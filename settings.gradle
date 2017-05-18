@@ -1,0 +1,8 @@
+rootProject.name = 'mago3d'
+include ':mago3d-core'
+include ':mago3d-admin'
+include ':mago3d-user'
+
+project(':mago3d-core').projectDir = "$rootDir/mago3d-core" as File
+project(':mago3d-admin').projectDir = "$rootDir/mago3d-admin" as File
+project(':mago3d-user').projectDir = "$rootDir/mago3d-user" as File

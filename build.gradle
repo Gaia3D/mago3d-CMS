@@ -1,0 +1,22 @@
+allprojects  {
+	//apply plugin: 'maven'
+  	//group = 'com.gaia3d'
+	//version = '0.0.1-SNAPSHOT'
+	
+	buildscript {
+		ext {
+			springBootVersion = '1.5.3.RELEASE'
+		}
+		repositories {
+			jcenter()
+			mavenCentral()
+		}
+		dependencies {
+			classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		}
+	}
+}
+
+subprojects {
+	
+}
