@@ -27,7 +27,7 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "login.do", method = RequestMethod.GET)
 	public String login(HttpServletRequest request, Model model) {
-		log.error("@@ wellcome");
+		log.info("@@ wellcome");
 		return "/login/login";
 	}
 }
