@@ -1,0 +1,428 @@
+package com.gaia3d.domain;
+
+import lombok.Data;
+
+/**
+ * 사용자 정보 테이블
+ * @author jeongdae
+ *
+ */
+@Data
+public class UserInfo {
+	
+	// 사용자 상태가 사용중
+	public static final String STATUS_USE = "0";
+	// 사용자 상태가 중지(관리자)
+	public static final String STATUS_FORBID = "1";
+	// 사용자 상태가 잠금(비밀번호 실패횟수 초과)
+	public static final String STATUS_FAIL_LOGIN_COUNT_OVER = "2";
+	// 사용자 상태가 휴면(로그인 기간)
+	public static final String STATUS_SLEEP = "3";
+	// 사용자 상태가 만료(사용기간 종료)
+	public static final String STATUS_TERM_END = "4";
+	// 사용자 상태가 삭제(화면 비표시)
+	public static final String STATUS_LOGICAL_DELETE = "5";
+	// 사용자 상태가 임시 비밀번호(비밀번호 찾기, 관리자 설정에 의한 임시 비밀번호 발급 시)
+	public static final String STATUS_TEMP_PASSWORD = "6";
+	
+	// OTP 상태 생성
+	public static final String OTP_CREATE = "0";
+	// OTP 상태 검증성공
+	public static final String OTP_SUCCESS = "1";
+	// OTP 상태 실패
+	public static final String OTP_FAIL = "2";
+	// OTP 상태 시간만료
+	public static final String OTP_EXPIRE = "3";
+		
+	// 모바일(앱)
+	public static final String TYPE_MOBILE_APP = "0";
+	// SMS
+	public static final String TYPE_SMS = "1";
+	// PC(WEB)
+	public static final String TYPE_PC = "2";
+	// 이메일
+	public static final String TYPE_EMAIL = "3";
+	// 메신저
+	public static final String TYPE_MESSANGER = "4";
+	// 토큰기기
+	public static final String TYPE_TOKEN = "5";
+	// RADIUS
+	public static final String TYPE_RADIUS = "6";
+	
+	/********* 로그인 타입 ***********/
+	// 사용자 로그인 인증 방법. 0 : 일반(아이디/비밀번호(기본값)), 1 : 기업용(사번추가), 2 : 일반 + OTP, 3 : 일반 + 인증서, 4 : OTP + 인증서, 5 : 일반 + OTP + 인증서
+	private String login_type;
+	private String otp_user_id;
+	private String otp_password;
+	private String otp_number;
+	
+	// user_group 에 등록되지 않은 사용자
+	private String[] user_all_id;
+	// user_group 에 등록된 사용자
+	private String[] user_select_id;
+	
+	private Long server_group_user_id;
+	private Long server_group_id;
+	
+	/******** 화면 오류 표시용 ********/
+	private String message_code;
+	private String error_code;
+	// 일정 기간 동안 미 접속시 잠금 처리(예 3개월 90일)
+	private String user_last_login_lock;
+	// 아이디 중복 확인 hidden 값
+	private String duplication_value;
+	// 논리 삭제 
+	private String delete_flag;
+	
+	// 페이지 처리를 위한 시작
+	private Long offset;
+	// 페이지별 표시할 건수
+	private Long limit;
+	
+	/********** 검색 조건 ************/
+	private String search_word;
+	// 검색 옵션. 0 : 일치, 1 : 포함
+	private String search_option;
+	private String search_value;
+	private String start_date;
+	private String end_date;
+	private String order_word;
+	private String order_value;
+	private Long list_counter = 10l;
+	
+	/****** validator ********/
+	private String method_mode;
+	// OTP 서비스 요청 타입
+	private String request_type;
+	
+	// 그룹 권한 제어, 사용안함
+	private Integer level;
+	
+	// OTP 사용유무, Y : 사용, N : 사용안함
+	private String otp_use_yn;
+	// OTP 번호 전송방법. 0 : 모바일(앱), 1 : SMS, 2 : PC(WEB), 3 : 이메일, 4 : 메신저, 5 : 토큰기기, 6 : RADIUS
+	private String otp_type;
+	
+	/********** Policy ************/
+	// 사용자 로그인 실패 잠금 해제 기간
+	private String user_fail_lock_release;
+	
+	/********** DB 사용 *************/
+	// 고유번호
+	private String user_id;
+	// 사용자 그룹 고유번호
+	private Long user_group_id;
+	// 사용자 그룹명
+	private String user_group_name;
+	// 이름
+	private String user_name;
+	// 비밀번호
+	private String password;
+	// 비밀번호 확인
+	private String password_confirm;
+	// SALT
+	private String salt;
+	// 전화번호1
+	private String telephone1;
+	// 전화번호2
+	private String telephone2;
+	// 전화번호3
+	private String telephone3;
+	// 전화번호
+	private String telephone;
+	// 핸드폰 번호1
+	private String mobile_phone1;
+	// 핸드폰 번호2
+	private String mobile_phone2;
+	// 핸드폰 번호3
+	private String mobile_phone3;
+	// 핸드폰 번호
+	private String mobile_phone;
+	// 이메일
+	private String email;
+	// 이메일1
+	private String email1;
+	// 이메일2
+	private String email2;
+	// 메신저 아이디
+	private String messanger;
+	// 사번
+	private String emp_no;
+	// 부서명
+	private String dept_name;
+	// 직급
+	private String position;
+	// 우편번호
+	private String postal_code;
+	// 주소
+	private String address;
+	// 상세주소
+	private String address_etc;
+	// 실명 인증 CI 고유값
+	private String ci;
+	// 실명 인증 DI 도메인 고유값
+	private String di;
+	// 로그인 횟수
+	private Long login_count;
+	// 로그인 실패 횟수
+	private Integer fail_login_count;
+	// 마지막 로그인 비밀번호 변경 날짜
+	private String last_password_change_date;
+	// 마지막 로그인 날짜
+	private String last_login_date;
+	// 개인정보 수정 날짜
+	private String update_date;
+	// 최초 로그인시 사용자 Role 권한 체크 패스 기능
+	private String user_role_check_yn;
+	// 사용자 상태. 0:사용중, 1:사용중지(관리자), 2:잠금(비밀번호 실패횟수 초과), 3:휴면(로그인 기간), 4:만료(사용기간 종료), 5:삭제(화면 비표시, policy.user_delete_method=0), 6:임시비밀번호
+	private String status;
+	// 현재 사용자 상태값
+	private String db_status;
+	// OTP 상태. 0:사용중, 1:사용중지(관리자), 2:잠금(OTP 실패횟수 초과)
+	private String otp_status;
+	// 사용자 등록 방법. 기본 : SELF
+	private String user_insert_type;
+	// Single Sign-On 사용유무. 기본값 N : 사용안함
+	private String sso_use_yn;
+	// OTP 마지막 테스트 시간
+	private String otp_last_test_date;
+	// 웹 아이디 사용 시작일
+	private String user_id_start_date;
+	// 웹 아이디 사용 종료일
+	private String user_id_end_date;
+	// 등록일
+	private String register_date;
+	// 새로운 비밀번호
+	private String new_password;
+	// 새로운 비밀번호 확인
+	private String new_password_confirm;
+	// 패스워드 변경 주기
+	private String password_change_term;
+	// 패스워드 변경 주기 값
+	private Boolean password_change_term_over;
+	// 이메일 From
+	private String from;
+	// 이메일 Subject
+	private String subject;
+	// 임시 비밀번호
+	private String temp_password;
+	//pin_number
+	private String pin_number;
+	// OTP Mobile 앱 Key
+	private String otp_mobile_app_key;
+	// OTP 사용 시작일
+	private String otp_use_start_date;
+	// OTP 사용 종료일
+	private String otp_use_end_date;
+	
+	/********** 검색 조건 ************/
+	private String search_user_name;
+	private String search_except_user_name;
+	
+	public String getViewOTPType() {
+		// OTP 번호 전송방법. 0 : 모바일(앱), 1 : SMS, 2 : PC(WEB), 3 : 이메일, 4 : 메신저, 5 : 토큰기기, 6 : RADIUS
+		if(this.otp_type == null || "".equals(this.otp_type)) {
+			return "";
+		}
+		if("0".equals(this.otp_type)) {
+			return "모바일(앱)";
+		} else if("1".equals(this.otp_type)) {
+			return "SMS";
+		} else if("2".equals(this.otp_type)) {
+			return "PC (WEB)";
+		} else if("3".equals(this.otp_type)) {
+			return "이메일";
+		} else if("4".equals(this.otp_type)) {
+			return "메신저";
+		} else if("5".equals(this.otp_type)) {
+			return "토큰기기";
+		} else if("6".equals(this.otp_type)) {
+			return "RADIUS";
+		}
+		return "";
+	}
+
+//	public String getViewTelePhone() {
+//		return Crypt.decrypt(telephone);
+//	}
+//	
+//	public String getMaskingTelePhone() {
+//		return getMaskingData(telephone, "DEFAULT");
+//	}
+//	
+//	public String getViewMaskingTelePhone() {
+//		return getMaskingData(Crypt.decrypt(telephone), "DEFAULT");
+//	}
+//
+//	public String getViewMobilePhone() {
+//		return Crypt.decrypt(mobile_phone);
+//	}
+//	
+//	public String getMaskingMobilePhone() {
+//		return getMaskingData(mobile_phone, "DEFAULT");
+//	}
+//	
+//	public String getViewMaskingMobilePhone() {
+//		return getMaskingData(Crypt.decrypt(mobile_phone), "DEFAULT");
+//	}
+//	
+//	public String getViewEmail() {
+//		return Crypt.decrypt(email);
+//	}
+//	
+//	public String getMaskingEmail() {
+//		return getMaskingData(email, "EMAIL");
+//	}
+//	
+//	public String getViewMaskingEmail() {
+//		return getMaskingData(Crypt.decrypt(email), "EMAIL");
+//	}
+//	
+//	public String getViewAddressEtc() {
+//		return Crypt.decrypt(address_etc);
+//	}
+//	
+//	public String getMaskingAddressEtc() {
+//		return getMaskingData(address_etc, "DEFAULT");
+//	}
+//	
+//	public String getViewMaskingAddressEtc() {
+//		return getMaskingData(Crypt.decrypt(address_etc), "DEFAULT");
+//	}
+
+	public String getViewLastPasswordChangeDate() {
+		if(this.last_password_change_date == null || "".equals( last_password_change_date)) {
+			return "";
+		}
+		return last_password_change_date.substring(0, 19); 
+	}
+
+	public String getViewLastLoginDate() {
+		if(this.last_login_date == null || "".equals( last_login_date)) {
+			return "";
+		}
+		return last_login_date.substring(0, 19); 
+	}
+
+	public String getViewOtpUseYn() {
+		if(this.otp_use_yn == null || "".equals(this.otp_use_yn)) {
+			return "";
+		}
+		if ("Y".equals(this.otp_use_yn)) {
+			return "사용";
+		} else if ("N".equals(this.otp_use_yn)) {
+			return "사용 안함";
+		}
+		return "";
+	}
+	
+	public String getViewStatus() {
+		// 사용자 상태. 0:사용중, 1:사용중지(관리자), 2:잠금(비밀번호 실패횟수 초과), 3:휴면(로그인 기간), 4:만료(사용기간 종료), 5:삭제(화면 비표시, policy.user_delete_method=0)
+		if(this.status == null || "".equals(this.status)) {
+			return "";
+		}
+		if("0".equals(this.status)) {
+			return "사용중";
+		} else if("1".equals(this.status)) {
+			return "사용중지";
+		} else if("2".equals(this.status)) {
+			return "잠금(실패횟수)";
+		} else if("3".equals(this.status)) {
+			return "휴면";
+		} else if("4".equals(this.status)) {
+			return "만료";
+		} else if("5".equals(this.status)) {
+			return "삭제";
+		} else if("6".equals(this.status)) {
+			return "임시 비밀번호";
+		}
+		return "";
+	}
+	
+	public String getViewOtpStatus() {
+		if("0".equals(this.otp_status)) {
+			return "사용중";
+		} else if("1".equals(this.otp_status)) {
+			return "사용중지(관리자)";
+		} else if("2".equals(this.otp_status)) {
+			return "잠금(실패횟수)";
+		}
+		return "";
+	}
+	
+	public String getViewSsoUseYn() {
+		if(this.sso_use_yn == null || "".equals(this.sso_use_yn)) {
+			return "";
+		}
+		if ("Y".equals(this.sso_use_yn)) {
+			return "사용";
+		} else if ("N".equals(this.sso_use_yn)) {
+			return "사용 안함";
+		}
+		return "";
+	}
+	
+	public String getViewOtpLastTestDate() {
+		if(this.otp_last_test_date == null || "".equals(this.otp_last_test_date)) {
+			return "";
+		}
+		return otp_last_test_date.substring(0, 19);
+	}
+
+//	/**
+//	 * 개인정보 마스킹 처리
+//	 * @param value
+//	 * @param type
+//	 * @return
+//	 */
+//	public String getMaskingData(String value, String type) {
+//		if(ConfigCache.isUserInfoMasking()) {
+//			return Masking.getMasking(value, type);
+//		}
+//		return value;
+//	}
+//	
+//	public String getViewUserInsertType() {
+//		CommonCode userInsertType = ConfigCache.getCommonCode(CommonCode.USER_REGISTER);
+//		CommonCode externalUserInsertType = ConfigCache.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER);
+//		
+//		if(this.user_insert_type == null || "".equals(this.user_insert_type)) {
+//			return "";
+//		} else if(this.user_insert_type.equals(userInsertType.getCode_value())) {
+//			return userInsertType.getCode_name();
+//		} else if(this.user_insert_type.equals(externalUserInsertType.getCode_value())) {
+//			return externalUserInsertType.getCode_name();
+//		}
+//		
+//		return "";
+//	}
+	
+	public String getValueUserIdStartDate() {
+		if(this.user_id_start_date == null || "".equals( user_id_start_date)) {
+			return "";
+		}
+		String value = user_id_start_date.substring(0, 19);
+		value = value.replaceAll("\\p{Space}", "");
+		value = value.replaceAll("-", "");
+		value = value.replaceAll(":", "");
+		return value;
+	}
+	
+	public String getValueUserIdEndDate() {
+		if(this.user_id_end_date == null || "".equals( user_id_end_date)) {
+			return "";
+		}
+		String value = user_id_end_date.substring(0, 19);
+		value = value.replaceAll("\\p{Space}", "");
+		value = value.replaceAll("-", "");
+		value = value.replaceAll(":", "");
+		return value;
+	}
+	
+	public String getViewRegisterDate() {
+		if(this.register_date == null || "".equals( register_date)) {
+			return "";
+		}
+		return register_date.substring(0, 19);
+	}
+}

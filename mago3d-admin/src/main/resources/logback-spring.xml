@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	<!-- <include resource="org/springframework/boot/logging/logback/base.xml" /> -->
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36}[%method:%line] - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
 
+	<!-- 
 	<appender name="dailyRollingFileAppender"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<prudent>true</prudent>
@@ -14,18 +23,18 @@
 		</filter>
 
 		<encoder>
-			<pattern>%d{yyyy:MM:dd HH:mm:ss.SSS} %-5level --- [%thread]
-				%logger{35} : %msg %n</pattern>
+		    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36}[%method:%line] - %msg%n</pattern>
 		</encoder>
 	</appender>
+	 -->
 
-	<logger name="org.springframework.web" level="INFO" />
-	<logger name="org.thymeleaf" level="INFO" />
-	<logger name="org.hibernate.SQL" level="INFO" />
-	<logger name="org.quartz.core" level="INFO" />
-	<logger name="org.h2.server.web" level="INFO" />
+	<logger name="org.apache.commons" level="INFO" additivity="false" />
+	<logger name="org.springframework.web" level="INFO" additivity="false" />
+	<logger name="java.sql.Connection" level="debug" additivity="false" />
+	<logger name="java.sql.PreparedStatement" level="debug" additivity="false" />
+	<logger name="java.sql.ResultSet" level="debug" additivity="false" />
 
-	<root level="INFO">
-		<appender-ref ref="dailyRollingFileAppender" />
+	<root level="info">
+		<appender-ref ref="STDOUT" />
 	</root>
 </configuration>
