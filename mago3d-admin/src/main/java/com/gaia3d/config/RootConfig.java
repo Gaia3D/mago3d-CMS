@@ -40,14 +40,14 @@ public class RootConfig {
 
 	@Bean
     public DataSourceTransactionManager transactionManager() {
-		log.info("################################# RootConfig transactionManager");
+		log.info(" ### RootConfig transactionManager ### ");
         final DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
         return transactionManager;
     }
 	
 	@Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {
-		log.info("################################# RootConfig sqlSessionFactory");
+		log.info(" ### RootConfig sqlSessionFactory ### ");
 		SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
 		factory.setDataSource(dataSource);
 		factory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/*.xml"));

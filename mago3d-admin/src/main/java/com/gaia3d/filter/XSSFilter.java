@@ -10,6 +10,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class XSSFilter implements Filter {
 	
 	//private static final Logger logger = LoggerFactory.getLogger(XSSFilter.class);
@@ -28,6 +31,7 @@ public class XSSFilter implements Filter {
  
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    	log.info(" >>> XSSFilter ");
     	chain.doFilter(new XSSRequestWrapper((HttpServletRequest) request), response);
     }
 }

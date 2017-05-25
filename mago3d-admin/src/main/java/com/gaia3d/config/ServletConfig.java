@@ -40,7 +40,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 
 	@Override
     public void addInterceptors(InterceptorRegistry registry) {
-		log.info("################################# ServletConfig addInterceptors");
+		log.info(" @@@ ServletConfig addInterceptors @@@@ ");
 		
         registry.addInterceptor(new ConfigInterceptor())
         		.addPathPatterns("/**");
@@ -85,13 +85,13 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		log.info("################################# ServletConfig addResourceHandlers");
+		log.info(" @@@ ServletConfig addResourceHandlers @@@");
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 
 	@Bean
 	public SimpleMappingExceptionResolver exceptionResolver() {
-		log.info("################################# ServletConfig exceptionResolver");
+		log.info(" @@@ ServletConfig exceptionResolver @@@");
 		
 		SimpleMappingExceptionResolver exceptionResolver = new SimpleMappingExceptionResolver();
 	 
@@ -112,7 +112,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	 
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
-		log.info("################################# ServletConfig viewResolver");
+		log.info(" @@@ ServletConfig viewResolver @@@");
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setPrefix("/WEB-INF/views");
 		viewResolver.setSuffix(".jsp");
@@ -123,7 +123,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	
 	@Bean
 	public RequestDataValueProcessor requestDataValueProcessor() {
-		log.info("################################# ServletConfig requestDataValueProcessor");
+		log.info(" @@@ ServletConfig requestDataValueProcessor @@@ ");
 		return new CSRFRequestDataValueProcessor();
 	}
 }
