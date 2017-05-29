@@ -1,6 +1,35 @@
 # Mago3D
 
-ÅëÇÕ °üÁ¦ & ÀÌ½´ °ü¸® ½Ã½ºÅÛ
+í†µí•© ê´€ì œ & ì´ìŠˆ ê´€ë¦¬ ì‹œìŠ¤í…œ
 
-2 °³¹ßÈ¯°æ
- springboot, gradle, mybatis, docker µî
+2 ê°œë°œí™˜ê²½ springboot, gradle, mybatis, docker ë“±
+ springboot, gradle, mybatis, docker ë“±
+
+1) postgresq9.6.3 ì„¤ì¹˜
+ - homepage ì°¸ì¡°
+2) PostGIS 2.3.2 ì„¤ì¹˜
+ - postgresqlì´ ì„¤ì¹˜ ë˜ì–´ ìˆì–´ì•¼ í•¨
+ http://www.postgis.net/windows_downloads/
+ http://download.osgeo.org/postgis/windows/pg96/
+ 
+ 
+ tar xvzf postgis-2.3.2.tar.gz 
+ cd postgis-2.3.2 
+ ./configure 
+ make 
+ make install
+ 
+ 
+ CREATE EXTENSION postgis;
+CREATE EXTENSION address_standardizer;
+CREATE EXTENSION fuzzystrmatch;
+CREATE EXTENSION postgis_topology;
+CREATE EXTENSION postgis_tiger_geocoder;
+
+CREATE EXTENSION pgrouting;
+
+CREATE EXTENSION postgis_sfcgal;
+ALTER DATABASE your_db_here SET postgis.backend = sfcgal;
+ 
+ 
+ 

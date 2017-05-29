@@ -1,0 +1,6 @@
+1 cache
+ - http://jojoldu.tistory.com/57
+ - ehcache는 추후에 적용하자.
+
+2 timestamp with time zone 문제는 일단 without time zone 으로 만들어 두고
+ 나중에 고치자. 
