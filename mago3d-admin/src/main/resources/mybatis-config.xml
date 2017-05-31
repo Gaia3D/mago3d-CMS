@@ -11,5 +11,6 @@
 	<typeAliases>
 		<typeAlias type="com.gaia3d.domain.UserSession" alias="userSession"/>
 		<typeAlias type="com.gaia3d.domain.UserInfo" alias="userInfo"/>
+		<typeAlias type="com.gaia3d.domain.Policy" alias="policy"/>
 	</typeAliases>
 </configuration>

@@ -4,8 +4,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.Policy;
+import com.gaia3d.domain.UserInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,9 +29,22 @@ public class LoginController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "login.do", method = RequestMethod.GET)
+	@GetMapping("/login.do")
 	public String login(HttpServletRequest request, Model model) {
-		log.info("@@ wellcome");
+		
+		Policy policy = CacheManager.getPolicy();
+		log.info("@@ policy = {}", policy);
+		
+		long nowTime = System.nanoTime();
+		String TOKEN_AES_KEY = (String.valueOf(nowTime) + "0000000000").substring(0, 16);
+		request.getSession().setAttribute("SESSION_TOKEN_AES_KEY", TOKEN_AES_KEY);
+		log.info("@@ SESSION_TOKEN_AES_KEY = {}", TOKEN_AES_KEY);
+		
+		UserInfo loginForm = new UserInfo();
+		model.addAttribute("loginForm", loginForm);
+		model.addAttribute("policy", policy);
+		model.addAttribute("TOKEN_AES_KEY", TOKEN_AES_KEY);
+		
 		return "/login/login";
 	}
 }

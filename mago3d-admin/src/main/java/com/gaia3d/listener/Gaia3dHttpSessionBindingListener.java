@@ -3,7 +3,6 @@ package com.gaia3d.listener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
-import com.gaia3d.cache.ConfigCache;
 import com.gaia3d.helper.SessionUserHelper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +24,9 @@ public class Gaia3dHttpSessionBindingListener implements HttpSessionBindingListe
 	public void valueBound(HttpSessionBindingEvent event) {
 		if (SessionUserHelper.isExistSession(event.getName())) {
 			log.info("######################### Exist user_id = {}", event.getName());
-			if("N".equals(ConfigCache.getPolicy().getUser_duplication_login_yn())) {
-				SessionUserHelper.invalidateSession(event.getName());
-			}
+//			if("N".equals(CacheConfig.getPolicy().getUser_duplication_login_yn())) {
+//				SessionUserHelper.invalidateSession(event.getName());
+//			}
 		}
 		log.info("######################### session create user_id = {}, session = {}", event.getName(), event.getSession());
 		SessionUserHelper.loginUsersMap.put(event.getName(), event.getSession());

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaia3d.persistence.PolicyMapper">
+
+	<!-- 운영 정책 정보 -->
+	<select id="getPolicy" resultType="policy">
+		/* getPolicy */
+		SELECT * FROM policy ORDER BY policy_id DESC LIMIT 1
+	</select>
+
+	<!-- 운영 정책 사용자 수정 -->	
+	<update id="updatePolicyUser" parameterType="policy">
+		/* updatePolicyUser */
+		UPDATE policy
+		SET user_id_min_length = #{user_id_min_length},
+			user_fail_login_count = #{user_fail_login_count},
+		<if test="user_fail_lock_release != null and user_fail_lock_release != ''">
+			user_fail_lock_release = #{user_fail_lock_release},
+		</if>
+			user_last_login_lock = #{user_last_login_lock},
+			user_duplication_login_yn = #{user_duplication_login_yn},
+			user_login_type = #{user_login_type},
+			user_update_check = #{user_update_check},
+			user_delete_check = #{user_delete_check},
+			user_delete_type = #{user_delete_type},
+			user_device_modify_yn = #{user_device_modify_yn}
+		WHERE policy_id = #{policy_id}
+	</update>
+	
+	<!-- 운영 정책 패스워드 수정 -->	
+	<update id="updatePolicyPassword" parameterType="policy">
+		/* updatePolicyPassword */
+		UPDATE policy
+		SET password_change_term = #{password_change_term},
+			password_min_length = #{password_min_length},
+			password_max_length = #{password_max_length},
+			password_eng_upper_count = #{password_eng_upper_count},
+			password_eng_lower_count = #{password_eng_lower_count},
+			password_number_count = #{password_number_count},
+			password_special_char_count = #{password_special_char_count},
+			password_continuous_char_count = #{password_continuous_char_count},
+			password_create_type = #{password_create_type},
+			password_create_char = #{password_create_char},
+			password_exception_char = #{password_exception_char}
+		WHERE policy_id = #{policy_id}
+	</update>
+	
+	<!-- 운영 정책 알림 수정 -->	
+	<update id="updatePolicyNotice" parameterType="policy">
+		/* updatePolicyNotice */
+		UPDATE policy
+		SET notice_service_yn = #{notice_service_yn},
+			notice_service_send_type = #{notice_service_send_type},
+			notice_approval_request_yn = #{notice_approval_request_yn},
+			notice_approval_sign_yn = #{notice_approval_sign_yn},
+			notice_password_update_yn = #{notice_password_update_yn},
+			notice_approval_delay_yn = #{notice_approval_delay_yn},
+			notice_risk_yn = #{notice_risk_yn},
+			notice_risk_send_type = #{notice_risk_send_type},
+			notice_risk_grade = #{notice_risk_grade}
+		WHERE policy_id = #{policy_id}
+	</update>
+	
+	<!-- 운영 정책 보안 수정 -->	
+	<update id="updatePolicySecurity" parameterType="policy">
+		/* updatePolicySecurity */
+		UPDATE policy
+		SET security_session_timeout_yn = #{security_session_timeout_yn},
+			security_session_timeout = #{security_session_timeout},
+			security_user_ip_check_yn = #{security_user_ip_check_yn},
+			security_session_hijacking = #{security_session_hijacking},
+			security_sso = #{security_sso},
+			security_sso_token_verify_time = #{security_sso_token_verify_time},
+			security_log_save_type = #{security_log_save_type},
+			security_log_save_term = #{security_log_save_term},
+			security_dynamic_block_yn = #{security_dynamic_block_yn},
+			security_api_result_secure_yn = #{security_api_result_secure_yn},
+			security_masking_yn = #{security_masking_yn}
+		WHERE policy_id = #{policy_id}
+	</update>
+	
+	<!-- 운영 정책 컨텐트 수정 -->	
+	<update id="updatePolicyContent" parameterType="policy">
+		/* updatePolicyContent */
+		UPDATE policy
+		SET content_main_widget_count = #{content_main_widget_count},
+			content_main_widget_interval = #{content_main_widget_interval},
+			content_monitoring_interval = #{content_monitoring_interval},
+			content_statistics_interval = #{content_statistics_interval},
+			content_load_balancing_interval = #{content_load_balancing_interval},
+			content_menu_group_root = #{content_menu_group_root},
+			content_user_group_root = #{content_user_group_root},
+			content_server_group_root = #{content_server_group_root},
+			content_account_group_root = #{content_account_group_root}
+		WHERE policy_id = #{policy_id}
+	</update>
+	
+	<!-- 사이트 정보 수정 -->	
+	<update id="updatePolicySite" parameterType="policy">
+		/* updatePolicySite */
+		UPDATE policy
+		SET site_name = #{site_name},
+			site_admin_name = #{site_admin_name},
+			site_admin_mobile_phone = #{site_admin_mobile_phone},
+			site_admin_email = #{site_admin_email},
+			site_product_log = #{site_product_log},
+			site_company_log = #{site_company_log}
+		WHERE policy_id = #{policy_id}
+	</update>
+	
+	<!-- BackOffice 정보 수정 -->	
+	<update id="updatePolicyBackoffice" parameterType="policy">
+		/* updatePolicyBackoffice */
+		UPDATE policy
+		SET backoffice_email_host = #{backoffice_email_host},
+			backoffice_email_port = #{backoffice_email_port},
+			backoffice_email_user = #{backoffice_email_user},
+			backoffice_email_password = #{backoffice_email_password},
+			backoffice_user_db_driver = #{backoffice_user_db_driver},
+			backoffice_user_db_url = #{backoffice_user_db_url},
+			backoffice_user_db_user = #{backoffice_user_db_user},
+			backoffice_user_db_password = #{backoffice_user_db_password}
+		WHERE policy_id = #{policy_id}
+	</update>
+	
+	<!-- 서버 시간 변경 -->
+	<update id="updatePolicyOs" parameterType="policy">
+		/* updatePolicyOs */
+		UPDATE policy
+		SET os_timezone = #{os_timezone},
+			os_ntp = #{os_ntp}
+		WHERE policy_id = #{policy_id}
+	</update>
+	
+	<!-- 제품 정보 수정 -->	
+	<update id="updatePolicySolution" parameterType="policy">
+		/* updatePolicySolution */
+		UPDATE policy
+		SET solution_name = #{solution_name},
+			solution_version = #{solution_version},
+			solution_company = #{solution_company},
+			solution_company_phone = #{solution_company_phone},
+			solution_manager = #{solution_manager},
+			solution_manager_phone = #{solution_manager_phone},
+			solution_manager_email = #{solution_manager_email}
+		WHERE policy_id = #{policy_id}
+	</update>
+
+</mapper>

@@ -38,6 +38,10 @@ public class RootConfig {
 	@Autowired
 	private DataSource dataSource;
 
+//	@Value("${spring.data.mongodb.host}")
+//	private String mongoHost;
+	
+	
 	@Bean
     public DataSourceTransactionManager transactionManager() {
 		log.info(" ### RootConfig transactionManager ### ");

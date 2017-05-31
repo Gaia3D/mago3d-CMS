@@ -33,18 +33,6 @@ public class Mago3dAdminApplication extends SpringBootServletInitializer {
         return application.sources(Mago3dAdminApplication.class);
     }
 	
-//	@Override
-//	public void onStartup(ServletContext container) throws ServletException {
-//		log.info("################################# SpringWebAppInitializer onStartup");
-//		
-//		registerFilter(container);
-//		registerListener(container);
-//		
-//		// web.xml session timeout 의 경우 application.properties 에 있음
-//		// TODO
-//		// 404 error page
-//	}
-	
 	@Bean
     public FilterRegistrationBean encodingFilter() {
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean(new CharacterEncodingFilter());

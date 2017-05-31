@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -31,11 +33,12 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-@Configuration
 @EnableWebMvc
+@Configuration
 @ComponentScan(basePackages = { "com.gaia3d.config, com.gaia3d.controller, com.gaia3d.interceptor, com.gaia3d.validator" }, includeFilters = {
 		@Filter(type = FilterType.ANNOTATION, value = Component.class),
-		@Filter(type = FilterType.ANNOTATION, value = Controller.class) })
+		@Filter(type = FilterType.ANNOTATION, value = Controller.class),
+		@Filter(type = FilterType.ANNOTATION, value = RestController.class)})
 public class ServletConfig extends WebMvcConfigurerAdapter {
 
 	@Override
@@ -86,8 +89,17 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		log.info(" @@@ ServletConfig addResourceHandlers @@@");
-		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+		registry.addResourceHandler("/css/**").addResourceLocations("/css/");
+		registry.addResourceHandler("/externlib/**").addResourceLocations("/externlib/");
+		registry.addResourceHandler("/hompage/**").addResourceLocations("/homepage/");
+		registry.addResourceHandler("/images/**").addResourceLocations("/images/");
+		registry.addResourceHandler("/js/**").addResourceLocations("/js/");
 	}
+	
+	@Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
 
 	@Bean
 	public SimpleMappingExceptionResolver exceptionResolver() {
@@ -103,9 +115,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	 	exceptionMappings.put("java.lang.RuntimeException", "/error/runtime-error");
 	 	exceptionResolver.setExceptionMappings(exceptionMappings);
 	 	
-	 	Properties statusCodes = new Properties();
-	 	statusCodes.put("/WEB-INF/views/error/error.jsp", "404");
-	 	exceptionResolver.setStatusCodes(statusCodes);
+	 	exceptionResolver.addStatusCode("errorx", 404);
 	 	
 	 	return exceptionResolver;
 	}
@@ -114,7 +124,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	public InternalResourceViewResolver viewResolver() {
 		log.info(" @@@ ServletConfig viewResolver @@@");
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setPrefix("/WEB-INF/views");
+		viewResolver.setPrefix("/WEB-INF/views/");
 		viewResolver.setSuffix(".jsp");
 		viewResolver.setOrder(3);
 		

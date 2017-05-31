@@ -2,8 +2,6 @@ package com.gaia3d.domain;
 
 import java.io.Serializable;
 
-import com.gaia3d.cache.ConfigCache;
-
 import lombok.Data;
 
 /**

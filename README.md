@@ -20,7 +20,7 @@
  make install
  
  
- CREATE EXTENSION postgis;
+CREATE EXTENSION postgis;
 CREATE EXTENSION address_standardizer;
 CREATE EXTENSION fuzzystrmatch;
 CREATE EXTENSION postgis_topology;

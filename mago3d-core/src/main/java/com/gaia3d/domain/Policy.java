@@ -1,7 +1,5 @@
 package com.gaia3d.domain;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.Data;
 
 /**
@@ -247,8 +245,8 @@ public class Policy {
 	private String site_admin_mobile_phone;
 	// 사이트 관리자 이메일
 	private String site_admin_email;
-	private MultipartFile uploadfile_top;
-	private MultipartFile uploadfile_bottom;
+//	private MultipartFile uploadfile_top;
+//	private MultipartFile uploadfile_bottom;
 	private String uploadfile_top_value;
 	private String uploadfile_bottom_value;
 	private String site_product_log;
