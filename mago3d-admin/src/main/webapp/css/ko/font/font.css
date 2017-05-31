@@ -1,0 +1,30 @@
+@font-face {
+  font-family: 'Nanum Gothic';
+  font-style: normal;
+  font-weight: 400;
+  src: url(NanumGothic-Regular.eot);
+  src: url(NanumGothic-Regular.eot?#iefix) format('embedded-opentype'),
+       url(NanumGothic-Regular.woff2) format('woff2'),
+       url(NanumGothic-Regular.woff) format('woff'),
+       url(NanumGothic-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nanum Gothic';
+  font-style: normal;
+  font-weight: 700;
+  src: url(NanumGothic-Bold.eot);
+  src: url(NanumGothic-Bold.eot?#iefix) format('embedded-opentype'),
+       url(NanumGothic-Bold.woff2) format('woff2'),
+       url(NanumGothic-Bold.woff) format('woff'),
+       url(NanumGothic-Bold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nanum Gothic';
+  font-style: normal;
+  font-weight: 800;
+  src: url(NanumGothic-ExtraBold.eot);
+  src: url(NanumGothic-ExtraBold.eot?#iefix) format('embedded-opentype'),
+       url(NanumGothic-ExtraBold.woff2) format('woff2'),
+       url(NanumGothic-ExtraBold.woff) format('woff'),
+       url(NanumGothic-ExtraBold.ttf) format('truetype');
+}

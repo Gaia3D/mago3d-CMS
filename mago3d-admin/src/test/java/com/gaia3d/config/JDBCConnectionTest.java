@@ -1,6 +1,4 @@
-package com.gaia3d;
-
-import static org.junit.Assert.*;
+package com.gaia3d.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,7 +15,7 @@ public class JDBCConnectionTest {
 		try {
 			Class.forName("org.postgresql.Driver");
 			Connection conn = null;
-			conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/mago3d", "postgres", "chun1000");
+			conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/mago3d", "postgres", "postgres");
 			PreparedStatement psmt = conn.prepareStatement("select count(*) as count from user_info");
 			ResultSet rs = null;
 			rs = psmt.executeQuery();

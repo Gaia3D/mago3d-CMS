@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@page import="kr.co.gt1000.domain.UserSession"%>
-<%@page import="kr.co.gt1000.cache.ConfigCache"%>
+<%@page import="com.gaia3d.domain.UserSession"%>
+<%@page import="com.gaia3d.cache.CacheConfig"%>
 <%@page import="java.util.Map"%>
 <%
 	Map<String, String> haStatusMap = ConfigCache.getHaMap();

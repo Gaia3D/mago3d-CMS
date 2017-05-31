@@ -5,7 +5,7 @@ import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+
+import com.gaia3d.security.Crypt;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,17 +37,33 @@ import lombok.extern.slf4j.Slf4j;
 				excludeFilters = @Filter(type = FilterType.ANNOTATION, value = Controller.class) )
 public class RootConfig {
 	
-	@Autowired
-	private DataSource dataSource;
-
-//	@Value("${spring.data.mongodb.host}")
-//	private String mongoHost;
+	@Value("${spring.datasource.driver-class-name}")
+	private String driverClassName;
+	@Value("${spring.datasource.url}")
+	private String url;
+	@Value("${spring.datasource.username}")
+	private String username;
+	@Value("${spring.datasource.password}")
+	private String password;
 	
+	@Bean
+	public DataSource dataSource() {
+		org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
+	    dataSource.setDriverClassName(driverClassName);
+	    dataSource.setUrl(Crypt.decrypt(url));
+	    dataSource.setUsername(Crypt.decrypt(username));
+	    dataSource.setPassword(Crypt.decrypt(password));
+//	    dataSource.setTestWhileIdle(testWhileIdle);     
+//	    dataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMills);
+//	    dataSource.setValidationQuery(validationQuery);
+	    return dataSource;
+
+	}
 	
 	@Bean
     public DataSourceTransactionManager transactionManager() {
 		log.info(" ### RootConfig transactionManager ### ");
-        final DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
+        final DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource());
         return transactionManager;
     }
 	
@@ -53,7 +71,7 @@ public class RootConfig {
     public SqlSessionFactory sqlSessionFactory() throws Exception {
 		log.info(" ### RootConfig sqlSessionFactory ### ");
 		SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
-		factory.setDataSource(dataSource);
+		factory.setDataSource(dataSource());
 		factory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/*.xml"));
 		factory.setConfigLocation(new PathMatchingResourcePatternResolver().getResource("mybatis-config.xml"));
 		//factory.setConfigLocation(new ClassPathResource("mybatis-config.xml"));

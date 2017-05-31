@@ -83,7 +83,7 @@ create table user_info(
 	user_id						varchar(32)	 						not null,
 	user_group_id				smallint								not null,
 	user_name					varchar(64)							not null,
-	password					varchar(256)						not null,
+	password					varchar(512)						not null,
 	salt						varchar(256)						not null,
 	telephone					varchar(256),
 	mobile_phone				varchar(256),

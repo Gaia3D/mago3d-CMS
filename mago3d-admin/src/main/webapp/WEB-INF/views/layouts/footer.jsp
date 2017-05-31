@@ -3,7 +3,7 @@
 <div class="site-footer">
 	<div class="row">
 		<div class="container">
-			<img src="/images/ko/common/logo-SGN.png" alt="GT1000" /> &copy; GT1000 Corp.
+			<img src="/images/ko/common/logo-SGN.png" alt="Gaia3d" /> &copy; Gaia3d Corp.
 		</div>
 	</div>
 </div>
