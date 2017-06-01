@@ -19,8 +19,29 @@ JS_MESSAGE["button.dobule.click"] = "진행 중입니다.";
 JS_MESSAGE["cache.reloaded"] = "캐시를 갱신 하였습니다.";
 JS_MESSAGE["usersession.grant.invalid"] = "사용 권한이 유효하지 않습니다.";
 
+JS_MESSAGE["login.password.decrypt.exception"] = "로그인 비밀번호 처리 과정에서 오류가 발생하였습니다.";
 
-JS_MESSAGE["role.role_id.required"] = "ROLE 고유키를 입력하여 주십시오.";
-
-JS_MESSAGE["common_code.code_key.required"] = "코드키를 입력하여 주십시오.";
-JS_MESSAGE["common_code.code_name.required"] = "코드명를 입력하여 주십시오.";
+//사용자
+JS_MESSAGE["user.id.empty"] = "아이디를 입력하여 주십시오.";
+JS_MESSAGE["user.id.min_length.invalid"] = "사용자 아이디 최소 길이가 올바르지 않습니다.";
+JS_MESSAGE["password.empty"] = "비밀번호를 입력하여 주십시오.";
+JS_MESSAGE["password.correct.empty"] = "비밀번호 확인을 입력하여 주십시오.";
+JS_MESSAGE["user.name.empty"] = "이름을 입력하여 주십시오.";
+JS_MESSAGE["user.input.invalid"] = "필수 입력값이 유효하지 않습니다.";
+JS_MESSAGE["user.id.duplication"] = "사용중인 아이디 입니다. 다른 아이디를 선택해 주십시오.";
+JS_MESSAGE["user.password.invalid"] = "입력한 패스워드가 설정된 패스워드 정책에 부적합 합니다.";
+JS_MESSAGE["user.password.digit.invalid"] = "입력한 패스워드가 설정된 패스워드 정책에(숫자 개수) 부적합 합니다.";
+JS_MESSAGE["user.password.upper.invalid"] = "입력한 패스워드가 설정된 패스워드 정책에(영문 대문자 개수) 부적합 합니다.";
+JS_MESSAGE["user.password.lower.invalid"] = "입력한 패스워드가 설정된 패스워드 정책에(영문 소문자 개수) 부적합 합니다.";
+JS_MESSAGE["user.password.special.invalid"] = "입력한 패스워드가 설정된 패스워드 정책에(특수 문자 개수) 부적합 합니다.";
+JS_MESSAGE["user.password.continuous.char.invalid"] = "연속 문자 제한 개수가 패스워드 정책에 부적합 합니다.";
+JS_MESSAGE["user.password.exception.char.message1"] = "관리자가 설정한 특수문자 ";
+JS_MESSAGE["user.password.exception.char.message2"] = " 는 비밀번호로 사용 하실 수 없습니다.";
+JS_MESSAGE["user.password.exception"] = "패스워드 등록 과정 중 오류가 발생하였습니다.";
+JS_MESSAGE["user.session.notexist"] = "세션 정보가 존재하지 않습니다.";
+JS_MESSAGE["user.session.closed"] = "세션 종료 처리 하였습니다.";
+JS_MESSAGE["user.session.close"] = "선택하신 사용자의 세션을 종료 하시겠습니까?";
+JS_MESSAGE["user.id.enable"] = "사용 가능한 아이디 입니다.";
+JS_MESSAGE["user.insert"] = "사용자를 등록 하였습니다.";
+JS_MESSAGE["user.info.update"] = "사용자 정보를 수정 하였습니다.";
+JS_MESSAGE["user.id.notexist"] = "아이디가 존재하지 않습니다.";

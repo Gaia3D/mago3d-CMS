@@ -3,8 +3,7 @@ drop table if exists user_group cascade;
 drop table if exists user_group_role cascade;
 drop table if exists user_group_menu;
 drop table if exists user_info cascade;
--- drop table if exists user_info_log cascade;
-
+drop table if exists user_device cascade;
 
 -- 사용자 그룹
 create table user_group(
@@ -135,3 +134,77 @@ comment on column user_info.last_password_change_date is '마지막 로그인 �
 comment on column user_info.update_date is '개인정보 수정 날짜';
 comment on column user_info.insert_date is '등록일';
 
+
+-- 사용자 사용 디바이스
+create table user_device (
+	user_device_id				bigint 								not null,
+	user_id						varchar(32)	 						not null,
+	device_name1				varchar(60)							not null,
+	device_type1				char(1)								default '0',
+	device_ip1					varchar(45),
+	device_priority1			smallint							default 1,
+	use_yn1						char(1)								default 'Y',
+	description1				varchar(256),
+	device_name2				varchar(60)							not null,
+	device_type2				char(1)								default '0',
+	device_ip2					varchar(45),
+	device_priority2			smallint							default 2,
+	use_yn2						char(1)								default 'Y',
+	description2				varchar(256),
+	device_name3				varchar(60)							not null,
+	device_type3				char(1)								default '0',
+	device_ip3					varchar(45),
+	device_priority3			smallint							default 3,
+	use_yn3						char(1)								default 'Y',
+	description3				varchar(256),
+	device_name4				varchar(60)							not null,
+	device_type4				char(1)								default '0',
+	device_ip4					varchar(45),
+	device_priority4			smallint							default 4,
+	use_yn4						char(1)								default 'Y',
+	description4				varchar(256),
+	device_name5				varchar(60)							not null,
+	device_type5				char(1)								default '0',
+	device_ip5					varchar(45),
+	device_priority5			smallint							default 5,
+	use_yn5						char(1)								default 'Y',
+	description5				varchar(256),
+	insert_date				timestamp without time zone			default now(),
+	constraint user_device_pk primary key (user_device_id)
+);
+
+
+comment on table user_device is '사용자 사용 디바이스';
+comment on column user_device.user_device_id is '고유번호';
+comment on column user_device.user_id is '사용자 아이디';
+comment on column user_device.device_name1 is '사용 기기명1';
+comment on column user_device.device_type1 is '사용 기기 타입1. 0 : PC, 1 : 핸드폰';
+comment on column user_device.device_ip1 is 'IP1';
+comment on column user_device.device_priority1 is '우선순위1';
+comment on column user_device.use_yn1 is '사용유무1. Y : 사용, N : 미사용';
+comment on column user_device.description1 is '설명1';
+comment on column user_device.device_name2 is '사용 기기명2';
+comment on column user_device.device_type2 is '사용 기기 타입2. 0 : PC, 1 : 핸드폰';
+comment on column user_device.device_ip2 is 'IP2';
+comment on column user_device.device_priority2 is '우선순위2';
+comment on column user_device.use_yn2 is '사용유무2. Y : 사용, N : 미사용';
+comment on column user_device.description2 is '설명2';
+comment on column user_device.device_name3 is '사용 기기명3';
+comment on column user_device.device_type3 is '사용 기기 타입3. 0 : PC, 1 : 핸드폰';
+comment on column user_device.device_ip3 is 'IP3';
+comment on column user_device.device_priority3 is '우선순위3';
+comment on column user_device.use_yn3 is '사용유무3. Y : 사용, N : 미사용';
+comment on column user_device.description3 is '설명3';
+comment on column user_device.device_name4 is '사용 기기명4';
+comment on column user_device.device_type4 is '사용 기기 타입4. 0 : PC, 1 : 핸드폰';
+comment on column user_device.device_ip4 is 'IP4';
+comment on column user_device.device_priority4 is '우선순위4';
+comment on column user_device.use_yn4 is '사용유무4. Y : 사용, N : 미사용';
+comment on column user_device.description4 is '설명4';
+comment on column user_device.device_name5 is '사용 기기명5';
+comment on column user_device.device_type5 is '사용 기기 타입5. 0 : PC, 1 : 핸드폰';
+comment on column user_device.device_ip5 is 'IP5';
+comment on column user_device.device_priority5 is '우선순위5';
+comment on column user_device.use_yn5 is '사용유무5. Y : 사용, N : 미사용';
+comment on column user_device.description5 is '설명5';
+comment on column user_device.insert_date is '등록일';

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaia3d.persistence.IssueMapper">
+
+	<!-- 이슈 총 건수 -->
+	<select id="getIssueTotalCount" parameterType="issue" resultType="long">
+		/* getIssueTotalCount */
+		SELECT COUNT(user_id) 
+		FROM issue
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+			${search_word} = #{search_value}
+			</if>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+			${search_word} LIKE '%' || #{search_value} || '%'
+			</if>
+			<if test="use_yn != null and use_yn != ''">
+			AND use_yn = #{use_yn}
+			</if>
+			<if test="start_date != null and start_date != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="end_date != null and end_date != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+		</trim>
+	</select>
+
+	<!-- 이슈 목록 -->
+	<select id="getListIssue" parameterType="issue" resultType="issue">
+		/* getListIssue */
+		SELECT A.*, 
+			(SELECT user_name FROM user_info WHERE user_id = A.user_id) AS user_name, 
+			(SELECT count(issue_comment_id) FROM issue_comment WHERE issue_id = A.issue_id) AS comment_count
+		FROM(
+			SELECT *
+			FROM issue 
+			<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+				${search_word} = #{search_value}
+				</if>
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+				${search_word} LIKE '%' || #{search_value} || '%'
+				</if>
+				<if test="use_yn != null and use_yn != ''">
+				AND use_yn = #{use_yn}
+				</if>
+				<if test="start_date != null and start_date != ''">
+				<![CDATA[
+				AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="end_date != null and end_date != ''">
+				<![CDATA[
+				AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+			</trim>
+			<choose>
+			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
+			ORDER BY ${order_word} ${order_value}
+			</when>
+			<otherwise>
+			ORDER BY insert_date DESC, issue_id DESC
+			</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) A
+	</select>
+	
+	<!-- 이슈 Comment 목록 -->
+	<select id="getListIssueComment" parameterType="long" resultType="issueComment">
+		/* getListIssueComment */
+		SELECT A.*, (SELECT user_name FROM user_info WHERE user_id = A.user_id) 
+		FROM issue_comment A 
+		WHERE issue_id = #{issue_id} 
+		ORDER BY insert_date DESC
+	</select>
+	
+	<!-- 이슈 정보 -->
+	<select id="getIssue" parameterType="long" resultType="issue">
+		/* getIssue */
+		SELECT A.*,
+			(SELECT user_name FROM user_info WHERE user_id = A.user_id) AS user_name, 
+			(SELECT contents FROM issue_detail WHERE issue_id = A.issue_id) AS contents 
+		FROM issue A
+		WHERE issue_id = #{issue_id}
+	</select>
+	
+	<!-- 이슈 Comment 정보 -->
+	<select id="getIssueComment" parameterType="long" resultType="issueComment">
+		/* getIssueComment */
+		SELECT * 
+		FROM issue_comment
+		WHERE issue_comment_id = #{issue_comment_id}
+	</select>
+	
+	<!-- 이슈 등록 -->
+	<insert id="insertIssue" parameterType="issue">
+		/* insertIssue */
+		<selectKey keyProperty="issue_id" resultType="long" order="BEFORE">
+    		SELECT nextval('issue_seq')
+  		</selectKey>
+		INSERT INTO issue(
+			issue_id, title, user_id, user_name, start_date, end_date, use_yn, client_ip
+		) values(
+			#{issue_id}, #{title}, #{user_id}, #{user_name}, 
+			<if test="start_date == null or start_date == ''">
+			null,
+			</if>
+			<if test="start_date != null and start_date != ''">
+			TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS'),
+			</if>
+			<if test="end_date == null or end_date == ''">
+			null,
+			</if>		
+			<if test="end_date != null and end_date != ''">
+			TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS'),
+			</if>			
+			#{use_yn}, #{client_ip}
+		)
+	</insert>
+	
+	<!-- 이슈 상세 등록 -->
+	<insert id="insertIssueDetail" parameterType="issue">
+		/* insertIssueDetail */
+		<selectKey keyProperty="issue_detail_id" resultType="long" order="BEFORE">
+    		SELECT nextval('issue_detail_seq')
+  		</selectKey>
+		INSERT INTO issue_detail (
+			issue_detail_id, issue_id, contents
+		) values (
+			#{issue_detail_id}, #{issue_id}, #{contents}
+		)
+	</insert>
+	<!-- 이슈 Comment 등록 -->
+	<insert id="insertIssueComment" parameterType="issueComment">
+		/* insertIssueComment */
+		<selectKey keyProperty="issue_comment_id" resultType="long" order="BEFORE">
+    		SELECT nextval('issue_comment_seq')
+  		</selectKey>
+		INSERT INTO issue_comment(
+			issue_comment_id, issue_id, user_id, comment, client_ip
+		) values(
+			#{issue_comment_id}, #{issue_id}, #{user_id}, #{comment}, #{client_ip}
+		)
+	</insert>
+	
+	<!-- 이슈 수정 -->	
+	<update id="updateIssue" parameterType="issue">
+		/* updateIssue */
+		UPDATE issue
+		SET title = #{title},
+			start_date = TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISS'),
+			end_date = TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISS'),
+			use_yn = #{use_yn}
+		WHERE issue_id = #{issue_id}
+	</update>
+	
+	<!-- 이슈 상세 수정 -->	
+	<update id="updateIssueDetail" parameterType="issue">
+		/* updateIssueDetail */
+		UPDATE issue_detail
+		SET contents = #{contents}
+		WHERE issue_id = #{issue_id}
+	</update>
+	
+	<!-- 이슈 조회 건수 증가 -->
+	<select id="updateIssueViewCount" parameterType="long">
+		/* updateIssueViewCount */
+		UPDATE issue
+		SET view_count = view_count + 1
+		WHERE issue_id = #{issue_id}
+	</select>
+	
+	<!-- 이슈 Comment 수정 -->	
+	<update id="updateIssueComment" parameterType="issueComment">
+		/* updateIssue */
+		UPDATE issue
+		SET comment = #{comment}
+		WHERE issue_comment_id = #{issue_comment_id}
+	</update>
+	
+	<!-- 이슈 삭제 -->
+	<delete id="deleteIssue" parameterType="long">
+		/* deleteIssue */
+		DELETE FROM issue WHERE issue_id = #{issue_id}
+	</delete>
+	
+	<!-- 이슈 상세 삭제 -->
+	<delete id="deleteIssueDetail" parameterType="long">
+		/* deleteIssueDetail */
+		DELETE FROM issue_detail WHERE issue_id = #{issue_id}
+	</delete>
+	
+	<!-- 이슈 Comment 삭제 -->
+	<delete id="deleteIssueComment" parameterType="long">
+		/* deleteIssueComment */
+		DELETE FROM issue_comment WHERE issue_comment_id = #{issue_comment_id}
+	</delete>
+	
+	<!-- 이슈 Comment 일괄 삭제 -->
+	<delete id="deleteIssueCommentByIssueId" parameterType="long">
+		/* deleteIssueCommentByIssueId */
+		DELETE FROM issue_comment WHERE issue_id = #{issue_id}
+	</delete>
+	
+</mapper>

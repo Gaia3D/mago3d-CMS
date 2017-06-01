@@ -9,8 +9,8 @@ insert into user_group(
 insert into user_info(
 	user_id, user_group_id, user_name, password, salt, user_role_check_yn, last_login_date
 ) values (
-	'admin', 1, '슈퍼관리자', '26b5a780af1b58c4ca473473b3646e145641ab848d3a543bfbe3f1f3a0e4bb3ee31130ab0abf29681b0215ebebcd8a253d83f60dc0fac48243e7c519a447025f', 
-	'$2a$10$nvWy9SLYNRLGJUUcLtyXgO', 'N', now()
+	'admin', 1, '슈퍼관리자', '17ea3ab706538b13ca825dae505c1c9a1bb32030a50a2ce675d7b5d73f6c70eb566df9b07561fd688e9fb7c44e6a3e9bf9de567f853c3c62db8d1e3ac5b479ec', 
+	'$2a$10$CMK4Fnjhg/CPE71xYSW9Se', 'N', now()
 );
 
 -- 메뉴
@@ -48,6 +48,12 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (102, 1, 102);
 
 -- 메인 화면 위젯
+insert into widget(	widget_id, name, view_order, user_id) values( 1, 'issueWidget', 1, 'admin' );
+insert into widget(	widget_id, name, view_order, user_id) values( 2, 'userWidget', 4, 'admin' );
+insert into widget(	widget_id, name, view_order, user_id) values( 3, 'scheduleLogListWidget', 7, 'admin' );
+insert into widget(	widget_id, name, view_order, user_id) values( 4, 'accessLogWidget', 8, 'admin' );
+insert into widget(	widget_id, name, view_order, user_id) values( 5, 'dbcpWidget', 9, 'admin' );
+insert into widget(	widget_id, name, view_order, user_id) values( 6, 'dbSessionWidget', 10, 'admin' );
 
 -- 운영 정책
 insert into policy(	policy_id, password_exception_char, site_name, site_admin_mobile_phone, site_admin_email) 

@@ -22,20 +22,12 @@ public class UserSession implements Serializable {
 	
 	/******** 화면 오류 표시용 ********/
 	private String error_code;
-	private String last_login_policy;
-	
 	/******* 세션 하이재킹 체크 *******/
 	private String login_ip;
 	
 	// 사용자 그룹명
 	private String user_group_name;
-	// 사용안함
-	private Integer level;
 	
-	// OTP 사용유무, Y : 사용, N : 사용안함
-	private String otp_use_yn;
-	// OTP 번호 전송방법. 0 : 모바일(앱), 1 : SMS, 2 : PC(WEB), 3 : 이메일, 4 : 메신저, 5 : 토큰기기, 6 : RADIUS
-	private String otp_type;
 	
 	/********** DB 사용 *************/
 	// 고유번호
@@ -48,6 +40,7 @@ public class UserSession implements Serializable {
 	private String password;
 	// SALT
 	private String salt;
+	
 	// 전화번호
 	private String telephone;
 	// 핸드폰 번호
@@ -57,7 +50,7 @@ public class UserSession implements Serializable {
 	// 메신저 아이디
 	private String messanger;
 	// 사번
-	private String emp_no;
+	private String employee_id;
 	// 직급
 	private String dept_name;
 	// 부서명
@@ -84,10 +77,9 @@ public class UserSession implements Serializable {
 	private String user_role_check_yn;
 	// 사용자 상태. 0:사용중, 1:사용중지(관리자), 2:잠금(비밀번호 실패횟수 초과), 3:휴면(로그인 기간), 4:만료(사용기간 종료), 5:삭제(화면 비표시, policy.user_delete_method=0), 6:임시비밀번호
 	private String status;
-	// Single Sign-On 사용유무. 기본값 N : 사용안함
-	private String sso_use_yn;
+	
 	// 등록일
-	private String register_date;
+	private String insert_date;
 	// 패스워드 변경 주기
 	private String password_change_term;
 	// 패스워드 변경 주기 값
@@ -96,10 +88,6 @@ public class UserSession implements Serializable {
 	private String user_last_login_lock;
 	// 일정 기간 동안 미 접속시 잠금 처리 결과 값
 	private Boolean user_last_login_lock_over;
-	//otp_pin_number
-	private String otp_pin_number;
-	// OTP Mobile 앱 Key
-	private String otp_mobile_app_key;
 	
 //	public String getViewTelePhone() {
 //		return Crypt.decrypt(telephone);
@@ -181,10 +169,10 @@ public class UserSession implements Serializable {
 //		return value;
 //	}
 	
-	public String getViewRegisterDate() {
-		if(this.register_date == null || "".equals( register_date)) {
+	public String getViewInsertDate() {
+		if(this.insert_date == null || "".equals( insert_date)) {
 			return "";
 		}
-		return register_date.substring(0, 19);
+		return insert_date.substring(0, 19);
 	}
 }

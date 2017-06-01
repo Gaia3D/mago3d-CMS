@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="com.gaia3d.domain.UserSession"%>
-<%@page import="com.gaia3d.cache.CacheConfig"%>
+<%@page import="com.gaia3d.domain.CacheManager"%>
 <%@page import="java.util.Map"%>
+<%@page import="java.util.HashMap"%>
 <%
-	Map<String, String> haStatusMap = ConfigCache.getHaMap();
+	Map<String, String> haStatusMap = new HashMap<String, String>();
 	String basicServerRole = null;
 	String activeServerIp = null;
 	String standbyStatus = null;

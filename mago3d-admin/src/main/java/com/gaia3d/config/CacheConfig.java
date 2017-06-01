@@ -1,29 +1,20 @@
-package com.gaia3d.controller;
+package com.gaia3d.config;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.stereotype.Component;
 
-import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.service.PolicyService;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * 메뉴
- * 
- * @author jeongdae
- *
- */
 @Slf4j
-@Controller
-@RequestMapping("/common/")
-public class ConfigCacheController {
+@Component
+public class CacheConfig {
 
 	@Autowired
 	private ApplicationContext context;

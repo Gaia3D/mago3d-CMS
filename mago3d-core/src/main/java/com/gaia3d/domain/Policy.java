@@ -16,11 +16,6 @@ public class Policy {
 	// 서버 하드웨어 시간 설정 쉘
 	public static final String SERVER_DATE_HWCLOCK_SHELL = "config_date_hwclock.sh";
 	
-	public static final String USER_OTP_FORBID = "0";
-	// 시간 동기화
-	public static final String OTP_ALGORITHM_TIME = "0";
-	// 이벤트 동기화
-	public static final String OTP_ALGORITHM_EVENT = "1";
 	// 사용자 논리적/물리적 삭제
 	public static final String LOGICAL_DELETE_USER = "0";
 	public static final String PHYSICAL_DELETE_USER = "1";
@@ -74,37 +69,6 @@ public class Policy {
 	// 사용자 디바이스 정보 수정여부. Y : 허용(기본값), N : 허용안함
 	private String user_device_modify_yn;
 	
-	// 사용자 OTP API 기능 사용유무. 0 : 사용안함, 1 : 사용(기본), 2 : 타회사
-	private String user_otp_status;
-	// 사용자 OTP 마지막 인증으로 부터 잠금 기간
-	private String user_otp_last_authentication_lock;
-	// 사용자 OTP 생성 및 인증 방식. 0 : 시간동기화(기본값), 1 : 이벤트 동기화
-	private String user_otp_algorithm_type;
-	// 사용자 OTP 인증번호 자리수. 기본 8자리(다른 OTP가 6자리를 사용해서 확장용)
-	private Integer user_otp_number_length;
-	// 사용자 OTP 실패 횟수
-	private Integer user_otp_fail_count;
-	// 사용자 OTP 번호 Mobile APP, 토큰 기가 시간 보정값(분단위). 기본 1분
-	private Integer user_otp_app_modify_time;
-	// 사용자 OTP 번호 유효시간(분단위). 기본 3분
-	private Integer user_otp_db_verify_time;
-	// 사용자 OTP 타입 SMS 사용유무. Y : 사용, N : 사용안함(기본값)
-	private String user_otp_sms_yn;
-	// 사용자 OTP 타입 이메일 사용유무. Y : 사용, N : 사용안함(기본값)
-	private String user_otp_email_yn;
-	// 사용자 OTP 타입 메신저 사용유무. Y : 사용, N : 사용안함(기본값)
-	private String user_otp_messanger_yn;
-	// 사용자 OTP 타입 토큰 사용유무. Y : 사용, N : 사용안함(기본값)
-	private String user_otp_token_yn;
-	// 사용자 Radius 프로토콜 사용유무. Y : 사용, N : 사용안함(기본값)
-	private String user_otp_radius_yn;
-	// OTP 사용 가능 횟수, 기본값 10000
-	private Integer user_otp_allow_counter;
-	// 사용자 모바일앱 Key 수정여부. Y : 허용(기본값), N : 허용안함
-	private String user_otp_mobile_app_key_modify_yn;
-	// 사용자 OTP PIN 번호 수정여부. Y : 허용(기본값), N : 허용안함
-	private String user_otp_pin_number_modify_yn;
-	
 	// 패스워드 변경 주기 기본 30일
 	private String password_change_term;
 	// 패스워드 최소 길이 기본 8
@@ -127,43 +91,6 @@ public class Policy {
 	private String password_create_char;
 	// 패스워드로 사용할수 없는 특수문자(XSS). <,>,&,작은따음표,큰따움표
 	private String password_exception_char;
-	
-	// 시스템 내 동일 패스워드 허용여부. Y : 허용, N : 허용안함
-	private String system_same_password_yn;
-	// 시스템 계정 다운로드시 확인. 0 : 패스워드(기본값), 1 : OTP
-	private String system_account_down_check;
-	// 시스템 스케줄 설정/해제시 확인. 0 : 패스워드(기본값), 1 : OTP
-	private String system_schedule_update_check;
-	// 시스템 접속 테스트 시 확인. 0 : 패스워드(기본값), 1 : OTP
-	private String system_connect_test_check;
-	// 시스템 수정시 확인. 0 : 패스워드(기본값), 1 : OTP
-	private String system_update_check;
-	// 시스템 삭제시 확인. 0 : 패스워드(기본값), 1 : OTP
-	private String system_delete_check;
-	// 시스템 삭제 처리 방식. 0 : 논리적(기본값), 1 : 물리적(DB 완전 삭제)
-	private String system_delete_type;
-	
-	// 계정 패스워드 보기시 확인. 0 : 패스워드(기본값), 1 : OTP
-	private String account_password_view_check;
-	// 계정 패스워드 변경시 확인. 0 : 패스워드(기본값), 1 : OTP
-	private String account_password_update_check;
-	// 계정 스케줄 설정/해제시 확인. 0 : 패스워드(기본값), 1 : OTP
-	private String account_schedule_update_check;
-	// 계정 수정시 확인. 0 : 패스워드(기본값), 1 : OTP
-	private String account_update_check;
-	// 계정 삭제시 확인. 0 : 패스워드(기본값), 1 : OTP
-	private String account_delete_check;
-	// 계정 삭제 처리 방식. 0 : 논리적(기본값), 1 : 물리적(DB 완전 삭제)
-	private String account_delete_type;
-	
-	// 결재 임시 패스워드 발급. 0 : 계정별(기본값), 1 : 요청별
-	private String approval_temp_password_type;
-	// 결재 승인시 확인. 0 : 패스워드(기본값), 1 : OTP
-	private String approval_sign_check;
-	// 결재 사후 승인. 0 : 패스워드(기본값), 1 : OTP
-	private String approval_after_sign;
-	// 결재 자동 반려. Y : 사용, N : 미사용(기본값)
-	private String approval_auto_reject_yn;
 	
 	// 알림 서비스 사용 유무. Y : 사용, N : 미사용(기본값)
 	private String notice_service_yn;
@@ -285,12 +212,13 @@ public class Policy {
 	private String solution_manager_email;
 	
 	// 등록일
-	private String register_date;
+	private String insert_date;
 	
-	public String getViewRegisterDate() {
-		if(this.register_date == null || "".equals( register_date)) {
+	
+	public String getViewInsertDate() {
+		if(this.insert_date == null || "".equals( insert_date)) {
 			return "";
 		}
-		return register_date.substring(0, 19);
+		return insert_date.substring(0, 19);
 	}
 }

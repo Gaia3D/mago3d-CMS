@@ -16,7 +16,8 @@ public class CacheManager {
 	private CacheManager() {
 	}
 	
-	
+	// 개인정보 마스킹 처리 유무
+	private boolean userInfoMasking = false; 
 	// 운영 정책
 	private Policy policy = null;
 	
@@ -36,6 +37,14 @@ public class CacheManager {
 //	}
 	
 	/**
+	 * 개인정보 마스킹 처리 유무
+	 * @return
+	 */
+	public static boolean isUserInfoMasking() {
+		return cache.userInfoMasking;
+	}
+	
+	/**
 	 * 운영 정책
 	 * @return
 	 */
@@ -45,5 +54,10 @@ public class CacheManager {
 	
 	public static void setPolicy(Policy policy) {
 		cache.policy = policy;
+		if("Y".equals(policy.getSecurity_masking_yn())) {
+			cache.userInfoMasking = true;
+		} else {
+			cache.userInfoMasking = false;
+		}
 	}
 }
