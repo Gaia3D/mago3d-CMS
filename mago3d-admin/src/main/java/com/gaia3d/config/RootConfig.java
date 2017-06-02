@@ -2,6 +2,7 @@ package com.gaia3d.config;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -57,7 +58,6 @@ public class RootConfig {
 //	    dataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMills);
 //	    dataSource.setValidationQuery(validationQuery);
 	    return dataSource;
-
 	}
 	
 	@Bean

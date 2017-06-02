@@ -17,7 +17,7 @@
 <header class="site-header">
 	<div class="row">
 		<div class="container">
-			<h1 class="site-title u-pull-left"><a href="/main/index.do"><img src="/images/ko/common/logo-OTP.png" alt="Gt1000 OTP" /></a></h1>
+			<h1 class="site-title u-pull-left"><a href="/main/index.do"><img src="/images/${lang}/common/logo-mago3d.png" alt="Gaia3d" width="150" height="48" ></a></h1>
 			<aside class="site-aside-menu u-pull-right">
 				<ul>
 <%

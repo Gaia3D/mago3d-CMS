@@ -13,6 +13,7 @@
 		<typeAlias type="com.gaia3d.domain.APILog" alias="aPILog"/>
 		<typeAlias type="com.gaia3d.domain.Issue" alias="issue"/>
 		<typeAlias type="com.gaia3d.domain.IssueDetail" alias="issueDetail"/>
+		<typeAlias type="com.gaia3d.domain.IssueComment" alias="issueComment"/>
 		<typeAlias type="com.gaia3d.domain.PGStatActivity" alias="pGStatActivity"/>
 		<typeAlias type="com.gaia3d.domain.Policy" alias="policy"/>
 		<typeAlias type="com.gaia3d.domain.Schedule" alias="schedule"/>

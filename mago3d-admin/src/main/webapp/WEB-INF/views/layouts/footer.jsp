@@ -3,7 +3,7 @@
 <div class="site-footer">
 	<div class="row">
 		<div class="container">
-			<img src="/images/ko/common/logo-SGN.png" alt="Gaia3d" /> &copy; Gaia3d Corp.
+			Mago3D ⓒ Gaia3d Corp. All Rights Reserved
 		</div>
 	</div>
 </div>

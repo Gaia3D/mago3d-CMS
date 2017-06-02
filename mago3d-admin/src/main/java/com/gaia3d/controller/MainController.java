@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -19,11 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import org.apache.tomcat.jdbc.pool.DataSource;
+
 import com.gaia3d.config.PropertiesConfig;
+import com.gaia3d.domain.AccessLog;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.PGStatActivity;
 import com.gaia3d.domain.Policy;
+import com.gaia3d.domain.ScheduleLog;
 import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.Widget;
 import com.gaia3d.helper.SessionUserHelper;
@@ -37,8 +40,10 @@ import com.gaia3d.service.UserService;
 import com.gaia3d.service.WidgetService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.FormatUtil;
+import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 /**
  * 메인
@@ -56,7 +61,7 @@ public class MainController {
 	private PropertiesConfig propertiesConfig;
 	
 	@Autowired
-	private BasicDataSource dataSource;
+	private DataSource dataSource;
 	
 	@Autowired
 	private APIService aPIService;
@@ -196,7 +201,7 @@ public class MainController {
 	private void dbcpWidget(Model model) {
 		model.addAttribute("userSessionCount", SessionUserHelper.loginUsersMap.size());
 		model.addAttribute("initialSize", dataSource.getInitialSize());
-		model.addAttribute("maxTotal", dataSource.getMaxTotal());
+//		model.addAttribute("maxTotal", dataSource.getMaxTotal());
 		model.addAttribute("maxIdle", dataSource.getMaxIdle());
 		model.addAttribute("minIdle", dataSource.getMinIdle());
 		model.addAttribute("numActive", dataSource.getNumActive());
@@ -270,8 +275,8 @@ public class MainController {
 	@RequestMapping(value = "ajax-user-widget.do", method = RequestMethod.GET)
 	@ResponseBody
 	public String ajaxUserWidget(HttpServletRequest request) {
-		
-		JSONObject jSONObject = new JSONObject();
+		Gson gson = new Gson();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			// 사용자 현황
@@ -303,7 +308,7 @@ public class MainController {
 	
 		jSONObject.put("result", result);
 		
-		return jSONObject.toString();
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -315,7 +320,8 @@ public class MainController {
 	@ResponseBody
 	public String ajaxScheduleLogListWidget(HttpServletRequest request) {
 		
-		JSONObject jSONObject = new JSONObject();
+		Gson gson = new Gson();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
@@ -333,7 +339,7 @@ public class MainController {
 			scheduleLog.setLimit(WIDGET_LIST_VIEW_COUNT);
 			List<ScheduleLog> scheduleLogList = scheduleService.getListScheduleLog(scheduleLog);
 			
-			jSONObject.put("scheduleLogList", JSONArray.fromObject(scheduleLogList));
+//			jSONObject.put("scheduleLogList", new JSONArray.fromObject(scheduleLogList));
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -341,7 +347,7 @@ public class MainController {
 	
 		jSONObject.put("result", result);
 		
-		return jSONObject.toString();
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -353,16 +359,17 @@ public class MainController {
 	@ResponseBody
 	public String ajaxDbcpWidget(HttpServletRequest request) {
 		
-		JSONObject jSONObject = new JSONObject();
+		Gson gson = new Gson();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			jSONObject.put("userSessionCount", SessionUserHelper.loginUsersMap.size());
-			jSONObject.put("initialSize", sGNIBasicDataSource.getInitialSize());
-			jSONObject.put("maxTotal", sGNIBasicDataSource.getMaxTotal());
-			jSONObject.put("maxIdle", sGNIBasicDataSource.getMaxIdle());
-			jSONObject.put("minIdle", sGNIBasicDataSource.getMinIdle());
-			jSONObject.put("numActive", sGNIBasicDataSource.getNumActive());
-			jSONObject.put("numIdle", sGNIBasicDataSource.getNumIdle());
+			jSONObject.put("initialSize", dataSource.getInitialSize());
+//			jSONObject.put("maxTotal", dataSource.getMaxTotal());
+			jSONObject.put("maxIdle", dataSource.getMaxIdle());
+			jSONObject.put("minIdle", dataSource.getMinIdle());
+			jSONObject.put("numActive", dataSource.getNumActive());
+			jSONObject.put("numIdle", dataSource.getNumIdle());
 			
 			// 사용자 dbcp 정보
 			Map<String, Integer> userDbcp = getUserDbcp();
@@ -380,7 +387,7 @@ public class MainController {
 	
 		jSONObject.put("result", result);
 		
-		return jSONObject.toString();
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -392,7 +399,8 @@ public class MainController {
 	@ResponseBody
 	public String ajaxAccessLogWidget(HttpServletRequest request) {
 		
-		JSONObject jSONObject = new JSONObject();
+		Gson gson = new Gson();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
@@ -410,7 +418,7 @@ public class MainController {
 			accessLog.setLimit(WIDGET_LIST_VIEW_COUNT);
 			List<AccessLog> accessLogList = logService.getListAccessLog(accessLog);
 			
-			jSONObject.put("accessLogList", JSONArray.fromObject(accessLogList));
+//			jSONObject.put("accessLogList", JSONArray.fromObject(accessLogList));
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -418,6 +426,6 @@ public class MainController {
 	
 		jSONObject.put("result", result);
 		
-		return jSONObject.toString();
+		return gson.toJson(jSONObject);
 	}
 }
