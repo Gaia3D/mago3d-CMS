@@ -26,8 +26,8 @@ create table policy(
 	password_create_char				varchar(32)			default '!@#',
 	password_exception_char				varchar(10)			default '<>&',
 	
-	geo_view_library					varchar(20)		default 'cesium',
-	geo_data_path						varchar(100)	default '/data',
+	geo_view_library					varchar(20)			default 'cesium',
+	geo_data_path						varchar(100)		default '/data',
 	geo_cull_face_enable				varchar(5)			default 'false',
 	geo_time_line_enable				varchar(5)			default 'false',
 	
@@ -36,7 +36,6 @@ create table policy(
 	geo_init_longitude					varchar(30)			default '126.924185',
 	geo_init_height						varchar(30)			default '3000.0',
 	geo_init_duration					smallint			default 3,
-	
 	
 	geo_server_enable						varchar(5)			default 'false',
 	geo_server_url							varchar(256),
@@ -49,8 +48,6 @@ create table policy(
 	
 	geo_callback_enable 					varchar(5)			default 'false',
 	geo_callback_selectedObject				varchar(64),
-	
-	
 	
 	notice_service_yn					char(1)				default 'Y',
 	notice_service_send_type			char(1)				default '0',

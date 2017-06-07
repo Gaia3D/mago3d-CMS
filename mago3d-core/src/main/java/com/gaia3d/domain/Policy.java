@@ -95,6 +95,48 @@ public class Policy {
 	// 패스워드로 사용할수 없는 특수문자(XSS). <,>,&,작은따음표,큰따움표
 	private String password_exception_char;
 	
+	// view library. 기본 cesium
+	private String geo_view_library;
+	// data 폴더. 기본 /data
+	private String geo_data_path;
+	// cullFace 사용유무. 기본 false
+	private String geo_cull_face_enable;
+	// timeLine 사용유무. 기본 false
+	private String geo_time_line_enable;
+	
+	// 초기 카메라 이동 유무. 기본 true
+	private String geo_init_camera_enable;
+	// 초기 카메라 이동 위도
+	private String geo_init_latitude;
+	// 초기 카메라 이동 경도
+	private String geo_init_longitude;
+	// 초기 카메라 이동 높이
+	private String geo_init_height;
+	// 초기 카메라 이동 시간. 초 단위
+	private Long geo_init_duration;
+	
+	// geo server 사용유무
+	private String geo_server_enable;
+	// geo server url
+	private String geo_server_url;
+	// geo server layers
+	private String geo_server_layers;
+	// geo server service 변수값
+	private String geo_server_parameters_service;
+	// geo server version 변수값
+	private String geo_server_parameters_version;
+	// geo server request 변수값
+	private String geo_server_parameters_request;
+	// geo server transparent 변수값
+	private String geo_server_parameters_transparent;
+	// geo server format 변수값
+	private String geo_server_parameters_format;
+	
+	// 콜백 function 사용유무. 기본값 false
+	private String geo_callback_enable;
+	// object 선택 callback function 이름
+	private String geo_callback_selectedObject;
+	
 	// 알림 서비스 사용 유무. Y : 사용, N : 미사용(기본값)
 	private String notice_service_yn;
 	// 알림 발송 매체. 0 : SMS(기본값), 1 : 이메일, 2 : 메신저

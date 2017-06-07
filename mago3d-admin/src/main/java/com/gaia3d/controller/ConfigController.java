@@ -1,4 +1,4 @@
-package com.gaia3d.config;
+package com.gaia3d.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +23,7 @@ import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.security.Crypt;
 import com.gaia3d.service.PolicyService;
+import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -204,7 +206,43 @@ public class ConfigController {
 //		jSONObject.put("result", result);
 //		return jSONObject.toString();
 //	}
+
+//	/**
+//	 * Geo
+//	 * @param request
+//	 * @param policy
+//	 * @return
+//	 */
+//	@PostMapping(value = "ajax-update-policy-geo.do")
+//	@ResponseBody
+//	public String ajaxUpdatePolicyPassword(HttpServletRequest request, Policy policy) {
+//		Gson gson = new Gson();
+//		gson.
+//		
+//		JSONObject jSONObject = new JSONObject();
+//		String result = "success";
+//		try {
+//			log.info("@@ policy = {} ", policy);
+//			if(policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0) {
+//				result = "policy.geo.invalid";
+//				jSONObject.put("result", result);
+//				return jSONObject.toString();
+//			}
+//			
+//			policyService.updatePolicyGeo(policy);
+//
+//			// TODO 캐시 갱신
+//			
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			result = "db.exception";
+//		}
 //	
+//		jSONObject.put("result", result);
+//		return jSONObject.toString();
+//	}
+	
+	
 //	/**
 //	 * 운영 정책 시스템 수정
 //	 * @param request

@@ -37,6 +37,9 @@
 							<ul>
 								<li><a href="#user_tab">사용자</a></li>
 								<li><a href="#password_tab">패스워드</a></li>
+								<li><a href="#geo_tab">공간 정보</a></li>
+								<li><a href="#geoserver_tab">GeoServer</a></li>
+								<li><a href="#geocallback_tab">CallBack</a></li>
 								<li><a href="#security_tab">보안</a></li>
 								<li><a href="#content_tab">컨텐트</a></li>
 								<li><a href="#os_tab">OS 설정</a></li>
@@ -47,6 +50,9 @@
 							
 							<%@ include file="/WEB-INF/views/config/modify-policy-user.jsp" %>
 							<%@ include file="/WEB-INF/views/config/modify-policy-password.jsp" %>
+							<%@ include file="/WEB-INF/views/config/modify-policy-geo.jsp" %>
+							<%@ include file="/WEB-INF/views/config/modify-policy-geoserver.jsp" %>
+							<%@ include file="/WEB-INF/views/config/modify-policy-geocallback.jsp" %>
 							<%@ include file="/WEB-INF/views/config/modify-policy-security.jsp" %>
 							<%@ include file="/WEB-INF/views/config/modify-policy-content.jsp" %>
 							<%@ include file="/WEB-INF/views/config/modify-policy-os.jsp" %>
@@ -325,6 +331,105 @@
 				error:function(request,status,error){
 			        alert(JS_MESSAGE["ajax.error.message"]);
 			        updatePasswordFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+	
+	// 공간 정보
+	var updatePolicyGeoFlag = true;
+	function updatePolicyGeo() {
+		if(updatePolicyGeoFlag) {
+			// validation 나중에
+			updatePolicyGeoFlag = false;
+			var info = $("#policyGeo").serialize();
+			$.ajax({
+				url: "/config/ajax-update-policy-geo.do",
+				type: "POST",
+				data: info,
+				cache: false,
+				async:false,
+				dataType: "json",
+				success: function(msg){
+					if(msg.result == "success") {
+						alert(JS_MESSAGE["policy.geo.update"]);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+					updatePolicyGeoFlag = true;
+				},
+				error:function(request,status,error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        updatePolicyGeoFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+	
+	// GeoServer
+	var updatePolicyGeoServerFlag = true;
+	function updatePolicyGeoServer() {
+		if(updatePolicyGeoServerFlag) {
+			// validation 나중에
+			updatePolicyGeoServerFlag = false;
+			var info = $("#policyGeoServer").serialize();
+			$.ajax({
+				url: "/config/ajax-update-policy-geoserver.do",
+				type: "POST",
+				data: info,
+				cache: false,
+				async:false,
+				dataType: "json",
+				success: function(msg){
+					if(msg.result == "success") {
+						alert(JS_MESSAGE["policy.geoserver.update"]);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+					updatePolicyGeoServerFlag = true;
+				},
+				error:function(request,status,error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        updatePolicyGeoServerFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+	
+	// Geo CallBack Function
+	var policyGeoCallBackFlag = true;
+	function policyGeoCallBack() {
+		if(policyGeoCallBackFlag) {
+			// validation 나중에
+			policyGeoCallBackFlag = false;
+			var info = $("#policyGeoCallBack").serialize();
+			$.ajax({
+				url: "/config/ajax-update-policy-geocallback.do",
+				type: "POST",
+				data: info,
+				cache: false,
+				async:false,
+				dataType: "json",
+				success: function(msg){
+					if(msg.result == "success") {
+						alert(JS_MESSAGE["policy.geo.update"]);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+					policyGeoCallBackFlag = true;
+				},
+				error:function(request,status,error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        policyGeoCallBackFlag = true;
 				}
 			});
 		} else {
