@@ -3,6 +3,7 @@ package com.gaia3d.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
+@Component
 public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
     @Override

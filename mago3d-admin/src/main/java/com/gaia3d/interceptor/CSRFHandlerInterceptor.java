@@ -3,6 +3,7 @@ package com.gaia3d.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.gaia3d.config.CSRFRequestDataValueProcessor;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
+@Component
 public class CSRFHandlerInterceptor extends HandlerInterceptorAdapter{
 	
 	private static final String LOGIN_URL = "/login/login.do";

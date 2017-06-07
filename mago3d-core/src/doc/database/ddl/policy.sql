@@ -26,6 +26,32 @@ create table policy(
 	password_create_char				varchar(32)			default '!@#',
 	password_exception_char				varchar(10)			default '<>&',
 	
+	geo_view_library					varchar(20)		default 'cesium',
+	geo_data_path						varchar(100)	default '/data',
+	geo_cull_face_enable				varchar(5)			default 'false',
+	geo_time_line_enable				varchar(5)			default 'false',
+	
+	geo_init_camera_enable				varchar(5)			default 'true',
+	geo_init_latitude					varchar(30)			default '37.521168',
+	geo_init_longitude					varchar(30)			default '126.924185',
+	geo_init_height						varchar(30)			default '3000.0',
+	geo_init_duration					smallint			default 3,
+	
+	
+	geo_server_enable						varchar(5)			default 'false',
+	geo_server_url							varchar(256),
+	geo_server_layers						varchar(60),
+	geo_server_parameters_service			varchar(30),
+	geo_server_parameters_version			varchar(30),
+	geo_server_parameters_request			varchar(30),
+	geo_server_parameters_transparent		varchar(30),
+	geo_server_parameters_format				varchar(30),
+	
+	geo_callback_enable 					varchar(5)			default 'false',
+	geo_callback_selectedObject				varchar(64),
+	
+	
+	
 	notice_service_yn					char(1)				default 'Y',
 	notice_service_send_type			char(1)				default '0',
 	notice_approval_request_yn			char(1)				default 'N',
@@ -64,9 +90,6 @@ create table policy(
 	site_admin_email					varchar(256),
 	site_product_log					varchar(256),
 	site_company_log					varchar(256),
-	
-	os_timezone							varchar(30)			default 'Asia/Seoul',
-	os_ntp								varchar(20),
 	
 	backoffice_email_host				varchar(30),
 	backoffice_email_port				int,
@@ -114,6 +137,30 @@ comment on column policy.password_create_type is '초기 패스워드 생성 방
 comment on column policy.password_create_char is '초기 패스워드 생성 문자열. 엑셀 업로드 등';
 comment on column policy.password_exception_char is '패스워드로 사용할수 없는 특수문자(XSS). <,>,&,작은따음표,큰따움표';
 
+comment on column policy.geo_view_library is 'view library. 기본 cesium';
+comment on column policy.geo_data_path is 'data 폴더. 기본 /data';
+comment on column policy.geo_cull_face_enable is 'cullFace 사용유무. 기본 false';
+comment on column policy.geo_time_line_enable is 'timeLine 사용유무. 기본 false';
+	
+comment on column policy.geo_init_camera_enable is '초기 카메라 이동 유무. 기본 true';
+comment on column policy.geo_init_latitude is '초기 카메라 이동 위도';
+comment on column policy.geo_init_longitude is '초기 카메라 이동 경도';
+comment on column policy.geo_init_height is '초기 카메라 이동 높이';
+comment on column policy.geo_init_duration is '초기 카메라 이동 시간. 초 단위';
+	
+comment on column policy.geo_server_enable is 'geo server 사용유무';
+comment on column policy.geo_server_url is 'geo server url';
+comment on column policy.geo_server_layers is 'geo server layers';
+comment on column policy.geo_server_parameters_service is 'geo server service 변수값';
+comment on column policy.geo_server_parameters_version is 'geo server version 변수값';
+comment on column policy.geo_server_parameters_request is 'geo server request 변수값';
+comment on column policy.geo_server_parameters_transparent is 'geo server transparent 변수값';
+comment on column policy.geo_server_parameters_format is 'geo server format 변수값';
+	
+comment on column policy.geo_callback_enable is '콜백 function 사용유무. 기본값 false';
+comment on column policy.geo_callback_selectedObject is 'object 선택 callback function 이름';
+
+
 comment on column policy.notice_service_yn is '알림 서비스 사용 유무. Y : 사용, N : 사용안함(기본값)';
 comment on column policy.notice_service_send_type is '알림 발송 매체. 0 : SMS(기본값), 1 : 이메일, 2 : 메신저';
 comment on column policy.notice_risk_yn is '알림 장애 발생시. Y : 사용, N 사용안함(기본값)';
@@ -144,9 +191,6 @@ comment on column policy.site_admin_mobile_phone is '사이트 관리자 핸드�
 comment on column policy.site_admin_email is '사이트 관리자 이메일';
 comment on column policy.site_product_log is '상단 솔루션 로고 이미지';
 comment on column policy.site_company_log is 'Footer 회사 로고 이미지';
-
-comment on column policy.os_timezone is 'Java TimeZone 설정. Asia/Seoul(기본), UTC(Universal Time Coordinated, 세계협정시)';
-comment on column policy.os_ntp is '서버 시간 설정 방법. 0 : 직접 이력, 1 : KT, 2 : LG, 3 : 아이네트, 4 : 마이크로소프트';
 
 comment on column policy.backoffice_email_host IS 'Email 연동 서버 host';
 comment on column policy.backoffice_email_port IS 'Email 연동 서버 포트';

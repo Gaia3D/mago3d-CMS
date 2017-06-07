@@ -14,6 +14,7 @@
 		<typeAlias type="com.gaia3d.domain.Issue" alias="issue"/>
 		<typeAlias type="com.gaia3d.domain.IssueDetail" alias="issueDetail"/>
 		<typeAlias type="com.gaia3d.domain.IssueComment" alias="issueComment"/>
+		<typeAlias type="com.gaia3d.domain.Menu" alias="menu"/>
 		<typeAlias type="com.gaia3d.domain.PGStatActivity" alias="pGStatActivity"/>
 		<typeAlias type="com.gaia3d.domain.Policy" alias="policy"/>
 		<typeAlias type="com.gaia3d.domain.Schedule" alias="schedule"/>
@@ -22,6 +23,8 @@
 		<typeAlias type="com.gaia3d.domain.UserSession" alias="userSession"/>
 		<typeAlias type="com.gaia3d.domain.UserInfo" alias="userInfo"/>
 		<typeAlias type="com.gaia3d.domain.UserDevice" alias="userDevice"/>
+		<typeAlias type="com.gaia3d.domain.UserGroup" alias="userGroup"/>
+		<typeAlias type="com.gaia3d.domain.UserGroupMenu" alias="userGroupMenu"/>
 		<typeAlias type="com.gaia3d.domain.SSOLog" alias="sSOLog"/>
 		<typeAlias type="com.gaia3d.domain.Widget" alias="widget"/>
 	</typeAliases>

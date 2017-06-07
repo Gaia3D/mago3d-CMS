@@ -51,7 +51,8 @@ dependencies {
 	compile 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	compile 'javax.servlet:jstl:1.2'
 	
-	
+	compile 'org.apache.logging.log4j:log4j:2.8.2'
+		
 	compileOnly('org.projectlombok:lombok')
 	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 	

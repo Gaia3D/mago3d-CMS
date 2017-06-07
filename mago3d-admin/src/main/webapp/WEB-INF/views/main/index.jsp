@@ -341,6 +341,9 @@
 <script type="text/javascript" src="/externlib/${lang}/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
 <script type="text/javascript" src="/externlib/${lang}/jqplot/plugins/jqplot.pointLabels.min.js"></script>
 
+<script type="text/javascript" src="/externlib/${lang}/spinner/progressSpin.min.js"></script>
+<script type="text/javascript" src="/externlib/${lang}/spinner/raphael.js"></script>
+
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
 <script type="text/javascript" src="/js/${lang}/navigation.js"></script>
@@ -356,14 +359,14 @@
 			userWidget(0, null);
 		}
 		if(scheduleLogListDraw == "true") {
-			startSpinner("scheduleLogListSpinner");
+			//startSpinner("scheduleLogListSpinner");
 			ajaxScheduleLogListWidget();
 		}
 		if(dbcpDraw == "true") {
 			setTimeout(callDbcp, 1000);
 		}
 		if(accessLogDraw == "true") {
-			startSpinner("accessLogSpinner");
+			//startSpinner("accessLogSpinner");
 		    setTimeout(callAccessLog, 2000);
 		}
 		
@@ -383,13 +386,13 @@
 	// DB Connection Pool 현황
 	function callDbcp() {
 		ajaxDbcpWidget();
-		setInterval(ajaxDbcpWidget, refreshTime);
+		//setInterval(ajaxDbcpWidget, refreshTime);
 	}
 	
 	// 사용자 추적
 	function callAccessLog() {
 		ajaxAccessLogWidget();
-		setInterval(ajaxAccessLogWidget, refreshTime);
+		//setInterval(ajaxAccessLogWidget, refreshTime);
 	}
 	
 	// 사용자 상태별 현황

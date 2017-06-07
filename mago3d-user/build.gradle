@@ -37,5 +37,7 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
 	
+	compile 'org.apache.logging.log4j:log4j:2.8.2'
+	
 	compile 'org.springframework.boot:spring-boot-devtools:1.5.3.RELEASE'
 }

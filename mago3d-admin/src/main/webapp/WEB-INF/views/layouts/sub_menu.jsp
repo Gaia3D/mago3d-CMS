@@ -2,13 +2,6 @@
 
 <div class="local-navigation">
 	<div class="nav-header">
-		<!-- <div class="service-status">
-			<span class="status-normal">ACTIVE - 192</span>
-			<span class="status-shade">
-				<span class="left-side"></span>
-				<span class="right-side"></span>
-			</span>
-		</div> -->
 		<h2 class="nav-title">
 			<span class="ko">${parentMenu.name }</span>
 			<span class="en">${parentMenu.name_en }</span>

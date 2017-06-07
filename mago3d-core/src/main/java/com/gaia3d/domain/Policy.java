@@ -1,5 +1,8 @@
 package com.gaia3d.domain;
 
+import com.gaia3d.security.Crypt;
+import com.gaia3d.security.Masking;
+
 import lombok.Data;
 
 /**
@@ -214,6 +217,78 @@ public class Policy {
 	// 등록일
 	private String insert_date;
 	
+	public String getViewSiteAdminMobilePhone() {
+		return Crypt.decrypt(site_admin_mobile_phone);
+	}
+	
+	public String getMaskingSiteAdminMobilePhone() {
+		return getMaskingData(site_admin_mobile_phone, "PHONE");
+	}
+	
+	public String getViewMaskingSiteAdminMobilePhone() {
+		return getMaskingData(Crypt.decrypt(site_admin_mobile_phone), "PHONE");
+	}
+
+	public String getViewSiteAdminEmail() {
+		return Crypt.decrypt(site_admin_email);
+	}
+	
+	public String getMaskingSiteAdminEmail() {
+		return getMaskingData(site_admin_email, "EMAIL");
+	}
+	
+	public String getViewMaskingSiteAdminEmail() {
+		return getMaskingData(Crypt.decrypt(site_admin_email), "EMAIL");
+	}
+	
+	public String getViewSolutionCompanyPhone() {
+		return Crypt.decrypt(solution_company_phone);
+	}
+	
+	public String getMaskingSolutionCompanyPhone() {
+		return getMaskingData(solution_company_phone, "PHONE");
+	}
+	
+	public String getViewMaskingSolutionCompanyPhone() {
+		return getMaskingData(Crypt.decrypt(solution_company_phone), "PHONE");
+	}
+	
+	public String getViewSolutionManagerPhone() {
+		return Crypt.decrypt(solution_manager_phone);
+	}
+	
+	public String getMaskingSolutionManagerPhone() {
+		return getMaskingData(solution_manager_phone, "PHONE");
+	}
+	
+	public String getViewMaskingSolutionManagerPhone() {
+		return getMaskingData(Crypt.decrypt(solution_manager_phone), "PHONE");
+	}
+	
+	public String getViewSolutionManagerEmail() {
+		return Crypt.decrypt(solution_manager_email);
+	}
+	
+	public String getMaskingSolutionManagerEmail() {
+		return getMaskingData(solution_manager_email, "EMAIL");
+	}
+	
+	public String getViewMaskingSolutionManagerEmail() {
+		return getMaskingData(Crypt.decrypt(solution_manager_email), "EMAIL");
+	}
+	
+	/**
+	 * 개인정보 마스킹 처리
+	 * @param value
+	 * @param type
+	 * @return
+	 */
+	public String getMaskingData(String value, String type) {
+		if(CacheManager.isUserInfoMasking()) {
+			return Masking.getMasking(value, type);
+		}
+		return value;
+	}
 	
 	public String getViewInsertDate() {
 		if(this.insert_date == null || "".equals( insert_date)) {

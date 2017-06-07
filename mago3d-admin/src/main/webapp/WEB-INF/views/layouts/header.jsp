@@ -4,7 +4,7 @@
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
 <%
-	Map<String, String> haStatusMap = new HashMap<String, String>();
+	Map<String, String> haStatusMap = CacheManager.getHaMap();
 	String basicServerRole = null;
 	String activeServerIp = null;
 	String standbyStatus = null;
@@ -17,7 +17,7 @@
 <header class="site-header">
 	<div class="row">
 		<div class="container">
-			<h1 class="site-title u-pull-left"><a href="/main/index.do"><img src="/images/${lang}/common/logo-mago3d.png" alt="Gaia3d" width="150" height="48" ></a></h1>
+			<h1 class="site-title u-pull-left"><a href="/main/index.do">Mago3D</a></h1>
 			<aside class="site-aside-menu u-pull-right">
 				<ul>
 <%
