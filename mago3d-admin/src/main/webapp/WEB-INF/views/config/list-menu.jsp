@@ -8,30 +8,32 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<title>${sessionSiteName }</title>
-	<link rel="stylesheet" href="/css/ko/font/font.css" />
-	<link rel="stylesheet" href="/images/ko/icon/glyph/glyphicon.css" />
-	<link rel="stylesheet" href="/externlib/ko/normalize/normalize.min.css" />
-	<link rel="stylesheet" href="/externlib/ko/jquery-ui/jquery-ui.css" />
-	<link rel="stylesheet" href="/css/ko/style.css" />
-	<link type="text/css" rel="stylesheet" href="/externlib/ko/axisj-1.0.13/ui/arongi/font-awesome.min.css" />
-	<link type="text/css" rel="stylesheet" href="/externlib/ko/axisj-1.0.13/ui/arongi/AXJ.min.css" />
-	<link type="text/css" rel="stylesheet" href="/externlib/ko/axisj-1.0.13/ui/arongi/AXButton.css" />
-	<link type="text/css" rel="stylesheet" href="/externlib/ko/axisj-1.0.13/ui/arongi/AXInput.css" />
-	<link type="text/css" rel="stylesheet" href="/externlib/ko/axisj-1.0.13/ui/arongi/AXSelect.css" />
-	<link type="text/css" rel="stylesheet" href="/externlib/ko/axisj-1.0.13/ui/arongi/AXTree.css" />
-	<script type="text/javascript" src="/externlib/ko/jquery/jquery-2.1.4.min.js"></script>
-	<script type="text/javascript" src="/externlib/ko/jquery/jquery-migrate-1.2.1.min.js"></script>
-	<script type="text/javascript" src="/externlib/ko/jquery-ui/jquery-ui-1.11.4.min.js"></script>	
-	<script type="text/javascript" src="/externlib/ko/axisj-1.0.13/lib/AXJ.js"></script>
-	<script type="text/javascript" src="/externlib/ko/axisj-1.0.13/lib/AXInput.js"></script>
-	<script type="text/javascript" src="/externlib/ko/axisj-1.0.13/lib/AXModal.js"></script>
-	<script type="text/javascript" src="/externlib/ko/axisj-1.0.13/lib/AXSelect.js"></script>
-	<script type="text/javascript" src="/externlib/ko/axisj-1.0.13/lib/AXTree.js"></script>
-	<script type="text/javascript" src="/js/ko/common.js"></script>
-	<script type="text/javascript" src="/js/ko/message.js"></script>
-	<script type="text/javascript" src="/js/consoleLog.js"></script>
-	<script type="text/javascript" src="/js/ko/menuTree.js"></script>
-	<script type="text/javascript" src="/js/ko/navigation.js"></script>
+	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
+	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" />
+	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
+	<link rel="stylesheet" href="/css/${lang}/style.css" />
+	
+	<link type="text/css" rel="stylesheet" href="/externlib/${lang}/axisj/ui/arongi/font-awesome.min.css" />
+	<link type="text/css" rel="stylesheet" href="/externlib/${lang}/axisj/ui/arongi/AXJ.min.css" />
+	<link type="text/css" rel="stylesheet" href="/externlib/${lang}/axisj/ui/arongi/AXButton.css" />
+	<link type="text/css" rel="stylesheet" href="/externlib/${lang}/axisj/ui/arongi/AXInput.css" />
+	<link type="text/css" rel="stylesheet" href="/externlib/${lang}/axisj/ui/arongi/AXSelect.css" />
+	<link type="text/css" rel="stylesheet" href="/externlib/${lang}/axisj/ui/arongi/AXTree.css" />
+	
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery-migrate-1.2.1.min.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
+		
+	<script type="text/javascript" src="/externlib/${lang}/axisj/lib/AXJ.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/axisj/lib/AXInput.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/axisj/lib/AXModal.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/axisj/lib/AXSelect.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/axisj/lib/AXTree.js"></script>
+	<script type="text/javascript" src="/js/${lang}/common.js"></script>
+	<script type="text/javascript" src="/js/${lang}/message.js"></script>
+	<script type="text/javascript" src="/js/${lang}/menuTree.js"></script>
+	<script type="text/javascript" src="/js/${lang}/navigation.js"></script>
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/layouts/header.jsp" %>

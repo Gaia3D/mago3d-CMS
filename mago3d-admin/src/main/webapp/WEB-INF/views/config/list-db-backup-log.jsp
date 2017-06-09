@@ -11,10 +11,10 @@
 	<link type="text/css" rel="stylesheet" href="/css/ko/layout.css" />
 	<link type="text/css" rel="stylesheet" href="/css/ko/common.css" />
 	<link type="text/css" rel="stylesheet" href="/css/ko/admin.css" />
-	<link type="text/css" rel="stylesheet" href="/externlib/ko/jquery-1.11.2/jquery-ui.min.css" />
+	<link type="text/css" rel="stylesheet" href="/externlib/ko/jquery-1.11.2/jquery-ui.css" />
 	<link type="text/css" rel="stylesheet" href="/externlib/ko/jquery-1.11.2/jquery-ui.theme.min.css" />
 	<script type="text/javascript" src="/externlib/ko/jquery-1.11.2/jquery-1.11.2.min.js"></script>
-	<script type="text/javascript" src="/externlib/ko/jquery-1.11.2/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/externlib/ko/jquery-1.11.2/jquery-ui.js"></script>
 	<script type="text/javascript" src="/js/ko/common.js"></script>
 	<script type="text/javascript" src="/js/ko/message.js"></script>
 	<script type="text/javascript" src="/js/consoleLog.js"></script>

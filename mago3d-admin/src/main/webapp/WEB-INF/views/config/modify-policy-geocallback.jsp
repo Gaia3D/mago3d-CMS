@@ -16,11 +16,11 @@
   		</tr>
   		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_callback_selectedObject">Object Select Callback</form:label>
+				<form:label path="geo_callback_selectedobject">Object Select Callback</form:label>
 			</th>
 			<td class="col-input">
-				<form:input path="geo_callback_selectedObject" cssClass="l" />
-				<form:errors path="geo_callback_selectedObject" cssClass="error" />
+				<form:input path="geo_callback_selectedobject" cssClass="l" />
+				<form:errors path="geo_callback_selectedobject" cssClass="error" />
 			</td>
 		</tr>
 	</table>

@@ -5,11 +5,19 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import com.gaia3d.domain.AccessLog;
+import com.gaia3d.domain.UserSession;
+import com.gaia3d.helper.URLHelper;
+import com.gaia3d.service.AccessLogService;
+import com.gaia3d.util.WebUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,8 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class LogInterceptor extends HandlerInterceptorAdapter {
 	
-//	@Autowired
-//	private LogService logService;
+	@Autowired
+	private AccessLogService accessLogService;
 	
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -36,65 +44,65 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     	
     	// 로그 예외 URL, 사용이력, 이중화, 메인 위젯(main, ajax, widget 이건 너무 많아서 키워드로 Filter)
     	boolean isExceptionURI = false;
-//    	if(uri.indexOf("main") >= 0 && uri.indexOf("ajax") >= 0 && uri.indexOf("widget") >= 0) {
-//    		isExceptionURI = true;
-//    	}
-//    	if(!isExceptionURI) {
-//	    	int exceptionURICount = URLHelper.LOG_EXCEPTION_URI.length;
-//	    	for(int i=0 ; i<exceptionURICount; i++) {
-//	    		if(uri.indexOf(URLHelper.LOG_EXCEPTION_URI[i]) >= 0) {
-//	    			isExceptionURI = true;
-//	    			break;
-//	    		}
-//	    	}
-//    	}
-//    	// 예외 URL 은 통과 처리
-//    	if(isExceptionURI) {
-//    		return true;
-//    	}
-//    	
-//    	AccessLog accessLog = new AccessLog();
-//    	accessLog.setRequest_uri(uri);
-//    	accessLog.setClient_ip(WebUtil.getClientIp(request));
-//    	
-//    	HttpSession session = request.getSession();
-//    	UserSession userSession = (UserSession)session.getAttribute(UserSession.KEY);
-//    	if(userSession == null || userSession.getUser_id() == null || "".equals(userSession.getUser_id())) {
-//    		accessLog.setUser_id("guest");
-//    		accessLog.setUser_name("guest");
-//    	} else {
-//    		accessLog.setUser_id(userSession.getUser_id());
-//    		accessLog.setUser_name(userSession.getUser_name());
-//    	}
-//    	
-//    	boolean isMultipartURI = false;
-//    	int multipartURICount = URLHelper.MULTIPART_REQUEST_URI.length;
-//    	for(int i=0 ; i<multipartURICount; i++) {
-//    		if(uri.indexOf(URLHelper.MULTIPART_REQUEST_URI[i]) >= 0) {
-//    			isMultipartURI = true;
-//    			break;
-//    		}
-//    	}
-//    	
-//    	if(isMultipartURI) {
-//    		accessLog.setParameters(getMultipartRequestParameters(request));
-//    	} else {
-//    		accessLog.setParameters(getRequestParameters(request));
-//    	}
-//    		
-//    	String userAgent = request.getHeader("User-Agent");
-//    	if(userAgent != null && userAgent.length() > 256) {
-//    		userAgent = userAgent.substring(0, 250) + "...";
-//    	}
-//    	String referer = request.getHeader("Referer");
-//    	if(referer != null && referer.length() > 256) {
-//    		referer = referer.substring(0, 250) + "...";
-//    	}
-//    	accessLog.setUser_agent(userAgent);
-//    	accessLog.setReferer(referer);
-//    	
-//    	// TODO parameters 처리 부분은 추후 보강하자.
-//    	logService.insertAccessLog(accessLog);
+    	if(uri.indexOf("main") >= 0 && uri.indexOf("ajax") >= 0 && uri.indexOf("widget") >= 0) {
+    		isExceptionURI = true;
+    	}
+    	if(!isExceptionURI) {
+	    	int exceptionURICount = URLHelper.LOG_EXCEPTION_URI.length;
+	    	for(int i=0 ; i<exceptionURICount; i++) {
+	    		if(uri.indexOf(URLHelper.LOG_EXCEPTION_URI[i]) >= 0) {
+	    			isExceptionURI = true;
+	    			break;
+	    		}
+	    	}
+    	}
+    	// 예외 URL 은 통과 처리
+    	if(isExceptionURI) {
+    		return true;
+    	}
+    	
+    	AccessLog accessLog = new AccessLog();
+    	accessLog.setRequest_uri(uri);
+    	accessLog.setClient_ip(WebUtil.getClientIp(request));
+    	
+    	HttpSession session = request.getSession();
+    	UserSession userSession = (UserSession)session.getAttribute(UserSession.KEY);
+    	if(userSession == null || userSession.getUser_id() == null || "".equals(userSession.getUser_id())) {
+    		accessLog.setUser_id("guest");
+    		accessLog.setUser_name("guest");
+    	} else {
+    		accessLog.setUser_id(userSession.getUser_id());
+    		accessLog.setUser_name(userSession.getUser_name());
+    	}
+    	
+    	boolean isMultipartURI = false;
+    	int multipartURICount = URLHelper.MULTIPART_REQUEST_URI.length;
+    	for(int i=0 ; i<multipartURICount; i++) {
+    		if(uri.indexOf(URLHelper.MULTIPART_REQUEST_URI[i]) >= 0) {
+    			isMultipartURI = true;
+    			break;
+    		}
+    	}
+    	
+    	if(isMultipartURI) {
+    		accessLog.setParameters(getMultipartRequestParameters(request));
+    	} else {
+    		accessLog.setParameters(getRequestParameters(request));
+    	}
+    		
+    	String userAgent = request.getHeader("User-Agent");
+    	if(userAgent != null && userAgent.length() > 256) {
+    		userAgent = userAgent.substring(0, 250) + "...";
+    	}
+    	String referer = request.getHeader("Referer");
+    	if(referer != null && referer.length() > 256) {
+    		referer = referer.substring(0, 250) + "...";
+    	}
+    	accessLog.setUser_agent(userAgent);
+    	accessLog.setReferer(referer);
+    	
+    	// TODO parameters 처리 부분은 추후 보강하자.
+    	accessLogService.insertAccessLog(accessLog);
     	
         return true;
     }

@@ -49,7 +49,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 		
         registry.addInterceptor(new ConfigInterceptor())
         		.addPathPatterns("/**");
-        registry.addInterceptor(new LogInterceptor())
+        registry.addInterceptor(logInterceptor())
         		.addPathPatterns("/**");
         registry.addInterceptor(new SecurityInterceptor())
         		.addPathPatterns("/**")
@@ -58,6 +58,15 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
         		.addPathPatterns("/**")
         		.excludePathPatterns("/login/**");
     }
+	
+	/**
+	 * LogInterceptor 안에서 AcessLogService를 Autowired 하기 위해서
+	 * @return
+	 */
+	@Bean
+	public LogInterceptor logInterceptor() {
+		return new LogInterceptor();
+	}
 	
 //	@Bean
 //	public LocaleResolver localeResolver() {

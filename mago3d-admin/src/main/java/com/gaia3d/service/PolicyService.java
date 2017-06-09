@@ -30,6 +30,27 @@ public interface PolicyService {
 	int updatePolicyPassword(Policy policy);
 	
 	/**
+	 * 공간 정보 기본 수정
+	 * @param policy
+	 * @return
+	 */
+	int updatePolicyGeo(Policy policy);
+	
+	/**
+	 * Geo Server 수정
+	 * @param policy
+	 * @return
+	 */
+	int updatePolicyGeoServer(Policy policy);
+	
+	/**
+	 * CallBack Function 수정
+	 * @param policy
+	 * @return
+	 */
+	int updatePolicyGeoCallBack(Policy policy);
+	
+	/**
 	 * 운영 정책 알림 수정
 	 * @param policy
 	 * @return

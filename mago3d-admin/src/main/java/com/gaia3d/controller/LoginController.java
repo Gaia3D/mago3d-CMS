@@ -1,33 +1,28 @@
 package com.gaia3d.controller;
 
-import java.net.URLDecoder;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.SessionKey;
-import com.gaia3d.domain.UserDevice;
-import com.gaia3d.domain.UserGroupRole;
 import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.UserSession;
-import com.gaia3d.helper.GroupRoleHelper;
 import com.gaia3d.helper.SessionUserHelper;
 import com.gaia3d.listener.Gaia3dHttpSessionBindingListener;
-import com.gaia3d.security.AESCipher;
 import com.gaia3d.service.LoginService;
 import com.gaia3d.service.UserService;
 import com.gaia3d.util.WebUtil;
@@ -88,17 +83,25 @@ public class LoginController {
 		
 		Policy policy = CacheManager.getPolicy();
 		String SESSION_TOKEN_AES_KEY = (String)request.getSession().getAttribute(SessionKey.SESSION_TOKEN_AES_KEY.name());
-		try {
-			AESCipher aESCipher = new AESCipher(SESSION_TOKEN_AES_KEY);
-			log.info("@@ SESSION_TOKEN_AES_KEY = {}", SESSION_TOKEN_AES_KEY);
-			loginForm.setPassword(aESCipher.decrypt(URLDecoder.decode(loginForm.getPassword(), "utf-8")));
-		} catch(Exception e) {
-			bindingResult.rejectValue("password", "login.password.decrypt.exception", e.getMessage());
-		}
+//		try {
+//			AESCipher aESCipher = new AESCipher(SESSION_TOKEN_AES_KEY);
+//			log.info("@@ SESSION_TOKEN_AES_KEY = {}", SESSION_TOKEN_AES_KEY);
+//			log.info("@@ password = {}", loginForm.getPassword());
+//			log.info("@@ url decode = {}", URLDecoder.decode(loginForm.getPassword(), "utf-8"));
+//			loginForm.setPassword(aESCipher.decrypt(URLDecoder.decode(loginForm.getPassword(), "utf-8")));
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			bindingResult.rejectValue("password", "login.password.decrypt.exception", e.getMessage());
+//		}
 			
 		this.loginValidator.validate(loginForm, bindingResult);
 		if(bindingResult.hasErrors()) {
-			log.info("@@ validation error! ");
+			List<ObjectError> errorList = bindingResult.getAllErrors();
+			for(ObjectError error : errorList) {
+				System.out.println("************************* " + error.getDefaultMessage());
+			}
+			
+			log.info("@@ validation error!");
 			loginForm.setPassword(null);
 			model.addAttribute("policy", policy);
 			model.addAttribute("TOKEN_AES_KEY", SESSION_TOKEN_AES_KEY);

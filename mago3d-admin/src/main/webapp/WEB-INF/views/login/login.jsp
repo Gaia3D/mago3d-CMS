@@ -87,7 +87,6 @@
 	
 <script type="text/javascript">
 	$(document).ready(function () {
-		
 	});
 	
 	function check() {
@@ -103,9 +102,10 @@
 			return false;
 		}
 		
-		GibberishAES.size(128);	
+		/* GibberishAES.size(128);	
 		var encryptionPassword = GibberishAES.aesEncrypt($("#password").val(), "${TOKEN_AES_KEY}");
-		$("#password").val(encodeURIComponent(encryptionPassword));
+		alert("encryptionPassword = " + encryptionPassword + ", password = " + encodeURIComponent(encryptionPassword));
+		$("#password").val(encodeURIComponent(encryptionPassword)); */
 	}
 </script>
 </body>

@@ -45,3 +45,19 @@ JS_MESSAGE["user.id.enable"] = "사용 가능한 아이디 입니다.";
 JS_MESSAGE["user.insert"] = "사용자를 등록 하였습니다.";
 JS_MESSAGE["user.info.update"] = "사용자 정보를 수정 하였습니다.";
 JS_MESSAGE["user.id.notexist"] = "아이디가 존재하지 않습니다.";
+
+
+//운영정책
+JS_MESSAGE["policy.server.datetime"] = "서버 시간이 재설정되었습니다."
+JS_MESSAGE["policy.user.update"] = "사용자 정책을 수정 하였습니다.";
+JS_MESSAGE["policy.password.update"] = "패스워드 정책을 수정 하였습니다.";
+JS_MESSAGE["policy.geo.update"] = "공간 정보를 수정 하였습니다.";
+JS_MESSAGE["policy.geoserver.update"] = "GeoServer를 수정 하였습니다.";
+JS_MESSAGE["policy.geocallback.update"] = "CallBack 함수를 수정 하였습니다.";
+JS_MESSAGE["policy.notice.update"] = "알림 정책을 수정 하였습니다.";
+JS_MESSAGE["policy.security.update"] = "보안 정책을 수정 하였습니다.";
+JS_MESSAGE["policy.content.update"] = "컨텐트 정책을 수정 하였습니다.";
+JS_MESSAGE["policy.site.update"] = "사이트 정보를 수정 하였습니다.";
+JS_MESSAGE["policy.os.update"] = "OS 설정 정보를 수정 하였습니다.";
+JS_MESSAGE["policy.backoffice.update"] = "Back Office 정보를 수정 하였습니다.";
+JS_MESSAGE["policy.solution.update"] = "제품 정보를 수정 하였습니다.";

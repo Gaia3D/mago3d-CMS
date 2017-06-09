@@ -1,5 +1,8 @@
 package com.gaia3d.domain;
 
+import com.gaia3d.security.Crypt;
+import com.gaia3d.security.Masking;
+
 import lombok.Data;
 
 /**
@@ -187,53 +190,53 @@ public class UserInfo {
 	private String search_user_name;
 	private String search_except_user_name;
 	
-//	public String getViewTelePhone() {
-//		return Crypt.decrypt(telephone);
-//	}
-//	
-//	public String getMaskingTelePhone() {
-//		return getMaskingData(telephone, "DEFAULT");
-//	}
-//	
-//	public String getViewMaskingTelePhone() {
-//		return getMaskingData(Crypt.decrypt(telephone), "DEFAULT");
-//	}
-//
-//	public String getViewMobilePhone() {
-//		return Crypt.decrypt(mobile_phone);
-//	}
-//	
-//	public String getMaskingMobilePhone() {
-//		return getMaskingData(mobile_phone, "DEFAULT");
-//	}
-//	
-//	public String getViewMaskingMobilePhone() {
-//		return getMaskingData(Crypt.decrypt(mobile_phone), "DEFAULT");
-//	}
-//	
-//	public String getViewEmail() {
-//		return Crypt.decrypt(email);
-//	}
-//	
-//	public String getMaskingEmail() {
-//		return getMaskingData(email, "EMAIL");
-//	}
-//	
-//	public String getViewMaskingEmail() {
-//		return getMaskingData(Crypt.decrypt(email), "EMAIL");
-//	}
-//	
-//	public String getViewAddressEtc() {
-//		return Crypt.decrypt(address_etc);
-//	}
-//	
-//	public String getMaskingAddressEtc() {
-//		return getMaskingData(address_etc, "DEFAULT");
-//	}
-//	
-//	public String getViewMaskingAddressEtc() {
-//		return getMaskingData(Crypt.decrypt(address_etc), "DEFAULT");
-//	}
+	public String getViewTelePhone() {
+		return Crypt.decrypt(telephone);
+	}
+	
+	public String getMaskingTelePhone() {
+		return getMaskingData(telephone, "DEFAULT");
+	}
+	
+	public String getViewMaskingTelePhone() {
+		return getMaskingData(Crypt.decrypt(telephone), "DEFAULT");
+	}
+
+	public String getViewMobilePhone() {
+		return Crypt.decrypt(mobile_phone);
+	}
+	
+	public String getMaskingMobilePhone() {
+		return getMaskingData(mobile_phone, "DEFAULT");
+	}
+	
+	public String getViewMaskingMobilePhone() {
+		return getMaskingData(Crypt.decrypt(mobile_phone), "DEFAULT");
+	}
+	
+	public String getViewEmail() {
+		return Crypt.decrypt(email);
+	}
+	
+	public String getMaskingEmail() {
+		return getMaskingData(email, "EMAIL");
+	}
+	
+	public String getViewMaskingEmail() {
+		return getMaskingData(Crypt.decrypt(email), "EMAIL");
+	}
+	
+	public String getViewAddressEtc() {
+		return Crypt.decrypt(address_etc);
+	}
+	
+	public String getMaskingAddressEtc() {
+		return getMaskingData(address_etc, "DEFAULT");
+	}
+	
+	public String getViewMaskingAddressEtc() {
+		return getMaskingData(Crypt.decrypt(address_etc), "DEFAULT");
+	}
 
 	public String getViewLastPasswordChangeDate() {
 		if(this.last_password_change_date == null || "".equals( last_password_change_date)) {
@@ -284,33 +287,33 @@ public class UserInfo {
 		return "";
 	}
 	
-//	/**
-//	 * 개인정보 마스킹 처리
-//	 * @param value
-//	 * @param type
-//	 * @return
-//	 */
-//	public String getMaskingData(String value, String type) {
-//		if(ConfigCache.isUserInfoMasking()) {
-//			return Masking.getMasking(value, type);
-//		}
-//		return value;
-//	}
-//	
-//	public String getViewUserInsertType() {
-//		CommonCode userInsertType = ConfigCache.getCommonCode(CommonCode.USER_REGISTER);
-//		CommonCode externalUserInsertType = ConfigCache.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER);
-//		
-//		if(this.user_insert_type == null || "".equals(this.user_insert_type)) {
-//			return "";
-//		} else if(this.user_insert_type.equals(userInsertType.getCode_value())) {
-//			return userInsertType.getCode_name();
-//		} else if(this.user_insert_type.equals(externalUserInsertType.getCode_value())) {
-//			return externalUserInsertType.getCode_name();
-//		}
-//		
-//		return "";
-//	}
+	/**
+	 * 개인정보 마스킹 처리
+	 * @param value
+	 * @param type
+	 * @return
+	 */
+	public String getMaskingData(String value, String type) {
+		if(CacheManager.isUserInfoMasking()) {
+			return Masking.getMasking(value, type);
+		}
+		return value;
+	}
+	
+	public String getViewUserInsertType() {
+		CommonCode userInsertType = CacheManager.getCommonCode(CommonCode.USER_REGISTER);
+		CommonCode externalUserInsertType = CacheManager.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER);
+		
+		if(this.user_insert_type == null || "".equals(this.user_insert_type)) {
+			return "";
+		} else if(this.user_insert_type.equals(userInsertType.getCode_value())) {
+			return userInsertType.getCode_name();
+		} else if(this.user_insert_type.equals(externalUserInsertType.getCode_value())) {
+			return externalUserInsertType.getCode_name();
+		}
+		
+		return "";
+	}
 	
 	public String getValueUserIdStartDate() {
 		if(this.user_id_start_date == null || "".equals( user_id_start_date)) {

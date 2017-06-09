@@ -11,11 +11,11 @@
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.min.css" />
+	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
 	<link rel="stylesheet" href="/css/${lang}/style.css" />
 	
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jqplot/jquery.jqplot.min.js"></script>
 	
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
@@ -406,11 +406,11 @@
 	}
 	
 	// Geo CallBack Function
-	var policyGeoCallBackFlag = true;
-	function policyGeoCallBack() {
-		if(policyGeoCallBackFlag) {
+	var updatePolicyGeoCallBackFlag = true;
+	function updatePolicyGeoCallBack() {
+		if(updatePolicyGeoCallBackFlag) {
 			// validation 나중에
-			policyGeoCallBackFlag = false;
+			updatePolicyGeoCallBackFlag = false;
 			var info = $("#policyGeoCallBack").serialize();
 			$.ajax({
 				url: "/config/ajax-update-policy-geocallback.do",
@@ -425,11 +425,11 @@
 					} else {
 						alert(JS_MESSAGE[msg.result]);
 					}
-					policyGeoCallBackFlag = true;
+					updatePolicyGeoCallBackFlag = true;
 				},
 				error:function(request,status,error){
 			        alert(JS_MESSAGE["ajax.error.message"]);
-			        policyGeoCallBackFlag = true;
+			        updatePolicyGeoCallBackFlag = true;
 				}
 			});
 		} else {

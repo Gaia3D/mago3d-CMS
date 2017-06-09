@@ -22,7 +22,7 @@
 				<span class="table-desc">초 단위, 기본 65초, 최소값 5초</span>
 			</td>
 		</tr>
-		<tr>
+		<!-- <tr>
 			<th class="col-label l" scope="row">
 				<form:label path="content_monitoring_interval">모니터링 감시 간격</form:label>
 				<span class="icon-glyph glyph-emark-dot color-warning"></span>
@@ -31,7 +31,7 @@
 				<form:input path="content_monitoring_interval" maxlength="2" cssClass="m" />
 				<span class="table-desc">분 단위</span>
 			</td>
-		</tr>
+		</tr> -->
 		<tr>
 			<th class="col-label l" scope="row">
 				<form:label path="content_statistics_interval">통계 기본 검색 기간</form:label>

@@ -2,6 +2,14 @@ package com.gaia3d.util;
 
 public class StringUtil {
 
+	public static boolean isEmpty(String str) {
+		return ((str == null) || (str.length() == 0));
+	}
+
+	public static boolean isNotEmpty(String str) {
+		return (!(isEmpty(str)));
+	}
+	
 	/**
 	 * 입력 값이 숫자인지를 판단
 	 * @param value

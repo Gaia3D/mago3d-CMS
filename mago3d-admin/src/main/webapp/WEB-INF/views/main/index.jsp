@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" />
 	
-	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.min.css" />
+	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/jqplot/jquery.jqplot.min.css" />
 	<link rel="stylesheet" href="/css/${lang}/style.css" />
 </head>
@@ -331,7 +331,7 @@
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 
 <script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
 
 <script type="text/javascript" src="/externlib/${lang}/jqplot/jquery.jqplot.min.js"></script>
 

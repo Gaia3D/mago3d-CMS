@@ -50,6 +50,36 @@ public class PolicyServiceImpl implements PolicyService {
 	}
 	
 	/**
+	 * 공간 정보 기본 수정
+	 * @param policy
+	 * @return
+	 */
+	@Transactional
+	public int updatePolicyGeo(Policy policy) {
+		return policyMapper.updatePolicyGeo(policy);
+	}
+	
+	/**
+	 * Geo Server 수정
+	 * @param policy
+	 * @return
+	 */
+	@Transactional
+	public int updatePolicyGeoServer(Policy policy) {
+		return policyMapper.updatePolicyGeoServer(policy);
+	}
+	
+	/**
+	 * CallBack Function 수정
+	 * @param policy
+	 * @return
+	 */
+	@Transactional
+	public int updatePolicyGeoCallBack(Policy policy) {
+		return policyMapper.updatePolicyGeoCallBack(policy);
+	}
+	
+	/**
 	 * 운영 정책 알림 수정
 	 * @param policy
 	 * @return

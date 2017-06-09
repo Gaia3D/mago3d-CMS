@@ -34,6 +34,8 @@ public class CacheManager {
 	
 	// 개인정보 마스킹 처리 유무
 	private boolean userInfoMasking = false;
+	// 공통 코드
+	private Map<String, CommonCode> commonCodeMap = null;
 	// 대메뉴 정보
 	private Map<Long, Menu> menuMap = null;
 	// 사용자 그룹별 메뉴
@@ -176,6 +178,19 @@ public class CacheManager {
 		} else {
 			cacheManager.userInfoMasking = false;
 		}
+	}
+	
+	/**
+	 * 공통 코드명
+	 * @param 
+	 * @return
+	 */
+	public static CommonCode getCommonCode(String codeKey) {
+		return cacheManager.commonCodeMap.get(codeKey);
+	}
+	
+	public static void setCommonCodeMap(Map<String, CommonCode> commonCodeMap) {
+		cacheManager.commonCodeMap = commonCodeMap;
 	}
 	
 	public static Map<String, String> getHaMap() {

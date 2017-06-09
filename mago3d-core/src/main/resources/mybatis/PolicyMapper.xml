@@ -46,6 +46,46 @@
 		WHERE policy_id = #{policy_id}
 	</update>
 	
+	<!-- 공간 정보 기본 수정 -->	
+	<update id="updatePolicyGeo" parameterType="policy">
+		/* updatePolicyGeo */
+		UPDATE policy
+		SET geo_view_library = #{geo_view_library},
+			geo_data_path = #{geo_data_path},
+			geo_cull_face_enable = #{geo_cull_face_enable},
+			geo_time_line_enable = #{geo_time_line_enable},
+			geo_init_camera_enable = #{geo_init_camera_enable},
+			geo_init_latitude = #{geo_init_latitude},
+			geo_init_longitude = #{geo_init_longitude},
+			geo_init_height = #{geo_init_height},
+			geo_init_duration = #{geo_init_duration}
+		WHERE policy_id = #{policy_id}
+	</update>
+	
+	<!-- Geo Server 수정 -->	
+	<update id="updatePolicyGeoServer" parameterType="policy">
+		/* updatePolicyGeoServer */
+		UPDATE policy
+		SET geo_server_enable = #{geo_server_enable},
+			geo_server_url = #{geo_server_url},
+			geo_server_layers = #{geo_server_layers},
+			geo_server_parameters_service = #{geo_server_parameters_service},
+			geo_server_parameters_version = #{geo_server_parameters_version},
+			geo_server_parameters_request = #{geo_server_parameters_request},
+			geo_server_parameters_transparent = #{geo_server_parameters_transparent},
+			geo_server_parameters_format = #{geo_server_parameters_format}
+		WHERE policy_id = #{policy_id}
+	</update>
+	
+	<!-- CallBack Function 수정 -->	
+	<update id="updatePolicyGeoCallBack" parameterType="policy">
+		/* updatePolicyGeoCallBack */
+		UPDATE policy
+		SET geo_callback_enable = #{geo_callback_enable},
+			geo_callback_selectedobject = #{geo_callback_selectedobject}
+		WHERE policy_id = #{policy_id}
+	</update>
+	
 	<!-- 운영 정책 알림 수정 -->	
 	<update id="updatePolicyNotice" parameterType="policy">
 		/* updatePolicyNotice */
