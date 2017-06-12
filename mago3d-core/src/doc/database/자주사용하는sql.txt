@@ -1,0 +1,6 @@
+alter 문
+
+추가
+ALTER TABLE policy ADD content_object_group_root			varchar(60)			default 'Mago3D';
+삭제
+ALTER TABLE policy DROP COLUMN content_account_group_root;

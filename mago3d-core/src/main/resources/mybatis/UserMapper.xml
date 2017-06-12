@@ -64,6 +64,7 @@
 			</if>
 	</select>
 	
+	<!-- TODO password 안 가져오게 수정해야 함 -->
 	<!-- 사용자 목록 -->
 	<select id="getListUser" parameterType="userInfo" resultType="userInfo">
 		/* getListUser */

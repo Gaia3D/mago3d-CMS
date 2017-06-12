@@ -196,7 +196,7 @@ public class Policy {
 	// 서버 그룹 최상위 그룹명
 	private String content_server_group_root;
 	// 계정 그룹 최상위 그룹명
-	private String content_account_group_root;
+	private String content_object_group_root;
 	
 	// Java TimeZone 설정. Asia/Seoul(기본), UTC(Universal Time Coordinated, 세계협정시)
 	private String os_timezone;

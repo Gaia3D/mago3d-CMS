@@ -111,6 +111,8 @@ public class UserGroupServiceImpl implements UserGroupService {
 	 */
 	@Transactional
 	public int insertUserGroup(UserGroup userGroup) {
+		
+		// TODO 이건 bdr 때문에 한거 같은데.... sequence 로 바꿔야 할 듯
 		userGroup.setUser_group_id(userGroupMapper.getMaxUserGroupId());
 		userGroupMapper.insertUserGroup(userGroup);
 		

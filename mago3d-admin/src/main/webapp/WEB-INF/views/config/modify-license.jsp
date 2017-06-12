@@ -52,16 +52,6 @@
 									<form:errors path="server_count" cssClass="error" />
 								</td>
 							</tr>
-							<tr>
-								<th class="col-label l" scope="row">
-									<form:label path="otp_user_count">OTP 사용자 수</form:label>
-									<span class="icon-glyph glyph-emark-dot color-warning"></span>
-								</th>
-								<td class="col-input">
-									<form:input path="otp_user_count" cssClass="m" />
-									<form:errors path="otp_user_count" cssClass="error" />
-								</td>
-							</tr>
 									
 							<tr>
 								<th class="col-label l" scope="row">
@@ -136,11 +126,6 @@
 		if ($("#server_count").val() == "") {
 			alert("시스템 수를 입력하여 주십시오.");
 			$("#server_count").focus();
-			return false;
-		}
-		if ($("#otp_user_count").val() == "") {
-			alert("OTP 사용자 수 입력하여 주십시오.");
-			$("#otp_user_count").focus();
 			return false;
 		}
 		if ($("#license").val() == "") {

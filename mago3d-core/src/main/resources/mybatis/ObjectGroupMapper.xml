@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaia3d.persistence.ObjectGroupMapper">
+
+	<!-- Object 그룹 목록 -->
+	<select id="getListObjectGroup" parameterType="objectGroup" resultType="objectGroup">
+		/* getListObjectGroup */
+		WITH RECURSIVE object_group_tree (
+			object_group_id, object_group_key, object_group_name, ancestor, parent, depth, view_order, default_yn, 
+			use_yn, child_yn, description, insert_date, path, cycle
+		) AS (
+	        SELECT A.object_group_id, A.object_group_key, A.object_group_name, A.ancestor, A.parent, A.depth, A.view_order, A.default_yn, 
+	        	A.use_yn, A.child_yn, A.description, A.insert_date, ARRAY[A.view_order], false
+			FROM object_group A
+	        WHERE A.parent = 0
+	        <if test="use_yn == 'Y'.toString()">
+	        	AND A.use_yn = 'Y'
+	        </if>
+			UNION ALL
+	        SELECT A.object_group_id, A.object_group_key, A.object_group_name, A.ancestor, A.parent, A.depth, A.view_order, A.default_yn,
+	        	A.use_yn, A.child_yn, A.description, A.insert_date, path || A.view_order, A.object_group_id = ANY(path)
+	        FROM object_group A, object_group_tree B
+	        WHERE A.parent = B.object_group_id AND not cycle
+		)
+	    SELECT object_group_id, object_group_key, object_group_name, ancestor, parent, depth, view_order, default_yn, use_yn, child_yn, description, insert_date, path
+	    FROM object_group_tree
+	    <if test="use_yn == 'Y'.toString()">
+	    WHERE use_yn = 'Y'
+	    </if>
+		ORDER BY path
+	</select>
+	
+	<!-- Object 그룹 -->
+	<select id="getObjectGroup" parameterType="long" resultType="objectGroup">
+		/* getObjectGroup */
+		SELECT * FROM object_group WHERE object_group_id = #{object_group_id}
+	</select>
+	
+	<!-- Object 그룹에 속한 자식 그룹 개수 -->
+	<select id="getObjectGroupChildCount" parameterType="long" resultType="int">
+		/* getObjectGroupChildCount */
+		SELECT COUNT(*) FROM object_group WHERE parent = #{parent} and use_yn = 'Y'
+	</select>
+	
+	<!-- Object 그룹에 속한 자식 그룹 목록 -->
+	<select id="getListObjectGroupChild" parameterType="long" resultType="long">
+		/* getListObjectGroupChild */
+		SELECT object_group_id FROM object_group WHERE parent = #{parent}
+	</select>
+
+	<!-- Object 그룹별 메뉴 목록 -->
+	<select id="getListObjectGroupMenu" parameterType="long" resultType="objectGroupMenu">
+		/* getListObjectGroupMenu */
+		WITH RECURSIVE menu_tree (
+			object_group_menu_id, object_group_id, all_yn, read_yn, write_yn, update_yn, delete_yn, 
+			menu_id, name, name_en, parent, depth, view_order, default_yn, use_yn, url, image, image_alt, css_class, path, cycle
+		) AS (
+	        SELECT X.object_group_menu_id, X.object_group_id, X.all_yn, X.read_yn, X.write_yn, X.update_yn, X.delete_yn, 
+				X.menu_id, X.name, X.name_en, X.parent, X.depth, X.view_order, X.default_yn, X.use_yn, X.url, X.image, X.image_alt, X.css_class, ARRAY[X.view_order], false
+			FROM (
+				SELECT A.object_group_menu_id, A.object_group_id, 
+					COALESCE(A.all_yn, 'N') AS all_yn, COALESCE(A.read_yn, 'N') AS read_yn, COALESCE(A.write_yn, 'N') AS write_yn, 
+					COALESCE(A.update_yn, 'N') AS update_yn, COALESCE(A.delete_yn, 'N') AS delete_yn,
+					B.menu_id, B.name, B.name_en, B.parent, B.depth, B.view_order, B.default_yn, B.use_yn, B.url, B.image, B.image_alt, B.css_class
+				FROM object_group_menu A, menu B
+				WHERE object_group_id = #{object_group_id}
+					AND A.menu_id = B.menu_id
+					AND B.use_yn != 'N'
+			) X
+	        WHERE X.parent = 0
+	        UNION ALL
+	        SELECT X.object_group_menu_id, X.object_group_id, X.all_yn, X.read_yn, X.write_yn, X.update_yn, X.delete_yn, 
+				X.menu_id, X.name, X.name_en, X.parent, X.depth, X.view_order, X.default_yn, X.use_yn, X.url, X.image, X.image_alt, X.css_class,
+				path || X.view_order, X.menu_id = ANY(path)
+	        FROM (
+	        	SELECT A.object_group_menu_id, A.object_group_id,
+	        		COALESCE(A.all_yn, 'N') AS all_yn, COALESCE(A.read_yn, 'N') AS read_yn, COALESCE(A.write_yn, 'N') AS write_yn, 
+					COALESCE(A.update_yn, 'N') AS update_yn, COALESCE(A.delete_yn, 'N') AS delete_yn, 
+					B.menu_id, B.name, B.name_en, B.parent, B.depth, B.view_order, B.default_yn, B.use_yn, B.url, B.image, B.image_alt, B.css_class
+				FROM object_group_menu A, menu B
+				WHERE object_group_id = #{object_group_id}
+					AND A.menu_id = B.menu_id
+					AND B.use_yn != 'N'
+	        ) X, menu_tree Y
+	        WHERE X.parent = Y.menu_id AND not cycle
+		)
+	    SELECT object_group_menu_id, object_group_id, all_yn, read_yn, write_yn, update_yn, delete_yn, 
+			menu_id, name, name_en, parent, depth, view_order, default_yn, use_yn, url, path, image, image_alt, css_class
+	    FROM menu_tree
+	    ORDER BY path
+	</select>
+	
+	<!-- 부모와 순서를 가지고 Object 그룹 정보를 취득 -->
+	<select id="getObjectGroupByParentAndViewOrder" parameterType="objectGroup" resultType="objectGroup">
+		/* getObjectGroupByParentAndViewOrder */
+		SELECT * 
+		FROM object_group 
+		WHERE parent = #{parent} 
+		<if test="update_type == 'up'.toString()">
+			<![CDATA[
+			AND view_order < #{view_order}
+			]]>
+		ORDER BY view_order DESC 
+		</if>
+		<if test="update_type == 'down'.toString()">
+			<![CDATA[
+			AND view_order > #{view_order}
+			]]>
+		ORDER BY view_order 
+		</if>
+		LIMIT 1 
+	</select>
+	
+	<!-- 자식 그룹 중 맨 마지막 순서의 그룹 정보를 취득 -->
+	<select id="getMaxViewOrderChildObjectGroup" parameterType="long" resultType="objectGroup">
+		/* getMaxViewOrderChildObjectGroup */
+		SELECT * FROM object_group WHERE parent = #{parent} ORDER BY view_order DESC LIMIT 1 
+	</select>
+	
+	<!-- TODO BDR 때문에 한거 같은데... sequence로 바꿔야 함 -->
+	<!-- object_group_id 최대값 -->
+	<select id="getMaxObjectGroupId" resultType="long">
+		/* getMaxObjectGroupId */
+		SELECT COALESCE(MAX(object_group_id), 0) + 1 FROM object_group
+	</select>
+	
+	<!-- Object 그룹 등록 -->
+	<insert id="insertObjectGroup" parameterType="objectGroup" >
+		/* insertObjectGroup */
+		INSERT INTO object_group(
+			object_group_id, object_group_key, object_group_name, ancestor, parent, depth, view_order, use_yn, description
+		) values(
+			#{object_group_id}, #{object_group_key}, #{object_group_name}, #{ancestor}, #{parent}, #{depth}, #{view_order}, #{use_yn}, #{description}
+		)
+	</insert>
+	
+	<!-- Object 그룹 수정 -->
+	<update id="updateObjectGroup" parameterType="objectGroup">
+		/* updateObjectGroup */
+		UPDATE object_group
+		SET group_key = #{group_key},
+			group_name = #{group_name},
+			<if test="parent != null and parent != ''">
+			ancestor = #{ancestor},
+			</if>
+			<if test="parent != null and parent != ''">
+			parent = #{parent},
+			</if>
+			<if test="depth != null and depth != ''">
+			depth = #{depth},
+			</if>
+			<if test="view_order != null and view_order != ''">
+			view_order = #{view_order},
+			</if>
+			use_yn = #{use_yn},
+			description = #{description}
+		WHERE object_group_id = #{object_group_id}
+	</update>
+	
+	<!-- Object 그룹 자식 존재 유무 수정 -->
+	<update id="updateObjectGroupChildYN" parameterType="objectGroup">
+		UPDATE object_group
+		SET child_yn = #{child_yn}
+		WHERE object_group_id = #{object_group_id}
+	</update>
+	
+	<!-- 그룹 순서 수정 -->
+	<update id="updateViewOrderObjectGroup" parameterType="objectGroup">
+		/* updateViewOrderObjectGroup */
+		UPDATE object_group SET view_order = #{view_order} WHERE object_group_id = #{object_group_id}
+	</update>
+	
+	<!-- 자식 그룹 상태 수정-->
+	<update id="updateChildObjectGroup" parameterType="long">
+		/* updateChildObjectGroup */
+		UPDATE object_group SET use_yn = 'N' WHERE parent = #{parent}
+	</update>
+	
+	<!-- Object 그룹 삭제 -->
+	<delete id="deleteObjectGroup" parameterType="long">
+		/* deleteObjectGroup */
+		DELETE FROM object_group WHERE object_group_id = #{object_group_id} AND default_yn != 'Y'
+	</delete>
+</mapper>

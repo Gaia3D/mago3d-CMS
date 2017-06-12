@@ -3,6 +3,7 @@ package com.gaia3d.service;
 import java.util.List;
 
 import com.gaia3d.domain.APILog;
+import com.gaia3d.domain.ExternalService;
 
 /**
  * API 이력
@@ -33,9 +34,37 @@ public interface APIService {
 	APILog getAPILog(Long api_log_id);
 	
 	/**
+	 * Private API 목록
+	 * @param externalService
+	 * @return
+	 */
+	List<ExternalService> getListExternalService(ExternalService externalService);
+	
+	/**
+	 * 제휴 서비스 정보
+	 * @param external_service_id
+	 * @return
+	 */
+	ExternalService getExternalService(Long external_service_id);
+	
+	/**
 	 * API 호출 정보 등록
 	 * @param aPILog
 	 * @return
 	 */
 	int insertAPILog(APILog aPILog);
+
+	/**
+	 * 제휴 서비스 등록
+	 * @param externalService
+	 * @return
+	 */
+	int insertExternalService(ExternalService externalService);
+	
+	/**
+	 * 제휴 서비스 수정
+	 * @param externalService
+	 * @return
+	 */
+	int updateExternalService(ExternalService externalService);
 }

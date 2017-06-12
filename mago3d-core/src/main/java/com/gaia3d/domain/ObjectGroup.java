@@ -3,13 +3,13 @@ package com.gaia3d.domain;
 import lombok.Data;
 
 /**
- * 사용자 그룹
- * @author jeongdae
+ * Object 그룹
+ * @author Cheon JeongDae
  *
  */
 @Data
-public class UserGroup {
-	
+public class ObjectGroup {
+
 	// 임시 그룹
 	public static final Long TEMP_GROUP = 2l;
 	
@@ -17,10 +17,11 @@ public class UserGroup {
 	public static final String IN_USE = "Y";
 	
 	/****** 화면 표시용 *******/
+	// 그룹에 등록된 사용자 수
 	private String open = "open";
 	private String node_type = "folder";
 	private String parent_name;
-	private Integer user_count;
+	private Integer object_count;
 	// up : 위로, down : 아래로
 	private String update_type;
 
@@ -28,11 +29,11 @@ public class UserGroup {
 	private String method_mode;
 
 	// 고유번호
-	private Long user_group_id;
+	private Long object_group_id;
 	// 링크 활용 등을 위한 확장 컬럼
-	private String group_key;
+	private String object_group_key;
 	// 그룹명
-	private String group_name;
+	private String object_group_name;
 	// 조상 고유번호
 	private Long ancestor;
 	// 부모 고유번호

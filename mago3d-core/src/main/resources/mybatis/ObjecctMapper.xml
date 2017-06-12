@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaia3d.persistence.ObjectMapper">
+
+	<!-- Object 총 건수 -->
+	<select id="getObjectTotalCount" parameterType="objectInfo" resultType="long">
+		/* getObjectTotalCount */
+		SELECT COUNT(object_id) 
+		FROM object_info
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="object_group_id != null and object_group_id > 0">
+			object_group_id = #{object_group_id}
+			</if>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+			AND ${search_word} = #{search_value}
+			</if>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+			AND ${search_word} LIKE '%' || #{search_value} || '%'
+			</if>
+			<if test="status == null or status == ''">
+			AND (status IS NULL OR status != '5')
+			</if>
+			<if test="status != null and status != ''">
+			AND status = #{status}
+			</if>
+			<if test="object_insert_type != null and object_insert_type != ''">
+			AND object_insert_type = #{object_insert_type}
+			</if>
+			<if test="start_date != null and start_date != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="end_date != null and end_date != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="search_object_name != null and search_object_name != ''">
+			AND object_id LIKE '${search_object_name}%'
+			</if>
+		</trim>
+	</select>
+	
+	<!-- object_group_id 그룹을 제외한 Object 수 -->
+	<select id="getExceptObjectGroupObjectByGroupIdTotalCount" parameterType="objectInfo" resultType="long">
+		/* getExceptObjectGroupObjectByGroupIdTotalCount */
+		SELECT COUNT(object_id) 
+		FROM object_info
+		WHERE
+			<![CDATA[
+			(object_group_id > #{object_group_id}
+			OR object_group_id < #{object_group_id})
+			]]>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != ''">
+			AND ${search_word} = #{search_value}
+			</if>
+			<if test="status != null and status != ''">
+			AND status = #{status}
+			</if>
+			<if test="search_except_object_name != null and search_except_object_name != ''">
+			AND object_id LIKE '${search_except_object_name}%'
+			</if>
+	</select>
+	
+	<!-- 사용자 목록 -->
+	<select id="getListObject" parameterType="objectInfo" resultType="objectInfo">
+		/* getListObject */
+		SELECT X.*, 
+			(SELECT object_group_name FROM object_group WHERE object_group_id = X.object_group_id) AS object_group_name
+		FROM (
+			SELECT *
+			FROM object_info
+			<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="object_group_id != null and object_group_id > 0">
+				object_group_id = #{object_group_id}
+				</if>
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+				AND ${search_word} = #{search_value}
+				</if>
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+				AND ${search_word} LIKE '%' || #{search_value} || '%'
+				</if>
+				<if test="status == null or status == ''">
+				AND (status IS NULL OR status != '5')
+				</if>
+				<if test="status != null and status != ''">
+				AND status = #{status}
+				</if>
+				<if test="object_insert_type != null and object_insert_type != ''">
+				AND object_insert_type = #{object_insert_type}
+				</if>
+				<if test="search_object_name != null and search_object_name != ''">
+				AND object_id LIKE '${search_object_name}%'
+				</if>
+				<if test="start_date != null and start_date != ''">
+				<![CDATA[
+				AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="end_date != null and end_date != ''">
+				<![CDATA[
+				AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+			</trim>
+			<choose>
+			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
+			ORDER BY ${order_word} ${order_value}
+			</when>
+			<otherwise>
+			ORDER BY insert_date DESC, object_id DESC
+			</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) X
+	</select>
+	
+	<!-- object_group_id를 제외한 사용자 목록 -->
+	<select id="getListExceptObjectGroupObjectByGroupId" parameterType="objectInfo" resultType="objectInfo">
+		/* getListExceptObjectGroupObjectByGroupId */
+		SELECT A.*, 
+			(SELECT object_group_name FROM object_group WHERE object_group_id = A.object_group_id) AS object_group_name
+		FROM (
+			SELECT *
+			FROM object_info 
+			<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != ''">
+				${search_word} = #{search_value}
+				</if>
+				<if test="object_group_id != null and object_group_id > 0">
+				<![CDATA[
+				AND (object_group_id > #{object_group_id}
+				OR object_group_id < #{object_group_id})
+				]]>
+				</if>
+				<if test="status != null and status != ''">
+				AND status = #{status}
+				</if>
+				<if test="search_except_object_name != null and search_except_object_name != ''">
+				AND object_id LIKE '${search_except_object_name}%'
+				</if>
+			</trim>
+			ORDER BY insert_date DESC, object_id DESC
+			OFFSET #{offset} LIMIT #{limit}
+		) A
+	</select>
+	
+	<!-- Object 정보 -->
+	<select id="getObject" parameterType="long" resultType="objectInfo">
+		/* getObject */
+		SELECT A.*, (SELECT object_group_name FROM object_group WHERE object_group_id = A.object_group_id) AS object_group_name 
+		FROM object_info A
+		WHERE object_id = #{object_id}
+	</select>
+	
+	<!-- Object 아이디 중복 체크 -->
+	<select id="getDuplicationIdCount" parameterType="long" resultType="int">
+		/* getDuplicationIdCount */
+		SELECT COUNT(object_id) AS count FROM object_info WHERE object_id = #{object_id}
+	</select>
+	
+	<!-- Object 등록 -->
+	<insert id="insertObject" parameterType="objectInfo">
+		/* insertObject */
+		INSERT INTO object_info(
+			object_id, object_group_id, object_key, object_name, location, height, heading, pitch, roll, update_date
+		) values(
+			#{object_id}, #{object_group_id}, #{object_key}, #{object_name}, #{location}, #{height}, #{heading}, #{pitch}, #{roll}, #{update_date}			
+		)
+	</insert>
+	
+	<!-- Object 수정 -->	
+	<update id="updateObject" parameterType="objectInfo">
+		/* updateObject */
+		UPDATE object_info
+		SET 
+			<if test="object_group_id != null and object_group_id > 0">
+			object_group_id = #{object_group_id},
+			</if>
+			<if test="object_key != null and object_key != ''">
+			object_key = #{object_key},
+			</if>
+			<if test="object_name != null and object_name != ''">
+			object_name = #{object_name},
+			</if>
+			<if test="location != null and location != ''">
+			location = #{location},
+			</if>
+			<if test="height != null and height != ''">
+			height = #{height},
+			</if>
+			<if test="heading != null and heading != ''">
+			heading = #{heading},
+			</if>
+			<if test="pitch != null and pitch != ''">
+			pitch = #{pitch},
+			</if>
+			<if test="roll != null and roll != ''">
+			roll = #{roll},
+			</if>
+			update_date = #{update_date}
+		WHERE object_id = #{object_id}
+	</update>
+	
+	<!-- Object 테이블의 사용자 그룹 정보 변경 -->	
+	<update id="updateObjectGroupObject" parameterType="objectInfo">
+		/* updateObjectGroupObject */
+		UPDATE object_info
+		SET object_group_id = #{object_group_id}
+		WHERE object_id = #{object_id}
+	</update>
+	
+	<!-- Object 상태 수정 -->	
+	<update id="updateObjectStatus" parameterType="objectInfo">
+		/* updateObjectStatus */
+		UPDATE object_info
+		SET status = #{status},
+			update_date = NOW()
+		WHERE object_id = #{object_id}
+	</update>
+	
+	<!-- Object 삭제 -->
+	<delete id="deleteObject" parameterType="long">
+		/* deleteObject */
+		DELETE FROM object_info WHERE object_id = #{object_id}
+	</delete>
+	
+</mapper>

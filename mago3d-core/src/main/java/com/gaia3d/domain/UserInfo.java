@@ -28,21 +28,6 @@ public class UserInfo {
 	// 사용자 상태가 임시 비밀번호(비밀번호 찾기, 관리자 설정에 의한 임시 비밀번호 발급 시)
 	public static final String STATUS_TEMP_PASSWORD = "6";
 	
-	// 모바일(앱)
-	public static final String TYPE_MOBILE_APP = "0";
-	// SMS
-	public static final String TYPE_SMS = "1";
-	// PC(WEB)
-	public static final String TYPE_PC = "2";
-	// 이메일
-	public static final String TYPE_EMAIL = "3";
-	// 메신저
-	public static final String TYPE_MESSANGER = "4";
-	// 토큰기기
-	public static final String TYPE_TOKEN = "5";
-	// RADIUS
-	public static final String TYPE_RADIUS = "6";
-	
 	/********* 로그인 타입 ***********/
 	// 사용자 로그인 인증 방법. 0 : 일반(아이디/비밀번호(기본값)), 1 : 기업용(사번추가), 2 : 일반 + OTP, 3 : 일반 + 인증서, 4 : OTP + 인증서, 5 : 일반 + OTP + 인증서
 	private String login_type;

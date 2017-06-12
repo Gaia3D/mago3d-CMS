@@ -12,6 +12,7 @@
 		<typeAlias type="com.gaia3d.domain.AccessLog" alias="accessLog"/>
 		<typeAlias type="com.gaia3d.domain.APILog" alias="aPILog"/>
 		<typeAlias type="com.gaia3d.domain.CommonCode" alias="commonCode"/>
+		<typeAlias type="com.gaia3d.domain.ExternalService" alias="externalService"/>
 		<typeAlias type="com.gaia3d.domain.FileInfo" alias="fileInfo"/>
 		<typeAlias type="com.gaia3d.domain.FileParseLog" alias="fileParseLog"/>
 		<typeAlias type="com.gaia3d.domain.Issue" alias="issue"/>
@@ -19,6 +20,8 @@
 		<typeAlias type="com.gaia3d.domain.IssueComment" alias="issueComment"/>
 		<typeAlias type="com.gaia3d.domain.Menu" alias="menu"/>
 		<typeAlias type="com.gaia3d.domain.PGStatActivity" alias="pGStatActivity"/>
+		<typeAlias type="com.gaia3d.domain.ObjectGroup" alias="objectGroup"/>
+		<typeAlias type="com.gaia3d.domain.ObjectInfo" alias="objectInfo"/>
 		<typeAlias type="com.gaia3d.domain.Policy" alias="policy"/>
 		<typeAlias type="com.gaia3d.domain.Role" alias="role"/>
 		<typeAlias type="com.gaia3d.domain.Schedule" alias="schedule"/>

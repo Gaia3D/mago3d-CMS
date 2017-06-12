@@ -5,7 +5,7 @@ import java.util.List;
 import com.gaia3d.domain.UserInfo;
 
 /**
- * 메뉴 관리
+ * 사용자
  * @author jeongdae
  *
  */

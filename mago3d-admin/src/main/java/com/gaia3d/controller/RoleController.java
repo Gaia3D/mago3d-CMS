@@ -109,7 +109,7 @@ public class RoleController {
 	
 		jSONObject.put("result", result);
 		
-		return jSONObject.toString();
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -165,7 +165,7 @@ public class RoleController {
 	
 		jSONObject.put("result", result);
 		
-		return jSONObject.toString();
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -194,7 +194,7 @@ public class RoleController {
 	
 		jSONObject.put("result", result);
 		
-		return jSONObject.toString();
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -275,7 +275,7 @@ public class RoleController {
 		jSONObject.put("result", result);
 		jSONObject.put("pagination", pagination);
 		jSONObject.put("listUserGroupRole", listUserGroupRole);
-		return jSONObject.toString();
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -298,7 +298,7 @@ public class RoleController {
 		}
 		jSONObject.put("result", result);
 		//jSONObject.put("listUserGroupRole", listUserGroupRole);
-		return jSONObject.toString();
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -333,7 +333,7 @@ public class RoleController {
 		jSONObject.put("result", result);
 		jSONObject.put("pagination", pagination);
 		jSONObject.put("listExceptUserGroupRoleByGroupId", listExceptUserGroupRoleByGroupId);
-		return jSONObject.toString();
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -368,7 +368,7 @@ public class RoleController {
 		jSONObject.put("result", result);
 		jSONObject.put("pagination", pagination);
 		jSONObject.put("listUserGroupRole", listUserGroupRole);
-		return jSONObject.toString();
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -416,7 +416,7 @@ public class RoleController {
 		jSONObject.put("result", result);
 		jSONObject.put("listExceptUserGroupRoleByGroupId", listExceptUserGroupRoleByGroupId);
 		jSONObject.put("listUserGroupRole", listUserGroupRole);
-		return jSONObject.toString(); 
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -464,7 +464,7 @@ public class RoleController {
 		jSONObject.put("result", result);
 		jSONObject.put("listExceptUserGroupRoleByGroupId", listExceptUserGroupRoleByGroupId);
 		jSONObject.put("listUserGroupRole", listUserGroupRole);
-		return jSONObject.toString(); 
+		return gson.toJson(jSONObject);
 	}
 	
 	/**

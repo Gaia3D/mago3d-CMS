@@ -422,14 +422,14 @@
 			tempPasswordUserTotalCount = parseInt(jsonData.tempPasswordUserTotalCount);
 		}
 		
-		var otpValues = [ activeUserTotalCount, fobidUserTotalCount, failUserTotalCount, sleepUserTotalCount, expireUserTotalCount, tempPasswordUserTotalCount];
+		var userValues = [ activeUserTotalCount, fobidUserTotalCount, failUserTotalCount, sleepUserTotalCount, expireUserTotalCount, tempPasswordUserTotalCount];
 		var ticks = ["사용중", "사용중지", "실패횟수", "휴면", "기간만료", "임시비밀번호"];
 		var yMax = 10;
 		if(activeUserTotalCount > 10 || fobidUserTotalCount > 10 || failUserTotalCount > 10 || sleepUserTotalCount > 10 || expireUserTotalCount > 10 || tempPasswordUserTotalCount > 10) {
 			yMax = Math.max(activeUserTotalCount, fobidUserTotalCount, failUserTotalCount, sleepUserTotalCount, expireUserTotalCount, tempPasswordUserTotalCount) + (activeUserTotalCount * 0.2);
 		}
 		
-        var plot = $.jqplot("userWidget", [otpValues], {
+        var plot = $.jqplot("userWidget", [userValues], {
         	//title : "사용자 상태별 현황",
         	height: 205,
         	animate: !$.jqplot.use_excanvas,
@@ -543,7 +543,7 @@
 				}
 			},
 			error : function(request, status, error) {
-				//alert("잠시 후 이용해 주시기 바랍니다. 장시간 같은 현상이(OTP 이력) 반복될 경우 관리자에게 문의하여 주십시오.");
+				//alert("잠시 후 이용해 주시기 바랍니다. 장시간 같은 현상이 반복될 경우 관리자에게 문의하여 주십시오.");
 			}
 		});
 	}

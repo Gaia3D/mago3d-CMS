@@ -47,6 +47,15 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (101, 1, 101);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (102, 1, 102);
 
+
+-- Object 그룹 테이블 기본값 입력
+insert into object_group(
+	object_group_id, object_group_key, object_group_name, parent, depth, view_order, default_yn, use_yn, description
+) values(
+	1, 'SUPER_ADMIN', '슈퍼 관리자', 0, 1, 1, 'Y', 'Y', '기본값'
+);
+
+
 -- 메인 화면 위젯
 insert into widget(	widget_id, name, view_order, user_id) values( 1, 'issueWidget', 1, 'admin' );
 insert into widget(	widget_id, name, view_order, user_id) values( 2, 'userWidget', 4, 'admin' );

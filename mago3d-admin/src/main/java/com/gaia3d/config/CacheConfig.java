@@ -1,5 +1,6 @@
 package com.gaia3d.config;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +12,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.Menu;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserGroup;
 import com.gaia3d.domain.UserGroupMenu;
+import com.gaia3d.service.CommonCodeService;
 import com.gaia3d.service.MenuService;
 import com.gaia3d.service.PolicyService;
 import com.gaia3d.service.UserGroupService;
@@ -40,8 +43,8 @@ public class CacheConfig {
 	private PolicyService policyService;
 //	@Autowired
 //	private APIService aPIService;
-//	@Autowired
-//	private CommonCodeService commonCodeService;
+	@Autowired
+	private CommonCodeService commonCodeService;
 //	@Autowired
 //	private ServerService serverService;	
 	
@@ -126,6 +129,24 @@ public class CacheConfig {
 	}
 
 	private void commonCode(CacheType cacheType) {
+		List<CommonCode> commonCodeList = commonCodeService.getListCommonCode();
+		Map<String, CommonCode> commonCodeMap = new HashMap<String, CommonCode>();
+		List<CommonCode> emailList = new ArrayList<CommonCode>();
+		for(CommonCode commonCode : commonCodeList) {
+			if(CommonCode.USER_REGISTER_EMAIL.equals(commonCode.getCode_key())) {
+				// 이메일
+				emailList.add(commonCode);
+			} else {
+				commonCodeMap.put(commonCode.getCode_key(), commonCode);
+			}
+		}
+		
+		CommonCode emailCommonCode = new CommonCode();
+		emailCommonCode.setEmailList(emailList);
+		commonCodeMap.put(CommonCode.USER_REGISTER_EMAIL, emailCommonCode);
+		CacheManager.setCommonCodeMap(commonCodeMap);
+		
+		
 		// 사용자 도메인 cache를 갱신
 		if(cacheType == CacheType.USER || cacheType == CacheType.BROADCAST) {
 			

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,7 +52,7 @@ public class MenuController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-menu.do", method = RequestMethod.POST, produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-list-menu.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxListMenu(HttpServletRequest request) {
 //		Gson gson = new Gson();

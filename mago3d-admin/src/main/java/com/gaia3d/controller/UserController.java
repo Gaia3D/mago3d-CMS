@@ -146,7 +146,7 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-user-group-user.do")
+	@RequestMapping(value = "ajax-list-user-group-user.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxListUserGroupUser(HttpServletRequest request, @RequestParam("user_group_id") Long user_group_id, @RequestParam(defaultValue="1") String pageNo) {
 		Gson gson = new Gson();
@@ -174,6 +174,8 @@ public class UserController {
 		jSONObject.put("result", result);
 		jSONObject.put("pagination", pagination);
 		jSONObject.put("userList", userList);
+		
+		log.info(">>>>>>>>>>>>>>>>>> userlist = {}", gson.toJson(jSONObject));
 		
 		return gson.toJson(jSONObject);
 	}

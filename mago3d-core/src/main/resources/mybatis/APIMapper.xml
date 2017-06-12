@@ -72,6 +72,37 @@
 		/* getAPILog */
 		SELECT * FROM api_log WHERE api_log_id = #{api_log_id}
 	</select>
+	
+	<!-- Private API 목록 -->
+	<select id="getListExternalService" parameterType="externalService" resultType="externalService">
+		/* getListExternalService */
+		SELECT *
+		FROM external_service 
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="status != null and status != ''">
+			AND status = #{status}
+			</if>
+			<if test="service_type != null and service_type != ''">
+			AND service_type = #{service_type}
+			</if>
+			<if test="url_port != null and url_port > 0">
+			AND url_port = #{url_port}
+			</if>
+		</trim>
+		ORDER BY external_service_id, insert_date DESC
+	</select>
+	
+	<!-- Private API 정보 -->
+	<select id="getExternalService" parameterType="long" resultType="externalService">
+		/* getExternalService */
+		SELECT * FROM external_service WHERE external_service_id = #{external_service_id}
+	</select>
+	
+	<!-- external_service_id 최대값 -->
+	<select id="getMaxExternalServiceId" resultType="long">
+		/* getMaxExternalServiceId */
+		SELECT COALESCE(MAX(external_service_id), 0) + 1 FROM external_service
+	</select>
 
 	<!-- API 호출 정보 등록 -->
 	<insert id="insertAPILog" parameterType="aPILog" >
@@ -93,4 +124,46 @@
 			#{business_result_message}, #{result_value1}, #{result_value2}, #{result_value3}, #{result_value4}, #{result_value5}
 		)
 	</insert>
+	
+	<!-- Private API 등록 -->
+	<insert id="insertExternalService" parameterType="externalService" >
+		/* insertExternalService */
+		INSERT INTO external_service (
+			external_service_id, service_code, service_name, service_type, server_ip, api_key,
+			url_scheme, url_host, url_port, url_path, sync_yn, system_id, account_id, account, password, 
+			status, description, extra_key_1, extra_key_2, extra_key_3, extra_value_1, extra_value_2, extra_value_3
+		) values(
+			#{external_service_id}, #{service_code}, #{service_name}, #{service_type}, #{server_ip}, #{api_key}, 
+			#{url_scheme}, #{url_host}, #{url_port}, #{url_path}, #{sync_yn}, #{system_id}, #{account_id},
+			#{account}, #{password}, #{status}, #{description}, #{extra_key_1}, #{extra_key_2}, #{extra_key_3}, #{extra_value_1}, #{extra_value_2}, #{extra_value_3}
+		)
+	</insert>
+
+	<!-- Private API 수정 -->	
+	<update id="updateExternalService" parameterType="externalService">
+		/* updateExternalService */
+		UPDATE external_service
+		SET service_name = #{service_name},
+			service_type = #{service_type}, 
+			server_ip = #{server_ip},
+			api_key = #{api_key}, 
+			url_scheme = #{url_scheme}, 
+			url_host = #{url_host}, 
+			url_port = #{url_port}, 
+			url_path = #{url_path},
+			sync_yn = #{sync_yn}, 
+			system_id = #{system_id}, 
+			account_id = #{account_id},
+			account = #{account}, 
+			password = #{password}, 
+			status = #{status}, 
+			description = #{description}, 
+			extra_key1 = #{extra_key1}, 
+			extra_key2 = #{extra_key2}, 
+			extra_key3 = #{extra_key3}, 
+			extra_value1 = #{extra_value1}, 
+			extra_value2 = #{extra_value2}, 
+			extra_value3 = #{extra_value3}
+		WHERE external_service_id = #{external_service_id}
+	</update>
 </mapper>

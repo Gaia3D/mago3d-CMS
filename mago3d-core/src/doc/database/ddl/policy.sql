@@ -79,7 +79,7 @@ create table policy(
 	content_menu_group_root				varchar(60)			default 'Mago3D',
 	content_user_group_root				varchar(60)			default 'Mago3D',
 	content_server_group_root			varchar(60)			default 'Mago3D',
-	content_account_group_root			varchar(60)			default 'Mago3D',
+	content_object_group_root			varchar(60)			default 'Mago3D',
 	
 	site_name							varchar(60),
 	site_admin_name						varchar(64),

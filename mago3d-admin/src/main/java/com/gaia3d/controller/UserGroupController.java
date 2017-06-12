@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -140,11 +141,11 @@ public class UserGroupController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-user-group.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-list-user-group.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxListUserGroup(HttpServletRequest request) {
-		Gson gson = new Gson();
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+//		Gson gson = new Gson();
+//		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		String userGroupTree = null;
 		List<UserGroup> userGroupList = new ArrayList<UserGroup>();
@@ -158,10 +159,13 @@ public class UserGroupController {
 			result = "db.execption";
 		}
 		
-		jSONObject.put("result", result);
-		jSONObject.put("userGroupTree", userGroupTree);
+//		jSONObject.put("result", result);
+//		jSONObject.put("userGroupTree", userGroupTree);
 		
-		return gson.toJson(jSONObject);
+		String jsonResult = "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+		return jsonResult;
+		
+//		return gson.toJson(jSONObject);
 	}
 	
 	/**
