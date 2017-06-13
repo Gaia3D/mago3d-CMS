@@ -5,26 +5,26 @@
 
 통합 과제 & 이슈 관리 시스템
 
-### Mission
+## Mission
 Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립트 라이브러리를 사용한 가시화 데이터를 통합 과제 & 이슈 관리를 할 수 있습니다.
 
 
 <p align="center"><img src ="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/mago3d.png" height="400">
 
-### Features
+## Features
  - 이슈 현황을 볼 수 있습니다.
  - 다양한 이슈들이 가시화되어 있어 보기 수월합니다.
  - ...
 
-### Development Environment
-#### Framework
+## Development Environment
+### Framework
  - [Spring](https://spring.io/) 사용하여...
  - Spring Boot
 
-#### UI
+### UI
  - [AXISJ](https://axisj.com) 자바스크립트 기반 UI Framework로 강력한 UI 기능 제공
 
-#### DataBase
+### DataBase
 - [PostgreSQL](https://www.postgresql.org/download/)
      - PostgreSQL 버전 설정 (PostgreSQL v9.6.3-1)
      - 설치경로 C:/PostgreSQL
@@ -34,17 +34,17 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
    - PostgreSQL 설치가 끝난 뒤에 Stack Builder를 실행하여 설치
    - PostGIS 버전 설정 (PostGIS v2.3.2)
 
-#### Build
+### Build
 - [gradle](https://gradle.org/releases)
   - gradle 버전 설치 (gradle v3.5)
   - 설치경로 C:/gradle
   - 시스템 변수 추가 -path -> C:\gradle\gradle-3.5 추가
 
-#### eclipse
+### eclipse
  - [lombok](https://projectlombok.org/) 설치
  - Eclipse Marketplace에서 Buildship Gradle Integration 2.0 설치
 
-### License
+## License
 ...
 
 
