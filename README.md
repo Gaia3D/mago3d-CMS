@@ -8,8 +8,11 @@
 ## Mission
 Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립트 라이브러리를 사용한 가시화 데이터를 통합 과제 & 이슈 관리를 할 수 있습니다.
 
-
-<p align="center"><img src ="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/mago3d.png" height="400">
+## FeaturesDemo
+<p align="center"><img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/issue.png"></p>
+<img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/userstatus.png" width="300" height="150">
+<img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/userstatus.png" width="300" height="150">
+<img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/userstatus.png" width="300" height="150">
 
 ## Features
  - 이슈 현황을 볼 수 있습니다.
