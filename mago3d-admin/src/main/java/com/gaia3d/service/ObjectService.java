@@ -82,13 +82,6 @@ public interface ObjectService {
 	int updateObjectStatus(ObjectInfo objectInfo);
 	
 	/**
-	 * Object 등록 방법에 의한 Object 상태 수정
-	 * @param objectInfo
-	 * @return
-	 */
-	int updateObjectStatusByInsertType(ObjectInfo objectInfo);
-	
-	/**
 	 * Object 상태 수정
 	 * @param business_type
 	 * @param status_value

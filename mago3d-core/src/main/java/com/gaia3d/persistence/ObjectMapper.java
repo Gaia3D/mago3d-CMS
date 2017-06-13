@@ -83,13 +83,6 @@ public interface ObjectMapper {
 	int updateObjectStatus(ObjectInfo objectInfo);
 	
 	/**
-	 * Object 등록 방법에 의한 Object 상태 수정
-	 * @param objectInfo
-	 * @return
-	 */
-	int updateObjectStatusByInsertType(ObjectInfo objectInfo);
-	
-	/**
 	 * Object 삭제
 	 * @param object_id
 	 * @return

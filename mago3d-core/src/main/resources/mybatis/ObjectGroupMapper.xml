@@ -49,48 +49,6 @@
 		SELECT object_group_id FROM object_group WHERE parent = #{parent}
 	</select>
 
-	<!-- Object 그룹별 메뉴 목록 -->
-	<select id="getListObjectGroupMenu" parameterType="long" resultType="objectGroupMenu">
-		/* getListObjectGroupMenu */
-		WITH RECURSIVE menu_tree (
-			object_group_menu_id, object_group_id, all_yn, read_yn, write_yn, update_yn, delete_yn, 
-			menu_id, name, name_en, parent, depth, view_order, default_yn, use_yn, url, image, image_alt, css_class, path, cycle
-		) AS (
-	        SELECT X.object_group_menu_id, X.object_group_id, X.all_yn, X.read_yn, X.write_yn, X.update_yn, X.delete_yn, 
-				X.menu_id, X.name, X.name_en, X.parent, X.depth, X.view_order, X.default_yn, X.use_yn, X.url, X.image, X.image_alt, X.css_class, ARRAY[X.view_order], false
-			FROM (
-				SELECT A.object_group_menu_id, A.object_group_id, 
-					COALESCE(A.all_yn, 'N') AS all_yn, COALESCE(A.read_yn, 'N') AS read_yn, COALESCE(A.write_yn, 'N') AS write_yn, 
-					COALESCE(A.update_yn, 'N') AS update_yn, COALESCE(A.delete_yn, 'N') AS delete_yn,
-					B.menu_id, B.name, B.name_en, B.parent, B.depth, B.view_order, B.default_yn, B.use_yn, B.url, B.image, B.image_alt, B.css_class
-				FROM object_group_menu A, menu B
-				WHERE object_group_id = #{object_group_id}
-					AND A.menu_id = B.menu_id
-					AND B.use_yn != 'N'
-			) X
-	        WHERE X.parent = 0
-	        UNION ALL
-	        SELECT X.object_group_menu_id, X.object_group_id, X.all_yn, X.read_yn, X.write_yn, X.update_yn, X.delete_yn, 
-				X.menu_id, X.name, X.name_en, X.parent, X.depth, X.view_order, X.default_yn, X.use_yn, X.url, X.image, X.image_alt, X.css_class,
-				path || X.view_order, X.menu_id = ANY(path)
-	        FROM (
-	        	SELECT A.object_group_menu_id, A.object_group_id,
-	        		COALESCE(A.all_yn, 'N') AS all_yn, COALESCE(A.read_yn, 'N') AS read_yn, COALESCE(A.write_yn, 'N') AS write_yn, 
-					COALESCE(A.update_yn, 'N') AS update_yn, COALESCE(A.delete_yn, 'N') AS delete_yn, 
-					B.menu_id, B.name, B.name_en, B.parent, B.depth, B.view_order, B.default_yn, B.use_yn, B.url, B.image, B.image_alt, B.css_class
-				FROM object_group_menu A, menu B
-				WHERE object_group_id = #{object_group_id}
-					AND A.menu_id = B.menu_id
-					AND B.use_yn != 'N'
-	        ) X, menu_tree Y
-	        WHERE X.parent = Y.menu_id AND not cycle
-		)
-	    SELECT object_group_menu_id, object_group_id, all_yn, read_yn, write_yn, update_yn, delete_yn, 
-			menu_id, name, name_en, parent, depth, view_order, default_yn, use_yn, url, path, image, image_alt, css_class
-	    FROM menu_tree
-	    ORDER BY path
-	</select>
-	
 	<!-- 부모와 순서를 가지고 Object 그룹 정보를 취득 -->
 	<select id="getObjectGroupByParentAndViewOrder" parameterType="objectGroup" resultType="objectGroup">
 		/* getObjectGroupByParentAndViewOrder */
@@ -172,10 +130,10 @@
 	</update>
 	
 	<!-- 자식 그룹 상태 수정-->
-	<update id="updateChildObjectGroup" parameterType="long">
+	<!-- <update id="updateChildObjectGroup" parameterType="long">
 		/* updateChildObjectGroup */
 		UPDATE object_group SET use_yn = 'N' WHERE parent = #{parent}
-	</update>
+	</update> -->
 	
 	<!-- Object 그룹 삭제 -->
 	<delete id="deleteObjectGroup" parameterType="long">

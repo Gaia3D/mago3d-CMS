@@ -25,14 +25,14 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
 						<div class="filters">
-		    				<form:form id="searchForm" modelAttribute="userInfo" method="post" action="/user/list-user.do" onsubmit="return searchCheck();">
+		    				<form:form id="searchForm" modelAttribute="objectInfo" method="post" action="/object/list-object.do" onsubmit="return searchCheck();">
 							<div class="input-group row">
 								<div class="input-set">
-									<label for="user_group_id">그룹명</label>
-									<form:select path="user_group_id" cssClass="select">
+									<label for="object_group_id">그룹명</label>
+									<form:select path="object_group_id" cssClass="select">
 										<option value="0">전체</option>
-<c:forEach var="userGroup" items="${userGroupList}">
-										<option value="${userGroup.user_group_id}">${userGroup.group_name}</option>
+<c:forEach var="objectGroup" items="${objectGroupList}">
+										<option value="${objectGroup.object_group_id}">${objectGroup.object_group_name}</option>
 </c:forEach>
 									</form:select>
 								</div>
@@ -40,8 +40,8 @@
 									<label for="search_word">검색어</label>
 									<select id="search_word" name="search_word" class="select">
 										<option value="">선택</option>
-					                	<option value="user_id">아이디</option>
-										<option value="user_name">이름</option>
+					                	<option value="object_id">아이디</option>
+										<option value="object_name">이름</option>
 									</select>
 									<select id="search_option" name="search_option" class="select">
 										<option value="0">일치</option>
@@ -55,18 +55,15 @@
 										<option value="">전체</option>
 										<option value="0"> 사용중 </option>
 										<option value="1"> 사용중지(관리자) </option>
-										<option value="2"> 잠금(비밀번호 실패횟수) </option>
-										<option value="3"> 휴면(로그인 기간) </option>
-										<option value="4"> 만료(사용기간 종료) </option>
-										<option value="5"> 삭제(화면 비표시) </option>
+										<option value="2"> 기타 </option>
 									</select>
 								</div>
 								<div class="input-set">
-									<label for="user_insert_type">등록 유형</label>
-									<select id="user_insert_type" name="user_insert_type" class="select">
+									<label for="object_insert_type">등록 유형</label>
+									<select id="object_insert_type" name="object_insert_type" class="select">
 										<option value="">전체</option>
-										<option value="${userInsertType.code_value }"> ${userInsertType.code_name } </option>
-										<option value="${externalUserInsertType.code_value }"> ${externalUserInsertType.code_name } </option>
+										<option value="${objectInsertType.code_value }"> ${objectInsertType.code_name } </option>
+										<option value="${externalObjectInsertType.code_value }"> ${externalObjectInsertType.code_name } </option>
 									</select>
 								</div>
 								<div class="input-set">
@@ -79,9 +76,8 @@
 									<label for="order_word">표시순서</label>
 									<select id="order_word" name="order_word" class="select">
 										<option value=""> 기본 </option>
-					                	<option value="user_id"> 아이디 </option>
-										<option value="user_name"> 이름 </option>
-										<option value="last_login_date"> 로그인날짜 </option>
+					                	<option value="object_id"> 아이디 </option>
+										<option value="object_name"> 이름 </option>
 										<option value="register_date"> 등록일 </option>
 									</select>
 									<select id="order_value" name="order_value" class="select">
@@ -102,7 +98,7 @@
 							</form:form>
 						</div>
 						<div class="list">
-							<form:form id="listForm" modelAttribute="userInfo" method="post">
+							<form:form id="listForm" modelAttribute="objectInfo" method="post">
 								<input type="hidden" id="check_ids" name="check_ids" value="" />
 							<div class="list-header row">
 								<div class="list-desc u-pull-left">
@@ -111,18 +107,17 @@
 								</div>
 								<div class="list-functions u-pull-right">
 									<div class="button-group">
-										<a href="#" onclick="passowrdInit(); return false;" class="button">비밀번호 초기화</a>
-										<a href="#" onclick="updateUserStatus('USER', 'LOCK'); return false;" class="button">사용자 잠금</a>
-										<a href="#" onclick="updateUserStatus('USER', 'UNLOCK'); return false;" class="button">사용자 잠금 해제</a>
-										<a href="#" onclick="deleteUsers(); return false;" class="button">일괄삭제</a>
-										<a href="#" onclick="inputExcelUser(); return false;" class="button">일괄등록(Excel)</a>
+										<a href="#" onclick="updateObjectStatus('OBJECT', 'LOCK'); return false;" class="button">Object 잠금</a>
+										<a href="#" onclick="updateObjectStatus('OBJECT', 'UNLOCK'); return false;" class="button">Object 잠금 해제</a>
+										<a href="#" onclick="deleteObjects(); return false;" class="button">일괄삭제</a>
+										<a href="#" onclick="inputExcelObject(); return false;" class="button">일괄등록(Excel)</a>
 <c:if test="${txtDownloadFlag ne 'true' }">
-										<a href="/user/download-excel-user.do" class="button">다운로드(Excel)</a>
+										<a href="/object/download-excel-object.do" class="button">다운로드(Excel)</a>
 </c:if>
 <c:if test="${txtDownloadFlag eq 'true' }">
-										<a href="/user/download-txt-user.do" class="button">다운로드(Txt)</a>
+										<a href="/object/download-txt-object.do" class="button">다운로드(Txt)</a>
 </c:if>
-										<a href="/user/download-excel-user-sample.do" class="image-button button-area button-batch-download" title="일괄등록예제파일"><span>일괄등록예제파일</span></a>
+										<a href="/object/download-excel-object-sample.do" class="image-button button-area button-batch-download" title="일괄등록예제파일"><span>일괄등록예제파일</span></a>
 									</div>
 								</div>
 							</div>
@@ -134,9 +129,6 @@
 									<col class="col-name" />
 									<col class="col-toggle" />
 									<col class="col-toggle" />
-									<!-- <col class="col-tel" /> -->
-									<!-- <col class="col-email" /> -->
-									<col class="col-date" />
 									<col class="col-date" />
 									<col class="col-functions" />
 									<thead>
@@ -148,47 +140,42 @@
 											<th scope="col" class="col-name">이름</th>
 											<th scope="col" class="col-toggle">상태</th>
 											<th scope="col" class="col-toggle">등록유형</th>
-											<!-- <th scope="col" class="col-tel">전화번호</th> -->
-											<!-- <th scope="col" class="col-email">이메일</th> -->
-											<th scope="col" class="col-date">마지막 로그인</th>
 											<th scope="col" class="col-date">등록일</th>
 											<th scope="col" class="col-functions">수정/삭제</th>
 										</tr>
 									</thead>
 									<tbody>
-<c:if test="${empty userList }">
+<c:if test="${empty objectList }">
 										<tr>
-											<td colspan="10" class="col-none">사용자가 존재하지 않습니다.</td>
+											<td colspan="9" class="col-none">Object가 존재하지 않습니다.</td>
 										</tr>
 </c:if>
-<c:if test="${!empty userList }">
-	<c:forEach var="userInfo" items="${userList}" varStatus="status">
+<c:if test="${!empty objectList }">
+	<c:forEach var="objectInfo" items="${objectList}" varStatus="status">
 										<tr>
 											<td class="col-checkbox">
-												<input type="checkbox" id="user_id_${userInfo.user_id}" name="user_id" value="${userInfo.user_id}" />
+												<input type="checkbox" id="object_id_${objectInfo.object_id}" name="object_id" value="${objectInfo.object_id}" />
 											</td>
 											<td class="col-number">${pagination.rowNumber - status.index }</td>
-											<td class="col-name"><a href="#" class="view-group-detail" onclick="detailUserGroupInfo('${userInfo.user_group_id }'); return false;">${userInfo.user_group_name }</a></td>
-											<td class="col-id">${userInfo.user_id }</td>
-											<td class="col-name"><a href="/user/detail-user.do?user_id=${userInfo.user_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}">${userInfo.user_name }</a></td>
+											<td class="col-name"><a href="#" class="view-group-detail" onclick="detailObjectGroupInfo('${objectInfo.object_group_id }'); return false;">${objectInfo.object_group_name }</a></td>
+											<td class="col-id">${objectInfo.object_id }</td>
+											<td class="col-name"><a href="/object/detail-object.do?object_id=${objectInfo.object_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}">${objectInfo.object_name }</a></td>
 											<td class="col-toggle">
-		<c:if test="${userInfo.status eq '0'}">
+		<c:if test="${objectInfo.status eq '0'}">
 												<span class="icon-glyph glyph-on on"></span>
 		</c:if>
-		<c:if test="${userInfo.status ne '0'}">
+		<c:if test="${objectInfo.status ne '0'}">
 												<span class="icon-glyph glyph-off off"></span>
 		</c:if>
-												<span class="icon-text">${userInfo.viewStatus }</span>
+												<span class="icon-text">${objectInfo.viewStatus }</span>
 											</td>
-											<td class="col-toggle">${userInfo.viewUserInsertType }</td>
-											<%-- <td class="col-tel">${userInfo.viewMaskingMobilePhone }</td> --%>
-											<%-- <td class="col-email">${userInfo.viewMaskingEmail }</td> --%>
-											<td class="col-date">${userInfo.viewLastLoginDate }</td>
-											<td class="col-date">${userInfo.viewInsertDate }</td>
+											<td class="col-toggle">${objectInfo.viewObjectInsertType }</td>
+											<td class="col-date">${objectInfo.viewLastLoginDate }</td>
+											<td class="col-date">${objectInfo.viewInsertDate }</td>
 											<td class="col-functions">
 												<span class="button-group">
-													<a href="/user/modify-user.do?user_id=${userInfo.user_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}" class="image-button button-edit">수정</a>
-													<a href="/user/delete-user.do?user_id=${userInfo.user_id }" onclick="return deleteWarning();" class="image-button button-delete">삭제</a>
+													<a href="/object/modify-object.do?object_id=${objectInfo.object_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}" class="image-button button-edit">수정</a>
+													<a href="/object/delete-object.do?object_id=${objectInfo.object_id }" onclick="return deleteWarning();" class="image-button button-delete">삭제</a>
 												</span>
 											</td>
 										</tr>
@@ -199,13 +186,13 @@
 							</form:form>
 							
 							<%-- 엑셀 다운로드 --%>
-							<form:form id="excelUserInfo" modelAttribute="excelUserInfo" method="post" action="/user/download-excel-user.do">
-								<form:hidden path="user_group_id" />
+							<form:form id="excelObjectInfo" modelAttribute="excelObjectInfo" method="post" action="/object/download-excel-object.do">
+								<form:hidden path="object_group_id" />
 								<form:hidden path="search_word" />
 								<form:hidden path="search_option" />
 								<form:hidden path="search_value" />
 								<form:hidden path="status" />
-								<form:hidden path="user_insert_type" />
+								<form:hidden path="object_insert_type" />
 								<form:hidden path="start_date" />
 								<form:hidden path="end_date" />
 								<form:hidden path="order_word" />
@@ -221,7 +208,7 @@
 	</div>
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 	
-	<div class="dialog" title="사용자 그룹 정보">
+	<div class="dialog" title="Object 그룹 정보">
 		<table class="inner-table scope-row">
 			<col class="col-label" />
 			<col class="col-data" />
@@ -244,9 +231,9 @@
 		</table>
 	</div>
 	<%-- 일괄등록(Excel) --%>
-	<div class="dialog_excel" title="사용자 일괄 등록">
-		<form id="fileInfo" name="fileInfo" action="/user/ajax-insert-excel-user.do" method="post" enctype="multipart/form-data">
-			<table id="excelUserUpload" class="inner-table scope-row">
+	<div class="dialog_excel" title="Object 일괄 등록">
+		<form id="fileInfo" name="fileInfo" action="/object/ajax-insert-excel-object.do" method="post" enctype="multipart/form-data">
+			<table id="excelObjectUpload" class="inner-table scope-row">
 				<col class="col-sub-label xl" />
 				<col class="col-data" />
 				<tbody>
@@ -277,10 +264,10 @@
 	$(document).ready(function() {
 		initJqueryCalendar();
 		
-		initSelect(	new Array("user_group_id", "status", "user_insert_type", "search_word", "search_option", "search_value", "order_word", "order_value", "list_counter"), 
-					new Array("${userInfo.user_group_id}", "${userInfo.status}", "${userInfo.user_insert_type}", "${userInfo.search_word}", 
-							"${userInfo.search_option}", "${userInfo.search_value}", "${userInfo.order_word}", "${userInfo.order_value}", "${pagination.pageRows }"));
-		initCalendar(new Array("start_date", "end_date"), new Array("${userInfo.start_date}", "${userInfo.end_date}"));
+		initSelect(	new Array("object_group_id", "status", "object_insert_type", "search_word", "search_option", "search_value", "order_word", "order_value", "list_counter"), 
+					new Array("${objectInfo.object_group_id}", "${objectInfo.status}", "${objectInfo.object_insert_type}", "${objectInfo.search_word}", 
+							"${objectInfo.search_option}", "${objectInfo.search_value}", "${objectInfo.order_word}", "${objectInfo.order_value}", "${pagination.pageRows }"));
+		initCalendar(new Array("start_date", "end_date"), new Array("${objectInfo.start_date}", "${objectInfo.end_date}"));
 		$( ".select" ).selectmenu();
 	});
 	
@@ -303,80 +290,36 @@
 	
 	// 전체 선택 
 	$("#chk_all").click(function() {
-		$(":checkbox[name=user_id]").prop("checked", this.checked);
+		$(":checkbox[name=object_id]").prop("checked", this.checked);
 	});
 	
-	// 사용자 등록 Layer 생성
-	function inputExcelUser() {
+	// Object 등록 Layer 생성
+	function inputExcelObject() {
 		dialog_excel.dialog( "open" );
 	}
-	// 사용자 등록 Layer 닫기
+	// Object 등록 Layer 닫기
 	function popClose() {
 		dialog_excel.dialog( "close" );
 		location.reload();
 	}
 	
-	// 비밀번호 초기화
-	var passowrdInitFlag = true;
-	function passowrdInit() {
-		if($("input:checkbox[name=user_id]:checked").length == 0) {
+	var updateObjectStatusFlag = true;
+	function updateObjectStatus(business_type, status_value) {
+		if($("input:checkbox[name=object_id]:checked").length == 0) {
 			alert(JS_MESSAGE["check.value.required"]);
 			return false;
 		} else {
 			var checkedValue = "";
-			$("input:checkbox[name=user_id]:checked").each(function(index){
-				checkedValue += $(this).val() + ",";
-			});
-			$("#check_ids").val(checkedValue);
-		}
-		var info = $("#listForm").serialize();		
-		if(passowrdInitFlag) {
-			passowrdInitFlag = false;
-			$.ajax({
-				url: "/user/ajax-init-user-password.do",
-				type: "POST",
-				data: info,
-				cache: false,
-				async:false,
-				dataType: "json",
-				success: function(msg){
-					if(msg.result == "success") {
-						alert(JS_MESSAGE["update"]);
-						location.reload();
-						$(":checkbox[name=user_id]").prop("checked", false);
-					} else {
-						alert(JS_MESSAGE[msg.result]);
-					}
-					passowrdInitFlag = true;
-				},
-				error:function(request,status,error){
-			        alert(JS_MESSAGE["ajax.error.message"]);
-			        passowrdInitFlag = true;
-				}
-			});
-		} else {
-			alert(JS_MESSAGE["button.dobule.click"]);
-			return;
-		} 
-	}
-	
-	var updateUserStatusFlag = true;
-	function updateUserStatus(business_type, status_value) {
-		if($("input:checkbox[name=user_id]:checked").length == 0) {
-			alert(JS_MESSAGE["check.value.required"]);
-			return false;
-		} else {
-			var checkedValue = "";
-			$("input:checkbox[name=user_id]:checked").each(function(index){
+			$("input:checkbox[name=object_id]:checked").each(function(index){
 				checkedValue += $(this).val() + ",";
 			});
 			$("#check_ids").val(checkedValue);
 		}
 		var info = $("#listForm").serialize() + "&business_type=" + business_type + "&status_value=" + status_value;		
-		if(updateUserStatusFlag) {
-			updateUserStatusFlag = false;
+		if(updateObjectStatusFlag) {
+			updateObjectStatusFlag = false;
 			$.ajax({
-				url: "/user/ajax-update-user-status.do",
+				url: "/object/ajax-update-object-status.do",
 				type: "POST",
 				data: info,
 				cache: false,
@@ -385,9 +328,9 @@
 				success: function(msg){
 					if(msg.result == "success") {
 						if(msg.result_message != null && msg.result_message != "" && business_type == "OTP") {
-							var updateMessage = JS_MESSAGE["user.user_otp.update.warning"];
+							var updateMessage = JS_MESSAGE["object.object_otp.update.warning"];
 							var patternCount = /{update_count}/ig; // notice "g" here now!
-							var pattern = /{user_ids}/ig; // notice "g" here now!
+							var pattern = /{object_ids}/ig; // notice "g" here now!
 							updateMessage = updateMessage.replace( patternCount, msg.update_count );
 							updateMessage = updateMessage.replace( pattern, msg.result_message );
 							alert(updateMessage);
@@ -395,15 +338,15 @@
 							alert(JS_MESSAGE["update"]);	
 						}
 						location.reload();
-						$(":checkbox[name=user_id]").prop("checked", false);
+						$(":checkbox[name=object_id]").prop("checked", false);
 					} else {
 						alert(JS_MESSAGE[msg.result]);
 					}
-					updateUserStatusFlag = true;
+					updateObjectStatusFlag = true;
 				},
 				error:function(request,status,error){
 			        alert(JS_MESSAGE["ajax.error.message"]);
-			        updateUserStatusFlag = true;
+			        updateObjectStatusFlag = true;
 				}
 			});
 		} else {
@@ -415,12 +358,12 @@
 	var fileUploadFlag = true;
 	function fileUpload() {
 		if($("#file_name").val() == "") {
-			alert(JS_MESSAGE["user.file.name"]);
+			alert(JS_MESSAGE["object.file.name"]);
 			$("#file_name").focus();
 			return false;
 		}
 		if(!isExcelFile($("#file_name").val())) {
-			alert(JS_MESSAGE["user.file.excel"]);
+			alert(JS_MESSAGE["object.file.excel"]);
 			$("#file_name").focus();
 			return false;
 		}
@@ -464,7 +407,7 @@
 						+ 	"<td> DB 등록 실패 건수</td>"
 						+ 	"<td> " + msg.insert_error_count + "</td>"
 						+ "</tr>";
-						$("#excelUserUpload > tbody:last").append(content);
+						$("#excelObjectUpload > tbody:last").append(content);
 					}
 					fileUploadFlag = true;
 				},
@@ -479,24 +422,24 @@
 		}
 	}
 	
-	// 사용자 그룹 정보
-    function detailUserGroupInfo(userGroupId) {
+	// Object 그룹 정보
+    function detailObjectGroupInfo(objectGroupId) {
     	dialog.dialog( "open" );
-    	ajaxUserGroupInfo(userGroupId);
+    	ajaxObjectGroupInfo(objectGroupId);
 	}
 	
-	// 사용자 그룹 정보
-    function ajaxUserGroupInfo(userGroupId) {
+	// Object 그룹 정보
+    function ajaxObjectGroupInfo(objectGroupId) {
     	$.ajax({
-    		url: "/user/ajax-user-group-info.do",
-    		data: { user_group_id : userGroupId },
+    		url: "/object/ajax-object-group-info.do",
+    		data: { object_group_id : objectGroupId },
     		type: "POST",
     		cache: false,
     		async:false,
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == "success") {
-    				drawUserGroupInfo(msg.userGroup);
+    				drawObjectGroupInfo(msg.objectGroup);
 				} else {
     				alert(JS_MESSAGE[msg.result]);
     			}
@@ -507,34 +450,34 @@
     	});
     }
 	
-	// 사용자 그룹 정보
-	function drawUserGroupInfo(jsonData) {
+	// Object 그룹 정보
+	function drawObjectGroupInfo(jsonData) {
 		$("#group_name_info").html(jsonData.group_name);
 		$("#group_key_info").html(jsonData.group_key);
 		$("#viewUseYn_info").html(jsonData.viewUseYn);
 		$("#description_info").html(jsonData.description);
 	}
 	
-	// 사용자 일괄 삭제
-	var deleteUsersFlag = true;
-	function deleteUsers() {
-		if($("input:checkbox[name=user_id]:checked").length == 0) {
+	// Object 일괄 삭제
+	var deleteObjectsFlag = true;
+	function deleteObjects() {
+		if($("input:checkbox[name=object_id]:checked").length == 0) {
 			alert(JS_MESSAGE["check.value.required"]);
 			return false;
 		} else {
 			var checkedValue = "";
-			$("input:checkbox[name=user_id]:checked").each(function(index){
+			$("input:checkbox[name=object_id]:checked").each(function(index){
 				checkedValue += $(this).val() + ",";
 			});
 			$("#check_ids").val(checkedValue);
 		}
 		
 		if(confirm(JS_MESSAGE["delete.confirm"])) {
-			if(deleteUsersFlag) {
-				deleteUsersFlag = false;
+			if(deleteObjectsFlag) {
+				deleteObjectsFlag = false;
 				var info = $("#listForm").serialize();
 				$.ajax({
-					url: "/user/ajax-delete-users.do",
+					url: "/object/ajax-delete-objects.do",
 					type: "POST",
 					data: info,
 					cache: false,
@@ -544,15 +487,15 @@
 						if(msg.result == "success") {
 							alert(JS_MESSAGE["delete"]);	
 							location.reload();
-							$(":checkbox[name=user_id]").prop("checked", false);
+							$(":checkbox[name=object_id]").prop("checked", false);
 						} else {
 							alert(JS_MESSAGE[msg.result]);
 						}
-						deleteUsersFlag = true;
+						deleteObjectsFlag = true;
 					},
 					error:function(request,status,error){
 				        alert(JS_MESSAGE["ajax.error.message"]);
-				        deleteUsersFlag = true;
+				        deleteObjectsFlag = true;
 					}
 				});
 			} else {

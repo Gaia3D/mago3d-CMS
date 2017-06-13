@@ -26,7 +26,7 @@
 	<script type="text/javascript" src="/externlib/${lang}/axisj/lib/AXModal.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/axisj/lib/AXSelect.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/axisj/lib/AXTree.js"></script>
-	<script type="text/javascript" src="/js/${lang}/userGroupTree.js"></script>
+	<script type="text/javascript" src="/js/${lang}/objectGroupTree.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
 	<script type="text/javascript" src="/js/${lang}/navigation.js"></script>
@@ -44,7 +44,7 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
 						<div class="content-header row">
-							<h3 class="content-title u-pull-left">사용자 그룹 (<a href="#" onclick="reloadUserGroupCache();">캐시갱신</a>)</h3>
+							<h3 class="content-title u-pull-left">데이터 그룹 (<a href="#" onclick="reloadObjectGroupCache();">캐시갱신</a>)</h3>
 							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
 						</div>
 						<div class="row">
@@ -60,9 +60,9 @@
 							<div class="two-third column">
 								<div class="node">
 									<div class="info">
-										<form name="userGroupForm" id="userGroupForm" method="post" onsubmit="return false;">
+										<form name="objectGroupForm" id="objectGroupForm" method="post" onsubmit="return false;">
 											<input type="hidden" id="writeMode" name="writeMode" value="" />
-											<input type="hidden" id="user_group_id" name="user_group_id" value="" />
+											<input type="hidden" id="object_group_id" name="object_group_id" value="" />
 											<input type="hidden" id="parent" name="parent" value="" />
 											<input type="hidden" id="depth" name="depth" value="" /> 
 											<input type="hidden" id="view_order" name="view_order" value="1" />
@@ -72,17 +72,17 @@
 											<col class="col-input" />
 											<tr>
 												<th class="col-label" scope="row">
-													<label for="group_name">그룹명</label>
+													<label for="object_group_name">그룹명</label>
 													<span class="icon-glyph glyph-emark-dot color-warning"></span>
 												</th>
-												<td class="col-input"><input type="text" id="group_name" name="group_name" value="" class="m" /></td>
+												<td class="col-input"><input type="text" id="object_group_name" name="object_group_name" value="" class="m" /></td>
 											</tr>
 											<tr>
 												<th class="col-label" scope="row">
-													<label for="group_key">그룹명(영문)</label>
+													<label for="object_group_key">그룹명(영문)</label>
 													<span class="icon-glyph glyph-emark-dot color-warning"></span>
 												</th>
-												<td class="col-input"><input type="text" id="group_key" name="group_key" value="" class="m" /></td>
+												<td class="col-input"><input type="text" id="object_group_key" name="object_group_key" value="" class="m" /></td>
 											</tr>
 											<tr>
 												<th class="col-label" scope="row">
@@ -107,9 +107,7 @@
 														<input type="reset" value="취소" />
 													</div>
 													<div class="button-group u-pull-right">
-														<a href="#" class="button" onclick="modifyUserGroupRole();">Role 관리</a>
-														<a href="#" class="button" onclick="modifyUserGroupMenu();">메뉴 관리</a>
-														<a href="#" class="button" onclick="modifyUserGroupUser();">사용자 관리</a>
+														<a href="#" class="button" onclick="modifyObjectGroupUser();">데이터 관리</a>
 													</div>
 												</td>
 											</tr>
@@ -119,70 +117,9 @@
 											
 									<div class="tabs">
 										<ul>
-											<li><a href="#role_tab">ROLE</a></li>
-											<li><a href="#menu_tab">메뉴</a></li>
-											<li><a href="#user_tab">사용자</a></li>
+											<li><a href="#object_tab">데이터</a></li>
 										</ul>
-										<div id="role_tab">
-											<table class="inner-table scope-col">
-												<col class="col-numer" />
-												<col class="col-name" />
-												<col class="col-key" />
-												<col class="col-toggle" />
-												<col class="col-desc" />
-												<col class="col-date-time" />
-												<thead>
-													<tr>
-														<th scope="col" class="col-number">번호</th>
-														<th scope="col" class="col-name">Role명</th>
-														<th scope="col" class="col-key">Role Key</th>
-														<th scope="col" class="col-toggle">사용여부</th>
-														<th scope="col" class="col-desc">설명</th>
-														<th scope="col" class="col-date-time">등록일</th>
-													</tr>
-												</thead>
-												<tbody id="role_list">
-													<tr>
-														<td colspan="6" class="col-none">등록된 Role이 없습니다.</td>
-													</tr>
-												</tbody>
-											</table>
-						
-											<div id="role_pagination" class="pagination"></div>
-										</div>
-										
-										<div id="menu_tab">
-											<table class="inner-table scope-col">
-												<col class="col-numer" />
-												<col class="col-name" />
-												<col class="col-toggle" />
-												<col class="col-url" />
-												<col class="col-url" />
-												<col class="col-desc" />
-												<col class="col-desc" />
-												<col class="col-date-time" />
-												<thead>
-													<tr>
-														<th scope="col" class="col-number">번호</th>
-														<th scope="col" class="col-name">메뉴명</th>
-														<th scope="col" class="col-toggle">사용여부</th>
-														<th scope="col" class="col-url">Url</th>
-														<th scope="col" class="col-url">이미지</th>
-														<th scope="col" class="col-desc">이미지 Alt</th>
-														<th scope="col" class="col-desc">설명</th>
-														<th scope="col" class="col-date-time">등록일</th>
-													</tr>
-												</thead>
-												<tbody id="menu_list">
-													<tr>
-														<td colspan="8" class="col-none">등록된 Menu가 없습니다.</td>
-													</tr>
-												</tbody>
-											</table>
-											<div id="menu_pagination" class="pagination"></div>
-										</div>
-										
-										<div id="user_tab">
+										<div id="object_tab">
 											<table class="inner-table scope-col">
 												<col class="col-numer" />
 												<col class="col-id" />
@@ -196,17 +133,17 @@
 														<th scope="col" class="col-id">아이디</th>
 														<th scope="col" class="col-name">이름</th>
 														<th scope="col" class="col-email">이메일</th>
-														<th scope="col" class="col-toggle">회원 상태</th>
+														<th scope="col" class="col-toggle">데이터 상태</th>
 														<th scope="col" class="col-date-time">등록일</th>
 													</tr>
 												</thead>
 												<tbody id="user_list">
 													<tr>
-														<td colspan="6" class="col-none">등록된 사용자가 없습니다.</td>		
+														<td colspan="6" class="col-none">등록된 데이터가 없습니다.</td>		
 													</tr>
 												</tbody>
 											</table>
-											<div id="user_pagination" class="pagination"></div>
+											<div id="object_pagination" class="pagination"></div>
 										</div>
 									</div>
 								</div>
@@ -219,165 +156,82 @@
 	</div>
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 	
-<!-- Role 관리 -->	
-<div id="role_manager" class="dialog" title="Role 관리">
+<!-- Object 관리 -->	
+<div id="object_manager" class="object_dialog" title="데이터 관리">
 	<div class="row">
-		<!-- 전체 Role -->
-		<div id="role_left" class="pool">
+		<!-- 전체 Object -->
+		<div id="object_left" class="pool">
 			<div class="list-header row">
 				<div class="u-pull-left">
-					<h4 class="column-title">전체 Role(선택 그룹 제외)</h4>
+					<h4 class="column-title">전체 데이터(선택 그룹 제외)</h4>
 				</div>
 				<div class="u-pull-right">
-					<label for="search_except_role_name">Role명</label>
-					<input type="search" id="search_except_role_name" name="search_except_role_name" class="m" value="" />
-					<input type="button" value="조회" onclick="drawGroupPage('1', 'role_all');" />
+					<label for="search_except_object_name">아이디</label>
+					<input type="search" id="search_except_object_name" name="search_except_object_name" class="m" value="" />
+					<input type="button" value="조회" onclick="drawGroupPage('1', 'object_all');" />
 				</div>
-				<div id="role_all_list_count" class="list-desc u-pull-left">
+				<div id="object_all_list_count" class="list-desc u-pull-left">
 				</div>
 			</div>
 		
-			<form id="role_left_form"> 			
+			<form id="object_left_form"> 			
 			<table class="list-table scope-col">
 				<col class="col-checkbox" />
 				<col class="col-name" />
 				<col class="col-toggle" />
 				<thead>
 					<tr>
-						<th scope="col" class="col-checkbox"><input type="checkbox" id="role_left_check_all" name="role_left_check_all" /></th>
-						<th scope="col" class="col-name">Role명 (Role Key)</th>
-						<th scope="col" class="col-toggle" style="min-width: 50px;">사용유무</th>
-					</tr>
-				</thead>
-				<tbody id="role_all_list">
-				</tbody>
-			</table>
-			<div id="role_all" class="pagination"></div>
-			</form>
-		</div>
-		
-		<!-- 사용자 그룹에 등록되어 있는 Role -->
-		<div id="role_right" class="chosen">
-			<div class="list-header row">
-				<div class="u-pull-left">
-					<h4 class="column-title">등록 Role(선택 그룹)</h4>
-				</div>
-				<div class="u-pull-right">
-					<label for="search_role_name">Role명</label>
-					<input type="search" id="search_role_name" name="search_role_name" class="m" value="" />
-					<input type="button" value="조회" onclick="drawGroupPage('1', 'role_select');" />
-				</div>
-				<div id="role_select_list_count" class="list-desc u-pull-left">
-				</div>
-			</div>
-			
-			<form id="role_right_form">
-			<table class="list-table scope-col">
-				<col class="col-checkbox" />
-				<col class="col-name" />
-				<col class="col-toggle" />
-				<thead>
-					<tr>
-						<th scope="col" class="col-checkbox"><input type="checkbox" id="role_right_check_all" name="role_right_check_all" /></th>
-						<th scope="col" class="col-name">Role명 (Role Key)</th>
-						<th scope="col" class="col-toggle" style="min-width: 50px;">사용유무</th>
-					</tr>
-				</thead>
-				<tbody id="role_select_list">
-				</tbody>
-			</table>
-			<div id="role_select" class="pagination"></div>
-			</form>
-		</div>
-		<div id="role_center" class="buttons">
-			<a href="#" id="role_button_insert" class="button color-area-em">
-				<span class="icon-glyph glyph-plus"></span>
-				<span class="icon-text">등록</span>
-			</a>
-			<a href="#" id="role_button_delete" class="button color-area-em">
-				<span class="icon-glyph glyph-ex"></span>
-				<span class="icon-text">삭제</span>
-			</a>
-		</div>
-	</div>
-</div>
-
-<!-- 사용자 관리 -->	
-<div id="user_manager" class="user_dialog" title="사용자 관리">
-	<div class="row">
-		<!-- 전체 사용자 -->
-		<div id="user_left" class="pool">
-			<div class="list-header row">
-				<div class="u-pull-left">
-					<h4 class="column-title">전체 사용자(선택 그룹 제외)</h4>
-				</div>
-				<div class="u-pull-right">
-					<label for="search_except_user_name">아이디</label>
-					<input type="search" id="search_except_user_name" name="search_except_user_name" class="m" value="" />
-					<input type="button" value="조회" onclick="drawGroupPage('1', 'user_all');" />
-				</div>
-				<div id="user_all_list_count" class="list-desc u-pull-left">
-				</div>
-			</div>
-		
-			<form id="user_left_form"> 			
-			<table class="list-table scope-col">
-				<col class="col-checkbox" />
-				<col class="col-name" />
-				<col class="col-toggle" />
-				<thead>
-					<tr>
-						<th scope="col" class="col-checkbox"><input type="checkbox" id="user_left_check_all" name="user_left_check_all" /></th>
+						<th scope="col" class="col-checkbox"><input type="checkbox" id="object_left_check_all" name="object_left_check_all" /></th>
 						<th scope="col" class="col-name">아이디</th>
 						<th scope="col" class="col-toggle">이름</th>
 					</tr>
 				</thead>
-				<tbody id="user_all_list">
+				<tbody id="object_all_list">
 				</tbody>
 			</table>
-			<div id="user_all" class="pagination"></div>
+			<div id="object_all" class="pagination"></div>
 			</form>
 		</div>
 		
-		<!-- 그룹에 등록되어 있는 사용자 -->
-		<div id="user_right" class="chosen">
+		<!-- 그룹에 등록되어 있는 object -->
+		<div id="object_right" class="chosen">
 			<div class="list-header row">
 				<div class="u-pull-left">
-					<h4 class="column-title">등록 사용자(선택 그룹)</h4>
+					<h4 class="column-title">등록 데이터(선택 그룹)</h4>
 				</div>
 				<div class="u-pull-right">
-					<label for="search_user_name">아이디</label>
-					<input type="search" id="search_user_name" name="search_user_name" class="m" value="" />
-					<input type="button" value="조회" onclick="drawGroupPage('1', 'user_select');" />
+					<label for="search_object_name">아이디</label>
+					<input type="search" id="search_user_name" name="search_object_name" class="m" value="" />
+					<input type="button" value="조회" onclick="drawGroupPage('1', 'object_select');" />
 				</div>
-				<div id="user_select_list_count" class="list-desc u-pull-left">
+				<div id="object_select_list_count" class="list-desc u-pull-left">
 				</div>
 			</div>
 			
-			<form id="user_right_form">
+			<form id="object_right_form">
 			<table class="list-table scope-col">
 				<col class="col-checkbox" />
 				<col class="col-name" />
 				<col class="col-toggle" />
 				<thead>
 					<tr>
-						<th scope="col" class="col-checkbox"><input type="checkbox" id="user_right_check_all" name="user_right_check_all" /></th>
+						<th scope="col" class="col-checkbox"><input type="checkbox" id="object_right_check_all" name="object_right_check_all" /></th>
 						<th scope="col" class="col-name">아이디</th>
 						<th scope="col" class="col-toggle">이름</th>
 					</tr>
 				</thead>
-				<tbody id="user_select_list">
+				<tbody id="object_select_list">
 				</tbody>
 			</table>
-			<div id="user_select" class="pagination"></div>
+			<div id="object_select" class="pagination"></div>
 			</form>
 		</div>
 		<div id="role_center" class="buttons">
-			<a href="#" id="user_button_insert" class="button color-area-em">
+			<a href="#" id="object_button_insert" class="button color-area-em">
 				<span class="icon-glyph glyph-plus"></span>
 				<span class="icon-text">등록</span>
 			</a>
-			<a href="#" id="user_button_delete" class="button color-area-em">
+			<a href="#" id="object_button_delete" class="button color-area-em">
 				<span class="icon-glyph glyph-ex"></span>
 				<span class="icon-text">삭제</span>
 			</a>
@@ -385,38 +239,23 @@
 	</div>
 </div>
 <script type="text/javascript">
-		var USER_GROUP_TREE_DATA = null;
+	var OBJECT_GROUP_TREE_DATA = null;
     $(document).ready(function() {
-    	getAjaxUserGroupList();
+    	getAjaxObjectGroupList();
 		fnObj.pageStart.delay(0.1);
 		$( ".tabs" ).tabs();
 	});
     
-    // 등록 가능한 Role 전체 선택 
-	$("#role_left_check_all").click(function() {
-		$(':checkbox[name=role_all_id]').prop('checked', this.checked);
+    // 등록 가능한 object 전체 선택 
+	$("#object_left_check_all").click(function() {
+		$(':checkbox[name=object_all_id]').prop('checked', this.checked);
 	});
-    // 등록된 Role 전체 선택 
-	$("#role_right_check_all").click(function() {
-		$(':checkbox[name=role_select_id]').prop('checked', this.checked);
-	});
-	// 등록 가능한 사용자 전체 선택 
-	$("#user_left_check_all").click(function() {
-		$(':checkbox[name=user_all_id]').prop('checked', this.checked);
-	});
-    // 등록된 사용자 전체 선택 
-	$("#user_right_check_all").click(function() {
-		$(':checkbox[name=user_select_id]').prop('checked', this.checked);
+    // 등록된 object 전체 선택 
+	$("#object_right_check_all").click(function() {
+		$(':checkbox[name=object_select_id]').prop('checked', this.checked);
 	});
 	
-	var roleDialog = $( ".dialog" ).dialog({
-		autoOpen: false,
-		height: 700,
-		width: 1000,
-		modal: true,
-		resizable: false
-	});
-	var userDialog = $( ".user_dialog" ).dialog({
+	var objectDialog = $( ".object_dialog" ).dialog({
 		autoOpen: false,
 		height: 700,
 		width: 1000,
@@ -424,123 +263,59 @@
 		resizable: false
 	});
 	
-	// 전체 Role 검색, enter key 
-	$("#search_except_role_name").keydown(function (key) {
+	// 전체 object 검색, enter key 
+	$("#search_except_object_name").keydown(function (key) {
 	    if (key.keyCode == 13) {
-			drawGroupPage('1', 'role_all');
+			drawGroupPage('1', 'object_all');
 	    }
 	});
-	// 등록 Role 검색, enter key
-	$("#search_role_name").keydown(function (key) {
+	// 등록 object 검색, enter key
+	$("#search_object_name").keydown(function (key) {
 	    if (key.keyCode == 13) {
-			drawGroupPage('1', 'role_select');
-	    }
-	});
-	// 전체 사용자 검색, enter key 
-	$("#search_except_user_name").keydown(function (key) {
-	    if (key.keyCode == 13) {
-			drawGroupPage('1', 'user_all');
-	    }
-	});
-	// 등록 사용자 검색, enter key
-	$("#search_user_name").keydown(function (key) {
-	    if (key.keyCode == 13) {
-			drawGroupPage('1', 'user_select');
+			drawGroupPage('1', 'object_select');
 	    }
 	});
 	
-	// Role 관리 팝업
-    function modifyUserGroupRole() {
-    	if ($("#user_group_id").val() == "") {
-    		alert("사용자 그룹을 선택해 주세요.");
+	// Object 관리
+    function modifyObjectGroupUser() {
+    	if ($("#object_group_id").val() == "") {
+    		alert("데이터 그룹을 선택해 주세요.");
     		return;
     	}
     	if ($("#depth").val() == "" || parseInt($("#depth").val()) < 1) {
-    		alert("최상위 그룹에는 Role을 등록할 수 없습니다.");
+    		alert("최상위 그룹에는 데이터를 등록할 수 없습니다.");
     		return;
     	}
-    	
-    	roleDialog.dialog( "open" );
-    	// 사용자 그룹 전체 Role 에서 선택한 사용자 그룹에 등록된 Role 을 제외한 Role 목록
-    	ajaxListExceptUserGroupRoleForUpdate(1);
-    	// 선택한 사용자 그룹에 등록된 Role 목록
-    	ajaxListUserGroupRoleForUpdate(1);
-	}
- 	// 메뉴 관리
-    function modifyUserGroupMenu() {
- 		alert("준비중입니다.");
- 	}
- 	// 사용자 관리
-    function modifyUserGroupUser() {
-    	if ($("#user_group_id").val() == "") {
-    		alert("사용자 그룹을 선택해 주세요.");
-    		return;
-    	}
-    	if ($("#depth").val() == "" || parseInt($("#depth").val()) < 1) {
-    		alert("최상위 그룹에는 사용자를 등록할 수 없습니다.");
-    		return;
-    	}
-    	userDialog.dialog( "open" );
-    	// 선택한 사용자 그룹에 등록된 User 목록
-    	ajaxListUserGroupUserByGroupId(1);
-    	// 사용자 그룹 전체 User 에서 선택한 사용자 그룹에 등록된 User 을 제외한 User 목록
-    	ajaxListExceptUserGroupUserByGroupId(1);
+    	objectDialog.dialog( "open" );
+    	// 선택한 Object 그룹에 등록된 User 목록
+    	ajaxListObjectGroupUserByGroupId(1);
+    	// Object 그룹 전체 User 에서 선택한 Object 그룹에 등록된 Object 을 제외한 Object 목록
+    	ajaxListExceptObjectGroupUserByGroupId(1);
 	}
 	
-	// Role 등록
-    $("#role_button_insert").click(function() {
-    	$("#role_left_check_all").prop("checked",  false);
-    	ajaxInsertUserGroupRole();
+	// object 등록
+    $("#object_button_insert").click(function() {
+    	$("#object_left_check_all").prop("checked",  false);
+    	ajaxInsertObjectGroupUser();
     });
- 	// 사용자 등록
-    $("#user_button_insert").click(function() {
-    	$("#user_left_check_all").prop("checked",  false);
-    	ajaxInsertUserGroupUser();
-    });
-	// Role 제거
-    $("#role_button_delete").click(function() {
-    	$("#role_right_check_all").prop("checked",  false);
-    	ajaxDeleteUserGroupRole();
-    });
- 	// 사용자 제거
-    $("#user_button_delete").click(function() {
-    	$("#user_right_check_all").prop("checked",  false);
-    	ajaxDeleteUserGroupUser();
+	// object 제거
+    $("#object_button_delete").click(function() {
+    	$("#object_right_check_all").prop("checked",  false);
+    	ajaxDeleteObjectGroupObject();
     });
 	
-	// 사용자 그룹 등록된 Role 목록
-    function ajaxListUserGroupRole(pageNo) {
-    	$.ajax({
-    		url: "/role/ajax-list-user-group-role.do",
-    		data: { user_group_id : $("#user_group_id").val(), pageNo : pageNo },
-    		type: "POST",
-    		cache: false,
-    		async:false,
-    		dataType: "json",
-    		success: function(msg){
-    			if (msg.result == "success") {
-    				drawListUserGroupRole(msg.listUserGroupRole, msg.pagination);
-				} else {
-    				alert(JS_MESSAGE[msg.result]);
-    			}
-    		},
-    		error:function(request,status,error){
-    			alert(JS_MESSAGE["ajax.error.message"]);
-    		}
-    	});
-    }
- 	// 사용자 그룹 등록된 사용자 목록
-    function ajaxListUserGroupUser(pageNo) {
+	// object 그룹 등록된 사용자 목록
+    function ajaxListObjectGroupObject(pageNo) {
  		$.ajax({
-    		url: "/user/ajax-list-user-group-user.do",
-    		data: { user_group_id : $("#user_group_id").val(), pageNo : pageNo },
+    		url: "/object/ajax-list-object-group-object.do",
+    		data: { object_group_id : $("#object_group_id").val(), pageNo : pageNo },
     		type: "POST",
     		cache: false,
     		async:false,
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == "success") {
-    				drawListUserGroupUser(msg.pagination, msg.userList);
+    				drawListObjectGroupObject(msg.pagination, msg.objectList);
 				} else {
     				alert(JS_MESSAGE[msg.result]);
     			}
@@ -550,23 +325,24 @@
     		}
     	});
     }
-	// 사용자 그룹 전체 Role 에서 선택한 사용자 그룹에 등록된 Role 을 제외한 Role 목록
-	function ajaxListExceptUserGroupRoleForUpdate(pageNo) {
- 		var search_except_role_name = $("#search_except_role_name").val();
- 		if(search_except_role_name != null && search_except_role_name != "") {
- 			search_except_role_name = encodeURIComponent(search_except_role_name);
+	
+	// object 그룹 전체 object 에서 선택한 object 그룹에 등록된 object 를 제외한 object 목록
+	function ajaxListExceptObjectGroupObjectByGroupId(pageNo) {
+ 		var search_except_object_name = $("#search_except_object_name").val();
+ 		if(search_except_object_name != null && search_except_object_name != "") {
+ 			search_except_object_name = encodeURIComponent(search_except_object_name);
  		}
-		$("#role_all_list").empty();
+ 		$("#object_all_list").empty();
     	$.ajax({
-    		url: "/role/ajax-list-except-user-group-role-for-update.do",
-    		data: { user_group_id : $("#user_group_id").val(), pageNo : pageNo, search_except_role_name : search_except_role_name },
+    		url: "/object/ajax-list-except-object-group-object-by-group-id.do",
+    		data: { object_group_id : $("#object_group_id").val(), pageNo : pageNo, search_except_object_name : search_except_object_name },
     		type: "POST",
     		cache: false,
     		async:false,
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == 'success') {
-    				drawListUserGroupRoleForUpdate(msg.listExceptUserGroupRoleByGroupId, msg.pagination, "role_all");
+    				drawListObjectGroupObjectByGroupId(msg.pagination, msg.objectList, "object_all");
     			} else {
     				alert(JS_MESSAGE[msg.result]);
     			}
@@ -576,59 +352,7 @@
     		}
     	});
     }
-	// 선택한 사용자 그룹에 등록된 Role 목록
-	function ajaxListUserGroupRoleForUpdate(pageNo) {
- 		var search_role_name = $("#search_role_name").val();
- 		if(search_role_name != null && search_role_name != "") {
- 			search_role_name = encodeURIComponent(search_role_name);
- 		}
-    	$("#role_select_list").empty();
-    	$.ajax({
-    		url: "/role/ajax-list-user-group-role-for-update.do",
-    		data: { user_group_id : $("#user_group_id").val(), pageNo : pageNo, search_role_name : search_role_name },
-    		type: "POST",
-    		cache: false,
-    		async:false,
-    		dataType: "json",
-    		success: function(msg){
-    			if (msg.result == 'success') {
-    				drawListUserGroupRoleForUpdate(msg.listUserGroupRole, msg.pagination, "role_select");
-    			} else {
-    				alert(JS_MESSAGE[msg.result]);
-    			}
-    		},
-    		error:function(request,status,error){
-    			alert(JS_MESSAGE["ajax.error.message"]);
-    		}
-    	});
-    }
-	// 사용자 그룹 전체 User 에서 선택한 사용자 그룹에 등록된 User 를 제외한 User 목록
-	function ajaxListExceptUserGroupUserByGroupId(pageNo) {
- 		var search_except_user_name = $("#search_except_user_name").val();
- 		if(search_except_user_name != null && search_except_user_name != "") {
- 			search_except_user_name = encodeURIComponent(search_except_user_name);
- 		}
- 		$("#user_all_list").empty();
-    	$.ajax({
-    		url: "/user/ajax-list-except-user-group-user-by-group-id.do",
-    		data: { user_group_id : $("#user_group_id").val(), pageNo : pageNo, search_except_user_name : search_except_user_name },
-    		type: "POST",
-    		cache: false,
-    		async:false,
-    		dataType: "json",
-    		success: function(msg){
-    			if (msg.result == 'success') {
-    				drawListUserGroupUserByGroupId(msg.pagination, msg.userList, "user_all");
-    			} else {
-    				alert(JS_MESSAGE[msg.result]);
-    			}
-    		},
-    		error:function(request,status,error){
-    			alert(JS_MESSAGE["ajax.error.message"]);
-    		}
-    	});
-    }
-	// 선택한 사용자 그룹에 등록된 User 목록
+	// 선택한 object 그룹에 등록된 object 목록
 	function ajaxListUserGroupUserByGroupId(pageNo) {
  		var search_user_name = $("#search_user_name").val();
  		if(search_user_name != null && search_user_name != "") {

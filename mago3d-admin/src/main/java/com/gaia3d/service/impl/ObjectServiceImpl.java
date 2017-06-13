@@ -175,16 +175,6 @@ public class ObjectServiceImpl implements ObjectService {
 	}
 	
 	/**
-	 * Object 등록 방법에 의한 Object 상태 수정
-	 * @param objectInfo
-	 * @return
-	 */
-	@Transactional
-	public int updateObjectStatusByInsertType(ObjectInfo objectInfo) {
-		return objectMapper.updateObjectStatusByInsertType(objectInfo);
-	}
-	
-	/**
 	 * Object 삭제
 	 * @param object_id
 	 * @return

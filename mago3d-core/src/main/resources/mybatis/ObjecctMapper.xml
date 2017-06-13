@@ -24,9 +24,6 @@
 			<if test="status != null and status != ''">
 			AND status = #{status}
 			</if>
-			<if test="object_insert_type != null and object_insert_type != ''">
-			AND object_insert_type = #{object_insert_type}
-			</if>
 			<if test="start_date != null and start_date != ''">
 			<![CDATA[
 			AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
@@ -87,9 +84,6 @@
 				</if>
 				<if test="status != null and status != ''">
 				AND status = #{status}
-				</if>
-				<if test="object_insert_type != null and object_insert_type != ''">
-				AND object_insert_type = #{object_insert_type}
 				</if>
 				<if test="search_object_name != null and search_object_name != ''">
 				AND object_id LIKE '${search_object_name}%'

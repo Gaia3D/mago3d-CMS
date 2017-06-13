@@ -79,10 +79,15 @@ public class ObjectInfo {
 	private String roll;
 	// object 상태. 0:사용중, 1:사용중지(관리자), 2:기타
 	private String status;
+	// object 등록 방법. 기본 : SELF
+	private String object_insert_type;
 	// 수정일 
 	private String update_date;
 	// 등록일
 	private String insert_date;
+	
+	private String search_object_name;
+	private String search_except_object_name;
 	
 	public String getViewStatus() {
 		// 사용자 상태. 0:사용중, 1:사용중지(관리자), 2:기타)

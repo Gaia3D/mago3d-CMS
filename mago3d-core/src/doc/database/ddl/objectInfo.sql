@@ -46,6 +46,7 @@ create table object_info(
 	pitch						varchar(10),
 	roll						varchar(10),
 	status						char(1)								default '0',
+	object_insert_type			varchar(30)							default 'SELF',
 	update_date					timestamp without time zone,
 	insert_date					timestamp without time zone			default now(),
 	constraint object_info_pk 	primary key(object_id)
@@ -61,7 +62,8 @@ comment on column object_info.height is '높이';
 comment on column object_info.heading is 'heading';
 comment on column object_info.pitch is 'pitch';
 comment on column object_info.roll is 'roll';
-comment on column object_info.status is '사용자 상태. 0:사용중, 1:사용중지(관리자), 2:기타';
+comment on column object_info.status is 'Object 상태. 0:사용중, 1:사용중지(관리자), 2:기타';
+comment on column object_info.object_insert_type is 'object 등록 방법. 기본 : SELF';
 comment on column object_info.update_date is '수정일';
 comment on column object_info.insert_date is '등록일';
 

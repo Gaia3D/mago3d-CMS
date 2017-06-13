@@ -19,6 +19,12 @@ insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_cla
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(21, '사용자 그룹', 'USER', 2 , 2, 1, '/user/list-user-group.do', 'glyph-users', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(22, '사용자 목록', 'USER', 2 , 2, 2, '/user/list-user.do', 'glyph-users', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(23, '사용자 등록', 'USER', 2 , 2, 3, '/user/input-user.do', 'glyph-users', 'N', 'Y');
+
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(3, '데이터', 'DATA', 0 , 1, 3, '/object/list-object.do', 'glyph-users', 'Y', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(31, '데이터 그룹', 'DATA', 3 , 2, 1, '/object/list-object-group.do', 'glyph-users', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(32, '데이터 목록', 'DATA', 3 , 2, 2, '/object/list-object.do', 'glyph-users', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(33, '데이터 등록', 'DATA', 3 , 2, 3, '/object/input-object.do', 'glyph-users', 'N', 'Y');
+
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(8, '환경설정', 'CONFIGURATION', 0 , 1, 8, '/config/modify-policy.do', 'glyph-settings', 'Y', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(81, '운영정책', 'CONFIGURATION', 8 , 2, 1, '/config/modify-policy.do', 'glyph-settings', 'Y', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(82, '메뉴설정', 'CONFIGURATION', 8 , 2, 2, '/config/list-menu.do', 'glyph-settings', 'Y', 'Y');
@@ -36,6 +42,9 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (21, 1, 21);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (22, 1, 22);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (23, 1, 23);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (31, 1, 31);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (32, 1, 32);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (33, 1, 33);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (8, 1, 8);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (81, 1, 81);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (82, 1, 82);
