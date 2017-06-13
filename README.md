@@ -1,4 +1,4 @@
-<img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/logo_mago3d.png" width="400" height="110">
+<p align="center"><img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/logo_mago3d.png" width="400" height="110"></p>
 
 <br>
 [![Englsh](https://img.shields.io/badge/language-English-orange.svg)](README.md)
@@ -10,7 +10,7 @@
 Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립트 라이브러리를 사용한 가시화 데이터를 통합 과제 & 이슈 관리를 할 수 있습니다.
 
 
-<p align="center"><img src ="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/mago3d.png" width="400" height="300">
+<p align="center"><img src ="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/mago3d.png" width="400" height="400">
 
 ### Features
  - 이슈 현황을 볼 수 있습니다.
@@ -47,6 +47,7 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 
 ### License
 ...
+
 
 
  tar xvzf postgis-2.3.2.tar.gz 
