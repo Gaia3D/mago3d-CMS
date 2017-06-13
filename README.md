@@ -10,9 +10,9 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 
 ## FeaturesDemo
 <p align="center"><img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/issue.png"></p>
-<p align="center"><img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/userstatus.png" width="231" height="150">
-<img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/DB%20Connection%20Pool.png" width="231" height="150">
-<img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/DB.png" width="231" height="150">
+<p align="center"><img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/userstatus.png" width="251" height="150">
+<img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/DB%20Connection%20Pool.png" width="251" height="150">
+<img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/DB.png" width="251" height="150">
 </p>
 
 ## Features
@@ -50,6 +50,7 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 
 ## License
 ...
+
 
 
 
