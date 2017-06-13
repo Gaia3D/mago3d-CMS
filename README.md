@@ -1,19 +1,13 @@
-<p align="center"><img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/logo_mago3d.png" width="400" height="110"></p>
-
 [![Englsh](https://img.shields.io/badge/language-English-orange.svg)](README.md)
 [![Korean](https://img.shields.io/badge/language-Korean-blue.svg)](README.md)
 
+# Mago3D
 통합 과제 & 이슈 관리 시스템
 
 ## Mission
 Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립트 라이브러리를 사용한 가시화 데이터를 통합 과제 & 이슈 관리를 할 수 있습니다.
 
 ## FeaturesDemo
-<p align="center"><img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/issue.png"></p>
-<p align="center"><img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/userstatus.png" width="250" height="200">
-<img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/DB%20Connection%20Pool.png" width="250" height="200">
-<img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/DB.png" width="250" height="200">
-</p>
 
 ## Features
  - 이슈 현황 신규 이슈, 진행 중인 이슈, 완료된 이슈를 볼 수 있습니다.
@@ -50,28 +44,3 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 
 ## License
 ...
-
-
-
-
-
- tar xvzf postgis-2.3.2.tar.gz 
- cd postgis-2.3.2 
- ./configure 
- make 
- make install
- 
- 
-CREATE EXTENSION postgis;
-CREATE EXTENSION address_standardizer;
-CREATE EXTENSION fuzzystrmatch;
-CREATE EXTENSION postgis_topology;
-CREATE EXTENSION postgis_tiger_geocoder;
-
-CREATE EXTENSION pgrouting;
-
-CREATE EXTENSION postgis_sfcgal;
-ALTER DATABASE your_db_here SET postgis.backend = sfcgal;
- 
- 
- 
