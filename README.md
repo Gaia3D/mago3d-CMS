@@ -1,4 +1,4 @@
-![log](./img/logo_mago3d.png){:width="50%"} <br>
+![log](./img/logo_mago3d.png?style=centerme) <br>
 [![Englsh](https://img.shields.io/badge/language-English-orange.svg)](README.md)
 [![Korean](https://img.shields.io/badge/language-Korean-blue.svg)](README.md)
 
