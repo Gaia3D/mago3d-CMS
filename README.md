@@ -1,7 +1,6 @@
+![log](./img/logo_mago3d.png)
 [![Englsh](https://img.shields.io/badge/language-English-orange.svg)](README.md)
 [![Korean](https://img.shields.io/badge/language-Korean-blue.svg)](README.md)
-
-## Mago3d
 
 통합 과제 & 이슈 관리 시스템
 
@@ -9,7 +8,7 @@
 Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립트 라이브러리를 사용한 가시화 데이터를 통합 과제 & 이슈 관리를 할 수 있습니다.
 
 
-![logo](./img/mago3d.png)
+![homepage](./img/mago3d.png)
 ### Development Environment
 #### Framework
  - [Spring](https://spring.io/) 사용하여...
@@ -40,6 +39,7 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 
 ### License
 ...
+
 
  tar xvzf postgis-2.3.2.tar.gz 
  cd postgis-2.3.2 
