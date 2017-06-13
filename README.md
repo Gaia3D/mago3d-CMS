@@ -1,6 +1,5 @@
 <p align="center"><img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/logo_mago3d.png" width="400" height="110"></p>
 
-<br>
 [![Englsh](https://img.shields.io/badge/language-English-orange.svg)](README.md)
 [![Korean](https://img.shields.io/badge/language-Korean-blue.svg)](README.md)
 
@@ -47,6 +46,7 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 
 ### License
 ...
+
 
 
 
