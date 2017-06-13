@@ -132,7 +132,7 @@
 			content_menu_group_root = #{content_menu_group_root},
 			content_user_group_root = #{content_user_group_root},
 			content_server_group_root = #{content_server_group_root},
-			content_object_group_root = #{content_object_group_root}
+			content_data_group_root = #{content_data_group_root}
 		WHERE policy_id = #{policy_id}
 	</update>
 	

@@ -20,10 +20,10 @@ insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_cla
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(22, '사용자 목록', 'USER', 2 , 2, 2, '/user/list-user.do', 'glyph-users', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(23, '사용자 등록', 'USER', 2 , 2, 3, '/user/input-user.do', 'glyph-users', 'N', 'Y');
 
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(3, '데이터', 'DATA', 0 , 1, 3, '/object/list-object.do', 'glyph-users', 'Y', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(31, '데이터 그룹', 'DATA', 3 , 2, 1, '/object/list-object-group.do', 'glyph-users', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(32, '데이터 목록', 'DATA', 3 , 2, 2, '/object/list-object.do', 'glyph-users', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(33, '데이터 등록', 'DATA', 3 , 2, 3, '/object/input-object.do', 'glyph-users', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(3, '데이터', 'DATA', 0 , 1, 3, '/data/list-data.do', 'glyph-users', 'Y', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(31, '데이터 그룹', 'DATA', 3 , 2, 1, '/data/list-data-group.do', 'glyph-users', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(32, '데이터 목록', 'DATA', 3 , 2, 2, '/data/list-data.do', 'glyph-users', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(33, '데이터 등록', 'DATA', 3 , 2, 3, '/data/input-data.do', 'glyph-users', 'N', 'Y');
 
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(8, '환경설정', 'CONFIGURATION', 0 , 1, 8, '/config/modify-policy.do', 'glyph-settings', 'Y', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(81, '운영정책', 'CONFIGURATION', 8 , 2, 1, '/config/modify-policy.do', 'glyph-settings', 'Y', 'Y');
@@ -57,9 +57,9 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (102, 1, 102);
 
 
--- Object 그룹 테이블 기본값 입력
-insert into object_group(
-	object_group_id, object_group_key, object_group_name, parent, depth, view_order, default_yn, use_yn, description
+-- Data 그룹 테이블 기본값 입력
+insert into data_group(
+	data_group_id, data_group_key, data_group_name, parent, depth, view_order, default_yn, use_yn, description
 ) values(
 	1, 'SUPER_ADMIN', '슈퍼 관리자', 0, 1, 1, 'Y', 'Y', '기본값'
 );

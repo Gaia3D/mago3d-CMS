@@ -196,31 +196,10 @@ public class FileUtil {
 	public static String getPIDFromFile(String fileName) {
 		
 		String pid = "";
-		BufferedReader bufferedReader = null;
-		FileReader fileReader = null;
-		try {
-			fileReader = new FileReader(fileName);
-			bufferedReader = new BufferedReader(fileReader);
+		try ( FileReader fileReader = new FileReader(fileName); BufferedReader bufferedReader = new BufferedReader(fileReader) ) {
 			pid = bufferedReader.readLine();			
-			bufferedReader.close();
-			fileReader.close();
 		} catch(Exception e) {
 			e.printStackTrace();
-		} finally {
-			if(bufferedReader != null) {
-				try {
-					bufferedReader.close();
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if(fileReader != null) {
-				try {
-					fileReader.close();
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		
 		log.info("@@@@@@@@ fileName = {}, pid = {}", fileName, pid);

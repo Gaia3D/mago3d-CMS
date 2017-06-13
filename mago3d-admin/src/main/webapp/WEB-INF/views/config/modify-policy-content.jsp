@@ -79,10 +79,10 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="content_object_group_root">계정 그룹 최상위 그룹명</form:label>
+				<form:label path="content_data_group_root">데이터 그룹 최상위 그룹명</form:label>
 				<span class="icon-glyph glyph-emark-dot color-warning"></span>
 			</th>
-			<td class="col-input"><form:input path="content_object_group_root" cssClass="m" /></td>
+			<td class="col-input"><form:input path="content_data_group_root" cssClass="m" /></td>
 		</tr>				
 	</table>
 	<div class="button-group">
