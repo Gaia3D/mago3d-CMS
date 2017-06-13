@@ -1,4 +1,4 @@
-<img align="center" src="https://github.com/Gaia3D/mago3d/wiki/logo" width="400" height="100">
+<center><img src="https://github.com/Gaia3D/mago3d/raw/feature/readme/img/logo_mago3d.png" width="400" height="110"></center>
 <br>
 [![Englsh](https://img.shields.io/badge/language-English-orange.svg)](README.md)
 [![Korean](https://img.shields.io/badge/language-Korean-blue.svg)](README.md)
