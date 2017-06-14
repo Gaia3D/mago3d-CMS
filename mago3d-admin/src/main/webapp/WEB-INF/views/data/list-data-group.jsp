@@ -242,7 +242,6 @@
 	var DATA_GROUP_TREE_DATA = null;
     $(document).ready(function() {
     	getAjaxDataGroupList();
-		fnObj.pageStart.delay(0.1);
 		$( ".tabs" ).tabs();
 	});
     

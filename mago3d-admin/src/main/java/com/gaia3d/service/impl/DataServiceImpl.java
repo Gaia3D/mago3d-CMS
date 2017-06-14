@@ -67,13 +67,13 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	/**
-	 * Data 아이디 중복 건수
-	 * @param data_id
+	 * Data Key 중복 건수
+	 * @param data_key
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public Integer getDuplicationIdCount(Long data_id) {
-		return dataMapper.getDuplicationIdCount(data_id);
+	public Integer getDuplicationKeyCount(String data_key) {
+		return dataMapper.getDuplicationKeyCount(data_key);
 	}
 	
 	/**

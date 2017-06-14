@@ -1,6 +1,9 @@
 package com.gaia3d.domain;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Data 정보
@@ -69,6 +72,14 @@ public class DataInfo {
 	private String data_name;
 	// 위도, 경도 정보 geometry 타입
 	private String location;
+	// 위도
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private String latitude;
+	// 경도
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private String longitude;
 	// 높이
 	private String height;
 	// heading
@@ -88,6 +99,26 @@ public class DataInfo {
 	
 	private String search_data_name;
 	private String search_except_data_name;
+	
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude() {
+		if(this.location != null) {
+			this.latitude = location;
+		}
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude() {
+		if(this.location != null) {
+			this.longitude = longitude;
+		}
+	}
 	
 	public String getViewStatus() {
 		// 사용자 상태. 0:사용중, 1:사용중지(관리자), 2:기타)

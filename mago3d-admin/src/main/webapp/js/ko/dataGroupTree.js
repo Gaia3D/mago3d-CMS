@@ -360,8 +360,8 @@ function appendTree() {
 }*/
 
 // 그룹 트리 초기화 값
-function initDataGroup(dataGroupTree) {
-	DATA_GROUP_TREE_DATA = dataGroupTree;
+function initDataGroup(groupTree) {
+	DATA_GROUP_TREE_DATA = groupTree;
 } 
 
 // 사용자 그룹 목록
@@ -372,11 +372,12 @@ function getAjaxDataGroupList() {
 		type: "POST",
 		data: info,
 		cache: false,
-		async:false,
+//		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
-				initDataGroup(msg.dataGroupTree);
+				initDataGroup(msg.groupTree);
+				fnObj.pageStart.delay(0.1);
 			} else {
 				alert(JS_MESSAGE[msg.result]);
 			}
@@ -421,7 +422,7 @@ function ajaxInsertDataGroup() {
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
-				dataGroupTree.setTree(msg.dataGroupTree);
+				dataGroupTree.setTree(msg.groupTree);
 				alert(JS_MESSAGE["insert"]);
 			} else {
 				alert(JS_MESSAGE[msg.result]);
@@ -446,7 +447,7 @@ function ajaxUpdateDataGroup() {
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
-				dataGroupTree.setTree(msg.dataGroupTree);
+				dataGroupTree.setTree(msg.groupTree);
 				alert(JS_MESSAGE["update"]);
 			} else {
 				alert(JS_MESSAGE[msg.result]);
@@ -473,7 +474,7 @@ function ajaxDeleteDataGroup() {
 			success: function(msg){
 				if(msg.result == "success") {
 					alert("삭제되었습니다.");
-					dataGroupTree.setTree(msg.dataGroupTree);
+					dataGroupTree.setTree(msg.groupTree);
 				} else if (msg.result == "usergroupserver.exists") {
 					alert("등록된 서버가 있어 삭제할 수 없습니다.");
 					return;
@@ -507,7 +508,7 @@ function ajaxUpdateMoveDataGroup() {
 				} else if(msg.result == "db.exception") {
 					alert("데이터 베이스 장애가 발생하였습니다. 잠시 후 다시 이용하여 주시기 바랍니다.");
 				} else if(msg.result == "success") {
-					dataGroupTree.setTree(msg.dataGroupTree);
+					dataGroupTree.setTree(msg.groupTree);
 				}
 			},
 			error:function(request,status,error){

@@ -150,9 +150,9 @@
 	</select>
 	
 	<!-- Data 아이디 중복 체크 -->
-	<select id="getDuplicationIdCount" parameterType="long" resultType="int">
-		/* getDuplicationIdCount */
-		SELECT COUNT(data_id) AS count FROM data_info WHERE data_id = #{data_id}
+	<select id="getDuplicationKeyCount" parameterType="string" resultType="int">
+		/* getDuplicationKeyCount */
+		SELECT COUNT(data_key) AS count FROM data_info WHERE data_key = #{data_key}
 	</select>
 	
 	<!-- Data 등록 -->
@@ -161,7 +161,7 @@
 		INSERT INTO data_info(
 			data_id, data_group_id, data_key, data_name, location, height, heading, pitch, roll, update_date
 		) values(
-			#{data_id}, #{data_group_id}, #{data_key}, #{data_name}, #{location}, #{height}, #{heading}, #{pitch}, #{roll}, #{update_date}			
+			#{data_id}, #{data_group_id}, #{data_key}, #{data_name}, ST_GeographyFromText(#{location}), #{height}, #{heading}, #{pitch}, #{roll}, #{update_date}			
 		)
 	</insert>
 	

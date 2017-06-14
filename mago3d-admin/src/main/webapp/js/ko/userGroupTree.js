@@ -376,11 +376,12 @@ function getAjaxUserGroupList() {
 		type: "POST",
 		data: info,
 		cache: false,
-		async:false,
+//		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
 				initUserGroup(msg.userGroupTree);
+				fnObj.pageStart.delay(0.1);
 			} else {
 				alert(JS_MESSAGE[msg.result]);
 			}

@@ -274,13 +274,14 @@ public class DataController {
 				return jSONData.toString();
 			}
 			
-			int count = dataService.getDuplicationIdCount(dataInfo.getData_id());
+			int count = dataService.getDuplicationKeyCount(dataInfo.getData_key());
 			if(count > 0) {
 				result = "data.id.duplication";
 				jSONData.put("result", result);
 				return jSONData.toString();
 			}
-			
+
+			dataInfo.setLocation("POINT(" + dataInfo.getLongitude() + " " + dataInfo.getLatitude() + ")");
 			dataService.insertData(dataInfo);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -362,25 +363,26 @@ public class DataController {
 	}
 	
 	/**
-	 * Data 아이디 중복 체크
+	 * Data key 중복 체크
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-data-id-duplication-check.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-data-key-duplication-check.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxDataIdDuplicationCheck(HttpServletRequest request, DataInfo dataInfo) {
+	public String ajaxDataKeyDuplicationCheck(HttpServletRequest request, DataInfo dataInfo) {
+		
 		Gson gson = new Gson();
 		Map<String, Object> jSONData = new HashMap<String, Object>();
 		String result = "success";
 		String duplication_value = "";
 		try {
-			if(dataInfo.getData_id() == null || "".equals(dataInfo.getData_id())) {
-				result = "data.id.empty";
+			if(dataInfo.getData_key() == null || "".equals(dataInfo.getData_key())) {
+				result = "data.key.empty";
 				jSONData.put("result", result);
 				return jSONData.toString();
 			}
 			
-			int count = dataService.getDuplicationIdCount(dataInfo.getData_id());
+			int count = dataService.getDuplicationKeyCount(dataInfo.getData_key());
 			log.info("@@ duplication_value = {}", count);
 			duplication_value = String.valueOf(count);
 		} catch(Exception e) {

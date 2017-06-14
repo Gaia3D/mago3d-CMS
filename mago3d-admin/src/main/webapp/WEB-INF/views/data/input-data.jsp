@@ -30,115 +30,111 @@
 						<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
 						<div class="tabs">
 							<ul>
-								<li><a href="#user_info_tab">기본정보</a></li>
+								<li><a href="#data_info_tab">기본정보</a></li>
 							</ul>
-							<div id="user_info_tab">
-								<form:form id="userInfo" modelAttribute="userInfo" method="post" onsubmit="return false;">
+							<div id="data_info_tab">
+								<form:form id="dataInfo" modelAttribute="dataInfo" method="post" onsubmit="return false;">
 								<table class="input-table scope-row">
 									<col class="col-label" />
 									<col class="col-input" />
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="user_id">아이디</form:label>
+											<form:label path="data_key">Key</form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
 											<form:hidden path="duplication_value"/>
-											<form:input path="user_id" cssClass="m" />
-					  						<input type="button" id="user_duplication_buttion" value="중복확인" />
-					  						<span class="table-desc" style="padding-left: 5px;">최소길이 ${policy.user_id_min_length}</span>
-											<form:errors path="user_id" cssClass="error" />
+											<form:input path="data_key" cssClass="m" />
+					  						<input type="button" id="data_duplication_buttion" value="중복확인" />
+					  						<form:errors path="data_key" cssClass="error" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="user_group_name">사용자 그룹</form:label>
+											<form:label path="data_group_name">데이터 그룹</form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
-											<form:hidden path="user_group_id" />
-				 							<form:input path="user_group_name" cssClass="m" readonly="true" />
-											<input type="button" id="user_group_buttion" value="그룹선택" />
+											<form:hidden path="data_group_id" />
+				 							<form:input path="data_group_name" cssClass="m" readonly="true" />
+											<input type="button" id="data_group_buttion" value="그룹선택" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="user_name">이름</form:label>
+											<form:label path="data_name">이름</form:label>
+										</th>
+										<td class="col-input">
+											<form:input path="data_name" class="m" />
+					  						<form:errors path="data_name" cssClass="error" />
+										</td>
+									</tr>
+									<tr>
+										<th class="col-label" scope="row">
+											<form:label path="latitude">위도</form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
-											<form:input path="user_name" class="m" />
-					  						<form:errors path="user_name" cssClass="error" />
+											<form:input path="latitude" class="m" />
+					  						<form:errors path="latitude" cssClass="error" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="password">비밀번호</form:label>
+											<form:label path="longitude">경도</form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
-											<form:password path="password" class="m" />
-											<span class="table-desc">영문 대문자 ${policy.password_eng_upper_count}, 소문자 ${policy.password_eng_lower_count},
-												 숫자 ${policy.password_number_count}, 특수문자 ${policy.password_special_char_count} 자 이상 필수.
-												 ${policy.password_min_length} ~ ${policy.password_max_length}자</span>
-											<form:errors path="password" cssClass="error" />
+											<form:input path="longitude" class="m" />
+					  						<form:errors path="longitude" cssClass="error" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="password_confirm">비밀번호 확인</form:label>
+											<form:label path="height">높이</form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
-											<form:password path="password_confirm" class="m" />
-											<form:errors path="password_confirm" cssClass="error" />
+											<form:input path="height" class="m" />
+					  						<form:errors path="height" cssClass="error" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="telephone1">전화번호</form:label>
+											<form:label path="heading">Heading</form:label>
+											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
-											<form:input path="telephone1" class="xs" maxlength="3" />
-											<span class="delimeter dash">-</span>
-											<form:input path="telephone2" class="xs" maxlength="4" />
-											<span class="delimeter dash">-</span>
-											<form:input path="telephone3" class="xs" maxlength="4" />
-											<form:errors path="telephone1" cssClass="error" />
-											<form:errors path="telephone2" cssClass="error" />
-											<form:errors path="telephone3" cssClass="error" />
+											<form:input path="heading" class="m" />
+					  						<form:errors path="heading" cssClass="error" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="mobile_phone1">핸드폰 번호</form:label>
+											<form:label path="pitch">Pitch</form:label>
+											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
-											<form:input path="mobile_phone1" class="xs" maxlength="3" />
-											<span class="delimeter dash">-</span>
-											<form:input path="mobile_phone2" class="xs" maxlength="4" />
-											<span class="delimeter dash">-</span>
-											<form:input path="mobile_phone3" class="xs" maxlength="4" />
-											<form:errors path="mobile_phone1" cssClass="error" />
-											<form:errors path="mobile_phone2" cssClass="error" />
-											<form:errors path="mobile_phone3" cssClass="error" />
+											<form:input path="pitch" class="m" />
+					  						<form:errors path="pitch" cssClass="error" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="messanger">메신저</form:label>
+											<form:label path="roll">Roll</form:label>
+											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
-											<form:input path="messanger" class="m" />
-											<form:errors path="messanger" cssClass="error" />
+											<form:input path="roll" class="m" />
+					  						<form:errors path="roll" cssClass="error" />
 										</td>
 									</tr>
 								</table>
 								
 								<div class="button-group">
-									<div id="insertUserLink" class="center-buttons">
-										<input type="submit" value="저장" onclick="insertUser();" />
-										<a href="/user/list-user.do" class="button">목록</a>
+									<div id="insertDataLink" class="center-buttons">
+										<input type="submit" value="저장" onclick="insertData();" />
+										<a href="/data/list-data.do" class="button">목록</a>
 									</div>
 								</div>
 								</form:form>
@@ -153,89 +149,89 @@
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 	
 	<!-- Dialog -->
-	<div class="dialog" title="Object 그룹">
-		<div class="dialog-user-group">
-<c:if test="${!empty userGroupList }">
+	<div class="dialog" title="데이터 그룹">
+		<div class="dialog-data-group">
+<c:if test="${!empty dataGroupList }">
 			<ul>
 	<c:set var="groupDepthValue" value="0" />
-	<c:forEach var="userGroup" items="${userGroupList }" varStatus="status">
-		<c:if test="${groupDepthValue eq '0' && userGroup.depth eq 1 }">
+	<c:forEach var="dataGroup" items="${dataGroupList }" varStatus="status">
+		<c:if test="${groupDepthValue eq '0' && dataGroup.depth eq 1 }">
 				<li>
-					<input type="radio" id="radio_group_${userGroup.user_group_id }" name="radio_group" value="${userGroup.user_group_id }_${userGroup.group_name }" />
-					<label for="radio_group_${userGroup.user_group_id }">${userGroup.group_name }</label>
+					<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
+					<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
 		</c:if>
-		<c:if test="${groupDepthValue eq '1' && userGroup.depth eq 1 }">
+		<c:if test="${groupDepthValue eq '1' && dataGroup.depth eq 1 }">
 				</li>
 				<li>
-					<input type="radio" id="radio_group_${userGroup.user_group_id }" name="radio_group" value="${userGroup.user_group_id }_${userGroup.group_name }" />
-					<label for="radio_group_${userGroup.user_group_id }">${userGroup.group_name }</label>
+					<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
+					<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
 		</c:if>
-		<c:if test="${groupDepthValue eq '1' && userGroup.depth eq 2 }">
+		<c:if test="${groupDepthValue eq '1' && dataGroup.depth eq 2 }">
 					<ul>
 						<li>
-							<input type="radio" id="radio_group_${userGroup.user_group_id }" name="radio_group" value="${userGroup.user_group_id }_${userGroup.group_name }" />
-							<label for="radio_group_${userGroup.user_group_id }">${userGroup.group_name }</label>
+							<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
+							<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
 		</c:if>
-		<c:if test="${groupDepthValue eq '2' && userGroup.depth eq 1 }">
+		<c:if test="${groupDepthValue eq '2' && dataGroup.depth eq 1 }">
 						</li>
 					</ul>
 				</li>
 				<li>
-					<input type="radio" id="radio_group_${userGroup.user_group_id }" name="radio_group" value="${userGroup.user_group_id }_${userGroup.group_name }" />
-					<label for="radio_group_${userGroup.user_group_id }">${userGroup.group_name }</label>
+					<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
+					<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
 		</c:if>
-		<c:if test="${groupDepthValue eq '2' && userGroup.depth eq 2 }">
+		<c:if test="${groupDepthValue eq '2' && dataGroup.depth eq 2 }">
 						</li>
 						<li>
-							<input type="radio" id="radio_group_${userGroup.user_group_id }" name="radio_group" value="${userGroup.user_group_id }_${userGroup.group_name }" />
-							<label for="radio_group_${userGroup.user_group_id }">${userGroup.group_name }</label>
+							<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
+							<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
 		</c:if>
-		<c:if test="${groupDepthValue eq '2' && userGroup.depth eq 3 }">
+		<c:if test="${groupDepthValue eq '2' && dataGroup.depth eq 3 }">
 							<ul style="padding-left: 30px;">
 								<li>
-									<input type="radio" id="radio_group_${userGroup.user_group_id }" name="radio_group" value="${userGroup.user_group_id }_${userGroup.group_name }" />
-									<label for="radio_group_${userGroup.user_group_id }">${userGroup.group_name }</label>
+									<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
+									<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
 		</c:if>
-		<c:if test="${groupDepthValue eq '3' && userGroup.depth eq 1 }">
+		<c:if test="${groupDepthValue eq '3' && dataGroup.depth eq 1 }">
 								</li>
 							</ul>
 						</li>
 					</ul>
 				</li>
 				<li>
-					<input type="radio" id="radio_group_${userGroup.user_group_id }" name="radio_group" value="${userGroup.user_group_id }_${userGroup.group_name }" />
-					<label for="radio_group_${userGroup.user_group_id }">${userGroup.group_name }</label>
+					<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
+					<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
 		</c:if>		
-		<c:if test="${groupDepthValue eq '3' && userGroup.depth eq 2 }">
+		<c:if test="${groupDepthValue eq '3' && dataGroup.depth eq 2 }">
 								</li>
 							</ul>
 						</li>
 						<li>
-							<input type="radio" id="radio_group_${userGroup.user_group_id }" name="radio_group" value="${userGroup.user_group_id }_${userGroup.group_name }" />
-							<label for="radio_group_${userGroup.user_group_id }">${userGroup.group_name }</label>
+							<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
+							<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
 		</c:if>			
-		<c:if test="${groupDepthValue eq '3' && userGroup.depth eq 3 }">
+		<c:if test="${groupDepthValue eq '3' && dataGroup.depth eq 3 }">
 								</li>
 								<li>
-									<input type="radio" id="radio_group_${userGroup.user_group_id }" name="radio_group" value="${userGroup.user_group_id }_${userGroup.group_name }" />
-									<label for="radio_group_${userGroup.user_group_id }">${userGroup.group_name }</label>
+									<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.group_name }" />
+									<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.group_name }</label>
 		</c:if>	
-		<c:if test="${userGroup.depth eq '3' && status.last }">
+		<c:if test="${dataGroup.depth eq '3' && status.last }">
 								</li>
 							</ul>
 						</li>
 					</ul>
 				</li>
 		</c:if>
-		<c:if test="${userGroup.depth eq '2' && status.last }">
+		<c:if test="${dataGroup.depth eq '2' && status.last }">
 						</li>
 					</ul>
 				</li>
 		</c:if>
-		<c:if test="${userGroup.depth eq '1' && status.last }">
+		<c:if test="${dataGroup.depth eq '1' && status.last }">
 				</li>
 		</c:if>
-		<c:set var="groupDepthValue" value="${userGroup.depth }" />			
+		<c:set var="groupDepthValue" value="${dataGroup.depth }" />			
 	</c:forEach>
 			</ul>
 </c:if>
@@ -252,25 +248,16 @@
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
 <script type="text/javascript">
 	// 0은 비표시, 1은 표시
-	var userDeviceArray = new Array("0", "0", "0", "0", "0", "0");
-	var userDeviceCount = 0;
+	var dataDeviceArray = new Array("0", "0", "0", "0", "0", "0");
+	var dataDeviceCount = 0;
 	$(document).ready(function() {
 		$( ".tabs" ).tabs();
 		
-		$("[name=otp_use_yn]").filter("[value='Y']").prop("checked",true);
-		$("[name=use_constraint_yn]").filter("[value='N']").prop("checked",true);
-
 		initJqueryCalendar();
-		
-		// OTP 사용기간 관련 설정
-		$( ".select" ).selectmenu();
-		
-		initOTPUseTime();
-		initUserDevice();
 	});
 	
 	// 그룹 선택
-	$( "#user_group_buttion" ).on( "click", function() {
+	$( "#data_group_buttion" ).on( "click", function() {
 		dialog.dialog( "open" );
 	});
 	var dialog = $( ".dialog" ).dialog({
@@ -281,68 +268,40 @@
 		resizable: false
 	});
 	
-	// 시작/종료 날짜의 시간/분 값 설정
-	function initOTPUseTime() {
-		for(var i=0; i<24; i++) {
-			if(i < 10) {
-				$("#use_start_hour").append("<option value='0"+ i +"'>0" + i + "</option>");
-				$("#use_end_hour").append("<option value='0"+ i +"'>0" + i + "</option>");
-			} else {
-				$("#use_start_hour").append("<option value='"+ i +"'>" + i + "</option>");
-				$("#use_end_hour").append("<option value='"+ i +"'>" + i + "</option>");
-			}
-		}
-		for(var i=0; i<60; i++) {
-			if(i < 10) {
-				$("#use_start_minute").append("<option value='0"+ i +"'>0" + i + "</option>");
-				$("#use_end_minute").append("<option value='0"+ i +"'>0" + i + "</option>");
-			} else {
-				$("#use_start_minute").append("<option value='"+ i +"'>" + i + "</option>");
-				$("#use_end_minute").append("<option value='"+ i +"'>" + i + "</option>");
-			}
-		}
-	}
-	
-	// 디바이스 초기화
-	function initUserDevice() {
-		for(var i = 1; i<6; i++) {
-			$("#user_device" + i).css("display", "none");
-		}
-	}
-	
 	// 아이디 중복 확인
-	$( "#user_duplication_buttion" ).on( "click", function() {
-		var userId = $("#user_id").val();
-		if (userId == "") {
-			alert(JS_MESSAGE["user.id.empty"]);
-			$("#user_id").focus();
+	$( "#data_duplication_buttion" ).on( "click", function() {
+		var dataKey = $("#data_key").val();
+		if (dataKey == "") {
+			alert(JS_MESSAGE["data.key.empty"]);
+			$("#data_id").focus();
 			return false;
 		}
-		var info = "user_id=" + userId;
+		var info = "data_key=" + dataKey;
 		$.ajax({
-			url: "/user/ajax-user-id-duplication-check.do",
+			url: "/data/ajax-data-key-duplication-check.do",
 			type: "POST",
 			data: info,
 			cache: false,
-			async:false,
+			//async:false,
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "success") {
 					if(msg.duplication_value != "0") {
-						alert(JS_MESSAGE["user.id.duplication"]);
-						$("#user_id").focus();
+						alert(JS_MESSAGE["data.key.duplication"]);
+						$("#data_key").focus();
 						return false;
 					} else {
-						alert(JS_MESSAGE["user.id.enable"]);
+						alert(JS_MESSAGE["data.key.enable"]);
 						$("#duplication_value").val(msg.duplication_value);
 					}
 				} else {
 					alert(JS_MESSAGE[msg.result]);
 				}
 			},
-			error: function() {
-				alert(JS_MESSAGE["ajax.error.message"]);
-			}
+			error:function(request,status,error) {
+				//alert(JS_MESSAGE["ajax.error.message"]);
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    		}
 		});
 	});
 	
@@ -354,20 +313,20 @@
 	        return false;
 	    } else {
 	    	var splitValues = radioObj.split("_");
-	    	var userGroupName = "";
+	    	var dataGroupName = "";
 	    	for(var i = 1; i < splitValues.length; i++) {
-	    		userGroupName = userGroupName + splitValues[i];
+	    		dataGroupName = dataGroupName + splitValues[i];
 	    		if(i != splitValues.length - 1) {
-	    			userGroupName = userGroupName + "_";
+	    			dataGroupName = dataGroupName + "_";
 	    		}
 			}	    	
-	    	$("#user_group_id").val(splitValues[0]);
-			$("#user_group_name").val(userGroupName);
+	    	$("#data_group_id").val(splitValues[0]);
+			$("#data_group_name").val(dataGroupName);
 			dialog.dialog( "close" );
 	    }
 	});
 	
-	// 사용자 정보 저장
+	// Data 정보 저장
 	var insertUserFlag = true;
 	function insertUser() {
 		if (checkUser() == false) {
@@ -375,9 +334,9 @@
 		}
 		if(insertUserFlag) {
 			insertUserFlag = false;
-			var info = $("#userInfo").serialize();
+			var info = $("#dataInfo").serialize();
 			$.ajax({
-				url: "/user/ajax-insert-user-info.do",
+				url: "/data/ajax-insert-data-info.do",
 				type: "POST",
 				data: info,
 				cache: false,
@@ -385,18 +344,8 @@
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
-						alert(JS_MESSAGE["user.insert"]);
+						alert(JS_MESSAGE["data.insert"]);
 						$("#duplication_value").val("");
-						$("#insertUserLink").empty();
-						$("#reloadMobilePhone").html(msg.maskingMobilePhone);
-						$("#reloadEmail").html(msg.maskingEmail);
-						$("#reloadMessanger").html(msg.messanger);
-					} else {
-						if(msg.result == "user.password.exception.char") {
-							alert(JS_MESSAGE["user.password.exception.char.message1"] + "${passwordExceptionChar}" + JS_MESSAGE["user.password.exception.char.message2"]);
-						} else {
-							alert(JS_MESSAGE[msg.result]);							
-						}
 					}
 					insertUserFlag = true;
 				},
@@ -412,92 +361,23 @@
 	}
 	
 	function checkUser() {
-		if ($("#user_id").val() == "") {
-			alert(JS_MESSAGE["user.id.empty"]);
-			$("#user_id").focus();
+		if ($("#data_id").val() == "") {
+			alert(JS_MESSAGE["data.id.empty"]);
+			$("#data_id").focus();
 			return false;
 		}
-		if($("#user_id").val().length < parseInt("${policy.user_id_min_length}")) {
-			alert("사용자 아이디 최소 길이는 ${policy.user_id_min_length} 입니다.");
-			$("#user_id").focus();
-			return;
-		}
-		if ($("#user_group_id").val() == "") {
-			alert(JS_MESSAGE["user.group.id.empty"]);
-			$("#user_group_id").focus();
+		if ($("#data_group_id").val() == "") {
+			alert(JS_MESSAGE["data.group.id.empty"]);
+			$("#data_group_id").focus();
 			return false;
 		}
-		if ($("#user_name").val() == "") {
-			alert(JS_MESSAGE["user.name.empty"]);
-			$("#user_name").focus();
+		if ($("#data_name").val() == "") {
+			alert(JS_MESSAGE["data.name.empty"]);
+			$("#data_name").focus();
 			return false;
 		}
-		var password = $("#password").val();
-		if (password == "") {
-			alert(JS_MESSAGE["password.empty"]);
-			$("#password").focus();
-			return false;
-		}
-		var password_confirm = $("#password_confirm").val();
-		if (password_confirm == "") {
-			alert(JS_MESSAGE["password.correct.empty"]);
-			$("#password_confirm").focus();
-			return false;
-		}
-		if(password != password_confirm) {
-			alert("비밀번호가 비밀번호 확인 이랑 일치하지 않습니다.");
-			$("#password").focus();
-			return false;
-		}
-		var telephone_regExp1 = /^\d{2,3}$/;
-		var telephone1 = $("#telephone1").val();
-		if (telephone1 != null && telephone1 != "" && !telephone_regExp1.test(telephone1)) {
-			alert("전화번호 형식에 맞게 입력해 주십시오.");
-			$("#telephone1").focus();
-			return false;
-		}
-		var telephone_regExp2 = /^\d{3,4}$/;
-		var telephone2 = $("#telephone2").val();
-		if (telephone2 != null && telephone2 != "" && !telephone_regExp2.test(telephone2)) {
-			alert("전화번호 형식에 맞게 입력해 주십시오.");
-			$("#telephone2").focus();
-			return false;
-		}
-		var telephone_regExp3 = /^\d{4,4}$/;
-		var telephone3 = $("#telephone3").val();
-		if (telephone3 != null && telephone3 != "" && !telephone_regExp3.test(telephone3)) {
-			alert("전화번호 형식에 맞게 입력해 주십시오.");
-			$("#telephone3").focus();
-			return false;
-		}
-		var mobilephone_regExp1 = /^\d{3,3}$/;
-		var mobile_phone1 = $("#mobile_phone1").val();
-		if (mobile_phone1 != null && mobile_phone1 != "" && !mobilephone_regExp1.test(mobile_phone1)) {
-			alert("핸드폰 번호 형식에맞게 입력해 주십시오.");
-			$("#mobile_phone1").focus();
-			return false;
-		}
-		var mobilephone_regExp2 = /^\d{3,4}$/;
-		var mobile_phone2 = $("#mobile_phone2").val();
-		if (mobile_phone2 != null && mobile_phone2 != "" && !mobilephone_regExp2.test(mobile_phone2)) {
-			alert("핸드폰 번호 형식에맞게 입력해 주십시오.");
-			$("#mobile_phone2").focus();
-			return false;
-		}
-		var mobilephone_regExp3 = /^\d{4,4}$/;
-		var mobile_phone3 = $("#mobile_phone3").val();
-		if (mobile_phone3 != null && mobile_phone3 != "" && !mobilephone_regExp3.test(mobile_phone3)) {
-			alert("핸드폰 번호 형식에맞게 입력해 주십시오.");
-			$("#mobile_phone3").focus();
-			return false;
-		}
-		var email_regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-		if ($("#email1").val() != null && $("#email1").val() != "" && $("#email2").val() != null && $("#email2").val() != "") {
-			if (!email_regExp.test($("#email1").val() + "@" + $("#email2").val())) {
-				alert("이메일 형식에 맞게 입력해 주십시오.");
-				return false;
-			}
-		}
+		
+		
 		if($("#duplication_value").val() == null || $("#duplication_value").val() == "") {
 			alert("아이디 중복확인을 해주십시오.");
 			return false;
@@ -506,291 +386,6 @@
 			return false;
 		}
 	}
-	
-	// 사용자 OTP 정보 저장
-	var insertUserOTPFlag = true;
-	function insertUserOTP() {
-		if (checkUserOtp() == false) {
-			return false;
-		}
-		if(insertUserOTPFlag) {
-			insertUserOTPFlag = false;
-			var info = $("#userOTP").serialize() + "&user_id=" + $("#user_id").val();
-			$.ajax({
-				url: "/user/ajax-insert-user-otp.do",
-				type: "POST",
-				data: info,
-				cache: false,
-				async:false,
-				dataType: "json",
-				success: function(msg){
-					if(msg.result == "success") {
-						alert(JS_MESSAGE["userotp.insert"]);
-						$("#insertUserOTPLink").empty();
-					} else {
-						alert(JS_MESSAGE[msg.result]);
-					}
-					insertUserOTPFlag = true;
-				},
-				error:function(request,status,error){
-			        alert(JS_MESSAGE["ajax.error.message"]);
-			        insertUserOTPFlag = true;
-				}
-			});
-		} else {
-			alert(JS_MESSAGE["button.dobule.click"]);
-			return;
-		}	
-	}
-	
-	function checkUserOtp() {
-		if ($("#user_id").val() == "") {
-			alert("사용자 기본 정보 등록 후 이용 가능 합니다.");
-			$("#user_id").focus();
-			return false;
-		}
-		
-		var otp_use_yn = $(":radio[name='otp_use_yn']:checked").val();
-		var otp_type = $(":radio[name='otp_type']:checked").val();
-		if(otp_use_yn == null || otp_use_yn == "") {
-			alert(JS_MESSAGE["userotp.otp_use_yn.invalid"]);
-			return false;
-		}
-		if(otp_use_yn == "Y") {
-			var user_otp_mobile_app_key_modify_yn = "${policy.user_otp_mobile_app_key_modify_yn}";
-			if(user_otp_mobile_app_key_modify_yn == "Y") {
-				if(otp_type == "0") {
-					var mobile_phone1 = $("#mobile_phone1").val();
-					var mobile_phone2 = $("#mobile_phone2").val();
-					var mobile_phone3 = $("#mobile_phone3").val();
-					if(mobile_phone1 == null || mobile_phone1 == "" 
-							|| mobile_phone2 == null || mobile_phone2 == ""
-							|| mobile_phone3 == null || mobile_phone3 == "") {
-						alert(JS_MESSAGE["userotp.mobile_phone.required"]);
-						return false;
-					}
-					
-					if ($("#mobile_app_key").val() == "") {
-						alert(JS_MESSAGE["userotp.mobile_app_key.invalid"]);
-						$("#mobile_app_key").focus();
-						return false;
-					}
-				}
-			}
-			var user_otp_pin_number_modify_yn = "${policy.user_otp_pin_number_modify_yn}";
-			if(user_otp_pin_number_modify_yn == "Y") {
-				if(otp_type == "2") {
-					if ($("#pin_number").val() == "") {
-						alert(JS_MESSAGE["userotp.pin_number.invalid"]);
-						$("#pin_number").focus();
-						return false;
-					}
-					if(!isNumber($("#pin_number").val())) {
-						$("#pin_number").focus();
-						return false;
-					}
-					if($("#pin_number").val().length < 4 || $("#pin_number").val().length > 8) {
-						alert(JS_MESSAGE["number.required"]);
-						$("#pin_number").focus();
-						return false;
-					}
-				}
-			}
-		}
-
-		var use_constraint_yn = $("#use_constraint_yn").val();
-		var use_start_day = $("#use_start_day").val().replace(/[^0-9]/g, "");
-		var use_end_day = $("#use_end_day").val().replace(/[^0-9]/g, "");
-		var use_start_hour = $("#use_start_hour").val();
-		var use_end_hour = $("#use_end_hour").val();
-		var use_start_minute = $("#use_start_minute").val();
-		var use_end_minute = $("#use_end_minute").val();
-		if(use_constraint_yn == 'Y') {
-			if(use_start_day != null && use_start_day != "") {
-				if(use_end_day == null || use_end_day == "") {
-					alert("종료일을 입력하여 주십시오.");
-					return false;
-				}
-				if(use_start_hour == null || use_start_hour == "" || use_start_minute == null || use_start_minute == "") {
-					alert("시작 시간을 입력하여 주십시오.");
-					return false;
-				}
-				if(use_end_hour == null || use_end_hour == "" || use_end_minute == null || use_end_minute == "") {
-					alert("종료 시간을 입력하여 주십시오.");
-					return false;
-				}
-				
-				var use_start_date = use_start_day + use_start_hour + use_start_minute;
-				var use_end_date = use_end_day + use_end_hour + use_end_minute;
-				if(use_start_date >= use_end_date) {
-					alert("시작 기간이 종료 기간보다 같거나 클수 없습니다.");
-					return false;
-				}
-			}
-		}
-
-		if($("[name=use_sunday_yn_name]").is(":checked")) {
-			$("#use_sunday_yn").val("Y");
-		} else {
-			$("#use_sunday_yn").val("N");
-		}
-		if($("[name=use_monday_yn_name]").is(":checked")) {
-			$("#use_monday_yn").val("Y");
-		} else {
-			$("#use_monday_yn").val("N");
-		}
-		if($("[name=use_tuesday_yn_name]").is(":checked")) {
-			$("#use_tuesday_yn").val("Y");
-		} else {
-			$("#use_tuesday_yn").val("N");
-		}
-		if($("[name=use_wednesday_yn_name]").is(":checked")) {
-			$("#use_wednesday_yn").val("Y");
-		} else {
-			$("#use_wednesday_yn").val("N");
-		}
-		if($("[name=use_thursday_yn_name]").is(":checked")) {
-			$("#use_thursday_yn").val("Y");
-		} else {
-			$("#use_thursday_yn").val("N");
-		}
-		if($("[name=use_friday_yn_name]").is(":checked")) {
-			$("#use_friday_yn").val("Y");
-		} else {
-			$("#use_friday_yn").val("N");
-		}
-		if($("[name=use_saturday_yn_name]").is(":checked")) {
-			$("#use_saturday_yn").val("Y");
-		} else {
-			$("#use_saturday_yn").val("N");
-		}
-	}
-	
-	// 사용자 디바이스 정보 저장
-	var insertUserDeviceFlag = true;
-	function insertUserDevice() {
-		if (checkUserDevice() == false) {
-			return false;
-		}
-		if(insertUserDeviceFlag) {
-			insertUserDeviceFlag = false;
-			var info = $("#userDevice").serialize() + "&user_id=" + $("#user_id").val();		
-			$.ajax({
-				url: "/user/ajax-insert-user-device.do",
-				type: "POST",
-				data: info,
-				cache: false,
-				async:false,
-				dataType: "json",
-				success: function(msg){
-					if(msg.result == "success") {
-						alert(JS_MESSAGE["insert"]);
-						$("#insertUserDeviceLink").empty();
-					} else {
-						alert(JS_MESSAGE[msg.result]);
-					}
-					insertUserDeviceFlag = true;
-				},
-				error:function(request,status,error){
-			        alert(JS_MESSAGE["ajax.error.message"]);
-			        insertUserDeviceFlag = true;
-				}
-			});
-		} else {
-			alert(JS_MESSAGE["button.dobule.click"]);
-			return;
-		}
-	}
-	
-	function checkUserDevice() {
-		if ($("#user_id").val() == "") {
-			alert("사용자 기본 정보 등록 후 이용 가능 합니다.");
-			return false;
-		}
-		for(var i=1; i<userDeviceCount + 1; i++) {
-			if(document.getElementById("user_device" + i).style.display == "") {
-				if($("#device_name" + i).val() == null || $("#device_name" + i).val() == "") {
-					alert("사용 기기명을 입력해 주십시오.");
-					$("#device_name" + i).focus();
-					return false;
-				}
-			}
-		}
-		
-		for(var i=1; i<userDeviceCount + 1; i++) {
-			if(!isIP($("#device_ip" + i).val())) {
-				alert("IP 형식에 맞게 입력해 주십시오.");
-				$("#device_ip" + i).focus();
-				return false;
-			}
-		}
-	}
-	
-	// 사용자 디바이스 추가
-	function addUserDevice() {
-		if(userDeviceArray[0] == "0") {
-			$("#user_device1").css("display", "");
-			userDeviceArray[0] = "1";
-			userDeviceCount++;
-		} else if(userDeviceArray[1] == "0") {
-			$("#user_device2").css("display", "");
-			userDeviceArray[1] = "1";
-			userDeviceCount++;
-		} else if(userDeviceArray[2] == "0") {
-			$("#user_device3").css("display", "");
-			userDeviceArray[2] = "1";
-			userDeviceCount++;
-		} else if(userDeviceArray[3] == "0") {
-			$("#user_device4").css("display", "");
-			userDeviceArray[3] = "1";
-			userDeviceCount++;
-		} else if(userDeviceArray[4] == "0") {
-			$("#user_device5").css("display", "");
-			userDeviceArray[4] = "1";
-			userDeviceCount++;
-		} else if(userDeviceArray[5] == "0") {
-			userDeviceArray[5] = "1";
-		}
-		
-		if(userDeviceArray[0] == "1" && userDeviceArray[1] == "1" && userDeviceArray[2] == "1"
-				&& userDeviceArray[3] == "1" && userDeviceArray[4] == "1" && userDeviceArray[5] == "1") {
-			alert("사용자 디바이스 등록은 최대 5개 까지 가능합니다.");
-		}
-		userDeviceArray[5] = "0"
-	}
-	
-	// 사용자 디바이스 삭제
-	function removeUserDevice(idx) {
-		var loopCount = userDeviceCount + 1;
-		for(var i = idx; i < loopCount; i++) {
-			if(i == loopCount - 1) {
-				// 마지막의 경우 삭제하고 종료
-				userDeviceArray[i-1] = "0";
-				$("#device_name" + i).val("");
-				$("#device_ip" + i).val("");
-				document.getElementById("device_type" + i).selectedIndex = 0;
-				document.getElementById("use_yn" + i).selectedIndex = 0;
-				$("#user_device" + i).css("display", "none");
-				userDeviceCount--;
-				return;
-			}
-			
-			$("#device_name" + i).val( $("#device_name" + (i + 1)).val() );
-			$("#device_ip" + i).val( $("#device_ip" + (i + 1)).val() );
-			document.getElementById("device_type" + i).selectedIndex = document.getElementById("device_type" + (i+1)).selectedIndex;
-			document.getElementById("use_yn" + i).selectedIndex = document.getElementById("use_yn" + (i+1)).selectedIndex;
-		}
-	}
-	
-	$( "#email3" ).selectmenu({
-		change: function( event, ui ) {
-			if($("#email3").val() != 0) {
-				$("#email2").val($("#email3").val());
-			} else {
-				$("#email2").val("");
-			}
-		}
-	});
 </script>
 </body>
 </html>

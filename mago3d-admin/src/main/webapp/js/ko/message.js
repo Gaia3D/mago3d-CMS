@@ -61,3 +61,6 @@ JS_MESSAGE["policy.site.update"] = "사이트 정보를 수정 하였습니다."
 JS_MESSAGE["policy.os.update"] = "OS 설정 정보를 수정 하였습니다.";
 JS_MESSAGE["policy.backoffice.update"] = "Back Office 정보를 수정 하였습니다.";
 JS_MESSAGE["policy.solution.update"] = "제품 정보를 수정 하였습니다.";
+
+JS_MESSAGE["data.key.empty"] = "아이디를 입력하여 주십시오.";
+JS_MESSAGE["data.key.duplication"] = "사용중인 아이디 입니다. 다른 아이디를 선택해 주십시오.";

@@ -41,11 +41,11 @@ public interface DataMapper {
 	List<DataInfo> getListExceptDataGroupDataByGroupId(DataInfo dataInfo);
 	
 	/**
-	 * Data 아이디 중복 건수
-	 * @param data_id
+	 * Data Key 중복 건수
+	 * @param data_key
 	 * @return
 	 */
-	Integer getDuplicationIdCount(Long data_id);
+	Integer getDuplicationKeyCount(String data_key);
 	
 	/**
 	 * Data 정보 취득
