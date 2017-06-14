@@ -36,11 +36,13 @@ comment on column data_group.insert_date is '등록일';
 
 -- Data 기본정보
 create table data_info(
-	data_id					varchar(32)	 						not null,
+	data_id						bigint			not null,
 	data_group_id				smallint							not null,
 	data_key					varchar(128)						not null,
-	data_name					varchar(64)							not null,
+	data_name					varchar(64),
 	location		 			GEOGRAPHY(POINT, 4326),
+	latitude					varchar(30)							not null,
+	longitude					varchar(30)							not null,
 	height						varchar(30),
 	heading						varchar(10),
 	pitch						varchar(10),
@@ -58,6 +60,8 @@ comment on column data_info.data_group_id is 'Data Group 고유번호';
 comment on column data_info.data_key is 'data 고유 식별번호';
 comment on column data_info.data_name is 'data 이름';
 comment on column data_info.location is '위도, 경도 정보';
+comment on column data_info.latitude is '위도';
+comment on column data_info.longitude is '경도';
 comment on column data_info.height is '높이';
 comment on column data_info.heading is 'heading';
 comment on column data_info.pitch is 'pitch';

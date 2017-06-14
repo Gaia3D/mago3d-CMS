@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.FileInfo;
@@ -57,11 +58,8 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/data/")
 public class DataController {
-	
-	// Data 일괄 등록
-	private String EXCEL_OBJECT_UPLOAD_DIR;
-	// Data 샘플 다운로드
-	private String EXCEL_SAMPLE_DIR;
+	@Autowired
+	private PropertiesConfig propertiesConfig;
 	
 	@Resource(name="dataValidator")
 	private DataValidator dataValidator;
@@ -115,8 +113,8 @@ public class DataController {
 			txtDownloadFlag = true;
 		}
 		
-		CommonCode dataInsertType = CacheManager.getCommonCode(CommonCode.OBJECT_REGISTER);
-		CommonCode externalDataInsertType = CacheManager.getCommonCode(CommonCode.EXTERNAL_OBJECT_REGISTER);
+		CommonCode dataInsertType = CacheManager.getCommonCode(CommonCode.DATA_REGISTER);
+		CommonCode externalDataInsertType = CacheManager.getCommonCode(CommonCode.EXTERNAL_DATA_REGISTER);
 		
 		model.addAttribute(pagination);
 		model.addAttribute("dataInsertType", dataInsertType);
@@ -276,12 +274,13 @@ public class DataController {
 			
 			int count = dataService.getDuplicationKeyCount(dataInfo.getData_key());
 			if(count > 0) {
-				result = "data.id.duplication";
+				result = "data.key.duplication";
 				jSONData.put("result", result);
 				return jSONData.toString();
 			}
 
 			dataInfo.setLocation("POINT(" + dataInfo.getLongitude() + " " + dataInfo.getLatitude() + ")");
+			log.info("@@@@@@@@@@@@@@@@@@ dataInfo = {}", dataInfo);
 			dataService.insertData(dataInfo);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -347,16 +346,13 @@ public class DataController {
 	 */
 	private String dataValidate(Policy policy, DataInfo dataInfo) {
 		
-		// 비밀번호 변경이 아닐경우
-		if(!"updatePassword".equals(dataInfo.getMethod_mode())) {
-			if(dataInfo.getData_id() == null || "".equals(dataInfo.getData_id())) {
-				return "data.input.invalid";
-			}
+		if(dataInfo.getData_key() == null || "".equals(dataInfo.getData_key())) {
+			return "data.input.invalid";
+		}
 			
-			if(dataInfo.getData_group_id() == null || dataInfo.getData_group_id() <= 0
-					|| dataInfo.getData_name() == null || "".equals(dataInfo.getData_name())) {
-				return "data.input.invalid";
-			}
+		if(dataInfo.getData_group_id() == null || dataInfo.getData_group_id() <= 0
+				|| dataInfo.getData_name() == null || "".equals(dataInfo.getData_name())) {
+			return "data.input.invalid";
 		}
 		
 		return null;
@@ -437,7 +433,7 @@ public class DataController {
 		log.info("@@@@@@@@ dataInfo = {}", dataInfo);
 		Policy policy = CacheManager.getPolicy();
 		
-		model.addAttribute("externalDataRegister", CacheManager.getCommonCode(CommonCode.EXTERNAL_OBJECT_REGISTER));
+		model.addAttribute("externalDataRegister", CacheManager.getCommonCode(CommonCode.EXTERNAL_DATA_REGISTER));
 		model.addAttribute("listParameters", listParameters);
 		model.addAttribute("policy", policy);
 		model.addAttribute("dataGroupList", dataGroupList);
@@ -655,16 +651,16 @@ public class DataController {
 		String result = "success";
 		try {
 			MultipartFile multipartFile = request.getFile("file_name");
-			FileInfo fileInfo = FileUtil.uploadExcel(multipartFile, FileUtil.EXCEL_USER_UPLOAD, EXCEL_OBJECT_UPLOAD_DIR);
+			FileInfo fileInfo = FileUtil.uploadExcel(multipartFile, FileUtil.EXCEL_DATA_UPLOAD, propertiesConfig.getExcelDataUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				jSONData.put("result", fileInfo.getError_code());
-				return jSONData.toString();
+				return gson.toJson(jSONData);
 			}
 			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 			fileInfo.setUser_id(userSession.getUser_id());
 			
-//			fileInfo = fileService.insertExcelData(fileInfo);
+			fileInfo = fileService.insertExcelData(fileInfo, userSession.getUser_id());
 			
 			jSONData.put("total_count", fileInfo.getTotal_count());
 			jSONData.put("parse_success_count", fileInfo.getParse_success_count());
@@ -819,12 +815,12 @@ public class DataController {
 	@ResponseBody
 	public void downloadExcelDataSample(HttpServletRequest request, HttpServletResponse response, Model model) {
 		
-		File rootDirectory = new File(EXCEL_SAMPLE_DIR);
+		File rootDirectory = new File(propertiesConfig.getExcelSampleUploadDir());
 		if(!rootDirectory.exists()) {
 			rootDirectory.mkdir();
 		}
 				
-		File file = new File(EXCEL_SAMPLE_DIR + "sample.xlsx");
+		File file = new File(propertiesConfig.getExcelSampleUploadDir() + "sample.xlsx");
 		if(file.exists()) {
 			String mimetype = "application/x-msdownload";
 			response.setContentType(mimetype);

@@ -33,14 +33,8 @@ public class FileUtil {
 	
 	// 사용자 일괄 등록
 	public static final String EXCEL_USER_UPLOAD = "EXCEL_USER_UPLOAD";
-	// 시스템 일괄 등록
-	public static final String EXCEL_SYSTEM_UPLOAD = "EXCEL_SYSTEM_UPLOAD";
-	// 계정 일괄 등록
-	public static final String EXCEL_ACCOUNT_UPLOAD = "EXCEL_ACCOUNT_UPLOAD";
-	// 비밀번호 일괄 등록
-	public static final String EXCEL_PASSWORD_UPLOAD = "EXCEL_PASSWORD_UPLOAD";
-	// 서버 일괄 등록
-	public static final String EXCEL_SERVER_UPLOAD = "EXCEL_SERVER_UPLOAD";
+	// Data 일괄 등록
+	public static final String EXCEL_DATA_UPLOAD = "EXCEL_DATA_UPLOAD";
 	
 	// 사용자 일괄 등록의 경우 허용 문서 타입
 	public static final String[] FILE_TYPE_EXCEL = {"xlsx", "xls"};
@@ -115,7 +109,7 @@ public class FileUtil {
 		}
 		String extension = fileNameValues[1];
 		List<String> extList = null;
-		if(EXCEL_USER_UPLOAD.equals(fileInfo.getJob_type()) || EXCEL_SERVER_UPLOAD.equals(fileInfo.getJob_type())) {
+		if(EXCEL_USER_UPLOAD.equals(fileInfo.getJob_type()) || EXCEL_DATA_UPLOAD.equals(fileInfo.getJob_type())) {
 			extList = Arrays.asList(FILE_TYPE_EXCEL);
 		} else {
 			extList = new ArrayList<String>();

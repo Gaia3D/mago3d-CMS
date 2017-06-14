@@ -19,8 +19,8 @@ public class CommonCode {
 	public static final String EXTERNAL_USER_REGISTER = "EXTERNAL_USER_REGISTER";
 	public static final String USER_REGISTER = "USER_REGISTER";
 	public static final String USER_REGISTER_EMAIL = "USER_REGISTER_EMAIL";
-	public static final String EXTERNAL_OBJECT_REGISTER = "EXTERNAL_OBJECT_REGISTER";
-	public static final String OBJECT_REGISTER = "OBJECT_REGISTER";
+	public static final String EXTERNAL_DATA_REGISTER = "EXTERNAL_DATA_REGISTER";
+	public static final String DATA_REGISTER = "DATA_REGISTER";
 	
 	/****** validator ********/
 	private String order_word;

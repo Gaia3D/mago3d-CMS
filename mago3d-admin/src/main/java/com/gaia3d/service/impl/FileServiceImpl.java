@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 //import org.apache.commons.lang.StringUtils;
 //import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 //import org.apache.poi.ss.usermodel.Cell;
@@ -18,13 +20,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.FileParseLog;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserInfo;
+import com.gaia3d.domain.UserSession;
 import com.gaia3d.persistence.FileMapper;
+import com.gaia3d.service.DataService;
 import com.gaia3d.service.FileService;
 import com.gaia3d.service.UserService;
+import com.gaia3d.util.FileUtil;
 import com.gaia3d.util.StringUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,10 +47,14 @@ public class FileServiceImpl implements FileService {
 	@Autowired
 	private UserService userService;
 	@Autowired
+	private DataService dataService;
+	@Autowired
 	private FileMapper fileMapper;
 	
 	// 사용자 일괄 등록 Excel 파일 컬럼수
 	private int EXCEL_UPLOAD_USER_COLUMN = 15;
+	// Data 일괄 등록 Excel 파일 컬럼수
+	private int EXCEL_UPLOAD_DATA_COLUMN = 9;
 	// 엑셀에 최대 등록 가능한 건수
 //	private int MAX_COUNT = 65000;
 	
@@ -473,58 +483,58 @@ public class FileServiceImpl implements FileService {
 //		}
 //		return null;
 //	}
-//	
-//	/**
-//	 * 서버 일괄 등록
-//	 * @param fileInfo
-//	 * @return
-//	 */
-//	@Transactional
-//	public FileInfo insertExcelServer(FileInfo fileInfo, MultipartHttpServletRequest request) {
-//		
-//		// 파일 이력을 저장
-//		insertFileInfo(fileInfo);
-//		
-//		// 파일 확장자가 xls 인 경우는 jexcel 로 파싱하고, xlsx 인 경우는 poi 로 파싱함, 6만 5천건 이상은 파싱 불가처리
-//		Map<String, Object> map = null;
-//		if(FileUtil.EXCEL_EXTENSION_XLS.equals(fileInfo.getFile_ext())) {
+	
+	/**
+	 * DATA 일괄 등록
+	 * @param fileInfo
+	 * @return
+	 */
+	@Transactional
+	public FileInfo insertExcelData(FileInfo fileInfo,  String userId) {
+		
+		// 파일 이력을 저장
+		insertFileInfo(fileInfo);
+		
+		// 파일 확장자가 xls 인 경우는 jexcel 로 파싱하고, xlsx 인 경우는 poi 로 파싱함, 6만 5천건 이상은 파싱 불가처리
+		Map<String, Object> map = null;
+		if(FileUtil.EXCEL_EXTENSION_XLS.equals(fileInfo.getFile_ext())) {
 //			map = excelParseJExcelServer(fileInfo, request);
-//		} else {
-//			map = excelParsePoiServer(fileInfo, request);
-//		}
-//		
-//		@SuppressWarnings("unchecked")
-//		List<Server> serverList = (List<Server>) map.get("serverList");
-//		
-//		FileParseLog fileParseLog = new FileParseLog();
-//		fileParseLog.setFile_info_id(fileInfo.getFile_info_id());
-//		fileParseLog.setLog_type(FileParseLog.DB_INSERT_LOG);
-//		
-//		int insertSuccessCount = 0;
-//		int insertErrorCount = 0;
-//		for(Server server : serverList) {
-//			try {
-//				serverService.insertServer(server);
-//				insertSuccessCount++;
-//			} catch(Exception e) {
-//				e.printStackTrace();
-//				fileParseLog.setIdentifier_value(fileInfo.getUser_id());
-//				fileParseLog.setError_code(e.getMessage());
-//				fileMapper.insertFileParseLog(fileParseLog);
-//				insertErrorCount++;
-//			}
-//		}
-//		
-//		fileInfo.setTotal_count((Integer) map.get("totalCount"));
-//		fileInfo.setParse_success_count((Integer) map.get("parseSuccessCount"));
-//		fileInfo.setParse_error_count((Integer) map.get("parseErrorCount"));
-//		fileInfo.setInsert_success_count(insertSuccessCount);
-//		fileInfo.setInsert_error_count(insertErrorCount);
-//		fileMapper.updateFileInfo(fileInfo);
-//		
-//		return fileInfo;
-//	}
-//	
+		} else {
+			map = excelParsePoiData(fileInfo, userId);
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<DataInfo> dataInfoList = (List<DataInfo>) map.get("dataInfoList");
+		
+		FileParseLog fileParseLog = new FileParseLog();
+		fileParseLog.setFile_info_id(fileInfo.getFile_info_id());
+		fileParseLog.setLog_type(FileParseLog.DB_INSERT_LOG);
+		
+		int insertSuccessCount = 0;
+		int insertErrorCount = 0;
+		for(DataInfo dataInfo : dataInfoList) {
+			try {
+				dataService.insertData(dataInfo);
+				insertSuccessCount++;
+			} catch(Exception e) {
+				e.printStackTrace();
+				fileParseLog.setIdentifier_value(fileInfo.getUser_id());
+				fileParseLog.setError_code(e.getMessage());
+				fileMapper.insertFileParseLog(fileParseLog);
+				insertErrorCount++;
+			}
+		}
+		
+		fileInfo.setTotal_count((Integer) map.get("totalCount"));
+		fileInfo.setParse_success_count((Integer) map.get("parseSuccessCount"));
+		fileInfo.setParse_error_count((Integer) map.get("parseErrorCount"));
+		fileInfo.setInsert_success_count(insertSuccessCount);
+		fileInfo.setInsert_error_count(insertErrorCount);
+		fileMapper.updateFileInfo(fileInfo);
+		
+		return fileInfo;
+	}
+	
 //	/**
 //	 * 서버 일괄 등록 Excel 파일 확장자가 xls일 경우 JExcel 을 이용하여 파싱
 //	 * @param fileInfo
@@ -591,7 +601,7 @@ public class FileServiceImpl implements FileService {
 //		result.put("parseErrorCount", parseErrorCount);
 //		return result;
 //	}
-//	
+	
 //	/**
 //	 * JExcel 을 이용해서 서버 정보를 파싱
 //	 * @param i
@@ -621,148 +631,132 @@ public class FileServiceImpl implements FileService {
 //		
 //		return server;
 //	}
-//	
-//	/**
-//	 * 서버 일괄 등록 Excel 파일 확장자가 xls일 경우 JExcel 을 이용하여 파싱
-//	 * @param fileInfo
-//	 * @return
-//	 */
-//	private Map<String, Object> excelParsePoiServer(FileInfo fileInfo, MultipartHttpServletRequest request) {
-//		
-//		int totalCount = 0;
-//		int parseSuccessCount = 0;
-//		int parseErrorCount = 0;
-//		
-//		List<Server> serverList = new ArrayList<Server>();
-//		
-//		FileParseLog fileParseLog = new FileParseLog();
-//		fileParseLog.setFile_info_id(fileInfo.getFile_info_id());
-//		fileParseLog.setLog_type(FileParseLog.FILE_PARSE_LOG);		
-//		FileInputStream fis = null;
-//		org.apache.poi.ss.usermodel.Workbook workbook = null;
-//		try {
-//			File file = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());
-//			fis = new FileInputStream(file);
-//			
-//			workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook(fis);
-//			org.apache.poi.ss.usermodel.Sheet sheet = workbook.getSheetAt(0);
-//			totalCount = sheet.getLastRowNum();
-//			log.info("@@@@@@@@@@@ rows = {}", totalCount);
-//			for(int i=1; i<= totalCount; i++) {
-//				Server server = null;
+	
+	/**
+	 * Data 일괄 등록 Excel 파일 확장자가 xls일 경우 JExcel 을 이용하여 파싱
+	 * @param fileInfo
+	 * @return
+	 */
+	private Map<String, Object> excelParsePoiData(FileInfo fileInfo, String userId) {
+		
+		int totalCount = 0;
+		int parseSuccessCount = 0;
+		int parseErrorCount = 0;
+		
+		List<DataInfo> dataInfoList = new ArrayList<DataInfo>();
+		
+		FileParseLog fileParseLog = new FileParseLog();
+		fileParseLog.setFile_info_id(fileInfo.getFile_info_id());
+		fileParseLog.setLog_type(FileParseLog.FILE_PARSE_LOG);		
+		FileInputStream fis = null;
+		org.apache.poi.ss.usermodel.Workbook workbook = null;
+		try {
+			File file = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());
+			fis = new FileInputStream(file);
+			
+			workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook(fis);
+			org.apache.poi.ss.usermodel.Sheet sheet = workbook.getSheetAt(0);
+			totalCount = sheet.getLastRowNum();
+			log.info("@@@@@@@@@@@ rows = {}", totalCount);
+			for(int i=1; i<= totalCount; i++) {
+				DataInfo dataInfo = null;
 //				UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-//				try {
-//					List<Object> excelObject = new ArrayList<Object>();
-//					Row row = sheet.getRow(i);
-//					for(int j=0; j<EXCEL_UPLOAD_SERVER_COLUMN; j++) {					
-//						Cell cell = row.getCell(j, Row.RETURN_BLANK_AS_NULL);
-//						if(cell != null) {
-//							switch(cell.getCellType()) {
-//								case Cell.CELL_TYPE_STRING:
-//									excelObject.add(cell.getStringCellValue().trim());
-//									break;
-//								case Cell.CELL_TYPE_NUMERIC:
-//									excelObject.add(Long.toString((long) cell.getNumericCellValue()));
-//									break;
-//							}
-//						}
-//					}
-//					
-//					server = getServerInfoFromPoi(excelObject);
-//					String errorCode = parseValidCheckerServer(server);
-//					if(StringUtils.isNotEmpty(errorCode)) {
-//						throw new Exception(errorCode);
-//					}
-//					fileParseLog.setIdentifier_value(userSession.getUser_id());
-//					fileParseLog.setStatus(FileParseLog.EXCEL_PARSE_SUCCESS);
-//					parseSuccessCount++;
-//				} catch(Exception e) {
-//					e.printStackTrace();
-//					parseErrorCount++;
-//					if(userSession == null || userSession.getUser_id() == null || "".equals(userSession.getUser_id())) {
-//						fileParseLog.setIdentifier_value("ADMIN_ERROR_ID");
-//					} else {
-//						fileParseLog.setIdentifier_value(userSession.getUser_id());
-//					}
-//					fileParseLog.setStatus(FileParseLog.EXCEL_PARSE_FAIL);
-//					fileParseLog.setError_code(e.getMessage());
-//				}
-//				
-//				if(userSession != null) {
-//					// TODO user_id 가 문제 생길때 어떻게 해야 하지?
-//					fileMapper.insertFileParseLog(fileParseLog);
-//					serverList.add(server);
-//				}
-//			}                         
-//			workbook.close();
-//			fis.close();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw new RuntimeException("서버 일괄 등록(POI) 파일 파싱 오류!");
-//		} finally {
-//			if(workbook != null) { try { workbook.close(); } catch(Exception e) { e.printStackTrace(); } }
-//			if(fis != null) { try { fis.close(); } catch(Exception e) { e.printStackTrace(); } }
-//		}
-//		
-//		Map<String, Object> result = new HashMap<String, Object>();
-//		result.put("serverList", serverList);
-//		result.put("totalCount", totalCount);
-//		result.put("parseSuccessCount", parseSuccessCount);
-//		result.put("parseErrorCount", parseErrorCount);
-//		return result;
-//	}
-//	
-//	/**
-//	 * POI를 이용해서 서버 정보를 파싱
-//	 * @param excelObject
-//	 * @return
-//	 */
-//	private Server getServerInfoFromPoi(List<Object> excelObject) {
-//		
-//		String apiKey = createApiKey();
-//		int sizeOfArrayList = excelObject.size();
-//		
-//		Server server = new Server();
-//		server.setApi_key(Crypt.encrypt(apiKey));
-//		server.setSync_yn(Server.USE_N);
-//		server.setUse_yn(Server.USE_N);
-//		server.setServer_name(StringUtil.getDefaultValue((String)excelObject.get(0)));
-//		server.setServer_ip(StringUtil.getDefaultValue((String)excelObject.get(1)));
-//		if(sizeOfArrayList > 2) {
-//			server.setServer_group_id(Long.valueOf(StringUtil.getDefaultValue((String)excelObject.get(2))));
-//		}
-//		if(sizeOfArrayList > 3) {
-//			server.setSsh_key_path(StringUtil.getDefaultValue((String)excelObject.get(3)));
-//		}
-//		if(sizeOfArrayList > 4) {
-//			server.setDescription(StringUtil.getDefaultValue((String)excelObject.get(4)));
-//		}
-//		
-//		return server;
-//	}
-//	
-//	private String parseValidCheckerServer(Server server) throws Exception {
-//
+				try {
+					List<Object> excelObject = new ArrayList<Object>();
+					Row row = sheet.getRow(i);
+					for(int j=0; j<EXCEL_UPLOAD_DATA_COLUMN; j++) {					
+						Cell cell = row.getCell(j, Row.RETURN_BLANK_AS_NULL);
+						if(cell != null) {
+							switch(cell.getCellType()) {
+								case Cell.CELL_TYPE_STRING:
+									excelObject.add(cell.getStringCellValue().trim());
+									break;
+								case Cell.CELL_TYPE_NUMERIC:
+									excelObject.add(Long.toString((long) cell.getNumericCellValue()));
+									break;
+							}
+						}
+					}
+					
+					dataInfo = getDataInfoFromPoi(excelObject);
+					String errorCode = parseValidCheckerData(dataInfo);
+					if(StringUtil.isNotEmpty(errorCode)) {
+						throw new Exception(errorCode);
+					}
+					fileParseLog.setIdentifier_value(userId);
+					fileParseLog.setStatus(FileParseLog.EXCEL_PARSE_SUCCESS);
+					parseSuccessCount++;
+				} catch(Exception e) {
+					e.printStackTrace();
+					parseErrorCount++;
+					if(userId == null || "".equals(userId)) {
+						fileParseLog.setIdentifier_value("ADMIN_ERROR_ID");
+					} else {
+						fileParseLog.setIdentifier_value(userId);
+					}
+					fileParseLog.setStatus(FileParseLog.EXCEL_PARSE_FAIL);
+					fileParseLog.setError_code(e.getMessage());
+				}
+				
+				if(userId != null) {
+					// TODO user_id 가 문제 생길때 어떻게 해야 하지?
+					fileMapper.insertFileParseLog(fileParseLog);
+					dataInfoList.add(dataInfo);
+				}
+			}                         
+			workbook.close();
+			fis.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Data 일괄 등록(POI) 파일 파싱 오류!");
+		} finally {
+			if(workbook != null) { try { workbook.close(); } catch(Exception e) { e.printStackTrace(); } }
+			if(fis != null) { try { fis.close(); } catch(Exception e) { e.printStackTrace(); } }
+		}
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("dataInfoList", dataInfoList);
+		result.put("totalCount", totalCount);
+		result.put("parseSuccessCount", parseSuccessCount);
+		result.put("parseErrorCount", parseErrorCount);
+		return result;
+	}
+	
+	/**
+	 * POI를 이용해서 서버 정보를 파싱
+	 * @param excelObject
+	 * @return
+	 */
+	private DataInfo getDataInfoFromPoi(List<Object> excelObject) {
+		
+		DataInfo dataInfo = new DataInfo();
+		dataInfo.setData_key((String)excelObject.get(0));
+		dataInfo.setData_group_id(Long.valueOf((String)excelObject.get(1)));
+		dataInfo.setData_name(StringUtil.getDefaultValue((String)excelObject.get(2)));
+		dataInfo.setLatitude(StringUtil.getDefaultValue((String)excelObject.get(3)));
+		dataInfo.setLongitude(StringUtil.getDefaultValue((String)excelObject.get(4)));
+		dataInfo.setHeading(StringUtil.getDefaultValue((String)excelObject.get(5)));
+		dataInfo.setPitch(StringUtil.getDefaultValue((String)excelObject.get(6)));
+		dataInfo.setRoll(StringUtil.getDefaultValue((String)excelObject.get(7)));
+		
+		return dataInfo;
+	}
+	
+	private String parseValidCheckerData(DataInfo dataInfo) throws Exception {
+
 //		// 필수값 체크
-//		if(StringUtils.isEmpty(server.getServer_name())) {
+//		if(StringUtil.isEmpty(dataInfo.getServer_name())) {
 //			return "server.server_name.invalid";
 //		}
-//		if(StringUtils.isEmpty(server.getServer_ip()) || !WebUtil.isIP(server.getServer_ip()) || (serverService.getDuplicationServerIpCount(server.getServer_ip()) > 0)) {
+//		if(StringUtil.isEmpty(dataInfo.getServer_ip()) || !WebUtil.isIP(server.getServer_ip()) || (serverService.getDuplicationServerIpCount(server.getServer_ip()) > 0)) {
 //			return "server.server_ip.invalid";
 //		}
-//		if(StringUtils.isEmpty(server.getApi_key())) {
+//		if(StringUtil.isEmpty(dataInfo.getApi_key())) {
 //			return "server.api_key.invalid";
 //		}
 //		
-//		// 옵션값 체크
-//		if(server.getServer_group_id() != null) {
-//			if(server.getServer_group_id() <= 0) {
-//				return "user.telephone.invalid";
-//			}
-//		}
-//		
-//		return null;
-//	}
+		return null;
+	}
 	
 	private String createApiKey() {
 		String uuid = null;

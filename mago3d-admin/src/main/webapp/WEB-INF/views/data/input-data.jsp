@@ -327,13 +327,13 @@
 	});
 	
 	// Data 정보 저장
-	var insertUserFlag = true;
-	function insertUser() {
-		if (checkUser() == false) {
+	var insertDataFlag = true;
+	function insertData() {
+		if (checkData() == false) {
 			return false;
 		}
-		if(insertUserFlag) {
-			insertUserFlag = false;
+		if(insertDataFlag) {
+			insertDataFlag = false;
 			var info = $("#dataInfo").serialize();
 			$.ajax({
 				url: "/data/ajax-insert-data-info.do",
@@ -347,11 +347,11 @@
 						alert(JS_MESSAGE["data.insert"]);
 						$("#duplication_value").val("");
 					}
-					insertUserFlag = true;
+					insertDataFlag = true;
 				},
 				error:function(request,status,error){
 			        alert(JS_MESSAGE["ajax.error.message"]);
-			        insertUserFlag = true;
+			        insertDataFlag = true;
 				}
 			});
 		} else {
@@ -360,10 +360,10 @@
 		}
 	}
 	
-	function checkUser() {
-		if ($("#data_id").val() == "") {
-			alert(JS_MESSAGE["data.id.empty"]);
-			$("#data_id").focus();
+	function checkData() {
+		if ($("#data_key").val() == "") {
+			alert(JS_MESSAGE["data.key.empty"]);
+			$("#data_key").focus();
 			return false;
 		}
 		if ($("#data_group_id").val() == "") {
@@ -379,10 +379,10 @@
 		
 		
 		if($("#duplication_value").val() == null || $("#duplication_value").val() == "") {
-			alert("아이디 중복확인을 해주십시오.");
+			alert("Key 중복확인을 해주십시오.");
 			return false;
 		} else if($("#duplication_value").val() == "1") {
-			alert("사용중인 아이디 입니다. 다른 아이디를 선택해 주십시오.");
+			alert("사용중인 Key 입니다. 다른 Key를 선택해 주십시오.");
 			return false;
 		}
 	}

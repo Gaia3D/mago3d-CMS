@@ -107,8 +107,8 @@
 								</div>
 								<div class="list-functions u-pull-right">
 									<div class="button-group">
-										<a href="#" onclick="updateDataStatus('OBJECT', 'LOCK'); return false;" class="button">Data 잠금</a>
-										<a href="#" onclick="updateDataStatus('OBJECT', 'UNLOCK'); return false;" class="button">Data 잠금 해제</a>
+										<a href="#" onclick="updateDataStatus('DATA', 'LOCK'); return false;" class="button">Data 잠금</a>
+										<a href="#" onclick="updateDataStatus('DATA', 'UNLOCK'); return false;" class="button">Data 잠금 해제</a>
 										<a href="#" onclick="deleteDatas(); return false;" class="button">일괄삭제</a>
 										<a href="#" onclick="inputExcelData(); return false;" class="button">일괄등록(Excel)</a>
 <c:if test="${txtDownloadFlag ne 'true' }">
@@ -129,6 +129,12 @@
 									<col class="col-name" />
 									<col class="col-toggle" />
 									<col class="col-toggle" />
+									<col class="col-toggle" />
+									<col class="col-toggle" />
+									<col class="col-toggle" />
+									<col class="col-toggle" />
+									<col class="col-toggle" />
+									<col class="col-toggle" />
 									<col class="col-date" />
 									<col class="col-functions" />
 									<thead>
@@ -136,8 +142,14 @@
 											<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
 											<th scope="col" class="col-number">번호</th>
 											<th scope="col" class="col-name">그룹명</th>
-											<th scope="col" class="col-id">아이디</th>
+											<th scope="col" class="col-id">Key</th>
 											<th scope="col" class="col-name">이름</th>
+											<th scope="col" class="col-toggle">위도</th>
+											<th scope="col" class="col-toggle">경도</th>
+											<th scope="col" class="col-toggle">높이</th>
+											<th scope="col" class="col-toggle">Heading</th>
+											<th scope="col" class="col-toggle">Pitch</th>
+											<th scope="col" class="col-toggle">Roll</th>
 											<th scope="col" class="col-toggle">상태</th>
 											<th scope="col" class="col-toggle">등록유형</th>
 											<th scope="col" class="col-date">등록일</th>
@@ -147,7 +159,7 @@
 									<tbody>
 <c:if test="${empty dataList }">
 										<tr>
-											<td colspan="9" class="col-none">Data가 존재하지 않습니다.</td>
+											<td colspan="15" class="col-none">Data가 존재하지 않습니다.</td>
 										</tr>
 </c:if>
 <c:if test="${!empty dataList }">
@@ -158,8 +170,14 @@
 											</td>
 											<td class="col-number">${pagination.rowNumber - status.index }</td>
 											<td class="col-name"><a href="#" class="view-group-detail" onclick="detailDataGroupInfo('${dataInfo.data_group_id }'); return false;">${dataInfo.data_group_name }</a></td>
-											<td class="col-id">${dataInfo.data_id }</td>
+											<td class="col-id">${dataInfo.data_key }</td>
 											<td class="col-name"><a href="/data/detail-data.do?data_id=${dataInfo.data_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}">${dataInfo.data_name }</a></td>
+											<td class="col-toggle">${dataInfo.latitude}</td>
+											<td class="col-toggle">${dataInfo.longitude}</td>
+											<td class="col-toggle">${dataInfo.height}</td>
+											<td class="col-toggle">${dataInfo.heading}</td>
+											<td class="col-toggle">${dataInfo.pitch}</td>
+											<td class="col-toggle">${dataInfo.roll}</td>
 											<td class="col-toggle">
 		<c:if test="${dataInfo.status eq '0'}">
 												<span class="icon-glyph glyph-on on"></span>
@@ -170,7 +188,6 @@
 												<span class="icon-text">${dataInfo.viewStatus }</span>
 											</td>
 											<td class="col-toggle">${dataInfo.viewDataInsertType }</td>
-											<td class="col-date">${dataInfo.viewLastLoginDate }</td>
 											<td class="col-date">${dataInfo.viewInsertDate }</td>
 											<td class="col-functions">
 												<span class="button-group">

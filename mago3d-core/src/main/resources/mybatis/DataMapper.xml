@@ -158,10 +158,13 @@
 	<!-- Data 등록 -->
 	<insert id="insertData" parameterType="dataInfo">
 		/* insertData */
+		<selectKey keyProperty="data_id" resultType="long" order="BEFORE">
+    		SELECT nextval('data_info_seq')
+  		</selectKey>
 		INSERT INTO data_info(
-			data_id, data_group_id, data_key, data_name, location, height, heading, pitch, roll, update_date
+			data_id, data_group_id, data_key, data_name, location, latitude, longitude, height, heading, pitch, roll, update_date
 		) values(
-			#{data_id}, #{data_group_id}, #{data_key}, #{data_name}, ST_GeographyFromText(#{location}), #{height}, #{heading}, #{pitch}, #{roll}, #{update_date}			
+			#{data_id}, #{data_group_id}, #{data_key}, #{data_name}, ST_GeographyFromText(#{location}), #{latitude}, #{longitude}, #{height}, #{heading}, #{pitch}, #{roll}, #{update_date}			
 		)
 	</insert>
 	
@@ -181,6 +184,12 @@
 			</if>
 			<if test="location != null and location != ''">
 			location = #{location},
+			</if>
+			<if test="latitude != null and latitude != ''">
+			latitude = #{latitude},
+			</if>
+			<if test="longitude != null and longitude != ''">
+			longitude = #{longitude},
 			</if>
 			<if test="height != null and height != ''">
 			height = #{height},

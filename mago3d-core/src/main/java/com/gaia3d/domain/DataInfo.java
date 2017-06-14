@@ -73,12 +73,8 @@ public class DataInfo {
 	// 위도, 경도 정보 geometry 타입
 	private String location;
 	// 위도
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private String latitude;
 	// 경도
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
 	private String longitude;
 	// 높이
 	private String height;
@@ -100,26 +96,6 @@ public class DataInfo {
 	private String search_data_name;
 	private String search_except_data_name;
 	
-	public String getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude() {
-		if(this.location != null) {
-			this.latitude = location;
-		}
-	}
-
-	public String getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude() {
-		if(this.location != null) {
-			this.longitude = longitude;
-		}
-	}
-	
 	public String getViewStatus() {
 		// 사용자 상태. 0:사용중, 1:사용중지(관리자), 2:기타)
 		if(this.status == null || "".equals(this.status)) {
@@ -132,6 +108,21 @@ public class DataInfo {
 		} else if("2".equals(this.status)) {
 			return "기타";
 		}
+		return "";
+	}
+	
+	public String getViewDataInsertType() {
+		CommonCode dataInsertType = CacheManager.getCommonCode(CommonCode.DATA_REGISTER);
+		CommonCode externalDataInsertType = CacheManager.getCommonCode(CommonCode.EXTERNAL_DATA_REGISTER);
+		
+//		if(this.data_insert_type == null || "".equals(this.data_insert_type)) {
+//			return "";
+//		} else if(this.data_insert_type.equals(dataInsertType.getCode_value())) {
+//			return dataInsertType.getCode_name();
+//		} else if(this.data_insert_type.equals(externalDataInsertType.getCode_value())) {
+//			return externalDataInsertType.getCode_name();
+//		}
+		
 		return "";
 	}
 	
