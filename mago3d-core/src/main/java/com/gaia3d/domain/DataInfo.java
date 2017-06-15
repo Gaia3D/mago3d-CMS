@@ -1,34 +1,37 @@
 package com.gaia3d.domain;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * Object 정보
+ * Data 정보
  * @author Cheon JeongDae
  *
  */
 @Data
-public class ObjectInfo {
+public class DataInfo {
 	
-	// Object 상태가 사용중
+	// Data 상태가 사용중
 	public static final String STATUS_USE = "0";
-	// Object 상태가 중지(관리자)
+	// Data 상태가 중지(관리자)
 	public static final String STATUS_FORBID = "1";
-	// Object 상태가 잠금(비밀번호 실패횟수 초과)
+	// Data 상태가 잠금(비밀번호 실패횟수 초과)
 	public static final String STATUS_FAIL_LOGIN_COUNT_OVER = "2";
-	// Object 상태가 휴면(로그인 기간)
+	// Data 상태가 휴면(로그인 기간)
 	public static final String STATUS_SLEEP = "3";
-	// Object 상태가 만료(사용기간 종료)
+	// Data 상태가 만료(사용기간 종료)
 	public static final String STATUS_TERM_END = "4";
-	// Object 상태가 삭제(화면 비표시)
+	// Data 상태가 삭제(화면 비표시)
 	public static final String STATUS_LOGICAL_DELETE = "5";
-	// Object 상태가 임시 비밀번호(비밀번호 찾기, 관리자 설정에 의한 임시 비밀번호 발급 시)
+	// Data 상태가 임시 비밀번호(비밀번호 찾기, 관리자 설정에 의한 임시 비밀번호 발급 시)
 	public static final String STATUS_TEMP_PASSWORD = "6";
 	
-	// object_group 에 등록되지 않은 Object
-	private String[] object_all_id;
-	// object_group 에 등록된 Object
-	private String[] object_select_id;
+	// data_group 에 등록되지 않은 Data
+	private String[] data_all_id;
+	// data_group 에 등록된 Data
+	private String[] data_select_id;
 	
 	/******** 화면 오류 표시용 ********/
 	private String message_code;
@@ -58,17 +61,21 @@ public class ObjectInfo {
 	private String method_mode;
 
 	// 고유번호
-	private Long object_id;
-	// Object Group 고유번호
-	private Long object_group_id;
-	// Object Group 이름
-	private String object_group_name;
-	// object 고유 식별번호
-	private String object_key;
-	// object 이름
-	private String object_name;
+	private Long data_id;
+	// Data Group 고유번호
+	private Long data_group_id;
+	// Data Group 이름
+	private String data_group_name;
+	// data 고유 식별번호
+	private String data_key;
+	// data 이름
+	private String data_name;
 	// 위도, 경도 정보 geometry 타입
 	private String location;
+	// 위도
+	private String latitude;
+	// 경도
+	private String longitude;
 	// 높이
 	private String height;
 	// heading
@@ -77,17 +84,17 @@ public class ObjectInfo {
 	private String pitch;
 	// roll
 	private String roll;
-	// object 상태. 0:사용중, 1:사용중지(관리자), 2:기타
+	// data 상태. 0:사용중, 1:사용중지(관리자), 2:기타
 	private String status;
-	// object 등록 방법. 기본 : SELF
-	private String object_insert_type;
+	// data 등록 방법. 기본 : SELF
+	private String data_insert_type;
 	// 수정일 
 	private String update_date;
 	// 등록일
 	private String insert_date;
 	
-	private String search_object_name;
-	private String search_except_object_name;
+	private String search_data_name;
+	private String search_except_data_name;
 	
 	public String getViewStatus() {
 		// 사용자 상태. 0:사용중, 1:사용중지(관리자), 2:기타)
@@ -101,6 +108,21 @@ public class ObjectInfo {
 		} else if("2".equals(this.status)) {
 			return "기타";
 		}
+		return "";
+	}
+	
+	public String getViewDataInsertType() {
+		CommonCode dataInsertType = CacheManager.getCommonCode(CommonCode.DATA_REGISTER);
+		CommonCode externalDataInsertType = CacheManager.getCommonCode(CommonCode.EXTERNAL_DATA_REGISTER);
+		
+//		if(this.data_insert_type == null || "".equals(this.data_insert_type)) {
+//			return "";
+//		} else if(this.data_insert_type.equals(dataInsertType.getCode_value())) {
+//			return dataInsertType.getCode_name();
+//		} else if(this.data_insert_type.equals(externalDataInsertType.getCode_value())) {
+//			return externalDataInsertType.getCode_name();
+//		}
+		
 		return "";
 	}
 	

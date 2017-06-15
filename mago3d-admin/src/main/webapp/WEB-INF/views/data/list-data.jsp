@@ -25,14 +25,14 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
 						<div class="filters">
-		    				<form:form id="searchForm" modelAttribute="objectInfo" method="post" action="/object/list-object.do" onsubmit="return searchCheck();">
+		    				<form:form id="searchForm" modelAttribute="dataInfo" method="post" action="/data/list-data.do" onsubmit="return searchCheck();">
 							<div class="input-group row">
 								<div class="input-set">
-									<label for="object_group_id">그룹명</label>
-									<form:select path="object_group_id" cssClass="select">
+									<label for="data_group_id">그룹명</label>
+									<form:select path="data_group_id" cssClass="select">
 										<option value="0">전체</option>
-<c:forEach var="objectGroup" items="${objectGroupList}">
-										<option value="${objectGroup.object_group_id}">${objectGroup.object_group_name}</option>
+<c:forEach var="dataGroup" items="${dataGroupList}">
+										<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name}</option>
 </c:forEach>
 									</form:select>
 								</div>
@@ -40,8 +40,8 @@
 									<label for="search_word">검색어</label>
 									<select id="search_word" name="search_word" class="select">
 										<option value="">선택</option>
-					                	<option value="object_id">아이디</option>
-										<option value="object_name">이름</option>
+					                	<option value="data_id">아이디</option>
+										<option value="data_name">이름</option>
 									</select>
 									<select id="search_option" name="search_option" class="select">
 										<option value="0">일치</option>
@@ -59,11 +59,11 @@
 									</select>
 								</div>
 								<div class="input-set">
-									<label for="object_insert_type">등록 유형</label>
-									<select id="object_insert_type" name="object_insert_type" class="select">
+									<label for="data_insert_type">등록 유형</label>
+									<select id="data_insert_type" name="data_insert_type" class="select">
 										<option value="">전체</option>
-										<option value="${objectInsertType.code_value }"> ${objectInsertType.code_name } </option>
-										<option value="${externalObjectInsertType.code_value }"> ${externalObjectInsertType.code_name } </option>
+										<option value="${dataInsertType.code_value }"> ${dataInsertType.code_name } </option>
+										<option value="${externalDataInsertType.code_value }"> ${externalDataInsertType.code_name } </option>
 									</select>
 								</div>
 								<div class="input-set">
@@ -76,8 +76,8 @@
 									<label for="order_word">표시순서</label>
 									<select id="order_word" name="order_word" class="select">
 										<option value=""> 기본 </option>
-					                	<option value="object_id"> 아이디 </option>
-										<option value="object_name"> 이름 </option>
+					                	<option value="data_id"> 아이디 </option>
+										<option value="data_name"> 이름 </option>
 										<option value="register_date"> 등록일 </option>
 									</select>
 									<select id="order_value" name="order_value" class="select">
@@ -98,7 +98,7 @@
 							</form:form>
 						</div>
 						<div class="list">
-							<form:form id="listForm" modelAttribute="objectInfo" method="post">
+							<form:form id="listForm" modelAttribute="dataInfo" method="post">
 								<input type="hidden" id="check_ids" name="check_ids" value="" />
 							<div class="list-header row">
 								<div class="list-desc u-pull-left">
@@ -107,17 +107,17 @@
 								</div>
 								<div class="list-functions u-pull-right">
 									<div class="button-group">
-										<a href="#" onclick="updateObjectStatus('OBJECT', 'LOCK'); return false;" class="button">Object 잠금</a>
-										<a href="#" onclick="updateObjectStatus('OBJECT', 'UNLOCK'); return false;" class="button">Object 잠금 해제</a>
-										<a href="#" onclick="deleteObjects(); return false;" class="button">일괄삭제</a>
-										<a href="#" onclick="inputExcelObject(); return false;" class="button">일괄등록(Excel)</a>
+										<a href="#" onclick="updateDataStatus('DATA', 'LOCK'); return false;" class="button">Data 잠금</a>
+										<a href="#" onclick="updateDataStatus('DATA', 'UNLOCK'); return false;" class="button">Data 잠금 해제</a>
+										<a href="#" onclick="deleteDatas(); return false;" class="button">일괄삭제</a>
+										<a href="#" onclick="inputExcelData(); return false;" class="button">일괄등록(Excel)</a>
 <c:if test="${txtDownloadFlag ne 'true' }">
-										<a href="/object/download-excel-object.do" class="button">다운로드(Excel)</a>
+										<a href="/data/download-excel-data.do" class="button">다운로드(Excel)</a>
 </c:if>
 <c:if test="${txtDownloadFlag eq 'true' }">
-										<a href="/object/download-txt-object.do" class="button">다운로드(Txt)</a>
+										<a href="/data/download-txt-data.do" class="button">다운로드(Txt)</a>
 </c:if>
-										<a href="/object/download-excel-object-sample.do" class="image-button button-area button-batch-download" title="일괄등록예제파일"><span>일괄등록예제파일</span></a>
+										<a href="/data/download-excel-data-sample.do" class="image-button button-area button-batch-download" title="일괄등록예제파일"><span>일괄등록예제파일</span></a>
 									</div>
 								</div>
 							</div>
@@ -129,6 +129,12 @@
 									<col class="col-name" />
 									<col class="col-toggle" />
 									<col class="col-toggle" />
+									<col class="col-toggle" />
+									<col class="col-toggle" />
+									<col class="col-toggle" />
+									<col class="col-toggle" />
+									<col class="col-toggle" />
+									<col class="col-toggle" />
 									<col class="col-date" />
 									<col class="col-functions" />
 									<thead>
@@ -136,8 +142,14 @@
 											<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
 											<th scope="col" class="col-number">번호</th>
 											<th scope="col" class="col-name">그룹명</th>
-											<th scope="col" class="col-id">아이디</th>
+											<th scope="col" class="col-id">Key</th>
 											<th scope="col" class="col-name">이름</th>
+											<th scope="col" class="col-toggle">위도</th>
+											<th scope="col" class="col-toggle">경도</th>
+											<th scope="col" class="col-toggle">높이</th>
+											<th scope="col" class="col-toggle">Heading</th>
+											<th scope="col" class="col-toggle">Pitch</th>
+											<th scope="col" class="col-toggle">Roll</th>
 											<th scope="col" class="col-toggle">상태</th>
 											<th scope="col" class="col-toggle">등록유형</th>
 											<th scope="col" class="col-date">등록일</th>
@@ -145,37 +157,42 @@
 										</tr>
 									</thead>
 									<tbody>
-<c:if test="${empty objectList }">
+<c:if test="${empty dataList }">
 										<tr>
-											<td colspan="9" class="col-none">Object가 존재하지 않습니다.</td>
+											<td colspan="15" class="col-none">Data가 존재하지 않습니다.</td>
 										</tr>
 </c:if>
-<c:if test="${!empty objectList }">
-	<c:forEach var="objectInfo" items="${objectList}" varStatus="status">
+<c:if test="${!empty dataList }">
+	<c:forEach var="dataInfo" items="${dataList}" varStatus="status">
 										<tr>
 											<td class="col-checkbox">
-												<input type="checkbox" id="object_id_${objectInfo.object_id}" name="object_id" value="${objectInfo.object_id}" />
+												<input type="checkbox" id="data_id_${dataInfo.data_id}" name="data_id" value="${dataInfo.data_id}" />
 											</td>
 											<td class="col-number">${pagination.rowNumber - status.index }</td>
-											<td class="col-name"><a href="#" class="view-group-detail" onclick="detailObjectGroupInfo('${objectInfo.object_group_id }'); return false;">${objectInfo.object_group_name }</a></td>
-											<td class="col-id">${objectInfo.object_id }</td>
-											<td class="col-name"><a href="/object/detail-object.do?object_id=${objectInfo.object_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}">${objectInfo.object_name }</a></td>
+											<td class="col-name"><a href="#" class="view-group-detail" onclick="detailDataGroupInfo('${dataInfo.data_group_id }'); return false;">${dataInfo.data_group_name }</a></td>
+											<td class="col-id">${dataInfo.data_key }</td>
+											<td class="col-name"><a href="/data/detail-data.do?data_id=${dataInfo.data_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}">${dataInfo.data_name }</a></td>
+											<td class="col-toggle">${dataInfo.latitude}</td>
+											<td class="col-toggle">${dataInfo.longitude}</td>
+											<td class="col-toggle">${dataInfo.height}</td>
+											<td class="col-toggle">${dataInfo.heading}</td>
+											<td class="col-toggle">${dataInfo.pitch}</td>
+											<td class="col-toggle">${dataInfo.roll}</td>
 											<td class="col-toggle">
-		<c:if test="${objectInfo.status eq '0'}">
+		<c:if test="${dataInfo.status eq '0'}">
 												<span class="icon-glyph glyph-on on"></span>
 		</c:if>
-		<c:if test="${objectInfo.status ne '0'}">
+		<c:if test="${dataInfo.status ne '0'}">
 												<span class="icon-glyph glyph-off off"></span>
 		</c:if>
-												<span class="icon-text">${objectInfo.viewStatus }</span>
+												<span class="icon-text">${dataInfo.viewStatus }</span>
 											</td>
-											<td class="col-toggle">${objectInfo.viewObjectInsertType }</td>
-											<td class="col-date">${objectInfo.viewLastLoginDate }</td>
-											<td class="col-date">${objectInfo.viewInsertDate }</td>
+											<td class="col-toggle">${dataInfo.viewDataInsertType }</td>
+											<td class="col-date">${dataInfo.viewInsertDate }</td>
 											<td class="col-functions">
 												<span class="button-group">
-													<a href="/object/modify-object.do?object_id=${objectInfo.object_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}" class="image-button button-edit">수정</a>
-													<a href="/object/delete-object.do?object_id=${objectInfo.object_id }" onclick="return deleteWarning();" class="image-button button-delete">삭제</a>
+													<a href="/data/modify-data.do?data_id=${dataInfo.data_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}" class="image-button button-edit">수정</a>
+													<a href="/data/delete-data.do?data_id=${dataInfo.data_id }" onclick="return deleteWarning();" class="image-button button-delete">삭제</a>
 												</span>
 											</td>
 										</tr>
@@ -186,13 +203,13 @@
 							</form:form>
 							
 							<%-- 엑셀 다운로드 --%>
-							<form:form id="excelObjectInfo" modelAttribute="excelObjectInfo" method="post" action="/object/download-excel-object.do">
-								<form:hidden path="object_group_id" />
+							<form:form id="excelDataInfo" modelAttribute="excelDataInfo" method="post" action="/data/download-excel-data.do">
+								<form:hidden path="data_group_id" />
 								<form:hidden path="search_word" />
 								<form:hidden path="search_option" />
 								<form:hidden path="search_value" />
 								<form:hidden path="status" />
-								<form:hidden path="object_insert_type" />
+								<form:hidden path="data_insert_type" />
 								<form:hidden path="start_date" />
 								<form:hidden path="end_date" />
 								<form:hidden path="order_word" />
@@ -208,7 +225,7 @@
 	</div>
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 	
-	<div class="dialog" title="Object 그룹 정보">
+	<div class="dialog" title="Data 그룹 정보">
 		<table class="inner-table scope-row">
 			<col class="col-label" />
 			<col class="col-data" />
@@ -231,9 +248,9 @@
 		</table>
 	</div>
 	<%-- 일괄등록(Excel) --%>
-	<div class="dialog_excel" title="Object 일괄 등록">
-		<form id="fileInfo" name="fileInfo" action="/object/ajax-insert-excel-object.do" method="post" enctype="multipart/form-data">
-			<table id="excelObjectUpload" class="inner-table scope-row">
+	<div class="dialog_excel" title="Data 일괄 등록">
+		<form id="fileInfo" name="fileInfo" action="/data/ajax-insert-excel-data.do" method="post" enctype="multipart/form-data">
+			<table id="excelDataUpload" class="inner-table scope-row">
 				<col class="col-sub-label xl" />
 				<col class="col-data" />
 				<tbody>
@@ -264,10 +281,10 @@
 	$(document).ready(function() {
 		initJqueryCalendar();
 		
-		initSelect(	new Array("object_group_id", "status", "object_insert_type", "search_word", "search_option", "search_value", "order_word", "order_value", "list_counter"), 
-					new Array("${objectInfo.object_group_id}", "${objectInfo.status}", "${objectInfo.object_insert_type}", "${objectInfo.search_word}", 
-							"${objectInfo.search_option}", "${objectInfo.search_value}", "${objectInfo.order_word}", "${objectInfo.order_value}", "${pagination.pageRows }"));
-		initCalendar(new Array("start_date", "end_date"), new Array("${objectInfo.start_date}", "${objectInfo.end_date}"));
+		initSelect(	new Array("data_group_id", "status", "data_insert_type", "search_word", "search_option", "search_value", "order_word", "order_value", "list_counter"), 
+					new Array("${dataInfo.data_group_id}", "${dataInfo.status}", "${dataInfo.data_insert_type}", "${dataInfo.search_word}", 
+							"${dataInfo.search_option}", "${dataInfo.search_value}", "${dataInfo.order_word}", "${dataInfo.order_value}", "${pagination.pageRows }"));
+		initCalendar(new Array("start_date", "end_date"), new Array("${dataInfo.start_date}", "${dataInfo.end_date}"));
 		$( ".select" ).selectmenu();
 	});
 	
@@ -290,36 +307,36 @@
 	
 	// 전체 선택 
 	$("#chk_all").click(function() {
-		$(":checkbox[name=object_id]").prop("checked", this.checked);
+		$(":checkbox[name=data_id]").prop("checked", this.checked);
 	});
 	
-	// Object 등록 Layer 생성
-	function inputExcelObject() {
+	// Data 등록 Layer 생성
+	function inputExcelData() {
 		dialog_excel.dialog( "open" );
 	}
-	// Object 등록 Layer 닫기
+	// Data 등록 Layer 닫기
 	function popClose() {
 		dialog_excel.dialog( "close" );
 		location.reload();
 	}
 	
-	var updateObjectStatusFlag = true;
-	function updateObjectStatus(business_type, status_value) {
-		if($("input:checkbox[name=object_id]:checked").length == 0) {
+	var updateDataStatusFlag = true;
+	function updateDataStatus(business_type, status_value) {
+		if($("input:checkbox[name=data_id]:checked").length == 0) {
 			alert(JS_MESSAGE["check.value.required"]);
 			return false;
 		} else {
 			var checkedValue = "";
-			$("input:checkbox[name=object_id]:checked").each(function(index){
+			$("input:checkbox[name=data_id]:checked").each(function(index){
 				checkedValue += $(this).val() + ",";
 			});
 			$("#check_ids").val(checkedValue);
 		}
 		var info = $("#listForm").serialize() + "&business_type=" + business_type + "&status_value=" + status_value;		
-		if(updateObjectStatusFlag) {
-			updateObjectStatusFlag = false;
+		if(updateDataStatusFlag) {
+			updateDataStatusFlag = false;
 			$.ajax({
-				url: "/object/ajax-update-object-status.do",
+				url: "/data/ajax-update-data-status.do",
 				type: "POST",
 				data: info,
 				cache: false,
@@ -328,9 +345,9 @@
 				success: function(msg){
 					if(msg.result == "success") {
 						if(msg.result_message != null && msg.result_message != "" && business_type == "OTP") {
-							var updateMessage = JS_MESSAGE["object.object_otp.update.warning"];
+							var updateMessage = JS_MESSAGE["data.data_otp.update.warning"];
 							var patternCount = /{update_count}/ig; // notice "g" here now!
-							var pattern = /{object_ids}/ig; // notice "g" here now!
+							var pattern = /{data_ids}/ig; // notice "g" here now!
 							updateMessage = updateMessage.replace( patternCount, msg.update_count );
 							updateMessage = updateMessage.replace( pattern, msg.result_message );
 							alert(updateMessage);
@@ -338,15 +355,15 @@
 							alert(JS_MESSAGE["update"]);	
 						}
 						location.reload();
-						$(":checkbox[name=object_id]").prop("checked", false);
+						$(":checkbox[name=data_id]").prop("checked", false);
 					} else {
 						alert(JS_MESSAGE[msg.result]);
 					}
-					updateObjectStatusFlag = true;
+					updateDataStatusFlag = true;
 				},
 				error:function(request,status,error){
 			        alert(JS_MESSAGE["ajax.error.message"]);
-			        updateObjectStatusFlag = true;
+			        updateDataStatusFlag = true;
 				}
 			});
 		} else {
@@ -358,12 +375,12 @@
 	var fileUploadFlag = true;
 	function fileUpload() {
 		if($("#file_name").val() == "") {
-			alert(JS_MESSAGE["object.file.name"]);
+			alert(JS_MESSAGE["data.file.name"]);
 			$("#file_name").focus();
 			return false;
 		}
 		if(!isExcelFile($("#file_name").val())) {
-			alert(JS_MESSAGE["object.file.excel"]);
+			alert(JS_MESSAGE["data.file.excel"]);
 			$("#file_name").focus();
 			return false;
 		}
@@ -407,7 +424,7 @@
 						+ 	"<td> DB 등록 실패 건수</td>"
 						+ 	"<td> " + msg.insert_error_count + "</td>"
 						+ "</tr>";
-						$("#excelObjectUpload > tbody:last").append(content);
+						$("#excelDataUpload > tbody:last").append(content);
 					}
 					fileUploadFlag = true;
 				},
@@ -422,24 +439,24 @@
 		}
 	}
 	
-	// Object 그룹 정보
-    function detailObjectGroupInfo(objectGroupId) {
+	// Data 그룹 정보
+    function detailDataGroupInfo(dataGroupId) {
     	dialog.dialog( "open" );
-    	ajaxObjectGroupInfo(objectGroupId);
+    	ajaxDataGroupInfo(dataGroupId);
 	}
 	
-	// Object 그룹 정보
-    function ajaxObjectGroupInfo(objectGroupId) {
+	// Data 그룹 정보
+    function ajaxDataGroupInfo(dataGroupId) {
     	$.ajax({
-    		url: "/object/ajax-object-group-info.do",
-    		data: { object_group_id : objectGroupId },
+    		url: "/data/ajax-data-group-info.do",
+    		data: { data_group_id : dataGroupId },
     		type: "POST",
     		cache: false,
     		async:false,
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == "success") {
-    				drawObjectGroupInfo(msg.objectGroup);
+    				drawDataGroupInfo(msg.dataGroup);
 				} else {
     				alert(JS_MESSAGE[msg.result]);
     			}
@@ -450,34 +467,34 @@
     	});
     }
 	
-	// Object 그룹 정보
-	function drawObjectGroupInfo(jsonData) {
+	// Data 그룹 정보
+	function drawDataGroupInfo(jsonData) {
 		$("#group_name_info").html(jsonData.group_name);
 		$("#group_key_info").html(jsonData.group_key);
 		$("#viewUseYn_info").html(jsonData.viewUseYn);
 		$("#description_info").html(jsonData.description);
 	}
 	
-	// Object 일괄 삭제
-	var deleteObjectsFlag = true;
-	function deleteObjects() {
-		if($("input:checkbox[name=object_id]:checked").length == 0) {
+	// Data 일괄 삭제
+	var deleteDatasFlag = true;
+	function deleteDatas() {
+		if($("input:checkbox[name=data_id]:checked").length == 0) {
 			alert(JS_MESSAGE["check.value.required"]);
 			return false;
 		} else {
 			var checkedValue = "";
-			$("input:checkbox[name=object_id]:checked").each(function(index){
+			$("input:checkbox[name=data_id]:checked").each(function(index){
 				checkedValue += $(this).val() + ",";
 			});
 			$("#check_ids").val(checkedValue);
 		}
 		
 		if(confirm(JS_MESSAGE["delete.confirm"])) {
-			if(deleteObjectsFlag) {
-				deleteObjectsFlag = false;
+			if(deleteDatasFlag) {
+				deleteDatasFlag = false;
 				var info = $("#listForm").serialize();
 				$.ajax({
-					url: "/object/ajax-delete-objects.do",
+					url: "/data/ajax-delete-datas.do",
 					type: "POST",
 					data: info,
 					cache: false,
@@ -487,15 +504,15 @@
 						if(msg.result == "success") {
 							alert(JS_MESSAGE["delete"]);	
 							location.reload();
-							$(":checkbox[name=object_id]").prop("checked", false);
+							$(":checkbox[name=data_id]").prop("checked", false);
 						} else {
 							alert(JS_MESSAGE[msg.result]);
 						}
-						deleteObjectsFlag = true;
+						deleteDatasFlag = true;
 					},
 					error:function(request,status,error){
 				        alert(JS_MESSAGE["ajax.error.message"]);
-				        deleteObjectsFlag = true;
+				        deleteDatasFlag = true;
 					}
 				});
 			} else {

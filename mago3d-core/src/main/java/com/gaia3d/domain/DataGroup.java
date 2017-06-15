@@ -3,12 +3,12 @@ package com.gaia3d.domain;
 import lombok.Data;
 
 /**
- * Object 그룹
+ * Data 그룹
  * @author Cheon JeongDae
  *
  */
 @Data
-public class ObjectGroup {
+public class DataGroup {
 
 	// 임시 그룹
 	public static final Long TEMP_GROUP = 2l;
@@ -21,7 +21,7 @@ public class ObjectGroup {
 	private String open = "open";
 	private String node_type = "folder";
 	private String parent_name;
-	private Integer object_count;
+	private Integer data_count;
 	// up : 위로, down : 아래로
 	private String update_type;
 
@@ -29,11 +29,11 @@ public class ObjectGroup {
 	private String method_mode;
 
 	// 고유번호
-	private Long object_group_id;
+	private Long data_group_id;
 	// 링크 활용 등을 위한 확장 컬럼
-	private String object_group_key;
+	private String data_group_key;
 	// 그룹명
-	private String object_group_name;
+	private String data_group_name;
 	// 조상 고유번호
 	private Long ancestor;
 	// 부모 고유번호
