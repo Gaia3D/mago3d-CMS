@@ -1,222 +1,70 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width">
-		<!-- <meta http-equiv="Cache-Control" content="no-cache"/>
-		<meta http-equiv="Expires" content="0"/>
-		<meta http-equiv="Pragma" content="no-cache"/> -->
-		<title>ShipBuilding</title>
-		<link rel="stylesheet" href="/css/ko/style.css" />
-		<link rel="stylesheet" href="/externlib/ko/cesium/Widgets/widgets.css" />
-	</head>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>Mago3D</title>
+    <!--[if lt IE 9]>
+    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript" src="../externlib/en/cesium/Cesium.js"></script>
+	<script type="text/javascript" src="../externlib/ko/jquery/jquery.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet"> 
+	<link href="../css/ko/homepage-style.css" rel="stylesheet" type="text/css" />
+</head>
+
 <body>
-
-	<header>
-		<div class="navbar navbar-green">
-			<div style="float: left; padding-left: 50px; padding-top: 15px;">Mago3D</div>
-			<div style="float: right">
-				<ul class="navbar-ul">
-					<li class="navbar-li">&nbsp;&nbsp;&nbsp;Download&nbsp;&nbsp;&nbsp;</li>
-					<li class="navbar-li">&nbsp;&nbsp;&nbsp;demo&nbsp;&nbsp;&nbsp;</li>
-					<li class="navbar-li">&nbsp;&nbsp;&nbsp;developers&nbsp;&nbsp;&nbsp;</li>
-				</ul>
-			</div>
+	<nav class="nav">
+		<div>
+			<h1>mago3D</h1>
+			<ul class="menu">
+				<li><a href="../homepage/mago3d.html">mago3D</a><span></span></li>
+				<li><a href="../homepage/demo.html">Demo</a><span></span></li>
+				<li><a href="../homepage/download.html">Download</a><span></span></li>
+				<li><a href="../homepage/tutorial.html">Tutorials</a><span></span></li>
+			</ul>
+			<ul class="language">
+				<li>KO</li>
+				<li class="on">EN</li>
+			</ul>
 		</div>
-	</header>
+	</nav>
 	
-	<div style="width:100% ;min-height: 500px; font-size: 12px;">
-		<form id="searchForm" name="searchForm" action="/" onsubmit="return false;">
-		<div style="float: left; min-width: 200px;">
-			<div style="padding-left: 10px; padding-top: 15px;">
-				<div>Mago3D
-					<input type="radio" id="magoEnable" name="magoState" value="0" checked="checked" onclick="changeMagoState(true);" />
-					<label for="magoEnable"> 활성 </label>
-					<input type="radio" id="magoDisable" name="magoState" value="1" onclick="changeMagoState(false);"/>
-					<label for="magoDisable"> 비활성 </label>
-				</div>
-				<hr style="height:1">
-			</div>
+	<section>
+		<div class="contents">
 			
-			<div style="padding-left: 10px;">
-				<label for="projectId">이름</label>
-				<select id="projectId" name="projectId" style="height: 25px;">
-					<option value="testId" selected="selected">세종 대왕급</option>
-					<option value="testId">충무공 이순신급</option>
-					<option value="testId">광개토 대왕급</option>
-				</select>
-				<hr style="height:1;">
-			</div>
 			
-			<div style="padding-left: 10px;">
-				<div>Deploy
-					<input type="radio" id="fullshipRender" name="renderMode" value="0" onclick="changeRender('0');" style="margin-left: 26px;"/>
-					<label for="fullshipRender"> 호선 </label>
-				</div>
-				<div>
-					<input type="radio" id="deployRender" name="renderMode" value="1" onclick="changeRender('1');" style="margin-left: 69px;"/>
-					<label for="deployRender"> 지번 전개 </label>
-				</div>
-				<hr style="height:1">
-			</div>
 			
-			<div style="padding-left: 10px;">
-				<div>OutFitting
-					<input type="radio" id="showOutFitting" name="outFitting" value="true" onclick="changeOutFitting(true);" />
-					<label for="showOutFitting"> 표시 </label>
-				</div>
-				<div>
-					<input type="radio" id="hideOutFitting" name="outFitting" value="false" onclick="changeOutFitting(false);" style="margin-left: 64px;"/>
-					<label for="hideOutFitting"> 비표시 </label>
-				</div>
-				<hr style="height:1">
+			<div class="fullbox" style="opacity: 1; height: 1070.44px;">
+			<iframe id="ytplayer" src="../images/ko/204.mov" muted="muted" title="" style="width: 100%; height: 1070.44px; margin-top: 0px; margin-left: 0px;" width="100%" height="100%" frameborder="0"></iframe>
 			</div>
+			<div class="pattern_bg" style="height: 1070.44px;"></div>
 			
-			<div style="padding-left: 10px;">
-				<div>BoundingBox
-					<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />
-					<label for="showBoundingBox"> 표시 </label>
-				</div>
-				<div>
-					<input type="radio" id="hideBoundingBox" name="boundingBox" value="false" onclick="changeBoundingBox(false);" style="margin-left: 81px;"/>
-					<label for="hideBoundingBox"> 비표시 </label>
-				</div>
-				<hr style="height:1">
-			</div>
 			
-			<div style="padding-left: 10px;">
-				<div>그림자
-					<input type="radio" id="showShadow" name="shadow" value="true" onclick="changeShadow(true);" style="margin-left: 15px;"/>
-					<label for="showShadow"> 표시 </label>
-					<input type="radio" id="hideShadow" name="shadow" value="false" onclick="changeShadow(false);" />
-					<label for="hideShadow"> 비표시 </label>
-				</div>
-				<hr style="height:1">
-			</div>
 			
-			<div style="padding-left: 10px;">
-				<label for="frustumFarDistance">가시 거리 </label>
-				<input type="text" id="frustumFarDistance" name="frustumFarDistance" placeholder=" 미터(m)" size="4" style="height: 20px;"/> 
-				<button type="button" id="changeFrustumFarDistanceAPI" class="btn btn-default btn-sm">적용</button>
-				<hr style="height:1">
-			</div>
-			
-			<div style="padding-left: 10px;">
-				<div>
-					<label for="blockType">블록 타입</label>
-					<select id="blockType" name="blockType" style="height: 25px;">
-						<option value="structure" selected="selected">Structure</option>
-						<option value="outfitting">OutFitting</option>
-					</select>
-				</div>
-				<div style="margin-top: 5px;"></div>
-				<div>	
-					<label for="blockId" style="margin-top: 35px;">블록 ID</label>
-					<select id="blockId" name="blockId" style="width:75px; height: 25px;">
-					</select>
-					<button type="button" id="searchBlockAPI" class="btn btn-default btn-sm">검색</button>
-				</div>
-				<hr style="height:1">
-			</div>
-			
-			<div style="padding-left: 10px;">
-				<div><label for="blockIds">블록 ID(하나만 입력)</label></div>
-				<div>
-					<input type="text" id="blockIds" name="blockIds" size="21" placeholder="   , 구분 입력" style="margin-top:3px; height: 20px;"/>
-				</div>
-				<div style="margin-top: 5px;"></div>
-				<div>
-					<label for="objectIds">Object ID(하나만 입력)</label>
-				</div>
-				<div>
-					<input type="text" id="objectIds" name="objectIds" size="21" placeholder="   , 구분 입력" style="margin-top:3px; height: 20px;"/>
-				</div>
-				<div style="margin-top: 5px;"></div>
-				<div>	
-					<label for="colorBlock">색깔</label>
-					<select id="colorBlock" name="colorBlock" style="width:100px; height: 25px;">
-						<option value=""> 없음 </option>
-						<option value="255,0,0"> 빨강 </option>
-						<option value="255,255,0"> 노랑 </option>
-						<option value="0,255,0"> 녹색 </option>
-						<option value="0,0,255"> 파랑 </option>
-						<option value="255,0,255"> 분홍 </option>
-						<option value="0,0,0"> 검정 </option>
-					</select><br/>
-					<button type="button" id="changeHighLightingAPI" style="height: 24px;">HighLighting</button>
-	                <button type="button" id="changeColorAPI" class="btn btn-default btn-sm" style="margin-top: 5px;">변경</button>
-				</div>
-				<hr style="height:1">	                
-			</div>
-			
-			<div style="padding-left: 10px;">
-				<div>
-					<label for="moveBlockId">블록 ID</label>
-					<select id="moveBlockId" name="moveBlockId" style="width:75px; height: 25px;">
-					</select>
-				</div>
-				<div style="margin-top: 3px;"></div>
-				<div>
-					<label for="latitude">위도 </label>
-					<input type="text" id="latitude" name="latitude" size="15" style="height: 20px;"/> 
-				</div>
-				<div style="margin-top: 3px;"></div>
-				<div>
-					<label for="longitude">경도 </label>
-					<input type="text" id="longitude" name="longitude" size="15" style="height: 20px;"/> 
-				</div>
-				<div style="margin-top: 3px;"></div>
-				<div>
-					<label for="elevation">높이 </label>
-					<input type="text" id="elevation" name="elevation" size="1" style="height: 20px;"/> 
-					<label for="heading">HEADING </label>
-					<input type="text" id="heading" name="heading" size="1" style="height: 20px;"/> 
-				</div>
-				<div style="margin-top: 3px;"></div>
-				<div>
-					<label for="pitch">PITCH </label>
-					<input type="text" id="pitch" name="pitch" size="2" style="height: 20px;"/> 
-					<label for="roll">ROLL </label>
-					<input type="text" id="roll" name="roll" size="2" style="height: 20px;"/> 
-				</div>
-				<div style="margin-top: 3px;"></div>
-				<div>	
-					<button type="button" id="changeLocationAndRotationAPI" style="height: 24px;">변환 행렬</button>
-				</div>
-				<hr style="height:1">	                
-			</div>
-			
-			<div style="padding-left: 10px;">
-				<div>마우스 이동모드
-					<input type="radio" id="mouseBlockMove" name="mouseMoveMode" value="0" onclick="changeMouseMove('0');" style="margin-left: 6px;"/>
-					<label for="mouseBlockMove"> Block </label>
-				</div>
-				<div>
-					<input type="radio" id="mouseObjectMove" name="mouseMoveMode" value="1" onclick="changeMouseMove('1');" style="margin-left: 97px;"/>
-					<label for="mouseObjectMove"> Object </label>
-				</div>
-				<div>HEADING 단축키 : Q , A</div>
-				<div>PITCH 단축키 : W , S</div>
-				<div>ROLL 단축키 : E , D</div>
-				<label for="moveObjectId">선택 objectId </label>
-				<input type="text" id="moveObjectId" name="moveObjectId" size="10" style="height: 20px;"/> 
-				<hr style="height:1">
-			</div>
-		</div>
-		</form>
-		<div style="padding-top: 10px; padding-left: 20px; width: 97%;">
-			<div id="magoContainer"></div>
-		</div>
-	</div>
+		</div>		
+	</section>
 	
-	<footer style="clear:both; text-align: center;">
-		<address>Gaia3D 팀에서 만들었습니다.</address>
-		<small>Copyright &copy; 2017 Gaia3D</small>
+	<footer>
+		<div>
+			<h2>
+				Contact
+				<span></span>
+			</h2>
+			<p>
+				Mago3d에 관심이 있는 고객님께서는 아래의 담당자 email, phone 또는 방문을 부탁 드립니다.
+			</p>
+			<ul class="contact">
+				<li class="company">www.gaia3d.com</li>
+				<li class="address">080 2 3397 3475</li>
+				<li class="mail">mago3d@gaia3d.com</li>
+			</ul>
+			<p class="copyright">
+				&copy; Mago3D - GIS 3D web platform. All Rights Reserved. * 문구수정필요
+			</p>
+		</div>
 	</footer>
-
-<script type="text/javascript" src="/externlib/en/cesium/Cesium.js"></script>
-<script type="text/javascript" src="/externlib/ko/jquery/jquery.js"></script>
-<script type="text/javascript" src="/js/ko/mago3d.js"></script>
-
+	<!-- //FOOTER -->
+	
 </body>
 </html>
