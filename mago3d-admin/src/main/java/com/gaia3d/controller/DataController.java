@@ -113,8 +113,8 @@ public class DataController {
 			txtDownloadFlag = true;
 		}
 		
-		CommonCode dataInsertType = CacheManager.getCommonCode(CommonCode.DATA_REGISTER);
-		CommonCode externalDataInsertType = CacheManager.getCommonCode(CommonCode.EXTERNAL_DATA_REGISTER);
+		CommonCode dataInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.DATA_REGISTER);
+		CommonCode externalDataInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.EXTERNAL_DATA_REGISTER);
 		
 		model.addAttribute(pagination);
 		model.addAttribute("dataInsertType", dataInsertType);

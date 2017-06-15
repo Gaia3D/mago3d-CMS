@@ -735,9 +735,12 @@ public class FileServiceImpl implements FileService {
 		dataInfo.setData_name(StringUtil.getDefaultValue((String)excelObject.get(2)));
 		dataInfo.setLatitude(StringUtil.getDefaultValue((String)excelObject.get(3)));
 		dataInfo.setLongitude(StringUtil.getDefaultValue((String)excelObject.get(4)));
-		dataInfo.setHeading(StringUtil.getDefaultValue((String)excelObject.get(5)));
-		dataInfo.setPitch(StringUtil.getDefaultValue((String)excelObject.get(6)));
-		dataInfo.setRoll(StringUtil.getDefaultValue((String)excelObject.get(7)));
+		dataInfo.setLocation("POINT(" + dataInfo.getLongitude() + " " + dataInfo.getLatitude() + ")");
+		log.info("@@@@@@@@@ location = {}", dataInfo.getLocation());
+		dataInfo.setHeight(StringUtil.getDefaultValue((String)excelObject.get(5)));
+		dataInfo.setHeading(StringUtil.getDefaultValue((String)excelObject.get(6)));
+		dataInfo.setPitch(StringUtil.getDefaultValue((String)excelObject.get(7)));
+		dataInfo.setRoll(StringUtil.getDefaultValue((String)excelObject.get(8)));
 		
 		return dataInfo;
 	}

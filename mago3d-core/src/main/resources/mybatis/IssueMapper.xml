@@ -6,7 +6,7 @@
 	<!-- 이슈 총 건수 -->
 	<select id="getIssueTotalCount" parameterType="issue" resultType="long">
 		/* getIssueTotalCount */
-		SELECT COUNT(user_id) 
+		SELECT COUNT(issue_id) 
 		FROM issue
 		<trim prefix="WHERE" prefixOverrides="AND">
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
@@ -107,22 +107,18 @@
     		SELECT nextval('issue_seq')
   		</selectKey>
 		INSERT INTO issue(
-			issue_id, title, user_id, user_name, start_date, end_date, use_yn, client_ip
+			issue_id, data_group_id, user_id, title, priority, due_date, issue_type, status, data_key, location, latitude, longitude, client_ip
 		) values(
-			#{issue_id}, #{title}, #{user_id}, #{user_name}, 
-			<if test="start_date == null or start_date == ''">
-			null,
-			</if>
-			<if test="start_date != null and start_date != ''">
-			TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS'),
-			</if>
-			<if test="end_date == null or end_date == ''">
+			#{issue_id}, #{data_group_id}, #{user_id}, #{title}, #{priority},
+			<if test="due_date == null or due_date == ''">
 			null,
 			</if>		
-			<if test="end_date != null and end_date != ''">
+			<if test="due_date != null and due_date != ''">
 			TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS'),
 			</if>			
-			#{use_yn}, #{client_ip}
+			 #{issue_type}, #{status}, #{data_key},
+			 #{location}, 
+			 #{latitude}, #{longitude}, #{client_ip}
 		)
 	</insert>
 	

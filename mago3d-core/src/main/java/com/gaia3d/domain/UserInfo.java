@@ -286,8 +286,8 @@ public class UserInfo {
 	}
 	
 	public String getViewUserInsertType() {
-		CommonCode userInsertType = CacheManager.getCommonCode(CommonCode.USER_REGISTER);
-		CommonCode externalUserInsertType = CacheManager.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER);
+		CommonCode userInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.USER_REGISTER);
+		CommonCode externalUserInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER);
 		
 		if(this.user_insert_type == null || "".equals(this.user_insert_type)) {
 			return "";

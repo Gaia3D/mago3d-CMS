@@ -22,6 +22,13 @@ public class CommonCode {
 	public static final String EXTERNAL_DATA_REGISTER = "EXTERNAL_DATA_REGISTER";
 	public static final String DATA_REGISTER = "DATA_REGISTER";
 	
+	// 이슈 우선순위
+	public static final String ISSUE_PRIORITY = "ISSUE_PRIORITY";
+	// 이슈 유형
+	public static final String ISSUE_TYPE = "ISSUE_TYPE";
+	// 이슈 상태
+	public static final String ISSUE_STATUS = "ISSUE_STATUS";
+	
 	/****** validator ********/
 	private String order_word;
 	private String order_value;

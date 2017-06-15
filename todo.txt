@@ -4,3 +4,8 @@
 
 2 timestamp with time zone 문제는 일단 without time zone 으로 만들어 두고
  나중에 고치자. 
+ 
+3 jsp template 은 나중에 고려하자.
+
+issue 테이블 파티션 처리 해야 함
+issue_comment 도.... comment 성능을 위해.... 분리해야 하나?

@@ -21,6 +21,7 @@ import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserGroup;
 import com.gaia3d.domain.UserGroupMenu;
 import com.gaia3d.service.UserGroupService;
+import com.gaia3d.util.StringUtil;
 import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
@@ -174,7 +175,7 @@ public class UserGroupController {
 	 * @param userGroup
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-insert-user-group.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-insert-user-group.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxInsertUserGroup(HttpServletRequest request, UserGroup userGroup) {
 		Gson gson = new Gson();
@@ -193,12 +194,15 @@ public class UserGroupController {
 					|| userGroup.getUse_yn() == null || "".equals(userGroup.getUse_yn())) {
 				
 				userGroupList.addAll(userGroupService.getListUserGroup(new UserGroup()));
+				userGroupTree = getUserGroupTree(userGroupList);
 				
 				result = "input.invalid";
-				jSONObject.put("result", result);
-				jSONObject.put("userGroupTree", getUserGroupTree(userGroupList));
-				
-				return jSONObject.toString();
+//				jSONObject.put("result", result);
+//				jSONObject.put("userGroupTree", getUserGroupTree(userGroupList));
+//				
+//				return gson.toJson(jSONObject);
+				String jsonResult = "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+				return jsonResult;
 			}
 			
 			// TODO group_key 중복 체크 해야 함
@@ -221,10 +225,13 @@ public class UserGroupController {
 			result = "db.exception";
 		}
 		
-		jSONObject.put("result", result);
-		jSONObject.put("userGroupTree", userGroupTree);
+//		jSONObject.put("result", result);
+//		jSONObject.put("userGroupTree", userGroupTree);
+//		
+//		return gson.toJson(jSONObject);
 		
-		return gson.toJson(jSONObject);
+		String jsonResult = "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+		return jsonResult;
 	}
 	
 	/**
@@ -233,11 +240,11 @@ public class UserGroupController {
 	 * @param userGroup
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-user-group.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-user-group.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdateUserGroup(HttpServletRequest request, UserGroup userGroup) {
-		Gson gson = new Gson();
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+//		Gson gson = new Gson();
+//		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		String userGroupTree = null;
 		List<UserGroup> userGroupList = new ArrayList<UserGroup>();
@@ -250,12 +257,15 @@ public class UserGroupController {
 					|| userGroup.getUse_yn() == null || "".equals(userGroup.getUse_yn())) {
 				
 				userGroupList.addAll(userGroupService.getListUserGroup(new UserGroup()));
+				userGroupTree = getUserGroupTree(userGroupList);
 				
 				result = "input.invalid";
-				jSONObject.put("result", result);
-				jSONObject.put("userGroupTree", getUserGroupTree(userGroupList));
-				
-				return jSONObject.toString();
+//				jSONObject.put("result", result);
+//				jSONObject.put("userGroupTree", getUserGroupTree(userGroupList));
+//				
+//				return jSONObject.toString();
+				String jsonResult = "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+				return jsonResult;
 			}
 			
 			userGroupService.updateUserGroup(userGroup);
@@ -268,9 +278,11 @@ public class UserGroupController {
 			result = "db.exception";
 		}
 		
-		jSONObject.put("result", result);
-		jSONObject.put("userGroupTree", userGroupTree);
-		return gson.toJson(jSONObject);
+//		jSONObject.put("result", result);
+//		jSONObject.put("userGroupTree", userGroupTree);
+//		return gson.toJson(jSONObject);
+		String jsonResult = "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+		return jsonResult;
 	}
 	
 	/**
@@ -279,7 +291,7 @@ public class UserGroupController {
 	 * @param userGroup
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-move-user-group.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-move-user-group.do")
 	@ResponseBody
 	public String ajaxUpdateMoveUserGroup(HttpServletRequest request, UserGroup userGroup) {
 		Gson gson = new Gson();
@@ -289,7 +301,6 @@ public class UserGroupController {
 		List<UserGroup> userGroupList = new ArrayList<UserGroup>();
 		userGroupList.add(getRootUserGroup());
 		try {
-			
 			log.info("@@ userGroup = {} ", userGroup);
 			if(userGroup.getUser_group_id() == null || userGroup.getUser_group_id().longValue() == 0l
 					|| userGroup.getView_order() == null || userGroup.getView_order().intValue() == 0
@@ -325,7 +336,7 @@ public class UserGroupController {
 	 * @param userGroup
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-delete-user-group.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-delete-user-group.do")
 	@ResponseBody
 	public String ajaxDeleteUserGroup(HttpServletRequest request, UserGroup userGroup) {
 		Gson gson = new Gson();
@@ -457,7 +468,7 @@ public class UserGroupController {
 				builder.append("\"node_type\"").append(":").append("\"" + userGroup.getNode_type() + "\"").append(",");
 				builder.append("\"ancestor\"").append(":").append("\"" + userGroup.getAncestor() + "\"").append(",");
 				builder.append("\"parent\"").append(":").append("\"" + userGroup.getParent() + "\"").append(",");
-				builder.append("\"parent_name\"").append(":").append("\"" + userGroup.getParent_name() + "\"").append(",");
+				builder.append("\"parent_name\"").append(":").append("\"" + StringUtil.getDefaultValue(userGroup.getParent_name()) + "\"").append(",");
 				builder.append("\"view_order\"").append(":").append("\"" + userGroup.getView_order() + "\"").append(",");
 				builder.append("\"depth\"").append(":").append("\"" + userGroup.getDepth() + "\"").append(",");
 				builder.append("\"default_yn\"").append(":").append("\"" + userGroup.getDefault_yn() + "\"").append(",");

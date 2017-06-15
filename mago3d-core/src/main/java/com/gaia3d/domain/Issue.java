@@ -1,8 +1,5 @@
 package com.gaia3d.domain;
 
-import com.gaia3d.security.Crypt;
-import com.gaia3d.security.Masking;
-
 import lombok.Data;
 
 /**
@@ -30,12 +27,40 @@ public class Issue {
 	private String order_word;
 	private String order_value;
 	
-	/************* 업무 처리 ***********/
-    // 사용자명
-    private String user_name;
+	// 댓글 개수
+	private Integer comment_count;
+	// 사용자명
+	private String user_name;
+	// 이슈 내용
+	private String content;
 	
-	// 고유키
+	/************* 업무 처리 ***********/
+    // 고유번호
 	private Long issue_id;
+	// 데이터 그룹
+	private Long data_group_id;
+	// 사용자 아이디
+	private String user_id;
+	// 이슈명
+	private String title;
+	// 우선순위. common_code 동적 생성
+	private String priority;
+	// 예정일. 마감일
+	private String due_date;
+	// 이슈 유형. common_code 동적 생성
+	private String issue_type;
+	// 상태. common_code 동적 생성
+	private String status;
+	// Data key
+	private String data_key;
+	// location(위도, 경도)
+	private String location;
+	// 위도
+	private String latitude;
+	// 경도
+	private String longitude;
+	// 요청 IP
+	private String client_ip;
 	
 	// 년도
 	private String year;

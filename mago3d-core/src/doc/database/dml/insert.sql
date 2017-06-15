@@ -20,10 +20,24 @@ insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_cla
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(22, '사용자 목록', 'USER', 2 , 2, 2, '/user/list-user.do', 'glyph-users', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(23, '사용자 등록', 'USER', 2 , 2, 3, '/user/input-user.do', 'glyph-users', 'N', 'Y');
 
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(3, '데이터', 'DATA', 0 , 1, 3, '/data/list-data.do', 'glyph-users', 'Y', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(31, '데이터 그룹', 'DATA', 3 , 2, 1, '/data/list-data-group.do', 'glyph-users', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(32, '데이터 목록', 'DATA', 3 , 2, 2, '/data/list-data.do', 'glyph-users', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(33, '데이터 등록', 'DATA', 3 , 2, 3, '/data/input-data.do', 'glyph-users', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(3, '데이터', 'DATA', 0 , 1, 3, '/data/list-data.do', 'glyph-monitor', 'Y', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(31, '데이터 그룹', 'DATA', 3 , 2, 1, '/data/list-data-group.do', 'glyph-monitor', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(32, '데이터 목록', 'DATA', 3 , 2, 2, '/data/list-data.do', 'glyph-monitor', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(33, '데이터 등록', 'DATA', 3 , 2, 3, '/data/input-data.do', 'glyph-monitor', 'N', 'Y');
+
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(4, '이슈', 'ISSUE', 0 , 1, 4, '/issue/list-issue.do', 'glyph-dashboard', 'Y', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(41, '이슈 일괄', 'ISSUE', 4 , 2, 1, '/issue/all-issue.do', 'glyph-dashboard', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(42, '이슈 목록', 'ISSUE', 4 , 2, 2, '/issue/list-issue.do', 'glyph-dashboard', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(43, '이슈 등록', 'ISSUE', 4 , 2, 3, '/issue/input-issue.do', 'glyph-dashboard', 'N', 'Y');
+
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(5, '통계및이력', 'STATISTICS', 0 , 1, 5, '/statistic/index.do', 'glyph-chart', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(51, '통계', 'STATISTICS', 5 , 2, 1, '/statistic/index.do', 'glyph-chart', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(52, '접근 이력', 'STATISTICS', 5 , 2, 2, '/log/list-access-log.do', 'glyph-chart', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(53, '정기 점검', 'STATISTICS', 5 , 2, 3, '/report/list-report-maintenance.do', 'glyph-chart', 'N', 'Y');
+
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(6, '스케줄', 'SCHEDULE', 0 , 1, 6, '/schedule/list-schedule.do', 'glyph-check', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(61, '스케줄 목록', 'STATISTICS', 6 , 2, 1, '/schedule/list-schedule.do', 'glyph-check', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(62, '스케줄 실행 이력', 'STATISTICS', 6 , 2, 2, '/schedule/list-schedule-log.do', 'glyph-check', 'N', 'Y');
 
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(8, '환경설정', 'CONFIGURATION', 0 , 1, 8, '/config/modify-policy.do', 'glyph-settings', 'Y', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(81, '운영정책', 'CONFIGURATION', 8 , 2, 1, '/config/modify-policy.do', 'glyph-settings', 'Y', 'Y');
@@ -42,9 +56,21 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (21, 1, 21);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (22, 1, 22);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (23, 1, 23);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (3, 1, 3);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (31, 1, 31);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (32, 1, 32);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (33, 1, 33);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (4, 1, 4);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (41, 1, 41);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (42, 1, 42);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (43, 1, 43);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (5, 1, 5);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (51, 1, 51);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (52, 1, 52);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (53, 1, 53);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (6, 1, 6);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (61, 1, 61);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (62, 1, 62);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (8, 1, 8);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (81, 1, 81);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (82, 1, 82);
@@ -93,3 +119,68 @@ insert into common_code (
 ) values (
   'USER_REGISTER_EMAIL', '이메일', 'EMAIL', 'user', 'gmail.com', 'Y', 2
 );
+
+insert into common_code (
+  code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order
+) values (
+  'ISSUE_PRIORITY', '우선순위', 'PRIORITY', 'ISSUE', '매우중요', 'Y', 1
+);
+insert into common_code (
+  code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order
+) values (
+  'ISSUE_PRIORITY', '우선순위', 'PRIORITY', 'ISSUE', '중요', 'Y', 2
+);
+insert into common_code (
+  code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order
+) values (
+  'ISSUE_PRIORITY', '우선순위', 'PRIORITY', 'ISSUE', '보통', 'Y', 3
+);
+insert into common_code (
+  code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order
+) values (
+  'ISSUE_PRIORITY', '우선순위', 'PRIORITY', 'ISSUE', '낮음', 'Y', 4
+);
+
+insert into common_code (
+  code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order
+) values (
+  'ISSUE_TYPE', '유형', 'TYPE', 'ISSUE', '버그', 'Y', 1
+);
+insert into common_code (
+  code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order
+) values (
+  'ISSUE_TYPE', '유형', 'TYPE', 'ISSUE', '기능개선', 'Y', 2
+);
+insert into common_code (
+  code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order
+) values (
+  'ISSUE_TYPE', '유형', 'TYPE', 'ISSUE', '수정', 'Y', 3
+);
+insert into common_code (
+  code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order
+) values (
+  'ISSUE_TYPE', '유형', 'TYPE', 'ISSUE', '기타', 'Y', 4
+);
+
+
+insert into common_code (
+  code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order
+) values (
+  'ISSUE_STATUS', '상태', 'STATUS', 'ISSUE', '등록', 'Y', 1
+);
+insert into common_code (
+  code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order
+) values (
+  'ISSUE_STATUS', '상태', 'STATUS', 'ISSUE', '진행중', 'Y', 2
+);
+insert into common_code (
+  code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order
+) values (
+  'ISSUE_STATUS', '상태', 'STATUS', 'ISSUE', '완료', 'Y', 3
+);
+insert into common_code (
+  code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order
+) values (
+  'ISSUE_STATUS', '상태', 'STATUS', 'ISSUE', '폐기', 'Y', 4
+);
+

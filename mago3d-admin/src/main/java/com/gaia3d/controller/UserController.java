@@ -16,13 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -128,8 +126,8 @@ public class UserController {
 			txtDownloadFlag = true;
 		}
 		
-		CommonCode userInsertType = CacheManager.getCommonCode(CommonCode.USER_REGISTER);
-		CommonCode externalUserInsertType = CacheManager.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER);
+		CommonCode userInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.USER_REGISTER);
+		CommonCode externalUserInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER);
 		
 		model.addAttribute(pagination);
 		model.addAttribute("userInsertType", userInsertType);
@@ -268,7 +266,8 @@ public class UserController {
 			}
 		}
 		
-		List<CommonCode> emailCommonCodeList = CacheManager.getCommonCode(CommonCode.USER_REGISTER_EMAIL).getEmailList();
+		@SuppressWarnings("unchecked")
+		List<CommonCode> emailCommonCodeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.USER_REGISTER_EMAIL);
 		
 		model.addAttribute("passwordExceptionChar", passwordExceptionChar);
 		model.addAttribute("emailCommonCodeList", emailCommonCodeList);
@@ -551,7 +550,8 @@ public class UserController {
 			}
 		}
 		
-		List<CommonCode> emailCommonCodeList = CacheManager.getCommonCode(CommonCode.USER_REGISTER_EMAIL).getEmailList();
+		@SuppressWarnings("unchecked")
+		List<CommonCode> emailCommonCodeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.USER_REGISTER_EMAIL);
 		
 		model.addAttribute("passwordExceptionChar", passwordExceptionChar);
 		model.addAttribute("emailCommonCodeList", emailCommonCodeList);

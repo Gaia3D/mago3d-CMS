@@ -130,22 +130,37 @@ public class CacheConfig {
 
 	private void commonCode(CacheType cacheType) {
 		List<CommonCode> commonCodeList = commonCodeService.getListCommonCode();
-		Map<String, CommonCode> commonCodeMap = new HashMap<String, CommonCode>();
+		Map<String, Object> commonCodeMap = new HashMap<>();
+		
 		List<CommonCode> emailList = new ArrayList<CommonCode>();
+		List<CommonCode> issuePriorityList = new ArrayList<CommonCode>();
+		List<CommonCode> issueTypeList = new ArrayList<CommonCode>();
+		List<CommonCode> issueStatusList = new ArrayList<CommonCode>();
+		
 		for(CommonCode commonCode : commonCodeList) {
 			if(CommonCode.USER_REGISTER_EMAIL.equals(commonCode.getCode_key())) {
 				// 이메일
 				emailList.add(commonCode);
+			} else if(CommonCode.ISSUE_PRIORITY.equals(commonCode.getCode_key())) {
+				// 이슈 우선순위
+				issuePriorityList.add(commonCode);
+			} else if(CommonCode.ISSUE_TYPE.equals(commonCode.getCode_key())) {
+				// 이슈 유형
+				issueTypeList.add(commonCode);
+			} else if(CommonCode.ISSUE_STATUS.equals(commonCode.getCode_key())) {
+				// 이슈 상태
+				issueStatusList.add(commonCode);
 			} else {
 				commonCodeMap.put(commonCode.getCode_key(), commonCode);
 			}
 		}
 		
-		CommonCode emailCommonCode = new CommonCode();
-		emailCommonCode.setEmailList(emailList);
-		commonCodeMap.put(CommonCode.USER_REGISTER_EMAIL, emailCommonCode);
+		// TODO 여기 다시 설계 해야 할거 같다. 
+		commonCodeMap.put(CommonCode.USER_REGISTER_EMAIL, emailList);
+		commonCodeMap.put(CommonCode.ISSUE_PRIORITY, issuePriorityList);
+		commonCodeMap.put(CommonCode.ISSUE_TYPE, issueTypeList);
+		commonCodeMap.put(CommonCode.ISSUE_STATUS, issueStatusList);
 		CacheManager.setCommonCodeMap(commonCodeMap);
-		
 		
 		// 사용자 도메인 cache를 갱신
 		if(cacheType == CacheType.USER || cacheType == CacheType.BROADCAST) {

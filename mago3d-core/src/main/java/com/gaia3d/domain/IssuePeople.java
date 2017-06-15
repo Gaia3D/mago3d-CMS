@@ -3,17 +3,19 @@ package com.gaia3d.domain;
 import lombok.Data;
 
 /**
- * Issue Detail
+ * Issue People
  * @author jeongdae
  *
  */
 @Data
-public class IssueDetail {
+public class IssuePeople {
 	
 	// 고유번호
+	private Long issue_people_id;
 	private Long issue_id;
-	private Long issue_detail_id;
-	private String contents;
+	// 이슈 관계자 유형. 1 : 대리자, 2 : 담당자
+	private String role_type;
+	private String user_id;
 	
 	// 등록일
 	private String insert_date;

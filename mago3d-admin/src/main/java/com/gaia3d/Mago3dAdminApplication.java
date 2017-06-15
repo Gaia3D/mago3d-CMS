@@ -33,14 +33,14 @@ public class Mago3dAdminApplication extends SpringBootServletInitializer {
         return application.sources(Mago3dAdminApplication.class);
     }
 	
-	@Bean
-    public FilterRegistrationBean encodingFilter() {
-		FilterRegistrationBean registrationBean = new FilterRegistrationBean(new CharacterEncodingFilter());
-		registrationBean.addInitParameter("encoding", "utf-8");
-		registrationBean.addInitParameter("forceEncoding", "true");
-		registrationBean.addUrlPatterns("*.do");
-        return registrationBean;
-    }
+//	@Bean
+//    public FilterRegistrationBean encodingFilter() {
+//		FilterRegistrationBean registrationBean = new FilterRegistrationBean(new CharacterEncodingFilter());
+//		registrationBean.addInitParameter("encoding", "utf-8");
+//		registrationBean.addInitParameter("forceEncoding", "true");
+//		registrationBean.addUrlPatterns("*.do");
+//        return registrationBean;
+//    }
 
     @Bean
     public FilterRegistrationBean xSSFilter() {

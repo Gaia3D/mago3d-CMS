@@ -112,8 +112,8 @@ public class DataInfo {
 	}
 	
 	public String getViewDataInsertType() {
-		CommonCode dataInsertType = CacheManager.getCommonCode(CommonCode.DATA_REGISTER);
-		CommonCode externalDataInsertType = CacheManager.getCommonCode(CommonCode.EXTERNAL_DATA_REGISTER);
+		CommonCode dataInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.DATA_REGISTER);
+		CommonCode externalDataInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.EXTERNAL_DATA_REGISTER);
 		
 //		if(this.data_insert_type == null || "".equals(this.data_insert_type)) {
 //			return "";
