@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.IssueComment;
+import com.gaia3d.domain.IssueFile;
+import com.gaia3d.domain.IssuePeople;
 
 /**
  * 이슈
@@ -71,17 +73,23 @@ public interface IssueMapper {
 	int insertIssueComment(IssueComment issueComment);
 	
 	/**
+	 * 이슈 파일 등록
+	 * @param issueFile
+	 */
+	int insertIssueFile(IssueFile issueFile);
+	
+	/**
+	 * 이슈 관계자 등록
+	 * @param issuePeople
+	 */
+	int insertIssuePeople(IssuePeople issuePeople);
+	
+	/**
 	 * 이슈 수정
 	 * @param issue
 	 * @return
 	 */
 	int updateIssue(Issue issue);
-	
-	/**
-	 * 이슈 조회 건수를 +1
-	 * @param issue_id
-	 */
-	void updateIssueViewCount(Long issue_id);
 	
 	/**
 	 * 이슈 상세 수정
@@ -106,7 +114,7 @@ public interface IssueMapper {
 	
 	/**
 	 * 이슈 상세 삭제
-	 * @param issue_id
+	 * @param issue_detail_id
 	 * @return
 	 */
 	int deleteIssueDetail(Long issue_id);

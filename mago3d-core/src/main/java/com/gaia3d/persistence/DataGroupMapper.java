@@ -28,6 +28,13 @@ public interface DataGroupMapper {
 	 * @return
 	 */
 	List<DataGroup> getListDataGroup(DataGroup dataGroup);
+	
+	/**
+	 * depth별 Data 그룹 목록
+	 * @param depth
+	 * @return
+	 */
+	List<DataGroup> getListDataGroupByDepth(Integer depth);
 
 	/**
 	 * Data 그룹 조회

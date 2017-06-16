@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.IssueComment;
+import com.gaia3d.domain.IssueFile;
+import com.gaia3d.domain.IssuePeople;
 import com.gaia3d.persistence.IssueMapper;
 import com.gaia3d.service.IssueService;
 
@@ -59,9 +61,7 @@ public class IssueServiceImpl implements IssueService {
 	 */
 	@Transactional
 	public Issue getIssue(Long issue_id) {
-		Issue issue = issueMapper.getIssue(issue_id);
-		issueMapper.updateIssueViewCount(issue_id);
-		return issue;
+		return issueMapper.getIssue(issue_id);
 	}
 	
 	/**
@@ -77,12 +77,46 @@ public class IssueServiceImpl implements IssueService {
 	/**
 	 * issue 등록
 	 * @param issue
+	 * @param issueFile
 	 * @return
 	 */
 	@Transactional
-	public int insertIssue(Issue issue) {
+	public int insertIssue(Issue issue, IssueFile issueFile) {
 		issueMapper.insertIssue(issue);
-		return issueMapper.insertIssueDetail(issue);
+		issueMapper.insertIssueDetail(issue);
+		issueFile.setIssue_id(issue.getIssue_id());
+		
+		if(issueFile.getFile_name() != null && !"".equals(issueFile.getFile_name())) {
+			issueMapper.insertIssueFile(issueFile);
+		}
+			
+		// TODO 리팩토링이 필요함
+		String assigneValue = issue.getAssignee();
+		if(assigneValue != null || !"".equals(assigneValue)) {
+			String[] assigneArray = assigneValue.split(",");
+			for(String assigne : assigneArray) {
+				IssuePeople issuePeople = new IssuePeople();
+				issuePeople.setIssue_id(issue.getIssue_id());
+				issuePeople.setRole_type(IssuePeople.ASSIGNEE);
+				issuePeople.setUser_id(assigne);
+				
+				issueMapper.insertIssuePeople(issuePeople);
+			}
+		}
+		String reporterValue = issue.getReporter();
+		if(reporterValue != null || !"".equals(reporterValue)) {
+			String[] reporterArray = reporterValue.split(",");
+			for(String reporter : reporterArray) {
+				IssuePeople issuePeople = new IssuePeople();
+				issuePeople.setIssue_id(issue.getIssue_id());
+				issuePeople.setRole_type(IssuePeople.REPORTER);
+				issuePeople.setUser_id(reporter);
+				
+				issueMapper.insertIssuePeople(issuePeople);
+			}
+		}
+		
+		return 1;
 	}
 	
 	/**

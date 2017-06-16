@@ -203,7 +203,7 @@
 			<if test="roll != null and roll != ''">
 			roll = #{roll},
 			</if>
-			update_date = #{update_date}
+			update_date = now()
 		WHERE data_id = #{data_id}
 	</update>
 	

@@ -23,4 +23,6 @@ public class PropertiesConfig {
 	private String excelUserUploadDir;
 	private String excelDataUploadDir;
 	private String excelSampleUploadDir;
+	
+	private String issueDataUploadDir;
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.IssueComment;
+import com.gaia3d.domain.IssueFile;
 
 /**
  * issue
@@ -50,9 +51,10 @@ public interface IssueService {
 	/**
 	 * issue 등록
 	 * @param issue
+	 * @param issueFile
 	 * @return
 	 */
-	int insertIssue(Issue issue);
+	int insertIssue(Issue issue, IssueFile issueFile);
 	
 	/**
 	 * issue Comment 등록

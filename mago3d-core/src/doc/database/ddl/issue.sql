@@ -18,8 +18,8 @@ create table issue (
 	
 	data_key 					varchar(128) 		NOT NULL,
 	location 					geography(Point,4326),
-	latitude 					varchar(30) 		NOT NULL,
-	longitude 					varchar(30) 		NOT NULL,
+	latitude 					varchar(30),
+	longitude 					varchar(30),
 	
 	year						char(4)				default to_char(now(), 'YYYY'),
 	month						varchar(2)			default to_char(now(), 'MM'),
@@ -30,6 +30,7 @@ create table issue (
 	minute						varchar(2)			default to_char(now(), 'MI'),
 	
 	client_ip					varchar(45)			not null,
+	update_date					timestamp without time zone,
 	insert_date					timestamp without time zone			default now(),
 	constraint issue_pk primary key (issue_id)	
 );
@@ -57,6 +58,7 @@ comment on column access_log.week is '이번달 몇주';
 comment on column access_log.hour is '시간';
 comment on column access_log.minute is '분';
 
+comment on column issue.update_date is '수정일';
 comment on column issue.insert_date is '등록일';
 
 -- 이슈 상세

@@ -35,9 +35,13 @@ public class FileUtil {
 	public static final String EXCEL_USER_UPLOAD = "EXCEL_USER_UPLOAD";
 	// Data 일괄 등록
 	public static final String EXCEL_DATA_UPLOAD = "EXCEL_DATA_UPLOAD";
+	// Issue 등록
+	public static final String ISSUE_DATA_UPLOAD = "ISSUE_DATA_UPLOAD";
 	
 	// 사용자 일괄 등록의 경우 허용 문서 타입
 	public static final String[] FILE_TYPE_EXCEL = {"xlsx", "xls"};
+	// issue 등록의 경우 허용 문서 타입
+	public static final String[] ISSUE_TYPE_EXCEL = {"png", "jpg", "jpeg", "gif", "tiff", "xlsx", "xls", "docx", "doc", "pptx", "ppt"};
 	// 엑셀 처리 기본 프로그램
 	public static final String EXCEL_EXTENSION_XLS = "xls";
 	// JEXCEL이 2007버전(xlsx) 을 읽지 못하기 때문에 POI를 병행해서 사용
@@ -55,7 +59,7 @@ public class FileUtil {
 	 * @param directory
 	 * @return
 	 */
-	public static FileInfo uploadExcel(MultipartFile multipartFile, String jobType, String directory) {
+	public static FileInfo upload(MultipartFile multipartFile, String jobType, String directory) {
 	
 		FileInfo fileInfo = new FileInfo();
 		fileInfo.setJob_type(jobType);
@@ -112,9 +116,8 @@ public class FileUtil {
 		if(EXCEL_USER_UPLOAD.equals(fileInfo.getJob_type()) || EXCEL_DATA_UPLOAD.equals(fileInfo.getJob_type())) {
 			extList = Arrays.asList(FILE_TYPE_EXCEL);
 		} else {
-			extList = new ArrayList<String>();
+			extList =  Arrays.asList(ISSUE_TYPE_EXCEL);
 		}
-		
 		if(!extList.contains(extension)) {
 			log.info("@@ extList = {}, extension = {}", extList, extension);
 			fileInfo.setError_code("fileinfo.ext.invalid");

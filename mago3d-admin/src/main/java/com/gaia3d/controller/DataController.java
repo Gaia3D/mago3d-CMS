@@ -269,14 +269,14 @@ public class DataController {
 			if(errorcode != null) {
 				result = errorcode;
 				jSONData.put("result", result);
-				return jSONData.toString();
+				return gson.toJson(jSONData);
 			}
 			
 			int count = dataService.getDuplicationKeyCount(dataInfo.getData_key());
 			if(count > 0) {
 				result = "data.key.duplication";
 				jSONData.put("result", result);
-				return jSONData.toString();
+				return gson.toJson(jSONData);
 			}
 
 			dataInfo.setLocation("POINT(" + dataInfo.getLongitude() + " " + dataInfo.getLatitude() + ")");
@@ -317,7 +317,7 @@ public class DataController {
 					data_all_id == null || data_all_id.length < 1) {
 				result = "input.invalid";
 				jSONData.put("result", result);
-				return jSONData.toString();
+				return gson.toJson(jSONData);
 			}
 			
 			DataInfo dataInfo = new DataInfo();
@@ -375,7 +375,7 @@ public class DataController {
 			if(dataInfo.getData_key() == null || "".equals(dataInfo.getData_key())) {
 				result = "data.key.empty";
 				jSONData.put("result", result);
-				return jSONData.toString();
+				return gson.toJson(jSONData);
 			}
 			
 			int count = dataService.getDuplicationKeyCount(dataInfo.getData_key());
@@ -461,7 +461,7 @@ public class DataController {
 			if(errorcode != null) {
 				result = errorcode;
 				jSONData.put("result", result);
-				return jSONData.toString();
+				return gson.toJson(jSONData);
 			}
 						
 			dataService.updateData(dataInfo);
@@ -496,7 +496,7 @@ public class DataController {
 		try {
 			if(check_ids.length() <= 0) {
 				jSONData.put("result", "check.value.required");
-				return jSONData.toString();
+				return gson.toJson(jSONData);
 			}
 			List<String> dataList = dataService.updateDataStatus(business_type, status_value, check_ids);
 			if(!dataList.isEmpty()) {
@@ -559,7 +559,7 @@ public class DataController {
 		try {
 			if(check_ids.length() <= 0) {
 				jSONData.put("result", "check.value.required");
-				return jSONData.toString();
+				return gson.toJson(jSONData);
 			}
 			
 			dataService.deleteDataList(check_ids);
@@ -597,7 +597,7 @@ public class DataController {
 					data_select_id == null || data_select_id.length < 1) {
 				result = "input.invalid";
 				jSONData.put("result", result);
-				return jSONData.toString();
+				return gson.toJson(jSONData);
 			}
 			
 			DataInfo dataInfo = new DataInfo();
@@ -651,7 +651,7 @@ public class DataController {
 		String result = "success";
 		try {
 			MultipartFile multipartFile = request.getFile("file_name");
-			FileInfo fileInfo = FileUtil.uploadExcel(multipartFile, FileUtil.EXCEL_DATA_UPLOAD, propertiesConfig.getExcelDataUploadDir());
+			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.EXCEL_DATA_UPLOAD, propertiesConfig.getExcelDataUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				jSONData.put("result", fileInfo.getError_code());
 				return gson.toJson(jSONData);

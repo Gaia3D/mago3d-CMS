@@ -43,7 +43,7 @@
 									<div>
 										<span class="banner-title">신규 이슈</span>
 										<span id="userOTPCountSpinner" class="banner-number"></span>
-										<span class="banner-unit"> 0 개</span>
+										<span class="banner-unit"> ${issueTotalCount } 개</span>
 									</div>
 								</div>
 							</div>

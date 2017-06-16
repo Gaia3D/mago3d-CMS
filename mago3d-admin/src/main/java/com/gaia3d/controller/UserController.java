@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.FileInfo;
@@ -64,10 +65,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/user/")
 public class UserController {
 	
-	// 사용자 일괄 등록
-	private String EXCEL_USER_UPLOAD_DIR;
-	// 사용자 샘플 다운로드
-	private String EXCEL_SAMPLE_DIR;
+	@Autowired
+	private PropertiesConfig propertiesConfig;
 	
 	@Resource(name="userValidator")
 	private UserValidator userValidator;
@@ -901,7 +900,7 @@ public class UserController {
 		String result = "success";
 		try {
 			MultipartFile multipartFile = request.getFile("file_name");
-			FileInfo fileInfo = FileUtil.uploadExcel(multipartFile, FileUtil.EXCEL_USER_UPLOAD, EXCEL_USER_UPLOAD_DIR);
+			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.EXCEL_USER_UPLOAD, propertiesConfig.getExcelUserUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				jSONObject.put("result", fileInfo.getError_code());
 				return jSONObject.toString();
@@ -1067,12 +1066,12 @@ public class UserController {
 	@ResponseBody
 	public void downloadExcelUserSample(HttpServletRequest request, HttpServletResponse response, Model model) {
 		
-		File rootDirectory = new File(EXCEL_SAMPLE_DIR);
+		File rootDirectory = new File(propertiesConfig.getExcelSampleUploadDir());
 		if(!rootDirectory.exists()) {
 			rootDirectory.mkdir();
 		}
 				
-		File file = new File(EXCEL_SAMPLE_DIR + "sample.xlsx");
+		File file = new File(propertiesConfig.getExcelSampleUploadDir() + "sample.xlsx");
 		if(file.exists()) {
 			String mimetype = "application/x-msdownload";
 			response.setContentType(mimetype);

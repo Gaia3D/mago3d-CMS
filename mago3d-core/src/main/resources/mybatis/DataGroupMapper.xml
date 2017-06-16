@@ -31,6 +31,12 @@
 		ORDER BY path
 	</select>
 	
+	<!-- depth별 Data 그룹 목록 -->
+	<select id="getListDataGroupByDepth" parameterType="int" resultType="dataGroup">
+		/* getListDataGroupByDepth */
+		SELECT * FROM data_group WHERE depth = #{depth} ORDER BY view_order, data_group_id
+	</select>
+	
 	<!-- Data 그룹 -->
 	<select id="getDataGroup" parameterType="long" resultType="dataGroup">
 		/* getDataGroup */

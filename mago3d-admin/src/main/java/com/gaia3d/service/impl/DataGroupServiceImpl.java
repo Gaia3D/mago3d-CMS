@@ -32,6 +32,16 @@ public class DataGroupServiceImpl implements DataGroupService {
 	public List<DataGroup> getListDataGroup(DataGroup dataGroup) {
 		return dataGroupMapper.getListDataGroup(dataGroup);
 	}
+	
+	/**
+	 * depth별 Data 그룹 목록
+	 * @param depth
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public List<DataGroup> getListDataGroupByDepth(Integer depth) {
+		return dataGroupMapper.getListDataGroupByDepth(depth);
+	}
 
 	/**
 	 * Data 그룹 조회
