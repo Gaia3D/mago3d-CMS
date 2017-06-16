@@ -182,12 +182,12 @@
 			return false;
 		}
 		if ($("#start_hour").val() > 23) {
-			alert("게시 시작시간을 올바르게 설정하여 주십시오.");
+			alert("issue 시작시간을 올바르게 설정하여 주십시오.");
 			$("#start_hour").focus();
 			return false;
 		}
 		if ($("#start_minute").val() > 59) {
-			alert("게시 시작시간을 올바르게 설정하여 주십시오.");
+			alert("issue 시작시간을 올바르게 설정하여 주십시오.");
 			$("#start_minute").focus();
 			return false;
 		}

@@ -1,5 +1,7 @@
 package com.gaia3d.domain;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 /**
@@ -49,6 +51,8 @@ public class Issue {
 	private String reporter;
 	// 첨부파일
 	private String file_name;
+	
+	private MultipartFile multipartFile;
 	
 	/****** validator ********/
 	private String method_mode;

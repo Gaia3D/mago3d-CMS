@@ -128,10 +128,7 @@ public class IssueController {
 	 * @return
 	 */
 	@PostMapping(value = "insert-issue.do")
-	public String ajaxInsertIssue(MultipartHttpServletRequest request, BindingResult bindingResult) {
-		
-		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+	public String ajaxInsertIssue(MultipartHttpServletRequest request, Issue issue, BindingResult bindingResult, Model model) {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 		
@@ -141,6 +138,18 @@ public class IssueController {
 			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.ISSUE_DATA_UPLOAD, propertiesConfig.getExcelDataUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				bindingResult.rejectValue("file_name", fileInfo.getError_code());
+				
+				List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
+				@SuppressWarnings("unchecked")
+				List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
+				@SuppressWarnings("unchecked")
+				List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
+				
+				model.addAttribute(issue);
+				model.addAttribute("dataGroupList", dataGroupList);
+				model.addAttribute("issuePriorityList", issuePriorityList);
+				model.addAttribute("issueTypeList", issueTypeList);
+				
 				return "/issue/input-issue";
 			}
 			
@@ -151,21 +160,9 @@ public class IssueController {
 			issueFile.setFile_ext(fileInfo.getFile_ext());
 		}
 		
-		Issue issue = new Issue();
-		issue.setData_group_id(Long.valueOf((String)request.getParameter("data_group_id")));
+		
 		issue.setUser_id(userSession.getUser_id());
 		issue.setUser_name(userSession.getUser_name());
-		issue.setData_group_id(Long.valueOf((String)request.getParameter("data_group_id")));
-		issue.setPriority((String)request.getParameter("priority"));
-		issue.setIssue_type((String)request.getParameter("issue_type"));
-		issue.setData_key((String)request.getParameter("data_key"));
-		issue.setLatitude((String)request.getParameter("latitude"));
-		issue.setLongitude((String)request.getParameter("longitude"));
-		issue.setTitle((String)request.getParameter("title"));
-		issue.setDue_date((String)request.getParameter("due_to"));
-		issue.setAssignee((String)request.getParameter("assignee"));
-		issue.setReporter((String)request.getParameter("reporter"));
-		issue.setContents((String)request.getParameter("contents"));
 		
 		issue.setMethod_mode("insert");
 		String errorcode = issue.validate();
@@ -176,6 +173,18 @@ public class IssueController {
 			} else if("contents.invalid".equals(errorcode)) {
 				bindingResult.rejectValue("contents", errorcode);
 			}
+			
+			List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
+			@SuppressWarnings("unchecked")
+			List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
+			@SuppressWarnings("unchecked")
+			List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
+			
+			model.addAttribute(issue);
+			model.addAttribute("dataGroupList", dataGroupList);
+			model.addAttribute("issuePriorityList", issuePriorityList);
+			model.addAttribute("issueTypeList", issueTypeList);
+			
 			return "/issue/input-issue";
 		}
 		
@@ -183,9 +192,10 @@ public class IssueController {
 		String client_ip = WebUtil.getClientIp(request);
 		issue.setClient_ip(client_ip);
 		log.info("@@@ issue = {}", issue);
+		
 		issueService.insertIssue(issue, issueFile);
 		
-		return "redirect:/issue/list-issue.do";
+		return "redirect:/issue/result-issue.do?issue_id=" + issue.getIssue_id() + "&method_mode=insert";
 	}
 	
 //	/**

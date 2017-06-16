@@ -18,6 +18,7 @@ import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserGroup;
 import com.gaia3d.domain.UserGroupMenu;
 import com.gaia3d.service.CommonCodeService;
+import com.gaia3d.service.DataGroupService;
 import com.gaia3d.service.MenuService;
 import com.gaia3d.service.PolicyService;
 import com.gaia3d.service.UserGroupService;
@@ -33,6 +34,8 @@ public class CacheConfig {
 	@Autowired
 	private PropertiesConfig propertiesConfig;
 
+	@Autowired
+	private DataGroupService dataGroupService;
 //	@Autowired
 //	private LicenseService licenseService;
 	@Autowired
@@ -65,6 +68,10 @@ public class CacheConfig {
 		// 서버 그룹 캐시 갱신, 확장용
 		// loadServerGroup();
 		// 공통 코드 캐시 갱신
+		
+		// 데이터를 그룹별로 로딩
+		data(CacheType.SELF);
+		
 		commonCode(CacheType.SELF);
 
 		log.info("**************** Admin 캐시 초기화 종료 *****************");
@@ -126,6 +133,16 @@ public class CacheConfig {
 		if(cacheType == CacheType.BROADCAST) {
 			
 		}
+	}
+	
+	/**
+	 * @param cacheType
+	 */
+	private void data(CacheType cacheType) {
+		// 1 depth 데이터를 전부 읽어 옴
+//		dataGroupService.get
+		
+		// 2 data
 	}
 
 	private void commonCode(CacheType cacheType) {
