@@ -171,9 +171,24 @@
 	});
 	
 	function check() {
+		if ($("#data_key").val() == "") {
+			alert("Data Key를 입력하여 주십시오.");
+			$("#data_key").focus();
+			return false;
+		}
 		if ($("#title").val() == "") {
 			alert("제목을 입력하여 주십시오.");
 			$("#title").focus();
+			return false;
+		}
+		if ($("#assignee").val() == "") {
+			alert("대리자를 입력하여 주십시오.");
+			$("#assignee").focus();
+			return false;
+		}
+		if ($("#reporter").val() == "") {
+			alert("보고 해야 하는 사람을 입력하여 주십시오.");
+			$("#reporter").focus();
 			return false;
 		}
 		if ($("#contents").val() == "") {

@@ -366,23 +366,70 @@
 			$("#data_key").focus();
 			return false;
 		}
-		if ($("#data_group_id").val() == "") {
-			alert(JS_MESSAGE["data.group.id.empty"]);
-			$("#data_group_id").focus();
-			return false;
-		}
-		if ($("#data_name").val() == "") {
-			alert(JS_MESSAGE["data.name.empty"]);
-			$("#data_name").focus();
-			return false;
-		}
-		
-		
 		if($("#duplication_value").val() == null || $("#duplication_value").val() == "") {
 			alert("Key 중복확인을 해주십시오.");
 			return false;
 		} else if($("#duplication_value").val() == "1") {
 			alert("사용중인 Key 입니다. 다른 Key를 선택해 주십시오.");
+			return false;
+		}
+		if ($("#data_group_id").val() == "") {
+			alert(JS_MESSAGE["data.group.id.empty"]);
+			$("#data_group_id").focus();
+			return false;
+		}
+		if ($("#latitude").val() == "") {
+			alert(JS_MESSAGE["data.latitude.empty"]);
+			$("#latitude").focus();
+			return false;
+		}
+		if (!isNumber($("#latitude").val())) {
+			$("#latitude").focus();
+			return false;
+		}
+		if ($("#longitude").val() == "") {
+			alert(JS_MESSAGE["data.longitude.empty"]);
+			$("#longitude").focus();
+			return false;
+		}
+		if (!isNumber($("#longitude").val())) {
+			$("#logitude").focus();
+			return false;
+		}
+		if ($("#height").val() == "") {
+			alert(JS_MESSAGE["data.height.empty"]);
+			$("#height").focus();
+			return false;
+		}
+		if (!isNumber($("#height").val())) {
+			$("#height").focus();
+			return false;
+		}
+		if ($("#heading").val() == "") {
+			alert(JS_MESSAGE["data.heading.empty"]);
+			$("#heading").focus();
+			return false;
+		}
+		if (!isNumber($("#heading").val())) {
+			$("#heading").focus();
+			return false;
+		}
+		if($("#pitch").val() == "") {
+			alert(JS_MESSAGE["data.pitch.empty"]);
+			$("#pitch").focus();
+			return false;
+		}
+		if (!isNumber($("#pitch").val())) {
+			$("#pitch").focus();
+			return false;
+		}
+		if($("#roll").val() == "") {
+			alert(JS_MESSAGE["data.roll.empty"]);
+			$("#roll").focus();
+			return false;
+		}
+		if (!isNumber($("#roll").val())) {
+			$("#roll").focus();
 			return false;
 		}
 	}
