@@ -367,10 +367,10 @@
 			return false;
 		}
 		if($("#duplication_value").val() == null || $("#duplication_value").val() == "") {
-			alert("Key 중복확인을 해주십시오.");
+			alert(JS_MESSAGE["data.key.duplication_value.check"]);
 			return false;
 		} else if($("#duplication_value").val() == "1") {
-			alert("사용중인 Key 입니다. 다른 Key를 선택해 주십시오.");
+			alert(JS_MESSAGE["data.key.duplication_value.already"]);
 			return false;
 		}
 		if ($("#data_group_id").val() == "") {
