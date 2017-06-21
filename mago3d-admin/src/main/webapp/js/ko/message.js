@@ -61,13 +61,32 @@ JS_MESSAGE["policy.site.update"] = "사이트 정보를 수정 하였습니다."
 JS_MESSAGE["policy.os.update"] = "OS 설정 정보를 수정 하였습니다.";
 JS_MESSAGE["policy.backoffice.update"] = "Back Office 정보를 수정 하였습니다.";
 JS_MESSAGE["policy.solution.update"] = "제품 정보를 수정 하였습니다.";
-
-JS_MESSAGE["data.key.empty"] = "아이디를 입력하여 주십시오.";
-JS_MESSAGE["data.key.duplication"] = "사용중인 아이디 입니다. 다른 아이디를 선택해 주십시오.";
-
 JS_MESSAGE["policy.content.invalid"] = "필수 입력값이 유효하지 않습니다.";
 
 // 데이터
+JS_MESSAGE["data.key.empty"] = "Key를 입력하여 주십시오.";
+JS_MESSAGE["data.key.duplication_value.check"] = "Key 중복확인을 해주십시오."
+JS_MESSAGE["data.key.duplication_value.already"] = "사용중인 Key 입니다. 다른 Key를 선택해 주십시오.";
+JS_MESSAGE["data.group.id.empty"] = "데이터 그룹을 선택하여 주십시오.";
+JS_MESSAGE["data.latitude.empty"] = "위도를 입력하여 주십시오.";
+JS_MESSAGE["data.longitude.empty"] = "경도를  입력하여 주십시오.";
+JS_MESSAGE["data.height.empty"] = "높이를  입력하여 주십시오.";
+JS_MESSAGE["data.heading.empty"] = "Heading을  입력하여 주십시오.";
+JS_MESSAGE["data.longitude.empty"] = "경도를  입력하여 주십시오.";
+JS_MESSAGE["data.pitch.empty"] = "Pitch를 입력하여 주십시오.";
+JS_MESSAGE["data.roll.empty"] = "Roll을 입력하여 주십시오.";
+JS_MESSAGE["data.key.duplication"] = "사용중인 아이디 입니다. 다른 아이디를 선택해 주십시오.";
 JS_MESSAGE["data.key.enable"] = "사용 가능한 Key 입니다.";
 JS_MESSAGE["data.insert"] = "데이터를 등록 하였습니다.";
 JS_MESSAGE["user.info.update"] = "사용자 정보를 수정 하였습니다.";
+
+// 이슈
+JS_MESSAGE["issue.datagroup.empty"] = "데이터 그룹을 선택하여 주십시오.";
+JS_MESSAGE["issue.issuetype.empty"] = "Issue Type을 선택하여 주십시오.";
+JS_MESSAGE["issue.datakey.empty"] = "Data Key를 입력하여 주십시오.";
+JS_MESSAGE["issue.title.empty"] = "제목을 입력하여 주십시오.";
+JS_MESSAGE["issue.assignee.empty"] = "대리자를 입력하여 주십시오";
+JS_MESSAGE["issue.reporter.empty"] = "보고 해야 하는 사람을 입력하여 주십시오.";
+JS_MESSAGE["issue.contents.empty"] = "내용을 입력하여 주십시오.";
+JS_MESSAGE["issue.start_hour.proper"] = "issue 시작시간을 올바르게 설정하여 주십시오.";
+JS_MESSAGE["issue.start_minute.proper"] = "issue 시작시간을 올바르게 설정하여 주십시오.";

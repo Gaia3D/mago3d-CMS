@@ -171,23 +171,38 @@
 	});
 	
 	function check() {
+		if ($("#data_key").val() == "") {
+			alert(JS_MESSAGE["issue.datakey.empty"]);
+			$("#data_key").focus();
+			return false;
+		}
 		if ($("#title").val() == "") {
-			alert("제목을 입력하여 주십시오.");
+			alert(JS_MESSAGE["issue.title.empty"]);
 			$("#title").focus();
 			return false;
 		}
+		if ($("#assignee").val() == "") {
+			alert(JS_MESSAGE["issue.assignee.empty"]);
+			$("#assignee").focus();
+			return false;
+		}
+		if ($("#reporter").val() == "") {
+			alert(JS_MESSAGE["issue.reporter.empty"]);
+			$("#reporter").focus();
+			return false;
+		}
 		if ($("#contents").val() == "") {
-			alert("내용을 입력하여 주십시오.");
+			alert(JS_MESSAGE["issue.contents.empty"]);
 			$("#contents").focus();
 			return false;
 		}
 		if ($("#start_hour").val() > 23) {
-			alert("issue 시작시간을 올바르게 설정하여 주십시오.");
+			alert(JS_MEESAGE["issue.start_hour.proper"]);
 			$("#start_hour").focus();
 			return false;
 		}
 		if ($("#start_minute").val() > 59) {
-			alert("issue 시작시간을 올바르게 설정하여 주십시오.");
+			alert(JS_MESSAGE["issue.start_minute.proper"]);
 			$("#start_minute").focus();
 			return false;
 		}
