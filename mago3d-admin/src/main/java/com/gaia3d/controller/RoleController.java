@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,7 +71,7 @@ public class RoleController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "input-role.do", method = RequestMethod.GET)
+	@GetMapping(value = "input-role.do")
 	public String inputRole(Model model) {
 		Role role = new Role();
 		role.setMethod_mode("insert");
@@ -84,7 +86,7 @@ public class RoleController {
 	 * @param userDevice
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-insert-role.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-insert-role.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxInsertRole(HttpServletRequest request, Role role) {
 		Gson gson = new Gson();
@@ -140,7 +142,7 @@ public class RoleController {
 	 * @param userDevice
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-role.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-role.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdateRole(HttpServletRequest request, Role role) {
 		Gson gson = new Gson();
@@ -173,7 +175,7 @@ public class RoleController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-delete-role.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-delete-role.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxDeleteRole(HttpServletRequest request, @RequestParam("role_id") String role_id) {
 		Gson gson = new Gson();
@@ -204,7 +206,7 @@ public class RoleController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "result-role.do", method = RequestMethod.GET)
+	@GetMapping(value = "result-role.do")
 	public String resultRole(HttpServletRequest request, @RequestParam("method_mode") String method_mode, Model model) {
 		
 		if("insert".equals(method_mode) || "update".equals(method_mode)) {
@@ -245,7 +247,7 @@ public class RoleController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-user-group-role.do")
+	@RequestMapping(value = "ajax-list-user-group-role.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxListUserGroupRole(HttpServletRequest request, @RequestParam("user_group_id") Long user_group_id, @RequestParam(defaultValue="1") String pageNo) {
 		Gson gson = new Gson();
@@ -283,7 +285,7 @@ public class RoleController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-account-group-role.do")
+	@RequestMapping(value = "ajax-list-account-group-role.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxListAccountGroupRole(HttpServletRequest request, @RequestParam("account_group_id") Long account_group_id) {
 		Gson gson = new Gson();
@@ -306,7 +308,7 @@ public class RoleController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-except-user-group-role-for-update.do")
+	@RequestMapping(value = "ajax-list-except-user-group-role-for-update.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxListExceptUserGroupRoleForUpdate(HttpServletRequest request, UserGroupRole userGroupRole, @RequestParam(defaultValue="1") String pageNo) {
 		Gson gson = new Gson();
@@ -341,7 +343,7 @@ public class RoleController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-user-group-role-for-update.do")
+	@RequestMapping(value = "ajax-list-user-group-role-for-update.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxListUserGroupRoleForUpdate(HttpServletRequest request, UserGroupRole userGroupRole, @RequestParam(defaultValue="1") String pageNo) {
 		Gson gson = new Gson();
@@ -379,7 +381,7 @@ public class RoleController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-insert-user-group-role.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-insert-user-group-role.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxInsertUserGroupRole(HttpServletRequest request,
 			@RequestParam("user_group_id") Long user_group_id,
@@ -427,7 +429,7 @@ public class RoleController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-delete-user-group-role.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-delete-user-group-role.do", produces = "application/json")
 	@ResponseBody
 	public String ajaxDeleteUserGroupRole(HttpServletRequest request,
 			@RequestParam("user_group_id") Long user_group_id,

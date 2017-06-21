@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,7 +43,7 @@ public class DataGroupController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "list-data-group.do", method = RequestMethod.GET)
+	@GetMapping(value = "list-data-group.do")
 	public String dataGroupList(Model model) {
 		return "/data/list-data-group";
 	}

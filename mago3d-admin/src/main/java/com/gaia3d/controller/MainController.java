@@ -275,7 +275,7 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-user-widget.do", method = RequestMethod.GET)
+	@GetMapping(value = "ajax-user-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUserWidget(HttpServletRequest request) {
 		Gson gson = new Gson();
@@ -319,7 +319,7 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-schedule-log-list-widget.do", method = RequestMethod.GET)
+	@GetMapping(value = "ajax-schedule-log-list-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxScheduleLogListWidget(HttpServletRequest request) {
 		
@@ -358,7 +358,7 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-dbcp-widget.do", method = RequestMethod.GET)
+	@GetMapping(value = "ajax-dbcp-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxDbcpWidget(HttpServletRequest request) {
 		
@@ -398,7 +398,7 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-access-log-widget.do", method = RequestMethod.GET)
+	@GetMapping(value = "ajax-access-log-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxAccessLogWidget(HttpServletRequest request) {
 		

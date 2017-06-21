@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -54,7 +56,7 @@ public class CommonCodeController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "input-code.do", method = RequestMethod.GET)
+	@GetMapping(value = "input-code.do")
 	public String inputCode(Model model) {
 		CommonCode commonCode = new CommonCode();
 		
@@ -68,7 +70,7 @@ public class CommonCodeController {
 	 * @param userDevice
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-insert-code.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-insert-code.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxInsertCode(HttpServletRequest request, CommonCode commonCode) {
 		Gson gson = new Gson();
@@ -114,7 +116,7 @@ public class CommonCodeController {
 	 * @param userDevice
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-code.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-code.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdateCode(HttpServletRequest request, CommonCode commonCode) {
 		Gson gson = new Gson();
@@ -148,7 +150,7 @@ public class CommonCodeController {
 	 * @param code_key
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-delete-code.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-delete-code.do", produces ="application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxDeleteCode(HttpServletRequest request, CommonCode commonCode) {
 		Gson gson = new Gson();

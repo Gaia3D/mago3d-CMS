@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -79,7 +81,7 @@ public class WidgetController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "modify-widget.do", method = RequestMethod.GET)
+	@GetMapping(value = "modify-widget.do")
 	public String modifyWidget(HttpServletRequest request, Model model) {
 		
 		Widget widget = new Widget();
@@ -154,7 +156,7 @@ public class WidgetController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-widget.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdateWidget(HttpServletRequest request, Widget widget) {
 		Gson gson = new Gson();
@@ -198,7 +200,7 @@ public class WidgetController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-access-log-widget.do", method = RequestMethod.GET)
+	@GetMapping(value = "ajax-access-log-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxAccessLogWidget(HttpServletRequest request) {
 		Gson gson = new Gson();
@@ -236,7 +238,7 @@ public class WidgetController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-schedule-log-list-widget.do", method = RequestMethod.GET)
+	@GetMapping(value = "ajax-schedule-log-list-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxScheduleLogListWidget(HttpServletRequest request) {
 		Gson gson = new Gson();
