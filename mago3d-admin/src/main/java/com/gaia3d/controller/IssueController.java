@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -102,7 +103,7 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "input-issue.do", method = RequestMethod.GET)
+	@GetMapping(value = "input-issue.do")
 	public String inputIssue(Model model) {
 		
 		List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
@@ -279,7 +280,7 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "detail-issue.do", method = RequestMethod.GET)
+	@GetMapping(value = "detail-issue.do")
 	public String detailIssue(@RequestParam("issue_id") String issue_id, HttpServletRequest request, Model model) {
 		
 		String listParameters = getListParameters(request);
@@ -300,7 +301,7 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "modify-issue.do", method = RequestMethod.GET)
+	@GetMapping(value = "modify-issue.do")
 	public String modifyIssue(HttpServletRequest request, @RequestParam("issue_id") String issue_id, Model model) {
 		String listParameters = getListParameters(request);
 		
@@ -321,7 +322,7 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-issue.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-issue.do", produces="application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdateIssue(Issue issue) {
 		
@@ -356,7 +357,7 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "delete-issue.do", method = RequestMethod.GET)
+	@GetMapping(value = "delete-issue.do")
 	public String deleteIssue(@RequestParam("issue_id") String issue_id, Model model) {
 		
 		issueService.deleteIssue(Long.valueOf(issue_id));
@@ -371,7 +372,7 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "result-issue.do", method = RequestMethod.GET)
+	@GetMapping(value = "result-issue.do")
 	public String resultIssue(HttpServletRequest request, @RequestParam("method_mode") String method_mode, Model model) {
 		
 		if("insert".equals(method_mode) || "update".equals(method_mode)) {
@@ -393,7 +394,7 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-insert-issue-comment.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-insert-issue-comment.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxInsertIssueComment(HttpServletRequest request, Issue issue) {
 		Gson gson = new Gson();
@@ -439,7 +440,7 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-delete-issue-comment.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-delete-issue-comment.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxDeleteIssueComment(HttpServletRequest request, Long issue_comment_id) {
 		Gson gson = new Gson();

@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.digester.annotations.rules.BeanPropertySetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -300,7 +301,7 @@ public class DataController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-insert-data-group-data.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-insert-data-group-data.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxInsertDataGroupData(HttpServletRequest request,
 			@RequestParam("data_group_id") Long data_group_id,
@@ -420,7 +421,7 @@ public class DataController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "modify-data.do", method = RequestMethod.GET)
+	@GetMapping(value = "modify-data.do", produces = "application/json; charset=utf8")
 	public String modifyData(@RequestParam("data_id") String data_id, HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo, Model model) {
 		
 		String listParameters = getListParameters(request);
@@ -448,7 +449,7 @@ public class DataController {
 	 * @param dataInfo
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-data-info.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-data-info.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdateDataInfo(HttpServletRequest request, DataInfo dataInfo) {
 		Gson gson = new Gson();
@@ -481,7 +482,7 @@ public class DataController {
 	 * @param dataInfo
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-data-status.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-data-status.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdateDataStatus(	HttpServletRequest request, 
 										@RequestParam("check_ids") String check_ids, 
@@ -532,7 +533,7 @@ public class DataController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "delete-data.do", method = RequestMethod.GET)
+	@GetMapping(value = "delete-data.do")
 	public String deleteData(@RequestParam("data_id") String data_id, Model model) {
 		
 		// validation 체크 해야 함
@@ -548,7 +549,7 @@ public class DataController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-delete-datas.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-delete-datas.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxDeleteDatas(HttpServletRequest request, @RequestParam("check_ids") String check_ids) {
 		
@@ -580,7 +581,7 @@ public class DataController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-delete-data-group-data.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-delete-data-group-data.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxDeleteDataGroupData(HttpServletRequest request,
 			@RequestParam("data_group_id") Long data_group_id,
@@ -627,7 +628,7 @@ public class DataController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "popup-input-excel-data.do", method = RequestMethod.GET)
+	@GetMapping(value = "popup-input-excel-data.do", produces = "application/json; charset=utf8")
 	public String popupInputExcelData(Model model) {
 		
 		FileInfo fileInfo = new FileInfo();
@@ -642,7 +643,7 @@ public class DataController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-insert-excel-data.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-insert-excel-data.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxInsertExcelData(MultipartHttpServletRequest request) {
 		

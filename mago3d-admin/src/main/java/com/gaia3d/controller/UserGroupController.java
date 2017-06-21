@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,7 +45,7 @@ public class UserGroupController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "list-user-group.do", method = RequestMethod.GET)
+	@GetMapping(value = "list-user-group.do")
 	public String userGroupList(Model model) {
 		return "/user/list-user-group";
 	}
@@ -54,7 +55,7 @@ public class UserGroupController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "list-user-group-menu.do", method = RequestMethod.GET)
+	@GetMapping(value = "list-user-group-menu.do")
 	public String listUserGroupMenu(@RequestParam("user_group_id") Long user_group_id, Model model) {
 		UserGroup userGroup = userGroupService.getUserGroup(user_group_id);
 		
@@ -70,7 +71,7 @@ public class UserGroupController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "modify-user-group-menu.do", method = RequestMethod.GET)
+	@GetMapping(value = "modify-user-group-menu.do")
 	public String userGroupMenuModify(@RequestParam("user_group_id") Long user_group_id, Model model) {
 		UserGroup userGroup = userGroupService.getUserGroup(user_group_id);
 		List<UserGroupMenu> userGroupMenuList = userGroupService.getListUserGroupMenu(userGroup);
@@ -92,7 +93,7 @@ public class UserGroupController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "update-user-group-menu.do", method = RequestMethod.POST)
+	@PostMapping(value = "update-user-group-menu.do")
 	public String updateUserGroupMenu( 	HttpServletRequest request,
 										@RequestParam("user_group_id") Long user_group_id,
 										@RequestParam("all_yn") String all_yn,
@@ -124,7 +125,7 @@ public class UserGroupController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "result-user-group-menu.do", method = RequestMethod.GET)
+	@GetMapping(value = "result-user-group-menu.do")
 	public String resultUserGroupMenu(@RequestParam("user_group_id") Long user_group_id, @RequestParam("method_mode") String method_mode, Model model) {
 		
 		UserGroup userGroup = userGroupService.getUserGroup(user_group_id);
