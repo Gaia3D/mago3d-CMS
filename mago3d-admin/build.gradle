@@ -15,7 +15,11 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
 
-version = '0.0.1-SNAPSHOT'
+war {
+	baseName = 'mago3d-admin'
+	version = '0.0.1-SNAPSHOT'
+}
+
 sourceCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
 

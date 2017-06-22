@@ -37,6 +37,15 @@
 		SELECT * FROM data_group WHERE depth = #{depth} ORDER BY view_order, data_group_id
 	</select>
 	
+	<!-- ancestor별 Data 그룹 목록 -->
+	<select id="getListDataGroupByAncestor" parameterType="long" resultType="dataGroup">
+		/* getListDataGroupByAncestor */
+		SELECT * 
+		FROM data_group 
+		WHERE ancestor = #{ancestor} 
+		ORDER BY depth, view_order
+	</select>
+	
 	<!-- Data 그룹 -->
 	<select id="getDataGroup" parameterType="long" resultType="dataGroup">
 		/* getDataGroup */
@@ -95,7 +104,14 @@
 		INSERT INTO data_group(
 			data_group_id, data_group_key, data_group_name, ancestor, parent, depth, view_order, use_yn, description
 		) values(
-			#{data_group_id}, #{data_group_key}, #{data_group_name}, #{ancestor}, #{parent}, #{depth}, #{view_order}, #{use_yn}, #{description}
+			#{data_group_id}, #{data_group_key}, #{data_group_name}, 
+			<if test="depth != null and depth == 1">
+			#{data_group_id},
+			</if>
+			<if test="depth != null and depth != 1">
+			#{ancestor},
+ 			</if>
+			#{parent}, #{depth}, #{view_order}, #{use_yn}, #{description}
 		)
 	</insert>
 	

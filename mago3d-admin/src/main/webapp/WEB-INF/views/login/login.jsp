@@ -7,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Mago3d Admin</title>
+	<title>${sessionSiteName }</title>
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" />
@@ -22,7 +22,7 @@
 		<div class="row">
 			<div class="container">
 				<div class="row">
-					<h1><img src="/images/${lang}/common/logo-mago3d.png" alt="Gaia3d" width="150" height="48" ></h1>
+					<h1 style="padding-bottom:10px; font-size:38px; font-family:Lousianne; color:#573592;">Mago3D</h1>
 <c:if test="${loginForm.error_code ne null && loginForm.error_code ne ''}">
 					<h6 style="padding-left: 10px; color: red;">* 
 	<c:if test="${loginForm.error_code eq 'user.session.empty'}">

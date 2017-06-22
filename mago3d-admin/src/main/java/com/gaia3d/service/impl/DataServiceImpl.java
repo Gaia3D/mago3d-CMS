@@ -57,6 +57,16 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	/**
+	 * Data 목록
+	 * @param dataInfo
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public List<DataInfo> getListDataByDataGroupId(DataInfo dataInfo) {
+		return dataMapper.getListDataByDataGroupId(dataInfo);
+	}
+	
+	/**
 	 * data_group_id를 제외한 Data 목록
 	 * @param dataInfo
 	 * @return

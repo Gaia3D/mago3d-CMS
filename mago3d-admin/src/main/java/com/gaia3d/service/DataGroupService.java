@@ -26,6 +26,13 @@ public interface DataGroupService {
 	 * @return
 	 */
 	List<DataGroup> getListDataGroupByDepth(Integer depth);
+	
+	/**
+	 * ancestor별 Data 그룹 목록
+	 * @param ancestor
+	 * @return
+	 */
+	List<DataGroup> getListDataGroupByAncestor(Long ancestor);
 
 	/**
 	 * Data 그룹 조회

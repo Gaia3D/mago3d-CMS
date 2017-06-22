@@ -13,15 +13,19 @@ import org.springframework.stereotype.Component;
 
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CommonCode;
+import com.gaia3d.domain.DataGroup;
+import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.Menu;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserGroup;
 import com.gaia3d.domain.UserGroupMenu;
 import com.gaia3d.service.CommonCodeService;
 import com.gaia3d.service.DataGroupService;
+import com.gaia3d.service.DataService;
 import com.gaia3d.service.MenuService;
 import com.gaia3d.service.PolicyService;
 import com.gaia3d.service.UserGroupService;
+import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,6 +38,8 @@ public class CacheConfig {
 	@Autowired
 	private PropertiesConfig propertiesConfig;
 
+	@Autowired
+	private DataService dataService;
 	@Autowired
 	private DataGroupService dataGroupService;
 //	@Autowired
@@ -56,6 +62,7 @@ public class CacheConfig {
 	@PostConstruct
 	public void init() {
 		log.info("**************** Admin 캐시 초기화 시작 *****************");
+		log.info("*************************************************");
 
 		// 라이선스 유호성 체크
 		license(CacheType.SELF);
@@ -139,10 +146,25 @@ public class CacheConfig {
 	 * @param cacheType
 	 */
 	private void data(CacheType cacheType) {
-		// 1 depth 데이터를 전부 읽어 옴
-//		dataGroupService.get
+		Map<String, List<DataInfo>> dataGroupMap = new HashMap<>();
 		
-		// 2 data
+		// 1 Depth group 정보를 전부 가져옴
+		List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
+		// 1 그룹별 하위 object 정보들을 전부 가져옴
+		for(DataGroup dataGroup : dataGroupList) {
+			List<DataGroup> childGroupList = dataGroupService.getListDataGroupByAncestor(dataGroup.getData_group_id());
+			List<DataInfo> allChildDataInfoList = new ArrayList<>();
+			for(DataGroup childDataGroup : childGroupList) {
+				DataInfo dataInfo = new DataInfo();
+				dataInfo.setData_group_id(childDataGroup.getData_group_id());
+				allChildDataInfoList.addAll(dataService.getListDataByDataGroupId(dataInfo));
+			}
+			dataGroupMap.put(dataGroup.getData_group_key(), allChildDataInfoList);
+		}
+		
+		Gson gson = new Gson();
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@ data cache @@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		log.info(" jason = {}", gson.toJson(dataGroupMap));
 	}
 
 	private void commonCode(CacheType cacheType) {

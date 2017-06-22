@@ -163,6 +163,7 @@ var fnObj = {
 		
 		document.dataGroupForm.reset();
 		document.dataGroupForm.writeMode.value = "append";
+		document.dataGroupForm.ancestor.value = obj.item.ancestor;
 		document.dataGroupForm.parent.value = obj.item.parent;
 		document.dataGroupForm.depth.value = obj.item.depth;
 		$("[name=use_yn]").removeAttr("checked");
@@ -183,8 +184,10 @@ var fnObj = {
 		
 		document.dataGroupForm.reset();
 		document.dataGroupForm.writeMode.value = "child";
+		console.log("obj.item.ancestor = " + obj.item.ancestor);
+		document.dataGroupForm.ancestor.value = obj.item.ancestor;
 		document.dataGroupForm.parent.value = obj.item.data_group_id;		
-		document.dataGroupForm.depth.value = parseInt(obj.item.depth) + parseInt(1);		
+		document.dataGroupForm.depth.value = parseInt(obj.item.depth) + parseInt(1);
 		$("[name=use_yn]").removeAttr("checked");
 		$("[name=use_yn]").filter("[value='Y']").prop("checked",true);
 		document.dataGroupForm.data_group_name.focus();

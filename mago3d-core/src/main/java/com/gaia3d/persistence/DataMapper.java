@@ -2,6 +2,8 @@ package com.gaia3d.persistence;
 
 import java.util.List;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.gaia3d.domain.DataInfo;
 
 /**
@@ -32,6 +34,13 @@ public interface DataMapper {
 	 * @return
 	 */
 	List<DataInfo> getListData(DataInfo dataInfo);
+	
+	/**
+	 * Data 목록
+	 * @param dataInfo
+	 * @return
+	 */
+	List<DataInfo> getListDataByDataGroupId(DataInfo dataInfo);
 	
 	/**
 	 * data_group_id를 제외한 Data 목록

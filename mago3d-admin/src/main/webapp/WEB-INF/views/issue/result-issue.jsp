@@ -28,7 +28,7 @@
 						<div class="list">
 							<div class="main_content_title">
 					    	<ul>
-					        	<li>스케줄 처리 결과</li>
+					        	<li>이슈 처리 결과</li>
 					        </ul>
 					    </div>
 						<ul>
@@ -39,48 +39,40 @@
 					  		</li>
 				<c:if test="${method_mode eq 'insert' || method_mode eq 'update'}">
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">스케줄명</span>
-					 			<span>${issue.name}</span>
+					  			<span style="display:inline-block; width: 200px;">데이터 그룹</span>
+					 			<span>${issue.data_group_name}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">시스템 그룹 고유키</span>
-					 			<span>${issue.system_group_id}</span>
+					  			<span style="display:inline-block; width: 200px;">이슈명</span>
+					 			<span>${issue.title}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">계정 그룹 고유키</span>
-					 			<span>${issue.account_group_id}</span>
+					  			<span style="display:inline-block; width: 200px;">우선순위</span>
+					 			<span>${issue.priority}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">스케줄 실행 Quartz 표현식</span>
-					 			<span>${issue.expression}</span>
+					  			<span style="display:inline-block; width: 200px;">예정일</span>
+					 			<span>${issue.due_date}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">시작 시간 yyyymmddhh24miss</span>
-					 			<span>${issue.start_date}</span>
+					  			<span style="display:inline-block; width: 200px;">이슈 유형</span>
+					 			<span>${issue.issue_type}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">종료 시간 yyyymmddhh24miss</span>
-					 			<span>${issue.end_date}</span>
+					  			<span style="display:inline-block; width: 200px;">상태</span>
+					 			<span>${issue.status}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">설명</span>
-					 			<span>${issue.description}</span>
+					  			<span style="display:inline-block; width: 200px;">위도</span>
+					 			<span>${issue.latitude}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">등록자 아이디</span>
-					 			<span>${issue.user_id}</span>
-					  		</li>
-					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">실행 주체</span>
-					 			<span>${issue.execute_server}</span>
-					  		</li>
-					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">사용유무</span>
-					 			<span>${issue.use_yn}</span>
+					  			<span style="display:inline-block; width: 200px;">경도</span>
+					 			<span>${issue.longitude}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
 					  			<span style="display:inline-block; width: 200px;">등록일</span>
-					 			<span>${issue.viewRegisterDate}</span>
+					 			<span>${issue.viewInsertDate}</span>
 					  		</li>
 				</c:if>
 					  		<li style="text-align: center;">

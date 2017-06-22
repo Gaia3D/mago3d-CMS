@@ -46,6 +46,8 @@ public class CacheManager {
 	private Map<String, String> haMap = null;
 	// StandBy Server 상태( ON, OFF, BUSY )
 	private String standByServerStatus = null;
+	// 데이터 그룹별 데이터 맵
+	private Map<String, List<DataInfo>> dataGroupMap = null;
 	
 //	/**
 //	 * 객체 리턴
@@ -201,6 +203,14 @@ public class CacheManager {
 		cacheManager.haMap = haMap;
 	}
 	
+	public static Map<String, List<DataInfo>> getDataGroupMap() {
+		return cacheManager.dataGroupMap;
+	}
+
+	public static void setDataGroupMap(Map<String, List<DataInfo>> dataGroupMap) {
+		cacheManager.dataGroupMap = dataGroupMap;
+	}
+
 	/**
 	 * StandBy Server 상태( ON, OFF, BUSY )
 	 * @return

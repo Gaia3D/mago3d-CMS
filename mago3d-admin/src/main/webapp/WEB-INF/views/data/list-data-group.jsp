@@ -51,7 +51,7 @@
 							<div class="one-third column">
 								<div id="AXTreeTarget" class="tree"></div>
 								<button type="button" class="btn btn-success btn-sm" onclick="addTree(); return false;">추가</button>
-								<button type="button" class="btn btn-warning btn-sm" onclick="addChildTree(); return false;">하위메뉴추가</button>
+								<button type="button" class="btn btn-warning btn-sm" onclick="addChildTree(); return false;">하위그룹추가</button>
 								<button type="button" class="btn btn-danger btn-sm" onclick="delTree(); return false;">선택삭제</button>
 								<!-- <button type="button" class="btn btn-success btn-sm" onclick="updateTree(); return false;">수정</button> -->
 								<button type="button" class="btn btn-warning btn-sm" onclick="moveUpTree(); return false;">위로</button>
@@ -63,6 +63,7 @@
 										<form name="dataGroupForm" id="dataGroupForm" method="post" onsubmit="return false;">
 											<input type="hidden" id="writeMode" name="writeMode" value="" />
 											<input type="hidden" id="data_group_id" name="data_group_id" value="" />
+											<input type="hidden" id="ancestor" name="ancestor" value="" />
 											<input type="hidden" id="parent" name="parent" value="" />
 											<input type="hidden" id="depth" name="depth" value="" /> 
 											<input type="hidden" id="view_order" name="view_order" value="1" />

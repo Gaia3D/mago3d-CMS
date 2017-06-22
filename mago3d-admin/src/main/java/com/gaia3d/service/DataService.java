@@ -33,6 +33,13 @@ public interface DataService {
 	List<DataInfo> getListData(DataInfo dataInfo);
 	
 	/**
+	 * Data 목록
+	 * @param dataInfo
+	 * @return
+	 */
+	List<DataInfo> getListDataByDataGroupId(DataInfo dataInfo);
+	
+	/**
 	 * data_group_id를 제외한 Data 목록
 	 * @param dataInfo
 	 * @return

@@ -121,7 +121,10 @@ public class DataGroupController {
 				dataGroup.setView_order(1);
 			} else {
 				dataGroup.setView_order(childGroup.getView_order() + 1);
+				dataGroup.setAncestor(childGroup.getAncestor());
 			}
+			
+			if(dataGroup.getParent() < 0) dataGroup.setParent(0l);
 			
 			dataGroupService.insertDataGroup(dataGroup);
 			dataGroupList.addAll(dataGroupService.getListDataGroup(new DataGroup()));

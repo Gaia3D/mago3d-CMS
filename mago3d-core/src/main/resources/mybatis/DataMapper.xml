@@ -61,7 +61,7 @@
 			</if>
 	</select>
 	
-	<!-- 사용자 목록 -->
+	<!-- Data 목록 -->
 	<select id="getListData" parameterType="dataInfo" resultType="dataInfo">
 		/* getListData */
 		SELECT X.*, 
@@ -109,6 +109,19 @@
 			</choose>
 			OFFSET #{offset} LIMIT #{limit}
 		) X
+	</select>
+	
+	<!-- Data 목록 -->
+	<select id="getListDataByDataGroupId" parameterType="dataInfo" resultType="dataInfo">
+		/* getListDataByDataGroupId */
+		SELECT A.*, B.data_group_name
+		FROM data_info A, data_group B
+		WHERE A.data_group_id = #{data_group_id} AND
+			A.data_group_id = B.data_group_id
+		ORDER BY A.insert_date DESC, data_id DESC
+		<if test="offset != null and offset > 0 and limit != null and limit > 0">
+		OFFSET #{offset} LIMIT #{limit}
+		</if>
 	</select>
 	
 	<!-- data_group_id를 제외한 사용자 목록 -->
