@@ -90,7 +90,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 		log.info(" @@@ ServletConfig addResourceHandlers @@@");
 		registry.addResourceHandler("/css/**").addResourceLocations("/css/");
 		registry.addResourceHandler("/externlib/**").addResourceLocations("/externlib/");
-		registry.addResourceHandler("/hompage/**").addResourceLocations("/homepage/");
+//		registry.addResourceHandler("/hompage/**").addResourceLocations("/homepage/");
 		registry.addResourceHandler("/images/**").addResourceLocations("/images/");
 		registry.addResourceHandler("/js/**").addResourceLocations("/js/");
 	}
@@ -121,7 +121,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	 	exceptionMappings.put("java.lang.RuntimeException", "/error/runtime-error");
 	 	exceptionResolver.setExceptionMappings(exceptionMappings);
 	 	
-	 	exceptionResolver.addStatusCode("errorx", 404);
+	 	exceptionResolver.addStatusCode("error", 404);
 	 	
 	 	return exceptionResolver;
 	}

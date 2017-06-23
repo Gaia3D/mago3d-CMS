@@ -54,7 +54,9 @@ public class LoginController {
 	 * @return
 	 */
 	@GetMapping("/login.do")
-	public String login(HttpServletRequest request, Model model) {
+	public String login(HttpServletRequest request, Model model)  throws Exception {
+		
+		log.info("@@@@@@@@@@@@@@@@ login page @@@@@@@@@@@@@@@@@@@ ");
 		
 		Policy policy = CacheManager.getPolicy();
 		log.info("@@ policy = {}", policy);

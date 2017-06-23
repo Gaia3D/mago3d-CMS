@@ -35,6 +35,12 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
     	String requestIp = WebUtil.getClientIp(request);
     	log.info("## Requst URI = {}, Request Ip = {}", uri, requestIp);
     	
+    	// 홈페이지는 통과
+    	if(uri.indexOf("/homepage/") >= 0) {
+    		log.info("homepage pass!!!");
+    		return true;
+    	}
+    	
     	boolean isExceptionURI = false;
     	int exceptionURICount = URLHelper.EXCEPTION_URI.length;
     	for(int i=0 ; i<exceptionURICount; i++) {
