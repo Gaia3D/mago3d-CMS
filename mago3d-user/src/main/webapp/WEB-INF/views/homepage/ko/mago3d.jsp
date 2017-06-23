@@ -1,5 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglib.jsp" %>
+<%@ include file="/WEB-INF/views/common/config.jsp" %>
+
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="${accessibility}">
 <head>
     <meta charset="utf-8">
     <title>Mago3D</title>
@@ -10,6 +14,10 @@
 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
+	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/js/${lang}/common.js"></script>
+	<script type="text/javascript" src="/js/${lang}/message.js"></script>
 </head>
 
 <body>
@@ -22,12 +30,12 @@
 	
 	<nav class="nav">
 		<div>
-			<h1><a href="./index.html">mago3D</a></h1>
+			<h1><a href="./index.do">mago3D</a></h1>
 			<ul class="menu">
 				<li class="on">mago3D <span></span></li>
-				<li><a href="/homepage/${lang}/demo.jsp">Demo</a><span></span></li>
-				<li><a href="/homepage/${lang}/download.jsp">Download</a><span></span></li>
-				<li><a href="/homepage/${lang}/tutorial.jsp">Tutorials</a><span></span></li>
+				<li><a href="/homepage/demo.do">Demo</a><span></span></li>
+				<li><a href="/homepage/download.do">Download</a><span></span></li>
+				<li><a href="/homepage/tutorial.do">Tutorials</a><span></span></li>
 			</ul>
 			<ul class="language">
 				<li class="on">KO</li>
@@ -35,13 +43,13 @@
 			</ul>
 		</div>
 	</nav>
-		<ul class="tab">
+	<section>
+		<div class="contents">
+			<ul class="tab">
 				<li><a href="#about">About</a></li>
 				<li><a href="#now">Now</a></li>
 				<li><a href="#will">Will be</a></li>
-		</ul>
-	<section>
-		<div class="contents">
+			</ul>
 			<div id="about" class="part">
 				<h3>About<span></span></h3>
 				<p>
