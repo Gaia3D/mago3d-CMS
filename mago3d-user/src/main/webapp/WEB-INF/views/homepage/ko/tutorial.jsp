@@ -6,11 +6,10 @@
     <!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
-    <script src="../../externlib/ko/jquery/jquery.js" type="text/javascript"></script>
-	<script src="../../js/ko/homepage-scrolling.js" type="text/javascript"></script>
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+ 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet"> 
-	<link href="../../css/ko/homepage-style.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"/>
 </head>
 
 <body>
@@ -18,9 +17,9 @@
 		<div>
 			<h1><a href="./index.html">mago3D</a></h1>
 			<ul class="menu">
-				<li><a href="../../homepage/ko/mago3d.html">mago3D</a> <span></span></li>
-				<li><a href="../../homepage/ko/demo.html">Demo</a><span></span></li>
-				<li><a href="../../homepage/ko/download.html">Download</a><span></span></li>
+				<li><a href="/homepage/${lang}/mago3d.html">mago3D</a> <span></span></li>
+				<li><a href="/homepage/${lang}/demo.html">Demo</a><span></span></li>
+				<li><a href="/homepage/${lang}/download.html">Download</a><span></span></li>
 				<li class="on">Tutorials<span></span></li>
 			</ul>
 			<ul class="language">
@@ -45,7 +44,7 @@
 				<dl>
 					<dt id="Started">Getting Started</dt>
 					<dd class="img">
-						<img src="../../images/ko/homepage/about.png">
+						<img src="/images/${lang}/homepage/about.png">
 					</dd>
 					<dd>
 						시작해 볼까요?
@@ -55,7 +54,7 @@
 				<dl>
 					<dt>Getting Started</dt>
 					<dd class="img">
-						<img src="../../images/ko/homepage/about.png">
+						<img src="/images/${lang}/homepage/about.png">
 					</dd>
 					<dd>
 						시작해 볼까요?
@@ -65,7 +64,7 @@
 				<dl>
 					<dt>Getting Started</dt>
 					<dd class="img">
-						<img src="../../images/ko/homepage/about.png">
+						<img src="/images/${lang}/homepage/about.png">
 					</dd>
 					<dd>
 						시작해 볼까요?
@@ -75,7 +74,7 @@
 				<dl>
 					<dt>Getting Started</dt>
 					<dd class="img">
-						<img src="../../images/ko/homepage/about.png">
+						<img src="/images/${lang}/homepage/about.png">
 					</dd>
 					<dd>
 						시작해 볼까요?
@@ -161,7 +160,7 @@
 
 					
 					<dd class="img">
-						<img src="../../images/ko/homepage/about.png">
+						<img src="/images/${lang}/homepage/about.png">
 					</dd>
 					<dd>
 						시작해 볼까요?

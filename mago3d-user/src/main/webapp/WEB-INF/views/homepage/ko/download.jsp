@@ -10,10 +10,10 @@
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <script src="../../externlib/ko/jquery/jquery.js" type="text/javascript"></script>
-	<script src="../../js/ko/homepage-scrolling.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-	<link href="../../css/ko/homepage-style.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"/>
 </head>
 
 <body>
@@ -21,10 +21,10 @@
 		<div>
 			<h1><a href="./index.html">mago3D</a></h1>
 			<ul class="menu">
-				<li><a href="../../homepage/ko/mago3d.html">mago3D</a> <span></span></li>
-				<li><a href="../../homepage/ko/demo.html">Demo</a><span></span></li>
+				<li><a href="/homepage/${lang}/mago3d.html">mago3D</a> <span></span></li>
+				<li><a href="/homepage/${lang}/demo.html">Demo</a><span></span></li>
 				<li class="on">Download<span></span></li>
-				<li><a href="../../homepage/ko/tutorial.html">Tutorials</a><span></span></li>
+				<li><a href="/homepage/${lang}/tutorial.html">Tutorials</a><span></span></li>
 			</ul>
 			<ul class="language">
 				<li class="on">KO</li>

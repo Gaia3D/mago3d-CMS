@@ -53,6 +53,7 @@ public class HomepageController {
 	 */
 	@GetMapping(value = "demo.do")
 	public String demo(HttpServletRequest request, Model model) {
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		String lang = null;
 		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 		if(lang == null || "".equals(lang)) {
