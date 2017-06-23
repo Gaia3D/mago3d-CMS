@@ -1,12 +1,22 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglib.jsp" %>
+<%@ include file="/WEB-INF/views/common/config.jsp" %>
+
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="${accessibility}">
 <head>
-    <meta charset="utf-8">
-    <title>Mago3D</title>
-    <script src="../../externlib/ko/jquery/jquery.js" type="text/javascript"></script>
-	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet"> 
-	<link href="../../css/ko/homepage-demo.css" rel="stylesheet" type="text/css" />
-	<script src="../../js/ko/mago3d.js" type="text/javascript"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Mago3D User</title>
+	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
+	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" />
+	<link rel="stylesheet" href="/css/${lang}/style.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans"> 
+	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css" />
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/js/${lang}/common.js"></script>
+	<script type="text/javascript" src="/js/${lang}/message.js"></script>
 </head>
 
 <body>
@@ -14,14 +24,12 @@
 <div class="trigger" >
 	<button type="button">메뉴</button>
 	<ul>
-		<li><a href="../../homepage/ko/tutorial.html">Tutorials</a></li>
-		<li><a href="../../homepage/ko/download.html">Download</a></li>
-		<li><a href="../../homepage/ko/mago3d.html">Mago3D</a></li>
-<!-- 		<li>Home</li>	 -->
+		<li><a href="/homepage/about.do">Mago3D</a></li>
+		<li><a href="/homepage/tutorials.do">Tutorials</a></li>
+		<li><a href="/homepage/download.do">Download</a></li>
 	</ul>
 </div>
 
-<!-- 메뉴영역 -->
  <ul class="dropdownmenu">
 	<li>샘플1
 		<ul>
@@ -61,7 +69,6 @@
 
 <!-- 맵영역 -->
 <div class="mapWrap"></div>
-
 
 <!-- 레이어 -->
 <div class="layer" style="top:50%; left:50%; width:350px; margin:-250px 0 0 -150px; ">
@@ -115,7 +122,6 @@
         </div>
     </div>
 </div>
-<!-- END 편집차단 -->
 
 </body>
 </html>
