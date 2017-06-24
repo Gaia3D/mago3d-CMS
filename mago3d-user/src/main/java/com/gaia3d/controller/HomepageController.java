@@ -62,7 +62,8 @@ public class HomepageController {
 	 * @return
 	 */
 	@GetMapping(value = "demo.do")
-	public String demo(HttpServletRequest request, Model model) throws Exception {
+	public String demo(HttpServletRequest request, Model model) {
+		
 		String lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 		if(lang == null || "".equals(lang)) {
 			lang = "ko";

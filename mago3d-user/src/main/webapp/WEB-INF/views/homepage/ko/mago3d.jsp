@@ -6,11 +6,10 @@
     <!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
-    <script src="../../externlib/ko/jquery/jquery.js"></script>
-	<script src="../../js/ko/homepage-scrolling.js" type="text/javascript"></script>
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-	<link href="../../css/ko/homepage-style.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 </head>
 
 <body>
@@ -26,9 +25,9 @@
 			<h1><a href="./index.html">mago3D</a></h1>
 			<ul class="menu">
 				<li class="on">mago3D <span></span></li>
-				<li><a href="../../homepage/ko/demo.html">Demo</a><span></span></li>
-				<li><a href="../../homepage/ko/download.html">Download</a><span></span></li>
-				<li><a href="../../homepage/ko/tutorial.html">Tutorials</a><span></span></li>
+				<li><a href="/homepage/${lang}/demo.jsp">Demo</a><span></span></li>
+				<li><a href="/homepage/${lang}/download.jsp">Download</a><span></span></li>
+				<li><a href="/homepage/${lang}/tutorial.jsp">Tutorials</a><span></span></li>
 			</ul>
 			<ul class="language">
 				<li class="on">KO</li>
@@ -65,7 +64,7 @@
                 <p class="sub_title">WebGL이 지원하는 성능 향상 기법</p>
                 <p>
                   <a href="#">
-                    <img src="../../images/ko/homepage/octree.png" alt="">
+                    <img src="/images/${lang}/homepage/octree.png" alt="">
                   </a>
                 </p>
                 <input type="button" name="MORE" value="MORE" class="button">
@@ -75,7 +74,7 @@
                 <p class="sub_title">multi-instance - 경량화 logic</p>
                 <p>
                   <a href="#">
-                    <img src="../../images/ko/homepage/octree.png" alt="">
+                    <img src="/images/${lang}/homepage/octree.png" alt="">
                   </a>
                 </p>
                 <input type="button" name="MORE" value="MORE" class="button">
@@ -85,7 +84,7 @@
                 <p class="sub_title">생성할 때 삼각형을 크기별로 정렬</p>
                 <p>
                   <a href="#">
-                    <img src="../../images/ko/homepage/octree.png" alt="">
+                    <img src="/images/${lang}/homepage/octree.png" alt="">
                   </a>
                 </p>
                 <input type="button" name="MORE" value="MORE" class="button">
@@ -95,7 +94,7 @@
                 <p class="sub_title">공간자료를 volume 별로 묶는 단위</p>
                 <p>
                   <a href="#">
-                    <img src="../../images/ko/homepage/octree.png" alt="">
+                    <img src="/images/${lang}/homepage/octree.png" alt="">
                   </a>
                 </p>
                 <input type="button" name="MORE" value="more" class="button">
@@ -111,7 +110,7 @@
                 <p class="sub_title">simplified data</p>
                 <p>
                   <a href="#">
-                    <img src="../../images/ko/homepage/octree.png" alt="">
+                    <img src="/images/${lang}/homepage/octree.png" alt="">
                   </a>
                 </p>
                 <input type="button" name="MORE" value="more" class="button">
@@ -121,7 +120,7 @@
                 <p class="sub_title">pre-processing - Visibility Indexing</p>
                 <p>
                   <a href="#">
-                    <img src="../../images/ko/homepage/octree.png" alt="">
+                    <img src="/images/${lang}/homepage/octree.png" alt="">
                   </a>
                 </p>
                 <input type="button" name="MORE" value="more" class="button">
@@ -131,7 +130,7 @@
                 <p class="sub_title">....</p>
                 <p>
                   <a href="#">
-                    <img src="../../images/ko/homepage/octree.png" alt="">
+                    <img src="/images/${lang}/homepage/octree.png" alt="">
                   </a>
                 </p>
                 <input type="button" name="MORE" value="more" class="button">
@@ -141,7 +140,7 @@
                 <p class="sub_title">...</p>
                 <p>
                   <a href="#">
-                    <img src="../../images/ko/homepage/octree.png" alt="">
+                    <img src="/images/${lang}/homepage/octree.png" alt="">
                   </a>
                 </p>
                 <input type="button" name="MORE" value="more" class="button">
@@ -156,19 +155,19 @@
 						<th>포맷</th> <th>세부 정보</th>
 					</tr>
 					<tr>
-						<td><img src="../../images/ko/homepage/IFC.png"/></td> <td> IFC(Industry Foundation Classes)건축 BIM 정보 교환을 위한 표준 포맷 </td>
+						<td><img src="/images/${lang}/homepage/IFC.png"/></td> <td> IFC(Industry Foundation Classes)건축 BIM 정보 교환을 위한 표준 포맷 </td>
 					</tr>
 					<tr>
-						<td><img src="../../images/ko/homepage/JT.png"/></td> <td>JT(Jupiter Tesselation) Siemens PLM Software 에서 개발된 경량화 3D 모델 포맷.</td>
+						<td><img src="/images/${lang}/homepage/JT.png"/></td> <td>JT(Jupiter Tesselation) Siemens PLM Software 에서 개발된 경량화 3D 모델 포맷.</td>
 					</tr>
 					<tr>
-						<td><img src="../../images/ko/homepage/obj.png"/></td> <td>OBJ(Wavefront file format specification) 3 차원 좌표 (다각형 선과 점), 텍스쳐 매핑 및 기타 오브젝트 정보를 포함하는 삼차원 물체에 사용되는 파일 포맷</td>
+						<td><img src="/images/${lang}/homepage/obj.png"/></td> <td>OBJ(Wavefront file format specification) 3 차원 좌표 (다각형 선과 점), 텍스쳐 매핑 및 기타 오브젝트 정보를 포함하는 삼차원 물체에 사용되는 파일 포맷</td>
 					</tr>
 					<tr>
-						<td><img src="../../images/ko/homepage/3ds.png"/></td> <td>3DS(3D-Studio File Format)) AutoDesk의 3D-Studio에서 사용되는 파일 포맷입니다. </td>
+						<td><img src="/images/${lang}/homepage/3ds.png"/></td> <td>3DS(3D-Studio File Format)) AutoDesk의 3D-Studio에서 사용되는 파일 포맷입니다. </td>
 					</tr>
 					<tr>
-						<td width="64px"><img src="../../images/ko/homepage/dae.png"></td> <td> COLLADA(COLLAborative Design Activity) - 3D assets 을 교환하기 위한 open standard XML schema 파일 포맷</td>
+						<td width="64px"><img src="/images/${lang}/homepage/dae.png"></td> <td> COLLADA(COLLAborative Design Activity) - 3D assets 을 교환하기 위한 open standard XML schema 파일 포맷</td>
 					</tr>
 				</table>
 
@@ -179,7 +178,7 @@
               <div class="4u">
                 <div class="box">
                   <a href="#" class="image-left">
-                      <img src="../../images/ko/homepage/Integration.jpg">
+                      <img src="/images/${lang}/homepage/Integration.jpg">
                   </a>
                   <h3>남극과학기지</h3>
                   <p>웹기반 3차원</p>
@@ -189,7 +188,7 @@
               <div class="4u">
                 <div class="box">
                   <a href="#" class="image-left">
-                      <img src="../../images/ko/homepage/Integration.jpg" alt="">
+                      <img src="/images/${lang}/homepage/Integration.jpg" alt="">
                   </a>
                   <h3>남극과학기지</h3>
                   <p>웹기반 3차원</p>
@@ -199,7 +198,7 @@
               <div class="4u">
                 <div class="box">
                   <a href="#" class="image-left">
-                      <img src="../../images/ko/homepage/Integration.jpg" alt="">
+                      <img src="/images/${lang}/homepage/Integration.jpg" alt="">
                   </a>
                   <h3>남극과학기지</h3>
                   <p>웹기반 3차원</p>
@@ -220,7 +219,7 @@
 				<p>
 					mago3d는 spring framework(springboot) 기반의 3d 플랫폼 입니다.공간 정보 DB 관련 처리를 위해 PostGis를 사용하고 있으며, 3D 렌더링 부분은 cesium, worldwind 등을 오픈 소스 javascript librar를 사용하고 있습니다. 3D 데이터를 웹에서 Rendering 하기 위해서 자체 개발한 F4D 포맷 및 Converter를 사용하고 있으며 가시화 및 렌더링 처리를 담당하는 mago3djs(javascript library)로 이루어져 있습니다.
 				</p>
-				<img src="../../images/ko/homepage/about.png" alt="">
+				<img src="/images/${lang}/homepage/about.png" alt="">
 
 				<h4>API</h4>
 				<table>
@@ -271,7 +270,7 @@
 				</p>
         <div class="wrap">
           <div class="colspan-2 column">
-            <img src="../../images/ko/homepage/dashboard.png">
+            <img src="/images/${lang}/homepage/dashboard.png">
           </div>
           <div class="colspan-1 column">
             <h2>관리자 페이지</h2>
@@ -292,10 +291,10 @@
             </p>
           </div>
           <div class="colspan-2 column text-left">
-            <img src="../../images/ko/homepage/issue.png">
+            <img src="/images/${lang}/homepage/issue.png">
           </div>
           <div class="colspan-2 column">
-            <img src="../../images/ko/homepage/data.png">
+            <img src="/images/${lang}/homepage/data.png">
           </div>
           <div class="colspan-1 column">
             <h2>데이터 관리</h2>

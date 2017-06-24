@@ -165,11 +165,6 @@
 	var dataGroupMap = ${dataGroupMap};
 	
 	var managerFactory = new ManagerFactory(null, "magoContainer", policyJson, dataGroupMap);
-	
-	// 블락 이동
-	$("#searchBlockAPI").click(function() {
-		searchBlockAPI($("#projectId").val(), $("#blockType").val(), $("#blockId").val());
-	});
 </script>
 </body>
 </html>
