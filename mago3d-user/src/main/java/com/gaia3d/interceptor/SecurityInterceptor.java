@@ -41,6 +41,11 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
     		return true;
     	}
     	
+    	if(uri.indexOf("/error") >= 0) {
+    		log.info("error pass!!!");
+    		return true;
+    	}
+    	
     	boolean isExceptionURI = false;
     	int exceptionURICount = URLHelper.EXCEPTION_URI.length;
     	for(int i=0 ; i<exceptionURICount; i++) {

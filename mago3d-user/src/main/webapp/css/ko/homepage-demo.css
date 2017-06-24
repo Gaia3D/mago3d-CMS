@@ -23,9 +23,10 @@ background-color: #eee;
 .trigger {
 position: absolute;
 top: 5px;
-right: 5px;
+right: 220px;
 min-width: 400px;
 direction: rtl;
+z-index: 999;
 }
 .trigger > button {
 display: block;
@@ -35,7 +36,7 @@ border: none;
 border-radius: 5px;
 text-indent: -999em;
 background-color: #0066cc;
-background-image: url(../../images/ko/ico.png);
+background-image: url(/images/ko/ico.png);
 background-repeat: no-repeat;
 background-position: 2px -155px;
 }
@@ -71,6 +72,7 @@ background-color: #0066cc;
 .trigger:hover > ul li a:hover {
 	color: #fff;
 }
+
 /* 드롭다운메뉴 */
 /* Level1 */
 .dropdownmenu > li {
@@ -85,6 +87,7 @@ color: #fff;
 text-align: center;
 line-height: 30px;
 background-color: #0066cc;
+z-index: 999;
 }
 .dropdownmenu > li:hover {
 background-color: tomato;
@@ -100,7 +103,7 @@ box-sizing: border-box;
 .dropdownmenu ul {
 position: absolute;
 display: none;
-width: 140px;
+width: 100%;
 border: 1px solid #ccc;
 }
 .dropdownmenu ul li {
@@ -146,7 +149,7 @@ margin:0;
 padding-left: 20px;
 font-size: 16px;
 font-weight: 600;
-background: url(../../images/ko/bullet_h4.png) no-repeat left 50%;
+background: url(/images/ko/bullet_h4.png) no-repeat left 50%;
 }
 .layerHeader > div {
 position: absolute;
@@ -160,7 +163,7 @@ width: 30px;
 height: 30px;
 border: none;
 text-indent: -999em;
-background-image: url(../../images/ko/ico.png);
+background-image: url(/images/ko/ico.png);
 background-color: transparent;
 background-position: 1px -264px;
 }

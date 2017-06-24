@@ -162,6 +162,7 @@ public class CacheConfig {
 			dataGroupMap.put(dataGroup.getData_group_key(), allChildDataInfoList);
 		}
 		
+		//CacheManager.setProjectDataGroupList(dataGroupList);
 		Gson gson = new Gson();
 		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@ data cache @@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		log.info(" jason = {}", gson.toJson(dataGroupMap));

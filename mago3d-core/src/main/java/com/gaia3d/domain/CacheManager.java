@@ -46,8 +46,11 @@ public class CacheManager {
 	private Map<String, String> haMap = null;
 	// StandBy Server 상태( ON, OFF, BUSY )
 	private String standByServerStatus = null;
+	
+	// 1 depth 데이터 그룹
+	private List<DataGroup> projectDataGroupList = null;
 	// 데이터 그룹별 데이터 맵
-	private Map<String, List<DataInfo>> dataGroupMap = null;
+	private Map<String, Map<String, DataInfo>> dataGroupMap = null;
 	
 //	/**
 //	 * 객체 리턴
@@ -148,6 +151,14 @@ public class CacheManager {
 		cacheManager.menuMap = menuMap;
 	}
 	
+	public static List<DataGroup> getProjectDataGroupList() {
+		return cacheManager.projectDataGroupList;
+	}
+
+	public static void setProjectDataGroupList(List<DataGroup> projectDataGroupList) {
+		cacheManager.projectDataGroupList = projectDataGroupList;
+	}
+
 	/**
 	 * 사용자 그룹별 메뉴 목록을 취득
 	 * @param userGroupId
@@ -203,11 +214,11 @@ public class CacheManager {
 		cacheManager.haMap = haMap;
 	}
 	
-	public static Map<String, List<DataInfo>> getDataGroupMap() {
+	public static Map<String, Map<String, DataInfo>> getDataGroupMap() {
 		return cacheManager.dataGroupMap;
 	}
 
-	public static void setDataGroupMap(Map<String, List<DataInfo>> dataGroupMap) {
+	public static void setDataGroupMap(Map<String, Map<String, DataInfo>> dataGroupMap) {
 		cacheManager.dataGroupMap = dataGroupMap;
 	}
 

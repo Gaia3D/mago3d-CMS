@@ -10,8 +10,8 @@
 		  		<span>사용유무</span>
  			</th>
  			<td class="col-input radio-set">
- 				<form:radiobutton path="geo_server_enable" value="Y" label="사용" />
-				<form:radiobutton path="geo_server_enable" value="N" label="사용안함" />
+ 				<form:radiobutton path="geo_server_enable" value="true" label="사용" />
+				<form:radiobutton path="geo_server_enable" value="false" label="사용안함" />
 	  		</td>
   		</tr>
 		<tr>

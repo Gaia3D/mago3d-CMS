@@ -145,22 +145,32 @@ public class CacheConfig {
 	 * @param cacheType
 	 */
 	private void data(CacheType cacheType) {
-		Map<String, List<DataInfo>> dataGroupMap = new HashMap<>();
+		Map<String, Map<String, DataInfo>> dataGroupMap = new HashMap<>();
+		List<DataInfo> allDataInfoList = new ArrayList<>();
 		
 		// 1 Depth group 정보를 전부 가져옴
 		List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
 		// 1 그룹별 하위 object 정보들을 전부 가져옴
 		for(DataGroup dataGroup : dataGroupList) {
 			List<DataGroup> childGroupList = dataGroupService.getListDataGroupByAncestor(dataGroup.getData_group_id());
-			List<DataInfo> allChildDataInfoList = new ArrayList<>();
+//			List<DataInfo> allChildDataInfoList = new ArrayList<>();
 			for(DataGroup childDataGroup : childGroupList) {
 				DataInfo dataInfo = new DataInfo();
 				dataInfo.setData_group_id(childDataGroup.getData_group_id());
-				allChildDataInfoList.addAll(dataService.getListDataByDataGroupId(dataInfo));
+//				allChildDataInfoList.addAll(dataService.getListDataByDataGroupId(dataInfo));
+				allDataInfoList.addAll(dataService.getListDataByDataGroupId(dataInfo));
 			}
-			dataGroupMap.put(dataGroup.getData_group_key(), allChildDataInfoList);
+//			dataGroupMap.put(dataGroup.getData_group_key(), allChildDataInfoList);
 		}
 		
+		Map<String, DataInfo> allDataInfoMap = new HashMap<>();
+		for(DataInfo dataInfo : allDataInfoList) {
+			allDataInfoMap.put(dataInfo.getData_key(), dataInfo);
+		}
+		
+		dataGroupMap.put("alldata", allDataInfoMap);
+		
+		CacheManager.setProjectDataGroupList(dataGroupList);
 		CacheManager.setDataGroupMap(dataGroupMap);
 	}
 

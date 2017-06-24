@@ -18,13 +18,13 @@ font-family: 'Noto Sans','Malgun Gothic','돋움',dotum, sans-serif;}
 header {
 position: relative;
 height: 250px;
-background-image: url(../../images/ko/header_about.png);
+background-image: url(/images/ko/header_about.png);
 }
 header > div {
 width: 1200px;
 margin: 0 auto;
 padding-top: 120px;
-background: url(../../images/ko/logo_header.png) no-repeat center 40px;
+background: url(/images/ko/logo_header.png) no-repeat center 40px;
 }
 header > div p {
 color: #fff;

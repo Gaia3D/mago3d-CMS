@@ -46,14 +46,14 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
 		log.info(" @@@ ServletConfig addInterceptors @@@@ ");
 		
-        registry.addInterceptor(new ConfigInterceptor())
-        		.addPathPatterns("/**");
-        registry.addInterceptor(new SecurityInterceptor())
-        		.addPathPatterns("/**")
-        		.excludePathPatterns("/login/**");
-        registry.addInterceptor(new CSRFHandlerInterceptor())
-        		.addPathPatterns("/**")
-        		.excludePathPatterns("/login/**");
+//        registry.addInterceptor(new ConfigInterceptor())
+//        		.addPathPatterns("/**");
+//        registry.addInterceptor(new SecurityInterceptor())
+//        		.addPathPatterns("/**")
+//        		.excludePathPatterns("/login/**");
+//        registry.addInterceptor(new CSRFHandlerInterceptor())
+//        		.addPathPatterns("/**")
+//        		.excludePathPatterns("/login/**");
     }
 	
 //	@Bean

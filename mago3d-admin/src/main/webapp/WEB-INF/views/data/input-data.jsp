@@ -383,25 +383,13 @@
 			$("#latitude").focus();
 			return false;
 		}
-		if (!isNumber($("#latitude").val())) {
-			$("#latitude").focus();
-			return false;
-		}
 		if ($("#longitude").val() == "") {
 			alert(JS_MESSAGE["data.longitude.empty"]);
 			$("#longitude").focus();
 			return false;
 		}
-		if (!isNumber($("#longitude").val())) {
-			$("#logitude").focus();
-			return false;
-		}
 		if ($("#height").val() == "") {
 			alert(JS_MESSAGE["data.height.empty"]);
-			$("#height").focus();
-			return false;
-		}
-		if (!isNumber($("#height").val())) {
 			$("#height").focus();
 			return false;
 		}
@@ -410,25 +398,13 @@
 			$("#heading").focus();
 			return false;
 		}
-		if (!isNumber($("#heading").val())) {
-			$("#heading").focus();
-			return false;
-		}
 		if($("#pitch").val() == "") {
 			alert(JS_MESSAGE["data.pitch.empty"]);
 			$("#pitch").focus();
 			return false;
 		}
-		if (!isNumber($("#pitch").val())) {
-			$("#pitch").focus();
-			return false;
-		}
 		if($("#roll").val() == "") {
 			alert(JS_MESSAGE["data.roll.empty"]);
-			$("#roll").focus();
-			return false;
-		}
-		if (!isNumber($("#roll").val())) {
 			$("#roll").focus();
 			return false;
 		}
