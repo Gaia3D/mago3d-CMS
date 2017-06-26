@@ -10,14 +10,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataGroup;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.SessionKey;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,14 +44,14 @@ public class HomepageController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "mago3d.do")
+	@GetMapping(value = "about.do")
 	public String about(HttpServletRequest request, Model model) {
 		String lang = null;
 		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 		if(lang == null || "".equals(lang)) {
 			lang = "ko";
 		}
-		return "/homepage/" + lang + "/mago3d";
+		return "/homepage/" + lang + "/about";
 	}
 	
 	/**
@@ -104,13 +102,13 @@ public class HomepageController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "tutorial.do")
+	@GetMapping(value = "tutorials.do")
 	public String tutorials(HttpServletRequest request, Model model) {
 		String lang = null;
 		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 		if(lang == null || "".equals(lang)) {
 			lang = "ko";
 		}
-		return "/homepage/" + lang + "/tutorial";
+		return "/homepage/" + lang + "/tutorials";
 	}
 }
