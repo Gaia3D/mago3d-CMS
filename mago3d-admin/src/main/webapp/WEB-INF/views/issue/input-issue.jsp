@@ -82,7 +82,7 @@
 							</tr>
 							<tr>
 								<th class="col-label" scope="row">
-									<form:label path="priority">Issue Type</form:label>
+									<form:label path="priority">Issue Priority</form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">
@@ -223,7 +223,6 @@
 				async:false,
 				dataType: "json",
 				success: function(msg){
-					alert(msg + "1");
 					if(msg.result == "success") {
 						alert(msg + "2");
 						alert(JS_MESSAGE["insert"]);

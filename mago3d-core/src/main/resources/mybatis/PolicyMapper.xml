@@ -82,7 +82,9 @@
 		/* updatePolicyGeoCallBack */
 		UPDATE policy
 		SET geo_callback_enable = #{geo_callback_enable},
-			geo_callback_selectedobject = #{geo_callback_selectedobject}
+			geo_callback_selectedobject = #{geo_callback_selectedobject},
+			geo_callback_insertissue = #{geo_callback_insertissue},
+			geo_callback_listissue = #{geo_callback_listissue}
 		WHERE policy_id = #{policy_id}
 	</update>
 	

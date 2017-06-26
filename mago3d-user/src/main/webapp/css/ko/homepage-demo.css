@@ -34,7 +34,7 @@ width: 40px;
 height: 40px;
 border: none;
 border-radius: 5px;
-text-indent: -999em;
+/*text-indent: -999em;*/
 background-color: #0066cc;
 background-image: url(/images/ko/ico.png);
 background-repeat: no-repeat;
@@ -124,6 +124,14 @@ background-color: #eee;
 
 
 .mapWrap {
+}
+
+#magoControllArea {
+	position: absolute;
+	top: 155px;
+	right: 30px;
+	direction: rtl;
+	z-index: 999;
 }
 
 

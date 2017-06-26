@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataGroup;
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.SessionKey;
 import com.google.gson.Gson;
@@ -71,10 +73,17 @@ public class HomepageController {
 		List<DataGroup> projectDataGroupList = CacheManager.getProjectDataGroupList();
 		Map<String, Map<String, DataInfo>> dataGroupMap = CacheManager.getDataGroupMap();
 		Policy policy = CacheManager.getPolicy();
+		@SuppressWarnings("unchecked")
+		List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
+		@SuppressWarnings("unchecked")
+		List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
 		
+		model.addAttribute("issue", new Issue());
 		model.addAttribute("projectDataGroupList", projectDataGroupList);
 		model.addAttribute("dataGroupMap", gson.toJson(dataGroupMap));
 		model.addAttribute("policyJson", gson.toJson(policy));
+		model.addAttribute("issuePriorityList", issuePriorityList);
+		model.addAttribute("issueTypeList", issueTypeList);
 		
 		log.info("@@@@@@ policy = {}", gson.toJson(policy));
 		log.info("@@@@@@ dataGroupMap = {}", gson.toJson(dataGroupMap));

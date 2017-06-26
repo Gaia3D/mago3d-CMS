@@ -136,6 +136,10 @@ public class Policy {
 	private String geo_callback_enable;
 	// object 선택 callback function 이름
 	private String geo_callback_selectedobject;
+	// issue 등록 callback function 이름
+	private String geo_callback_insertissue;
+	// issue list callback function 이름
+	private String geo_callback_listissue;
 	
 	// 알림 서비스 사용 유무. Y : 사용, N : 미사용(기본값)
 	private String notice_service_yn;

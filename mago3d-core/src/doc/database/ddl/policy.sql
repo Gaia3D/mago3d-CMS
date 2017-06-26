@@ -48,6 +48,8 @@ create table policy(
 	
 	geo_callback_enable 					varchar(5)			default 'false',
 	geo_callback_selectedObject				varchar(64),
+	geo_callback_insertIssue				varchar(64),
+	geo_callback_listIssue					varchar(64),
 	
 	notice_service_yn					char(1)				default 'Y',
 	notice_service_send_type			char(1)				default '0',
@@ -156,7 +158,8 @@ comment on column policy.geo_server_parameters_format is 'geo server format 변�
 	
 comment on column policy.geo_callback_enable is '콜백 function 사용유무. 기본값 false';
 comment on column policy.geo_callback_selectedObject is 'object 선택 callback function 이름';
-
+comment on column policy.geo_callback_insertIssue is 'issue 등록 callback function 이름';
+comment on column policy.geo_callback_listIssue is 'issue 목록 callback function 이름';
 
 comment on column policy.notice_service_yn is '알림 서비스 사용 유무. Y : 사용, N : 사용안함(기본값)';
 comment on column policy.notice_service_send_type is '알림 발송 매체. 0 : SMS(기본값), 1 : 이메일, 2 : 메신저';

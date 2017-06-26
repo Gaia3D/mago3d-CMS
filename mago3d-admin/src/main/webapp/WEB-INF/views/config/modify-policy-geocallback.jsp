@@ -23,6 +23,24 @@
 				<form:errors path="geo_callback_selectedobject" cssClass="error" />
 			</td>
 		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_callback_insertissue">Issue 등록 Callback</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_callback_insertissue" cssClass="l" />
+				<form:errors path="geo_callback_insertissue" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_callback_listissue">Issue 목록 Callback</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_callback_listissue" cssClass="l" />
+				<form:errors path="geo_callback_listissue" cssClass="error" />
+			</td>
+		</tr>
 	</table>
 	<div class="button-group">
 		<div class="center-buttons">

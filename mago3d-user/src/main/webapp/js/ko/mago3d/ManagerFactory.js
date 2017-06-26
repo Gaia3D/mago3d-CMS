@@ -550,7 +550,7 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData) {
 		api.setRenderMode("1");
 		magoManager.callAPI(api);
 
-		if(!MagoConfig.getPolicy().geo_time_line_enable == "true") {
+		if(MagoConfig.getPolicy().geo_time_line_enable == "false") {
 			// visible <---> hidden
 			$(viewer._animation.container).css("visibility", "hidden");
 			$(viewer._timeline.container).css("visibility", "hidden");
