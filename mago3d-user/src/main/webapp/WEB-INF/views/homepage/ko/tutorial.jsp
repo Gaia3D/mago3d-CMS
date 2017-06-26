@@ -1,5 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglib.jsp" %>
+<%@ include file="/WEB-INF/views/common/config.jsp" %>
+
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="${accessibility}">
 <head>
     <meta charset="utf-8">
     <title>Mago3D</title>
@@ -15,11 +19,11 @@
 <body>
 	<nav class="nav">
 		<div>
-			<h1><a href="./index.html">mago3D</a></h1>
+			<h1><a href="./index.do">mago3D</a></h1>
 			<ul class="menu">
-				<li><a href="/homepage/${lang}/mago3d.html">mago3D</a> <span></span></li>
-				<li><a href="/homepage/${lang}/demo.html">Demo</a><span></span></li>
-				<li><a href="/homepage/${lang}/download.html">Download</a><span></span></li>
+				<li><a href="/homepage/mago3d.do">mago3D</a> <span></span></li>
+				<li><a href="/homepage/demo.do">Demo</a><span></span></li>
+				<li><a href="/homepage/download.do">Download</a><span></span></li>
 				<li class="on">Tutorials<span></span></li>
 			</ul>
 			<ul class="language">

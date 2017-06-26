@@ -46,14 +46,14 @@ public class HomepageController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "about.do")
+	@GetMapping(value = "mago3d.do")
 	public String about(HttpServletRequest request, Model model) {
 		String lang = null;
 		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 		if(lang == null || "".equals(lang)) {
 			lang = "ko";
 		}
-		return "/homepage/" + lang + "/about";
+		return "/homepage/" + lang + "/mago3d";
 	}
 	
 	/**
@@ -104,13 +104,13 @@ public class HomepageController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "tutorials.do")
+	@GetMapping(value = "tutorial.do")
 	public String tutorials(HttpServletRequest request, Model model) {
 		String lang = null;
 		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 		if(lang == null || "".equals(lang)) {
 			lang = "ko";
 		}
-		return "/homepage/" + lang + "/tutorials";
+		return "/homepage/" + lang + "/tutorial";
 	}
 }
