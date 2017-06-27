@@ -8,12 +8,12 @@
 		/* getIssueTotalCount */
 		SELECT COUNT(issue_id) 
 		FROM issue
-		<trim prefix="WHERE" prefixOverrides="AND">
+		WHERE user_id = #{user_id} 
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
-			${search_word} = #{search_value}
+			AND ${search_word} = #{search_value}
 			</if>
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
-			${search_word} LIKE '%' || #{search_value} || '%'
+			AND ${search_word} LIKE '%' || #{search_value} || '%'
 			</if>
 			<if test="start_date != null and start_date != ''">
 			<![CDATA[
@@ -25,7 +25,6 @@
 			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
 			]]>
 			</if>
-		</trim>
 	</select>
 
 	<!-- 이슈 목록 -->
@@ -36,13 +35,14 @@
 			(SELECT count(issue_comment_id) FROM issue_comment WHERE issue_id = A.issue_id) AS comment_count
 		FROM(
 			SELECT *
-			FROM issue 
-			<trim prefix="WHERE" prefixOverrides="AND">
+			FROM issue
+			WHERE user_id = #{user_id} 
+			<trim prefixOverrides="AND">
 				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
-				${search_word} = #{search_value}
+				AND ${search_word} = #{search_value}
 				</if>
 				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
-				${search_word} LIKE '%' || #{search_value} || '%'
+				AND ${search_word} LIKE '%' || #{search_value} || '%'
 				</if>
 				<if test="start_date != null and start_date != ''">
 				<![CDATA[

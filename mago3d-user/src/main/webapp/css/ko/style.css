@@ -633,7 +633,7 @@ input[type=file] {
 	
 textarea {
 	min-width: 100%;
-	min-height: 300px; }
+	min-height: 150px; }
 
 textarea.reply {
 	min-height: 60px; }
@@ -669,7 +669,8 @@ label {
 
 .m {
 	width: 160px; }
-	
+.ml {
+	width: 280px; }	
 .l {
 	width: 400px; }
 	

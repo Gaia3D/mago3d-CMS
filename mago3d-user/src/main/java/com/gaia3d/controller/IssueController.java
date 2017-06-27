@@ -73,6 +73,15 @@ public class IssueController {
 	@RequestMapping(value = "list-issue.do")
 	public String listIssue(HttpServletRequest request, Issue issue, @RequestParam(defaultValue="1") String pageNo, Model model) {
 		
+		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+		if(userSession == null) {
+			issue.setUser_id("guest");
+			issue.setUser_name("guest");
+		} else {
+			issue.setUser_id(userSession.getUser_id());
+			issue.setUser_name(userSession.getUser_name());
+		}
+		
 		log.info("@@ issue = {}", issue);
 		if(StringUtil.isNotEmpty(issue.getStart_date())) {
 			issue.setStart_date(issue.getStart_date().substring(0, 8) + DateUtil.START_TIME);

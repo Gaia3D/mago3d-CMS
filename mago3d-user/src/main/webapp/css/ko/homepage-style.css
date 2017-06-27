@@ -97,7 +97,7 @@ height: 47px;
 margin: 15px 0 0 0;
 text-indent: -999em;
 cursor: pointer;
-background: url(../../images/ko/logo.png) no-repeat 0 0;
+background: url(/images/ko/logo.png) no-repeat 0 0;
 }
 h1 > a {
 display: block;
@@ -132,7 +132,7 @@ margin:20px 0 10px;
 padding-left: 20px;
 font-size: 22px;
 font-weight: 200;
-background: url(../../images/ko/bullet_h4.png) no-repeat left 50%;
+background: url(/images/ko/bullet_h4.png) no-repeat left 50%;
 }
 h5 {
 
@@ -300,7 +300,7 @@ cursor: pointer;
 text-indent: -999em;
 border-radius: 25px;
 border: 1px solid #dedede;
-background: url(../../images/ko/contact.png) no-repeat center -430px;
+background: url(/images/ko/contact.png) no-repeat center -430px;
 }
 
 
@@ -340,7 +340,7 @@ color: #fff;
 border-radius: 5px;
 border: none;
 background-color: #0066cc;
-background-image: url(../../images/ko/ico.png);
+background-image: url(/images/ko/ico.png);
 background-repeat: no-repeat;
 background-position: 30px 20px;
 }
@@ -438,7 +438,7 @@ text-align: center;
 display: inline-block;
 margin-right: 30px;
 padding-top: 70px;
-background-image:url(../../images/ko/contact.png);
+background-image:url(/images/ko/contact.png);
 background-repeat: no-repeat;
 }
 .contact:last-child li {
@@ -717,7 +717,7 @@ box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
 /* /////// MAIN //////// */
 
 .pattern_bg {
-background: rgba(0, 0, 0, 0) url("../../images/ko/pattern_bg.png") repeat scroll 0 0;
+background: rgba(0, 0, 0, 0) url("/images/ko/pattern_bg.png") repeat scroll 0 0;
 display: block;
 left: 0;
 position: absolute;

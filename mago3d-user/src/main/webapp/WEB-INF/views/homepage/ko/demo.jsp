@@ -11,8 +11,7 @@
 	<%-- <link rel="stylesheet" href="/css/${lang}/font/font.css" /> --%>
 <%-- 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" /> --%>
-<%-- 	<link rel="stylesheet" href="/css/${lang}/style.css" /> --%>
-<!-- 	<link rel="stylesheet" href="/sample/style.css" /> -->
+<link rel="stylesheet" href="/css/${lang}/style.css" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans"> 
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css" />
 	
@@ -29,13 +28,31 @@
 <body>
 	<div id="apiAndIssueArea">
 		<ul>
+			<li style="background-color : #573592"><a href="#issueContent" style="color: #FFFFFF">최근 등록한 이슈(30일 이내)</a></li>
 		    <li style="background-color : #573592"><a href="#apiContent" style="color: #FFFFFF">API 목록</a></li>
-		    <li style="background-color : #573592"><a href="#issueContent" style="color: #FFFFFF">최근 등록한 이슈(30일 이내)</a></li>
 		</ul>
+		<div id="issueContent" style="background-color: #FFFFFF">
+<c:if test="${empty issueList }">
+			<div style="text-align: center; vertical-align:middle; height: 50px;">
+				Issue가 존재하지 않습니다.
+			</div>
+</c:if>
+<c:if test="${!empty issueList }">
+	<c:forEach var="issue" items="${issueList}" varStatus="status">	
+			<div>
+				<div>
+					<span>${status.count }</span>
+					<span>${issue.title }</span>
+				</div>
+				<div id="issue_toggle_${issue.issue_id }">${issue.data_group_name } ${issue.viewInsertDate }</div>
+			</div>
+	</c:forEach>
+</c:if>
+		</div>
 		<div id="apiContent" style="background-color: #FFFFFF">
 			<div style="margin-top: 15px;">
-				<span style="padding-right: 70px;">Data Key</span>
-				<input type="text" id="data_key" name="data_key" size="10" />
+				<span style="padding-right: 60px;">Data Key</span>
+				<input type="text" id="data_key" name="data_key" size="15" />
 				<button type="button" id="searchData" >검색</button>
 			</div>
 			<div style="margin-top: 15px;">
@@ -45,17 +62,6 @@
 				<input type="radio" id="hideBoundingBox" name="boundingBox" value="false" onclick="changeBoundingBox(false);"/>
 				<label for="hideBoundingBox"> 비표시 </label>
 			</div>
-		</div>
-		<div id="issueContent" style="background-color: #FFFFFF">
-			<p>Morbi tincidunt, dui sit amet ellenteris consectetur tortor et purus.</p>
-			<p>a</p>
-			<p>a</p>
-			<p>a</p>
-			<p>a</p>
-			<p>a</p>
-			<p>a</p>
-			<p>a</p>
-			<p>a</p>
 		</div>
 	</div>
 
@@ -122,7 +128,7 @@
 <!-- 	        <h4>테이블</h4> -->
 	        <table>
 	        	<tr>
-	        		<th style="width: 100px;">
+	        		<th style="width: 120px;">
 	        			<form:label path="data_group_id">데이터 그룹</form:label>
 	        			<span class="icon-glyph glyph-emark-dot color-warning"></span>
 	        		</th>
@@ -151,7 +157,7 @@
 	        			<form:label path="data_key">Data Key</form:label>
 	        			<span class="icon-glyph glyph-emark-dot color-warning"></span>
 	        		</th>
-	        		<td><form:input path="data_key" cssClass="l" />
+	        		<td><form:input path="data_key" cssClass="ml" />
 						<form:errors path="data_key" cssClass="error" />
 						<form:hidden path="latitude"/>
 						<form:hidden path="longitude"/>
@@ -162,7 +168,7 @@
 	        			<form:label path="title">제목</form:label>
 	        			<span class="icon-glyph glyph-emark-dot color-warning"></span>
 	        		</th>
-	        		<td><form:input path="title" cssClass="xl" size="40" />
+	        		<td><form:input path="title" cssClass="ml" />
 						<form:errors path="title" cssClass="error" />
 	        		</td>
 	        	</tr>
@@ -180,27 +186,27 @@
 	        		<th><form:label path="due_date">마감일</form:label></th>
 	        		<td><form:hidden path="start_date" />
 						<input type="text" id="start_day" name="start_day" placeholder="날짜" size="7" maxlength="4" />
-						<input type="text" id="start_hour" name="start_hour" class="s" placeholder="시간" size="5" maxlength="2" />
+						<input type="text" id="start_hour" name="start_hour" placeholder="시간" size="3" maxlength="2" />
 						<span class="delimeter">:</span>
-						<input type="text" id="start_minute" name="start_minute" class="s" placeholder="분" size="5" maxlength="2" />
+						<input type="text" id="start_minute" name="start_minute" placeholder="분" size="3" maxlength="2" />
 	        		</td>
 	        	</tr>
 	        	<tr>
 	        		<th><form:label path="assignee">Assignee</form:label></th>
-	        		<td><form:input path="assignee" cssClass="l" placeholder="대리자" />
+	        		<td><form:input path="assignee" cssClass="m" placeholder="대리자" />
 						<form:errors path="assignee" cssClass="error" />
 	        		</td>
 	        	</tr>
 	        	<tr>
 	        		<th><form:label path="reporter">reporter</form:label></th>
-	        		<td><form:input path="reporter" cssClass="l" placeholder="보고 해야 하는 사람" />
+	        		<td><form:input path="reporter" cssClass="m" placeholder="보고 해야 하는 사람" />
 						<form:errors path="reporter" cssClass="error" />
 	        		</td>
 	        	</tr>
 	        	<tr>
 	        		<th><form:label path="contents">내용</form:label></th>
 	        		<td>
-	        			<form:textarea path="contents" cols="40" rows="3" />
+	        			<form:textarea path="contents" />
 						<form:errors path="contents" cssClass="error" />
 	        		</td>
 	        	</tr>
