@@ -16,8 +16,10 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans"> 
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css" />
 	
+		<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-toast/jquery.toast.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-toast/jquery.toast.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
@@ -25,6 +27,37 @@
 </head>
 
 <body>
+	<div id="apiAndIssueArea">
+		<ul>
+		    <li style="background-color : #573592"><a href="#apiContent" style="color: #FFFFFF">API 목록</a></li>
+		    <li style="background-color : #573592"><a href="#issueContent" style="color: #FFFFFF">최근 등록한 이슈(30일 이내)</a></li>
+		</ul>
+		<div id="apiContent" style="background-color: #FFFFFF">
+			<div style="margin-top: 15px;">
+				<span style="padding-right: 70px;">Data Key</span>
+				<input type="text" id="data_key" name="data_key" size="10" />
+				<button type="button" id="searchData" >검색</button>
+			</div>
+			<div style="margin-top: 15px;">
+				<span style="padding-right: 40px;">Bounding Box</span>
+				<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />
+				<label for="showBoundingBox"> 표시 </label>
+				<input type="radio" id="hideBoundingBox" name="boundingBox" value="false" onclick="changeBoundingBox(false);"/>
+				<label for="hideBoundingBox"> 비표시 </label>
+			</div>
+		</div>
+		<div id="issueContent" style="background-color: #FFFFFF">
+			<p>Morbi tincidunt, dui sit amet ellenteris consectetur tortor et purus.</p>
+			<p>a</p>
+			<p>a</p>
+			<p>a</p>
+			<p>a</p>
+			<p>a</p>
+			<p>a</p>
+			<p>a</p>
+			<p>a</p>
+		</div>
+	</div>
 
 	<div class="trigger" >
 		<button type="button"></button>
@@ -250,6 +283,12 @@
 		managerFactory.flyTo(longitude, latitude, height, duration);
 	}
 	
+	$( function() {
+		$("#apiAndIssueArea" ).tabs();
+	});
+
+
+	
 	// 이슈 등록
 	$("#issueEnable").click(function() {
 		if(insertIssueFlag) {
@@ -400,6 +439,17 @@
 			return;
 		}
 	});
+	
+	
+	// Data 검색
+	$("#searchData").click(function() {
+		searchDataAPI($("#data_key").val());
+	});
+	// boundingBox 표시/비표시
+	function changeBoundingBox(isShow) {
+		$("input:radio[name='boundingBox']:radio[value='" + isShow + "']").prop("checked", true);
+		changeBoundingBoxAPI(isShow);
+	}
 </script>
 </body>
 </html>
