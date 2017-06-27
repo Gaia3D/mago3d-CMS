@@ -8,10 +8,10 @@
 		/* getListDataGroup */
 		WITH RECURSIVE data_group_tree (
 			data_group_id, data_group_key, data_group_name, ancestor, parent, depth, view_order, default_yn, 
-			use_yn, child_yn, description, insert_date, path, cycle
+			use_yn, child_yn, latitude, longitude, height, duration, description, insert_date, path, cycle
 		) AS (
 	        SELECT A.data_group_id, A.data_group_key, A.data_group_name, A.ancestor, A.parent, A.depth, A.view_order, A.default_yn, 
-	        	A.use_yn, A.child_yn, A.description, A.insert_date, ARRAY[A.view_order], false
+	        	A.use_yn, A.child_yn, A.latitude, A.longitude, A.height, A.duration, A.description, A.insert_date, ARRAY[A.view_order], false
 			FROM data_group A
 	        WHERE A.parent = 0
 	        <if test="use_yn == 'Y'.toString()">
@@ -19,11 +19,11 @@
 	        </if>
 			UNION ALL
 	        SELECT A.data_group_id, A.data_group_key, A.data_group_name, A.ancestor, A.parent, A.depth, A.view_order, A.default_yn,
-	        	A.use_yn, A.child_yn, A.description, A.insert_date, path || A.view_order, A.data_group_id = ANY(path)
+	        	A.use_yn, A.child_yn, A.latitude, A.longitude, A.height, A.duration, A.description, A.insert_date, path || A.view_order, A.data_group_id = ANY(path)
 	        FROM data_group A, data_group_tree B
 	        WHERE A.parent = B.data_group_id AND not cycle
 		)
-	    SELECT data_group_id, data_group_key, data_group_name, ancestor, parent, depth, view_order, default_yn, use_yn, child_yn, description, insert_date, path
+	    SELECT data_group_id, data_group_key, data_group_name, ancestor, parent, depth, view_order, default_yn, use_yn, child_yn, latitude, longitude, height, duration, description, insert_date, path
 	    FROM data_group_tree
 	    <if test="use_yn == 'Y'.toString()">
 	    WHERE use_yn = 'Y'
@@ -102,7 +102,7 @@
 	<insert id="insertDataGroup" parameterType="dataGroup" >
 		/* insertDataGroup */
 		INSERT INTO data_group(
-			data_group_id, data_group_key, data_group_name, ancestor, parent, depth, view_order, use_yn, description
+			data_group_id, data_group_key, data_group_name, ancestor, parent, depth, view_order, use_yn, latitude, longitude, height, duration, description
 		) values(
 			#{data_group_id}, #{data_group_key}, #{data_group_name}, 
 			<if test="depth != null and depth == 1">
@@ -111,7 +111,7 @@
 			<if test="depth != null and depth != 1">
 			#{ancestor},
  			</if>
-			#{parent}, #{depth}, #{view_order}, #{use_yn}, #{description}
+			#{parent}, #{depth}, #{view_order}, #{use_yn}, #{latitude}, #{longitude}, #{height}, #{duration}, #{description}
 		)
 	</insert>
 	
@@ -134,6 +134,10 @@
 			view_order = #{view_order},
 			</if>
 			use_yn = #{use_yn},
+			latitude = #{latitude},
+			longitude = #{longitude},
+			height = #{height},
+			duration = #{duration},
 			description = #{description}
 		WHERE data_group_id = #{data_group_id}
 	</update>

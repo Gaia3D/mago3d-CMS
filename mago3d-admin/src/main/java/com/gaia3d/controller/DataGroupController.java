@@ -305,7 +305,11 @@ public class DataGroupController {
 		dataGroup.setView_order(0);
 		dataGroup.setDepth(0);
 		dataGroup.setDefault_yn("Y");
-		dataGroup.setUse_yn("Y");		
+		dataGroup.setUse_yn("Y");
+		dataGroup.setLatitude("");
+		dataGroup.setLongitude("");
+		dataGroup.setHeight("");
+		dataGroup.setDuration(2000);
 		dataGroup.setDescription("");
 		
 		return dataGroup;
@@ -339,6 +343,10 @@ public class DataGroupController {
 		builder.append("\"default_yn\"").append(":").append("\"" + dataGroup.getDefault_yn() + "\"").append(",");
 		builder.append("\"use_yn\"").append(":").append("\"" + dataGroup.getUse_yn() + "\"").append(",");
 		builder.append("\"child_yn\"").append(":").append("\"" + dataGroup.getUse_yn() + "\"").append(",");
+		builder.append("\"latitude\"").append(":").append("\"" + dataGroup.getLatitude() + "\"").append(",");
+		builder.append("\"longitude\"").append(":").append("\"" + dataGroup.getLongitude() + "\"").append(",");
+		builder.append("\"height\"").append(":").append("\"" + dataGroup.getHeight() + "\"").append(",");
+		builder.append("\"duration\"").append(":").append("\"" + dataGroup.getDuration() + "\"").append(",");
 		builder.append("\"description\"").append(":").append("\"" + dataGroup.getDescription() + "\"");
 		
 		if(dataGroupCount > 1) {
@@ -384,7 +392,11 @@ public class DataGroupController {
 				builder.append("\"depth\"").append(":").append("\"" + dataGroup.getDepth() + "\"").append(",");
 				builder.append("\"default_yn\"").append(":").append("\"" + dataGroup.getDefault_yn() + "\"").append(",");
 				builder.append("\"use_yn\"").append(":").append("\"" + dataGroup.getUse_yn() + "\"").append(",");			
-				builder.append("\"child_yn\"").append(":").append("\"" + dataGroup.getUse_yn() + "\"").append(",");			
+				builder.append("\"child_yn\"").append(":").append("\"" + dataGroup.getUse_yn() + "\"").append(",");
+				builder.append("\"latitude\"").append(":").append("\"" + dataGroup.getLatitude() + "\"").append(",");
+				builder.append("\"longitude\"").append(":").append("\"" + dataGroup.getLongitude() + "\"").append(",");
+				builder.append("\"height\"").append(":").append("\"" + dataGroup.getHeight() + "\"").append(",");
+				builder.append("\"duration\"").append(":").append("\"" + dataGroup.getDuration() + "\"").append(",");
 				builder.append("\"description\"").append(":").append("\"" + dataGroup.getDescription() + "\"");
 				
 				if(i == (dataGroupCount-1)) {

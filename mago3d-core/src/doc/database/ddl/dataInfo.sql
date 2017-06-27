@@ -14,6 +14,10 @@ create table data_group(
 	child_yn					char(1)								default 'N',
 	default_yn					char(1)								default 'N',
 	use_yn						char(1)								default 'Y',
+	latitude					varchar(30),
+	longitude					varchar(30),
+	height						varchar(30),
+	duration					smallint,
 	description					varchar(256),
 	insert_date					timestamp with time zone			default now(),
 	constraint data_group_pk 	primary key (data_group_id)	
@@ -30,6 +34,10 @@ comment on column data_group.view_order is '나열 순서';
 comment on column data_group.child_yn is '자식 존재유무, Y : 존재, N : 존재안함(기본)';
 comment on column data_group.default_yn is '삭제 불가, Y : 기본, N : 선택';
 comment on column data_group.use_yn is '사용유무, Y : 사용, N : 사용안함';
+comment on column data_group.latitude is '위도';
+comment on column data_group.longitude is '경도';
+comment on column data_group.height is '높이';
+comment on column data_group.duration is 'flyTo 이동시간';
 comment on column data_group.description is '설명';
 comment on column data_group.insert_date is '등록일';
 

@@ -48,6 +48,15 @@ public class DataGroup {
 	private String use_yn;
 	// 자식 존재 유무, Y : 존재, N : 존재안함(기본)
 	private String child_yn;
+	// 위도
+	private String latitude;
+	// 경도
+	private String longitude;
+	// 높이
+	private String height;
+	// flyTo 이동시간
+	private Integer duration;
+	
 	// 설명
 	private String description;
 	// 등록일

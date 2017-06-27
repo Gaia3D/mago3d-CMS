@@ -128,9 +128,8 @@ background-color: #eee;
 
 #magoControllArea {
 	position: absolute;
-	top: 155px;
-	right: 30px;
-	direction: rtl;
+	top: 50px;
+	right: 0px;
 	z-index: 999;
 }
 

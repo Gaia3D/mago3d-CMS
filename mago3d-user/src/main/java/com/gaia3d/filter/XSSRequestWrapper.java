@@ -94,6 +94,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
             	int afterLength = value.length();
             	if(beforeLength != afterLength) {
             		value = "[NOTICE] This variable XSS attacks Suspected.";
+            		System.out.println("@@@@@@@@@@@ [NOTICE] This variable XSS attacks Suspected.");
             		break;
             	}
             }

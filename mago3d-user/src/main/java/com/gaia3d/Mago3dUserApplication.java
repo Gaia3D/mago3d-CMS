@@ -58,7 +58,7 @@ public class Mago3dUserApplication extends SpringBootServletInitializer {
 	    TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory() {
 	        @Override
 	        protected void postProcessContext(Context context) {
-	            final int cacheSize = 40 * 1024;
+	            final int cacheSize = 256 * 1024;
 	            StandardRoot standardRoot = new StandardRoot(context);
 	            standardRoot.setCacheMaxSize(cacheSize);
 	            context.setResources(standardRoot); // This is what made it work in my case.

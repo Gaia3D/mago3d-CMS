@@ -63,6 +63,10 @@ var fnObj = {
 					$("[name=use_yn]").filter("[value='" + item.use_yn + "']").prop("checked",true);
 					$("#use_yn > option[value='"+item.use_yn+"']").attr("selected", "true");
 					$("#data_group_key").val(item.data_group_key);
+					$("#latitude").val(item.latitude);
+					$("#longitude").val(item.longitude);
+					$("#height").val(item.height);
+					$("#duration").val(item.duration);
 					$("#description").val(item.description);
 					$("#ancestor").val(item.ancestor);
 					$("#parent").val(item.parent);

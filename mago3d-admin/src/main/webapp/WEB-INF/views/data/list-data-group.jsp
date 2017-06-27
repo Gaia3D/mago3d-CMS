@@ -98,6 +98,17 @@
 												</td>
 											</tr>
 											<tr>
+												<th class="col-label" scope="row">
+													<label for="latitude">위도/경도/높이/초</label>
+												</th>
+												<td class="col-input">
+													<input type="text" id="latitude" name="latitude" value="" class="s" />
+													<input type="text" id="longitude" name="longitude" value="" class="s" />
+													<input type="text" id="height" name="height" value="" class="s" />
+													<input type="text" id="duration" name="duration" value="" class="s" />
+												</td>
+											</tr>
+											<tr>
 												<th class="col-label" scope="row"><label for="description">설명</label></th>
 												<td class="col-input"><input type="text" id="description" name="description" value="" class="l"/></td>
 											</tr>

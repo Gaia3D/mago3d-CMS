@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/common/taglib.jsp" %>
 <%@ include file="/WEB-INF/views/common/config.jsp" %>
+<%@ page isErrorPage="true" %>
+<%
+	exception.printStackTrace();
+%>
 
 <!DOCTYPE html>
 <html lang="${accessibility}">
@@ -28,6 +32,7 @@
 				</div>
 				<div class="marT40"></div>
 				<div class="list">
+				============ ${exception.message} #######################
 					<div style="float:left; margin-right:40px; padding-left: 20px;"><img src="/images/ko/common/error.png" width="130" height="130" /></div>
 			        <div style="font-size:22px; padding-top: 30px;"><b>요청하신 페이지를 찾을 수 없습니다.</b></div>
 			        <div style="margin-top:10px;">브라우저 주소 입력란을 다시 한번 확인해 주십시오. &nbsp;&nbsp;<a href="/main/index.do" class="button">홈</a></div>

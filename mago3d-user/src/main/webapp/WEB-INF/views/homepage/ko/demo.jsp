@@ -36,30 +36,34 @@
 		</ul>
 	</div>
 
-	<ul class="dropdownmenu">
-<c:forEach var="dataGroup" items="${projectDataGroupList}">
-		<li>${dataGroup.data_group_name}
-			<ul>
-				<li>BoundingBox 표시</li>
-				<li>색깔 변경</li>
-				<li>위치 변환</li>
-			</ul>
-		</li>
-</c:forEach>	
-	</ul>
-
 	<div id="magoControllArea">
+<c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status">
+		<div id="" style="padding-top:5px; width: 120px;">
+			<img src="/images/${lang }/homepage/data_group_${status.count }.png" width="21px;" height="33px;" alt="Issue Input" />
+	<c:if test="${dataGroup.data_group_name == 'JT' }">
+			<a href="#" onclick="alert('preparing...');">
+				<span style="padding-left:10px; width: 50px; bold; color: #FFFFFF;">${dataGroup.data_group_name }</span>
+			</a>
+	</c:if>
+	<c:if test="${dataGroup.data_group_name != 'JT' }">
+			<a href="#" onclick="flyTo('${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">
+				<span style="padding-left:10px; width: 50px; bold; color: #FFFFFF;">${dataGroup.data_group_name }</span>
+			</a>
+	</c:if>
+		</div>
+</c:forEach>	
+		<div style="height: 30px;"></div>
 		<div id="issueEnable" style="width: 150px;">
 			<img src="/images/${lang }/homepage/issue_input.png" alt="Issue Input" width="40px;" height="50px;" />
 			<p />
 			<span id="issueEnableLabel" style="margin-top: 5px; width: 50px; bold; color: #FFFFFF;">Issue 등록</span>
 		</div>
-		<div id="objectInfoEnable" style="margin-top:20px; width:150px;">
+		<div id="objectInfoEnable" style="margin-top:10px; width:150px;">
 			<img src="/images/${lang }/homepage/info_view.png" alt="Info View" width="40px;" height="50px;" />
 			<p />
 			<span id="objectInfoEnableLabel" style="margin-top: 5px; width: 50px; bold; color: #FFFFFF;">Object 정보 표시</span>
 		</div>
-		<div id="issuesEnable" style="margin-top:20px; width:150px;">
+		<div id="issuesEnable" style="margin-top:10px; width:150px;">
 			<img src="/images/${lang }/homepage/issue_list.png" alt="Info View" width="40px;" height="50px;" />
 			<p />
 			<span id="issuesEnableLabel" style="margin-top: 5px; width: 50px; bold; color: #FFFFFF;">Issue 목록</span>
@@ -74,7 +78,7 @@
 	<div id="magoContainer" style="position: absolute; width: 99%; height: 95%; margin-top: 0; padding: 0; overflow: hidden;"></div>
 
 	<form:form id="issue" modelAttribute="issue" method="post" onsubmit="return false;">
-	<div id="inputIssueLayer" style="display: none; top:40%; left:10%; width:450px; margin:-250px 0 0 -150px; " class="layer">
+	<div id="inputIssueLayer" style="display: none; top:40%; left:45%; width:450px; margin:-250px 0 0 -150px; " class="layer">
 	    <div class="layerHeader">
 	        <h2>Issue Register</h2>
 	        <div>
@@ -85,7 +89,10 @@
 <!-- 	        <h4>테이블</h4> -->
 	        <table>
 	        	<tr>
-	        		<th style="width: 100px;"><form:label path="data_group_id">데이터 그룹</form:label></th>
+	        		<th style="width: 100px;">
+	        			<form:label path="data_group_id">데이터 그룹</form:label>
+	        			<span class="icon-glyph glyph-emark-dot color-warning"></span>
+	        		</th>
 	        		<td>
 	        			<form:select path="data_group_id" cssClass="select">
 <c:forEach var="dataGroup" items="${projectDataGroupList}">
@@ -95,7 +102,9 @@
 	        		</td>
 	        	</tr>
 	        	<tr>
-	        		<th><form:label path="issue_type">Issue Type</form:label></th>
+	        		<th>
+	        			<form:label path="issue_type">Issue Type</form:label>
+	        		</th>
 	        		<td>
 	        			<form:select path="issue_type" cssClass="select">
 <c:forEach var="commonCode" items="${issueTypeList}">
@@ -105,7 +114,10 @@
 	        		</td>
 	        	</tr>
 	        	<tr>
-	        		<th><form:label path="data_key">Data Key</form:label></th>
+	        		<th>
+	        			<form:label path="data_key">Data Key</form:label>
+	        			<span class="icon-glyph glyph-emark-dot color-warning"></span>
+	        		</th>
 	        		<td><form:input path="data_key" cssClass="l" />
 						<form:errors path="data_key" cssClass="error" />
 						<form:hidden path="latitude"/>
@@ -113,7 +125,10 @@
 	        		</td>
 	        	</tr>
 	        	<tr>
-	        		<th><form:label path="title">제목</form:label></th>
+	        		<th>
+	        			<form:label path="title">제목</form:label>
+	        			<span class="icon-glyph glyph-emark-dot color-warning"></span>
+	        		</th>
 	        		<td><form:input path="title" cssClass="xl" size="40" />
 						<form:errors path="title" cssClass="error" />
 	        		</td>
@@ -159,7 +174,7 @@
 	        </table>
 	        
 	      	<div class="btns">
-				<button id="issueInsertButton">Save</button>
+	 			<button id="issueInsertButton">Save</button>
 			</div>
 	    </div>
 	</div>
@@ -231,6 +246,10 @@
 	var listIssueFlag = false;
 	var managerFactory = new ManagerFactory(null, "magoContainer", policyJson, dataGroupMap);
 	
+	function flyTo(longitude, latitude, height, duration) {
+		managerFactory.flyTo(longitude, latitude, height, duration);
+	}
+	
 	// 이슈 등록
 	$("#issueEnable").click(function() {
 		if(insertIssueFlag) {
@@ -289,7 +308,7 @@
 	function showSelectedObject(projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll){
 		if(objectInfoViewFlag) {
 			$.toast({
-			    heading: 'How to contribute?!',
+			    heading: 'Click Object Info',
 			    text: [
 			        'projectId : ' + projectId, 
 			        'blockId : ' + blockId, 
@@ -319,7 +338,7 @@
 			$("#title").focus();
 			return false;
 		}
-		if ($("#assignee").val() == "") {
+		/* if ($("#assignee").val() == "") {
 			alert(JS_MESSAGE["issue.assignee.empty"]);
 			$("#assignee").focus();
 			return false;
@@ -328,7 +347,7 @@
 			alert(JS_MESSAGE["issue.reporter.empty"]);
 			$("#reporter").focus();
 			return false;
-		}
+		} */
 		if ($("#contents").val() == "") {
 			alert(JS_MESSAGE["issue.contents.empty"]);
 			$("#contents").focus();
@@ -346,19 +365,19 @@
 		}
 	}
 	
-	var insertIssueFlag = true;
-	function insertIssue() {
+	var isInsertIssue = true;
+	$("#issueInsertButton").click(function() {
 		if (check() == false) {
 			return false;
 		}
-		if(insertIssueFlag) {
-			insertIssueFlag = false;
+		if(isInsertIssue) {
+			isInsertIssue = false;
 			var info = $("#issue").serialize();		
 			$.ajax({
+				url: "/issue/ajax-insert-issue.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -368,18 +387,19 @@
 					}
 					
 					$("#inputIssueLayer").hide();
-					insertIssueFlag = true;
+					isInsertIssue = true;
 				},
 				error:function(request,status,error){
-			        alert(JS_MESSAGE["ajax.error.message"]);
-			        insertIssueFlag = true;
+			        //alert(JS_MESSAGE["ajax.error.message"]);
+			        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			        isInsertIssue = true;
 				}
 			});
 		} else {
 			alert(JS_MESSAGE["button.dobule.click"]);
 			return;
-		}	
-	}
+		}
+	});
 </script>
 </body>
 </html>
