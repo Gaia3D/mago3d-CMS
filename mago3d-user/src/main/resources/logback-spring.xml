@@ -28,8 +28,9 @@
 	</appender>
 	 -->
 
-	<logger name="org.apache.commons" level="INFO" additivity="false" />
-	<logger name="org.springframework" level="INFO" additivity="false" />
+	<logger name="org.apache.commons" level="debug" additivity="false" />
+	<logger name="org.apache.catalina" level="debug" additivity="false" />
+	<logger name="org.springframework" level="debug" additivity="false" />
 	<logger name="org.springframework.boot" level="debug" additivity="false" />
 	<logger name="java.sql.Connection" level="debug" additivity="false" />
 	<logger name="java.sql.PreparedStatement" level="debug" additivity="false" />
