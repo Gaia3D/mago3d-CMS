@@ -238,7 +238,7 @@ background:  tomato;
 /* contents */
 .contents > div.part {
 margin-bottom: 150px;
-padding-top: 100px;
+padding-top: 50px;
 }
 /* .contents:nth-child(1) div{
 padding-top: 80px;
@@ -609,14 +609,6 @@ font-size: 1.1em;
 color: #FFF;
 margin-bottom: 40px;
 }
-.simplebar {
-background-color: 		#DCDCDC;
-width: 1200px;
-height: 1.5px;
-position: relative;
-display: inline-block;
-margin-top: 40px;
-}
 /* /////// propit /////// */
 #featured {
 padding: 4em 0em;
@@ -808,4 +800,9 @@ z-index: 11;
 	top: 50%;
 	margin-top: -32px;
 	font-size: 64px;
+}
+
+/* //////////// architecture ////////// */
+.architecture img{
+margin-bottom: 30px;
 }

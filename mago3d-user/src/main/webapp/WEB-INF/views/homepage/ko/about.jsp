@@ -125,7 +125,7 @@
 				</table>
 				<a href="#" class="goTop">위로</a>
 			</div>
-      <span class="simplebar"></span>
+      
 			<!-- // ABOUT -->
 
 			<div id="now" class="part">
@@ -134,47 +134,14 @@
 				<p>
 					mago3d는 spring framework(springboot) 기반의 3d 플랫폼 입니다.공간 정보 DB 관련 처리를 위해 PostGis를 사용하고 있으며, 3D 렌더링 부분은 cesium, worldwind 등을 오픈 소스 javascript librar를 사용하고 있습니다. 3D 데이터를 웹에서 Rendering 하기 위해서 자체 개발한 F4D 포맷 및 Converter를 사용하고 있으며 가시화 및 렌더링 처리를 담당하는 mago3djs(javascript library)로 이루어져 있습니다.
 				</p>
-				<img src="/images/${lang}/homepage/about.png" alt="">
-				
-				<h4>API</h4>
-				<table>
-					<tr>
-						<td>mago3d 상태 변경</td>
-						<td>deploy 상태 변경</td>
-					</tr>
-					<tr>
-						<td>BoundingBox 상태 변경</td>
-						<td>OutFitting 상태 변경</td>
-					</tr>
-					<tr>
-						<td>그림자 상태 변경</td>
-						<td>가시거리 변경</td>
-					</tr>
-          <tr>
-            <td>블록 검색</td>
-            <td>HighLighting</td>
-          </tr>
-          <tr>
-            <td>Color 변경</td>
-            <td>Location & Roatation 변경</td>
-          </tr>
-          <tr>
-            <td>Location & Roatation 취득</td>
-            <td>블록 마우스 이동</td>
-          </tr>
-          <tr>
-            <td>블록 Location & Rotation   Notice</td>
-            <td>마우스 클릭 객체 이동 대상 변경</td>
-          </tr>
-				</table>
-				<div class="api">
-					<a href="">
-						<p>Show API</p>
-					</a>
+				<div class="architecture">
+					<img src="/images/${lang}/homepage/arc.png" alt="">
+					<img src="/images/${lang}/homepage/sw.png" alt="">
 				</div>
+				
 				<a href="#" class="goTop">위로</a>
 			</div>
-      <span class="simplebar"></span>
+      
 			<!-- // NOW -->
 
 			<div id="will" class="part">
