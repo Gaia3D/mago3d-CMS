@@ -15,6 +15,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<link rel="stylesheet" href="/css/${lang}/hojun-style.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
@@ -35,7 +36,7 @@
 				<li class="on">mago3D <span></span></li>
 				<li><a href="/homepage/demo.do">Demo</a><span></span></li>
 				<li><a href="/homepage/download.do">Download</a><span></span></li>
-				<li><a href="/homepage/tutorial.do">Tutorials</a><span></span></li>
+				<li><a href="/homepage/tutorials.do">Tutorials</a><span></span></li>
 			</ul>
 			<ul class="language">
 				<li class="on">KO</li>
@@ -53,110 +54,54 @@
 			<div id="about" class="part">
 				<h3>About<span></span></h3>
 				<p>
-					MAGO3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. MAGO3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 이에 따라, MAGO3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.
-				</p>
-
-				<h4>특징<span></span></h4>
-				<p>
-          공간의 끊김 없는 통합(Seamless integration of indoor & outdoor space) 웹브라우저 상에서 구동되며, 별도의 플러그인이나 엑티브엑스
-          설치가 필요 없습니다. 오픈소스(Cesium, World Wind)를 기반으로 개발된 오픈소스로서 개방성과 확장성 또한 뛰어납니다. 다양한 Rendering 알고리즘을 사용하여
-          초대용량 3차원 포맷(.jt, .ifc, .obj, .3ds, .dae)을 초고속 렌더링 뿐만 아니라 효율적으로 관리를 할 수 있습니다.
-				</p>
-        <div class="wrapper_clear">
-          <h4>Rendering Algorithm</h4>
-          <br>
-          <div id="market" class="container">
-            <div class="row">
-              <div class="3u">
-                  <h2>삼각형 꼭지점 순서 보정</h2>
-                <p class="sub_title">WebGL이 지원하는 성능 향상 기법</p>
-                <p>
-                  <a href="#">
-                    <img src="/images/${lang}/homepage/octree.png" alt="">
-                  </a>
-                </p>
-                <input type="button" name="MORE" value="MORE" class="button">
-              </div>
-              <div class="3u">
-                  <h2>model/reference</h2>
-                <p class="sub_title">multi-instance - 경량화 logic</p>
-                <p>
-                  <a href="#">
-                    <img src="/images/${lang}/homepage/octree.png" alt="">
-                  </a>
-                </p>
-                <input type="button" name="MORE" value="MORE" class="button">
-              </div>
-              <div class="3u">
-                  <h2>VBO 생성</h2>
-                <p class="sub_title">생성할 때 삼각형을 크기별로 정렬</p>
-                <p>
-                  <a href="#">
-                    <img src="/images/${lang}/homepage/octree.png" alt="">
-                  </a>
-                </p>
-                <input type="button" name="MORE" value="MORE" class="button">
-              </div>
-              <div class="3u">
-                  <h2>3D 공간 octree</h2>
-                <p class="sub_title">공간자료를 volume 별로 묶는 단위</p>
-                <p>
-                  <a href="#">
-                    <img src="/images/${lang}/homepage/octree.png" alt="">
-                  </a>
-                </p>
-                <input type="button" name="MORE" value="more" class="button">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="wrapper_clear">
-          <div id="market" class="container">
-            <div class="row">
-              <div class="3u">
-                  <h2>Lego Structure</h2>
-                <p class="sub_title">simplified data</p>
-                <p>
-                  <a href="#">
-                    <img src="/images/${lang}/homepage/octree.png" alt="">
-                  </a>
-                </p>
-                <input type="button" name="MORE" value="more" class="button">
-              </div>
-              <div class="3u">
-                  <h2>가시성 색인</h2>
-                <p class="sub_title">pre-processing - Visibility Indexing</p>
-                <p>
-                  <a href="#">
-                    <img src="/images/${lang}/homepage/octree.png" alt="">
-                  </a>
-                </p>
-                <input type="button" name="MORE" value="more" class="button">
-              </div>
-              <div class="3u">
-                  <h2>context device</h2>
-                <p class="sub_title">....</p>
-                <p>
-                  <a href="#">
-                    <img src="/images/${lang}/homepage/octree.png" alt="">
-                  </a>
-                </p>
-                <input type="button" name="MORE" value="more" class="button">
-              </div>
-              <div class="3u">
-                <h2>dependency 제거</h2>
-                <p class="sub_title">...</p>
-                <p>
-                  <a href="#">
-                    <img src="/images/${lang}/homepage/octree.png" alt="">
-                  </a>
-                </p>
-                <input type="button" name="MORE" value="more" class="button">
-              </div>
-            </div>
-          </div>
-        </div>
-
+					MAGO3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다.
+					MAGO3D는 기존의 솔루션과 달리 공간의 끊김 없는 통합 (Seamless integration of indoor & outdoor space)으로 실내외 구별 없이 끊김 없이 AFC와 3D GIS를 웹 브라우저에서 통합해 줍니다.
+					오픈소스 (Cesium, World Wind)를 기반으로 개발된 오픈소스로서 개방성과 확장성 또한 뛰어납니다. 이에 따라, MAGO3D 사용자는 다양한 Rendering 알고리즘을 사용하여 
+					초대용량 BIM(Building Information Modelling), JT (Jupiter), 
+					IFC, 3DS...등  3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다. 
+				</p>			
+				<div class="row_demo">
+					<div class="wrapper_demo">
+						<div class="highlight">
+							<a href="#">
+								<span class="image left">
+									<img src="/images/${lang}/homepage/gangbuk.png">
+								</span>
+								<div class="description">
+									<h2>3DS</h2>
+									<p>3DS Modeling</p>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div class="wrapper_demo">
+						<div class="highlight two">
+							<a href="#">
+								<span class="image fit">
+									<img src="/images/${lang}/homepage/Collada_model.png">
+								</span>
+								<div class="description">
+									<h2>COLLADA</h2>
+									<p>COLLADA Modeling</p>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div class="wrapper_demo">
+						<div class="highlight three">
+							<a href="#">
+								<span class="image left">
+									<img src="/images/${lang}/homepage/IFC_model.png">
+								</span>
+								<div class="description ">
+									<h2>IFC</h2>
+									<p>IFC Modeling</p>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+				
 				<h4>지원포맷<span></span></h4>
 				<table>
 					<tr>
@@ -172,50 +117,12 @@
 						<td><img src="/images/${lang}/homepage/obj.png"/></td> <td>OBJ(Wavefront file format specification) 3 차원 좌표 (다각형 선과 점), 텍스쳐 매핑 및 기타 오브젝트 정보를 포함하는 삼차원 물체에 사용되는 파일 포맷</td>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/3ds.png"/></td> <td>3DS(3D-Studio File Format)) AutoDesk의 3D-Studio에서 사용되는 파일 포맷입니다. </td>
+						<td><img src="/images/${lang}/homepage/3DS.png"/></td> <td>3DS(3D-Studio File Format)) AutoDesk의 3D-Studio에서 사용되는 파일 포맷입니다. </td>
 					</tr>
 					<tr>
 						<td width="64px"><img src="/images/${lang}/homepage/dae.png"></td> <td> COLLADA(COLLAborative Design Activity) - 3D assets 을 교환하기 위한 open standard XML schema 파일 포맷</td>
 					</tr>
 				</table>
-
-				<h4>실적 사례<span></span></h4>
-        <div id="featured">
-          <div class="container">
-            <div class="row">
-              <div class="4u">
-                <div class="box">
-                  <a href="#" class="image-left">
-                      <img src="/images/${lang}/homepage/Integration.jpg">
-                  </a>
-                  <h3>남극과학기지</h3>
-                  <p>웹기반 3차원</p>
-                  <input type="button" name="MORE" value="more" class="button">
-                </div>
-              </div>
-              <div class="4u">
-                <div class="box">
-                  <a href="#" class="image-left">
-                      <img src="/images/${lang}/homepage/Integration.jpg" alt="">
-                  </a>
-                  <h3>남극과학기지</h3>
-                  <p>웹기반 3차원</p>
-                  <input type="button" name="MORE" value="more" class="button">
-                </div>
-              </div>
-              <div class="4u">
-                <div class="box">
-                  <a href="#" class="image-left">
-                      <img src="/images/${lang}/homepage/Integration.jpg" alt="">
-                  </a>
-                  <h3>남극과학기지</h3>
-                  <p>웹기반 3차원</p>
-                  <input type="button" name="MORE" value="more" class="button">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 				<a href="#" class="goTop">위로</a>
 			</div>
       <span class="simplebar"></span>
@@ -228,7 +135,7 @@
 					mago3d는 spring framework(springboot) 기반의 3d 플랫폼 입니다.공간 정보 DB 관련 처리를 위해 PostGis를 사용하고 있으며, 3D 렌더링 부분은 cesium, worldwind 등을 오픈 소스 javascript librar를 사용하고 있습니다. 3D 데이터를 웹에서 Rendering 하기 위해서 자체 개발한 F4D 포맷 및 Converter를 사용하고 있으며 가시화 및 렌더링 처리를 담당하는 mago3djs(javascript library)로 이루어져 있습니다.
 				</p>
 				<img src="/images/${lang}/homepage/about.png" alt="">
-
+				
 				<h4>API</h4>
 				<table>
 					<tr>

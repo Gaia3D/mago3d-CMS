@@ -724,3 +724,88 @@ position: absolute;
 top: 0;
 z-index: 11;
 }
+/* ///////// 추가 ////// */
+
+.row_demo {
+	margin: -25px 0 -1 px -25px;
+}
+
+.row_demo>* {
+	padding: 25px 0 0 25px;
+}
+
+.wrapper_demo {
+	width: 30.3333333333%;
+	clear: none;
+	margin-left: 0;
+	display: inline-block;
+}
+
+.highlight {
+	position: relative;
+}
+
+.highlight a {
+	display: block;
+	text-decoration: none;
+	color: #fff;
+}
+
+.highlight image {
+	margin: 0;
+}
+
+.image .fit {
+	display: block;
+	width: 100%;
+}
+
+.highlight .description {
+	transition: background-color 0.25s ease-in-out;
+	background-color: #119ee7;
+	background-size: 100% 100%;
+	padding: 2.25em 100px 2.25em 2em;
+	position: relative;
+}
+
+.highlight.two .description {
+	background-color: #f35111;
+}
+
+.highlight.three .description {
+	background-color: #575757;
+}
+
+.highlight .description h2 {
+	font-size: 2em;
+	letter-spacing: -1px;
+	margin: 0;
+	color: inherit;
+}
+
+.highlight .description p {
+	font-weight: 300;
+	letter-spacing: 0;
+	opacity: 0.65;
+	color: inherit;
+	margin: 0.25em 0 0 0;
+	font-size: 1.25em;
+	line-height: 1.5em;
+}
+
+.highlight .description:before {
+	display: inline-block;
+	font-family: FontAwesome;
+	text-decoration: none;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	content: '\f0a9';
+	position: absolute;
+	right: 24px;
+	top: 50%;
+	margin-top: -32px;
+	font-size: 64px;
+}
