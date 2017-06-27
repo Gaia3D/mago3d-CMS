@@ -25,10 +25,10 @@
 		<div>
 			<h1><a href="./index.do">mago3D</a></h1>
 			<ul class="menu">
-				<li><a href="/homepage/mago3d.do">mago3D</a> <span></span></li>
+				<li><a href="/homepage/about.do">mago3D</a> <span></span></li>
 				<li><a href="/homepage/demo.do">Demo</a><span></span></li>
 				<li class="on">Download<span></span></li>
-				<li><a href="/homepage/tutorial.do">Tutorials</a><span></span></li>
+				<li><a href="/homepage/tutorials.do">Tutorials</a><span></span></li>
 			</ul>
 			<ul class="language">
 				<li class="on">KO</li>
@@ -48,8 +48,8 @@
 
 			<h4>추가된 기능</h4>
 			<ul>
-				<li>Block ID,Object Id를 이동하는 api가 추가 되었습니다.</li>
-				<li>색깔 및 highlighting 이 추가 되었고 속도는 20배 이상 빨리 하게 되었습니다. 정말 초초초 울트라 스피드 입니다.</li>
+				<li>다양한 유형의 이슈를 등록할 수 있고, 이슈 목록에서 누가,언제,어디서 이슈를 등록했는지 알 수 있습니다.</li>
+				<li>엑셀 형식으로 정의된 파일을 사용하여 더 많은 데이터를 쉽고 빠르게 올릴 수 있는 일괄등록기능이 생겼습니다.</li>
 				<li>색깔 및 highlighting 이 추가 되었고 속도는 20배 이상 빨리 하게 되었습니다. 정말 초초초 울트라 스피드 입니다.</li>
 				<li>색깔 및 highlighting 이 추가 되었고 속도는 20배 이상 빨리 하게 되었습니다. 정말 초초초 울트라 스피드 입니다.</li>
 			</ul>

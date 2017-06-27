@@ -21,7 +21,7 @@
 		<div>
 			<h1><a href="./index.do">mago3D</a></h1>
 			<ul class="menu">
-				<li><a href="/homepage/mago3d.do">mago3D</a> <span></span></li>
+				<li><a href="/homepage/about.do">mago3D</a> <span></span></li>
 				<li><a href="/homepage/demo.do">Demo</a><span></span></li>
 				<li><a href="/homepage/download.do">Download</a><span></span></li>
 				<li class="on">Tutorials<span></span></li>
