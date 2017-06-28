@@ -26,45 +26,115 @@
 </head>
 
 <body>
-	<div id="apiAndIssueArea">
-		<ul>
-			<li style="background-color : #573592"><a href="#issueContent" style="color: #FFFFFF">최근 등록한 이슈(30일 이내)</a></li>
-		    <li style="background-color : #573592"><a href="#apiContent" style="color: #FFFFFF">API 목록</a></li>
-		</ul>
-		<div id="issueContent" style="background-color: #FFFFFF">
+	<div id="recentIssueListArea" style="text-align: center; height: 30px;">
+		<span>My Issue(5건, 30일 이내)</span>
+		<img id="issueMoreImage" src="/images/${lang }/homepage/plus.png" alt="more" width="24px;" height="24px;"/>
+	</div>
+	<div id="apiListArea" style="text-align: center; height: 30px;">
+		<span style="margin-left:50px; margin-right: 50px;">API 목록</span>
+		<img id="apiMoreImage" src="/images/${lang }/homepage/plus.png" alt="more" width="24px;" height="24px;"/>
+	</div>
+	
+	<div id="recentIssueListContent" style="display: none">
 <c:if test="${empty issueList }">
-			<div style="text-align: center; vertical-align:middle; height: 50px;">
-				Issue가 존재하지 않습니다.
-			</div>
+		<div style="text-align: center; padding-top:20px; height: 50px;">
+			Issue가 존재하지 않습니다.
+		</div>
 </c:if>
 <c:if test="${!empty issueList }">
 	<c:forEach var="issue" items="${issueList}" varStatus="status">	
+		<div style="margin-left: 20px; margin-top: 20px; margin-bottom: 20px; background: gainsboro">
 			<div>
-				<div>
-					<span>${status.count }</span>
-					<span>${issue.title }</span>
-				</div>
-				<div id="issue_toggle_${issue.issue_id }">${issue.data_group_name } ${issue.viewInsertDate }</div>
+				<img id="issueMoreImage" src="/images/${lang }/homepage/bullet_h4.png" alt="" />
+				<span style="padding-left: 10px; width:200px; overflow: hidden;">${issue.title }</span>
+				<span style="float:right; padding-right: 15px; padding-top: 5px;">
+					<a href="#" onclick="flyTo('${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">
+						<img id="issueMoreImage" src="/images/${lang }/homepage/btn_going.png" width="26" height="26" alt="" />
+					</a>
+				</span>
 			</div>
+			<div id="issue_toggle_${issue.issue_id }">
+				<span style="padding-left: 25px;">[${issue.issue_type }][${issue.priority }]</span>
+				<span style="padding-left: 5px;">${issue.data_group_name }</span>
+				<span style="float:right; padding-right: 20px;">${issue.viewInsertDate }</span>
+			</div>
+		</div>
 	</c:forEach>
 </c:if>
-		</div>
-		<div id="apiContent" style="background-color: #FFFFFF">
-			<div style="margin-top: 15px;">
-				<span style="padding-right: 60px;">Data Key</span>
-				<input type="text" id="data_key" name="data_key" size="15" />
-				<button type="button" id="searchData" >검색</button>
-			</div>
-			<div style="margin-top: 15px;">
-				<span style="padding-right: 40px;">Bounding Box</span>
-				<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />
-				<label for="showBoundingBox"> 표시 </label>
-				<input type="radio" id="hideBoundingBox" name="boundingBox" value="false" onclick="changeBoundingBox(false);"/>
-				<label for="hideBoundingBox"> 비표시 </label>
-			</div>
-		</div>
 	</div>
-
+	<div id="apiListContent" style="display: none">
+		<div style="height: 20px;"></div>
+		<div>
+			<span style="padding-left: 10px; padding-right: 100px;">Data Key</span>
+			<input type="text" id="search_data_key" name="search_data_key" size="15" />
+			<button type="button" id="searchData" >검색</button>
+		</div>
+		<div style="margin-top: 15px;">
+			<span style="padding-left: 10px; padding-right: 70px;">Bounding Box</span>
+			<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />
+			<label for="showBoundingBox"> 표시 </label>
+			<input type="radio" id="hideBoundingBox" name="boundingBox" value="false" onclick="changeBoundingBox(false);"/>
+			<label for="hideBoundingBox"> 비표시 </label>
+		</div>
+		<div style="margin-top: 15px;">
+			<span style="padding-left: 10px; padding-right: 16px;">Selecting And Moving</span>
+			<input type="radio" id="mouseAllMove" name="mouseMoveMode" value="0" onclick="changeMouseMove('0');"/>
+			<label for="mouseAllMove"> ALL </label>
+			<input type="radio" id="mouseObjectMove" name="mouseMoveMode" value="1" onclick="changeMouseMove('1');"/>
+			<label for="mouseObjectMove"> Object </label>
+		</div>
+		<div style="margin-top: 15px;">
+			<div style="padding-left: 10px;">
+				Location And Rotation
+			</div>
+			<div style="margin-top: 5px;">
+				<span style="padding-left: 102px; padding-right: 12px;">
+					<label for="move_data_key">Data Key</label>
+					<input type="text" id="move_data_key" name="move_data_key" size="15" />
+				</span>
+			</div>
+			<div style="margin-top: 5px;">
+				<span style="padding-left: 110px; padding-right: 12px;">
+					<label for="move_latitude">위도 </label>
+					<input type="text" id="move_latitude" name="move_latitude" size="15"/> 
+				</span> 
+			</div>
+			<div style="margin-top: 5px;">
+				<span style="padding-left: 110px; padding-right: 12px;">
+					<label for="move_longitude">경도 </label>
+					<input type="text" id="move_longitude" name="move_longitude" size="15"/>
+				</span> 
+			</div>
+			<div style="margin-top: 5px;">
+				<span style="padding-left: 110px; padding-right: 12px;">
+					<label for="move_height">높이 </label>
+					<input type="text" id="move_height" name="move_height" size="15" />
+				</span> 
+			</div>
+			<div style="margin-top: 5px;">
+				<span style="padding-left: 97px; padding-right: 12px;">
+					<label for="move_heading">HEADING </label>
+					<input type="text" id="move_heading" name="move_heading" size="15" />
+				</span> 
+			</div>
+			<div style="margin-top: 5px;">
+				<span style="padding-left: 110px; padding-right: 12px;">
+					<label for="move_pitch">PITCH </label>
+					<input type="text" id="move_pitch" name="move_pitch" size="15" />
+				</span>
+			</div> 
+			<div style="margin-top: 5px;">
+				<span style="padding-left: 110px; padding-right: 12px;">
+					<label for="move_roll">ROLL </label>
+					<input type="text" id="move_roll" name="move_roll" size="15" /> 
+					<button type="button" id="changeLocationAndRotationAPI">변환</button>
+				</span>
+			</div>
+		</div>
+		<div style="height: 20px;"></div>
+	</div>
+	
+		
 	<div class="trigger" >
 		<button type="button"></button>
 		<ul>
@@ -161,6 +231,7 @@
 						<form:errors path="data_key" cssClass="error" />
 						<form:hidden path="latitude"/>
 						<form:hidden path="longitude"/>
+						<form:hidden path="height"/>
 	        		</td>
 	        	</tr>
 	        	<tr>
@@ -203,7 +274,7 @@
 						<form:errors path="reporter" cssClass="error" />
 	        		</td>
 	        	</tr>
-	        	<tr>
+	        	<tr style="height: 50px;">
 	        		<th><form:label path="contents">내용</form:label></th>
 	        		<td>
 	        			<form:textarea path="contents" />
@@ -285,15 +356,35 @@
 	var listIssueFlag = false;
 	var managerFactory = new ManagerFactory(null, "magoContainer", policyJson, dataGroupMap);
 	
+	$(document).ready(function() {
+		$("#recentIssueListContent").show();
+		//$("#issueMoreImage").attr("src", "/images/${lang }/homepage/minus.png");
+		
+		// BoundingBox
+		changeBoundingBox(false);
+		// Selecting And Moving
+		changeMouseMove("0");
+	});
+	$("#issueMoreImage").click(function() {
+		if($("#recentIssueListContent").css("display") == "none") {
+			$("#recentIssueListContent").show();
+			$("#apiListContent").hide();
+		} else {
+			$("#recentIssueListContent").hide();
+		}
+	});
+	$("#apiMoreImage").click(function() {
+		if($("#apiListContent").css("display") == "none") {
+			$("#apiListContent").show();
+			$("#recentIssueListContent").hide();
+		} else {
+			$("#apiListContent").hide();
+		}
+	});
+	
 	function flyTo(longitude, latitude, height, duration) {
 		managerFactory.flyTo(longitude, latitude, height, duration);
 	}
-	
-	$( function() {
-		$("#apiAndIssueArea" ).tabs();
-	});
-
-
 	
 	// 이슈 등록
 	$("#issueEnable").click(function() {
@@ -336,11 +427,10 @@
 				
 				var dt = new Date();
 				
-				$("#data_name").val(dt.getFullYear() + "/" + (dt.getMonth()+1) + "/" + dt.getDate() + " " + dt.getHours() + "-" + dt.getMinutes() + "-" + dt.getSeconds());
-				$("#data_key").val(dt.getFullYear() + "/" + (dt.getMonth()+1) + "/" + dt.getDate() + " " + dt.getHours() + "-" + dt.getMinutes() + "-" + dt.getSeconds());
+				
 				$("#latitude").val("37.57750");
 				$("#longitude").val("126.89069");
-				$("#elevation").val("60.0");
+				$("#height").val("60.0");
 			}
 		}
 	}
@@ -350,8 +440,16 @@
 	});
 	
 	// object 정보 표시 call back function
-	function showSelectedObject(projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll){
+	function showSelectedObject(projectId, blockId, objectId, latitude, longitude, height, heading, pitch, roll){
 		if(objectInfoViewFlag) {
+			$("#move_data_key").val(projectId + "_" + blockId);
+			$("#move_latitude").val(latitude);
+			$("#move_longitude").val(longitude);
+			$("#move_height").val(height);
+			$("#move_heading").val(heading);
+			$("#move_pitch").val(pitch);
+			$("#move_roll").val(roll);
+			
 			$.toast({
 			    heading: 'Click Object Info',
 			    text: [
@@ -360,7 +458,7 @@
 			        'objectId : ' + objectId,
 			        'latitude : ' + latitude,
 			        'longitude : ' + longitude,
-			        'elevation : ' + elevation,
+			        'height : ' + height,
 			        'heading : ' + heading,
 			        'pitch : ' + pitch,
 			        'roll : ' + roll
@@ -368,7 +466,7 @@
 				//bgColor : 'blue',
 				hideAfter: 5000,
 				icon: 'info'
-			})
+			});
 		}
 	}
 	
@@ -449,12 +547,66 @@
 	
 	// Data 검색
 	$("#searchData").click(function() {
-		searchDataAPI($("#data_key").val());
+		if ($.trim($("#search_data_key").val()) === ""){
+			alert("Data Key를 입력해 주세요.");
+			$("#search_data_key").focus();
+			return false;
+		}
+		searchDataAPI($("#search_data_key").val());
 	});
 	// boundingBox 표시/비표시
 	function changeBoundingBox(isShow) {
 		$("input:radio[name='boundingBox']:radio[value='" + isShow + "']").prop("checked", true);
 		changeBoundingBoxAPI(isShow);
+	}
+	// 마우스 클릭 객체 이동 모드 변경
+	function changeMouseMove(mouseMoveMode) {
+		$("input:radio[name='mouseMoveMode']:radio[value='" + mouseMoveMode + "']").prop("checked", true);
+		changeMouseMoveAPI(mouseMoveMode);
+	}
+	// 변환행렬
+	$("#changeLocationAndRotationAPI").click(function() {
+		if(!changeLocationAndRotationCheck()) return false;
+		changeLocationAndRotationAPI(	$("#move_data_key").val(), $("#move_latitude").val(), $("#move_longitude").val(), 
+										$("#move_height").val(), $("#move_heading").val(), $("#move_pitch").val(), $("#move_roll").val());
+	});
+	function changeLocationAndRotationCheck() {
+		if ($.trim($("#move_data_key").val()) === ""){
+			alert("Data Key를 입력해 주세요.");
+			$("#move_data_key").focus();
+			return false;
+		}
+		if ($.trim($("#move_latitude").val()) === ""){
+			alert("위도를 입력해 주세요.");
+			$("#move_latitude").focus();
+			return false;
+		}
+		if ($.trim($("#move_longitude").val()) === ""){
+			alert("경도를 입력해 주세요.");
+			$("#move_longitude").focus();
+			return false;
+		}
+		if ($.trim($("#move_height").val()) === ""){
+			alert("높이를 입력해 주세요.");
+			$("#move_height").focus();
+			return false;
+		}
+		if ($.trim($("#move_heading").val()) === ""){
+			alert("heading을 입력해 주세요.");
+			$("#move_heading").focus();
+			return false;
+		}
+		if ($.trim($("#move_pitch").val()) === ""){
+			alert("pitch를 입력해 주세요.");
+			$("#move_pitch").focus();
+			return false;
+		}
+		if ($.trim($("#move_roll").val()) === ""){
+			alert("roll를 입력해 주세요.");
+			$("#move_roll").focus();
+			return false;
+		}
+		return true;
 	}
 </script>
 </body>

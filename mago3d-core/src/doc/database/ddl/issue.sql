@@ -20,6 +20,7 @@ create table issue (
 	location 					geography(Point,4326),
 	latitude 					varchar(30),
 	longitude 					varchar(30),
+	height 						varchar(30),
 	
 	year						char(4)				default to_char(now(), 'YYYY'),
 	month						varchar(2)			default to_char(now(), 'MM'),
@@ -48,6 +49,7 @@ comment on column issue.data_key is 'Data key';
 comment on column issue.location is 'location(위도, 경도)';
 comment on column issue.latitude is '위도';
 comment on column issue.longitude is '경도';
+comment on column issue.height is '높이';
 comment on column issue.client_ip is '요청 IP';
 
 comment on column access_log.year is '년';

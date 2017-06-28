@@ -8,7 +8,71 @@
 		/* getIssueTotalCount */
 		SELECT COUNT(issue_id) 
 		FROM issue
-		WHERE user_id = #{user_id} 
+		<trim prefix="WHERE" prefixOverrides="AND">	
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+			${search_word} = #{search_value}
+			</if>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+			${search_word} LIKE '%' || #{search_value} || '%'
+			</if>
+			<if test="start_date != null and start_date != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="end_date != null and end_date != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+		</trim>
+	</select>
+
+	<!-- 이슈 목록 -->
+	<select id="getListIssue" parameterType="issue" resultType="issue">
+		/* getListIssue */
+		SELECT A.*, 
+			(SELECT user_name FROM user_info WHERE user_id = A.user_id) AS user_name, 
+			(SELECT count(issue_comment_id) FROM issue_comment WHERE issue_id = A.issue_id) AS comment_count
+		FROM(
+			SELECT *
+			FROM issue
+			<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+				${search_word} = #{search_value}
+				</if>
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+				${search_word} LIKE '%' || #{search_value} || '%'
+				</if>
+				<if test="start_date != null and start_date != ''">
+				<![CDATA[
+				AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="end_date != null and end_date != ''">
+				<![CDATA[
+				AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+			</trim>
+			<choose>
+			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
+			ORDER BY ${order_word} ${order_value}
+			</when>
+			<otherwise>
+			ORDER BY insert_date DESC, issue_id DESC
+			</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) A
+	</select>
+	
+	<!-- 이슈 총 건수 -->
+	<select id="getIssueTotalCountByUserId" parameterType="issue" resultType="long">
+		/* getIssueTotalCount */
+		SELECT COUNT(issue_id) 
+		FROM issue
+		WHERE user_id = #{user_id}
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 			AND ${search_word} = #{search_value}
 			</if>
@@ -28,16 +92,16 @@
 	</select>
 
 	<!-- 이슈 목록 -->
-	<select id="getListIssue" parameterType="issue" resultType="issue">
+	<select id="getListIssueByUserId" parameterType="issue" resultType="issue">
 		/* getListIssue */
 		SELECT A.*, 
 			(SELECT user_name FROM user_info WHERE user_id = A.user_id) AS user_name, 
+			(SELECT data_group_name FROM data_group WHERE data_group_id = A.data_group_id) AS data_group_name, 
 			(SELECT count(issue_comment_id) FROM issue_comment WHERE issue_id = A.issue_id) AS comment_count
 		FROM(
 			SELECT *
 			FROM issue
-			WHERE user_id = #{user_id} 
-			<trim prefixOverrides="AND">
+			WHERE user_id = #{user_id}
 				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 				AND ${search_word} = #{search_value}
 				</if>
@@ -54,7 +118,6 @@
 				AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
 				]]>
 				</if>
-			</trim>
 			<choose>
 			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
 			ORDER BY ${order_word} ${order_value}
@@ -101,7 +164,7 @@
     		SELECT nextval('issue_seq')
   		</selectKey>
 		INSERT INTO issue(
-			issue_id, data_group_id, user_id, title, priority, due_date, issue_type, status, data_key, location, latitude, longitude, client_ip
+			issue_id, data_group_id, user_id, title, priority, due_date, issue_type, status, data_key, location, latitude, longitude, height, client_ip
 		) values(
 			#{issue_id}, #{data_group_id}, #{user_id}, #{title}, #{priority},
 			<if test="due_date == null or due_date == ''">
@@ -117,7 +180,7 @@
 			<if test="location != null and location != ''">
 			ST_GeographyFromText(#{location})
 			</if>		
-			#{latitude}, #{longitude}, #{client_ip}
+			#{latitude}, #{longitude}, #{height}, #{client_ip}
 		)
 	</insert>
 	
@@ -201,6 +264,9 @@
 			</if>
 			<if test="longitude != null and longitude != ''">
 			longitude = #{longitude},
+			</if>
+			<if test="height != null and height != ''">
+			height = #{height},
 			</if>
 			<if test="user_id != null and user_id != ''">
 			client_ip = #{client_ip},

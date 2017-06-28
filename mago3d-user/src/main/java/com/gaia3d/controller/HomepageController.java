@@ -98,7 +98,7 @@ public class HomepageController {
 		if(StringUtil.isNotEmpty(issue.getEnd_date())) {
 			issue.setEnd_date(issue.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
 		}
-		long totalCount = issueService.getIssueTotalCount(issue);
+		long totalCount = issueService.getIssueTotalCountByUserId(issue);
 		
 		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(issue), totalCount, Long.valueOf(pageNo).longValue());
 		log.info("@@ pagination = {}", pagination);
@@ -107,7 +107,7 @@ public class HomepageController {
 		issue.setLimit(pagination.getPageRows());
 		List<Issue> issueList = new ArrayList<Issue>();
 		if(totalCount > 0l) {
-			issueList = issueService.getListIssue(issue);
+			issueList = issueService.getListIssueByUserId(issue);
 		}
 		
 		Gson gson = new Gson();

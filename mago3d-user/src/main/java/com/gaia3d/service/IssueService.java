@@ -28,6 +28,20 @@ public interface IssueService {
 	List<Issue> getListIssue(Issue issue);
 	
 	/**
+	 * issue 총 건수
+	 * @param issue
+	 * @return
+	 */
+	Long getIssueTotalCountByUserId(Issue issue);
+	
+	/**
+	 * issue 목록
+	 * @param issue
+	 * @return
+	 */
+	List<Issue> getListIssueByUserId(Issue issue);
+	
+	/**
 	 * issue Comment 목록
 	 * @param issue_id
 	 * @return

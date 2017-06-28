@@ -45,6 +45,26 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	/**
+	 * issue 총 건수
+	 * @param issue
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public Long getIssueTotalCountByUserId(Issue issue) {
+		return issueMapper.getIssueTotalCountByUserId(issue);
+	}
+	
+	/**
+	 * issue 목록
+	 * @param issue
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public List<Issue> getListIssueByUserId(Issue issue) {
+		return issueMapper.getListIssueByUserId(issue);
+	}
+	
+	/**
 	 * issue Comment 목록
 	 * @param issue_id
 	 * @return

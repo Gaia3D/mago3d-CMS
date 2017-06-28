@@ -19,17 +19,42 @@ height: 100%;
 background-color: #eee;
 }
 
-#apiAndIssueArea {
-	background: #573592;
-    border-radius: 4px;
-    margin: 10px 0px 0px 0px;
-    font-size:14px;
-    color:white;
-    width:350px;
-    padding:10px;
-    position: absolute;
+#recentIssueListArea {
+	position: absolute;
+	top: 5px;
+	left: 10px;
+	min-width: 210px;
+	background-color: #573592;
+    color : #FFFFFF;
     z-index: 999;
 }
+#recentIssueListContent {
+	position: absolute;
+	top: 37px;
+	left: 10px;
+	background-color: #FFFFFF;
+	min-width: 413px;
+	z-index: 999;
+}
+#apiListArea {
+	position: absolute;
+	top: 5px;
+	left: 225px;
+	min-width: 200px;
+	background-color: #573592;
+	color : #FFFFFF;
+	z-index: 999;
+}
+#apiListContent {
+	position: absolute;
+	top: 37px;
+	left: 10px;
+	background-color: #FFFFFF;
+	min-width: 413px;
+	z-index: 999;
+}
+
+
 
 /* 공통메뉴 */
 .trigger {

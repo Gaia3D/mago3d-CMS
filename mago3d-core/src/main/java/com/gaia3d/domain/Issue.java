@@ -82,6 +82,8 @@ public class Issue {
 	private String latitude;
 	// 경도
 	private String longitude;
+	// 높이
+	private String height;
 	// 요청 IP
 	private String client_ip;
 	

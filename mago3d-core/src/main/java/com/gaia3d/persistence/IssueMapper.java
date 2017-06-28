@@ -32,6 +32,20 @@ public interface IssueMapper {
 	List<Issue> getListIssue(Issue issue);
 	
 	/**
+	 * 이슈 총 건수
+	 * @param issue
+	 * @return
+	 */
+	Long getIssueTotalCountByUserId(Issue issue);
+	
+	/**
+	 * 이슈 목록
+	 * @param issue
+	 * @return
+	 */
+	List<Issue> getListIssueByUserId(Issue issue);
+	
+	/**
 	 * 이슈 Comment 목록
 	 * @param issue_id
 	 * @return
