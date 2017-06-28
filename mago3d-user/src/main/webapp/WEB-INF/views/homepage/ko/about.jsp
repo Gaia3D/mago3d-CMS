@@ -33,10 +33,10 @@
 		<div>
 			<h1><a href="./index.do">mago3D</a></h1>
 			<ul class="menu">
-				<li class="on">mago3D <span></span></li>
-				<li><a href="/homepage/demo.do">Demo</a><span></span></li>
-				<li><a href="/homepage/download.do">Download</a><span></span></li>
-				<li><a href="/homepage/tutorials.do">Tutorials</a><span></span></li>
+				<li class="on">mago3D<span></span></li>
+				<a href="/homepage/demo.do"><li>Demo<span></span></li></a>
+				<a href="/homepage/download.do"><li>Download<span></span></li></a>
+				<a href="/homepage/tutorials.do"><li>Tutorials<span></span></li></a>
 			</ul>
 			<ul class="language">
 				<li class="on">KO</li>
