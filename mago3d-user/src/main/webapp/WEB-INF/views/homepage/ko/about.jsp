@@ -31,12 +31,12 @@
 	
 	<nav class="nav">
 		<div>
-			<h1><a href="./index.do">mago3D</a></h1>
+			<h1><a href="./index.do">Mago3D</a></h1>
 			<ul class="menu">
-				<li class="on">mago3D <span></span></li>
-				<li><a href="/homepage/demo.do">Demo</a><span></span></li>
-				<li><a href="/homepage/download.do">Download</a><span></span></li>
-				<li><a href="/homepage/tutorials.do">Tutorials</a><span></span></li>
+				<li class="on">Mago3D<span></span></li>
+				<a href="/homepage/demo.do"><li>Demo<span></span></li></a>
+				<a href="/homepage/download.do"><li>Download<span></span></li></a>
+				<a href="/homepage/tutorials.do"><li>Tutorials<span></span></li></a>
 			</ul>
 			<ul class="language">
 				<li class="on">KO</li>
@@ -47,16 +47,16 @@
 	<section>
 		<div class="contents">
 			<ul class="tab">
-				<li><a href="#about">About</a></li>
-				<li><a href="#now">Now</a></li>
-				<li><a href="#will">Will be</a></li>
+				<a href="#about"><li>About</li></a>
+				<a href="#now"><li>Now</li></a>
+				<a href="#will"><li>Will be</li></a>
 			</ul>
 			<div id="about" class="part">
 				<h3>About<span></span></h3>
 				<p>
-					MAGO3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다.
-					MAGO3D는 기존의 솔루션과 달리 공간의 끊김 없는 통합 (Seamless integration of indoor & outdoor space)으로 실내외 구별 없이 끊김 없이 AFC와 3D GIS를 웹 브라우저에서 통합해 줍니다.
-					오픈소스 (Cesium, World Wind)를 기반으로 개발된 오픈소스로서 개방성과 확장성 또한 뛰어납니다. 이에 따라, MAGO3D 사용자는 다양한 Rendering 알고리즘을 사용하여 
+					Mago3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다.
+					Mago3D는 기존의 솔루션과 달리 공간의 끊김 없는 통합 (Seamless integration of indoor & outdoor space)으로 실내외 구별 없이 끊김 없이 AFC와 3D GIS를 웹 브라우저에서 통합해 줍니다.
+					오픈소스 (Cesium, World Wind)를 기반으로 개발된 오픈소스로서 개방성과 확장성 또한 뛰어납니다. 이에 따라, Mago3D 사용자는 다양한 Rendering 알고리즘을 사용하여 
 					초대용량 BIM(Building Information Modelling), JT (Jupiter), 
 					IFC, 3DS...등  3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다. 
 				</p>			
@@ -132,7 +132,7 @@
 				<h3>NOW<span></span></h3>
 				<h4>Architecture</h4>
 				<p>
-					mago3d는 spring framework(springboot) 기반의 3d 플랫폼 입니다.공간 정보 DB 관련 처리를 위해 PostGis를 사용하고 있으며, 3D 렌더링 부분은 cesium, worldwind 등을 오픈 소스 javascript librar를 사용하고 있습니다. 3D 데이터를 웹에서 Rendering 하기 위해서 자체 개발한 F4D 포맷 및 Converter를 사용하고 있으며 가시화 및 렌더링 처리를 담당하는 mago3djs(javascript library)로 이루어져 있습니다.
+					Mago3D는 spring framework(springboot) 기반의 3d 플랫폼 입니다.공간 정보 DB 관련 처리를 위해 PostGis를 사용하고 있으며, 3D 렌더링 부분은 cesium, worldwind 등을 오픈 소스 javascript librar를 사용하고 있습니다. 3D 데이터를 웹에서 Rendering 하기 위해서 자체 개발한 F4D 포맷 및 Converter를 사용하고 있으며 가시화 및 렌더링 처리를 담당하는 mago3djs(javascript library)로 이루어져 있습니다.
 				</p>
 				<div class="architecture">
 					<img src="/images/${lang}/homepage/arc.png" alt="">
@@ -214,7 +214,7 @@
 				<h4>클라우드 환경 제공</h4>
 				<p>
 					Amazon, Google, Azure 등 클라우드 서비스를 제공 할 예정 입니다.
-					사용자는 클라우드 환경 하에서 자신이 가지고 있는 jt,obj,collada 파일 등을 실시간 업로딩 후 mago3d에서 확인 하실 수 있습니다.
+					사용자는 클라우드 환경 하에서 자신이 가지고 있는 jt, obj, collada 파일 등을 실시간 업로딩 후 Mago3D에서 확인 하실 수 있습니다.
 				</p>
 				<a href="#" class="goTop">위로</a>
 			</div>
@@ -230,7 +230,7 @@
 				<span></span>
 			</h2>
 			<p>
-				Mago3d에 관심이 있는 고객님께서는 아래의 담당자 email, phone 또는 방문을 부탁 드립니다.
+				Mago3D에 관심이 있는 고객님께서는 아래의 담당자 email, phone 또는 방문을 부탁 드립니다.
 			</p>
 			<ul class="contact">
 				<li class="company">www.gaia3d.com</li>
@@ -238,7 +238,7 @@
 				<li class="mail">mago3d@gaia3d.com</li>
 			</ul>
 			<p class="copyright">
-				&copy; Mago3D - GIS 3D web platform. All Rights Reserved. * 문구수정필요
+				&copy; 2017. Mago3D all rights reserved.
 			</p>
 		</div>
 	</footer>

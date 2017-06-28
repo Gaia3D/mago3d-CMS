@@ -138,9 +138,9 @@
 	<div class="trigger" >
 		<button type="button"></button>
 		<ul>
-			<li><a href="/homepage/tutorials.do">Tutorials</a></li>
-			<li><a href="/homepage/download.do">Download</a></li>
-			<li><a href="/homepage/about.do">Mago3D</a></li>
+			<a href="/homepage/tutorials.do"><li>Tutorials<span></span></li></a>
+			<a href="/homepage/download.do"><li>Download<span></span></li></a>
+			<a href="/homepage/about.do"><li>mago3D<span></span></li></a>
 			<li>Home</li>	
 		</ul>
 	</div>

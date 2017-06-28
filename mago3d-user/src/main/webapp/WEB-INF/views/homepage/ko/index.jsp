@@ -21,10 +21,10 @@
 		<div>
 			<h1>mago3D</h1>
 			<ul class="menu">
-				<li><a href="/homepage/mago3d.do">mago3D</a><span></span></li>
-				<li><a href="/homepage/demo.do">Demo</a><span></span></li>
-				<li><a href="/homepage/download.do">Download</a><span></span></li>
-				<li><a href="/homepage/tutorial.do">Tutorials</a><span></span></li>
+				<a href="/homepage/about.do"><li>mago3D<span></span></li></a>
+				<a href="/homepage/demo.do"><li>Demo<span></span></li></a>
+				<a href="/homepage/download.do"><li>Download<span></span></li></a>
+				<a href="/homepage/tutorials.do"><li>Tutorials<span></span></li></a>
 			</ul>
 			<ul class="language">
 				<li class="on">KO</li>
@@ -63,7 +63,7 @@
 				<li class="mail">mago3d@gaia3d.com</li>
 			</ul>
 			<p class="copyright">
-				&copy; Mago3D - GIS 3D web platform. All Rights Reserved. * 문구수정필요
+				&copy; 2017. Mago3D all rights reserved.
 			</p>
 		</div>
 	</footer>
