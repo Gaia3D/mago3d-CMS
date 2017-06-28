@@ -18,6 +18,7 @@ apply plugin: 'war'
 war {
 	baseName = 'mago3d-user'
 	version = '0.0.1-SNAPSHOT'
+	rootSpec.exclude ('data')
 }
 
 sourceCompatibility = 1.8
