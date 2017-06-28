@@ -138,9 +138,9 @@
 	<div class="trigger" >
 		<button type="button"></button>
 		<ul>
-			<a href="/homepage/tutorials.do"><li>Tutorials<span></span></li></a>
-			<a href="/homepage/download.do"><li>Download<span></span></li></a>
-			<a href="/homepage/about.do"><li>mago3D<span></span></li></a>
+			<li><a href="/homepage/tutorials.do">Tutorials</a></li>
+			<li><a href="/homepage/download.do">Download</a></li>
+			<li><a href="/homepage/about.do">mago3D</a></li>
 			<li>Home</li>	
 		</ul>
 	</div>
@@ -348,6 +348,7 @@
 <script type="text/javascript" src="/js/${lang}/mago3d/TerranTile.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/GlobeTile.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Sphere.js"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/ObjectMarker.js"></script>
 <script>
 	var policyJson = ${policyJson};
 	var dataGroupMap = ${dataGroupMap};
