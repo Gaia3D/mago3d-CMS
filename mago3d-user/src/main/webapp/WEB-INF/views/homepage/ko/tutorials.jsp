@@ -190,7 +190,7 @@
 				<li class="mail">mago3d@gaia3d.com</li>
 			</ul>
 			<p class="copyright">
-				&copy; Mago3D - GIS 3D web platform. All Rights Reserved. * 문구수정필요
+				&copy; 2017. Mago3D all rights reserved.
 			</p>
 		</div>
 	</footer>
