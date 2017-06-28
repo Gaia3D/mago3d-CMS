@@ -53,6 +53,10 @@ public class RootConfig {
 	    dataSource.setUrl(Crypt.decrypt(url));
 	    dataSource.setUsername(Crypt.decrypt(username));
 	    dataSource.setPassword(Crypt.decrypt(password));
+	    dataSource.setInitialSize(120);
+	    dataSource.setMaxActive(300);
+	    dataSource.setMaxIdle(180);
+	    dataSource.setMinIdle(120);
 //	    dataSource.setTestWhileIdle(testWhileIdle);     
 //	    dataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMills);
 //	    dataSource.setValidationQuery(validationQuery);
