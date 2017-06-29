@@ -56,7 +56,7 @@ section {
 width: 1200px;
 margin: 0 auto;
 padding-bottom: 100px;
-min-height: 900px;
+/*min-height: 900px;*/
 }
 section .contents {
 position: relative;
@@ -65,7 +65,7 @@ margin: 0 auto;
 }
 /* FOOTER */
 footer {
-margin-top: 50px;
+/*margin-top: 50px;*/
 padding-top: 30px;
 background-color: #ccc;
 }

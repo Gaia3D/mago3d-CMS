@@ -30,8 +30,8 @@
 				<li class="on">Tutorials</li>
 			</ul>
 			<ul class="language">
-				<li class="on"><a href="#" onclick ="changeLanguage('ko');">KO</a></li>
-				<li><a href="#" onclick ="changeLanguage('en');">EN</a></li>
+				<li id="languageKO"><a href="" onclick ="changeLanguage('ko');">KO</a></li>
+				<li id="languageEN" class="on"><a href="" onclick ="changeLanguage('en');">EN</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -40,138 +40,47 @@
 		<h2>Tutorials<span></span></h2>
 		<div class="contents">
 			<ul class="subMenu">				
-				<li><a href="#start">Getting Started</a></li>
-				<li>블록이동</li>
-				<li>색깔변경</li>
-				<li>highlighting</li>
-				<li>Location &amp; Rotation</li>
-				<li><a href="#MouseEvent">Mouse Event</a></li>
+				<li>Issue registration API</a></li>
+				<li>Object information display API</li>
+				<li>Issue list API</li>
+				<li>Moving API</li>
+				<li>My Issue API</li>
 			</ul>
 			<div class="subContents">
 				<dl>
-					<dt id="Started">Getting Started</dt>
+					<dt id="Started">Issue registration API</dt>
 					<dd class="img">
 						<img src="/images/${lang}/homepage/about.png">
 					</dd>
 					<dd>
-						시작해 볼까요?
-						어떻게 하면 될까요? 잘하면 됩니다.
+						Coming soon...
 					</dd>
 				</dl>
 				<dl>
-					<dt>Getting Started</dt>
+					<dt>Object information display API</dt>
 					<dd class="img">
 						<img src="/images/${lang}/homepage/about.png">
 					</dd>
 					<dd>
-						시작해 볼까요?
-						어떻게 하면 될까요? 잘하면 됩니다.
+						Coming soon...
 					</dd>
 				</dl>
 				<dl>
-					<dt>Getting Started</dt>
+					<dt>Issue list API</dt>
 					<dd class="img">
 						<img src="/images/${lang}/homepage/about.png">
 					</dd>
 					<dd>
-						시작해 볼까요?
-						어떻게 하면 될까요? 잘하면 됩니다.
+						Coming soon...
 					</dd>
 				</dl>
 				<dl>
-					<dt>Getting Started</dt>
+					<dt>My Issue API</dt>
 					<dd class="img">
 						<img src="/images/${lang}/homepage/about.png">
 					</dd>
 					<dd>
-						시작해 볼까요?
-						어떻게 하면 될까요? 잘하면 됩니다.
-					</dd>
-				</dl>
-				<dl>
-				
-					<dt id="MouseEvent">changeMouseMoveAPI</dt>
-					<dd>마우스 클릭 후 선택한 객체가 Block 인지 Object 인지를 설정해주는 API 입니다.</dd>
-					<dd>html</dd>
-						<div class="example-code">
-						<pre>
-						Block 이동 모드 <br>
-							<span class="tag">< input </span>&nbsp;
-							<span class="value"> type</span>
-							=
-							<span class="string">"radio"</span>
-							&nbsp;
-							<span class="value"> id </span>
-							= &nbsp;
-							<span class="string">"mouseBlockMove"</span>
-							&nbsp;
-							<span class="value">value</span>
-							= &nbsp;
-							<span class="string">"0"</span>
-							&nbsp;
-							<span class="value"> onclick</span>
-							= &nbsp;
-							<span class="string">changeMouseMove('0');</span>
-							<span class="tag">/> </span><br>
-							<span class="tag">< label </span>
-							<span class="value">for</span>
-							=
-							<span class="string">"mouseBlockMove" ></span>
-							&nbsp;Block
-							<span class="tag">< /label></span> <br>
-							<br>
-							Object 이동 모드 <br>
-							<span class="tag">< input </span>&nbsp;
-							<span class="value"> type</span>
-							=
-							<span class="string">"radio"</span>
-							&nbsp;
-							<span class="value"> id </span>
-							= &nbsp;
-							<span class="string">"mouseObjectMove"</span>
-							&nbsp;
-							<span class="value">value</span>
-							= &nbsp;
-							<span class="string">"0"</span>
-							&nbsp;
-							<span class="value"> onclick</span>
-							= &nbsp;
-							<span class="string">changeMouseMove('0');</span>
-							<span class="tag">/> </span><br>
-							<span class="tag">< label </span>
-							<span class="value">for</span>
-							=
-							<span class="string">"mouseObjectMove" ></span>
-							&nbsp;Block
-							<span class="tag">< /label></span>
-						</pre>
-					</div>
-					<dd>Javascript</dd>
-						<div class="example-code">
-						<pre>
-							<span class="function">function</span>
-							changeMouseMove (mouseMoveMode) { <br>
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(
-							<span class="string">"input:radio{name='mouseMoveMode']:radio[value='"</span>
-							+ mouseMoveMode +
-							<span class="string">"']"</span>
-							.prop(
-							<span class="string">"checked"</span>
-							,
-							<span class="value">true</span>
-							); <br>
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changeMouseMoveAPI (mouseMoveMode); <br>
-							}
-						</pre>
-					</div>
-
-					
-					<dd class="img">
-						<img src="/images/${lang}/homepage/about.png">
-					</dd>
-					<dd>
-						시작해 볼까요?
-						어떻게 하면 될까요? 잘하면 됩니다.
+						Coming soon...
 					</dd>
 				</dl>
 			</div>
@@ -185,7 +94,7 @@
 				<span></span>
 			</h2>
 			<p>
-				Mago3d에 관심이 있는 고객님께서는 아래의 담당자 email, phone 또는 방문을 부탁 드립니다.
+				If you are interested in Mago3D, please contact us by email or phone or visit us directly.
 			</p>
 			<ul class="contact">
 				<li class="company">www.gaia3d.com</li>

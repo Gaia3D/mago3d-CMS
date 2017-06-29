@@ -30,8 +30,8 @@
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			</ul>
 			<ul class="language">
-				<li class="on"><a href="#" onclick ="changeLanguage('ko');">KO</a></li>
-				<li><a href="#" onclick ="changeLanguage('en');">EN</a></li>
+				<li id="languageKO"><a href="" onclick ="changeLanguage('ko');">KO</a></li>
+				<li id="languageEN" class="on"><a href="" onclick ="changeLanguage('en');">EN</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -58,7 +58,7 @@
 				<span></span>
 			</h2>
 			<p>
-				Mago3d에 관심이 있는 고객님께서는 아래의 담당자 email, phone 또는 방문을 부탁 드립니다.
+				If you are interested in Mago3D, please contact us by email or phone or visit us directly.
 			</p>
 			<ul class="contact">
 				<li class="company">www.gaia3d.com</li>
