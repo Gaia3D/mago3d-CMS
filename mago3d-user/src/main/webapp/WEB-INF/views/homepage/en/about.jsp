@@ -229,9 +229,9 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				<h4>Acknowledgement</h4>
 				<ul>
 					<li>This project is part of the research(공간정보 SW활용을 위한 오픈소스 가공기술개발(No. 16NSIP-B080778-04)) activities of the Ministry of Land, Infrastructure and Transport.</li>
-					<li>서울시 3차원 데이터는 한국공간정보산업진흥원의 허가를 받아 연구목적으로 사용 중입니다.</li>
-					<li>서울시 실내 데이터는 서울시의 허가를 받아 연구목적으로 사용 중입니다.</li>
-					<li>기타 자료는 각 저작권자의 허락을 받아 서비스합니다.</li>
+					<li>The 3D data of Seoul is being used for research purpose under the permission of Korea Spatial Informaiton Industry Promotion Institute.</li>
+					<li>The indoor data of Seoul is being used for research purposes under the permission of Seoul Metropolitan Government.</li>
+					<li>Other datas will be provided with the permission of each copyright holder.</li>
 				</ul>
 				<a href="#" class="goTop">goTop</a>
 			</div>
