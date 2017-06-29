@@ -27,114 +27,116 @@
 </head>
 
 <body>
-	<div id="recentIssueListArea" style="text-align: center; height: 30px;">
-		<span>My Issue(5건, 30일 이내)</span>
-		<img id="issueMoreImage" src="/images/${lang }/homepage/plus.png" alt="more" width="24px;" height="24px;"/>
-	</div>
-	<div id="apiListArea" style="text-align: center; height: 30px;">
-		<span style="margin-left:50px; margin-right: 50px;">API 목록</span>
-		<img id="apiMoreImage" src="/images/${lang }/homepage/plus.png" alt="more" width="24px;" height="24px;"/>
-	</div>
-	
-	<div id="recentIssueListContent" style="display: none">
-<c:if test="${empty issueList }">
-		<div style="text-align: center; padding-top:20px; height: 50px;">
-			Issue가 존재하지 않습니다.
+	<div class="ctrl">
+		<div>
+			<button id="issueEnable">Issue 등록</button>
+			<button id="objectInfoEnable">Object 정보</button>	
+			<button id="issuesEnable">Issues 정보</button>
 		</div>
+		<ul>
+			<li id="issueMoreImage">My Issue</li>
+			<li id="apiMoreImage">API목록</li>
+		</ul>
+		<div id="recentIssueListContent" style="display: none">
+<c:if test="${empty issueList }">
+			<div style="text-align: center; padding-top:20px; height: 50px;">
+				Issue가 존재하지 않습니다.
+			</div>
 </c:if>
 <c:if test="${!empty issueList }">
 	<c:forEach var="issue" items="${issueList}" varStatus="status">	
-		<div style="margin-left: 20px; margin-top: 20px; margin-bottom: 20px; background: gainsboro">
-			<div>
-				<img id="issueMoreImage" src="/images/${lang }/homepage/bullet_h4.png" alt="" />
-				<span style="padding-left: 10px; width:200px; overflow: hidden;">${issue.title }</span>
-				<span style="float:right; padding-right: 15px; padding-top: 5px;">
-					<a href="#" onclick="flyTo('${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">
-						<img id="issueMoreImage" src="/images/${lang }/homepage/btn_going.png" width="26" height="26" alt="" />
-					</a>
-				</span>
+			<div style="margin-left: 20px; margin-top: 20px; margin-bottom: 20px; background: gainsboro">
+				<div>
+					<img src="/images/${lang }/homepage/bullet_h4.png" alt="" />
+					<span style="padding-left: 10px; width:200px; overflow: hidden;">${issue.title }</span>
+					<span style="float:right; padding-right: 15px; padding-top: 5px;">
+						<a href="#" onclick="flyTo('${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">
+							<img src="/images/${lang }/homepage/btn_going.png" width="26" height="26" alt="" />
+						</a>
+					</span>
+				</div>
+				<div id="issue_toggle_${issue.issue_id }">
+					<span style="padding-left: 25px;">[${issue.issue_type }][${issue.priority }]</span>
+					<span style="padding-left: 5px;">${issue.data_group_name }</span>
+					<span style="float:right; padding-right: 20px;">${issue.viewInsertDate }</span>
+				</div>
 			</div>
-			<div id="issue_toggle_${issue.issue_id }">
-				<span style="padding-left: 25px;">[${issue.issue_type }][${issue.priority }]</span>
-				<span style="padding-left: 5px;">${issue.data_group_name }</span>
-				<span style="float:right; padding-right: 20px;">${issue.viewInsertDate }</span>
-			</div>
-		</div>
 	</c:forEach>
 </c:if>
+		</div>
+		
+		<div id="apiListContent" style="display: none">
+			<div style="height: 20px;"></div>
+			<div>
+				<span style="padding-left: 10px; padding-right: 100px;">Data Key</span>
+				<input type="text" id="search_data_key" name="search_data_key" size="15" />
+				<button type="button" id="searchData" style="width: 50px; background: #727272; font-size: 1.2rem;">검색</button>
+			</div>
+			<div style="margin-top: 15px;">
+				<span style="padding-left: 10px; padding-right: 70px;">Bounding Box</span>
+				<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />
+				<label for="showBoundingBox"> 표시 </label>
+				<input type="radio" id="hideBoundingBox" name="boundingBox" value="false" onclick="changeBoundingBox(false);"/>
+				<label for="hideBoundingBox"> 비표시 </label>
+			</div>
+			<div style="margin-top: 15px;">
+				<span style="padding-left: 10px; padding-right: 16px;">Selecting And Moving</span>
+				<input type="radio" id="mouseAllMove" name="mouseMoveMode" value="0" onclick="changeMouseMove('0');"/>
+				<label for="mouseAllMove"> ALL </label>
+				<input type="radio" id="mouseObjectMove" name="mouseMoveMode" value="1" onclick="changeMouseMove('1');"/>
+				<label for="mouseObjectMove"> Object </label>
+			</div>
+			<div style="margin-top: 15px;">
+				<div style="padding-left: 10px;">
+					Location And Rotation
+				</div>
+				<div style="margin-top: 5px;">
+					<span style="padding-left: 102px; padding-right: 12px;">
+						<label for="move_data_key">Data Key</label>
+						<input type="text" id="move_data_key" name="move_data_key" size="15" />
+					</span>
+				</div>
+				<div style="margin-top: 5px;">
+					<span style="padding-left: 110px; padding-right: 12px;">
+						<label for="move_latitude">위도 </label>
+						<input type="text" id="move_latitude" name="move_latitude" size="15"/> 
+					</span> 
+				</div>
+				<div style="margin-top: 5px;">
+					<span style="padding-left: 110px; padding-right: 12px;">
+						<label for="move_longitude">경도 </label>
+						<input type="text" id="move_longitude" name="move_longitude" size="15"/>
+					</span> 
+				</div>
+				<div style="margin-top: 5px;">
+					<span style="padding-left: 110px; padding-right: 12px;">
+						<label for="move_height">높이 </label>
+						<input type="text" id="move_height" name="move_height" size="15" />
+					</span> 
+				</div>
+				<div style="margin-top: 5px;">
+					<span style="padding-left: 97px; padding-right: 12px;">
+						<label for="move_heading">HEADING </label>
+						<input type="text" id="move_heading" name="move_heading" size="15" />
+					</span> 
+				</div>
+				<div style="margin-top: 5px;">
+					<span style="padding-left: 110px; padding-right: 12px;">
+						<label for="move_pitch">PITCH </label>
+						<input type="text" id="move_pitch" name="move_pitch" size="15" />
+					</span>
+				</div> 
+				<div style="margin-top: 5px;">
+					<span style="padding-left: 110px; padding-right: 12px;">
+						<label for="move_roll">ROLL </label>
+						<input type="text" id="move_roll" name="move_roll" size="15" /> 
+						<button type="button" id="changeLocationAndRotationAPI">변환</button>
+					</span>
+				</div>
+			</div>
+			<div style="height: 20px;"></div>
+		</div>
 	</div>
-	<div id="apiListContent" style="display: none">
-		<div style="height: 20px;"></div>
-		<div>
-			<span style="padding-left: 10px; padding-right: 100px;">Data Key</span>
-			<input type="text" id="search_data_key" name="search_data_key" size="15" />
-			<button type="button" id="searchData" >검색</button>
-		</div>
-		<div style="margin-top: 15px;">
-			<span style="padding-left: 10px; padding-right: 70px;">Bounding Box</span>
-			<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />
-			<label for="showBoundingBox"> 표시 </label>
-			<input type="radio" id="hideBoundingBox" name="boundingBox" value="false" onclick="changeBoundingBox(false);"/>
-			<label for="hideBoundingBox"> 비표시 </label>
-		</div>
-		<div style="margin-top: 15px;">
-			<span style="padding-left: 10px; padding-right: 16px;">Selecting And Moving</span>
-			<input type="radio" id="mouseAllMove" name="mouseMoveMode" value="0" onclick="changeMouseMove('0');"/>
-			<label for="mouseAllMove"> ALL </label>
-			<input type="radio" id="mouseObjectMove" name="mouseMoveMode" value="1" onclick="changeMouseMove('1');"/>
-			<label for="mouseObjectMove"> Object </label>
-		</div>
-		<div style="margin-top: 15px;">
-			<div style="padding-left: 10px;">
-				Location And Rotation
-			</div>
-			<div style="margin-top: 5px;">
-				<span style="padding-left: 102px; padding-right: 12px;">
-					<label for="move_data_key">Data Key</label>
-					<input type="text" id="move_data_key" name="move_data_key" size="15" />
-				</span>
-			</div>
-			<div style="margin-top: 5px;">
-				<span style="padding-left: 110px; padding-right: 12px;">
-					<label for="move_latitude">위도 </label>
-					<input type="text" id="move_latitude" name="move_latitude" size="15"/> 
-				</span> 
-			</div>
-			<div style="margin-top: 5px;">
-				<span style="padding-left: 110px; padding-right: 12px;">
-					<label for="move_longitude">경도 </label>
-					<input type="text" id="move_longitude" name="move_longitude" size="15"/>
-				</span> 
-			</div>
-			<div style="margin-top: 5px;">
-				<span style="padding-left: 110px; padding-right: 12px;">
-					<label for="move_height">높이 </label>
-					<input type="text" id="move_height" name="move_height" size="15" />
-				</span> 
-			</div>
-			<div style="margin-top: 5px;">
-				<span style="padding-left: 97px; padding-right: 12px;">
-					<label for="move_heading">HEADING </label>
-					<input type="text" id="move_heading" name="move_heading" size="15" />
-				</span> 
-			</div>
-			<div style="margin-top: 5px;">
-				<span style="padding-left: 110px; padding-right: 12px;">
-					<label for="move_pitch">PITCH </label>
-					<input type="text" id="move_pitch" name="move_pitch" size="15" />
-				</span>
-			</div> 
-			<div style="margin-top: 5px;">
-				<span style="padding-left: 110px; padding-right: 12px;">
-					<label for="move_roll">ROLL </label>
-					<input type="text" id="move_roll" name="move_roll" size="15" /> 
-					<button type="button" id="changeLocationAndRotationAPI">변환</button>
-				</span>
-			</div>
-		</div>
-		<div style="height: 20px;"></div>
-	</div>
-	
 		
 	<div class="trigger" >
 		<button type="button"></button>
@@ -146,42 +148,22 @@
 		</ul>
 	</div>
 
-	<div id="magoControllArea">
+	<div class="shortcut" style="top:60px;">
+		<p>바로가기</p>
+		<ul>
 <c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status">
-		<div id="" style="padding-top:5px; width: 120px;">
-			<img src="/images/${lang }/homepage/data_group_${status.count }.png" width="21px;" height="33px;" alt="Issue Input" />
 	<c:if test="${dataGroup.data_group_name == 'JT' }">
-			<a href="#" onclick="alert('preparing...');">
-				<span style="padding-left:10px; width: 50px; bold; color: #FFFFFF;">${dataGroup.data_group_name }</span>
-			</a>
+			<li onclick="alert('preparing...');">${dataGroup.data_group_name }</li>
 	</c:if>
 	<c:if test="${dataGroup.data_group_name != 'JT' }">
-			<a href="#" onclick="flyTo('${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">
-				<span style="padding-left:10px; width: 50px; bold; color: #FFFFFF;">${dataGroup.data_group_name }</span>
-			</a>
-	</c:if>
-		</div>
-</c:forEach>	
-		<div style="height: 30px;"></div>
-		<div id="issueEnable" style="width: 150px;">
-			<img src="/images/${lang }/homepage/issue_input.png" alt="Issue Input" width="40px;" height="50px;" />
-			<p />
-			<span id="issueEnableLabel" style="margin-top: 5px; width: 50px; bold; color: #FFFFFF;">Issue 등록</span>
-		</div>
-		<div id="objectInfoEnable" style="margin-top:10px; width:150px;">
-			<img src="/images/${lang }/homepage/info_view.png" alt="Info View" width="40px;" height="50px;" />
-			<p />
-			<span id="objectInfoEnableLabel" style="margin-top: 5px; width: 50px; bold; color: #FFFFFF;">Object 정보 표시</span>
-		</div>
-		<div id="issuesEnable" style="margin-top:10px; width:150px;">
-			<img src="/images/${lang }/homepage/issue_list.png" alt="Info View" width="40px;" height="50px;" />
-			<p />
-			<span id="issuesEnableLabel" style="margin-top: 5px; width: 50px; bold; color: #FFFFFF;">Issue 목록 표시</span>
-		</div>
-	</div>
-	
+			<li onclick="flyTo('${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">${dataGroup.data_group_name }</li>
+	</c:if>		
+</c:forEach>
+		</ul>
+	</div>	
+
 	<!-- 맵영역 -->
-	<div id="magoContainer" style="position: absolute; width: 99%; height: 95%; margin-top: 0; padding: 0; overflow: hidden;"></div>
+	<div id="magoContainer" style="position: absolute; width: 100%; height: 95%; margin-top: 0; padding: 0; overflow: hidden;"></div>
 
 	<form:form id="issue" modelAttribute="issue" method="post" onsubmit="return false;">
 	<div id="inputIssueLayer" style="display: none; top:40%; left:45%; width:450px; margin:-250px 0 0 -150px; " class="layer">
@@ -356,7 +338,6 @@
 	
 	$(document).ready(function() {
 		$("#recentIssueListContent").show();
-		//$("#issueMoreImage").attr("src", "/images/${lang }/homepage/minus.png");
 		
 		// BoundingBox
 		changeBoundingBox(false);
@@ -365,17 +346,23 @@
 	});
 	$("#issueMoreImage").click(function() {
 		if($("#recentIssueListContent").css("display") == "none") {
+			$("#issueMoreImage").addClass("on");
+			$("#apiMoreImage").removeClass("on");
 			$("#recentIssueListContent").show();
 			$("#apiListContent").hide();
 		} else {
+			$("#issueMoreImage").removeClass("on");
 			$("#recentIssueListContent").hide();
 		}
 	});
 	$("#apiMoreImage").click(function() {
 		if($("#apiListContent").css("display") == "none") {
+			$("#apiMoreImage").addClass("on");
+			$("#issueMoreImage").removeClass("on");
 			$("#apiListContent").show();
 			$("#recentIssueListContent").hide();
 		} else {
+			$("#apiMoreImage").removeClass("on");
 			$("#apiListContent").hide();
 		}
 	});
@@ -388,10 +375,12 @@
 	$("#issueEnable").click(function() {
 		if(insertIssueFlag) {
 			insertIssueFlag = false;
-			$("#issueEnableLabel").text("Issue 등록");
+			//$("#issueEnable").val("Issue 등록");
+			$("#issueEnable").removeClass("on");
 		} else {
 			insertIssueFlag = true;
-			$("#issueEnableLabel").text("활성화 상태");
+			//$("#issueEnable").val("Issue 등록중");
+			$("#issueEnable").addClass("on");
 		}
 		changeInsertIssueModeAPI(insertIssueFlag);
 	});
@@ -399,10 +388,12 @@
 	$("#objectInfoEnable").click(function() {
 		if(objectInfoViewFlag) {
 			objectInfoViewFlag = false;
-			$("#objectInfoEnableLabel").text("Object 정보 표시");
+			$("#objectInfoEnable").removeClass("on");
+			//$("#objectInfoEnableLabel").text("Object 정보 표시");
 		} else {
 			objectInfoViewFlag = true;
-			$("#objectInfoEnableLabel").text("활성화 상태");
+			//$("#objectInfoEnableLabel").text("활성화 상태");
+			$("#objectInfoEnable").addClass("on");			
 		}
 		changeObjectInfoViewModeAPI(objectInfoViewFlag);
 	});
@@ -412,10 +403,12 @@
 		return;
 		if(listIssueFlag) {
 			listIssueFlag = false;
-			$("#issuesEnableLabel").text("Issue 목록");
+			$("#issuesEnable").removeClass("on");
+			//$("#issuesEnableLabel").text("Issue 목록");
 		} else {
 			listIssueFlag = true;
-			$("#issuesEnableLabel").text("활성화 상태");
+			$("#issuesEnable").addClass("on");
+			//$("#issuesEnableLabel").text("활성화 상태");
 		}
 		changeListIssueViewModeAPI(listIssueFlag);
 	});
@@ -607,6 +600,97 @@
 			return false;
 		}
 		return true;
+	}
+	
+	// TODO issue url 밑에 있어야 할지도 모르겠다.
+	function ajaxIssueList() {
+		var info = "";		
+		$.ajax({
+			url: "/homepage/ajax-list-issue.do",
+			type: "POST",
+			data: info,
+			cache: false,
+			dataType: "json",
+			success: function(msg){
+				if(msg.result == "success") {
+					/* var issueList = msg.issueList;
+					var content = "";
+					content 	= "<table class=\"widget-table\">"
+								+	"<col class=\"col-left\" />"
+								+	"<col class=\"col-center\" />"
+								+	"<col class=\"col-center\" />";
+					if(userOTPLogList == null || userOTPLogList.length == 0) {
+						content += 	"<tr>"
+								+	"	<td colspan=\"3\" class=\"col-none\">OTP 이력이 존재하지 않습니다.</td>"
+								+	"</tr>";
+					} else {
+						for(i=0; i<userOTPLogList.length; i++ ) {
+							var userOTP = null;
+							userOTP = userOTPLogList[i];
+							content = content 
+								+ 	"<tr>"
+								+ 	"	<td class=\"col-left\"><em>" + userOTP.group_name + "</em>(" + userOTP.user_name + ")</td>";
+							// // 상태. 0 : 생성, 1 : 검증성공, 2 : 실패, 3 : 시간만료
+							var imageName = "";
+							var statusName = "";
+							if(userOTP.otp_number_status == "0") {
+								imageName = "otp-create.png";
+								statusName = "OTP 생성";
+							} else if(userOTP.otp_number_status == "1") {
+								imageName = "otp-success.png";
+								statusName = "인증 성공";
+							} else if(userOTP.otp_number_status == "2") {
+								imageName = "otp-fail.png";
+								statusName = "OTP 실패";
+							} else if(userOTP.otp_number_status == "3") {
+								imageName = "otp-success.png";
+								statusName = "시간만료";
+							}
+							content += 	"<td class=\"col-center\">"
+								+		"	<img style=\"margin-top:8px\" src=\"/images/ko/icon/" + imageName + "\" alt=\"" +  statusName + "\" />"		
+								+		"</td>"
+								+ 		"<td class=\"col-center\">" + userOTP.viewRegisterDate + "</td>"
+								+ 	"</tr>";
+						}
+					}
+					$("#userOTPLogListWidget").empty();
+					$("#userOTPLogListWidget").html(content); */
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error:function(request,status,error){
+		        //alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		});
+		
+/* 		<div id="recentIssueListContent" style="display: none">
+		<c:if test="${empty issueList }">
+				<div style="text-align: center; padding-top:20px; height: 50px;">
+					Issue가 존재하지 않습니다.
+				</div>
+		</c:if>
+		<c:if test="${!empty issueList }">
+			<c:forEach var="issue" items="${issueList}" varStatus="status">	
+				<div style="margin-left: 20px; margin-top: 20px; margin-bottom: 20px; background: gainsboro">
+					<div>
+						<img id="issueMoreImage" src="/images/${lang }/homepage/bullet_h4.png" alt="" />
+						<span style="padding-left: 10px; width:200px; overflow: hidden;">${issue.title }</span>
+						<span style="float:right; padding-right: 15px; padding-top: 5px;">
+							<a href="#" onclick="flyTo('${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">
+								<img id="issueMoreImage" src="/images/${lang }/homepage/btn_going.png" width="26" height="26" alt="" />
+							</a>
+						</span>
+					</div>
+					<div id="issue_toggle_${issue.issue_id }">
+						<span style="padding-left: 25px;">[${issue.issue_type }][${issue.priority }]</span>
+						<span style="padding-left: 5px;">${issue.data_group_name }</span>
+						<span style="float:right; padding-right: 20px;">${issue.viewInsertDate }</span>
+					</div>
+				</div>
+			</c:forEach>
+		</c:if> */
 	}
 </script>
 </body>

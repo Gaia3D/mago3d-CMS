@@ -142,6 +142,58 @@ public class HomepageController {
 	 * @param model
 	 * @return
 	 */
+	@GetMapping(value = "ajax-list-issue.do")
+	@ResponseBody
+	public String ajaxListIssue(HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo) {
+		
+		Gson gson = new Gson();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		String result = "success";
+		try {
+			Issue issue = new Issue();
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			if(userSession == null) {
+				issue.setUser_id("guest");
+				issue.setUser_name("guest");
+			} else {
+				issue.setUser_id(userSession.getUser_id());
+				issue.setUser_name(userSession.getUser_name());
+			}
+			
+			log.info("@@ issue = {}", issue);
+			if(StringUtil.isNotEmpty(issue.getStart_date())) {
+				issue.setStart_date(issue.getStart_date().substring(0, 8) + DateUtil.START_TIME);
+			}
+			if(StringUtil.isNotEmpty(issue.getEnd_date())) {
+				issue.setEnd_date(issue.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
+			}
+			long totalCount = issueService.getIssueTotalCountByUserId(issue);
+			
+			Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(issue), totalCount, Long.valueOf(pageNo).longValue());
+			log.info("@@ pagination = {}", pagination);
+			
+			issue.setOffset(pagination.getOffset());
+			issue.setLimit(pagination.getPageRows());
+			List<Issue> issueList = new ArrayList<Issue>();
+			if(totalCount > 0l) {
+				issueList = issueService.getListIssueByUserId(issue);
+			}
+			
+			jSONObject.put("issueList", issueList);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		jSONObject.put("result", result);
+		return gson.toJson(jSONObject);
+	}
+	
+	/**
+	 * 메인
+	 * @param model
+	 * @return
+	 */
 	@GetMapping(value = "download.do")
 	public String download(HttpServletRequest request, Model model) {
 		String lang = null;
