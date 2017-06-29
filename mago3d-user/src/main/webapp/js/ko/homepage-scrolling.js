@@ -4,9 +4,12 @@
 			var header = $('header');
 			var windowScrollTop = $(window).scrollTop()
 			var navOffsetTop = nav.offset().top;
-			var headerTop = header.offset().top;
-			var headerHeight = header.outerHeight();
-			var headerBottom = headerTop + headerHeight;
+			var headerBottom = 0;
+			if(header.length)
+			{
+				headerBottom = header.offset().top + header.outerHeight();
+			}
+			
 			if((navOffsetTop < windowScrollTop) || (headerBottom < windowScrollTop)){
 				nav.offset({top:windowScrollTop});
 			}else if(headerBottom > windowScrollTop){
