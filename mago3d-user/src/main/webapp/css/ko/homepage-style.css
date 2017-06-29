@@ -753,21 +753,27 @@ z-index: 11;
 }
 
 .highlight .description {
-	transition: background-color 0.25s ease-in-out;
-	background-color: #119ee7;
-	background-size: 100% 100%;
-	padding: 2.25em 100px 2.25em 2em;
-	position: relative;
+transition: background-color 0.25s ease-in-out;
+background: #50C9C3;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #96DEDA, #50C9C3);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #96DEDA, #50C9C3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background-size: 100% 100%;
+padding: 2.25em 100px 2.25em 2em;
+position: relative;
 }
 
 .highlight.two .description {
-	background-color: #f35111;
+background: #A770EF;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #FDB99B, #CF8BF3, #A770EF);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #FDB99B, #CF8BF3, #A770EF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
 }
 
 .highlight.three .description {
-	background-color: #575757;
+background: #c21500;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #ffc500, #c21500);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #ffc500, #c21500); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
-
 .highlight .description h2 {
 	font-size: 2em;
 	letter-spacing: -1px;
@@ -785,22 +791,22 @@ z-index: 11;
 	line-height: 1.5em;
 }
 
-.highlight .description:before {
-	display: inline-block;
-	font-family: FontAwesome;
-	text-decoration: none;
-	font-style: normal;
-	font-weight: normal;
-	line-height: 1;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	content: '\f0a9';
-	position: absolute;
-	right: 24px;
-	top: 50%;
-	margin-top: -32px;
-	font-size: 64px;
-}
+/* .highlight .description:before { */
+/* 	display: inline-block; */
+/* 	font-family: FontAwesome; */
+/* 	text-decoration: none; */
+/* 	font-style: normal; */
+/* 	font-weight: normal; */
+/* 	line-height: 1; */
+/* 	-webkit-font-smoothing: antialiased; */
+/* 	-moz-osx-font-smoothing: grayscale; */
+/* 	content: '\f0a9'; */
+/* 	position: absolute; */
+/* 	right: 24px; */
+/* 	top: 50%; */
+/* 	margin-top: -32px; */
+/* 	font-size: 64px; */
+/* } */
 
 /* //////////// architecture ////////// */
 .architecture img{
