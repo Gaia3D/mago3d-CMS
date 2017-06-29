@@ -22,10 +22,10 @@
 		<div>
 			<h1>mago3D</h1>
 			<ul class="menu">
-				<a href="/homepage/about.do"><li>mago3D<span></span></li></a>
-				<a href="/homepage/demo.do"><li>Demo<span></span></li></a>
-				<a href="/homepage/download.do"><li>Download<span></span></li></a>
-				<a href="/homepage/tutorials.do"><li>Tutorials<span></span></li></a>
+				<li><a href="/homepage/about.do">mago3D</a></li>
+				<li><a href="/homepage/demo.do">Demo</a></li>
+				<li><a href="/homepage/download.do">Download</a></li>
+				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			</ul>
 			<ul class="language">
 				<li class="on">KO</li>
