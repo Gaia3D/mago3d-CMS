@@ -812,3 +812,26 @@ background: linear-gradient(to right, #ffc500, #c21500); /* W3C, IE 10+/ Edge, F
 .architecture img{
 margin-bottom: 30px;
 }
+
+/* Index Page Slider */
+#slider {
+	position: relative;
+	width: 1200px;
+}
+
+#slider .viewer {
+	width: 1200px;
+	height: 500px;
+	overflow: hidden;
+}
+
+#slider .viewer .reel {
+	display: none;
+	height: 500px;
+}
+
+#slider .viewer .reel .slide {
+	position: relative;
+	width: 1200px;
+	height: 500px;
+}

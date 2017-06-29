@@ -19,36 +19,85 @@ height: 100%;
 background-color: #eee;
 }
 
-#recentIssueListArea {
-	position: absolute;
-	top: 5px;
-	left: 10px;
-	min-width: 210px;
-	background-color: #573592;
-    color : #FFFFFF;
-    z-index: 999;
+/* CONTROL GROUP */
+.ctrl {
+position: absolute;
+top:2px;
+left: 3px;
+z-index: 999;
 }
+.ctrl div > button {
+width: 136px;
+margin:0 0 3px;
+padding: 7px 0;
+font-size: 1em;
+border: 0;
+color: #fff;
+background: #2c303a;
+}
+.ctrl div > button.on {
+color: #fff !important;
+background: tomato;
+}
+
+
+.ctrl > ul li {
+width: 195px;
+display: inline-block;
+padding: 5px;
+font-size: 1em;
+cursor: pointer;
+border: 0;
+background-color: #fff;
+background-image: url(/images/ko/homepage/ico.png);
+background-repeat: no-repeat;
+background-position: right 5px;
+}
+.ctrl > ul li.on {
+color: #fff !important;
+background-color: tomato;
+background-image: url(/images/ko/homepage/ico.png);
+background-repeat: no-repeat;
+background-position: right -48px;
+}
+
+/* 바로가기 */
+.shortcut {
+position: absolute;
+right:3px;
+font-size: 0.9em;
+background-color: #fff;
+z-index: 999;
+}
+.shortcut p {
+padding: 5px 0 5px 25px;
+border-bottom: 1px dotted #333;
+background: url(/images/ko/homepage/ico.png) no-repeat left -462px;
+
+}
+.shortcut > ul li {
+padding: 3px 10px;
+list-style-position: inside;
+list-style-type: disc;
+
+}
+.shortcut > ul li:hover {
+color: #fff;
+background-color: #0066cc;
+}
+
 #recentIssueListContent {
 	position: absolute;
-	top: 37px;
-	left: 10px;
+	top: 69px;
+	left: 0px;
 	background-color: #FFFFFF;
 	min-width: 413px;
 	z-index: 999;
 }
-#apiListArea {
-	position: absolute;
-	top: 5px;
-	left: 225px;
-	min-width: 200px;
-	background-color: #573592;
-	color : #FFFFFF;
-	z-index: 999;
-}
 #apiListContent {
 	position: absolute;
-	top: 37px;
-	left: 10px;
+	top: 69px;
+	left: 0px;
 	background-color: #FFFFFF;
 	min-width: 413px;
 	z-index: 999;
