@@ -40,138 +40,47 @@
 		<h2>Tutorials<span></span></h2>
 		<div class="contents">
 			<ul class="subMenu">				
-				<li><a href="#start">Getting Started</a></li>
-				<li>블록이동</li>
-				<li>색깔변경</li>
-				<li>highlighting</li>
-				<li>Location &amp; Rotation</li>
-				<li><a href="#MouseEvent">Mouse Event</a></li>
+				<li>Issue 등록 API</a></li>
+				<li>Object 정보 표시 API</li>
+				<li>Issue 목록 API</li>
+				<li>장소 이동 API</li>
+				<li>My Issue API</li>
 			</ul>
 			<div class="subContents">
 				<dl>
-					<dt id="Started">Getting Started</dt>
+					<dt id="Started">Issue 등록 API</dt>
 					<dd class="img">
 						<img src="/images/${lang}/homepage/about.png">
 					</dd>
 					<dd>
-						시작해 볼까요?
-						어떻게 하면 될까요? 잘하면 됩니다.
+						준비 중 입니다.
 					</dd>
 				</dl>
 				<dl>
-					<dt>Getting Started</dt>
+					<dt>Object 정보 표시 API</dt>
 					<dd class="img">
 						<img src="/images/${lang}/homepage/about.png">
 					</dd>
 					<dd>
-						시작해 볼까요?
-						어떻게 하면 될까요? 잘하면 됩니다.
+						준비 중 입니다.
 					</dd>
 				</dl>
 				<dl>
-					<dt>Getting Started</dt>
+					<dt>Issue 목록 API</dt>
 					<dd class="img">
 						<img src="/images/${lang}/homepage/about.png">
 					</dd>
 					<dd>
-						시작해 볼까요?
-						어떻게 하면 될까요? 잘하면 됩니다.
+						준비 중 입니다.
 					</dd>
 				</dl>
 				<dl>
-					<dt>Getting Started</dt>
+					<dt>My Issue API</dt>
 					<dd class="img">
 						<img src="/images/${lang}/homepage/about.png">
 					</dd>
 					<dd>
-						시작해 볼까요?
-						어떻게 하면 될까요? 잘하면 됩니다.
-					</dd>
-				</dl>
-				<dl>
-				
-					<dt id="MouseEvent">changeMouseMoveAPI</dt>
-					<dd>마우스 클릭 후 선택한 객체가 Block 인지 Object 인지를 설정해주는 API 입니다.</dd>
-					<dd>html</dd>
-						<div class="example-code">
-						<pre>
-						Block 이동 모드 <br>
-							<span class="tag">< input </span>&nbsp;
-							<span class="value"> type</span>
-							=
-							<span class="string">"radio"</span>
-							&nbsp;
-							<span class="value"> id </span>
-							= &nbsp;
-							<span class="string">"mouseBlockMove"</span>
-							&nbsp;
-							<span class="value">value</span>
-							= &nbsp;
-							<span class="string">"0"</span>
-							&nbsp;
-							<span class="value"> onclick</span>
-							= &nbsp;
-							<span class="string">changeMouseMove('0');</span>
-							<span class="tag">/> </span><br>
-							<span class="tag">< label </span>
-							<span class="value">for</span>
-							=
-							<span class="string">"mouseBlockMove" ></span>
-							&nbsp;Block
-							<span class="tag">< /label></span> <br>
-							<br>
-							Object 이동 모드 <br>
-							<span class="tag">< input </span>&nbsp;
-							<span class="value"> type</span>
-							=
-							<span class="string">"radio"</span>
-							&nbsp;
-							<span class="value"> id </span>
-							= &nbsp;
-							<span class="string">"mouseObjectMove"</span>
-							&nbsp;
-							<span class="value">value</span>
-							= &nbsp;
-							<span class="string">"0"</span>
-							&nbsp;
-							<span class="value"> onclick</span>
-							= &nbsp;
-							<span class="string">changeMouseMove('0');</span>
-							<span class="tag">/> </span><br>
-							<span class="tag">< label </span>
-							<span class="value">for</span>
-							=
-							<span class="string">"mouseObjectMove" ></span>
-							&nbsp;Block
-							<span class="tag">< /label></span>
-						</pre>
-					</div>
-					<dd>Javascript</dd>
-						<div class="example-code">
-						<pre>
-							<span class="function">function</span>
-							changeMouseMove (mouseMoveMode) { <br>
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(
-							<span class="string">"input:radio{name='mouseMoveMode']:radio[value='"</span>
-							+ mouseMoveMode +
-							<span class="string">"']"</span>
-							.prop(
-							<span class="string">"checked"</span>
-							,
-							<span class="value">true</span>
-							); <br>
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changeMouseMoveAPI (mouseMoveMode); <br>
-							}
-						</pre>
-					</div>
-
-					
-					<dd class="img">
-						<img src="/images/${lang}/homepage/about.png">
-					</dd>
-					<dd>
-						시작해 볼까요?
-						어떻게 하면 될까요? 잘하면 됩니다.
+						준비 중 입니다.
 					</dd>
 				</dl>
 			</div>
