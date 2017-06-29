@@ -15,6 +15,8 @@
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"  type="text/css" />
 	<script type="text/javascript" src="/js/analytics.js"></script>
+	<script type="text/javascript" src="/js/${lang }/common.js"></script>
+	<script type="text/javascript" src="/js/${lang }/message.js"></script>
 </head>
 
 <body>
@@ -28,8 +30,8 @@
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			</ul>
 			<ul class="language">
-				<li class="on">KO</li>
-				<li>EN</li>
+				<li class="on"><a href="#" onclick ="changeLanguage('ko');">KO</a></li>
+				<li><a href="#" onclick ="changeLanguage('en');">EN</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -69,6 +71,5 @@
 		</div>
 	</footer>
 	<!-- //FOOTER -->
-
 </body>
 </html>

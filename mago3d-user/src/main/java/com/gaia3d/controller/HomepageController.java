@@ -2,6 +2,7 @@ package com.gaia3d.controller;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CommonCode;
@@ -62,6 +64,7 @@ public class HomepageController {
 	public String about(HttpServletRequest request, Model model) {
 		String lang = null;
 		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		log.info("@@ lang = {}", lang);
 		if(lang == null || "".equals(lang)) {
 			lang = "ko";
 		}
@@ -162,6 +165,32 @@ public class HomepageController {
 			lang = "ko";
 		}
 		return "/homepage/" + lang + "/tutorials";
+	}
+	
+	/**
+	 * 언어 설정
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "ajax-change-language.do")
+	@ResponseBody
+	public String ajaxChangeLanguage(HttpServletRequest request, @RequestParam("lang") String lang, Model model) {
+		Gson gson = new Gson();
+		Map<String, Object> jSONData = new HashMap<String, Object>();
+		String result = "success";
+		try {
+			log.info("@@ lang = {}", lang);
+			if(lang != null && !"".equals(lang) && ("ko".equals(lang) || "en".equals(lang))) {
+				request.getSession().setAttribute(SessionKey.LANG.name(), lang);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		jSONData.put("result", result);
+		
+		return gson.toJson(jSONData);
 	}
 	
 	/**

@@ -202,3 +202,33 @@ function isSequenceChar(input){
 
 	return result;             
 }
+
+function changeLanguage(lang) {
+	var updateFlag = true;
+	if(updateFlag) {
+		updateFlag = false;
+		$.ajax({
+			url: "/homepage/ajax-change-language.do?lang=" + lang,
+			type: "GET",
+			//data: info,
+			cache: false,
+			dataType: "json",
+			success: function(msg){
+				if(msg.result == "success") {
+					alert(JS_MESSAGE["success"]);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+				updateFlag = true;
+			},
+			error:function(request,status,error){
+		        //alert(JS_MESSAGE["ajax.error.message"]);
+		        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		        updateFlag = true;
+			}
+		});
+	} else {
+		alert(JS_MESSAGE["button.dobule.click"]);
+		return;
+	}
+}

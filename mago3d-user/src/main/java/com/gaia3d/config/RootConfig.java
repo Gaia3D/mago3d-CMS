@@ -54,10 +54,10 @@ public class RootConfig {
 	    dataSource.setUsername(Crypt.decrypt(username));
 	    dataSource.setPassword(Crypt.decrypt(password));
 	    // 서버용
-//	    dataSource.setInitialSize(120);
-//	    dataSource.setMaxActive(300);
-//	    dataSource.setMaxIdle(180);
-//	    dataSource.setMinIdle(120);
+	    dataSource.setInitialSize(60);
+	    dataSource.setMaxActive(150);
+	    dataSource.setMaxIdle(90);
+	    dataSource.setMinIdle(60);
 //	    dataSource.setTestWhileIdle(testWhileIdle);     
 //	    dataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMills);
 //	    dataSource.setValidationQuery(validationQuery);
