@@ -34,8 +34,8 @@
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO" class="on"><a href="#" onclick ="changeLanguage('ko');">KO</a></li>
-				<li id="languageEN"><a href="#" onclick ="changeLanguage('en');">EN</a></li>
+				<li class="on"><a href="#" onclick ="changeLanguage('ko');">KO</a></li>
+				<li><a href="#" onclick ="changeLanguage('en');">EN</a></li>
 			</ul>
 		</div>
 	</nav>

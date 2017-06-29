@@ -215,10 +215,19 @@ function changeLanguage(lang) {
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "success") {
-					alert(JS_MESSAGE["success"]);
+					//alert(JS_MESSAGE["success"]);
 				} else {
 					alert(JS_MESSAGE[msg.result]);
 				}
+				
+				if(lang == "ko") {
+					$("#languageKO").addClass("on");
+					$("#languageEN").removeClass("on");
+				} else {
+					$("#languageKO").removeClass("on");
+					$("#languageEN").addClass("on");
+				}
+					
 				updateFlag = true;
 			},
 			error:function(request,status,error){
