@@ -34,8 +34,8 @@
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO" class="on"><a href="#" onclick ="changeLanguage('ko');">KO</a></li>
-				<li id="languageEN"><a href="#" onclick ="changeLanguage('en');">EN</a></li>
+				<li id="languageKO" class="on"><a href="" onclick ="changeLanguage('ko');">KO</a></li>
+				<li id="languageEN"><a href="" onclick ="changeLanguage('en');">EN</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -57,13 +57,6 @@
 				<li>다양한 API를 간편하게 사용할 수 있도록 API목록 기능을 지원하고 있습니다.</li>
 			</ul>
 
-			<h4>Quick Start Guide</h4>
-			<ol>
-				<li>mago3d를 설치합니다.</li>
-				<li>mago3d를 설치하고 was(tomcat), webserver(nginx, apache)를 설치합니다.</li>
-				<li>확인한다</li>
-			</ol>
-
 			<h4>Documentation</h4>
 			<table>
 				<tr>
@@ -78,7 +71,7 @@
 				</tr>
 			</table>
 
-			<h4>소스링크</h4>
+			<h4>소스</h4>
 			<table>
 				<tr>
 					<th>버전</th>
@@ -110,7 +103,7 @@
 				<span></span>
 			</h2>
 			<p>
-				Mago3d에 관심이 있는 고객님께서는 아래의 담당자 email, phone 또는 방문을 부탁 드립니다.
+				Mago3D 에 관심있는 고객들께서는 연락(이메일, 전화) 또는 직접 방문을 부탁드립니다.
 			</p>
 			<ul class="contact">
 				<li class="company">www.gaia3d.com</li>

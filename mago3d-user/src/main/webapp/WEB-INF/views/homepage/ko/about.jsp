@@ -11,17 +11,15 @@
 <!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans"
-	rel="stylesheet">
-<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
-<link rel="stylesheet" href="/css/${lang}/font/font.css" />
-<link rel="stylesheet" href="/css/${lang}/hojun-style.css" />
-<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-<script type="text/javascript" src="/js/${lang}/common.js"></script>
-<script type="text/javascript" src="/js/${lang}/message.js"></script>
-<script type="text/javascript" src="/js/analytics.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
+	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/js/${lang}/common.js"></script>
+	<script type="text/javascript" src="/js/${lang}/message.js"></script>
+	<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 
 <body>
@@ -195,27 +193,26 @@
 					<div class="colspan-2 column text-left">
 						<img src="/images/${lang}/homepage/issue.png">
 					</div>
-					<div class="colspan-2 column">
+					<div class="colspan-2 column clear">
 						<img src="/images/${lang}/homepage/data.png">
 					</div>
 					<div class="colspan-1 column">
 						<h2>데이터 관리</h2>
 						<p>
 							데이터를 관리해주는 페이지입니다. 데이터 목록에서는 현재 데이터 상태를 확인할 수 있습니다. 데이터는 등록 페이지에서
-							하나하나 등록할 수도 있지만 엑셀 형식으로 일괄등록이 가능합니다. 삭제 / 수정 DATA 잠금 등 많은 기능을
-							제공하고 있습니다. <br> 데이터 그룹에서는 데이터를 그룹화 시킬 수 있습니다.
+							하나하나 등록할 수도 있지만 엑셀 형식으로 일괄등록이 가능합니다. 데이터의 <b>삭제 / 수정 / 잠금</b> 등
+							많은 기능을 제공하고 있습니다. 데이터 그룹에서는 데이터를 그룹화 시킬 수 있습니다.
 						</p>
 					</div>
 				</div>
-
 				<h4>추가 기능</h4>
 				<table>
 					<tr>
 						<td>관리자 페이지 DashBoard 제공</td>
-						<td>용자 그룹 Role Based Acess Controll 기능 제공</td>
+						<td>사용자 그룹의 역할 기반 접근-제어 기능 제공</td>
 					</tr>
 					<tr>
-						<td>3d object 정보 PogstGis 연동, RestAPI, 캐싱 기능 제공</td>
+						<td>3D object 정보 PogstGis 연동, RestAPI, 캐싱 기능 제공</td>
 						<td>F4D 변환 배치 기능 제공</td>
 					</tr>
 					<tr>
@@ -228,18 +225,18 @@
 					</tr>
 					<tr>
 						<td>스케줄 기능 제공</td>
+						<td></td>
 					</tr>
 				</table>
 				<h4>클라우드 환경 제공</h4>
-				<p>Amazon, Google, Azure 등 클라우드 서비스를 제공 할 예정 입니다. 사용자는 클라우드 환경
-					하에서 자신이 가지고 있는 jt, obj, collada 파일 등을 실시간 업로딩 후 Mago3D에서 확인 하실 수
-					있습니다.</p>
+				<p>Amazon, Google, Azure 등 클라우드 서비스를 제공할 예정입니다. 사용자는 클라우드 환경 하에서
+					자신이 가지고 있는 파일(jt,obj,collada 등)을 업로딩 후 Mago3D에서 실시간으러 확인할수 있습니다.</p>
 				<h4>Acknowledgement</h4>
 				<ul>
-					<li>본 프로젝트는 국토교통부 과제(과제번호: ABCD1234)의 연구활동의 일환입니다.</li>
+					<li>본 프로젝트는 국토교통부 공간정보 SW활용을 위한 오픈소스 가공기술개발(과제번호:16NSIP-B080778-04)의 연구활동의 일환입니다.</li>
 					<li>서울시 3차원 데이터는 한국공간정보산업진흥원의 허가를 받아 연구목적으로 사용 중입니다.</li>
 					<li>서울시 실내 데이터는 서울시의 허가를 받아 연구목적으로 사용 중입니다.</li>
-					<li>기타 자료는 각 저각권자의 허락을 받아 서비스합니다.</li>
+					<li>기타 자료는 각 저작권자의 허락을 받아 서비스합니다.</li>
 				</ul>
 				<a href="#" class="goTop">위로</a>
 			</div>
@@ -254,7 +251,9 @@
 			<h2>
 				Contact <span></span>
 			</h2>
-			<p>Mago3D에 관심이 있는 고객님께서는 아래의 담당자 email, phone 또는 방문을 부탁 드립니다.</p>
+			<p>
+				Mago3D 에 관심있는 고객들께서는 연락(이메일, 전화) 또는 직접 방문을 부탁드립니다.
+			</p>
 			<ul class="contact">
 				<li class="company">www.gaia3d.com</li>
 				<li class="address">080 2 3397 3475</li>
