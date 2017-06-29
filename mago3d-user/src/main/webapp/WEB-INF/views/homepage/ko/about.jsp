@@ -19,6 +19,7 @@
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
+	<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 
 <body>
@@ -33,10 +34,10 @@
 		<div>
 			<h1><a href="./index.do">Mago3D</a></h1>
 			<ul class="menu">
-				<li class="on">Mago3D<span></span></li>
-				<a href="/homepage/demo.do"><li>Demo<span></span></li></a>
-				<a href="/homepage/download.do"><li>Download<span></span></li></a>
-				<a href="/homepage/tutorials.do"><li>Tutorials<span></span></li></a>
+				<li class="on">Mago3D</li>
+				<li><a href="/homepage/demo.do">Demo</a></li>
+				<li><a href="/homepage/download.do">Download</a></li>
+				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			</ul>
 			<ul class="language">
 				<li class="on">KO</li>
@@ -47,9 +48,9 @@
 	<section>
 		<div class="contents">
 			<ul class="tab">
-				<a href="#about"><li>About</li></a>
-				<a href="#now"><li>Now</li></a>
-				<a href="#will"><li>Will be</li></a>
+				<li><a href="#about"></a>About</li>
+				<li><a href="#now">Now</a></li>
+				<li><a href="#will">Will be</a></li>
 			</ul>
 			<div id="about" class="part">
 				<h3>About<span></span></h3>

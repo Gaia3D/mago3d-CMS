@@ -14,15 +14,16 @@
 <link rel="stylesheet" href="/css/${lang}/style.css" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans"> 
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css" />
+	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css" />
 	
-		<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
+	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-toast/jquery.toast.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-toast/jquery.toast.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
-	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css" />
+	<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 
 <body>
@@ -175,7 +176,7 @@
 		<div id="issuesEnable" style="margin-top:10px; width:150px;">
 			<img src="/images/${lang }/homepage/issue_list.png" alt="Info View" width="40px;" height="50px;" />
 			<p />
-			<span id="issuesEnableLabel" style="margin-top: 5px; width: 50px; bold; color: #FFFFFF;">Issue 목록</span>
+			<span id="issuesEnableLabel" style="margin-top: 5px; width: 50px; bold; color: #FFFFFF;">Issue 목록 표시</span>
 		</div>
 		
 		<div style="margin-top:50px; width:150px;" onclick="inputIssue();">
@@ -411,6 +412,8 @@
 	});
 	// issue list 표시
 	$("#issuesEnable").click(function() {
+		alert("준비중 입니다.");
+		return;
 		if(listIssueFlag) {
 			listIssueFlag = false;
 			$("#issuesEnableLabel").text("Issue 목록");

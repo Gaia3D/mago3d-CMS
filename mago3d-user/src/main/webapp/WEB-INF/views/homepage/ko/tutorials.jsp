@@ -14,6 +14,8 @@
  	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet"> 
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"/>
+	<script type="text/javascript" src="/js/analytics.js"></script>
+	
 </head>
 
 <body>
