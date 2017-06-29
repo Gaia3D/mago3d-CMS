@@ -28,7 +28,7 @@
 			<p>A Brand-New Live 3D Platform</p>
 		</div>
 	</header>
-	
+
 	<nav class="nav">
 		<div>
 			<h1><a href="./index.do">Mago3D</a></h1>
@@ -52,7 +52,7 @@
 				<li><a href="#will">Will be</a></li>
 			</ul>
 			<div id="about" class="part">
-				<h3>About<span></span></h3>
+				<h3>About</h3>
 				<p>
 MAGO3D could seamlessly integrate AEC(Architecture, Engineering, Construction) and 3D GIS in web browser using Cesium or Web World Wind.
 Although there has been numerous attempts to integrate AEC and 3D GIS on a single geospatial platform, the outcome of these attempts are not so satisfactory till to date. 
@@ -139,8 +139,8 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				MAGO3D can now visualise massive 3D data including indoor objects and AEC data at least 100k objects, in a single scene seamlessly with traditional outdoor 3D GIS objects.
 				</p>
 				<div class="architecture">
-					<img src="/images/${lang}/homepage/arc.png" alt="">
-					<img src="/images/${lang}/homepage/sw.png" alt="">
+					<img src="/images/${lang}/homepage/arc.png" style="width: 590px; margin-top: 60px;">
+					<img src="/images/${lang}/homepage/sw.png" style="width: 590px;">
 				</div>
 				
 				<a href="#" class="goTop">goTop</a>
@@ -228,7 +228,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				</p>
 				<h4>Acknowledgement</h4>
 				<ul>
-					<li>This project is part of the research(공간정보 SW활용을 위한 오픈소스 가공기술개발(No. 16NSIP-B080778-04)) activities of the Ministry of Land, Infrastructure and Transport.</li>
+					<li>This project is part of the research(공간정보 SW활용을 위한 오픈소스 가공기술개발 No. 16NSIP-B080778-04)) activities of the Ministry of Land, Infrastructure and Transport.</li>
 					<li>The 3D data of Seoul is being used for research purpose under the permission of Korea Spatial Informaiton Industry Promotion Institute.</li>
 					<li>The indoor data of Seoul is being used for research purposes under the permission of Seoul Metropolitan Government.</li>
 					<li>Other datas will be provided with the permission of each copyright holder.</li>

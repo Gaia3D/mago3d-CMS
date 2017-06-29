@@ -12,6 +12,7 @@
     <![endif]-->
     
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.slidertron-1.1.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"  type="text/css" />
 	<script type="text/javascript" src="/js/analytics.js"></script>
@@ -39,15 +40,52 @@
 	<section>
 		<div class="contents">
 
-
-
-			<div class="fullbox" style="opacity: 1; height: 1070.44px;">
-			<iframe id="ytplayer" src="../images/ko/204.mov" muted="muted" title="" style="width: 100%; height: 1070.44px; margin-top: 0px; margin-left: 0px;" width="100%" height="100%" frameborder="0"></iframe>
+			<div id="slider">
+				<div class="viewer">
+					<div class="reel">
+						<div class="slide">
+							<img src="/images/slider01.png" alt="" />
+						</div>
+						<div class="slide">
+							<img src="/images/slider02.png" alt="" />
+						</div>
+						<div class="slide">
+							<img src="/images/slider03.png" alt="" />
+						</div>
+						<div class="slide">
+							<img src="/images/slider04.png" alt="" />
+						</div>
+						<div class="slide">
+							<img src="/images/slider05.png" alt="" />
+						</div>
+						<div class="slide">
+							<img src="/images/slider06.png" alt="" />
+						</div>
+						<div class="slide">
+							<img src="/images/slider07.png" alt="" />
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class="pattern_bg" style="height: 1070.44px;"></div>
 
-
-
+			<script>
+				var $slider = $('#slider');
+				if ($slider.length > 0) {
+					$slider.slidertron({
+						mode : 'fade',
+						seamlessWrap : false,
+						viewerSelector : '.viewer',
+						reelSelector : '.viewer .reel',
+						slidesSelector : '.viewer .reel .slide',
+						advanceDelay : 7000,
+						speed : 600,
+						fadeInSpeed : 1500,
+						autoFit : true,
+						autoFitAspectRatio : (1200 / 832)
+					});
+				}
+			</script>
+			
 		</div>
 	</section>
 

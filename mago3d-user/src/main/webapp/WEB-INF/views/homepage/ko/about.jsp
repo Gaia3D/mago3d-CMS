@@ -1,14 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/common/taglib.jsp"%>
-<%@ include file="/WEB-INF/views/common/config.jsp"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglib.jsp" %>
+<%@ include file="/WEB-INF/views/common/config.jsp" %>
 
 <!DOCTYPE html>
 <html lang="${accessibility}">
 <head>
-<meta charset="utf-8">
-<title>Mago3D</title>
-<!--[if lt IE 9]>
+    <meta charset="utf-8">
+    <title>Mago3D</title>
+    <!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
@@ -32,9 +31,7 @@
 
 	<nav class="nav">
 		<div>
-			<h1>
-				<a href="./index.do">Mago3D</a>
-			</h1>
+			<h1><a href="./index.do">Mago3D</a></h1>
 			<ul class="menu">
 				<li class="on">Mago3D</li>
 				<li><a href="/homepage/demo.do">Demo</a></li>
@@ -42,9 +39,8 @@
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO" class="on"><a href="#"
-					onclick="changeLanguage('ko');">KO</a></li>
-				<li id="languageEN"><a href="#" onclick="changeLanguage('en');">EN</a></li>
+				<li id="languageKO" class="on"><a href="" onclick="changeLanguage('ko');">KO</a></li>
+				<li id="languageEN"><a href="" onclick="changeLanguage('en');">EN</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -56,23 +52,24 @@
 				<li><a href="#will">Will be</a></li>
 			</ul>
 			<div id="about" class="part">
-				<h3>
-					About<span></span>
-				</h3>
-				<p>Mago3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인
-					3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. Mago3D는 기존의
-					솔루션과 달리 공간의 끊김 없는 통합 (Seamless integration of indoor & outdoor
-					space)으로 실내외 구별 없이 끊김 없이 AFC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 오픈소스
-					(Cesium, World Wind)를 기반으로 개발된 오픈소스로서 개방성과 확장성 또한 뛰어납니다. 이에 따라,
-					Mago3D 사용자는 다양한 Rendering 알고리즘을 사용하여 초대용량 BIM(Building Information
-					Modelling), JT (Jupiter), IFC, 3DS...등 3D GIS 파일 등을 별도의 프로그램 설치 없이
-					웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.</p>
+				<h3>About</h3>
+				<p>
+Mago3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인
+3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. Mago3D는 기존의
+솔루션과 달리 공간의 끊김 없는 통합 (Seamless integration of indoor & outdoor
+space)으로 실내외 구별 없이 끊김 없이 AFC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 오픈소스
+(Cesium, World Wind)를 기반으로 개발된 오픈소스로서 개방성과 확장성 또한 뛰어납니다. 이에 따라,
+Mago3D 사용자는 다양한 Rendering 알고리즘을 사용하여 초대용량 BIM(Building Information
+Modelling), JT (Jupiter), IFC, 3DS...등 3D GIS 파일 등을 별도의 프로그램 설치 없이
+웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.
+				</p>
 				<div class="row_demo">
 					<div class="wrapper_demo">
 						<div class="highlight">
-							<a href="#"> <span class="image left"> <img
-									src="/images/${lang}/homepage/gangbuk.png">
-							</span>
+							<a href="#">
+								<span class="image left">
+									<img src="/images/${lang}/homepage/gangbuk.png">
+								</span>
 								<div class="description">
 									<h2>3DS</h2>
 									<p>3DS Modeling</p>
@@ -82,9 +79,10 @@
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight two">
-							<a href="#"> <span class="image fit"> <img
-									src="/images/${lang}/homepage/Collada_model.png">
-							</span>
+							<a href="#">
+								<span class="image fit">
+									<img src="/images/${lang}/homepage/Collada_model.png">
+								</span>
 								<div class="description">
 									<h2>COLLADA</h2>
 									<p>COLLADA Modeling</p>

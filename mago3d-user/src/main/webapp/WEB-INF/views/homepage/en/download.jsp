@@ -43,7 +43,7 @@
 	<section>
 		<div class="contents">
 
-			<button type="button" class="down">
+			<button type="button" class="down" onclick='alert("Coming soon...")'>
 				DOWNLOAD Mago3D 1.0.0
 				<span>123.5 MB</span>
 				<span>2017-07-01</span>
@@ -65,7 +65,7 @@
 					<th>Biz Document</th>
 				</tr>
 				<tr>
-					<td><a href="./documention/index.html">Mago3Djs-1.0.0 js Document</a></td>
+					<td><a href="./documention/index.html" onclick='alert("Coming soon...")'>Mago3Djs-1.0.0 js Document</a></td>
 					<td></td>
 					<td></td>
 				</tr>
@@ -81,13 +81,13 @@
 				</tr>
 				<tr>
 					<td>1.0.0</td>
-					<td><a href="#">Mago3Dall.zip</a></td>
+					<td><a href="#" onclick='alert("Coming soon...")'>Mago3Dall.zip</a></td>
 					<td>2017-07-01</td>
 					<td>
 						<ul>
 							<li><a href="https://github.com/Gaia3D/mago3djs">mago3djs</a></li>
-							<li>mago3dconver</li>
-							<li>mago3dbiz</li>
+							<li><a href="#" onclick='alert("Coming soon...")'>mago3dconver</a></li>
+							<li><a href="#" onclick='alert("Coming soon...")'>mago3dbiz</a></li>
 						</ul>
 					</td>
 				</tr>
