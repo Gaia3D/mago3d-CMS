@@ -56,7 +56,13 @@
 				<li>To display object information display now available.</li>
 				<li>Support API list to make it easier to use various APIs.</li>
 			</ul>
-
+            <h4>Quick Start Guide</h4>
+            <ol>
+                <li>Install mago3d.</li>
+                <li>After installing, install was (tomcat), web server (nginx, apache), DataBase (PostgreSQL + PostGIS).</li>
+                <li>Use was and web server to run mago3d.</li>
+                <li>Mago3d Registers the data you want to use on the administrator's homepage by using registration or batch registration and registers necessary data.</li>
+            </ol>
 			<h4>Documentation</h4>
 			<table>
 				<tr>
