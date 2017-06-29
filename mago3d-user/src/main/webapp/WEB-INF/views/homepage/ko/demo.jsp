@@ -425,10 +425,12 @@
 			if($("#inputIssueLayer").css("display") == "none") {
 				$("#inputIssueLayer").show();
 				
-				$("#data_key").val(data_key);
+				$("#data_key").val(data_name);
 				$("#latitude").val(latitude);
 				$("#longitude").val(longitude);
 				$("#height").val(height);
+				
+				console.log("data_name = " + data_name + ", data_key = " + data_key + ", latitude = " + latitude + ", longitude = " + longitude + ", height = " + height); 
 			}
 		}
 	}
