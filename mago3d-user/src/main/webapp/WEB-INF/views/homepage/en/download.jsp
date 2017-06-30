@@ -71,7 +71,7 @@
 					<th>Biz Document</th>
 				</tr>
 				<tr>
-					<td><a href="./documention/index.html" onclick='alert("Coming soon...")'>Mago3Djs-1.0.0 js Document</a></td>
+					<td><a href="#" onclick='alert("Coming soon...")'>Mago3Djs-1.0.0 js Document</a></td>
 					<td></td>
 					<td></td>
 				</tr>

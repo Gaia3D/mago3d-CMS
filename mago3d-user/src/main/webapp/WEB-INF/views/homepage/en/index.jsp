@@ -58,12 +58,6 @@
 						<div class="slide">
 							<img src="/images/slider05.png" alt="" />
 						</div>
-						<div class="slide">
-							<img src="/images/slider06.png" alt="" />
-						</div>
-						<div class="slide">
-							<img src="/images/slider07.png" alt="" />
-						</div>
 					</div>
 				</div>
 			</div>
@@ -77,7 +71,7 @@
 						viewerSelector : '.viewer',
 						reelSelector : '.viewer .reel',
 						slidesSelector : '.viewer .reel .slide',
-						advanceDelay : 7000,
+						advanceDelay : 3000,
 						speed : 600,
 						fadeInSpeed : 1500,
 						autoFit : true,
