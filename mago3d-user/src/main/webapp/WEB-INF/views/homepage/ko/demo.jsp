@@ -144,7 +144,7 @@
 			<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			<li><a href="/homepage/download.do">Download</a></li>
 			<li><a href="/homepage/about.do">mago3D</a></li>
-			<li>Home</li>	
+			<li><a href="/homepage/index.do">Home</a></li>	
 		</ul>
 	</div>
 
@@ -329,6 +329,11 @@
 <script type="text/javascript" src="/js/${lang}/mago3d/Sphere.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/ObjectMarker.js"></script>
 <script>
+	var agent = navigator.userAgent.toLowerCase();
+	if(agent.indexOf('chrome') < 0) { 
+		alert("이 데모 페이지는 대용량 웹 데이터 처리를 위해 Chrome 브라우저에 최적화 되어 있습니다. \n원활한 서비스 이용을 위해 Chrome 브라우저를 이용  하시기 바랍니다.");
+	}
+
 	var policyJson = ${policyJson};
 	var dataGroupMap = ${dataGroupMap};
 	var insertIssueFlag = false;
