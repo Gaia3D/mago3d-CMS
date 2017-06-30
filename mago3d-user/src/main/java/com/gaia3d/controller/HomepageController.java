@@ -103,7 +103,7 @@ public class HomepageController {
 		}
 		long totalCount = issueService.getIssueTotalCountByUserId(issue);
 		
-		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(issue), totalCount, Long.valueOf(pageNo).longValue());
+		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(issue), totalCount, Long.valueOf(pageNo).longValue(), 5l);
 		log.info("@@ pagination = {}", pagination);
 		
 		issue.setOffset(pagination.getOffset());
@@ -142,7 +142,7 @@ public class HomepageController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "ajax-list-issue.do")
+	@GetMapping(value = "ajax-list-issue.do", produces="application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxListIssue(HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo) {
 		
@@ -169,7 +169,7 @@ public class HomepageController {
 			}
 			long totalCount = issueService.getIssueTotalCountByUserId(issue);
 			
-			Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(issue), totalCount, Long.valueOf(pageNo).longValue());
+			Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(issue), totalCount, Long.valueOf(pageNo).longValue(), 5l);
 			log.info("@@ pagination = {}", pagination);
 			
 			issue.setOffset(pagination.getOffset());

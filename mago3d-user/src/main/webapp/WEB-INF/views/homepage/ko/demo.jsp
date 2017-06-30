@@ -45,7 +45,7 @@
 </c:if>
 <c:if test="${!empty issueList }">
 	<c:forEach var="issue" items="${issueList}" varStatus="status">	
-			<div style="margin-left: 20px; margin-top: 20px; margin-bottom: 20px; background: gainsboro">
+			<div style="padding-left: 20px; padding-top: 20px; padding-bottom: 20px; background: gainsboro">
 				<div>
 					<img src="/images/${lang }/homepage/bullet_h4.png" alt="" />
 					<span style="padding-left: 10px; width:200px; overflow: hidden;">${issue.title }</span>
@@ -418,6 +418,7 @@
 		changeListIssueViewModeAPI(listIssueFlag);
 	});
 	
+	// issue input layer call back function
 	function showInsertIssueLayer(data_name, data_key, latitude, longitude, height) {
 		if(insertIssueFlag) {
 			if($("#inputIssueLayer").css("display") == "none") {
@@ -529,6 +530,7 @@
 					
 					$("#inputIssueLayer").hide();
 					isInsertIssue = true;
+					ajaxIssueList();
 				},
 				error:function(request,status,error){
 			        //alert(JS_MESSAGE["ajax.error.message"]);
@@ -541,7 +543,6 @@
 			return;
 		}
 	});
-	
 	
 	// Data 검색
 	$("#searchData").click(function() {
@@ -612,54 +613,43 @@
 		var info = "";		
 		$.ajax({
 			url: "/homepage/ajax-list-issue.do",
-			type: "POST",
+			type: "GET",
 			data: info,
-			cache: false,
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "success") {
-					/* var issueList = msg.issueList;
+					var issueList = msg.issueList;
 					var content = "";
-					content 	= "<table class=\"widget-table\">"
-								+	"<col class=\"col-left\" />"
-								+	"<col class=\"col-center\" />"
-								+	"<col class=\"col-center\" />";
-					if(userOTPLogList == null || userOTPLogList.length == 0) {
-						content += 	"<tr>"
-								+	"	<td colspan=\"3\" class=\"col-none\">OTP 이력이 존재하지 않습니다.</td>"
-								+	"</tr>";
+					
+					if(issueList == null || issueList.length == 0) {
+						content += 	"<div style=\"text-align: center; padding-top:20px; height: 50px;\">"
+								+	"	Issue가 존재하지 않습니다."
+								+	"</div>";
 					} else {
-						for(i=0; i<userOTPLogList.length; i++ ) {
-							var userOTP = null;
-							userOTP = userOTPLogList[i];
+						for(i=0; i<issueList.length; i++ ) {
+							var issue = null;
+							issue = issueList[i];
 							content = content 
-								+ 	"<tr>"
-								+ 	"	<td class=\"col-left\"><em>" + userOTP.group_name + "</em>(" + userOTP.user_name + ")</td>";
-							// // 상태. 0 : 생성, 1 : 검증성공, 2 : 실패, 3 : 시간만료
-							var imageName = "";
-							var statusName = "";
-							if(userOTP.otp_number_status == "0") {
-								imageName = "otp-create.png";
-								statusName = "OTP 생성";
-							} else if(userOTP.otp_number_status == "1") {
-								imageName = "otp-success.png";
-								statusName = "인증 성공";
-							} else if(userOTP.otp_number_status == "2") {
-								imageName = "otp-fail.png";
-								statusName = "OTP 실패";
-							} else if(userOTP.otp_number_status == "3") {
-								imageName = "otp-success.png";
-								statusName = "시간만료";
-							}
-							content += 	"<td class=\"col-center\">"
-								+		"	<img style=\"margin-top:8px\" src=\"/images/ko/icon/" + imageName + "\" alt=\"" +  statusName + "\" />"		
-								+		"</td>"
-								+ 		"<td class=\"col-center\">" + userOTP.viewRegisterDate + "</td>"
-								+ 	"</tr>";
+								+ 	"<div style=\"padding-left: 20px; padding-top: 20px; padding-bottom: 20px; background: gainsboro\">"
+								+ 	"	<div>"
+								+ 	"		<img src=\"/images/${lang }/homepage/bullet_h4.png\" alt=\"\" />"
+								+ 	"		<span style=\"padding-left: 10px; width:200px; overflow: hidden;\">" + issue.title + "</span>"
+								+ 	"		<span style=\"float:right; padding-right: 15px; padding-top: 5px;\">"
+								+ 	"			<a href=\"#\" onclick=\"flyTo('" + issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">"
+								+ 	"				<img src=\"/images/${lang }/homepage/btn_going.png\" width=\"26\" height=\"26\" alt=\"\" />"
+								+ 	"			</a>"
+								+ 	"		</span>"
+								+ 	"	</div>"
+								+ 	"	<div id=\"issue_toggle_" + issue.issue_id + "\">"
+								+ 	"		<span style=\"padding-left: 25px;\">[" +  issue.issue_type + "][" + issue.priority + "]</span>"
+								+ 	"		<span style=\"padding-left: 5px;\">" + issue.data_group_name  + "</span>"
+								+ 	"		<span style=\"float:right; padding-right: 20px;\">" + issue.insert_date + "</span>"
+								+ 	"	</div>"
+								+ 	"</div>";
 						}
 					}
-					$("#userOTPLogListWidget").empty();
-					$("#userOTPLogListWidget").html(content); */
+					$("#recentIssueListContent").empty();
+					$("#recentIssueListContent").html(content);
 				} else {
 					alert(JS_MESSAGE[msg.result]);
 				}
@@ -669,33 +659,6 @@
 				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			}
 		});
-		
-/* 		<div id="recentIssueListContent" style="display: none">
-		<c:if test="${empty issueList }">
-				<div style="text-align: center; padding-top:20px; height: 50px;">
-					Issue가 존재하지 않습니다.
-				</div>
-		</c:if>
-		<c:if test="${!empty issueList }">
-			<c:forEach var="issue" items="${issueList}" varStatus="status">	
-				<div style="margin-left: 20px; margin-top: 20px; margin-bottom: 20px; background: gainsboro">
-					<div>
-						<img id="issueMoreImage" src="/images/${lang }/homepage/bullet_h4.png" alt="" />
-						<span style="padding-left: 10px; width:200px; overflow: hidden;">${issue.title }</span>
-						<span style="float:right; padding-right: 15px; padding-top: 5px;">
-							<a href="#" onclick="flyTo('${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">
-								<img id="issueMoreImage" src="/images/${lang }/homepage/btn_going.png" width="26" height="26" alt="" />
-							</a>
-						</span>
-					</div>
-					<div id="issue_toggle_${issue.issue_id }">
-						<span style="padding-left: 25px;">[${issue.issue_type }][${issue.priority }]</span>
-						<span style="padding-left: 5px;">${issue.data_group_name }</span>
-						<span style="float:right; padding-right: 20px;">${issue.viewInsertDate }</span>
-					</div>
-				</div>
-			</c:forEach>
-		</c:if> */
 	}
 </script>
 </body>
