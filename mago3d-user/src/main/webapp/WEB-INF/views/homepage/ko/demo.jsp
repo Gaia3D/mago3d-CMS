@@ -643,7 +643,7 @@
 								+ 	"	<div id=\"issue_toggle_" + issue.issue_id + "\">"
 								+ 	"		<span style=\"padding-left: 25px;\">[" +  issue.issue_type + "][" + issue.priority + "]</span>"
 								+ 	"		<span style=\"padding-left: 5px;\">" + issue.data_group_name  + "</span>"
-								+ 	"		<span style=\"float:right; padding-right: 20px;\">" + issue.insert_date + "</span>"
+								+ 	"		<span style=\"float:right; padding-right: 20px;\">" + issue.insert_date.substring(0,19) + "</span>"
 								+ 	"	</div>"
 								+ 	"</div>";
 						}
