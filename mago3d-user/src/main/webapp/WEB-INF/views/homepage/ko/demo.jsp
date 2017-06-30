@@ -163,7 +163,7 @@
 	</div>	
 
 	<!-- 맵영역 -->
-	<div id="magoContainer" style="position: absolute; width: 100%; height: 95%; margin-top: 0; padding: 0; overflow: hidden;"></div>
+	<div id="magoContainer" style="position: absolute; width: 100%; height: 100%; margin-top: 0; padding: 0; overflow: hidden;"></div>
 
 	<form:form id="issue" modelAttribute="issue" method="post" onsubmit="return false;">
 	<div id="inputIssueLayer" style="display: none; top:40%; left:45%; width:450px; margin:-250px 0 0 -150px; " class="layer">
