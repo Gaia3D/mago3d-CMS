@@ -6,7 +6,7 @@
 <html lang="${accessibility}">
 <head>
     <meta charset="utf-8">
-    <title>Mago3D</title>
+    <title>about | mago3D User</title>
     <!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -31,9 +31,9 @@
 
 	<nav class="nav">
 		<div>
-			<h1><a href="./index.do">Mago3D</a></h1>
+			<h1><a href="./index.do">mago3D</a></h1>
 			<ul class="menu">
-				<li class="on">Mago3D</li>
+				<li class="on">mago3D</li>
 				<li><a href="/homepage/demo.do">Demo</a></li>
 				<li><a href="/homepage/download.do">Download</a></li>
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
@@ -54,10 +54,18 @@
 			<div id="about" class="part">
 				<h3>About</h3>
 				<p>
-MAGO3D could seamlessly integrate AEC(Architecture, Engineering, Construction) and 3D GIS in web browser using Cesium or Web World Wind.
+mago3D could seamlessly integrate AEC(Architecture, Engineering, Construction) and 3D GIS in web browser using Cesium or Web World Wind.
 Although there has been numerous attempts to integrate AEC and 3D GIS on a single geospatial platform, the outcome of these attempts are not so satisfactory till to date. 
 Difference of data model, massive number of data to be rendered, big volume of file size are among those major technical barriers that hindered seamless integration of indoor and outdoor space.
-				</p>			
+				</p>
+				<h4>Features of mago3D</h4>
+				<ul>
+					<li>Integration of 3D GIS with BIM / AEC</li>
+					<li>Seamless integration of indoor and outdoor spaces (seamless integration of indoor & outdoor space)</li>
+					<li>Runs on a web browser and does not require a separate plug-in or ActiveX installation</li>
+					<li>It is open source based on open source (Cesium, World Wind) and has excellent openness and scalability.</li>
+					<li>Efficient management and ultra-fast rendering of high-capacity 3-D files</li>
+				</ul>			
 				<div class="row_demo">
 					<div class="wrapper_demo">
 						<div class="highlight">
@@ -108,9 +116,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 					<tr>
 						<td><img src="/images/${lang}/homepage/IFC.png"/></td> <td>IFC(Industry Foundation Classes)<br/>- a commonly used collaboration format in Building information modeling(BIM).</td>
 					</tr>
-					<tr>
-						<td><img src="/images/${lang}/homepage/JT.png"/></td> <td>JT(Jupiter Tesselation)<br/>- an ISO-standardized 3D data format and is in industry used for product visualization, collaboration, CAD data exchange, and in some also for long-term data retention.</td>
-					</tr>
+
 					<tr>
 						<td><img src="/images/${lang}/homepage/obj.png"/></td> <td>OBJ(Wavefront file format specification)<br/>- a geometry definition file format adopted by other 3D graphics application vendors.</td>
 					</tr>
@@ -119,6 +125,10 @@ Difference of data model, massive number of data to be rendered, big volume of f
 					</tr>
 					<tr>
 						<td width="64px"><img src="/images/${lang}/homepage/dae.png"></td> <td>COLLADA(COLLAborative Design Activity)<br/>- an interchange file format for exchanging digital assets among various graphics software applications.</td>
+					</tr>
+					<tr>
+						<td><img src="/images/${lang}/homepage/JT.png"/></td> <td>JT(Jupiter Tesselation)<br/>- an ISO-standardized 3D data format and is in industry used for product visualization, collaboration, CAD data exchange, and in some also for long-term data retention.
+						- If you want to use it, please contact the company.</td>
 					</tr>
 				</table>
 				<a href="#" class="goTop">goTop</a>
@@ -130,13 +140,13 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				<h3>NOW<span></span></h3>
 				<h4>Architecture</h4>
 				<p>
-				Mago3D based on spring framework (springboot). We use PostGis for processing spatial information, and use open source javascript library for cesium, worldwind for 3D rendering part.
+				mago3D based on spring framework (springboot). We use PostGis for processing spatial information, and use open source javascript library for cesium, worldwind for 3D rendering part.
 				One of big hurdle to integrate AEC and 3D GIS simultaneously is handling and visualisation of massive 3D data. 
 				To overcome this hurdle, new format called F4D has been devised adopting block reference concept. 
 				Also a format converter that converts popular 3D format to F4D has been developed. 
 				Currently industry standard IFC(Industry Foundation Classes), JT(Jupiter Tessellation), and popular 3D formats such as OBJ, 3DS, COLLADA DAE can be converted to F4D format. 
-				F4D format coupled with mago3djs(javascript library) has proven that it can increase memory management efficiency and rendering speed drastically. 
-				MAGO3D can now visualise massive 3D data including indoor objects and AEC data at least 100k objects, in a single scene seamlessly with traditional outdoor 3D GIS objects.
+				F4D format coupled with mago3Djs(javascript library) has proven that it can increase memory management efficiency and rendering speed drastically. 
+				mago3D can now visualise massive 3D data including indoor objects and AEC data at least 100k objects, in a single scene seamlessly with traditional outdoor 3D GIS objects.
 				</p>
 				<div class="architecture">
 					<img src="/images/${lang}/homepage/arc.png" style="width: 590px; margin-top: 60px;">
@@ -224,11 +234,11 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				</table>
 				<h4>Cloud environment</h4>
 				<p>We will provide Amazon, Google, Azure and other cloud services.
-				Users can check it in real time in Mago3D, after uploading files(jt,obj,collada, etc.) in the cloud environment. 
+				Users can check it in real time in mago3D, after uploading files(jt,obj,collada, etc.) in the cloud environment. 
 				</p>
 				<h4>Acknowledgement</h4>
 				<ul>
-					<li>This project is part of the research(공간정보 SW활용을 위한 오픈소스 가공기술개발 No. 16NSIP-B080778-04)) activities of the Ministry of Land, Infrastructure and Transport.</li>
+					<li>Ministry of Land, Transport and Maritime Affairs "Development of open source processing technology for application of spatial information SW (Project number: 16NSIP-B080778-04)".</li>
 					<li>The 3D data of Seoul is being used for research purpose under the permission of Korea Spatial Informaiton Industry Promotion Institute.</li>
 					<li>The indoor data of Seoul is being used for research purposes under the permission of Seoul Metropolitan Government.</li>
 					<li>Other datas will be provided with the permission of each copyright holder.</li>
@@ -247,7 +257,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				<span></span>
 			</h2>
 			<p>
-				If you are interested in Mago3D, please contact us by email or phone or visit us directly.
+				If you are interested in mago3D, please contact us by email or phone or visit us directly.
 			</p>
 			<ul class="contact">
 				<li class="company">www.gaia3d.com</li>

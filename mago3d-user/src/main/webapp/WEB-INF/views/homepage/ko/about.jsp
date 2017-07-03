@@ -64,7 +64,6 @@
 				이에 따라, mago3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 
 				3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.</p>
 				<h4>mago3D의 특징</h4>
-				<P>
 				<ul>
 					<li>BIM/AEC와 3D GIS의 통합</li>
 					<li>실내외 공간의 끊김 없는 통합(Seamless integration of indoor & outdoor space)</li>
@@ -72,7 +71,6 @@
 					<li>오픈소스(Cesium, World Wind)를 기반으로 개발된 오픈소스로서 개방성과 확장성이 뛰어남</li>
 					<li>초대용량 3차원 파일의 효율적 관리 및 초고속 렌더링</li>
 				</ul>
-				</P>
 				<div class="row_demo">
 					<div class="wrapper_demo">
 						<div class="highlight">
