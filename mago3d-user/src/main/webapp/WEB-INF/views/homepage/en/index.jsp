@@ -6,7 +6,7 @@
 <html lang="${accessibility}">
 <head>
     <meta charset="utf-8">
-    <title>Mago3D</title>
+    <title>index | mago3D User</title>
     <!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -94,11 +94,11 @@
 			</p>
 			<ul class="contact">
 				<li class="company">www.gaia3d.com</li>
-				<li class="address">080 2 3397 3475</li>
-				<li class="mail">mago3d@gaia3d.com</li>
+				<li class="address">+82-(0)2-3397-3475</li>
+				<li class="mail">info@gaia3d.com</li>
 			</ul>
 			<p class="copyright">
-				&copy; 2017. Mago3D all rights reserved.
+				&copy; 2017 Gaia3D, Inc
 			</p>
 		</div>
 	</footer>

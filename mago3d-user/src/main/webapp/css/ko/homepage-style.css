@@ -116,6 +116,7 @@ margin-bottom: 30px;
 padding-bottom: 13px;
 font-size: 28px;
 line-height: 30px;
+margin-top: 30px;
 }
 h3 > span {
 position: absolute;
@@ -237,7 +238,7 @@ background:  tomato;
 /* ///// CONTENTS ///// */
 /* contents */
 .contents > div.part {
-margin-bottom: 150px;
+margin-bottom: 60px;
 padding-top: 50px;
 }
 /* .contents:nth-child(1) div{
@@ -596,6 +597,8 @@ vertical-align: baseline;
 display: inline-block;
 }
 #market .button {
+height: 40px;
+vertical-align:middle; 
 position: relative;
 display: inline-block;
 margin-top: 0.5em;
