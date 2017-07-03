@@ -342,7 +342,7 @@
 	var managerFactory = new ManagerFactory(null, "magoContainer", policyJson, dataGroupMap);
 	
 	$(document).ready(function() {
-		$("#recentIssueListContent").show();
+		//$("#recentIssueListContent").show();
 		
 		// BoundingBox
 		changeBoundingBox(false);
