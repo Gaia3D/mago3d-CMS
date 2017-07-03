@@ -7,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Mago3D User</title>
+	<title>mago3D Demo</title>
 	<%-- <link rel="stylesheet" href="/css/${lang}/font/font.css" /> --%>
 <%-- 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" /> --%>
@@ -152,12 +152,7 @@
 		<p>바로가기</p>
 		<ul>
 <c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status">
-	<c:if test="${dataGroup.data_group_name == 'JT' }">
-			<li onclick="alert('preparing...');">${dataGroup.data_group_name }</li>
-	</c:if>
-	<c:if test="${dataGroup.data_group_name != 'JT' }">
 			<li onclick="flyTo('${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">${dataGroup.data_group_name }</li>
-	</c:if>		
 </c:forEach>
 		</ul>
 	</div>	

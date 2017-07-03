@@ -18,6 +18,7 @@
 			END AS user_last_login_lock_over
 			]]>
 		FROM user_info A LEFT OUTER JOIN user_group B ON A.user_group_id = B.user_group_id
+		WHERE A.user_id = #{user_id}
 	</select>
 
 	<!-- 사용자 기본 정보 중 세션 관련 정보 수정 -->

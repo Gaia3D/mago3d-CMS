@@ -151,7 +151,6 @@ public class MainController {
 		Issue issue = new Issue();
 		issue.setStart_date(startDate);
 		issue.setEnd_date(endDate);
-		
 		Long issueTotalCount = issueService.getIssueTotalCount(issue);
 		
 		model.addAttribute("issueTotalCount", issueTotalCount);

@@ -47,7 +47,7 @@
 	<section>
 		<div class="contents">
 
-			<button type="button" class="down" onclick='alert("준비 중 입니다.")'>
+			<button type="button" class="down" onclick='alert("준비 중 입니다."); return false;'>
 				DOWNLOAD Mago3D 1.0.0 <span>123.5 MB</span> <span>2017-07-01</span>
 			</button>
 
@@ -80,7 +80,7 @@
 					<th>Biz Document</th>
 				</tr>
 				<tr>
-					<td><a href="#" onclick='alert("준비 중 입니다.")'>Mago3Djs-1.0.0
+					<td><a href="#" onclick='alert("준비 중 입니다."); returnf alse;'>Mago3Djs-1.0.0
 							js Document</a></td>
 					<td></td>
 					<td></td>
@@ -102,8 +102,8 @@
 					<td>
 						<ul>
 							<li><a href="https://github.com/Gaia3D/mago3djs">mago3djs</a></li>
-							<li><a href="#" onclick='alert("준비 중 입니다.")'>mago3dconver</a></li>
-							<li><a href="#" onclick='alert("준비 중 입니다.")'>mago3dbiz</a></li>
+							<li><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3dconver</a></li>
+							<li><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3dbiz</a></li>
 						</ul>
 					</td>
 				</tr>
