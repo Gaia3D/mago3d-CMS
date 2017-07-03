@@ -75,7 +75,6 @@ Difference of data model, massive number of data to be rendered, big volume of f
 								</span>
 								<div class="description">
 									<h2>3DS</h2>
-									<p>3DS Modeling</p>
 								</div>
 							</a>
 						</div>
@@ -88,7 +87,6 @@ Difference of data model, massive number of data to be rendered, big volume of f
 								</span>
 								<div class="description">
 									<h2>COLLADA</h2>
-									<p>COLLADA Modeling</p>
 								</div>
 							</a>
 						</div>
@@ -101,7 +99,6 @@ Difference of data model, massive number of data to be rendered, big volume of f
 								</span>
 								<div class="description ">
 									<h2>IFC</h2>
-									<p>IFC Modeling</p>
 								</div>
 							</a>
 						</div>
