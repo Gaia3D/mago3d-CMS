@@ -13,8 +13,7 @@
     <![endif]-->
 <script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 <script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans"
-	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 <link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 <link rel="stylesheet" href="/css/${lang}/font/font.css" />
 <script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
