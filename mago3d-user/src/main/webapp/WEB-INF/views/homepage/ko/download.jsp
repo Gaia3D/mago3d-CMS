@@ -94,7 +94,7 @@
 					<th>Biz Document</th>
 				</tr>
 				<tr>
-					<td><a href="#" onclick='alert("준비 중 입니다."); returnf alse;'>mago3Djs-1.0.0
+					<td><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3Djs-1.0.0
 							js Document</a></td>
 					<td></td>
 					<td></td>
