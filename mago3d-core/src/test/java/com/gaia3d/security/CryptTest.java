@@ -9,6 +9,7 @@ public class CryptTest {
 		System.out.println(Crypt.encrypt("jdbc:postgresql://localhost:5432/mago3d"));
 		System.out.println(Crypt.encrypt("postgres"));
 		System.out.println(Crypt.encrypt("postgres"));
+		System.out.println(Crypt.encrypt("test"));
 	}
 
 }

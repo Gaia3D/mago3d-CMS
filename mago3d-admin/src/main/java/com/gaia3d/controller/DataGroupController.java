@@ -57,7 +57,7 @@ public class DataGroupController {
 	@ResponseBody
 	public String ajaxListDataGroup(HttpServletRequest request) {
 //		Gson gson = new Gson();
-//		Map<String, Data> jSONData = new HashMap<String, Data>();
+//		Map<String, Data> jSONObject = new HashMap<String, Data>();
 		String result = "success";
 		String dataGroupTree = null;
 		List<DataGroup> dataGroupList = new ArrayList<DataGroup>();
@@ -71,9 +71,9 @@ public class DataGroupController {
 			result = "db.execption";
 		}
 		
-//		jSONData.put("result", result);
-//		jSONData.put("dataGroupTree", dataGroupTree);
-//		return gson.toJson(jSONData);
+//		jSONObject.put("result", result);
+//		jSONObject.put("dataGroupTree", dataGroupTree);
+//		return gson.toJson(jSONObject);
 		
 		return JSONUtil.getResultTreeString(result, dataGroupTree);
 	}
@@ -88,7 +88,7 @@ public class DataGroupController {
 	@ResponseBody
 	public String ajaxInsertDataGroup(HttpServletRequest request, DataGroup dataGroup) {
 //		Gson gson = new Gson();
-//		Map<String, Data> jSONData = new HashMap<String, Data>();
+//		Map<String, Data> jSONObject = new HashMap<String, Data>();
 		String result = "success";
 		String dataGroupTree = null;
 		List<DataGroup> dataGroupList = new ArrayList<DataGroup>();
@@ -105,9 +105,9 @@ public class DataGroupController {
 				dataGroupList.addAll(dataGroupService.getListDataGroup(new DataGroup()));
 				
 				result = "input.invalid";
-//				jSONData.put("result", result);
-//				jSONData.put("dataGroupTree", getDataGroupTree(dataGroupList));
-//				return jSONData.toString();
+//				jSONObject.put("result", result);
+//				jSONObject.put("dataGroupTree", getDataGroupTree(dataGroupList));
+//				return jSONObject.toString();
 				
 				return JSONUtil.getResultTreeString(result, dataGroupTree);
 			}
@@ -135,9 +135,9 @@ public class DataGroupController {
 			result = "db.exception";
 		}
 		
-//		jSONData.put("result", result);
-//		jSONData.put("dataGroupTree", dataGroupTree);
-//		return gson.toJson(jSONData);
+//		jSONObject.put("result", result);
+//		jSONObject.put("dataGroupTree", dataGroupTree);
+//		return gson.toJson(jSONObject);
 		
 		return JSONUtil.getResultTreeString(result, dataGroupTree);
 	}
@@ -152,7 +152,7 @@ public class DataGroupController {
 	@ResponseBody
 	public String ajaxUpdateDataGroup(HttpServletRequest request, DataGroup dataGroup) {
 //		Gson gson = new Gson();
-//		Map<String, Data> jSONData = new HashMap<String, Data>();
+//		Map<String, Data> jSONObject = new HashMap<String, Data>();
 		String result = "success";
 		String dataGroupTree = null;
 		List<DataGroup> dataGroupList = new ArrayList<DataGroup>();
@@ -167,9 +167,9 @@ public class DataGroupController {
 				dataGroupList.addAll(dataGroupService.getListDataGroup(new DataGroup()));
 				
 				result = "input.invalid";
-//				jSONData.put("result", result);
-//				jSONData.put("dataGroupTree", getDataGroupTree(dataGroupList));
-//				return jSONData.toString();
+//				jSONObject.put("result", result);
+//				jSONObject.put("dataGroupTree", getDataGroupTree(dataGroupList));
+//				return jSONObject.toString();
 				
 				return JSONUtil.getResultTreeString(result, dataGroupTree);
 			}
@@ -184,9 +184,9 @@ public class DataGroupController {
 			result = "db.exception";
 		}
 		
-//		jSONData.put("result", result);
-//		jSONData.put("dataGroupTree", dataGroupTree);
-//		return gson.toJson(jSONData);
+//		jSONObject.put("result", result);
+//		jSONObject.put("dataGroupTree", dataGroupTree);
+//		return gson.toJson(jSONObject);
 		
 		return JSONUtil.getResultTreeString(result, dataGroupTree);
 	}
@@ -201,7 +201,7 @@ public class DataGroupController {
 	@ResponseBody
 	public String ajaxUpdateMoveDataGroup(HttpServletRequest request, DataGroup dataGroup) {
 //		Gson gson = new Gson();
-//		Map<String, Data> jSONData = new HashMap<String, Data>();
+//		Map<String, Data> jSONObject = new HashMap<String, Data>();
 		String result = "success";
 		String dataGroupTree = null;		
 		List<DataGroup> dataGroupList = new ArrayList<DataGroup>();
@@ -216,10 +216,10 @@ public class DataGroupController {
 				dataGroupList.addAll(dataGroupService.getListDataGroup(new DataGroup()));
 				
 				result = "input.invalid";
-//				jSONData.put("result", result);
-//				jSONData.put("dataGroupTree", getDataGroupTree(dataGroupList));
+//				jSONObject.put("result", result);
+//				jSONObject.put("dataGroupTree", getDataGroupTree(dataGroupList));
 //				
-//				return jSONData.toString();
+//				return jSONObject.toString();
 				return JSONUtil.getResultTreeString(result, dataGroupTree);
 			}
 			
@@ -232,10 +232,10 @@ public class DataGroupController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-//		jSONData.put("result", result);
-//		jSONData.put("dataGroupTree", dataGroupTree);
+//		jSONObject.put("result", result);
+//		jSONObject.put("dataGroupTree", dataGroupTree);
 //		
-//		return gson.toJson(jSONData);
+//		return gson.toJson(jSONObject);
 		return JSONUtil.getResultTreeString(result, dataGroupTree);
 	}
 	
@@ -249,7 +249,7 @@ public class DataGroupController {
 	@ResponseBody
 	public String ajaxDeleteDataGroup(HttpServletRequest request, DataGroup dataGroup) {
 //		Gson gson = new Gson();
-//		Map<String, Data> jSONData = new HashMap<String, Data>();
+//		Map<String, Data> jSONObject = new HashMap<String, Data>();
 		String result = "success";
 		String dataGroupTree = null;
 		List<DataGroup> dataGroupList = new ArrayList<DataGroup>();
@@ -260,10 +260,10 @@ public class DataGroupController {
 				dataGroupList.addAll(dataGroupService.getListDataGroup(new DataGroup()));
 				
 				result = "input.invalid";
-//				jSONData.put("result", result);
-//				jSONData.put("dataGroupTree", getDataGroupTree(dataGroupList));
+//				jSONObject.put("result", result);
+//				jSONObject.put("dataGroupTree", getDataGroupTree(dataGroupList));
 //				
-//				return jSONData.toString();
+//				return jSONObject.toString();
 				return JSONUtil.getResultTreeString(result, dataGroupTree);
 			}
 			
@@ -276,10 +276,10 @@ public class DataGroupController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-//		jSONData.put("result", result);
-//		jSONData.put("dataGroupTree", dataGroupTree);
+//		jSONObject.put("result", result);
+//		jSONObject.put("dataGroupTree", dataGroupTree);
 //		
-//		return gson.toJson(jSONData);
+//		return gson.toJson(jSONObject);
 		return JSONUtil.getResultTreeString(result, dataGroupTree);
 	}
 	

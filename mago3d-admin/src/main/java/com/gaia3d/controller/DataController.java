@@ -136,7 +136,7 @@ public class DataController {
 	@ResponseBody
 	public String ajaxListDataGroupData(HttpServletRequest request, @RequestParam("data_group_id") Long data_group_id, @RequestParam(defaultValue="1") String pageNo) {
 		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		Pagination pagination = null;
 		List<DataInfo> dataList = new ArrayList<DataInfo>();
@@ -157,13 +157,13 @@ public class DataController {
 			result = "db.exception";
 		}
 		
-		jSONData.put("result", result);
-		jSONData.put("pagination", pagination);
-		jSONData.put("dataList", dataList);
+		jSONObject.put("result", result);
+		jSONObject.put("pagination", pagination);
+		jSONObject.put("dataList", dataList);
 		
-		log.info(">>>>>>>>>>>>>>>>>> datalist = {}", gson.toJson(jSONData));
+		log.info(">>>>>>>>>>>>>>>>>> datalist = {}", gson.toJson(jSONObject));
 		
-		return gson.toJson(jSONData);
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -175,7 +175,7 @@ public class DataController {
 	@ResponseBody
 	public String ajaxListExceptDataGroupDataByGroupId(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) {
 		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		Pagination pagination = null;
 		List<DataInfo> dataList = new ArrayList<DataInfo>();
@@ -192,10 +192,10 @@ public class DataController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-		jSONData.put("result", result);
-		jSONData.put("pagination", pagination);
-		jSONData.put("dataList", dataList);
-		return gson.toJson(jSONData);
+		jSONObject.put("result", result);
+		jSONObject.put("pagination", pagination);
+		jSONObject.put("dataList", dataList);
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -207,7 +207,7 @@ public class DataController {
 	@ResponseBody
 	public String ajaxListDataGroupDataByGroupId(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) {
 		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		Pagination pagination = null;
 		List<DataInfo> dataList = new ArrayList<DataInfo>();
@@ -225,10 +225,10 @@ public class DataController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-		jSONData.put("result", result);
-		jSONData.put("pagination", pagination);
-		jSONData.put("dataList", dataList);
-		return gson.toJson(jSONData);
+		jSONObject.put("result", result);
+		jSONObject.put("pagination", pagination);
+		jSONObject.put("dataList", dataList);
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -262,22 +262,22 @@ public class DataController {
 	@ResponseBody
 	public String ajaxInsertDataInfo(HttpServletRequest request, DataInfo dataInfo) {
 		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			dataInfo.setMethod_mode("insert");
 			String errorcode = dataValidate(CacheManager.getPolicy(), dataInfo);
 			if(errorcode != null) {
 				result = errorcode;
-				jSONData.put("result", result);
-				return gson.toJson(jSONData);
+				jSONObject.put("result", result);
+				return gson.toJson(jSONObject);
 			}
 			
 			int count = dataService.getDuplicationKeyCount(dataInfo.getData_key());
 			if(count > 0) {
 				result = "data.key.duplication";
-				jSONData.put("result", result);
-				return gson.toJson(jSONData);
+				jSONObject.put("result", result);
+				return gson.toJson(jSONObject);
 			}
 
 			dataInfo.setLocation("POINT(" + dataInfo.getLongitude() + " " + dataInfo.getLatitude() + ")");
@@ -288,9 +288,9 @@ public class DataController {
 			result = "db.exception";
 		}
 	
-		jSONData.put("result", result);
+		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONData);
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -309,7 +309,7 @@ public class DataController {
 		
 		log.info("@@@ data_group_id = {}, data_all_id = {}", data_group_id, data_all_id);
 		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		List<DataInfo> exceptDataList = new ArrayList<DataInfo>();
 		List<DataInfo> dataList = new ArrayList<DataInfo>();
 		String result = "success";
@@ -317,8 +317,8 @@ public class DataController {
 			if(data_group_id == null || data_group_id.longValue() == 0l ||				
 					data_all_id == null || data_all_id.length < 1) {
 				result = "input.invalid";
-				jSONData.put("result", result);
-				return gson.toJson(jSONData);
+				jSONObject.put("result", result);
+				return gson.toJson(jSONObject);
 			}
 			
 			DataInfo dataInfo = new DataInfo();
@@ -331,13 +331,13 @@ public class DataController {
 			exceptDataList = dataService.getListExceptDataGroupDataByGroupId(dataInfo);
 		} catch(Exception e) {
 			e.printStackTrace();
-			jSONData.put("result", "db.exception");
+			jSONObject.put("result", "db.exception");
 		}
 		
-		jSONData.put("result", result	);
-		jSONData.put("exceptDataList", exceptDataList);
-		jSONData.put("dataList", dataList);
-		return gson.toJson(jSONData);
+		jSONObject.put("result", result	);
+		jSONObject.put("exceptDataList", exceptDataList);
+		jSONObject.put("dataList", dataList);
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -369,14 +369,14 @@ public class DataController {
 	public String ajaxDataKeyDuplicationCheck(HttpServletRequest request, DataInfo dataInfo) {
 		
 		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		String duplication_value = "";
 		try {
 			if(dataInfo.getData_key() == null || "".equals(dataInfo.getData_key())) {
 				result = "data.key.empty";
-				jSONData.put("result", result);
-				return gson.toJson(jSONData);
+				jSONObject.put("result", result);
+				return gson.toJson(jSONObject);
 			}
 			
 			int count = dataService.getDuplicationKeyCount(dataInfo.getData_key());
@@ -387,10 +387,10 @@ public class DataController {
 			result = "db.exception";
 		}
 	
-		jSONData.put("result", result);
-		jSONData.put("duplication_value", duplication_value);
+		jSONObject.put("result", result);
+		jSONObject.put("duplication_value", duplication_value);
 		
-		return gson.toJson(jSONData);
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -453,7 +453,7 @@ public class DataController {
 	@ResponseBody
 	public String ajaxUpdateDataInfo(HttpServletRequest request, DataInfo dataInfo) {
 		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			Policy policy = CacheManager.getPolicy();
@@ -461,8 +461,8 @@ public class DataController {
 			String errorcode = dataValidate(policy,dataInfo);
 			if(errorcode != null) {
 				result = errorcode;
-				jSONData.put("result", result);
-				return gson.toJson(jSONData);
+				jSONObject.put("result", result);
+				return gson.toJson(jSONObject);
 			}
 						
 			dataService.updateData(dataInfo);
@@ -471,9 +471,9 @@ public class DataController {
 			result = "db.exception";
 		}
 	
-		jSONData.put("result", result);
+		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONData);
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -491,13 +491,13 @@ public class DataController {
 		
 		log.info("@@@@@@@ check_ids = {}, business_type = {}, status_value = {}", check_ids, business_type, status_value);
 		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		String result_message = "";
 		try {
 			if(check_ids.length() <= 0) {
-				jSONData.put("result", "check.value.required");
-				return gson.toJson(jSONData);
+				jSONObject.put("result", "check.value.required");
+				return gson.toJson(jSONObject);
 			}
 			List<String> dataList = dataService.updateDataStatus(business_type, status_value, check_ids);
 			if(!dataList.isEmpty()) {
@@ -513,18 +513,18 @@ public class DataController {
 				}
 				
 				String[] dataIds = check_ids.split(",");
-				jSONData.put("update_count", dataIds.length - dataList.size());
-				jSONData.put("business_type", business_type);
-				jSONData.put("result_message", result_message);
+				jSONObject.put("update_count", dataIds.length - dataList.size());
+				jSONObject.put("business_type", business_type);
+				jSONObject.put("result_message", result_message);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONData.put("result", result);
+		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONData);
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -555,22 +555,22 @@ public class DataController {
 		
 		log.info("@@@@@@@ check_ids = {}", check_ids);
 		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			if(check_ids.length() <= 0) {
-				jSONData.put("result", "check.value.required");
-				return gson.toJson(jSONData);
+				jSONObject.put("result", "check.value.required");
+				return gson.toJson(jSONObject);
 			}
 			
 			dataService.deleteDataList(check_ids);
 		} catch(Exception e) {
 			e.printStackTrace();
-			jSONData.put("result", "db.exception");
+			jSONObject.put("result", "db.exception");
 		}
 		
-		jSONData.put("result", result	);
-		return gson.toJson(jSONData);
+		jSONObject.put("result", result	);
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -589,7 +589,7 @@ public class DataController {
 		
 		log.info("@@@ data_group_id = {}, data_select_id = {}", data_group_id, data_select_id);
 		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		List<DataInfo> exceptDataList = new ArrayList<DataInfo>();
 		List<DataInfo> dataList = new ArrayList<DataInfo>();
 		String result = "success";
@@ -597,8 +597,8 @@ public class DataController {
 			if(data_group_id == null || data_group_id.longValue() == 0l ||				
 					data_select_id == null || data_select_id.length < 1) {
 				result = "input.invalid";
-				jSONData.put("result", result);
-				return gson.toJson(jSONData);
+				jSONObject.put("result", result);
+				return gson.toJson(jSONObject);
 			}
 			
 			DataInfo dataInfo = new DataInfo();
@@ -614,13 +614,13 @@ public class DataController {
 			exceptDataList = dataService.getListExceptDataGroupDataByGroupId(dataInfo);
 		} catch(Exception e) {
 			e.printStackTrace();
-			jSONData.put("result", "db.exception");
+			jSONObject.put("result", "db.exception");
 		}
 		
-		jSONData.put("result", result	);
-		jSONData.put("exceptDataList", exceptDataList);
-		jSONData.put("dataList", dataList);
-		return gson.toJson(jSONData);
+		jSONObject.put("result", result	);
+		jSONObject.put("exceptDataList", exceptDataList);
+		jSONObject.put("dataList", dataList);
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -648,14 +648,14 @@ public class DataController {
 	public String ajaxInsertExcelData(MultipartHttpServletRequest request) {
 		
 		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			MultipartFile multipartFile = request.getFile("file_name");
 			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.EXCEL_DATA_UPLOAD, propertiesConfig.getExcelDataUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
-				jSONData.put("result", fileInfo.getError_code());
-				return gson.toJson(jSONData);
+				jSONObject.put("result", fileInfo.getError_code());
+				return gson.toJson(jSONObject);
 			}
 			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -663,11 +663,11 @@ public class DataController {
 			
 			fileInfo = fileService.insertExcelData(fileInfo, userSession.getUser_id());
 			
-			jSONData.put("total_count", fileInfo.getTotal_count());
-			jSONData.put("parse_success_count", fileInfo.getParse_success_count());
-			jSONData.put("parse_error_count", fileInfo.getParse_error_count());
-			jSONData.put("insert_success_count", fileInfo.getInsert_success_count());
-			jSONData.put("insert_error_count", fileInfo.getInsert_error_count());
+			jSONObject.put("total_count", fileInfo.getTotal_count());
+			jSONObject.put("parse_success_count", fileInfo.getParse_success_count());
+			jSONObject.put("parse_error_count", fileInfo.getParse_error_count());
+			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
+			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
 			
 			// 파일 삭제
 			File copyFile = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());
@@ -679,9 +679,9 @@ public class DataController {
 			result = "db.exception";
 		}
 	
-		jSONData.put("result", result);
+		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONData);
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
@@ -861,7 +861,7 @@ public class DataController {
 		log.info("@@@@@@@ data_group_id = {}", data_group_id);
 		
 		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		DataGroup dataGroup = null;
 		try {	
@@ -871,10 +871,10 @@ public class DataController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-		jSONData.put("result", result);
-		jSONData.put("dataGroup", dataGroup);
+		jSONObject.put("result", result);
+		jSONObject.put("dataGroup", dataGroup);
 		
-		return gson.toJson(jSONData);
+		return gson.toJson(jSONObject);
 	}
 	
 	/**

@@ -228,7 +228,7 @@ public class HomepageController {
 	@ResponseBody
 	public String ajaxChangeLanguage(HttpServletRequest request, @RequestParam("lang") String lang, Model model) {
 		Gson gson = new Gson();
-		Map<String, Object> jSONData = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			log.info("@@ lang = {}", lang);
@@ -240,9 +240,9 @@ public class HomepageController {
 			result = "db.exception";
 		}
 	
-		jSONData.put("result", result);
+		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONData);
+		return gson.toJson(jSONObject);
 	}
 	
 	/**
