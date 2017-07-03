@@ -7,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>mago3D Demo</title>
+	<title>demo | mago3D User</title>
 	<%-- <link rel="stylesheet" href="/css/${lang}/font/font.css" /> --%>
 <%-- 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" /> --%>

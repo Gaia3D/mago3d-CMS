@@ -1,24 +1,25 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/common/taglib.jsp" %>
-<%@ include file="/WEB-INF/views/common/config.jsp" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglib.jsp"%>
+<%@ include file="/WEB-INF/views/common/config.jsp"%>
 
 <!DOCTYPE html>
 <html lang="${accessibility}">
 <head>
-    <meta charset="utf-8">
-    <title>Mago3D</title>
-    <!--[if lt IE 9]>
+<meta charset="utf-8">
+<title>about | mago3D User</title>
+<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
-	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
-	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
-	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-	<script type="text/javascript" src="/js/${lang}/common.js"></script>
-	<script type="text/javascript" src="/js/${lang}/message.js"></script>
-	<script type="text/javascript" src="/js/analytics.js"></script>
+<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
+<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+<script type="text/javascript" src="/js/${lang}/common.js"></script>
+<script type="text/javascript" src="/js/${lang}/message.js"></script>
+<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 
 <body>
@@ -31,61 +32,66 @@
 
 	<nav class="nav">
 		<div>
-			<h1><a href="./index.do">Mago3D</a></h1>
+			<h1>
+				<a href="./index.do">mago3D</a>
+			</h1>
 			<ul class="menu">
-				<li class="on">Mago3D</li>
+				<li class="on">mago3D</li>
 				<li><a href="/homepage/demo.do">Demo</a></li>
 				<li><a href="/homepage/download.do">Download</a></li>
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO" class="on"><a href="" onclick="changeLanguage('ko');">KO</a></li>
-				<li id="languageEN"><a href="" onclick="changeLanguage('en');">EN</a></li>
+				<li id="languageKO" class="on"><a href="#"
+					onclick="changeLanguage('ko');">KO</a></li>
+				<li id="languageEN"><a href="#" onclick="changeLanguage('en');">EN</a></li>
 			</ul>
 		</div>
 	</nav>
 	<section>
 		<div class="contents">
 			<ul class="tab">
-				<li><a href="#about"></a>About</li>
+				<li><a href="#about"></a>About<span></span></li>
 				<li><a href="#now">Now</a></li>
 				<li><a href="#will">Will be</a></li>
 			</ul>
 			<div id="about" class="part">
-				<h3>About</h3>
-				<p>
-Mago3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인
-3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. Mago3D는 기존의
-솔루션과 달리 공간의 끊김 없는 통합 (Seamless integration of indoor & outdoor
-space)으로 실내외 구별 없이 끊김 없이 AFC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 오픈소스
-(Cesium, World Wind)를 기반으로 개발된 오픈소스로서 개방성과 확장성 또한 뛰어납니다. 이에 따라,
-Mago3D 사용자는 다양한 Rendering 알고리즘을 사용하여 초대용량 BIM(Building Information
-Modelling), JT (Jupiter), IFC, 3DS...등 3D GIS 파일 등을 별도의 프로그램 설치 없이
-웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.
-				</p>
+				<h3>
+					About<span></span>
+				</h3>
+				<p>mago3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. 
+				mago3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 
+				이에 따라, mago3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 
+				3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.</p>
+				<h4>mago3D의 특징</h4>
+				<P>
+				<ul>
+					<li>BIM/AEC와 3D GIS의 통합</li>
+					<li>실내외 공간의 끊김 없는 통합(Seamless integration of indoor & outdoor space)</li>
+					<li>웹브라우저 상에서 구동되며, 별도의 플러그인이나 엑티브엑스 설치가 필요 없음</li>
+					<li>오픈소스(Cesium, World Wind)를 기반으로 개발된 오픈소스로서 개방성과 확장성이 뛰어남</li>
+					<li>초대용량 3차원 파일의 효율적 관리 및 초고속 렌더링</li>
+				</ul>
+				</P>
 				<div class="row_demo">
 					<div class="wrapper_demo">
 						<div class="highlight">
-							<a href="#">
-								<span class="image left">
-									<img src="/images/${lang}/homepage/gangbuk.png">
-								</span>
+							<a href="#"> <span class="image left"> <img
+									src="/images/${lang}/homepage/gangbuk.png">
+							</span>
 								<div class="description">
 									<h2>3DS</h2>
-									<p>3DS Modeling</p>
 								</div>
 							</a>
 						</div>
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight two">
-							<a href="#">
-								<span class="image fit">
-									<img src="/images/${lang}/homepage/Collada_model.png">
-								</span>
+							<a href="#"> <span class="image fit"> <img
+									src="/images/${lang}/homepage/Collada_model.png">
+							</span>
 								<div class="description">
 									<h2>COLLADA</h2>
-									<p>COLLADA Modeling</p>
 								</div>
 							</a>
 						</div>
@@ -96,8 +102,7 @@ Modelling), JT (Jupiter), IFC, 3DS...등 3D GIS 파일 등을 별도의 프로�
 									src="/images/${lang}/homepage/IFC_model.png">
 							</span>
 								<div class="description ">
-									<h2>IFC</h2>
-									<p>IFC Modeling</p>
+									<h2>IFC(BIM)</h2>
 								</div>
 							</a>
 						</div>
@@ -116,11 +121,7 @@ Modelling), JT (Jupiter), IFC, 3DS...등 3D GIS 파일 등을 별도의 프로�
 						<td><img src="/images/${lang}/homepage/IFC.png" /></td>
 						<td>IFC(Industry Foundation Classes)건축 BIM 정보 교환을 위한 표준 포맷</td>
 					</tr>
-					<tr>
-						<td><img src="/images/${lang}/homepage/JT.png" /></td>
-						<td>JT(Jupiter Tesselation) Siemens PLM Software 에서 개발된 경량화
-							3D 모델 포맷.</td>
-					</tr>
+
 					<tr>
 						<td><img src="/images/${lang}/homepage/obj.png" /></td>
 						<td>OBJ(Wavefront file format specification) 3 차원 좌표 (다각형 선과
@@ -136,10 +137,16 @@ Modelling), JT (Jupiter), IFC, 3DS...등 3D GIS 파일 등을 별도의 프로�
 						<td>COLLADA(COLLAborative Design Activity) - 3D assets 을 교환하기
 							위한 open standard XML schema 파일 포맷</td>
 					</tr>
+					<tr>
+						<td><img src="/images/${lang}/homepage/JT.png" /></td>
+						<td>JT(Jupiter Tesselation) Siemens PLM Software 에서 개발된 경량화
+							3D 모델 포맷. - JT포맷은 회사 연락 필요</td>
+					</tr>
 				</table>
-				<a href="#" class="goTop">위로</a>
+				<h4>Rendering Algoritm</h4>
+				<p>준비 중 입니다.</p>
+			<a href="#" class="goTop">위로</a>
 			</div>
-
 			<!-- // ABOUT -->
 
 			<div id="now" class="part">
@@ -147,10 +154,10 @@ Modelling), JT (Jupiter), IFC, 3DS...등 3D GIS 파일 등을 별도의 프로�
 					NOW<span></span>
 				</h3>
 				<h4>Architecture</h4>
-				<p>Mago3D는 spring framework(springboot) 기반의 3d 플랫폼 입니다.공간 정보 DB
-					관련 처리를 위해 PostGis를 사용하고 있으며, 3D 렌더링 부분은 cesium, worldwind 등을 오픈 소스
-					javascript librar를 사용하고 있습니다. 3D 데이터를 웹에서 Rendering 하기 위해서 자체 개발한
-					F4D 포맷 및 Converter를 사용하고 있으며 가시화 및 렌더링 처리를 담당하는 mago3djs(javascript
+				<p>mago3D는 spring framework(spring boot) 기반의 3d 플랫폼입니다. 공간 정보 DB
+					관련 처리를 위해 PostGis를 사용하고 있으며, 3D 렌더링 부분은 cesium, world wind 등을 오픈 소스
+					javascript library를 사용하고 있습니다. 3D 데이터를 웹에서 Rendering 하기 위해서 자체 개발한
+					F4D 포맷 및 Converter를 사용하고 있으며 가시화 및 렌더링 처리를 담당하는 mago3DJS(javascript
 					library)로 이루어져 있습니다.</p>
 				<div class="architecture">
 					<img src="/images/${lang}/homepage/arc.png"
@@ -185,7 +192,7 @@ Modelling), JT (Jupiter), IFC, 3DS...등 3D GIS 파일 등을 별도의 프로�
 						<p>
 							이슈를 관리해주는 페이지입니다. 이슈 목록에서는 현재 이슈 상태를 확인할 수 있습니다. 그 이슈의 등록일, 마감일
 							상태, 유형 등 다양한 정보를 얻을 수 있습니다. <b>수정 / 삭제</b>도 할 수 있습니다. <br>
-							이슈 등록에서는 Issue type, 제목, 내용 등 필수 항목을 기재하시면 이슈를 등록 할 수 있습니다.
+							이슈 등록에서는 Issue type, 제목, 내용 등 필수 항목을 기재하시면 이슈를 등록할 수 있습니다.
 						</p>
 					</div>
 					<div class="colspan-2 column text-left">
@@ -198,8 +205,8 @@ Modelling), JT (Jupiter), IFC, 3DS...등 3D GIS 파일 등을 별도의 프로�
 						<h2>데이터 관리</h2>
 						<p>
 							데이터를 관리해주는 페이지입니다. 데이터 목록에서는 현재 데이터 상태를 확인할 수 있습니다. 데이터는 등록 페이지에서
-							하나하나 등록할 수도 있지만 엑셀 형식으로 일괄등록이 가능합니다. 데이터의 <b>삭제 / 수정 / 잠금</b> 등
-							많은 기능을 제공하고 있습니다. 데이터 그룹에서는 데이터를 그룹화 시킬 수 있습니다.
+							하나하나 등록할 수도 있지만, 엑셀 형식으로 일괄등록이 가능합니다. 데이터의 <b>삭제 / 수정 / 잠금</b> 등
+							많은 기능을 제공하고 있습니다. 데이터 그룹에서는 데이터를 그룹화시킬 수 있습니다.
 						</p>
 					</div>
 				</div>
@@ -228,10 +235,10 @@ Modelling), JT (Jupiter), IFC, 3DS...등 3D GIS 파일 등을 별도의 프로�
 				</table>
 				<h4>클라우드 환경 제공</h4>
 				<p>Amazon, Google, Azure 등 클라우드 서비스를 제공할 예정입니다. 사용자는 클라우드 환경 하에서
-					자신이 가지고 있는 파일(jt,obj,collada 등)을 업로딩 후 Mago3D에서 실시간으러 확인할수 있습니다.</p>
+					자신이 가지고 있는 파일(jt,obj,collada,3ds,ifc 등)을 업로딩 후 mago3D에서 실시간으로 확인할수 있습니다.</p>
 				<h4>Acknowledgement</h4>
 				<ul>
-					<li>본 프로젝트는 국토교통부 공간정보 SW활용을 위한 오픈소스 가공기술개발(과제번호:16NSIP-B080778-04)의 연구활동의 일환입니다.</li>
+					<li>국토교통부 '공간정보 SW활용을 위한 오픈소스 가공기술개발(과제번호:16NSIP-B080778-04)'의 일환입니다.</li>
 					<li>서울시 3차원 데이터는 한국공간정보산업진흥원의 허가를 받아 연구목적으로 사용 중입니다.</li>
 					<li>서울시 실내 데이터는 서울시의 허가를 받아 연구목적으로 사용 중입니다.</li>
 					<li>기타 자료는 각 저작권자의 허락을 받아 서비스합니다.</li>
@@ -249,15 +256,13 @@ Modelling), JT (Jupiter), IFC, 3DS...등 3D GIS 파일 등을 별도의 프로�
 			<h2>
 				Contact <span></span>
 			</h2>
-			<p>
-				Mago3D 에 관심있는 고객들께서는 연락(이메일, 전화) 또는 직접 방문을 부탁드립니다.
-			</p>
+			<p>mago3D 에 관심있는 고객들께서는 연락(이메일, 전화) 또는 직접 방문을 부탁드립니다.</p>
 			<ul class="contact">
 				<li class="company">www.gaia3d.com</li>
-				<li class="address">080 2 3397 3475</li>
-				<li class="mail">mago3d@gaia3d.com</li>
+				<li class="address">+82-(0)2-3397-3475 </li>
+				<li class="mail">info@gaia3d.com</li>
 			</ul>
-			<p class="copyright">&copy; 2017. Mago3D all rights reserved.</p>
+			<p class="copyright">&copy; 2017 Gaia3D, Inc.</p>
 		</div>
 	</footer>
 </body>

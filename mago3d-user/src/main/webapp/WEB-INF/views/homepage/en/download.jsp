@@ -6,7 +6,7 @@
 <html lang="${accessibility}">
 <head>
     <meta charset="utf-8">
-    <title>Mago3D</title>
+    <title>download | mago3D User</title>
     <!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
