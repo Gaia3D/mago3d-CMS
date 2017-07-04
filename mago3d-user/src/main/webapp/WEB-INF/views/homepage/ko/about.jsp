@@ -36,7 +36,7 @@
 				<a href="./index.do">mago3D</a>
 			</h1>
 			<ul class="menu">
-				<li class="on">mago3D</li>
+				<li class="on">mago3D<span></span></li>
 				<li><a href="/homepage/demo.do">Demo</a></li>
 				<li><a href="/homepage/download.do">Download</a></li>
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
@@ -51,7 +51,7 @@
 	<section>
 		<div class="contents">
 			<ul class="tab">
-				<li><a href="#about"></a>About<span></span></li>
+				<li><a href="#about">About</a></li>
 				<li><a href="#now">Now</a></li>
 				<li><a href="#will">Will be</a></li>
 			</ul>
@@ -141,8 +141,7 @@
 							3D 모델 포맷. - JT포맷은 회사 연락 필요</td>
 					</tr>
 				</table>
-				<h4>Rendering Algoritm</h4>
-				<p>준비 중 입니다.</p>
+
 			<a href="#" class="goTop">위로</a>
 			</div>
 			<!-- // ABOUT -->
