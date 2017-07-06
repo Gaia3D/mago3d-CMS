@@ -6,30 +6,32 @@
 <!DOCTYPE html>
 <html lang="${accessibility}">
 <head>
-<meta charset="utf-8">
-<title>download | mago3D User</title>
-<!--[if lt IE 9]>
+	<meta charset="utf-8">
+	<title>download | mago3D User</title>
+	<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-<!--[if lt IE 8]>
-    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans"
-	rel="stylesheet">
-<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
-<script type="text/javascript" src="/js/analytics.js"></script>
-<script type="text/javascript" src="/js/${lang }/common.js"></script>
-<script type="text/javascript" src="/js/${lang }/message.js"></script>
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
+	<script type="text/javascript" src="/js/${lang }/common.js"></script>
+	<script type="text/javascript" src="/js/${lang }/message.js"></script>
+	<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 
 <body>
+
+	<header class='down'>
+		<div>
+			<p>Architecture, Engineering, Construction</p>
+			<p>A Brand-New Live 3D Platform</p>
+		</div>
+	</header>
+	
 	<nav class="nav">
 		<div>
 			<h1>
-				<a href="./index.do">mago3D</a>
+				<a href="/homepage/index.do">mago3D</a>
 			</h1>
 			<ul class="menu">
 				<li><a href="/homepage/about.do">mago3D</a></li>
@@ -39,17 +41,15 @@
 			</ul>
 			<ul class="language">
 				<li id="languageKO"><a href="" onclick="changeLanguage('ko');">KO</a></li>
-				<li id="languageEN" class="on"><a href=""
-					onclick="changeLanguage('en');">EN</a></li>
+				<li id="languageEN" class="on">EN</li>
 			</ul>
 		</div>
 	</nav>
 
 	<section>
 		<div class="contents">
-
-			<button type="button" class="down" onclick='alert("Coming soon...")'>
-				DOWNLOAD Mago3D 1.0.0<span>2017-07-01</span>
+			<button type="button" class="down" onclick='alert("Coming soon..."); return false;'>
+				DOWNLOAD mago3D 1.0.0 <span>2017-07-01</span>
 			</button>
 
 			<h4>Added features</h4>
@@ -62,6 +62,7 @@
 				<li>To display object information display now available.</li>
 				<li>Support API list to make it easier to use various APIs.</li>
 			</ul>
+
 			<h4>Quick Start Guide</h4>
 			<ol>
 				<li>Install mago3d.</li>
@@ -107,7 +108,7 @@
 					<th>Biz Document</th>
 				</tr>
 				<tr>
-					<td><a href="#" onclick='alert("Coming soon...")'>Mago3Djs-1.0.0
+					<td><a href="#" onclick='alert("Coming soon..."); return false;'>Mago3Djs-1.0.0
 							js Document</a></td>
 					<td></td>
 					<td></td>
@@ -129,8 +130,8 @@
 					<td>
 						<ul>
 							<li><a href="https://github.com/Gaia3D/mago3djs">mago3djs</a></li>
-							<li><a href="#" onclick='alert("Coming soon...")'>mago3dconver</a></li>
-							<li><a href="#" onclick='alert("Coming soon...")'>mago3dbiz</a></li>
+							<li><a href="#" onclick='alert("Coming soon..."); return false;'>mago3dconver</a></li>
+							<li><a href="#" onclick='alert("Coming soon..."); return false;'>mago3dbiz</a></li>
 						</ul>
 					</td>
 				</tr>
@@ -151,7 +152,7 @@
 				<li class="address">+82-(0)2-3397-3475</li>
 				<li class="mail">info@gaia3d.com</li>
 			</ul>
-			<p class="copyright">&copy; 2017. Mago3D all rights reserved.</p>
+			<p class="copyright">&copy; 2017 Gaia3D, Inc.</p>
 		</div>
 	</footer>
 </body>
