@@ -33,14 +33,14 @@
 		<div>
 			<h1><a href="./index.do">mago3D</a></h1>
 			<ul class="menu">
-				<li class="on">mago3D</li>
+				<li class="on">mago3D<span></span></li>
 				<li><a href="/homepage/demo.do">Demo</a></li>
 				<li><a href="/homepage/download.do">Download</a></li>
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO" class="on"><a href="" onclick ="changeLanguage('ko');">KO</a></li>
-				<li id="languageEN"><a href="" onclick ="changeLanguage('en');">EN</a></li>
+				<li id="languageKO"><a href="" onclick ="changeLanguage('ko');">KO</a></li>
+				<li id="languageEN" class="on"><a href="" onclick ="changeLanguage('en');">EN</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -75,7 +75,6 @@ Difference of data model, massive number of data to be rendered, big volume of f
 								</span>
 								<div class="description">
 									<h2>3DS</h2>
-									<p>3DS Modeling</p>
 								</div>
 							</a>
 						</div>
@@ -88,7 +87,6 @@ Difference of data model, massive number of data to be rendered, big volume of f
 								</span>
 								<div class="description">
 									<h2>COLLADA</h2>
-									<p>COLLADA Modeling</p>
 								</div>
 							</a>
 						</div>
@@ -101,7 +99,6 @@ Difference of data model, massive number of data to be rendered, big volume of f
 								</span>
 								<div class="description ">
 									<h2>IFC</h2>
-									<p>IFC Modeling</p>
 								</div>
 							</a>
 						</div>

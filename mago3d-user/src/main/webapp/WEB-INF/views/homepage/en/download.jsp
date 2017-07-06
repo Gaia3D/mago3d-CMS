@@ -49,7 +49,7 @@
 		<div class="contents">
 
 			<button type="button" class="down" onclick='alert("Coming soon...")'>
-				DOWNLOAD Mago3D 1.0.0 <span>123.5 MB</span> <span>2017-07-01</span>
+				DOWNLOAD Mago3D 1.0.0<span>2017-07-01</span>
 			</button>
 
 			<h4>Added features</h4>

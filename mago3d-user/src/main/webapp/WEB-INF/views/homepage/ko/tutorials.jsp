@@ -27,7 +27,7 @@
 				<li><a href="/homepage/about.do">mago3D</a></li>
 				<li><a href="/homepage/demo.do">Demo</a></li>
 				<li><a href="/homepage/download.do">Download</a></li>
-				<li class="on">Tutorials</li>
+				<li class="on">Tutorials<span></span></li>
 			</ul>
 			<ul class="language">
 				<li id="languageKO" class="on"><a href="" onclick ="changeLanguage('ko');">KO</a></li>
