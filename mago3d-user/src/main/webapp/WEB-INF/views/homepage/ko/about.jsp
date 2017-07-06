@@ -131,7 +131,7 @@
 							포맷입니다.</td>
 					</tr>
 					<tr>
-						<td width="64px"><img src="/images/${lang}/homepage/dae.png"></td>
+						<td><img src="/images/${lang}/homepage/dae.png"></td>
 						<td>COLLADA(COLLAborative Design Activity) - 3D assets 을 교환하기
 							위한 open standard XML schema 파일 포맷</td>
 					</tr>
