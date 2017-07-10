@@ -10,7 +10,7 @@
 	<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"  type="text/css" />
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"  type="text/css"></link>
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
@@ -25,7 +25,7 @@
 		</p>
 	</div>
 	
-	<iframe class="vod" src="https://www.youtube.com/embed/n5jdRzLwegg?autoplay=1&loop=1&playlist=n5jdRzLwegg&controls=0&showinfo=0&origin=http://www.mago3d.com" frameborder="0" allowfullscreen></iframe>
+	<iframe class="vod" src="https://www.youtube.com/embed/n5jdRzLwegg?autoplay=1&loop=1&playlist=n5jdRzLwegg&controls=0&showinfo=0&origin=http://www.mago3d.com" seamless="seamless" allowfullscreen></iframe>
 	
 	<!-- 언어 -->	
 	<div class="mainMenu">
