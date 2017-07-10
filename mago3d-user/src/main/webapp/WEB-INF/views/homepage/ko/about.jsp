@@ -74,9 +74,8 @@
 				<div class="row_demo">
 					<div class="wrapper_demo">
 						<div class="highlight">
-							<a href="#"> <span class="image left"> <img
-									src="/images/${lang}/homepage/gangbuk.png"
-									alt="3DS포맷이 mago3D에 올라간 화면 입니다.">
+							<a href="#"> <span class="image left"> 
+							<img src="/images/${lang}/homepage/gangbuk.png" alt="3DS포맷이 mago3D에 올라간 화면입니다.">
 							</span>
 								<div class="description">
 									<h2>3DS</h2>
@@ -86,9 +85,9 @@
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight two">
-							<a href="#"> <span class="image fit"> <img
-									src="/images/${lang}/homepage/Collada_model.png"
-									alt="COLLADA 포맷이 mago3D에 올라간 화면 입니다.">
+							<a href="#"> 
+							<span class="image fit"> <img src="/images/${lang}/homepage/Collada_model.png"
+							 alt="COLLADA 포맷이 mago3D에 올라간 화면 입니다.">
 							</span>
 								<div class="description">
 									<h2>COLLADA</h2>
@@ -98,9 +97,8 @@
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight three">
-							<a href="#"> <span class="image left"> <img
-									src="/images/${lang}/homepage/IFC_model.png"
-									alt="IFC(BIM)포맷이 mago3D에 올라간 화면 입니다.">
+							<a href="#"> <span class="image left"> <img	src="/images/${lang}/homepage/IFC_model.png"
+							 alt="IFC(BIM)포맷이 mago3D에 올라간 화면입니다.">
 							</span>
 								<div class="description ">
 									<h2>IFC(BIM)</h2>
@@ -119,32 +117,27 @@
 						<th>세부 정보</th>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/IFC.png"
-							alt="ifc(BIM) 포맷 이미지" /></td>
+						<td><img src="/images/${lang}/homepage/IFC.png"	alt="ifc(BIM) 포맷 이미지" /></td>
 						<td>IFC(Industry Foundation Classes)건축 BIM 정보 교환을 위한 표준 포맷</td>
 					</tr>
 
 					<tr>
-						<td><img src="/images/${lang}/homepage/obj.png"
-							alt="obj 포맷 이미지" /></td>
+						<td><img src="/images/${lang}/homepage/obj.png"	alt="obj 포맷 이미지" /></td>
 						<td>OBJ(Wavefront file format specification) 3 차원 좌표 (다각형 선과
 							점), 텍스쳐 매핑 및 기타 오브젝트 정보를 포함하는 삼차원 물체에 사용되는 파일 포맷</td>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/3DS.png"
-							alt="3ds 포맷 이미지" /></td>
+						<td><img src="/images/${lang}/homepage/3DS.png"	alt="3ds 포맷 이미지" /></td>
 						<td>3DS(3D-Studio File Format)) AutoDesk의 3D-Studio에서 사용되는 파일
 							포맷입니다.</td>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/dae.png"
-							alt="dae 포맷 이미지"></td>
+						<td><img src="/images/${lang}/homepage/dae.png"	alt="dae 포맷 이미지"></td>
 						<td>COLLADA(COLLAborative Design Activity) - 3D assets 을 교환하기
 							위한 open standard XML schema 파일 포맷</td>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/JT.png"
-							alt="jt 포맷 이미지" /></td>
+						<td><img src="/images/${lang}/homepage/JT.png" alt="jt 포맷 이미지" /></td>
 						<td>JT(Jupiter Tesselation) Siemens PLM Software 에서 개발된 경량화
 							3D 모델 포맷. - JT포맷은 회사 연락 필요</td>
 					</tr>
@@ -232,7 +225,7 @@
 					</div>
 					<div class="algo-row">
 						<a href="#">
-							<div class="aglo-thumbnail" alt="Bounding box이미지" ㅠstyle="background-image:url(/images/${lang}/homepage/boundingbox.png)">
+							<div class="aglo-thumbnail" alt="Bounding box이미지" style="background-image:url(/images/${lang}/homepage/boundingbox.png)">
 								<div>
 									<h3>bounding box</h3>
 									<P>bounding box 계산</P>
@@ -275,7 +268,7 @@
 				<div class="wrap">
 					<div class="colspan-2 column">
 						<img src="/images/${lang}/homepage/dashboard.png"
-							alt="관리자 페이지에 데쉬보드화면 입니다.">
+							alt="관리자 페이지에 dashboard">
 					</div>
 					<div class="colspan-1 column">
 						<h2>관리자 페이지</h2>
@@ -294,11 +287,11 @@
 					</div>
 					<div class="colspan-2 column text-left">
 						<img src="/images/${lang}/homepage/issue.png"
-							alt="관리자 페이지에  이슈 관리를 해주는 페이지의 이미지 입니다.">
+							alt="관리자 페이지에  이슈 관리를 해주는 페이지의 이미지입니다.">
 					</div>
 					<div class="colspan-2 column clear">
 						<img src="/images/${lang}/homepage/data.png"
-							alt="관리자 페이지에 데이터 관리를 해주는 페이지의 이미지 입니다. ">
+							alt="관리자 페이지에 데이터 관리를 해주는 페이지의 이미지입니다. ">
 					</div>
 					<div class="colspan-1 column">
 						<h2>데이터 관리</h2>
