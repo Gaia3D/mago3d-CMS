@@ -1,22 +1,23 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/common/taglib.jsp" %>
-<%@ include file="/WEB-INF/views/common/config.jsp" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglib.jsp"%>
+<%@ include file="/WEB-INF/views/common/config.jsp"%>
 
 <!DOCTYPE html>
 <html lang="${accessibility}">
 <head>
-	<meta charset="utf-8">
-	<title>about | mago3D User</title>
-	<!--[if lt IE 9]>
+<meta charset="utf-8">
+<title>about | mago3D User</title>
+<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
-	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
-	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
-	<script type="text/javascript" src="/js/${lang}/common.js"></script>
-	<script type="text/javascript" src="/js/${lang}/message.js"></script>
-	<script type="text/javascript" src="/js/analytics.js"></script>
+<link rel="stylesheet" href="/css/${lang}/homepage-style.css"></link>
+<link rel="stylesheet" href="/css/${lang}/font/font.css"></link>
+<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
+<script type="text/javascript" src="/js/${lang}/common.js"></script>
+<script type="text/javascript" src="/js/${lang}/message.js"></script>
+<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 
 <body>
@@ -55,16 +56,17 @@
 				<h3>
 					About<span></span>
 				</h3>
-				<p>
-mago3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. 
-mago3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 
-이에 따라, mago3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 
-3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.
-				</p>
+				<p>mago3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인
+					3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. mago3D는 기존의
+					솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 이에 따라,
+					mago3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter
+					Tessellation), 3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을
+					진행할 수 있습니다.</p>
 				<h4>mago3D의 특징</h4>
 				<ul>
 					<li>BIM/AEC와 3D GIS의 통합</li>
-					<li>실내외 공간의 끊김 없는 통합(Seamless integration of indoor & outdoor space)</li>
+					<li>실내외 공간의 끊김 없는 통합(Seamless integration of indoor & outdoor
+						space)</li>
 					<li>웹브라우저 상에서 구동되며, 별도의 플러그인이나 엑티브엑스 설치가 필요 없음</li>
 					<li>오픈소스(Cesium, World Wind)를 기반으로 개발된 오픈소스로서 개방성과 확장성이 뛰어남</li>
 					<li>초대용량 3차원 파일의 효율적 관리 및 초고속 렌더링</li>
@@ -72,10 +74,10 @@ mago3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AE
 				<div class="row_demo">
 					<div class="wrapper_demo">
 						<div class="highlight">
-							<a href="#">
-								<span class="image left">
-									<img src="/images/${lang}/homepage/gangbuk.png">
-								</span>
+							<a href="#"> <span class="image left"> <img
+									src="/images/${lang}/homepage/gangbuk.png"
+									alt="3DS포맷이 mago3D에 올라간 화면 입니다.">
+							</span>
 								<div class="description">
 									<h2>3DS</h2>
 								</div>
@@ -84,10 +86,10 @@ mago3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AE
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight two">
-							<a href="#">
-								<span class="image fit">
-									<img src="/images/${lang}/homepage/Collada_model.png">
-								</span>
+							<a href="#"> <span class="image fit"> <img
+									src="/images/${lang}/homepage/Collada_model.png"
+									alt="COLLADA 포맷이 mago3D에 올라간 화면 입니다.">
+							</span>
 								<div class="description">
 									<h2>COLLADA</h2>
 								</div>
@@ -96,10 +98,10 @@ mago3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AE
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight three">
-							<a href="#">
-								<span class="image left">
-									<img src="/images/${lang}/homepage/IFC_model.png">
-								</span>
+							<a href="#"> <span class="image left"> <img
+									src="/images/${lang}/homepage/IFC_model.png"
+									alt="IFC(BIM)포맷이 mago3D에 올라간 화면 입니다.">
+							</span>
 								<div class="description ">
 									<h2>IFC(BIM)</h2>
 								</div>
@@ -117,33 +119,128 @@ mago3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AE
 						<th>세부 정보</th>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/IFC.png" /></td>
+						<td><img src="/images/${lang}/homepage/IFC.png"
+							alt="ifc(BIM) 포맷 이미지" /></td>
 						<td>IFC(Industry Foundation Classes)건축 BIM 정보 교환을 위한 표준 포맷</td>
 					</tr>
 
 					<tr>
-						<td><img src="/images/${lang}/homepage/obj.png" /></td>
+						<td><img src="/images/${lang}/homepage/obj.png"
+							alt="obj 포맷 이미지" /></td>
 						<td>OBJ(Wavefront file format specification) 3 차원 좌표 (다각형 선과
 							점), 텍스쳐 매핑 및 기타 오브젝트 정보를 포함하는 삼차원 물체에 사용되는 파일 포맷</td>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/3DS.png" /></td>
+						<td><img src="/images/${lang}/homepage/3DS.png"
+							alt="3ds 포맷 이미지" /></td>
 						<td>3DS(3D-Studio File Format)) AutoDesk의 3D-Studio에서 사용되는 파일
 							포맷입니다.</td>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/dae.png"></td>
+						<td><img src="/images/${lang}/homepage/dae.png"
+							alt="dae 포맷 이미지"></td>
 						<td>COLLADA(COLLAborative Design Activity) - 3D assets 을 교환하기
 							위한 open standard XML schema 파일 포맷</td>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/JT.png" /></td>
+						<td><img src="/images/${lang}/homepage/JT.png"
+							alt="jt 포맷 이미지" /></td>
 						<td>JT(Jupiter Tesselation) Siemens PLM Software 에서 개발된 경량화
 							3D 모델 포맷. - JT포맷은 회사 연락 필요</td>
 					</tr>
 				</table>
 				<h4>Rendering Algoritm</h4>
-				<p>준비 중 입니다.</p>
+				<div class="wrapper-algo">
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="삼각형 꼭지점 순서 보정 이미지"
+								style="background-image:url(/images/${lang}/homepage/triangle.png)">
+								<div>
+									<h3>삼각형 꼭지점 순서 보정</h3>
+									<P>WebGL이 지원하는 성능 향상 기법</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Model/Reference 이미지"
+								style="background-image:url(/images/${lang}/homepage/model_reference.png)">
+								<div>
+									<h3>Model/Reference</h3>
+									<P>Multi-instance- 경량화 logic</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="VBO 생성 이미지"
+								style="background-image:url(/images/${lang}/homepage/tri.jpg)">
+								<div>
+									<h3>VBO 생성</h3>
+									<P>삼각형 크기 별로 정렬해서 저장</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="3D 공간 Octree"
+								style="background-image:url(/images/${lang}/homepage/octree.png)">
+								<div>
+									<h3>3D 공간 Octree</h3>
+									<P>flexible octree depth 적용</P>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="wrapper-algo">
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Lego Strucure 이미지"
+								style="background-image:url(/images/${lang}/homepage/lego.png)">
+								<div>
+									<h3>Lego Strucure</h3>
+									<P>rougher LOD를 위한 데이터 생성</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="가시성 색인 이미지"
+								style="background-image:url(/images/${lang}/homepage/indexing.png)">
+								<div>
+									<h3>가시성 색인</h3>
+									<P>Occlusion을 위한 pre-processing</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="원시 데이터 로딩 이미지"
+								style="background-image:url(/images/${lang}/homepage/loading.png)">
+								<div>
+									<h3>원시 데이터 로딩</h3>
+									<P>loading time out 적용</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Bounding box이미지" ㅠstyle="background-image:url(/images/${lang}/homepage/boundingbox.png)">
+								<div>
+									<h3>bounding box</h3>
+									<P>bounding box 계산</P>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
 				<a href="#" class="goTop">위로</a>
 			</div>
 			<!-- // ABOUT -->
@@ -159,8 +256,10 @@ mago3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AE
 					F4D 포맷 및 Converter를 사용하고 있으며 가시화 및 렌더링 처리를 담당하는 mago3DJS(javascript
 					library)로 이루어져 있습니다.</p>
 				<div class="architecture">
-					<img src="/images/${lang}/homepage/arc.png" style="width: 590px; margin-top: 60px;">
-					<img src="/images/${lang}/homepage/sw.png" style="width: 590px;">
+					<img src="/images/${lang}/homepage/arc.png"
+						style="width: 590px; margin-top: 60px;" alt="mago3D 아키텍쳐"> <img
+						src="/images/${lang}/homepage/sw.png" style="width: 590px;"
+						alt="mago3D 소프트웨어 구성도">
 				</div>
 				<a href="#" class="goTop">위로</a>
 			</div>
@@ -175,7 +274,8 @@ mago3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AE
 				<p>관리자, 일반 사용자 사이트를 제공하며 아래와 같은 기능을 제공 합니다.</p>
 				<div class="wrap">
 					<div class="colspan-2 column">
-						<img src="/images/${lang}/homepage/dashboard.png">
+						<img src="/images/${lang}/homepage/dashboard.png"
+							alt="관리자 페이지에 데쉬보드화면 입니다.">
 					</div>
 					<div class="colspan-1 column">
 						<h2>관리자 페이지</h2>
@@ -193,10 +293,12 @@ mago3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AE
 						</p>
 					</div>
 					<div class="colspan-2 column text-left">
-						<img src="/images/${lang}/homepage/issue.png">
+						<img src="/images/${lang}/homepage/issue.png"
+							alt="관리자 페이지에  이슈 관리를 해주는 페이지의 이미지 입니다.">
 					</div>
 					<div class="colspan-2 column clear">
-						<img src="/images/${lang}/homepage/data.png">
+						<img src="/images/${lang}/homepage/data.png"
+							alt="관리자 페이지에 데이터 관리를 해주는 페이지의 이미지 입니다. ">
 					</div>
 					<div class="colspan-1 column">
 						<h2>데이터 관리</h2>
@@ -232,10 +334,12 @@ mago3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AE
 				</table>
 				<h4>클라우드 환경 제공</h4>
 				<p>Amazon, Google, Azure 등 클라우드 서비스를 제공할 예정입니다. 사용자는 클라우드 환경 하에서
-					자신이 가지고 있는 파일(jt,obj,collada,3ds,ifc 등)을 업로딩 후 mago3D에서 실시간으로 확인할수 있습니다.</p>
+					자신이 가지고 있는 파일(jt,obj,collada,3ds,ifc 등)을 업로딩 후 mago3D에서 실시간으로 확인할수
+					있습니다.</p>
 				<h4>Acknowledgement</h4>
 				<ul>
-					<li>국토교통부 '공간정보 SW활용을 위한 오픈소스 가공기술개발(과제번호:16NSIP-B080778-04)'의 일환입니다.</li>
+					<li>국토교통부 '공간정보 SW활용을 위한 오픈소스 가공기술개발(과제번호:16NSIP-B080778-04)'의
+						일환입니다.</li>
 					<li>서울시 3차원 데이터는 한국공간정보산업진흥원의 허가를 받아 연구목적으로 사용 중입니다.</li>
 					<li>서울시 실내 데이터는 서울시의 허가를 받아 연구목적으로 사용 중입니다.</li>
 					<li>기타 자료는 각 저작권자의 허락을 받아 서비스합니다.</li>

@@ -8,11 +8,11 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<title>demo | mago3D User</title>
-	<link rel="stylesheet" href="/css/${lang}/style.css" />
-	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/jquery-toast/jquery.toast.css" />
+	<link rel="stylesheet" href="/css/${lang}/style.css"></link>
+	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css"></link>
+	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css"></link>
+	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css"></link>
+	<link rel="stylesheet" href="/externlib/${lang}/jquery-toast/jquery.toast.css"></link>
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-toast/jquery.toast.js"></script>

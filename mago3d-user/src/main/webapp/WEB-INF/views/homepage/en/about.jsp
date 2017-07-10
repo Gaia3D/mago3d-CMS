@@ -10,8 +10,8 @@
 	<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
-	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"></link>
+	<link rel="stylesheet" href="/css/${lang}/font/font.css"></link>
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
@@ -138,7 +138,97 @@ Difference of data model, massive number of data to be rendered, big volume of f
 					</tr>
 				</table>
 				<h4>Rendering Algoritm</h4>
-				<p>Coming Soon...</p>
+				<div class="wrapper-algo">
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Correct triangle vertex sequence images"
+								style="background-image:url(/images/${lang}/homepage/triangle.png)">
+								<div>
+									<h3>Correct triangle vertex sequence</h3>
+									<P>Performance enhancements supported by WebGL</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Model/Reference images"
+								style="background-image:url(/images/${lang}/homepage/model_reference.png)">
+								<div>
+									<h3>Model/Reference</h3>
+									<P>Multi-instance- lightweight logic</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Create VBO  images"
+								style="background-image:url(/images/${lang}/homepage/tri.jpg)">
+								<div>
+									<h3>Create VBO</h3>
+									<P>Save sorted by triangle size</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="3D space Octree"
+								style="background-image:url(/images/${lang}/homepage/octree.png)">
+								<div>
+									<h3>3D Space Octree</h3>
+									<P>flexible octree depth 적용</P>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="wrapper-algo">
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Lego Strucure images"
+								style="background-image:url(/images/${lang}/homepage/lego.png)">
+								<div>
+									<h3>Lego Strucure</h3>
+									<P>Generate data for rougher LOD</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Visibility Index images"
+								style="background-image:url(/images/${lang}/homepage/indexing.png)">
+								<div>
+									<h3>Visibility Index</h3>
+									<P>Pre-processing for occlusion</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Raw data loading images"
+								style="background-image:url(/images/${lang}/homepage/loading.png)">
+								<div>
+									<h3> Raw data loading </h3>
+									<P>Applying loading time out</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Bounding box images" style="background-image:url(/images/${lang}/homepage/boundingbox.png)">
+								<div>
+									<h3>bounding box</h3>
+									<P>Bounding box calculation</P>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
 				<a href="#" class="goTop">goTop</a>
 			</div>
 			<!-- // ABOUT -->
