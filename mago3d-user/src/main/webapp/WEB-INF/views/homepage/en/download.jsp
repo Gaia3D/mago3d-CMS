@@ -48,7 +48,7 @@
 
 	<section>
 		<div class="contents">
-			<button type="button" class="down" onclick='alert("Coming soon..."); return false;'>
+			<button type="button" class="down" onclick="location.href='https://github.com/Gaia3D/mago3d'">
 				DOWNLOAD mago3D 1.0.0 <span>2017-07-01</span>
 			</button>
 
