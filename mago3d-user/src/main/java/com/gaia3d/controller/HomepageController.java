@@ -77,7 +77,7 @@ public class HomepageController {
 	 * @return
 	 */
 	@GetMapping(value = "demo.do")
-	public String demo(HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo, Model model) {
+	public String demo(HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo, @RequestParam(defaultValue="cesium") String viewLibrary, Model model) {
 		
 		String lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 		if(lang == null || "".equals(lang)) {
@@ -122,6 +122,8 @@ public class HomepageController {
 		@SuppressWarnings("unchecked")
 		List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
 		
+		if(viewLibrary.equals("worldwind")) policy.setGeo_view_library("worldwind");
+		
 		model.addAttribute("issue", issue);
 		model.addAttribute(pagination);
 		model.addAttribute("issueList", issueList);
@@ -134,7 +136,7 @@ public class HomepageController {
 		log.info("@@@@@@ policy = {}", gson.toJson(policy));
 		log.info("@@@@@@ dataGroupMap = {}", gson.toJson(dataGroupMap));
 		
-		return "/homepage/" + lang + "/demo";
+		return "/homepage/" + lang + "/" + viewLibrary;
 	}
 	
 	/**

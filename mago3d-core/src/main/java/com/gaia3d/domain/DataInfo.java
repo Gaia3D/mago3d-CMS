@@ -1,16 +1,17 @@
 package com.gaia3d.domain;
 
-import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Data 정보
  * @author Cheon JeongDae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class DataInfo {
 	
 	// Data 상태가 사용중

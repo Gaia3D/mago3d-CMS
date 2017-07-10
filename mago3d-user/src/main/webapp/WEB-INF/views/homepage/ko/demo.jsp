@@ -254,7 +254,7 @@
 	        			<form:textarea path="contents" />
 						<form:errors path="contents" cssClass="error" />
 	        		</td>
-	        	</tr>
+				</tr>
 	        </table>
 	        
 	      	<div class="btns">
@@ -323,6 +323,7 @@
 <script type="text/javascript" src="/js/${lang}/mago3d/GlobeTile.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Sphere.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/ObjectMarker.js"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Pin.js"></script>
 <script>
 	var agent = navigator.userAgent.toLowerCase();
 	if(agent.indexOf('chrome') < 0) { 

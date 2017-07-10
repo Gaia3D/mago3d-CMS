@@ -1,13 +1,17 @@
 package com.gaia3d.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Issue People
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class IssuePeople {
 	
 	// TODO enum 으로 바꿔야 할거 같은데.... ㅠ.ㅠ

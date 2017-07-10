@@ -1,13 +1,17 @@
 package com.gaia3d.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 스케줄
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class Schedule {
 	
 	// 로그인 실패 건수 잠김 해제

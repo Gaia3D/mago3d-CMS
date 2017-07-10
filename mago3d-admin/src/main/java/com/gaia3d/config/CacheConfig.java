@@ -8,17 +8,22 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.CacheName;
+import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataGroup;
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.ExternalService;
 import com.gaia3d.domain.Menu;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserGroup;
 import com.gaia3d.domain.UserGroupMenu;
+import com.gaia3d.helper.HttpClientHelper;
+import com.gaia3d.security.Crypt;
+import com.gaia3d.service.APIService;
 import com.gaia3d.service.CommonCodeService;
 import com.gaia3d.service.DataGroupService;
 import com.gaia3d.service.DataService;
@@ -26,6 +31,7 @@ import com.gaia3d.service.MenuService;
 import com.gaia3d.service.PolicyService;
 import com.gaia3d.service.UserGroupService;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,10 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CacheConfig {
 
 	@Autowired
-	private ApplicationContext context;
-	@Autowired
-	private PropertiesConfig propertiesConfig;
-
+	private APIService aPIService;
 	@Autowired
 	private DataService dataService;
 	@Autowired
@@ -55,7 +58,11 @@ public class CacheConfig {
 	@Autowired
 	private CommonCodeService commonCodeService;
 //	@Autowired
-//	private ServerService serverService;	
+//	private ServerService serverService;
+	
+	@Autowired
+	private PropertiesConfig propertiesConfig;
+	
 	
 	public static final String LOCALHOST = "localhost";
 
@@ -79,6 +86,9 @@ public class CacheConfig {
 		// 데이터를 그룹별로 로딩
 		data(CacheType.SELF);
 		
+		// Private API Cache 갱신
+		externalServiceCache(CacheType.SELF);
+		
 		commonCode(CacheType.SELF);
 
 		log.info("**************** Admin 캐시 초기화 종료 *****************");
@@ -89,6 +99,7 @@ public class CacheConfig {
 		else if(cacheName == CacheName.POLICY) policy(cacheType);
 		else if(cacheName == CacheName.MENU) menu(cacheType);
 		else if(cacheName == CacheName.COMMON_CODE) commonCode(cacheType);
+		else if(cacheName == CacheName.DATA_GROUP) data(cacheType);
 	}
 	
 	private void license(CacheType cacheType) {
@@ -146,26 +157,37 @@ public class CacheConfig {
 	 * @param cacheType
 	 */
 	private void data(CacheType cacheType) {
-		Map<String, List<DataInfo>> dataGroupMap = new HashMap<>();
+		Map<String, Map<String, DataInfo>> dataGroupMap = new HashMap<>();
+		List<DataInfo> allDataInfoList = new ArrayList<>();
 		
 		// 1 Depth group 정보를 전부 가져옴
 		List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
 		// 1 그룹별 하위 object 정보들을 전부 가져옴
 		for(DataGroup dataGroup : dataGroupList) {
 			List<DataGroup> childGroupList = dataGroupService.getListDataGroupByAncestor(dataGroup.getData_group_id());
-			List<DataInfo> allChildDataInfoList = new ArrayList<>();
+//			List<DataInfo> allChildDataInfoList = new ArrayList<>();
 			for(DataGroup childDataGroup : childGroupList) {
 				DataInfo dataInfo = new DataInfo();
 				dataInfo.setData_group_id(childDataGroup.getData_group_id());
-				allChildDataInfoList.addAll(dataService.getListDataByDataGroupId(dataInfo));
+//				allChildDataInfoList.addAll(dataService.getListDataByDataGroupId(dataInfo));
+				allDataInfoList.addAll(dataService.getListDataByDataGroupId(dataInfo));
 			}
-			dataGroupMap.put(dataGroup.getData_group_key(), allChildDataInfoList);
+//			dataGroupMap.put(dataGroup.getData_group_key(), allChildDataInfoList);
 		}
 		
-		//CacheManager.setProjectDataGroupList(dataGroupList);
-		Gson gson = new Gson();
-		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@ data cache @@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		log.info(" jason = {}", gson.toJson(dataGroupMap));
+		Map<String, DataInfo> allDataInfoMap = new HashMap<>();
+		for(DataInfo dataInfo : allDataInfoList) {
+			allDataInfoMap.put(dataInfo.getData_key(), dataInfo);
+		}
+		
+		dataGroupMap.put("alldata", allDataInfoMap);
+		
+		CacheManager.setProjectDataGroupList(dataGroupList);
+		CacheManager.setDataGroupMap(dataGroupMap);
+		
+		if(cacheType == CacheType.BROADCAST) {
+			callRemoteCache(CacheName.DATA_GROUP);
+		}
 	}
 
 	private void commonCode(CacheType cacheType) {
@@ -211,12 +233,49 @@ public class CacheConfig {
 			
 		}
 	}
-
-	enum CacheName {
-		LICENSE, POLICY, MENU, USER_GROUP, SERVER_GROUP, COMMON_CODE, EXTERNAL
-	};
 	
-	enum CacheType {
-		SELF, USER, BROADCAST
+	/**
+	 * Private API Cache 갱신
+	 */
+	private void externalServiceCache(CacheType cacheType) {
+		ExternalService service = new ExternalService();
+		service.setStatus(ExternalService.STATUS_USE);
+		List<ExternalService> externalCacheList = aPIService.getListExternalService(service);
+		
+//		List<ExternalService> remoteCacheServiceList = new ArrayList<ExternalService>();
+//		for(ExternalService externalService : externalCacheList) {
+//			if(ExternalService.EXTERNAL_CACHE.equals(externalService.getService_type())) {
+//				remoteCacheServiceList.add(externalService);
+//			} else if(ExternalService.HA.equals(externalService.getService_type())) {
+//				//remoteHAServiceList.add(externalService);
+//			}
+//		}
+		
+		CacheManager.setRemoteCacheServiceList(externalCacheList);
+	}
+	
+	/**
+	 * Remote Cache 갱신 요청
+	 * @param cacheName
+	 */
+	private void callRemoteCache(CacheName cacheName) {
+		
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@ callRemoteCache start! ");
+
+		// TODO 로컬, 이중화 등의 분기 처리가 생략되어 있음
+		List<ExternalService> remoteCacheServerList = CacheManager.getRemoteCacheServiceList();
+		for(ExternalService externalService : remoteCacheServerList) {
+			// TODO 환경 설정으로 빼서 로컬이거나 단독 서버인 경우 호출하지 않게 설계해야 함
+			String authData = "api-key=" + Crypt.decrypt(propertiesConfig.getRestAuthKey()) + "&cache_name=" + cacheName.toString() + "&time=" + System.nanoTime();
+			authData = Crypt.encrypt(authData);
+			
+			String jsonData = HttpClientHelper.httpPost(externalService, authData);
+			JsonObject resultObject = new Gson().fromJson(jsonData, JsonObject.class);
+			if(resultObject != null && !resultObject.isJsonNull() ) {
+				String result = resultObject.get("result").toString();
+				String result_message = resultObject.get("result_message").toString();
+				log.error("@@@ success_yn = {}. result_message = {}", result, result_message);
+			}
+		}
 	}
 }

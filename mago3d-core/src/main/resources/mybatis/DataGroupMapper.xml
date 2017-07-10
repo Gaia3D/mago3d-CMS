@@ -34,7 +34,7 @@
 	<!-- depth별 Data 그룹 목록 -->
 	<select id="getListDataGroupByDepth" parameterType="int" resultType="dataGroup">
 		/* getListDataGroupByDepth */
-		SELECT * FROM data_group WHERE depth = #{depth} ORDER BY view_order, data_group_id
+		SELECT * FROM data_group WHERE depth = #{depth} AND use_yn = 'Y' ORDER BY view_order, data_group_id
 	</select>
 	
 	<!-- ancestor별 Data 그룹 목록 -->

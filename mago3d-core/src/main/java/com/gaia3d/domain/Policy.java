@@ -3,14 +3,18 @@ package com.gaia3d.domain;
 import com.gaia3d.security.Crypt;
 import com.gaia3d.security.Masking;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 운영 정책
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class Policy {
 	public static final String Y = "Y";
 	

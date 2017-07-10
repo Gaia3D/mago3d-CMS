@@ -21,6 +21,9 @@ JS_MESSAGE["usersession.grant.invalid"] = "사용 권한이 유효하지 않습�
 
 JS_MESSAGE["login.password.decrypt.exception"] = "로그인 비밀번호 처리 과정에서 오류가 발생하였습니다.";
 
+// Cache
+JS_MESSAGE["cache.input.invalid"] = "필수 입력값이 유효하지 않습니다.";
+
 //사용자
 JS_MESSAGE["user.id.empty"] = "아이디를 입력하여 주십시오.";
 JS_MESSAGE["user.id.min_length.invalid"] = "사용자 아이디 최소 길이가 올바르지 않습니다.";

@@ -10,6 +10,8 @@ public class CryptTest {
 		System.out.println(Crypt.encrypt("postgres"));
 		System.out.println(Crypt.encrypt("postgres"));
 		System.out.println(Crypt.encrypt("test"));
+		
+		System.out.println(Crypt.encrypt("mago3d-rest-api-key"));
 	}
 
 }

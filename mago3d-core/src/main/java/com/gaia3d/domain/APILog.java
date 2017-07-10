@@ -3,14 +3,18 @@ package com.gaia3d.domain;
 import com.gaia3d.security.Crypt;
 import com.gaia3d.security.Masking;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * PM이 제공하는 서비스 API 호출 이력
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class APILog {
 	
 	// service_code = Single Sign-On Token 생성 요청
@@ -18,9 +22,6 @@ public class APILog {
 	
 	// 외부 호출
 	public static final String API = "API";
-	
-	public static final String RESULT_SUCCESS = "Y";
-	public static final String RESULT_FAIL = "N";
 	
 	// 사용 매체( 0 : 웹, 1 : 기타)
 	public static final String DEVICE_WEB = "0";

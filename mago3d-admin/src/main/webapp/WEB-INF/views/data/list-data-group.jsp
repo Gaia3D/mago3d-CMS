@@ -482,9 +482,9 @@
 	function reloadDataGroupCache() {
 		if(cacheFlag) {
 			cacheFlag = false;
-			var info = "service_name=dataGroup";
+			var info = "cacheName=DATA_GROUP&cacheType=BROADCAST";
 			$.ajax({
-				url: "/common/ajax-reload-config-cache.do",
+				url: "/cache/ajax-reload-config-cache.do",
 				type: "POST",
 				data: info,
 				cache: false,

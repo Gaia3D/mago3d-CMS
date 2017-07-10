@@ -12,6 +12,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.CacheName;
+import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataGroup;
 import com.gaia3d.domain.DataInfo;
@@ -88,6 +90,7 @@ public class CacheConfig {
 		else if(cacheName == CacheName.POLICY) policy(cacheType);
 		else if(cacheName == CacheName.MENU) menu(cacheType);
 		else if(cacheName == CacheName.COMMON_CODE) commonCode(cacheType);
+		else if(cacheName == CacheName.DATA_GROUP) data(cacheType);
 	}
 	
 	private void license(CacheType cacheType) {
@@ -216,13 +219,5 @@ public class CacheConfig {
 		if(cacheType == CacheType.BROADCAST) {
 			
 		}
-	}
-
-	enum CacheName {
-		LICENSE, POLICY, MENU, USER_GROUP, SERVER_GROUP, COMMON_CODE, EXTERNAL
-	};
-	
-	enum CacheType {
-		SELF, USER, BROADCAST
 	}
 }

@@ -1,13 +1,17 @@
 package com.gaia3d.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Single Sign-On Token 생성, 검증
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class SSOLog {
 	
 	// Token 상태 생성

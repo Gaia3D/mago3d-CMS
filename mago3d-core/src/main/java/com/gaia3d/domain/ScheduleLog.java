@@ -1,13 +1,17 @@
 package com.gaia3d.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 스케줄 실행 이력
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class ScheduleLog {
 
 	// 성공

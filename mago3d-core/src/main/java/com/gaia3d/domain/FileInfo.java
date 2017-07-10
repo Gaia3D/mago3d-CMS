@@ -1,13 +1,17 @@
 package com.gaia3d.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 파일 관리
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class FileInfo {
 	
 	// validation

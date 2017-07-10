@@ -1,13 +1,17 @@
 package com.gaia3d.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 위젯
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class Widget {
 	
 	// 화면에서 위젯 정렬값

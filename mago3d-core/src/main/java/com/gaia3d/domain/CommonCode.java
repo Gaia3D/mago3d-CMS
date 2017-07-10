@@ -3,16 +3,18 @@ package com.gaia3d.domain;
 import java.util.List;
 
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * CommonCode
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class CommonCode {
 
 	// 외부 시스템 연동 사용자 등록

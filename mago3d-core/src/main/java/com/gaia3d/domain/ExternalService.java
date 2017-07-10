@@ -1,23 +1,26 @@
 package com.gaia3d.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Private API
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class ExternalService {
 	
 	// 상태. 0 : 사용, 1 : 미사용, ??
 	public static final String STATUS_USE = "0";
 	public static final String STATUS_FIBID = "1";
 	
-	// 0 : Cache(캐시 Reload), 1 : OTP 서버
+	// 0 : Cache(캐시 Reload), 1 : HA
 	public static final String EXTERNAL_CACHE = "0";
-	public static final String OTP_SERVER = "1";
-	public static final String HA = "2";
+	public static final String HA = "1";
 //	public static final String SESSION_USER = "3";
 	
 	public static final Integer SERVER_PORT = 8443;
@@ -69,16 +72,6 @@ public class ExternalService {
 	// 경로, 리소스 위치
 	private String url_path;
 	
-	// 계정동기화. 0 : 사용, 1 : 미사용
-	private String sync_yn;
-	// 동기화 pm_system ID
-	private Integer system_id;
-	// 동기화 pm_account ID
-	private Integer account_id;
-	// 비동기화 일 경우 계정명
-	private String account;
-	// 비동기화 일 경우 패스워드
-	private String password;
 	// 기본 표시 메뉴, Y : 기본, N : 선택
 	private String default_yn;
 	// 상태. 0 : 사용, 1 : 미사용

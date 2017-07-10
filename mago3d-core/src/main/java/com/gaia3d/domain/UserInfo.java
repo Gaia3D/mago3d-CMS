@@ -3,14 +3,18 @@ package com.gaia3d.domain;
 import com.gaia3d.security.Crypt;
 import com.gaia3d.security.Masking;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 사용자 정보 테이블
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class UserInfo {
 	
 	// 사용자 상태가 사용중

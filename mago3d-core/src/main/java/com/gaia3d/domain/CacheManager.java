@@ -52,6 +52,9 @@ public class CacheManager {
 	// 데이터 그룹별 데이터 맵
 	private Map<String, Map<String, DataInfo>> dataGroupMap = null;
 	
+	// 원격 캐시 목록
+	private List<ExternalService> remoteCacheServiceList = null;
+	
 //	/**
 //	 * 객체 리턴
 //	 * @return
@@ -232,5 +235,13 @@ public class CacheManager {
 
 	public static void setStandByServerStatus(String standByServerStatus) {
 		cacheManager.standByServerStatus = standByServerStatus;
+	}
+
+	public static List<ExternalService> getRemoteCacheServiceList() {
+		return cacheManager.remoteCacheServiceList;
+	}
+
+	public static void setRemoteCacheServiceList(List<ExternalService> remoteCacheServiceList) {
+		cacheManager.remoteCacheServiceList = remoteCacheServiceList;
 	}
 }

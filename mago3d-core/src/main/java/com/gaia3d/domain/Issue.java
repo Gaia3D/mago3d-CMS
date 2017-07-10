@@ -2,14 +2,18 @@ package com.gaia3d.domain;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Issue
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class Issue {
 	
 	// 총건수
