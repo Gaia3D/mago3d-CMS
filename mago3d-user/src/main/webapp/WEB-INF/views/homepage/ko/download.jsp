@@ -11,7 +11,7 @@
 	<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"></link>
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<script type="text/javascript" src="/js/${lang }/common.js"></script>
@@ -48,7 +48,7 @@
 
 	<section>
 		<div class="contents">
-			<button type="button" class="down" onclick='alert("준비 중 입니다."); return false;'>
+			<button type="button" class="down" onclick="location.href='https://github.com/Gaia3D/mago3d'">
 				DOWNLOAD mago3D 1.0.0 <span>2017-07-01</span>
 			</button>
 
