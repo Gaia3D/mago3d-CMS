@@ -31,14 +31,12 @@
 			<h1><a href="/homepage/index.do">mago3D</a></h1>
 			<ul class="menu">
 				<li><a href="/homepage/about.do">mago3D</a></li>
-				<li>
+				<li class="dropdown">
 					Demo
-					<ul>
-						<li>
-							<a href="/homepage/demo.do">cesium</a> | 
-							<a href="/homepage/demo.do?viewLibrary=worldwind">worldwind</a>
-						</li>
-					</ul>
+					<div class="dropdown-content">
+						<a href="/homepage/demo.do">Cesium</a>
+						<a href="/homepage/demo.do?viewLibrary=worldwind">worldwind</a>
+					</div>
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
 				<li class="on">Tutorials<span></span></li>

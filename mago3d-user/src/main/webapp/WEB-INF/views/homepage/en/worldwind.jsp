@@ -153,8 +153,11 @@
 	</div>	
 
 	<!-- 맵영역 -->
-	<div id="magoContainer" style="position: absolute; width: 100%; height: 100%; margin-top: 0; padding: 0; overflow: hidden;"></div>
-
+	<div style="position: absolute; width: 100%; height: 100%; margin-top: 0; padding: 0; overflow: hidden;">
+		<canvas id="magoContainer" style="width: 100%; height: 100%">
+	        Your browser does not support HTML5 Canvas.
+	    </canvas>
+	</div>
 	<form:form id="issue" modelAttribute="issue" method="post" onsubmit="return false;">
 	<div id="inputIssueLayer" style="display: none; top:40%; left:45%; width:450px; margin:-250px 0 0 -150px; " class="layer">
 	    <div class="layerHeader">
@@ -259,7 +262,7 @@
 	</div>
 	</form:form>
 
-<script type="text/javascript" src="/externlib/${lang}/cesium/Cesium.js"></script>
+<script type="text/javascript" src="/externlib/${lang}/webworldwind/worldwind.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Code.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/API.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Config.js"></script>
@@ -318,6 +321,7 @@
 <script type="text/javascript" src="/js/${lang}/mago3d/GlobeTile.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Sphere.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/ObjectMarker.js"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Pin.js"></script>
 <script>
 	var agent = navigator.userAgent.toLowerCase();
 	if(agent.indexOf('chrome') < 0) { 
@@ -329,7 +333,8 @@
 	var insertIssueFlag = false;
 	var objectInfoViewFlag = false;
 	var listIssueFlag = false;
-	var managerFactory = new ManagerFactory(null, "magoContainer", policyJson, dataGroupMap);
+	var imagePath = "/images/${lang}";
+	var managerFactory = new ManagerFactory(null, "magoContainer", policyJson, dataGroupMap, imagePath);
 	
 	$(document).ready(function() {
 		//$("#recentIssueListContent").show();
