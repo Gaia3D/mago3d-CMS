@@ -10,8 +10,8 @@
 	<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
-	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"></link>
+	<link rel="stylesheet" href="/css/${lang}/font/font.css"></link>
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
@@ -73,7 +73,8 @@ Difference of data model, massive number of data to be rendered, big volume of f
 						<div class="highlight">
 							<a href="#">
 								<span class="image left">
-									<img src="/images/${lang}/homepage/gangbuk.png">
+									<img src="/images/${lang}/homepage/gangbuk.png" 
+									alt="3DS format has been uploaded to mago3D.">
 								</span>
 								<div class="description">
 									<h2>3DS</h2>
@@ -85,7 +86,8 @@ Difference of data model, massive number of data to be rendered, big volume of f
 						<div class="highlight two">
 							<a href="#">
 								<span class="image fit">
-									<img src="/images/${lang}/homepage/Collada_model.png">
+									<img src="/images/${lang}/homepage/Collada_model.png" 
+									alt="COLLADA format is the screen which is uploaded to mago3D.">
 								</span>
 								<div class="description">
 									<h2>COLLADA</h2>
@@ -97,7 +99,8 @@ Difference of data model, massive number of data to be rendered, big volume of f
 						<div class="highlight three">
 							<a href="#">
 								<span class="image left">
-									<img src="/images/${lang}/homepage/IFC_model.png">
+									<img src="/images/${lang}/homepage/IFC_model.png" 
+									alt="The IFC (BIM) format has been uploaded to mago3D.">
 								</span>
 								<div class="description ">
 									<h2>IFC(BIM)</h2>
@@ -116,29 +119,120 @@ Difference of data model, massive number of data to be rendered, big volume of f
 						<th>Details</th>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/IFC.png"/></td>
+						<td><img src="/images/${lang}/homepage/IFC.png" alt="IFC(BIM) format image"/></td>
 						<td>IFC(Industry Foundation Classes)<br/>- a commonly used collaboration format in Building information modeling(BIM).</td>
 					</tr>
 
 					<tr>
-						<td><img src="/images/${lang}/homepage/obj.png"/></td>
+						<td><img src="/images/${lang}/homepage/obj.png" alt="OBJ format image"/></td>
 						<td>OBJ(Wavefront file format specification)<br/>- a geometry definition file format adopted by other 3D graphics application vendors.</td>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/3DS.png"/></td>
+						<td><img src="/images/${lang}/homepage/3DS.png" alt="3DS format image"/></td>
 						<td>3DS(3D-Studio File Format)<br/>- an import/export format used by the Autodesk 3ds Max 3D modeling, animation and rendering software.</td>
 					</tr>
 					<tr>
-						<td width="64px"><img src="/images/${lang}/homepage/dae.png"></td>
+						<td width="64px"><img src="/images/${lang}/homepage/dae.png" alt="COLLADA format image"></td>
 						<td>COLLADA(COLLAborative Design Activity)<br/>- an interchange file format for exchanging digital assets among various graphics software applications.</td>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/JT.png"/></td> <td>JT(Jupiter Tesselation)<br/>- an ISO-standardized 3D data format and is in industry used for product visualization, collaboration, CAD data exchange, and in some also for long-term data retention.
+						<td><img src="/images/${lang}/homepage/JT.png" alt="Jt format image"/></td> 
+						<td>JT(Jupiter Tesselation)<br/>- an ISO-standardized 3D data format and is in industry used for product visualization, collaboration, CAD data exchange, and in some also for long-term data retention.
 						- If you want to use it, please contact the company.</td>
 					</tr>
 				</table>
 				<h4>Rendering Algoritm</h4>
-				<p>Coming Soon...</p>
+				<div class="wrapper-algo">
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Correct triangle vertex sequence images"
+								style="background-image:url(/images/${lang}/homepage/triangle.png)">
+								<div>
+									<h3>Correct triangle vertex sequence</h3>
+									<P>Performance enhancements supported by WebGL</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Model/Reference images"
+								style="background-image:url(/images/${lang}/homepage/model_reference.png)">
+								<div>
+									<h3>Model/Reference</h3>
+									<P>Multi-instance- lightweight logic</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Create VBO  images"
+								style="background-image:url(/images/${lang}/homepage/tri.jpg)">
+								<div>
+									<h3>Create VBO</h3>
+									<P>Save sorted by triangle size</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="3D space Octree"
+								style="background-image:url(/images/${lang}/homepage/octree.png)">
+								<div>
+									<h3>3D Space Octree</h3>
+									<P>flexible octree depth 적용</P>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="wrapper-algo">
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Lego Strucure images"
+								style="background-image:url(/images/${lang}/homepage/lego.png)">
+								<div>
+									<h3>Lego Strucure</h3>
+									<P>Generate data for rougher LOD</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Visibility Index images"
+								style="background-image:url(/images/${lang}/homepage/indexing.png)">
+								<div>
+									<h3>Visibility Index</h3>
+									<P>Pre-processing for occlusion</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Raw data loading images"
+								style="background-image:url(/images/${lang}/homepage/loading.png)">
+								<div>
+									<h3> Raw data loading </h3>
+									<P>Applying loading time out</P>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="algo-row">
+						<a href="#">
+							<div class="aglo-thumbnail" alt="Bounding box images" style="background-image:url(/images/${lang}/homepage/boundingbox.png)">
+								<div>
+									<h3>bounding box</h3>
+									<P>Bounding box calculation</P>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
 				<a href="#" class="goTop">goTop</a>
 			</div>
 			<!-- // ABOUT -->
@@ -158,8 +252,8 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				mago3D can now visualise massive 3D data including indoor objects and AEC data at least 100k objects, in a single scene seamlessly with traditional outdoor 3D GIS objects.
 				</p>
 				<div class="architecture">
-					<img src="/images/${lang}/homepage/arc.png" style="width: 590px; margin-top: 60px;">
-					<img src="/images/${lang}/homepage/sw.png" style="width: 590px;">
+					<img src="/images/${lang}/homepage/arc.png" alt="Mago3D Architecture" style="width: 590px; margin-top: 60px;">
+					<img src="/images/${lang}/homepage/sw.png" alt="Mago3D software configuration diagram" style="width: 590px;" >
 				</div>
 				<a href="#" class="goTop">goTop</a>
 			</div>
@@ -175,7 +269,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 					provides the following features.</p>
 				<div class="wrap">
 					<div class="colspan-2 column">
-						<img src="/images/${lang}/homepage/dashboard.png">
+						<img src="/images/${lang}/homepage/dashboard.png" alt="Dashboard on admin page">
 					</div>
 					<div class="colspan-1 column">
 						<h2>Admin page</h2>
@@ -198,10 +292,12 @@ Difference of data model, massive number of data to be rendered, big volume of f
 						</p>
 					</div>
 					<div class="colspan-2 column text-left">
-						<img src="/images/${lang}/homepage/issue.png">
+						<img src="/images/${lang}/homepage/issue.png" 
+						alt="This is an image of the page that manages the issue on the manager page.">
 					</div>
 					<div class="colspan-2 column clear">
-						<img src="/images/${lang}/homepage/data.png">
+						<img src="/images/${lang}/homepage/data.png" 
+						alt="This is an image of the page that manages the data on the admin page.">
 					</div>
 					<div class="colspan-1 column">
 						<h2>Data management</h2>

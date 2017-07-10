@@ -10,7 +10,7 @@
     <!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"></link>
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<script type="text/javascript" src="/js/${lang }/common.js"></script>
@@ -46,7 +46,7 @@
 		<h2>Tutorials<span></span></h2>
 		<div class="contents">
 			<ul class="subMenu">				
-				<li>Issue 등록 API</a></li>
+				<li>삼각형 꼭지점 순서 보정</li>
 				<li>Object 정보 표시 API</li>
 				<li>Issue 목록 API</li>
 				<li>장소 이동 API</li>
@@ -54,12 +54,17 @@
 			</ul>
 			<div class="subContents">
 				<dl>
-					<dt id="Started">Issue 등록 API</dt>
+					<dt id="Started">삼각형 꼭지점 순서 보정</dt>
 					<dd class="img">
-						<img src="/images/${lang}/homepage/about.png">
+						<img src="/images/${lang}/homepage/face_culling.png">
 					</dd>
 					<dd>
-						준비 중 입니다.
+						<b>face culling -WebGL이 지원하는 성능 향상 기법</b>
+						<ul>
+							<li> WebGL이 rendering을 수행할 때 기본적으로 face culling을 수행하여 성능을 향상시킨다.</li>
+							<li> face culling이란 카메라가 삼각형의 뒷면을 보고 있다면 삼각형을 그리지 않는 기법 </li>
+							<li> 삼각형의 앞/뒷면을 결정하는 것은 삼각형의 꼭지점 순서</li>
+						</ul>
 					</dd>
 				</dl>
 				<dl>
