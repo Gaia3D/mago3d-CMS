@@ -31,7 +31,7 @@ var Policy = function() {
 	this.hideBuildings = [];
 
 	// 0 = block mode, 1 = object mode
-	this.mouseMoveMode = 0;
+	this.mouseMoveMode = 1;
 	
 	// 이슈 등록 표시
 	this.issueInsertEnable = false;
@@ -39,6 +39,9 @@ var Policy = function() {
 	this.objectInfoViewEnable = false;
 	// 이슈 목록 표시
 	this.issueListEnable = false;
+	
+	// 이미지 경로
+	this.imagePath = "";
 	
 	// provisional.***
 	this.colorChangedObjectId;
@@ -131,4 +134,11 @@ Policy.prototype.getIssueListEnable = function() {
 };
 Policy.prototype.setIssueListEnable = function(issueListEnable) {
 	this.issueListEnable = issueListEnable;
+};
+
+Policy.prototype.getImagePath = function() {
+	return this.imagePath;
+};
+Policy.prototype.setImagePath = function(imagePath) {
+	this.imagePath = imagePath;
 };

@@ -79,6 +79,7 @@ public class HomepageController {
 	@GetMapping(value = "demo.do")
 	public String demo(HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo, @RequestParam(defaultValue="cesium") String viewLibrary, Model model) {
 		
+		log.info("@@ viewLibrary = {}", viewLibrary);
 		String lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 		if(lang == null || "".equals(lang)) {
 			lang = "ko";
@@ -122,7 +123,8 @@ public class HomepageController {
 		@SuppressWarnings("unchecked")
 		List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
 		
-		if(viewLibrary.equals("worldwind")) policy.setGeo_view_library("worldwind");
+		if(viewLibrary.equals("cesium")) policy.setGeo_view_library("cesium");
+		else if(viewLibrary.equals("worldwind")) policy.setGeo_view_library("worldwind");
 		
 		model.addAttribute("issue", issue);
 		model.addAttribute(pagination);

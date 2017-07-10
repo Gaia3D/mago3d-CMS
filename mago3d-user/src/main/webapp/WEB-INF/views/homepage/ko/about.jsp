@@ -35,7 +35,15 @@
 			</h1>
 			<ul class="menu">
 				<li class="on">mago3D<span></span></li>
-				<li><a href="/homepage/demo.do">Demo</a></li>
+				<li>
+					Demo
+					<ul>
+						<li>
+							<a href="/homepage/demo.do">cesium</a> | 
+							<a href="/homepage/demo.do?viewLibrary=worldwind">worldwind</a>
+						</li>
+					</ul>
+				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			</ul>

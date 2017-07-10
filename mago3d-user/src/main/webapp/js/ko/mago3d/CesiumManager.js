@@ -1194,7 +1194,8 @@ CesiumManager.prototype.upDateSceneStateMatrices = function(sceneState) {
 		
 		// ModelViewMatrix Inverse.***
 		var matrixInv = WorldWind.Matrix.fromIdentity();
-		matrixInv.invertMatrix(modelView);
+		//matrixInv.invertMatrix(modelView);
+		matrixInv.invertOrthonormalMatrix(modelView);
 		columnMajorArray = matrixInv.columnMajorComponents(columnMajorArrayAux);
 		sceneState.modelViewMatrixInv.copyFromFloatArray(columnMajorArray);
 		
@@ -1211,10 +1212,13 @@ CesiumManager.prototype.upDateSceneStateMatrices = function(sceneState) {
 		modelView = WorldWind.Matrix.fromIdentity();
 		modelView.copy(dc.navigatorState.modelview);
 		columnMajorArray = modelViewRelToEye.columnMajorComponents(columnMajorArray);
-		//columnMajorArray[12] = 0.0;
-		//columnMajorArray[13] = 0.0;
-		//columnMajorArray[14] = 0.0;
 		sceneState.modelViewRelToEyeMatrix.copyFromFloatArray(columnMajorArray);
+		
+		// ModelViewRelToEyeMatrixInv.***
+		var mvRelToEyeInv = WorldWind.Matrix.fromIdentity();
+		mvRelToEyeInv.invertOrthonormalMatrix(modelViewRelToEye);
+		columnMajorArray = mvRelToEyeInv.columnMajorComponents(columnMajorArrayAux);
+		sceneState.modelViewRelToEyeMatrixInv.copyFromFloatArray(columnMajorArray);
 		
 		// ModelViewProjectionRelToEyeMatrix.***
 		var modelViewProjectionRelToEye_aux = WorldWind.Matrix.fromIdentity();
@@ -1235,8 +1239,6 @@ CesiumManager.prototype.upDateSceneStateMatrices = function(sceneState) {
 		columnMajorArray[14] = 0.0;
 		sceneState.modelViewProjRelToEyeMatrix.copyFromFloatArray(columnMajorArray);
 		*/
-		//Cesium.Matrix4.toArray(uniformState._modelViewRelativeToEye, sceneState.modelViewRelToEyeMatrix._floatArrays);
-		//dc.navigatorState.projection
 		
 		var cameraPosition = dc.navigatorState.eyePoint;
 		sceneState.camera.position.set(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
@@ -1246,13 +1248,12 @@ CesiumManager.prototype.upDateSceneStateMatrices = function(sceneState) {
 		
 		var viewport = this.wwd.viewport;
 		sceneState.camera.frustum.aspectRatio = viewport.width/viewport.height;
-		sceneState.camera.frustum.near[0] = this.wwd.navigator.nearDistance;
-		sceneState.camera.frustum.far = 1000;
+		//sceneState.camera.frustum.near[0] = this.wwd.navigator.nearDistance;
+		sceneState.camera.frustum.near[0] = 0.1;
+		sceneState.camera.frustum.far = 1000.0;
 		//sceneState.camera.frustum.far[0] = this.wwd.navigator.farDistance;
 		
-		
-		sceneState.camera.frustum.fovRad = Math.PI/4;
-		sceneState.camera.frustum.fovRad = 55 * Math.PI/180;
+		sceneState.camera.frustum.fovRad = 56.1 * Math.PI/180; // pendent to know the real fov in webwroldwind.***
 		sceneState.camera.frustum.fovyRad = sceneState.camera.frustum.fovRad/sceneState.camera.frustum.aspectRatio;
 		//sceneState.camera.frustum.fovyRad = 45 * Math.PI/180;
 
@@ -1335,37 +1336,37 @@ CesiumManager.prototype.renderNeoBuildingsAsimectricVersion = function(scene, is
 	if(this.pin.texture == undefined)
 	{
 		this.pin.texture = new Texture();
-		var filePath_inServer = "../images/PinImage.png";
+		var filePath_inServer = this.magoPolicy.imagePath + "/PinImage.png";
 		this.pin.texture.texId = gl.createTexture();
 		this.readerWriter.readNeoReferenceTexture(gl, filePath_inServer, this.pin.texture, undefined, this);
 		this.pin.texturesArray.push(this.pin.texture);
 		
 		var cabreadoTex = new Texture();
-		filePath_inServer = "../images/PinCabreado.png";
+		filePath_inServer = this.magoPolicy.imagePath + "/PinCabreado.png";
 		cabreadoTex.texId = gl.createTexture();
 		this.readerWriter.readNeoReferenceTexture(gl, filePath_inServer, cabreadoTex, undefined, this);
 		this.pin.texturesArray.push(cabreadoTex);
 		
 		var cabreadoTex = new Texture();
-		filePath_inServer = "../images/PinTijeras.png";
+		filePath_inServer = this.magoPolicy.imagePath + "/PinTijeras.png";
 		cabreadoTex.texId = gl.createTexture();
 		this.readerWriter.readNeoReferenceTexture(gl, filePath_inServer, cabreadoTex, undefined, this);
 		this.pin.texturesArray.push(cabreadoTex);
 		
 		var cabreadoTex = new Texture();
-		filePath_inServer = "../images/PinDislike.png";
+		filePath_inServer = this.magoPolicy.imagePath + "/PinDislike.png";
 		cabreadoTex.texId = gl.createTexture();
 		this.readerWriter.readNeoReferenceTexture(gl, filePath_inServer, cabreadoTex, undefined, this);
 		this.pin.texturesArray.push(cabreadoTex);
 		
 		var cabreadoTex = new Texture();
-		filePath_inServer = "../images/PinLikeGreen.png";
+		filePath_inServer = this.magoPolicy.imagePath + "/PinLikeGreen.png";
 		cabreadoTex.texId = gl.createTexture();
 		this.readerWriter.readNeoReferenceTexture(gl, filePath_inServer, cabreadoTex, undefined, this);
 		this.pin.texturesArray.push(cabreadoTex);
 		
 		var cabreadoTex = new Texture();
-		filePath_inServer = "../images/PinCarcajadas.png";
+		filePath_inServer = this.magoPolicy.imagePath + "/PinCarcajadas.png";
 		cabreadoTex.texId = gl.createTexture();
 		this.readerWriter.readNeoReferenceTexture(gl, filePath_inServer, cabreadoTex, undefined, this);
 		this.pin.texturesArray.push(cabreadoTex);
@@ -1425,13 +1426,6 @@ CesiumManager.prototype.renderNeoBuildingsAsimectricVersion = function(scene, is
 		var hola = 0;
 	}
 
-	// update the matrices of the scene and the camera position.***
-	//if(!this.isLastFrustum)
-	
-
-	
-	//cameraPosition = null;
-
 	var currentShader = undefined;
 
 	// renderDepth for all buildings.***
@@ -1474,14 +1468,14 @@ CesiumManager.prototype.renderNeoBuildingsAsimectricVersion = function(scene, is
 	/*
 	if(this.bPicking == true && this.bObjectMarker == true && isLastFrustum)
 	{
+		//this.bPicking = false;
 		var pixelPos = new Point3D();
-		pixelPos = this.calculatePixelPositionAsimetricMode(gl, scene, pixelPos);
+		pixelPos = this.calculatePixelPositionWorldCoord(gl, scene, pixelPos);
 		var objMarker = this.objMarkerManager.newObjectMarker();
 		
 		ManagerUtils.calculateGeoLocationDataByAbsolutePoint(pixelPos.x, pixelPos.y, pixelPos.z, objMarker.geoLocationData, this);
 		this.renderingFase = !this.renderingFase;
-		
-		this.bPicking = false;
+
 	}
 	*/
 	
@@ -1501,7 +1495,6 @@ CesiumManager.prototype.renderNeoBuildingsAsimectricVersion = function(scene, is
 			//this.selectedObjectNotice(currentSelectedBuilding);
 			//console.log("objectId = " + selectedObject.objectId);
 		}
-		
 	}
 	
 	// 1) The depth render.**********************************************************************************************************************
@@ -1788,6 +1781,35 @@ CesiumManager.prototype.getSelectedObjectPickingAsimetricMode = function(gl, sce
 			this.selectionCandidateBuildingsArray.push(neoBuilding);
 		}
 	}
+	
+	neoBuildingsCount = visibleObjControlerBuildings.currentVisibles2.length;
+	for(var i=0; i<neoBuildingsCount; i++)
+	{
+		neoBuilding = visibleObjControlerBuildings.currentVisibles2[i];
+		currentVisibleOctreesControler = neoBuilding.currentVisibleOctreesControler;
+		if(currentVisibleOctreesControler)
+		{
+			// LOD2.***
+			currentVisibleLowestOctCount = currentVisibleOctreesControler.currentVisibles2.length;
+			for(var j=0; j<currentVisibleLowestOctCount; j++)
+			{
+				lowestOctree = currentVisibleOctreesControler.currentVisibles2[j];
+
+				if(lowestOctree.lego == undefined)
+					continue;
+
+				if(lowestOctree.lego.selColor4 == undefined)
+					lowestOctree.lego.selColor4 = new Color();
+				
+				availableColor = this.selectionColor.getAvailableColor(availableColor);
+
+				lowestOctree.lego.selColor4.set(availableColor.r, availableColor.g, availableColor.b, alfa);
+				this.selectionCandidateObjectsArray.push(undefined);
+				this.selectionCandidateLowestOctreesArray.push(lowestOctree);
+				this.selectionCandidateBuildingsArray.push(neoBuilding);
+			}
+		}
+	}
 
 	// colorSelection render.************************************************************************************************************
 	// colorSelection render.************************************************************************************************************
@@ -1874,6 +1896,49 @@ CesiumManager.prototype.getSelectedObjectPickingAsimetricMode = function(gl, sce
 			this.renderer.renderLodBuildingColorSelection(gl, lowestOctree.lego, this, currentShader, ssao_idx);
 		}
 		
+	}
+	
+	var neoBuildingsCount = visibleObjControlerBuildings.currentVisibles2.length;
+	for(var i=0; i<neoBuildingsCount; i++)
+	{
+		neoBuilding = visibleObjControlerBuildings.currentVisibles2[i];
+		
+		var buildingGeoLocation = neoBuilding.geoLocDataManager.getGeoLocationData(0);
+		gl.uniform3fv(currentShader.buildingPosHIGH_loc, buildingGeoLocation.positionHIGH);
+		gl.uniform3fv(currentShader.buildingPosLOW_loc, buildingGeoLocation.positionLOW);
+		
+		currentVisibleOctreesControler = neoBuilding.currentVisibleOctreesControler;
+		if(currentVisibleOctreesControler)
+		{
+
+			// LOD2.***
+			gl.uniformMatrix4fv(currentShader.RefTransfMatrix, false, buildingGeoLocation.rotMatrix._floatArrays);
+			currentVisibleLowestOctCount = currentVisibleOctreesControler.currentVisibles2.length;
+			for(var j=0; j<currentVisibleLowestOctCount; j++)
+			{
+				lowestOctree = currentVisibleOctreesControler.currentVisibles2[j];
+
+				if(lowestOctree.lego == undefined) {
+				continue;
+				}
+
+				if(lowestOctree.lego.fileLoadState == CODE.fileLoadState.READY) {
+					continue;
+				}
+
+				if(lowestOctree.lego.fileLoadState == 2) {
+					continue;
+				}
+
+				gl.uniform1i(currentShader.hasTexture_loc, false); //.***
+				gl.uniform4fv(currentShader.color4Aux_loc, [lowestOctree.lego.selColor4.r/255.0, lowestOctree.lego.selColor4.g/255.0, lowestOctree.lego.selColor4.b/255.0, 1.0]);
+
+				gl.uniform1i(currentShader.hasAditionalMov_loc, false);
+				gl.uniform3fv(currentShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
+
+				this.renderer.renderLodBuildingColorSelection(gl, lowestOctree.lego, this, currentShader, ssao_idx);
+			}
+		}
 	}
 
 	if(currentShader.position3_loc != -1)gl.disableVertexAttribArray(currentShader.position3_loc);
@@ -1976,138 +2041,14 @@ CesiumManager.prototype.getRayCamSpace = function(gl, pixelX, pixelY, resultRay)
  * @param renderables_neoRefLists_array 변수
  */
 CesiumManager.prototype.calculateSelObjMovePlaneAsimetricMode = function(gl, cameraPosition, scene, neoBuilding) {
-
-	// depth render.************************************************************************************************************
-	// depth render.************************************************************************************************************
-	// depth render.************************************************************************************************************
-	gl.enable(gl.DEPTH_TEST);
-	gl.depthFunc(gl.LEQUAL);
-	gl.depthRange(0, 1);
-
-	//var camera = this.sceneState.camera;
-//	var frustum = camera.frustum;
-			//var current_frustum_near = scene._context._us._currentFrustum.x;
-			//var current_frustum_far = scene._context._us._currentFrustum.y;
-			//var frustumsCount = scene._frustumCommandsList.length;
-			//current_frustum_far = scene._frustumCommandsList[frustumsCount-1].far;
+	if(this.pointSC == undefined)
+		this.pointSC = new Point3D();
 	
-	var current_frustum_near = this.sceneState.camera.frustum.near;
-	var current_frustum_far = this.sceneState.camera.frustum.far;
-	//var frustumsCount = 1;
-	//current_frustum_far = scene._frustumCommandsList[frustumsCount-1].far;
-
-	if(this.selectionFbo == undefined) this.selectionFbo = new FBO(gl, this.sceneState.drawingBufferWidth, this.sceneState.drawingBufferHeight);
-	this.selectionFbo.bind(); // framebuffer for color selection.***
-	//gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.selectionFbo.colorBuffer, 0);
-
-	if(this.octreeSelected.neoReferencesMotherAndIndices)
-	{
-		if(this.octreeSelected.neoReferencesMotherAndIndices.currentVisibleIndices.length == 0)
-		{
-			this.octreeSelected.neoReferencesMotherAndIndices.currentVisibleIndices = this.octreeSelected.neoReferencesMotherAndIndices.neoRefsIndices;
-		}
+	if(this.pointSC2 == undefined)
+		this.pointSC2 = new Point3D();
 	
-		//var currentShader = this.postFxShadersManager.pFx_shaders_array[6]; // depth shader.***
-		var currentShader = this.postFxShadersManager.pFx_shaders_array[3]; // ssao_depth shader.***
-
-		gl.clearColor(1, 1, 1, 1); // white background.***
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // clear buffer.***
-		//gl.viewport(0, 0, scene.drawingBufferWidth, scene.drawingBufferHeight);
-
-		var shaderProgram = currentShader.program;
-		gl.useProgram(shaderProgram);
-		gl.enableVertexAttribArray(currentShader.position3_loc);
-		//gl.enableVertexAttribArray(currentShader.normal3_loc);
-
-		gl.uniformMatrix4fv(currentShader.modelViewProjectionMatrix4RelToEye_loc, false, this.sceneState.modelViewProjRelToEyeMatrix._floatArrays);
-		gl.uniformMatrix4fv(currentShader.modelViewMatrix4RelToEye_loc, false, this.sceneState.modelViewRelToEyeMatrix._floatArrays);
-		gl.uniform3fv(currentShader.cameraPosHIGH_loc, this.sceneState.encodedCamPosHigh);
-		gl.uniform3fv(currentShader.cameraPosLOW_loc, this.sceneState.encodedCamPosLow);
-		var idxKeyMatrix = 0;
-		var buildingGeoLocation = this.buildingSelected.geoLocDataManager.getGeoLocationData(0);
-		gl.uniform3fv(currentShader.buildingPosHIGH_loc, buildingGeoLocation.positionHIGH);
-		gl.uniform3fv(currentShader.buildingPosLOW_loc, buildingGeoLocation.positionLOW);
-
-		gl.uniform1f(currentShader.far_loc, current_frustum_far);
-
-		var ssao_idx = -1; // selection code.***
-		//ssao_idx = 1; // test.***
-		var renderTexture = false;
-		var isInterior = false;
-		var renderTexture = false;
-		var minSize = 0.0;
-		var refsCount = this.octreeSelected.setRenderedFalseToAllReferences();
-		this.renderer.renderNeoRefListsAsimetricVersion(gl, this.octreeSelected.neoReferencesMotherAndIndices, this.buildingSelected, this, isInterior, currentShader, renderTexture, ssao_idx, minSize, undefined, idxKeyMatrix);
-
-		gl.disableVertexAttribArray(currentShader.position3_loc);
-		//gl.disableVertexAttribArray(currentShader.normal3_loc);
-	}
-	// 2) LOD 2 & 3.************************************************************************************************************************************
-	// 2) LOD 2 & 3.************************************************************************************************************************************
-	// 2) LOD 2 & 3.************************************************************************************************************************************
-	var neoBuilding = this.buildingSelected;
-	var lowestOctree;
-	if(neoBuilding != undefined)
-	{
-		this.arrayAuxSC.length = 0;
-		neoBuilding.octree.extractLowestOctreesIfHasTriPolyhedrons(this.arrayAuxSC);
-
-		var lowestOctreesCount = this.arrayAuxSC.length;
-		for(var i=0; i<lowestOctreesCount; i++)
-		{
-			lowestOctree = this.arrayAuxSC[i];
-			if(lowestOctree.lego != undefined)
-			{
-				if(neoBuilding != undefined)
-				{
-					currentShader = this.postFxShadersManager.pFx_shaders_array[7]; // lodBuilding depth.***
-					shaderProgram = currentShader.program;
-					gl.useProgram(shaderProgram);
-					gl.enableVertexAttribArray(currentShader.position3_loc);
-
-					gl.uniformMatrix4fv(currentShader.modelViewProjectionMatrix4RelToEye_loc, false, this.sceneState.modelViewProjRelToEyeMatrix._floatArrays);
-					gl.uniformMatrix4fv(currentShader.modelViewMatrix4RelToEye_loc, false, this.sceneState.modelViewRelToEyeMatrix._floatArrays);
-					gl.uniform3fv(currentShader.cameraPosHIGH_loc, this.sceneState.encodedCamPosHigh);
-					gl.uniform3fv(currentShader.cameraPosLOW_loc, this.sceneState.encodedCamPosLow);
-					gl.uniformMatrix4fv(currentShader.normalMatrix4_loc, false, this.sceneState.normalMatrix4._floatArrays);
-
-					gl.uniform1f(currentShader.near_loc, current_frustum_near);
-					gl.uniform1f(currentShader.far_loc, current_frustum_far);
-
-					gl.uniform1i(currentShader.hasAditionalMov_loc, true);
-					gl.uniform3fv(currentShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
-
-					var buildingGeoLocation = neoBuilding.geoLocDataManager.getGeoLocationData(0);
-					gl.uniform3fv(currentShader.buildingPosHIGH_loc, buildingGeoLocation.positionHIGH);
-					gl.uniform3fv(currentShader.buildingPosLOW_loc, buildingGeoLocation.positionLOW);
-					gl.uniformMatrix4fv(currentShader.buildingRotMatrix_loc, false, buildingGeoLocation.rotMatrix._floatArrays);
-
-					var ssao_idx = 0; // depth.***
-					this.renderer.renderLodBuilding(gl, lowestOctree.lego, this, currentShader, ssao_idx);
-					if(currentShader.position3_loc != -1)gl.disableVertexAttribArray(currentShader.position3_loc);
-				}
-			}
-		}
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------
-	// Now, read the picked pixel and find the pixel position.*********************************************************
-	var depthPixels = new Uint8Array(4 * 1 * 1); // 4 x 1x1 pixel.***
-	gl.readPixels(this.mouse_x, this.sceneState.drawingBufferHeight - this.mouse_y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, depthPixels);
-
-	var zDepth = depthPixels[0]/(256.0*256.0*256.0) + depthPixels[1]/(256.0*256.0) + depthPixels[2]/256.0 + depthPixels[3]; // 0 to 256 range depth.***
-	zDepth /= 256.0; // convert to 0 to 1.0 range depth.***
-
-	var realZDepth = zDepth*current_frustum_far;
-
-	// now, find the 3d position of the pixel in camCoord.****
-	this.resultRaySC = this.getRayCamSpace(gl, this.mouse_x, this.mouse_y, this.resultRaySC);
-	this.pointSC.set(this.resultRaySC[0] * realZDepth, this.resultRaySC[1] * realZDepth, this.resultRaySC[2] * realZDepth);
-	
+	this.calculatePixelPositionWorldCoord(gl, scene, this.pointSC2);
 	var buildingGeoLocation = this.buildingSelected.geoLocDataManager.getGeoLocationData(0);
-
-	// now, must transform this pixelCamCoord to world coord.***
-	this.pointSC2 = this.sceneState.modelViewMatrixInv.transformPoint3D(this.pointSC, this.pointSC2); // worldSpacePoint.***
 	this.pointSC = buildingGeoLocation.tMatrixInv.transformPoint3D(this.pointSC2, this.pointSC); // buildingSpacePoint.***
 
 	this.selObjMovePlane = new Plane();
@@ -2124,7 +2065,7 @@ CesiumManager.prototype.calculateSelObjMovePlaneAsimetricMode = function(gl, cam
  * @param scene 변수
  * @param renderables_neoRefLists_array 변수
  */
-CesiumManager.prototype.calculatePixelPositionAsimetricMode = function(gl, scene, resultPixelPos) {
+CesiumManager.prototype.calculatePixelPositionWorldCoord = function(gl, scene, resultPixelPos) {
 
 	// depth render.************************************************************************************************************
 	// depth render.************************************************************************************************************
@@ -2137,15 +2078,13 @@ CesiumManager.prototype.calculatePixelPositionAsimetricMode = function(gl, scene
 	//gl.depthFunc(gl.GREATER);
 	//gl.enable(gl.CULL_FACE);
 
-	var camera = scene._camera;
-//	var frustum = camera.frustum;
-	var current_frustum_near = scene._context._us._currentFrustum.x;
-	var current_frustum_far = scene._context._us._currentFrustum.y;
-	var frustumsCount = scene._frustumCommandsList.length;
-	current_frustum_far = this.sceneState.camera.frustum.far;
+	var current_frustum_near = this.sceneState.camera.frustum.near;
+	var current_frustum_far = this.sceneState.camera.frustum.far;
 
-	if(this.selectionFbo == undefined) this.selectionFbo = new FBO(gl, scene.drawingBufferWidth, scene.drawingBufferHeight);
+	if(this.selectionFbo == undefined) 
+		this.selectionFbo = new FBO(gl, this.sceneState.drawingBufferWidth, this.sceneState.drawingBufferHeight);
 	this.selectionFbo.bind(); // framebuffer for color selection.***
+	
 	//this.depthFboNeo.bind(); // DEPTH START.*****************************************************************************************************
 	gl.clearColor(1, 1, 1, 1); // white background.***
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // clear buffer.***
@@ -2155,7 +2094,7 @@ CesiumManager.prototype.calculatePixelPositionAsimetricMode = function(gl, scene
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------
 	// Now, read the picked pixel and find the pixel position.*********************************************************
 	var depthPixels = new Uint8Array(4 * 1 * 1); // 4 x 1x1 pixel.***
-	gl.readPixels(this.mouse_x, scene.drawingBufferHeight - this.mouse_y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, depthPixels);
+	gl.readPixels(this.mouse_x, this.sceneState.drawingBufferHeight - this.mouse_y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, depthPixels);
 	var zDepth = depthPixels[0]/(256.0*256.0*256.0) + depthPixels[1]/(256.0*256.0) + depthPixels[2]/256.0 + depthPixels[3]; // 0 to 256 range depth.***
 	zDepth /= 256.0; // convert to 0 to 1.0 range depth.***
 	var realZDepth = zDepth*current_frustum_far;
@@ -2363,23 +2302,30 @@ CesiumManager.prototype.moveSelectedObjectAsimetricMode = function(scene, render
 			this.renderingFase = currentRenderingFase;
 		}
 
-		// world ray = camPos + lambda*camDir.***
 		if(this.lineSC == undefined)
 			this.lineSC = new Line();
 		
 		this.getRayWorldSpace(gl, scene, this.mouse_x, this.mouse_y, this.lineSC); // rayWorldSpace.***
-		var buildingGeoLocation = this.buildingSelected.geoLocDataManager.getGeoLocationData(0);
+
+		// transform world_ray to building_ray.***
 		var camPosBuilding = new Point3D();
 		var camDirBuilding = new Point3D();
-		camPosBuilding = buildingGeoLocation.tMatrixInv.transformPoint3D(this.lineSC.point, camPosBuilding);
-		camDirBuilding = buildingGeoLocation.rotMatrixInv.transformPoint3D(this.lineSC.direction, camDirBuilding);
-	
+		
+		var buildingGeoLocation = this.buildingSelected.geoLocDataManager.getGeoLocationData(0);
+		camPosBuilding = buildingGeoLocation.geoLocMatrixInv.transformPoint3D(this.lineSC.point, camPosBuilding);
+		this.pointSC = buildingGeoLocation.geoLocMatrixInv.rotatePoint3D(this.lineSC.direction, this.pointSC);
+		camDirBuilding.x = this.pointSC.x;
+		camDirBuilding.y = this.pointSC.y;
+		camDirBuilding.z = this.pointSC.z;
+
 		// now, intersect building_ray with the selObjMovePlane.***
 		var line = new Line();
-		line.setPointAndDir(camPosBuilding.x, camPosBuilding.y, camPosBuilding.z,       camDirBuilding.x, camDirBuilding.y, camDirBuilding.z);// original.***
+		line.setPointAndDir(camPosBuilding.x, camPosBuilding.y, camPosBuilding.z,       camDirBuilding.x, camDirBuilding.y, camDirBuilding.z);
 
 		var intersectionPoint = new Point3D();
 		intersectionPoint = this.selObjMovePlane.intersectionLine(line, intersectionPoint);
+		intersectionPoint.set(-intersectionPoint.x, -intersectionPoint.y, -intersectionPoint.z);
+
 
 		// register the movement.***
 		if(this.buildingSelected.moveVector == undefined)
@@ -2394,22 +2340,26 @@ CesiumManager.prototype.moveSelectedObjectAsimetricMode = function(scene, render
 			var difZ = intersectionPoint.z - this.startMovPoint.z;
 
 			this.buildingSelected.moveVector.set(difX, difY, difZ);
+
+			// test.*** see the cartographic values of the intersected point.***
 			var newPosition = new Point3D();
+
 			newPosition.add(difX, difY, difZ);
 			var geoLocationData;
 			geoLocationData = this.buildingSelected.geoLocDataManager.geoLocationDataArray[0];
 			
 			newPosition.add(geoLocationData.pivotPoint.x, geoLocationData.pivotPoint.y, geoLocationData.pivotPoint.z);
-			
-			if(this.geographicCoordSC == undefined)
-				this.geographicCoordSC = new GeographicCoord();
-			
-			ManagerUtils.worldPointToGeographicCoords(newPosition, this.geographicCoordSC, this);
-			this.changeLocationAndRotation(this.buildingSelected.buildingId, this.geographicCoordSC.latitude, this.geographicCoordSC.longitude, undefined, undefined, undefined, undefined);
+
+			//var cartographic = Cesium.Ellipsoid.cartesianToCartographic(intersectionPoint.x, intersectionPoint.y, intersectionPoint.z);
+			var cartographic = Cesium.Cartographic.fromCartesian(new Cesium.Cartesian3(newPosition.x, newPosition.y, newPosition.z));
+			var newLongitude = cartographic.longitude * (180.0/Math.PI);
+			var newlatitude = cartographic.latitude * (180.0/Math.PI);
+			var newHeight = cartographic.height;
+
+			this.changeLocationAndRotation(this.buildingSelected.buildingId, newlatitude, newLongitude, undefined, undefined, undefined, undefined);
 			this.displayLocationAndRotation(this.buildingSelected);
 			//this.selectedObjectNotice(this.buildingSelected);
 		}
-
 	}
 	else if(this.magoPolicy.mouseMoveMode == 1) // objects move.***
 	{
@@ -3349,6 +3299,8 @@ CesiumManager.prototype.renderLowestOctreeAsimetricVersion = function(gl, camera
 				gl.uniform2fv(currentShader.noiseScale2_loc, [this.depthFboNeo.width/this.noiseTexture.width, this.depthFboNeo.height/this.noiseTexture.height]);
 				gl.uniform3fv(currentShader.kernel16_loc, this.kernel);
 				
+				gl.uniform1i(currentShader.textureFlipYAxis_loc, this.sceneState.textureFlipYAxis);
+				
 				gl.activeTexture(gl.TEXTURE0);
 				gl.bindTexture(gl.TEXTURE_2D, this.depthFboNeo.colorBuffer);  // original.***
 				gl.activeTexture(gl.TEXTURE1);
@@ -3366,6 +3318,14 @@ CesiumManager.prototype.renderLowestOctreeAsimetricVersion = function(gl, camera
 				if(this.isLastFrustum)
 				{
 					this.renderer.renderNeoBuildingsAsimetricVersion(gl, visibleObjControlerBuildings, this, currentShader, renderTexture, ssao_idx, minSize, 0, refTMatrixIdxKey);
+				}
+				
+				if(currentShader)
+				{
+					if(currentShader.texCoord2_loc != -1)gl.disableVertexAttribArray(currentShader.texCoord2_loc);
+					if(currentShader.position3_loc != -1)gl.disableVertexAttribArray(currentShader.position3_loc);
+					if(currentShader.normal3_loc != -1)gl.disableVertexAttribArray(currentShader.normal3_loc);
+					if(currentShader.color4_loc != -1)gl.disableVertexAttribArray(currentShader.color4_loc);
 				}
 
 			}
@@ -3398,6 +3358,7 @@ CesiumManager.prototype.renderLowestOctreeAsimetricVersion = function(gl, camera
 				gl.uniform1i(currentShader.hasAditionalMov_loc, true);
 				gl.uniform3fv(currentShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
 				gl.uniform1i(currentShader.hasTexture_loc, false); // initially false.***
+				gl.uniform1i(currentShader.textureFlipYAxis_loc,this.sceneState.textureFlipYAxis);
 
 				gl.uniform1i(currentShader.depthTex_loc, 0);
 				gl.uniform1i(currentShader.noiseTex_loc, 1);
@@ -3418,6 +3379,14 @@ CesiumManager.prototype.renderLowestOctreeAsimetricVersion = function(gl, camera
 				gl.bindTexture(gl.TEXTURE_2D, this.textureAux_1x1);
 
 				this.renderer.renderNeoBuildingsLOD2AsimetricVersion(gl, visibleObjControlerBuildings, this, currentShader, renderTexture, ssao_idx);
+				
+				if(currentShader)
+				{
+					if(currentShader.texCoord2_loc != -1)gl.disableVertexAttribArray(currentShader.texCoord2_loc);
+					if(currentShader.position3_loc != -1)gl.disableVertexAttribArray(currentShader.position3_loc);
+					if(currentShader.normal3_loc != -1)gl.disableVertexAttribArray(currentShader.normal3_loc);
+					if(currentShader.color4_loc != -1)gl.disableVertexAttribArray(currentShader.color4_loc);
+				}
 			}
 			
 			// If there are an object selected, then there are a stencilBuffer.******************************************
@@ -3478,9 +3447,15 @@ CesiumManager.prototype.renderLowestOctreeAsimetricVersion = function(gl, camera
 				gl.enable(gl.DEPTH_TEST);// return to the normal state.***
 				gl.disable(gl.STENCIL_TEST);
 				gl.depthRange(0, 1);// return to the normal value.***
-				gl.disableVertexAttribArray(currentShader.position3_loc);
+				//gl.disableVertexAttribArray(currentShader.position3_loc);
 				
-				gl.useProgram(null);
+				if(currentShader)
+				{
+					if(currentShader.texCoord2_loc != -1)gl.disableVertexAttribArray(currentShader.texCoord2_loc);
+					if(currentShader.position3_loc != -1)gl.disableVertexAttribArray(currentShader.position3_loc);
+					if(currentShader.normal3_loc != -1)gl.disableVertexAttribArray(currentShader.normal3_loc);
+					if(currentShader.color4_loc != -1)gl.disableVertexAttribArray(currentShader.color4_loc);
+				}
 				*/
 			}
 			
@@ -3567,6 +3542,14 @@ CesiumManager.prototype.renderLowestOctreeAsimetricVersion = function(gl, camera
 					gl.uniform3fv(currentShader.aditionalMov_loc, [this.pointSC.x, this.pointSC.y, this.pointSC.z]); //.***
 					this.renderer.renderTriPolyhedron(gl, this.unitaryBoxSC, this, currentShader, ssao_idx, neoBuilding.isHighLighted);
 				}
+				
+				if(currentShader)
+				{
+					if(currentShader.texCoord2_loc != -1)gl.disableVertexAttribArray(currentShader.texCoord2_loc);
+					if(currentShader.position3_loc != -1)gl.disableVertexAttribArray(currentShader.position3_loc);
+					if(currentShader.normal3_loc != -1)gl.disableVertexAttribArray(currentShader.normal3_loc);
+					if(currentShader.color4_loc != -1)gl.disableVertexAttribArray(currentShader.color4_loc);
+				}
 			}
 			
 			// 4) Render ObjectMarkers.********************************************************************************************************
@@ -3637,6 +3620,14 @@ CesiumManager.prototype.renderLowestOctreeAsimetricVersion = function(gl, camera
 					gl.uniform3fv(currentShader.aditionalMov_loc, [this.pointSC.x, this.pointSC.y, this.pointSC.z]); //.***
 					this.renderer.renderTriPolyhedron(gl, this.unitaryBoxSC, this, currentShader, ssao_idx, isHighLighted);
 				}
+				if(currentShader)
+				{
+					if(currentShader.texCoord2_loc != -1)gl.disableVertexAttribArray(currentShader.texCoord2_loc);
+					if(currentShader.position3_loc != -1)gl.disableVertexAttribArray(currentShader.position3_loc);
+					if(currentShader.normal3_loc != -1)gl.disableVertexAttribArray(currentShader.normal3_loc);
+					if(currentShader.color4_loc != -1)gl.disableVertexAttribArray(currentShader.color4_loc);
+				}
+				*/
 				
 				// now repeat the objects markers for png images.***
 				// Png for pin image 128x128.********************************************************************
@@ -3644,12 +3635,16 @@ CesiumManager.prototype.renderLowestOctreeAsimetricVersion = function(gl, camera
 					this.pin.createPin(gl);
 				
 				currentShader = this.postFxShadersManager.pFx_shaders_array[13]; // png image shader.***
+				
 				shaderProgram = currentShader.program;
+				
 				gl.useProgram(shaderProgram);
 				gl.uniformMatrix4fv(currentShader.modelViewProjectionMatrix4RelToEye_loc, false, this.sceneState.modelViewProjRelToEyeMatrix._floatArrays);
 				gl.uniform3fv(currentShader.cameraPosHIGH_loc, this.sceneState.encodedCamPosHigh);
 				gl.uniform3fv(currentShader.cameraPosLOW_loc, this.sceneState.encodedCamPosLow);
 				gl.uniformMatrix4fv(currentShader.buildingRotMatrix_loc, false, this.sceneState.modelViewRelToEyeMatrixInv._floatArrays);
+				
+				gl.uniform1i(currentShader.textureFlipYAxis_loc, this.sceneState.textureFlipYAxis); 
 				// Tell the shader to get the texture from texture unit 0
 				gl.uniform1i(currentShader.texture_loc, 0);
 				gl.enableVertexAttribArray(currentShader.texCoord2_loc);
@@ -3686,7 +3681,7 @@ CesiumManager.prototype.renderLowestOctreeAsimetricVersion = function(gl, camera
 				gl.bindTexture(gl.TEXTURE_2D, null);
 				gl.disableVertexAttribArray(currentShader.texCoord2_loc);
 				gl.disableVertexAttribArray(currentShader.position3_loc);
-				*/
+				
 			}
 			
 		}
@@ -3742,10 +3737,7 @@ CesiumManager.prototype.depthRenderLowestOctreeAsimetricVersion = function(gl, s
 		shaderProgram = currentShader.program;
 
 		gl.useProgram(shaderProgram);
-		//gl.enableVertexAttribArray(currentShader.texCoord2_loc); // No textures for depth render.***
 		gl.enableVertexAttribArray(currentShader.position3_loc);
-		if(currentShader.normal3_loc != -1)
-			gl.enableVertexAttribArray(currentShader.normal3_loc);
 
 		gl.uniformMatrix4fv(currentShader.modelViewProjectionMatrix4RelToEye_loc, false, this.sceneState.modelViewProjRelToEyeMatrix._floatArrays);
 		gl.uniformMatrix4fv(currentShader.modelViewMatrix4RelToEye_loc, false, this.sceneState.modelViewRelToEyeMatrix._floatArrays); // original.***
@@ -3757,8 +3749,6 @@ CesiumManager.prototype.depthRenderLowestOctreeAsimetricVersion = function(gl, s
 		gl.uniform1f(currentShader.near_loc, this.sceneState.camera.frustum.near);
 		gl.uniform1f(currentShader.far_loc, this.sceneState.camera.frustum.far);
 
-		gl.uniformMatrix4fv(currentShader.normalMatrix4_loc, false, this.sceneState.normalMatrix4._floatArrays);
-
 		// renderDepth for all buildings.***
 		// 1) LOD 0 & LOD1.*********************************************************************************************************************
 		// 1) LOD 0 & LOD1.*********************************************************************************************************************
@@ -3769,6 +3759,10 @@ CesiumManager.prototype.depthRenderLowestOctreeAsimetricVersion = function(gl, s
 		{
 			this.renderer.renderNeoBuildingsAsimetricVersion(gl, visibleObjControlerBuildings, this, currentShader, renderTexture, ssao_idx, minSize, 0, refTMatrixIdxKey);
 		}
+	}
+	if(currentShader)
+	{
+		//if(currentShader.position3_loc != -1)gl.disableVertexAttribArray(currentShader.position3_loc);
 	}
 	
 	// 2) LOD 2 & 3.************************************************************************************************************************************
@@ -3793,22 +3787,17 @@ CesiumManager.prototype.depthRenderLowestOctreeAsimetricVersion = function(gl, s
 		gl.uniform1f(currentShader.near_loc, this.sceneState.camera.frustum.near);
 		gl.uniform1f(currentShader.far_loc, this.sceneState.camera.frustum.far);
 
-		gl.uniformMatrix4fv(currentShader.normalMatrix4_loc, false, this.sceneState.normalMatrix4._floatArrays);
-
 		gl.uniform1i(currentShader.hasAditionalMov_loc, true);
 		gl.uniform3fv(currentShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
 		
 		this.renderer.renderNeoBuildingsLOD2AsimetricVersion(gl, visibleObjControlerBuildings, this, currentShader, renderTexture, ssao_idx);
 
-		if(currentShader.position3_loc != -1)gl.disableVertexAttribArray(currentShader.position3_loc);
+		//if(currentShader.position3_loc != -1)gl.disableVertexAttribArray(currentShader.position3_loc);
 	}
 	
 	if(currentShader)
 	{
-		if(currentShader.texCoord2_loc != -1)gl.disableVertexAttribArray(currentShader.texCoord2_loc);
-		if(currentShader.position3_loc != -1)gl.disableVertexAttribArray(currentShader.position3_loc);
-		if(currentShader.normal3_loc != -1)gl.disableVertexAttribArray(currentShader.normal3_loc);
-		if(currentShader.color4_loc != -1)gl.disableVertexAttribArray(currentShader.color4_loc);
+		//if(currentShader.position3_loc != -1)gl.disableVertexAttribArray(currentShader.position3_loc);
 	}
 };
 
@@ -4816,7 +4805,8 @@ CesiumManager.prototype.flyToBuilding = function(dataKey) {
 	if(realBuildingPos == undefined)
 		return;
 
-	this.boundingSphere_Aux.center = Cesium.Cartesian3.clone(realBuildingPos);
+	//
+	
 	if(this.renderingModeTemp == 0)
 		this.radiusAprox_aux = (neoBuilding.bbox.maxX - neoBuilding.bbox.minX) * 1.2/2.0;
 	if(this.renderingModeTemp == 1)
@@ -4828,10 +4818,21 @@ CesiumManager.prototype.flyToBuilding = function(dataKey) {
 
 	//var position = new Cesium.Cartesian3(this.pointSC.x, this.pointSC.y, this.pointSC.z);
 	//var cartographicPosition = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
-
-	var viewer = this.scene.viewer;
-	var seconds = 3;
-	this.scene.camera.flyToBoundingSphere(this.boundingSphere_Aux, seconds);
+	if(this.configInformation.geo_view_library === Constant.CESIUM)
+	{
+		this.boundingSphere_Aux.center = Cesium.Cartesian3.clone(realBuildingPos);
+		var viewer = this.scene.viewer;
+		var seconds = 3;
+		this.scene.camera.flyToBoundingSphere(this.boundingSphere_Aux, seconds);
+	}
+	else if(this.configInformation.geo_view_library === Constant.WORLDWIND)
+	{
+		//this.boundingSphere_Aux.center = realBuildingPos;
+		var buildingGeoLocation = neoBuilding.geoLocDataManager.getGeoLocationData(0);
+		var geographicCoord = buildingGeoLocation.geographicCoord;
+		this.wwd.goToAnimator.travelTime = 3000;
+		this.wwd.goTo(new WorldWind.Position(geographicCoord.latitude, geographicCoord.longitude, geographicCoord.altitude + 1000));
+	}
 };
 
 /**
@@ -5343,6 +5344,8 @@ CesiumManager.prototype.selectedObjectNotice = function(neoBuilding) {
 		
 		// 이슈 등록 창 오픈
 		if(this.magoPolicy.getIssueInsertEnable()) {
+			// insert pin.***
+			
 			insertIssueCallback(	MagoConfig.getPolicy().geo_callback_insertissue,
 									dividedName[0] + "_" + dividedName[1],
 									objectId,

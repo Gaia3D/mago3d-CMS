@@ -310,7 +310,7 @@ public class UserController {
 			String salt = BCrypt.gensalt();
 			ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(512);
 			shaPasswordEncoder.setIterations(1000);
-			String encriptPassword = shaPasswordEncoder.encodePassword(userInfo.getPassword(), salt) ;
+			String encriptPassword = shaPasswordEncoder.encodePassword(userInfo.getPassword(), salt);
 			
 			if(userInfo.getTelephone1() != null && !"".equals(userInfo.getTelephone1()) &&
 					userInfo.getTelephone2() != null && !"".equals(userInfo.getTelephone2()) &&
