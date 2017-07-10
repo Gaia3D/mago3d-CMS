@@ -5,24 +5,22 @@
 <!DOCTYPE html>
 <html lang="${accessibility}">
 <head>
-    <meta charset="utf-8">
-    <title>about | mago3D User</title>
-    <!--[if lt IE 9]>
+	<meta charset="utf-8">
+	<title>about | mago3D User</title>
+	<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
-	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 
 <body>
-	<header>
+	<header class='about'>
 		<div>
 			<p>Architecture, Engineering, Construction</p>
 			<p>A Brand-New Live 3D Platform</p>
@@ -31,28 +29,32 @@
 
 	<nav class="nav">
 		<div>
-			<h1><a href="./index.do">mago3D</a></h1>
+			<h1>
+				<a href="/homepage/index.do">mago3D</a>
+			</h1>
 			<ul class="menu">
-				<li class="on">mago3D</li>
+				<li class="on">mago3D<span></span></li>
 				<li><a href="/homepage/demo.do">Demo</a></li>
 				<li><a href="/homepage/download.do">Download</a></li>
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO" class="on"><a href="" onclick ="changeLanguage('ko');">KO</a></li>
-				<li id="languageEN"><a href="" onclick ="changeLanguage('en');">EN</a></li>
+				<li id="languageKO"><a href="" onclick ="changeLanguage('ko');">KO</a></li>
+				<li id="languageEN" class="on">EN</li>
 			</ul>
 		</div>
 	</nav>
 	<section>
 		<div class="contents">
 			<ul class="tab">
-				<li><a href="#about"></a>About</li>
+				<li><a href="#about">About</a></li>
 				<li><a href="#now">Now</a></li>
 				<li><a href="#will">Will be</a></li>
 			</ul>
 			<div id="about" class="part">
-				<h3>About</h3>
+				<h3>
+					About<span></span>
+				</h3>
 				<p>
 mago3D could seamlessly integrate AEC(Architecture, Engineering, Construction) and 3D GIS in web browser using Cesium or Web World Wind.
 Although there has been numerous attempts to integrate AEC and 3D GIS on a single geospatial platform, the outcome of these attempts are not so satisfactory till to date. 
@@ -65,7 +67,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 					<li>Runs on a web browser and does not require a separate plug-in or ActiveX installation</li>
 					<li>It is open source based on open source (Cesium, World Wind) and has excellent openness and scalability.</li>
 					<li>Efficient management and ultra-fast rendering of high-capacity 3-D files</li>
-				</ul>			
+				</ul>
 				<div class="row_demo">
 					<div class="wrapper_demo">
 						<div class="highlight">
@@ -75,7 +77,6 @@ Difference of data model, massive number of data to be rendered, big volume of f
 								</span>
 								<div class="description">
 									<h2>3DS</h2>
-									<p>3DS Modeling</p>
 								</div>
 							</a>
 						</div>
@@ -88,7 +89,6 @@ Difference of data model, massive number of data to be rendered, big volume of f
 								</span>
 								<div class="description">
 									<h2>COLLADA</h2>
-									<p>COLLADA Modeling</p>
 								</div>
 							</a>
 						</div>
@@ -100,44 +100,53 @@ Difference of data model, massive number of data to be rendered, big volume of f
 									<img src="/images/${lang}/homepage/IFC_model.png">
 								</span>
 								<div class="description ">
-									<h2>IFC</h2>
-									<p>IFC Modeling</p>
+									<h2>IFC(BIM)</h2>
 								</div>
 							</a>
 						</div>
 					</div>
 				</div>
-				
-				<h4>Supported formats<span></span></h4>
+
+				<h4>
+					Supported formats<span></span>
+				</h4>
 				<table>
 					<tr>
-						<th>Format</th> <th>Details</th>
+						<th>Format</th>
+						<th>Details</th>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/IFC.png"/></td> <td>IFC(Industry Foundation Classes)<br/>- a commonly used collaboration format in Building information modeling(BIM).</td>
+						<td><img src="/images/${lang}/homepage/IFC.png"/></td>
+						<td>IFC(Industry Foundation Classes)<br/>- a commonly used collaboration format in Building information modeling(BIM).</td>
 					</tr>
 
 					<tr>
-						<td><img src="/images/${lang}/homepage/obj.png"/></td> <td>OBJ(Wavefront file format specification)<br/>- a geometry definition file format adopted by other 3D graphics application vendors.</td>
+						<td><img src="/images/${lang}/homepage/obj.png"/></td>
+						<td>OBJ(Wavefront file format specification)<br/>- a geometry definition file format adopted by other 3D graphics application vendors.</td>
 					</tr>
 					<tr>
-						<td><img src="/images/${lang}/homepage/3DS.png"/></td> <td>3DS(3D-Studio File Format)<br/>- an import/export format used by the Autodesk 3ds Max 3D modeling, animation and rendering software.</td>
+						<td><img src="/images/${lang}/homepage/3DS.png"/></td>
+						<td>3DS(3D-Studio File Format)<br/>- an import/export format used by the Autodesk 3ds Max 3D modeling, animation and rendering software.</td>
 					</tr>
 					<tr>
-						<td width="64px"><img src="/images/${lang}/homepage/dae.png"></td> <td>COLLADA(COLLAborative Design Activity)<br/>- an interchange file format for exchanging digital assets among various graphics software applications.</td>
+						<td width="64px"><img src="/images/${lang}/homepage/dae.png"></td>
+						<td>COLLADA(COLLAborative Design Activity)<br/>- an interchange file format for exchanging digital assets among various graphics software applications.</td>
 					</tr>
 					<tr>
 						<td><img src="/images/${lang}/homepage/JT.png"/></td> <td>JT(Jupiter Tesselation)<br/>- an ISO-standardized 3D data format and is in industry used for product visualization, collaboration, CAD data exchange, and in some also for long-term data retention.
 						- If you want to use it, please contact the company.</td>
 					</tr>
 				</table>
+				<h4>Rendering Algoritm</h4>
+				<p>Coming Soon...</p>
 				<a href="#" class="goTop">goTop</a>
 			</div>
-      
 			<!-- // ABOUT -->
 
 			<div id="now" class="part">
-				<h3>NOW<span></span></h3>
+				<h3>
+					NOW<span></span>
+				</h3>
 				<h4>Architecture</h4>
 				<p>
 				mago3D based on spring framework (springboot). We use PostGis for processing spatial information, and use open source javascript library for cesium, worldwind for 3D rendering part.
@@ -152,10 +161,9 @@ Difference of data model, massive number of data to be rendered, big volume of f
 					<img src="/images/${lang}/homepage/arc.png" style="width: 590px; margin-top: 60px;">
 					<img src="/images/${lang}/homepage/sw.png" style="width: 590px;">
 				</div>
-				
 				<a href="#" class="goTop">goTop</a>
 			</div>
-      
+
 			<!-- // NOW -->
 
 			<div id="will" class="part">
@@ -248,13 +256,13 @@ Difference of data model, massive number of data to be rendered, big volume of f
 			<!-- // WILL -->
 
 		</div>
+
 	</section>
 
 	<footer>
 		<div>
 			<h2>
-				Contact
-				<span></span>
+				Contact <span></span>
 			</h2>
 			<p>
 				If you are interested in mago3D, please contact us by email or phone or visit us directly.
@@ -264,9 +272,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				<li class="address">+82-(0)2-3397-3475</li>
 				<li class="mail">info@gaia3d.com</li>
 			</ul>
-			<p class="copyright">
-				&copy; 2017 Gaia3D, Inc.
-			</p>
+			<p class="copyright">&copy; 2017 Gaia3D, Inc.</p>
 		</div>
 	</footer>
 </body>

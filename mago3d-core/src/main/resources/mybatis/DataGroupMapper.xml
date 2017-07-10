@@ -34,7 +34,7 @@
 	<!-- depth별 Data 그룹 목록 -->
 	<select id="getListDataGroupByDepth" parameterType="int" resultType="dataGroup">
 		/* getListDataGroupByDepth */
-		SELECT * FROM data_group WHERE depth = #{depth} AND use_yn = 'Y' ORDER BY view_order, data_group_id
+		SELECT * FROM data_group WHERE depth = #{depth} and use_yn = 'Y' ORDER BY view_order, data_group_id
 	</select>
 	
 	<!-- ancestor별 Data 그룹 목록 -->
@@ -49,7 +49,7 @@
 	<!-- Data 그룹 -->
 	<select id="getDataGroup" parameterType="long" resultType="dataGroup">
 		/* getDataGroup */
-		SELECT * FROM data_group WHERE data_group_id = #{data_group_id}
+		SELECT * FROM data_group WHERE data_group_id = #{data_group_id} 
 	</select>
 	
 	<!-- Data 그룹에 속한 자식 그룹 개수 -->

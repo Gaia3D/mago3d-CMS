@@ -8,14 +8,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<title>demo | mago3D User</title>
-	<%-- <link rel="stylesheet" href="/css/${lang}/font/font.css" /> --%>
-<%-- 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" /> --%>
-<link rel="stylesheet" href="/css/${lang}/style.css" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans"> 
+	<link rel="stylesheet" href="/css/${lang}/style.css" />
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css" />
-	
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-toast/jquery.toast.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
@@ -152,12 +147,7 @@
 		<p>Shortcuts</p>
 		<ul>
 <c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status">
-	<c:if test="${dataGroup.data_group_name == 'JT' }">
-			<li onclick="alert('preparing...');">${dataGroup.data_group_name }</li>
-	</c:if>
-	<c:if test="${dataGroup.data_group_name != 'JT' }">
 			<li onclick="flyTo('${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">${dataGroup.data_group_name }</li>
-	</c:if>		
 </c:forEach>
 		</ul>
 	</div>	
@@ -342,7 +332,7 @@
 	var managerFactory = new ManagerFactory(null, "magoContainer", policyJson, dataGroupMap);
 	
 	$(document).ready(function() {
-		$("#recentIssueListContent").show();
+		//$("#recentIssueListContent").show();
 		
 		// BoundingBox
 		changeBoundingBox(false);
@@ -623,7 +613,7 @@
 					
 					if(issueList == null || issueList.length == 0) {
 						content += 	"<div style=\"text-align: center; padding-top:20px; height: 50px;\">"
-								+	"	Issue가 존재하지 않습니다."
+								+	"	The issue does not exist."
 								+	"</div>";
 					} else {
 						for(i=0; i<issueList.length; i++ ) {
@@ -643,7 +633,7 @@
 								+ 	"	<div id=\"issue_toggle_" + issue.issue_id + "\">"
 								+ 	"		<span style=\"padding-left: 25px;\">[" +  issue.issue_type + "][" + issue.priority + "]</span>"
 								+ 	"		<span style=\"padding-left: 5px;\">" + issue.data_group_name  + "</span>"
-								+ 	"		<span style=\"float:right; padding-right: 20px;\">" + issue.insert_date + "</span>"
+								+ 	"		<span style=\"float:right; padding-right: 20px;\">" + issue.insert_date.substring(0,19) + "</span>"
 								+ 	"	</div>"
 								+ 	"</div>";
 						}

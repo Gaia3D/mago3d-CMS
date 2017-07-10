@@ -203,7 +203,7 @@ function isSequenceChar(input){
 	return result;             
 }
 
-function changeLanguage(lang) {
+function changeLanguage(lang, href) {
 	var updateFlag = true;
 	if(updateFlag) {
 		updateFlag = false;
@@ -229,6 +229,7 @@ function changeLanguage(lang) {
 				}
 					
 				updateFlag = true;
+				window.location = href || "";
 			},
 			error:function(request,status,error){
 		        //alert(JS_MESSAGE["ajax.error.message"]);

@@ -6,30 +6,32 @@
 <!DOCTYPE html>
 <html lang="${accessibility}">
 <head>
-<meta charset="utf-8">
-<title>download | mago3D User</title>
-<!--[if lt IE 9]>
+	<meta charset="utf-8">
+	<title>download | mago3D User</title>
+	<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-<!--[if lt IE 8]>
-    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans"
-	rel="stylesheet">
-<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
-<script type="text/javascript" src="/js/analytics.js"></script>
-<script type="text/javascript" src="/js/${lang }/common.js"></script>
-<script type="text/javascript" src="/js/${lang }/message.js"></script>
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
+	<script type="text/javascript" src="/js/${lang }/common.js"></script>
+	<script type="text/javascript" src="/js/${lang }/message.js"></script>
+	<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 
 <body>
+
+	<header class='down'>
+		<div>
+			<p>Architecture, Engineering, Construction</p>
+			<p>대용량 3차원GIS를 쉽고 빠르게 웹에서 구현합니다</p>
+		</div>
+	</header>
+	
 	<nav class="nav">
 		<div>
 			<h1>
-				<a href="./index.do">mago3D</a>
+				<a href="/homepage/index.do">mago3D</a>
 			</h1>
 			<ul class="menu">
 				<li><a href="/homepage/about.do">mago3D</a></li>
@@ -38,15 +40,14 @@
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO" class="on"><a href="" onclick="changeLanguage('ko');">KO</a></li>
-				<li id="languageEN"><a href="" onclick="changeLanguage('en');">EN</a></li>
+				<li id="languageKO" class="on">KO</li>
+				<li id="languageEN"><a href="#" onclick="changeLanguage('en');">EN</a></li>
 			</ul>
 		</div>
 	</nav>
 
 	<section>
 		<div class="contents">
-
 			<button type="button" class="down" onclick='alert("준비 중 입니다."); return false;'>
 				DOWNLOAD mago3D 1.0.0 <span>2017-07-01</span>
 			</button>
@@ -139,9 +140,7 @@
 				<li class="address">+82-(0)2-3397-3475</li>
 				<li class="mail">info@gaia3d.com</li>
 			</ul>
-			<p class="copyright">
-				&copy; 2017 Gaia3D, Inc.
-			</p>
+			<p class="copyright">&copy; 2017 Gaia3D, Inc.</p>
 		</div>
 	</footer>
 </body>

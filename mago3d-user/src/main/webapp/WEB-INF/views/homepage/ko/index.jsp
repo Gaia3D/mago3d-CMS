@@ -6,102 +6,36 @@
 <html lang="${accessibility}">
 <head>
     <meta charset="utf-8">
-    <title>index | mago3D User</title>
-    <!--[if lt IE 9]>
+    <title>Mago3D</title>
+	<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    
-	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.slidertron-1.1.js"></script>
-	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"  type="text/css" />
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
-	<script type="text/javascript" src="/js/${lang }/common.js"></script>
-	<script type="text/javascript" src="/js/${lang }/message.js"></script>
 </head>
 
 <body>
-	<nav class="nav">
-		<div>
-			<h1>mago3D</h1>
-			<ul class="menu">
-				<li><a href="/homepage/about.do">mago3D</a></li>
-				<li><a href="/homepage/demo.do">Demo</a></li>
-				<li><a href="/homepage/download.do">Download</a></li>
-				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
-			</ul>
-			<ul class="language">
-				<li id="languageKO" class="on"><a href="" onclick ="changeLanguage('ko');">KO</a></li>
-				<li id="languageEN" ><a href="" onclick ="changeLanguage('en');">EN</a></li>
-			</ul>
-		</div>
-	</nav>
-
-	<section>
-		<div class="contents">
-
-			<div id="slider">
-				<div class="viewer">
-					<div class="reel">
-						<div class="slide">
-							<img src="/images/slider01.png" alt="" />
-						</div>
-						<div class="slide">
-							<img src="/images/slider02.png" alt="" />
-						</div>
-						<div class="slide">
-							<img src="/images/slider03.png" alt="" />
-						</div>
-						<div class="slide">
-							<img src="/images/slider04.png" alt="" />
-						</div>
-						<div class="slide">
-							<img src="/images/slider05.png" alt="" />
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<script>
-				var $slider = $('#slider');
-				if ($slider.length > 0) {
-					$slider.slidertron({
-						mode : 'fade',
-						seamlessWrap : false,
-						viewerSelector : '.viewer',
-						reelSelector : '.viewer .reel',
-						slidesSelector : '.viewer .reel .slide',
-						advanceDelay : 3000,
-						speed : 600,
-						fadeInSpeed : 1500,
-						autoFit : true,
-						autoFitAspectRatio : (1200 / 832)
-					});
-				}
-			</script>
-			
-		</div>
-	</section>
-
-	<footer>
-		<div>
-			<h2>
-				Contact
-				<span></span>
-			</h2>
-			<p>
-				mago3D 에 관심있는 고객들께서는 연락(이메일, 전화) 또는 직접 방문을 부탁드립니다.
-			</p>
-			<ul class="contact">
-				<li class="company">www.gaia3d.com</li>
-				<li class="address">+82-(0)2-3397-3475</li>
-				<li class="mail">info@gaia3d.com</li>
-			</ul>
-			<p class="copyright">
-				&copy; 2017 Gaia3D, Inc.
-			</p>
-		</div>
-	</footer>
-	<!-- //FOOTER -->
+<div id="vodWrap">
+	<div class="vodBlock">
+		<p>
+			<span>Architecture, Engineering, Construction</span>
+			<span>대용량 3차원GIS를 쉽고 빠르게 웹에서 구현합니다.</span>
+		</p>
+	</div>
+	
+	<iframe class="vod" src="https://www.youtube.com/embed/n5jdRzLwegg?autoplay=1&loop=1&playlist=n5jdRzLwegg&controls=0&showinfo=0&origin=http://www.mago3d.com" frameborder="0" allowfullscreen></iframe>
+	
+	<!-- 언어 -->	
+	<div class="mainMenu">
+		<ul class="nav">
+			<li><a href="#" onclick ="changeLanguage('ko', '/homepage/about.do');">KOREAN</a></li>
+			<li><a href="#" onclick ="changeLanguage('en', '/homepage/about.do');">ENGLISH</a></li>
+		</ul> 
+	</div>
+	
+</div>
+<!-- END VODWRAP -->	
 </body>
 </html>
