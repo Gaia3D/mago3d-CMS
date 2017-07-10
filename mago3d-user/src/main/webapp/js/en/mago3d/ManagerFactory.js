@@ -10,7 +10,7 @@
  * @param serverData data json object
  * @return api
  */
-var ManagerFactory = function(viewer, containerId, serverPolicy, serverData) {
+var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, imagePath) {
 	if(!(this instanceof ManagerFactory)) {
 		throw new Error(Messages.CONSTRUCT_ERROR);
 	}
@@ -25,7 +25,15 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData) {
 		MagoConfig.init(serverPolicy, serverData);
 		
 		if(viewer === null) viewer = new Cesium.Viewer(containerId);
+		viewer.imageryLayers.addImageryProvider(new Cesium.ArcGisMapServerImageryProvider({
+	        url : 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+	        enablePickFeatures: false
+	    }));
+		
 		viewer.scene.magoManager = new CesiumManager();
+		viewer.scene.magoManager.sceneState.textureFlipYAxis = false;
+		// test.***
+		//viewer.scene.magoManager.cesiumWidget = viewer._cesiumWidget;
 		
 		viewer.camera.frustum.fov = Cesium.Math.PI_OVER_THREE*1.8;
 
@@ -46,6 +54,9 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData) {
 		}
 		// render Mode 적용
 		initRenderMode();
+		
+		// 이미지 경로
+		magoManager.magoPolicy.imagePath = imagePath;
 	} else if(serverPolicy.geo_view_library === Constant.WORLDWIND) {
 		// 환경 설정
 		MagoConfig.init(serverPolicy, serverData);
@@ -61,11 +72,7 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData) {
         var wwd = new WorldWind.WorldWindow(containerId);
 		//wwd.depthBits = 32;
 		
-		// animator setting
-		wwd.goToAnimator.travelTime = 10000;
-
-
-        var layers = [
+		var layers = [
             {layer: new WorldWind.BMNGLayer(), enabled: true},
             {layer: new WorldWind.BMNGLandsatLayer(), enabled: false},
             {layer: new WorldWind.BingAerialWithLabelsLayer(null), enabled: true},
@@ -83,8 +90,9 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData) {
         // Now set up to handle highlighting.
         //var highlightController = new WorldWind.HighlightController(wwd);
 
-		var cesiumManager = new CesiumManager();
-		cesiumManager.wwd = wwd;
+		magoManager = new CesiumManager();
+		magoManager.wwd = wwd;
+		magoManager.sceneState.textureFlipYAxis = true;
 		
 		var newRenderableLayer = new WorldWind.RenderableLayer();
 		newRenderableLayer.displayName = "F4D tiles";
@@ -92,21 +100,22 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData) {
         wwd.addLayer(newRenderableLayer);
 		
 		//newRenderableLayer.addRenderable(f4d_wwwLayer);// old.***
-		newRenderableLayer.addRenderable(cesiumManager);
+		newRenderableLayer.addRenderable(magoManager);
 		// End Create a layer to hold the f4dBuildings.-------------------------------------------------------
 
 		var gl = wwd.drawContext.currentGlContext;
 		
-		initWwwMago(cesiumManager, gl);
+		initWwwMago(magoManager, gl);
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Click event. Is different to anothers event handlers.******************************************************
 		// The common gesture-handling function.
 		var handleClick = function (recognizer) {
 			// Obtain the event location.
-			var x = recognizer.clientX,
-				y = recognizer.clientY;
-
+			magoManager.mouse_x = event.layerX,
+			magoManager.mouse_y = event.layerY;
+			magoManager.bPicking = true;
+			
 			// Perform the pick. Must first convert from window coordinates to canvas coordinates, which are
 			// relative to the upper left corner of the canvas rather than the upper left corner of the page.
 			//var pickList = wwd.pick(wwd.canvasCoordinates(x, y));
@@ -128,17 +137,39 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData) {
 		var mouseDownEvent = function(event)
 		{
 			// Mouse down.***
-			cesiumManager.isCameraMoving = true;
+			if(event.button == 0)
+				magoManager.mouseLeftDown = true;
+			magoManager.isCameraMoving = true;
+			magoManager.mouse_x = event.layerX,
+			magoManager.mouse_y = event.layerY;
 		};
 		wwd.addEventListener("mousedown", mouseDownEvent, false);
 		
 		var mouseUpEvent = function(event)
 		{
 			// Mouse up.***
-			cesiumManager.isCameraMoving = false;
+			if(event.button == 0)
+				magoManager.mouseLeftDown = false;
+			magoManager.isCameraMoving = false;
 		};
 		wwd.addEventListener("mouseup", mouseUpEvent, false);
 		
+		var mouseMoveEvent = function(event)
+		{
+			// Mouse move.***
+			magoManager.mouse_x = event.layerX,
+			magoManager.mouse_y = event.layerY;
+			if(magoManager.mouseLeftDown)
+				magoManager.manageMouseMove(event.layerX, event.layerY);
+			
+		};
+		wwd.addEventListener("mousemove", mouseMoveEvent, false);
+	
+		wwd.goToAnimator.travelTime = MagoConfig.getPolicy().geo_init_duration * 1000;
+		wwd.goTo(new WorldWind.Position(MagoConfig.getPolicy().geo_init_latitude, MagoConfig.getPolicy().geo_init_longitude, MagoConfig.getPolicy().geo_init_height));
+	    
+	    // 이미지 경로
+	    magoManager.magoPolicy.imagePath = imagePath;
 	}
 
 	// 실제 화면에 object를 rendering 하는 메인 메서드
@@ -222,52 +253,7 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData) {
 		magoManager.handler.setInputAction(function(movement) {
 			if(magoManager.mouseLeftDown) {
 				if(movement.startPosition.x != movement.endPosition.x || movement.startPosition.y != movement.endPosition.y) {
-
-					// distinguish 2 modes.******************************************************
-					if(magoManager.magoPolicy.mouseMoveMode == 0) // blocks move.***
-					{
-						if(magoManager.buildingSelected != undefined) {
-							// move the selected object.***
-							magoManager.mouse_x = movement.startPosition.x;
-							magoManager.mouse_y = movement.startPosition.y;
-
-							// 1rst, check if there are objects to move.***
-							if(magoManager.mustCheckIfDragging) {
-								if(magoManager.isDragging(magoManager.scene)) {
-									magoManager.mouseDragging = true;
-									disableCameraMotion(false);
-								}
-								magoManager.mustCheckIfDragging = false;
-							}
-						} else {
-							magoManager.isCameraMoving = true; // if no object is selected.***
-						}
-					}
-					else if(magoManager.magoPolicy.mouseMoveMode == 1) // objects move.***
-					{
-						if(magoManager.objectSelected != undefined) {
-							// move the selected object.***
-							magoManager.mouse_x = movement.startPosition.x;
-							magoManager.mouse_y = movement.startPosition.y;
-
-							// 1rst, check if there are objects to move.***
-							if(magoManager.mustCheckIfDragging) {
-								if(magoManager.isDragging(magoManager.scene)) {
-									magoManager.mouseDragging = true;
-									disableCameraMotion(false);
-								}
-								magoManager.mustCheckIfDragging = false;
-							}
-						} else {
-							magoManager.isCameraMoving = true; // if no object is selected.***
-						}
-					}
-					//---------------------------------------------------------------------------------
-					magoManager.isCameraMoving = true; // test.***
-					if(magoManager.mouseDragging) {
-						//magoManager.moveSelectedObject(magoManager.scene, magoManager.currentRenderablesNeoRefListsArray); // original.***
-						magoManager.moveSelectedObjectAsimetricMode(magoManager.scene, magoManager.currentRenderablesNeoRefListsArray);
-					}
+					magoManager.manageMouseMove(movement.startPosition.x, movement.startPosition.y);
 				}
 			} else{
 				magoManager.mouseDragging = false;
@@ -533,12 +519,17 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData) {
 		},
 		// flyTo
 		flyTo : function(longitude, latitude, height, duration) {
-			viewer.camera.flyTo({
-				destination : Cesium.Cartesian3.fromDegrees(parseFloat(longitude),
-															parseFloat(latitude),
-															parseFloat(height)),
-				duration: parseInt(duration)
-			});
+			if(MagoConfig.getPolicy().geo_view_library === Constant.CESIUM) {
+				viewer.camera.flyTo({
+					destination : Cesium.Cartesian3.fromDegrees(parseFloat(longitude),
+																parseFloat(latitude),
+																parseFloat(height)),
+					duration: parseInt(duration)
+				});
+			} else {
+				wwd.goToAnimator.travelTime = duration * 1000;
+				wwd.goTo(new WorldWind.Position(parseFloat(latitude), parseFloat(longitude), parseFloat(height) + 50));
+			}
 		},
 		// 블락 및 부재 검색 api
 		search : function(blockId) {

@@ -154,7 +154,7 @@
 
 	<!-- 맵영역 -->
 	<div style="position: absolute; width: 100%; height: 100%; margin-top: 0; padding: 0; overflow: hidden;">
-		<canvas id="magoContainer" style="width: 100%; height: auto">
+		<canvas id="magoContainer" style="width: 100%; height: 100%">
 	        Your browser does not support HTML5 Canvas.
 	    </canvas>
 	</div>
