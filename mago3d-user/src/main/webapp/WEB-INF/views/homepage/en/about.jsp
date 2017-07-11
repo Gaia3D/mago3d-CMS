@@ -38,7 +38,7 @@
 					Demo
 					<div class="dropdown-content">
 						<a href="/homepage/demo.do">Cesium</a>
-						<a href="/homepage/demo.do?viewLibrary=worldwind">worldwind</a>
+						<a href="/homepage/demo.do?viewLibrary=worldwind">World Wind</a>
 					</div>
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
