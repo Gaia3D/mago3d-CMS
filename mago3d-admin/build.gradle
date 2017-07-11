@@ -15,7 +15,11 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
 
-version = '0.0.1-SNAPSHOT'
+war {
+	baseName = 'mago3d-admin'
+	version = '0.0.1-SNAPSHOT'
+}
+
 sourceCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
 
@@ -39,7 +43,10 @@ dependencies {
 	compile 'org.apache.commons:commons-dbcp2:2.1.1'
 	compile 'com.google.code.gson:gson:2.8.1'
 	//compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0.pr3'
-
+	compile 'org.apache.poi:poi:3.16'
+	compile 'org.apache.poi:poi-ooxml:3.16'
+	
+	compile 'org.springframework.boot:spring-boot-configuration-processor'
 	
 	//compile('org.springframework.boot:spring-boot-starter-cache')
 	//compile 'net.sf.ehcache:ehcache:2.10.4'
@@ -47,9 +54,8 @@ dependencies {
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('org.postgresql:postgresql')
 	compile('javax.servlet:javax.servlet-api:3.1.0')
-	//compile('org.apache.commons:commons-dbcp2:2.1.1')
-
-	compile 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	
+	providedRuntime('org.apache.tomcat.embed:tomcat-embed-jasper')
 	compile 'javax.servlet:jstl:1.2'
 	
 	compile 'org.apache.logging.log4j:log4j:2.8.2'

@@ -2,7 +2,6 @@ package com.gaia3d.config;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -54,6 +53,11 @@ public class RootConfig {
 	    dataSource.setUrl(Crypt.decrypt(url));
 	    dataSource.setUsername(Crypt.decrypt(username));
 	    dataSource.setPassword(Crypt.decrypt(password));
+	    // 서버용
+	    dataSource.setInitialSize(10);
+	    dataSource.setMaxActive(25);
+	    dataSource.setMaxIdle(15);
+	    dataSource.setMinIdle(10);
 //	    dataSource.setTestWhileIdle(testWhileIdle);     
 //	    dataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMills);
 //	    dataSource.setValidationQuery(validationQuery);

@@ -1,16 +1,19 @@
 package com.gaia3d.domain;
 
-import com.gaia3d.security.Crypt;
-import com.gaia3d.security.Masking;
+import org.springframework.web.multipart.MultipartFile;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Issue
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class Issue {
 	
 	// 총건수
@@ -30,12 +33,63 @@ public class Issue {
 	private String order_word;
 	private String order_value;
 	
-	/************* 업무 처리 ***********/
-    // 사용자명
-    private String user_name;
+	// 이슈 상세 고유번호
+	private Long issue_detail_id;
+	// 댓글 개수
+	private Integer comment_count;
+	// 데이터 그룹명
+	private String data_group_name;
+	// 사용자명
+	private String user_name;
+	// 이슈 내용
+	private String contents;
+	// 이슈 댓글 고유번호
+	private Long issue_comment_id;
+	// comment
+	private String comment;
+	// 조회수
+	private Integer view_count;
+	// 대리자
+	private String assignee;
+	// 레포트
+	private String reporter;
+	// 첨부파일
+	private String file_name;
 	
-	// 고유키
+	private MultipartFile multipartFile;
+	
+	/****** validator ********/
+	private String method_mode;
+	
+	/************* 업무 처리 ***********/
+    // 고유번호
 	private Long issue_id;
+	// 데이터 그룹
+	private Long data_group_id;
+	// 사용자 아이디
+	private String user_id;
+	// 이슈명
+	private String title;
+	// 우선순위. common_code 동적 생성
+	private String priority;
+	// 예정일. 마감일
+	private String due_date;
+	// 이슈 유형. common_code 동적 생성
+	private String issue_type;
+	// 상태. common_code 동적 생성
+	private String status;
+	// Data key
+	private String data_key;
+	// location(위도, 경도)
+	private String location;
+	// 위도
+	private String latitude;
+	// 경도
+	private String longitude;
+	// 높이
+	private String height;
+	// 요청 IP
+	private String client_ip;
 	
 	// 년도
 	private String year;
@@ -52,14 +106,32 @@ public class Issue {
 	// 분
 	private String minute;
 	
+	// 수정일
+	private String update_date;
 	// 등록일
 	private String insert_date;
 	
+	public String getViewDueDate() {
+		if(this.due_date == null || "".equals( due_date)) {
+			return "";
+		}
+		return due_date.substring(0, 19);
+	}
 	
 	public String getViewInsertDate() {
 		if(this.insert_date == null || "".equals( insert_date)) {
 			return "";
 		}
 		return insert_date.substring(0, 19);
+	}
+	
+	public String validate() {
+		if(this.title == null || "".equals( title)) {
+			return "title.invalid";
+		}
+		if(this.contents == null || "".equals( contents)) {
+			return "contents.invalid";
+		}
+		return null;
 	}
 }

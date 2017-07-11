@@ -3,14 +3,18 @@ package com.gaia3d.domain;
 import com.gaia3d.security.Crypt;
 import com.gaia3d.security.Masking;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 운영 정책
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class Policy {
 	public static final String Y = "Y";
 	
@@ -136,6 +140,10 @@ public class Policy {
 	private String geo_callback_enable;
 	// object 선택 callback function 이름
 	private String geo_callback_selectedobject;
+	// issue 등록 callback function 이름
+	private String geo_callback_insertissue;
+	// issue list callback function 이름
+	private String geo_callback_listissue;
 	
 	// 알림 서비스 사용 유무. Y : 사용, N : 미사용(기본값)
 	private String notice_service_yn;
@@ -196,7 +204,7 @@ public class Policy {
 	// 서버 그룹 최상위 그룹명
 	private String content_server_group_root;
 	// 계정 그룹 최상위 그룹명
-	private String content_object_group_root;
+	private String content_data_group_root;
 	
 	// Java TimeZone 설정. Asia/Seoul(기본), UTC(Universal Time Coordinated, 세계협정시)
 	private String os_timezone;

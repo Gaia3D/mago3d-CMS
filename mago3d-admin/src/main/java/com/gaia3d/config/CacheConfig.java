@@ -8,19 +8,30 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.CacheName;
+import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.CommonCode;
+import com.gaia3d.domain.DataGroup;
+import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.ExternalService;
 import com.gaia3d.domain.Menu;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserGroup;
 import com.gaia3d.domain.UserGroupMenu;
+import com.gaia3d.helper.HttpClientHelper;
+import com.gaia3d.security.Crypt;
+import com.gaia3d.service.APIService;
 import com.gaia3d.service.CommonCodeService;
+import com.gaia3d.service.DataGroupService;
+import com.gaia3d.service.DataService;
 import com.gaia3d.service.MenuService;
 import com.gaia3d.service.PolicyService;
 import com.gaia3d.service.UserGroupService;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,10 +40,11 @@ import lombok.extern.slf4j.Slf4j;
 public class CacheConfig {
 
 	@Autowired
-	private ApplicationContext context;
+	private APIService aPIService;
 	@Autowired
-	private PropertiesConfig propertiesConfig;
-
+	private DataService dataService;
+	@Autowired
+	private DataGroupService dataGroupService;
 //	@Autowired
 //	private LicenseService licenseService;
 	@Autowired
@@ -46,13 +58,18 @@ public class CacheConfig {
 	@Autowired
 	private CommonCodeService commonCodeService;
 //	@Autowired
-//	private ServerService serverService;	
+//	private ServerService serverService;
+	
+	@Autowired
+	private PropertiesConfig propertiesConfig;
+	
 	
 	public static final String LOCALHOST = "localhost";
 
 	@PostConstruct
 	public void init() {
 		log.info("**************** Admin 캐시 초기화 시작 *****************");
+		log.info("*************************************************");
 
 		// 라이선스 유호성 체크
 		license(CacheType.SELF);
@@ -65,6 +82,13 @@ public class CacheConfig {
 		// 서버 그룹 캐시 갱신, 확장용
 		// loadServerGroup();
 		// 공통 코드 캐시 갱신
+		
+		// 데이터를 그룹별로 로딩
+		data(CacheType.SELF);
+		
+		// Private API Cache 갱신
+		externalServiceCache(CacheType.SELF);
+		
 		commonCode(CacheType.SELF);
 
 		log.info("**************** Admin 캐시 초기화 종료 *****************");
@@ -75,6 +99,7 @@ public class CacheConfig {
 		else if(cacheName == CacheName.POLICY) policy(cacheType);
 		else if(cacheName == CacheName.MENU) menu(cacheType);
 		else if(cacheName == CacheName.COMMON_CODE) commonCode(cacheType);
+		else if(cacheName == CacheName.DATA_GROUP) data(cacheType);
 	}
 	
 	private void license(CacheType cacheType) {
@@ -127,25 +152,77 @@ public class CacheConfig {
 			
 		}
 	}
+	
+	/**
+	 * @param cacheType
+	 */
+	private void data(CacheType cacheType) {
+		Map<String, Map<String, DataInfo>> dataGroupMap = new HashMap<>();
+		List<DataInfo> allDataInfoList = new ArrayList<>();
+		
+		// 1 Depth group 정보를 전부 가져옴
+		List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
+		// 1 그룹별 하위 object 정보들을 전부 가져옴
+		for(DataGroup dataGroup : dataGroupList) {
+			List<DataGroup> childGroupList = dataGroupService.getListDataGroupByAncestor(dataGroup.getData_group_id());
+//			List<DataInfo> allChildDataInfoList = new ArrayList<>();
+			for(DataGroup childDataGroup : childGroupList) {
+				DataInfo dataInfo = new DataInfo();
+				dataInfo.setData_group_id(childDataGroup.getData_group_id());
+//				allChildDataInfoList.addAll(dataService.getListDataByDataGroupId(dataInfo));
+				allDataInfoList.addAll(dataService.getListDataByDataGroupId(dataInfo));
+			}
+//			dataGroupMap.put(dataGroup.getData_group_key(), allChildDataInfoList);
+		}
+		
+		Map<String, DataInfo> allDataInfoMap = new HashMap<>();
+		for(DataInfo dataInfo : allDataInfoList) {
+			allDataInfoMap.put(dataInfo.getData_key(), dataInfo);
+		}
+		
+		dataGroupMap.put("alldata", allDataInfoMap);
+		
+		CacheManager.setProjectDataGroupList(dataGroupList);
+		CacheManager.setDataGroupMap(dataGroupMap);
+		
+		if(cacheType == CacheType.BROADCAST) {
+			callRemoteCache(CacheName.DATA_GROUP);
+		}
+	}
 
 	private void commonCode(CacheType cacheType) {
 		List<CommonCode> commonCodeList = commonCodeService.getListCommonCode();
-		Map<String, CommonCode> commonCodeMap = new HashMap<String, CommonCode>();
+		Map<String, Object> commonCodeMap = new HashMap<>();
+		
 		List<CommonCode> emailList = new ArrayList<CommonCode>();
+		List<CommonCode> issuePriorityList = new ArrayList<CommonCode>();
+		List<CommonCode> issueTypeList = new ArrayList<CommonCode>();
+		List<CommonCode> issueStatusList = new ArrayList<CommonCode>();
+		
 		for(CommonCode commonCode : commonCodeList) {
 			if(CommonCode.USER_REGISTER_EMAIL.equals(commonCode.getCode_key())) {
 				// 이메일
 				emailList.add(commonCode);
+			} else if(CommonCode.ISSUE_PRIORITY.equals(commonCode.getCode_key())) {
+				// 이슈 우선순위
+				issuePriorityList.add(commonCode);
+			} else if(CommonCode.ISSUE_TYPE.equals(commonCode.getCode_key())) {
+				// 이슈 유형
+				issueTypeList.add(commonCode);
+			} else if(CommonCode.ISSUE_STATUS.equals(commonCode.getCode_key())) {
+				// 이슈 상태
+				issueStatusList.add(commonCode);
 			} else {
 				commonCodeMap.put(commonCode.getCode_key(), commonCode);
 			}
 		}
 		
-		CommonCode emailCommonCode = new CommonCode();
-		emailCommonCode.setEmailList(emailList);
-		commonCodeMap.put(CommonCode.USER_REGISTER_EMAIL, emailCommonCode);
+		// TODO 여기 다시 설계 해야 할거 같다. 
+		commonCodeMap.put(CommonCode.USER_REGISTER_EMAIL, emailList);
+		commonCodeMap.put(CommonCode.ISSUE_PRIORITY, issuePriorityList);
+		commonCodeMap.put(CommonCode.ISSUE_TYPE, issueTypeList);
+		commonCodeMap.put(CommonCode.ISSUE_STATUS, issueStatusList);
 		CacheManager.setCommonCodeMap(commonCodeMap);
-		
 		
 		// 사용자 도메인 cache를 갱신
 		if(cacheType == CacheType.USER || cacheType == CacheType.BROADCAST) {
@@ -156,12 +233,49 @@ public class CacheConfig {
 			
 		}
 	}
-
-	enum CacheName {
-		LICENSE, POLICY, MENU, USER_GROUP, SERVER_GROUP, COMMON_CODE, EXTERNAL
-	};
 	
-	enum CacheType {
-		SELF, USER, BROADCAST
+	/**
+	 * Private API Cache 갱신
+	 */
+	private void externalServiceCache(CacheType cacheType) {
+		ExternalService service = new ExternalService();
+		service.setStatus(ExternalService.STATUS_USE);
+		List<ExternalService> externalCacheList = aPIService.getListExternalService(service);
+		
+//		List<ExternalService> remoteCacheServiceList = new ArrayList<ExternalService>();
+//		for(ExternalService externalService : externalCacheList) {
+//			if(ExternalService.EXTERNAL_CACHE.equals(externalService.getService_type())) {
+//				remoteCacheServiceList.add(externalService);
+//			} else if(ExternalService.HA.equals(externalService.getService_type())) {
+//				//remoteHAServiceList.add(externalService);
+//			}
+//		}
+		
+		CacheManager.setRemoteCacheServiceList(externalCacheList);
+	}
+	
+	/**
+	 * Remote Cache 갱신 요청
+	 * @param cacheName
+	 */
+	private void callRemoteCache(CacheName cacheName) {
+		
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@ callRemoteCache start! ");
+
+		// TODO 로컬, 이중화 등의 분기 처리가 생략되어 있음
+		List<ExternalService> remoteCacheServerList = CacheManager.getRemoteCacheServiceList();
+		for(ExternalService externalService : remoteCacheServerList) {
+			// TODO 환경 설정으로 빼서 로컬이거나 단독 서버인 경우 호출하지 않게 설계해야 함
+			String authData = "api-key=" + Crypt.decrypt(propertiesConfig.getRestAuthKey()) + "&cache_name=" + cacheName.toString() + "&time=" + System.nanoTime();
+			authData = Crypt.encrypt(authData);
+			
+			String jsonData = HttpClientHelper.httpPost(externalService, authData);
+			JsonObject resultObject = new Gson().fromJson(jsonData, JsonObject.class);
+			if(resultObject != null && !resultObject.isJsonNull() ) {
+				String result = resultObject.get("result").toString();
+				String result_message = resultObject.get("result_message").toString();
+				log.error("@@@ success_yn = {}. result_message = {}", result, result_message);
+			}
+		}
 	}
 }

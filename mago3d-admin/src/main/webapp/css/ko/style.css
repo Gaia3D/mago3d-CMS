@@ -2263,7 +2263,18 @@ tr:hover td {
 .dialog-user-group > ul {
 	border-bottom: 1px solid #efefef; }
 
+.dialog-data-group > ul > li > ul > li {
+	 padding-left: 30px; }
 
+.dialog-data-group li {
+	list-style: none;
+	border-top: 1px solid #efefef; }
+	
+.dialog-data-group > ul > li:first-child {
+	border-top: 0; }
+	
+.dialog-data-group > ul {
+	border-bottom: 1px solid #efefef; }
 
 
 /* General user page

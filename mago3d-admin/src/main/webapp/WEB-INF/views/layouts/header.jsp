@@ -17,7 +17,7 @@
 <header class="site-header">
 	<div class="row">
 		<div class="container">
-			<h1 class="site-title u-pull-left"><a href="/main/index.do">Mago3D</a></h1>
+			<h2 class="site-title u-pull-left" style="font-size:28px; font-family:Lousianne; color:#573592"><a href="/main/index.do">mago3D</a></h2>
 			<aside class="site-aside-menu u-pull-right">
 				<ul>
 <%

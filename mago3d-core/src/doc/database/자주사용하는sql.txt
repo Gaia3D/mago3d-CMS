@@ -4,3 +4,11 @@ alter 문
 ALTER TABLE policy ADD content_object_group_root			varchar(60)			default 'Mago3D';
 삭제
 ALTER TABLE policy DROP COLUMN content_account_group_root;
+
+
+select *, ST_Distance(
+ST_GeographyFromText('SRID=4326;POINT('||longitude||' '||latitude||')'), 
+ST_GeographyFromText('SRID=4326;POINT(126.927232 37.520575)')
+) as dis from data_group order by dis;
+
+

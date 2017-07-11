@@ -31,8 +31,8 @@
 		  		<span>CullFace 사용유무</span>
  			</th>
  			<td class="col-input radio-set">
- 				<form:radiobutton path="geo_cull_face_enable" value="Y" label="사용" />
-				<form:radiobutton path="geo_cull_face_enable" value="N" label="사용안함" />
+ 				<form:radiobutton path="geo_cull_face_enable" value="true" label="사용" />
+				<form:radiobutton path="geo_cull_face_enable" value="false" label="사용안함" />
 	  		</td>
   		</tr>
   		<tr>
@@ -40,8 +40,8 @@
 		  		<span>TimeLine 표시유무</span>
  			</th>
  			<td class="col-input radio-set">
- 				<form:radiobutton path="geo_time_line_enable" value="Y" label="사용" />
-				<form:radiobutton path="geo_time_line_enable" value="N" label="사용안함" />
+ 				<form:radiobutton path="geo_time_line_enable" value="true" label="사용" />
+				<form:radiobutton path="geo_time_line_enable" value="false" label="사용안함" />
 	  		</td>
   		</tr>
   		<tr>
@@ -49,8 +49,8 @@
 		  		<span>초기 카메라 이동 유무</span>
  			</th>
  			<td class="col-input radio-set">
- 				<form:radiobutton path="geo_init_camera_enable" value="Y" label="사용" />
-				<form:radiobutton path="geo_init_camera_enable" value="N" label="사용안함" />
+ 				<form:radiobutton path="geo_init_camera_enable" value="true" label="사용" />
+				<form:radiobutton path="geo_init_camera_enable" value="false" label="사용안함" />
 	  		</td>
   		</tr>
   		<tr>

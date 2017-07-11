@@ -1,6 +1,8 @@
 package com.gaia3d.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 메뉴
@@ -8,7 +10,9 @@ import lombok.Data;
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class Menu {
 
 	/******** 화면 트리 표시용 ********/

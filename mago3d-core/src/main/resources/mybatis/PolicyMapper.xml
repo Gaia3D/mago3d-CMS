@@ -82,7 +82,9 @@
 		/* updatePolicyGeoCallBack */
 		UPDATE policy
 		SET geo_callback_enable = #{geo_callback_enable},
-			geo_callback_selectedobject = #{geo_callback_selectedobject}
+			geo_callback_selectedobject = #{geo_callback_selectedobject},
+			geo_callback_insertissue = #{geo_callback_insertissue},
+			geo_callback_listissue = #{geo_callback_listissue}
 		WHERE policy_id = #{policy_id}
 	</update>
 	
@@ -132,7 +134,7 @@
 			content_menu_group_root = #{content_menu_group_root},
 			content_user_group_root = #{content_user_group_root},
 			content_server_group_root = #{content_server_group_root},
-			content_object_group_root = #{content_object_group_root}
+			content_data_group_root = #{content_data_group_root}
 		WHERE policy_id = #{policy_id}
 	</update>
 	

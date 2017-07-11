@@ -1,7 +1,5 @@
 package com.gaia3d.security;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class CryptTest {
@@ -11,6 +9,9 @@ public class CryptTest {
 		System.out.println(Crypt.encrypt("jdbc:postgresql://localhost:5432/mago3d"));
 		System.out.println(Crypt.encrypt("postgres"));
 		System.out.println(Crypt.encrypt("postgres"));
+		System.out.println(Crypt.encrypt("test"));
+		
+		System.out.println(Crypt.encrypt("mago3d-rest-api-key"));
 	}
 
 }

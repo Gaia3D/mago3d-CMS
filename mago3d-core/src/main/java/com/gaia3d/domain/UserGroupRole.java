@@ -1,16 +1,18 @@
 package com.gaia3d.domain;
 
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 사용자 그룹별 Role
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class UserGroupRole {
 	
 	// Role 유형. 0 : 사용자

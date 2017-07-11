@@ -8,17 +8,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import org.apache.tomcat.jdbc.pool.DataSource;
 
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.AccessLog;
@@ -30,7 +27,6 @@ import com.gaia3d.domain.ScheduleLog;
 import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.Widget;
 import com.gaia3d.helper.SessionUserHelper;
-import com.gaia3d.persistence.GlobalCode;
 import com.gaia3d.service.APIService;
 import com.gaia3d.service.AccessLogService;
 import com.gaia3d.service.IssueService;
@@ -152,6 +148,12 @@ public class MainController {
 	 * @param model
 	 */
 	private void issueWidget(String startDate, String endDate, Model model) {
+		Issue issue = new Issue();
+		issue.setStart_date(startDate);
+		issue.setEnd_date(endDate);
+		Long issueTotalCount = issueService.getIssueTotalCount(issue);
+		
+		model.addAttribute("issueTotalCount", issueTotalCount);
 	}
 	
 	/**
@@ -272,7 +274,7 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-user-widget.do", method = RequestMethod.GET)
+	@GetMapping(value = "ajax-user-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUserWidget(HttpServletRequest request) {
 		Gson gson = new Gson();
@@ -316,7 +318,7 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-schedule-log-list-widget.do", method = RequestMethod.GET)
+	@GetMapping(value = "ajax-schedule-log-list-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxScheduleLogListWidget(HttpServletRequest request) {
 		
@@ -355,7 +357,7 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-dbcp-widget.do", method = RequestMethod.GET)
+	@GetMapping(value = "ajax-dbcp-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxDbcpWidget(HttpServletRequest request) {
 		
@@ -395,7 +397,7 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-access-log-widget.do", method = RequestMethod.GET)
+	@GetMapping(value = "ajax-access-log-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxAccessLogWidget(HttpServletRequest request) {
 		

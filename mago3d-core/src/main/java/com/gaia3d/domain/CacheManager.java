@@ -35,7 +35,7 @@ public class CacheManager {
 	// 개인정보 마스킹 처리 유무
 	private boolean userInfoMasking = false;
 	// 공통 코드
-	private Map<String, CommonCode> commonCodeMap = null;
+	private Map<String, Object> commonCodeMap = null;
 	// 대메뉴 정보
 	private Map<Long, Menu> menuMap = null;
 	// 사용자 그룹별 메뉴
@@ -46,6 +46,14 @@ public class CacheManager {
 	private Map<String, String> haMap = null;
 	// StandBy Server 상태( ON, OFF, BUSY )
 	private String standByServerStatus = null;
+	
+	// 1 depth 데이터 그룹
+	private List<DataGroup> projectDataGroupList = null;
+	// 데이터 그룹별 데이터 맵
+	private Map<String, Map<String, DataInfo>> dataGroupMap = null;
+	
+	// 원격 캐시 목록
+	private List<ExternalService> remoteCacheServiceList = null;
 	
 //	/**
 //	 * 객체 리턴
@@ -146,6 +154,14 @@ public class CacheManager {
 		cacheManager.menuMap = menuMap;
 	}
 	
+	public static List<DataGroup> getProjectDataGroupList() {
+		return cacheManager.projectDataGroupList;
+	}
+
+	public static void setProjectDataGroupList(List<DataGroup> projectDataGroupList) {
+		cacheManager.projectDataGroupList = projectDataGroupList;
+	}
+
 	/**
 	 * 사용자 그룹별 메뉴 목록을 취득
 	 * @param userGroupId
@@ -185,11 +201,11 @@ public class CacheManager {
 	 * @param 
 	 * @return
 	 */
-	public static CommonCode getCommonCode(String codeKey) {
+	public static Object getCommonCode(String codeKey) {
 		return cacheManager.commonCodeMap.get(codeKey);
 	}
 	
-	public static void setCommonCodeMap(Map<String, CommonCode> commonCodeMap) {
+	public static void setCommonCodeMap(Map<String, Object> commonCodeMap) {
 		cacheManager.commonCodeMap = commonCodeMap;
 	}
 	
@@ -201,6 +217,14 @@ public class CacheManager {
 		cacheManager.haMap = haMap;
 	}
 	
+	public static Map<String, Map<String, DataInfo>> getDataGroupMap() {
+		return cacheManager.dataGroupMap;
+	}
+
+	public static void setDataGroupMap(Map<String, Map<String, DataInfo>> dataGroupMap) {
+		cacheManager.dataGroupMap = dataGroupMap;
+	}
+
 	/**
 	 * StandBy Server 상태( ON, OFF, BUSY )
 	 * @return
@@ -211,5 +235,13 @@ public class CacheManager {
 
 	public static void setStandByServerStatus(String standByServerStatus) {
 		cacheManager.standByServerStatus = standByServerStatus;
+	}
+
+	public static List<ExternalService> getRemoteCacheServiceList() {
+		return cacheManager.remoteCacheServiceList;
+	}
+
+	public static void setRemoteCacheServiceList(List<ExternalService> remoteCacheServiceList) {
+		cacheManager.remoteCacheServiceList = remoteCacheServiceList;
 	}
 }

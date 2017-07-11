@@ -2,14 +2,18 @@ package com.gaia3d.domain;
 
 import java.io.Serializable;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 세션에 저장될 사용자 정보
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class UserSession implements Serializable {
 	
 	private static final long serialVersionUID = -7648113594557708090L;

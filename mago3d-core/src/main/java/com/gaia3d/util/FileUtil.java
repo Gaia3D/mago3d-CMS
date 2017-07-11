@@ -13,7 +13,6 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gaia3d.domain.FileInfo;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -34,17 +33,15 @@ public class FileUtil {
 	
 	// 사용자 일괄 등록
 	public static final String EXCEL_USER_UPLOAD = "EXCEL_USER_UPLOAD";
-	// 시스템 일괄 등록
-	public static final String EXCEL_SYSTEM_UPLOAD = "EXCEL_SYSTEM_UPLOAD";
-	// 계정 일괄 등록
-	public static final String EXCEL_ACCOUNT_UPLOAD = "EXCEL_ACCOUNT_UPLOAD";
-	// 비밀번호 일괄 등록
-	public static final String EXCEL_PASSWORD_UPLOAD = "EXCEL_PASSWORD_UPLOAD";
-	// 서버 일괄 등록
-	public static final String EXCEL_SERVER_UPLOAD = "EXCEL_SERVER_UPLOAD";
+	// Data 일괄 등록
+	public static final String EXCEL_DATA_UPLOAD = "EXCEL_DATA_UPLOAD";
+	// Issue 등록
+	public static final String ISSUE_DATA_UPLOAD = "ISSUE_DATA_UPLOAD";
 	
 	// 사용자 일괄 등록의 경우 허용 문서 타입
 	public static final String[] FILE_TYPE_EXCEL = {"xlsx", "xls"};
+	// issue 등록의 경우 허용 문서 타입
+	public static final String[] ISSUE_TYPE_EXCEL = {"png", "jpg", "jpeg", "gif", "tiff", "xlsx", "xls", "docx", "doc", "pptx", "ppt"};
 	// 엑셀 처리 기본 프로그램
 	public static final String EXCEL_EXTENSION_XLS = "xls";
 	// JEXCEL이 2007버전(xlsx) 을 읽지 못하기 때문에 POI를 병행해서 사용
@@ -62,7 +59,7 @@ public class FileUtil {
 	 * @param directory
 	 * @return
 	 */
-	public static FileInfo uploadExcel(MultipartFile multipartFile, String jobType, String directory) {
+	public static FileInfo upload(MultipartFile multipartFile, String jobType, String directory) {
 	
 		FileInfo fileInfo = new FileInfo();
 		fileInfo.setJob_type(jobType);
@@ -116,12 +113,11 @@ public class FileUtil {
 		}
 		String extension = fileNameValues[1];
 		List<String> extList = null;
-		if(EXCEL_USER_UPLOAD.equals(fileInfo.getJob_type()) || EXCEL_SERVER_UPLOAD.equals(fileInfo.getJob_type())) {
+		if(EXCEL_USER_UPLOAD.equals(fileInfo.getJob_type()) || EXCEL_DATA_UPLOAD.equals(fileInfo.getJob_type())) {
 			extList = Arrays.asList(FILE_TYPE_EXCEL);
 		} else {
-			extList = new ArrayList<String>();
+			extList =  Arrays.asList(ISSUE_TYPE_EXCEL);
 		}
-		
 		if(!extList.contains(extension)) {
 			log.info("@@ extList = {}, extension = {}", extList, extension);
 			fileInfo.setError_code("fileinfo.ext.invalid");
@@ -196,31 +192,10 @@ public class FileUtil {
 	public static String getPIDFromFile(String fileName) {
 		
 		String pid = "";
-		BufferedReader bufferedReader = null;
-		FileReader fileReader = null;
-		try {
-			fileReader = new FileReader(fileName);
-			bufferedReader = new BufferedReader(fileReader);
+		try ( FileReader fileReader = new FileReader(fileName); BufferedReader bufferedReader = new BufferedReader(fileReader) ) {
 			pid = bufferedReader.readLine();			
-			bufferedReader.close();
-			fileReader.close();
 		} catch(Exception e) {
 			e.printStackTrace();
-		} finally {
-			if(bufferedReader != null) {
-				try {
-					bufferedReader.close();
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if(fileReader != null) {
-				try {
-					fileReader.close();
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		
 		log.info("@@@@@@@@ fileName = {}, pid = {}", fileName, pid);

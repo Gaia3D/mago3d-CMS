@@ -7,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Mago3d Admin</title>
+	<title>${sessionSiteName }</title>
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" />
@@ -43,7 +43,7 @@
 									<div>
 										<span class="banner-title">신규 이슈</span>
 										<span id="userOTPCountSpinner" class="banner-number"></span>
-										<span class="banner-unit"> 0 개</span>
+										<span class="banner-unit"> ${issueTotalCount } 개</span>
 									</div>
 								</div>
 							</div>

@@ -1,13 +1,17 @@
 package com.gaia3d.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 사용자 그룹
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class UserGroup {
 	
 	// 임시 그룹

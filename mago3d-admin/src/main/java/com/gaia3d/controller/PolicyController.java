@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.digester.annotations.rules.BeanPropertySetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -81,7 +82,7 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-policy-user.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-policy-user.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdatePolicyUser(HttpServletRequest request, Policy policy) {
 		Gson gson = new Gson();
@@ -123,7 +124,7 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-policy-password.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-policy-password.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdatePolicyPassword(HttpServletRequest request, Policy policy) {
 		Gson gson = new Gson();
@@ -171,7 +172,7 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-geo.do")
+	@PostMapping(value = "ajax-update-policy-geo.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdatePolicyGeo(HttpServletRequest request, Policy policy) {
 		Gson gson = new Gson();
@@ -204,7 +205,7 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-geoserver.do")
+	@PostMapping(value = "ajax-update-policy-geoserver.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdatePolicyGeoServer(HttpServletRequest request, Policy policy) {
 		Gson gson = new Gson();
@@ -237,7 +238,7 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-geocallback.do")
+	@PostMapping(value = "ajax-update-policy-geocallback.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdatePolicyGeoCallBack(HttpServletRequest request, Policy policy) {
 		Gson gson = new Gson();
@@ -270,7 +271,7 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-policy-notice.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-policy-notice.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdatePolicyNotice(HttpServletRequest request, Policy policy) {
 		Gson gson = new Gson();
@@ -312,7 +313,7 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-policy-security.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-policy-security.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdatePolicySecurity(HttpServletRequest request, Policy policy) {
 		Gson gson = new Gson();
@@ -352,7 +353,7 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-policy-content.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-policy-content.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdatePolicyContent(HttpServletRequest request, Policy policy) {
 		Gson gson = new Gson();
@@ -403,7 +404,7 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-policy-site.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-policy-site.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdatePolicySite(HttpServletRequest request, Policy policy) {
 		Gson gson = new Gson();
@@ -446,7 +447,7 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-policy-os.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-policy-os.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdatePolicyOs(HttpServletRequest request, Policy policy) {
 		Gson gson = new Gson();
@@ -507,7 +508,7 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-policy-backoffice.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-policy-backoffice.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdatePolicyBackoffice(HttpServletRequest request, Policy policy) {
 		Gson gson = new Gson();
@@ -543,7 +544,7 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-policy-solution.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-policy-solution.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdatePolicySolution(HttpServletRequest request, Policy policy) {
 		Gson gson = new Gson();

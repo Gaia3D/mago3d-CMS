@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- <include resource="org/springframework/boot/logging/logback/base.xml"/> -->
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36}[%method:%line] - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+
+	<!-- 
+	<appender name="dailyRollingFileAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<prudent>true</prudent>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>applicatoin.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+
+		<encoder>
+		    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36}[%method:%line] - %msg%n</pattern>
+		</encoder>
+	</appender>
+	 -->
+
+	<logger name="org.apache.commons" level="debug" additivity="false" />
+<!-- 	<logger name="org.mybatis.spring.boot" level="debug" additivity="false" /> -->
+	<!-- <logger name="org.apache.tomcat.embed" level="debug" additivity="false" />
+	<logger name="org.apache.catalina" level="debug" additivity="false" /> -->
+	<logger name="org.springframework" level="debug" additivity="false" />
+<!-- 	<logger name="org.springframework.boot" level="debug" additivity="false" /> -->
+	<logger name="org.springframework.web" level="debug" additivity="false" />
+	<!-- <logger name="org.apache.commons.dbcp2" level="debug" additivity="false" /> -->
+	<logger name="java.sql.Connection" level="debug" additivity="false" />
+	<logger name="java.sql.PreparedStatement" level="debug" additivity="false" />
+	<logger name="java.sql.ResultSet" level="debug" additivity="false" />
+
+	<root level="debug">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

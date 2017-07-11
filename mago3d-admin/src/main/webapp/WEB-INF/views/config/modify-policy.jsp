@@ -508,10 +508,7 @@
 				$("#content_monitoring_interval").focus();
 				return;
 			}
-			if(!isNumber($("#content_monitoring_interval").val())) {
-				$("#content_monitoring_interval").focus();
-				return;
-			}
+			
 			if($("#content_statistics_interval").val() == "") {
 				alert("통계 기본 검색 기간을 선택해 주십시오.");
 				$("#content_statistics_interval").focus();

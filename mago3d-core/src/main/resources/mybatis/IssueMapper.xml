@@ -6,17 +6,14 @@
 	<!-- 이슈 총 건수 -->
 	<select id="getIssueTotalCount" parameterType="issue" resultType="long">
 		/* getIssueTotalCount */
-		SELECT COUNT(user_id) 
+		SELECT COUNT(issue_id) 
 		FROM issue
-		<trim prefix="WHERE" prefixOverrides="AND">
+		<trim prefix="WHERE" prefixOverrides="AND">	
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 			${search_word} = #{search_value}
 			</if>
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
 			${search_word} LIKE '%' || #{search_value} || '%'
-			</if>
-			<if test="use_yn != null and use_yn != ''">
-			AND use_yn = #{use_yn}
 			</if>
 			<if test="start_date != null and start_date != ''">
 			<![CDATA[
@@ -39,16 +36,13 @@
 			(SELECT count(issue_comment_id) FROM issue_comment WHERE issue_id = A.issue_id) AS comment_count
 		FROM(
 			SELECT *
-			FROM issue 
+			FROM issue
 			<trim prefix="WHERE" prefixOverrides="AND">
 				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 				${search_word} = #{search_value}
 				</if>
 				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
 				${search_word} LIKE '%' || #{search_value} || '%'
-				</if>
-				<if test="use_yn != null and use_yn != ''">
-				AND use_yn = #{use_yn}
 				</if>
 				<if test="start_date != null and start_date != ''">
 				<![CDATA[
@@ -61,6 +55,69 @@
 				]]>
 				</if>
 			</trim>
+			<choose>
+			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
+			ORDER BY ${order_word} ${order_value}
+			</when>
+			<otherwise>
+			ORDER BY insert_date DESC, issue_id DESC
+			</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) A
+	</select>
+	
+	<!-- 이슈 총 건수 -->
+	<select id="getIssueTotalCountByUserId" parameterType="issue" resultType="long">
+		/* getIssueTotalCount */
+		SELECT COUNT(issue_id) 
+		FROM issue
+		WHERE user_id = #{user_id}
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+			AND ${search_word} = #{search_value}
+			</if>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+			AND ${search_word} LIKE '%' || #{search_value} || '%'
+			</if>
+			<if test="start_date != null and start_date != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="end_date != null and end_date != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+	</select>
+
+	<!-- 이슈 목록 -->
+	<select id="getListIssueByUserId" parameterType="issue" resultType="issue">
+		/* getListIssue */
+		SELECT A.*, 
+			(SELECT user_name FROM user_info WHERE user_id = A.user_id) AS user_name, 
+			(SELECT data_group_name FROM data_group WHERE data_group_id = A.data_group_id) AS data_group_name, 
+			(SELECT count(issue_comment_id) FROM issue_comment WHERE issue_id = A.issue_id) AS comment_count
+		FROM(
+			SELECT *
+			FROM issue
+			WHERE user_id = #{user_id}
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+				AND ${search_word} = #{search_value}
+				</if>
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+				AND ${search_word} LIKE '%' || #{search_value} || '%'
+				</if>
+				<if test="start_date != null and start_date != ''">
+				<![CDATA[
+				AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="end_date != null and end_date != ''">
+				<![CDATA[
+				AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
 			<choose>
 			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
 			ORDER BY ${order_word} ${order_value}
@@ -107,22 +164,23 @@
     		SELECT nextval('issue_seq')
   		</selectKey>
 		INSERT INTO issue(
-			issue_id, title, user_id, user_name, start_date, end_date, use_yn, client_ip
+			issue_id, data_group_id, user_id, title, priority, due_date, issue_type, status, data_key, location, latitude, longitude, height, client_ip
 		) values(
-			#{issue_id}, #{title}, #{user_id}, #{user_name}, 
-			<if test="start_date == null or start_date == ''">
-			null,
-			</if>
-			<if test="start_date != null and start_date != ''">
-			TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS'),
-			</if>
-			<if test="end_date == null or end_date == ''">
+			#{issue_id}, #{data_group_id}, #{user_id}, #{title}, #{priority},
+			<if test="due_date == null or due_date == ''">
 			null,
 			</if>		
-			<if test="end_date != null and end_date != ''">
-			TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS'),
+			<if test="due_date != null and due_date != ''">
+			TO_TIMESTAMP(#{due_date}, 'YYYYMMDDHH24MISSUS'),
 			</if>			
-			#{use_yn}, #{client_ip}
+			#{issue_type}, #{status}, #{data_key},
+			<if test="location == null or location == ''">
+			null,
+			</if>		
+			<if test="location != null and location != ''">
+			ST_GeographyFromText(#{location})
+			</if>		
+			#{latitude}, #{longitude}, #{height}, #{client_ip}
 		)
 	</insert>
 	
@@ -138,6 +196,7 @@
 			#{issue_detail_id}, #{issue_id}, #{contents}
 		)
 	</insert>
+	
 	<!-- 이슈 Comment 등록 -->
 	<insert id="insertIssueComment" parameterType="issueComment">
 		/* insertIssueComment */
@@ -151,14 +210,68 @@
 		)
 	</insert>
 	
+	<!-- 이슈 파일 등록 -->
+	<insert id="insertIssueFile" parameterType="issueFile">
+		/* insertIssueFile */
+		<selectKey keyProperty="issue_file_id" resultType="long" order="BEFORE">
+    		SELECT nextval('issue_file_seq')
+  		</selectKey>
+		INSERT INTO issue_file(
+			issue_file_id, issue_id, file_name, file_real_name, file_path, file_size, file_ext
+		) values(
+			#{issue_file_id}, #{issue_id}, #{file_name}, #{file_real_name}, #{file_path}, #{file_size}, #{file_ext}
+		)
+	</insert>
+	
+	<!-- 이슈 관계자 등록 -->
+	<insert id="insertIssuePeople" parameterType="issuePeople">
+		/* insertIssuePeople */
+		<selectKey keyProperty="issue_people_id" resultType="long" order="BEFORE">
+    		SELECT nextval('issue_people_seq')
+  		</selectKey>
+		INSERT INTO issue_people(
+			issue_people_id, issue_id, role_type, user_id
+		) values(
+			#{issue_people_id}, #{issue_id}, #{role_type}, #{user_id}
+		)
+	</insert>
+	
 	<!-- 이슈 수정 -->	
 	<update id="updateIssue" parameterType="issue">
 		/* updateIssue */
 		UPDATE issue
-		SET title = #{title},
-			start_date = TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISS'),
-			end_date = TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISS'),
-			use_yn = #{use_yn}
+		SET 
+			<if test="data_group_id != null and data_group_id > 0">
+			data_group_id = #{data_group_id},
+			</if>
+			<if test="user_id != null and user_id != ''">
+			user_id = #{user_id},
+			</if>
+			<if test="title != null and title != ''">
+			title = #{title},
+			</if>
+			<if test="priority != null and priority != ''">
+			priority = #{priority},
+			</if>
+			<if test="due_date != null and due_date != ''">
+			TO_TIMESTAMP(#{due_date}, 'YYYYMMDDHH24MISSUS'),
+			</if>
+			<if test="location != null and location != ''">
+			ST_GeographyFromText(#{location})
+			</if>
+			<if test="latitude != null and latitude != ''">
+			latitude = #{latitude},
+			</if>
+			<if test="longitude != null and longitude != ''">
+			longitude = #{longitude},
+			</if>
+			<if test="height != null and height != ''">
+			height = #{height},
+			</if>
+			<if test="user_id != null and user_id != ''">
+			client_ip = #{client_ip},
+			</if>
+			update_date = NOW()
 		WHERE issue_id = #{issue_id}
 	</update>
 	
@@ -167,16 +280,8 @@
 		/* updateIssueDetail */
 		UPDATE issue_detail
 		SET contents = #{contents}
-		WHERE issue_id = #{issue_id}
+		WHERE issue_detail_id = #{issue_detail_id}
 	</update>
-	
-	<!-- 이슈 조회 건수 증가 -->
-	<select id="updateIssueViewCount" parameterType="long">
-		/* updateIssueViewCount */
-		UPDATE issue
-		SET view_count = view_count + 1
-		WHERE issue_id = #{issue_id}
-	</select>
 	
 	<!-- 이슈 Comment 수정 -->	
 	<update id="updateIssueComment" parameterType="issueComment">
@@ -195,7 +300,7 @@
 	<!-- 이슈 상세 삭제 -->
 	<delete id="deleteIssueDetail" parameterType="long">
 		/* deleteIssueDetail */
-		DELETE FROM issue_detail WHERE issue_id = #{issue_id}
+		DELETE FROM issue_detail WHERE issue_detail_id = #{issue_detail_id}
 	</delete>
 	
 	<!-- 이슈 Comment 삭제 -->

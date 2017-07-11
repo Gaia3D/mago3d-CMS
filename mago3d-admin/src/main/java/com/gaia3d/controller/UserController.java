@@ -16,15 +16,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.FileInfo;
@@ -66,10 +67,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/user/")
 public class UserController {
 	
-	// 사용자 일괄 등록
-	private String EXCEL_USER_UPLOAD_DIR;
-	// 사용자 샘플 다운로드
-	private String EXCEL_SAMPLE_DIR;
+	@Autowired
+	private PropertiesConfig propertiesConfig;
 	
 	@Resource(name="userValidator")
 	private UserValidator userValidator;
@@ -128,8 +127,8 @@ public class UserController {
 			txtDownloadFlag = true;
 		}
 		
-		CommonCode userInsertType = CacheManager.getCommonCode(CommonCode.USER_REGISTER);
-		CommonCode externalUserInsertType = CacheManager.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER);
+		CommonCode userInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.USER_REGISTER);
+		CommonCode externalUserInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER);
 		
 		model.addAttribute(pagination);
 		model.addAttribute("userInsertType", userInsertType);
@@ -185,7 +184,7 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-except-user-group-user-by-group-id.do")
+	@RequestMapping(value = "ajax-list-except-user-group-user-by-group-id.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxListExceptUserGroupUserByGroupId(HttpServletRequest request, UserInfo userInfo, @RequestParam(defaultValue="1") String pageNo) {
 		Gson gson = new Gson();
@@ -217,7 +216,7 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-user-group-user-by-group-id.do")
+	@RequestMapping(value = "ajax-list-user-group-user-by-group-id.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxListUserGroupUserByGroupId(HttpServletRequest request, UserInfo userInfo, @RequestParam(defaultValue="1") String pageNo) {
 		Gson gson = new Gson();
@@ -250,7 +249,7 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "input-user.do", method = RequestMethod.GET)
+	@GetMapping(value = "input-user.do")
 	public String inputUser(Model model) {
 		
 		UserGroup userGroup = new UserGroup();
@@ -268,7 +267,8 @@ public class UserController {
 			}
 		}
 		
-		List<CommonCode> emailCommonCodeList = CacheManager.getCommonCode(CommonCode.USER_REGISTER_EMAIL).getEmailList();
+		@SuppressWarnings("unchecked")
+		List<CommonCode> emailCommonCodeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.USER_REGISTER_EMAIL);
 		
 		model.addAttribute("passwordExceptionChar", passwordExceptionChar);
 		model.addAttribute("emailCommonCodeList", emailCommonCodeList);
@@ -285,7 +285,7 @@ public class UserController {
 	 * @param userInfo
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-insert-user-info.do", method = RequestMethod.POST)
+	@GetMapping(value = "ajax-insert-user-info.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxInsertUserInfo(HttpServletRequest request, UserInfo userInfo) {
 		Gson gson = new Gson();
@@ -310,7 +310,7 @@ public class UserController {
 			String salt = BCrypt.gensalt();
 			ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(512);
 			shaPasswordEncoder.setIterations(1000);
-			String encriptPassword = shaPasswordEncoder.encodePassword(userInfo.getPassword(), salt) ;
+			String encriptPassword = shaPasswordEncoder.encodePassword(userInfo.getPassword(), salt);
 			
 			if(userInfo.getTelephone1() != null && !"".equals(userInfo.getTelephone1()) &&
 					userInfo.getTelephone2() != null && !"".equals(userInfo.getTelephone2()) &&
@@ -359,7 +359,7 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-insert-user-group-user.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-insert-user-group-user.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxInsertUserGroupUser(HttpServletRequest request,
 			@RequestParam("user_group_id") Long user_group_id,
@@ -442,7 +442,7 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-user-id-duplication-check.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-user-id-duplication-check.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUserIdDuplicationCheck(HttpServletRequest request, UserInfo userInfo) {
 		Gson gson = new Gson();
@@ -500,7 +500,7 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "modify-user.do", method = RequestMethod.GET)
+	@GetMapping(value = "modify-user.do")
 	public String modifyUser(@RequestParam("user_id") String user_id, HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo, Model model) {
 		
 		String listParameters = getListParameters(request);
@@ -551,7 +551,8 @@ public class UserController {
 			}
 		}
 		
-		List<CommonCode> emailCommonCodeList = CacheManager.getCommonCode(CommonCode.USER_REGISTER_EMAIL).getEmailList();
+		@SuppressWarnings("unchecked")
+		List<CommonCode> emailCommonCodeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.USER_REGISTER_EMAIL);
 		
 		model.addAttribute("passwordExceptionChar", passwordExceptionChar);
 		model.addAttribute("emailCommonCodeList", emailCommonCodeList);
@@ -571,7 +572,7 @@ public class UserController {
 	 * @param userInfo
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-user-info.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-user-info.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdateUserInfo(HttpServletRequest request, UserInfo userInfo) {
 		Gson gson = new Gson();
@@ -702,7 +703,7 @@ public class UserController {
 	 * @param userInfo
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-init-user-password.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-init-user-password.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxInitUserPassword(	HttpServletRequest request, 
 										@RequestParam("check_ids") String check_ids) {
@@ -731,7 +732,7 @@ public class UserController {
 	 * @param userInfo
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-user-status.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-user-status.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdateUserStatus(	HttpServletRequest request, 
 										@RequestParam("check_ids") String check_ids, 
@@ -782,7 +783,7 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "delete-user.do", method = RequestMethod.GET)
+	@GetMapping(value = "delete-user.do")
 	public String deleteUser(@RequestParam("user_id") String user_id, Model model) {
 		
 		// validation 체크 해야 함
@@ -798,7 +799,7 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-delete-users.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-delete-users.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxDeleteUsers(HttpServletRequest request, @RequestParam("check_ids") String check_ids) {
 		
@@ -830,7 +831,7 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-delete-user-group-user.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-delete-user-group-user.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxDeleteUserGroupUser(HttpServletRequest request,
 			@RequestParam("user_group_id") Long user_group_id,
@@ -877,7 +878,7 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "popup-input-excel-user.do", method = RequestMethod.GET)
+	@GetMapping(value = "popup-input-excel-user.do")
 	public String popupInputExcelUser(Model model) {
 		
 		FileInfo fileInfo = new FileInfo();
@@ -892,7 +893,7 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-insert-excel-user.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-insert-excel-user.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxInsertExcelUser(MultipartHttpServletRequest request) {
 		
@@ -901,7 +902,7 @@ public class UserController {
 		String result = "success";
 		try {
 			MultipartFile multipartFile = request.getFile("file_name");
-			FileInfo fileInfo = FileUtil.uploadExcel(multipartFile, FileUtil.EXCEL_USER_UPLOAD, EXCEL_USER_UPLOAD_DIR);
+			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.EXCEL_USER_UPLOAD, propertiesConfig.getExcelUserUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				jSONObject.put("result", fileInfo.getError_code());
 				return jSONObject.toString();
@@ -1067,12 +1068,12 @@ public class UserController {
 	@ResponseBody
 	public void downloadExcelUserSample(HttpServletRequest request, HttpServletResponse response, Model model) {
 		
-		File rootDirectory = new File(EXCEL_SAMPLE_DIR);
+		File rootDirectory = new File(propertiesConfig.getExcelSampleUploadDir());
 		if(!rootDirectory.exists()) {
 			rootDirectory.mkdir();
 		}
 				
-		File file = new File(EXCEL_SAMPLE_DIR + "sample.xlsx");
+		File file = new File(propertiesConfig.getExcelSampleUploadDir() + "sample.xlsx");
 		if(file.exists()) {
 			String mimetype = "application/x-msdownload";
 			response.setContentType(mimetype);
@@ -1120,7 +1121,7 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "modify-password.do", method = RequestMethod.GET)
+	@GetMapping(value = "modify-password.do")
 	public String modifyPassword(HttpServletRequest request, Model model) {
 		model.addAttribute("policy", CacheManager.getPolicy());
 		model.addAttribute("userInfo", new UserInfo());
@@ -1135,7 +1136,7 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "update-password.do", method = RequestMethod.POST)
+	@PostMapping(value = "update-password.do")
 	public String updatePassword(HttpServletRequest request, @ModelAttribute("userInfo") UserInfo userInfo, BindingResult bindingResult, Model model) {
 		
 		Policy policy = CacheManager.getPolicy();
@@ -1185,7 +1186,7 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-user-group-info.do")
+	@RequestMapping(value = "ajax-user-group-info.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUserGroupInfo(HttpServletRequest request, @RequestParam("user_group_id") Long user_group_id) {
 		

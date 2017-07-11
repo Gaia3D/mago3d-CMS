@@ -3,24 +3,33 @@ package com.gaia3d.domain;
 import java.util.List;
 
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * CommonCode
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class CommonCode {
 
 	// 외부 시스템 연동 사용자 등록
 	public static final String EXTERNAL_USER_REGISTER = "EXTERNAL_USER_REGISTER";
 	public static final String USER_REGISTER = "USER_REGISTER";
 	public static final String USER_REGISTER_EMAIL = "USER_REGISTER_EMAIL";
-	public static final String EXTERNAL_OBJECT_REGISTER = "EXTERNAL_OBJECT_REGISTER";
-	public static final String OBJECT_REGISTER = "OBJECT_REGISTER";
+	public static final String EXTERNAL_DATA_REGISTER = "EXTERNAL_DATA_REGISTER";
+	public static final String DATA_REGISTER = "DATA_REGISTER";
+	
+	// 이슈 우선순위
+	public static final String ISSUE_PRIORITY = "ISSUE_PRIORITY";
+	// 이슈 유형
+	public static final String ISSUE_TYPE = "ISSUE_TYPE";
+	// 이슈 상태
+	public static final String ISSUE_STATUS = "ISSUE_STATUS";
 	
 	/****** validator ********/
 	private String order_word;

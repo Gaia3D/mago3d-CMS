@@ -82,7 +82,7 @@ public class MenuController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-insert-menu.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-insert-menu.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxInsertMenu(HttpServletRequest request, Menu menu) {
 		Gson gson = new Gson();
@@ -147,7 +147,7 @@ public class MenuController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-menu.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-menu.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdateMenu(HttpServletRequest request, Menu menu) {
 		Gson gson = new Gson();
@@ -201,7 +201,7 @@ public class MenuController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-update-move-menu.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-update-move-menu.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxUpdateMoveMenu(HttpServletRequest request, Menu menu) {
 		Gson gson = new Gson();
@@ -246,7 +246,7 @@ public class MenuController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-delete-menu.do", method = RequestMethod.POST)
+	@PostMapping(value = "ajax-delete-menu.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxDeleteMenu(HttpServletRequest request, Menu menu) {
 		Gson gson = new Gson();

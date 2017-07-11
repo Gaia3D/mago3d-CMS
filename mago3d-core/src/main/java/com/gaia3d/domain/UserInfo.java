@@ -3,14 +3,18 @@ package com.gaia3d.domain;
 import com.gaia3d.security.Crypt;
 import com.gaia3d.security.Masking;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 사용자 정보 테이블
  * @author jeongdae
  *
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class UserInfo {
 	
 	// 사용자 상태가 사용중
@@ -286,8 +290,8 @@ public class UserInfo {
 	}
 	
 	public String getViewUserInsertType() {
-		CommonCode userInsertType = CacheManager.getCommonCode(CommonCode.USER_REGISTER);
-		CommonCode externalUserInsertType = CacheManager.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER);
+		CommonCode userInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.USER_REGISTER);
+		CommonCode externalUserInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER);
 		
 		if(this.user_insert_type == null || "".equals(this.user_insert_type)) {
 			return "";

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaia3d.persistence.DataMapper">
+
+	<!-- Data 총 건수 -->
+	<select id="getDataTotalCount" parameterType="dataInfo" resultType="long">
+		/* getDataTotalCount */
+		SELECT COUNT(data_id) 
+		FROM data_info
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="data_group_id != null and data_group_id > 0">
+			data_group_id = #{data_group_id}
+			</if>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+			AND ${search_word} = #{search_value}
+			</if>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+			AND ${search_word} LIKE '%' || #{search_value} || '%'
+			</if>
+			<if test="status == null or status == ''">
+			AND (status IS NULL OR status != '5')
+			</if>
+			<if test="status != null and status != ''">
+			AND status = #{status}
+			</if>
+			<if test="start_date != null and start_date != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="end_date != null and end_date != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="search_data_name != null and search_data_name != ''">
+			AND data_id LIKE '${search_data_name}%'
+			</if>
+		</trim>
+	</select>
+	
+	<!-- data_group_id 그룹을 제외한 Data 수 -->
+	<select id="getExceptDataGroupDataByGroupIdTotalCount" parameterType="dataInfo" resultType="long">
+		/* getExceptDataGroupDataByGroupIdTotalCount */
+		SELECT COUNT(data_id) 
+		FROM data_info
+		WHERE
+			<![CDATA[
+			(data_group_id > #{data_group_id}
+			OR data_group_id < #{data_group_id})
+			]]>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != ''">
+			AND ${search_word} = #{search_value}
+			</if>
+			<if test="status != null and status != ''">
+			AND status = #{status}
+			</if>
+			<if test="search_except_data_name != null and search_except_data_name != ''">
+			AND data_id LIKE '${search_except_data_name}%'
+			</if>
+	</select>
+	
+	<!-- Data 목록 -->
+	<select id="getListData" parameterType="dataInfo" resultType="dataInfo">
+		/* getListData */
+		SELECT X.*, 
+			(SELECT data_group_name FROM data_group WHERE data_group_id = X.data_group_id) AS data_group_name
+		FROM (
+			SELECT *
+			FROM data_info
+			<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="data_group_id != null and data_group_id > 0">
+				data_group_id = #{data_group_id}
+				</if>
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+				AND ${search_word} = #{search_value}
+				</if>
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+				AND ${search_word} LIKE '%' || #{search_value} || '%'
+				</if>
+				<if test="status == null or status == ''">
+				AND (status IS NULL OR status != '5')
+				</if>
+				<if test="status != null and status != ''">
+				AND status = #{status}
+				</if>
+				<if test="search_data_name != null and search_data_name != ''">
+				AND data_id LIKE '${search_data_name}%'
+				</if>
+				<if test="start_date != null and start_date != ''">
+				<![CDATA[
+				AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="end_date != null and end_date != ''">
+				<![CDATA[
+				AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+			</trim>
+			<choose>
+			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
+			ORDER BY ${order_word} ${order_value}
+			</when>
+			<otherwise>
+			ORDER BY insert_date DESC, data_id DESC
+			</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) X
+	</select>
+	
+	<!-- Data 목록 -->
+	<select id="getListDataByDataGroupId" parameterType="dataInfo" resultType="dataInfo">
+		/* getListDataByDataGroupId */
+		SELECT A.*, B.data_group_name
+		FROM data_info A, data_group B
+		WHERE A.data_group_id = #{data_group_id} AND
+			A.data_group_id = B.data_group_id
+		ORDER BY A.insert_date DESC, data_id DESC
+		<if test="offset != null and offset > 0 and limit != null and limit > 0">
+		OFFSET #{offset} LIMIT #{limit}
+		</if>
+	</select>
+	
+	<!-- data_group_id를 제외한 사용자 목록 -->
+	<select id="getListExceptDataGroupDataByGroupId" parameterType="dataInfo" resultType="dataInfo">
+		/* getListExceptDataGroupDataByGroupId */
+		SELECT A.*, 
+			(SELECT data_group_name FROM data_group WHERE data_group_id = A.data_group_id) AS data_group_name
+		FROM (
+			SELECT *
+			FROM data_info 
+			<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != ''">
+				${search_word} = #{search_value}
+				</if>
+				<if test="data_group_id != null and data_group_id > 0">
+				<![CDATA[
+				AND (data_group_id > #{data_group_id}
+				OR data_group_id < #{data_group_id})
+				]]>
+				</if>
+				<if test="status != null and status != ''">
+				AND status = #{status}
+				</if>
+				<if test="search_except_data_name != null and search_except_data_name != ''">
+				AND data_id LIKE '${search_except_data_name}%'
+				</if>
+			</trim>
+			ORDER BY insert_date DESC, data_id DESC
+			OFFSET #{offset} LIMIT #{limit}
+		) A
+	</select>
+	
+	<!-- Data 정보 -->
+	<select id="getData" parameterType="long" resultType="dataInfo">
+		/* getData */
+		SELECT A.*, (SELECT data_group_name FROM data_group WHERE data_group_id = A.data_group_id) AS data_group_name 
+		FROM data_info A
+		WHERE data_id = #{data_id}
+	</select>
+	
+	<!-- Data 아이디 중복 체크 -->
+	<select id="getDuplicationKeyCount" parameterType="string" resultType="int">
+		/* getDuplicationKeyCount */
+		SELECT COUNT(data_key) AS count FROM data_info WHERE data_key = #{data_key}
+	</select>
+	
+	<!-- Data 등록 -->
+	<insert id="insertData" parameterType="dataInfo">
+		/* insertData */
+		<selectKey keyProperty="data_id" resultType="long" order="BEFORE">
+    		SELECT nextval('data_info_seq')
+  		</selectKey>
+		INSERT INTO data_info(
+			data_id, data_group_id, data_key, data_name, location, latitude, longitude, height, heading, pitch, roll, update_date
+		) values(
+			#{data_id}, #{data_group_id}, #{data_key}, #{data_name}, ST_GeographyFromText(#{location}), #{latitude}, #{longitude}, #{height}, #{heading}, #{pitch}, #{roll}, #{update_date}			
+		)
+	</insert>
+	
+	<!-- Data 수정 -->	
+	<update id="updateData" parameterType="dataInfo">
+		/* updateData */
+		UPDATE data_info
+		SET 
+			<if test="data_group_id != null and data_group_id > 0">
+			data_group_id = #{data_group_id},
+			</if>
+			<if test="data_key != null and data_key != ''">
+			data_key = #{data_key},
+			</if>
+			<if test="data_name != null and data_name != ''">
+			data_name = #{data_name},
+			</if>
+			<if test="location != null and location != ''">
+			location = #{location},
+			</if>
+			<if test="latitude != null and latitude != ''">
+			latitude = #{latitude},
+			</if>
+			<if test="longitude != null and longitude != ''">
+			longitude = #{longitude},
+			</if>
+			<if test="height != null and height != ''">
+			height = #{height},
+			</if>
+			<if test="heading != null and heading != ''">
+			heading = #{heading},
+			</if>
+			<if test="pitch != null and pitch != ''">
+			pitch = #{pitch},
+			</if>
+			<if test="roll != null and roll != ''">
+			roll = #{roll},
+			</if>
+			update_date = now()
+		WHERE data_id = #{data_id}
+	</update>
+	
+	<!-- Data 테이블의 사용자 그룹 정보 변경 -->	
+	<update id="updateDataGroupData" parameterType="dataInfo">
+		/* updateDataGroupData */
+		UPDATE data_info
+		SET data_group_id = #{data_group_id}
+		WHERE data_id = #{data_id}
+	</update>
+	
+	<!-- Data 상태 수정 -->	
+	<update id="updateDataStatus" parameterType="dataInfo">
+		/* updateDataStatus */
+		UPDATE data_info
+		SET status = #{status},
+			update_date = NOW()
+		WHERE data_id = #{data_id}
+	</update>
+	
+	<!-- Data 삭제 -->
+	<delete id="deleteData" parameterType="long">
+		/* deleteData */
+		DELETE FROM data_info WHERE data_id = #{data_id}
+	</delete>
+	
+</mapper>

@@ -10,8 +10,8 @@
 		  		<span>사용유무</span>
  			</th>
  			<td class="col-input radio-set">
- 				<form:radiobutton path="geo_callback_enable" value="Y" label="사용" />
-				<form:radiobutton path="geo_callback_enable" value="N" label="사용안함" />
+ 				<form:radiobutton path="geo_callback_enable" value="true" label="사용" />
+				<form:radiobutton path="geo_callback_enable" value="false" label="사용안함" />
 	  		</td>
   		</tr>
   		<tr>
@@ -21,6 +21,24 @@
 			<td class="col-input">
 				<form:input path="geo_callback_selectedobject" cssClass="l" />
 				<form:errors path="geo_callback_selectedobject" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_callback_insertissue">Issue 등록 Callback</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_callback_insertissue" cssClass="l" />
+				<form:errors path="geo_callback_insertissue" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_callback_listissue">Issue 목록 Callback</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_callback_listissue" cssClass="l" />
+				<form:errors path="geo_callback_listissue" cssClass="error" />
 			</td>
 		</tr>
 	</table>

@@ -388,7 +388,6 @@
 		var USER_GROUP_TREE_DATA = null;
     $(document).ready(function() {
     	getAjaxUserGroupList();
-		fnObj.pageStart.delay(0.1);
 		$( ".tabs" ).tabs();
 	});
     

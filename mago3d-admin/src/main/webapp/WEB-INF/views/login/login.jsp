@@ -7,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Mago3d Admin</title>
+	<title>${sessionSiteName }</title>
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" />
@@ -22,7 +22,7 @@
 		<div class="row">
 			<div class="container">
 				<div class="row">
-					<h1><img src="/images/${lang}/common/logo-mago3d.png" alt="Gaia3d" width="150" height="48" ></h1>
+					<h1 style="padding-bottom:10px; font-size:38px; font-family:Lousianne; color:#573592;">mago3D</h1>
 <c:if test="${loginForm.error_code ne null && loginForm.error_code ne ''}">
 					<h6 style="padding-left: 10px; color: red;">* 
 	<c:if test="${loginForm.error_code eq 'user.session.empty'}">
@@ -62,7 +62,7 @@
 				<div class="panel row">
 					<h2 class="sign-title"><span class="text-sub">Administrator</span><br /><span class="text-main">Login</span></h2>
 					<div class="sign-inputs">
-						<div class="sign-desc">Mago3D 이슈 시스템</div>
+						<div class="sign-desc">mago3D 이슈 시스템</div>
 						<form:form id="loginForm" modelAttribute="loginForm" method="post" action="/login/process-login.do" onsubmit="return check();">
 							<input type="hidden" name="login_type" value=""/>
 							<label for="user_id"><span class="icon-glyph glyph-users"></span></label>
