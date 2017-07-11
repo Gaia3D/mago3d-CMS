@@ -283,5 +283,23 @@ function changeListIssueViewModeAPI(flag) {
 	}
 }
 
-
+/**
+ * pin image를 그림
+ * 
+ * @param data_key 데이터 고유키
+ * @param latitude 데이터 고유키
+ * @param longitude 데이터 고유키
+ * @param height 데이터 고유키
+ * @return
+ */
+function drawInsertIssueImageAPI(data_key, latitude, longitude, height) {
+	var api = new API("drawInsertIssueImage");
+	api.setDataKey(data_key);
+	api.setLatitude(latitude);
+	api.setLongitude(longitude);
+	api.setElevation(height);
+	if(managerFactory != null) {
+		managerFactory.callAPI(api);
+	}
+}
 

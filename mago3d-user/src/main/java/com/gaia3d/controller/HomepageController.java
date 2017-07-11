@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -77,7 +78,8 @@ public class HomepageController {
 	 * @return
 	 */
 	@GetMapping(value = "demo.do")
-	public String demo(HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo, @RequestParam(defaultValue="cesium") String viewLibrary, Model model) {
+	public String demo(HttpServletRequest request, HttpServletResponse response, 
+			@RequestParam(defaultValue="1") String pageNo, @RequestParam(defaultValue="cesium") String viewLibrary, Model model) {
 		
 		log.info("@@ viewLibrary = {}", viewLibrary);
 		String lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
@@ -138,6 +140,10 @@ public class HomepageController {
 		log.info("@@@@@@ policy = {}", gson.toJson(policy));
 		log.info("@@@@@@ dataGroupMap = {}", gson.toJson(dataGroupMap));
 		
+//		response.setHeader("Pragma", "No-cache");
+//		response.setHeader("Cache-Control", "No-cache");
+//		response.setHeader("Expires", "1");
+
 		return "/homepage/" + lang + "/" + viewLibrary;
 	}
 	

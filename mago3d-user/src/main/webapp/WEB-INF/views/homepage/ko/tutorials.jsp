@@ -6,6 +6,7 @@
 <html lang="${accessibility}">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
     <title>tutorials | mago3D User</title>
     <!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -13,8 +14,8 @@
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"></link>
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
-	<script type="text/javascript" src="/js/${lang }/common.js"></script>
-	<script type="text/javascript" src="/js/${lang }/message.js"></script>
+	<script type="text/javascript" src="/js/${lang}/common.js"></script>
+	<script type="text/javascript" src="/js/${lang}/message.js"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 

@@ -5650,5 +5650,12 @@ CesiumManager.prototype.callAPI = function(api) {
 	} else if(apiName === "changeListIssueViewMode") {
 		// issue list 표시
 		this.magoPolicy.setIssueListEnable(api.getIssueListEnable());
+	} else if(apiName === "drawInsertIssueImage") {
+		//pin image를 그림
+		// 배 병철 나쁜 시키, 여자도 안 해 주는..... 졸라 나쁜 시키, 지만 여자 사귀고.....
+		// api.getDataKey(),
+		// api.getLatitude()),
+		// api.getLongitude()),
+		// api.getElevation()),
 	}
 };

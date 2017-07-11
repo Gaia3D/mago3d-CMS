@@ -6,6 +6,7 @@
 <html lang="${accessibility}">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
     <title>Mago3D</title>
 	<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
