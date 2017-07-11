@@ -7,6 +7,9 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
+	<!-- <meta http-equiv="Cache-Control" content="no-cache"/>
+	<meta http-equiv="Expires" content="-1"/>
+	<meta http-equiv="Pragma" content="no-cache"/> -->
 	<title>demo | mago3D User</title>
 	<link rel="stylesheet" href="/css/${lang}/style.css" />
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css" />
@@ -262,66 +265,66 @@
 	</div>
 	</form:form>
 
-<script type="text/javascript" src="/externlib/${lang}/webworldwind/worldwind.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Code.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/API.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Config.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Callback.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Constant.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Message.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/ManagerFactory.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Atmosphere.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/GeometryUtil.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/GeometryModifier.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Line.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Plane.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Point3D.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Shader.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/ShaderSource.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/ReaderWriter.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Renderer.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Selection.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/VBOManager.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/CesiumManager.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/PostFxShader.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/FBO.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Geometry.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Accessor.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/NeoTexture.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/BoundingBox.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/BlockModels.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/FileRequestControler.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/ManagerUtils.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/NeoReferenceModels.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/OcclusionCullOctree.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Octree.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/VisibleObjectsControler.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Matrix4.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Lego.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Camera.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/GeoLocationData.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/MagoFacade.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Policy.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Box.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Vertex.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Triangle.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/TriSurface.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/TriPolyhedron.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/VertexList.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/VertexMatrix.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Color.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Quaternion.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/domain/ProjectLayer.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/MetaData.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/SceneState.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/SplitValue.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Frustum.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/GeographicCoord.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/TerranTile.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/GlobeTile.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Sphere.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/ObjectMarker.js"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/Pin.js"></script>
+<script type="text/javascript" src="/externlib/${lang}/webworldwind/worldwind.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Code.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/API.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Config.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Callback.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Constant.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Message.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/ManagerFactory.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Atmosphere.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/GeometryUtil.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/GeometryModifier.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Line.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Plane.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Point3D.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Shader.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/ShaderSource.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/ReaderWriter.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Renderer.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Selection.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/VBOManager.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/CesiumManager.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/PostFxShader.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/FBO.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Geometry.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Accessor.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/NeoTexture.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/BoundingBox.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/BlockModels.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/FileRequestControler.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/ManagerUtils.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/NeoReferenceModels.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/OcclusionCullOctree.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Octree.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/VisibleObjectsControler.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Matrix4.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Lego.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Camera.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/GeoLocationData.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/MagoFacade.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Policy.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Box.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Vertex.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Triangle.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/TriSurface.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/TriPolyhedron.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/VertexList.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/VertexMatrix.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Color.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Quaternion.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/domain/ProjectLayer.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/MetaData.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/SceneState.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/SplitValue.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Frustum.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/GeographicCoord.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/TerranTile.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/GlobeTile.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Sphere.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/ObjectMarker.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Pin.js?currentTime=${currentTime}"></script>
 <script>
 	var agent = navigator.userAgent.toLowerCase();
 	if(agent.indexOf('chrome') < 0) { 
@@ -429,41 +432,6 @@
 		}
 	}
 	
-	$("#inputIssueClose").click(function() {
-		$("#inputIssueLayer").hide();
-	});
-	
-	// object 정보 표시 call back function
-	function showSelectedObject(projectId, blockId, objectId, latitude, longitude, height, heading, pitch, roll){
-		if(objectInfoViewFlag) {
-			$("#move_data_key").val(projectId + "_" + blockId);
-			$("#move_latitude").val(latitude);
-			$("#move_longitude").val(longitude);
-			$("#move_height").val(height);
-			$("#move_heading").val(heading);
-			$("#move_pitch").val(pitch);
-			$("#move_roll").val(roll);
-			
-			$.toast({
-			    heading: 'Click Object Info',
-			    text: [
-			        'projectId : ' + projectId, 
-			        'blockId : ' + blockId, 
-			        'objectId : ' + objectId,
-			        'latitude : ' + latitude,
-			        'longitude : ' + longitude,
-			        'height : ' + height,
-			        'heading : ' + heading,
-			        'pitch : ' + pitch,
-			        'roll : ' + roll
-			    ],
-				//bgColor : 'blue',
-				hideAfter: 5000,
-				icon: 'info'
-			});
-		}
-	}
-	
 	function check() {
 		if ($("#data_key").val() == "") {
 			alert(JS_MESSAGE["issue.datakey.empty"]);
@@ -519,6 +487,8 @@
 				success: function(msg){
 					if(msg.result == "success") {
 						alert(JS_MESSAGE["insert"]);
+						// pin image를 그림
+						drawInsertIssueImageAPI(msg.issue.issue_id, msg.issue.issue_type, $("#data_key").val(), $("#latitude").val(), $("#longitude").val(), $("#height").val());
 					} else {
 						alert(JS_MESSAGE[msg.result]);
 					}
@@ -533,11 +503,49 @@
 			        isInsertIssue = true;
 				}
 			});
+			
+			changeInsertIssueStateAPI(0);
 		} else {
 			alert(JS_MESSAGE["button.dobule.click"]);
 			return;
 		}
 	});
+	
+	$("#inputIssueClose").click(function() {
+		$("#inputIssueLayer").hide();
+		changeInsertIssueStateAPI(0);
+	});
+	
+	// object 정보 표시 call back function
+	function showSelectedObject(projectId, blockId, objectId, latitude, longitude, height, heading, pitch, roll){
+		if(objectInfoViewFlag) {
+			$("#move_data_key").val(projectId + "_" + blockId);
+			$("#move_latitude").val(latitude);
+			$("#move_longitude").val(longitude);
+			$("#move_height").val(height);
+			$("#move_heading").val(heading);
+			$("#move_pitch").val(pitch);
+			$("#move_roll").val(roll);
+			
+			$.toast({
+			    heading: 'Click Object Info',
+			    text: [
+			        'projectId : ' + projectId, 
+			        'blockId : ' + blockId, 
+			        'objectId : ' + objectId,
+			        'latitude : ' + latitude,
+			        'longitude : ' + longitude,
+			        'height : ' + height,
+			        'heading : ' + heading,
+			        'pitch : ' + pitch,
+			        'roll : ' + roll
+			    ],
+				//bgColor : 'blue',
+				hideAfter: 5000,
+				icon: 'info'
+			});
+		}
+	}
 	
 	// Data 검색
 	$("#searchData").click(function() {
