@@ -68,7 +68,7 @@ public interface IssueService {
 	 * @param issueFile
 	 * @return
 	 */
-	int insertIssue(Issue issue, IssueFile issueFile);
+	Issue insertIssue(Issue issue, IssueFile issueFile);
 	
 	/**
 	 * issue Comment 등록

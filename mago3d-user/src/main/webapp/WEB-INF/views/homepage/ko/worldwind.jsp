@@ -181,9 +181,9 @@
 	        		<td>
 	        			<form:select path="data_group_id" cssClass="select">
 <c:forEach var="dataGroup" items="${projectDataGroupList}">
-										<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name}</option>
+							<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name}</option>
 </c:forEach>
-									</form:select>
+						</form:select>
 	        		</td>
 	        	</tr>
 	        	<tr>
@@ -193,7 +193,7 @@
 	        		<td>
 	        			<form:select path="issue_type" cssClass="select">
 <c:forEach var="commonCode" items="${issueTypeList}">
-										<option value="${commonCode.code_value}">${commonCode.code_value}</option>
+							<option value="${commonCode.code_value}">${commonCode.code_value}</option>
 </c:forEach>
 						</form:select>
 	        		</td>
@@ -331,7 +331,7 @@
 	if(agent.indexOf('chrome') < 0) { 
 		alert("이 데모 페이지는 대용량 웹 데이터 처리를 위해 Chrome 브라우저에 최적화 되어 있습니다. \n원활한 서비스 이용을 위해 Chrome 브라우저를 이용  하시기 바랍니다.");
 	}
-	
+
 	var policyJson = ${policyJson};
 	var dataGroupMap = ${dataGroupMap};
 	var insertIssueFlag = false;
@@ -433,41 +433,6 @@
 		}
 	}
 	
-	$("#inputIssueClose").click(function() {
-		$("#inputIssueLayer").hide();
-	});
-	
-	// object 정보 표시 call back function
-	function showSelectedObject(projectId, blockId, objectId, latitude, longitude, height, heading, pitch, roll){
-		if(objectInfoViewFlag) {
-			$("#move_data_key").val(projectId + "_" + blockId);
-			$("#move_latitude").val(latitude);
-			$("#move_longitude").val(longitude);
-			$("#move_height").val(height);
-			$("#move_heading").val(heading);
-			$("#move_pitch").val(pitch);
-			$("#move_roll").val(roll);
-			
-			$.toast({
-			    heading: 'Click Object Info',
-			    text: [
-			        'projectId : ' + projectId, 
-			        'blockId : ' + blockId, 
-			        'objectId : ' + objectId,
-			        'latitude : ' + latitude,
-			        'longitude : ' + longitude,
-			        'height : ' + height,
-			        'heading : ' + heading,
-			        'pitch : ' + pitch,
-			        'roll : ' + roll
-			    ],
-				//bgColor : 'blue',
-				hideAfter: 5000,
-				icon: 'info'
-			});
-		}
-	}
-	
 	function check() {
 		if ($("#data_key").val() == "") {
 			alert(JS_MESSAGE["issue.datakey.empty"]);
@@ -523,6 +488,8 @@
 				success: function(msg){
 					if(msg.result == "success") {
 						alert(JS_MESSAGE["insert"]);
+						// pin image를 그림
+						drawInsertIssueImageAPI(msg.issue.issue_id, msg.issue.issue_type, $("#data_key").val(), $("#latitude").val(), $("#longitude").val(), $("#height").val());
 					} else {
 						alert(JS_MESSAGE[msg.result]);
 					}
@@ -537,11 +504,49 @@
 			        isInsertIssue = true;
 				}
 			});
+			
+			changeInsertIssueStateAPI(0);
 		} else {
 			alert(JS_MESSAGE["button.dobule.click"]);
 			return;
 		}
 	});
+	
+	$("#inputIssueClose").click(function() {
+		$("#inputIssueLayer").hide();
+		changeInsertIssueStateAPI(0);
+	});
+	
+	// object 정보 표시 call back function
+	function showSelectedObject(projectId, blockId, objectId, latitude, longitude, height, heading, pitch, roll){
+		if(objectInfoViewFlag) {
+			$("#move_data_key").val(projectId + "_" + blockId);
+			$("#move_latitude").val(latitude);
+			$("#move_longitude").val(longitude);
+			$("#move_height").val(height);
+			$("#move_heading").val(heading);
+			$("#move_pitch").val(pitch);
+			$("#move_roll").val(roll);
+			
+			$.toast({
+			    heading: 'Click Object Info',
+			    text: [
+			        'projectId : ' + projectId, 
+			        'blockId : ' + blockId, 
+			        'objectId : ' + objectId,
+			        'latitude : ' + latitude,
+			        'longitude : ' + longitude,
+			        'height : ' + height,
+			        'heading : ' + heading,
+			        'pitch : ' + pitch,
+			        'roll : ' + roll
+			    ],
+				//bgColor : 'blue',
+				hideAfter: 5000,
+				icon: 'info'
+			});
+		}
+	}
 	
 	// Data 검색
 	$("#searchData").click(function() {

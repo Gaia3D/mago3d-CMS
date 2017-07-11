@@ -429,41 +429,6 @@
 		}
 	}
 	
-	$("#inputIssueClose").click(function() {
-		$("#inputIssueLayer").hide();
-	});
-	
-	// object 정보 표시 call back function
-	function showSelectedObject(projectId, blockId, objectId, latitude, longitude, height, heading, pitch, roll){
-		if(objectInfoViewFlag) {
-			$("#move_data_key").val(projectId + "_" + blockId);
-			$("#move_latitude").val(latitude);
-			$("#move_longitude").val(longitude);
-			$("#move_height").val(height);
-			$("#move_heading").val(heading);
-			$("#move_pitch").val(pitch);
-			$("#move_roll").val(roll);
-			
-			$.toast({
-			    heading: 'Click Object Info',
-			    text: [
-			        'projectId : ' + projectId, 
-			        'blockId : ' + blockId, 
-			        'objectId : ' + objectId,
-			        'latitude : ' + latitude,
-			        'longitude : ' + longitude,
-			        'height : ' + height,
-			        'heading : ' + heading,
-			        'pitch : ' + pitch,
-			        'roll : ' + roll
-			    ],
-				//bgColor : 'blue',
-				hideAfter: 5000,
-				icon: 'info'
-			});
-		}
-	}
-	
 	function check() {
 		if ($("#data_key").val() == "") {
 			alert(JS_MESSAGE["issue.datakey.empty"]);
@@ -520,7 +485,7 @@
 					if(msg.result == "success") {
 						alert(JS_MESSAGE["insert"]);
 						// pin image를 그림
-						drawInsertIssueImageAPI(data_key, latitude, longitude, height);
+						drawInsertIssueImageAPI(msg.issue.issue_id, msg.issue.issue_type, $("#data_key").val(), $("#latitude").val(), $("#longitude").val(), $("#height").val());
 					} else {
 						alert(JS_MESSAGE[msg.result]);
 					}
@@ -535,11 +500,49 @@
 			        isInsertIssue = true;
 				}
 			});
+			
+			changeInsertIssueStateAPI(0);
 		} else {
 			alert(JS_MESSAGE["button.dobule.click"]);
 			return;
 		}
 	});
+	
+	$("#inputIssueClose").click(function() {
+		$("#inputIssueLayer").hide();
+		changeInsertIssueStateAPI(0);
+	});
+	
+	// object 정보 표시 call back function
+	function showSelectedObject(projectId, blockId, objectId, latitude, longitude, height, heading, pitch, roll){
+		if(objectInfoViewFlag) {
+			$("#move_data_key").val(projectId + "_" + blockId);
+			$("#move_latitude").val(latitude);
+			$("#move_longitude").val(longitude);
+			$("#move_height").val(height);
+			$("#move_heading").val(heading);
+			$("#move_pitch").val(pitch);
+			$("#move_roll").val(roll);
+			
+			$.toast({
+			    heading: 'Click Object Info',
+			    text: [
+			        'projectId : ' + projectId, 
+			        'blockId : ' + blockId, 
+			        'objectId : ' + objectId,
+			        'latitude : ' + latitude,
+			        'longitude : ' + longitude,
+			        'height : ' + height,
+			        'heading : ' + heading,
+			        'pitch : ' + pitch,
+			        'roll : ' + roll
+			    ],
+				//bgColor : 'blue',
+				hideAfter: 5000,
+				icon: 'info'
+			});
+		}
+	}
 	
 	// Data 검색
 	$("#searchData").click(function() {

@@ -137,7 +137,7 @@ public class IssueController {
 	 * @return
 	 */
 	@PostMapping(value = "insert-issue.do")
-	public String ajaxInsertIssue(MultipartHttpServletRequest request, Issue issue, BindingResult bindingResult, Model model) {
+	public String insertIssue(MultipartHttpServletRequest request, Issue issue, BindingResult bindingResult, Model model) {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 		
@@ -276,6 +276,7 @@ public class IssueController {
 			issue.setClient_ip(client_ip);
 			log.info("@@@ issue = {}", issue);
 			issueService.insertIssue(issue, issueFile);
+			jSONObject.put("issue", issue);
 			
 		} catch(Exception e) {
 			e.printStackTrace();

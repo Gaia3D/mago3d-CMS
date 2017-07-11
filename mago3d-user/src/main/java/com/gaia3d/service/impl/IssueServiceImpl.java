@@ -101,7 +101,7 @@ public class IssueServiceImpl implements IssueService {
 	 * @return
 	 */
 	@Transactional
-	public int insertIssue(Issue issue, IssueFile issueFile) {
+	public Issue insertIssue(Issue issue, IssueFile issueFile) {
 		issueMapper.insertIssue(issue);
 		issueMapper.insertIssueDetail(issue);
 		issueFile.setIssue_id(issue.getIssue_id());
@@ -136,7 +136,7 @@ public class IssueServiceImpl implements IssueService {
 			}
 		}
 		
-		return 1;
+		return issue;
 	}
 	
 	/**

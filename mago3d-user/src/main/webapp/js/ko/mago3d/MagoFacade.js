@@ -176,18 +176,6 @@ function changeLocationAndRotationAPI(data_key, latitude, longitude, height, hea
  * @return building
  */
 function getLocationAndRotationAPI(projectId, blockId) {
-	
-//	// 호출하는 블럭이 frustum culling 안에 있을 경우.
-//	var building = getLocationAndRotationAPI("testId", "F110T");
-//	if(building.geoLocationDataAux !== undefined) {
-//		console.log("@@@@@@@@@@@@@@@@" + building.geoLocationDataAux.latitude);
-//		console.log("@@@@@@@@@@@@@@@@" + building.geoLocationDataAux.longitude);
-//		console.log("@@@@@@@@@@@@@@@@" + building.geoLocationDataAux.elevation);
-//		console.log("@@@@@@@@@@@@@@@@" + building.geoLocationDataAux.heading);
-//		console.log("@@@@@@@@@@@@@@@@" + building.geoLocationDataAux.pitch);
-//		console.log("@@@@@@@@@@@@@@@@" + building.geoLocationDataAux.roll);
-//	}
-	
 	var api = new API("getLocationAndRotation");
 	api.setProjectId(projectId);
 	api.setBlockId(blockId);
@@ -286,14 +274,18 @@ function changeListIssueViewModeAPI(flag) {
 /**
  * pin image를 그림
  * 
+ * @param issue_id 이슈 고유키
+ * @param issue_type 이슈 고유키
  * @param data_key 데이터 고유키
  * @param latitude 데이터 고유키
  * @param longitude 데이터 고유키
  * @param height 데이터 고유키
  * @return
  */
-function drawInsertIssueImageAPI(data_key, latitude, longitude, height) {
+function drawInsertIssueImageAPI(issue_id, issue_type, data_key, latitude, longitude, height) {
 	var api = new API("drawInsertIssueImage");
+	api.setIssueId(issue_id);
+	api.setIssueId(issue_type);
 	api.setDataKey(data_key);
 	api.setLatitude(latitude);
 	api.setLongitude(longitude);
@@ -303,3 +295,16 @@ function drawInsertIssueImageAPI(data_key, latitude, longitude, height) {
 	}
 }
 
+/**
+ * issue 등록 geo 정보 관련 상태 변경
+ * 
+ * @param insertIssueState 이슈 등록 좌표 상태
+ * @return
+ */
+function changeInsertIssueStateAPI(insertIssueState) {
+	var api = new API("changeInsertIssueState");
+	api.setInsertIssueState(insertIssueState);
+	if(managerFactory != null) {
+		managerFactory.callAPI(api);
+	}
+}
