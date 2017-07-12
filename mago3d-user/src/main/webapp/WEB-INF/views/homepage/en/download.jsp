@@ -23,10 +23,10 @@
 <body>
 
 	<header class='down'>
-		<div>
-			<p>Architecture, Engineering, Construction</p>
-			<p>A Brand-New Live 3D Platform</p>
-		</div>
+<!-- 		<div> -->
+<!-- 			<p>Architecture, Engineering, Construction</p> -->
+<!-- 			<p>A Brand-New Live 3D Platform</p> -->
+<!-- 		</div> -->
 	</header>
 	
 	<nav class="nav">
@@ -36,12 +36,12 @@
 			</h1>
 			<ul class="menu">
 				<li><a href="/homepage/about.do">mago3D</a></li>
-				<li class="dropdown">
-					Demo
-					<div class="dropdown-content">
-						<a href="/homepage/demo.do">Cesium</a>
-						<a href="/homepage/demo.do?viewLibrary=worldwind">World Wind</a>
-					</div>
+				<li>Demo<span></span>
+					<ul>
+						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
+						<li><a href="/homepage/demo.do?viewLibrary=worldwind"
+							style="color: white">World Wind</a></li>
+					</ul>
 				</li>
 				<li class="on">Download<span></span></li>
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
@@ -54,6 +54,7 @@
 	</nav>
 
 	<section>
+		<h2>mago3D</h2>
 		<div class="contents">
 			<button type="button" class="down" onclick="location.href='https://github.com/Gaia3D/mago3d'">
 				DOWNLOAD mago3D 1.0.0 <span>2017-07-01</span>
