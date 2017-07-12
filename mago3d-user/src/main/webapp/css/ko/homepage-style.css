@@ -17,35 +17,35 @@ font-family: 'Noto Sans','Malgun Gothic','돋움',dotum, sans-serif;}
 /* HEADER */
 header {
 position: relative;
-height: 200px;
+height: 80px;
 background-repeat: repeat-x;
 background-color: #323140;
 background-image: url(/images/ko/header.png);
 }
-header.about {
-background-position: 0 0;
-}
-header.down {
-background-position: 0 -200px;
-}
-header.tuto {
-background-position: 0 -400px;
-}
-header > div {
-width: 1200px;
-margin: 0 auto;
-padding-top: 120px;
-background: url(/images/ko/logo_header.png) no-repeat center 40px;
-}
-header > div p {
-color: #fff;
-font-size: 23px;
-text-align: center;
-line-height: 1.8em;
-font-weight: 100;
-}
-header > div p:last-child {
-}
+/* header.about { */
+/* background-position: 0 0; */
+/* } */
+/* header.down { */
+/* background-position: 0 -200px; */
+/* } */
+/* header.tuto { */
+/* background-position: 0 -400px; */
+/* } */
+/* header > div { */
+/* width: 1200px; */
+/* margin: 0 auto; */
+/* padding-top: 120px; */
+/* background: url(/images/ko/logo_header.png) no-repeat center 40px; */
+/* } */
+/* header > div p { */
+/* color: #fff; */
+/* font-size: 23px; */
+/* text-align: center; */
+/* line-height: 1.8em; */
+/* font-weight: 100; */
+/* } */
+/* header > div p:last-child { */
+/* } */
 /* NAV */
 nav {
 margin-bottom: 50px;
@@ -472,56 +472,25 @@ background-position: center 0px;
 }
 
 
-.example-code {
-font-size: 13.8px;
+/* 메뉴 2depth 0712 */
+.menu li > ul {
+display: none;
 }
-/* /////// example-code //////// */
-.example-code pre {
-
-margin:10px;
-padding:10px;
-border: none;
-border-radius: 3px;
-max-width: 800px;
-background-color: #28272B;
-white-space: pre-line;
-white-space:nowrap;
-color: white;
-font: inherit;
+.menu li:hover > ul {
+display: block;
+margin-top: 22px;
 }
-
-.example-code pre .function {
-color :#ff8040;
+.menu li:hover > ul li {
+height: 35px;
+color: #fff;
+background-color: tomato;
 }
-.example-code pre .string {
-color : #7FFFD4;
+.menu li:hover > ul li * {
+vertical-align: middle;
 }
-.example-code pre .value {
-color : #FF6347;
+.menu li > ul li:nth-child(1) {
+border-bottom: 1px dotted #fff;
 }
-.example-code pre .tag {
-color : #FFE4B5;
-}
-
-.propit{
-width:300px;
-height:300px;
-}
-.propit div h4{
-font-weight: 700;
-font-size: 10px;
-color: white;
-}
-.api a{
-text-decoration: none;
-}
-.api p{
-text-align: center;
-color: gray;
-font-size: 30px;
-}
-
-
 
 
 /* ////////// Dex /////////// */

@@ -35,12 +35,12 @@
 			</h1>
 			<ul class="menu">
 				<li class="on">mago3D<span></span></li>
-				<li class="dropdown">
-					Demo
-					<div class="dropdown-content">
-						<a href="/homepage/demo.do">Cesium</a>
-						<a href="/homepage/demo.do?viewLibrary=worldwind">World Wind</a>
-					</div>
+				<li>Demo<span></span>
+					<ul>
+						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
+						<li><a href="/homepage/demo.do?viewLibrary=worldwind"
+							style="color: white">World Wind</a></li>
+					</ul>
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
