@@ -48,7 +48,7 @@
 					<img src="/images/${lang }/homepage/bullet_h4.png" alt="" />
 					<span style="padding-left: 10px; width:200px; overflow: hidden;">${issue.title }</span>
 					<span style="float:right; padding-right: 15px; padding-top: 5px;">
-						<a href="#" onclick="flyTo('${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">
+						<a href="#" onclick="flyTo('${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">
 							<img src="/images/${lang }/homepage/btn_going.png" width="26" height="26" alt="" />
 						</a>
 					</span>
@@ -150,7 +150,7 @@
 		<p>바로가기</p>
 		<ul>
 <c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status">
-			<li onclick="flyTo('${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">${dataGroup.data_group_name }</li>
+			<li onclick="flyTo(null, null, '${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">${dataGroup.data_group_name }</li>
 </c:forEach>
 		</ul>
 	</div>	
@@ -367,8 +367,8 @@
 		}
 	});
 	
-	function flyTo(longitude, latitude, height, duration) {
-		managerFactory.flyTo(longitude, latitude, height, duration);
+	function flyTo(issueId, issueType, longitude, latitude, height, duration) {
+		managerFactory.flyTo(issueId, issueType, longitude, latitude, height, duration);
 	}
 	
 	// 이슈 등록
@@ -423,8 +423,6 @@
 				$("#latitude").val(latitude);
 				$("#longitude").val(longitude);
 				$("#height").val(height);
-				
-				console.log("data_name = " + data_name + ", data_key = " + data_key + ", latitude = " + latitude + ", longitude = " + longitude + ", height = " + height); 
 			}
 		}
 	}
@@ -635,7 +633,8 @@
 								+ 	"		<img src=\"/images/${lang }/homepage/bullet_h4.png\" alt=\"\" />"
 								+ 	"		<span style=\"padding-left: 10px; width:200px; overflow: hidden;\">" + issue.title + "</span>"
 								+ 	"		<span style=\"float:right; padding-right: 15px; padding-top: 5px;\">"
-								+ 	"			<a href=\"#\" onclick=\"flyTo('" + issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">"
+								+ 	"			<a href=\"#\" onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type 
+													+ "', '" + issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">"
 								+ 	"				<img src=\"/images/${lang }/homepage/btn_going.png\" width=\"26\" height=\"26\" alt=\"\" />"
 								+ 	"			</a>"
 								+ 	"		</span>"
