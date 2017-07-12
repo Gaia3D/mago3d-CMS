@@ -54,7 +54,7 @@
 	</nav>
 
 	<section>
-		<h2>mago3D</h2>
+		<h2>Download</h2>
 		<div class="contents">
 			<button type="button" class="down" onclick="location.href='https://github.com/Gaia3D/mago3d'">
 				DOWNLOAD mago3D 1.0.0 <span>2017-07-01</span>

@@ -50,8 +50,8 @@
 	</nav>
 	
 	<section>
-		<h2>mago3D</h2>
-		<h2>Tutorials<span></span></h2>
+		<h2>Tutorials</h2>
+		<h2>API List<span></span></h2>
 		<div class="contents">
 			<ul class="subMenu">				
 				<li>Issue registration API</a></li>
