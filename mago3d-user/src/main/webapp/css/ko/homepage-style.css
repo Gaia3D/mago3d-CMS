@@ -294,7 +294,7 @@ text-decoration: none;
 display: inline-block;
 width: 100%;
 height: 100%;
-margin-top: 10px;
+line-height: 50px;
 }
 .tab li:hover {
 transition: all 1.5s;
@@ -949,7 +949,10 @@ border:1px solid #fff;
 background-color: transparent;
 }
 .mainMenu .nav  li a{
-color: #fff;	
+display: block;
+color: #fff;
+width: 100%;
+height: 100%;	
 }
 .mainMenu .nav li:hover {
 border:1px solid tomato;

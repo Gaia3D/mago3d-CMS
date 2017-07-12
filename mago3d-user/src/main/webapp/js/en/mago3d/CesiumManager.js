@@ -1465,19 +1465,36 @@ CesiumManager.prototype.renderNeoBuildingsAsimectricVersion = function(scene, is
 	else{
 		var hola = 0;
 	}
-	/*
-	if(this.bPicking == true && this.bObjectMarker == true && isLastFrustum)
+	
+	if(this.bPicking == true && isLastFrustum)
 	{
-		//this.bPicking = false;
-		var pixelPos = new Point3D();
-		pixelPos = this.calculatePixelPositionWorldCoord(gl, scene, pixelPos);
-		var objMarker = this.objMarkerManager.newObjectMarker();
+		if(this.magoPolicy.issueInsertEnable == true)
+		{
+			if(this.objMarkerSC == undefined)
+				this.objMarkerSC = new ObjectMarker();
+			
+			var pixelPos = new Point3D();
+			pixelPos = this.calculatePixelPositionWorldCoord(gl, scene, pixelPos);
+			//var objMarker = this.objMarkerManager.newObjectMarker();
+			
+			ManagerUtils.calculateGeoLocationDataByAbsolutePoint(pixelPos.x, pixelPos.y, pixelPos.z, this.objMarkerSC.geoLocationData, this);
+			this.renderingFase = !this.renderingFase;
+		}
 		
-		ManagerUtils.calculateGeoLocationDataByAbsolutePoint(pixelPos.x, pixelPos.y, pixelPos.z, objMarker.geoLocationData, this);
-		this.renderingFase = !this.renderingFase;
-
+		if(this.magoPolicy.objectInfoViewEnable == true)
+		{
+			if(this.objMarkerSC == undefined)
+				this.objMarkerSC = new ObjectMarker();
+			
+			var pixelPos = new Point3D();
+			pixelPos = this.calculatePixelPositionWorldCoord(gl, scene, pixelPos);
+			//var objMarker = this.objMarkerManager.newObjectMarker();
+			
+			ManagerUtils.calculateGeoLocationDataByAbsolutePoint(pixelPos.x, pixelPos.y, pixelPos.z, this.objMarkerSC.geoLocationData, this);
+			this.renderingFase = !this.renderingFase;
+		}
 	}
-	*/
+	
 	
 	if(this.bPicking == true && isLastFrustum)
 	{
@@ -5316,7 +5333,6 @@ CesiumManager.prototype.displayLocationAndRotation = function(neoBuilding) {
 								geoLocationData.heading,
 								geoLocationData.pitch,
 								geoLocationData.roll);
-	
 };
 
 /**
@@ -5324,40 +5340,37 @@ CesiumManager.prototype.displayLocationAndRotation = function(neoBuilding) {
  */
 CesiumManager.prototype.selectedObjectNotice = function(neoBuilding) {
 	//var projectIdAndBlockId = neoBuilding.buildingId;
-	var latitude, longitude, altitude, heading, pitch, roll;
 	var geoLocationData = neoBuilding.geoLocDataManager.geoLocationDataArray[0];
-	latitude = geoLocationData.geographicCoord.latitude;
-	longitude = geoLocationData.geographicCoord.longitude;
-	altitude = geoLocationData.geographicCoord.altitude;
-	heading = geoLocationData.heading;
-	pitch = geoLocationData.pitch;
-	roll = geoLocationData.roll;
-	
 	var dividedName = neoBuilding.buildingId.split("_");
+	
 	if(MagoConfig.getPolicy().geo_callback_enable == "true") {
 		var objectId = null;
 		if(this.objectSelected != undefined) objectId = this.objectSelected.objectId;
-		selectedObjectCallback(		MagoConfig.getPolicy().geo_callback_selectedobject,
-									dividedName[0],
-									dividedName[1],
-									objectId,
-									geoLocationData.geographicCoord.latitude,
-									geoLocationData.geographicCoord.longitude,
-									geoLocationData.geographicCoord.altitude,
-									geoLocationData.heading,
-									geoLocationData.pitch,
-									geoLocationData.roll);
 		
+		// click object 정보를 표시
+		if(this.magoPolicy.getObjectInfoViewEnable()) {
+			selectedObjectCallback(		MagoConfig.getPolicy().geo_callback_selectedobject,
+										dividedName[0],
+										dividedName[1],
+										objectId,
+										this.objMarkerSC.geoLocationData.geographicCoord.latitude,
+										this.objMarkerSC.geoLocationData.geographicCoord.longitude,
+										this.objMarkerSC.geoLocationData.geographicCoord.altitude,
+										geoLocationData.heading,
+										geoLocationData.pitch,
+										geoLocationData.roll);
+		}
+			
 		// 이슈 등록 창 오픈
 		if(this.magoPolicy.getIssueInsertEnable()) {
-			// insert pin.***
+			if(this.objMarkerSC == undefined) return;
 			
 			insertIssueCallback(	MagoConfig.getPolicy().geo_callback_insertissue,
 									dividedName[0] + "_" + dividedName[1],
 									objectId,
-									geoLocationData.geographicCoord.latitude,
-									geoLocationData.geographicCoord.longitude,
-									geoLocationData.geographicCoord.altitude);
+									this.objMarkerSC.geoLocationData.geographicCoord.latitude,
+									this.objMarkerSC.geoLocationData.geographicCoord.longitude,
+									(parseFloat(this.objMarkerSC.geoLocationData.geographicCoord.altitude) + 10));
 		}
 	}
 };
@@ -5650,5 +5663,18 @@ CesiumManager.prototype.callAPI = function(api) {
 	} else if(apiName === "changeListIssueViewMode") {
 		// issue list 표시
 		this.magoPolicy.setIssueListEnable(api.getIssueListEnable());
+	} else if(apiName === "drawInsertIssueImage") {
+		// pin 을 표시
+		if(this.objMarkerSC == undefined) return;
+		
+		var objMarker = this.objMarkerManager.newObjectMarker();
+		
+		this.objMarkerSC.issue_id = api.getIssueId;
+		this.objMarkerSC.issue_type = api.getIssueType;
+		this.objMarkerSC.geoLocationData.geographicCoord.setLonLatAlt(parseFloat(api.getLongitude), parseFloat(api.getLatitude), parseFloat(api.getHeight));
+		
+		objMarker.copyFrom(this.objMarkerSC);
+	} else if(apiName === "changeInsertIssueState") {
+		this.sceneState.insertIssueState = 0;
 	}
 };
