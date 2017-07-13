@@ -6,7 +6,7 @@
 <html lang="${accessibility}">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
+	<meta name="viewport" content="width=1250">	
 	<title>download | mago3D User</title>
 	<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -35,7 +35,7 @@
 			</h1>
 			<ul class="menu">
 				<li><a href="/homepage/about.do">mago3D</a></li>
-				<li>Demo<span></span>
+				<li class="mm" onclick='selectMenu();'>Demo<span></span>
 					<ul>
 						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
 						<li><a href="/homepage/demo.do?viewLibrary=worldwind"

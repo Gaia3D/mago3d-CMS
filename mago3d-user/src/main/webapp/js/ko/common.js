@@ -6,7 +6,14 @@ function deleteWarning() {
 		return false;
 	}
 }
-
+//mobile hover 처리
+function selectMenu() {
+	$(document).ready(function(){
+		  $(".mm").hover(function(){
+			  $("a").show();
+			})
+		});
+}
 // 로딩중 Spinner 처리
 function startSpinner(loadingId) {
 	var $spinnerDiv = $("#" + loadingId);
