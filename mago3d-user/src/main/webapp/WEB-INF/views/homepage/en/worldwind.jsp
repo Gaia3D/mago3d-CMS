@@ -446,7 +446,7 @@
 						if(issueList != null && issueList.length > 0) {
 							for(i=0; i<issueList.length; i++ ) {
 								var issue = issueList[i];
-								drawInsertIssueImageAPI(issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
+								drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
 							}
 						}
 					} else {
@@ -536,7 +536,7 @@
 					if(msg.result == "success") {
 						alert(JS_MESSAGE["insert"]);
 						// pin image를 그림
-						drawInsertIssueImageAPI(msg.issue.issue_id, msg.issue.issue_type, $("#data_key").val(), $("#latitude").val(), $("#longitude").val(), $("#height").val());
+						drawInsertIssueImageAPI(1, msg.issue.issue_id, msg.issue.issue_type, $("#data_key").val(), $("#latitude").val(), $("#longitude").val(), $("#height").val());
 					} else {
 						alert(JS_MESSAGE[msg.result]);
 					}
