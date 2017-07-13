@@ -44,6 +44,16 @@ public class DataGroupServiceImpl implements DataGroupService {
 	}
 	
 	/**
+	 * geo 정보를 이용해서 가장 가까운 데이터 그룹 정보를 획득
+	 * @param dataGroup
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public DataGroup getDataGroupByGeo(DataGroup dataGroup) {
+		return dataGroupMapper.getDataGroupByGeo(dataGroup);
+	}
+	
+	/**
 	 * ancestor별 Data 그룹 목록
 	 * @param ancestor
 	 * @return

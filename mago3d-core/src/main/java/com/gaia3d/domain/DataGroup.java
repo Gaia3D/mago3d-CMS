@@ -52,6 +52,8 @@ public class DataGroup {
 	private String use_yn;
 	// 자식 존재 유무, Y : 존재, N : 존재안함(기본)
 	private String child_yn;
+	// 위도, 경도 정보 geometry 타입
+	private String location;
 	// 위도
 	private String latitude;
 	// 경도

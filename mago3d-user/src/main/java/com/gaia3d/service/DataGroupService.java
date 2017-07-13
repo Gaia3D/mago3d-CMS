@@ -28,6 +28,13 @@ public interface DataGroupService {
 	List<DataGroup> getListDataGroupByDepth(Integer depth);
 	
 	/**
+	 * geo 정보를 이용해서 가장 가까운 데이터 그룹 정보를 획득
+	 * @param dataGroup
+	 * @return
+	 */
+	DataGroup getDataGroupByGeo(DataGroup dataGroup);
+	
+	/**
 	 * ancestor별 Data 그룹 목록
 	 * @param ancestor
 	 * @return
