@@ -5663,6 +5663,10 @@ CesiumManager.prototype.callAPI = function(api) {
 	} else if(apiName === "changeListIssueViewMode") {
 		// issue list 표시
 		this.magoPolicy.setIssueListEnable(api.getIssueListEnable());
+		if(!api.getIssueListEnable()) {
+			// clear objMarkerManager objectmakersarrays 사이즈를 0 으로 하면... .됨
+			this.objMarkerManager.objectMarkerArray = [];
+		}
 	} else if(apiName === "drawInsertIssueImage") {
 		// pin 을 표시
 		if(this.objMarkerSC == undefined) {
@@ -5671,8 +5675,6 @@ CesiumManager.prototype.callAPI = function(api) {
 			ManagerUtils.calculateGeoLocationData(parseFloat(api.getLongitude()), parseFloat(api.getLatitude()), parseFloat(api.getElevation()), 
 					undefined, undefined, undefined, this.objMarkerSC.geoLocationData, this);
 		}
-		
-		// clear objMarkerManager objectmakersarrays 사이즈를 0 으로 하면... .됨
 		
 		var objMarker = this.objMarkerManager.newObjectMarker();
 		

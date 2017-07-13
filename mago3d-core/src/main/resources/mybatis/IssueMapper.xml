@@ -100,9 +100,10 @@
 	<!-- 이슈 목록 -->
 	<select id="getListIssueByUserId" parameterType="issue" resultType="issue">
 		/* getListIssue */
-		SELECT A.*, 
-			(SELECT user_name FROM user_info WHERE user_id = A.user_id) AS user_name, 
-			(SELECT data_group_name FROM data_group WHERE data_group_id = A.data_group_id) AS data_group_name, 
+		SELECT A.*, C.data_group_name,
+			(SELECT user_name FROM user_info WHERE user_id = A.user_id) AS user_name,
+			(SELECT code_name FROM common_code WHERE code_value = A.issue_type) AS issue_type_name,
+			(SELECT code_name FROM common_code WHERE code_value = A.priority) AS priority_name,
 			(SELECT count(issue_comment_id) FROM issue_comment WHERE issue_id = A.issue_id) AS comment_count
 		FROM(
 			SELECT *
@@ -133,7 +134,9 @@
 			</otherwise>
 			</choose>
 			OFFSET #{offset} LIMIT #{limit}
-		) A
+		) A, data_group C
+		WHERE A.data_group_id = C.data_group_id
+		ORDER BY insert_date DESC, issue_id DESC
 	</select>
 	
 	<!-- 이슈 Comment 목록 -->

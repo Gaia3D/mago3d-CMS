@@ -72,10 +72,12 @@ public class Issue {
 	private String title;
 	// 우선순위. common_code 동적 생성
 	private String priority;
+	private String priority_name;
 	// 예정일. 마감일
 	private String due_date;
 	// 이슈 유형. common_code 동적 생성
 	private String issue_type;
+	private String issue_type_name;
 	// 상태. common_code 동적 생성
 	private String status;
 	// Data key

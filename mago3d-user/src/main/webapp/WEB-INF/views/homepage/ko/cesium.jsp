@@ -12,7 +12,7 @@
 	<meta http-equiv="Pragma" content="no-cache"/> -->
 	<title>demo | mago3D User</title>
 	<link rel="stylesheet" href="/css/${lang}/style.css" />
-	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css" />
+	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css?currentTime=${currentTime}" />
 	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-toast/jquery.toast.css" />
@@ -25,46 +25,77 @@
 </head>
 
 <body>
+	<div class="trigger" >
+		<button type="button"></button>
+		<ul>
+			<li><a href="/homepage/index.do">Home</a></li>
+			<li><a href="/homepage/about.do">Mago3D</a></li>	
+			<li><a href="/homepage/download.do">Download</a></li>
+			<li><a href="/homepage/tutorials.do">Tutorials</a></li>
+		</ul>
+	</div>
 	<div class="ctrl">
 		<div>
 			<button id="issueEnable">Issue 등록</button>
 			<button id="objectInfoEnable">Object 정보</button>	
-			<button id="issuesEnable">Issues 정보</button>
+			<button id="issuesEnable">Issues 표시</button>
 			<input type="hidden" id="now_latitude" name="now_latitude" value="${now_latitude }" />
 			<input type="hidden" id="now_longitude" name="now_longitude" value="${now_longitude }"  />
 		</div>
-		<ul>
+		<ul class="tab">
 			<li id="issueMoreImage">My Issue</li>
 			<li id="apiMoreImage">API목록</li>
 		</ul>
-		<div id="recentIssueListContent" style="display: none">
+		<ul id="recentIssueListContent" class="issue" style="display: none">
 <c:if test="${empty issueList }">
-			<div style="text-align: center; padding-top:20px; height: 50px;">
+			<li style="text-align: center; padding-top:20px; height: 50px;">
 				Issue가 존재하지 않습니다.
-			</div>
+			</li>
 </c:if>
 <c:if test="${!empty issueList }">
-	<c:forEach var="issue" items="${issueList}" varStatus="status">	
-			<div style="padding-left: 20px; padding-top: 20px; padding-bottom: 20px; background: gainsboro">
-				<div>
-					<img src="/images/${lang }/homepage/bullet_h4.png" alt="" />
-					<span style="padding-left: 10px; width:200px; overflow: hidden;">${issue.title }</span>
-					<span style="float:right; padding-right: 15px; padding-top: 5px;">
-						<a href="#" onclick="flyTo('${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">
-							<img src="/images/${lang }/homepage/btn_going.png" width="26" height="26" alt="" />
-						</a>
-					</span>
-				</div>
-				<div id="issue_toggle_${issue.issue_id }">
-					<span style="padding-left: 25px;">[${issue.issue_type }][${issue.priority }]</span>
-					<span style="padding-left: 5px;">${issue.data_group_name }</span>
-					<span style="float:right; padding-right: 20px;">${issue.viewInsertDate }</span>
-				</div>
-			</div>
+	<c:set var="issueTypeCss" value="i1" />
+	<c:set var="issuePriorityCss" value="t1" />
+	<c:forEach var="issue" items="${issueList}" varStatus="status">
+		<c:if test="${issue.issue_type eq 'BUGGER'}">
+			<c:set var="issueTypeCss" value="i1" />
+		</c:if>
+		<c:if test="${issue.issue_type eq 'IMPROVE'}">
+			<c:set var="issueTypeCss" value="i2" />
+		</c:if>
+		<c:if test="${issue.issue_type eq 'NEW'}">
+			<c:set var="issueTypeCss" value="i3" />
+		</c:if>
+		<c:if test="${issue.issue_type eq 'ETC'}">
+			<c:set var="issueTypeCss" value="i4" />
+		</c:if>
+		<c:if test="${issue.priority eq 'CRITICAL'}">
+			<c:set var="issuePriorityCss" value="t1" />
+		</c:if>
+		<c:if test="${issue.priority eq 'MUST'}">
+			<c:set var="issuePriorityCss" value="t2" />
+		</c:if>
+		<c:if test="${issue.priority eq 'MINOR'}">
+			<c:set var="issuePriorityCss" value="t3" />
+		</c:if>
+		<c:if test="${issue.priority eq 'TRIVIAL'}">
+			<c:set var="issuePriorityCss" value="t4" />
+		</c:if>
+			<li>
+				<p class="title">
+					${issue.title }
+				</p>
+				<p class="info">
+					<span class="tag ${issueTypeCss }">${issue.issue_type_name }</span>
+					<span class="tag ${issuePriorityCss }">${issue.priority_name }</span>
+					<span>[${issue.data_group_name }]</span>
+					<button type="button" title="바로가기" onclick="flyTo('${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">바로가기</button>
+					<span class="date">${issue.viewInsertDate }</span>
+				</p>
+			</li>
 	</c:forEach>
 </c:if>
-		</div>
-		
+		</ul>
+
 		<div id="apiListContent" style="display: none">
 			<div style="height: 20px;"></div>
 			<div>
@@ -138,16 +169,6 @@
 		</div>
 	</div>
 		
-	<div class="trigger" >
-		<button type="button"></button>
-		<ul>
-			<li><a href="/homepage/tutorials.do">Tutorials</a></li>
-			<li><a href="/homepage/download.do">Download</a></li>
-			<li><a href="/homepage/about.do">mago3D</a></li>
-			<li><a href="/homepage/index.do">Home</a></li>	
-		</ul>
-	</div>
-
 	<div class="shortcut" style="top:60px;">
 		<p>바로가기</p>
 		<ul>
@@ -169,7 +190,6 @@
 	        </div>
 	    </div>
 	    <div class="layerContents">
-<!-- 	        <h4>테이블</h4> -->
 	        <table>
 	        	<tr>
 	        		<th style="width: 120px;">
@@ -191,7 +211,7 @@
 	        		<td>
 	        			<form:select path="issue_type" cssClass="select">
 <c:forEach var="commonCode" items="${issueTypeList}">
-							<option value="${commonCode.code_value}">${commonCode.code_value}</option>
+							<option value="${commonCode.code_value}">${commonCode.code_name}</option>
 </c:forEach>
 						</form:select>
 	        		</td>
@@ -218,11 +238,11 @@
 	        		</td>
 	        	</tr>
 	        	<tr>
-	        		<th><form:label path="priority">Issue Type</form:label></th>
+	        		<th><form:label path="priority">Issue Priority</form:label></th>
 	        		<td>
 	        			<form:select path="priority" cssClass="select">
 <c:forEach var="commonCode" items="${issuePriorityList}">
-							<option value="${commonCode.code_value}">${commonCode.code_value}</option>
+							<option value="${commonCode.code_value}">${commonCode.code_name}</option>
 </c:forEach>
 						</form:select>
 	        		</td>
@@ -653,31 +673,47 @@
 					var content = "";
 					
 					if(issueList == null || issueList.length == 0) {
-						content += 	"<div style=\"text-align: center; padding-top:20px; height: 50px;\">"
+						content += 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
 								+	"	Issue가 존재하지 않습니다."
-								+	"</div>";
+								+	"</li>";
 					} else {
 						for(i=0; i<issueList.length; i++ ) {
-							var issue = null;
-							issue = issueList[i];
+							var issue = issueList[i];
+							var issueTypeCss = "i1";
+							var issuePriorityCss = "t1";
+							if(issue.issue_type == "BUGGER") {
+								issueTypeCss = "i1";
+							} else if(issue.issue_type == "IMPROVE") {
+								issueTypeCss = "i2";
+							} else if(issue.issue_type == "NEW") {
+								issueTypeCss = "i3";
+							} else if(issue.issue_type == "ETC") {
+								issueTypeCss = "i4";
+							}
+							
+							if(issue.priority == "CRITICAL") {
+								issuePriorityCss = "t1";
+							} else if(issue.priority == "MUST") {
+								issuePriorityCss = "t2";
+							} else if(issue.priority == "MINOR") {
+								issuePriorityCss = "t3";
+							} else if(issue.priority == "TRIVIAL") {
+								issuePriorityCss = "t4";
+							}
+							
 							content = content 
-								+ 	"<div style=\"padding-left: 20px; padding-top: 20px; padding-bottom: 20px; background: gainsboro\">"
-								+ 	"	<div>"
-								+ 	"		<img src=\"/images/${lang }/homepage/bullet_h4.png\" alt=\"\" />"
-								+ 	"		<span style=\"padding-left: 10px; width:200px; overflow: hidden;\">" + issue.title + "</span>"
-								+ 	"		<span style=\"float:right; padding-right: 15px; padding-top: 5px;\">"
-								+ 	"			<a href=\"#\" onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type 
-													+ "', '" + issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">"
-								+ 	"				<img src=\"/images/${lang }/homepage/btn_going.png\" width=\"26\" height=\"26\" alt=\"\" />"
-								+ 	"			</a>"
-								+ 	"		</span>"
-								+ 	"	</div>"
-								+ 	"	<div id=\"issue_toggle_" + issue.issue_id + "\">"
-								+ 	"		<span style=\"padding-left: 25px;\">[" +  issue.issue_type + "][" + issue.priority + "]</span>"
-								+ 	"		<span style=\"padding-left: 5px;\">" + issue.data_group_name  + "</span>"
-								+ 	"		<span style=\"float:right; padding-right: 20px;\">" + issue.insert_date.substring(0,19) + "</span>"
-								+ 	"	</div>"
-								+ 	"</div>";
+								+ 	"<li>"
+								+ 	"	<p class=\"title\">" + issue.title  + "</p>"
+								+ 	"	<p class=\"info\">"
+								+ 	"		<span class=\"tag " + issueTypeCss + "\">" + issue.issue_type_name + "</span>"
+								+ 	"		<span class=\"tag " + issuePriorityCss + "\">" + issue.priority_name + "</span>"
+								+ 	"		<span>[" + issue.data_group_name + "]</span>"
+								+ 	"		<button type=\"button\" title=\"바로가기\""
+								+				"onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+								+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">바로가기</button>"
+								+ 	"		<span class=\"date\">" + issue.insert_date.substring(0,19) + "</span>"
+								+	"	</p>"
+								+ 	"</li>";
 						}
 					}
 					$("#recentIssueListContent").empty();
