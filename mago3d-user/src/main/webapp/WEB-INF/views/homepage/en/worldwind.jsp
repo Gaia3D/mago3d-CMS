@@ -88,7 +88,7 @@
 					<span class="tag ${issueTypeCss }">${issue.issue_type_name }</span>
 					<span class="tag ${issuePriorityCss }">${issue.priority_name }</span>
 					<span>[${issue.data_group_name }]</span>
-					<button type="button" title="바로가기" onclick="flyTo('${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">바로가기</button>
+					<button type="button" title="Shortcuts" onclick="flyTo('${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">바로가기</button>
 					<span class="date">${issue.viewInsertDate }</span>
 				</p>
 			</li>
@@ -122,43 +122,43 @@
 					Location And Rotation
 				</div>
 				<div style="margin-top: 5px;">
-					<span style="padding-left: 50px; padding-right: 12px;">
+					<span style="padding-left: 60px; padding-right: 12px;">
 						<label for="move_data_key">Data Key</label>
 						<input type="text" id="move_data_key" name="move_data_key" size="15" />
 					</span>
 				</div>
 				<div style="margin-top: 5px;">
-					<span style="padding-left: 50px; padding-right: 12px;">
+					<span style="padding-left: 66px; padding-right: 12px;">
 						<label for="move_latitude">Latitude</label>
 						<input type="text" id="move_latitude" name="move_latitude" size="15"/> 
 					</span> 
 				</div>
 				<div style="margin-top: 5px;">
-					<span style="padding-left: 50px; padding-right: 12px;">
+					<span style="padding-left: 53px; padding-right: 12px;">
 						<label for="move_longitude">Longitude</label>
 						<input type="text" id="move_longitude" name="move_longitude" size="15"/>
 					</span> 
 				</div>
 				<div style="margin-top: 5px;">
-					<span style="padding-left: 50px; padding-right: 12px;">
+					<span style="padding-left: 66px; padding-right: 12px;">
 						<label for="move_height">Altitude</label>
 						<input type="text" id="move_height" name="move_height" size="15" />
 					</span> 
 				</div>
 				<div style="margin-top: 5px;">
-					<span style="padding-left: 50px; padding-right: 12px;">
+					<span style="padding-left: 63px; padding-right: 12px;">
 						<label for="move_heading">Heading</label>
 						<input type="text" id="move_heading" name="move_heading" size="15" />
 					</span> 
 				</div>
 				<div style="margin-top: 5px;">
-					<span style="padding-left: 50px; padding-right: 12px;">
+					<span style="padding-left: 66px; padding-right: 12px;">
 						<label for="move_pitch">Pitch</label>
 						<input type="text" id="move_pitch" name="move_pitch" size="15" />
 					</span>
 				</div> 
 				<div style="margin-top: 5px;">
-					<span style="padding-left: 50px; padding-right: 12px;">
+					<span style="padding-left: 66px; padding-right: 12px;">
 						<label for="move_roll">Roll</label>
 						<input type="text" id="move_roll" name="move_roll" size="15" /> 
 						<button type="button" id="changeLocationAndRotationAPI">Transform</button>
@@ -246,7 +246,7 @@
 	        		<td>
 	        			<form:select path="priority" cssClass="select">
 <c:forEach var="commonCode" items="${issuePriorityList}">
-							<option value="${commonCode.code_value}">${commonCode.code_value}</option>
+							<option value="${commonCode.code_value}">${commonCode.code_name}</option>
 </c:forEach>
 						</form:select>
 	        		</td>
@@ -262,13 +262,13 @@
 	        	</tr>
 	        	<tr>
 	        		<th><form:label path="assignee">Assignee</form:label></th>
-	        		<td><form:input path="assignee" cssClass="m" placeholder="대리자" />
+	        		<td><form:input path="assignee" cssClass="m" placeholder="assignee" />
 						<form:errors path="assignee" cssClass="error" />
 	        		</td>
 	        	</tr>
 	        	<tr>
 	        		<th><form:label path="reporter">reporter</form:label></th>
-	        		<td><form:input path="reporter" cssClass="m" placeholder="보고 해야 하는 사람" />
+	        		<td><form:input path="reporter" cssClass="m" placeholder="reporter" />
 						<form:errors path="reporter" cssClass="error" />
 	        		</td>
 	        	</tr>
