@@ -100,7 +100,10 @@ text-align: center;
 
 
 
-
+/* about li */
+ul li{margin-left: 30px;}
+ol li{margin-left: 30px;}
+b {margin-left: 30px;}
 /* ///// COMMON ///// */
 h1 {
 float: left;
