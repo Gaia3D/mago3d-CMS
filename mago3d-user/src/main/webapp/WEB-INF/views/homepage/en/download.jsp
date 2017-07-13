@@ -116,7 +116,7 @@
 					<th>Biz Document</th>
 				</tr>
 				<tr>
-					<td><a href="#" onclick='alert("Coming soon..."); return false;'>Mago3Djs-1.0.0
+					<td><a href="#" onclick='alert("Coming soon..."); return false;'>Mago3D.js-1.0.0
 							js Document</a></td>
 					<td></td>
 					<td></td>
@@ -137,8 +137,8 @@
 					<td>2017-07-01</td>
 					<td>
 						<ul>
-							<li><a href="https://github.com/Gaia3D/mago3djs">mago3djs</a></li>
-							<li><a href="#" onclick='alert("Coming soon..."); return false;'>mago3dconver</a></li>
+							<li><a href="https://github.com/Gaia3D/mago3djs">mago3D.js</a></li>
+							<li><a href="#" onclick='alert("Coming soon..."); return false;'>F4G Converter</a></li>
 							<li><a href="#" onclick='alert("Coming soon..."); return false;'>mago3dbiz</a></li>
 						</ul>
 					</td>

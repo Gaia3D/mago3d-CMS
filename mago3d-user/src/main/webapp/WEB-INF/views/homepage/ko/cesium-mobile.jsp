@@ -11,11 +11,11 @@
 	<meta http-equiv="Expires" content="-1"/>
 	<meta http-equiv="Pragma" content="no-cache"/> -->
 	<title>demo | mago3D User</title>
+	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-mobile/jquery.mobile-1.4.5.min.css">
 	<script src="/externlib/${lang}/jquery-mobile/jquery.min.js"></script>
 	<script src="/externlib/${lang}/jquery-mobile/jquery.mobile-1.4.5.min.js"></script>
-	<script type="text/javascript" src="/externlib/${lang}/jquery-mobile/jquery.mobile.nestedlists.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-toast/jquery.toast.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
@@ -45,8 +45,6 @@
 			style="width: 100%; height100 %; margin-top: 0; padding: 0; overflow: hidden;">
 			<div id="magoContainer"
 				style="position: absolute; width: 100%; height: 100%; margin-top: 0; padding: 0; overflow: hidden;"></div>
-
-			<h3>Main Page</h3>
 			<a href="#leftpanel1"
 				class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-mini">Reveal</a>
 		</div>
@@ -55,20 +53,35 @@
 		<div data-role="panel" id="leftpanel1" data-position="left"
 			data-display="overlay" data-theme="a">
 			<div data-role="content">
-				         <ul data-role="listview" >
-				         	<li data-role="collapsible" data-inset="false" data_iconps="right">
-				        	<li data-role="list-divider">HomePage</li>
-				        	<li data-role="list-divider">default
-				        		<ul>
-				        			<li>주소, 위치, 감섹</li>
-				        			<li>기본위치 이동</li>
-				        		</ul>
-				        	</li>
-				        	<li data-role="list-divider">Shortcuts</li>
-				        	<li data-role="list-divider">Issues</li>
-				        	<li data-role="list-divider">Object</li>
-				        	<li data-role="list-divider">Debug</li>
-				        </ul>       
+					<ul data-role="listview">
+					  <li data-role="collapsible" data-iconpos="right" data-inset="false">
+					    <h2>Birds</h2>
+					    <ul data-role="listview" data-theme="b">
+					      <li class="ui-frist-child"><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">"Condor"</a></li>
+					      <li><a href="#">Eagle</a></li>
+					      <li class="ui-last-child"><a href="#">Sparrow</a></li>
+					    </ul>
+					  </li>
+					  <li><a href="#">Humans</a></li>
+					  <li data-role="collapsible" data-iconpos="right" data-inset="false">
+					    <h2>Fish</h2>
+					    <ul data-role="listview" data-theme="b">
+					      <li><a href="#">Salmon</a></li>
+					      <li><a href="#">Pollock</a></li>
+					      <li><a href="#">Trout</a></li>
+					    </ul>
+					  </li>
+					  <li data-role="collapsible" data-iconpos="right" data-inset="false">
+					    <h2>Choose your preference</h2>
+					    <form>
+					      <fieldset data-role="controlgroup" data-type="horizontal">
+					        <label>Birds<input type="checkbox" id="choose-birds-regular"></label>
+					        <label>Humans<input type="checkbox" id="choose-humans-regular"></label>
+					        <label>Fish<input type="checkbox" id="choose-fish-regular"></label>
+					      </fieldset>
+					    </form>
+					  </li>
+					</ul>    
 			</div>
 			<!-- 				<form> -->
 			<!-- 					<ul data-role="listview" data-inset="true"> -->

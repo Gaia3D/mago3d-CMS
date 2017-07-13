@@ -256,7 +256,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				To overcome this hurdle, new format called F4D has been devised adopting block reference concept. 
 				Also a format converter that converts popular 3D format to F4D has been developed. 
 				Currently industry standard IFC(Industry Foundation Classes), JT(Jupiter Tessellation), and popular 3D formats such as OBJ, 3DS, COLLADA DAE can be converted to F4D format. 
-				F4D format coupled with mago3Djs(javascript library) has proven that it can increase memory management efficiency and rendering speed drastically. 
+				F4D format coupled with mago3D.js(javascript library) has proven that it can increase memory management efficiency and rendering speed drastically. 
 				mago3D can now visualise massive 3D data including indoor objects and AEC data at least 100k objects, in a single scene seamlessly with traditional outdoor 3D GIS objects.
 				</p>
 				<div class="architecture">

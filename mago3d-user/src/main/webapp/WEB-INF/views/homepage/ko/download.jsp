@@ -102,7 +102,7 @@
 					<th>Biz Document</th>
 				</tr>
 				<tr>
-					<td><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3Djs-1.0.0
+					<td><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3D.js-1.0.0
 							js Document</a></td>
 					<td></td>
 					<td></td>
@@ -123,8 +123,8 @@
 					<td>2017-07-01</td>
 					<td>
 						<ul>
-							<li><a href="https://github.com/Gaia3D/mago3Djs">mago3Djs</a></li>
-							<li><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3Dconver</a></li>
+							<li><a href="https://github.com/Gaia3D/mago3Djs">mago3D.js</a></li>
+							<li><a href="#" onclick='alert("준비 중 입니다."); return false;'>F4G Converter</a></li>
 							<li><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3Dbiz</a></li>
 						</ul>
 					</td>
