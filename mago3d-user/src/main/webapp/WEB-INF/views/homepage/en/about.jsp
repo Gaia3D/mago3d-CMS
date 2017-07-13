@@ -52,6 +52,7 @@
 		</div>
 	</nav>
 	<section>
+	<h2>mago3D</h2>
 		<div class="contents">
 			<ul class="tab">
 				<li><a href="#about">About</a></li>
