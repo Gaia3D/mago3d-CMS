@@ -164,7 +164,7 @@ public class HomepageController {
 	
 	private boolean isMobile(HttpServletRequest request) { 
 		String userAgent = request.getHeader("user-agent"); 
-		boolean mobile1 = userAgent.matches(".*(iPhone|iPod|Android|Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson)"); 
+		boolean mobile1 = userAgent.matches(".*(iPhone|iPod|Android|Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson).*"); 
 		boolean mobile2 = userAgent.matches(".*(LG|SAMSUNG|Samsung).*"); 
 		if(mobile1 || mobile2) { 
 			return true; 
