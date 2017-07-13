@@ -122,7 +122,7 @@ border: none;
 border-radius: 5px;
 /*text-indent: -999em;*/
 background-color: #0066cc;
-background-image: url(/images/ko/ico.png);
+background-image: url(/images/ko/homepage/ico.png);
 background-repeat: no-repeat;
 background-position: 2px -155px;
 }
@@ -242,7 +242,7 @@ margin:0;
 padding-left: 20px;
 font-size: 16px;
 font-weight: 600;
-background: url(/images/ko/bullet_h4.png) no-repeat left 50%;
+background: url(/images/ko/homepage/bullet_h4.png) no-repeat left 50%;
 }
 .layerHeader > div {
 position: absolute;
@@ -256,7 +256,7 @@ width: 30px;
 height: 30px;
 border: none;
 text-indent: -999em;
-background-image: url(/images/ko/ico.png);
+background-image: url(/images/ko/homepage/ico.png);
 background-color: transparent;
 background-position: 1px -264px;
 }
