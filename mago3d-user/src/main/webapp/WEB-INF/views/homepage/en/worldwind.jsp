@@ -203,7 +203,7 @@
 	        		<td>
 	        			<form:select path="data_group_id" cssClass="select">
 <c:forEach var="dataGroup" items="${projectDataGroupList}">
-							<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name_en}</option>
+							<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name}</option>
 </c:forEach>
 						</form:select>
 	        		</td>
@@ -246,7 +246,7 @@
 	        		<td>
 	        			<form:select path="priority" cssClass="select">
 <c:forEach var="commonCode" items="${issuePriorityList}">
-							<option value="${commonCode.code_value}">${commonCode.code_name}</option>
+							<option value="${commonCode.code_value}">${commonCode.code_name_en}</option>
 </c:forEach>
 						</form:select>
 	        		</td>
