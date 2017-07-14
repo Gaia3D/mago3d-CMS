@@ -19,9 +19,9 @@
 	<insert id="insertCommonCode" parameterType="commonCode">
 		/* insertCommonCode */
 		INSERT INTO common_code(
-			code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order, description
+			code_key, code_name, code_name_en, code_type, code_value, use_yn, view_order, css_class, image, description
 		) values(
-			#{code_key}, #{code_name}, #{code_name_en}, #{code_type}, #{code_value}, #{use_yn}, #{view_order}, #{description}
+			#{code_key}, #{code_name}, #{code_name_en}, #{code_type}, #{code_value}, #{use_yn}, #{view_order}, #{css_class}, #{image}, #{description}
 		)
 	</insert>
 	
@@ -43,6 +43,12 @@
 		</if>
 		<if test="view_order != null and view_order > 0">
 			, view_order = #{view_order}
+		</if>
+		<if test="css_class != null and css_class != ''">	
+			, css_class = #{css_class}
+		</if>
+		<if test="image != null and image != ''">	
+			, image = #{image}
 		</if> 
 		<if test="description != null and description != ''">	
 			, description = #{description}

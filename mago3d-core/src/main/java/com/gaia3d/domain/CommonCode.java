@@ -56,6 +56,10 @@ public class CommonCode {
 	private String use_yn;
 	// 표시 순서
 	private Integer view_order;
+	// css name
+	private String css_class;
+	// image full name
+	private String image;
 	
 	// 설명
 	private String description;
