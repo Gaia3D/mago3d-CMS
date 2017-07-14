@@ -5370,7 +5370,7 @@ CesiumManager.prototype.selectedObjectNotice = function(neoBuilding) {
 									objectId,
 									this.objMarkerSC.geoLocationData.geographicCoord.latitude,
 									this.objMarkerSC.geoLocationData.geographicCoord.longitude,
-									(parseFloat(this.objMarkerSC.geoLocationData.geographicCoord.altitude) + 10));
+									(parseFloat(this.objMarkerSC.geoLocationData.geographicCoord.altitude)));
 		}
 	}
 };
@@ -5669,7 +5669,7 @@ CesiumManager.prototype.callAPI = function(api) {
 		}
 	} else if(apiName === "drawInsertIssueImage") {
 		// pin 을 표시
-		if(this.objMarkerSC == undefined) {
+		if(this.objMarkerSC == undefined || api.getDrawType() == 0) {
 			this.objMarkerSC = new ObjectMarker();
 			this.objMarkerSC.geoLocationData.geographicCoord = new GeographicCoord();
 			ManagerUtils.calculateGeoLocationData(parseFloat(api.getLongitude()), parseFloat(api.getLatitude()), parseFloat(api.getElevation()), 
