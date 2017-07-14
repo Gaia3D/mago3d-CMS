@@ -24,11 +24,8 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, ima
 		// 환경 설정
 		MagoConfig.init(serverPolicy, serverData);
 		
-		if(viewer === null) viewer = new Cesium.Viewer(containerId);
-		viewer.imageryLayers.addImageryProvider(new Cesium.ArcGisMapServerImageryProvider({
-	        url : 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
-	        enablePickFeatures: false
-	    }));
+		if(viewer === null) viewer = new Cesium.Viewer(containerId, {homeButton:false, geocoder:false, sceneModePicker:false, infoBox:false, fullscreenButton:false, navigationHelpButton:false});
+		viewer.scene.frameState.creditDisplay.container.style.visibility = 'hidden';
 		
 		viewer.scene.magoManager = new CesiumManager();
 		viewer.scene.magoManager.sceneState.textureFlipYAxis = false;
