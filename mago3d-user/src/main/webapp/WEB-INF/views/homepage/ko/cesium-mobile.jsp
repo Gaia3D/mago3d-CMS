@@ -13,107 +13,277 @@
 	<title>demo | mago3D User</title>
 	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-mobile/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="/externlib/${lang}/jquery-toast/jquery.toast.css" />
+	
 	<script src="/externlib/${lang}/jquery-mobile/jquery.min.js"></script>
 	<script src="/externlib/${lang}/jquery-mobile/jquery.mobile-1.4.5.min.js"></script>
-	<script type="text/javascript" src="/externlib/${lang}/jquery-mobile/jquery.mobile.nestedlists.js"></script>
-	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-toast/jquery.toast.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
+	<style>
+		.ui-panel-inner {
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    right: 0;
+		    bottom: 0px;
+		    overflow: auto;
+		    -webkit-overflow-scrolling: touch;
+		}
+		.ui-li-static.ui-collapsible > .ui-collapsible-heading {
+			margin: 0;
+		}
+
+		.ui-li-static.ui-collapsible {
+			padding: 0;
+		}
+
+		.ui-li-static.ui-collapsible > .ui-collapsible-heading > .ui-btn {
+			border-top-width: 0;
+		}
+
+		.ui-li-static.ui-collapsible > .ui-collapsible-heading.ui-collapsible-heading-collapsed > .ui-btn,
+		.ui-li-static.ui-collapsible > .ui-collapsible-content {
+			border-bottom-width: 0;
+		}
+	</style>
 </head>
 
 <body>
 	<div data-role="page" class="jqm-demos" data-quicklinks="true">
-		<!-- default panel  -->
-		<div data-role="panel" id="defaultpanel">
-			<h3>Default panel options</h3>
-			<p>
-				This panel has all the default options: positioned on the left with
-				the reveal display mode. The panel markup is <em>before</em> the
-				header, content and footer in the source order.
-			</p>
-			<p>To close, click off the panel, swipe left or right, hit the
-				Esc key, or use the button below:</p>
-			<a href="#demo-links" data-rel="close"
-				class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left ui-btn-inline">Close
-				panel</a>
-		</div>
-		<!-- /default panel -->
-
 		<div role="main" class="ui-content jqm-content"
 			style="width: 100%; height100 %; margin-top: 0; padding: 0; overflow: hidden;">
 			<div id="magoContainer"
 				style="position: absolute; width: 100%; height: 100%; margin-top: 0; padding: 0; overflow: hidden;"></div>
-
-			<h3>Main Page</h3>
-			<a href="#leftpanel1"
-				class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-mini">Reveal</a>
+			<a href="#leftpanel" data-icon="bars" data-iconpos="notext"
+				class="ui-btn ui-btn-icon-notext ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a> 
 		</div>
 
-		<!-- leftpanel1  -->
-		<div data-role="panel" id="leftpanel1" data-position="left"
-			data-display="overlay" data-theme="a">
-			<div data-role="content">
-				         <ul data-role="listview" >
-				         	<li data-role="collapsible" data-inset="false" data_iconps="right">
-				        	<li data-role="list-divider">HomePage</li>
-				        	<li data-role="list-divider">default
-				        		<ul>
-				        			<li>주소, 위치, 감섹</li>
-				        			<li>기본위치 이동</li>
-				        		</ul>
-				        	</li>
-				        	<li data-role="list-divider">Shortcuts</li>
-				        	<li data-role="list-divider">Issues</li>
-				        	<li data-role="list-divider">Object</li>
-				        	<li data-role="list-divider">Debug</li>
-				        </ul>       
+		<!-- leftpanel  -->
+		<div data-role="panel" id="leftpanel" data-position="left" data-display="overlay" data-theme="a">
+			<ul data-role="listview" data-inset="false" data-shadow="false">
+				<li data-filtertext="homepage" data-icon="home"><a href="/homepage/index.do">Home</a></li>
+				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false">
+					<h2>바로 가기</h2>
+					<ul data-role="listview" data-theme="b">
+<c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status">
+						<li onclick="flyTo(null, null, '${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">${dataGroup.data_group_name }</li>
+</c:forEach>
+					</ul>
+				</li>
+				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false">
+					<h2>Issues</h2>
+					<ul data-role="listview" data-theme="b">
+						<li id="issueEnable">이슈 등록</li>
+						<li><a href="#issueListPanel">이슈 목록</a></li>
+					</ul>
+				</li>
+				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false">
+					<h2>API List</h2>
+					<ul data-role="listview" data-theme="b">
+						<li id="objectInfoEnable">Object 정보</li>
+						<li class="ui-field-contain">
+							<label>Data Key</label>
+							<input type="text" id="search_data_key" name="search_data_key" size="15" />
+							<button type="button" id="searchData" style=""background: #727272;">검색</button>
+						</li>
+						<li class="ui-field-contain">
+						<fieldset data-role="controlgroup" data-type="horizontal">
+						    <legend>Bounding Box</legend>
+							<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />
+							<label for="showBoundingBox"> 표시 </label>
+							<input type="radio" id="hideBoundingBox" name="boundingBox" value="false" onclick="changeBoundingBox(false);"/>
+							<label for="hideBoundingBox"> 비표시 </label>					
+						</fieldset>
+						</li>
+						<li class="ui-field-contain">
+						<fieldset data-role="controlgroup" data-type="horizontal">
+						    <legend>이동</legend>
+							<input type="radio" id="mouseAllMove" name="mouseMoveMode" value="0" onclick="changeMouseMove('0');"/>
+							<label for="mouseAllMove"> ALL </label>
+							<input type="radio" id="mouseObjectMove" name="mouseMoveMode" value="1" onclick="changeMouseMove('1');"/>
+							<label for="mouseObjectMove"> Object </label>					
+						</fieldset>
+						</li>
+						<li><a href="#listApiPanel">Location And Rotation</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<!-- /leftpanel -->
+
+		<div data-role="panel" id="inputIssuePanel" data-position="left" data-display="overlay" data-theme="a">
+			<div data-role="header">
+				<h3>Issue Register</h3>
+				<a href="#leftpanel" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+				<a href="#" data-rel="close">닫기</a>
 			</div>
-			<!-- 				<form> -->
-			<!-- 					<ul data-role="listview" data-inset="true"> -->
-			<!--                         <li class="ui-field-contain"> -->
-			<!--                             <label for="name2">Text Input:</label> -->
-			<!--                             <input type="text" name="name2" id="name2" value="" data-clear-btn="true"> -->
-			<!--                         </li> -->
-			<!--                         <li class="ui-field-contain"> -->
-			<!--                             <label for="textarea2">Textarea:</label> -->
-			<!--                         <textarea cols="40" rows="8" name="textarea2" id="textarea2"></textarea> -->
-			<!--                         </li> -->
-			<!--                         <li class="ui-field-contain"> -->
-			<!--                             <label for="flip2">Flip switch:</label> -->
-			<!--                             <select name="flip2" id="flip2" data-role="slider"> -->
-			<!--                                 <option value="off">Off</option> -->
-			<!--                                 <option value="on">On</option> -->
-			<!--                             </select> -->
-			<!--                         </li> -->
-			<!--                         <li class="ui-field-contain"> -->
-			<!--                             <label for="slider2">Slider:</label> -->
-			<!--                             <input type="range" name="slider2" id="slider2" value="0" min="0" max="100" data-highlight="true"> -->
-			<!--                         </li> -->
-
-			<!--                         <li class="ui-field-contain"> -->
-			<!--                             <label for="select-choice-1" class="select">Choose shipping method:</label> -->
-			<!--                             <select name="select-choice-1" id="select-choice-1"> -->
-			<!--                                 <option value="standard">Standard: 7 day</option> -->
-			<!--                                 <option value="rush">Rush: 3 days</option> -->
-			<!--                                 <option value="express">Express: next day</option> -->
-			<!--                                 <option value="overnight">Overnight</option> -->
-			<!--                             </select> -->
-			<!--                         </li> -->
-			<!--                         <li class="ui-body ui-body-b"> -->
-			<!--                             <fieldset class="ui-grid-a"> -->
-			<!--                                     <div class="ui-block-a"><button type="submit" class="ui-btn ui-corner-all ui-btn-a">Cancel</button></div> -->
-			<!--                                     <div class="ui-block-b"><button type="submit" class="ui-btn ui-corner-all ui-btn-a">Submit</button></div> -->
-			<!--                             </fieldset> -->
-			<!--                         </li> -->
-			<!-- 					</ul> -->
-			<!-- 				</form> -->
-			<a href="#demo-links" data-rel="close"
-				class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Close
-				panel</a>
+			<form:form id="issue" modelAttribute="issue" method="post" onsubmit="return false;">
+				<ul data-role="listview" data-inset="true">
+					<li class="ui-field-contain">
+						<form:label path="data_group_id">데이터 그룹</form:label>
+						<form:select path="data_group_id">
+							<c:forEach var="dataGroup" items="${projectDataGroupList}">
+							<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name}</option>
+							</c:forEach>
+						</form:select>
+					</li>
+					<li class="ui-field-contain">
+						<form:label path="issue_type">Issue Type</form:label>
+						<form:select path="issue_type" cssClass="select">
+							<c:forEach var="commonCode" items="${issueTypeList}">
+							<option value="${commonCode.code_value}">${commonCode.code_value}</option>
+							</c:forEach>
+						</form:select>
+					</li>
+					<li class="ui-field-contain">
+						<form:label path="data_key">Data Key</form:label>
+						<form:input path="data_key" cssClass="ml" />
+						<form:errors path="data_key" cssClass="error" />
+						<form:hidden path="latitude"/>
+						<form:hidden path="longitude"/>
+						<form:hidden path="height"/>
+					</li>
+					<li class="ui-field-contain">
+						<form:label path="title">제목</form:label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+						<form:input path="title" cssClass="ml" />
+						<form:errors path="title" cssClass="error" />
+					</li>
+					<li class="ui-field-contain">
+						<form:label path="priority">Issue Type</form:label>
+						<form:select path="priority" cssClass="select">
+							<c:forEach var="commonCode" items="${issuePriorityList}">
+							<option value="${commonCode.code_value}">${commonCode.code_value}</option>
+							</c:forEach>
+						</form:select>		
+					</li>
+					<li class="ui-field-contain">
+						<form:label path="due_date">마감일</form:label>
+						<form:hidden path="start_date" />
+						<input type="text" id="start_day" name="start_day" placeholder="날짜" size="7" maxlength="4" />
+						<input type="text" id="start_hour" name="start_hour" placeholder="시간" size="3" maxlength="2" />
+						<span class="delimeter">:</span>
+						<input type="text" id="start_minute" name="start_minute" placeholder="분" size="3" maxlength="2" />
+					</li>	        
+					<li class="ui-field-contain">
+						<form:label path="assignee">Assignee</form:label>
+						<form:input path="assignee" cssClass="m" placeholder="대리자" />
+						<form:errors path="assignee" cssClass="error" />
+					</li>
+					<li class="ui-field-contain">
+						<form:label path="reporter">reporter</form:label>
+						<form:input path="reporter" cssClass="m" placeholder="보고 해야 하는 사람" />
+						<form:errors path="reporter" cssClass="error" />
+					</li>
+					<li class="ui-field-contain">
+						<form:label path="contents">내용</form:label>
+						<form:textarea path="contents" />
+						<form:errors path="contents" cssClass="error" />
+					</li>
+					<li class="ui-field-contain">
+						<button id="issueInsertButton">Save</button>
+					</li>
+				</ul>
+			</form:form>
 		</div>
-		<!-- /leftpanel1 -->
+		
+		<div data-role="panel" id="issueListPanel" data-position="left" data-display="overlay" data-theme="a">
+			<div data-role="header">
+				<h3>Issue List</h3>
+				<a href="#leftpanel" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+				<a href="#" data-rel="close">닫기</a>
+			</div>
+
+			<ul data-role="listview" data-inset="true">
+				<c:if test="${empty issueList }">
+				<li>Issue가 존재하지 않습니다.</li>
+				</c:if>
+				<c:if test="${!empty issueList }">
+			<c:set var="issueTypeCss" value="i1" />
+			<c:set var="issuePriorityCss" value="t1" />
+			
+			<c:forEach var="issue" items="${issueList}" varStatus="status">
+				<c:if test="${issue.issue_type eq 'BUGGER'}">
+					<c:set var="issueTypeCss" value="i1" />
+				</c:if>
+				<c:if test="${issue.issue_type eq 'IMPROVE'}">
+					<c:set var="issueTypeCss" value="i2" />
+				</c:if>
+				<c:if test="${issue.issue_type eq 'NEW'}">
+					<c:set var="issueTypeCss" value="i3" />
+				</c:if>
+				<c:if test="${issue.issue_type eq 'ETC'}">
+					<c:set var="issueTypeCss" value="i4" />
+				</c:if>
+				<c:if test="${issue.priority eq 'CRITICAL'}">
+					<c:set var="issuePriorityCss" value="t1" />
+				</c:if>
+				<c:if test="${issue.priority eq 'MUST'}">
+					<c:set var="issuePriorityCss" value="t2" />
+				</c:if>
+				<c:if test="${issue.priority eq 'MINOR'}">
+					<c:set var="issuePriorityCss" value="t3" />
+				</c:if>
+				<c:if test="${issue.priority eq 'TRIVIAL'}">
+					<c:set var="issuePriorityCss" value="t4" />
+				</c:if>
+				<li><a href="#" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-eye" onclick="flyTo('${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">
+					<h3>${issue.title}</h3>
+					<p class="info">
+						<span class="tag ${issueTypeCss}">${issue.issue_type_name}</span>
+						<span class="tag ${issuePriorityCss }">${issue.priority_name}</span>
+						<span>[${issue.data_group_name}]</span>
+						<span class="date">${issue.viewInsertDate}</span>
+					</p>
+				</a></li>
+			</c:forEach>
+			</c:if>
+			</ul>
+		</div>
+		
+		<div data-role="panel" id="listApiPanel" data-position="left" data-display="overlay" data-theme="a">
+			<div data-role="header">
+				<h3>Location And Rotation</h3>
+				<a href="#leftpanel" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+				<a href="#" data-rel="close">닫기</a>
+			</div>
+			
+			<ul data-role="listview" data-inset="true">
+				<li class="ui-field-contain">
+					<label for="move_data_key">Data Key</label>
+					<input type="text" id="move_data_key" name="move_data_key" size="15" />
+				</li>
+				<li class="ui-field-contain">
+					<label for="move_latitude">위도 </label>
+					<input type="text" id="move_latitude" name="move_latitude" size="15"/> 
+				</li>
+				<li class="ui-field-contain">
+					<label for="move_longitude">경도 </label>
+					<input type="text" id="move_longitude" name="move_longitude" size="15"/>
+				</li>
+				<li class="ui-field-contain">
+					<label for="move_height">높이 </label>
+					<input type="text" id="move_height" name="move_height" size="15" />
+				</li>
+				<li class="ui-field-contain">
+					<label for="move_heading">HEADING </label>
+					<input type="text" id="move_heading" name="move_heading" size="15" />
+				</li>
+				<li class="ui-field-contain">
+					<label for="move_pitch">PITCH </label>
+					<input type="text" id="move_pitch" name="move_pitch" size="15" />
+				</li>
+				<li class="ui-field-contain">
+					<label for="move_roll">ROLL </label>
+					<input type="text" id="move_roll" name="move_roll" size="15" />
+				</li>
+				<li class="ui-field-contain">
+					<button type="button" id="changeLocationAndRotationAPI">변환</button>
+				</li>
+			</ul>
+		</div>
 	</div>
 <script type="text/javascript" src="/externlib/${lang}/cesium/Cesium.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Code.js?currentTime=${currentTime}"></script>
@@ -122,7 +292,7 @@
 <script type="text/javascript" src="/js/${lang}/mago3d/Callback.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Constant.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Message.js?currentTime=${currentTime}"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/ManagerFactory.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/ManagerFactory.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Atmosphere.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/GeometryUtil.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/GeometryModifier.js?currentTime=${currentTime}"></script>
@@ -292,8 +462,7 @@
 	// issue input layer call back function
 	function showInsertIssueLayer(data_name, data_key, latitude, longitude, height) {
 		if(insertIssueFlag) {
-			if($("#inputIssueLayer").css("display") == "none") {
-				$("#inputIssueLayer").show();
+				$("#inputIssuePanel").panel("open");
 				
 				$("#data_key").val(data_name);
 				$("#latitude").val(latitude);
@@ -303,7 +472,6 @@
 				// 현재 좌표를 저장
 				$("#now_latitude").val(latitude);
 				$("#now_longitude").val(longitude);
-			}
 		}
 	}
 	
@@ -394,6 +562,8 @@
 	// object 정보 표시 call back function
 	function showSelectedObject(projectId, blockId, objectId, latitude, longitude, height, heading, pitch, roll){
 		if(objectInfoViewFlag) {
+			$("#listApiPanel").panel("open");
+			
 			$("#move_data_key").val(projectId + "_" + blockId);
 			$("#move_latitude").val(latitude);
 			$("#move_longitude").val(longitude);
@@ -402,6 +572,7 @@
 			$("#move_pitch").val(pitch);
 			$("#move_roll").val(roll);
 			
+			$("#listApiPanel").panel("close");
 			$.toast({
 			    heading: 'Click Object Info',
 			    text: [
@@ -437,12 +608,12 @@
 	});
 	// boundingBox 표시/비표시
 	function changeBoundingBox(isShow) {
-		$("input:radio[name='boundingBox']:radio[value='" + isShow + "']").prop("checked", true);
+		$("input:radio[name='boundingBox']:radio[value='" + isShow + "']").prop("checked", true).checkboxradio('refresh');
 		changeBoundingBoxAPI(isShow);
 	}
 	// 마우스 클릭 객체 이동 모드 변경
 	function changeMouseMove(mouseMoveMode) {
-		$("input:radio[name='mouseMoveMode']:radio[value='" + mouseMoveMode + "']").prop("checked", true);
+		$("input:radio[name='mouseMoveMode']:radio[value='" + mouseMoveMode + "']").prop("checked", true).checkboxradio('refresh');
 		changeMouseMoveAPI(mouseMoveMode);
 	}
 	// 변환행렬
