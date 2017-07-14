@@ -203,7 +203,7 @@
 	        		<td>
 	        			<form:select path="data_group_id" cssClass="select">
 <c:forEach var="dataGroup" items="${projectDataGroupList}">
-							<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name}</option>
+							<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name_en}</option>
 </c:forEach>
 						</form:select>
 	        		</td>
@@ -215,7 +215,7 @@
 	        		<td>
 	        			<form:select path="issue_type" cssClass="select">
 <c:forEach var="commonCode" items="${issueTypeList}">
-							<option value="${commonCode.code_value}">${commonCode.code_name}</option>
+							<option value="${commonCode.code_value}">${commonCode.code_name_en}</option>
 </c:forEach>
 						</form:select>
 	        		</td>
@@ -254,10 +254,10 @@
 	        	<tr>
 	        		<th><form:label path="due_date">Due Date</form:label></th>
 	        		<td><form:hidden path="start_date" />
-						<input type="text" id="start_day" name="start_day" placeholder="날짜" size="7" maxlength="4" />
-						<input type="text" id="start_hour" name="start_hour" placeholder="시간" size="3" maxlength="2" />
+						<input type="text" id="start_day" name="start_day" placeholder="Day" size="7" maxlength="4" />
+						<input type="text" id="start_hour" name="start_hour" placeholder="Hour" size="3" maxlength="2" />
 						<span class="delimeter">:</span>
-						<input type="text" id="start_minute" name="start_minute" placeholder="분" size="3" maxlength="2" />
+						<input type="text" id="start_minute" name="start_minute" placeholder="Minute" size="3" maxlength="2" />
 	        		</td>
 	        	</tr>
 	        	<tr>
