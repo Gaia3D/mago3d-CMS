@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width">
     <title>Mago3D</title>
 	<!--[if lt IE 9]>
-    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"  type="text/css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>

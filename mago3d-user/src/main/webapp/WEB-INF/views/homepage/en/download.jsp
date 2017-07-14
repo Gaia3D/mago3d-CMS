@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/common/taglib.jsp"%>
 <%@ include file="/WEB-INF/views/common/config.jsp"%>
 
@@ -47,7 +46,7 @@
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO"><a href="" onclick="changeLanguage('ko');">KO</a></li>
+				<li id="languageKO"><a href="#" onclick="changeLanguage('ko');">KO</a></li>
 				<li id="languageEN" class="on">EN</li>
 			</ul>
 		</div>
@@ -82,7 +81,7 @@
 					registration and registers necessary data.</li>
 			</ol>
 			<h4>Gaia3D's mago3D Software License:</h4>
-			<b>1. F4G Converter: Dual License – Please see below for more
+			<b>1. F4D Converter: Dual License – Please see below for more
 				details.</b><br>
 			<br>
 			<p>
@@ -113,13 +112,10 @@
 				<tr>
 					<th>JS Document</th>
 					<th>Convert Document</th>
-					<th>Biz Document</th>
 				</tr>
 				<tr>
-					<td><a href="#" onclick='alert("Coming soon..."); return false;'>Mago3Djs-1.0.0
-							js Document</a></td>
-					<td></td>
-					<td></td>
+					<td><a href="#" onclick='alert("Coming soon..."); return false;'>mago3Djs-1.0.0 js Document</a></td>
+					<td><a href="#" onclick='alert("Coming soon..."); return false;'>F4DConverter-1.0.0 Document</a></td>
 				</tr>
 			</table>
 
@@ -137,9 +133,8 @@
 					<td>2017-07-01</td>
 					<td>
 						<ul>
-							<li><a href="https://github.com/Gaia3D/mago3djs">mago3djs</a></li>
-							<li><a href="#" onclick='alert("Coming soon..."); return false;'>mago3dconver</a></li>
-							<li><a href="#" onclick='alert("Coming soon..."); return false;'>mago3dbiz</a></li>
+							<li><a href="https://github.com/Gaia3D/mago3djs">mago3D.js</a></li>
+							<li><a href="#" onclick='alert("Coming soon..."); return false;'>F4D Converter</a></li>
 						</ul>
 					</td>
 				</tr>

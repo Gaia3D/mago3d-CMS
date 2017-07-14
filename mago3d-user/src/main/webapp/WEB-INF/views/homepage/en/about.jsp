@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/common/taglib.jsp" %>
-<%@ include file="/WEB-INF/views/common/config.jsp" %>
+<%@ include file="/WEB-INF/views/common/taglib.jsp"%>
+<%@ include file="/WEB-INF/views/common/config.jsp"%>
 
 <!DOCTYPE html>
 <html lang="${accessibility}">
@@ -9,8 +9,8 @@
 	<meta name="viewport" content="width=1250">
 	<title>about | mago3D User</title>
 	<!--[if lt IE 9]>
-    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+	   	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
@@ -22,10 +22,10 @@
 
 <body>
 	<header class='about'>
-		<div>
-			<p>Architecture, Engineering, Construction</p>
-			<p>A Brand-New Live 3D Platform</p>
-		</div>
+<!--		<div> -->
+<!--			<p>Architecture, Engineering, Construction</p> -->
+<!--			<p>A Brand-New Live 3D Platform</p> -->
+<!--		</div> -->
 	</header>
 
 	<nav class="nav">
@@ -52,7 +52,7 @@
 		</div>
 	</nav>
 	<section>
-	<h2>mago3D</h2>
+		<h2>mago3D</h2>
 		<div class="contents">
 			<ul class="tab">
 				<li><a href="#about">About</a></li>
@@ -190,7 +190,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 								style="background-image:url(/images/${lang}/homepage/octree.png)">
 								<div>
 									<h3>3D Space Octree</h3>
-									<P>flexible octree depth 적용</P>
+									<P>flexible octree depth</P>
 								</div>
 							</div>
 						</a>

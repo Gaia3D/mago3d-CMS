@@ -24,10 +24,10 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, ima
 		// 환경 설정
 		MagoConfig.init(serverPolicy, serverData);
 		
-		if(viewer === null) viewer = new Cesium.Viewer(containerId);
-		
+		if(viewer === null) viewer = new Cesium.Viewer(containerId, {homeButton:false, geocoder:false, sceneModePicker:false, infoBox:false, fullscreenButton:false, navigationHelpButton:false});
+		viewer.scene.frameState.creditDisplay.container.style.visibility = 'hidden';
 		setDefaultDataset();
-		
+
 		viewer.scene.magoManager = new CesiumManager();
 		viewer.scene.magoManager.sceneState.textureFlipYAxis = false;
 		// test.***

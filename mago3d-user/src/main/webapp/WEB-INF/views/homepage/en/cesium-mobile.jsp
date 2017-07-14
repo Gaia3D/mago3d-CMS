@@ -54,12 +54,9 @@
 	<div data-role="page" class="jqm-demos" data-quicklinks="true">
 		<div role="main" class="ui-content jqm-content"
 			style="width:100%; height:100%; margin-top:0; padding:0; overflow:hidden;">
-			<div style="position:absolute; width:100%; height:100%; margin-top:0; padding:0; overflow:hidden;">
-				<canvas id="magoContainer" style="width: 100%; height: 100%">
-				Your browser does not support HTML5 Canvas.
-				</canvas>
-			</div>
-			<a href="#leftpanel" data-icon="bars" data-iconpos="notext"
+			<div id="magoContainer"
+				style="position:absolute; width:100%; height:100%; margin-top:0; padding:0; overflow:hidden;"></div>
+			<a href="#menuPanel" data-icon="bars" data-iconpos="notext"
 				class="ui-btn ui-btn-icon-notext ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a> 
 		</div>
 
@@ -68,7 +65,7 @@
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-filtertext="homepage" data-icon="home"><a href="/homepage/index.do">Home</a></li>
 				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false">
-					<h2>바로 가기</h2>
+					<h2>Shortcuts</h2>
 					<ul data-role="listview" data-theme="b">
 						<c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status">
 						<li onclick="flyTo(null, null, '${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">${dataGroup.data_group_name }</li>
@@ -76,26 +73,26 @@
 					</ul>
 				</li>
 				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false">
-					<h2>이슈 사항</h2>
+					<h2>Issues</h2>
 					<ul data-role="listview" data-theme="b">
 						<li class="ui-field-contain">
 						<a href="#" style="padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 0px;">
 							<fieldset data-role="controlgroup">
-								<label for="issueEnable" style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">이슈 등록</label>
+								<label for="issueEnable" style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">Issue Register</label>
 								<input type="checkbox" name="issueEnable" id="issueEnable"/>
 							</fieldset>    
 						</a>
 						</li>
-						<li><a href="#issueListPanel">이슈 목록</a></li>
+						<li><a href="#issueListPanel">Issue List</a></li>
 					</ul>
 				</li>
 				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false">
-					<h2>API 목록</h2>
+					<h2>API List</h2>
 					<ul data-role="listview" data-theme="b">
 						<li class="ui-field-contain">
 						<a href="#" style="padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 0px;">
 							<fieldset data-role="controlgroup">
-								<label for="objectInfoEnable" style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">Object 정보</label>
+								<label for="objectInfoEnable" style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">Object Information</label>
 								<input type="checkbox" name="objectInfoEnable" id="objectInfoEnable"/>
 							</fieldset>    
 						</a>
@@ -103,20 +100,20 @@
 						<li class="ui-field-contain">
 							<label>Data Key</label>
 							<input type="text" id="search_data_key" name="search_data_key" size="15" />
-							<button type="button" id="searchData" style=""background: #727272;">검색</button>
+							<button type="button" id="searchData" style=""background: #727272;">Search</button>
 						</li>
 						<li class="ui-field-contain">
 						<fieldset data-role="controlgroup" data-type="horizontal">
 							<legend>Bounding Box</legend>
 							<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />
-							<label for="showBoundingBox"> 표시 </label>
+							<label for="showBoundingBox">Show</label>
 							<input type="radio" id="hideBoundingBox" name="boundingBox" value="false" onclick="changeBoundingBox(false);"/>
-							<label for="hideBoundingBox"> 비표시 </label>					
+							<label for="hideBoundingBox">Hide</label>					
 						</fieldset>
 						</li>
 						<li class="ui-field-contain">
 						<fieldset data-role="controlgroup" data-type="horizontal">
-						    <legend>선택 및 이동</legend>
+							<legend>Selecting And Moving</legend>
 							<input type="radio" id="mouseAllMove" name="mouseMoveMode" value="0" onclick="changeMouseMove('0');"/>
 							<label for="mouseAllMove">ALL</label>
 							<input type="radio" id="mouseObjectMove" name="mouseMoveMode" value="1" onclick="changeMouseMove('1');"/>
@@ -134,12 +131,12 @@
 			<div data-role="header">
 				<h3>Issue Register</h3>
 				<a href="#menuPanel" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
-				<a href="#" data-rel="close">닫기</a>
+				<a href="#" data-rel="close">Close</a>
 			</div>
 			<form:form id="issue" modelAttribute="issue" method="post" onsubmit="return false;">
 				<ul data-role="listview" data-inset="true">
 					<li class="ui-field-contain">
-						<form:label path="data_group_id">데이터 그룹</form:label>
+						<form:label path="data_group_id">Data Group</form:label>
 						<form:select path="data_group_id">
 							<c:forEach var="dataGroup" items="${projectDataGroupList}">
 							<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name}</option>
@@ -163,7 +160,7 @@
 						<form:hidden path="height"/>
 					</li>
 					<li class="ui-field-contain">
-						<form:label path="title">제목</form:label>
+						<form:label path="title">Title</form:label>
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 						<form:input path="title" cssClass="ml" />
 						<form:errors path="title" cssClass="error" />
@@ -177,25 +174,25 @@
 						</form:select>		
 					</li>
 					<li class="ui-field-contain">
-						<form:label path="due_date">마감일</form:label>
+						<form:label path="due_date">Due Date</form:label>
 						<form:hidden path="start_date" />
-						<input type="text" id="start_day" name="start_day" placeholder="날짜" size="7" maxlength="4" />
-						<input type="text" id="start_hour" name="start_hour" placeholder="시간" size="3" maxlength="2" />
+						<input type="text" id="start_day" name="start_day" placeholder="Day" size="7" maxlength="4" />
+						<input type="text" id="start_hour" name="start_hour" placeholder="Hour" size="3" maxlength="2" />
 						<span class="delimeter">:</span>
-						<input type="text" id="start_minute" name="start_minute" placeholder="분" size="3" maxlength="2" />
+						<input type="text" id="start_minute" name="start_minute" placeholder="Minute" size="3" maxlength="2" />
 					</li>	        
 					<li class="ui-field-contain">
 						<form:label path="assignee">Assignee</form:label>
-						<form:input path="assignee" cssClass="m" placeholder="대리자" />
+						<form:input path="assignee" cssClass="m" placeholder="assignee" />
 						<form:errors path="assignee" cssClass="error" />
 					</li>
 					<li class="ui-field-contain">
 						<form:label path="reporter">reporter</form:label>
-						<form:input path="reporter" cssClass="m" placeholder="보고 해야 하는 사람" />
+						<form:input path="reporter" cssClass="m" placeholder="reporter" />
 						<form:errors path="reporter" cssClass="error" />
 					</li>
 					<li class="ui-field-contain">
-						<form:label path="contents">내용</form:label>
+						<form:label path="contents">Contents</form:label>
 						<form:textarea path="contents" />
 						<form:errors path="contents" cssClass="error" />
 					</li>
@@ -210,12 +207,12 @@
 			<div data-role="header">
 				<h3>Issue List</h3>
 				<a href="#menuPanel" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
-				<a href="#" data-rel="close">닫기</a>
+				<a href="#" data-rel="close">Close</a>
 			</div>
 
 			<ul data-role="listview" data-inset="true">
 				<c:if test="${empty issueList }">
-				<li>Issue가 존재하지 않습니다.</li>
+				<li>The issue does not exist.</li>
 				</c:if>
 				<c:if test="${!empty issueList }">
 			<c:set var="issueTypeCss" value="i1" />
@@ -264,7 +261,7 @@
 			<div data-role="header">
 				<h3>Location And Rotation</h3>
 				<a href="#menuPanel" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
-				<a href="#" data-rel="close">닫기</a>
+				<a href="#" data-rel="close">Close</a>
 			</div>
 			
 			<ul data-role="listview" data-inset="true">
@@ -273,15 +270,15 @@
 					<input type="text" id="move_data_key" name="move_data_key" size="15" />
 				</li>
 				<li class="ui-field-contain">
-					<label for="move_latitude">위도 </label>
+					<label for="move_latitude">Latitude</label>
 					<input type="text" id="move_latitude" name="move_latitude" size="15"/> 
 				</li>
 				<li class="ui-field-contain">
-					<label for="move_longitude">경도 </label>
+					<label for="move_longitude">Longitude</label>
 					<input type="text" id="move_longitude" name="move_longitude" size="15"/>
 				</li>
 				<li class="ui-field-contain">
-					<label for="move_height">높이 </label>
+					<label for="move_height">Altitude</label>
 					<input type="text" id="move_height" name="move_height" size="15" />
 				</li>
 				<li class="ui-field-contain">
@@ -297,12 +294,12 @@
 					<input type="text" id="move_roll" name="move_roll" size="15" />
 				</li>
 				<li class="ui-field-contain">
-					<button type="button" id="changeLocationAndRotationAPI">변환</button>
+					<button type="button" id="changeLocationAndRotationAPI">Transform</button>
 				</li>
 			</ul>
 		</div>
 	</div>
-<script type="text/javascript" src="/externlib/${lang}/webworldwind/worldwind.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/externlib/${lang}/cesium/Cesium.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Code.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/API.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Config.js?currentTime=${currentTime}"></script>
@@ -365,7 +362,7 @@
 <script>
 	var agent = navigator.userAgent.toLowerCase();
 	if(agent.indexOf('chrome') < 0) { 
-		alert("이 데모 페이지는 대용량 웹 데이터 처리를 위해 Chrome 브라우저에 최적화 되어 있습니다. \n원활한 서비스 이용을 위해 Chrome 브라우저를 이용  하시기 바랍니다.");
+		alert("This page is optimized for the Chrome browser for massive data processing.\nPlease use the Chrome browser for seamless service.");
 	}
 
 	var policyJson = ${policyJson};
@@ -554,7 +551,7 @@
 	// Data 검색
 	$("#searchData").click(function() {
 		if ($.trim($("#search_data_key").val()) === ""){
-			alert("Data Key를 입력해 주세요.");
+			alert("Please enter data key.");
 			$("#search_data_key").focus();
 			return false;
 		}
@@ -578,37 +575,37 @@
 	});
 	function changeLocationAndRotationCheck() {
 		if ($.trim($("#move_data_key").val()) === ""){
-			alert("Data Key를 입력해 주세요.");
+			alert("Please enter data key.");
 			$("#move_data_key").focus();
 			return false;
 		}
 		if ($.trim($("#move_latitude").val()) === ""){
-			alert("위도를 입력해 주세요.");
+			alert("Please enter latitude.");
 			$("#move_latitude").focus();
 			return false;
 		}
 		if ($.trim($("#move_longitude").val()) === ""){
-			alert("경도를 입력해 주세요.");
+			alert("Please enter longitude.");
 			$("#move_longitude").focus();
 			return false;
 		}
 		if ($.trim($("#move_height").val()) === ""){
-			alert("높이를 입력해 주세요.");
+			alert("Please enter altitude.");
 			$("#move_height").focus();
 			return false;
 		}
 		if ($.trim($("#move_heading").val()) === ""){
-			alert("heading을 입력해 주세요.");
+			alert("Please enter heading.");
 			$("#move_heading").focus();
 			return false;
 		}
 		if ($.trim($("#move_pitch").val()) === ""){
-			alert("pitch를 입력해 주세요.");
+			alert("Please enter pitch.");
 			$("#move_pitch").focus();
 			return false;
 		}
 		if ($.trim($("#move_roll").val()) === ""){
-			alert("roll를 입력해 주세요.");
+			alert("Please enter roll.");
 			$("#move_roll").focus();
 			return false;
 		}
@@ -630,7 +627,7 @@
 					
 					if(issueList == null || issueList.length == 0) {
 						content += 	"<div style=\"text-align: center; padding-top:20px; height: 50px;\">"
-								+	"	Issue가 존재하지 않습니다."
+								+	"	The issue does not exist."
 								+	"</div>";
 					} else {
 						for(i=0; i<issueList.length; i++ ) {

@@ -53,36 +53,50 @@
 <body>
 	<div data-role="page" class="jqm-demos" data-quicklinks="true">
 		<div role="main" class="ui-content jqm-content"
-			style="width: 100%; height100 %; margin-top: 0; padding: 0; overflow: hidden;">
+			style="width:100%; height:100%; margin-top:0; padding:0; overflow:hidden;">
 			<div id="magoContainer"
-				style="position: absolute; width: 100%; height: 100%; margin-top: 0; padding: 0; overflow: hidden;"></div>
-			<a href="#leftpanel" data-icon="bars" data-iconpos="notext"
+				style="position:absolute; width:100%; height:100%; margin-top:0; padding:0; overflow:hidden;"></div>
+			<a href="#menuPanel" data-icon="bars" data-iconpos="notext"
 				class="ui-btn ui-btn-icon-notext ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a> 
 		</div>
 
-		<!-- leftpanel  -->
-		<div data-role="panel" id="leftpanel" data-position="left" data-display="overlay" data-theme="a">
+		<!-- menuPanel  -->
+		<div data-role="panel" id="menuPanel" data-position="left" data-display="overlay" data-theme="a">
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-filtertext="homepage" data-icon="home"><a href="/homepage/index.do">Home</a></li>
 				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false">
 					<h2>바로 가기</h2>
 					<ul data-role="listview" data-theme="b">
-<c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status">
+						<c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status">
 						<li onclick="flyTo(null, null, '${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">${dataGroup.data_group_name }</li>
-</c:forEach>
+						</c:forEach>
 					</ul>
 				</li>
 				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false">
-					<h2>Issues</h2>
+					<h2>이슈 사항</h2>
 					<ul data-role="listview" data-theme="b">
-						<li id="issueEnable">이슈 등록</li>
+						<li class="ui-field-contain">
+						<a href="#" style="padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 0px;">
+							<fieldset data-role="controlgroup">
+								<label for="issueEnable" style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">이슈 등록</label>
+								<input type="checkbox" name="issueEnable" id="issueEnable"/>
+							</fieldset>    
+						</a>
+						</li>
 						<li><a href="#issueListPanel">이슈 목록</a></li>
 					</ul>
 				</li>
 				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false">
-					<h2>API List</h2>
+					<h2>API 목록</h2>
 					<ul data-role="listview" data-theme="b">
-						<li id="objectInfoEnable">Object 정보</li>
+						<li class="ui-field-contain">
+						<a href="#" style="padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 0px;">
+							<fieldset data-role="controlgroup">
+								<label for="objectInfoEnable" style="border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">Object 정보</label>
+								<input type="checkbox" name="objectInfoEnable" id="objectInfoEnable"/>
+							</fieldset>    
+						</a>
+						</li>
 						<li class="ui-field-contain">
 							<label>Data Key</label>
 							<input type="text" id="search_data_key" name="search_data_key" size="15" />
@@ -90,7 +104,7 @@
 						</li>
 						<li class="ui-field-contain">
 						<fieldset data-role="controlgroup" data-type="horizontal">
-						    <legend>Bounding Box</legend>
+							<legend>Bounding Box</legend>
 							<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />
 							<label for="showBoundingBox"> 표시 </label>
 							<input type="radio" id="hideBoundingBox" name="boundingBox" value="false" onclick="changeBoundingBox(false);"/>
@@ -99,11 +113,11 @@
 						</li>
 						<li class="ui-field-contain">
 						<fieldset data-role="controlgroup" data-type="horizontal">
-						    <legend>이동</legend>
+						    <legend>선택 및 이동</legend>
 							<input type="radio" id="mouseAllMove" name="mouseMoveMode" value="0" onclick="changeMouseMove('0');"/>
-							<label for="mouseAllMove"> ALL </label>
+							<label for="mouseAllMove">ALL</label>
 							<input type="radio" id="mouseObjectMove" name="mouseMoveMode" value="1" onclick="changeMouseMove('1');"/>
-							<label for="mouseObjectMove"> Object </label>					
+							<label for="mouseObjectMove">Object</label>					
 						</fieldset>
 						</li>
 						<li><a href="#listApiPanel">Location And Rotation</a></li>
@@ -111,12 +125,12 @@
 				</li>
 			</ul>
 		</div>
-		<!-- /leftpanel -->
+		<!-- /menuPanel -->
 
 		<div data-role="panel" id="inputIssuePanel" data-position="left" data-display="overlay" data-theme="a">
 			<div data-role="header">
 				<h3>Issue Register</h3>
-				<a href="#leftpanel" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+				<a href="#menuPanel" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
 				<a href="#" data-rel="close">닫기</a>
 			</div>
 			<form:form id="issue" modelAttribute="issue" method="post" onsubmit="return false;">
@@ -192,7 +206,7 @@
 		<div data-role="panel" id="issueListPanel" data-position="left" data-display="overlay" data-theme="a">
 			<div data-role="header">
 				<h3>Issue List</h3>
-				<a href="#leftpanel" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+				<a href="#menuPanel" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
 				<a href="#" data-rel="close">닫기</a>
 			</div>
 
@@ -246,7 +260,7 @@
 		<div data-role="panel" id="listApiPanel" data-position="left" data-display="overlay" data-theme="a">
 			<div data-role="header">
 				<h3>Location And Rotation</h3>
-				<a href="#leftpanel" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+				<a href="#menuPanel" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
 				<a href="#" data-rel="close">닫기</a>
 			</div>
 			
@@ -268,15 +282,15 @@
 					<input type="text" id="move_height" name="move_height" size="15" />
 				</li>
 				<li class="ui-field-contain">
-					<label for="move_heading">HEADING </label>
+					<label for="move_heading">Heading</label>
 					<input type="text" id="move_heading" name="move_heading" size="15" />
 				</li>
 				<li class="ui-field-contain">
-					<label for="move_pitch">PITCH </label>
+					<label for="move_pitch">Pitch</label>
 					<input type="text" id="move_pitch" name="move_pitch" size="15" />
 				</li>
 				<li class="ui-field-contain">
-					<label for="move_roll">ROLL </label>
+					<label for="move_roll">Roll</label>
 					<input type="text" id="move_roll" name="move_roll" size="15" />
 				</li>
 				<li class="ui-field-contain">
@@ -292,7 +306,7 @@
 <script type="text/javascript" src="/js/${lang}/mago3d/Callback.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Constant.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Message.js?currentTime=${currentTime}"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/ManagerFactory.js"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/ManagerFactory.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Atmosphere.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/GeometryUtil.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/GeometryModifier.js?currentTime=${currentTime}"></script>
@@ -360,34 +374,10 @@
 	var managerFactory = new ManagerFactory(null, "magoContainer", policyJson, dataGroupMap, imagePath);
 	
 	$(document).ready(function() {
-		//$("#recentIssueListContent").show();
-		
 		// BoundingBox
 		changeBoundingBox(false);
 		// Selecting And Moving
 		changeMouseMove("0");
-	});
-	$("#issueMoreImage").click(function() {
-		if($("#recentIssueListContent").css("display") == "none") {
-			$("#issueMoreImage").addClass("on");
-			$("#apiMoreImage").removeClass("on");
-			$("#recentIssueListContent").show();
-			$("#apiListContent").hide();
-		} else {
-			$("#issueMoreImage").removeClass("on");
-			$("#recentIssueListContent").hide();
-		}
-	});
-	$("#apiMoreImage").click(function() {
-		if($("#apiListContent").css("display") == "none") {
-			$("#apiMoreImage").addClass("on");
-			$("#issueMoreImage").removeClass("on");
-			$("#apiListContent").show();
-			$("#recentIssueListContent").hide();
-		} else {
-			$("#apiMoreImage").removeClass("on");
-			$("#apiListContent").hide();
-		}
 	});
 	
 	function flyTo(issueId, issueType, longitude, latitude, height, duration) {
@@ -401,62 +391,23 @@
 	$("#issueEnable").click(function() {
 		if(insertIssueFlag) {
 			insertIssueFlag = false;
-			$("#issueEnable").removeClass("on");
 		} else {
 			insertIssueFlag = true;
-			$("#issueEnable").addClass("on");
 		}
+		$(this).attr("checked", insertIssueFlag).checkboxradio("refresh");
 		changeInsertIssueModeAPI(insertIssueFlag);
+		if(insertIssueFlag)	$("#menuPanel").panel("close");
 	});
 	// object info 표시
 	$("#objectInfoEnable").click(function() {
 		if(objectInfoViewFlag) {
 			objectInfoViewFlag = false;
-			$("#objectInfoEnable").removeClass("on");
 		} else {
 			objectInfoViewFlag = true;
-			$("#objectInfoEnable").addClass("on");			
 		}
+		$(this).attr("checked", objectInfoViewFlag).checkboxradio("refresh");
 		changeObjectInfoViewModeAPI(objectInfoViewFlag);
-	});
-	// issue list 표시
-	$("#issuesEnable").click(function() {
-		if(listIssueFlag) {
-			listIssueFlag = false;
-			$("#issuesEnable").removeClass("on");
-		} else {
-			listIssueFlag = true;
-			$("#issuesEnable").addClass("on");
-			
-			// 현재 위치의 latitude, logitude를 가지고 가장 가까이에 있는 데이터 그룹에 속하는 이슈 목록을 최대 100건 받아서 표시
-			var now_latitude = $("#now_latitude").val();
-			var now_longitude = $("#now_longitude").val();
-			var info = "latitude=" + now_latitude + "&longitude=" + now_longitude;		
-			$.ajax({
-				url: "/issue/ajax-list-issue-by-geo.do",
-				type: "GET",
-				data: info,
-				dataType: "json",
-				success: function(msg){
-					if(msg.result == "success") {
-						var issueList = msg.issueList;
-						if(issueList != null && issueList.length > 0) {
-							for(i=0; i<issueList.length; i++ ) {
-								var issue = issueList[i];
-								drawInsertIssueImageAPI(issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
-							}
-						}
-					} else {
-						alert(JS_MESSAGE[msg.result]);
-					}
-				},
-				error:function(request,status,error){
-			        //alert(JS_MESSAGE["ajax.error.message"]);
-					console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-				}
-			});
-		}
-		changeListIssueViewModeAPI(listIssueFlag);
+		if(objectInfoViewFlag)	$("#menuPanel").panel("close");
 	});
 	
 	// issue input layer call back function
@@ -536,7 +487,7 @@
 						alert(JS_MESSAGE[msg.result]);
 					}
 					
-					$("#inputIssueLayer").hide();
+					$("#inputIssuePanel").panel("close");
 					isInsertIssue = true;
 					ajaxIssueList();
 				},
@@ -555,7 +506,7 @@
 	});
 	
 	$("#inputIssueClose").click(function() {
-		$("#inputIssueLayer").hide();
+		$("#inputIssuePanel").panel("close");
 		changeInsertIssueStateAPI(0);
 	});
 	

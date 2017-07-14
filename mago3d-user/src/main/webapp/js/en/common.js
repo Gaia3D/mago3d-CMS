@@ -6,7 +6,7 @@ function deleteWarning() {
 		return false;
 	}
 }
-// mobile hover 처리
+//mobile hover 처리
 function selectMenu() {
 	$(document).ready(function(){
 		  $(".mm").hover(function(){
