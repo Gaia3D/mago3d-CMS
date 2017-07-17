@@ -10,6 +10,7 @@ body, th, td, input, select, textarea { color:#444; font-family:'Malgun Gothic',
 button { cursor:pointer; font-family: 'Noto Sans', sans-serif; }
 html, body { margin:0; padding:0; width: 100%; height:100%; background-color: #fff;
 font-family: 'Noto Sans','Malgun Gothic','돋움',dotum, sans-serif;}
+td ul li a { display: inline; }
 
 
 
@@ -99,7 +100,10 @@ text-align: center;
 
 
 
-
+/* about li */
+ul li{margin-left: 30px;}
+ol li{margin-left: 30px;}
+b {margin-left: 30px;}
 /* ///// COMMON ///// */
 h1 {
 float: left;
