@@ -6,12 +6,12 @@
 <html lang="${accessibility}">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
+	<meta name="viewport" content="width=1250">	
 	<title>download | mago3D User</title>
 	<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"></link>
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<script type="text/javascript" src="/js/${lang }/common.js"></script>
@@ -22,10 +22,10 @@
 <body>
 
 	<header class='down'>
-		<div>
-			<p>Architecture, Engineering, Construction</p>
-			<p>대용량 3차원GIS를 쉽고 빠르게 웹에서 구현합니다</p>
-		</div>
+<!-- 		<div> -->
+<!-- 			<p>Architecture, Engineering, Construction</p> -->
+<!-- 			<p>대용량 3차원GIS를 쉽고 빠르게 웹에서 구현합니다</p> -->
+<!-- 		</div> -->
 	</header>
 	
 	<nav class="nav">
@@ -35,12 +35,12 @@
 			</h1>
 			<ul class="menu">
 				<li><a href="/homepage/about.do">mago3D</a></li>
-				<li class="dropdown">
-					Demo
-					<div class="dropdown-content">
-						<a href="/homepage/demo.do">Cesium</a>
-						<a href="/homepage/demo.do?viewLibrary=worldwind">worldwind</a>
-					</div>
+				<li class="mm" onclick='selectMenu();'>Demo<span></span>
+					<ul>
+						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
+						<li><a href="/homepage/demo.do?viewLibrary=worldwind"
+							style="color: white">World Wind</a></li>
+					</ul>
 				</li>
 				<li class="on">Download<span></span></li>
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
@@ -53,6 +53,7 @@
 	</nav>
 
 	<section>
+		<h2>Download</h2>
 		<div class="contents">
 			<button type="button" class="down" onclick="location.href='https://github.com/Gaia3D/mago3d'">
 				DOWNLOAD mago3D 1.0.0 <span>2017-07-01</span>
@@ -101,7 +102,7 @@
 					<th>Biz Document</th>
 				</tr>
 				<tr>
-					<td><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3Djs-1.0.0
+					<td><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3D.js-1.0.0
 							js Document</a></td>
 					<td></td>
 					<td></td>
@@ -122,8 +123,8 @@
 					<td>2017-07-01</td>
 					<td>
 						<ul>
-							<li><a href="https://github.com/Gaia3D/mago3Djs">mago3Djs</a></li>
-							<li><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3Dconver</a></li>
+							<li><a href="https://github.com/Gaia3D/mago3Djs">mago3D.js</a></li>
+							<li><a href="#" onclick='alert("준비 중 입니다."); return false;'>F4G Converter</a></li>
 							<li><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3Dbiz</a></li>
 						</ul>
 					</td>

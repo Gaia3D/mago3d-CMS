@@ -6,12 +6,12 @@
 <html lang="${accessibility}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=1250">
     <title>tutorials | mago3D User</title>
     <!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"></link>
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
@@ -21,10 +21,10 @@
 
 <body>
 	<header class='tuto'>
-		<div>
-			<p>Architecture, Engineering, Construction</p>
-			<p>A Brand-New Live 3D Platform</p>
-		</div>
+<!-- 		<div> -->
+<!-- 			<p>Architecture, Engineering, Construction</p> -->
+<!-- 			<p>A Brand-New Live 3D Platform</p> -->
+<!-- 		</div> -->
 	</header>
 	
 	<nav class="nav">
@@ -32,12 +32,12 @@
 			<h1><a href="/homepage/index.do">mago3D</a></h1>
 			<ul class="menu">
 				<li><a href="/homepage/about.do">mago3D</a></li>
-				<li class="dropdown">
-					Demo
-					<div class="dropdown-content">
-						<a href="/homepage/demo.do">Cesium</a>
-						<a href="/homepage/demo.do?viewLibrary=worldwind">worldwind</a>
-					</div>
+				<li class="mm" onclick='selectMenu();'>Demo<span></span>
+					<ul>
+						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
+						<li><a href="/homepage/demo.do?viewLibrary=worldwind"
+							style="color: white">World Wind</a></li>
+					</ul>
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
 				<li class="on">Tutorials<span></span></li>
@@ -50,7 +50,8 @@
 	</nav>
 	
 	<section>
-		<h2>Tutorials<span></span></h2>
+		<h2>Tutorials</h2>
+		<h2>API List<span></span></h2>
 		<div class="contents">
 			<ul class="subMenu">				
 				<li>Issue registration API</a></li>

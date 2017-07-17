@@ -52,6 +52,20 @@
 		SELECT * FROM data_group WHERE data_group_id = #{data_group_id} 
 	</select>
 	
+	<!-- Data 그룹 -->
+	<select id="getDataGroupByGeo" parameterType="dataGroup" resultType="dataGroup">
+		/* getDataGroupByGeo */
+		SELECT *, 
+			ST_Distance(
+				ST_GeographyFromText('SRID=4326;POINT('||longitude||' '||latitude||')'), 
+				ST_GeographyFromText(#{location})
+			) AS distance
+		FROM data_group
+		WHERE use_yn = 'Y'
+		ORDER BY distance
+		LIMIT 1
+	</select>
+	
 	<!-- Data 그룹에 속한 자식 그룹 개수 -->
 	<select id="getDataGroupChildCount" parameterType="long" resultType="int">
 		/* getDataGroupChildCount */

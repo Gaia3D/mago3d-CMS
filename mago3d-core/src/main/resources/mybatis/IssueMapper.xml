@@ -9,11 +9,14 @@
 		SELECT COUNT(issue_id) 
 		FROM issue
 		<trim prefix="WHERE" prefixOverrides="AND">	
+			<if test="data_group_id != null and data_group_id > 0">
+				data_group_id = #{data_group_id}
+			</if>
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
-			${search_word} = #{search_value}
+			AND ${search_word} = #{search_value}
 			</if>
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
-			${search_word} LIKE '%' || #{search_value} || '%'
+			AND ${search_word} LIKE '%' || #{search_value} || '%'
 			</if>
 			<if test="start_date != null and start_date != ''">
 			<![CDATA[
@@ -38,11 +41,14 @@
 			SELECT *
 			FROM issue
 			<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="data_group_id != null and data_group_id > 0">
+				data_group_id = #{data_group_id}
+				</if>
 				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
-				${search_word} = #{search_value}
+				AND ${search_word} = #{search_value}
 				</if>
 				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
-				${search_word} LIKE '%' || #{search_value} || '%'
+				AND ${search_word} LIKE '%' || #{search_value} || '%'
 				</if>
 				<if test="start_date != null and start_date != ''">
 				<![CDATA[

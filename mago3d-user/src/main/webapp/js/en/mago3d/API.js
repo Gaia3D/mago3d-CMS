@@ -25,6 +25,10 @@ var API = function(apiName) {
 	this.objectIds = null;
 	// data_key
 	this.dataKey = null;
+	// issueId
+	this.issueId = null;
+	// issueType
+	this.issueType = null;
 	
 	// fullship = 0, deploy = 1
 	this.renderMode = 0;
@@ -69,6 +73,8 @@ var API = function(apiName) {
 	this.objectInfoViewEnable = false;
 	// 이슈 목록 표시
 	this.issueListEnable = false;
+	//
+	this.insertIssueState = 0;
 };
 
 API.prototype.getMagoEnable = function() {
@@ -108,6 +114,19 @@ API.prototype.getObjectIds = function() {
 };
 API.prototype.setObjectIds = function(objectIds) {
 	this.objectIds = objectIds;
+};
+
+API.prototype.getIssueId = function() {
+	return this.issueId;
+};
+API.prototype.setIssueId = function(issueId) {
+	this.issueId = issueId;
+};
+API.prototype.getIssueType = function() {
+	return this.issueType;
+};
+API.prototype.setIssueType = function(issueType) {
+	this.issueId = issueType;
 };
 
 API.prototype.getDataKey = function() {
@@ -232,4 +251,11 @@ API.prototype.getIssueListEnable = function() {
 };
 API.prototype.setIssueListEnable = function(issueListEnable) {
 	this.issueListEnable = issueListEnable;
+};
+
+API.prototype.getInsertIssueState = function() {
+	return this.insertIssueState;
+};
+API.prototype.setInsertIssueState = function(insertIssueState) {
+	this.insertIssueState = insertIssueState;
 };

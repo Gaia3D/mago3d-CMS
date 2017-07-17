@@ -6,13 +6,13 @@
 <html lang="${accessibility}">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
+	<meta name="viewport" content="width=1250">
 	<title>about | mago3D User</title>
 	<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-	<link rel="stylesheet" href="/css/${lang}/homepage-style.css"></link>
-	<link rel="stylesheet" href="/css/${lang}/font/font.css"></link>
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
+	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
@@ -35,12 +35,12 @@
 			</h1>
 			<ul class="menu">
 				<li class="on">mago3D<span></span></li>
-				<li class="dropdown">
-					Demo
-					<div class="dropdown-content">
-						<a href="/homepage/demo.do">Cesium</a>
-						<a href="/homepage/demo.do?viewLibrary=worldwind">worldwind</a>
-					</div>
+				<li class="mm" onclick='selectMenu();'>Demo<span></span>
+					<ul>
+						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
+						<li><a href="/homepage/demo.do?viewLibrary=worldwind"
+							style="color: white">World Wind</a></li>
+					</ul>
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
 				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
@@ -52,6 +52,7 @@
 		</div>
 	</nav>
 	<section>
+	<h2>mago3D</h2>
 		<div class="contents">
 			<ul class="tab">
 				<li><a href="#about">About</a></li>
@@ -255,7 +256,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				To overcome this hurdle, new format called F4D has been devised adopting block reference concept. 
 				Also a format converter that converts popular 3D format to F4D has been developed. 
 				Currently industry standard IFC(Industry Foundation Classes), JT(Jupiter Tessellation), and popular 3D formats such as OBJ, 3DS, COLLADA DAE can be converted to F4D format. 
-				F4D format coupled with mago3Djs(javascript library) has proven that it can increase memory management efficiency and rendering speed drastically. 
+				F4D format coupled with mago3D.js(javascript library) has proven that it can increase memory management efficiency and rendering speed drastically. 
 				mago3D can now visualise massive 3D data including indoor objects and AEC data at least 100k objects, in a single scene seamlessly with traditional outdoor 3D GIS objects.
 				</p>
 				<div class="architecture">

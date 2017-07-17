@@ -3,13 +3,14 @@
 article, aside, details, figcaption, figure, footer, header, hgroup, menu nav, section { display:block; }
 ul, ol, dl { list-style:none; }
 img, video { max-width:100%; border:0; vertical-align:top; }
-a {vertical-align:top; text-decoration:none; color:#000; }
+a {display: block; text-decoration:none; color:#000; width: 100%; height: 100%;}
 table { border-collapse:collapse; border-spacing:0; }
 input, select { vertical-align:middle; }
 body, th, td, input, select, textarea { color:#444; font-family:'Malgun Gothic','돋움',dotum, sans-serif; font-size:15px; line-height:1.8em;}
 button { cursor:pointer; font-family: 'Noto Sans', sans-serif; }
 html, body { margin:0; padding:0; width: 100%; height:100%; background-color: #fff;
 font-family: 'Noto Sans','Malgun Gothic','돋움',dotum, sans-serif;}
+td ul li a { display: inline; }
 
 
 
@@ -17,35 +18,35 @@ font-family: 'Noto Sans','Malgun Gothic','돋움',dotum, sans-serif;}
 /* HEADER */
 header {
 position: relative;
-height: 200px;
+height: 80px;
 background-repeat: repeat-x;
 background-color: #323140;
 background-image: url(/images/ko/header.png);
 }
-header.about {
-background-position: 0 0;
-}
-header.down {
-background-position: 0 -200px;
-}
-header.tuto {
-background-position: 0 -400px;
-}
-header > div {
-width: 1200px;
-margin: 0 auto;
-padding-top: 120px;
-background: url(/images/ko/logo_header.png) no-repeat center 40px;
-}
-header > div p {
-color: #fff;
-font-size: 23px;
-text-align: center;
-line-height: 1.8em;
-font-weight: 100;
-}
-header > div p:last-child {
-}
+/* header.about { */
+/* background-position: 0 0; */
+/* } */
+/* header.down { */
+/* background-position: 0 -200px; */
+/* } */
+/* header.tuto { */
+/* background-position: 0 -400px; */
+/* } */
+/* header > div { */
+/* width: 1200px; */
+/* margin: 0 auto; */
+/* padding-top: 120px; */
+/* background: url(/images/ko/logo_header.png) no-repeat center 40px; */
+/* } */
+/* header > div p { */
+/* color: #fff; */
+/* font-size: 23px; */
+/* text-align: center; */
+/* line-height: 1.8em; */
+/* font-weight: 100; */
+/* } */
+/* header > div p:last-child { */
+/* } */
 /* NAV */
 nav {
 margin-bottom: 50px;
@@ -99,7 +100,10 @@ text-align: center;
 
 
 
-
+/* about li */
+ul li{margin-left: 30px;}
+ol li{margin-left: 30px;}
+b {margin-left: 30px;}
 /* ///// COMMON ///// */
 h1 {
 float: left;
@@ -294,7 +298,7 @@ text-decoration: none;
 display: inline-block;
 width: 100%;
 height: 100%;
-margin-top: 10px;
+line-height: 50px;
 }
 .tab li:hover {
 transition: all 1.5s;
@@ -472,56 +476,25 @@ background-position: center 0px;
 }
 
 
-.example-code {
-font-size: 13.8px;
+/* 메뉴 2depth 0712 */
+.menu li > ul {
+display: none;
 }
-/* /////// example-code //////// */
-.example-code pre {
-
-margin:10px;
-padding:10px;
-border: none;
-border-radius: 3px;
-max-width: 800px;
-background-color: #28272B;
-white-space: pre-line;
-white-space:nowrap;
-color: white;
-font: inherit;
+.menu li:hover > ul {
+display: block;
+margin-top: 22px;
 }
-
-.example-code pre .function {
-color :#ff8040;
+.menu li:hover > ul li {
+height: 35px;
+color: #fff;
+background-color: tomato;
 }
-.example-code pre .string {
-color : #7FFFD4;
+.menu li:hover > ul li * {
+vertical-align: middle;
 }
-.example-code pre .value {
-color : #FF6347;
+.menu li > ul li:nth-child(1) {
+border-bottom: 1px dotted #fff;
 }
-.example-code pre .tag {
-color : #FFE4B5;
-}
-
-.propit{
-width:300px;
-height:300px;
-}
-.propit div h4{
-font-weight: 700;
-font-size: 10px;
-color: white;
-}
-.api a{
-text-decoration: none;
-}
-.api p{
-text-align: center;
-color: gray;
-font-size: 30px;
-}
-
-
 
 
 /* ////////// Dex /////////// */
@@ -939,7 +912,7 @@ margin-right: 30px;
 }
 .mainMenu .nav  li {
 display: inline-block;
-padding: 7px 50px;
+
 color: #fff;
 font-size: 20px;
 line-height: 30px;
@@ -949,7 +922,11 @@ border:1px solid #fff;
 background-color: transparent;
 }
 .mainMenu .nav  li a{
-color: #fff;	
+display: block;
+color: #fff;
+width: 180px;
+height: 50px;
+line-height: 50px;
 }
 .mainMenu .nav li:hover {
 border:1px solid tomato;
@@ -978,7 +955,6 @@ background-color: tomato;
 color: #fff;
 background-color: tomato;	
 }
-
 
 
 /* algo */

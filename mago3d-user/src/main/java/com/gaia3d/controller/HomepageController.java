@@ -79,9 +79,10 @@ public class HomepageController {
 	 */
 	@GetMapping(value = "demo.do")
 	public String demo(HttpServletRequest request, HttpServletResponse response, 
-			@RequestParam(defaultValue="1") String pageNo, @RequestParam(defaultValue="cesium") String viewLibrary, Model model) {
+			@RequestParam(defaultValue="1") String pageNo, @RequestParam(defaultValue="cesium") String viewLibrary, String device, Model model) {
 		
 		log.info("@@ viewLibrary = {}", viewLibrary);
+		String viewName = "cesium";
 		String lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 		if(lang == null || "".equals(lang)) {
 			lang = "ko";
@@ -125,10 +126,24 @@ public class HomepageController {
 		@SuppressWarnings("unchecked")
 		List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
 		
-		if(viewLibrary.equals("cesium")) policy.setGeo_view_library("cesium");
-		else if(viewLibrary.equals("worldwind")) policy.setGeo_view_library("worldwind");
+		boolean isMobile = isMobile(request);
+		if(viewLibrary.equals("cesium")) {
+			policy.setGeo_view_library("cesium");
+			viewName = "cesium";
+			if(!"pc".equals(device) && isMobile) {
+				viewName = "cesium-mobile";
+			}
+		} else if(viewLibrary.equals("worldwind")) {
+			policy.setGeo_view_library("worldwind");
+			viewName = "worldwind";
+			if(!"pc".equals(device) && isMobile) {
+				viewName = "worldwind-mobile";
+			}
+		}
 		
 		model.addAttribute("issue", issue);
+		model.addAttribute("now_latitude", policy.getGeo_init_latitude());
+		model.addAttribute("now_longitude", policy.getGeo_init_longitude());
 		model.addAttribute(pagination);
 		model.addAttribute("issueList", issueList);
 		model.addAttribute("projectDataGroupList", projectDataGroupList);
@@ -144,7 +159,17 @@ public class HomepageController {
 //		response.setHeader("Cache-Control", "No-cache");
 //		response.setHeader("Expires", "1");
 
-		return "/homepage/" + lang + "/" + viewLibrary;
+		return "/homepage/" + lang + "/" + viewName;
+	}
+	
+	private boolean isMobile(HttpServletRequest request) { 
+		String userAgent = request.getHeader("user-agent"); 
+		boolean mobile1 = userAgent.matches(".*(iPhone|iPod|Android|Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson).*"); 
+		boolean mobile2 = userAgent.matches(".*(LG|SAMSUNG|Samsung).*"); 
+		if(mobile1 || mobile2) { 
+			return true; 
+		}
+		return false;
 	}
 	
 	/**

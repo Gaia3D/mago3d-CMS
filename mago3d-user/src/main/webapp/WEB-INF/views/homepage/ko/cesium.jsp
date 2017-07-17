@@ -30,6 +30,8 @@
 			<button id="issueEnable">Issue 등록</button>
 			<button id="objectInfoEnable">Object 정보</button>	
 			<button id="issuesEnable">Issues 정보</button>
+			<input type="hidden" id="now_latitude" name="now_latitude" value="${now_latitude }" />
+			<input type="hidden" id="now_longitude" name="now_longitude" value="${now_longitude }"  />
 		</div>
 		<ul>
 			<li id="issueMoreImage">My Issue</li>
@@ -369,17 +371,18 @@
 	
 	function flyTo(issueId, issueType, longitude, latitude, height, duration) {
 		managerFactory.flyTo(issueId, issueType, longitude, latitude, height, duration);
+		// 현재 좌표를 저장
+		$("#now_latitude").val(latitude);
+		$("#now_longitude").val(longitude);
 	}
 	
 	// 이슈 등록
 	$("#issueEnable").click(function() {
 		if(insertIssueFlag) {
 			insertIssueFlag = false;
-			//$("#issueEnable").val("Issue 등록");
 			$("#issueEnable").removeClass("on");
 		} else {
 			insertIssueFlag = true;
-			//$("#issueEnable").val("Issue 등록중");
 			$("#issueEnable").addClass("on");
 		}
 		changeInsertIssueModeAPI(insertIssueFlag);
@@ -389,26 +392,48 @@
 		if(objectInfoViewFlag) {
 			objectInfoViewFlag = false;
 			$("#objectInfoEnable").removeClass("on");
-			//$("#objectInfoEnableLabel").text("Object 정보 표시");
 		} else {
 			objectInfoViewFlag = true;
-			//$("#objectInfoEnableLabel").text("활성화 상태");
 			$("#objectInfoEnable").addClass("on");			
 		}
 		changeObjectInfoViewModeAPI(objectInfoViewFlag);
 	});
 	// issue list 표시
 	$("#issuesEnable").click(function() {
-		alert("준비중 입니다.");
-		return;
 		if(listIssueFlag) {
 			listIssueFlag = false;
 			$("#issuesEnable").removeClass("on");
-			//$("#issuesEnableLabel").text("Issue 목록");
 		} else {
 			listIssueFlag = true;
 			$("#issuesEnable").addClass("on");
-			//$("#issuesEnableLabel").text("활성화 상태");
+			
+			// 현재 위치의 latitude, logitude를 가지고 가장 가까이에 있는 데이터 그룹에 속하는 이슈 목록을 최대 100건 받아서 표시
+			var now_latitude = $("#now_latitude").val();
+			var now_longitude = $("#now_longitude").val();
+			var info = "latitude=" + now_latitude + "&longitude=" + now_longitude;		
+			$.ajax({
+				url: "/issue/ajax-list-issue-by-geo.do",
+				type: "GET",
+				data: info,
+				dataType: "json",
+				success: function(msg){
+					if(msg.result == "success") {
+						var issueList = msg.issueList;
+						if(issueList != null && issueList.length > 0) {
+							for(i=0; i<issueList.length; i++ ) {
+								var issue = issueList[i];
+								drawInsertIssueImageAPI(issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
+							}
+						}
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+				},
+				error:function(request,status,error){
+			        //alert(JS_MESSAGE["ajax.error.message"]);
+					console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				}
+			});
 		}
 		changeListIssueViewModeAPI(listIssueFlag);
 	});
@@ -423,6 +448,10 @@
 				$("#latitude").val(latitude);
 				$("#longitude").val(longitude);
 				$("#height").val(height);
+				
+				// 현재 좌표를 저장
+				$("#now_latitude").val(latitude);
+				$("#now_longitude").val(longitude);
 			}
 		}
 	}
@@ -539,6 +568,10 @@
 				hideAfter: 5000,
 				icon: 'info'
 			});
+			
+			// 현재 좌표를 저장
+			$("#now_latitude").val(latitude);
+			$("#now_longitude").val(longitude);
 		}
 	}
 	

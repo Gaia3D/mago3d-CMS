@@ -107,6 +107,55 @@ public class IssueController {
 	}
 	
 	/**
+	 * 메인
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "ajax-list-issue-by-geo.do", produces="application/json; charset=utf8")
+	@ResponseBody
+	public String ajaxListIssueByGeo(HttpServletRequest request, DataGroup dataGroup) {
+		
+		log.info("@@ dataGroup = {}", dataGroup);
+		
+		Gson gson = new Gson();
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		String result = "success";
+		try {
+			Issue issue = new Issue();
+//			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+//			if(userSession == null) {
+//				issue.setUser_id("guest");
+//				issue.setUser_name("guest");
+//			} else {
+//				issue.setUser_id(userSession.getUser_id());
+//				issue.setUser_name(userSession.getUser_name());
+//			}
+			dataGroup.setLocation("SRID=4326;POINT(" + dataGroup.getLongitude() + " " + dataGroup.getLatitude() + ")");
+			DataGroup nearDataGroup = dataGroupService.getDataGroupByGeo(dataGroup);
+			
+			if(StringUtil.isNotEmpty(issue.getStart_date())) {
+				issue.setStart_date(issue.getStart_date().substring(0, 8) + DateUtil.START_TIME);
+			}
+			if(StringUtil.isNotEmpty(issue.getEnd_date())) {
+				issue.setEnd_date(issue.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
+			}
+						
+			issue.setData_group_id(nearDataGroup.getData_group_id());
+			issue.setOffset(0l);
+			issue.setLimit(100l);
+			List<Issue> issueList = issueService.getListIssue(issue);
+			
+			jSONObject.put("issueList", issueList);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		jSONObject.put("result", result);
+		return gson.toJson(jSONObject);
+	}
+	
+	/**
 	 * issue 쓰기 화면
 	 * @param model
 	 * @return

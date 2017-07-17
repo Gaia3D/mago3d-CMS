@@ -3,8 +3,6 @@ package com.gaia3d.persistence;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.gaia3d.domain.DataGroup;
 
 /**
@@ -29,6 +27,13 @@ public interface DataGroupMapper {
 	 * @return
 	 */
 	List<DataGroup> getListDataGroup(DataGroup dataGroup);
+	
+	/**
+	 * geo 정보를 이용해서 가장 가까운 데이터 그룹 정보를 획득
+	 * @param dataGroup
+	 * @return
+	 */
+	DataGroup getDataGroupByGeo(DataGroup dataGroup);
 	
 	/**
 	 * depth별 Data 그룹 목록
