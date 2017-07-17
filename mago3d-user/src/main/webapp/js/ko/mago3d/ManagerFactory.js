@@ -24,12 +24,10 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, ima
 		// 환경 설정
 		MagoConfig.init(serverPolicy, serverData);
 		
-		if(viewer === null) viewer = new Cesium.Viewer(containerId);
-		viewer.imageryLayers.addImageryProvider(new Cesium.ArcGisMapServerImageryProvider({
-	        url : 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
-	        enablePickFeatures: false
-	    }));
-		
+		if(viewer === null) viewer = new Cesium.Viewer(containerId, {homeButton:false, geocoder:false, sceneModePicker:false, infoBox:false, fullscreenButton:false, navigationHelpButton:false});
+		viewer.scene.frameState.creditDisplay.container.style.visibility = 'hidden';
+		setDefaultDataset();
+
 		viewer.scene.magoManager = new CesiumManager();
 		viewer.scene.magoManager.sceneState.textureFlipYAxis = false;
 		// test.***
@@ -504,7 +502,35 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, ima
 			viewer.forceResize();
 		}
 	}
-
+	// pick baseLayer
+	function setDefaultDataset() {
+	  var DEFALUT_IMAGE = "ESRI World Imagery";
+	  var DEFALUT_TERRAIN = "STK World Terrain meshes";
+	  
+	  // search default imageryProvider from baseLayerPicker
+	  var imageryProvider = null;
+	  var imageryProviderViewModels = viewer.baseLayerPicker.viewModel.imageryProviderViewModels; 
+	  for (var i in imageryProviderViewModels) {
+	    var provider = imageryProviderViewModels[i];
+	    if (provider.name == DEFALUT_IMAGE) {
+	      imageryProvider = provider;
+	      break;
+	    }
+	  }
+	  if (imageryProvider) viewer.baseLayerPicker.viewModel.selectedImagery = imageryProvider;
+	  
+	  // search default terrainProvider from baseLayerPicker
+	  var terrainProvider = null;
+	  var terrainProviderViewModels = viewer.baseLayerPicker.viewModel.terrainProviderViewModels
+	  for (var i in terrainProviderViewModels) {
+	    var provider = terrainProviderViewModels[i];
+	    if (provider.name == DEFALUT_TERRAIN) {
+	      terrainProvider = provider;
+	      break;
+	    }
+	  }
+	  if (terrainProvider) viewer.baseLayerPicker.viewModel.selectedTerrain = terrainProvider;
+	}
 	// TODO API 객체를 생성해서 하나의 parameter로 전달하는 방식이 좀 더 깔끔할거 같지만 성능적인 부분에서 조금은 투박할거 같아서 일단 이렇게 처리
 	return {
 		// api gateway 역할
@@ -533,6 +559,7 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, ima
 			// pin을 그림
 			if(issueId != null || issueType != undefined) {
 				var api = new API("drawInsertIssueImage");
+				api.setDrawType(0);
 				api.setIssueId(issueId);
 				api.setIssueId(issueType);
 				api.setDataKey(null);

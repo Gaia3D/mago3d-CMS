@@ -44,7 +44,7 @@
 			</ul>
 			<ul class="language">
 				<li id="languageKO" class="on">KO</li>
-				<li id="languageEN"><a href="" onclick ="changeLanguage('en');">EN</a></li>
+				<li id="languageEN"><a href="#" onclick ="changeLanguage('en');">EN</a></li>
 			</ul>
 		</div>
 	</nav>

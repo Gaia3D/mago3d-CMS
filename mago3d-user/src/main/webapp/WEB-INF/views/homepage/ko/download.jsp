@@ -6,7 +6,7 @@
 <html lang="${accessibility}">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=1250">	
+	<meta name="viewport" content="width=1250">
 	<title>download | mago3D User</title>
 	<!--[if lt IE 9]>
     	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -80,7 +80,7 @@
 
 			</ol>
 			<h4>Gaia3D's mago3D Software License:</h4>
-			<b>1. F4G Converter: Dual License – Please see below for more details.</b><br><br>
+			<b>1. F4D Converter: Dual License – Please see below for more details.</b><br><br>
 			<p><i>mago3D F4D Converter Commercial License for OEMs, ISVs and VARs</i><br>Gaia3D provides its mago3D F4D Converter under a dual license model 
 			designed to meet the development and distribution needs of both commercial distributors (such as OEMs, ISVs and VARs) and open source projects.<br>
 			<br>
@@ -99,13 +99,10 @@
 				<tr>
 					<th>JS Document</th>
 					<th>Convert Document</th>
-					<th>Biz Document</th>
 				</tr>
 				<tr>
-					<td><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3D.js-1.0.0
-							js Document</a></td>
-					<td></td>
-					<td></td>
+					<td><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3Djs-1.0.0 js Document</a></td>
+					<td><a href="#" onclick='alert("준비 중 입니다."); return false;'>F4DConverter-1.0.0 Document</a></td>
 				</tr>
 			</table>
 
@@ -119,13 +116,12 @@
 				</tr>
 				<tr>
 					<td>1.0.0</td>
-					<td><a href="#" onclick='alert("준비 중 입니다.")'>mago3Dall.zip</a></td>
+					<td><a href="#" onclick='alert("준비 중 입니다.")'>mago3D.zip</a></td>
 					<td>2017-07-01</td>
 					<td>
 						<ul>
 							<li><a href="https://github.com/Gaia3D/mago3Djs">mago3D.js</a></li>
-							<li><a href="#" onclick='alert("준비 중 입니다."); return false;'>F4G Converter</a></li>
-							<li><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3Dbiz</a></li>
+							<li><a href="#" onclick='alert("준비 중 입니다."); return false;'>F4D Converter</a></li>
 						</ul>
 					</td>
 				</tr>

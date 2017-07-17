@@ -1,25 +1,23 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/common/taglib.jsp"%>
 <%@ include file="/WEB-INF/views/common/config.jsp"%>
 
 <!DOCTYPE html>
 <html lang="${accessibility}">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=1250">
-
-<title>about | mago3D User</title>
-<!--[if lt IE 9]>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=1250">
+	<title>about | mago3D User</title>
+	<!--[if lt IE 9]>
 	   	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
-<link rel="stylesheet" href="/css/${lang}/font/font.css" />
-<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
-<script type="text/javascript" src="/js/${lang}/common.js"></script>
-<script type="text/javascript" src="/js/${lang}/message.js"></script>
-<script type="text/javascript" src="/js/analytics.js"></script>
+	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
+	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
+	<script type="text/javascript" src="/js/${lang}/common.js"></script>
+	<script type="text/javascript" src="/js/${lang}/message.js"></script>
+	<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 
 <body>
@@ -380,6 +378,3 @@
 
 
 </html>
-<script>
-
-</script>

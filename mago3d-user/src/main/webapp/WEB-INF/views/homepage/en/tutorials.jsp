@@ -43,7 +43,7 @@
 				<li class="on">Tutorials<span></span></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO"><a href="" onclick ="changeLanguage('ko');">KO</a></li>
+				<li id="languageKO"><a href="#" onclick ="changeLanguage('ko');">KO</a></li>
 				<li id="languageEN" class="on">EN</li>
 			</ul>
 		</div>
