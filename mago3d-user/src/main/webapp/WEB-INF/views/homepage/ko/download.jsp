@@ -71,7 +71,8 @@
 
 			<h4>Quick Start Guide</h4>
 			<ol>
-				<li>mago3D를 설치합니다.</li>
+				<li>Download버튼을 클릭하여 mago3D소스를 eclipse에서 받아 줍니다.</li>
+				<li>다운받은 mago3D를 Existing Gradle Project로 import합니다.</li>
 				<li>설치한 다음에 was(tomcat), web server(nginx, apache),
 					DataBase(PostgreSQL + PostGIS)를 설치합니다.</li>
 				<li>was와 web server를 사용하여 mago3D를 실행시켜 줍니다.</li>
