@@ -11,4 +11,4 @@ ST_GeographyFromText('SRID=4326;POINT('||longitude||' '||latitude||')'),
 ST_GeographyFromText('SRID=4326;POINT(126.927232 37.520575)')
 ) as dis from data_group order by dis;
 
-
+alter sequence data_info_seq restart with 2000;
