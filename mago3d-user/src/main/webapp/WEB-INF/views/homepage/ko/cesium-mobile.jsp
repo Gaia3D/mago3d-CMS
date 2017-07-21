@@ -75,7 +75,7 @@
 		<div data-role="panel" id="menuPanel" data-position="left" data-display="overlay" data-theme="b">
 			<ul data-role="listview" data-inset="false" data-shadow="false">
 				<li data-filtertext="homepage" data-icon="home"><a href="/homepage/index.do">Home</a></li>
-				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false">
+				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" data-collapsed="false">
 					<h2>바로 가기</h2>
 					<ul data-role="listview" data-theme="a">
 						<c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status">
@@ -83,6 +83,7 @@
 						</c:forEach>
 					</ul>
 				</li>
+
 				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false">
 					<h2>이슈 사항</h2>
 					<ul data-role="listview" data-theme="a">
@@ -91,11 +92,12 @@
 							<fieldset data-role="controlgroup" data-iconpos="right">
 								<label for="issueEnable" style="background-color: white; border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;">이슈 등록</label>
 								<input type="checkbox" name="issueEnable" id="issueEnable"/>
+								<label for="issuesEnable" style="background-color: white; border-top-width: 0px;margin-top: 0.1px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;">이슈 표시</label>
+								<input type="checkbox" name="issuesEnable" id="issuesEnable"/>
 							</fieldset>    
 						</a>
 						</li>
 						<li><a href="#IssueListPage" style="background-color: white; margin-top:-2px;">이슈 목록</a></li>
-						<li><a href="#" id="issuesEnable" style=" border-style: hidden; background-color: white; margin-top:-3px;">이슈 표시</a></li>
 					</ul>	
 				</li>
 				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right">
@@ -109,14 +111,13 @@
 								<input type="checkbox" name="mouseObjectMove" id="mouseObjectMove"/>
 								<label for="objectInfoEnable" style=" border-style: hidden; background-color: white; border-color: white;border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">Object 정보</label>
 								<input type="checkbox" name="objectInfoEnable" id="objectInfoEnable"/>
-								<label for="boundingBoxEnable" style=" border-style: hidden;background-color: white; border-color: white;border-top-width: 0px;margin-top: 0.1px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">BoundingBox</label>
+								<label for="boundingBoxEnable" style=" border-style: hidden;background-color: white; border-color: white;border-top-width: 0px;margin-top: 0.1px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">BoundingBox 표시</label>
 								<input type="checkbox" name="boundingBoxEnable" id="boundingBoxEnable"/>
-
 							</fieldset>    						
 						</form>
 						</a>
-						</li>
 						<li style="margin-top:-2px;"><a href="#LocationAndRotationPage" >Location And Rotation</a></li>
+						</li>			
 					</ul>
 				</li>
 			</ul>
@@ -358,7 +359,7 @@
 			</ul>
 		</div>
 	</div>
-	<script type="text/javascript" src="/externlib/${lang}/cesium/Cesium.js"></script>
+<script type="text/javascript" src="/externlib/${lang}/cesium/Cesium.js"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Code.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/API.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Config.js?currentTime=${currentTime}"></script>
@@ -452,10 +453,13 @@
 			insertIssueFlag = false;
 		} else {
 			insertIssueFlag = true;
+ 			$.mobile.changePage("#dialogPage", {role: "dialog"});
+
 		}
 		$(this).attr("checked", insertIssueFlag).checkboxradio("refresh");
 		changeInsertIssueModeAPI(insertIssueFlag);
 		if(insertIssueFlag)	$("#menuPanel").panel("close");
+		
 	});
 	//판넬 열기
 	// object info 표시
