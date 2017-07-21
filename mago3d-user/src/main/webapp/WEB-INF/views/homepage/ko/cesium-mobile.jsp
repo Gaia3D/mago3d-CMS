@@ -72,9 +72,10 @@
 		</div>
 
 		<!-- menuPanel  -->
+		
 		<div data-role="panel" id="menuPanel" data-position="left" data-display="overlay" data-theme="b">
-			<ul data-role="listview" data-inset="false" data-shadow="false">
-				<li data-filtertext="homepage" data-icon="home"><a href="/homepage/index.do">Home</a></li>
+			<div data-role="collapsibleset" data-inset="false" data-shadow="false" style="list-style:none;"> 
+				<li data-filtertext="homepage" data-icon="home"><a href="/homepage/index.do" style="color:white; text-decoration:none ">Home</a></li>
 				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" data-collapsed="false">
 					<h2>바로 가기</h2>
 					<ul data-role="listview" data-theme="a">
@@ -83,7 +84,6 @@
 						</c:forEach>
 					</ul>
 				</li>
-
 				<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false">
 					<h2>이슈 사항</h2>
 					<ul data-role="listview" data-theme="a">
@@ -109,7 +109,7 @@
 							<fieldset data-role="controlgroup" data-iconpos="right">
 								<label for="mouseObjectMove" style=" border-style: hidden;background-color: white; border-color: white;border-top-width: 0px;margin-top: 0.1px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">Object 이동</label>
 								<input type="checkbox" name="mouseObjectMove" id="mouseObjectMove"/>
-								<label for="objectInfoEnable" style=" border-style: hidden; background-color: white; border-color: white;border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">Object 정보</label>
+								<label for="objectInfoEnable" style=" border-style: hidden; background-color: white; border-color: white;border-top-width: 0px;margin-top: 0px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">Object 정보 표시</label>
 								<input type="checkbox" name="objectInfoEnable" id="objectInfoEnable"/>
 								<label for="boundingBoxEnable" style=" border-style: hidden;background-color: white; border-color: white;border-top-width: 0px;margin-top: 0.1px;border-bottom-width: 0px;margin-bottom: 0px;border-left-width: 0px;border-right-width: 0px;" data-corners="false">BoundingBox 표시</label>
 								<input type="checkbox" name="boundingBoxEnable" id="boundingBoxEnable"/>
@@ -120,7 +120,7 @@
 						</li>			
 					</ul>
 				</li>
-			</ul>
+			</div>
 		</div>
 	</div>
 	<div id="LocationAndRotationPage" data-role="page">
@@ -273,7 +273,7 @@
 						<div class="ui-grid-a">
 							<div class="ui-block-a">시간</div>
 							<div class="ui-block-b">
-								<input type="time" name="timePicker1" id="timePicker1" value="10:00">
+								<input type="time" name="timePicker1" id="timePicker1">
 							</div>
 						</div>
 					</li>
