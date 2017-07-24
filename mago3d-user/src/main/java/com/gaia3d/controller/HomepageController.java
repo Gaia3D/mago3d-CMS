@@ -73,7 +73,7 @@ public class HomepageController {
 	}
 	
 	/**
-	 * 메인
+	 * demo
 	 * @param model
 	 * @return
 	 */
