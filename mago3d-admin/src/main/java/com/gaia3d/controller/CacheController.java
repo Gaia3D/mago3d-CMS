@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.gaia3d.config.CacheConfig;
 import com.gaia3d.domain.CacheName;
 import com.gaia3d.domain.CacheType;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,16 +37,14 @@ public class CacheController {
 	 */
 	@PostMapping(value = "ajax-reload-config-cache.do")
 	@ResponseBody
-	public String ajaxReloadConfigCache(HttpServletRequest request, String cacheName, String cacheType) {
-		
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxReloadConfigCache(HttpServletRequest request, String cacheName, String cacheType) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			if(cacheName == null || "".equals(cacheName) || cacheType == null || "".equals(cacheType)) {
 				result = "cache.input.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			cacheConfig.loadCache(CacheName.valueOf(cacheName), CacheType.valueOf(cacheType));
@@ -58,6 +55,6 @@ public class CacheController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 }

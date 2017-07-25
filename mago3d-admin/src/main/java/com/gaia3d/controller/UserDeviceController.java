@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gaia3d.domain.UserDevice;
 import com.gaia3d.service.UserDeviceService;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,9 +33,8 @@ public class UserDeviceController {
 	 */
 	@PostMapping(value = "ajax-insert-user-device.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxInsertUserDevice(HttpServletRequest request, UserDevice userDevice) {
+	public Map<String, Object> ajaxInsertUserDevice(HttpServletRequest request, UserDevice userDevice) {
 		
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -46,7 +44,7 @@ public class UserDeviceController {
 				result = errorcode;
 				jSONObject.put("result", result);
 				log.info("validate error 발생: {} " ,jSONObject.toString());
-				return jSONObject.toString();
+				return jSONObject;
 			}			
 			userDeviceService.insertUserDevice(userDevice);
 		} catch(Exception e) {
@@ -56,7 +54,7 @@ public class UserDeviceController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -67,9 +65,8 @@ public class UserDeviceController {
 	 */
 	@PostMapping(value = "ajax-update-user-device.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdateUserDevice(HttpServletRequest request, UserDevice userDevice) {
+	public Map<String, Object> ajaxUpdateUserDevice(HttpServletRequest request, UserDevice userDevice) {
 		
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -84,7 +81,7 @@ public class UserDeviceController {
 			if(errorcode != null) {
 				result = errorcode;
 				jSONObject.put("result", result);
-				return jSONObject.toString();
+				return jSONObject;
 			}			
 			if(dbUserDevice.getUser_device_id() == null || dbUserDevice.getUser_device_id().longValue() <= 0l) {
 				userDeviceService.insertUserDevice(userDevice);
@@ -98,6 +95,6 @@ public class UserDeviceController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 }

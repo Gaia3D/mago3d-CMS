@@ -17,7 +17,6 @@ import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheName;
 import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.Result;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,9 +43,8 @@ public class CacheController {
 	 */
 	@RequestMapping(value = "call-cache.do")
 	@ResponseBody
-	public ResponseEntity<String> callCache(HttpServletRequest request) {
+	public ResponseEntity<Map<String, Object>> callCache(HttpServletRequest request) {
 		
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		
 		String result = Result.FAIL.toString();
@@ -82,6 +80,6 @@ public class CacheController {
 		jSONObject.put("result", result);
 		jSONObject.put("result_message", result_message);
 		
-		return new ResponseEntity<String>(gson.toJson(jSONObject), httpStatus);
+		return new ResponseEntity<Map<String, Object>>(jSONObject, httpStatus);
 	}
 }

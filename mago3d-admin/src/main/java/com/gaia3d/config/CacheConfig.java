@@ -10,6 +10,8 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CacheName;
 import com.gaia3d.domain.CacheType;
@@ -30,9 +32,6 @@ import com.gaia3d.service.DataService;
 import com.gaia3d.service.MenuService;
 import com.gaia3d.service.PolicyService;
 import com.gaia3d.service.UserGroupService;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -270,12 +269,22 @@ public class CacheConfig {
 			authData = Crypt.encrypt(authData);
 			
 			String jsonData = HttpClientHelper.httpPost(externalService, authData);
-			JsonObject resultObject = new Gson().fromJson(jsonData, JsonObject.class);
-			if(resultObject != null && !resultObject.isJsonNull() ) {
-				String result = resultObject.get("result").toString();
-				String result_message = resultObject.get("result_message").toString();
+			
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				HashMap<String, String> resultMap = mapper.readValue(jsonData, new TypeReference<HashMap<String, String>>() {});
+				String result = resultMap.get("result").toString();
+				String result_message = resultMap.get("result_message").toString();
 				log.error("@@@ success_yn = {}. result_message = {}", result, result_message);
+			} catch(Exception e) {
+				e.printStackTrace();
 			}
+//			JsonObject resultObject = new Gson().fromJson(jsonData, JsonObject.class);
+//			if(resultObject != null && !resultObject.isJsonNull() ) {
+//				String result = resultObject.get("result").toString();
+//				String result_message = resultObject.get("result_message").toString();
+//				log.error("@@@ success_yn = {}. result_message = {}", result, result_message);
+//			}
 		}
 	}
 }

@@ -38,7 +38,6 @@ import com.gaia3d.util.FileUtil;
 import com.gaia3d.util.StringUtil;
 import com.gaia3d.util.WebUtil;
 import com.gaia3d.validator.IssueValidator;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -113,11 +112,10 @@ public class IssueController {
 	 */
 	@GetMapping(value = "ajax-list-issue-by-geo.do", produces="application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxListIssueByGeo(HttpServletRequest request, DataGroup dataGroup) {
+	public Map<String, Object> ajaxListIssueByGeo(HttpServletRequest request, DataGroup dataGroup) {
 		
 		log.info("@@ dataGroup = {}", dataGroup);
 		
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -152,7 +150,7 @@ public class IssueController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -266,8 +264,7 @@ public class IssueController {
 	 */
 	@PostMapping(value = "ajax-insert-issue.do")
 	@ResponseBody
-	public String ajaxInsertIssue(HttpServletRequest request, Issue issue) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxInsertIssue(HttpServletRequest request, Issue issue) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -317,7 +314,7 @@ public class IssueController {
 				result = errorcode;
 				jSONObject.put("result", result);
 				log.info("validate error 발생: {} ", jSONObject.toString());
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			// TODO 날짜를 더해서 넣어야 한다 공백 처리 해서
@@ -334,7 +331,7 @@ public class IssueController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -387,9 +384,7 @@ public class IssueController {
 	 */
 	@PostMapping(value = "ajax-update-issue.do", produces="application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdateIssue(Issue issue) {
-		
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxUpdateIssue(Issue issue) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -401,7 +396,7 @@ public class IssueController {
 			if(errorcode != null) {
 				result = errorcode;
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}			
 			issueService.updateIssue(issue);
 		} catch(Exception e) {
@@ -411,7 +406,7 @@ public class IssueController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -459,8 +454,7 @@ public class IssueController {
 	 */
 	@PostMapping(value = "ajax-insert-issue-comment.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxInsertIssueComment(HttpServletRequest request, Issue issue) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxInsertIssueComment(HttpServletRequest request, Issue issue) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -470,12 +464,12 @@ public class IssueController {
 			if(issue.getIssue_id() == null || issue.getIssue_id().longValue() <= 0l) {
 				result = "issuecomment.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			if(issue.getComment() == null || "".equals(issue.getComment())) {
 				result = "issuecomment.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			IssueComment issueComment = new IssueComment();
@@ -495,7 +489,7 @@ public class IssueController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -505,8 +499,7 @@ public class IssueController {
 	 */
 	@PostMapping(value = "ajax-delete-issue-comment.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxDeleteIssueComment(HttpServletRequest request, Long issue_comment_id) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxDeleteIssueComment(HttpServletRequest request, Long issue_comment_id) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -514,7 +507,7 @@ public class IssueController {
 			if(issue_comment_id == null || issue_comment_id.longValue() <= 0l) {
 				result = "issuecomment.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			IssueComment issueComment = issueService.getIssueComment(issue_comment_id);
@@ -527,7 +520,7 @@ public class IssueController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**

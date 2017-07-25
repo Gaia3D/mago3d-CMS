@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.gaia3d.config.CacheConfig;
 import com.gaia3d.domain.CommonCode;
 import com.gaia3d.service.CommonCodeService;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -71,8 +70,7 @@ public class CommonCodeController {
 	 */
 	@PostMapping(value = "ajax-insert-code.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxInsertCode(HttpServletRequest request, CommonCode commonCode) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxInsertCode(HttpServletRequest request, CommonCode commonCode) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -82,7 +80,7 @@ public class CommonCodeController {
 				result = errorcode;
 				jSONObject.put("result", result);
 				log.info("validate error 발생: {} " ,jSONObject.toString());
-				return jSONObject.toString();
+				return jSONObject;
 			}			
 			commonCodeService.insertCommonCode(commonCode);
 		} catch(Exception e) {
@@ -92,7 +90,7 @@ public class CommonCodeController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -117,8 +115,8 @@ public class CommonCodeController {
 	 */
 	@PostMapping(value = "ajax-update-code.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdateCode(HttpServletRequest request, CommonCode commonCode) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdateCode(HttpServletRequest request, CommonCode commonCode) {
+		
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -128,7 +126,7 @@ public class CommonCodeController {
 				result = errorcode;
 				jSONObject.put("result", result);
 				log.info("validate error 발생: {} " ,jSONObject.toString());
-				return jSONObject.toString();
+				return jSONObject;
 			}
 			commonCodeService.updateCommonCode(commonCode);
 			
@@ -140,7 +138,7 @@ public class CommonCodeController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -151,8 +149,7 @@ public class CommonCodeController {
 	 */
 	@PostMapping(value = "ajax-delete-code.do", produces ="application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxDeleteCode(HttpServletRequest request, CommonCode commonCode) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxDeleteCode(HttpServletRequest request, CommonCode commonCode) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -161,7 +158,7 @@ public class CommonCodeController {
 					|| commonCode.getView_order() == null || commonCode.getView_order().intValue() <= 0) {
 				jSONObject.put("result", "common_code.code_key.required");
 				log.info("validate error 발생: {} " ,jSONObject.toString());
-				return jSONObject.toString();
+				return jSONObject;
 			}
 			commonCodeService.deleteCommonCode(commonCode);
 		} catch(Exception e) {
@@ -171,7 +168,7 @@ public class CommonCodeController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
