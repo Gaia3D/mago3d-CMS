@@ -255,6 +255,21 @@ public class HomepageController {
 	}
 	
 	/**
+	 * 메인
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "api.do")
+	public String api(HttpServletRequest request, Model model) {
+		String lang = null;
+		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		if(lang == null || "".equals(lang)) {
+			lang = "ko";
+		}
+		return "/homepage/" + lang + "/api";
+	}
+	
+	/**
 	 * 언어 설정
 	 * @param model
 	 * @return
