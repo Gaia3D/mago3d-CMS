@@ -308,7 +308,7 @@ function changeShadowAPI(isShow) {
 <code>
 &lt;label for="frustumFarDistance"&gt; Visible distance &lt;/label&gt;
 &lt;input type="text" id="frustumFarDistance" name="frustumFarDistance" placeholder="Meter(m)" size=4" /&gt;
-&lt;button type="button" id="changeFrustumFarDistanceAPI" class="btn btn-default btn-sm">apply/&gt;button%lt;
+&lt;button type="button" id="changeFrustumFarDistanceAPI" class="btn btn-default btn-sm">apply&lt;/button&gt;
 </code>
 			</pre>
 				<br> <b>javaScript</b>
@@ -349,7 +349,7 @@ function changeFrustumFarDistanceAPI(frustumFarDistance) {
 &lt;div&gt;
 	&lt;span  style="padding-left: 10px; padding-right: 100px;"&gt;Data Key&lt;/span&gt;
 	&lt;input type="text" id="search_data_key" name="search_data_key" size="15" /&gt;
-	&lt;button type="button" id="searchData" style="width: 50px; background: #727272; font-size: 1.2rem;">search/&gt;button%lt;
+	&lt;button type="button" id="searchData" style="width: 50px; background: #727272; font-size: 1.2rem;">search&lt;/button&gt;
 &lt;/div&gt;
 </code>
 			</pre>
@@ -398,7 +398,7 @@ function searchDataAPI(dataKey) {
 &lt;div&gt;
 	&lt;label for="objectIds"&gt;Object Id input &lt;/label&gt;
 	&lt;input type="text" id="objectIds" name="objectIds" placeholder=", Enter segment" size=21" /&gt;
-	&lt;button type="button" id="changeColorAPI" class="btn btn-default btn-sm">change/&gt;button%lt;
+	&lt;button type="button" id="changeColorAPI" class="btn btn-default btn-sm">change&lt;/button&gt;
 &lt;div/&gt;
 </code>
 			</pre>
@@ -489,7 +489,7 @@ function changeColorAPI(objectIds, color) {
 		&lt;span&gt;
 			&lt;label for="move_roll"&gt;ROLL&lt;/label&gt;
 			&lt;input type="text" id="move_roll" name="move_roll" size="15" /&gt;
-			&lt;button type="button" id="changeLocationAndRotationAPI">change/&gt;button%lt;
+			&lt;button type="button" id="changeLocationAndRotationAPI">change&lt;/button&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;		
 &lt;/div&gt;

@@ -308,7 +308,7 @@ function changeShadowAPI(isShow) {
 <code>
 &lt;label for="frustumFarDistance"&gt; 가시 거리 &lt;/label&gt;
 &lt;input type="text" id="frustumFarDistance" name="frustumFarDistance" placeholder="미터(m)" size=4" /&gt;
-&lt;button type="button" id="changeFrustumFarDistanceAPI" class="btn btn-default btn-sm">적용/&gt;button%lt;
+&lt;button type="button" id="changeFrustumFarDistanceAPI" class="btn btn-default btn-sm">적용&lt;/button&gt;
 </code>
 			</pre>
 				<br> <b>javaScript</b>
@@ -349,7 +349,7 @@ function changeFrustumFarDistanceAPI(frustumFarDistance) {
 &lt;div&gt;
 	&lt;span  style="padding-left: 10px; padding-right: 100px;"&gt;Data Key&lt;/span&gt;
 	&lt;input type="text" id="search_data_key" name="search_data_key" size="15" /&gt;
-	&lt;button type="button" id="searchData" style="width: 50px; background: #727272; font-size: 1.2rem;">검색/&gt;button%lt;
+	&lt;button type="button" id="searchData" style="width: 50px; background: #727272; font-size: 1.2rem;">검색&lt;/button&gt;
 &lt;/div&gt;
 </code>
 			</pre>
@@ -398,7 +398,7 @@ function searchDataAPI(dataKey) {
 &lt;div&gt;
 	&lt;label for="objectIds"&gt;Object Id 입력 &lt;/label&gt;
 	&lt;input type="text" id="objectIds" name="objectIds" placeholder=", 구분 입력" size=21" /&gt;
-	&lt;button type="button" id="changeColorAPI" class="btn btn-default btn-sm">변경/&gt;button%lt;
+	&lt;button type="button" id="changeColorAPI" class="btn btn-default btn-sm">변경&lt;/button&gt;
 &lt;div/&gt;
 </code>
 			</pre>
@@ -489,7 +489,7 @@ function changeColorAPI(objectIds, color) {
 		&lt;span&gt;
 			&lt;label for="move_roll"&gt;ROLL&lt;/label&gt;
 			&lt;input type="text" id="move_roll" name="move_roll" size="15" /&gt;
-			&lt;button type="button" id="changeLocationAndRotationAPI">변환/&gt;button%lt;
+			&lt;button type="button" id="changeLocationAndRotationAPI">변환&lt;/button&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;		
 &lt;/div&gt;
@@ -738,13 +738,13 @@ function changeListIssueViewModeAPI(flag) {
 				<pre>
 <code>
 if(msg.result == "success") {
-						alert(JS_MESSAGE["insert"]);
-						// pin image를 그림
-						drawInsertIssueImageAPI(1, msg.issue.issue_id, msg.issue.issue_type, $("#data_key").val(),
-						 $("#latitude").val(), $("#longitude").val(), $("#height").val());
-					} else {
-						alert(JS_MESSAGE[msg.result]);
-					}
+				alert(JS_MESSAGE["insert"]);
+				// pin image를 그림
+				drawInsertIssueImageAPI(1, msg.issue.issue_id, msg.issue.issue_type, $("#data_key").val(),
+				 $("#latitude").val(), $("#longitude").val(), $("#height").val());
+			} else {
+				alert(JS_MESSAGE[msg.result]);
+			}
 </code>
 			</pre>
 				<br> <b>javaScript</b>
