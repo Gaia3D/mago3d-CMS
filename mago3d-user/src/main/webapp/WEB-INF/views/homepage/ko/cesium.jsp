@@ -32,6 +32,7 @@
 			<li><a href="/homepage/about.do">Mago3D</a></li>	
 			<li><a href="/homepage/download.do">Download</a></li>
 			<li><a href="/homepage/tutorials.do">Tutorials</a></li>
+			<li><a href="/homepage/api.do">Api</a></li>
 		</ul>
 	</div>
 	<div class="ctrl">
@@ -317,7 +318,7 @@
 <script type="text/javascript" src="/js/${lang}/mago3d/Renderer.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Selection.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/VBOManager.js?currentTime=${currentTime}"></script>
-<script type="text/javascript" src="/js/${lang}/mago3d/CesiumManager.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/MagoManager.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/PostFxShader.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/FBO.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Geometry.js?currentTime=${currentTime}"></script>

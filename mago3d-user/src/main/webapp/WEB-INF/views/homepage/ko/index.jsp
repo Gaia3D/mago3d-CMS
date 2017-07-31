@@ -26,7 +26,7 @@
 		</p>
 	</div>
 	
-	<object class="vod" data="https://www.youtube.com/embed/GPf0HhJ1-PA?autoplay=1&loop=1&playlist=n5jdRzLwegg&controls=0&showinfo=0&origin=http://www.mago3d.com"></object>
+	<object class="vod" data="https://www.youtube.com/embed/68XWIC2K-kA?autoplay=1&loop=1&playlist=n5jdRzLwegg&controls=0&showinfo=0&origin=http://www.mago3d.com"></object>
 	<div class="mainMenu">
 		<ul class="nav">
 			<li><a href="#" onclick ="changeLanguage('ko', '/homepage/about.do');">KOREAN</a></li>

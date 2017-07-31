@@ -41,6 +41,12 @@
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
 				<li class="on">Tutorials<span></span></li>
+				<li class="mm" onclick='selectMenu();'>Docs
+					<ul>
+						<li><a href="/homepage/api.do" style="color: white">API</a></li>
+						<li><a href="/homepage/F4DSpec.do" style="color: white">F4D Spec</a></li>						
+					</ul>
+				</li>
 			</ul>
 			<ul class="language">
 				<li id="languageKO" class="on">KO</li>
