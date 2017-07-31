@@ -76,15 +76,15 @@
 			</div>
 			<article class="readme">
 				<img src="https://img.shields.io/badge/language-English-orange.svg" /> <img src="https://img.shields.io/badge/language-Korean-blue.svg" />
-				<p>MAGO3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. MAGO3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 이에 따라, MAGO3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.
 				<p>
+MAGO3D is a next-generation 3D platform that integrates and visualizes AEC (Architecture, Engineering, Construction) and traditional 3D spatial information (3D GIS). Unlike existing solutions, MAGO3D seamlessly integrates AEC and 3D GIS in a web browser without distinction between indoor and outdoor. As a result, MAGO3D users can quickly view and collaborate on large-capacity building information modeling (BIM), JT (Jupiter Tessellation) and 3D GIS files without installing any additional programs.<p>
 				<h4>Mssion</h4>
-				<p>Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립트 라이브러리를 사용한 가시화 데이터를 통합 과제 | 이슈 관리를 할 수 있습니다.</p>
+				<p>Mago3DJS Visualization using open source JavaScript library for three-dimensional multi-block visualization Data integration task | You can manage issues.</p>
 				<h4>Features</h4>
 				<ul class="readme_list">
-					<li>이슈 현황 신규 이슈, 진행 중인 이슈, 완료된 이슈를 볼 수 있습니다.</li>
-					<li>사용자 상태별 현황을 그래프로 되어 있어 보기 편합니다.</li>
-					<li>DB Connection Pool 현황이나 DV세션 현황을 테이블로 볼 수 있습니다.</li>
+					<li>Issue Status You can view new issues, ongoing issues, and completed issues.</li>
+					<li>It is easy to view the status by user status graph.</li>
+					<li>DB Connection Pool status or DV session status can be viewed as a table.</li>
 				</ul>
 				<h4>Development Environment</h4>
 				<mark>Spring, gradle, PostgreSQL, PostGIS, mybatis, Docker</mark>
@@ -94,46 +94,46 @@
 					<ul class="readme_list">
 						<li><b style="color: #1E90FF;">Postgres</b>
 							<ul class="sub_list">
-								<li> PostgreSQL 버전 설정 (PostgreSQL v9.6.3-1)</li>
-								<li> 설치경로 C:/PostgreSQL</li>
-								<li> 비밀번호 설정 Password: postgres Retype Password: postgres</li>
+								<li>Setting PostgreSQL Version (PostgreSQL v9.6.3-1)</li>
+								<li>Installation path C:/PostgreSQL</li>
+								<li>Setting Password: postgres Retype Password: postgres</li>
 							</ul>
 						</li>
 						<li><b style="color: #1E90FF;">PostGIS</b>
 							<ul class="sub_list">
-								<li>PostgreSQL 설치가 끝난 뒤에 Stack Builder를 실행하여 설치</li>
-								<li>PostGIS 버전 설정 (PostGIS v2.3.2)</li>
-								<li>PostgreSQL Extensions PostGIS 필수</li>
+								<li>After installing PostgreSQL, run Stack Builder to install</li>
+								<li>PostGIS version setting (PostGIS v2.3.2)</li>
+								<li>PostgreSQL Extensions PostGIS Required</li>
 							</ul>
 						</li>
 						<li><b style="color: #1E90FF;">gradle</b>
 							<ul class="sub_list">
-								<li>gradle 버전 설치 (gradle v3.5)</li>
-								<li>설치경로 C:/gradle</li>
-								<li>시스템 변수 추가 -path -> C:/gradle/gradle-3.5 추가</li>
+								<li>Installing the gradle version (gradle v3.5)</li>
+								<li>Installation path C:/gradle</li>
+								<li>Adding System Variables-path -> C:/gradle/gradle-3.5 add</li>
 						
 							</ul>
 						</li>
 						<li><b style="color: #1E90FF;">lombok</b>
 							<ul class="sub_list">
-								<li> 설치한 뒤에 다운로드 폴더 이동 후 실행 </li>
-								<li>eclipse 설치 위치 [Specify location..]를 검색해서 'eclipse.exe' 파일을 선택합니다.</li>
-								<li>install/update 클릭합니다.</li>
+								<li>After installation, move the download folder and run</li>
+								<li>Locate the eclipse installation location [Specify location ..] and select the file 'eclipse.exe'.</li>
+								<li>Click install / update.</li>
 							</ul>
 						</li>
 						<li><b style="color: #1E90FF;">Buildship Gradle Integration</b>
 							<ul class="sub_list">
-								<li>eclipse Help -> Eclipse Marketplace 이동 후 Buildship Gradle Integration 2.0을 설치합니다.</li>
+								<li>Go to eclipse Help -> Eclipse Marketplace and install Buildship Gradle Integration 2.0.</li>
 							</ul>
 						</li>
 					</ul>
 					<div class="sub_title">Setting</div>
 					<ul class="readme_list">
-						<li>eclipse에서 mago3D Project를 git clone으로 불러옵니다.</li>
-						<li>File -> Import -> Gradle -> Existing Gradle Project를 클릭하여 mago3D를 받아줍니다.</li>
-						<li>mago3D를 실행하기전에 PostgreSQL을 사용하여 데이터베이스를 만들어 줍니다.</li>
+						<li>From eclipse, load the mago3D Project into git clone.</li>
+						<li>Click File -> Import -> Gradle -> Existing Gradle Project to accept mago3D.</li>
+						<li>Create a database using PostgreSQL before running mago3D.</li>
 						<li>PostgreSQL -> new DataBase</li>
-						<li>생성한 database에 쿼리를 실행시켜줍니다. 쿼리는 mago3D-core -> src -> doc -> database 안에 있습니다.</li>
+						<li>Run the query on the generated database. The query is in mago3D-core -> src -> doc -> database.</li>
 					</ul>
 					<pre>
 						<code>
@@ -147,14 +147,14 @@
 					</pre>
 					<div class="sub_title">Execution</div>
 					<ul class="readme_list">
-						<li>mago3D를 실행하려면 mago3d-@@@ -> src/main/java -> com.gaia3d -> Mago3dAdminApplication.java를 Spring Boot app으로 실행시켜줍니다.</li>
+						<li>To run mago3D, run mago3d - @@@ -> src / main / java -> com.gaia3d -> Mago3dAdminApplication.java as Spring Boot app.</li>
 					</ul>
 				</div>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeMagoStateAPI">changeMagoStateAPI()</span></h2>
-				<p>mago3D 활성화 상태 값을 변경함으로서 화면에 mago3D Object 가 표시, 비표시 됩니다.</p>
+				<p>Mago3D The mago3D Object is displayed and hidden on the screen by changing the activation status value.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -166,7 +166,7 @@
 					<tbody>
 						<tr>
 							<td>isShow</td>
-							<td>true: 활성화, false: 비활성화</td>
+							<td>True: enabled, false: disabled</td>
 						</tr>
 					</tbody>
 				</table>
@@ -176,9 +176,9 @@
 <code>
 &lt;div&gt;mago3D
 	&lt;input type="radio" id="magoEnable" name="magoState" value="0" checked="checked" onclick="changeMagoState(true);" /&gt;
-	&lt;label for="magoEnable"&gt; 활성화 &lt;/label&gt;
+	&lt;label for="magoEnable"&gt; enabled &lt;/label&gt;
 	&lt;input type="radio" id="magoDisable" name="magoState" value="1"  onclick="changeMagoState(false);" /&gt;
-	&lt;label for="magoDisable"&gt; 비활성화 &lt;/label&gt;
+	&lt;label for="magoDisable"&gt; disabled &lt;/label&gt;
 &lt;/div&gt;
 </code>
 			</pre>
@@ -198,7 +198,7 @@ function changeMagoStateAPI(isShow) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeBoundingBoxAPI">changeBoundingBoxAPI()</span></h2>
-				<p>Block의 BoundingBox 표시 유무를 설정</p>
+				<p>Set whether to display the BoundingBox of the block</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -210,7 +210,7 @@ function changeMagoStateAPI(isShow) {
 					<tbody>
 						<tr>
 							<td>isShow</td>
-							<td>true: 활성화, false: 비활성화</td>
+							<td>true: enabled, false: disabled</td>
 						</tr>
 					</tbody>
 				</table>
@@ -220,9 +220,9 @@ function changeMagoStateAPI(isShow) {
 <code>
 &lt;div&gt;BoundingBox
 	&lt;input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBoxAPI(true);" /&gt;
-	&lt;label for="showBoundingBox"&gt; 표시 &lt;/label&gt;
+	&lt;label for="showBoundingBox"&gt; enabled &lt;/label&gt;
 	&lt;input type="radio" id="hideBoundingBox" name="boundingBox" value="false"  onclick="changeBoundingBoxAPI(false);" /&gt;
-	&lt;label for="hideBoundingBox"&gt; 비표시 &lt;/label&gt;
+	&lt;label for="hideBoundingBox"&gt; disabled &lt;/label&gt;
 &lt;/div&gt;
 </code>
 			</pre>
@@ -242,7 +242,7 @@ function changeBoundingBoxAPI(isShow) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeShadowAPI">changeShadowAPI()</span></h2>
-				<p>블락의 Structure, Outfitting 그림자 표시 유무를 설정</p>
+				<p>Structure / Outfitting of the block</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -254,7 +254,7 @@ function changeBoundingBoxAPI(isShow) {
 					<tbody>
 						<tr>
 							<td>isShow</td>
-							<td>true: 활성화, false: 비활성화</td>
+							<td>true: enabled, false: disabled</td>
 						</tr>
 					</tbody>
 				</table>
@@ -264,9 +264,9 @@ function changeBoundingBoxAPI(isShow) {
 <code>
 &lt;div&gt;Shadow
 	&lt;input type="radio" id="showShadow" name="shadow" value="true" onclick="changeShadowAPI(true);" /&gt;
-	&lt;label for="showShadow"&gt; 표시 &lt;/label&gt;
+	&lt;label for="showShadow"&gt; enabled &lt;/label&gt;
 	&lt;input type="radio" id="hideShadow" name="boundingBox" value="false"  onclick="changeShadowAPI(false);" /&gt;
-	&lt;label for="hideShadow"&gt; 비표시 &lt;/label&gt;
+	&lt;label for="hideShadow"&gt; disabled &lt;/label&gt;
 &lt;/div&gt;
 </code>
 			</pre>
@@ -286,7 +286,7 @@ function changeShadowAPI(isShow) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeFrustumFarDistanceAPI">changeFrustumFarDistanceAPI()</span></h2>
-				<p>입력 받은 거리의 제곱값을 이용해서 Frustum Culling 거리를 설정합니다.</p>
+				<p>Set the Frustum Culling distance using the square of the input distance.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -298,7 +298,7 @@ function changeShadowAPI(isShow) {
 					<tbody>
 						<tr>
 							<td>frustumFarDistance</td>
-							<td>frustum 거리. 내부적으로는 입력값의 제곱이 사용됨</td>
+							<td>Frustum street. Internally, the square of the input value is used</td>
 						</tr>
 					</tbody>
 				</table>
@@ -306,9 +306,9 @@ function changeShadowAPI(isShow) {
 				<b>html</b>
 				<pre>
 <code>
-&lt;label for="frustumFarDistance"&gt; 가시 거리 &lt;/label&gt;
-&lt;input type="text" id="frustumFarDistance" name="frustumFarDistance" placeholder="미터(m)" size=4" /&gt;
-&lt;button type="button" id="changeFrustumFarDistanceAPI" class="btn btn-default btn-sm">적용/&gt;button%lt;
+&lt;label for="frustumFarDistance"&gt; Visible distance &lt;/label&gt;
+&lt;input type="text" id="frustumFarDistance" name="frustumFarDistance" placeholder="Meter(m)" size=4" /&gt;
+&lt;button type="button" id="changeFrustumFarDistanceAPI" class="btn btn-default btn-sm">apply/&gt;button%lt;
 </code>
 			</pre>
 				<br> <b>javaScript</b>
@@ -326,7 +326,7 @@ function changeFrustumFarDistanceAPI(frustumFarDistance) {
 			</article>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="searchDataAPI">searchDataAPI()</span></h2>
-				<p>데이터 고유키를 입력받아, 카메라 위치를 이동합니다.</p>
+				<p>Enter the data unique key to move the camera position.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -338,7 +338,7 @@ function changeFrustumFarDistanceAPI(frustumFarDistance) {
 					<tbody>
 						<tr>
 							<td>dataKey</td>
-							<td>검색을 원하는 blockId</td>
+							<td>The blockId you want to search</td>
 						</tr>
 					</tbody>
 				</table>
@@ -349,7 +349,7 @@ function changeFrustumFarDistanceAPI(frustumFarDistance) {
 &lt;div&gt;
 	&lt;span  style="padding-left: 10px; padding-right: 100px;"&gt;Data Key&lt;/span&gt;
 	&lt;input type="text" id="search_data_key" name="search_data_key" size="15" /&gt;
-	&lt;button type="button" id="searchData" style="width: 50px; background: #727272; font-size: 1.2rem;">검색/&gt;button%lt;
+	&lt;button type="button" id="searchData" style="width: 50px; background: #727272; font-size: 1.2rem;">search/&gt;button%lt;
 &lt;/div&gt;
 </code>
 			</pre>
@@ -370,7 +370,7 @@ function searchDataAPI(dataKey) {
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeColorAPI">changeColorAPI()</span></h2>
 				<p>
-					입력받은 Object 를 입력받은 color 로 변경 표시합니다.<br> Object정보를 ','로 구분해서 복수 입력 가능합니다.
+					It displays the input object as the input color. <br> It is possible to input multiple object information separated by ','.
 				</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -383,11 +383,11 @@ function searchDataAPI(dataKey) {
 					<tbody>
 						<tr>
 							<td>objectIds</td>
-							<td>object id. 복수개의 경우 , 로 입력</td>
+							<td>Object id. In a plurality of cases,</td>
 						</tr>
 						<tr>
 							<td>color</td>
-							<td>R, G, B 색깔을 ',' 로 연결한 string 값을 받음</td>
+							<td>R, G, and B colors are connected to ','</td>
 						</tr>
 					</tbody>
 				</table>
@@ -396,9 +396,9 @@ function searchDataAPI(dataKey) {
 				<pre>
 <code>
 &lt;div&gt;
-	&lt;label for="objectIds"&gt;Object Id 입력 &lt;/label&gt;
-	&lt;input type="text" id="objectIds" name="objectIds" placeholder=", 구분 입력" size=21" /&gt;
-	&lt;button type="button" id="changeColorAPI" class="btn btn-default btn-sm">변경/&gt;button%lt;
+	&lt;label for="objectIds"&gt;Object Id input &lt;/label&gt;
+	&lt;input type="text" id="objectIds" name="objectIds" placeholder=", Enter segment" size=21" /&gt;
+	&lt;button type="button" id="changeColorAPI" class="btn btn-default btn-sm">change/&gt;button%lt;
 &lt;div/&gt;
 </code>
 			</pre>
@@ -419,7 +419,7 @@ function changeColorAPI(objectIds, color) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeLocationAndRotationAPI">changeLocationAndRotationAPI()</span></h2>
-				<p>입력 받은 위치정보와 회전 정보로 블록을 변환 시킵니다.</p>
+				<p>The block is converted by the input position information and rotation information.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -435,27 +435,27 @@ function changeColorAPI(objectIds, color) {
 						</tr>
 						<tr>
 							<td>latitude</td>
-							<td>위도</td>
+							<td>latitude</td>
 						</tr>
 						<tr>
 							<td>longitude</td>
-							<td>경도</td>
+							<td>longitude</td>
 						</tr>
 						<tr>
 							<td>height</td>
-							<td>높이</td>
+							<td>height</td>
 						</tr>
 						<tr>
 							<td>heading</td>
-							<td>좌, 우</td>
+							<td>left, right</td>
 						</tr>
 						<tr>
 							<td>pitch</td>
-							<td>위, 아래</td>
+							<td>uo, down</td>
 						</tr>
 						<tr>
 							<td>roll</td>
-							<td>좌, 우 기울기</td>
+							<td>left, right roll</td>
 						</tr>
 					</tbody>
 				</table>
@@ -472,13 +472,13 @@ function changeColorAPI(objectIds, color) {
 	&lt;/div&gt;
 	&lt;div&gt;
 		&lt;span&gt;
-			&lt;label for="move_latitude"&gt;위도&lt;/label&gt;
+			&lt;label for="move_latitude"&gt;latitude&lt;/label&gt;
 			&lt;input type="text" id="move_latitude" name="move_latitude" size="15" /&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;
 	&lt;div&gt;
 		&lt;span&gt;
-			&lt;label for="move_longitude"&gt;경도&lt;/label&gt;
+			&lt;label for="move_longitude"&gt;longitude&lt;/label&gt;
 			&lt;input type="text" id="move_longitude" name="move_longitude" size="15" /&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;	
@@ -489,7 +489,7 @@ function changeColorAPI(objectIds, color) {
 		&lt;span&gt;
 			&lt;label for="move_roll"&gt;ROLL&lt;/label&gt;
 			&lt;input type="text" id="move_roll" name="move_roll" size="15" /&gt;
-			&lt;button type="button" id="changeLocationAndRotationAPI">변환/&gt;button%lt;
+			&lt;button type="button" id="changeLocationAndRotationAPI">change/&gt;button%lt;
 		&lt;/span&gt;
 	&lt;/div&gt;		
 &lt;/div&gt;
@@ -517,7 +517,7 @@ function changeLocationAndRotationAPI(data_key, latitude, longitude, height, hea
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeMouseMoveAPI">changeMouseMoveAPI()</span></h2>
-				<p>마우스 클릭 객체 이동 대상 변경합니다</p>
+				<p>Change mouse click target to move object</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -529,7 +529,7 @@ function changeLocationAndRotationAPI(data_key, latitude, longitude, height, hea
 					<tbody>
 						<tr>
 							<td>mouseMoveMode</td>
-							<td>0이면 전체, 1이면 object</td>
+							<td>0 is full, 1 is object</td>
 						</tr>
 					</tbody>
 				</table>
@@ -537,7 +537,7 @@ function changeLocationAndRotationAPI(data_key, latitude, longitude, height, hea
 				<b>html</b>
 				<pre>
 <code>
-&lt;div&gt;마우스 이동모드
+&lt;div&gt;Mouse movement mode
 	&lt;div&gt;
 		&lt;input type="radio" id="mouseBlockMove" name="mouseBlockMove" value="0" onclick="changeMouseMove('0')"/&gt;
 		&lt;label for="mouseBlockMove"&gt;Block&lt;/label&gt;
@@ -565,7 +565,7 @@ function changeMouseMoveAPI(mouseMoveMode) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeInsertIssueModeAPI">changeInsertIssueModeAPI()</span></h2>
-				<p>이슈 등록 활성화 유무</p>
+				<p>Whether issue registration activation</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -577,7 +577,7 @@ function changeMouseMoveAPI(mouseMoveMode) {
 					<tbody>
 						<tr>
 							<td>flag</td>
-							<td>true = 활성화, false = 비활성화</td>
+							<td>true = enable, false = disable</td>
 						</tr>
 					</tbody>
 				</table>
@@ -604,7 +604,7 @@ function changeInsertIssueModeAPI(flag) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeObjectInfoViewModeAPI">changeObjectInfoViewModeAPI()</span></h2>
-				<p>object 정보 표시 활성화 유무</p>
+				<p>Whether object information display is enabled</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -616,7 +616,7 @@ function changeInsertIssueModeAPI(flag) {
 					<tbody>
 						<tr>
 							<td>flag</td>
-							<td>true = 활성화, false = 비활성화</td>
+							<td>true = enable, false = disable</td>
 						</tr>
 					</tbody>
 				</table>
@@ -652,7 +652,7 @@ function changeObjectInfoViewModeAPI(flag) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeListIssueViewModeAPI">changeListIssueViewModeAPI()</span></h2>
-				<p>now_latitude, now_longitude를 가지고 데이터 그룹에 있는 그룹 중에 가장 가까운 그룹 위치를 찾고 그 데이터 그룹에 속하는 issue 100개를 가져와서 보여줍니다.</p>
+				<p>With now_latitude, now_longitude, finds the nearest group location in the data group, and retrieves and displays 100 issues belonging to that data group.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -664,7 +664,7 @@ function changeObjectInfoViewModeAPI(flag) {
 					<tbody>
 						<tr>
 							<td>flag</td>
-							<td>true = 활성화, false = 비활성화</td>
+							<td>true = enable, false = disable</td>
 						</tr>
 					</tbody>
 				</table>
@@ -672,7 +672,7 @@ function changeObjectInfoViewModeAPI(flag) {
 				<b>html</b>
 				<pre>
 <code>
-&lt;button id="issuesEnable"&gt;Issues 표시&lt;/button&gt;
+&lt;button id="issuesEnable"&gt;Issues Display&lt;/button&gt;
 			&lt;input type="hidden" id="now_latitude" name="now_latitude" value="${now_latitude }" /&gt;
 			&lt;input type="hidden" id="now_longitude" name="now_longitude" value="${now_longitude }"  /&gt;
 </code>
@@ -693,7 +693,7 @@ function changeListIssueViewModeAPI(flag) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="drawInsertIssueImageAPI">drawInsertIssueImageAPI()</span></h2>
-				<p>Pin image를 그림</p>
+				<p>Picture of pin image</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -705,31 +705,31 @@ function changeListIssueViewModeAPI(flag) {
 					<tbody>
 						<tr>
 							<td>drawType</td>
-							<td>이미지를 그리는 유형 0 : DB, 1 : 이슈등록</td>
+							<td>Image type 0: DB, 1: Issue registration</td>
 						</tr>
 						<tr>
 							<td>issue_id</td>
-							<td>이슈 고유키</td>
+							<td>Issue unique key</td>
 						</tr>
 						<tr>
 							<td>issue_type</td>
-							<td>이슈 고유키</td>
+							<td>Issue unique key</td>
 						</tr>
 						<tr>
 							<td>data_key</td>
-							<td>데이터 고유키</td>
+							<td>data unique key</td>
 						</tr>
 						<tr>
 							<td>latitude</td>
-							<td>데이터 고유키</td>
+							<td>data unique key</td>
 						</tr>
 						<tr>
 							<td>longitude</td>
-							<td>데이터 고유키</td>
+							<td>data unique key</td>
 						</tr>
 						<tr>
 							<td>height</td>
-							<td>데이터 고유키</td>
+							<td>data unique key</td>
 						</tr>
 					</tbody>
 				</table>
@@ -739,7 +739,7 @@ function changeListIssueViewModeAPI(flag) {
 <code>
 if(msg.result == "success") {
 						alert(JS_MESSAGE["insert"]);
-						// pin image를 그림
+						// pin image images
 						drawInsertIssueImageAPI(1, msg.issue.issue_id, msg.issue.issue_type, $("#data_key").val(),
 						 $("#latitude").val(), $("#longitude").val(), $("#height").val());
 					} else {
@@ -769,7 +769,7 @@ function drawInsertIssueImageAPI(drawType, issue_id, issue_type, data_key, latit
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeInsertIssueStateAPI">changeInsertIssueStateAPI()</span></h2>
-				<p>issue 등록 geo 정보 관련 상태 변경</p>
+				<p>Issue registration geo information related status change</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -781,7 +781,7 @@ function drawInsertIssueImageAPI(drawType, issue_id, issue_type, data_key, latit
 					<tbody>
 						<tr>
 							<td>insertIssueState</td>
-							<td>이슈 등록 좌표 상태</td>
+							<td>Issue registration coordinate status</td>
 						</tr>
 					</tbody>
 				</table>
@@ -802,7 +802,7 @@ function changeInsertIssueStateAPI(insertIssueState) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="mouseMoveAPI">mouseMoveAPI()</span></h2>
-				<p>마우스를 사용할 수 없는 환경에서 버튼 이벤트로 대체</p>
+				<p>Replace with button event in mouse disabled environment</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -814,7 +814,7 @@ function changeInsertIssueStateAPI(insertIssueState) {
 					<tbody>
 						<tr>
 							<td>eventType</td>
-							<td>어떤 마우스 동작을 원하는지를 구분</td>
+							<td>Identify which mouse actions you want</td>
 						</tr>
 					</tbody>
 				</table>
