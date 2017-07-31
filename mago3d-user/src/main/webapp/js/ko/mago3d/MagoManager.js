@@ -1468,12 +1468,14 @@ MagoManager.prototype.renderNeoBuildingsAsimectricVersion = function(scene, isLa
 	
 	if(this.bPicking == true && isLastFrustum)
 	{
+		var pixelPos;
+		
 		if(this.magoPolicy.issueInsertEnable == true)
 		{
 			if(this.objMarkerSC == undefined)
 				this.objMarkerSC = new ObjectMarker();
 			
-			var pixelPos = new Point3D();
+			pixelPos = new Point3D();
 			pixelPos = this.calculatePixelPositionWorldCoord(gl, this.mouse_x, this.mouse_y, pixelPos);
 			//var objMarker = this.objMarkerManager.newObjectMarker();
 			
@@ -1486,8 +1488,11 @@ MagoManager.prototype.renderNeoBuildingsAsimectricVersion = function(scene, isLa
 			if(this.objMarkerSC == undefined)
 				this.objMarkerSC = new ObjectMarker();
 			
-			var pixelPos = new Point3D();
-			pixelPos = this.calculatePixelPositionWorldCoord(gl, this.mouse_x, this.mouse_y, pixelPos);
+			if(pixelPos == undefined)
+			{
+				pixelPos = new Point3D();
+				pixelPos = this.calculatePixelPositionWorldCoord(gl, this.mouse_x, this.mouse_y, pixelPos);
+			}
 			//var objMarker = this.objMarkerManager.newObjectMarker();
 			
 			ManagerUtils.calculateGeoLocationDataByAbsolutePoint(pixelPos.x, pixelPos.y, pixelPos.z, this.objMarkerSC.geoLocationData, this);
@@ -1611,6 +1616,9 @@ MagoManager.prototype.getSelectedObjects = function(gl, mouseX, mouseY, visibleO
 	{
 		neoBuilding = visibleObjControlerBuildings.currentVisibles0[i];
 		currentVisibleOctreesControler = neoBuilding.currentVisibleOctreesControler;
+		
+		if(currentVisibleOctreesControler == undefined)
+			continue;
 		
 		// LOD0.***
 		currentVisibleLowestOctCount = currentVisibleOctreesControler.currentVisibles0.length;
@@ -1740,6 +1748,8 @@ MagoManager.prototype.getSelectedObjects = function(gl, mouseX, mouseY, visibleO
 		gl.uniform3fv(currentShader.buildingPosLOW_loc, buildingGeoLocation.positionLOW);
 		
 		currentVisibleOctreesControler = neoBuilding.currentVisibleOctreesControler;
+		if(currentVisibleOctreesControler == undefined)
+			continue;
 		
 		// LOD0.***
 		currentVisibleLowestOctCount = currentVisibleOctreesControler.currentVisibles0.length;
@@ -1921,7 +1931,7 @@ MagoManager.prototype.getRayCamSpace = function(gl, pixelX, pixelY, resultRay) {
 };
 
 /**
- * Calculates the plane on move a project(a building). This plane is tangent to world in pixel position.
+ * Calculates the plane on move an object.
  * @param {GL} gl 변수
  * @param {int} pixelX Screen x position of the pixel.
  * @param {int} pixelY Screen y position of the pixel.
@@ -1936,8 +1946,7 @@ MagoManager.prototype.calculateSelObjMovePlaneAsimetricMode = function(gl, pixel
 	
 	this.calculatePixelPositionWorldCoord(gl, this.mouse_x, this.mouse_y, this.pointSC2);
 	var buildingGeoLocation = this.buildingSelected.geoLocDataManager.getGeoLocationData(0);
-	//this.pointSC = buildingGeoLocation.tMatrixInv.transformPoint3D(this.pointSC2, this.pointSC); // buildingSpacePoint.***
-	this.pointSC = buildingGeoLocation.geoLocMatrixInv.transformPoint3D(this.pointSC2, this.pointSC); // buildingCartographicPositionSpacePoint.***
+	this.pointSC = buildingGeoLocation.tMatrixInv.transformPoint3D(this.pointSC2, this.pointSC); // buildingSpacePoint.***
 
 	if(resultSelObjMovePlane == undefined)
 		resultSelObjMovePlane = new Plane();
@@ -2161,7 +2170,10 @@ MagoManager.prototype.moveSelectedObjectAsimetricMode = function(gl) {
 		if(this.selObjMovePlane == undefined) {
 			var currentRenderingFase = this.renderingFase;
 			this.renderingFase = -1;
-			this.selObjMovePlane = this.calculateSelObjMovePlaneAsimetricMode(gl, this.mouse_x, this.mouse_y, this.selObjMovePlane);
+			this.selObjMovePlane = new Plane();
+			// create a local XY plane.
+			this.selObjMovePlane.setPointAndNormal(0.0, 0.0, 0.0,    0.0, 0.0, 1.0); 
+			// selObjMovePlane is a tangent plane to globe in the selected point.
 			this.renderingFase = currentRenderingFase;
 		}
 
@@ -2199,37 +2211,25 @@ MagoManager.prototype.moveSelectedObjectAsimetricMode = function(gl) {
 			this.buildingSelected.moveVector = new Point3D();
 
 		if(!this.thereAreStartMovePoint) {
-			var cartographic = Cesium.Cartographic.fromCartesian(new Cesium.Cartesian3(intersectionPoint.x, intersectionPoint.y, intersectionPoint.z));
-			this.startMovPoint.x = cartographic.longitude * (180.0/Math.PI);
-			this.startMovPoint.y = cartographic.latitude * (180.0/Math.PI);
+			var cartographic = ManagerUtils.pointToGeographicCoord(intersectionPoint, cartographic, this);
+			this.startMovPoint.x = cartographic.longitude;
+			this.startMovPoint.y = cartographic.latitude;
 			this.thereAreStartMovePoint = true;
 		} else {
-			var cartographic = Cesium.Cartographic.fromCartesian(new Cesium.Cartesian3(intersectionPoint.x, intersectionPoint.y, intersectionPoint.z));
-			this.pointSC.x = cartographic.longitude * (180.0/Math.PI);
-			this.pointSC.y = cartographic.latitude * (180.0/Math.PI);
+			var cartographic = ManagerUtils.pointToGeographicCoord(intersectionPoint, cartographic, this);
+			this.pointSC.x = cartographic.longitude;
+			this.pointSC.y = cartographic.latitude;
 			var difX = this.pointSC.x - this.startMovPoint.x;
 			var difY = this.pointSC.y - this.startMovPoint.y;
 
-			//this.buildingSelected.moveVector.set(difX, difY, difZ);
-			
 			var geoLocationData;
 			geoLocationData = this.buildingSelected.geoLocDataManager.geoLocationDataArray[0];
-			/*
-			// test.*** see the cartographic values of the intersected point.***
-			var newPosition = new Point3D();
-
-			newPosition.add(difX, difY, difZ);
-			newPosition.add(geoLocationData.pivotPoint.x, geoLocationData.pivotPoint.y, geoLocationData.pivotPoint.z);
-			*/
-
-			//var cartographic = Cesium.Cartographic.fromCartesian(new Cesium.Cartesian3(newPosition.x, newPosition.y, newPosition.z));
 			var newLongitude = geoLocationData.geographicCoord.longitude - difX;
 			var newlatitude = geoLocationData.geographicCoord.latitude - difY;
 			var newHeight = cartographic.height;
 
 			this.changeLocationAndRotation(this.buildingSelected.buildingId, newlatitude, newLongitude, undefined, undefined, undefined, undefined);
 			this.displayLocationAndRotation(this.buildingSelected);
-			//this.selectedObjectNotice(this.buildingSelected);
 			
 			this.startMovPoint.x -= difX;
 			this.startMovPoint.y -= difY;
@@ -2257,7 +2257,7 @@ MagoManager.prototype.moveSelectedObjectAsimetricMode = function(gl) {
 		var camPosBuilding = new Point3D();
 		var camDirBuilding = new Point3D();
 		camPosBuilding = buildingGeoLocation.tMatrixInv.transformPoint3D(this.lineSC.point, camPosBuilding);
-		camDirBuilding = buildingGeoLocation.rotMatrixInv.transformPoint3D(this.lineSC.direction, camDirBuilding);
+		camDirBuilding = buildingGeoLocation.tMatrixInv.rotatePoint3D(this.lineSC.direction, camDirBuilding);
 	
 		// now, intersect building_ray with the selObjMovePlane.***
 		var line = new Line();
@@ -2268,7 +2268,7 @@ MagoManager.prototype.moveSelectedObjectAsimetricMode = function(gl) {
 
 		//the movement of an object must multiply by buildingRotMatrix.***
 		var transformedIntersectPoint = new Point3D();
-		transformedIntersectPoint = buildingGeoLocation.rotMatrix.transformPoint3D(intersectionPoint, transformedIntersectPoint); 
+		transformedIntersectPoint = buildingGeoLocation.tMatrix.rotatePoint3D(intersectionPoint, transformedIntersectPoint); 
 		intersectionPoint.x = transformedIntersectPoint.x;
 		intersectionPoint.y = transformedIntersectPoint.y;
 		intersectionPoint.z = transformedIntersectPoint.z;
@@ -2278,6 +2278,7 @@ MagoManager.prototype.moveSelectedObjectAsimetricMode = function(gl) {
 			this.objectSelected.moveVector = new Point3D();
 
 		if(!this.thereAreStartMovePoint) {
+
 			this.startMovPoint = intersectionPoint;
 			this.startMovPoint.add(-this.objectSelected.moveVector.x, -this.objectSelected.moveVector.y, -this.objectSelected.moveVector.z);
 			this.thereAreStartMovePoint = true;
@@ -3817,8 +3818,8 @@ MagoManager.prototype.createDefaultShaders = function(gl) {
 	// 1) ModelReferences ssaoShader.******************************************************************************
 	var shaderName = "modelReferencesSsao";
 	var shader = this.postFxShadersManager.newShader(shaderName);
-	var ssao_vs_source = ShaderSource.modelRefSsaoVsSource;
-	var ssao_fs_source = ShaderSource.modelRefSsaoFsSource;
+	var ssao_vs_source = ShaderSource['ModelRefSsaoVS'];
+	var ssao_fs_source = ShaderSource['ModelRefSsaoFS'];
 
 	shader.program = gl.createProgram();
 	shader.shader_vertex = this.postFxShadersManager.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
