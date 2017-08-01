@@ -317,12 +317,16 @@ public class IssueController {
 				return jSONObject;
 			}
 			
-			// TODO 날짜를 더해서 넣어야 한다 공백 처리 해서
+			if(issue.getDue_day() != null && !"".equals(issue.getDue_day())
+					&& issue.getDue_hour() != null && !"".equals(issue.getDue_hour())) {
+				issue.setDue_date(issue.getDue_day().replaceAll("-", "") + issue.getDue_hour());
+			}
 			String client_ip = WebUtil.getClientIp(request);
 			issue.setClient_ip(client_ip);
-			log.info("@@@ issue = {}", issue);
+			log.info("@@@ before issue = {}", issue);
 			issueService.insertIssue(issue, issueFile);
 			jSONObject.put("issue", issue);
+			log.info("@@@ after issue = {}", issue);
 			
 		} catch(Exception e) {
 			e.printStackTrace();

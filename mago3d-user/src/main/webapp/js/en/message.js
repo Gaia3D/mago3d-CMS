@@ -88,5 +88,5 @@ JS_MESSAGE["issue.title.empty"] = "제목을 입력하여 주십시오.";
 JS_MESSAGE["issue.assignee.empty"] = "대리자를 입력하여 주십시오";
 JS_MESSAGE["issue.reporter.empty"] = "보고 해야 하는 사람을 입력하여 주십시오.";
 JS_MESSAGE["issue.contents.empty"] = "내용을 입력하여 주십시오.";
-JS_MESSAGE["issue.start_hour.proper"] = "issue 시작시간을 올바르게 설정하여 주십시오.";
-JS_MESSAGE["issue.start_minute.proper"] = "issue 시작시간을 올바르게 설정하여 주십시오.";
+JS_MESSAGE["issue.due_day.invalid"] = "issue 마감일을 올바르게 입력하여 주십시오.";
+JS_MESSAGE["issue.due_time.invalid"] = "issue 마감시간을 올바르게 입력하여 주십시오.";

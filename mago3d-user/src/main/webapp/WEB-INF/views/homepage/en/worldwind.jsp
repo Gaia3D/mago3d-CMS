@@ -11,7 +11,7 @@
 	<meta http-equiv="Expires" content="-1"/>
 	<meta http-equiv="Pragma" content="no-cache"/> -->
 	<title>demo | mago3D User</title>
-	<link rel="stylesheet" href="/css/${lang}/style.css" />
+	<link rel="stylesheet" href="/css/${lang}/style.css?currentTime=${currentTime}" />
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css?currentTime=${currentTime}" />
 	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
@@ -32,6 +32,7 @@
 			<li><a href="/homepage/about.do">Mago3D</a></li>	
 			<li><a href="/homepage/download.do">Download</a></li>
 			<li><a href="/homepage/tutorials.do">Tutorials</a></li>
+			<li><a href="/homepage/api.do">Api</a></li>
 		</ul>
 	</div>
 	<div class="ctrl">
@@ -252,12 +253,12 @@
 	        		</td>
 	        	</tr>
 	        	<tr>
-	        		<th><form:label path="due_date">Due Date</form:label></th>
-	        		<td><form:hidden path="start_date" />
-						<input type="text" id="start_day" name="start_day" placeholder="Day" size="7" maxlength="4" />
-						<input type="text" id="start_hour" name="start_hour" placeholder="Hour" size="3" maxlength="2" />
-						<span class="delimeter">:</span>
-						<input type="text" id="start_minute" name="start_minute" placeholder="Minute" size="3" maxlength="2" />
+	        		<th><form:label path="due_day">Due Date</form:label></th>
+	        		<td><form:hidden path="due_date" />
+						<input type="text" id="due_day" name="due_day" placeholder="0000-00-00" size="7" maxlength="10" />
+						Day&nbsp;&nbsp;
+						<input type="text" id="due_hour" name="due_hour" placeholder="00" size="2" maxlength="2" /> :
+						<input type="text" id="due_minute" name="due_minute" placeholder="00" size="2" maxlength="2" />
 	        		</td>
 	        	</tr>
 	        	<tr>
@@ -363,6 +364,19 @@
 	var managerFactory = new ManagerFactory(null, "magoContainer", policyJson, dataGroupMap, imagePath);
 	
 	$(document).ready(function() {
+		$("#due_day").datepicker({ 
+			dateFormat : "yy-mm-dd",
+			dayNames : [ "일", "월", "화", "수", "목", "금", "토" ],
+			dayNamesShort : [ "일", "월", "화", "수", "목", "금", "토" ],
+			dayNamesMin : [ "일", "월", "화", "수", "목", "금", "토" ],
+			monthNames : [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+			monthNamesShort : [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+			prevText : "",
+			nextText : "",
+			showMonthAfterYear : true,
+			yearSuffix : "년"
+		});
+		
 		//$("#recentIssueListContent").show();
 		
 		// BoundingBox
@@ -506,14 +520,8 @@
 			$("#contents").focus();
 			return false;
 		}
-		if ($("#start_hour").val() > 23) {
-			alert(JS_MEESAGE["issue.start_hour.proper"]);
-			$("#start_hour").focus();
-			return false;
-		}
-		if ($("#start_minute").val() > 59) {
-			alert(JS_MESSAGE["issue.start_minute.proper"]);
-			$("#start_minute").focus();
+		/* if ($("#due_day").val() != null && $("#due_time").val() != null) {
+			$("#due_date").val($("#due_day").val() + $("#due_time").val());
 			return false;
 		}
 	}
@@ -546,8 +554,8 @@
 					ajaxIssueList();
 				},
 				error:function(request,status,error){
-			        //alert(JS_MESSAGE["ajax.error.message"]);
-			        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			        alert(JS_MESSAGE["ajax.error.message"]);
+					console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			        isInsertIssue = true;
 				}
 			});

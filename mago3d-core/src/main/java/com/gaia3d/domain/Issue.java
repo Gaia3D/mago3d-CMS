@@ -75,6 +75,9 @@ public class Issue {
 	private String priority_name;
 	// 예정일. 마감일
 	private String due_date;
+	private String due_day;
+	private String due_hour;
+	private String due_minute;
 	// 이슈 유형. common_code 동적 생성
 	private String issue_type;
 	private String issue_type_name;
@@ -116,15 +119,25 @@ public class Issue {
 	public String getViewDueDate() {
 		if(this.due_date == null || "".equals( due_date)) {
 			return "";
+		} else {
+			if(due_date.length() > 19) {
+				return due_date.substring(0, 19);
+			} else {
+				return due_date;
+			}
 		}
-		return due_date.substring(0, 19);
 	}
 	
 	public String getViewInsertDate() {
 		if(this.insert_date == null || "".equals( insert_date)) {
 			return "";
+		} else {
+			if(insert_date.length() > 19) {
+				return insert_date.substring(0, 19);
+			} else {
+				return insert_date;
+			}
 		}
-		return insert_date.substring(0, 19);
 	}
 	
 	public String validate() {
