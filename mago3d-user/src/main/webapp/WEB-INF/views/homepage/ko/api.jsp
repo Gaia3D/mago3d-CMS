@@ -33,7 +33,7 @@
 	<div id="wrap">
 		<div class="navigation">
 			<h3 class="application_name">
-				<a href="/homepage/about.do">mago3D.JS</a>
+				<a href="/homepage/api.do">mago3D.JS</a>
 			</h3>
 			<div class="search">
 				<input id="search" type="text" class="form-control input-sm" placeholder="Search Documentations">
@@ -76,64 +76,43 @@
 			</div>
 			<article class="readme">
 				<img src="https://img.shields.io/badge/language-English-orange.svg" /> <img src="https://img.shields.io/badge/language-Korean-blue.svg" />
-				<p>MAGO3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. MAGO3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 이에 따라, MAGO3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.
-				<p>
-				<h4>Mssion</h4>
-				<p>Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립트 라이브러리를 사용한 가시화 데이터를 통합 과제 | 이슈 관리를 할 수 있습니다.</p>
-				<h4>Features</h4>
-				<ul class="readme_list">
-					<li>이슈 현황 신규 이슈, 진행 중인 이슈, 완료된 이슈를 볼 수 있습니다.</li>
-					<li>사용자 상태별 현황을 그래프로 되어 있어 보기 편합니다.</li>
-					<li>DB Connection Pool 현황이나 DV세션 현황을 테이블로 볼 수 있습니다.</li>
-				</ul>
 				<h4>Development Environment</h4>
-				<mark>Spring, gradle, PostgreSQL, PostGIS, mybatis, Docker</mark>
+				<mark>Spring, gradle, PostgreSQL, PostGIS, mybatis, Docker, SourceTree</mark>
 				<h4>Getting Started</h4>
 				<div class="list_wrap">
 					<div class="sub_title">Install</div>
 					<ul class="readme_list">
-						<li><b style="color: #1E90FF;">Postgres</b>
+						<li><b style="color: #1E90FF;">PostgreSQL 9.6.3-1</b>
 							<ul class="sub_list">
-								<li> PostgreSQL 버전 설정 (PostgreSQL v9.6.3-1)</li>
 								<li> 설치경로 C:/PostgreSQL</li>
-								<li> 비밀번호 설정 Password: postgres Retype Password: postgres</li>
 							</ul>
 						</li>
-						<li><b style="color: #1E90FF;">PostGIS</b>
+						<li><b style="color: #1E90FF;">PostGIS 2.3.2</b>
 							<ul class="sub_list">
 								<li>PostgreSQL 설치가 끝난 뒤에 Stack Builder를 실행하여 설치</li>
-								<li>PostGIS 버전 설정 (PostGIS v2.3.2)</li>
 								<li>PostgreSQL Extensions PostGIS 필수</li>
 							</ul>
 						</li>
-						<li><b style="color: #1E90FF;">gradle</b>
+						<li><b style="color: #1E90FF;">Gradle 3.5</b>
 							<ul class="sub_list">
-								<li>gradle 버전 설치 (gradle v3.5)</li>
 								<li>설치경로 C:/gradle</li>
 								<li>시스템 변수 추가 -path -> C:/gradle/gradle-3.5 추가</li>
 						
 							</ul>
 						</li>
-						<li><b style="color: #1E90FF;">lombok</b>
+						<li><b style="color: #1E90FF;">Eclipse (neon 버전 이상)</b>
 							<ul class="sub_list">
-								<li> 설치한 뒤에 다운로드 폴더 이동 후 실행 </li>
-								<li>eclipse 설치 위치 [Specify location..]를 검색해서 'eclipse.exe' 파일을 선택합니다.</li>
-								<li>install/update 클릭합니다.</li>
-							</ul>
-						</li>
-						<li><b style="color: #1E90FF;">Buildship Gradle Integration</b>
-							<ul class="sub_list">
-								<li>eclipse Help -> Eclipse Marketplace 이동 후 Buildship Gradle Integration 2.0을 설치합니다.</li>
+								<li>lombok를 설정합니다.</li>
+								<li>Eclipse Marketplace 이동 후 Buildship Gradle Integration 2.0을 설치합니다.</li>
 							</ul>
 						</li>
 					</ul>
-					<div class="sub_title">Setting</div>
+					<h4>Setting</h4>
 					<ul class="readme_list">
 						<li>eclipse에서 mago3D Project를 git clone으로 불러옵니다.</li>
 						<li>File -> Import -> Gradle -> Existing Gradle Project를 클릭하여 mago3D를 받아줍니다.</li>
 						<li>mago3D를 실행하기전에 PostgreSQL을 사용하여 데이터베이스를 만들어 줍니다.</li>
 						<li>PostgreSQL -> new DataBase</li>
-						<li>생성한 database에 쿼리를 실행시켜줍니다. 쿼리는 mago3D-core -> src -> doc -> database 안에 있습니다.</li>
 					</ul>
 					<pre>
 						<code>
@@ -145,8 +124,8 @@
 	Connection_Limit: -1
 						</code>
 					</pre>
-					<div class="sub_title">Execution</div>
 					<ul class="readme_list">
+						<li style="margin-top: 16px;">생성한 database에 쿼리를 실행시켜줍니다. 쿼리는 mago3D-core -> src -> doc -> database 안에 있습니다.</li>
 						<li>mago3D를 실행하려면 mago3d-@@@ -> src/main/java -> com.gaia3d -> Mago3dAdminApplication.java를 Spring Boot app으로 실행시켜줍니다.</li>
 					</ul>
 				</div>
@@ -583,10 +562,28 @@ function changeMouseMoveAPI(mouseMoveMode) {
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
-				<b>html</b>
+				<b>Callback.js</b>
 				<pre>
 <code>
-준비중
+function insertIssueCallback(functionName, data_name, data_key, latitude, longitude, elevation) {
+	window[functionName](data_name, data_key, latitude, longitude, elevation);
+}
+</code>
+				</pre>
+				<br><b>html</b>
+				<pre>
+<code>
+var isInsertIssue = true;
+$("#issueEnable").click(function() {
+		if(insertIssueFlag) {
+			insertIssueFlag = false;
+			$("#issueEnable").removeClass("on");
+		} else {
+			insertIssueFlag = true;
+			$("#issueEnable").addClass("on");
+		}
+		changeInsertIssueModeAPI(insertIssueFlag);
+	});
 </code>
 			</pre>
 				<br> <b>javaScript</b>
@@ -606,6 +603,7 @@ function changeInsertIssueModeAPI(flag) {
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeObjectInfoViewModeAPI">changeObjectInfoViewModeAPI()</span></h2>
 				<p>object 정보 표시 활성화 유무</p>
+				<p>policy 테이블 안에 있는 geo_callback_selectedobject라는 컬럼에 함수 이름을 등록하고, 등록한 함수 이름을Callback.js으로 불러옵니다.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -622,7 +620,22 @@ function changeInsertIssueModeAPI(flag) {
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
-				<b>html</b>
+				<b>Callback.js</b>
+				<pre>
+<code>
+function selectedObjectCallback(functionName, projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll) {
+    window[functionName](projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll);
+}
+</code>
+				</pre>
+				<br><b>html</b>
+				<pre>
+<code>
+&lt;div&gt;
+	&lt;button id="objectInfoEnable"&gt;Object 정보&lt;/button&gt;	
+&lt;/div&gt;
+</code>			
+				</pre>
 				<pre>
 <code>
 $("#objectInfoEnable").click(function() {
@@ -637,7 +650,7 @@ $("#objectInfoEnable").click(function() {
 	});
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br><b>javaScript</b>
 				<pre>
 <code>
 function changeObjectInfoViewModeAPI(flag) {

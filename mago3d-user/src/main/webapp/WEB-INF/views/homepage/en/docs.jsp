@@ -39,8 +39,8 @@
 				<li class="on">Documentation<span></span></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO" class="on">KO</li>
-				<li id="languageEN"><a href="#" onclick="changeLanguage('en');">EN</a></li>
+				<li id="languageKO"><a href="#" onclick="changeLanguage('ko');">KO</a></li>
+				<li id="languageEN" class="on">EN</li>
 			</ul>
 		</div>
 	</nav>
@@ -54,11 +54,10 @@
 		</div>
 		<div class="docs-main">
 			<div class="title">Documentation</div>
-			<p>MAGO3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. MAGO3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 이에 따라, MAGO3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.</p>
+			<p>MAGO3D integrates AEC (Architecture, Engineering, Construction) area and 3D spatial information (3D GIS) and delivers images. MAGO3D integrates AEC and 3D GIS with web servers. MAGO3D users can install Building Information Modeling (BIM), Jupiter Tessellation (JT), and 3D GIS files together with other programs to help collaborate.</p>
 			<div class="sub_title">API Reference Documentation</div>
 			<ul class="docs-list">
-				<li><a href="/homepage/api.do">mago3D.JS API</a>는 JavaScript에 관한 API를 설명한 문서입니다.</li>
-				<li>준비 중 입니다.</li>
+				<li><a href="/homepage/api.do">mago3D.JS API</a>Is a document describing the API for JavaScript.</li>
 			</ul>
 		</div>
 	</section>
