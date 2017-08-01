@@ -259,6 +259,22 @@ public class HomepageController {
 	 * @param model
 	 * @return
 	 */
+	@GetMapping(value = "docs.do")
+	public String doc(HttpServletRequest request, Model model) {
+		String lang = null;
+		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		if(lang == null || "".equals(lang)) {
+			lang = "ko";
+		}
+		return "/homepage/" + lang + "/docs";
+	}
+	
+	/**
+	 * 
+	 * @param request
+	 * @param model
+	 * @return
+	 */
 	@GetMapping(value = "api.do")
 	public String api(HttpServletRequest request, Model model) {
 		String lang = null;

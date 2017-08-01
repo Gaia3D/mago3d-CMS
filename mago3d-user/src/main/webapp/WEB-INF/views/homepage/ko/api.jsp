@@ -322,8 +322,9 @@ function changeFrustumFarDistanceAPI(frustumFarDistance) {
 	}
 }
 </code>
-				</pre>
+				</pre>	
 			</article>
+			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="searchDataAPI">searchDataAPI()</span></h2>
 				<p>데이터 고유키를 입력받아, 카메라 위치를 이동합니다.</p>
@@ -835,7 +836,10 @@ function changeInsertIssueStateAPI(insertIssueState) {
 			&lt;span id="moveDownImage"&gt;&lt;img src="/images/ko/pitch_down.png" alt="down" /&gt;&lt;/span&gt;
 		&lt;/li&gt;
 	&lt;/ul&gt;
-
+</code>
+				</pre>
+				<pre>
+<code>
 $("#moveForwardImage").click(function() {
 		mouseMoveAPI("moveForward");
 	});
@@ -855,9 +859,8 @@ $("#moveForwardImage").click(function() {
 		mouseMoveAPI("moveDown");
 	});
 
-
 </code>
-			</pre>
+				</pre>
 				<br> <b>javaScript</b>
 				<pre>
 <code>
