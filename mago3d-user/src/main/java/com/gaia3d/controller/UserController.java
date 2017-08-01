@@ -50,7 +50,6 @@ import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.FileUtil;
 import com.gaia3d.util.StringUtil;
 import com.gaia3d.validator.UserValidator;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -222,8 +221,7 @@ public class UserController {
 	 */
 	@PostMapping(value = "ajax-update-user-info.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdateUserInfo(HttpServletRequest request, UserInfo userInfo) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxUpdateUserInfo(HttpServletRequest request, UserInfo userInfo) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -233,7 +231,7 @@ public class UserController {
 			if(errorcode != null) {
 				result = errorcode;
 				jSONObject.put("result", result);
-				return jSONObject.toString();
+				return jSONObject;
 			}
 						
 			UserInfo dbUserInfo = userService.getUser(userInfo.getUser_id());
@@ -249,7 +247,7 @@ public class UserController {
 					log.info("@@ password error!");
 					result = "user.password.exception";
 					jSONObject.put("result", result);
-					return jSONObject.toString();
+					return jSONObject;
 				}
 			}
 			
@@ -342,7 +340,7 @@ public class UserController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -353,15 +351,14 @@ public class UserController {
 	 */
 	@PostMapping(value = "ajax-init-user-password.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxInitUserPassword(	HttpServletRequest request, 
+	public Map<String, Object> ajaxInitUserPassword(	HttpServletRequest request, 
 										@RequestParam("check_ids") String check_ids) {
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			if(check_ids.length() <= 0) {
 				jSONObject.put("result", "check.value.required");
-				return jSONObject.toString();
+				return jSONObject;
 			}
 			userService.updateUserPasswordInit(check_ids);
 		} catch(Exception e) {
@@ -371,7 +368,7 @@ public class UserController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -449,11 +446,9 @@ public class UserController {
 	 */
 	@RequestMapping(value = "ajax-user-group-info.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUserGroupInfo(HttpServletRequest request, @RequestParam("user_group_id") Long user_group_id) {
+	public Map<String, Object> ajaxUserGroupInfo(HttpServletRequest request, @RequestParam("user_group_id") Long user_group_id) {
 		
 		log.info("@@@@@@@ user_group_id = {}", user_group_id);
-		
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		UserGroup userGroup = null;
@@ -467,7 +462,7 @@ public class UserController {
 		jSONObject.put("result", result);
 		jSONObject.put("userGroup", userGroup);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**

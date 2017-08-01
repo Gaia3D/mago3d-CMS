@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gaia3d.config.PropertiesConfig;
@@ -36,7 +35,6 @@ import com.gaia3d.service.UserService;
 import com.gaia3d.service.WidgetService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.FormatUtil;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -276,8 +274,7 @@ public class MainController {
 	 */
 	@GetMapping(value = "ajax-user-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUserWidget(HttpServletRequest request) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxUserWidget(HttpServletRequest request) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -310,7 +307,7 @@ public class MainController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -320,9 +317,8 @@ public class MainController {
 	 */
 	@GetMapping(value = "ajax-schedule-log-list-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxScheduleLogListWidget(HttpServletRequest request) {
+	public Map<String, Object> ajaxScheduleLogListWidget(HttpServletRequest request) {
 		
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -349,7 +345,7 @@ public class MainController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -359,9 +355,7 @@ public class MainController {
 	 */
 	@GetMapping(value = "ajax-dbcp-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxDbcpWidget(HttpServletRequest request) {
-		
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxDbcpWidget(HttpServletRequest request) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -389,7 +383,7 @@ public class MainController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -399,9 +393,7 @@ public class MainController {
 	 */
 	@GetMapping(value = "ajax-access-log-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxAccessLogWidget(HttpServletRequest request) {
-		
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxAccessLogWidget(HttpServletRequest request) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -428,6 +420,6 @@ public class MainController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 }

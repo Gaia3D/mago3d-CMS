@@ -20,7 +20,6 @@ import com.gaia3d.domain.Menu;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.service.MenuService;
 import com.gaia3d.util.StringUtil;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -84,8 +83,7 @@ public class MenuController {
 	 */
 	@PostMapping(value = "ajax-insert-menu.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxInsertMenu(HttpServletRequest request, Menu menu) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxInsertMenu(HttpServletRequest request, Menu menu) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		String menuTree = null;
@@ -107,7 +105,7 @@ public class MenuController {
 				jSONObject.put("result", result);
 				jSONObject.put("menuTree", getMenuTree(menuList));
 				
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			menu.setParent(Long.parseLong(parent));
@@ -139,7 +137,7 @@ public class MenuController {
 		jSONObject.put("result", result);
 		jSONObject.put("menuTree", menuTree);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -149,8 +147,7 @@ public class MenuController {
 	 */
 	@PostMapping(value = "ajax-update-menu.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdateMenu(HttpServletRequest request, Menu menu) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdateMenu(HttpServletRequest request, Menu menu) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		String menuTree = null;
@@ -170,7 +167,7 @@ public class MenuController {
 				jSONObject.put("result", result);
 				jSONObject.put("menuTree", getMenuTree(menuList));
 				
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			// TODO null 이라는 문자가 들어가면 트리가 표시되지 않음. 나중에 잡자.
@@ -193,7 +190,7 @@ public class MenuController {
 		jSONObject.put("result", result);
 		jSONObject.put("menuTree", menuTree);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -203,8 +200,7 @@ public class MenuController {
 	 */
 	@PostMapping(value = "ajax-update-move-menu.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdateMoveMenu(HttpServletRequest request, Menu menu) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdateMoveMenu(HttpServletRequest request, Menu menu) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		String menuTree = null;
@@ -222,7 +218,7 @@ public class MenuController {
 				jSONObject.put("result", result);
 				jSONObject.put("menuTree", getMenuTree(menuList));
 				
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			menuService.updateMoveMenu(menu);
@@ -238,7 +234,7 @@ public class MenuController {
 		jSONObject.put("result", result);
 		jSONObject.put("menuTree", menuTree);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -248,8 +244,7 @@ public class MenuController {
 	 */
 	@PostMapping(value = "ajax-delete-menu.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxDeleteMenu(HttpServletRequest request, Menu menu) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxDeleteMenu(HttpServletRequest request, Menu menu) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		String menuTree = null;
@@ -265,7 +260,7 @@ public class MenuController {
 				jSONObject.put("result", result);
 				jSONObject.put("menuTree", getMenuTree(menuList));
 				
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			menuService.deleteMenu(menu.getMenu_id());
@@ -281,7 +276,7 @@ public class MenuController {
 		jSONObject.put("result", result);
 		jSONObject.put("menuTree", menuTree);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**

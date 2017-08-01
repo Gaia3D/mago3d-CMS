@@ -35,7 +35,6 @@ import com.gaia3d.service.UserService;
 import com.gaia3d.service.WidgetService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.FormatUtil;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -156,8 +155,7 @@ public class WidgetController {
 	 */
 	@PostMapping(value = "ajax-update-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdateWidget(HttpServletRequest request, Widget widget) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxUpdateWidget(HttpServletRequest request, Widget widget) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -168,7 +166,7 @@ public class WidgetController {
 			if(widget.getWidget_order() == null || "".equals(widget.getWidget_order())) {
 				result = "widget.invalid";
 				jSONObject.put("result", result);
-				return jSONObject.toString();
+				return jSONObject;
 			}
 			
 			List<Widget> widgetList = new ArrayList<Widget>();
@@ -190,7 +188,7 @@ public class WidgetController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -200,8 +198,7 @@ public class WidgetController {
 	 */
 	@GetMapping(value = "ajax-access-log-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxAccessLogWidget(HttpServletRequest request) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxAccessLogWidget(HttpServletRequest request) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -228,7 +225,7 @@ public class WidgetController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -238,8 +235,7 @@ public class WidgetController {
 	 */
 	@GetMapping(value = "ajax-schedule-log-list-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxScheduleLogListWidget(HttpServletRequest request) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxScheduleLogListWidget(HttpServletRequest request) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -266,7 +262,7 @@ public class WidgetController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**

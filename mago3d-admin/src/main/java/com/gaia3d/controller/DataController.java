@@ -15,7 +15,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.digester.annotations.rules.BeanPropertySetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +22,6 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,20 +31,19 @@ import org.springframework.web.servlet.ModelAndView;
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CommonCode;
-import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.DataGroup;
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserSession;
-import com.gaia3d.service.FileService;
 import com.gaia3d.service.DataGroupService;
 import com.gaia3d.service.DataService;
+import com.gaia3d.service.FileService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.FileUtil;
 import com.gaia3d.util.StringUtil;
 import com.gaia3d.validator.DataValidator;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -134,8 +131,7 @@ public class DataController {
 	 */
 	@RequestMapping(value = "ajax-list-data-group-data.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxListDataGroupData(HttpServletRequest request, @RequestParam("data_group_id") Long data_group_id, @RequestParam(defaultValue="1") String pageNo) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxListDataGroupData(HttpServletRequest request, @RequestParam("data_group_id") Long data_group_id, @RequestParam(defaultValue="1") String pageNo) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		Pagination pagination = null;
@@ -161,9 +157,9 @@ public class DataController {
 		jSONObject.put("pagination", pagination);
 		jSONObject.put("dataList", dataList);
 		
-		log.info(">>>>>>>>>>>>>>>>>> datalist = {}", gson.toJson(jSONObject));
+		log.info(">>>>>>>>>>>>>>>>>> datalist = {}", jSONObject);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -173,8 +169,7 @@ public class DataController {
 	 */
 	@RequestMapping(value = "ajax-list-except-data-group-data-by-group-id.do")
 	@ResponseBody
-	public String ajaxListExceptDataGroupDataByGroupId(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxListExceptDataGroupDataByGroupId(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		Pagination pagination = null;
@@ -195,7 +190,7 @@ public class DataController {
 		jSONObject.put("result", result);
 		jSONObject.put("pagination", pagination);
 		jSONObject.put("dataList", dataList);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -205,8 +200,7 @@ public class DataController {
 	 */
 	@RequestMapping(value = "ajax-list-data-group-data-by-group-id.do")
 	@ResponseBody
-	public String ajaxListDataGroupDataByGroupId(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxListDataGroupDataByGroupId(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		Pagination pagination = null;
@@ -228,7 +222,7 @@ public class DataController {
 		jSONObject.put("result", result);
 		jSONObject.put("pagination", pagination);
 		jSONObject.put("dataList", dataList);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -260,8 +254,7 @@ public class DataController {
 	 */
 	@PostMapping(value = "ajax-insert-data-info.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxInsertDataInfo(HttpServletRequest request, DataInfo dataInfo) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxInsertDataInfo(HttpServletRequest request, DataInfo dataInfo) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -270,14 +263,14 @@ public class DataController {
 			if(errorcode != null) {
 				result = errorcode;
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			int count = dataService.getDuplicationKeyCount(dataInfo.getData_key());
 			if(count > 0) {
 				result = "data.key.duplication";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 
 			dataInfo.setLocation("POINT(" + dataInfo.getLongitude() + " " + dataInfo.getLatitude() + ")");
@@ -290,7 +283,7 @@ public class DataController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -303,12 +296,11 @@ public class DataController {
 	 */
 	@PostMapping(value = "ajax-insert-data-group-data.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxInsertDataGroupData(HttpServletRequest request,
+	public Map<String, Object> ajaxInsertDataGroupData(HttpServletRequest request,
 			@RequestParam("data_group_id") Long data_group_id,
 			@RequestParam("data_all_id") String[] data_all_id) {
 		
 		log.info("@@@ data_group_id = {}, data_all_id = {}", data_group_id, data_all_id);
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		List<DataInfo> exceptDataList = new ArrayList<DataInfo>();
 		List<DataInfo> dataList = new ArrayList<DataInfo>();
@@ -318,7 +310,7 @@ public class DataController {
 					data_all_id == null || data_all_id.length < 1) {
 				result = "input.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			DataInfo dataInfo = new DataInfo();
@@ -337,7 +329,7 @@ public class DataController {
 		jSONObject.put("result", result	);
 		jSONObject.put("exceptDataList", exceptDataList);
 		jSONObject.put("dataList", dataList);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -366,9 +358,8 @@ public class DataController {
 	 */
 	@PostMapping(value = "ajax-data-key-duplication-check.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxDataKeyDuplicationCheck(HttpServletRequest request, DataInfo dataInfo) {
+	public Map<String, Object> ajaxDataKeyDuplicationCheck(HttpServletRequest request, DataInfo dataInfo) {
 		
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		String duplication_value = "";
@@ -376,7 +367,7 @@ public class DataController {
 			if(dataInfo.getData_key() == null || "".equals(dataInfo.getData_key())) {
 				result = "data.key.empty";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			int count = dataService.getDuplicationKeyCount(dataInfo.getData_key());
@@ -390,7 +381,7 @@ public class DataController {
 		jSONObject.put("result", result);
 		jSONObject.put("duplication_value", duplication_value);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -451,8 +442,7 @@ public class DataController {
 	 */
 	@PostMapping(value = "ajax-update-data-info.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdateDataInfo(HttpServletRequest request, DataInfo dataInfo) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxUpdateDataInfo(HttpServletRequest request, DataInfo dataInfo) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -462,7 +452,7 @@ public class DataController {
 			if(errorcode != null) {
 				result = errorcode;
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 						
 			dataService.updateData(dataInfo);
@@ -473,7 +463,7 @@ public class DataController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -484,20 +474,19 @@ public class DataController {
 	 */
 	@PostMapping(value = "ajax-update-data-status.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdateDataStatus(	HttpServletRequest request, 
+	public Map<String, Object> ajaxUpdateDataStatus(	HttpServletRequest request, 
 										@RequestParam("check_ids") String check_ids, 
 										@RequestParam("business_type") String business_type, 
 										@RequestParam("status_value") String status_value) {
 		
 		log.info("@@@@@@@ check_ids = {}, business_type = {}, status_value = {}", check_ids, business_type, status_value);
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		String result_message = "";
 		try {
 			if(check_ids.length() <= 0) {
 				jSONObject.put("result", "check.value.required");
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			List<String> dataList = dataService.updateDataStatus(business_type, status_value, check_ids);
 			if(!dataList.isEmpty()) {
@@ -524,7 +513,7 @@ public class DataController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -551,16 +540,15 @@ public class DataController {
 	 */
 	@PostMapping(value = "ajax-delete-datas.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxDeleteDatas(HttpServletRequest request, @RequestParam("check_ids") String check_ids) {
+	public Map<String, Object> ajaxDeleteDatas(HttpServletRequest request, @RequestParam("check_ids") String check_ids) {
 		
 		log.info("@@@@@@@ check_ids = {}", check_ids);
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			if(check_ids.length() <= 0) {
 				jSONObject.put("result", "check.value.required");
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			dataService.deleteDataList(check_ids);
@@ -570,7 +558,7 @@ public class DataController {
 		}
 		
 		jSONObject.put("result", result	);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -583,12 +571,11 @@ public class DataController {
 	 */
 	@PostMapping(value = "ajax-delete-data-group-data.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxDeleteDataGroupData(HttpServletRequest request,
+	public Map<String, Object> ajaxDeleteDataGroupData(HttpServletRequest request,
 			@RequestParam("data_group_id") Long data_group_id,
 			@RequestParam("data_select_id") String[] data_select_id) {
 		
 		log.info("@@@ data_group_id = {}, data_select_id = {}", data_group_id, data_select_id);
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		List<DataInfo> exceptDataList = new ArrayList<DataInfo>();
 		List<DataInfo> dataList = new ArrayList<DataInfo>();
@@ -598,7 +585,7 @@ public class DataController {
 					data_select_id == null || data_select_id.length < 1) {
 				result = "input.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			DataInfo dataInfo = new DataInfo();
@@ -620,7 +607,7 @@ public class DataController {
 		jSONObject.put("result", result	);
 		jSONObject.put("exceptDataList", exceptDataList);
 		jSONObject.put("dataList", dataList);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -645,9 +632,8 @@ public class DataController {
 	 */
 	@PostMapping(value = "ajax-insert-excel-data.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxInsertExcelData(MultipartHttpServletRequest request) {
+	public Map<String, Object> ajaxInsertExcelData(MultipartHttpServletRequest request) {
 		
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -655,7 +641,7 @@ public class DataController {
 			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.EXCEL_DATA_UPLOAD, propertiesConfig.getExcelDataUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				jSONObject.put("result", fileInfo.getError_code());
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -681,7 +667,7 @@ public class DataController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -856,11 +842,10 @@ public class DataController {
 	 */
 	@RequestMapping(value = "ajax-data-group-info.do")
 	@ResponseBody
-	public String ajaxDataGroupInfo(HttpServletRequest request, @RequestParam("data_group_id") Long data_group_id) {
+	public Map<String, Object> ajaxDataGroupInfo(HttpServletRequest request, @RequestParam("data_group_id") Long data_group_id) {
 		
 		log.info("@@@@@@@ data_group_id = {}", data_group_id);
 		
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		DataGroup dataGroup = null;
@@ -874,7 +859,7 @@ public class DataController {
 		jSONObject.put("result", result);
 		jSONObject.put("dataGroup", dataGroup);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**

@@ -23,7 +23,6 @@ import com.gaia3d.domain.UserGroup;
 import com.gaia3d.domain.UserGroupMenu;
 import com.gaia3d.service.UserGroupService;
 import com.gaia3d.util.StringUtil;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -179,8 +178,6 @@ public class UserGroupController {
 	@PostMapping(value = "ajax-insert-user-group.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String ajaxInsertUserGroup(HttpServletRequest request, UserGroup userGroup) {
-		Gson gson = new Gson();
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		String userGroupTree = null;
 		List<UserGroup> userGroupList = new ArrayList<UserGroup>();
@@ -294,8 +291,7 @@ public class UserGroupController {
 	 */
 	@PostMapping(value = "ajax-update-move-user-group.do")
 	@ResponseBody
-	public String ajaxUpdateMoveUserGroup(HttpServletRequest request, UserGroup userGroup) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxUpdateMoveUserGroup(HttpServletRequest request, UserGroup userGroup) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		String userGroupTree = null;		
@@ -313,7 +309,7 @@ public class UserGroupController {
 				jSONObject.put("result", result);
 				jSONObject.put("userGroupTree", getUserGroupTree(userGroupList));
 				
-				return jSONObject.toString();
+				return jSONObject;
 			}
 			
 			userGroupService.updateMoveUserGroup(userGroup);
@@ -328,7 +324,7 @@ public class UserGroupController {
 		jSONObject.put("result", result);
 		jSONObject.put("userGroupTree", userGroupTree);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -339,8 +335,7 @@ public class UserGroupController {
 	 */
 	@PostMapping(value = "ajax-delete-user-group.do")
 	@ResponseBody
-	public String ajaxDeleteUserGroup(HttpServletRequest request, UserGroup userGroup) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxDeleteUserGroup(HttpServletRequest request, UserGroup userGroup) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		String userGroupTree = null;
@@ -355,7 +350,7 @@ public class UserGroupController {
 				jSONObject.put("result", result);
 				jSONObject.put("userGroupTree", getUserGroupTree(userGroupList));
 				
-				return jSONObject.toString();
+				return jSONObject;
 			}
 			
 			userGroupService.deleteUserGroup(userGroup.getUser_group_id());
@@ -370,7 +365,7 @@ public class UserGroupController {
 		jSONObject.put("result", result);
 		jSONObject.put("userGroupTree", userGroupTree);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**

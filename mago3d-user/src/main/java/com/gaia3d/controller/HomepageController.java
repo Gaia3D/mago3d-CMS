@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataGroup;
@@ -29,7 +30,6 @@ import com.gaia3d.domain.UserSession;
 import com.gaia3d.service.IssueService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.StringUtil;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -79,7 +79,7 @@ public class HomepageController {
 	 */
 	@GetMapping(value = "demo.do")
 	public String demo(HttpServletRequest request, HttpServletResponse response, 
-			@RequestParam(defaultValue="1") String pageNo, @RequestParam(defaultValue="cesium") String viewLibrary, String device, Model model) {
+			@RequestParam(defaultValue="1") String pageNo, @RequestParam(defaultValue="cesium") String viewLibrary, String device, Model model) throws Exception {
 		
 		log.info("@@ viewLibrary = {}", viewLibrary);
 		String viewName = "cesium";
@@ -117,7 +117,6 @@ public class HomepageController {
 			issueList = issueService.getListIssueByUserId(issue);
 		}
 		
-		Gson gson = new Gson();
 		List<DataGroup> projectDataGroupList = CacheManager.getProjectDataGroupList();
 		Map<String, Map<String, DataInfo>> dataGroupMap = CacheManager.getDataGroupMap();
 		Policy policy = CacheManager.getPolicy();
@@ -141,19 +140,21 @@ public class HomepageController {
 			}
 		}
 		
+		ObjectMapper mapper = new ObjectMapper();
+		
 		model.addAttribute("issue", issue);
 		model.addAttribute("now_latitude", policy.getGeo_init_latitude());
 		model.addAttribute("now_longitude", policy.getGeo_init_longitude());
 		model.addAttribute(pagination);
 		model.addAttribute("issueList", issueList);
 		model.addAttribute("projectDataGroupList", projectDataGroupList);
-		model.addAttribute("dataGroupMap", gson.toJson(dataGroupMap));
-		model.addAttribute("policyJson", gson.toJson(policy));
+		model.addAttribute("dataGroupMap", mapper.writeValueAsString(dataGroupMap));
+		model.addAttribute("policyJson", mapper.writeValueAsString(policy));
 		model.addAttribute("issuePriorityList", issuePriorityList);
 		model.addAttribute("issueTypeList", issueTypeList);
 		
-		log.info("@@@@@@ policy = {}", gson.toJson(policy));
-		log.info("@@@@@@ dataGroupMap = {}", gson.toJson(dataGroupMap));
+		log.info("@@@@@@ policy = {}", mapper.writeValueAsString(policy));
+		log.info("@@@@@@ dataGroupMap = {}", mapper.writeValueAsString(dataGroupMap));
 		
 //		response.setHeader("Pragma", "No-cache");
 //		response.setHeader("Cache-Control", "No-cache");
@@ -179,9 +180,8 @@ public class HomepageController {
 	 */
 	@GetMapping(value = "ajax-list-issue.do", produces="application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxListIssue(HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo) {
+	public Map<String, Object> ajaxListIssue(HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo) {
 		
-		Gson gson = new Gson();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -221,7 +221,7 @@ public class HomepageController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -292,8 +292,7 @@ public class HomepageController {
 	 */
 	@GetMapping(value = "ajax-change-language.do")
 	@ResponseBody
-	public String ajaxChangeLanguage(HttpServletRequest request, @RequestParam("lang") String lang, Model model) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxChangeLanguage(HttpServletRequest request, @RequestParam("lang") String lang, Model model) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -308,7 +307,7 @@ public class HomepageController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**

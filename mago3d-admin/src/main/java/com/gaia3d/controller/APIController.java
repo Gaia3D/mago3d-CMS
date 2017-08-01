@@ -23,7 +23,6 @@ import com.gaia3d.security.Crypt;
 import com.gaia3d.service.APIService;
 import com.gaia3d.service.RoleService;
 import com.gaia3d.util.StringUtil;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -92,8 +91,7 @@ public class APIController {
 	 */
 	@PostMapping(value = "ajax-update-external-service.do")
 	@ResponseBody
-	public String ajaxUpdateExternalService(HttpServletRequest request, ExternalService externalService) {
-		Gson gson = new Gson();
+	public Map<String, Object> ajaxUpdateExternalService(HttpServletRequest request, ExternalService externalService) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
@@ -102,7 +100,7 @@ public class APIController {
 			if(errorcode != null) {
 				result = errorcode;
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 						
 			externalService.setApi_key(Crypt.encrypt(externalService.getApi_key()));
@@ -116,7 +114,7 @@ public class APIController {
 	
 		jSONObject.put("result", result);
 		
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	private String getSearchParameters(APILog aPILog) {

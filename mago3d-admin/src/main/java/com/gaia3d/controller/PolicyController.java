@@ -19,7 +19,6 @@ import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.security.Crypt;
 import com.gaia3d.service.PolicyService;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -84,8 +83,7 @@ public class PolicyController {
 	 */
 	@PostMapping(value = "ajax-update-policy-user.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdatePolicyUser(HttpServletRequest request, Policy policy) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdatePolicyUser(HttpServletRequest request, Policy policy) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -103,7 +101,7 @@ public class PolicyController {
 					|| policy.getUser_device_modify_yn() == null || "".equals(policy.getUser_device_modify_yn())) {
 				result = "policy.user.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			policyService.updatePolicyUser(policy);
@@ -115,7 +113,7 @@ public class PolicyController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 
 	/**
@@ -126,8 +124,7 @@ public class PolicyController {
 	 */
 	@PostMapping(value = "ajax-update-policy-password.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdatePolicyPassword(HttpServletRequest request, Policy policy) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdatePolicyPassword(HttpServletRequest request, Policy policy) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -144,14 +141,14 @@ public class PolicyController {
 					) {
 				result = "policy.password.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			if( policy.getPassword_eng_upper_count().intValue() == 0 && policy.getPassword_eng_lower_count().intValue() == 0 
 					&& policy.getPassword_number_count().intValue() == 0 && policy.getPassword_special_char_count().intValue() == 0 ) {
 				result = "policy.password.role.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			policyService.updatePolicyPassword(policy);
@@ -163,7 +160,7 @@ public class PolicyController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 
 	/**
@@ -174,8 +171,7 @@ public class PolicyController {
 	 */
 	@PostMapping(value = "ajax-update-policy-geo.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdatePolicyGeo(HttpServletRequest request, Policy policy) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdatePolicyGeo(HttpServletRequest request, Policy policy) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -183,7 +179,7 @@ public class PolicyController {
 			if(policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0) {
 				result = "policy.geo.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			policyService.updatePolicyGeo(policy);
@@ -196,7 +192,7 @@ public class PolicyController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -207,8 +203,7 @@ public class PolicyController {
 	 */
 	@PostMapping(value = "ajax-update-policy-geoserver.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdatePolicyGeoServer(HttpServletRequest request, Policy policy) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdatePolicyGeoServer(HttpServletRequest request, Policy policy) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -216,7 +211,7 @@ public class PolicyController {
 			if(policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0) {
 				result = "policy.geo.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			policyService.updatePolicyGeoServer(policy);
@@ -229,7 +224,7 @@ public class PolicyController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -240,8 +235,7 @@ public class PolicyController {
 	 */
 	@PostMapping(value = "ajax-update-policy-geocallback.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdatePolicyGeoCallBack(HttpServletRequest request, Policy policy) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdatePolicyGeoCallBack(HttpServletRequest request, Policy policy) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -249,7 +243,7 @@ public class PolicyController {
 			if(policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0) {
 				result = "policy.geo.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			policyService.updatePolicyGeoCallBack(policy);
@@ -262,7 +256,7 @@ public class PolicyController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -273,8 +267,7 @@ public class PolicyController {
 	 */
 	@PostMapping(value = "ajax-update-policy-notice.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdatePolicyNotice(HttpServletRequest request, Policy policy) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdatePolicyNotice(HttpServletRequest request, Policy policy) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -292,7 +285,7 @@ public class PolicyController {
 					) {
 				result = "policy.notice.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			policyService.updatePolicyNotice(policy);
@@ -304,7 +297,7 @@ public class PolicyController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -315,8 +308,7 @@ public class PolicyController {
 	 */
 	@PostMapping(value = "ajax-update-policy-security.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdatePolicySecurity(HttpServletRequest request, Policy policy) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdatePolicySecurity(HttpServletRequest request, Policy policy) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -332,7 +324,7 @@ public class PolicyController {
 					) {
 				result = "policy.security.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			policyService.updatePolicySecurity(policy);
@@ -344,7 +336,7 @@ public class PolicyController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -355,8 +347,7 @@ public class PolicyController {
 	 */
 	@PostMapping(value = "ajax-update-policy-content.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdatePolicyContent(HttpServletRequest request, Policy policy) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdatePolicyContent(HttpServletRequest request, Policy policy) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -367,7 +358,7 @@ public class PolicyController {
 					|| ( policy.getContent_monitoring_interval() == null || policy.getContent_monitoring_interval().intValue() < 0 )) {
 				result = "policy.content.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			policyService.updatePolicyContent(policy);
@@ -395,7 +386,7 @@ public class PolicyController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -406,8 +397,7 @@ public class PolicyController {
 	 */
 	@PostMapping(value = "ajax-update-policy-site.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdatePolicySite(HttpServletRequest request, Policy policy) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdatePolicySite(HttpServletRequest request, Policy policy) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -438,7 +428,7 @@ public class PolicyController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -449,8 +439,7 @@ public class PolicyController {
 	 */
 	@PostMapping(value = "ajax-update-policy-os.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdatePolicyOs(HttpServletRequest request, Policy policy) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdatePolicyOs(HttpServletRequest request, Policy policy) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		String timeType = "";
@@ -499,7 +488,7 @@ public class PolicyController {
 		
 		log.info("@@ result = {} ", result);
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -510,8 +499,7 @@ public class PolicyController {
 	 */
 	@PostMapping(value = "ajax-update-policy-backoffice.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdatePolicyBackoffice(HttpServletRequest request, Policy policy) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdatePolicyBackoffice(HttpServletRequest request, Policy policy) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -519,7 +507,7 @@ public class PolicyController {
 			if( ( policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0 )) {
 				result = "policy.backoffice.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			policy.setBackoffice_email_password(Crypt.encrypt(policy.getBackoffice_email_password()));
@@ -535,7 +523,7 @@ public class PolicyController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
 	
 	/**
@@ -546,8 +534,7 @@ public class PolicyController {
 	 */
 	@PostMapping(value = "ajax-update-policy-solution.do", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String ajaxUpdatePolicySolution(HttpServletRequest request, Policy policy) {
-		Gson gson = new Gson();
+	public Map<String, String> ajaxUpdatePolicySolution(HttpServletRequest request, Policy policy) {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		try {
@@ -558,7 +545,7 @@ public class PolicyController {
 					|| policy.getSolution_manager() == null || "".equals(policy.getSolution_manager())) {
 				result = "policy.solution.invalid";
 				jSONObject.put("result", result);
-				return gson.toJson(jSONObject);
+				return jSONObject;
 			}
 			
 			policy.setSolution_company_phone(Crypt.encrypt(policy.getSolution_company_phone()));
@@ -574,7 +561,7 @@ public class PolicyController {
 		}
 	
 		jSONObject.put("result", result);
-		return gson.toJson(jSONObject);
+		return jSONObject;
 	}
      
 //	@RequestMapping(value = "change-logo.do", method = RequestMethod.POST)

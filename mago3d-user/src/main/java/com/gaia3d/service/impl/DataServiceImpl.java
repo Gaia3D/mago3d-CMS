@@ -4,16 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gaia3d.domain.CacheManager;
-import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.persistence.DataMapper;
 import com.gaia3d.service.DataService;
-import com.gaia3d.util.StringUtil;
 
 /**
  * Data

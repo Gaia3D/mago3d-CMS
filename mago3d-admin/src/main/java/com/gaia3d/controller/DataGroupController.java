@@ -21,7 +21,6 @@ import com.gaia3d.domain.DataGroup;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.service.DataGroupService;
 import com.gaia3d.util.JSONUtil;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 

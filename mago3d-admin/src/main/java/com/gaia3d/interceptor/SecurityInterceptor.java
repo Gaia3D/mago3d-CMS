@@ -9,13 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.UserSession;
 import com.gaia3d.helper.URLHelper;
 import com.gaia3d.util.WebUtil;
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -64,10 +64,10 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 	    		return false;
 			} else {
 				log.info("## uri = {}, ajax_uri >= 0 ", uri);
-				Gson gson = new Gson();
+				ObjectMapper mapper = new ObjectMapper();
 				Map<String, String> jSONObject = new HashMap<String, String>();
     			jSONObject.put("result", "user.session.empty");
-    			response.getWriter().write(gson.toJson(jSONObject));
+    			response.getWriter().write(mapper.writeValueAsString(jSONObject));
     			
 //    			사용자 정보가 없을 경우는 : 404 (Not Found)
 //    			요청 정보가 정확하지 않을 경우 : 400 (Bad Request)

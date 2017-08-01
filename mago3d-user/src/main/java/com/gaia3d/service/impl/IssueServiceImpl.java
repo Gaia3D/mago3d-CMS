@@ -112,7 +112,7 @@ public class IssueServiceImpl implements IssueService {
 			
 		// TODO 리팩토링이 필요함
 		String assigneValue = issue.getAssignee();
-		if(assigneValue != null || !"".equals(assigneValue)) {
+		if(assigneValue != null && !"".equals(assigneValue)) {
 			String[] assigneArray = assigneValue.split(",");
 			for(String assigne : assigneArray) {
 				IssuePeople issuePeople = new IssuePeople();
@@ -124,7 +124,7 @@ public class IssueServiceImpl implements IssueService {
 			}
 		}
 		String reporterValue = issue.getReporter();
-		if(reporterValue != null || !"".equals(reporterValue)) {
+		if(reporterValue != null && !"".equals(reporterValue)) {
 			String[] reporterArray = reporterValue.split(",");
 			for(String reporter : reporterArray) {
 				IssuePeople issuePeople = new IssuePeople();
