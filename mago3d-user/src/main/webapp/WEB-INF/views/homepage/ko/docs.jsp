@@ -54,7 +54,22 @@
 		</div>
 		<div class="docs-main">
 			<div class="title">Documentation</div>
-			<p>MAGO3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. MAGO3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 이에 따라, MAGO3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.</p>
+			<p>mago3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. 
+				mago3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 
+				이에 따라, mago3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.</p>
+			<div class="sub_title">mago3D 아키텍처</div>
+			<div>jt, collada, ifc, 3ds 파일 등을 웹에서 동작하게 하는 converter, 브라우저에서 3D Rendering을 담당하는 js, 이슈 관리를 위한 was 시스템으로 구성 되어 있다. </div>
+			<div>
+				<div>F4D Converter</div>
+				<div>mago3DJS</div>
+				<div>Issue Managerment System</div>
+			</div>
+			<div class="sub_title">mago3D 활용 분야</div>
+			<div>
+				<div>3D Content Management System - F4D Converter, mago3DJS, Issue Managerment System Full package 솔루션</div>
+				<div>3D Rendering View - 사내 업무 시스템 또는 이슈 관리 시스템이 존재하는 경우 F4D Converter, mago3DJS 를 이용하여 3D Rendering 기능을 제공</div>
+			</div>
+			
 			<div class="sub_title">API Reference Documentation</div>
 			<ul class="docs-list">
 				<li><a href="/homepage/api.do">mago3D.JS API</a>는 JavaScript에 관한 API를 설명한 문서입니다.</li>
