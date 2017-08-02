@@ -26,7 +26,7 @@ ul, li {margin:0; padding:0; }
 	position: absolute;
 	top: 2px;
 	left: 424px;
-	min-width: 320px;
+	min-width: 380px;
 	z-index: 999;
 }
 .trigger > button {

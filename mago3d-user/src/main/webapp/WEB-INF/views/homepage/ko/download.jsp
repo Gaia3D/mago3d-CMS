@@ -43,13 +43,7 @@
 					</ul>
 				</li>
 				<li class="on">Download<span></span></li>
-				<li><a href="/homepage/tutorials.do">Tutorials</a></li>
-				<li class="mm" onclick='selectMenu();'>Docs
-					<ul>
-						<li><a href="/homepage/api.do" style="color: white">API</a></li>
-						<li><a href="#" onclick='alert("준비 중 입니다."); return false;' style="color: white">F4D Spec</a></li>						
-					</ul>
-				</li>
+				<li><a href="/homepage/docs.do">Documentation</a></li>
 			</ul>
 			<ul class="language">
 				<li id="languageKO" class="on">KO</li>

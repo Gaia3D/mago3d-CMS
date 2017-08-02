@@ -76,64 +76,43 @@
 			</div>
 			<article class="readme">
 				<img src="https://img.shields.io/badge/language-English-orange.svg" /> <img src="https://img.shields.io/badge/language-Korean-blue.svg" />
-				<p>
-MAGO3D is a next-generation 3D platform that integrates and visualizes AEC (Architecture, Engineering, Construction) and traditional 3D spatial information (3D GIS). Unlike existing solutions, MAGO3D seamlessly integrates AEC and 3D GIS in a web browser without distinction between indoor and outdoor. As a result, MAGO3D users can quickly view and collaborate on large-capacity building information modeling (BIM), JT (Jupiter Tessellation) and 3D GIS files without installing any additional programs.<p>
-				<h4>Mssion</h4>
-				<p>Mago3DJS Visualization using open source JavaScript library for three-dimensional multi-block visualization Data integration task | You can manage issues.</p>
-				<h4>Features</h4>
-				<ul class="readme_list">
-					<li>Issue Status You can view new issues, ongoing issues, and completed issues.</li>
-					<li>It is easy to view the status by user status graph.</li>
-					<li>DB Connection Pool status or DV session status can be viewed as a table.</li>
-				</ul>
 				<h4>Development Environment</h4>
-				<mark>Spring, gradle, PostgreSQL, PostGIS, mybatis, Docker</mark>
+				<mark>Spring, gradle, PostgreSQL, PostGIS, mybatis, Docker, SourceTree</mark>
 				<h4>Getting Started</h4>
 				<div class="list_wrap">
 					<div class="sub_title">Install</div>
 					<ul class="readme_list">
-						<li><b style="color: #1E90FF;">Postgres</b>
+												<li><b style="color: #1E90FF;">PostgreSQL 9.6.3-1</b>
 							<ul class="sub_list">
-								<li>Setting PostgreSQL Version (PostgreSQL v9.6.3-1)</li>
-								<li>Installation path C:/PostgreSQL</li>
-								<li>Setting Password: postgres Retype Password: postgres</li>
+								<li>Installation path C: / PostgreSQL</li>
 							</ul>
 						</li>
-						<li><b style="color: #1E90FF;">PostGIS</b>
+						<li><b style="color: #1E90FF;">PostGIS 2.3.2</b>
 							<ul class="sub_list">
 								<li>After installing PostgreSQL, run Stack Builder to install</li>
-								<li>PostGIS version setting (PostGIS v2.3.2)</li>
 								<li>PostgreSQL Extensions PostGIS Required</li>
 							</ul>
 						</li>
-						<li><b style="color: #1E90FF;">gradle</b>
+						<li><b style="color: #1E90FF;">Gradle 3.5</b>
 							<ul class="sub_list">
-								<li>Installing the gradle version (gradle v3.5)</li>
 								<li>Installation path C:/gradle</li>
-								<li>Adding System Variables-path -> C:/gradle/gradle-3.5 add</li>
+								<li>Add system variable -path -> Add C: /gradle/gradle-3.5</li>
 						
 							</ul>
 						</li>
-						<li><b style="color: #1E90FF;">lombok</b>
+						<li><b style="color: #1E90FF;">Eclipse (neon Version or higher)</b>
 							<ul class="sub_list">
-								<li>After installation, move the download folder and run</li>
-								<li>Locate the eclipse installation location [Specify location ..] and select the file 'eclipse.exe'.</li>
-								<li>Click install / update.</li>
-							</ul>
-						</li>
-						<li><b style="color: #1E90FF;">Buildship Gradle Integration</b>
-							<ul class="sub_list">
-								<li>Go to eclipse Help -> Eclipse Marketplace and install Buildship Gradle Integration 2.0.</li>
+								<li>Set lombok.</li>
+								<li>Go to the Eclipse Marketplace and install Buildship Gradle Integration 2.0.</li>
 							</ul>
 						</li>
 					</ul>
-					<div class="sub_title">Setting</div>
+				<h4>Setting</h4>
 					<ul class="readme_list">
 						<li>From eclipse, load the mago3D Project into git clone.</li>
 						<li>Click File -> Import -> Gradle -> Existing Gradle Project to accept mago3D.</li>
 						<li>Create a database using PostgreSQL before running mago3D.</li>
 						<li>PostgreSQL -> new DataBase</li>
-						<li>Run the query on the generated database. The query is in mago3D-core -> src -> doc -> database.</li>
 					</ul>
 					<pre>
 						<code>
@@ -145,8 +124,8 @@ MAGO3D is a next-generation 3D platform that integrates and visualizes AEC (Arch
 	Connection_Limit: -1
 						</code>
 					</pre>
-					<div class="sub_title">Execution</div>
 					<ul class="readme_list">
+						<li style="margin-top: 16px;">Run the query on the generated database. The query is in mago3D-core -> src -> doc -> database.</li>
 						<li>To run mago3D, run mago3d - @@@ -> src / main / java -> com.gaia3d -> Mago3dAdminApplication.java as Spring Boot app.</li>
 					</ul>
 				</div>
@@ -605,6 +584,7 @@ function changeInsertIssueModeAPI(flag) {
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeObjectInfoViewModeAPI">changeObjectInfoViewModeAPI()</span></h2>
 				<p>Whether object information display is enabled</p>
+				<p>Register the function name in the geo_callback_selectedobject column in the policy table and call the registered function name to Callback.js.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -621,7 +601,15 @@ function changeInsertIssueModeAPI(flag) {
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
-				<b>html</b>
+				<b>Callback.js</b>
+				<pre>
+<code>
+function selectedObjectCallback(functionName, projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll) {
+    window[functionName](projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll);
+}
+</code>
+				</pre>
+				<br><b>html</b>
 				<pre>
 <code>
 $("#objectInfoEnable").click(function() {

@@ -24,30 +24,30 @@ background-repeat: repeat-x;
 background-color: #323140;
 background-image: url(/images/ko/homepage/header.png);
 }
-/* header.about { */
-/* background-position: 0 0; */
-/* } */
-/* header.down { */
-/* background-position: 0 -200px; */
-/* } */
-/* header.tuto { */
-/* background-position: 0 -400px; */
-/* } */
-/* header > div { */
-/* width: 1200px; */
-/* margin: 0 auto; */
-/* padding-top: 120px; */
-/* background: url(/images/ko/homepage/logo_header.png) no-repeat center 40px; */
-/* } */
-/* header > div p { */
-/* color: #fff; */
-/* font-size: 23px; */
-/* text-align: center; */
-/* line-height: 1.8em; */
-/* font-weight: 100; */
-/* } */
-/* header > div p:last-child { */
-/* } */
+header.about {
+background-position: 0 0;
+}
+header.down {
+background-position: 0 -200px;
+}
+header.tuto {
+background-position: 0 -400px;
+}
+header > div {
+width: 1200px;
+margin: 0 auto;
+padding-top: 120px;
+background: url(/images/ko/homepage/logo_header.png) no-repeat center 40px;
+}
+header > div p {
+color: #fff;
+font-size: 23px;
+text-align: center;
+line-height: 1.8em;
+font-weight: 100;
+}
+header > div p:last-child {
+}
 /* NAV */
 nav {
 margin-bottom: 50px;
@@ -1178,4 +1178,67 @@ display: block;
 .sub_list {
 margin-left: 30px;
 list-style-type: circle;
+}
+
+/* Docs */
+.docs-menu {
+display: block;
+width: 200px;
+position: absolute;
+}
+.docs-menu li {
+padding: .1em .5em;
+}
+.docs-menu a{
+display: block;
+padding-left: 10px;
+padding-right: 10px;
+margin-left: -10px;
+margin-right: -10px;
+padding-top: 5px;
+padding-bottom: 5px;
+line-height: 1;
+font-size: 1.3em;
+}
+.docs-menu .on {
+background-color: #ccc;
+border-radius: 8px;
+}
+.docs-menu .on a{
+color: white;
+}
+.docs-menu li:hover {
+background-color: #ccc;
+border-radius: 8px;
+}
+.docs-menu a:hover {
+color: white;
+}
+.docs-main {
+margin-left: 300px;
+/* font-size: 22px; */
+}
+.docs-main .title {
+color: #242424;
+font-size: 2.6em;
+margin-bottom: 50px;
+}
+.docs-main .sub_title {
+color: #152740;
+font-size: 1.4em;
+font-weight: 700;
+margin-top: 20px;
+margin-bottom: 20px;
+}
+.docs-main p {
+font-size: 18px;
+}
+.docs-list {
+list-style: circle;
+margin-left: 50px;
+margin-top: 20px;
+}
+.docs-list li a{
+display: inline;
+color: tomato;
 }
