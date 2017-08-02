@@ -359,6 +359,7 @@
 <script type="text/javascript" src="/js/${lang}/mago3d/Sphere.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/ObjectMarker.js?currentTime=${currentTime}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d/Pin.js?currentTime=${currentTime}"></script>
+<script type="text/javascript" src="/js/${lang}/mago3d/Texture.js?currentTime=${currentTime}"></script>
 <script>
 	var agent = navigator.userAgent.toLowerCase();
 	if(agent.indexOf('chrome') < 0) { 
