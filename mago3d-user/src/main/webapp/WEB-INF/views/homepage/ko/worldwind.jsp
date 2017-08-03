@@ -467,7 +467,7 @@
 		/* if ($("#due_day").val() != null && $("#due_time").val() != null) {
 			$("#due_date").val($("#due_day").val() + $("#due_time").val());
 			return false;
-		}
+		} */
 	}
 	
 	var isInsertIssue = true;
