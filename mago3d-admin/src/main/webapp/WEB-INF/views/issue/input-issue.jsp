@@ -53,7 +53,7 @@
 								<td class="col-input">
 									<form:select path="issue_type" cssClass="select">
 <c:forEach var="commonCode" items="${issueTypeList}">
-										<option value="${commonCode.code_value}">${commonCode.code_value}</option>
+										<option value="${commonCode.code_key}">${commonCode.code_value}</option>
 </c:forEach>
 									</form:select>
 								</td>
@@ -88,7 +88,7 @@
 								<td class="col-input">
 									<form:select path="priority" cssClass="select">
 <c:forEach var="commonCode" items="${issuePriorityList}">
-										<option value="${commonCode.code_value}">${commonCode.code_value}</option>
+										<option value="${commonCode.code_key}">${commonCode.code_value}</option>
 </c:forEach>
 									</form:select>
 								</td>

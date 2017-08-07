@@ -17,6 +17,7 @@ create table issue (
 	status						varchar(30),
 	
 	data_key 					varchar(128) 		NOT NULL,
+	object_key 					varchar(256),
 	location 					geography(Point,4326),
 	latitude 					varchar(30),
 	longitude 					varchar(30),
@@ -46,6 +47,7 @@ comment on column issue.due_date is '예정일. 마감일';
 comment on column issue.issue_type is '이슈 유형. common_code 동적 생성';
 comment on column issue.status is '상태. common_code 동적 생성';
 comment on column issue.data_key is 'Data key';
+comment on column issue.object_key is 'Object key';
 comment on column issue.location is 'location(위도, 경도)';
 comment on column issue.latitude is '위도';
 comment on column issue.longitude is '경도';

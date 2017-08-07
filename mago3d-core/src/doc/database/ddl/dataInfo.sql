@@ -56,7 +56,7 @@ create table data_info(
 	pitch						varchar(10),
 	roll						varchar(10),
 	status						char(1)								default '0',
-	data_insert_type			varchar(30)							default 'SELF',
+	data_insert_type			varchar(30)							default 'DATA_REGISTER_SELF',
 	update_date					timestamp without time zone,
 	insert_date					timestamp without time zone			default now(),
 	constraint data_info_pk 	primary key(data_id)

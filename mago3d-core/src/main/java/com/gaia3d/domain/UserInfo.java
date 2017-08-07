@@ -1,5 +1,7 @@
 package com.gaia3d.domain;
 
+import java.util.Map;
+
 import com.gaia3d.security.Crypt;
 import com.gaia3d.security.Masking;
 
@@ -290,18 +292,15 @@ public class UserInfo {
 	}
 	
 	public String getViewUserInsertType() {
-		CommonCode userInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.USER_REGISTER);
-		CommonCode externalUserInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER);
-		
+		// TODO 이건 뭔가 아닌거 같은데... 어떻게 처리 하지?
 		if(this.user_insert_type == null || "".equals(this.user_insert_type)) {
 			return "";
-		} else if(this.user_insert_type.equals(userInsertType.getCode_value())) {
-			return userInsertType.getCode_name();
-		} else if(this.user_insert_type.equals(externalUserInsertType.getCode_value())) {
-			return externalUserInsertType.getCode_name();
 		}
 		
-		return "";
+		Map<String, Object> commonCodeMap = CacheManager.getCommonCodeMap();
+		CommonCode commonCode = (CommonCode)commonCodeMap.get(this.user_insert_type);
+		if(commonCode == null) return "";
+		else return commonCode.getCode_name();
 	}
 	
 	public String getValueUserIdStartDate() {

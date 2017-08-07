@@ -73,6 +73,7 @@ create table policy(
 	security_api_result_secure_yn		char(1)				default 'N',
 	security_masking_yn					char(1)				default 'Y',
 	
+	content_cache_version				int					default 1,
 	content_main_widget_count			int					default 6,
 	content_main_widget_interval		int					default 65,
 	content_monitoring_interval			int					default 1,
@@ -179,6 +180,7 @@ comment on column policy.security_dynamic_block_yn is '보안 동적 차단. Y :
 comment on column policy.security_api_result_secure_yn is 'API 결과 암호화 사용. Y : 사용, N 사용안함(기본값)';
 comment on column policy.security_masking_yn is '개인정보 마스킹 처리. Y : 사용(기본값), N 사용안함';
 
+comment on column policy.content_cache_version is 'css, js 갱신용 cache version.';
 comment on column policy.content_main_widget_count is '메인 화면 위젯 표시 갯수. 기본 6개';
 comment on column policy.content_main_widget_interval is '메인 화면 위젯 Refresh 간격. 기본 65초(모니터링 간격 60초에 대한 시간 간격 고려)';
 comment on column policy.content_statistics_interval is '통계 기본 검색 기간. 0 : 1년 단위, 1 : 상/하반기, 2 : 분기 단위, 3 : 월 단위';

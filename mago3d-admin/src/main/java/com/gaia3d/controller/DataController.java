@@ -111,12 +111,11 @@ public class DataController {
 			txtDownloadFlag = true;
 		}
 		
-		CommonCode dataInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.DATA_REGISTER);
-		CommonCode externalDataInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.EXTERNAL_DATA_REGISTER);
+		@SuppressWarnings("unchecked")
+		List<CommonCode> dataRegisterTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.DATA_REGISTER_TYPE);
 		
 		model.addAttribute(pagination);
-		model.addAttribute("dataInsertType", dataInsertType);
-		model.addAttribute("externalDataInsertType", externalDataInsertType);
+		model.addAttribute("dataRegisterTypeList", dataRegisterTypeList);
 		model.addAttribute("dataGroupList", dataGroupList);
 		model.addAttribute("txtDownloadFlag", Boolean.valueOf(txtDownloadFlag));
 		model.addAttribute("dataList", dataList);
@@ -425,7 +424,10 @@ public class DataController {
 		log.info("@@@@@@@@ dataInfo = {}", dataInfo);
 		Policy policy = CacheManager.getPolicy();
 		
-		model.addAttribute("externalDataRegister", CacheManager.getCommonCode(CommonCode.EXTERNAL_DATA_REGISTER));
+		@SuppressWarnings("unchecked")
+		List<CommonCode> dataRegisterTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.DATA_REGISTER_TYPE);
+		
+		model.addAttribute("dataRegisterTypeList", dataRegisterTypeList);
 		model.addAttribute("listParameters", listParameters);
 		model.addAttribute("policy", policy);
 		model.addAttribute("dataGroupList", dataGroupList);

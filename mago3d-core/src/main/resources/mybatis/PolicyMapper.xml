@@ -126,9 +126,9 @@
 	<update id="updatePolicyContent" parameterType="policy">
 		/* updatePolicyContent */
 		UPDATE policy
-		SET content_main_widget_count = #{content_main_widget_count},
+		SET content_cache_version = #{content_cache_version},
+			content_main_widget_count = #{content_main_widget_count},
 			content_main_widget_interval = #{content_main_widget_interval},
-			content_monitoring_interval = #{content_monitoring_interval},
 			content_statistics_interval = #{content_statistics_interval},
 			content_load_balancing_interval = #{content_load_balancing_interval},
 			content_menu_group_root = #{content_menu_group_root},

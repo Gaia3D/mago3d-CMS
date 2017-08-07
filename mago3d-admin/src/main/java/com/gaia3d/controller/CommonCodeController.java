@@ -37,6 +37,7 @@ public class CommonCodeController {
 	
 	/**
 	 * 공통 코드 목록
+	 * @param request
 	 * @param model
 	 * @return
 	 */
@@ -65,7 +66,7 @@ public class CommonCodeController {
 	/**
 	 * 공통 코드 등록
 	 * @param request
-	 * @param userDevice
+	 * @param commonCode
 	 * @return
 	 */
 	@PostMapping(value = "ajax-insert-code.do", produces = "application/json; charset=utf8")
@@ -95,13 +96,14 @@ public class CommonCodeController {
 	
 	/**
 	 * 공통 코드 수정
-	 * @param role
+	 * @param request
+	 * @param commonCode
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "modify-code.do")
 	public String modifyCode(HttpServletRequest request, CommonCode commonCode, Model model) {
-		commonCode = commonCodeService.getCommonCode(commonCode);
+		commonCode = commonCodeService.getCommonCode(commonCode.getCode_key());
 		commonCode.setDb_code_value(commonCode.getCode_value());
 		model.addAttribute(commonCode);
 		return "/code/modify-code";
@@ -110,7 +112,7 @@ public class CommonCodeController {
 	/**
 	 * 공통 코드 정보 수정
 	 * @param request
-	 * @param userDevice
+	 * @param commonCode
 	 * @return
 	 */
 	@PostMapping(value = "ajax-update-code.do", produces = "application/json; charset=utf8")
@@ -144,7 +146,7 @@ public class CommonCodeController {
 	/**
 	 * 공통 코드 정보 삭제
 	 * @param request
-	 * @param code_key
+	 * @param commonCode
 	 * @return
 	 */
 	@PostMapping(value = "ajax-delete-code.do", produces ="application/json; charset=utf8")
@@ -160,7 +162,7 @@ public class CommonCodeController {
 				log.info("validate error 발생: {} " ,jSONObject.toString());
 				return jSONObject;
 			}
-			commonCodeService.deleteCommonCode(commonCode);
+			commonCodeService.deleteCommonCode(commonCode.getCode_key());
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -173,13 +175,14 @@ public class CommonCodeController {
 	
 	/**
 	 * 공통 코드 정보
-	 * @param code_key
+	 * @param request
+	 * @param commonCode
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "detail-code.do")
 	public String detailCode(HttpServletRequest request, CommonCode commonCode, Model model) {
-		commonCode = commonCodeService.getCommonCode(commonCode);
+		commonCode = commonCodeService.getCommonCode(commonCode.getCode_key());
 		model.addAttribute("commonCode", commonCode);
 		return "/code/detail-code";
 	}

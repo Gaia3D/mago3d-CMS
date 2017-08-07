@@ -7,6 +7,13 @@
 		<col class="col-input" />
 		<tr>
 			<th class="col-label l" scope="row">
+				<form:label path="content_cache_version">Cache Version</form:label>
+				<span class="icon-glyph glyph-emark-dot color-warning"></span>
+			</th>
+			<td class="col-input"><form:input path="content_cache_version" cssClass="m" /></td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
 				<form:label path="content_main_widget_count">메인 화면 위젯 표시 개수</form:label>
 				<span class="icon-glyph glyph-emark-dot color-warning"></span>
 			</th>

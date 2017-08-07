@@ -201,6 +201,9 @@ public class CacheManager {
 	 * @param 
 	 * @return
 	 */
+	public static Map<String, Object> getCommonCodeMap() {
+		return cacheManager.commonCodeMap;
+	}
 	public static Object getCommonCode(String codeKey) {
 		return cacheManager.commonCodeMap.get(codeKey);
 	}

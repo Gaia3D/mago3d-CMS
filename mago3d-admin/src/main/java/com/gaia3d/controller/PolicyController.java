@@ -353,9 +353,9 @@ public class PolicyController {
 		try {
 			log.info("@@ policy = {} ", policy);
 			if( ( policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0 )
+					|| ( policy.getContent_cache_version() == null || policy.getContent_cache_version().intValue() < 0)
 					|| ( policy.getContent_main_widget_count() == null || policy.getContent_main_widget_count().intValue() < 0 )
-					|| ( policy.getContent_main_widget_interval() == null || policy.getContent_main_widget_interval().intValue() < 5 )
-					|| ( policy.getContent_monitoring_interval() == null || policy.getContent_monitoring_interval().intValue() < 0 )) {
+					|| ( policy.getContent_main_widget_interval() == null || policy.getContent_main_widget_interval().intValue() < 5 )) {
 				result = "policy.content.invalid";
 				jSONObject.put("result", result);
 				return jSONObject;

@@ -25,37 +25,7 @@
 					<h1 style="padding-bottom:10px; font-size:38px; font-family:Lousianne; color:#573592;">mago3D</h1>
 <c:if test="${loginForm.error_code ne null && loginForm.error_code ne ''}">
 					<h6 style="padding-left: 10px; color: red;">* 
-	<c:if test="${loginForm.error_code eq 'user.session.empty'}">
-						고객 정보가 존재하지 않습니다. 아이디, 비밀번호를 확인하여 주십시오.
-	</c:if>
-	<c:if test="${loginForm.error_code eq 'usersession.password.invalid'}">
-		<c:if test="${loginForm.status == null || loginForm.status == ''}">
-						비밀번호가 일치하지 않습니다.
-		</c:if>
-		<c:if test="${loginForm.status != null && loginForm.status != ''}">
-						비밀번호가 일치하지 않습니다. <br/>현재 고객님은 ${loginForm.viewStatus} 상태 입니다. 관리자에게 문의하여 주십시요.
-		</c:if>
-	</c:if>
-	<c:if test="${loginForm.error_code eq 'usersession.status.invalid'}">
-						현재 고객님은 ${loginForm.viewStatus} 상태 입니다. 관리자에게 문의하여 주십시요.
-	</c:if>
-	<c:if test="${loginForm.error_code eq 'usersession.faillogincount.invalid'}">
-						고객님은 비밀번호 실패 횟수 ${loginForm.fail_login_count } 를 초과하셨습니다. <br/>
-						관리자에게 문의하여 주십시요.
-	</c:if>
-	<c:if test="${loginForm.error_code eq 'usersession.lastlogin.invalid'}">
-						고객님은 마지막 로그인 ${loginForm.viewLastLoginDate } 로 부터 ${loginForm.user_last_login_lock }일이 경과 되었습니다.<br/>
-						관리자에게 문의하여 주십시요.
-	</c:if>
-	<c:if test="${loginForm.error_code eq 'login.encrypt.exception'}">
-						로그인 정보 복호화 처리 과정에서 오류가 발생하였습니다. <br/>페이지를 새로고침 후 이용해 주시기 바랍니다.
-	</c:if>
-	<c:if test="${loginForm.error_code eq 'usersession.role.invalid'}">
-						관리자 페이지 접근 권한(ROLE)이 존재하지 않습니다.
-	</c:if>
-	<c:if test="${loginForm.error_code eq 'userdevice.ip.invalid'}">
-						사용자 등록 정보에 저장된 IP가 아닙니다.
-	</c:if>
+						<spring:message code="${loginForm.error_code}" />
 					</h6>
 </c:if>				
 				</div>
@@ -64,7 +34,6 @@
 					<div class="sign-inputs">
 						<div class="sign-desc">mago3D 이슈 시스템</div>
 						<form:form id="loginForm" modelAttribute="loginForm" method="post" action="/login/process-login.do" onsubmit="return check();">
-							<input type="hidden" name="login_type" value=""/>
 							<label for="user_id"><span class="icon-glyph glyph-users"></span></label>
 							<input type="text" id="user_id" name="user_id" maxlength="32" title="아이디" placeholder="아이디" required="required" />
 							<label for="password"><span class="icon-glyph glyph-lock"></span></label>

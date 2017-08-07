@@ -62,7 +62,6 @@ public class CacheConfig {
 	@Autowired
 	private PropertiesConfig propertiesConfig;
 	
-	
 	public static final String LOCALHOST = "localhost";
 
 	@PostConstruct
@@ -191,36 +190,46 @@ public class CacheConfig {
 
 	private void commonCode(CacheType cacheType) {
 		List<CommonCode> commonCodeList = commonCodeService.getListCommonCode();
+		log.info(" commonCodeList size = {}", commonCodeList.size());
 		Map<String, Object> commonCodeMap = new HashMap<>();
 		
-		List<CommonCode> emailList = new ArrayList<CommonCode>();
-		List<CommonCode> issuePriorityList = new ArrayList<CommonCode>();
-		List<CommonCode> issueTypeList = new ArrayList<CommonCode>();
-		List<CommonCode> issueStatusList = new ArrayList<CommonCode>();
+		List<CommonCode> emailList = new ArrayList<>();
+		List<CommonCode> issuePriorityList = new ArrayList<>();
+		List<CommonCode> issueTypeList = new ArrayList<>();
+		List<CommonCode> issueStatusList = new ArrayList<>();
+		List<CommonCode> userRegisterTypeList = new ArrayList<>();
+		List<CommonCode> dataRegisterTypeList = new ArrayList<>();
 		
 		for(CommonCode commonCode : commonCodeList) {
-			if(CommonCode.USER_REGISTER_EMAIL.equals(commonCode.getCode_key())) {
+			if(CommonCode.USER_EMAIL.equals(commonCode.getCode_type())) {
 				// 이메일
 				emailList.add(commonCode);
-			} else if(CommonCode.ISSUE_PRIORITY.equals(commonCode.getCode_key())) {
+			} else if(CommonCode.USER_REGISTER_TYPE.equals(commonCode.getCode_type())) {
+				// 사용자 등록 타입
+				userRegisterTypeList.add(commonCode);
+			} else if(CommonCode.ISSUE_PRIORITY.equals(commonCode.getCode_type())) {
 				// 이슈 우선순위
 				issuePriorityList.add(commonCode);
-			} else if(CommonCode.ISSUE_TYPE.equals(commonCode.getCode_key())) {
+			} else if(CommonCode.ISSUE_TYPE.equals(commonCode.getCode_type())) {
 				// 이슈 유형
 				issueTypeList.add(commonCode);
-			} else if(CommonCode.ISSUE_STATUS.equals(commonCode.getCode_key())) {
+			} else if(CommonCode.ISSUE_STATUS.equals(commonCode.getCode_type())) {
 				// 이슈 상태
 				issueStatusList.add(commonCode);
-			} else {
-				commonCodeMap.put(commonCode.getCode_key(), commonCode);
+			} else if(CommonCode.DATA_REGISTER_TYPE.equals(commonCode.getCode_type())) {
+				// data 등록 타입
+				dataRegisterTypeList.add(commonCode);
 			}
+			commonCodeMap.put(commonCode.getCode_key(), commonCode);
 		}
 		
 		// TODO 여기 다시 설계 해야 할거 같다. 
-		commonCodeMap.put(CommonCode.USER_REGISTER_EMAIL, emailList);
+		commonCodeMap.put(CommonCode.USER_EMAIL, emailList);
+		commonCodeMap.put(CommonCode.USER_REGISTER_TYPE, userRegisterTypeList);
 		commonCodeMap.put(CommonCode.ISSUE_PRIORITY, issuePriorityList);
 		commonCodeMap.put(CommonCode.ISSUE_TYPE, issueTypeList);
 		commonCodeMap.put(CommonCode.ISSUE_STATUS, issueStatusList);
+		commonCodeMap.put(CommonCode.DATA_REGISTER_TYPE, dataRegisterTypeList);
 		CacheManager.setCommonCodeMap(commonCodeMap);
 		
 		// 사용자 도메인 cache를 갱신

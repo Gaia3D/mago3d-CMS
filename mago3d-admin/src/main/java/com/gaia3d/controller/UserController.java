@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -126,12 +125,12 @@ public class UserController {
 			txtDownloadFlag = true;
 		}
 		
-		CommonCode userInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.USER_REGISTER);
-		CommonCode externalUserInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER);
+		@SuppressWarnings("unchecked")
+		List<CommonCode> userRegisterTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.USER_REGISTER_TYPE);
 		
 		model.addAttribute(pagination);
-		model.addAttribute("userInsertType", userInsertType);
-		model.addAttribute("externalUserInsertType", externalUserInsertType);
+		model.addAttribute("commonCodeMap", CacheManager.getCommonCodeMap());
+		model.addAttribute("userRegisterTypeList", userRegisterTypeList);
 		model.addAttribute("userGroupList", userGroupList);
 		model.addAttribute("txtDownloadFlag", Boolean.valueOf(txtDownloadFlag));
 		model.addAttribute("userList", userList);
@@ -264,7 +263,7 @@ public class UserController {
 		}
 		
 		@SuppressWarnings("unchecked")
-		List<CommonCode> emailCommonCodeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.USER_REGISTER_EMAIL);
+		List<CommonCode> emailCommonCodeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.USER_EMAIL);
 		
 		model.addAttribute("passwordExceptionChar", passwordExceptionChar);
 		model.addAttribute("emailCommonCodeList", emailCommonCodeList);
@@ -545,11 +544,10 @@ public class UserController {
 		}
 		
 		@SuppressWarnings("unchecked")
-		List<CommonCode> emailCommonCodeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.USER_REGISTER_EMAIL);
+		List<CommonCode> emailCommonCodeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.USER_EMAIL);
 		
 		model.addAttribute("passwordExceptionChar", passwordExceptionChar);
 		model.addAttribute("emailCommonCodeList", emailCommonCodeList);
-		model.addAttribute("externalUserRegister", CacheManager.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER));
 		model.addAttribute("listParameters", listParameters);
 		model.addAttribute("policy", policy);
 		model.addAttribute("userGroupList", userGroupList);

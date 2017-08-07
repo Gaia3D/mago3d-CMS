@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -79,7 +80,7 @@ public class LoginController {
 	 * @return
 	 */
 	@PostMapping(value = "process-login.do")
-	public String processLogin(HttpServletRequest request, UserInfo loginForm, BindingResult bindingResult, Model model) {
+	public String processLogin(HttpServletRequest request, @ModelAttribute("loginForm") UserInfo loginForm, BindingResult bindingResult, Model model) {
 		
 		Policy policy = CacheManager.getPolicy();
 		String SESSION_TOKEN_AES_KEY = (String)request.getSession().getAttribute(SessionKey.SESSION_TOKEN_AES_KEY.name());
@@ -98,11 +99,13 @@ public class LoginController {
 		if(bindingResult.hasErrors()) {
 			List<ObjectError> errorList = bindingResult.getAllErrors();
 			for(ObjectError error : errorList) {
-				System.out.println("************************* " + error.getDefaultMessage());
+				log.info("************************* error message = {}", error.getDefaultMessage());
 			}
 			
 			log.info("@@ validation error!");
 			loginForm.setPassword(null);
+			loginForm.setError_code("field.required");
+			model.addAttribute("loginForm", loginForm);
 			model.addAttribute("policy", policy);
 			model.addAttribute("TOKEN_AES_KEY", SESSION_TOKEN_AES_KEY);
 			return "/login/login";
@@ -133,11 +136,15 @@ public class LoginController {
 				userInfo.setStatus(UserInfo.STATUS_SLEEP);
 				userService.updateUserStatus(userInfo);
 				bindingResult.rejectValue("user_id", "usersession.lastlogin.invalid");
+			} else {
+				bindingResult.rejectValue("user_id", errorCode);
 			}
 			
 			log.error("@@ errorCode = {} ", errorCode);
+			loginForm.setError_code(errorCode);
 			loginForm.setUser_id(null);
 			loginForm.setPassword(null);
+			model.addAttribute("loginForm", loginForm);
 			model.addAttribute("policy", policy);
 			model.addAttribute("TOKEN_AES_KEY", SessionKey.TOKEN_AES_KEY.name());
 			

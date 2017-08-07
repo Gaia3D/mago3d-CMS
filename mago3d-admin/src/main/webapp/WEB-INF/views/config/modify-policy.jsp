@@ -485,6 +485,10 @@
 	var updateContentFlag = true;
 	function updatePolicyContent() {
 		if(updateContentFlag) {
+			if(!isNumber($("#content_cache_version").val())) {
+				$("#content_cache_version").focus();
+				return;
+			}
 			if($("#content_main_widget_count").val() == "") {
 				alert("메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.");
 				$("#content_main_widget_count").focus();
@@ -501,11 +505,6 @@
 			}
 			if(!isNumber($("#content_main_widget_interval").val())) {
 				$("#content_main_widget_interval").focus();
-				return;
-			}
-			if($("#content_monitoring_interval").val() == "") {
-				alert("모니터링 감시 간격(분단위)을 입력하여 주십시오.");
-				$("#content_monitoring_interval").focus();
 				return;
 			}
 			

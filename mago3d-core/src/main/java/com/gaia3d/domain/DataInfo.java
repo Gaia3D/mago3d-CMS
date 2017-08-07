@@ -1,5 +1,7 @@
 package com.gaia3d.domain;
 
+import java.util.Map;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -113,18 +115,15 @@ public class DataInfo {
 	}
 	
 	public String getViewDataInsertType() {
-		CommonCode dataInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.DATA_REGISTER);
-		CommonCode externalDataInsertType = (CommonCode)CacheManager.getCommonCode(CommonCode.EXTERNAL_DATA_REGISTER);
+		// TODO 이건 뭔가 아닌거 같은데... 어떻게 처리 하지?
+		if(this.data_insert_type == null || "".equals(this.data_insert_type)) {
+			return "";
+		}
 		
-//		if(this.data_insert_type == null || "".equals(this.data_insert_type)) {
-//			return "";
-//		} else if(this.data_insert_type.equals(dataInsertType.getCode_value())) {
-//			return dataInsertType.getCode_name();
-//		} else if(this.data_insert_type.equals(externalDataInsertType.getCode_value())) {
-//			return externalDataInsertType.getCode_name();
-//		}
-		
-		return "";
+		Map<String, Object> commonCodeMap = CacheManager.getCommonCodeMap();
+		CommonCode commonCode = (CommonCode)commonCodeMap.get(this.data_insert_type);
+		if(commonCode == null) return "";
+		else return commonCode.getCode_name();
 	}
 	
 	public String getViewInsertDate() {

@@ -42,6 +42,13 @@
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row">
+									<form:label path="code_type">분류</form:label>
+									<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								</th>
+								<td class="col-input"><form:input path="code_type" cssClass="m" /></td>
+							</tr>
+							<tr>
+								<th class="col-label l" scope="row">
 									<form:label path="code_name">코드명</form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
@@ -63,13 +70,6 @@
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row">
-									<form:label path="code_type">코드분류</form:label>
-									<span class="icon-glyph glyph-emark-dot color-warning"></span>
-								</th>
-								<td class="col-input"><form:input path="code_type" cssClass="m" /></td>
-							</tr>
-							<tr>
-								<th class="col-label l" scope="row">
 									<span>사용 여부</span>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
@@ -85,6 +85,20 @@
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input"><form:input path="view_order" cssClass="s" /></td>
+							</tr>
+							<tr>
+								<th class="col-label l" scope="row">
+									<form:label path="css_class">CSS Class명</form:label>
+									<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								</th>
+								<td class="col-input"><form:input path="css_class" cssClass="m" /></td>
+							</tr>
+							<tr>
+								<th class="col-label l" scope="row">
+									<form:label path="image">이미지</form:label>
+									<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								</th>
+								<td class="col-input"><form:input path="image" cssClass="l" /></td>
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row"><form:label path="description">설명</form:label></th>
@@ -111,10 +125,6 @@
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
 <script type="text/javascript" src="/js/${lang}/navigation.js"></script>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$( ".select" ).selectmenu();
-	});
-	
 	function check() {
 		if ($("#code_name").val() == "") {
 			alert("코드명을 입력하여 주십시오.");

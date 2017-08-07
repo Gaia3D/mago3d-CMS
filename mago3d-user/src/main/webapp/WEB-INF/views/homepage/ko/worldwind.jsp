@@ -53,40 +53,12 @@
 			</li>
 </c:if>
 <c:if test="${!empty issueList }">
-	<c:set var="issueTypeCss" value="i1" />
-	<c:set var="issuePriorityCss" value="t1" />
 	<c:forEach var="issue" items="${issueList}" varStatus="status">
-		<c:if test="${issue.issue_type eq 'BUGGER'}">
-			<c:set var="issueTypeCss" value="i1" />
-		</c:if>
-		<c:if test="${issue.issue_type eq 'IMPROVE'}">
-			<c:set var="issueTypeCss" value="i2" />
-		</c:if>
-		<c:if test="${issue.issue_type eq 'NEW'}">
-			<c:set var="issueTypeCss" value="i3" />
-		</c:if>
-		<c:if test="${issue.issue_type eq 'ETC'}">
-			<c:set var="issueTypeCss" value="i4" />
-		</c:if>
-		<c:if test="${issue.priority eq 'CRITICAL'}">
-			<c:set var="issuePriorityCss" value="t1" />
-		</c:if>
-		<c:if test="${issue.priority eq 'MUST'}">
-			<c:set var="issuePriorityCss" value="t2" />
-		</c:if>
-		<c:if test="${issue.priority eq 'MINOR'}">
-			<c:set var="issuePriorityCss" value="t3" />
-		</c:if>
-		<c:if test="${issue.priority eq 'TRIVIAL'}">
-			<c:set var="issuePriorityCss" value="t4" />
-		</c:if>
 			<li>
-				<p class="title">
-					${issue.title }
-				</p>
+				<p class="title">${issue.title }</p>
 				<p class="info">
-					<span class="tag ${issueTypeCss }">${issue.issue_type_name }</span>
-					<span class="tag ${issuePriorityCss }">${issue.priority_name }</span>
+					<span class="tag ${issue.issue_type_css_class }">${issue.issue_type_name }</span>
+					<span class="tag ${issue.priority_css_class }">${issue.priority_name }</span>
 					<span>[${issue.data_group_name }]</span>
 					<button type="button" title="바로가기" onclick="flyTo('${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">바로가기</button>
 					<span class="date">${issue.viewInsertDate }</span>
@@ -217,7 +189,7 @@
 	        		<td>
 	        			<form:select path="issue_type" cssClass="select">
 <c:forEach var="commonCode" items="${issueTypeList}">
-							<option value="${commonCode.code_value}">${commonCode.code_name}</option>
+							<option value="${commonCode.code_key}">${commonCode.code_name}</option>
 </c:forEach>
 						</form:select>
 	        		</td>
@@ -229,6 +201,7 @@
 	        		</th>
 	        		<td><form:input path="data_key" cssClass="ml" />
 						<form:errors path="data_key" cssClass="error" />
+						<form:hidden path="object_key"/>
 						<form:hidden path="latitude"/>
 						<form:hidden path="longitude"/>
 						<form:hidden path="height"/>
@@ -248,7 +221,7 @@
 	        		<td>
 	        			<form:select path="priority" cssClass="select">
 <c:forEach var="commonCode" items="${issuePriorityList}">
-							<option value="${commonCode.code_value}">${commonCode.code_name}</option>
+							<option value="${commonCode.code_key}">${commonCode.code_name}</option>
 </c:forEach>
 						</form:select>
 	        		</td>
@@ -421,12 +394,13 @@
 	});
 	
 	// issue input layer call back function
-	function showInsertIssueLayer(data_name, data_key, latitude, longitude, height) {
+	function showInsertIssueLayer(data_key, object_key, latitude, longitude, height) {
 		if(insertIssueFlag) {
 			if($("#inputIssueLayer").css("display") == "none") {
 				$("#inputIssueLayer").show();
 				
-				$("#data_key").val(data_name);
+				$("#data_key").val(data_key);
+				$("#object_key").val(object_key);
 				$("#latitude").val(latitude);
 				$("#longitude").val(longitude);
 				$("#height").val(height);
@@ -467,7 +441,7 @@
 		/* if ($("#due_day").val() != null && $("#due_time").val() != null) {
 			$("#due_date").val($("#due_day").val() + $("#due_time").val());
 			return false;
-		}
+		} */
 	}
 	
 	var isInsertIssue = true;
@@ -635,34 +609,12 @@
 					} else {
 						for(i=0; i<issueList.length; i++ ) {
 							var issue = issueList[i];
-							var issueTypeCss = "i1";
-							var issuePriorityCss = "t1";
-							if(issue.issue_type == "BUGGER") {
-								issueTypeCss = "i1";
-							} else if(issue.issue_type == "IMPROVE") {
-								issueTypeCss = "i2";
-							} else if(issue.issue_type == "NEW") {
-								issueTypeCss = "i3";
-							} else if(issue.issue_type == "ETC") {
-								issueTypeCss = "i4";
-							}
-							
-							if(issue.priority == "CRITICAL") {
-								issuePriorityCss = "t1";
-							} else if(issue.priority == "MUST") {
-								issuePriorityCss = "t2";
-							} else if(issue.priority == "MINOR") {
-								issuePriorityCss = "t3";
-							} else if(issue.priority == "TRIVIAL") {
-								issuePriorityCss = "t4";
-							}
-							
 							content = content 
 								+ 	"<li>"
 								+ 	"	<p class=\"title\">" + issue.title  + "</p>"
 								+ 	"	<p class=\"info\">"
-								+ 	"		<span class=\"tag " + issueTypeCss + "\">" + issue.issue_type_name + "</span>"
-								+ 	"		<span class=\"tag " + issuePriorityCss + "\">" + issue.priority_name + "</span>"
+								+ 	"		<span class=\"tag " + issue.issue_type_css_class + "\">" + issue.issue_type_name + "</span>"
+								+ 	"		<span class=\"tag " + issue.priority_css_class + "\">" + issue.priority_name + "</span>"
 								+ 	"		<span>[" + issue.data_group_name + "]</span>"
 								+ 	"		<button type=\"button\" title=\"바로가기\""
 								+				"onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 

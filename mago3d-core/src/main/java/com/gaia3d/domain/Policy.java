@@ -187,6 +187,8 @@ public class Policy {
 	// 개인정보 마스킹 처리. Y : 사용(기본값), N 사용안함
 	private String security_masking_yn;
 	
+	// css, js 갱신용 cache version.
+	private Integer content_cache_version;
 	// 메인 화면 위젯 표시 갯수. 기본 6개
 	private Integer content_main_widget_count;
 	// 메인 화면 위젯 Refresh 간격. 기본 65초(모니터링 간격 60초에 대한 시간 간격 고려)

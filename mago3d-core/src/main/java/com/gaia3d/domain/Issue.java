@@ -73,6 +73,9 @@ public class Issue {
 	// 우선순위. common_code 동적 생성
 	private String priority;
 	private String priority_name;
+	private String priority_css_class;
+	private String priority_image;
+	
 	// 예정일. 마감일
 	private String due_date;
 	private String due_day;
@@ -81,10 +84,14 @@ public class Issue {
 	// 이슈 유형. common_code 동적 생성
 	private String issue_type;
 	private String issue_type_name;
+	private String issue_type_css_class;
+	private String issue_type_images;
 	// 상태. common_code 동적 생성
 	private String status;
 	// Data key
 	private String data_key;
+	// Object key
+	private String object_key;
 	// location(위도, 경도)
 	private String location;
 	// 위도

@@ -65,8 +65,10 @@
 									<label for="user_insert_type">등록 유형</label>
 									<select id="user_insert_type" name="user_insert_type" class="select">
 										<option value="">전체</option>
-										<option value="${userInsertType.code_value }"> ${userInsertType.code_name } </option>
-										<option value="${externalUserInsertType.code_value }"> ${externalUserInsertType.code_name } </option>
+<c:forEach var="commonCode" items="${userRegisterTypeList}" varStatus="status">
+										<option value="${commonCode.code_value }"> ${commonCode.code_name } </option>
+										<option value="${commonCode.code_value }"> ${commonCode.code_name } </option>
+</c:forEach>
 									</select>
 								</div>
 								<div class="input-set">

@@ -160,11 +160,13 @@ public class UserController {
 		}
 		
 		@SuppressWarnings("unchecked")
-		List<CommonCode> emailCommonCodeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.USER_REGISTER_EMAIL);
+		List<CommonCode> emailCommonCodeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.USER_EMAIL);
+		@SuppressWarnings("unchecked")
+		List<CommonCode> userRegisterTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.USER_REGISTER_TYPE);
 		
 		model.addAttribute("passwordExceptionChar", passwordExceptionChar);
 		model.addAttribute("emailCommonCodeList", emailCommonCodeList);
-		model.addAttribute("externalUserRegister", CacheManager.getCommonCode(CommonCode.EXTERNAL_USER_REGISTER));
+		model.addAttribute("userRegisterTypeList", userRegisterTypeList);
 		model.addAttribute("listParameters", listParameters);
 		model.addAttribute("policy", policy);
 		model.addAttribute("userGroupList", userGroupList);

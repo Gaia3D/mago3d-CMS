@@ -99,44 +99,45 @@
 
 	<!-- 이슈 목록 -->
 	<select id="getListIssueByUserId" parameterType="issue" resultType="issue">
-		/* getListIssue */
-		SELECT A.*, C.data_group_name,
-			(SELECT user_name FROM user_info WHERE user_id = A.user_id) AS user_name,
-			(SELECT code_name FROM common_code WHERE code_value = A.issue_type) AS issue_type_name,
-			(SELECT code_name FROM common_code WHERE code_value = A.priority) AS priority_name,
-			(SELECT count(issue_comment_id) FROM issue_comment WHERE issue_id = A.issue_id) AS comment_count
-		FROM(
-			SELECT *
-			FROM issue
-			WHERE user_id = #{user_id}
-				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
-				AND ${search_word} = #{search_value}
-				</if>
-				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
-				AND ${search_word} LIKE '%' || #{search_value} || '%'
-				</if>
-				<if test="start_date != null and start_date != ''">
-				<![CDATA[
-				AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
-				]]>
-				</if>
-				<if test="end_date != null and end_date != ''">
-				<![CDATA[
-				AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
-				]]>
-				</if>
-			<choose>
-			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
-			ORDER BY ${order_word} ${order_value}
-			</when>
-			<otherwise>
-			ORDER BY insert_date DESC, issue_id DESC
-			</otherwise>
-			</choose>
-			OFFSET #{offset} LIMIT #{limit}
-		) A, data_group C
-		WHERE A.data_group_id = C.data_group_id
-		ORDER BY insert_date DESC, issue_id DESC
+		/* getListIssueByUserId */
+		SELECT Z.*,
+			(SELECT count(issue_comment_id) FROM issue_comment WHERE issue_id = Z.issue_id) AS comment_count
+		FROM (	
+			SELECT X.*, Y.code_name AS priority_name, Y.css_class AS priority_css_class, Y.image AS priority_image 
+			FROM (		
+				SELECT A.*, B.user_name, C.data_group_name, D.code_name AS issue_type_name, D.css_class AS issue_type_css_class, D.image AS issue_type_image
+				FROM issue A LEFT OUTER JOIN user_info B ON A.user_id = B.user_id
+					INNER JOIN data_group C ON A.data_group_id = C.data_group_id
+					INNER JOIN common_code D ON A.issue_type = D.code_key
+				WHERE A.user_id = #{user_id}
+					<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+					AND ${search_word} = #{search_value}
+					</if>
+					<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+					AND ${search_word} LIKE '%' || #{search_value} || '%'
+					</if>
+					<if test="start_date != null and start_date != ''">
+					<![CDATA[
+					AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+					]]>
+					</if>
+					<if test="end_date != null and end_date != ''">
+					<![CDATA[
+					AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+					]]>
+					</if>
+				<choose>
+				<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
+				ORDER BY ${order_word} ${order_value}
+				</when>
+				<otherwise>
+				ORDER BY A.insert_date DESC, A.issue_id DESC
+				</otherwise>
+				</choose>
+				OFFSET #{offset} LIMIT #{limit}
+			) X, common_code Y
+			WHERE X.priority = Y.code_key
+		) Z
 	</select>
 	
 	<!-- 이슈 Comment 목록 -->
@@ -173,7 +174,7 @@
     		SELECT nextval('issue_seq')
   		</selectKey>
 		INSERT INTO issue(
-			issue_id, data_group_id, user_id, title, priority, due_date, issue_type, status, data_key, location, latitude, longitude, height, client_ip
+			issue_id, data_group_id, user_id, title, priority, due_date, issue_type, status, data_key, object_key, location, latitude, longitude, height, client_ip
 		) values(
 			#{issue_id}, #{data_group_id}, #{user_id}, #{title}, #{priority},
 			<if test="due_date == null or due_date == ''">
@@ -182,7 +183,7 @@
 			<if test="due_date != null and due_date != ''">
 			TO_TIMESTAMP(#{due_date}, 'YYYYMMDDHH24MISSUS'),
 			</if>			
-			#{issue_type}, #{status}, #{data_key},
+			#{issue_type}, #{status}, #{data_key}, #{object_key},
 			<if test="location == null or location == ''">
 			null,
 			</if>		

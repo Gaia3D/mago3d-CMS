@@ -1,3 +1,6 @@
+psql -U postgres 디비명
+
+
 alter 문
 
 추가

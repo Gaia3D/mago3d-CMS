@@ -96,7 +96,7 @@ create table user_info(
 	di							varchar(256),
 	status						char(1)								default '0',
 	user_role_check_yn			char(1)								default 'Y',
-	user_insert_type			varchar(30)							default 'SELF',
+	user_insert_type			varchar(30)							default 'USER_REGISTER_SELF',
 	sso_use_yn					char(1)								default 'N',
 	login_count					bigint								default 0,
 	fail_login_count			smallint							default 0,

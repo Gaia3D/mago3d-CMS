@@ -35,12 +35,12 @@ public class CommonCodeServiceImpl implements CommonCodeService {
 	/**
 	 * 공통 코드 정보
 	 * 
-	 * @param commonCode
+	 * @param code_key
 	 * @return
 	 */
 	@Transactional(readOnly = true)
-	public CommonCode getCommonCode(CommonCode commonCode) {
-		return commonCodeMapper.getCommonCode(commonCode);
+	public CommonCode getCommonCode(String code_key) {
+		return commonCodeMapper.getCommonCode(code_key);
 	}
 
 	/**
@@ -68,11 +68,11 @@ public class CommonCodeServiceImpl implements CommonCodeService {
 	/**
 	 * 공통 코드 삭제
 	 * 
-	 * @param commonCode
+	 * @param code_key
 	 * @return
 	 */
 	@Transactional
-	public int deleteCommonCode(CommonCode commonCode) {
-		return commonCodeMapper.deleteCommonCode(commonCode);
+	public int deleteCommonCode(String code_key) {
+		return commonCodeMapper.deleteCommonCode(code_key);
 	}
 }

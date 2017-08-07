@@ -23,10 +23,10 @@ public interface CommonCodeMapper {
 	
 	/**
 	 * 공통 코드 정보
-	 * @param commonCode
+	 * @param code_key
 	 * @return
 	 */
-	CommonCode getCommonCode(CommonCode commonCode);
+	CommonCode getCommonCode(String code_key);
 	
 	/**
 	 * 공통 코드 등록
@@ -44,8 +44,8 @@ public interface CommonCodeMapper {
 	
 	/**
 	 * 공통 코드 삭제
-	 * @param commonCode
+	 * @param code_key
 	 * @return
 	 */
-	int deleteCommonCode(CommonCode commonCode);
+	int deleteCommonCode(String code_key);
 }
