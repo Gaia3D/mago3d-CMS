@@ -41,7 +41,7 @@
 			<ul class="list">
 				<li class="item"><span class="api_title"> <a class="api" href="#changeMagoStateAPI">changeMagoStateAPI</a>
 				</span></li>
-				<li class="item"><span class="api_title"> <a href="#changeBoundingBoxAPI">changeBonudingBoxAPI</a>
+				<li class="item"><span class="api_title"> <a href="#changeBoundingBoxAPI">changeBoundingBoxAPI</a>
 				</span></li>
 				<li class="item"><span class="api_title"> <a href="#changeShadowAPI">changeShadowAPI</a>
 				</span></li>
@@ -177,7 +177,7 @@ function changeMagoStateAPI(isShow) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeBoundingBoxAPI">changeBoundingBoxAPI()</span></h2>
-				<p>Set whether to display the BoundingBox of the block</p>
+				<p>To display the BoundingBox, click the Show radio button. When clicked, isShow is passed to true value and changeBoundingBoxAPI is activated.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -286,7 +286,7 @@ function changeShadowAPI(isShow) {
 				<pre>
 <code>
 &lt;label for="frustumFarDistance"&gt; Visible distance &lt;/label&gt;
-&lt;input type="text" id="frustumFarDistance" name="frustumFarDistance" placeholder="Meter(m)" size=4" /&gt;
+&lt;input type="text" id="frustumFarDistance" name="frustumFarDistance" placeholder="Meter(m)" /&gt;
 &lt;button type="button" id="changeFrustumFarDistanceAPI" class="btn btn-default btn-sm">apply&lt;/button&gt;
 </code>
 			</pre>
@@ -326,9 +326,9 @@ function changeFrustumFarDistanceAPI(frustumFarDistance) {
 				<pre>
 <code>
 &lt;div&gt;
-	&lt;span  style="padding-left: 10px; padding-right: 100px;"&gt;Data Key&lt;/span&gt;
-	&lt;input type="text" id="search_data_key" name="search_data_key" size="15" /&gt;
-	&lt;button type="button" id="searchData" style="width: 50px; background: #727272; font-size: 1.2rem;">search&lt;/button&gt;
+	&lt;span"&gt;Data Key&lt;/span&gt;
+	&lt;input type="text" id="search_data_key" name="search_data_key"/&gt;
+	&lt;button type="button" id="searchData">search&lt;/button&gt;
 &lt;/div&gt;
 </code>
 			</pre>
@@ -376,7 +376,7 @@ function searchDataAPI(dataKey) {
 <code>
 &lt;div&gt;
 	&lt;label for="objectIds"&gt;Object Id input &lt;/label&gt;
-	&lt;input type="text" id="objectIds" name="objectIds" placeholder=", Enter segment" size=21" /&gt;
+	&lt;input type="text" id="objectIds" name="objectIds" placeholder=", Enter segment"/&gt;
 	&lt;button type="button" id="changeColorAPI" class="btn btn-default btn-sm">change&lt;/button&gt;
 &lt;div/&gt;
 </code>
@@ -446,19 +446,19 @@ function changeColorAPI(objectIds, color) {
 	&lt;div&gt;
 		&lt;span&gt;
 			&lt;label for="move_data_key"&gt;Data Key &lt;/label&gt;
-			&lt;input type="text" id="move_data_key" name="move_data_key" size="15" /&gt;
+			&lt;input type="text" id="move_data_key" name="move_data_key"/&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;
 	&lt;div&gt;
 		&lt;span&gt;
-			&lt;label for="move_latitude"&gt;latitude&lt;/label&gt;
-			&lt;input type="text" id="move_latitude" name="move_latitude" size="15" /&gt;
+			&lt;label for="move_latitude"&gt;위도&lt;/label&gt;
+			&lt;input type="text" id="move_latitude" name="move_latitude"/&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;
 	&lt;div&gt;
 		&lt;span&gt;
-			&lt;label for="move_longitude"&gt;longitude&lt;/label&gt;
-			&lt;input type="text" id="move_longitude" name="move_longitude" size="15" /&gt;
+			&lt;label for="move_longitude"&gt;경도&lt;/label&gt;
+			&lt;input type="text" id="move_longitude" name="move_longitude"/&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;	
 	.
@@ -467,29 +467,20 @@ function changeColorAPI(objectIds, color) {
 	&lt;div&gt;
 		&lt;span&gt;
 			&lt;label for="move_roll"&gt;ROLL&lt;/label&gt;
-			&lt;input type="text" id="move_roll" name="move_roll" size="15" /&gt;
-			&lt;button type="button" id="changeLocationAndRotationAPI">change&lt;/button&gt;
+			&lt;input type="text" id="move_roll" name="move_roll"/&gt;
+			&lt;button type="button" id="changeLocationAndRotationAPI">변환&lt;/button&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;		
 &lt;/div&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
-function changeLocationAndRotationAPI(data_key, latitude, longitude, height, heading, pitch, roll) {
-	var api = new API("changeLocationAndRotation");
-	api.setDataKey(data_key);
-	api.setLatitude(latitude);
-	api.setLongitude(longitude);
-	api.setElevation(height);
-	api.setHeading(heading);
-	api.setPitch(pitch);
-	api.setRoll(roll);
-	if(managerFactory != null) {
-		managerFactory.callAPI(api);
-	}
-}
+$("#changeLocationAndRotationAPI").click(function() {
+	changeLocationAndRotationAPI(	$("#move_data_key").val(), $("#move_latitude").val(), $("#move_longitude").val(), 
+							$("#move_height").val(), $("#move_heading").val(), $("#move_pitch").val(), $("#move_roll").val());
+});
 </code>
 				</pre>
 			</article>
@@ -508,7 +499,7 @@ function changeLocationAndRotationAPI(data_key, latitude, longitude, height, hea
 					<tbody>
 						<tr>
 							<td>mouseMoveMode</td>
-							<td>0 is full, 1 is object</td>
+							<td>mouseMoveMode 0 = All, 1 = object, 2 = None</td>
 						</tr>
 					</tbody>
 				</table>
@@ -516,27 +507,26 @@ function changeLocationAndRotationAPI(data_key, latitude, longitude, height, hea
 				<b>html</b>
 				<pre>
 <code>
-&lt;div&gt;Mouse movement mode
+&lt;div&gt;
+	&lt;span&gt;Selecting And Moving&lt;/span&gt;
+	&lt;input type="radio" id="mouseNoneMove" name="mouseMoveMode" value="2" onclick="changeMouseMove('2');"/&gt;
+	&lt;label for="mouseNoneMove"&gt; None &lt;/label&gt;
 	&lt;div&gt;
-		&lt;input type="radio" id="mouseBlockMove" name="mouseBlockMove" value="0" onclick="changeMouseMove('0')"/&gt;
-		&lt;label for="mouseBlockMove"&gt;Block&lt;/label&gt;
+		&lt;input type="radio" id="mouseAllMove" name="mouseBlockMove" value="0" onclick="changeMouseMove('0')"/&gt;
+		&lt;label for="mouseAllMove"&gt;All&lt;/label&gt;
 	&lt;/div&gt;
 	&lt;div&gt;
-		&lt;input type="radio" id="mouseBlockMove" name="mouseBlockMove" value="0" onclick="changeMouseMove('0')"/&gt;
-		&lt;label for="mouseBlockMove"&gt;Block&lt;/label&gt;
+		&lt;input type="radio" id="mouseObjectMove" name="mouseBlockMove" value="1" onclick="changeMouseMove('1')"/&gt;
+		&lt;label for="mouseObjectMove"&gt;Object&lt;/label&gt;
 	&lt;/div&gt;		
-&lt;/div&gt;	
+&lt;/div&gt;		
 </code>
 			</pre>
 				<br> <b>javaScript</b>
 				<pre>
 <code>
-function changeMouseMoveAPI(mouseMoveMode) {
-	var api = new API("changeMouseMove");
-	api.setMouseMoveMode(mouseMoveMode);
-	if(managerFactory != null) {
-		managerFactory.callAPI(api);
-	}
+function changeMouseMove(mouseMoveMode) {
+	changeMouseMoveAPI(mouseMoveMode);
 }
 </code>
 				</pre>
@@ -544,7 +534,7 @@ function changeMouseMoveAPI(mouseMoveMode) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeInsertIssueModeAPI">changeInsertIssueModeAPI()</span></h2>
-				<p>Whether issue registration activation</p>
+				<p>Clicking the Issue Issue button activates changeInsertIssueModeAPI. When you select an object for which you want to register an artifact, it invokes the callback function showInsertIssueLayer stored in the database policy table.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -564,27 +554,51 @@ function changeMouseMoveAPI(mouseMoveMode) {
 				<b>html</b>
 				<pre>
 <code>
-준비중
+&lt;button id="issueEnable"&gt;Issue insert&lt;/button&gt;
 </code>
-			</pre>
-				<br> <b>javaScript</b>
+				</pre>
+				<br><b>JavaScript</b>
 				<pre>
 <code>
-function changeInsertIssueModeAPI(flag) {
-	var api = new API("changeInsertIssueMode");
-	api.setIssueInsertEnable(flag);
-	if(managerFactory != null) {
-		managerFactory.callAPI(api);
+var isInsertIssue = true;
+$("#issueEnable").click(function() {
+	if(insertIssueFlag) {
+		insertIssueFlag = false;
+		$("#issueEnable").removeClass("on");
+	} else {
+		insertIssueFlag = true;
+		$("#issueEnable").addClass("on");
+	}
+	changeInsertIssueModeAPI(insertIssueFlag);
+});
+</code>
+			</pre>
+			<br><b>Callback function called from mago3DJS</b>
+			<pre>
+<code class=javascript>
+function showInsertIssueLayer(data_name, data_key, latitude, longitude, height) {
+	if(insertIssueFlag) {
+		if($("#inputIssueLayer").css("display") == "none") {
+			$("#inputIssueLayer").show();
+			
+			$("#data_key").val(data_name);
+			$("#latitude").val(latitude);
+			$("#longitude").val(longitude);
+			$("#height").val(height);
+			
+			// 현재 좌표를 저장
+			$("#now_latitude").val(latitude);
+			$("#now_longitude").val(longitude);
+		}
 	}
 }
 </code>
-				</pre>
+			</pre>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeObjectInfoViewModeAPI">changeObjectInfoViewModeAPI()</span></h2>
-				<p>Whether object information display is enabled</p>
-				<p>Register the function name in the geo_callback_selectedobject column in the policy table and call the registered function name to Callback.js.</p>
+				<p>When you click the Object information display button, changeObjectInfoViewModeAPI is activated. When you select an object for which you want to get information while it is active, the information is called from the callback function showSelectedOject, whose contents are called from mago3DJS, to the toast message.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -601,37 +615,63 @@ function changeInsertIssueModeAPI(flag) {
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
-				<b>Callback.js</b>
-				<pre>
-<code>
-function selectedObjectCallback(functionName, projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll) {
-    window[functionName](projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll);
-}
-</code>
-				</pre>
 				<br><b>html</b>
 				<pre>
 <code>
-$("#objectInfoEnable").click(function() {
-		if(objectInfoViewFlag) {
-			objectInfoViewFlag = false;
-			$("#objectInfoEnable").removeClass("on");
-		} else {
-			objectInfoViewFlag = true;
-			$("#objectInfoEnable").addClass("on");			
-		}
-		changeObjectInfoViewModeAPI(objectInfoViewFlag);
-	});
-</code>
-			</pre>
-				<br> <b>javaScript</b>
+&lt;div&gt;
+	&lt;button id="objectInfoEnable"&gt;Object 정보&lt;/button&gt;	
+&lt;/div&gt;
+</code>			
+				</pre>
+				<br><b>JavaScript</b>
 				<pre>
 <code>
-function changeObjectInfoViewModeAPI(flag) {
-	var api = new API("changeObjectInfoViewMode");
-	api.setObjectInfoViewEnable(flag);
-	if(managerFactory != null) {
-		managerFactory.callAPI(api);
+$("#objectInfoEnable").click(function() {
+	if(objectInfoViewFlag) {
+		objectInfoViewFlag = false;
+		$("#objectInfoEnable").removeClass("on");
+	} else {
+		objectInfoViewFlag = true;
+		$("#objectInfoEnable").addClass("on");			
+	}
+	changeObjectInfoViewModeAPI(objectInfoViewFlag);
+});
+</code>
+				</pre>
+				<br><b>Callback function called from mago3DJS</b>
+				<pre>
+<code>
+function showSelectedObject(projectId, blockId, objectId, latitude, longitude, height, heading, pitch, roll){
+	if(objectInfoViewFlag) {
+		$("#move_data_key").val(projectId + "_" + blockId);
+		$("#move_latitude").val(latitude);
+		$("#move_longitude").val(longitude);
+		$("#move_height").val(height);
+		$("#move_heading").val(heading);
+		$("#move_pitch").val(pitch);
+		$("#move_roll").val(roll);
+		
+		$.toast({
+		    heading: 'Click Object Info',
+		    text: [
+		        'projectId : ' + projectId, 
+		        'blockId : ' + blockId, 
+		        'objectId : ' + objectId,
+		        'latitude : ' + latitude,
+		        'longitude : ' + longitude,
+		        'height : ' + height,
+		        'heading : ' + heading,
+		        'pitch : ' + pitch,
+		        'roll : ' + roll
+		    ],
+			//bgColor : 'blue',
+			hideAfter: 5000,
+			icon: 'info'
+		});
+		
+		// save
+		$("#now_latitude").val(latitude);
+		$("#now_longitude").val(longitude);
 	}
 }
 </code>
@@ -668,13 +708,44 @@ function changeObjectInfoViewModeAPI(flag) {
 				<br> <b>javaScript</b>
 				<pre>
 <code>
-function changeListIssueViewModeAPI(flag) {
-	var api = new API("changeListIssueViewMode");
-	api.setIssueListEnable(flag);
-	if(managerFactory != null) {
-		managerFactory.callAPI(api);
+$("#issuesEnable").click(function() {
+	if(listIssueFlag) {
+		listIssueFlag = false;
+		$("#issuesEnable").removeClass("on");
+	} else {
+		listIssueFlag = true;
+		$("#issuesEnable").addClass("on");
+		
+		// 현재 위치의 latitude, logitude를 가지고 가장 가까이에 있는 데이터 그룹에 속하는 이슈 목록을 최대 100건 받아서 표시
+		var now_latitude = $("#now_latitude").val();
+		var now_longitude = $("#now_longitude").val();
+		var info = "latitude=" + now_latitude + "&longitude=" + now_longitude;		
+		$.ajax({
+			url: "/issue/ajax-list-issue-by-geo.do",
+			type: "GET",
+			data: info,
+			dataType: "json",
+			success: function(msg){
+				if(msg.result == "success") {
+					var issueList = msg.issueList;
+					if(issueList != null && issueList.length > 0) {
+						for(i=0; i&lt;issueList.length; i++ ) {
+							var issue = issueList[i];
+							drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
+						}
+					}
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error:function(request,status,error){
+		        //alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		});
 	}
-}
+	changeListIssueViewModeAPI(listIssueFlag);
+});
 </code>
 				</pre>
 			</article>
@@ -722,35 +793,10 @@ function changeListIssueViewModeAPI(flag) {
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
-				<b>html</b>
-				<pre>
-<code>
-if(msg.result == "success") {
-						alert(JS_MESSAGE["insert"]);
-						// pin image images
-						drawInsertIssueImageAPI(1, msg.issue.issue_id, msg.issue.issue_type, $("#data_key").val(),
-						 $("#latitude").val(), $("#longitude").val(), $("#height").val());
-					} else {
-						alert(JS_MESSAGE[msg.result]);
-					}
-</code>
-			</pre>
 				<br> <b>javaScript</b>
 				<pre>
-<code>
-function drawInsertIssueImageAPI(drawType, issue_id, issue_type, data_key, latitude, longitude, height) {
-	var api = new API("drawInsertIssueImage");
-	api.setDrawType(drawType);
-	api.setIssueId(issue_id);
-	api.setIssueId(issue_type);
-	api.setDataKey(data_key);
-	api.setLatitude(latitude);
-	api.setLongitude(longitude);
-	api.setElevation(height);
-	if(managerFactory != null) {
-		managerFactory.callAPI(api);
-	}
-}
+<code class="javascript">
+drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
 </code>
 				</pre>
 			</article>
@@ -807,53 +853,10 @@ function changeInsertIssueStateAPI(insertIssueState) {
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
-				<b>html</b>
+				<b>javaScript</b>
 				<pre>
 <code>
-
-&lt;ul class="controlStick"&gt;
-		&lt;li&gt;
-			&lt;span id="moveForwardImage"&gt;&lt;img src="/images/ko/plus.png" alt="plus" /&gt;&lt;/span&gt;
-			&lt;span id="moveRightImage"&gt;&lt;img src="/images/ko/rotate_right.png" alt="rotate right" /&gt;&lt;/span&gt;
-			&lt;span id="moveUpImage"&gt;&lt;img src="/images/ko/pitch_up.png" alt="plus" /&gt;&lt;/span&gt;
-		&lt;/li&gt;
-		&lt;li&gt;
-			&lt;span id="moveBackwardImage"&gt;&lt;img src="/images/ko/minus.png" alt="minus" /&gt;&lt;/span&gt;
-			&lt;span id="moveLeftImage"&gt;&lt;img src="/images/ko/rotate_left.png" alt="rotate left" /&gt;&lt;/span&gt;
-			&lt;span id="moveDownImage"&gt;&lt;img src="/images/ko/pitch_down.png" alt="down" /&gt;&lt;/span&gt;
-		&lt;/li&gt;
-	&lt;/ul&gt;
-
-$("#moveForwardImage").click(function() {
-		mouseMoveAPI("moveForward");
-	});
-	$("#moveBackwardImage").click(function() {
-		mouseMoveAPI("moveBackward");
-	});
-	$("#moveRightImage").click(function() {
-		mouseMoveAPI("moveRight");
-	});
-	$("#moveLeftImage").click(function() {
-		mouseMoveAPI("moveLeft");
-	});
-	$("#moveUpImage").click(function() {
-		mouseMoveAPI("moveUp");
-	});
-	$("#moveDownImage").click(function() {
-		mouseMoveAPI("moveDown");
-	});
-
-
-</code>
-			</pre>
-				<br> <b>javaScript</b>
-				<pre>
-<code>
-function mouseMoveAPI(eventType) {
-	if(managerFactory != null) {
-		managerFactory.mouseMove(eventType);
-	}
-}
+changeInsertIssueStateAPI(0);
 </code>
 				</pre>
 			</article>

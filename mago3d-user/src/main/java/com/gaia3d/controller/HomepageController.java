@@ -284,6 +284,20 @@ public class HomepageController {
 		}
 		return "/homepage/" + lang + "/api";
 	}
+	/**
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "spec.do")
+	public String Spec(HttpServletRequest request, Model model) {
+		String lang = null;
+		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		if(lang == null || "".equals(lang)) {
+			lang = "ko";
+		}
+		return "/homepage/" + lang + "/spec";
+	}
 	
 	/**
 	 * 언어 설정
