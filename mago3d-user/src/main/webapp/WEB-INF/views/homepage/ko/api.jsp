@@ -41,7 +41,7 @@
 			<ul class="list">
 				<li class="item"><span class="api_title"> <a class="api" href="#changeMagoStateAPI">changeMagoStateAPI</a>
 				</span></li>
-				<li class="item"><span class="api_title"> <a href="#changeBoundingBoxAPI">changeBonudingBoxAPI</a>
+				<li class="item"><span class="api_title"> <a href="#changeBoundingBoxAPI">changeBoundingBoxAPI</a>
 				</span></li>
 				<li class="item"><span class="api_title"> <a href="#changeShadowAPI">changeShadowAPI</a>
 				</span></li>
@@ -130,7 +130,7 @@
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeMagoStateAPI">changeMagoStateAPI()</span></h2>
+				<h2><span id="changeMagoStateAPI">changeMagoStateAPI</span></h2>
 				<p>mago3D 활성화 상태 값을 변경함으로서 화면에 mago3D Object 가 표시, 비표시 됩니다.</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -159,7 +159,7 @@
 &lt;/div&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 function changeMagoState(isShow) {
@@ -170,8 +170,8 @@ function changeMagoState(isShow) {
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeBoundingBoxAPI">changeBoundingBoxAPI()</span></h2>
-				<p>Block의 BoundingBox 표시 유무를 설정</p>
+				<h2><span id="changeBoundingBoxAPI">changeBoundingBoxAPI</span></h2>
+				<p>BoundingBox를 표시하려면 표시 라디오 버튼을 클릭합니다. 클릭하면 isShow가 true 값으로 넘어가며 changeBoundingBoxAPI가 활성화됩니다.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -191,7 +191,8 @@ function changeMagoState(isShow) {
 				<b>html</b>
 				<pre>
 <code>
-&lt;div&gt;BoundingBox
+&lt;div&gt;
+	&lt;span&gt;BoundingBox&lt;/span&gt;
 	&lt;input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" /&gt;
 	&lt;label for="showBoundingBox"&gt; 표시 &lt;/label&gt;
 	&lt;input type="radio" id="hideBoundingBox" name="boundingBox" value="false"  onclick="changeBoundingBox(false);" /&gt;
@@ -199,11 +200,10 @@ function changeMagoState(isShow) {
 &lt;/div&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
-<code class="javascript">
+<code class="JavaScript">
 function changeBoundingBox(isShow) {
-	$("input:radio[name='boundingBox']:radio[value='" + isShow + "']").prop("checked", true);
 	changeBoundingBoxAPI(isShow);
 }
 </code>
@@ -211,7 +211,7 @@ function changeBoundingBox(isShow) {
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeShadowAPI">changeShadowAPI()</span></h2>
+				<h2><span id="changeShadowAPI">changeShadowAPI</span></h2>
 				<p>블락의 Structure, Outfitting 그림자 표시 유무를 설정</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -240,11 +240,10 @@ function changeBoundingBox(isShow) {
 &lt;/div&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 function changeShadow(isShow) {
-	$("input:radio[name='shadow']:radio[value='" + isShow + "']").prop("checked", true);
 	changeShadowAPI(isShow);
 }
 </code>
@@ -252,7 +251,7 @@ function changeShadow(isShow) {
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeFrustumFarDistanceAPI">changeFrustumFarDistanceAPI()</span></h2>
+				<h2><span id="changeFrustumFarDistanceAPI">changeFrustumFarDistanceAPI</span></h2>
 				<p>입력 받은 거리의 제곱값을 이용해서 Frustum Culling 거리를 설정합니다.</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -274,11 +273,11 @@ function changeShadow(isShow) {
 				<pre>
 <code>
 &lt;label for="frustumFarDistance"&gt; 가시 거리 &lt;/label&gt;
-&lt;input type="text" id="frustumFarDistance" name="frustumFarDistance" placeholder="미터(m)" size=4" /&gt;
+&lt;input type="text" id="frustumFarDistance" name="frustumFarDistance" placeholder="미터(m)"/&gt;
 &lt;button type="button" id="changeFrustumFarDistanceAPI" class="btn btn-default btn-sm">적용&lt;/button&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 $("#changeFrustumFarDistanceAPI").click(function() {
@@ -290,7 +289,7 @@ $("#changeFrustumFarDistanceAPI").click(function() {
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="searchDataAPI">searchDataAPI()</span></h2>
+				<h2><span id="searchDataAPI">searchDataAPI</span></h2>
 				<p>데이터 고유키를 입력받아, 카메라 위치를 이동합니다.</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -312,13 +311,13 @@ $("#changeFrustumFarDistanceAPI").click(function() {
 				<pre>
 <code>
 &lt;div&gt;
-	&lt;span  style="padding-left: 10px; padding-right: 100px;"&gt;Data Key&lt;/span&gt;
-	&lt;input type="text" id="search_data_key" name="search_data_key" size="15" /&gt;
-	&lt;button type="button" id="searchData" style="width: 50px; background: #727272; font-size: 1.2rem;">검색&lt;/button&gt;
+	&lt;span&gt;Data Key&lt;/span&gt;
+	&lt;input type="text" id="search_data_key" name="search_data_key"/&gt;
+	&lt;button type="button" id="searchData">검색&lt;/button&gt;
 &lt;/div&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 $("#searchData").click(function() {
@@ -334,7 +333,7 @@ $("#searchData").click(function() {
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeColorAPI">changeColorAPI()</span></h2>
+				<h2><span id="changeColorAPI">changeColorAPI</span></h2>
 				<p>
 					입력받은 Object 를 입력받은 color 로 변경 표시합니다.<br> Object정보를 ','로 구분해서 복수 입력 가능합니다.
 				</p>
@@ -363,9 +362,9 @@ $("#searchData").click(function() {
 <code>
 &lt;div&gt;
 	&lt;label for="objectIds"&gt;Object Id 입력 &lt;/label&gt;
-	&lt;input type="text" id="objectIds" name="objectIds" placeholder=", 구분 입력" size=21" /&gt;
+	&lt;input type="text" id="objectIds" name="objectIds" placeholder=", 구분 입력"/&gt;
 	&lt;label for="colorBlock"&gt;색깔&lt;/label/&gt;
-	&lt;select id="colorBlock" name="colorBlock" style="width:100px; height: 25px;"/&gt;
+	&lt;select id="colorBlock" name="colorBlock"/&gt;
 		&lt;option value=""&gt; 없음 &lt;/option/&gt;
 		&lt;option value="255,0,0"&gt; 빨강 &lt;/option/&gt;
 		&lt;option value="255,255,0"&gt; 노랑&lt;/option/&gt;
@@ -378,7 +377,7 @@ $("#searchData").click(function() {
 &lt;div/&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 $("#changeColorAPI").click(function(e) {
@@ -390,7 +389,7 @@ $("#changeColorAPI").click(function(e) {
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeLocationAndRotationAPI">changeLocationAndRotationAPI()</span></h2>
+				<h2><span id="changeLocationAndRotationAPI">changeLocationAndRotationAPI</span></h2>
 				<p>입력 받은 위치정보와 회전 정보로 블록을 변환 시킵니다.</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -439,19 +438,19 @@ $("#changeColorAPI").click(function(e) {
 	&lt;div&gt;
 		&lt;span&gt;
 			&lt;label for="move_data_key"&gt;Data Key &lt;/label&gt;
-			&lt;input type="text" id="move_data_key" name="move_data_key" size="15" /&gt;
+			&lt;input type="text" id="move_data_key" name="move_data_key"/&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;
 	&lt;div&gt;
 		&lt;span&gt;
 			&lt;label for="move_latitude"&gt;위도&lt;/label&gt;
-			&lt;input type="text" id="move_latitude" name="move_latitude" size="15" /&gt;
+			&lt;input type="text" id="move_latitude" name="move_latitude"/&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;
 	&lt;div&gt;
 		&lt;span&gt;
 			&lt;label for="move_longitude"&gt;경도&lt;/label&gt;
-			&lt;input type="text" id="move_longitude" name="move_longitude" size="15" /&gt;
+			&lt;input type="text" id="move_longitude" name="move_longitude"/&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;	
 	.
@@ -460,67 +459,27 @@ $("#changeColorAPI").click(function(e) {
 	&lt;div&gt;
 		&lt;span&gt;
 			&lt;label for="move_roll"&gt;ROLL&lt;/label&gt;
-			&lt;input type="text" id="move_roll" name="move_roll" size="15" /&gt;
+			&lt;input type="text" id="move_roll" name="move_roll"/&gt;
 			&lt;button type="button" id="changeLocationAndRotationAPI">변환&lt;/button&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;		
 &lt;/div&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 $("#changeLocationAndRotationAPI").click(function() {
-	if(!changeLocationAndRotationCheck()) return false;
 	changeLocationAndRotationAPI(	$("#move_data_key").val(), $("#move_latitude").val(), $("#move_longitude").val(), 
-									$("#move_height").val(), $("#move_heading").val(), $("#move_pitch").val(), $("#move_roll").val());
+							$("#move_height").val(), $("#move_heading").val(), $("#move_pitch").val(), $("#move_roll").val());
 });
-
-function changeLocationAndRotationCheck() {
-	if ($.trim($("#move_data_key").val()) === ""){
-		alert("Data Key를 입력해 주세요.");
-		$("#move_data_key").focus();
-		return false;
-	}
-	if ($.trim($("#move_latitude").val()) === ""){
-		alert("위도를 입력해 주세요.");
-		$("#move_latitude").focus();
-		return false;
-	}
-	if ($.trim($("#move_longitude").val()) === ""){
-		alert("경도를 입력해 주세요.");
-		$("#move_longitude").focus();
-		return false;
-	}
-	if ($.trim($("#move_height").val()) === ""){
-		alert("높이를 입력해 주세요.");
-		$("#move_height").focus();
-		return false;
-	}
-	if ($.trim($("#move_heading").val()) === ""){
-		alert("heading을 입력해 주세요.");
-		$("#move_heading").focus();
-		return false;
-	}
-	if ($.trim($("#move_pitch").val()) === ""){
-		alert("pitch를 입력해 주세요.");
-		$("#move_pitch").focus();
-		return false;
-	}
-	if ($.trim($("#move_roll").val()) === ""){
-		alert("roll를 입력해 주세요.");
-		$("#move_roll").focus();
-		return false;
-	}
-	return true;
-}
 </code>
 				</pre>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeMouseMoveAPI">changeMouseMoveAPI()</span></h2>
-				<p>마우스 클릭 객체 이동 대상 변경합니다</p>
+				<h2><span id="changeMouseMoveAPI">changeMouseMoveAPI</span></h2>
+				<p>마우스를 클릭할 때 이동 모드를 변경할 수 있습니다. mouseMoveMode가 0이면 전체이동, 1이면 객체이동, 2이면 이동이 불가능해집니다.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -532,7 +491,7 @@ function changeLocationAndRotationCheck() {
 					<tbody>
 						<tr>
 							<td>mouseMoveMode</td>
-							<td>0이면 전체, 1이면 object</td>
+							<td>mouseMoveMode 0 = All, 1 = object, 2 = None</td>
 						</tr>
 					</tbody>
 				</table>
@@ -540,23 +499,25 @@ function changeLocationAndRotationCheck() {
 				<b>html</b>
 				<pre>
 <code>
-&lt;div&gt;마우스 이동모드
+&lt;div&gt;
+	&lt;span&gt;Selecting And Moving&lt;/span&gt;
+	&lt;input type="radio" id="mouseNoneMove" name="mouseMoveMode" value="2" onclick="changeMouseMove('2');"/&gt;
+	&lt;label for="mouseNoneMove"&gt; None &lt;/label&gt;
 	&lt;div&gt;
-		&lt;input type="radio" id="mouseBlockMove" name="mouseBlockMove" value="0" onclick="changeMouseMove('0')"/&gt;
-		&lt;label for="mouseBlockMove"&gt;Block&lt;/label&gt;
+		&lt;input type="radio" id="mouseAllMove" name="mouseBlockMove" value="0" onclick="changeMouseMove('0')"/&gt;
+		&lt;label for="mouseAllMove"&gt;All&lt;/label&gt;
 	&lt;/div&gt;
 	&lt;div&gt;
-		&lt;input type="radio" id="mouseBlockMove" name="mouseBlockMove" value="0" onclick="changeMouseMove('0')"/&gt;
-		&lt;label for="mouseBlockMove"&gt;Block&lt;/label&gt;
+		&lt;input type="radio" id="mouseObjectMove" name="mouseBlockMove" value="1" onclick="changeMouseMove('1')"/&gt;
+		&lt;label for="mouseObjectMove"&gt;Object&lt;/label&gt;
 	&lt;/div&gt;		
 &lt;/div&gt;	
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 function changeMouseMove(mouseMoveMode) {
-	$("input:radio[name='mouseMoveMode']:radio[value='" + mouseMoveMode + "']").prop("checked", true);
 	changeMouseMoveAPI(mouseMoveMode);
 }
 </code>
@@ -564,8 +525,8 @@ function changeMouseMove(mouseMoveMode) {
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeInsertIssueModeAPI">changeInsertIssueModeAPI()</span></h2>
-				<p>이슈 등록 활성화 유무</p>
+				<h2><span id="changeInsertIssueModeAPI">changeInsertIssueModeAPI</span></h2>
+				<p>이슈등록 버튼을 클릭하면 changeInsertIssueModeAPI가 활성화됩니다. 활성화된 상태에서 이슈를 등록하고 싶은 객체를 선택하면 데이터베이스 policy 테이블에 저장되어있는 callback함수 showInsertIssueLayer를 호출합니다.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -582,12 +543,13 @@ function changeMouseMove(mouseMoveMode) {
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
+				<b>html</b>
 				<pre>
 <code>
 &lt;button id="issueEnable"&gt;Issue 등록&lt;/button&gt;
 </code>
 				</pre>
-				<br><b>html</b>
+				<br><b>JavaScript</b>
 				<pre>
 <code>
 var isInsertIssue = true;
@@ -603,12 +565,32 @@ $("#issueEnable").click(function() {
 });
 </code>
 			</pre>
+			<br><b>mago3DJS로 부터 호출 되는 callback 함수</b>
+			<pre>
+<code class=javascript>
+function showInsertIssueLayer(data_name, data_key, latitude, longitude, height) {
+	if(insertIssueFlag) {
+		if($("#inputIssueLayer").css("display") == "none") {
+			$("#inputIssueLayer").show();
+			
+			$("#data_key").val(data_name);
+			$("#latitude").val(latitude);
+			$("#longitude").val(longitude);
+			$("#height").val(height);
+			
+			// 현재 좌표를 저장
+			$("#now_latitude").val(latitude);
+			$("#now_longitude").val(longitude);
+		}
+	}
+}
+</code>
+			</pre>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeObjectInfoViewModeAPI">changeObjectInfoViewModeAPI()</span></h2>
-				<p>object 정보 표시 활성화 유무</p>
-				<p>policy 테이블 안에 있는 geo_callback_selectedobject라는 컬럼에 함수 이름을 등록하고, 등록한 함수 이름을Callback.js으로 불러옵니다.</p>
+				<h2><span id="changeObjectInfoViewModeAPI">changeObjectInfoViewModeAPI</span></h2>
+				<p>Object 정보 표시 버튼을 클릭하면 changeObjectInfoViewModeAPI가 활성화됩니다. 활성화된 상태에서 정보를 얻고 싶은 객체를 선택하면 그 객체의 내용이 mago3DJS로 부터 호출되는 callback 함수 showSelectedOject에서 정보가 토스트 메세지로 호출됩니다.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -625,7 +607,30 @@ $("#issueEnable").click(function() {
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
-				<b>mago3DJS로 부터 호출 되는 callback 함수</b>
+				<br><b>html</b>
+				<pre>
+<code>
+&lt;div&gt;
+	&lt;button id="objectInfoEnable"&gt;Object 정보&lt;/button&gt;	
+&lt;/div&gt;
+</code>			
+				</pre>
+				<br><b>JavaScript</b>
+				<pre>
+<code>
+$("#objectInfoEnable").click(function() {
+	if(objectInfoViewFlag) {
+		objectInfoViewFlag = false;
+		$("#objectInfoEnable").removeClass("on");
+	} else {
+		objectInfoViewFlag = true;
+		$("#objectInfoEnable").addClass("on");			
+	}
+	changeObjectInfoViewModeAPI(objectInfoViewFlag);
+});
+</code>
+				</pre>
+				<br><b>mago3DJS로 부터 호출 되는 callback 함수</b>
 				<pre>
 <code>
 function showSelectedObject(projectId, blockId, objectId, latitude, longitude, height, heading, pitch, roll){
@@ -663,38 +668,10 @@ function showSelectedObject(projectId, blockId, objectId, latitude, longitude, h
 }
 </code>
 				</pre>
-				<br><b>html</b>
-				<pre>
-<code>
-&lt;div&gt;
-	&lt;button id="objectInfoEnable"&gt;Object 정보&lt;/button&gt;	
-&lt;/div&gt;
-</code>			
-				</pre>
-				<pre>
-<code>
-
-</code>
-			</pre>
-				<br><b>javaScript</b>
-				<pre>
-<code>
-$("#objectInfoEnable").click(function() {
-	if(objectInfoViewFlag) {
-		objectInfoViewFlag = false;
-		$("#objectInfoEnable").removeClass("on");
-	} else {
-		objectInfoViewFlag = true;
-		$("#objectInfoEnable").addClass("on");			
-	}
-	changeObjectInfoViewModeAPI(objectInfoViewFlag);
-});
-</code>
-				</pre>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeListIssueViewModeAPI">changeListIssueViewModeAPI()</span></h2>
+				<h2><span id="changeListIssueViewModeAPI">changeListIssueViewModeAPI</span></h2>
 				<p>now_latitude, now_longitude를 가지고 데이터 그룹에 있는 그룹 중에 가장 가까운 그룹 위치를 찾고 그 데이터 그룹에 속하는 issue 100개를 가져와서 보여줍니다.</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -714,13 +691,13 @@ $("#objectInfoEnable").click(function() {
 				<h4>Examples:</h4>
 				<b>html</b>
 				<pre>
-<code>
+<code class="html">
 &lt;button id="issuesEnable"&gt;Issues 표시&lt;/button&gt;
-&lt;input type="hidden" id="now_latitude" name="now_latitude" value="${now_latitude }" /&gt;
-&lt;input type="hidden" id="now_longitude" name="now_longitude" value="${now_longitude }"  /&gt;
+&lt;input type="hidden" id="now_latitude" name="now_latitude" value="&#36;{now_latitude}" /&gt;
+&lt;input type="hidden" id="now_longitude" name="now_longitude" value="&#36;{now_longitude}"  /&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 $("#issuesEnable").click(function() {
@@ -766,7 +743,7 @@ $("#issuesEnable").click(function() {
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="drawInsertIssueImageAPI">drawInsertIssueImageAPI()</span></h2>
+				<h2><span id="drawInsertIssueImageAPI">drawInsertIssueImageAPI</span></h2>
 				<p>Pin image를 그림</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -808,13 +785,7 @@ $("#issuesEnable").click(function() {
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
-				<b>html</b>
-				<pre>
-<code>
-없음
-</code>
-			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
@@ -823,7 +794,7 @@ drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, iss
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeInsertIssueStateAPI">changeInsertIssueStateAPI()</span></h2>
+				<h2><span id="changeInsertIssueStateAPI">changeInsertIssueStateAPI</span></h2>
 				<p>issue 등록 geo 정보 관련 상태 변경</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -841,9 +812,9 @@ drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, iss
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
-				<b>javaScript</b>
+				<b>JavaScript</b>
 				<pre>
-<code>
+<code class="javascript">
 changeInsertIssueStateAPI(0);
 </code>
 				</pre>
