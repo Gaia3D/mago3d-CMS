@@ -49,7 +49,7 @@
 			<ul>
 				<li class="on"><a href="/homepage/docs.do">Docs</a></li>
 				<li><a href="/homepage/api.do" target="_blank">mago3D.JS API</a></li>
-				<li><a href="#"  onclick='alert("준비 중 입니다."); return false;'>F4D-Converter Spec</a>
+				<li><a href="/homepage/spec.do">F4D-Converter Spec</a>
 			</ul>
 		</div>
 		<div class="docs-main">
