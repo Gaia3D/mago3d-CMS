@@ -1,5 +1,5 @@
-drop table if exists api_log;
-drop table if exists external_service;
+drop table if exists api_log cascade;
+drop table if exists external_service cascade;
 
 -- API 호출 이력
 create table api_log(
