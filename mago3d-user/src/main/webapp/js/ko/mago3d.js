@@ -1,3 +1,1892 @@
+/**
+ * @file tgajs - Javascript decoder & (experimental) encoder for TGA files
+ * @desc tgajs is a fork from https://github.com/vthibault/jsTGALoader
+ * @author Vincent Thibault (Original author)
+ * @author Lukas Schmitt
+ * @version 1.0.0
+ */
+
+/* Copyright (c) 2013, Vincent Thibault. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without modification,
+ are permitted provided that the following conditions are met:
+
+ * Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright notice,
+ this list of conditions and the following disclaimer in the documentation
+ and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
+
+(function (_global) {
+  'use strict';
+
+  /**
+   * @var {object} TGA type constants
+   */
+  Targa.Type = {
+    NO_DATA: 0,
+    INDEXED: 1,
+    RGB: 2,
+    GREY: 3,
+    RLE_INDEXED: 9,
+    RLE_RGB: 10,
+    RLE_GREY: 11
+  };
+
+  /**
+   * @var {object} TGA origin constants
+   */
+  Targa.Origin = {
+    BOTTOM_LEFT: 0x00,
+    BOTTOM_RIGHT: 0x01,
+    TOP_LEFT: 0x02,
+    TOP_RIGHT: 0x03,
+    SHIFT: 0x04,
+    MASK: 0x30,
+    ALPHA: 0x08
+  };
+
+  Targa.HEADER_SIZE = 18;
+  Targa.FOOTER_SIZE = 26;
+  Targa.LITTLE_ENDIAN = true;
+  Targa.RLE_BIT = 0x80;
+  Targa.RLE_MASK = 0x7f;
+  Targa.RLE_PACKET = 1;
+  Targa.RAW_PACKET = 2;
+  Targa.SIGNATURE = "TRUEVISION-XFILE.\0";
+
+  /**
+   * TGA Namespace
+   * @constructor
+   */
+  function Targa() {
+    if (arguments.length == 1) {
+      var h = arguments[0];
+
+      this.header = createHeader(h);
+      setHeaderBooleans(this.header);
+      checkHeader(this.header);
+    }
+  }
+
+  /**
+   * Sets header or default values
+   * @param header header
+   * @returns {Object}
+   */
+  function createHeader(header) {
+    return {
+      /* 0x00  BYTE */  idLength: defaultFor(header.idLength, 0),
+      /* 0x01  BYTE */  colorMapType: defaultFor(header.colorMapType, 0),
+      /* 0x02  BYTE */  imageType: defaultFor(header.imageType, Targa.Type.RGB),
+      /* 0x03  WORD */  colorMapIndex: defaultFor(header.colorMapIndex, 0),
+      /* 0x05  WORD */  colorMapLength: defaultFor(header.colorMapLength, 0),
+      /* 0x07  BYTE */  colorMapDepth: defaultFor(header.colorMapDepth, 0),
+      /* 0x08  WORD */  offsetX: defaultFor(header.offsetX, 0),
+      /* 0x0a  WORD */  offsetY: defaultFor(header.offsetY, 0),
+      /* 0x0c  WORD */  width: defaultFor(header.width, 0),
+      /* 0x0e  WORD */  height: defaultFor(header.height, 0),
+      /* 0x10  BYTE */  pixelDepth: defaultFor(header.pixelDepth,32),
+      /* 0x11  BYTE */  flags: defaultFor(header.flags, 8)
+    };
+  }
+
+  function defaultFor(arg, val) { return typeof arg !== 'undefined' ? arg : val; }
+
+  /**
+   * Write footer of TGA file to view
+   * Byte 0-3 - Extension Area Offset, 0 if no Extension Area exists
+   * Byte 4-7 - Developer Directory Offset, 0 if no Developer Area exists
+   * Byte 8-25 - Signature
+   * @param {Uint8Array} footer
+   */
+  function writeFooter(footer) {
+    var signature = Targa.SIGNATURE;
+    var offset = footer.byteLength - signature.length;
+    for (var i = 0; i < signature.length; i++) {
+      footer[offset + i] = signature.charCodeAt(i);
+    }
+  }
+
+  /**
+   * Write header of TGA file to view
+   * @param header
+   * @param view DataView
+   */
+  function writeHeader(header, view) {
+    var littleEndian = Targa.LITTLE_ENDIAN;
+
+    view.setUint8(0x00, header.idLength);
+    view.setUint8(0x01, header.colorMapType);
+    view.setUint8(0x02, header.imageType);
+    view.setUint16(0x03, header.colorMapIndex, littleEndian);
+    view.setUint16(0x05, header.colorMapLength, littleEndian);
+    view.setUint8(0x07, header.colorMapDepth);
+    view.setUint16(0x08, header.offsetX, littleEndian);
+    view.setUint16(0x0a, header.offsetY, littleEndian);
+    view.setUint16(0x0c, header.width, littleEndian);
+    view.setUint16(0x0e, header.height, littleEndian);
+    view.setUint8(0x10, header.pixelDepth);
+    view.setUint8(0x11, header.flags);
+  }
+
+  function readHeader(view) {
+    var littleEndian = Targa.LITTLE_ENDIAN;
+
+    // Not enough data to contain header ?
+    if (view.byteLength  < 0x12) {
+      throw new Error('Targa::load() - Not enough data to contain header');
+    }
+
+    var header = {};
+    header.idLength = view.getUint8(0x00);
+    header.colorMapType = view.getUint8(0x01);
+    header.imageType =  view.getUint8(0x02);
+    header.colorMapIndex = view.getUint16(0x03, littleEndian);
+    header.colorMapLength = view.getUint16(0x05, littleEndian);
+    header.colorMapDepth = view.getUint8(0x07);
+    header.offsetX = view.getUint16(0x08, littleEndian);
+    header.offsetY = view.getUint16(0x0a, littleEndian);
+    header.width = view.getUint16(0x0c, littleEndian);
+    header.height = view.getUint16(0x0e, littleEndian);
+    header.pixelDepth = view.getUint8(0x10);
+    header.flags = view.getUint8(0x11);
+
+    return header;
+  }
+
+  /**
+   * Set additional header booleans
+   * @param header
+   */
+  function setHeaderBooleans(header) {
+    header.hasEncoding = (header.imageType === Targa.Type.RLE_INDEXED || header.imageType === Targa.Type.RLE_RGB || header.imageType === Targa.Type.RLE_GREY);
+    header.hasColorMap = (header.imageType === Targa.Type.RLE_INDEXED || header.imageType === Targa.Type.INDEXED);
+    header.isGreyColor = (header.imageType === Targa.Type.RLE_GREY || header.imageType === Targa.Type.GREY);
+    header.bytePerPixel = header.pixelDepth >> 3;
+    header.origin = (header.flags & Targa.Origin.MASK) >> Targa.Origin.SHIFT;
+    header.alphaBits = header.flags & Targa.Origin.ALPHA;
+  }
+
+  /**
+   * Check the header of TGA file to detect errors
+   *
+   * @param {object} header tga header structure
+   * @throws Error
+   */
+  function checkHeader(header) {
+    // What the need of a file without data ?
+    if (header.imageType === Targa.Type.NO_DATA) {
+      throw new Error('Targa::checkHeader() - No data');
+    }
+
+    // Indexed type
+    if (header.hasColorMap) {
+      if (header.colorMapLength > 256 || header.colorMapType !== 1) {
+        throw new Error('Targa::checkHeader() - Unsupported colormap for indexed type');
+      }
+      if (header.colorMapDepth !== 16 && header.colorMapDepth !== 24  && header.colorMapDepth !== 32) {
+        throw new Error('Targa::checkHeader() - Unsupported colormap depth');
+      }
+    }
+    else {
+      if (header.colorMapType) {
+        throw new Error('Targa::checkHeader() - Why does the image contain a palette ?');
+      }
+    }
+
+    // Check image size
+    if (header.width <= 0 || header.height <= 0) {
+      throw new Error('Targa::checkHeader() - Invalid image size');
+    }
+
+    // Check pixel size
+    if (header.pixelDepth !== 8 &&
+      header.pixelDepth !== 16 &&
+      header.pixelDepth !== 24 &&
+      header.pixelDepth !== 32) {
+      throw new Error('Targa::checkHeader() - Invalid pixel size "' + header.pixelDepth + '"');
+    }
+
+    // Check alpha size
+    if (header.alphaBits !== 0 &&
+        header.alphaBits !== 1 &&
+        header.alphaBits !== 8) {
+      throw new Error('Targa::checkHeader() - Unsuppported alpha size');
+    }
+  }
+
+
+  /**
+   * Decode RLE compression
+   *
+   * @param {Uint8Array} data
+   * @param {number} bytesPerPixel bytes per Pixel
+   * @param {number} outputSize in byte: width * height * pixelSize
+   */
+  function decodeRLE(data, bytesPerPixel, outputSize) {
+    var pos, c, count, i, offset;
+    var pixels, output;
+
+    output = new Uint8Array(outputSize);
+    pixels = new Uint8Array(bytesPerPixel);
+    offset = 0; // offset in data
+    pos = 0; // offset for output
+
+    while (pos < outputSize) {
+      c = data[offset++]; // current byte to check
+      count = (c & Targa.RLE_MASK) + 1; // repetition count of pixels, the lower 7 bits + 1
+
+      // RLE packet, if highest bit is set to 1.
+      if (c & Targa.RLE_BIT) {
+        // Copy pixel values to be repeated to tmp array
+        for (i = 0; i < bytesPerPixel; ++i) {
+          pixels[i] = data[offset++];
+        }
+
+        // Copy pixel values * count to output
+        for (i = 0; i < count; ++i) {
+          output.set(pixels, pos);
+          pos += bytesPerPixel;
+        }
+      }
+
+      // Raw packet (Non-Run-Length Encoded)
+      else {
+        count *= bytesPerPixel;
+        for (i = 0; i < count; ++i) {
+          output[pos++] = data[offset++];
+        }
+      }
+    }
+
+    if (pos > outputSize) {
+      throw new Error("Targa::decodeRLE() - Read bytes: " + pos + " Expected bytes: " + outputSize);
+    }
+
+    return output;
+  }
+
+  /**
+   * Encode ImageData object with RLE compression
+   *
+   * @param header
+   * @param imageData from canvas to compress
+   */
+  function encodeRLE(header, imageData) {
+    var maxRepetitionCount = 128;
+    var i;
+    var data = imageData;
+    var output = []; // output size is unknown
+    var pos = 0; // pos in imageData array
+    var bytesPerPixel = header.pixelDepth >> 3;
+    var offset = 0;
+    var packetType, packetLength, packetHeader;
+    var tgaLength = header.width * header.height * bytesPerPixel;
+    var isSamePixel = function isSamePixel(pos, offset) {
+      for (var i = 0; i < bytesPerPixel; i++) {
+        if (data[pos * bytesPerPixel + i] !== data[offset * bytesPerPixel + i]) {
+          return false;
+        }
+      }
+      return true;
+    };
+    var getPacketType = function(pos) {
+      if (isSamePixel(pos, pos + 1)) {
+        return Targa.RLE_PACKET;
+      }
+      return Targa.RAW_PACKET;
+    };
+
+    while (pos * bytesPerPixel < data.length && pos * bytesPerPixel < tgaLength) {
+      // determine packet type
+      packetType = getPacketType(pos);
+
+      // determine packet length
+      packetLength = 0;
+      if (packetType === Targa.RLE_PACKET) {
+        while (pos + packetLength < data.length
+        && packetLength < maxRepetitionCount
+        && isSamePixel(pos, pos + packetLength)) {
+          packetLength++;
+        }
+      } else { // packetType === Targa.RAW_PACKET
+        while (pos + packetLength < data.length
+        && packetLength < maxRepetitionCount
+        && getPacketType(pos + packetLength) === Targa.RAW_PACKET) {
+          packetLength++;
+        }
+      }
+
+      // write packet header
+      packetHeader = packetLength - 1;
+      if (packetType === Targa.RLE_PACKET) {
+        packetHeader |= Targa.RLE_BIT;
+      }
+      output[offset++] = packetHeader;
+
+      // write rle packet pixel OR raw pixels
+      if (packetType === Targa.RLE_PACKET) {
+        for (i = 0; i < bytesPerPixel; i++) {
+          output[i + offset] = data[i + pos * bytesPerPixel];
+        }
+        offset += bytesPerPixel;
+      } else {
+        for (i = 0; i < bytesPerPixel * packetLength; i++) {
+          output[i + offset] = data[i + pos * bytesPerPixel];
+        }
+        offset += bytesPerPixel * packetLength;
+      }
+      pos += packetLength;
+    }
+
+    return new Uint8Array(output);
+  }
+
+
+  /**
+   * Return a ImageData object from a TGA file (8bits)
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} indexes - index to colorMap
+   * @param {Array} colorMap
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageData8bits(imageData, indexes, colorMap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var color, index, offset, i, x, y;
+    var bytePerPixel = this.header.colorMapDepth >> 3;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i++) {
+        offset = (x + width * y) * 4;
+        index = indexes[i] * bytePerPixel;
+        if (bytePerPixel === 4) {
+          imageData[offset    ] = colorMap[index + 2]; // red
+          imageData[offset + 1] = colorMap[index + 1]; // green
+          imageData[offset + 2] = colorMap[index    ]; // blue
+          imageData[offset + 3] = colorMap[index + 3]; // alpha
+        } else if (bytePerPixel === 3) {
+          imageData[offset    ] = colorMap[index + 2]; // red
+          imageData[offset + 1] = colorMap[index + 1]; // green
+          imageData[offset + 2] = colorMap[index    ]; // blue
+          imageData[offset + 3] = 255; // alpha
+        } else if (bytePerPixel === 2) {
+          color = colorMap[index] | (colorMap[index + 1] << 8);
+          imageData[offset    ] = (color & 0x7C00) >> 7; // red
+          imageData[offset + 1] = (color & 0x03E0) >> 2; // green
+          imageData[offset + 2] = (color & 0x001F) << 3; // blue
+          imageData[offset + 3] = (color & 0x8000) ? 0 : 255; // overlay 0 = opaque and 1 = transparent Discussion at: https://bugzilla.gnome.org/show_bug.cgi?id=683381
+        }
+      }
+    }
+
+    return imageData;
+  }
+
+
+  /**
+   * Return a ImageData object from a TGA file (16bits)
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} pixels data
+   * @param {Array} colormap - not used
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageData16bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var color, offset, i, x, y;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i += 2) {
+        color = pixels[i] | (pixels[i + 1] << 8);
+        offset = (x + width * y) * 4;
+        imageData[offset    ] = (color & 0x7C00) >> 7; // red
+        imageData[offset + 1] = (color & 0x03E0) >> 2; // green
+        imageData[offset + 2] = (color & 0x001F) << 3; // blue
+        imageData[offset + 3] = (color & 0x8000) ? 0 : 255; // overlay 0 = opaque and 1 = transparent Discussion at: https://bugzilla.gnome.org/show_bug.cgi?id=683381
+      }
+    }
+
+    return imageData;
+  }
+
+
+  /**
+   * Return a ImageData object from a TGA file (24bits)
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} pixels data
+   * @param {Array} colormap - not used
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageData24bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var offset, i, x, y;
+    var bpp = this.header.pixelDepth >> 3;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i += bpp) {
+        offset = (x + width * y) * 4;
+        imageData[offset + 3] = 255;  // alpha
+        imageData[offset + 2] = pixels[i    ]; // blue
+        imageData[offset + 1] = pixels[i + 1]; // green
+        imageData[offset    ] = pixels[i + 2]; // red
+      }
+    }
+
+    return imageData;
+  }
+
+
+  /**
+   * Return a ImageData object from a TGA file (32bits)
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} pixels data from TGA file
+   * @param {Array} colormap - not used
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageData32bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var i, x, y, offset;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i += 4) {
+        offset = (x + width * y) * 4;
+        imageData[offset + 2] = pixels[i    ]; // blue
+        imageData[offset + 1] = pixels[i + 1]; // green
+        imageData[offset    ] = pixels[i + 2]; // red
+        imageData[offset + 3] = pixels[i + 3]; // alpha
+      }
+    }
+
+    return imageData;
+  }
+
+  /**
+   * Return a ImageData object from a TGA file (32bits). Uses pre multiplied alpha values
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} pixels data from TGA file
+   * @param {Array} colormap - not used
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageData32bitsPre(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var i, x, y, offset, alpha;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i += 4) {
+        offset = (x + width * y) * 4;
+        alpha = pixels[i + 3] * 255; // TODO needs testing
+        imageData[offset + 2] = pixels[i    ] / alpha; // blue
+        imageData[offset + 1] = pixels[i + 1] / alpha; // green
+        imageData[offset    ] = pixels[i + 2] / alpha; // red
+        imageData[offset + 3] = pixels[i + 3]; // alpha
+      }
+    }
+
+    return imageData;
+  }
+
+
+  /**
+   * Return a ImageData object from a TGA file (8bits grey)
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} pixels data
+   * @param {Array} colormap - not used
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageDataGrey8bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var color, offset, i, x, y;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i++) {
+        color = pixels[i];
+        offset = (x + width * y) * 4;
+        imageData[offset    ] = color; // red
+        imageData[offset + 1] = color; // green
+        imageData[offset + 2] = color; // blue
+        imageData[offset + 3] = 255;   // alpha
+      }
+    }
+
+    return imageData;
+  }
+
+
+  /**
+   * Return a ImageData object from a TGA file (16bits grey) 8 Bit RGB and 8 Bit Alpha
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} pixels data
+   * @param {Array} colormap - not used
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageDataGrey16bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var color, offset, i, x, y;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i += 2) {
+        color = pixels[i];
+        offset = (x + width * y) * 4;
+        imageData[offset] = color;
+        imageData[offset + 1] = color;
+        imageData[offset + 2] = color;
+        imageData[offset + 3] = pixels[i + 1];
+      }
+    }
+
+    return imageData;
+  }
+
+
+  /**
+   * Open a targa file using XHR, be aware with Cross Domain files...
+   *
+   * @param {string} path - Path of the filename to load
+   * @param {function} callback - callback to trigger when the file is loaded
+   */
+  Targa.prototype.open = function targaOpen(path, callback) {
+    var req, tga = this;
+    req = new XMLHttpRequest();
+    req.open('GET', path, true);
+    req.responseType = 'arraybuffer';
+    req.onload = function () {
+      if (this.status === 200) {
+        tga.arrayBuffer = req.response;
+        tga.load(tga.arrayBuffer);
+        if (callback) {
+          callback.call(tga);
+        }
+      }
+    };
+    req.send(null);
+  };
+
+
+  function readFooter(view) {
+    var offset = view.byteLength - Targa.FOOTER_SIZE;
+    var signature = Targa.SIGNATURE;
+
+    var footer = {};
+
+    var signatureArray = new Uint8Array(view.buffer, offset + 0x08, signature.length);
+    var str = String.fromCharCode.apply(null, signatureArray);
+
+    if (!isSignatureValid(str)) {
+      footer.hasFooter = false;
+      return footer;
+    }
+
+    footer.hasFooter = true;
+    footer.extensionOffset = view.getUint32(offset, Targa.LITTLE_ENDIAN);
+    footer.developerOffset = view.getUint32(offset + 0x04, Targa.LITTLE_ENDIAN);
+    footer.hasExtensionArea = footer.extensionOffset !== 0;
+    footer.hasDeveloperArea = footer.developerOffset !== 0;
+
+    if (footer.extensionOffset) {
+      footer.attributeType = view.getUint8(footer.extensionOffset + 494);
+    }
+
+    return footer;
+  }
+
+  function isSignatureValid(str) {
+    var signature = Targa.SIGNATURE;
+
+    for (var i = 0; i < signature.length; i++) {
+      if (str.charCodeAt(i) !== signature.charCodeAt(i)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Load and parse a TGA file
+   *
+   * @param {ArrayBuffer} data - TGA file buffer array
+   */
+  Targa.prototype.load = function targaLoad(data) {
+    var dataView = new DataView(data);
+
+    this.headerData = new Uint8Array(data, 0, Targa.HEADER_SIZE);
+
+    this.header = readHeader(dataView); // Parse Header
+    setHeaderBooleans(this.header);
+    checkHeader(this.header); // Check if a valid TGA file (or if we can load it)
+
+    var offset = Targa.HEADER_SIZE;
+    // Move to data
+    offset += this.header.idLength;
+    if (offset >= data.byteLength) {
+      throw new Error('Targa::load() - No data');
+    }
+
+    // Read palette
+    if (this.header.hasColorMap) {
+      var colorMapSize = this.header.colorMapLength * (this.header.colorMapDepth >> 3);
+      this.palette = new Uint8Array(data, offset, colorMapSize);
+      offset += colorMapSize;
+    }
+
+    var bytesPerPixel = this.header.pixelDepth >> 3;
+    var imageSize = this.header.width * this.header.height;
+    var pixelTotal = imageSize * bytesPerPixel;
+
+    if (this.header.hasEncoding) { // RLE encoded
+      var RLELength = data.byteLength - offset - Targa.FOOTER_SIZE;
+      var RLEData = new Uint8Array(data, offset, RLELength);
+      this.imageData = decodeRLE(RLEData, bytesPerPixel, pixelTotal);
+    } else { // RAW pixels
+      this.imageData = new Uint8Array(data, offset, this.header.hasColorMap ? imageSize : pixelTotal);
+    }
+    
+    this.footer = readFooter(dataView);
+
+    if (this.header.alphaBits !== 0  || this.footer.hasExtensionArea && (this.footer.attributeType === 3 || this.footer.attributeType === 4)) {
+      this.footer.usesAlpha = true;
+    }
+  };
+
+
+  /**
+   * Return a ImageData object from a TGA file
+   *
+   * @param {object} imageData - Optional ImageData to work with
+   * @returns {object} imageData
+   */
+  Targa.prototype.getImageData = function targaGetImageData(imageData) {
+    var width = this.header.width;
+    var height = this.header.height;
+    var origin = (this.header.flags & Targa.Origin.MASK) >> Targa.Origin.SHIFT;
+    var x_start, x_step, x_end, y_start, y_step, y_end;
+    var getImageData;
+
+    // Create an imageData
+    if (!imageData) {
+      if (document) {
+        imageData = document.createElement('canvas').getContext('2d').createImageData(width, height);
+      }
+      // In Thread context ?
+      else {
+        imageData = {
+          width: width,
+          height: height,
+          data: new Uint8ClampedArray(width * height * 4)
+        };
+      }
+    }
+
+    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.TOP_RIGHT) {
+      y_start = 0;
+      y_step = 1;
+      y_end = height;
+    }
+    else {
+      y_start = height - 1;
+      y_step = -1;
+      y_end = -1;
+    }
+
+    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.BOTTOM_LEFT) {
+      x_start = 0;
+      x_step = 1;
+      x_end = width;
+    }
+    else {
+      x_start = width - 1;
+      x_step = -1;
+      x_end = -1;
+    }
+
+    // TODO: use this.header.offsetX and this.header.offsetY ?
+
+    switch (this.header.pixelDepth) {
+      case 8:
+        getImageData = this.header.isGreyColor ? getImageDataGrey8bits : getImageData8bits;
+        break;
+
+      case 16:
+        getImageData = this.header.isGreyColor ? getImageDataGrey16bits : getImageData16bits;
+        break;
+
+      case 24:
+        getImageData = getImageData24bits;
+        break;
+
+      case 32:
+        if (this.footer.hasExtensionArea) {
+          if (this.footer.attributeType === 3) { // straight alpha
+            getImageData = getImageData32bits;
+          } else if (this.footer.attributeType === 4) { // pre multiplied alpha
+            getImageData = getImageData32bitsPre;
+          } else { // ignore alpha values if attributeType set to 0, 1, 2
+            getImageData = getImageData24bits;
+          }
+        } else {
+          if (this.header.alphaBits !== 0) {
+            getImageData = getImageData32bits;
+          } else { // 32 bits Depth, but alpha Bits set to 0
+            getImageData = getImageData24bits;
+          }
+        }
+
+        break;
+    }
+
+    getImageData.call(this, imageData.data, this.imageData, this.palette, width, y_start, y_step, y_end, x_start, x_step, x_end);
+    return imageData;
+  };
+
+  /** (Experimental)
+   *  Encodes imageData into TGA format
+   *  Only TGA True Color 32 bit with optional RLE encoding is supported for now
+   * @param imageData
+   */
+  Targa.prototype.setImageData = function targaSetImageData(imageData) {
+
+    if (!imageData) {
+      throw new Error('Targa::setImageData() - imageData argument missing');
+    }
+
+    var width = this.header.width;
+    var height = this.header.height;
+    var expectedLength = width * height * (this.header.pixelDepth  >> 3);
+    var origin = (this.header.flags & Targa.Origin.MASK) >> Targa.Origin.SHIFT;
+    var x_start, x_step, x_end, y_start, y_step, y_end;
+
+    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.TOP_RIGHT) {
+      y_start = 0; // start bottom, step upward
+      y_step = 1;
+      y_end = height;
+    } else {
+      y_start = height - 1; // start at top, step downward
+      y_step = -1;
+      y_end = -1;
+    }
+
+    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.BOTTOM_LEFT) {
+      x_start = 0; // start left, step right
+      x_step = 1;
+      x_end = width;
+    } else {
+      x_start = width - 1; // start right, step left
+      x_step = -1;
+      x_end = -1;
+    }
+
+    if (!this.imageData) {
+      this.imageData = new Uint8Array(expectedLength);
+    }
+
+    // start top left if origin is bottom left
+    // swapping order of first two arguments does the trick for writing
+    // this converts canvas data to internal tga representation
+    // this.imageData contains tga data
+    getImageData32bits(this.imageData, imageData.data, this.palette, width, y_start, y_step, y_end, x_start, x_step, x_end);
+
+    var data = this.imageData;
+
+    if (this.header.hasEncoding) {
+      data = encodeRLE(this.header, data);
+    }
+
+    var bufferSize = Targa.HEADER_SIZE + data.length + Targa.FOOTER_SIZE;
+    var buffer = new ArrayBuffer(bufferSize);
+
+    this.arrayBuffer = buffer;
+    // create array, useful for inspecting data while debugging
+    this.headerData = new Uint8Array(buffer, 0, Targa.HEADER_SIZE);
+    this.RLEData = new Uint8Array(buffer, Targa.HEADER_SIZE, data.length);
+    this.footerData = new Uint8Array(buffer, Targa.HEADER_SIZE + data.length, Targa.FOOTER_SIZE);
+
+    var headerView = new DataView(this.headerData.buffer);
+    writeHeader(this.header, headerView);
+    this.RLEData.set(data);
+    writeFooter(this.footerData);
+  };
+
+  /**
+   * Return a canvas with the TGA render on it
+   *
+   * @returns {object} CanvasElement
+   */
+  Targa.prototype.getCanvas = function targaGetCanvas() {
+    var canvas, ctx, imageData;
+
+    canvas = document.createElement('canvas');
+    ctx = canvas.getContext('2d');
+    imageData = ctx.createImageData(this.header.width, this.header.height);
+
+    canvas.width = this.header.width;
+    canvas.height = this.header.height;
+
+    ctx.putImageData(this.getImageData(imageData), 0, 0);
+
+    return canvas;
+  };
+
+
+  /**
+   * Return a dataURI of the TGA file
+   *
+   * @param {string} type - Optional image content-type to output (default: image/png)
+   * @returns {string} url
+   */
+  Targa.prototype.getDataURL = function targaGetDatURL(type) {
+    return this.getCanvas().toDataURL(type || 'image/png');
+  };
+
+  /**
+   * Return a objectURL of the TGA file
+   * The url can be used in the download attribute of a link
+   * @returns {string} url
+   */
+  Targa.prototype.getBlobURL = function targetGetBlobURL() {
+    if (!this.arrayBuffer) {
+      throw new Error('Targa::getBlobURL() - No data available for blob');
+    }
+    var blob = new Blob([this.arrayBuffer], { type: "image/x-tga" });
+    return URL.createObjectURL(blob);
+  };
+
+
+  // Find Context
+  var shim = {};
+  if (typeof(exports) === 'undefined') {
+    if (typeof(define) === 'function' && typeof(define.amd) === 'object' && define.amd) {
+      define(function () {
+        return Targa;
+      });
+    } else {
+      // Browser
+      shim.exports = typeof(window) !== 'undefined' ? window : _global;
+    }
+  }
+  else {
+    // Commonjs
+    shim.exports = exports;
+  }
+
+
+  // Export
+  if (shim.exports) {
+    shim.exports.TGA = Targa;
+  }
+
+})(this);
+
+'use strict';
+
+/**
+ * mago3djs API
+ * 
+ * @alias API
+ * @class API
+ * 
+ * @param {any} apiName api이름
+ */
+function API(apiName)
+{
+	if (!(this instanceof API)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	// mago3d 활성화/비활성화 여부
+	this.magoEnable = true;
+
+	// api 이름
+	this.apiName = apiName;
+	// project id
+	this.projectId = null;
+	// block id
+	this.blockId = null;
+	// blockIds
+	this.blockIds = null;
+	// objectIds
+	this.objectIds = null;
+	// data_key
+	this.dataKey = null;
+	// issueId
+	this.issueId = null;
+	// issueType
+	this.issueType = null;
+	// drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
+	this.drawType = 0;
+
+	// fullship = 0, deploy = 1
+	this.renderMode = 0;
+	// 위도
+	this.latitude = 0;
+	// 경도
+	this.longitude = 0;
+	// 높이
+	this.elevation = 0;
+	// heading
+	this.heading = 0;
+	// pitch
+	this.pitch = 0;
+	// roll
+	this.roll = 0;
+
+	// 색깔
+	this.color = 0;
+	// structs = MSP, outfitting = MOP
+	this.blockType = null;
+	// outfitting 표시/비표시
+	this.showOutFitting = false;
+	// boundingBox 표시/비표시
+	this.showBoundingBox = false;
+	// 그림자 표시/비표시
+	this.showShadow = false;
+	// frustum culling 가시 거리(M단위)
+	this.frustumFarDistance = 0;
+	//	// highlighting
+	//	this.highLightedBuildings = [];
+	//	// color
+	//	this.colorBuildings = [];
+	//	// show/hide
+	//	this.hideBuildings = [];
+
+	// 0 = block mode, 1 = object mode
+	this.mouseMoveMode = 0;
+
+	// 이슈 등록 표시
+	this.issueInsertEnable = false;
+	// object 정보 표시
+	this.objectInfoViewEnable = false;
+	// 이슈 목록 표시
+	this.issueListEnable = false;
+	//
+	this.insertIssueState = 0;
+};
+
+API.prototype.getMagoEnable = function() 
+{
+	return this.magoEnable;
+};
+API.prototype.setMagoEnable = function(magoEnable) 
+{
+	this.magoEnable = magoEnable;
+};
+
+API.prototype.getAPIName = function() 
+{
+	return this.apiName;
+};
+
+API.prototype.getProjectId = function() 
+{
+	return this.projectId;
+};
+API.prototype.setProjectId = function(projectId) 
+{
+	this.projectId = projectId;
+};
+
+API.prototype.getBlockId = function() 
+{
+	return this.blockId;
+};
+API.prototype.setBlockId = function(blockId) 
+{
+	this.blockId = blockId;
+};
+
+API.prototype.getBlockIds = function() 
+{
+	return this.blockIds;
+};
+API.prototype.setBlockIds = function(blockIds) 
+{
+	this.blockIds = blockIds;
+};
+
+API.prototype.getObjectIds = function() 
+{
+	return this.objectIds;
+};
+API.prototype.setObjectIds = function(objectIds) 
+{
+	this.objectIds = objectIds;
+};
+
+API.prototype.getIssueId = function() 
+{
+	return this.issueId;
+};
+API.prototype.setIssueId = function(issueId) 
+{
+	this.issueId = issueId;
+};
+API.prototype.getIssueType = function() 
+{
+	return this.issueType;
+};
+API.prototype.setIssueType = function(issueType) 
+{
+	this.issueId = issueType;
+};
+
+API.prototype.getDataKey = function() 
+{
+	return this.dataKey;
+};
+API.prototype.setDataKey = function(dataKey) 
+{
+	this.dataKey = dataKey;
+};
+
+API.prototype.getRenderMode = function() 
+{
+	return this.renderMode;
+};
+API.prototype.setRenderMode = function(renderMode) 
+{
+	this.renderMode = renderMode;
+};
+
+API.prototype.getLatitude = function() 
+{
+	return this.latitude;
+};
+API.prototype.setLatitude = function(latitude) 
+{
+	this.latitude = latitude;
+};
+
+API.prototype.getLongitude = function() 
+{
+	return this.longitude;
+};
+API.prototype.setLongitude = function(longitude) 
+{
+	this.longitude = longitude;
+};
+
+API.prototype.getElevation = function() 
+{
+	return this.elevation;
+};
+API.prototype.setElevation = function(elevation) 
+{
+	this.elevation = elevation;
+};
+
+API.prototype.getHeading = function() 
+{
+	return this.heading;
+};
+API.prototype.setHeading = function(heading) 
+{
+	this.heading = heading;
+};
+
+API.prototype.getPitch = function() 
+{
+	return this.pitch;
+};
+API.prototype.setPitch = function(pitch) 
+{
+	this.pitch = pitch;
+};
+
+API.prototype.getRoll = function() 
+{
+	return this.roll;
+};
+API.prototype.setRoll = function(roll) 
+{
+	this.roll = roll;
+};
+
+API.prototype.getColor = function() 
+{
+	return this.color;
+};
+API.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+
+API.prototype.getBlockType = function() 
+{
+	return this.blockType;
+};
+API.prototype.setBlockType = function(blockType) 
+{
+	this.blockType = blockType;
+};
+
+API.prototype.getShowOutFitting = function() 
+{
+	return this.showOutFitting;
+};
+API.prototype.setShowOutFitting = function(showOutFitting) 
+{
+	this.showOutFitting = showOutFitting;
+};
+
+API.prototype.getShowBoundingBox = function() 
+{
+	return this.showBoundingBox;
+};
+API.prototype.setShowBoundingBox = function(showBoundingBox) 
+{
+	this.showBoundingBox = showBoundingBox;
+};
+
+API.prototype.getShowShadow = function() 
+{
+	return this.showShadow;
+};
+API.prototype.setShowShadow = function(showShadow) 
+{
+	this.showShadow = showShadow;
+};
+
+API.prototype.getFrustumFarDistance = function() 
+{
+	return this.frustumFarDistance;
+};
+API.prototype.setFrustumFarDistance = function(frustumFarDistance) 
+{
+	this.frustumFarDistance = frustumFarDistance;
+};
+
+API.prototype.getMouseMoveMode = function() 
+{
+	return this.mouseMoveMode;
+};
+API.prototype.setMouseMoveMode = function(mouseMoveMode) 
+{
+	this.mouseMoveMode = mouseMoveMode;
+};
+
+API.prototype.getIssueInsertEnable = function() 
+{
+	return this.issueInsertEnable;
+};
+API.prototype.setIssueInsertEnable = function(issueInsertEnable) 
+{
+	this.issueInsertEnable = issueInsertEnable;
+};
+API.prototype.getObjectInfoViewEnable = function() 
+{
+	return this.objectInfoViewEnable;
+};
+API.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
+{
+	this.objectInfoViewEnable = objectInfoViewEnable;
+};
+API.prototype.getIssueListEnable = function() 
+{
+	return this.issueListEnable;
+};
+API.prototype.setIssueListEnable = function(issueListEnable) 
+{
+	this.issueListEnable = issueListEnable;
+};
+
+API.prototype.getInsertIssueState = function() 
+{
+	return this.insertIssueState;
+};
+API.prototype.setInsertIssueState = function(insertIssueState) 
+{
+	this.insertIssueState = insertIssueState;
+};
+
+API.prototype.getDrawType = function() 
+{
+	return this.drawType;
+};
+API.prototype.setDrawType = function(drawType) 
+{
+	this.drawType = drawType;
+};
+
+'use strict';
+
+/**
+ * 선택한 object 정보를 화면에 표시
+ * @param
+ */
+function selectedObjectCallback(functionName, projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll) 
+{
+	window[functionName](projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll);
+}
+
+/**
+ * 선택한 object 정보를 화면에 표시
+ * @param functionName
+ * @param data_key
+ * @param object_key
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ */
+function insertIssueCallback(functionName, data_key, object_key, latitude, longitude, elevation) 
+{
+	window[functionName](data_key, object_key, latitude, longitude, elevation);
+}
+'use strict';
+
+/**
+ * 환경 설정 클래스. json 으로 할까 고민도 했지만 우선은 이 형태로 하기로 함
+ * @class MagoConfig
+ */
+var MagoConfig = MagoConfig || {};
+
+MagoConfig.getPolicy = function() 
+{
+	return this.serverPolicy;
+};
+
+MagoConfig.getData = function() 
+{
+	return this.serverData;
+};
+
+/**
+ * 환경설정 세팅
+ * 
+ * @param serverPolicy mago3d policy(json)
+ * @param serverData data 정보(json)
+ */
+MagoConfig.init = function(serverPolicy, serverData) 
+{
+	this.serverPolicy = serverPolicy;
+	this.serverData = serverData;
+};
+
+/* eslint-env jquery */
+'use strict';
+
+/**
+ * 화면단 UI와 연동 되는 API. APIGateWay 혹은 API 클래스로 클래스명 수정 예정
+ * @class MagoFacade
+ */
+/**
+ * mago3d 활성화/비활성화
+ * 
+ * @param {Property} isShow true = 활성화, false = 비활성화
+ */
+function changeMagoStateAPI(isShow) 
+{
+	var api = new API("changeMagoState");
+	api.setMagoEnable(isShow);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * render mode
+ * 
+ * @param {Property} renderMode 0 = 호선, 1 = 지번전개
+ */
+function changeRenderAPI(renderMode) 
+{
+	var api = new API("changeRender");
+	api.setRenderMode(renderMode);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * outfitting 표시/비표시
+ * 
+ * @param {Property} isShow true = 활성화, false = 비활성화
+ */
+function changeOutFittingAPI(isShow) 
+{
+	var api = new API("changeOutFitting");
+	api.setShowOutFitting(isShow);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * boundingBox 표시/비표시
+ * 
+ * @param {Property} isShow true = 활성화, false = 비활성화
+ */
+function changeBoundingBoxAPI(isShow) 
+{
+	var api = new API("changeBoundingBox");
+	api.setShowBoundingBox(isShow);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * 그림자 표시/비표시
+ * 
+ * @param {Property} isShow true = 활성화, false = 비활성화
+ */
+function changeShadowAPI(isShow) 
+{
+	var api = new API("changeShadow");
+	api.setShowShadow(isShow);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * frustum culling 가시 거리
+ * 
+ * @param {Property} frustumFarDistance frustum 거리. 내부적으로는 입력값의 제곱이 사용됨
+ */
+function changeFrustumFarDistanceAPI(frustumFarDistance) 
+{
+	var api = new API("changefrustumFarDistance");
+	api.setFrustumFarDistance(frustumFarDistance);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * 데이터 검색
+ * 
+ * @param {Property} dataKey 데이터 고유키
+ */
+function searchDataAPI(dataKey) 
+{
+	var api = new API("searchData");
+	api.setDataKey(dataKey);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * highlighting
+ * 
+ * @param {Property} projectId 프로젝트 아이디
+ * @param {Property} blockIds block id. 복수개의 경우 , 로 입력
+ * @param {Property} objectIds object id. 복수개의 경우 , 로 입력
+ */
+function changeHighLightingAPI(projectId, blockIds, objectIds) 
+{
+	var api = new API("changeHighLighting");
+	api.setProjectId(projectId);
+	api.setBlockIds(blockIds);
+	api.setObjectIds(objectIds);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * color 변경
+ * 
+ * @param {Property} projectId 프로젝트 아이디
+ * @param {Property} blockIds block id. 복수개의 경우 , 로 입력
+ * @param {Property} objectIds object id. 복수개의 경우 , 로 입력
+ * @param {Property} color R, G, B 색깔을 ',' 로 연결한 string 값을 받음.
+ */
+function changeColorAPI(projectId, blockIds, objectIds, color) 
+{
+	var api = new API("changeColor");
+	api.setProjectId(projectId);
+	api.setBlockIds(blockIds);
+	api.setObjectIds(objectIds);
+	api.setColor(color);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * location and rotation 변경
+ * 
+ * @param {Property} data_key
+ * @param {Property} latitude 위도
+ * @param {Property} longitude 경도
+ * @param {Property} height 높이
+ * @param {Property} heading 좌, 우
+ * @param {Property} pitch 위, 아래
+ * @param {Property} roll 좌, 우 기울기
+ */
+function changeLocationAndRotationAPI(data_key, latitude, longitude, height, heading, pitch, roll) 
+{
+	var api = new API("changeLocationAndRotation");
+	api.setDataKey(data_key);
+	api.setLatitude(latitude);
+	api.setLongitude(longitude);
+	api.setElevation(height);
+	api.setHeading(heading);
+	api.setPitch(pitch);
+	api.setRoll(roll);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * 블럭의 location and rotation 정보를 취득
+ * TODO 기능 정의가 명확히 되지 않아 return 값을 현재의 계층 구조를 임시로 유지
+ * 
+ * @param  {Property} projectId 프로젝트 아이디
+ * @param  {Property} blockId block id
+ * @returns {Building} building
+ */
+function getLocationAndRotationAPI(projectId, blockId) 
+{
+	var api = new API("getLocationAndRotation");
+	api.setProjectId(projectId);
+	api.setBlockId(blockId);
+	if (managerFactory != null) 
+	{
+		var building = managerFactory.callAPI(api);
+		return building;
+	}
+}
+
+/**
+ * block 이동된 후 location and rotation 알림
+ * 
+ * @param {Property} projectId 프로젝트 아이디
+ * @param {Property} blockId block id
+ * @param {Property} objectId object id
+ * @param {Property} latitude 위도
+ * @param {Property} longitude 경도
+ * @param {Property} elevation 높이
+ * @param {Property} heading 좌, 우
+ * @param {Property} pitch 위, 아래
+ * @param {Property} roll 좌, 우 기울기
+ */
+function showLocationAndRotationAPI(projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll) 
+{
+	$("#projectId").val(projectId);
+	$("#moveBlockId").val(blockId);
+	if (objectId !== undefined && objectId !== null) { $("#moveObjectId").val(objectId); }
+	$("#latitude").val(latitude);
+	$("#longitude").val(longitude);
+	if (elevation === undefined) { elevation = 0; }
+	$("#elevation").val(elevation);
+	if (heading === undefined) { heading = 0; }
+	$("#heading").val(heading);
+	if (pitch === undefined) { pitch = 0; }
+	$("#pitch").val(pitch);
+	if (roll === undefined) { roll = 0; }
+	$("#roll").val(roll);
+}
+
+/**
+ * 마우스 클릭 객체 이동 대상 변경
+ * 
+ * @param {Property} mouseMoveMode 0 = All, 1 = object, 2 = None
+ */
+function changeMouseMoveAPI(mouseMoveMode) 
+{
+	var api = new API("changeMouseMove");
+	api.setMouseMoveMode(mouseMoveMode);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * 이슈 등록 활성화 유무
+ * 
+ * @param {Property} flag true = 활성화, false = 비활성화
+ */
+function changeInsertIssueModeAPI(flag) 
+{
+	var api = new API("changeInsertIssueMode");
+	api.setIssueInsertEnable(flag);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * object 정보 표시 활성화 유무
+ * 
+ * @param {Property} flag true = 활성화, false = 비활성화
+ */
+function changeObjectInfoViewModeAPI(flag) 
+{
+	var api = new API("changeObjectInfoViewMode");
+	api.setObjectInfoViewEnable(flag);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * 이슈 목록 활성화 유무
+ * 
+ * @param {Property} flag true = 활성화, false = 비활성화
+ */
+function changeListIssueViewModeAPI(flag) 
+{
+	var api = new API("changeListIssueViewMode");
+	api.setIssueListEnable(flag);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * pin image를 그림
+ * 
+ * @param {Property} drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
+ * @param {Property} issue_id 이슈 고유키
+ * @param {Property} issue_type 이슈 고유키
+ * @param {Property} data_key 데이터 고유키
+ * @param {Property} latitude 데이터 고유키
+ * @param {Property} longitude 데이터 고유키
+ * @param {Property} height 데이터 고유키
+ */
+function drawInsertIssueImageAPI(drawType, issue_id, issue_type, data_key, latitude, longitude, height) 
+{
+	var api = new API("drawInsertIssueImage");
+	api.setDrawType(drawType);
+	api.setIssueId(issue_id);
+	api.setIssueId(issue_type);
+	api.setDataKey(data_key);
+	api.setLatitude(latitude);
+	api.setLongitude(longitude);
+	api.setElevation(height);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * issue 등록 geo 정보 관련 상태 변경
+ * 
+ * @param {Property} insertIssueState 이슈 등록 좌표 상태
+ */
+function changeInsertIssueStateAPI(insertIssueState) 
+{
+	var api = new API("changeInsertIssueState");
+	api.setInsertIssueState(insertIssueState);
+	if (managerFactory != null) 
+	{
+		managerFactory.callAPI(api);
+	}
+}
+
+/**
+ * 마우스를 사용할 수 없는 환경에서 버튼 이벤트로 대체
+ * @param {Property} eventType 어떤 마우스 동작을 원하는지를 구분
+ */
+function mouseMoveAPI(eventType) 
+{
+	if (managerFactory != null) 
+	{
+		managerFactory.mouseMove(eventType);
+	}
+}
+
+'use strict';
+
+/**
+ * Policy
+ * @class API
+ */
+var Policy = function() 
+{
+	if (!(this instanceof Policy)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	// mago3d 활성화/비활성화 여부
+	this.magoEnable = true;
+
+	// outfitting 표시 여부
+	this.showOutFitting = false;
+	// boundingBox 표시/비표시
+	this.showBoundingBox = false;
+	// 그림자 표시/비표시
+	this.showShadow = false;
+	// far frustum 거리
+	this.frustumFarSquaredDistance = 5000000;
+
+	// highlighting
+	this.highLightedBuildings = [];
+	// color
+	this.colorBuildings = [];
+	// color
+	this.color = [];
+	// show/hide
+	this.hideBuildings = [];
+
+	// 0 = block mode, 1 = object mode
+	this.mouseMoveMode = 1;
+	
+	// 이슈 등록 표시
+	this.issueInsertEnable = false;
+	// object 정보 표시
+	this.objectInfoViewEnable = false;
+	// 이슈 목록 표시
+	this.issueListEnable = false;
+	
+	// 이미지 경로
+	this.imagePath = "";
+	
+	// provisional.***
+	this.colorChangedObjectId;
+};
+
+Policy.prototype.getMagoEnable = function() 
+{
+	return this.magoEnable;
+};
+Policy.prototype.setMagoEnable = function(magoEnable) 
+{
+	this.magoEnable = magoEnable;
+};
+
+Policy.prototype.getShowOutFitting = function() 
+{
+	return this.showOutFitting;
+};
+Policy.prototype.setShowOutFitting = function(showOutFitting) 
+{
+	this.showOutFitting = showOutFitting;
+};
+
+Policy.prototype.getShowBoundingBox = function() 
+{
+	return this.showBoundingBox;
+};
+Policy.prototype.setShowBoundingBox = function(showBoundingBox) 
+{
+	this.showBoundingBox = showBoundingBox;
+};
+
+Policy.prototype.getShowShadow = function() 
+{
+	return this.showShadow;
+};
+Policy.prototype.setShowShadow = function(showShadow) 
+{
+	this.showShadow = showShadow;
+};
+
+Policy.prototype.getFrustumFarSquaredDistance = function() 
+{
+	return this.frustumFarSquaredDistance;
+};
+Policy.prototype.setFrustumFarSquaredDistance = function(frustumFarSquaredDistance) 
+{
+	this.frustumFarSquaredDistance = frustumFarSquaredDistance;
+};
+
+Policy.prototype.getHighLightedBuildings = function() 
+{
+	return this.highLightedBuildings;
+};
+Policy.prototype.setHighLightedBuildings = function(highLightedBuildings) 
+{
+	this.highLightedBuildings = highLightedBuildings;
+};
+
+Policy.prototype.getColorBuildings = function() 
+{
+	return this.colorBuildings;
+};
+Policy.prototype.setColorBuildings = function(colorBuildings) 
+{
+	this.colorBuildings = colorBuildings;
+};
+
+Policy.prototype.getColor = function() 
+{
+	return this.color;
+};
+Policy.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+
+Policy.prototype.getHideBuildings = function() 
+{
+	return this.hideBuildings;
+};
+Policy.prototype.setHideBuildings = function(hideBuildings) 
+{
+	this.hideBuildings = hideBuildings;
+};
+
+Policy.prototype.getMouseMoveMode = function() 
+{
+	return this.mouseMoveMode;
+};
+Policy.prototype.setMouseMoveMode = function(mouseMoveMode) 
+{
+	this.mouseMoveMode = mouseMoveMode;
+};
+
+Policy.prototype.getIssueInsertEnable = function() 
+{
+	return this.issueInsertEnable;
+};
+Policy.prototype.setIssueInsertEnable = function(issueInsertEnable) 
+{
+	this.issueInsertEnable = issueInsertEnable;
+};
+Policy.prototype.getObjectInfoViewEnable = function() 
+{
+	return this.objectInfoViewEnable;
+};
+Policy.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
+{
+	this.objectInfoViewEnable = objectInfoViewEnable;
+};
+Policy.prototype.getIssueListEnable = function() 
+{
+	return this.issueListEnable;
+};
+Policy.prototype.setIssueListEnable = function(issueListEnable) 
+{
+	this.issueListEnable = issueListEnable;
+};
+
+Policy.prototype.getImagePath = function() 
+{
+	return this.imagePath;
+};
+Policy.prototype.setImagePath = function(imagePath) 
+{
+	this.imagePath = imagePath;
+};
+
+'use strict';
+
+/**
+ * 프로젝트(ship, weather등)의 구성 요소
+ * @class SearchCondition
+ */
+var ProjectLayer = function() 
+{
+	if (!(this instanceof ProjectLayer)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	// project id
+	this.projectId = null;
+	// block id
+	this.blockId = null;
+	// object id
+	this.objectId = null;
+	
+};
+
+ProjectLayer.prototype.getProjectId = function() 
+{
+	return this.projectId;
+};
+ProjectLayer.prototype.setProjectId = function(projectId) 
+{
+	this.projectId = projectId;
+};
+
+ProjectLayer.prototype.getBlockId = function() 
+{
+	return this.blockId;
+};
+ProjectLayer.prototype.setBlockId = function(blockId) 
+{
+	this.blockId = blockId;
+};
+
+ProjectLayer.prototype.getObjectId = function() 
+{
+	return this.objectId;
+};
+ProjectLayer.prototype.setObjectId = function(objectId) 
+{
+	this.objectId = objectId;
+};
 'use strict';
 
 /**
@@ -394,7 +2283,7 @@ CircularCloud.prototype.createCloud = function(longitude, latitude, altitude,
 		splitVelueZ.low ]);
 
 	this.bbox = this.shadowVertexMatrix.getBoundingBox(this.bbox);
-	var cloudPoint3d = this.bbox.getCenterPoint3d(cloudPoint3d);
+	var cloudPoint3d = this.bbox.getCenterPoint(cloudPoint3d);
 	this.cullingPosition = new Cesium.Cartesian3(cloudPoint3d.x
 			+ this.position.x, cloudPoint3d.y + this.position.y, cloudPoint3d.z
 			+ this.position.z);
@@ -573,7 +2462,9 @@ AuxiliarSegment.prototype.setPoints = function(point1X, point1Y, point1Z,   poin
 'use strict';
 
 /**
- * 영역 박스
+ * 영역박스
+ * 
+ * @alias BoundingBox
  * @class BoundingBox
  */
 var BoundingBox = function() 
@@ -593,100 +2484,119 @@ var BoundingBox = function()
 };
 
 /**
- * 영역 박스 초기화
- * @param point3d 변수
+ * 영역박스 초기화
+ * 
+ * @param {Point3D} point 3차원 점
  */
-BoundingBox.prototype.setInit = function(point3d) 
+BoundingBox.prototype.init = function(point) 
 {
-	this.minX = point3d.x;
-	this.minY = point3d.y;
-	this.minZ = point3d.z;
+	point = point || new Point3D();
 
-	this.maxX = point3d.x;
-	this.maxY = point3d.y;
-	this.maxZ = point3d.z;
+	this.minX = point.x;
+	this.minY = point.y;
+	this.minZ = point.z;
+
+	this.maxX = point.x;
+	this.maxY = point.y;
+	this.maxZ = point.z;
 };
 
 /**
- * 영역 박스 삭제
- * @param point3d 변수
+ * 영역박스 삭제
+ * 
  */
 BoundingBox.prototype.deleteObjects = function() 
 {
-	this.minX = undefined;
-	this.minY = undefined;
-	this.minZ = undefined;
+	delete this.minX;
+	delete this.minY;
+	delete this.minZ;
 
-	this.maxX = undefined;
-	this.maxY = undefined;
-	this.maxZ = undefined;
+	delete this.maxX;
+	delete this.maxY;
+	delete this.maxZ;
 };
 
 /**
- * 영역 박스 확대
- * @param dist 변수
+ * 영역박스 확대
+ * 
+ * @param {Number} distance
  */
-BoundingBox.prototype.expand = function(dist) 
+BoundingBox.prototype.expand = function(distance) 
 {
-	this.minX -= dist;
-	this.minY -= dist;
-	this.minZ -= dist;
+	distance = distance || 0.0;
+	distance = Math.abs(distance);
 
-	this.maxX += dist;
-	this.maxY += dist;
-	this.maxZ += dist;
+	this.minX -= distance;
+	this.minY -= distance;
+	this.minZ -= distance;
+
+	this.maxX += distance;
+	this.maxY += distance;
+	this.maxZ += distance;
 };
 
 /**
- * 영역 박스에 포인트를 추가하면서 영역을 변경
- * @param point3d 변수
+ * 주어진 3차원 점을 포함하는 영역으로 영역박스 크기를 변경
+ * 
+ * @param {Point3D} point 3차원 점
  */
-BoundingBox.prototype.addPoint3D = function(point3d) 
+BoundingBox.prototype.addPoint = function(point) 
 {
-	if (point3d.x < this.minX) { this.minX = point3d.x; }
-	else if (point3d.x > this.maxX) { this.maxX = point3d.x; }
+	if (point !== undefined)	{ return; }
 
-	if (point3d.y < this.minY) { this.minY = point3d.y; }
-	else if (point3d.y > this.maxY) { this.maxY = point3d.y; }
+	if (point.x < this.minX) { this.minX = point.x; }
+	else if (point.x > this.maxX) { this.maxX = point.x; }
 
-	if (point3d.z < this.minZ) { this.minZ = point3d.z; }
-	else if (point3d.z > this.maxZ) { this.maxZ = point3d.z; }
+	if (point.y < this.minY) { this.minY = point.y; }
+	else if (point.y > this.maxY) { this.maxY = point.y; }
+
+	if (point.z < this.minZ) { this.minZ = point.z; }
+	else if (point.z > this.maxZ) { this.maxZ = point.z; }
 };
 
 /**
- * 영역 박스에 새로운 박스를 포함해서 새로 그림
- * @param boundingBox 변수
+ * 주어진 영역박스를 포함하는 영역으로 영역박스 크기를 변경
+ * 
+ * @param {BoundingBox} box 영역박스
  */
-BoundingBox.prototype.addBox = function(boundingBox) 
+BoundingBox.prototype.addBox = function(box) 
 {
-	if (boundingBox.minX < this.minX) { this.minX = boundingBox.minX; }
-	if (boundingBox.maxX > this.maxX) { this.maxX = boundingBox.maxX; }
+	if (box !== undefined)	{ return; }
 
-	if (boundingBox.minY < this.minY) { this.minY = boundingBox.minY; }
-	if (boundingBox.maxY > this.maxY) { this.maxY = boundingBox.maxY; }
+	if (box.minX < this.minX) { this.minX = box.minX; }
+	if (box.maxX > this.maxX) { this.maxX = box.maxX; }
 
-	if (boundingBox.minZ < this.minZ) { this.minZ = boundingBox.minZ; }
-	if (boundingBox.maxZ > this.maxZ) { this.maxZ = boundingBox.maxZ; }
+	if (box.minY < this.minY) { this.minY = box.minY; }
+	if (box.maxY > this.maxY) { this.maxY = box.maxY; }
+
+	if (box.minZ < this.minZ) { this.minZ = box.minZ; }
+	if (box.maxZ > this.maxZ) { this.maxZ = box.maxZ; }
 };
 
 /**
- * 영역 박스 가로, 세로, 높이 중에서 최대값
- * @returns result
+ * 영역박스의 가로, 세로, 높이 중에서 최소값
+ * 
+ * @returns {Number} 최소값
+ */
+BoundingBox.prototype.getMinLength = function() 
+{
+	return Math.min(this.maxX - this.minX, this.maxY - this.minY, this.maxZ - this.minZ);
+};
+
+/**
+ * 영역박스의 가로, 세로, 높이 중에서 최대값
+ * 
+ * @returns {Number} 최대값
  */
 BoundingBox.prototype.getMaxLength = function() 
 {
-	var result = this.maxX - this.minX;
-	var dimY = this.maxY - this.minY;
-	var dimZ = this.maxZ - this.minZ;
-	if (dimY > result) { result = dimY; }
-	if (dimZ > result) { result = dimZ; }
-
-	return result;
+	return Math.max(this.maxX - this.minX, this.maxY - this.minY, this.maxZ - this.minZ);
 };
 
 /**
- * 어떤 일을 하고 있습니까?
- * @returns result
+ * 영역박스의 X축 방향의 길이
+ * 
+ * @returns {Number} 길이값
  */
 BoundingBox.prototype.getXLength = function() 
 {
@@ -694,8 +2604,9 @@ BoundingBox.prototype.getXLength = function()
 };
 
 /**
- * 어떤 일을 하고 있습니까?
- * @returns result
+ * 영역박스의 Y축 방향의 길이
+ * 
+ * @returns {Number} 길이값
  */
 BoundingBox.prototype.getYLength = function() 
 {
@@ -703,8 +2614,9 @@ BoundingBox.prototype.getYLength = function()
 };
 
 /**
- * 어떤 일을 하고 있습니까?
- * @returns result
+ * 영역박스의 Z축 방향의 길이
+ * 
+ * @returns {Number} 길이값
  */
 BoundingBox.prototype.getZLength = function() 
 {
@@ -712,23 +2624,50 @@ BoundingBox.prototype.getZLength = function()
 };
 
 /**
- * 영역 박스의 중심을 획득
- * @param resultPoint3d
- * @returns resultPoint3d
+ * 영역박스의 중심점을 구한다.
+ * 
+ * @param {Point3D} result 영역박스의 중심점
+ * 
+ * @returns {Point3D} 영역박스의 중심점
  */
-BoundingBox.prototype.getCenterPoint3d = function(resultPoint3d) 
+BoundingBox.prototype.getCenterPoint = function(result) 
 {
-	if ( resultPoint3d == undefined ) { resultPoint3d = new Point3D(); }
+	if ( result === undefined ) { result = new Point3D(); }
 
-	resultPoint3d.set((this.maxX + this.minX)/2, (this.maxY + this.minY)/2, (this.maxZ + this.minZ)/2);
-	return resultPoint3d;
+	result.set((this.maxX + this.minX)/2, (this.maxY + this.minY)/2, (this.maxZ + this.minZ)/2);
+
+	return result;
+};
+
+
+/**
+ * 영역박스와 점과의 교차 여부를 판단
+ * 
+ * @param {Point3D} point 3차원 점
+ * @returns {Boolean} 교차 여부
+ */
+BoundingBox.prototype.intersectWithPoint = function(point) 
+{
+	if (point === undefined)	{ return false; }
+
+	if (point.x < this.minX || point.x > this.maxX || 
+		point.y < this.minY || point.y > this.maxY ||
+		point.z < this.minZ || point.z > this.maxZ) 
+	{
+		return false;
+	}
+
+	//return this.isPoint3dInside(point.x, point.y, point.z);
+	return true;
 };
 
 /**
- * 영역 박스내에 존재 유무를 판단
- * @param x 변수
- * @param y 변수
- * @param z 변수
+ * 영역박스와 점과의 교차 여부를 판단
+ * 
+ * @param {Number} x x성분
+ * @param {Number} y y성분
+ * @param {Number} z z성분
+ * @returns {Boolean} 교차 여부
  */
 BoundingBox.prototype.isPoint3dInside = function(x, y, z) 
 {
@@ -749,70 +2688,62 @@ BoundingBox.prototype.isPoint3dInside = function(x, y, z)
 };
 
 /**
- * 영역 박스내에 존재 유무를 판단
- * @param x 변수
- * @param y 변수
- * @param z 변수
+ * 영역박스와 주어진 영역박스와의 교차 여부를 판단
+ * 
+ * @param {BoundingBox} box 영역박스
+ * @returns {Boolean} 교차 여부
  */
-BoundingBox.prototype.intersectsWithBBox = function(bbox) 
+BoundingBox.prototype.intersectWithBox = function(box)
+{
+	if (box === undefined)	{ return false; }
+
+	if (box.minX > this.maxX || box.maxX < this.minX ||
+		box.minY > this.maxY || box.maxY < this.minY ||
+		box.minZ > this.maxZ || box.maxZ < this.minZ)
+	{
+		return false;
+	}
+
+	return true;
+};
+
+/**
+ * 영역박스와 주어진 영역박스와의 교차 여부를 판단
+ * 
+ * @param {BoundingBox} box 영역박스
+ * @returns {Boolean} 교차 여부
+ */
+BoundingBox.prototype.intersectsWithBBox = function(box) 
 {
 	var intersection = true;
 
-	if (this.maxX < bbox.minX)
+	if (this.maxX < box.minX)
 	{
 		intersection = false;
 	}
-	else if (this.minX > bbox.maxX)
+	else if (this.minX > box.maxX)
 	{
 		intersection = false;
 	}
-	//--------------------------------
-	else if (this.maxY < bbox.minY)
+	else if (this.maxY < box.minY)
 	{
 		intersection = false;
 	}
-	else if (this.minY > bbox.maxY)
+	else if (this.minY > box.maxY)
 	{
 		intersection = false;
 	}
-	//--------------------------------
-	else if (this.maxZ < bbox.minZ)
+	else if (this.maxZ < box.minZ)
 	{
 		intersection = false;
 	}
-	else if (this.minZ > bbox.maxZ)
+	else if (this.minZ > box.maxZ)
 	{
 		intersection = false;
 	}
 
 	return intersection;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 'use strict';
 
@@ -5672,7 +7603,12 @@ MagoManager.prototype.getRenderablesDetailedNeoBuildingAsimetricVersion = functi
 			var squaredDistLod1 = 15000;
 			var squaredDistLod2 = 500000*1000;
 			
-			
+			if (neoBuilding.buildingId == "Sea_Port")
+			{
+				squaredDistLod0 = 120000;
+				squaredDistLod1 = 285000;
+				squaredDistLod2 = 500000*1000;
+			}
 			//squaredDistLod0 = 45000;
 			//squaredDistLod1 = 85000;
 			//squaredDistLod2 = 500000*1000;
@@ -6594,7 +8530,7 @@ MagoManager.prototype.renderLowestOctreeAsimetricVersion = function(gl, cameraPo
 					gl.uniform3fv(currentShader.buildingPosHIGH_loc, buildingGeoLocation.positionHIGH);
 					gl.uniform3fv(currentShader.buildingPosLOW_loc, buildingGeoLocation.positionLOW);
 
-					this.pointSC = neoBuilding.bbox.getCenterPoint3d(this.pointSC);
+					this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
 					gl.uniform3fv(currentShader.aditionalMov_loc, [this.pointSC.x, this.pointSC.y, this.pointSC.z]); //.***
 					this.renderer.renderTriPolyhedron(gl, this.unitaryBoxSC, this, currentShader, ssao_idx, neoBuilding.isHighLighted);
 				}
@@ -6613,7 +8549,7 @@ MagoManager.prototype.renderLowestOctreeAsimetricVersion = function(gl, cameraPo
 					gl.uniform3fv(currentShader.buildingPosHIGH_loc, buildingGeoLocation.positionHIGH);
 					gl.uniform3fv(currentShader.buildingPosLOW_loc, buildingGeoLocation.positionLOW);
 
-					this.pointSC = neoBuilding.bbox.getCenterPoint3d(this.pointSC);
+					this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
 					gl.uniform3fv(currentShader.aditionalMov_loc, [this.pointSC.x, this.pointSC.y, this.pointSC.z]); //.***
 					this.renderer.renderTriPolyhedron(gl, this.unitaryBoxSC, this, currentShader, ssao_idx, neoBuilding.isHighLighted);
 				}
@@ -7760,7 +9696,7 @@ MagoManager.prototype.doFrustumCullingNeoBuildings = function(frustumVolume, cam
 			continue;
 		}
 
-		this.pointSC = neoBuilding.bbox.getCenterPoint3d(this.pointSC);
+		this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
 		var realBuildingPos = undefined; // necesary init to undefined.***
 		
 		var geoLoc = neoBuilding.geoLocDataManager.getGeoLocationData(0); // the idx = 0 -> is the 1rst (default).***
@@ -7888,20 +9824,20 @@ MagoManager.prototype.flyToBuilding = function(dataKey)
 			if (newLocation) 
 			{
 				neoBuilding.geoLocationDataAux = ManagerUtils.calculateGeoLocationData(newLocation.LONGITUDE, newLocation.LATITUDE, newLocation.ELEVATION, heading, pitch, roll, neoBuilding.geoLocationDataAux, this);
-				this.pointSC = neoBuilding.bbox.getCenterPoint3d(this.pointSC);
+				this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
 				//realBuildingPos = neoBuilding.geoLocationDataAux.tMatrix.transformPoint3D(this.pointSC, realBuildingPos );
 				realBuildingPos = neoBuilding.geoLocationDataAux.pivotPoint;
 			}
 			else 
 			{
 				// use the normal data.***
-				this.pointSC = neoBuilding.bbox.getCenterPoint3d(this.pointSC);
+				this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
 				realBuildingPos = neoBuilding.transfMat.transformPoint3D(this.pointSC, realBuildingPos );
 			}
 		}
 		else 
 		{
-			this.pointSC = neoBuilding.bbox.getCenterPoint3d(this.pointSC);
+			this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
 			//realBuildingPos = neoBuilding.geoLocationDataAux.tMatrix.transformPoint3D(this.pointSC, realBuildingPos );
 			realBuildingPos = neoBuilding.geoLocationDataAux.pivotPoint;
 		}
@@ -7909,7 +9845,7 @@ MagoManager.prototype.flyToBuilding = function(dataKey)
 	else 
 	{
 		var buildingGeoLocation = neoBuilding.geoLocDataManager.getGeoLocationData(0);
-		this.pointSC = neoBuilding.bbox.getCenterPoint3d(this.pointSC);
+		this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
 		realBuildingPos = buildingGeoLocation.tMatrix.transformPoint3D(this.pointSC, realBuildingPos );
 	}
 	// end calculating realPosition of the building.------------------------------------------------------------------------
@@ -8568,7 +10504,7 @@ MagoManager.prototype.changeLocationAndRotation = function(projectIdAndBlockId, 
 	if (geoLocationData == undefined)
 	{ return; }
 
-	this.pointSC = neoBuilding.bbox.getCenterPoint3d(this.pointSC);
+	this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
 	ManagerUtils.translatePivotPointGeoLocationData(geoLocationData, this.pointSC );
 
 	// now, must change the keyMatrix of the references of the octrees.***
@@ -8592,7 +10528,7 @@ MagoManager.prototype.changeLocationAndRotation = function(projectIdAndBlockId, 
 	if (geoLocationData == undefined)
 	{ return; }
 
-	this.pointSC = neoBuilding.bbox.getCenterPoint3d(this.pointSC); // the centerpoint is taken from structure block.***
+	this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC); // the centerpoint is taken from structure block.***
 	ManagerUtils.translatePivotPointGeoLocationData(geoLocationData, this.pointSC );
 
 	// now, must change the keyMatrix of the references of the octrees.***
@@ -8667,7 +10603,7 @@ MagoManager.prototype.createDeploymentGeoLocationsForHeavyIndustries = function(
 			buildingGeoLocation = neoBuilding.geoLocDataManager.newGeoLocationData("deploymentLoc");
 			ManagerUtils.calculateGeoLocationData(longitude, latitude, altitude+10, heading, pitch, roll, buildingGeoLocation, this);
 			
-			this.pointSC = structureTypedBuilding.bbox.getCenterPoint3d(this.pointSC);
+			this.pointSC = structureTypedBuilding.bbox.getCenterPoint(this.pointSC);
 			ManagerUtils.translatePivotPointGeoLocationData(buildingGeoLocation, this.pointSC );
 			////this.changeLocationAndRotation(neoBuilding.buildingId, latitude, longitude, altitude, heading, pitch, roll);
 			////currentCalculatingPositionsCount ++;
@@ -8688,7 +10624,7 @@ MagoManager.prototype.createDeploymentGeoLocationsForHeavyIndustries = function(
 				buildingGeoLocation = neoBuilding.geoLocDataManager.newGeoLocationData("deploymentLoc");
 				ManagerUtils.calculateGeoLocationData(longitude, latitude, altitude, heading, pitch, roll, buildingGeoLocation);
 				
-				this.pointSC = structureTypedBuilding.bbox.getCenterPoint3d(this.pointSC);
+				this.pointSC = structureTypedBuilding.bbox.getCenterPoint(this.pointSC);
 				ManagerUtils.translatePivotPointGeoLocationData(buildingGeoLocation, this.pointSC );
 			}
 			
@@ -8701,7 +10637,7 @@ MagoManager.prototype.createDeploymentGeoLocationsForHeavyIndustries = function(
 				buildingGeoLocation = neoBuilding.geoLocDataManager.newGeoLocationData("deploymentLoc");
 				ManagerUtils.calculateGeoLocationData(longitude, latitude, altitude, heading, pitch, roll, buildingGeoLocation);
 				
-				this.pointSC = structureTypedBuilding.bbox.getCenterPoint3d(this.pointSC);
+				this.pointSC = structureTypedBuilding.bbox.getCenterPoint(this.pointSC);
 				ManagerUtils.translatePivotPointGeoLocationData(buildingGeoLocation, this.pointSC );
 			}
 			
@@ -9270,8 +11206,8 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, ima
 		if (event.key === "q" || event.key === "Q") 
 		{  // right arrow
 			// get current building selected.***
-			if(magoManager.magoPolicy.issueInsertEnable)
-				return;
+			if (magoManager.magoPolicy.issueInsertEnable)
+			{ return; }
 			var selectedBuilding = magoManager.buildingSelected;	
 			if (selectedBuilding != undefined) 
 			{
@@ -9288,8 +11224,8 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, ima
 		else if (event.key === "a" || event.key === "A") 
 		{  // right arrow
 			// get current building selected.***
-			if(magoManager.magoPolicy.issueInsertEnable)
-				return;
+			if (magoManager.magoPolicy.issueInsertEnable)
+			{ return; }
 			var selectedBuilding = magoManager.buildingSelected;
 			if (selectedBuilding != undefined) 
 			{
@@ -9306,8 +11242,8 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, ima
 		else if (event.key === "w" || event.key === "W") 
 		{  // right arrow
 			// get current building selected.***
-			if(magoManager.magoPolicy.issueInsertEnable)
-				return;
+			if (magoManager.magoPolicy.issueInsertEnable)
+			{ return; }
 			var selectedBuilding = magoManager.buildingSelected;
 			if (selectedBuilding != undefined) 
 			{
@@ -9324,8 +11260,8 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, ima
 		else if (event.key === "s" || event.key === "S") 
 		{  // right arrow
 			// get current building selected.***
-			if(magoManager.magoPolicy.issueInsertEnable)
-				return;
+			if (magoManager.magoPolicy.issueInsertEnable)
+			{ return; }
 			var selectedBuilding = magoManager.buildingSelected;
 			if (selectedBuilding != undefined) 
 			{
@@ -9342,8 +11278,8 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, ima
 		else if (event.key === "e" || event.key === "E") 
 		{  // right arrow
 			// get current building selected.***
-			if(magoManager.magoPolicy.issueInsertEnable)
-				return;
+			if (magoManager.magoPolicy.issueInsertEnable)
+			{ return; }
 			var selectedBuilding = magoManager.buildingSelected;
 			if (selectedBuilding != undefined) 
 			{		
@@ -9360,8 +11296,8 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, ima
 		else if (event.key === "d" || event.key === "D") 
 		{  // right arrow
 			// get current building selected.***
-			if(magoManager.magoPolicy.issueInsertEnable)
-				return;
+			if (magoManager.magoPolicy.issueInsertEnable)
+			{ return; }
 			var selectedBuilding = magoManager.buildingSelected;
 			if (selectedBuilding != undefined) 
 			{
@@ -12005,8 +13941,8 @@ VertexList.prototype.getBoundingBox = function(resultBox)
 
 	for (var i = 0, vertexCount = this.vertexArray.length; i < vertexCount; i++) 
 	{
-		if (i == 0) { resultBox.setInit(this.vertexArray[i].point3d); }
-		else { resultBox.addPoint3D(this.vertexArray[i].point3d); }
+		if (i == 0) { resultBox.init(this.vertexArray[i].point3d); }
+		else { resultBox.addPoint(this.vertexArray[i].point3d); }
 	}
 	return resultBox;
 };
@@ -12085,8 +14021,8 @@ VertexMatrix.prototype.getBoundingBox = function(resultBox)
 	this.totalVertexArraySC = this.getTotalVertexArray(this.totalVertexArraySC);
 	for (var i = 0, totalVertexCount = this.totalVertexArraySC.length; i < totalVertexCount; i++) 
 	{
-		if (i == 0) { resultBox.setInit(this.totalVertexArraySC[i].point3d); }
-		else { resultBox.addPoint3D(this.totalVertexArraySC[i].point3d); }
+		if (i == 0) { resultBox.init(this.totalVertexArraySC[i].point3d); }
+		else { resultBox.addPoint(this.totalVertexArraySC[i].point3d); }
 	}
 	return resultBox;
 };
@@ -12332,951 +14268,15 @@ VisibleObjectsController.prototype.initArrays = function()
 	this.currentRenderables3 = [];
 };
 
-/**
- * @file tgajs - Javascript decoder & (experimental) encoder for TGA files
- * @desc tgajs is a fork from https://github.com/vthibault/jsTGALoader
- * @author Vincent Thibault (Original author)
- * @author Lukas Schmitt
- * @version 1.0.0
- */
-
-/* Copyright (c) 2013, Vincent Thibault. All rights reserved.
-
- Redistribution and use in source and binary forms, with or without modification,
- are permitted provided that the following conditions are met:
-
- * Redistributions of source code must retain the above copyright notice, this
- list of conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice,
- this list of conditions and the following disclaimer in the documentation
- and/or other materials provided with the distribution.
-
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
-
-(function (_global) {
-  'use strict';
-
-  /**
-   * @var {object} TGA type constants
-   */
-  Targa.Type = {
-    NO_DATA: 0,
-    INDEXED: 1,
-    RGB: 2,
-    GREY: 3,
-    RLE_INDEXED: 9,
-    RLE_RGB: 10,
-    RLE_GREY: 11
-  };
-
-  /**
-   * @var {object} TGA origin constants
-   */
-  Targa.Origin = {
-    BOTTOM_LEFT: 0x00,
-    BOTTOM_RIGHT: 0x01,
-    TOP_LEFT: 0x02,
-    TOP_RIGHT: 0x03,
-    SHIFT: 0x04,
-    MASK: 0x30,
-    ALPHA: 0x08
-  };
-
-  Targa.HEADER_SIZE = 18;
-  Targa.FOOTER_SIZE = 26;
-  Targa.LITTLE_ENDIAN = true;
-  Targa.RLE_BIT = 0x80;
-  Targa.RLE_MASK = 0x7f;
-  Targa.RLE_PACKET = 1;
-  Targa.RAW_PACKET = 2;
-  Targa.SIGNATURE = "TRUEVISION-XFILE.\0";
-
-  /**
-   * TGA Namespace
-   * @constructor
-   */
-  function Targa() {
-    if (arguments.length == 1) {
-      var h = arguments[0];
-
-      this.header = createHeader(h);
-      setHeaderBooleans(this.header);
-      checkHeader(this.header);
-    }
-  }
-
-  /**
-   * Sets header or default values
-   * @param header header
-   * @returns {Object}
-   */
-  function createHeader(header) {
-    return {
-      /* 0x00  BYTE */  idLength: defaultFor(header.idLength, 0),
-      /* 0x01  BYTE */  colorMapType: defaultFor(header.colorMapType, 0),
-      /* 0x02  BYTE */  imageType: defaultFor(header.imageType, Targa.Type.RGB),
-      /* 0x03  WORD */  colorMapIndex: defaultFor(header.colorMapIndex, 0),
-      /* 0x05  WORD */  colorMapLength: defaultFor(header.colorMapLength, 0),
-      /* 0x07  BYTE */  colorMapDepth: defaultFor(header.colorMapDepth, 0),
-      /* 0x08  WORD */  offsetX: defaultFor(header.offsetX, 0),
-      /* 0x0a  WORD */  offsetY: defaultFor(header.offsetY, 0),
-      /* 0x0c  WORD */  width: defaultFor(header.width, 0),
-      /* 0x0e  WORD */  height: defaultFor(header.height, 0),
-      /* 0x10  BYTE */  pixelDepth: defaultFor(header.pixelDepth,32),
-      /* 0x11  BYTE */  flags: defaultFor(header.flags, 8)
-    };
-  }
-
-  function defaultFor(arg, val) { return typeof arg !== 'undefined' ? arg : val; }
-
-  /**
-   * Write footer of TGA file to view
-   * Byte 0-3 - Extension Area Offset, 0 if no Extension Area exists
-   * Byte 4-7 - Developer Directory Offset, 0 if no Developer Area exists
-   * Byte 8-25 - Signature
-   * @param {Uint8Array} footer
-   */
-  function writeFooter(footer) {
-    var signature = Targa.SIGNATURE;
-    var offset = footer.byteLength - signature.length;
-    for (var i = 0; i < signature.length; i++) {
-      footer[offset + i] = signature.charCodeAt(i);
-    }
-  }
-
-  /**
-   * Write header of TGA file to view
-   * @param header
-   * @param view DataView
-   */
-  function writeHeader(header, view) {
-    var littleEndian = Targa.LITTLE_ENDIAN;
-
-    view.setUint8(0x00, header.idLength);
-    view.setUint8(0x01, header.colorMapType);
-    view.setUint8(0x02, header.imageType);
-    view.setUint16(0x03, header.colorMapIndex, littleEndian);
-    view.setUint16(0x05, header.colorMapLength, littleEndian);
-    view.setUint8(0x07, header.colorMapDepth);
-    view.setUint16(0x08, header.offsetX, littleEndian);
-    view.setUint16(0x0a, header.offsetY, littleEndian);
-    view.setUint16(0x0c, header.width, littleEndian);
-    view.setUint16(0x0e, header.height, littleEndian);
-    view.setUint8(0x10, header.pixelDepth);
-    view.setUint8(0x11, header.flags);
-  }
-
-  function readHeader(view) {
-    var littleEndian = Targa.LITTLE_ENDIAN;
-
-    // Not enough data to contain header ?
-    if (view.byteLength  < 0x12) {
-      throw new Error('Targa::load() - Not enough data to contain header');
-    }
-
-    var header = {};
-    header.idLength = view.getUint8(0x00);
-    header.colorMapType = view.getUint8(0x01);
-    header.imageType =  view.getUint8(0x02);
-    header.colorMapIndex = view.getUint16(0x03, littleEndian);
-    header.colorMapLength = view.getUint16(0x05, littleEndian);
-    header.colorMapDepth = view.getUint8(0x07);
-    header.offsetX = view.getUint16(0x08, littleEndian);
-    header.offsetY = view.getUint16(0x0a, littleEndian);
-    header.width = view.getUint16(0x0c, littleEndian);
-    header.height = view.getUint16(0x0e, littleEndian);
-    header.pixelDepth = view.getUint8(0x10);
-    header.flags = view.getUint8(0x11);
-
-    return header;
-  }
-
-  /**
-   * Set additional header booleans
-   * @param header
-   */
-  function setHeaderBooleans(header) {
-    header.hasEncoding = (header.imageType === Targa.Type.RLE_INDEXED || header.imageType === Targa.Type.RLE_RGB || header.imageType === Targa.Type.RLE_GREY);
-    header.hasColorMap = (header.imageType === Targa.Type.RLE_INDEXED || header.imageType === Targa.Type.INDEXED);
-    header.isGreyColor = (header.imageType === Targa.Type.RLE_GREY || header.imageType === Targa.Type.GREY);
-    header.bytePerPixel = header.pixelDepth >> 3;
-    header.origin = (header.flags & Targa.Origin.MASK) >> Targa.Origin.SHIFT;
-    header.alphaBits = header.flags & Targa.Origin.ALPHA;
-  }
-
-  /**
-   * Check the header of TGA file to detect errors
-   *
-   * @param {object} header tga header structure
-   * @throws Error
-   */
-  function checkHeader(header) {
-    // What the need of a file without data ?
-    if (header.imageType === Targa.Type.NO_DATA) {
-      throw new Error('Targa::checkHeader() - No data');
-    }
-
-    // Indexed type
-    if (header.hasColorMap) {
-      if (header.colorMapLength > 256 || header.colorMapType !== 1) {
-        throw new Error('Targa::checkHeader() - Unsupported colormap for indexed type');
-      }
-      if (header.colorMapDepth !== 16 && header.colorMapDepth !== 24  && header.colorMapDepth !== 32) {
-        throw new Error('Targa::checkHeader() - Unsupported colormap depth');
-      }
-    }
-    else {
-      if (header.colorMapType) {
-        throw new Error('Targa::checkHeader() - Why does the image contain a palette ?');
-      }
-    }
-
-    // Check image size
-    if (header.width <= 0 || header.height <= 0) {
-      throw new Error('Targa::checkHeader() - Invalid image size');
-    }
-
-    // Check pixel size
-    if (header.pixelDepth !== 8 &&
-      header.pixelDepth !== 16 &&
-      header.pixelDepth !== 24 &&
-      header.pixelDepth !== 32) {
-      throw new Error('Targa::checkHeader() - Invalid pixel size "' + header.pixelDepth + '"');
-    }
-
-    // Check alpha size
-    if (header.alphaBits !== 0 &&
-        header.alphaBits !== 1 &&
-        header.alphaBits !== 8) {
-      throw new Error('Targa::checkHeader() - Unsuppported alpha size');
-    }
-  }
-
-
-  /**
-   * Decode RLE compression
-   *
-   * @param {Uint8Array} data
-   * @param {number} bytesPerPixel bytes per Pixel
-   * @param {number} outputSize in byte: width * height * pixelSize
-   */
-  function decodeRLE(data, bytesPerPixel, outputSize) {
-    var pos, c, count, i, offset;
-    var pixels, output;
-
-    output = new Uint8Array(outputSize);
-    pixels = new Uint8Array(bytesPerPixel);
-    offset = 0; // offset in data
-    pos = 0; // offset for output
-
-    while (pos < outputSize) {
-      c = data[offset++]; // current byte to check
-      count = (c & Targa.RLE_MASK) + 1; // repetition count of pixels, the lower 7 bits + 1
-
-      // RLE packet, if highest bit is set to 1.
-      if (c & Targa.RLE_BIT) {
-        // Copy pixel values to be repeated to tmp array
-        for (i = 0; i < bytesPerPixel; ++i) {
-          pixels[i] = data[offset++];
-        }
-
-        // Copy pixel values * count to output
-        for (i = 0; i < count; ++i) {
-          output.set(pixels, pos);
-          pos += bytesPerPixel;
-        }
-      }
-
-      // Raw packet (Non-Run-Length Encoded)
-      else {
-        count *= bytesPerPixel;
-        for (i = 0; i < count; ++i) {
-          output[pos++] = data[offset++];
-        }
-      }
-    }
-
-    if (pos > outputSize) {
-      throw new Error("Targa::decodeRLE() - Read bytes: " + pos + " Expected bytes: " + outputSize);
-    }
-
-    return output;
-  }
-
-  /**
-   * Encode ImageData object with RLE compression
-   *
-   * @param header
-   * @param imageData from canvas to compress
-   */
-  function encodeRLE(header, imageData) {
-    var maxRepetitionCount = 128;
-    var i;
-    var data = imageData;
-    var output = []; // output size is unknown
-    var pos = 0; // pos in imageData array
-    var bytesPerPixel = header.pixelDepth >> 3;
-    var offset = 0;
-    var packetType, packetLength, packetHeader;
-    var tgaLength = header.width * header.height * bytesPerPixel;
-    var isSamePixel = function isSamePixel(pos, offset) {
-      for (var i = 0; i < bytesPerPixel; i++) {
-        if (data[pos * bytesPerPixel + i] !== data[offset * bytesPerPixel + i]) {
-          return false;
-        }
-      }
-      return true;
-    };
-    var getPacketType = function(pos) {
-      if (isSamePixel(pos, pos + 1)) {
-        return Targa.RLE_PACKET;
-      }
-      return Targa.RAW_PACKET;
-    };
-
-    while (pos * bytesPerPixel < data.length && pos * bytesPerPixel < tgaLength) {
-      // determine packet type
-      packetType = getPacketType(pos);
-
-      // determine packet length
-      packetLength = 0;
-      if (packetType === Targa.RLE_PACKET) {
-        while (pos + packetLength < data.length
-        && packetLength < maxRepetitionCount
-        && isSamePixel(pos, pos + packetLength)) {
-          packetLength++;
-        }
-      } else { // packetType === Targa.RAW_PACKET
-        while (pos + packetLength < data.length
-        && packetLength < maxRepetitionCount
-        && getPacketType(pos + packetLength) === Targa.RAW_PACKET) {
-          packetLength++;
-        }
-      }
-
-      // write packet header
-      packetHeader = packetLength - 1;
-      if (packetType === Targa.RLE_PACKET) {
-        packetHeader |= Targa.RLE_BIT;
-      }
-      output[offset++] = packetHeader;
-
-      // write rle packet pixel OR raw pixels
-      if (packetType === Targa.RLE_PACKET) {
-        for (i = 0; i < bytesPerPixel; i++) {
-          output[i + offset] = data[i + pos * bytesPerPixel];
-        }
-        offset += bytesPerPixel;
-      } else {
-        for (i = 0; i < bytesPerPixel * packetLength; i++) {
-          output[i + offset] = data[i + pos * bytesPerPixel];
-        }
-        offset += bytesPerPixel * packetLength;
-      }
-      pos += packetLength;
-    }
-
-    return new Uint8Array(output);
-  }
-
-
-  /**
-   * Return a ImageData object from a TGA file (8bits)
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} indexes - index to colorMap
-   * @param {Array} colorMap
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageData8bits(imageData, indexes, colorMap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var color, index, offset, i, x, y;
-    var bytePerPixel = this.header.colorMapDepth >> 3;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i++) {
-        offset = (x + width * y) * 4;
-        index = indexes[i] * bytePerPixel;
-        if (bytePerPixel === 4) {
-          imageData[offset    ] = colorMap[index + 2]; // red
-          imageData[offset + 1] = colorMap[index + 1]; // green
-          imageData[offset + 2] = colorMap[index    ]; // blue
-          imageData[offset + 3] = colorMap[index + 3]; // alpha
-        } else if (bytePerPixel === 3) {
-          imageData[offset    ] = colorMap[index + 2]; // red
-          imageData[offset + 1] = colorMap[index + 1]; // green
-          imageData[offset + 2] = colorMap[index    ]; // blue
-          imageData[offset + 3] = 255; // alpha
-        } else if (bytePerPixel === 2) {
-          color = colorMap[index] | (colorMap[index + 1] << 8);
-          imageData[offset    ] = (color & 0x7C00) >> 7; // red
-          imageData[offset + 1] = (color & 0x03E0) >> 2; // green
-          imageData[offset + 2] = (color & 0x001F) << 3; // blue
-          imageData[offset + 3] = (color & 0x8000) ? 0 : 255; // overlay 0 = opaque and 1 = transparent Discussion at: https://bugzilla.gnome.org/show_bug.cgi?id=683381
-        }
-      }
-    }
-
-    return imageData;
-  }
-
-
-  /**
-   * Return a ImageData object from a TGA file (16bits)
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} pixels data
-   * @param {Array} colormap - not used
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageData16bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var color, offset, i, x, y;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i += 2) {
-        color = pixels[i] | (pixels[i + 1] << 8);
-        offset = (x + width * y) * 4;
-        imageData[offset    ] = (color & 0x7C00) >> 7; // red
-        imageData[offset + 1] = (color & 0x03E0) >> 2; // green
-        imageData[offset + 2] = (color & 0x001F) << 3; // blue
-        imageData[offset + 3] = (color & 0x8000) ? 0 : 255; // overlay 0 = opaque and 1 = transparent Discussion at: https://bugzilla.gnome.org/show_bug.cgi?id=683381
-      }
-    }
-
-    return imageData;
-  }
-
-
-  /**
-   * Return a ImageData object from a TGA file (24bits)
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} pixels data
-   * @param {Array} colormap - not used
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageData24bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var offset, i, x, y;
-    var bpp = this.header.pixelDepth >> 3;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i += bpp) {
-        offset = (x + width * y) * 4;
-        imageData[offset + 3] = 255;  // alpha
-        imageData[offset + 2] = pixels[i    ]; // blue
-        imageData[offset + 1] = pixels[i + 1]; // green
-        imageData[offset    ] = pixels[i + 2]; // red
-      }
-    }
-
-    return imageData;
-  }
-
-
-  /**
-   * Return a ImageData object from a TGA file (32bits)
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} pixels data from TGA file
-   * @param {Array} colormap - not used
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageData32bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var i, x, y, offset;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i += 4) {
-        offset = (x + width * y) * 4;
-        imageData[offset + 2] = pixels[i    ]; // blue
-        imageData[offset + 1] = pixels[i + 1]; // green
-        imageData[offset    ] = pixels[i + 2]; // red
-        imageData[offset + 3] = pixels[i + 3]; // alpha
-      }
-    }
-
-    return imageData;
-  }
-
-  /**
-   * Return a ImageData object from a TGA file (32bits). Uses pre multiplied alpha values
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} pixels data from TGA file
-   * @param {Array} colormap - not used
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageData32bitsPre(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var i, x, y, offset, alpha;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i += 4) {
-        offset = (x + width * y) * 4;
-        alpha = pixels[i + 3] * 255; // TODO needs testing
-        imageData[offset + 2] = pixels[i    ] / alpha; // blue
-        imageData[offset + 1] = pixels[i + 1] / alpha; // green
-        imageData[offset    ] = pixels[i + 2] / alpha; // red
-        imageData[offset + 3] = pixels[i + 3]; // alpha
-      }
-    }
-
-    return imageData;
-  }
-
-
-  /**
-   * Return a ImageData object from a TGA file (8bits grey)
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} pixels data
-   * @param {Array} colormap - not used
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageDataGrey8bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var color, offset, i, x, y;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i++) {
-        color = pixels[i];
-        offset = (x + width * y) * 4;
-        imageData[offset    ] = color; // red
-        imageData[offset + 1] = color; // green
-        imageData[offset + 2] = color; // blue
-        imageData[offset + 3] = 255;   // alpha
-      }
-    }
-
-    return imageData;
-  }
-
-
-  /**
-   * Return a ImageData object from a TGA file (16bits grey) 8 Bit RGB and 8 Bit Alpha
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} pixels data
-   * @param {Array} colormap - not used
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageDataGrey16bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var color, offset, i, x, y;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i += 2) {
-        color = pixels[i];
-        offset = (x + width * y) * 4;
-        imageData[offset] = color;
-        imageData[offset + 1] = color;
-        imageData[offset + 2] = color;
-        imageData[offset + 3] = pixels[i + 1];
-      }
-    }
-
-    return imageData;
-  }
-
-
-  /**
-   * Open a targa file using XHR, be aware with Cross Domain files...
-   *
-   * @param {string} path - Path of the filename to load
-   * @param {function} callback - callback to trigger when the file is loaded
-   */
-  Targa.prototype.open = function targaOpen(path, callback) {
-    var req, tga = this;
-    req = new XMLHttpRequest();
-    req.open('GET', path, true);
-    req.responseType = 'arraybuffer';
-    req.onload = function () {
-      if (this.status === 200) {
-        tga.arrayBuffer = req.response;
-        tga.load(tga.arrayBuffer);
-        if (callback) {
-          callback.call(tga);
-        }
-      }
-    };
-    req.send(null);
-  };
-
-
-  function readFooter(view) {
-    var offset = view.byteLength - Targa.FOOTER_SIZE;
-    var signature = Targa.SIGNATURE;
-
-    var footer = {};
-
-    var signatureArray = new Uint8Array(view.buffer, offset + 0x08, signature.length);
-    var str = String.fromCharCode.apply(null, signatureArray);
-
-    if (!isSignatureValid(str)) {
-      footer.hasFooter = false;
-      return footer;
-    }
-
-    footer.hasFooter = true;
-    footer.extensionOffset = view.getUint32(offset, Targa.LITTLE_ENDIAN);
-    footer.developerOffset = view.getUint32(offset + 0x04, Targa.LITTLE_ENDIAN);
-    footer.hasExtensionArea = footer.extensionOffset !== 0;
-    footer.hasDeveloperArea = footer.developerOffset !== 0;
-
-    if (footer.extensionOffset) {
-      footer.attributeType = view.getUint8(footer.extensionOffset + 494);
-    }
-
-    return footer;
-  }
-
-  function isSignatureValid(str) {
-    var signature = Targa.SIGNATURE;
-
-    for (var i = 0; i < signature.length; i++) {
-      if (str.charCodeAt(i) !== signature.charCodeAt(i)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  /**
-   * Load and parse a TGA file
-   *
-   * @param {ArrayBuffer} data - TGA file buffer array
-   */
-  Targa.prototype.load = function targaLoad(data) {
-    var dataView = new DataView(data);
-
-    this.headerData = new Uint8Array(data, 0, Targa.HEADER_SIZE);
-
-    this.header = readHeader(dataView); // Parse Header
-    setHeaderBooleans(this.header);
-    checkHeader(this.header); // Check if a valid TGA file (or if we can load it)
-
-    var offset = Targa.HEADER_SIZE;
-    // Move to data
-    offset += this.header.idLength;
-    if (offset >= data.byteLength) {
-      throw new Error('Targa::load() - No data');
-    }
-
-    // Read palette
-    if (this.header.hasColorMap) {
-      var colorMapSize = this.header.colorMapLength * (this.header.colorMapDepth >> 3);
-      this.palette = new Uint8Array(data, offset, colorMapSize);
-      offset += colorMapSize;
-    }
-
-    var bytesPerPixel = this.header.pixelDepth >> 3;
-    var imageSize = this.header.width * this.header.height;
-    var pixelTotal = imageSize * bytesPerPixel;
-
-    if (this.header.hasEncoding) { // RLE encoded
-      var RLELength = data.byteLength - offset - Targa.FOOTER_SIZE;
-      var RLEData = new Uint8Array(data, offset, RLELength);
-      this.imageData = decodeRLE(RLEData, bytesPerPixel, pixelTotal);
-    } else { // RAW pixels
-      this.imageData = new Uint8Array(data, offset, this.header.hasColorMap ? imageSize : pixelTotal);
-    }
-    
-    this.footer = readFooter(dataView);
-
-    if (this.header.alphaBits !== 0  || this.footer.hasExtensionArea && (this.footer.attributeType === 3 || this.footer.attributeType === 4)) {
-      this.footer.usesAlpha = true;
-    }
-  };
-
-
-  /**
-   * Return a ImageData object from a TGA file
-   *
-   * @param {object} imageData - Optional ImageData to work with
-   * @returns {object} imageData
-   */
-  Targa.prototype.getImageData = function targaGetImageData(imageData) {
-    var width = this.header.width;
-    var height = this.header.height;
-    var origin = (this.header.flags & Targa.Origin.MASK) >> Targa.Origin.SHIFT;
-    var x_start, x_step, x_end, y_start, y_step, y_end;
-    var getImageData;
-
-    // Create an imageData
-    if (!imageData) {
-      if (document) {
-        imageData = document.createElement('canvas').getContext('2d').createImageData(width, height);
-      }
-      // In Thread context ?
-      else {
-        imageData = {
-          width: width,
-          height: height,
-          data: new Uint8ClampedArray(width * height * 4)
-        };
-      }
-    }
-
-    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.TOP_RIGHT) {
-      y_start = 0;
-      y_step = 1;
-      y_end = height;
-    }
-    else {
-      y_start = height - 1;
-      y_step = -1;
-      y_end = -1;
-    }
-
-    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.BOTTOM_LEFT) {
-      x_start = 0;
-      x_step = 1;
-      x_end = width;
-    }
-    else {
-      x_start = width - 1;
-      x_step = -1;
-      x_end = -1;
-    }
-
-    // TODO: use this.header.offsetX and this.header.offsetY ?
-
-    switch (this.header.pixelDepth) {
-      case 8:
-        getImageData = this.header.isGreyColor ? getImageDataGrey8bits : getImageData8bits;
-        break;
-
-      case 16:
-        getImageData = this.header.isGreyColor ? getImageDataGrey16bits : getImageData16bits;
-        break;
-
-      case 24:
-        getImageData = getImageData24bits;
-        break;
-
-      case 32:
-        if (this.footer.hasExtensionArea) {
-          if (this.footer.attributeType === 3) { // straight alpha
-            getImageData = getImageData32bits;
-          } else if (this.footer.attributeType === 4) { // pre multiplied alpha
-            getImageData = getImageData32bitsPre;
-          } else { // ignore alpha values if attributeType set to 0, 1, 2
-            getImageData = getImageData24bits;
-          }
-        } else {
-          if (this.header.alphaBits !== 0) {
-            getImageData = getImageData32bits;
-          } else { // 32 bits Depth, but alpha Bits set to 0
-            getImageData = getImageData24bits;
-          }
-        }
-
-        break;
-    }
-
-    getImageData.call(this, imageData.data, this.imageData, this.palette, width, y_start, y_step, y_end, x_start, x_step, x_end);
-    return imageData;
-  };
-
-  /** (Experimental)
-   *  Encodes imageData into TGA format
-   *  Only TGA True Color 32 bit with optional RLE encoding is supported for now
-   * @param imageData
-   */
-  Targa.prototype.setImageData = function targaSetImageData(imageData) {
-
-    if (!imageData) {
-      throw new Error('Targa::setImageData() - imageData argument missing');
-    }
-
-    var width = this.header.width;
-    var height = this.header.height;
-    var expectedLength = width * height * (this.header.pixelDepth  >> 3);
-    var origin = (this.header.flags & Targa.Origin.MASK) >> Targa.Origin.SHIFT;
-    var x_start, x_step, x_end, y_start, y_step, y_end;
-
-    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.TOP_RIGHT) {
-      y_start = 0; // start bottom, step upward
-      y_step = 1;
-      y_end = height;
-    } else {
-      y_start = height - 1; // start at top, step downward
-      y_step = -1;
-      y_end = -1;
-    }
-
-    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.BOTTOM_LEFT) {
-      x_start = 0; // start left, step right
-      x_step = 1;
-      x_end = width;
-    } else {
-      x_start = width - 1; // start right, step left
-      x_step = -1;
-      x_end = -1;
-    }
-
-    if (!this.imageData) {
-      this.imageData = new Uint8Array(expectedLength);
-    }
-
-    // start top left if origin is bottom left
-    // swapping order of first two arguments does the trick for writing
-    // this converts canvas data to internal tga representation
-    // this.imageData contains tga data
-    getImageData32bits(this.imageData, imageData.data, this.palette, width, y_start, y_step, y_end, x_start, x_step, x_end);
-
-    var data = this.imageData;
-
-    if (this.header.hasEncoding) {
-      data = encodeRLE(this.header, data);
-    }
-
-    var bufferSize = Targa.HEADER_SIZE + data.length + Targa.FOOTER_SIZE;
-    var buffer = new ArrayBuffer(bufferSize);
-
-    this.arrayBuffer = buffer;
-    // create array, useful for inspecting data while debugging
-    this.headerData = new Uint8Array(buffer, 0, Targa.HEADER_SIZE);
-    this.RLEData = new Uint8Array(buffer, Targa.HEADER_SIZE, data.length);
-    this.footerData = new Uint8Array(buffer, Targa.HEADER_SIZE + data.length, Targa.FOOTER_SIZE);
-
-    var headerView = new DataView(this.headerData.buffer);
-    writeHeader(this.header, headerView);
-    this.RLEData.set(data);
-    writeFooter(this.footerData);
-  };
-
-  /**
-   * Return a canvas with the TGA render on it
-   *
-   * @returns {object} CanvasElement
-   */
-  Targa.prototype.getCanvas = function targaGetCanvas() {
-    var canvas, ctx, imageData;
-
-    canvas = document.createElement('canvas');
-    ctx = canvas.getContext('2d');
-    imageData = ctx.createImageData(this.header.width, this.header.height);
-
-    canvas.width = this.header.width;
-    canvas.height = this.header.height;
-
-    ctx.putImageData(this.getImageData(imageData), 0, 0);
-
-    return canvas;
-  };
-
-
-  /**
-   * Return a dataURI of the TGA file
-   *
-   * @param {string} type - Optional image content-type to output (default: image/png)
-   * @returns {string} url
-   */
-  Targa.prototype.getDataURL = function targaGetDatURL(type) {
-    return this.getCanvas().toDataURL(type || 'image/png');
-  };
-
-  /**
-   * Return a objectURL of the TGA file
-   * The url can be used in the download attribute of a link
-   * @returns {string} url
-   */
-  Targa.prototype.getBlobURL = function targetGetBlobURL() {
-    if (!this.arrayBuffer) {
-      throw new Error('Targa::getBlobURL() - No data available for blob');
-    }
-    var blob = new Blob([this.arrayBuffer], { type: "image/x-tga" });
-    return URL.createObjectURL(blob);
-  };
-
-
-  // Find Context
-  var shim = {};
-  if (typeof(exports) === 'undefined') {
-    if (typeof(define) === 'function' && typeof(define.amd) === 'object' && define.amd) {
-      define(function () {
-        return Targa;
-      });
-    } else {
-      // Browser
-      shim.exports = typeof(window) !== 'undefined' ? window : _global;
-    }
-  }
-  else {
-    // Commonjs
-    shim.exports = exports;
-  }
-
-
-  // Export
-  if (shim.exports) {
-    shim.exports.TGA = Targa;
-  }
-
-})(this);
-
 'use strict';
 
 /**
  * 버퍼 안의 데이터를 어떻게 읽어야 할지 키가 되는 객체
+ * 
+ * @alias Accessor
  * @class Accessor
  */
-var Accessor = function() 
+var Accessor = function () 
 {
 
 	if (!(this instanceof Accessor)) 
@@ -13624,7 +14624,9 @@ BlocksListsContainer.prototype.getBlockList = function(blockList_name)
 'use strict';
 
 /**
- * 어떤 일을 하고 있습니까?
+ * F4D Lego 클래스
+ * 
+ * @alias Lego
  * @class Lego
  */
 var Lego = function() 
@@ -13634,13 +14636,13 @@ var Lego = function()
 		throw new Error(Messages.CONSTRUCT_ERROR);
 	}
 
-	//this.dataArraybuffer; // binary data.***
 	this.vbo_vicks_container = new VBOVertexIdxCacheKeysContainer();
 	this.fileLoadState = CODE.fileLoadState.READY;
 	this.dataArrayBuffer;
 	this.selColor4;
 };
 
+/*
 Lego.prototype.parseArrayBuffer = function(gl, readWriter, dataArraybuffer, bytesReaded) 
 {
 	if (this.fileLoadState == CODE.fileLoadState.LOADING_FINISHED) 
@@ -13711,6 +14713,89 @@ Lego.prototype.parseArrayBuffer = function(gl, readWriter, dataArraybuffer, byte
 	}
 
 	return bytesReaded;
+};
+*/
+
+/**
+ * F4D Lego 자료를 읽는다
+ * 
+ * @param {any} gl 
+ * @param {any} readWriter 
+ * @param {any} dataArraybuffer 
+ * @param {any} bytesReaded 
+ */
+Lego.prototype.parseArrayBuffer = function(gl, readWriter, dataArraybuffer, bytesReaded)
+{
+	this.parseLegoData(dataArraybuffer);
+};
+
+/**
+ * F4D Lego 자료를 읽는다
+ * 
+ * @param {ArrayBuffer} buffer 
+ * @returns 
+ */
+Lego.prototype.parseLegoData = function(buffer)
+{
+	if (this.fileLoadState !== CODE.fileLoadState.LOADING_FINISHED)	{ return; }
+
+	var stream = new DataStream(buffer, 0, DataStream.LITTLE_ENDIAN);
+	this.fileLoadState = CODE.fileLoadState.PARSE_STARTED;
+
+	var bbox = new BoundingBox();
+	var vboCacheKey = this.vbo_vicks_container.newVBOVertexIdxCacheKey();
+
+	// BoundingBox
+	bbox.minX = stream.readFloat32();
+	bbox.minY = stream.readFloat32();
+	bbox.minZ = stream.readFloat32();
+	bbox.maxX = stream.readFloat32();
+	bbox.maxY = stream.readFloat32();
+	bbox.maxZ = stream.readFloat32();
+
+	// VBO(Position Buffer) - x,y,z
+	var numPositions = stream.readUint32();
+	var positionBuffer = stream.readFloat32Array(numPositions * 3);
+	//console.log(numPositions + " Positions = " + positionBuffer);
+
+	vboCacheKey.vertexCount = numPositions;
+	vboCacheKey.posVboDataArray = positionBuffer;
+
+	// VBO(Normal Buffer) - i,j,k
+	var hasNormals = stream.readUint8();
+	if (hasNormals) 
+	{
+		var numNormals = stream.readUint32();
+		var normalBuffer = stream.readInt8Array(numNormals * 3);
+		//console.log(numNormals + " Normals = " + normalBuffer);
+
+		vboCacheKey.norVboDataArray = normalBuffer;
+	}
+
+	// VBO(Color Buffer) - r,g,b,a
+	var hasColors = stream.readUint8();
+	if (hasColors)
+	{
+		var numColors = stream.readUint32();
+		var colorBuffer = stream.readUint8Array(numColors * 4);
+		//console.log(numColors + " Colors = " + colorBuffer);
+
+		vboCacheKey.colVboDataArray = colorBuffer;
+	}
+
+	// VBO(TextureCoord Buffer) - u,v
+	var hasTexCoords = stream.readUint8();
+	if (hasTexCoords)
+	{
+		var dataType = stream.readUint16();
+		var numCoords = stream.readUint32();
+		var coordBuffer = stream.readFloat32Array(numCoords * 2);
+		//console.log(numCoords + " Coords = " + coordBuffer);
+
+		vboCacheKey.tcoordVboDataArray = coordBuffer;
+	}
+
+	this.fileLoadState = CODE.fileLoadState.PARSE_FINISHED;
 };
 
 'use strict';
@@ -15795,11 +16880,11 @@ ReaderWriter.prototype.getBoundingBoxFromFloat32Array = function(float32Array, r
 
 		if (i==0) 
 		{
-			resultBbox.setInit(this.point3dSC);
+			resultBbox.init(this.point3dSC);
 		}
 		else 
 		{
-			resultBbox.addPoint3D(this.point3dSC);
+			resultBbox.addPoint(this.point3dSC);
 		}
 	}
 
@@ -16375,33 +17460,28 @@ ReaderWriter.prototype.parseObjectIndexFile = function(arrayBuffer, neoBuildings
 	{
 		// read the building location data.***
 		var neoBuilding = neoBuildingsList.newNeoBuilding();
+		if (neoBuilding.metaData === undefined) 
+		{
+			neoBuilding.metaData = new MetaData();
+		}
+
+		if (neoBuilding.metaData.geographicCoord === undefined)
+		{ neoBuilding.metaData.geographicCoord = new GeographicCoord(); }
+
+		if (neoBuilding.metaData.bbox === undefined) 
+		{
+			neoBuilding.metaData.bbox = new BoundingBox();
+		}
 
 		buildingNameLength = this.readInt32(arrayBuffer, bytesReaded, bytesReaded+4);
 		bytesReaded += 4;
 		var buildingName = String.fromCharCode.apply(null, new Int8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ buildingNameLength)));
 		bytesReaded += buildingNameLength;
-		/* khj(20170331)
-		var buildingName = "";
-		for(var j=0; j<buildingNameLength; j++) {
-			buildingName += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ 1)));bytesReaded += 1;
-		}
-		*/
 
 		longitude = this.readFloat64(arrayBuffer, bytesReaded, bytesReaded+8); bytesReaded += 8;
 		latitude = this.readFloat64(arrayBuffer, bytesReaded, bytesReaded+8); bytesReaded += 8;
 		altitude = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
 
-		//longitude = 128.594998;
-		//latitude = 34.904209;
-		//altitude = 50.0;
-		// sangamdong 37.577984, 126.894383
-
-		heading = 0.0;
-		pitch = 0.0;
-		roll = 0.0;
-
-		// TEST.*********
-		altitude = 50.0;
 		neoBuilding.bbox = new BoundingBox();
 		neoBuilding.bbox.minX = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
 		neoBuilding.bbox.minY = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
@@ -16409,55 +17489,8 @@ ReaderWriter.prototype.parseObjectIndexFile = function(arrayBuffer, neoBuildings
 		neoBuilding.bbox.maxX = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
 		neoBuilding.bbox.maxY = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
 		neoBuilding.bbox.maxZ = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-
-		// create a building and set the location.***
-		//var neoBuilding_header_path = this.geometryDataPath + "/"+buildingFileName+"/Header.hed";
-		var buildingNameDivided = buildingName.split("_");
-		if (buildingNameDivided[2] != undefined)
-		{
-			neoBuilding.buildingId = buildingNameDivided[1] + "_" + buildingNameDivided[2];
-			neoBuilding.buildingType = buildingNameDivided[3];
-		}
-		else
-		{
-			neoBuilding.buildingId = buildingNameDivided[1];
-			neoBuilding.buildingType = buildingNameDivided[3];
-		}
 		
-		if (neoBuilding.buildingType == undefined)
-		{
-			neoBuilding.buildingType = "basicBuilding";
-		}
-		
-		if (neoBuilding.buildingId == "Sample_MEP")
-		{
-			var hola = 0;
-		}
-		
-		/* khj(20170331) : before converted jt data path has been changed.
-		var buildingNameDivided = buildingName.split("-");
-		var tempBuildingId = buildingNameDivided[2].split("_");
-		neoBuilding.buildingId = tempBuildingId[0];
-		neoBuilding.buildingType = buildingNameDivided[1];
-		*/
-
-		neoBuilding.buildingFileName = buildingName;
-		if (neoBuilding.metaData == undefined) 
-		{
-			neoBuilding.metaData = new MetaData();
-		}
-		if (neoBuilding.metaData.geographicCoord == undefined)
-		{ neoBuilding.metaData.geographicCoord = new GeographicCoord(); }
-
-		neoBuilding.metaData.geographicCoord.setLonLatAlt(longitude, latitude, altitude);
-
-		if (neoBuilding.metaData.bbox == undefined) 
-		{
-			neoBuilding.metaData.bbox = new BoundingBox();
-		}
-
 		var bbox = neoBuilding.metaData.bbox;
-
 		bbox.minX = neoBuilding.bbox.minX;
 		bbox.minY = neoBuilding.bbox.minY;
 		bbox.minZ = neoBuilding.bbox.minZ;
@@ -16465,6 +17498,14 @@ ReaderWriter.prototype.parseObjectIndexFile = function(arrayBuffer, neoBuildings
 		bbox.maxX = neoBuilding.bbox.maxX;
 		bbox.maxY = neoBuilding.bbox.maxY;
 		bbox.maxZ = neoBuilding.bbox.maxZ;
+
+		// create a building and set the location.***
+		neoBuilding.buildingId = buildingName.substr(4, buildingNameLength-4);
+		neoBuilding.buildingType = "basicBuilding";
+		neoBuilding.buildingFileName = buildingName;
+		neoBuilding.metaData.geographicCoord.setLonLatAlt(longitude, latitude, altitude);
+
+		// console.log("Building Name = " + buildingName);
 	}
 
 	neoBuildingsList.neoBuildingsArray.reverse();
@@ -19954,957 +20995,6 @@ Selection.prototype.init = function(gl, drawingBufferWidth, drawingBufferHeight)
 };
 'use strict';
 
-/**
- * mago3djs API
- * 
- * @alias API
- * @class API
- * 
- * @param {any} apiName api이름
- */
-function API(apiName)
-{
-	if (!(this instanceof API)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	// mago3d 활성화/비활성화 여부
-	this.magoEnable = true;
-
-	// api 이름
-	this.apiName = apiName;
-	// project id
-	this.projectId = null;
-	// block id
-	this.blockId = null;
-	// blockIds
-	this.blockIds = null;
-	// objectIds
-	this.objectIds = null;
-	// data_key
-	this.dataKey = null;
-	// issueId
-	this.issueId = null;
-	// issueType
-	this.issueType = null;
-	// drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
-	this.drawType = 0;
-
-	// fullship = 0, deploy = 1
-	this.renderMode = 0;
-	// 위도
-	this.latitude = 0;
-	// 경도
-	this.longitude = 0;
-	// 높이
-	this.elevation = 0;
-	// heading
-	this.heading = 0;
-	// pitch
-	this.pitch = 0;
-	// roll
-	this.roll = 0;
-
-	// 색깔
-	this.color = 0;
-	// structs = MSP, outfitting = MOP
-	this.blockType = null;
-	// outfitting 표시/비표시
-	this.showOutFitting = false;
-	// boundingBox 표시/비표시
-	this.showBoundingBox = false;
-	// 그림자 표시/비표시
-	this.showShadow = false;
-	// frustum culling 가시 거리(M단위)
-	this.frustumFarDistance = 0;
-	//	// highlighting
-	//	this.highLightedBuildings = [];
-	//	// color
-	//	this.colorBuildings = [];
-	//	// show/hide
-	//	this.hideBuildings = [];
-
-	// 0 = block mode, 1 = object mode
-	this.mouseMoveMode = 0;
-
-	// 이슈 등록 표시
-	this.issueInsertEnable = false;
-	// object 정보 표시
-	this.objectInfoViewEnable = false;
-	// 이슈 목록 표시
-	this.issueListEnable = false;
-	//
-	this.insertIssueState = 0;
-};
-
-API.prototype.getMagoEnable = function() 
-{
-	return this.magoEnable;
-};
-API.prototype.setMagoEnable = function(magoEnable) 
-{
-	this.magoEnable = magoEnable;
-};
-
-API.prototype.getAPIName = function() 
-{
-	return this.apiName;
-};
-
-API.prototype.getProjectId = function() 
-{
-	return this.projectId;
-};
-API.prototype.setProjectId = function(projectId) 
-{
-	this.projectId = projectId;
-};
-
-API.prototype.getBlockId = function() 
-{
-	return this.blockId;
-};
-API.prototype.setBlockId = function(blockId) 
-{
-	this.blockId = blockId;
-};
-
-API.prototype.getBlockIds = function() 
-{
-	return this.blockIds;
-};
-API.prototype.setBlockIds = function(blockIds) 
-{
-	this.blockIds = blockIds;
-};
-
-API.prototype.getObjectIds = function() 
-{
-	return this.objectIds;
-};
-API.prototype.setObjectIds = function(objectIds) 
-{
-	this.objectIds = objectIds;
-};
-
-API.prototype.getIssueId = function() 
-{
-	return this.issueId;
-};
-API.prototype.setIssueId = function(issueId) 
-{
-	this.issueId = issueId;
-};
-API.prototype.getIssueType = function() 
-{
-	return this.issueType;
-};
-API.prototype.setIssueType = function(issueType) 
-{
-	this.issueId = issueType;
-};
-
-API.prototype.getDataKey = function() 
-{
-	return this.dataKey;
-};
-API.prototype.setDataKey = function(dataKey) 
-{
-	this.dataKey = dataKey;
-};
-
-API.prototype.getRenderMode = function() 
-{
-	return this.renderMode;
-};
-API.prototype.setRenderMode = function(renderMode) 
-{
-	this.renderMode = renderMode;
-};
-
-API.prototype.getLatitude = function() 
-{
-	return this.latitude;
-};
-API.prototype.setLatitude = function(latitude) 
-{
-	this.latitude = latitude;
-};
-
-API.prototype.getLongitude = function() 
-{
-	return this.longitude;
-};
-API.prototype.setLongitude = function(longitude) 
-{
-	this.longitude = longitude;
-};
-
-API.prototype.getElevation = function() 
-{
-	return this.elevation;
-};
-API.prototype.setElevation = function(elevation) 
-{
-	this.elevation = elevation;
-};
-
-API.prototype.getHeading = function() 
-{
-	return this.heading;
-};
-API.prototype.setHeading = function(heading) 
-{
-	this.heading = heading;
-};
-
-API.prototype.getPitch = function() 
-{
-	return this.pitch;
-};
-API.prototype.setPitch = function(pitch) 
-{
-	this.pitch = pitch;
-};
-
-API.prototype.getRoll = function() 
-{
-	return this.roll;
-};
-API.prototype.setRoll = function(roll) 
-{
-	this.roll = roll;
-};
-
-API.prototype.getColor = function() 
-{
-	return this.color;
-};
-API.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-
-API.prototype.getBlockType = function() 
-{
-	return this.blockType;
-};
-API.prototype.setBlockType = function(blockType) 
-{
-	this.blockType = blockType;
-};
-
-API.prototype.getShowOutFitting = function() 
-{
-	return this.showOutFitting;
-};
-API.prototype.setShowOutFitting = function(showOutFitting) 
-{
-	this.showOutFitting = showOutFitting;
-};
-
-API.prototype.getShowBoundingBox = function() 
-{
-	return this.showBoundingBox;
-};
-API.prototype.setShowBoundingBox = function(showBoundingBox) 
-{
-	this.showBoundingBox = showBoundingBox;
-};
-
-API.prototype.getShowShadow = function() 
-{
-	return this.showShadow;
-};
-API.prototype.setShowShadow = function(showShadow) 
-{
-	this.showShadow = showShadow;
-};
-
-API.prototype.getFrustumFarDistance = function() 
-{
-	return this.frustumFarDistance;
-};
-API.prototype.setFrustumFarDistance = function(frustumFarDistance) 
-{
-	this.frustumFarDistance = frustumFarDistance;
-};
-
-API.prototype.getMouseMoveMode = function() 
-{
-	return this.mouseMoveMode;
-};
-API.prototype.setMouseMoveMode = function(mouseMoveMode) 
-{
-	this.mouseMoveMode = mouseMoveMode;
-};
-
-API.prototype.getIssueInsertEnable = function() 
-{
-	return this.issueInsertEnable;
-};
-API.prototype.setIssueInsertEnable = function(issueInsertEnable) 
-{
-	this.issueInsertEnable = issueInsertEnable;
-};
-API.prototype.getObjectInfoViewEnable = function() 
-{
-	return this.objectInfoViewEnable;
-};
-API.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
-{
-	this.objectInfoViewEnable = objectInfoViewEnable;
-};
-API.prototype.getIssueListEnable = function() 
-{
-	return this.issueListEnable;
-};
-API.prototype.setIssueListEnable = function(issueListEnable) 
-{
-	this.issueListEnable = issueListEnable;
-};
-
-API.prototype.getInsertIssueState = function() 
-{
-	return this.insertIssueState;
-};
-API.prototype.setInsertIssueState = function(insertIssueState) 
-{
-	this.insertIssueState = insertIssueState;
-};
-
-API.prototype.getDrawType = function() 
-{
-	return this.drawType;
-};
-API.prototype.setDrawType = function(drawType) 
-{
-	this.drawType = drawType;
-};
-
-'use strict';
-
-/**
- * 선택한 object 정보를 화면에 표시
- * @param
- */
-function selectedObjectCallback(functionName, projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll) 
-{
-	window[functionName](projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll);
-}
-
-/**
- * 선택한 object 정보를 화면에 표시
- * @param functionName
- * @param data_key
- * @param object_key
- * @param latitude
- * @param longitude
- * @param elevation
- */
-function insertIssueCallback(functionName, data_key, object_key, latitude, longitude, elevation) 
-{
-	window[functionName](data_key, object_key, latitude, longitude, elevation);
-}
-'use strict';
-
-/**
- * 환경 설정 클래스. json 으로 할까 고민도 했지만 우선은 이 형태로 하기로 함
- * @class MagoConfig
- */
-var MagoConfig = MagoConfig || {};
-
-MagoConfig.getPolicy = function() 
-{
-	return this.serverPolicy;
-};
-
-MagoConfig.getData = function() 
-{
-	return this.serverData;
-};
-
-/**
- * 환경설정 세팅
- * 
- * @param serverPolicy mago3d policy(json)
- * @param serverData data 정보(json)
- */
-MagoConfig.init = function(serverPolicy, serverData) 
-{
-	this.serverPolicy = serverPolicy;
-	this.serverData = serverData;
-};
-
-/* eslint-env jquery */
-'use strict';
-
-/**
- * 화면단 UI와 연동 되는 API. APIGateWay 혹은 API 클래스로 클래스명 수정 예정
- * @class MagoFacade
- */
-/**
- * mago3d 활성화/비활성화
- * 
- * @param {Property} isShow true = 활성화, false = 비활성화
- */
-function changeMagoStateAPI(isShow) 
-{
-	var api = new API("changeMagoState");
-	api.setMagoEnable(isShow);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * render mode
- * 
- * @param {Property} renderMode 0 = 호선, 1 = 지번전개
- */
-function changeRenderAPI(renderMode) 
-{
-	var api = new API("changeRender");
-	api.setRenderMode(renderMode);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * outfitting 표시/비표시
- * 
- * @param {Property} isShow true = 활성화, false = 비활성화
- */
-function changeOutFittingAPI(isShow) 
-{
-	var api = new API("changeOutFitting");
-	api.setShowOutFitting(isShow);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * boundingBox 표시/비표시
- * 
- * @param {Property} isShow true = 활성화, false = 비활성화
- */
-function changeBoundingBoxAPI(isShow) 
-{
-	var api = new API("changeBoundingBox");
-	api.setShowBoundingBox(isShow);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * 그림자 표시/비표시
- * 
- * @param {Property} isShow true = 활성화, false = 비활성화
- */
-function changeShadowAPI(isShow) 
-{
-	var api = new API("changeShadow");
-	api.setShowShadow(isShow);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * frustum culling 가시 거리
- * 
- * @param {Property} frustumFarDistance frustum 거리. 내부적으로는 입력값의 제곱이 사용됨
- */
-function changeFrustumFarDistanceAPI(frustumFarDistance) 
-{
-	var api = new API("changefrustumFarDistance");
-	api.setFrustumFarDistance(frustumFarDistance);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * 데이터 검색
- * 
- * @param {Property} dataKey 데이터 고유키
- */
-function searchDataAPI(dataKey) 
-{
-	var api = new API("searchData");
-	api.setDataKey(dataKey);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * highlighting
- * 
- * @param {Property} projectId 프로젝트 아이디
- * @param {Property} blockIds block id. 복수개의 경우 , 로 입력
- * @param {Property} objectIds object id. 복수개의 경우 , 로 입력
- */
-function changeHighLightingAPI(projectId, blockIds, objectIds) 
-{
-	var api = new API("changeHighLighting");
-	api.setProjectId(projectId);
-	api.setBlockIds(blockIds);
-	api.setObjectIds(objectIds);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * color 변경
- * 
- * @param {Property} projectId 프로젝트 아이디
- * @param {Property} blockIds block id. 복수개의 경우 , 로 입력
- * @param {Property} objectIds object id. 복수개의 경우 , 로 입력
- * @param {Property} color R, G, B 색깔을 ',' 로 연결한 string 값을 받음.
- */
-function changeColorAPI(projectId, blockIds, objectIds, color) 
-{
-	var api = new API("changeColor");
-	api.setProjectId(projectId);
-	api.setBlockIds(blockIds);
-	api.setObjectIds(objectIds);
-	api.setColor(color);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * location and rotation 변경
- * 
- * @param {Property} data_key
- * @param {Property} latitude 위도
- * @param {Property} longitude 경도
- * @param {Property} height 높이
- * @param {Property} heading 좌, 우
- * @param {Property} pitch 위, 아래
- * @param {Property} roll 좌, 우 기울기
- */
-function changeLocationAndRotationAPI(data_key, latitude, longitude, height, heading, pitch, roll) 
-{
-	var api = new API("changeLocationAndRotation");
-	api.setDataKey(data_key);
-	api.setLatitude(latitude);
-	api.setLongitude(longitude);
-	api.setElevation(height);
-	api.setHeading(heading);
-	api.setPitch(pitch);
-	api.setRoll(roll);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * 블럭의 location and rotation 정보를 취득
- * TODO 기능 정의가 명확히 되지 않아 return 값을 현재의 계층 구조를 임시로 유지
- * 
- * @param  {Property} projectId 프로젝트 아이디
- * @param  {Property} blockId block id
- * @returns {Building} building
- */
-function getLocationAndRotationAPI(projectId, blockId) 
-{
-	var api = new API("getLocationAndRotation");
-	api.setProjectId(projectId);
-	api.setBlockId(blockId);
-	if (managerFactory != null) 
-	{
-		var building = managerFactory.callAPI(api);
-		return building;
-	}
-}
-
-/**
- * block 이동된 후 location and rotation 알림
- * 
- * @param {Property} projectId 프로젝트 아이디
- * @param {Property} blockId block id
- * @param {Property} objectId object id
- * @param {Property} latitude 위도
- * @param {Property} longitude 경도
- * @param {Property} elevation 높이
- * @param {Property} heading 좌, 우
- * @param {Property} pitch 위, 아래
- * @param {Property} roll 좌, 우 기울기
- */
-function showLocationAndRotationAPI(projectId, blockId, objectId, latitude, longitude, elevation, heading, pitch, roll) 
-{
-	$("#projectId").val(projectId);
-	$("#moveBlockId").val(blockId);
-	if (objectId !== undefined && objectId !== null) { $("#moveObjectId").val(objectId); }
-	$("#latitude").val(latitude);
-	$("#longitude").val(longitude);
-	if (elevation === undefined) { elevation = 0; }
-	$("#elevation").val(elevation);
-	if (heading === undefined) { heading = 0; }
-	$("#heading").val(heading);
-	if (pitch === undefined) { pitch = 0; }
-	$("#pitch").val(pitch);
-	if (roll === undefined) { roll = 0; }
-	$("#roll").val(roll);
-}
-
-/**
- * 마우스 클릭 객체 이동 대상 변경
- * 
- * @param {Property} mouseMoveMode 0 = All, 1 = object, 2 = None
- */
-function changeMouseMoveAPI(mouseMoveMode) 
-{
-	var api = new API("changeMouseMove");
-	api.setMouseMoveMode(mouseMoveMode);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * 이슈 등록 활성화 유무
- * 
- * @param {Property} flag true = 활성화, false = 비활성화
- */
-function changeInsertIssueModeAPI(flag) 
-{
-	var api = new API("changeInsertIssueMode");
-	api.setIssueInsertEnable(flag);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * object 정보 표시 활성화 유무
- * 
- * @param {Property} flag true = 활성화, false = 비활성화
- */
-function changeObjectInfoViewModeAPI(flag) 
-{
-	var api = new API("changeObjectInfoViewMode");
-	api.setObjectInfoViewEnable(flag);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * 이슈 목록 활성화 유무
- * 
- * @param {Property} flag true = 활성화, false = 비활성화
- */
-function changeListIssueViewModeAPI(flag) 
-{
-	var api = new API("changeListIssueViewMode");
-	api.setIssueListEnable(flag);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * pin image를 그림
- * 
- * @param {Property} drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
- * @param {Property} issue_id 이슈 고유키
- * @param {Property} issue_type 이슈 고유키
- * @param {Property} data_key 데이터 고유키
- * @param {Property} latitude 데이터 고유키
- * @param {Property} longitude 데이터 고유키
- * @param {Property} height 데이터 고유키
- */
-function drawInsertIssueImageAPI(drawType, issue_id, issue_type, data_key, latitude, longitude, height) 
-{
-	var api = new API("drawInsertIssueImage");
-	api.setDrawType(drawType);
-	api.setIssueId(issue_id);
-	api.setIssueId(issue_type);
-	api.setDataKey(data_key);
-	api.setLatitude(latitude);
-	api.setLongitude(longitude);
-	api.setElevation(height);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * issue 등록 geo 정보 관련 상태 변경
- * 
- * @param {Property} insertIssueState 이슈 등록 좌표 상태
- */
-function changeInsertIssueStateAPI(insertIssueState) 
-{
-	var api = new API("changeInsertIssueState");
-	api.setInsertIssueState(insertIssueState);
-	if (managerFactory != null) 
-	{
-		managerFactory.callAPI(api);
-	}
-}
-
-/**
- * 마우스를 사용할 수 없는 환경에서 버튼 이벤트로 대체
- * @param {Property} eventType 어떤 마우스 동작을 원하는지를 구분
- */
-function mouseMoveAPI(eventType) 
-{
-	if (managerFactory != null) 
-	{
-		managerFactory.mouseMove(eventType);
-	}
-}
-
-'use strict';
-
-/**
- * Policy
- * @class API
- */
-var Policy = function() 
-{
-	if (!(this instanceof Policy)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	// mago3d 활성화/비활성화 여부
-	this.magoEnable = true;
-
-	// outfitting 표시 여부
-	this.showOutFitting = false;
-	// boundingBox 표시/비표시
-	this.showBoundingBox = false;
-	// 그림자 표시/비표시
-	this.showShadow = false;
-	// far frustum 거리
-	this.frustumFarSquaredDistance = 5000000;
-
-	// highlighting
-	this.highLightedBuildings = [];
-	// color
-	this.colorBuildings = [];
-	// color
-	this.color = [];
-	// show/hide
-	this.hideBuildings = [];
-
-	// 0 = block mode, 1 = object mode
-	this.mouseMoveMode = 1;
-	
-	// 이슈 등록 표시
-	this.issueInsertEnable = false;
-	// object 정보 표시
-	this.objectInfoViewEnable = false;
-	// 이슈 목록 표시
-	this.issueListEnable = false;
-	
-	// 이미지 경로
-	this.imagePath = "";
-	
-	// provisional.***
-	this.colorChangedObjectId;
-};
-
-Policy.prototype.getMagoEnable = function() 
-{
-	return this.magoEnable;
-};
-Policy.prototype.setMagoEnable = function(magoEnable) 
-{
-	this.magoEnable = magoEnable;
-};
-
-Policy.prototype.getShowOutFitting = function() 
-{
-	return this.showOutFitting;
-};
-Policy.prototype.setShowOutFitting = function(showOutFitting) 
-{
-	this.showOutFitting = showOutFitting;
-};
-
-Policy.prototype.getShowBoundingBox = function() 
-{
-	return this.showBoundingBox;
-};
-Policy.prototype.setShowBoundingBox = function(showBoundingBox) 
-{
-	this.showBoundingBox = showBoundingBox;
-};
-
-Policy.prototype.getShowShadow = function() 
-{
-	return this.showShadow;
-};
-Policy.prototype.setShowShadow = function(showShadow) 
-{
-	this.showShadow = showShadow;
-};
-
-Policy.prototype.getFrustumFarSquaredDistance = function() 
-{
-	return this.frustumFarSquaredDistance;
-};
-Policy.prototype.setFrustumFarSquaredDistance = function(frustumFarSquaredDistance) 
-{
-	this.frustumFarSquaredDistance = frustumFarSquaredDistance;
-};
-
-Policy.prototype.getHighLightedBuildings = function() 
-{
-	return this.highLightedBuildings;
-};
-Policy.prototype.setHighLightedBuildings = function(highLightedBuildings) 
-{
-	this.highLightedBuildings = highLightedBuildings;
-};
-
-Policy.prototype.getColorBuildings = function() 
-{
-	return this.colorBuildings;
-};
-Policy.prototype.setColorBuildings = function(colorBuildings) 
-{
-	this.colorBuildings = colorBuildings;
-};
-
-Policy.prototype.getColor = function() 
-{
-	return this.color;
-};
-Policy.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-
-Policy.prototype.getHideBuildings = function() 
-{
-	return this.hideBuildings;
-};
-Policy.prototype.setHideBuildings = function(hideBuildings) 
-{
-	this.hideBuildings = hideBuildings;
-};
-
-Policy.prototype.getMouseMoveMode = function() 
-{
-	return this.mouseMoveMode;
-};
-Policy.prototype.setMouseMoveMode = function(mouseMoveMode) 
-{
-	this.mouseMoveMode = mouseMoveMode;
-};
-
-Policy.prototype.getIssueInsertEnable = function() 
-{
-	return this.issueInsertEnable;
-};
-Policy.prototype.setIssueInsertEnable = function(issueInsertEnable) 
-{
-	this.issueInsertEnable = issueInsertEnable;
-};
-Policy.prototype.getObjectInfoViewEnable = function() 
-{
-	return this.objectInfoViewEnable;
-};
-Policy.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
-{
-	this.objectInfoViewEnable = objectInfoViewEnable;
-};
-Policy.prototype.getIssueListEnable = function() 
-{
-	return this.issueListEnable;
-};
-Policy.prototype.setIssueListEnable = function(issueListEnable) 
-{
-	this.issueListEnable = issueListEnable;
-};
-
-Policy.prototype.getImagePath = function() 
-{
-	return this.imagePath;
-};
-Policy.prototype.setImagePath = function(imagePath) 
-{
-	this.imagePath = imagePath;
-};
-
-'use strict';
-
-/**
- * 프로젝트(ship, weather등)의 구성 요소
- * @class SearchCondition
- */
-var ProjectLayer = function() 
-{
-	if (!(this instanceof ProjectLayer)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	// project id
-	this.projectId = null;
-	// block id
-	this.blockId = null;
-	// object id
-	this.objectId = null;
-	
-};
-
-ProjectLayer.prototype.getProjectId = function() 
-{
-	return this.projectId;
-};
-ProjectLayer.prototype.setProjectId = function(projectId) 
-{
-	this.projectId = projectId;
-};
-
-ProjectLayer.prototype.getBlockId = function() 
-{
-	return this.blockId;
-};
-ProjectLayer.prototype.setBlockId = function(blockId) 
-{
-	this.blockId = blockId;
-};
-
-ProjectLayer.prototype.getObjectId = function() 
-{
-	return this.objectId;
-};
-ProjectLayer.prototype.setObjectId = function(objectId) 
-{
-	this.objectId = objectId;
-};
-'use strict';
-
 
 /**
  * 어떤 일을 하고 있습니까?
@@ -23999,510 +24089,6 @@ void main()\n\
     \n\
 }";
 
-'use strict';
-
-/**
- * 사용하지 않음
- */
-!(function() 
-{
-
-	var URL = window.URL || window.webkitURL;
-	if (!URL) 
-	{
-		throw new Error('This browser does not support Blob URLs');
-	}
-
-	if (!window.Worker) 
-	{
-		throw new Error('This browser does not support Web Workers');
-	}
-
-	function Multithread(threads) 
-	{
-		this.threads = Math.max(2, threads | 0);
-		this._queue = [];
-		this._queueSize = 0;
-		this._activeThreads = 0;
-		this._debug = {
-			start : 0,
-			end   : 0,
-			time  : 0
-		};
-	}
-
-	Multithread.prototype._worker = {
-		JSON: function() 
-		{
-			var /**/name/**/ = (/**/func/**/);
-			self.addEventListener('message', function(e) 
-			{
-				var data = e.data;
-				var view = new DataView(data);
-				var len = data.byteLength;
-				var str = Array(len);
-				for (var i=0;i<len;i++) 
-				{
-					str[i] = String.fromCharCode(view.getUint8(i));
-				}
-				var args = JSON.parse(str.join(''));
-				var value = (/**/name/**/).apply(/**/name/**/, args);
-				try 
-				{
-					data = JSON.stringify(value);
-				}
-				catch (e) 
-				{
-					throw new Error('Parallel function must return JSON serializable response');
-				}
-				len = typeof(data)==='undefined'?0:data.length;
-				var buffer = new ArrayBuffer(len);
-				view = new DataView(buffer);
-				for (i=0;i<len;i++) 
-				{
-					view.setUint8(i, data.charCodeAt(i) & 255);
-				}
-				self.postMessage(buffer, [buffer]);
-				self.close();
-			});
-		},
-		Int32: function() 
-		{
-			var /**/name/**/ = (/**/func/**/);
-			self.addEventListener('message', function(e) 
-			{
-				var data = e.data;
-				var view = new DataView(data);
-				var len = data.byteLength / 4;
-				var arr = Array(len);
-				for (var i=0;i<len;i++) 
-				{
-					arr[i] = view.getInt32(i*4);
-				}
-				var value = (/**/name/**/).apply(/**/name/**/, arr);
-				if (!(value instanceof Array)) { value = [value]; }
-				len = value.length;
-				var buffer = new ArrayBuffer(len * 4);
-				view = new DataView(buffer);
-				for (i=0;i<len;i++) 
-				{
-					view.setInt32(i*4, value[i]);
-				}
-				self.postMessage(buffer, [buffer]);
-				self.close();
-			});
-		},
-		Float64: function() 
-		{
-			var /**/name/**/ = (/**/func/**/);
-			self.addEventListener('message', function(e) 
-			{
-				var data = e.data;
-				var view = new DataView(data);
-				var len = data.byteLength / 8;
-				var arr = Array(len);
-				for (var i=0;i<len;i++) 
-				{
-					arr[i] = view.getFloat64(i*8);
-				}
-				var value = (/**/name/**/).apply(/**/name/**/, arr);
-				if (!(value instanceof Array)) { value = [value]; }
-				len = value.length;
-				var buffer = new ArrayBuffer(len * 8);
-				view = new DataView(buffer);
-				for (i=0;i<len;i++) 
-				{
-					view.setFloat64(i*8, value[i]);
-				}
-				self.postMessage(buffer, [buffer]);
-				self.close();
-			});
-		}
-	};
-
-	Multithread.prototype._encode = {
-		JSON: function(args) 
-		{
-			try 
-			{
-				var data = JSON.stringify(args);
-			}
-			catch (e) 
-			{
-				throw new Error('Arguments provided to parallel function must be JSON serializable');
-			}
-			len = data.length;
-			var buffer = new ArrayBuffer(len);
-			var view = new DataView(buffer);
-			for (var i=0;i<len;i++) 
-			{
-				view.setUint8(i, data.charCodeAt(i) & 255);
-			}
-			return buffer;
-		},
-		Int32: function(args) 
-		{
-			len = args.length;
-			var buffer = new ArrayBuffer(len*4);
-			var view = new DataView(buffer);
-			for (var i=0;i<len;i++) 
-			{
-				view.setInt32(i*4, args[i]);
-			}
-			return buffer;
-		},
-		Float64: function(args) 
-		{
-			len = args.length;
-			var buffer = new ArrayBuffer(len*8);
-			var view = new DataView(buffer);
-			for (var i=0;i<len;i++) 
-			{
-				view.setFloat64(i*8, args[i]);
-			}
-			return buffer;
-		}
-	};
-
-	Multithread.prototype._decode = {
-		JSON: function(data) 
-		{
-			var view = new DataView(data);
-			var len = data.byteLength;
-			var str = Array(len);
-			for (var i=0;i<len;i++) 
-			{
-				str[i] = String.fromCharCode(view.getUint8(i));
-			}
-			if (!str.length) 
-			{
-				return;
-			}
-			else 
-			{
-				return JSON.parse(str.join(''));
-			}
-		},
-		Int32: function(data) 
-		{
-			var view = new DataView(data);
-			var len = data.byteLength / 4;
-			var arr = Array(len);
-			for (var i=0;i<len;i++) 
-			{
-				arr[i] = view.getInt32(i*4);
-			}
-			return arr;
-		},
-		Float64: function(data) 
-		{
-			var view = new DataView(data);
-			var len = data.byteLength / 8;
-			var arr = Array(len);
-			for (var i=0;i<len;i++) 
-			{
-				arr[i] = view.getFloat64(i*8);
-			}
-			return arr;
-		},
-	};
-
-	Multithread.prototype._execute = function(resource, args, type, callback) 
-	{
-		if (!this._activeThreads) 
-		{
-			this._debug.start = (new Date()).valueOf();
-		}
-		if (this._activeThreads < this.threads) 
-		{
-			this._activeThreads++;
-			var t = (new Date()).valueOf();
-			var worker = new Worker(resource);
-			var buffer = this._encode[type](args);
-			var decode = this._decode[type];
-			var self = this;
-			if (type==='JSON') 
-			{
-				var listener = function(e) 
-				{
-					callback.call(self, decode(e.data));
-					self.ready();
-				};
-			}
-			else 
-			{
-				var listener = function(e) 
-				{
-					callback.apply(self, decode(e.data));
-					self.ready();
-				};
-			}
-			worker.addEventListener('message', listener);
-			worker.postMessage(buffer, [buffer]);
-		}
-		else 
-		{
-			this._queueSize++;
-			this._queue.push([resource, args, type, callback]);
-		}
-	};
-
-	Multithread.prototype.ready = function() 
-	{
-		this._activeThreads--;
-		if (this._queueSize) 
-		{
-			this._execute.apply(this, this._queue.shift());
-			this._queueSize--;
-		}
-		else if (!this._activeThreads) 
-		{
-			this._debug.end = (new Date()).valueOf();
-			this._debug.time = this._debug.end - this._debug.start;
-		}
-	};
-
-	Multithread.prototype._prepare = function(fn, type) 
-	{
-
-		fn = fn;
-
-		var name = fn.name;
-		var fnStr = fn.toString();
-		if (!name) 
-		{
-			name = '$' + ((Math.random()*10)|0);
-			while (fnStr.indexOf(name) !== -1) 
-			{
-				name += ((Math.random()*10)|0);
-			}
-		}
-
-		var script = this._worker[type]
-			.toString()
-			.replace(/^.*?[\n\r]+/gi, '')
-			.replace(/\}[\s]*$/, '')
-			.replace(/\/\*\*\/name\/\*\*\//gi, name)
-			.replace(/\/\*\*\/func\/\*\*\//gi, fnStr);
-
-		var resource = URL.createObjectURL(new Blob([script], {type: 'text/javascript'}));
-
-		return resource;
-
-	};
-
-	Multithread.prototype.process = function(fn, callback) 
-	{
-
-		var resource = this._prepare(fn, 'JSON');
-		var self = this;
-
-		return function() 
-		{
-			self._execute(resource, [].slice.call(arguments), 'JSON', callback);
-		};
-
-	};
-
-	Multithread.prototype.processInt32 = function(fn, callback) 
-	{
-
-		var resource = this._prepare(fn, 'Int32');
-		var self = this;
-
-		return function() 
-		{
-			self._execute(resource, [].slice.call(arguments), 'Int32', callback);
-		};
-
-	};
-
-	Multithread.prototype.processFloat64 = function(fn, callback) 
-	{
-
-		var resource = this._prepare(fn, 'Float64');
-		var self = this;
-
-		return function() 
-		{
-			self._execute(resource, [].slice.call(arguments), 'Float64', callback);
-		};
-
-	};
-
-	window.Multithread = Multithread;
-
-})();
-'use strict';
-
-//importScripts('../Build/CesiumUnminified/SonGeometryJScript.js'); // No.***
-//importScripts('GeometryUtil.js'); // Yes.***
-//importScripts('GeometryModifier.js');
-//importScripts('Point3D.js');
-//importScripts('CullingVolume.js');
-
-// Test son.*****************************************************
-var currentCamPos = new Point3D();
-var lastCamPos = new Point3D();
-var squareDistUmbral = 22.0;
-var building_project;
-var compRefList_array_background;
-
-//var compRefList_Container = new CompoundReferencesListContainer();
-//var interiorCompRefList_Container = new CompoundReferencesListContainer();
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-var geoModifier = new GeometryModifier();
-// End test son.-------------------------------------------------
-
-onmessage = function(e) 
-{
-	console.log('Message received from main script');
-	var workerResult = 'Result: sonete';
-
-	console.log('Posting message back to main script');
-	//postMessage(workerResult);
-	var result = possibleCameraPositionChanged(e);
-	postMessage([result]);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param value 변수
- */
-function setTest(value) 
-{
-	squareDistUmbral = value;
-}
-
-/*
-function getFrustumIntersectedProjectBuildings(projectsList, cullingVolume)
-{
-	var buildings_array = [];
-	var last_squared_dist = undefined;
-	var detailed_building = undefined;
-	var building_projects_count = projectsList._BR_buildingsArray.length;
-
-	for(var p_counter = 0; p_counter<building_projects_count; p_counter++)
-	{
-		var BR_Project = projectsList._BR_buildingsArray[p_counter];
-		var squaredDistToCamera = Cartesian3.distanceSquared(cameraPosition, BR_Project.buildingPosition);
-		var min_squaredDist_to_see_detailed = 40000;
-		var min_squaredDist_to_see = 10000000;
-
-		if(squaredDistToCamera > min_squaredDist_to_see)
-			continue;
-
-		var boundingSphere_Aux = new BoundingSphere();
-		boundingSphere_Aux.center = BR_Project.buildingPosition;
-		boundingSphere_Aux.radius = 50.0; // 50m. Provisional.***
-
-		//----------------------------------------------------------------------------------------------------------------------------
-		// var frameState = scene._frameState;
-
-		var frustumCull = frameState.cullingVolume.computeVisibility(boundingSphere_Aux);
-		if(frustumCull !== Intersect.OUTSIDE)
-		{
-			if(squaredDistToCamera < min_squaredDist_to_see_detailed)// min dist to see detailed.***
-			{
-				if(last_squared_dist)
-				{
-					if(squaredDistToCamera < last_squared_dist)
-					{
-						last_squared_dist = squaredDistToCamera;
-						buildings_array.push(detailed_building);
-						detailed_building = BR_Project;
-					}
-					else{
-						buildings_array.push(BR_Project);
-					}
-				}
-				else{
-					last_squared_dist = squaredDistToCamera;
-					detailed_building = BR_Project;
-				}
-			}
-			else{
-				buildings_array.push(BR_Project);
-			}
-		}
-
-	}
-
-
-	return buildings_array;
-};
-*/
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param e 변수
- */
-function possibleCameraPositionChanged(e) 
-{
-	var compRefList_Container = e.data[0];
-	var interiorCompRefList_Container = e.data[1];
-	var camPos = e.data[2];
-	//var compRefList_array = e.data[2];
-
-	var eye_x = camPos.x;
-	var eye_y = camPos.y;
-	var eye_z = camPos.z;
-
-	var interior_visibleCompRefLists = geoModifier.compoundReferencesListContainerGetVisibleCompRefObjectsList(interiorCompRefList_Container, eye_x, eye_y, eye_z);
-	var visibleCompRefLists = geoModifier.compoundReferencesListContainerGetVisibleCompRefObjectsList(compRefList_Container, eye_x, eye_y, eye_z);
-	var total_visibleCompRefLists = visibleCompRefLists.concat(interior_visibleCompRefLists);
-	//var interior_visibleCompRefLists = interiorCompRefList_Container.get_visibleCompRefObjectsList(eye_x, eye_y, eye_z); // Cannot use alien functions.***
-	//var visibleCompRefLists = compRefList_Container.get_visibleCompRefObjectsList(eye_x, eye_y, eye_z); // Cannot use alien functions.***
-	//var total_visibleCompRefLists = visibleCompRefLists.concat(interior_visibleCompRefLists);
-
-	return total_visibleCompRefLists;
-	/*
-	// 1rst, frustum culling.*******************
-	var projectsList = e.data[0];
-	var cullingVolume = e.data[1];
-	//var projects_list = getFrustumIntersectedProjectBuildings(projectsList, cullingVolume);
-
-
-	var squaredDist = lastCamPos.squareDistTo(currentCamPos.x, currentCamPos.y, currentCamPos.z);
-	if(squaredDist > squareDistUmbral)
-	{
-		// Camera position changed.***
-		lastCamPos.set(currentCamPos.x, currentCamPos.y, currentCamPos.z);
-
-	}
-	else{
-		// Camera doesnt moved.***
-	}
-	*/
-}
-
-/*
-// An example.***
-var i = 0;
-
-function timedCount() {
-    i = i + 1;
-    postMessage(i);
-    setTimeout("timedCount()",500);
-}
-
-//timedCount();
-*/
-/*
-var n = 1;
-search: while (true) {
-  n += 1;
-  for (var i = 2; i <= Math.sqrt(n); i += 1)
-    if (n % i == 0)
-     continue search;
-  // found a prime!
-  postMessage(n);
-}
-*/
-
 
 
 /**
@@ -24832,8 +24418,8 @@ VertexMatrix.prototype.getBoundingBox = function(resultBox)
 	this.totalVertexArraySC = this.getTotalVertexArray(this.totalVertexArraySC);
 	for (var i = 0, totalVertexCount = this.totalVertexArraySC.length; i < totalVertexCount; i++) 
 	{
-		if (i == 0) { resultBox.setInit(this.totalVertexArraySC[i].point3d); }
-		else { resultBox.addPoint3D(this.totalVertexArraySC[i].point3d); }
+		if (i == 0) { resultBox.init(this.totalVertexArraySC[i].point3d); }
+		else { resultBox.addPoint(this.totalVertexArraySC[i].point3d); }
 	}
 	return resultBox;
 };
@@ -25346,12 +24932,12 @@ TrianglesSurface.prototype.getBoundingBox = function()
 
 	var bb = new BoundingBox();
 	var firstPoint3d = this.mPoint3DArray[0];
-	bb.setInit(firstPoint3d);
+	bb.init(firstPoint3d);
 
 	for (var i = 1; i < pointsCount; i++) 
 	{
 		var point3d = this.mPoint3DArray[i];
-		bb.addPoint3D(point3d);
+		bb.addPoint(point3d);
 	}
 
 	return bb;
@@ -27135,29 +26721,533 @@ ManagerUtils.getBuildingCurrentPosition = function(renderingMode, neoBuilding)
 			{
 				neoBuilding.geoLocationDataAux = ManagerUtils.calculateGeoLocationData(newLocation.LONGITUDE, newLocation.LATITUDE, newLocation.ELEVATION, neoBuilding.geoLocationDataAux);
 
-				//this.pointSC = neoBuilding.bbox.getCenterPoint3d(this.pointSC);
+				//this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
 				neoBuilding.point3dScratch.set(0.0, 0.0, 50.0);
 				realBuildingPos = neoBuilding.geoLocationDataAux.tMatrix.transformPoint3D(neoBuilding.point3dScratch, realBuildingPos );
 			}
 			else 
 			{
 				// use the normal data.***
-				neoBuilding.point3dScratch = neoBuilding.bbox.getCenterPoint3d(neoBuilding.point3dScratch);
+				neoBuilding.point3dScratch = neoBuilding.bbox.getCenterPoint(neoBuilding.point3dScratch);
 				realBuildingPos = neoBuilding.transfMat.transformPoint3D(neoBuilding.point3dScratch, realBuildingPos );
 			}
 		}
 		else 
 		{
-			//this.pointSC = neoBuilding.bbox.getCenterPoint3d(this.pointSC);
+			//this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
 			neoBuilding.point3dScratch.set(0.0, 0.0, 50.0);
 			realBuildingPos = neoBuilding.geoLocationDataAux.tMatrix.transformPoint3D(neoBuilding.point3dScratch, realBuildingPos );
 		}
 	}
 	else 
 	{
-		neoBuilding.point3dScratch = neoBuilding.bbox.getCenterPoint3d(neoBuilding.point3dScratch);
+		neoBuilding.point3dScratch = neoBuilding.bbox.getCenterPoint(neoBuilding.point3dScratch);
 		realBuildingPos = neoBuilding.transfMat.transformPoint3D(neoBuilding.point3dScratch, realBuildingPos );
 	}
 
 	return realBuildingPos;
 };
+
+'use strict';
+
+/**
+ * 사용하지 않음
+ */
+!(function() 
+{
+
+	var URL = window.URL || window.webkitURL;
+	if (!URL) 
+	{
+		throw new Error('This browser does not support Blob URLs');
+	}
+
+	if (!window.Worker) 
+	{
+		throw new Error('This browser does not support Web Workers');
+	}
+
+	function Multithread(threads) 
+	{
+		this.threads = Math.max(2, threads | 0);
+		this._queue = [];
+		this._queueSize = 0;
+		this._activeThreads = 0;
+		this._debug = {
+			start : 0,
+			end   : 0,
+			time  : 0
+		};
+	}
+
+	Multithread.prototype._worker = {
+		JSON: function() 
+		{
+			var /**/name/**/ = (/**/func/**/);
+			self.addEventListener('message', function(e) 
+			{
+				var data = e.data;
+				var view = new DataView(data);
+				var len = data.byteLength;
+				var str = Array(len);
+				for (var i=0;i<len;i++) 
+				{
+					str[i] = String.fromCharCode(view.getUint8(i));
+				}
+				var args = JSON.parse(str.join(''));
+				var value = (/**/name/**/).apply(/**/name/**/, args);
+				try 
+				{
+					data = JSON.stringify(value);
+				}
+				catch (e) 
+				{
+					throw new Error('Parallel function must return JSON serializable response');
+				}
+				len = typeof(data)==='undefined'?0:data.length;
+				var buffer = new ArrayBuffer(len);
+				view = new DataView(buffer);
+				for (i=0;i<len;i++) 
+				{
+					view.setUint8(i, data.charCodeAt(i) & 255);
+				}
+				self.postMessage(buffer, [buffer]);
+				self.close();
+			});
+		},
+		Int32: function() 
+		{
+			var /**/name/**/ = (/**/func/**/);
+			self.addEventListener('message', function(e) 
+			{
+				var data = e.data;
+				var view = new DataView(data);
+				var len = data.byteLength / 4;
+				var arr = Array(len);
+				for (var i=0;i<len;i++) 
+				{
+					arr[i] = view.getInt32(i*4);
+				}
+				var value = (/**/name/**/).apply(/**/name/**/, arr);
+				if (!(value instanceof Array)) { value = [value]; }
+				len = value.length;
+				var buffer = new ArrayBuffer(len * 4);
+				view = new DataView(buffer);
+				for (i=0;i<len;i++) 
+				{
+					view.setInt32(i*4, value[i]);
+				}
+				self.postMessage(buffer, [buffer]);
+				self.close();
+			});
+		},
+		Float64: function() 
+		{
+			var /**/name/**/ = (/**/func/**/);
+			self.addEventListener('message', function(e) 
+			{
+				var data = e.data;
+				var view = new DataView(data);
+				var len = data.byteLength / 8;
+				var arr = Array(len);
+				for (var i=0;i<len;i++) 
+				{
+					arr[i] = view.getFloat64(i*8);
+				}
+				var value = (/**/name/**/).apply(/**/name/**/, arr);
+				if (!(value instanceof Array)) { value = [value]; }
+				len = value.length;
+				var buffer = new ArrayBuffer(len * 8);
+				view = new DataView(buffer);
+				for (i=0;i<len;i++) 
+				{
+					view.setFloat64(i*8, value[i]);
+				}
+				self.postMessage(buffer, [buffer]);
+				self.close();
+			});
+		}
+	};
+
+	Multithread.prototype._encode = {
+		JSON: function(args) 
+		{
+			try 
+			{
+				var data = JSON.stringify(args);
+			}
+			catch (e) 
+			{
+				throw new Error('Arguments provided to parallel function must be JSON serializable');
+			}
+			len = data.length;
+			var buffer = new ArrayBuffer(len);
+			var view = new DataView(buffer);
+			for (var i=0;i<len;i++) 
+			{
+				view.setUint8(i, data.charCodeAt(i) & 255);
+			}
+			return buffer;
+		},
+		Int32: function(args) 
+		{
+			len = args.length;
+			var buffer = new ArrayBuffer(len*4);
+			var view = new DataView(buffer);
+			for (var i=0;i<len;i++) 
+			{
+				view.setInt32(i*4, args[i]);
+			}
+			return buffer;
+		},
+		Float64: function(args) 
+		{
+			len = args.length;
+			var buffer = new ArrayBuffer(len*8);
+			var view = new DataView(buffer);
+			for (var i=0;i<len;i++) 
+			{
+				view.setFloat64(i*8, args[i]);
+			}
+			return buffer;
+		}
+	};
+
+	Multithread.prototype._decode = {
+		JSON: function(data) 
+		{
+			var view = new DataView(data);
+			var len = data.byteLength;
+			var str = Array(len);
+			for (var i=0;i<len;i++) 
+			{
+				str[i] = String.fromCharCode(view.getUint8(i));
+			}
+			if (!str.length) 
+			{
+				return;
+			}
+			else 
+			{
+				return JSON.parse(str.join(''));
+			}
+		},
+		Int32: function(data) 
+		{
+			var view = new DataView(data);
+			var len = data.byteLength / 4;
+			var arr = Array(len);
+			for (var i=0;i<len;i++) 
+			{
+				arr[i] = view.getInt32(i*4);
+			}
+			return arr;
+		},
+		Float64: function(data) 
+		{
+			var view = new DataView(data);
+			var len = data.byteLength / 8;
+			var arr = Array(len);
+			for (var i=0;i<len;i++) 
+			{
+				arr[i] = view.getFloat64(i*8);
+			}
+			return arr;
+		},
+	};
+
+	Multithread.prototype._execute = function(resource, args, type, callback) 
+	{
+		if (!this._activeThreads) 
+		{
+			this._debug.start = (new Date()).valueOf();
+		}
+		if (this._activeThreads < this.threads) 
+		{
+			this._activeThreads++;
+			var t = (new Date()).valueOf();
+			var worker = new Worker(resource);
+			var buffer = this._encode[type](args);
+			var decode = this._decode[type];
+			var self = this;
+			if (type==='JSON') 
+			{
+				var listener = function(e) 
+				{
+					callback.call(self, decode(e.data));
+					self.ready();
+				};
+			}
+			else 
+			{
+				var listener = function(e) 
+				{
+					callback.apply(self, decode(e.data));
+					self.ready();
+				};
+			}
+			worker.addEventListener('message', listener);
+			worker.postMessage(buffer, [buffer]);
+		}
+		else 
+		{
+			this._queueSize++;
+			this._queue.push([resource, args, type, callback]);
+		}
+	};
+
+	Multithread.prototype.ready = function() 
+	{
+		this._activeThreads--;
+		if (this._queueSize) 
+		{
+			this._execute.apply(this, this._queue.shift());
+			this._queueSize--;
+		}
+		else if (!this._activeThreads) 
+		{
+			this._debug.end = (new Date()).valueOf();
+			this._debug.time = this._debug.end - this._debug.start;
+		}
+	};
+
+	Multithread.prototype._prepare = function(fn, type) 
+	{
+
+		fn = fn;
+
+		var name = fn.name;
+		var fnStr = fn.toString();
+		if (!name) 
+		{
+			name = '$' + ((Math.random()*10)|0);
+			while (fnStr.indexOf(name) !== -1) 
+			{
+				name += ((Math.random()*10)|0);
+			}
+		}
+
+		var script = this._worker[type]
+			.toString()
+			.replace(/^.*?[\n\r]+/gi, '')
+			.replace(/\}[\s]*$/, '')
+			.replace(/\/\*\*\/name\/\*\*\//gi, name)
+			.replace(/\/\*\*\/func\/\*\*\//gi, fnStr);
+
+		var resource = URL.createObjectURL(new Blob([script], {type: 'text/javascript'}));
+
+		return resource;
+
+	};
+
+	Multithread.prototype.process = function(fn, callback) 
+	{
+
+		var resource = this._prepare(fn, 'JSON');
+		var self = this;
+
+		return function() 
+		{
+			self._execute(resource, [].slice.call(arguments), 'JSON', callback);
+		};
+
+	};
+
+	Multithread.prototype.processInt32 = function(fn, callback) 
+	{
+
+		var resource = this._prepare(fn, 'Int32');
+		var self = this;
+
+		return function() 
+		{
+			self._execute(resource, [].slice.call(arguments), 'Int32', callback);
+		};
+
+	};
+
+	Multithread.prototype.processFloat64 = function(fn, callback) 
+	{
+
+		var resource = this._prepare(fn, 'Float64');
+		var self = this;
+
+		return function() 
+		{
+			self._execute(resource, [].slice.call(arguments), 'Float64', callback);
+		};
+
+	};
+
+	window.Multithread = Multithread;
+
+})();
+'use strict';
+
+//importScripts('../Build/CesiumUnminified/SonGeometryJScript.js'); // No.***
+//importScripts('GeometryUtil.js'); // Yes.***
+//importScripts('GeometryModifier.js');
+//importScripts('Point3D.js');
+//importScripts('CullingVolume.js');
+
+// Test son.*****************************************************
+var currentCamPos = new Point3D();
+var lastCamPos = new Point3D();
+var squareDistUmbral = 22.0;
+var building_project;
+var compRefList_array_background;
+
+//var compRefList_Container = new CompoundReferencesListContainer();
+//var interiorCompRefList_Container = new CompoundReferencesListContainer();
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+var geoModifier = new GeometryModifier();
+// End test son.-------------------------------------------------
+
+onmessage = function(e) 
+{
+	console.log('Message received from main script');
+	var workerResult = 'Result: sonete';
+
+	console.log('Posting message back to main script');
+	//postMessage(workerResult);
+	var result = possibleCameraPositionChanged(e);
+	postMessage([result]);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param value 변수
+ */
+function setTest(value) 
+{
+	squareDistUmbral = value;
+}
+
+/*
+function getFrustumIntersectedProjectBuildings(projectsList, cullingVolume)
+{
+	var buildings_array = [];
+	var last_squared_dist = undefined;
+	var detailed_building = undefined;
+	var building_projects_count = projectsList._BR_buildingsArray.length;
+
+	for(var p_counter = 0; p_counter<building_projects_count; p_counter++)
+	{
+		var BR_Project = projectsList._BR_buildingsArray[p_counter];
+		var squaredDistToCamera = Cartesian3.distanceSquared(cameraPosition, BR_Project.buildingPosition);
+		var min_squaredDist_to_see_detailed = 40000;
+		var min_squaredDist_to_see = 10000000;
+
+		if(squaredDistToCamera > min_squaredDist_to_see)
+			continue;
+
+		var boundingSphere_Aux = new BoundingSphere();
+		boundingSphere_Aux.center = BR_Project.buildingPosition;
+		boundingSphere_Aux.radius = 50.0; // 50m. Provisional.***
+
+		//----------------------------------------------------------------------------------------------------------------------------
+		// var frameState = scene._frameState;
+
+		var frustumCull = frameState.cullingVolume.computeVisibility(boundingSphere_Aux);
+		if(frustumCull !== Intersect.OUTSIDE)
+		{
+			if(squaredDistToCamera < min_squaredDist_to_see_detailed)// min dist to see detailed.***
+			{
+				if(last_squared_dist)
+				{
+					if(squaredDistToCamera < last_squared_dist)
+					{
+						last_squared_dist = squaredDistToCamera;
+						buildings_array.push(detailed_building);
+						detailed_building = BR_Project;
+					}
+					else{
+						buildings_array.push(BR_Project);
+					}
+				}
+				else{
+					last_squared_dist = squaredDistToCamera;
+					detailed_building = BR_Project;
+				}
+			}
+			else{
+				buildings_array.push(BR_Project);
+			}
+		}
+
+	}
+
+
+	return buildings_array;
+};
+*/
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param e 변수
+ */
+function possibleCameraPositionChanged(e) 
+{
+	var compRefList_Container = e.data[0];
+	var interiorCompRefList_Container = e.data[1];
+	var camPos = e.data[2];
+	//var compRefList_array = e.data[2];
+
+	var eye_x = camPos.x;
+	var eye_y = camPos.y;
+	var eye_z = camPos.z;
+
+	var interior_visibleCompRefLists = geoModifier.compoundReferencesListContainerGetVisibleCompRefObjectsList(interiorCompRefList_Container, eye_x, eye_y, eye_z);
+	var visibleCompRefLists = geoModifier.compoundReferencesListContainerGetVisibleCompRefObjectsList(compRefList_Container, eye_x, eye_y, eye_z);
+	var total_visibleCompRefLists = visibleCompRefLists.concat(interior_visibleCompRefLists);
+	//var interior_visibleCompRefLists = interiorCompRefList_Container.get_visibleCompRefObjectsList(eye_x, eye_y, eye_z); // Cannot use alien functions.***
+	//var visibleCompRefLists = compRefList_Container.get_visibleCompRefObjectsList(eye_x, eye_y, eye_z); // Cannot use alien functions.***
+	//var total_visibleCompRefLists = visibleCompRefLists.concat(interior_visibleCompRefLists);
+
+	return total_visibleCompRefLists;
+	/*
+	// 1rst, frustum culling.*******************
+	var projectsList = e.data[0];
+	var cullingVolume = e.data[1];
+	//var projects_list = getFrustumIntersectedProjectBuildings(projectsList, cullingVolume);
+
+
+	var squaredDist = lastCamPos.squareDistTo(currentCamPos.x, currentCamPos.y, currentCamPos.z);
+	if(squaredDist > squareDistUmbral)
+	{
+		// Camera position changed.***
+		lastCamPos.set(currentCamPos.x, currentCamPos.y, currentCamPos.z);
+
+	}
+	else{
+		// Camera doesnt moved.***
+	}
+	*/
+}
+
+/*
+// An example.***
+var i = 0;
+
+function timedCount() {
+    i = i + 1;
+    postMessage(i);
+    setTimeout("timedCount()",500);
+}
+
+//timedCount();
+*/
+/*
+var n = 1;
+search: while (true) {
+  n += 1;
+  for (var i = 2; i <= Math.sqrt(n); i += 1)
+    if (n % i == 0)
+     continue search;
+  // found a prime!
+  postMessage(n);
+}
+*/
