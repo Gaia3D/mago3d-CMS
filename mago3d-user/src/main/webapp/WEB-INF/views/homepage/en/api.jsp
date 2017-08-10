@@ -33,7 +33,7 @@
 	<div id="wrap">
 		<div class="navigation">
 			<h3 class="application_name">
-				<a href="/homepage/about.do">mago3D.JS</a>
+				<a href="/homepage/api.do">mago3D.JS</a>
 			</h3>
 			<div class="search">
 				<input id="search" type="text" class="form-control input-sm" placeholder="Search Documentations">
@@ -65,8 +65,6 @@
 				</span></li>
 				<li class="item"><span class="api_title"> <a href="#changeInsertIssueStateAPI">changeInsertIssueStateAPI</a>
 				</span></li>
-				<li class="item"><span class="api_title"> <a href="#mouseMoveAPI">mouseMoveAPI</a>
-				</span></li>
 			</ul>
 		</div>
 		<div class="main" id="content">
@@ -75,64 +73,52 @@
 				<img src="/images/${lang}/homepage/AC.png" style="margin-bottom: 10px;" />
 			</div>
 			<article class="readme">
-				<img src="https://img.shields.io/badge/language-English-orange.svg" /> <img src="https://img.shields.io/badge/language-Korean-blue.svg" />
+				<img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"> <img src="https://img.shields.io/badge/language-English-orange.svg" /> <img src="https://img.shields.io/badge/language-Korean-blue.svg" />
+				<p><b>Open source JavaScript library for 3D multi-block visualization</b></p>
+				<p>It is a next generation 3D GIS platform that integrates and visualizes AEC (Architecture, Engineering, Construction) area and traditional 3D spatial information (3D GIS). Integrate AEC and 3D GIS in a web browser, indoors, outdoors, indistinguishable. You can browse and collaborate on large-scale BIM (Building Information Modeling), JT (Jupiter Tessellation), and 3D GIS files without installing any program on the web browser.</p>
 				<h4>Development Environment</h4>
-				<mark>Spring, gradle, PostgreSQL, PostGIS, mybatis, Docker, SourceTree</mark>
+				<div class="list_wrap">
+					<p><mark>java8, eclipse neon, node, apache, Jasmine, Jsdoc, Gulp, eslint, JQuery</mark>
+				</div>
 				<h4>Getting Started</h4>
 				<div class="list_wrap">
-					<div class="sub_title">Install</div>
 					<ul class="readme_list">
-												<li><b style="color: #1E90FF;">PostgreSQL 9.6.3-1</b>
+						<li><b style="color: #1E90FF;">mago3DJS Install</b>
 							<ul class="sub_list">
-								<li>Installation path C: / PostgreSQL</li>
-							</ul>
-						</li>
-						<li><b style="color: #1E90FF;">PostGIS 2.3.2</b>
-							<ul class="sub_list">
-								<li>After installing PostgreSQL, run Stack Builder to install</li>
-								<li>PostgreSQL Extensions PostGIS Required</li>
-							</ul>
-						</li>
-						<li><b style="color: #1E90FF;">Gradle 3.5</b>
-							<ul class="sub_list">
-								<li>Installation path C:/gradle</li>
-								<li>Add system variable -path -> Add C: /gradle/gradle-3.5</li>
-						
-							</ul>
-						</li>
-						<li><b style="color: #1E90FF;">Eclipse (neon Version or higher)</b>
-							<ul class="sub_list">
-								<li>Set lombok.</li>
-								<li>Go to the Eclipse Marketplace and install Buildship Gradle Integration 2.0.</li>
+								<li><a href="https://github.com/Gaia3D/mago3djs" style="display: inline;"><b>github</b></a>It accepts mago3DJS from.</li>
+								<li>Installation path C:/git/repository/mago3djs</li>
 							</ul>
 						</li>
 					</ul>
-				<h4>Setting</h4>
 					<ul class="readme_list">
-						<li>From eclipse, load the mago3D Project into git clone.</li>
-						<li>Click File -> Import -> Gradle -> Existing Gradle Project to accept mago3D.</li>
-						<li>Create a database using PostgreSQL before running mago3D.</li>
-						<li>PostgreSQL -> new DataBase</li>
+						<li><b style="color: #1E90FF;">node Setup</b>
+							<ul class="sub_list">
+								<li>npm install</li>
+								<li>npm install -g gulp</li>
+							</ul>
+						</li>
 					</ul>
-					<pre>
-						<code>
-	name: mago3d
-	Encoding: UTF8
-	Template: template0
-	Collation: C
-	Character_type: C
-	Connection_Limit: -1
-						</code>
-					</pre>
 					<ul class="readme_list">
-						<li style="margin-top: 16px;">Run the query on the generated database. The query is in mago3D-core -> src -> doc -> database.</li>
-						<li>To run mago3D, run mago3d - @@@ -> src / main / java -> com.gaia3d -> Mago3dAdminApplication.java as Spring Boot app.</li>
+						<li><b style="color: #1E90FF;">Running the server</b>
+							<ul class="sub_list">
+								<li>Running a local server:  C:\git\repository\mago3djs> node server.js</li>
+								<li>Running a public server:  C:\git\repository\mago3djs> node server.js --public true</li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="readme_list">
+						<li><b style="color: #1E90FF;">Data folder link</b>
+							<ul class="sub_list">
+								<li>Create Data Folder: mklink /d "C:\git\repository\mago3djs\data" "C:\data"</li>
+								<li>Delete data folder: C:\git\repository\mago3djs>rmdir data</li>
+							</ul>
+						</li>
 					</ul>
 				</div>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeMagoStateAPI">changeMagoStateAPI()</span></h2>
+				<h2><span id="changeMagoStateAPI">changeMagoStateAPI</span></h2>
 				<p>Mago3D The mago3D Object is displayed and hidden on the screen by changing the activation status value.</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -145,7 +131,7 @@
 					<tbody>
 						<tr>
 							<td>isShow</td>
-							<td>True: enabled, false: disabled</td>
+							<td>true: Activation, false: Disabled</td>
 						</tr>
 					</tbody>
 				</table>
@@ -155,12 +141,12 @@
 <code>
 &lt;div&gt;mago3D
 	&lt;input type="radio" id="magoEnable" name="magoState" value="0" checked="checked" onclick="changeMagoState(true);" /&gt;
-	&lt;label for="magoEnable"&gt; enabled &lt;/label&gt;
+	&lt;label for="magoEnable"&gt; Activation &lt;/label&gt;
 	&lt;input type="radio" id="magoDisable" name="magoState" value="1"  onclick="changeMagoState(false);" /&gt;
-	&lt;label for="magoDisable"&gt; disabled &lt;/label&gt;
+	&lt;label for="magoDisable"&gt; Disabled &lt;/label&gt;
 &lt;/div&gt;
 </code>
-			</pre>
+				</pre>
 				<br> <b>javaScript</b>
 				<pre>
 <code>
@@ -176,8 +162,8 @@ function changeMagoStateAPI(isShow) {
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeBoundingBoxAPI">changeBoundingBoxAPI()</span></h2>
-				<p>To display the BoundingBox, click the Show radio button. When clicked, isShow is passed to true value and changeBoundingBoxAPI is activated.</p>
+				<h2><span id="changeBoundingBoxAPI">changeBoundingBoxAPI</span></h2>
+				<p>ChangeBoundingBoxAPI BoundingBox is displayed and hidden by changing the activation state value.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -208,20 +194,16 @@ function changeMagoStateAPI(isShow) {
 				<br> <b>javaScript</b>
 				<pre>
 <code class="javascript">
-function changeBoundingBoxAPI(isShow) {
-	var api = new API("changeBoundingBox");
-	api.setShowBoundingBox(isShow);
-	if(managerFactory != null) {
-		managerFactory.callAPI(api);
-	}
+function changeBoundingBox(isShow) {
+	changeBoundingBoxAPI(isShow);
 }
 </code>
 			</pre>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeShadowAPI">changeShadowAPI()</span></h2>
-				<p>Structure / Outfitting of the block</p>
+				<h2><span id="changeShadowAPI">changeShadowAPI</span></h2>
+				<p>ChangeShadowAPI Activation Shows and hides the Structure, Outfitting shadow of a block by changing the value of the state</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -252,19 +234,15 @@ function changeBoundingBoxAPI(isShow) {
 				<br> <b>javaScript</b>
 				<pre>
 <code>
-function changeShadowAPI(isShow) {
-	var api = new API("changeShadow");
-	api.setShowShadow(isShow);
-	if(managerFactory != null) {
-		managerFactory.callAPI(api);
-	}
+function changeShadow(isShow) {
+	changeShadowAPI(isShow);
 }
 </code>
 				</pre>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeFrustumFarDistanceAPI">changeFrustumFarDistanceAPI()</span></h2>
+				<h2><span id="changeFrustumFarDistanceAPI">changeFrustumFarDistanceAPI</span></h2>
 				<p>Set the Frustum Culling distance using the square of the input distance.</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -293,18 +271,15 @@ function changeShadowAPI(isShow) {
 				<br> <b>javaScript</b>
 				<pre>
 <code>
-function changeFrustumFarDistanceAPI(frustumFarDistance) {
-	var api = new API("changefrustumFarDistance");
-	api.setFrustumFarDistance(frustumFarDistance);
-	if(managerFactory != null) {
-		managerFactory.callAPI(api);
-	}
-}
+$("#changeFrustumFarDistanceAPI").click(function() {
+	if(!changeFrustumFarDistanceCheck()) return false;
+	changeFrustumFarDistanceAPI($("#frustumFarDistance").val());
+});
 </code>
 				</pre>
 			</article>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="searchDataAPI">searchDataAPI()</span></h2>
+				<h2><span id="searchDataAPI">searchDataAPI</span></h2>
 				<p>Enter the data unique key to move the camera position.</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -335,19 +310,20 @@ function changeFrustumFarDistanceAPI(frustumFarDistance) {
 				<br> <b>javaScript</b>
 				<pre>
 <code>
-function searchDataAPI(dataKey) {
-	var api = new API("searchData");
-	api.setDataKey(dataKey);
-	if(managerFactory != null) {
-		managerFactory.callAPI(api);
+$("#searchData").click(function() {
+	if ($.trim($("#search_data_key").val()) === ""){
+		alert("Data Key를 입력해 주세요.");
+		$("#search_data_key").focus();
+		return false;
 	}
-}
+	searchDataAPI($("#search_data_key").val());
+});
 </code>
 				</pre>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeColorAPI">changeColorAPI()</span></h2>
+				<h2><span id="changeColorAPI">changeColorAPI</span></h2>
 				<p>
 					It displays the input object as the input color. <br> It is possible to input multiple object information separated by ','.
 				</p>
@@ -384,20 +360,16 @@ function searchDataAPI(dataKey) {
 				<br> <b>javaScript</b>
 				<pre>
 <code>
-function changeColorAPI(objectIds, color) {
-	var api = new API("changeColor");
-	api.setObjectIds(objectIds);
-	api.setColor(color);
-	if(managerFactory != null) {
-		managerFactory.callAPI(api);
-	}
-}
+$("#changeColorAPI").click(function(e) {
+	if(!changeColorCheck(e)) return false;
+	changeColorAPI($("#objectIds").val(), $("#colorBlock").val());
+});
 </code>
 				</pre>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeLocationAndRotationAPI">changeLocationAndRotationAPI()</span></h2>
+				<h2><span id="changeLocationAndRotationAPI">changeLocationAndRotationAPI</span></h2>
 				<p>The block is converted by the input position information and rotation information.</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -486,8 +458,9 @@ $("#changeLocationAndRotationAPI").click(function() {
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeMouseMoveAPI">changeMouseMoveAPI()</span></h2>
-				<p>Change mouse click target to move object</p>
+				<h2><span id="changeMouseMoveAPI">changeMouseMoveAPI</span></h2>
+				<p>
+You can change the mode of movement when you click the mouse. If mouseMoveMode is 0, it means that the entire movement, 1 means move the object, 2 means the movement.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -533,8 +506,12 @@ function changeMouseMove(mouseMoveMode) {
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeInsertIssueModeAPI">changeInsertIssueModeAPI()</span></h2>
-				<p>Clicking the Issue Issue button activates changeInsertIssueModeAPI. When you select an object for which you want to register an artifact, it invokes the callback function showInsertIssueLayer stored in the database policy table.</p>
+				<h2><span id="changeInsertIssueModeAPI">changeInsertIssueModeAPI</span></h2>
+				<p>
+					ChangeInsertIssueModeAPI is an API to enable artifacts. The parameter flag in this API is Boolean type, and if true, the issue mode is activated
+					If false, the method is disabled. If you click on the object for which you want to register an issue, the issue registration callback function is called according to the database operation policy managing the callback function
+					The issue registration window appears. If you save the contents in the issue registration window, it will be registered in the database. In addition, the issue callback function can be customized by the user.
+				</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -586,7 +563,7 @@ function showInsertIssueLayer(data_name, data_key, latitude, longitude, height) 
 			$("#longitude").val(longitude);
 			$("#height").val(height);
 			
-			// 현재 좌표를 저장
+			// Save current coordinates
 			$("#now_latitude").val(latitude);
 			$("#now_longitude").val(longitude);
 		}
@@ -597,8 +574,12 @@ function showInsertIssueLayer(data_name, data_key, latitude, longitude, height) 
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeObjectInfoViewModeAPI">changeObjectInfoViewModeAPI()</span></h2>
-				<p>When you click the Object information display button, changeObjectInfoViewModeAPI is activated. When you select an object for which you want to get information while it is active, the information is called from the callback function showSelectedOject, whose contents are called from mago3DJS, to the toast message.</p>
+				<h2><span id="changeObjectInfoViewModeAPI">changeObjectInfoViewModeAPI</span></h2>
+				<p>
+					ChangeObjectInfoViewModeAPI is an API that enables the display of Object information. The parameter flag in this API is Boolean type,
+					Mode is enabled and disabled if it is false. If you click on an object for which you want to know the information while it is activated, the callback function will manage the callback function.
+					The object information is called through Jquery Plugin Toast. In addition, the information display callback function can be customized by the user.
+				</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -679,7 +660,7 @@ function showSelectedObject(projectId, blockId, objectId, latitude, longitude, h
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeListIssueViewModeAPI">changeListIssueViewModeAPI()</span></h2>
+				<h2><span id="changeListIssueViewModeAPI">changeListIssueViewModeAPI</span></h2>
 				<p>With now_latitude, now_longitude, finds the nearest group location in the data group, and retrieves and displays 100 issues belonging to that data group.</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -716,7 +697,7 @@ $("#issuesEnable").click(function() {
 		listIssueFlag = true;
 		$("#issuesEnable").addClass("on");
 		
-		// 현재 위치의 latitude, logitude를 가지고 가장 가까이에 있는 데이터 그룹에 속하는 이슈 목록을 최대 100건 받아서 표시
+		// Display up to 100 issue lists belonging to the nearest data group with latitude and logitude of the current position
 		var now_latitude = $("#now_latitude").val();
 		var now_longitude = $("#now_longitude").val();
 		var info = "latitude=" + now_latitude + "&longitude=" + now_longitude;		
@@ -751,8 +732,8 @@ $("#issuesEnable").click(function() {
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="drawInsertIssueImageAPI">drawInsertIssueImageAPI()</span></h2>
-				<p>Picture of pin image</p>
+				<h2><span id="drawInsertIssueImageAPI">drawInsertIssueImageAPI</span></h2>
+				<p>Pin image is drawn. If drawType is 0, DB, 1, then issue issue</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -802,40 +783,7 @@ drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, iss
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="changeInsertIssueStateAPI">changeInsertIssueStateAPI()</span></h2>
-				<p>Issue registration geo information related status change</p>
-				<h4>Parameters:</h4>
-				<table>
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>insertIssueState</td>
-							<td>Issue registration coordinate status</td>
-						</tr>
-					</tbody>
-				</table>
-				<h4>Examples:</h4>
-				<b>javaScript</b>
-				<pre>
-<code>
-function changeInsertIssueStateAPI(insertIssueState) {
-	var api = new API("changeInsertIssueState");
-	api.setInsertIssueState(insertIssueState);
-	if(managerFactory != null) {
-		managerFactory.callAPI(api);
-	}
-}
-</code>
-				</pre>
-			</article>
-			<hr>
-			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="mouseMoveAPI">mouseMoveAPI()</span></h2>
+				<h2><span id="changeInsertIssueStateAPI">changeInsertIssueStateAPI</span></h2>
 				<p>Replace with button event in mouse disabled environment</p>
 				<h4>Parameters:</h4>
 				<table>
@@ -855,7 +803,7 @@ function changeInsertIssueStateAPI(insertIssueState) {
 				<h4>Examples:</h4>
 				<b>javaScript</b>
 				<pre>
-<code>
+<code class="javascript">
 changeInsertIssueStateAPI(0);
 </code>
 				</pre>
