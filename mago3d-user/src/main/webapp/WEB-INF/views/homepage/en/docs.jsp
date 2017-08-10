@@ -49,15 +49,33 @@
 			<ul>
 				<li class="on"><a href="/homepage/docs.do">Docs</a></li>
 				<li><a href="/homepage/api.do" target="_blank">mago3D.JS API</a></li>
-				<li><a href="#"  onclick='alert("준비 중 입니다."); return false;'>F4D-Converter Spec</a>
+				<li><a href="/homepage/spec.do">F4D-Converter Spec</a>
 			</ul>
 		</div>
 		<div class="docs-main">
 			<div class="title">Documentation</div>
-			<p>MAGO3D integrates AEC (Architecture, Engineering, Construction) area and 3D spatial information (3D GIS) and delivers images. MAGO3D integrates AEC and 3D GIS with web servers. MAGO3D users can install Building Information Modeling (BIM), Jupiter Tessellation (JT), and 3D GIS files together with other programs to help collaborate.</p>
+			<p>	
+				Mago3D is a next-generation 3D platform that integrates and visualizes AEC (Architecture, Engineering, Construction) areas and traditional 3D spatial information (3D GIS).
+				Mago3D seamlessly integrates AEC and 3D GIS in a web browser, indistinguishable from existing solutions.
+				As a result, mago3D users can quickly view and collaborate on large-scale building information modeling (BIM), JT (Jupiter Tessellation) and 3D GIS files without installing any additional programs.
+			</p>
+			<div class="sub_title">mago3D architecture</div>
+			<div>Jt, collada, ifc, and 3ds files on the web, js for 3D rendering in the browser, and was system for issue management.</div>
+			<div>
+				<div>F4D Converter</div>
+				<div>mago3DJS</div>
+				<div>Issue Managerment System</div>
+			</div>
+			<div class="sub_title">Applications of mago3D</div>
+			<div>
+				<div>3D Rendering View - Provides 3D rendering function using F4D Converter and mago3DJS when there is in-house business system or issue management system</div>
+				<div></div>
+			</div>
+			
 			<div class="sub_title">API Reference Documentation</div>
 			<ul class="docs-list">
-				<li><a href="/homepage/api.do">mago3D.JS API</a>Is a document describing the API for JavaScript.</li>
+				<li><a href="/homepage/api.do">mago3D.JS API</a>is a document describing the API for JavaScript.</li>
+				<li>Coming soon.</li>
 			</ul>
 		</div>
 	</section>
@@ -66,7 +84,7 @@
 		<h2>
 			Contact <span></span>
 		</h2>
-		<p>mago3D 에 관심있는 고객들께서는 연락(이메일, 전화) 또는 직접 방문을 부탁드립니다.</p>
+		<p>If you are interested in mago3D, please contact us by email or phone or visit us directly.</p>
 		<ul class="contact">
 			<li class="company">www.gaia3d.com</li>
 			<li class="address">+82-(0)2-3397-3475</li>

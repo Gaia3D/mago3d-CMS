@@ -73,65 +73,53 @@
 				<img src="/images/${lang}/homepage/AC.png" style="margin-bottom: 10px;" />
 			</div>
 			<article class="readme">
-				<img src="https://img.shields.io/badge/language-English-orange.svg" /> <img src="https://img.shields.io/badge/language-Korean-blue.svg" />
+				<img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"> <img src="https://img.shields.io/badge/language-English-orange.svg" /> <img src="https://img.shields.io/badge/language-Korean-blue.svg" />
+				<p>3차원 다중 블록 가시화를 위한 오픈소스 자바스크립트 라이브러리</p>
+				<p>AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리 및 가시화하는 차세대 3차원 GIS 플랫폼입니다. 실내,실 외 구별없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.</p>
 				<h4>Development Environment</h4>
-				<mark>Spring, gradle, PostgreSQL, PostGIS, mybatis, Docker, SourceTree</mark>
+				<div class="list_wrap">
+					<p><mark>java8, eclipse neon, node, apache, Jasmine, Jsdoc, Gulp, eslint, JQuery</mark>
+				</div>
 				<h4>Getting Started</h4>
 				<div class="list_wrap">
-					<div class="sub_title">Install</div>
 					<ul class="readme_list">
-						<li><b style="color: #1E90FF;">PostgreSQL 9.6.3-1</b>
+						<li><b style="color: #1E90FF;">mago3DJS Install</b>
 							<ul class="sub_list">
-								<li> 설치경로 C:/PostgreSQL</li>
-							</ul>
-						</li>
-						<li><b style="color: #1E90FF;">PostGIS 2.3.2</b>
-							<ul class="sub_list">
-								<li>PostgreSQL 설치가 끝난 뒤에 Stack Builder를 실행하여 설치</li>
-								<li>PostgreSQL Extensions PostGIS 필수</li>
-							</ul>
-						</li>
-						<li><b style="color: #1E90FF;">Gradle 3.5</b>
-							<ul class="sub_list">
-								<li>설치경로 C:/gradle</li>
-								<li>시스템 변수 추가 -path -> C:/gradle/gradle-3.5 추가</li>
-						
-							</ul>
-						</li>
-						<li><b style="color: #1E90FF;">Eclipse (neon 버전 이상)</b>
-							<ul class="sub_list">
-								<li>lombok를 설정합니다.</li>
-								<li>Eclipse Marketplace 이동 후 Buildship Gradle Integration 2.0을 설치합니다.</li>
+								<li><a href="https://github.com/Gaia3D/mago3djs" style="display: inline;"><b>github</b></a>에서 mago3DJS를 받아 줍니다.</li>
+								<li> 설치경로 C:/git/repository/mago3djs</li>
 							</ul>
 						</li>
 					</ul>
-					<h4>Setting</h4>
 					<ul class="readme_list">
-						<li>eclipse에서 mago3D Project를 git clone으로 불러옵니다.</li>
-						<li>File -> Import -> Gradle -> Existing Gradle Project를 클릭하여 mago3D를 받아줍니다.</li>
-						<li>mago3D를 실행하기전에 PostgreSQL을 사용하여 데이터베이스를 만들어 줍니다.</li>
-						<li>PostgreSQL -> new DataBase</li>
+						<li><b style="color: #1E90FF;">node Setup</b>
+							<ul class="sub_list">
+								<li>npm install</li>
+								<li>npm install -g gulp</li>
+							</ul>
+						</li>
 					</ul>
-					<pre>
-						<code>
-	name: mago3d
-	Encoding: UTF8
-	Template: template0
-	Collation: C
-	Character_type: C
-	Connection_Limit: -1
-						</code>
-					</pre>
 					<ul class="readme_list">
-						<li style="margin-top: 16px;">생성한 database에 쿼리를 실행시켜줍니다. 쿼리는 mago3D-core -> src -> doc -> database 안에 있습니다.</li>
-						<li>mago3D를 실행하려면 mago3d-@@@ -> src/main/java -> com.gaia3d -> Mago3dAdminApplication.java를 Spring Boot app으로 실행시켜줍니다.</li>
+						<li><b style="color: #1E90FF;">서버 실행</b>
+							<ul class="sub_list">
+								<li>Local 서버 실행:  C:\git\repository\mago3djs> node server.js</li>
+								<li>public 서버 실행:  C:\git\repository\mago3djs> node server.js --public true</li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="readme_list">
+						<li><b style="color: #1E90FF;">데이터 폴더 링크</b>
+							<ul class="sub_list">
+								<li>데이터 폴더 생성: mklink /d "C:\git\repository\mago3djs\data" "C:\data"</li>
+								<li>데이터 폴더 삭제: C:\git\repository\mago3djs>rmdir data</li>
+							</ul>
+						</li>
 					</ul>
 				</div>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeMagoStateAPI">changeMagoStateAPI</span></h2>
-				<p>mago3D 활성화 상태 값을 변경함으로서 화면에 mago3D Object 가 표시, 비표시 됩니다.</p>
+				<p>mago3D 활성화 상태 값을 변경함으로서 화면에 mago3D Object가 표시, 비표시 됩니다.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -171,7 +159,7 @@ function changeMagoState(isShow) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeBoundingBoxAPI">changeBoundingBoxAPI</span></h2>
-				<p>BoundingBox를 표시하려면 표시 라디오 버튼을 클릭합니다. 클릭하면 isShow가 true 값으로 넘어가며 changeBoundingBoxAPI가 활성화됩니다.</p>
+				<p>changeBoundingBoxAPI 활성화 상태 값을 변경함으로서 BoundingBox가 표시, 비표시 됩니다.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -212,7 +200,7 @@ function changeBoundingBox(isShow) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeShadowAPI">changeShadowAPI</span></h2>
-				<p>블락의 Structure, Outfitting 그림자 표시 유무를 설정</p>
+				<p>changeShadowAPI 활성화 상태 값을 변경함으로서 블락의 Structure, Outfitting 그림자가 표시, 비표시 됩니다</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -382,7 +370,7 @@ $("#searchData").click(function() {
 <code>
 $("#changeColorAPI").click(function(e) {
 	if(!changeColorCheck(e)) return false;
-	changeColorAPI($("#projectId").val(), $("#blockIds").val(), $("#objectIds").val(), $("#colorBlock").val());
+	changeColorAPI($("#objectIds").val(), $("#colorBlock").val());
 });
 </code>
 				</pre>
@@ -526,7 +514,9 @@ function changeMouseMove(mouseMoveMode) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeInsertIssueModeAPI">changeInsertIssueModeAPI</span></h2>
-				<p>이슈등록 버튼을 클릭하면 changeInsertIssueModeAPI가 활성화됩니다. 활성화된 상태에서 이슈를 등록하고 싶은 객체를 선택하면 데이터베이스 policy 테이블에 저장되어있는 callback함수 showInsertIssueLayer를 호출합니다.</p>
+				<p>changeInsertIssueModeAPI란 이슈 기능을 활성화하는 API입니다. 이 API에 파라미터인 flag는 Boolean 타입이고  true이면 이슈 모드가 활성화되고 
+				false이면 비활성화되는 방식입니다. 활성화되어있는 상태에서 이슈를 등록하고 싶은 Object를 클릭하면 callback함수를 관리해주는 데이터베이스 운영정책에 따라서 이슈등록 callback함수가 호출이되어 
+				이슈등록 창이 나옵니다. 이슈등록 창에 내용을 적고 저장하면 데이터베이스에 등록이됩니다. 또한, 이슈등록 callback함수는 사용자가 Customizing이 가능합니다.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -552,7 +542,7 @@ function changeMouseMove(mouseMoveMode) {
 				<br><b>JavaScript</b>
 				<pre>
 <code>
-var isInsertIssue = true;
+var insertIssueFlag = false;
 $("#issueEnable").click(function() {
 	if(insertIssueFlag) {
 		insertIssueFlag = false;
@@ -590,7 +580,9 @@ function showInsertIssueLayer(data_name, data_key, latitude, longitude, height) 
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeObjectInfoViewModeAPI">changeObjectInfoViewModeAPI</span></h2>
-				<p>Object 정보 표시 버튼을 클릭하면 changeObjectInfoViewModeAPI가 활성화됩니다. 활성화된 상태에서 정보를 얻고 싶은 객체를 선택하면 그 객체의 내용이 mago3DJS로 부터 호출되는 callback 함수 showSelectedOject에서 정보가 토스트 메세지로 호출됩니다.</p>
+				<p>changeObjectInfoViewModeAPI는 Object정보표시 기능을 활성화하는 API입니다. 이 API에 파라미터인 flag는 Boolean 타입이고 true이면 정보 표시 
+				모드가 활성화되고 false이면 비활성화되는 방식입니다. 활성화되어있는 상태에서 정보를 알고 싶은 Object를 클릭하면 callback함수를 관리해주는 데이터베이스 운영정책에 따라서 정보표시 callback함수가 
+				호출되고 Jquery Plugin Toast통하여 Object정보가 나옵니다. 또한, 정보표시 callback함수는 사용자가 Customizing이 가능합니다.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -618,6 +610,7 @@ function showInsertIssueLayer(data_name, data_key, latitude, longitude, height) 
 				<br><b>JavaScript</b>
 				<pre>
 <code>
+var objectInfoViewFlag = false;
 $("#objectInfoEnable").click(function() {
 	if(objectInfoViewFlag) {
 		objectInfoViewFlag = false;
@@ -744,7 +737,7 @@ $("#issuesEnable").click(function() {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="drawInsertIssueImageAPI">drawInsertIssueImageAPI</span></h2>
-				<p>Pin image를 그림</p>
+				<p>Pin Image를 그려줍니다. drawType이 0 이면 DB, 1 이면 이슈등록</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -795,7 +788,7 @@ drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, iss
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeInsertIssueStateAPI">changeInsertIssueStateAPI</span></h2>
-				<p>issue 등록 geo 정보 관련 상태 변경</p>
+				<p>mago3DJS 엔진이 이슈 등록을 위해서 좌표를 기억하고 있었는데 changeInsertIssueStateAPI에 파라미터에 0을 넘겨 주면 좌표를 초기화합니다.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
