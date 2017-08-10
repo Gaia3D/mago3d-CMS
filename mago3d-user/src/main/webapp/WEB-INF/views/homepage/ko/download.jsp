@@ -44,6 +44,7 @@
 				</li>
 				<li class="on">Download<span></span></li>
 				<li><a href="/homepage/docs.do">Documentation</a></li>
+				<li> <a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
 				<li id="languageKO" class="on">KO</li>

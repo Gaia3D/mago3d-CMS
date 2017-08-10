@@ -7,7 +7,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=1250">
-	<title>about | mago3D User</title>
+	<title>spec | mago3D User</title>
 	<!--[if lt IE 9]>
 	   	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
@@ -37,6 +37,7 @@
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
 				<li class="on">Documentation<span></span></li>
+				<li><a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
 				<li id="languageKO" class="on">KO</li>

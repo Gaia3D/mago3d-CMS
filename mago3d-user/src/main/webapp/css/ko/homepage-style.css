@@ -1286,3 +1286,22 @@ margin-bottom: 0px;
     background-color: #dddddd;
     border: 1px solid white;
 }
+#faq_menu a{
+display: inline;
+color: #739dd3;
+text-decoration: none;
+}
+#faq_menu a:hover{
+text-decoration: underline;
+}
+#faq_main .sub_title{
+margin-top: 30px;
+margin-bottom: 10px;
+font-size: 23px;
+font-weight: bold;
+display: block;
+}
+.line {
+border-top: solid 1px #ccc;
+margin: 20px 0;
+}
