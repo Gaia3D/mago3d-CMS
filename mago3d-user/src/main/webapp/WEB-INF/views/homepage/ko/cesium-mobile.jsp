@@ -467,57 +467,46 @@ ul {
 	// 		$("input:radio[name='boundingBox']:radio[value='" + isShow + "']").prop("checked", true).checkboxradio('refresh');
 	// 		changeBoundingBoxAPI(isShow);
 	// 	}
-	$("#issuesEnable").click(
-			function() {
-				if (listIssueFlag) {
-					listIssueFlag = false;
-					$("#issuesEnable").removeClass("on");
-				} else {
-					listIssueFlag = true;
-					$("#issuesEnable").addClass("on");
-
-					// 현재 위치의 latitude, logitude를 가지고 가장 가까이에 있는 데이터 그룹에 속하는 이슈 목록을 최대 100건 받아서 표시
-					var now_latitude = $("#now_latitude").val();
-					var now_longitude = $("#now_longitude").val();
-					var info = "latitude=" + now_latitude + "&longitude="
-							+ now_longitude;
-					$.ajax({
-						url : "/issue/ajax-list-issue-by-geo.do",
-						type : "GET",
-						data : info,
-						dataType : "json",
-						success : function(msg) {
-							if (msg.result == "success") {
-								var issueList = msg.issueList;
-								if (issueList != null
-										&& issueList.length > 0) {
-									for (i = 0; i < issueList.length; i++) {
-										var issue = issueList[i];
-										drawInsertIssueImageAPI(0,
-												issue.issue_id,
-												issue.issue_type,
-												issue.data_key,
-												issue.latitude,
-												issue.longitude,
-												issue.height);
-									}
-								}
-							} else {
-								alert(JS_MESSAGE[msg.result]);
+	$("#issuesEnable").click(function() {
+		if(listIssueFlag) {
+			listIssueFlag = false;
+			$("#issuesEnable").removeClass("on");
+		} else {
+			listIssueFlag = true;
+			$("#issuesEnable").addClass("on");
+			
+			// 현재 위치의 latitude, logitude를 가지고 가장 가까이에 있는 데이터 그룹에 속하는 이슈 목록을 최대 100건 받아서 표시
+			var now_latitude = $("#now_latitude").val();
+			var now_longitude = $("#now_longitude").val();
+			var info = "latitude=" + now_latitude + "&longitude=" + now_longitude;		
+			$.ajax({
+				url: "/issue/ajax-list-issue-by-geo.do",
+				type: "GET",
+				data: info,
+				dataType: "json",
+				success: function(msg){
+					if(msg.result == "success") {
+						var issueList = msg.issueList;
+						if(issueList != null && issueList.length > 0) {
+							for(i=0; i<issueList.length; i++ ) {
+								var issue = issueList[i];
+								drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
 							}
-						},
-						error : function(request, status, error) {
-							//alert(JS_MESSAGE["ajax.error.message"]);
-							console.log("code:" + request.status + "\n"
-									+ "message:" + request.responseText
-									+ "\n" + "error:" + error);
 						}
-					});
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+				},
+				error:function(request,status,error){
+			        //alert(JS_MESSAGE["ajax.error.message"]);
+					console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				}
-				changeListIssueViewModeAPI(listIssueFlag);
-				$("#menuPanel").panel("close");
 			});
-
+		}
+		changeListIssueViewModeAPI(listIssueFlag);
+		$("#menuPanel").panel("close");
+	});
+	
 	// issue input layer call back function
 	function showInsertIssueLayer(data_name, data_key, latitude, longitude,
 			height) {
@@ -722,76 +711,50 @@ ul {
 
 	// TODO issue url 밑에 있어야 할지도 모르겠다.
 	function ajaxIssueList() {
-		var info = "";
-		$
-				.ajax({
-					url : "/homepage/ajax-list-issue.do",
-					type : "GET",
-					data : info,
-					dataType : "json",
-					success : function(msg) {
-						if (msg.result == "success") {
-							var issueList = msg.issueList;
-							var content = "";
-
-							if (issueList == null || issueList.length == 0) {
-								content += "<div style=\"text-align: center; padding-top:20px; height: 50px;\">"
-										+ "	Issue가 존재하지 않습니다." + "</div>";
-							} else {
-								for (i = 0; i < issueList.length; i++) {
-									var issue = null;
-									issue = issueList[i];
-									content = content
-											+ "<div style=\"padding-left: 20px; padding-top: 20px; padding-bottom: 20px; background: gainsboro\">"
-											+ "	<div>"
-											+ "		<img src=\"/images/${lang }/homepage/bullet_h4.png\" alt=\"\" />"
-											+ "		<span style=\"padding-left: 10px; width:200px; overflow: hidden;\">"
-											+ issue.title
-											+ "</span>"
-											+ "		<span style=\"float:right; padding-right: 15px; padding-top: 5px;\">"
-											+ "			<a href=\"#\" onclick=\"flyTo('"
-											+ issue.issue_id
-											+ "', '"
-											+ issue.issue_type
-											+ "', '"
-											+ issue.longitude
-											+ "', '"
-											+ issue.latitude
-											+ "', '"
-											+ issue.height
-											+ "', '2')\">"
-											+ "				<img src=\"/images/${lang }/homepage/btn_going.png\" width=\"26\" height=\"26\" alt=\"\" />"
-											+ "			</a>"
-											+ "		</span>"
-											+ "	</div>"
-											+ "	<div id=\"issue_toggle_" + issue.issue_id + "\">"
-											+ "		<span style=\"padding-left: 25px;\">["
-											+ issue.issue_type
-											+ "]["
-											+ issue.priority
-											+ "]</span>"
-											+ "		<span style=\"padding-left: 5px;\">"
-											+ issue.data_group_name
-											+ "</span>"
-											+ "		<span style=\"float:right; padding-right: 20px;\">"
-											+ issue.insert_date.substring(
-													0, 19) + "</span>"
-											+ "	</div>" + "</div>";
-								}
-							}
-							$("#recentIssueListContent").empty();
-							$("#recentIssueListContent").html(content);
-						} else {
-							alert(JS_MESSAGE[msg.result]);
+		var info = "";		
+		$.ajax({
+			url: "/homepage/ajax-list-issue.do",
+			type: "GET",
+			data: info,
+			dataType: "json",
+			success: function(msg){
+				if(msg.result == "success") {
+					var issueList = msg.issueList;
+					var content = "";
+					
+					if(issueList == null || issueList.length == 0) {
+						content += 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
+								+	"	Issue가 존재하지 않습니다."
+								+	"</li>";
+					} else {
+						for(i=0; i<issueList.length; i++ ) {
+							var issue = issueList[i];
+							content = content 
+								+ 	"<li>"
+								+ 	"	<p class=\"title\">" + issue.title  + "</p>"
+								+ 	"	<p class=\"info\">"
+								+ 	"		<span class=\"tag " + issue.issue_type_css_class + "\">" + issue.issue_type_name + "</span>"
+								+ 	"		<span class=\"tag " + issue.priority_css_class + "\">" + issue.priority_name + "</span>"
+								+ 	"		<span>[" + issue.data_group_name + "]</span>"
+								+ 	"		<button type=\"button\" title=\"바로가기\""
+								+				"onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+								+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">바로가기</button>"
+								+ 	"		<span class=\"date\">" + issue.insert_date.substring(0,19) + "</span>"
+								+	"	</p>"
+								+ 	"</li>";
 						}
-					},
-					error : function(request, status, error) {
-						//alert(JS_MESSAGE["ajax.error.message"]);
-						console.log("code:" + request.status + "\n"
-								+ "message:" + request.responseText + "\n"
-								+ "error:" + error);
 					}
-				});
+					$("#recentIssueListContent").empty();
+					$("#recentIssueListContent").html(content);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error:function(request,status,error){
+		        //alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		});
 	}
 </script>
 
