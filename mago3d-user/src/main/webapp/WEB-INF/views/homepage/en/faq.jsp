@@ -47,8 +47,8 @@
 				<li class="on">FAQ<span></span></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO" class="on">KO</li>
-				<li id="languageEN"><a href="#" onclick="changeLanguage('en');">EN</a></li>
+				<li id="languageKO" ><a href="#" onclick="changeLanguage('ko');">KO</a></li>
+				<li id="languageEN" class="on">EN</li>
 			</ul>
 		</div>
 	</nav>
@@ -58,35 +58,35 @@
 		<div class="contents">
 		<div id="faq_menu" style="margin-bottom: 50px;">
 		<ul>
-				<li><a href="#mago3D">mago3D란 무엇입니까?</a></li>
-				<li><a href="#mago3DJS">mago3DJS란 무엇입니까?</a></li>
-				<li><a href="#mago3Dneed">mago3D가 필요한 이유는 무엇입니까?</a></li>
+				<li><a href="#mago3D">What is mago3D?</a></li>
+				<li><a href="#mago3DJS">What is mago3DJS?</a></li>
+				<li><a href="#mago3Dneed">Why do I need mago3D?</a></li>
 			</ul>
 		</div>
 		<div id="faq_main">
-			<div class="sub_title"><span id="mago3D">mago3D란 무엇입니까?</span></div>
+			<div class="sub_title"><span id="mago3D">What is mago3D?</span></div>
 			<p>
-				MAGO3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. 
+				MAGO3D is a next-generation 3D platform that integrates and visualizes AEC (Architecture, Engineering, Construction) and traditional 3D spatial information (3D GIS).
 			</p>
-			<div class="sub_title"><span id="mago3DJS">mago3DJS란 무엇입니까?</span></div>
+			<div class="sub_title">What is mago3DJS?<span id="mago3DJS"></span></div>
 			<p>
-				3차원 다중 블록 가시화를 위한 오픈소스 자바스크립트 라이브러리입니다.
+				Open-source JavaScript library for 3D multi-block visualization.
 			</p>
-			<div class="sub_title"><span id="mago3Dneed">mago3D가 필요한 이유는 무엇입니까?</span></div>
+			<div class="sub_title"><span id="mago3Dneed">Why do I need mago3D?</span></div>
 			<p>
-				MAGO3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 이에 따라, MAGO3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.
+				Unlike existing solutions, MAGO3D seamlessly integrates AEC and 3D GIS in a web browser without distinction between indoor and outdoor. As a result, MAGO3D users can quickly view and collaborate on large-capacity building information modeling (BIM), JT (Jupiter Tessellation) and 3D GIS files without installing any additional programs.
 			</p>
 		</div>
 		</div>
 
 	</section>
 
-	<footer style="margin-top: 63px;">
+	<footer style="margin-top: 68px;">
 		<div>
 			<h2>
 				Contact <span></span>
 			</h2>
-			<p>mago3D 에 관심있는 고객들께서는 연락(이메일, 전화) 또는 직접 방문을 부탁드립니다.</p>
+			<p>If you are interested in mago3D, please contact us by email or phone or visit us directly.</p>
 			<ul class="contact">
 				<li class="company">www.gaia3d.com</li>
 				<li class="address">+82-(0)2-3397-3475</li>

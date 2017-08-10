@@ -37,6 +37,7 @@
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
 				<li class="on">Documentation<span></span></li>
+				<li><a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
 				<li id="languageKO"><a href="#" onclick="changeLanguage('ko');">KO</a></li>

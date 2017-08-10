@@ -26,7 +26,7 @@ ul, li {margin:0; padding:0; }
 	position: absolute;
 	top: 2px;
 	left: 424px;
-	min-width: 380px;
+	min-width: 412px;
 	z-index: 999;
 }
 .trigger > button {
@@ -60,7 +60,7 @@ ul, li {margin:0; padding:0; }
 	color: #333;
 	font-size: 13px;
 }
-.trigger:hover > ul li:hover {
+.trigger:hover > ul li:hover a{
 	height: 34px;
 	padding: 0 15px;
 	color: #fff;
