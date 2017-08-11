@@ -49,12 +49,12 @@
 		<div class="docs-menu">
 			<ul>
 				<li><a href="/homepage/docs.do">Docs</a></li>
-				<li><a href="/homepage/api.do" target="_blank">mago3D.JS API</a></li>
-				<li class="on"><a href="/homepage/spec.do">F4D-Converter Spec</a>
+				<li><a href="/homepage/api.do" target="_blank">mago3D.js</a></li>
+				<li class="on"><a href="/homepage/spec.do">F4D Converter</a>
 			</ul>
 		</div>
 		<div class="docs-main">
-			<div class="title">F4D-Converter Spec</div>
+			<div class="title">F4D Converter</div>
 			<p>
 				
 			</p>
