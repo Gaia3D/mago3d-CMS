@@ -1184,9 +1184,11 @@ list-style-type: circle;
 display: block;
 width: 200px;
 position: absolute;
+margin-left: 60px;
 }
 .docs-menu li {
 padding: .1em .5em;
+margin-top: 5px;
 }
 .docs-menu a{
 display: block;
@@ -1198,17 +1200,17 @@ padding-top: 5px;
 padding-bottom: 5px;
 line-height: 1;
 font-size: 1.3em;
+color: gray;
 }
 .docs-menu .on {
 background-color: #ccc;
-border-radius: 8px;
 }
 .docs-menu .on a{
 color: white;
 }
 .docs-menu li:hover {
 background-color: #ccc;
-border-radius: 8px;
+color: white;
 }
 .docs-menu a:hover {
 color: white;
@@ -1297,11 +1299,19 @@ text-decoration: underline;
 #faq_main .sub_title{
 margin-top: 30px;
 margin-bottom: 10px;
-font-size: 23px;
+font-size: 20px;
 font-weight: bold;
 display: block;
 }
 .line {
 border-top: solid 1px #ccc;
 margin: 20px 0;
+}
+#faq_main a{
+display: inline;
+color: #739dd3;
+text-decoration: none;
+}
+#faq_main a:hover{
+text-decoration: underline;
 }
