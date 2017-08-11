@@ -34,7 +34,12 @@
 				<a href="/homepage/index.do">mago3D</a>
 			</h1>
 			<ul class="menu">
-				<li><a href="/homepage/about.do">mago3D</a></li>
+				<li class="mm" onclick='selectMenu();'>mago3D<span></span>
+					<ul>
+						<li><a href="/homepage/about.do" style="color: white">about</a></li>
+						<li><a href="/homepage/news.do" style="color: white">News</a></li>
+					</ul>
+				</li>
 				<li class="mm" onclick='selectMenu();'>Demo<span></span>
 					<ul>
 						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
@@ -43,7 +48,12 @@
 					</ul>
 				</li>
 				<li class="on">Download<span></span></li>
-				<li><a href="/homepage/docs.do">Documentation</a></li>
+				<li class="mm" onclick='selectMenu();'>Documentation<span></span>
+					<ul>
+						<li><a href="/homepage/api.do" style="color: white" target="_blank">API</a></li>
+						<li><a href="/homepage/spec.do" style="color: white">F4D Spec</a></li>
+					</ul>
+				</li>
 				<li> <a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
@@ -55,6 +65,7 @@
 
 	<section>
 		<h2>Download</h2>
+		
 		<div class="contents">
 			<button type="button" class="down" onclick="location.href='https://github.com/Gaia3D/mago3d'">
 				DOWNLOAD mago3D 1.0.0 <span>2017-07-01</span>

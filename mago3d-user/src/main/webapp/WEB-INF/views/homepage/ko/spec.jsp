@@ -27,7 +27,12 @@
 				<a href="/homepage/index.do">mago3D</a>
 			</h1>
 			<ul class="menu">
-				<li><a href="/homepage/about.do">mago3D</a></li>
+				<li class="mm" onclick='selectMenu();'>mago3D<span></span>
+					<ul>
+						<li><a href="/homepage/about.do" style="color: white">about</a></li>
+						<li><a href="/homepage/news.do" style="color: white">News</a></li>
+					</ul>
+				</li>
 				<li class="mm" onclick='selectMenu();'>Demo<span></span>
 					<ul>
 						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
@@ -36,7 +41,12 @@
 					</ul>
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
-				<li class="on">Documentation<span></span></li>
+				<li class="mm on" onclick='selectMenu();'>Documentation<span></span>
+					<ul>
+						<li><a href="/homepage/api.do" style="color: white" target="_blank">API</a></li>
+						<li><a href="/homepage/spec.do" style="color: white">F4D Spec</a></li>
+					</ul>
+				</li>
 				<li><a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
@@ -46,18 +56,9 @@
 		</div>
 	</nav>
 	<section>
-		<div class="docs-menu">
-			<ul>
-				<li><a href="/homepage/docs.do">Docs</a></li>
-				<li><a href="/homepage/api.do" target="_blank">mago3D.js</a></li>
-				<li class="on"><a href="/homepage/spec.do">F4D Converter</a>
-			</ul>
-		</div>
-		<div class="docs-main">
-			<div class="title">F4D Converter</div>
-			<p>
-				
-			</p>
+		<div class="docs-main content">
+			<h2 style="margin-bottom: 5px;">F4D Converter</h2>
+			<div class="line"></div>
 			<div class="sub_title">1. Introduction</div>
 			<div>Although there have been numerous attempts to integrate BIM and 3D GIS on a single geospatial platform, the outcome of those attempts are not so satisfactory till to date. Difference of data model, massive number of data to be rendered, big volume of file size are among those major technical barriers that hindered seamless integration of BIM and 3D GIS. And there are many increasing demands to see and integrate BIM and 3D GIS on a web browser since web environment has been proven as an effective collaborative platform in architecture and geospatial domains. This abstract introduces an open source based BIM-GIS integration platform called Mago3D(https://github.com/Gaia3D/mago3djs) that could manage, handle, and visualise massive 3D data from BIM and 3D GIS simultaneously on a web browser. Mago3D platform has been developed on top of well-known open source GIS projects, Cesium(http://cesiumjs.org/) and NASA World Wind(https://worldwind.arc.nasa.gov/), to make the best of their existing features and at the same time to expand the functionalities to BIM and AEC(Architecture, Engineering and Construction) areas. </div>
 			<div class="sub_title">2. Development of the Mago3D Platform</div>

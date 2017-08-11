@@ -1180,43 +1180,7 @@ list-style-type: circle;
 }
 
 /* Docs */
-.docs-menu {
-display: block;
-width: 200px;
-position: absolute;
-margin-left: 60px;
-}
-.docs-menu li {
-padding: .1em .5em;
-margin-top: 5px;
-}
-.docs-menu a{
-display: block;
-padding-left: 10px;
-padding-right: 10px;
-margin-left: -10px;
-margin-right: -10px;
-padding-top: 5px;
-padding-bottom: 5px;
-line-height: 1;
-font-size: 1.3em;
-color: gray;
-}
-.docs-menu .on {
-background-color: #ccc;
-}
-.docs-menu .on a{
-color: white;
-}
-.docs-menu li:hover {
-background-color: #ccc;
-color: white;
-}
-.docs-menu a:hover {
-color: white;
-}
 .docs-main {
-margin-left: 300px;
 /* font-size: 22px; */
 }
 .docs-main .title {

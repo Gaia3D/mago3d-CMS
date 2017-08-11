@@ -73,6 +73,22 @@ public class HomepageController {
 	}
 	
 	/**
+	 * 메인
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "news.do")
+	public String news(HttpServletRequest request, Model model) {
+		String lang = null;
+		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		log.info("@@ lang = {}", lang);
+		if(lang == null || "".equals(lang)) {
+			lang = "ko";
+		}
+		return "/homepage/" + lang + "/news";
+	}	
+	
+	/**
 	 * demo
 	 * @param model
 	 * @return
