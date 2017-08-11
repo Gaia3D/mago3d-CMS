@@ -103,8 +103,8 @@
 					<th>Convert Document</th>
 				</tr>
 				<tr>
-					<td><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3Djs-1.0.0 js Document</a></td>
-					<td><a href="#" onclick='alert("준비 중 입니다."); return false;'>F4DConverter-1.0.0 Document</a></td>
+					<td><a href="/homepage/api.do" target="_blank">mago3D.js-1.0.0 js Document</a></td>
+					<td><a href="/homepage/spec.do">F4D Converter-1.0.0 Document</a></td>
 				</tr>
 			</table>
 
@@ -118,7 +118,7 @@
 				</tr>
 				<tr>
 					<td>1.0.0</td>
-					<td><a href="#" onclick='alert("준비 중 입니다.")'>mago3D.zip</a></td>
+					<td><a href="https://github.com/Gaia3D/-Deprecated-mago3d/archive/master.zip">mago3D.zip</a></td>
 					<td>2017-07-01</td>
 					<td>
 						<ul>
