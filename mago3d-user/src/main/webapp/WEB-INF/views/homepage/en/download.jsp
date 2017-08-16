@@ -134,8 +134,8 @@
 					<td>2017-07-01</td>
 					<td>
 						<ul>
-							<li><a href="https://github.com/Gaia3D/mago3djs">mago3D.js</a></li>
-							<li><a href="#" onclick='alert("Coming soon..."); return false;'>F4D Converter</a></li>
+							<li><a href="https://github.com/Gaia3D/mago3Djs" target="_blank">mago3D.js</a></li>
+							<li><a href="https://github.com/Gaia3D/F4DConverter" target="_blank">F4D Converter</a></li>
 						</ul>
 					</td>
 				</tr>
