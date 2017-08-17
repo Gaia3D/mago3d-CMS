@@ -120,23 +120,45 @@
 				</tr>
 			</table>
 
-			<h4>Source</h4>
+			<h4>mago3D.js</h4>
 			<table>
 				<tr>
 					<th>Version</th>
 					<th>Download</th>
 					<th>Date</th>
-					<th>GitHub</th>
+					<th>Description</th>
 				</tr>
 				<tr>
 					<td>1.0.0</td>
-					<td><a href="https://github.com/Gaia3D/-Deprecated-mago3d/archive/master.zip">mago3D.zip</a></td>
-					<td>2017-07-01</td>
 					<td>
-						<ul>
-							<li><a href="https://github.com/Gaia3D/mago3Djs" target="_blank">mago3D.js</a></li>
-							<li><a href="https://github.com/Gaia3D/F4DConverter" target="_blank">F4D Converter</a></li>
-						</ul>
+					<ul>
+						<li>GitHub : <a href="https://github.com/Gaia3D/mago3Djs" target="_blank">mago3D.js</a></li>
+					</ul>
+					</td>
+					<td>2017-07-01</td>
+					<td><a href="https://github.com/Gaia3D/mago3djs/blob/develop/README.md" target="_blank">ReadMe</a>
+					</td>
+				</tr>
+			</table>
+			
+			<h4>F4D Converter</h4>
+			<table>
+				<tr>
+					<th>Version</th>
+					<th>Download</th>
+					<th>Date</th>
+					<th>Description</th>
+				</tr>
+				<tr>
+					<td>0.0.1</td>
+					<td>
+					<ul>
+						<li>GitHub : <a href="https://github.com/Gaia3D/F4DConverter" target="_blank">F4D Converter</a></li>
+						<li>Installer : <a href="/data/download/SetupF4DConverter.msi" target="_blank">F4D Converter 64bit (this installation requires Windows 7 or later)</a></li>
+					</ul>
+					</td>
+					<td>2017-08-17</td>
+					<td><a href="https://github.com/Gaia3D/F4DConverter/blob/master/README.md" target="_blank">ReadMe</a>
 					</td>
 				</tr>
 			</table>
