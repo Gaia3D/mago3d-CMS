@@ -13,7 +13,9 @@
 	<![endif]-->
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<link rel="stylesheet" href="/externlib/${lang}/slick/slick.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/slick/slick.js"></script>
 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
@@ -27,7 +29,6 @@
 <!-- 			<p>대용량 3차원GIS를 쉽고 빠르게 웹에서 구현합니다</p> -->
 <!-- 		</div> -->
 	</header>
-
 	<nav class="nav">
 		<div>
 			<h1>
@@ -65,12 +66,16 @@
 	<section>
 		<div class="contents">
 		<h2>News</h2>
-		
-			
-			
-			
-	
-		
+			<div class="slider">
+				<div class="fade slick-slider">
+					<img src="/images/${lang}/homepage/data.png"/>
+					<img src="/images/${lang}/homepage/data.png"/>
+					<img src="/images/${lang}/homepage/data.png"/>
+				</div>
+			</div>
+			<div class="new_main">
+				dfgdfgdgggggggggg
+			</div>
 		</div>
 	</section>
 	<footer>
@@ -88,6 +93,15 @@
 		</div>
 	</footer>
 </body>
-
+<script>
+$('.single-item').slick();
+$('.fade').slick({
+	  dots: true,
+	  infinite: true,
+	  speed: 500,
+	  fade: true,
+	  cssEase: 'linear'
+	});
+</script>
 
 </html>
