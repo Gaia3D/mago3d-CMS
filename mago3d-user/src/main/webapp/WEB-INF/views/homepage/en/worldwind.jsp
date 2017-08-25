@@ -32,6 +32,7 @@
 			<li><a href="/homepage/about.do">Mago3D</a></li>	
 			<li><a href="/homepage/download.do">Download</a></li>
 			<li><a href="/homepage/docs.do">Documentation</a></li>
+			<li><a href="/homepage/faq.do">FAQ</a></li>
 		</ul>
 	</div>
 	<div class="ctrl">

@@ -14,7 +14,6 @@ html, body { margin:0; padding:0; width: 100%; height:100%; background-color: #f
 font-family: 'Noto Sans','Malgun Gothic','돋움',dotum, sans-serif;}
 td ul li a {display: inline;}
 hr {margin-top: 50px;}
-
 /* ///// LAYOUT ///// */
 /* HEADER */
 header {
@@ -1185,9 +1184,11 @@ list-style-type: circle;
 display: block;
 width: 200px;
 position: absolute;
+margin-left: 60px;
 }
 .docs-menu li {
 padding: .1em .5em;
+margin-top: 5px;
 }
 .docs-menu a{
 display: block;
@@ -1199,17 +1200,17 @@ padding-top: 5px;
 padding-bottom: 5px;
 line-height: 1;
 font-size: 1.3em;
+color: gray;
 }
 .docs-menu .on {
 background-color: #ccc;
-border-radius: 8px;
 }
 .docs-menu .on a{
 color: white;
 }
 .docs-menu li:hover {
 background-color: #ccc;
-border-radius: 8px;
+color: white;
 }
 .docs-menu a:hover {
 color: white;
@@ -1225,7 +1226,7 @@ margin-bottom: 50px;
 }
 .docs-main .sub_title {
 color: #152740;
-font-size: 1.4em;
+font-size: 1.8em;
 font-weight: 700;
 margin-top: 20px;
 margin-bottom: 20px;
@@ -1241,4 +1242,76 @@ margin-top: 20px;
 .docs-list li a{
 display: inline;
 color: tomato;
+}
+.sub_main {
+margin-left: 30px;
+}
+.sub_main .sub_title {
+color: #152740;
+font-size: 1.5em;
+font-weight: 700;
+margin-top: 20px;
+margin-bottom: 20px;
+}
+.sub_main ul {
+margin-left: 40px;
+margin-top: 20px;
+margin-bottom: 20px;
+list-style: circle;
+}
+.sub_main img {
+margin-left: 150px;
+margin-top: 30px;
+margin-bottom: 20px;
+}
+.sub_main .description {
+color: gray;
+margin-left: 215px;
+}
+.sub_main table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.sub_main td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+.sub_main .specImage{
+margin-left: 0px;
+margin-top: 0px;
+margin-bottom: 0px;
+}
+.sub_main tr:nth-child(even) {
+    background-color: #dddddd;
+    border: 1px solid white;
+}
+#faq_menu a{
+display: inline;
+color: #739dd3;
+text-decoration: none;
+}
+#faq_menu a:hover{
+text-decoration: underline;
+}
+#faq_main .sub_title{
+margin-top: 30px;
+margin-bottom: 10px;
+font-size: 20px;
+font-weight: bold;
+display: block;
+}
+.line {
+border-top: solid 1px #ccc;
+margin: 20px 0;
+}
+#faq_main a{
+display: inline;
+color: #739dd3;
+text-decoration: none;
+}
+#faq_main a:hover{
+text-decoration: underline;
 }

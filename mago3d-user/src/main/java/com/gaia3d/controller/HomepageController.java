@@ -334,6 +334,20 @@ public class HomepageController {
 	}
 	
 	/**
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "faq.do")
+	public String Faq(HttpServletRequest request, Model model) {
+		String lang = null;
+		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		if(lang == null || "".equals(lang)) {
+			lang = "ko";
+		}
+		return "/homepage/" + lang + "/faq";
+	}
+	/**
 	 * 언어 설정
 	 * @param model
 	 * @return

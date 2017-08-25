@@ -44,6 +44,7 @@
 				</li>
 				<li class="on">Download<span></span></li>
 				<li><a href="/homepage/docs.do">Documentation</a></li>
+				<li> <a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
 				<li id="languageKO" class="on">KO</li>
@@ -102,32 +103,53 @@
 					<th>Convert Document</th>
 				</tr>
 				<tr>
-					<td><a href="#" onclick='alert("준비 중 입니다."); return false;'>mago3Djs-1.0.0 js Document</a></td>
-					<td><a href="#" onclick='alert("준비 중 입니다."); return false;'>F4DConverter-1.0.0 Document</a></td>
+					<td><a href="/homepage/api.do" target="_blank">mago3D.js-1.0.0 js Document</a></td>
+					<td><a href="/homepage/spec.do">F4D Converter-1.0.0 Document</a></td>
 				</tr>
 			</table>
 
-			<h4>소스링크</h4>
+			<h4>mago3D.js</h4>
 			<table>
 				<tr>
 					<th>버전</th>
 					<th>다운로드</th>
 					<th>날짜</th>
-					<th>GitHub</th>
+					<th>설명</th>
 				</tr>
 				<tr>
 					<td>1.0.0</td>
-					<td><a href="#" onclick='alert("준비 중 입니다.")'>mago3D.zip</a></td>
-					<td>2017-07-01</td>
 					<td>
-						<ul>
-							<li><a href="https://github.com/Gaia3D/mago3Djs">mago3D.js</a></li>
-							<li><a href="#" onclick='alert("준비 중 입니다."); return false;'>F4D Converter</a></li>
-						</ul>
+					<ul>
+						<li>GitHub : <a href="https://github.com/Gaia3D/mago3Djs" target="_blank">mago3D.js</a></li>
+					</ul>
+					</td>
+					<td>2017-07-01</td>
+					<td><a href="https://github.com/Gaia3D/mago3djs/blob/develop/README.md" target="_blank">ReadMe</a>
 					</td>
 				</tr>
 			</table>
-
+			
+			<h4>F4D Converter</h4>
+			<table>
+				<tr>
+					<th>버전</th>
+					<th>다운로드</th>
+					<th>날짜</th>
+					<th>설명</th>
+				</tr>
+				<tr>
+					<td>0.0.1</td>
+					<td>
+					<ul>
+						<li>GitHub : <a href="https://github.com/Gaia3D/F4DConverter" target="_blank">F4D Converter</a></li>
+						<li>Installer : <a href="/data/download/SetupF4DConverter.msi" target="_blank">F4D Converter 64bit (this installation requires Windows 7 or later)</a></li>
+					</ul>
+					</td>
+					<td>2017-08-17</td>
+					<td><a href="https://github.com/Gaia3D/F4DConverter/blob/master/README.md" target="_blank">ReadMe</a>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</section>
 
