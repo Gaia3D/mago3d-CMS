@@ -36,7 +36,7 @@
 			<ul class="menu">
 				<li class="mm" onclick='selectMenu();'>mago3D<span></span>
 					<ul>
-						<li><a href="/homepage/about.do" style="color: white">about</a></li>
+						<li><a href="/homepage/about.do" style="color: white">About</a></li>
 						<li><a href="/homepage/news.do" style="color: white">News</a></li>
 					</ul>
 				</li>
@@ -112,7 +112,7 @@
 				<div>
 				<div class="sub_title"><span id="mago3DJSbug">mago3DJS에서 버그를 발견했습니다. 어떻게 해야 합니까?</span></div>
 					<p>
-						모든 mago3DJS에 관련 버그를 <a href="https://github.com/Gaia3D/mago3djs">mago3DJS issue tracker</a> 에 제출하십시오. 감사합니다!
+						모든 mago3DJS에 관련 버그를 <a href="https://github.com/Gaia3D/mago3djs/issues">mago3DJS issue tracker</a> 에 제출하십시오. 감사합니다!
 					</p>
 				</div>
 				<div class="sub_title"><span id="mago3Dbug">mago3D 전체에서 버그를 발견하거나 다른 질문이 있는 경우에는 어떻게 해야 합니까?</span></div>

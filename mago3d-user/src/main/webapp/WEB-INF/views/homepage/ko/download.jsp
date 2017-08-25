@@ -36,7 +36,7 @@
 			<ul class="menu">
 				<li class="mm" onclick='selectMenu();'>mago3D<span></span>
 					<ul>
-						<li><a href="/homepage/about.do" style="color: white">about</a></li>
+						<li><a href="/homepage/about.do" style="color: white">About</a></li>
 						<li><a href="/homepage/news.do" style="color: white">News</a></li>
 					</ul>
 				</li>
@@ -107,18 +107,6 @@
 			 applications with mago3D F4D Converter software, Gaia3D’s open source software licensed under the AGPL is the best option.
 			</p>
 			<b>2. mago3D.js: Apache License</b><br>
-			<h4>Documentation</h4>
-			<table>
-				<tr>
-					<th>JS Document</th>
-					<th>Convert Document</th>
-				</tr>
-				<tr>
-					<td><a href="/homepage/api.do" target="_blank">mago3D.js-1.0.0 js Document</a></td>
-					<td><a href="/homepage/spec.do">F4D Converter-1.0.0 Document</a></td>
-				</tr>
-			</table>
-
 			<h4>mago3D.js</h4>
 			<table>
 				<tr>
@@ -132,6 +120,7 @@
 					<td>
 					<ul>
 						<li>GitHub : <a href="https://github.com/Gaia3D/mago3Djs" target="_blank">mago3D.js</a></li>
+						<li>API : <a href="homepage/api.do" target="_blank">mago3D.js API</a></li>
 					</ul>
 					</td>
 					<td>2017-07-01</td>
@@ -154,6 +143,7 @@
 					<ul>
 						<li>GitHub : <a href="https://github.com/Gaia3D/F4DConverter" target="_blank">F4D Converter</a></li>
 						<li>Installer : <a href="/data/download/SetupF4DConverter.msi" target="_blank">F4D Converter 64bit (this installation requires Windows 7 or later)</a></li>
+						<li>Spec : <a href="/homepage/spec.do">F4D Converter Spec</a></li>
 					</ul>
 					</td>
 					<td>2017-08-17</td>

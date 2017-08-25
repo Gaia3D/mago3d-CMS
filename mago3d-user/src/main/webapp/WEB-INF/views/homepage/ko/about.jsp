@@ -36,7 +36,7 @@
 			<ul class="menu">
 				<li class="mm on" onclick='selectMenu();'>mago3D<span></span>
 					<ul>
-						<li><a href="#" style="color: white">about</a></li>
+						<li><a href="#" style="color: white">About</a></li>
 						<li><a href="/homepage/news.do" style="color: white">News</a></li>
 					</ul>
 				</li>
@@ -250,8 +250,7 @@
 					</div>
 					<div class="algo-row">
 						<a href="#">
-							<div class="aglo-thumbnail" alt="Bounding box이미지"
-								style="background-image:url(/images/${lang}/homepage/boundingbox.png)">
+							<div class="aglo-thumbnail" alt="Bounding box이미지" style="background-image:url(/images/${lang}/homepage/boundingbox.png)">
 								<div>
 									<h3>bounding box</h3>
 									<P>bounding box 계산</P>
@@ -357,7 +356,7 @@
 					있습니다.</p>
 				<h4>Acknowledgement</h4>
 				<ul>
-					<li>국토교통부 '공간정보 SW활용을 위한 오픈소스 가공기술개발(과제번호:16NSIP-B080778-04)'의
+					<li>국토교통부 '공간정보 SW활용을 위한 오픈소스 가공기술개발(과제번호:17NSIP-B080778-04)'의
 						일환입니다.</li>
 					<li>서울시 3차원 데이터는 한국공간정보산업진흥원의 허가를 받아 연구목적으로 사용 중입니다.</li>
 					<li>서울시 실내 데이터는 서울시의 허가를 받아 연구목적으로 사용 중입니다.</li>
