@@ -16,6 +16,8 @@ import lombok.ToString;
 @ToString
 public class Issue {
 	
+	public static final String TITLE = "title";
+	
 	// 총건수
 	private Long totalCount;
 	// 페이지 처리를 위한 시작
@@ -32,6 +34,7 @@ public class Issue {
 	private String end_date;
 	private String order_word;
 	private String order_value;
+	private Long list_counter = 10l;
 	
 	// 이슈 상세 고유번호
 	private Long issue_detail_id;

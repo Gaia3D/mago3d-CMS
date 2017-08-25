@@ -247,6 +247,7 @@ public class IssueController {
 		// TODO 날짜를 더해서 넣어야 한다 공백 처리 해서
 		String client_ip = WebUtil.getClientIp(request);
 		issue.setClient_ip(client_ip);
+		issue.setLocation("POINT(" + issue.getLongitude() + " " + issue.getLatitude() + ")");
 		log.info("@@@ issue = {}", issue);
 		
 		issueService.insertIssue(issue, issueFile);
@@ -323,8 +324,12 @@ public class IssueController {
 			}
 			String client_ip = WebUtil.getClientIp(request);
 			issue.setClient_ip(client_ip);
+			issue.setLocation("POINT(" + issue.getLongitude() + " " + issue.getLatitude() + ")");
+			log.info("@@@ input = {}, location = {}", "POINT(" + issue.getLongitude() + " " + issue.getLatitude() + ")", issue.getLocation());
 			log.info("@@@ before issue = {}", issue);
+			
 			issueService.insertIssue(issue, issueFile);
+			
 			jSONObject.put("issue", issue);
 			log.info("@@@ after issue = {}", issue);
 			

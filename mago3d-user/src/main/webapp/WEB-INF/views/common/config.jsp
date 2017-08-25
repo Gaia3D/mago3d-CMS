@@ -10,9 +10,6 @@
 		lang = "ko";
 	}
 	
-	long currentTime = System.currentTimeMillis();
-	
 	request.setAttribute("lang", lang);
-	request.setAttribute("currentTime", currentTime);
 	request.setAttribute("accessibility", accessibility);
 %>
