@@ -46,8 +46,8 @@
 		<li><a href="/homepage/about.do">mago3D</a></li>
 		<li>Demo
 			<ul>
-				<li>Cesium</li>
-				<li><a href="/homepage/demo.do?viewLibrary=worldwind">World Wind</a></li>
+				<li><a href="/homepage/demo.do?viewLibrary=cesium">Cesium</a></li>
+				<li>World Wind</li>
 			</ul>
 		</li>
 		<li><a href="/homepage/download.do">Download</a></li>
