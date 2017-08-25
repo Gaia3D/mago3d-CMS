@@ -75,7 +75,7 @@
 	
 	<!-- 이슈 총 건수 -->
 	<select id="getIssueTotalCountByUserId" parameterType="issue" resultType="long">
-		/* getIssueTotalCount */
+		/* getIssueTotalCountByUserId */
 		SELECT COUNT(issue_id) 
 		FROM issue
 		WHERE user_id = #{user_id}
@@ -188,7 +188,7 @@
 			null,
 			</if>		
 			<if test="location != null and location != ''">
-			ST_GeographyFromText(#{location})
+			ST_GeographyFromText(#{location}),
 			</if>		
 			#{latitude}, #{longitude}, #{height}, #{client_ip}
 		)

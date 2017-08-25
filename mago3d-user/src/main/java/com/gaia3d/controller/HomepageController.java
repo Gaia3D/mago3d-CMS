@@ -27,6 +27,7 @@ import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.SessionKey;
 import com.gaia3d.domain.UserSession;
+import com.gaia3d.service.DataService;
 import com.gaia3d.service.IssueService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.StringUtil;
@@ -40,6 +41,8 @@ public class HomepageController {
 	
 	@Autowired
 	private IssueService issueService;
+	@Autowired
+	private DataService dataService;
 
 	/**
 	 * 메인
@@ -124,7 +127,7 @@ public class HomepageController {
 		}
 		long totalCount = issueService.getIssueTotalCountByUserId(issue);
 		
-		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(issue), totalCount, Long.valueOf(pageNo).longValue(), 5l);
+		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(issue), totalCount, Long.valueOf(pageNo).longValue(), 10l);
 		log.info("@@ pagination = {}", pagination);
 		
 		issue.setOffset(pagination.getOffset());
@@ -163,9 +166,11 @@ public class HomepageController {
 		model.addAttribute("now_latitude", policy.getGeo_init_latitude());
 		model.addAttribute("now_longitude", policy.getGeo_init_longitude());
 		model.addAttribute(pagination);
+		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("issueList", issueList);
 		model.addAttribute("projectDataGroupList", projectDataGroupList);
 		model.addAttribute("dataGroupMap", mapper.writeValueAsString(dataGroupMap));
+		model.addAttribute("cache_version", policy.getContent_cache_version());
 		model.addAttribute("policyJson", mapper.writeValueAsString(policy));
 		model.addAttribute("issuePriorityList", issuePriorityList);
 		model.addAttribute("issueTypeList", issueTypeList);
@@ -195,14 +200,13 @@ public class HomepageController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "ajax-list-issue.do", produces="application/json; charset=utf8")
+	@RequestMapping(value = "ajax-list-issue.do", produces="application/json; charset=utf8")
 	@ResponseBody
-	public Map<String, Object> ajaxListIssue(HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo) {
+	public Map<String, Object> ajaxListIssue(HttpServletRequest request, Issue issue, @RequestParam(defaultValue="1") String pageNo) {
 		
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
-			Issue issue = new Issue();
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 			if(userSession == null) {
 				issue.setUser_id("guest");
@@ -219,19 +223,49 @@ public class HomepageController {
 			if(StringUtil.isNotEmpty(issue.getEnd_date())) {
 				issue.setEnd_date(issue.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
 			}
-			long totalCount = issueService.getIssueTotalCountByUserId(issue);
 			
-			Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(issue), totalCount, Long.valueOf(pageNo).longValue(), 5l);
-			log.info("@@ pagination = {}", pagination);
-			
-			issue.setOffset(pagination.getOffset());
-			issue.setLimit(pagination.getPageRows());
-			List<Issue> issueList = new ArrayList<Issue>();
-			if(totalCount > 0l) {
-				issueList = issueService.getListIssueByUserId(issue);
+			long totalCount = 0l;
+			DataInfo dataInfo = null;
+			if(DataInfo.DATA_NAME.equals(issue.getSearch_word())) {
+				dataInfo = new DataInfo();
+				dataInfo.setData_group_id(issue.getData_group_id());
+				dataInfo.setSearch_word(issue.getSearch_word());
+				dataInfo.setSearch_option(issue.getSearch_option());
+				dataInfo.setSearch_value(issue.getSearch_value());
+				dataInfo.setStart_date(issue.getStart_date());
+				dataInfo.setEnd_date(issue.getEnd_date());
+				dataInfo.setOrder_word(issue.getOrder_word());
+				dataInfo.setOrder_value(issue.getOrder_value());
+				dataInfo.setList_counter(issue.getList_counter());
+				totalCount = dataService.getDataTotalCount(dataInfo);
+			} else {
+				totalCount = issueService.getIssueTotalCountByUserId(issue);
 			}
 			
-			jSONObject.put("issueList", issueList);
+			long pageRows = 10l;
+			if(issue.getList_counter() != null && issue.getList_counter().longValue() > 0) pageRows = issue.getList_counter().longValue();
+			Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(issue), totalCount, Long.valueOf(pageNo).longValue(), pageRows);
+			log.info("@@ pagination = {}", pagination);
+			
+			if(DataInfo.DATA_NAME.equals(issue.getSearch_word())) {
+				dataInfo.setOffset(pagination.getOffset());
+				dataInfo.setLimit(pagination.getPageRows());
+				List<DataInfo> dataInfoList = new ArrayList<DataInfo>();
+				if(totalCount > 0l) {
+					dataInfoList = dataService.getListData(dataInfo);
+				}
+				jSONObject.put("dataInfoList", dataInfoList);
+			} else {
+				issue.setOffset(pagination.getOffset());
+				issue.setLimit(pagination.getPageRows());
+				List<Issue> issueList = new ArrayList<Issue>();
+				if(totalCount > 0l) {
+					issueList = issueService.getListIssueByUserId(issue);
+				}
+				jSONObject.put("issueList", issueList);
+			}
+			
+			jSONObject.put("totalCount", totalCount);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

@@ -12,7 +12,6 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.gaia3d.filter.XSSFilter;
 import com.gaia3d.listener.Gaia3dHttpSessionBindingListener;
