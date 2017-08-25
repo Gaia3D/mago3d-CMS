@@ -737,7 +737,7 @@
 			        'pitch : ' + pitch,
 			        'roll : ' + roll
 			    ],
-				//bgColor : 'blue',
+				bgColor : '#393946',
 				hideAfter: 5000,
 				icon: 'info',
 				position : 'bottom-right'
