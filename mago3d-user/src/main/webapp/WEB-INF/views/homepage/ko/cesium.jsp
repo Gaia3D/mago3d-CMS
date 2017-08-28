@@ -321,7 +321,7 @@
 		
 		<div class="btns">
 				<button type="button" id="issueSaveButton" class="full">저장</button>
-			</div>
+		</div>
 	</div>
 	</form:form>
 	
@@ -641,7 +641,7 @@
 									content = content 
 										+ 	"<li>"
 										+ 	"	<button type=\"button\" title=\"바로가기\""
-										+			"onclick=\"flyToBounding('" + dataInfo.data_key + "');\">바로가기</button>"
+										+			" onclick=\"flyToBounding('" + dataInfo.data_key + "');\">바로가기</button>"
 										+ 	"	<div class=\"info\">"
 										+ 	"		<p class=\"title\">"
 										+ 	"			<span>" + dataInfo.data_group_name + "</span>"
@@ -670,8 +670,8 @@
 									content = content 
 										+ 	"<li>"
 										+ 	"	<button type=\"button\" title=\"바로가기\""
-										+			"onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
-										+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">바로가기</button>"
+										+			" onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+										+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2');\">바로가기</button>"
 										+ 	"	<div class=\"info\">"
 										+ 	"		<p class=\"title\">"
 										+ 	"			<span>" + issue.data_group_name + "</span>"
@@ -690,6 +690,7 @@
 						
 						$("#searchList").empty();
 						$("#searchList").html(content);
+						console.log(content);
 					} else {
 						alert(JS_MESSAGE[msg.result]);
 					}

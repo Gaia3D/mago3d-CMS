@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -116,7 +118,7 @@ public class CacheConfig {
 		CacheManager.setPolicy(policy);
 		// 사용자 도메인 cache를 갱신
 		if(cacheType == CacheType.USER || cacheType == CacheType.BROADCAST) {
-			
+			callRemoteCache(CacheName.POLICY);
 		}
 		// 이중화 도메인 사용자, 관리자 cache를 갱신
 		if(cacheType == CacheType.BROADCAST) {
@@ -276,24 +278,14 @@ public class CacheConfig {
 			// TODO 환경 설정으로 빼서 로컬이거나 단독 서버인 경우 호출하지 않게 설계해야 함
 			String authData = "api-key=" + Crypt.decrypt(propertiesConfig.getRestAuthKey()) + "&cache_name=" + cacheName.toString() + "&time=" + System.nanoTime();
 			authData = Crypt.encrypt(authData);
-			
-			String jsonData = HttpClientHelper.httpPost(externalService, authData);
-			
-			ObjectMapper mapper = new ObjectMapper();
 			try {
-				HashMap<String, String> resultMap = mapper.readValue(jsonData, new TypeReference<HashMap<String, String>>() {});
-				String result = resultMap.get("result").toString();
-				String result_message = resultMap.get("result_message").toString();
-				log.error("@@@ success_yn = {}. result_message = {}", result, result_message);
+				Map<String, Object> jSONObject = HttpClientHelper.httpPost(externalService, authData);
+				log.error("@@@ statusCode = {}.", jSONObject.get("statusCode"));
+				log.error("@@@ statusCodeValue = {}.", jSONObject.get("statusCodeValue"));
+				log.error("@@@ result = {}.", jSONObject.get("result"));
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
-//			JsonObject resultObject = new Gson().fromJson(jsonData, JsonObject.class);
-//			if(resultObject != null && !resultObject.isJsonNull() ) {
-//				String result = resultObject.get("result").toString();
-//				String result_message = resultObject.get("result_message").toString();
-//				log.error("@@@ success_yn = {}. result_message = {}", result, result_message);
-//			}
 		}
 	}
 }

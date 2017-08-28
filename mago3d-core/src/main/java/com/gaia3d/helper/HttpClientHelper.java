@@ -6,14 +6,15 @@ import java.io.InputStreamReader;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -24,6 +25,9 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gaia3d.domain.ExternalService;
 
@@ -96,11 +100,13 @@ public class HttpClientHelper {
 	 * @param authData
 	 * @return
 	 */
-	public static String httpPost(ExternalService externalService, String authData) {
-		
+	@ResponseBody
+	public static Map<String, Object> httpPost(ExternalService externalService, String authData) {
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = null;
 		CloseableHttpClient httpclient = null;
 		CloseableHttpResponse response = null;
+		HttpStatus httpStatus = null;
         try {
         	httpclient = HttpClients.custom().setDefaultRequestConfig(defaultConfig).build();
         	
@@ -112,13 +118,16 @@ public class HttpClientHelper {
 			nameValuePair.add(new BasicNameValuePair("auth_data", authData));
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair, "utf-8"));
 			response = httpclient.execute(httpPost);
-		    
-			log.info("@@@@@@@@@@@@ response status = {}", response.getStatusLine().getStatusCode());
-		    if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK
-		    		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST
-		    		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+			httpStatus = HttpStatus.valueOf(response.getStatusLine().getStatusCode());
+			log.info("@@@@@@@@@@@@ response httpStatus = {}", httpStatus);
+		    if (httpStatus == HttpStatus.OK) {
 				result = getResult(response);
+			    log.info("@@@@@@@@@@@@ result = {}", result);
 			}
+		    
+		    jSONObject.put("statusCode", httpStatus.value());
+		    jSONObject.put("statusCodeValue", httpStatus.name());
+		    jSONObject.put("result", result);
         } catch(Exception e) {
         	e.printStackTrace();
         } finally {
@@ -137,7 +146,7 @@ public class HttpClientHelper {
         		e.printStackTrace();
         	}
         }
-        return result;
+        return jSONObject;
 	}
 	
 //	/**
@@ -336,6 +345,7 @@ public class HttpClientHelper {
 		String result = null;
 		CloseableHttpClient httpclient = null;
 		CloseableHttpResponse response = null;
+		HttpStatus httpStatus = null;
 		
 		TrustManager easyTrustManager = new X509TrustManager() {
 			public X509Certificate[] getAcceptedIssuers() {
@@ -372,11 +382,11 @@ public class HttpClientHelper {
 	        HttpGet httpget = new HttpGet(requestUrl.toString());
             response = httpclient.execute(httpget);
             log.info("@@@@@@@@@@@@ response status = {}", response.getStatusLine().getStatusCode());
-            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK
-            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST
-            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-				result = getResult(response);
-			}
+//            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK
+//            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST
+//            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+//				result = getResult(response);
+//			}
 		} catch(Exception e) {
         	e.printStackTrace();
         } finally {
@@ -409,6 +419,7 @@ public class HttpClientHelper {
 		String result = null;
 		CloseableHttpClient httpclient = null;
 		CloseableHttpResponse response = null;
+		HttpStatus httpStatus = null;
 		
 		TrustManager easyTrustManager = new X509TrustManager() {
 			public X509Certificate[] getAcceptedIssuers() {
@@ -447,11 +458,11 @@ public class HttpClientHelper {
 			response = httpclient.execute(httpPost);
             
 			log.info("@@@@@@@@@@@@ response status = {}", response.getStatusLine().getStatusCode());
-            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK
-            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST
-            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-				result = getResult(response);
-			}
+//            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK
+//            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST
+//            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+//				result = getResult(response);
+//			}
 		} catch(Exception e) {
         	e.printStackTrace();
         } finally {
