@@ -22,10 +22,6 @@
 <body>
 
 	<header class='down'>
-<!-- 		<div> -->
-<!-- 			<p>Architecture, Engineering, Construction</p> -->
-<!-- 			<p>대용량 3차원GIS를 쉽고 빠르게 웹에서 구현합니다</p> -->
-<!-- 		</div> -->
 	</header>
 	
 	<nav class="nav">
@@ -44,7 +40,7 @@
 				</li>
 				<li class="on">Download<span></span></li>
 				<li><a href="/homepage/docs.do">Documentation</a></li>
-				<li> <a href="/homepage/faq.do">FAQ</a></li>
+				<li><a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
 				<li id="languageKO" class="on">KO</li>

@@ -22,10 +22,6 @@
 
 <body>
 	<header class='about'>
-<!--		<div> -->
-<!--			<p>Architecture, Engineering, Construction</p> -->
-<!--			<p>A Brand-New Live 3D Platform</p> -->
-<!--		</div> -->
 	</header>
 
 	<nav class="nav">

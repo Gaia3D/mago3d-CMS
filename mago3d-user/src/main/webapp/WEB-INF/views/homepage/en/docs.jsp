@@ -50,7 +50,7 @@
 			<ul>
 				<li class="on"><a href="/homepage/docs.do">Docs</a></li>
 				<li><a href="/homepage/api.do" target="_blank">mago3D.js</a></li>
-				<li><a href="/homepage/spec.do">F4D Converter</a>
+				<li><a href="/homepage/spec.do">F4D Converter</a></li>
 			</ul>
 		</div>
 		<div class="docs-main">

@@ -106,13 +106,11 @@
 					</p>
 				</div>
 				<div class="sub_title"><span id="mago3Dbug">mago3D 전체에서 버그를 발견하거나 다른 질문이 있는 경우에는 어떻게 해야 합니까?</span></div>
-					<p>
-						문제를 발견했거나 위에서 다룰 수 없는 다른 질문이 있으시면 <a href="mailto:info@gaia3d.com">info@gaia3d.com</a>으로 이메일을 보내주십시오.
-					</p>
-				</div>
+				<p>
+					문제를 발견했거나 위에서 다룰 수 없는 다른 질문이 있으시면 <a href="mailto:info@gaia3d.com">info@gaia3d.com</a>으로 이메일을 보내주십시오.
+				</p>
 			</div>
 		</div>
-
 	</section>
 
 	<footer style="margin-top: 63px;">
