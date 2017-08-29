@@ -9049,7 +9049,8 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, ima
 			|| serverPolicy.geo_view_library === Constant.CESIUM) 
 	{
 		
-		if (viewer === null) { viewer = new Cesium.Viewer(containerId); }
+        if(viewer === null) viewer = new Cesium.Viewer(containerId, {homeButton:false, geocoder:false, sceneModePicker:false, infoBox:false, fullscreenButton:false, navigationHelpButton:false});
+        viewer.scene.frameState.creditDisplay.container.style.visibility = 'hidden';
 
 		// 기본 지도 설정
 		setDefaultDataset();

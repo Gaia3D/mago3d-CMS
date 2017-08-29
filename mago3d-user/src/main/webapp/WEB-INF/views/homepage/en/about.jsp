@@ -34,7 +34,12 @@
 				<a href="/homepage/index.do">mago3D</a>
 			</h1>
 			<ul class="menu">
-				<li class="on">mago3D<span></span></li>
+				<li class="mm on" onclick='selectMenu();'>mago3D<span></span>
+					<ul>
+						<li><a href="/homepage/about.do" style="color: white">About</a></li>
+						<li><a href="/homepage/news.do" style="color: white" onclick="alert('Coming soon.'); return false">News</a></li>
+					</ul>
+				</li>
 				<li class="mm" onclick='selectMenu();'>Demo<span></span>
 					<ul>
 						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
@@ -43,7 +48,12 @@
 					</ul>
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
-				<li><a href="/homepage/docs.do">Documentation</a></li>
+				<li class="mm" onclick='selectMenu();'>Documentation<span></span>
+					<ul>
+						<li><a href="/homepage/api.do" style="color: white" target="_blank">API</a></li>
+						<li><a href="/homepage/spec.do" style="color: white">F4D Spec</a></li>
+					</ul>
+				</li>
 				<li><a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
@@ -351,7 +361,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				</p>
 				<h4>Acknowledgement</h4>
 				<ul>
-					<li>Ministry of Land, Transport and Maritime Affairs "Development of open source processing technology for application of spatial information SW (Project number: 16NSIP-B080778-04)".</li>
+					<li>Ministry of Land, Transport and Maritime Affairs "Development of open source processing technology for application of spatial information SW (Project number: 17NSIP-B080778-04)".</li>
 					<li>The 3D data of Seoul is being used for research purpose under the permission of Korea Spatial Informaiton Industry Promotion Institute.</li>
 					<li>The indoor data of Seoul is being used for research purposes under the permission of Seoul Metropolitan Government.</li>
 					<li>Other datas will be provided with the permission of each copyright holder.</li>

@@ -37,7 +37,7 @@
 				<li class="mm on" onclick='selectMenu();'>mago3D<span></span>
 					<ul>
 						<li><a href="#" style="color: white">About</a></li>
-						<li><a href="/homepage/news.do" style="color: white">News</a></li>
+						<li><a href="/homepage/news.do" style="color: white" onclick="alert('준비 중 입니다.'); return false">News</a></li>
 					</ul>
 				</li>
 				<li class="mm" onclick='selectMenu();'>Demo<span></span>
