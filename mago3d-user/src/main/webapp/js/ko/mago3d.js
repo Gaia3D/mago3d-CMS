@@ -1204,6 +1204,21 @@ var Color = function()
 	this.b = 0;
 	this.a = 1;
 };
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param red 변수
+ * @param green 변수
+ * @param blue 변수
+ * @param alpha 변수
+ */
+Color.prototype.deleteObjects = function() 
+{
+	this.r = undefined;
+	this.g = undefined;
+	this.b = undefined;
+	this.a = undefined;
+};
   
 /**
  * 어떤 일을 하고 있습니까?
@@ -1651,171 +1666,9 @@ FileRequestControler.prototype.isFull = function ()
 	return this.filesRequestedCount >= this.maxFilesRequestedCount; 
 };
 
-FileRequestControler.prototype.isFullPlus = function ()
+FileRequestControler.prototype.isFullPlus = function (extraCount)
 {
-	return this.filesRequestedCount >= (this.maxFilesRequestedCount + 2); 
-};
-
-'use strict';
-
-var keyFlags = {
-	moveForward  : false,
-	moveBackward : false,
-	moveLeft     : false,
-	moveRight    : false
-};
-
-function getFlagFromKeyCode(code)
-{
-	switch (code)
-	{
-	case 37 :	// Arrow-Left
-	{
-		console.log("KeyDown Left");
-		return 'moveLeft';
-	}
-	case 38 :	// Arrow-Up
-	{
-		console.log("KeyDown Up");
-		return 'moveForward';
-	}
-	case 39 :	// Arrow-Right
-	{
-		console.log("KeyDown Right");
-		return 'moveRight';
-	}
-	case 40 :	// Arrow-Down
-	{
-		console.log("KeyDown Down");
-		return 'moveBackward';
-	}
-	default :
-	{
-		return undefined;
-	}
-	}
-};
-
-function onKeyDown(event)
-{
-	var flag = getFlagFromKeyCode(event.keyCode);
-	if ( typeof flag !== 'undefined')
-	{
-		keyFlags[flag] = true;
-	}
-};
-
-function onKeyUp(event)
-{
-	var flag = getFlagFromKeyCode(event.keyCode);
-	if ( typeof flag !== 'undefined')
-	{
-		keyFlags[flag] = false;
-	}
-};
-
-/**
- * 카메라 1인칭 시점 모드
- * 
- */
-function FirstPersonView ()
-{
-	this._camera = undefined;
-	this._cameraBAK = undefined;
-	this._position = new Point3D();
-	this._rotation = new Point3D();
-	this._positionSpeed = 1.0;
-	this._ratationSpeed = 1.0;
-}
-
-Object.defineProperties(FirstPersonView.prototype, {
-	"camera": {
-		get : function () { return this._camera; },
-		set : function (value) { this._camera = value; }
-	},
-	"position": {
-		get : function () { return this._position; },
-		set : function (value) { this._position = value; }		
-	},
-	"rotation": {
-		get : function () { return this._rotation; },
-		set : function (value) { this._rotation = value; }
-	},
-	"positionSpeed": {
-		get : function () { return this._positionSpeed; },
-		set : function (value) { this._positionSpeed = value; }
-	},
-	"rotationSpeed": {
-		get : function () { return this._ratationSpeed; },
-		set : function (value) { this._ratationSpeed = value; }
-	}
-});
-
-FirstPersonView.prototype.init = function ()
-{
-	this._position.set(0.0, 0.0, 0.0);
-	this._rotation.set(0.0, 0.0, 0.0);
-
-	document.addEventListener('keydown', onKeyDown, false);
-	document.addEventListener('keyup', onKeyUp, false);
-};
-
-FirstPersonView.prototype.release = function ()
-{
-	this._camera = undefined;
-	this._cameraBAK = undefined;
-	document.removeEventListener('keydown', onKeyDown, false);
-	document.removeEventListener('keyup', onKeyUp, false);
-};
-
-FirstPersonView.prototype.move = function (vector)
-{
-	var position = vec3.fromValues(this._position.x, this._position.y, this.position.z);
-	var matrix = mat4.create();
-	mat4.rotateY(matrix, matrix, this._rotation.y);
-	vec3.transformMat4(vector, vector, matrix);
-	vec3.add(position, position, vector);
-	this._position.set(position[0], position[1], position[2]);
-};
-FirstPersonView.prototype.update = function(manager)
-{
-	if (this._camera === undefined)	{ return; }
-
-	
-
-	/*
-	var scratchLookAtMatrix4 = new Cesium.Matrix4();
-	var scratchFlyToBoundingSphereCart4 = new Cesium.Cartesian4();
-	var transform = Cesium.Transforms.eastNorthUpToFixedFrame(this._camera.position, Cesium.Ellipsoid.WGS84, scratchLookAtMatrix4);
-	Cesium.Cartesian3.fromCartesian4(Cesium.Matrix4.getColumn(transform, 1, scratchFlyToBoundingSphereCart4), this._camera.direction);
-	Cesium.Cartesian3.fromCartesian4(Cesium.Matrix4.getColumn(transform, 2, scratchFlyToBoundingSphereCart4), this._camera.up);
-	
-	var pos1 = Cesium.Cartesian3.fromDegrees(126.60795289318042, 37.58281268636716, 28.0);
-	var pos2 = Cesium.Cartesian3.fromDegrees(126.60795243349536, 37.58283027052396, 28.0);
-	console.log(Cesium.Cartesian3.distance(pos1, pos2));
-	*/
-	if (keyFlags.moveForward)
-	{
-		var isBlocked = manager.checkCollision(this._camera.position, this._camera.direction);
-		if (isBlocked)	{ return; }
-		this._camera.moveForward(0.5);
-		this.move(vec3.fromValues(0.0, 1.0, 0.0));
-	}
-	if (keyFlags.moveBackward)
-	{
-		this._camera.moveBackward(0.5);
-		this.move(vec3.fromValues(0.0, -1.0, 0.0));
-	}
-	if (keyFlags.moveLeft)
-	{
-		this._camera.lookLeft(0.1);
-		this.move(vec3.fromValues(-1.0, 0.0, 0.0));	
-	}		
-	if (keyFlags.moveRight)
-	{
-		this._camera.lookRight(0.1);
-		this.move(vec3.fromValues(1.0, 0.0, 0.0));	
-	}
+	return this.filesRequestedCount >= (this.maxFilesRequestedCount + extraCount); 
 };
 
 'use strict';
@@ -2399,6 +2252,7 @@ var NeoBuilding = function()
 	this.isReadyToRender = false; // no used yet...
 
 	this.moveVector; 
+	this.squaredDistToCam;
 
 	// The simple building.***********************************************
 	this.simpleBuilding3x3Texture;
@@ -3349,6 +3203,8 @@ var MagoManager = function()
 	this.readerWriter = new ReaderWriter();
 	this.magoPolicy = new Policy();
 	this.smartTileManager = new SmartTileManager();
+	this.processQueue = new ProcessQueue();
+	this.parseQueue = new ParseQueue();
 
 	// SSAO.***************************************************
 	this.noiseTexture;
@@ -4141,116 +3997,6 @@ MagoManager.prototype.renderCloudShadows = function(gl, cameraPosition, cullingV
 };
 
 /**
- * 카메라 포지션이 double 형 자료 데이터를 두개로 분리
- * @param encodedCamPosMC_High 변수
- * @param encodedCamPosMC_Low 변수
- * @param cameraPosition 변수
- */
-/*
-MagoManager.prototype.calculateEncodedCameraPositionMCHighLow = function(encodedCamPosMC_High, encodedCamPosMC_Low, cameraPosition) {
-	var camSplitVelue_X  = Cesium.EncodedCartesian3.encode(cameraPosition.x);
-	var camSplitVelue_Y  = Cesium.EncodedCartesian3.encode(cameraPosition.y);
-	var camSplitVelue_Z  = Cesium.EncodedCartesian3.encode(cameraPosition.z);
-
-	encodedCamPosMC_High[0] = camSplitVelue_X.high;
-	encodedCamPosMC_High[1] = camSplitVelue_Y.high;
-	encodedCamPosMC_High[2] = camSplitVelue_Z.high;
-
-	encodedCamPosMC_Low[0] = camSplitVelue_X.low;
-	encodedCamPosMC_Low[1] = camSplitVelue_Y.low;
-	encodedCamPosMC_Low[2] = camSplitVelue_Z.low;
-
-	//var us = context._us;
-	//this.encodedCamPosMC_High[0] = us._encodedCameraPositionMC.high.x;
-	//this.encodedCamPosMC_High[1] = us._encodedCameraPositionMC.high.y;
-	//this.encodedCamPosMC_High[2] = us._encodedCameraPositionMC.high.z;
-	//this.encodedCamPosMC_Low[0] = us._encodedCameraPositionMC.low.x;
-	//this.encodedCamPosMC_Low[1] = us._encodedCameraPositionMC.low.y;
-	//this.encodedCamPosMC_Low[2] = us._encodedCameraPositionMC.low.z;
-};
-*/
-
-///**
-// * TODO 사용 안해서 주석 처리함
-// * @param gl 변수
-// * @param cameraPosition 변수
-// * @param _modelViewProjectionRelativeToEye 변수
-// * @param scene 변수
-// */
-//MagoManager.prototype.renderPCloudProjects = function(gl, cameraPosition, _modelViewProjectionRelativeToEye, scene) {
-//	//this.isCameraMoving = this.isButtonDown(scene);
-//
-//	// Check if camera was moved considerably for update the renderables objects.***
-//	if(this.detailed_building) {
-//		this.squareDistUmbral = 4.5*4.5;
-//	} else {
-//		this.squareDistUmbral = 50*50;
-//	}
-//	this.isCameraMoved(cameraPosition, this.squareDistUmbral);
-//
-//	// Calculate "modelViewProjectionRelativeToEye".*********************************************************
-//	Cesium.Matrix4.toArray(_modelViewProjectionRelativeToEye, this.modelViewProjRelToEye_matrix);
-//	//End Calculate "modelViewProjectionRelativeToEye".------------------------------------------------------
-//
-//	// Calculate encodedCamPosMC high and low values.********************************************************
-//	this.calculateEncodedCameraPositionMCHighLow(this.encodedCamPosMC_High, this.encodedCamPosMC_Low, cameraPosition);
-//
-//	// Now, render the simple visible buildings.***************************************************************************
-//	// http://learningwebgl.com/blog/?p=684 // tutorial for shader with normals.***
-//	var shader = this.shadersManager.getMagoShader(6);
-//	var shaderProgram = shader.SHADER_PROGRAM;
-//	gl.useProgram(shaderProgram);
-//	gl.enableVertexAttribArray(shader._color);
-//	gl.enableVertexAttribArray(shader._position);
-//
-//	gl.enable(gl.DEPTH_TEST);
-//	gl.depthFunc(gl.LEQUAL);
-//	gl.depthRange(0, 1);
-//
-//	gl.uniformMatrix4fv(shader._ModelViewProjectionMatrixRelToEye, false, this.modelViewProjRelToEye_matrix);
-//	gl.uniform3fv(shader._encodedCamPosHIGH, this.encodedCamPosMC_High);
-//	gl.uniform3fv(shader._encodedCamPosLOW, this.encodedCamPosMC_Low);
-//
-//	//gl.activeTexture(gl.TEXTURE0);
-//	this.currentVisibleBuildingsPost_array.length = 0;
-//
-//	var filePath_scratch = "";
-//
-//	// Now, render LOD0 texture buildings.***
-//	var pCloudProject;
-//	var pCloud_projectsCount = this.bRBuildingProjectsList._pCloudMesh_array.length;
-//	for(var i=0; i<pCloud_projectsCount; i++) {
-//		pCloudProject = this.bRBuildingProjectsList._pCloudMesh_array[i];
-//		if(!pCloudProject._f4d_header_readed) {
-//			// Must read the header file.***
-//			if(this.backGround_fileReadings_count < 20) {
-//				filePath_scratch = this.readerWriter.geometryDataPath +"/" + pCloudProject._f4d_headerPathName;
-//
-//				this.readerWriter.getPCloudHeader(gl, filePath_scratch, pCloudProject, this.readerWriter, this);
-//				this.backGround_fileReadings_count ++;
-//			}
-//			continue;
-//		} else if(!pCloudProject._f4d_geometry_readed && pCloudProject._f4d_header_readed_finished) {
-//			if(this.backGround_fileReadings_count < 20) {
-//				filePath_scratch = this.readerWriter.geometryDataPath +"/" + pCloudProject._f4d_geometryPathName;
-//
-//				this.readerWriter.getPCloudGeometry(gl, filePath_scratch, pCloudProject, this.readerWriter, this);
-//				this.backGround_fileReadings_count ++;
-//			}
-//			continue;
-//		}
-//
-//		// Now, render the pCloud project.***
-//		if(pCloudProject._f4d_geometry_readed_finished) {
-//			this.renderer.renderPCloudProject(gl, pCloudProject, this.modelViewProjRelToEye_matrix, this.encodedCamPosMC_High, this.encodedCamPosMC_Low, this);
-//		}
-//	}
-//
-//	gl.disableVertexAttribArray(shader._color);
-//	gl.disableVertexAttribArray(shader._position);
-//};
-
-/**
  * 텍스처를 읽어서 그래픽 카드에 올림
  * @param gl 변수
  * @param image 변수
@@ -4283,6 +4029,9 @@ MagoManager.prototype.prepareNeoBuildingsAsimetricVersion = function(gl)
 	for (var i=0, length = currentVisibleBlocks.length; i<length; i++) 
 	{
 		neoBuilding = currentVisibleBlocks[i];
+		
+		if (neoBuilding.buildingId == "U310T")
+		{ var hola = 0; }
 
 		// check if this building is ready to render.***
 		if (!neoBuilding.allFilesLoaded) 
@@ -4299,76 +4048,6 @@ MagoManager.prototype.prepareNeoBuildingsAsimetricVersion = function(gl)
 		}
 	}
 	currentVisibleBlocks.length = 0;
-};
-
-/**
- * 빌딩의 octree를 적용
- * @param neoBuilding 변수
- */
-MagoManager.prototype.loadBuildingOctree = function(neoBuilding) 
-{
-	// The references (Interiors Octree).*************************************************************************
-	// octree must load if the camera is very closed.***
-	if (neoBuilding.octree !== undefined && !neoBuilding.octreeLoadedAllFiles) 
-	{
-		var geometryDataPath = this.readerWriter.geometryDataPath;
-		var buildingFolderName = neoBuilding.buildingFileName;
-		var interiorCRef_folderPath = geometryDataPath + "/" + buildingFolderName + "/inLOD4";
-		//var lod_level = 4;
-		//var interior_base_name = "Ref_NodeData";
-		var subOctreeName_counter = -1;
-		var areAllSubOctreesLoadedFile = true; // init on true.***
-		var blocksList = neoBuilding._blocksList_Container.getBlockList("Blocks4");
-		var subOctree;
-		var neoReferencesList;
-
-		// a = octree level 1.***
-		for (var a=1; a<9; a++) 
-		{
-			// b = octree level 2.***
-			for (var b=1; b<9; b++) 
-			{
-				// c = octree level 3.***
-				for (var c=1; c<9; c++) 
-				{
-
-					// slow method.**************************************************************************************************
-					subOctreeName_counter = a*100 + b*10 + c;
-					var subOctreeNumberName = subOctreeName_counter.toString();
-					subOctree = neoBuilding.octree.getOctreeByNumberName(subOctreeNumberName); // dont use this method. is slow.***
-
-					if (subOctree.neoRefsList_Array.length === 0) 
-					{
-						if (!this.fileRequestControler.isFull())
-						{
-							neoReferencesList = new NeoReferencesList();
-							//if(transformMat)
-							//{
-							//	neoReferencesList.multiplyReferencesMatrices(transformMat); // after parse, multiply transfMat by the buildings mat.***
-							//}
-							neoReferencesList.blocksList = blocksList;
-							subOctree.neoRefsList_Array.push(neoReferencesList);
-
-							var intRef_filePath = interiorCRef_folderPath + "/" + subOctreeNumberName;
-							this.readerWriter.getNeoReferencesArraybuffer(intRef_filePath, neoReferencesList, this);
-						}
-						areAllSubOctreesLoadedFile = false;
-					}
-					else 
-					{
-						neoReferencesList = subOctree.neoRefsList_Array[0];
-						if (neoReferencesList !== undefined && neoReferencesList.fileLoadState === CODE.fileLoadState.READY) { areAllSubOctreesLoadedFile = false; }
-					}
-					////readerWriter.getNeoReferences(gl, intCompRef_filePath, null, subOctreeNumberName, lod_level, blocksList_4, moveMatrix, neoBuilding, readerWriter, subOctreeName_counter);
-				}
-			}
-		}
-
-		if (areAllSubOctreesLoadedFile) 
-		{
-			neoBuilding.octreeLoadedAllFiles = true;
-		}
-	}
 };
 
 /**
@@ -4639,23 +4318,30 @@ MagoManager.prototype.renderNeoBuildingsAsimectricVersion = function(scene, isLa
 		this.visibleObjControlerOctrees.initArrays(); // init.******
 		this.visibleObjControlerOctreesAux.initArrays(); // init.******
 
+		// lod 0 & lod 1.
 		var buildingsCount = this.visibleObjControlerBuildings.currentVisibles0.length;
 		for (var i=0; i<buildingsCount; i++) 
 		{
 			var neoBuilding = this.visibleObjControlerBuildings.currentVisibles0[i];
+			if (neoBuilding.buildingId == "U310T")
+			{ var hola = 0; }
+			
 			this.getRenderablesDetailedNeoBuildingAsimetricVersion(gl, scene, neoBuilding, this.visibleObjControlerOctrees, this.visibleObjControlerOctreesAux, 0);
-			this.prepareVisibleOctreesAsimetricVersionLOD2(gl, scene, neoBuilding);
 		}
+		var fileRequestExtraCount = 2;
+		this.prepareVisibleOctreesSortedByDistanceLOD2(gl, scene, this.visibleObjControlerOctrees, fileRequestExtraCount);
+		fileRequestExtraCount = 5;
+		this.prepareVisibleOctreesSortedByDistance(gl, scene, this.visibleObjControlerOctrees, fileRequestExtraCount); 
 		
-		this.prepareVisibleOctreesSortedByDistance(gl, scene, this.visibleObjControlerOctrees); 
-		
+		// lod 2.
 		buildingsCount = this.visibleObjControlerBuildings.currentVisibles2.length;
 		for (var i=0; i<buildingsCount; i++) 
 		{
 			var neoBuilding = this.visibleObjControlerBuildings.currentVisibles2[i];
 			this.getRenderablesDetailedNeoBuildingAsimetricVersion(gl, scene, neoBuilding, this.visibleObjControlerOctrees, this.visibleObjControlerOctreesAux, 2);
-			this.prepareVisibleOctreesAsimetricVersionLOD2(gl, scene, neoBuilding);
 		}
+		fileRequestExtraCount = 2;
+		this.prepareVisibleOctreesSortedByDistanceLOD2(gl, scene, this.visibleObjControlerOctrees, fileRequestExtraCount);
 		
 		// if a LOD0 building has a NO ready lowestOctree, then push this building to the LOD2BuildingsArray.***
 		buildingsCount = this.visibleObjControlerBuildings.currentVisibles0.length;
@@ -4671,6 +4357,7 @@ MagoManager.prototype.renderNeoBuildingsAsimectricVersion = function(scene, isLa
 			}
 		}
 		
+		this.manageQueue();
 	}
 	
 	if (this.bPicking === true && isLastFrustum)
@@ -5683,6 +5370,9 @@ MagoManager.prototype.moveSelectedObjectAsimetricMode_current = function(gl)
 MagoManager.prototype.getRenderablesDetailedNeoBuildingAsimetricVersion = function(gl, scene, neoBuilding, visibleObjControlerOctrees, visibleObjControlerOctreesAux, lod) 
 {
 	if (neoBuilding === undefined || neoBuilding.octree === undefined) { return; }
+	
+	if (neoBuilding.buildingId == "U310T")
+	{ var hola = 0; }
 
 	neoBuilding.currentRenderablesNeoRefLists.length = 0;
 
@@ -5698,15 +5388,15 @@ MagoManager.prototype.getRenderablesDetailedNeoBuildingAsimetricVersion = functi
 		this.myFrustumSC = new Frustum();
 	}
 
-	if (lod === 0 || lod === 1)
+	if (lod === 0 || lod === 1 || lod === 2)
 	{
 		var squaredDistLod0 = 500;
 		var squaredDistLod1 = 12000;
 		var squaredDistLod2 = 500000*1000;
 		
-		squaredDistLod0 = 500;
-		squaredDistLod1 = 15000;
-		squaredDistLod2 = 500000*1000;
+		//squaredDistLod0 = 300;
+		//squaredDistLod1 = 1000;
+		//squaredDistLod2 = 500000*1000;
 		
 		if (neoBuilding.buildingId === "Sea_Port" || neoBuilding.buildingId === "ctships")
 		{
@@ -5714,8 +5404,7 @@ MagoManager.prototype.getRenderablesDetailedNeoBuildingAsimetricVersion = functi
 			squaredDistLod1 = 285000;
 			squaredDistLod2 = 500000*1000;
 		}
-		
-			
+
 		var frustumVolume;
 		var find = false;
 			
@@ -5757,7 +5446,6 @@ MagoManager.prototype.getRenderablesDetailedNeoBuildingAsimetricVersion = functi
 			find = neoBuilding.octree.getBBoxIntersectedLowestOctreesByLOD(	this.myCullingVolumeBBoxSC, neoBuilding.currentVisibleOctreesControler, visibleObjControlerOctrees, this.myBboxSC,
 				this.myCameraSC.position.x, this.myCameraSC.position.y, this.myCameraSC.position.z,
 				squaredDistLod0, squaredDistLod1, squaredDistLod2);
-				
 			// End provisional.----------------------------------------------------------------																		
 		}
 		else if (this.configInformation.geo_view_library === Constant.CESIUM)
@@ -5785,32 +5473,39 @@ MagoManager.prototype.getRenderablesDetailedNeoBuildingAsimetricVersion = functi
 				var plane = frustumVolume.planes[i];
 				this.myFrustumSC.planesArray[i].setNormalAndDistance(plane.x, plane.y, plane.z, plane.w);
 			}
-		
-			//neoBuilding.currentVisibleOctreesControler.currentVisibles0.length = 0;
-			//neoBuilding.currentVisibleOctreesControler.currentVisibles1.length = 0;
-			//neoBuilding.currentVisibleOctreesControler.currentVisibles2.length = 0;
-			//neoBuilding.currentVisibleOctreesControler.currentVisibles3.length = 0;
 			
 			neoBuilding.currentVisibleOctreesControler.currentVisibles0 = [];
 			neoBuilding.currentVisibleOctreesControler.currentVisibles1 = [];
 			neoBuilding.currentVisibleOctreesControler.currentVisibles2 = [];
 			neoBuilding.currentVisibleOctreesControler.currentVisibles3 = [];
-	
-			find = neoBuilding.octree.getFrustumVisibleLowestOctreesByLOD(	this.myFrustumSC, neoBuilding.currentVisibleOctreesControler, visibleObjControlerOctrees, this.boundingSphere_Aux,
-				this.myCameraSC.position.x, this.myCameraSC.position.y, this.myCameraSC.position.z,
-				squaredDistLod0, squaredDistLod1, squaredDistLod2);
 			
+			if (lod === 2)
+			{
+				neoBuilding.octree.extractLowestOctreesByLOD(neoBuilding.currentVisibleOctreesControler, visibleObjControlerOctrees, this.boundingSphere_Aux,
+					this.myCameraSC.position.x, this.myCameraSC.position.y, this.myCameraSC.position.z,
+					squaredDistLod0, squaredDistLod1, squaredDistLod2);
+				find = true;
+			}
+			else 
+			{
+				find = neoBuilding.octree.getFrustumVisibleLowestOctreesByLOD(	this.myFrustumSC, neoBuilding.currentVisibleOctreesControler, visibleObjControlerOctrees, this.boundingSphere_Aux,
+					this.myCameraSC.position.x, this.myCameraSC.position.y, this.myCameraSC.position.z,
+					squaredDistLod0, squaredDistLod1, squaredDistLod2);
+			}
 		}
+
 		if (!find) 
 		{
-			this.deleteNeoBuilding(this.sceneState.gl, neoBuilding);
+			//this.deleteNeoBuilding(this.sceneState.gl, neoBuilding);
+			this.processQueue.buildingsToDelete.push(neoBuilding);
 			return;
 		}
 	}
 	else
 	{
+		// no enter here...
 		neoBuilding.currentVisibleOctreesControler.currentVisibles2.length = 0;
-		neoBuilding.octree.extractLowestOctreesIfHasTriPolyhedrons(neoBuilding.currentVisibleOctreesControler.currentVisibles2);
+		neoBuilding.octree.extractLowestOctreesIfHasTriPolyhedrons(neoBuilding.currentVisibleOctreesControler.currentVisibles2); // old.
 	}
 	
 	// LOD0 & LOD1
@@ -5852,97 +5547,91 @@ MagoManager.prototype.getRenderablesDetailedNeoBuildingAsimetricVersion = functi
  * @param {any} scene 
  * @param {any} neoBuilding 
  */
-MagoManager.prototype.prepareVisibleOctreesAsimetricVersion = function(gl, scene, neoBuilding) 
+MagoManager.prototype.manageQueue = function() 
 {
-	if (this.fileRequestControler.isFull())	{ return; }
-
-	var visibleObjControlerOctrees = neoBuilding.currentVisibleOctreesControler;
-	if (visibleObjControlerOctrees === undefined)
-	{ return; }
-
-	var refListsParsingCount = 0;
-	var maxRefListParsingCount = 30;
-	var geometryDataPath = this.readerWriter.geometryDataPath;
-	var buildingFolderName = neoBuilding.buildingFileName;
-
-	// LOD0 & LOD1
-	// Check if the lod0lowestOctrees, lod1lowestOctrees must load and parse data
-	var lowestOctree;
-	var currentVisibleOctrees = [].concat(visibleObjControlerOctrees.currentVisibles0, visibleObjControlerOctrees.currentVisibles1);
-
-	for (var i=0, length = currentVisibleOctrees.length; i<length; i++) 
+	// first, delete buildings.
+	var maxDeleteBuildingsCount = 20;
+	var buildingsToDeleteCount = this.processQueue.buildingsToDelete.length;
+	if (buildingsToDeleteCount < maxDeleteBuildingsCount)
+	{ maxDeleteBuildingsCount = buildingsToDeleteCount; }
+	
+	var neoBuilding;
+	
+	for (var i=0; i<maxDeleteBuildingsCount; i++)
 	{
-		lowestOctree = currentVisibleOctrees[i];
-		
-		if (lowestOctree.triPolyhedronsCount === 0) 
-		{ continue; }
-		
-		if (lowestOctree.octree_number_name === undefined)
-		{ continue; }
-		
-		if (lowestOctree.neoReferencesMotherAndIndices === undefined)
-		{
-			lowestOctree.neoReferencesMotherAndIndices = new NeoReferencesMotherAndIndices();
-			lowestOctree.neoReferencesMotherAndIndices.motherNeoRefsList = neoBuilding.motherNeoReferencesArray;
-		}
-
-		if (lowestOctree.neoReferencesMotherAndIndices.fileLoadState === 0)
-		{
-			if (this.fileRequestControler.isFull())	{ return; }
-
-			if (lowestOctree.neoReferencesMotherAndIndices.blocksList === undefined)
-			{ lowestOctree.neoReferencesMotherAndIndices.blocksList = new BlocksList(); }
-
-			var subOctreeNumberName = lowestOctree.octree_number_name.toString();
-			var references_folderPath = geometryDataPath + "/" + buildingFolderName + "/References";
-			var intRef_filePath = references_folderPath + "/" + subOctreeNumberName + "_Ref";
-			this.readerWriter.getNeoReferencesArraybuffer(intRef_filePath, lowestOctree.neoReferencesMotherAndIndices, this);
-			
-			continue;
-		}
-
-		// 2 = file loading finished.***
-		if (lowestOctree.neoReferencesMotherAndIndices.fileLoadState === CODE.fileLoadState.LOADING_FINISHED) 
-		{
-			if (refListsParsingCount < maxRefListParsingCount) 
-			{
-				// must parse the arraybuffer data.***
-				var buildingGeoLocation = neoBuilding.geoLocDataManager.getGeoLocationData(0);
-				this.matrix4SC.setByFloat32Array(buildingGeoLocation.rotMatrix._floatArrays);
-				lowestOctree.neoReferencesMotherAndIndices.parseArrayBufferReferences(gl, lowestOctree.neoReferencesMotherAndIndices.dataArraybuffer, this.readerWriter, neoBuilding.motherNeoReferencesArray, this.matrix4SC, this);
-				lowestOctree.neoReferencesMotherAndIndices.dataArraybuffer = undefined;
-				lowestOctree.neoReferencesMotherAndIndices.multiplyKeyTransformMatrix(0, buildingGeoLocation.rotMatrix);
-				refListsParsingCount += 1;
-			}
-		}
-		else if (lowestOctree.neoReferencesMotherAndIndices.fileLoadState === CODE.fileLoadState.PARSE_FINISHED ) 
-		{
-			// 4 = parsed.***
-			// now, check if the blocksList is loaded & parsed.***
-			var blocksList = lowestOctree.neoReferencesMotherAndIndices.blocksList;
-			// 0 = file loading NO started.***
-			if (blocksList.fileLoadState === CODE.fileLoadState.READY) 
-			{
-				if (this.fileRequestControler.isFull())	{ return; }
-
-				// must read blocksList.***
-				var subOctreeNumberName = lowestOctree.octree_number_name.toString();
-				var blocks_folderPath = geometryDataPath + "/" + buildingFolderName + "/Models";
-				var filePathInServer = blocks_folderPath + "/" + subOctreeNumberName + "_Model";
-				this.readerWriter.getNeoBlocksArraybuffer(filePathInServer, blocksList, this);
-
-				continue;
-			}
-		}
-		
-		// if the lowest octree is not ready to render, then:
-		if (lowestOctree.neoReferencesMotherAndIndices.fileLoadState !== CODE.fileLoadState.PARSE_FINISHED )
-		{
-			visibleObjControlerOctrees.currentVisibles2.push(lowestOctree);
-		}
+		neoBuilding = this.processQueue.buildingsToDelete.shift();
+		this.deleteNeoBuilding(this.sceneState.gl, neoBuilding);
 	}
-
-	currentVisibleOctrees.length = 0;
+	
+	// parse pendent data.
+	var maxParsesCount = 10;
+	
+	// references lod0 & lod 1.
+	toParseCount = this.parseQueue.octreesLod0ReferencesToParseArray.length;
+	if (toParseCount < maxParsesCount)
+	{ maxParsesCount = toParseCount; }
+	
+	var lowestOctree;
+	var neoBuilding;
+	var gl = this.sceneState.gl;
+	if (this.matrix4SC == undefined)
+	{ this.matrix4SC = new Matrix4(); }
+	
+	for (var i=0; i<maxParsesCount; i++)
+	{
+		lowestOctree = this.parseQueue.octreesLod0ReferencesToParseArray.shift();
+		
+		if (lowestOctree.neoReferencesMotherAndIndices == undefined)
+		{ continue; }
+		
+		if (lowestOctree.neoReferencesMotherAndIndices.dataArraybuffer == undefined)
+		{ continue; }
+		
+		neoBuilding = lowestOctree.neoBuildingOwner;
+		var buildingGeoLocation = neoBuilding.geoLocDataManager.getGeoLocationData(0);
+		this.matrix4SC.setByFloat32Array(buildingGeoLocation.rotMatrix._floatArrays);
+		lowestOctree.neoReferencesMotherAndIndices.parseArrayBufferReferences(gl, lowestOctree.neoReferencesMotherAndIndices.dataArraybuffer, this.readerWriter, neoBuilding.motherNeoReferencesArray, this.matrix4SC, this);
+		lowestOctree.neoReferencesMotherAndIndices.multiplyKeyTransformMatrix(0, buildingGeoLocation.rotMatrix);
+		lowestOctree.neoReferencesMotherAndIndices.dataArraybuffer = undefined;
+	}
+	
+	// models lod0 & lod1.
+	maxParsesCount = 10;
+	var toParseCount = this.parseQueue.octreesLod0ModelsToParseArray.length;
+	if (toParseCount < maxParsesCount)
+	{ maxParsesCount = toParseCount; }
+	
+	for (var i=0; i<maxParsesCount; i++)
+	{
+		lowestOctree = this.parseQueue.octreesLod0ModelsToParseArray.shift();
+		
+		if (lowestOctree.neoReferencesMotherAndIndices == undefined)
+		{ continue; }
+		
+		var blocksList = lowestOctree.neoReferencesMotherAndIndices.blocksList;
+		if (blocksList.dataArraybuffer == undefined)
+		{ continue; }
+		
+		neoBuilding = lowestOctree.neoBuildingOwner;
+		blocksList.parseBlocksList(blocksList.dataArraybuffer, this.readerWriter, neoBuilding.motherBlocksArray, this);
+		blocksList.dataArraybuffer = undefined;
+	}
+	
+	// lego lod2.
+	maxParsesCount = 10;
+	var toParseCount = this.parseQueue.octreesLod2LegosToParseArray.length;
+	if (toParseCount < maxParsesCount)
+	{ maxParsesCount = toParseCount; }
+	
+	for (var i=0; i<maxParsesCount; i++)
+	{
+		lowestOctree = this.parseQueue.octreesLod2LegosToParseArray.shift();
+		if (lowestOctree.lego == undefined)
+		{ continue; }
+		
+		lowestOctree.lego.parseArrayBuffer(gl, lowestOctree.lego.dataArrayBuffer, this);
+		lowestOctree.lego.dataArrayBuffer = undefined;
+	}
 };
 
 /**
@@ -5952,12 +5641,12 @@ MagoManager.prototype.prepareVisibleOctreesAsimetricVersion = function(gl, scene
  * @param {any} scene 
  * @param {any} neoBuilding 
  */
-MagoManager.prototype.prepareVisibleOctreesSortedByDistance = function(gl, scene, globalVisibleObjControlerOctrees) 
+MagoManager.prototype.prepareVisibleOctreesSortedByDistance = function(gl, scene, globalVisibleObjControlerOctrees, fileRequestExtraCount) 
 {
-	if (this.fileRequestControler.isFullPlus())	{ return; }
+	if (this.fileRequestControler.isFullPlus(fileRequestExtraCount))	{ return; }
 
 	var refListsParsingCount = 0;
-	var maxRefListParsingCount = 2;
+	var maxRefListParsingCount = 20;
 	var geometryDataPath = this.readerWriter.geometryDataPath;
 	var buildingFolderName;
 	var neoBuilding;
@@ -5967,11 +5656,14 @@ MagoManager.prototype.prepareVisibleOctreesSortedByDistance = function(gl, scene
 	var lowestOctree;
 	for (var i=0, length = currentVisibleOctrees.length; i<length; i++) 
 	{
-		if (this.vboMemoryManager.isGpuMemFull())
-		{ return; }
+		//if (this.vboMemoryManager.isGpuMemFull())
+		//{ return; }
 		
-		if (refListsParsingCount > maxRefListParsingCount && this.fileRequestControler.isFullPlus()) 
-		{ return; }
+		//if (refListsParsingCount > maxRefListParsingCount && this.fileRequestControler.isFullPlus(fileRequestExtraCount)) 
+		//{ return; }
+	
+		//if (this.fileRequestControler.isFullPlus(fileRequestExtraCount)) 
+		//{ return; }
 			
 		lowestOctree = currentVisibleOctrees[i];
 		neoBuilding = lowestOctree.neoBuildingOwner;
@@ -5995,7 +5687,7 @@ MagoManager.prototype.prepareVisibleOctreesSortedByDistance = function(gl, scene
 
 		if (lowestOctree.neoReferencesMotherAndIndices.fileLoadState === CODE.fileLoadState.READY)
 		{
-			if (this.fileRequestControler.isFullPlus())	{ return; }
+			if (this.fileRequestControler.isFullPlus(fileRequestExtraCount))	{ return; }
 
 			if (lowestOctree.neoReferencesMotherAndIndices.blocksList === undefined)
 			{ lowestOctree.neoReferencesMotherAndIndices.blocksList = new BlocksList(); }
@@ -6003,14 +5695,15 @@ MagoManager.prototype.prepareVisibleOctreesSortedByDistance = function(gl, scene
 			var subOctreeNumberName = lowestOctree.octree_number_name.toString();
 			var references_folderPath = geometryDataPath + "/" + buildingFolderName + "/References";
 			var intRef_filePath = references_folderPath + "/" + subOctreeNumberName + "_Ref";
-			this.readerWriter.getNeoReferencesArraybuffer(intRef_filePath, lowestOctree.neoReferencesMotherAndIndices, this);
+			this.readerWriter.getNeoReferencesArraybuffer(intRef_filePath, lowestOctree, this);
 			continue;
 		}
 
 		// 2 = file loading finished.***
+		/*
 		if (lowestOctree.neoReferencesMotherAndIndices.fileLoadState === CODE.fileLoadState.LOADING_FINISHED) 
 		{
-			if (refListsParsingCount < maxRefListParsingCount) 
+			//if (refListsParsingCount < maxRefListParsingCount) 
 			{
 				// must parse the arraybuffer data.***
 				var buildingGeoLocation = neoBuilding.geoLocDataManager.getGeoLocationData(0);
@@ -6029,7 +5722,8 @@ MagoManager.prototype.prepareVisibleOctreesSortedByDistance = function(gl, scene
 				refListsParsingCount += 1;
 			}
 		}
-		else if (lowestOctree.neoReferencesMotherAndIndices.fileLoadState === CODE.fileLoadState.PARSE_FINISHED ) 
+		*/
+		if (lowestOctree.neoReferencesMotherAndIndices.fileLoadState === CODE.fileLoadState.PARSE_FINISHED ) 
 		{
 			// 4 = parsed.***
 			// now, check if the blocksList is loaded & parsed.***
@@ -6037,18 +5731,19 @@ MagoManager.prototype.prepareVisibleOctreesSortedByDistance = function(gl, scene
 			// 0 = file loading NO started.***
 			if (blocksList.fileLoadState === CODE.fileLoadState.READY) 
 			{
-				if (this.fileRequestControler.isFullPlus())	{ return; }
+				if (this.fileRequestControler.isFullPlus(fileRequestExtraCount))	{ return; }
 
 				// must read blocksList.***
 				var subOctreeNumberName = lowestOctree.octree_number_name.toString();
 				var blocks_folderPath = geometryDataPath + "/" + buildingFolderName + "/Models";
 				var filePathInServer = blocks_folderPath + "/" + subOctreeNumberName + "_Model";
-				this.readerWriter.getNeoBlocksArraybuffer(filePathInServer, blocksList, this);
+				this.readerWriter.getNeoBlocksArraybuffer(filePathInServer, lowestOctree, this);
 				continue;
 			}
+			/*
 			else if (blocksList.fileLoadState === CODE.fileLoadState.LOADING_FINISHED)
 			{
-				if (refListsParsingCount < maxRefListParsingCount) 
+				//if (refListsParsingCount < maxRefListParsingCount) 
 				{
 					if (!blocksList.parseBlocksList(blocksList.dataArraybuffer, this.readerWriter, neoBuilding.motherBlocksArray, this))
 					{
@@ -6061,6 +5756,7 @@ MagoManager.prototype.prepareVisibleOctreesSortedByDistance = function(gl, scene
 				}
 				continue;
 			}
+			*/
 		}
 		
 		// if the lowest octree is not ready to render, then:
@@ -6078,26 +5774,28 @@ MagoManager.prototype.prepareVisibleOctreesSortedByDistance = function(gl, scene
  * @param {any} scene 
  * @param {any} neoBuilding 
  */
-MagoManager.prototype.prepareVisibleOctreesSortedByDistanceLOD2 = function(gl, scene, globalVisibleObjControlerOctrees) 
+MagoManager.prototype.prepareVisibleOctreesSortedByDistanceLOD2 = function(gl, scene, globalVisibleObjControlerOctrees, fileRequestExtraCount) 
 {
-	if (this.fileRequestControler.isFull())	{ return; }
+	var extraCount = fileRequestExtraCount;
+	if (this.fileRequestControler.isFullPlus(extraCount))	{ return; }
 
-	var visibleObjControlerOctrees = neoBuilding.currentVisibleOctreesControler;
-	if (visibleObjControlerOctrees === undefined)
+	//var visibleObjControlerOctrees = neoBuilding.currentVisibleOctreesControler;
+	if (globalVisibleObjControlerOctrees === undefined)
 	{ return; }
 
 	var lowestOctreeLegosParsingCount = 0;
 	var maxLowestOctreeLegosParsingCount = 100;
 	var geometryDataPath = this.readerWriter.geometryDataPath;
-	var buildingFolderName = neoBuilding.buildingFileName;
+	var neoBuilding;
+	var buildingFolderName;
 
 	// LOD2
 	// Check if the lod2lowestOctrees must load and parse data
 	var lowestOctree;
 
-	for (var i=0, length = neoBuilding.currentVisibleOctreesControler.currentVisibles2.length; i<length; i++) 
+	for (var i=0, length = globalVisibleObjControlerOctrees.currentVisibles2.length; i<length; i++) 
 	{
-		lowestOctree = neoBuilding.currentVisibleOctreesControler.currentVisibles2[i];
+		lowestOctree = globalVisibleObjControlerOctrees.currentVisibles2[i];
 		
 		if (lowestOctree.octree_number_name === undefined)
 		{ continue; }
@@ -6110,6 +5808,12 @@ MagoManager.prototype.prepareVisibleOctreesSortedByDistanceLOD2 = function(gl, s
 
 		if (lowestOctree.lego === undefined && lowestOctree.lego.dataArrayBuffer === undefined) 
 		{ continue; }
+	
+		neoBuilding = lowestOctree.neoBuildingOwner;
+		if (neoBuilding == undefined)
+		{ continue; }
+		
+		buildingFolderName = neoBuilding.buildingFileName;
 
 		if (neoBuilding.buildingType === "outfitting")
 		{ continue; }
@@ -6118,7 +5822,7 @@ MagoManager.prototype.prepareVisibleOctreesSortedByDistanceLOD2 = function(gl, s
 		if (lowestOctree.lego.fileLoadState === CODE.fileLoadState.READY && !this.isCameraMoving) 
 		{
 			// must load the legoStructure of the lowestOctree.***
-			if (!this.fileRequestControler.isFull())
+			if (!this.fileRequestControler.isFullPlus(extraCount))
 			{
 				var subOctreeNumberName = lowestOctree.octree_number_name.toString();
 				var bricks_folderPath = geometryDataPath + "/" + buildingFolderName + "/Bricks";
@@ -6127,7 +5831,7 @@ MagoManager.prototype.prepareVisibleOctreesSortedByDistanceLOD2 = function(gl, s
 			}
 			continue;
 		}
-
+		/*
 		if (lowestOctree.lego.fileLoadState === 2 && !this.isCameraMoving) 
 		{
 			if (lowestOctreeLegosParsingCount < maxLowestOctreeLegosParsingCount) 
@@ -6139,99 +5843,12 @@ MagoManager.prototype.prepareVisibleOctreesSortedByDistanceLOD2 = function(gl, s
 			}
 			continue;
 		}
-		
-		// finally check if there are legoSimpleBuildingTexture.***
-		if (lowestOctree.lego.vbo_vicks_container.vboCacheKeysArray[0] && lowestOctree.lego.vbo_vicks_container.vboCacheKeysArray[0].tcoordVboDataArray)
-		{
-			if (neoBuilding.simpleBuilding3x3Texture === undefined)
-			{
-				neoBuilding.simpleBuilding3x3Texture = new Texture();
-				var buildingFolderName = neoBuilding.buildingFileName;
-				var filePath_inServer = this.readerWriter.geometryDataPath + "/" + buildingFolderName + "/SimpleBuildingTexture3x3.bmp";
-				this.readerWriter.readLegoSimpleBuildingTexture(gl, filePath_inServer, neoBuilding.simpleBuilding3x3Texture, this);
-			}
-		}
-	}
-};
-
-/**
- * LOD2 에 대한 F4D LegoData 를 요청
- * 
- * @param {any} gl 
- * @param {any} scene 
- * @param {any} neoBuilding 
- */
-MagoManager.prototype.prepareVisibleOctreesAsimetricVersionLOD2 = function(gl, scene, neoBuilding) 
-{
-	if (this.fileRequestControler.isFull())	{ return; }
-
-	var visibleObjControlerOctrees = neoBuilding.currentVisibleOctreesControler;
-	if (visibleObjControlerOctrees === undefined)
-	{ return; }
-
-	var lowestOctreeLegosParsingCount = 0;
-	var maxLowestOctreeLegosParsingCount = 10;
-	var geometryDataPath = this.readerWriter.geometryDataPath;
-	var buildingFolderName = neoBuilding.buildingFileName;
-
-	// LOD2
-	// Check if the lod2lowestOctrees must load and parse data
-	var lowestOctree;
-
-	for (var i=0, length = neoBuilding.currentVisibleOctreesControler.currentVisibles2.length; i<length; i++) 
-	{
-		//if(this.vboMemoryManager.isGpuMemFull())
-		//	return;
-		
-		lowestOctree = neoBuilding.currentVisibleOctreesControler.currentVisibles2[i];
-		
-		if (lowestOctree.octree_number_name === undefined)
-		{ continue; }
-		
-		if (lowestOctree.lego === undefined) 
-		{
-			lowestOctree.lego = new Lego();
-			lowestOctree.lego.fileLoadState = CODE.fileLoadState.READY;
-		}
-
-		if (lowestOctree.lego === undefined && lowestOctree.lego.dataArrayBuffer === undefined) 
-		{ continue; }
-
-		if (neoBuilding.buildingType === "outfitting")
-		{ continue; }
-
-		// && lowestOctree.neoRefsList_Array.length === 0)
-		if (lowestOctree.lego.fileLoadState === CODE.fileLoadState.READY && !this.isCameraMoving) 
-		{
-			// must load the legoStructure of the lowestOctree.***
-			if (!this.fileRequestControler.isFull())
-			{
-				var subOctreeNumberName = lowestOctree.octree_number_name.toString();
-				var bricks_folderPath = geometryDataPath + "/" + buildingFolderName + "/Bricks";
-				var filePathInServer = bricks_folderPath + "/" + subOctreeNumberName + "_Brick";
-				this.readerWriter.getOctreeLegoArraybuffer(filePathInServer, lowestOctree, this);
-			}
-			continue;
-		}
-
-		if (lowestOctree.lego.fileLoadState === 2 && !this.isCameraMoving) 
-		{
-			if (lowestOctreeLegosParsingCount < maxLowestOctreeLegosParsingCount) 
-			{
-				var bytesReaded = 0;
-				lowestOctree.lego.parseArrayBuffer(gl, lowestOctree.lego.dataArrayBuffer, this);
-				lowestOctree.lego.dataArrayBuffer = undefined;
-				lowestOctreeLegosParsingCount++;
-			}
-			continue;
-		}
-		
+		*/
 		// finally check if there are legoSimpleBuildingTexture.***
 		if (lowestOctree.lego.vbo_vicks_container.vboCacheKeysArray[0] && lowestOctree.lego.vbo_vicks_container.vboCacheKeysArray[0].meshTexcoordsCacheKey)
 		{
 			if (neoBuilding.simpleBuilding3x3Texture === undefined)
 			{
-				if (this.fileRequestControler.isFull())	{ continue; }
 				neoBuilding.simpleBuilding3x3Texture = new Texture();
 				var buildingFolderName = neoBuilding.buildingFileName;
 				var filePath_inServer = this.readerWriter.geometryDataPath + "/" + buildingFolderName + "/SimpleBuildingTexture3x3.bmp";
@@ -6240,6 +5857,7 @@ MagoManager.prototype.prepareVisibleOctreesAsimetricVersionLOD2 = function(gl, s
 		}
 	}
 };
+
 
 /**
  * 어떤 일을 하고 있습니까?
@@ -7776,7 +7394,9 @@ MagoManager.prototype.doFrustumCullingNeoBuildings = function(frustumVolume, cam
 		if (squaredDistToCamera > this.magoPolicy.getFrustumFarSquaredDistance())
 		{
 			if (deleteBuildings)
-			{ this.deleteNeoBuilding(this.sceneState.gl, neoBuilding); }
+			{ 
+				this.deleteNeoBuilding(this.sceneState.gl, neoBuilding); 
+			}
 			continue;
 		}
 			
@@ -7852,6 +7472,39 @@ MagoManager.prototype.doFrustumCullingNeoBuildings = function(frustumVolume, cam
  * @param frustumVolume 변수
  * @param cameraPosition 변수
  */
+MagoManager.prototype.putBuildingToArraySortedByDist = function(buildingArray, neoBuilding) 
+{
+	// provisionally do this.
+	var finished = false;
+	var i=0;
+	var idx;
+	var buildingsCount = buildingArray.length;
+	while (!finished && i<buildingsCount)
+	{
+		if (neoBuilding.squaredDistToCam < buildingArray[i].squaredDistToCam)
+		{
+			idx = i;
+			finished = true;
+		}
+		i++;
+	}
+	
+	if (finished)
+	{
+		buildingArray.splice(idx, 0, neoBuilding);
+	}
+	else 
+	{
+		buildingArray.push(neoBuilding);
+	}
+};
+
+/**
+ * 카메라 영역에 벗어난 오브젝트의 렌더링은 비 활성화
+ * 
+ * @param frustumVolume 변수
+ * @param cameraPosition 변수
+ */
 MagoManager.prototype.doFrustumCullingSmartTiles = function(frustumVolume, cameraPosition) 
 {
 	// This makes the visible buildings array.
@@ -7909,6 +7562,10 @@ MagoManager.prototype.doFrustumCullingSmartTiles = function(frustumVolume, camer
 			{
 				// determine LOD for each building.
 				neoBuilding = lowestTile.buildingsArray[j];
+				
+				if (neoBuilding.buildingId == "U310T")
+				{ var hola = 0; }
+	
 				geoLoc = neoBuilding.geoLocDataManager.getGeoLocationData(0);
 				if (geoLoc === undefined || geoLoc.pivotPoint === undefined)
 				{ 
@@ -7942,7 +7599,7 @@ MagoManager.prototype.doFrustumCullingSmartTiles = function(frustumVolume, camer
 				
 				if (neoBuilding.buildingId === "ctships")
 				{
-					lod0_minSquaredDist = 100000000;
+					lod0_minSquaredDist = 1000;
 					lod1_minSquaredDist = 1;
 					lod2_minSquaredDist = 10000000*10000;
 					lod3_minSquaredDist = 100000*9;
@@ -7951,45 +7608,56 @@ MagoManager.prototype.doFrustumCullingSmartTiles = function(frustumVolume, camer
 				this.radiusAprox_aux = (neoBuilding.bbox.maxX - neoBuilding.bbox.minX) * 1.2/2.0;
 				squaredDistToCamera = cameraPosition.squareDistTo(realBuildingPos.x, realBuildingPos.y, realBuildingPos.z);
 				squaredDistToCamera -= (this.radiusAprox_aux*this.radiusAprox_aux)*2;
+				neoBuilding.squaredDistToCam = squaredDistToCamera;
 				if (squaredDistToCamera > this.magoPolicy.getFrustumFarSquaredDistance())
 				{
 					continue;
 				}
+				//this.putBuildingToArraySortedByDist(this.visibleObjControlerBuildings.currentVisibles0, neoBuilding);
+
 				
 				if (this.isLastFrustum)
 				{
 					if (squaredDistToCamera < lod0_minSquaredDist) 
 					{
-						this.visibleObjControlerBuildings.currentVisibles0.push(neoBuilding);
+						//this.visibleObjControlerBuildings.currentVisibles0.push(neoBuilding);
+						this.putBuildingToArraySortedByDist(this.visibleObjControlerBuildings.currentVisibles0, neoBuilding);
 					}
 					else if (squaredDistToCamera < lod1_minSquaredDist) 
 					{
-						this.visibleObjControlerBuildings.currentVisibles1.push(neoBuilding);
+						//this.visibleObjControlerBuildings.currentVisibles1.push(neoBuilding);
+						this.putBuildingToArraySortedByDist(this.visibleObjControlerBuildings.currentVisibles1, neoBuilding);
 					}
 					else if (squaredDistToCamera < lod2_minSquaredDist) 
 					{
-						this.visibleObjControlerBuildings.currentVisibles2.push(neoBuilding);
+						//this.visibleObjControlerBuildings.currentVisibles2.push(neoBuilding);
+						this.putBuildingToArraySortedByDist(this.visibleObjControlerBuildings.currentVisibles2, neoBuilding);
 					}
 					else if (squaredDistToCamera < lod3_minSquaredDist) 
 					{
-						this.visibleObjControlerBuildings.currentVisibles3.push(neoBuilding);
+						//this.visibleObjControlerBuildings.currentVisibles3.push(neoBuilding);
+						this.putBuildingToArraySortedByDist(this.visibleObjControlerBuildings.currentVisibles3, neoBuilding);
 					}
 				}
 				else
 				{
 					if (squaredDistToCamera < lod1_minSquaredDist) 
 					{
-						this.visibleObjControlerBuildings.currentVisibles1.push(neoBuilding);
+						//this.visibleObjControlerBuildings.currentVisibles1.push(neoBuilding);
+						this.putBuildingToArraySortedByDist(this.visibleObjControlerBuildings.currentVisibles1, neoBuilding);
 					}
 					else if (squaredDistToCamera < lod2_minSquaredDist) 
 					{
-						this.visibleObjControlerBuildings.currentVisibles2.push(neoBuilding);
+						//this.visibleObjControlerBuildings.currentVisibles2.push(neoBuilding);
+						this.putBuildingToArraySortedByDist(this.visibleObjControlerBuildings.currentVisibles2, neoBuilding);
 					}
 					else if (squaredDistToCamera < lod3_minSquaredDist) 
 					{
-						this.visibleObjControlerBuildings.currentVisibles3.push(neoBuilding);
+						//this.visibleObjControlerBuildings.currentVisibles3.push(neoBuilding);
+						this.putBuildingToArraySortedByDist(this.visibleObjControlerBuildings.currentVisibles3, neoBuilding);
 					}
 				}
+				
 			}
 		
 		}
@@ -8033,6 +7701,7 @@ MagoManager.prototype.doFrustumCullingSmartTiles = function(frustumVolume, camer
 					if (currentCalculatingPositionsCount < maxNumberOfCalculatingPositions)
 					{
 						this.visibleObjControlerBuildings.currentVisibles0.push(neoBuilding);
+						//this.parseQueue.neoBuildingsHeaderToParseArray.push(neoBuilding);
 						currentCalculatingPositionsCount++;
 					}
 					continue;
@@ -9223,13 +8892,15 @@ var ManagerFactory = function(viewer, containerId, serverPolicy, serverData, ima
 	// 환경 설정
 	MagoConfig.init(serverPolicy, serverData);
 	
+    if(viewer === null) viewer = new Cesium.Viewer(containerId, {homeButton:false, geocoder:false, sceneModePicker:false, infoBox:false, fullscreenButton:false, navigationHelpButton:false});
+    viewer.scene.frameState.creditDisplay.container.style.visibility = 'hidden';
+    
 	if (serverPolicy.geo_view_library === null
 			|| serverPolicy.geo_view_library === ''
 			|| serverPolicy.geo_view_library === Constant.CESIUM) 
 	{
 		
-        if(viewer === null) viewer = new Cesium.Viewer(containerId, {homeButton:false, geocoder:false, sceneModePicker:false, infoBox:false, fullscreenButton:false, navigationHelpButton:false});
-        viewer.scene.frameState.creditDisplay.container.style.visibility = 'hidden';
+		if (viewer === null) { viewer = new Cesium.Viewer(containerId); }
 
 		// 기본 지도 설정
 		setDefaultDataset();
@@ -11535,6 +11206,15 @@ SmartTile.prototype.calculateTileRange = function()
 };
 
 /**
+ * 어떤 일을 하고 있습니까?
+ * @param geoLocData 변수
+ */
+SmartTile.prototype.deleteBuildings = function(gl, vboMemManager) 
+{
+	
+};
+
+/**
  * Quadtree based tile with thickness.
  * @class SmartTileManager
  */
@@ -13118,7 +12798,7 @@ var VBOMemoryManager = function()
 		throw new Error(Messages.CONSTRUCT_ERROR);
 	}
 	// if "enableMemoryManagement" == false -> no management of the gpu memory.
-	this.enableMemoryManagement = true;
+	this.enableMemoryManagement = false;
 	
 	this.buffersKeyWorld = new VBOKeysWorld();
 	this.elementKeyWorld = new VBOKeysWorld();
@@ -14572,13661 +14252,6 @@ ProjectLayer.prototype.setObjectId = function(objectId)
 {
 	this.objectId = objectId;
 };
-/**
-  DataStream reads scalars, arrays and structs of data from an ArrayBuffer.
-  It's like a file-like DataView on steroids.
-
-  @param {ArrayBuffer} arrayBuffer ArrayBuffer to read from.
-  @param {?Number} byteOffset Offset from arrayBuffer beginning for the DataStream.
-  @param {?Boolean} endianness DataStream.BIG_ENDIAN or DataStream.LITTLE_ENDIAN (the default).
-  */
-var DataStream = function(arrayBuffer, byteOffset, endianness) {
-  this._byteOffset = byteOffset || 0;
-  if (arrayBuffer instanceof ArrayBuffer) {
-    this.buffer = arrayBuffer;
-  } else if (typeof arrayBuffer == "object") {
-    this.dataView = arrayBuffer;
-    if (byteOffset) {
-      this._byteOffset += byteOffset;
-    }
-  } else {
-    this.buffer = new ArrayBuffer(arrayBuffer || 1);
-  }
-  this.position = 0;
-  this.endianness = endianness == null ? DataStream.LITTLE_ENDIAN : endianness;
-};
-DataStream.prototype = {};
-
-/* Fix for Opera 12 not defining BYTES_PER_ELEMENT in typed array prototypes. */
-if (Uint8Array.prototype.BYTES_PER_ELEMENT === undefined) {
-    Uint8Array.prototype.BYTES_PER_ELEMENT = Uint8Array.BYTES_PER_ELEMENT; 
-    Int8Array.prototype.BYTES_PER_ELEMENT = Int8Array.BYTES_PER_ELEMENT; 
-    Uint8ClampedArray.prototype.BYTES_PER_ELEMENT = Uint8ClampedArray.BYTES_PER_ELEMENT; 
-    Uint16Array.prototype.BYTES_PER_ELEMENT = Uint16Array.BYTES_PER_ELEMENT; 
-    Int16Array.prototype.BYTES_PER_ELEMENT = Int16Array.BYTES_PER_ELEMENT; 
-    Uint32Array.prototype.BYTES_PER_ELEMENT = Uint32Array.BYTES_PER_ELEMENT; 
-    Int32Array.prototype.BYTES_PER_ELEMENT = Int32Array.BYTES_PER_ELEMENT; 
-    Float64Array.prototype.BYTES_PER_ELEMENT = Float64Array.BYTES_PER_ELEMENT; 
-}
-
-/**
-  Saves the DataStream contents to the given filename.
-  Uses Chrome's anchor download property to initiate download.
-
-  @param {string} filename Filename to save as.
-  @return {null}
-  */
-DataStream.prototype.save = function(filename) {
-  var blob = new Blob(this.buffer);
-  var URL = (window.webkitURL || window.URL);
-  if (URL && URL.createObjectURL) {
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement('a');
-      a.setAttribute('href', url);
-      a.setAttribute('download', filename);
-      a.click();
-      URL.revokeObjectURL(url);
-  } else {
-      throw("DataStream.save: Can't create object URL.");
-  }
-};
-
-/**
-  Big-endian const to use as default endianness.
-  @type {boolean}
-  */
-DataStream.BIG_ENDIAN = false;
-
-/**
-  Little-endian const to use as default endianness.
-  @type {boolean}
-  */
-DataStream.LITTLE_ENDIAN = true;
-
-/**
-  Whether to extend DataStream buffer when trying to write beyond its size.
-  If set, the buffer is reallocated to twice its current size until the
-  requested write fits the buffer.
-  @type {boolean}
-  */
-DataStream.prototype._dynamicSize = true;
-Object.defineProperty(DataStream.prototype, 'dynamicSize',
-  { get: function() {
-      return this._dynamicSize;
-    },
-    set: function(v) {
-      if (!v) {
-        this._trimAlloc();
-      }
-      this._dynamicSize = v;
-    } });
-
-/**
-  Virtual byte length of the DataStream backing buffer.
-  Updated to be max of original buffer size and last written size.
-  If dynamicSize is false is set to buffer size.
-  @type {number}
-  */
-DataStream.prototype._byteLength = 0;
-
-/**
-  Returns the byte length of the DataStream object.
-  @type {number}
-  */
-Object.defineProperty(DataStream.prototype, 'byteLength',
-  { get: function() {
-    return this._byteLength - this._byteOffset;
-  }});
-
-/**
-  Set/get the backing ArrayBuffer of the DataStream object.
-  The setter updates the DataView to point to the new buffer.
-  @type {Object}
-  */
-Object.defineProperty(DataStream.prototype, 'buffer',
-  { get: function() {
-      this._trimAlloc();
-      return this._buffer;
-    },
-    set: function(v) {
-      this._buffer = v;
-      this._dataView = new DataView(this._buffer, this._byteOffset);
-      this._byteLength = this._buffer.byteLength;
-    } });
-
-/**
-  Set/get the byteOffset of the DataStream object.
-  The setter updates the DataView to point to the new byteOffset.
-  @type {number}
-  */
-Object.defineProperty(DataStream.prototype, 'byteOffset',
-  { get: function() {
-      return this._byteOffset;
-    },
-    set: function(v) {
-      this._byteOffset = v;
-      this._dataView = new DataView(this._buffer, this._byteOffset);
-      this._byteLength = this._buffer.byteLength;
-    } });
-
-/**
-  Set/get the backing DataView of the DataStream object.
-  The setter updates the buffer and byteOffset to point to the DataView values.
-  @type {Object}
-  */
-Object.defineProperty(DataStream.prototype, 'dataView',
-  { get: function() {
-      return this._dataView;
-    },
-    set: function(v) {
-      this._byteOffset = v.byteOffset;
-      this._buffer = v.buffer;
-      this._dataView = new DataView(this._buffer, this._byteOffset);
-      this._byteLength = this._byteOffset + v.byteLength;
-    } });
-
-/**
-  Internal function to resize the DataStream buffer when required.
-  @param {number} extra Number of bytes to add to the buffer allocation.
-  @return {null}
-  */
-DataStream.prototype._realloc = function(extra) {
-  if (!this._dynamicSize) {
-    return;
-  }
-  var req = this._byteOffset + this.position + extra;
-  var blen = this._buffer.byteLength;
-  if (req <= blen) {
-    if (req > this._byteLength) {
-      this._byteLength = req;
-    }
-    return;
-  }
-  if (blen < 1) {
-    blen = 1;
-  }
-  while (req > blen) {
-    blen *= 2;
-  }
-  var buf = new ArrayBuffer(blen);
-  var src = new Uint8Array(this._buffer);
-  var dst = new Uint8Array(buf, 0, src.length);
-  dst.set(src);
-  this.buffer = buf;
-  this._byteLength = req;
-};
-
-/**
-  Internal function to trim the DataStream buffer when required.
-  Used for stripping out the extra bytes from the backing buffer when
-  the virtual byteLength is smaller than the buffer byteLength (happens after
-  growing the buffer with writes and not filling the extra space completely).
-
-  @return {null}
-  */
-DataStream.prototype._trimAlloc = function() {
-  if (this._byteLength == this._buffer.byteLength) {
-    return;
-  }
-  var buf = new ArrayBuffer(this._byteLength);
-  var dst = new Uint8Array(buf);
-  var src = new Uint8Array(this._buffer, 0, dst.length);
-  dst.set(src);
-  this.buffer = buf;
-};
-
-/**
-  Sets the DataStream read/write position to given position.
-  Clamps between 0 and DataStream length.
-
-  @param {number} pos Position to seek to.
-  @return {null}
-  */
-DataStream.prototype.seek = function(pos) {
-  var npos = Math.max(0, Math.min(this.byteLength, pos));
-  this.position = (isNaN(npos) || !isFinite(npos)) ? 0 : npos;
-};
-
-/**
-  Returns true if the DataStream seek pointer is at the end of buffer and
-  there's no more data to read.
-
-  @return {boolean} True if the seek pointer is at the end of the buffer.
-  */
-DataStream.prototype.isEof = function() {
-  return (this.position >= this.byteLength);
-};
-
-/**
-  Maps an Int32Array into the DataStream buffer, swizzling it to native
-  endianness in-place. The current offset from the start of the buffer needs to
-  be a multiple of element size, just like with typed array views.
-
-  Nice for quickly reading in data. Warning: potentially modifies the buffer
-  contents.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} Int32Array to the DataStream backing buffer.
-  */
-DataStream.prototype.mapInt32Array = function(length, e) {
-  this._realloc(length * 4);
-  var arr = new Int32Array(this._buffer, this.byteOffset+this.position, length);
-  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
-  this.position += length * 4;
-  return arr;
-};
-
-/**
-  Maps an Int16Array into the DataStream buffer, swizzling it to native
-  endianness in-place. The current offset from the start of the buffer needs to
-  be a multiple of element size, just like with typed array views.
-
-  Nice for quickly reading in data. Warning: potentially modifies the buffer
-  contents.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} Int16Array to the DataStream backing buffer.
-  */
-DataStream.prototype.mapInt16Array = function(length, e) {
-  this._realloc(length * 2);
-  var arr = new Int16Array(this._buffer, this.byteOffset+this.position, length);
-  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
-  this.position += length * 2;
-  return arr;
-};
-
-/**
-  Maps an Int8Array into the DataStream buffer.
-
-  Nice for quickly reading in data.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} Int8Array to the DataStream backing buffer.
-  */
-DataStream.prototype.mapInt8Array = function(length) {
-  this._realloc(length * 1);
-  var arr = new Int8Array(this._buffer, this.byteOffset+this.position, length);
-  this.position += length * 1;
-  return arr;
-};
-
-/**
-  Maps a Uint32Array into the DataStream buffer, swizzling it to native
-  endianness in-place. The current offset from the start of the buffer needs to
-  be a multiple of element size, just like with typed array views.
-
-  Nice for quickly reading in data. Warning: potentially modifies the buffer
-  contents.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} Uint32Array to the DataStream backing buffer.
-  */
-DataStream.prototype.mapUint32Array = function(length, e) {
-  this._realloc(length * 4);
-  var arr = new Uint32Array(this._buffer, this.byteOffset+this.position, length);
-  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
-  this.position += length * 4;
-  return arr;
-};
-
-/**
-  Maps a Uint16Array into the DataStream buffer, swizzling it to native
-  endianness in-place. The current offset from the start of the buffer needs to
-  be a multiple of element size, just like with typed array views.
-
-  Nice for quickly reading in data. Warning: potentially modifies the buffer
-  contents.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} Uint16Array to the DataStream backing buffer.
-  */
-DataStream.prototype.mapUint16Array = function(length, e) {
-  this._realloc(length * 2);
-  var arr = new Uint16Array(this._buffer, this.byteOffset+this.position, length);
-  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
-  this.position += length * 2;
-  return arr;
-};
-
-/**
-  Maps a Uint8Array into the DataStream buffer.
-
-  Nice for quickly reading in data.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} Uint8Array to the DataStream backing buffer.
-  */
-DataStream.prototype.mapUint8Array = function(length) {
-  this._realloc(length * 1);
-  var arr = new Uint8Array(this._buffer, this.byteOffset+this.position, length);
-  this.position += length * 1;
-  return arr;
-};
-
-/**
-  Maps a Float64Array into the DataStream buffer, swizzling it to native
-  endianness in-place. The current offset from the start of the buffer needs to
-  be a multiple of element size, just like with typed array views.
-
-  Nice for quickly reading in data. Warning: potentially modifies the buffer
-  contents.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} Float64Array to the DataStream backing buffer.
-  */
-DataStream.prototype.mapFloat64Array = function(length, e) {
-  this._realloc(length * 8);
-  var arr = new Float64Array(this._buffer, this.byteOffset+this.position, length);
-  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
-  this.position += length * 8;
-  return arr;
-};
-
-/**
-  Maps a Float32Array into the DataStream buffer, swizzling it to native
-  endianness in-place. The current offset from the start of the buffer needs to
-  be a multiple of element size, just like with typed array views.
-
-  Nice for quickly reading in data. Warning: potentially modifies the buffer
-  contents.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} Float32Array to the DataStream backing buffer.
-  */
-DataStream.prototype.mapFloat32Array = function(length, e) {
-  this._realloc(length * 4);
-  var arr = new Float32Array(this._buffer, this.byteOffset+this.position, length);
-  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
-  this.position += length * 4;
-  return arr;
-};
-
-/**
-  Reads an Int32Array of desired length and endianness from the DataStream.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} The read Int32Array.
- */
-DataStream.prototype.readInt32Array = function(length, e) {
-  length = length == null ? (this.byteLength-this.position / 4) : length;
-  var arr = new Int32Array(length);
-  DataStream.memcpy(arr.buffer, 0,
-                    this.buffer, this.byteOffset+this.position,
-                    length*arr.BYTES_PER_ELEMENT);
-  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
-  this.position += arr.byteLength;
-  return arr;
-};
-
-/**
-  Reads an Int16Array of desired length and endianness from the DataStream.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} The read Int16Array.
- */
-DataStream.prototype.readInt16Array = function(length, e) {
-  length = length == null ? (this.byteLength-this.position / 2) : length;
-  var arr = new Int16Array(length);
-  DataStream.memcpy(arr.buffer, 0,
-                    this.buffer, this.byteOffset+this.position,
-                    length*arr.BYTES_PER_ELEMENT);
-  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
-  this.position += arr.byteLength;
-  return arr;
-};
-
-/**
-  Reads an Int8Array of desired length from the DataStream.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} The read Int8Array.
- */
-DataStream.prototype.readInt8Array = function(length) {
-  length = length == null ? (this.byteLength-this.position) : length;
-  var arr = new Int8Array(length);
-  DataStream.memcpy(arr.buffer, 0,
-                    this.buffer, this.byteOffset+this.position,
-                    length*arr.BYTES_PER_ELEMENT);
-  this.position += arr.byteLength;
-  return arr;
-};
-
-/**
-  Reads a Uint32Array of desired length and endianness from the DataStream.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} The read Uint32Array.
- */
-DataStream.prototype.readUint32Array = function(length, e) {
-  length = length == null ? (this.byteLength-this.position / 4) : length;
-  var arr = new Uint32Array(length);
-  DataStream.memcpy(arr.buffer, 0,
-                    this.buffer, this.byteOffset+this.position,
-                    length*arr.BYTES_PER_ELEMENT);
-  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
-  this.position += arr.byteLength;
-  return arr;
-};
-
-/**
-  Reads a Uint16Array of desired length and endianness from the DataStream.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} The read Uint16Array.
- */
-DataStream.prototype.readUint16Array = function(length, e) {
-  length = length == null ? (this.byteLength-this.position / 2) : length;
-  var arr = new Uint16Array(length);
-  DataStream.memcpy(arr.buffer, 0,
-                    this.buffer, this.byteOffset+this.position,
-                    length*arr.BYTES_PER_ELEMENT);
-  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
-  this.position += arr.byteLength;
-  return arr;
-};
-
-/**
-  Reads a Uint8Array of desired length from the DataStream.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} The read Uint8Array.
- */
-DataStream.prototype.readUint8Array = function(length) {
-  length = length == null ? (this.byteLength-this.position) : length;
-  var arr = new Uint8Array(length);
-  DataStream.memcpy(arr.buffer, 0,
-                    this.buffer, this.byteOffset+this.position,
-                    length*arr.BYTES_PER_ELEMENT);
-  this.position += arr.byteLength;
-  return arr;
-};
-
-/**
-  Reads a Float64Array of desired length and endianness from the DataStream.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} The read Float64Array.
- */
-DataStream.prototype.readFloat64Array = function(length, e) {
-  length = length == null ? (this.byteLength-this.position / 8) : length;
-  var arr = new Float64Array(length);
-  DataStream.memcpy(arr.buffer, 0,
-                    this.buffer, this.byteOffset+this.position,
-                    length*arr.BYTES_PER_ELEMENT);
-  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
-  this.position += arr.byteLength;
-  return arr;
-};
-
-/**
-  Reads a Float32Array of desired length and endianness from the DataStream.
-
-  @param {number} length Number of elements to map.
-  @param {?boolean} e Endianness of the data to read.
-  @return {Object} The read Float32Array.
- */
-DataStream.prototype.readFloat32Array = function(length, e) {
-  length = length == null ? (this.byteLength-this.position / 4) : length;
-  var arr = new Float32Array(length);
-  DataStream.memcpy(arr.buffer, 0,
-                    this.buffer, this.byteOffset+this.position,
-                    length*arr.BYTES_PER_ELEMENT);
-  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
-  this.position += arr.byteLength;
-  return arr;
-};
-
-/**
-  Writes an Int32Array of specified endianness to the DataStream.
-
-  @param {Object} arr The array to write.
-  @param {?boolean} e Endianness of the data to write.
- */
-DataStream.prototype.writeInt32Array = function(arr, e) {
-  this._realloc(arr.length * 4);
-  if (arr instanceof Int32Array &&
-      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
-    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
-                      arr.buffer, arr.byteOffset,
-                      arr.byteLength);
-    this.mapInt32Array(arr.length, e);
-  } else {
-    for (var i=0; i<arr.length; i++) {
-      this.writeInt32(arr[i], e);
-    }
-  }
-};
-
-/**
-  Writes an Int16Array of specified endianness to the DataStream.
-
-  @param {Object} arr The array to write.
-  @param {?boolean} e Endianness of the data to write.
- */
-DataStream.prototype.writeInt16Array = function(arr, e) {
-  this._realloc(arr.length * 2);
-  if (arr instanceof Int16Array &&
-      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
-    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
-                      arr.buffer, arr.byteOffset,
-                      arr.byteLength);
-    this.mapInt16Array(arr.length, e);
-  } else {
-    for (var i=0; i<arr.length; i++) {
-      this.writeInt16(arr[i], e);
-    }
-  }
-};
-
-/**
-  Writes an Int8Array to the DataStream.
-
-  @param {Object} arr The array to write.
- */
-DataStream.prototype.writeInt8Array = function(arr) {
-  this._realloc(arr.length * 1);
-  if (arr instanceof Int8Array &&
-      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
-    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
-                      arr.buffer, arr.byteOffset,
-                      arr.byteLength);
-    this.mapInt8Array(arr.length);
-  } else {
-    for (var i=0; i<arr.length; i++) {
-      this.writeInt8(arr[i]);
-    }
-  }
-};
-
-/**
-  Writes a Uint32Array of specified endianness to the DataStream.
-
-  @param {Object} arr The array to write.
-  @param {?boolean} e Endianness of the data to write.
- */
-DataStream.prototype.writeUint32Array = function(arr, e) {
-  this._realloc(arr.length * 4);
-  if (arr instanceof Uint32Array &&
-      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
-    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
-                      arr.buffer, arr.byteOffset,
-                      arr.byteLength);
-    this.mapUint32Array(arr.length, e);
-  } else {
-    for (var i=0; i<arr.length; i++) {
-      this.writeUint32(arr[i], e);
-    }
-  }
-};
-
-/**
-  Writes a Uint16Array of specified endianness to the DataStream.
-
-  @param {Object} arr The array to write.
-  @param {?boolean} e Endianness of the data to write.
- */
-DataStream.prototype.writeUint16Array = function(arr, e) {
-  this._realloc(arr.length * 2);
-  if (arr instanceof Uint16Array &&
-      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
-    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
-                      arr.buffer, arr.byteOffset,
-                      arr.byteLength);
-    this.mapUint16Array(arr.length, e);
-  } else {
-    for (var i=0; i<arr.length; i++) {
-      this.writeUint16(arr[i], e);
-    }
-  }
-};
-
-/**
-  Writes a Uint8Array to the DataStream.
-
-  @param {Object} arr The array to write.
- */
-DataStream.prototype.writeUint8Array = function(arr) {
-  this._realloc(arr.length * 1);
-  if (arr instanceof Uint8Array &&
-      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
-    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
-                      arr.buffer, arr.byteOffset,
-                      arr.byteLength);
-    this.mapUint8Array(arr.length);
-  } else {
-    for (var i=0; i<arr.length; i++) {
-      this.writeUint8(arr[i]);
-    }
-  }
-};
-
-/**
-  Writes a Float64Array of specified endianness to the DataStream.
-
-  @param {Object} arr The array to write.
-  @param {?boolean} e Endianness of the data to write.
- */
-DataStream.prototype.writeFloat64Array = function(arr, e) {
-  this._realloc(arr.length * 8);
-  if (arr instanceof Float64Array &&
-      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
-    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
-                      arr.buffer, arr.byteOffset,
-                      arr.byteLength);
-    this.mapFloat64Array(arr.length, e);
-  } else {
-    for (var i=0; i<arr.length; i++) {
-      this.writeFloat64(arr[i], e);
-    }
-  }
-};
-
-/**
-  Writes a Float32Array of specified endianness to the DataStream.
-
-  @param {Object} arr The array to write.
-  @param {?boolean} e Endianness of the data to write.
- */
-DataStream.prototype.writeFloat32Array = function(arr, e) {
-  this._realloc(arr.length * 4);
-  if (arr instanceof Float32Array &&
-      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
-    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
-                      arr.buffer, arr.byteOffset,
-                      arr.byteLength);
-    this.mapFloat32Array(arr.length, e);
-  } else {
-    for (var i=0; i<arr.length; i++) {
-      this.writeFloat32(arr[i], e);
-    }
-  }
-};
-
-
-/**
-  Reads a 32-bit int from the DataStream with the desired endianness.
-
-  @param {?boolean} e Endianness of the number.
-  @return {number} The read number.
- */
-DataStream.prototype.readInt32 = function(e) {
-  var v = this._dataView.getInt32(this.position, e == null ? this.endianness : e);
-  this.position += 4;
-  return v;
-};
-
-/**
-  Reads a 16-bit int from the DataStream with the desired endianness.
-
-  @param {?boolean} e Endianness of the number.
-  @return {number} The read number.
- */
-DataStream.prototype.readInt16 = function(e) {
-  var v = this._dataView.getInt16(this.position, e == null ? this.endianness : e);
-  this.position += 2;
-  return v;
-};
-
-/**
-  Reads an 8-bit int from the DataStream.
-
-  @return {number} The read number.
- */
-DataStream.prototype.readInt8 = function() {
-  var v = this._dataView.getInt8(this.position);
-  this.position += 1;
-  return v;
-};
-
-/**
-  Reads a 32-bit unsigned int from the DataStream with the desired endianness.
-
-  @param {?boolean} e Endianness of the number.
-  @return {number} The read number.
- */
-DataStream.prototype.readUint32 = function(e) {
-  var v = this._dataView.getUint32(this.position, e == null ? this.endianness : e);
-  this.position += 4;
-  return v;
-};
-
-/**
-  Reads a 16-bit unsigned int from the DataStream with the desired endianness.
-
-  @param {?boolean} e Endianness of the number.
-  @return {number} The read number.
- */
-DataStream.prototype.readUint16 = function(e) {
-  var v = this._dataView.getUint16(this.position, e == null ? this.endianness : e);
-  this.position += 2;
-  return v;
-};
-
-/**
-  Reads an 8-bit unsigned int from the DataStream.
-
-  @return {number} The read number.
- */
-DataStream.prototype.readUint8 = function() {
-  var v = this._dataView.getUint8(this.position);
-  this.position += 1;
-  return v;
-};
-
-/**
-  Reads a 32-bit float from the DataStream with the desired endianness.
-
-  @param {?boolean} e Endianness of the number.
-  @return {number} The read number.
- */
-DataStream.prototype.readFloat32 = function(e) {
-  var v = this._dataView.getFloat32(this.position, e == null ? this.endianness : e);
-  this.position += 4;
-  return v;
-};
-
-/**
-  Reads a 64-bit float from the DataStream with the desired endianness.
-
-  @param {?boolean} e Endianness of the number.
-  @return {number} The read number.
- */
-DataStream.prototype.readFloat64 = function(e) {
-  var v = this._dataView.getFloat64(this.position, e == null ? this.endianness : e);
-  this.position += 8;
-  return v;
-};
-
-
-/**
-  Writes a 32-bit int to the DataStream with the desired endianness.
-
-  @param {number} v Number to write.
-  @param {?boolean} e Endianness of the number.
- */
-DataStream.prototype.writeInt32 = function(v, e) {
-  this._realloc(4);
-  this._dataView.setInt32(this.position, v, e == null ? this.endianness : e);
-  this.position += 4;
-};
-
-/**
-  Writes a 16-bit int to the DataStream with the desired endianness.
-
-  @param {number} v Number to write.
-  @param {?boolean} e Endianness of the number.
- */
-DataStream.prototype.writeInt16 = function(v, e) {
-  this._realloc(2);
-  this._dataView.setInt16(this.position, v, e == null ? this.endianness : e);
-  this.position += 2;
-};
-
-/**
-  Writes an 8-bit int to the DataStream.
-
-  @param {number} v Number to write.
- */
-DataStream.prototype.writeInt8 = function(v) {
-  this._realloc(1);
-  this._dataView.setInt8(this.position, v);
-  this.position += 1;
-};
-
-/**
-  Writes a 32-bit unsigned int to the DataStream with the desired endianness.
-
-  @param {number} v Number to write.
-  @param {?boolean} e Endianness of the number.
- */
-DataStream.prototype.writeUint32 = function(v, e) {
-  this._realloc(4);
-  this._dataView.setUint32(this.position, v, e == null ? this.endianness : e);
-  this.position += 4;
-};
-
-/**
-  Writes a 16-bit unsigned int to the DataStream with the desired endianness.
-
-  @param {number} v Number to write.
-  @param {?boolean} e Endianness of the number.
- */
-DataStream.prototype.writeUint16 = function(v, e) {
-  this._realloc(2);
-  this._dataView.setUint16(this.position, v, e == null ? this.endianness : e);
-  this.position += 2;
-};
-
-/**
-  Writes an 8-bit unsigned  int to the DataStream.
-
-  @param {number} v Number to write.
- */
-DataStream.prototype.writeUint8 = function(v) {
-  this._realloc(1);
-  this._dataView.setUint8(this.position, v);
-  this.position += 1;
-};
-
-/**
-  Writes a 32-bit float to the DataStream with the desired endianness.
-
-  @param {number} v Number to write.
-  @param {?boolean} e Endianness of the number.
- */
-DataStream.prototype.writeFloat32 = function(v, e) {
-  this._realloc(4);
-  this._dataView.setFloat32(this.position, v, e == null ? this.endianness : e);
-  this.position += 4;
-};
-
-/**
-  Writes a 64-bit float to the DataStream with the desired endianness.
-
-  @param {number} v Number to write.
-  @param {?boolean} e Endianness of the number.
- */
-DataStream.prototype.writeFloat64 = function(v, e) {
-  this._realloc(8);
-  this._dataView.setFloat64(this.position, v, e == null ? this.endianness : e);
-  this.position += 8;
-};
-
-/**
-  Native endianness. Either DataStream.BIG_ENDIAN or DataStream.LITTLE_ENDIAN
-  depending on the platform endianness.
-
-  @type {boolean}
- */
-DataStream.endianness = new Int8Array(new Int16Array([1]).buffer)[0] > 0;
-
-/**
-  Copies byteLength bytes from the src buffer at srcOffset to the
-  dst buffer at dstOffset.
-
-  @param {Object} dst Destination ArrayBuffer to write to.
-  @param {number} dstOffset Offset to the destination ArrayBuffer.
-  @param {Object} src Source ArrayBuffer to read from.
-  @param {number} srcOffset Offset to the source ArrayBuffer.
-  @param {number} byteLength Number of bytes to copy.
- */
-DataStream.memcpy = function(dst, dstOffset, src, srcOffset, byteLength) {
-  var dstU8 = new Uint8Array(dst, dstOffset, byteLength);
-  var srcU8 = new Uint8Array(src, srcOffset, byteLength);
-  dstU8.set(srcU8);
-};
-
-/**
-  Converts array to native endianness in-place.
-
-  @param {Object} array Typed array to convert.
-  @param {boolean} arrayIsLittleEndian True if the data in the array is
-                                       little-endian. Set false for big-endian.
-  @return {Object} The converted typed array.
- */
-DataStream.arrayToNative = function(array, arrayIsLittleEndian) {
-  if (arrayIsLittleEndian == this.endianness) {
-    return array;
-  } else {
-    return this.flipArrayEndianness(array);
-  }
-};
-
-/**
-  Converts native endianness array to desired endianness in-place.
-
-  @param {Object} array Typed array to convert.
-  @param {boolean} littleEndian True if the converted array should be
-                                little-endian. Set false for big-endian.
-  @return {Object} The converted typed array.
- */
-DataStream.nativeToEndian = function(array, littleEndian) {
-  if (this.endianness == littleEndian) {
-    return array;
-  } else {
-    return this.flipArrayEndianness(array);
-  }
-};
-
-/**
-  Flips typed array endianness in-place.
-
-  @param {Object} array Typed array to flip.
-  @return {Object} The converted typed array.
- */
-DataStream.flipArrayEndianness = function(array) {
-  var u8 = new Uint8Array(array.buffer, array.byteOffset, array.byteLength);
-  for (var i=0; i<array.byteLength; i+=array.BYTES_PER_ELEMENT) {
-    for (var j=i+array.BYTES_PER_ELEMENT-1, k=i; j>k; j--, k++) {
-      var tmp = u8[k];
-      u8[k] = u8[j];
-      u8[j] = tmp;
-    }
-  }
-  return array;
-};
-
-/**
-  Creates an array from an array of character codes.
-  Uses String.fromCharCode in chunks for memory efficiency and then concatenates
-  the resulting string chunks.
-
-  @param {array} array Array of character codes.
-  @return {string} String created from the character codes.
-**/
-DataStream.createStringFromArray = function(array) {
-  var chunk_size = 0x8000;
-  var chunks = [];
-  for (var i=0; i < array.length; i += chunk_size) {
-    chunks.push(String.fromCharCode.apply(null, array.subarray(i, i + chunk_size)));
-  }
-  return chunks.join("");
-};
-
-/**
-  Seek position where DataStream#readStruct ran into a problem.
-  Useful for debugging struct parsing.
-
-  @type {number}
- */
-DataStream.prototype.failurePosition = 0;
-
-/**
-  Reads a struct of data from the DataStream. The struct is defined as
-  a flat array of [name, type]-pairs. See the example below:
-
-  ds.readStruct([
-    'headerTag', 'uint32', // Uint32 in DataStream endianness.
-    'headerTag2', 'uint32be', // Big-endian Uint32.
-    'headerTag3', 'uint32le', // Little-endian Uint32.
-    'array', ['[]', 'uint32', 16], // Uint32Array of length 16.
-    'array2Length', 'uint32',
-    'array2', ['[]', 'uint32', 'array2Length'] // Uint32Array of length array2Length
-  ]);
-
-  The possible values for the type are as follows:
-
-  // Number types
-
-  // Unsuffixed number types use DataStream endianness.
-  // To explicitly specify endianness, suffix the type with
-  // 'le' for little-endian or 'be' for big-endian,
-  // e.g. 'int32be' for big-endian int32.
-
-  'uint8' -- 8-bit unsigned int
-  'uint16' -- 16-bit unsigned int
-  'uint32' -- 32-bit unsigned int
-  'int8' -- 8-bit int
-  'int16' -- 16-bit int
-  'int32' -- 32-bit int
-  'float32' -- 32-bit float
-  'float64' -- 64-bit float
-
-  // String types
-  'cstring' -- ASCII string terminated by a zero byte.
-  'string:N' -- ASCII string of length N, where N is a literal integer.
-  'string:variableName' -- ASCII string of length $variableName,
-    where 'variableName' is a previously parsed number in the current struct.
-  'string,CHARSET:N' -- String of byteLength N encoded with given CHARSET.
-  'u16string:N' -- UCS-2 string of length N in DataStream endianness.
-  'u16stringle:N' -- UCS-2 string of length N in little-endian.
-  'u16stringbe:N' -- UCS-2 string of length N in big-endian.
-
-  // Complex types
-  [name, type, name_2, type_2, ..., name_N, type_N] -- Struct
-  function(dataStream, struct) {} -- Callback function to read and return data.
-  {get: function(dataStream, struct) {},
-   set: function(dataStream, struct) {}}
-  -- Getter/setter functions to read and return data, handy for using the same
-     struct definition for reading and writing structs.
-  ['[]', type, length] -- Array of given type and length. The length can be either
-                        a number, a string that references a previously-read
-                        field, or a callback function(struct, dataStream, type){}.
-                        If length is '*', reads in as many elements as it can.
-
-  @param {Object} structDefinition Struct definition object.
-  @return {Object} The read struct. Null if failed to read struct.
- */
-DataStream.prototype.readStruct = function(structDefinition) {
-  var struct = {}, t, v, n;
-  var p = this.position;
-  for (var i=0; i<structDefinition.length; i+=2) {
-    t = structDefinition[i+1];
-    v = this.readType(t, struct);
-    if (v == null) {
-      if (this.failurePosition == 0) {
-        this.failurePosition = this.position;
-      }
-      this.position = p;
-      return null;
-    }
-    struct[structDefinition[i]] = v;
-  }
-  return struct;
-};
-
-/**
-  Read UCS-2 string of desired length and endianness from the DataStream.
-
-  @param {number} length The length of the string to read.
-  @param {boolean} endianness The endianness of the string data in the DataStream.
-  @return {string} The read string.
- */
-DataStream.prototype.readUCS2String = function(length, endianness) {
-  return DataStream.createStringFromArray(this.readUint16Array(length, endianness));
-};
-
-/**
-  Write a UCS-2 string of desired endianness to the DataStream. The
-  lengthOverride argument lets you define the number of characters to write.
-  If the string is shorter than lengthOverride, the extra space is padded with
-  zeroes.
-
-  @param {string} str The string to write.
-  @param {?boolean} endianness The endianness to use for the written string data.
-  @param {?number} lengthOverride The number of characters to write.
- */
-DataStream.prototype.writeUCS2String = function(str, endianness, lengthOverride) {
-  if (lengthOverride == null) {
-    lengthOverride = str.length;
-  }
-  for (var i = 0; i < str.length && i < lengthOverride; i++) {
-    this.writeUint16(str.charCodeAt(i), endianness);
-  }
-  for (; i<lengthOverride; i++) {
-    this.writeUint16(0);
-  }
-};
-
-/**
-  Read a string of desired length and encoding from the DataStream.
-
-  @param {number} length The length of the string to read in bytes.
-  @param {?string} encoding The encoding of the string data in the DataStream.
-                            Defaults to ASCII.
-  @return {string} The read string.
- */
-DataStream.prototype.readString = function(length, encoding) {
-  if (encoding == null || encoding == "ASCII") {
-    return DataStream.createStringFromArray(this.mapUint8Array(length == null ? this.byteLength-this.position : length));
-  } else {
-    return (new TextDecoder(encoding)).decode(this.mapUint8Array(length));
-  }
-};
-
-/**
-  Writes a string of desired length and encoding to the DataStream.
-
-  @param {string} s The string to write.
-  @param {?string} encoding The encoding for the written string data.
-                            Defaults to ASCII.
-  @param {?number} length The number of characters to write.
- */
-DataStream.prototype.writeString = function(s, encoding, length) {
-  if (encoding == null || encoding == "ASCII") {
-    if (length != null) {
-      var i = 0;
-      var len = Math.min(s.length, length);
-      for (i=0; i<len; i++) {
-        this.writeUint8(s.charCodeAt(i));
-      }
-      for (; i<length; i++) {
-        this.writeUint8(0);
-      }
-    } else {
-      for (var i=0; i<s.length; i++) {
-        this.writeUint8(s.charCodeAt(i));
-      }
-    }
-  } else {
-    this.writeUint8Array((new TextEncoder(encoding)).encode(s.substring(0, length)));
-  }
-};
-
-
-/**
-  Read null-terminated string of desired length from the DataStream. Truncates
-  the returned string so that the null byte is not a part of it.
-
-  @param {?number} length The length of the string to read.
-  @return {string} The read string.
- */
-DataStream.prototype.readCString = function(length) {
-  var blen = this.byteLength-this.position;
-  var u8 = new Uint8Array(this._buffer, this._byteOffset + this.position);
-  var len = blen;
-  if (length != null) {
-    len = Math.min(length, blen);
-  }
-  for (var i = 0; i < len && u8[i] != 0; i++); // find first zero byte
-  var s = DataStream.createStringFromArray(this.mapUint8Array(i));
-  if (length != null) {
-    this.position += len-i;
-  } else if (i != blen) {
-    this.position += 1; // trailing zero if not at end of buffer
-  }
-  return s;
-};
-
-/**
-  Writes a null-terminated string to DataStream and zero-pads it to length
-  bytes. If length is not given, writes the string followed by a zero.
-  If string is longer than length, the written part of the string does not have
-  a trailing zero.
-
-  @param {string} s The string to write.
-  @param {?number} length The number of characters to write.
- */
-DataStream.prototype.writeCString = function(s, length) {
-  if (length != null) {
-    var i = 0;
-    var len = Math.min(s.length, length);
-    for (i=0; i<len; i++) {
-      this.writeUint8(s.charCodeAt(i));
-    }
-    for (; i<length; i++) {
-      this.writeUint8(0);
-    }
-  } else {
-    for (var i=0; i<s.length; i++) {
-      this.writeUint8(s.charCodeAt(i));
-    }
-    this.writeUint8(0);
-  }
-};
-
-/**
-  Reads an object of type t from the DataStream, passing struct as the thus-far
-  read struct to possible callbacks that refer to it. Used by readStruct for
-  reading in the values, so the type is one of the readStruct types.
-
-  @param {Object} t Type of the object to read.
-  @param {?Object} struct Struct to refer to when resolving length references
-                          and for calling callbacks.
-  @return {?Object} Returns the object on successful read, null on unsuccessful.
- */
-DataStream.prototype.readType = function(t, struct) {
-  if (typeof t == "function") {
-    return t(this, struct);
-  } else if (typeof t == "object" && !(t instanceof Array)) {
-    return t.get(this, struct);
-  } else if (t instanceof Array && t.length != 3) {
-    return this.readStruct(t, struct);
-  }
-  var v = null;
-  var lengthOverride = null;
-  var charset = "ASCII";
-  var pos = this.position;
-  var len;
-  if (typeof t == 'string' && /:/.test(t)) {
-    var tp = t.split(":");
-    t = tp[0];
-    len = tp[1];
-
-    // allow length to be previously parsed variable
-    // e.g. 'string:fieldLength', if `fieldLength` has
-    // been parsed previously.
-    if (struct[len] != null) {
-      lengthOverride = parseInt(struct[len]);
-    } else {
-      // assume literal integer e.g., 'string:4'
-      lengthOverride = parseInt(tp[1]);
-    }
-  }
-  if (typeof t == 'string' && /,/.test(t)) {
-    var tp = t.split(",");
-    t = tp[0];
-    charset = parseInt(tp[1]);
-  }
-  switch(t) {
-
-    case 'uint8':
-      v = this.readUint8(); break;
-    case 'int8':
-      v = this.readInt8(); break;
-
-    case 'uint16':
-      v = this.readUint16(this.endianness); break;
-    case 'int16':
-      v = this.readInt16(this.endianness); break;
-    case 'uint32':
-      v = this.readUint32(this.endianness); break;
-    case 'int32':
-      v = this.readInt32(this.endianness); break;
-    case 'float32':
-      v = this.readFloat32(this.endianness); break;
-    case 'float64':
-      v = this.readFloat64(this.endianness); break;
-
-    case 'uint16be':
-      v = this.readUint16(DataStream.BIG_ENDIAN); break;
-    case 'int16be':
-      v = this.readInt16(DataStream.BIG_ENDIAN); break;
-    case 'uint32be':
-      v = this.readUint32(DataStream.BIG_ENDIAN); break;
-    case 'int32be':
-      v = this.readInt32(DataStream.BIG_ENDIAN); break;
-    case 'float32be':
-      v = this.readFloat32(DataStream.BIG_ENDIAN); break;
-    case 'float64be':
-      v = this.readFloat64(DataStream.BIG_ENDIAN); break;
-
-    case 'uint16le':
-      v = this.readUint16(DataStream.LITTLE_ENDIAN); break;
-    case 'int16le':
-      v = this.readInt16(DataStream.LITTLE_ENDIAN); break;
-    case 'uint32le':
-      v = this.readUint32(DataStream.LITTLE_ENDIAN); break;
-    case 'int32le':
-      v = this.readInt32(DataStream.LITTLE_ENDIAN); break;
-    case 'float32le':
-      v = this.readFloat32(DataStream.LITTLE_ENDIAN); break;
-    case 'float64le':
-      v = this.readFloat64(DataStream.LITTLE_ENDIAN); break;
-
-    case 'cstring':
-      v = this.readCString(lengthOverride); break;
-
-    case 'string':
-      v = this.readString(lengthOverride, charset); break;
-
-    case 'u16string':
-      v = this.readUCS2String(lengthOverride, this.endianness); break;
-
-    case 'u16stringle':
-      v = this.readUCS2String(lengthOverride, DataStream.LITTLE_ENDIAN); break;
-
-    case 'u16stringbe':
-      v = this.readUCS2String(lengthOverride, DataStream.BIG_ENDIAN); break;
-
-    default:
-      if (t.length == 3) {
-        var ta = t[1];
-        var len = t[2];
-        var length = 0;
-        if (typeof len == 'function') {
-          length = len(struct, this, t);
-        } else if (typeof len == 'string' && struct[len] != null) {
-          length = parseInt(struct[len]);
-        } else {
-          length = parseInt(len);
-        }
-        if (typeof ta == "string") {
-          var tap = ta.replace(/(le|be)$/, '');
-          var endianness = null;
-          if (/le$/.test(ta)) {
-            endianness = DataStream.LITTLE_ENDIAN;
-          } else if (/be$/.test(ta)) {
-            endianness = DataStream.BIG_ENDIAN;
-          }
-          if (len == '*') {
-            length = null;
-          }
-          switch(tap) {
-            case 'uint8':
-              v = this.readUint8Array(length); break;
-            case 'uint16':
-              v = this.readUint16Array(length, endianness); break;
-            case 'uint32':
-              v = this.readUint32Array(length, endianness); break;
-            case 'int8':
-              v = this.readInt8Array(length); break;
-            case 'int16':
-              v = this.readInt16Array(length, endianness); break;
-            case 'int32':
-              v = this.readInt32Array(length, endianness); break;
-            case 'float32':
-              v = this.readFloat32Array(length, endianness); break;
-            case 'float64':
-              v = this.readFloat64Array(length, endianness); break;
-            case 'cstring':
-            case 'utf16string':
-            case 'string':
-              if (length == null) {
-                v = [];
-                while (!this.isEof()) {
-                  var u = this.readType(ta, struct);
-                  if (u == null) break;
-                  v.push(u);
-                }
-              } else {
-                v = new Array(length);
-                for (var i=0; i<length; i++) {
-                  v[i] = this.readType(ta, struct);
-                }
-              }
-              break;
-          }
-        } else {
-          if (len == '*') {
-            v = [];
-            this.buffer;
-            while (true) {
-              var p = this.position;
-              try {
-                var o = this.readType(ta, struct);
-                if (o == null) {
-                  this.position = p;
-                  break;
-                }
-                v.push(o);
-              } catch(e) {
-                this.position = p;
-                break;
-              }
-            }
-          } else {
-            v = new Array(length);
-            for (var i=0; i<length; i++) {
-              var u = this.readType(ta, struct);
-              if (u == null) return null;
-              v[i] = u;
-            }
-          }
-        }
-        break;
-      }
-  }
-  if (lengthOverride != null) {
-    this.position = pos + lengthOverride;
-  }
-  return v;
-};
-
-/**
-  Writes a struct to the DataStream. Takes a structDefinition that gives the
-  types and a struct object that gives the values. Refer to readStruct for the
-  structure of structDefinition.
-
-  @param {Object} structDefinition Type definition of the struct.
-  @param {Object} struct The struct data object.
-  */
-DataStream.prototype.writeStruct = function(structDefinition, struct) {
-  for (var i = 0; i < structDefinition.length; i+=2) {
-    var t = structDefinition[i+1];
-    this.writeType(t, struct[structDefinition[i]], struct);
-  }
-};
-
-/**
-  Writes object v of type t to the DataStream.
-
-  @param {Object} t Type of data to write.
-  @param {Object} v Value of data to write.
-  @param {Object} struct Struct to pass to write callback functions.
-  */
-DataStream.prototype.writeType = function(t, v, struct) {
-  if (typeof t == "function") {
-    return t(this, v);
-  } else if (typeof t == "object" && !(t instanceof Array)) {
-    return t.set(this, v, struct);
-  }
-  var lengthOverride = null;
-  var charset = "ASCII";
-  var pos = this.position;
-  if (typeof(t) == 'string' && /:/.test(t)) {
-    var tp = t.split(":");
-    t = tp[0];
-    lengthOverride = parseInt(tp[1]);
-  }
-  if (typeof t == 'string' && /,/.test(t)) {
-    var tp = t.split(",");
-    t = tp[0];
-    charset = parseInt(tp[1]);
-  }
-
-  switch(t) {
-    case 'uint8':
-      this.writeUint8(v);
-      break;
-    case 'int8':
-      this.writeInt8(v);
-      break;
-
-    case 'uint16':
-      this.writeUint16(v, this.endianness);
-      break;
-    case 'int16':
-      this.writeInt16(v, this.endianness);
-      break;
-    case 'uint32':
-      this.writeUint32(v, this.endianness);
-      break;
-    case 'int32':
-      this.writeInt32(v, this.endianness);
-      break;
-    case 'float32':
-      this.writeFloat32(v, this.endianness);
-      break;
-    case 'float64':
-      this.writeFloat64(v, this.endianness);
-      break;
-
-    case 'uint16be':
-      this.writeUint16(v, DataStream.BIG_ENDIAN);
-      break;
-    case 'int16be':
-      this.writeInt16(v, DataStream.BIG_ENDIAN);
-      break;
-    case 'uint32be':
-      this.writeUint32(v, DataStream.BIG_ENDIAN);
-      break;
-    case 'int32be':
-      this.writeInt32(v, DataStream.BIG_ENDIAN);
-      break;
-    case 'float32be':
-      this.writeFloat32(v, DataStream.BIG_ENDIAN);
-      break;
-    case 'float64be':
-      this.writeFloat64(v, DataStream.BIG_ENDIAN);
-      break;
-
-    case 'uint16le':
-      this.writeUint16(v, DataStream.LITTLE_ENDIAN);
-      break;
-    case 'int16le':
-      this.writeInt16(v, DataStream.LITTLE_ENDIAN);
-      break;
-    case 'uint32le':
-      this.writeUint32(v, DataStream.LITTLE_ENDIAN);
-      break;
-    case 'int32le':
-      this.writeInt32(v, DataStream.LITTLE_ENDIAN);
-      break;
-    case 'float32le':
-      this.writeFloat32(v, DataStream.LITTLE_ENDIAN);
-      break;
-    case 'float64le':
-      this.writeFloat64(v, DataStream.LITTLE_ENDIAN);
-      break;
-
-    case 'cstring':
-      this.writeCString(v, lengthOverride);
-      break;
-
-    case 'string':
-      this.writeString(v, charset, lengthOverride);
-      break;
-
-    case 'u16string':
-      this.writeUCS2String(v, this.endianness, lengthOverride);
-      break;
-
-    case 'u16stringle':
-      this.writeUCS2String(v, DataStream.LITTLE_ENDIAN, lengthOverride);
-      break;
-
-    case 'u16stringbe':
-      this.writeUCS2String(v, DataStream.BIG_ENDIAN, lengthOverride);
-      break;
-
-    default:
-      if (t.length == 3) {
-        var ta = t[1];
-        for (var i=0; i<v.length; i++) {
-          this.writeType(ta, v[i]);
-        }
-        break;
-      } else {
-        this.writeStruct(t, v);
-        break;
-      }
-  }
-  if (lengthOverride != null) {
-    this.position = pos;
-    this._realloc(lengthOverride);
-    this.position = pos + lengthOverride;
-  }
-};
-
-// Export DataStream for amd environments
-if (typeof define === 'function' && define.amd) {
-    define('DataStream', [], function() {
-      return DataStream;
-    });
-  }
-  
-// Export DataStream for CommonJS
-if (typeof module === 'object' && module && module.exports) {
-  module.exports = DataStream;
-}
-
-/**
- * @fileoverview gl-matrix - High performance matrix and vector operations
- * @author Brandon Jones
- * @author Colin MacKenzie IV
- * @version 2.4.0
- */
-
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define([], factory);
-	else {
-		var a = factory();
-		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
-	}
-})(this, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.setMatrixArrayType = setMatrixArrayType;
-exports.toRadian = toRadian;
-exports.equals = equals;
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-/**
- * Common utilities
- * @module glMatrix
- */
-
-// Configuration Constants
-var EPSILON = exports.EPSILON = 0.000001;
-var ARRAY_TYPE = exports.ARRAY_TYPE = typeof Float32Array !== 'undefined' ? Float32Array : Array;
-var RANDOM = exports.RANDOM = Math.random;
-
-/**
- * Sets the type of array used when creating new vectors and matrices
- *
- * @param {Type} type Array type, such as Float32Array or Array
- */
-function setMatrixArrayType(type) {
-  exports.ARRAY_TYPE = ARRAY_TYPE = type;
-}
-
-var degree = Math.PI / 180;
-
-/**
- * Convert Degree To Radian
- *
- * @param {Number} a Angle in Degrees
- */
-function toRadian(a) {
-  return a * degree;
-}
-
-/**
- * Tests whether or not the arguments have approximately the same value, within an absolute
- * or relative tolerance of glMatrix.EPSILON (an absolute tolerance is used for values less
- * than or equal to 1.0, and a relative tolerance is used for larger values)
- *
- * @param {Number} a The first number to test.
- * @param {Number} b The second number to test.
- * @returns {Boolean} True if the numbers are approximately equal, false otherwise.
- */
-function equals(a, b) {
-  return Math.abs(a - b) <= EPSILON * Math.max(1.0, Math.abs(a), Math.abs(b));
-}
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.sub = exports.mul = undefined;
-exports.create = create;
-exports.fromMat4 = fromMat4;
-exports.clone = clone;
-exports.copy = copy;
-exports.fromValues = fromValues;
-exports.set = set;
-exports.identity = identity;
-exports.transpose = transpose;
-exports.invert = invert;
-exports.adjoint = adjoint;
-exports.determinant = determinant;
-exports.multiply = multiply;
-exports.translate = translate;
-exports.rotate = rotate;
-exports.scale = scale;
-exports.fromTranslation = fromTranslation;
-exports.fromRotation = fromRotation;
-exports.fromScaling = fromScaling;
-exports.fromMat2d = fromMat2d;
-exports.fromQuat = fromQuat;
-exports.normalFromMat4 = normalFromMat4;
-exports.projection = projection;
-exports.str = str;
-exports.frob = frob;
-exports.add = add;
-exports.subtract = subtract;
-exports.multiplyScalar = multiplyScalar;
-exports.multiplyScalarAndAdd = multiplyScalarAndAdd;
-exports.exactEquals = exactEquals;
-exports.equals = equals;
-
-var _common = __webpack_require__(0);
-
-var glMatrix = _interopRequireWildcard(_common);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/**
- * 3x3 Matrix
- * @module mat3
- */
-
-/**
- * Creates a new identity mat3
- *
- * @returns {mat3} a new 3x3 matrix
- */
-function create() {
-  var out = new glMatrix.ARRAY_TYPE(9);
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 1;
-  out[5] = 0;
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 1;
-  return out;
-}
-
-/**
- * Copies the upper-left 3x3 values into the given mat3.
- *
- * @param {mat3} out the receiving 3x3 matrix
- * @param {mat4} a   the source 4x4 matrix
- * @returns {mat3} out
- */
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-function fromMat4(out, a) {
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  out[3] = a[4];
-  out[4] = a[5];
-  out[5] = a[6];
-  out[6] = a[8];
-  out[7] = a[9];
-  out[8] = a[10];
-  return out;
-}
-
-/**
- * Creates a new mat3 initialized with values from an existing matrix
- *
- * @param {mat3} a matrix to clone
- * @returns {mat3} a new 3x3 matrix
- */
-function clone(a) {
-  var out = new glMatrix.ARRAY_TYPE(9);
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  out[3] = a[3];
-  out[4] = a[4];
-  out[5] = a[5];
-  out[6] = a[6];
-  out[7] = a[7];
-  out[8] = a[8];
-  return out;
-}
-
-/**
- * Copy the values from one mat3 to another
- *
- * @param {mat3} out the receiving matrix
- * @param {mat3} a the source matrix
- * @returns {mat3} out
- */
-function copy(out, a) {
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  out[3] = a[3];
-  out[4] = a[4];
-  out[5] = a[5];
-  out[6] = a[6];
-  out[7] = a[7];
-  out[8] = a[8];
-  return out;
-}
-
-/**
- * Create a new mat3 with the given values
- *
- * @param {Number} m00 Component in column 0, row 0 position (index 0)
- * @param {Number} m01 Component in column 0, row 1 position (index 1)
- * @param {Number} m02 Component in column 0, row 2 position (index 2)
- * @param {Number} m10 Component in column 1, row 0 position (index 3)
- * @param {Number} m11 Component in column 1, row 1 position (index 4)
- * @param {Number} m12 Component in column 1, row 2 position (index 5)
- * @param {Number} m20 Component in column 2, row 0 position (index 6)
- * @param {Number} m21 Component in column 2, row 1 position (index 7)
- * @param {Number} m22 Component in column 2, row 2 position (index 8)
- * @returns {mat3} A new mat3
- */
-function fromValues(m00, m01, m02, m10, m11, m12, m20, m21, m22) {
-  var out = new glMatrix.ARRAY_TYPE(9);
-  out[0] = m00;
-  out[1] = m01;
-  out[2] = m02;
-  out[3] = m10;
-  out[4] = m11;
-  out[5] = m12;
-  out[6] = m20;
-  out[7] = m21;
-  out[8] = m22;
-  return out;
-}
-
-/**
- * Set the components of a mat3 to the given values
- *
- * @param {mat3} out the receiving matrix
- * @param {Number} m00 Component in column 0, row 0 position (index 0)
- * @param {Number} m01 Component in column 0, row 1 position (index 1)
- * @param {Number} m02 Component in column 0, row 2 position (index 2)
- * @param {Number} m10 Component in column 1, row 0 position (index 3)
- * @param {Number} m11 Component in column 1, row 1 position (index 4)
- * @param {Number} m12 Component in column 1, row 2 position (index 5)
- * @param {Number} m20 Component in column 2, row 0 position (index 6)
- * @param {Number} m21 Component in column 2, row 1 position (index 7)
- * @param {Number} m22 Component in column 2, row 2 position (index 8)
- * @returns {mat3} out
- */
-function set(out, m00, m01, m02, m10, m11, m12, m20, m21, m22) {
-  out[0] = m00;
-  out[1] = m01;
-  out[2] = m02;
-  out[3] = m10;
-  out[4] = m11;
-  out[5] = m12;
-  out[6] = m20;
-  out[7] = m21;
-  out[8] = m22;
-  return out;
-}
-
-/**
- * Set a mat3 to the identity matrix
- *
- * @param {mat3} out the receiving matrix
- * @returns {mat3} out
- */
-function identity(out) {
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 1;
-  out[5] = 0;
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 1;
-  return out;
-}
-
-/**
- * Transpose the values of a mat3
- *
- * @param {mat3} out the receiving matrix
- * @param {mat3} a the source matrix
- * @returns {mat3} out
- */
-function transpose(out, a) {
-  // If we are transposing ourselves we can skip a few steps but have to cache some values
-  if (out === a) {
-    var a01 = a[1],
-        a02 = a[2],
-        a12 = a[5];
-    out[1] = a[3];
-    out[2] = a[6];
-    out[3] = a01;
-    out[5] = a[7];
-    out[6] = a02;
-    out[7] = a12;
-  } else {
-    out[0] = a[0];
-    out[1] = a[3];
-    out[2] = a[6];
-    out[3] = a[1];
-    out[4] = a[4];
-    out[5] = a[7];
-    out[6] = a[2];
-    out[7] = a[5];
-    out[8] = a[8];
-  }
-
-  return out;
-}
-
-/**
- * Inverts a mat3
- *
- * @param {mat3} out the receiving matrix
- * @param {mat3} a the source matrix
- * @returns {mat3} out
- */
-function invert(out, a) {
-  var a00 = a[0],
-      a01 = a[1],
-      a02 = a[2];
-  var a10 = a[3],
-      a11 = a[4],
-      a12 = a[5];
-  var a20 = a[6],
-      a21 = a[7],
-      a22 = a[8];
-
-  var b01 = a22 * a11 - a12 * a21;
-  var b11 = -a22 * a10 + a12 * a20;
-  var b21 = a21 * a10 - a11 * a20;
-
-  // Calculate the determinant
-  var det = a00 * b01 + a01 * b11 + a02 * b21;
-
-  if (!det) {
-    return null;
-  }
-  det = 1.0 / det;
-
-  out[0] = b01 * det;
-  out[1] = (-a22 * a01 + a02 * a21) * det;
-  out[2] = (a12 * a01 - a02 * a11) * det;
-  out[3] = b11 * det;
-  out[4] = (a22 * a00 - a02 * a20) * det;
-  out[5] = (-a12 * a00 + a02 * a10) * det;
-  out[6] = b21 * det;
-  out[7] = (-a21 * a00 + a01 * a20) * det;
-  out[8] = (a11 * a00 - a01 * a10) * det;
-  return out;
-}
-
-/**
- * Calculates the adjugate of a mat3
- *
- * @param {mat3} out the receiving matrix
- * @param {mat3} a the source matrix
- * @returns {mat3} out
- */
-function adjoint(out, a) {
-  var a00 = a[0],
-      a01 = a[1],
-      a02 = a[2];
-  var a10 = a[3],
-      a11 = a[4],
-      a12 = a[5];
-  var a20 = a[6],
-      a21 = a[7],
-      a22 = a[8];
-
-  out[0] = a11 * a22 - a12 * a21;
-  out[1] = a02 * a21 - a01 * a22;
-  out[2] = a01 * a12 - a02 * a11;
-  out[3] = a12 * a20 - a10 * a22;
-  out[4] = a00 * a22 - a02 * a20;
-  out[5] = a02 * a10 - a00 * a12;
-  out[6] = a10 * a21 - a11 * a20;
-  out[7] = a01 * a20 - a00 * a21;
-  out[8] = a00 * a11 - a01 * a10;
-  return out;
-}
-
-/**
- * Calculates the determinant of a mat3
- *
- * @param {mat3} a the source matrix
- * @returns {Number} determinant of a
- */
-function determinant(a) {
-  var a00 = a[0],
-      a01 = a[1],
-      a02 = a[2];
-  var a10 = a[3],
-      a11 = a[4],
-      a12 = a[5];
-  var a20 = a[6],
-      a21 = a[7],
-      a22 = a[8];
-
-  return a00 * (a22 * a11 - a12 * a21) + a01 * (-a22 * a10 + a12 * a20) + a02 * (a21 * a10 - a11 * a20);
-}
-
-/**
- * Multiplies two mat3's
- *
- * @param {mat3} out the receiving matrix
- * @param {mat3} a the first operand
- * @param {mat3} b the second operand
- * @returns {mat3} out
- */
-function multiply(out, a, b) {
-  var a00 = a[0],
-      a01 = a[1],
-      a02 = a[2];
-  var a10 = a[3],
-      a11 = a[4],
-      a12 = a[5];
-  var a20 = a[6],
-      a21 = a[7],
-      a22 = a[8];
-
-  var b00 = b[0],
-      b01 = b[1],
-      b02 = b[2];
-  var b10 = b[3],
-      b11 = b[4],
-      b12 = b[5];
-  var b20 = b[6],
-      b21 = b[7],
-      b22 = b[8];
-
-  out[0] = b00 * a00 + b01 * a10 + b02 * a20;
-  out[1] = b00 * a01 + b01 * a11 + b02 * a21;
-  out[2] = b00 * a02 + b01 * a12 + b02 * a22;
-
-  out[3] = b10 * a00 + b11 * a10 + b12 * a20;
-  out[4] = b10 * a01 + b11 * a11 + b12 * a21;
-  out[5] = b10 * a02 + b11 * a12 + b12 * a22;
-
-  out[6] = b20 * a00 + b21 * a10 + b22 * a20;
-  out[7] = b20 * a01 + b21 * a11 + b22 * a21;
-  out[8] = b20 * a02 + b21 * a12 + b22 * a22;
-  return out;
-}
-
-/**
- * Translate a mat3 by the given vector
- *
- * @param {mat3} out the receiving matrix
- * @param {mat3} a the matrix to translate
- * @param {vec2} v vector to translate by
- * @returns {mat3} out
- */
-function translate(out, a, v) {
-  var a00 = a[0],
-      a01 = a[1],
-      a02 = a[2],
-      a10 = a[3],
-      a11 = a[4],
-      a12 = a[5],
-      a20 = a[6],
-      a21 = a[7],
-      a22 = a[8],
-      x = v[0],
-      y = v[1];
-
-  out[0] = a00;
-  out[1] = a01;
-  out[2] = a02;
-
-  out[3] = a10;
-  out[4] = a11;
-  out[5] = a12;
-
-  out[6] = x * a00 + y * a10 + a20;
-  out[7] = x * a01 + y * a11 + a21;
-  out[8] = x * a02 + y * a12 + a22;
-  return out;
-}
-
-/**
- * Rotates a mat3 by the given angle
- *
- * @param {mat3} out the receiving matrix
- * @param {mat3} a the matrix to rotate
- * @param {Number} rad the angle to rotate the matrix by
- * @returns {mat3} out
- */
-function rotate(out, a, rad) {
-  var a00 = a[0],
-      a01 = a[1],
-      a02 = a[2],
-      a10 = a[3],
-      a11 = a[4],
-      a12 = a[5],
-      a20 = a[6],
-      a21 = a[7],
-      a22 = a[8],
-      s = Math.sin(rad),
-      c = Math.cos(rad);
-
-  out[0] = c * a00 + s * a10;
-  out[1] = c * a01 + s * a11;
-  out[2] = c * a02 + s * a12;
-
-  out[3] = c * a10 - s * a00;
-  out[4] = c * a11 - s * a01;
-  out[5] = c * a12 - s * a02;
-
-  out[6] = a20;
-  out[7] = a21;
-  out[8] = a22;
-  return out;
-};
-
-/**
- * Scales the mat3 by the dimensions in the given vec2
- *
- * @param {mat3} out the receiving matrix
- * @param {mat3} a the matrix to rotate
- * @param {vec2} v the vec2 to scale the matrix by
- * @returns {mat3} out
- **/
-function scale(out, a, v) {
-  var x = v[0],
-      y = v[1];
-
-  out[0] = x * a[0];
-  out[1] = x * a[1];
-  out[2] = x * a[2];
-
-  out[3] = y * a[3];
-  out[4] = y * a[4];
-  out[5] = y * a[5];
-
-  out[6] = a[6];
-  out[7] = a[7];
-  out[8] = a[8];
-  return out;
-}
-
-/**
- * Creates a matrix from a vector translation
- * This is equivalent to (but much faster than):
- *
- *     mat3.identity(dest);
- *     mat3.translate(dest, dest, vec);
- *
- * @param {mat3} out mat3 receiving operation result
- * @param {vec2} v Translation vector
- * @returns {mat3} out
- */
-function fromTranslation(out, v) {
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 1;
-  out[5] = 0;
-  out[6] = v[0];
-  out[7] = v[1];
-  out[8] = 1;
-  return out;
-}
-
-/**
- * Creates a matrix from a given angle
- * This is equivalent to (but much faster than):
- *
- *     mat3.identity(dest);
- *     mat3.rotate(dest, dest, rad);
- *
- * @param {mat3} out mat3 receiving operation result
- * @param {Number} rad the angle to rotate the matrix by
- * @returns {mat3} out
- */
-function fromRotation(out, rad) {
-  var s = Math.sin(rad),
-      c = Math.cos(rad);
-
-  out[0] = c;
-  out[1] = s;
-  out[2] = 0;
-
-  out[3] = -s;
-  out[4] = c;
-  out[5] = 0;
-
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 1;
-  return out;
-}
-
-/**
- * Creates a matrix from a vector scaling
- * This is equivalent to (but much faster than):
- *
- *     mat3.identity(dest);
- *     mat3.scale(dest, dest, vec);
- *
- * @param {mat3} out mat3 receiving operation result
- * @param {vec2} v Scaling vector
- * @returns {mat3} out
- */
-function fromScaling(out, v) {
-  out[0] = v[0];
-  out[1] = 0;
-  out[2] = 0;
-
-  out[3] = 0;
-  out[4] = v[1];
-  out[5] = 0;
-
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 1;
-  return out;
-}
-
-/**
- * Copies the values from a mat2d into a mat3
- *
- * @param {mat3} out the receiving matrix
- * @param {mat2d} a the matrix to copy
- * @returns {mat3} out
- **/
-function fromMat2d(out, a) {
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = 0;
-
-  out[3] = a[2];
-  out[4] = a[3];
-  out[5] = 0;
-
-  out[6] = a[4];
-  out[7] = a[5];
-  out[8] = 1;
-  return out;
-}
-
-/**
-* Calculates a 3x3 matrix from the given quaternion
-*
-* @param {mat3} out mat3 receiving operation result
-* @param {quat} q Quaternion to create matrix from
-*
-* @returns {mat3} out
-*/
-function fromQuat(out, q) {
-  var x = q[0],
-      y = q[1],
-      z = q[2],
-      w = q[3];
-  var x2 = x + x;
-  var y2 = y + y;
-  var z2 = z + z;
-
-  var xx = x * x2;
-  var yx = y * x2;
-  var yy = y * y2;
-  var zx = z * x2;
-  var zy = z * y2;
-  var zz = z * z2;
-  var wx = w * x2;
-  var wy = w * y2;
-  var wz = w * z2;
-
-  out[0] = 1 - yy - zz;
-  out[3] = yx - wz;
-  out[6] = zx + wy;
-
-  out[1] = yx + wz;
-  out[4] = 1 - xx - zz;
-  out[7] = zy - wx;
-
-  out[2] = zx - wy;
-  out[5] = zy + wx;
-  out[8] = 1 - xx - yy;
-
-  return out;
-}
-
-/**
-* Calculates a 3x3 normal matrix (transpose inverse) from the 4x4 matrix
-*
-* @param {mat3} out mat3 receiving operation result
-* @param {mat4} a Mat4 to derive the normal matrix from
-*
-* @returns {mat3} out
-*/
-function normalFromMat4(out, a) {
-  var a00 = a[0],
-      a01 = a[1],
-      a02 = a[2],
-      a03 = a[3];
-  var a10 = a[4],
-      a11 = a[5],
-      a12 = a[6],
-      a13 = a[7];
-  var a20 = a[8],
-      a21 = a[9],
-      a22 = a[10],
-      a23 = a[11];
-  var a30 = a[12],
-      a31 = a[13],
-      a32 = a[14],
-      a33 = a[15];
-
-  var b00 = a00 * a11 - a01 * a10;
-  var b01 = a00 * a12 - a02 * a10;
-  var b02 = a00 * a13 - a03 * a10;
-  var b03 = a01 * a12 - a02 * a11;
-  var b04 = a01 * a13 - a03 * a11;
-  var b05 = a02 * a13 - a03 * a12;
-  var b06 = a20 * a31 - a21 * a30;
-  var b07 = a20 * a32 - a22 * a30;
-  var b08 = a20 * a33 - a23 * a30;
-  var b09 = a21 * a32 - a22 * a31;
-  var b10 = a21 * a33 - a23 * a31;
-  var b11 = a22 * a33 - a23 * a32;
-
-  // Calculate the determinant
-  var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
-
-  if (!det) {
-    return null;
-  }
-  det = 1.0 / det;
-
-  out[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
-  out[1] = (a12 * b08 - a10 * b11 - a13 * b07) * det;
-  out[2] = (a10 * b10 - a11 * b08 + a13 * b06) * det;
-
-  out[3] = (a02 * b10 - a01 * b11 - a03 * b09) * det;
-  out[4] = (a00 * b11 - a02 * b08 + a03 * b07) * det;
-  out[5] = (a01 * b08 - a00 * b10 - a03 * b06) * det;
-
-  out[6] = (a31 * b05 - a32 * b04 + a33 * b03) * det;
-  out[7] = (a32 * b02 - a30 * b05 - a33 * b01) * det;
-  out[8] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
-
-  return out;
-}
-
-/**
- * Generates a 2D projection matrix with the given bounds
- *
- * @param {mat3} out mat3 frustum matrix will be written into
- * @param {number} width Width of your gl context
- * @param {number} height Height of gl context
- * @returns {mat3} out
- */
-function projection(out, width, height) {
-  out[0] = 2 / width;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = -2 / height;
-  out[5] = 0;
-  out[6] = -1;
-  out[7] = 1;
-  out[8] = 1;
-  return out;
-}
-
-/**
- * Returns a string representation of a mat3
- *
- * @param {mat3} a matrix to represent as a string
- * @returns {String} string representation of the matrix
- */
-function str(a) {
-  return 'mat3(' + a[0] + ', ' + a[1] + ', ' + a[2] + ', ' + a[3] + ', ' + a[4] + ', ' + a[5] + ', ' + a[6] + ', ' + a[7] + ', ' + a[8] + ')';
-}
-
-/**
- * Returns Frobenius norm of a mat3
- *
- * @param {mat3} a the matrix to calculate Frobenius norm of
- * @returns {Number} Frobenius norm
- */
-function frob(a) {
-  return Math.sqrt(Math.pow(a[0], 2) + Math.pow(a[1], 2) + Math.pow(a[2], 2) + Math.pow(a[3], 2) + Math.pow(a[4], 2) + Math.pow(a[5], 2) + Math.pow(a[6], 2) + Math.pow(a[7], 2) + Math.pow(a[8], 2));
-}
-
-/**
- * Adds two mat3's
- *
- * @param {mat3} out the receiving matrix
- * @param {mat3} a the first operand
- * @param {mat3} b the second operand
- * @returns {mat3} out
- */
-function add(out, a, b) {
-  out[0] = a[0] + b[0];
-  out[1] = a[1] + b[1];
-  out[2] = a[2] + b[2];
-  out[3] = a[3] + b[3];
-  out[4] = a[4] + b[4];
-  out[5] = a[5] + b[5];
-  out[6] = a[6] + b[6];
-  out[7] = a[7] + b[7];
-  out[8] = a[8] + b[8];
-  return out;
-}
-
-/**
- * Subtracts matrix b from matrix a
- *
- * @param {mat3} out the receiving matrix
- * @param {mat3} a the first operand
- * @param {mat3} b the second operand
- * @returns {mat3} out
- */
-function subtract(out, a, b) {
-  out[0] = a[0] - b[0];
-  out[1] = a[1] - b[1];
-  out[2] = a[2] - b[2];
-  out[3] = a[3] - b[3];
-  out[4] = a[4] - b[4];
-  out[5] = a[5] - b[5];
-  out[6] = a[6] - b[6];
-  out[7] = a[7] - b[7];
-  out[8] = a[8] - b[8];
-  return out;
-}
-
-/**
- * Multiply each element of the matrix by a scalar.
- *
- * @param {mat3} out the receiving matrix
- * @param {mat3} a the matrix to scale
- * @param {Number} b amount to scale the matrix's elements by
- * @returns {mat3} out
- */
-function multiplyScalar(out, a, b) {
-  out[0] = a[0] * b;
-  out[1] = a[1] * b;
-  out[2] = a[2] * b;
-  out[3] = a[3] * b;
-  out[4] = a[4] * b;
-  out[5] = a[5] * b;
-  out[6] = a[6] * b;
-  out[7] = a[7] * b;
-  out[8] = a[8] * b;
-  return out;
-}
-
-/**
- * Adds two mat3's after multiplying each element of the second operand by a scalar value.
- *
- * @param {mat3} out the receiving vector
- * @param {mat3} a the first operand
- * @param {mat3} b the second operand
- * @param {Number} scale the amount to scale b's elements by before adding
- * @returns {mat3} out
- */
-function multiplyScalarAndAdd(out, a, b, scale) {
-  out[0] = a[0] + b[0] * scale;
-  out[1] = a[1] + b[1] * scale;
-  out[2] = a[2] + b[2] * scale;
-  out[3] = a[3] + b[3] * scale;
-  out[4] = a[4] + b[4] * scale;
-  out[5] = a[5] + b[5] * scale;
-  out[6] = a[6] + b[6] * scale;
-  out[7] = a[7] + b[7] * scale;
-  out[8] = a[8] + b[8] * scale;
-  return out;
-}
-
-/**
- * Returns whether or not the matrices have exactly the same elements in the same position (when compared with ===)
- *
- * @param {mat3} a The first matrix.
- * @param {mat3} b The second matrix.
- * @returns {Boolean} True if the matrices are equal, false otherwise.
- */
-function exactEquals(a, b) {
-  return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3] && a[4] === b[4] && a[5] === b[5] && a[6] === b[6] && a[7] === b[7] && a[8] === b[8];
-}
-
-/**
- * Returns whether or not the matrices have approximately the same elements in the same position.
- *
- * @param {mat3} a The first matrix.
- * @param {mat3} b The second matrix.
- * @returns {Boolean} True if the matrices are equal, false otherwise.
- */
-function equals(a, b) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3],
-      a4 = a[4],
-      a5 = a[5],
-      a6 = a[6],
-      a7 = a[7],
-      a8 = a[8];
-  var b0 = b[0],
-      b1 = b[1],
-      b2 = b[2],
-      b3 = b[3],
-      b4 = b[4],
-      b5 = b[5],
-      b6 = b[6],
-      b7 = b[7],
-      b8 = b[8];
-  return Math.abs(a0 - b0) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) && Math.abs(a1 - b1) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) && Math.abs(a2 - b2) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) && Math.abs(a3 - b3) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) && Math.abs(a4 - b4) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) && Math.abs(a5 - b5) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) && Math.abs(a6 - b6) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) && Math.abs(a7 - b7) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a7), Math.abs(b7)) && Math.abs(a8 - b8) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a8), Math.abs(b8));
-}
-
-/**
- * Alias for {@link mat3.multiply}
- * @function
- */
-var mul = exports.mul = multiply;
-
-/**
- * Alias for {@link mat3.subtract}
- * @function
- */
-var sub = exports.sub = subtract;
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.forEach = exports.sqrLen = exports.len = exports.sqrDist = exports.dist = exports.div = exports.mul = exports.sub = undefined;
-exports.create = create;
-exports.clone = clone;
-exports.length = length;
-exports.fromValues = fromValues;
-exports.copy = copy;
-exports.set = set;
-exports.add = add;
-exports.subtract = subtract;
-exports.multiply = multiply;
-exports.divide = divide;
-exports.ceil = ceil;
-exports.floor = floor;
-exports.min = min;
-exports.max = max;
-exports.round = round;
-exports.scale = scale;
-exports.scaleAndAdd = scaleAndAdd;
-exports.distance = distance;
-exports.squaredDistance = squaredDistance;
-exports.squaredLength = squaredLength;
-exports.negate = negate;
-exports.inverse = inverse;
-exports.normalize = normalize;
-exports.dot = dot;
-exports.cross = cross;
-exports.lerp = lerp;
-exports.hermite = hermite;
-exports.bezier = bezier;
-exports.random = random;
-exports.transformMat4 = transformMat4;
-exports.transformMat3 = transformMat3;
-exports.transformQuat = transformQuat;
-exports.rotateX = rotateX;
-exports.rotateY = rotateY;
-exports.rotateZ = rotateZ;
-exports.angle = angle;
-exports.str = str;
-exports.exactEquals = exactEquals;
-exports.equals = equals;
-
-var _common = __webpack_require__(0);
-
-var glMatrix = _interopRequireWildcard(_common);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/**
- * 3 Dimensional Vector
- * @module vec3
- */
-
-/**
- * Creates a new, empty vec3
- *
- * @returns {vec3} a new 3D vector
- */
-function create() {
-  var out = new glMatrix.ARRAY_TYPE(3);
-  out[0] = 0;
-  out[1] = 0;
-  out[2] = 0;
-  return out;
-}
-
-/**
- * Creates a new vec3 initialized with values from an existing vector
- *
- * @param {vec3} a vector to clone
- * @returns {vec3} a new 3D vector
- */
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-function clone(a) {
-  var out = new glMatrix.ARRAY_TYPE(3);
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  return out;
-}
-
-/**
- * Calculates the length of a vec3
- *
- * @param {vec3} a vector to calculate length of
- * @returns {Number} length of a
- */
-function length(a) {
-  var x = a[0];
-  var y = a[1];
-  var z = a[2];
-  return Math.sqrt(x * x + y * y + z * z);
-}
-
-/**
- * Creates a new vec3 initialized with the given values
- *
- * @param {Number} x X component
- * @param {Number} y Y component
- * @param {Number} z Z component
- * @returns {vec3} a new 3D vector
- */
-function fromValues(x, y, z) {
-  var out = new glMatrix.ARRAY_TYPE(3);
-  out[0] = x;
-  out[1] = y;
-  out[2] = z;
-  return out;
-}
-
-/**
- * Copy the values from one vec3 to another
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the source vector
- * @returns {vec3} out
- */
-function copy(out, a) {
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  return out;
-}
-
-/**
- * Set the components of a vec3 to the given values
- *
- * @param {vec3} out the receiving vector
- * @param {Number} x X component
- * @param {Number} y Y component
- * @param {Number} z Z component
- * @returns {vec3} out
- */
-function set(out, x, y, z) {
-  out[0] = x;
-  out[1] = y;
-  out[2] = z;
-  return out;
-}
-
-/**
- * Adds two vec3's
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @returns {vec3} out
- */
-function add(out, a, b) {
-  out[0] = a[0] + b[0];
-  out[1] = a[1] + b[1];
-  out[2] = a[2] + b[2];
-  return out;
-}
-
-/**
- * Subtracts vector b from vector a
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @returns {vec3} out
- */
-function subtract(out, a, b) {
-  out[0] = a[0] - b[0];
-  out[1] = a[1] - b[1];
-  out[2] = a[2] - b[2];
-  return out;
-}
-
-/**
- * Multiplies two vec3's
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @returns {vec3} out
- */
-function multiply(out, a, b) {
-  out[0] = a[0] * b[0];
-  out[1] = a[1] * b[1];
-  out[2] = a[2] * b[2];
-  return out;
-}
-
-/**
- * Divides two vec3's
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @returns {vec3} out
- */
-function divide(out, a, b) {
-  out[0] = a[0] / b[0];
-  out[1] = a[1] / b[1];
-  out[2] = a[2] / b[2];
-  return out;
-}
-
-/**
- * Math.ceil the components of a vec3
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a vector to ceil
- * @returns {vec3} out
- */
-function ceil(out, a) {
-  out[0] = Math.ceil(a[0]);
-  out[1] = Math.ceil(a[1]);
-  out[2] = Math.ceil(a[2]);
-  return out;
-}
-
-/**
- * Math.floor the components of a vec3
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a vector to floor
- * @returns {vec3} out
- */
-function floor(out, a) {
-  out[0] = Math.floor(a[0]);
-  out[1] = Math.floor(a[1]);
-  out[2] = Math.floor(a[2]);
-  return out;
-}
-
-/**
- * Returns the minimum of two vec3's
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @returns {vec3} out
- */
-function min(out, a, b) {
-  out[0] = Math.min(a[0], b[0]);
-  out[1] = Math.min(a[1], b[1]);
-  out[2] = Math.min(a[2], b[2]);
-  return out;
-}
-
-/**
- * Returns the maximum of two vec3's
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @returns {vec3} out
- */
-function max(out, a, b) {
-  out[0] = Math.max(a[0], b[0]);
-  out[1] = Math.max(a[1], b[1]);
-  out[2] = Math.max(a[2], b[2]);
-  return out;
-}
-
-/**
- * Math.round the components of a vec3
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a vector to round
- * @returns {vec3} out
- */
-function round(out, a) {
-  out[0] = Math.round(a[0]);
-  out[1] = Math.round(a[1]);
-  out[2] = Math.round(a[2]);
-  return out;
-}
-
-/**
- * Scales a vec3 by a scalar number
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the vector to scale
- * @param {Number} b amount to scale the vector by
- * @returns {vec3} out
- */
-function scale(out, a, b) {
-  out[0] = a[0] * b;
-  out[1] = a[1] * b;
-  out[2] = a[2] * b;
-  return out;
-}
-
-/**
- * Adds two vec3's after scaling the second operand by a scalar value
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @param {Number} scale the amount to scale b by before adding
- * @returns {vec3} out
- */
-function scaleAndAdd(out, a, b, scale) {
-  out[0] = a[0] + b[0] * scale;
-  out[1] = a[1] + b[1] * scale;
-  out[2] = a[2] + b[2] * scale;
-  return out;
-}
-
-/**
- * Calculates the euclidian distance between two vec3's
- *
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @returns {Number} distance between a and b
- */
-function distance(a, b) {
-  var x = b[0] - a[0];
-  var y = b[1] - a[1];
-  var z = b[2] - a[2];
-  return Math.sqrt(x * x + y * y + z * z);
-}
-
-/**
- * Calculates the squared euclidian distance between two vec3's
- *
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @returns {Number} squared distance between a and b
- */
-function squaredDistance(a, b) {
-  var x = b[0] - a[0];
-  var y = b[1] - a[1];
-  var z = b[2] - a[2];
-  return x * x + y * y + z * z;
-}
-
-/**
- * Calculates the squared length of a vec3
- *
- * @param {vec3} a vector to calculate squared length of
- * @returns {Number} squared length of a
- */
-function squaredLength(a) {
-  var x = a[0];
-  var y = a[1];
-  var z = a[2];
-  return x * x + y * y + z * z;
-}
-
-/**
- * Negates the components of a vec3
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a vector to negate
- * @returns {vec3} out
- */
-function negate(out, a) {
-  out[0] = -a[0];
-  out[1] = -a[1];
-  out[2] = -a[2];
-  return out;
-}
-
-/**
- * Returns the inverse of the components of a vec3
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a vector to invert
- * @returns {vec3} out
- */
-function inverse(out, a) {
-  out[0] = 1.0 / a[0];
-  out[1] = 1.0 / a[1];
-  out[2] = 1.0 / a[2];
-  return out;
-}
-
-/**
- * Normalize a vec3
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a vector to normalize
- * @returns {vec3} out
- */
-function normalize(out, a) {
-  var x = a[0];
-  var y = a[1];
-  var z = a[2];
-  var len = x * x + y * y + z * z;
-  if (len > 0) {
-    //TODO: evaluate use of glm_invsqrt here?
-    len = 1 / Math.sqrt(len);
-    out[0] = a[0] * len;
-    out[1] = a[1] * len;
-    out[2] = a[2] * len;
-  }
-  return out;
-}
-
-/**
- * Calculates the dot product of two vec3's
- *
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @returns {Number} dot product of a and b
- */
-function dot(a, b) {
-  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-}
-
-/**
- * Computes the cross product of two vec3's
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @returns {vec3} out
- */
-function cross(out, a, b) {
-  var ax = a[0],
-      ay = a[1],
-      az = a[2];
-  var bx = b[0],
-      by = b[1],
-      bz = b[2];
-
-  out[0] = ay * bz - az * by;
-  out[1] = az * bx - ax * bz;
-  out[2] = ax * by - ay * bx;
-  return out;
-}
-
-/**
- * Performs a linear interpolation between two vec3's
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @param {Number} t interpolation amount between the two inputs
- * @returns {vec3} out
- */
-function lerp(out, a, b, t) {
-  var ax = a[0];
-  var ay = a[1];
-  var az = a[2];
-  out[0] = ax + t * (b[0] - ax);
-  out[1] = ay + t * (b[1] - ay);
-  out[2] = az + t * (b[2] - az);
-  return out;
-}
-
-/**
- * Performs a hermite interpolation with two control points
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @param {vec3} c the third operand
- * @param {vec3} d the fourth operand
- * @param {Number} t interpolation amount between the two inputs
- * @returns {vec3} out
- */
-function hermite(out, a, b, c, d, t) {
-  var factorTimes2 = t * t;
-  var factor1 = factorTimes2 * (2 * t - 3) + 1;
-  var factor2 = factorTimes2 * (t - 2) + t;
-  var factor3 = factorTimes2 * (t - 1);
-  var factor4 = factorTimes2 * (3 - 2 * t);
-
-  out[0] = a[0] * factor1 + b[0] * factor2 + c[0] * factor3 + d[0] * factor4;
-  out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
-  out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
-
-  return out;
-}
-
-/**
- * Performs a bezier interpolation with two control points
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the first operand
- * @param {vec3} b the second operand
- * @param {vec3} c the third operand
- * @param {vec3} d the fourth operand
- * @param {Number} t interpolation amount between the two inputs
- * @returns {vec3} out
- */
-function bezier(out, a, b, c, d, t) {
-  var inverseFactor = 1 - t;
-  var inverseFactorTimesTwo = inverseFactor * inverseFactor;
-  var factorTimes2 = t * t;
-  var factor1 = inverseFactorTimesTwo * inverseFactor;
-  var factor2 = 3 * t * inverseFactorTimesTwo;
-  var factor3 = 3 * factorTimes2 * inverseFactor;
-  var factor4 = factorTimes2 * t;
-
-  out[0] = a[0] * factor1 + b[0] * factor2 + c[0] * factor3 + d[0] * factor4;
-  out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
-  out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
-
-  return out;
-}
-
-/**
- * Generates a random vector with the given scale
- *
- * @param {vec3} out the receiving vector
- * @param {Number} [scale] Length of the resulting vector. If ommitted, a unit vector will be returned
- * @returns {vec3} out
- */
-function random(out, scale) {
-  scale = scale || 1.0;
-
-  var r = glMatrix.RANDOM() * 2.0 * Math.PI;
-  var z = glMatrix.RANDOM() * 2.0 - 1.0;
-  var zScale = Math.sqrt(1.0 - z * z) * scale;
-
-  out[0] = Math.cos(r) * zScale;
-  out[1] = Math.sin(r) * zScale;
-  out[2] = z * scale;
-  return out;
-}
-
-/**
- * Transforms the vec3 with a mat4.
- * 4th vector component is implicitly '1'
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the vector to transform
- * @param {mat4} m matrix to transform with
- * @returns {vec3} out
- */
-function transformMat4(out, a, m) {
-  var x = a[0],
-      y = a[1],
-      z = a[2];
-  var w = m[3] * x + m[7] * y + m[11] * z + m[15];
-  w = w || 1.0;
-  out[0] = (m[0] * x + m[4] * y + m[8] * z + m[12]) / w;
-  out[1] = (m[1] * x + m[5] * y + m[9] * z + m[13]) / w;
-  out[2] = (m[2] * x + m[6] * y + m[10] * z + m[14]) / w;
-  return out;
-}
-
-/**
- * Transforms the vec3 with a mat3.
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the vector to transform
- * @param {mat3} m the 3x3 matrix to transform with
- * @returns {vec3} out
- */
-function transformMat3(out, a, m) {
-  var x = a[0],
-      y = a[1],
-      z = a[2];
-  out[0] = x * m[0] + y * m[3] + z * m[6];
-  out[1] = x * m[1] + y * m[4] + z * m[7];
-  out[2] = x * m[2] + y * m[5] + z * m[8];
-  return out;
-}
-
-/**
- * Transforms the vec3 with a quat
- *
- * @param {vec3} out the receiving vector
- * @param {vec3} a the vector to transform
- * @param {quat} q quaternion to transform with
- * @returns {vec3} out
- */
-function transformQuat(out, a, q) {
-  // benchmarks: http://jsperf.com/quaternion-transform-vec3-implementations
-
-  var x = a[0],
-      y = a[1],
-      z = a[2];
-  var qx = q[0],
-      qy = q[1],
-      qz = q[2],
-      qw = q[3];
-
-  // calculate quat * vec
-  var ix = qw * x + qy * z - qz * y;
-  var iy = qw * y + qz * x - qx * z;
-  var iz = qw * z + qx * y - qy * x;
-  var iw = -qx * x - qy * y - qz * z;
-
-  // calculate result * inverse quat
-  out[0] = ix * qw + iw * -qx + iy * -qz - iz * -qy;
-  out[1] = iy * qw + iw * -qy + iz * -qx - ix * -qz;
-  out[2] = iz * qw + iw * -qz + ix * -qy - iy * -qx;
-  return out;
-}
-
-/**
- * Rotate a 3D vector around the x-axis
- * @param {vec3} out The receiving vec3
- * @param {vec3} a The vec3 point to rotate
- * @param {vec3} b The origin of the rotation
- * @param {Number} c The angle of rotation
- * @returns {vec3} out
- */
-function rotateX(out, a, b, c) {
-  var p = [],
-      r = [];
-  //Translate point to the origin
-  p[0] = a[0] - b[0];
-  p[1] = a[1] - b[1];
-  p[2] = a[2] - b[2];
-
-  //perform rotation
-  r[0] = p[0];
-  r[1] = p[1] * Math.cos(c) - p[2] * Math.sin(c);
-  r[2] = p[1] * Math.sin(c) + p[2] * Math.cos(c);
-
-  //translate to correct position
-  out[0] = r[0] + b[0];
-  out[1] = r[1] + b[1];
-  out[2] = r[2] + b[2];
-
-  return out;
-}
-
-/**
- * Rotate a 3D vector around the y-axis
- * @param {vec3} out The receiving vec3
- * @param {vec3} a The vec3 point to rotate
- * @param {vec3} b The origin of the rotation
- * @param {Number} c The angle of rotation
- * @returns {vec3} out
- */
-function rotateY(out, a, b, c) {
-  var p = [],
-      r = [];
-  //Translate point to the origin
-  p[0] = a[0] - b[0];
-  p[1] = a[1] - b[1];
-  p[2] = a[2] - b[2];
-
-  //perform rotation
-  r[0] = p[2] * Math.sin(c) + p[0] * Math.cos(c);
-  r[1] = p[1];
-  r[2] = p[2] * Math.cos(c) - p[0] * Math.sin(c);
-
-  //translate to correct position
-  out[0] = r[0] + b[0];
-  out[1] = r[1] + b[1];
-  out[2] = r[2] + b[2];
-
-  return out;
-}
-
-/**
- * Rotate a 3D vector around the z-axis
- * @param {vec3} out The receiving vec3
- * @param {vec3} a The vec3 point to rotate
- * @param {vec3} b The origin of the rotation
- * @param {Number} c The angle of rotation
- * @returns {vec3} out
- */
-function rotateZ(out, a, b, c) {
-  var p = [],
-      r = [];
-  //Translate point to the origin
-  p[0] = a[0] - b[0];
-  p[1] = a[1] - b[1];
-  p[2] = a[2] - b[2];
-
-  //perform rotation
-  r[0] = p[0] * Math.cos(c) - p[1] * Math.sin(c);
-  r[1] = p[0] * Math.sin(c) + p[1] * Math.cos(c);
-  r[2] = p[2];
-
-  //translate to correct position
-  out[0] = r[0] + b[0];
-  out[1] = r[1] + b[1];
-  out[2] = r[2] + b[2];
-
-  return out;
-}
-
-/**
- * Get the angle between two 3D vectors
- * @param {vec3} a The first operand
- * @param {vec3} b The second operand
- * @returns {Number} The angle in radians
- */
-function angle(a, b) {
-  var tempA = fromValues(a[0], a[1], a[2]);
-  var tempB = fromValues(b[0], b[1], b[2]);
-
-  normalize(tempA, tempA);
-  normalize(tempB, tempB);
-
-  var cosine = dot(tempA, tempB);
-
-  if (cosine > 1.0) {
-    return 0;
-  } else if (cosine < -1.0) {
-    return Math.PI;
-  } else {
-    return Math.acos(cosine);
-  }
-}
-
-/**
- * Returns a string representation of a vector
- *
- * @param {vec3} a vector to represent as a string
- * @returns {String} string representation of the vector
- */
-function str(a) {
-  return 'vec3(' + a[0] + ', ' + a[1] + ', ' + a[2] + ')';
-}
-
-/**
- * Returns whether or not the vectors have exactly the same elements in the same position (when compared with ===)
- *
- * @param {vec3} a The first vector.
- * @param {vec3} b The second vector.
- * @returns {Boolean} True if the vectors are equal, false otherwise.
- */
-function exactEquals(a, b) {
-  return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
-}
-
-/**
- * Returns whether or not the vectors have approximately the same elements in the same position.
- *
- * @param {vec3} a The first vector.
- * @param {vec3} b The second vector.
- * @returns {Boolean} True if the vectors are equal, false otherwise.
- */
-function equals(a, b) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2];
-  var b0 = b[0],
-      b1 = b[1],
-      b2 = b[2];
-  return Math.abs(a0 - b0) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) && Math.abs(a1 - b1) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) && Math.abs(a2 - b2) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2));
-}
-
-/**
- * Alias for {@link vec3.subtract}
- * @function
- */
-var sub = exports.sub = subtract;
-
-/**
- * Alias for {@link vec3.multiply}
- * @function
- */
-var mul = exports.mul = multiply;
-
-/**
- * Alias for {@link vec3.divide}
- * @function
- */
-var div = exports.div = divide;
-
-/**
- * Alias for {@link vec3.distance}
- * @function
- */
-var dist = exports.dist = distance;
-
-/**
- * Alias for {@link vec3.squaredDistance}
- * @function
- */
-var sqrDist = exports.sqrDist = squaredDistance;
-
-/**
- * Alias for {@link vec3.length}
- * @function
- */
-var len = exports.len = length;
-
-/**
- * Alias for {@link vec3.squaredLength}
- * @function
- */
-var sqrLen = exports.sqrLen = squaredLength;
-
-/**
- * Perform some operation over an array of vec3s.
- *
- * @param {Array} a the array of vectors to iterate over
- * @param {Number} stride Number of elements between the start of each vec3. If 0 assumes tightly packed
- * @param {Number} offset Number of elements to skip at the beginning of the array
- * @param {Number} count Number of vec3s to iterate over. If 0 iterates over entire array
- * @param {Function} fn Function to call for each vector in the array
- * @param {Object} [arg] additional argument to pass to fn
- * @returns {Array} a
- * @function
- */
-var forEach = exports.forEach = function () {
-  var vec = create();
-
-  return function (a, stride, offset, count, fn, arg) {
-    var i = void 0,
-        l = void 0;
-    if (!stride) {
-      stride = 3;
-    }
-
-    if (!offset) {
-      offset = 0;
-    }
-
-    if (count) {
-      l = Math.min(count * stride + offset, a.length);
-    } else {
-      l = a.length;
-    }
-
-    for (i = offset; i < l; i += stride) {
-      vec[0] = a[i];vec[1] = a[i + 1];vec[2] = a[i + 2];
-      fn(vec, vec, arg);
-      a[i] = vec[0];a[i + 1] = vec[1];a[i + 2] = vec[2];
-    }
-
-    return a;
-  };
-}();
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.forEach = exports.sqrLen = exports.len = exports.sqrDist = exports.dist = exports.div = exports.mul = exports.sub = undefined;
-exports.create = create;
-exports.clone = clone;
-exports.fromValues = fromValues;
-exports.copy = copy;
-exports.set = set;
-exports.add = add;
-exports.subtract = subtract;
-exports.multiply = multiply;
-exports.divide = divide;
-exports.ceil = ceil;
-exports.floor = floor;
-exports.min = min;
-exports.max = max;
-exports.round = round;
-exports.scale = scale;
-exports.scaleAndAdd = scaleAndAdd;
-exports.distance = distance;
-exports.squaredDistance = squaredDistance;
-exports.length = length;
-exports.squaredLength = squaredLength;
-exports.negate = negate;
-exports.inverse = inverse;
-exports.normalize = normalize;
-exports.dot = dot;
-exports.lerp = lerp;
-exports.random = random;
-exports.transformMat4 = transformMat4;
-exports.transformQuat = transformQuat;
-exports.str = str;
-exports.exactEquals = exactEquals;
-exports.equals = equals;
-
-var _common = __webpack_require__(0);
-
-var glMatrix = _interopRequireWildcard(_common);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/**
- * 4 Dimensional Vector
- * @module vec4
- */
-
-/**
- * Creates a new, empty vec4
- *
- * @returns {vec4} a new 4D vector
- */
-function create() {
-  var out = new glMatrix.ARRAY_TYPE(4);
-  out[0] = 0;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  return out;
-}
-
-/**
- * Creates a new vec4 initialized with values from an existing vector
- *
- * @param {vec4} a vector to clone
- * @returns {vec4} a new 4D vector
- */
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-function clone(a) {
-  var out = new glMatrix.ARRAY_TYPE(4);
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  out[3] = a[3];
-  return out;
-}
-
-/**
- * Creates a new vec4 initialized with the given values
- *
- * @param {Number} x X component
- * @param {Number} y Y component
- * @param {Number} z Z component
- * @param {Number} w W component
- * @returns {vec4} a new 4D vector
- */
-function fromValues(x, y, z, w) {
-  var out = new glMatrix.ARRAY_TYPE(4);
-  out[0] = x;
-  out[1] = y;
-  out[2] = z;
-  out[3] = w;
-  return out;
-}
-
-/**
- * Copy the values from one vec4 to another
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a the source vector
- * @returns {vec4} out
- */
-function copy(out, a) {
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  out[3] = a[3];
-  return out;
-}
-
-/**
- * Set the components of a vec4 to the given values
- *
- * @param {vec4} out the receiving vector
- * @param {Number} x X component
- * @param {Number} y Y component
- * @param {Number} z Z component
- * @param {Number} w W component
- * @returns {vec4} out
- */
-function set(out, x, y, z, w) {
-  out[0] = x;
-  out[1] = y;
-  out[2] = z;
-  out[3] = w;
-  return out;
-}
-
-/**
- * Adds two vec4's
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a the first operand
- * @param {vec4} b the second operand
- * @returns {vec4} out
- */
-function add(out, a, b) {
-  out[0] = a[0] + b[0];
-  out[1] = a[1] + b[1];
-  out[2] = a[2] + b[2];
-  out[3] = a[3] + b[3];
-  return out;
-}
-
-/**
- * Subtracts vector b from vector a
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a the first operand
- * @param {vec4} b the second operand
- * @returns {vec4} out
- */
-function subtract(out, a, b) {
-  out[0] = a[0] - b[0];
-  out[1] = a[1] - b[1];
-  out[2] = a[2] - b[2];
-  out[3] = a[3] - b[3];
-  return out;
-}
-
-/**
- * Multiplies two vec4's
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a the first operand
- * @param {vec4} b the second operand
- * @returns {vec4} out
- */
-function multiply(out, a, b) {
-  out[0] = a[0] * b[0];
-  out[1] = a[1] * b[1];
-  out[2] = a[2] * b[2];
-  out[3] = a[3] * b[3];
-  return out;
-}
-
-/**
- * Divides two vec4's
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a the first operand
- * @param {vec4} b the second operand
- * @returns {vec4} out
- */
-function divide(out, a, b) {
-  out[0] = a[0] / b[0];
-  out[1] = a[1] / b[1];
-  out[2] = a[2] / b[2];
-  out[3] = a[3] / b[3];
-  return out;
-}
-
-/**
- * Math.ceil the components of a vec4
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a vector to ceil
- * @returns {vec4} out
- */
-function ceil(out, a) {
-  out[0] = Math.ceil(a[0]);
-  out[1] = Math.ceil(a[1]);
-  out[2] = Math.ceil(a[2]);
-  out[3] = Math.ceil(a[3]);
-  return out;
-}
-
-/**
- * Math.floor the components of a vec4
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a vector to floor
- * @returns {vec4} out
- */
-function floor(out, a) {
-  out[0] = Math.floor(a[0]);
-  out[1] = Math.floor(a[1]);
-  out[2] = Math.floor(a[2]);
-  out[3] = Math.floor(a[3]);
-  return out;
-}
-
-/**
- * Returns the minimum of two vec4's
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a the first operand
- * @param {vec4} b the second operand
- * @returns {vec4} out
- */
-function min(out, a, b) {
-  out[0] = Math.min(a[0], b[0]);
-  out[1] = Math.min(a[1], b[1]);
-  out[2] = Math.min(a[2], b[2]);
-  out[3] = Math.min(a[3], b[3]);
-  return out;
-}
-
-/**
- * Returns the maximum of two vec4's
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a the first operand
- * @param {vec4} b the second operand
- * @returns {vec4} out
- */
-function max(out, a, b) {
-  out[0] = Math.max(a[0], b[0]);
-  out[1] = Math.max(a[1], b[1]);
-  out[2] = Math.max(a[2], b[2]);
-  out[3] = Math.max(a[3], b[3]);
-  return out;
-}
-
-/**
- * Math.round the components of a vec4
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a vector to round
- * @returns {vec4} out
- */
-function round(out, a) {
-  out[0] = Math.round(a[0]);
-  out[1] = Math.round(a[1]);
-  out[2] = Math.round(a[2]);
-  out[3] = Math.round(a[3]);
-  return out;
-}
-
-/**
- * Scales a vec4 by a scalar number
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a the vector to scale
- * @param {Number} b amount to scale the vector by
- * @returns {vec4} out
- */
-function scale(out, a, b) {
-  out[0] = a[0] * b;
-  out[1] = a[1] * b;
-  out[2] = a[2] * b;
-  out[3] = a[3] * b;
-  return out;
-}
-
-/**
- * Adds two vec4's after scaling the second operand by a scalar value
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a the first operand
- * @param {vec4} b the second operand
- * @param {Number} scale the amount to scale b by before adding
- * @returns {vec4} out
- */
-function scaleAndAdd(out, a, b, scale) {
-  out[0] = a[0] + b[0] * scale;
-  out[1] = a[1] + b[1] * scale;
-  out[2] = a[2] + b[2] * scale;
-  out[3] = a[3] + b[3] * scale;
-  return out;
-}
-
-/**
- * Calculates the euclidian distance between two vec4's
- *
- * @param {vec4} a the first operand
- * @param {vec4} b the second operand
- * @returns {Number} distance between a and b
- */
-function distance(a, b) {
-  var x = b[0] - a[0];
-  var y = b[1] - a[1];
-  var z = b[2] - a[2];
-  var w = b[3] - a[3];
-  return Math.sqrt(x * x + y * y + z * z + w * w);
-}
-
-/**
- * Calculates the squared euclidian distance between two vec4's
- *
- * @param {vec4} a the first operand
- * @param {vec4} b the second operand
- * @returns {Number} squared distance between a and b
- */
-function squaredDistance(a, b) {
-  var x = b[0] - a[0];
-  var y = b[1] - a[1];
-  var z = b[2] - a[2];
-  var w = b[3] - a[3];
-  return x * x + y * y + z * z + w * w;
-}
-
-/**
- * Calculates the length of a vec4
- *
- * @param {vec4} a vector to calculate length of
- * @returns {Number} length of a
- */
-function length(a) {
-  var x = a[0];
-  var y = a[1];
-  var z = a[2];
-  var w = a[3];
-  return Math.sqrt(x * x + y * y + z * z + w * w);
-}
-
-/**
- * Calculates the squared length of a vec4
- *
- * @param {vec4} a vector to calculate squared length of
- * @returns {Number} squared length of a
- */
-function squaredLength(a) {
-  var x = a[0];
-  var y = a[1];
-  var z = a[2];
-  var w = a[3];
-  return x * x + y * y + z * z + w * w;
-}
-
-/**
- * Negates the components of a vec4
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a vector to negate
- * @returns {vec4} out
- */
-function negate(out, a) {
-  out[0] = -a[0];
-  out[1] = -a[1];
-  out[2] = -a[2];
-  out[3] = -a[3];
-  return out;
-}
-
-/**
- * Returns the inverse of the components of a vec4
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a vector to invert
- * @returns {vec4} out
- */
-function inverse(out, a) {
-  out[0] = 1.0 / a[0];
-  out[1] = 1.0 / a[1];
-  out[2] = 1.0 / a[2];
-  out[3] = 1.0 / a[3];
-  return out;
-}
-
-/**
- * Normalize a vec4
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a vector to normalize
- * @returns {vec4} out
- */
-function normalize(out, a) {
-  var x = a[0];
-  var y = a[1];
-  var z = a[2];
-  var w = a[3];
-  var len = x * x + y * y + z * z + w * w;
-  if (len > 0) {
-    len = 1 / Math.sqrt(len);
-    out[0] = x * len;
-    out[1] = y * len;
-    out[2] = z * len;
-    out[3] = w * len;
-  }
-  return out;
-}
-
-/**
- * Calculates the dot product of two vec4's
- *
- * @param {vec4} a the first operand
- * @param {vec4} b the second operand
- * @returns {Number} dot product of a and b
- */
-function dot(a, b) {
-  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
-}
-
-/**
- * Performs a linear interpolation between two vec4's
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a the first operand
- * @param {vec4} b the second operand
- * @param {Number} t interpolation amount between the two inputs
- * @returns {vec4} out
- */
-function lerp(out, a, b, t) {
-  var ax = a[0];
-  var ay = a[1];
-  var az = a[2];
-  var aw = a[3];
-  out[0] = ax + t * (b[0] - ax);
-  out[1] = ay + t * (b[1] - ay);
-  out[2] = az + t * (b[2] - az);
-  out[3] = aw + t * (b[3] - aw);
-  return out;
-}
-
-/**
- * Generates a random vector with the given scale
- *
- * @param {vec4} out the receiving vector
- * @param {Number} [scale] Length of the resulting vector. If ommitted, a unit vector will be returned
- * @returns {vec4} out
- */
-function random(out, vectorScale) {
-  vectorScale = vectorScale || 1.0;
-
-  //TODO: This is a pretty awful way of doing this. Find something better.
-  out[0] = glMatrix.RANDOM();
-  out[1] = glMatrix.RANDOM();
-  out[2] = glMatrix.RANDOM();
-  out[3] = glMatrix.RANDOM();
-  normalize(out, out);
-  scale(out, out, vectorScale);
-  return out;
-}
-
-/**
- * Transforms the vec4 with a mat4.
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a the vector to transform
- * @param {mat4} m matrix to transform with
- * @returns {vec4} out
- */
-function transformMat4(out, a, m) {
-  var x = a[0],
-      y = a[1],
-      z = a[2],
-      w = a[3];
-  out[0] = m[0] * x + m[4] * y + m[8] * z + m[12] * w;
-  out[1] = m[1] * x + m[5] * y + m[9] * z + m[13] * w;
-  out[2] = m[2] * x + m[6] * y + m[10] * z + m[14] * w;
-  out[3] = m[3] * x + m[7] * y + m[11] * z + m[15] * w;
-  return out;
-}
-
-/**
- * Transforms the vec4 with a quat
- *
- * @param {vec4} out the receiving vector
- * @param {vec4} a the vector to transform
- * @param {quat} q quaternion to transform with
- * @returns {vec4} out
- */
-function transformQuat(out, a, q) {
-  var x = a[0],
-      y = a[1],
-      z = a[2];
-  var qx = q[0],
-      qy = q[1],
-      qz = q[2],
-      qw = q[3];
-
-  // calculate quat * vec
-  var ix = qw * x + qy * z - qz * y;
-  var iy = qw * y + qz * x - qx * z;
-  var iz = qw * z + qx * y - qy * x;
-  var iw = -qx * x - qy * y - qz * z;
-
-  // calculate result * inverse quat
-  out[0] = ix * qw + iw * -qx + iy * -qz - iz * -qy;
-  out[1] = iy * qw + iw * -qy + iz * -qx - ix * -qz;
-  out[2] = iz * qw + iw * -qz + ix * -qy - iy * -qx;
-  out[3] = a[3];
-  return out;
-}
-
-/**
- * Returns a string representation of a vector
- *
- * @param {vec4} a vector to represent as a string
- * @returns {String} string representation of the vector
- */
-function str(a) {
-  return 'vec4(' + a[0] + ', ' + a[1] + ', ' + a[2] + ', ' + a[3] + ')';
-}
-
-/**
- * Returns whether or not the vectors have exactly the same elements in the same position (when compared with ===)
- *
- * @param {vec4} a The first vector.
- * @param {vec4} b The second vector.
- * @returns {Boolean} True if the vectors are equal, false otherwise.
- */
-function exactEquals(a, b) {
-  return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
-}
-
-/**
- * Returns whether or not the vectors have approximately the same elements in the same position.
- *
- * @param {vec4} a The first vector.
- * @param {vec4} b The second vector.
- * @returns {Boolean} True if the vectors are equal, false otherwise.
- */
-function equals(a, b) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3];
-  var b0 = b[0],
-      b1 = b[1],
-      b2 = b[2],
-      b3 = b[3];
-  return Math.abs(a0 - b0) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) && Math.abs(a1 - b1) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) && Math.abs(a2 - b2) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) && Math.abs(a3 - b3) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3));
-}
-
-/**
- * Alias for {@link vec4.subtract}
- * @function
- */
-var sub = exports.sub = subtract;
-
-/**
- * Alias for {@link vec4.multiply}
- * @function
- */
-var mul = exports.mul = multiply;
-
-/**
- * Alias for {@link vec4.divide}
- * @function
- */
-var div = exports.div = divide;
-
-/**
- * Alias for {@link vec4.distance}
- * @function
- */
-var dist = exports.dist = distance;
-
-/**
- * Alias for {@link vec4.squaredDistance}
- * @function
- */
-var sqrDist = exports.sqrDist = squaredDistance;
-
-/**
- * Alias for {@link vec4.length}
- * @function
- */
-var len = exports.len = length;
-
-/**
- * Alias for {@link vec4.squaredLength}
- * @function
- */
-var sqrLen = exports.sqrLen = squaredLength;
-
-/**
- * Perform some operation over an array of vec4s.
- *
- * @param {Array} a the array of vectors to iterate over
- * @param {Number} stride Number of elements between the start of each vec4. If 0 assumes tightly packed
- * @param {Number} offset Number of elements to skip at the beginning of the array
- * @param {Number} count Number of vec4s to iterate over. If 0 iterates over entire array
- * @param {Function} fn Function to call for each vector in the array
- * @param {Object} [arg] additional argument to pass to fn
- * @returns {Array} a
- * @function
- */
-var forEach = exports.forEach = function () {
-  var vec = create();
-
-  return function (a, stride, offset, count, fn, arg) {
-    var i = void 0,
-        l = void 0;
-    if (!stride) {
-      stride = 4;
-    }
-
-    if (!offset) {
-      offset = 0;
-    }
-
-    if (count) {
-      l = Math.min(count * stride + offset, a.length);
-    } else {
-      l = a.length;
-    }
-
-    for (i = offset; i < l; i += stride) {
-      vec[0] = a[i];vec[1] = a[i + 1];vec[2] = a[i + 2];vec[3] = a[i + 3];
-      fn(vec, vec, arg);
-      a[i] = vec[0];a[i + 1] = vec[1];a[i + 2] = vec[2];a[i + 3] = vec[3];
-    }
-
-    return a;
-  };
-}();
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.vec4 = exports.vec3 = exports.vec2 = exports.quat = exports.mat4 = exports.mat3 = exports.mat2d = exports.mat2 = exports.glMatrix = undefined;
-
-var _common = __webpack_require__(0);
-
-var glMatrix = _interopRequireWildcard(_common);
-
-var _mat = __webpack_require__(5);
-
-var mat2 = _interopRequireWildcard(_mat);
-
-var _mat2d = __webpack_require__(6);
-
-var mat2d = _interopRequireWildcard(_mat2d);
-
-var _mat2 = __webpack_require__(1);
-
-var mat3 = _interopRequireWildcard(_mat2);
-
-var _mat3 = __webpack_require__(7);
-
-var mat4 = _interopRequireWildcard(_mat3);
-
-var _quat = __webpack_require__(8);
-
-var quat = _interopRequireWildcard(_quat);
-
-var _vec = __webpack_require__(9);
-
-var vec2 = _interopRequireWildcard(_vec);
-
-var _vec2 = __webpack_require__(2);
-
-var vec3 = _interopRequireWildcard(_vec2);
-
-var _vec3 = __webpack_require__(3);
-
-var vec4 = _interopRequireWildcard(_vec3);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-exports.glMatrix = glMatrix;
-exports.mat2 = mat2;
-exports.mat2d = mat2d;
-exports.mat3 = mat3;
-exports.mat4 = mat4;
-exports.quat = quat;
-exports.vec2 = vec2;
-exports.vec3 = vec3;
-exports.vec4 = vec4; /**
-                      * @fileoverview gl-matrix - High performance matrix and vector operations
-                      * @author Brandon Jones
-                      * @author Colin MacKenzie IV
-                      * @version 2.4.0
-                      */
-
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-// END HEADER
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.sub = exports.mul = undefined;
-exports.create = create;
-exports.clone = clone;
-exports.copy = copy;
-exports.identity = identity;
-exports.fromValues = fromValues;
-exports.set = set;
-exports.transpose = transpose;
-exports.invert = invert;
-exports.adjoint = adjoint;
-exports.determinant = determinant;
-exports.multiply = multiply;
-exports.rotate = rotate;
-exports.scale = scale;
-exports.fromRotation = fromRotation;
-exports.fromScaling = fromScaling;
-exports.str = str;
-exports.frob = frob;
-exports.LDU = LDU;
-exports.add = add;
-exports.subtract = subtract;
-exports.exactEquals = exactEquals;
-exports.equals = equals;
-exports.multiplyScalar = multiplyScalar;
-exports.multiplyScalarAndAdd = multiplyScalarAndAdd;
-
-var _common = __webpack_require__(0);
-
-var glMatrix = _interopRequireWildcard(_common);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/**
- * 2x2 Matrix
- * @module mat2
- */
-
-/**
- * Creates a new identity mat2
- *
- * @returns {mat2} a new 2x2 matrix
- */
-function create() {
-  var out = new glMatrix.ARRAY_TYPE(4);
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 1;
-  return out;
-}
-
-/**
- * Creates a new mat2 initialized with values from an existing matrix
- *
- * @param {mat2} a matrix to clone
- * @returns {mat2} a new 2x2 matrix
- */
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-function clone(a) {
-  var out = new glMatrix.ARRAY_TYPE(4);
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  out[3] = a[3];
-  return out;
-}
-
-/**
- * Copy the values from one mat2 to another
- *
- * @param {mat2} out the receiving matrix
- * @param {mat2} a the source matrix
- * @returns {mat2} out
- */
-function copy(out, a) {
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  out[3] = a[3];
-  return out;
-}
-
-/**
- * Set a mat2 to the identity matrix
- *
- * @param {mat2} out the receiving matrix
- * @returns {mat2} out
- */
-function identity(out) {
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 1;
-  return out;
-}
-
-/**
- * Create a new mat2 with the given values
- *
- * @param {Number} m00 Component in column 0, row 0 position (index 0)
- * @param {Number} m01 Component in column 0, row 1 position (index 1)
- * @param {Number} m10 Component in column 1, row 0 position (index 2)
- * @param {Number} m11 Component in column 1, row 1 position (index 3)
- * @returns {mat2} out A new 2x2 matrix
- */
-function fromValues(m00, m01, m10, m11) {
-  var out = new glMatrix.ARRAY_TYPE(4);
-  out[0] = m00;
-  out[1] = m01;
-  out[2] = m10;
-  out[3] = m11;
-  return out;
-}
-
-/**
- * Set the components of a mat2 to the given values
- *
- * @param {mat2} out the receiving matrix
- * @param {Number} m00 Component in column 0, row 0 position (index 0)
- * @param {Number} m01 Component in column 0, row 1 position (index 1)
- * @param {Number} m10 Component in column 1, row 0 position (index 2)
- * @param {Number} m11 Component in column 1, row 1 position (index 3)
- * @returns {mat2} out
- */
-function set(out, m00, m01, m10, m11) {
-  out[0] = m00;
-  out[1] = m01;
-  out[2] = m10;
-  out[3] = m11;
-  return out;
-}
-
-/**
- * Transpose the values of a mat2
- *
- * @param {mat2} out the receiving matrix
- * @param {mat2} a the source matrix
- * @returns {mat2} out
- */
-function transpose(out, a) {
-  // If we are transposing ourselves we can skip a few steps but have to cache
-  // some values
-  if (out === a) {
-    var a1 = a[1];
-    out[1] = a[2];
-    out[2] = a1;
-  } else {
-    out[0] = a[0];
-    out[1] = a[2];
-    out[2] = a[1];
-    out[3] = a[3];
-  }
-
-  return out;
-}
-
-/**
- * Inverts a mat2
- *
- * @param {mat2} out the receiving matrix
- * @param {mat2} a the source matrix
- * @returns {mat2} out
- */
-function invert(out, a) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3];
-
-  // Calculate the determinant
-  var det = a0 * a3 - a2 * a1;
-
-  if (!det) {
-    return null;
-  }
-  det = 1.0 / det;
-
-  out[0] = a3 * det;
-  out[1] = -a1 * det;
-  out[2] = -a2 * det;
-  out[3] = a0 * det;
-
-  return out;
-}
-
-/**
- * Calculates the adjugate of a mat2
- *
- * @param {mat2} out the receiving matrix
- * @param {mat2} a the source matrix
- * @returns {mat2} out
- */
-function adjoint(out, a) {
-  // Caching this value is nessecary if out == a
-  var a0 = a[0];
-  out[0] = a[3];
-  out[1] = -a[1];
-  out[2] = -a[2];
-  out[3] = a0;
-
-  return out;
-}
-
-/**
- * Calculates the determinant of a mat2
- *
- * @param {mat2} a the source matrix
- * @returns {Number} determinant of a
- */
-function determinant(a) {
-  return a[0] * a[3] - a[2] * a[1];
-}
-
-/**
- * Multiplies two mat2's
- *
- * @param {mat2} out the receiving matrix
- * @param {mat2} a the first operand
- * @param {mat2} b the second operand
- * @returns {mat2} out
- */
-function multiply(out, a, b) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3];
-  var b0 = b[0],
-      b1 = b[1],
-      b2 = b[2],
-      b3 = b[3];
-  out[0] = a0 * b0 + a2 * b1;
-  out[1] = a1 * b0 + a3 * b1;
-  out[2] = a0 * b2 + a2 * b3;
-  out[3] = a1 * b2 + a3 * b3;
-  return out;
-}
-
-/**
- * Rotates a mat2 by the given angle
- *
- * @param {mat2} out the receiving matrix
- * @param {mat2} a the matrix to rotate
- * @param {Number} rad the angle to rotate the matrix by
- * @returns {mat2} out
- */
-function rotate(out, a, rad) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3];
-  var s = Math.sin(rad);
-  var c = Math.cos(rad);
-  out[0] = a0 * c + a2 * s;
-  out[1] = a1 * c + a3 * s;
-  out[2] = a0 * -s + a2 * c;
-  out[3] = a1 * -s + a3 * c;
-  return out;
-}
-
-/**
- * Scales the mat2 by the dimensions in the given vec2
- *
- * @param {mat2} out the receiving matrix
- * @param {mat2} a the matrix to rotate
- * @param {vec2} v the vec2 to scale the matrix by
- * @returns {mat2} out
- **/
-function scale(out, a, v) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3];
-  var v0 = v[0],
-      v1 = v[1];
-  out[0] = a0 * v0;
-  out[1] = a1 * v0;
-  out[2] = a2 * v1;
-  out[3] = a3 * v1;
-  return out;
-}
-
-/**
- * Creates a matrix from a given angle
- * This is equivalent to (but much faster than):
- *
- *     mat2.identity(dest);
- *     mat2.rotate(dest, dest, rad);
- *
- * @param {mat2} out mat2 receiving operation result
- * @param {Number} rad the angle to rotate the matrix by
- * @returns {mat2} out
- */
-function fromRotation(out, rad) {
-  var s = Math.sin(rad);
-  var c = Math.cos(rad);
-  out[0] = c;
-  out[1] = s;
-  out[2] = -s;
-  out[3] = c;
-  return out;
-}
-
-/**
- * Creates a matrix from a vector scaling
- * This is equivalent to (but much faster than):
- *
- *     mat2.identity(dest);
- *     mat2.scale(dest, dest, vec);
- *
- * @param {mat2} out mat2 receiving operation result
- * @param {vec2} v Scaling vector
- * @returns {mat2} out
- */
-function fromScaling(out, v) {
-  out[0] = v[0];
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = v[1];
-  return out;
-}
-
-/**
- * Returns a string representation of a mat2
- *
- * @param {mat2} a matrix to represent as a string
- * @returns {String} string representation of the matrix
- */
-function str(a) {
-  return 'mat2(' + a[0] + ', ' + a[1] + ', ' + a[2] + ', ' + a[3] + ')';
-}
-
-/**
- * Returns Frobenius norm of a mat2
- *
- * @param {mat2} a the matrix to calculate Frobenius norm of
- * @returns {Number} Frobenius norm
- */
-function frob(a) {
-  return Math.sqrt(Math.pow(a[0], 2) + Math.pow(a[1], 2) + Math.pow(a[2], 2) + Math.pow(a[3], 2));
-}
-
-/**
- * Returns L, D and U matrices (Lower triangular, Diagonal and Upper triangular) by factorizing the input matrix
- * @param {mat2} L the lower triangular matrix
- * @param {mat2} D the diagonal matrix
- * @param {mat2} U the upper triangular matrix
- * @param {mat2} a the input matrix to factorize
- */
-
-function LDU(L, D, U, a) {
-  L[2] = a[2] / a[0];
-  U[0] = a[0];
-  U[1] = a[1];
-  U[3] = a[3] - L[2] * U[1];
-  return [L, D, U];
-}
-
-/**
- * Adds two mat2's
- *
- * @param {mat2} out the receiving matrix
- * @param {mat2} a the first operand
- * @param {mat2} b the second operand
- * @returns {mat2} out
- */
-function add(out, a, b) {
-  out[0] = a[0] + b[0];
-  out[1] = a[1] + b[1];
-  out[2] = a[2] + b[2];
-  out[3] = a[3] + b[3];
-  return out;
-}
-
-/**
- * Subtracts matrix b from matrix a
- *
- * @param {mat2} out the receiving matrix
- * @param {mat2} a the first operand
- * @param {mat2} b the second operand
- * @returns {mat2} out
- */
-function subtract(out, a, b) {
-  out[0] = a[0] - b[0];
-  out[1] = a[1] - b[1];
-  out[2] = a[2] - b[2];
-  out[3] = a[3] - b[3];
-  return out;
-}
-
-/**
- * Returns whether or not the matrices have exactly the same elements in the same position (when compared with ===)
- *
- * @param {mat2} a The first matrix.
- * @param {mat2} b The second matrix.
- * @returns {Boolean} True if the matrices are equal, false otherwise.
- */
-function exactEquals(a, b) {
-  return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
-}
-
-/**
- * Returns whether or not the matrices have approximately the same elements in the same position.
- *
- * @param {mat2} a The first matrix.
- * @param {mat2} b The second matrix.
- * @returns {Boolean} True if the matrices are equal, false otherwise.
- */
-function equals(a, b) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3];
-  var b0 = b[0],
-      b1 = b[1],
-      b2 = b[2],
-      b3 = b[3];
-  return Math.abs(a0 - b0) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) && Math.abs(a1 - b1) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) && Math.abs(a2 - b2) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) && Math.abs(a3 - b3) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3));
-}
-
-/**
- * Multiply each element of the matrix by a scalar.
- *
- * @param {mat2} out the receiving matrix
- * @param {mat2} a the matrix to scale
- * @param {Number} b amount to scale the matrix's elements by
- * @returns {mat2} out
- */
-function multiplyScalar(out, a, b) {
-  out[0] = a[0] * b;
-  out[1] = a[1] * b;
-  out[2] = a[2] * b;
-  out[3] = a[3] * b;
-  return out;
-}
-
-/**
- * Adds two mat2's after multiplying each element of the second operand by a scalar value.
- *
- * @param {mat2} out the receiving vector
- * @param {mat2} a the first operand
- * @param {mat2} b the second operand
- * @param {Number} scale the amount to scale b's elements by before adding
- * @returns {mat2} out
- */
-function multiplyScalarAndAdd(out, a, b, scale) {
-  out[0] = a[0] + b[0] * scale;
-  out[1] = a[1] + b[1] * scale;
-  out[2] = a[2] + b[2] * scale;
-  out[3] = a[3] + b[3] * scale;
-  return out;
-}
-
-/**
- * Alias for {@link mat2.multiply}
- * @function
- */
-var mul = exports.mul = multiply;
-
-/**
- * Alias for {@link mat2.subtract}
- * @function
- */
-var sub = exports.sub = subtract;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.sub = exports.mul = undefined;
-exports.create = create;
-exports.clone = clone;
-exports.copy = copy;
-exports.identity = identity;
-exports.fromValues = fromValues;
-exports.set = set;
-exports.invert = invert;
-exports.determinant = determinant;
-exports.multiply = multiply;
-exports.rotate = rotate;
-exports.scale = scale;
-exports.translate = translate;
-exports.fromRotation = fromRotation;
-exports.fromScaling = fromScaling;
-exports.fromTranslation = fromTranslation;
-exports.str = str;
-exports.frob = frob;
-exports.add = add;
-exports.subtract = subtract;
-exports.multiplyScalar = multiplyScalar;
-exports.multiplyScalarAndAdd = multiplyScalarAndAdd;
-exports.exactEquals = exactEquals;
-exports.equals = equals;
-
-var _common = __webpack_require__(0);
-
-var glMatrix = _interopRequireWildcard(_common);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/**
- * 2x3 Matrix
- * @module mat2d
- *
- * @description
- * A mat2d contains six elements defined as:
- * <pre>
- * [a, c, tx,
- *  b, d, ty]
- * </pre>
- * This is a short form for the 3x3 matrix:
- * <pre>
- * [a, c, tx,
- *  b, d, ty,
- *  0, 0, 1]
- * </pre>
- * The last row is ignored so the array is shorter and operations are faster.
- */
-
-/**
- * Creates a new identity mat2d
- *
- * @returns {mat2d} a new 2x3 matrix
- */
-function create() {
-  var out = new glMatrix.ARRAY_TYPE(6);
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 1;
-  out[4] = 0;
-  out[5] = 0;
-  return out;
-}
-
-/**
- * Creates a new mat2d initialized with values from an existing matrix
- *
- * @param {mat2d} a matrix to clone
- * @returns {mat2d} a new 2x3 matrix
- */
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-function clone(a) {
-  var out = new glMatrix.ARRAY_TYPE(6);
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  out[3] = a[3];
-  out[4] = a[4];
-  out[5] = a[5];
-  return out;
-}
-
-/**
- * Copy the values from one mat2d to another
- *
- * @param {mat2d} out the receiving matrix
- * @param {mat2d} a the source matrix
- * @returns {mat2d} out
- */
-function copy(out, a) {
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  out[3] = a[3];
-  out[4] = a[4];
-  out[5] = a[5];
-  return out;
-}
-
-/**
- * Set a mat2d to the identity matrix
- *
- * @param {mat2d} out the receiving matrix
- * @returns {mat2d} out
- */
-function identity(out) {
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 1;
-  out[4] = 0;
-  out[5] = 0;
-  return out;
-}
-
-/**
- * Create a new mat2d with the given values
- *
- * @param {Number} a Component A (index 0)
- * @param {Number} b Component B (index 1)
- * @param {Number} c Component C (index 2)
- * @param {Number} d Component D (index 3)
- * @param {Number} tx Component TX (index 4)
- * @param {Number} ty Component TY (index 5)
- * @returns {mat2d} A new mat2d
- */
-function fromValues(a, b, c, d, tx, ty) {
-  var out = new glMatrix.ARRAY_TYPE(6);
-  out[0] = a;
-  out[1] = b;
-  out[2] = c;
-  out[3] = d;
-  out[4] = tx;
-  out[5] = ty;
-  return out;
-}
-
-/**
- * Set the components of a mat2d to the given values
- *
- * @param {mat2d} out the receiving matrix
- * @param {Number} a Component A (index 0)
- * @param {Number} b Component B (index 1)
- * @param {Number} c Component C (index 2)
- * @param {Number} d Component D (index 3)
- * @param {Number} tx Component TX (index 4)
- * @param {Number} ty Component TY (index 5)
- * @returns {mat2d} out
- */
-function set(out, a, b, c, d, tx, ty) {
-  out[0] = a;
-  out[1] = b;
-  out[2] = c;
-  out[3] = d;
-  out[4] = tx;
-  out[5] = ty;
-  return out;
-}
-
-/**
- * Inverts a mat2d
- *
- * @param {mat2d} out the receiving matrix
- * @param {mat2d} a the source matrix
- * @returns {mat2d} out
- */
-function invert(out, a) {
-  var aa = a[0],
-      ab = a[1],
-      ac = a[2],
-      ad = a[3];
-  var atx = a[4],
-      aty = a[5];
-
-  var det = aa * ad - ab * ac;
-  if (!det) {
-    return null;
-  }
-  det = 1.0 / det;
-
-  out[0] = ad * det;
-  out[1] = -ab * det;
-  out[2] = -ac * det;
-  out[3] = aa * det;
-  out[4] = (ac * aty - ad * atx) * det;
-  out[5] = (ab * atx - aa * aty) * det;
-  return out;
-}
-
-/**
- * Calculates the determinant of a mat2d
- *
- * @param {mat2d} a the source matrix
- * @returns {Number} determinant of a
- */
-function determinant(a) {
-  return a[0] * a[3] - a[1] * a[2];
-}
-
-/**
- * Multiplies two mat2d's
- *
- * @param {mat2d} out the receiving matrix
- * @param {mat2d} a the first operand
- * @param {mat2d} b the second operand
- * @returns {mat2d} out
- */
-function multiply(out, a, b) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3],
-      a4 = a[4],
-      a5 = a[5];
-  var b0 = b[0],
-      b1 = b[1],
-      b2 = b[2],
-      b3 = b[3],
-      b4 = b[4],
-      b5 = b[5];
-  out[0] = a0 * b0 + a2 * b1;
-  out[1] = a1 * b0 + a3 * b1;
-  out[2] = a0 * b2 + a2 * b3;
-  out[3] = a1 * b2 + a3 * b3;
-  out[4] = a0 * b4 + a2 * b5 + a4;
-  out[5] = a1 * b4 + a3 * b5 + a5;
-  return out;
-}
-
-/**
- * Rotates a mat2d by the given angle
- *
- * @param {mat2d} out the receiving matrix
- * @param {mat2d} a the matrix to rotate
- * @param {Number} rad the angle to rotate the matrix by
- * @returns {mat2d} out
- */
-function rotate(out, a, rad) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3],
-      a4 = a[4],
-      a5 = a[5];
-  var s = Math.sin(rad);
-  var c = Math.cos(rad);
-  out[0] = a0 * c + a2 * s;
-  out[1] = a1 * c + a3 * s;
-  out[2] = a0 * -s + a2 * c;
-  out[3] = a1 * -s + a3 * c;
-  out[4] = a4;
-  out[5] = a5;
-  return out;
-}
-
-/**
- * Scales the mat2d by the dimensions in the given vec2
- *
- * @param {mat2d} out the receiving matrix
- * @param {mat2d} a the matrix to translate
- * @param {vec2} v the vec2 to scale the matrix by
- * @returns {mat2d} out
- **/
-function scale(out, a, v) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3],
-      a4 = a[4],
-      a5 = a[5];
-  var v0 = v[0],
-      v1 = v[1];
-  out[0] = a0 * v0;
-  out[1] = a1 * v0;
-  out[2] = a2 * v1;
-  out[3] = a3 * v1;
-  out[4] = a4;
-  out[5] = a5;
-  return out;
-}
-
-/**
- * Translates the mat2d by the dimensions in the given vec2
- *
- * @param {mat2d} out the receiving matrix
- * @param {mat2d} a the matrix to translate
- * @param {vec2} v the vec2 to translate the matrix by
- * @returns {mat2d} out
- **/
-function translate(out, a, v) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3],
-      a4 = a[4],
-      a5 = a[5];
-  var v0 = v[0],
-      v1 = v[1];
-  out[0] = a0;
-  out[1] = a1;
-  out[2] = a2;
-  out[3] = a3;
-  out[4] = a0 * v0 + a2 * v1 + a4;
-  out[5] = a1 * v0 + a3 * v1 + a5;
-  return out;
-}
-
-/**
- * Creates a matrix from a given angle
- * This is equivalent to (but much faster than):
- *
- *     mat2d.identity(dest);
- *     mat2d.rotate(dest, dest, rad);
- *
- * @param {mat2d} out mat2d receiving operation result
- * @param {Number} rad the angle to rotate the matrix by
- * @returns {mat2d} out
- */
-function fromRotation(out, rad) {
-  var s = Math.sin(rad),
-      c = Math.cos(rad);
-  out[0] = c;
-  out[1] = s;
-  out[2] = -s;
-  out[3] = c;
-  out[4] = 0;
-  out[5] = 0;
-  return out;
-}
-
-/**
- * Creates a matrix from a vector scaling
- * This is equivalent to (but much faster than):
- *
- *     mat2d.identity(dest);
- *     mat2d.scale(dest, dest, vec);
- *
- * @param {mat2d} out mat2d receiving operation result
- * @param {vec2} v Scaling vector
- * @returns {mat2d} out
- */
-function fromScaling(out, v) {
-  out[0] = v[0];
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = v[1];
-  out[4] = 0;
-  out[5] = 0;
-  return out;
-}
-
-/**
- * Creates a matrix from a vector translation
- * This is equivalent to (but much faster than):
- *
- *     mat2d.identity(dest);
- *     mat2d.translate(dest, dest, vec);
- *
- * @param {mat2d} out mat2d receiving operation result
- * @param {vec2} v Translation vector
- * @returns {mat2d} out
- */
-function fromTranslation(out, v) {
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 1;
-  out[4] = v[0];
-  out[5] = v[1];
-  return out;
-}
-
-/**
- * Returns a string representation of a mat2d
- *
- * @param {mat2d} a matrix to represent as a string
- * @returns {String} string representation of the matrix
- */
-function str(a) {
-  return 'mat2d(' + a[0] + ', ' + a[1] + ', ' + a[2] + ', ' + a[3] + ', ' + a[4] + ', ' + a[5] + ')';
-}
-
-/**
- * Returns Frobenius norm of a mat2d
- *
- * @param {mat2d} a the matrix to calculate Frobenius norm of
- * @returns {Number} Frobenius norm
- */
-function frob(a) {
-  return Math.sqrt(Math.pow(a[0], 2) + Math.pow(a[1], 2) + Math.pow(a[2], 2) + Math.pow(a[3], 2) + Math.pow(a[4], 2) + Math.pow(a[5], 2) + 1);
-}
-
-/**
- * Adds two mat2d's
- *
- * @param {mat2d} out the receiving matrix
- * @param {mat2d} a the first operand
- * @param {mat2d} b the second operand
- * @returns {mat2d} out
- */
-function add(out, a, b) {
-  out[0] = a[0] + b[0];
-  out[1] = a[1] + b[1];
-  out[2] = a[2] + b[2];
-  out[3] = a[3] + b[3];
-  out[4] = a[4] + b[4];
-  out[5] = a[5] + b[5];
-  return out;
-}
-
-/**
- * Subtracts matrix b from matrix a
- *
- * @param {mat2d} out the receiving matrix
- * @param {mat2d} a the first operand
- * @param {mat2d} b the second operand
- * @returns {mat2d} out
- */
-function subtract(out, a, b) {
-  out[0] = a[0] - b[0];
-  out[1] = a[1] - b[1];
-  out[2] = a[2] - b[2];
-  out[3] = a[3] - b[3];
-  out[4] = a[4] - b[4];
-  out[5] = a[5] - b[5];
-  return out;
-}
-
-/**
- * Multiply each element of the matrix by a scalar.
- *
- * @param {mat2d} out the receiving matrix
- * @param {mat2d} a the matrix to scale
- * @param {Number} b amount to scale the matrix's elements by
- * @returns {mat2d} out
- */
-function multiplyScalar(out, a, b) {
-  out[0] = a[0] * b;
-  out[1] = a[1] * b;
-  out[2] = a[2] * b;
-  out[3] = a[3] * b;
-  out[4] = a[4] * b;
-  out[5] = a[5] * b;
-  return out;
-}
-
-/**
- * Adds two mat2d's after multiplying each element of the second operand by a scalar value.
- *
- * @param {mat2d} out the receiving vector
- * @param {mat2d} a the first operand
- * @param {mat2d} b the second operand
- * @param {Number} scale the amount to scale b's elements by before adding
- * @returns {mat2d} out
- */
-function multiplyScalarAndAdd(out, a, b, scale) {
-  out[0] = a[0] + b[0] * scale;
-  out[1] = a[1] + b[1] * scale;
-  out[2] = a[2] + b[2] * scale;
-  out[3] = a[3] + b[3] * scale;
-  out[4] = a[4] + b[4] * scale;
-  out[5] = a[5] + b[5] * scale;
-  return out;
-}
-
-/**
- * Returns whether or not the matrices have exactly the same elements in the same position (when compared with ===)
- *
- * @param {mat2d} a The first matrix.
- * @param {mat2d} b The second matrix.
- * @returns {Boolean} True if the matrices are equal, false otherwise.
- */
-function exactEquals(a, b) {
-  return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3] && a[4] === b[4] && a[5] === b[5];
-}
-
-/**
- * Returns whether or not the matrices have approximately the same elements in the same position.
- *
- * @param {mat2d} a The first matrix.
- * @param {mat2d} b The second matrix.
- * @returns {Boolean} True if the matrices are equal, false otherwise.
- */
-function equals(a, b) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3],
-      a4 = a[4],
-      a5 = a[5];
-  var b0 = b[0],
-      b1 = b[1],
-      b2 = b[2],
-      b3 = b[3],
-      b4 = b[4],
-      b5 = b[5];
-  return Math.abs(a0 - b0) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) && Math.abs(a1 - b1) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) && Math.abs(a2 - b2) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) && Math.abs(a3 - b3) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) && Math.abs(a4 - b4) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) && Math.abs(a5 - b5) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5));
-}
-
-/**
- * Alias for {@link mat2d.multiply}
- * @function
- */
-var mul = exports.mul = multiply;
-
-/**
- * Alias for {@link mat2d.subtract}
- * @function
- */
-var sub = exports.sub = subtract;
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.sub = exports.mul = undefined;
-exports.create = create;
-exports.clone = clone;
-exports.copy = copy;
-exports.fromValues = fromValues;
-exports.set = set;
-exports.identity = identity;
-exports.transpose = transpose;
-exports.invert = invert;
-exports.adjoint = adjoint;
-exports.determinant = determinant;
-exports.multiply = multiply;
-exports.translate = translate;
-exports.scale = scale;
-exports.rotate = rotate;
-exports.rotateX = rotateX;
-exports.rotateY = rotateY;
-exports.rotateZ = rotateZ;
-exports.fromTranslation = fromTranslation;
-exports.fromScaling = fromScaling;
-exports.fromRotation = fromRotation;
-exports.fromXRotation = fromXRotation;
-exports.fromYRotation = fromYRotation;
-exports.fromZRotation = fromZRotation;
-exports.fromRotationTranslation = fromRotationTranslation;
-exports.getTranslation = getTranslation;
-exports.getScaling = getScaling;
-exports.getRotation = getRotation;
-exports.fromRotationTranslationScale = fromRotationTranslationScale;
-exports.fromRotationTranslationScaleOrigin = fromRotationTranslationScaleOrigin;
-exports.fromQuat = fromQuat;
-exports.frustum = frustum;
-exports.perspective = perspective;
-exports.perspectiveFromFieldOfView = perspectiveFromFieldOfView;
-exports.ortho = ortho;
-exports.lookAt = lookAt;
-exports.targetTo = targetTo;
-exports.str = str;
-exports.frob = frob;
-exports.add = add;
-exports.subtract = subtract;
-exports.multiplyScalar = multiplyScalar;
-exports.multiplyScalarAndAdd = multiplyScalarAndAdd;
-exports.exactEquals = exactEquals;
-exports.equals = equals;
-
-var _common = __webpack_require__(0);
-
-var glMatrix = _interopRequireWildcard(_common);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/**
- * 4x4 Matrix
- * @module mat4
- */
-
-/**
- * Creates a new identity mat4
- *
- * @returns {mat4} a new 4x4 matrix
- */
-function create() {
-  var out = new glMatrix.ARRAY_TYPE(16);
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 0;
-  out[5] = 1;
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 0;
-  out[9] = 0;
-  out[10] = 1;
-  out[11] = 0;
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = 0;
-  out[15] = 1;
-  return out;
-}
-
-/**
- * Creates a new mat4 initialized with values from an existing matrix
- *
- * @param {mat4} a matrix to clone
- * @returns {mat4} a new 4x4 matrix
- */
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-function clone(a) {
-  var out = new glMatrix.ARRAY_TYPE(16);
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  out[3] = a[3];
-  out[4] = a[4];
-  out[5] = a[5];
-  out[6] = a[6];
-  out[7] = a[7];
-  out[8] = a[8];
-  out[9] = a[9];
-  out[10] = a[10];
-  out[11] = a[11];
-  out[12] = a[12];
-  out[13] = a[13];
-  out[14] = a[14];
-  out[15] = a[15];
-  return out;
-}
-
-/**
- * Copy the values from one mat4 to another
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the source matrix
- * @returns {mat4} out
- */
-function copy(out, a) {
-  out[0] = a[0];
-  out[1] = a[1];
-  out[2] = a[2];
-  out[3] = a[3];
-  out[4] = a[4];
-  out[5] = a[5];
-  out[6] = a[6];
-  out[7] = a[7];
-  out[8] = a[8];
-  out[9] = a[9];
-  out[10] = a[10];
-  out[11] = a[11];
-  out[12] = a[12];
-  out[13] = a[13];
-  out[14] = a[14];
-  out[15] = a[15];
-  return out;
-}
-
-/**
- * Create a new mat4 with the given values
- *
- * @param {Number} m00 Component in column 0, row 0 position (index 0)
- * @param {Number} m01 Component in column 0, row 1 position (index 1)
- * @param {Number} m02 Component in column 0, row 2 position (index 2)
- * @param {Number} m03 Component in column 0, row 3 position (index 3)
- * @param {Number} m10 Component in column 1, row 0 position (index 4)
- * @param {Number} m11 Component in column 1, row 1 position (index 5)
- * @param {Number} m12 Component in column 1, row 2 position (index 6)
- * @param {Number} m13 Component in column 1, row 3 position (index 7)
- * @param {Number} m20 Component in column 2, row 0 position (index 8)
- * @param {Number} m21 Component in column 2, row 1 position (index 9)
- * @param {Number} m22 Component in column 2, row 2 position (index 10)
- * @param {Number} m23 Component in column 2, row 3 position (index 11)
- * @param {Number} m30 Component in column 3, row 0 position (index 12)
- * @param {Number} m31 Component in column 3, row 1 position (index 13)
- * @param {Number} m32 Component in column 3, row 2 position (index 14)
- * @param {Number} m33 Component in column 3, row 3 position (index 15)
- * @returns {mat4} A new mat4
- */
-function fromValues(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) {
-  var out = new glMatrix.ARRAY_TYPE(16);
-  out[0] = m00;
-  out[1] = m01;
-  out[2] = m02;
-  out[3] = m03;
-  out[4] = m10;
-  out[5] = m11;
-  out[6] = m12;
-  out[7] = m13;
-  out[8] = m20;
-  out[9] = m21;
-  out[10] = m22;
-  out[11] = m23;
-  out[12] = m30;
-  out[13] = m31;
-  out[14] = m32;
-  out[15] = m33;
-  return out;
-}
-
-/**
- * Set the components of a mat4 to the given values
- *
- * @param {mat4} out the receiving matrix
- * @param {Number} m00 Component in column 0, row 0 position (index 0)
- * @param {Number} m01 Component in column 0, row 1 position (index 1)
- * @param {Number} m02 Component in column 0, row 2 position (index 2)
- * @param {Number} m03 Component in column 0, row 3 position (index 3)
- * @param {Number} m10 Component in column 1, row 0 position (index 4)
- * @param {Number} m11 Component in column 1, row 1 position (index 5)
- * @param {Number} m12 Component in column 1, row 2 position (index 6)
- * @param {Number} m13 Component in column 1, row 3 position (index 7)
- * @param {Number} m20 Component in column 2, row 0 position (index 8)
- * @param {Number} m21 Component in column 2, row 1 position (index 9)
- * @param {Number} m22 Component in column 2, row 2 position (index 10)
- * @param {Number} m23 Component in column 2, row 3 position (index 11)
- * @param {Number} m30 Component in column 3, row 0 position (index 12)
- * @param {Number} m31 Component in column 3, row 1 position (index 13)
- * @param {Number} m32 Component in column 3, row 2 position (index 14)
- * @param {Number} m33 Component in column 3, row 3 position (index 15)
- * @returns {mat4} out
- */
-function set(out, m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) {
-  out[0] = m00;
-  out[1] = m01;
-  out[2] = m02;
-  out[3] = m03;
-  out[4] = m10;
-  out[5] = m11;
-  out[6] = m12;
-  out[7] = m13;
-  out[8] = m20;
-  out[9] = m21;
-  out[10] = m22;
-  out[11] = m23;
-  out[12] = m30;
-  out[13] = m31;
-  out[14] = m32;
-  out[15] = m33;
-  return out;
-}
-
-/**
- * Set a mat4 to the identity matrix
- *
- * @param {mat4} out the receiving matrix
- * @returns {mat4} out
- */
-function identity(out) {
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 0;
-  out[5] = 1;
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 0;
-  out[9] = 0;
-  out[10] = 1;
-  out[11] = 0;
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = 0;
-  out[15] = 1;
-  return out;
-}
-
-/**
- * Transpose the values of a mat4
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the source matrix
- * @returns {mat4} out
- */
-function transpose(out, a) {
-  // If we are transposing ourselves we can skip a few steps but have to cache some values
-  if (out === a) {
-    var a01 = a[1],
-        a02 = a[2],
-        a03 = a[3];
-    var a12 = a[6],
-        a13 = a[7];
-    var a23 = a[11];
-
-    out[1] = a[4];
-    out[2] = a[8];
-    out[3] = a[12];
-    out[4] = a01;
-    out[6] = a[9];
-    out[7] = a[13];
-    out[8] = a02;
-    out[9] = a12;
-    out[11] = a[14];
-    out[12] = a03;
-    out[13] = a13;
-    out[14] = a23;
-  } else {
-    out[0] = a[0];
-    out[1] = a[4];
-    out[2] = a[8];
-    out[3] = a[12];
-    out[4] = a[1];
-    out[5] = a[5];
-    out[6] = a[9];
-    out[7] = a[13];
-    out[8] = a[2];
-    out[9] = a[6];
-    out[10] = a[10];
-    out[11] = a[14];
-    out[12] = a[3];
-    out[13] = a[7];
-    out[14] = a[11];
-    out[15] = a[15];
-  }
-
-  return out;
-}
-
-/**
- * Inverts a mat4
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the source matrix
- * @returns {mat4} out
- */
-function invert(out, a) {
-  var a00 = a[0],
-      a01 = a[1],
-      a02 = a[2],
-      a03 = a[3];
-  var a10 = a[4],
-      a11 = a[5],
-      a12 = a[6],
-      a13 = a[7];
-  var a20 = a[8],
-      a21 = a[9],
-      a22 = a[10],
-      a23 = a[11];
-  var a30 = a[12],
-      a31 = a[13],
-      a32 = a[14],
-      a33 = a[15];
-
-  var b00 = a00 * a11 - a01 * a10;
-  var b01 = a00 * a12 - a02 * a10;
-  var b02 = a00 * a13 - a03 * a10;
-  var b03 = a01 * a12 - a02 * a11;
-  var b04 = a01 * a13 - a03 * a11;
-  var b05 = a02 * a13 - a03 * a12;
-  var b06 = a20 * a31 - a21 * a30;
-  var b07 = a20 * a32 - a22 * a30;
-  var b08 = a20 * a33 - a23 * a30;
-  var b09 = a21 * a32 - a22 * a31;
-  var b10 = a21 * a33 - a23 * a31;
-  var b11 = a22 * a33 - a23 * a32;
-
-  // Calculate the determinant
-  var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
-
-  if (!det) {
-    return null;
-  }
-  det = 1.0 / det;
-
-  out[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
-  out[1] = (a02 * b10 - a01 * b11 - a03 * b09) * det;
-  out[2] = (a31 * b05 - a32 * b04 + a33 * b03) * det;
-  out[3] = (a22 * b04 - a21 * b05 - a23 * b03) * det;
-  out[4] = (a12 * b08 - a10 * b11 - a13 * b07) * det;
-  out[5] = (a00 * b11 - a02 * b08 + a03 * b07) * det;
-  out[6] = (a32 * b02 - a30 * b05 - a33 * b01) * det;
-  out[7] = (a20 * b05 - a22 * b02 + a23 * b01) * det;
-  out[8] = (a10 * b10 - a11 * b08 + a13 * b06) * det;
-  out[9] = (a01 * b08 - a00 * b10 - a03 * b06) * det;
-  out[10] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
-  out[11] = (a21 * b02 - a20 * b04 - a23 * b00) * det;
-  out[12] = (a11 * b07 - a10 * b09 - a12 * b06) * det;
-  out[13] = (a00 * b09 - a01 * b07 + a02 * b06) * det;
-  out[14] = (a31 * b01 - a30 * b03 - a32 * b00) * det;
-  out[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
-
-  return out;
-}
-
-/**
- * Calculates the adjugate of a mat4
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the source matrix
- * @returns {mat4} out
- */
-function adjoint(out, a) {
-  var a00 = a[0],
-      a01 = a[1],
-      a02 = a[2],
-      a03 = a[3];
-  var a10 = a[4],
-      a11 = a[5],
-      a12 = a[6],
-      a13 = a[7];
-  var a20 = a[8],
-      a21 = a[9],
-      a22 = a[10],
-      a23 = a[11];
-  var a30 = a[12],
-      a31 = a[13],
-      a32 = a[14],
-      a33 = a[15];
-
-  out[0] = a11 * (a22 * a33 - a23 * a32) - a21 * (a12 * a33 - a13 * a32) + a31 * (a12 * a23 - a13 * a22);
-  out[1] = -(a01 * (a22 * a33 - a23 * a32) - a21 * (a02 * a33 - a03 * a32) + a31 * (a02 * a23 - a03 * a22));
-  out[2] = a01 * (a12 * a33 - a13 * a32) - a11 * (a02 * a33 - a03 * a32) + a31 * (a02 * a13 - a03 * a12);
-  out[3] = -(a01 * (a12 * a23 - a13 * a22) - a11 * (a02 * a23 - a03 * a22) + a21 * (a02 * a13 - a03 * a12));
-  out[4] = -(a10 * (a22 * a33 - a23 * a32) - a20 * (a12 * a33 - a13 * a32) + a30 * (a12 * a23 - a13 * a22));
-  out[5] = a00 * (a22 * a33 - a23 * a32) - a20 * (a02 * a33 - a03 * a32) + a30 * (a02 * a23 - a03 * a22);
-  out[6] = -(a00 * (a12 * a33 - a13 * a32) - a10 * (a02 * a33 - a03 * a32) + a30 * (a02 * a13 - a03 * a12));
-  out[7] = a00 * (a12 * a23 - a13 * a22) - a10 * (a02 * a23 - a03 * a22) + a20 * (a02 * a13 - a03 * a12);
-  out[8] = a10 * (a21 * a33 - a23 * a31) - a20 * (a11 * a33 - a13 * a31) + a30 * (a11 * a23 - a13 * a21);
-  out[9] = -(a00 * (a21 * a33 - a23 * a31) - a20 * (a01 * a33 - a03 * a31) + a30 * (a01 * a23 - a03 * a21));
-  out[10] = a00 * (a11 * a33 - a13 * a31) - a10 * (a01 * a33 - a03 * a31) + a30 * (a01 * a13 - a03 * a11);
-  out[11] = -(a00 * (a11 * a23 - a13 * a21) - a10 * (a01 * a23 - a03 * a21) + a20 * (a01 * a13 - a03 * a11));
-  out[12] = -(a10 * (a21 * a32 - a22 * a31) - a20 * (a11 * a32 - a12 * a31) + a30 * (a11 * a22 - a12 * a21));
-  out[13] = a00 * (a21 * a32 - a22 * a31) - a20 * (a01 * a32 - a02 * a31) + a30 * (a01 * a22 - a02 * a21);
-  out[14] = -(a00 * (a11 * a32 - a12 * a31) - a10 * (a01 * a32 - a02 * a31) + a30 * (a01 * a12 - a02 * a11));
-  out[15] = a00 * (a11 * a22 - a12 * a21) - a10 * (a01 * a22 - a02 * a21) + a20 * (a01 * a12 - a02 * a11);
-  return out;
-}
-
-/**
- * Calculates the determinant of a mat4
- *
- * @param {mat4} a the source matrix
- * @returns {Number} determinant of a
- */
-function determinant(a) {
-  var a00 = a[0],
-      a01 = a[1],
-      a02 = a[2],
-      a03 = a[3];
-  var a10 = a[4],
-      a11 = a[5],
-      a12 = a[6],
-      a13 = a[7];
-  var a20 = a[8],
-      a21 = a[9],
-      a22 = a[10],
-      a23 = a[11];
-  var a30 = a[12],
-      a31 = a[13],
-      a32 = a[14],
-      a33 = a[15];
-
-  var b00 = a00 * a11 - a01 * a10;
-  var b01 = a00 * a12 - a02 * a10;
-  var b02 = a00 * a13 - a03 * a10;
-  var b03 = a01 * a12 - a02 * a11;
-  var b04 = a01 * a13 - a03 * a11;
-  var b05 = a02 * a13 - a03 * a12;
-  var b06 = a20 * a31 - a21 * a30;
-  var b07 = a20 * a32 - a22 * a30;
-  var b08 = a20 * a33 - a23 * a30;
-  var b09 = a21 * a32 - a22 * a31;
-  var b10 = a21 * a33 - a23 * a31;
-  var b11 = a22 * a33 - a23 * a32;
-
-  // Calculate the determinant
-  return b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
-}
-
-/**
- * Multiplies two mat4s
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the first operand
- * @param {mat4} b the second operand
- * @returns {mat4} out
- */
-function multiply(out, a, b) {
-  var a00 = a[0],
-      a01 = a[1],
-      a02 = a[2],
-      a03 = a[3];
-  var a10 = a[4],
-      a11 = a[5],
-      a12 = a[6],
-      a13 = a[7];
-  var a20 = a[8],
-      a21 = a[9],
-      a22 = a[10],
-      a23 = a[11];
-  var a30 = a[12],
-      a31 = a[13],
-      a32 = a[14],
-      a33 = a[15];
-
-  // Cache only the current line of the second matrix
-  var b0 = b[0],
-      b1 = b[1],
-      b2 = b[2],
-      b3 = b[3];
-  out[0] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
-  out[1] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
-  out[2] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
-  out[3] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
-
-  b0 = b[4];b1 = b[5];b2 = b[6];b3 = b[7];
-  out[4] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
-  out[5] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
-  out[6] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
-  out[7] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
-
-  b0 = b[8];b1 = b[9];b2 = b[10];b3 = b[11];
-  out[8] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
-  out[9] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
-  out[10] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
-  out[11] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
-
-  b0 = b[12];b1 = b[13];b2 = b[14];b3 = b[15];
-  out[12] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
-  out[13] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
-  out[14] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
-  out[15] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
-  return out;
-}
-
-/**
- * Translate a mat4 by the given vector
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the matrix to translate
- * @param {vec3} v vector to translate by
- * @returns {mat4} out
- */
-function translate(out, a, v) {
-  var x = v[0],
-      y = v[1],
-      z = v[2];
-  var a00 = void 0,
-      a01 = void 0,
-      a02 = void 0,
-      a03 = void 0;
-  var a10 = void 0,
-      a11 = void 0,
-      a12 = void 0,
-      a13 = void 0;
-  var a20 = void 0,
-      a21 = void 0,
-      a22 = void 0,
-      a23 = void 0;
-
-  if (a === out) {
-    out[12] = a[0] * x + a[4] * y + a[8] * z + a[12];
-    out[13] = a[1] * x + a[5] * y + a[9] * z + a[13];
-    out[14] = a[2] * x + a[6] * y + a[10] * z + a[14];
-    out[15] = a[3] * x + a[7] * y + a[11] * z + a[15];
-  } else {
-    a00 = a[0];a01 = a[1];a02 = a[2];a03 = a[3];
-    a10 = a[4];a11 = a[5];a12 = a[6];a13 = a[7];
-    a20 = a[8];a21 = a[9];a22 = a[10];a23 = a[11];
-
-    out[0] = a00;out[1] = a01;out[2] = a02;out[3] = a03;
-    out[4] = a10;out[5] = a11;out[6] = a12;out[7] = a13;
-    out[8] = a20;out[9] = a21;out[10] = a22;out[11] = a23;
-
-    out[12] = a00 * x + a10 * y + a20 * z + a[12];
-    out[13] = a01 * x + a11 * y + a21 * z + a[13];
-    out[14] = a02 * x + a12 * y + a22 * z + a[14];
-    out[15] = a03 * x + a13 * y + a23 * z + a[15];
-  }
-
-  return out;
-}
-
-/**
- * Scales the mat4 by the dimensions in the given vec3 not using vectorization
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the matrix to scale
- * @param {vec3} v the vec3 to scale the matrix by
- * @returns {mat4} out
- **/
-function scale(out, a, v) {
-  var x = v[0],
-      y = v[1],
-      z = v[2];
-
-  out[0] = a[0] * x;
-  out[1] = a[1] * x;
-  out[2] = a[2] * x;
-  out[3] = a[3] * x;
-  out[4] = a[4] * y;
-  out[5] = a[5] * y;
-  out[6] = a[6] * y;
-  out[7] = a[7] * y;
-  out[8] = a[8] * z;
-  out[9] = a[9] * z;
-  out[10] = a[10] * z;
-  out[11] = a[11] * z;
-  out[12] = a[12];
-  out[13] = a[13];
-  out[14] = a[14];
-  out[15] = a[15];
-  return out;
-}
-
-/**
- * Rotates a mat4 by the given angle around the given axis
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the matrix to rotate
- * @param {Number} rad the angle to rotate the matrix by
- * @param {vec3} axis the axis to rotate around
- * @returns {mat4} out
- */
-function rotate(out, a, rad, axis) {
-  var x = axis[0],
-      y = axis[1],
-      z = axis[2];
-  var len = Math.sqrt(x * x + y * y + z * z);
-  var s = void 0,
-      c = void 0,
-      t = void 0;
-  var a00 = void 0,
-      a01 = void 0,
-      a02 = void 0,
-      a03 = void 0;
-  var a10 = void 0,
-      a11 = void 0,
-      a12 = void 0,
-      a13 = void 0;
-  var a20 = void 0,
-      a21 = void 0,
-      a22 = void 0,
-      a23 = void 0;
-  var b00 = void 0,
-      b01 = void 0,
-      b02 = void 0;
-  var b10 = void 0,
-      b11 = void 0,
-      b12 = void 0;
-  var b20 = void 0,
-      b21 = void 0,
-      b22 = void 0;
-
-  if (Math.abs(len) < glMatrix.EPSILON) {
-    return null;
-  }
-
-  len = 1 / len;
-  x *= len;
-  y *= len;
-  z *= len;
-
-  s = Math.sin(rad);
-  c = Math.cos(rad);
-  t = 1 - c;
-
-  a00 = a[0];a01 = a[1];a02 = a[2];a03 = a[3];
-  a10 = a[4];a11 = a[5];a12 = a[6];a13 = a[7];
-  a20 = a[8];a21 = a[9];a22 = a[10];a23 = a[11];
-
-  // Construct the elements of the rotation matrix
-  b00 = x * x * t + c;b01 = y * x * t + z * s;b02 = z * x * t - y * s;
-  b10 = x * y * t - z * s;b11 = y * y * t + c;b12 = z * y * t + x * s;
-  b20 = x * z * t + y * s;b21 = y * z * t - x * s;b22 = z * z * t + c;
-
-  // Perform rotation-specific matrix multiplication
-  out[0] = a00 * b00 + a10 * b01 + a20 * b02;
-  out[1] = a01 * b00 + a11 * b01 + a21 * b02;
-  out[2] = a02 * b00 + a12 * b01 + a22 * b02;
-  out[3] = a03 * b00 + a13 * b01 + a23 * b02;
-  out[4] = a00 * b10 + a10 * b11 + a20 * b12;
-  out[5] = a01 * b10 + a11 * b11 + a21 * b12;
-  out[6] = a02 * b10 + a12 * b11 + a22 * b12;
-  out[7] = a03 * b10 + a13 * b11 + a23 * b12;
-  out[8] = a00 * b20 + a10 * b21 + a20 * b22;
-  out[9] = a01 * b20 + a11 * b21 + a21 * b22;
-  out[10] = a02 * b20 + a12 * b21 + a22 * b22;
-  out[11] = a03 * b20 + a13 * b21 + a23 * b22;
-
-  if (a !== out) {
-    // If the source and destination differ, copy the unchanged last row
-    out[12] = a[12];
-    out[13] = a[13];
-    out[14] = a[14];
-    out[15] = a[15];
-  }
-  return out;
-}
-
-/**
- * Rotates a matrix by the given angle around the X axis
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the matrix to rotate
- * @param {Number} rad the angle to rotate the matrix by
- * @returns {mat4} out
- */
-function rotateX(out, a, rad) {
-  var s = Math.sin(rad);
-  var c = Math.cos(rad);
-  var a10 = a[4];
-  var a11 = a[5];
-  var a12 = a[6];
-  var a13 = a[7];
-  var a20 = a[8];
-  var a21 = a[9];
-  var a22 = a[10];
-  var a23 = a[11];
-
-  if (a !== out) {
-    // If the source and destination differ, copy the unchanged rows
-    out[0] = a[0];
-    out[1] = a[1];
-    out[2] = a[2];
-    out[3] = a[3];
-    out[12] = a[12];
-    out[13] = a[13];
-    out[14] = a[14];
-    out[15] = a[15];
-  }
-
-  // Perform axis-specific matrix multiplication
-  out[4] = a10 * c + a20 * s;
-  out[5] = a11 * c + a21 * s;
-  out[6] = a12 * c + a22 * s;
-  out[7] = a13 * c + a23 * s;
-  out[8] = a20 * c - a10 * s;
-  out[9] = a21 * c - a11 * s;
-  out[10] = a22 * c - a12 * s;
-  out[11] = a23 * c - a13 * s;
-  return out;
-}
-
-/**
- * Rotates a matrix by the given angle around the Y axis
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the matrix to rotate
- * @param {Number} rad the angle to rotate the matrix by
- * @returns {mat4} out
- */
-function rotateY(out, a, rad) {
-  var s = Math.sin(rad);
-  var c = Math.cos(rad);
-  var a00 = a[0];
-  var a01 = a[1];
-  var a02 = a[2];
-  var a03 = a[3];
-  var a20 = a[8];
-  var a21 = a[9];
-  var a22 = a[10];
-  var a23 = a[11];
-
-  if (a !== out) {
-    // If the source and destination differ, copy the unchanged rows
-    out[4] = a[4];
-    out[5] = a[5];
-    out[6] = a[6];
-    out[7] = a[7];
-    out[12] = a[12];
-    out[13] = a[13];
-    out[14] = a[14];
-    out[15] = a[15];
-  }
-
-  // Perform axis-specific matrix multiplication
-  out[0] = a00 * c - a20 * s;
-  out[1] = a01 * c - a21 * s;
-  out[2] = a02 * c - a22 * s;
-  out[3] = a03 * c - a23 * s;
-  out[8] = a00 * s + a20 * c;
-  out[9] = a01 * s + a21 * c;
-  out[10] = a02 * s + a22 * c;
-  out[11] = a03 * s + a23 * c;
-  return out;
-}
-
-/**
- * Rotates a matrix by the given angle around the Z axis
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the matrix to rotate
- * @param {Number} rad the angle to rotate the matrix by
- * @returns {mat4} out
- */
-function rotateZ(out, a, rad) {
-  var s = Math.sin(rad);
-  var c = Math.cos(rad);
-  var a00 = a[0];
-  var a01 = a[1];
-  var a02 = a[2];
-  var a03 = a[3];
-  var a10 = a[4];
-  var a11 = a[5];
-  var a12 = a[6];
-  var a13 = a[7];
-
-  if (a !== out) {
-    // If the source and destination differ, copy the unchanged last row
-    out[8] = a[8];
-    out[9] = a[9];
-    out[10] = a[10];
-    out[11] = a[11];
-    out[12] = a[12];
-    out[13] = a[13];
-    out[14] = a[14];
-    out[15] = a[15];
-  }
-
-  // Perform axis-specific matrix multiplication
-  out[0] = a00 * c + a10 * s;
-  out[1] = a01 * c + a11 * s;
-  out[2] = a02 * c + a12 * s;
-  out[3] = a03 * c + a13 * s;
-  out[4] = a10 * c - a00 * s;
-  out[5] = a11 * c - a01 * s;
-  out[6] = a12 * c - a02 * s;
-  out[7] = a13 * c - a03 * s;
-  return out;
-}
-
-/**
- * Creates a matrix from a vector translation
- * This is equivalent to (but much faster than):
- *
- *     mat4.identity(dest);
- *     mat4.translate(dest, dest, vec);
- *
- * @param {mat4} out mat4 receiving operation result
- * @param {vec3} v Translation vector
- * @returns {mat4} out
- */
-function fromTranslation(out, v) {
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 0;
-  out[5] = 1;
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 0;
-  out[9] = 0;
-  out[10] = 1;
-  out[11] = 0;
-  out[12] = v[0];
-  out[13] = v[1];
-  out[14] = v[2];
-  out[15] = 1;
-  return out;
-}
-
-/**
- * Creates a matrix from a vector scaling
- * This is equivalent to (but much faster than):
- *
- *     mat4.identity(dest);
- *     mat4.scale(dest, dest, vec);
- *
- * @param {mat4} out mat4 receiving operation result
- * @param {vec3} v Scaling vector
- * @returns {mat4} out
- */
-function fromScaling(out, v) {
-  out[0] = v[0];
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 0;
-  out[5] = v[1];
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 0;
-  out[9] = 0;
-  out[10] = v[2];
-  out[11] = 0;
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = 0;
-  out[15] = 1;
-  return out;
-}
-
-/**
- * Creates a matrix from a given angle around a given axis
- * This is equivalent to (but much faster than):
- *
- *     mat4.identity(dest);
- *     mat4.rotate(dest, dest, rad, axis);
- *
- * @param {mat4} out mat4 receiving operation result
- * @param {Number} rad the angle to rotate the matrix by
- * @param {vec3} axis the axis to rotate around
- * @returns {mat4} out
- */
-function fromRotation(out, rad, axis) {
-  var x = axis[0],
-      y = axis[1],
-      z = axis[2];
-  var len = Math.sqrt(x * x + y * y + z * z);
-  var s = void 0,
-      c = void 0,
-      t = void 0;
-
-  if (Math.abs(len) < glMatrix.EPSILON) {
-    return null;
-  }
-
-  len = 1 / len;
-  x *= len;
-  y *= len;
-  z *= len;
-
-  s = Math.sin(rad);
-  c = Math.cos(rad);
-  t = 1 - c;
-
-  // Perform rotation-specific matrix multiplication
-  out[0] = x * x * t + c;
-  out[1] = y * x * t + z * s;
-  out[2] = z * x * t - y * s;
-  out[3] = 0;
-  out[4] = x * y * t - z * s;
-  out[5] = y * y * t + c;
-  out[6] = z * y * t + x * s;
-  out[7] = 0;
-  out[8] = x * z * t + y * s;
-  out[9] = y * z * t - x * s;
-  out[10] = z * z * t + c;
-  out[11] = 0;
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = 0;
-  out[15] = 1;
-  return out;
-}
-
-/**
- * Creates a matrix from the given angle around the X axis
- * This is equivalent to (but much faster than):
- *
- *     mat4.identity(dest);
- *     mat4.rotateX(dest, dest, rad);
- *
- * @param {mat4} out mat4 receiving operation result
- * @param {Number} rad the angle to rotate the matrix by
- * @returns {mat4} out
- */
-function fromXRotation(out, rad) {
-  var s = Math.sin(rad);
-  var c = Math.cos(rad);
-
-  // Perform axis-specific matrix multiplication
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 0;
-  out[5] = c;
-  out[6] = s;
-  out[7] = 0;
-  out[8] = 0;
-  out[9] = -s;
-  out[10] = c;
-  out[11] = 0;
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = 0;
-  out[15] = 1;
-  return out;
-}
-
-/**
- * Creates a matrix from the given angle around the Y axis
- * This is equivalent to (but much faster than):
- *
- *     mat4.identity(dest);
- *     mat4.rotateY(dest, dest, rad);
- *
- * @param {mat4} out mat4 receiving operation result
- * @param {Number} rad the angle to rotate the matrix by
- * @returns {mat4} out
- */
-function fromYRotation(out, rad) {
-  var s = Math.sin(rad);
-  var c = Math.cos(rad);
-
-  // Perform axis-specific matrix multiplication
-  out[0] = c;
-  out[1] = 0;
-  out[2] = -s;
-  out[3] = 0;
-  out[4] = 0;
-  out[5] = 1;
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = s;
-  out[9] = 0;
-  out[10] = c;
-  out[11] = 0;
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = 0;
-  out[15] = 1;
-  return out;
-}
-
-/**
- * Creates a matrix from the given angle around the Z axis
- * This is equivalent to (but much faster than):
- *
- *     mat4.identity(dest);
- *     mat4.rotateZ(dest, dest, rad);
- *
- * @param {mat4} out mat4 receiving operation result
- * @param {Number} rad the angle to rotate the matrix by
- * @returns {mat4} out
- */
-function fromZRotation(out, rad) {
-  var s = Math.sin(rad);
-  var c = Math.cos(rad);
-
-  // Perform axis-specific matrix multiplication
-  out[0] = c;
-  out[1] = s;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = -s;
-  out[5] = c;
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 0;
-  out[9] = 0;
-  out[10] = 1;
-  out[11] = 0;
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = 0;
-  out[15] = 1;
-  return out;
-}
-
-/**
- * Creates a matrix from a quaternion rotation and vector translation
- * This is equivalent to (but much faster than):
- *
- *     mat4.identity(dest);
- *     mat4.translate(dest, vec);
- *     let quatMat = mat4.create();
- *     quat4.toMat4(quat, quatMat);
- *     mat4.multiply(dest, quatMat);
- *
- * @param {mat4} out mat4 receiving operation result
- * @param {quat4} q Rotation quaternion
- * @param {vec3} v Translation vector
- * @returns {mat4} out
- */
-function fromRotationTranslation(out, q, v) {
-  // Quaternion math
-  var x = q[0],
-      y = q[1],
-      z = q[2],
-      w = q[3];
-  var x2 = x + x;
-  var y2 = y + y;
-  var z2 = z + z;
-
-  var xx = x * x2;
-  var xy = x * y2;
-  var xz = x * z2;
-  var yy = y * y2;
-  var yz = y * z2;
-  var zz = z * z2;
-  var wx = w * x2;
-  var wy = w * y2;
-  var wz = w * z2;
-
-  out[0] = 1 - (yy + zz);
-  out[1] = xy + wz;
-  out[2] = xz - wy;
-  out[3] = 0;
-  out[4] = xy - wz;
-  out[5] = 1 - (xx + zz);
-  out[6] = yz + wx;
-  out[7] = 0;
-  out[8] = xz + wy;
-  out[9] = yz - wx;
-  out[10] = 1 - (xx + yy);
-  out[11] = 0;
-  out[12] = v[0];
-  out[13] = v[1];
-  out[14] = v[2];
-  out[15] = 1;
-
-  return out;
-}
-
-/**
- * Returns the translation vector component of a transformation
- *  matrix. If a matrix is built with fromRotationTranslation,
- *  the returned vector will be the same as the translation vector
- *  originally supplied.
- * @param  {vec3} out Vector to receive translation component
- * @param  {mat4} mat Matrix to be decomposed (input)
- * @return {vec3} out
- */
-function getTranslation(out, mat) {
-  out[0] = mat[12];
-  out[1] = mat[13];
-  out[2] = mat[14];
-
-  return out;
-}
-
-/**
- * Returns the scaling factor component of a transformation
- *  matrix. If a matrix is built with fromRotationTranslationScale
- *  with a normalized Quaternion paramter, the returned vector will be
- *  the same as the scaling vector
- *  originally supplied.
- * @param  {vec3} out Vector to receive scaling factor component
- * @param  {mat4} mat Matrix to be decomposed (input)
- * @return {vec3} out
- */
-function getScaling(out, mat) {
-  var m11 = mat[0];
-  var m12 = mat[1];
-  var m13 = mat[2];
-  var m21 = mat[4];
-  var m22 = mat[5];
-  var m23 = mat[6];
-  var m31 = mat[8];
-  var m32 = mat[9];
-  var m33 = mat[10];
-
-  out[0] = Math.sqrt(m11 * m11 + m12 * m12 + m13 * m13);
-  out[1] = Math.sqrt(m21 * m21 + m22 * m22 + m23 * m23);
-  out[2] = Math.sqrt(m31 * m31 + m32 * m32 + m33 * m33);
-
-  return out;
-}
-
-/**
- * Returns a quaternion representing the rotational component
- *  of a transformation matrix. If a matrix is built with
- *  fromRotationTranslation, the returned quaternion will be the
- *  same as the quaternion originally supplied.
- * @param {quat} out Quaternion to receive the rotation component
- * @param {mat4} mat Matrix to be decomposed (input)
- * @return {quat} out
- */
-function getRotation(out, mat) {
-  // Algorithm taken from http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
-  var trace = mat[0] + mat[5] + mat[10];
-  var S = 0;
-
-  if (trace > 0) {
-    S = Math.sqrt(trace + 1.0) * 2;
-    out[3] = 0.25 * S;
-    out[0] = (mat[6] - mat[9]) / S;
-    out[1] = (mat[8] - mat[2]) / S;
-    out[2] = (mat[1] - mat[4]) / S;
-  } else if (mat[0] > mat[5] & mat[0] > mat[10]) {
-    S = Math.sqrt(1.0 + mat[0] - mat[5] - mat[10]) * 2;
-    out[3] = (mat[6] - mat[9]) / S;
-    out[0] = 0.25 * S;
-    out[1] = (mat[1] + mat[4]) / S;
-    out[2] = (mat[8] + mat[2]) / S;
-  } else if (mat[5] > mat[10]) {
-    S = Math.sqrt(1.0 + mat[5] - mat[0] - mat[10]) * 2;
-    out[3] = (mat[8] - mat[2]) / S;
-    out[0] = (mat[1] + mat[4]) / S;
-    out[1] = 0.25 * S;
-    out[2] = (mat[6] + mat[9]) / S;
-  } else {
-    S = Math.sqrt(1.0 + mat[10] - mat[0] - mat[5]) * 2;
-    out[3] = (mat[1] - mat[4]) / S;
-    out[0] = (mat[8] + mat[2]) / S;
-    out[1] = (mat[6] + mat[9]) / S;
-    out[2] = 0.25 * S;
-  }
-
-  return out;
-}
-
-/**
- * Creates a matrix from a quaternion rotation, vector translation and vector scale
- * This is equivalent to (but much faster than):
- *
- *     mat4.identity(dest);
- *     mat4.translate(dest, vec);
- *     let quatMat = mat4.create();
- *     quat4.toMat4(quat, quatMat);
- *     mat4.multiply(dest, quatMat);
- *     mat4.scale(dest, scale)
- *
- * @param {mat4} out mat4 receiving operation result
- * @param {quat4} q Rotation quaternion
- * @param {vec3} v Translation vector
- * @param {vec3} s Scaling vector
- * @returns {mat4} out
- */
-function fromRotationTranslationScale(out, q, v, s) {
-  // Quaternion math
-  var x = q[0],
-      y = q[1],
-      z = q[2],
-      w = q[3];
-  var x2 = x + x;
-  var y2 = y + y;
-  var z2 = z + z;
-
-  var xx = x * x2;
-  var xy = x * y2;
-  var xz = x * z2;
-  var yy = y * y2;
-  var yz = y * z2;
-  var zz = z * z2;
-  var wx = w * x2;
-  var wy = w * y2;
-  var wz = w * z2;
-  var sx = s[0];
-  var sy = s[1];
-  var sz = s[2];
-
-  out[0] = (1 - (yy + zz)) * sx;
-  out[1] = (xy + wz) * sx;
-  out[2] = (xz - wy) * sx;
-  out[3] = 0;
-  out[4] = (xy - wz) * sy;
-  out[5] = (1 - (xx + zz)) * sy;
-  out[6] = (yz + wx) * sy;
-  out[7] = 0;
-  out[8] = (xz + wy) * sz;
-  out[9] = (yz - wx) * sz;
-  out[10] = (1 - (xx + yy)) * sz;
-  out[11] = 0;
-  out[12] = v[0];
-  out[13] = v[1];
-  out[14] = v[2];
-  out[15] = 1;
-
-  return out;
-}
-
-/**
- * Creates a matrix from a quaternion rotation, vector translation and vector scale, rotating and scaling around the given origin
- * This is equivalent to (but much faster than):
- *
- *     mat4.identity(dest);
- *     mat4.translate(dest, vec);
- *     mat4.translate(dest, origin);
- *     let quatMat = mat4.create();
- *     quat4.toMat4(quat, quatMat);
- *     mat4.multiply(dest, quatMat);
- *     mat4.scale(dest, scale)
- *     mat4.translate(dest, negativeOrigin);
- *
- * @param {mat4} out mat4 receiving operation result
- * @param {quat4} q Rotation quaternion
- * @param {vec3} v Translation vector
- * @param {vec3} s Scaling vector
- * @param {vec3} o The origin vector around which to scale and rotate
- * @returns {mat4} out
- */
-function fromRotationTranslationScaleOrigin(out, q, v, s, o) {
-  // Quaternion math
-  var x = q[0],
-      y = q[1],
-      z = q[2],
-      w = q[3];
-  var x2 = x + x;
-  var y2 = y + y;
-  var z2 = z + z;
-
-  var xx = x * x2;
-  var xy = x * y2;
-  var xz = x * z2;
-  var yy = y * y2;
-  var yz = y * z2;
-  var zz = z * z2;
-  var wx = w * x2;
-  var wy = w * y2;
-  var wz = w * z2;
-
-  var sx = s[0];
-  var sy = s[1];
-  var sz = s[2];
-
-  var ox = o[0];
-  var oy = o[1];
-  var oz = o[2];
-
-  out[0] = (1 - (yy + zz)) * sx;
-  out[1] = (xy + wz) * sx;
-  out[2] = (xz - wy) * sx;
-  out[3] = 0;
-  out[4] = (xy - wz) * sy;
-  out[5] = (1 - (xx + zz)) * sy;
-  out[6] = (yz + wx) * sy;
-  out[7] = 0;
-  out[8] = (xz + wy) * sz;
-  out[9] = (yz - wx) * sz;
-  out[10] = (1 - (xx + yy)) * sz;
-  out[11] = 0;
-  out[12] = v[0] + ox - (out[0] * ox + out[4] * oy + out[8] * oz);
-  out[13] = v[1] + oy - (out[1] * ox + out[5] * oy + out[9] * oz);
-  out[14] = v[2] + oz - (out[2] * ox + out[6] * oy + out[10] * oz);
-  out[15] = 1;
-
-  return out;
-}
-
-/**
- * Calculates a 4x4 matrix from the given quaternion
- *
- * @param {mat4} out mat4 receiving operation result
- * @param {quat} q Quaternion to create matrix from
- *
- * @returns {mat4} out
- */
-function fromQuat(out, q) {
-  var x = q[0],
-      y = q[1],
-      z = q[2],
-      w = q[3];
-  var x2 = x + x;
-  var y2 = y + y;
-  var z2 = z + z;
-
-  var xx = x * x2;
-  var yx = y * x2;
-  var yy = y * y2;
-  var zx = z * x2;
-  var zy = z * y2;
-  var zz = z * z2;
-  var wx = w * x2;
-  var wy = w * y2;
-  var wz = w * z2;
-
-  out[0] = 1 - yy - zz;
-  out[1] = yx + wz;
-  out[2] = zx - wy;
-  out[3] = 0;
-
-  out[4] = yx - wz;
-  out[5] = 1 - xx - zz;
-  out[6] = zy + wx;
-  out[7] = 0;
-
-  out[8] = zx + wy;
-  out[9] = zy - wx;
-  out[10] = 1 - xx - yy;
-  out[11] = 0;
-
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = 0;
-  out[15] = 1;
-
-  return out;
-}
-
-/**
- * Generates a frustum matrix with the given bounds
- *
- * @param {mat4} out mat4 frustum matrix will be written into
- * @param {Number} left Left bound of the frustum
- * @param {Number} right Right bound of the frustum
- * @param {Number} bottom Bottom bound of the frustum
- * @param {Number} top Top bound of the frustum
- * @param {Number} near Near bound of the frustum
- * @param {Number} far Far bound of the frustum
- * @returns {mat4} out
- */
-function frustum(out, left, right, bottom, top, near, far) {
-  var rl = 1 / (right - left);
-  var tb = 1 / (top - bottom);
-  var nf = 1 / (near - far);
-  out[0] = near * 2 * rl;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 0;
-  out[5] = near * 2 * tb;
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = (right + left) * rl;
-  out[9] = (top + bottom) * tb;
-  out[10] = (far + near) * nf;
-  out[11] = -1;
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = far * near * 2 * nf;
-  out[15] = 0;
-  return out;
-}
-
-/**
- * Generates a perspective projection matrix with the given bounds
- *
- * @param {mat4} out mat4 frustum matrix will be written into
- * @param {number} fovy Vertical field of view in radians
- * @param {number} aspect Aspect ratio. typically viewport width/height
- * @param {number} near Near bound of the frustum
- * @param {number} far Far bound of the frustum
- * @returns {mat4} out
- */
-function perspective(out, fovy, aspect, near, far) {
-  var f = 1.0 / Math.tan(fovy / 2);
-  var nf = 1 / (near - far);
-  out[0] = f / aspect;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 0;
-  out[5] = f;
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 0;
-  out[9] = 0;
-  out[10] = (far + near) * nf;
-  out[11] = -1;
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = 2 * far * near * nf;
-  out[15] = 0;
-  return out;
-}
-
-/**
- * Generates a perspective projection matrix with the given field of view.
- * This is primarily useful for generating projection matrices to be used
- * with the still experiemental WebVR API.
- *
- * @param {mat4} out mat4 frustum matrix will be written into
- * @param {Object} fov Object containing the following values: upDegrees, downDegrees, leftDegrees, rightDegrees
- * @param {number} near Near bound of the frustum
- * @param {number} far Far bound of the frustum
- * @returns {mat4} out
- */
-function perspectiveFromFieldOfView(out, fov, near, far) {
-  var upTan = Math.tan(fov.upDegrees * Math.PI / 180.0);
-  var downTan = Math.tan(fov.downDegrees * Math.PI / 180.0);
-  var leftTan = Math.tan(fov.leftDegrees * Math.PI / 180.0);
-  var rightTan = Math.tan(fov.rightDegrees * Math.PI / 180.0);
-  var xScale = 2.0 / (leftTan + rightTan);
-  var yScale = 2.0 / (upTan + downTan);
-
-  out[0] = xScale;
-  out[1] = 0.0;
-  out[2] = 0.0;
-  out[3] = 0.0;
-  out[4] = 0.0;
-  out[5] = yScale;
-  out[6] = 0.0;
-  out[7] = 0.0;
-  out[8] = -((leftTan - rightTan) * xScale * 0.5);
-  out[9] = (upTan - downTan) * yScale * 0.5;
-  out[10] = far / (near - far);
-  out[11] = -1.0;
-  out[12] = 0.0;
-  out[13] = 0.0;
-  out[14] = far * near / (near - far);
-  out[15] = 0.0;
-  return out;
-}
-
-/**
- * Generates a orthogonal projection matrix with the given bounds
- *
- * @param {mat4} out mat4 frustum matrix will be written into
- * @param {number} left Left bound of the frustum
- * @param {number} right Right bound of the frustum
- * @param {number} bottom Bottom bound of the frustum
- * @param {number} top Top bound of the frustum
- * @param {number} near Near bound of the frustum
- * @param {number} far Far bound of the frustum
- * @returns {mat4} out
- */
-function ortho(out, left, right, bottom, top, near, far) {
-  var lr = 1 / (left - right);
-  var bt = 1 / (bottom - top);
-  var nf = 1 / (near - far);
-  out[0] = -2 * lr;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 0;
-  out[5] = -2 * bt;
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 0;
-  out[9] = 0;
-  out[10] = 2 * nf;
-  out[11] = 0;
-  out[12] = (left + right) * lr;
-  out[13] = (top + bottom) * bt;
-  out[14] = (far + near) * nf;
-  out[15] = 1;
-  return out;
-}
-
-/**
- * Generates a look-at matrix with the given eye position, focal point, and up axis
- *
- * @param {mat4} out mat4 frustum matrix will be written into
- * @param {vec3} eye Position of the viewer
- * @param {vec3} center Point the viewer is looking at
- * @param {vec3} up vec3 pointing up
- * @returns {mat4} out
- */
-function lookAt(out, eye, center, up) {
-  var x0 = void 0,
-      x1 = void 0,
-      x2 = void 0,
-      y0 = void 0,
-      y1 = void 0,
-      y2 = void 0,
-      z0 = void 0,
-      z1 = void 0,
-      z2 = void 0,
-      len = void 0;
-  var eyex = eye[0];
-  var eyey = eye[1];
-  var eyez = eye[2];
-  var upx = up[0];
-  var upy = up[1];
-  var upz = up[2];
-  var centerx = center[0];
-  var centery = center[1];
-  var centerz = center[2];
-
-  if (Math.abs(eyex - centerx) < glMatrix.EPSILON && Math.abs(eyey - centery) < glMatrix.EPSILON && Math.abs(eyez - centerz) < glMatrix.EPSILON) {
-    return mat4.identity(out);
-  }
-
-  z0 = eyex - centerx;
-  z1 = eyey - centery;
-  z2 = eyez - centerz;
-
-  len = 1 / Math.sqrt(z0 * z0 + z1 * z1 + z2 * z2);
-  z0 *= len;
-  z1 *= len;
-  z2 *= len;
-
-  x0 = upy * z2 - upz * z1;
-  x1 = upz * z0 - upx * z2;
-  x2 = upx * z1 - upy * z0;
-  len = Math.sqrt(x0 * x0 + x1 * x1 + x2 * x2);
-  if (!len) {
-    x0 = 0;
-    x1 = 0;
-    x2 = 0;
-  } else {
-    len = 1 / len;
-    x0 *= len;
-    x1 *= len;
-    x2 *= len;
-  }
-
-  y0 = z1 * x2 - z2 * x1;
-  y1 = z2 * x0 - z0 * x2;
-  y2 = z0 * x1 - z1 * x0;
-
-  len = Math.sqrt(y0 * y0 + y1 * y1 + y2 * y2);
-  if (!len) {
-    y0 = 0;
-    y1 = 0;
-    y2 = 0;
-  } else {
-    len = 1 / len;
-    y0 *= len;
-    y1 *= len;
-    y2 *= len;
-  }
-
-  out[0] = x0;
-  out[1] = y0;
-  out[2] = z0;
-  out[3] = 0;
-  out[4] = x1;
-  out[5] = y1;
-  out[6] = z1;
-  out[7] = 0;
-  out[8] = x2;
-  out[9] = y2;
-  out[10] = z2;
-  out[11] = 0;
-  out[12] = -(x0 * eyex + x1 * eyey + x2 * eyez);
-  out[13] = -(y0 * eyex + y1 * eyey + y2 * eyez);
-  out[14] = -(z0 * eyex + z1 * eyey + z2 * eyez);
-  out[15] = 1;
-
-  return out;
-}
-
-/**
- * Generates a matrix that makes something look at something else.
- *
- * @param {mat4} out mat4 frustum matrix will be written into
- * @param {vec3} eye Position of the viewer
- * @param {vec3} center Point the viewer is looking at
- * @param {vec3} up vec3 pointing up
- * @returns {mat4} out
- */
-function targetTo(out, eye, target, up) {
-  var eyex = eye[0],
-      eyey = eye[1],
-      eyez = eye[2],
-      upx = up[0],
-      upy = up[1],
-      upz = up[2];
-
-  var z0 = eyex - target[0],
-      z1 = eyey - target[1],
-      z2 = eyez - target[2];
-
-  var len = z0 * z0 + z1 * z1 + z2 * z2;
-  if (len > 0) {
-    len = 1 / Math.sqrt(len);
-    z0 *= len;
-    z1 *= len;
-    z2 *= len;
-  }
-
-  var x0 = upy * z2 - upz * z1,
-      x1 = upz * z0 - upx * z2,
-      x2 = upx * z1 - upy * z0;
-
-  out[0] = x0;
-  out[1] = x1;
-  out[2] = x2;
-  out[3] = 0;
-  out[4] = z1 * x2 - z2 * x1;
-  out[5] = z2 * x0 - z0 * x2;
-  out[6] = z0 * x1 - z1 * x0;
-  out[7] = 0;
-  out[8] = z0;
-  out[9] = z1;
-  out[10] = z2;
-  out[11] = 0;
-  out[12] = eyex;
-  out[13] = eyey;
-  out[14] = eyez;
-  out[15] = 1;
-  return out;
-};
-
-/**
- * Returns a string representation of a mat4
- *
- * @param {mat4} a matrix to represent as a string
- * @returns {String} string representation of the matrix
- */
-function str(a) {
-  return 'mat4(' + a[0] + ', ' + a[1] + ', ' + a[2] + ', ' + a[3] + ', ' + a[4] + ', ' + a[5] + ', ' + a[6] + ', ' + a[7] + ', ' + a[8] + ', ' + a[9] + ', ' + a[10] + ', ' + a[11] + ', ' + a[12] + ', ' + a[13] + ', ' + a[14] + ', ' + a[15] + ')';
-}
-
-/**
- * Returns Frobenius norm of a mat4
- *
- * @param {mat4} a the matrix to calculate Frobenius norm of
- * @returns {Number} Frobenius norm
- */
-function frob(a) {
-  return Math.sqrt(Math.pow(a[0], 2) + Math.pow(a[1], 2) + Math.pow(a[2], 2) + Math.pow(a[3], 2) + Math.pow(a[4], 2) + Math.pow(a[5], 2) + Math.pow(a[6], 2) + Math.pow(a[7], 2) + Math.pow(a[8], 2) + Math.pow(a[9], 2) + Math.pow(a[10], 2) + Math.pow(a[11], 2) + Math.pow(a[12], 2) + Math.pow(a[13], 2) + Math.pow(a[14], 2) + Math.pow(a[15], 2));
-}
-
-/**
- * Adds two mat4's
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the first operand
- * @param {mat4} b the second operand
- * @returns {mat4} out
- */
-function add(out, a, b) {
-  out[0] = a[0] + b[0];
-  out[1] = a[1] + b[1];
-  out[2] = a[2] + b[2];
-  out[3] = a[3] + b[3];
-  out[4] = a[4] + b[4];
-  out[5] = a[5] + b[5];
-  out[6] = a[6] + b[6];
-  out[7] = a[7] + b[7];
-  out[8] = a[8] + b[8];
-  out[9] = a[9] + b[9];
-  out[10] = a[10] + b[10];
-  out[11] = a[11] + b[11];
-  out[12] = a[12] + b[12];
-  out[13] = a[13] + b[13];
-  out[14] = a[14] + b[14];
-  out[15] = a[15] + b[15];
-  return out;
-}
-
-/**
- * Subtracts matrix b from matrix a
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the first operand
- * @param {mat4} b the second operand
- * @returns {mat4} out
- */
-function subtract(out, a, b) {
-  out[0] = a[0] - b[0];
-  out[1] = a[1] - b[1];
-  out[2] = a[2] - b[2];
-  out[3] = a[3] - b[3];
-  out[4] = a[4] - b[4];
-  out[5] = a[5] - b[5];
-  out[6] = a[6] - b[6];
-  out[7] = a[7] - b[7];
-  out[8] = a[8] - b[8];
-  out[9] = a[9] - b[9];
-  out[10] = a[10] - b[10];
-  out[11] = a[11] - b[11];
-  out[12] = a[12] - b[12];
-  out[13] = a[13] - b[13];
-  out[14] = a[14] - b[14];
-  out[15] = a[15] - b[15];
-  return out;
-}
-
-/**
- * Multiply each element of the matrix by a scalar.
- *
- * @param {mat4} out the receiving matrix
- * @param {mat4} a the matrix to scale
- * @param {Number} b amount to scale the matrix's elements by
- * @returns {mat4} out
- */
-function multiplyScalar(out, a, b) {
-  out[0] = a[0] * b;
-  out[1] = a[1] * b;
-  out[2] = a[2] * b;
-  out[3] = a[3] * b;
-  out[4] = a[4] * b;
-  out[5] = a[5] * b;
-  out[6] = a[6] * b;
-  out[7] = a[7] * b;
-  out[8] = a[8] * b;
-  out[9] = a[9] * b;
-  out[10] = a[10] * b;
-  out[11] = a[11] * b;
-  out[12] = a[12] * b;
-  out[13] = a[13] * b;
-  out[14] = a[14] * b;
-  out[15] = a[15] * b;
-  return out;
-}
-
-/**
- * Adds two mat4's after multiplying each element of the second operand by a scalar value.
- *
- * @param {mat4} out the receiving vector
- * @param {mat4} a the first operand
- * @param {mat4} b the second operand
- * @param {Number} scale the amount to scale b's elements by before adding
- * @returns {mat4} out
- */
-function multiplyScalarAndAdd(out, a, b, scale) {
-  out[0] = a[0] + b[0] * scale;
-  out[1] = a[1] + b[1] * scale;
-  out[2] = a[2] + b[2] * scale;
-  out[3] = a[3] + b[3] * scale;
-  out[4] = a[4] + b[4] * scale;
-  out[5] = a[5] + b[5] * scale;
-  out[6] = a[6] + b[6] * scale;
-  out[7] = a[7] + b[7] * scale;
-  out[8] = a[8] + b[8] * scale;
-  out[9] = a[9] + b[9] * scale;
-  out[10] = a[10] + b[10] * scale;
-  out[11] = a[11] + b[11] * scale;
-  out[12] = a[12] + b[12] * scale;
-  out[13] = a[13] + b[13] * scale;
-  out[14] = a[14] + b[14] * scale;
-  out[15] = a[15] + b[15] * scale;
-  return out;
-}
-
-/**
- * Returns whether or not the matrices have exactly the same elements in the same position (when compared with ===)
- *
- * @param {mat4} a The first matrix.
- * @param {mat4} b The second matrix.
- * @returns {Boolean} True if the matrices are equal, false otherwise.
- */
-function exactEquals(a, b) {
-  return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3] && a[4] === b[4] && a[5] === b[5] && a[6] === b[6] && a[7] === b[7] && a[8] === b[8] && a[9] === b[9] && a[10] === b[10] && a[11] === b[11] && a[12] === b[12] && a[13] === b[13] && a[14] === b[14] && a[15] === b[15];
-}
-
-/**
- * Returns whether or not the matrices have approximately the same elements in the same position.
- *
- * @param {mat4} a The first matrix.
- * @param {mat4} b The second matrix.
- * @returns {Boolean} True if the matrices are equal, false otherwise.
- */
-function equals(a, b) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3];
-  var a4 = a[4],
-      a5 = a[5],
-      a6 = a[6],
-      a7 = a[7];
-  var a8 = a[8],
-      a9 = a[9],
-      a10 = a[10],
-      a11 = a[11];
-  var a12 = a[12],
-      a13 = a[13],
-      a14 = a[14],
-      a15 = a[15];
-
-  var b0 = b[0],
-      b1 = b[1],
-      b2 = b[2],
-      b3 = b[3];
-  var b4 = b[4],
-      b5 = b[5],
-      b6 = b[6],
-      b7 = b[7];
-  var b8 = b[8],
-      b9 = b[9],
-      b10 = b[10],
-      b11 = b[11];
-  var b12 = b[12],
-      b13 = b[13],
-      b14 = b[14],
-      b15 = b[15];
-
-  return Math.abs(a0 - b0) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) && Math.abs(a1 - b1) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) && Math.abs(a2 - b2) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) && Math.abs(a3 - b3) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) && Math.abs(a4 - b4) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) && Math.abs(a5 - b5) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) && Math.abs(a6 - b6) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) && Math.abs(a7 - b7) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a7), Math.abs(b7)) && Math.abs(a8 - b8) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a8), Math.abs(b8)) && Math.abs(a9 - b9) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a9), Math.abs(b9)) && Math.abs(a10 - b10) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a10), Math.abs(b10)) && Math.abs(a11 - b11) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a11), Math.abs(b11)) && Math.abs(a12 - b12) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a12), Math.abs(b12)) && Math.abs(a13 - b13) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a13), Math.abs(b13)) && Math.abs(a14 - b14) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a14), Math.abs(b14)) && Math.abs(a15 - b15) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a15), Math.abs(b15));
-}
-
-/**
- * Alias for {@link mat4.multiply}
- * @function
- */
-var mul = exports.mul = multiply;
-
-/**
- * Alias for {@link mat4.subtract}
- * @function
- */
-var sub = exports.sub = subtract;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.setAxes = exports.sqlerp = exports.rotationTo = exports.equals = exports.exactEquals = exports.normalize = exports.sqrLen = exports.squaredLength = exports.len = exports.length = exports.lerp = exports.dot = exports.scale = exports.mul = exports.add = exports.set = exports.copy = exports.fromValues = exports.clone = undefined;
-exports.create = create;
-exports.identity = identity;
-exports.setAxisAngle = setAxisAngle;
-exports.getAxisAngle = getAxisAngle;
-exports.multiply = multiply;
-exports.rotateX = rotateX;
-exports.rotateY = rotateY;
-exports.rotateZ = rotateZ;
-exports.calculateW = calculateW;
-exports.slerp = slerp;
-exports.invert = invert;
-exports.conjugate = conjugate;
-exports.fromMat3 = fromMat3;
-exports.fromEuler = fromEuler;
-exports.str = str;
-
-var _common = __webpack_require__(0);
-
-var glMatrix = _interopRequireWildcard(_common);
-
-var _mat = __webpack_require__(1);
-
-var mat3 = _interopRequireWildcard(_mat);
-
-var _vec = __webpack_require__(2);
-
-var vec3 = _interopRequireWildcard(_vec);
-
-var _vec2 = __webpack_require__(3);
-
-var vec4 = _interopRequireWildcard(_vec2);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/**
- * Quaternion
- * @module quat
- */
-
-/**
- * Creates a new identity quat
- *
- * @returns {quat} a new quaternion
- */
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-function create() {
-  var out = new glMatrix.ARRAY_TYPE(4);
-  out[0] = 0;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 1;
-  return out;
-}
-
-/**
- * Set a quat to the identity quaternion
- *
- * @param {quat} out the receiving quaternion
- * @returns {quat} out
- */
-function identity(out) {
-  out[0] = 0;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 1;
-  return out;
-}
-
-/**
- * Sets a quat from the given angle and rotation axis,
- * then returns it.
- *
- * @param {quat} out the receiving quaternion
- * @param {vec3} axis the axis around which to rotate
- * @param {Number} rad the angle in radians
- * @returns {quat} out
- **/
-function setAxisAngle(out, axis, rad) {
-  rad = rad * 0.5;
-  var s = Math.sin(rad);
-  out[0] = s * axis[0];
-  out[1] = s * axis[1];
-  out[2] = s * axis[2];
-  out[3] = Math.cos(rad);
-  return out;
-}
-
-/**
- * Gets the rotation axis and angle for a given
- *  quaternion. If a quaternion is created with
- *  setAxisAngle, this method will return the same
- *  values as providied in the original parameter list
- *  OR functionally equivalent values.
- * Example: The quaternion formed by axis [0, 0, 1] and
- *  angle -90 is the same as the quaternion formed by
- *  [0, 0, 1] and 270. This method favors the latter.
- * @param  {vec3} out_axis  Vector receiving the axis of rotation
- * @param  {quat} q     Quaternion to be decomposed
- * @return {Number}     Angle, in radians, of the rotation
- */
-function getAxisAngle(out_axis, q) {
-  var rad = Math.acos(q[3]) * 2.0;
-  var s = Math.sin(rad / 2.0);
-  if (s != 0.0) {
-    out_axis[0] = q[0] / s;
-    out_axis[1] = q[1] / s;
-    out_axis[2] = q[2] / s;
-  } else {
-    // If s is zero, return any axis (no rotation - axis does not matter)
-    out_axis[0] = 1;
-    out_axis[1] = 0;
-    out_axis[2] = 0;
-  }
-  return rad;
-}
-
-/**
- * Multiplies two quat's
- *
- * @param {quat} out the receiving quaternion
- * @param {quat} a the first operand
- * @param {quat} b the second operand
- * @returns {quat} out
- */
-function multiply(out, a, b) {
-  var ax = a[0],
-      ay = a[1],
-      az = a[2],
-      aw = a[3];
-  var bx = b[0],
-      by = b[1],
-      bz = b[2],
-      bw = b[3];
-
-  out[0] = ax * bw + aw * bx + ay * bz - az * by;
-  out[1] = ay * bw + aw * by + az * bx - ax * bz;
-  out[2] = az * bw + aw * bz + ax * by - ay * bx;
-  out[3] = aw * bw - ax * bx - ay * by - az * bz;
-  return out;
-}
-
-/**
- * Rotates a quaternion by the given angle about the X axis
- *
- * @param {quat} out quat receiving operation result
- * @param {quat} a quat to rotate
- * @param {number} rad angle (in radians) to rotate
- * @returns {quat} out
- */
-function rotateX(out, a, rad) {
-  rad *= 0.5;
-
-  var ax = a[0],
-      ay = a[1],
-      az = a[2],
-      aw = a[3];
-  var bx = Math.sin(rad),
-      bw = Math.cos(rad);
-
-  out[0] = ax * bw + aw * bx;
-  out[1] = ay * bw + az * bx;
-  out[2] = az * bw - ay * bx;
-  out[3] = aw * bw - ax * bx;
-  return out;
-}
-
-/**
- * Rotates a quaternion by the given angle about the Y axis
- *
- * @param {quat} out quat receiving operation result
- * @param {quat} a quat to rotate
- * @param {number} rad angle (in radians) to rotate
- * @returns {quat} out
- */
-function rotateY(out, a, rad) {
-  rad *= 0.5;
-
-  var ax = a[0],
-      ay = a[1],
-      az = a[2],
-      aw = a[3];
-  var by = Math.sin(rad),
-      bw = Math.cos(rad);
-
-  out[0] = ax * bw - az * by;
-  out[1] = ay * bw + aw * by;
-  out[2] = az * bw + ax * by;
-  out[3] = aw * bw - ay * by;
-  return out;
-}
-
-/**
- * Rotates a quaternion by the given angle about the Z axis
- *
- * @param {quat} out quat receiving operation result
- * @param {quat} a quat to rotate
- * @param {number} rad angle (in radians) to rotate
- * @returns {quat} out
- */
-function rotateZ(out, a, rad) {
-  rad *= 0.5;
-
-  var ax = a[0],
-      ay = a[1],
-      az = a[2],
-      aw = a[3];
-  var bz = Math.sin(rad),
-      bw = Math.cos(rad);
-
-  out[0] = ax * bw + ay * bz;
-  out[1] = ay * bw - ax * bz;
-  out[2] = az * bw + aw * bz;
-  out[3] = aw * bw - az * bz;
-  return out;
-}
-
-/**
- * Calculates the W component of a quat from the X, Y, and Z components.
- * Assumes that quaternion is 1 unit in length.
- * Any existing W component will be ignored.
- *
- * @param {quat} out the receiving quaternion
- * @param {quat} a quat to calculate W component of
- * @returns {quat} out
- */
-function calculateW(out, a) {
-  var x = a[0],
-      y = a[1],
-      z = a[2];
-
-  out[0] = x;
-  out[1] = y;
-  out[2] = z;
-  out[3] = Math.sqrt(Math.abs(1.0 - x * x - y * y - z * z));
-  return out;
-}
-
-/**
- * Performs a spherical linear interpolation between two quat
- *
- * @param {quat} out the receiving quaternion
- * @param {quat} a the first operand
- * @param {quat} b the second operand
- * @param {Number} t interpolation amount between the two inputs
- * @returns {quat} out
- */
-function slerp(out, a, b, t) {
-  // benchmarks:
-  //    http://jsperf.com/quaternion-slerp-implementations
-  var ax = a[0],
-      ay = a[1],
-      az = a[2],
-      aw = a[3];
-  var bx = b[0],
-      by = b[1],
-      bz = b[2],
-      bw = b[3];
-
-  var omega = void 0,
-      cosom = void 0,
-      sinom = void 0,
-      scale0 = void 0,
-      scale1 = void 0;
-
-  // calc cosine
-  cosom = ax * bx + ay * by + az * bz + aw * bw;
-  // adjust signs (if necessary)
-  if (cosom < 0.0) {
-    cosom = -cosom;
-    bx = -bx;
-    by = -by;
-    bz = -bz;
-    bw = -bw;
-  }
-  // calculate coefficients
-  if (1.0 - cosom > 0.000001) {
-    // standard case (slerp)
-    omega = Math.acos(cosom);
-    sinom = Math.sin(omega);
-    scale0 = Math.sin((1.0 - t) * omega) / sinom;
-    scale1 = Math.sin(t * omega) / sinom;
-  } else {
-    // "from" and "to" quaternions are very close
-    //  ... so we can do a linear interpolation
-    scale0 = 1.0 - t;
-    scale1 = t;
-  }
-  // calculate final values
-  out[0] = scale0 * ax + scale1 * bx;
-  out[1] = scale0 * ay + scale1 * by;
-  out[2] = scale0 * az + scale1 * bz;
-  out[3] = scale0 * aw + scale1 * bw;
-
-  return out;
-}
-
-/**
- * Calculates the inverse of a quat
- *
- * @param {quat} out the receiving quaternion
- * @param {quat} a quat to calculate inverse of
- * @returns {quat} out
- */
-function invert(out, a) {
-  var a0 = a[0],
-      a1 = a[1],
-      a2 = a[2],
-      a3 = a[3];
-  var dot = a0 * a0 + a1 * a1 + a2 * a2 + a3 * a3;
-  var invDot = dot ? 1.0 / dot : 0;
-
-  // TODO: Would be faster to return [0,0,0,0] immediately if dot == 0
-
-  out[0] = -a0 * invDot;
-  out[1] = -a1 * invDot;
-  out[2] = -a2 * invDot;
-  out[3] = a3 * invDot;
-  return out;
-}
-
-/**
- * Calculates the conjugate of a quat
- * If the quaternion is normalized, this function is faster than quat.inverse and produces the same result.
- *
- * @param {quat} out the receiving quaternion
- * @param {quat} a quat to calculate conjugate of
- * @returns {quat} out
- */
-function conjugate(out, a) {
-  out[0] = -a[0];
-  out[1] = -a[1];
-  out[2] = -a[2];
-  out[3] = a[3];
-  return out;
-}
-
-/**
- * Creates a quaternion from the given 3x3 rotation matrix.
- *
- * NOTE: The resultant quaternion is not normalized, so you should be sure
- * to renormalize the quaternion yourself where necessary.
- *
- * @param {quat} out the receiving quaternion
- * @param {mat3} m rotation matrix
- * @returns {quat} out
- * @function
- */
-function fromMat3(out, m) {
-  // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
-  // article "Quaternion Calculus and Fast Animation".
-  var fTrace = m[0] + m[4] + m[8];
-  var fRoot = void 0;
-
-  if (fTrace > 0.0) {
-    // |w| > 1/2, may as well choose w > 1/2
-    fRoot = Math.sqrt(fTrace + 1.0); // 2w
-    out[3] = 0.5 * fRoot;
-    fRoot = 0.5 / fRoot; // 1/(4w)
-    out[0] = (m[5] - m[7]) * fRoot;
-    out[1] = (m[6] - m[2]) * fRoot;
-    out[2] = (m[1] - m[3]) * fRoot;
-  } else {
-    // |w| <= 1/2
-    var i = 0;
-    if (m[4] > m[0]) i = 1;
-    if (m[8] > m[i * 3 + i]) i = 2;
-    var j = (i + 1) % 3;
-    var k = (i + 2) % 3;
-
-    fRoot = Math.sqrt(m[i * 3 + i] - m[j * 3 + j] - m[k * 3 + k] + 1.0);
-    out[i] = 0.5 * fRoot;
-    fRoot = 0.5 / fRoot;
-    out[3] = (m[j * 3 + k] - m[k * 3 + j]) * fRoot;
-    out[j] = (m[j * 3 + i] + m[i * 3 + j]) * fRoot;
-    out[k] = (m[k * 3 + i] + m[i * 3 + k]) * fRoot;
-  }
-
-  return out;
-}
-
-/**
- * Creates a quaternion from the given euler angle x, y, z.
- *
- * @param {quat} out the receiving quaternion
- * @param {x} Angle to rotate around X axis in degrees.
- * @param {y} Angle to rotate around Y axis in degrees.
- * @param {z} Angle to rotate around Z axis in degrees.
- * @returns {quat} out
- * @function
- */
-function fromEuler(out, x, y, z) {
-  var halfToRad = 0.5 * Math.PI / 180.0;
-  x *= halfToRad;
-  y *= halfToRad;
-  z *= halfToRad;
-
-  var sx = Math.sin(x);
-  var cx = Math.cos(x);
-  var sy = Math.sin(y);
-  var cy = Math.cos(y);
-  var sz = Math.sin(z);
-  var cz = Math.cos(z);
-
-  out[0] = sx * cy * cz - cx * sy * sz;
-  out[1] = cx * sy * cz + sx * cy * sz;
-  out[2] = cx * cy * sz - sx * sy * cz;
-  out[3] = cx * cy * cz + sx * sy * sz;
-
-  return out;
-}
-
-/**
- * Returns a string representation of a quatenion
- *
- * @param {quat} a vector to represent as a string
- * @returns {String} string representation of the vector
- */
-function str(a) {
-  return 'quat(' + a[0] + ', ' + a[1] + ', ' + a[2] + ', ' + a[3] + ')';
-}
-
-/**
- * Creates a new quat initialized with values from an existing quaternion
- *
- * @param {quat} a quaternion to clone
- * @returns {quat} a new quaternion
- * @function
- */
-var clone = exports.clone = vec4.clone;
-
-/**
- * Creates a new quat initialized with the given values
- *
- * @param {Number} x X component
- * @param {Number} y Y component
- * @param {Number} z Z component
- * @param {Number} w W component
- * @returns {quat} a new quaternion
- * @function
- */
-var fromValues = exports.fromValues = vec4.fromValues;
-
-/**
- * Copy the values from one quat to another
- *
- * @param {quat} out the receiving quaternion
- * @param {quat} a the source quaternion
- * @returns {quat} out
- * @function
- */
-var copy = exports.copy = vec4.copy;
-
-/**
- * Set the components of a quat to the given values
- *
- * @param {quat} out the receiving quaternion
- * @param {Number} x X component
- * @param {Number} y Y component
- * @param {Number} z Z component
- * @param {Number} w W component
- * @returns {quat} out
- * @function
- */
-var set = exports.set = vec4.set;
-
-/**
- * Adds two quat's
- *
- * @param {quat} out the receiving quaternion
- * @param {quat} a the first operand
- * @param {quat} b the second operand
- * @returns {quat} out
- * @function
- */
-var add = exports.add = vec4.add;
-
-/**
- * Alias for {@link quat.multiply}
- * @function
- */
-var mul = exports.mul = multiply;
-
-/**
- * Scales a quat by a scalar number
- *
- * @param {quat} out the receiving vector
- * @param {quat} a the vector to scale
- * @param {Number} b amount to scale the vector by
- * @returns {quat} out
- * @function
- */
-var scale = exports.scale = vec4.scale;
-
-/**
- * Calculates the dot product of two quat's
- *
- * @param {quat} a the first operand
- * @param {quat} b the second operand
- * @returns {Number} dot product of a and b
- * @function
- */
-var dot = exports.dot = vec4.dot;
-
-/**
- * Performs a linear interpolation between two quat's
- *
- * @param {quat} out the receiving quaternion
- * @param {quat} a the first operand
- * @param {quat} b the second operand
- * @param {Number} t interpolation amount between the two inputs
- * @returns {quat} out
- * @function
- */
-var lerp = exports.lerp = vec4.lerp;
-
-/**
- * Calculates the length of a quat
- *
- * @param {quat} a vector to calculate length of
- * @returns {Number} length of a
- */
-var length = exports.length = vec4.length;
-
-/**
- * Alias for {@link quat.length}
- * @function
- */
-var len = exports.len = length;
-
-/**
- * Calculates the squared length of a quat
- *
- * @param {quat} a vector to calculate squared length of
- * @returns {Number} squared length of a
- * @function
- */
-var squaredLength = exports.squaredLength = vec4.squaredLength;
-
-/**
- * Alias for {@link quat.squaredLength}
- * @function
- */
-var sqrLen = exports.sqrLen = squaredLength;
-
-/**
- * Normalize a quat
- *
- * @param {quat} out the receiving quaternion
- * @param {quat} a quaternion to normalize
- * @returns {quat} out
- * @function
- */
-var normalize = exports.normalize = vec4.normalize;
-
-/**
- * Returns whether or not the quaternions have exactly the same elements in the same position (when compared with ===)
- *
- * @param {quat} a The first quaternion.
- * @param {quat} b The second quaternion.
- * @returns {Boolean} True if the vectors are equal, false otherwise.
- */
-var exactEquals = exports.exactEquals = vec4.exactEquals;
-
-/**
- * Returns whether or not the quaternions have approximately the same elements in the same position.
- *
- * @param {quat} a The first vector.
- * @param {quat} b The second vector.
- * @returns {Boolean} True if the vectors are equal, false otherwise.
- */
-var equals = exports.equals = vec4.equals;
-
-/**
- * Sets a quaternion to represent the shortest rotation from one
- * vector to another.
- *
- * Both vectors are assumed to be unit length.
- *
- * @param {quat} out the receiving quaternion.
- * @param {vec3} a the initial vector
- * @param {vec3} b the destination vector
- * @returns {quat} out
- */
-var rotationTo = exports.rotationTo = function () {
-  var tmpvec3 = vec3.create();
-  var xUnitVec3 = vec3.fromValues(1, 0, 0);
-  var yUnitVec3 = vec3.fromValues(0, 1, 0);
-
-  return function (out, a, b) {
-    var dot = vec3.dot(a, b);
-    if (dot < -0.999999) {
-      vec3.cross(tmpvec3, xUnitVec3, a);
-      if (vec3.len(tmpvec3) < 0.000001) vec3.cross(tmpvec3, yUnitVec3, a);
-      vec3.normalize(tmpvec3, tmpvec3);
-      setAxisAngle(out, tmpvec3, Math.PI);
-      return out;
-    } else if (dot > 0.999999) {
-      out[0] = 0;
-      out[1] = 0;
-      out[2] = 0;
-      out[3] = 1;
-      return out;
-    } else {
-      vec3.cross(tmpvec3, a, b);
-      out[0] = tmpvec3[0];
-      out[1] = tmpvec3[1];
-      out[2] = tmpvec3[2];
-      out[3] = 1 + dot;
-      return normalize(out, out);
-    }
-  };
-}();
-
-/**
- * Performs a spherical linear interpolation with two control points
- *
- * @param {quat} out the receiving quaternion
- * @param {quat} a the first operand
- * @param {quat} b the second operand
- * @param {quat} c the third operand
- * @param {quat} d the fourth operand
- * @param {Number} t interpolation amount
- * @returns {quat} out
- */
-var sqlerp = exports.sqlerp = function () {
-  var temp1 = create();
-  var temp2 = create();
-
-  return function (out, a, b, c, d, t) {
-    slerp(temp1, a, d, t);
-    slerp(temp2, b, c, t);
-    slerp(out, temp1, temp2, 2 * t * (1 - t));
-
-    return out;
-  };
-}();
-
-/**
- * Sets the specified quaternion with values corresponding to the given
- * axes. Each axis is a vec3 and is expected to be unit length and
- * perpendicular to all other specified axes.
- *
- * @param {vec3} view  the vector representing the viewing direction
- * @param {vec3} right the vector representing the local "right" direction
- * @param {vec3} up    the vector representing the local "up" direction
- * @returns {quat} out
- */
-var setAxes = exports.setAxes = function () {
-  var matr = mat3.create();
-
-  return function (out, view, right, up) {
-    matr[0] = right[0];
-    matr[3] = right[1];
-    matr[6] = right[2];
-
-    matr[1] = up[0];
-    matr[4] = up[1];
-    matr[7] = up[2];
-
-    matr[2] = -view[0];
-    matr[5] = -view[1];
-    matr[8] = -view[2];
-
-    return normalize(out, fromMat3(out, matr));
-  };
-}();
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.forEach = exports.sqrLen = exports.sqrDist = exports.dist = exports.div = exports.mul = exports.sub = exports.len = undefined;
-exports.create = create;
-exports.clone = clone;
-exports.fromValues = fromValues;
-exports.copy = copy;
-exports.set = set;
-exports.add = add;
-exports.subtract = subtract;
-exports.multiply = multiply;
-exports.divide = divide;
-exports.ceil = ceil;
-exports.floor = floor;
-exports.min = min;
-exports.max = max;
-exports.round = round;
-exports.scale = scale;
-exports.scaleAndAdd = scaleAndAdd;
-exports.distance = distance;
-exports.squaredDistance = squaredDistance;
-exports.length = length;
-exports.squaredLength = squaredLength;
-exports.negate = negate;
-exports.inverse = inverse;
-exports.normalize = normalize;
-exports.dot = dot;
-exports.cross = cross;
-exports.lerp = lerp;
-exports.random = random;
-exports.transformMat2 = transformMat2;
-exports.transformMat2d = transformMat2d;
-exports.transformMat3 = transformMat3;
-exports.transformMat4 = transformMat4;
-exports.str = str;
-exports.exactEquals = exactEquals;
-exports.equals = equals;
-
-var _common = __webpack_require__(0);
-
-var glMatrix = _interopRequireWildcard(_common);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/**
- * 2 Dimensional Vector
- * @module vec2
- */
-
-/**
- * Creates a new, empty vec2
- *
- * @returns {vec2} a new 2D vector
- */
-function create() {
-  var out = new glMatrix.ARRAY_TYPE(2);
-  out[0] = 0;
-  out[1] = 0;
-  return out;
-}
-
-/**
- * Creates a new vec2 initialized with values from an existing vector
- *
- * @param {vec2} a vector to clone
- * @returns {vec2} a new 2D vector
- */
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-function clone(a) {
-  var out = new glMatrix.ARRAY_TYPE(2);
-  out[0] = a[0];
-  out[1] = a[1];
-  return out;
-}
-
-/**
- * Creates a new vec2 initialized with the given values
- *
- * @param {Number} x X component
- * @param {Number} y Y component
- * @returns {vec2} a new 2D vector
- */
-function fromValues(x, y) {
-  var out = new glMatrix.ARRAY_TYPE(2);
-  out[0] = x;
-  out[1] = y;
-  return out;
-}
-
-/**
- * Copy the values from one vec2 to another
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the source vector
- * @returns {vec2} out
- */
-function copy(out, a) {
-  out[0] = a[0];
-  out[1] = a[1];
-  return out;
-}
-
-/**
- * Set the components of a vec2 to the given values
- *
- * @param {vec2} out the receiving vector
- * @param {Number} x X component
- * @param {Number} y Y component
- * @returns {vec2} out
- */
-function set(out, x, y) {
-  out[0] = x;
-  out[1] = y;
-  return out;
-}
-
-/**
- * Adds two vec2's
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the first operand
- * @param {vec2} b the second operand
- * @returns {vec2} out
- */
-function add(out, a, b) {
-  out[0] = a[0] + b[0];
-  out[1] = a[1] + b[1];
-  return out;
-}
-
-/**
- * Subtracts vector b from vector a
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the first operand
- * @param {vec2} b the second operand
- * @returns {vec2} out
- */
-function subtract(out, a, b) {
-  out[0] = a[0] - b[0];
-  out[1] = a[1] - b[1];
-  return out;
-}
-
-/**
- * Multiplies two vec2's
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the first operand
- * @param {vec2} b the second operand
- * @returns {vec2} out
- */
-function multiply(out, a, b) {
-  out[0] = a[0] * b[0];
-  out[1] = a[1] * b[1];
-  return out;
-};
-
-/**
- * Divides two vec2's
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the first operand
- * @param {vec2} b the second operand
- * @returns {vec2} out
- */
-function divide(out, a, b) {
-  out[0] = a[0] / b[0];
-  out[1] = a[1] / b[1];
-  return out;
-};
-
-/**
- * Math.ceil the components of a vec2
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a vector to ceil
- * @returns {vec2} out
- */
-function ceil(out, a) {
-  out[0] = Math.ceil(a[0]);
-  out[1] = Math.ceil(a[1]);
-  return out;
-};
-
-/**
- * Math.floor the components of a vec2
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a vector to floor
- * @returns {vec2} out
- */
-function floor(out, a) {
-  out[0] = Math.floor(a[0]);
-  out[1] = Math.floor(a[1]);
-  return out;
-};
-
-/**
- * Returns the minimum of two vec2's
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the first operand
- * @param {vec2} b the second operand
- * @returns {vec2} out
- */
-function min(out, a, b) {
-  out[0] = Math.min(a[0], b[0]);
-  out[1] = Math.min(a[1], b[1]);
-  return out;
-};
-
-/**
- * Returns the maximum of two vec2's
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the first operand
- * @param {vec2} b the second operand
- * @returns {vec2} out
- */
-function max(out, a, b) {
-  out[0] = Math.max(a[0], b[0]);
-  out[1] = Math.max(a[1], b[1]);
-  return out;
-};
-
-/**
- * Math.round the components of a vec2
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a vector to round
- * @returns {vec2} out
- */
-function round(out, a) {
-  out[0] = Math.round(a[0]);
-  out[1] = Math.round(a[1]);
-  return out;
-};
-
-/**
- * Scales a vec2 by a scalar number
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the vector to scale
- * @param {Number} b amount to scale the vector by
- * @returns {vec2} out
- */
-function scale(out, a, b) {
-  out[0] = a[0] * b;
-  out[1] = a[1] * b;
-  return out;
-};
-
-/**
- * Adds two vec2's after scaling the second operand by a scalar value
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the first operand
- * @param {vec2} b the second operand
- * @param {Number} scale the amount to scale b by before adding
- * @returns {vec2} out
- */
-function scaleAndAdd(out, a, b, scale) {
-  out[0] = a[0] + b[0] * scale;
-  out[1] = a[1] + b[1] * scale;
-  return out;
-};
-
-/**
- * Calculates the euclidian distance between two vec2's
- *
- * @param {vec2} a the first operand
- * @param {vec2} b the second operand
- * @returns {Number} distance between a and b
- */
-function distance(a, b) {
-  var x = b[0] - a[0],
-      y = b[1] - a[1];
-  return Math.sqrt(x * x + y * y);
-};
-
-/**
- * Calculates the squared euclidian distance between two vec2's
- *
- * @param {vec2} a the first operand
- * @param {vec2} b the second operand
- * @returns {Number} squared distance between a and b
- */
-function squaredDistance(a, b) {
-  var x = b[0] - a[0],
-      y = b[1] - a[1];
-  return x * x + y * y;
-};
-
-/**
- * Calculates the length of a vec2
- *
- * @param {vec2} a vector to calculate length of
- * @returns {Number} length of a
- */
-function length(a) {
-  var x = a[0],
-      y = a[1];
-  return Math.sqrt(x * x + y * y);
-};
-
-/**
- * Calculates the squared length of a vec2
- *
- * @param {vec2} a vector to calculate squared length of
- * @returns {Number} squared length of a
- */
-function squaredLength(a) {
-  var x = a[0],
-      y = a[1];
-  return x * x + y * y;
-};
-
-/**
- * Negates the components of a vec2
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a vector to negate
- * @returns {vec2} out
- */
-function negate(out, a) {
-  out[0] = -a[0];
-  out[1] = -a[1];
-  return out;
-};
-
-/**
- * Returns the inverse of the components of a vec2
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a vector to invert
- * @returns {vec2} out
- */
-function inverse(out, a) {
-  out[0] = 1.0 / a[0];
-  out[1] = 1.0 / a[1];
-  return out;
-};
-
-/**
- * Normalize a vec2
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a vector to normalize
- * @returns {vec2} out
- */
-function normalize(out, a) {
-  var x = a[0],
-      y = a[1];
-  var len = x * x + y * y;
-  if (len > 0) {
-    //TODO: evaluate use of glm_invsqrt here?
-    len = 1 / Math.sqrt(len);
-    out[0] = a[0] * len;
-    out[1] = a[1] * len;
-  }
-  return out;
-};
-
-/**
- * Calculates the dot product of two vec2's
- *
- * @param {vec2} a the first operand
- * @param {vec2} b the second operand
- * @returns {Number} dot product of a and b
- */
-function dot(a, b) {
-  return a[0] * b[0] + a[1] * b[1];
-};
-
-/**
- * Computes the cross product of two vec2's
- * Note that the cross product must by definition produce a 3D vector
- *
- * @param {vec3} out the receiving vector
- * @param {vec2} a the first operand
- * @param {vec2} b the second operand
- * @returns {vec3} out
- */
-function cross(out, a, b) {
-  var z = a[0] * b[1] - a[1] * b[0];
-  out[0] = out[1] = 0;
-  out[2] = z;
-  return out;
-};
-
-/**
- * Performs a linear interpolation between two vec2's
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the first operand
- * @param {vec2} b the second operand
- * @param {Number} t interpolation amount between the two inputs
- * @returns {vec2} out
- */
-function lerp(out, a, b, t) {
-  var ax = a[0],
-      ay = a[1];
-  out[0] = ax + t * (b[0] - ax);
-  out[1] = ay + t * (b[1] - ay);
-  return out;
-};
-
-/**
- * Generates a random vector with the given scale
- *
- * @param {vec2} out the receiving vector
- * @param {Number} [scale] Length of the resulting vector. If ommitted, a unit vector will be returned
- * @returns {vec2} out
- */
-function random(out, scale) {
-  scale = scale || 1.0;
-  var r = glMatrix.RANDOM() * 2.0 * Math.PI;
-  out[0] = Math.cos(r) * scale;
-  out[1] = Math.sin(r) * scale;
-  return out;
-};
-
-/**
- * Transforms the vec2 with a mat2
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the vector to transform
- * @param {mat2} m matrix to transform with
- * @returns {vec2} out
- */
-function transformMat2(out, a, m) {
-  var x = a[0],
-      y = a[1];
-  out[0] = m[0] * x + m[2] * y;
-  out[1] = m[1] * x + m[3] * y;
-  return out;
-};
-
-/**
- * Transforms the vec2 with a mat2d
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the vector to transform
- * @param {mat2d} m matrix to transform with
- * @returns {vec2} out
- */
-function transformMat2d(out, a, m) {
-  var x = a[0],
-      y = a[1];
-  out[0] = m[0] * x + m[2] * y + m[4];
-  out[1] = m[1] * x + m[3] * y + m[5];
-  return out;
-};
-
-/**
- * Transforms the vec2 with a mat3
- * 3rd vector component is implicitly '1'
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the vector to transform
- * @param {mat3} m matrix to transform with
- * @returns {vec2} out
- */
-function transformMat3(out, a, m) {
-  var x = a[0],
-      y = a[1];
-  out[0] = m[0] * x + m[3] * y + m[6];
-  out[1] = m[1] * x + m[4] * y + m[7];
-  return out;
-};
-
-/**
- * Transforms the vec2 with a mat4
- * 3rd vector component is implicitly '0'
- * 4th vector component is implicitly '1'
- *
- * @param {vec2} out the receiving vector
- * @param {vec2} a the vector to transform
- * @param {mat4} m matrix to transform with
- * @returns {vec2} out
- */
-function transformMat4(out, a, m) {
-  var x = a[0];
-  var y = a[1];
-  out[0] = m[0] * x + m[4] * y + m[12];
-  out[1] = m[1] * x + m[5] * y + m[13];
-  return out;
-}
-
-/**
- * Returns a string representation of a vector
- *
- * @param {vec2} a vector to represent as a string
- * @returns {String} string representation of the vector
- */
-function str(a) {
-  return 'vec2(' + a[0] + ', ' + a[1] + ')';
-}
-
-/**
- * Returns whether or not the vectors exactly have the same elements in the same position (when compared with ===)
- *
- * @param {vec2} a The first vector.
- * @param {vec2} b The second vector.
- * @returns {Boolean} True if the vectors are equal, false otherwise.
- */
-function exactEquals(a, b) {
-  return a[0] === b[0] && a[1] === b[1];
-}
-
-/**
- * Returns whether or not the vectors have approximately the same elements in the same position.
- *
- * @param {vec2} a The first vector.
- * @param {vec2} b The second vector.
- * @returns {Boolean} True if the vectors are equal, false otherwise.
- */
-function equals(a, b) {
-  var a0 = a[0],
-      a1 = a[1];
-  var b0 = b[0],
-      b1 = b[1];
-  return Math.abs(a0 - b0) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) && Math.abs(a1 - b1) <= glMatrix.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1));
-}
-
-/**
- * Alias for {@link vec2.length}
- * @function
- */
-var len = exports.len = length;
-
-/**
- * Alias for {@link vec2.subtract}
- * @function
- */
-var sub = exports.sub = subtract;
-
-/**
- * Alias for {@link vec2.multiply}
- * @function
- */
-var mul = exports.mul = multiply;
-
-/**
- * Alias for {@link vec2.divide}
- * @function
- */
-var div = exports.div = divide;
-
-/**
- * Alias for {@link vec2.distance}
- * @function
- */
-var dist = exports.dist = distance;
-
-/**
- * Alias for {@link vec2.squaredDistance}
- * @function
- */
-var sqrDist = exports.sqrDist = squaredDistance;
-
-/**
- * Alias for {@link vec2.squaredLength}
- * @function
- */
-var sqrLen = exports.sqrLen = squaredLength;
-
-/**
- * Perform some operation over an array of vec2s.
- *
- * @param {Array} a the array of vectors to iterate over
- * @param {Number} stride Number of elements between the start of each vec2. If 0 assumes tightly packed
- * @param {Number} offset Number of elements to skip at the beginning of the array
- * @param {Number} count Number of vec2s to iterate over. If 0 iterates over entire array
- * @param {Function} fn Function to call for each vector in the array
- * @param {Object} [arg] additional argument to pass to fn
- * @returns {Array} a
- * @function
- */
-var forEach = exports.forEach = function () {
-  var vec = create();
-
-  return function (a, stride, offset, count, fn, arg) {
-    var i = void 0,
-        l = void 0;
-    if (!stride) {
-      stride = 2;
-    }
-
-    if (!offset) {
-      offset = 0;
-    }
-
-    if (count) {
-      l = Math.min(count * stride + offset, a.length);
-    } else {
-      l = a.length;
-    }
-
-    for (i = offset; i < l; i += stride) {
-      vec[0] = a[i];vec[1] = a[i + 1];
-      fn(vec, vec, arg);
-      a[i] = vec[0];a[i + 1] = vec[1];
-    }
-
-    return a;
-  };
-}();
-
-/***/ })
-/******/ ]);
-});
-/**
- * @file tgajs - Javascript decoder & (experimental) encoder for TGA files
- * @desc tgajs is a fork from https://github.com/vthibault/jsTGALoader
- * @author Vincent Thibault (Original author)
- * @author Lukas Schmitt
- * @version 1.0.0
- */
-
-/* Copyright (c) 2013, Vincent Thibault. All rights reserved.
-
- Redistribution and use in source and binary forms, with or without modification,
- are permitted provided that the following conditions are met:
-
- * Redistributions of source code must retain the above copyright notice, this
- list of conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice,
- this list of conditions and the following disclaimer in the documentation
- and/or other materials provided with the distribution.
-
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
-
-(function (_global) {
-  'use strict';
-
-  /**
-   * @var {object} TGA type constants
-   */
-  Targa.Type = {
-    NO_DATA: 0,
-    INDEXED: 1,
-    RGB: 2,
-    GREY: 3,
-    RLE_INDEXED: 9,
-    RLE_RGB: 10,
-    RLE_GREY: 11
-  };
-
-  /**
-   * @var {object} TGA origin constants
-   */
-  Targa.Origin = {
-    BOTTOM_LEFT: 0x00,
-    BOTTOM_RIGHT: 0x01,
-    TOP_LEFT: 0x02,
-    TOP_RIGHT: 0x03,
-    SHIFT: 0x04,
-    MASK: 0x30,
-    ALPHA: 0x08
-  };
-
-  Targa.HEADER_SIZE = 18;
-  Targa.FOOTER_SIZE = 26;
-  Targa.LITTLE_ENDIAN = true;
-  Targa.RLE_BIT = 0x80;
-  Targa.RLE_MASK = 0x7f;
-  Targa.RLE_PACKET = 1;
-  Targa.RAW_PACKET = 2;
-  Targa.SIGNATURE = "TRUEVISION-XFILE.\0";
-
-  /**
-   * TGA Namespace
-   * @constructor
-   */
-  function Targa() {
-    if (arguments.length == 1) {
-      var h = arguments[0];
-
-      this.header = createHeader(h);
-      setHeaderBooleans(this.header);
-      checkHeader(this.header);
-    }
-  }
-
-  /**
-   * Sets header or default values
-   * @param header header
-   * @returns {Object}
-   */
-  function createHeader(header) {
-    return {
-      /* 0x00  BYTE */  idLength: defaultFor(header.idLength, 0),
-      /* 0x01  BYTE */  colorMapType: defaultFor(header.colorMapType, 0),
-      /* 0x02  BYTE */  imageType: defaultFor(header.imageType, Targa.Type.RGB),
-      /* 0x03  WORD */  colorMapIndex: defaultFor(header.colorMapIndex, 0),
-      /* 0x05  WORD */  colorMapLength: defaultFor(header.colorMapLength, 0),
-      /* 0x07  BYTE */  colorMapDepth: defaultFor(header.colorMapDepth, 0),
-      /* 0x08  WORD */  offsetX: defaultFor(header.offsetX, 0),
-      /* 0x0a  WORD */  offsetY: defaultFor(header.offsetY, 0),
-      /* 0x0c  WORD */  width: defaultFor(header.width, 0),
-      /* 0x0e  WORD */  height: defaultFor(header.height, 0),
-      /* 0x10  BYTE */  pixelDepth: defaultFor(header.pixelDepth,32),
-      /* 0x11  BYTE */  flags: defaultFor(header.flags, 8)
-    };
-  }
-
-  function defaultFor(arg, val) { return typeof arg !== 'undefined' ? arg : val; }
-
-  /**
-   * Write footer of TGA file to view
-   * Byte 0-3 - Extension Area Offset, 0 if no Extension Area exists
-   * Byte 4-7 - Developer Directory Offset, 0 if no Developer Area exists
-   * Byte 8-25 - Signature
-   * @param {Uint8Array} footer
-   */
-  function writeFooter(footer) {
-    var signature = Targa.SIGNATURE;
-    var offset = footer.byteLength - signature.length;
-    for (var i = 0; i < signature.length; i++) {
-      footer[offset + i] = signature.charCodeAt(i);
-    }
-  }
-
-  /**
-   * Write header of TGA file to view
-   * @param header
-   * @param view DataView
-   */
-  function writeHeader(header, view) {
-    var littleEndian = Targa.LITTLE_ENDIAN;
-
-    view.setUint8(0x00, header.idLength);
-    view.setUint8(0x01, header.colorMapType);
-    view.setUint8(0x02, header.imageType);
-    view.setUint16(0x03, header.colorMapIndex, littleEndian);
-    view.setUint16(0x05, header.colorMapLength, littleEndian);
-    view.setUint8(0x07, header.colorMapDepth);
-    view.setUint16(0x08, header.offsetX, littleEndian);
-    view.setUint16(0x0a, header.offsetY, littleEndian);
-    view.setUint16(0x0c, header.width, littleEndian);
-    view.setUint16(0x0e, header.height, littleEndian);
-    view.setUint8(0x10, header.pixelDepth);
-    view.setUint8(0x11, header.flags);
-  }
-
-  function readHeader(view) {
-    var littleEndian = Targa.LITTLE_ENDIAN;
-
-    // Not enough data to contain header ?
-    if (view.byteLength  < 0x12) {
-      throw new Error('Targa::load() - Not enough data to contain header');
-    }
-
-    var header = {};
-    header.idLength = view.getUint8(0x00);
-    header.colorMapType = view.getUint8(0x01);
-    header.imageType =  view.getUint8(0x02);
-    header.colorMapIndex = view.getUint16(0x03, littleEndian);
-    header.colorMapLength = view.getUint16(0x05, littleEndian);
-    header.colorMapDepth = view.getUint8(0x07);
-    header.offsetX = view.getUint16(0x08, littleEndian);
-    header.offsetY = view.getUint16(0x0a, littleEndian);
-    header.width = view.getUint16(0x0c, littleEndian);
-    header.height = view.getUint16(0x0e, littleEndian);
-    header.pixelDepth = view.getUint8(0x10);
-    header.flags = view.getUint8(0x11);
-
-    return header;
-  }
-
-  /**
-   * Set additional header booleans
-   * @param header
-   */
-  function setHeaderBooleans(header) {
-    header.hasEncoding = (header.imageType === Targa.Type.RLE_INDEXED || header.imageType === Targa.Type.RLE_RGB || header.imageType === Targa.Type.RLE_GREY);
-    header.hasColorMap = (header.imageType === Targa.Type.RLE_INDEXED || header.imageType === Targa.Type.INDEXED);
-    header.isGreyColor = (header.imageType === Targa.Type.RLE_GREY || header.imageType === Targa.Type.GREY);
-    header.bytePerPixel = header.pixelDepth >> 3;
-    header.origin = (header.flags & Targa.Origin.MASK) >> Targa.Origin.SHIFT;
-    header.alphaBits = header.flags & Targa.Origin.ALPHA;
-  }
-
-  /**
-   * Check the header of TGA file to detect errors
-   *
-   * @param {object} header tga header structure
-   * @throws Error
-   */
-  function checkHeader(header) {
-    // What the need of a file without data ?
-    if (header.imageType === Targa.Type.NO_DATA) {
-      throw new Error('Targa::checkHeader() - No data');
-    }
-
-    // Indexed type
-    if (header.hasColorMap) {
-      if (header.colorMapLength > 256 || header.colorMapType !== 1) {
-        throw new Error('Targa::checkHeader() - Unsupported colormap for indexed type');
-      }
-      if (header.colorMapDepth !== 16 && header.colorMapDepth !== 24  && header.colorMapDepth !== 32) {
-        throw new Error('Targa::checkHeader() - Unsupported colormap depth');
-      }
-    }
-    else {
-      if (header.colorMapType) {
-        throw new Error('Targa::checkHeader() - Why does the image contain a palette ?');
-      }
-    }
-
-    // Check image size
-    if (header.width <= 0 || header.height <= 0) {
-      throw new Error('Targa::checkHeader() - Invalid image size');
-    }
-
-    // Check pixel size
-    if (header.pixelDepth !== 8 &&
-      header.pixelDepth !== 16 &&
-      header.pixelDepth !== 24 &&
-      header.pixelDepth !== 32) {
-      throw new Error('Targa::checkHeader() - Invalid pixel size "' + header.pixelDepth + '"');
-    }
-
-    // Check alpha size
-    if (header.alphaBits !== 0 &&
-        header.alphaBits !== 1 &&
-        header.alphaBits !== 8) {
-      throw new Error('Targa::checkHeader() - Unsuppported alpha size');
-    }
-  }
-
-
-  /**
-   * Decode RLE compression
-   *
-   * @param {Uint8Array} data
-   * @param {number} bytesPerPixel bytes per Pixel
-   * @param {number} outputSize in byte: width * height * pixelSize
-   */
-  function decodeRLE(data, bytesPerPixel, outputSize) {
-    var pos, c, count, i, offset;
-    var pixels, output;
-
-    output = new Uint8Array(outputSize);
-    pixels = new Uint8Array(bytesPerPixel);
-    offset = 0; // offset in data
-    pos = 0; // offset for output
-
-    while (pos < outputSize) {
-      c = data[offset++]; // current byte to check
-      count = (c & Targa.RLE_MASK) + 1; // repetition count of pixels, the lower 7 bits + 1
-
-      // RLE packet, if highest bit is set to 1.
-      if (c & Targa.RLE_BIT) {
-        // Copy pixel values to be repeated to tmp array
-        for (i = 0; i < bytesPerPixel; ++i) {
-          pixels[i] = data[offset++];
-        }
-
-        // Copy pixel values * count to output
-        for (i = 0; i < count; ++i) {
-          output.set(pixels, pos);
-          pos += bytesPerPixel;
-        }
-      }
-
-      // Raw packet (Non-Run-Length Encoded)
-      else {
-        count *= bytesPerPixel;
-        for (i = 0; i < count; ++i) {
-          output[pos++] = data[offset++];
-        }
-      }
-    }
-
-    if (pos > outputSize) {
-      throw new Error("Targa::decodeRLE() - Read bytes: " + pos + " Expected bytes: " + outputSize);
-    }
-
-    return output;
-  }
-
-  /**
-   * Encode ImageData object with RLE compression
-   *
-   * @param header
-   * @param imageData from canvas to compress
-   */
-  function encodeRLE(header, imageData) {
-    var maxRepetitionCount = 128;
-    var i;
-    var data = imageData;
-    var output = []; // output size is unknown
-    var pos = 0; // pos in imageData array
-    var bytesPerPixel = header.pixelDepth >> 3;
-    var offset = 0;
-    var packetType, packetLength, packetHeader;
-    var tgaLength = header.width * header.height * bytesPerPixel;
-    var isSamePixel = function isSamePixel(pos, offset) {
-      for (var i = 0; i < bytesPerPixel; i++) {
-        if (data[pos * bytesPerPixel + i] !== data[offset * bytesPerPixel + i]) {
-          return false;
-        }
-      }
-      return true;
-    };
-    var getPacketType = function(pos) {
-      if (isSamePixel(pos, pos + 1)) {
-        return Targa.RLE_PACKET;
-      }
-      return Targa.RAW_PACKET;
-    };
-
-    while (pos * bytesPerPixel < data.length && pos * bytesPerPixel < tgaLength) {
-      // determine packet type
-      packetType = getPacketType(pos);
-
-      // determine packet length
-      packetLength = 0;
-      if (packetType === Targa.RLE_PACKET) {
-        while (pos + packetLength < data.length
-        && packetLength < maxRepetitionCount
-        && isSamePixel(pos, pos + packetLength)) {
-          packetLength++;
-        }
-      } else { // packetType === Targa.RAW_PACKET
-        while (pos + packetLength < data.length
-        && packetLength < maxRepetitionCount
-        && getPacketType(pos + packetLength) === Targa.RAW_PACKET) {
-          packetLength++;
-        }
-      }
-
-      // write packet header
-      packetHeader = packetLength - 1;
-      if (packetType === Targa.RLE_PACKET) {
-        packetHeader |= Targa.RLE_BIT;
-      }
-      output[offset++] = packetHeader;
-
-      // write rle packet pixel OR raw pixels
-      if (packetType === Targa.RLE_PACKET) {
-        for (i = 0; i < bytesPerPixel; i++) {
-          output[i + offset] = data[i + pos * bytesPerPixel];
-        }
-        offset += bytesPerPixel;
-      } else {
-        for (i = 0; i < bytesPerPixel * packetLength; i++) {
-          output[i + offset] = data[i + pos * bytesPerPixel];
-        }
-        offset += bytesPerPixel * packetLength;
-      }
-      pos += packetLength;
-    }
-
-    return new Uint8Array(output);
-  }
-
-
-  /**
-   * Return a ImageData object from a TGA file (8bits)
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} indexes - index to colorMap
-   * @param {Array} colorMap
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageData8bits(imageData, indexes, colorMap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var color, index, offset, i, x, y;
-    var bytePerPixel = this.header.colorMapDepth >> 3;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i++) {
-        offset = (x + width * y) * 4;
-        index = indexes[i] * bytePerPixel;
-        if (bytePerPixel === 4) {
-          imageData[offset    ] = colorMap[index + 2]; // red
-          imageData[offset + 1] = colorMap[index + 1]; // green
-          imageData[offset + 2] = colorMap[index    ]; // blue
-          imageData[offset + 3] = colorMap[index + 3]; // alpha
-        } else if (bytePerPixel === 3) {
-          imageData[offset    ] = colorMap[index + 2]; // red
-          imageData[offset + 1] = colorMap[index + 1]; // green
-          imageData[offset + 2] = colorMap[index    ]; // blue
-          imageData[offset + 3] = 255; // alpha
-        } else if (bytePerPixel === 2) {
-          color = colorMap[index] | (colorMap[index + 1] << 8);
-          imageData[offset    ] = (color & 0x7C00) >> 7; // red
-          imageData[offset + 1] = (color & 0x03E0) >> 2; // green
-          imageData[offset + 2] = (color & 0x001F) << 3; // blue
-          imageData[offset + 3] = (color & 0x8000) ? 0 : 255; // overlay 0 = opaque and 1 = transparent Discussion at: https://bugzilla.gnome.org/show_bug.cgi?id=683381
-        }
-      }
-    }
-
-    return imageData;
-  }
-
-
-  /**
-   * Return a ImageData object from a TGA file (16bits)
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} pixels data
-   * @param {Array} colormap - not used
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageData16bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var color, offset, i, x, y;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i += 2) {
-        color = pixels[i] | (pixels[i + 1] << 8);
-        offset = (x + width * y) * 4;
-        imageData[offset    ] = (color & 0x7C00) >> 7; // red
-        imageData[offset + 1] = (color & 0x03E0) >> 2; // green
-        imageData[offset + 2] = (color & 0x001F) << 3; // blue
-        imageData[offset + 3] = (color & 0x8000) ? 0 : 255; // overlay 0 = opaque and 1 = transparent Discussion at: https://bugzilla.gnome.org/show_bug.cgi?id=683381
-      }
-    }
-
-    return imageData;
-  }
-
-
-  /**
-   * Return a ImageData object from a TGA file (24bits)
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} pixels data
-   * @param {Array} colormap - not used
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageData24bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var offset, i, x, y;
-    var bpp = this.header.pixelDepth >> 3;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i += bpp) {
-        offset = (x + width * y) * 4;
-        imageData[offset + 3] = 255;  // alpha
-        imageData[offset + 2] = pixels[i    ]; // blue
-        imageData[offset + 1] = pixels[i + 1]; // green
-        imageData[offset    ] = pixels[i + 2]; // red
-      }
-    }
-
-    return imageData;
-  }
-
-
-  /**
-   * Return a ImageData object from a TGA file (32bits)
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} pixels data from TGA file
-   * @param {Array} colormap - not used
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageData32bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var i, x, y, offset;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i += 4) {
-        offset = (x + width * y) * 4;
-        imageData[offset + 2] = pixels[i    ]; // blue
-        imageData[offset + 1] = pixels[i + 1]; // green
-        imageData[offset    ] = pixels[i + 2]; // red
-        imageData[offset + 3] = pixels[i + 3]; // alpha
-      }
-    }
-
-    return imageData;
-  }
-
-  /**
-   * Return a ImageData object from a TGA file (32bits). Uses pre multiplied alpha values
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} pixels data from TGA file
-   * @param {Array} colormap - not used
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageData32bitsPre(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var i, x, y, offset, alpha;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i += 4) {
-        offset = (x + width * y) * 4;
-        alpha = pixels[i + 3] * 255; // TODO needs testing
-        imageData[offset + 2] = pixels[i    ] / alpha; // blue
-        imageData[offset + 1] = pixels[i + 1] / alpha; // green
-        imageData[offset    ] = pixels[i + 2] / alpha; // red
-        imageData[offset + 3] = pixels[i + 3]; // alpha
-      }
-    }
-
-    return imageData;
-  }
-
-
-  /**
-   * Return a ImageData object from a TGA file (8bits grey)
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} pixels data
-   * @param {Array} colormap - not used
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageDataGrey8bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var color, offset, i, x, y;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i++) {
-        color = pixels[i];
-        offset = (x + width * y) * 4;
-        imageData[offset    ] = color; // red
-        imageData[offset + 1] = color; // green
-        imageData[offset + 2] = color; // blue
-        imageData[offset + 3] = 255;   // alpha
-      }
-    }
-
-    return imageData;
-  }
-
-
-  /**
-   * Return a ImageData object from a TGA file (16bits grey) 8 Bit RGB and 8 Bit Alpha
-   *
-   * @param {Array} imageData - ImageData to bind
-   * @param {Array} pixels data
-   * @param {Array} colormap - not used
-   * @param {number} width
-   * @param {number} y_start - start at y pixel.
-   * @param {number} x_start - start at x pixel.
-   * @param {number} y_step  - increment y pixel each time.
-   * @param {number} y_end   - stop at pixel y.
-   * @param {number} x_step  - increment x pixel each time.
-   * @param {number} x_end   - stop at pixel x.
-   * @returns {Array} imageData
-   */
-  function getImageDataGrey16bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
-    var color, offset, i, x, y;
-
-    for (i = 0, y = y_start; y !== y_end; y += y_step) {
-      for (x = x_start; x !== x_end; x += x_step, i += 2) {
-        color = pixels[i];
-        offset = (x + width * y) * 4;
-        imageData[offset] = color;
-        imageData[offset + 1] = color;
-        imageData[offset + 2] = color;
-        imageData[offset + 3] = pixels[i + 1];
-      }
-    }
-
-    return imageData;
-  }
-
-
-  /**
-   * Open a targa file using XHR, be aware with Cross Domain files...
-   *
-   * @param {string} path - Path of the filename to load
-   * @param {function} callback - callback to trigger when the file is loaded
-   */
-  Targa.prototype.open = function targaOpen(path, callback) {
-    var req, tga = this;
-    req = new XMLHttpRequest();
-    req.open('GET', path, true);
-    req.responseType = 'arraybuffer';
-    req.onload = function () {
-      if (this.status === 200) {
-        tga.arrayBuffer = req.response;
-        tga.load(tga.arrayBuffer);
-        if (callback) {
-          callback.call(tga);
-        }
-      }
-    };
-    req.send(null);
-  };
-
-
-  function readFooter(view) {
-    var offset = view.byteLength - Targa.FOOTER_SIZE;
-    var signature = Targa.SIGNATURE;
-
-    var footer = {};
-
-    var signatureArray = new Uint8Array(view.buffer, offset + 0x08, signature.length);
-    var str = String.fromCharCode.apply(null, signatureArray);
-
-    if (!isSignatureValid(str)) {
-      footer.hasFooter = false;
-      return footer;
-    }
-
-    footer.hasFooter = true;
-    footer.extensionOffset = view.getUint32(offset, Targa.LITTLE_ENDIAN);
-    footer.developerOffset = view.getUint32(offset + 0x04, Targa.LITTLE_ENDIAN);
-    footer.hasExtensionArea = footer.extensionOffset !== 0;
-    footer.hasDeveloperArea = footer.developerOffset !== 0;
-
-    if (footer.extensionOffset) {
-      footer.attributeType = view.getUint8(footer.extensionOffset + 494);
-    }
-
-    return footer;
-  }
-
-  function isSignatureValid(str) {
-    var signature = Targa.SIGNATURE;
-
-    for (var i = 0; i < signature.length; i++) {
-      if (str.charCodeAt(i) !== signature.charCodeAt(i)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  /**
-   * Load and parse a TGA file
-   *
-   * @param {ArrayBuffer} data - TGA file buffer array
-   */
-  Targa.prototype.load = function targaLoad(data) {
-    var dataView = new DataView(data);
-
-    this.headerData = new Uint8Array(data, 0, Targa.HEADER_SIZE);
-
-    this.header = readHeader(dataView); // Parse Header
-    setHeaderBooleans(this.header);
-    checkHeader(this.header); // Check if a valid TGA file (or if we can load it)
-
-    var offset = Targa.HEADER_SIZE;
-    // Move to data
-    offset += this.header.idLength;
-    if (offset >= data.byteLength) {
-      throw new Error('Targa::load() - No data');
-    }
-
-    // Read palette
-    if (this.header.hasColorMap) {
-      var colorMapSize = this.header.colorMapLength * (this.header.colorMapDepth >> 3);
-      this.palette = new Uint8Array(data, offset, colorMapSize);
-      offset += colorMapSize;
-    }
-
-    var bytesPerPixel = this.header.pixelDepth >> 3;
-    var imageSize = this.header.width * this.header.height;
-    var pixelTotal = imageSize * bytesPerPixel;
-
-    if (this.header.hasEncoding) { // RLE encoded
-      var RLELength = data.byteLength - offset - Targa.FOOTER_SIZE;
-      var RLEData = new Uint8Array(data, offset, RLELength);
-      this.imageData = decodeRLE(RLEData, bytesPerPixel, pixelTotal);
-    } else { // RAW pixels
-      this.imageData = new Uint8Array(data, offset, this.header.hasColorMap ? imageSize : pixelTotal);
-    }
-    
-    this.footer = readFooter(dataView);
-
-    if (this.header.alphaBits !== 0  || this.footer.hasExtensionArea && (this.footer.attributeType === 3 || this.footer.attributeType === 4)) {
-      this.footer.usesAlpha = true;
-    }
-  };
-
-
-  /**
-   * Return a ImageData object from a TGA file
-   *
-   * @param {object} imageData - Optional ImageData to work with
-   * @returns {object} imageData
-   */
-  Targa.prototype.getImageData = function targaGetImageData(imageData) {
-    var width = this.header.width;
-    var height = this.header.height;
-    var origin = (this.header.flags & Targa.Origin.MASK) >> Targa.Origin.SHIFT;
-    var x_start, x_step, x_end, y_start, y_step, y_end;
-    var getImageData;
-
-    // Create an imageData
-    if (!imageData) {
-      if (document) {
-        imageData = document.createElement('canvas').getContext('2d').createImageData(width, height);
-      }
-      // In Thread context ?
-      else {
-        imageData = {
-          width: width,
-          height: height,
-          data: new Uint8ClampedArray(width * height * 4)
-        };
-      }
-    }
-
-    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.TOP_RIGHT) {
-      y_start = 0;
-      y_step = 1;
-      y_end = height;
-    }
-    else {
-      y_start = height - 1;
-      y_step = -1;
-      y_end = -1;
-    }
-
-    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.BOTTOM_LEFT) {
-      x_start = 0;
-      x_step = 1;
-      x_end = width;
-    }
-    else {
-      x_start = width - 1;
-      x_step = -1;
-      x_end = -1;
-    }
-
-    // TODO: use this.header.offsetX and this.header.offsetY ?
-
-    switch (this.header.pixelDepth) {
-      case 8:
-        getImageData = this.header.isGreyColor ? getImageDataGrey8bits : getImageData8bits;
-        break;
-
-      case 16:
-        getImageData = this.header.isGreyColor ? getImageDataGrey16bits : getImageData16bits;
-        break;
-
-      case 24:
-        getImageData = getImageData24bits;
-        break;
-
-      case 32:
-        if (this.footer.hasExtensionArea) {
-          if (this.footer.attributeType === 3) { // straight alpha
-            getImageData = getImageData32bits;
-          } else if (this.footer.attributeType === 4) { // pre multiplied alpha
-            getImageData = getImageData32bitsPre;
-          } else { // ignore alpha values if attributeType set to 0, 1, 2
-            getImageData = getImageData24bits;
-          }
-        } else {
-          if (this.header.alphaBits !== 0) {
-            getImageData = getImageData32bits;
-          } else { // 32 bits Depth, but alpha Bits set to 0
-            getImageData = getImageData24bits;
-          }
-        }
-
-        break;
-    }
-
-    getImageData.call(this, imageData.data, this.imageData, this.palette, width, y_start, y_step, y_end, x_start, x_step, x_end);
-    return imageData;
-  };
-
-  /** (Experimental)
-   *  Encodes imageData into TGA format
-   *  Only TGA True Color 32 bit with optional RLE encoding is supported for now
-   * @param imageData
-   */
-  Targa.prototype.setImageData = function targaSetImageData(imageData) {
-
-    if (!imageData) {
-      throw new Error('Targa::setImageData() - imageData argument missing');
-    }
-
-    var width = this.header.width;
-    var height = this.header.height;
-    var expectedLength = width * height * (this.header.pixelDepth  >> 3);
-    var origin = (this.header.flags & Targa.Origin.MASK) >> Targa.Origin.SHIFT;
-    var x_start, x_step, x_end, y_start, y_step, y_end;
-
-    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.TOP_RIGHT) {
-      y_start = 0; // start bottom, step upward
-      y_step = 1;
-      y_end = height;
-    } else {
-      y_start = height - 1; // start at top, step downward
-      y_step = -1;
-      y_end = -1;
-    }
-
-    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.BOTTOM_LEFT) {
-      x_start = 0; // start left, step right
-      x_step = 1;
-      x_end = width;
-    } else {
-      x_start = width - 1; // start right, step left
-      x_step = -1;
-      x_end = -1;
-    }
-
-    if (!this.imageData) {
-      this.imageData = new Uint8Array(expectedLength);
-    }
-
-    // start top left if origin is bottom left
-    // swapping order of first two arguments does the trick for writing
-    // this converts canvas data to internal tga representation
-    // this.imageData contains tga data
-    getImageData32bits(this.imageData, imageData.data, this.palette, width, y_start, y_step, y_end, x_start, x_step, x_end);
-
-    var data = this.imageData;
-
-    if (this.header.hasEncoding) {
-      data = encodeRLE(this.header, data);
-    }
-
-    var bufferSize = Targa.HEADER_SIZE + data.length + Targa.FOOTER_SIZE;
-    var buffer = new ArrayBuffer(bufferSize);
-
-    this.arrayBuffer = buffer;
-    // create array, useful for inspecting data while debugging
-    this.headerData = new Uint8Array(buffer, 0, Targa.HEADER_SIZE);
-    this.RLEData = new Uint8Array(buffer, Targa.HEADER_SIZE, data.length);
-    this.footerData = new Uint8Array(buffer, Targa.HEADER_SIZE + data.length, Targa.FOOTER_SIZE);
-
-    var headerView = new DataView(this.headerData.buffer);
-    writeHeader(this.header, headerView);
-    this.RLEData.set(data);
-    writeFooter(this.footerData);
-  };
-
-  /**
-   * Return a canvas with the TGA render on it
-   *
-   * @returns {object} CanvasElement
-   */
-  Targa.prototype.getCanvas = function targaGetCanvas() {
-    var canvas, ctx, imageData;
-
-    canvas = document.createElement('canvas');
-    ctx = canvas.getContext('2d');
-    imageData = ctx.createImageData(this.header.width, this.header.height);
-
-    canvas.width = this.header.width;
-    canvas.height = this.header.height;
-
-    ctx.putImageData(this.getImageData(imageData), 0, 0);
-
-    return canvas;
-  };
-
-
-  /**
-   * Return a dataURI of the TGA file
-   *
-   * @param {string} type - Optional image content-type to output (default: image/png)
-   * @returns {string} url
-   */
-  Targa.prototype.getDataURL = function targaGetDatURL(type) {
-    return this.getCanvas().toDataURL(type || 'image/png');
-  };
-
-  /**
-   * Return a objectURL of the TGA file
-   * The url can be used in the download attribute of a link
-   * @returns {string} url
-   */
-  Targa.prototype.getBlobURL = function targetGetBlobURL() {
-    if (!this.arrayBuffer) {
-      throw new Error('Targa::getBlobURL() - No data available for blob');
-    }
-    var blob = new Blob([this.arrayBuffer], { type: "image/x-tga" });
-    return URL.createObjectURL(blob);
-  };
-
-
-  // Find Context
-  var shim = {};
-  if (typeof(exports) === 'undefined') {
-    if (typeof(define) === 'function' && typeof(define.amd) === 'object' && define.amd) {
-      define(function () {
-        return Targa;
-      });
-    } else {
-      // Browser
-      shim.exports = typeof(window) !== 'undefined' ? window : _global;
-    }
-  }
-  else {
-    // Commonjs
-    shim.exports = exports;
-  }
-
-
-  // Export
-  if (shim.exports) {
-    shim.exports.TGA = Targa;
-  }
-
-})(this);
-
-'use strict';
-
-/**
- * 버퍼 안의 데이터를 어떻게 읽어야 할지 키가 되는 객체
- * 
- * @alias Accessor
- * @class Accessor
- */
-var Accessor = function () 
-{
-
-	if (!(this instanceof Accessor)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.bufferId;
-	// 0= position, 1= normal, 2= color, 3= texcoord.***
-	this.accesorType;
-	this.bufferStart;
-	// 버퍼의 시작 시점
-	this.stride;
-	// character, int 등
-	this.dataType;
-	// 2차원, 3차원
-	this.dimension;
-
-	// 데이터가 포함되어 있는 x,y,z의 한계를 바운드라고 한다. 바운드 좌표
-	this.minX = 0.0;
-	this.minY = 0.0;
-	this.minZ = 0.0;
-	this.maxX = 0.0;
-	this.maxY = 0.0;
-	this.maxZ = 0.0;
-};
-
-'use strict';
-
-/**
- * 블럭 모델
- * @class Block
- */
-var Block = function() 
-{
-	if (!(this instanceof Block)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	// This has "VertexIdxVBOArraysContainer" because the "indices" cannot to be greater than 65000, because indices are short type.***
-	this.vBOVertexIdxCacheKeysContainer = new VBOVertexIdxCacheKeysContainer(); // Change this for "vbo_VertexIdx_CacheKeys_Container__idx".***
-	this.mIFCEntityType = -1;
-	this.isSmallObj = false;
-	this.radius = 10;
-	this.vertexCount = 0; // only for test.*** delete this.***
-
-	this.lego; // legoBlock.***
-};
-
-/**
- * 블럭이 가지는 데이터 삭제
- * @returns block
- */
-Block.prototype.deleteObjects = function(gl, vboMemManager) 
-{
-
-	this.vBOVertexIdxCacheKeysContainer.deleteGlObjects(gl, vboMemManager);
-	this.vBOVertexIdxCacheKeysContainer = undefined;
-	this.mIFCEntityType = undefined;
-	this.isSmallObj = undefined;
-	this.radius = undefined;
-	this.vertexCount = undefined; // only for test.*** delete this.***
-
-	if (this.lego) { this.lego.deleteGlObjects(gl); }
-
-	this.lego = undefined;
-};
-
-/**
- * 블록 목록
- * @class BlocksList
- */
-var BlocksList = function() 
-{
-	if (!(this instanceof BlocksList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.name = "";
-	this.blocksArray;
-	// 0 = no started to load. 1 = started loading. 2 = finished loading. 3 = parse started. 4 = parse finished.***
-	this.fileLoadState = CODE.fileLoadState.READY;
-	this.dataArraybuffer; // file loaded data, that is no parsed yet.***
-};
-
-/**
- * 새 블록 생성
- * @returns block
- */
-BlocksList.prototype.newBlock = function() 
-{
-	if (this.blocksArray === undefined) { this.blocksArray = []; }
-
-	var block = new Block();
-	this.blocksArray.push(block);
-	return block;
-};
-
-/**
- * 블록 획득
- * @param idx 변수
- * @returns block
- */
-BlocksList.prototype.getBlock = function(idx) 
-{
-	if (this.blocksArray === undefined) { return null; }
-
-	if (idx >= 0 && idx < this.blocksArray.length) 
-	{
-		return this.blocksArray[idx];
-	}
-	return null;
-};
-
-/**
- * 블록을 삭제
- * @param idx 변수
- * @returns block
- */
-BlocksList.prototype.deleteGlObjects = function(gl, vboMemManager) 
-{
-	if (this.blocksArray === undefined) { return; }
-
-	for (var i = 0, blocksCount = this.blocksArray.length; i < blocksCount; i++ ) 
-	{
-		var block = this.blocksArray[i];
-		block.vBOVertexIdxCacheKeysContainer.deleteGlObjects(gl, vboMemManager);
-		block.vBOVertexIdxCacheKeysContainer = undefined; // Change this for "vbo_VertexIdx_CacheKeys_Container__idx".***
-		block.mIFCEntityType = undefined;
-		block.isSmallObj = undefined;
-		block.radius = undefined;
-		block.vertexCount = undefined; // only for test.*** delete this.***
-		if (block.lego) 
-		{
-			block.lego.vbo_vicks_container.deleteGlObjects(gl, vboMemManager);
-			block.lego.vbo_vicks_container = undefined;
-		}
-		block.lego = undefined; // legoBlock.***
-		this.blocksArray[i] = undefined;
-	}
-	this.blocksArray = undefined;
-	this.name = undefined;
-	this.fileLoadState = undefined;
-	this.dataArraybuffer = undefined; // file loaded data, that is no parsed yet.***
-};
-
-
-/**
- * 블록리스트 버퍼를 파싱(비대칭적)
- * This function parses the geometry data from binary arrayBuffer.
- * 
- * @param {arrayBuffer} arrayBuffer Binary data to parse.
- * @param {ReadWriter} readWriter Helper to read inside of the arrayBuffer.
- * @param {Array} motherBlocksArray Global blocks array.
- */
-BlocksList.prototype.parseBlocksList = function(arrayBuffer, readWriter, motherBlocksArray, magoManager) 
-{
-	this.fileLoadState = CODE.fileLoadState.PARSE_STARTED;
-	var bytesReaded = 0;
-	var blocksCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded + 4);
-	bytesReaded += 4;
-	var startBuff, endBuff;
-	var posByteSize, norByteSize, idxByteSize;
-	var vboMemManager = magoManager.vboMemoryManager;
-	var classifiedPosByteSize = 0, classifiedNorByteSize = 0, classifiedIdxByteSize = 0;
-	var gl = magoManager.sceneState.gl;
-	var succesfullyGpuDataBinded = true;
-
-	for ( var i = 0; i< blocksCount; i++ ) 
-	{
-		var blockIdx = readWriter.readInt32(arrayBuffer, bytesReaded, bytesReaded+4);
-		bytesReaded += 4;
-
-		// Check if block exist.
-		if (motherBlocksArray[blockIdx]) 
-		{
-			// The block exists, then read data but no create a new block.
-			bytesReaded += 4 * 6; // boundingBox.
-			// Read vbo datas (indices cannot superate 65535 value).
-			var vboDatasCount = readWriter.readInt32(arrayBuffer, bytesReaded, bytesReaded+4);
-			bytesReaded += 4;
-			for ( var j = 0; j < vboDatasCount; j++ ) 
-			{
-				// 1) Positions array.
-				var vertexCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4);
-				bytesReaded += 4;
-				var verticesFloatValuesCount = vertexCount * 3;
-				startBuff = bytesReaded;
-				endBuff = bytesReaded + 4 * verticesFloatValuesCount;
-				bytesReaded = bytesReaded + 4 * verticesFloatValuesCount; // updating data.***
-
-				// 2) Normals.
-				vertexCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4);
-				bytesReaded += 4;
-				var normalByteValuesCount = vertexCount * 3;
-				bytesReaded = bytesReaded + 1 * normalByteValuesCount; // updating data.***
-
-				// 3) Indices.
-				var shortIndicesValuesCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4);
-				bytesReaded += 4;
-				var sizeLevels = readWriter.readUInt8(arrayBuffer, bytesReaded, bytesReaded+1);
-				bytesReaded += 1;
-				bytesReaded = bytesReaded + sizeLevels * 4;
-				bytesReaded = bytesReaded + sizeLevels * 4;
-				bytesReaded = bytesReaded + 2 * shortIndicesValuesCount; // updating data.***
-			}
-			// Pendent to load the block's lego.***
-			continue;
-		}
-		
-		// The block doesn't exist, so creates a new block and read data.
-		var block = new Block();
-		block.idx = blockIdx;
-		motherBlocksArray[blockIdx] = block;
-
-		// 1rst, read bbox.
-		var bbox = new BoundingBox();
-		bbox.minX = new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4));
-		bytesReaded += 4;
-		bbox.minY = new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4));
-		bytesReaded += 4;
-		bbox.minZ = new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4));
-		bytesReaded += 4;
-
-		bbox.maxX = new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4));
-		bytesReaded += 4;
-		bbox.maxY = new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4));
-		bytesReaded += 4;
-		bbox.maxZ = new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4));
-		bytesReaded += 4;
-
-		var maxLength = bbox.getMaxLength();
-		if (maxLength < 0.5) { block.isSmallObj = true; }
-		else { block.isSmallObj = false; }
-
-		block.radius = maxLength/2.0;
-
-		bbox.deleteObjects();
-		bbox = undefined;
-
-		// New for read multiple vbo datas (indices cannot superate 65535 value).***
-		var vboDatasCount = readWriter.readInt32(arrayBuffer, bytesReaded, bytesReaded+4);
-		bytesReaded += 4;
-		for ( var j = 0; j < vboDatasCount; j++ ) 
-		{
-			// 1) Positions array.
-			var vertexCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4);
-			bytesReaded += 4;
-			var verticesFloatValuesCount = vertexCount * 3;
-			// now padding the array to adjust to standard memory size of pool.
-			posByteSize = 4 * verticesFloatValuesCount;
-			classifiedPosByteSize = vboMemManager.getClassifiedBufferSize(posByteSize);
-			
-			block.vertexCount = vertexCount;
-			startBuff = bytesReaded;
-			endBuff = bytesReaded + 4 * verticesFloatValuesCount;
-			var vboViCacheKey = block.vBOVertexIdxCacheKeysContainer.newVBOVertexIdxCacheKey();
-			vboViCacheKey.posVboDataArray = new Float32Array(classifiedPosByteSize);
-			vboViCacheKey.posVboDataArray.set(new Float32Array(arrayBuffer.slice(startBuff, endBuff)));
-			vboViCacheKey.posArrayByteSize = classifiedPosByteSize; 
-			bytesReaded = bytesReaded + 4 * verticesFloatValuesCount; // updating data.***
-			
-			// 2) Normals.
-			vertexCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4);
-			bytesReaded += 4;
-			var normalByteValuesCount = vertexCount * 3;
-			// now padding the array to adjust to standard memory size of pool.
-			norByteSize = 1 * normalByteValuesCount;
-			classifiedNorByteSize = vboMemManager.getClassifiedBufferSize(norByteSize);
-			
-			startBuff = bytesReaded;
-			endBuff = bytesReaded + 1 * normalByteValuesCount;
-			vboViCacheKey.norVboDataArray = new Int8Array(classifiedNorByteSize);
-			vboViCacheKey.norVboDataArray.set(new Int8Array(arrayBuffer.slice(startBuff, endBuff)));
-			vboViCacheKey.norArrayByteSize = classifiedNorByteSize;
-			bytesReaded = bytesReaded + 1 * normalByteValuesCount; // updating data.***
-			
-			// 3) Indices.
-			var shortIndicesValuesCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4);
-			// now padding the array to adjust to standard memory size of pool.
-			idxByteSize = 2 * shortIndicesValuesCount;
-			classifiedIdxByteSize = vboMemManager.getClassifiedBufferSize(idxByteSize);
-			
-			bytesReaded += 4;
-			var sizeLevels = readWriter.readUInt8(arrayBuffer, bytesReaded, bytesReaded+1);
-			bytesReaded +=1;
-			var sizeThresholds = [];
-			for ( var k = 0; k < sizeLevels; k++ )
-			{
-				sizeThresholds.push(new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4)));
-				bytesReaded += 4;
-			}
-			var indexMarkers = [];
-			for ( var k = 0; k < sizeLevels; k++ )
-			{
-				indexMarkers.push(readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4));
-				bytesReaded += 4;
-			}
-			var bigTrianglesShortIndicesValues_count = indexMarkers[sizeLevels-1];
-			vboViCacheKey.bigTrianglesIndicesCount = bigTrianglesShortIndicesValues_count;
-			startBuff = bytesReaded;
-			endBuff = bytesReaded + 2 * shortIndicesValuesCount;
-
-			vboViCacheKey.idxVboDataArray = new Int16Array(classifiedIdxByteSize);
-			vboViCacheKey.idxVboDataArray.set(new Int16Array(arrayBuffer.slice(startBuff, endBuff)));
-			vboViCacheKey.idxArrayByteSize = classifiedIdxByteSize;
-			bytesReaded = bytesReaded + 2 * shortIndicesValuesCount; // updating data.***
-			vboViCacheKey.indicesCount = shortIndicesValuesCount;
-
-			posByteSize;
-			norByteSize;
-			idxByteSize;
-			
-			classifiedPosByteSize;
-			classifiedNorByteSize;
-			classifiedIdxByteSize;
-			
-			var hola = 0;
-			
-			// test.
-			if (!vboViCacheKey.isReadyPositions(gl, magoManager.vboMemoryManager))
-			{ succesfullyGpuDataBinded = false; }
-			if (!vboViCacheKey.isReadyNormals(gl, magoManager.vboMemoryManager))
-			{ succesfullyGpuDataBinded = false; }
-			if (!vboViCacheKey.isReadyFaces(gl, magoManager.vboMemoryManager))
-			{ succesfullyGpuDataBinded = false; }
-		}
-		
-		
-
-		// Pendent to load the block's lego.***
-	}
-	this.fileLoadState = CODE.fileLoadState.PARSE_FINISHED;
-	return succesfullyGpuDataBinded;
-};
-
-/**
- * 블록 컨테이너
- * @class BlocksListsContainer
- */
-var BlocksListsContainer = function() 
-{
-	if (!(this instanceof BlocksListsContainer)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	this.blocksListsArray = [];
-};
-
-/**
- * 새 블록 리스트를 생성
- * @param blocksListName 변수
- * @returns blocksList
- */
-BlocksListsContainer.prototype.newBlocksList = function(blocksListName) 
-{
-	var blocksList = new BlocksList();
-	blocksList.name = blocksListName;
-	this.blocksListsArray.push(blocksList);
-	return blocksList;
-};
-
-/**
- * 블록 리스트 획득
- * @param blockList_name 변수
- * @returns blocksList
- */
-BlocksListsContainer.prototype.getBlockList = function(blockList_name) 
-{
-	var blocksListsCount = this.blocksListsArray.length;
-	var found = false;
-	var i=0;
-	var blocksList = null;
-	while (!found && i<blocksListsCount) 
-	{
-		var currentBlocksList = this.blocksListsArray[i];
-		if (currentBlocksList.name === blockList_name) 
-		{
-			found = true;
-			blocksList = currentBlocksList;
-		}
-		i++;
-	}
-	return blocksList;
-};
-
-'use strict';
-
-/**
- * F4D Lego 클래스
- * 
- * @alias Lego
- * @class Lego
- */
-var Lego = function() 
-{
-	if (!(this instanceof Lego)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.vbo_vicks_container = new VBOVertexIdxCacheKeysContainer();
-	this.fileLoadState = CODE.fileLoadState.READY;
-	this.dataArrayBuffer;
-	this.selColor4;
-};
-
-/**
- * F4D Lego 자료를 읽는다
- * 
- * @param {any} gl 
- * @param {any} readWriter 
- * @param {any} dataArraybuffer 
- * @param {any} bytesReaded 
- */
-Lego.prototype.parseArrayBuffer = function(gl, dataArraybuffer, magoManager)
-{
-	this.parseLegoData(dataArraybuffer, gl, magoManager);
-};
-
-/**
- * F4D Lego 자료를 읽는다
- * 
- * @param {ArrayBuffer} buffer 
- */
-Lego.prototype.parseLegoData = function(buffer, gl, magoManager)
-{
-	if (this.fileLoadState !== CODE.fileLoadState.LOADING_FINISHED)	{ return; }
-	
-	var vboMemManager = magoManager.vboMemoryManager;
-
-	var stream = new DataStream(buffer, 0, DataStream.LITTLE_ENDIAN);
-	this.fileLoadState = CODE.fileLoadState.PARSE_STARTED;
-
-	var bbox = new BoundingBox();
-	var vboCacheKey = this.vbo_vicks_container.newVBOVertexIdxCacheKey();
-
-	// BoundingBox
-	bbox.minX = stream.readFloat32();
-	bbox.minY = stream.readFloat32();
-	bbox.minZ = stream.readFloat32();
-	bbox.maxX = stream.readFloat32();
-	bbox.maxY = stream.readFloat32();
-	bbox.maxZ = stream.readFloat32();
-
-	// VBO(Position Buffer) - x,y,z
-	var numPositions = stream.readUint32();
-	var posByteSize = 4 * numPositions * 3;
-	var classifiedPosByteSize = vboMemManager.getClassifiedBufferSize(posByteSize);
-	//var positionBuffer = stream.readFloat32Array(numPositions * 3); // original.***
-	var positionBuffer = new Float32Array(classifiedPosByteSize);
-	positionBuffer.set(stream.readFloat32Array(numPositions * 3));
-	// console.log(numPositions + " Positions = " + positionBuffer[0]);
-
-	vboCacheKey.vertexCount = numPositions;
-	vboCacheKey.posVboDataArray = positionBuffer;
-	vboCacheKey.posArrayByteSize = classifiedPosByteSize;
-
-	// VBO(Normal Buffer) - i,j,k
-	var hasNormals = stream.readUint8();
-	if (hasNormals) 
-	{
-		var numNormals = stream.readUint32();
-		var norByteSize = 1 * numNormals * 3;
-		var classifiedNorByteSize = vboMemManager.getClassifiedBufferSize(norByteSize);
-		//var normalBuffer = stream.readInt8Array(numNormals * 3); // original.***
-		var normalBuffer = new Int8Array(classifiedNorByteSize);
-		normalBuffer.set(stream.readInt8Array(numNormals * 3));
-		// console.log(numNormals + " Normals = " + normalBuffer[0]);
-
-		vboCacheKey.norVboDataArray = normalBuffer;
-		vboCacheKey.norArrayByteSize = classifiedNorByteSize;
-	}
-
-	// VBO(Color Buffer) - r,g,b,a
-	var hasColors = stream.readUint8();
-	if (hasColors)
-	{
-		var numColors = stream.readUint32();
-		var colByteSize = 1 * numColors * 4;
-		var classifiedColByteSize = vboMemManager.getClassifiedBufferSize(colByteSize);
-						
-		//var colorBuffer = stream.readUint8Array(numColors * 4); // original.***
-		var colorBuffer = new Uint8Array(classifiedColByteSize);
-		colorBuffer.set(stream.readUint8Array(numColors * 4));
-		// console.log(numColors + " Colors = " + colorBuffer[0]);
-
-		vboCacheKey.colVboDataArray = colorBuffer;
-		vboCacheKey.colArrayByteSize = classifiedColByteSize;
-	}
-
-	// VBO(TextureCoord Buffer) - u,v
-	var hasTexCoords = stream.readUint8();
-	if (hasTexCoords)
-	{
-		var dataType = stream.readUint16();
-		var numCoords = stream.readUint32();
-		var tCoordByteSize = 2 * numCoords * 4;
-		var classifiedTCoordByteSize = vboMemManager.getClassifiedBufferSize(tCoordByteSize);
-		//var coordBuffer = stream.readFloat32Array(numCoords * 2); // original.***
-		var coordBuffer = new Float32Array(classifiedTCoordByteSize);
-		coordBuffer.set(stream.readFloat32Array(numCoords * 2));
-		// console.log(numCoords + " Coords = " + coordBuffer[0]);
-
-		vboCacheKey.tcoordVboDataArray = coordBuffer;
-		vboCacheKey.tcoordArrayByteSize = classifiedTCoordByteSize;
-	}
-
-	this.fileLoadState = CODE.fileLoadState.PARSE_FINISHED;
-	
-	vboCacheKey.isReadyPositions(gl, magoManager.vboMemoryManager);
-	vboCacheKey.isReadyNormals(gl, magoManager.vboMemoryManager);
-	vboCacheKey.isReadyColors(gl, magoManager.vboMemoryManager);
-
-	// 4) Texcoord.*********************************************
-	if (hasTexCoords)
-	{
-		vboCacheKey.isReadyTexCoords(gl, magoManager.vboMemoryManager);
-	}	
-	
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * F4D MetaData 클래스
- * 
- * @alias MetaData
- * @class MetaData
- */
-var MetaData = function() 
-{
-	if (!(this instanceof MetaData)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.guid; // must be undefined initially.***
-	this.version = "";
-	this.geographicCoord; // longitude, latitude, altitude.***
-
-	this.heading;
-	this.pitch;
-	this.roll;
-
-	this.bbox; // BoundingBox.***
-	this.imageLodCount;
-
-	// Buildings octree mother size.***
-	this.oct_min_x = 0.0;
-	this.oct_max_x = 0.0;
-	this.oct_min_y = 0.0;
-	this.oct_max_y = 0.0;
-	this.oct_min_z = 0.0;
-	this.oct_max_z = 0.0;
-
-	this.isSmall = false;
-	this.fileLoadState = CODE.fileLoadState.READY;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param arrayBuffer 변수
- * @param readWriter 변수
- */
-MetaData.prototype.deleteObjects = function() 
-{
-	this.guid = undefined; // must be undefined initially.***
-	this.version = undefined;
-	if (this.geographicCoord)
-	{ this.geographicCoord.deleteObjects(); }
-	this.geographicCoord = undefined; // longitude, latitude, altitude.***
-
-	this.heading = undefined;
-	this.pitch = undefined;
-	this.roll = undefined;
-
-	this.bbox.deleteObjects();
-	this.bbox = undefined; // BoundingBox.***
-	this.imageLodCount = undefined;
-
-	// Buildings octree mother size.***
-	this.oct_min_x = undefined;
-	this.oct_max_x = undefined;
-	this.oct_min_y = undefined;
-	this.oct_max_y = undefined;
-	this.oct_min_z = undefined;
-	this.oct_max_z = undefined;
-
-	this.isSmall = undefined;
-	this.fileLoadState = undefined;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param arrayBuffer 변수
- * @param readWriter 변수
- */
-MetaData.prototype.parseFileHeader = function(arrayBuffer, readWriter) 
-{
-	var version_string_length = 5;
-	var intAux_scratch = 0;
-	var auxScratch;
-	//var header = BR_Project._header;
-	//var arrayBuffer = this.fileArrayBuffer;
-	//var bytes_readed = this.fileBytesReaded;
-	var bytes_readed = 0;
-
-	if (readWriter === undefined) { readWriter = new ReaderWriter(); }
-
-	// 1) Version(5 chars).***********
-	for (var j=0; j<version_string_length; j++)
-	{
-		this.version += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
-	}
-
-	// 3) Global unique ID.*********************
-	if (this.guid === undefined) { this.guid =""; }
-
-	intAux_scratch = readWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-	for (var j=0; j<intAux_scratch; j++)
-	{
-		this.guid += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
-	}
-
-	// 4) Location.*************************
-	if (this.longitude === undefined) 
-	{
-		this.longitude = (new Float64Array(arrayBuffer.slice(bytes_readed, bytes_readed+8)))[0]; bytes_readed += 8;
-	}
-	else { bytes_readed += 8; }
-
-	if (this.latitude === undefined) 
-	{
-		this.latitude = (new Float64Array(arrayBuffer.slice(bytes_readed, bytes_readed+8)))[0]; bytes_readed += 8;
-	}
-	else { bytes_readed += 8; }
-
-	if (this.altitude === undefined) 
-	{
-		this.altitude = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	}
-	else { bytes_readed += 4; }
-
-	//this.altitude += 20.0; // TEST.***
-
-	//header._elevation += 70.0; // delete this. TEST.!!!
-	if (this.bbox === undefined) { this.bbox = new BoundingBox(); }
-
-	// 6) BoundingBox.************************
-	this.bbox.minX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.bbox.minY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.bbox.minZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.bbox.maxX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.bbox.maxY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.bbox.maxZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-
-	// TEST. PROVISIONAL. DELETE.***
-	//this.bbox.expand(20.0);
-	var imageLODs_count = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
-
-	// 7) Buildings octree mother size.***
-	this.oct_min_x = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.oct_min_y = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.oct_min_z = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.oct_max_x = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.oct_max_y = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.oct_max_z = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-
-	var isLarge = false;
-	if (this.bbox.maxX - this.bbox.minX > 40.0 || this.bbox.maxY - this.bbox.minY > 40.0) 
-	{
-		isLarge = true;
-	}
-
-	if (!isLarge && this.bbox.maxZ - this.bbox.minZ < 30.0) 
-	{
-		this.isSmall = true;
-	}
-
-	return bytes_readed;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param arrayBuffer 변수
- * @param readWriter 변수
- */
-MetaData.prototype.parseFileHeaderAsimetricVersion = function(arrayBuffer, readWriter) 
-{
-	var version_string_length = 5;
-	var intAux_scratch = 0;
-	var auxScratch;
-	//var header = BR_Project._header;
-	//var arrayBuffer = this.fileArrayBuffer;
-	//var bytes_readed = this.fileBytesReaded;
-	var bytes_readed = 0;
-
-	if (readWriter === undefined) { readWriter = new ReaderWriter(); }
-
-	// 1) Version(5 chars).***********
-	for (var j=0; j<version_string_length; j++)
-	{
-		this.version += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
-	}
-
-	// 3) Global unique ID.*********************
-	if (this.guid === undefined) { this.guid =""; }
-
-	intAux_scratch = readWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-	for (var j=0; j<intAux_scratch; j++)
-	{
-		this.guid += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
-	}
-
-	// 4) Location.*************************
-	if (this.longitude === undefined) 
-	{
-		this.longitude = (new Float64Array(arrayBuffer.slice(bytes_readed, bytes_readed+8)))[0]; bytes_readed += 8;
-	}
-	else { bytes_readed += 8; }
-
-	if (this.latitude === undefined) 
-	{
-		this.latitude = (new Float64Array(arrayBuffer.slice(bytes_readed, bytes_readed+8)))[0]; bytes_readed += 8;
-	}
-	else { bytes_readed += 8; }
-
-	if (this.altitude === undefined) 
-	{
-		this.altitude = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	}
-	else { bytes_readed += 4; }
-
-	//this.altitude -= 140.0; // TEST.***
-
-	//header._elevation += 70.0; // delete this. TEST.!!!
-	if (this.bbox === undefined) { this.bbox = new BoundingBox(); }
-
-	// 6) BoundingBox.************************
-	this.bbox.minX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.bbox.minY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.bbox.minZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.bbox.maxX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.bbox.maxY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	this.bbox.maxZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-
-	// TEST. PROVISIONAL. DELETE.***
-	//this.bbox.expand(20.0);
-
-	//var imageLODs_count = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
-
-	//// 7) Buildings octree mother size.***
-	//this.oct_min_x = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	//this.oct_min_y = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	//this.oct_min_z = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	//this.oct_max_x = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	//this.oct_max_y = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-	//this.oct_max_z = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-
-	var isLarge = false;
-	if (this.bbox.maxX - this.bbox.minX > 40.0 || this.bbox.maxY - this.bbox.minY > 40.0) 
-	{
-		isLarge = true;
-	}
-
-	if (!isLarge && this.bbox.maxZ - this.bbox.minZ < 30.0) 
-	{
-		this.isSmall = true;
-	}
-
-	return bytes_readed;
-};
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class ModelReferencedGroup
- */
-var ModelReferencedGroup = function() 
-{
-	if (!(this instanceof ModelReferencedGroup)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	this.modelIdx; // there are only one model.
-	this.referencesIdxArray = []; // all references has the same model.
-};
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class ModelReferencedGroupsList
- */
-var ModelReferencedGroupsList = function() 
-{
-	if (!(this instanceof ModelReferencedGroupsList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	this.modelReferencedGroupsMap = [];
-	this.modelReferencedGroupsArray = [];
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param treeDepth 변수
- */
-ModelReferencedGroupsList.prototype.getModelReferencedGroup = function(modelIdx) 
-{
-	var modelReferencedGroup = this.modelReferencedGroupsMap[modelIdx];
-	
-	if (modelReferencedGroup == undefined)
-	{
-		modelReferencedGroup = new ModelReferencedGroup();
-		modelReferencedGroup.modelIdx = modelIdx;
-		this.modelReferencedGroupsMap[modelIdx] = modelReferencedGroup;
-	}
-	
-	return modelReferencedGroup;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param treeDepth 변수
- */
-ModelReferencedGroupsList.prototype.makeModelReferencedGroupsArray = function() 
-{
-	this.modelReferencedGroupsArray.length = 0;
-	
-	var modelRefGroupsCount = this.modelReferencedGroupsMap.length;
-	for (var i=0; i<modelRefGroupsCount; i++)
-	{
-		if (this.modelReferencedGroupsMap[i] != undefined)
-		{ this.modelReferencedGroupsArray.push(this.modelReferencedGroupsMap[i]); }
-	}
-	this.modelReferencedGroupsMap.length = 0;
-	
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param treeDepth 변수
- */
-ModelReferencedGroupsList.prototype.createModelReferencedGroups = function(neoRefsIndices, motherNeoRefsList) 
-{
-	// Group all the references that has the same model.
-	if (neoRefsIndices == undefined)
-	{ return; }
-	
-	if (motherNeoRefsList == undefined)
-	{ return; }
-	
-	var referenceIdx;
-	var modelIdx;
-	var modelRefGroup;
-	var referencesCount = neoRefsIndices.length;
-	for (var i=0; i<referencesCount; i++)
-	{
-		referenceIdx = neoRefsIndices[i];
-		modelIdx = motherNeoRefsList[referenceIdx]._block_idx;
-		modelRefGroup = this.getModelReferencedGroup(modelIdx);
-		modelRefGroup.referencesIdxArray.push(referenceIdx);
-	}
-	
-	// Now, delete the "modelReferencedGroupsMap" and make a simple array.
-	this.makeModelReferencedGroupsArray();
-	
-};
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class NeoReference
- */
-var NeoReference = function() 
-{
-	if (!(this instanceof NeoReference)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	// 1) Object IDX.***
-	this._id = 0;
-
-	this.objectId = "";
-
-	// 2) Block Idx.***
-	this._block_idx = -1;
-
-	// 3) Transformation Matrix.***
-	this._matrix4 = new Matrix4(); // initial and necessary matrix.***
-	this._originalMatrix4 = new Matrix4(); // original matrix, for use with block-reference (do not modify).***
-	this.tMatrixAuxArray; // use for deploying mode, cronological transformations for example.***
-	this.refMatrixType = 2; // 0 = identity matrix, 1 = translate matrix, 2 = transformation matrix.
-	this.refTranslationVec; // use this if "refMatrixType" == 1.
-	// 4) VBO datas container.***
-	this.vBOVertexIdxCacheKeysContainer; // initially undefined.***
-	
-	// 4) Tex coords cache_key.*** // old.***
-	this.MESH_TEXCOORD_cacheKey; // old.***
-
-	// 5) The texture image.***
-	this.hasTexture = false;
-	this.texture; // Texture
-
-	// 6) 1 color.***
-	this.color4; //new Color();
-	this.aditionalColor; // used when object color was changed.***
-
-	// 7) selection color.***
-	this.selColor4; //new Color(); // use for selection only.***
-
-	this.vertexCount = 0;// provisional. for checking vertexCount of the block.*** delete this.****
-
-	// 8) movement of the object.***
-	this.moveVector; // Point3D.***
-
-	// 9) check for render.***
-	this.bRendered = false;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-NeoReference.prototype.multiplyTransformMatrix = function(matrix) 
-{
-	this._matrix4 = this._originalMatrix4.getMultipliedByMatrix(matrix); // Original.***
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-NeoReference.prototype.multiplyKeyTransformMatrix = function(idxKey, matrix) 
-{
-	// this function multiplies the originalMatrix by "matrix" and stores it in the "idxKey" position.***
-	if (this.tMatrixAuxArray === undefined)
-	{ this.tMatrixAuxArray = []; }
-
-	this.tMatrixAuxArray[idxKey] = this._originalMatrix4.getMultipliedByMatrix(matrix, this.tMatrixAuxArray[idxKey]);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-NeoReference.prototype.hasKeyMatrix = function(idxKey) 
-{
-	if (this.tMatrixAuxArray === undefined)
-	{ return false; }
-
-	if (this.tMatrixAuxArray[idxKey] === undefined)
-	{ return false; }
-	else
-	{ return true; }
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-NeoReference.prototype.deleteGlObjects = function(gl, vboMemManager) 
-{
-	// 1) Object ID.***
-	this._id = undefined;
-
-	// 2) Block Idx.***
-	this._block_idx = undefined;
-
-	// 3) Transformation Matrix.***
-	this._matrix4._floatArrays = undefined;
-	this._matrix4 = undefined;
-	this._originalMatrix4._floatArrays = undefined;
-	this._originalMatrix4 = undefined; //
-	
-	// 4) Tex coords cache_key.*** // old.***
-	if (this.MESH_TEXCOORD_cacheKey) 
-	{ // old.***
-		gl.deleteBuffer(this.MESH_TEXCOORD_cacheKey); // old.***
-		this.MESH_TEXCOORD_cacheKey = undefined; // old.***
-	} // old.***
-
-	// 5) The texture image.***
-	this.hasTexture = undefined;
-	this.texture = undefined; // Texture
-
-	// 6) 1 color.***
-	this.color4 = undefined; //new Color();
-
-	// 7) selection color.***
-	this.selColor4 = undefined; //new Color(); // use for selection only.***
-
-	this.vertexCount = undefined;// provisional. for checking vertexCount of the block.*** delete this.****
-
-	// 8) movement of the object.***
-	this.moveVector = undefined; // Point3D.***
-
-	this.bRendered = undefined;
-};
-
-//*************************************************************************************************************************************************************
-//*************************************************************************************************************************************************************
-//*************************************************************************************************************************************************************
-/**
- * 어떤 일을 하고 있습니까?
- * @class NeoReferencesMotherAndIndices
- */
-var NeoReferencesMotherAndIndices = function() 
-{
-	if (!(this instanceof NeoReferencesMotherAndIndices)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	// for asimetric mode.***// for asimetric mode.***// for asimetric mode.***// for asimetric mode.***
-	this.motherNeoRefsList; // this is a NeoReferencesList pointer.***
-	this.blocksList; // local blocks list. used only for parse data.***
-	this.neoRefsIndices = []; // All objects(references) of this class.
-	this.modelReferencedGroupsList;
-
-	this.fileLoadState = 0;
-	this.dataArraybuffer;
-	this.succesfullyGpuDataBinded;
-
-	this.exterior_ocCullOctree; // octree that contains the visible indices.
-	this.interior_ocCullOctree; // octree that contains the visible indices.
-	
-	this.currentVisibleIndices = [];
-	this.currentVisibleMRG; // MRG = ModelReferencedGroup.
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param matrix 변수
- */
-NeoReferencesMotherAndIndices.prototype.multiplyKeyTransformMatrix = function(idxKey, matrix) 
-{
-	var refIndicesCount = this.neoRefsIndices.length;
-	for (var i=0; i<refIndicesCount; i++)
-	{
-		this.motherNeoRefsList[this.neoRefsIndices[i]].multiplyKeyTransformMatrix(idxKey, matrix);
-	}
-};
-
-NeoReferencesMotherAndIndices.prototype.updateCurrentVisibleIndices = function(isExterior, eye_x, eye_y, eye_z) 
-{
-	if (isExterior)
-	{
-		if (this.exterior_ocCullOctree !== undefined)
-		{
-			if (this.exterior_ocCullOctree._subBoxesArray && this.exterior_ocCullOctree._subBoxesArray.length > 0)
-			{
-				if (this.currentVisibleMRG == undefined)
-				{ this.currentVisibleMRG = new ModelReferencedGroupsList(); }
-				
-				this.currentVisibleIndices = this.exterior_ocCullOctree.getIndicesVisiblesForEye(eye_x, eye_y, eye_z, this.currentVisibleIndices, this.currentVisibleMRG);
-			}
-			else 
-			{
-				this.currentVisibleIndices = this.neoRefsIndices;
-				this.currentVisibleMRG = this.modelReferencedGroupsList;
-			}
-		}
-	}
-	else
-	{
-		if (this.interior_ocCullOctree !== undefined)
-		{
-			if (this.interior_ocCullOctree._subBoxesArray && this.interior_ocCullOctree._subBoxesArray.length > 0)
-			{
-				if (this.currentVisibleMRG == undefined)
-				{ this.currentVisibleMRG = new ModelReferencedGroupsList(); }
-				
-				this.currentVisibleIndices = this.interior_ocCullOctree.getIndicesVisiblesForEye(eye_x, eye_y, eye_z, this.currentVisibleIndices, this.currentVisibleMRG);
-			}
-			else
-			{
-				this.currentVisibleIndices = this.neoRefsIndices;
-				this.currentVisibleMRG = this.modelReferencedGroupsList;
-			}
-		}
-	}
-};
-
-/**
- * Returns the neoReference
- * @param matrix 변수
- */
-NeoReferencesMotherAndIndices.prototype.getNeoReference = function(idx) 
-{
-	return this.motherNeoRefsList[this.neoRefsIndices[idx]];
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param treeDepth 변수
- */
-NeoReferencesMotherAndIndices.prototype.deleteObjects = function(gl, vboMemManager) 
-{
-	this.motherNeoRefsList = undefined; // this is a NeoReferencesList pointer.***
-	if (this.blocksList)
-	{ this.blocksList.deleteGlObjects(gl, vboMemManager); }
-
-	this.blocksList = undefined;
-	this.neoRefsIndices = undefined;
-
-	this.fileLoadState = 0;
-	this.dataArraybuffer = undefined;
-
-	this.exterior_ocCullOctree = undefined;
-	this.interior_ocCullOctree = undefined;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param treeDepth 변수
- */
-NeoReferencesMotherAndIndices.prototype.setRenderedFalseToAllReferences = function() 
-{
-	var refIndicesCount = this.neoRefsIndices.length;
-	for (var i=0; i<refIndicesCount; i++)
-	{
-		this.motherNeoRefsList[this.neoRefsIndices[i]].bRendered = false;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param treeDepth 변수
- */
-NeoReferencesMotherAndIndices.prototype.createModelReferencedGroups = function() 
-{
-	// Group all the references that has the same model.
-	if (this.neoRefsIndices == undefined)
-	{ return; }
-	
-	if (this.modelReferencedGroupsList == undefined)
-	{ this.modelReferencedGroupsList = new ModelReferencedGroupsList(); }
-
-	this.modelReferencedGroupsList.createModelReferencedGroups(this.neoRefsIndices, this.motherNeoRefsList);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param arrayBuffer 변수
- * @param neoBuilding 변수
- * @param readWriter 변수
- */
-NeoReferencesMotherAndIndices.prototype.parseArrayBufferReferences = function(gl, arrayBuffer, readWriter, motherNeoReferencesArray, tMatrix4, magoManager) 
-{
-	this.fileLoadState = CODE.fileLoadState.PARSE_STARTED;
-
-	var startBuff;
-	var endBuff;
-	var bytes_readed = 0;
-	var neoRefsCount = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-	var testIdentityMatsCount = 0;
-	var stadistic_refMat_Identities_count = 0;
-	var stadistic_refMat_Translates_count = 0;
-	var stadistic_refMat_Transforms_count = 0;
-	var vboMemManager = magoManager.vboMemoryManager;
-	var classifiedTCoordByteSize = 0, classifiedColByteSize = 0;
-	var colByteSize, tCoordByteSize;
-	this.succesfullyGpuDataBinded = true;
-
-	for (var i = 0; i < neoRefsCount; i++) 
-	{
-		var neoRef = new NeoReference();
-
-		// 1) Id.***
-		var ref_ID =  readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-		neoRef._id = ref_ID;
-
-		this.motherNeoRefsList = motherNeoReferencesArray;
-		if (motherNeoReferencesArray[neoRef._id] !== undefined)
-		{
-			// pass this neoReference because exist in the motherNeoReferencesArray.***
-			neoRef = motherNeoReferencesArray[neoRef._id];
-			if (this.neoRefsIndices === undefined)
-			{ this.neoRefsIndices = []; }
-			
-			this.neoRefsIndices.push(neoRef._id);
-
-			var objectIdLength = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed +=1;
-			var objectId = String.fromCharCode.apply(null, new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+objectIdLength)));
-			neoRef.objectId = objectId;
-			bytes_readed += objectIdLength;
-
-			// 2) Block's Idx.***
-			var blockIdx =   readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._block_idx = blockIdx;
-
-			// 3) Transform Matrix4.***
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-
-			// Float mode.**************************************************************
-			// New modifications for xxxx 20161013.*****************************
-			var has_1_color = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
-			if (has_1_color) 
-			{
-				// "type" : one of following
-				// 5120 : signed byte, 5121 : unsigned byte, 5122 : signed short, 5123 : unsigned short, 5126 : float
-				var data_type = readWriter.readUInt16(arrayBuffer, bytes_readed, bytes_readed+2); bytes_readed += 2;
-				var dim = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
-
-				var daya_bytes;
-				if (data_type === 5121) { daya_bytes = 1; }
-
-				var r = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
-				var g = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
-				var b = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
-				var alfa = 255;
-
-				if (dim === 4) 
-				{
-					alfa = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
-				}
-			}
-			
-			var has_colors = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
-			var has_texCoords = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
-			
-			if (has_colors || has_texCoords)
-			{
-				var vboDatasCount = readWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-				
-				for (var j=0; j<vboDatasCount; j++)
-				{
-					if (has_colors)
-					{
-						var data_type = readWriter.readUInt16(arrayBuffer, bytes_readed, bytes_readed+2); bytes_readed += 2;
-						var dim = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
-
-						var daya_bytes; // (5120 signed byte), (5121 unsigned byte), (5122 signed short), (5123 unsigned short), (5126 float)
-						if (data_type === 5120 || data_type === 5121) { daya_bytes = 1; }
-						else if (data_type === 5122 || data_type === 5123) { daya_bytes = 2; }
-						else if (data_type === 5126) { daya_bytes = 4; }
-						
-						var vertexCount = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-						var verticesFloatValuesCount = vertexCount * dim;
-						startBuff = bytes_readed;
-						endBuff = bytes_readed + daya_bytes * verticesFloatValuesCount; 
-						bytes_readed += daya_bytes * verticesFloatValuesCount; // updating data.***
-					}
-					
-					if (has_texCoords)
-					{
-						var data_type = readWriter.readUInt16(arrayBuffer, bytes_readed, bytes_readed+2); bytes_readed += 2;
-						
-						var daya_bytes; // (5120 signed byte), (5121 unsigned byte), (5122 signed short), (5123 unsigned short), (5126 float)
-						if (data_type === 5120 || data_type === 5121) { daya_bytes = 1; }
-						else if (data_type === 5122 || data_type === 5123) { daya_bytes = 2; }
-						else if (data_type === 5126) { daya_bytes = 4; }
-						
-						var vertexCount = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-						var verticesFloatValuesCount = vertexCount * 2; // 2 = dimension of texCoord.***
-						startBuff = bytes_readed;
-						endBuff = bytes_readed + daya_bytes * verticesFloatValuesCount; 
-						bytes_readed += daya_bytes * verticesFloatValuesCount;
-					}
-				}
-			}
-			
-			// 4) short texcoords. OLD. Change this for Materials.***
-			var textures_count = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4; // this is only indicative that there are a texcoords.***
-			if (textures_count > 0) 
-			{
-
-				// Now, read the texture_type and texture_file_name.***
-				var texture_type_nameLegth = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-				for (var j=0; j<texture_type_nameLegth; j++) 
-				{
-					bytes_readed += 1; // for example "diffuse".***
-				}
-
-				var texture_fileName_Legth = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-				for (var j=0; j<texture_fileName_Legth; j++) 
-				{
-					bytes_readed += 1;
-				}
-			} 
-			
-			// do the stadistic recount.
-			if (neoRef.refMatrixType == 0){ stadistic_refMat_Identities_count +=1; }
-			if (neoRef.refMatrixType == 1){ stadistic_refMat_Translates_count +=1; }
-			if (neoRef.refMatrixType == 2){ stadistic_refMat_Transforms_count +=1; }
-		}
-		else
-		{
-
-			motherNeoReferencesArray[neoRef._id] = neoRef;
-			if (this.neoRefsIndices === undefined)
-			{ this.neoRefsIndices = []; }
-			
-			this.neoRefsIndices.push(neoRef._id);
-
-			var objectIdLength = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed +=1;
-			var objectId = String.fromCharCode.apply(null, new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+objectIdLength)));
-			neoRef.objectId = objectId;
-			bytes_readed += objectIdLength;
-
-			// 2) Block's Idx.***
-			var blockIdx =   readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._block_idx = blockIdx;
-
-			// 3) Transform Matrix4.***
-			neoRef._originalMatrix4._floatArrays[0] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._originalMatrix4._floatArrays[1] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._originalMatrix4._floatArrays[2] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._originalMatrix4._floatArrays[3] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-
-			neoRef._originalMatrix4._floatArrays[4] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._originalMatrix4._floatArrays[5] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._originalMatrix4._floatArrays[6] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._originalMatrix4._floatArrays[7] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-
-			neoRef._originalMatrix4._floatArrays[8] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._originalMatrix4._floatArrays[9] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._originalMatrix4._floatArrays[10] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._originalMatrix4._floatArrays[11] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-
-			neoRef._originalMatrix4._floatArrays[12] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._originalMatrix4._floatArrays[13] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._originalMatrix4._floatArrays[14] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			neoRef._originalMatrix4._floatArrays[15] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			
-			// Compute the references matrix type.
-			neoRef.refMatrixType = neoRef._originalMatrix4.computeMatrixType();
-			if (neoRef.refMatrixType === 0){ stadistic_refMat_Identities_count +=1; }
-			if (neoRef.refMatrixType === 1)
-			{
-				neoRef.refTranslationVec = new Float32Array([neoRef._originalMatrix4._floatArrays[12], neoRef._originalMatrix4._floatArrays[13], neoRef._originalMatrix4._floatArrays[14]]);
-				stadistic_refMat_Translates_count +=1;
-			}
-			if (neoRef.refMatrixType === 2){ stadistic_refMat_Transforms_count +=1; }
-
-			// Float mode.**************************************************************
-			// New modifications for xxxx 20161013.*****************************
-			var has_1_color = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
-			if (has_1_color) 
-			{
-				// "type" : one of following
-				// 5120 : signed byte, 5121 : unsigned byte, 5122 : signed short, 5123 : unsigned short, 5126 : float
-				var data_type = readWriter.readUInt16(arrayBuffer, bytes_readed, bytes_readed+2); bytes_readed += 2;
-				var dim = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
-
-				var daya_bytes;
-				if (data_type === 5121) { daya_bytes = 1; }
-
-				var r = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
-				var g = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
-				var b = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
-				var alfa = 255;
-
-				if (dim === 4) 
-				{
-					alfa = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
-				}
-
-				neoRef.color4 = new Color();
-				neoRef.color4.set(r, g, b, alfa);
-			}
-			
-			var has_colors = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
-			var has_texCoords = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
-			
-			if (has_colors || has_texCoords)
-			{
-				var vboDatasCount = readWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-				
-				if (vboDatasCount > 0)
-				{
-					if (neoRef.vBOVertexIdxCacheKeysContainer === undefined)
-					{ neoRef.vBOVertexIdxCacheKeysContainer = new VBOVertexIdxCacheKeysContainer(); }
-				}
-				
-				for (var j=0; j<vboDatasCount; j++)
-				{
-					var vboViCacheKey = neoRef.vBOVertexIdxCacheKeysContainer.newVBOVertexIdxCacheKey();
-					
-					if (has_colors)
-					{
-						var data_type = readWriter.readUInt16(arrayBuffer, bytes_readed, bytes_readed+2); bytes_readed += 2;
-						var dim = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
-
-						var daya_bytes; // (5120 signed byte), (5121 unsigned byte), (5122 signed short), (5123 unsigned short), (5126 float)
-						if (data_type === 5120 || data_type === 5121) { daya_bytes = 1; }
-						else if (data_type === 5122 || data_type === 5123) { daya_bytes = 2; }
-						else if (data_type === 5126) { daya_bytes = 4; }
-						
-						var vertexCount = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-						var verticesFloatValuesCount = vertexCount * dim;
-						colByteSize = daya_bytes * verticesFloatValuesCount;
-						classifiedColByteSize = vboMemManager.getClassifiedBufferSize(colByteSize);
-						
-						neoRef.vertexCount = vertexCount; // no necessary.***
-						startBuff = bytes_readed;
-						endBuff = bytes_readed + daya_bytes * verticesFloatValuesCount; 
-						//vboViCacheKey.colVboDataArray = new Float32Array(arrayBuffer.slice(startBuff, endBuff)); // original.***
-						// TODO: Float32Array or UintArray depending of dataType.***
-						vboViCacheKey.colVboDataArray = new Float32Array(classifiedColByteSize);
-						vboViCacheKey.colVboDataArray.set(new Float32Array(arrayBuffer.slice(startBuff, endBuff)));
-						vboViCacheKey.colArrayByteSize = classifiedColByteSize;
-						bytes_readed += daya_bytes * verticesFloatValuesCount; // updating data.***
-						
-						// send data to gpu.
-						if (!vboViCacheKey.isReadyColors(gl, magoManager.vboMemoryManager))
-						{
-							this.succesfullyGpuDataBinded = false;
-						}
-					}
-					
-					if (has_texCoords)
-					{
-						var data_type = readWriter.readUInt16(arrayBuffer, bytes_readed, bytes_readed+2); bytes_readed += 2;
-						
-						var daya_bytes; // (5120 signed byte), (5121 unsigned byte), (5122 signed short), (5123 unsigned short), (5126 float)
-						if (data_type === 5120 || data_type === 5121) { daya_bytes = 1; }
-						else if (data_type === 5122 || data_type === 5123) { daya_bytes = 2; }
-						else if (data_type === 5126) { daya_bytes = 4; }
-						
-						var vertexCount = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-						var verticesFloatValuesCount = vertexCount * 2; // 2 = dimension of texCoord.***
-						// example: posByteSize = 4 * verticesFloatValuesCount;
-						tCoordByteSize = daya_bytes * verticesFloatValuesCount;
-						classifiedTCoordByteSize = vboMemManager.getClassifiedBufferSize(tCoordByteSize);
-						
-						neoRef.vertexCount = vertexCount; // no necessary.***
-						startBuff = bytes_readed;
-						endBuff = bytes_readed + daya_bytes * verticesFloatValuesCount; 
-						//vboViCacheKey.tcoordVboDataArray = new Float32Array(arrayBuffer.slice(startBuff, endBuff)); // original.***
-						vboViCacheKey.tcoordVboDataArray = new Float32Array(classifiedTCoordByteSize);
-						vboViCacheKey.tcoordVboDataArray.set(new Float32Array(arrayBuffer.slice(startBuff, endBuff)));
-						vboViCacheKey.tcoordArrayByteSize = classifiedTCoordByteSize;
-						bytes_readed += daya_bytes * verticesFloatValuesCount;
-						
-						// send data to gpu.
-						if (!vboViCacheKey.isReadyTexCoords(gl, magoManager.vboMemoryManager))
-						{
-							this.succesfullyGpuDataBinded = false;
-						}
-					}
-				}
-			}
-
-			// 4) short texcoords. OLD. Change this for Materials.***
-			var textures_count = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4; // this is only indicative that there are a texcoords.***
-			if (textures_count > 0) 
-			{
-				var textureTypeName = "";
-				var textureImageFileName = "";
-
-				// Now, read the texture_type and texture_file_name.***
-				var texture_type_nameLegth = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-				for (var j=0; j<texture_type_nameLegth; j++) 
-				{
-					textureTypeName += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1; // for example "diffuse".***
-				}
-
-				var texture_fileName_Legth = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-				for (var j=0; j<texture_fileName_Legth; j++) 
-				{
-					textureImageFileName += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
-				}
-				
-				if (texture_fileName_Legth > 0)
-				{
-					neoRef.texture = new Texture();
-					neoRef.hasTexture = true;
-					neoRef.texture.textureTypeName = textureTypeName;
-					neoRef.texture.textureImageFileName = textureImageFileName;
-				}
-
-				/*
-				// 1pixel texture, wait for texture to load.********************************************
-				if(neoRef.texture.texId === undefined)
-					neoRef.texture.texId = gl.createTexture();
-				gl.bindTexture(gl.TEXTURE_2D, neoRef.texture.texId);
-				gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([90, 80, 85, 255])); // red
-				gl.bindTexture(gl.TEXTURE_2D, null);
-				*/
-			}
-			else 
-			{
-				neoRef.hasTexture = false;
-			}
-
-			if (tMatrix4)
-			{
-				neoRef.multiplyTransformMatrix(tMatrix4);
-			}
-		}
-
-	}
-	
-	this.createModelReferencedGroups(); // test for stadistics.
-	
-
-	// Now occlusion cullings.***
-	// Occlusion culling octree data.*****
-	if (this.exterior_ocCullOctree === undefined)
-	{ this.exterior_ocCullOctree = new OcclusionCullingOctreeCell(); }
-
-	var infiniteOcCullBox = this.exterior_ocCullOctree;
-	//bytes_readed = this.readOcclusionCullingOctreeCell(arrayBuffer, bytes_readed, infiniteOcCullBox); // old.***
-	bytes_readed = this.exterior_ocCullOctree.parseArrayBuffer(arrayBuffer, bytes_readed, readWriter);
-	infiniteOcCullBox.expandBox(1000); // Only for the infinite box.***
-	infiniteOcCullBox.setSizesSubBoxes();
-	infiniteOcCullBox.createModelReferencedGroups(this.motherNeoRefsList);
-
-	if (this.interior_ocCullOctree === undefined)
-	{ this.interior_ocCullOctree = new OcclusionCullingOctreeCell(); }
-
-	var ocCullBox = this.interior_ocCullOctree;
-	//bytes_readed = this.readOcclusionCullingOctreeCell(arrayBuffer, bytes_readed, ocCullBox); // old.***
-	bytes_readed = this.interior_ocCullOctree.parseArrayBuffer(arrayBuffer, bytes_readed, readWriter);
-	ocCullBox.setSizesSubBoxes();
-	ocCullBox.createModelReferencedGroups(this.motherNeoRefsList);
-
-	this.fileLoadState = CODE.fileLoadState.PARSE_FINISHED;
-	return this.succesfullyGpuDataBinded;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class NeoTexture
- */
-var NeoTexture = function() 
-{
-	if (!(this instanceof NeoTexture)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	this.lod;
-	this.textureId; // texture id in gl.***
-	this.texImage; // image. delete this once upload to gl.***
-	this.loadStarted = false;
-	this.loadFinished = false;
-};
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Octree
- *
- * @param octreeOwner 변수
- */
-var Octree = function(octreeOwner) 
-{
-	if (!(this instanceof Octree)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	// Note: an octree is a cube, not a box.***
-	this.centerPos = new Point3D();
-	this.half_dx = 0.0; // half width.***
-	this.half_dy = 0.0; // half length.***
-	this.half_dz = 0.0; // half height.***
-
-	this.octree_owner;
-	this.octree_level = 0;
-	this.octree_number_name = 0;
-	this.squareDistToEye = 10000.0;
-	this.triPolyhedronsCount = 0; // no calculated. Readed when parsing.***
-	this.fileLoadState = CODE.fileLoadState.READY;
-
-	if (octreeOwner) 
-	{
-		this.octree_owner = octreeOwner;
-		this.octree_level = octreeOwner.octree_level + 1;
-	}
-
-	this.subOctrees_array = [];
-	this.neoReferencesMotherAndIndices; // Asimetric mode.***
-
-	// now, for legoStructure.***
-	this.lego;
-	
-	// aditional data for web world wind, provisionally.******************
-	this.provisionalSegmentsArray;
-	// end provisional data.----------------------------------------------
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns subOctree 변수
- */
-Octree.prototype.new_subOctree = function() 
-{
-	var subOctree = new Octree(this);
-	subOctree.octree_level = this.octree_level + 1;
-	this.subOctrees_array.push(subOctree);
-	return subOctree;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param treeDepth 변수
- */
-Octree.prototype.deleteGlObjects = function(gl, vboMemManager) 
-{
-	if (this.lego !== undefined) 
-	{
-		this.lego.vbo_vicks_container.deleteGlObjects(gl, vboMemManager);
-		this.lego.vbo_vicks_container = undefined;
-	}
-	
-	this.legoDataArrayBuffer = undefined;
-	this.lego = undefined;
-
-	this.centerPos.deleteObjects();
-	this.centerPos = undefined;
-	this.half_dx = undefined; // half width.***
-	this.half_dy = undefined; // half length.***
-	this.half_dz = undefined; // half height.***
-
-	this.octree_owner = undefined;
-	this.octree_level = undefined;
-	this.octree_number_name = undefined;
-	this.squareDistToEye = undefined;
-	this.triPolyhedronsCount = undefined; // no calculated. Readed when parsing.***
-	this.fileLoadState = undefined; // 0 = no started to load. 1 = started loading. 2 = finished loading. 3 = parse started. 4 = parse finished.***
-
-	this.neoBuildingOwner = undefined;
-
-	if (this.neoReferencesMotherAndIndices)
-	{ this.neoReferencesMotherAndIndices.deleteObjects(gl, vboMemManager); }
-
-	this.neoReferencesMotherAndIndices = undefined;
-
-	// delete the blocksList.***
-	if (this.neoRefsList_Array !== undefined) 
-	{
-		for (var i=0, neoRefListsCount = this.neoRefsList_Array.length; i<neoRefListsCount; i++) 
-		{
-			if (this.neoRefsList_Array[i]) 
-			{
-				this.neoRefsList_Array[i].deleteGlObjects(gl, vboMemManager);
-			}
-			this.neoRefsList_Array[i] = undefined;
-		}
-		this.neoRefsList_Array = undefined;
-	}
-
-	if (this.subOctrees_array !== undefined) 
-	{
-		for (var i=0, subOctreesCount = this.subOctrees_array.length; i<subOctreesCount; i++) 
-		{
-			this.subOctrees_array[i].deleteGlObjects(gl, vboMemManager);
-			this.subOctrees_array[i] = undefined;
-		}
-		this.subOctrees_array = undefined;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param treeDepth 변수
- */
-Octree.prototype.deleteLod0GlObjects = function(gl, vboMemManager) 
-{
-	if (this.neoReferencesMotherAndIndices)
-	{ this.neoReferencesMotherAndIndices.deleteObjects(gl, vboMemManager); }
-
-	if (this.subOctrees_array !== undefined) 
-	{
-		for (var i=0, subOctreesCount = this.subOctrees_array.length; i<subOctreesCount; i++) 
-		{
-			this.subOctrees_array[i].deleteLod0GlObjects(gl, vboMemManager);
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param treeDepth 변수
- */
-Octree.prototype.setRenderedFalseToAllReferences = function() 
-{
-
-
-	if (this.neoReferencesMotherAndIndices)
-	{
-		this.neoReferencesMotherAndIndices.setRenderedFalseToAllReferences();
-		var subOctreesCount = this.subOctrees_array.length;
-		for (var i=0; i<subOctreesCount; i++) 
-		{
-			this.subOctrees_array[i].setRenderedFalseToAllReferences();
-		}
-	}
-
-
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param treeDepth 변수
- */
-Octree.prototype.makeTree = function(treeDepth) 
-{
-	if (this.octree_level < treeDepth) 
-	{
-		for (var i=0; i<8; i++) 
-		{
-			var subOctree = this.new_subOctree();
-			subOctree.octree_number_name = this.octree_number_name * 10 + (i+1);
-		}
-
-		this.setSizesSubBoxes();
-
-		for (var i=0; i<8; i++) 
-		{
-			this.subOctrees_array[i].makeTree(treeDepth);
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param intNumber 변수
- * @returns numDigits
- */
-Octree.prototype.getNumberOfDigits = function(intNumber) 
-{
-	if (intNumber > 0) 
-	{
-		var numDigits = Math.floor(Math.log10(intNumber)+1);
-		return numDigits;
-	}
-	else 
-	{
-		return 1;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-Octree.prototype.getMotherOctree = function() 
-{
-	if (this.octree_owner === undefined) { return this; }
-
-	return this.octree_owner.getMotherOctree();
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param octreeNumberName 변수
- * @param numDigits 변수
- * @returns subOctrees_array[idx-1].getOctree(rest_octreeNumberName, numDigits-1)
- */
-Octree.prototype.getOctree = function(octreeNumberName, numDigits) 
-{
-	if (numDigits === 1) 
-	{
-		if (octreeNumberName === 0) { return this.getMotherOctree(); }
-		else { return this.subOctrees_array[octreeNumberName-1]; }
-	}
-
-	// determine the next level octree.***
-	var exp = numDigits-1;
-	var denominator = Math.pow(10, exp);
-	var idx = Math.floor(octreeNumberName /denominator) % 10;
-	var rest_octreeNumberName = octreeNumberName - idx * denominator;
-	return this.subOctrees_array[idx-1].getOctree(rest_octreeNumberName, numDigits-1);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param octreeNumberName 변수
- * @returns motherOctree.subOctrees_array[idx-1].getOctree(rest_octreeNumberName, numDigits-1)
- */
-Octree.prototype.getOctreeByNumberName = function(octreeNumberName) 
-{
-	var motherOctree = this.getMotherOctree();
-	var numDigits = this.getNumberOfDigits(octreeNumberName);
-	if (numDigits === 1) 
-	{
-		if (octreeNumberName === 0) { return motherOctree; }
-		else { return motherOctree.subOctrees_array[octreeNumberName-1]; }
-	}
-
-	if (motherOctree.subOctrees_array.length === 0) { return undefined; }
-
-	// determine the next level octree.***
-	var exp = numDigits-1;
-	var denominator = Math.pow(10, exp);
-	var idx = Math.floor(octreeNumberName /denominator) % 10;
-	var rest_octreeNumberName = octreeNumberName - idx * denominator;
-	return motherOctree.subOctrees_array[idx-1].getOctree(rest_octreeNumberName, numDigits-1);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-Octree.prototype.setSizesSubBoxes = function() 
-{
-	// Octree number name.********************************
-	// Bottom                      Top
-	// |---------|---------|     |---------|---------|
-	// |         |         |     |         |         |       Y
-	// |    3    |    2    |     |    7    |    6    |       ^
-	// |         |         |     |         |         |       |
-	// |---------+---------|     |---------+---------|       |
-	// |         |         |     |         |         |       |
-	// |    0    |    1    |     |    4    |    5    |       |
-	// |         |         |     |         |         |       |-----------> X
-	// |---------|---------|     |---------|---------|
-
-	if (this.subOctrees_array.length > 0) 
-	{
-		var half_x = this.centerPos.x;
-		var half_y = this.centerPos.y;
-		var half_z = this.centerPos.z;
-
-		var min_x = this.centerPos.x - this.half_dx;
-		var min_y = this.centerPos.y - this.half_dy;
-		var min_z = this.centerPos.z - this.half_dz;
-
-		var max_x = this.centerPos.x + this.half_dx;
-		var max_y = this.centerPos.y + this.half_dy;
-		var max_z = this.centerPos.z + this.half_dz;
-
-		this.subOctrees_array[0].setBoxSize(min_x, half_x, min_y, half_y, min_z, half_z);
-		this.subOctrees_array[1].setBoxSize(half_x, max_x, min_y, half_y, min_z, half_z);
-		this.subOctrees_array[2].setBoxSize(half_x, max_x, half_y, max_y, min_z, half_z);
-		this.subOctrees_array[3].setBoxSize(min_x, half_x, half_y, max_y, min_z, half_z);
-
-		this.subOctrees_array[4].setBoxSize(min_x, half_x, min_y, half_y, half_z, max_z);
-		this.subOctrees_array[5].setBoxSize(half_x, max_x, min_y, half_y, half_z, max_z);
-		this.subOctrees_array[6].setBoxSize(half_x, max_x, half_y, max_y, half_z, max_z);
-		this.subOctrees_array[7].setBoxSize(min_x, half_x, half_y, max_y, half_z, max_z);
-
-		for (var i=0; i<8; i++) 
-		{
-			this.subOctrees_array[i].setSizesSubBoxes();
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param Min_x 변수
- * @param Max_x 변수
- * @param Min_y 변수
- * @param Max_y 변수
- * @param Min_z 변수
- * @param Max_z 변수
- */
-Octree.prototype.setBoxSize = function(Min_X, Max_X, Min_Y, Max_Y, Min_Z, Max_Z) 
-{
-	this.centerPos.x = (Max_X + Min_X)/2.0;
-	this.centerPos.y = (Max_Y + Min_Y)/2.0;
-	this.centerPos.z = (Max_Z + Min_Z)/2.0;
-
-	this.half_dx = (Max_X - Min_X)/2.0; // half width.***
-	this.half_dy = (Max_Y - Min_Y)/2.0; // half length.***
-	this.half_dz = (Max_Z - Min_Z)/2.0; // half height.***
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns centerPos
- */
-Octree.prototype.getCenterPos = function() 
-{
-	return this.centerPos;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns Math.abs(this.half_dx*1.2);
- */
-Octree.prototype.getRadiusAprox = function() 
-{
-	//return Math.abs(this.half_dx*1.2);
-	return Math.abs(this.half_dx*3.0);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param result_CRefListsArray 변수
- */
-Octree.prototype.getCRefListArray = function(result_CRefListsArray) 
-{
-	if (result_CRefListsArray === undefined) { result_CRefListsArray = []; }
-
-	if (this.subOctrees_array.length > 0) 
-	{
-		for (var i=0, subOctreesArrayLength = this.subOctrees_array.length; i<subOctreesArrayLength; i++) 
-		{
-			this.subOctrees_array[i].getCRefListArray(result_CRefListsArray);
-		}
-	}
-	else 
-	{
-		if (this.compRefsListArray.length>0) 
-		{
-			result_CRefListsArray.push(this.compRefsListArray[0]); // there are only 1.***
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param result_NeoRefListsArray 변수
- */
-Octree.prototype.getNeoRefListArray = function(result_NeoRefListsArray) 
-{
-	if (result_NeoRefListsArray === undefined) { result_NeoRefListsArray = []; }
-
-	var subOctreesArrayLength = this.subOctrees_array.length;
-	if (subOctreesArrayLength > 0) 
-	{
-		for (var i=0; i<subOctreesArrayLength; i++) 
-		{
-			this.subOctrees_array[i].getNeoRefListArray(result_NeoRefListsArray);
-		}
-	}
-	else 
-	{
-		if (this.neoRefsList_Array.length>0) // original.***
-		//if(this.triPolyhedronsCount>0)
-		{
-			result_NeoRefListsArray.push(this.neoRefsList_Array[0]); // there are only 1.***
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param cesium_cullingVolume 변수
- * @param result_CRefListsArray 변수
- * @param cesium_boundingSphere_scratch 변수
- * @param eye_x 변수
- * @param eye_y 변수
- * @param eye_z 변수
- */
-Octree.prototype.getFrustumVisibleCRefListArray = function(cesium_cullingVolume, result_CRefListsArray, cesium_boundingSphere_scratch, eye_x, eye_y, eye_z) 
-{
-	var visibleOctreesArray = [];
-	var sortedOctreesArray = [];
-	var distAux = 0.0;
-
-	//this.getAllSubOctrees(visibleOctreesArray); // Test.***
-	this.getFrustumVisibleOctrees(cesium_cullingVolume, visibleOctreesArray, cesium_boundingSphere_scratch);
-
-	// Now, we must sort the subOctrees near->far from eye.***
-	var visibleOctrees_count = visibleOctreesArray.length;
-	for (var i=0; i<visibleOctrees_count; i++) 
-	{
-		visibleOctreesArray[i].setSquareDistToEye(eye_x, eye_y, eye_z);
-		this.putOctreeInEyeDistanceSortedArray(sortedOctreesArray, visibleOctreesArray[i], eye_x, eye_y, eye_z);
-	}
-
-	for (var i=0; i<visibleOctrees_count; i++) 
-	{
-		sortedOctreesArray[i].getCRefListArray(result_CRefListsArray);
-		//visibleOctreesArray[i].getCRefListArray(result_CRefListsArray);
-	}
-
-	visibleOctreesArray.length = 0;
-	excludedOctArray.length = 0;
-
-	visibleOctreesArray = undefined;
-	excludedOctArray = undefined;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param cesium_cullingVolume 변수
- * @param result_NeoRefListsArray 변수
- * @param cesium_boundingSphere_scratch 변수
- * @param eye_x 변수
- * @param eye_y 변수
- * @param eye_z 변수
- */
-Octree.prototype.getFrustumVisibleNeoRefListArray = function(cesium_cullingVolume, result_NeoRefListsArray, cesium_boundingSphere_scratch, eye_x, eye_y, eye_z) 
-{
-	var visibleOctreesArray = [];
-	var sortedOctreesArray = [];
-	var distAux = 0.0;
-
-	//this.getAllSubOctrees(visibleOctreesArray); // Test.***
-	this.getFrustumVisibleOctreesNeoBuilding(cesium_cullingVolume, visibleOctreesArray, cesium_boundingSphere_scratch); // Original.***
-
-	// Now, we must sort the subOctrees near->far from eye.***
-	var visibleOctrees_count = visibleOctreesArray.length;
-	for (var i=0; i<visibleOctrees_count; i++) 
-	{
-		visibleOctreesArray[i].setSquareDistToEye(eye_x, eye_y, eye_z);
-		this.putOctreeInEyeDistanceSortedArray(sortedOctreesArray, visibleOctreesArray[i], eye_x, eye_y, eye_z);
-	}
-
-	for (var i=0; i<visibleOctrees_count; i++) 
-	{
-		sortedOctreesArray[i].getNeoRefListArray(result_NeoRefListsArray);
-	}
-
-	visibleOctreesArray = null;
-	sortedOctreesArray = null;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param cullingVolume 변수
- * @param result_NeoRefListsArray 변수
- * @param boundingSphere_scratch 변수
- * @param eye_x 변수
- * @param eye_y 변수
- * @param eye_z 변수
- */
-Octree.prototype.getBBoxIntersectedLowestOctreesByLOD = function(bbox, visibleObjControlerOctrees, globalVisibleObjControlerOctrees,
-	bbox_scratch, eye_x, eye_y, eye_z, squaredDistLod0, squaredDistLod1, squaredDistLod2 ) 
-{
-	var visibleOctreesArray = [];
-	var distAux = 0.0;
-	var find = false;
-
-	this.getBBoxIntersectedOctreesNeoBuildingAsimetricVersion(bbox, visibleOctreesArray, bbox_scratch);
-	//this.getFrustumVisibleOctreesNeoBuildingAsimetricVersion(cullingVolume, visibleOctreesArray, boundingSphere_scratch); // Original.***
-
-	// Now, we must sort the subOctrees near->far from eye.***
-	var visibleOctrees_count = visibleOctreesArray.length;
-	for (var i=0; i<visibleOctrees_count; i++) 
-	{
-		visibleOctreesArray[i].setSquareDistToEye(eye_x, eye_y, eye_z);
-	}
-
-	for (var i=0; i<visibleOctrees_count; i++) 
-	{
-		if (visibleOctreesArray[i].squareDistToEye < squaredDistLod0) 
-		{
-			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
-			{
-				if (globalVisibleObjControlerOctrees)
-				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles0, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
-				visibleObjControlerOctrees.currentVisibles0.push(visibleOctreesArray[i]);
-				find = true;
-			}
-		}
-		else if (visibleOctreesArray[i].squareDistToEye < squaredDistLod1) 
-		{
-			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
-			{
-				if (globalVisibleObjControlerOctrees)
-				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles1, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
-				visibleObjControlerOctrees.currentVisibles1.push(visibleOctreesArray[i]);
-				find = true;
-			}
-		}
-		else if (visibleOctreesArray[i].squareDistToEye < squaredDistLod2) 
-		{
-			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
-			{
-				if (globalVisibleObjControlerOctrees)
-				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles2, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
-				visibleObjControlerOctrees.currentVisibles2.push(visibleOctreesArray[i]);
-				find = true;
-			}
-		}
-		else 
-		{
-			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
-			{
-				if (globalVisibleObjControlerOctrees)
-				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles3, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
-				visibleObjControlerOctrees.currentVisibles3.push(visibleOctreesArray[i]);
-				find = true;
-			}
-		}
-	}
-
-	visibleOctreesArray = null;
-	return find;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param cullingVolume 변수
- * @param result_NeoRefListsArray 변수
- * @param boundingSphere_scratch 변수
- * @param eye_x 변수
- * @param eye_y 변수
- * @param eye_z 변수
- */
-Octree.prototype.getFrustumVisibleLowestOctreesByLOD = function(cullingVolume, visibleObjControlerOctrees, globalVisibleObjControlerOctrees,
-	boundingSphere_scratch, eye_x, eye_y, eye_z, squaredDistLod0, squaredDistLod1, squaredDistLod2 ) 
-{
-	var visibleOctreesArray = [];
-	var distAux = 0.0;
-	var find = false;
-
-	//this.getAllSubOctrees(visibleOctreesArray); // Test.***
-	this.getFrustumVisibleOctreesNeoBuildingAsimetricVersion(cullingVolume, visibleOctreesArray, boundingSphere_scratch); // Original.***
-
-	// Now, we must sort the subOctrees near->far from eye.***
-	var visibleOctrees_count = visibleOctreesArray.length;
-	for (var i=0; i<visibleOctrees_count; i++) 
-	{
-		visibleOctreesArray[i].setSquareDistToEye(eye_x, eye_y, eye_z);
-	}
-
-	for (var i=0; i<visibleOctrees_count; i++) 
-	{
-		if (visibleOctreesArray[i].squareDistToEye < squaredDistLod0) 
-		{
-			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
-			{
-				if (globalVisibleObjControlerOctrees)
-				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles0, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
-				visibleObjControlerOctrees.currentVisibles0.push(visibleOctreesArray[i]);
-				find = true;
-			}
-		}
-		else if (visibleOctreesArray[i].squareDistToEye < squaredDistLod1) 
-		{
-			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
-			{
-				if (globalVisibleObjControlerOctrees)
-				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles1, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
-				visibleObjControlerOctrees.currentVisibles1.push(visibleOctreesArray[i]);
-				find = true;
-			}
-		}
-		else if (visibleOctreesArray[i].squareDistToEye < squaredDistLod2) 
-		{
-			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
-			{
-				if (globalVisibleObjControlerOctrees)
-				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles2, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
-				visibleObjControlerOctrees.currentVisibles2.push(visibleOctreesArray[i]);
-				find = true;
-			}
-		}
-		else 
-		{
-			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
-			{
-				if (globalVisibleObjControlerOctrees)
-				{ globalVisibleObjControlerOctrees.currentVisibles3.push(visibleOctreesArray[i]); }
-				visibleObjControlerOctrees.currentVisibles3.push(visibleOctreesArray[i]);
-				find = true;
-			}
-		}
-	}
-
-	visibleOctreesArray = null;
-	return find;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param cesium_cullingVolume 변수
- * @param result_octreesArray 변수
- * @param cesium_boundingSphere_scratch 변수
- */
-Octree.prototype.getFrustumVisibleOctreesNeoBuilding = function(cesium_cullingVolume, result_octreesArray, cesium_boundingSphere_scratch) 
-{
-	if (this.subOctrees_array.length === 0 && this.neoRefsList_Array.length === 0) // original.***
-	//if(this.subOctrees_array.length === 0 && this.triPolyhedronsCount === 0)
-	//if(this.subOctrees_array.length === 0 && this.compRefsListArray.length === 0) // For use with ifc buildings.***
-	{ return; }
-
-	// this function has Cesium dependence.***
-	if (result_octreesArray === undefined) { result_octreesArray = []; }
-
-	if (cesium_boundingSphere_scratch === undefined) { cesium_boundingSphere_scratch = new Cesium.BoundingSphere(); } // Cesium dependency.***
-
-	cesium_boundingSphere_scratch.center.x = this.centerPos.x;
-	cesium_boundingSphere_scratch.center.y = this.centerPos.y;
-	cesium_boundingSphere_scratch.center.z = this.centerPos.z;
-
-	if (this.subOctrees_array.length === 0) 
-	{
-	//cesium_boundingSphere_scratch.radius = this.getRadiusAprox()*0.7;
-		cesium_boundingSphere_scratch.radius = this.getRadiusAprox();
-	}
-	else 
-	{
-		cesium_boundingSphere_scratch.radius = this.getRadiusAprox();
-	}
-
-	var frustumCull = cesium_cullingVolume.computeVisibility(cesium_boundingSphere_scratch);
-	if (frustumCull === Cesium.Intersect.INSIDE ) 
-	{
-		//result_octreesArray.push(this);
-		this.getAllSubOctreesIfHasRefLists(result_octreesArray);
-	}
-	else if (frustumCull === Cesium.Intersect.INTERSECTING  ) 
-	{
-		if (this.subOctrees_array.length === 0) 
-		{
-			//if(this.neoRefsList_Array.length > 0) // original.***
-			//if(this.triPolyhedronsCount > 0)
-			result_octreesArray.push(this);
-		}
-		else 
-		{
-			for (var i=0, subOctreesArrayLength = this.subOctrees_array.length; i<subOctreesArrayLength; i++ ) 
-			{
-				this.subOctrees_array[i].getFrustumVisibleOctreesNeoBuilding(cesium_cullingVolume, result_octreesArray, cesium_boundingSphere_scratch);
-			}
-		}
-	}
-	// else if(frustumCull === Cesium.Intersect.OUTSIDE) => do nothing.***
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param cesium_cullingVolume 변수
- * @param result_octreesArray 변수
- * @param boundingSphere_scratch 변수
- */
-Octree.prototype.getFrustumVisibleOctreesNeoBuildingAsimetricVersion = function(cullingVolume, result_octreesArray, boundingSphere_scratch) 
-{
-	//if(this.subOctrees_array.length === 0 && this.neoRefsList_Array.length === 0) // original.***
-	if (this.subOctrees_array === undefined) { return; }
-
-	if (this.subOctrees_array.length === 0 && this.triPolyhedronsCount === 0)
-	//if(this.subOctrees_array.length === 0 && this.compRefsListArray.length === 0) // For use with ifc buildings.***
-	{ return; }
-
-	if (result_octreesArray === undefined) { result_octreesArray = []; }
-	
-	if (boundingSphere_scratch === undefined) 
-	{ boundingSphere_scratch = new Sphere(); } 
-
-	boundingSphere_scratch.centerPoint.x = this.centerPos.x;
-	boundingSphere_scratch.centerPoint.y = this.centerPos.y;
-	boundingSphere_scratch.centerPoint.z = this.centerPos.z;
-	boundingSphere_scratch.r = this.getRadiusAprox();
-
-	var frustumCull = cullingVolume.intersectionSphere(boundingSphere_scratch);
-	if (frustumCull === Constant.INTERSECTION_INSIDE ) 
-	{
-		//result_octreesArray.push(this);
-		this.getAllSubOctreesIfHasRefLists(result_octreesArray);
-	}
-	else if (frustumCull === Constant.INTERSECTION_INTERSECT  ) 
-	{
-		if (this.subOctrees_array.length === 0) 
-		{
-			//if(this.neoRefsList_Array.length > 0) // original.***
-			//if(this.triPolyhedronsCount > 0)
-			result_octreesArray.push(this);
-		}
-		else 
-		{
-			for (var i=0, subOctreesArrayLength = this.subOctrees_array.length; i<subOctreesArrayLength; i++ ) 
-			{
-				this.subOctrees_array[i].getFrustumVisibleOctreesNeoBuildingAsimetricVersion(cullingVolume, result_octreesArray, boundingSphere_scratch);
-			}
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param cesium_cullingVolume 변수
- * @param result_octreesArray 변수
- * @param boundingSphere_scratch 변수
- */
-Octree.prototype.getBBoxIntersectedOctreesNeoBuildingAsimetricVersion = function(bbox, result_octreesArray, bbox_scratch) 
-{
-	//if(this.subOctrees_array.length === 0 && this.neoRefsList_Array.length === 0) // original.***
-	if (this.subOctrees_array === undefined) { return; }
-
-	if (this.subOctrees_array.length === 0 && this.triPolyhedronsCount === 0)
-	//if(this.subOctrees_array.length === 0 && this.compRefsListArray.length === 0) // For use with ifc buildings.***
-	{ return; }
-
-	if (result_octreesArray === undefined) { result_octreesArray = []; }
-	
-	if (bbox_scratch === undefined) 
-	{ bbox_scratch = new BoundingBox(); } 
-	
-
-	bbox_scratch.minX = this.centerPos.x - this.half_dx;
-	bbox_scratch.maxX = this.centerPos.x + this.half_dx;
-	bbox_scratch.minY = this.centerPos.y - this.half_dy;
-	bbox_scratch.maxY = this.centerPos.y + this.half_dy;
-	bbox_scratch.minZ = this.centerPos.z - this.half_dz;
-	bbox_scratch.maxZ = this.centerPos.z + this.half_dz;
-
-	var intersects = bbox.intersectsWithBBox(bbox_scratch);
-	if (intersects)
-	{
-		this.getAllSubOctreesIfHasRefLists(result_octreesArray);
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param cesium_cullingVolume 변수
- * @param result_octreesArray 변수
- * @param cesium_boundingSphere_scratch 변수
- */
-Octree.prototype.getFrustumVisibleOctrees = function(cesium_cullingVolume, result_octreesArray, cesium_boundingSphere_scratch) 
-{
-	if (this.subOctrees_array.length === 0 && this.compRefsListArray.length === 0) // For use with ifc buildings.***
-	{ return; }
-	// old. delete this.***
-	// this function has Cesium dependence.***
-	if (result_octreesArray === undefined) { result_octreesArray = []; }
-
-	if (cesium_boundingSphere_scratch === undefined) { cesium_boundingSphere_scratch = new Cesium.BoundingSphere(); } // Cesium dependency.***
-
-	cesium_boundingSphere_scratch.center.x = this.centerPos.x;
-	cesium_boundingSphere_scratch.center.y = this.centerPos.y;
-	cesium_boundingSphere_scratch.center.z = this.centerPos.z;
-
-	if (this.subOctrees_array.length === 0) 
-	{
-	//cesium_boundingSphere_scratch.radius = this.getRadiusAprox()*0.7;
-		cesium_boundingSphere_scratch.radius = this.getRadiusAprox();
-	}
-	else 
-	{
-		cesium_boundingSphere_scratch.radius = this.getRadiusAprox();
-	}
-
-	var frustumCull = cesium_cullingVolume.computeVisibility(cesium_boundingSphere_scratch);
-	if (frustumCull === Cesium.Intersect.INSIDE ) 
-	{
-		//result_octreesArray.push(this);
-		this.getAllSubOctrees(result_octreesArray);
-	}
-	else if (frustumCull === Cesium.Intersect.INTERSECTING ) 
-	{
-		if (this.subOctrees_array.length === 0 && this.neoRefsList_Array.length > 0) 
-		{
-			result_octreesArray.push(this);
-		}
-		else 
-		{
-			for (var i=0, subOctreesArrayLength = this.subOctrees_array.length; i<subOctreesArrayLength; i++ ) 
-			{
-				this.subOctrees_array[i].getFrustumVisibleOctrees(cesium_cullingVolume, result_octreesArray, cesium_boundingSphere_scratch);
-			}
-		}
-	}
-	// else if(frustumCull === Cesium.Intersect.OUTSIDE) => do nothing.***
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param eye_x 변수
- * @param eye_y 변수
- * @param eye_z 변수
- */
-Octree.prototype.setSquareDistToEye = function(eye_x, eye_y, eye_z) 
-{
-	this.squareDistToEye = (this.centerPos.x - eye_x)*(this.centerPos.x - eye_x) +
-							(this.centerPos.y - eye_y)*(this.centerPos.y - eye_y) +
-							(this.centerPos.z - eye_z)*(this.centerPos.z - eye_z) ;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param octreesArray 변수
- * @param octree 변수
- * @returns result_idx
- */
-Octree.prototype.getIndexToInsertBySquaredDistToEye = function(octreesArray, octree) 
-{
-	// lineal implementation. In the future use dicotomic search technique.***
-	var finished = false;
-	var octrees_count = octreesArray.length;
-	var i=0;
-	var result_idx = 0;
-
-	while (!finished && i<octrees_count) 
-	{
-		if (octreesArray[i].squareDistToEye > octree.squareDistToEye) 
-		{
-			result_idx = i;
-			finished = true;
-		}
-		i++;
-	}
-	if (!finished) 
-	{
-		result_idx = octrees_count;
-	}
-
-	return result_idx;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param result_octreesArray 변수
- * @param octree 변수
- * @param eye_x 변수
- * @param eye_y 변수
- * @param eye_z 변수
- */
-Octree.prototype.putOctreeInEyeDistanceSortedArray = function(result_octreesArray, octree, eye_x, eye_y, eye_z) 
-{
-	// sorting is from minDist to maxDist.***
-	// http://stackoverflow.com/questions/586182/how-to-insert-an-item-into-an-array-at-a-specific-index
-
-	var insert_idx= this.getIndexToInsertBySquaredDistToEye(result_octreesArray, octree);
-
-	result_octreesArray.splice(insert_idx, 0, octree);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param result_octreesArray 변수
- */
-Octree.prototype.getAllSubOctreesIfHasRefLists = function(result_octreesArray) 
-{
-	if (this.subOctrees_array === undefined) { return; }
-
-	if (result_octreesArray === undefined) { result_octreesArray = []; }
-
-	if (this.subOctrees_array.length > 0) 
-	{
-		for (var i=0, subOctreesArrayLength = this.subOctrees_array.length; i<subOctreesArrayLength; i++) 
-		{
-			this.subOctrees_array[i].getAllSubOctreesIfHasRefLists(result_octreesArray);
-		}
-	}
-	else 
-	{
-		//if(this.neoRefsList_Array.length > 0)
-		if (this.triPolyhedronsCount > 0) { result_octreesArray.push(this); } // there are only 1.***
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param result_octreesArray 변수
- */
-Octree.prototype.getAllSubOctrees = function(result_octreesArray) 
-{
-	if (result_octreesArray === undefined) { result_octreesArray = []; }
-
-	if (this.subOctrees_array.length > 0) 
-	{
-		for (var i=0, subOctreesArrayLength = this.subOctrees_array.length; i<subOctreesArrayLength; i++) 
-		{
-			this.subOctrees_array[i].getAllSubOctrees(result_octreesArray);
-		}
-	}
-	else 
-	{
-		result_octreesArray.push(this); // there are only 1.***
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param result_octreesArray 변수
- */
-Octree.prototype.extractLowestOctreesIfHasTriPolyhedrons = function(lowestOctreesArray) 
-{
-	var subOctreesCount = this.subOctrees_array.length;
-
-	if (subOctreesCount === 0 && this.triPolyhedronsCount > 0) 
-	{
-		lowestOctreesArray.push(this);
-	}
-	else 
-	{
-		for (var i=0; i<subOctreesCount; i++) 
-		{
-			this.subOctrees_array[i].extractLowestOctreesIfHasTriPolyhedrons(lowestOctreesArray);
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param result_octreesArray 변수
- */
-Octree.prototype.multiplyKeyTransformMatrix = function(idxKey, matrix) 
-{
-	var subOctreesCount = this.subOctrees_array.length;
-
-	if (subOctreesCount === 0 && this.triPolyhedronsCount > 0) 
-	{
-		if (this.neoReferencesMotherAndIndices)
-		{ this.neoReferencesMotherAndIndices.multiplyKeyTransformMatrix(idxKey, matrix); }
-	}
-	else 
-	{
-		for (var i=0; i<subOctreesCount; i++) 
-		{
-			this.subOctrees_array[i].multiplyKeyTransformMatrix(idxKey, matrix);
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param result_octreesArray 변수
- */
-Octree.prototype.parseAsimetricVersion = function(arrayBuffer, readerWriter, bytesReaded, neoBuildingOwner) 
-{
-	var octreeLevel = readerWriter.readInt32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-
-	if (octreeLevel === 0) 
-	{
-		// this is the mother octree, so read the mother octree's size.***
-		var minX = readerWriter.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-		var maxX = readerWriter.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-		var minY = readerWriter.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-		var maxY = readerWriter.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-		var minZ = readerWriter.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-		var maxZ = readerWriter.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-
-		this.setBoxSize(minX, maxX, minY, maxY, minZ, maxZ );
-		this.octree_number_name = 0;
-	}
-
-	var subOctreesCount = readerWriter.readUInt8(arrayBuffer, bytesReaded, bytesReaded+1); bytesReaded += 1; // this must be 0 or 8.***
-	this.triPolyhedronsCount = readerWriter.readInt32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-	if (this.triPolyhedronsCount > 0)
-	{ this.neoBuildingOwner = neoBuildingOwner; }
-
-	// 1rst, create the 8 subOctrees.***
-	for (var i=0; i<subOctreesCount; i++) 
-	{
-		var subOctree = this.new_subOctree();
-		subOctree.octree_number_name = this.octree_number_name * 10 + (i+1);
-	}
-
-	// now, set size of subOctrees.***
-	this.setSizesSubBoxes();
-
-	for (var i=0; i<subOctreesCount; i++) 
-	{
-		var subOctree = this.subOctrees_array[i];
-		bytesReaded = subOctree.parseAsimetricVersion(arrayBuffer, readerWriter, bytesReaded, neoBuildingOwner);
-	}
-
-	return bytesReaded;
-};
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class ReaderWriter
- */
-var ReaderWriter = function() 
-{
-	if (!(this instanceof ReaderWriter)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	//this.geometryDataPath = "/F4D_GeometryData";
-	this.geometryDataPath = MagoConfig.getPolicy().geo_data_path;
-	this.viArraysContainer = new VertexIdxVBOArraysContainer();
-	this.byteColorsVBOArraysContainer = new ByteColorsVBOArraysContainer();
-	//var simpleBuildingImage = new Image();
-
-	this.j_counter;
-	this.k_counter;
-
-	this.gl;
-	this.incre_latAng = 0.001;
-	this.incre_longAng = 0.001;
-	this.GAIA3D__offset_latitude = -0.001;
-	this.GAIA3D__offset_longitude = -0.001;
-	this.GAIA3D__counter = 0;
-
-	// Var for reading files.
-	this.uint32;
-	this.uint16;
-	this.int16;
-	this.float32;
-	this.float16;
-	this.int8;
-	this.int8_value;
-	this.max_color_value = 126;
-
-	this.startBuff;
-	this.endBuff;
-
-	this.filesReadings_count = 0;
-
-	// SCRATCH.*** 
-	this.temp_var_to_waste;
-	this.countSC;
-	this.xSC;
-	this.ySC;
-	this.zSC;
-	this.point3dSC = new Point3D();
-	this.bboxSC = new BoundingBox();
-};
-
-/**
- * 버퍼에서 데이터를 읽어서 32비트 부호없는 정수값에 대한 배열의 0번째 값을 돌려줌
- * @param buffer 복사할 버퍼
- * @param start 시작 바이트 인덱스
- * @param end 끝 바이트 인덱스
- * @returns uint32[0]
- */
-ReaderWriter.prototype.readUInt32 = function(buffer, start, end) 
-{
-	var uint32 = new Uint32Array(buffer.slice(start, end));
-	return uint32[0];
-};
-
-/**
- * 버퍼에서 데이터를 읽어서 32비트 정수값에 대한 배열의 0번째 값을 돌려줌
- * @param buffer 복사할 버퍼
- * @param start 시작 바이트 인덱스
- * @param end 끝 바이트 인덱스
- * @returns int32[0]
- */
-ReaderWriter.prototype.readInt32 = function(buffer, start, end) 
-{
-	var int32 = new Int32Array(buffer.slice(start, end));
-	return int32[0];
-};
-
-/**
- * 버퍼에서 데이터를 읽어서 16비트 부호없는 정수값에 대한 배열의 0번째 값을 돌려줌
- * @param buffer 복사할 버퍼
- * @param start 시작 바이트 인덱스
- * @param end 끝 바이트 인덱스
- * @returns uint16[0]
- */
-ReaderWriter.prototype.readUInt16 = function(buffer, start, end) 
-{
-	var uint16 = new Uint16Array(buffer.slice(start, end));
-	return uint16[0];
-};
-
-/**
- * 버퍼에서 데이터를 읽어서 32비트 정수값에 대한 배열의 0번째 값을 돌려줌
- * @param buffer 복사할 버퍼
- * @param start 시작 바이트 인덱스
- * @param end 끝 바이트 인덱스
- * @returns int16[0]
- */
-ReaderWriter.prototype.readInt16 = function(buffer, start, end) 
-{
-	var int16 = new Int16Array(buffer.slice(start, end));
-	return int16[0];
-};
-
-/**
- * 버퍼에서 데이터를 읽어서 64비트 float값에 대한 배열의 0번째 값을 돌려줌
- * @param buffer 복사할 버퍼
- * @param start 시작 바이트 인덱스
- * @param end 끝 바이트 인덱스
- * @returns float64[0]
- */
-ReaderWriter.prototype.readFloat64 = function(buffer, start, end) 
-{
-	var float64 = new Float64Array(buffer.slice(start, end));
-	return float64[0];
-};
-
-/**
- * 버퍼에서 데이터를 읽어서 32비트 float값에 대한 배열의 0번째 값을 돌려줌
- * @param buffer 복사할 버퍼
- * @param start 시작 바이트 인덱스
- * @param end 끝 바이트 인덱스
- * @returns float32[0]
- */
-ReaderWriter.prototype.readFloat32 = function(buffer, start, end) 
-{
-	var float32 = new Float32Array(buffer.slice(start, end));
-	return float32[0];
-};
-
-/**
- * 버퍼에서 데이터를 읽어서 32비트 부호없는 정수값에 대한 배열의 0번째 값을 돌려줌
- * @param buffer 복사할 버퍼
- * @param start 시작 바이트 인덱스
- * @param end 끝 바이트 인덱스
- * @returns float16[0]
- */
-ReaderWriter.prototype.readFloat16 = function(buffer, start, end) 
-{
-	var float16 = new Float32Array(buffer.slice(start, end));
-	return float16[0];
-};
-
-/**
- * 버퍼에서 데이터를 읽어서 8비트 정수값에 대한 배열의 0번째 값을 돌려줌
- * @param buffer 복사할 버퍼
- * @param start 시작 바이트 인덱스
- * @param end 끝 바이트 인덱스
- * @returns int8[0]
- */
-ReaderWriter.prototype.readInt8 = function(buffer, start, end) 
-{
-	var int8 = new Int8Array(buffer.slice(start, end));
-	return int8[0];
-};
-
-/**
- * 버퍼에서 데이터를 읽어서 8비트 부호없는 정수값에 대한 배열의 0번째 값을 돌려줌
- * @param buffer 복사할 버퍼
- * @param start 시작 바이트 인덱스
- * @param end 끝 바이트 인덱스
- * @returns uint8[0]
- */
-ReaderWriter.prototype.readUInt8 = function(buffer, start, end) 
-{
-	var uint8 = new Uint8Array(buffer.slice(start, end));
-	return uint8[0];
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param buffer 변수
- * @param start 변수
- * @param end 변수
- * @returns int8_value
- */
-ReaderWriter.prototype.readInt8ByteColor = function(buffer, start, end) 
-{
-	var int8 = new Int8Array(buffer.slice(start, end));
-	var int8_value = int8[0];
-
-	if (int8_value > max_color_value) { int8_value = max_color_value; }
-
-	if (int8_value < 0) { int8_value += 256; }
-
-	return int8_value;
-};
-
-function loadWithXhr(fileName) 
-{
-	// 1) 사용될 jQuery Deferred 객체를 생성한다.
-	var deferred = $.Deferred();
-	
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", fileName, true);
-	xhr.responseType = "arraybuffer";;
-	  
-	// 이벤트 핸들러를 등록한다.
-	xhr.onload = function() 
-	{
-		if (xhr.status < 200 || xhr.status >= 300) 
-		{
-			deferred.reject(xhr.status);
-			return;
-		}
-		else 
-		{
-			// 3.1) DEFERRED를 해결한다. (모든 done()...을 동작시킬 것이다.)
-			deferred.resolve(xhr.response);
-		} 
-	};
-	
-	xhr.onerror = function(e) 
-	{
-		console.log("Invalid XMLHttpRequest response type.");
-		deferred.reject(xhr.status);
-	};
-
-	// 작업을 수행한다.
-	xhr.send(null);
-	
-	// 참고: jQuery.ajax를 사용할 수 있었고 해야할 수 있었다.
-	// 참고: jQuery.ajax는 Promise를 반환하지만 다른 Deferred/Promise를 사용하여 애플리케이션에 의미있는 구문으로 감싸는 것은 언제나 좋은 생각이다.
-	// ---- /AJAX 호출 ---- //
-	  
-	// 2) 이 deferred의 promise를 반환한다.
-	return deferred.promise();
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param float32Array 변수
- * @param resultBbox 변수
- * @returns resultBbox
- */
-ReaderWriter.prototype.getBoundingBoxFromFloat32Array = function(float32Array, resultBbox) 
-{
-	if (resultBbox === undefined) { resultBbox = new BoundingBox(); }
-
-	var values_count = float32Array.length;
-	for (var i=0; i<values_count; i+=3) 
-	{
-		this.point3dSC.x = float32Array[i];
-		this.point3dSC.y = float32Array[i+1];
-		this.point3dSC.z = float32Array[i+2];
-
-		if (i===0) 
-		{
-			resultBbox.init(this.point3dSC);
-		}
-		else 
-		{
-			resultBbox.addPoint(this.point3dSC);
-		}
-	}
-
-	return resultBbox;
-};
-
-ReaderWriter.prototype.getNeoBlocksArraybuffer = function(fileName, blocksList, magoManager) 
-{
-	magoManager.fileRequestControler.filesRequestedCount += 1;
-	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
-	
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			blocksList.dataArraybuffer = arrayBuffer;
-			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
-			arrayBuffer = null;
-		}
-		else 
-		{
-			blocksList.fileLoadState = 500;
-		}
-	}).fail(function(status) 
-	{
-		console.log("Invalid XMLHttpRequest status = " + status);
-		if (status === 0) { blocksList.fileLoadState = 500; }
-		else { blocksList.fileLoadState = status; }
-	}).always(function() 
-	{
-		magoManager.fileRequestControler.filesRequestedCount -= 1;
-		if (magoManager.fileRequestControler.filesRequestedCount < 0) { magoManager.fileRequestControler.filesRequestedCount = 0; }
-	});
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param fileName 변수
- * @param blocksList 변수
- * @param neoBuilding 변수
- * @param readerWriter 변수
- */
-ReaderWriter.prototype.getNeoBlocks = function(gl, fileName, blocksList, readerWriter, magoManager) 
-{
-//	magoManager.fileRequestControler.neoBuildingBlocksListsRequestedCount += 1;
-	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
-
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			readerWriter.readNeoBlocks(gl, arrayBuffer, blocksList);
-			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
-			arrayBuffer = null;
-		}
-		else 
-		{
-			blocksList.fileLoadState = 500;
-		}
-	}).fail(function(status) 
-	{
-		console.log("xhr status = " + status);
-		if (status === 0) { blocksList.fileLoadState = 500; }
-		else { blocksList.fileLoadState = status; }
-	}).always(function() 
-	{
-		//		magoManager.fileRequestControler.neoBuildingBlocksListsRequestedCount -= 1;
-		//		if(magoManager.fileRequestControler.neoBuildingBlocksListsRequestedCount < 0) magoManager.fileRequestControler.neoBuildingBlocksListsRequestedCount = 0;
-	});
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param fileName 파일명
- * @param magoManager 변수
- */
-ReaderWriter.prototype.getNeoReferencesArraybuffer = function(fileName, neoRefsList, magoManager) 
-{
-	magoManager.fileRequestControler.filesRequestedCount += 1;
-	neoRefsList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
-	
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			neoRefsList.dataArraybuffer = arrayBuffer;
-			neoRefsList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
-			arrayBuffer = null;
-		}
-		else 
-		{
-			neoRefsList.fileLoadState = 500;
-		}
-	}).fail(function(status) 
-	{
-		console.log("xhr status = " + status);
-		if (status === 0) { neoRefsList.fileLoadState = 500; }
-		else { neoRefsList.fileLoadState = status; }
-	}).always(function() 
-	{
-		magoManager.fileRequestControler.filesRequestedCount -= 1;
-		if (magoManager.fileRequestControler.filesRequestedCount < 0) { magoManager.fileRequestControler.filesRequestedCount = 0; }
-	});
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param fileName 파일명
- * @param magoManager 변수
- */
-ReaderWriter.prototype.getOctreeLegoArraybuffer = function(fileName, lowestOctree, magoManager) 
-{
-	magoManager.fileRequestControler.filesRequestedCount += 1;
-	lowestOctree.lego.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
-	
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			if (lowestOctree.lego)
-			{
-				lowestOctree.lego.dataArrayBuffer = arrayBuffer;
-				lowestOctree.lego.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
-			}
-			else 
-			{
-				lowestOctree = undefined;
-			}
-			arrayBuffer = null;
-		}
-		else 
-		{
-			lowestOctree.lego.fileLoadState = 500;
-		}
-	}).fail(function(status) 
-	{
-		console.log("xhr status = " + status);
-		if (status === 0) { lowestOctree.lego.fileLoadState = 500; }
-		else { lowestOctree.lego.fileLoadState = status; }
-	}).always(function() 
-	{
-		magoManager.fileRequestControler.filesRequestedCount -= 1;
-		if (magoManager.fileRequestControler.filesRequestedCount < 0) { magoManager.fileRequestControler.filesRequestedCount = 0; }
-	});
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param fileName 변수
- * @param lodBuilding 변수
- * @param magoManager 변수
- */
-ReaderWriter.prototype.getLodBuildingArraybuffer = function(fileName, lodBuilding, magoManager) 
-{
-	magoManager.fileRequestControler.filesRequestedCount += 1;
-	lodBuilding.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
-	
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			lodBuilding.dataArraybuffer = arrayBuffer;
-			lodBuilding.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
-			arrayBuffer = null;
-		}
-		else 
-		{
-			lodBuilding.fileLoadState = 500;
-		}
-	}).fail(function(status) 
-	{
-		console.log("xhr status = " + status);
-		if (status === 0) { lodBuilding.fileLoadState = 500; }
-		else { lodBuilding.fileLoadState = status; }
-	}).always(function() 
-	{
-		magoManager.fileRequestControler.filesRequestedCount -= 1;
-		if (magoManager.fileRequestControler.filesRequestedCount < 0) { magoManager.fileRequestControler.filesRequestedCount = 0; }
-	});
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param arrayBuffer 변수
- * @param filePath_inServer 변수
- * @param terranTile 변수
- * @param readerWriter 변수
- * @param bytes_readed 변수
- * @returns bytes_readed
- */
-ReaderWriter.prototype.readTerranTileFile = function(gl, arrayBuffer, filePath_inServer, terranTile, readerWriter, bytes_readed) 
-{
-	//var bytes_readed = 0;
-//	var f4d_headerPathName_length = 0;
-//	var BP_Project;
-//	var idxFile;
-//	var subTile;
-
-	terranTile._depth = this.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-	if (terranTile._depth === 0) 
-	{
-		// Read dimensions.***
-		terranTile.longitudeMin = this.readFloat64(arrayBuffer, bytes_readed, bytes_readed+8); bytes_readed += 8;
-		terranTile.longitudeMax = this.readFloat64(arrayBuffer, bytes_readed, bytes_readed+8); bytes_readed += 8;
-		terranTile.latitudeMin = this.readFloat64(arrayBuffer, bytes_readed, bytes_readed+8); bytes_readed += 8;
-		terranTile.latitudeMax = this.readFloat64(arrayBuffer, bytes_readed, bytes_readed+8); bytes_readed += 8;
-	}
-
-	// Read the max_depth of the quadtree.***
-	var max_dpeth = this.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-
-	// Now, make the quadtree.***
-	terranTile.makeTree(max_dpeth);
-
-	return bytes_readed;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param fileName 변수
- * @param terranTile 변수
- * @param readerWriter 변수
- */
-ReaderWriter.prototype.getTerranTileFile = function(gl, fileName, terranTile, readerWriter) 
-{
-	// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
-//	magoManager.fileRequestControler.filesRequestedCount += 1;
-//	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
-
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			var bytes_readed = 0;
-			readerWriter.readTerranTileFile(gl, arrayBuffer, fileName, terranTile, readerWriter, bytes_readed);
-
-			// Once readed the terranTilesFile, must make all the quadtree.***
-			terranTile.setDimensionsSubTiles();
-			terranTile.calculatePositionByLonLatSubTiles();
-			terranTile.terranIndexFile_readed = true;
-
-			//			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
-			arrayBuffer = null;
-		}
-		else 
-		{
-			//			blocksList.fileLoadState = 500;
-		}
-	}).fail(function(status) 
-	{
-		console.log("xhr status = " + xhr.status);
-		//		if(status === 0) blocksList.fileLoadState = 500;
-		//		else blocksList.fileLoadState = status;
-	}).always(function() 
-	{
-		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
-		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
-	});
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param filePath_inServer 변수
- * @param BR_ProjectsList 변수
- * @param readerWriter 변수
- */
-ReaderWriter.prototype.getPCloudIndexFile = function(gl, fileName, BR_ProjectsList, readerWriter) 
-{
-//	magoManager.fileRequestControler.filesRequestedCount += 1;
-//	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
-
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			// write code here.***
-			var pCloudProject;
-
-			var bytes_readed = 0;
-
-			var f4d_rawPathName_length = 0;
-			//			var f4d_simpleBuildingPathName_length = 0;
-			//			var f4d_nailImagePathName_length = 0;
-
-			var pCloudProjects_count = readerWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-
-			for (var i=0; i<pCloudProjects_count; i++) 
-			{
-				pCloudProject = new PCloudMesh();
-				BR_ProjectsList._pCloudMesh_array.push(pCloudProject);
-				pCloudProject._header._f4d_version = 2;
-				// 1rst, read the files path names.************************************************************************************************************
-				f4d_rawPathName_length = readerWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-				for (var j=0; j<f4d_rawPathName_length; j++) 
-				{
-					pCloudProject._f4d_rawPathName += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
-				}
-
-				pCloudProject._f4d_headerPathName = pCloudProject._f4d_rawPathName + "/pCloud_Header.hed";
-				pCloudProject._f4d_geometryPathName = pCloudProject._f4d_rawPathName + "/pCloud_Geo.f4d";
-
-				//BP_Project._f4d_headerPathName = BP_Project._f4d_rawPathName + "_Header.hed";
-				//BP_Project._f4d_simpleBuildingPathName = BP_Project._f4d_rawPathName + "_Geom.f4d";
-				//BP_Project._f4d_nailImagePathName = BP_Project._f4d_rawPathName + "_Gaia.jpg";
-			}
-			//			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
-			arrayBuffer = null;
-		}
-		else 
-		{
-			//			blocksList.fileLoadState = 500;
-		}
-	}).fail(function(status) 
-	{
-		console.log("xhr status = " + status);
-		//		if(status === 0) blocksList.fileLoadState = 500;
-		//		else blocksList.fileLoadState = status;
-	}).always(function() 
-	{
-		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
-		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
-	});
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param fileName 변수
- * @param pCloud 변수
- * @param readerWriter 변수
- * @param magoManager 변수
- */
-ReaderWriter.prototype.getPCloudHeader = function(gl, fileName, pCloud, readerWriter, magoManager) 
-{
-	pCloud._f4d_header_readed = true;
-	//	magoManager.fileRequestControler.filesRequestedCount += 1;
-	//	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
-
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			// write code here.***
-
-			var bytes_readed = 0;
-			var version_string_length = 5;
-			var intAux_scratch = 0;
-			var auxScratch;
-			var header = pCloud._header;
-
-			// 1) Version(5 chars).***********
-			for (var j=0; j<version_string_length; j++)
-			{
-				header._version += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
-			}
-
-			// 2) Type (1 byte).**************
-			header._type = String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
-
-			// 3) Global unique ID.*********************
-			intAux_scratch = readerWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			for (var j=0; j<intAux_scratch; j++)
-			{
-				header._global_unique_id += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
-			}
-
-			// 4) Location.*************************
-			header._latitude = (new Float64Array(arrayBuffer.slice(bytes_readed, bytes_readed+8)))[0]; bytes_readed += 8;
-			header._longitude = (new Float64Array(arrayBuffer.slice(bytes_readed, bytes_readed+8)))[0]; bytes_readed += 8;
-			header._elevation = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-
-			header._elevation += 60.0; // delete this. TEST.!!!
-
-			// 5) Orientation.*********************
-			auxScratch = new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)); bytes_readed += 4; // yaw.***
-			auxScratch = new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)); bytes_readed += 4; // pitch.***
-			auxScratch = new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)); bytes_readed += 4; // roll.***
-
-			// 6) BoundingBox.************************
-			header._boundingBox.minX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-			header._boundingBox.minY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-			header._boundingBox.minZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-			header._boundingBox.maxX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-			header._boundingBox.maxY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-			header._boundingBox.maxZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-
-			var isLarge = false;
-			if (header._boundingBox.maxX - header._boundingBox.minX > 40.0 || header._boundingBox.maxY - header._boundingBox.minY > 40.0) 
-			{
-				isLarge = true;
-			}
-
-			if (!isLarge && header._boundingBox.maxZ - header._boundingBox.minZ < 30.0) 
-			{
-				header.isSmall = true;
-			}
-
-			// 7) octZerothBox.***********************
-			header._octZerothBox.minX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-			header._octZerothBox.minY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-			header._octZerothBox.minZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-			header._octZerothBox.maxX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-			header._octZerothBox.maxY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-			header._octZerothBox.maxZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
-
-			// 8) Data file name.********************
-			intAux_scratch = readerWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-			for (var j=0; j<intAux_scratch; j++) 
-			{
-				header._dataFileName += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
-			}
-
-			// Now, must calculate some params of the project.**********************************************
-			// 0) PositionMatrix.************************************************************************
-			//var height = elevation;
-
-			var position = Cesium.Cartesian3.fromDegrees(header._longitude, header._latitude, header._elevation); // Old.***
-			pCloud._pCloudPosition = position;
-
-			// High and Low values of the position.****************************************************
-			var splitValue = Cesium.EncodedCartesian3.encode(position);
-			var splitVelue_X  = Cesium.EncodedCartesian3.encode(position.x);
-			var splitVelue_Y  = Cesium.EncodedCartesian3.encode(position.y);
-			var splitVelue_Z  = Cesium.EncodedCartesian3.encode(position.z);
-
-			pCloud._pCloudPositionHIGH = new Float32Array(3);
-			pCloud._pCloudPositionHIGH[0] = splitVelue_X.high;
-			pCloud._pCloudPositionHIGH[1] = splitVelue_Y.high;
-			pCloud._pCloudPositionHIGH[2] = splitVelue_Z.high;
-
-			pCloud._pCloudPositionLOW = new Float32Array(3);
-			pCloud._pCloudPositionLOW[0] = splitVelue_X.low;
-			pCloud._pCloudPositionLOW[1] = splitVelue_Y.low;
-			pCloud._pCloudPositionLOW[2] = splitVelue_Z.low;
-
-			if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
-
-			pCloud._f4d_header_readed_finished = true;
-			//			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
-			arrayBuffer = null;
-		}
-		else 
-		{
-			//			blocksList.fileLoadState = 500;
-		}
-	}).fail(function(status) 
-	{
-		console.log("xhr status = " + status);
-		//		if(status === 0) blocksList.fileLoadState = 500;
-		//		else blocksList.fileLoadState = status;
-	}).always(function() 
-	{
-		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
-		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
-	});
-};
-
-/**
- * object index 파일을 읽어서 빌딩 개수, 포지션, 크기 정보를 배열에 저장
- * @param gl gl context
- * @param fileName 파일명
- * @param readerWriter 파일 처리를 담당
- * @param neoBuildingsList object index 파일을 파싱한 정보를 저장할 배열
- */
-ReaderWriter.prototype.getObjectIndexFileForSmartTile = function(fileName, magoManager, buildingSeedList) 
-{
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			buildingSeedList.dataArrayBuffer = arrayBuffer;
-			buildingSeedList.parseBuildingSeedArrayBuffer();
-			
-			magoManager.makeSmartTile(buildingSeedList);
-			arrayBuffer = null;
-			//magoManager.createDeploymentGeoLocationsForHeavyIndustries();
-		}
-		else 
-		{
-			//			blocksList.fileLoadState = 500;
-		}
-	}).fail(function(status) 
-	{
-		console.log("xhr status = " + status);
-		//		if(status === 0) blocksList.fileLoadState = 500;
-		//		else blocksList.fileLoadState = status;
-	}).always(function() 
-	{
-		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
-		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
-	});
-};
-
-/**
- * object index 파일을 읽어서 빌딩 개수, 포지션, 크기 정보를 배열에 저장
- * @param gl gl context
- * @param fileName 파일명
- * @param readerWriter 파일 처리를 담당
- * @param neoBuildingsList object index 파일을 파싱한 정보를 저장할 배열
- */
-ReaderWriter.prototype.getObjectIndexFile = function(fileName, readerWriter, neoBuildingsList, magoManager) 
-{
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			readerWriter.parseObjectIndexFile(arrayBuffer, neoBuildingsList);
-			arrayBuffer = null;
-			magoManager.createDeploymentGeoLocationsForHeavyIndustries();
-		}
-		else 
-		{
-			//			blocksList.fileLoadState = 500;
-		}
-	}).fail(function(status) 
-	{
-		console.log("xhr status = " + status);
-		//		if(status === 0) blocksList.fileLoadState = 500;
-		//		else blocksList.fileLoadState = status;
-	}).always(function() 
-	{
-		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
-		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
-	});
-};
-
-/**
- * object index 파일을 읽어서 빌딩 개수, 포지션, 크기 정보를 배열에 저장
- * @param arrayBuffer object index file binary data
- * @param neoBuildingsList object index 파일을 파싱한 정보를 저장할 배열
- */
-ReaderWriter.prototype.parseObjectIndexFile = function(arrayBuffer, neoBuildingsList) 
-{
-	var bytesReaded = 0;
-	var buildingNameLength;
-	var longitude;
-	var latitude;
-	var altitude;
-
-	var buildingsCount = this.readInt32(arrayBuffer, bytesReaded, bytesReaded+4);
-	bytesReaded += 4;
-	for (var i =0; i<buildingsCount; i++) 
-	{
-		// read the building location data.***
-		var neoBuilding = neoBuildingsList.newNeoBuilding();
-		if (neoBuilding.metaData === undefined) 
-		{
-			neoBuilding.metaData = new MetaData();
-		}
-
-		if (neoBuilding.metaData.geographicCoord === undefined)
-		{ neoBuilding.metaData.geographicCoord = new GeographicCoord(); }
-
-		if (neoBuilding.metaData.bbox === undefined) 
-		{
-			neoBuilding.metaData.bbox = new BoundingBox();
-		}
-
-		buildingNameLength = this.readInt32(arrayBuffer, bytesReaded, bytesReaded+4);
-		bytesReaded += 4;
-		var buildingName = String.fromCharCode.apply(null, new Int8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ buildingNameLength)));
-		bytesReaded += buildingNameLength;
-
-		longitude = this.readFloat64(arrayBuffer, bytesReaded, bytesReaded+8); bytesReaded += 8;
-		latitude = this.readFloat64(arrayBuffer, bytesReaded, bytesReaded+8); bytesReaded += 8;
-		altitude = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-
-		neoBuilding.bbox = new BoundingBox();
-		neoBuilding.bbox.minX = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-		neoBuilding.bbox.minY = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-		neoBuilding.bbox.minZ = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-		neoBuilding.bbox.maxX = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-		neoBuilding.bbox.maxY = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-		neoBuilding.bbox.maxZ = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-
-		// create a building and set the location.***
-		neoBuilding.buildingId = buildingName.substr(4, buildingNameLength-4);
-		neoBuilding.buildingType = "basicBuilding";
-		neoBuilding.buildingFileName = buildingName;
-		neoBuilding.metaData.geographicCoord.setLonLatAlt(longitude, latitude, altitude);
-	}
-
-	neoBuildingsList.neoBuildingsArray.reverse();
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param fileName 변수
- * @param neoBuilding 변수
- * @param readerWriter 변수
- * @param magoManager 변수
- */
-ReaderWriter.prototype.getNeoHeader = function(gl, fileName, neoBuilding, readerWriter, magoManager) 
-{
-	//BR_Project._f4d_header_readed = true;
-	magoManager.fileRequestControler.filesRequestedCount += 1;
-	neoBuilding.metaData.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
-
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			if (neoBuilding.metaData === undefined) 
-			{
-				neoBuilding.metaData = new MetaData();
-			}
-			neoBuilding.metaData.parseFileHeader(arrayBuffer, readerWriter);
-
-			// Now, make the neoBuilding's octree.***
-			if (neoBuilding.octree === undefined) { neoBuilding.octree = new Octree(undefined); }
-
-			neoBuilding.octree.setBoxSize(neoBuilding.metaData.oct_min_x, neoBuilding.metaData.oct_max_x,
-				neoBuilding.metaData.oct_min_y, neoBuilding.metaData.oct_max_y,
-				neoBuilding.metaData.oct_min_z, neoBuilding.metaData.oct_max_z);
-
-			neoBuilding.octree.makeTree(3);
-			neoBuilding.octree.setSizesSubBoxes();
-
-			neoBuilding.metaData.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
-			//if(magoManager.backGround_fileReadings_count > 0 )
-			//    magoManager.backGround_fileReadings_count -= 1; // old.***
-			//BR_Project._f4d_header_readed_finished = true;
-			arrayBuffer = null;
-		}
-		else 
-		{
-			neoBuilding.metaData.fileLoadState = 500;
-		}
-	}).fail(function(status) 
-	{
-		console.log("xhr status = " + status);
-		if (status === 0) { neoBuilding.metaData.fileLoadState = 500; }
-		else { neoBuilding.metaData.fileLoadState = status; }
-	}).always(function() 
-	{
-		magoManager.fileRequestControler.filesRequestedCount -= 1;
-		if (magoManager.fileRequestControler.filesRequestedCount < 0) { magoManager.fileRequestControler.filesRequestedCount = 0; }
-	});
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param fileName 변수
- * @param neoBuilding 변수
- * @param readerWriter 변수
- * @param magoManager 변수
- */
-ReaderWriter.prototype.getNeoHeaderAsimetricVersion = function(gl, fileName, neoBuilding, readerWriter, magoManager) 
-{
-	//BR_Project._f4d_header_readed = true;
-	magoManager.fileRequestControler.filesRequestedCount += 1;
-	neoBuilding.metaData.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
-
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			if (neoBuilding.metaData === undefined) 
-			{
-				neoBuilding.metaData = new MetaData();
-			}
-			var bytesReaded = neoBuilding.metaData.parseFileHeaderAsimetricVersion(arrayBuffer, readerWriter);
-
-			// Now, make the neoBuilding's octree.***
-			if (neoBuilding.octree === undefined) { neoBuilding.octree = new Octree(undefined); }
-
-			// now, parse octreeAsimetric.***
-			neoBuilding.octree.parseAsimetricVersion(arrayBuffer, readerWriter, bytesReaded, neoBuilding);
-
-			neoBuilding.metaData.oct_min_x = neoBuilding.octree.centerPos.x - neoBuilding.octree.half_dx;
-			neoBuilding.metaData.oct_max_x = neoBuilding.octree.centerPos.x + neoBuilding.octree.half_dx;
-			neoBuilding.metaData.oct_min_y = neoBuilding.octree.centerPos.y - neoBuilding.octree.half_dy;
-			neoBuilding.metaData.oct_max_y = neoBuilding.octree.centerPos.y + neoBuilding.octree.half_dy;
-			neoBuilding.metaData.oct_min_z = neoBuilding.octree.centerPos.z - neoBuilding.octree.half_dz;
-			neoBuilding.metaData.oct_max_z = neoBuilding.octree.centerPos.z + neoBuilding.octree.half_dz;
-
-			neoBuilding.metaData.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
-
-			// test for 1500 blocks.***
-			/*
-			if(neoBuilding.bbox === undefined)
-				neoBuilding.bbox = new BoundingBox();
-			neoBuilding.bbox.minX = neoBuilding.metaData.oct_min_x;
-			neoBuilding.bbox.minY = neoBuilding.metaData.oct_min_y;
-			neoBuilding.bbox.minZ = neoBuilding.metaData.oct_min_z;
-			neoBuilding.bbox.maxX = neoBuilding.metaData.oct_max_x;
-			neoBuilding.bbox.maxY = neoBuilding.metaData.oct_max_y;
-			neoBuilding.bbox.maxZ = neoBuilding.metaData.oct_max_z;
-			*/
-			// end // test for 1500 blocks.***
-
-			//BR_Project._f4d_header_readed_finished = true;
-			arrayBuffer = undefined;
-		}
-		else 
-		{
-			neoBuilding.metaData.fileLoadState = 500;
-			arrayBuffer = undefined;
-		}
-	}).fail(function(status) 
-	{
-		console.log("xhr status = " + status);
-		if (status === 0) { neoBuilding.metaData.fileLoadState = 500; }
-		else { neoBuilding.metaData.fileLoadState = status; }
-	}).always(function() 
-	{
-		magoManager.fileRequestControler.filesRequestedCount -= 1;
-		if (magoManager.fileRequestControler.filesRequestedCount < 0) { magoManager.fileRequestControler.filesRequestedCount = 0; }
-	});
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param imageArrayBuffer 변수
- * @param BR_Project 변수
- * @param readerWriter 변수
- * @param magoManager 변수
- * @param imageLod 변수
- */
-ReaderWriter.prototype.readNailImageOfArrayBuffer = function(gl, imageArrayBuffer, BR_Project, readerWriter, magoManager, imageLod) 
-{
-	var simpBuildingV1 = BR_Project._simpleBuilding_v1;
-	var blob = new Blob( [ imageArrayBuffer ], { type: "image/jpeg" } );
-	var urlCreator = window.URL || window.webkitURL;
-	var imagenUrl = urlCreator.createObjectURL(blob);
-	var simpleBuildingImage = new Image();
-
-	simpleBuildingImage.onload = function () 
-	{
-		//console.log("Image Onload");
-		if (simpBuildingV1._simpleBuildingTexture === undefined)
-		{ simpBuildingV1._simpleBuildingTexture = gl.createTexture(); }
-		handleTextureLoaded(gl, simpleBuildingImage, simpBuildingV1._simpleBuildingTexture);
-		BR_Project._f4d_nailImage_readed_finished = true;
-		imageArrayBuffer = null;
-		BR_Project._simpleBuilding_v1.textureArrayBuffer = null;
-
-		if (magoManager.backGround_imageReadings_count > 0) 
-		{
-			magoManager.backGround_imageReadings_count--;
-		}
-	};
-
-	simpleBuildingImage.onerror = function() 
-	{
-		// doesn't exist or error loading
-
-		//BR_Project._f4d_lod0Image_readed_finished = false;
-		//BR_Project._f4d_lod0Image_exists = false;
-		//if(magoManager.backGround_fileReadings_count > 0 )
-		//	  magoManager.backGround_fileReadings_count -=1;
-
-		return;
-	};
-
-	simpleBuildingImage.src = imagenUrl;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param filePath_inServer 변수
- * @param BR_Project 변수
- * @param readerWriter 변수
- * @param magoManager 변수
- * @param imageLod 변수
- */
-ReaderWriter.prototype.readNailImage = function(gl, filePath_inServer, BR_Project, readerWriter, magoManager, imageLod) 
-{
-	if (imageLod === undefined) { imageLod = 3; } // The lowest lod.***
-
-	if (imageLod === 3) { BR_Project._f4d_nailImage_readed = true; }
-	else if (imageLod === 0) { BR_Project._f4d_lod0Image_readed  = true; }
-
-	if (BR_Project._simpleBuilding_v1 === undefined) { BR_Project._simpleBuilding_v1 = new SimpleBuildingV1(); }
-
-	var simpBuildingV1 = BR_Project._simpleBuilding_v1;
-
-	var simpleBuildingImage = new Image();
-	simpleBuildingImage.onload = function() 
-	{
-	/*
-		if(magoManager.render_time > 20)// for the moment is a test.***
-		{
-			if(imageLod === 3)
-				BR_Project._f4d_nailImage_readed = false;
-			else if(imageLod === 0)
-				BR_Project._f4d_lod0Image_readed  = false;
-
-			if(magoManager.backGround_fileReadings_count > 0 )
-			  magoManager.backGround_fileReadings_count -=1;
-
-			return;
-		}
-		*/
-
-		if (imageLod === 3) 
-		{
-			handleTextureLoaded(gl, simpleBuildingImage, simpBuildingV1._simpleBuildingTexture);
-			BR_Project._f4d_nailImage_readed_finished = true;
-		}
-		else if (imageLod === 0) 
-		{
-			if (simpBuildingV1._texture_0 === undefined) { simpBuildingV1._texture_0 = gl.createTexture(); }
-
-			handleTextureLoaded(gl, simpleBuildingImage, simpBuildingV1._texture_0);
-			BR_Project._f4d_lod0Image_readed_finished = true;
-		}
-
-		if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
-	};
-
-	simpleBuildingImage.onerror = function() 
-	{
-		// doesn't exist or error loading
-		BR_Project._f4d_lod0Image_readed_finished = false;
-		BR_Project._f4d_lod0Image_exists = false;
-		if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
-		return;
-	};
-
-	var filePath_inServer_SimpleBuildingImage = filePath_inServer;
-	simpleBuildingImage.src = filePath_inServer_SimpleBuildingImage;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param filePath_inServer 변수
- * @param f4dTex 변수
- * @param magoManager 변수
- */
-ReaderWriter.prototype.readTexture = function(gl, filePath_inServer, f4dTex, magoManager) 
-{
-	f4dTex.loadStarted = true;
-	f4dTex.texImage = new Image();
-	f4dTex.texImage.onload = function() 
-	{
-		f4dTex.loadFinished = true;
-
-		if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
-	};
-
-	f4dTex.texImage.onerror = function() 
-	{
-		// doesn't exist or error loading
-		f4dTex.loadStarted = false;
-		if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
-		return;
-	};
-
-	f4dTex.texImage.src = filePath_inServer;
-};
-
-ReaderWriter.prototype.decodeTGA = function(arrayBuffer) 
-{
-	// code from toji.***
-	var content = new Uint8Array(arrayBuffer),
-		contentOffset = 18 + content[0],
-		imagetype = content[2], // 2 = rgb, only supported format for now
-		width = content[12] + (content[13] << 8),
-		height = content[14] + (content[15] << 8),
-		bpp = content[16], // should be 8,16,24,32
-		
-		bytesPerPixel = bpp / 8,
-		bytesPerRow = width * 4,
-		data, i, j, x, y;
-
-	if (!width || !height) 
-	{
-		console.error("Invalid dimensions");
-		return null;
-	}
-
-	if (imagetype !== 2) 
-	{
-		console.error("Unsupported TGA format:", imagetype);
-		return null;
-	}
-
-	data = new Uint8Array(width * height * 4);
-	i = contentOffset;
-
-	// Oy, with the flipping of the rows...
-	for (y = height-1; y >= 0; --y) 
-	{
-		for (x = 0; x < width; ++x, i += bytesPerPixel) 
-		{
-			j = (x * 4) + (y * bytesPerRow);
-			data[j] = content[i+2];
-			data[j+1] = content[i+1];
-			data[j+2] = content[i+0];
-			data[j+3] = (bpp === 32 ? content[i+3] : 255);
-		}
-	}
-
-	return {
-		width  : width,
-		height : height,
-		data   : data
-	};
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param filePath_inServer 변수
- * @param texture 변수
- * @param neoBuilding 변수
- * @param magoManager 변수
- */
-ReaderWriter.prototype.readNeoReferenceTexture = function(gl, filePath_inServer, texture, neoBuilding, magoManager) 
-{
-	// Must know the fileExtension.***
-	var extension = filePath_inServer.split('.').pop();
-	
-	if (extension === "tga" || extension === "TGA" || extension === "Tga")
-	{
-		//texture.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
-		loadWithXhr(filePath_inServer).done(function(response) 
-		{
-			var arrayBuffer = response;
-			if (arrayBuffer) 
-			{
-				// decode tga.***
-				// Test with tga decoder from https://github.com/schmittl/tgajs
-				var tga = new TGA();
-				tga.load(arrayBuffer);
-				// End decoding.---------------------------------------------------
-				
-				//var tga = magoManager.readerWriter.decodeTGA(arrayBuffer); // old code.
-				//if(tga) {
-				//    gl.bindTexture(gl.TEXTURE_2D, texture.texId);
-				//     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, tga.width, tga.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, tga.data);
-				//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-				//	gl.generateMipmap(gl.TEXTURE_2D);
-				//	texture.fileLoadState = CODE.fileLoadState.LOADING_FINISHED; // file load finished.***
-				//}
-				
-				// example values of tga.header
-				// alphaBits 0
-				// bytePerPixel 3
-				// colorMapDepth 0
-				// colorMapIndex 0
-				// colorMapLength 0
-				// colorMapType 0
-				// flags 32
-				// hasColorMap false
-				// hasEncoding false
-				// height 2048
-				// idLength 0
-				// imageType 2
-				// isGreyColor false
-				// offsetX 0
-				// offsetY 0
-				// origin 2
-				// pixelDepth 24
-				// width 2048
-				
-				if (tga) 
-				{
-					var rgbType;
-					if (tga.header.bytePerPixel === 3)
-					{
-						rgbType = gl.RGB;
-						
-						// test change rgb to bgr.***
-						/*
-						var imageDataLength = tga.imageData.length;
-						var pixelsCount = imageDataLength/3;
-						var r, g, b;
-						for(var i=0; i<pixelsCount; i++)
-						{
-							r = tga.imageData[i*3];
-							g = tga.imageData[i*3+1];
-							b = tga.imageData[i*3+2];
-							
-							tga.imageData[i*3] = b;
-							tga.imageData[i*3+1] = g;
-							tga.imageData[i*3+2] = r;
-						}
-						*/
-					}
-					else if (tga.header.bytePerPixel === 4)
-					{
-						rgbType = gl.RGBA;
-						
-						// test change rgb to bgr.***
-						
-						var imageDataLength = tga.imageData.length;
-						var pixelsCount = imageDataLength/4;
-						var r, g, b, a;
-						for (var i=0; i<pixelsCount; i++)
-						{
-							r = tga.imageData[i*4];
-							g = tga.imageData[i*4+1];
-							b = tga.imageData[i*4+2];
-							a = tga.imageData[i*4+3];
-							
-							tga.imageData[i*4] = b;
-							tga.imageData[i*4+1] = g;
-							tga.imageData[i*4+2] = r;
-							tga.imageData[i*4+3] = a;
-						}
-						
-					}
-					
-					
-					
-					gl.bindTexture(gl.TEXTURE_2D, texture.texId);
-					gl.texImage2D(gl.TEXTURE_2D, 0, rgbType, tga.header.width, tga.header.height, 0, rgbType, gl.UNSIGNED_BYTE, tga.imageData);
-					gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-					gl.generateMipmap(gl.TEXTURE_2D);
-					texture.fileLoadState = CODE.fileLoadState.LOADING_FINISHED; // file load finished.***
-				}
-			}
-		}).fail(function(status) 
-		{
-			if (neoBuilding)
-			{
-				console.log("xhr status = " + status);
-				if (status === 0) { neoBuilding.metaData.fileLoadState = 500; }
-				else { neoBuilding.metaData.fileLoadState = status; }
-			}
-		}).always(function() 
-		{
-			magoManager.backGround_fileReadings_count -= 1;
-			if (magoManager.backGround_fileReadings_count < 0) { magoManager.backGround_fileReadings_count = 0; }
-		});
-	}
-	else 
-	{
-		var neoRefImage = new Image();
-		texture.fileLoadState = CODE.fileLoadState.LOADING_STARTED; // file load started.***
-		//magoManager.backGround_fileReadings_count ++;
-		neoRefImage.onload = function() 
-		{
-			handleTextureLoaded(gl, neoRefImage, texture.texId);
-			texture.fileLoadState = CODE.fileLoadState.LOADING_FINISHED; // file load finished.***
-
-			if (magoManager.backGround_fileReadings_count > 0 ) 
-			{ magoManager.backGround_fileReadings_count -=1; }
-		};
-
-		neoRefImage.onerror = function() 
-		{
-			// doesn't exist or error loading
-			return;
-		};
-		neoRefImage.src = filePath_inServer;
-	}	
-};
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param filePath_inServer 변수
- * @param texture 변수
- * @param neoBuilding 변수
- * @param magoManager 변수
- */
-ReaderWriter.prototype.readLegoSimpleBuildingTexture = function(gl, filePath_inServer, texture, magoManager) 
-{
-	var neoRefImage = new Image();
-	//magoManager.backGround_fileReadings_count ++;
-	neoRefImage.onload = function() 
-	{
-		if (texture.texId === undefined) 
-		{ texture.texId = gl.createTexture(); }
-
-		handleTextureLoaded(gl, neoRefImage, texture.texId);
-
-		if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
-	};
-
-	neoRefImage.onerror = function() 
-	{
-		// doesn't exist or error loading
-		return;
-	};
-
-	neoRefImage.src = filePath_inServer;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param terranTile 변수
- * @param readerWriter 변수
- */
-ReaderWriter.prototype.openTerranTile = function(gl, terranTile, readerWriter ) 
-{
-	var filePath_inServer = this.geometryDataPath + Constant.RESULT_XDO2F4D_TERRAINTILEFILE_TXT;
-	readerWriter.getTerranTileFile(gl, filePath_inServer, terranTile, readerWriter);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param fileName 변수
- * @param terranTile 변수
- * @param readerWriter 변수
- * @param magoManager 변수
- */
-ReaderWriter.prototype.getTileArrayBuffer = function(gl, fileName, terranTile, readerWriter, magoManager) 
-{
-	// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
-	terranTile.fileReading_started = true;
-	//	magoManager.fileRequestControler.backGround_fileReadings_count += 1;
-	//	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
-
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			//var BR_Project = new BRBuildingProject(); // Test.***
-			//readerWriter.readF4D_Header(gl, arrayBuffer, BR_Project ); // Test.***
-			terranTile.fileArrayBuffer = arrayBuffer;
-			terranTile.fileReading_finished = true;
-
-			if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
-			//			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
-			arrayBuffer = null;
-		}
-		else 
-		{
-			//			blocksList.fileLoadState = 500;
-		}
-	}).fail(function(status) 
-	{
-		console.log("xhr status = " + status);
-		//		if(status === 0) blocksList.fileLoadState = 500;
-		//		else blocksList.fileLoadState = status;
-	}).always(function() 
-	{
-		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
-		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
-	});
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param filePath_inServer 변수
- * @param pCloud 변수
- * @param readerWriter 변수
- * @param magoManager 변수
- */
-ReaderWriter.prototype.getPCloudGeometry = function(gl, fileName, pCloud, readerWriter, magoManager) 
-{
-	// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
-	pCloud._f4d_geometry_readed = true;
-	//	magoManager.fileRequestControler.filesRequestedCount += 1;
-	//	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
-
-	loadWithXhr(fileName).done(function(response) 
-	{
-		var arrayBuffer = response;
-		if (arrayBuffer) 
-		{
-			// write code here.***
-			var bytes_readed = 0;
-			var startBuff;
-			var endBuff;
-
-			var meshes_count = readerWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4; // Almost allways is 1.***
-			for (var a=0; a<meshes_count; a++) 
-			{
-				var vbo_objects_count = readerWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4; // Almost allways is 1.***
-
-				// single interleaved buffer mode.*********************************************************************************
-				for (var i=0; i<vbo_objects_count; i++) 
-				{
-					var vbo_vertexIdx_data = pCloud.vbo_datas.newVBOVertexIdxCacheKey();
-					//var vt_cacheKey = simpObj._vtCacheKeys_container.newVertexTexcoordsArraysCacheKey();
-
-					var iDatas_count = readerWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4; // iDatasCount = vertexCount.***
-					startBuff = bytes_readed;
-					//endBuff = bytes_readed + (4*3+1*3+1*4)*iDatas_count; // pos(float*3) + normal(byte*3) + color4(byte*4).***
-					endBuff = bytes_readed + (4*3+4*3+1*4)*iDatas_count; // pos(float*3) + normal(float*3) + color4(byte*4).***
-
-					//vt_cacheKey._verticesArray_cacheKey = gl.createBuffer ();
-					vbo_vertexIdx_data.meshVertexCacheKey = gl.createBuffer();
-					gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vertexIdx_data.meshVertexCacheKey);
-					gl.bufferData(gl.ARRAY_BUFFER, arrayBuffer.slice(startBuff, endBuff), gl.STATIC_DRAW);
-
-					//bytes_readed = bytes_readed + (4*3+1*3+1*4)*iDatas_count; // pos(float*3) + normal(byte*3) + color4(byte*4).*** // updating data.***
-					bytes_readed = bytes_readed + (4*3+4*3+1*4)*iDatas_count; // pos(float*3) + normal(float*3) + color4(byte*4).*** // updating data.***
-
-					//vt_cacheKey._vertices_count = iDatas_count;
-					// Now, read short indices.***
-					var shortIndices_count = readerWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
-
-					vbo_vertexIdx_data.indicesCount = shortIndices_count;
-
-					// Indices.***********************
-					startBuff = bytes_readed;
-					endBuff = bytes_readed + 2*shortIndices_count;
-					/*
-					// Test.***************************************************************************************
-					for(var counter = 0; counter<shortIndices_count; counter++)
-					{
-						var shortIdx = new Uint16Array(arrayBuffer.slice(bytes_readed, bytes_readed+2));bytes_readed += 2;
-						if(shortIdx[0] >= iDatas_count)
-						{
-							var h=0;
-						}
-					}
-					bytes_readed -= 2*shortIndices_count;
-					// End test.------------------------------------------------------------------------------------
-					*/
-
-					vbo_vertexIdx_data.meshFacesCacheKey= gl.createBuffer();
-					gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vbo_vertexIdx_data.meshFacesCacheKey);
-					gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(arrayBuffer.slice(startBuff, endBuff)), gl.STATIC_DRAW);
-
-					bytes_readed = bytes_readed + 2*shortIndices_count; // updating data.***
-				}
-			}
-
-			//			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
-			if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
-
-			pCloud._f4d_geometry_readed_finished = true;
-			arrayBuffer = null;
-		}
-		else 
-		{
-			//			blocksList.fileLoadState = 500;
-		}
-	}).fail(function(status) 
-	{
-		console.log("xhr status = " + status);
-		//		if(status === 0) blocksList.fileLoadState = 500;
-		//		else blocksList.fileLoadState = status;
-	}).always(function() 
-	{
-		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
-		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
-	});
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param buildingFileName 변수
- * @param latitude 변수
- * @param longitude 변수
- * @param height 변수
- * @param readerWriter 변수
- * @param NeoBuildingsList 변수
- * @param magoManager 변수
- */
-ReaderWriter.prototype.openNeoBuilding = function(gl, buildingFileName, latitude, longitude, height, readerWriter, NeoBuildingsList, magoManager) 
-{
-	// This is a test function to read the new f4d format.***
-	// The location(latitude, longitude, height) is provisional.***
-
-	// Read the header.***
-	var neoBuilding_header_path = this.geometryDataPath + "/"+buildingFileName+"/Header.hed";
-	var neoBuilding = NeoBuildingsList.newNeoBuilding();
-
-	neoBuilding.buildingFileName = buildingFileName;
-
-	if (neoBuilding.octree === undefined) { neoBuilding.octree = new Octree(undefined); }
-
-	readerWriter.getNeoHeader(gl, neoBuilding_header_path, neoBuilding, readerWriter, magoManager); // Here makes the tree of octree.***
-
-	// 0) PositionMatrix.************************************************************************
-	//var height = elevation;
-	var position = Cesium.Cartesian3.fromDegrees(longitude, latitude, height); // Old.***
-	//var position = absolutePosition;
-	neoBuilding.buildingPosition = position;
-
-	// High and Low values of the position.****************************************************
-	var splitValue = Cesium.EncodedCartesian3.encode(position); // no works.***
-	var splitVelue_X  = Cesium.EncodedCartesian3.encode(position.x);
-	var splitVelue_Y  = Cesium.EncodedCartesian3.encode(position.y);
-	var splitVelue_Z  = Cesium.EncodedCartesian3.encode(position.z);
-
-	neoBuilding.buildingPositionHIGH = new Float32Array(3);
-	neoBuilding.buildingPositionHIGH[0] = splitVelue_X.high;
-	neoBuilding.buildingPositionHIGH[1] = splitVelue_Y.high;
-	neoBuilding.buildingPositionHIGH[2] = splitVelue_Z.high;
-
-	neoBuilding.buildingPositionLOW = new Float32Array(3);
-	neoBuilding.buildingPositionLOW[0] = splitVelue_X.low;
-	neoBuilding.buildingPositionLOW[1] = splitVelue_Y.low;
-	neoBuilding.buildingPositionLOW[2] = splitVelue_Z.low;
-	// End.-----------------------------------------------------------------------------------
-
-	// Determine the elevation of the position.***********************************************************
-	var cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
-	var height = cartographic.height;
-	// End Determine the elevation of the position.-------------------------------------------------------
-	neoBuilding.move_matrix = new Float32Array(16); // PositionMatrix.***
-	neoBuilding.moveMatrixInv = new Float32Array(16); // Inverse of PositionMatrix.***
-
-	Cesium.Transforms.eastNorthUpToFixedFrame(position, undefined, neoBuilding.move_matrix);
-	neoBuilding.transfMat_inv = new Float32Array(16);
-	Cesium.Matrix4.inverse(neoBuilding.move_matrix, neoBuilding.transfMat_inv);
-
-	neoBuilding.move_matrix[12] = 0;
-	neoBuilding.move_matrix[13] = 0;
-	neoBuilding.move_matrix[14] = 0;
-	neoBuilding.buildingPosition = position;
-	// note: "neoBuilding.move_matrix" is only rotation matrix.***
-
-	Cesium.Matrix4.inverse(neoBuilding.move_matrix, neoBuilding.moveMatrixInv);
-
-	// 1) Blocks.*******************************************************************************************************************************
-	var blocksListContainer = neoBuilding._blocksList_Container;
-	var filePath_inServer = "";
-
-	filePath_inServer = this.geometryDataPath + "/"+buildingFileName+"/Blocks1";
-	var blocksList = blocksListContainer.getBlockList("Blocks1");
-	readerWriter.getNeoBlocks(gl, filePath_inServer, blocksList, readerWriter);
-
-	var filePath_inServer_2 = this.geometryDataPath + "/"+buildingFileName+"/Blocks2";
-	var blocksList_2 = blocksListContainer.getBlockList("Blocks2");
-	readerWriter.getNeoBlocks(gl, filePath_inServer_2, blocksList_2, readerWriter);
-
-	var filePath_inServer_3 = this.geometryDataPath + "/"+buildingFileName+"/Blocks3";
-	var blocksList_3 = blocksListContainer.getBlockList("Blocks3");
-	readerWriter.getNeoBlocks(gl, filePath_inServer_3, blocksList_3, readerWriter);
-
-	var filePath_inServer_bone = this.geometryDataPath + "/"+buildingFileName+"/BlocksBone";
-	var blocksList_bone = blocksListContainer.getBlockList("BlocksBone");
-	readerWriter.getNeoBlocks(gl, filePath_inServer_bone, blocksList_bone, readerWriter);
-
-	var filePath_inServer_4 = this.geometryDataPath + "/"+buildingFileName+"/Blocks4"; // Interior Objects.***
-	var blocksList_4 = blocksListContainer.getBlockList("Blocks4");
-	readerWriter.getNeoBlocks(gl, filePath_inServer_4, blocksList_4, readerWriter);
-
-	// 2) References.****************************************************************************************************************************
-	var moveMatrix = new Matrix4();
-	moveMatrix.setByFloat32Array(neoBuilding.move_matrix);
-	var lod_level = 0;
-
-	var neoRefList_container = neoBuilding._neoRefLists_Container;
-
-	lod_level = 0;
-	filePath_inServer = this.geometryDataPath + "/" + buildingFileName + "/Ref_Skin1";
-	readerWriter.getNeoReferences(gl, filePath_inServer, neoRefList_container, "Ref_Skin1", lod_level, blocksList, moveMatrix, neoBuilding, readerWriter, undefined);
-
-	lod_level = 1;
-	filePath_inServer = this.geometryDataPath + "/" + buildingFileName + "/Ref_Skin2";
-	readerWriter.getNeoReferences(gl, filePath_inServer, neoRefList_container, "Ref_Skin2", lod_level, blocksList_2, moveMatrix, neoBuilding, readerWriter, undefined);
-
-	lod_level = 2;
-	filePath_inServer = this.geometryDataPath + "/" + buildingFileName + "/Ref_Skin3";
-	readerWriter.getNeoReferences(gl, filePath_inServer, neoRefList_container, "Ref_Skin3", lod_level, blocksList_3, moveMatrix, neoBuilding, readerWriter, undefined);
-
-	lod_level = 3;
-	filePath_inServer = this.geometryDataPath + "/" + buildingFileName + "/Ref_Bone";
-	readerWriter.getNeoReferences(gl, filePath_inServer, neoRefList_container, "Ref_Bone", lod_level, blocksList_bone, moveMatrix, neoBuilding, readerWriter, undefined);
-
-	// Now, read the interior objects in octree format.**********************************************************************************************
-	var interiorCRef_folderPath = this.geometryDataPath + "/" + buildingFileName + "/inLOD4";
-	lod_level = 4;
-	//var interior_base_name = "Ref_NodeData";
-	var subOctreeName_counter = -1;
-
-	for (var i=1; i<9; i++) 
-	{
-		for (var j=1; j<9; j++) 
-		{
-			for (var k=1; k<9; k++) 
-			{
-				subOctreeName_counter = i*100 + j*10 + k;
-				var interiorCRef_fileName = subOctreeName_counter.toString();
-
-				// Create a "compoundRefList".************************************************
-				var intCompRef_filePath = interiorCRef_folderPath + "/" + interiorCRef_fileName;
-				//readerWriter.readF4D_CompoundReferences_inServer(gl, intCompRef_filePath, null, interiorCRef_fileName, 4, blocksList_4, moveMatrix, BR_buildingProject, readerWriter, subOctreeName_counter);
-				readerWriter.getNeoReferences(gl, intCompRef_filePath, null, interiorCRef_fileName, lod_level, blocksList_4, moveMatrix, neoBuilding, readerWriter, subOctreeName_counter);
-			}
-		}
-	}
-
-	// Now, read the simple building.************************
-	neoBuilding.neoSimpleBuilding = new NeoSimpleBuilding();
-	filePath_inServer = this.geometryDataPath + "/"+buildingFileName+"/SimpleBuilding";
-	readerWriter.getNeoSimpleBuilding(gl, filePath_inServer, neoBuilding.neoSimpleBuilding, readerWriter);
-};
-
-//load neoTextures
-ReaderWriter.prototype.handleTextureLoaded = function(gl, image, texture) 
-{
-	// https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
-	//var gl = viewer.scene.context._gl;
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	//gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true); // if need vertical mirror of the image.***
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image); // Original.***
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-	//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-	//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-	//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-	gl.generateMipmap(gl.TEXTURE_2D);
-	gl.bindTexture(gl.TEXTURE_2D, null);
-};
-
 'use strict';
 
 /**
@@ -30385,6 +16410,6763 @@ Selection.prototype.init = function(gl, drawingBufferWidth, drawingBufferHeight)
 	gl.bindRenderbuffer(gl.RENDERBUFFER, null);
 	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 };
+'use strict';
+
+/**
+ * 버퍼 안의 데이터를 어떻게 읽어야 할지 키가 되는 객체
+ * 
+ * @alias Accessor
+ * @class Accessor
+ */
+var Accessor = function () 
+{
+
+	if (!(this instanceof Accessor)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.bufferId;
+	// 0= position, 1= normal, 2= color, 3= texcoord.***
+	this.accesorType;
+	this.bufferStart;
+	// 버퍼의 시작 시점
+	this.stride;
+	// character, int 등
+	this.dataType;
+	// 2차원, 3차원
+	this.dimension;
+
+	// 데이터가 포함되어 있는 x,y,z의 한계를 바운드라고 한다. 바운드 좌표
+	this.minX = 0.0;
+	this.minY = 0.0;
+	this.minZ = 0.0;
+	this.maxX = 0.0;
+	this.maxY = 0.0;
+	this.maxZ = 0.0;
+};
+
+'use strict';
+
+/**
+ * 블럭 모델
+ * @class Block
+ */
+var Block = function() 
+{
+	if (!(this instanceof Block)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	// This has "VertexIdxVBOArraysContainer" because the "indices" cannot to be greater than 65000, because indices are short type.***
+	this.vBOVertexIdxCacheKeysContainer = new VBOVertexIdxCacheKeysContainer(); // Change this for "vbo_VertexIdx_CacheKeys_Container__idx".***
+	this.mIFCEntityType = -1;
+	this.isSmallObj = false;
+	this.radius = 10;
+	this.vertexCount = 0; // only for test.*** delete this.***
+
+	this.lego; // legoBlock.***
+};
+
+/**
+ * 블럭이 가지는 데이터 삭제
+ * @returns block
+ */
+Block.prototype.deleteObjects = function(gl, vboMemManager) 
+{
+
+	this.vBOVertexIdxCacheKeysContainer.deleteGlObjects(gl, vboMemManager);
+	this.vBOVertexIdxCacheKeysContainer = undefined;
+	this.mIFCEntityType = undefined;
+	this.isSmallObj = undefined;
+	this.radius = undefined;
+	this.vertexCount = undefined; // only for test.*** delete this.***
+
+	if (this.lego) { this.lego.deleteGlObjects(gl); }
+
+	this.lego = undefined;
+};
+
+/**
+ * 블록 목록
+ * @class BlocksList
+ */
+var BlocksList = function() 
+{
+	if (!(this instanceof BlocksList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.name = "";
+	this.blocksArray;
+	// 0 = no started to load. 1 = started loading. 2 = finished loading. 3 = parse started. 4 = parse finished.***
+	this.fileLoadState = CODE.fileLoadState.READY;
+	this.dataArraybuffer; // file loaded data, that is no parsed yet.***
+};
+
+/**
+ * 새 블록 생성
+ * @returns block
+ */
+BlocksList.prototype.newBlock = function() 
+{
+	if (this.blocksArray === undefined) { this.blocksArray = []; }
+
+	var block = new Block();
+	this.blocksArray.push(block);
+	return block;
+};
+
+/**
+ * 블록 획득
+ * @param idx 변수
+ * @returns block
+ */
+BlocksList.prototype.getBlock = function(idx) 
+{
+	if (this.blocksArray === undefined) { return null; }
+
+	if (idx >= 0 && idx < this.blocksArray.length) 
+	{
+		return this.blocksArray[idx];
+	}
+	return null;
+};
+
+/**
+ * 블록을 삭제
+ * @param idx 변수
+ * @returns block
+ */
+BlocksList.prototype.deleteGlObjects = function(gl, vboMemManager) 
+{
+	if (this.blocksArray === undefined) { return; }
+
+	for (var i = 0, blocksCount = this.blocksArray.length; i < blocksCount; i++ ) 
+	{
+		var block = this.blocksArray[i];
+		block.vBOVertexIdxCacheKeysContainer.deleteGlObjects(gl, vboMemManager);
+		block.vBOVertexIdxCacheKeysContainer = undefined; // Change this for "vbo_VertexIdx_CacheKeys_Container__idx".***
+		block.mIFCEntityType = undefined;
+		block.isSmallObj = undefined;
+		block.radius = undefined;
+		block.vertexCount = undefined; // only for test.*** delete this.***
+		if (block.lego) 
+		{
+			block.lego.vbo_vicks_container.deleteGlObjects(gl, vboMemManager);
+			block.lego.vbo_vicks_container = undefined;
+		}
+		block.lego = undefined; // legoBlock.***
+		this.blocksArray[i] = undefined;
+	}
+	this.blocksArray = undefined;
+	this.name = undefined;
+	this.fileLoadState = undefined;
+	this.dataArraybuffer = undefined; // file loaded data, that is no parsed yet.***
+};
+
+
+/**
+ * 블록리스트 버퍼를 파싱(비대칭적)
+ * This function parses the geometry data from binary arrayBuffer.
+ * 
+ * @param {arrayBuffer} arrayBuffer Binary data to parse.
+ * @param {ReadWriter} readWriter Helper to read inside of the arrayBuffer.
+ * @param {Array} motherBlocksArray Global blocks array.
+ */
+BlocksList.prototype.parseBlocksList = function(arrayBuffer, readWriter, motherBlocksArray, magoManager) 
+{
+	this.fileLoadState = CODE.fileLoadState.PARSE_STARTED;
+	var bytesReaded = 0;
+	var blocksCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded + 4);
+	bytesReaded += 4;
+	var startBuff, endBuff;
+	var posByteSize, norByteSize, idxByteSize;
+	var vboMemManager = magoManager.vboMemoryManager;
+	var classifiedPosByteSize = 0, classifiedNorByteSize = 0, classifiedIdxByteSize = 0;
+	var gl = magoManager.sceneState.gl;
+	var succesfullyGpuDataBinded = true;
+
+	for ( var i = 0; i< blocksCount; i++ ) 
+	{
+		var blockIdx = readWriter.readInt32(arrayBuffer, bytesReaded, bytesReaded+4);
+		bytesReaded += 4;
+
+		// Check if block exist.
+		if (motherBlocksArray[blockIdx]) 
+		{
+			// The block exists, then read data but no create a new block.
+			bytesReaded += 4 * 6; // boundingBox.
+			// Read vbo datas (indices cannot superate 65535 value).
+			var vboDatasCount = readWriter.readInt32(arrayBuffer, bytesReaded, bytesReaded+4);
+			bytesReaded += 4;
+			for ( var j = 0; j < vboDatasCount; j++ ) 
+			{
+				// 1) Positions array.
+				var vertexCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4);
+				bytesReaded += 4;
+				var verticesFloatValuesCount = vertexCount * 3;
+				startBuff = bytesReaded;
+				endBuff = bytesReaded + 4 * verticesFloatValuesCount;
+				bytesReaded = bytesReaded + 4 * verticesFloatValuesCount; // updating data.***
+
+				// 2) Normals.
+				vertexCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4);
+				bytesReaded += 4;
+				var normalByteValuesCount = vertexCount * 3;
+				bytesReaded = bytesReaded + 1 * normalByteValuesCount; // updating data.***
+
+				// 3) Indices.
+				var shortIndicesValuesCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4);
+				bytesReaded += 4;
+				var sizeLevels = readWriter.readUInt8(arrayBuffer, bytesReaded, bytesReaded+1);
+				bytesReaded += 1;
+				bytesReaded = bytesReaded + sizeLevels * 4;
+				bytesReaded = bytesReaded + sizeLevels * 4;
+				bytesReaded = bytesReaded + 2 * shortIndicesValuesCount; // updating data.***
+			}
+			// Pendent to load the block's lego.***
+			continue;
+		}
+		
+		// The block doesn't exist, so creates a new block and read data.
+		var block = new Block();
+		block.idx = blockIdx;
+		motherBlocksArray[blockIdx] = block;
+
+		// 1rst, read bbox.
+		var bbox = new BoundingBox();
+		bbox.minX = new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4));
+		bytesReaded += 4;
+		bbox.minY = new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4));
+		bytesReaded += 4;
+		bbox.minZ = new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4));
+		bytesReaded += 4;
+
+		bbox.maxX = new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4));
+		bytesReaded += 4;
+		bbox.maxY = new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4));
+		bytesReaded += 4;
+		bbox.maxZ = new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4));
+		bytesReaded += 4;
+
+		var maxLength = bbox.getMaxLength();
+		if (maxLength < 0.5) { block.isSmallObj = true; }
+		else { block.isSmallObj = false; }
+
+		block.radius = maxLength/2.0;
+
+		bbox.deleteObjects();
+		bbox = undefined;
+
+		// New for read multiple vbo datas (indices cannot superate 65535 value).***
+		var vboDatasCount = readWriter.readInt32(arrayBuffer, bytesReaded, bytesReaded+4);
+		bytesReaded += 4;
+		for ( var j = 0; j < vboDatasCount; j++ ) 
+		{
+			// 1) Positions array.
+			var vertexCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4);
+			bytesReaded += 4;
+			var verticesFloatValuesCount = vertexCount * 3;
+			// now padding the array to adjust to standard memory size of pool.
+			posByteSize = 4 * verticesFloatValuesCount;
+			classifiedPosByteSize = vboMemManager.getClassifiedBufferSize(posByteSize);
+			
+			block.vertexCount = vertexCount;
+			startBuff = bytesReaded;
+			endBuff = bytesReaded + 4 * verticesFloatValuesCount;
+			var vboViCacheKey = block.vBOVertexIdxCacheKeysContainer.newVBOVertexIdxCacheKey();
+			vboViCacheKey.posVboDataArray = new Float32Array(classifiedPosByteSize);
+			vboViCacheKey.posVboDataArray.set(new Float32Array(arrayBuffer.slice(startBuff, endBuff)));
+			vboViCacheKey.posArrayByteSize = classifiedPosByteSize; 
+			bytesReaded = bytesReaded + 4 * verticesFloatValuesCount; // updating data.***
+			
+			// 2) Normals.
+			vertexCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4);
+			bytesReaded += 4;
+			var normalByteValuesCount = vertexCount * 3;
+			// now padding the array to adjust to standard memory size of pool.
+			norByteSize = 1 * normalByteValuesCount;
+			classifiedNorByteSize = vboMemManager.getClassifiedBufferSize(norByteSize);
+			
+			startBuff = bytesReaded;
+			endBuff = bytesReaded + 1 * normalByteValuesCount;
+			vboViCacheKey.norVboDataArray = new Int8Array(classifiedNorByteSize);
+			vboViCacheKey.norVboDataArray.set(new Int8Array(arrayBuffer.slice(startBuff, endBuff)));
+			vboViCacheKey.norArrayByteSize = classifiedNorByteSize;
+			bytesReaded = bytesReaded + 1 * normalByteValuesCount; // updating data.***
+			
+			// 3) Indices.
+			var shortIndicesValuesCount = readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4);
+			// now padding the array to adjust to standard memory size of pool.
+			idxByteSize = 2 * shortIndicesValuesCount;
+			classifiedIdxByteSize = vboMemManager.getClassifiedBufferSize(idxByteSize);
+			
+			bytesReaded += 4;
+			var sizeLevels = readWriter.readUInt8(arrayBuffer, bytesReaded, bytesReaded+1);
+			bytesReaded +=1;
+			var sizeThresholds = [];
+			for ( var k = 0; k < sizeLevels; k++ )
+			{
+				sizeThresholds.push(new Float32Array(arrayBuffer.slice(bytesReaded, bytesReaded+4)));
+				bytesReaded += 4;
+			}
+			var indexMarkers = [];
+			for ( var k = 0; k < sizeLevels; k++ )
+			{
+				indexMarkers.push(readWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4));
+				bytesReaded += 4;
+			}
+			var bigTrianglesShortIndicesValues_count = indexMarkers[sizeLevels-1];
+			vboViCacheKey.bigTrianglesIndicesCount = bigTrianglesShortIndicesValues_count;
+			startBuff = bytesReaded;
+			endBuff = bytesReaded + 2 * shortIndicesValuesCount;
+
+			vboViCacheKey.idxVboDataArray = new Int16Array(classifiedIdxByteSize);
+			vboViCacheKey.idxVboDataArray.set(new Int16Array(arrayBuffer.slice(startBuff, endBuff)));
+			vboViCacheKey.idxArrayByteSize = classifiedIdxByteSize;
+			bytesReaded = bytesReaded + 2 * shortIndicesValuesCount; // updating data.***
+			vboViCacheKey.indicesCount = shortIndicesValuesCount;
+
+			posByteSize;
+			norByteSize;
+			idxByteSize;
+			
+			classifiedPosByteSize;
+			classifiedNorByteSize;
+			classifiedIdxByteSize;
+			
+			var hola = 0;
+			
+			// test.
+			if (!vboViCacheKey.isReadyPositions(gl, magoManager.vboMemoryManager))
+			{ succesfullyGpuDataBinded = false; }
+			if (!vboViCacheKey.isReadyNormals(gl, magoManager.vboMemoryManager))
+			{ succesfullyGpuDataBinded = false; }
+			if (!vboViCacheKey.isReadyFaces(gl, magoManager.vboMemoryManager))
+			{ succesfullyGpuDataBinded = false; }
+		}
+		
+		
+
+		// Pendent to load the block's lego.***
+	}
+	this.fileLoadState = CODE.fileLoadState.PARSE_FINISHED;
+	return succesfullyGpuDataBinded;
+};
+
+/**
+ * 블록 컨테이너
+ * @class BlocksListsContainer
+ */
+var BlocksListsContainer = function() 
+{
+	if (!(this instanceof BlocksListsContainer)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	this.blocksListsArray = [];
+};
+
+/**
+ * 새 블록 리스트를 생성
+ * @param blocksListName 변수
+ * @returns blocksList
+ */
+BlocksListsContainer.prototype.newBlocksList = function(blocksListName) 
+{
+	var blocksList = new BlocksList();
+	blocksList.name = blocksListName;
+	this.blocksListsArray.push(blocksList);
+	return blocksList;
+};
+
+/**
+ * 블록 리스트 획득
+ * @param blockList_name 변수
+ * @returns blocksList
+ */
+BlocksListsContainer.prototype.getBlockList = function(blockList_name) 
+{
+	var blocksListsCount = this.blocksListsArray.length;
+	var found = false;
+	var i=0;
+	var blocksList = null;
+	while (!found && i<blocksListsCount) 
+	{
+		var currentBlocksList = this.blocksListsArray[i];
+		if (currentBlocksList.name === blockList_name) 
+		{
+			found = true;
+			blocksList = currentBlocksList;
+		}
+		i++;
+	}
+	return blocksList;
+};
+
+'use strict';
+
+/**
+ * F4D Lego 클래스
+ * 
+ * @alias Lego
+ * @class Lego
+ */
+var Lego = function() 
+{
+	if (!(this instanceof Lego)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.vbo_vicks_container = new VBOVertexIdxCacheKeysContainer();
+	this.fileLoadState = CODE.fileLoadState.READY;
+	this.dataArrayBuffer;
+	this.selColor4;
+};
+
+/**
+ * F4D Lego 자료를 읽는다
+ * 
+ * @param {any} gl 
+ * @param {any} readWriter 
+ * @param {any} dataArraybuffer 
+ * @param {any} bytesReaded 
+ */
+Lego.prototype.parseArrayBuffer = function(gl, dataArraybuffer, magoManager)
+{
+	this.parseLegoData(dataArraybuffer, gl, magoManager);
+};
+
+/**
+ * F4D Lego 자료를 읽는다
+ * 
+ * @param {any} gl 
+ * @param {any} readWriter 
+ * @param {any} dataArraybuffer 
+ * @param {any} bytesReaded 
+ */
+Lego.prototype.deleteObjects = function(gl, vboMemManager)
+{
+	this.vbo_vicks_container.deleteGlObjects(gl, vboMemManager);
+	this.vbo_vicks_container = undefined;
+	this.fileLoadState = undefined;
+	this.dataArrayBuffer = undefined;
+	if (this.selColor4 != undefined)
+	{
+		this.selColor4.deleteObjects();
+		this.selColor4 = undefined;
+	}
+};
+
+/**
+ * F4D Lego 자료를 읽는다
+ * 
+ * @param {ArrayBuffer} buffer 
+ */
+Lego.prototype.parseLegoData = function(buffer, gl, magoManager)
+{
+	if (this.fileLoadState !== CODE.fileLoadState.LOADING_FINISHED)	{ return; }
+	
+	var vboMemManager = magoManager.vboMemoryManager;
+
+	var stream = new DataStream(buffer, 0, DataStream.LITTLE_ENDIAN);
+	this.fileLoadState = CODE.fileLoadState.PARSE_STARTED;
+
+	var bbox = new BoundingBox();
+	var vboCacheKey = this.vbo_vicks_container.newVBOVertexIdxCacheKey();
+
+	// BoundingBox
+	bbox.minX = stream.readFloat32();
+	bbox.minY = stream.readFloat32();
+	bbox.minZ = stream.readFloat32();
+	bbox.maxX = stream.readFloat32();
+	bbox.maxY = stream.readFloat32();
+	bbox.maxZ = stream.readFloat32();
+
+	// VBO(Position Buffer) - x,y,z
+	var numPositions = stream.readUint32();
+	var posByteSize = 4 * numPositions * 3;
+	var classifiedPosByteSize = vboMemManager.getClassifiedBufferSize(posByteSize);
+	//var positionBuffer = stream.readFloat32Array(numPositions * 3); // original.***
+	var positionBuffer = new Float32Array(classifiedPosByteSize);
+	positionBuffer.set(stream.readFloat32Array(numPositions * 3));
+	// console.log(numPositions + " Positions = " + positionBuffer[0]);
+
+	vboCacheKey.vertexCount = numPositions;
+	vboCacheKey.posVboDataArray = positionBuffer;
+	vboCacheKey.posArrayByteSize = classifiedPosByteSize;
+
+	// VBO(Normal Buffer) - i,j,k
+	var hasNormals = stream.readUint8();
+	if (hasNormals) 
+	{
+		var numNormals = stream.readUint32();
+		var norByteSize = 1 * numNormals * 3;
+		var classifiedNorByteSize = vboMemManager.getClassifiedBufferSize(norByteSize);
+		//var normalBuffer = stream.readInt8Array(numNormals * 3); // original.***
+		var normalBuffer = new Int8Array(classifiedNorByteSize);
+		normalBuffer.set(stream.readInt8Array(numNormals * 3));
+		// console.log(numNormals + " Normals = " + normalBuffer[0]);
+
+		vboCacheKey.norVboDataArray = normalBuffer;
+		vboCacheKey.norArrayByteSize = classifiedNorByteSize;
+	}
+
+	// VBO(Color Buffer) - r,g,b,a
+	var hasColors = stream.readUint8();
+	if (hasColors)
+	{
+		var numColors = stream.readUint32();
+		var colByteSize = 1 * numColors * 4;
+		var classifiedColByteSize = vboMemManager.getClassifiedBufferSize(colByteSize);
+						
+		//var colorBuffer = stream.readUint8Array(numColors * 4); // original.***
+		var colorBuffer = new Uint8Array(classifiedColByteSize);
+		colorBuffer.set(stream.readUint8Array(numColors * 4));
+		// console.log(numColors + " Colors = " + colorBuffer[0]);
+
+		vboCacheKey.colVboDataArray = colorBuffer;
+		vboCacheKey.colArrayByteSize = classifiedColByteSize;
+	}
+
+	// VBO(TextureCoord Buffer) - u,v
+	var hasTexCoords = stream.readUint8();
+	if (hasTexCoords)
+	{
+		var dataType = stream.readUint16();
+		var numCoords = stream.readUint32();
+		var tCoordByteSize = 2 * numCoords * 4;
+		var classifiedTCoordByteSize = vboMemManager.getClassifiedBufferSize(tCoordByteSize);
+		//var coordBuffer = stream.readFloat32Array(numCoords * 2); // original.***
+		var coordBuffer = new Float32Array(classifiedTCoordByteSize);
+		coordBuffer.set(stream.readFloat32Array(numCoords * 2));
+		// console.log(numCoords + " Coords = " + coordBuffer[0]);
+
+		vboCacheKey.tcoordVboDataArray = coordBuffer;
+		vboCacheKey.tcoordArrayByteSize = classifiedTCoordByteSize;
+	}
+
+	this.fileLoadState = CODE.fileLoadState.PARSE_FINISHED;
+	
+	var succesfullyGpuDataBinded = true;
+	if (!vboCacheKey.isReadyPositions(gl, magoManager.vboMemoryManager))
+	{ succesfullyGpuDataBinded = false; }
+	if (!vboCacheKey.isReadyNormals(gl, magoManager.vboMemoryManager))
+	{ succesfullyGpuDataBinded = false; }
+	if (!vboCacheKey.isReadyColors(gl, magoManager.vboMemoryManager))
+	{ succesfullyGpuDataBinded = false; }
+
+	// 4) Texcoord.*********************************************
+	if (hasTexCoords)
+	{
+		if (!vboCacheKey.isReadyTexCoords(gl, magoManager.vboMemoryManager))
+		{ succesfullyGpuDataBinded = false; }
+	}	
+	return succesfullyGpuDataBinded;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * F4D MetaData 클래스
+ * 
+ * @alias MetaData
+ * @class MetaData
+ */
+var MetaData = function() 
+{
+	if (!(this instanceof MetaData)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.guid; // must be undefined initially.***
+	this.version = "";
+	this.geographicCoord; // longitude, latitude, altitude.***
+
+	this.heading;
+	this.pitch;
+	this.roll;
+
+	this.bbox; // BoundingBox.***
+	this.imageLodCount;
+
+	// Buildings octree mother size.***
+	this.oct_min_x = 0.0;
+	this.oct_max_x = 0.0;
+	this.oct_min_y = 0.0;
+	this.oct_max_y = 0.0;
+	this.oct_min_z = 0.0;
+	this.oct_max_z = 0.0;
+
+	this.isSmall = false;
+	this.fileLoadState = CODE.fileLoadState.READY;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param arrayBuffer 변수
+ * @param readWriter 변수
+ */
+MetaData.prototype.deleteObjects = function() 
+{
+	this.guid = undefined; // must be undefined initially.***
+	this.version = undefined;
+	if (this.geographicCoord)
+	{ this.geographicCoord.deleteObjects(); }
+	this.geographicCoord = undefined; // longitude, latitude, altitude.***
+
+	this.heading = undefined;
+	this.pitch = undefined;
+	this.roll = undefined;
+
+	if (this.bbox)
+	{ this.bbox.deleteObjects(); }
+	this.bbox = undefined; // BoundingBox.***
+	this.imageLodCount = undefined;
+
+	// Buildings octree mother size.***
+	this.oct_min_x = undefined;
+	this.oct_max_x = undefined;
+	this.oct_min_y = undefined;
+	this.oct_max_y = undefined;
+	this.oct_min_z = undefined;
+	this.oct_max_z = undefined;
+
+	this.isSmall = undefined;
+	this.fileLoadState = undefined;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param arrayBuffer 변수
+ * @param readWriter 변수
+ */
+MetaData.prototype.parseFileHeader = function(arrayBuffer, readWriter) 
+{
+	var version_string_length = 5;
+	var intAux_scratch = 0;
+	var auxScratch;
+	//var header = BR_Project._header;
+	//var arrayBuffer = this.fileArrayBuffer;
+	//var bytes_readed = this.fileBytesReaded;
+	var bytes_readed = 0;
+
+	if (readWriter === undefined) { readWriter = new ReaderWriter(); }
+
+	// 1) Version(5 chars).***********
+	for (var j=0; j<version_string_length; j++)
+	{
+		this.version += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
+	}
+
+	// 3) Global unique ID.*********************
+	if (this.guid === undefined) { this.guid =""; }
+
+	intAux_scratch = readWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+	for (var j=0; j<intAux_scratch; j++)
+	{
+		this.guid += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
+	}
+
+	// 4) Location.*************************
+	if (this.longitude === undefined) 
+	{
+		this.longitude = (new Float64Array(arrayBuffer.slice(bytes_readed, bytes_readed+8)))[0]; bytes_readed += 8;
+	}
+	else { bytes_readed += 8; }
+
+	if (this.latitude === undefined) 
+	{
+		this.latitude = (new Float64Array(arrayBuffer.slice(bytes_readed, bytes_readed+8)))[0]; bytes_readed += 8;
+	}
+	else { bytes_readed += 8; }
+
+	if (this.altitude === undefined) 
+	{
+		this.altitude = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	}
+	else { bytes_readed += 4; }
+
+	//this.altitude += 20.0; // TEST.***
+
+	//header._elevation += 70.0; // delete this. TEST.!!!
+	if (this.bbox === undefined) { this.bbox = new BoundingBox(); }
+
+	// 6) BoundingBox.************************
+	this.bbox.minX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.bbox.minY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.bbox.minZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.bbox.maxX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.bbox.maxY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.bbox.maxZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+
+	// TEST. PROVISIONAL. DELETE.***
+	//this.bbox.expand(20.0);
+	var imageLODs_count = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
+
+	// 7) Buildings octree mother size.***
+	this.oct_min_x = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.oct_min_y = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.oct_min_z = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.oct_max_x = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.oct_max_y = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.oct_max_z = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+
+	var isLarge = false;
+	if (this.bbox.maxX - this.bbox.minX > 40.0 || this.bbox.maxY - this.bbox.minY > 40.0) 
+	{
+		isLarge = true;
+	}
+
+	if (!isLarge && this.bbox.maxZ - this.bbox.minZ < 30.0) 
+	{
+		this.isSmall = true;
+	}
+
+	return bytes_readed;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param arrayBuffer 변수
+ * @param readWriter 변수
+ */
+MetaData.prototype.parseFileHeaderAsimetricVersion = function(arrayBuffer, readWriter) 
+{
+	var version_string_length = 5;
+	var intAux_scratch = 0;
+	var auxScratch;
+	//var header = BR_Project._header;
+	//var arrayBuffer = this.fileArrayBuffer;
+	//var bytes_readed = this.fileBytesReaded;
+	var bytes_readed = 0;
+
+	if (readWriter === undefined) { readWriter = new ReaderWriter(); }
+
+	// 1) Version(5 chars).***********
+	for (var j=0; j<version_string_length; j++)
+	{
+		this.version += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
+	}
+
+	// 3) Global unique ID.*********************
+	if (this.guid === undefined) { this.guid =""; }
+
+	intAux_scratch = readWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+	for (var j=0; j<intAux_scratch; j++)
+	{
+		this.guid += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
+	}
+
+	// 4) Location.*************************
+	if (this.longitude === undefined) 
+	{
+		this.longitude = (new Float64Array(arrayBuffer.slice(bytes_readed, bytes_readed+8)))[0]; bytes_readed += 8;
+	}
+	else { bytes_readed += 8; }
+
+	if (this.latitude === undefined) 
+	{
+		this.latitude = (new Float64Array(arrayBuffer.slice(bytes_readed, bytes_readed+8)))[0]; bytes_readed += 8;
+	}
+	else { bytes_readed += 8; }
+
+	if (this.altitude === undefined) 
+	{
+		this.altitude = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	}
+	else { bytes_readed += 4; }
+
+	//this.altitude -= 140.0; // TEST.***
+
+	//header._elevation += 70.0; // delete this. TEST.!!!
+	if (this.bbox === undefined) { this.bbox = new BoundingBox(); }
+
+	// 6) BoundingBox.************************
+	this.bbox.minX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.bbox.minY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.bbox.minZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.bbox.maxX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.bbox.maxY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	this.bbox.maxZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+
+	// TEST. PROVISIONAL. DELETE.***
+	//this.bbox.expand(20.0);
+
+	//var imageLODs_count = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
+
+	//// 7) Buildings octree mother size.***
+	//this.oct_min_x = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	//this.oct_min_y = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	//this.oct_min_z = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	//this.oct_max_x = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	//this.oct_max_y = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+	//this.oct_max_z = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+
+	var isLarge = false;
+	if (this.bbox.maxX - this.bbox.minX > 40.0 || this.bbox.maxY - this.bbox.minY > 40.0) 
+	{
+		isLarge = true;
+	}
+
+	if (!isLarge && this.bbox.maxZ - this.bbox.minZ < 30.0) 
+	{
+		this.isSmall = true;
+	}
+
+	return bytes_readed;
+};
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class ModelReferencedGroup
+ */
+var ModelReferencedGroup = function() 
+{
+	if (!(this instanceof ModelReferencedGroup)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	this.modelIdx; // there are only one model.
+	this.referencesIdxArray = []; // all references has the same model.
+};
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class ModelReferencedGroupsList
+ */
+var ModelReferencedGroupsList = function() 
+{
+	if (!(this instanceof ModelReferencedGroupsList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.modelReferencedGroupsMap = [];
+	this.modelReferencedGroupsArray = [];
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param treeDepth 변수
+ */
+ModelReferencedGroupsList.prototype.getModelReferencedGroup = function(modelIdx) 
+{
+	var modelReferencedGroup = this.modelReferencedGroupsMap[modelIdx];
+	
+	if (modelReferencedGroup == undefined)
+	{
+		modelReferencedGroup = new ModelReferencedGroup();
+		modelReferencedGroup.modelIdx = modelIdx;
+		this.modelReferencedGroupsMap[modelIdx] = modelReferencedGroup;
+	}
+	
+	return modelReferencedGroup;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param treeDepth 변수
+ */
+ModelReferencedGroupsList.prototype.makeModelReferencedGroupsArray = function() 
+{
+	this.modelReferencedGroupsArray.length = 0;
+	
+	var modelRefGroupsCount = this.modelReferencedGroupsMap.length;
+	for (var i=0; i<modelRefGroupsCount; i++)
+	{
+		if (this.modelReferencedGroupsMap[i] != undefined)
+		{ this.modelReferencedGroupsArray.push(this.modelReferencedGroupsMap[i]); }
+	}
+	this.modelReferencedGroupsMap.length = 0;
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param treeDepth 변수
+ */
+ModelReferencedGroupsList.prototype.createModelReferencedGroups = function(neoRefsIndices, motherNeoRefsList) 
+{
+	// Group all the references that has the same model.
+	if (neoRefsIndices == undefined)
+	{ return; }
+	
+	if (motherNeoRefsList == undefined)
+	{ return; }
+	
+	var referenceIdx;
+	var modelIdx;
+	var modelRefGroup;
+	var referencesCount = neoRefsIndices.length;
+	for (var i=0; i<referencesCount; i++)
+	{
+		referenceIdx = neoRefsIndices[i];
+		modelIdx = motherNeoRefsList[referenceIdx]._block_idx;
+		modelRefGroup = this.getModelReferencedGroup(modelIdx);
+		modelRefGroup.referencesIdxArray.push(referenceIdx);
+	}
+	
+	// Now, delete the "modelReferencedGroupsMap" and make a simple array.
+	this.makeModelReferencedGroupsArray();
+	
+};
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class NeoReference
+ */
+var NeoReference = function() 
+{
+	if (!(this instanceof NeoReference)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	// 1) Object IDX.***
+	this._id = 0;
+
+	this.objectId = "";
+
+	// 2) Block Idx.***
+	this._block_idx = -1;
+
+	// 3) Transformation Matrix.***
+	this._matrix4 = new Matrix4(); // initial and necessary matrix.***
+	this._originalMatrix4 = new Matrix4(); // original matrix, for use with block-reference (do not modify).***
+	this.tMatrixAuxArray; // use for deploying mode, cronological transformations for example.***
+	this.refMatrixType = 2; // 0 = identity matrix, 1 = translate matrix, 2 = transformation matrix.
+	this.refTranslationVec; // use this if "refMatrixType" == 1.
+	// 4) VBO datas container.***
+	this.vBOVertexIdxCacheKeysContainer; // initially undefined.***
+	
+	// 4) Tex coords cache_key.*** // old.***
+	this.MESH_TEXCOORD_cacheKey; // old.***
+
+	// 5) The texture image.***
+	this.hasTexture = false;
+	this.texture; // Texture
+
+	// 6) 1 color.***
+	this.color4; //new Color();
+	this.aditionalColor; // used when object color was changed.***
+
+	// 7) selection color.***
+	this.selColor4; //new Color(); // use for selection only.***
+
+	this.vertexCount = 0;// provisional. for checking vertexCount of the block.*** delete this.****
+
+	// 8) movement of the object.***
+	this.moveVector; // Point3D.***
+
+	// 9) check for render.***
+	this.bRendered = false;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+NeoReference.prototype.multiplyTransformMatrix = function(matrix) 
+{
+	this._matrix4 = this._originalMatrix4.getMultipliedByMatrix(matrix); // Original.***
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+NeoReference.prototype.multiplyKeyTransformMatrix = function(idxKey, matrix) 
+{
+	// this function multiplies the originalMatrix by "matrix" and stores it in the "idxKey" position.***
+	if (this.tMatrixAuxArray === undefined)
+	{ this.tMatrixAuxArray = []; }
+
+	this.tMatrixAuxArray[idxKey] = this._originalMatrix4.getMultipliedByMatrix(matrix, this.tMatrixAuxArray[idxKey]);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+NeoReference.prototype.hasKeyMatrix = function(idxKey) 
+{
+	if (this.tMatrixAuxArray === undefined)
+	{ return false; }
+
+	if (this.tMatrixAuxArray[idxKey] === undefined)
+	{ return false; }
+	else
+	{ return true; }
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+NeoReference.prototype.deleteGlObjects = function(gl, vboMemManager) 
+{
+	// 1) Object ID.***
+	this._id = undefined;
+
+	// 2) Block Idx.***
+	this._block_idx = undefined;
+
+	// 3) Transformation Matrix.***
+	this._matrix4._floatArrays = undefined;
+	this._matrix4 = undefined;
+	this._originalMatrix4._floatArrays = undefined;
+	this._originalMatrix4 = undefined; //
+	
+	// 4) Tex coords cache_key.*** // old.***
+	if (this.MESH_TEXCOORD_cacheKey) 
+	{ // old.***
+		gl.deleteBuffer(this.MESH_TEXCOORD_cacheKey); // old.***
+		this.MESH_TEXCOORD_cacheKey = undefined; // old.***
+	} // old.***
+
+	// 5) The texture image.***
+	this.hasTexture = undefined;
+	this.texture = undefined; // Texture
+
+	// 6) 1 color.***
+	this.color4 = undefined; //new Color();
+
+	// 7) selection color.***
+	this.selColor4 = undefined; //new Color(); // use for selection only.***
+
+	this.vertexCount = undefined;// provisional. for checking vertexCount of the block.*** delete this.****
+
+	// 8) movement of the object.***
+	this.moveVector = undefined; // Point3D.***
+
+	this.bRendered = undefined;
+};
+
+//*************************************************************************************************************************************************************
+//*************************************************************************************************************************************************************
+//*************************************************************************************************************************************************************
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class NeoReferencesMotherAndIndices
+ */
+var NeoReferencesMotherAndIndices = function() 
+{
+	if (!(this instanceof NeoReferencesMotherAndIndices)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	// for asimetric mode.***// for asimetric mode.***// for asimetric mode.***// for asimetric mode.***
+	this.motherNeoRefsList; // this is a NeoReferencesList pointer.***
+	this.blocksList; // local blocks list. used only for parse data.***
+	this.neoRefsIndices = []; // All objects(references) of this class.
+	this.modelReferencedGroupsList;
+
+	this.fileLoadState = 0;
+	this.dataArraybuffer;
+	this.succesfullyGpuDataBinded;
+
+	this.exterior_ocCullOctree; // octree that contains the visible indices.
+	this.interior_ocCullOctree; // octree that contains the visible indices.
+	
+	this.currentVisibleIndices = [];
+	this.currentVisibleMRG; // MRG = ModelReferencedGroup.
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param matrix 변수
+ */
+NeoReferencesMotherAndIndices.prototype.multiplyKeyTransformMatrix = function(idxKey, matrix) 
+{
+	var refIndicesCount = this.neoRefsIndices.length;
+	for (var i=0; i<refIndicesCount; i++)
+	{
+		this.motherNeoRefsList[this.neoRefsIndices[i]].multiplyKeyTransformMatrix(idxKey, matrix);
+	}
+};
+
+NeoReferencesMotherAndIndices.prototype.updateCurrentVisibleIndices = function(isExterior, eye_x, eye_y, eye_z) 
+{
+	if (isExterior)
+	{
+		if (this.exterior_ocCullOctree !== undefined)
+		{
+			if (this.exterior_ocCullOctree._subBoxesArray && this.exterior_ocCullOctree._subBoxesArray.length > 0)
+			{
+				if (this.currentVisibleMRG == undefined)
+				{ this.currentVisibleMRG = new ModelReferencedGroupsList(); }
+				
+				this.currentVisibleIndices = this.exterior_ocCullOctree.getIndicesVisiblesForEye(eye_x, eye_y, eye_z, this.currentVisibleIndices, this.currentVisibleMRG);
+			}
+			else 
+			{
+				this.currentVisibleIndices = this.neoRefsIndices;
+				this.currentVisibleMRG = this.modelReferencedGroupsList;
+			}
+		}
+	}
+	else
+	{
+		if (this.interior_ocCullOctree !== undefined)
+		{
+			if (this.interior_ocCullOctree._subBoxesArray && this.interior_ocCullOctree._subBoxesArray.length > 0)
+			{
+				if (this.currentVisibleMRG == undefined)
+				{ this.currentVisibleMRG = new ModelReferencedGroupsList(); }
+				
+				this.currentVisibleIndices = this.interior_ocCullOctree.getIndicesVisiblesForEye(eye_x, eye_y, eye_z, this.currentVisibleIndices, this.currentVisibleMRG);
+			}
+			else
+			{
+				this.currentVisibleIndices = this.neoRefsIndices;
+				this.currentVisibleMRG = this.modelReferencedGroupsList;
+			}
+		}
+	}
+};
+
+/**
+ * Returns the neoReference
+ * @param matrix 변수
+ */
+NeoReferencesMotherAndIndices.prototype.getNeoReference = function(idx) 
+{
+	return this.motherNeoRefsList[this.neoRefsIndices[idx]];
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param treeDepth 변수
+ */
+NeoReferencesMotherAndIndices.prototype.deleteObjects = function(gl, vboMemManager) 
+{
+	this.motherNeoRefsList = undefined; // this is a NeoReferencesList pointer.***
+	if (this.blocksList)
+	{ this.blocksList.deleteGlObjects(gl, vboMemManager); }
+
+	this.blocksList = undefined;
+	this.neoRefsIndices = undefined;
+
+	this.fileLoadState = 0;
+	this.dataArraybuffer = undefined;
+
+	this.exterior_ocCullOctree = undefined;
+	this.interior_ocCullOctree = undefined;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param treeDepth 변수
+ */
+NeoReferencesMotherAndIndices.prototype.setRenderedFalseToAllReferences = function() 
+{
+	var refIndicesCount = this.neoRefsIndices.length;
+	for (var i=0; i<refIndicesCount; i++)
+	{
+		this.motherNeoRefsList[this.neoRefsIndices[i]].bRendered = false;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param treeDepth 변수
+ */
+NeoReferencesMotherAndIndices.prototype.createModelReferencedGroups = function() 
+{
+	// Group all the references that has the same model.
+	if (this.neoRefsIndices == undefined)
+	{ return; }
+	
+	if (this.modelReferencedGroupsList == undefined)
+	{ this.modelReferencedGroupsList = new ModelReferencedGroupsList(); }
+
+	this.modelReferencedGroupsList.createModelReferencedGroups(this.neoRefsIndices, this.motherNeoRefsList);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param arrayBuffer 변수
+ * @param neoBuilding 변수
+ * @param readWriter 변수
+ */
+NeoReferencesMotherAndIndices.prototype.parseArrayBufferReferences = function(gl, arrayBuffer, readWriter, motherNeoReferencesArray, tMatrix4, magoManager) 
+{
+	this.fileLoadState = CODE.fileLoadState.PARSE_STARTED;
+
+	var startBuff;
+	var endBuff;
+	var bytes_readed = 0;
+	var neoRefsCount = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+	var testIdentityMatsCount = 0;
+	var stadistic_refMat_Identities_count = 0;
+	var stadistic_refMat_Translates_count = 0;
+	var stadistic_refMat_Transforms_count = 0;
+	var vboMemManager = magoManager.vboMemoryManager;
+	var classifiedTCoordByteSize = 0, classifiedColByteSize = 0;
+	var colByteSize, tCoordByteSize;
+	this.succesfullyGpuDataBinded = true;
+
+	for (var i = 0; i < neoRefsCount; i++) 
+	{
+		var neoRef = new NeoReference();
+
+		// 1) Id.***
+		var ref_ID =  readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+		neoRef._id = ref_ID;
+
+		this.motherNeoRefsList = motherNeoReferencesArray;
+		if (motherNeoReferencesArray[neoRef._id] !== undefined)
+		{
+			// pass this neoReference because exist in the motherNeoReferencesArray.***
+			neoRef = motherNeoReferencesArray[neoRef._id];
+			if (this.neoRefsIndices === undefined)
+			{ this.neoRefsIndices = []; }
+			
+			this.neoRefsIndices.push(neoRef._id);
+
+			var objectIdLength = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed +=1;
+			var objectId = String.fromCharCode.apply(null, new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+objectIdLength)));
+			neoRef.objectId = objectId;
+			bytes_readed += objectIdLength;
+
+			// 2) Block's Idx.***
+			var blockIdx =   readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._block_idx = blockIdx;
+
+			// 3) Transform Matrix4.***
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+
+			// Float mode.**************************************************************
+			// New modifications for xxxx 20161013.*****************************
+			var has_1_color = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
+			if (has_1_color) 
+			{
+				// "type" : one of following
+				// 5120 : signed byte, 5121 : unsigned byte, 5122 : signed short, 5123 : unsigned short, 5126 : float
+				var data_type = readWriter.readUInt16(arrayBuffer, bytes_readed, bytes_readed+2); bytes_readed += 2;
+				var dim = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
+
+				var daya_bytes;
+				if (data_type === 5121) { daya_bytes = 1; }
+
+				var r = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
+				var g = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
+				var b = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
+				var alfa = 255;
+
+				if (dim === 4) 
+				{
+					alfa = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
+				}
+			}
+			
+			var has_colors = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
+			var has_texCoords = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
+			
+			if (has_colors || has_texCoords)
+			{
+				var vboDatasCount = readWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+				
+				for (var j=0; j<vboDatasCount; j++)
+				{
+					if (has_colors)
+					{
+						var data_type = readWriter.readUInt16(arrayBuffer, bytes_readed, bytes_readed+2); bytes_readed += 2;
+						var dim = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
+
+						var daya_bytes; // (5120 signed byte), (5121 unsigned byte), (5122 signed short), (5123 unsigned short), (5126 float)
+						if (data_type === 5120 || data_type === 5121) { daya_bytes = 1; }
+						else if (data_type === 5122 || data_type === 5123) { daya_bytes = 2; }
+						else if (data_type === 5126) { daya_bytes = 4; }
+						
+						var vertexCount = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+						var verticesFloatValuesCount = vertexCount * dim;
+						startBuff = bytes_readed;
+						endBuff = bytes_readed + daya_bytes * verticesFloatValuesCount; 
+						bytes_readed += daya_bytes * verticesFloatValuesCount; // updating data.***
+					}
+					
+					if (has_texCoords)
+					{
+						var data_type = readWriter.readUInt16(arrayBuffer, bytes_readed, bytes_readed+2); bytes_readed += 2;
+						
+						var daya_bytes; // (5120 signed byte), (5121 unsigned byte), (5122 signed short), (5123 unsigned short), (5126 float)
+						if (data_type === 5120 || data_type === 5121) { daya_bytes = 1; }
+						else if (data_type === 5122 || data_type === 5123) { daya_bytes = 2; }
+						else if (data_type === 5126) { daya_bytes = 4; }
+						
+						var vertexCount = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+						var verticesFloatValuesCount = vertexCount * 2; // 2 = dimension of texCoord.***
+						startBuff = bytes_readed;
+						endBuff = bytes_readed + daya_bytes * verticesFloatValuesCount; 
+						bytes_readed += daya_bytes * verticesFloatValuesCount;
+					}
+				}
+			}
+			
+			// 4) short texcoords. OLD. Change this for Materials.***
+			var textures_count = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4; // this is only indicative that there are a texcoords.***
+			if (textures_count > 0) 
+			{
+
+				// Now, read the texture_type and texture_file_name.***
+				var texture_type_nameLegth = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+				for (var j=0; j<texture_type_nameLegth; j++) 
+				{
+					bytes_readed += 1; // for example "diffuse".***
+				}
+
+				var texture_fileName_Legth = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+				for (var j=0; j<texture_fileName_Legth; j++) 
+				{
+					bytes_readed += 1;
+				}
+			} 
+			
+			// do the stadistic recount.
+			if (neoRef.refMatrixType == 0){ stadistic_refMat_Identities_count +=1; }
+			if (neoRef.refMatrixType == 1){ stadistic_refMat_Translates_count +=1; }
+			if (neoRef.refMatrixType == 2){ stadistic_refMat_Transforms_count +=1; }
+		}
+		else
+		{
+
+			motherNeoReferencesArray[neoRef._id] = neoRef;
+			if (this.neoRefsIndices === undefined)
+			{ this.neoRefsIndices = []; }
+			
+			this.neoRefsIndices.push(neoRef._id);
+
+			var objectIdLength = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed +=1;
+			var objectId = String.fromCharCode.apply(null, new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+objectIdLength)));
+			neoRef.objectId = objectId;
+			bytes_readed += objectIdLength;
+
+			// 2) Block's Idx.***
+			var blockIdx =   readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._block_idx = blockIdx;
+
+			// 3) Transform Matrix4.***
+			neoRef._originalMatrix4._floatArrays[0] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._originalMatrix4._floatArrays[1] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._originalMatrix4._floatArrays[2] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._originalMatrix4._floatArrays[3] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+
+			neoRef._originalMatrix4._floatArrays[4] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._originalMatrix4._floatArrays[5] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._originalMatrix4._floatArrays[6] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._originalMatrix4._floatArrays[7] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+
+			neoRef._originalMatrix4._floatArrays[8] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._originalMatrix4._floatArrays[9] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._originalMatrix4._floatArrays[10] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._originalMatrix4._floatArrays[11] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+
+			neoRef._originalMatrix4._floatArrays[12] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._originalMatrix4._floatArrays[13] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._originalMatrix4._floatArrays[14] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			neoRef._originalMatrix4._floatArrays[15] =  readWriter.readFloat32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			
+			// Compute the references matrix type.
+			neoRef.refMatrixType = neoRef._originalMatrix4.computeMatrixType();
+			if (neoRef.refMatrixType === 0){ stadistic_refMat_Identities_count +=1; }
+			if (neoRef.refMatrixType === 1)
+			{
+				neoRef.refTranslationVec = new Float32Array([neoRef._originalMatrix4._floatArrays[12], neoRef._originalMatrix4._floatArrays[13], neoRef._originalMatrix4._floatArrays[14]]);
+				stadistic_refMat_Translates_count +=1;
+			}
+			if (neoRef.refMatrixType === 2){ stadistic_refMat_Transforms_count +=1; }
+
+			// Float mode.**************************************************************
+			// New modifications for xxxx 20161013.*****************************
+			var has_1_color = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
+			if (has_1_color) 
+			{
+				// "type" : one of following
+				// 5120 : signed byte, 5121 : unsigned byte, 5122 : signed short, 5123 : unsigned short, 5126 : float
+				var data_type = readWriter.readUInt16(arrayBuffer, bytes_readed, bytes_readed+2); bytes_readed += 2;
+				var dim = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
+
+				var daya_bytes;
+				if (data_type === 5121) { daya_bytes = 1; }
+
+				var r = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
+				var g = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
+				var b = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
+				var alfa = 255;
+
+				if (dim === 4) 
+				{
+					alfa = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+daya_bytes); bytes_readed += daya_bytes;
+				}
+
+				neoRef.color4 = new Color();
+				neoRef.color4.set(r, g, b, alfa);
+			}
+			
+			var has_colors = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
+			var has_texCoords = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
+			
+			if (has_colors || has_texCoords)
+			{
+				var vboDatasCount = readWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+				
+				if (vboDatasCount > 0)
+				{
+					if (neoRef.vBOVertexIdxCacheKeysContainer === undefined)
+					{ neoRef.vBOVertexIdxCacheKeysContainer = new VBOVertexIdxCacheKeysContainer(); }
+				}
+				
+				for (var j=0; j<vboDatasCount; j++)
+				{
+					var vboViCacheKey = neoRef.vBOVertexIdxCacheKeysContainer.newVBOVertexIdxCacheKey();
+					
+					if (has_colors)
+					{
+						var data_type = readWriter.readUInt16(arrayBuffer, bytes_readed, bytes_readed+2); bytes_readed += 2;
+						var dim = readWriter.readUInt8(arrayBuffer, bytes_readed, bytes_readed+1); bytes_readed += 1;
+
+						var daya_bytes; // (5120 signed byte), (5121 unsigned byte), (5122 signed short), (5123 unsigned short), (5126 float)
+						if (data_type === 5120 || data_type === 5121) { daya_bytes = 1; }
+						else if (data_type === 5122 || data_type === 5123) { daya_bytes = 2; }
+						else if (data_type === 5126) { daya_bytes = 4; }
+						
+						var vertexCount = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+						var verticesFloatValuesCount = vertexCount * dim;
+						colByteSize = daya_bytes * verticesFloatValuesCount;
+						classifiedColByteSize = vboMemManager.getClassifiedBufferSize(colByteSize);
+						
+						neoRef.vertexCount = vertexCount; // no necessary.***
+						startBuff = bytes_readed;
+						endBuff = bytes_readed + daya_bytes * verticesFloatValuesCount; 
+						//vboViCacheKey.colVboDataArray = new Float32Array(arrayBuffer.slice(startBuff, endBuff)); // original.***
+						// TODO: Float32Array or UintArray depending of dataType.***
+						vboViCacheKey.colVboDataArray = new Float32Array(classifiedColByteSize);
+						vboViCacheKey.colVboDataArray.set(new Float32Array(arrayBuffer.slice(startBuff, endBuff)));
+						vboViCacheKey.colArrayByteSize = classifiedColByteSize;
+						bytes_readed += daya_bytes * verticesFloatValuesCount; // updating data.***
+						
+						// send data to gpu.
+						if (!vboViCacheKey.isReadyColors(gl, magoManager.vboMemoryManager))
+						{
+							this.succesfullyGpuDataBinded = false;
+						}
+					}
+					
+					if (has_texCoords)
+					{
+						var data_type = readWriter.readUInt16(arrayBuffer, bytes_readed, bytes_readed+2); bytes_readed += 2;
+						
+						var daya_bytes; // (5120 signed byte), (5121 unsigned byte), (5122 signed short), (5123 unsigned short), (5126 float)
+						if (data_type === 5120 || data_type === 5121) { daya_bytes = 1; }
+						else if (data_type === 5122 || data_type === 5123) { daya_bytes = 2; }
+						else if (data_type === 5126) { daya_bytes = 4; }
+						
+						var vertexCount = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+						var verticesFloatValuesCount = vertexCount * 2; // 2 = dimension of texCoord.***
+						// example: posByteSize = 4 * verticesFloatValuesCount;
+						tCoordByteSize = daya_bytes * verticesFloatValuesCount;
+						classifiedTCoordByteSize = vboMemManager.getClassifiedBufferSize(tCoordByteSize);
+						
+						neoRef.vertexCount = vertexCount; // no necessary.***
+						startBuff = bytes_readed;
+						endBuff = bytes_readed + daya_bytes * verticesFloatValuesCount; 
+						//vboViCacheKey.tcoordVboDataArray = new Float32Array(arrayBuffer.slice(startBuff, endBuff)); // original.***
+						vboViCacheKey.tcoordVboDataArray = new Float32Array(classifiedTCoordByteSize);
+						vboViCacheKey.tcoordVboDataArray.set(new Float32Array(arrayBuffer.slice(startBuff, endBuff)));
+						vboViCacheKey.tcoordArrayByteSize = classifiedTCoordByteSize;
+						bytes_readed += daya_bytes * verticesFloatValuesCount;
+						
+						// send data to gpu.
+						if (!vboViCacheKey.isReadyTexCoords(gl, magoManager.vboMemoryManager))
+						{
+							this.succesfullyGpuDataBinded = false;
+						}
+					}
+				}
+			}
+
+			// 4) short texcoords. OLD. Change this for Materials.***
+			var textures_count = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4; // this is only indicative that there are a texcoords.***
+			if (textures_count > 0) 
+			{
+				var textureTypeName = "";
+				var textureImageFileName = "";
+
+				// Now, read the texture_type and texture_file_name.***
+				var texture_type_nameLegth = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+				for (var j=0; j<texture_type_nameLegth; j++) 
+				{
+					textureTypeName += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1; // for example "diffuse".***
+				}
+
+				var texture_fileName_Legth = readWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+				for (var j=0; j<texture_fileName_Legth; j++) 
+				{
+					textureImageFileName += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
+				}
+				
+				if (texture_fileName_Legth > 0)
+				{
+					neoRef.texture = new Texture();
+					neoRef.hasTexture = true;
+					neoRef.texture.textureTypeName = textureTypeName;
+					neoRef.texture.textureImageFileName = textureImageFileName;
+				}
+
+				/*
+				// 1pixel texture, wait for texture to load.********************************************
+				if(neoRef.texture.texId === undefined)
+					neoRef.texture.texId = gl.createTexture();
+				gl.bindTexture(gl.TEXTURE_2D, neoRef.texture.texId);
+				gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([90, 80, 85, 255])); // red
+				gl.bindTexture(gl.TEXTURE_2D, null);
+				*/
+			}
+			else 
+			{
+				neoRef.hasTexture = false;
+			}
+
+			if (tMatrix4)
+			{
+				neoRef.multiplyTransformMatrix(tMatrix4);
+			}
+		}
+
+	}
+	
+	this.createModelReferencedGroups(); // test for stadistics.
+	
+
+	// Now occlusion cullings.***
+	// Occlusion culling octree data.*****
+	if (this.exterior_ocCullOctree === undefined)
+	{ this.exterior_ocCullOctree = new OcclusionCullingOctreeCell(); }
+
+	var infiniteOcCullBox = this.exterior_ocCullOctree;
+	//bytes_readed = this.readOcclusionCullingOctreeCell(arrayBuffer, bytes_readed, infiniteOcCullBox); // old.***
+	bytes_readed = this.exterior_ocCullOctree.parseArrayBuffer(arrayBuffer, bytes_readed, readWriter);
+	infiniteOcCullBox.expandBox(1000); // Only for the infinite box.***
+	infiniteOcCullBox.setSizesSubBoxes();
+	infiniteOcCullBox.createModelReferencedGroups(this.motherNeoRefsList);
+
+	if (this.interior_ocCullOctree === undefined)
+	{ this.interior_ocCullOctree = new OcclusionCullingOctreeCell(); }
+
+	var ocCullBox = this.interior_ocCullOctree;
+	//bytes_readed = this.readOcclusionCullingOctreeCell(arrayBuffer, bytes_readed, ocCullBox); // old.***
+	bytes_readed = this.interior_ocCullOctree.parseArrayBuffer(arrayBuffer, bytes_readed, readWriter);
+	ocCullBox.setSizesSubBoxes();
+	ocCullBox.createModelReferencedGroups(this.motherNeoRefsList);
+
+	this.fileLoadState = CODE.fileLoadState.PARSE_FINISHED;
+	return this.succesfullyGpuDataBinded;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class NeoTexture
+ */
+var NeoTexture = function() 
+{
+	if (!(this instanceof NeoTexture)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.lod;
+	this.textureId; // texture id in gl.***
+	this.texImage; // image. delete this once upload to gl.***
+	this.loadStarted = false;
+	this.loadFinished = false;
+};
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Octree
+ *
+ * @param octreeOwner 변수
+ */
+var Octree = function(octreeOwner) 
+{
+	if (!(this instanceof Octree)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	// Note: an octree is a cube, not a box.***
+	this.centerPos = new Point3D();
+	this.half_dx = 0.0; // half width.***
+	this.half_dy = 0.0; // half length.***
+	this.half_dz = 0.0; // half height.***
+
+	this.octree_owner;
+	this.octree_level = 0;
+	this.octree_number_name = 0;
+	this.squareDistToEye = 10000.0;
+	this.triPolyhedronsCount = 0; // no calculated. Readed when parsing.***
+	this.fileLoadState = CODE.fileLoadState.READY;
+
+	if (octreeOwner) 
+	{
+		this.octree_owner = octreeOwner;
+		this.octree_level = octreeOwner.octree_level + 1;
+	}
+
+	this.subOctrees_array = [];
+	this.neoReferencesMotherAndIndices; // Asimetric mode.***
+
+	// now, for legoStructure.***
+	this.lego;
+	
+	// aditional data for web world wind, provisionally.******************
+	this.provisionalSegmentsArray;
+	// end provisional data.----------------------------------------------
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns subOctree 변수
+ */
+Octree.prototype.new_subOctree = function() 
+{
+	var subOctree = new Octree(this);
+	subOctree.octree_level = this.octree_level + 1;
+	this.subOctrees_array.push(subOctree);
+	return subOctree;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param treeDepth 변수
+ */
+Octree.prototype.deleteGlObjects = function(gl, vboMemManager) 
+{
+	if (this.lego !== undefined) 
+	{
+		this.lego.deleteObjects(gl, vboMemManager);
+		this.lego = undefined;
+	}
+	
+	this.legoDataArrayBuffer = undefined;
+	this.centerPos.deleteObjects();
+	this.centerPos = undefined;
+	this.half_dx = undefined; // half width.***
+	this.half_dy = undefined; // half length.***
+	this.half_dz = undefined; // half height.***
+
+	this.octree_owner = undefined;
+	this.octree_level = undefined;
+	this.octree_number_name = undefined;
+	this.squareDistToEye = undefined;
+	this.triPolyhedronsCount = undefined; // no calculated. Readed when parsing.***
+	this.fileLoadState = undefined; // 0 = no started to load. 1 = started loading. 2 = finished loading. 3 = parse started. 4 = parse finished.***
+
+	this.neoBuildingOwner = undefined;
+
+	if (this.neoReferencesMotherAndIndices)
+	{ this.neoReferencesMotherAndIndices.deleteObjects(gl, vboMemManager); }
+
+	this.neoReferencesMotherAndIndices = undefined;
+
+	// delete the blocksList.***
+	if (this.neoRefsList_Array !== undefined) 
+	{
+		for (var i=0, neoRefListsCount = this.neoRefsList_Array.length; i<neoRefListsCount; i++) 
+		{
+			if (this.neoRefsList_Array[i]) 
+			{
+				this.neoRefsList_Array[i].deleteGlObjects(gl, vboMemManager);
+			}
+			this.neoRefsList_Array[i] = undefined;
+		}
+		this.neoRefsList_Array = undefined;
+	}
+
+	if (this.subOctrees_array !== undefined) 
+	{
+		for (var i=0, subOctreesCount = this.subOctrees_array.length; i<subOctreesCount; i++) 
+		{
+			this.subOctrees_array[i].deleteGlObjects(gl, vboMemManager);
+			this.subOctrees_array[i] = undefined;
+		}
+		this.subOctrees_array = undefined;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param treeDepth 변수
+ */
+Octree.prototype.deleteLod0GlObjects = function(gl, vboMemManager) 
+{
+	if (this.neoReferencesMotherAndIndices)
+	{ this.neoReferencesMotherAndIndices.deleteObjects(gl, vboMemManager); }
+
+	if (this.subOctrees_array !== undefined) 
+	{
+		for (var i=0, subOctreesCount = this.subOctrees_array.length; i<subOctreesCount; i++) 
+		{
+			this.subOctrees_array[i].deleteLod0GlObjects(gl, vboMemManager);
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param treeDepth 변수
+ */
+Octree.prototype.setRenderedFalseToAllReferences = function() 
+{
+
+
+	if (this.neoReferencesMotherAndIndices)
+	{
+		this.neoReferencesMotherAndIndices.setRenderedFalseToAllReferences();
+		var subOctreesCount = this.subOctrees_array.length;
+		for (var i=0; i<subOctreesCount; i++) 
+		{
+			this.subOctrees_array[i].setRenderedFalseToAllReferences();
+		}
+	}
+
+
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param treeDepth 변수
+ */
+Octree.prototype.makeTree = function(treeDepth) 
+{
+	if (this.octree_level < treeDepth) 
+	{
+		for (var i=0; i<8; i++) 
+		{
+			var subOctree = this.new_subOctree();
+			subOctree.octree_number_name = this.octree_number_name * 10 + (i+1);
+		}
+
+		this.setSizesSubBoxes();
+
+		for (var i=0; i<8; i++) 
+		{
+			this.subOctrees_array[i].makeTree(treeDepth);
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param intNumber 변수
+ * @returns numDigits
+ */
+Octree.prototype.getNumberOfDigits = function(intNumber) 
+{
+	if (intNumber > 0) 
+	{
+		var numDigits = Math.floor(Math.log10(intNumber)+1);
+		return numDigits;
+	}
+	else 
+	{
+		return 1;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+Octree.prototype.getMotherOctree = function() 
+{
+	if (this.octree_owner === undefined) { return this; }
+
+	return this.octree_owner.getMotherOctree();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param octreeNumberName 변수
+ * @param numDigits 변수
+ * @returns subOctrees_array[idx-1].getOctree(rest_octreeNumberName, numDigits-1)
+ */
+Octree.prototype.getOctree = function(octreeNumberName, numDigits) 
+{
+	if (numDigits === 1) 
+	{
+		if (octreeNumberName === 0) { return this.getMotherOctree(); }
+		else { return this.subOctrees_array[octreeNumberName-1]; }
+	}
+
+	// determine the next level octree.***
+	var exp = numDigits-1;
+	var denominator = Math.pow(10, exp);
+	var idx = Math.floor(octreeNumberName /denominator) % 10;
+	var rest_octreeNumberName = octreeNumberName - idx * denominator;
+	return this.subOctrees_array[idx-1].getOctree(rest_octreeNumberName, numDigits-1);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param octreeNumberName 변수
+ * @returns motherOctree.subOctrees_array[idx-1].getOctree(rest_octreeNumberName, numDigits-1)
+ */
+Octree.prototype.getOctreeByNumberName = function(octreeNumberName) 
+{
+	var motherOctree = this.getMotherOctree();
+	var numDigits = this.getNumberOfDigits(octreeNumberName);
+	if (numDigits === 1) 
+	{
+		if (octreeNumberName === 0) { return motherOctree; }
+		else { return motherOctree.subOctrees_array[octreeNumberName-1]; }
+	}
+
+	if (motherOctree.subOctrees_array.length === 0) { return undefined; }
+
+	// determine the next level octree.***
+	var exp = numDigits-1;
+	var denominator = Math.pow(10, exp);
+	var idx = Math.floor(octreeNumberName /denominator) % 10;
+	var rest_octreeNumberName = octreeNumberName - idx * denominator;
+	return motherOctree.subOctrees_array[idx-1].getOctree(rest_octreeNumberName, numDigits-1);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+Octree.prototype.setSizesSubBoxes = function() 
+{
+	// Octree number name.********************************
+	// Bottom                      Top
+	// |---------|---------|     |---------|---------|
+	// |         |         |     |         |         |       Y
+	// |    3    |    2    |     |    7    |    6    |       ^
+	// |         |         |     |         |         |       |
+	// |---------+---------|     |---------+---------|       |
+	// |         |         |     |         |         |       |
+	// |    0    |    1    |     |    4    |    5    |       |
+	// |         |         |     |         |         |       |-----------> X
+	// |---------|---------|     |---------|---------|
+
+	if (this.subOctrees_array.length > 0) 
+	{
+		var half_x = this.centerPos.x;
+		var half_y = this.centerPos.y;
+		var half_z = this.centerPos.z;
+
+		var min_x = this.centerPos.x - this.half_dx;
+		var min_y = this.centerPos.y - this.half_dy;
+		var min_z = this.centerPos.z - this.half_dz;
+
+		var max_x = this.centerPos.x + this.half_dx;
+		var max_y = this.centerPos.y + this.half_dy;
+		var max_z = this.centerPos.z + this.half_dz;
+
+		this.subOctrees_array[0].setBoxSize(min_x, half_x, min_y, half_y, min_z, half_z);
+		this.subOctrees_array[1].setBoxSize(half_x, max_x, min_y, half_y, min_z, half_z);
+		this.subOctrees_array[2].setBoxSize(half_x, max_x, half_y, max_y, min_z, half_z);
+		this.subOctrees_array[3].setBoxSize(min_x, half_x, half_y, max_y, min_z, half_z);
+
+		this.subOctrees_array[4].setBoxSize(min_x, half_x, min_y, half_y, half_z, max_z);
+		this.subOctrees_array[5].setBoxSize(half_x, max_x, min_y, half_y, half_z, max_z);
+		this.subOctrees_array[6].setBoxSize(half_x, max_x, half_y, max_y, half_z, max_z);
+		this.subOctrees_array[7].setBoxSize(min_x, half_x, half_y, max_y, half_z, max_z);
+
+		for (var i=0; i<8; i++) 
+		{
+			this.subOctrees_array[i].setSizesSubBoxes();
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param Min_x 변수
+ * @param Max_x 변수
+ * @param Min_y 변수
+ * @param Max_y 변수
+ * @param Min_z 변수
+ * @param Max_z 변수
+ */
+Octree.prototype.setBoxSize = function(Min_X, Max_X, Min_Y, Max_Y, Min_Z, Max_Z) 
+{
+	this.centerPos.x = (Max_X + Min_X)/2.0;
+	this.centerPos.y = (Max_Y + Min_Y)/2.0;
+	this.centerPos.z = (Max_Z + Min_Z)/2.0;
+
+	this.half_dx = (Max_X - Min_X)/2.0; // half width.***
+	this.half_dy = (Max_Y - Min_Y)/2.0; // half length.***
+	this.half_dz = (Max_Z - Min_Z)/2.0; // half height.***
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns centerPos
+ */
+Octree.prototype.getCenterPos = function() 
+{
+	return this.centerPos;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns Math.abs(this.half_dx*1.2);
+ */
+Octree.prototype.getRadiusAprox = function() 
+{
+	//return Math.abs(this.half_dx*1.2);
+	return Math.abs(this.half_dx*3.0);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param result_CRefListsArray 변수
+ */
+Octree.prototype.getCRefListArray = function(result_CRefListsArray) 
+{
+	if (result_CRefListsArray === undefined) { result_CRefListsArray = []; }
+
+	if (this.subOctrees_array.length > 0) 
+	{
+		for (var i=0, subOctreesArrayLength = this.subOctrees_array.length; i<subOctreesArrayLength; i++) 
+		{
+			this.subOctrees_array[i].getCRefListArray(result_CRefListsArray);
+		}
+	}
+	else 
+	{
+		if (this.compRefsListArray.length>0) 
+		{
+			result_CRefListsArray.push(this.compRefsListArray[0]); // there are only 1.***
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param result_NeoRefListsArray 변수
+ */
+Octree.prototype.getNeoRefListArray = function(result_NeoRefListsArray) 
+{
+	if (result_NeoRefListsArray === undefined) { result_NeoRefListsArray = []; }
+
+	var subOctreesArrayLength = this.subOctrees_array.length;
+	if (subOctreesArrayLength > 0) 
+	{
+		for (var i=0; i<subOctreesArrayLength; i++) 
+		{
+			this.subOctrees_array[i].getNeoRefListArray(result_NeoRefListsArray);
+		}
+	}
+	else 
+	{
+		if (this.neoRefsList_Array.length>0) // original.***
+		//if(this.triPolyhedronsCount>0)
+		{
+			result_NeoRefListsArray.push(this.neoRefsList_Array[0]); // there are only 1.***
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param cesium_cullingVolume 변수
+ * @param result_CRefListsArray 변수
+ * @param cesium_boundingSphere_scratch 변수
+ * @param eye_x 변수
+ * @param eye_y 변수
+ * @param eye_z 변수
+ */
+Octree.prototype.getFrustumVisibleCRefListArray = function(cesium_cullingVolume, result_CRefListsArray, cesium_boundingSphere_scratch, eye_x, eye_y, eye_z) 
+{
+	var visibleOctreesArray = [];
+	var sortedOctreesArray = [];
+	var distAux = 0.0;
+
+	//this.getAllSubOctrees(visibleOctreesArray); // Test.***
+	this.getFrustumVisibleOctrees(cesium_cullingVolume, visibleOctreesArray, cesium_boundingSphere_scratch);
+
+	// Now, we must sort the subOctrees near->far from eye.***
+	var visibleOctrees_count = visibleOctreesArray.length;
+	for (var i=0; i<visibleOctrees_count; i++) 
+	{
+		visibleOctreesArray[i].setSquareDistToEye(eye_x, eye_y, eye_z);
+		this.putOctreeInEyeDistanceSortedArray(sortedOctreesArray, visibleOctreesArray[i], eye_x, eye_y, eye_z);
+	}
+
+	for (var i=0; i<visibleOctrees_count; i++) 
+	{
+		sortedOctreesArray[i].getCRefListArray(result_CRefListsArray);
+		//visibleOctreesArray[i].getCRefListArray(result_CRefListsArray);
+	}
+
+	visibleOctreesArray.length = 0;
+	excludedOctArray.length = 0;
+
+	visibleOctreesArray = undefined;
+	excludedOctArray = undefined;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param cesium_cullingVolume 변수
+ * @param result_NeoRefListsArray 변수
+ * @param cesium_boundingSphere_scratch 변수
+ * @param eye_x 변수
+ * @param eye_y 변수
+ * @param eye_z 변수
+ */
+Octree.prototype.getFrustumVisibleNeoRefListArray = function(cesium_cullingVolume, result_NeoRefListsArray, cesium_boundingSphere_scratch, eye_x, eye_y, eye_z) 
+{
+	var visibleOctreesArray = [];
+	var sortedOctreesArray = [];
+	var distAux = 0.0;
+
+	//this.getAllSubOctrees(visibleOctreesArray); // Test.***
+	this.getFrustumVisibleOctreesNeoBuilding(cesium_cullingVolume, visibleOctreesArray, cesium_boundingSphere_scratch); // Original.***
+
+	// Now, we must sort the subOctrees near->far from eye.***
+	var visibleOctrees_count = visibleOctreesArray.length;
+	for (var i=0; i<visibleOctrees_count; i++) 
+	{
+		visibleOctreesArray[i].setSquareDistToEye(eye_x, eye_y, eye_z);
+		this.putOctreeInEyeDistanceSortedArray(sortedOctreesArray, visibleOctreesArray[i], eye_x, eye_y, eye_z);
+	}
+
+	for (var i=0; i<visibleOctrees_count; i++) 
+	{
+		sortedOctreesArray[i].getNeoRefListArray(result_NeoRefListsArray);
+	}
+
+	visibleOctreesArray = null;
+	sortedOctreesArray = null;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param cullingVolume 변수
+ * @param result_NeoRefListsArray 변수
+ * @param boundingSphere_scratch 변수
+ * @param eye_x 변수
+ * @param eye_y 변수
+ * @param eye_z 변수
+ */
+Octree.prototype.getBBoxIntersectedLowestOctreesByLOD = function(bbox, visibleObjControlerOctrees, globalVisibleObjControlerOctrees,
+	bbox_scratch, eye_x, eye_y, eye_z, squaredDistLod0, squaredDistLod1, squaredDistLod2 ) 
+{
+	var visibleOctreesArray = [];
+	var distAux = 0.0;
+	var find = false;
+
+	this.getBBoxIntersectedOctreesNeoBuildingAsimetricVersion(bbox, visibleOctreesArray, bbox_scratch);
+	//this.getFrustumVisibleOctreesNeoBuildingAsimetricVersion(cullingVolume, visibleOctreesArray, boundingSphere_scratch); // Original.***
+
+	// Now, we must sort the subOctrees near->far from eye.***
+	var visibleOctrees_count = visibleOctreesArray.length;
+	for (var i=0; i<visibleOctrees_count; i++) 
+	{
+		visibleOctreesArray[i].setSquareDistToEye(eye_x, eye_y, eye_z);
+	}
+
+	for (var i=0; i<visibleOctrees_count; i++) 
+	{
+		if (visibleOctreesArray[i].squareDistToEye < squaredDistLod0) 
+		{
+			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
+			{
+				if (globalVisibleObjControlerOctrees)
+				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles0, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
+				visibleObjControlerOctrees.currentVisibles0.push(visibleOctreesArray[i]);
+				find = true;
+			}
+		}
+		else if (visibleOctreesArray[i].squareDistToEye < squaredDistLod1) 
+		{
+			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
+			{
+				if (globalVisibleObjControlerOctrees)
+				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles1, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
+				visibleObjControlerOctrees.currentVisibles1.push(visibleOctreesArray[i]);
+				find = true;
+			}
+		}
+		else if (visibleOctreesArray[i].squareDistToEye < squaredDistLod2) 
+		{
+			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
+			{
+				if (globalVisibleObjControlerOctrees)
+				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles2, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
+				visibleObjControlerOctrees.currentVisibles2.push(visibleOctreesArray[i]);
+				find = true;
+			}
+		}
+		else 
+		{
+			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
+			{
+				if (globalVisibleObjControlerOctrees)
+				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles3, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
+				visibleObjControlerOctrees.currentVisibles3.push(visibleOctreesArray[i]);
+				find = true;
+			}
+		}
+	}
+
+	visibleOctreesArray = null;
+	return find;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param cullingVolume 변수
+ * @param result_NeoRefListsArray 변수
+ * @param boundingSphere_scratch 변수
+ * @param eye_x 변수
+ * @param eye_y 변수
+ * @param eye_z 변수
+ */
+Octree.prototype.getFrustumVisibleLowestOctreesByLOD = function(cullingVolume, visibleObjControlerOctrees, globalVisibleObjControlerOctrees,
+	boundingSphere_scratch, eye_x, eye_y, eye_z, squaredDistLod0, squaredDistLod1, squaredDistLod2 ) 
+{
+	var visibleOctreesArray = [];
+	var distAux = 0.0;
+	var find = false;
+
+	//this.getAllSubOctrees(visibleOctreesArray); // Test.***
+	this.getFrustumVisibleOctreesNeoBuildingAsimetricVersion(cullingVolume, visibleOctreesArray, boundingSphere_scratch); // Original.***
+
+	// Now, we must sort the subOctrees near->far from eye.***
+	var visibleOctrees_count = visibleOctreesArray.length;
+	for (var i=0; i<visibleOctrees_count; i++) 
+	{
+		visibleOctreesArray[i].setSquareDistToEye(eye_x, eye_y, eye_z);
+	}
+
+	for (var i=0; i<visibleOctrees_count; i++) 
+	{
+		if (visibleOctreesArray[i].squareDistToEye < squaredDistLod0) 
+		{
+			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
+			{
+				if (globalVisibleObjControlerOctrees)
+				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles0, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
+				visibleObjControlerOctrees.currentVisibles0.push(visibleOctreesArray[i]);
+				find = true;
+			}
+		}
+		else if (visibleOctreesArray[i].squareDistToEye < squaredDistLod1) 
+		{
+			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
+			{
+				if (globalVisibleObjControlerOctrees)
+				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles1, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
+				visibleObjControlerOctrees.currentVisibles1.push(visibleOctreesArray[i]);
+				find = true;
+			}
+		}
+		else if (visibleOctreesArray[i].squareDistToEye < squaredDistLod2) 
+		{
+			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
+			{
+				if (globalVisibleObjControlerOctrees)
+				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles2, visibleOctreesArray[i], eye_x, eye_y, eye_z); }
+				visibleObjControlerOctrees.currentVisibles2.push(visibleOctreesArray[i]);
+				find = true;
+			}
+		}
+		else 
+		{
+			if (visibleOctreesArray[i].triPolyhedronsCount > 0) 
+			{
+				if (globalVisibleObjControlerOctrees)
+				{ globalVisibleObjControlerOctrees.currentVisibles3.push(visibleOctreesArray[i]); }
+				visibleObjControlerOctrees.currentVisibles3.push(visibleOctreesArray[i]);
+				find = true;
+			}
+		}
+	}
+
+	visibleOctreesArray = null;
+	return find;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param cullingVolume 변수
+ * @param result_NeoRefListsArray 변수
+ * @param boundingSphere_scratch 변수
+ * @param eye_x 변수
+ * @param eye_y 변수
+ * @param eye_z 변수
+ */
+Octree.prototype.extractLowestOctreesByLOD = function(visibleObjControlerOctrees, globalVisibleObjControlerOctrees,
+	boundingSphere_scratch, eye_x, eye_y, eye_z, squaredDistLod0, squaredDistLod1, squaredDistLod2 ) 
+{
+	var lowestOctreesArray = [];
+	var distAux = 0.0;
+	var find = false;
+
+	this.extractLowestOctreesIfHasTriPolyhedrons(lowestOctreesArray);
+	
+	// Now, we must sort the subOctrees near->far from eye.***
+	var visibleOctrees_count = lowestOctreesArray.length;
+	for (var i=0; i<visibleOctrees_count; i++) 
+	{
+		lowestOctreesArray[i].setSquareDistToEye(eye_x, eye_y, eye_z);
+	}
+
+	for (var i=0; i<visibleOctrees_count; i++) 
+	{
+		if (lowestOctreesArray[i].squareDistToEye < squaredDistLod0) 
+		{
+			if (lowestOctreesArray[i].triPolyhedronsCount > 0) 
+			{
+				if (globalVisibleObjControlerOctrees)
+				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles0, lowestOctreesArray[i], eye_x, eye_y, eye_z); }
+				visibleObjControlerOctrees.currentVisibles0.push(lowestOctreesArray[i]);
+				find = true;
+			}
+		}
+		else if (lowestOctreesArray[i].squareDistToEye < squaredDistLod1) 
+		{
+			if (lowestOctreesArray[i].triPolyhedronsCount > 0) 
+			{
+				if (globalVisibleObjControlerOctrees)
+				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles1, lowestOctreesArray[i], eye_x, eye_y, eye_z); }
+				visibleObjControlerOctrees.currentVisibles1.push(lowestOctreesArray[i]);
+				find = true;
+			}
+		}
+		else if (lowestOctreesArray[i].squareDistToEye < squaredDistLod2) 
+		{
+			if (lowestOctreesArray[i].triPolyhedronsCount > 0) 
+			{
+				if (globalVisibleObjControlerOctrees)
+				{ this.putOctreeInEyeDistanceSortedArray(globalVisibleObjControlerOctrees.currentVisibles2, lowestOctreesArray[i], eye_x, eye_y, eye_z); }
+				visibleObjControlerOctrees.currentVisibles2.push(lowestOctreesArray[i]);
+				find = true;
+			}
+		}
+		else 
+		{
+			if (lowestOctreesArray[i].triPolyhedronsCount > 0) 
+			{
+				if (globalVisibleObjControlerOctrees)
+				{ globalVisibleObjControlerOctrees.currentVisibles3.push(lowestOctreesArray[i]); }
+				visibleObjControlerOctrees.currentVisibles3.push(lowestOctreesArray[i]);
+				find = true;
+			}
+		}
+	}
+
+	return find;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param cesium_cullingVolume 변수
+ * @param result_octreesArray 변수
+ * @param cesium_boundingSphere_scratch 변수
+ */
+Octree.prototype.getFrustumVisibleOctreesNeoBuilding = function(cesium_cullingVolume, result_octreesArray, cesium_boundingSphere_scratch) 
+{
+	if (this.subOctrees_array.length === 0 && this.neoRefsList_Array.length === 0) // original.***
+	//if(this.subOctrees_array.length === 0 && this.triPolyhedronsCount === 0)
+	//if(this.subOctrees_array.length === 0 && this.compRefsListArray.length === 0) // For use with ifc buildings.***
+	{ return; }
+
+	// this function has Cesium dependence.***
+	if (result_octreesArray === undefined) { result_octreesArray = []; }
+
+	if (cesium_boundingSphere_scratch === undefined) { cesium_boundingSphere_scratch = new Cesium.BoundingSphere(); } // Cesium dependency.***
+
+	cesium_boundingSphere_scratch.center.x = this.centerPos.x;
+	cesium_boundingSphere_scratch.center.y = this.centerPos.y;
+	cesium_boundingSphere_scratch.center.z = this.centerPos.z;
+
+	if (this.subOctrees_array.length === 0) 
+	{
+	//cesium_boundingSphere_scratch.radius = this.getRadiusAprox()*0.7;
+		cesium_boundingSphere_scratch.radius = this.getRadiusAprox();
+	}
+	else 
+	{
+		cesium_boundingSphere_scratch.radius = this.getRadiusAprox();
+	}
+
+	var frustumCull = cesium_cullingVolume.computeVisibility(cesium_boundingSphere_scratch);
+	if (frustumCull === Cesium.Intersect.INSIDE ) 
+	{
+		//result_octreesArray.push(this);
+		this.getAllSubOctreesIfHasRefLists(result_octreesArray);
+	}
+	else if (frustumCull === Cesium.Intersect.INTERSECTING  ) 
+	{
+		if (this.subOctrees_array.length === 0) 
+		{
+			//if(this.neoRefsList_Array.length > 0) // original.***
+			//if(this.triPolyhedronsCount > 0)
+			result_octreesArray.push(this);
+		}
+		else 
+		{
+			for (var i=0, subOctreesArrayLength = this.subOctrees_array.length; i<subOctreesArrayLength; i++ ) 
+			{
+				this.subOctrees_array[i].getFrustumVisibleOctreesNeoBuilding(cesium_cullingVolume, result_octreesArray, cesium_boundingSphere_scratch);
+			}
+		}
+	}
+	// else if(frustumCull === Cesium.Intersect.OUTSIDE) => do nothing.***
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param cesium_cullingVolume 변수
+ * @param result_octreesArray 변수
+ * @param boundingSphere_scratch 변수
+ */
+Octree.prototype.getFrustumVisibleOctreesNeoBuildingAsimetricVersion = function(cullingVolume, result_octreesArray, boundingSphere_scratch) 
+{
+	//if(this.subOctrees_array.length === 0 && this.neoRefsList_Array.length === 0) // original.***
+	if (this.subOctrees_array === undefined) { return; }
+
+	if (this.subOctrees_array.length === 0 && this.triPolyhedronsCount === 0)
+	//if(this.subOctrees_array.length === 0 && this.compRefsListArray.length === 0) // For use with ifc buildings.***
+	{ return; }
+
+	if (result_octreesArray === undefined) { result_octreesArray = []; }
+	
+	if (boundingSphere_scratch === undefined) 
+	{ boundingSphere_scratch = new Sphere(); } 
+
+	boundingSphere_scratch.centerPoint.x = this.centerPos.x;
+	boundingSphere_scratch.centerPoint.y = this.centerPos.y;
+	boundingSphere_scratch.centerPoint.z = this.centerPos.z;
+	boundingSphere_scratch.r = this.getRadiusAprox();
+
+	var frustumCull = cullingVolume.intersectionSphere(boundingSphere_scratch);
+	if (frustumCull === Constant.INTERSECTION_INSIDE ) 
+	{
+		//result_octreesArray.push(this);
+		this.getAllSubOctreesIfHasRefLists(result_octreesArray);
+	}
+	else if (frustumCull === Constant.INTERSECTION_INTERSECT  ) 
+	{
+		if (this.subOctrees_array.length === 0) 
+		{
+			//if(this.neoRefsList_Array.length > 0) // original.***
+			//if(this.triPolyhedronsCount > 0)
+			result_octreesArray.push(this);
+		}
+		else 
+		{
+			for (var i=0, subOctreesArrayLength = this.subOctrees_array.length; i<subOctreesArrayLength; i++ ) 
+			{
+				this.subOctrees_array[i].getFrustumVisibleOctreesNeoBuildingAsimetricVersion(cullingVolume, result_octreesArray, boundingSphere_scratch);
+			}
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param cesium_cullingVolume 변수
+ * @param result_octreesArray 변수
+ * @param boundingSphere_scratch 변수
+ */
+Octree.prototype.getBBoxIntersectedOctreesNeoBuildingAsimetricVersion = function(bbox, result_octreesArray, bbox_scratch) 
+{
+	//if(this.subOctrees_array.length === 0 && this.neoRefsList_Array.length === 0) // original.***
+	if (this.subOctrees_array === undefined) { return; }
+
+	if (this.subOctrees_array.length === 0 && this.triPolyhedronsCount === 0)
+	//if(this.subOctrees_array.length === 0 && this.compRefsListArray.length === 0) // For use with ifc buildings.***
+	{ return; }
+
+	if (result_octreesArray === undefined) { result_octreesArray = []; }
+	
+	if (bbox_scratch === undefined) 
+	{ bbox_scratch = new BoundingBox(); } 
+	
+
+	bbox_scratch.minX = this.centerPos.x - this.half_dx;
+	bbox_scratch.maxX = this.centerPos.x + this.half_dx;
+	bbox_scratch.minY = this.centerPos.y - this.half_dy;
+	bbox_scratch.maxY = this.centerPos.y + this.half_dy;
+	bbox_scratch.minZ = this.centerPos.z - this.half_dz;
+	bbox_scratch.maxZ = this.centerPos.z + this.half_dz;
+
+	var intersects = bbox.intersectsWithBBox(bbox_scratch);
+	if (intersects)
+	{
+		this.getAllSubOctreesIfHasRefLists(result_octreesArray);
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param cesium_cullingVolume 변수
+ * @param result_octreesArray 변수
+ * @param cesium_boundingSphere_scratch 변수
+ */
+Octree.prototype.getFrustumVisibleOctrees = function(cesium_cullingVolume, result_octreesArray, cesium_boundingSphere_scratch) 
+{
+	if (this.subOctrees_array.length === 0 && this.compRefsListArray.length === 0) // For use with ifc buildings.***
+	{ return; }
+	// old. delete this.***
+	// this function has Cesium dependence.***
+	if (result_octreesArray === undefined) { result_octreesArray = []; }
+
+	if (cesium_boundingSphere_scratch === undefined) { cesium_boundingSphere_scratch = new Cesium.BoundingSphere(); } // Cesium dependency.***
+
+	cesium_boundingSphere_scratch.center.x = this.centerPos.x;
+	cesium_boundingSphere_scratch.center.y = this.centerPos.y;
+	cesium_boundingSphere_scratch.center.z = this.centerPos.z;
+
+	if (this.subOctrees_array.length === 0) 
+	{
+	//cesium_boundingSphere_scratch.radius = this.getRadiusAprox()*0.7;
+		cesium_boundingSphere_scratch.radius = this.getRadiusAprox();
+	}
+	else 
+	{
+		cesium_boundingSphere_scratch.radius = this.getRadiusAprox();
+	}
+
+	var frustumCull = cesium_cullingVolume.computeVisibility(cesium_boundingSphere_scratch);
+	if (frustumCull === Cesium.Intersect.INSIDE ) 
+	{
+		//result_octreesArray.push(this);
+		this.getAllSubOctrees(result_octreesArray);
+	}
+	else if (frustumCull === Cesium.Intersect.INTERSECTING ) 
+	{
+		if (this.subOctrees_array.length === 0 && this.neoRefsList_Array.length > 0) 
+		{
+			result_octreesArray.push(this);
+		}
+		else 
+		{
+			for (var i=0, subOctreesArrayLength = this.subOctrees_array.length; i<subOctreesArrayLength; i++ ) 
+			{
+				this.subOctrees_array[i].getFrustumVisibleOctrees(cesium_cullingVolume, result_octreesArray, cesium_boundingSphere_scratch);
+			}
+		}
+	}
+	// else if(frustumCull === Cesium.Intersect.OUTSIDE) => do nothing.***
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param eye_x 변수
+ * @param eye_y 변수
+ * @param eye_z 변수
+ */
+Octree.prototype.setSquareDistToEye = function(eye_x, eye_y, eye_z) 
+{
+	this.squareDistToEye = (this.centerPos.x - eye_x)*(this.centerPos.x - eye_x) +
+							(this.centerPos.y - eye_y)*(this.centerPos.y - eye_y) +
+							(this.centerPos.z - eye_z)*(this.centerPos.z - eye_z) ;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param octreesArray 변수
+ * @param octree 변수
+ * @returns result_idx
+ */
+Octree.prototype.getIndexToInsertBySquaredDistToEye = function(octreesArray, octree) 
+{
+	// lineal implementation. In the future use dicotomic search technique.***
+	var finished = false;
+	var octrees_count = octreesArray.length;
+	var i=0;
+	var result_idx = 0;
+
+	while (!finished && i<octrees_count) 
+	{
+		if (octreesArray[i].squareDistToEye > octree.squareDistToEye) 
+		{
+			result_idx = i;
+			finished = true;
+		}
+		i++;
+	}
+	if (!finished) 
+	{
+		result_idx = octrees_count;
+	}
+
+	return result_idx;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param result_octreesArray 변수
+ * @param octree 변수
+ * @param eye_x 변수
+ * @param eye_y 변수
+ * @param eye_z 변수
+ */
+Octree.prototype.putOctreeInEyeDistanceSortedArray = function(result_octreesArray, octree, eye_x, eye_y, eye_z) 
+{
+	// sorting is from minDist to maxDist.***
+	// http://stackoverflow.com/questions/586182/how-to-insert-an-item-into-an-array-at-a-specific-index
+
+	var insert_idx= this.getIndexToInsertBySquaredDistToEye(result_octreesArray, octree);
+
+	result_octreesArray.splice(insert_idx, 0, octree);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param result_octreesArray 변수
+ */
+Octree.prototype.getAllSubOctreesIfHasRefLists = function(result_octreesArray) 
+{
+	if (this.subOctrees_array === undefined) { return; }
+
+	if (result_octreesArray === undefined) { result_octreesArray = []; }
+
+	if (this.subOctrees_array.length > 0) 
+	{
+		for (var i=0, subOctreesArrayLength = this.subOctrees_array.length; i<subOctreesArrayLength; i++) 
+		{
+			this.subOctrees_array[i].getAllSubOctreesIfHasRefLists(result_octreesArray);
+		}
+	}
+	else 
+	{
+		//if(this.neoRefsList_Array.length > 0)
+		if (this.triPolyhedronsCount > 0) { result_octreesArray.push(this); } // there are only 1.***
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param result_octreesArray 변수
+ */
+Octree.prototype.getAllSubOctrees = function(result_octreesArray) 
+{
+	if (result_octreesArray === undefined) { result_octreesArray = []; }
+
+	if (this.subOctrees_array.length > 0) 
+	{
+		for (var i=0, subOctreesArrayLength = this.subOctrees_array.length; i<subOctreesArrayLength; i++) 
+		{
+			this.subOctrees_array[i].getAllSubOctrees(result_octreesArray);
+		}
+	}
+	else 
+	{
+		result_octreesArray.push(this); // there are only 1.***
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param result_octreesArray 변수
+ */
+Octree.prototype.extractLowestOctreesIfHasTriPolyhedrons = function(lowestOctreesArray) 
+{
+	if (this.subOctrees_array == undefined)
+	{ return; }
+	
+	var subOctreesCount = this.subOctrees_array.length;
+
+	if (subOctreesCount === 0 && this.triPolyhedronsCount > 0) 
+	{
+		lowestOctreesArray.push(this);
+	}
+	else 
+	{
+		for (var i=0; i<subOctreesCount; i++) 
+		{
+			this.subOctrees_array[i].extractLowestOctreesIfHasTriPolyhedrons(lowestOctreesArray);
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param result_octreesArray 변수
+ */
+Octree.prototype.multiplyKeyTransformMatrix = function(idxKey, matrix) 
+{
+	var subOctreesCount = this.subOctrees_array.length;
+
+	if (subOctreesCount === 0 && this.triPolyhedronsCount > 0) 
+	{
+		if (this.neoReferencesMotherAndIndices)
+		{ this.neoReferencesMotherAndIndices.multiplyKeyTransformMatrix(idxKey, matrix); }
+	}
+	else 
+	{
+		for (var i=0; i<subOctreesCount; i++) 
+		{
+			this.subOctrees_array[i].multiplyKeyTransformMatrix(idxKey, matrix);
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param result_octreesArray 변수
+ */
+Octree.prototype.parseAsimetricVersion = function(arrayBuffer, readerWriter, bytesReaded, neoBuildingOwner) 
+{
+	var octreeLevel = readerWriter.readInt32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+
+	if (octreeLevel === 0) 
+	{
+		// this is the mother octree, so read the mother octree's size.***
+		var minX = readerWriter.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+		var maxX = readerWriter.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+		var minY = readerWriter.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+		var maxY = readerWriter.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+		var minZ = readerWriter.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+		var maxZ = readerWriter.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+
+		this.setBoxSize(minX, maxX, minY, maxY, minZ, maxZ );
+		this.octree_number_name = 0;
+	}
+
+	var subOctreesCount = readerWriter.readUInt8(arrayBuffer, bytesReaded, bytesReaded+1); bytesReaded += 1; // this must be 0 or 8.***
+	this.triPolyhedronsCount = readerWriter.readInt32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+	if (this.triPolyhedronsCount > 0)
+	{ this.neoBuildingOwner = neoBuildingOwner; }
+
+	// 1rst, create the 8 subOctrees.***
+	for (var i=0; i<subOctreesCount; i++) 
+	{
+		var subOctree = this.new_subOctree();
+		subOctree.octree_number_name = this.octree_number_name * 10 + (i+1);
+	}
+
+	// now, set size of subOctrees.***
+	this.setSizesSubBoxes();
+
+	for (var i=0; i<subOctreesCount; i++) 
+	{
+		var subOctree = this.subOctrees_array[i];
+		bytesReaded = subOctree.parseAsimetricVersion(arrayBuffer, readerWriter, bytesReaded, neoBuildingOwner);
+	}
+
+	return bytesReaded;
+};
+
+'use strict';
+
+/**
+ * ParseQueue
+ * 
+ * @alias ParseQueue
+ * @class ParseQueue
+ */
+var ParseQueue = function() 
+{
+	if (!(this instanceof ParseQueue)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.octreesLod0ReferencesToParseArray = [];
+	this.octreesLod0ModelsToParseArray = [];
+	this.octreesLod2LegosToParseArray = [];
+	this.neoBuildingsHeaderToParseArray = [];
+};
+'use strict';
+
+/**
+ * ProcessQueue
+ * 
+ * @alias ProcessQueue
+ * @class ProcessQueue
+ */
+var ProcessQueue = function() 
+{
+	if (!(this instanceof ProcessQueue)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.buildingsToDelete = [];
+};
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class ReaderWriter
+ */
+var ReaderWriter = function() 
+{
+	if (!(this instanceof ReaderWriter)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	//this.geometryDataPath = "/F4D_GeometryData";
+	this.geometryDataPath = MagoConfig.getPolicy().geo_data_path;
+	this.viArraysContainer = new VertexIdxVBOArraysContainer();
+	this.byteColorsVBOArraysContainer = new ByteColorsVBOArraysContainer();
+	//var simpleBuildingImage = new Image();
+
+	this.j_counter;
+	this.k_counter;
+
+	this.gl;
+	this.incre_latAng = 0.001;
+	this.incre_longAng = 0.001;
+	this.GAIA3D__offset_latitude = -0.001;
+	this.GAIA3D__offset_longitude = -0.001;
+	this.GAIA3D__counter = 0;
+
+	// Var for reading files.
+	this.uint32;
+	this.uint16;
+	this.int16;
+	this.float32;
+	this.float16;
+	this.int8;
+	this.int8_value;
+	this.max_color_value = 126;
+
+	this.startBuff;
+	this.endBuff;
+
+	this.filesReadings_count = 0;
+
+	// SCRATCH.*** 
+	this.temp_var_to_waste;
+	this.countSC;
+	this.xSC;
+	this.ySC;
+	this.zSC;
+	this.point3dSC = new Point3D();
+	this.bboxSC = new BoundingBox();
+};
+
+/**
+ * 버퍼에서 데이터를 읽어서 32비트 부호없는 정수값에 대한 배열의 0번째 값을 돌려줌
+ * @param buffer 복사할 버퍼
+ * @param start 시작 바이트 인덱스
+ * @param end 끝 바이트 인덱스
+ * @returns uint32[0]
+ */
+ReaderWriter.prototype.readUInt32 = function(buffer, start, end) 
+{
+	var uint32 = new Uint32Array(buffer.slice(start, end));
+	return uint32[0];
+};
+
+/**
+ * 버퍼에서 데이터를 읽어서 32비트 정수값에 대한 배열의 0번째 값을 돌려줌
+ * @param buffer 복사할 버퍼
+ * @param start 시작 바이트 인덱스
+ * @param end 끝 바이트 인덱스
+ * @returns int32[0]
+ */
+ReaderWriter.prototype.readInt32 = function(buffer, start, end) 
+{
+	var int32 = new Int32Array(buffer.slice(start, end));
+	return int32[0];
+};
+
+/**
+ * 버퍼에서 데이터를 읽어서 16비트 부호없는 정수값에 대한 배열의 0번째 값을 돌려줌
+ * @param buffer 복사할 버퍼
+ * @param start 시작 바이트 인덱스
+ * @param end 끝 바이트 인덱스
+ * @returns uint16[0]
+ */
+ReaderWriter.prototype.readUInt16 = function(buffer, start, end) 
+{
+	var uint16 = new Uint16Array(buffer.slice(start, end));
+	return uint16[0];
+};
+
+/**
+ * 버퍼에서 데이터를 읽어서 32비트 정수값에 대한 배열의 0번째 값을 돌려줌
+ * @param buffer 복사할 버퍼
+ * @param start 시작 바이트 인덱스
+ * @param end 끝 바이트 인덱스
+ * @returns int16[0]
+ */
+ReaderWriter.prototype.readInt16 = function(buffer, start, end) 
+{
+	var int16 = new Int16Array(buffer.slice(start, end));
+	return int16[0];
+};
+
+/**
+ * 버퍼에서 데이터를 읽어서 64비트 float값에 대한 배열의 0번째 값을 돌려줌
+ * @param buffer 복사할 버퍼
+ * @param start 시작 바이트 인덱스
+ * @param end 끝 바이트 인덱스
+ * @returns float64[0]
+ */
+ReaderWriter.prototype.readFloat64 = function(buffer, start, end) 
+{
+	var float64 = new Float64Array(buffer.slice(start, end));
+	return float64[0];
+};
+
+/**
+ * 버퍼에서 데이터를 읽어서 32비트 float값에 대한 배열의 0번째 값을 돌려줌
+ * @param buffer 복사할 버퍼
+ * @param start 시작 바이트 인덱스
+ * @param end 끝 바이트 인덱스
+ * @returns float32[0]
+ */
+ReaderWriter.prototype.readFloat32 = function(buffer, start, end) 
+{
+	var float32 = new Float32Array(buffer.slice(start, end));
+	return float32[0];
+};
+
+/**
+ * 버퍼에서 데이터를 읽어서 32비트 부호없는 정수값에 대한 배열의 0번째 값을 돌려줌
+ * @param buffer 복사할 버퍼
+ * @param start 시작 바이트 인덱스
+ * @param end 끝 바이트 인덱스
+ * @returns float16[0]
+ */
+ReaderWriter.prototype.readFloat16 = function(buffer, start, end) 
+{
+	var float16 = new Float32Array(buffer.slice(start, end));
+	return float16[0];
+};
+
+/**
+ * 버퍼에서 데이터를 읽어서 8비트 정수값에 대한 배열의 0번째 값을 돌려줌
+ * @param buffer 복사할 버퍼
+ * @param start 시작 바이트 인덱스
+ * @param end 끝 바이트 인덱스
+ * @returns int8[0]
+ */
+ReaderWriter.prototype.readInt8 = function(buffer, start, end) 
+{
+	var int8 = new Int8Array(buffer.slice(start, end));
+	return int8[0];
+};
+
+/**
+ * 버퍼에서 데이터를 읽어서 8비트 부호없는 정수값에 대한 배열의 0번째 값을 돌려줌
+ * @param buffer 복사할 버퍼
+ * @param start 시작 바이트 인덱스
+ * @param end 끝 바이트 인덱스
+ * @returns uint8[0]
+ */
+ReaderWriter.prototype.readUInt8 = function(buffer, start, end) 
+{
+	var uint8 = new Uint8Array(buffer.slice(start, end));
+	return uint8[0];
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param buffer 변수
+ * @param start 변수
+ * @param end 변수
+ * @returns int8_value
+ */
+ReaderWriter.prototype.readInt8ByteColor = function(buffer, start, end) 
+{
+	var int8 = new Int8Array(buffer.slice(start, end));
+	var int8_value = int8[0];
+
+	if (int8_value > max_color_value) { int8_value = max_color_value; }
+
+	if (int8_value < 0) { int8_value += 256; }
+
+	return int8_value;
+};
+
+function loadWithXhr(fileName) 
+{
+	// 1) 사용될 jQuery Deferred 객체를 생성한다.
+	var deferred = $.Deferred();
+	
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", fileName, true);
+	xhr.responseType = "arraybuffer";;
+	  
+	// 이벤트 핸들러를 등록한다.
+	xhr.onload = function() 
+	{
+		if (xhr.status < 200 || xhr.status >= 300) 
+		{
+			deferred.reject(xhr.status);
+			return;
+		}
+		else 
+		{
+			// 3.1) DEFERRED를 해결한다. (모든 done()...을 동작시킬 것이다.)
+			deferred.resolve(xhr.response);
+		} 
+	};
+	
+	xhr.onerror = function(e) 
+	{
+		console.log("Invalid XMLHttpRequest response type.");
+		deferred.reject(xhr.status);
+	};
+
+	// 작업을 수행한다.
+	xhr.send(null);
+	
+	// 참고: jQuery.ajax를 사용할 수 있었고 해야할 수 있었다.
+	// 참고: jQuery.ajax는 Promise를 반환하지만 다른 Deferred/Promise를 사용하여 애플리케이션에 의미있는 구문으로 감싸는 것은 언제나 좋은 생각이다.
+	// ---- /AJAX 호출 ---- //
+	  
+	// 2) 이 deferred의 promise를 반환한다.
+	return deferred.promise();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param float32Array 변수
+ * @param resultBbox 변수
+ * @returns resultBbox
+ */
+ReaderWriter.prototype.getBoundingBoxFromFloat32Array = function(float32Array, resultBbox) 
+{
+	if (resultBbox === undefined) { resultBbox = new BoundingBox(); }
+
+	var values_count = float32Array.length;
+	for (var i=0; i<values_count; i+=3) 
+	{
+		this.point3dSC.x = float32Array[i];
+		this.point3dSC.y = float32Array[i+1];
+		this.point3dSC.z = float32Array[i+2];
+
+		if (i===0) 
+		{
+			resultBbox.init(this.point3dSC);
+		}
+		else 
+		{
+			resultBbox.addPoint(this.point3dSC);
+		}
+	}
+
+	return resultBbox;
+};
+
+ReaderWriter.prototype.getNeoBlocksArraybuffer = function(fileName, lowestOctree, magoManager) 
+{
+	magoManager.fileRequestControler.filesRequestedCount += 1;
+	var blocksList = lowestOctree.neoReferencesMotherAndIndices.blocksList;
+	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+	
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			blocksList.dataArraybuffer = arrayBuffer;
+			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
+			arrayBuffer = null;
+			magoManager.parseQueue.octreesLod0ModelsToParseArray.push(lowestOctree);
+		}
+		else 
+		{
+			blocksList.fileLoadState = 500;
+		}
+	}).fail(function(status) 
+	{
+		console.log("Invalid XMLHttpRequest status = " + status);
+		if (status === 0) { blocksList.fileLoadState = 500; }
+		else { blocksList.fileLoadState = status; }
+	}).always(function() 
+	{
+		magoManager.fileRequestControler.filesRequestedCount -= 1;
+		if (magoManager.fileRequestControler.filesRequestedCount < 0) { magoManager.fileRequestControler.filesRequestedCount = 0; }
+	});
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param fileName 변수
+ * @param blocksList 변수
+ * @param neoBuilding 변수
+ * @param readerWriter 변수
+ */
+ReaderWriter.prototype.getNeoBlocks = function(gl, fileName, blocksList, readerWriter, magoManager) 
+{
+//	magoManager.fileRequestControler.neoBuildingBlocksListsRequestedCount += 1;
+	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			readerWriter.readNeoBlocks(gl, arrayBuffer, blocksList);
+			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
+			arrayBuffer = null;
+		}
+		else 
+		{
+			blocksList.fileLoadState = 500;
+		}
+	}).fail(function(status) 
+	{
+		console.log("xhr status = " + status);
+		if (status === 0) { blocksList.fileLoadState = 500; }
+		else { blocksList.fileLoadState = status; }
+	}).always(function() 
+	{
+		//		magoManager.fileRequestControler.neoBuildingBlocksListsRequestedCount -= 1;
+		//		if(magoManager.fileRequestControler.neoBuildingBlocksListsRequestedCount < 0) magoManager.fileRequestControler.neoBuildingBlocksListsRequestedCount = 0;
+	});
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param fileName 파일명
+ * @param magoManager 변수
+ */
+ReaderWriter.prototype.getNeoReferencesArraybuffer = function(fileName, lowestOctree, magoManager) 
+{
+	magoManager.fileRequestControler.filesRequestedCount += 1;
+	lowestOctree.neoReferencesMotherAndIndices.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+	
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			var neoRefsList = lowestOctree.neoReferencesMotherAndIndices;
+			if (neoRefsList)
+			{
+				neoRefsList.dataArraybuffer = arrayBuffer;
+				neoRefsList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
+				magoManager.parseQueue.octreesLod0ReferencesToParseArray.push(lowestOctree);
+			}
+			arrayBuffer = null;
+			
+		}
+		else 
+		{
+			lowestOctree.neoReferencesMotherAndIndices.fileLoadState = 500;
+		}
+	}).fail(function(status) 
+	{
+		console.log("xhr status = " + status);
+		if (status === 0) { lowestOctree.neoReferencesMotherAndIndices.fileLoadState = 500; }
+		else { lowestOctree.neoReferencesMotherAndIndices.fileLoadState = status; }
+	}).always(function() 
+	{
+		magoManager.fileRequestControler.filesRequestedCount -= 1;
+		if (magoManager.fileRequestControler.filesRequestedCount < 0) { magoManager.fileRequestControler.filesRequestedCount = 0; }
+	});
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param fileName 파일명
+ * @param magoManager 변수
+ */
+ReaderWriter.prototype.getOctreeLegoArraybuffer = function(fileName, lowestOctree, magoManager) 
+{
+	magoManager.fileRequestControler.filesRequestedCount += 1;
+	lowestOctree.lego.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+	
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			if (lowestOctree.lego)
+			{
+				lowestOctree.lego.dataArrayBuffer = arrayBuffer;
+				lowestOctree.lego.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
+				magoManager.parseQueue.octreesLod2LegosToParseArray.push(lowestOctree);
+			}
+			else 
+			{
+				lowestOctree = undefined;
+			}
+			arrayBuffer = null;
+		}
+		else 
+		{
+			lowestOctree.lego.fileLoadState = 500;
+		}
+	}).fail(function(status) 
+	{
+		console.log("xhr status = " + status);
+		if (status === 0) { lowestOctree.lego.fileLoadState = 500; }
+		else { lowestOctree.lego.fileLoadState = status; }
+	}).always(function() 
+	{
+		magoManager.fileRequestControler.filesRequestedCount -= 1;
+		if (magoManager.fileRequestControler.filesRequestedCount < 0) { magoManager.fileRequestControler.filesRequestedCount = 0; }
+	});
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param fileName 변수
+ * @param lodBuilding 변수
+ * @param magoManager 변수
+ */
+ReaderWriter.prototype.getLodBuildingArraybuffer = function(fileName, lodBuilding, magoManager) 
+{
+	magoManager.fileRequestControler.filesRequestedCount += 1;
+	lodBuilding.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+	
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			lodBuilding.dataArraybuffer = arrayBuffer;
+			lodBuilding.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
+			arrayBuffer = null;
+		}
+		else 
+		{
+			lodBuilding.fileLoadState = 500;
+		}
+	}).fail(function(status) 
+	{
+		console.log("xhr status = " + status);
+		if (status === 0) { lodBuilding.fileLoadState = 500; }
+		else { lodBuilding.fileLoadState = status; }
+	}).always(function() 
+	{
+		magoManager.fileRequestControler.filesRequestedCount -= 1;
+		if (magoManager.fileRequestControler.filesRequestedCount < 0) { magoManager.fileRequestControler.filesRequestedCount = 0; }
+	});
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param arrayBuffer 변수
+ * @param filePath_inServer 변수
+ * @param terranTile 변수
+ * @param readerWriter 변수
+ * @param bytes_readed 변수
+ * @returns bytes_readed
+ */
+ReaderWriter.prototype.readTerranTileFile = function(gl, arrayBuffer, filePath_inServer, terranTile, readerWriter, bytes_readed) 
+{
+	//var bytes_readed = 0;
+//	var f4d_headerPathName_length = 0;
+//	var BP_Project;
+//	var idxFile;
+//	var subTile;
+
+	terranTile._depth = this.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+	if (terranTile._depth === 0) 
+	{
+		// Read dimensions.***
+		terranTile.longitudeMin = this.readFloat64(arrayBuffer, bytes_readed, bytes_readed+8); bytes_readed += 8;
+		terranTile.longitudeMax = this.readFloat64(arrayBuffer, bytes_readed, bytes_readed+8); bytes_readed += 8;
+		terranTile.latitudeMin = this.readFloat64(arrayBuffer, bytes_readed, bytes_readed+8); bytes_readed += 8;
+		terranTile.latitudeMax = this.readFloat64(arrayBuffer, bytes_readed, bytes_readed+8); bytes_readed += 8;
+	}
+
+	// Read the max_depth of the quadtree.***
+	var max_dpeth = this.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+
+	// Now, make the quadtree.***
+	terranTile.makeTree(max_dpeth);
+
+	return bytes_readed;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param fileName 변수
+ * @param terranTile 변수
+ * @param readerWriter 변수
+ */
+ReaderWriter.prototype.getTerranTileFile = function(gl, fileName, terranTile, readerWriter) 
+{
+	// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
+//	magoManager.fileRequestControler.filesRequestedCount += 1;
+//	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			var bytes_readed = 0;
+			readerWriter.readTerranTileFile(gl, arrayBuffer, fileName, terranTile, readerWriter, bytes_readed);
+
+			// Once readed the terranTilesFile, must make all the quadtree.***
+			terranTile.setDimensionsSubTiles();
+			terranTile.calculatePositionByLonLatSubTiles();
+			terranTile.terranIndexFile_readed = true;
+
+			//			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
+			arrayBuffer = null;
+		}
+		else 
+		{
+			//			blocksList.fileLoadState = 500;
+		}
+	}).fail(function(status) 
+	{
+		console.log("xhr status = " + xhr.status);
+		//		if(status === 0) blocksList.fileLoadState = 500;
+		//		else blocksList.fileLoadState = status;
+	}).always(function() 
+	{
+		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
+		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
+	});
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param filePath_inServer 변수
+ * @param BR_ProjectsList 변수
+ * @param readerWriter 변수
+ */
+ReaderWriter.prototype.getPCloudIndexFile = function(gl, fileName, BR_ProjectsList, readerWriter) 
+{
+//	magoManager.fileRequestControler.filesRequestedCount += 1;
+//	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			// write code here.***
+			var pCloudProject;
+
+			var bytes_readed = 0;
+
+			var f4d_rawPathName_length = 0;
+			//			var f4d_simpleBuildingPathName_length = 0;
+			//			var f4d_nailImagePathName_length = 0;
+
+			var pCloudProjects_count = readerWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+
+			for (var i=0; i<pCloudProjects_count; i++) 
+			{
+				pCloudProject = new PCloudMesh();
+				BR_ProjectsList._pCloudMesh_array.push(pCloudProject);
+				pCloudProject._header._f4d_version = 2;
+				// 1rst, read the files path names.************************************************************************************************************
+				f4d_rawPathName_length = readerWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+				for (var j=0; j<f4d_rawPathName_length; j++) 
+				{
+					pCloudProject._f4d_rawPathName += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
+				}
+
+				pCloudProject._f4d_headerPathName = pCloudProject._f4d_rawPathName + "/pCloud_Header.hed";
+				pCloudProject._f4d_geometryPathName = pCloudProject._f4d_rawPathName + "/pCloud_Geo.f4d";
+
+				//BP_Project._f4d_headerPathName = BP_Project._f4d_rawPathName + "_Header.hed";
+				//BP_Project._f4d_simpleBuildingPathName = BP_Project._f4d_rawPathName + "_Geom.f4d";
+				//BP_Project._f4d_nailImagePathName = BP_Project._f4d_rawPathName + "_Gaia.jpg";
+			}
+			//			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
+			arrayBuffer = null;
+		}
+		else 
+		{
+			//			blocksList.fileLoadState = 500;
+		}
+	}).fail(function(status) 
+	{
+		console.log("xhr status = " + status);
+		//		if(status === 0) blocksList.fileLoadState = 500;
+		//		else blocksList.fileLoadState = status;
+	}).always(function() 
+	{
+		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
+		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
+	});
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param fileName 변수
+ * @param pCloud 변수
+ * @param readerWriter 변수
+ * @param magoManager 변수
+ */
+ReaderWriter.prototype.getPCloudHeader = function(gl, fileName, pCloud, readerWriter, magoManager) 
+{
+	pCloud._f4d_header_readed = true;
+	//	magoManager.fileRequestControler.filesRequestedCount += 1;
+	//	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			// write code here.***
+
+			var bytes_readed = 0;
+			var version_string_length = 5;
+			var intAux_scratch = 0;
+			var auxScratch;
+			var header = pCloud._header;
+
+			// 1) Version(5 chars).***********
+			for (var j=0; j<version_string_length; j++)
+			{
+				header._version += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
+			}
+
+			// 2) Type (1 byte).**************
+			header._type = String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
+
+			// 3) Global unique ID.*********************
+			intAux_scratch = readerWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			for (var j=0; j<intAux_scratch; j++)
+			{
+				header._global_unique_id += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
+			}
+
+			// 4) Location.*************************
+			header._latitude = (new Float64Array(arrayBuffer.slice(bytes_readed, bytes_readed+8)))[0]; bytes_readed += 8;
+			header._longitude = (new Float64Array(arrayBuffer.slice(bytes_readed, bytes_readed+8)))[0]; bytes_readed += 8;
+			header._elevation = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+
+			header._elevation += 60.0; // delete this. TEST.!!!
+
+			// 5) Orientation.*********************
+			auxScratch = new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)); bytes_readed += 4; // yaw.***
+			auxScratch = new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)); bytes_readed += 4; // pitch.***
+			auxScratch = new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)); bytes_readed += 4; // roll.***
+
+			// 6) BoundingBox.************************
+			header._boundingBox.minX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+			header._boundingBox.minY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+			header._boundingBox.minZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+			header._boundingBox.maxX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+			header._boundingBox.maxY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+			header._boundingBox.maxZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+
+			var isLarge = false;
+			if (header._boundingBox.maxX - header._boundingBox.minX > 40.0 || header._boundingBox.maxY - header._boundingBox.minY > 40.0) 
+			{
+				isLarge = true;
+			}
+
+			if (!isLarge && header._boundingBox.maxZ - header._boundingBox.minZ < 30.0) 
+			{
+				header.isSmall = true;
+			}
+
+			// 7) octZerothBox.***********************
+			header._octZerothBox.minX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+			header._octZerothBox.minY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+			header._octZerothBox.minZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+			header._octZerothBox.maxX = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+			header._octZerothBox.maxY = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+			header._octZerothBox.maxZ = (new Float32Array(arrayBuffer.slice(bytes_readed, bytes_readed+4)))[0]; bytes_readed += 4;
+
+			// 8) Data file name.********************
+			intAux_scratch = readerWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			for (var j=0; j<intAux_scratch; j++) 
+			{
+				header._dataFileName += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytes_readed, bytes_readed+ 1)));bytes_readed += 1;
+			}
+
+			// Now, must calculate some params of the project.**********************************************
+			// 0) PositionMatrix.************************************************************************
+			//var height = elevation;
+
+			var position = Cesium.Cartesian3.fromDegrees(header._longitude, header._latitude, header._elevation); // Old.***
+			pCloud._pCloudPosition = position;
+
+			// High and Low values of the position.****************************************************
+			var splitValue = Cesium.EncodedCartesian3.encode(position);
+			var splitVelue_X  = Cesium.EncodedCartesian3.encode(position.x);
+			var splitVelue_Y  = Cesium.EncodedCartesian3.encode(position.y);
+			var splitVelue_Z  = Cesium.EncodedCartesian3.encode(position.z);
+
+			pCloud._pCloudPositionHIGH = new Float32Array(3);
+			pCloud._pCloudPositionHIGH[0] = splitVelue_X.high;
+			pCloud._pCloudPositionHIGH[1] = splitVelue_Y.high;
+			pCloud._pCloudPositionHIGH[2] = splitVelue_Z.high;
+
+			pCloud._pCloudPositionLOW = new Float32Array(3);
+			pCloud._pCloudPositionLOW[0] = splitVelue_X.low;
+			pCloud._pCloudPositionLOW[1] = splitVelue_Y.low;
+			pCloud._pCloudPositionLOW[2] = splitVelue_Z.low;
+
+			if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
+
+			pCloud._f4d_header_readed_finished = true;
+			//			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
+			arrayBuffer = null;
+		}
+		else 
+		{
+			//			blocksList.fileLoadState = 500;
+		}
+	}).fail(function(status) 
+	{
+		console.log("xhr status = " + status);
+		//		if(status === 0) blocksList.fileLoadState = 500;
+		//		else blocksList.fileLoadState = status;
+	}).always(function() 
+	{
+		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
+		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
+	});
+};
+
+/**
+ * object index 파일을 읽어서 빌딩 개수, 포지션, 크기 정보를 배열에 저장
+ * @param gl gl context
+ * @param fileName 파일명
+ * @param readerWriter 파일 처리를 담당
+ * @param neoBuildingsList object index 파일을 파싱한 정보를 저장할 배열
+ */
+ReaderWriter.prototype.getObjectIndexFileForSmartTile = function(fileName, magoManager, buildingSeedList) 
+{
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			buildingSeedList.dataArrayBuffer = arrayBuffer;
+			buildingSeedList.parseBuildingSeedArrayBuffer();
+			
+			magoManager.makeSmartTile(buildingSeedList);
+			arrayBuffer = null;
+			//magoManager.createDeploymentGeoLocationsForHeavyIndustries();
+		}
+		else 
+		{
+			//			blocksList.fileLoadState = 500;
+		}
+	}).fail(function(status) 
+	{
+		console.log("xhr status = " + status);
+		//		if(status === 0) blocksList.fileLoadState = 500;
+		//		else blocksList.fileLoadState = status;
+	}).always(function() 
+	{
+		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
+		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
+	});
+};
+
+/**
+ * object index 파일을 읽어서 빌딩 개수, 포지션, 크기 정보를 배열에 저장
+ * @param gl gl context
+ * @param fileName 파일명
+ * @param readerWriter 파일 처리를 담당
+ * @param neoBuildingsList object index 파일을 파싱한 정보를 저장할 배열
+ */
+ReaderWriter.prototype.getObjectIndexFile = function(fileName, readerWriter, neoBuildingsList, magoManager) 
+{
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			readerWriter.parseObjectIndexFile(arrayBuffer, neoBuildingsList);
+			arrayBuffer = null;
+			magoManager.createDeploymentGeoLocationsForHeavyIndustries();
+		}
+		else 
+		{
+			//			blocksList.fileLoadState = 500;
+		}
+	}).fail(function(status) 
+	{
+		console.log("xhr status = " + status);
+		//		if(status === 0) blocksList.fileLoadState = 500;
+		//		else blocksList.fileLoadState = status;
+	}).always(function() 
+	{
+		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
+		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
+	});
+};
+
+/**
+ * object index 파일을 읽어서 빌딩 개수, 포지션, 크기 정보를 배열에 저장
+ * @param arrayBuffer object index file binary data
+ * @param neoBuildingsList object index 파일을 파싱한 정보를 저장할 배열
+ */
+ReaderWriter.prototype.parseObjectIndexFile = function(arrayBuffer, neoBuildingsList) 
+{
+	var bytesReaded = 0;
+	var buildingNameLength;
+	var longitude;
+	var latitude;
+	var altitude;
+
+	var buildingsCount = this.readInt32(arrayBuffer, bytesReaded, bytesReaded+4);
+	bytesReaded += 4;
+	for (var i =0; i<buildingsCount; i++) 
+	{
+		// read the building location data.***
+		var neoBuilding = neoBuildingsList.newNeoBuilding();
+		if (neoBuilding.metaData === undefined) 
+		{
+			neoBuilding.metaData = new MetaData();
+		}
+
+		if (neoBuilding.metaData.geographicCoord === undefined)
+		{ neoBuilding.metaData.geographicCoord = new GeographicCoord(); }
+
+		if (neoBuilding.metaData.bbox === undefined) 
+		{
+			neoBuilding.metaData.bbox = new BoundingBox();
+		}
+
+		buildingNameLength = this.readInt32(arrayBuffer, bytesReaded, bytesReaded+4);
+		bytesReaded += 4;
+		var buildingName = String.fromCharCode.apply(null, new Int8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ buildingNameLength)));
+		bytesReaded += buildingNameLength;
+
+		longitude = this.readFloat64(arrayBuffer, bytesReaded, bytesReaded+8); bytesReaded += 8;
+		latitude = this.readFloat64(arrayBuffer, bytesReaded, bytesReaded+8); bytesReaded += 8;
+		altitude = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+
+		neoBuilding.bbox = new BoundingBox();
+		neoBuilding.bbox.minX = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+		neoBuilding.bbox.minY = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+		neoBuilding.bbox.minZ = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+		neoBuilding.bbox.maxX = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+		neoBuilding.bbox.maxY = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+		neoBuilding.bbox.maxZ = this.readFloat32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
+
+		// create a building and set the location.***
+		neoBuilding.buildingId = buildingName.substr(4, buildingNameLength-4);
+		neoBuilding.buildingType = "basicBuilding";
+		neoBuilding.buildingFileName = buildingName;
+		neoBuilding.metaData.geographicCoord.setLonLatAlt(longitude, latitude, altitude);
+	}
+
+	neoBuildingsList.neoBuildingsArray.reverse();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param fileName 변수
+ * @param neoBuilding 변수
+ * @param readerWriter 변수
+ * @param magoManager 변수
+ */
+ReaderWriter.prototype.getNeoHeader = function(gl, fileName, neoBuilding, readerWriter, magoManager) 
+{
+	//BR_Project._f4d_header_readed = true;
+	magoManager.fileRequestControler.filesRequestedCount += 1;
+	neoBuilding.metaData.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			if (neoBuilding.metaData === undefined) 
+			{
+				neoBuilding.metaData = new MetaData();
+			}
+			neoBuilding.metaData.parseFileHeader(arrayBuffer, readerWriter);
+
+			// Now, make the neoBuilding's octree.***
+			if (neoBuilding.octree === undefined) { neoBuilding.octree = new Octree(undefined); }
+
+			neoBuilding.octree.setBoxSize(neoBuilding.metaData.oct_min_x, neoBuilding.metaData.oct_max_x,
+				neoBuilding.metaData.oct_min_y, neoBuilding.metaData.oct_max_y,
+				neoBuilding.metaData.oct_min_z, neoBuilding.metaData.oct_max_z);
+
+			neoBuilding.octree.makeTree(3);
+			neoBuilding.octree.setSizesSubBoxes();
+
+			neoBuilding.metaData.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
+			//if(magoManager.backGround_fileReadings_count > 0 )
+			//    magoManager.backGround_fileReadings_count -= 1; // old.***
+			//BR_Project._f4d_header_readed_finished = true;
+			arrayBuffer = null;
+		}
+		else 
+		{
+			neoBuilding.metaData.fileLoadState = 500;
+		}
+	}).fail(function(status) 
+	{
+		console.log("xhr status = " + status);
+		if (status === 0) { neoBuilding.metaData.fileLoadState = 500; }
+		else { neoBuilding.metaData.fileLoadState = status; }
+	}).always(function() 
+	{
+		magoManager.fileRequestControler.filesRequestedCount -= 1;
+		if (magoManager.fileRequestControler.filesRequestedCount < 0) { magoManager.fileRequestControler.filesRequestedCount = 0; }
+	});
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param fileName 변수
+ * @param neoBuilding 변수
+ * @param readerWriter 변수
+ * @param magoManager 변수
+ */
+ReaderWriter.prototype.getNeoHeaderAsimetricVersion = function(gl, fileName, neoBuilding, readerWriter, magoManager) 
+{
+	//BR_Project._f4d_header_readed = true;
+	magoManager.fileRequestControler.filesRequestedCount += 1;
+	neoBuilding.metaData.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			if (neoBuilding.metaData === undefined) 
+			{
+				neoBuilding.metaData = new MetaData();
+			}
+			var bytesReaded = neoBuilding.metaData.parseFileHeaderAsimetricVersion(arrayBuffer, readerWriter);
+
+			// Now, make the neoBuilding's octree.***
+			if (neoBuilding.octree === undefined) { neoBuilding.octree = new Octree(undefined); }
+
+			// now, parse octreeAsimetric.***
+			neoBuilding.octree.parseAsimetricVersion(arrayBuffer, readerWriter, bytesReaded, neoBuilding);
+
+			neoBuilding.metaData.oct_min_x = neoBuilding.octree.centerPos.x - neoBuilding.octree.half_dx;
+			neoBuilding.metaData.oct_max_x = neoBuilding.octree.centerPos.x + neoBuilding.octree.half_dx;
+			neoBuilding.metaData.oct_min_y = neoBuilding.octree.centerPos.y - neoBuilding.octree.half_dy;
+			neoBuilding.metaData.oct_max_y = neoBuilding.octree.centerPos.y + neoBuilding.octree.half_dy;
+			neoBuilding.metaData.oct_min_z = neoBuilding.octree.centerPos.z - neoBuilding.octree.half_dz;
+			neoBuilding.metaData.oct_max_z = neoBuilding.octree.centerPos.z + neoBuilding.octree.half_dz;
+
+			neoBuilding.metaData.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
+
+			//BR_Project._f4d_header_readed_finished = true;
+			arrayBuffer = undefined;
+		}
+		else 
+		{
+			neoBuilding.metaData.fileLoadState = 500;
+			arrayBuffer = undefined;
+		}
+	}).fail(function(status) 
+	{
+		console.log("xhr status = " + status);
+		if (status === 0) { neoBuilding.metaData.fileLoadState = 500; }
+		else { neoBuilding.metaData.fileLoadState = status; }
+	}).always(function() 
+	{
+		magoManager.fileRequestControler.filesRequestedCount -= 1;
+		if (magoManager.fileRequestControler.filesRequestedCount < 0) { magoManager.fileRequestControler.filesRequestedCount = 0; }
+	});
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param imageArrayBuffer 변수
+ * @param BR_Project 변수
+ * @param readerWriter 변수
+ * @param magoManager 변수
+ * @param imageLod 변수
+ */
+ReaderWriter.prototype.readNailImageOfArrayBuffer = function(gl, imageArrayBuffer, BR_Project, readerWriter, magoManager, imageLod) 
+{
+	var simpBuildingV1 = BR_Project._simpleBuilding_v1;
+	var blob = new Blob( [ imageArrayBuffer ], { type: "image/jpeg" } );
+	var urlCreator = window.URL || window.webkitURL;
+	var imagenUrl = urlCreator.createObjectURL(blob);
+	var simpleBuildingImage = new Image();
+
+	simpleBuildingImage.onload = function () 
+	{
+		//console.log("Image Onload");
+		if (simpBuildingV1._simpleBuildingTexture === undefined)
+		{ simpBuildingV1._simpleBuildingTexture = gl.createTexture(); }
+		handleTextureLoaded(gl, simpleBuildingImage, simpBuildingV1._simpleBuildingTexture);
+		BR_Project._f4d_nailImage_readed_finished = true;
+		imageArrayBuffer = null;
+		BR_Project._simpleBuilding_v1.textureArrayBuffer = null;
+
+		if (magoManager.backGround_imageReadings_count > 0) 
+		{
+			magoManager.backGround_imageReadings_count--;
+		}
+	};
+
+	simpleBuildingImage.onerror = function() 
+	{
+		// doesn't exist or error loading
+
+		//BR_Project._f4d_lod0Image_readed_finished = false;
+		//BR_Project._f4d_lod0Image_exists = false;
+		//if(magoManager.backGround_fileReadings_count > 0 )
+		//	  magoManager.backGround_fileReadings_count -=1;
+
+		return;
+	};
+
+	simpleBuildingImage.src = imagenUrl;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param filePath_inServer 변수
+ * @param BR_Project 변수
+ * @param readerWriter 변수
+ * @param magoManager 변수
+ * @param imageLod 변수
+ */
+ReaderWriter.prototype.readNailImage = function(gl, filePath_inServer, BR_Project, readerWriter, magoManager, imageLod) 
+{
+	if (imageLod === undefined) { imageLod = 3; } // The lowest lod.***
+
+	if (imageLod === 3) { BR_Project._f4d_nailImage_readed = true; }
+	else if (imageLod === 0) { BR_Project._f4d_lod0Image_readed  = true; }
+
+	if (BR_Project._simpleBuilding_v1 === undefined) { BR_Project._simpleBuilding_v1 = new SimpleBuildingV1(); }
+
+	var simpBuildingV1 = BR_Project._simpleBuilding_v1;
+
+	var simpleBuildingImage = new Image();
+	simpleBuildingImage.onload = function() 
+	{
+	/*
+		if(magoManager.render_time > 20)// for the moment is a test.***
+		{
+			if(imageLod === 3)
+				BR_Project._f4d_nailImage_readed = false;
+			else if(imageLod === 0)
+				BR_Project._f4d_lod0Image_readed  = false;
+
+			if(magoManager.backGround_fileReadings_count > 0 )
+			  magoManager.backGround_fileReadings_count -=1;
+
+			return;
+		}
+		*/
+
+		if (imageLod === 3) 
+		{
+			handleTextureLoaded(gl, simpleBuildingImage, simpBuildingV1._simpleBuildingTexture);
+			BR_Project._f4d_nailImage_readed_finished = true;
+		}
+		else if (imageLod === 0) 
+		{
+			if (simpBuildingV1._texture_0 === undefined) { simpBuildingV1._texture_0 = gl.createTexture(); }
+
+			handleTextureLoaded(gl, simpleBuildingImage, simpBuildingV1._texture_0);
+			BR_Project._f4d_lod0Image_readed_finished = true;
+		}
+
+		if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
+	};
+
+	simpleBuildingImage.onerror = function() 
+	{
+		// doesn't exist or error loading
+		BR_Project._f4d_lod0Image_readed_finished = false;
+		BR_Project._f4d_lod0Image_exists = false;
+		if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
+		return;
+	};
+
+	var filePath_inServer_SimpleBuildingImage = filePath_inServer;
+	simpleBuildingImage.src = filePath_inServer_SimpleBuildingImage;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param filePath_inServer 변수
+ * @param f4dTex 변수
+ * @param magoManager 변수
+ */
+ReaderWriter.prototype.readTexture = function(gl, filePath_inServer, f4dTex, magoManager) 
+{
+	f4dTex.loadStarted = true;
+	f4dTex.texImage = new Image();
+	f4dTex.texImage.onload = function() 
+	{
+		f4dTex.loadFinished = true;
+
+		if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
+	};
+
+	f4dTex.texImage.onerror = function() 
+	{
+		// doesn't exist or error loading
+		f4dTex.loadStarted = false;
+		if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
+		return;
+	};
+
+	f4dTex.texImage.src = filePath_inServer;
+};
+
+ReaderWriter.prototype.decodeTGA = function(arrayBuffer) 
+{
+	// code from toji.***
+	var content = new Uint8Array(arrayBuffer),
+		contentOffset = 18 + content[0],
+		imagetype = content[2], // 2 = rgb, only supported format for now
+		width = content[12] + (content[13] << 8),
+		height = content[14] + (content[15] << 8),
+		bpp = content[16], // should be 8,16,24,32
+		
+		bytesPerPixel = bpp / 8,
+		bytesPerRow = width * 4,
+		data, i, j, x, y;
+
+	if (!width || !height) 
+	{
+		console.error("Invalid dimensions");
+		return null;
+	}
+
+	if (imagetype !== 2) 
+	{
+		console.error("Unsupported TGA format:", imagetype);
+		return null;
+	}
+
+	data = new Uint8Array(width * height * 4);
+	i = contentOffset;
+
+	// Oy, with the flipping of the rows...
+	for (y = height-1; y >= 0; --y) 
+	{
+		for (x = 0; x < width; ++x, i += bytesPerPixel) 
+		{
+			j = (x * 4) + (y * bytesPerRow);
+			data[j] = content[i+2];
+			data[j+1] = content[i+1];
+			data[j+2] = content[i+0];
+			data[j+3] = (bpp === 32 ? content[i+3] : 255);
+		}
+	}
+
+	return {
+		width  : width,
+		height : height,
+		data   : data
+	};
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param filePath_inServer 변수
+ * @param texture 변수
+ * @param neoBuilding 변수
+ * @param magoManager 변수
+ */
+ReaderWriter.prototype.readNeoReferenceTexture = function(gl, filePath_inServer, texture, neoBuilding, magoManager) 
+{
+	// Must know the fileExtension.***
+	var extension = filePath_inServer.split('.').pop();
+	
+	if (extension === "tga" || extension === "TGA" || extension === "Tga")
+	{
+		//texture.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+		loadWithXhr(filePath_inServer).done(function(response) 
+		{
+			var arrayBuffer = response;
+			if (arrayBuffer) 
+			{
+				// decode tga.***
+				// Test with tga decoder from https://github.com/schmittl/tgajs
+				var tga = new TGA();
+				tga.load(arrayBuffer);
+				// End decoding.---------------------------------------------------
+				
+				//var tga = magoManager.readerWriter.decodeTGA(arrayBuffer); // old code.
+				//if(tga) {
+				//    gl.bindTexture(gl.TEXTURE_2D, texture.texId);
+				//     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, tga.width, tga.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, tga.data);
+				//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+				//	gl.generateMipmap(gl.TEXTURE_2D);
+				//	texture.fileLoadState = CODE.fileLoadState.LOADING_FINISHED; // file load finished.***
+				//}
+				
+				// example values of tga.header
+				// alphaBits 0
+				// bytePerPixel 3
+				// colorMapDepth 0
+				// colorMapIndex 0
+				// colorMapLength 0
+				// colorMapType 0
+				// flags 32
+				// hasColorMap false
+				// hasEncoding false
+				// height 2048
+				// idLength 0
+				// imageType 2
+				// isGreyColor false
+				// offsetX 0
+				// offsetY 0
+				// origin 2
+				// pixelDepth 24
+				// width 2048
+				
+				if (tga) 
+				{
+					var rgbType;
+					if (tga.header.bytePerPixel === 3)
+					{
+						rgbType = gl.RGB;
+						
+						// test change rgb to bgr.***
+						/*
+						var imageDataLength = tga.imageData.length;
+						var pixelsCount = imageDataLength/3;
+						var r, g, b;
+						for(var i=0; i<pixelsCount; i++)
+						{
+							r = tga.imageData[i*3];
+							g = tga.imageData[i*3+1];
+							b = tga.imageData[i*3+2];
+							
+							tga.imageData[i*3] = b;
+							tga.imageData[i*3+1] = g;
+							tga.imageData[i*3+2] = r;
+						}
+						*/
+					}
+					else if (tga.header.bytePerPixel === 4)
+					{
+						rgbType = gl.RGBA;
+						
+						// test change rgb to bgr.***
+						
+						var imageDataLength = tga.imageData.length;
+						var pixelsCount = imageDataLength/4;
+						var r, g, b, a;
+						for (var i=0; i<pixelsCount; i++)
+						{
+							r = tga.imageData[i*4];
+							g = tga.imageData[i*4+1];
+							b = tga.imageData[i*4+2];
+							a = tga.imageData[i*4+3];
+							
+							tga.imageData[i*4] = b;
+							tga.imageData[i*4+1] = g;
+							tga.imageData[i*4+2] = r;
+							tga.imageData[i*4+3] = a;
+						}
+						
+					}
+					
+					
+					
+					gl.bindTexture(gl.TEXTURE_2D, texture.texId);
+					gl.texImage2D(gl.TEXTURE_2D, 0, rgbType, tga.header.width, tga.header.height, 0, rgbType, gl.UNSIGNED_BYTE, tga.imageData);
+					gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+					gl.generateMipmap(gl.TEXTURE_2D);
+					texture.fileLoadState = CODE.fileLoadState.LOADING_FINISHED; // file load finished.***
+				}
+			}
+		}).fail(function(status) 
+		{
+			if (neoBuilding)
+			{
+				console.log("xhr status = " + status);
+				if (status === 0) { neoBuilding.metaData.fileLoadState = 500; }
+				else { neoBuilding.metaData.fileLoadState = status; }
+			}
+		}).always(function() 
+		{
+			magoManager.backGround_fileReadings_count -= 1;
+			if (magoManager.backGround_fileReadings_count < 0) { magoManager.backGround_fileReadings_count = 0; }
+		});
+	}
+	else 
+	{
+		var neoRefImage = new Image();
+		texture.fileLoadState = CODE.fileLoadState.LOADING_STARTED; // file load started.***
+		//magoManager.backGround_fileReadings_count ++;
+		neoRefImage.onload = function() 
+		{
+			handleTextureLoaded(gl, neoRefImage, texture.texId);
+			texture.fileLoadState = CODE.fileLoadState.LOADING_FINISHED; // file load finished.***
+
+			if (magoManager.backGround_fileReadings_count > 0 ) 
+			{ magoManager.backGround_fileReadings_count -=1; }
+		};
+
+		neoRefImage.onerror = function() 
+		{
+			// doesn't exist or error loading
+			return;
+		};
+		neoRefImage.src = filePath_inServer;
+	}	
+};
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param filePath_inServer 변수
+ * @param texture 변수
+ * @param neoBuilding 변수
+ * @param magoManager 변수
+ */
+ReaderWriter.prototype.readLegoSimpleBuildingTexture = function(gl, filePath_inServer, texture, magoManager) 
+{
+	var neoRefImage = new Image();
+	//magoManager.backGround_fileReadings_count ++;
+	neoRefImage.onload = function() 
+	{
+		if (texture.texId === undefined) 
+		{ texture.texId = gl.createTexture(); }
+
+		handleTextureLoaded(gl, neoRefImage, texture.texId);
+
+		if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
+	};
+
+	neoRefImage.onerror = function() 
+	{
+		// doesn't exist or error loading
+		return;
+	};
+
+	neoRefImage.src = filePath_inServer;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param terranTile 변수
+ * @param readerWriter 변수
+ */
+ReaderWriter.prototype.openTerranTile = function(gl, terranTile, readerWriter ) 
+{
+	var filePath_inServer = this.geometryDataPath + Constant.RESULT_XDO2F4D_TERRAINTILEFILE_TXT;
+	readerWriter.getTerranTileFile(gl, filePath_inServer, terranTile, readerWriter);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param fileName 변수
+ * @param terranTile 변수
+ * @param readerWriter 변수
+ * @param magoManager 변수
+ */
+ReaderWriter.prototype.getTileArrayBuffer = function(gl, fileName, terranTile, readerWriter, magoManager) 
+{
+	// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
+	terranTile.fileReading_started = true;
+	//	magoManager.fileRequestControler.backGround_fileReadings_count += 1;
+	//	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			//var BR_Project = new BRBuildingProject(); // Test.***
+			//readerWriter.readF4D_Header(gl, arrayBuffer, BR_Project ); // Test.***
+			terranTile.fileArrayBuffer = arrayBuffer;
+			terranTile.fileReading_finished = true;
+
+			if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
+			//			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
+			arrayBuffer = null;
+		}
+		else 
+		{
+			//			blocksList.fileLoadState = 500;
+		}
+	}).fail(function(status) 
+	{
+		console.log("xhr status = " + status);
+		//		if(status === 0) blocksList.fileLoadState = 500;
+		//		else blocksList.fileLoadState = status;
+	}).always(function() 
+	{
+		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
+		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
+	});
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param filePath_inServer 변수
+ * @param pCloud 변수
+ * @param readerWriter 변수
+ * @param magoManager 변수
+ */
+ReaderWriter.prototype.getPCloudGeometry = function(gl, fileName, pCloud, readerWriter, magoManager) 
+{
+	// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
+	pCloud._f4d_geometry_readed = true;
+	//	magoManager.fileRequestControler.filesRequestedCount += 1;
+	//	blocksList.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+
+	loadWithXhr(fileName).done(function(response) 
+	{
+		var arrayBuffer = response;
+		if (arrayBuffer) 
+		{
+			// write code here.***
+			var bytes_readed = 0;
+			var startBuff;
+			var endBuff;
+
+			var meshes_count = readerWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4; // Almost allways is 1.***
+			for (var a=0; a<meshes_count; a++) 
+			{
+				var vbo_objects_count = readerWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4; // Almost allways is 1.***
+
+				// single interleaved buffer mode.*********************************************************************************
+				for (var i=0; i<vbo_objects_count; i++) 
+				{
+					var vbo_vertexIdx_data = pCloud.vbo_datas.newVBOVertexIdxCacheKey();
+					//var vt_cacheKey = simpObj._vtCacheKeys_container.newVertexTexcoordsArraysCacheKey();
+
+					var iDatas_count = readerWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4; // iDatasCount = vertexCount.***
+					startBuff = bytes_readed;
+					//endBuff = bytes_readed + (4*3+1*3+1*4)*iDatas_count; // pos(float*3) + normal(byte*3) + color4(byte*4).***
+					endBuff = bytes_readed + (4*3+4*3+1*4)*iDatas_count; // pos(float*3) + normal(float*3) + color4(byte*4).***
+
+					//vt_cacheKey._verticesArray_cacheKey = gl.createBuffer ();
+					vbo_vertexIdx_data.meshVertexCacheKey = gl.createBuffer();
+					gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vertexIdx_data.meshVertexCacheKey);
+					gl.bufferData(gl.ARRAY_BUFFER, arrayBuffer.slice(startBuff, endBuff), gl.STATIC_DRAW);
+
+					//bytes_readed = bytes_readed + (4*3+1*3+1*4)*iDatas_count; // pos(float*3) + normal(byte*3) + color4(byte*4).*** // updating data.***
+					bytes_readed = bytes_readed + (4*3+4*3+1*4)*iDatas_count; // pos(float*3) + normal(float*3) + color4(byte*4).*** // updating data.***
+
+					//vt_cacheKey._vertices_count = iDatas_count;
+					// Now, read short indices.***
+					var shortIndices_count = readerWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+
+					vbo_vertexIdx_data.indicesCount = shortIndices_count;
+
+					// Indices.***********************
+					startBuff = bytes_readed;
+					endBuff = bytes_readed + 2*shortIndices_count;
+					/*
+					// Test.***************************************************************************************
+					for(var counter = 0; counter<shortIndices_count; counter++)
+					{
+						var shortIdx = new Uint16Array(arrayBuffer.slice(bytes_readed, bytes_readed+2));bytes_readed += 2;
+						if(shortIdx[0] >= iDatas_count)
+						{
+							var h=0;
+						}
+					}
+					bytes_readed -= 2*shortIndices_count;
+					// End test.------------------------------------------------------------------------------------
+					*/
+
+					vbo_vertexIdx_data.meshFacesCacheKey= gl.createBuffer();
+					gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vbo_vertexIdx_data.meshFacesCacheKey);
+					gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(arrayBuffer.slice(startBuff, endBuff)), gl.STATIC_DRAW);
+
+					bytes_readed = bytes_readed + 2*shortIndices_count; // updating data.***
+				}
+			}
+
+			//			blocksList.fileLoadState = CODE.fileLoadState.LOADING_FINISHED;
+			if (magoManager.backGround_fileReadings_count > 0 ) { magoManager.backGround_fileReadings_count -=1; }
+
+			pCloud._f4d_geometry_readed_finished = true;
+			arrayBuffer = null;
+		}
+		else 
+		{
+			//			blocksList.fileLoadState = 500;
+		}
+	}).fail(function(status) 
+	{
+		console.log("xhr status = " + status);
+		//		if(status === 0) blocksList.fileLoadState = 500;
+		//		else blocksList.fileLoadState = status;
+	}).always(function() 
+	{
+		//		magoManager.fileRequestControler.filesRequestedCount -= 1;
+		//		if(magoManager.fileRequestControler.filesRequestedCount < 0) magoManager.fileRequestControler.filesRequestedCount = 0;
+	});
+};
+
+
+//load neoTextures
+ReaderWriter.prototype.handleTextureLoaded = function(gl, image, texture) 
+{
+	// https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
+	//var gl = viewer.scene.context._gl;
+	gl.bindTexture(gl.TEXTURE_2D, texture);
+	//gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true); // if need vertical mirror of the image.***
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image); // Original.***
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+	//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+	//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+	gl.generateMipmap(gl.TEXTURE_2D);
+	gl.bindTexture(gl.TEXTURE_2D, null);
+};
+
+/**
+  DataStream reads scalars, arrays and structs of data from an ArrayBuffer.
+  It's like a file-like DataView on steroids.
+
+  @param {ArrayBuffer} arrayBuffer ArrayBuffer to read from.
+  @param {?Number} byteOffset Offset from arrayBuffer beginning for the DataStream.
+  @param {?Boolean} endianness DataStream.BIG_ENDIAN or DataStream.LITTLE_ENDIAN (the default).
+  */
+var DataStream = function(arrayBuffer, byteOffset, endianness) {
+  this._byteOffset = byteOffset || 0;
+  if (arrayBuffer instanceof ArrayBuffer) {
+    this.buffer = arrayBuffer;
+  } else if (typeof arrayBuffer == "object") {
+    this.dataView = arrayBuffer;
+    if (byteOffset) {
+      this._byteOffset += byteOffset;
+    }
+  } else {
+    this.buffer = new ArrayBuffer(arrayBuffer || 1);
+  }
+  this.position = 0;
+  this.endianness = endianness == null ? DataStream.LITTLE_ENDIAN : endianness;
+};
+DataStream.prototype = {};
+
+/* Fix for Opera 12 not defining BYTES_PER_ELEMENT in typed array prototypes. */
+if (Uint8Array.prototype.BYTES_PER_ELEMENT === undefined) {
+    Uint8Array.prototype.BYTES_PER_ELEMENT = Uint8Array.BYTES_PER_ELEMENT; 
+    Int8Array.prototype.BYTES_PER_ELEMENT = Int8Array.BYTES_PER_ELEMENT; 
+    Uint8ClampedArray.prototype.BYTES_PER_ELEMENT = Uint8ClampedArray.BYTES_PER_ELEMENT; 
+    Uint16Array.prototype.BYTES_PER_ELEMENT = Uint16Array.BYTES_PER_ELEMENT; 
+    Int16Array.prototype.BYTES_PER_ELEMENT = Int16Array.BYTES_PER_ELEMENT; 
+    Uint32Array.prototype.BYTES_PER_ELEMENT = Uint32Array.BYTES_PER_ELEMENT; 
+    Int32Array.prototype.BYTES_PER_ELEMENT = Int32Array.BYTES_PER_ELEMENT; 
+    Float64Array.prototype.BYTES_PER_ELEMENT = Float64Array.BYTES_PER_ELEMENT; 
+}
+
+/**
+  Saves the DataStream contents to the given filename.
+  Uses Chrome's anchor download property to initiate download.
+
+  @param {string} filename Filename to save as.
+  @return {null}
+  */
+DataStream.prototype.save = function(filename) {
+  var blob = new Blob(this.buffer);
+  var URL = (window.webkitURL || window.URL);
+  if (URL && URL.createObjectURL) {
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.setAttribute('href', url);
+      a.setAttribute('download', filename);
+      a.click();
+      URL.revokeObjectURL(url);
+  } else {
+      throw("DataStream.save: Can't create object URL.");
+  }
+};
+
+/**
+  Big-endian const to use as default endianness.
+  @type {boolean}
+  */
+DataStream.BIG_ENDIAN = false;
+
+/**
+  Little-endian const to use as default endianness.
+  @type {boolean}
+  */
+DataStream.LITTLE_ENDIAN = true;
+
+/**
+  Whether to extend DataStream buffer when trying to write beyond its size.
+  If set, the buffer is reallocated to twice its current size until the
+  requested write fits the buffer.
+  @type {boolean}
+  */
+DataStream.prototype._dynamicSize = true;
+Object.defineProperty(DataStream.prototype, 'dynamicSize',
+  { get: function() {
+      return this._dynamicSize;
+    },
+    set: function(v) {
+      if (!v) {
+        this._trimAlloc();
+      }
+      this._dynamicSize = v;
+    } });
+
+/**
+  Virtual byte length of the DataStream backing buffer.
+  Updated to be max of original buffer size and last written size.
+  If dynamicSize is false is set to buffer size.
+  @type {number}
+  */
+DataStream.prototype._byteLength = 0;
+
+/**
+  Returns the byte length of the DataStream object.
+  @type {number}
+  */
+Object.defineProperty(DataStream.prototype, 'byteLength',
+  { get: function() {
+    return this._byteLength - this._byteOffset;
+  }});
+
+/**
+  Set/get the backing ArrayBuffer of the DataStream object.
+  The setter updates the DataView to point to the new buffer.
+  @type {Object}
+  */
+Object.defineProperty(DataStream.prototype, 'buffer',
+  { get: function() {
+      this._trimAlloc();
+      return this._buffer;
+    },
+    set: function(v) {
+      this._buffer = v;
+      this._dataView = new DataView(this._buffer, this._byteOffset);
+      this._byteLength = this._buffer.byteLength;
+    } });
+
+/**
+  Set/get the byteOffset of the DataStream object.
+  The setter updates the DataView to point to the new byteOffset.
+  @type {number}
+  */
+Object.defineProperty(DataStream.prototype, 'byteOffset',
+  { get: function() {
+      return this._byteOffset;
+    },
+    set: function(v) {
+      this._byteOffset = v;
+      this._dataView = new DataView(this._buffer, this._byteOffset);
+      this._byteLength = this._buffer.byteLength;
+    } });
+
+/**
+  Set/get the backing DataView of the DataStream object.
+  The setter updates the buffer and byteOffset to point to the DataView values.
+  @type {Object}
+  */
+Object.defineProperty(DataStream.prototype, 'dataView',
+  { get: function() {
+      return this._dataView;
+    },
+    set: function(v) {
+      this._byteOffset = v.byteOffset;
+      this._buffer = v.buffer;
+      this._dataView = new DataView(this._buffer, this._byteOffset);
+      this._byteLength = this._byteOffset + v.byteLength;
+    } });
+
+/**
+  Internal function to resize the DataStream buffer when required.
+  @param {number} extra Number of bytes to add to the buffer allocation.
+  @return {null}
+  */
+DataStream.prototype._realloc = function(extra) {
+  if (!this._dynamicSize) {
+    return;
+  }
+  var req = this._byteOffset + this.position + extra;
+  var blen = this._buffer.byteLength;
+  if (req <= blen) {
+    if (req > this._byteLength) {
+      this._byteLength = req;
+    }
+    return;
+  }
+  if (blen < 1) {
+    blen = 1;
+  }
+  while (req > blen) {
+    blen *= 2;
+  }
+  var buf = new ArrayBuffer(blen);
+  var src = new Uint8Array(this._buffer);
+  var dst = new Uint8Array(buf, 0, src.length);
+  dst.set(src);
+  this.buffer = buf;
+  this._byteLength = req;
+};
+
+/**
+  Internal function to trim the DataStream buffer when required.
+  Used for stripping out the extra bytes from the backing buffer when
+  the virtual byteLength is smaller than the buffer byteLength (happens after
+  growing the buffer with writes and not filling the extra space completely).
+
+  @return {null}
+  */
+DataStream.prototype._trimAlloc = function() {
+  if (this._byteLength == this._buffer.byteLength) {
+    return;
+  }
+  var buf = new ArrayBuffer(this._byteLength);
+  var dst = new Uint8Array(buf);
+  var src = new Uint8Array(this._buffer, 0, dst.length);
+  dst.set(src);
+  this.buffer = buf;
+};
+
+/**
+  Sets the DataStream read/write position to given position.
+  Clamps between 0 and DataStream length.
+
+  @param {number} pos Position to seek to.
+  @return {null}
+  */
+DataStream.prototype.seek = function(pos) {
+  var npos = Math.max(0, Math.min(this.byteLength, pos));
+  this.position = (isNaN(npos) || !isFinite(npos)) ? 0 : npos;
+};
+
+/**
+  Returns true if the DataStream seek pointer is at the end of buffer and
+  there's no more data to read.
+
+  @return {boolean} True if the seek pointer is at the end of the buffer.
+  */
+DataStream.prototype.isEof = function() {
+  return (this.position >= this.byteLength);
+};
+
+/**
+  Maps an Int32Array into the DataStream buffer, swizzling it to native
+  endianness in-place. The current offset from the start of the buffer needs to
+  be a multiple of element size, just like with typed array views.
+
+  Nice for quickly reading in data. Warning: potentially modifies the buffer
+  contents.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} Int32Array to the DataStream backing buffer.
+  */
+DataStream.prototype.mapInt32Array = function(length, e) {
+  this._realloc(length * 4);
+  var arr = new Int32Array(this._buffer, this.byteOffset+this.position, length);
+  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
+  this.position += length * 4;
+  return arr;
+};
+
+/**
+  Maps an Int16Array into the DataStream buffer, swizzling it to native
+  endianness in-place. The current offset from the start of the buffer needs to
+  be a multiple of element size, just like with typed array views.
+
+  Nice for quickly reading in data. Warning: potentially modifies the buffer
+  contents.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} Int16Array to the DataStream backing buffer.
+  */
+DataStream.prototype.mapInt16Array = function(length, e) {
+  this._realloc(length * 2);
+  var arr = new Int16Array(this._buffer, this.byteOffset+this.position, length);
+  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
+  this.position += length * 2;
+  return arr;
+};
+
+/**
+  Maps an Int8Array into the DataStream buffer.
+
+  Nice for quickly reading in data.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} Int8Array to the DataStream backing buffer.
+  */
+DataStream.prototype.mapInt8Array = function(length) {
+  this._realloc(length * 1);
+  var arr = new Int8Array(this._buffer, this.byteOffset+this.position, length);
+  this.position += length * 1;
+  return arr;
+};
+
+/**
+  Maps a Uint32Array into the DataStream buffer, swizzling it to native
+  endianness in-place. The current offset from the start of the buffer needs to
+  be a multiple of element size, just like with typed array views.
+
+  Nice for quickly reading in data. Warning: potentially modifies the buffer
+  contents.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} Uint32Array to the DataStream backing buffer.
+  */
+DataStream.prototype.mapUint32Array = function(length, e) {
+  this._realloc(length * 4);
+  var arr = new Uint32Array(this._buffer, this.byteOffset+this.position, length);
+  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
+  this.position += length * 4;
+  return arr;
+};
+
+/**
+  Maps a Uint16Array into the DataStream buffer, swizzling it to native
+  endianness in-place. The current offset from the start of the buffer needs to
+  be a multiple of element size, just like with typed array views.
+
+  Nice for quickly reading in data. Warning: potentially modifies the buffer
+  contents.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} Uint16Array to the DataStream backing buffer.
+  */
+DataStream.prototype.mapUint16Array = function(length, e) {
+  this._realloc(length * 2);
+  var arr = new Uint16Array(this._buffer, this.byteOffset+this.position, length);
+  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
+  this.position += length * 2;
+  return arr;
+};
+
+/**
+  Maps a Uint8Array into the DataStream buffer.
+
+  Nice for quickly reading in data.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} Uint8Array to the DataStream backing buffer.
+  */
+DataStream.prototype.mapUint8Array = function(length) {
+  this._realloc(length * 1);
+  var arr = new Uint8Array(this._buffer, this.byteOffset+this.position, length);
+  this.position += length * 1;
+  return arr;
+};
+
+/**
+  Maps a Float64Array into the DataStream buffer, swizzling it to native
+  endianness in-place. The current offset from the start of the buffer needs to
+  be a multiple of element size, just like with typed array views.
+
+  Nice for quickly reading in data. Warning: potentially modifies the buffer
+  contents.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} Float64Array to the DataStream backing buffer.
+  */
+DataStream.prototype.mapFloat64Array = function(length, e) {
+  this._realloc(length * 8);
+  var arr = new Float64Array(this._buffer, this.byteOffset+this.position, length);
+  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
+  this.position += length * 8;
+  return arr;
+};
+
+/**
+  Maps a Float32Array into the DataStream buffer, swizzling it to native
+  endianness in-place. The current offset from the start of the buffer needs to
+  be a multiple of element size, just like with typed array views.
+
+  Nice for quickly reading in data. Warning: potentially modifies the buffer
+  contents.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} Float32Array to the DataStream backing buffer.
+  */
+DataStream.prototype.mapFloat32Array = function(length, e) {
+  this._realloc(length * 4);
+  var arr = new Float32Array(this._buffer, this.byteOffset+this.position, length);
+  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
+  this.position += length * 4;
+  return arr;
+};
+
+/**
+  Reads an Int32Array of desired length and endianness from the DataStream.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} The read Int32Array.
+ */
+DataStream.prototype.readInt32Array = function(length, e) {
+  length = length == null ? (this.byteLength-this.position / 4) : length;
+  var arr = new Int32Array(length);
+  DataStream.memcpy(arr.buffer, 0,
+                    this.buffer, this.byteOffset+this.position,
+                    length*arr.BYTES_PER_ELEMENT);
+  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
+  this.position += arr.byteLength;
+  return arr;
+};
+
+/**
+  Reads an Int16Array of desired length and endianness from the DataStream.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} The read Int16Array.
+ */
+DataStream.prototype.readInt16Array = function(length, e) {
+  length = length == null ? (this.byteLength-this.position / 2) : length;
+  var arr = new Int16Array(length);
+  DataStream.memcpy(arr.buffer, 0,
+                    this.buffer, this.byteOffset+this.position,
+                    length*arr.BYTES_PER_ELEMENT);
+  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
+  this.position += arr.byteLength;
+  return arr;
+};
+
+/**
+  Reads an Int8Array of desired length from the DataStream.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} The read Int8Array.
+ */
+DataStream.prototype.readInt8Array = function(length) {
+  length = length == null ? (this.byteLength-this.position) : length;
+  var arr = new Int8Array(length);
+  DataStream.memcpy(arr.buffer, 0,
+                    this.buffer, this.byteOffset+this.position,
+                    length*arr.BYTES_PER_ELEMENT);
+  this.position += arr.byteLength;
+  return arr;
+};
+
+/**
+  Reads a Uint32Array of desired length and endianness from the DataStream.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} The read Uint32Array.
+ */
+DataStream.prototype.readUint32Array = function(length, e) {
+  length = length == null ? (this.byteLength-this.position / 4) : length;
+  var arr = new Uint32Array(length);
+  DataStream.memcpy(arr.buffer, 0,
+                    this.buffer, this.byteOffset+this.position,
+                    length*arr.BYTES_PER_ELEMENT);
+  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
+  this.position += arr.byteLength;
+  return arr;
+};
+
+/**
+  Reads a Uint16Array of desired length and endianness from the DataStream.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} The read Uint16Array.
+ */
+DataStream.prototype.readUint16Array = function(length, e) {
+  length = length == null ? (this.byteLength-this.position / 2) : length;
+  var arr = new Uint16Array(length);
+  DataStream.memcpy(arr.buffer, 0,
+                    this.buffer, this.byteOffset+this.position,
+                    length*arr.BYTES_PER_ELEMENT);
+  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
+  this.position += arr.byteLength;
+  return arr;
+};
+
+/**
+  Reads a Uint8Array of desired length from the DataStream.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} The read Uint8Array.
+ */
+DataStream.prototype.readUint8Array = function(length) {
+  length = length == null ? (this.byteLength-this.position) : length;
+  var arr = new Uint8Array(length);
+  DataStream.memcpy(arr.buffer, 0,
+                    this.buffer, this.byteOffset+this.position,
+                    length*arr.BYTES_PER_ELEMENT);
+  this.position += arr.byteLength;
+  return arr;
+};
+
+/**
+  Reads a Float64Array of desired length and endianness from the DataStream.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} The read Float64Array.
+ */
+DataStream.prototype.readFloat64Array = function(length, e) {
+  length = length == null ? (this.byteLength-this.position / 8) : length;
+  var arr = new Float64Array(length);
+  DataStream.memcpy(arr.buffer, 0,
+                    this.buffer, this.byteOffset+this.position,
+                    length*arr.BYTES_PER_ELEMENT);
+  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
+  this.position += arr.byteLength;
+  return arr;
+};
+
+/**
+  Reads a Float32Array of desired length and endianness from the DataStream.
+
+  @param {number} length Number of elements to map.
+  @param {?boolean} e Endianness of the data to read.
+  @return {Object} The read Float32Array.
+ */
+DataStream.prototype.readFloat32Array = function(length, e) {
+  length = length == null ? (this.byteLength-this.position / 4) : length;
+  var arr = new Float32Array(length);
+  DataStream.memcpy(arr.buffer, 0,
+                    this.buffer, this.byteOffset+this.position,
+                    length*arr.BYTES_PER_ELEMENT);
+  DataStream.arrayToNative(arr, e == null ? this.endianness : e);
+  this.position += arr.byteLength;
+  return arr;
+};
+
+/**
+  Writes an Int32Array of specified endianness to the DataStream.
+
+  @param {Object} arr The array to write.
+  @param {?boolean} e Endianness of the data to write.
+ */
+DataStream.prototype.writeInt32Array = function(arr, e) {
+  this._realloc(arr.length * 4);
+  if (arr instanceof Int32Array &&
+      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
+    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
+                      arr.buffer, arr.byteOffset,
+                      arr.byteLength);
+    this.mapInt32Array(arr.length, e);
+  } else {
+    for (var i=0; i<arr.length; i++) {
+      this.writeInt32(arr[i], e);
+    }
+  }
+};
+
+/**
+  Writes an Int16Array of specified endianness to the DataStream.
+
+  @param {Object} arr The array to write.
+  @param {?boolean} e Endianness of the data to write.
+ */
+DataStream.prototype.writeInt16Array = function(arr, e) {
+  this._realloc(arr.length * 2);
+  if (arr instanceof Int16Array &&
+      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
+    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
+                      arr.buffer, arr.byteOffset,
+                      arr.byteLength);
+    this.mapInt16Array(arr.length, e);
+  } else {
+    for (var i=0; i<arr.length; i++) {
+      this.writeInt16(arr[i], e);
+    }
+  }
+};
+
+/**
+  Writes an Int8Array to the DataStream.
+
+  @param {Object} arr The array to write.
+ */
+DataStream.prototype.writeInt8Array = function(arr) {
+  this._realloc(arr.length * 1);
+  if (arr instanceof Int8Array &&
+      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
+    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
+                      arr.buffer, arr.byteOffset,
+                      arr.byteLength);
+    this.mapInt8Array(arr.length);
+  } else {
+    for (var i=0; i<arr.length; i++) {
+      this.writeInt8(arr[i]);
+    }
+  }
+};
+
+/**
+  Writes a Uint32Array of specified endianness to the DataStream.
+
+  @param {Object} arr The array to write.
+  @param {?boolean} e Endianness of the data to write.
+ */
+DataStream.prototype.writeUint32Array = function(arr, e) {
+  this._realloc(arr.length * 4);
+  if (arr instanceof Uint32Array &&
+      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
+    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
+                      arr.buffer, arr.byteOffset,
+                      arr.byteLength);
+    this.mapUint32Array(arr.length, e);
+  } else {
+    for (var i=0; i<arr.length; i++) {
+      this.writeUint32(arr[i], e);
+    }
+  }
+};
+
+/**
+  Writes a Uint16Array of specified endianness to the DataStream.
+
+  @param {Object} arr The array to write.
+  @param {?boolean} e Endianness of the data to write.
+ */
+DataStream.prototype.writeUint16Array = function(arr, e) {
+  this._realloc(arr.length * 2);
+  if (arr instanceof Uint16Array &&
+      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
+    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
+                      arr.buffer, arr.byteOffset,
+                      arr.byteLength);
+    this.mapUint16Array(arr.length, e);
+  } else {
+    for (var i=0; i<arr.length; i++) {
+      this.writeUint16(arr[i], e);
+    }
+  }
+};
+
+/**
+  Writes a Uint8Array to the DataStream.
+
+  @param {Object} arr The array to write.
+ */
+DataStream.prototype.writeUint8Array = function(arr) {
+  this._realloc(arr.length * 1);
+  if (arr instanceof Uint8Array &&
+      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
+    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
+                      arr.buffer, arr.byteOffset,
+                      arr.byteLength);
+    this.mapUint8Array(arr.length);
+  } else {
+    for (var i=0; i<arr.length; i++) {
+      this.writeUint8(arr[i]);
+    }
+  }
+};
+
+/**
+  Writes a Float64Array of specified endianness to the DataStream.
+
+  @param {Object} arr The array to write.
+  @param {?boolean} e Endianness of the data to write.
+ */
+DataStream.prototype.writeFloat64Array = function(arr, e) {
+  this._realloc(arr.length * 8);
+  if (arr instanceof Float64Array &&
+      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
+    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
+                      arr.buffer, arr.byteOffset,
+                      arr.byteLength);
+    this.mapFloat64Array(arr.length, e);
+  } else {
+    for (var i=0; i<arr.length; i++) {
+      this.writeFloat64(arr[i], e);
+    }
+  }
+};
+
+/**
+  Writes a Float32Array of specified endianness to the DataStream.
+
+  @param {Object} arr The array to write.
+  @param {?boolean} e Endianness of the data to write.
+ */
+DataStream.prototype.writeFloat32Array = function(arr, e) {
+  this._realloc(arr.length * 4);
+  if (arr instanceof Float32Array &&
+      (this.byteOffset+this.position) % arr.BYTES_PER_ELEMENT == 0) {
+    DataStream.memcpy(this._buffer, this.byteOffset+this.position,
+                      arr.buffer, arr.byteOffset,
+                      arr.byteLength);
+    this.mapFloat32Array(arr.length, e);
+  } else {
+    for (var i=0; i<arr.length; i++) {
+      this.writeFloat32(arr[i], e);
+    }
+  }
+};
+
+
+/**
+  Reads a 32-bit int from the DataStream with the desired endianness.
+
+  @param {?boolean} e Endianness of the number.
+  @return {number} The read number.
+ */
+DataStream.prototype.readInt32 = function(e) {
+  var v = this._dataView.getInt32(this.position, e == null ? this.endianness : e);
+  this.position += 4;
+  return v;
+};
+
+/**
+  Reads a 16-bit int from the DataStream with the desired endianness.
+
+  @param {?boolean} e Endianness of the number.
+  @return {number} The read number.
+ */
+DataStream.prototype.readInt16 = function(e) {
+  var v = this._dataView.getInt16(this.position, e == null ? this.endianness : e);
+  this.position += 2;
+  return v;
+};
+
+/**
+  Reads an 8-bit int from the DataStream.
+
+  @return {number} The read number.
+ */
+DataStream.prototype.readInt8 = function() {
+  var v = this._dataView.getInt8(this.position);
+  this.position += 1;
+  return v;
+};
+
+/**
+  Reads a 32-bit unsigned int from the DataStream with the desired endianness.
+
+  @param {?boolean} e Endianness of the number.
+  @return {number} The read number.
+ */
+DataStream.prototype.readUint32 = function(e) {
+  var v = this._dataView.getUint32(this.position, e == null ? this.endianness : e);
+  this.position += 4;
+  return v;
+};
+
+/**
+  Reads a 16-bit unsigned int from the DataStream with the desired endianness.
+
+  @param {?boolean} e Endianness of the number.
+  @return {number} The read number.
+ */
+DataStream.prototype.readUint16 = function(e) {
+  var v = this._dataView.getUint16(this.position, e == null ? this.endianness : e);
+  this.position += 2;
+  return v;
+};
+
+/**
+  Reads an 8-bit unsigned int from the DataStream.
+
+  @return {number} The read number.
+ */
+DataStream.prototype.readUint8 = function() {
+  var v = this._dataView.getUint8(this.position);
+  this.position += 1;
+  return v;
+};
+
+/**
+  Reads a 32-bit float from the DataStream with the desired endianness.
+
+  @param {?boolean} e Endianness of the number.
+  @return {number} The read number.
+ */
+DataStream.prototype.readFloat32 = function(e) {
+  var v = this._dataView.getFloat32(this.position, e == null ? this.endianness : e);
+  this.position += 4;
+  return v;
+};
+
+/**
+  Reads a 64-bit float from the DataStream with the desired endianness.
+
+  @param {?boolean} e Endianness of the number.
+  @return {number} The read number.
+ */
+DataStream.prototype.readFloat64 = function(e) {
+  var v = this._dataView.getFloat64(this.position, e == null ? this.endianness : e);
+  this.position += 8;
+  return v;
+};
+
+
+/**
+  Writes a 32-bit int to the DataStream with the desired endianness.
+
+  @param {number} v Number to write.
+  @param {?boolean} e Endianness of the number.
+ */
+DataStream.prototype.writeInt32 = function(v, e) {
+  this._realloc(4);
+  this._dataView.setInt32(this.position, v, e == null ? this.endianness : e);
+  this.position += 4;
+};
+
+/**
+  Writes a 16-bit int to the DataStream with the desired endianness.
+
+  @param {number} v Number to write.
+  @param {?boolean} e Endianness of the number.
+ */
+DataStream.prototype.writeInt16 = function(v, e) {
+  this._realloc(2);
+  this._dataView.setInt16(this.position, v, e == null ? this.endianness : e);
+  this.position += 2;
+};
+
+/**
+  Writes an 8-bit int to the DataStream.
+
+  @param {number} v Number to write.
+ */
+DataStream.prototype.writeInt8 = function(v) {
+  this._realloc(1);
+  this._dataView.setInt8(this.position, v);
+  this.position += 1;
+};
+
+/**
+  Writes a 32-bit unsigned int to the DataStream with the desired endianness.
+
+  @param {number} v Number to write.
+  @param {?boolean} e Endianness of the number.
+ */
+DataStream.prototype.writeUint32 = function(v, e) {
+  this._realloc(4);
+  this._dataView.setUint32(this.position, v, e == null ? this.endianness : e);
+  this.position += 4;
+};
+
+/**
+  Writes a 16-bit unsigned int to the DataStream with the desired endianness.
+
+  @param {number} v Number to write.
+  @param {?boolean} e Endianness of the number.
+ */
+DataStream.prototype.writeUint16 = function(v, e) {
+  this._realloc(2);
+  this._dataView.setUint16(this.position, v, e == null ? this.endianness : e);
+  this.position += 2;
+};
+
+/**
+  Writes an 8-bit unsigned  int to the DataStream.
+
+  @param {number} v Number to write.
+ */
+DataStream.prototype.writeUint8 = function(v) {
+  this._realloc(1);
+  this._dataView.setUint8(this.position, v);
+  this.position += 1;
+};
+
+/**
+  Writes a 32-bit float to the DataStream with the desired endianness.
+
+  @param {number} v Number to write.
+  @param {?boolean} e Endianness of the number.
+ */
+DataStream.prototype.writeFloat32 = function(v, e) {
+  this._realloc(4);
+  this._dataView.setFloat32(this.position, v, e == null ? this.endianness : e);
+  this.position += 4;
+};
+
+/**
+  Writes a 64-bit float to the DataStream with the desired endianness.
+
+  @param {number} v Number to write.
+  @param {?boolean} e Endianness of the number.
+ */
+DataStream.prototype.writeFloat64 = function(v, e) {
+  this._realloc(8);
+  this._dataView.setFloat64(this.position, v, e == null ? this.endianness : e);
+  this.position += 8;
+};
+
+/**
+  Native endianness. Either DataStream.BIG_ENDIAN or DataStream.LITTLE_ENDIAN
+  depending on the platform endianness.
+
+  @type {boolean}
+ */
+DataStream.endianness = new Int8Array(new Int16Array([1]).buffer)[0] > 0;
+
+/**
+  Copies byteLength bytes from the src buffer at srcOffset to the
+  dst buffer at dstOffset.
+
+  @param {Object} dst Destination ArrayBuffer to write to.
+  @param {number} dstOffset Offset to the destination ArrayBuffer.
+  @param {Object} src Source ArrayBuffer to read from.
+  @param {number} srcOffset Offset to the source ArrayBuffer.
+  @param {number} byteLength Number of bytes to copy.
+ */
+DataStream.memcpy = function(dst, dstOffset, src, srcOffset, byteLength) {
+  var dstU8 = new Uint8Array(dst, dstOffset, byteLength);
+  var srcU8 = new Uint8Array(src, srcOffset, byteLength);
+  dstU8.set(srcU8);
+};
+
+/**
+  Converts array to native endianness in-place.
+
+  @param {Object} array Typed array to convert.
+  @param {boolean} arrayIsLittleEndian True if the data in the array is
+                                       little-endian. Set false for big-endian.
+  @return {Object} The converted typed array.
+ */
+DataStream.arrayToNative = function(array, arrayIsLittleEndian) {
+  if (arrayIsLittleEndian == this.endianness) {
+    return array;
+  } else {
+    return this.flipArrayEndianness(array);
+  }
+};
+
+/**
+  Converts native endianness array to desired endianness in-place.
+
+  @param {Object} array Typed array to convert.
+  @param {boolean} littleEndian True if the converted array should be
+                                little-endian. Set false for big-endian.
+  @return {Object} The converted typed array.
+ */
+DataStream.nativeToEndian = function(array, littleEndian) {
+  if (this.endianness == littleEndian) {
+    return array;
+  } else {
+    return this.flipArrayEndianness(array);
+  }
+};
+
+/**
+  Flips typed array endianness in-place.
+
+  @param {Object} array Typed array to flip.
+  @return {Object} The converted typed array.
+ */
+DataStream.flipArrayEndianness = function(array) {
+  var u8 = new Uint8Array(array.buffer, array.byteOffset, array.byteLength);
+  for (var i=0; i<array.byteLength; i+=array.BYTES_PER_ELEMENT) {
+    for (var j=i+array.BYTES_PER_ELEMENT-1, k=i; j>k; j--, k++) {
+      var tmp = u8[k];
+      u8[k] = u8[j];
+      u8[j] = tmp;
+    }
+  }
+  return array;
+};
+
+/**
+  Creates an array from an array of character codes.
+  Uses String.fromCharCode in chunks for memory efficiency and then concatenates
+  the resulting string chunks.
+
+  @param {array} array Array of character codes.
+  @return {string} String created from the character codes.
+**/
+DataStream.createStringFromArray = function(array) {
+  var chunk_size = 0x8000;
+  var chunks = [];
+  for (var i=0; i < array.length; i += chunk_size) {
+    chunks.push(String.fromCharCode.apply(null, array.subarray(i, i + chunk_size)));
+  }
+  return chunks.join("");
+};
+
+/**
+  Seek position where DataStream#readStruct ran into a problem.
+  Useful for debugging struct parsing.
+
+  @type {number}
+ */
+DataStream.prototype.failurePosition = 0;
+
+/**
+  Reads a struct of data from the DataStream. The struct is defined as
+  a flat array of [name, type]-pairs. See the example below:
+
+  ds.readStruct([
+    'headerTag', 'uint32', // Uint32 in DataStream endianness.
+    'headerTag2', 'uint32be', // Big-endian Uint32.
+    'headerTag3', 'uint32le', // Little-endian Uint32.
+    'array', ['[]', 'uint32', 16], // Uint32Array of length 16.
+    'array2Length', 'uint32',
+    'array2', ['[]', 'uint32', 'array2Length'] // Uint32Array of length array2Length
+  ]);
+
+  The possible values for the type are as follows:
+
+  // Number types
+
+  // Unsuffixed number types use DataStream endianness.
+  // To explicitly specify endianness, suffix the type with
+  // 'le' for little-endian or 'be' for big-endian,
+  // e.g. 'int32be' for big-endian int32.
+
+  'uint8' -- 8-bit unsigned int
+  'uint16' -- 16-bit unsigned int
+  'uint32' -- 32-bit unsigned int
+  'int8' -- 8-bit int
+  'int16' -- 16-bit int
+  'int32' -- 32-bit int
+  'float32' -- 32-bit float
+  'float64' -- 64-bit float
+
+  // String types
+  'cstring' -- ASCII string terminated by a zero byte.
+  'string:N' -- ASCII string of length N, where N is a literal integer.
+  'string:variableName' -- ASCII string of length $variableName,
+    where 'variableName' is a previously parsed number in the current struct.
+  'string,CHARSET:N' -- String of byteLength N encoded with given CHARSET.
+  'u16string:N' -- UCS-2 string of length N in DataStream endianness.
+  'u16stringle:N' -- UCS-2 string of length N in little-endian.
+  'u16stringbe:N' -- UCS-2 string of length N in big-endian.
+
+  // Complex types
+  [name, type, name_2, type_2, ..., name_N, type_N] -- Struct
+  function(dataStream, struct) {} -- Callback function to read and return data.
+  {get: function(dataStream, struct) {},
+   set: function(dataStream, struct) {}}
+  -- Getter/setter functions to read and return data, handy for using the same
+     struct definition for reading and writing structs.
+  ['[]', type, length] -- Array of given type and length. The length can be either
+                        a number, a string that references a previously-read
+                        field, or a callback function(struct, dataStream, type){}.
+                        If length is '*', reads in as many elements as it can.
+
+  @param {Object} structDefinition Struct definition object.
+  @return {Object} The read struct. Null if failed to read struct.
+ */
+DataStream.prototype.readStruct = function(structDefinition) {
+  var struct = {}, t, v, n;
+  var p = this.position;
+  for (var i=0; i<structDefinition.length; i+=2) {
+    t = structDefinition[i+1];
+    v = this.readType(t, struct);
+    if (v == null) {
+      if (this.failurePosition == 0) {
+        this.failurePosition = this.position;
+      }
+      this.position = p;
+      return null;
+    }
+    struct[structDefinition[i]] = v;
+  }
+  return struct;
+};
+
+/**
+  Read UCS-2 string of desired length and endianness from the DataStream.
+
+  @param {number} length The length of the string to read.
+  @param {boolean} endianness The endianness of the string data in the DataStream.
+  @return {string} The read string.
+ */
+DataStream.prototype.readUCS2String = function(length, endianness) {
+  return DataStream.createStringFromArray(this.readUint16Array(length, endianness));
+};
+
+/**
+  Write a UCS-2 string of desired endianness to the DataStream. The
+  lengthOverride argument lets you define the number of characters to write.
+  If the string is shorter than lengthOverride, the extra space is padded with
+  zeroes.
+
+  @param {string} str The string to write.
+  @param {?boolean} endianness The endianness to use for the written string data.
+  @param {?number} lengthOverride The number of characters to write.
+ */
+DataStream.prototype.writeUCS2String = function(str, endianness, lengthOverride) {
+  if (lengthOverride == null) {
+    lengthOverride = str.length;
+  }
+  for (var i = 0; i < str.length && i < lengthOverride; i++) {
+    this.writeUint16(str.charCodeAt(i), endianness);
+  }
+  for (; i<lengthOverride; i++) {
+    this.writeUint16(0);
+  }
+};
+
+/**
+  Read a string of desired length and encoding from the DataStream.
+
+  @param {number} length The length of the string to read in bytes.
+  @param {?string} encoding The encoding of the string data in the DataStream.
+                            Defaults to ASCII.
+  @return {string} The read string.
+ */
+DataStream.prototype.readString = function(length, encoding) {
+  if (encoding == null || encoding == "ASCII") {
+    return DataStream.createStringFromArray(this.mapUint8Array(length == null ? this.byteLength-this.position : length));
+  } else {
+    return (new TextDecoder(encoding)).decode(this.mapUint8Array(length));
+  }
+};
+
+/**
+  Writes a string of desired length and encoding to the DataStream.
+
+  @param {string} s The string to write.
+  @param {?string} encoding The encoding for the written string data.
+                            Defaults to ASCII.
+  @param {?number} length The number of characters to write.
+ */
+DataStream.prototype.writeString = function(s, encoding, length) {
+  if (encoding == null || encoding == "ASCII") {
+    if (length != null) {
+      var i = 0;
+      var len = Math.min(s.length, length);
+      for (i=0; i<len; i++) {
+        this.writeUint8(s.charCodeAt(i));
+      }
+      for (; i<length; i++) {
+        this.writeUint8(0);
+      }
+    } else {
+      for (var i=0; i<s.length; i++) {
+        this.writeUint8(s.charCodeAt(i));
+      }
+    }
+  } else {
+    this.writeUint8Array((new TextEncoder(encoding)).encode(s.substring(0, length)));
+  }
+};
+
+
+/**
+  Read null-terminated string of desired length from the DataStream. Truncates
+  the returned string so that the null byte is not a part of it.
+
+  @param {?number} length The length of the string to read.
+  @return {string} The read string.
+ */
+DataStream.prototype.readCString = function(length) {
+  var blen = this.byteLength-this.position;
+  var u8 = new Uint8Array(this._buffer, this._byteOffset + this.position);
+  var len = blen;
+  if (length != null) {
+    len = Math.min(length, blen);
+  }
+  for (var i = 0; i < len && u8[i] != 0; i++); // find first zero byte
+  var s = DataStream.createStringFromArray(this.mapUint8Array(i));
+  if (length != null) {
+    this.position += len-i;
+  } else if (i != blen) {
+    this.position += 1; // trailing zero if not at end of buffer
+  }
+  return s;
+};
+
+/**
+  Writes a null-terminated string to DataStream and zero-pads it to length
+  bytes. If length is not given, writes the string followed by a zero.
+  If string is longer than length, the written part of the string does not have
+  a trailing zero.
+
+  @param {string} s The string to write.
+  @param {?number} length The number of characters to write.
+ */
+DataStream.prototype.writeCString = function(s, length) {
+  if (length != null) {
+    var i = 0;
+    var len = Math.min(s.length, length);
+    for (i=0; i<len; i++) {
+      this.writeUint8(s.charCodeAt(i));
+    }
+    for (; i<length; i++) {
+      this.writeUint8(0);
+    }
+  } else {
+    for (var i=0; i<s.length; i++) {
+      this.writeUint8(s.charCodeAt(i));
+    }
+    this.writeUint8(0);
+  }
+};
+
+/**
+  Reads an object of type t from the DataStream, passing struct as the thus-far
+  read struct to possible callbacks that refer to it. Used by readStruct for
+  reading in the values, so the type is one of the readStruct types.
+
+  @param {Object} t Type of the object to read.
+  @param {?Object} struct Struct to refer to when resolving length references
+                          and for calling callbacks.
+  @return {?Object} Returns the object on successful read, null on unsuccessful.
+ */
+DataStream.prototype.readType = function(t, struct) {
+  if (typeof t == "function") {
+    return t(this, struct);
+  } else if (typeof t == "object" && !(t instanceof Array)) {
+    return t.get(this, struct);
+  } else if (t instanceof Array && t.length != 3) {
+    return this.readStruct(t, struct);
+  }
+  var v = null;
+  var lengthOverride = null;
+  var charset = "ASCII";
+  var pos = this.position;
+  var len;
+  if (typeof t == 'string' && /:/.test(t)) {
+    var tp = t.split(":");
+    t = tp[0];
+    len = tp[1];
+
+    // allow length to be previously parsed variable
+    // e.g. 'string:fieldLength', if `fieldLength` has
+    // been parsed previously.
+    if (struct[len] != null) {
+      lengthOverride = parseInt(struct[len]);
+    } else {
+      // assume literal integer e.g., 'string:4'
+      lengthOverride = parseInt(tp[1]);
+    }
+  }
+  if (typeof t == 'string' && /,/.test(t)) {
+    var tp = t.split(",");
+    t = tp[0];
+    charset = parseInt(tp[1]);
+  }
+  switch(t) {
+
+    case 'uint8':
+      v = this.readUint8(); break;
+    case 'int8':
+      v = this.readInt8(); break;
+
+    case 'uint16':
+      v = this.readUint16(this.endianness); break;
+    case 'int16':
+      v = this.readInt16(this.endianness); break;
+    case 'uint32':
+      v = this.readUint32(this.endianness); break;
+    case 'int32':
+      v = this.readInt32(this.endianness); break;
+    case 'float32':
+      v = this.readFloat32(this.endianness); break;
+    case 'float64':
+      v = this.readFloat64(this.endianness); break;
+
+    case 'uint16be':
+      v = this.readUint16(DataStream.BIG_ENDIAN); break;
+    case 'int16be':
+      v = this.readInt16(DataStream.BIG_ENDIAN); break;
+    case 'uint32be':
+      v = this.readUint32(DataStream.BIG_ENDIAN); break;
+    case 'int32be':
+      v = this.readInt32(DataStream.BIG_ENDIAN); break;
+    case 'float32be':
+      v = this.readFloat32(DataStream.BIG_ENDIAN); break;
+    case 'float64be':
+      v = this.readFloat64(DataStream.BIG_ENDIAN); break;
+
+    case 'uint16le':
+      v = this.readUint16(DataStream.LITTLE_ENDIAN); break;
+    case 'int16le':
+      v = this.readInt16(DataStream.LITTLE_ENDIAN); break;
+    case 'uint32le':
+      v = this.readUint32(DataStream.LITTLE_ENDIAN); break;
+    case 'int32le':
+      v = this.readInt32(DataStream.LITTLE_ENDIAN); break;
+    case 'float32le':
+      v = this.readFloat32(DataStream.LITTLE_ENDIAN); break;
+    case 'float64le':
+      v = this.readFloat64(DataStream.LITTLE_ENDIAN); break;
+
+    case 'cstring':
+      v = this.readCString(lengthOverride); break;
+
+    case 'string':
+      v = this.readString(lengthOverride, charset); break;
+
+    case 'u16string':
+      v = this.readUCS2String(lengthOverride, this.endianness); break;
+
+    case 'u16stringle':
+      v = this.readUCS2String(lengthOverride, DataStream.LITTLE_ENDIAN); break;
+
+    case 'u16stringbe':
+      v = this.readUCS2String(lengthOverride, DataStream.BIG_ENDIAN); break;
+
+    default:
+      if (t.length == 3) {
+        var ta = t[1];
+        var len = t[2];
+        var length = 0;
+        if (typeof len == 'function') {
+          length = len(struct, this, t);
+        } else if (typeof len == 'string' && struct[len] != null) {
+          length = parseInt(struct[len]);
+        } else {
+          length = parseInt(len);
+        }
+        if (typeof ta == "string") {
+          var tap = ta.replace(/(le|be)$/, '');
+          var endianness = null;
+          if (/le$/.test(ta)) {
+            endianness = DataStream.LITTLE_ENDIAN;
+          } else if (/be$/.test(ta)) {
+            endianness = DataStream.BIG_ENDIAN;
+          }
+          if (len == '*') {
+            length = null;
+          }
+          switch(tap) {
+            case 'uint8':
+              v = this.readUint8Array(length); break;
+            case 'uint16':
+              v = this.readUint16Array(length, endianness); break;
+            case 'uint32':
+              v = this.readUint32Array(length, endianness); break;
+            case 'int8':
+              v = this.readInt8Array(length); break;
+            case 'int16':
+              v = this.readInt16Array(length, endianness); break;
+            case 'int32':
+              v = this.readInt32Array(length, endianness); break;
+            case 'float32':
+              v = this.readFloat32Array(length, endianness); break;
+            case 'float64':
+              v = this.readFloat64Array(length, endianness); break;
+            case 'cstring':
+            case 'utf16string':
+            case 'string':
+              if (length == null) {
+                v = [];
+                while (!this.isEof()) {
+                  var u = this.readType(ta, struct);
+                  if (u == null) break;
+                  v.push(u);
+                }
+              } else {
+                v = new Array(length);
+                for (var i=0; i<length; i++) {
+                  v[i] = this.readType(ta, struct);
+                }
+              }
+              break;
+          }
+        } else {
+          if (len == '*') {
+            v = [];
+            this.buffer;
+            while (true) {
+              var p = this.position;
+              try {
+                var o = this.readType(ta, struct);
+                if (o == null) {
+                  this.position = p;
+                  break;
+                }
+                v.push(o);
+              } catch(e) {
+                this.position = p;
+                break;
+              }
+            }
+          } else {
+            v = new Array(length);
+            for (var i=0; i<length; i++) {
+              var u = this.readType(ta, struct);
+              if (u == null) return null;
+              v[i] = u;
+            }
+          }
+        }
+        break;
+      }
+  }
+  if (lengthOverride != null) {
+    this.position = pos + lengthOverride;
+  }
+  return v;
+};
+
+/**
+  Writes a struct to the DataStream. Takes a structDefinition that gives the
+  types and a struct object that gives the values. Refer to readStruct for the
+  structure of structDefinition.
+
+  @param {Object} structDefinition Type definition of the struct.
+  @param {Object} struct The struct data object.
+  */
+DataStream.prototype.writeStruct = function(structDefinition, struct) {
+  for (var i = 0; i < structDefinition.length; i+=2) {
+    var t = structDefinition[i+1];
+    this.writeType(t, struct[structDefinition[i]], struct);
+  }
+};
+
+/**
+  Writes object v of type t to the DataStream.
+
+  @param {Object} t Type of data to write.
+  @param {Object} v Value of data to write.
+  @param {Object} struct Struct to pass to write callback functions.
+  */
+DataStream.prototype.writeType = function(t, v, struct) {
+  if (typeof t == "function") {
+    return t(this, v);
+  } else if (typeof t == "object" && !(t instanceof Array)) {
+    return t.set(this, v, struct);
+  }
+  var lengthOverride = null;
+  var charset = "ASCII";
+  var pos = this.position;
+  if (typeof(t) == 'string' && /:/.test(t)) {
+    var tp = t.split(":");
+    t = tp[0];
+    lengthOverride = parseInt(tp[1]);
+  }
+  if (typeof t == 'string' && /,/.test(t)) {
+    var tp = t.split(",");
+    t = tp[0];
+    charset = parseInt(tp[1]);
+  }
+
+  switch(t) {
+    case 'uint8':
+      this.writeUint8(v);
+      break;
+    case 'int8':
+      this.writeInt8(v);
+      break;
+
+    case 'uint16':
+      this.writeUint16(v, this.endianness);
+      break;
+    case 'int16':
+      this.writeInt16(v, this.endianness);
+      break;
+    case 'uint32':
+      this.writeUint32(v, this.endianness);
+      break;
+    case 'int32':
+      this.writeInt32(v, this.endianness);
+      break;
+    case 'float32':
+      this.writeFloat32(v, this.endianness);
+      break;
+    case 'float64':
+      this.writeFloat64(v, this.endianness);
+      break;
+
+    case 'uint16be':
+      this.writeUint16(v, DataStream.BIG_ENDIAN);
+      break;
+    case 'int16be':
+      this.writeInt16(v, DataStream.BIG_ENDIAN);
+      break;
+    case 'uint32be':
+      this.writeUint32(v, DataStream.BIG_ENDIAN);
+      break;
+    case 'int32be':
+      this.writeInt32(v, DataStream.BIG_ENDIAN);
+      break;
+    case 'float32be':
+      this.writeFloat32(v, DataStream.BIG_ENDIAN);
+      break;
+    case 'float64be':
+      this.writeFloat64(v, DataStream.BIG_ENDIAN);
+      break;
+
+    case 'uint16le':
+      this.writeUint16(v, DataStream.LITTLE_ENDIAN);
+      break;
+    case 'int16le':
+      this.writeInt16(v, DataStream.LITTLE_ENDIAN);
+      break;
+    case 'uint32le':
+      this.writeUint32(v, DataStream.LITTLE_ENDIAN);
+      break;
+    case 'int32le':
+      this.writeInt32(v, DataStream.LITTLE_ENDIAN);
+      break;
+    case 'float32le':
+      this.writeFloat32(v, DataStream.LITTLE_ENDIAN);
+      break;
+    case 'float64le':
+      this.writeFloat64(v, DataStream.LITTLE_ENDIAN);
+      break;
+
+    case 'cstring':
+      this.writeCString(v, lengthOverride);
+      break;
+
+    case 'string':
+      this.writeString(v, charset, lengthOverride);
+      break;
+
+    case 'u16string':
+      this.writeUCS2String(v, this.endianness, lengthOverride);
+      break;
+
+    case 'u16stringle':
+      this.writeUCS2String(v, DataStream.LITTLE_ENDIAN, lengthOverride);
+      break;
+
+    case 'u16stringbe':
+      this.writeUCS2String(v, DataStream.BIG_ENDIAN, lengthOverride);
+      break;
+
+    default:
+      if (t.length == 3) {
+        var ta = t[1];
+        for (var i=0; i<v.length; i++) {
+          this.writeType(ta, v[i]);
+        }
+        break;
+      } else {
+        this.writeStruct(t, v);
+        break;
+      }
+  }
+  if (lengthOverride != null) {
+    this.position = pos;
+    this._realloc(lengthOverride);
+    this.position = pos + lengthOverride;
+  }
+};
+
+// Export DataStream for amd environments
+if (typeof define === 'function' && define.amd) {
+    define('DataStream', [], function() {
+      return DataStream;
+    });
+  }
+  
+// Export DataStream for CommonJS
+if (typeof module === 'object' && module && module.exports) {
+  module.exports = DataStream;
+}
+
+/**
+ * @file tgajs - Javascript decoder & (experimental) encoder for TGA files
+ * @desc tgajs is a fork from https://github.com/vthibault/jsTGALoader
+ * @author Vincent Thibault (Original author)
+ * @author Lukas Schmitt
+ * @version 1.0.0
+ */
+
+/* Copyright (c) 2013, Vincent Thibault. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without modification,
+ are permitted provided that the following conditions are met:
+
+ * Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright notice,
+ this list of conditions and the following disclaimer in the documentation
+ and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
+
+(function (_global) {
+  'use strict';
+
+  /**
+   * @var {object} TGA type constants
+   */
+  Targa.Type = {
+    NO_DATA: 0,
+    INDEXED: 1,
+    RGB: 2,
+    GREY: 3,
+    RLE_INDEXED: 9,
+    RLE_RGB: 10,
+    RLE_GREY: 11
+  };
+
+  /**
+   * @var {object} TGA origin constants
+   */
+  Targa.Origin = {
+    BOTTOM_LEFT: 0x00,
+    BOTTOM_RIGHT: 0x01,
+    TOP_LEFT: 0x02,
+    TOP_RIGHT: 0x03,
+    SHIFT: 0x04,
+    MASK: 0x30,
+    ALPHA: 0x08
+  };
+
+  Targa.HEADER_SIZE = 18;
+  Targa.FOOTER_SIZE = 26;
+  Targa.LITTLE_ENDIAN = true;
+  Targa.RLE_BIT = 0x80;
+  Targa.RLE_MASK = 0x7f;
+  Targa.RLE_PACKET = 1;
+  Targa.RAW_PACKET = 2;
+  Targa.SIGNATURE = "TRUEVISION-XFILE.\0";
+
+  /**
+   * TGA Namespace
+   * @constructor
+   */
+  function Targa() {
+    if (arguments.length == 1) {
+      var h = arguments[0];
+
+      this.header = createHeader(h);
+      setHeaderBooleans(this.header);
+      checkHeader(this.header);
+    }
+  }
+
+  /**
+   * Sets header or default values
+   * @param header header
+   * @returns {Object}
+   */
+  function createHeader(header) {
+    return {
+      /* 0x00  BYTE */  idLength: defaultFor(header.idLength, 0),
+      /* 0x01  BYTE */  colorMapType: defaultFor(header.colorMapType, 0),
+      /* 0x02  BYTE */  imageType: defaultFor(header.imageType, Targa.Type.RGB),
+      /* 0x03  WORD */  colorMapIndex: defaultFor(header.colorMapIndex, 0),
+      /* 0x05  WORD */  colorMapLength: defaultFor(header.colorMapLength, 0),
+      /* 0x07  BYTE */  colorMapDepth: defaultFor(header.colorMapDepth, 0),
+      /* 0x08  WORD */  offsetX: defaultFor(header.offsetX, 0),
+      /* 0x0a  WORD */  offsetY: defaultFor(header.offsetY, 0),
+      /* 0x0c  WORD */  width: defaultFor(header.width, 0),
+      /* 0x0e  WORD */  height: defaultFor(header.height, 0),
+      /* 0x10  BYTE */  pixelDepth: defaultFor(header.pixelDepth,32),
+      /* 0x11  BYTE */  flags: defaultFor(header.flags, 8)
+    };
+  }
+
+  function defaultFor(arg, val) { return typeof arg !== 'undefined' ? arg : val; }
+
+  /**
+   * Write footer of TGA file to view
+   * Byte 0-3 - Extension Area Offset, 0 if no Extension Area exists
+   * Byte 4-7 - Developer Directory Offset, 0 if no Developer Area exists
+   * Byte 8-25 - Signature
+   * @param {Uint8Array} footer
+   */
+  function writeFooter(footer) {
+    var signature = Targa.SIGNATURE;
+    var offset = footer.byteLength - signature.length;
+    for (var i = 0; i < signature.length; i++) {
+      footer[offset + i] = signature.charCodeAt(i);
+    }
+  }
+
+  /**
+   * Write header of TGA file to view
+   * @param header
+   * @param view DataView
+   */
+  function writeHeader(header, view) {
+    var littleEndian = Targa.LITTLE_ENDIAN;
+
+    view.setUint8(0x00, header.idLength);
+    view.setUint8(0x01, header.colorMapType);
+    view.setUint8(0x02, header.imageType);
+    view.setUint16(0x03, header.colorMapIndex, littleEndian);
+    view.setUint16(0x05, header.colorMapLength, littleEndian);
+    view.setUint8(0x07, header.colorMapDepth);
+    view.setUint16(0x08, header.offsetX, littleEndian);
+    view.setUint16(0x0a, header.offsetY, littleEndian);
+    view.setUint16(0x0c, header.width, littleEndian);
+    view.setUint16(0x0e, header.height, littleEndian);
+    view.setUint8(0x10, header.pixelDepth);
+    view.setUint8(0x11, header.flags);
+  }
+
+  function readHeader(view) {
+    var littleEndian = Targa.LITTLE_ENDIAN;
+
+    // Not enough data to contain header ?
+    if (view.byteLength  < 0x12) {
+      throw new Error('Targa::load() - Not enough data to contain header');
+    }
+
+    var header = {};
+    header.idLength = view.getUint8(0x00);
+    header.colorMapType = view.getUint8(0x01);
+    header.imageType =  view.getUint8(0x02);
+    header.colorMapIndex = view.getUint16(0x03, littleEndian);
+    header.colorMapLength = view.getUint16(0x05, littleEndian);
+    header.colorMapDepth = view.getUint8(0x07);
+    header.offsetX = view.getUint16(0x08, littleEndian);
+    header.offsetY = view.getUint16(0x0a, littleEndian);
+    header.width = view.getUint16(0x0c, littleEndian);
+    header.height = view.getUint16(0x0e, littleEndian);
+    header.pixelDepth = view.getUint8(0x10);
+    header.flags = view.getUint8(0x11);
+
+    return header;
+  }
+
+  /**
+   * Set additional header booleans
+   * @param header
+   */
+  function setHeaderBooleans(header) {
+    header.hasEncoding = (header.imageType === Targa.Type.RLE_INDEXED || header.imageType === Targa.Type.RLE_RGB || header.imageType === Targa.Type.RLE_GREY);
+    header.hasColorMap = (header.imageType === Targa.Type.RLE_INDEXED || header.imageType === Targa.Type.INDEXED);
+    header.isGreyColor = (header.imageType === Targa.Type.RLE_GREY || header.imageType === Targa.Type.GREY);
+    header.bytePerPixel = header.pixelDepth >> 3;
+    header.origin = (header.flags & Targa.Origin.MASK) >> Targa.Origin.SHIFT;
+    header.alphaBits = header.flags & Targa.Origin.ALPHA;
+  }
+
+  /**
+   * Check the header of TGA file to detect errors
+   *
+   * @param {object} header tga header structure
+   * @throws Error
+   */
+  function checkHeader(header) {
+    // What the need of a file without data ?
+    if (header.imageType === Targa.Type.NO_DATA) {
+      throw new Error('Targa::checkHeader() - No data');
+    }
+
+    // Indexed type
+    if (header.hasColorMap) {
+      if (header.colorMapLength > 256 || header.colorMapType !== 1) {
+        throw new Error('Targa::checkHeader() - Unsupported colormap for indexed type');
+      }
+      if (header.colorMapDepth !== 16 && header.colorMapDepth !== 24  && header.colorMapDepth !== 32) {
+        throw new Error('Targa::checkHeader() - Unsupported colormap depth');
+      }
+    }
+    else {
+      if (header.colorMapType) {
+        throw new Error('Targa::checkHeader() - Why does the image contain a palette ?');
+      }
+    }
+
+    // Check image size
+    if (header.width <= 0 || header.height <= 0) {
+      throw new Error('Targa::checkHeader() - Invalid image size');
+    }
+
+    // Check pixel size
+    if (header.pixelDepth !== 8 &&
+      header.pixelDepth !== 16 &&
+      header.pixelDepth !== 24 &&
+      header.pixelDepth !== 32) {
+      throw new Error('Targa::checkHeader() - Invalid pixel size "' + header.pixelDepth + '"');
+    }
+
+    // Check alpha size
+    if (header.alphaBits !== 0 &&
+        header.alphaBits !== 1 &&
+        header.alphaBits !== 8) {
+      throw new Error('Targa::checkHeader() - Unsuppported alpha size');
+    }
+  }
+
+
+  /**
+   * Decode RLE compression
+   *
+   * @param {Uint8Array} data
+   * @param {number} bytesPerPixel bytes per Pixel
+   * @param {number} outputSize in byte: width * height * pixelSize
+   */
+  function decodeRLE(data, bytesPerPixel, outputSize) {
+    var pos, c, count, i, offset;
+    var pixels, output;
+
+    output = new Uint8Array(outputSize);
+    pixels = new Uint8Array(bytesPerPixel);
+    offset = 0; // offset in data
+    pos = 0; // offset for output
+
+    while (pos < outputSize) {
+      c = data[offset++]; // current byte to check
+      count = (c & Targa.RLE_MASK) + 1; // repetition count of pixels, the lower 7 bits + 1
+
+      // RLE packet, if highest bit is set to 1.
+      if (c & Targa.RLE_BIT) {
+        // Copy pixel values to be repeated to tmp array
+        for (i = 0; i < bytesPerPixel; ++i) {
+          pixels[i] = data[offset++];
+        }
+
+        // Copy pixel values * count to output
+        for (i = 0; i < count; ++i) {
+          output.set(pixels, pos);
+          pos += bytesPerPixel;
+        }
+      }
+
+      // Raw packet (Non-Run-Length Encoded)
+      else {
+        count *= bytesPerPixel;
+        for (i = 0; i < count; ++i) {
+          output[pos++] = data[offset++];
+        }
+      }
+    }
+
+    if (pos > outputSize) {
+      throw new Error("Targa::decodeRLE() - Read bytes: " + pos + " Expected bytes: " + outputSize);
+    }
+
+    return output;
+  }
+
+  /**
+   * Encode ImageData object with RLE compression
+   *
+   * @param header
+   * @param imageData from canvas to compress
+   */
+  function encodeRLE(header, imageData) {
+    var maxRepetitionCount = 128;
+    var i;
+    var data = imageData;
+    var output = []; // output size is unknown
+    var pos = 0; // pos in imageData array
+    var bytesPerPixel = header.pixelDepth >> 3;
+    var offset = 0;
+    var packetType, packetLength, packetHeader;
+    var tgaLength = header.width * header.height * bytesPerPixel;
+    var isSamePixel = function isSamePixel(pos, offset) {
+      for (var i = 0; i < bytesPerPixel; i++) {
+        if (data[pos * bytesPerPixel + i] !== data[offset * bytesPerPixel + i]) {
+          return false;
+        }
+      }
+      return true;
+    };
+    var getPacketType = function(pos) {
+      if (isSamePixel(pos, pos + 1)) {
+        return Targa.RLE_PACKET;
+      }
+      return Targa.RAW_PACKET;
+    };
+
+    while (pos * bytesPerPixel < data.length && pos * bytesPerPixel < tgaLength) {
+      // determine packet type
+      packetType = getPacketType(pos);
+
+      // determine packet length
+      packetLength = 0;
+      if (packetType === Targa.RLE_PACKET) {
+        while (pos + packetLength < data.length
+        && packetLength < maxRepetitionCount
+        && isSamePixel(pos, pos + packetLength)) {
+          packetLength++;
+        }
+      } else { // packetType === Targa.RAW_PACKET
+        while (pos + packetLength < data.length
+        && packetLength < maxRepetitionCount
+        && getPacketType(pos + packetLength) === Targa.RAW_PACKET) {
+          packetLength++;
+        }
+      }
+
+      // write packet header
+      packetHeader = packetLength - 1;
+      if (packetType === Targa.RLE_PACKET) {
+        packetHeader |= Targa.RLE_BIT;
+      }
+      output[offset++] = packetHeader;
+
+      // write rle packet pixel OR raw pixels
+      if (packetType === Targa.RLE_PACKET) {
+        for (i = 0; i < bytesPerPixel; i++) {
+          output[i + offset] = data[i + pos * bytesPerPixel];
+        }
+        offset += bytesPerPixel;
+      } else {
+        for (i = 0; i < bytesPerPixel * packetLength; i++) {
+          output[i + offset] = data[i + pos * bytesPerPixel];
+        }
+        offset += bytesPerPixel * packetLength;
+      }
+      pos += packetLength;
+    }
+
+    return new Uint8Array(output);
+  }
+
+
+  /**
+   * Return a ImageData object from a TGA file (8bits)
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} indexes - index to colorMap
+   * @param {Array} colorMap
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageData8bits(imageData, indexes, colorMap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var color, index, offset, i, x, y;
+    var bytePerPixel = this.header.colorMapDepth >> 3;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i++) {
+        offset = (x + width * y) * 4;
+        index = indexes[i] * bytePerPixel;
+        if (bytePerPixel === 4) {
+          imageData[offset    ] = colorMap[index + 2]; // red
+          imageData[offset + 1] = colorMap[index + 1]; // green
+          imageData[offset + 2] = colorMap[index    ]; // blue
+          imageData[offset + 3] = colorMap[index + 3]; // alpha
+        } else if (bytePerPixel === 3) {
+          imageData[offset    ] = colorMap[index + 2]; // red
+          imageData[offset + 1] = colorMap[index + 1]; // green
+          imageData[offset + 2] = colorMap[index    ]; // blue
+          imageData[offset + 3] = 255; // alpha
+        } else if (bytePerPixel === 2) {
+          color = colorMap[index] | (colorMap[index + 1] << 8);
+          imageData[offset    ] = (color & 0x7C00) >> 7; // red
+          imageData[offset + 1] = (color & 0x03E0) >> 2; // green
+          imageData[offset + 2] = (color & 0x001F) << 3; // blue
+          imageData[offset + 3] = (color & 0x8000) ? 0 : 255; // overlay 0 = opaque and 1 = transparent Discussion at: https://bugzilla.gnome.org/show_bug.cgi?id=683381
+        }
+      }
+    }
+
+    return imageData;
+  }
+
+
+  /**
+   * Return a ImageData object from a TGA file (16bits)
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} pixels data
+   * @param {Array} colormap - not used
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageData16bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var color, offset, i, x, y;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i += 2) {
+        color = pixels[i] | (pixels[i + 1] << 8);
+        offset = (x + width * y) * 4;
+        imageData[offset    ] = (color & 0x7C00) >> 7; // red
+        imageData[offset + 1] = (color & 0x03E0) >> 2; // green
+        imageData[offset + 2] = (color & 0x001F) << 3; // blue
+        imageData[offset + 3] = (color & 0x8000) ? 0 : 255; // overlay 0 = opaque and 1 = transparent Discussion at: https://bugzilla.gnome.org/show_bug.cgi?id=683381
+      }
+    }
+
+    return imageData;
+  }
+
+
+  /**
+   * Return a ImageData object from a TGA file (24bits)
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} pixels data
+   * @param {Array} colormap - not used
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageData24bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var offset, i, x, y;
+    var bpp = this.header.pixelDepth >> 3;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i += bpp) {
+        offset = (x + width * y) * 4;
+        imageData[offset + 3] = 255;  // alpha
+        imageData[offset + 2] = pixels[i    ]; // blue
+        imageData[offset + 1] = pixels[i + 1]; // green
+        imageData[offset    ] = pixels[i + 2]; // red
+      }
+    }
+
+    return imageData;
+  }
+
+
+  /**
+   * Return a ImageData object from a TGA file (32bits)
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} pixels data from TGA file
+   * @param {Array} colormap - not used
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageData32bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var i, x, y, offset;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i += 4) {
+        offset = (x + width * y) * 4;
+        imageData[offset + 2] = pixels[i    ]; // blue
+        imageData[offset + 1] = pixels[i + 1]; // green
+        imageData[offset    ] = pixels[i + 2]; // red
+        imageData[offset + 3] = pixels[i + 3]; // alpha
+      }
+    }
+
+    return imageData;
+  }
+
+  /**
+   * Return a ImageData object from a TGA file (32bits). Uses pre multiplied alpha values
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} pixels data from TGA file
+   * @param {Array} colormap - not used
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageData32bitsPre(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var i, x, y, offset, alpha;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i += 4) {
+        offset = (x + width * y) * 4;
+        alpha = pixels[i + 3] * 255; // TODO needs testing
+        imageData[offset + 2] = pixels[i    ] / alpha; // blue
+        imageData[offset + 1] = pixels[i + 1] / alpha; // green
+        imageData[offset    ] = pixels[i + 2] / alpha; // red
+        imageData[offset + 3] = pixels[i + 3]; // alpha
+      }
+    }
+
+    return imageData;
+  }
+
+
+  /**
+   * Return a ImageData object from a TGA file (8bits grey)
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} pixels data
+   * @param {Array} colormap - not used
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageDataGrey8bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var color, offset, i, x, y;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i++) {
+        color = pixels[i];
+        offset = (x + width * y) * 4;
+        imageData[offset    ] = color; // red
+        imageData[offset + 1] = color; // green
+        imageData[offset + 2] = color; // blue
+        imageData[offset + 3] = 255;   // alpha
+      }
+    }
+
+    return imageData;
+  }
+
+
+  /**
+   * Return a ImageData object from a TGA file (16bits grey) 8 Bit RGB and 8 Bit Alpha
+   *
+   * @param {Array} imageData - ImageData to bind
+   * @param {Array} pixels data
+   * @param {Array} colormap - not used
+   * @param {number} width
+   * @param {number} y_start - start at y pixel.
+   * @param {number} x_start - start at x pixel.
+   * @param {number} y_step  - increment y pixel each time.
+   * @param {number} y_end   - stop at pixel y.
+   * @param {number} x_step  - increment x pixel each time.
+   * @param {number} x_end   - stop at pixel x.
+   * @returns {Array} imageData
+   */
+  function getImageDataGrey16bits(imageData, pixels, colormap, width, y_start, y_step, y_end, x_start, x_step, x_end) {
+    var color, offset, i, x, y;
+
+    for (i = 0, y = y_start; y !== y_end; y += y_step) {
+      for (x = x_start; x !== x_end; x += x_step, i += 2) {
+        color = pixels[i];
+        offset = (x + width * y) * 4;
+        imageData[offset] = color;
+        imageData[offset + 1] = color;
+        imageData[offset + 2] = color;
+        imageData[offset + 3] = pixels[i + 1];
+      }
+    }
+
+    return imageData;
+  }
+
+
+  /**
+   * Open a targa file using XHR, be aware with Cross Domain files...
+   *
+   * @param {string} path - Path of the filename to load
+   * @param {function} callback - callback to trigger when the file is loaded
+   */
+  Targa.prototype.open = function targaOpen(path, callback) {
+    var req, tga = this;
+    req = new XMLHttpRequest();
+    req.open('GET', path, true);
+    req.responseType = 'arraybuffer';
+    req.onload = function () {
+      if (this.status === 200) {
+        tga.arrayBuffer = req.response;
+        tga.load(tga.arrayBuffer);
+        if (callback) {
+          callback.call(tga);
+        }
+      }
+    };
+    req.send(null);
+  };
+
+
+  function readFooter(view) {
+    var offset = view.byteLength - Targa.FOOTER_SIZE;
+    var signature = Targa.SIGNATURE;
+
+    var footer = {};
+
+    var signatureArray = new Uint8Array(view.buffer, offset + 0x08, signature.length);
+    var str = String.fromCharCode.apply(null, signatureArray);
+
+    if (!isSignatureValid(str)) {
+      footer.hasFooter = false;
+      return footer;
+    }
+
+    footer.hasFooter = true;
+    footer.extensionOffset = view.getUint32(offset, Targa.LITTLE_ENDIAN);
+    footer.developerOffset = view.getUint32(offset + 0x04, Targa.LITTLE_ENDIAN);
+    footer.hasExtensionArea = footer.extensionOffset !== 0;
+    footer.hasDeveloperArea = footer.developerOffset !== 0;
+
+    if (footer.extensionOffset) {
+      footer.attributeType = view.getUint8(footer.extensionOffset + 494);
+    }
+
+    return footer;
+  }
+
+  function isSignatureValid(str) {
+    var signature = Targa.SIGNATURE;
+
+    for (var i = 0; i < signature.length; i++) {
+      if (str.charCodeAt(i) !== signature.charCodeAt(i)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Load and parse a TGA file
+   *
+   * @param {ArrayBuffer} data - TGA file buffer array
+   */
+  Targa.prototype.load = function targaLoad(data) {
+    var dataView = new DataView(data);
+
+    this.headerData = new Uint8Array(data, 0, Targa.HEADER_SIZE);
+
+    this.header = readHeader(dataView); // Parse Header
+    setHeaderBooleans(this.header);
+    checkHeader(this.header); // Check if a valid TGA file (or if we can load it)
+
+    var offset = Targa.HEADER_SIZE;
+    // Move to data
+    offset += this.header.idLength;
+    if (offset >= data.byteLength) {
+      throw new Error('Targa::load() - No data');
+    }
+
+    // Read palette
+    if (this.header.hasColorMap) {
+      var colorMapSize = this.header.colorMapLength * (this.header.colorMapDepth >> 3);
+      this.palette = new Uint8Array(data, offset, colorMapSize);
+      offset += colorMapSize;
+    }
+
+    var bytesPerPixel = this.header.pixelDepth >> 3;
+    var imageSize = this.header.width * this.header.height;
+    var pixelTotal = imageSize * bytesPerPixel;
+
+    if (this.header.hasEncoding) { // RLE encoded
+      var RLELength = data.byteLength - offset - Targa.FOOTER_SIZE;
+      var RLEData = new Uint8Array(data, offset, RLELength);
+      this.imageData = decodeRLE(RLEData, bytesPerPixel, pixelTotal);
+    } else { // RAW pixels
+      this.imageData = new Uint8Array(data, offset, this.header.hasColorMap ? imageSize : pixelTotal);
+    }
+    
+    this.footer = readFooter(dataView);
+
+    if (this.header.alphaBits !== 0  || this.footer.hasExtensionArea && (this.footer.attributeType === 3 || this.footer.attributeType === 4)) {
+      this.footer.usesAlpha = true;
+    }
+  };
+
+
+  /**
+   * Return a ImageData object from a TGA file
+   *
+   * @param {object} imageData - Optional ImageData to work with
+   * @returns {object} imageData
+   */
+  Targa.prototype.getImageData = function targaGetImageData(imageData) {
+    var width = this.header.width;
+    var height = this.header.height;
+    var origin = (this.header.flags & Targa.Origin.MASK) >> Targa.Origin.SHIFT;
+    var x_start, x_step, x_end, y_start, y_step, y_end;
+    var getImageData;
+
+    // Create an imageData
+    if (!imageData) {
+      if (document) {
+        imageData = document.createElement('canvas').getContext('2d').createImageData(width, height);
+      }
+      // In Thread context ?
+      else {
+        imageData = {
+          width: width,
+          height: height,
+          data: new Uint8ClampedArray(width * height * 4)
+        };
+      }
+    }
+
+    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.TOP_RIGHT) {
+      y_start = 0;
+      y_step = 1;
+      y_end = height;
+    }
+    else {
+      y_start = height - 1;
+      y_step = -1;
+      y_end = -1;
+    }
+
+    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.BOTTOM_LEFT) {
+      x_start = 0;
+      x_step = 1;
+      x_end = width;
+    }
+    else {
+      x_start = width - 1;
+      x_step = -1;
+      x_end = -1;
+    }
+
+    // TODO: use this.header.offsetX and this.header.offsetY ?
+
+    switch (this.header.pixelDepth) {
+      case 8:
+        getImageData = this.header.isGreyColor ? getImageDataGrey8bits : getImageData8bits;
+        break;
+
+      case 16:
+        getImageData = this.header.isGreyColor ? getImageDataGrey16bits : getImageData16bits;
+        break;
+
+      case 24:
+        getImageData = getImageData24bits;
+        break;
+
+      case 32:
+        if (this.footer.hasExtensionArea) {
+          if (this.footer.attributeType === 3) { // straight alpha
+            getImageData = getImageData32bits;
+          } else if (this.footer.attributeType === 4) { // pre multiplied alpha
+            getImageData = getImageData32bitsPre;
+          } else { // ignore alpha values if attributeType set to 0, 1, 2
+            getImageData = getImageData24bits;
+          }
+        } else {
+          if (this.header.alphaBits !== 0) {
+            getImageData = getImageData32bits;
+          } else { // 32 bits Depth, but alpha Bits set to 0
+            getImageData = getImageData24bits;
+          }
+        }
+
+        break;
+    }
+
+    getImageData.call(this, imageData.data, this.imageData, this.palette, width, y_start, y_step, y_end, x_start, x_step, x_end);
+    return imageData;
+  };
+
+  /** (Experimental)
+   *  Encodes imageData into TGA format
+   *  Only TGA True Color 32 bit with optional RLE encoding is supported for now
+   * @param imageData
+   */
+  Targa.prototype.setImageData = function targaSetImageData(imageData) {
+
+    if (!imageData) {
+      throw new Error('Targa::setImageData() - imageData argument missing');
+    }
+
+    var width = this.header.width;
+    var height = this.header.height;
+    var expectedLength = width * height * (this.header.pixelDepth  >> 3);
+    var origin = (this.header.flags & Targa.Origin.MASK) >> Targa.Origin.SHIFT;
+    var x_start, x_step, x_end, y_start, y_step, y_end;
+
+    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.TOP_RIGHT) {
+      y_start = 0; // start bottom, step upward
+      y_step = 1;
+      y_end = height;
+    } else {
+      y_start = height - 1; // start at top, step downward
+      y_step = -1;
+      y_end = -1;
+    }
+
+    if (origin === Targa.Origin.TOP_LEFT || origin === Targa.Origin.BOTTOM_LEFT) {
+      x_start = 0; // start left, step right
+      x_step = 1;
+      x_end = width;
+    } else {
+      x_start = width - 1; // start right, step left
+      x_step = -1;
+      x_end = -1;
+    }
+
+    if (!this.imageData) {
+      this.imageData = new Uint8Array(expectedLength);
+    }
+
+    // start top left if origin is bottom left
+    // swapping order of first two arguments does the trick for writing
+    // this converts canvas data to internal tga representation
+    // this.imageData contains tga data
+    getImageData32bits(this.imageData, imageData.data, this.palette, width, y_start, y_step, y_end, x_start, x_step, x_end);
+
+    var data = this.imageData;
+
+    if (this.header.hasEncoding) {
+      data = encodeRLE(this.header, data);
+    }
+
+    var bufferSize = Targa.HEADER_SIZE + data.length + Targa.FOOTER_SIZE;
+    var buffer = new ArrayBuffer(bufferSize);
+
+    this.arrayBuffer = buffer;
+    // create array, useful for inspecting data while debugging
+    this.headerData = new Uint8Array(buffer, 0, Targa.HEADER_SIZE);
+    this.RLEData = new Uint8Array(buffer, Targa.HEADER_SIZE, data.length);
+    this.footerData = new Uint8Array(buffer, Targa.HEADER_SIZE + data.length, Targa.FOOTER_SIZE);
+
+    var headerView = new DataView(this.headerData.buffer);
+    writeHeader(this.header, headerView);
+    this.RLEData.set(data);
+    writeFooter(this.footerData);
+  };
+
+  /**
+   * Return a canvas with the TGA render on it
+   *
+   * @returns {object} CanvasElement
+   */
+  Targa.prototype.getCanvas = function targaGetCanvas() {
+    var canvas, ctx, imageData;
+
+    canvas = document.createElement('canvas');
+    ctx = canvas.getContext('2d');
+    imageData = ctx.createImageData(this.header.width, this.header.height);
+
+    canvas.width = this.header.width;
+    canvas.height = this.header.height;
+
+    ctx.putImageData(this.getImageData(imageData), 0, 0);
+
+    return canvas;
+  };
+
+
+  /**
+   * Return a dataURI of the TGA file
+   *
+   * @param {string} type - Optional image content-type to output (default: image/png)
+   * @returns {string} url
+   */
+  Targa.prototype.getDataURL = function targaGetDatURL(type) {
+    return this.getCanvas().toDataURL(type || 'image/png');
+  };
+
+  /**
+   * Return a objectURL of the TGA file
+   * The url can be used in the download attribute of a link
+   * @returns {string} url
+   */
+  Targa.prototype.getBlobURL = function targetGetBlobURL() {
+    if (!this.arrayBuffer) {
+      throw new Error('Targa::getBlobURL() - No data available for blob');
+    }
+    var blob = new Blob([this.arrayBuffer], { type: "image/x-tga" });
+    return URL.createObjectURL(blob);
+  };
+
+
+  // Find Context
+  var shim = {};
+  if (typeof(exports) === 'undefined') {
+    if (typeof(define) === 'function' && typeof(define.amd) === 'object' && define.amd) {
+      define(function () {
+        return Targa;
+      });
+    } else {
+      // Browser
+      shim.exports = typeof(window) !== 'undefined' ? window : _global;
+    }
+  }
+  else {
+    // Commonjs
+    shim.exports = exports;
+  }
+
+
+  // Export
+  if (shim.exports) {
+    shim.exports.TGA = Targa;
+  }
+
+})(this);
+
 'use strict';
 
 
