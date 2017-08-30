@@ -30,7 +30,12 @@
 				<a href="/homepage/index.do">mago3D</a>
 			</h1>
 			<ul class="menu">
-				<li class="on">mago3D<span></span></li>
+				<li class="mm on" onclick='selectMenu();'>mago3D<span></span>
+					<ul>
+						<li><a href="#" style="color: white">About</a></li>
+						<li><a href="/homepage/news.do" style="color: white" onclick="alert('준비 중 입니다.'); return false">News</a></li>
+					</ul>
+				</li>
 				<li class="mm" onclick='selectMenu();'>Demo<span></span>
 					<ul>
 						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
@@ -39,8 +44,13 @@
 					</ul>
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
-				<li><a href="/homepage/docs.do">Documentation</a></li>
-				<li><a href="/homepage/faq.do">FAQ</a></li>
+				<li class="mm" onclick='selectMenu();'>Documentation<span></span>
+					<ul>
+						<li><a href="/homepage/api.do" style="color: white" target="_blank">API</a></li>
+						<li><a href="/homepage/spec.do" style="color: white">F4D Spec</a></li>
+					</ul>
+				</li>
+				<li> <a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
 				<li id="languageKO" class="on">KO</li>
@@ -236,8 +246,7 @@
 					</div>
 					<div class="algo-row">
 						<a href="#">
-							<div class="aglo-thumbnail" alt="Bounding box이미지"
-								style="background-image:url(/images/${lang}/homepage/boundingbox.png)">
+							<div class="aglo-thumbnail" alt="Bounding box이미지" style="background-image:url(/images/${lang}/homepage/boundingbox.png)">
 								<div>
 									<h3>bounding box</h3>
 									<P>bounding box 계산</P>
@@ -343,7 +352,7 @@
 					있습니다.</p>
 				<h4>Acknowledgement</h4>
 				<ul>
-					<li>국토교통부 '공간정보 SW활용을 위한 오픈소스 가공기술개발(과제번호:16NSIP-B080778-04)'의
+					<li>국토교통부 '공간정보 SW활용을 위한 오픈소스 가공기술개발(과제번호:17NSIP-B080778-04)'의
 						일환입니다.</li>
 					<li>서울시 3차원 데이터는 한국공간정보산업진흥원의 허가를 받아 연구목적으로 사용 중입니다.</li>
 					<li>서울시 실내 데이터는 서울시의 허가를 받아 연구목적으로 사용 중입니다.</li>
