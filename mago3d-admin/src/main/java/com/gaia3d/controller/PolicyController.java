@@ -5,16 +5,17 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.digester.annotations.rules.BeanPropertySetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gaia3d.config.CacheConfig;
+import com.gaia3d.domain.CacheType;
+import com.gaia3d.domain.CacheName;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.security.Crypt;
@@ -32,6 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/config/")
 public class PolicyController {
 	
+	@Autowired
+	CacheConfig cacheConfig;
 	@Autowired
 	private PolicyService policyService;
 	
@@ -84,7 +87,7 @@ public class PolicyController {
 	@PostMapping(value = "ajax-update-policy-user.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyUser(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -97,16 +100,16 @@ public class PolicyController {
 //					|| policy.getUser_login_type() == null || "".equals(policy.getUser_login_type())
 //					|| policy.getUser_update_check() == null || "".equals(policy.getUser_update_check())
 //					|| policy.getUser_delete_check() == null || "".equals(policy.getUser_delete_check())
-					|| policy.getUser_delete_type() == null || "".equals(policy.getUser_delete_type())
-					|| policy.getUser_device_modify_yn() == null || "".equals(policy.getUser_device_modify_yn())) {
+//					|| policy.getUser_delete_type() == null || "".equals(policy.getUser_delete_type())
+//					|| policy.getUser_device_modify_yn() == null || "".equals(policy.getUser_device_modify_yn())
+					) {
 				result = "policy.user.invalid";
 				jSONObject.put("result", result);
 				return jSONObject;
 			}
 			
 			policyService.updatePolicyUser(policy);
-			
-			// TODO 캐시 갱신
+			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -152,8 +155,7 @@ public class PolicyController {
 			}
 			
 			policyService.updatePolicyPassword(policy);
-
-			// TODO 캐시 갱신
+			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -183,9 +185,7 @@ public class PolicyController {
 			}
 			
 			policyService.updatePolicyGeo(policy);
-
-			// TODO 캐시 갱신
-			
+			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -215,9 +215,7 @@ public class PolicyController {
 			}
 			
 			policyService.updatePolicyGeoServer(policy);
-
-			// TODO 캐시 갱신
-			
+			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -247,9 +245,7 @@ public class PolicyController {
 			}
 			
 			policyService.updatePolicyGeoCallBack(policy);
-
-			// TODO 캐시 갱신
-			
+			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -289,8 +285,7 @@ public class PolicyController {
 			}
 			
 			policyService.updatePolicyNotice(policy);
-
-			// TODO 캐시 갱신
+			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -328,8 +323,7 @@ public class PolicyController {
 			}
 			
 			policyService.updatePolicySecurity(policy);
-
-			// TODO 캐시 갱신
+			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -379,7 +373,7 @@ public class PolicyController {
 //				}
 //			}
 			
-			// TODO 캐시 갱신
+			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -421,7 +415,7 @@ public class PolicyController {
 //			policy.setSite_admin_email(Crypt.encrypt(policy.getSite_admin_email()));
 //			policyService.updatePolicySite(policy);
 
-			// TODO 캐시 갱신
+			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -480,7 +474,7 @@ public class PolicyController {
 			// TODO OS 시간 설정 후 
 			// /sbin/hwclock --systohc --localtime
 			
-			// TODO 캐시 갱신
+			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -516,7 +510,7 @@ public class PolicyController {
 			policy.setBackoffice_user_db_password(Crypt.encrypt(policy.getBackoffice_user_db_password()));
 			policyService.updatePolicyBackoffice(policy);
 
-			// TODO 캐시 갱신
+			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -553,8 +547,7 @@ public class PolicyController {
 			policy.setSolution_manager_email(Crypt.encrypt(policy.getSolution_manager_email()));
 			
 			policyService.updatePolicySolution(policy);
-			
-			// TODO 캐시 갱신
+			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

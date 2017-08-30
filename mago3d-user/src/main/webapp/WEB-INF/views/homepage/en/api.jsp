@@ -231,7 +231,7 @@ function changeBoundingBox(isShow) {
 &lt;/div&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 function changeShadow(isShow) {
@@ -268,7 +268,7 @@ function changeShadow(isShow) {
 &lt;button type="button" id="changeFrustumFarDistanceAPI" class="btn btn-default btn-sm">apply&lt;/button&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 $("#changeFrustumFarDistanceAPI").click(function() {
@@ -278,6 +278,7 @@ $("#changeFrustumFarDistanceAPI").click(function() {
 </code>
 				</pre>
 			</article>
+			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="searchDataAPI">searchDataAPI</span></h2>
 				<p>Enter the data unique key to move the camera position.</p>
@@ -301,18 +302,18 @@ $("#changeFrustumFarDistanceAPI").click(function() {
 				<pre>
 <code>
 &lt;div&gt;
-	&lt;span"&gt;Data Key&lt;/span&gt;
+	&lt;span&gt;Data Key&lt;/span&gt;
 	&lt;input type="text" id="search_data_key" name="search_data_key"/&gt;
 	&lt;button type="button" id="searchData">search&lt;/button&gt;
 &lt;/div&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 $("#searchData").click(function() {
 	if ($.trim($("#search_data_key").val()) === ""){
-		alert("Data Key를 입력해 주세요.");
+		alert("Please enter the Data Key.");
 		$("#search_data_key").focus();
 		return false;
 	}
@@ -353,11 +354,21 @@ $("#searchData").click(function() {
 &lt;div&gt;
 	&lt;label for="objectIds"&gt;Object Id input &lt;/label&gt;
 	&lt;input type="text" id="objectIds" name="objectIds" placeholder=", Enter segment"/&gt;
+	&lt;label for="colorBlock"&gt;Color&lt;/label/&gt;
+	&lt;select id="colorBlock" name="colorBlock"/&gt;
+		&lt;option value=""&gt; None &lt;/option/&gt;
+		&lt;option value="255,0,0"&gt; Red &lt;/option/&gt;
+		&lt;option value="255,255,0"&gt; Yellow &lt;/option/&gt;
+		&lt;option value="0,255,0"&gt; Green &lt;/option/&gt;
+		&lt;option value="0,0,255"&gt; Blue &lt;/option/&gt;
+		&lt;option value="255,0,255"&gt; Pink &lt;/option/&gt;
+		&lt;option value="0,0,0"&gt; Black &lt;/option/&gt;
+	&lt;/select&gt;
 	&lt;button type="button" id="changeColorAPI" class="btn btn-default btn-sm">change&lt;/button&gt;
 &lt;div/&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 $("#changeColorAPI").click(function(e) {
@@ -423,13 +434,13 @@ $("#changeColorAPI").click(function(e) {
 	&lt;/div&gt;
 	&lt;div&gt;
 		&lt;span&gt;
-			&lt;label for="move_latitude"&gt;위도&lt;/label&gt;
+			&lt;label for="move_latitude"&gt;Latitude&lt;/label&gt;
 			&lt;input type="text" id="move_latitude" name="move_latitude"/&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;
 	&lt;div&gt;
 		&lt;span&gt;
-			&lt;label for="move_longitude"&gt;경도&lt;/label&gt;
+			&lt;label for="move_longitude"&gt;Longitude&lt;/label&gt;
 			&lt;input type="text" id="move_longitude" name="move_longitude"/&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;	
@@ -440,7 +451,7 @@ $("#changeColorAPI").click(function(e) {
 		&lt;span&gt;
 			&lt;label for="move_roll"&gt;ROLL&lt;/label&gt;
 			&lt;input type="text" id="move_roll" name="move_roll"/&gt;
-			&lt;button type="button" id="changeLocationAndRotationAPI">변환&lt;/button&gt;
+			&lt;button type="button" id="changeLocationAndRotationAPI">Transform&lt;/button&gt;
 		&lt;/span&gt;
 	&lt;/div&gt;		
 &lt;/div&gt;
@@ -492,10 +503,10 @@ You can change the mode of movement when you click the mouse. If mouseMoveMode i
 		&lt;input type="radio" id="mouseObjectMove" name="mouseBlockMove" value="1" onclick="changeMouseMove('1')"/&gt;
 		&lt;label for="mouseObjectMove"&gt;Object&lt;/label&gt;
 	&lt;/div&gt;		
-&lt;/div&gt;		
+&lt;/div&gt;	
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 function changeMouseMove(mouseMoveMode) {
@@ -537,7 +548,7 @@ function changeMouseMove(mouseMoveMode) {
 				<br><b>JavaScript</b>
 				<pre>
 <code>
-var isInsertIssue = true;
+var insertIssueFlag = false;
 $("#issueEnable").click(function() {
 	if(insertIssueFlag) {
 		insertIssueFlag = false;
@@ -600,13 +611,14 @@ function showInsertIssueLayer(data_name, data_key, latitude, longitude, height) 
 				<pre>
 <code>
 &lt;div&gt;
-	&lt;button id="objectInfoEnable"&gt;Object 정보&lt;/button&gt;	
+	&lt;button id="objectInfoEnable"&gt;Object Information&lt;/button&gt;	
 &lt;/div&gt;
 </code>			
 				</pre>
 				<br><b>JavaScript</b>
 				<pre>
 <code>
+var objectInfoViewFlag = false;
 $("#objectInfoEnable").click(function() {
 	if(objectInfoViewFlag) {
 		objectInfoViewFlag = false;
@@ -680,13 +692,13 @@ function showSelectedObject(projectId, blockId, objectId, latitude, longitude, h
 				<h4>Examples:</h4>
 				<b>html</b>
 				<pre>
-<code>
+<code class="html">
 &lt;button id="issuesEnable"&gt;Issues Display&lt;/button&gt;
-			&lt;input type="hidden" id="now_latitude" name="now_latitude" value="${now_latitude }" /&gt;
-			&lt;input type="hidden" id="now_longitude" name="now_longitude" value="${now_longitude }"  /&gt;
+&lt;input type="hidden" id="now_latitude" name="now_latitude" value="&#36;{now_latitude}" /&gt;
+&lt;input type="hidden" id="now_longitude" name="now_longitude" value="&#36;{now_longitude}"  /&gt;
 </code>
 			</pre>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code>
 $("#issuesEnable").click(function() {
@@ -774,7 +786,7 @@ $("#issuesEnable").click(function() {
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
-				<br> <b>javaScript</b>
+				<br> <b>JavaScript</b>
 				<pre>
 <code class="javascript">
 drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
@@ -801,7 +813,7 @@ drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, iss
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
-				<b>javaScript</b>
+				<b>JavaScript</b>
 				<pre>
 <code class="javascript">
 changeInsertIssueStateAPI(0);

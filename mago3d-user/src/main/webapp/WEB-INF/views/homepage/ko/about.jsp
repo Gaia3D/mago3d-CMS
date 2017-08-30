@@ -22,10 +22,6 @@
 
 <body>
 	<header class='about'>
-<!-- 		<div> -->
-<!-- 			<p>Architecture, Engineering, Construction</p> -->
-<!-- 			<p>대용량 3차원GIS를 쉽고 빠르게 웹에서 구현합니다</p> -->
-<!-- 		</div> -->
 	</header>
 
 	<nav class="nav">

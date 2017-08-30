@@ -127,11 +127,11 @@
 					</p>
 				</div>
 				<div class="sub_title"><span id="mago3Dbug">What should I do if I find bugs or have other questions throughout mago3D?</span></div>
-					<p>
-						If you've found a problem or have any other questions you can not address above, please email <a href="mailto:info@gaia3d.com"> info@gaia3d.com </a>.
-					</p>
-				</div>
+				<p>
+					If you've found a problem or have any other questions you can not address above, please email <a href="mailto:info@gaia3d.com"> info@gaia3d.com </a>.
+				</p>
 			</div>
+		</div>
 	</section>
 
 	<footer style="margin-top: 63px;">

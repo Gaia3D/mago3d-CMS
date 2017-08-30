@@ -8,7 +8,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<title>demo | mago3D User</title>
-	<%-- <link rel="stylesheet" href="/css/${lang}/style.css?cache_version=${cache_version}" /> --%>
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css?cache_version=${cache_version}" />
 	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
@@ -65,7 +64,7 @@
 		</li>
 </c:if>
 <c:if test="${!empty issueList }">
-	<c:forEach var="issue" items="${issueList}" varStatus="status">	
+	<c:forEach var="issue" items="${issueList}" varStatus="status">
 		<li>
 			<button type="button" title="바로가기" onclick="flyTo('${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">바로가기</button>
 			<div class="info">
@@ -321,7 +320,7 @@
 		
 		<div class="btns">
 				<button type="button" id="issueSaveButton" class="full">저장</button>
-			</div>
+		</div>
 	</div>
 	</form:form>
 	
@@ -507,10 +506,9 @@
 						+ 		"최신 Issue 10개 표시"
 						+	"</li>";
 					if(issueList == null || issueList.length == 0) {
-						content = content	
-							+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-							+	"	Issue가 존재하지 않습니다."
-							+	"</li>";
+						content += 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
+								+	"	Issue가 존재하지 않습니다."
+								+	"</li>";
 					} else {
 						issueListCount = issueList.length;
 						for(i=0; i<issueListCount; i++ ) {
@@ -641,7 +639,7 @@
 									content = content 
 										+ 	"<li>"
 										+ 	"	<button type=\"button\" title=\"바로가기\""
-										+			"onclick=\"flyToBounding('" + dataInfo.data_key + "');\">바로가기</button>"
+										+			" onclick=\"flyToBounding('" + dataInfo.data_key + "');\">바로가기</button>"
 										+ 	"	<div class=\"info\">"
 										+ 	"		<p class=\"title\">"
 										+ 	"			<span>" + dataInfo.data_group_name + "</span>"
@@ -670,8 +668,8 @@
 									content = content 
 										+ 	"<li>"
 										+ 	"	<button type=\"button\" title=\"바로가기\""
-										+			"onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
-										+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">바로가기</button>"
+										+			" onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+										+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2');\">바로가기</button>"
 										+ 	"	<div class=\"info\">"
 										+ 	"		<p class=\"title\">"
 										+ 	"			<span>" + issue.data_group_name + "</span>"
@@ -690,6 +688,7 @@
 						
 						$("#searchList").empty();
 						$("#searchList").html(content);
+						console.log(content);
 					} else {
 						alert(JS_MESSAGE[msg.result]);
 					}

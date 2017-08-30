@@ -273,7 +273,7 @@ $("#changeFrustumFarDistanceAPI").click(function() {
 	changeFrustumFarDistanceAPI($("#frustumFarDistance").val());
 });
 </code>
-				</pre>	
+				</pre>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
@@ -780,7 +780,7 @@ $("#issuesEnable").click(function() {
 				<h4>Examples:</h4>
 				<br> <b>JavaScript</b>
 				<pre>
-<code>
+<code class="javascript">
 drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
 </code>
 				</pre>

@@ -22,10 +22,6 @@
 <body>
 
 	<header class='down'>
-<!-- 		<div> -->
-<!-- 			<p>Architecture, Engineering, Construction</p> -->
-<!-- 			<p>A Brand-New Live 3D Platform</p> -->
-<!-- 		</div> -->
 	</header>
 	
 	<nav class="nav">
@@ -92,30 +88,18 @@
 					registration and registers necessary data.</li>
 			</ol>
 			<h4>Gaia3D's mago3D Software License:</h4>
-			<b>1. F4D Converter: Dual License – Please see below for more
-				details.</b><br>
+			<b>1. F4D Converter: Dual License – Please see below for more details.</b><br><br>
+			<p><i>mago3D F4D Converter Commercial License for ISVs and VARs</i><br>Gaia3D provides its mago3D F4D Converter under a dual license model 
+			designed to meet the development and distribution needs of both commercial distributors (such as ISVs and VARs) and open source projects.<br>
 			<br>
-			<p>
-				<i>mago3D F4D Converter Commercial License for ISVs and
-					VARs</i><br>Gaia3D provides its mago3D F4D Converter under a dual
-				license model designed to meet the development and distribution
-				needs of both commercial distributors (such as ISVs and VARs)
-				and open source projects.<br> <br> <i>For ISVs,
-					VARs and Other Distributors of Commercial Applications:</i><br>
-				ISVs (Independent Software
-				Vendors), VARs (Value Added Resellers) and other distributors that
-				combine and distribute commercially licensed software with mago3D
-				F4D Converter software and do not wish to distribute the source code
-				for the commercially licensed software under version 3 of the GNU
-				AFFERO GENERAL PUBLIC LICENSE (the "AGPL"
-				https://www.gnu.org/licenses/agpl-3.0.en.html ) must enter into a
-				commercial license agreement with Gaia3D.<br>
-				<br> <i>For Open Source Projects and Other Developers of
-					Open Source Applications:</i><br> For developers of Free Open
-				Source Software ("FOSS") applications under the GPL or AGPL that
-				want to combine and distribute those FOSS applications with mago3D
-				F4D Converter software, Gaia3D’s open source software licensed under
-				the AGPL is the best option.
+			<i>For ISVs, VARs and Other Distributors of Commercial Applications:</i><br>
+			ISVs (Independent Software Vendors), VARs (Value Added Resellers) and other distributors that 
+			combine and distribute commercially licensed software with mago3D F4D Converter software and do not wish to distribute the source code 
+			for the commercially licensed software under version 3 of the GNU AFFERO GENERAL PUBLIC LICENSE (the "AGPL" https://www.gnu.org/licenses/agpl-3.0.en.html )
+			 must enter into a commercial license agreement with Gaia3D.<br><br>
+			<i>For Open Source Projects and Other Developers of Open Source Applications:</i><br>
+			 For developers of Free Open Source Software ("FOSS") applications under the GPL or AGPL that want to combine and distribute those FOSS 
+			 applications with mago3D F4D Converter software, Gaia3D’s open source software licensed under the AGPL is the best option.
 			</p>
 			<b>2. mago3D.js: Apache License</b><br>
 			<h4>Documentation</h4>
@@ -125,8 +109,8 @@
 					<th>Convert Document</th>
 				</tr>
 				<tr>
-					<td><a href="/homepage/api.do" target="_blank">mago3Djs-1.0.0 js Document</a></td>
-					<td><a href="/homepage/spec.do">F4DConverter-1.0.0 Document</a></td>
+					<td><a href="/homepage/api.do" target="_blank">mago3D.js-1.0.0 js Document</a></td>
+					<td><a href="/homepage/spec.do">F4D Converter-1.0.0 Document</a></td>
 				</tr>
 			</table>
 
@@ -172,7 +156,6 @@
 					</td>
 				</tr>
 			</table>
-
 		</div>
 	</section>
 
