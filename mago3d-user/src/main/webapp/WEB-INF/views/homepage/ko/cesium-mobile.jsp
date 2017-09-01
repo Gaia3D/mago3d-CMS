@@ -6,7 +6,7 @@
 <html lang="${accessibility}">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width">
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
 	<title>demo | mago3D User</title>
 	<%-- <link rel="stylesheet" href="/css/${lang}/style.css?cache_version=${cache_version}" /> --%>
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css?cache_version=${cache_version}" />
@@ -21,7 +21,10 @@
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
-
+<style>
+input {height: 29px;}
+body, th, td, input, select, textarea { color:#444; font-family:'Malgun Gothic','돋움',dotum, sans-serif; font-size:12px; line-height:1.8em; }
+</style>
 <body>
 <input type="hidden" id="now_latitude" name="now_latitude" value="${now_latitude }" />
 <input type="hidden" id="now_longitude" name="now_longitude" value="${now_longitude }"  />
@@ -29,7 +32,7 @@
 	<li id="homeMenu" class="home">
 		<img src="/images/ko/homepage/home-icon.png" style="width: 35px; height: 35px; padding-right: 2px;"/>
 	</li>
-	<li id="shortCutsMenu" class="shortCuts" data-tooltip-text="바로가기 기능을 제공 합니다.">바로가기</li>
+	<li id="shortCutMenu" class="shortCuts" data-tooltip-text="바로가기 기능을 제공 합니다.">Link</li>
 	<li id="myIssueMenu" class="issue" data-tooltip-text="전체 Issue 리스트 중에서 최신 Issue 10개를 시간 순으로 정렬하여 보여 줍니다.">Issue<span id="issueListCount">${totalCount }</span></li>
 	<li id="searchMenu" class="search" data-tooltip-text="Issue, Object, 공간 정보 등을 활용한 검색 기능을 제공 합니다.">검색</li>
 	<li id="apiMenu" class="api" data-tooltip-text="mago3D 여러 기능을 Control 할 수 있는 다양한 API들을 제공 합니다.">API</li>	
@@ -55,11 +58,13 @@
 			<li><a href="/homepage/docs.do">Documentation</a></li>
 			<li><a href="/homepage/faq.do">FAQ</a></li>
 		</ul>
+		
 		<ul id="shortCutMenuContent" class="shortList">
 			<c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status">
-			<li onclick="flyTo(null, null, '${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">${dataGroup.data_group_name }</li>
+			<li class="shortCutbtn" onclick="flyTo(null, null, '${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">${dataGroup.data_group_name }</li>
 			</c:forEach>
 		</ul>
+		
 		<ul id="myIssueMenuContent" class="issueList">
 			<li style="margin-bottom: 8px; font-size: 1em; font-weight: normal; color: #2955a6;">최신 Issue 10개 표시</li>
 		<c:if test="${empty issueList }">
@@ -82,13 +87,13 @@
 				</li>
 			</c:forEach>
 		</c:if>
-	</ul>
+		</ul>
 
 	<form:form id="searchForm" modelAttribute="issue" method="post" onsubmit="return false;">
 		<div id="searchMenuContent" class="searchWrap">
 			<table>
 				<tr style="height: 35px;">
-					<td style="width: 80px;"><label for="data_group_id">데이터 그룹</label></td>
+					<td style="width: 380px;"><label for="data_group_id">데이터 그룹</label></td>
 					<td><select id="data_group_id" name="data_group_id" class="select">
 							<option value=""> 전체 </option>
 							<c:forEach var="dataGroup" items="${projectDataGroupList}">
@@ -116,14 +121,14 @@
 				</tr>
 				<tr style="height: 30px;">
 					<td><label for="order_word">표시순서</label></td>
-					<td><select id="order_word" name="order_word" class="select">
+					<td><select id="order_word" style="width: 60px;" name="order_word" class="select">
 							<option value=""> 기본 </option>
 							<option value="register_date"> 등록일 </option>
-					</select> <select id="order_value" name="order_value" class="select">
+					</select> <select id="order_value" style="width: 60px;" name="order_value" class="select">
 							<option value=""> 기본 </option>
 							<option value="ASC"> 오름차순 </option>
 							<option value="DESC"> 내림차순 </option>
-					</select> <select id="list_counter" name="list_counter" class="select">
+					</select> <select id="list_counter" style="width: 80px;" name="list_counter" class="select">
 							<option value="5"> 5 개씩 </option>
 							<option value="10"> 10 개씩 </option>
 							<option value="50"> 50 개씩 </option>
@@ -131,7 +136,7 @@
 				</tr>
 			</table>
 			<div class="btns">
-				<button id="searchBtn" type="button" id="searchData" class="full">검색</button>
+				<button type="button" id="searchData" class="full">검색</button>
 			</div>
 			<ul id="searchList" class="searchList"></ul>
 		</div>
@@ -210,24 +215,24 @@
 
 				<tr style="height: 35px;">
 					<td><form:label path="due_day">마감일</form:label></td>
-					<td><form:hidden path="due_date" /> <input type="text" id="due_day" name="due_day" class="date" size="10" maxlength="10" /> 일&nbsp;&nbsp; <input type="text" id="due_hour" name="due_hour" placeholder=" 00" size="2" maxlength="2" /> : <input type="text" id="due_minute" name="due_minute" placeholder=" 00" size="2" maxlength="2" /> 분</td>
+					<td><form:hidden path="due_date" /> <input type="text" id="due_day" name="due_day" class="date" size="10" maxlength="10" /> 일 <input type="text" id="due_hour" name="due_hour" placeholder=" 00" size="2" maxlength="2" style="width: 30px;" /> : <input type="text" id="due_minute" name="due_minute" placeholder=" 00" size="2" maxlength="2" style="width: 30px;"/> 분</td>
 				</tr>
 
 				<tr style="height: 35px;">
 					<td><form:label path="assignee">Assignee</form:label></td>
-					<td><form:input path="assignee" cssClass="m" placeholder=" 대리자" size="24" />
+					<td><form:input path="assignee" cssClass="m" placeholder=" 대리자" size="24" style="width: 147px"/>
 						<button type="button" class="btn" onclick="alert('준비중입니다.');">선택</button> <form:errors path="assignee" cssClass="error" /></td>
 				</tr>
 
 				<tr style="height: 35px;">
 					<td><form:label path="reporter">reporter</form:label></td>
-					<td><form:input path="reporter" cssClass="m" placeholder=" 보고 해야 하는 사람" size="24" />
+					<td><form:input path="reporter" cssClass="m" placeholder=" 보고 해야 하는 사람" size="24" style="width: 147px"/>
 						<button type="button" class="btn" onclick="alert('준비중입니다.');">선택</button> <form:errors path="reporter" cssClass="error" /></td>
 				</tr>
 
 				<tr>
 					<td><form:label path="contents">내용</form:label> <span class="icon-glyph glyph-emark-dot color-warning"></span></td>
-					<td><form:textarea path="contents" rows="5" cols="32" /> <form:errors path="contents" cssClass="error" /></td>
+					<td><form:textarea path="contents" rows="5" cols="32"/> <form:errors path="contents" cssClass="error" /></td>
 				</tr>
 			</table>
 
@@ -252,11 +257,6 @@
 		</div>
 	</div>
 </div>
-	<!-- <ul class="shortcut"> -->
-<%-- 	<c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status"> --%>
-<%-- 	<li onclick="flyTo(null, null, '${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">${dataGroup.data_group_name }</li> --%>
-<%-- 	</c:forEach>	 --%>
-<!-- </ul> -->
 
 <!-- 맵영역 -->
 <div id="magoContainer" class="mapWrap"></div>
@@ -264,7 +264,6 @@
 <script type="text/javascript" src="/externlib/${lang}/cesium/Cesium.js?cache_version=${cache_version}"></script>
 <script type="text/javascript" src="/js/${lang}/mago3d.js?cache_version=${cache_version}"></script>
 <script>
-
 // 	swipe
 	var swipe = new Hammer(document);
 	// detect swipe and call to a function
@@ -282,13 +281,16 @@
 	    });
 	  }
 	});
-	
+
 //	Close
 	$(".issueBtn").click(function (){
 		$("#menuContent").hide();
 		$(".issue").removeClass("on");
 	})
-	
+	$(".shortCutbtn").click(function (){
+		$("#menuContent").hide();
+		$(".shortCuts").removeClass("on");
+	})
 	var agent = navigator.userAgent.toLowerCase();
 	if(agent.indexOf('chrome') < 0) { 
 		alert("이 데모 페이지는 대용량 웹 데이터 처리를 위해 Chrome 브라우저에 최적화 되어 있습니다. \n원활한 서비스 이용을 위해 Chrome 브라우저를 이용  하시기 바랍니다.");
@@ -298,6 +300,7 @@
 	var dataGroupMap = ${dataGroupMap};
 	var menuMap = new Map();
 	menuMap.set("homeMenu", false);
+	menuMap.set("shortCutMenu", false);
 	menuMap.set("myIssueMenu", false);
 	menuMap.set("searchMenu", false);
 	menuMap.set("apiMenu", false);
@@ -334,12 +337,15 @@
 			$("#insertIssueEnableButton").addClass("on");
 			$("#insertIssueEnableButton").text("Issue 등록 활성화 상태");
 			insertIssueEnable = true;
+			$("#menuContent").hide();
+			alert("객체를 선택해 주세요. ");
 		}
 		changeInsertIssueModeAPI(insertIssueEnable);
 	});
 	// issue input layer call back function
 	function showInsertIssueLayer(data_key, object_key, latitude, longitude, height) {
 		if(insertIssueEnable) {
+			$("#menuContent").show();
 			$("#data_key").val(data_key);
 			$("#object_key").val(object_key);
 			$("#latitude").val(latitude);
@@ -478,6 +484,9 @@
 	$("#homeMenu").click(function() {
 		menuSlideControl("homeMenu");
 	});
+	$("#shortCutMenu").click(function() {
+		menuSlideControl("shortCutMenu");
+	})
 	$("#myIssueMenu").click(function() {
 		menuSlideControl("myIssueMenu");
 	});
@@ -565,7 +574,7 @@
 									var dataInfo = dataInfoList[i];
 									content = content 
 										+ 	"<li>"
-										+ 	"	<button type=\"button\" title=\"바로가기\""
+										+ 	"	<button class=\"searchbtn\" type=\"button\" title=\"바로가기\""
 										+			"onclick=\"flyToBounding('" + dataInfo.data_key + "');\">바로가기</button>"
 										+ 	"	<div class=\"info\">"
 										+ 	"		<p class=\"title\">"
@@ -594,7 +603,7 @@
 									var issue = issueList[i];
 									content = content 
 										+ 	"<li>"
-										+ 	"	<button type=\"button\" title=\"바로가기\""
+										+ 	"	<button class=\"searchbtn\" type=\"button\" title=\"바로가기\""
 										+			"onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
 										+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">바로가기</button>"
 										+ 	"	<div class=\"info\">"
@@ -615,8 +624,10 @@
 						
 						$("#searchList").empty();
 						$("#searchList").html(content);
-						$("#menuContent").hide();
-						$(".search").removeClass("on");
+						$(".searchbtn").click(function (){
+							$("#menuContent").hide();
+							$(".search ").removeClass("on");
+						})
 					} else {
 						alert(JS_MESSAGE[msg.result]);
 					}
@@ -681,6 +692,8 @@
 		if(!changeLocationAndRotationCheck()) return false;
 		changeLocationAndRotationAPI(	$("#move_data_key").val(), $("#move_latitude").val(), $("#move_longitude").val(), 
 										$("#move_height").val(), $("#move_heading").val(), $("#move_pitch").val(), $("#move_roll").val());
+		$("#menuContent").hide();
+		$(".api").removeClass("on");
 	});
 	function changeLocationAndRotationCheck() {
 		if ($.trim($("#move_data_key").val()) === ""){

@@ -236,7 +236,9 @@ button.btn.on {
 .configWrap {
 	display:none; 
 }
-
+.shortList {
+	display:none;
+}
 /* Home */
 .navContents ul.menuList {
 	margin: 10px 15px 0px 55px;
@@ -594,8 +596,16 @@ button.btn.on {
 
 
 
-/* mobile */
 
+
+
+
+
+/* mobile */
+textarea {
+width: 100%;
+height: 100%;
+}
 /* NAV */
 .mobile-nav {
 	position: absolute;
@@ -669,7 +679,12 @@ nav li.issue > span * {
 	background-color: #fff;
 	z-index: 100;
 }
-
+.shortList > li {
+    position: relative;
+    padding: 10px 10px 10px 15px;
+    border-bottom: 1px dotted #ccc;
+    cursor: pointer;
+}
 /* Home */
 .mobile-navContents ul.menuList {
 	margin: 10px 15px 0px 55px;
@@ -683,7 +698,7 @@ nav li.issue > span * {
 
 /* Search */
 .mobile-navContents div.searchWrap {
-	margin: 10px 15px 0px 55px;
+	margin: 10px 1px 0px 55px;
 }
 ..mobile-navContents div.searchWrap > div h3 {
 	margin-bottom: 8px;
@@ -724,4 +739,9 @@ nav li.issue > span * {
 	font-weight: normal;
 	color: #2955a6;
 }
-textarea.ui-input-text { height: inherit !important}
+.cameraButton {
+	position: absolute;
+	z-index: 99999;
+	right: 10px;
+	top: 600px;
+}
