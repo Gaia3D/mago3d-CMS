@@ -34,7 +34,12 @@
 				<a href="/homepage/index.do">mago3D</a>
 			</h1>
 			<ul class="menu">
-				<li><a href="/homepage/about.do">mago3D</a></li>
+				<li class="mm" onclick='selectMenu();'>mago3D<span></span>
+					<ul>
+						<li><a href="/homepage/about.do" style="color: white">About</a></li>
+						<li><a href="/homepage/news.do" style="color: white" onclick="alert('준비 중 입니다.'); return false">News</a></li>
+					</ul>
+				</li>
 				<li class="mm" onclick='selectMenu();'>Demo<span></span>
 					<ul>
 						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
@@ -43,7 +48,12 @@
 					</ul>
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
-				<li><a href="/homepage/docs.do">Documentation</a></li>
+				<li class="mm" onclick='selectMenu();'>Documentation<span></span>
+					<ul>
+						<li><a href="/homepage/api.do" style="color: white" target="_blank">API</a></li>
+						<li><a href="/homepage/spec.do" style="color: white">F4D Spec</a></li>
+					</ul>
+				</li>
 				<li class="on">FAQ<span></span></li>
 			</ul>
 			<ul class="language">
@@ -102,7 +112,7 @@
 				<div>
 				<div class="sub_title"><span id="mago3DJSbug">mago3DJS에서 버그를 발견했습니다. 어떻게 해야 합니까?</span></div>
 					<p>
-						모든 mago3DJS에 관련 버그를 <a href="https://github.com/Gaia3D/mago3djs">mago3DJS issue tracker</a> 에 제출하십시오. 감사합니다!
+						모든 mago3DJS에 관련 버그를 <a href="https://github.com/Gaia3D/mago3djs/issues">mago3DJS issue tracker</a> 에 제출하십시오. 감사합니다!
 					</p>
 				</div>
 				<div class="sub_title"><span id="mago3Dbug">mago3D 전체에서 버그를 발견하거나 다른 질문이 있는 경우에는 어떻게 해야 합니까?</span></div>

@@ -76,6 +76,23 @@ public class HomepageController {
 	}
 	
 	/**
+	 * 메인
+	 * @param model
+	 * @return
+	 */
+	
+	@GetMapping(value = "news.do")
+	public String news(HttpServletRequest request, Model model) {
+		String lang = null;
+		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		log.info("@@ lang = {}", lang);
+		if(lang == null || "".equals(lang)) {
+			lang = "ko";
+		}
+		return "/homepage/" + lang + "/news";
+	}	
+	
+	/**
 	 * demo
 	 * @param model
 	 * @return
@@ -347,6 +364,82 @@ public class HomepageController {
 		}
 		return "/homepage/" + lang + "/faq";
 	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "article1.do")
+	public String article1(HttpServletRequest request, Model model) {
+		String lang = null;
+		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		if(lang == null || "".equals(lang)) {
+			lang = "ko";
+		}
+		return "/homepage/" + lang + "/article1";
+	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "article2.do")
+	public String article2(HttpServletRequest request, Model model) {
+		String lang = null;
+		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		if(lang == null || "".equals(lang)) {
+			lang = "ko";
+		}
+		return "/homepage/" + lang + "/article2";
+	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "article3.do")
+	public String article3(HttpServletRequest request, Model model) {
+		String lang = null;
+		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		if(lang == null || "".equals(lang)) {
+			lang = "ko";
+		}
+		return "/homepage/" + lang + "/article3";
+	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "article4.do")
+	public String article4(HttpServletRequest request, Model model) {
+		String lang = null;
+		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		if(lang == null || "".equals(lang)) {
+			lang = "ko";
+		}
+		return "/homepage/" + lang + "/article4";
+	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "news-listview.do")
+	public String newsListview(HttpServletRequest request, Model model) {
+		String lang = null;
+		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		if(lang == null || "".equals(lang)) {
+			lang = "ko";
+		}
+		return "/homepage/" + lang + "/news-listview";
+	}
+	
 	/**
 	 * 언어 설정
 	 * @param model
