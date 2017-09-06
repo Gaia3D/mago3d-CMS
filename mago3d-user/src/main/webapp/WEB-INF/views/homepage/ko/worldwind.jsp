@@ -9,14 +9,13 @@
 	<meta name="viewport" content="width=device-width">
 	<title>demo | mago3D User</title>
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css?cache_version=${cache_version}" />
-	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
+	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css?cache_version=${cache_version}" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-toast/jquery.toast.css" />
-	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-toast/jquery.toast.js"></script>
-	<script type="text/javascript" src="/js/${lang}/common.js"></script>
-	<script type="text/javascript" src="/js/${lang}/message.js"></script>
+	<script type="text/javascript" src="/js/${lang}/common.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/js/${lang}/message.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 
@@ -319,8 +318,8 @@
 		</table>
 		
 		<div class="btns">
-				<button type="button" id="issueSaveButton" class="full">저장</button>
-			</div>
+			<button type="button" id="issueSaveButton" class="full">저장</button>
+		</div>
 	</div>
 	</form:form>
 	
@@ -643,7 +642,7 @@
 									content = content 
 										+ 	"<li>"
 										+ 	"	<button type=\"button\" title=\"바로가기\""
-										+			"onclick=\"flyToBounding('" + dataInfo.data_key + "');\">바로가기</button>"
+										+			" onclick=\"flyToBounding('" + dataInfo.data_key + "');\">바로가기</button>"
 										+ 	"	<div class=\"info\">"
 										+ 	"		<p class=\"title\">"
 										+ 	"			<span>" + dataInfo.data_group_name + "</span>"
@@ -672,8 +671,8 @@
 									content = content 
 										+ 	"<li>"
 										+ 	"	<button type=\"button\" title=\"바로가기\""
-										+			"onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
-										+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">바로가기</button>"
+										+			" onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+										+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2');\">바로가기</button>"
 										+ 	"	<div class=\"info\">"
 										+ 	"		<p class=\"title\">"
 										+ 	"			<span>" + issue.data_group_name + "</span>"

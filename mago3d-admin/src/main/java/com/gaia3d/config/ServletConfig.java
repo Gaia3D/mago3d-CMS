@@ -122,22 +122,27 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
     }
 
 	@Bean
-	public SimpleMappingExceptionResolver exceptionResolver() {
+	public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
 		log.info(" @@@ ServletConfig exceptionResolver @@@");
 		
-		SimpleMappingExceptionResolver exceptionResolver = new SimpleMappingExceptionResolver();
-	 
-		exceptionResolver.setOrder(1);
-		exceptionResolver.setDefaultErrorView("/error/default-error");
+		SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
 		
 		Properties exceptionMappings = new Properties();
-	 	exceptionMappings.put("com.gaia3d.exception.BusinessLogicException", "/error/business-error");
-	 	exceptionMappings.put("java.lang.RuntimeException", "/error/runtime-error");
-	 	exceptionResolver.setExceptionMappings(exceptionMappings);
+	 	exceptionMappings.put("BusinessLogicException", "error/business-error");
+	 	exceptionMappings.put("RuntimeException", "error/runtime-error");
+	 	exceptionMappings.put("Exception", "error/error");
+	 	simpleMappingExceptionResolver.setExceptionMappings(exceptionMappings);
 	 	
-	 	exceptionResolver.addStatusCode("error", 404);
+	 	Properties statusCodes = new Properties();
+        statusCodes.put("error/error", "403");
+        statusCodes.put("error/error", "404");
+        statusCodes.put("error/error", "500");
+        simpleMappingExceptionResolver.setStatusCodes(statusCodes);
+
+	 	simpleMappingExceptionResolver.setOrder(1);
+	 	simpleMappingExceptionResolver.setDefaultErrorView("error/error");
 	 	
-	 	return exceptionResolver;
+	 	return simpleMappingExceptionResolver;
 	}
 	 
 	@Bean

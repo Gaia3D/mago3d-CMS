@@ -2523,3 +2523,29 @@ tr:hover td {
 .f14{font-size:14px;}
 .f16{font-size:16px;}
 .f20{font-size:20px;}	
+
+
+#geo_ambient_reflection_coef_view {
+	width: 3em;
+	height: 1.6em;
+	top: 50%;
+	margin-top: -.8em;
+	text-align: center;
+	line-height: 1.6em;
+}
+#geo_diffuse_reflection_coef_view {
+	width: 3em;
+	height: 1.6em;
+	top: 50%;
+	margin-top: -.8em;
+	text-align: center;
+	line-height: 1.6em;
+}
+#geo_specular_reflection_coef_view {
+	width: 3em;
+	height: 1.6em;
+	top: 50%;
+	margin-top: -.8em;
+	text-align: center;
+	line-height: 1.6em;
+}

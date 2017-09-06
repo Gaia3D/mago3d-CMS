@@ -12,11 +12,13 @@
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
+	<link rel="stylesheet" href="/externlib/${lang}/color-picker/palette-color-picker.css" />
 	<link rel="stylesheet" href="/css/${lang}/style.css" />
 	
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jqplot/jquery.jqplot.min.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/color-picker/palette-color-picker.js"></script>
 	
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
@@ -70,6 +72,7 @@
 	$(document).ready(function() {
 		$( ".tabs" ).tabs();
 		initJqueryCalendar();
+		initGeo();
 		
 		$("#user_delete_type").val("${policyUser.user_delete_type}");
 		
@@ -345,13 +348,17 @@
 		if(updatePolicyGeoFlag) {
 			// validation 나중에
 			updatePolicyGeoFlag = false;
-			var info = $("#policyGeo").serialize();
+			var info = $("#policyGeo").serializeArray();
+			//var info = $("#policyGeo").serialize();
+			info.find(item => item.name === "geo_ambient_reflection_coef").value = $("#geo_ambient_reflection_coef").val();
+			info.find(item => item.name === "geo_diffuse_reflection_coef").value = $("#geo_diffuse_reflection_coef").val();
+			info.find(item => item.name === "geo_specular_reflection_coef").value = $("#geo_specular_reflection_coef").val();
+			info = $.param(info);
 			$.ajax({
 				url: "/config/ajax-update-policy-geo.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -370,6 +377,66 @@
 			alert(JS_MESSAGE["button.dobule.click"]);
 			return;
 		}
+	}
+	
+	// geo 정보 설정
+	function initGeo() {
+		var ambient = $( "#geo_ambient_reflection_coef_view" );
+		$( "#geo_ambient_reflection_coef" ).slider({
+			range: "max",
+			min: 0, // min value
+			max: 1, // max value
+			step: 0.01,
+			value: '${policy.geo_ambient_reflection_coef}', // default value of slider
+			create: function() {
+				ambient.text( $( this ).slider( "value" ) );
+			},
+			slide: function( event, ui ) {
+				ambient.text( ui.value);
+				$("#geo_ambient_reflection_coef" ).val(ui.value);
+			}
+		});
+		var diffuse = $( "#geo_diffuse_reflection_coef_view" );
+		$( "#geo_diffuse_reflection_coef" ).slider({
+			range: "max",
+			min: 0, // min value
+			max: 1, // max value
+			step: 0.01,
+			value: '${policy.geo_diffuse_reflection_coef}', // default value of slider
+			create: function() {
+				diffuse.text( $( this ).slider( "value" ) );
+			},
+			slide: function( event, ui ) {
+				diffuse.text( ui.value);
+				$("#geo_diffuse_reflection_coef" ).val(ui.value);
+			}
+		});
+		var specular = $( "#geo_specular_reflection_coef_view" );
+		$( "#geo_specular_reflection_coef" ).slider({
+			range: "max",
+			min: 0, // min value
+			max: 1, // max value
+			step: 0.01,
+			value: '${policy.geo_specular_reflection_coef}', // default value of slider
+			create: function() {
+				specular.text( $( this ).slider( "value" ) );
+			},
+			slide: function( event, ui ) {
+				specular.text( ui.value);
+				$("#geo_specular_reflection_coef" ).val(ui.value);
+			}
+		});
+		
+		$('[name="geo_ambient_color"]').paletteColorPicker({
+			clear_btn: 'last',
+			//position: 'downside',
+			close_all_but_this: true // Default is false
+		});
+		$('[name="geo_specular_color"]').paletteColorPicker({
+			clear_btn: 'last',
+			//position: 'downside',
+			close_all_but_this: true // Default is false
+		});
 	}
 	
 	// GeoServer

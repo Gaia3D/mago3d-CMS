@@ -11,7 +11,7 @@
 		<logger name="org.apache.commons" level="info">
 			<appender-ref ref="STDOUT" />
 		</logger>
-		<logger name="org.springframework" level="info">
+		<logger name="org.springframework.web" level="info">
 			<appender-ref ref="STDOUT" />
 		</logger>
 		<logger name="java.sql.Connection" level="debug">

@@ -83,6 +83,8 @@ public class CacheConfig {
 	}
 
 	public void loadCache(CacheName cacheName, CacheType cacheType) {
+		log.info(" *************** loadCache cacheName = {}, cacheType = {}", cacheName.name(), cacheType.name());
+		
 		if(cacheName == CacheName.LICENSE) license(cacheType);
 		else if(cacheName == CacheName.POLICY) policy(cacheType);
 		else if(cacheName == CacheName.MENU) menu(cacheType);

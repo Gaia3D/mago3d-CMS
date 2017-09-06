@@ -36,6 +36,16 @@ create table policy(
 	geo_init_longitude					varchar(30)			default '126.924185',
 	geo_init_height						varchar(30)			default '3000.0',
 	geo_init_duration					smallint			default 3,
+	geo_lod0							varchar(20)			default '22',
+	geo_lod1							varchar(20)			default '70',
+	geo_lod2							varchar(20)			default '22360',
+	geo_lod3							varchar(20)			default '50000',
+	geo_ambient_reflection_coef			varchar(10)			default '0.5',
+	geo_diffuse_reflection_coef			varchar(10)			default '1.0',
+	geo_specular_reflection_coef		varchar(10)			default '1.0',
+	geo_specular_color					varchar(11)			default '#d8d8d8',
+	geo_ambient_color					varchar(11)			default '#d8d8d8',
+	geo_ssao_radius						varchar(20)			default '0.15',
 	
 	geo_server_enable						varchar(5)			default 'false',
 	geo_server_url							varchar(256),
@@ -50,6 +60,7 @@ create table policy(
 	geo_callback_selectedObject				varchar(64),
 	geo_callback_insertIssue				varchar(64),
 	geo_callback_listIssue					varchar(64),
+	geo_callback_clickposition				varchar(64),
 	
 	notice_service_yn					char(1)				default 'Y',
 	notice_service_send_type			char(1)				default '0',
@@ -147,6 +158,16 @@ comment on column policy.geo_init_latitude is '초기 카메라 이동 위도';
 comment on column policy.geo_init_longitude is '초기 카메라 이동 경도';
 comment on column policy.geo_init_height is '초기 카메라 이동 높이';
 comment on column policy.geo_init_duration is '초기 카메라 이동 시간. 초 단위';
+comment on column policy.geo_lod0 is 'LOD0. 기본값 22M';
+comment on column policy.geo_lod1 is 'LOD1. 기본값 70M';
+comment on column policy.geo_lod2 is 'LOD2. 기본값 22360M';
+comment on column policy.geo_lod3 is 'LOD3. 기본값 50000M';
+comment on column policy.geo_ambient_reflection_coef is '다이렉트 빛이 아닌 반사율 범위. 기본값 0.5';
+comment on column policy.geo_diffuse_reflection_coef is '자기 색깔의 반사율 범위. 기본값 1.0';
+comment on column policy.geo_specular_reflection_coef is '표면의 반질거림 범위. 기본값 1.0';
+comment on column policy.geo_ambient_color is '다이렉트 빛이 아닌 반사율 RGB, 콤마로 연결';
+comment on column policy.geo_specular_color is '표면의 반질거림 색깔. RGB, 콤마로 연결';
+comment on column policy.geo_ssao_radius is '그림자 반경',
 	
 comment on column policy.geo_server_enable is 'geo server 사용유무';
 comment on column policy.geo_server_url is 'geo server url';
@@ -161,6 +182,7 @@ comment on column policy.geo_callback_enable is '콜백 function 사용유무. �
 comment on column policy.geo_callback_selectedObject is 'object 선택 callback function 이름';
 comment on column policy.geo_callback_insertIssue is 'issue 등록 callback function 이름';
 comment on column policy.geo_callback_listIssue is 'issue 목록 callback function 이름';
+comment on column policy.geo_callback_clickposition is 'mouse click 시 위치 정보 callback function 이름';
 
 comment on column policy.notice_service_yn is '알림 서비스 사용 유무. Y : 사용, N : 사용안함(기본값)';
 comment on column policy.notice_service_send_type is '알림 발송 매체. 0 : SMS(기본값), 1 : 이메일, 2 : 메신저';

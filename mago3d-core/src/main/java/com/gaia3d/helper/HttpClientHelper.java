@@ -120,7 +120,7 @@ public class HttpClientHelper {
 			response = httpclient.execute(httpPost);
 			httpStatus = HttpStatus.valueOf(response.getStatusLine().getStatusCode());
 			log.info("@@@@@@@@@@@@ response httpStatus = {}", httpStatus);
-		    if (httpStatus == HttpStatus.OK) {
+		    if (httpStatus == HttpStatus.OK || httpStatus == HttpStatus.UNAUTHORIZED) {
 				result = getResult(response);
 			    log.info("@@@@@@@@@@@@ result = {}", result);
 			}

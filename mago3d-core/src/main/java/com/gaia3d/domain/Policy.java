@@ -119,6 +119,34 @@ public class Policy {
 	// 초기 카메라 이동 시간. 초 단위
 	private Long geo_init_duration;
 	
+	// LOD0. 기본값 22M
+	private String geo_lod0;
+	// LOD1. 기본값 70M
+	private String geo_lod1;
+	// LOD2. 기본값 22360M
+	private String geo_lod2;
+	// LOD3. 기본값 50000M
+	private String geo_lod3;
+	
+	// 다이렉트 빛이 아닌 반사율 범위. 기본값 0.5
+	private String geo_ambient_reflection_coef;
+	// 자기 색깔의 반사율 범위. 기본값 1.0
+	private String geo_diffuse_reflection_coef;
+	// 표면의 반질거림 범위. 기본값 1.0
+	private String geo_specular_reflection_coef;
+	// 다이렉트 빛이 아닌 반사율 RGB, 콤마로 연결
+	private String geo_ambient_color;
+	private String geo_ambient_colorR;
+	private String geo_ambient_colorG;
+	private String geo_ambient_colorB;
+	// 표면의 반질거림 색깔. RGB, 콤마로 연결
+	private String geo_specular_color;
+	private String geo_specular_colorR;
+	private String geo_specular_colorG;
+	private String geo_specular_colorB;
+	// 그림자 반경
+	private String geo_ssao_radius;
+	
 	// geo server 사용유무
 	private String geo_server_enable;
 	// geo server url
@@ -144,6 +172,8 @@ public class Policy {
 	private String geo_callback_insertissue;
 	// issue list callback function 이름
 	private String geo_callback_listissue;
+	// mouse click 시 위치 정보 callback function 이름
+	private String geo_callback_clickposition;
 	
 	// 알림 서비스 사용 유무. Y : 사용, N : 미사용(기본값)
 	private String notice_service_yn;

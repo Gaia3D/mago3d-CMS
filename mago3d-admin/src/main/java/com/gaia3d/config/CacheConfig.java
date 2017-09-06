@@ -271,7 +271,6 @@ public class CacheConfig {
 	private void callRemoteCache(CacheName cacheName) {
 		
 		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@ callRemoteCache start! ");
-
 		// TODO 로컬, 이중화 등의 분기 처리가 생략되어 있음
 		List<ExternalService> remoteCacheServerList = CacheManager.getRemoteCacheServiceList();
 		for(ExternalService externalService : remoteCacheServerList) {
@@ -279,10 +278,15 @@ public class CacheConfig {
 			String authData = "api-key=" + Crypt.decrypt(propertiesConfig.getRestAuthKey()) + "&cache_name=" + cacheName.toString() + "&time=" + System.nanoTime();
 			authData = Crypt.encrypt(authData);
 			try {
-				Map<String, Object> jSONObject = HttpClientHelper.httpPost(externalService, authData);
-				log.error("@@@ statusCode = {}.", jSONObject.get("statusCode"));
-				log.error("@@@ statusCodeValue = {}.", jSONObject.get("statusCodeValue"));
-				log.error("@@@ result = {}.", jSONObject.get("result"));
+				Map<String, Object> resultObject = HttpClientHelper.httpPost(externalService, authData);
+				if(resultObject != null && !resultObject.isEmpty() ) {
+					int statusCode = (Integer)resultObject.get("statusCode");
+					String statusCodeValue = (String)resultObject.get("statusCodeValue");
+					String result = (String)resultObject.get("result");
+					log.error("@@@ statusCode = {}.", statusCode);
+					log.error("@@@ statusCodeValue = {}.", statusCodeValue);
+					log.error("@@@ result = {}.", result);
+				}
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
