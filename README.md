@@ -1,5 +1,8 @@
-[![Englsh](https://img.shields.io/badge/language-English-orange.svg)](README.md)
-[![Korean](https://img.shields.io/badge/language-Korean-blue.svg)](README.md)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+[![Englsh](https://img.shields.io/badge/language-English-orange.svg)](#english)
+[![Korean](https://img.shields.io/badge/language-Korean-blue.svg)](#korean)
+
+<a name="korean"></a>
 
 # Mago3D
 MAGO3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. MAGO3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 이에 따라, MAGO3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.
@@ -63,4 +66,76 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 ## github
  [Mago3DJS](https://github.com/Gaia3D/mago3djs) 깃허브 사이트 입니다.
 ## License
-...
+[Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
+
+
+
+
+
+
+
+<br><br>
+[한국어](#korean)
+
+# <a name="english"></a>Mago3D
+MAGO3D is a next-generation three-dimensional platform that integrates and visualizes AEC (Architecture, Engineering, Construction) and traditional 3D spatial information (3D GIS). Unlike conventional solutions, MAGO3D seamlessly integrates AEC and 3D GIS in a web browser without distinction between indoor and outdoor. As a result, MAGO3D users can quickly view and collaborate on large-scale building information modeling (BIM), JT (Jupiter Tessellation) and 3D GIS files without installing any additional programs.
+
+## Mission
+Mago3DJS Integrate visualization data using open source JavaScript library for 3D multi-block visualization.
+
+## Features
+- Issue status You can see new issue, ongoing issue, and finished issue.
+- It is easy to view the status by user status graph.
+- DB Connection Pool status or DV session status can be viewed as a table.
+
+## Development Environment
+<code>Spring, gradle, PostgreSQL, PostGIS, mybatis Docker </code>
+
+## Getting Started
+
+###  Install
+
+- [PostgreSQL](https://github.com/Gaia3D/mago3d/wiki/PostgreSQL-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
+  - PostgreSQL v9.6.3-1
+  - Installation path C:/PostgreSQL
+
+- [PostGIS](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
+  - After installing PostgreSQL, run Stack Builder to install
+  - PostGIS v2.3.2
+  - PostgreSQL Extensions PostGIS 
+- [gradle](https://github.com/Gaia3D/mago3d/wiki/gradle-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
+  - gradle v3.5
+  - Installation path C:/gradle
+  - Adding System Variables -path -> C:\gradle\gradle-3.5 Add
+- [lombok](https://projectlombok.org/)
+  - After installing, move the download folder and execute it.
+  - Locate the eclipse installation location [Specify location ..] and select the file 'eclipse.exe'.
+  - Click install / update.
+
+- Buildship Gradle Integration
+  - Go to Eclipse Help -> Eclipse Marketplace and install Buildship Gradle Integration 2.0.
+
+### Setting
+
+  - From eclipse, load the mago3d Project into git clone.
+  - Click File -> Import -> Gradle -> Existing Gradle Project to accept mago3d.
+  - Create a database using PostgreSQL before running mago3d <br>
+  PostgreSQL - > new DataBase
+  <pre>
+    Name: mago3d
+    Encoding: UTF8
+    Template: template0
+    Collation: C
+    Character type: C
+    Connection Limit: -1
+  </pre>
+  - Runs a query on a database of fish. The query is located in mago3d-core -> src -> doc -> database.
+
+### Execution
+
+ - To run mao3d, run mago3d-admin -> src / main / java -> com.gaia3d -> Mago3dAdminApplication.java as a Spring Boot app.
+
+## github
+ [Mago3DJS](https://github.com/Gaia3D/mago3djs) It is a feather hub site.
+## License
+[Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
