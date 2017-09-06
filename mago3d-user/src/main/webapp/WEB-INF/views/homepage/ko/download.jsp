@@ -30,7 +30,12 @@
 				<a href="/homepage/index.do">mago3D</a>
 			</h1>
 			<ul class="menu">
-				<li><a href="/homepage/about.do">mago3D</a></li>
+				<li class="mm" onclick='selectMenu();'>mago3D<span></span>
+					<ul>
+						<li><a href="/homepage/about.do" style="color: white">About</a></li>
+						<li><a href="/homepage/news.do" style="color: white" onclick="alert('준비 중 입니다.'); return false">News</a></li>
+					</ul>
+				</li>
 				<li class="mm" onclick='selectMenu();'>Demo<span></span>
 					<ul>
 						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
@@ -39,8 +44,13 @@
 					</ul>
 				</li>
 				<li class="on">Download<span></span></li>
-				<li><a href="/homepage/docs.do">Documentation</a></li>
-				<li><a href="/homepage/faq.do">FAQ</a></li>
+				<li class="mm" onclick='selectMenu();'>Documentation<span></span>
+					<ul>
+						<li><a href="/homepage/api.do" style="color: white" target="_blank">API</a></li>
+						<li><a href="/homepage/spec.do" style="color: white">F4D Spec</a></li>
+					</ul>
+				</li>
+				<li> <a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
 				<li id="languageKO" class="on">KO</li>
@@ -51,6 +61,7 @@
 
 	<section>
 		<h2>Download</h2>
+		
 		<div class="contents">
 			<button type="button" class="down" onclick="location.href='https://github.com/Gaia3D/mago3d'">
 				DOWNLOAD mago3D 1.0.0 <span>2017-07-01</span>
@@ -92,18 +103,6 @@
 			 applications with mago3D F4D Converter software, Gaia3D’s open source software licensed under the AGPL is the best option.
 			</p>
 			<b>2. mago3D.js: Apache License</b><br>
-			<h4>Documentation</h4>
-			<table>
-				<tr>
-					<th>JS Document</th>
-					<th>Convert Document</th>
-				</tr>
-				<tr>
-					<td><a href="/homepage/api.do" target="_blank">mago3D.js-1.0.0 js Document</a></td>
-					<td><a href="/homepage/spec.do">F4D Converter-1.0.0 Document</a></td>
-				</tr>
-			</table>
-
 			<h4>mago3D.js</h4>
 			<table>
 				<tr>
@@ -117,6 +116,7 @@
 					<td>
 					<ul>
 						<li>GitHub : <a href="https://github.com/Gaia3D/mago3Djs" target="_blank">mago3D.js</a></li>
+						<li>API : <a href="homepage/api.do" target="_blank">mago3D.js API</a></li>
 					</ul>
 					</td>
 					<td>2017-07-01</td>
@@ -139,6 +139,7 @@
 					<ul>
 						<li>GitHub : <a href="https://github.com/Gaia3D/F4DConverter" target="_blank">F4D Converter</a></li>
 						<li>Installer : <a href="/data/download/SetupF4DConverter.msi" target="_blank">F4D Converter 64bit (this installation requires Windows 7 or later)</a></li>
+						<li>Spec : <a href="/homepage/spec.do">F4D Converter Spec</a></li>
 					</ul>
 					</td>
 					<td>2017-08-17</td>
