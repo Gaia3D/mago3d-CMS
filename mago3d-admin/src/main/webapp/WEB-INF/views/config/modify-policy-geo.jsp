@@ -90,6 +90,95 @@
 				<form:errors path="geo_init_duration" cssClass="error" />
 			</td>
 		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_lod0">LOD0</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_lod0" cssClass="m" />&nbsp;M
+				<form:errors path="geo_lod0" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_lod1">LOD1</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_lod1" cssClass="m" />&nbsp;M
+				<form:errors path="geo_lod1" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_lod2">LOD2</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_lod2" cssClass="m" />&nbsp;M
+				<form:errors path="geo_lod2" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_ambient_reflection_coef">ambient_reflection_coeficient</form:label>
+			</th>
+			<td class="col-input" style="padding-left: 20px;">
+				<div id="geo_ambient_reflection_coef" style="display: inline-block; width: 230px;">
+					<div id="geo_ambient_reflection_coef_view" class="ui-slider-handle"></div>
+				</div>
+				<form:hidden path="geo_ambient_reflection_coef" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_diffuse_reflection_coef">geo_diffuse_reflection_coef</form:label>
+			</th>
+			<td class="col-input" style="padding-left: 20px;">
+				<div id="geo_diffuse_reflection_coef" style="display: inline-block; width: 230px;">
+					<div id="geo_diffuse_reflection_coef_view" class="ui-slider-handle"></div>
+				</div>
+				<form:hidden path="geo_diffuse_reflection_coef" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_specular_reflection_coef">geo_specular_reflection_coef</form:label>
+			</th>
+			<td class="col-input" style="padding-left: 20px;">
+				<div id="geo_specular_reflection_coef" style="display: inline-block; width: 230px;">
+					<div id="geo_specular_reflection_coef_view" class="ui-slider-handle"></div>
+				</div>
+				<form:hidden path="geo_specular_reflection_coef" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_ambient_color">geo_ambient_color</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_ambient_color" cssClass="m"
+					data-palette='["#D50000","#304FFE","#00B8D4","#00C853","#FFD600","#FF6D00","#FF1744","#3D5AFE","#00E5FF","#00E676","#FFEA00",
+			       "#FF9100","#FF5252","#536DFE","#18FFFF","#69F0AE","#FFFF00","#FFAB40"]' />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_specular_color">geo_specular_color</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_specular_color" cssClass="m"
+					data-palette='["#D50000","#304FFE","#00B8D4","#00C853","#FFD600","#FF6D00","#FF1744","#3D5AFE","#00E5FF","#00E676","#FFEA00",
+			       "#FF9100","#FF5252","#536DFE","#18FFFF","#69F0AE","#FFFF00","#FFAB40"]' />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_ssao_radius">SSAO Radius</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_ssao_radius" cssClass="m" />
+				<form:errors path="geo_ssao_radius" cssClass="error" />
+			</td>
+		</tr>
 	</table>
 	<div class="button-group">
 		<div class="center-buttons">

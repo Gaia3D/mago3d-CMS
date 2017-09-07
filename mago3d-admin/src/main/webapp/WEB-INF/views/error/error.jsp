@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page isErrorPage="true" %>
 <%@ include file="/WEB-INF/views/common/taglib.jsp" %>
-
+<%
+	if(exception != null) exception.printStackTrace();
+%>
 <!DOCTYPE html>
 <html lang="ko-KR">
 <head>
@@ -23,7 +26,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="page-header row">
-					<h2 class="page-title u-pull-left">오류 페이지(404)</h2>
+					<h2 class="page-title u-pull-left">오류 페이지(404) --- 2</h2>
 				</div>
 				<div class="marT40"></div>
 				<div class="list">

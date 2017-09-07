@@ -2,7 +2,7 @@
 <%@ page isErrorPage="true" %>
 <%@ include file="/WEB-INF/views/common/taglib.jsp" %>
 <%
-	exception.printStackTrace();
+	if(exception != null) exception.printStackTrace();
 %>
 
 <!DOCTYPE html>

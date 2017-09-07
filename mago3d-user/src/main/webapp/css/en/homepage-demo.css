@@ -541,8 +541,6 @@ button.btn.on {
     width: 6px;
 }
 
-
-
 /*
 	css-only-tooltip version 1.0.0
 	ⓒ 2015 AHN JAE-HA http://github.com/eu81273
@@ -592,10 +590,55 @@ button.btn.on {
 }
 
 
+#geo_ambient_reflection_coef_view {
+	width: 3em;
+	height: 1.6em;
+	top: 50%;
+	margin-top: -.8em;
+	text-align: center;
+	line-height: 1.6em;
+}
+#geo_diffuse_reflection_coef_view {
+	width: 3em;
+	height: 1.6em;
+	top: 50%;
+	margin-top: -.8em;
+	text-align: center;
+	line-height: 1.6em;
+}
+#geo_specular_reflection_coef_view {
+	width: 3em;
+	height: 1.6em;
+	top: 50%;
+	margin-top: -.8em;
+	text-align: center;
+	line-height: 1.6em;
+}
+
+#objectLabel {
+	background-color: transparent;  /* needed because webgl-tutoraisl.css sets canvas bg color to white */
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: 10;
+	pointer-events:none;
+}
+
+
+
+
+
+
+
 
 
 
 /* mobile */
+
+.shortList {
+	display:none;
+}
+
 textarea {
 width: 100%;
 height: 100%;
@@ -733,4 +776,3 @@ nav li.issue > span * {
 	font-weight: normal;
 	color: #2955a6;
 }
-textarea.ui-input-text { height: inherit !important}

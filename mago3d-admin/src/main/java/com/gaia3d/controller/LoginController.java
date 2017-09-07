@@ -22,6 +22,7 @@ import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.SessionKey;
 import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.UserSession;
+import com.gaia3d.exception.BusinessLogicException;
 import com.gaia3d.helper.SessionUserHelper;
 import com.gaia3d.listener.Gaia3dHttpSessionBindingListener;
 import com.gaia3d.service.LoginService;
@@ -56,7 +57,6 @@ public class LoginController {
 	 */
 	@GetMapping("/login.do")
 	public String login(HttpServletRequest request, Model model) {
-		
 		Policy policy = CacheManager.getPolicy();
 		log.info("@@ policy = {}", policy);
 		

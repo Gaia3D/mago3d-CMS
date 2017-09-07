@@ -9,14 +9,13 @@
 	<meta name="viewport" content="width=device-width">
 	<title>demo | mago3D User</title>
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css?cache_version=${cache_version}" />
-	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
+	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css?cache_version=${cache_version}" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-toast/jquery.toast.css" />
-	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-toast/jquery.toast.js"></script>
-	<script type="text/javascript" src="/js/${lang}/common.js"></script>
-	<script type="text/javascript" src="/js/${lang}/message.js"></script>
+	<script type="text/javascript" src="/js/${lang}/common.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/js/${lang}/message.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 
@@ -50,8 +49,13 @@
 			</ul>
 		</li>
 		<li><a href="/homepage/download.do">Download</a></li>
-		<li> <a href="/homepage/docs.do">Documentation</a></li>
-		<li> <a href="/homepage/faq.do">FAQ</a></li>
+		<li>Documentation
+			<ul>
+				<li><a href="http://www.mago3d.com/homepage/api.do">API</a></li>
+				<li><a href="http://www.mago3d.com/homepage/spec.do">F4D Spec</a></li>
+			</ul>
+		</li>
+		<li><a href="/homepage/faq.do">FAQ</a></li>
 	</ul>
 	
 	<ul id="myIssueMenuContent" class="issueList">
@@ -187,6 +191,23 @@
 			<input type="radio" id="hideNearGeoIssueList" name="nearGeoIssueList" value="false" onclick="changeNearGeoIssueList(false);"/>
 			<label for="hideNearGeoIssueList"> 비표시 </label>
 		</div>
+		<div>
+			<h3>클릭 지점의 위치 정보</h3>
+			<ul class="apiLoca">
+				<li>
+					<label for="positionLatitude"> 위도 </label>
+					<input type="text" id="positionLatitude" name="positionLatitude" size="15" />
+				</li>
+				<li>
+					<label for="positionLongitude"> 경도 </label>
+					<input type="text" id="positionLongitude" name="positionLongitude" size="15" />
+				</li>
+				<li>
+					<label for="positionAltitude"> 높이 </label>
+					<input type="text" id="positionAltitude" name="positionAltitude" size="15" />
+				</li>
+			</ul>
+		</div>
 	</div>
 	
 	<form:form id="issue" modelAttribute="issue" method="post" onsubmit="return false;">
@@ -319,12 +340,19 @@
 		</table>
 		
 		<div class="btns">
-				<button type="button" id="issueSaveButton" class="full">저장</button>
-			</div>
+			<button type="button" id="issueSaveButton" class="full">저장</button>
+		</div>
 	</div>
 	</form:form>
 	
 	<div id="configMenuContent" class="configWrap">
+		<div>
+			<h3>Label</h3>
+			<input type="radio" id="showLabel" name="labelInfo" value="true" onclick="changeLabel(true);" />
+			<label for="showLabel"> 표시 </label>
+			<input type="radio" id="hideLabel" name="labelInfo" value="false" onclick="changeLabel(false);"/>
+			<label for="hideLabel"> 비표시 </label>
+		</div>
 		<div>
 			<h3>Object 정보</h3>
 			<input type="radio" id="showObjectInfo" name="objectInfo" value="true" onclick="changeObjectInfoViewMode(true);" />
@@ -347,6 +375,91 @@
 			<label for="mouseAllMove"> ALL </label>
 			<input type="radio" id="mouseObjectMove" name="mouseMoveMode" value="1" onclick="changeMouseMove('1');"/>
 			<label for="mouseObjectMove"> Object </label>
+		</div>
+		<div>
+			<h3>LOD</h3>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">LOD0</div>
+				<input type="text" id="geo_lod0" name="geo_lod0" value="22" size="15" />&nbsp;M
+			</div>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">LOD1</div>
+				<input type="text" id="geo_lod1" name="geo_lod1" value="70" size="15" />&nbsp;M
+			</div>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">LOD2</div>
+				<input type="text" id="geo_lod2" name="geo_lod2" value="22360" size="15" />&nbsp;M&nbsp;&nbsp;
+				<button type="button" id="changeLodButton" class="btn">변경</button>
+			</div>
+		</div>
+		<div>
+			<h3>Lighting</h3>
+			<div style="height: 30px;">AmbientReflectionCoeficient</div>
+			<div id="ambient_reflection_coef" style="display: inline-block; width: 310px;">
+				<div id="geo_ambient_reflection_coef_view" class="ui-slider-handle"></div>
+				<input type="hidden" id="geo_ambient_reflection_coef" name="geo_ambient_reflection_coef" value="0.5" />
+			</div>
+			<div style="height: 30px;">DiffuseReflectionCoeficient</div>
+			<div id="diffuse_reflection_coef" style="display: inline-block; width: 310px;">
+				<div id="geo_diffuse_reflection_coef_view" class="ui-slider-handle"></div>
+				<input type="hidden" id="geo_diffuse_reflection_coef" name="geo_diffuse_reflection_coef" value="1" />
+			</div>
+			<div style="height: 30px;">SpecularReflectionCoeficient</div>
+			<div id="specular_reflection_coef" style="display: inline-block; width: 310px;">
+				<div id="geo_specular_reflection_coef_view" class="ui-slider-handle"></div>
+				<input type="hidden" id="geo_specular_reflection_coef" name="geo_specular_reflection_coef" value="1" />
+			</div>
+			<!-- <div style="height: 30px;">
+				<label for="geo_ambient_color">AmbientColor</label>
+				<input type="text" id="geo_ambient_color" name="geo_ambient_color" class="m" size="15"
+					data-palette='[	"#c00000","#ff0000","#ffc000","#ffff00","#92d050",
+									"#00b050","#00b0f0","#0070c0","#002060","#7030a0",
+									"#f2f2f2","#d8d8d8","#bfbfbf","#a5a5a5","#7f7f7f",
+									"#7f7f7f","#595959","#3f3f3f","#262626","#0c0c0c",
+									"#ddd9c3","#c4bd97","#938953","#494429","#1d1b10",
+									"#c6d9f0","#8db3e2","#548dd4","#17365d","#0f243e",
+									"#dbe5f1","#b8cce4","#95b3d7","#366092","#244061",
+									"#f2dcdb","#e5b9b7","#d99694","#953734","#632423",
+									"#ebf1dd","#d7e3bc","#c3d69b","#76923c","#4f6128",
+									"#e5e0ec","#ccc1d9","#b2a2c7","#5f497a","#3f3151",
+									"#dbeef3","#b7dde8","#92cddc","#31859b","#205867",
+									"#fdeada","#fbd5b5","#fac08f","#e36c09","#974806" ]' />
+			</div>
+			<div style="height: 30px;">
+				<label for="geo_specular_color">SpecularColor</label>
+				<input type="text" id="geo_specular_color" name="geo_specular_color" class="m" size="15"
+					data-palette='[ "#c00000","#ff0000","#ffc000","#ffff00","#92d050",
+									"#00b050","#00b0f0","#0070c0","#002060","#7030a0",
+									"#f2f2f2","#d8d8d8","#bfbfbf","#a5a5a5","#7f7f7f",
+									"#7f7f7f","#595959","#3f3f3f","#262626","#0c0c0c",
+									"#ddd9c3","#c4bd97","#938953","#494429","#1d1b10",
+									"#c6d9f0","#8db3e2","#548dd4","#17365d","#0f243e",
+									"#dbe5f1","#b8cce4","#95b3d7","#366092","#244061",
+									"#f2dcdb","#e5b9b7","#d99694","#953734","#632423",
+									"#ebf1dd","#d7e3bc","#c3d69b","#76923c","#4f6128",
+									"#e5e0ec","#ccc1d9","#b2a2c7","#5f497a","#3f3151",
+									"#dbeef3","#b7dde8","#92cddc","#31859b","#205867",
+									"#fdeada","#fbd5b5","#fac08f","#e36c09","#974806" ]' />
+				&nbsp;
+			</div> -->
+			<div style="height: 30px; text-align: center;">
+				<button type="button" id="changeLightingButton" class="btn">변경</button>
+			</div>
+			
+			<div style="text-align: center">
+			</div>
+		</div>
+		<div>
+			<h3><label for="geo_ssao_radius">SSAO Radius</label></h3>
+			<input type="text" id="geo_ssao_radius" name="geo_ssao_radius" />
+			<button type="button" id="changeSsadRadiusButton" class="btn">변경</button>
+		</div>
+		<div>
+			<h3>View Mode</h3>
+			<input type="radio" id="mode3PV" name="viewMode" value ="false" onclick="changeViewMode(false);"/>
+			<label for="mode3PV"> 3인칭 모드 </label>
+			<input type="radio" id="mode1PV" name="viewMode" value ="true" onclick="changeViewMode(true);"/>
+			<label for="mode1PV"> 1인칭 모드 </label>
 		</div>
 	</div>
 </div>
@@ -382,17 +495,24 @@
 	menuMap.set("insertIssueMenu", false);
 	menuMap.set("configMenu", false);
 	var insertIssueEnable = false;
+	var FPVModeFlag = false;
 	var imagePath = "/images/${lang}";
 	var managerFactory = new ManagerFactory(null, "magoContainer", policyJson, dataGroupMap, imagePath);
 	
 	$(document).ready(function() {
 		initJqueryCalendar();
+		// Label 표시
+		changeLabel(true);
 		// object 정보 표시
 		changeObjectInfoViewMode(false);
 		// BoundingBox
 		changeBoundingBox(false);
 		// Selecting And Moving
 		changeMouseMove("2");
+		// slider, color-picker
+		initRendering();
+		// 3PView Mode
+		changeViewMode(false);
 	});
 	
 	function flyTo(issueId, issueType, longitude, latitude, height, duration) {
@@ -643,7 +763,7 @@
 									content = content 
 										+ 	"<li>"
 										+ 	"	<button type=\"button\" title=\"바로가기\""
-										+			"onclick=\"flyToBounding('" + dataInfo.data_key + "');\">바로가기</button>"
+										+			" onclick=\"flyToBounding('" + dataInfo.data_key + "');\">바로가기</button>"
 										+ 	"	<div class=\"info\">"
 										+ 	"		<p class=\"title\">"
 										+ 	"			<span>" + dataInfo.data_group_name + "</span>"
@@ -672,8 +792,8 @@
 									content = content 
 										+ 	"<li>"
 										+ 	"	<button type=\"button\" title=\"바로가기\""
-										+			"onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
-										+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">바로가기</button>"
+										+			" onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+										+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2');\">바로가기</button>"
 										+ 	"	<div class=\"info\">"
 										+ 	"		<p class=\"title\">"
 										+ 	"			<span>" + issue.data_group_name + "</span>"
@@ -831,6 +951,11 @@
 	}
 	
 	// 설정 메뉴 시작
+	// Label 표시
+	function changeLabel(isShow) {
+		$("input:radio[name='labelInfo']:radio[value='" + isShow + "']").prop("checked", true);
+		changeLabelAPI(isShow);
+	}
 	// object info 표시
 	function changeObjectInfoViewMode(isShow) {
 		$("input:radio[name='objectInfo']:radio[value='" + isShow + "']").prop("checked", true);
@@ -845,6 +970,91 @@
 	function changeMouseMove(mouseMoveMode) {
 		$("input:radio[name='mouseMoveMode']:radio[value='" + mouseMoveMode + "']").prop("checked", true);
 		changeMouseMoveAPI(mouseMoveMode);
+	}
+	// 카메라 모드 전환
+	function changeViewMode(isFPVMode) {
+		$("input:radio[name='viewMode']:radio[value='" + isFPVMode + "']").prop("checked", true);
+		changeFPVModeAPI(isFPVMode);
+	}
+	
+	// rendering 설정
+	function initRendering() {
+		var ambient = $( "#geo_ambient_reflection_coef_view" );
+		$( "#ambient_reflection_coef" ).slider({
+			range: "max",
+			min: 0, // min value
+			max: 1, // max value
+			step: 0.01,
+			value: '0.5', // default value of slider
+			create: function() {
+				ambient.text( $( this ).slider( "value" ) );
+			},
+			slide: function( event, ui ) {
+				ambient.text( ui.value);
+				$("#geo_ambient_reflection_coef" ).val(ui.value);
+			}
+		});
+		var diffuse = $( "#geo_diffuse_reflection_coef_view" );
+		$( "#diffuse_reflection_coef" ).slider({
+			range: "max",
+			min: 0, // min value
+			max: 1, // max value
+			step: 0.01,
+			value: '1.0', // default value of slider
+			create: function() {
+				diffuse.text( $( this ).slider( "value" ) );
+			},
+			slide: function( event, ui ) {
+				diffuse.text( ui.value);
+				$("#geo_diffuse_reflection_coef" ).val(ui.value);
+			}
+		});
+		var specular = $( "#geo_specular_reflection_coef_view" );
+		$( "#specular_reflection_coef" ).slider({
+			range: "max",
+			min: 0, // min value
+			max: 1, // max value
+			step: 0.01,
+			value: '1.0', // default value of slider
+			create: function() {
+				specular.text( $( this ).slider( "value" ) );
+			},
+			slide: function( event, ui ) {
+				specular.text( ui.value);
+				$("#geo_specular_reflection_coef" ).val(ui.value);
+			}
+		});
+		
+		/* $('[name="geo_ambient_color"]').paletteColorPicker({
+			clear_btn: 'last',
+			//position: 'downside',
+			close_all_but_this: true // Default is false
+		});
+		$('[name="geo_specular_color"]').paletteColorPicker({
+			clear_btn: 'last',
+			//position: 'downside',
+			close_all_but_this: true // Default is false
+		}); */
+	}
+	
+	// LOD 설정
+	$("#changeLodButton").click(function() {
+		changeLodAPI($("#geo_lod0").val(), $("#geo_lod1").val(), $("#geo_lod2").val(), null);
+	});
+	// Lighting 설정
+	$("#changeLightingButton").click(function() {
+		changeLightingAPI(	$("#geo_ambient_reflection_coef").val(), $("#geo_diffuse_reflection_coef").val(), $("#geo_specular_reflection_coef").val(), null, null);
+	});
+	// Ssadradius 설정
+	$("#changeSsadRadiusButton").click(function() {
+		changeSsadRadiusAPI($("#geo_ssao_radius").val());
+	});
+
+	// click poisition call back function
+	function showClickPosition(position) {
+		$("#positionLatitude").val(position.lat);
+		$("#positionLongitude").val(position.lon);
+		$("#positionAltitude").val(position.alt);
 	}
 </script>
 </body>

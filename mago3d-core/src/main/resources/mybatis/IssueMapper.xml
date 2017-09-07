@@ -137,6 +137,14 @@
 				OFFSET #{offset} LIMIT #{limit}
 			) X, common_code Y
 			WHERE X.priority = Y.code_key
+			<choose>
+			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
+			ORDER BY ${order_word} ${order_value}
+			</when>
+			<otherwise>
+			ORDER BY X.insert_date DESC, X.issue_id DESC
+			</otherwise>
+			</choose>
 		) Z
 	</select>
 	

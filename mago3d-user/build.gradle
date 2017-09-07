@@ -1,3 +1,6 @@
+// gradle build -Pprofile=real (or real, demo)
+final String DEFAULT_PROFILE = 'local'
+
 buildscript {
 	ext {
 		springBootVersion = '1.5.3.RELEASE'
@@ -31,6 +34,30 @@ repositories {
 configurations {
 	providedRuntime
 }
+
+sourceSets {
+	main {
+		resources {
+			if (!project.hasProperty('profile') || !profile) {
+				println " ========== > default profile is local. "
+				ext.profile = DEFAULT_PROFILE
+			}
+			
+			if (profile == 'real') {
+				println " ===========> profile file is ${profile}"
+				srcDir "src/main/resources/${profile}"
+				//copy {
+		        //	from "src/main/resources/${profile}"
+				//	into "src/main/resources"
+		        //}
+			} else {
+				println " ===========> profile file is ${profile}"
+				//srcDir "src/main/resources"
+				exclude "**/real/*"
+			}
+		}
+	}
+}
 	
 dependencies {
   	compile project(':mago3d-core')
@@ -45,22 +72,20 @@ dependencies {
 	compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0'
 	compile 'org.apache.poi:poi:3.16'
 	compile 'org.apache.poi:poi-ooxml:3.16'
-	
 	compile 'org.springframework.boot:spring-boot-configuration-processor'
-	
 	//compile('org.springframework.boot:spring-boot-starter-cache')
 	//compile 'net.sf.ehcache:ehcache:2.10.4'
+	compile('javax.servlet:javax.servlet-api:3.1.0')
+	compile 'javax.servlet:jstl:1.2'
+	compile 'org.apache.logging.log4j:log4j:2.8.2'
+	//compile('org.springframework.boot:spring-boot-starter-actuator')
+		
+	compileOnly('org.projectlombok:lombok')
 	
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('org.postgresql:postgresql')
-	compile('javax.servlet:javax.servlet-api:3.1.0')
 	
 	providedRuntime('org.apache.tomcat.embed:tomcat-embed-jasper')
-	compile 'javax.servlet:jstl:1.2'
-	
-	compile 'org.apache.logging.log4j:log4j:2.8.2'
-		
-	compileOnly('org.projectlombok:lombok')
 	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 	
 	testCompile('org.springframework.boot:spring-boot-starter-test')
