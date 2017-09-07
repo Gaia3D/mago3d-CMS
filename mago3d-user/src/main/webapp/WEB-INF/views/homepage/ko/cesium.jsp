@@ -341,7 +341,7 @@
 		</table>
 		
 		<div class="btns">
-				<button type="button" id="issueSaveButton" class="full">저장</button>
+			<button type="button" id="issueSaveButton" class="full">저장</button>
 		</div>
 	</div>
 	</form:form>
