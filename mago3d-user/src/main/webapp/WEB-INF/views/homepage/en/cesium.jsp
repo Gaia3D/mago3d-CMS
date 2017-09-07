@@ -126,16 +126,16 @@
 			</tr>
 			<tr style="height: 30px;">
 				<td><label for="order_word">View Order</label></td>
-				<td><select id="order_word" name="order_word" class="select">
+				<td><select style="width:85px;" id="order_word" name="order_word" class="select">
 					<option value=""> Basic </option>
 			       	<option value="register_date"> Registration Date </option>
 				</select>
-				<select id="order_value" name="order_value" class="select">
+				<select style="width:85px;" id="order_value" name="order_value" class="select">
 					<option value=""> Basic </option>
 				   	<option value="ASC"> Ascending </option>
 					<option value="DESC"> Descending </option>
 				</select>
-				<select id="list_counter" name="list_counter" class="select">
+				<select style="width:85px;" id="list_counter" name="list_counter" class="select">
 					<option value="5"> listing 5 </option>
 				 	<option value="10"> listing 10 </option>
 					<option value="50"> listing 50 </option>
@@ -316,7 +316,7 @@
 			
 			<tr style="height: 35px;">
 				<td><form:label path="assignee">Assignee</form:label></td>
-				<td><form:input path="assignee" cssClass="m" placeholder="assignee" size="24" />
+				<td><form:input style="font-size:13px;" path="assignee" cssClass="m" placeholder="assignee" size="24" />
 					<button type="button" class="btn" onclick="alert('Comming Soon...');">Select</button> 
 					<form:errors path="assignee" cssClass="error" />
 				</td>
@@ -324,7 +324,7 @@
 			
 			<tr style="height: 35px;">
 				<td><form:label path="reporter">Reporter</form:label></td>
-				<td><form:input path="reporter" cssClass="m" placeholder="reporter" size="24" />
+				<td><form:input style="font-size:13px;" path="reporter" cssClass="m" placeholder="reporter" size="24" />
 					<button type="button" class="btn" onclick="alert('Comming Soon...');">Select</button> 
 					<form:errors path="reporter" cssClass="error" />
 				</td>
