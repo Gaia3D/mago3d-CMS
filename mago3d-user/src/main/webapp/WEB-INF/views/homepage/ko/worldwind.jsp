@@ -454,13 +454,13 @@
 			<input type="text" id="geo_ssao_radius" name="geo_ssao_radius" />
 			<button type="button" id="changeSsadRadiusButton" class="btn">변경</button>
 		</div>
-		<div>
-			<h3>View Mode</h3>
-			<input type="radio" id="mode3PV" name="viewMode" value ="false" onclick="changeViewMode(false);"/>
-			<label for="mode3PV"> 3인칭 모드 </label>
-			<input type="radio" id="mode1PV" name="viewMode" value ="true" onclick="changeViewMode(true);"/>
-			<label for="mode1PV"> 1인칭 모드 </label>
-		</div>
+<!-- 		<div> -->
+<!-- 			<h3>View Mode</h3> -->
+<!-- 			<input type="radio" id="mode3PV" name="viewMode" value ="false" onclick="changeViewMode(false);"/> -->
+<!-- 			<label for="mode3PV"> 3인칭 모드 </label> -->
+<!-- 			<input type="radio" id="mode1PV" name="viewMode" value ="true" onclick="changeViewMode(true);"/> -->
+<!-- 			<label for="mode1PV"> 1인칭 모드 </label> -->
+<!-- 		</div> -->
 	</div>
 </div>
 
@@ -475,6 +475,7 @@
 	<canvas id="magoContainer" style="width: 100%; height: 100%">
         Your browser does not support HTML5 Canvas.
     </canvas>
+    <canvas id="objectLabel"></canvas>
 </div>
 
 <script type="text/javascript" src="/externlib/${lang}/webworldwind/worldwind.js?cache_version=${cache_version}"></script>

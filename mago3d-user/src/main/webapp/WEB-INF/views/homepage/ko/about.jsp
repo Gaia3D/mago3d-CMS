@@ -34,6 +34,7 @@
 					<ul>
 						<li><a href="#" style="color: white">About</a></li>
 						<li><a href="/homepage/news.do" style="color: white" onclick="alert('준비 중 입니다.'); return false">News</a></li>
+						<li><a href="/homepage/news.do" style="color: white" onclick="alert('준비 중 입니다.'); return false">Products</a></li>
 					</ul>
 				</li>
 				<li class="mm" onclick='selectMenu();'>Demo<span></span>
@@ -79,8 +80,7 @@
 				<h4>mago3D의 특징</h4>
 				<ul>
 					<li>BIM/AEC와 3D GIS의 통합</li>
-					<li>실내외 공간의 끊김 없는 통합(Seamless integration of indoor & outdoor
-						space)</li>
+					<li>실내외 공간의 끊김 없는 통합(Seamless integration of indoor | outdoor	space)</li>
 					<li>웹브라우저 상에서 구동되며, 별도의 플러그인이나 엑티브엑스 설치가 필요 없음</li>
 					<li>오픈소스(Cesium, World Wind)를 기반으로 개발된 오픈소스로서 개방성과 확장성이 뛰어남</li>
 					<li>초대용량 3차원 파일의 효율적 관리 및 초고속 렌더링</li>
@@ -88,10 +88,11 @@
 				<div class="row_demo">
 					<div class="wrapper_demo">
 						<div class="highlight">
-							<a href="#"> <span class="image left"> <img
-									src="/images/${lang}/homepage/gangbuk.png"
-									alt="3DS포맷이 mago3D에 올라간 화면입니다.">
-							</span>
+								<a href="#"> 
+								<span class="image left"> <img
+										src="/images/${lang}/homepage/gangbuk.png"
+										alt="3DS포맷이 mago3D에 올라간 화면입니다.">
+								</span>
 								<div class="description">
 									<h2>3DS</h2>
 								</div>
@@ -167,8 +168,7 @@
 				<div class="wrapper-algo">
 					<div class="algo-row">
 						<a href="#">
-							<div class="aglo-thumbnail" alt="삼각형 꼭지점 순서 보정 이미지"
-								style="background-image:url(/images/${lang}/homepage/triangle.png)">
+							<div class="aglo-thumbnail" alt="삼각형 꼭지점 순서 보정 이미지" style="background-image:url(/images/${lang}/homepage/triangle.png)">
 								<div>
 									<h3>삼각형 꼭지점 순서 보정</h3>
 									<P>WebGL이 지원하는 성능 향상 기법</P>
@@ -284,7 +284,7 @@
 				<h3>
 					Will be<span></span>
 				</h3>
-				<h4>3d 통합 관제 &amp;이슈 관리 시스템</h4>
+				<h4>컨텐츠관리 플랫폼</h4>
 				<p>관리자, 일반 사용자 사이트를 제공하며 아래와 같은 기능을 제공 합니다.</p>
 				<div class="wrap">
 					<div class="colspan-2 column">
