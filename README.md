@@ -16,23 +16,24 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
  - DB Connection Pool 현황이나 DV세션 현황을 테이블로 볼 수 있습니다.
 
 ## Development Environment
-<code>Spring, gradle, PostgreSQL, PostGIS, mybatis Docker </code>
+  - Spring
+  - Gradle
+  - PostgreSQL
+  - PostGIS
+  - mybatis
+  - Docker
 
 ## Getting Started
 
 ###  Install
 
-- [PostgreSQL](https://github.com/Gaia3D/mago3d/wiki/PostgreSQL-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
-  - PostgreSQL 버전 설정 (PostgreSQL v9.6.3-1)
+- [PostgreSQL 9.6.3-1](https://github.com/Gaia3D/mago3d/wiki/PostgreSQL-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
   - 설치경로 C:/PostgreSQL
-  - 비밀번호 설정 Password: postgres Retype Password : postgres
 
-- [PostGIS](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
+- [PostGIS 2.3.2](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
   - PostgreSQL 설치가 끝난 뒤에 Stack Builder를 실행하여 설치
-  - PostGIS 버전 설정 (PostGIS v2.3.2)
   - PostgreSQL Extensions PostGIS 필수
-- [gradle](https://github.com/Gaia3D/mago3d/wiki/gradle-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
-  - gradle 버전 설치 (gradle v3.5)
+- [gradle 3.5](https://github.com/Gaia3D/mago3d/wiki/gradle-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
   - 설치경로 C:/gradle
   - 시스템 변수 추가 -path -> C:\gradle\gradle-3.5 추가
 - [lombok](https://projectlombok.org/)
@@ -89,24 +90,28 @@ Mago3DJS Integrate visualization data using open source JavaScript library for 3
 - DB Connection Pool status or DV session status can be viewed as a table.
 
 ## Development Environment
-<code>Spring, gradle, PostgreSQL, PostGIS, mybatis Docker </code>
+- Spring
+- Gradle
+- PostgreSQL
+- PostGIS
+- mybatis
+- Docker
 
 ## Getting Started
 
 ###  Install
 
-- [PostgreSQL](https://github.com/Gaia3D/mago3d/wiki/PostgreSQL-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
-  - PostgreSQL v9.6.3-1
+- [PostgreSQL 9.6.3-1](https://github.com/Gaia3D/mago3d/wiki/PostgreSQL-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
   - Installation path C:/PostgreSQL
 
-- [PostGIS](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
+- [PostGIS 2.3.2](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
   - After installing PostgreSQL, run Stack Builder to install
-  - PostGIS v2.3.2
-  - PostgreSQL Extensions PostGIS 
-- [gradle](https://github.com/Gaia3D/mago3d/wiki/gradle-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
-  - gradle v3.5
+  - PostgreSQL Extensions PostGIS
+
+- [gradle 3.5](https://github.com/Gaia3D/mago3d/wiki/gradle-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
   - Installation path C:/gradle
   - Adding System Variables -path -> C:\gradle\gradle-3.5 Add
+
 - [lombok](https://projectlombok.org/)
   - After installing, move the download folder and execute it.
   - Locate the eclipse installation location [Specify location ..] and select the file 'eclipse.exe'.
