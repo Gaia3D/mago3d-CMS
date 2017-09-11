@@ -522,6 +522,9 @@ list-style: none;
 margin-bottom: 30px;
 display: block;
 }
+.description b {
+font-size: 30px;
+}
 .sub_title {
 margin-bottom: 10px;
 font-weight: bold;
