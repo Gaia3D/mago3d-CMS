@@ -34,7 +34,6 @@
 					<ul>
 						<li><a href="#" style="color: white">About</a></li>
 						<li><a href="/homepage/news.do" style="color: white" onclick="alert('준비 중 입니다.'); return false">News</a></li>
-						<li><a href="/homepage/news.do" style="color: white" onclick="alert('준비 중 입니다.'); return false">Products</a></li>
 					</ul>
 				</li>
 				<li class="mm" onclick='selectMenu();'>Demo<span></span>
@@ -88,38 +87,40 @@
 				<div class="row_demo">
 					<div class="wrapper_demo">
 						<div class="highlight">
-								<a href="#"> 
+								<a href="/homepag/demo.do"> 
 								<span class="image left"> <img
 										src="/images/${lang}/homepage/gangbuk.png"
 										alt="3DS포맷이 mago3D에 올라간 화면입니다.">
 								</span>
-								<div class="description">
-									<h2>3DS</h2>
-								</div>
+								<span class="description">
+									<b>3DS</b>
+								</span>
 							</a>
 						</div>
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight two">
-							<a href="#"> <span class="image fit"> <img
+							<a href="/homepage/demo.do">  
+							<span class="image fit"> <img
 									src="/images/${lang}/homepage/Collada_model.png"
 									alt="COLLADA 포맷이 mago3D에 올라간 화면 입니다.">
 							</span>
-								<div class="description">
-									<h2>COLLADA</h2>
-								</div>
+								<span class="description">
+									<b>COLLADA</b>
+								</span>
 							</a>
 						</div>
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight three">
-							<a href="#"> <span class="image left"> <img
+							<a href="/homepage/demo.do"> 
+							 <span class="image left"> <img
 									src="/images/${lang}/homepage/IFC_model.png"
 									alt="IFC(BIM)포맷이 mago3D에 올라간 화면입니다.">
 							</span>
-								<div class="description ">
-									<h2>IFC(BIM)</h2>
-								</div>
+								<span class="description ">
+									<b>IFC(BIM)</b>
+								</span>
 							</a>
 						</div>
 					</div>
@@ -171,7 +172,7 @@
 							<div class="aglo-thumbnail" alt="삼각형 꼭지점 순서 보정 이미지" style="background-image:url(/images/${lang}/homepage/triangle.png)">
 								<div>
 									<h3>삼각형 꼭지점 순서 보정</h3>
-									<P>WebGL이 지원하는 성능 향상 기법</P>
+									<p>WebGL이 지원하는 성능 향상 기법</p>
 								</div>
 							</div>
 						</a>
@@ -263,17 +264,25 @@
 				<h3>
 					NOW<span></span>
 				</h3>
-				<h4>Architecture</h4>
 				<p>mago3D는 spring framework(spring boot) 기반의 3d 플랫폼입니다. 공간 정보 DB
 					관련 처리를 위해 PostGis를 사용하고 있으며, 3D 렌더링 부분은 cesium, world wind 등을 오픈 소스
 					javascript library를 사용하고 있습니다. 3D 데이터를 웹에서 Rendering 하기 위해서 자체 개발한
 					F4D 포맷 및 Converter를 사용하고 있으며 가시화 및 렌더링 처리를 담당하는 mago3DJS(javascript
-					library)로 이루어져 있습니다.</p>
+					library)로 이루어져 있습니다.
+				</p>
+				<h4>Architecture</h4>
+				
 				<div class="architecture">
+					<h2>mago3D</h2>
 					<img src="/images/${lang}/homepage/arc.png"
 						style="width: 590px; margin-top: 60px;" alt="mago3D 아키텍쳐"> <img
 						src="/images/${lang}/homepage/sw.png" style="width: 590px;"
 						alt="mago3D 소프트웨어 구성도">
+				</div>
+				
+				<div class="architecture">
+					<h2>F4D Converter</h2>
+					<img src="/images/${lang}/homepage/F4D_Converter.png" style="margin-left: 220px;" >
 				</div>
 				<a href="#" class="goTop">위로</a>
 			</div>
@@ -289,7 +298,7 @@
 				<div class="wrap">
 					<div class="colspan-2 column">
 						<img src="/images/${lang}/homepage/dashboard.png"
-							alt="관리자 페이지에 dashboard">
+							alt="관리자 페이지에 dashboard" style="width: 800px; height: 500px;">
 					</div>
 					<div class="colspan-1 column">
 						<h2>관리자 페이지</h2>
@@ -308,11 +317,11 @@
 					</div>
 					<div class="colspan-2 column text-left">
 						<img src="/images/${lang}/homepage/issue.png"
-							alt="관리자 페이지에  이슈 관리를 해주는 페이지의 이미지입니다.">
+							alt="관리자 페이지에  이슈 관리를 해주는 페이지의 이미지입니다." style="width: 800px;">
 					</div>
 					<div class="colspan-2 column clear">
 						<img src="/images/${lang}/homepage/data.png"
-							alt="관리자 페이지에 데이터 관리를 해주는 페이지의 이미지입니다. ">
+							alt="관리자 페이지에 데이터 관리를 해주는 페이지의 이미지입니다. " style="width: 800px; ">
 					</div>
 					<div class="colspan-1 column">
 						<h2>데이터 관리</h2>

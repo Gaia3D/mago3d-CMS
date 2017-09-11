@@ -86,40 +86,40 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				<div class="row_demo">
 					<div class="wrapper_demo">
 						<div class="highlight">
-							<a href="#">
+							<a href="/homepage/demo.do">
 								<span class="image left">
 									<img src="/images/${lang}/homepage/gangbuk.png" 
 									alt="3DS format has been uploaded to mago3D.">
 								</span>
-								<div class="description">
-									<h2>3DS</h2>
-								</div>
+								<span class="description">
+									<b>3DS</b>
+								</span>
 							</a>
 						</div>
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight two">
-							<a href="#">
+							<a href="/homepage/demo.do">
 								<span class="image fit">
 									<img src="/images/${lang}/homepage/Collada_model.png" 
 									alt="COLLADA format is the screen which is uploaded to mago3D.">
 								</span>
-								<div class="description">
-									<h2>COLLADA</h2>
-								</div>
+								<span class="description">
+									<b>COLLADA</b>
+								</span>
 							</a>
 						</div>
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight three">
-							<a href="#">
+							<a href="/homepage/demo.do">
 								<span class="image left">
 									<img src="/images/${lang}/homepage/IFC_model.png" 
 									alt="The IFC (BIM) format has been uploaded to mago3D.">
 								</span>
-								<div class="description ">
-									<h2>IFC(BIM)</h2>
-								</div>
+								<span class="description ">
+									<b>IFC(BIM)</b>
+								</span>
 							</a>
 						</div>
 					</div>
@@ -267,8 +267,15 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				mago3D can now visualise massive 3D data including indoor objects and AEC data at least 100k objects, in a single scene seamlessly with traditional outdoor 3D GIS objects.
 				</p>
 				<div class="architecture">
-					<img src="/images/${lang}/homepage/arc.png" alt="Mago3D Architecture" style="width: 590px; margin-top: 60px;">
-					<img src="/images/${lang}/homepage/sw.png" alt="Mago3D software configuration diagram" style="width: 590px;" >
+					<h2>mago3D</h2>
+					<img src="/images/${lang}/homepage/arc.png"
+						style="width: 590px; margin-top: 60px;" alt="mago3D 아키텍쳐"> <img
+						src="/images/${lang}/homepage/sw.png" style="width: 590px;"
+						alt="mago3D 소프트웨어 구성도">
+				</div>
+				<div class="architecture">
+					<h2>F4D Converter</h2>
+					<img src="/images/${lang}/homepage/F4D_Converter.png" style="margin-left: 220px;" >
 				</div>
 				<a href="#" class="goTop">goTop</a>
 			</div>
@@ -284,7 +291,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 					provides the following features.</p>
 				<div class="wrap">
 					<div class="colspan-2 column">
-						<img src="/images/${lang}/homepage/dashboard.png" alt="Dashboard on admin page">
+						<img src="/images/${lang}/homepage/dashboard.png" alt="Dashboard on admin page"style="width: 800px; height: 500px;">
 					</div>
 					<div class="colspan-1 column">
 						<h2>Admin page</h2>
@@ -308,11 +315,11 @@ Difference of data model, massive number of data to be rendered, big volume of f
 					</div>
 					<div class="colspan-2 column text-left">
 						<img src="/images/${lang}/homepage/issue.png" 
-						alt="This is an image of the page that manages the issue on the manager page.">
+						alt="This is an image of the page that manages the issue on the manager page." style="width: 800px;">
 					</div>
 					<div class="colspan-2 column clear">
 						<img src="/images/${lang}/homepage/data.png" 
-						alt="This is an image of the page that manages the data on the admin page.">
+						alt="This is an image of the page that manages the data on the admin page."style="width: 800px;">
 					</div>
 					<div class="colspan-1 column">
 						<h2>Data management</h2>
