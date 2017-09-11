@@ -291,7 +291,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 					provides the following features.</p>
 				<div class="wrap">
 					<div class="colspan-2 column">
-						<img src="/images/${lang}/homepage/dashboard.png" alt="Dashboard on admin page">
+						<img src="/images/${lang}/homepage/dashboard.png" alt="Dashboard on admin page"style="width: 800px; height: 500px;">
 					</div>
 					<div class="colspan-1 column">
 						<h2>Admin page</h2>
@@ -315,11 +315,11 @@ Difference of data model, massive number of data to be rendered, big volume of f
 					</div>
 					<div class="colspan-2 column text-left">
 						<img src="/images/${lang}/homepage/issue.png" 
-						alt="This is an image of the page that manages the issue on the manager page.">
+						alt="This is an image of the page that manages the issue on the manager page." style="width: 800px;">
 					</div>
 					<div class="colspan-2 column clear">
 						<img src="/images/${lang}/homepage/data.png" 
-						alt="This is an image of the page that manages the data on the admin page.">
+						alt="This is an image of the page that manages the data on the admin page."style="width: 800px;">
 					</div>
 					<div class="colspan-1 column">
 						<h2>Data management</h2>
