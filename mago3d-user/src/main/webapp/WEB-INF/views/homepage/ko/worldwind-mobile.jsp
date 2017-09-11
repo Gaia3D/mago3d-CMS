@@ -436,13 +436,22 @@ body, th, td, input, select, textarea { color:#444; font-family:'Malgun Gothic',
 	
 //	Close
 	$(".issueBtn").click(function (){
-		$("#menuContent").hide();
-		$(".issue").removeClass("on");
-	})
+		CloseMenuContent(".issue");
+	});
 	$(".shortCutbtn").click(function (){
+		CloseMenuContent(".shortCuts");
+	});
+	$("#mode1PV").click(function () {
+		CloseMenuContent(".config");
+	});
+ 	$("#mode3PV").click(function () {
+ 		CloseMenuContent(".config");
+ 	});
+	
+	function CloseMenuContent(className) {
 		$("#menuContent").hide();
-		$(".shortCuts").removeClass("on");
-	})
+		$(className).removeClass("on");
+	}
 
 	var agent = navigator.userAgent.toLowerCase();
 	if(agent.indexOf('chrome') < 0) { 

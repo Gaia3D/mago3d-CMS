@@ -427,13 +427,23 @@ body, th, td, input, select, textarea { color:#444; font-family:'Malgun Gothic',
 
 //	Close
 	$(".issueBtn").click(function (){
-		$("#menuContent").hide();
-		$(".issue").removeClass("on");
-	})
+		CloseMenuContent(".issue");
+	});
 	$(".shortCutbtn").click(function (){
+		CloseMenuContent(".shortCuts");
+	});
+	$("#mode1PV").click(function () {
+		CloseMenuContent(".config");
+	});
+ 	$("#mode3PV").click(function () {
+ 		CloseMenuContent(".config");
+ 	});
+	
+	function CloseMenuContent(className) {
 		$("#menuContent").hide();
-		$(".shortCuts").removeClass("on");
-	})
+		$(className).removeClass("on");
+	}
+	
 	var agent = navigator.userAgent.toLowerCase();
 	if(agent.indexOf('chrome') < 0) { 
 		alert("이 데모 페이지는 대용량 웹 데이터 처리를 위해 Chrome 브라우저에 최적화 되어 있습니다. \n원활한 서비스 이용을 위해 Chrome 브라우저를 이용  하시기 바랍니다.");

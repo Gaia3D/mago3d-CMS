@@ -489,7 +489,7 @@ background-color: tomato;
 .menu li:hover > ul li * {
 vertical-align: middle;
 }
-.menu li > ul li:nth-child(1) {
+.menu li > ul li {
 border-bottom: 1px dotted #fff;
 }
 
