@@ -422,7 +422,7 @@ body, th, td, input, select, textarea { color:#444; font-family:'Malgun Gothic',
 	$(document).ready(function() {
 		initJqueryCalendar();
 		// Label 표시
-		changeLabel(true);
+		changeLabel(false);
 		// object 정보 표시
 		changeObjectInfoViewMode(false);
 		// BoundingBox
