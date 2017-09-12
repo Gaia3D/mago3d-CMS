@@ -267,15 +267,10 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				mago3D can now visualise massive 3D data including indoor objects and AEC data at least 100k objects, in a single scene seamlessly with traditional outdoor 3D GIS objects.
 				</p>
 				<div class="architecture">
-					<h2>mago3D</h2>
 					<img src="/images/${lang}/homepage/arc.png"
 						style="width: 590px; margin-top: 60px;" alt="mago3D 아키텍쳐"> <img
 						src="/images/${lang}/homepage/sw.png" style="width: 590px;"
 						alt="mago3D 소프트웨어 구성도">
-				</div>
-				<div class="architecture">
-					<h2>F4D Converter</h2>
-					<img src="/images/${lang}/homepage/F4D_Converter.png" style="margin-left: 220px;" >
 				</div>
 				<a href="#" class="goTop">goTop</a>
 			</div>

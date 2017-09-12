@@ -264,25 +264,18 @@
 				<h3>
 					NOW<span></span>
 				</h3>
+				<h4>Architecture</h4>
 				<p>mago3D는 spring framework(spring boot) 기반의 3d 플랫폼입니다. 공간 정보 DB
 					관련 처리를 위해 PostGis를 사용하고 있으며, 3D 렌더링 부분은 cesium, world wind 등을 오픈 소스
 					javascript library를 사용하고 있습니다. 3D 데이터를 웹에서 Rendering 하기 위해서 자체 개발한
 					F4D 포맷 및 Converter를 사용하고 있으며 가시화 및 렌더링 처리를 담당하는 mago3DJS(javascript
 					library)로 이루어져 있습니다.
 				</p>
-				<h4>Architecture</h4>
-				
 				<div class="architecture">
-					<h2>mago3D</h2>
 					<img src="/images/${lang}/homepage/arc.png"
 						style="width: 590px; margin-top: 60px;" alt="mago3D 아키텍쳐"> <img
 						src="/images/${lang}/homepage/sw.png" style="width: 590px;"
 						alt="mago3D 소프트웨어 구성도">
-				</div>
-				
-				<div class="architecture">
-					<h2>F4D Converter</h2>
-					<img src="/images/${lang}/homepage/F4D_Converter.png" style="margin-left: 220px;" >
 				</div>
 				<a href="#" class="goTop">위로</a>
 			</div>
