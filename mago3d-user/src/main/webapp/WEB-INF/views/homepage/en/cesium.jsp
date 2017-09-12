@@ -156,31 +156,31 @@
 			<ul class="apiLoca">
 				<li>
 					<label for="move_data_key">Data Key</label>
-					<input type="text" id="move_data_key" name="move_data_key" size="15" />
+					<input type="text" id="move_data_key" name="move_data_key" size="25" />
 				</li>
 				<li>
 					<label for="move_latitude">Latitude</label>
-					<input type="text" id="move_latitude" name="move_latitude" size="15"/>
+					<input type="text" id="move_latitude" name="move_latitude" size="25"/>
 				</li>
 				<li>
 					<label for="move_longitude">Longitude</label>
-					<input type="text" id="move_longitude" name="move_longitude" size="15"/>
+					<input type="text" id="move_longitude" name="move_longitude" size="25"/>
 				</li>
 				<li>
 					<label for="move_height">Altitude</label>
-					<input type="text" id="move_height" name="move_height" size="15" />
+					<input type="text" id="move_height" name="move_height" size="25" />
 				</li>
 				<li>
 					<label for="move_heading">Heading</label>
-					<input type="text" id="move_heading" name="move_heading" size="15" />
+					<input type="text" id="move_heading" name="move_heading" size="25" />
 				</li>
 				<li>
 					<label for="move_pitch">Pitch</label>
-					<input type="text" id="move_pitch" name="move_pitch" size="15" />
+					<input type="text" id="move_pitch" name="move_pitch" size="25" />
 				</li>
 				<li>
 					<label for="move_roll">Roll</label>
-					<input type="text" id="move_roll" name="move_roll" size="15" />
+					<input type="text" id="move_roll" name="move_roll" size="25" />
 					<button type="button" id="changeLocationAndRotationAPI" class="btn">Transform</button> 
 				</li>
 			</ul>
@@ -197,15 +197,15 @@
 			<ul class="apiLoca">
 				<li>
 					<label for="positionLatitude"> Latitude </label>
-					<input type="text" id="positionLatitude" name="positionLatitude" size="15" />
+					<input type="text" id="positionLatitude" name="positionLatitude" size="25" />
 				</li>
 				<li>
 					<label for="positionLongitude"> Longitude </label>
-					<input type="text" id="positionLongitude" name="positionLongitude" size="15" />
+					<input type="text" id="positionLongitude" name="positionLongitude" size="25" />
 				</li>
 				<li>
 					<label for="positionAltitude"> Altitude </label>
-					<input type="text" id="positionAltitude" name="positionAltitude" size="15" />
+					<input type="text" id="positionAltitude" name="positionAltitude" size="25" />
 				</li>
 			</ul>
 		</div>
@@ -369,6 +369,21 @@
 			<label for="hideBoundingBox"> Hide </label>
 		</div>
 		<div>
+			<h3>Object Occlusion Culling</h3>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">사용유무</div>
+				<input type="radio" id="useOcclusionCulling" name="occlusionCulling" value="true" />
+				<label for="useOccusionCulling"> 사용 </label>
+				<input type="radio" id="unusedOcclusionCulling" name="occlusionCulling" value="false" />
+				<label for="unusedOcclusionCulling"> 미사용 </label>
+			</div>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">Data Key</div>
+				<input type="text" id="occlusion_culling_data_key" name="occlusion_culling_data_key" size="28" />
+				<button type="button" id="changeOcclusionCullingButton" class="btn">적용</button>
+			</div>
+		</div>
+		<div>
 			<h3>Selecting And Moving</h3>
 			<input type="radio" id="mouseNoneMove" name="mouseMoveMode" value="2" onclick="changeMouseMove('2');"/>
 			<label for="mouseNoneMove"> None </label>
@@ -396,19 +411,24 @@
 		<div>
 			<h3>Lighting</h3>
 			<div style="height: 30px;">AmbientReflectionCoeficient</div>
-			<div id="ambient_reflection_coef" style="display: inline-block; width: 310px;">
+			<div id="ambient_reflection_coef" style="display: inline-block; width: 260px;">
 				<div id="geo_ambient_reflection_coef_view" class="ui-slider-handle"></div>
 				<input type="hidden" id="geo_ambient_reflection_coef" name="geo_ambient_reflection_coef" value="0.5" />
 			</div>
 			<div style="height: 30px;">DiffuseReflectionCoeficient</div>
-			<div id="diffuse_reflection_coef" style="display: inline-block; width: 310px;">
+			<div id="diffuse_reflection_coef" style="display: inline-block; width: 260px;">
 				<div id="geo_diffuse_reflection_coef_view" class="ui-slider-handle"></div>
 				<input type="hidden" id="geo_diffuse_reflection_coef" name="geo_diffuse_reflection_coef" value="1" />
 			</div>
 			<div style="height: 30px;">SpecularReflectionCoeficient</div>
-			<div id="specular_reflection_coef" style="display: inline-block; width: 310px;">
-				<div id="geo_specular_reflection_coef_view" class="ui-slider-handle"></div>
-				<input type="hidden" id="geo_specular_reflection_coef" name="geo_specular_reflection_coef" value="1" />
+			<div>
+				<div id="specular_reflection_coef" style="display: inline-block; width: 260px;">
+					<div id="geo_specular_reflection_coef_view" class="ui-slider-handle"></div>
+					<input type="hidden" id="geo_specular_reflection_coef" name="geo_specular_reflection_coef" value="1" />
+				</div>
+				<div style="float: right;">
+					<button type="button" id="changeLightingButton" class="btn">변경</button>
+				</div>
 			</div>
 			<!-- <div style="height: 30px;">
 				<label for="geo_ambient_color">AmbientColor</label>
@@ -443,10 +463,6 @@
 									"#fdeada","#fbd5b5","#fac08f","#e36c09","#974806" ]' />
 				&nbsp;
 			</div> -->
-			<div style="height: 30px; text-align: center;">
-				<button type="button" id="changeLightingButton" class="btn">Change</button>
-			</div>
-			
 			<div style="text-align: center">
 			</div>
 		</div>
@@ -833,10 +849,10 @@
 	
 	// API 메뉴시작
 	// object 정보 표시 call back function
-	function showSelectedObject(projectId, blockId, objectId, latitude, longitude, height, heading, pitch, roll) {
+	function showSelectedObject(data_key, objectId, latitude, longitude, height, heading, pitch, roll) {
 		var objectInfoViewFlag = $(':radio[name="objectInfo"]:checked').val();
 		if(objectInfoViewFlag) {
-			$("#move_data_key").val(projectId + "_" + blockId);
+			$("#move_data_key").val(data_key);
 			$("#move_latitude").val(latitude);
 			$("#move_longitude").val(longitude);
 			$("#move_height").val(height);
@@ -847,8 +863,7 @@
 			$.toast({
 			    heading: 'Click Object Info',
 			    text: [
-			        'projectId : ' + projectId, 
-			        'blockId : ' + blockId, 
+			    	'dataKey : ' + data_key, 
 			        'objectId : ' + objectId,
 			        'latitude : ' + latitude,
 			        'longitude : ' + longitude,
@@ -863,6 +878,8 @@
 				position : 'bottom-right'
 			});
 			
+			// occlusion culling
+			$("#occlusion_culling_data_key").val(data_key);
 			// 현재 좌표를 저장
 			$("#now_latitude").val(latitude);
 			$("#now_longitude").val(longitude);
@@ -964,6 +981,10 @@
 		$("input:radio[name='boundingBox']:radio[value='" + isShow + "']").prop("checked", true);
 		changeBoundingBoxAPI(isShow);
 	}
+	// Object Occlusion culling
+	$("#changeOcclusionCullingButton").click(function () {
+		changeOcclusionCullingAPI(($(':radio[name="occlusionCulling"]:checked').val() === "true"), $("#occlusion_culling_data_key").val());		
+	});
 	// 마우스 클릭 객체 이동 모드 변경
 	function changeMouseMove(mouseMoveMode) {
 		$("input:radio[name='mouseMoveMode']:radio[value='" + mouseMoveMode + "']").prop("checked", true);
