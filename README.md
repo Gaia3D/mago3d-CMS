@@ -26,28 +26,17 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 ## Getting Started
 
 ###  Install
+- [java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html )
+  - java jdk-8u144-windows-x64.exe를 설치합니다.
+
+- [eclipse Oxygen](https://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R/eclipse-inst-win64.exe)
+  - eclipse neon버전 이상을 설치합니다.
+  - eclipse를 실행 후 Project Import <br>
+    File -> import -> Gradle -> Existing Gradle Project
 
 - [PostgreSQL 9.6.3-1](https://github.com/Gaia3D/mago3d/wiki/PostgreSQL-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
+
   - 설치경로 C:/PostgreSQL
-
-- [PostGIS 2.3.2](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
-  - PostgreSQL 설치가 끝난 뒤에 Stack Builder를 실행하여 설치
-  - PostgreSQL Extensions PostGIS 필수
-- [gradle 3.5](https://github.com/Gaia3D/mago3d/wiki/gradle-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
-  - 설치경로 C:/gradle
-  - 시스템 변수 추가 -path -> C:\gradle\gradle-3.5 추가
-- [lombok](https://projectlombok.org/)
-  - 설치한 뒤에 다운로드 폴더 이동 후 실행
-  - eclipse 설치 위치 [Specify location..]를 검색해서 'eclipse.exe' 파일을 선택합니다.
-  - install/update 클릭합니다.
-
-- Buildship Gradle Integration
-  - eclipse Help -> Eclipse Marketplace 이동 후 Buildship Gradle Integration 2.0을 설치합니다.
-
-### Setting
-
-  - eclipse에서 mago3d Project를 git clone으로 불러옵니다.
-  - File -> Import -> Gradle -> Existing Gradle Project를 클릭하여 mago3d를 받아줍니다.
   - mago3d를 실행하기전에 PostgreSQL을 사용하여 데이터베이스를 만들어 줍니다.<br>
   PostgreSQL - > new DataBase
   <pre>
@@ -60,9 +49,24 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
   </pre>
   - 생선한 database에 쿼리를 실행시켜줍니다. 쿼리는 mago3d-core -> src -> doc -> database 안에 있습니다.
 
+- [PostGIS 2.3.2](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
+  - 설치경로 C:/PostGIS
+  - PostgreSQL Extensions PostGIS 필수 <br>
+   <code>CREATE EXTENSION postgis</code>
+
+- [gradle 4.1](https://gradle.org/docs/)
+  - 설치경로 C:/gradle
+  - 시스템 변수 추가 -path -> C:\gradle\gradle-4.1 추가
+  - Eclipse BuildShip Gradle Plugin 또는 Gradle command line을 이용하여 build합니다.
+
+- [lombok](https://projectlombok.org/)
+  - 설치한 뒤에 다운로드 폴더 이동 후 실행
+  - eclipse 설치 위치 [Specify location..]를 검색해서 'eclipse.exe' 파일을 선택합니다.
+  - install/update 클릭합니다.
+
 ### Execution
 
- - mao3d를 실행하려면 mago3d-admin -> src/main/java -> com.gaia3d -> Mago3dAdminApplication.java를 Spring Boot app으로 실행시켜줍니다.
+ - mago3d-admin project spring boot 실행 <br> /mago3d-admin/src/main/java/com/gaia3d/Mago3dAdminApplication.java
 
 ## github
  [Mago3DJS](https://github.com/Gaia3D/mago3djs) 깃허브 사이트 입니다.
@@ -100,30 +104,16 @@ Mago3DJS Integrate visualization data using open source JavaScript library for 3
 ## Getting Started
 
 ###  Install
+- [java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html )
+  - Install java jdk-8u144-windows-x64.exe.
+
+- [eclipse Oxygen](https://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R/eclipse-inst-win64.exe)
+  - Install the eclipse neon version or later.
+  - After running eclipse, Project Import <br>
+    File -> import -> Gradle -> Existing Gradle Project
 
 - [PostgreSQL 9.6.3-1](https://github.com/Gaia3D/mago3d/wiki/PostgreSQL-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
   - Installation path C:/PostgreSQL
-
-- [PostGIS 2.3.2](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
-  - After installing PostgreSQL, run Stack Builder to install
-  - PostgreSQL Extensions PostGIS
-
-- [gradle 3.5](https://github.com/Gaia3D/mago3d/wiki/gradle-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
-  - Installation path C:/gradle
-  - Adding System Variables -path -> C:\gradle\gradle-3.5 Add
-
-- [lombok](https://projectlombok.org/)
-  - After installing, move the download folder and execute it.
-  - Locate the eclipse installation location [Specify location ..] and select the file 'eclipse.exe'.
-  - Click install / update.
-
-- Buildship Gradle Integration
-  - Go to Eclipse Help -> Eclipse Marketplace and install Buildship Gradle Integration 2.0.
-
-### Setting
-
-  - From eclipse, load the mago3d Project into git clone.
-  - Click File -> Import -> Gradle -> Existing Gradle Project to accept mago3d.
   - Create a database using PostgreSQL before running mago3d <br>
   PostgreSQL - > new DataBase
   <pre>
@@ -136,9 +126,23 @@ Mago3DJS Integrate visualization data using open source JavaScript library for 3
   </pre>
   - Runs a query on a database of fish. The query is located in mago3d-core -> src -> doc -> database.
 
-### Execution
+- [PostGIS 2.3.2](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
+  - 설치경로 C:/PostGIS
+  - PostgreSQL Extensions PostGIS <br>
+  <code>CREATE EXTENSION postgis</code>
 
- - To run mao3d, run mago3d-admin -> src / main / java -> com.gaia3d -> Mago3dAdminApplication.java as a Spring Boot app.
+- [gradle 4.1](https://gradle.org/docs/)
+  - Installation path C:/gradle
+  - Adding System Variables -path -> C:\gradle\gradle-4.1 Add
+  - Build with Eclipse BuildShip Gradle Plugin or Gradle command line.
+
+- [lombok](https://projectlombok.org/)
+  - After installing, move the download folder and execute it.
+  - Locate the eclipse installation location [Specify location ..] and select the file 'eclipse.exe'.
+  - Click install / update.
+
+### Execution
+- run mago3d-admin project spring boot <br> /mago3d-admin/src/main/java/com/gaia3d/Mago3dAdminApplication.java
 
 ## github
  [Mago3DJS](https://github.com/Gaia3D/mago3djs) It is a feather hub site.
