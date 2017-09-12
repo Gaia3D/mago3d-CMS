@@ -4,7 +4,7 @@
 
 <a name="korean"></a>
 
-# Mago3D
+# mago3D
 MAGO3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. MAGO3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 이에 따라, MAGO3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.
 
 ## Mission
@@ -37,17 +37,14 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 - [PostgreSQL 9.6.3-1](https://github.com/Gaia3D/mago3d/wiki/PostgreSQL-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
 
   - 설치경로 C:/PostgreSQL
-  - mago3d를 실행하기전에 PostgreSQL을 사용하여 데이터베이스를 만들어 줍니다.<br>
-  PostgreSQL - > new DataBase
-  <pre>
-    Name: mago3d
-    Encoding: UTF8
-    Template: template0
-    Collation: C
-    Character type: C
-    Connection Limit: -1
-  </pre>
-  - 생선한 database에 쿼리를 실행시켜줍니다. 쿼리는 mago3d-core -> src -> doc -> database 안에 있습니다.
+  - DB Table 생성 및 초기 데이터 등록
+    - windows 자동 실행 script는 개발 중입니다.
+    - download 한 소스의 /mago3d-core/src/doc 폴더로 이동합니다.
+    - ddl 폴더의 sql 파일을 실행하여 table을 생성합니다.<br>
+    table, table column comment 다국어 버전은 개발 중입니다.
+    - ddl 폴더의 sequence sql 실행하여 sequence 생성합니다.
+    - index, trigger 폴더의 sql을 실행하여 index 및 partition 생성합니다.
+    - dml 폴더의 sql을 실행하여 초기 데이터 등록
 
 - [PostGIS 2.3.2](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
   - 설치경로 C:/PostGIS
@@ -82,7 +79,7 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 <br><br>
 [한국어](#korean)
 
-# <a name="english"></a>Mago3D
+# <a name="english"></a>mago3D
 MAGO3D is a next-generation three-dimensional platform that integrates and visualizes AEC (Architecture, Engineering, Construction) and traditional 3D spatial information (3D GIS). Unlike conventional solutions, MAGO3D seamlessly integrates AEC and 3D GIS in a web browser without distinction between indoor and outdoor. As a result, MAGO3D users can quickly view and collaborate on large-scale building information modeling (BIM), JT (Jupiter Tessellation) and 3D GIS files without installing any additional programs.
 
 ## Mission
@@ -113,21 +110,19 @@ Mago3DJS Integrate visualization data using open source JavaScript library for 3
     File -> import -> Gradle -> Existing Gradle Project
 
 - [PostgreSQL 9.6.3-1](https://github.com/Gaia3D/mago3d/wiki/PostgreSQL-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
-  - Installation path C:/PostgreSQL
-  - Create a database using PostgreSQL before running mago3d <br>
-  PostgreSQL - > new DataBase
-  <pre>
-    Name: mago3d
-    Encoding: UTF8
-    Template: template0
-    Collation: C
-    Character type: C
-    Connection Limit: -1
-  </pre>
-  - Runs a query on a database of fish. The query is located in mago3d-core -> src -> doc -> database.
+
+  - Installation path C: / PostgreSQL
+  - DB table and initial data registration
+    - windows autorun script is under development.
+    - Go to the downloaded source / mago3d-core / src / doc folder.
+    - Creates a SQL file in the ddl folder as a table. <br>
+    Tables, table columns Comments Multilingual versions are under development.
+    - Order of folders in ddl in SQL work order.
+    - Runs index, index, and partition of the folder by running SQL.
+    - Initial data registration in SQL in the dml folder
 
 - [PostGIS 2.3.2](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
-  - 설치경로 C:/PostGIS
+  - Installation path C:/PostGIS
   - PostgreSQL Extensions PostGIS <br>
   <code>CREATE EXTENSION postgis</code>
 
