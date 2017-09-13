@@ -371,11 +371,11 @@
 		<div>
 			<h3>Object Occlusion Culling</h3>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;">사용유무</div>
+				<div style="display: inline-block; width: 70px;">Whether or not to use</div>
 				<input type="radio" id="useOcclusionCulling" name="occlusionCulling" value="true" />
-				<label for="useOccusionCulling"> 사용 </label>
+				<label for="useOccusionCulling"> use </label>
 				<input type="radio" id="unusedOcclusionCulling" name="occlusionCulling" value="false" />
-				<label for="unusedOcclusionCulling"> 미사용 </label>
+				<label for="unusedOcclusionCulling"> unused </label>
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">Data Key</div>
