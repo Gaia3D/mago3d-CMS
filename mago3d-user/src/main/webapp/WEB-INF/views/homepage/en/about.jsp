@@ -71,9 +71,9 @@
 					About<span></span>
 				</h3>
 				<p>
-mago3D could seamlessly integrate AEC(Architecture, Engineering, Construction) and 3D GIS in web browser using Cesium or Web World Wind.
-Although there has been numerous attempts to integrate AEC and 3D GIS on a single geospatial platform, the outcome of these attempts are not so satisfactory till to date. 
-Difference of data model, massive number of data to be rendered, big volume of file size are among those major technical barriers that hindered seamless integration of indoor and outdoor space.
+					mago3D could seamlessly integrate AEC(Architecture, Engineering, Construction) and 3D GIS in web browser using Cesium or Web World Wind.
+					Although there has been numerous attempts to integrate AEC and 3D GIS on a single geospatial platform, the outcome of these attempts are not so satisfactory till to date. 
+					Difference of data model, massive number of data to be rendered, big volume of file size are among those major technical barriers that hindered seamless integration of indoor and outdoor space.
 				</p>
 				<h4>Features of mago3D</h4>
 				<ul>
@@ -140,20 +140,19 @@ Difference of data model, massive number of data to be rendered, big volume of f
 
 					<tr>
 						<td><img src="/images/${lang}/homepage/obj.png" alt="OBJ format image"/></td>
-						<td>OBJ(Wavefront file format specification)<br/>- a geometry definition file format adopted by other 3D graphics application vendors.</td>
+						<td>Wavefront File Format Specification (OBJ) A three-dimensional file format that contains three-dimensional coordinates (polygonal lines and points), texture mapping, and other object information</td>
 					</tr>
 					<tr>
 						<td><img src="/images/${lang}/homepage/3DS.png" alt="3DS format image"/></td>
-						<td>3DS(3D-Studio File Format)<br/>- an import/export format used by the Autodesk 3ds Max 3D modeling, animation and rendering software.</td>
+						<td>3D Studio File Format (3DS)) File formats used in 3D Studio in AutoDesk</td>
 					</tr>
 					<tr>
 						<td width="64px"><img src="/images/${lang}/homepage/dae.png" alt="COLLADA format image"></td>
-						<td>COLLADA(COLLAborative Design Activity)<br/>- an interchange file format for exchanging digital assets among various graphics software applications.</td>
+						<td>COLLADA (COLLAborative Design Activity) - Open standard format based on XML Schema for exchanging 3D data</td>
 					</tr>
 					<tr>
 						<td><img src="/images/${lang}/homepage/JT.png" alt="Jt format image"/></td> 
-						<td>JT(Jupiter Tesselation)<br/>- an ISO-standardized 3D data format and is in industry used for product visualization, collaboration, CAD data exchange, and in some also for long-term data retention.
-						- If you want to use it, please contact the company.</td>
+						<td>JT (Jupiter Tessellation) Lightweight 3D model format developed by Siemens PLM Software - Please contact us if you need JT format support</td>
 					</tr>
 				</table>
 				<h4>Rendering Algoritm</h4>
@@ -175,7 +174,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 								style="background-image:url(/images/${lang}/homepage/model_reference.png)">
 								<div>
 									<h3>Model/Reference</h3>
-									<P>Multi-instance- lightweight logic</P>
+									<P>Multi-instance lightweight technique</P>
 								</div>
 							</div>
 						</a>
@@ -197,7 +196,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 								style="background-image:url(/images/${lang}/homepage/octree.png)">
 								<div>
 									<h3>3D Space Octree</h3>
-									<P>flexible octree depth</P>
+									<P>Flexible octree depth</P>
 								</div>
 							</div>
 						</a>
@@ -241,7 +240,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 						<a href="#">
 							<div class="aglo-thumbnail" alt="Bounding box images" style="background-image:url(/images/${lang}/homepage/boundingbox.png)">
 								<div>
-									<h3>bounding box</h3>
+									<h3>Bounding box</h3>
 									<P>Bounding box calculation</P>
 								</div>
 							</div>
@@ -258,7 +257,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				</h3>
 				<h4>Architecture</h4>
 				<p>
-				mago3D based on spring framework (springboot). We use PostGis for processing spatial information, and use open source javascript library for cesium, worldwind for 3D rendering part.
+				mago3D is a spring framework (spring boot) based 3D platform. We use PostGis for processing spatial information, and use open source javascript library for cesium, worldwind for 3D rendering part.
 				One of big hurdle to integrate AEC and 3D GIS simultaneously is handling and visualisation of massive 3D data. 
 				To overcome this hurdle, new format called F4D has been devised adopting block reference concept. 
 				Also a format converter that converts popular 3D format to F4D has been developed. 
@@ -335,8 +334,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 						<td>Role based access-control of user groups</td>
 					</tr>
 					<tr>
-						<td>PogstGis with 3D object information, support caching.<br />REST
-							API that provides API for 3D data sending and receiving.
+						<td>3D object information PogstGIS interlock, RestAPI, caching function
 						</td>
 						<td>Converting to F4D format</td>
 					</tr>
@@ -359,7 +357,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				</p>
 				<h4>Acknowledgement</h4>
 				<ul>
-					<li>Ministry of Land, Transport and Maritime Affairs "Development of open source processing technology for application of spatial information SW (Project number: 17NSIP-B080778-04)".</li>
+					<li>This project is part of the Ministry of Land, Transport and Maritime Affairs, "Development of Open Source Processing Technology for Application of Spatial Information SW (Project Number: 17NSIP-B080778-04)".</li>
 					<li>The 3D data of Seoul is being used for research purpose under the permission of Korea Spatial Informaiton Industry Promotion Institute.</li>
 					<li>The indoor data of Seoul is being used for research purposes under the permission of Seoul Metropolitan Government.</li>
 					<li>Other datas will be provided with the permission of each copyright holder.</li>

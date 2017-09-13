@@ -143,26 +143,22 @@
 					<tr>
 						<td><img src="/images/${lang}/homepage/obj.png"
 							alt="obj 포맷 이미지" /></td>
-						<td>OBJ(Wavefront file format specification) 3 차원 좌표 (다각형 선과
-							점), 텍스쳐 매핑 및 기타 오브젝트 정보를 포함하는 삼차원 물체에 사용되는 파일 포맷</td>
+						<td>OBJ(Wavefront File Format Specification) 3차원 좌표 (다각형 선과 점), 텍스쳐 매핑 및 기타 오브젝트 정보를 포함하는 3차원 파일 포맷</td>
 					</tr>
 					<tr>
 						<td><img src="/images/${lang}/homepage/3DS.png"
 							alt="3ds 포맷 이미지" /></td>
-						<td>3DS(3D-Studio File Format)) AutoDesk의 3D-Studio에서 사용되는 파일
-							포맷입니다.</td>
+						<td>3DS(3D Studio File Format)) AutoDesk의 3D Studio에서 사용되는 파일 포맷</td>
 					</tr>
 					<tr>
 						<td><img src="/images/${lang}/homepage/dae.png"
 							alt="dae 포맷 이미지"></td>
-						<td>COLLADA(COLLAborative Design Activity) - 3D assets 을 교환하기
-							위한 open standard XML schema 파일 포맷</td>
+						<td>COLLADA(COLLAborative Design Activity) - 3D 자료를 교환하기 위한 XML 스키마 기반의 개방형 표준 포맷</td>
 					</tr>
 					<tr>
 						<td><img src="/images/${lang}/homepage/JT.png"
 							alt="jt 포맷 이미지" /></td>
-						<td>JT(Jupiter Tesselation) Siemens PLM Software 에서 개발된 경량화
-							3D 모델 포맷. - JT포맷은 회사 연락 필요</td>
+						<td>JT(Jupiter Tessellation) Siemens PLM Software 에서 개발된 경량화 3D 모델 포맷 - JT포맷 지원이 필요한 경우 별도 연락 요망</td>
 					</tr>
 				</table>
 				<h4>Rendering Algoritm</h4>
@@ -183,7 +179,7 @@
 								style="background-image:url(/images/${lang}/homepage/model_reference.png)">
 								<div>
 									<h3>Model/Reference</h3>
-									<P>Multi-instance- 경량화 logic</P>
+									<P>Multi-instance 경량화 기법</P>
 								</div>
 							</div>
 						</a>
@@ -205,7 +201,7 @@
 								style="background-image:url(/images/${lang}/homepage/octree.png)">
 								<div>
 									<h3>3D 공간 Octree</h3>
-									<P>flexible octree depth 적용</P>
+									<P>Flexible octree depth 적용</P>
 								</div>
 							</div>
 						</a>
@@ -218,7 +214,7 @@
 								style="background-image:url(/images/${lang}/homepage/lego.png)">
 								<div>
 									<h3>Lego Strucure</h3>
-									<P>rougher LOD를 위한 데이터 생성</P>
+									<P>Rougher LOD를 위한 데이터 생성</P>
 								</div>
 							</div>
 						</a>
@@ -240,7 +236,7 @@
 								style="background-image:url(/images/${lang}/homepage/loading.png)">
 								<div>
 									<h3>원시 데이터 로딩</h3>
-									<P>loading time out 적용</P>
+									<P>Loading time out 적용</P>
 								</div>
 							</div>
 						</a>
@@ -249,8 +245,8 @@
 						<a href="#">
 							<div class="aglo-thumbnail" alt="Bounding box이미지" style="background-image:url(/images/${lang}/homepage/boundingbox.png)">
 								<div>
-									<h3>bounding box</h3>
-									<P>bounding box 계산</P>
+									<h3>Bounding box</h3>
+									<P>Bounding box 계산</P>
 								</div>
 							</div>
 						</a>
@@ -265,7 +261,7 @@
 					NOW<span></span>
 				</h3>
 				<h4>Architecture</h4>
-				<p>mago3D는 spring framework(spring boot) 기반의 3d 플랫폼입니다. 공간 정보 DB
+				<p>mago3D는 spring framework(spring boot) 기반의 3D 플랫폼입니다. 공간 정보 DB
 					관련 처리를 위해 PostGis를 사용하고 있으며, 3D 렌더링 부분은 cesium, world wind 등을 오픈 소스
 					javascript library를 사용하고 있습니다. 3D 데이터를 웹에서 Rendering 하기 위해서 자체 개발한
 					F4D 포맷 및 Converter를 사용하고 있으며 가시화 및 렌더링 처리를 담당하는 mago3DJS(javascript
@@ -332,7 +328,7 @@
 						<td>사용자 그룹의 역할 기반 접근-제어 기능 제공</td>
 					</tr>
 					<tr>
-						<td>3D object 정보 PogstGis 연동, RestAPI, 캐싱 기능 제공</td>
+						<td>3D Object 정보 PogstGIS 연동, RestAPI, 캐싱 기능 제공</td>
 						<td>F4D 변환 배치 기능 제공</td>
 					</tr>
 					<tr>
@@ -354,8 +350,7 @@
 					있습니다.</p>
 				<h4>Acknowledgement</h4>
 				<ul>
-					<li>국토교통부 '공간정보 SW활용을 위한 오픈소스 가공기술개발(과제번호:17NSIP-B080778-04)'의
-						일환입니다.</li>
+					<li>본 프로젝트는 국토교통부 '공간정보 SW활용을 위한 오픈소스 가공기술개발(과제번호:17NSIP-B080778-04)'의 일환입니다.</li>
 					<li>서울시 3차원 데이터는 한국공간정보산업진흥원의 허가를 받아 연구목적으로 사용 중입니다.</li>
 					<li>서울시 실내 데이터는 서울시의 허가를 받아 연구목적으로 사용 중입니다.</li>
 					<li>기타 자료는 각 저작권자의 허락을 받아 서비스합니다.</li>

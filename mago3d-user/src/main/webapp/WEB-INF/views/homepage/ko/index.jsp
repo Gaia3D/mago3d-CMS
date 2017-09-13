@@ -22,7 +22,7 @@
 	<div class="vodBlock">
 		<p>
 			<span>Architecture, Engineering, Construction</span>
-			<span>대용량 3차원GIS를 쉽고 빠르게 웹에서 구현합니다.</span>
+			<span>대용량 3차원 GIS를 쉽고 빠르게 웹에서 구현합니다.</span>
 		</p>
 	</div>
 	
