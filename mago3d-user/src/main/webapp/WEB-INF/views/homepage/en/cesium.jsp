@@ -307,10 +307,10 @@
 				<td><form:label path="due_day">Due Date</form:label></td>
 				<td><form:hidden path="due_date" />
 					<input type="text" id="due_day" name="due_day" class="date" size="10" maxlength="10" />
-					일&nbsp;&nbsp;
+					D&nbsp;&nbsp;
 					<input type="text" id="due_hour" name="due_hour" placeholder=" 00" size="2" maxlength="2" /> :
 					<input type="text" id="due_minute" name="due_minute" placeholder=" 00" size="2" maxlength="2" />
-					분
+					M
 				</td>
 			</tr>
 			
