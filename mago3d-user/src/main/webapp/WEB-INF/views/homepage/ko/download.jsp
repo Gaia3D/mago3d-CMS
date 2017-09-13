@@ -102,7 +102,7 @@
 			 For developers of Free Open Source Software ("FOSS") applications under the GPL or AGPL that want to combine and distribute those FOSS 
 			 applications with mago3D F4D Converter software, Gaia3D’s open source software licensed under the AGPL is the best option.
 			</p>
-			<b>2. mago3D.js: Apache License</b><br>
+			<b>2. mago3D.js: Apache 2.0 License</b><br>
 			<h4>mago3D.js</h4>
 			<table>
 				<tr>

@@ -307,10 +307,10 @@
 				<td><form:label path="due_day">Due Date</form:label></td>
 				<td><form:hidden path="due_date" />
 					<input type="text" id="due_day" name="due_day" class="date" size="10" maxlength="10" />
-					일&nbsp;&nbsp;
+					D&nbsp;&nbsp;
 					<input type="text" id="due_hour" name="due_hour" placeholder=" 00" size="2" maxlength="2" /> :
 					<input type="text" id="due_minute" name="due_minute" placeholder=" 00" size="2" maxlength="2" />
-					분
+					M
 				</td>
 			</tr>
 			
@@ -371,11 +371,11 @@
 		<div>
 			<h3>Object Occlusion Culling</h3>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;">사용유무</div>
+				<div style="display: inline-block; width: 70px;">Whether or not to use</div>
 				<input type="radio" id="useOcclusionCulling" name="occlusionCulling" value="true" />
-				<label for="useOccusionCulling"> 사용 </label>
+				<label for="useOccusionCulling"> use </label>
 				<input type="radio" id="unusedOcclusionCulling" name="occlusionCulling" value="false" />
-				<label for="unusedOcclusionCulling"> 미사용 </label>
+				<label for="unusedOcclusionCulling"> unused </label>
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">Data Key</div>
