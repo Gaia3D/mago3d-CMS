@@ -17,11 +17,11 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 
 ## Development Environment
   - Spring
-  - Gradle
+  - mybatis
+  - lombok
   - PostgreSQL
   - PostGIS
-  - mybatis
-  - Docker
+  - Gradle
 
 ## Getting Started
 
@@ -50,11 +50,12 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
   - 설치경로 C:/PostGIS
   - PostgreSQL Extensions PostGIS 필수 <br>
    <code>CREATE EXTENSION postgis</code>
+  - PosGIS Extensions이 성공적으로 끝나면 spatial_ref_sys라는 테이블이 자동 생성됩니다.
 
 - [gradle 4.1](https://gradle.org/docs/)
   - 설치경로 C:/gradle
   - 시스템 변수 추가 -path -> C:\gradle\gradle-4.1 추가
-  - Eclipse BuildShip Gradle Plugin 또는 Gradle command line을 이용하여 build합니다.
+  - eclipse BuildShip Gradle Plugin을 사용하여 build합니다.
 
 - [lombok](https://projectlombok.org/)
   - 설치한 뒤에 다운로드 폴더 이동 후 실행
@@ -64,9 +65,12 @@ Mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 ### Execution
 
  - mago3d-admin project spring boot 실행 <br> /mago3d-admin/src/main/java/com/gaia3d/Mago3dAdminApplication.java
+ - mago3d-user project spring boot 실행 <br> /mago3d-user/src/main/java/com/gaia3d/Mago3dUserApplication.java
 
 ## github
- [Mago3DJS](https://github.com/Gaia3D/mago3djs) 깃허브 사이트 입니다.
+- [mago3DJs](https://github.com/Gaia3D/mago3djs) 깃허브 사이트 입니다.
+- [F4DConverter](https://github.com/Gaia3D/F4DConverter) 깃허브 사이트 입니다.
+
 ## License
 [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 
@@ -91,12 +95,13 @@ Mago3DJS Integrate visualization data using open source JavaScript library for 3
 - DB Connection Pool status or DV session status can be viewed as a table.
 
 ## Development Environment
-- Spring
-- Gradle
-- PostgreSQL
-- PostGIS
-- mybatis
-- Docker
+  - Spring
+  - mybatis
+  - lombok
+  - PostgreSQL
+  - PostGIS
+  - Gradle
+
 
 ## Getting Started
 
@@ -125,11 +130,12 @@ Mago3DJS Integrate visualization data using open source JavaScript library for 3
   - Installation path C:/PostGIS
   - PostgreSQL Extensions PostGIS <br>
   <code>CREATE EXTENSION postgis</code>
+  - When PosGIS Extensions finishes successfully, a table called spatial_ref_sys is automatically created.
 
 - [gradle 4.1](https://gradle.org/docs/)
   - Installation path C:/gradle
   - Adding System Variables -path -> C:\gradle\gradle-4.1 Add
-  - Build with Eclipse BuildShip Gradle Plugin or Gradle command line.
+  - Build using eclipse BuildShip Gradle Plugin.
 
 - [lombok](https://projectlombok.org/)
   - After installing, move the download folder and execute it.
@@ -138,8 +144,10 @@ Mago3DJS Integrate visualization data using open source JavaScript library for 3
 
 ### Execution
 - run mago3d-admin project spring boot <br> /mago3d-admin/src/main/java/com/gaia3d/Mago3dAdminApplication.java
+- run mago3d-user project spring boot <br> /mago3d-user/src/main/java/com/gaia3d/Mago3dUserApplication.java
 
 ## github
- [Mago3DJS](https://github.com/Gaia3D/mago3djs) It is a feather hub site.
+- [Mago3DJS](https://github.com/Gaia3D/mago3djs) It is a feather hub site.
+- [F4DConverter](https://github.com/Gaia3D/F4DConverter) It is a feather hub site.
 ## License
 [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
