@@ -125,16 +125,16 @@
 			</tr>
 			<tr style="height: 30px;">
 				<td><label for="order_word">View Order</label></td>
-				<td><select style="width: 85px;" id="order_word" name="order_word" class="select">
+				<td><select style="width:85px;" id="order_word" name="order_word" class="select">
 					<option value=""> Basic </option>
 			       	<option value="register_date"> Registration Date </option>
 				</select>
-				<select style="width: 85px;" id="order_value" name="order_value" class="select">
+				<select style="width:85px;" id="order_value" name="order_value" class="select">
 					<option value=""> Basic </option>
 				   	<option value="ASC"> Ascending </option>
 					<option value="DESC"> Descending </option>
 				</select>
-				<select style="width: 85px;" id="list_counter" name="list_counter" class="select">
+				<select style="width:85px;" id="list_counter" name="list_counter" class="select">
 					<option value="5"> listing 5 </option>
 				 	<option value="10"> listing 10 </option>
 					<option value="50"> listing 50 </option>
@@ -354,7 +354,7 @@
 			<label for="hideLabel"> Hide </label>
 		</div>
 		<div>
-			<h3>Object 정보</h3>
+			<h3>Object Information</h3>
 			<input type="radio" id="showObjectInfo" name="objectInfo" value="true" onclick="changeObjectInfoViewMode(true);" />
 			<label for="showObjectInfo"> Show </label>
 			<input type="radio" id="hideObjectInfo" name="objectInfo" value="false" onclick="changeObjectInfoViewMode(false);"/>
@@ -370,11 +370,11 @@
 		<div>
 			<h3>Object Occlusion Culling</h3>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;">Whether or not to use</div>
+				<div style="display: inline-block; width: 70px;">Select</div>
 				<input type="radio" id="useOcclusionCulling" name="occlusionCulling" value="true" />
 				<label for="useOccusionCulling"> use </label>
 				<input type="radio" id="unusedOcclusionCulling" name="occlusionCulling" value="false" />
-				<label for="unusedOcclusionCulling"> unuse </label>
+				<label for="unusedOcclusionCulling"> unused </label>
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">Data Key</div>

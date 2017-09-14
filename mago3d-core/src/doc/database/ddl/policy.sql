@@ -167,7 +167,7 @@ comment on column policy.geo_diffuse_reflection_coef is '자기 색깔의 반사
 comment on column policy.geo_specular_reflection_coef is '표면의 반질거림 범위. 기본값 1.0';
 comment on column policy.geo_ambient_color is '다이렉트 빛이 아닌 반사율 RGB, 콤마로 연결';
 comment on column policy.geo_specular_color is '표면의 반질거림 색깔. RGB, 콤마로 연결';
-comment on column policy.geo_ssao_radius is '그림자 반경',
+comment on column policy.geo_ssao_radius is '그림자 반경';
 	
 comment on column policy.geo_server_enable is 'geo server 사용유무';
 comment on column policy.geo_server_url is 'geo server url';

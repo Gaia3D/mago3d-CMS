@@ -190,7 +190,7 @@
 			<input type="radio" id="showNearGeoIssueList" name="nearGeoIssueList" value="true" onclick="changeNearGeoIssueList(true);" />
 			<label for="showNearGeoIssueList"> Show </label>
 			<input type="radio" id="hideNearGeoIssueList" name="nearGeoIssueList" value="false" onclick="changeNearGeoIssueList(false);"/>
-			<label for="hideNearGeoIssueList"> 비표시 </label>
+			<label for="hideNearGeoIssueList"> Hide </label>
 		</div>
 		<div>
 			<h3>About the location of the click point</h3>
@@ -371,7 +371,7 @@
 		<div>
 			<h3>Object Occlusion Culling</h3>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;">Whether or not to use</div>
+				<div style="display: inline-block; width: 70px;">Select</div>
 				<input type="radio" id="useOcclusionCulling" name="occlusionCulling" value="true" />
 				<label for="useOccusionCulling"> use </label>
 				<input type="radio" id="unusedOcclusionCulling" name="occlusionCulling" value="false" />
