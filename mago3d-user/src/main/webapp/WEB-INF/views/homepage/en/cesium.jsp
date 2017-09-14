@@ -379,8 +379,8 @@
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">Data Key</div>
-				<input type="text" id="occlusion_culling_data_key" name="occlusion_culling_data_key" size="28" />
-				<button type="button" id="changeOcclusionCullingButton" class="btn">적용</button>
+				<input type="text" id="occlusion_culling_data_key" name="occlusion_culling_data_key" size="23" />
+				<button type="button" id="changeOcclusionCullingButton" class="btn">Change</button>
 			</div>
 		</div>
 		<div>
@@ -396,38 +396,38 @@
 			<h3>LOD</h3>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">LOD0</div>
-				<input type="text" id="geo_lod0" name="geo_lod0" value="22" size="15" />&nbsp;M
+				<input type="text" id="geo_lod0" name="geo_lod0" value="22" size="19" />&nbsp;M
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">LOD1</div>
-				<input type="text" id="geo_lod1" name="geo_lod1" value="70" size="15" />&nbsp;M
+				<input type="text" id="geo_lod1" name="geo_lod1" value="70" size="19" />&nbsp;M
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">LOD2</div>
-				<input type="text" id="geo_lod2" name="geo_lod2" value="22360" size="15" />&nbsp;M&nbsp;&nbsp;
+				<input type="text" id="geo_lod2" name="geo_lod2" value="22360" size="19" />&nbsp;M&nbsp;&nbsp;
 				<button type="button" id="changeLodButton" class="btn">Change</button>
 			</div>
 		</div>
 		<div>
 			<h3>Lighting</h3>
 			<div style="height: 30px;">AmbientReflectionCoeficient</div>
-			<div id="ambient_reflection_coef" style="display: inline-block; width: 260px;">
+			<div id="ambient_reflection_coef" style="display: inline-block; width: 228px;">
 				<div id="geo_ambient_reflection_coef_view" class="ui-slider-handle"></div>
 				<input type="hidden" id="geo_ambient_reflection_coef" name="geo_ambient_reflection_coef" value="0.5" />
 			</div>
 			<div style="height: 30px;">DiffuseReflectionCoeficient</div>
-			<div id="diffuse_reflection_coef" style="display: inline-block; width: 260px;">
+			<div id="diffuse_reflection_coef" style="display: inline-block; width: 228px;">
 				<div id="geo_diffuse_reflection_coef_view" class="ui-slider-handle"></div>
 				<input type="hidden" id="geo_diffuse_reflection_coef" name="geo_diffuse_reflection_coef" value="1" />
 			</div>
 			<div style="height: 30px;">SpecularReflectionCoeficient</div>
 			<div>
-				<div id="specular_reflection_coef" style="display: inline-block; width: 260px;">
+				<div id="specular_reflection_coef" style="display: inline-block; width: 228px;">
 					<div id="geo_specular_reflection_coef_view" class="ui-slider-handle"></div>
 					<input type="hidden" id="geo_specular_reflection_coef" name="geo_specular_reflection_coef" value="1" />
 				</div>
 				<div style="float: right;">
-					<button type="button" id="changeLightingButton" class="btn">변경</button>
+					<button type="button" id="changeLightingButton" class="btn">Change</button>
 				</div>
 			</div>
 			<!-- <div style="height: 30px;">
