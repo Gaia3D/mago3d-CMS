@@ -63,9 +63,9 @@ mago3DJs 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
   - install/update 클릭합니다.
 
 ### Execution
-
- - mago3D-admin project spring boot 실행 <br> /mago3D-admin/src/main/java/com/gaia3d/mago3DAdminApplication.java
- - mago3D-user project spring boot 실행 <br> /mago3D-user/src/main/java/com/gaia3d/mago3DUserApplication.java
+- mago3D-admin project spring boot 실행
+<pre><code>/mago3D-admin/src/main/java/com/gaia3d/mago3DAdminApplication.java</code></pre>
+- mago3D-user project spring boot 실행 <br> <pre><code>/mago3D-user/src/main/java/com/gaia3d/mago3DUserApplication.java</code></pre>
 
 ## github
 - [mago3DJs](https://github.com/Gaia3D/mago3djs) 깃허브 사이트 입니다.
@@ -142,8 +142,10 @@ mago3DJs Integrate visualization data using open source JavaScript library for 3
   - Click install / update.
 
 ### Execution
-- run mago3D-admin project spring boot <br> /mago3D-admin/src/main/java/com/gaia3d/mago3DAdminApplication.java
-- run mago3D-user project spring boot <br> /mago3D-user/src/main/java/com/gaia3d/mago3DUserApplication.java
+- run mago3D-admin project spring boot <br>
+<pre><code>/mago3D-admin/src/main/java/com/gaia3d/mago3DAdminApplication.java</code></pre>
+- run mago3D-user project spring boot <br>
+<pre><code>/mago3D-user/src/main/java/com/gaia3d/mago3DUserApplication.java</code></pre>
 
 ## github
 - [mago3DJs](https://github.com/Gaia3D/mago3djs) It is a feather hub site.
@@ -184,20 +186,21 @@ mago3DJS 3次元マルチブロック可視化のためのオープンソース�
   - java jdk-8u144-windows-x64.exeをインストールします。
 
 - [eclipse Oxygen](https://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R/eclipse-inst-win64.exe)
-  - eclipse neon以降のバージョンをインストールします。
-  - eclipseを実行した後Project Import <br>
-  File  - > import  - > Gradle  - > Existing Gradle Project
+
+ - eclipse neon以降のバージョンをインストールします。
+ - eclipseを実行した後Project Import <br>
+    File  - > import  - > Gradle  - > Existing Gradle Project
 
 - [PostgreSQL 9.6.3-1](https://github.com/Gaia3D/mago3d/wiki/PostgreSQL-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
-  - インストールパスはC：/ PostgreSQL
-  -  DB Tableの作成と初期データの登録
-      -  windows自動実行scriptは開発中です。
-      -  downloadしたソースの/ mago3D-core / src / docフォルダに移動します。
-      -  ddlフォルダのsqlファイルを実行してtableを生成します。<br>
-      table、table column comment多言語バージョンは開発中です。
-      -  ddlフォルダのsequence sql実行してsequence生成します。
-      -  index、triggerフォルダのsqlを実行して、indexとpartition生成します。
-      -  dmlフォルダのsqlを実行して、初期データの登録
+ - インストールパスはC：/ PostgreSQL
+ -  DB Tableの作成と初期データの登録
+    -  windows自動実行scriptは開発中です。
+    -  downloadしたソースの/ mago3D-core / src / docフォルダに移動します。
+    -  ddlフォルダのsqlファイルを実行してtableを生成します。<br>
+    table、table column comment多言語バージョンは開発中です。
+    -  ddlフォルダのsequence sql実行してsequence生成します。
+    -  index、triggerフォルダのsqlを実行して、indexとpartition生成します。
+    -  dmlフォルダのsqlを実行して、初期データの登録
 
 - [PostGIS 2.3.2](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
   - インストールパスはC：/ PostGIS
@@ -217,8 +220,10 @@ mago3DJS 3次元マルチブロック可視化のためのオープンソース�
 
 ### Execution
 
- - mago3D-admin project spring boot 実行 <br> /mago3D-admin/src/main/java/com/gaia3d/mago3DAdminApplication.java
- - mago3D-user project spring boot 実行 <br> /mago3D-user/src/main/java/com/gaia3d/mago3DUserApplication.java
+ - mago3d-admin project spring boot 実行 <br>
+ <pre><code>/mago3D-admin/src/main/java/com/gaia3d/mago3DAdminApplication.java</code></pre>
+ - mago3d-user project spring boot 実行 <br>
+ <pre><code>/mago3D-user/src/main/java/com/gaia3d/mago3DUserApplication.java</code></pre>
 
 ## github
 - [mago3DJs](https://github.com/Gaia3D/mago3djs) github サイトです。
