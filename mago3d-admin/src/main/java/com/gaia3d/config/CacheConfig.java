@@ -8,12 +8,8 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CacheName;
 import com.gaia3d.domain.CacheType;
@@ -34,6 +30,7 @@ import com.gaia3d.service.DataService;
 import com.gaia3d.service.MenuService;
 import com.gaia3d.service.PolicyService;
 import com.gaia3d.service.UserGroupService;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

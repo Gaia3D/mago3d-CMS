@@ -20,6 +20,8 @@ public class UserGroupRole {
 	
 	// 관리자 페이지 접근 권한
 	public static final String USER_ADMIN_LOGIN = "USER_ADMIN_LOGIN";
+	// 사용자 페이지 접근 권한
+	public static final String USER_USER_LOGIN = "USER_USER_LOGIN";
 	// Single Sign-On 토큰 생성/검증 시 Role
 	public static final String USER_CREATE_SSO_TOKEN = "USER_CREATE_SSO_TOKEN";
 	public static final String USER_VERIFY_SSO_TOKEN = "USER_VERIFY_SSO_TOKEN";

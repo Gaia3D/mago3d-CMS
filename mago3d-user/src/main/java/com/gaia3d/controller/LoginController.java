@@ -19,11 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.SessionKey;
+import com.gaia3d.domain.UserGroupRole;
 import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.UserSession;
+import com.gaia3d.helper.GroupRoleHelper;
 import com.gaia3d.helper.SessionUserHelper;
 import com.gaia3d.listener.Gaia3dHttpSessionBindingListener;
 import com.gaia3d.service.LoginService;
+import com.gaia3d.service.RoleService;
 import com.gaia3d.service.UserService;
 import com.gaia3d.util.WebUtil;
 import com.gaia3d.validator.LoginValidator;
@@ -45,6 +48,8 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 	@Autowired
+	private RoleService roleService;
+	@Autowired
 	private UserService userService;
 	
 	/**
@@ -55,7 +60,6 @@ public class LoginController {
 	 */
 	@GetMapping("/login.do")
 	public String login(HttpServletRequest request, Model model) {
-		
 		Policy policy = CacheManager.getPolicy();
 		log.info("@@ policy = {}", policy);
 		
@@ -98,11 +102,13 @@ public class LoginController {
 		if(bindingResult.hasErrors()) {
 			List<ObjectError> errorList = bindingResult.getAllErrors();
 			for(ObjectError error : errorList) {
-				System.out.println("************************* " + error.getDefaultMessage());
+				log.info("************************* error message = {}", error.getDefaultMessage());
 			}
 			
 			log.info("@@ validation error!");
 			loginForm.setPassword(null);
+			loginForm.setError_code("field.required");
+			model.addAttribute("loginForm", loginForm);
 			model.addAttribute("policy", policy);
 			model.addAttribute("TOKEN_AES_KEY", SESSION_TOKEN_AES_KEY);
 			return "/login/login";
@@ -133,11 +139,15 @@ public class LoginController {
 				userInfo.setStatus(UserInfo.STATUS_SLEEP);
 				userService.updateUserStatus(userInfo);
 				bindingResult.rejectValue("user_id", "usersession.lastlogin.invalid");
+			} else {
+				bindingResult.rejectValue("user_id", errorCode);
 			}
 			
 			log.error("@@ errorCode = {} ", errorCode);
+			loginForm.setError_code(errorCode);
 			loginForm.setUser_id(null);
 			loginForm.setPassword(null);
+			model.addAttribute("loginForm", loginForm);
 			model.addAttribute("policy", policy);
 			model.addAttribute("TOKEN_AES_KEY", SessionKey.TOKEN_AES_KEY.name());
 			
@@ -228,15 +238,15 @@ public class LoginController {
 			return "usersession.lastlogin.invalid";
 		}
 		
-//		// 초기 세팅시만 이 값을 N으로 세팅해서 사용자 Role 체크 하지 않음
-//		if(!UserSession.N.equals(userSession.getUser_role_check_yn())) {
-//			// 사용자 그룹 ROLE 확인
-//			UserGroupRole userGroupRole = new UserGroupRole();
-//			userGroupRole.setUser_id(userSession.getUser_id());
-//			if(!GroupRoleHelper.isUserGroupRoleValid(roleService.getListUserGroupRoleByUserId(userGroupRole), UserGroupRole.USER_ADMIN_LOGIN)) {
-//				return "usersession.role.invalid";
-//			}
-//		}
+		// 초기 세팅시만 이 값을 N으로 세팅해서 사용자 Role 체크 하지 않음
+		if(!UserSession.N.equals(userSession.getUser_role_check_yn())) {
+			// 사용자 그룹 ROLE 확인
+			UserGroupRole userGroupRole = new UserGroupRole();
+			userGroupRole.setUser_id(userSession.getUser_id());
+			if(!GroupRoleHelper.isUserGroupRoleValid(roleService.getListUserGroupRoleByUserId(userGroupRole), UserGroupRole.USER_USER_LOGIN)) {
+				return "usersession.role.invalid";
+			}
+		}
 		
 //		// 사용자 IP 체크
 //		if(Policy.Y.equals(policy.getSecurity_user_ip_check_yn())) {

@@ -71,7 +71,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public ReloadableResourceBundleMessageSource messageSource(){
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-		messageSource.setBasename("WEB-INF/messages/messages");
+		messageSource.setBasename("classpath:/messages/messages");
 		messageSource.setDefaultEncoding("UTF-8");
 		//messageSource.setCacheSeconds(messagesCacheSeconds);
 		return messageSource;

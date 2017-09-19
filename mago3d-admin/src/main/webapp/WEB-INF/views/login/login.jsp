@@ -27,7 +27,7 @@
 					<h6 style="padding-left: 10px; color: red;">* 
 						<spring:message code="${loginForm.error_code}" />
 					</h6>
-</c:if>				
+</c:if>
 				</div>
 				<div class="panel row">
 					<h2 class="sign-title"><span class="text-sub">Administrator</span><br /><span class="text-main">Login</span></h2>
