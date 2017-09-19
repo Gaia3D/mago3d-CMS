@@ -9,7 +9,9 @@
 	<meta name="viewport" content="width=device-width">
 	<title>demo | mago3D User</title>
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css?cache_version=${cache_version}" />
+<c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css?cache_version=${cache_version}" />
+</c:if>
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css?cache_version=${cache_version}" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-toast/jquery.toast.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js?cache_version=${cache_version}"></script>
@@ -45,8 +47,14 @@
 		<li><a href="/homepage/about.do">mago3D</a></li>
 		<li>Demo
 			<ul>
+<c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 				<li>Cesium</li>
 				<li><a href="/homepage/demo.do?viewLibrary=worldwind">World Wind</a></li>
+</c:if>				
+<c:if test="${geoViewLibrary eq 'worldwind' }">				
+				<li><a href="/homepage/demo.do?viewLibrary=cesium">Cesium</a></li>
+				<li>World Wind</li>
+</c:if>				
 			</ul>
 		</li>
 		<li><a href="/homepage/download.do">Download</a></li>
@@ -488,10 +496,25 @@
 </ul>
 
 <!-- 맵영역 -->
+<c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 <div id="magoContainer" class="mapWrap"></div>
 <canvas id="objectLabel"></canvas>
+</c:if>
+<c:if test="${geoViewLibrary eq 'worldwind' }">
+<div style="position: absolute; width: 100%; height: 100%; margin-top: 0; padding: 0; overflow: hidden;">
+	<canvas id="magoContainer" style="width: 100%; height: 100%">
+        Your browser does not support HTML5 Canvas.
+    </canvas>
+    <canvas id="objectLabel"></canvas>
+</div>
+</c:if>
 
+<c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 <script type="text/javascript" src="/externlib/${lang}/cesium/Cesium.js?cache_version=${cache_version}"></script>
+</c:if>
+<c:if test="${geoViewLibrary eq 'worldwind' }">
+<script type="text/javascript" src="/externlib/${lang}/webworldwind/worldwind.js?cache_version=${cache_version}"></script>
+</c:if>
 <script type="text/javascript" src="/js/${lang}/mago3d.js?cache_version=${cache_version}"></script>
 <script>
 	var agent = navigator.userAgent.toLowerCase();

@@ -9,21 +9,23 @@
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
 	<title>demo | mago3D User</title>
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css?cache_version=${cache_version}" />
+<c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css?cache_version=${cache_version}" />
+</c:if>	
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css?cache_version=${cache_version}" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-toast/jquery.toast.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-toast/jquery.toast.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/hammer/hammer.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
-	<script type="text/javascript" src="/externlib/${lang}/hammer/hammer.js?cache_version=${cache_version}"></script>
+	<style>
+		input {height: 29px;}
+		body, th, td, input, select, textarea { color:#444; font-family:'Malgun Gothic','돋움',dotum, sans-serif; font-size:12px; line-height:1.8em; }
+	</style>
 </head>
-<style>
-input {height: 29px;}
-body, th, td, input, select, textarea { color:#444; font-family:'Malgun Gothic','돋움',dotum, sans-serif; font-size:12px; line-height:1.8em; }
-</style>
 <body>
 <input type="hidden" id="now_latitude" name="now_latitude" value="${now_latitude }" />
 <input type="hidden" id="now_longitude" name="now_longitude" value="${now_longitude }"  />
@@ -49,8 +51,14 @@ body, th, td, input, select, textarea { color:#444; font-family:'Malgun Gothic',
 			<li><a href="/homepage/about.do">mago3D</a></li>
 			<li>Demo
 				<ul>
+<c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 					<li>Cesium</li>
 					<li><a href="/homepage/demo.do?viewLibrary=worldwind">World Wind</a></li>
+</c:if>				
+<c:if test="${geoViewLibrary eq 'worldwind' }">				
+					<li><a href="/homepage/demo.do?viewLibrary=cesium">Cesium</a></li>
+					<li>World Wind</li>
+</c:if>		
 				</ul>
 			</li>
 			<li><a href="/homepage/download.do">Download</a></li>
@@ -358,17 +366,27 @@ body, th, td, input, select, textarea { color:#444; font-family:'Malgun Gothic',
 		</div>
 	</div>
 </div>
-	<!-- <ul class="shortcut"> -->
-<%-- 	<c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status"> --%>
-<%-- 	<li onclick="flyTo(null, null, '${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">${dataGroup.data_group_name }</li> --%>
-<%-- 	</c:forEach>	 --%>
-<!-- </ul> -->
 
 <!-- 맵영역 -->
+<c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 <div id="magoContainer" class="mapWrap"></div>
 <canvas id="objectLabel"></canvas>
+</c:if>
+<c:if test="${geoViewLibrary eq 'worldwind' }">
+<div style="position: absolute; width: 100%; height: 100%; margin-top: 0; padding: 0; overflow: hidden;">
+	<canvas id="magoContainer" style="width: 100%; height: 100%">
+        Your browser does not support HTML5 Canvas.
+    </canvas>
+    <canvas id="objectLabel"></canvas>
+</div>
+</c:if>
 
+<c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 <script type="text/javascript" src="/externlib/${lang}/cesium/Cesium.js?cache_version=${cache_version}"></script>
+</c:if>
+<c:if test="${geoViewLibrary eq 'worldwind' }">
+<script type="text/javascript" src="/externlib/${lang}/webworldwind/worldwind.js?cache_version=${cache_version}"></script>
+</c:if>
 <script type="text/javascript" src="/js/${lang}/mago3d.js?cache_version=${cache_version}"></script>
 <script>
 
