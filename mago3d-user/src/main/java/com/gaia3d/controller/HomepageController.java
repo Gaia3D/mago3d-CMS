@@ -101,7 +101,7 @@ public class HomepageController {
 			@RequestParam(defaultValue="1") String pageNo, @RequestParam(defaultValue="cesium") String viewLibrary, String device, Model model) throws Exception {
 		
 		log.info("@@ viewLibrary = {}", viewLibrary);
-		String viewName = "cesium";
+		String viewName = "demo";
 		String lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 		if(lang == null || "".equals(lang)) {
 			lang = "ko";
@@ -147,7 +147,7 @@ public class HomepageController {
 		boolean isMobile = isMobile(request);
 		policy.setGeo_view_library(viewLibrary);
 		if(!"pc".equals(device) && isMobile) {
-			viewName = "cesium-mobile";
+			viewName = "demo-mobile";
 		}
 		
 		ObjectMapper mapper = new ObjectMapper();
