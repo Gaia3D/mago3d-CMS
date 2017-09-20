@@ -85,7 +85,7 @@
 	<insert id="insertSSOLog" parameterType="sSOLog" >
 		/* insertSSOLog */
 		<selectKey keyProperty="sso_log_id" resultType="long" order="BEFORE">
-    		SELECT nextval('sso_log_seq')
+    		SELECT NEXTVAL('sso_log_seq')
   		</selectKey>
 		INSERT INTO sso_log (
 			sso_log_id, user_id, server_ip, token, token_status

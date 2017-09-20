@@ -65,7 +65,8 @@ public class CacheConfig {
 
 	@PostConstruct
 	public void init() {
-		log.info("**************** Admin 캐시 초기화 시작 *****************");
+		log.info("*************************************************");
+		log.info("************ Admin Cache Init Start *************");
 		log.info("*************************************************");
 
 		// 라이선스 유호성 체크
@@ -88,7 +89,9 @@ public class CacheConfig {
 		
 		commonCode(CacheType.SELF);
 
-		log.info("**************** Admin 캐시 초기화 종료 *****************");
+		log.info("*************************************************");
+		log.info("************* Admin Cache Init End **************");
+		log.info("*************************************************");
 	}
 
 	public void loadCache(CacheName cacheName, CacheType cacheType) {

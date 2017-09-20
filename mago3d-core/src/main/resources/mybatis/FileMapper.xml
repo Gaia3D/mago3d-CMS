@@ -19,7 +19,7 @@
 	<insert id="insertFileInfo" parameterType="fileInfo" >
 		/* insertFileInfo */
 		<selectKey keyProperty="file_info_id" resultType="long" order="BEFORE">
-    		SELECT nextval('file_info_seq')
+    		SELECT NEXTVAL('file_info_seq')
   		</selectKey>
 		INSERT INTO file_info(
 			file_info_id, user_id, job_type, file_name, file_real_name, file_path, file_size, file_ext
@@ -43,7 +43,7 @@
 	<!-- 파일 파싱 로그 저장 -->
 	<insert id="insertFileParseLog" parameterType="fileParseLog">
 		<selectKey keyProperty="file_parse_log_id" resultType="long" order="BEFORE">
-			SELECT nextval('file_parse_log_seq');
+			SELECT NEXTVAL('file_parse_log_seq');
 		</selectKey>
 		INSERT INTO file_parse_log (
 			file_parse_log_id, file_info_id, identifier_value, error_code, log_type, status

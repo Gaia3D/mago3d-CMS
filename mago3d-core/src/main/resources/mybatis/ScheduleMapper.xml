@@ -88,7 +88,7 @@
 	<insert id="insertScheduleLog" parameterType="scheduleLog">
 		/* insertScheduleLog */
 		<selectKey keyProperty="schedule_log_id" resultType="long" order="BEFORE">
-    		SELECT nextval('schedule_log_seq')
+    		SELECT NEXTVAL('schedule_log_seq')
   		</selectKey>
 		INSERT INTO schedule_log(
 			schedule_log_id, schedule_id, execute_result, execute_total_count, execute_message

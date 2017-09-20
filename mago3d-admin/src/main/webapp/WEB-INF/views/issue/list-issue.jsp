@@ -117,7 +117,7 @@
 								<tbody>
 <c:if test="${empty issueList }">
 							<tr>
-								<td colspan="12" class="col-none">Issue이 존재하지 않습니다.</td>
+								<td colspan="12" class="col-none">Issue가 존재하지 않습니다.</td>
 							</tr>
 </c:if>
 <c:if test="${!empty issueList }">
