@@ -24,7 +24,7 @@
 	<insert id="insertUserDevice" parameterType="userDevice" >
 		/* insertUserDevice */
 		<selectKey keyProperty="user_device_id" resultType="long" order="BEFORE">
-    		SELECT nextval('user_device_seq')
+    		SELECT NEXTVAL('user_device_seq')
   		</selectKey>
 		INSERT INTO user_device (
 			user_device_id, user_id,

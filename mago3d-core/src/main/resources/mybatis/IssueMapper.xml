@@ -118,12 +118,12 @@
 					</if>
 					<if test="start_date != null and start_date != ''">
 					<![CDATA[
-					AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+					AND A.insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
 					]]>
 					</if>
 					<if test="end_date != null and end_date != ''">
 					<![CDATA[
-					AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+					AND A.insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
 					]]>
 					</if>
 				<choose>
@@ -179,7 +179,7 @@
 	<insert id="insertIssue" parameterType="issue">
 		/* insertIssue */
 		<selectKey keyProperty="issue_id" resultType="long" order="BEFORE">
-    		SELECT nextval('issue_seq')
+    		SELECT NEXTVAL('issue_seq')
   		</selectKey>
 		INSERT INTO issue(
 			issue_id, data_group_id, user_id, title, priority, due_date, issue_type, status, data_key, object_key, location, latitude, longitude, height, client_ip
@@ -206,7 +206,7 @@
 	<insert id="insertIssueDetail" parameterType="issue">
 		/* insertIssueDetail */
 		<selectKey keyProperty="issue_detail_id" resultType="long" order="BEFORE">
-    		SELECT nextval('issue_detail_seq')
+    		SELECT NEXTVAL('issue_detail_seq')
   		</selectKey>
 		INSERT INTO issue_detail (
 			issue_detail_id, issue_id, contents
@@ -219,7 +219,7 @@
 	<insert id="insertIssueComment" parameterType="issueComment">
 		/* insertIssueComment */
 		<selectKey keyProperty="issue_comment_id" resultType="long" order="BEFORE">
-    		SELECT nextval('issue_comment_seq')
+    		SELECT NEXTVAL('issue_comment_seq')
   		</selectKey>
 		INSERT INTO issue_comment(
 			issue_comment_id, issue_id, user_id, comment, client_ip
@@ -232,7 +232,7 @@
 	<insert id="insertIssueFile" parameterType="issueFile">
 		/* insertIssueFile */
 		<selectKey keyProperty="issue_file_id" resultType="long" order="BEFORE">
-    		SELECT nextval('issue_file_seq')
+    		SELECT NEXTVAL('issue_file_seq')
   		</selectKey>
 		INSERT INTO issue_file(
 			issue_file_id, issue_id, file_name, file_real_name, file_path, file_size, file_ext
@@ -245,7 +245,7 @@
 	<insert id="insertIssuePeople" parameterType="issuePeople">
 		/* insertIssuePeople */
 		<selectKey keyProperty="issue_people_id" resultType="long" order="BEFORE">
-    		SELECT nextval('issue_people_seq')
+    		SELECT NEXTVAL('issue_people_seq')
   		</selectKey>
 		INSERT INTO issue_people(
 			issue_people_id, issue_id, role_type, user_id

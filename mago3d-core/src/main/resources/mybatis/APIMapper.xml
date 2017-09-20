@@ -108,7 +108,7 @@
 	<insert id="insertAPILog" parameterType="aPILog" >
 		/* insertAPILog */
 		<selectKey keyProperty="api_log_id" resultType="long" order="BEFORE">
-    		SELECT nextval('api_log_seq')
+    		SELECT NEXTVAL('api_log_seq')
   		</selectKey>
 		INSERT INTO api_log (
 			api_log_id, service_code, service_name,  client_ip, client_server_name, api_key, 

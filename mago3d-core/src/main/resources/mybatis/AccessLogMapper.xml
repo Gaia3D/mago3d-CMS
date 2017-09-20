@@ -72,7 +72,7 @@
 	<insert id="insertAccessLog" parameterType="accessLog" >
 		/* insertAccessLog */
 		<selectKey keyProperty="access_log_id" resultType="long" order="BEFORE">
-    		SELECT nextval('access_log_seq')
+    		SELECT NEXTVAL('access_log_seq')
   		</selectKey>
 		INSERT INTO access_log(
 			access_log_id, user_id, user_name, client_ip, request_uri, parameters, user_agent, referer

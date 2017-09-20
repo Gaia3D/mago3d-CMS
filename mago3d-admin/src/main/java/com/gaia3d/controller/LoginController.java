@@ -29,7 +29,6 @@ import com.gaia3d.listener.Gaia3dHttpSessionBindingListener;
 import com.gaia3d.service.LoginService;
 import com.gaia3d.service.RoleService;
 import com.gaia3d.service.UserService;
-import com.gaia3d.service.impl.RoleServiceImpl;
 import com.gaia3d.util.WebUtil;
 import com.gaia3d.validator.LoginValidator;
 

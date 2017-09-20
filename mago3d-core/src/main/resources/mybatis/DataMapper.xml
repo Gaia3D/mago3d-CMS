@@ -172,7 +172,7 @@
 	<insert id="insertData" parameterType="dataInfo">
 		/* insertData */
 		<selectKey keyProperty="data_id" resultType="long" order="BEFORE">
-    		SELECT nextval('data_info_seq')
+    		SELECT NEXTVAL('data_info_seq')
   		</selectKey>
 		INSERT INTO data_info(
 			data_id, data_group_id, data_key, data_name, location, latitude, longitude, height, heading, pitch, roll, update_date

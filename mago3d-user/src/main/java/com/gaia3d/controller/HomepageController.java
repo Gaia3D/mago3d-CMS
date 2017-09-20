@@ -80,7 +80,6 @@ public class HomepageController {
 	 * @param model
 	 * @return
 	 */
-	
 	@GetMapping(value = "news.do")
 	public String news(HttpServletRequest request, Model model) {
 		String lang = null;
@@ -93,7 +92,7 @@ public class HomepageController {
 	}	
 	
 	/**
-	 * demo
+	 * 데모
 	 * @param model
 	 * @return
 	 */
@@ -102,7 +101,7 @@ public class HomepageController {
 			@RequestParam(defaultValue="1") String pageNo, @RequestParam(defaultValue="cesium") String viewLibrary, String device, Model model) throws Exception {
 		
 		log.info("@@ viewLibrary = {}", viewLibrary);
-		String viewName = "cesium";
+		String viewName = "demo";
 		String lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 		if(lang == null || "".equals(lang)) {
 			lang = "ko";
@@ -146,22 +145,14 @@ public class HomepageController {
 		List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
 		
 		boolean isMobile = isMobile(request);
-		if(viewLibrary.equals("cesium")) {
-			policy.setGeo_view_library("cesium");
-			viewName = "cesium";
-			if(!"pc".equals(device) && isMobile) {
-				viewName = "cesium-mobile";
-			}
-		} else if(viewLibrary.equals("worldwind")) {
-			policy.setGeo_view_library("worldwind");
-			viewName = "worldwind";
-			if(!"pc".equals(device) && isMobile) {
-				viewName = "worldwind-mobile";
-			}
+		policy.setGeo_view_library(viewLibrary);
+		if(!"pc".equals(device) && isMobile) {
+			viewName = "demo-mobile";
 		}
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
+		model.addAttribute("geoViewLibrary", policy.getGeo_view_library());
 		model.addAttribute("issue", issue);
 		model.addAttribute("now_latitude", policy.getGeo_init_latitude());
 		model.addAttribute("now_longitude", policy.getGeo_init_longitude());
@@ -175,13 +166,10 @@ public class HomepageController {
 		model.addAttribute("issuePriorityList", issuePriorityList);
 		model.addAttribute("issueTypeList", issueTypeList);
 		
+		log.info("@@@@@@ viewName = {}", viewName);
 		log.info("@@@@@@ policy = {}", mapper.writeValueAsString(policy));
 		log.info("@@@@@@ dataGroupMap = {}", mapper.writeValueAsString(dataGroupMap));
 		
-//		response.setHeader("Pragma", "No-cache");
-//		response.setHeader("Cache-Control", "No-cache");
-//		response.setHeader("Expires", "1");
-
 		return "/homepage/" + lang + "/" + viewName;
 	}
 	
@@ -276,7 +264,7 @@ public class HomepageController {
 	}
 	
 	/**
-	 * 메인
+	 * 다운로드
 	 * @param model
 	 * @return
 	 */
@@ -291,7 +279,7 @@ public class HomepageController {
 	}
 	
 	/**
-	 * 메인
+	 * 튜토리얼
 	 * @param model
 	 * @return
 	 */
@@ -306,7 +294,7 @@ public class HomepageController {
 	}
 	
 	/**
-	 * 메인
+	 * 문서
 	 * @param model
 	 * @return
 	 */
@@ -321,7 +309,7 @@ public class HomepageController {
 	}
 	
 	/**
-	 * 
+	 * API
 	 * @param request
 	 * @param model
 	 * @return
@@ -335,7 +323,9 @@ public class HomepageController {
 		}
 		return "/homepage/" + lang + "/api";
 	}
+	
 	/**
+	 * Spec
 	 * @param request
 	 * @param model
 	 * @return
@@ -351,6 +341,7 @@ public class HomepageController {
 	}
 	
 	/**
+	 * FAQ
 	 * @param request
 	 * @param model
 	 * @return
@@ -363,21 +354,6 @@ public class HomepageController {
 			lang = "ko";
 		}
 		return "/homepage/" + lang + "/faq";
-	}
-	
-	/**
-	 * @param request
-	 * @param model
-	 * @return
-	 */
-	@GetMapping(value = "news-listview.do")
-	public String newsListview(HttpServletRequest request, Model model) {
-		String lang = null;
-		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
-		if(lang == null || "".equals(lang)) {
-			lang = "ko";
-		}
-		return "/homepage/" + lang + "/news-listview";
 	}
 	
 	/**
@@ -434,34 +410,34 @@ public class HomepageController {
 		return builder.toString();
 	}
 	
-	/**
-	 * 목록 페이지 이동 검색 조건
-	 * @param issue
-	 * @return
-	 */
-	private String getListParameters(HttpServletRequest request) {
-		StringBuilder builder = new StringBuilder(100);
-		String pageNo = request.getParameter("pageNo");
-		builder.append("pageNo=" + pageNo);
-		builder.append("&");
-		builder.append("search_word=" + StringUtil.getDefaultValue(request.getParameter("search_word")));
-		builder.append("&");
-		builder.append("search_option=" + StringUtil.getDefaultValue(request.getParameter("search_option")));
-		builder.append("&");
-		try {
-			builder.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(request.getParameter("search_value")), "UTF-8"));
-		} catch(Exception e) {
-			e.printStackTrace();
-			builder.append("search_value=");
-		}
-		builder.append("&");
-		builder.append("start_date=" + StringUtil.getDefaultValue(request.getParameter("start_date")));
-		builder.append("&");
-		builder.append("end_date=" + StringUtil.getDefaultValue(request.getParameter("end_date")));
-		builder.append("&");
-		builder.append("order_word=" + StringUtil.getDefaultValue(request.getParameter("order_word")));
-		builder.append("&");
-		builder.append("order_value=" + StringUtil.getDefaultValue(request.getParameter("order_value")));
-		return builder.toString();
-	}
+//	/**
+//	 * 목록 페이지 이동 검색 조건
+//	 * @param issue
+//	 * @return
+//	 */
+//	private String getListParameters(HttpServletRequest request) {
+//		StringBuilder builder = new StringBuilder(100);
+//		String pageNo = request.getParameter("pageNo");
+//		builder.append("pageNo=" + pageNo);
+//		builder.append("&");
+//		builder.append("search_word=" + StringUtil.getDefaultValue(request.getParameter("search_word")));
+//		builder.append("&");
+//		builder.append("search_option=" + StringUtil.getDefaultValue(request.getParameter("search_option")));
+//		builder.append("&");
+//		try {
+//			builder.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(request.getParameter("search_value")), "UTF-8"));
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			builder.append("search_value=");
+//		}
+//		builder.append("&");
+//		builder.append("start_date=" + StringUtil.getDefaultValue(request.getParameter("start_date")));
+//		builder.append("&");
+//		builder.append("end_date=" + StringUtil.getDefaultValue(request.getParameter("end_date")));
+//		builder.append("&");
+//		builder.append("order_word=" + StringUtil.getDefaultValue(request.getParameter("order_word")));
+//		builder.append("&");
+//		builder.append("order_value=" + StringUtil.getDefaultValue(request.getParameter("order_value")));
+//		return builder.toString();
+//	}
 }
