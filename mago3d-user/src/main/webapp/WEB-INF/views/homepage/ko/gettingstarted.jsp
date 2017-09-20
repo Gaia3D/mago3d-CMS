@@ -7,14 +7,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=1250">
-<title>Install Guide | mago3D User</title>
+<title>Community Edtion | mago3D User</title>
 <!--[if lt IE 9]>
 	   	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 <link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 <link rel="stylesheet" href="/css/${lang}/font/font.css" />
 <script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
+<%-- <script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script> --%>
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
 <script type="text/javascript" src="/js/analytics.js"></script>
@@ -46,7 +46,7 @@
 					<ul>
 						<li><a href="/homepage/api.do" style="color: white" target="_blank">API</a></li>
 						<li><a href="/homepage/spec.do" style="color: white">F4D Spec</a></li>
-						<li><a href="/homepage/installguide.do" style="color: white">Tutorials</a></li>
+						<li><a href="/homepage/installguide.do" style="color: white">Install Guide</a></li>
 					</ul>
 				</li>
 				<li><a href="/homepage/faq.do">FAQ</a></li>
@@ -62,40 +62,15 @@
 			<div class="guide">
 				<aside>
 					<ul>
-						<li><a class="on" href="#">Tutorials</a>
+						<li><a href="/homepage/tutorials.do">Tutorials</a>
 						<li><a href="/homepage/setup.do">Setup</a>
-						<li><a href="/homepage/gettingstarted.do">Getting Started</a>
+						<li><a class="on" href="/homepage/gettingstarted.do">Getting Started</a>
 					</ul>
 				</aside>
 				<div class="contents">
-					<h3>Tutorials</h3>
+					<h3>Getting Started</h3>
 					<div class="sub_contents">
-						<div class="title">Set Up</div>
-						<div class="list">
-							<ul>
-								<li><a href="#CommunityEdtion">Community Edtion</a>
-									<ul class="sub_list">
-										<li><a href="#SourceDownload">Source Download</a></li>
-										<li><a href="#NodeInstall">Node Install</a></li>
-										<li><a href="#F4DConverter">F4D Converter Install</a></li>
-									</ul></li>
-							</ul>
-							<ul>
-								<li><a href="#EnterpriseEdtion">Enterprise Edtion</a>
-									<ul class="sub_list">
-										<li><a href="#JavaInstall">Java Install</a></li>
-										<li><a href="#EclipseInstall">Eclipse Install</a></li>
-										<li><a href="#GradleInstall">Gradle Install</a></li>
-										<li><a href="#PostgreSQLInstall">PostgreSQL Install</a></li>
-										<li><a href="#PostGISInstall">PostGIS Install</a></li>
-										<li><a href="#LombokInstall">Lombok Install</a></li>
-										<li><a href="#eSourceDownload">Source Download</a></li>
-									</ul></li>
-							</ul>
-						</div>
-					</div>
-					<div class="sub_contents">
-						<div class="title">Getting Started</div>
+						<div class="title">Contant</div>
 						<div class="list">
 							<ul>
 								<li><a href="#CommunityEdtion">Community Edtion</a>
@@ -115,40 +90,53 @@
 									</ul></li>
 							</ul>
 						</div>
-						
-					
-<!-- 					<div class="col"> -->
-<!-- 						<div class="tutorials"> -->
-<!-- 							<a href="/home/"> -->
-<!-- 								<div class="title">Community Edition</div> -->
-<!-- 								<ul> -->
-<!-- 									<li>무료로 제공되며 업무 시스템(이슈관리, 시설물등)이 존재하는 경우 3D Rendering 솔루션으로 사용하는 경우 이상적입니다.</li> -->
-<!-- 									<li>F4D Converter + mago3DJs</li> -->
-<!-- 								</ul> -->
-<!-- 								<span>mago3D Community Edition(F4D Converter + mago3DJS)을 download 후</span> -->
-<!-- 								<span>고객이 소유한 3D Data(IFC, 3DS, Collada 등)를 F4D Converter 를 이용하여</span> -->
-<!-- 								<span>Render용 F4D Data로 변환 후, mago3DJS(JavaScript) 를 연동하여</span> -->
-<!-- 								<span>브라우저에서 확인한다.</span> -->
-<!-- 							</a> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 					<div class="col"> -->
-<!-- 						<div class="tutorials"> -->
-<!-- 							<a href="#"> -->
-<!-- 								<div class="title">Enterprise Edition</div> -->
-<!-- 								<ul> -->
-<!-- 									<li>대용량 3D 데이터를 처리하기 위한 플랫폼으로 데이터 관리, 이슈 관리 기능을 제공 합니다.</li> -->
-<!-- 									<li>F4D Converter + mago3DJS + Content Management System</li> -->
-<!-- 								</ul> -->
-<!-- 								<span>mago3D Enterprise Edition(F4D Converter + mago3DJS + CMS)을</span> -->
-<!-- 								<span>download 후 이용하여 Data를 등록, Issue를 관리하는 방법을 확인합니다.</span> -->
-<!-- 							</a> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
+					</div>
+					<div class="sub_contents">
+						<div id="CommunityEdtion"></div>
+						<h3 style="margin-top: 80px;">Community Edtion</h3>
+						<div id="DataConverter"></div>
+						<div class="title">Data 변환</div>
+						<p>관리자 권한으로 Command Line Prompt를 실행한 다음 F4D Converter를 설치한 디렉토리로 이동합니다.</p>
+						<p>변환한 데이터를 저장할 폴더(outputFolder)를 생성합니다.</p>
+						<div class="block">C:\data</div>
+						<p>InputFolder에 변환할 데이터를 놓고, 다음을 실행합니다.</p>
+						<div class="prompt">
+							<div class="admin">관리자: 명령 프롬프트</div>
+							<div class="order">C:\F4DConverter>F4DConverter.exe -inputFolder D:\demo_data -outputFolder c:\data -log D:\demo_data/logtTest.txt -indexing y</div>
+							<b> ※ argument 관련 설명은 <a href="https://github.com/Gaia3D/F4DConverter">https://github.com/Gaia3D/F4DConverter</a>참조</b>
+							<ul style="margin-left: 19px; margin-bottom: 3px;">
+								<li>inputFolder [rawDataFolder] : an absolute path of the folder where raw data files to be converted are.</li>
+								<li>outputFolder [F4DFolder] : an absolute path of the folder where conversion results(F4D datasets) are created</li>
+								<li>log [logFileFullPath] : an absolute path of a log file which is created after finishing conversion processes</li>
+								<li>indexing [one of Y, y, N, n] : wheter objectIndexFile.ihe should be created or not. "NOT created" is default</li>
+							</ul>
+							<b>C:\data 폴더에 F4D_xxxx 폴더들과, objectIndexFile.ihe 파일 생성을 확인 파일이 생성되지 않은 경우 로그파일(logTest.txt)를 확인</b>
+						</div>
+					</div>
+					<div class="sub_contents">
+						<div id="SettingFiles"></div>
+						<div class="title">설정 파일 수정</div>
+						<p>Community Edtion버전에서는 두개의 설정 파일을 가지고 있습니다.</p>
+						<p>mago3DJS Rendering 관련 설정을 담당하는 policy.json 파일과 Data의 Location 정보를 담당하는 data.json 파일이 있습니다.</p>
+						<ul>
+							<li>Policy.json
+								<ul>
+									<li>Init Camera Latitude, Longitude, CallBack Function, Geo Server 설정 등</li>
+								</ul>
+							</li>
+							<li>Data.json
+								<ul>
+									<li>Data Key, Name, Latitude, Longitude, Altitude, Heading, Pitch, Roll 설정 등</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
+
 	</section>
+
 	<footer>
 		<div>
 			<h2>

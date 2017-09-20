@@ -341,6 +341,38 @@ public class HomepageController {
 	}
 	
 	/**
+	 * install
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "setup.do")
+	public String setup(HttpServletRequest request, Model model) {
+		String lang = null;
+		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		if(lang == null || "".equals(lang)) {
+			lang = "ko";
+		}
+		return "/homepage/" + lang + "/setup";
+	}
+	
+	/**
+	 * gettingstarted
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "gettingstarted.do")
+	public String gettingstarted(HttpServletRequest request, Model model) {
+		String lang = null;
+		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		if(lang == null || "".equals(lang)) {
+			lang = "ko";
+		}
+		return "/homepage/" + lang + "/gettingstarted";
+	}
+	
+	/**
 	 * FAQ
 	 * @param request
 	 * @param model

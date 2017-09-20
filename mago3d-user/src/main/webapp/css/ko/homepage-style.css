@@ -1466,7 +1466,7 @@ color: white;
 width: 200px;
 }
 .guide .contents {
-width: 850PX;
+width: 907px;
 margin-left: 300px;
 margin-top: 2.5em;
 }
@@ -1477,6 +1477,9 @@ margin-bottom: 15px;
 }
 .guide .contents .edtion {
 margin-top: 55px;
+}
+.guide .contents .sub_contents .list ul{
+margin-bottom: 5px;
 }
 .guide .contents .edtion .title {
 color: gray;
@@ -1491,10 +1494,9 @@ display: inline;
 text-decoration: none;
 }
 .guide .contents .sub_contents {
-margin-top: 60px;
 padding-top: 30px;
 border-top: 2px solid #f5f7f9;
-margin-bottom: 30px;
+margin-bottom: 50px;
 }
 .guide .images {
 margin-top: 30px;
@@ -1517,4 +1519,60 @@ margin: 0;
 margin-bottom: 10px;
 font-size: 12px;
 overflow: auto;
+}
+.guide .contents .tutorials {
+width: 388px;
+display: inline-block;
+/* border: 1px solid gray; */
+border-radius:6px;
+height: 300px;
+padding: 15px;
+}
+.guide .contents .tutorials .title {
+color: #2d3a42;
+font-size: 30px;
+margin-bottom: 15px;
+}
+.guide .contents .tutorials ul {
+margin-bottom: 20px;
+margin-left: 5px;
+}
+.guide .contents .tutorials a {
+text-decoration: none;
+}
+.guide .contents .col {
+display: inline-block;
+background-color: #f5f7f9;
+border-radius: 6px;
+}
+.guide .contents ul {
+margin-bottom: 5px;
+}
+.guide .contents .sub_contents .sub_list li{
+list-style: circle;
+list-style-position: inside;
+}
+.guide .contents ul li ul li {
+list-style: circle;
+list-style-position: inside;
+margin-left: 21px;
+}
+.guide a {
+color: #2B87C4;
+display: inline;
+text-decoration: none;
+}
+
+.guide .prompt .admin{
+border: 1px solid black;
+background-color: #f5f7f9;
+padding: 5px;
+}
+.guide .prompt .order {
+padding: 6px;
+background-color: #24292E;
+overflow: hidden;
+overflow-x:scroll;
+white-space:nowrap;
+color: #f5f7f9;
 }
