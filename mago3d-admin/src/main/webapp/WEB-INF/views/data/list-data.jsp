@@ -137,6 +137,7 @@
 									<col class="col-toggle" />
 									<col class="col-toggle" />
 									<col class="col-toggle" />
+									<col class="col-toggle" />
 									<col class="col-date" />
 									<col class="col-functions" />
 									<thead>
@@ -153,6 +154,7 @@
 											<th scope="col" class="col-toggle">Pitch</th>
 											<th scope="col" class="col-toggle">Roll</th>
 											<th scope="col" class="col-toggle">상태</th>
+											<th scope="col" class="col-toggle">공개유무</th>
 											<th scope="col" class="col-toggle">등록유형</th>
 											<th scope="col" class="col-date">등록일</th>
 											<th scope="col" class="col-functions">수정/삭제</th>
@@ -161,7 +163,7 @@
 									<tbody>
 <c:if test="${empty dataList }">
 										<tr>
-											<td colspan="15" class="col-none">Data가 존재하지 않습니다.</td>
+											<td colspan="16" class="col-none">Data가 존재하지 않습니다.</td>
 										</tr>
 </c:if>
 <c:if test="${!empty dataList }">
@@ -189,6 +191,7 @@
 		</c:if>
 												<span class="icon-text">${dataInfo.viewStatus }</span>
 											</td>
+											<td class="col-toggle">${dataInfo.public_yn }</td>
 											<td class="col-toggle">${dataInfo.viewDataInsertType }</td>
 											<td class="col-date">${dataInfo.viewInsertDate }</td>
 											<td class="col-functions">

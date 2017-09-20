@@ -258,7 +258,7 @@ public class DataController {
 		String result = "success";
 		try {
 			dataInfo.setMethod_mode("insert");
-			String errorcode = dataValidate(CacheManager.getPolicy(), dataInfo);
+			String errorcode = dataValidate(dataInfo);
 			if(errorcode != null) {
 				result = errorcode;
 				jSONObject.put("result", result);
@@ -336,8 +336,7 @@ public class DataController {
 	 * @param dataInfo
 	 * @return
 	 */
-	private String dataValidate(Policy policy, DataInfo dataInfo) {
-		
+	private String dataValidate(DataInfo dataInfo) {
 		if(dataInfo.getData_key() == null || "".equals(dataInfo.getData_key())) {
 			return "data.input.invalid";
 		}
@@ -355,7 +354,7 @@ public class DataController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-data-key-duplication-check.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-data-key-duplication-check.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDataKeyDuplicationCheck(HttpServletRequest request, DataInfo dataInfo) {
 		
@@ -367,6 +366,12 @@ public class DataController {
 				result = "data.key.empty";
 				jSONObject.put("result", result);
 				return jSONObject;
+			} else if(dataInfo.getOld_data_key() != null && !"".equals(dataInfo.getOld_data_key())) {
+				if(dataInfo.getData_key().equals(dataInfo.getOld_data_key())) {
+					result = "data.key.same";
+					jSONObject.put("result", result);
+					return jSONObject;
+				}
 			}
 			
 			int count = dataService.getDuplicationKeyCount(dataInfo.getData_key());
@@ -411,15 +416,16 @@ public class DataController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "modify-data.do", produces = "application/json; charset=utf8")
-	public String modifyData(@RequestParam("data_id") String data_id, HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo, Model model) {
+	@GetMapping(value = "modify-data.do")
+	public String modifyData(@RequestParam("data_id") Long data_id, HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo, Model model) {
 		
 		String listParameters = getListParameters(request);
 		
 		DataGroup dataGroup = new DataGroup();
 		dataGroup.setUse_yn(DataGroup.IN_USE);
 		List<DataGroup> dataGroupList = dataGroupService.getListDataGroup(dataGroup);
-		DataInfo dataInfo =  dataService.getData(Long.valueOf(data_id));
+		DataInfo dataInfo =  dataService.getData(data_id);
+		dataInfo.setOld_data_key(dataInfo.getData_key());
 		
 		log.info("@@@@@@@@ dataInfo = {}", dataInfo);
 		Policy policy = CacheManager.getPolicy();
@@ -442,15 +448,14 @@ public class DataController {
 	 * @param dataInfo
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-data-info.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-data-info.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateDataInfo(HttpServletRequest request, DataInfo dataInfo) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
-			Policy policy = CacheManager.getPolicy();
 			dataInfo.setMethod_mode("update");
-			String errorcode = dataValidate(policy,dataInfo);
+			String errorcode = dataValidate(dataInfo);
 			if(errorcode != null) {
 				result = errorcode;
 				jSONObject.put("result", result);
@@ -464,7 +469,6 @@ public class DataController {
 		}
 	
 		jSONObject.put("result", result);
-		
 		return jSONObject;
 	}
 	

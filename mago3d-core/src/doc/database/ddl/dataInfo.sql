@@ -56,6 +56,7 @@ create table data_info(
 	pitch						varchar(10),
 	roll						varchar(10),
 	status						char(1)								default '0',
+	public_yn					char(1)								default 'N',
 	data_insert_type			varchar(30)							default 'DATA_REGISTER_SELF',
 	update_date					timestamp without time zone,
 	insert_date					timestamp without time zone			default now(),
@@ -74,6 +75,7 @@ comment on column data_info.height is '높이';
 comment on column data_info.heading is 'heading';
 comment on column data_info.pitch is 'pitch';
 comment on column data_info.roll is 'roll';
+comment on column data_info.public_yn is '공개 유무. 기본값 N(비공개)';
 comment on column data_info.status is 'Data 상태. 0:사용중, 1:사용중지(관리자), 2:기타';
 comment on column data_info.data_insert_type is 'data 등록 방법. 기본 : SELF';
 comment on column data_info.update_date is '수정일';

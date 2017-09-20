@@ -22,16 +22,8 @@ public class DataInfo {
 	public static final String STATUS_USE = "0";
 	// Data 상태가 중지(관리자)
 	public static final String STATUS_FORBID = "1";
-	// Data 상태가 잠금(비밀번호 실패횟수 초과)
-	public static final String STATUS_FAIL_LOGIN_COUNT_OVER = "2";
-	// Data 상태가 휴면(로그인 기간)
-	public static final String STATUS_SLEEP = "3";
-	// Data 상태가 만료(사용기간 종료)
-	public static final String STATUS_TERM_END = "4";
 	// Data 상태가 삭제(화면 비표시)
 	public static final String STATUS_LOGICAL_DELETE = "5";
-	// Data 상태가 임시 비밀번호(비밀번호 찾기, 관리자 설정에 의한 임시 비밀번호 발급 시)
-	public static final String STATUS_TEMP_PASSWORD = "6";
 	
 	// data_group 에 등록되지 않은 Data
 	private String[] data_all_id;
@@ -73,6 +65,8 @@ public class DataInfo {
 	private String data_group_name;
 	// data 고유 식별번호
 	private String data_key;
+	// data 고유 식별번호
+	private String old_data_key;
 	// data 이름
 	private String data_name;
 	// 위도, 경도 정보 geometry 타입
@@ -91,6 +85,8 @@ public class DataInfo {
 	private String roll;
 	// data 상태. 0:사용중, 1:사용중지(관리자), 2:기타
 	private String status;
+	// 공개 유무. 기본값 비공개 N
+	private String public_yn;
 	// data 등록 방법. 기본 : SELF
 	private String data_insert_type;
 	// 수정일 

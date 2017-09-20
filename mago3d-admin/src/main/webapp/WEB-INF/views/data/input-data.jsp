@@ -129,6 +129,16 @@
 					  						<form:errors path="roll" cssClass="error" />
 										</td>
 									</tr>
+									<tr>
+										<th class="col-label" scope="row">
+											<form:label path="public_yn">공개 유무</form:label>
+											<span class="icon-glyph glyph-emark-dot color-warning"></span>
+										</th>
+										<td class="col-input">
+											<form:radiobutton path="public_yn" value="Y" label="사용"/>
+											<form:radiobutton path="public_yn" value="N" label="사용안함" />
+										</td>
+									</tr>
 								</table>
 								
 								<div class="button-group">
@@ -247,13 +257,8 @@
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
 <script type="text/javascript">
-	// 0은 비표시, 1은 표시
-	var dataDeviceArray = new Array("0", "0", "0", "0", "0", "0");
-	var dataDeviceCount = 0;
 	$(document).ready(function() {
 		$( ".tabs" ).tabs();
-		
-		initJqueryCalendar();
 	});
 	
 	// 그룹 선택

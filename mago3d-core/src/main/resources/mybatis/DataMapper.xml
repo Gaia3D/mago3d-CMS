@@ -165,7 +165,9 @@
 	<!-- Data 아이디 중복 체크 -->
 	<select id="getDuplicationKeyCount" parameterType="string" resultType="int">
 		/* getDuplicationKeyCount */
-		SELECT COUNT(data_key) AS count FROM data_info WHERE data_key = #{data_key}
+		SELECT COUNT(data_key) AS count 
+		FROM data_info 
+		WHERE data_key = #{data_key}
 	</select>
 	
 	<!-- Data 등록 -->
@@ -175,9 +177,11 @@
     		SELECT NEXTVAL('data_info_seq')
   		</selectKey>
 		INSERT INTO data_info(
-			data_id, data_group_id, data_key, data_name, location, latitude, longitude, height, heading, pitch, roll, update_date
+			data_id, data_group_id, data_key, data_name, location, latitude, longitude, 
+			height, heading, pitch, roll, public_yn, update_date
 		) values(
-			#{data_id}, #{data_group_id}, #{data_key}, #{data_name}, ST_GeographyFromText(#{location}), #{latitude}, #{longitude}, #{height}, #{heading}, #{pitch}, #{roll}, #{update_date}			
+			#{data_id}, #{data_group_id}, #{data_key}, #{data_name}, ST_GeographyFromText(#{location}), #{latitude}, #{longitude}, 
+			#{height}, #{heading}, #{pitch}, #{roll}, #{public_yn}, #{update_date}			
 		)
 	</insert>
 	
@@ -215,6 +219,9 @@
 			</if>
 			<if test="roll != null and roll != ''">
 			roll = #{roll},
+			</if>
+			<if test="public_yn != null and public_yn != ''">
+			public_yn = #{public_yn},
 			</if>
 			update_date = now()
 		WHERE data_id = #{data_id}
