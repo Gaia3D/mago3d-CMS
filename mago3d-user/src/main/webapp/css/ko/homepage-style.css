@@ -1576,3 +1576,7 @@ overflow-x:scroll;
 white-space:nowrap;
 color: #f5f7f9;
 }
+
+.guide .prompt .order .order-color {
+color: gray;
+}

@@ -13,6 +13,8 @@
 	<![endif]-->
 <link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 <link rel="stylesheet" href="/css/${lang}/font/font.css" />
+<link rel="stylesheet" href="/externlib/${lang}/highlight/styles/monokai.css" />
+<script type="text/javascript" src="/externlib/${lang}/highlight/highlight.js"></script>
 <script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 <%-- <script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script> --%>
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
@@ -77,7 +79,8 @@
 									<ul class="sub_list">
 										<li><a href="#DataConverter">Data 변환</a></li>
 										<li><a href="#SettingFiles">설정 파일 수정</a></li>
-										<li><a href="#Start">Start</a></li>
+										<li><a href="#Start">Start.html</a></li>
+										<li><a href="#JavaScript">mago3D 연동 JavaScript 작성</a></li>
 									</ul></li>
 							</ul>
 							<ul>
@@ -103,7 +106,8 @@
 						<div class="prompt">
 							<div class="admin">관리자: 명령 프롬프트</div>
 							<div class="order">C:\F4DConverter>F4DConverter.exe -inputFolder D:\demo_data -outputFolder c:\data -log D:\demo_data/logtTest.txt -indexing y</div>
-							<b> ※ argument 관련 설명은 <a href="https://github.com/Gaia3D/F4DConverter">https://github.com/Gaia3D/F4DConverter</a>참조</b>
+							<b> ※ argument 관련 설명은 <a href="https://github.com/Gaia3D/F4DConverter">https://github.com/Gaia3D/F4DConverter</a>참조
+							</b>
 							<ul style="margin-left: 19px; margin-bottom: 3px;">
 								<li>inputFolder [rawDataFolder] : an absolute path of the folder where raw data files to be converted are.</li>
 								<li>outputFolder [F4DFolder] : an absolute path of the folder where conversion results(F4D datasets) are created</li>
@@ -131,6 +135,78 @@
 							</li>
 						</ul>
 					</div>
+					<div class="sub_contents">
+						<div id="Start"></div>
+						<div class="title">Start.html</div>
+						<ul>
+							<li>Ajax 통신을 위해 jQuery를 추가 합니다.</li>
+							<li>Customizer 된 Cesium을 추가 합니다.</li>
+							<li>mago3DJS 사용을 위해 mago3d.js를 추가 합니다. mago3D Project를 gulp를 이용해서 build를 하면 build 디렉토리에 생성됩니다. 생성된 build파일을 사용합니다.</li>
+						</ul>
+						<pre>
+<code class="html">&lt;link rel="stylesheet" href="/src/engine/cesium/Widgets/widgets.css"/&gt;
+&lt;script type="text/javascript" src="/thirdparty/jquery/jquery.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="/src/engine/cesium/Cesium.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="/tutorials/mago3d.js"&gt;&lt;/script&gt;
+</code>
+						</pre>
+						<p>Cesium map을 render할 div 영역을 설정합니다.</p>
+						<pre>
+<code class="html">&lt;div id="magoContainer" class="mapWrap"&gt;&lt;/div&gt;
+</code>
+						</pre>
+						<br>
+						<div class="sub_contents">
+							<div class="title">mago3D 연동 JavaScript 작성</div>
+							<pre>
+<code class="javascript">var imagePath = "images/ko";
+magoStart(null, "magoContainer", null, null); // cesium map을 render할 div
+
+// mago3d 시작, 정책 데이터 파일을 로딩
+function magoStart(viewer, renderDivId, imagePath) {
+	$.ajax({
+		url: "/tutorials/policy-tutorials.json", //policy json 설정
+		type: "GET",
+		dataType: "json",
+		success: function(serverPolicy) {
+			loadData(viewer, renderDivId, serverPolicy);
+		},
+		error: function(e) {
+			alert(e.responseText);
+		}
+	});
+}
+
+function loadData(viewer, renderDivId, serverPolicy) {
+	$.ajax({
+		url: "/tutorials/data-tutorials.json", //data json 설정
+		type: "GET",
+		dataType: "json",
+		success: function(serverData) {
+			managerFactory = new ManagerFactory(viewer, renderDivId, serverPolicy,
+			 serverData, imagePath); // mago3D Start
+		},
+		error: function(e) {
+			alert(e.responseText);
+		}
+	})
+}
+</code>
+						</pre>
+						</div>
+						<div class="sub_contents">
+							<div class="title">Node Server 실행</div>
+							<div class="prompt">
+								<div class="admin">명령 프롬프트 - node server.js</div>
+								<div class="order">C:\git\repository\mago3djs><span class="order-color"> node server.js <br>Mago3D development server running
+								locally. Connect to http://localhost:80</span> </div>
+							</div>
+						</div>
+						<div class="sub_contents">
+							<div class="title">API 연동</div>
+							
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -153,5 +229,8 @@
 	</footer>
 </body>
 
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
 
 </html>
