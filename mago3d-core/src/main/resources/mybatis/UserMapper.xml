@@ -167,22 +167,10 @@
 		/* insertUser */
 		INSERT INTO user_info(
 			user_id, user_group_id, user_name, password, salt, telephone, mobile_phone, email, 
-			messanger, postal_code, address, address_etc, ci, di, status, user_insert_type, update_date, user_id_start_date, user_id_end_date
+			messanger, postal_code, address, address_etc, ci, di, status, user_insert_type, update_date
 		) values(
 			#{user_id}, #{user_group_id}, #{user_name}, #{password}, #{salt}, #{telephone}, #{mobile_phone}, #{email}, 
 			#{messanger}, #{postal_code}, #{address}, #{address_etc}, #{ci}, #{di}, COALESCE(#{status}, '0'), COALESCE(#{user_insert_type}, 'SELF'), NOW()
-			<if test="user_id_start_date == null or user_id_start_date == ''">
-			, null
-			</if>
-			<if test="user_id_start_date != null and user_id_start_date != ''">
-			, TO_TIMESTAMP(#{user_id_start_date}, 'YYYYMMDDHH24MISSUS')
-			</if>
-			<if test="user_id_end_date == null or user_id_end_date == ''">
-			, null
-			</if>		
-			<if test="user_id_end_date != null and user_id_end_date != ''">
-			, TO_TIMESTAMP(#{user_id_end_date}, 'YYYYMMDDHH24MISSUS')
-			</if>			
 		)
 	</insert>
 	

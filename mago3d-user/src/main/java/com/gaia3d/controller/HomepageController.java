@@ -4,6 +4,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.domain.CacheManager;
@@ -39,6 +42,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/homepage/")
 public class HomepageController {
 	
+	@Autowired
+	private LocaleResolver localeResolver;
 	@Autowired
 	private IssueService issueService;
 	@Autowired
@@ -363,13 +368,17 @@ public class HomepageController {
 	 */
 	@GetMapping(value = "ajax-change-language.do")
 	@ResponseBody
-	public Map<String, Object> ajaxChangeLanguage(HttpServletRequest request, @RequestParam("lang") String lang, Model model) {
+	public Map<String, Object> ajaxChangeLanguage(HttpServletRequest request, HttpServletResponse response, @RequestParam("lang") String lang, Model model) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			log.info("@@ lang = {}", lang);
 			if(lang != null && !"".equals(lang) && ("ko".equals(lang) || "en".equals(lang))) {
 				request.getSession().setAttribute(SessionKey.LANG.name(), lang);
+				Locale locale = new Locale(lang);
+//				LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+//				localeResolver.setLocale(request, response, locale);
+				localeResolver.setLocale(request, response, locale);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
