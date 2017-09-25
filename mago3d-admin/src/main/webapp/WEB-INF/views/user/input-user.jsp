@@ -31,7 +31,6 @@
 						<div class="tabs">
 							<ul>
 								<li><a href="#user_info_tab">기본정보</a></li>
-								<li><a href="#user_otp_tab">OTP</a></li>
 								<li><a href="#user_device_tab">디바이스</a></li>
 							</ul>
 							<div id="user_info_tab">
@@ -162,189 +161,6 @@
 									<div id="insertUserLink" class="center-buttons">
 										<input type="submit" value="저장" onclick="insertUser();" />
 										<a href="/user/list-user.do" class="button">목록</a>
-									</div>
-								</div>
-								</form:form>
-							</div>
-										
-							<div id="user_otp_tab">
-								<form:form id="userOTP" modelAttribute="userOTP" method="post" onsubmit="return false;">
-								<table class="input-table scope-row">
-									<col class="col-label" />
-									<col class="col-input" />
-									<col class="col-input" />
-									<col class="col-input" />
-									<col class="col-input" />
-									<tr>
-										<th class="col-label" scope="row">
-											<span>OTP 사용 여부</span>
-											<span class="icon-glyph glyph-emark-dot color-warning"></span>
-										</th>
-										<td class="col-input radio-set" colspan="3">
-											<form:radiobutton path="otp_use_yn" value="Y" label="사용" />
-											<form:radiobutton path="otp_use_yn" value="N" label="사용안함" />
-										</td>
-									</tr>
-																					
-									<tr>
-										<th class="col-label" scope="rowgroup" rowspan="${otpTypeCount }">
-											<span>OTP 인증 방식</span>
-										</th>
-										<td class="col-input radio-set">
-											<input type="radio" id="otp_type_app" name="otp_type" value="0" />
-											<label for="otp_type_app">모바일(앱) 이용</label>
-										</td>
-										<td class="col-input">
-											<label for="mobile_app_key">앱 OTP Key</label>
-										</td>
-										<td class="col-input">
-											<form:input path="mobile_app_key" placeholder="공백없이 입력" class="l" />
-											<form:errors path="mobile_app_key" cssClass="error" />
-										</td>
-									</tr>
-<c:if test="${policy.user_otp_sms_yn eq 'Y'}">																					
-									<tr>
-										<td class="col-input radio-set">
-											<input type="radio" id="otp_type_sms" name="otp_type" value="1" />
-											<label for="otp_type_sms">SMS 전송</label>
-										</td>
-										<td class="col-input">핸드폰 번호</td>
-										<td id="reloadMobilePhone" class="col-input" colspan="2">${userOTP.viewMaskingMobilePhone}</td>
-									</tr>
-</c:if>																					
-									<tr>
-										<td class="col-input radio-set">
-											<input type="radio" id="otp_type_pc" name="otp_type" value="2" />
-											<label for="otp_type_pc">PC(Web) 이용</label>
-										</td>
-										<td class="col-input">
-											<label for="pin_number">PIN 번호</label>
-										</td>
-										<td class="col-input" colspan="2">
-											<form:password path="pin_number" class="m" />
-											<span class="table-desc">숫자(4~8자리)</span>
-											<form:errors path="pin_number" cssClass="error" />
-										</td>
-									</tr>
-<c:if test="${policy.user_otp_email_yn eq 'Y'}">																					
-									<tr>
-										<td class="col-input radio-set">
-											<input type="radio" id="otp_type_email" name="otp_type" value="3" />
-											<label for="otp_type_email">이메일 전송</label>
-										</td>
-										<td class="col-input">이메일</td>
-										<td id="reloadEmail" class="col-input" colspan="2">${userOTP.viewMaskingEmail}</td>
-									</tr>
-</c:if>
-<c:if test="${policy.user_otp_messanger_yn eq 'Y'}">																					
-									<tr>
-										<td class="col-input radio-set">
-											<input type="radio" id="otp_type_messanger" name="otp_type" value="4" />
-											<label for="otp_type_messanger">메신저 전송</label>
-										</td>
-										<td class="col-input">메신저</td>
-										<td id="reloadMessanger" class="col-input" colspan="2">${userOTP.messanger}</td>
-									</tr>
-</c:if>
-<c:if test="${policy.user_otp_radius_yn eq 'Y'}">
-									<tr>
-										<td class="col-input radio-set">
-											<input type="radio" id="otp_type_radius" name="otp_type" value="6" />
-											<label for="otp_type_radius">RADIUS</label>
-										</td>
-										<td class="col-input">Radius 프로토콜 (도움말)</td>
-										<td class="col-input" colspan="2"></td>
-									</tr>
-</c:if>												
-									<tr>
-										<th class="col-label" scope="rowgroup" rowspan="5">
-											<span>OTP 사용 접속 제어</span>
-										</th>
-										<td class="col-input radio-set" colspan="3">
-											<form:radiobutton path="use_constraint_yn" value="Y" label="사용" />
-											<form:radiobutton path="use_constraint_yn" value="N" label="사용안함" />
-										</td>
-									</tr>
-																					
-									<tr>
-										<td class="col-input">
-											<label for="allow_counter">건수</label>
-										</td>
-										<td class="col-input" colspan="3">
-											<form:input path="allow_counter" cssClass="s" maxlength="5" />
-											<span class="table-desc">회 (사용 가능)</span>
-											<form:errors path="allow_counter" cssClass="error" />
-										</td>
-									</tr>
-																		
-									<tr>
-										<td class="col-input">
-											<label for="use_start_day">날짜</label>
-										</td>
-										<td class="col-input" colspan="3">
-											<form:input path="use_start_day" cssClass="s date" />
-											<span class="delimeter tilde">~</span>
-											<form:input path="use_end_day" cssClass="s date" />
-										</td>
-									</tr>
-									
-									<tr>
-										<td class="col-input">
-											<label for="use_monday_yn">요일</label>
-											<form:hidden path="use_sunday_yn" />
-											<form:hidden path="use_monday_yn" />
-											<form:hidden path="use_tuesday_yn" />
-											<form:hidden path="use_wednesday_yn" />
-											<form:hidden path="use_thursday_yn" />
-											<form:hidden path="use_friday_yn" />
-											<form:hidden path="use_saturday_yn" />
-										</td>
-										<td class="col-input checkbox-set" colspan="3">
-											<input type="checkbox" id="use_monday_yn_name" name="use_monday_yn_name" />
-											<label for="use_monday_yn_name">월</label>
-											<input type="checkbox" id="use_tuesday_yn_name" name="use_tuesday_yn_name" />
-											<label for="use_tuesday_yn_name">화</label>
-											<input type="checkbox" id="use_wednesday_yn_name" name="use_wednesday_yn_name" />
-											<label for="use_wednesday_yn_name">수</label>
-											<input type="checkbox" id="use_thursday_yn_name" name="use_thursday_yn_name" />
-											<label for="use_thursday_yn_name">목</label>
-											<input type="checkbox" id="use_friday_yn_name" name="use_friday_yn_name" />
-											<label for="use_friday_yn_name">금</label>
-											<input type="checkbox" id="use_saturday_yn_name" name="use_saturday_yn_name" />
-											<label for="use_saturday_yn_name">토</label>
-											<input type="checkbox" id="use_sunday_yn_name" name="use_sunday_yn_name" />
-											<label for="use_sunday_yn_name">일</label>
-										</td>
-									</tr>
-									
-									<tr>
-										<td class="col-input">
-											<label for="use_start_hour">시간</label>
-										</td>
-										<td class="col-input" colspan="3">
-											<select id="use_start_hour" name="use_start_hour" class="select">
-							  					<option value="">시간</option>
-							  				</select>
-											<span class="delimeter">:</span>
-											<select id="use_start_minute" name="use_start_minute" class="select">
-							  					<option value="">분</option>
-							  				</select>
-											<span class="delimeter">~</span>
-											<select id="use_end_hour" name="use_end_hour" class="select">
-							  					<option value="">시간</option>
-							  				</select>
-											<span class="delimeter">:</span>
-											<select id="use_end_minute" name="use_end_minute" class="select">
-							  					<option value="">분</option>
-							  				</select>
-										</td>
-									</tr>
-								</table>
-								
-								<div class="button-group">
-									<div id="insertUserOTPLink" class="center-buttons">
-										<input type="submit" value="저장" onclick="insertUserOTP();" />
-										<a href="/user/list-user.do?${listParameters}" class="button">목록</a>
 									</div>
 								</div>
 								</form:form>
@@ -616,16 +432,7 @@
 	var userDeviceCount = 0;
 	$(document).ready(function() {
 		$( ".tabs" ).tabs();
-		
-		$("[name=otp_use_yn]").filter("[value='Y']").prop("checked",true);
-		$("[name=use_constraint_yn]").filter("[value='N']").prop("checked",true);
-
 		initJqueryCalendar();
-		
-		// OTP 사용기간 관련 설정
-		$( ".select" ).selectmenu();
-		
-		initOTPUseTime();
 		initUserDevice();
 	});
 	
@@ -640,28 +447,6 @@
 		modal: true,
 		resizable: false
 	});
-	
-	// 시작/종료 날짜의 시간/분 값 설정
-	function initOTPUseTime() {
-		for(var i=0; i<24; i++) {
-			if(i < 10) {
-				$("#use_start_hour").append("<option value='0"+ i +"'>0" + i + "</option>");
-				$("#use_end_hour").append("<option value='0"+ i +"'>0" + i + "</option>");
-			} else {
-				$("#use_start_hour").append("<option value='"+ i +"'>" + i + "</option>");
-				$("#use_end_hour").append("<option value='"+ i +"'>" + i + "</option>");
-			}
-		}
-		for(var i=0; i<60; i++) {
-			if(i < 10) {
-				$("#use_start_minute").append("<option value='0"+ i +"'>0" + i + "</option>");
-				$("#use_end_minute").append("<option value='0"+ i +"'>0" + i + "</option>");
-			} else {
-				$("#use_start_minute").append("<option value='"+ i +"'>" + i + "</option>");
-				$("#use_end_minute").append("<option value='"+ i +"'>" + i + "</option>");
-			}
-		}
-	}
 	
 	// 디바이스 초기화
 	function initUserDevice() {
@@ -761,7 +546,8 @@
 					insertUserFlag = true;
 				},
 				error:function(request,status,error){
-			        alert(JS_MESSAGE["ajax.error.message"]);
+			        //alert(JS_MESSAGE["ajax.error.message"]);
+			        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			        insertUserFlag = true;
 				}
 			});
@@ -864,165 +650,6 @@
 		} else if($("#duplication_value").val() == "1") {
 			alert("사용중인 아이디 입니다. 다른 아이디를 선택해 주십시오.");
 			return false;
-		}
-	}
-	
-	// 사용자 OTP 정보 저장
-	var insertUserOTPFlag = true;
-	function insertUserOTP() {
-		if (checkUserOtp() == false) {
-			return false;
-		}
-		if(insertUserOTPFlag) {
-			insertUserOTPFlag = false;
-			var info = $("#userOTP").serialize() + "&user_id=" + $("#user_id").val();
-			$.ajax({
-				url: "/user/ajax-insert-user-otp.do",
-				type: "POST",
-				data: info,
-				cache: false,
-				async:false,
-				dataType: "json",
-				success: function(msg){
-					if(msg.result == "success") {
-						alert(JS_MESSAGE["userotp.insert"]);
-						$("#insertUserOTPLink").empty();
-					} else {
-						alert(JS_MESSAGE[msg.result]);
-					}
-					insertUserOTPFlag = true;
-				},
-				error:function(request,status,error){
-			        alert(JS_MESSAGE["ajax.error.message"]);
-			        insertUserOTPFlag = true;
-				}
-			});
-		} else {
-			alert(JS_MESSAGE["button.dobule.click"]);
-			return;
-		}	
-	}
-	
-	function checkUserOtp() {
-		if ($("#user_id").val() == "") {
-			alert("사용자 기본 정보 등록 후 이용 가능 합니다.");
-			$("#user_id").focus();
-			return false;
-		}
-		
-		var otp_use_yn = $(":radio[name='otp_use_yn']:checked").val();
-		var otp_type = $(":radio[name='otp_type']:checked").val();
-		if(otp_use_yn == null || otp_use_yn == "") {
-			alert(JS_MESSAGE["userotp.otp_use_yn.invalid"]);
-			return false;
-		}
-		if(otp_use_yn == "Y") {
-			var user_otp_mobile_app_key_modify_yn = "${policy.user_otp_mobile_app_key_modify_yn}";
-			if(user_otp_mobile_app_key_modify_yn == "Y") {
-				if(otp_type == "0") {
-					var mobile_phone1 = $("#mobile_phone1").val();
-					var mobile_phone2 = $("#mobile_phone2").val();
-					var mobile_phone3 = $("#mobile_phone3").val();
-					if(mobile_phone1 == null || mobile_phone1 == "" 
-							|| mobile_phone2 == null || mobile_phone2 == ""
-							|| mobile_phone3 == null || mobile_phone3 == "") {
-						alert(JS_MESSAGE["userotp.mobile_phone.required"]);
-						return false;
-					}
-					
-					if ($("#mobile_app_key").val() == "") {
-						alert(JS_MESSAGE["userotp.mobile_app_key.invalid"]);
-						$("#mobile_app_key").focus();
-						return false;
-					}
-				}
-			}
-			var user_otp_pin_number_modify_yn = "${policy.user_otp_pin_number_modify_yn}";
-			if(user_otp_pin_number_modify_yn == "Y") {
-				if(otp_type == "2") {
-					if ($("#pin_number").val() == "") {
-						alert(JS_MESSAGE["userotp.pin_number.invalid"]);
-						$("#pin_number").focus();
-						return false;
-					}
-					if(!isNumber($("#pin_number").val())) {
-						$("#pin_number").focus();
-						return false;
-					}
-					if($("#pin_number").val().length < 4 || $("#pin_number").val().length > 8) {
-						alert(JS_MESSAGE["number.required"]);
-						$("#pin_number").focus();
-						return false;
-					}
-				}
-			}
-		}
-
-		var use_constraint_yn = $("#use_constraint_yn").val();
-		var use_start_day = $("#use_start_day").val().replace(/[^0-9]/g, "");
-		var use_end_day = $("#use_end_day").val().replace(/[^0-9]/g, "");
-		var use_start_hour = $("#use_start_hour").val();
-		var use_end_hour = $("#use_end_hour").val();
-		var use_start_minute = $("#use_start_minute").val();
-		var use_end_minute = $("#use_end_minute").val();
-		if(use_constraint_yn == 'Y') {
-			if(use_start_day != null && use_start_day != "") {
-				if(use_end_day == null || use_end_day == "") {
-					alert("종료일을 입력하여 주십시오.");
-					return false;
-				}
-				if(use_start_hour == null || use_start_hour == "" || use_start_minute == null || use_start_minute == "") {
-					alert("시작 시간을 입력하여 주십시오.");
-					return false;
-				}
-				if(use_end_hour == null || use_end_hour == "" || use_end_minute == null || use_end_minute == "") {
-					alert("종료 시간을 입력하여 주십시오.");
-					return false;
-				}
-				
-				var use_start_date = use_start_day + use_start_hour + use_start_minute;
-				var use_end_date = use_end_day + use_end_hour + use_end_minute;
-				if(use_start_date >= use_end_date) {
-					alert("시작 기간이 종료 기간보다 같거나 클수 없습니다.");
-					return false;
-				}
-			}
-		}
-
-		if($("[name=use_sunday_yn_name]").is(":checked")) {
-			$("#use_sunday_yn").val("Y");
-		} else {
-			$("#use_sunday_yn").val("N");
-		}
-		if($("[name=use_monday_yn_name]").is(":checked")) {
-			$("#use_monday_yn").val("Y");
-		} else {
-			$("#use_monday_yn").val("N");
-		}
-		if($("[name=use_tuesday_yn_name]").is(":checked")) {
-			$("#use_tuesday_yn").val("Y");
-		} else {
-			$("#use_tuesday_yn").val("N");
-		}
-		if($("[name=use_wednesday_yn_name]").is(":checked")) {
-			$("#use_wednesday_yn").val("Y");
-		} else {
-			$("#use_wednesday_yn").val("N");
-		}
-		if($("[name=use_thursday_yn_name]").is(":checked")) {
-			$("#use_thursday_yn").val("Y");
-		} else {
-			$("#use_thursday_yn").val("N");
-		}
-		if($("[name=use_friday_yn_name]").is(":checked")) {
-			$("#use_friday_yn").val("Y");
-		} else {
-			$("#use_friday_yn").val("N");
-		}
-		if($("[name=use_saturday_yn_name]").is(":checked")) {
-			$("#use_saturday_yn").val("Y");
-		} else {
-			$("#use_saturday_yn").val("N");
 		}
 	}
 	

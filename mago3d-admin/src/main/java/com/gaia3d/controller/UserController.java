@@ -280,7 +280,7 @@ public class UserController {
 	 * @param userInfo
 	 * @return
 	 */
-	@GetMapping(value = "ajax-insert-user-info.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-insert-user-info.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertUserInfo(HttpServletRequest request, UserInfo userInfo) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();

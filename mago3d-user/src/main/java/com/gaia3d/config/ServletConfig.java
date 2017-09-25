@@ -1,5 +1,6 @@
 package com.gaia3d.config;
 
+import java.util.Locale;
 import java.util.Properties;
 
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -54,12 +57,12 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 //        		.excludePathPatterns("/login/**");
     }
 	
-//	@Bean
-//	public LocaleResolver localeResolver() {
-//		SessionLocaleResolver slr = new SessionLocaleResolver();
-//		slr.setDefaultLocale(locale);
-//		return slr;
-//	}
+	@Bean
+	public LocaleResolver localeResolver() {
+		SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
+		sessionLocaleResolver.setDefaultLocale(Locale.KOREA);
+		return sessionLocaleResolver;
+	}
 //	
 //	@Bean
 //	public LocaleChangeInterceptor localeChangeInterceptor() {
