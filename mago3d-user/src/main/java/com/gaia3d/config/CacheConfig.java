@@ -52,9 +52,6 @@ public class CacheConfig {
 //	@Autowired
 //	private ServerService serverService;
 	
-	@Autowired
-	private PropertiesConfig propertiesConfig;
-	
 	public static final String LOCALHOST = "localhost";
 
 	@PostConstruct
