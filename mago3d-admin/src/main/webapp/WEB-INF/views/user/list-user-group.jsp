@@ -44,18 +44,18 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
 						<div class="content-header row">
-							<h3 class="content-title u-pull-left">사용자 그룹 (<a href="#" onclick="reloadUserGroupCache();">캐시갱신</a>)</h3>
-							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
+							<h3 class="content-title u-pull-left"><spring:message code='user.group.usergroup'/> (<a href="#" onclick="reloadUserGroupCache();"><spring:message code='user.group.cache.update'/></a>)</h3>
+							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='user.group.check.mark'/></div>
 						</div>
 						<div class="row">
 							<div class="one-third column">
 								<div id="AXTreeTarget" class="tree"></div>
-								<button type="button" class="btn btn-success btn-sm" onclick="addTree(); return false;">추가</button>
-								<button type="button" class="btn btn-warning btn-sm" onclick="addChildTree(); return false;">하위메뉴추가</button>
-								<button type="button" class="btn btn-danger btn-sm" onclick="delTree(); return false;">선택삭제</button>
-								<!-- <button type="button" class="btn btn-success btn-sm" onclick="updateTree(); return false;">수정</button> -->
-								<button type="button" class="btn btn-warning btn-sm" onclick="moveUpTree(); return false;">위로</button>
-								<button type="button" class="btn btn-danger btn-sm" onclick="moveDownTree(); return false;">아래로</button>
+								<button type="button" class="btn btn-success btn-sm" onclick="addTree(); return false;"><spring:message code='user.group.add'/></button>
+								<button type="button" class="btn btn-warning btn-sm" onclick="addChildTree(); return false;"><spring:message code='user.group.add.submenu'/></button>
+								<button type="button" class="btn btn-danger btn-sm" onclick="delTree(); return false;"><spring:message code='user.group.select.delete'/></button>
+<!-- 								<button type="button" class="btn btn-success btn-sm" onclick="updateTree(); return false;">수정</button> -->
+								<button type="button" class="btn btn-warning btn-sm" onclick="moveUpTree(); return false;"><spring:message code='user.group.up'/></button>
+								<button type="button" class="btn btn-danger btn-sm" onclick="moveDownTree(); return false;"><spring:message code='user.group.down'/></button>
 							</div>
 							<div class="two-third column">
 								<div class="node">
@@ -72,44 +72,44 @@
 											<col class="col-input" />
 											<tr>
 												<th class="col-label" scope="row">
-													<label for="group_name">그룹명</label>
+													<label for="group_name"><spring:message code='user.group.name'/></label>
 													<span class="icon-glyph glyph-emark-dot color-warning"></span>
 												</th>
 												<td class="col-input"><input type="text" id="group_name" name="group_name" value="" class="m" /></td>
 											</tr>
 											<tr>
 												<th class="col-label" scope="row">
-													<label for="group_key">그룹명(영문)</label>
+													<label for="group_key"><spring:message code='user.group.user.group.en'/></label>
 													<span class="icon-glyph glyph-emark-dot color-warning"></span>
 												</th>
 												<td class="col-input"><input type="text" id="group_key" name="group_key" value="" class="m" /></td>
 											</tr>
 											<tr>
 												<th class="col-label" scope="row">
-													<span>사용여부</span>
+													<span><spring:message code='user.group.use.not'/></span>
 													<span class="icon-glyph glyph-emark-dot color-warning"></span>
 												</th>
 												<td class="col-input radio-set">
 													<input type="radio" id="use_y" name="use_yn" value="Y" />
-													<label for="use_y">사용</label>
+													<label for="use_y"><spring:message code='user.group.use'/></label>
 													<input type="radio" id="use_n" name="use_yn" value="N" />
-													<label for="use_n">사용안함</label>
+													<label for="use_n"><spring:message code='user.group.stop'/></label>
 												</td>
 											</tr>
 											<tr>
-												<th class="col-label" scope="row"><label for="description">설명</label></th>
+												<th class="col-label" scope="row"><label for="description"><spring:message code='user.group.description'/></label></th>
 												<td class="col-input"><input type="text" id="description" name="description" value="" class="l"/></td>
 											</tr>
 											<tr>
 												<td colspan="2">
 													<div class="button-group u-pull-left">
-														<input type="submit" value="저장" onclick="appendTree();"/>
-														<input type="reset" value="취소" />
+														<input type="submit" value="<spring:message code='user.group.save'/>" onclick="appendTree();"/>
+														<input type="reset" value="<spring:message code='user.group.cancel'/>" />
 													</div>
 													<div class="button-group u-pull-right">
-														<a href="#" class="button" onclick="modifyUserGroupRole();">Role 관리</a>
-														<a href="#" class="button" onclick="modifyUserGroupMenu();">메뉴 관리</a>
-														<a href="#" class="button" onclick="modifyUserGroupUser();">사용자 관리</a>
+														<a href="#" class="button" onclick="modifyUserGroupRole();"><spring:message code='user.group.control.roll'/></a>
+														<a href="#" class="button" onclick="modifyUserGroupMenu();"><spring:message code='user.group.control.menu'/></a>
+														<a href="#" class="button" onclick="modifyUserGroupUser();"><spring:message code='user.group.control.user'/></a>
 													</div>
 												</td>
 											</tr>
@@ -119,9 +119,9 @@
 											
 									<div class="tabs">
 										<ul>
-											<li><a href="#role_tab">ROLE</a></li>
-											<li><a href="#menu_tab">메뉴</a></li>
-											<li><a href="#user_tab">사용자</a></li>
+											<li><a href="#role_tab"><spring:message code='user.group.role'/></a></li>
+											<li><a href="#menu_tab"><spring:message code='user.group.menu'/></a></li>
+											<li><a href="#user_tab"><spring:message code='user.group.user'/></a></li>
 										</ul>
 										<div id="role_tab">
 											<table class="inner-table scope-col">
@@ -133,17 +133,17 @@
 												<col class="col-date-time" />
 												<thead>
 													<tr>
-														<th scope="col" class="col-number">번호</th>
-														<th scope="col" class="col-name">Role명</th>
-														<th scope="col" class="col-key">Role Key</th>
-														<th scope="col" class="col-toggle">사용여부</th>
-														<th scope="col" class="col-desc">설명</th>
-														<th scope="col" class="col-date-time">등록일</th>
+														<th scope="col" class="col-number"><spring:message code='user.group.number'/></th>
+														<th scope="col" class="col-name"><spring:message code='user.group.role.name'/></th>
+														<th scope="col" class="col-key"><spring:message code='user.group.role.key'/></th>
+														<th scope="col" class="col-toggle"><spring:message code='user.group.use.not'/></th>
+														<th scope="col" class="col-desc"><spring:message code='user.group.description'/></th>
+														<th scope="col" class="col-date-time"><spring:message code='user.group.insert.date'/></th>
 													</tr>
 												</thead>
 												<tbody id="role_list">
 													<tr>
-														<td colspan="6" class="col-none">등록된 Role이 없습니다.</td>
+														<td colspan="6" class="col-none"><spring:message code='user.group.role.insert.not'/></td>
 													</tr>
 												</tbody>
 											</table>
@@ -163,19 +163,19 @@
 												<col class="col-date-time" />
 												<thead>
 													<tr>
-														<th scope="col" class="col-number">번호</th>
-														<th scope="col" class="col-name">메뉴명</th>
-														<th scope="col" class="col-toggle">사용여부</th>
-														<th scope="col" class="col-url">Url</th>
-														<th scope="col" class="col-url">이미지</th>
-														<th scope="col" class="col-desc">이미지 Alt</th>
-														<th scope="col" class="col-desc">설명</th>
-														<th scope="col" class="col-date-time">등록일</th>
+														<th scope="col" class="col-number"><spring:message code='user.group.number'/></th>
+														<th scope="col" class="col-name"><spring:message code='user.group.role.name'/></th>
+														<th scope="col" class="col-toggle"><spring:message code='user.group.use.not'/></th>
+														<th scope="col" class="col-url"><spring:message code='user.group.menu.url'/></th>
+														<th scope="col" class="col-url"><spring:message code='user.group.menu.image'/></th>
+														<th scope="col" class="col-desc"><spring:message code='user.group.menu.image.alt'/></th>
+														<th scope="col" class="col-desc"><spring:message code='user.group.description'/></th>
+														<th scope="col" class="col-date-time"><spring:message code='user.group.insert.date'/></th>
 													</tr>
 												</thead>
 												<tbody id="menu_list">
 													<tr>
-														<td colspan="8" class="col-none">등록된 Menu가 없습니다.</td>
+														<td colspan="8" class="col-none"><spring:message code='user.group.menu.insert.not'/></td>
 													</tr>
 												</tbody>
 											</table>
@@ -192,17 +192,17 @@
 												<col class="col-date-time" />
 												<thead>
 													<tr>
-														<th scope="col" class="col-number">번호</th>
-														<th scope="col" class="col-id">아이디</th>
-														<th scope="col" class="col-name">이름</th>
-														<th scope="col" class="col-email">이메일</th>
-														<th scope="col" class="col-toggle">회원 상태</th>
-														<th scope="col" class="col-date-time">등록일</th>
+														<th scope="col" class="col-number"><spring:message code='user.group.number'/></th>
+														<th scope="col" class="col-id"><spring:message code='user.group.id'/></th>
+														<th scope="col" class="col-name"><spring:message code='user.group.name'/></th>
+														<th scope="col" class="col-email"><spring:message code='user.group.email'/></th>
+														<th scope="col" class="col-toggle"><spring:message code='user.group.user.status'/></th>
+														<th scope="col" class="col-date-time"><spring:message code='user.group.insert.date'/></th>
 													</tr>
 												</thead>
 												<tbody id="user_list">
 													<tr>
-														<td colspan="6" class="col-none">등록된 사용자가 없습니다.</td>		
+														<td colspan="6" class="col-none"><spring:message code='user.group.user.not'/></td>		
 													</tr>
 												</tbody>
 											</table>
@@ -220,18 +220,18 @@
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 	
 <!-- Role 관리 -->	
-<div id="role_manager" class="dialog" title="Role 관리">
+<div id="role_manager" class="dialog" title="<spring:message code='user.group.control.roll'/>">
 	<div class="row">
 		<!-- 전체 Role -->
 		<div id="role_left" class="pool">
 			<div class="list-header row">
 				<div class="u-pull-left">
-					<h4 class="column-title">전체 Role(선택 그룹 제외)</h4>
+					<h4 class="column-title"><spring:message code='user.group.role.all'/></h4>
 				</div>
 				<div class="u-pull-right">
-					<label for="search_except_role_name">Role명</label>
+					<label for="search_except_role_name"><spring:message code='user.group.role.name'/></label>
 					<input type="search" id="search_except_role_name" name="search_except_role_name" class="m" value="" />
-					<input type="button" value="조회" onclick="drawGroupPage('1', 'role_all');" />
+					<input type="button" value="<spring:message code='user.group.lookup'/>" onclick="drawGroupPage('1', 'role_all');" />
 				</div>
 				<div id="role_all_list_count" class="list-desc u-pull-left">
 				</div>
@@ -245,8 +245,8 @@
 				<thead>
 					<tr>
 						<th scope="col" class="col-checkbox"><input type="checkbox" id="role_left_check_all" name="role_left_check_all" /></th>
-						<th scope="col" class="col-name">Role명 (Role Key)</th>
-						<th scope="col" class="col-toggle" style="min-width: 50px;">사용유무</th>
+						<th scope="col" class="col-name"><spring:message code='user.group.role.name.key'/></th>
+						<th scope="col" class="col-toggle" style="min-width: 50px;"><spring:message code='user.group.use.not'/></th>
 					</tr>
 				</thead>
 				<tbody id="role_all_list">
@@ -260,12 +260,12 @@
 		<div id="role_right" class="chosen">
 			<div class="list-header row">
 				<div class="u-pull-left">
-					<h4 class="column-title">등록 Role(선택 그룹)</h4>
+					<h4 class="column-title"><spring:message code='user.group.role.insert.select.group'/></h4>
 				</div>
 				<div class="u-pull-right">
-					<label for="search_role_name">Role명</label>
+					<label for="search_role_name"><spring:message code='user.group.role.name'/></label>
 					<input type="search" id="search_role_name" name="search_role_name" class="m" value="" />
-					<input type="button" value="조회" onclick="drawGroupPage('1', 'role_select');" />
+					<input type="button" value="<spring:message code='user.group.lookup'/>" onclick="drawGroupPage('1', 'role_select');" />
 				</div>
 				<div id="role_select_list_count" class="list-desc u-pull-left">
 				</div>
@@ -279,8 +279,8 @@
 				<thead>
 					<tr>
 						<th scope="col" class="col-checkbox"><input type="checkbox" id="role_right_check_all" name="role_right_check_all" /></th>
-						<th scope="col" class="col-name">Role명 (Role Key)</th>
-						<th scope="col" class="col-toggle" style="min-width: 50px;">사용유무</th>
+						<th scope="col" class="col-name"><spring:message code='user.group.role.name.key'/></th>
+						<th scope="col" class="col-toggle" style="min-width: 50px;"><spring:message code='user.group.use.not'/></th>
 					</tr>
 				</thead>
 				<tbody id="role_select_list">
@@ -292,29 +292,29 @@
 		<div id="role_center" class="buttons">
 			<a href="#" id="role_button_insert" class="button color-area-em">
 				<span class="icon-glyph glyph-plus"></span>
-				<span class="icon-text">등록</span>
+				<span class="icon-text"><spring:message code='user.group.role.insert'/></span>
 			</a>
 			<a href="#" id="role_button_delete" class="button color-area-em">
 				<span class="icon-glyph glyph-ex"></span>
-				<span class="icon-text">삭제</span>
+				<span class="icon-text"><spring:message code='user.group.role.delete'/></span>
 			</a>
 		</div>
 	</div>
 </div>
 
 <!-- 사용자 관리 -->	
-<div id="user_manager" class="user_dialog" title="사용자 관리">
+<div id="user_manager" class="user_dialog" title="<spring:message code='user.group.control.user'/>">
 	<div class="row">
 		<!-- 전체 사용자 -->
 		<div id="user_left" class="pool">
 			<div class="list-header row">
 				<div class="u-pull-left">
-					<h4 class="column-title">전체 사용자(선택 그룹 제외)</h4>
+					<h4 class="column-title"><spring:message code='user.group.user.all.user'/></h4>
 				</div>
 				<div class="u-pull-right">
-					<label for="search_except_user_name">아이디</label>
+					<label for="search_except_user_name"><spring:message code='user.group.id'/></label>
 					<input type="search" id="search_except_user_name" name="search_except_user_name" class="m" value="" />
-					<input type="button" value="조회" onclick="drawGroupPage('1', 'user_all');" />
+					<input type="button" value="<spring:message code='user.group.lookup'/>" onclick="drawGroupPage('1', 'user_all');" />
 				</div>
 				<div id="user_all_list_count" class="list-desc u-pull-left">
 				</div>
@@ -328,8 +328,8 @@
 				<thead>
 					<tr>
 						<th scope="col" class="col-checkbox"><input type="checkbox" id="user_left_check_all" name="user_left_check_all" /></th>
-						<th scope="col" class="col-name">아이디</th>
-						<th scope="col" class="col-toggle">이름</th>
+						<th scope="col" class="col-name"><spring:message code='user.group.id'/></th>
+						<th scope="col" class="col-toggle"><spring:message code='user.group.user.name'/></th>
 					</tr>
 				</thead>
 				<tbody id="user_all_list">
@@ -343,12 +343,12 @@
 		<div id="user_right" class="chosen">
 			<div class="list-header row">
 				<div class="u-pull-left">
-					<h4 class="column-title">등록 사용자(선택 그룹)</h4>
+					<h4 class="column-title"><spring:message code='user.group.user.insert.user'/></h4>
 				</div>
 				<div class="u-pull-right">
-					<label for="search_user_name">아이디</label>
+					<label for="search_user_name"><spring:message code='user.group.id'/></label>
 					<input type="search" id="search_user_name" name="search_user_name" class="m" value="" />
-					<input type="button" value="조회" onclick="drawGroupPage('1', 'user_select');" />
+					<input type="button" value="<spring:message code='user.group.lookup'/>" onclick="drawGroupPage('1', 'user_select');" />
 				</div>
 				<div id="user_select_list_count" class="list-desc u-pull-left">
 				</div>
@@ -362,8 +362,8 @@
 				<thead>
 					<tr>
 						<th scope="col" class="col-checkbox"><input type="checkbox" id="user_right_check_all" name="user_right_check_all" /></th>
-						<th scope="col" class="col-name">아이디</th>
-						<th scope="col" class="col-toggle">이름</th>
+						<th scope="col" class="col-name"><spring:message code='user.group.id'/></th>
+						<th scope="col" class="col-toggle"><spring:message code='user.group.user.name'/></th>
 					</tr>
 				</thead>
 				<tbody id="user_select_list">
@@ -375,11 +375,11 @@
 		<div id="role_center" class="buttons">
 			<a href="#" id="user_button_insert" class="button color-area-em">
 				<span class="icon-glyph glyph-plus"></span>
-				<span class="icon-text">등록</span>
+				<span class="icon-text"><spring:message code='user.group.role.insert'/></span>
 			</a>
 			<a href="#" id="user_button_delete" class="button color-area-em">
 				<span class="icon-glyph glyph-ex"></span>
-				<span class="icon-text">삭제</span>
+				<span class="icon-text"><spring:message code='user.group.role.delete'/></span>
 			</a>
 		</div>
 	</div>
@@ -451,11 +451,11 @@
 	// Role 관리 팝업
     function modifyUserGroupRole() {
     	if ($("#user_group_id").val() == "") {
-    		alert("사용자 그룹을 선택해 주세요.");
+    		alert(JS_MESSAGE["user.group.select"]);
     		return;
     	}
     	if ($("#depth").val() == "" || parseInt($("#depth").val()) < 1) {
-    		alert("최상위 그룹에는 Role을 등록할 수 없습니다.");
+    		alert(JS_MESSAGE["user.group.role.top.not.insert"]);
     		return;
     	}
     	
@@ -467,16 +467,16 @@
 	}
  	// 메뉴 관리
     function modifyUserGroupMenu() {
- 		alert("준비중입니다.");
+ 		alert(JS_MESSAGE["commingsoon"]);
  	}
  	// 사용자 관리
     function modifyUserGroupUser() {
     	if ($("#user_group_id").val() == "") {
-    		alert("사용자 그룹을 선택해 주세요.");
+    		alert(JS_MESSAGE["user.group.select"] );
     		return;
     	}
     	if ($("#depth").val() == "" || parseInt($("#depth").val()) < 1) {
-    		alert("최상위 그룹에는 사용자를 등록할 수 없습니다.");
+    		alert(JS_MESSAGE["user.group.top.not.insert"]);
     		return;
     	}
     	userDialog.dialog( "open" );
@@ -657,12 +657,12 @@
     function ajaxInsertUserGroupRole() {
     	var user_group_id = $("#user_group_id").val()
     	if (user_group_id == "") {
-    		alert("그룹 아이디가 없습니다.");
+    		alert(JS_MESSAGE["user.group.not.group.id"]);
     		return;
     	}
     	var status = checkedStatus($(":checkbox[name=role_all_id]"));
     	if (!status) {
-			alert("선택된 항목이 없습니다.");
+			alert(JS_MESSAGE["user.group.not.select"]);
 			return;
 		}
     	var param = $("#role_left_form").serialize() + "&user_group_id=" + user_group_id;
@@ -690,12 +690,12 @@
     function ajaxInsertUserGroupUser() {
     	var user_group_id = $("#user_group_id").val()
     	if (user_group_id == "") {
-    		alert("그룹 아이디가 없습니다.");
+    		alert(JS_MESSAGE["user.group.not.group.id"]);
     		return;
     	}
     	var status = checkedStatus($(":checkbox[name=user_all_id]"));
     	if (!status) {
-			alert("선택된 항목이 없습니다.");
+			alert(JS_MESSAGE["user.group.not.select"]);
 			return;
 		}
     	var param = $("#user_left_form").serialize() + "&user_group_id=" + user_group_id;
@@ -724,12 +724,12 @@
     function ajaxDeleteUserGroupRole() {
     	var user_group_id = $("#user_group_id").val()
     	if (user_group_id == "") {
-    		alert("그룹 아이디가 없습니다.");
+    		alert(JS_MESSAGE["user.group.not.group.id"]);
     		return;
     	}
     	var status = checkedStatus($(":checkbox[name=role_select_id]"));
     	if (!status) {
-			alert("선택된 항목이 없습니다.");
+			alert(JS_MESSAGE["user.group.not.select"]);
 			return;
 		}
     	var param = $("#role_right_form").serialize() + "&user_group_id=" + user_group_id;
@@ -759,12 +759,12 @@
     function ajaxDeleteUserGroupUser() {
     	var user_group_id = $("#user_group_id").val()
     	if (user_group_id == "") {
-    		alert("그룹 아이디가 없습니다.");
+    		alert(JS_MESSAGE["user.group.not.group.id"]);
     		return;
     	}
     	var status = checkedStatus($(":checkbox[name=user_select_id]"));
     	if (!status) {
-			alert("선택된 항목이 없습니다.");
+			alert(JS_MESSAGE["user.group.not.select"]);
 			return;
 		}
     	var param = $("#user_right_form").serialize() + "&user_group_id=" + user_group_id;
