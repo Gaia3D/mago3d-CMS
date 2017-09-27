@@ -204,7 +204,7 @@ function loadData(viewer, renderDivId, serverPolicy) {
 						</div>
 						<div class="sub_contents">
 							<div class="title">API 연동</div>
-							
+							<p>API 연동 </p>
 						</div>
 					</div>
 				</div>

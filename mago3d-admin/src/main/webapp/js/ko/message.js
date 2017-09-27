@@ -94,3 +94,12 @@ JS_MESSAGE["issue.reporter.empty"] = "보고 해야 하는 사람을 입력하�
 JS_MESSAGE["issue.contents.empty"] = "내용을 입력하여 주십시오.";
 JS_MESSAGE["issue.start_hour.proper"] = "issue 시작시간을 올바르게 설정하여 주십시오.";
 JS_MESSAGE["issue.start_minute.proper"] = "issue 시작시간을 올바르게 설정하여 주십시오.";
+
+// ticks
+JS_MESSAGE["main.status.in.use"] = "사용중";
+JS_MESSAGE["main.status.stop.use"] = "사용중지";
+JS_MESSAGE["main.status.fail.count"] = "실패횟수";
+JS_MESSAGE["main.status.dormancy"] = "휴면";
+JS_MESSAGE["main.status.expires"] = "기간만료";
+JS_MESSAGE["main.status.temporary.password"] = "임시비밀번호";
+
