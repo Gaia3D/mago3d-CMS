@@ -30,8 +30,8 @@
 						<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
 						<div class="tabs">
 							<ul>
-								<li><a href="#user_info_tab">기본정보</a></li>
-								<li><a href="#user_device_tab">디바이스</a></li>
+								<li><a href="#user_info_tab"><spring:message code='user.input.information'/></a></li>
+								<li><a href="#user_device_tab"><spring:message code='user.input.device'/></a></li>
 							</ul>
 							<div id="user_info_tab">
 								<form:form id="userInfo" modelAttribute="userInfo" method="post" onsubmit="return false;">
@@ -40,31 +40,31 @@
 									<col class="col-input" />
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="user_id">아이디</form:label>
+											<form:label path="user_id"><spring:message code='id'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
 											<form:hidden path="duplication_value"/>
 											<form:input path="user_id" cssClass="m" />
-					  						<input type="button" id="user_duplication_buttion" value="중복확인" />
-					  						<span class="table-desc" style="padding-left: 5px;">최소길이 ${policy.user_id_min_length}</span>
+					  						<input type="button" id="user_duplication_buttion" value="<spring:message code='overlap.check'/>" />
+					  						<span class="table-desc" style="padding-left: 5px;"><spring:message code='minimum.length'/> ${policy.user_id_min_length}</span>
 											<form:errors path="user_id" cssClass="error" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="user_group_name">사용자 그룹</form:label>
+											<form:label path="user_group_name"><spring:message code='user.group.usergroup'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
 											<form:hidden path="user_group_id" />
 				 							<form:input path="user_group_name" cssClass="m" readonly="true" />
-											<input type="button" id="user_group_buttion" value="그룹선택" />
+											<input type="button" id="user_group_buttion" value="<spring:message code='user.group.usergroup'/>" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="user_name">이름</form:label>
+											<form:label path="user_name"><spring:message code='name'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -74,7 +74,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="password">비밀번호</form:label>
+											<form:label path="password"><spring:message code='password'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -87,7 +87,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="password_confirm">비밀번호 확인</form:label>
+											<form:label path="password_confirm"><spring:message code='password.check'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -97,7 +97,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="telephone1">전화번호</form:label>
+											<form:label path="telephone1"><spring:message code='phone.number'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="telephone1" class="xs" maxlength="3" />
@@ -112,7 +112,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="mobile_phone1">핸드폰 번호</form:label>
+											<form:label path="mobile_phone1"><spring:message code='cell.phone.number'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="mobile_phone1" class="xs" maxlength="3" />
@@ -127,14 +127,14 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="email1">이메일</form:label>
+											<form:label path="email1"><spring:message code='email'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="email1" class="s" />
 											<span class="delimeter at">@</span>
 											<form:input path="email2" class="s" />
 											<select id="email3" name="email3" class="select">
-				               		 			<option value="0">직접입력</option>
+				               		 			<option value="0"><spring:message code='direct.input'/></option>
 	<c:if test="${!empty emailCommonCodeList }">
 		<c:forEach var="commonCode" items="${emailCommonCodeList}" varStatus="status">
 				               		 			<option value="${commonCode.code_value }">${commonCode.code_value }</option>
@@ -148,7 +148,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="messanger">메신저</form:label>
+											<form:label path="messanger"><spring:message code='messenger'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="messanger" class="m" />
@@ -159,8 +159,8 @@
 								
 								<div class="button-group">
 									<div id="insertUserLink" class="center-buttons">
-										<input type="submit" value="저장" onclick="insertUser();" />
-										<a href="/user/list-user.do" class="button">목록</a>
+										<input type="submit" value="<spring:message code='save'/>" onclick="insertUser();" />
+										<a href="/user/list-user.do" class="button"><spring:message code='list'/></a>
 									</div>
 								</div>
 								</form:form>
@@ -177,21 +177,21 @@
 									<col class="col-functions" />
 									<thead>
 										<tr>
-											<th class="col-number" scope="col">우선순위</th>
+											<th class="col-number" scope="col"><spring:message code='user.device.priority'/></th>
 											<th class="col-name" scope="col">
-												<span>사용기기명</span>
+												<span><spring:message code='user.device.device.name'/></span>
 												<span class="icon-glyph glyph-emark-dot color-warning"></span>
 											</th>
 											<th class="col-type-select" scope="col">
-												<span>타입</span>
+												<span><spring:message code='user.device.type'/></span>
 												<span class="icon-glyph glyph-emark-dot color-warning"></span>
 											</th>
-											<th class="col-ip" scope="col">접속 IP</th>
+											<th class="col-ip" scope="col"><spring:message code='user.device.ip'/></th>
 											<th class="col-toggle-radio" scope="col">
-												<span>사용여부</span>
+												<span><spring:message code='user.device.use.not'/></span>
 												<span class="icon-glyph glyph-emark-dot color-warning"></span>
 											</th>
-											<th class="col-functions" scope="col">삭제</th>
+											<th class="col-functions" scope="col"><spring:message code='user.device.delete'/></th>
 										</tr>
 									</thead>
 									
@@ -202,14 +202,14 @@
 											<td class="col-type-select">
 												<select id="device_type1" name="device_type1" class="select">
 					               		 			<option value="0">PC</option>
-													<option value="1">핸드폰</option>
+													<option value="1"><spring:message code='cellphone'/></option>
 												</select>
 											</td>
 											<td class="col-ip"><form:input path="device_ip1" class="m"/></td>
 											<td class="col-type-select">
 												<select id="use_yn1" name="use_yn1" class="select">
-					               		 			<option value="Y">사용</option>
-													<option value="N">미사용</option>
+					               		 			<option value="Y"><spring:message code='use'/></option>
+													<option value="N"><spring:message code='not.use'/></option>
 												</select>
 											</td>
 											<td class="col-functions">
@@ -223,18 +223,18 @@
 											<td class="col-type-select">
 												<select id="device_type2" name="device_type2" class="select">
 					               		 			<option value="0">PC</option>
-													<option value="1">핸드폰</option>
+													<option value="1"><spring:message code='cellphone'/></option>
 												</select>
 											</td>
 											<td class="col-ip"><form:input path="device_ip2" class="m"/></td>
 											<td class="col-type-select">
 												<select id="use_yn2" name="use_yn2" class="select">
-					               		 			<option value="Y">사용</option>
-													<option value="N">미사용</option>
+					               		 			<option value="Y"><spring:message code='use'/></option>
+													<option value="N"><spring:message code='not.use'/></option>
 												</select>
 											</td>
 											<td class="col-functions">
-												<a href="#" onclick="removeUserDevice(2);" class="image-button button-delete">삭제</a>
+												<a href="#" onclick="removeUserDevice(2);" class="image-button button-delete"><spring:message code='user.device.delete'/></a>
 											</td>
 										</tr>
 									
@@ -244,18 +244,18 @@
 											<td class="col-type-select">
 												<select id="device_type3" name="device_type3" class="select">
 					               		 			<option value="0">PC</option>
-													<option value="1">핸드폰</option>
+													<option value="1"><spring:message code='cellphone'/></option>
 												</select>
 											</td>
 											<td class="col-ip"><form:input path="device_ip3" class="m"/></td>
 											<td class="col-type-select">
 												<select id="use_yn3" name="use_yn3" class="select">
-					               		 			<option value="Y">사용</option>
-													<option value="N">미사용</option>
+					               		 			<option value="Y"><spring:message code='use'/></option>
+													<option value="N"><spring:message code='not.use'/></option>
 												</select>
 											</td>
 											<td class="col-functions">
-												<a href="#" onclick="removeUserDevice(3);" class="image-button button-delete">삭제</a>
+												<a href="#" onclick="removeUserDevice(3);" class="image-button button-delete"><spring:message code='user.device.delete'/></a>
 											</td>
 										</tr>
 										<tr id="user_device4">
@@ -264,18 +264,18 @@
 											<td class="col-type-select">
 												<select id="device_type4" name="device_type4" class="select">
 					               		 			<option value="0">PC</option>
-													<option value="1">핸드폰</option>
+													<option value="1"><spring:message code='cellphone'/></option>
 												</select>
 											</td>
 											<td class="col-ip"><form:input path="device_ip4" class="m"/></td>
 											<td class="col-type-select">
 												<select id="use_yn4" name="use_yn4" class="select">
-					               		 			<option value="Y">사용</option>
-													<option value="N">미사용</option>
+					               		 			<option value="Y"><spring:message code='use'/></option>
+													<option value="N"><spring:message code='not.use'/></option>
 												</select>
 											</td>
 											<td class="col-functions">
-												<a href="#" onclick="removeUserDevice(4);" class="image-button button-delete">삭제</a>
+												<a href="#" onclick="removeUserDevice(4);" class="image-button button-delete"><spring:message code='user.device.delete'/></a>
 											</td>
 										</tr>
 										<tr id="user_device5">
@@ -284,18 +284,18 @@
 											<td class="col-type-select">
 												<select id="device_type5" name="device_type5" class="select">
 					               		 			<option value="0">PC</option>
-													<option value="1">핸드폰</option>
+													<option value="1"><spring:message code='cellphone'/></option>
 												</select>
 											</td>
 											<td class="col-ip"><form:input path="device_ip5" class="m"/></td>
 											<td class="col-type-select">
 												<select id="use_yn5" name="use_yn5" class="select">
-					               		 			<option value="Y">사용</option>
-													<option value="N">미사용</option>
+					               		 			<option value="Y"><spring:message code='use'/></option>
+													<option value="N"><spring:message code='not.use'/></option>
 												</select>
 											</td>
 											<td class="col-functions">
-												<a href="#" onclick="removeUserDevice(5);" class="image-button button-delete">삭제</a>
+												<a href="#" onclick="removeUserDevice(5);" class="image-button button-delete"><spring:message code='user.device.delete'/></a>
 											</td>
 										</tr>
 										<tr>
@@ -312,8 +312,8 @@
 								
 								<div class="button-group">
 									<div id="insertUserDeviceLink" class="center-buttons">
-										<input type="submit" value="저장" onclick="insertUserDevice();" />
-										<a href="/user/list-user.do?${listParameters}" class="button">목록</a>
+										<input type="submit" value="<spring:message code='save'/>" onclick="insertUserDevice();" />
+										<a href="/user/list-user.do?${listParameters}" class="button"><spring:message code='list'/></a>
 									</div>
 								</div>
 								</form:form>
@@ -329,7 +329,7 @@
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 	
 	<!-- Dialog -->
-	<div class="dialog" title="사용자 그룹">
+	<div class="dialog" title="<spring:message code='user.group.usergroup'/>">
 		<div class="dialog-user-group">
 <c:if test="${!empty userGroupList }">
 			<ul>
@@ -418,7 +418,7 @@
 		</div>
 			
 		<div class="button-group">
-			<input type="submit" id="button_groupSelect" name="button_groupSelect" value="선택" />
+			<input type="submit" id="button_groupSelect" name="button_groupSelect" value="<spring:message code='select'/>" />
 		</div>
 	</div>
 
@@ -495,7 +495,7 @@
 	$( "#button_groupSelect" ).on( "click", function() {
 		var radioObj = $(":radio[name=radio_group]:checked").val();
 		if (!radioObj) {
-			alert('그룹이 선택되지 않았습니다.');
+			alert(JS_MESSAGE["check.group.required"]);
 	        return false;
 	    } else {
 	    	var splitValues = radioObj.split("_");
@@ -564,7 +564,7 @@
 			return false;
 		}
 		if($("#user_id").val().length < parseInt("${policy.user_id_min_length}")) {
-			alert("사용자 아이디 최소 길이는 ${policy.user_id_min_length} 입니다.");
+			alert(JS_MESSAGE["user.group.id.minlength"] + " ${policy.user_id_min_length}" + JS_MESSAGE["user.group.id.minlength.2"]);
 			$("#user_id").focus();
 			return;
 		}
@@ -591,56 +591,56 @@
 			return false;
 		}
 		if(password != password_confirm) {
-			alert("비밀번호가 비밀번호 확인 이랑 일치하지 않습니다.");
+			alert(JS_MESSAGE["user.group.password.not.same"]);
 			$("#password").focus();
 			return false;
 		}
 		var telephone_regExp1 = /^\d{2,3}$/;
 		var telephone1 = $("#telephone1").val();
 		if (telephone1 != null && telephone1 != "" && !telephone_regExp1.test(telephone1)) {
-			alert("전화번호 형식에 맞게 입력해 주십시오.");
+			alert(JS_MESSAGE["user.group.phone.number.type"]);
 			$("#telephone1").focus();
 			return false;
 		}
 		var telephone_regExp2 = /^\d{3,4}$/;
 		var telephone2 = $("#telephone2").val();
 		if (telephone2 != null && telephone2 != "" && !telephone_regExp2.test(telephone2)) {
-			alert("전화번호 형식에 맞게 입력해 주십시오.");
+			alert(JS_MESSAGE["user.group.phone.number.type"]);
 			$("#telephone2").focus();
 			return false;
 		}
 		var telephone_regExp3 = /^\d{4,4}$/;
 		var telephone3 = $("#telephone3").val();
 		if (telephone3 != null && telephone3 != "" && !telephone_regExp3.test(telephone3)) {
-			alert("전화번호 형식에 맞게 입력해 주십시오.");
+			alert(JS_MESSAGE["user.group.phone.number.type"]);
 			$("#telephone3").focus();
 			return false;
 		}
 		var mobilephone_regExp1 = /^\d{3,3}$/;
 		var mobile_phone1 = $("#mobile_phone1").val();
 		if (mobile_phone1 != null && mobile_phone1 != "" && !mobilephone_regExp1.test(mobile_phone1)) {
-			alert("핸드폰 번호 형식에맞게 입력해 주십시오.");
+			alert(JS_MESSAGE["user.group.phone.number.type"]);
 			$("#mobile_phone1").focus();
 			return false;
 		}
 		var mobilephone_regExp2 = /^\d{3,4}$/;
 		var mobile_phone2 = $("#mobile_phone2").val();
 		if (mobile_phone2 != null && mobile_phone2 != "" && !mobilephone_regExp2.test(mobile_phone2)) {
-			alert("핸드폰 번호 형식에맞게 입력해 주십시오.");
+			alert(JS_MESSAGE["user.group.phone.number.type"]);
 			$("#mobile_phone2").focus();
 			return false;
 		}
 		var mobilephone_regExp3 = /^\d{4,4}$/;
 		var mobile_phone3 = $("#mobile_phone3").val();
 		if (mobile_phone3 != null && mobile_phone3 != "" && !mobilephone_regExp3.test(mobile_phone3)) {
-			alert("핸드폰 번호 형식에맞게 입력해 주십시오.");
+			alert(JS_MESSAGE["user.group.phone.number.type"]);
 			$("#mobile_phone3").focus();
 			return false;
 		}
 		var email_regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 		if ($("#email1").val() != null && $("#email1").val() != "" && $("#email2").val() != null && $("#email2").val() != "") {
 			if (!email_regExp.test($("#email1").val() + "@" + $("#email2").val())) {
-				alert("이메일 형식에 맞게 입력해 주십시오.");
+				alert();
 				return false;
 			}
 		}
