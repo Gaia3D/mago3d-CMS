@@ -1,9 +1,13 @@
 package com.gaia3d.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.LocaleResolver;
 
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Policy;
@@ -44,6 +51,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/login/")
 public class LoginController {
 	
+	@Autowired
+	private LocaleResolver localeResolver;
 	@Resource(name="loginValidator")
 	private LoginValidator loginValidator;
 	@Autowired
@@ -272,6 +281,35 @@ public class LoginController {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * 언어 설정
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "ajax-change-language.do")
+	@ResponseBody
+	public Map<String, Object> ajaxChangeLanguage(HttpServletRequest request, HttpServletResponse response, @RequestParam("lang") String lang, Model model) {
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		String result = "success";
+		try {
+			log.info("@@ lang = {}", lang);
+			if(lang != null && !"".equals(lang) && ("ko".equals(lang) || "en".equals(lang))) {
+				request.getSession().setAttribute(SessionKey.LANG.name(), lang);
+				Locale locale = new Locale(lang);
+//				LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+//				localeResolver.setLocale(request, response, locale);
+				localeResolver.setLocale(request, response, locale);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		jSONObject.put("result", result);
+		
+		return jSONObject;
 	}
 	
 	/**

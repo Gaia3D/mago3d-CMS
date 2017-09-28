@@ -1,0 +1,3 @@
+-Dtrust_all_cert=true 옵션을 주고 실행시키시거나 X509TrustManager를 모두 허용하는 hostnameverifier를 만드시고 
+이 녀석을 resttemplate의 request factory로 쓰시면 될 것입니다. 
+회사라 소스를 적어 드리기가 곤란한데 resttemplate trust all과 같은 키워드로 구글링 해 보시면 참고하실 소스 들이 나올 거에요

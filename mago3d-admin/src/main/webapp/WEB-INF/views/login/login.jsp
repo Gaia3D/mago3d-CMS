@@ -21,6 +21,13 @@
 	<div class="site-body">
 		<div class="row">
 			<div class="container">
+				<div style="float: right;">
+					<select id="userLocale" name="userLocale" onchange="changeLanguage(this.value);">
+						<option value="ko">KOREA</option>
+						<option value="en">ENGLISH</option>
+						<option value="jp">JAPAN</option>
+					</select>
+				</div>
 				<div class="row">
 					<h1 style="padding-bottom:10px; font-size:38px; font-family:Lousianne; color:#573592;">mago3D</h1>
 <c:if test="${loginForm.error_code ne null && loginForm.error_code ne ''}">
@@ -77,6 +84,38 @@
 		var encryptionPassword = GibberishAES.aesEncrypt($("#password").val(), "${TOKEN_AES_KEY}");
 		alert("encryptionPassword = " + encryptionPassword + ", password = " + encodeURIComponent(encryptionPassword));
 		$("#password").val(encodeURIComponent(encryptionPassword)); */
+	}
+	
+	function changeLanguage(lang) {
+		alert(lang);
+		return;
+		var updateFlag = true;
+		if(updateFlag) {
+			updateFlag = false;
+			$.ajax({
+				url: "/login/ajax-change-language.do?lang=" + lang,
+				type: "GET",
+				//data: info,
+				cache: false,
+				dataType: "json",
+				success: function(msg){
+					if(msg.result == "success") {
+						//alert(JS_MESSAGE["success"]);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+					updateFlag = true;
+				},
+				error:function(request,status,error){
+			        //alert(JS_MESSAGE["ajax.error.message"]);
+			        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			        updateFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
 	}
 </script>
 </body>

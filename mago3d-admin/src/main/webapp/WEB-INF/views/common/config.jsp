@@ -6,6 +6,8 @@
 	String lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 	if("en".equals(lang)) {
 		accessibility = "en-US";
+	} else if("ja".equals(lang)) {
+		accessibility = "ja-JP";
 	} else {
 		lang = "ko";
 	}
