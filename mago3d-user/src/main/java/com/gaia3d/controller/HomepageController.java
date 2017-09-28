@@ -404,7 +404,9 @@ public class HomepageController {
 		String result = "success";
 		try {
 			log.info("@@ lang = {}", lang);
-			if(lang != null && !"".equals(lang) && ("ko".equals(lang) || "en".equals(lang))) {
+			if(Locale.KOREA.getLanguage().equals(lang) 
+					|| Locale.ENGLISH.getLanguage().equals(lang)
+					|| Locale.JAPAN.getLanguage().equals(lang)) {
 				request.getSession().setAttribute(SessionKey.LANG.name(), lang);
 				Locale locale = new Locale(lang);
 //				LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);

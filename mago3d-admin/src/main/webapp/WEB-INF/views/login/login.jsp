@@ -25,7 +25,7 @@
 					<select id="userLocale" name="userLocale" onchange="changeLanguage(this.value);">
 						<option value="ko">KOREA</option>
 						<option value="en">ENGLISH</option>
-						<option value="jp">JAPAN</option>
+						<option value="ja">JAPAN</option>
 					</select>
 				</div>
 				<div class="row">
@@ -87,8 +87,6 @@
 	}
 	
 	function changeLanguage(lang) {
-		alert(lang);
-		return;
 		var updateFlag = true;
 		if(updateFlag) {
 			updateFlag = false;
