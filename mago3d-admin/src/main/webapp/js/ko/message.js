@@ -10,7 +10,7 @@ JS_MESSAGE["upload"] = "업로딩 중입니다.";
 JS_MESSAGE["move.confirm"] = "이동 하시겠습니까?";
 JS_MESSAGE["delete.confirm"] = "삭제 하시겠습니까?";
 JS_MESSAGE["check.value.required"] = "선택된 항목이 없습니다.";
-
+JS_MESSAGE["commingsoon"] = "준비중입니다";
 // 공통
 JS_MESSAGE["user.session.empty"] = "로그인 후 사용 가능한 서비스 입니다.";
 JS_MESSAGE["db.exception"] = "데이터 베이스 장애가 발생하였습니다. 잠시 후 다시 이용하여 주시기 바랍니다.";
@@ -94,3 +94,18 @@ JS_MESSAGE["issue.reporter.empty"] = "보고 해야 하는 사람을 입력하�
 JS_MESSAGE["issue.contents.empty"] = "내용을 입력하여 주십시오.";
 JS_MESSAGE["issue.start_hour.proper"] = "issue 시작시간을 올바르게 설정하여 주십시오.";
 JS_MESSAGE["issue.start_minute.proper"] = "issue 시작시간을 올바르게 설정하여 주십시오.";
+
+// ticks
+JS_MESSAGE["main.status.in.use"] = "사용중";
+JS_MESSAGE["main.status.stop.use"] = "사용중지";
+JS_MESSAGE["main.status.fail.count"] = "실패횟수";
+JS_MESSAGE["main.status.dormancy"] = "휴면";
+JS_MESSAGE["main.status.expires"] = "기간만료";
+JS_MESSAGE["main.status.temporary.password"] = "임시비밀번호";
+
+//user group
+JS_MESSAGE["user.group.select"] = "사용자 그룹을 선택해 주세요.";
+JS_MESSAGE["user.group.top.not.insert"] = "최상위 그룹에는 사용자를 등록할 수 없습니다.";
+JS_MESSAGE["user.group.role.top.not.insert"] = "최상위 그룹에는 Role을 등록할 수 없습니다.";
+JS_MESSAGE["user.group.not.group.id"] = "그룹 아이디가 없습니다.";
+JS_MESSAGE["user.group.not.select"] = "선택된 항목이 없습니다.";

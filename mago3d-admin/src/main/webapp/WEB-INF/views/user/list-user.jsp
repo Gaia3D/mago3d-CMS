@@ -26,45 +26,46 @@
 					<div class="page-content">
 						<div class="filters">
 		    				<form:form id="searchForm" modelAttribute="userInfo" method="post" action="/user/list-user.do" onsubmit="return searchCheck();">
+							<spring:message code='user.group.all' var='userGroupAll'/>
 							<div class="input-group row">
 								<div class="input-set">
-									<label for="user_group_id">그룹명</label>
+									<label for="user_group_id"><spring:message code='user.group.name'/></label>
 									<form:select path="user_group_id" cssClass="select">
-										<option value="0">전체</option>
+										<option value="0">${userGroupAll}</option>
 <c:forEach var="userGroup" items="${userGroupList}">
 										<option value="${userGroup.user_group_id}">${userGroup.group_name}</option>
 </c:forEach>
 									</form:select>
 								</div>
 								<div class="input-set">
-									<label for="search_word">검색어</label>
+									<label for="search_word"><spring:message code='user.group.search.word'/></label>
 									<select id="search_word" name="search_word" class="select">
-										<option value="">선택</option>
-					                	<option value="user_id">아이디</option>
-										<option value="user_name">이름</option>
+										<option value=""><spring:message code='user.group.select'/></option>
+					                	<option value="user_id"><spring:message code='user.group.id'/></option>
+										<option value="user_name"><spring:message code='user.group.user.name'/></option>
 									</select>
 									<select id="search_option" name="search_option" class="select">
-										<option value="0">일치</option>
-										<option value="1">포함</option>
+										<option value="0"><spring:message code='user.group.same'/></option>
+										<option value="1"><spring:message code='user.group.include'/></option>
 									</select>
 									<form:input path="search_value" type="search" cssClass="m" />
 								</div>
 								<div class="input-set">
-									<label for="status">상태</label>
+									<label for="status"><spring:message code='user.group.status'/></label>
 									<select id="status" name="status" class="select">
-										<option value="">전체</option>
-										<option value="0"> 사용중 </option>
-										<option value="1"> 사용중지(관리자) </option>
-										<option value="2"> 잠금(비밀번호 실패횟수) </option>
-										<option value="3"> 휴면(로그인 기간) </option>
-										<option value="4"> 만료(사용기간 종료) </option>
-										<option value="5"> 삭제(화면 비표시) </option>
+										<option value="">${userGroupAll}</option>
+										<option value="0"> <spring:message code='user.group.in.use'/> </option>
+										<option value="1"> <spring:message code='user.group.stop.use'/> </option>
+										<option value="2"> <spring:message code='user.group.lock.password'/> </option>
+										<option value="3"> <spring:message code='user.group.dormancy'/> </option>
+										<option value="4"> <spring:message code='user.group.expires'/> </option>
+										<option value="5"> <spring:message code='user.group.delete'/> </option>
 									</select>
 								</div>
 								<div class="input-set">
-									<label for="user_insert_type">등록 유형</label>
+									<label for="user_insert_type"><spring:message code='user.group.insert.type'/></label>
 									<select id="user_insert_type" name="user_insert_type" class="select">
-										<option value="">전체</option>
+										<option value="">${userGroupAll}</option>
 <c:forEach var="commonCode" items="${userRegisterTypeList}" varStatus="status">
 										<option value="${commonCode.code_value }"> ${commonCode.code_name } </option>
 										<option value="${commonCode.code_value }"> ${commonCode.code_name } </option>
@@ -72,33 +73,35 @@
 									</select>
 								</div>
 								<div class="input-set">
-									<label for="start_date">날짜</label>
+									<label for="start_date"><spring:message code='user.group.date'/></label>
 									<input type="text" class="s date" id="start_date" name="start_date" />
 									<span class="delimeter tilde">~</span>
 									<input type="text" class="s date" id="end_date" name="end_date" />
 								</div>
+								
 								<div class="input-set">
-									<label for="order_word">표시순서</label>
+									<label for="order_word"><spring:message code='user.group.order'/></label>
 									<select id="order_word" name="order_word" class="select">
-										<option value=""> 기본 </option>
-					                	<option value="user_id"> 아이디 </option>
-										<option value="user_name"> 이름 </option>
-										<option value="last_login_date"> 로그인날짜 </option>
-										<option value="register_date"> 등록일 </option>
+										<option value=""><spring:message code='user.group.basic'/></option>
+					                	<option value="user_id"><spring:message code='user.group.id'/></option>
+										<option value="user_name"><spring:message code='user.group.user.name'/> </option>
+										<option value="last_login_date"><spring:message code='user.group.login.date'/></option>
+										<option value="register_date"> <spring:message code='user.group.insert.date'/> </option>
 									</select>
 									<select id="order_value" name="order_value" class="select">
-				                		<option value=""> 기본 </option>
-					                	<option value="ASC"> 오름차순 </option>
-										<option value="DESC"> 내림차순 </option>
+				                		<option value=""> <spring:message code='user.group.basic'/> </option>
+					                	<option value="ASC"> <spring:message code='user.group.ascending'/></option>
+										<option value="DESC"> <spring:message code='user.group.descending.order'/> </option>
 									</select>
 									<select id="list_counter" name="list_counter" class="select">
-				                		<option value="10"> 10 개씩 </option>
-					                	<option value="50"> 50 개씩 </option>
-										<option value="100"> 100 개씩 </option>
+				                		<option value="10"> <spring:message code='user.group.ten.count'/> </option>
+					                	<option value="50"> <spring:message code='user.group.fifty.count'/> </option>
+										<option value="100"> <spring:message code='user.group.hundred.count'/> </option>
 									</select>
 								</div>
 								<div class="input-set">
-									<input type="submit" value="검색" />
+									<spring:message code='user.group.search' var='search'/>
+									<input type="submit" value="${search}" />
 								</div>
 							</div>
 							</form:form>
@@ -108,23 +111,24 @@
 								<input type="hidden" id="check_ids" name="check_ids" value="" />
 							<div class="list-header row">
 								<div class="list-desc u-pull-left">
-									전체: <em><fmt:formatNumber value="${pagination.totalCount}" type="number"/></em>건, 
-									<fmt:formatNumber value="${pagination.pageNo}" type="number"/> / <fmt:formatNumber value="${pagination.lastPage }" type="number"/> 페이지
+									${userGroupAll}<em><fmt:formatNumber value="${pagination.totalCount}" type="number"/></em> <spring:message code='user.group.count'/>
+									<fmt:formatNumber value="${pagination.pageNo}" type="number"/> / <fmt:formatNumber value="${pagination.lastPage }" type="number"/> <spring:message code='user.group.page'/>
 								</div>
+								
 								<div class="list-functions u-pull-right">
 									<div class="button-group">
-										<a href="#" onclick="passowrdInit(); return false;" class="button">비밀번호 초기화</a>
-										<a href="#" onclick="updateUserStatus('USER', 'LOCK'); return false;" class="button">사용자 잠금</a>
-										<a href="#" onclick="updateUserStatus('USER', 'UNLOCK'); return false;" class="button">사용자 잠금 해제</a>
-										<a href="#" onclick="deleteUsers(); return false;" class="button">일괄삭제</a>
-										<a href="#" onclick="inputExcelUser(); return false;" class="button">일괄등록(Excel)</a>
+										<a href="#" onclick="passowrdInit(); return false;" class="button"><spring:message code='user.group.password.init'/></a>
+										<a href="#" onclick="updateUserStatus('USER', 'LOCK'); return false;" class="button"><spring:message code='user.group.user.lock'/></a>
+										<a href="#" onclick="updateUserStatus('USER', 'UNLOCK'); return false;" class="button"><spring:message code='user.group.user.lock.init'/></a>
+										<a href="#" onclick="deleteUsers(); return false;" class="button"><spring:message code='user.group.all.delete'/></a>
+										<a href="#" onclick="inputExcelUser(); return false;" class="button"><spring:message code='user.group.all.insert'/></a>
 <c:if test="${txtDownloadFlag ne 'true' }">
-										<a href="/user/download-excel-user.do" class="button">다운로드(Excel)</a>
+										<a href="/user/download-excel-user.do" class="button"><spring:message code='user.group.download'/></a>
 </c:if>
 <c:if test="${txtDownloadFlag eq 'true' }">
-										<a href="/user/download-txt-user.do" class="button">다운로드(Txt)</a>
-</c:if>
-										<a href="/user/download-excel-user-sample.do" class="image-button button-area button-batch-download" title="일괄등록예제파일"><span>일괄등록예제파일</span></a>
+										<a href="/user/download-txt-user.do" class="button"><spring:message code='user.group.download.txt'/></a>
+</c:if><spring:message code='user.group.insert.example' var='insertExample'/>
+										<a href="/user/download-excel-user-sample.do" class="image-button button-area button-batch-download" title="${insertExample}"><span>${insertExample}</span></a>
 									</div>
 								</div>
 							</div>
@@ -144,23 +148,23 @@
 									<thead>
 										<tr>
 											<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
-											<th scope="col" class="col-number">번호</th>
-											<th scope="col" class="col-name">그룹명</th>
-											<th scope="col" class="col-id">아이디</th>
-											<th scope="col" class="col-name">이름</th>
-											<th scope="col" class="col-toggle">상태</th>
-											<th scope="col" class="col-toggle">등록유형</th>
+											<th scope="col" class="col-number"><spring:message code='user.group.number'/></th>
+											<th scope="col" class="col-name"><spring:message code='user.group.name'/></th>
+											<th scope="col" class="col-id"><spring:message code='user.group.id'/></th>
+											<th scope="col" class="col-name"><spring:message code='user.group.user.name'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='user.group.status'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='user.group.insert.type'/></th>
 											<!-- <th scope="col" class="col-tel">전화번호</th> -->
 											<!-- <th scope="col" class="col-email">이메일</th> -->
-											<th scope="col" class="col-date">마지막 로그인</th>
-											<th scope="col" class="col-date">등록일</th>
-											<th scope="col" class="col-functions">수정/삭제</th>
+											<th scope="col" class="col-date"><spring:message code='user.group.last.login'/></th>
+											<th scope="col" class="col-date"><spring:message code='user.group.insert.date'/></th>
+											<th scope="col" class="col-functions"><spring:message code='user.group.modified.and.insert'/></th>
 										</tr>
 									</thead>
 									<tbody>
 <c:if test="${empty userList }">
 										<tr>
-											<td colspan="10" class="col-none">사용자가 존재하지 않습니다.</td>
+											<td colspan="10" class="col-none"><spring:message code='user.group.empty'/></td>
 										</tr>
 </c:if>
 <c:if test="${!empty userList }">

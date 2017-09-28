@@ -24,21 +24,21 @@
 			<div id="location">
 				<ul>
 					<li style="margin-right:12px;"><img src="/images/btn_menu_hiding.gif" /></li>
-		          	<li class="s_title"><a href="/user/list-user.do">사용자</a></li>
+		          	<li class="s_title"><a href="/user/list-user.do"><spring:message code='user.group.user'/></a></li>
 		          	<li class="next_img"></li>
-			        <li class="s_title">사용자 그룹별 메뉴정보</li>
+			        <li class="s_title"><spring:message code='user.user.list.information'/></li>
 		        </ul>
 		    </div>
 		    
 			<div id="main_content">
 				<div class="main_content_title">
 			    	<ul>
-			        	<li>사용자 그룹</li>
+			        	<li><spring:message code='user.group.usergroup'/></li>
 			        </ul>
 			    </div>
 				<div id="list_area">
 					<table class="list_table">
-						<caption>사용자 그룹</caption>
+						<caption><spring:message code='user.group.usergroup'/></caption>
 						<colgroup>
 							<col width="20%" />
 							<col width="10%" />
@@ -47,16 +47,16 @@
 						</colgroup>
 						<thead>
 							<tr>
-								<th scope="col">메뉴명</th>
-								<th scope="col">사용유무</th>
-								<th scope="col">전체 권한</th>
-								<th scope="col">개별 권한</th>
+								<th scope="col"><spring:message code='user.group.menu.name'/></th>
+								<th scope="col"><spring:message code='user.list.use.not'/></th>
+								<th scope="col"><spring:message code='user.list.all.authority'/></th>
+								<th scope="col"><spring:message code='user.list.solo.authority'/></th>
 		 					</tr>
 						</thead>
 						<tbody>
 		<c:if test="${empty userGroupMenuList }">
 							<tr>
-								<td colspan="4">사용자 그룹 메뉴 권한 목록이 존재하지 않습니다.</td>
+								<td colspan="4"><spring:message code='user.list.menu.not.authority'/></td>
 							</tr>
 		</c:if>
 		<c:if test="${!empty userGroupMenuList }">
@@ -117,7 +117,7 @@
 							<tr style="line-height: 40px;">
 					  			<td colspan="4" style="text-align: center;">
 					  				<a href="/user/modify-user-group-menu.do?user_group_id=${userGroup.user_group_id }" class="buttonPro purple">메뉴권한 수정</a>
-					  				<a href="/user/list-user-group.do" class="buttonPro purple">그룹 목록</a>
+					  				<a href="/user/list-user-group.do" class="buttonPro purple"><spring:message code='user.list.group.list'/></a>
 					  			</td>
 					  		</tr>
 						</tbody>

@@ -20,7 +20,7 @@
 <body class="home">
 	<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
 	<%@ include file="/WEB-INF/views/layouts/menu.jsp" %>
-	
+
 	<div class="site-body">
 		<div class="container">
 			<div class="widgets">
@@ -28,7 +28,7 @@
 					<div class="widget widget-low widget-otp-usage full column">
 						<div class="widget-header row">
 							<div class="widget-heading u-pull-left">						
-								<h3 class="widget-title">이슈 현황<span class="widget-desc">${yearMonthDay } (오늘)</span></h3>
+								<h3 class="widget-title"><spring:message code='main.issue.issuestatus'/><span class="widget-desc">${yearMonthDay } (<spring:message code='main.today'/>)</span></h3>
 							</div>
 						</div><!-- .widget-header -->
 						<div class="widget-content row">
@@ -41,9 +41,9 @@
 										</div>
 									</div>
 									<div>
-										<span class="banner-title">신규 이슈</span>
+										<span class="banner-title"><spring:message code='main.issue.newissue'/></span>
 										<span id="userOTPCountSpinner" class="banner-number"></span>
-										<span class="banner-unit"> ${issueTotalCount } 개</span>
+										<span class="banner-unit"> ${issueTotalCount}<spring:message code='main.count'/> </span>
 									</div>
 								</div>
 							</div>
@@ -57,9 +57,9 @@
 										</div>
 									</div>
 									<div>
-										<span class="banner-title">진행중인 이슈</span>
+										<span class="banner-title"><spring:message code='main.issue.ongoingissue'/></span>
 										<span id="userOTPSuccessCountSpinner" class="banner-number"></span>
-										<span class="banner-unit"> 0 개</span>
+										<span class="banner-unit"> 0 <spring:message code='main.count'/></span>
 									</div>
 								</div>
 							</div>
@@ -73,9 +73,9 @@
 										</div>
 									</div>
 									<div>
-										<span class="banner-title">완료된 이슈</span>
+										<span class="banner-title"><spring:message code='main.issue.completedissue'/></span>
 										<span id="userOTPFailCountSpinner" class="banner-number"></span>
-										<span class="banner-unit"> 0 개</span>
+										<span class="banner-unit"> 0 <spring:message code='main.count'/></span>
 									</div>
 								</div>
 							</div>
@@ -88,10 +88,11 @@
 					<div id="${dbWidget.widget_id }" class="widget one-third column" style="font-size: 16px;">
 						<div class="widget-header row">
 							<div class="widget-heading u-pull-left">						
-								<h3 class="widget-title">사용자 상태별 현황<span class="widget-desc">${today } 기준</span></h3>
+								<h3 class="widget-title"><spring:message code='main.status.userstatus'/><span class="widget-desc">${today }<spring:message code='main.standard'/></span></h3>
 							</div>
 							<div class="widget-functions u-pull-right">
-								<a href="/user/list-user.do" title="사용자 상태별 현황 더보기"><span class="icon-glyph glyph-plus"></span></a>
+								<spring:message code='main.status.moreuserstatus' var="moreuserstatus"/>
+								<a href="/user/list-user.do" title="${moreuserstatus}"><span class="icon-glyph glyph-plus"></span></a>
 							</div>
 						</div>
 						<div id="${dbWidget.name}" class="widget-content row">
@@ -102,10 +103,11 @@
 					<div id="${dbWidget.widget_id }" class="widget one-third column">
 						<div class="widget-header row">
 							<div class="widget-heading u-pull-left">						
-								<h3 class="widget-title">스케줄 실행 사용 이력<span class="widget-desc">${thisYear }년 최근 7건</span></h3>
+								<h3 class="widget-title"><spring:message code='main.status.schedule.execution'/><span class="widget-desc">${thisYear }<spring:message code='main.status.schedule.date'/></span></h3>
 							</div>
 							<div class="widget-functions u-pull-right">
-								<a href="/schedule/list-schedule-log.do" title="스케줄 실행 이력 더보기"><span class="icon-glyph glyph-plus"></span></a>
+								<spring:message code='main.status.schedule.moreexecution' var="moreExectuion"/>
+								<a href="/schedule/list-schedule-log.do" title="${moreExectuion}"><span class="icon-glyph glyph-plus"></span></a>
 							</div>
 						</div>
 						<div id="${dbWidget.name}" class="widget-content row">
@@ -119,10 +121,11 @@
 					<div id="${dbWidget.widget_id }" class="widget one-third column">
 						<div class="widget-header row">
 							<div class="widget-heading u-pull-left">						
-								<h3 class="widget-title">사용자 추적<span class="widget-desc">${today } 기준</span></h3>
+								<h3 class="widget-title"><spring:message code='main.status.user.tracking'/><span class="widget-desc">${today } <spring:message code='main.standard'/></span></h3>
 							</div>
 							<div class="widget-functions u-pull-right">
-								<a href="/log/list-access-log.do" title="사용자 추적 이력 더보기"><span class="icon-glyph glyph-plus"></span></a>
+								<spring:message code='main.status.user.moretracking' var='moreTracking'/>
+								<a href="/log/list-access-log.do" title="${moreTracking}"><span class="icon-glyph glyph-plus"></span></a>
 							</div>
 						</div>
 						
@@ -137,7 +140,7 @@
 					<div id="${dbWidget.widget_id }" class="widget one-third column">
 						<div class="widget-header row">
 							<div class="widget-heading u-pull-left">						
-								<h3 class="widget-title">DB Connection Pool 현황<span class="widget-desc">${today } 기준</span></h3>
+								<h3 class="widget-title"><spring:message code='main.status.db.connection.pool'/><span class="widget-desc">${today }<spring:message code='main.standard'/></span></h3>
 							</div>
 						</div>
 						
@@ -149,22 +152,22 @@
 								<col class="col-center" />
 								<tr>
 									<td class="col-left">
-										<em>속성</em>
+										<em><spring:message code='main.status.property'/></em>
 									</td>
 									<td class="col-center">
-										<em>관리자</em>
+										<em><spring:message code='main.status.admin'/></em>
 									</td>
 									<td class="col-center">
-										<em>사용자</em>
+										<em><spring:message code='main.status.user'/></em>
 									</td>
 									<td class="col-center">
-										<em>상태</em>
+										<em><spring:message code='main.status'/></em>
 									</td>
 								</tr>
 								<tr>
 									<td class="col-left">
 										<span class="icon-glyph glyph-users-circle"></span>
-										<em>현재 세션 접속자수</em>
+										<em><spring:message code='main.status.usersession.count'/></em>
 									</td>
 									<td class="col-center">
 										<span id="userSessionCount" class="tendency increase">${userSessionCount }</span>
@@ -181,7 +184,7 @@
 								<tr>
 									<td class="col-left">
 										<span class="icon-glyph glyph-imark-circle"></span>
-										<em>초기값</em> (initialSize)
+										<em><spring:message code='main.status.initialSize' /></em> (initialSize)
 									</td>
 									<td class="col-center">
 										<span id="initialSize" class="tendency increase">${initialSize }</span>
@@ -198,7 +201,7 @@
 								<tr>
 									<td class="col-left">
 										<span class="icon-glyph glyph-plus-circle"></span>
-										<em>최대생성</em> (maxTotal)
+										<em><spring:message code='main.status.maxtotal'/></em> (maxTotal)
 									</td>
 									<td class="col-center">
 										<span id="maxTotal" class="tendency decrease">${maxTotal }</span>
@@ -215,7 +218,7 @@
 								<tr>
 									<td class="col-left">
 										<span class="icon-glyph glyph-top-circle"></span>
-										<em>최대유지</em> (maxIdle)
+										<em><spring:message code='main.status.maxIdle'/></em> (maxIdle)
 									</td>
 									<td class="col-center">
 										<span id="maxIdle" class="tendency decrease">${maxIdle }</span>
@@ -232,7 +235,7 @@
 								<tr>
 									<td class="col-left">
 										<span class="icon-glyph glyph-mouse-circle"></span>
-										<em>사용중</em> (numActive)
+										<em><spring:message code='main.status.numactive'/></em> (numActive)
 									</td>
 									<td class="col-center">
 										<span id="numActive" class="tendency increase">${numActive }</span>
@@ -249,7 +252,7 @@
 								<tr>
 									<td class="col-left">
 										<span class="icon-glyph glyph-bottom-circle"></span>
-										<em>최소유지, 유지수</em> (minIdle, numIdle)
+										<em><spring:message code='main.status.minIdle'/></em> (minIdle, numIdle)
 									</td>
 									<td class="col-center">
 										<span id="minIdle" class="tendency increase">${minIdle },${numIdle }</span>
@@ -288,10 +291,11 @@
 					<div id="${dbWidget.widget_id }" class="widget one-third column">
 						<div class="widget-header row">
 							<div class="widget-heading u-pull-left">						
-								<h3 class="widget-title">DB 세션 현황(${dbSessionCount })<span class="widget-desc">${today } 기준</span></h3>
+								<h3 class="widget-title"><spring:message code='main.status.db.session'/>(${dbSessionCount })<span class="widget-desc">${today }<spring:message code='main.standard'/></span></h3>
 							</div>
 							<div class="widget-functions u-pull-right">
-								<a href="/monitoring/list-db-session.do" title="DB 세션 현황 더보기"><span class="icon-glyph glyph-plus"></span></a>
+								<spring:message code='main.status.db.moresession' var='moreSession'/>
+								<a href="/monitoring/list-db-session.do" title="${moreSession}"><span class="icon-glyph glyph-plus"></span></a>
 							</div>
 						</div>
 						<div id="${dbWidget.name}" class="widget-content row">
@@ -300,7 +304,7 @@
 								<col class="col-left" />
 			<c:if test="${empty dbSessionList }">					
 								<tr>
-									<td colspan="2" class="col-none">DB 세션 정보가 존재하지 않습니다.</td>
+									<td colspan="2" class="col-none"><spring:message code='main.status.db.nosession'/></td>
 								</tr>
 			</c:if>
 			<c:if test="${!empty dbSessionList }">
@@ -421,9 +425,9 @@
 			expireUserTotalCount = parseInt(jsonData.expireUserTotalCount);
 			tempPasswordUserTotalCount = parseInt(jsonData.tempPasswordUserTotalCount);
 		}
-		
+
 		var userValues = [ activeUserTotalCount, fobidUserTotalCount, failUserTotalCount, sleepUserTotalCount, expireUserTotalCount, tempPasswordUserTotalCount];
-		var ticks = ["사용중", "사용중지", "실패횟수", "휴면", "기간만료", "임시비밀번호"];
+		var ticks = [JS_MESSAGE["main.status.in.use"], JS_MESSAGE["main.status.stop.use"], JS_MESSAGE["main.status.fail.count"], JS_MESSAGE["main.status.dormancy"], JS_MESSAGE["main.status.expires"], JS_MESSAGE["main.status.temporary.password"]];
 		var yMax = 10;
 		if(activeUserTotalCount > 10 || fobidUserTotalCount > 10 || failUserTotalCount > 10 || sleepUserTotalCount > 10 || expireUserTotalCount > 10 || tempPasswordUserTotalCount > 10) {
 			yMax = Math.max(activeUserTotalCount, fobidUserTotalCount, failUserTotalCount, sleepUserTotalCount, expireUserTotalCount, tempPasswordUserTotalCount) + (activeUserTotalCount * 0.2);

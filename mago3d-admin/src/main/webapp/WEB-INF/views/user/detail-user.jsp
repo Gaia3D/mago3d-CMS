@@ -35,7 +35,7 @@
 									<col class="col-label" />
 									<col class="col-data" />
 									<tr>
-										<th class="col-label" scope="row">아이디</th>
+										<th class="col-label" scope="row"><spring:message code='user.id'/></th>
 										<td class="col-data">${userInfo.user_id}</td>
 									</tr>	
 									<tr>
