@@ -48,6 +48,7 @@
 					<ul>
 						<li><a href="/homepage/api.do" style="color: white" target="_blank">API</a></li>
 						<li><a href="/homepage/spec.do" style="color: white">F4D Spec</a></li>
+<!-- 						<li><a href="/homepage/tutorials.do" style="color: white">Tutorials</a></li> -->
 					</ul>
 				</li>
 				<li> <a href="/homepage/faq.do">FAQ</a></li>

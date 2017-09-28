@@ -205,6 +205,7 @@ margin:0 -2px;
 font-size: 18px;
 font-weight: 500;
 text-align: center;
+z-index: 999;
 }
 .menu li span {
 display: inline-block;
@@ -1064,6 +1065,9 @@ margin-bottom: 8px;
 padding-bottom: 8px;
 border-bottom: 1px solid #333;
 }
+.navigation .list .item .api:hover {
+color: white;
+} 
 .navigation li.item .api_title {
 cursor: pointer;
 position: relative;
@@ -1161,12 +1165,16 @@ text-align: left;
     text-align: left;
 }
 pre {
+overflow: auto;
+word-wrap: normal;
+margin: 0;
+padding: .85em 1em;
 margin-bottom: -60px;
 }
 code {
-font-family: "Source Code Pro";
-font-size: 20px;
-white-space: pre;
+font-family: Consolas,"Liberation Mono",Menlo,Courier,monospace;
+/* font-size: 10px; */
+/* white-space: pre; */
 }
 .list_wrap {
 margin-left: 25px;
@@ -1415,4 +1423,160 @@ margin-left: 835px;
 .news-more a{
 color: gray;
 font-weight: bold;
+}
+
+/* install guide */
+.guide aside {
+width: 300px;
+float: left;
+/* margin-left: 130px; */
+}
+.guide aside ul {
+list-style-type: none;
+margin: 0;
+padding: 0;
+}
+.guide aside ul li{
+list-style: none;
+width: 200px;
+height: 30px;
+padding: .1em .5em;
+margin-bottom: 8px;
+}
+.guide aside .on{
+background-color: gray;
+color: white;
+width: 200px;
+}
+.guide aside ul li a{
+display: block;
+padding-left: 10px;
+padding-right: 10px;
+margin-left: -10px;
+margin-right: -10px;
+padding-top: 5px;
+padding-bottom: 5px;
+line-height: 2;
+text-decoration: none;
+color: #ccc;
+}
+.guide aside ul li a:hover {
+background-color: gray;
+color: white;
+width: 200px;
+}
+.guide .contents {
+width: 907px;
+margin-left: 300px;
+margin-top: 2.5em;
+}
+.guide .contents .title {
+color: gray;
+font-size: 30px;
+margin-bottom: 15px;
+}
+.guide .contents .edtion {
+margin-top: 55px;
+}
+.guide .contents .sub_contents .list ul{
+margin-bottom: 5px;
+}
+.guide .contents .edtion .title {
+color: gray;
+font-size: 30px;
+margin-bottom: 15px;
+}
+.guide .contents .edtion ul {
+margin-left: 25px;	
+}
+.guide .contents .list li a {
+display: inline;
+text-decoration: none;
+}
+.guide .contents .sub_contents {
+padding-top: 30px;
+border-top: 2px solid #f5f7f9;
+margin-bottom: 50px;
+}
+.guide .images {
+margin-top: 30px;
+margin-bottom: 30px;
+}
+.guide .images .dis{
+color: gray;
+display: inline-block;
+margin-left: 100px;
+}
+.guide .contents p {
+margin-bottom: 5px;
+}
+.guide .contents .block {
+border: 1px solid #d6d6d6;
+background-color: #f1f1f1;
+width: 98%;
+padding: 5px;
+margin: 0;
+margin-bottom: 10px;
+font-size: 12px;
+overflow: auto;
+}
+.guide .contents .tutorials {
+width: 388px;
+display: inline-block;
+/* border: 1px solid gray; */
+border-radius:6px;
+height: 300px;
+padding: 15px;
+}
+.guide .contents .tutorials .title {
+color: #2d3a42;
+font-size: 30px;
+margin-bottom: 15px;
+}
+.guide .contents .tutorials ul {
+margin-bottom: 20px;
+margin-left: 5px;
+}
+.guide .contents .tutorials a {
+text-decoration: none;
+}
+.guide .contents .col {
+display: inline-block;
+background-color: #f5f7f9;
+border-radius: 6px;
+}
+.guide .contents ul {
+margin-bottom: 5px;
+}
+.guide .contents .sub_contents .sub_list li{
+list-style: circle;
+list-style-position: inside;
+}
+.guide .contents ul li ul li {
+list-style: circle;
+list-style-position: inside;
+margin-left: 21px;
+}
+.guide a {
+color: #2B87C4;
+display: inline;
+text-decoration: none;
+}
+
+.guide .prompt .admin{
+border: 1px solid black;
+background-color: #f5f7f9;
+padding: 5px;
+}
+.guide .prompt .order {
+padding: 6px;
+background-color: #24292E;
+overflow: hidden;
+overflow-x:scroll;
+white-space:nowrap;
+color: #f5f7f9;
+}
+
+.guide .prompt .order .order-color {
+color: gray;
 }
