@@ -132,4 +132,4 @@ JS_MESSAGE["data.top.not.insert"] = "Data can not be registered in the top level
 JS_MESSAGE["data.group.not.group.id"] = "There is no group ID.";
 JS_MESSAGE["data.not.select"] = "No items selected.";
 JS_MESSAGE["data.no.insert.data"] = "No data registered";
-JS_MESSAGE["data.up.group.no.insert"] = "You can not register to the top level 
+JS_MESSAGE["data.up.group.no.insert"] = "You can not register to the top level";
