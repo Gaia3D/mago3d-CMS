@@ -27,7 +27,7 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					
 					<div class="page-content">
-						<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
+						<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='user.input.check.box'/></div>
 						<div class="tabs">
 							<ul>
 								<li><a href="#user_info_tab"><spring:message code='user.input.information'/></a></li>
@@ -79,9 +79,9 @@
 										</th>
 										<td class="col-input">
 											<form:password path="password" class="m" />
-											<span class="table-desc">영문 대문자 ${policy.password_eng_upper_count}, 소문자 ${policy.password_eng_lower_count},
-												 숫자 ${policy.password_number_count}, 특수문자 ${policy.password_special_char_count} 자 이상 필수.
-												 ${policy.password_min_length} ~ ${policy.password_max_length}자</span>
+											<span class="table-desc"><spring:message code='user.input.upper.case'/> ${policy.password_eng_upper_count}, <spring:message code='user.input.lower.case'/> ${policy.password_eng_lower_count},
+												 <spring:message code='user.input.number'/> ${policy.password_number_count}, <spring:message code='user.input.special.characters'/> ${policy.password_special_char_count} <spring:message code='user.input.special.characters.need'/>
+												 ${policy.password_min_length} ~ ${policy.password_max_length}<spring:message code='user.input.do'/></span>
 											<form:errors path="password" cssClass="error" />
 										</td>
 									</tr>
@@ -302,7 +302,7 @@
 											<td colspan="6" class="col-none">
 												<div class="button-group">
 													<div class="center-buttons">
-														<input type="button" value="추가" onclick="addUserDevice();" style="background-color: #573592 ;"/>
+														<input type="button" value="<spring:message code='add'/>" onclick="addUserDevice();" style="background-color: #573592 ;"/>
 													</div>
 												</div>
 											</td>
@@ -645,10 +645,10 @@
 			}
 		}
 		if($("#duplication_value").val() == null || $("#duplication_value").val() == "") {
-			alert("아이디 중복확인을 해주십시오.");
+			alert(JS_MESSAGE["check.id.duplication"]);
 			return false;
 		} else if($("#duplication_value").val() == "1") {
-			alert("사용중인 아이디 입니다. 다른 아이디를 선택해 주십시오.");
+			alert(JS_MESSAGE["use.id.other.id.select"]);
 			return false;
 		}
 	}
@@ -691,13 +691,13 @@
 	
 	function checkUserDevice() {
 		if ($("#user_id").val() == "") {
-			alert("사용자 기본 정보 등록 후 이용 가능 합니다.");
+			alert(JS_MESSAGE["user.basic.information.input"]);
 			return false;
 		}
 		for(var i=1; i<userDeviceCount + 1; i++) {
 			if(document.getElementById("user_device" + i).style.display == "") {
 				if($("#device_name" + i).val() == null || $("#device_name" + i).val() == "") {
-					alert("사용 기기명을 입력해 주십시오.");
+					alert(JS_MESSAGE["use.device.name.input"]);
 					$("#device_name" + i).focus();
 					return false;
 				}
@@ -706,7 +706,7 @@
 		
 		for(var i=1; i<userDeviceCount + 1; i++) {
 			if(!isIP($("#device_ip" + i).val())) {
-				alert("IP 형식에 맞게 입력해 주십시오.");
+				alert(JS_MESSAGE["input.ip"]);
 				$("#device_ip" + i).focus();
 				return false;
 			}
@@ -741,7 +741,7 @@
 		
 		if(userDeviceArray[0] == "1" && userDeviceArray[1] == "1" && userDeviceArray[2] == "1"
 				&& userDeviceArray[3] == "1" && userDeviceArray[4] == "1" && userDeviceArray[5] == "1") {
-			alert("사용자 디바이스 등록은 최대 5개 까지 가능합니다.");
+			alert(JS_MESSAGE["user.device.input.max.five"]);
 		}
 		userDeviceArray[5] = "0"
 	}

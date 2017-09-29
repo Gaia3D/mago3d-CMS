@@ -11,7 +11,12 @@ JS_MESSAGE["move.confirm"] = "移動しますか？";
 JS_MESSAGE["delete.confirm"] = "削除しますか？";
 JS_MESSAGE["check.value.required"] = "選択された項目がありません。";
 JS_MESSAGE["commingsoon"] = "準備中です";
-JS_MESSAGE ["check.group.required"] = "No group selected";
+JS_MESSAGE["check.group.required"] ="グループが選択されていません。";
+JS_MESSAGE["check.id.duplication"] = "ユーザ名の重複チェックをしてください。";
+JS_MESSAGE["use.id.other.id.select"] = "使用中のIDです。他のIDを選択してください。";
+JS_MESSAGE["total.count"]="総件数：";
+JS_MESSAGE["total.few"] = "何件";
+
 //共通
 JS_MESSAGE["user.session.empty"] = "ログイン後に使用可能なサービスです。";
 JS_MESSAGE["db.exception"] = "データベースに障害が発生しました。しばらくしてから再度ご利用ください。";
@@ -112,7 +117,20 @@ JS_MESSAGE["user.group.not.group.id"] = "グループ名がありません。";
 JS_MESSAGE["user.group.not.select"] = "選択された項目がありません。";
 
 //input group
-JS_MESSAGE["user.group.id.minlength"]="ユーザー名最小の長さは、";
-JS_MESSAGE["user.group.id.minlength.2"]="です";
-JS_MESSAGE["user.group.password.not.same"]="パスワードがパスワードの確認やら一致しません。";
-JS_MESSAGE["user.group.phone.number.type"]="電話番号の形式に合わせて入力してください。";
+JS_MESSAGE["user.group.id.minlength"] ="ユーザー名最小の長さは、";
+JS_MESSAGE["user.group.id.minlength.2"] ="です";
+JS_MESSAGE["user.group.password.not.same"] ="パスワードがパスワードの確認やら一致しません。";
+JS_MESSAGE["user.group.phone.number.type"] ="電話番号の形式に合わせて入力してください。";
+JS_MESSAGE["user.basic.information.input"] ="ユーザーの基本情報登録後利用可能です。";
+JS_MESSAGE["use.device.name.input"] ="使用機器名を入力してください。";
+JS_MESSAGE["input.ip"] ="IP形式に合わせて入力してください。";
+JS_MESSAGE["user.device.input.max.five"] = "ユーザーのデバイスの登録は最大5個まで可能です。";
+JS_MESSAGE["fail.count.retry.select"]="失敗件数が存在します。ファイルをもう一度選択してください。";
+
+//data
+JS_MESSAGE["data.group.select"]="データのグループを選択してください。";
+JS_MESSAGE["data.top.not.insert"]="最上位グループには、データを登録することができません。";
+JS_MESSAGE["data.group.not.group.id"]="グループ名がありません。";
+JS_MESSAGE["data.not.select"]="選択された項目がありません。";
+JS_MESSAGE["data.no.insert.data"]="登録されたデータがありません。";
+JS_MESSAGE["data.up.group.no.insert"]="最上位グループに登録することはできません。";

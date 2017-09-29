@@ -28,40 +28,40 @@
 		    				<form:form id="searchForm" modelAttribute="dataInfo" method="post" action="/data/list-data.do" onsubmit="return searchCheck();">
 							<div class="input-group row">
 								<div class="input-set">
-									<label for="data_group_id">그룹명</label>
+									<label for="data_group_id"><spring:message code='data.group.name'/></label>
 									<form:select path="data_group_id" cssClass="select">
-										<option value="0">전체</option>
+										<option value="0"><spring:message code='all'/></option>
 <c:forEach var="dataGroup" items="${dataGroupList}">
 										<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name}</option>
 </c:forEach>
 									</form:select>
 								</div>
 								<div class="input-set">
-									<label for="search_word">검색어</label>
+									<label for="search_word"><spring:message code='search.word'/></label>
 									<select id="search_word" name="search_word" class="select">
-										<option value="">선택</option>
-					                	<option value="data_id">아이디</option>
-										<option value="data_name">이름</option>
+										<option value=""><spring:message code='search.word'/></option>
+					                	<option value="data_id"><spring:message code='select'/></option>
+										<option value="data_name"><spring:message code='name'/></option>
 									</select>
 									<select id="search_option" name="search_option" class="select">
-										<option value="0">일치</option>
-										<option value="1">포함</option>
+										<option value="0"><spring:message code='search.same'/></option>
+										<option value="1"><spring:message code='search.include'/></option>
 									</select>
 									<form:input path="search_value" type="search" cssClass="m" />
 								</div>
 								<div class="input-set">
-									<label for="status">상태</label>
+									<label for="status"><spring:message code='search.status'/></label>
 									<select id="status" name="status" class="select">
-										<option value="">전체</option>
-										<option value="0"> 사용중 </option>
-										<option value="1"> 사용중지(관리자) </option>
-										<option value="2"> 기타 </option>
+										<option value=""> <spring:message code='all'/> </option>
+										<option value="0"> <spring:message code='search.in.use'/>  </option>
+										<option value="1"> <spring:message code='search.stop.use'/> </option>
+										<option value="2"> <spring:message code='search.etc'/> </option>
 									</select>
 								</div>
 								<div class="input-set">
-									<label for="data_insert_type">등록 유형</label>
+									<label for="data_insert_type"><spring:message code='search.insert.type'/></label>
 									<select id="data_insert_type" name="data_insert_type" class="select">
-										<option value="">전체</option>
+										<option value=""><spring:message code='all'/></option>
 <c:forEach var="commonCode" items="${dataRegisterTypeList}" varStatus="status">
 										<option value="${commonCode.code_value }"> ${commonCode.code_name } </option>
 										<option value="${commonCode.code_value }"> ${commonCode.code_name } </option>
@@ -69,32 +69,32 @@
 									</select>
 								</div>
 								<div class="input-set">
-									<label for="start_date">날짜</label>
+									<label for="start_date"><spring:message code='search.date'/></label>
 									<input type="text" class="s date" id="start_date" name="start_date" />
 									<span class="delimeter tilde">~</span>
 									<input type="text" class="s date" id="end_date" name="end_date" />
 								</div>
 								<div class="input-set">
-									<label for="order_word">표시순서</label>
+									<label for="order_word"><spring:message code='search.order'/></label>
 									<select id="order_word" name="order_word" class="select">
-										<option value=""> 기본 </option>
-					                	<option value="data_id"> 아이디 </option>
-										<option value="data_name"> 이름 </option>
-										<option value="register_date"> 등록일 </option>
+										<option value=""> <spring:message code='search.basic'/> </option>
+					                	<option value="data_id"> <spring:message code='id'/> </option>
+										<option value="data_name"> <spring:message code='name'/> </option>
+										<option value="register_date"> <spring:message code='search.insert.date'/> </option>
 									</select>
 									<select id="order_value" name="order_value" class="select">
-				                		<option value=""> 기본 </option>
-					                	<option value="ASC"> 오름차순 </option>
-										<option value="DESC"> 내림차순 </option>
+				                		<option value=""> <spring:message code='search.basic'/> </option>
+					                	<option value="ASC"> <spring:message code='search.ascending'/> </option>
+										<option value="DESC"> <spring:message code='search.descending.order'/> </option>
 									</select>
 									<select id="list_counter" name="list_counter" class="select">
-				                		<option value="10"> 10 개씩 </option>
-					                	<option value="50"> 50 개씩 </option>
-										<option value="100"> 100 개씩 </option>
+				                		<option value="10"> <spring:message code='search.ten.count'/> </option>
+					                	<option value="50"> <spring:message code='search.fifty.count'/> </option>
+										<option value="100"> <spring:message code='search.hundred.count'/> </option>
 									</select>
 								</div>
 								<div class="input-set">
-									<input type="submit" value="검색" />
+									<input type="submit" value="<spring:message code='search'/>" />
 								</div>
 							</div>
 							</form:form>
@@ -104,22 +104,22 @@
 								<input type="hidden" id="check_ids" name="check_ids" value="" />
 							<div class="list-header row">
 								<div class="list-desc u-pull-left">
-									전체: <em><fmt:formatNumber value="${pagination.totalCount}" type="number"/></em>건, 
-									<fmt:formatNumber value="${pagination.pageNo}" type="number"/> / <fmt:formatNumber value="${pagination.lastPage }" type="number"/> 페이지
+									<spring:message code='all.d'/> <em><fmt:formatNumber value="${pagination.totalCount}" type="number"/></em><spring:message code='search.what.count'/> 
+									<fmt:formatNumber value="${pagination.pageNo}" type="number"/> / <fmt:formatNumber value="${pagination.lastPage }" type="number"/> <spring:message code='search.page'/>
 								</div>
 								<div class="list-functions u-pull-right">
 									<div class="button-group">
-										<a href="#" onclick="updateDataStatus('DATA', 'LOCK'); return false;" class="button">Data 잠금</a>
-										<a href="#" onclick="updateDataStatus('DATA', 'UNLOCK'); return false;" class="button">Data 잠금 해제</a>
-										<a href="#" onclick="deleteDatas(); return false;" class="button">일괄삭제</a>
-										<a href="#" onclick="inputExcelData(); return false;" class="button">일괄등록(Excel)</a>
+										<a href="#" onclick="updateDataStatus('DATA', 'LOCK'); return false;" class="button"><spring:message code='data.lock'/></a>
+										<a href="#" onclick="updateDataStatus('DATA', 'UNLOCK'); return false;" class="button"><spring:message code='data.lock.release'/></a>
+										<a href="#" onclick="deleteDatas(); return false;" class="button"><spring:message code='data.all.delete'/></a>
+										<a href="#" onclick="inputExcelData(); return false;" class="button"><spring:message code='data.all.insert'/></a>
 <c:if test="${txtDownloadFlag ne 'true' }">
-										<a href="/data/download-excel-data.do" class="button">다운로드(Excel)</a>
+										<a href="/data/download-excel-data.do" class="button"><spring:message code='data.download'/></a>
 </c:if>
 <c:if test="${txtDownloadFlag eq 'true' }">
-										<a href="/data/download-txt-data.do" class="button">다운로드(Txt)</a>
+										<a href="/data/download-txt-data.do" class="button"><spring:message code='data.download.txt'/></a>
 </c:if>
-										<a href="/data/download-excel-data-sample.do" class="image-button button-area button-batch-download" title="일괄등록예제파일"><span>일괄등록예제파일</span></a>
+										<a href="/data/download-excel-data-sample.do" class="image-button button-area button-batch-download" title="<spring:message code='data.all.example.file'/>"><span><spring:message code='data.all.example.file'/></span></a>
 									</div>
 								</div>
 							</div>
@@ -143,27 +143,27 @@
 									<thead>
 										<tr>
 											<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
-											<th scope="col" class="col-number">번호</th>
-											<th scope="col" class="col-name">그룹명</th>
-											<th scope="col" class="col-id">Key</th>
-											<th scope="col" class="col-name">이름</th>
-											<th scope="col" class="col-toggle">위도</th>
-											<th scope="col" class="col-toggle">경도</th>
-											<th scope="col" class="col-toggle">높이</th>
+											<th scope="col" class="col-number"><spring:message code='number'/></th>
+											<th scope="col" class="col-name"><spring:message code='user.group.name'/></th>
+											<th scope="col" class="col-id"><spring:message code='key'/></th>
+											<th scope="col" class="col-name"><spring:message code='name'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='height'/></th>
 											<th scope="col" class="col-toggle">Heading</th>
 											<th scope="col" class="col-toggle">Pitch</th>
 											<th scope="col" class="col-toggle">Roll</th>
-											<th scope="col" class="col-toggle">상태</th>
-											<th scope="col" class="col-toggle">공개유무</th>
-											<th scope="col" class="col-toggle">등록유형</th>
-											<th scope="col" class="col-date">등록일</th>
-											<th scope="col" class="col-functions">수정/삭제</th>
+											<th scope="col" class="col-toggle"><spring:message code='status'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='use.not'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='insert.type'/></th>
+											<th scope="col" class="col-date"><spring:message code='search.insert.date'/></th>
+											<th scope="col" class="col-functions"><spring:message code='modified.and.inser'/></th>
 										</tr>
 									</thead>
 									<tbody>
 <c:if test="${empty dataList }">
 										<tr>
-											<td colspan="16" class="col-none">Data가 존재하지 않습니다.</td>
+											<td colspan="16" class="col-none"><spring:message code='data.no.data'/></td>
 										</tr>
 </c:if>
 <c:if test="${!empty dataList }">
@@ -196,8 +196,8 @@
 											<td class="col-date">${dataInfo.viewInsertDate }</td>
 											<td class="col-functions">
 												<span class="button-group">
-													<a href="/data/modify-data.do?data_id=${dataInfo.data_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}" class="image-button button-edit">수정</a>
-													<a href="/data/delete-data.do?data_id=${dataInfo.data_id }" onclick="return deleteWarning();" class="image-button button-delete">삭제</a>
+													<a href="/data/modify-data.do?data_id=${dataInfo.data_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}" class="image-button button-edit"><spring:message code='modified'/></a>
+													<a href="/data/delete-data.do?data_id=${dataInfo.data_id }" onclick="return deleteWarning();" class="image-button button-delete"><spring:message code='delete'/></a>
 												</span>
 											</td>
 										</tr>
@@ -235,32 +235,32 @@
 			<col class="col-label" />
 			<col class="col-data" />
 			<tr>
-				<th class="col-label" scope="row">그룹명</th>
+				<th class="col-label" scope="row"><spring:message code='data.group.name'/></th>
 				<td id="group_name_info" class="col-data"></td>
 			</tr>
 			<tr>
-				<th class="col-label" scope="row">그룹명(영문)</th>
+				<th class="col-label" scope="row"><spring:message code='data.group.name.en'/></th>
 				<td id="group_key_info" class="col-data"></td>
 			</tr>
 			<tr>
-				<th class="col-label" scope="row">사용여부</th>
+				<th class="col-label" scope="row"><spring:message code='data.use.not'/></th>
 				<td id="viewUseYn_info" class="col-data"></td>
 			</tr>
 			<tr>
-				<th class="col-label" scope="row">설명</th>
+				<th class="col-label" scope="row"><spring:message code='description'/></th>
 				<td id="description_info" class="col-data"></td>
 			</tr>
 		</table>
 	</div>
 	<%-- 일괄등록(Excel) --%>
-	<div class="dialog_excel" title="Data 일괄 등록">
+	<div class="dialog_excel" title="<spring:message code='data.all.insert.data'/>">
 		<form id="fileInfo" name="fileInfo" action="/data/ajax-insert-excel-data.do" method="post" enctype="multipart/form-data">
 			<table id="excelDataUpload" class="inner-table scope-row">
 				<col class="col-sub-label xl" />
 				<col class="col-data" />
 				<tbody>
 					<tr>
-						<th class="col-sub-label xl">파일올리기</th>
+						<th class="col-sub-label xl"><spring:message code='data.upload.file'/></th>
 						<td>
 							<div class="inner-data">
 								<input type="file" id="file_name" name="file_name" class="col-data" />
@@ -270,7 +270,7 @@
 				</tbody>
 			</table>
 			<div class="button-group">
-				<input type="button" onclick="fileUpload();" class="button" value="파일저장" />
+				<input type="button" onclick="fileUpload();" class="button" value="<spring:message code='data.file.save'/>"/>
 			</div>
 		</form>
 	</div>
@@ -401,7 +401,7 @@
 					if(msg.result == "success") {
 						if(msg.parse_error_count != 0 || msg.insert_error_count != 0) {
 							$("#file_name").val('');
-							alert("실패 건수가 존재합니다. 파일을 다시 선택해주세요.");
+							alert(JS_MESSAGE["fail.count.retry.select"]);
 						} else {
 							alert(JS_MESSAGE["update"]);
 						}

@@ -27,10 +27,10 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					
 					<div class="page-content">
-						<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
+						<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='user.group.check.mark'/></div>
 						<div class="tabs">
 							<ul>
-								<li><a href="#data_info_tab">기본정보</a></li>
+								<li><a href="#data_info_tab"><spring:message code='user.input.information'/></a></li>
 							</ul>
 							<div id="data_info_tab">
 								<form:form id="dataInfo" modelAttribute="dataInfo" method="post" onsubmit="return false;">
@@ -44,27 +44,28 @@
 											<form:label path="data_key">Key</form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
+										<spring:message code='overlap.check' var='overLap'/>
 										<td class="col-input">
 											<form:hidden path="duplication_value"/>
 											<form:input path="data_key" cssClass="m" />
-					  						<input type="button" id="data_duplication_buttion" value="중복확인" />
+					  						<input type="button" id="data_duplication_buttion" value="${ overLap}" />
 					  						<form:errors path="data_key" cssClass="error" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="data_group_name">데이터 그룹</form:label>
+											<form:label path="data_group_name"><spring:message code='data.group'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
 											<form:hidden path="data_group_id" />
 				 							<form:input path="data_group_name" cssClass="m" readonly="true" />
-											<input type="button" id="data_group_buttion" value="그룹선택" />
+											<input type="button" id="data_group_buttion" value="<spring:message code='user.input.group.select'/>" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="data_name">이름</form:label>
+											<form:label path="data_name"><spring:message code='name'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="data_name" class="m" />
@@ -73,7 +74,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="latitude">위도</form:label>
+											<form:label path="latitude"><spring:message code='lat'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -83,7 +84,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="longitude">경도</form:label>
+											<form:label path="longitude"><spring:message code='lon'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -93,7 +94,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="height">높이</form:label>
+											<form:label path="height"><spring:message code='height'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -133,20 +134,22 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="public_yn">공개 유무</form:label>
+											<form:label path="public_yn"><spring:message code='use.not'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
+										<spring:message code='use' var='use'/>
+										<spring:message code='no.use' var='noUse'/>
 										<td class="col-input">
-											<form:radiobutton path="public_yn" value="Y" label="사용"/>
-											<form:radiobutton path="public_yn" value="N" label="사용안함" />
+											<form:radiobutton path="public_yn" value="Y" label="${use}"/>
+											<form:radiobutton path="public_yn" value="N" label="${noUse}" />
 										</td>
 									</tr>
 								</table>
 								
 								<div class="button-group">
 									<div id="insertDataLink" class="center-buttons">
-										<input type="submit" value="수정" onclick="updateData();" />
-										<a href="/data/list-data.do" class="button">목록</a>
+										<input type="submit" value="<spring:message code='modified'/>" onclick="updateData();" />
+										<a href="/data/list-data.do" class="button"><spring:message code='list'/></a>
 									</div>
 								</div>
 								</form:form>
@@ -161,7 +164,7 @@
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 	
 	<!-- Dialog -->
-	<div class="dialog" title="데이터 그룹">
+	<div class="dialog" title="<spring:message code='data.group'/>">
 		<div class="dialog-data-group">
 <c:if test="${!empty dataGroupList }">
 			<ul>
@@ -322,7 +325,7 @@
 	$( "#button_groupSelect" ).on( "click", function() {
 		var radioObj = $(":radio[name=radio_group]:checked").val();
 		if (!radioObj) {
-			alert('그룹이 선택되지 않았습니다.');
+			alert(JS_MESSAGE["check.group.required"]);
 	        return false;
 	    } else {
 	    	var splitValues = radioObj.split("_");

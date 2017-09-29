@@ -11,7 +11,12 @@ JS_MESSAGE["move.confirm"]= "Are you sure you want to move?";
 JS_MESSAGE["delete.confirm"]= "Are you sure?";
 JS_MESSAGE["check.value.required"]= "No items selected.";
 JS_MESSAGE["commingsoon"]= "Preparing";
-JS_MESSAGE ["check.group.required"] = "No group selected";
+JS_MESSAGE["check.group.required"] = "No group selected";
+JS_MESSAGE["check.id.duplication"] = "Please check duplicate ID.";
+JS_MESSAGE["use.id.other.id.select"] = "This is the ID you are using. Please choose a different one.";
+JS_MESSAGE["total.count"] = "C:";
+JS_MESSAGE["total.few"] = "few";
+
 // common
 JS_MESSAGE["user.session.empty"]= "Available after login";
 JS_MESSAGE["db.exception"]= "Database error occurred. Please try again later.";
@@ -111,7 +116,20 @@ JS_MESSAGE["user.group.not.group.id"]= "There is no group ID.";
 JS_MESSAGE["user.group.not.select"]= "No item selected";
 
 //input group
-JS_MESSAGE ["user.group.id.minlength"] = "User ID minimum length";
-JS_MESSAGE ["user.group.id.minlength.2"] = "";
-JS_MESSAGE ["user.group.password.not.same"] = "Password does not match password verification";
-JS_MESSAGE ["user.group.phone.number.type"] = "Please fill in the phone number format";
+JS_MESSAGE["user.group.id.minlength"] = "User ID minimum length";
+JS_MESSAGE["user.group.id.minlength.2"] = "";
+JS_MESSAGE["user.group.password.not.same"] = "Password does not match password verification";
+JS_MESSAGE["user.group.phone.number.type"] = "Please fill in the phone number format";
+JS_MESSAGE["user.basic.information.input"] = "Available after registering user's basic information";
+JS_MESSAGE["use.device.name.input"] = "Please enter your device name.";
+JS_MESSAGE["input.ip"] = "Please enter the IP format.";
+JS_MESSAGE["user.device.input.max.five"] = "You can register up to 5 user devices.";
+JS_MESSAGE["fail.count.retry.select"] = "The number of failures exists. Please select the file again.";
+
+//data
+JS_MESSAGE["data.group.select"] = "Please select a data group.";
+JS_MESSAGE["data.top.not.insert"] = "Data can not be registered in the top level group";
+JS_MESSAGE["data.group.not.group.id"] = "There is no group ID.";
+JS_MESSAGE["data.not.select"] = "No items selected.";
+JS_MESSAGE["data.no.insert.data"] = "No data registered";
+JS_MESSAGE["data.up.group.no.insert"] = "You can not register to the top level 
