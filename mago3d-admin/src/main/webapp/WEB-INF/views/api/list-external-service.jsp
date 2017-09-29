@@ -29,7 +29,7 @@
 						<div class="list">
 							<div class="list-header row">
 								<div class="list-desc u-pull-left">
-									전체: <em>${totalCount}</em>건
+									<spring:message code='all.d'/> <em>${totalCount}</em> <spring:message code='search.what.count'/>
 								</div>
 							</div>
 							<table class="list-table scope-col">
@@ -43,20 +43,20 @@
 								<col class="col-functions" />
 								<thead>
 									<tr>
-										<th scope="col" class="col-number">번호</th>
-										<th scope="col" class="col-name">서비스명</th>
-										<th scope="col" class="col-type">서비스유형</th>
+										<th scope="col" class="col-number"><spring:message code='number'/></th>
+										<th scope="col" class="col-name"><spring:message code='api.service.name'/></th>
+										<th scope="col" class="col-type"><spring:message code='api.service.type'/></th>
 										<th scope="col" class="col-ip">IP</th>
 										<th scope="col" class="col-url">URL</th>
-										<th scope="col" class="col-toggle">상태</th>
-										<th scope="col" class="col-date-time">등록일</th>
-										<th scope="col" class="col-functions">수정</th>
+										<th scope="col" class="col-toggle"><spring:message code='status'/></th>
+										<th scope="col" class="col-date-time"><spring:message code='search.insert.date'/></th>
+										<th scope="col" class="col-functions"><spring:message code='modified'/></th>
 									</tr>
 								</thead>
 								<tbody>
 <c:if test="${empty externalServiceList }">
 								<tr>
-									<td colspan="8" class="col-none">Private API 목록이 존재하지 않습니다.</td>
+									<td colspan="8" class="col-none"><spring:message code='api.no.api'/></td>
 								</tr>
 </c:if>
 <c:if test="${!empty externalServiceList }">

@@ -12,6 +12,10 @@ JS_MESSAGE["delete.confirm"] = "삭제 하시겠습니까?";
 JS_MESSAGE["check.value.required"] = "선택된 항목이 없습니다.";
 JS_MESSAGE["commingsoon"] = "준비중입니다";
 JS_MESSAGE["check.group.required"] = "그룹이 선택되지 않았습니다.";
+JS_MESSAGE["check.id.duplication"] = "아이디 중복확인을 해주십시오.";
+JS_MESSAGE["use.id.other.id.select"] = "사용중인 아이디 입니다. 다른 아이디를 선택해 주십시오.";
+JS_MESSAGE["total.count"] = "총건수:";
+JS_MESSAGE["total.few"] = "건";
 // 공통
 JS_MESSAGE["user.session.empty"] = "로그인 후 사용 가능한 서비스 입니다.";
 JS_MESSAGE["db.exception"] = "데이터 베이스 장애가 발생하였습니다. 잠시 후 다시 이용하여 주시기 바랍니다.";
@@ -114,5 +118,18 @@ JS_MESSAGE["user.group.not.select"] = "선택된 항목이 없습니다.";
 //input group
 JS_MESSAGE["user.group.id.minlength"] = "사용자 아이디 최소 길이는";
 JS_MESSAGE["user.group.id.minlength.2"] = "입니다";
-JS_MESSAGE["user.group.password.not.same"]= "비밀번호가 비밀번호 확인 이랑 일치하지 않습니다.";
-JS_MESSAGE["user.group.phone.number.type"]= "전화번호 형식에 맞게 입력해 주십시오.";
+JS_MESSAGE["user.group.password.not.same"] = "비밀번호가 비밀번호 확인 이랑 일치하지 않습니다.";
+JS_MESSAGE["user.group.phone.number.type"] = "전화번호 형식에 맞게 입력해 주십시오.";
+JS_MESSAGE["user.basic.information.input"] = "사용자 기본 정보 등록 후 이용 가능 합니다.";
+JS_MESSAGE["use.device.name.input"] = "사용 기기명을 입력해 주십시오.";
+JS_MESSAGE["input.ip"] = "IP 형식에 맞게 입력해 주십시오.";
+JS_MESSAGE["user.device.input.max.five"] = "사용자 디바이스 등록은 최대 5개 까지 가능합니다.";
+JS_MESSAGE["fail.count.retry.select"] = "실패 건수가 존재합니다. 파일을 다시 선택해주세요.";
+
+//data
+JS_MESSAGE["data.group.select"] = "데이터 그룹을 선택해 주세요.";
+JS_MESSAGE["data.top.not.insert"] = "최상위 그룹에는 데이터를 등록할 수 없습니다.";
+JS_MESSAGE["data.group.not.group.id"] = "그룹 아이디가 없습니다.";
+JS_MESSAGE["data.not.select"] = "선택된 항목이 없습니다.";
+JS_MESSAGE["data.no.insert.data"] = "등록된 데이터가 없습니다.";
+JS_MESSAGE["data.up.group.no.insert"] = "최상위 그룹에는 등록할 수 없습니다.";

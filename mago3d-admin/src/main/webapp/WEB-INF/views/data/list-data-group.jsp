@@ -44,18 +44,18 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
 						<div class="content-header row">
-							<h3 class="content-title u-pull-left">데이터 그룹 (<a href="#" onclick="reloadDataGroupCache();">캐시갱신</a>)</h3>
+							<h3 class="content-title u-pull-left"><spring:message code='data.group'/> (<a href="#" onclick="reloadDataGroupCache();"><spring:message code='data.cache.init'/></a>)</h3>
 							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
 						</div>
 						<div class="row">
 							<div class="one-third column">
 								<div id="AXTreeTarget" class="tree"></div>
-								<button type="button" class="btn btn-success btn-sm" onclick="addTree(); return false;">추가</button>
-								<button type="button" class="btn btn-warning btn-sm" onclick="addChildTree(); return false;">하위그룹추가</button>
-								<button type="button" class="btn btn-danger btn-sm" onclick="delTree(); return false;">선택삭제</button>
+								<button type="button" class="btn btn-success btn-sm" onclick="addTree(); return false;"><spring:message code='add'/></button>
+								<button type="button" class="btn btn-warning btn-sm" onclick="addChildTree(); return false;"><spring:message code='data.sub.group.add'/></button>
+								<button type="button" class="btn btn-danger btn-sm" onclick="delTree(); return false;"><spring:message code='data.select.delete'/></button>
 								<!-- <button type="button" class="btn btn-success btn-sm" onclick="updateTree(); return false;">수정</button> -->
-								<button type="button" class="btn btn-warning btn-sm" onclick="moveUpTree(); return false;">위로</button>
-								<button type="button" class="btn btn-danger btn-sm" onclick="moveDownTree(); return false;">아래로</button>
+								<button type="button" class="btn btn-warning btn-sm" onclick="moveUpTree(); return false;"><spring:message code='data.group.up'/></button>
+								<button type="button" class="btn btn-danger btn-sm" onclick="moveDownTree(); return false;"><spring:message code='data.group.down'/></button>
 							</div>
 							<div class="two-third column">
 								<div class="node">
@@ -73,33 +73,33 @@
 											<col class="col-input" />
 											<tr>
 												<th class="col-label" scope="row">
-													<label for="data_group_name">그룹명</label>
+													<label for="data_group_name"><spring:message code='data.group'/></label>
 													<span class="icon-glyph glyph-emark-dot color-warning"></span>
 												</th>
 												<td class="col-input"><input type="text" id="data_group_name" name="data_group_name" value="" class="m" /></td>
 											</tr>
 											<tr>
 												<th class="col-label" scope="row">
-													<label for="data_group_key">그룹명(영문)</label>
+													<label for="data_group_key"><spring:message code='data.group.name.en'/></label>
 													<span class="icon-glyph glyph-emark-dot color-warning"></span>
 												</th>
 												<td class="col-input"><input type="text" id="data_group_key" name="data_group_key" value="" class="m" /></td>
 											</tr>
 											<tr>
 												<th class="col-label" scope="row">
-													<span>사용여부</span>
+													<span><spring:message code='data.use.not'/></span>
 													<span class="icon-glyph glyph-emark-dot color-warning"></span>
 												</th>
 												<td class="col-input radio-set">
 													<input type="radio" id="use_y" name="use_yn" value="Y" />
-													<label for="use_y">사용</label>
+													<label for="use_y"><spring:message code='use'/></label>
 													<input type="radio" id="use_n" name="use_yn" value="N" />
-													<label for="use_n">사용안함</label>
+													<label for="use_n"><spring:message code='not.use'/></label>
 												</td>
 											</tr>
 											<tr>
 												<th class="col-label" scope="row">
-													<label for="latitude">위도/경도/높이/초</label>
+													<label for="latitude"><spring:message code='data.lat.lon.height.s'/></label>
 												</th>
 												<td class="col-input">
 													<input type="text" id="latitude" name="latitude" value="" class="s" />
@@ -109,17 +109,17 @@
 												</td>
 											</tr>
 											<tr>
-												<th class="col-label" scope="row"><label for="description">설명</label></th>
+												<th class="col-label" scope="row"><label for="description"><spring:message code='description'/></label></th>
 												<td class="col-input"><input type="text" id="description" name="description" value="" class="l"/></td>
 											</tr>
 											<tr>
 												<td colspan="2">
 													<div class="button-group u-pull-left">
-														<input type="submit" value="저장" onclick="appendTree();"/>
-														<input type="reset" value="취소" />
+														<input type="submit" value="<spring:message code='save'/>" onclick="appendTree();"/>
+														<input type="reset" value="<spring:message code='cancel'/>" />
 													</div>
 													<div class="button-group u-pull-right">
-														<a href="#" class="button" onclick="modifyDataGroupData();">데이터 관리</a>
+														<a href="#" class="button" onclick="modifyDataGroupData();"><spring:message code='data.management'/></a>
 													</div>
 												</td>
 											</tr>
@@ -129,7 +129,7 @@
 											
 									<div class="tabs">
 										<ul>
-											<li><a href="#data_tab">데이터</a></li>
+											<li><a href="#data_tab"><spring:message code='data'/></a></li>
 										</ul>
 										<div id="data_tab">
 											<table class="inner-table scope-col">
@@ -141,17 +141,17 @@
 												<col class="col-date-time" />
 												<thead>
 													<tr>
-														<th scope="col" class="col-number">번호</th>
-														<th scope="col" class="col-id">아이디</th>
-														<th scope="col" class="col-name">이름</th>
-														<th scope="col" class="col-email">이메일</th>
-														<th scope="col" class="col-toggle">데이터 상태</th>
-														<th scope="col" class="col-date-time">등록일</th>
+														<th scope="col" class="col-number"><spring:message code='number'/></th>
+														<th scope="col" class="col-id"><spring:message code='id'/></th>
+														<th scope="col" class="col-name"><spring:message code='name'/></th>
+														<th scope="col" class="col-email"><spring:message code='email'/></th>
+														<th scope="col" class="col-toggle"><spring:message code='data.status'/></th>
+														<th scope="col" class="col-date-time"><spring:message code='data.insert.date'/></th>
 													</tr>
 												</thead>
 												<tbody id="data_list">
 													<tr>
-														<td colspan="6" class="col-none">등록된 데이터가 없습니다.</td>		
+														<td colspan="6" class="col-none"><spring:message code='data.no.insert.data'/></td>		
 													</tr>
 												</tbody>
 											</table>
@@ -169,16 +169,16 @@
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 	
 <!-- Data 관리 -->	
-<div id="data_manager" class="data_dialog" title="데이터 관리">
+<div id="data_manager" class="data_dialog" title="<spring:message code='data.management'/>">
 	<div class="row">
 		<!-- 전체 Data -->
 		<div id="data_left" class="pool">
 			<div class="list-header row">
 				<div class="u-pull-left">
-					<h4 class="column-title">전체 데이터(선택 그룹 제외)</h4>
+					<h4 class="column-title"><spring:message code='data.all.data'/></h4>
 				</div>
 				<div class="u-pull-right">
-					<label for="search_except_data_name">아이디</label>
+					<label for="search_except_data_name"><spring:message code='id'/></label>
 					<input type="search" id="search_except_data_name" name="search_except_data_name" class="m" value="" />
 					<input type="button" value="조회" onclick="drawGroupPage('1', 'data_all');" />
 				</div>
@@ -194,8 +194,8 @@
 				<thead>
 					<tr>
 						<th scope="col" class="col-checkbox"><input type="checkbox" id="data_left_check_all" name="data_left_check_all" /></th>
-						<th scope="col" class="col-name">아이디</th>
-						<th scope="col" class="col-toggle">이름</th>
+						<th scope="col" class="col-name"><spring:message code='id'/></th>
+						<th scope="col" class="col-toggle"><spring:message code='name'/></th>
 					</tr>
 				</thead>
 				<tbody id="data_all_list">
@@ -209,12 +209,12 @@
 		<div id="data_right" class="chosen">
 			<div class="list-header row">
 				<div class="u-pull-left">
-					<h4 class="column-title">등록 데이터(선택 그룹)</h4>
+					<h4 class="column-title"><spring:message code='data.insert.group'/></h4>
 				</div>
 				<div class="u-pull-right">
-					<label for="search_data_name">아이디</label>
+					<label for="search_data_name"><spring:message code='id'/></label>
 					<input type="search" id="search_data_name" name="search_data_name" class="m" value="" />
-					<input type="button" value="조회" onclick="drawGroupPage('1', 'data_select');" />
+					<input type="button" value="<spring:message code='data.group.lookup'/>" onclick="drawGroupPage('1', 'data_select');" />
 				</div>
 				<div id="data_select_list_count" class="list-desc u-pull-left">
 				</div>
@@ -228,8 +228,8 @@
 				<thead>
 					<tr>
 						<th scope="col" class="col-checkbox"><input type="checkbox" id="data_right_check_all" name="data_right_check_all" /></th>
-						<th scope="col" class="col-name">아이디</th>
-						<th scope="col" class="col-toggle">이름</th>
+						<th scope="col" class="col-name"><spring:message code='id'/></th>
+						<th scope="col" class="col-toggle"><spring:message code='name'/></th>
 					</tr>
 				</thead>
 				<tbody id="data_select_list">
@@ -241,11 +241,11 @@
 		<div id="role_center" class="buttons">
 			<a href="#" id="data_button_insert" class="button color-area-em">
 				<span class="icon-glyph glyph-plus"></span>
-				<span class="icon-text">등록</span>
+				<span class="icon-text"><spring:message code='insert'/></span>
 			</a>
 			<a href="#" id="data_button_delete" class="button color-area-em">
 				<span class="icon-glyph glyph-ex"></span>
-				<span class="icon-text">삭제</span>
+				<span class="icon-text"><spring:message code='delete'/></span>
 			</a>
 		</div>
 	</div>
@@ -290,11 +290,11 @@
 	// Data 관리
     function modifyDataGroupData() {
     	if ($("#data_group_id").val() == "") {
-    		alert("데이터 그룹을 선택해 주세요.");
+    		alert(JS_MESSAGE["data.group.select"]);
     		return;
     	}
     	if ($("#depth").val() == "" || parseInt($("#depth").val()) < 1) {
-    		alert("최상위 그룹에는 데이터를 등록할 수 없습니다.");
+    		alert(JS_MESSAGE["data.top.not.insert"]);
     		return;
     	}
     	dataDialog.dialog( "open" );
@@ -394,12 +394,12 @@
     function ajaxInsertDataGroupData() {
     	var data_group_id = $("#data_group_id").val()
     	if (data_group_id == "") {
-    		alert("그룹 아이디가 없습니다.");
+    		alert(JS_MESSAGE["data.group.not.group.id"]);
     		return;
     	}
     	var status = checkedStatus($(":checkbox[name=data_all_id]"));
     	if (!status) {
-			alert("선택된 항목이 없습니다.");
+			alert(JS_MESSAGE["data.not.select"]);
 			return;
 		}
     	var param = $("#data_left_form").serialize() + "&data_group_id=" + data_group_id;
@@ -428,12 +428,12 @@
     function ajaxDeleteDataGroupData() {
     	var data_group_id = $("#data_group_id").val()
     	if (data_group_id == "") {
-    		alert("그룹 아이디가 없습니다.");
+    		alert(JS_MESSAGE["data.group.not.group.id"]);
     		return;
     	}
     	var status = checkedStatus($(":checkbox[name=data_select_id]"));
     	if (!status) {
-			alert("선택된 항목이 없습니다.");
+			alert(JS_MESSAGE["data.not.select"]);
 			return;
 		}
     	var param = $("#data_right_form").serialize() + "&data_group_id=" + data_group_id;
@@ -526,14 +526,14 @@
 			}
 		} else {
 			content += 	"<tr>"
-					+		"<td colspan=\"3\" class=\"col-none\">등록된 데이터가 없습니다.</td>"
+					+		"<td colspan=\"3\" class=\"col-none\">" + JS_MESSAGE["data.no.insert.data"] + "</td>"
 					+	"</tr>";
 		}
 		
 		$("#" + type + "_list").empty();
 		$("#" + type + "_list").html(content);
 		$("#" + type + "_list_count").empty();
-		$("#" + type + "_list_count").html("총건수: <em>" + pagination.totalCount + "</em>건");
+		$("#" + type + "_list_count").html(JS_MESSAGE["total.count"] + " <em>" + pagination.totalCount + "</em>" + JS_MESSAGE["total.few"]);
 		
 		drawPage(pagination, type, type);
 	}
@@ -556,13 +556,13 @@
 			}
 		} else {
 			content += 	"<tr>"
-					+		"<td colspan=\"5\" class=\"col-none\">등록된 데이터가 없습니다.</td>"
+					+		"<td colspan=\"5\" class=\"col-none\">" + JS_MESSAGE["data.no.insert.data"] + "</td>"
 					+	"</tr>";
 		}
 		$("#data_list").empty();
 		$("#data_list").html(content);
 		$("#data_select_list_count").empty();
-		$("#data_select_list_count").html("총건수: <em>" + pagination.totalCount + "</em>건");
+		$("#data_select_list_count").html(JS_MESSAGE["total.count"] + " <em>" + pagination.totalCount + "</em>건");
 		drawPage(pagination, "data_list", "data_pagination");
 	}
 	
@@ -583,7 +583,7 @@
 		var colspan = "5";
 		var content = "";
 		content += 	"<tr>"
-				+		"<td colspan=\"" + colspan + "\" class=\"col-none\">최상위 그룹에는 등록할 수 없습니다.</td>"
+				+		"<td colspan=\"" + colspan + "\" class=\"col-none\">"+ JS_MESSAGE["data.up.group.no.insert"] + "</td>"
 				+	"</tr>";
 		$("#" + type + "_list").html(content);
  	}

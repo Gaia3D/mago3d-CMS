@@ -17,7 +17,7 @@
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-toast/jquery.toast.js"></script>
-	<script type="text/javascript" src="/externlib/${lang}/hammer.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/${lang}/hammer/hammer.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>

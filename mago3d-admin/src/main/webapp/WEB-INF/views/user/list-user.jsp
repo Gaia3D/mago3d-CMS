@@ -232,19 +232,19 @@
 			<col class="col-label" />
 			<col class="col-data" />
 			<tr>
-				<th class="col-label" scope="row">그룹명</th>
+				<th class="col-label" scope="row"><spring:message code='user.group.name'/></th>
 				<td id="group_name_info" class="col-data"></td>
 			</tr>
 			<tr>
-				<th class="col-label" scope="row">그룹명(영문)</th>
+				<th class="col-label" scope="row"><spring:message code='user.group.user.group.en'/></th>
 				<td id="group_key_info" class="col-data"></td>
 			</tr>
 			<tr>
-				<th class="col-label" scope="row">사용여부</th>
+				<th class="col-label" scope="row"><spring:message code='user.device.use.not'/></th>
 				<td id="viewUseYn_info" class="col-data"></td>
 			</tr>
 			<tr>
-				<th class="col-label" scope="row">설명</th>
+				<th class="col-label" scope="row"><spring:message code='user.group.description'/></th>
 				<td id="description_info" class="col-data"></td>
 			</tr>
 		</table>
@@ -257,7 +257,7 @@
 				<col class="col-data" />
 				<tbody>
 					<tr>
-						<th class="col-sub-label xl">파일올리기</th>
+						<th class="col-sub-label xl"><spring:message code='user.group.file.upload'/></th>
 						<td>
 							<div class="inner-data">
 								<input type="file" id="file_name" name="file_name" class="col-data" />
@@ -442,7 +442,7 @@
 					if(msg.result == "success") {
 						if(msg.parse_error_count != 0 || msg.insert_error_count != 0) {
 							$("#file_name").val('');
-							alert("실패 건수가 존재합니다. 파일을 다시 선택해주세요.");
+							alert(JS_MESSAGE ["fail.count.retry.select"]);
 						} else {
 							alert(JS_MESSAGE["update"]);
 						}
