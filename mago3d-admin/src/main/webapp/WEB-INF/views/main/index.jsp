@@ -43,7 +43,7 @@
 									<div>
 										<span class="banner-title"><spring:message code='main.issue.newissue'/></span>
 										<span id="userOTPCountSpinner" class="banner-number"></span>
-										<span class="banner-unit"> ${issueTotalCount}<spring:message code='main.count'/> </span>
+										<span class="banner-unit"> ${issueTotalCount} <spring:message code='main.count'/> </span>
 									</div>
 								</div>
 							</div>
@@ -528,7 +528,7 @@
 								+	"<col class=\"col-center\" />";
 					if(scheduleLogList == null || scheduleLogList.length == 0) {
 						content += 	"<tr>"
-								+	"	<td colspan=\"3\" class=\"col-none\">스케줄 실행 이력이 존재하지 않습니다.</td>"
+								+	"	<td colspan=\"3\" class=\"col-none\"><spring:message code='main.status.no.schedule'/></td>"
 								+	"</tr>";
 					} else {
 						for(i=0; i<scheduleLogList.length; i++ ) {
@@ -605,7 +605,7 @@
 								+	"<col class=\"col-left\" />";
 					if(accessLogList == null || accessLogList.length == 0) {
 						content += 	"<tr>"
-								+	"	<td colspan=\"2\" class=\"col-none\">사용자 추적 이력이 존재하지 않습니다.</td>"
+								+	"	<td colspan=\"2\" class=\"col-none\"><spring:message code='main.status.no.user.tracking'/></td>"
 								+	"</tr>";
 					} else {
 						for(i=0; i<accessLogList.length; i++ ) {

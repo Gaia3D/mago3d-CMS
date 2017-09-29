@@ -11,6 +11,7 @@ JS_MESSAGE["move.confirm"] = "이동 하시겠습니까?";
 JS_MESSAGE["delete.confirm"] = "삭제 하시겠습니까?";
 JS_MESSAGE["check.value.required"] = "선택된 항목이 없습니다.";
 JS_MESSAGE["commingsoon"] = "준비중입니다";
+JS_MESSAGE["check.group.required"] = "그룹이 선택되지 않았습니다.";
 // 공통
 JS_MESSAGE["user.session.empty"] = "로그인 후 사용 가능한 서비스 입니다.";
 JS_MESSAGE["db.exception"] = "데이터 베이스 장애가 발생하였습니다. 잠시 후 다시 이용하여 주시기 바랍니다.";
@@ -109,3 +110,9 @@ JS_MESSAGE["user.group.top.not.insert"] = "최상위 그룹에는 사용자를 �
 JS_MESSAGE["user.group.role.top.not.insert"] = "최상위 그룹에는 Role을 등록할 수 없습니다.";
 JS_MESSAGE["user.group.not.group.id"] = "그룹 아이디가 없습니다.";
 JS_MESSAGE["user.group.not.select"] = "선택된 항목이 없습니다.";
+
+//input group
+JS_MESSAGE["user.group.id.minlength"] = "사용자 아이디 최소 길이는";
+JS_MESSAGE["user.group.id.minlength.2"] = "입니다";
+JS_MESSAGE["user.group.password.not.same"]= "비밀번호가 비밀번호 확인 이랑 일치하지 않습니다.";
+JS_MESSAGE["user.group.phone.number.type"]= "전화번호 형식에 맞게 입력해 주십시오.";

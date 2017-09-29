@@ -1,0 +1,185 @@
+AXTree.js
+1) moveUpTree: function ()
+
+	beore
+	if (selectedObject.error) {
+		toast.push(selectedObject.description);
+		return;
+	}
+	.....
+	if (nowChildIndex < 1) {
+		//이동불가
+		toast.push("순서의 처음입니다.");
+	} else {
+		try {
+				if (isRootControl) {
+					var newSelectedHash = "0".setDigit(cfg.hashDigit) + "_" + (nowChildIndex - 1).setDigit(cfg.hashDigit);
+					var tempObj = AXUtil.copyObject(myTree[nowChildIndex]);
+					myTree[nowChildIndex] = AXUtil.copyObject(myTree[nowChildIndex - 1]);
+					myTree[nowChildIndex - 1] = tempObj;
+					if(typeof myTree[nowChildIndex]._CUD == "undefined") myTree[nowChildIndex]._CUD = "U";
+					if(typeof myTree[nowChildIndex - 1]._CUD == "undefined") myTree[nowChildIndex - 1]._CUD = "U";
+				} else {
+					var newSelectedHash = "0".setDigit(cfg.hashDigit) + "_" + parentHashs.join("_") + "_" + (nowChildIndex - 1).setDigit(cfg.hashDigit);
+					var tempObj = AXUtil.copyObject(myTree[cfg.reserveKeys.subTree][nowChildIndex]);
+					myTree[cfg.reserveKeys.subTree][nowChildIndex] = AXUtil.copyObject(myTree[cfg.reserveKeys.subTree][nowChildIndex - 1]);
+					myTree[cfg.reserveKeys.subTree][nowChildIndex - 1] = tempObj;
+					if(typeof myTree[cfg.reserveKeys.subTree][nowChildIndex]._CUD == "undefined") myTree[cfg.reserveKeys.subTree][nowChildIndex]._CUD = "U";
+					if(typeof myTree[cfg.reserveKeys.subTree][nowChildIndex - 1]._CUD == "undefined") myTree[cfg.reserveKeys.subTree][nowChildIndex - 1]._CUD = "U";
+				}
+			} catch (e) {
+				trace(e);
+			}
+
+			this.selectedCells.clear();
+			this.selectedRow.clear();
+
+			this.list = this.convertHashListToTree(this.tree);
+			this.printList();
+
+			var newSelecteIndex;
+			for (var idx = 0; idx < this.list.length; idx++) {
+				if (this.list[idx][reserveKeys.hashKey] == newSelectedHash) {
+					newSelecteIndex = idx;
+					this.body.find(".gridBodyTr_" + newSelecteIndex).addClass("selected");
+					this.selectedRow.push(newSelecteIndex);
+					break;
+				}
+			}
+
+		}
+	},
+	
+	after
+	if (selectedObject.error) {
+		//toast.push(selectedObject.description);
+		alert(selectedObject.description);
+		return "-1";
+	}
+	....
+	if (nowChildIndex < 1) {
+		//이동불가
+		//toast.push("순서의 처음입니다.");
+		alert("순서의 처음입니다.");
+		return "-1";
+	} else {
+		return "1";
+		// 원본 전부 주석처리
+		}
+	},
+
+2) moveDownTree: function () {
+	before
+	if (selectedObject.error) {
+			toast.push(selectedObject.description);
+			return;
+		}
+		
+	if (nowChildIndex > subTreeLength - 2) {
+			//이동불가
+			toast.push("순서의 마지막입니다.");
+		} else {
+
+			try {
+				if (isRootControl) {
+					var newSelectedHash = "0".setDigit(cfg.hashDigit) + "_" + (nowChildIndex.number() + 1).setDigit(cfg.hashDigit);
+					var tempObj = AXUtil.copyObject(myTree[nowChildIndex]);
+					myTree[nowChildIndex] = AXUtil.copyObject(myTree[nowChildIndex.number() + 1]);
+					myTree[nowChildIndex.number() + 1] = tempObj;
+					if(typeof myTree[nowChildIndex]._CUD == "undefined") myTree[nowChildIndex]._CUD = "U";
+					if(typeof myTree[nowChildIndex + 1]._CUD == "undefined") myTree[nowChildIndex + 1]._CUD = "U";
+				} else {
+					var newSelectedHash = "0".setDigit(cfg.hashDigit) + "_" + parentHashs.join("_") + "_" + (nowChildIndex.number() + 1).setDigit(cfg.hashDigit);
+					var tempObj = AXUtil.copyObject(myTree[cfg.reserveKeys.subTree][nowChildIndex]);
+					myTree[cfg.reserveKeys.subTree][nowChildIndex] = AXUtil.copyObject(myTree[cfg.reserveKeys.subTree][nowChildIndex.number() + 1]);
+					myTree[cfg.reserveKeys.subTree][nowChildIndex.number() + 1] = tempObj;
+					if(typeof myTree[cfg.reserveKeys.subTree][nowChildIndex]._CUD == "undefined") myTree[cfg.reserveKeys.subTree][nowChildIndex]._CUD = "U";
+					if(typeof myTree[cfg.reserveKeys.subTree][nowChildIndex + 1]._CUD == "undefined") myTree[cfg.reserveKeys.subTree][nowChildIndex + 1]._CUD = "U";
+				}
+			} catch (e) {
+				trace(e);
+			}
+
+			this.selectedCells.clear();
+			this.selectedRow.clear();
+
+			this.list = this.convertHashListToTree(this.tree);
+			this.printList();
+
+			var newSelecteIndex;
+			for (var idx = 0; idx < this.list.length; idx++) {
+				if (this.list[idx][reserveKeys.hashKey] == newSelectedHash) {
+					newSelecteIndex = idx;
+
+					this.body.find(".gridBodyTr_" + newSelecteIndex).addClass("selected");
+					this.selectedRow.push(newSelecteIndex);
+
+					break;
+				}
+			};	
+		
+	after
+	if (selectedObject.error) {
+			//toast.push(selectedObject.description);
+			alert(selectedObject.description);
+			return "-1";
+		}
+
+
+	if (nowChildIndex > subTreeLength - 2) {
+			//이동불가
+			//toast.push("순서의 마지막입니다.");
+			alert("순서의 마지막입니다.");
+			return "-1";
+		} else {
+			return "1";
+			// TODO 아래로의 경우 validation 체크만 사용해서 주석처리 함
+//			try {
+//				if (isRootControl) {
+//					var newSelectedHash = "0".setDigit(cfg.hashDigit) + "_" + (nowChildIndex.number() + 1).setDigit(cfg.hashDigit);
+//					var tempObj = AXUtil.copyObject(myTree[nowChildIndex]);
+//					myTree[nowChildIndex] = AXUtil.copyObject(myTree[nowChildIndex.number() + 1]);
+//					myTree[nowChildIndex.number() + 1] = tempObj;
+//					if(typeof myTree[nowChildIndex]._CUD == "undefined") myTree[nowChildIndex]._CUD = "U";
+//					if(typeof myTree[nowChildIndex + 1]._CUD == "undefined") myTree[nowChildIndex + 1]._CUD = "U";
+//				} else {
+//					var newSelectedHash = "0".setDigit(cfg.hashDigit) + "_" + parentHashs.join("_") + "_" + (nowChildIndex.number() + 1).setDigit(cfg.hashDigit);
+//					var tempObj = AXUtil.copyObject(myTree[cfg.reserveKeys.subTree][nowChildIndex]);
+//					myTree[cfg.reserveKeys.subTree][nowChildIndex] = AXUtil.copyObject(myTree[cfg.reserveKeys.subTree][nowChildIndex.number() + 1]);
+//					myTree[cfg.reserveKeys.subTree][nowChildIndex.number() + 1] = tempObj;
+//					if(typeof myTree[cfg.reserveKeys.subTree][nowChildIndex]._CUD == "undefined") myTree[cfg.reserveKeys.subTree][nowChildIndex]._CUD = "U";
+//					if(typeof myTree[cfg.reserveKeys.subTree][nowChildIndex + 1]._CUD == "undefined") myTree[cfg.reserveKeys.subTree][nowChildIndex + 1]._CUD = "U";
+//				}
+//			} catch (e) {
+//				trace(e);
+//			}
+//
+//			this.selectedCells.clear();
+//			this.selectedRow.clear();
+//
+//			this.list = this.convertHashListToTree(this.tree);
+//			this.printList();
+//
+//			var newSelecteIndex;
+//			for (var idx = 0; idx < this.list.length; idx++) {
+//				if (this.list[idx][reserveKeys.hashKey] == newSelectedHash) {
+//					newSelecteIndex = idx;
+//
+//					this.body.find(".gridBodyTr_" + newSelecteIndex).addClass("selected");
+//					this.selectedRow.push(newSelecteIndex);
+//
+//					break;
+//				}
+//			};
+
+
+
+
+
+
+
+
+
+
+
+

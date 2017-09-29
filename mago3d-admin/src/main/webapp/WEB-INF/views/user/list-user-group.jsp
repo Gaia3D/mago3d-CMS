@@ -857,13 +857,13 @@
 			}
 		} else {
 			content += 	"<tr>"
-				+		"<td colspan=\"3\" class=\"col-none\">등록된 Role 이 없습니다.</td>"
+				+		"<td colspan=\"3\" class=\"col-none\"><spring:message code='user.group.user.not'/></td>"
 				+	"</tr>";
 		}
 		$("#" + type + "_list").empty();
 		$("#" + type + "_list").html(content);
 		$("#" + type + "_list_count").empty();
-		$("#" + type + "_list_count").html("총건수: <em>" + pagination.totalCount + "</em>건");
+		$("#" + type + "_list_count").html("<spring:message code='user.group.all.count'/> <em>" + pagination.totalCount + "</em><spring:message code='user.group.all.count.key'/>");
 		
 		drawPage(pagination, type, type);
 	}
@@ -884,14 +884,14 @@
 			}
 		} else {
 			content += 	"<tr>"
-					+		"<td colspan=\"3\" class=\"col-none\">등록된 사용자가 없습니다.</td>"
+					+		"<td colspan=\"3\" class=\"col-none\"><spring:message code='user.group.user.not'/></td>"
 					+	"</tr>";
 		}
 		
 		$("#" + type + "_list").empty();
 		$("#" + type + "_list").html(content);
 		$("#" + type + "_list_count").empty();
-		$("#" + type + "_list_count").html("총건수: <em>" + pagination.totalCount + "</em>건");
+		$("#" + type + "_list_count").html("<spring:message code='user.group.all.count'/> <em>" + pagination.totalCount + "</em><spring:message code='user.group.all.count.key'/>");
 		
 		drawPage(pagination, type, type);
 	}
@@ -915,13 +915,13 @@
 			}
 		} else {
 			content += 	"<tr>"
-					+		"<td colspan=\"6\" class=\"col-none\">등록된 Role이 없습니다.</td>"
+					+		"<td colspan=\"6\" class=\"col-none\"><spring:message code='user.group.role.insert.not'/></td>"
 					+	"</tr>";
 		}
 		$("#role_list").empty();
 		$("#role_list").html(content);
 		$("#role_select_list_count").empty();
-		$("#role_select_list_count").html("총건수: <em>" + pagination.totalCount + "</em>건");
+		$("#role_select_list_count").html("<spring:message code='user.group.all.count'/> <em>" + pagination.totalCount + "</em><spring:message code='user.group.all.count.key'/>");
 		drawPage(pagination, "role_list", "role_pagination");
 	}
 	
@@ -944,13 +944,13 @@
 			}
 		} else {
 			content += 	"<tr>"
-					+		"<td colspan=\"6\" class=\"col-none\">등록된 사용자가 없습니다.</td>"
+					+		"<td colspan=\"6\" class=\"col-none\"><spring:message code='user.group.user.not'/></td>"
 					+	"</tr>";
 		}
 		$("#user_list").empty();
 		$("#user_list").html(content);
 		$("#user_select_list_count").empty();
-		$("#user_select_list_count").html("총건수: <em>" + pagination.totalCount + "</em>건");
+		$("#user_select_list_count").html("<spring:message code='user.group.all.count'/> <em>" + pagination.totalCount + "</em><spring:message code='user.group.all.count.key'/>");
 		drawPage(pagination, "user_list", "user_pagination");
 	}
 	
@@ -980,7 +980,7 @@
 		else if(type == "user") colspan = "6";
 		var content = "";
 		content += 	"<tr>"
-				+		"<td colspan=\"" + colspan + "\" class=\"col-none\">최상위 그룹에는 등록할 수 없습니다.</td>"
+				+		"<td colspan=\"" + colspan + "\" class=\"col-none\"><spring:message code='user.list.group.no.top'/></td>"
 				+	"</tr>";
 		$("#" + type + "_list").html(content);
  	}
