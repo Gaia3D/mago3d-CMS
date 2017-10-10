@@ -45,7 +45,7 @@
 					<div class="page-content">
 						<div class="content-header row">
 							<h3 class="content-title u-pull-left"><spring:message code='data.group'/> (<a href="#" onclick="reloadDataGroupCache();"><spring:message code='data.cache.init'/></a>)</h3>
-							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
+							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
 						</div>
 						<div class="row">
 							<div class="one-third column">

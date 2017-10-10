@@ -26,7 +26,7 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
 						<div class="input-header row">
-							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
+							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
 						</div>
 						<form:form id="issue" action="/issue/insert-issue.do" modelAttribute="issue" method="post" enctype="multipart/form-data" onsubmit="return check();">			
 						<table class="input-table scope-row">

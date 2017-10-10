@@ -18,44 +18,46 @@
   		</tr>
   		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_data_path">Data 폴더</form:label>
+				<form:label path="geo_data_path"><spring:message code='config.data.folder'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_data_path" cssClass="l" />
-				<span class="table-desc"> 디렉토리</span>
+				<span class="table-desc"><spring:message code='config.directory'/></span>
 				<form:errors path="geo_data_path" cssClass="error" />
 			</td>
 		</tr>
   		<tr>
   			<th>
-		  		<span>CullFace 사용유무</span>
+		  		<span><spring:message code='config.cullface.use.not'/></span>
  			</th>
+ 			<spring:message code='use' var='use'/>
+ 			<spring:message code='no.use' var='noUse'/>
  			<td class="col-input radio-set">
- 				<form:radiobutton path="geo_cull_face_enable" value="true" label="사용" />
-				<form:radiobutton path="geo_cull_face_enable" value="false" label="사용안함" />
+ 				<form:radiobutton path="geo_cull_face_enable" value="true" label="${use}" />
+				<form:radiobutton path="geo_cull_face_enable" value="false" label="${noUse}" />
 	  		</td>
   		</tr>
   		<tr>
   			<th>
-		  		<span>TimeLine 표시유무</span>
+		  		<span><spring:message code='config.timeline.use.not'/></span>
  			</th>
  			<td class="col-input radio-set">
- 				<form:radiobutton path="geo_time_line_enable" value="true" label="사용" />
-				<form:radiobutton path="geo_time_line_enable" value="false" label="사용안함" />
+ 				<form:radiobutton path="geo_time_line_enable" value="true" label="${use}" />
+				<form:radiobutton path="geo_time_line_enable" value="false" label="${noUse}" />
 	  		</td>
   		</tr>
   		<tr>
   			<th>
-		  		<span>초기 카메라 이동 유무</span>
+		  		<span><spring:message code='config.init.camera.move'/></span>
  			</th>
  			<td class="col-input radio-set">
- 				<form:radiobutton path="geo_init_camera_enable" value="true" label="사용" />
-				<form:radiobutton path="geo_init_camera_enable" value="false" label="사용안함" />
+ 				<form:radiobutton path="geo_init_camera_enable" value="true" label="${use}" />
+				<form:radiobutton path="geo_init_camera_enable" value="false" label="${noUse}" />
 	  		</td>
   		</tr>
   		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_init_latitude">초기 카메라 이동 위도</form:label>
+				<form:label path="geo_init_latitude"><spring:message code='config.init.camera.lattiude'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_init_latitude" cssClass="m" />
@@ -64,7 +66,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_init_longitude">초기 카메라 이동 경도</form:label>
+				<form:label path="geo_init_longitude"><spring:message code='config.init.camera.longitude'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_init_longitude" cssClass="m" />
@@ -73,7 +75,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_init_height">초기 카메라 이동 높이</form:label>
+				<form:label path="geo_init_height"><spring:message code='config.init.camera.height'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_init_height" cssClass="m" />
@@ -82,11 +84,11 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_init_duration">초기 카메라 이동 시간</form:label>
+				<form:label path="geo_init_duration"><spring:message code='config.init.camera.height'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_init_duration" cssClass="m" />
-				<span class="table-desc"> 초단위</span>
+				<span class="table-desc"><spring:message code='config.second.unit'/></span>
 				<form:errors path="geo_init_duration" cssClass="error" />
 			</td>
 		</tr>
@@ -182,7 +184,7 @@
 	</table>
 	<div class="button-group">
 		<div class="center-buttons">
-			<a href="#" onclick="updatePolicyGeo();" class="button">저장</a>
+			<a href="#" onclick="updatePolicyGeo();" class="button"><spring:message code='save'/></a>
 		</div>
 	</div>
 	</form:form>

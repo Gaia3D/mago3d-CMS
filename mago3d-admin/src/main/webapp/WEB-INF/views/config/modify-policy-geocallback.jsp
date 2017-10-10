@@ -7,11 +7,13 @@
 		<col class="col-input" />
 		<tr>
   			<th>
-		  		<span>사용유무</span>
+		  		<span><spring:message code='config.use.not'/></span>
  			</th>
+ 			<spring:message code='use' var='use'/>
+ 			<spring:message code='no.use' var='noUse'/>
  			<td class="col-input radio-set">
- 				<form:radiobutton path="geo_callback_enable" value="true" label="사용" />
-				<form:radiobutton path="geo_callback_enable" value="false" label="사용안함" />
+ 				<form:radiobutton path="geo_callback_enable" value="true" label="${use}" />
+				<form:radiobutton path="geo_callback_enable" value="false" label="${noUse}" />
 	  		</td>
   		</tr>
   		<tr>
@@ -25,7 +27,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_callback_insertissue">Issue 등록 Callback</form:label>
+				<form:label path="geo_callback_insertissue"><spring:message code='config.issue.insert.callback'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_callback_insertissue" cssClass="l" />
@@ -34,7 +36,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_callback_listissue">Issue 목록 Callback</form:label>
+				<form:label path="geo_callback_listissue"><spring:message code='config.issue.list.callback'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_callback_listissue" cssClass="l" />
@@ -43,7 +45,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_callback_clickposition">Mouse Click 위치  Callback</form:label>
+				<form:label path="geo_callback_clickposition"><spring:message code='config.mouse.click.position.callback'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_callback_clickposition" cssClass="l" />
@@ -53,7 +55,7 @@
 	</table>
 	<div class="button-group">
 		<div class="center-buttons">
-			<a href="#" onclick="updatePolicyGeoCallBack();" class="button">저장</a>
+			<a href="#" onclick="updatePolicyGeoCallBack();" class="button"><spring:message code='save'/></a>
 		</div>
 	</div>
 	</form:form>

@@ -34,20 +34,20 @@
 				<div class="page-area">
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
-						<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
+						<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
 						<div class="tabs">
 							<ul>
-								<li><a href="#user_tab">사용자</a></li>
-								<li><a href="#password_tab">패스워드</a></li>
-								<li><a href="#geo_tab">공간 정보</a></li>
+								<li><a href="#user_tab"><spring:message code='user.group.user'/></a></li>
+								<li><a href="#password_tab"><spring:message code='password'/></a></li>
+								<li><a href="#geo_tab"><spring:message code='spatial.information'/></a></li>
 								<li><a href="#geoserver_tab">GeoServer</a></li>
 								<li><a href="#geocallback_tab">CallBack</a></li>
-								<li><a href="#security_tab">보안</a></li>
-								<li><a href="#content_tab">컨텐트</a></li>
-								<li><a href="#os_tab">OS 설정</a></li>
-								<li><a href="#backoffice_tab">Back Office 정보</a></li>
-								<li><a href="#site_tab">사이트 정보</a></li>
-								<li><a href="#solution_tab">제품 정보</a></li>
+								<li><a href="#security_tab"><spring:message code='security'/></a></li>
+								<li><a href="#content_tab"><spring:message code='content'/></a></li>
+								<li><a href="#os_tab"><spring:message code='os.setting'/></a></li>
+								<li><a href="#backoffice_tab"><spring:message code='back.office.information'/></a></li>
+								<li><a href="#site_tab"><spring:message code='site.information'/></a></li>
+								<li><a href="#solution_tab"><spring:message code='product.information'/></a></li>
 							</ul>
 							
 							<%@ include file="/WEB-INF/views/config/modify-policy-user.jsp" %>
