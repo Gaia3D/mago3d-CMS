@@ -7,11 +7,13 @@
 		<col class="col-input" />
 		<tr>
   			<th>
-		  		<span>사용유무</span>
+		  		<span><spring:message code='config.use.not'/></span>
  			</th>
+ 			<spring:message code='use' var='use'/>
+ 			<spring:message code='no.use' var='noUse'/>
  			<td class="col-input radio-set">
- 				<form:radiobutton path="geo_server_enable" value="true" label="사용" />
-				<form:radiobutton path="geo_server_enable" value="false" label="사용안함" />
+ 				<form:radiobutton path="geo_server_enable" value="true" label="${use}" />
+				<form:radiobutton path="geo_server_enable" value="false" label="${noUse}" />
 	  		</td>
   		</tr>
 		<tr>
@@ -80,7 +82,7 @@
 	</table>
 	<div class="button-group">
 		<div class="center-buttons">
-			<a href="#" onclick="updatePolicyGeoServer();" class="button">저장</a>
+			<a href="#" onclick="updatePolicyGeoServer();" class="button"><spring:message code='save'/></a>
 		</div>
 	</div>
 	</form:form>
