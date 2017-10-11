@@ -46,19 +46,19 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
 						<div class="content-header row">
-							<h3 class="content-title u-pull-left">메뉴 정보 수정 (<a href="#" onclick="reloadMenuCache();">캐시갱신</a>)</h3>
-							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
+							<h3 class="content-title u-pull-left"><spring:message code='config.menu.information'/> (<a href="#" onclick="reloadMenuCache();"><spring:message code='config.menu.cache'/></a>)</h3>
+							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
 						</div><!-- .content-header -->
 						
 						<div class="row">
 							<div class="one-third column">
 								<div id="AXTreeTarget" class="tree"></div>
-								<button type="button" class="btn btn-success btn-sm" onclick="addTree(); return false;">추가</button>
-								<button type="button" class="btn btn-success btn-sm" onclick="addChildTree(); return false;">하위 메뉴 추가</button>
-								<button type="button" class="btn btn-success btn-sm" onclick="delTree(); return false;">선택삭제</button>
-								<button type="button" class="btn btn-success btn-sm" onclick="updateTree(); return false;">수정</button>
-								<button type="button" class="btn btn-warning btn-sm" onclick="moveUpTree(); return false;">위로</button>
-								<button type="button" class="btn btn-danger btn-sm" onclick="moveDownTree(); return false;">아래로</button>
+								<button type="button" class="btn btn-success btn-sm" onclick="addTree(); return false;"><spring:message code='add'/></button>
+								<button type="button" class="btn btn-success btn-sm" onclick="addChildTree(); return false;"><spring:message code='config.menu.down.add'/></button>
+								<button type="button" class="btn btn-success btn-sm" onclick="delTree(); return false;"><spring:message code='config.menu.select.delete'/></button>
+								<button type="button" class="btn btn-success btn-sm" onclick="updateTree(); return false;"><spring:message code='config.menu.modified'/></button>
+								<button type="button" class="btn btn-warning btn-sm" onclick="moveUpTree(); return false;"><spring:message code='config.menu.up'/></button>
+								<button type="button" class="btn btn-danger btn-sm" onclick="moveDownTree(); return false;"><spring:message code='config.menu.down'/></button>
 							</div>
 							
 							<div class="two-third column">
@@ -76,28 +76,28 @@
 											<col class="col-input" />
 											<tr>
 												<th class="col-label" scope="row">
-													<label for="name">메뉴명</label>
+													<label for="name"><spring:message code='config.menu.name'/></label>
 													<span class="icon-glyph glyph-emark-dot color-warning"></span>
 												</th>
 												<td class="col-input"><input type="text" id="name" name="name" class="m" /></td>
 											</tr>
 											<tr>
 												<th class="col-label" scope="row">
-													<label for="name_en">메뉴명(영어)</label>
+													<label for="name_en"><spring:message code='config.menu.name.en'/></label>
 													<span class="icon-glyph glyph-emark-dot color-warning"></span>
 												</th>
 												<td class="col-input"><input type="text" id="name_en" name="name_en" class="m" /></td>
 											</tr>
 											<tr>
 												<th class="col-label" scope="row">
-													<span>사용여부</span>
+													<span><spring:message code='config.menu.use.not'/></span>
 													<span class="icon-glyph glyph-emark-dot color-warning"></span>
 												</th>
 												<td class="col-input radio-set">
 													<input type="radio" id="useY" name="use_yn" value="Y"/>
-													<label for="useY">사용</label>
+													<label for="useY"><spring:message code='use'/></label>
 													<input type="radio" id="useN" name="use_yn" value="N"/>
-													<label for="useN">미사용</label>
+													<label for="useN"><spring:message code='not.use'/></label>
 												</td>
 											</tr>
 											<tr>
@@ -105,11 +105,11 @@
 												<td class="col-input"><input type="text" id="url" name="url" class="l" /></td>
 											</tr>
 											<tr>
-												<th class="col-label" scope="row"><label for="image">이미지</label></th>
+												<th class="col-label" scope="row"><label for="image"><spring:message code='config.menu.image'/></label></th>
 												<td class="col-input"><input type="text" id="image" name="image" class="l" /></td>
 											</tr>
 											<tr>
-												<th class="col-label" scope="row"><label for="image_alt">이미지 Alt</label></th>
+												<th class="col-label" scope="row"><label for="image_alt"><spring:message code='config.menu.image.alt'/></label></th>
 												<td class="col-input"><input type="text" id="image_alt" name="image_alt" class="l" /></td>
 											</tr>
 											<tr>
@@ -117,15 +117,15 @@
 												<td class="col-input"><input type="text" id="css_class" name="css_class" class="m" /></td>
 											</tr>
 											<tr>
-												<th class="col-label" scope="row"><label for="description">설명</label></th>
+												<th class="col-label" scope="row"><label for="description"><spring:message code='description'/></label></th>
 												<td class="col-input"><input type="text" id="description" name="description" class="l" /></td>
 											</tr>
 											<tr>
 												<td colspan="2">
 													<div class="button-group">
 														<div class="center-buttons">
-															<input type="submit" value="저장" onclick="appendTree();" />
-															<input type="reset" value="취소" onclick="resetForm();" />
+															<input type="submit" value="<spring:message code='save'/>" onclick="appendTree();" />
+															<input type="reset" value="<spring:message code='config.menu.cancel'/>" onclick="resetForm();" />
 														</div>
 													</div>
 												</td>

@@ -134,3 +134,8 @@ JS_MESSAGE["data.group.not.group.id"]="グループ名がありません。";
 JS_MESSAGE["data.not.select"]="選択された項目がありません。";
 JS_MESSAGE["data.no.insert.data"]="登録されたデータがありません。";
 JS_MESSAGE["data.up.group.no.insert"]="最上位グループに登録することはできません。";
+
+//role
+JS_MESSAGE["role.insert.name"]="Role名を入力してください。";
+JS_MESSAGE["role.insert.key"]="Role Keyを入力してください。";
+JS_MESSAGE["role.insert.type"]="Roleタイプを選択してください。";

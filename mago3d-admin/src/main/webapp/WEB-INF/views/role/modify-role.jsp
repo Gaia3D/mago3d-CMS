@@ -25,7 +25,7 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
 						<div class="input-header row">
-							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
+							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
 						</div>
 						<form:form id="role" modelAttribute="role" method="post" onsubmit="return false;">
 							<form:hidden path="role_id"/>
@@ -35,7 +35,7 @@
 							<col class="col-input" />
 							<tr>
 								<th class="col-label l" scope="row">
-									<form:label path="role_name">Role 명</form:label>
+									<form:label path="role_name"><spring:message code='role.name'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input"><form:input path="role_name" cssClass="l" /></td>
@@ -49,46 +49,52 @@
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row">
-									<form:label path="role_type">Role 유형</form:label>
+									<form:label path="role_type"><spring:message code='role.type'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
+								<spring:message code='role.user' var='user'/>
+								<spring:message code='role.server' var='server'/>
 								<td class="col-input">
 									<select id="role_type" name="role_type" class="select" >
-										<option value="0"> 사용자 </option>
-										<option value="1"> 서버 </option>
+										<option value="0"> ${user} </option>
+										<option value="1"> ${server} </option>
 									</select>
 								</td>
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row"><form:label path="business_type">업무 유형</form:label></th>
+								<spring:message code='role.login' var='login'/>
+								<spring:message code='role.main' var='main'/>
 								<td class="col-input">
 									<select id="business_type" name="business_type" class="select">
-										<option value="0"> 로그인 </option>
-										<option value="1"> 메인 </option>
+										<option value="0"> ${login} </option>
+										<option value="1"> ${main} </option>
 									</select>
 								</td>
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row">
-									<span>사용 여부</span>
+									<span><spring:message code='role.use.not'/></span>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
+								<spring:message code='use' var='use'/>
+								<spring:message code='not.use' var='notUse'/>
 								<td class="col-input radio-set">
 									<form:radiobutton path="use_yn" value="Y" />
-									<label for="role-usage-use">사용</label>
+									<label for="role-usage-use">${use}</label>
 									<form:radiobutton path="use_yn" value="N" />
-									<label for="role-usage-none">미사용</label>
+									<label for="role-usage-none">${notUse}</label>
 								</td>
 							</tr>
 						  	<tr>
-								<th class="col-label l" scope="row"><form:label path="description">설명</form:label></th>
+								<th class="col-label l" scope="row"><form:label path="description"><spring:message code='description'/></form:label></th>
 								<td class="col-input"><form:input path="description" cssClass="xl" /></td>
 							</tr>
 						</table>
 						<div class="button-group">
 							<div class="center-buttons">
-								<input type="submit" value="저장" onclick="updateRole();" />
-								<a href="/role/list-role.do?pageNo=${pagination.pageNo }" class="button">목록</a>
+								<input type="submit" value="<spring:message code='save'/>" onclick="updateRole();" />
+								<a href="/role/list-role.do?pageNo=${pagination.pageNo }" class="button"><spring:message code='list'/></a>
 							</div>
 						</div>
 						</form:form>
@@ -111,12 +117,12 @@
 	
 	function check() {
 		if ($("#role_name").val() == "") {
-			alert("Role명을 입력하여 주십시오.");
+			alert(JS_MESSAGE["role.insert.name"]);
 			$("#role_name").focus();
 			return false;
 		}
 		if ($("#role_type").val() == "") {
-			alert("Role 유형을 선택해 주십시오.");
+			alert(JS_MESSAGE["role.insert.type"]);
 			$("#role_type").focus();
 			return false;
 		}
