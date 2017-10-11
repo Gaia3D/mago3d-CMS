@@ -48,6 +48,13 @@ public class RootConfig {
 	
 	@Bean
 	public DataSource dataSource() {
+//		HikariDataSource dataSource = new HikariDataSource();
+//		dataSource.setDriverClassName(driverClassName);
+//		dataSource.setJdbcUrl(Crypt.decrypt(url));
+//		dataSource.setUsername(Crypt.decrypt(username));
+//		dataSource.setPassword(Crypt.decrypt(password));
+//		dataSource.setMaximumPoolSize(50);
+		
 		org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
 	    dataSource.setDriverClassName(driverClassName);
 	    dataSource.setUrl(Crypt.decrypt(url));
