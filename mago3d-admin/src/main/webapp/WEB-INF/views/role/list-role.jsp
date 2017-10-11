@@ -28,35 +28,44 @@
 							<form:form id="role" modelAttribute="role" method="post" action="/role/list-role.do">
 								<div class="input-group row">
 									<div class="input-set">
-										<label for="role_type">Role 분류</label>
+									<spring:message code='role.total' var='total'/>
+									<spring:message code='role.user' var='user'/>
+										<label for="role_type"><spring:message code='role.class'/></label>
 										<select id="role_type" name="role_type" class="select">
-											<option value="">전체</option>
-											<option value="0">사용자</option>
+											<option value="">${total}</option>
+											<option value="0">${user}</option>
 										</select>
 									</div>
 									<div class="input-set">
-										<label for="use_yn">사용여부</label>
+									<spring:message code='use' var='use'/>
+									<spring:message code='not.use' var='notUse'/>
+										<label for="use_yn"><spring:message code='role.use.not'/></label>
 										<select id="use_yn" name="use_yn" class="select">
-											<option value="">전체</option>
-											<option value="Y">사용</option>
-											<option value="N">미사용</option>
+											<option value="">${total}</option>
+											<option value="Y">${use}</option>
+											<option value="N">${notUse}</option>
 										</select>
 									</div>
+									<spring:message code='role.basic' var='basic'/>
+									<spring:message code='role.name' var='name'/>
+									<spring:message code='role.insert.date' var='date'/>
+									<spring:message code='role.up.order' var='upOrder'/>
+									<spring:message code='role.down.order' var='downOrder'/>
 									<div class="input-set">
-										<label for="order_word">표시 순서</label>
+										<label for="order_word"><spring:message code='role.order'/></label>
 										<select id="order_word" name="order_word" class="select">
-											<option value="">기본</option>
-											<option value="role_name">Role 명</option>
-											<option value="insert_date">등록일</option>
+											<option value="">${basic}</option>
+											<option value="role_name">${name}</option>
+											<option value="insert_date">${date}</option>
 										</select>
 										<select id="order_value" name="order_value" class="select">
-											<option value="">기본</option>
-											<option value="ASC">오름차순</option>
-											<option value="DESC">내림차순</option>
+											<option value="">${basic}</option>
+											<option value="ASC">${upOrder}</option>
+											<option value="DESC">${downOrder }</option>
 										</select>
 									</div>
 									<div class="input-set">
-										<input type="submit" value="검색" />
+										<input type="submit" value="<spring:message code='search'/>" />
 									</div>
 								</div>
 							</form:form>
@@ -64,12 +73,12 @@
 						<div class="list">
 							<div class="list-header row">
 								<div class="list-desc u-pull-left">
-									전체: <em><fmt:formatNumber value="${pagination.totalCount}" type="number"/></em>건, 
-									<fmt:formatNumber value="${pagination.pageNo}" type="number"/> / <fmt:formatNumber value="${pagination.lastPage }" type="number"/> 페이지
+									<spring:message code='role.total'/>: <em><fmt:formatNumber value="${pagination.totalCount}" type="number"/></em><spring:message code='role.few'/> 
+									<fmt:formatNumber value="${pagination.pageNo}" type="number"/> / <fmt:formatNumber value="${pagination.lastPage }" type="number"/> <spring:message code='role.page'/>
 								</div>
 								<div class="list-functions u-pull-right">
 									<div class="button-group">
-										<a href="/role/input-role.do" class="image-button button-area button-new" title="Role 등록">Role 등록</a>
+										<a href="/role/input-role.do" class="image-button button-area button-new" title="<spring:message code='role.insert'/>"><spring:message code='role.insert'/></a>
 									</div>
 								</div>
 							</div>
@@ -85,20 +94,20 @@
 									<col class="col-functions" />
 									<thead>
 										<tr>
-											<th scope="col" class="col-number">번호</th>
-											<th scope="col" class="col-name">Role 명</th>
+											<th scope="col" class="col-number"><spring:message code='role.number'/></th>
+											<th scope="col" class="col-name"><spring:message code='role.name'/></th>
 											<th scope="col" class="col-key">Role Key</th>
-											<th scope="col" class="col-type">Role 유형</th>
-											<th scope="col" class="col-toggle">사용여부</th>
-											<th scope="col" class="col-desc">설명</th>
-											<th scope="col" class="col-date-time">등록일</th>
-											<th scope="col" class="col-functions">수정/삭제</th>
+											<th scope="col" class="col-type"><spring:message code='role.type'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='role.use.not'/></th>
+											<th scope="col" class="col-desc"><spring:message code='description'/></th>
+											<th scope="col" class="col-date-time"><spring:message code='role.insert.date'/></th>
+											<th scope="col" class="col-functions"><spring:message code='role.modify.or.delete'/></th>
 										</tr>
 									</thead>
 									<tbody>
 <c:if test="${empty roleList }">
 										<tr>
-											<td colspan="8" class="col-none">Role 이 존재하지 않습니다.</td>
+											<td colspan="8" class="col-none"><spring:message code='role.exist'/></td>
 										</tr>
 </c:if>
 <c:if test="${!empty roleList }">
@@ -114,7 +123,7 @@
 											<td class="col-functions">
 												<span class="button-group">
 													<a href="/role/modify-role.do?role_id=${role.role_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}" class="image-button button-edit">수정</a>
-													<a href="#" onclick="deleteRole('${role.role_id}');" class="image-button button-delete">삭제</a>
+													<a href="#" onclick="deleteRole('${role.role_id}');" class="image-button button-delete"><spring:message code='delete'/></a>
 												</span>
 											</td>
 										</tr>
@@ -151,7 +160,7 @@
 	var deleteRoleFlag = true;
 	function deleteRole(role_id) {
 		if(deleteRoleFlag) {
-			if(confirm("삭제 하시겠습니까?")) { 
+			if(confirm(JS_MESSAGE["delete.confirm"])) { 
 				deleteRoleFlag = false;
 				var info = "role_id=" + role_id;		
 				$.ajax({

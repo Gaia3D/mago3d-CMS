@@ -28,7 +28,7 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
 						<div class="content-header row">
-							<div class="content-title u-pull-left">마우스로 위젯을 끌어 당겨, 메인 화면에 표시할 위치를 정하신 후 저장 버튼을 눌러 주십시오.</div>
+							<div class="content-title u-pull-left"><spring:message code='config.widget.top'/></div>
 						</div>
 						<form:form id="widget" modelAttribute="widget" method="post" onsubmit="return false;">
 				  			<form:hidden path="widget_order" />
@@ -39,10 +39,10 @@
 							<div id="${dbWidget.widget_id }" class="widget one-third column" style="font-size: 16px;">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title">사용자 상태별 현황<span class="widget-desc">${today } 기준</span></h3>
+										<h3 class="widget-title"><spring:message code='config.widget.user.status'/><span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
 									</div>
 									<div class="widget-functions u-pull-right">
-										<a href="/user/list-user.do" title="사용자 상태별 현황 더보기"><span class="icon-glyph glyph-plus"></span></a>
+										<a href="/user/list-user.do" title="<spring:message code='config.widget.user.status.more'/>"><span class="icon-glyph glyph-plus"></span></a>
 									</div>
 								</div>
 								<div id="${dbWidget.name}" class="widget-content row">
@@ -53,10 +53,10 @@
 							<div id="${dbWidget.widget_id }" class="widget one-third column">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title">스케줄 실행 이력<span class="widget-desc">${thisYear }년 최근 7건</span></h3>
+										<h3 class="widget-title"><spring:message code='config.widget.schedule'/><span class="widget-desc">${thisYear }<spring:message code='config.widget.last.year.7'/></span></h3>
 									</div>
 									<div class="widget-functions u-pull-right">
-										<a href="/schedule/list-schedule-log.do" title="스케줄 실행 이력 더보기"><span class="icon-glyph glyph-plus"></span></a>
+										<a href="/schedule/list-schedule-log.do" title="<spring:message code='config.widget.schedule.more'/>"><span class="icon-glyph glyph-plus"></span></a>
 									</div>
 								</div>
 								<div id="${dbWidget.name}" class="widget-content row">
@@ -70,10 +70,10 @@
 							<div id="${dbWidget.widget_id }" class="widget one-third column">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title">사용자 추적<span class="widget-desc">${today } 기준</span></h3>
+										<h3 class="widget-title"><spring:message code='config.widget.user.tracking'/><span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
 									</div>
 									<div class="widget-functions u-pull-right">
-										<a href="/log/list-access-log.do" title="사용자 추적 이력 더보기"><span class="icon-glyph glyph-plus"></span></a>
+										<a href="/log/list-access-log.do" title="<spring:message code='config.widget.user.tracking.more'/>"><span class="icon-glyph glyph-plus"></span></a>
 									</div>
 								</div>
 								
@@ -88,7 +88,7 @@
 							<div id="${dbWidget.widget_id }" class="widget one-third column">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title">DB Connection Pool 현황<span class="widget-desc">${today } 기준</span></h3>
+										<h3 class="widget-title"><spring:message code='config.widget.db.connection'/><span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
 									</div>
 								</div>
 								
@@ -100,22 +100,22 @@
 										<col class="col-center" />
 										<tr>
 											<td class="col-left">
-												<em>속성</em>
+												<em><spring:message code='config.widget.db.property'/></em>
 											</td>
 											<td class="col-center">
-												<em>관리자</em>
+												<em><spring:message code='config.widget.db.admin'/></em>
 											</td>
 											<td class="col-center">
-												<em>사용자</em>
+												<em><spring:message code='config.widget.db.user'/></em>
 											</td>
 											<td class="col-center">
-												<em>상태</em>
+												<em><spring:message code='config.widget.db.status'/></em>
 											</td>
 										</tr>
 										<tr>
 											<td class="col-left">
 												<span class="icon-glyph glyph-users-circle"></span>
-												<em>현재 세션 접속자수</em>
+												<em><spring:message code='config.widget.db.now.session'/></em>
 											</td>
 											<td class="col-center">
 												<span id="userSessionCount" class="tendency increase">${userSessionCount }</span>
@@ -132,7 +132,7 @@
 										<tr>
 											<td class="col-left">
 												<span class="icon-glyph glyph-imark-circle"></span>
-												<em>초기값</em> (initialSize)
+												<em><spring:message code='config.widget.db.init'/></em> (initialSize)
 											</td>
 											<td class="col-center">
 												<span id="initialSize" class="tendency increase">${initialSize }</span>
@@ -149,7 +149,7 @@
 										<tr>
 											<td class="col-left">
 												<span class="icon-glyph glyph-plus-circle"></span>
-												<em>최대생성</em> (maxTotal)
+												<em><spring:message code='config.widget.db.max.total'/></em> (maxTotal)
 											</td>
 											<td class="col-center">
 												<span id="maxTotal" class="tendency decrease">${maxTotal }</span>
@@ -166,7 +166,7 @@
 										<tr>
 											<td class="col-left">
 												<span class="icon-glyph glyph-top-circle"></span>
-												<em>최대유지</em> (maxIdle)
+												<em><spring:message code='config.widget.db.max.idle'/></em> (maxIdle)
 											</td>
 											<td class="col-center">
 												<span id="maxIdle" class="tendency decrease">${maxIdle }</span>
@@ -183,7 +183,7 @@
 										<tr>
 											<td class="col-left">
 												<span class="icon-glyph glyph-mouse-circle"></span>
-												<em>사용중</em> (numActive)
+												<em><spring:message code='config.widget.db.using'/></em> (numActive)
 											</td>
 											<td class="col-center">
 												<span id="numActive" class="tendency increase">${numActive }</span>
@@ -200,7 +200,7 @@
 										<tr>
 											<td class="col-left">
 												<span class="icon-glyph glyph-bottom-circle"></span>
-												<em>최소유지, 유지수</em> (minIdle, numIdle)
+												<em><spring:message code='config.widget.db.min.idle'/></em> (minIdle, numIdle)
 											</td>
 											<td class="col-center">
 												<span id="minIdle" class="tendency increase">${minIdle },${numIdle }</span>
@@ -222,10 +222,10 @@
 							<div id="${dbWidget.widget_id }" class="widget one-third column">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title">DB 세션 현황(${dbSessionCount })<span class="widget-desc">${today } 기준</span></h3>
+										<h3 class="widget-title"><spring:message code='config.widget.db.session'/>(${dbSessionCount })<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
 									</div>
 									<div class="widget-functions u-pull-right">
-										<a href="/monitoring/list-db-session.do" title="DB 세션 현황 더보기"><span class="icon-glyph glyph-plus"></span></a>
+										<a href="/monitoring/list-db-session.do" title="<spring:message code='config.widget.db.session.more'/>"><span class="icon-glyph glyph-plus"></span></a>
 									</div>
 								</div>
 								<div id="${dbWidget.name}" class="widget-content row">
@@ -234,7 +234,7 @@
 										<col class="col-left" />
 					<c:if test="${empty dbSessionList }">					
 										<tr>
-											<td colspan="2" class="col-none">DB 세션 정보가 존재하지 않습니다.</td>
+											<td colspan="2" class="col-none"><spring:message code='config.widget.db.session.no'/></td>
 										</tr>
 					</c:if>
 					<c:if test="${!empty dbSessionList }">
@@ -260,7 +260,7 @@
 						</form:form>
 						<div class="button-group">
 							<div class="center-buttons">
-								<input type="submit" value="저장" onclick="updateWidget(); return false;" />
+								<input type="submit" value="<spring:message code='save'/>" onclick="updateWidget(); return false;"/>
 							</div>
 						</div>
 					</div>				

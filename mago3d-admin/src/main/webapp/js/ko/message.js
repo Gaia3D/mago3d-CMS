@@ -16,6 +16,12 @@ JS_MESSAGE["check.id.duplication"] = "아이디 중복확인을 해주십시오.
 JS_MESSAGE["use.id.other.id.select"] = "사용중인 아이디 입니다. 다른 아이디를 선택해 주십시오.";
 JS_MESSAGE["total.count"] = "총건수:";
 JS_MESSAGE["total.few"] = "건";
+JS_MESSAGE["user"] = "사용자";
+JS_MESSAGE["server"] = "서버";
+JS_MESSAGE["account"] = "계정";
+JS_MESSAGE["use"] = "사용";
+JS_MESSAGE["not.use"] = "미사용";
+
 // 공통
 JS_MESSAGE["user.session.empty"] = "로그인 후 사용 가능한 서비스 입니다.";
 JS_MESSAGE["db.exception"] = "데이터 베이스 장애가 발생하였습니다. 잠시 후 다시 이용하여 주시기 바랍니다.";
@@ -133,3 +139,8 @@ JS_MESSAGE["data.group.not.group.id"] = "그룹 아이디가 없습니다.";
 JS_MESSAGE["data.not.select"] = "선택된 항목이 없습니다.";
 JS_MESSAGE["data.no.insert.data"] = "등록된 데이터가 없습니다.";
 JS_MESSAGE["data.up.group.no.insert"] = "최상위 그룹에는 등록할 수 없습니다.";
+
+//role
+JS_MESSAGE["role.insert.name"] = "Role명을 입력하여 주십시오.";
+JS_MESSAGE["role.insert.key"] = "Role Key를 입력하여 주십시오.";
+JS_MESSAGE["role.insert.type"] = "Role 유형을 선택해 주십시오.";

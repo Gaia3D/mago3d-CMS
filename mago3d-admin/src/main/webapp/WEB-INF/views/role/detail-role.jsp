@@ -28,7 +28,7 @@
 							<col class="col-label" />
 							<col class="col-data" />
 							<tr>
-								<th class="col-label" scope="row">Role 명</th>
+								<th class="col-label" scope="row"><spring:message code='role.name'/></th>
 								<td class="col-data">${role.role_name}</td>
 							</tr>
 							<tr>
@@ -36,26 +36,26 @@
 								<td class="col-data">${role.role_key}</td>
 							</tr>
 							<tr>
-								<th class="col-label" scope="row">Role 유형</th>
+								<th class="col-label" scope="row"><spring:message code='role.type'/></th>
 								<td class="col-data" id="role_type"></td>
 							</tr>
 							<tr>
-								<th class="col-label" scope="row">업무 유형</th>
+								<th class="col-label" scope="row"><spring:message code='role.type.work'/></th>
 								<td class="col-data" id="business_type"></td>
 							</tr>
 							<tr>
-								<th class="col-label" scope="row">사용 유무</th>
+								<th class="col-label" scope="row"><spring:message code='role.use.not'/></th>
 								<td class="col-data" id="use_yn"></td>
 							</tr>
 							<tr>
-								<th class="col-label" scope="row">설명</th>
+								<th class="col-label" scope="row"><spring:message code='description'/></th>
 								<td class="col-data">${role.description}</td>
 							</tr>
 						</table>
 						<div class="button-group">
 							<div class="center-buttons">
-								<a href="/role/list-role.do?${listParameters}" class="button">목록</a>
-								<a href="/role/modify-role.do?role_id=${role.role_id }" class="button">수정</a>
+								<a href="/role/list-role.do?${listParameters}" class="button"><spring:message code='list'/></a>
+								<a href="/role/modify-role.do?role_id=${role.role_id }" class="button"><spring:message code='modified'/></a>
 							</div>
 						</div>
 					</div>
@@ -73,23 +73,22 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$( ".select" ).selectmenu();
-		
 		if('${role.role_type}' == 0) {
-			$("#role_type").text("사용자");
+			$("#role_type").text(JS_MESSAGE["user"]);
 		}
 		
 		if('${role.business_type}' == 0) {
-			$("#business_type").text("사용자");
+			$("#business_type").text(JS_MESSAGE["user"]);
 		} else if('${role.business_type}' == 1) {
-			$("#business_type").text("서버");
+			$("#business_type").text(JS_MESSAGE["server"]);
 		} else if('${role.business_type}' == 2) {
-			$("#business_type").text("계정");
+			$("#business_type").text(JS_MESSAGE["account"]);
 		}
 		
 		if('${role.use_yn}' == 'Y') {
-			$("#use_yn").text("사용");
+			$("#use_yn").text(JS_MESSAGE["use"]);
 		} else {
-			$("#use_yn").text("미사용");
+			$("#use_yn").text(JS_MESSAGE["not.use"]);
 		}
 	});
 </script>

@@ -133,3 +133,8 @@ JS_MESSAGE["data.group.not.group.id"] = "There is no group ID.";
 JS_MESSAGE["data.not.select"] = "No items selected.";
 JS_MESSAGE["data.no.insert.data"] = "No data registered";
 JS_MESSAGE["data.up.group.no.insert"] = "You can not register to the top level";
+
+//role
+JS_MESSAGE["role.insert.name"] = "Please enter the Role name.";
+JS_MESSAGE["role.insert.key"] = "Please enter Role Key";
+JS_MESSAGE["role.insert.type"] = "Please select Role type";
