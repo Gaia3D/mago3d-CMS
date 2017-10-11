@@ -250,7 +250,7 @@
 		</div>
 			
 		<div class="button-group">
-			<input type="submit" id="button_groupSelect" name="button_groupSelect" value="선택" />
+			<input type="submit" id="button_groupSelect" name="button_groupSelect" value="<spring:message code='select'/>" />
 		</div>
 	</div>
 

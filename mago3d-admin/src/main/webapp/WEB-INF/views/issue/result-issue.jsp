@@ -28,55 +28,55 @@
 						<div class="list">
 							<div class="main_content_title">
 					    	<ul>
-					        	<li>이슈 처리 결과</li>
+					        	<li><spring:message code='issue.result'/></li>
 					        </ul>
 					    </div>
 						<ul>
 							<li style="line-height: 30px;">
-				<c:if test="${method_mode eq 'insert'}">등록 되었습니다.</c:if>
-				<c:if test="${method_mode eq 'update'}">수정 되었습니다.</c:if>
-				<c:if test="${method_mode eq 'delete'}">삭제 되었습니다.</c:if>
+				<c:if test="${method_mode eq 'insert'}"><spring:message code='issue.insert'/></c:if>
+				<c:if test="${method_mode eq 'update'}"><spring:message code='issue.modify'/></c:if>
+				<c:if test="${method_mode eq 'delete'}"><spring:message code='issue.delete'/></c:if>
 					  		</li>
 				<c:if test="${method_mode eq 'insert' || method_mode eq 'update'}">
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">데이터 그룹</span>
+					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.data.group'/></span>
 					 			<span>${issue.data_group_name}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">이슈명</span>
+					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.name'/></span>
 					 			<span>${issue.title}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">우선순위</span>
+					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.priority'/></span>
 					 			<span>${issue.priority}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">예정일</span>
+					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.due.date'/></span>
 					 			<span>${issue.due_date}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">이슈 유형</span>
+					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.type'/></span>
 					 			<span>${issue.issue_type}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">상태</span>
+					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.status'/></span>
 					 			<span>${issue.status}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">위도</span>
+					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.latitude'/></span>
 					 			<span>${issue.latitude}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">경도</span>
+					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.longitude'/></span>
 					 			<span>${issue.longitude}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;">등록일</span>
+					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.insert.date'/></span>
 					 			<span>${issue.viewInsertDate}</span>
 					  		</li>
 				</c:if>
 					  		<li style="text-align: center;">
-					  			<a href="/issue/list-issue.do">목록</a>
+					  			<a href="/issue/list-issue.do"><spring:message code='list'/></a>
 					  		</li>
 					 	</ul>
 						</div>

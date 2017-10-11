@@ -27,7 +27,7 @@
 						<div class="list">
 							<div class="list-header row">
 								<div class="list-desc u-pull-left">
-									전체: <em>${commonCodeListSize}</em>건
+									<spring:message code='all'/> <em>${commonCodeListSize}</em><spring:message code='user.group.all.count.key'/>
 								</div>
 							</div>
 							<table class="list-table scope-col">
@@ -46,19 +46,19 @@
 								<col class="col-functions" />
 								<thead>
 									<tr>
-										<th scope="col" class="col-number">번호</th>
-										<th scope="col" class="col-type">코드분류</th>
-										<th scope="col" class="col-id">코드키</th>
-										<th scope="col" class="col-name">코드명</th>
+										<th scope="col" class="col-number"><spring:message code='number'/></th>
+										<th scope="col" class="col-type"><spring:message code='code.list'/></th>
+										<th scope="col" class="col-id"><spring:message code='code.key'/></th>
+										<th scope="col" class="col-name"><spring:message code='code.name'/></th>
 										<!-- <th scope="col" class="col-name">코드명(영어)</th> -->
-										<th scope="col" class="col-name">코드값</th>
-										<th scope="col" class="col-toggle">사용유무</th>
-										<th scope="col" class="col-number">표시순서</th>
+										<th scope="col" class="col-name"><spring:message code='code.result'/></th>
+										<th scope="col" class="col-toggle"><spring:message code='code.use.not'/></th>
+										<th scope="col" class="col-number"><spring:message code='code.order'/></th>
 										<th scope="col" class="col-name">Css</th>
 										<th scope="col" class="col-name">Image</th>
-										<th scope="col" class="col-desc">설명</th>
-										<th scope="col" class="col-desc">등록일</th>
-										<th scope="col" class="col-functions">수정/삭제</th>
+										<th scope="col" class="col-desc"><spring:message code='description'/></th>
+										<th scope="col" class="col-desc"><spring:message code='code.insert.date'/></th>
+										<th scope="col" class="col-functions"><spring:message code='code.modify.delete'/></th>
 									</tr>
 								</thead>
 								<tbody>

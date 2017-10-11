@@ -31,36 +31,36 @@
 							<div class="list-desc u-pull-left">
 								<h6 style="padding-left: 10px; color: red;">* 
 		<c:if test="${userInfo.error_code eq 'user.password.exception'}">
-									비밀번호 변환 중에 오류가 발생하였습니다.
+									<spring:message code='user.password.error'/>
 		</c:if>
 		<c:if test="${userInfo.error_code eq 'user.password.invalid'}">
-									패스워드 정책에 부적합 합니다.
+									<spring:message code='user.password.policy'/>
 		</c:if>
 		<c:if test="${userInfo.error_code eq 'user.password.compare.invalid'}">
-									기존 패스워드가 일치하지 않습니다.
+									<spring:message code='user.password.basic'/>
 		</c:if>
 		<c:if test="${userInfo.error_code eq 'user.password.exception.char'}">
-									특수문자 ${policy.password_exception_char } 는 보안 취약성 때문에 패스워드로 사용 할 수 없는 문자 입니다.
+									<spring:message code='user.password.special'/> ${policy.password_exception_char } <spring:message code='user.password.security'/>
 		</c:if>
 		<c:if test="${userInfo.error_code eq 'user.password.digit.invalid'}">
-									숫자 갯수가 패스워드 정책에 부적합 합니다.
+									<spring:message code='user.password.count'/>
 		</c:if>
 		<c:if test="${userInfo.error_code eq 'user.password.upper.invalid'}">
-									대문자 갯수가 패스워드 정책에 부적합 합니다.
+									<spring:message code='user.password.upper.case'/>
 		</c:if>
 		<c:if test="${userInfo.error_code eq 'user.password.lower.invalid'}">
-									소문자 갯수가 패스워드 정책에 부적합 합니다.
+									<spring:message code='user.password.lower.case'/>
 		</c:if>
 		<c:if test="${userInfo.error_code eq 'user.password.special.invalid'}">
-									특수문자 갯수가 패스워드 정책에 부적합 합니다.
+									<spring:message code='user.password.special.count'/>
 		</c:if>						
 		<c:if test="${userInfo.error_code eq 'user.password.continuous.char.invalid'}">
-									연속 문자 제한 개수가 패스워드 정책에 부적합 합니다.
+									<spring:message code='user.password.continuity'/>
 		</c:if>		
 								</h6>
 							</div>
 	</c:if>
-							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
+							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
 						</div>
 						<form:form id="userInfo" modelAttribute="userInfo" method="post" action="/user/update-password.do" onsubmit="return check();">
 						<table class="input-table scope-row">
@@ -68,7 +68,7 @@
 							<col class="col-input" />
 							<tr>
 								<th class="col-label" scope="row">
-									<form:label path="password">현재 비밀번호</form:label>
+									<form:label path="password"><spring:message code='user.password.now'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">
@@ -78,20 +78,20 @@
 							</tr>
 							<tr>
 								<th class="col-label" scope="row">
-									<form:label path="new_password">새로운 비밀번호</form:label>
+									<form:label path="new_password"><spring:message code='user.password.new'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">
 									<form:password path="new_password" class="m" />
-									<span class="table-desc">영문 대문자 ${policy.password_eng_upper_count}, 소문자 ${policy.password_eng_lower_count},
-										 숫자 ${policy.password_number_count}, 특수문자 ${policy.password_special_char_count} 자 이상 필수.
-										 ${policy.password_min_length} ~ ${policy.password_max_length}자</span>
+									<span class="table-desc"><spring:message code='user.password.capital.letter'/> ${policy.password_eng_upper_count}, <spring:message code='user.password.small.letter'/> ${policy.password_eng_lower_count},
+										 <spring:message code='number'/> ${policy.password_number_count}, <spring:message code='user.password.special.characters'/> ${policy.password_special_char_count} <spring:message code='user.password.required.characters'/>
+										 ${policy.password_min_length} ~ ${policy.password_max_length}<spring:message code='user.password.characters'/></span>
 									<form:errors path="new_password" cssClass="error" />
 								</td>
 							</tr>
 							<tr>
 								<th class="col-label" scope="row">
-									<form:label path="new_password_confirm">비밀번호 확인</form:label>
+									<form:label path="new_password_confirm"><spring:message code='user.password.check'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">
@@ -103,8 +103,8 @@
 						
 						<div class="button-group">
 							<div id="insertServerLink" class="center-buttons">
-								<input type="submit" value="변경하기" />
-								<a href="/login/login.do" class="button" onclick="return laterChangePasswordConfirm();" >다음에 변경하기</a>
+								<input type="submit" value="<spring:message code='user.password.change'/>" />
+								<a href="/login/login.do" class="button" onclick="return laterChangePasswordConfirm();" ><spring:message code='user.password.next.change'/></a>
 							</div>
 						</div>
 						</form:form>
