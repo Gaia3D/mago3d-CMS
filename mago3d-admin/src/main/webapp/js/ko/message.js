@@ -144,3 +144,12 @@ JS_MESSAGE["data.up.group.no.insert"] = "최상위 그룹에는 등록할 수 �
 JS_MESSAGE["role.insert.name"] = "Role명을 입력하여 주십시오.";
 JS_MESSAGE["role.insert.key"] = "Role Key를 입력하여 주십시오.";
 JS_MESSAGE["role.insert.type"] = "Role 유형을 선택해 주십시오.";
+
+//code
+JS_MESSAGE["code.insert.name"] = "코드명을 입력하여 주십시오.";
+JS_MESSAGE["code.insert.result"] = "코드값을 선택해 주십시오.";
+
+//service
+JS_MESSAGE["service.insert.name"] = "서비스명을 입력하여 주십시오.";
+JS_MESSAGE["service.insert.ip"] = "서버 IP를 입력하여 주십시오.";
+JS_MESSAGE["service.insert.api.key"] = "API KEY를 입력하여 주십시오.";

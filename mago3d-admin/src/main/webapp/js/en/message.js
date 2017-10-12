@@ -138,3 +138,12 @@ JS_MESSAGE["data.up.group.no.insert"] = "You can not register to the top level";
 JS_MESSAGE["role.insert.name"] = "Please enter the Role name.";
 JS_MESSAGE["role.insert.key"] = "Please enter Role Key";
 JS_MESSAGE["role.insert.type"] = "Please select Role type";
+
+//code
+JS_MESSAGE["code.insert.name"] = "Please enter a code name.";
+JS_MESSAGE["code.insert.result"] = "Please select a code value";
+
+//service
+JS_MESSAGE["service.insert.name"] = "Please enter the service name";
+JS_MESSAGE["service.insert.ip"] = "Please enter the server IP.";
+JS_MESSAGE["service.insert.api.key"] = "Please enter the API KEY.";

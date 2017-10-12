@@ -25,7 +25,7 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
 						<div class="input-header row">
-							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
+							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
 						</div>
 						<form:form id="commonCode" modelAttribute="commonCode" method="post" onsubmit="return false;">
 							<form:hidden path="code_key" />
@@ -35,80 +35,82 @@
 							<col class="col-input" />
 							<tr>
 								<th class="col-label l" scope="row">
-									코드키
+									<spring:message code='code.key'/>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">${commonCode.code_key}</td>
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row">
-									<form:label path="code_type">분류</form:label>
+									<form:label path="code_type"><spring:message code='code.class'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input"><form:input path="code_type" cssClass="m" /></td>
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row">
-									<form:label path="code_name">코드명</form:label>
+									<form:label path="code_name"><spring:message code='code.name'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input"><form:input path="code_name" cssClass="m" /></td>
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row">
-									<form:label path="code_name_en">코드명(영어)</form:label>
+									<form:label path="code_name_en"><spring:message code='code.name.en'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input"><form:input path="code_name_en" cssClass="m" /></td>
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row">
-									<form:label path="code_value">코드값</form:label>
+									<form:label path="code_value"><spring:message code='code.result'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input"><form:input path="code_value" cssClass="m" /></td>
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row">
-									<span>사용 여부</span>
+									<span><spring:message code='code.use.not'/></span>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
+								<spring:message code='use' var='use'/>
+								<spring:message code='no.use' var='noUse'/>
 								<td class="col-input radio-set">
-							 		<form:radiobutton path="use_yn" value="Y" label="사용" />
-									<form:radiobutton path="use_yn" value="N" label="사용안함" />
+							 		<form:radiobutton path="use_yn" value="Y" label="${use}" />
+									<form:radiobutton path="use_yn" value="N" label="${noUse}" />
 								</td>
 									
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row">
-									<form:label path="view_order">표시순서</form:label>
+									<form:label path="view_order"><spring:message code='code.order'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input"><form:input path="view_order" cssClass="s" /></td>
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row">
-									<form:label path="css_class">CSS Class명</form:label>
+									<form:label path="css_class"><spring:message code='code.css.class'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input"><form:input path="css_class" cssClass="m" /></td>
 							</tr>
 							<tr>
 								<th class="col-label l" scope="row">
-									<form:label path="image">이미지</form:label>
+									<form:label path="image"><spring:message code='code.image'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input"><form:input path="image" cssClass="l" /></td>
 							</tr>
 							<tr>
-								<th class="col-label l" scope="row"><form:label path="description">설명</form:label></th>
+								<th class="col-label l" scope="row"><form:label path="description"><spring:message code='description'/></form:label></th>
 								<td class="col-input"><form:input path="description" cssClass="xl" /></td>
 							</tr>
 						</table>
 						<div class="button-group">
 							<div class="center-buttons">
-								<input type="submit" value="저장" onclick="updateCode();" />
-								<a href="/code/list-code.do" class="button">목록</a>
+								<input type="submit" value="<spring:message code='save'/>" onclick="updateCode();" />
+								<a href="/code/list-code.do" class="button"><spring:message code='list'/></a>
 							</div>
 						</div>
 						</form:form>
@@ -127,12 +129,12 @@
 <script type="text/javascript">
 	function check() {
 		if ($("#code_name").val() == "") {
-			alert("코드명을 입력하여 주십시오.");
+			alert(JS_MESSAGE["code.insert.name"]);
 			$("#code_name").focus();
 			return false;
 		}
 		if ($("#code_value").val() == "") {
-			alert("코드값을 선택해 주십시오.");
+			alert(JS_MESSAGE["code.insert.result"]);
 			$("#code_value").focus();
 			return false;
 		}

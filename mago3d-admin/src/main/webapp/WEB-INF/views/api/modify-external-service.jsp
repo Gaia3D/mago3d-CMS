@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+	<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/common/taglib.jsp" %>
 <%@ include file="/WEB-INF/views/common/config.jsp" %>
 
@@ -26,7 +26,7 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
 						<div class="input-header row">
-							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
+							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
 						</div>
 						<form:form id="externalService" modelAttribute="externalService" method="post" onsubmit="return false;">			
 							<form:hidden path="external_service_id"/>
@@ -35,59 +35,61 @@
 								<col class="col-input" />
 								<tr>
 									<th class="col-label m" scope="row">
-										<form:label path="service_code">서비스 코드</form:label>
+										<form:label path="service_code"><spring:message code='api.service.code'/></form:label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input">${externalService.service_code}</td>
 								</tr>
 								<tr>
 									<th class="col-label m" scope="row">
-										<form:label path="service_name">서비스명</form:label>
+										<form:label path="service_name"><spring:message code='api.service.name'/></form:label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input"><form:input path="service_name" cssClass="m" /></td>
 								</tr>
 								<tr>
 									<th class="col-label m" scope="row">
-										<form:label path="service_type">서비스 유형</form:label>
+										<form:label path="service_type"><spring:message code='api.service.type'/></form:label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
+									<spring:message code='api.service.ha' var='ha'/>
+									<spring:message code='api.service.user.list' var='userList'/>
 									<td class="col-input">
 										<select id="service_type" name="service_type" class="select">
-											<option value="0"> Cache(캐시 Reload) </option>
-											<option value="1"> 고가용성(HA) </option>
-											<option value="2"> 접속자 목록 </option>
+											<option value="0">Cache(Reload)</option>
+											<option value="1">${ha}</option>
+											<option value="2">${userList}</option>
 										</select>
 									</td>
 								</tr>
 								<tr>
 									<th class="col-label m" scope="row">
-										<form:label path="server_ip">서버 IP</form:label>
+										<form:label path="server_ip"><spring:message code='api.service.ip'/></form:label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input">
 				 						<form:hidden path="server_ip" />
 										<form:input path="view_server_ip" cssClass="m" readonly="true" />
-						 				<a href="#" onclick="displayListServer();" class="button">서버 선택</a>
+						 				<a href="#" onclick="displayListServer();" class="button"><spring:message code='api.server.select'/></a>
 									</td>
 								</tr>
 								<tr>
 									<th class="col-label m" scope="row">
-										<form:label path="url_scheme">Scheme (프로토콜)</form:label>
+										<form:label path="url_scheme"><spring:message code='api.service.scheme'/></form:label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input"><form:input path="url_scheme" cssClass="m" /></td>
 								</tr>
 								<tr>
 									<th class="col-label m" scope="row">
-										<form:label path="url_host">호스트</form:label>
+										<form:label path="url_host"><spring:message code='api.service.host'/></form:label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input"><form:input path="url_host" cssClass="m" /></td>
 								</tr>
 								<tr>
 									<th class="col-label m" scope="row">
-										<form:label path="url_port">포트</form:label>
+										<form:label path="url_port"><spring:message code='api.service.port'/></form:label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input"><form:input path="url_port" cssClass="m" /></td>
@@ -102,24 +104,26 @@
 									</td>
 								</tr>
 								<tr>
-									<th class="col-label m" scope="row"><form:label path="url_path">경로</form:label></th>
+									<th class="col-label m" scope="row"><form:label path="url_path"><spring:message code='api.service.local'/></form:label></th>
 									<td class="col-input"><form:input path="url_path" cssClass="l" /></td>
 								</tr>
 								<tr>
-									<th class="col-label m" scope="row"><span>상태</span></th>
+								<spring:message code='use' var='use'/>
+								<spring:message code='not.use' var='notUse'/>
+									<th class="col-label m" scope="row"><span><spring:message code='api.service.status'/></span></th>
 									<td class="col-input radio-set">
 										<form:radiobutton path="status" value="0" />
-										<label for="service-status-use">사용</label>
+										<label for="service-status-use">${use}</label>
 										<form:radiobutton path="status" value="1" />
-										<label for="service-status-none">미사용</label>
+										<label for="service-status-none">${notUse}</label>
 									</td>
 								</tr>
 								<tr>
-									<th class="col-label m" scope="row"><form:label path="description">설명</form:label></th>
+									<th class="col-label m" scope="row"><form:label path="description"><spring:message code='description'/></form:label></th>
 									<td class="col-input"><form:input path="description" cssClass="l" /></td>
 								</tr>
 								<tr>
-									<th class="col-label m" scope="row"><form:label path="extra_key1">여분 필드 1</form:label></th>
+									<th class="col-label m" scope="row"><form:label path="extra_key1"><spring:message code='api.service.one'/></form:label></th>
 									<td class="col-input">
 										<span class="table-desc">KEY&nbsp;:&nbsp;</span>
 										<form:input path="extra_key1" type="text" class="m" />
@@ -129,7 +133,7 @@
 									</td>
 								</tr>
 								<tr>
-									<th class="col-label m" scope="row"><form:label path="extra_key2">여분 필드 2</form:label></th>
+									<th class="col-label m" scope="row"><form:label path="extra_key2"><spring:message code='api.service.two'/></form:label></th>
 									<td class="col-input">
 										<span class="table-desc">KEY&nbsp;:&nbsp;</span>
 										<form:input path="extra_key2" type="text" class="m" />
@@ -139,7 +143,7 @@
 									</td>
 								</tr>
 								<tr>
-									<th class="col-label m" scope="row"><form:label path="extra_key3">여분 필드 3</form:label></th>
+									<th class="col-label m" scope="row"><form:label path="extra_key3"><spring:message code='api.service.three'/></form:label></th>
 									<td class="col-input">
 										<span class="table-desc">KEY&nbsp;:&nbsp;</span>
 										<form:input path="extra_key3" type="text" class="m" />
@@ -151,8 +155,8 @@
 							</table>
 							<div class="button-group">
 								<div class="center-buttons">
-									<input type="submit" value="저장" onclick="updateExternalService();" />
-									<a href="/api/list-external-service.do" class="button">목록</a>
+									<input type="submit" value="<spring:message code='save'/>" onclick="updateExternalService();"/>
+									<a href="/api/list-external-service.do" class="button"><spring:message code='list'/></a>
 								</div>
 							</div>
 						</form:form>
@@ -269,17 +273,17 @@
 			return false;
 		} */
 		if ($("#service_name").val() == "") {
-			alert("서비스명을 입력하여 주십시오.");
+			alert(JS_MESSAGE["service.insert.name"]);
 			$("#service_name").focus();
 			return false;
 		}
 		if ($("#server_ip").val() == "") {
-			alert("서버 IP를 입력하여 주십시오.");
+			alert(JS_MESSAGE["service.insert.ip"]);
 			$("#server_ip").focus();
 			return false;
 		}
 		if ($("#api_key").val() == "") {
-			alert("API KEY를 입력하여 주십시오.");
+			alert(JS_MESSAGE["service.insert.api.key"]);
 			$("#api_key").focus();
 			return false;
 		}

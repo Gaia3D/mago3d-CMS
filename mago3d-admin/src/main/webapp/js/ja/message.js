@@ -139,3 +139,12 @@ JS_MESSAGE["data.up.group.no.insert"]="最上位グループに登録するこ�
 JS_MESSAGE["role.insert.name"]="Role名を入力してください。";
 JS_MESSAGE["role.insert.key"]="Role Keyを入力してください。";
 JS_MESSAGE["role.insert.type"]="Roleタイプを選択してください。";
+
+//code
+JS_MESSAGE["code.insert.name"]="コード名を入力してください。";
+JS_MESSAGE["code.insert.result"]="コードの値を選択してください。";
+
+//service
+JS_MESSAGE["service.insert.name"]="サービス名を入力してください。";
+JS_MESSAGE["service.insert.ip"]="サーバーのIPアドレスを入力してください。";
+JS_MESSAGE["service.insert.api.key"]="API KEYを入力してください。";
