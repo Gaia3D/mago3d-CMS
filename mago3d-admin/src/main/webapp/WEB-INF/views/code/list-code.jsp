@@ -111,7 +111,7 @@
 	var deleteCodeFlag = true;
 	function deleteCode(code_key) {
 		if(deleteCodeFlag) {
-			if(confirm("삭제 하시겠습니까?")) { 
+			if(confirm(JS_MESSAGE["delete.confirm"])) { 
 				deleteCodeFlag = false;
 				var info = "code_key=" + code_key;		
 				$.ajax({
