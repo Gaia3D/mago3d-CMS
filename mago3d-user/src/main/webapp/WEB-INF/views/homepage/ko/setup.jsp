@@ -13,13 +13,19 @@
 	<![endif]-->
 <link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 <link rel="stylesheet" href="/css/${lang}/font/font.css" />
+
 <script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 <%-- <script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script> --%>
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
 <script type="text/javascript" src="/js/analytics.js"></script>
-</head>
 
+</head>
+<style>
+ul {
+	margin-left: 15px;
+}
+</style>
 <body>
 	<header class='about'> </header>
 
@@ -75,6 +81,7 @@
 							<ul>
 								<li><a href="#CommunityEdtion">Community Edtion</a>
 									<ul class="sub_list">
+										<li><a href="#editor">Editor or IDE Install</a></li>
 										<li><a href="#SourceDownload">Source Download</a></li>
 										<li><a href="#NodeInstall">Node Install</a></li>
 										<li><a href="#F4DConverter">F4D Converter Install</a></li>
@@ -96,6 +103,16 @@
 					</div>
 					<div id="CommunityEdtion">
 						<h3 style="margin-top: 80px;">Community Edtion</h3>
+						<div class="sub_contents">
+							<div id="editor"></div>
+							<div class="title">Editor or IDE Install</div>
+							<p>이미 사용중인 편집기가 있는 경우 이 과정은 생략 가능합니다.</p>
+							<p>mago3D 개발팀의 경우 Eclipse를 사용</p>
+							<ul>
+								<li>http://www.eclipse.org/downloads/eclipse-packages/</li>
+								<li>Eclipse IDE for Java EE Developers</li>
+							</ul>
+						</div>
 						<div class="sub_contents">
 							<div id="SourceDownload"></div>
 							<div class="title ">Source Download</div>

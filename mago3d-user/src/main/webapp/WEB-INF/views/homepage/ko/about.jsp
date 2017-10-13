@@ -13,6 +13,7 @@
 	<![endif]-->
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<link rel="shortcut icon" type="image/x-icon" href="/images/${lang}/homepage/favicon.ico"/>
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
@@ -48,7 +49,7 @@
 					<ul>
 						<li><a href="/homepage/api.do" style="color: white" target="_blank">API</a></li>
 						<li><a href="/homepage/spec.do" style="color: white">F4D Spec</a></li>
-<!-- 						<li><a href="/homepage/tutorials.do" style="color: white">Tutorials</a></li> -->
+						<li><a href="/homepage/tutorials.do" style="color: white">Tutorials</a></li>
 					</ul>
 				</li>
 				<li> <a href="/homepage/faq.do">FAQ</a></li>

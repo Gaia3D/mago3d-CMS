@@ -13,6 +13,7 @@
 	<![endif]-->
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<link rel="shortcut icon" type="image/x-icon" href="/images/${lang}/homepage/favicon.ico"/>
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 <%-- 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script> --%>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
