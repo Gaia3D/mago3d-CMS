@@ -144,7 +144,6 @@
 														<th scope="col" class="col-number"><spring:message code='number'/></th>
 														<th scope="col" class="col-id"><spring:message code='id'/></th>
 														<th scope="col" class="col-name"><spring:message code='name'/></th>
-														<th scope="col" class="col-email"><spring:message code='email'/></th>
 														<th scope="col" class="col-toggle"><spring:message code='data.status'/></th>
 														<th scope="col" class="col-date-time"><spring:message code='data.insert.date'/></th>
 													</tr>

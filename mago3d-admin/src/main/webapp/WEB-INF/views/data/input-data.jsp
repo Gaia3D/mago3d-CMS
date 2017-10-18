@@ -14,18 +14,15 @@
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
 	<link rel="stylesheet" href="/css/${lang}/style.css" />
 </head>
-
 <body>
 	<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
 	<%@ include file="/WEB-INF/views/layouts/menu.jsp" %>
-	
 	<div class="site-body">
 		<div class="container">
 			<div class="site-content">
 				<%@ include file="/WEB-INF/views/layouts/sub_menu.jsp" %>
 				<div class="page-area">
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
-					
 					<div class="page-content">
 						<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='user.input.check.box'/></div>
 						<div class="tabs">
@@ -258,6 +255,7 @@
 <script src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>		
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
+<script type="text/javascript" src="/js/${lang}/navigation.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$( ".tabs" ).tabs();
@@ -416,6 +414,7 @@
 			return false;
 		}
 	}
+	
 </script>
 </body>
 </html>

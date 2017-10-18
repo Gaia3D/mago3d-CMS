@@ -75,6 +75,7 @@
 							<ul>
 								<li><a href="#CommunityEdtion">Community Edtion</a>
 									<ul class="sub_list">
+										<li><a href="#">Editor or IDE Install</a></li>
 										<li><a href="#SourceDownload">Source Download</a></li>
 										<li><a href="#NodeInstall">Node Install</a></li>
 										<li><a href="#F4DConverter">F4D Converter Install</a></li>

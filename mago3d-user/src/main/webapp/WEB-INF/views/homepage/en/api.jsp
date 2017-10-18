@@ -11,6 +11,7 @@
 <!--[if lt IE 9]>
 	   	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+<link rel="shortcut icon" type="image/x-icon" href="/images/${lang}/homepage/favicon.ico"/>	
 <link rel="stylesheet" href="/externlib/${lang}/highlight/styles/agate.css" />
 <link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 <link rel="stylesheet" href="/css/${lang}/font/font.css" />
