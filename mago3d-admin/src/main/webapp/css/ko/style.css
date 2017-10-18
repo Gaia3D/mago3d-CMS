@@ -737,20 +737,20 @@ select + .ui-selectmenu-button + input {
 	box-sizing: border-box; }
 	
 .ui-selectmenu-button span.ui-icon {
-    top: 0;
-    right: 0;
+/*     top: 0; */
+/*     right: 0; */
     width: 17px;
-    height: 23px;
+/*     height: 23px; */
     line-height: 23px !important;
     margin: 0;
-    padding: 0;
-    padding-top: 3px;
-    padding-left: 6px;
+/*     padding: 0; */
+/*     padding-top: 3px; */
+/*     padding-left: 6px; */
     border-left: 1px solid #e0e0e0; }
 
-.ui-selectmenu-button span.ui-icon {
-    background-image: none;
-	text-indent: 0; }
+/* .ui-selectmenu-button span.ui-icon { */
+/*     background-image: none; */
+/* 	text-indent: 0; } */
 
 .ui-selectmenu-button span.ui-icon:after {
     content: '\e955';
