@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +34,7 @@ import com.gaia3d.service.UserService;
 import com.gaia3d.service.WidgetService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.FormatUtil;
+import com.zaxxer.hikari.HikariDataSource;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,7 +55,7 @@ public class MainController {
 	private PropertiesConfig propertiesConfig;
 	
 	@Autowired
-	private DataSource dataSource;
+	private HikariDataSource dataSource;
 	
 	@Autowired
 	private APIService aPIService;
@@ -200,12 +200,19 @@ public class MainController {
 	 */
 	private void dbcpWidget(Model model) {
 		model.addAttribute("userSessionCount", SessionUserHelper.loginUsersMap.size());
-		model.addAttribute("initialSize", dataSource.getInitialSize());
-//		model.addAttribute("maxTotal", dataSource.getMaxTotal());
-		model.addAttribute("maxIdle", dataSource.getMaxIdle());
-		model.addAttribute("minIdle", dataSource.getMinIdle());
-		model.addAttribute("numActive", dataSource.getNumActive());
-		model.addAttribute("numIdle", dataSource.getNumIdle());
+		
+		model.addAttribute("initialSize", dataSource.getMaximumPoolSize());
+//	model.addAttribute("maxIdle", dataSource.getMaxIdle());
+		model.addAttribute("minIdle", dataSource.getMinimumIdle());
+//	model.addAttribute("numActive", dataSource.getNumActive());
+//	model.addAttribute("numIdle", dataSource.getNumIdle());
+		
+//		model.addAttribute("initialSize", dataSource.getInitialSize());
+////		model.addAttribute("maxTotal", dataSource.getMaxTotal());
+//		model.addAttribute("maxIdle", dataSource.getMaxIdle());
+//		model.addAttribute("minIdle", dataSource.getMinIdle());
+//		model.addAttribute("numActive", dataSource.getNumActive());
+//		model.addAttribute("numIdle", dataSource.getNumIdle());
 		
 		// 사용자 dbcp 정보
 		Map<String, Integer> userDbcp = getUserDbcp();
@@ -360,12 +367,17 @@ public class MainController {
 		String result = "success";
 		try {
 			jSONObject.put("userSessionCount", SessionUserHelper.loginUsersMap.size());
-			jSONObject.put("initialSize", dataSource.getInitialSize());
-//			jSONObject.put("maxTotal", dataSource.getMaxTotal());
-			jSONObject.put("maxIdle", dataSource.getMaxIdle());
-			jSONObject.put("minIdle", dataSource.getMinIdle());
-			jSONObject.put("numActive", dataSource.getNumActive());
-			jSONObject.put("numIdle", dataSource.getNumIdle());
+			
+			jSONObject.put("initialSize", dataSource.getMaximumPoolSize());
+			jSONObject.put("minIdle", dataSource.getMinimumIdle());
+			jSONObject.put("numIdle", dataSource.getMaximumPoolSize());
+			
+//			jSONObject.put("initialSize", dataSource.getInitialSize());
+////			jSONObject.put("maxTotal", dataSource.getMaxTotal());
+//			jSONObject.put("maxIdle", dataSource.getMaxIdle());
+//			jSONObject.put("minIdle", dataSource.getMinIdle());
+//			jSONObject.put("numActive", dataSource.getNumActive());
+//			jSONObject.put("numIdle", dataSource.getNumIdle());
 			
 			// 사용자 dbcp 정보
 			Map<String, Integer> userDbcp = getUserDbcp();

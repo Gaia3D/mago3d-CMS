@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.gaia3d.security.Crypt;
+import com.zaxxer.hikari.HikariDataSource;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,26 +49,36 @@ public class RootConfig {
 	
 	@Bean
 	public DataSource dataSource() {
-//		HikariDataSource dataSource = new HikariDataSource();
-//		dataSource.setDriverClassName(driverClassName);
-//		dataSource.setJdbcUrl(Crypt.decrypt(url));
-//		dataSource.setUsername(Crypt.decrypt(username));
-//		dataSource.setPassword(Crypt.decrypt(password));
-//		dataSource.setMaximumPoolSize(50);
 		
-		org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
-	    dataSource.setDriverClassName(driverClassName);
-	    dataSource.setUrl(Crypt.decrypt(url));
-	    dataSource.setUsername(Crypt.decrypt(username));
-	    dataSource.setPassword(Crypt.decrypt(password));
-	    // 서버용
-	    dataSource.setInitialSize(20);
-	    dataSource.setMaxActive(50);
-	    dataSource.setMaxIdle(30);
-	    dataSource.setMinIdle(20);
-//	    dataSource.setTestWhileIdle(testWhileIdle);     
-//	    dataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMills);
-//	    dataSource.setValidationQuery(validationQuery);
+		// TODO hikari 에서는 min, max 를 동일값을 해 주길 권장
+//		spring.datasource.hikari.minimum-idle=20
+//		spring.datasource.hikari.maximum-pool-size=30
+//		spring.datasource.hikari.idle-timeout=600000 (10분)
+//		spring.datasource.hikari.max-lifetime=1800000 (30분)
+//		spring.datasource.hikari.connection-timeout=15000
+//		spring.datasource.hikari.validation-timeout=10000
+
+		HikariDataSource dataSource = new HikariDataSource();
+		dataSource.setDriverClassName(driverClassName);
+		dataSource.setJdbcUrl(Crypt.decrypt(url));
+		dataSource.setUsername(Crypt.decrypt(username));
+		dataSource.setPassword(Crypt.decrypt(password));
+		dataSource.setMaximumPoolSize(50);
+		dataSource.setMinimumIdle(50);
+		
+//		org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
+//	    dataSource.setDriverClassName(driverClassName);
+//	    dataSource.setUrl(Crypt.decrypt(url));
+//	    dataSource.setUsername(Crypt.decrypt(username));
+//	    dataSource.setPassword(Crypt.decrypt(password));
+//	    // 서버용
+//	    dataSource.setInitialSize(20);
+//	    dataSource.setMaxActive(50);
+//	    dataSource.setMaxIdle(30);
+//	    dataSource.setMinIdle(20);
+////	    dataSource.setTestWhileIdle(testWhileIdle);     
+////	    dataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMills);
+////	    dataSource.setValidationQuery(validationQuery);
 	    return dataSource;
 	}
 	

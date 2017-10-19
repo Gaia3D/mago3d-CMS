@@ -26,16 +26,32 @@
 		    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36}[%method:%line] - %msg%n</pattern>
 		</encoder>
 	</appender>
+	
+	
+	// 이건 혹시나 해서 .... 나중에 지워도 될거 같다.
+	<property name="DEV_HOME" value="c:/logs" />
+	<appender name="FILE-AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${DEV_HOME}/debug.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss} - %msg%n
+			</Pattern>
+		</encoder>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${DEV_HOME}/archived/debug.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
 	 -->
 
-	<logger name="org.apache.commons" level="debug" additivity="false" />
-<!-- 	<logger name="org.mybatis.spring.boot" level="debug" additivity="false" /> -->
-	<!-- <logger name="org.apache.tomcat.embed" level="debug" additivity="false" />
-	<logger name="org.apache.catalina" level="debug" additivity="false" /> -->
-	<logger name="org.springframework" level="debug" additivity="false" />
-<!-- 	<logger name="org.springframework.boot" level="debug" additivity="false" /> -->
-	<logger name="org.springframework.web" level="debug" additivity="false" />
-	<!-- <logger name="org.apache.commons.dbcp2" level="debug" additivity="false" /> -->
+	<logger name="org.apache.tomcat" level="debug" additivity="false" />
+	<logger name="org.apache.commons" level="INFO" additivity="false" />
+<!-- tomcat 시작시 오류 날때는 이 로그 레벨을 적용하면 상세히 나옴	
+		<logger name="org.springframework.web" level="debug" additivity="false" /> -->
+	<logger name="org.springframework" level="INFO" additivity="false" />
 	<logger name="java.sql.Connection" level="debug" additivity="false" />
 	<logger name="java.sql.PreparedStatement" level="debug" additivity="false" />
 	<logger name="java.sql.ResultSet" level="debug" additivity="false" />

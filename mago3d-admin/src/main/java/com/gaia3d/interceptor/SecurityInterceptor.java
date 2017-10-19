@@ -1,5 +1,6 @@
 package com.gaia3d.interceptor;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,16 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
     	String uri = request.getRequestURI();
     	String requestIp = WebUtil.getClientIp(request);
-    	log.info("## Requst URI = {}, Request Ip = {}", uri, requestIp);
+    	
+    	log.info("## Request URL = {}", request.getRequestURL().toString());
+    	log.info("## getMethod = {}, getContextType = {}, getContextPath = {}", request.getMethod(), request.getContentType(), request.getContextPath());
+    	Enumeration<String> headerNames = request.getHeaderNames();
+        while(headerNames.hasMoreElements()){
+            String headerName = headerNames.nextElement();
+            String headerValue = request.getHeader(headerName);
+            log.info("## headerName = {}, headerValue = {}", headerName, headerValue);
+        }
+        log.info("## Requst URI = {}, Request Ip = {}", uri, requestIp);
     	
     	boolean isExceptionURI = false;
     	int exceptionURICount = URLHelper.EXCEPTION_URI.length;
