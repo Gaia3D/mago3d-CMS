@@ -18,7 +18,7 @@
   		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_server_url">URL</form:label>
+				<form:label path="geo_server_url"><spring:message code='url'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_server_url" cssClass="l" />
@@ -27,7 +27,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_server_layers">Layers</form:label>
+				<form:label path="geo_server_layers"><spring:message code='config.geoserver.layers'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_server_layers" cssClass="m" />
@@ -36,7 +36,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_server_parameters_service">Parameters Service</form:label>
+				<form:label path="geo_server_parameters_service"><spring:message code='config.geoserver.parameters_service'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_server_parameters_service" cssClass="m" />
@@ -45,7 +45,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_server_parameters_version">Parameters Version</form:label>
+				<form:label path="geo_server_parameters_version"><spring:message code='config.geoserver.parameters_version'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_server_parameters_version" cssClass="m" />
@@ -54,7 +54,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_server_parameters_request">Parameters Request</form:label>
+				<form:label path="geo_server_parameters_request"><spring:message code='config.geoserver.parameters_request'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_server_parameters_request" cssClass="m" />
@@ -63,7 +63,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_server_parameters_transparent">Parameters Transparent</form:label>
+				<form:label path="geo_server_parameters_transparent"><spring:message code='config.geoserver.parameters_transparent'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_server_parameters_transparent" cssClass="m" />
@@ -72,7 +72,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_server_parameters_format">Parameters Format</form:label>
+				<form:label path="geo_server_parameters_format"><spring:message code='config.geoserver.parameters_format'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_server_parameters_format" cssClass="m" />

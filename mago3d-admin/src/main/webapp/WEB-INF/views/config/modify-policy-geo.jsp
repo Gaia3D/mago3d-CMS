@@ -5,9 +5,10 @@
 	<table class="input-table scope-row">
 		<col class="col-label l" />
 		<col class="col-input" />
+		
 		<tr>
   			<th>
-		  		<form:label path="geo_view_library" cssClass="nessItem">View Library</form:label>
+		  		<form:label path="geo_view_library" cssClass="nessItem"><spring:message code='config.geo.viewlibrary'/></form:label>
  			</th>
  			<td>
 	  			<select id="geo_view_library" name="geo_view_library" class="select">
@@ -94,7 +95,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_lod0">LOD0</form:label>
+				<form:label path="geo_lod0"><spring:message code='config.geo.lod0'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_lod0" cssClass="m" />&nbsp;M
@@ -103,7 +104,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_lod1">LOD1</form:label>
+				<form:label path="geo_lod1"><spring:message code='config.geo.lod1'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_lod1" cssClass="m" />&nbsp;M
@@ -112,7 +113,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_lod2">LOD2</form:label>
+				<form:label path="geo_lod2"><spring:message code='config.geo.lod2'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_lod2" cssClass="m" />&nbsp;M
@@ -121,7 +122,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_ambient_reflection_coef">ambient_reflection_coeficient</form:label>
+				<form:label path="geo_ambient_reflection_coef"><spring:message code='config.geo.ambient_reflection_coeficient'/></form:label>
 			</th>
 			<td class="col-input" style="padding-left: 20px;">
 				<div id="geo_ambient_reflection_coef" style="display: inline-block; width: 230px;">
@@ -132,7 +133,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_diffuse_reflection_coef">geo_diffuse_reflection_coef</form:label>
+				<form:label path="geo_diffuse_reflection_coef"><spring:message code='config.geo.diffuse_reflection_coef'/></form:label>
 			</th>
 			<td class="col-input" style="padding-left: 20px;">
 				<div id="geo_diffuse_reflection_coef" style="display: inline-block; width: 230px;">
@@ -143,7 +144,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_specular_reflection_coef">geo_specular_reflection_coef</form:label>
+				<form:label path="geo_specular_reflection_coef"><spring:message code='config.geo.specular_reflection_coef'/></form:label>
 			</th>
 			<td class="col-input" style="padding-left: 20px;">
 				<div id="geo_specular_reflection_coef" style="display: inline-block; width: 230px;">
@@ -154,7 +155,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_ambient_color">geo_ambient_color</form:label>
+				<form:label path="geo_ambient_color"><spring:message code='config.geo.geo_ambient_color'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_ambient_color" cssClass="m"
@@ -164,7 +165,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_specular_color">geo_specular_color</form:label>
+				<form:label path="geo_specular_color"><spring:message code='config.geo.geo_specular_color'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_specular_color" cssClass="m"
@@ -174,7 +175,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_ssao_radius">SSAO Radius</form:label>
+				<form:label path="geo_ssao_radius"><spring:message code='config.geo.ssaoradius'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_ssao_radius" cssClass="m" />

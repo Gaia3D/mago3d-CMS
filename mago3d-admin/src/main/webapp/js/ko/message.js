@@ -153,3 +153,13 @@ JS_MESSAGE["code.insert.result"] = "코드값을 선택해 주십시오.";
 JS_MESSAGE["service.insert.name"] = "서비스명을 입력하여 주십시오.";
 JS_MESSAGE["service.insert.ip"] = "서버 IP를 입력하여 주십시오.";
 JS_MESSAGE["service.insert.api.key"] = "API KEY를 입력하여 주십시오.";
+
+//widget
+JS_MESSAGE["config.schedule.widget.does.not.exist"] = "스케줄 실행 이력이 존재하지 않습니다.";
+JS_MESSAGE["config.widget.using"] = "사용중";
+JS_MESSAGE["config.widget.stop.using"] = "사용중지";
+JS_MESSAGE["config.widget.fail.count"] = "실패횟수";
+JS_MESSAGE["config.widget.dormancy"] = "휴면";
+JS_MESSAGE["config.widget.expires"] = "기간만료";
+JS_MESSAGE["config.widget.temporary.password"] = "임시비밀번호";
+JS_MESSAGE["config.widget.content.does.not.exit"] = "수정된 컨텐츠가 존재하지 않습니다.";
