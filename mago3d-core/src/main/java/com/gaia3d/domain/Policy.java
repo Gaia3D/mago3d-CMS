@@ -149,20 +149,34 @@ public class Policy {
 	
 	// geo server 사용유무
 	private String geo_server_enable;
-	// geo server url
+	// geo server 기본 layers url
 	private String geo_server_url;
-	// geo server layers
+	// geo server 기본 layers
 	private String geo_server_layers;
-	// geo server service 변수값
+	// geo server 기본 layers service 변수값
 	private String geo_server_parameters_service;
-	// geo server version 변수값
+	// geo server 기본 layers version 변수값
 	private String geo_server_parameters_version;
-	// geo server request 변수값
+	// geo server 기본 layers request 변수값
 	private String geo_server_parameters_request;
-	// geo server transparent 변수값
+	// geo server 기본 layers transparent 변수값
 	private String geo_server_parameters_transparent;
-	// geo server format 변수값
+	// geo server 기본 layers format 변수값
 	private String geo_server_parameters_format;
+	// geo server 추가 layers url
+	private String geo_server_add_url;
+	// geo server 추가 layers layers
+	private String geo_server_add_layers;
+	// geo server 추가 layers service 변수값
+	private String geo_server_add_parameters_service;
+	// geo server 추가 layers version 변수값
+	private String geo_server_add_parameters_version;
+	// geo server 추가 layers request 변수값
+	private String geo_server_add_parameters_request;
+	// geo server 추가 layers transparent 변수값
+	private String geo_server_add_parameters_transparent;
+	// geo server 추가 layers format 변수값
+	private String geo_server_add_parameters_format;
 	
 	// 콜백 function 사용유무. 기본값 false
 	private String geo_callback_enable;

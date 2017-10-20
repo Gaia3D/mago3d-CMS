@@ -83,7 +83,14 @@
 			geo_server_parameters_version = #{geo_server_parameters_version},
 			geo_server_parameters_request = #{geo_server_parameters_request},
 			geo_server_parameters_transparent = #{geo_server_parameters_transparent},
-			geo_server_parameters_format = #{geo_server_parameters_format}
+			geo_server_parameters_format = #{geo_server_parameters_format},
+			geo_server_add_url = #{geo_server_add_url},
+			geo_server_add_layers = #{geo_server_add_layers},
+			geo_server_add_parameters_service = #{geo_server_add_parameters_service},
+			geo_server_add_parameters_version = #{geo_server_add_parameters_version},
+			geo_server_add_parameters_request = #{geo_server_add_parameters_request},
+			geo_server_add_parameters_transparent = #{geo_server_add_parameters_transparent},
+			geo_server_add_parameters_format = #{geo_server_add_parameters_format}
 		WHERE policy_id = #{policy_id}
 	</update>
 	

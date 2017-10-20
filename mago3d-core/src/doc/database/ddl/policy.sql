@@ -54,7 +54,14 @@ create table policy(
 	geo_server_parameters_version			varchar(30),
 	geo_server_parameters_request			varchar(30),
 	geo_server_parameters_transparent		varchar(30),
-	geo_server_parameters_format				varchar(30),
+	geo_server_parameters_format			varchar(30),
+	geo_server_add_url						varchar(256),
+	geo_server_add_layers					varchar(60),
+	geo_server_add_parameters_service		varchar(30),
+	geo_server_add_parameters_version		varchar(30),
+	geo_server_add_parameters_request		varchar(30),
+	geo_server_add_parameters_transparent	varchar(30),
+	geo_server_add_parameters_format		varchar(30),
 	
 	geo_callback_enable 					varchar(5)			default 'false',
 	geo_callback_selectedObject				varchar(64),
@@ -170,13 +177,20 @@ comment on column policy.geo_specular_color is '표면의 반질거림 색깔. R
 comment on column policy.geo_ssao_radius is '그림자 반경';
 	
 comment on column policy.geo_server_enable is 'geo server 사용유무';
-comment on column policy.geo_server_url is 'geo server url';
-comment on column policy.geo_server_layers is 'geo server layers';
-comment on column policy.geo_server_parameters_service is 'geo server service 변수값';
-comment on column policy.geo_server_parameters_version is 'geo server version 변수값';
-comment on column policy.geo_server_parameters_request is 'geo server request 변수값';
-comment on column policy.geo_server_parameters_transparent is 'geo server transparent 변수값';
-comment on column policy.geo_server_parameters_format is 'geo server format 변수값';
+comment on column policy.geo_server_url is 'geo server 기본 Layers url';
+comment on column policy.geo_server_layers is 'geo server 기본 layers';
+comment on column policy.geo_server_parameters_service is 'geo server 기본 Layers service 변수값';
+comment on column policy.geo_server_parameters_version is 'geo server 기본 Layers version 변수값';
+comment on column policy.geo_server_parameters_request is 'geo server 기본 Layers request 변수값';
+comment on column policy.geo_server_parameters_transparent is 'geo server 기본 Layers transparent 변수값';
+comment on column policy.geo_server_parameters_format is 'geo server 기본 Layers format 변수값';
+comment on column policy.geo_server_add_url is 'geo server 추가 Layers url';
+comment on column policy.geo_server_add_layers is 'geo server 추가 Layers';
+comment on column policy.geo_server_add_parameters_service is 'geo server 추가 Layers service 변수값';
+comment on column policy.geo_server_add_parameters_version is 'geo server 추가 Layers version 변수값';
+comment on column policy.geo_server_add_parameters_request is 'geo server 추가 Layers request 변수값';
+comment on column policy.geo_server_add_parameters_transparent is 'geo server 추가 Layers transparent 변수값';
+comment on column policy.geo_server_add_parameters_format is 'geo server 추가 Layers format 변수값';
 	
 comment on column policy.geo_callback_enable is '콜백 function 사용유무. 기본값 false';
 comment on column policy.geo_callback_selectedObject is 'object 선택 callback function 이름';
