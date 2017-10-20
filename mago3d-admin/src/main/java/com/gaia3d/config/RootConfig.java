@@ -46,6 +46,10 @@ public class RootConfig {
 	private String username;
 	@Value("${spring.datasource.password}")
 	private String password;
+	@Value("${spring.datasource.hikari.maximum-pool-size}")
+	private Integer maximumPoolSize;
+	@Value("${spring.datasource.hikari.minimum-idle}")
+	private Integer minimumIdle;
 	
 	@Bean
 	public DataSource dataSource() {
@@ -63,7 +67,8 @@ public class RootConfig {
 		dataSource.setJdbcUrl(Crypt.decrypt(url));
 		dataSource.setUsername(Crypt.decrypt(username));
 		dataSource.setPassword(Crypt.decrypt(password));
-		dataSource.setMaximumPoolSize(25);
+		dataSource.setMaximumPoolSize(maximumPoolSize);
+		dataSource.setMinimumIdle(minimumIdle);
 		
 //		org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
 //	    dataSource.setDriverClassName(driverClassName);
