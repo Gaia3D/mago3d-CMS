@@ -147,3 +147,13 @@ JS_MESSAGE["code.insert.result"] = "Please select a code value";
 JS_MESSAGE["service.insert.name"] = "Please enter the service name";
 JS_MESSAGE["service.insert.ip"] = "Please enter the server IP.";
 JS_MESSAGE["service.insert.api.key"] = "Please enter the API KEY.";
+
+//config
+JS_MESSAGE["config.schedule.widget.does.not.exist"] = "Schedule execution history does not exist.";
+JS_MESSAGE["config.widget.using"] = "In use";
+JS_MESSAGE["config.widget.stop.using"] = "Disable";
+JS_MESSAGE["config.widget.fail.count"] = "Failures";
+JS_MESSAGE["config.widget.dormancy"] = "Sleep";
+JS_MESSAGE["config.widget.expires"] = "Expires";
+JS_MESSAGE["config.temporary.password"] = "Temporary password";
+JS_MESSAGE["config.widget.content.does.not.exit"] = "Modified content does not exist";

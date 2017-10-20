@@ -388,7 +388,7 @@
 								+	"<col class=\"col-center\" />";
 					if(scheduleLogList == null || scheduleLogList.length == 0) {
 						content += 	"<tr>"
-								+	"	<td colspan=\"3\" class=\"col-none\">스케줄 실행 이력이 존재하지 않습니다.</td>"
+								+	"	<td colspan=\"3\" class=\"col-none\">"+ JS_MESSAGE["config.schedule.widget.does.not.exist"] + "</td>"
 								+	"</tr>";
 					} else {
 						for(i=0; i<scheduleLogList.length; i++ ) {
@@ -462,7 +462,7 @@
 	var updateFlag = true;
 	function updateWidget() {
 		if ($("#widget_order").val() == "") {
-			alert("수정된 컨텐츠가 존재하지 않습니다.");
+			alert(JS_MESSAGE["config.widget.content.does.not.exit"]);
 			return false;
 		}
 		if (updateFlag) {
