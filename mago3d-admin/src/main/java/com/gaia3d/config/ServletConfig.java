@@ -147,7 +147,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	 	
 	 	return simpleMappingExceptionResolver;
 	}
-	 
+	
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		log.info(" @@@ ServletConfig viewResolver @@@");

@@ -159,9 +159,9 @@
 	</div>
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 	
-<script type="text/javascript" src="/externlib/ko/jquery/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="/externlib/ko/jquery/jquery.js"></script>
 <script type="text/javascript" src="/externlib/ko/jquery/jquery-migrate-1.2.1.min.js"></script>
-<script type="text/javascript" src="/externlib/ko/jquery-ui/jquery-ui-1.11.4.min.js"></script>	
+<script type="text/javascript" src="/externlib/ko/jquery-ui/jquery-ui.js"></script>	
 <script type="text/javascript" src="/js/ko/common.js"></script>
 <script type="text/javascript" src="/js/ko/message.js"></script>
 <script type="text/javascript" src="/js/consoleLog.js"></script>
