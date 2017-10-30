@@ -157,7 +157,7 @@
 					<td>
 						<ul>
 							<li>tutorials : <a href="/data/download/tutorials_en.pdf" download>tutorials</a></li>
-							<li>API : <a href="homepage/api.do" target="_blank">mago3D.js API</a></li>
+							<li>API : <a href="/homepage/api.do" target="_blank">mago3D.js API</a></li>
 							<li>Spec : <a href="/homepage/spec.do">F4D Converter Spec</a></li>
 						</ul>
 					</td>
