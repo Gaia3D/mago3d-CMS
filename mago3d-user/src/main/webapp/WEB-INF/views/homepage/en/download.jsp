@@ -102,18 +102,6 @@
 			 applications with mago3D F4D Converter software, Gaia3D’s open source software licensed under the AGPL is the best option.
 			</p>
 			<b>2. mago3D.js: Apache 2.0 License</b><br>
-			<h4>Documentation</h4>
-			<table>
-				<tr>
-					<th>JS Document</th>
-					<th>Convert Document</th>
-				</tr>
-				<tr>
-					<td><a href="/homepage/api.do" target="_blank">mago3D.js-1.0.0 js Document</a></td>
-					<td><a href="/homepage/spec.do">F4D Converter-1.0.0 Document</a></td>
-				</tr>
-			</table>
-
 			<h4>mago3D.js</h4>
 			<table>
 				<tr>
@@ -154,6 +142,26 @@
 					<td>2017-08-17</td>
 					<td><a href="https://github.com/Gaia3D/F4DConverter/blob/master/README.md" target="_blank">ReadMe</a>
 					</td>
+				</tr>
+			</table>
+			
+			<h4>Documentation</h4>
+			<table>
+				<tr>
+					<th>Version</th>
+					<th>Download</th>
+					<th>Date</th>
+				</tr>
+				<tr>
+					<td>0.0.1</td>
+					<td>
+						<ul>
+							<li>tutorials : <a href="/data/download/tutorials_en.pdf" download>tutorials</a></li>
+							<li>API : <a href="homepage/api.do" target="_blank">mago3D.js API</a></li>
+							<li>Spec : <a href="/homepage/spec.do">F4D Converter Spec</a></li>
+						</ul>
+					</td>
+					<td>2017-10-30</td>
 				</tr>
 			</table>
 		</div>

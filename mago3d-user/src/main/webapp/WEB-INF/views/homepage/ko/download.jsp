@@ -116,12 +116,12 @@
 					<td>
 					<ul>
 						<li>GitHub : <a href="https://github.com/Gaia3D/mago3Djs" target="_blank">mago3D.js</a></li>
-						<li>API : <a href="homepage/api.do" target="_blank">mago3D.js API</a></li>
 					</ul>
 					</td>
 					<td>2017-07-01</td>
 					<td><a href="https://github.com/Gaia3D/mago3djs/blob/develop/README.md" target="_blank">ReadMe</a>
 					</td>
+					
 				</tr>
 			</table>
 			
@@ -139,12 +139,31 @@
 					<ul>
 						<li>GitHub : <a href="https://github.com/Gaia3D/F4DConverter" target="_blank">F4D Converter</a></li>
 						<li>Installer : <a href="/data/download/SetupF4DConverter.msi" target="_blank">F4D Converter 64bit (this installation requires Windows 7 or later)</a></li>
-						<li>Spec : <a href="/homepage/spec.do">F4D Converter Spec</a></li>
 					</ul>
 					</td>
 					<td>2017-08-17</td>
 					<td><a href="https://github.com/Gaia3D/F4DConverter/blob/master/README.md" target="_blank">ReadMe</a>
 					</td>
+				</tr>
+			</table>
+			
+			<h4>Documentation</h4>
+			<table>
+				<tr>
+					<th>버전</th>
+					<th>다운로드</th>
+					<th>날짜</th>
+				</tr>
+				<tr>
+					<td>0.0.1</td>
+					<td>
+						<ul>
+							<li>tutorials : <a href="/data/download/tutorials.pdf" download>tutorials</a></li>
+							<li>API : <a href="homepage/api.do" target="_blank">mago3D.js API</a></li>
+							<li>Spec : <a href="/homepage/spec.do">F4D Converter Spec</a></li>
+						</ul>
+					</td>
+					<td>2017-10-30</td>
 				</tr>
 			</table>
 		</div>
