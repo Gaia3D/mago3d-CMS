@@ -1146,7 +1146,7 @@ padding-left: 0px;
 }
 .main .api_description table {
 margin: 12px 0;
-width: 800px;
+width: 910px;
 border-collapse: collapse;
 border-spacing: 0;
 }
@@ -1164,6 +1164,59 @@ text-align: left;
     vertical-align: top;
     text-align: left;
 }
+
+.main .api_list table {
+    background: white;
+    border-radius: 3px;
+    border-collapse: collapse;
+/*     height: 320px; */
+/*     margin: auto; */
+    padding: 5px;
+    max-width: 1980px;
+    width: 910px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    animation: float 5s infinite;
+}
+.main .api_list table tr {
+    border-top: 1px solid #C1C3D1;
+    border-bottom-: 1px solid #C1C3D1;
+    color: #666B85;
+    font-size: 16px;
+    font-weight: normal;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+.main .api_list td {
+    background: #FFFFFF;
+    padding: 20px;
+    text-align: left;
+    vertical-align: middle;
+    font-weight: 300;
+    font-size: 18px;
+    text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+    border-right: 1px solid #C1C3D1;
+}
+.main .api_list tr:nth-child(odd) td {
+    background: #EBEBEB;
+}
+.main .api_list .api_name {
+width: 50px;
+}
+.main .api_list .api_des{
+width: 600px;
+}
+/* .main .api_list table{ */
+/* 	width: 100%; */
+/*     border-top: 1px solid #444444; */
+/*     border-collapse: collapse; */
+/*     border: 0; */
+/* } */
+/* .main .api_list th, td { */
+/*     text-align: left; */
+/*     padding: 8px; */
+/* } */
+/* .main .api_list tr:nth-child(even) {background-color: #f2f2f2;} */
+
+
 pre {
 overflow: auto;
 word-wrap: normal;
