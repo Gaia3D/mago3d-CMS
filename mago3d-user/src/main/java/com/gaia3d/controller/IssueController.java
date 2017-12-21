@@ -24,14 +24,14 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CommonCode;
-import com.gaia3d.domain.DataGroup;
+import com.gaia3d.domain.Project;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.IssueComment;
 import com.gaia3d.domain.IssueFile;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.UserSession;
-import com.gaia3d.service.DataGroupService;
+import com.gaia3d.service.ProjectService;
 import com.gaia3d.service.IssueService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.FileUtil;
@@ -57,7 +57,7 @@ public class IssueController {
 	private IssueValidator issueValidator;
 	
 	@Autowired
-	private DataGroupService dataGroupService;
+	private ProjectService dataGroupService;
 	@Autowired
 	private IssueService issueService;
 	
@@ -112,9 +112,9 @@ public class IssueController {
 	 */
 	@GetMapping(value = "ajax-list-issue-by-geo.do", produces="application/json; charset=utf8")
 	@ResponseBody
-	public Map<String, Object> ajaxListIssueByGeo(HttpServletRequest request, DataGroup dataGroup) {
+	public Map<String, Object> ajaxListIssueByGeo(HttpServletRequest request, Project project) {
 		
-		log.info("@@ dataGroup = {}", dataGroup);
+		log.info("@@ project = {}", project);
 		
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
@@ -128,8 +128,8 @@ public class IssueController {
 //				issue.setUser_id(userSession.getUser_id());
 //				issue.setUser_name(userSession.getUser_name());
 //			}
-			dataGroup.setLocation("SRID=4326;POINT(" + dataGroup.getLongitude() + " " + dataGroup.getLatitude() + ")");
-			DataGroup nearDataGroup = dataGroupService.getDataGroupByGeo(dataGroup);
+			project.setLocation("SRID=4326;POINT(" + project.getLongitude() + " " + project.getLatitude() + ")");
+			Project nearDataGroup = dataGroupService.getProjectByGeo(project);
 			
 			if(StringUtil.isNotEmpty(issue.getStart_date())) {
 				issue.setStart_date(issue.getStart_date().substring(0, 8) + DateUtil.START_TIME);
@@ -161,7 +161,7 @@ public class IssueController {
 	@GetMapping(value = "input-issue.do")
 	public String inputIssue(Model model) {
 		
-		List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
+		List<Project> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
 		@SuppressWarnings("unchecked")
 		List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
 		@SuppressWarnings("unchecked")
@@ -195,7 +195,7 @@ public class IssueController {
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				bindingResult.rejectValue("file_name", fileInfo.getError_code());
 				
-				List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
+				List<Project> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
 				@SuppressWarnings("unchecked")
 				List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
 				@SuppressWarnings("unchecked")
@@ -230,7 +230,7 @@ public class IssueController {
 				bindingResult.rejectValue("contents", errorcode);
 			}
 			
-			List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
+			List<Project> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
 			@SuppressWarnings("unchecked")
 			List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
 			@SuppressWarnings("unchecked")

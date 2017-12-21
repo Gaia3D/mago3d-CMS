@@ -28,8 +28,8 @@ public class DataValidator implements Validator {
 			ValidationUtilsHelper.rejectIfEmptyOrWhitespace(errors, "data_id", "field.required");
 		}
 			
-		if(dataInfo.getData_group_id() <= 0) {
-			errors.rejectValue("data_group_id", "field.required", null, null);
+		if(dataInfo.getProject_id() <= 0) {
+			errors.rejectValue("project_id", "field.required", null, null);
 		}
 		ValidationUtilsHelper.rejectIfEmptyOrWhitespace(errors, "data_name", "field.required");
 	}

@@ -14,21 +14,21 @@ import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CacheName;
 import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.CommonCode;
-import com.gaia3d.domain.DataGroup;
-import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.ExternalService;
 import com.gaia3d.domain.Menu;
+import com.gaia3d.domain.OSType;
 import com.gaia3d.domain.Policy;
+import com.gaia3d.domain.Project;
 import com.gaia3d.domain.UserGroup;
 import com.gaia3d.domain.UserGroupMenu;
 import com.gaia3d.helper.HttpClientHelper;
 import com.gaia3d.security.Crypt;
 import com.gaia3d.service.APIService;
 import com.gaia3d.service.CommonCodeService;
-import com.gaia3d.service.DataGroupService;
 import com.gaia3d.service.DataService;
 import com.gaia3d.service.MenuService;
 import com.gaia3d.service.PolicyService;
+import com.gaia3d.service.ProjectService;
 import com.gaia3d.service.UserGroupService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +42,7 @@ public class CacheConfig {
 	@Autowired
 	private DataService dataService;
 	@Autowired
-	private DataGroupService dataGroupService;
+	private ProjectService projectService;
 //	@Autowired
 //	private LicenseService licenseService;
 	@Autowired
@@ -99,7 +99,7 @@ public class CacheConfig {
 		else if(cacheName == CacheName.POLICY) policy(cacheType);
 		else if(cacheName == CacheName.MENU) menu(cacheType);
 		else if(cacheName == CacheName.COMMON_CODE) commonCode(cacheType);
-		else if(cacheName == CacheName.DATA_GROUP) data(cacheType);
+		else if(cacheName == CacheName.PROJECT) data(cacheType);
 	}
 	
 	private void license(CacheType cacheType) {
@@ -157,36 +157,15 @@ public class CacheConfig {
 	 * @param cacheType
 	 */
 	private void data(CacheType cacheType) {
-		Map<String, Map<String, DataInfo>> dataGroupMap = new HashMap<>();
-		List<DataInfo> allDataInfoList = new ArrayList<>();
-		
-		// 1 Depth group 정보를 전부 가져옴
-		List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
-		// 1 그룹별 하위 object 정보들을 전부 가져옴
-		for(DataGroup dataGroup : dataGroupList) {
-			List<DataGroup> childGroupList = dataGroupService.getListDataGroupByAncestor(dataGroup.getData_group_id());
-//			List<DataInfo> allChildDataInfoList = new ArrayList<>();
-			for(DataGroup childDataGroup : childGroupList) {
-				DataInfo dataInfo = new DataInfo();
-				dataInfo.setData_group_id(childDataGroup.getData_group_id());
-//				allChildDataInfoList.addAll(dataService.getListDataByDataGroupId(dataInfo));
-				allDataInfoList.addAll(dataService.getListDataByDataGroupId(dataInfo));
-			}
-//			dataGroupMap.put(dataGroup.getData_group_key(), allChildDataInfoList);
+		List<Project> projectList = projectService.getListProject(new Project());
+		Map<Long, Project> projectMap = new HashMap<>();
+		for(Project project : projectList) {
+			projectMap.put(project.getProject_id(), project);
 		}
-		
-		Map<String, DataInfo> allDataInfoMap = new HashMap<>();
-		for(DataInfo dataInfo : allDataInfoList) {
-			allDataInfoMap.put(dataInfo.getData_key(), dataInfo);
-		}
-		
-		dataGroupMap.put("alldata", allDataInfoMap);
-		
-		CacheManager.setProjectDataGroupList(dataGroupList);
-		CacheManager.setDataGroupMap(dataGroupMap);
+		CacheManager.setProjectMap(projectMap);
 		
 		if(cacheType == CacheType.BROADCAST) {
-			callRemoteCache(CacheName.DATA_GROUP);
+			callRemoteCache(CacheName.PROJECT);
 		}
 	}
 
@@ -271,6 +250,11 @@ public class CacheConfig {
 	private void callRemoteCache(CacheName cacheName) {
 		
 		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@ callRemoteCache start! ");
+		if(propertiesConfig.getOsType().toUpperCase().equals(OSType.WINDOW.toString().toUpperCase())) {
+			log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@ OS Type = {}. skip callRemoteCache ", propertiesConfig.getOsType().toUpperCase());
+			return;
+		}
+				
 		// TODO 로컬, 이중화 등의 분기 처리가 생략되어 있음
 		List<ExternalService> remoteCacheServerList = CacheManager.getRemoteCacheServiceList();
 		for(ExternalService externalService : remoteCacheServerList) {

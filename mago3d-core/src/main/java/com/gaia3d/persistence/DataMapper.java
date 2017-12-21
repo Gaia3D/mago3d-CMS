@@ -1,8 +1,8 @@
 package com.gaia3d.persistence;
 
 import java.util.List;
+
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.gaia3d.domain.DataInfo;
 
@@ -36,11 +36,11 @@ public interface DataMapper {
 	List<DataInfo> getListData(DataInfo dataInfo);
 	
 	/**
-	 * Data 목록
+	 * 프로젝트별 Data 목록
 	 * @param dataInfo
 	 * @return
 	 */
-	List<DataInfo> getListDataByDataGroupId(DataInfo dataInfo);
+	List<DataInfo> getListDataByProjectId(DataInfo dataInfo);
 	
 	/**
 	 * data_group_id를 제외한 Data 목록
@@ -51,10 +51,10 @@ public interface DataMapper {
 	
 	/**
 	 * Data Key 중복 건수
-	 * @param data_key
+	 * @param dataInfo
 	 * @return
 	 */
-	Integer getDuplicationKeyCount(String data_key);
+	Integer getDuplicationKeyCount(DataInfo dataInfo);
 	
 	/**
 	 * Data 정보 취득
@@ -62,6 +62,20 @@ public interface DataMapper {
 	 * @return
 	 */
 	DataInfo getData(Long data_id);
+	
+	/**
+	 * 표시 순서
+	 * @param dvataInfo
+	 * @return
+	 */
+	Integer getViewOrderByParent(DataInfo dvataInfo);
+	
+	/**
+	 * 한 프로젝트 내 Root Parent 개수를 체크
+	 * @param dvataInfo
+	 * @return
+	 */
+	Integer getRootParentCount(DataInfo dvataInfo);
 	
 	/**
 	 * Data 등록

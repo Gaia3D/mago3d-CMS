@@ -7,7 +7,7 @@ drop table if exists issue_people cascade;
 -- 이슈
 create table issue (
 	issue_id					bigint				not null,
-	data_group_id				smallint			not null,
+	project_id					smallint			not null,
 	user_id						varchar(32)	 		not null,
 	
 	title						varchar(300)		not null,
@@ -19,9 +19,9 @@ create table issue (
 	data_key 					varchar(128) 		NOT NULL,
 	object_key 					varchar(256),
 	location 					geography(Point,4326),
-	latitude 					varchar(30),
-	longitude 					varchar(30),
-	height 						varchar(30),
+	latitude					numeric(13,10),
+	longitude					numeric(13,10),
+	height						numeric(7,3),
 	
 	year						char(4)				default to_char(now(), 'YYYY'),
 	month						varchar(2)			default to_char(now(), 'MM'),
@@ -39,7 +39,7 @@ create table issue (
 
 comment on table issue is '이슈';
 comment on column issue.issue_id is '고유번호';
-comment on column issue.data_group_id is '데이터 그룹';
+comment on column issue.project_id is '프로젝트 아이디';
 comment on column issue.user_id is '사용자 아이디';
 comment on column issue.title is '이슈명';
 comment on column issue.priority is '우선순위. common_code 동적 생성';

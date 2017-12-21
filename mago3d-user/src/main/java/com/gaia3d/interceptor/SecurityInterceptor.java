@@ -33,7 +33,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
     	String uri = request.getRequestURI();
     	String requestIp = WebUtil.getClientIp(request);
-    	log.info("## Requst URI = {}, Request Ip = {}", uri, requestIp);
+    	log.info("## Requst URI = {}, Request Ip = {}, header = {}", uri, requestIp, request.getHeader("X-Requested-With"));
     	
     	// 홈페이지는 통과
     	if(uri.indexOf("/homepage/") >= 0) {

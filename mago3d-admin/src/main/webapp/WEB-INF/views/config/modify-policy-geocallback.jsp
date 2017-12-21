@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div id="geocallback_tab">
 	<form:form id="policyGeoCallBack" modelAttribute="policy" method="post" onsubmit="return false;">
-		<form:hidden path="policy_id"/>
 	<table class="input-table scope-row">
 		<col class="col-label l" />
 		<col class="col-input" />
@@ -17,6 +16,15 @@
 	  		</td>
   		</tr>
   		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_callback_apiresult">api 처리 결과 Callback</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_callback_apiresult" cssClass="l" />
+				<form:errors path="geo_callback_apiresult" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
 			<th class="col-label l" scope="row">
 				<form:label path="geo_callback_selectedobject">Object Select Callback</form:label>
 			</th>

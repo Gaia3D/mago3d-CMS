@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaia3d.persistence.ProjectMapper">
+
+	<!-- project 목록 -->
+	<select id="getListProject" parameterType="project" resultType="project">
+		/* getListProject */
+		SELECT * 
+		FROM project
+		<if test="use_yn != null and use_yn != ''">
+	    WHERE use_yn = #{use_yn}
+	    </if>
+		ORDER BY view_order
+	</select>
+	
+	<!-- project -->
+	<select id="getProject" parameterType="long" resultType="project">
+		/* getProject */
+		SELECT * FROM project WHERE project_id = #{project_id} 
+	</select>
+	
+	<!-- project by geo -->
+	<select id="getProjectByGeo" parameterType="project" resultType="project">
+		/* getProjectByGeo */
+		SELECT *, 
+			ST_Distance(
+				ST_GeographyFromText('SRID=4326;POINT('||longitude||' '||latitude||')'), 
+				ST_GeographyFromText(#{location})
+			) AS distance
+		FROM project
+		WHERE use_yn = 'Y'
+		ORDER BY distance
+		LIMIT 1
+	</select>
+	
+	<!-- project 아이디 중복 체크 -->
+	<select id="getDuplicationKeyCount" parameterType="string" resultType="int">
+		/* getDuplicationKeyCount */
+		SELECT COUNT(project_key) AS count 
+		FROM project
+		WHERE project_key = #{project_key}
+	</select>
+	
+	<!-- project 등록 -->
+	<insert id="insertProject" parameterType="project" >
+		/* insertProject */
+		<selectKey keyProperty="project_id" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('project_seq')
+  		</selectKey>
+		INSERT INTO project(
+			project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration, description
+		) values(
+			#{project_id}, #{project_key}, #{project_name}, #{view_order}, #{use_yn}, #{latitude}, #{longitude}, #{height}, #{duration}, #{description}
+		)
+	</insert>
+	
+	<!-- project 수정 -->
+	<update id="updateProject" parameterType="project">
+		/* updateProject */
+		UPDATE project
+		SET project_key = #{project_key},
+			project_name = #{project_name},
+			<if test="view_order != null and view_order > 0">
+			view_order = #{view_order},
+			</if>
+			use_yn = #{use_yn},
+			latitude = #{latitude},
+			longitude = #{longitude},
+			height = #{height},
+			duration = #{duration},
+			description = #{description}
+		WHERE project_id = #{project_id}
+	</update>
+	
+	<!-- project 삭제 -->
+	<delete id="deleteProject" parameterType="long">
+		/* deleteProject */
+		DELETE FROM project WHERE project_id = #{project_id} AND default_yn != 'Y'
+	</delete>
+</mapper>

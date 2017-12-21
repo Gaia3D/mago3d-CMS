@@ -24,14 +24,14 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CommonCode;
-import com.gaia3d.domain.DataGroup;
+import com.gaia3d.domain.Project;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.IssueComment;
 import com.gaia3d.domain.IssueFile;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.UserSession;
-import com.gaia3d.service.DataGroupService;
+import com.gaia3d.service.ProjectService;
 import com.gaia3d.service.IssueService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.FileUtil;
@@ -57,7 +57,7 @@ public class IssueController {
 	private IssueValidator issueValidator;
 	
 	@Autowired
-	private DataGroupService dataGroupService;
+	private ProjectService projectService;
 	@Autowired
 	private IssueService issueService;
 	
@@ -106,7 +106,10 @@ public class IssueController {
 	@GetMapping(value = "input-issue.do")
 	public String inputIssue(Model model) {
 		
-		List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
+		Project project = new Project();
+		project.setUse_yn(Project.IN_USE);
+		List<Project> projectList = projectService.getListProject(project);
+		
 		@SuppressWarnings("unchecked")
 		List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
 		@SuppressWarnings("unchecked")
@@ -114,7 +117,7 @@ public class IssueController {
 		
 		Issue issue = new Issue();
 		model.addAttribute(issue);
-		model.addAttribute("dataGroupList", dataGroupList);
+		model.addAttribute("projectList", projectList);
 		model.addAttribute("issuePriorityList", issuePriorityList);
 		model.addAttribute("issueTypeList", issueTypeList);
 		
@@ -140,14 +143,17 @@ public class IssueController {
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				bindingResult.rejectValue("file_name", fileInfo.getError_code());
 				
-				List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
+				Project project = new Project();
+				project.setUse_yn(Project.IN_USE);
+				List<Project> projectList = projectService.getListProject(project);
+				
 				@SuppressWarnings("unchecked")
 				List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
 				@SuppressWarnings("unchecked")
 				List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
 				
 				model.addAttribute(issue);
-				model.addAttribute("dataGroupList", dataGroupList);
+				model.addAttribute("projectList", projectList);
 				model.addAttribute("issuePriorityList", issuePriorityList);
 				model.addAttribute("issueTypeList", issueTypeList);
 				
@@ -175,14 +181,17 @@ public class IssueController {
 				bindingResult.rejectValue("contents", errorcode);
 			}
 			
-			List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
+			Project project = new Project();
+			project.setUse_yn(Project.IN_USE);
+			List<Project> projectList = projectService.getListProject(project);
+			
 			@SuppressWarnings("unchecked")
 			List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
 			@SuppressWarnings("unchecked")
 			List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
 			
 			model.addAttribute(issue);
-			model.addAttribute("dataGroupList", dataGroupList);
+			model.addAttribute("projectList", projectList);
 			model.addAttribute("issuePriorityList", issuePriorityList);
 			model.addAttribute("issueTypeList", issueTypeList);
 			

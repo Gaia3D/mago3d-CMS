@@ -28,11 +28,11 @@
 		    				<form:form id="searchForm" modelAttribute="dataInfo" method="post" action="/data/list-data.do" onsubmit="return searchCheck();">
 							<div class="input-group row">
 								<div class="input-set">
-									<label for="data_group_id"><spring:message code='data.group.name'/></label>
-									<form:select path="data_group_id" cssClass="select">
+									<label for="project_id">프로젝트명</label>
+									<form:select path="project_id" cssClass="select">
 										<option value="0"><spring:message code='all'/></option>
-<c:forEach var="dataGroup" items="${dataGroupList}">
-										<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name}</option>
+<c:forEach var="project" items="${projectList}">
+										<option value="${project.project_id}">${project.project_name}</option>
 </c:forEach>
 									</form:select>
 								</div>
@@ -127,6 +127,8 @@
 									<col class="col-checkbox" />
 									<col class="col-number" />
 									<col class="col-name" />
+									<col class="col-name" />
+									<col class="col-number" />
 									<col class="col-id" />
 									<col class="col-name" />
 									<col class="col-toggle" />
@@ -134,36 +136,32 @@
 									<col class="col-toggle" />
 									<col class="col-toggle" />
 									<col class="col-toggle" />
-									<col class="col-toggle" />
-									<col class="col-toggle" />
-									<col class="col-toggle" />
-									<col class="col-toggle" />
+									<col class="col-name" />
 									<col class="col-date" />
 									<col class="col-functions" />
 									<thead>
 										<tr>
 											<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
 											<th scope="col" class="col-number"><spring:message code='number'/></th>
-											<th scope="col" class="col-name"><spring:message code='user.group.name'/></th>
+											<th scope="col" class="col-name">프로젝트명</th>
+											<th scope="col" class="col-name">상위 Node</th>
+											<th scope="col" class="col-number">Depth</th>
 											<th scope="col" class="col-id"><spring:message code='key'/></th>
 											<th scope="col" class="col-name"><spring:message code='name'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='height'/></th>
-											<th scope="col" class="col-toggle">Heading</th>
-											<th scope="col" class="col-toggle">Pitch</th>
-											<th scope="col" class="col-toggle">Roll</th>
 											<th scope="col" class="col-toggle"><spring:message code='status'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='use.not'/></th>
-											<th scope="col" class="col-toggle"><spring:message code='insert.type'/></th>
-											<th scope="col" class="col-date"><spring:message code='search.insert.date'/></th>
+											<th scope="col" class="col-name">속성</th>
+											<th scope="col" class="col-date">등록일</th>
 											<th scope="col" class="col-functions"><spring:message code='modified.and.inser'/></th>
 										</tr>
 									</thead>
 									<tbody>
 <c:if test="${empty dataList }">
 										<tr>
-											<td colspan="16" class="col-none"><spring:message code='data.no.data'/></td>
+											<td colspan="15" class="col-none"><spring:message code='data.no.data'/></td>
 										</tr>
 </c:if>
 <c:if test="${!empty dataList }">
@@ -173,15 +171,14 @@
 												<input type="checkbox" id="data_id_${dataInfo.data_id}" name="data_id" value="${dataInfo.data_id}" />
 											</td>
 											<td class="col-number">${pagination.rowNumber - status.index }</td>
-											<td class="col-name"><a href="#" class="view-group-detail" onclick="detailDataGroupInfo('${dataInfo.data_group_id }'); return false;">${dataInfo.data_group_name }</a></td>
+											<td class="col-name"><a href="#" class="view-group-detail" onclick="detailProject('${dataInfo.project_id }'); return false;">${dataInfo.project_name }</a></td>
+											<td class="col-id">${dataInfo.parent }</td>
+											<td class="col-id">${dataInfo.depth }</td>
 											<td class="col-id">${dataInfo.data_key }</td>
 											<td class="col-name"><a href="/data/detail-data.do?data_id=${dataInfo.data_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}">${dataInfo.data_name }</a></td>
 											<td class="col-toggle">${dataInfo.latitude}</td>
 											<td class="col-toggle">${dataInfo.longitude}</td>
 											<td class="col-toggle">${dataInfo.height}</td>
-											<td class="col-toggle">${dataInfo.heading}</td>
-											<td class="col-toggle">${dataInfo.pitch}</td>
-											<td class="col-toggle">${dataInfo.roll}</td>
 											<td class="col-toggle">
 		<c:if test="${dataInfo.status eq '0'}">
 												<span class="icon-glyph glyph-on on"></span>
@@ -192,7 +189,7 @@
 												<span class="icon-text">${dataInfo.viewStatus }</span>
 											</td>
 											<td class="col-toggle">${dataInfo.public_yn }</td>
-											<td class="col-toggle">${dataInfo.viewDataInsertType }</td>
+											<td class="col-name"><a href="#" onclick="viewAttributes('${dataInfo.data_id }'); return false;">속성</a></td>
 											<td class="col-date">${dataInfo.viewInsertDate }</td>
 											<td class="col-functions">
 												<span class="button-group">
@@ -209,7 +206,7 @@
 							
 							<%-- 엑셀 다운로드 --%>
 							<form:form id="excelDataInfo" modelAttribute="excelDataInfo" method="post" action="/data/download-excel-data.do">
-								<form:hidden path="data_group_id" />
+								<form:hidden path="project_id" />
 								<form:hidden path="search_word" />
 								<form:hidden path="search_option" />
 								<form:hidden path="search_value" />
@@ -235,11 +232,11 @@
 			<col class="col-label" />
 			<col class="col-data" />
 			<tr>
-				<th class="col-label" scope="row"><spring:message code='data.group.name'/></th>
+				<th class="col-label" scope="row">프로젝트명</th>
 				<td id="group_name_info" class="col-data"></td>
 			</tr>
 			<tr>
-				<th class="col-label" scope="row"><spring:message code='data.group.name.en'/></th>
+				<th class="col-label" scope="row">프로젝트명(영문)</th>
 				<td id="group_key_info" class="col-data"></td>
 			</tr>
 			<tr>
@@ -286,8 +283,8 @@
 	$(document).ready(function() {
 		initJqueryCalendar();
 		
-		initSelect(	new Array("data_group_id", "status", "data_insert_type", "search_word", "search_option", "search_value", "order_word", "order_value", "list_counter"), 
-					new Array("${dataInfo.data_group_id}", "${dataInfo.status}", "${dataInfo.data_insert_type}", "${dataInfo.search_word}", 
+		initSelect(	new Array("project_id", "status", "data_insert_type", "search_word", "search_option", "search_value", "order_word", "order_value", "list_counter"), 
+					new Array("${dataInfo.project_id}", "${dataInfo.status}", "${dataInfo.data_insert_type}", "${dataInfo.search_word}", 
 							"${dataInfo.search_option}", "${dataInfo.search_value}", "${dataInfo.order_word}", "${dataInfo.order_value}", "${pagination.pageRows }"));
 		initCalendar(new Array("start_date", "end_date"), new Array("${dataInfo.start_date}", "${dataInfo.end_date}"));
 		$( ".select" ).selectmenu();

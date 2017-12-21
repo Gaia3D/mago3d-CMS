@@ -4,16 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gaia3d.domain.CacheManager;
-import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.persistence.DataMapper;
 import com.gaia3d.service.DataService;
-import com.gaia3d.util.StringUtil;
 
 /**
  * Data
@@ -62,8 +58,8 @@ public class DataServiceImpl implements DataService {
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<DataInfo> getListDataByDataGroupId(DataInfo dataInfo) {
-		return dataMapper.getListDataByDataGroupId(dataInfo);
+	public List<DataInfo> getListDataByProjectId(DataInfo dataInfo) {
+		return dataMapper.getListDataByProjectId(dataInfo);
 	}
 	
 	/**
@@ -78,12 +74,12 @@ public class DataServiceImpl implements DataService {
 	
 	/**
 	 * Data Key 중복 건수
-	 * @param data_key
+	 * @param dataInfo
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public Integer getDuplicationKeyCount(String data_key) {
-		return dataMapper.getDuplicationKeyCount(data_key);
+	public Integer getDuplicationKeyCount(DataInfo dataInfo) {
+		return dataMapper.getDuplicationKeyCount(dataInfo);
 	}
 	
 	/**
@@ -94,6 +90,26 @@ public class DataServiceImpl implements DataService {
 	@Transactional(readOnly=true)
 	public DataInfo getData(Long data_id) {
 		return dataMapper.getData(data_id);
+	}
+	
+	/**
+	 * 표시 순서
+	 * @param dvataInfo
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public Integer getViewOrderByParent(DataInfo dvataInfo) {
+		return dataMapper.getViewOrderByParent(dvataInfo);
+	}
+	
+	/**
+	 * 한 프로젝트 내 Root Parent 개수를 체크
+	 * @param dvataInfo
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public Integer getRootParentCount(DataInfo dvataInfo) {
+		return dataMapper.getRootParentCount(dvataInfo);
 	}
 	
 	/**

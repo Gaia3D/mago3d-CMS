@@ -103,7 +103,7 @@
 										<th scope="col" class="col-number"><spring:message code='number'/></th>
 										<th scope="col" class="col-id"><spring:message code='id'/></th>
 										<th scope="col" class="col-name"><spring:message code='name'/></th>
-										<th scope="col" class="col-toggle"><spring:message code='data.group'/></th>
+										<th scope="col" class="col-toggle">프로젝트명</th>
 										<th scope="col" class="col-title"><spring:message code='title'/></th>
 										<th scope="col" class="col-toggle"><spring:message code='user.device.priority'/></th>
 										<th scope="col" class="col-toggle"><spring:message code='type'/></th>
@@ -126,7 +126,7 @@
 										<td class="col-number">${pagination.rowNumber - status.index}</td>
 										<td class="col-id">${issue.user_id}</td>
 										<td class="col-name">${issue.user_name}</td>
-										<td class="col-toggle">${issue.data_group_name}</td>
+										<td class="col-toggle">${issue.project_name}</td>
 										<td class="col-title">
 											<a href="/issue/detail-issue.do?issue_id=${issue.issue_id}&amp;pageNo=${pagination.pageNo}${pagination.searchParameters}">${issue.title}</a>
 											<span class="table-desc">

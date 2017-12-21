@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div id="security_tab">
 	<form:form id="policySecurity" modelAttribute="policy" method="post" onsubmit="return false;">
-		<form:hidden path="policy_id"/>
 	<table class="input-table scope-row">
 		<col class="col-label l" />
 		<col class="col-input" />

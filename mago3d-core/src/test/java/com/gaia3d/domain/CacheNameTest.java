@@ -12,7 +12,7 @@ public class CacheNameTest {
 		System.out.println(name.toString());
 		System.out.println(type.toString());
 		
-		if(CacheName.DATA_GROUP == name) {
+		if(CacheName.PROJECT == name) {
 			System.out.println("equals");
 		}
 	}

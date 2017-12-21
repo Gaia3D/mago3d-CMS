@@ -22,7 +22,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CommonCode;
-import com.gaia3d.domain.DataGroup;
+import com.gaia3d.domain.Project;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.Pagination;
@@ -140,9 +140,20 @@ public class HomepageController {
 			issueList = issueService.getListIssueByUserId(issue);
 		}
 		
-		List<DataGroup> projectDataGroupList = CacheManager.getProjectDataGroupList();
-		Map<String, Map<String, DataInfo>> dataGroupMap = CacheManager.getDataGroupMap();
 		Policy policy = CacheManager.getPolicy();
+		List<Project> projectList = CacheManager.getProjectList();
+		Map<String, String> initProjectJsonMap = new HashMap<>();
+		int initProjectsLength = 0;
+		String defaultProjects = policy.getGeo_data_default_projects();
+		String[] initProjects = null;
+		if(defaultProjects != null && !"".equals(defaultProjects)) {
+			initProjects = defaultProjects.split(",");
+			for(String projectId : initProjects) {
+				initProjectJsonMap.put(projectId, CacheManager.getProjectDataJson(Long.valueOf(projectId)));
+			}
+			initProjectsLength = initProjects.length;
+		}
+				
 		@SuppressWarnings("unchecked")
 		List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
 		@SuppressWarnings("unchecked")
@@ -163,8 +174,9 @@ public class HomepageController {
 		model.addAttribute(pagination);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("issueList", issueList);
-		model.addAttribute("projectDataGroupList", projectDataGroupList);
-		model.addAttribute("dataGroupMap", mapper.writeValueAsString(dataGroupMap));
+		model.addAttribute("projectList", projectList);
+		model.addAttribute("initProjectsLength", initProjectsLength);
+		model.addAttribute("initProjectJsonMap", mapper.writeValueAsString(initProjectJsonMap));
 		model.addAttribute("cache_version", policy.getContent_cache_version());
 		model.addAttribute("policyJson", mapper.writeValueAsString(policy));
 		model.addAttribute("issuePriorityList", issuePriorityList);
@@ -172,7 +184,8 @@ public class HomepageController {
 		
 		log.info("@@@@@@ viewName = {}", viewName);
 		log.info("@@@@@@ policy = {}", mapper.writeValueAsString(policy));
-		log.info("@@@@@@ dataGroupMap = {}", mapper.writeValueAsString(dataGroupMap));
+		log.info("@@@@@@ initProjectsLength = {}", initProjectsLength);
+		log.info("@@@@@@ initProjectJsonMap = {}", mapper.writeValueAsString(initProjectJsonMap));
 		
 		return "/homepage/" + lang + "/" + viewName;
 	}
@@ -192,7 +205,7 @@ public class HomepageController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-issue.do", produces="application/json; charset=utf8")
+	@RequestMapping(value = "ajax-list-issue.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListIssue(HttpServletRequest request, Issue issue, @RequestParam(defaultValue="1") String pageNo) {
 		
@@ -220,7 +233,7 @@ public class HomepageController {
 			DataInfo dataInfo = null;
 			if(DataInfo.DATA_NAME.equals(issue.getSearch_word())) {
 				dataInfo = new DataInfo();
-				dataInfo.setData_group_id(issue.getData_group_id());
+				dataInfo.setProject_id(issue.getProject_id());
 				dataInfo.setSearch_word(issue.getSearch_word());
 				dataInfo.setSearch_option(issue.getSearch_option());
 				dataInfo.setSearch_value(issue.getSearch_value());

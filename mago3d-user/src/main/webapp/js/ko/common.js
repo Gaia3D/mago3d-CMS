@@ -249,3 +249,26 @@ function changeLanguage(lang, href) {
 		return;
 	}
 }
+
+function ajaxCall(url, info, successCallback, errorCallback, isClickEnable, ...theArgs) {
+	$.ajax({
+		url: url,
+		type: "POST",
+		data: info,
+		dataType: "json",
+		headers: { "X-mago3D-Header" : "mago3D"},
+		success : function(msg) {
+			successCallback(msg, theArgs);
+			if(isClickEnable !== null && isClickEnable !== undefined) isClickEnable = true;
+		},
+		error : function(request, status, error) {
+			errorCallback(request, status, error);
+			if(isClickEnable !== null && isClickEnable !== undefined) isClickEnable = true;
+		}
+	});
+}
+
+function errorCallback(request, status, error) {
+	alert(JS_MESSAGE["ajax.error.message"]);
+	console.log("code : " + request.status + "\n" + "message : " + request.responseText + "\n" + "error : " + error);
+}

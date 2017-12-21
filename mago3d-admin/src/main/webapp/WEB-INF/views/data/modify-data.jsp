@@ -41,41 +41,55 @@
 									<col class="col-input" />
 									<tr>
 										<th class="col-label" scope="row">
+											<form:label path="project_id">프로젝트명</form:label>
+											<span class="icon-glyph glyph-emark-dot color-warning"></span>
+										</th>
+										<td class="col-input">
+											<select id="project_id" name="project_id" class="select" >
+	<c:forEach var="project" items="${projectList }">
+												<option value="${project.project_id }">${project.project_name }</option>
+	</c:forEach>									
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th class="col-label" scope="row">
+											<form:label path="parent">상위 Node</form:label>
+											<span class="icon-glyph glyph-emark-dot color-warning"></span>
+										</th>
+										<td class="col-input">
+											<form:hidden path="parent" />
+											<form:hidden path="parent_depth" />
+				 							<form:input path="parent_name" cssClass="l" readonly="true" />
+											<input type="button" id="parentFind" value="찾기" />
+										</td>
+									</tr>
+									<tr>
+										<th class="col-label" scope="row">
 											<form:label path="data_key">Key</form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<spring:message code='overlap.check' var='overLap'/>
 										<td class="col-input">
 											<form:hidden path="duplication_value"/>
-											<form:input path="data_key" cssClass="m" />
-					  						<input type="button" id="data_duplication_buttion" value="${ overLap}" />
+											<form:input path="data_key" cssClass="l" />
+					  						<input type="button" id="data_duplication_buttion" value="${overLap}" />
 					  						<form:errors path="data_key" cssClass="error" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="data_group_name"><spring:message code='data.group'/></form:label>
+											<form:label path="data_name"><spring:message code='name'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
-											<form:hidden path="data_group_id" />
-				 							<form:input path="data_group_name" cssClass="m" readonly="true" />
-											<input type="button" id="data_group_buttion" value="<spring:message code='user.input.group.select'/>" />
-										</td>
-									</tr>
-									<tr>
-										<th class="col-label" scope="row">
-											<form:label path="data_name"><spring:message code='name'/></form:label>
-										</th>
-										<td class="col-input">
-											<form:input path="data_name" class="m" />
+											<form:input path="data_name" class="l" />
 					  						<form:errors path="data_name" cssClass="error" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
 											<form:label path="latitude"><spring:message code='lat'/></form:label>
-											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
 											<form:input path="latitude" class="m" />
@@ -85,7 +99,6 @@
 									<tr>
 										<th class="col-label" scope="row">
 											<form:label path="longitude"><spring:message code='lon'/></form:label>
-											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
 											<form:input path="longitude" class="m" />
@@ -95,7 +108,6 @@
 									<tr>
 										<th class="col-label" scope="row">
 											<form:label path="height"><spring:message code='height'/></form:label>
-											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
 											<form:input path="height" class="m" />
@@ -105,7 +117,6 @@
 									<tr>
 										<th class="col-label" scope="row">
 											<form:label path="heading">Heading</form:label>
-											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
 											<form:input path="heading" class="m" />
@@ -115,7 +126,6 @@
 									<tr>
 										<th class="col-label" scope="row">
 											<form:label path="pitch">Pitch</form:label>
-											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
 											<form:input path="pitch" class="m" />
@@ -125,7 +135,6 @@
 									<tr>
 										<th class="col-label" scope="row">
 											<form:label path="roll">Roll</form:label>
-											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
 											<form:input path="roll" class="m" />
@@ -134,20 +143,27 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="public_yn"><spring:message code='use.not'/></form:label>
+											<form:label path="attributes">속성</form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
-										<spring:message code='use' var='use'/>
-										<spring:message code='no.use' var='noUse'/>
 										<td class="col-input">
-											<form:radiobutton path="public_yn" value="Y" label="${use}"/>
-											<form:radiobutton path="public_yn" value="N" label="${noUse}" />
+											<form:input path="attributes" class="xl" />
+					  						<form:errors path="attributes" cssClass="error" />
+										</td>
+									</tr>
+									<tr>
+										<th class="col-label" scope="row">
+											<form:label path="description">설명</form:label>
+										</th>
+										<td class="col-input">
+											<form:input path="description" class="xl" />
+					  						<form:errors path="description" cssClass="error" />
 										</td>
 									</tr>
 								</table>
 								
 								<div class="button-group">
-									<div id="insertDataLink" class="center-buttons">
+									<div class="center-buttons">
 										<input type="submit" value="<spring:message code='modified'/>" onclick="updateData();" />
 										<a href="/data/list-data.do" class="button"><spring:message code='list'/></a>
 									</div>
@@ -164,96 +180,35 @@
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 	
 	<!-- Dialog -->
-	<div class="dialog" title="<spring:message code='data.group'/>">
-		<div class="dialog-data-group">
-<c:if test="${!empty dataGroupList }">
-			<ul>
-	<c:set var="groupDepthValue" value="0" />
-	<c:forEach var="dataGroup" items="${dataGroupList }" varStatus="status">
-		<c:if test="${groupDepthValue eq '0' && dataGroup.depth eq 1 }">
-				<li>
-					<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
-					<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
-		</c:if>
-		<c:if test="${groupDepthValue eq '1' && dataGroup.depth eq 1 }">
-				</li>
-				<li>
-					<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
-					<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
-		</c:if>
-		<c:if test="${groupDepthValue eq '1' && dataGroup.depth eq 2 }">
-					<ul>
-						<li>
-							<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
-							<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
-		</c:if>
-		<c:if test="${groupDepthValue eq '2' && dataGroup.depth eq 1 }">
-						</li>
-					</ul>
-				</li>
-				<li>
-					<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
-					<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
-		</c:if>
-		<c:if test="${groupDepthValue eq '2' && dataGroup.depth eq 2 }">
-						</li>
-						<li>
-							<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
-							<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
-		</c:if>
-		<c:if test="${groupDepthValue eq '2' && dataGroup.depth eq 3 }">
-							<ul style="padding-left: 30px;">
-								<li>
-									<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
-									<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
-		</c:if>
-		<c:if test="${groupDepthValue eq '3' && dataGroup.depth eq 1 }">
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
-					<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
-		</c:if>		
-		<c:if test="${groupDepthValue eq '3' && dataGroup.depth eq 2 }">
-								</li>
-							</ul>
-						</li>
-						<li>
-							<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.data_group_name }" />
-							<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.data_group_name }</label>
-		</c:if>			
-		<c:if test="${groupDepthValue eq '3' && dataGroup.depth eq 3 }">
-								</li>
-								<li>
-									<input type="radio" id="radio_group_${dataGroup.data_group_id }" name="radio_group" value="${dataGroup.data_group_id }_${dataGroup.group_name }" />
-									<label for="radio_group_${dataGroup.data_group_id }">${dataGroup.group_name }</label>
-		</c:if>	
-		<c:if test="${dataGroup.depth eq '3' && status.last }">
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</li>
-		</c:if>
-		<c:if test="${dataGroup.depth eq '2' && status.last }">
-						</li>
-					</ul>
-				</li>
-		</c:if>
-		<c:if test="${dataGroup.depth eq '1' && status.last }">
-				</li>
-		</c:if>
-		<c:set var="groupDepthValue" value="${dataGroup.depth }" />			
-	</c:forEach>
-			</ul>
-</c:if>
-		</div>
-			
+	<div id="dataDialog" class="dataDialog">
+		<table class="list-table scope-col">
+			<col class="col-number" />
+			<col class="col-name" />
+			<col class="col-id" />
+			<col class="col-name" />
+			<col class="col-toggle" />
+			<col class="col-toggle" />
+			<col class="col-toggle" />
+			<col class="col-toggle" />
+			<col class="col-toggle" />
+			<thead>
+				<tr>
+					<th scope="col" class="col-number"><spring:message code='number'/></th>
+					<th scope="col" class="col-number">Depth</th>
+					<th scope="col" class="col-id"><spring:message code='key'/></th>
+					<th scope="col" class="col-name"><spring:message code='name'/></th>
+					<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
+					<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
+					<th scope="col" class="col-toggle"><spring:message code='height'/></th>
+					<th scope="col" class="col-toggle">속성</th>
+					<th scope="col" class="col-toggle">선택</th>
+				</tr>
+			</thead>
+			<tbody id="projectDataList">
+			</tbody>
+		</table>
 		<div class="button-group">
-			<input type="submit" id="button_groupSelect" name="button_groupSelect" value="선택" />
+			<input type="button" id="rootParentSelect" class="button" value="최상위(ROOT) 폴더로 저장"/>
 		</div>
 	</div>
 
@@ -264,35 +219,135 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$( ".tabs" ).tabs();
+		$(".select").selectmenu();
+		$("#project_id").val(${project.project_id});
 	});
 	
-	// 그룹 선택
-	$( "#data_group_buttion" ).on( "click", function() {
-		dialog.dialog( "open" );
-	});
-	var dialog = $( ".dialog" ).dialog({
+	var dataDialog = $( ".dataDialog" ).dialog({
 		autoOpen: false,
 		height: 600,
-		width: 600,
+		width: 1200,
 		modal: true,
+		overflow : "auto",
 		resizable: false
+	});
+	
+	// 부모 찾기
+	$( "#parentFind" ).on( "click", function() {
+		dataDialog.dialog( "open" );
+		dataDialog.dialog( "option", "title", $("#project_id option:selected").prop("label"));
+		drawDataList($("#project_id").val());
+	});
+	
+	function drawDataList(projectId) {
+		if(projectId === "") {
+			alert(JS_MESSAGE["project.project_id.empty"]);
+			return false;
+		}
+		var info = "project_id=" + projectId;
+		$.ajax({
+			url: "/data/ajax-list-data-by-project-id.do",
+			type: "POST",
+			data: info,
+			cache: false,
+			dataType: "json",
+			success: function(msg){
+				if(msg.result == "success") {
+					var content = "";
+					var dataList = msg.dataList;
+					if(dataList == null || dataList.length == 0) {
+						content = content
+							+ 	"<tr>"
+							+ 	"	<td colspan=\"9\" class=\"col-none\">데이터가 존재하지 않습니다.</td>"
+							+ 	"</tr>";
+					} else {
+						dataListCount = dataList.length;
+						var preViewDepth = "";
+						var preDataId = 0;
+						var preDepth = 0;
+						for(i=0; i<dataListCount; i++ ) {
+							var dataInfo = dataList[i];
+							var viewAttributes = dataInfo.attributes;
+							var viewDepth = getViewDepth(preViewDepth, dataInfo.data_id, preDepth, dataInfo.depth);
+							if(viewAttributes !== null && viewAttributes !== "" && viewAttributes.length > 20) viewAttributes = viewAttributes.substring(0, 20) + "...";
+							content = content 
+								+ 	"<tr>"
+								+ 	"	<td class=\"col-number\">" + (i + 1) + " </td>"
+								+ 	"	<td class=\"col-id\">" + viewDepth + "</td>"
+								+ 	"	<td class=\"col-id\">" + dataInfo.data_key + "</td>"
+								+ 	"	<td class=\"col-name\">" + dataInfo.data_name + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + dataInfo.latitude + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + dataInfo.longitude + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + dataInfo.height + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + viewAttributes + "</td>"
+								+ 	"	<td class=\"col-toggle\"><a href=\"#\" onclick=\"confirmParent('" 
+								+ 									dataInfo.data_id + "', '" + dataInfo.data_name + "', '" + dataInfo.depth + "'); return false;\">선택</a></td>"
+								+ 	"	</tr>";
+								
+							preDataId = dataInfo.data_id;
+							preDepth = dataInfo.depth;
+							preViewDepth = viewDepth;
+						}
+					}
+					
+					$("#projectDataList").empty();
+					$("#projectDataList").html(content);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error:function(request, status, error) {
+				//alert(JS_MESSAGE["ajax.error.message"]);
+				alert(" code : " + request.status + "\n" + ", message : " + request.responseText + "\n" + ", error : " + error);
+    		}
+		});
+	}
+	
+	function getViewDepth(preViewDepth, dataId, preDepth, depth) {
+		var result = "";
+		if(depth === 1) return result + dataId;
+		
+		if(preDepth === depth) {
+			// 형제
+			if(preViewDepth.indexOf(".") >= 0) {
+				result =  preViewDepth.substring(0, preViewDepth.lastIndexOf(".") + 1) + dataId;
+			} else {
+				result = dataId;
+			}
+		} else if(preDepth < depth) {
+			// 자식
+			result = preViewDepth + "." + dataId;				
+		} else {
+			result =  preViewDepth.substring(0, preViewDepth.lastIndexOf("."));
+			result =  result.substring(0, result.lastIndexOf(".") + 1) + dataId;
+		}
+		return result;
+	}
+	
+	// 상위 Node
+	function confirmParent(dataId, dataName, depth) {
+		$("#parent").val(dataId);
+		$("#parent_name").val(dataName);
+		$("#parent_depth").val(depth);
+		dataDialog.dialog( "close" );
+	}
+	
+	$( "#rootParentSelect" ).on( "click", function() {
+		$("#parent").val(0);
+		$("#parent_name").val("최상위 Node");
+		$("#parent_depth").val(1);
+		dataDialog.dialog( "close" );
 	});
 	
 	// 아이디 중복 확인
 	$( "#data_duplication_buttion" ).on( "click", function() {
-		var oldDataKey = $("#old_data_key").val();
 		var dataKey = $("#data_key").val();
 		if (dataKey == "") {
 			alert(JS_MESSAGE["data.key.empty"]);
-			$("#data_key").focus();
-			return false;
-		} else if(oldDataKey === dataKey ) {
-			alert(JS_MESSAGE["data.key.same"]);
-			$("#data_key").focus();
+			$("#data_id").focus();
 			return false;
 		}
-			
-		var info = "data_key=" + dataKey + "&old_data_key=";
+		var info = "project_id=" + $("#project_id").val() + "&data_key=" + dataKey;
 		$.ajax({
 			url: "/data/ajax-data-key-duplication-check.do",
 			type: "POST",
@@ -314,35 +369,14 @@
 					alert(JS_MESSAGE[msg.result]);
 				}
 			},
-			error:function(request,status,error) {
+			error:function(request, status, error) {
 				//alert(JS_MESSAGE["ajax.error.message"]);
-				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				alert(" code : " + request.status + "\n" + ", message : " + request.responseText + "\n" + ", error : " + error);
     		}
 		});
 	});
 	
-	// 그룹 선택
-	$( "#button_groupSelect" ).on( "click", function() {
-		var radioObj = $(":radio[name=radio_group]:checked").val();
-		if (!radioObj) {
-			alert(JS_MESSAGE["check.group.required"]);
-	        return false;
-	    } else {
-	    	var splitValues = radioObj.split("_");
-	    	var dataGroupName = "";
-	    	for(var i = 1; i < splitValues.length; i++) {
-	    		dataGroupName = dataGroupName + splitValues[i];
-	    		if(i != splitValues.length - 1) {
-	    			dataGroupName = dataGroupName + "_";
-	    		}
-			}	    	
-	    	$("#data_group_id").val(splitValues[0]);
-			$("#data_group_name").val(dataGroupName);
-			dialog.dialog( "close" );
-	    }
-	});
-	
-	// Data 정보 저장
+	// Data 정보 수정
 	var updateDataFlag = true;
 	function updateData() {
 		if (checkData() == false) {
@@ -356,21 +390,20 @@
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
 						alert(JS_MESSAGE["data.update"]);
+						$("#parent").val("");
 						$("#duplication_value").val("");
 					} else {
 						alert(JS_MESSAGE[msg.result]);
 					}
-					console.log("=========== " + msg.result);
-					console.log("=========== " + msg);
 					updateDataFlag = true;
 				},
 				error:function(request,status,error){
 			        alert(JS_MESSAGE["ajax.error.message"]);
+			        alert(" code : " + request.status + "\n" + ", message : " + request.responseText + "\n" + ", error : " + error);
 			        updateDataFlag = true;
 				}
 			});
@@ -381,48 +414,28 @@
 	}
 	
 	function checkData() {
+		if ($("#parent").val() == "") {
+			alert(JS_MESSAGE["data.parent.empty"]);
+			$("#parent_name").focus();
+			return false;
+		}
 		if ($("#data_key").val() == "") {
 			alert(JS_MESSAGE["data.key.empty"]);
 			$("#data_key").focus();
 			return false;
 		}
-		if($("#duplication_value").val() == "1") {
-			alert(JS_MESSAGE["data.key.duplication_value.already"]);
-			return false;
+		if($("#data_key").val() !== $("#old_data_key").val()) {
+			if($("#duplication_value").val() == null || $("#duplication_value").val() == "") {
+				alert(JS_MESSAGE["data.key.duplication_value.check"]);
+				return false;
+			} else if($("#duplication_value").val() == "1") {
+				alert(JS_MESSAGE["data.key.duplication_value.already"]);
+				return false;
+			}
 		}
-		if ($("#data_group_id").val() == "") {
-			alert(JS_MESSAGE["data.group.id.empty"]);
-			$("#data_group_id").focus();
-			return false;
-		}
-		if ($("#latitude").val() == "") {
-			alert(JS_MESSAGE["data.latitude.empty"]);
-			$("#latitude").focus();
-			return false;
-		}
-		if ($("#longitude").val() == "") {
-			alert(JS_MESSAGE["data.longitude.empty"]);
-			$("#longitude").focus();
-			return false;
-		}
-		if ($("#height").val() == "") {
-			alert(JS_MESSAGE["data.height.empty"]);
-			$("#height").focus();
-			return false;
-		}
-		if ($("#heading").val() == "") {
-			alert(JS_MESSAGE["data.heading.empty"]);
-			$("#heading").focus();
-			return false;
-		}
-		if($("#pitch").val() == "") {
-			alert(JS_MESSAGE["data.pitch.empty"]);
-			$("#pitch").focus();
-			return false;
-		}
-		if($("#roll").val() == "") {
-			alert(JS_MESSAGE["data.roll.empty"]);
-			$("#roll").focus();
+		if ($("#data_name").val() == "") {
+			alert(JS_MESSAGE["data.name.empty"]);
+			$("#data_name").focus();
 			return false;
 		}
 	}

@@ -5,27 +5,27 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.gaia3d.domain.DataGroup;
+import com.gaia3d.domain.Project;
 
 /**
- * Data 그룹 등록, 수정 Validation 체크
+ * project 등록, 수정 Validation 체크
  * @author jeongdae
  *
  */
-@Component("dataGroupValidator")
-public class DataGroupValidator implements Validator {
+@Component("projectValidator")
+public class ProjectValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return (DataGroup.class.isAssignableFrom(clazz));
+		return (Project.class.isAssignableFrom(clazz));
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		//DataGroup dataGroup = (DataGroup)target;
+		//Project project = (Project)target;
 		
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "data_group_key", "field.required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "data_group_name", "field.required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "project_key", "field.required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "project_name", "field.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "use_yn", "field.required");
 	}
 }

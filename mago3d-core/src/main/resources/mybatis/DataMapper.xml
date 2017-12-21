@@ -9,8 +9,8 @@
 		SELECT COUNT(data_id) 
 		FROM data_info
 		<trim prefix="WHERE" prefixOverrides="AND">
-			<if test="data_group_id != null and data_group_id > 0">
-			data_group_id = #{data_group_id}
+			<if test="project_id != null and project_id > 0">
+			project_id = #{project_id}
 			</if>
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 			AND ${search_word} = #{search_value}
@@ -47,8 +47,8 @@
 		FROM data_info
 		WHERE
 			<![CDATA[
-			(data_group_id > #{data_group_id}
-			OR data_group_id < #{data_group_id})
+			(project_id > #{project_id}
+			OR project_id < #{project_id})
 			]]>
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != ''">
 			AND ${search_word} = #{search_value}
@@ -65,13 +65,13 @@
 	<select id="getListData" parameterType="dataInfo" resultType="dataInfo">
 		/* getListData */
 		SELECT X.*, 
-			(SELECT data_group_name FROM data_group WHERE data_group_id = X.data_group_id) AS data_group_name
+			(SELECT project_name FROM project WHERE project_id = X.project_id) AS project_name
 		FROM (
 			SELECT *
 			FROM data_info
 			<trim prefix="WHERE" prefixOverrides="AND">
-				<if test="data_group_id != null and data_group_id > 0">
-				data_group_id = #{data_group_id}
+				<if test="project_id != null and project_id > 0">
+				project_id = #{project_id}
 				</if>
 				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 				AND ${search_word} = #{search_value}
@@ -111,17 +111,27 @@
 		) X
 	</select>
 	
-	<!-- Data 목록 -->
-	<select id="getListDataByDataGroupId" parameterType="dataInfo" resultType="dataInfo">
-		/* getListDataByDataGroupId */
-		SELECT A.*, B.data_group_name
-		FROM data_info A, data_group B
-		WHERE A.data_group_id = #{data_group_id} AND
-			A.data_group_id = B.data_group_id
-		ORDER BY A.insert_date DESC, data_id DESC
-		<if test="offset != null and offset > 0 and limit != null and limit > 0">
-		OFFSET #{offset} LIMIT #{limit}
-		</if>
+	<!-- 프로젝트별 Data 목록 -->
+	<select id="getListDataByProjectId" parameterType="dataInfo" resultType="dataInfo">
+		/* getListDataByProjectId */
+		WITH RECURSIVE project_data_info (
+			data_id, data_key, data_name, parent, depth, view_order, latitude, longitude, height, public_yn, child_yn, attributes, insert_date, path, cycle
+		) AS (
+	        SELECT A.data_id, A.data_key, A.data_name, A.parent, A.depth, A.view_order,
+	        	A.latitude, A.longitude, A.height, 
+	        	A.public_yn, A.child_yn, A.attributes, A.insert_date, ARRAY[A.view_order], false
+			FROM data_info A
+	        WHERE A.parent = 0 AND A.project_id = #{project_id}
+	        UNION ALL
+	        SELECT A.data_id, A.data_key, A.data_name, A.parent, A.depth, A.view_order,
+	        	A.latitude, A.longitude, A.height,  
+	        	A.public_yn, A.child_yn, A.attributes, A.insert_date, path || A.view_order, A.parent = ANY(path)
+	        FROM data_info A, project_data_info B
+	        WHERE A.parent = B.data_id AND not cycle
+		)
+	    SELECT data_id, data_key, data_name, parent, depth, view_order, latitude, longitude, height, public_yn, child_yn, attributes, insert_date, path
+	    FROM project_data_info
+	    ORDER BY path
 	</select>
 	
 	<!-- data_group_id를 제외한 사용자 목록 -->
@@ -157,17 +167,41 @@
 	<!-- Data 정보 -->
 	<select id="getData" parameterType="long" resultType="dataInfo">
 		/* getData */
-		SELECT A.*, (SELECT data_group_name FROM data_group WHERE data_group_id = A.data_group_id) AS data_group_name 
-		FROM data_info A
+		SELECT A.*, B.project_name,
+			CASE WHEN A.parent = 0 THEN '최상위 Node'
+				ELSE (SELECT data_name FROM data_info WHERE data_id = A.parent)
+			END AS parent_name
+		FROM data_info A, project B
 		WHERE data_id = #{data_id}
+			AND A.project_id = B.project_id
 	</select>
 	
 	<!-- Data 아이디 중복 체크 -->
-	<select id="getDuplicationKeyCount" parameterType="string" resultType="int">
+	<select id="getDuplicationKeyCount" parameterType="dataInfo" resultType="int">
 		/* getDuplicationKeyCount */
 		SELECT COUNT(data_key) AS count 
 		FROM data_info 
-		WHERE data_key = #{data_key}
+		WHERE project_id = #{project_id} 
+			AND data_key = #{data_key}
+	</select>
+	
+	<!-- 표시 순서 -->
+	<select id="getViewOrderByParent" parameterType="dataInfo" resultType="int">
+		/* getViewOrderByParent */
+		SELECT COALESCE(MAX(view_order), 0) + 1 
+		FROM data_info
+		WHERE parent = #{parent}
+	</select>
+	
+	<!-- 한 프로젝트 내 Root Parent 개수를 체크 -->
+	<select id="getRootParentCount" parameterType="dataInfo" resultType="int">
+		/* getRootParentCount */
+		SELECT COUNT(data_id) 
+		FROM data_info 
+		WHERE project_id = #{project_id} 
+			AND parent = 0 
+			AND depth = 1
+			AND data_id != #{data_id}
 	</select>
 	
 	<!-- Data 등록 -->
@@ -177,11 +211,17 @@
     		SELECT NEXTVAL('data_info_seq')
   		</selectKey>
 		INSERT INTO data_info(
-			data_id, data_group_id, data_key, data_name, location, latitude, longitude, 
-			height, heading, pitch, roll, public_yn, update_date
+			data_id, project_id, data_key, data_name, parent, depth, view_order, 
+			location, latitude, longitude, height, heading, pitch, roll, description
+			<if test="attributes != null and attributes != ''">
+			, attributes
+			</if>
 		) values(
-			#{data_id}, #{data_group_id}, #{data_key}, #{data_name}, ST_GeographyFromText(#{location}), #{latitude}, #{longitude}, 
-			#{height}, #{heading}, #{pitch}, #{roll}, #{public_yn}, #{update_date}			
+			#{data_id}, #{project_id}, #{data_key}, #{data_name}, #{parent}, #{depth}, #{view_order}, 
+			ST_GeographyFromText(#{location}), #{latitude}, #{longitude}, #{height}, #{heading}, #{pitch}, #{roll}, #{description}
+			<if test="attributes != null and attributes != ''">
+			, TO_JSON(#{attributes}::json)
+			</if>
 		)
 	</insert>
 	
@@ -190,8 +230,8 @@
 		/* updateData */
 		UPDATE data_info
 		SET 
-			<if test="data_group_id != null and data_group_id > 0">
-			data_group_id = #{data_group_id},
+			<if test="project_id != null and project_id > 0">
+			project_id = #{project_id},
 			</if>
 			<if test="data_key != null and data_key != ''">
 			data_key = #{data_key},
@@ -199,29 +239,35 @@
 			<if test="data_name != null and data_name != ''">
 			data_name = #{data_name},
 			</if>
-			<if test="location != null and location != ''">
-			location = #{location},
+			<if test="location != null">
+			location = ST_GeographyFromText(#{location}),
 			</if>
-			<if test="latitude != null and latitude != ''">
+			<if test="latitude != null">
 			latitude = #{latitude},
 			</if>
-			<if test="longitude != null and longitude != ''">
+			<if test="longitude != null">
 			longitude = #{longitude},
 			</if>
-			<if test="height != null and height != ''">
+			<if test="height != null">
 			height = #{height},
 			</if>
-			<if test="heading != null and heading != ''">
+			<if test="heading != null">
 			heading = #{heading},
 			</if>
-			<if test="pitch != null and pitch != ''">
+			<if test="pitch != null">
 			pitch = #{pitch},
 			</if>
-			<if test="roll != null and roll != ''">
+			<if test="roll != null">
 			roll = #{roll},
 			</if>
 			<if test="public_yn != null and public_yn != ''">
 			public_yn = #{public_yn},
+			</if>
+			<if test="attributes != null and attributes != ''">
+			attributes = TO_JSON(#{attributes}::json)
+			</if>
+			<if test="description != null and description != ''">
+			description = #{description},
 			</if>
 			update_date = now()
 		WHERE data_id = #{data_id}

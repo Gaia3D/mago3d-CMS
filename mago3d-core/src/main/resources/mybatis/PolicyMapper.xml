@@ -3,6 +3,10 @@
 
 <mapper namespace="com.gaia3d.persistence.PolicyMapper">
 
+	<!-- <resultMap id="policyResultMap" type="policy">
+		<result property="xxx" column="geo_data_default_projects" javaType="java.lang.String" jdbcType="ARRAY" />
+	</resultMap> -->
+
 	<!-- 운영 정책 정보 -->
 	<select id="getPolicy" resultType="policy">
 		/* getPolicy */
@@ -23,8 +27,7 @@
 			user_login_type = #{user_login_type},
 			user_update_check = #{user_update_check},
 			user_delete_check = #{user_delete_check},
-			user_delete_type = #{user_delete_type},
-			user_device_modify_yn = #{user_device_modify_yn}
+			user_delete_type = #{user_delete_type}
 		WHERE policy_id = #{policy_id}
 	</update>
 	
@@ -52,6 +55,12 @@
 		UPDATE policy
 		SET geo_view_library = #{geo_view_library},
 			geo_data_path = #{geo_data_path},
+			<if test="geo_data_default_projects == null or geo_data_default_projects == ''">
+			geo_data_default_projects = null,
+			</if>
+			<if test="geo_data_default_projects != null and geo_data_default_projects != ''">
+			geo_data_default_projects = STRING_TO_ARRAY(#{geo_data_default_projects}, ','),
+			</if>
 			geo_cull_face_enable = #{geo_cull_face_enable},
 			geo_time_line_enable = #{geo_time_line_enable},
 			geo_init_camera_enable = #{geo_init_camera_enable},
@@ -59,6 +68,8 @@
 			geo_init_longitude = #{geo_init_longitude},
 			geo_init_height = #{geo_init_height},
 			geo_init_duration = #{geo_init_duration},
+			geo_init_default_terrain = #{geo_init_default_terrain},
+			geo_init_default_fov = #{geo_init_default_fov},
 			geo_lod0 = #{geo_lod0},
 			geo_lod1 = #{geo_lod1},
 			geo_lod2 = #{geo_lod2},
@@ -99,6 +110,7 @@
 		/* updatePolicyGeoCallBack */
 		UPDATE policy
 		SET geo_callback_enable = #{geo_callback_enable},
+			geo_callback_apiresult = #{geo_callback_apiresult},
 			geo_callback_selectedobject = #{geo_callback_selectedobject},
 			geo_callback_insertissue = #{geo_callback_insertissue},
 			geo_callback_listissue = #{geo_callback_listissue},

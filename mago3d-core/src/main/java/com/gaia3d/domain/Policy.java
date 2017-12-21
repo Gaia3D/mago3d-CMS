@@ -3,6 +3,7 @@ package com.gaia3d.domain;
 import com.gaia3d.security.Crypt;
 import com.gaia3d.security.Masking;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -73,8 +74,6 @@ public class Policy {
 	private String user_delete_check;
 	// 사용자 정보 삭제 방법. 0 : 논리적(기본값), 1 : 물리적(DB 삭제)
 	private String user_delete_type;
-	// 사용자 디바이스 정보 수정여부. Y : 허용(기본값), N : 허용안함
-	private String user_device_modify_yn;
 	
 	// 패스워드 변경 주기 기본 30일
 	private String password_change_term;
@@ -103,6 +102,10 @@ public class Policy {
 	private String geo_view_library;
 	// data 폴더. 기본 /data
 	private String geo_data_path;
+	// 초기 로딩 프로젝트
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private String geo_data_default_projects;
 	// cullFace 사용유무. 기본 false
 	private String geo_cull_face_enable;
 	// timeLine 사용유무. 기본 false
@@ -118,6 +121,10 @@ public class Policy {
 	private String geo_init_height;
 	// 초기 카메라 이동 시간. 초 단위
 	private Long geo_init_duration;
+	// 기본 Terrain
+	private String geo_init_default_terrain;
+	// field of view. 기본값 0(1.8 적용)
+	private Long geo_init_default_fov;
 	
 	// LOD0. 기본값 22M
 	private String geo_lod0;
@@ -180,6 +187,8 @@ public class Policy {
 	
 	// 콜백 function 사용유무. 기본값 false
 	private String geo_callback_enable;
+	// api 처리 결과 callback function 이름
+	private String geo_callback_apiresult;
 	// object 선택 callback function 이름
 	private String geo_callback_selectedobject;
 	// issue 등록 callback function 이름
@@ -312,6 +321,19 @@ public class Policy {
 	
 	// 등록일
 	private String insert_date;
+	
+	public String getGeo_data_default_projects() {
+		return geo_data_default_projects;
+	}
+
+	public void setGeo_data_default_projects(String geo_data_default_projects) {
+		this.geo_data_default_projects = geo_data_default_projects;
+		if(this.geo_data_default_projects != null && !("").equals(this.geo_data_default_projects)) {
+			this.geo_data_default_projects = this.geo_data_default_projects.replace("{", "");
+			this.geo_data_default_projects = this.geo_data_default_projects.replace("}", "");
+			this.geo_data_default_projects = this.geo_data_default_projects.replaceAll("\"", "");
+		}
+	}
 	
 	public String getViewSiteAdminMobilePhone() {
 		return Crypt.decrypt(site_admin_mobile_phone);

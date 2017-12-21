@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div id="geo_tab">
 	<form:form id="policyGeo" modelAttribute="policy" method="post" onsubmit="return false;">
-		<form:hidden path="policy_id"/>
 	<table class="input-table scope-row">
 		<col class="col-label l" />
 		<col class="col-input" />
@@ -25,6 +24,15 @@
 				<form:input path="geo_data_path" cssClass="l" />
 				<span class="table-desc"><spring:message code='config.directory'/></span>
 				<form:errors path="geo_data_path" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_data_default_projects">시작시 로딩 프로젝트</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_data_default_projects" cssClass="l" />
+				<input type="button" id="projectFind" value="찾기" />
 			</td>
 		</tr>
   		<tr>
@@ -85,12 +93,30 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_init_duration"><spring:message code='config.init.camera.height'/></form:label>
+				<form:label path="geo_init_duration"><spring:message code='config.init.camera.time'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_init_duration" cssClass="m" />
 				<span class="table-desc"><spring:message code='config.second.unit'/></span>
 				<form:errors path="geo_init_duration" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_init_default_terrain">Terrain</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_init_default_terrain" cssClass="l" />
+				<form:errors path="geo_init_default_terrain" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_init_default_fov">Field Of View</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_init_default_fov" cssClass="m" />
+				<form:errors path="geo_init_default_fov" cssClass="error" />
 			</td>
 		</tr>
 		<tr>
@@ -189,4 +215,41 @@
 		</div>
 	</div>
 	</form:form>
+</div>
+
+<!-- Dialog -->
+<div id="dataDialog" class="dataDialog" title="프로젝트 목록">
+	<table class="list-table scope-col">
+		<col class="col-number" />
+		<col class="col-name" />
+		<col class="col-name" />
+		<col class="col-number" />
+		<col class="col-toggle" />
+		<col class="col-toggle" />
+		<col class="col-toggle" />
+		<col class="col-toggle" />
+		<col class="col-toggle" />
+		<col class="col-number" />
+		<col class="col-date" />
+		<thead>
+			<tr>
+				<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
+				<th scope="col" class="col-name">Key</th>
+				<th scope="col" class="col-name">프로젝트명</th>
+				<th scope="col" class="col-number">순서</th>
+				<th scope="col" class="col-toggle">기본값</th>
+				<th scope="col" class="col-toggle">사용유무</th>
+				<th scope="col" class="col-toggle">위도</th>
+				<th scope="col" class="col-toggle">경도</th>
+				<th scope="col" class="col-toggle">높이</th>
+				<th scope="col" class="col-number">이동시간</th>
+				<th scope="col" class="col-date">등록일</th>
+			</tr>
+		</thead>
+		<tbody id="projectList">
+		</tbody>
+	</table>
+	<div class="button-group">
+		<input type="button" id="projectSelect" class="button" value="선택"/>
+	</div>
 </div>

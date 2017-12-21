@@ -28,6 +28,7 @@ create table policy(
 	
 	geo_view_library					varchar(20)			default 'cesium',
 	geo_data_path						varchar(100)		default '/data',
+	geo_data_default_projects			varchar(30)[],
 	geo_cull_face_enable				varchar(5)			default 'false',
 	geo_time_line_enable				varchar(5)			default 'false',
 	
@@ -36,6 +37,9 @@ create table policy(
 	geo_init_longitude					varchar(30)			default '126.924185',
 	geo_init_height						varchar(30)			default '3000.0',
 	geo_init_duration					smallint			default 3,
+	geo_init_default_terrain			varchar(64),
+	geo_init_default_fov				smallint			default 0,
+	
 	geo_lod0							varchar(20)			default '22',
 	geo_lod1							varchar(20)			default '70',
 	geo_lod2							varchar(20)			default '22360',
@@ -64,6 +68,7 @@ create table policy(
 	geo_server_add_parameters_format		varchar(30),
 	
 	geo_callback_enable 					varchar(5)			default 'false',
+	geo_callback_apiresult					varchar(64),
 	geo_callback_selectedObject				varchar(64),
 	geo_callback_insertIssue				varchar(64),
 	geo_callback_listIssue					varchar(64),
@@ -157,6 +162,7 @@ comment on column policy.password_exception_char is '패스워드로 사용할�
 
 comment on column policy.geo_view_library is 'view library. 기본 cesium';
 comment on column policy.geo_data_path is 'data 폴더. 기본 /data';
+comment on column policy.geo_data_default_projects is '시작시 로딩 프로젝트. 배열로 저장';
 comment on column policy.geo_cull_face_enable is 'cullFace 사용유무. 기본 false';
 comment on column policy.geo_time_line_enable is 'timeLine 사용유무. 기본 false';
 	
@@ -165,6 +171,8 @@ comment on column policy.geo_init_latitude is '초기 카메라 이동 위도';
 comment on column policy.geo_init_longitude is '초기 카메라 이동 경도';
 comment on column policy.geo_init_height is '초기 카메라 이동 높이';
 comment on column policy.geo_init_duration is '초기 카메라 이동 시간. 초 단위';
+comment on column policy.geo_init_default_terrain is '기본 Terrain';
+comment on column policy.geo_init_default_fov is 'field of view. 기본값 0(1.8 적용)';
 comment on column policy.geo_lod0 is 'LOD0. 기본값 22M';
 comment on column policy.geo_lod1 is 'LOD1. 기본값 70M';
 comment on column policy.geo_lod2 is 'LOD2. 기본값 22360M';
@@ -193,6 +201,7 @@ comment on column policy.geo_server_add_parameters_transparent is 'geo server �
 comment on column policy.geo_server_add_parameters_format is 'geo server 추가 Layers format 변수값';
 	
 comment on column policy.geo_callback_enable is '콜백 function 사용유무. 기본값 false';
+comment on column policy.geo_callback_apiresult is 'api 처리 결과 callback function 이름';
 comment on column policy.geo_callback_selectedObject is 'object 선택 callback function 이름';
 comment on column policy.geo_callback_insertIssue is 'issue 등록 callback function 이름';
 comment on column policy.geo_callback_listIssue is 'issue 목록 callback function 이름';

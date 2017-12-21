@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div id="site_tab">
 	<form:form id="policySite" modelAttribute="policy" method="post" onsubmit="return false;" >
-		<form:hidden path="policy_id"/>
 		<form:hidden path="uploadfile_top_value"/>
 		<form:hidden path="uploadfile_bottom_value"/>
 	<table class="input-table scope-row">

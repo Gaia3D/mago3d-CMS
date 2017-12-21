@@ -9,8 +9,8 @@
 		SELECT COUNT(issue_id) 
 		FROM issue
 		<trim prefix="WHERE" prefixOverrides="AND">	
-			<if test="data_group_id != null and data_group_id > 0">
-				data_group_id = #{data_group_id}
+			<if test="project_id != null and project_id > 0">
+				project_id = #{project_id}
 			</if>
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 			AND ${search_word} = #{search_value}
@@ -41,8 +41,8 @@
 			SELECT *
 			FROM issue
 			<trim prefix="WHERE" prefixOverrides="AND">
-				<if test="data_group_id != null and data_group_id > 0">
-				data_group_id = #{data_group_id}
+				<if test="project_id != null and project_id > 0">
+				project_id = #{project_id}
 				</if>
 				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 				AND ${search_word} = #{search_value}
@@ -105,9 +105,9 @@
 		FROM (	
 			SELECT X.*, Y.code_name AS priority_name, Y.css_class AS priority_css_class, Y.image AS priority_image 
 			FROM (		
-				SELECT A.*, B.user_name, C.data_group_name, D.code_name AS issue_type_name, D.css_class AS issue_type_css_class, D.image AS issue_type_image
+				SELECT A.*, B.user_name, C.project_name, D.code_name AS issue_type_name, D.css_class AS issue_type_css_class, D.image AS issue_type_image
 				FROM issue A LEFT OUTER JOIN user_info B ON A.user_id = B.user_id
-					INNER JOIN data_group C ON A.data_group_id = C.data_group_id
+					INNER JOIN project C ON A.project_id = C.project_id
 					INNER JOIN common_code D ON A.issue_type = D.code_key
 				WHERE A.user_id = #{user_id}
 					<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
@@ -182,9 +182,9 @@
     		SELECT NEXTVAL('issue_seq')
   		</selectKey>
 		INSERT INTO issue(
-			issue_id, data_group_id, user_id, title, priority, due_date, issue_type, status, data_key, object_key, location, latitude, longitude, height, client_ip
+			issue_id, project_id, user_id, title, priority, due_date, issue_type, status, data_key, object_key, location, latitude, longitude, height, client_ip
 		) values(
-			#{issue_id}, #{data_group_id}, #{user_id}, #{title}, #{priority},
+			#{issue_id}, #{project_id}, #{user_id}, #{title}, #{priority},
 			<if test="due_date == null or due_date == ''">
 			null,
 			</if>		
@@ -259,8 +259,8 @@
 		/* updateIssue */
 		UPDATE issue
 		SET 
-			<if test="data_group_id != null and data_group_id > 0">
-			data_group_id = #{data_group_id},
+			<if test="project_id != null and project_id > 0">
+			project_id = #{project_id},
 			</if>
 			<if test="user_id != null and user_id != ''">
 			user_id = #{user_id},

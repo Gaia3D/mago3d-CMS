@@ -3,10 +3,11 @@ drop table if exists menu cascade;
 
 -- 메뉴
 create table menu(
-	menu_id				smallint 									not null,
+	menu_id				smallint 								not null,
 	name				varchar(100)							not null,
 	name_en				varchar(30)								not null,
-	parent				smallint									default '1',
+	lang				varchar(10)								default 'ko',
+	parent				smallint								default '1',
 	depth				smallint								default '1',
 	view_order			smallint								default '1',
 	url					varchar(100)							not null,
@@ -26,6 +27,7 @@ comment on table menu is '메뉴';
 comment on column menu.menu_id is '고유번호';
 comment on column menu.name is '메뉴명';
 comment on column menu.name_en is '영어 메뉴명';
+comment on column menu.lang is '언어';
 comment on column menu.parent is '부모 고유번호';
 comment on column menu.depth is '깊이';
 comment on column menu.view_order is '나열 순서';

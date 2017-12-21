@@ -131,13 +131,12 @@
 		
 		if(updateOsFlag) {
 			updateOsFlag = false;
-			var info = $("#policyOs").serialize();
+			var info = $("#policyOs").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-os.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -211,7 +210,6 @@
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -315,13 +313,12 @@
 			} */
 			
 			updatePasswordFlag = false;
-			var info = $("#policyPassword").serialize();
+			var info = $("#policyPassword").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-password.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -353,7 +350,7 @@
 			info.find(item => item.name === "geo_ambient_reflection_coef").value = $("#geo_ambient_reflection_coef").val();
 			info.find(item => item.name === "geo_diffuse_reflection_coef").value = $("#geo_diffuse_reflection_coef").val();
 			info.find(item => item.name === "geo_specular_reflection_coef").value = $("#geo_specular_reflection_coef").val();
-			info = $.param(info);
+			info = $.param(info) + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-geo.do",
 				type: "POST",
@@ -439,19 +436,102 @@
 		});
 	}
 	
+	var dataDialog = $( ".dataDialog" ).dialog({
+		autoOpen: false,
+		height: 600,
+		width: 1200,
+		modal: true,
+		overflow : "auto",
+		resizable: false
+	});
+	
+	// 시작 프로젝트 찾기
+	$( "#projectFind" ).on( "click", function() {
+		dataDialog.dialog( "open" );
+		drawProjectList();
+	});
+	
+	function drawProjectList() {
+		$.ajax({
+			url: "/data/ajax-list-project.do",
+			type: "POST",
+			//data: info,
+			cache: false,
+			dataType: "json",
+			success: function(msg){
+				if(msg.result == "success") {
+					var content = "";
+					var projectList = msg.projectList;
+					if(projectList == null || projectList.length == 0) {
+						content = content
+							+ 	"<tr>"
+							+ 	"	<td colspan=\"11\" class=\"col-none\">프로젝트가 존재하지 않습니다.</td>"
+							+ 	"</tr>";
+					} else {
+						projectListCount = projectList.length;
+						for(i=0; i<projectListCount; i++ ) {
+							var project = projectList[i];
+							content = content 
+								+ 	"<tr>"
+								+ 	"	<td class=\"col-checkbox\"><input type=\"checkbox\" id=\"project_id_" + project.project_id 
+								+ 											"\" name=\"project_id\" value=\"" + project.project_id + "\" /></td>"
+								+ 	"	<td class=\"col-name\">" + project.project_key + " </td>"
+								+ 	"	<td class=\"col-name\">" + project.project_name + " </td>"
+								+ 	"	<td class=\"col-number\">" + project.view_order + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.default_yn + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.use_yn + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.latitude + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.longitude + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.height + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.duration + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.insert_date +"</td>"
+								+ 	"	</tr>";
+						}
+					}
+					
+					$("#projectList").empty();
+					$("#projectList").html(content);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error:function(request, status, error) {
+				//alert(JS_MESSAGE["ajax.error.message"]);
+				alert(" code : " + request.status + "\n" + ", message : " + request.responseText + "\n" + ", error : " + error);
+    		}
+		});
+	}
+	
+	// 전체 선택 
+	$("#chk_all").click(function() {
+		$(":checkbox[name=project_id]").prop("checked", this.checked);
+	});
+	
+	$( "#projectSelect" ).on( "click", function() {
+		var checkedValue = "";
+		$("input:checkbox[name=project_id]:checked").each(function(index){
+			checkedValue += $(this).val() + ",";
+		});
+		if(checkedValue.indexOf(",") > 0) {
+			checkedValue =checkedValue.substring(0, checkedValue.lastIndexOf(","));
+		}
+		
+		$("#geo_data_default_projects").val(checkedValue);
+		dataDialog.dialog( "close" );
+	});
+	
 	// GeoServer
 	var updatePolicyGeoServerFlag = true;
 	function updatePolicyGeoServer() {
 		if(updatePolicyGeoServerFlag) {
 			// validation 나중에
 			updatePolicyGeoServerFlag = false;
-			var info = $("#policyGeoServer").serialize();
+			var info = $("#policyGeoServer").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-geoserver.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -478,13 +558,12 @@
 		if(updatePolicyGeoCallBackFlag) {
 			// validation 나중에
 			updatePolicyGeoCallBackFlag = false;
-			var info = $("#policyGeoCallBack").serialize();
+			var info = $("#policyGeoCallBack").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-geocallback.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -521,13 +600,12 @@
 				}
 			}
 			updateSecurityFlag = false;
-			var info = $("#policySecurity").serialize();
+			var info = $("#policySecurity").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-security.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -601,13 +679,12 @@
 			}
 			
 			updateContentFlag = false;
-			var info = $("#policyContent").serialize();
+			var info = $("#policyContent").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-content.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -633,13 +710,12 @@
 	function updatePolicyBackoffice() {
 		if(updateBackofficeFlag) {
 			updateBackofficeFlag = false;
-			var info = $("#policyBackoffice").serialize();
+			var info = $("#policyBackoffice").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-backoffice.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -687,13 +763,12 @@
 			}
 			
 			updateSiteFlag = false;
-			var info = $("#policySite").serialize();
+			var info = $("#policySite").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-site.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -740,13 +815,12 @@
 			}
 			
 			updateSolutionFlag = false;
-			var info = $("#policySolution").serialize();
+			var info = $("#policySolution").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-solution.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -766,15 +840,6 @@
 			return;
 		}
 	}
-	
-	/* function checkChangLogo() {
-		if($("#uploadfile_top").val() != null && $("#uploadfile_top").val() != "") {
-			$("#uploadfile_top_value").val("logo");
-		}
-		if($("#uploadfile_bottom").val() != null && $("#uploadfile_bottom").val() != "") {
-			$("#uploadfile_bottom_value").val("logo");
-		}
-	} */
 </script>
 </body>
 </html>

@@ -30,6 +30,8 @@ public class Menu {
 	private String name;
 	// 영어 메뉴명
 	private String name_en;
+	// 언어별
+	private String lang;
 	// 부모 고유번호
 	private Long parent;
 	// 깊이

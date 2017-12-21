@@ -84,7 +84,9 @@ JS_MESSAGE["data.key.same"] = "동일 Key 입니다.";
 JS_MESSAGE["data.key.duplication"] = "사용중인 Key 입니다. 다른 Key를 선택해 주십시오.";
 JS_MESSAGE["data.key.duplication_value.check"] = "Key 중복확인을 해주십시오."
 JS_MESSAGE["data.key.duplication_value.already"] = "사용중인 Key 입니다. 다른 Key를 선택해 주십시오.";
-JS_MESSAGE["data.group.id.empty"] = "데이터 그룹을 선택하여 주십시오.";
+JS_MESSAGE["data.project.root.duplication"] = "프로젝트 Root가 존재합니다.";
+JS_MESSAGE["data.project.id.empty"] = "프로젝트를 선택하여 주십시오.";
+JS_MESSAGE["data.parent.empty"] = "상위 노드를 선택하여 주십시오.";
 JS_MESSAGE["data.latitude.empty"] = "위도를 입력하여 주십시오.";
 JS_MESSAGE["data.longitude.empty"] = "경도를  입력하여 주십시오.";
 JS_MESSAGE["data.height.empty"] = "높이를  입력하여 주십시오.";
@@ -94,6 +96,22 @@ JS_MESSAGE["data.pitch.empty"] = "Pitch를 입력하여 주십시오.";
 JS_MESSAGE["data.roll.empty"] = "Roll을 입력하여 주십시오.";
 JS_MESSAGE["data.insert"] = "데이터를 등록 하였습니다.";
 JS_MESSAGE["data.update"] = "데이터 정보를 수정 하였습니다.";
+
+// project
+JS_MESSAGE["project.insert"] = "프로젝트를 등록 하였습니다.";
+JS_MESSAGE["project.update"] = "프로젝트를 수정 하였습니다.";
+JS_MESSAGE["project.project_id.empty"] = "Project Id를 입력하여 주십시오.";
+JS_MESSAGE["project.key.empty"] = "Key를 입력하여 주십시오.";
+JS_MESSAGE["project.key.enable"] = "사용 가능한 Key 입니다.";
+JS_MESSAGE["project.key.same"] = "동일 Key 입니다.";
+JS_MESSAGE["project.key.duplication"] = "사용중인 Key 입니다. 다른 Key를 선택해 주십시오.";
+JS_MESSAGE["project.key.duplication_value.check"] = "Key 중복확인을 해주십시오."
+JS_MESSAGE["project.key.duplication_value.already"] = "사용중인 Key 입니다. 다른 Key를 선택해 주십시오.";
+JS_MESSAGE["project.name.empty"] = "프로젝트명을 입력하여 주십시오.";
+JS_MESSAGE["project.latitude.empty"] = "위도를 입력하여 주십시오.";
+JS_MESSAGE["project.longitude.empty"] = "경도를  입력하여 주십시오.";
+JS_MESSAGE["project.height.empty"] = "높이를  입력하여 주십시오.";
+JS_MESSAGE["project.height.empty"] = "이동시간을  입력하여 주십시오.";
 
 // 이슈
 JS_MESSAGE["issue.datagroup.empty"] = "데이터 그룹을 선택하여 주십시오.";

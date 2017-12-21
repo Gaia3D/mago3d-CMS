@@ -1,7 +1,6 @@
 package com.gaia3d.persistence;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.gaia3d.domain.Policy;
 

@@ -34,13 +34,13 @@
 							<col class="col-input" />
 							<tr>
 								<th class="col-label" scope="row">
-									<form:label path="data_group_id"><spring:message code='data.group'/></form:label>
+									<form:label path="project_id">프로젝트명</form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">
-									<form:select path="data_group_id" cssClass="select">
-<c:forEach var="dataGroup" items="${dataGroupList}">
-										<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name}</option>
+									<form:select path="project_id" cssClass="select">
+<c:forEach var="project" items="${projectList}">
+										<option value="${project.project_id}">${project.project_name}</option>
 </c:forEach>
 									</form:select>
 								</td>

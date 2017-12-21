@@ -12,7 +12,7 @@
 		<typeAlias type="com.gaia3d.domain.AccessLog" alias="accessLog"/>
 		<typeAlias type="com.gaia3d.domain.APILog" alias="aPILog"/>
 		<typeAlias type="com.gaia3d.domain.CommonCode" alias="commonCode"/>
-		<typeAlias type="com.gaia3d.domain.DataGroup" alias="dataGroup"/>
+		<typeAlias type="com.gaia3d.domain.Project" alias="project"/>
 		<typeAlias type="com.gaia3d.domain.DataInfo" alias="dataInfo"/>
 		<typeAlias type="com.gaia3d.domain.ExternalService" alias="externalService"/>
 		<typeAlias type="com.gaia3d.domain.FileInfo" alias="fileInfo"/>
@@ -38,4 +38,12 @@
 		<typeAlias type="com.gaia3d.domain.SSOLog" alias="sSOLog"/>
 		<typeAlias type="com.gaia3d.domain.Widget" alias="widget"/>
 	</typeAliases>
+	
+	<!-- 
+		TODO 이 방법은 resultMap에 컬럼 개수가 너무 많아서 안 맞는듯, 그냥 꼼수 사용
+	<typeHandlers>
+		<typeHandler handler="com.gaia3d.typehandler.xxxxTypeHandler"/>
+		<package name="com.gaia3d.typehandler"/>
+	</typeHandlers>
+	 -->
 </configuration>

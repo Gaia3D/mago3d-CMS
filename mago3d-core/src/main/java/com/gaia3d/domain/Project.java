@@ -1,18 +1,20 @@
 package com.gaia3d.domain;
 
+import java.math.BigDecimal;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Data 그룹
+ * project
  * @author Cheon JeongDae
  *
  */
 @Getter
 @Setter
 @ToString
-public class DataGroup {
+public class Project {
 
 	// 임시 그룹
 	public static final Long TEMP_GROUP = 2l;
@@ -31,38 +33,34 @@ public class DataGroup {
 
 	/****** validator ********/
 	private String method_mode;
+	
+	// 아이디 중복 확인 hidden 값
+	private String duplication_value;
 
 	// 고유번호
-	private Long data_group_id;
+	private Long project_id;
 	// 링크 활용 등을 위한 확장 컬럼
-	private String data_group_key;
+	private String project_key;
+	// old 고유 식별번호
+	private String old_project_key;
 	// 그룹명
-	private String data_group_name;
-	// 조상 고유번호
-	private Long ancestor;
-	// 부모 고유번호
-	private Long parent;
-	// 깊이
-	private Integer depth;
+	private String project_name;
 	// 나열 순서
 	private Integer view_order;
 	// 기본 사용 삭제불가, Y : 기본, N : 선택
 	private String default_yn;
 	// 사용유무, Y : 사용, N : 사용안함
 	private String use_yn;
-	// 자식 존재 유무, Y : 존재, N : 존재안함(기본)
-	private String child_yn;
 	// 위도, 경도 정보 geometry 타입
 	private String location;
 	// 위도
-	private String latitude;
+	private BigDecimal latitude;
 	// 경도
-	private String longitude;
+	private BigDecimal longitude;
 	// 높이
-	private String height;
+	private BigDecimal height;
 	// flyTo 이동시간
 	private Integer duration;
-	
 	// 설명
 	private String description;
 	// 등록일

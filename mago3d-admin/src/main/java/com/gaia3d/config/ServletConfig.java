@@ -2,7 +2,9 @@ package com.gaia3d.config;
 
 import java.util.Locale;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -11,10 +13,12 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.Ordered;
+import org.springframework.http.CacheControl;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -39,6 +43,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Cheon JeongDae
  *
  */
+//@EnableSwagger2
 @Slf4j
 @EnableWebMvc
 @Configuration
@@ -104,12 +109,28 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+				
 		log.info(" @@@ ServletConfig addResourceHandlers @@@");
 		registry.addResourceHandler("/css/**").addResourceLocations("/css/");
 		registry.addResourceHandler("/externlib/**").addResourceLocations("/externlib/");
 //		registry.addResourceHandler("/hompage/**").addResourceLocations("/homepage/");
 		registry.addResourceHandler("/images/**").addResourceLocations("/images/");
 		registry.addResourceHandler("/js/**").addResourceLocations("/js/");
+		//registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+//		registry.addResourceHandler("/swagger-ui.html**").addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
+//	    registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+	    //registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+		
+//		if (!registry.hasMappingForPattern("/webjars/**")) {
+//            registry.addResourceHandler("/webjars/**")
+//                    .addResourceLocations("classpath:/resources/webjars/")
+//                    .setCacheControl( CacheControl.maxAge(1, TimeUnit.HOURS).cachePublic() );
+//        }
+//        if (!registry.hasMappingForPattern("/**")) {
+//            registry.addResourceHandler("/**")
+//                    .addResourceLocations("classpath:/static")
+//                    .setCacheControl( CacheControl.maxAge(0, TimeUnit.SECONDS).cachePublic());
+//        }
 	}
 	
 	@Override
@@ -149,6 +170,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	}
 	
 	@Bean
+	@ConditionalOnMissingBean(InternalResourceViewResolver.class)
 	public InternalResourceViewResolver viewResolver() {
 		log.info(" @@@ ServletConfig viewResolver @@@");
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -164,4 +186,30 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 		log.info(" @@@ ServletConfig requestDataValueProcessor @@@ ");
 		return new CSRFRequestDataValueProcessor();
 	}
+	
+//	/**
+//     * Global CORS Configuration
+//     */
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        // 간략설정
+//        registry.addMapping("/**");
+//
+//        // 상세설정
+//        registry.addMapping("/api/**").allowedOrigins("http://domain2.com")
+//                .allowedMethods("PUT", "DELETE")
+//                .allowedHeaders("header1", "header2", "header3")
+//                .exposedHeaders("header1", "header2").allowCredentials(false)
+//                .maxAge(3600);
+//    }
+	
+//	@Bean
+//	public Docket petApi() {
+//		return new Docket(DocumentationType.SWAGGER_2)
+//			.select()
+//	        .apis(RequestHandlerSelectors.any())
+//	        .paths(PathSelectors.any())
+//	        .build()
+//	        .pathMapping("/");
+//	}
 }

@@ -40,7 +40,7 @@
 				<c:if test="${method_mode eq 'insert' || method_mode eq 'update'}">
 					  		<li style="line-height: 30px;">
 					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.data.group'/></span>
-					 			<span>${issue.data_group_name}</span>
+					 			<span>${issue.project_name}</span>
 					  		</li>
 					  		<li style="line-height: 30px;">
 					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.name'/></span>

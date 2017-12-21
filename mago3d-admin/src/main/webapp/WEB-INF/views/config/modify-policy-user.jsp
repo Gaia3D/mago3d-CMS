@@ -74,16 +74,6 @@
 				</select>
 			</td>
 		</tr>
-		<tr>
-			<th class="col-label l" scope="row">
-				<span><spring:message code='config.user.device.information'/></span>
-				<span class="icon-glyph glyph-emark-dot color-warning"></span>
-			</th>
-			<td class="col-input radio-set">
-				<form:radiobutton path="user_device_modify_yn" value="Y" label="${use}"/>
-				<form:radiobutton path="user_device_modify_yn" value="N" label="${noUse}"/>
-			</td>
-		</tr>
 	</table>
 	<div class="button-group">
 		<div class="center-buttons">

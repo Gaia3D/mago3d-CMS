@@ -7,3 +7,13 @@ log4jdbc 같은걸 사용해야 나오는거 같다.... 찜찜해서 그냥 logb
 회사라 소스를 적어 드리기가 곤란한데 resttemplate trust all과 같은 키워드로 구글링 해 보시면 참고하실 소스 들이 나올 거에요
 
 
+array column
+VALUES ( {#points,javaType=java.util.Array,typeHandler=org.apache.ibatis.type.ArrayTypeHandler}
+)
+
+json 관련
+http://blog.gaerae.com/2015/09/postgresql-multiple-rows-and-json-or-string.html
+table 전체를 json
+SELECT array_to_json(array_agg(t)) FROM t;
+
+

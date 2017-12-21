@@ -1,5 +1,7 @@
 package com.gaia3d.domain;
 
+import java.math.BigDecimal;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Getter;
@@ -40,8 +42,8 @@ public class Issue {
 	private Long issue_detail_id;
 	// 댓글 개수
 	private Integer comment_count;
-	// 데이터 그룹명
-	private String data_group_name;
+	// 프로젝트명
+	private String project_name;
 	// 사용자명
 	private String user_name;
 	// 이슈 내용
@@ -67,8 +69,8 @@ public class Issue {
 	/************* 업무 처리 ***********/
     // 고유번호
 	private Long issue_id;
-	// 데이터 그룹
-	private Long data_group_id;
+	// 프로젝트 아이디
+	private Long project_id;
 	// 사용자 아이디
 	private String user_id;
 	// 이슈명
@@ -98,11 +100,11 @@ public class Issue {
 	// location(위도, 경도)
 	private String location;
 	// 위도
-	private String latitude;
+	private BigDecimal latitude;
 	// 경도
-	private String longitude;
+	private BigDecimal longitude;
 	// 높이
-	private String height;
+	private BigDecimal height;
 	// 요청 IP
 	private String client_ip;
 	
