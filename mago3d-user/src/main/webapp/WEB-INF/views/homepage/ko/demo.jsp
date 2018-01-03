@@ -54,7 +54,7 @@
 <c:if test="${geoViewLibrary eq 'worldwind' }">				
 				<li><a href="/homepage/demo.do?viewLibrary=cesium">Cesium</a></li>
 				<li>World Wind</li>
-</c:if>				
+</c:if>
 			</ul>
 		</li>
 		<li><a href="/homepage/download.do">Download</a></li>
@@ -103,11 +103,12 @@
 			<tr style="height: 35px;">
 				<td style="width: 80px;"><label for="project_id">프로젝트</label></td>
 				<td><select id="project_id" name="project_id" class="select">
-					<option value=""> 전체 </option>
+						<option value=""> 전체 </option>
 <c:forEach var="project" items="${projectList}">
-					<option value="${project.project_id}">${project.project_name}</option>
+						<option value="${project.project_id}">${project.project_name}</option>
 </c:forEach>
-				</select></td>
+					</select>
+				</td>
 			</tr>
 			<tr style="height: 35px;">
 				<td><label for="search_word">분류</label></td>
@@ -124,31 +125,31 @@
 			</tr>
 			<tr style="height: 35px;">
 				<td>
-				<label for="search_value">검색어</label></td>
+					<label for="search_value">검색어</label></td>
 				<td><input type="text" id="search_value" name="search_value" size="31" /></td>
 			</tr>
 			<tr style="height: 35px;">
 				<td><label for="start_date">날짜</label></td>
 				<td><input type="text" class="s date" id="start_date" name="start_date" size="12" />
-				<span class="delimeter tilde">~</span>
-				<input type="text" class="s date" id="end_date" name="end_date" size="12" /></td>
+					<span class="delimeter tilde">~</span>
+					<input type="text" class="s date" id="end_date" name="end_date" size="12" /></td>
 			</tr>
 			<tr style="height: 30px;">
 				<td><label for="order_word">표시순서</label></td>
 				<td><select id="order_word" name="order_word" class="select">
-					<option value=""> 기본 </option>
-			       	<option value="register_date"> 등록일 </option>
-				</select>
-				<select id="order_value" name="order_value" class="select">
-					<option value=""> 기본 </option>
-				   	<option value="ASC"> 오름차순 </option>
-					<option value="DESC"> 내림차순 </option>
-				</select>
-				<select id="list_counter" name="list_counter" class="select">
-					<option value="5"> 5 개씩 </option>
-				 	<option value="10"> 10 개씩 </option>
-					<option value="50"> 50 개씩 </option>
-				</select>
+						<option value=""> 기본 </option>
+				       	<option value="register_date"> 등록일 </option>
+					</select>
+					<select id="order_value" name="order_value" class="select">
+						<option value=""> 기본 </option>
+					   	<option value="ASC"> 오름차순 </option>
+						<option value="DESC"> 내림차순 </option>
+					</select>
+					<select id="list_counter" name="list_counter" class="select">
+						<option value="5"> 5 개씩 </option>
+					 	<option value="10"> 10 개씩 </option>
+						<option value="50"> 50 개씩 </option>
+					</select>
 				</td>
 			</tr>
 		</table>
@@ -313,7 +314,7 @@
 		<table>
 			<tr style="height: 35px;">
 				<td style="width: 100px;" nowrap="nowrap">
-					<form:label path="project_id">데이터 그룹</form:label>
+					<form:label path="project_id">프로젝트</form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
@@ -936,7 +937,7 @@
 			var info = $("#searchForm").serialize();
 			var url = null;
 			if($("#search_word").val() === "data_name") {
-				url = "/homepage/ajax-search-data.do";
+				url = "/data/ajax-search-data.do";
 			} else {
 				url = "/homepage/ajax-list-issue.do";
 			}
