@@ -762,13 +762,13 @@
 	}
 	
 	// 이슈 등록
-	var isInsertIssue = true;
+	var isInsertIssue = { "enable" : true };
 	$("#issueSaveButton").click(function() {
 		if (check() == false) {
 			return false;
 		}
-		if(isInsertIssue) {
-			isInsertIssue = false;
+		if(isInsertIssue["enable"]) {
+			isInsertIssue["enable"] = false;
 			var url = "/issue/ajax-insert-issue.do";
 			var info = $("#issue").serialize();
 			ajaxCall(url, info, issueSaveCallback, errorCallback, isInsertIssue);
@@ -776,7 +776,7 @@
 			// issue 등록 버튼, css, 상태를 변경
 			$("#insertIssueEnableButton").removeClass("on");
 			$("#insertIssueEnableButton").text("클릭 후 객체를 선택해 주세요.");
-			insertIssueEnable = false;
+			insertIssueEnable["enable"] = false;
 			
 			changeInsertIssueStateAPI(managerFactory, 0);
 		} else {
@@ -841,7 +841,7 @@
 					content = content 
 						+ 	"<li>"
 						+ 	"	<button type=\"button\" title=\"바로가기\""
-						+			"onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+						+			"onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
 						+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">바로가기</button>"
 						+ 	"	<div class=\"info\">"
 						+ 	"		<p class=\"title\">"
@@ -923,7 +923,7 @@
 	
 	// 검색 메뉴 시작
 	// Data 검색
-	var searchDataFlag = true;
+	var searchDataFlag = { "enable" : true }
 	$("#searchData").click(function() {
 		if ($.trim($("#search_value").val()) === ""){
 			alert("검색어를 입력해 주세요.");
@@ -931,10 +931,15 @@
 			return false;
 		}
 		
-		if(searchDataFlag) {
-			searchDataFlag = false;
+		if(searchDataFlag["enable"]) {
+			searchDataFlag["enable"] = false;
 			var info = $("#searchForm").serialize();
-			var url = "/homepage/ajax-list-issue.do";
+			var url = null;
+			if($("#search_word").val() === "data_name") {
+				url = "/homepage/ajax-search-data.do";
+			} else {
+				url = "/homepage/ajax-list-issue.do";
+			}
 			ajaxCall(url, info, searchDataCallback, errorCallback, searchDataFlag);
 		} else {
 			alert(JS_MESSAGE["button.dobule.click"]);
@@ -957,9 +962,13 @@
 					for(i=0; i<dataInfoListCount; i++ ) {
 						var dataInfo = dataInfoList[i];
 						content = content 
-							+ 	"<li>"
+							+ 	"<li>";
+						if(dataInfo.parent !== 0) {	
+							content = content 
 							+ 	"	<button type=\"button\" title=\"바로가기\""
-							+			" onclick=\"flyToBounding('" + dataInfo.data_key + "');\">바로가기</button>"
+							+ 	" 		onclick=\"gotoData('" + dataInfo.project_id + "', '" + dataInfo.data_key + "');\">바로가기</button>";
+						}
+						content = content 
 							+ 	"	<div class=\"info\">"
 							+ 	"		<p class=\"title\">"
 							+ 	"			<span>" + dataInfo.project_name + "</span>"
@@ -988,7 +997,7 @@
 						content = content 
 							+ 	"<li>"
 							+ 	"	<button type=\"button\" title=\"바로가기\""
-							+			" onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+							+			" onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
 							+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2');\">바로가기</button>"
 							+ 	"	<div class=\"info\">"
 							+ 	"		<p class=\"title\">"
@@ -1013,6 +1022,11 @@
 		}
 	}
 	
+	// 데이터 위치로 이동
+	function gotoData(projectId, dataKey) {
+		searchDataAPI(managerFactory, projectId, dataKey);
+	}
+	
 	$("#localSearch").click(function() {
 		if ($.trim($("#localSearchDataKey").val()) === ""){
 			alert("Data Key를 입력해 주세요.");
@@ -1021,10 +1035,6 @@
 		}
 		searchDataAPI(managerFactory, $("#localSearchProjectId").val(), $("#localSearchDataKey").val());
 	});
-	
-	function localSearch(projectId, dataKey) {
-		searchDataAPI(managerFactory, $("#localSearchProjectId").val(), $("#localSearchDataKey").val());
-	}
 	
 	// API 메뉴시작
 	// object 정보 표시 call back function

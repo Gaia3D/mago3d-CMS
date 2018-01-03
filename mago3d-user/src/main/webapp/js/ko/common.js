@@ -259,11 +259,11 @@ function ajaxCall(url, info, successCallback, errorCallback, isClickEnable, ...t
 		headers: { "X-mago3D-Header" : "mago3D"},
 		success : function(msg) {
 			successCallback(msg, theArgs);
-			if(isClickEnable !== null && isClickEnable !== undefined) isClickEnable = true;
+			if(isClickEnable !== null && isClickEnable !== undefined) isClickEnable["enable"] = true;
 		},
 		error : function(request, status, error) {
 			errorCallback(request, status, error);
-			if(isClickEnable !== null && isClickEnable !== undefined) isClickEnable = true;
+			if(isClickEnable !== null && isClickEnable !== undefined) isClickEnable["enable"] = true;
 		}
 	});
 }

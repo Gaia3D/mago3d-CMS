@@ -40,27 +40,6 @@
 		</trim>
 	</select>
 	
-	<!-- data_group_id 그룹을 제외한 Data 수 -->
-	<select id="getExceptDataGroupDataByGroupIdTotalCount" parameterType="dataInfo" resultType="long">
-		/* getExceptDataGroupDataByGroupIdTotalCount */
-		SELECT COUNT(data_id) 
-		FROM data_info
-		WHERE
-			<![CDATA[
-			(project_id > #{project_id}
-			OR project_id < #{project_id})
-			]]>
-			<if test="search_word != null and search_word != '' and search_value != null and search_value != ''">
-			AND ${search_word} = #{search_value}
-			</if>
-			<if test="status != null and status != ''">
-			AND status = #{status}
-			</if>
-			<if test="search_except_data_name != null and search_except_data_name != ''">
-			AND data_id LIKE '${search_except_data_name}%'
-			</if>
-	</select>
-	
 	<!-- Data 목록 -->
 	<select id="getListData" parameterType="dataInfo" resultType="dataInfo">
 		/* getListData */
@@ -132,36 +111,6 @@
 	    SELECT data_id, data_key, data_name, parent, depth, view_order, latitude, longitude, height, public_yn, child_yn, attributes, insert_date, path
 	    FROM project_data_info
 	    ORDER BY path
-	</select>
-	
-	<!-- data_group_id를 제외한 사용자 목록 -->
-	<select id="getListExceptDataGroupDataByGroupId" parameterType="dataInfo" resultType="dataInfo">
-		/* getListExceptDataGroupDataByGroupId */
-		SELECT A.*, 
-			(SELECT data_group_name FROM data_group WHERE data_group_id = A.data_group_id) AS data_group_name
-		FROM (
-			SELECT *
-			FROM data_info 
-			<trim prefix="WHERE" prefixOverrides="AND">
-				<if test="search_word != null and search_word != '' and search_value != null and search_value != ''">
-				${search_word} = #{search_value}
-				</if>
-				<if test="data_group_id != null and data_group_id > 0">
-				<![CDATA[
-				AND (data_group_id > #{data_group_id}
-				OR data_group_id < #{data_group_id})
-				]]>
-				</if>
-				<if test="status != null and status != ''">
-				AND status = #{status}
-				</if>
-				<if test="search_except_data_name != null and search_except_data_name != ''">
-				AND data_id LIKE '${search_except_data_name}%'
-				</if>
-			</trim>
-			ORDER BY insert_date DESC, data_id DESC
-			OFFSET #{offset} LIMIT #{limit}
-		) A
 	</select>
 	
 	<!-- Data 정보 -->

@@ -55,6 +55,10 @@ public class DataInfo {
 	private String order_value;
 	private Long list_counter = 10l;
 	
+	// 사용자명
+	private String user_id;
+	private String user_name;
+	
 	/****** validator ********/
 	private String method_mode;
 

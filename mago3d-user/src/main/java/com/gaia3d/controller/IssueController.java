@@ -1,5 +1,6 @@
 package com.gaia3d.controller;
 
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,7 +58,7 @@ public class IssueController {
 	private IssueValidator issueValidator;
 	
 	@Autowired
-	private ProjectService dataGroupService;
+	private ProjectService projectService;
 	@Autowired
 	private IssueService issueService;
 	
@@ -106,11 +107,11 @@ public class IssueController {
 	}
 	
 	/**
-	 * 메인
+	 * 공간 정보를 이용한 현재 위치 근처의 이슈
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "ajax-list-issue-by-geo.do", produces="application/json; charset=utf8")
+	@PostMapping(value = "ajax-list-issue-by-geo.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListIssueByGeo(HttpServletRequest request, Project project) {
 		
@@ -129,7 +130,7 @@ public class IssueController {
 //				issue.setUser_name(userSession.getUser_name());
 //			}
 			project.setLocation("SRID=4326;POINT(" + project.getLongitude() + " " + project.getLatitude() + ")");
-			Project nearDataGroup = dataGroupService.getProjectByGeo(project);
+			Project nearProject = projectService.getProjectByGeo(project);
 			
 			if(StringUtil.isNotEmpty(issue.getStart_date())) {
 				issue.setStart_date(issue.getStart_date().substring(0, 8) + DateUtil.START_TIME);
@@ -138,7 +139,7 @@ public class IssueController {
 				issue.setEnd_date(issue.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
 			}
 						
-			issue.setData_group_id(nearDataGroup.getData_group_id());
+			issue.setProject_id(nearProject.getProject_id());
 			issue.setOffset(0l);
 			issue.setLimit(100l);
 			List<Issue> issueList = issueService.getListIssue(issue);
@@ -154,6 +155,7 @@ public class IssueController {
 	}
 	
 	/**
+	 * TODO 현재는 사용하지 않음
 	 * issue 쓰기 화면
 	 * @param model
 	 * @return
@@ -161,7 +163,9 @@ public class IssueController {
 	@GetMapping(value = "input-issue.do")
 	public String inputIssue(Model model) {
 		
-		List<Project> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
+		Project project = new Project();
+		project.setUse_yn(Project.IN_USE);
+		List<Project> projectList = projectService.getListProject(project);
 		@SuppressWarnings("unchecked")
 		List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
 		@SuppressWarnings("unchecked")
@@ -169,7 +173,7 @@ public class IssueController {
 		
 		Issue issue = new Issue();
 		model.addAttribute(issue);
-		model.addAttribute("dataGroupList", dataGroupList);
+		model.addAttribute("projectList", projectList);
 		model.addAttribute("issuePriorityList", issuePriorityList);
 		model.addAttribute("issueTypeList", issueTypeList);
 		
@@ -177,6 +181,7 @@ public class IssueController {
 	}
 	
 	/**
+	 * TODO 현재는 사용하지 않음
 	 * issue 등록
 	 * @param issue
 	 * @param bindingResult
@@ -188,6 +193,9 @@ public class IssueController {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 		
+		Project project = new Project();
+		project.setUse_yn(Project.IN_USE);
+		
 		MultipartFile multipartFile = request.getFile("file_name");
 		IssueFile issueFile = new IssueFile();
 		if(multipartFile != null && multipartFile.getSize() != 0l) {
@@ -195,14 +203,14 @@ public class IssueController {
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				bindingResult.rejectValue("file_name", fileInfo.getError_code());
 				
-				List<Project> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
+				List<Project> projectList = projectService.getListProject(project);
 				@SuppressWarnings("unchecked")
 				List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
 				@SuppressWarnings("unchecked")
 				List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
 				
 				model.addAttribute(issue);
-				model.addAttribute("dataGroupList", dataGroupList);
+				model.addAttribute("projectList", projectList);
 				model.addAttribute("issuePriorityList", issuePriorityList);
 				model.addAttribute("issueTypeList", issueTypeList);
 				
@@ -230,14 +238,14 @@ public class IssueController {
 				bindingResult.rejectValue("contents", errorcode);
 			}
 			
-			List<Project> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
+			List<Project> projectList = projectService.getListProject(project);
 			@SuppressWarnings("unchecked")
 			List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
 			@SuppressWarnings("unchecked")
 			List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
 			
 			model.addAttribute(issue);
-			model.addAttribute("dataGroupList", dataGroupList);
+			model.addAttribute("projectList", projectList);
 			model.addAttribute("issuePriorityList", issuePriorityList);
 			model.addAttribute("issueTypeList", issueTypeList);
 			
@@ -270,7 +278,8 @@ public class IssueController {
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-			
+		
+			// TODO 현재 버전에서는 파일 첨부가 없어서 임시로 주석 처리 해 둔거 같음
 //			MultipartFile multipartFile = request.getFile("file_name");
 			IssueFile issueFile = new IssueFile();
 //			if(multipartFile != null && multipartFile.getSize() != 0l) {
@@ -288,7 +297,7 @@ public class IssueController {
 //			}
 //			
 //			Issue issue = new Issue();
-//			issue.setData_group_id(Long.valueOf((String)request.getParameter("data_group_id")));
+//			issue.setProject_id(Long.valueOf((String)request.getParameter("project_id")));
 			if(userSession == null) {
 				issue.setUser_id("guest");
 				issue.setUser_name("guest");
@@ -297,17 +306,17 @@ public class IssueController {
 				issue.setUser_name(userSession.getUser_name());
 			}
 			
-//			issue.setData_group_id(Long.valueOf((String)request.getParameter("data_group_id")));
-//			issue.setPriority((String)request.getParameter("priority"));
-//			issue.setIssue_type((String)request.getParameter("issue_type"));
-//			issue.setData_key((String)request.getParameter("data_key"));
-//			issue.setLatitude((String)request.getParameter("latitude"));
-//			issue.setLongitude((String)request.getParameter("longitude"));
-//			issue.setTitle((String)request.getParameter("title"));
-//			issue.setDue_date((String)request.getParameter("due_to"));
-//			issue.setAssignee((String)request.getParameter("assignee"));
-//			issue.setReporter((String)request.getParameter("reporter"));
-//			issue.setContents((String)request.getParameter("contents"));
+			issue.setProject_id(Long.valueOf((String)request.getParameter("project_id")));
+			issue.setPriority((String)request.getParameter("priority"));
+			issue.setIssue_type((String)request.getParameter("issue_type"));
+			issue.setData_key((String)request.getParameter("data_key"));
+			issue.setLatitude(new BigDecimal((String)request.getParameter("latitude")));
+			issue.setLongitude(new BigDecimal((String)request.getParameter("longitude")));
+			issue.setTitle((String)request.getParameter("title"));
+			issue.setDue_date((String)request.getParameter("due_to"));
+			issue.setAssignee((String)request.getParameter("assignee"));
+			issue.setReporter((String)request.getParameter("reporter"));
+			issue.setContents((String)request.getParameter("contents"));
 			
 			issue.setMethod_mode("insert");
 			String errorcode = issue.validate();
@@ -390,7 +399,7 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-issue.do", produces="application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-issue.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateIssue(Issue issue) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
@@ -460,7 +469,7 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-insert-issue-comment.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-insert-issue-comment.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertIssueComment(HttpServletRequest request, Issue issue) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
@@ -505,7 +514,7 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-delete-issue-comment.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-delete-issue-comment.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDeleteIssueComment(HttpServletRequest request, Long issue_comment_id) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();

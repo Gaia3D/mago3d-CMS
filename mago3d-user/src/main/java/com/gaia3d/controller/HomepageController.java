@@ -22,14 +22,12 @@ import org.springframework.web.servlet.LocaleResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CommonCode;
-import com.gaia3d.domain.Project;
-import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Policy;
+import com.gaia3d.domain.Project;
 import com.gaia3d.domain.SessionKey;
 import com.gaia3d.domain.UserSession;
-import com.gaia3d.service.DataService;
 import com.gaia3d.service.IssueService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.StringUtil;
@@ -45,9 +43,7 @@ public class HomepageController {
 	private LocaleResolver localeResolver;
 	@Autowired
 	private IssueService issueService;
-	@Autowired
-	private DataService dataService;
-
+	
 	/**
 	 * 메인
 	 * @param model
@@ -201,7 +197,7 @@ public class HomepageController {
 	}
 	
 	/**
-	 * 메인
+	 * 이슈 목록
 	 * @param model
 	 * @return
 	 */
@@ -229,47 +225,20 @@ public class HomepageController {
 				issue.setEnd_date(issue.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
 			}
 			
-			long totalCount = 0l;
-			DataInfo dataInfo = null;
-			if(DataInfo.DATA_NAME.equals(issue.getSearch_word())) {
-				dataInfo = new DataInfo();
-				dataInfo.setProject_id(issue.getProject_id());
-				dataInfo.setSearch_word(issue.getSearch_word());
-				dataInfo.setSearch_option(issue.getSearch_option());
-				dataInfo.setSearch_value(issue.getSearch_value());
-				dataInfo.setStart_date(issue.getStart_date());
-				dataInfo.setEnd_date(issue.getEnd_date());
-				dataInfo.setOrder_word(issue.getOrder_word());
-				dataInfo.setOrder_value(issue.getOrder_value());
-				dataInfo.setList_counter(issue.getList_counter());
-				totalCount = dataService.getDataTotalCount(dataInfo);
-			} else {
-				totalCount = issueService.getIssueTotalCountByUserId(issue);
-			}
+			long totalCount = issueService.getIssueTotalCountByUserId(issue);
 			
 			long pageRows = 10l;
 			if(issue.getList_counter() != null && issue.getList_counter().longValue() > 0) pageRows = issue.getList_counter().longValue();
 			Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(issue), totalCount, Long.valueOf(pageNo).longValue(), pageRows);
 			log.info("@@ pagination = {}", pagination);
 			
-			if(DataInfo.DATA_NAME.equals(issue.getSearch_word())) {
-				dataInfo.setOffset(pagination.getOffset());
-				dataInfo.setLimit(pagination.getPageRows());
-				List<DataInfo> dataInfoList = new ArrayList<DataInfo>();
-				if(totalCount > 0l) {
-					dataInfoList = dataService.getListData(dataInfo);
-				}
-				jSONObject.put("dataInfoList", dataInfoList);
-			} else {
-				issue.setOffset(pagination.getOffset());
-				issue.setLimit(pagination.getPageRows());
-				List<Issue> issueList = new ArrayList<Issue>();
-				if(totalCount > 0l) {
-					issueList = issueService.getListIssueByUserId(issue);
-				}
-				jSONObject.put("issueList", issueList);
+			issue.setOffset(pagination.getOffset());
+			issue.setLimit(pagination.getPageRows());
+			List<Issue> issueList = new ArrayList<Issue>();
+			if(totalCount > 0l) {
+				issueList = issueService.getListIssueByUserId(issue);
 			}
-			
+			jSONObject.put("issueList", issueList);
 			jSONObject.put("totalCount", totalCount);
 		} catch(Exception e) {
 			e.printStackTrace();

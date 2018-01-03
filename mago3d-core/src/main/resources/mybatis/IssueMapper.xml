@@ -277,13 +277,13 @@
 			<if test="location != null and location != ''">
 			ST_GeographyFromText(#{location})
 			</if>
-			<if test="latitude != null and latitude != ''">
+			<if test="latitude != null">
 			latitude = #{latitude},
 			</if>
-			<if test="longitude != null and longitude != ''">
+			<if test="longitude != null">
 			longitude = #{longitude},
 			</if>
-			<if test="height != null and height != ''">
+			<if test="height != null">
 			height = #{height},
 			</if>
 			<if test="user_id != null and user_id != ''">

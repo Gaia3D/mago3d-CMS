@@ -4828,6 +4828,10 @@ MagoManager.prototype.startRender = function(scene, isLastFrustum, frustumIdx, n
 		{
 			// inverse "for" because delete 1rst farest.***
 			node = this.visibleObjControlerNodes.currentVisibles3[i];
+			neoBuilding = node.data.neoBuilding;
+			if(neoBuilding && neoBuilding.buildingId == "2119_E43GC_E43PP_A410P")
+					var hola = 0;
+				
 			if (!this.processQueue.nodesToDeleteLessThanLod3Map.has(node))
 			{
 				this.processQueue.putNodeToDeleteLessThanLod3(node, 0);
@@ -4835,6 +4839,8 @@ MagoManager.prototype.startRender = function(scene, isLastFrustum, frustumIdx, n
 			}
 			if (nodesPutted > 10)
 			{ break; }
+			//if(this.processQueue.nodesToDeleteLessThanLod3Map.length > 10)
+			//{ break; }
 		}
 		
 		// lod3, lod4, lod5.***
@@ -6382,6 +6388,7 @@ MagoManager.prototype.manageQueue = function()
 	}
 	
 	// now, delete lod0, lod1, lod2.***
+	/*
 	var deletedCount = 0;
 	var nodesToDeleteLod2Lod4Lod5Array = Array.from(this.processQueue.nodesToDeleteLessThanLod3Map.keys());
 	var nodesCount = nodesToDeleteLod2Lod4Lod5Array.length;
@@ -6396,22 +6403,25 @@ MagoManager.prototype.manageQueue = function()
 			neoBuilding = node.data.neoBuilding;
 			if (neoBuilding === undefined)
 			{ continue; }
-
+		
+			if(neoBuilding.buildingId == "2119_E43GC_E43PP_A410P")
+				var hola = 0;
+			
 			if (neoBuilding.octree !== undefined)
 			{ 
-				neoBuilding.octree.deleteObjectsModelReferences(gl, this.vboMemoryManager);
-				if (neoBuilding.octree.lego)
-				{
-					neoBuilding.octree.lego.deleteObjects(gl, this.vboMemoryManager);
-					neoBuilding.octree.lego = undefined;
-				}
+				neoBuilding.octree.deleteLod2GlObjects(gl, this.vboMemoryManager);
+				//if (neoBuilding.octree.lego)
+				//{
+				//	neoBuilding.octree.lego.deleteObjects(gl, this.vboMemoryManager);
+				//	neoBuilding.octree.lego = undefined;
+				//}
 				
 				// delete the textureLod2.***
-				//if(neoBuilding.simpleBuilding3x3Texture)
-				//{
-				//	neoBuilding.simpleBuilding3x3Texture.deleteObjects(gl);
-				//	neoBuilding.simpleBuilding3x3Texture = undefined;
-				//}
+				if(neoBuilding.simpleBuilding3x3Texture)
+				{
+					neoBuilding.simpleBuilding3x3Texture.deleteObjects(gl);
+					neoBuilding.simpleBuilding3x3Texture = undefined;
+				}
 			}
 			neoBuilding.deleteObjectsModelReferences(gl, this.vboMemoryManager);
 			deletedCount++;
@@ -6420,6 +6430,7 @@ MagoManager.prototype.manageQueue = function()
 			{ break; }
 		}
 	}
+	*/
 	
 	
 	// parse pendent data.**********************************************************************************
@@ -9249,16 +9260,26 @@ MagoManager.prototype.tilesFrustumCullingFinished = function(intersectedLowestTi
 				{ var hola = 0; }
 				if (neoBuilding.buildingId === "Goliath")
 				{ var hola = 0; }
-				
-				this.radiusAprox_aux = neoBuilding.bbox.getRadiusAprox();
-				if (this.boundingSphere_Aux === undefined)
-				{ this.boundingSphere_Aux = new Sphere(); }
 			
-				this.boundingSphere_Aux.setCenterPoint(realBuildingPos.x, realBuildingPos.y, realBuildingPos.z);
-				this.boundingSphere_Aux.setRadius(this.radiusAprox_aux);
+				if(neoBuilding.buildingId == "2119_E43GC_E43PP_A410P")
+					var hola = 0;
+			
+				// test.***
+				//if(neoBuilding.octree)
+				//{
+				//	var cameraPosition = this.sceneState.camera.position;
+				//	distToCamera = neoBuilding.octree.getMinDistToCamera(cameraPosition);
+				//}
+				//else{
+					this.radiusAprox_aux = neoBuilding.bbox.getRadiusAprox();
+					if (this.boundingSphere_Aux === undefined)
+					{ this.boundingSphere_Aux = new Sphere(); }
 				
-				distToCamera = cameraPosition.distToSphere(this.boundingSphere_Aux);
-				
+					this.boundingSphere_Aux.setCenterPoint(realBuildingPos.x, realBuildingPos.y, realBuildingPos.z);
+					this.boundingSphere_Aux.setRadius(this.radiusAprox_aux);
+					
+					distToCamera = cameraPosition.distToSphere(this.boundingSphere_Aux);
+				//}
 				neoBuilding.distToCam = distToCamera;
 			
 				if (distToCamera > this.magoPolicy.getFrustumFarDistance())
@@ -11988,16 +12009,16 @@ OcclusionCullingOctreeCell.prototype.intersectsWithPoint3D = function(x, y, z)
  */
 OcclusionCullingOctreeCell.prototype.getIntersectedSubBoxByPoint3D = function(x, y, z) 
 {
-	if (this._ocCulling_Cell_owner === null) 
+	if (this._ocCulling_Cell_owner === undefined) 
 	{
 		// This is the mother_cell.***
 		if (!this.intersectsWithPoint3D(x, y, z)) 
 		{
-			return null;
+			return undefined;
 		}
 	}
 	
-	var intersectedSubBox = null;
+	var intersectedSubBox = undefined;
 	var subBoxes_count = this._subBoxesArray.length;
 	if (subBoxes_count > 0) 
 	{
@@ -12005,7 +12026,7 @@ OcclusionCullingOctreeCell.prototype.getIntersectedSubBoxByPoint3D = function(x,
 		var center_y = (this.minY + this.maxY)/2.0;
 		var center_z = (this.minZ + this.maxZ)/2.0;
 		
-		var intersectedSubBox_aux = null;
+		var intersectedSubBox_aux = undefined;
 		var intersectedSubBox_idx;
 		if (x<center_x) 
 		{
@@ -12064,7 +12085,7 @@ OcclusionCullingOctreeCell.prototype.getIndicesVisiblesForEye = function(eye_x, 
 {
 	var intersectedSubBox = this.getIntersectedSubBoxByPoint3D(eye_x, eye_y, eye_z);
 	
-	if (intersectedSubBox !== null && intersectedSubBox._indicesArray.length > 0) 
+	if (intersectedSubBox !== undefined && intersectedSubBox._indicesArray.length > 0) 
 	{
 		result_visibleIndicesArray = intersectedSubBox._indicesArray;
 		if (result_modelReferencedGroup)
@@ -12124,6 +12145,9 @@ OcclusionCullingOctreeCell.prototype.parseArrayBuffer = function(arrayBuffer, by
 		for (var i=0; i<objects_count; i++) 
 		{
 			var objects_idxInList = f4dReaderWriter.readUInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
+			if(objects_idxInList < 0)
+				var hola = 0;
+			
 			this._indicesArray.push(objects_idxInList);
 		}
 	}
@@ -15677,461 +15701,6 @@ VisibleObjectsController.prototype.clear = function()
 'use strict';
 
 /**
- * 어떤 일을 하고 있습니까?
- * @class Face
- */
-var Face = function() 
-{
-	if (!(this instanceof Face)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.halfEdge;
-};
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class HalfEdge
- */
-var HalfEdge = function() 
-{
-	if (!(this instanceof HalfEdge)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.origenVertex;
-	this.nextEdge;
-	this.twinEdge;
-	this.face;
-};
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Mesh
- */
-var Mesh = function() 
-{
-	if (!(this instanceof Mesh)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.surfacesArray;
-};
-
-'use strict';
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class ParametricMesh
- */
-var ParametricMesh = function() 
-{
-	if (!(this instanceof ParametricMesh)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	this.profilesList; // class: ProfilesList.
-	this.trianglesMatrix;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ParametricMesh.prototype.extrude = function(profile, extrusionVector, extrusionDist, extrudeSegmentsCount) 
-{
-	if (this.profilesList === undefined)
-	{
-		this.profilesList = new ProfilesList();
-	}
-	
-	if (extrudeSegmentsCount === undefined)
-	{ extrudeSegmentsCount = 1; }
-	
-	// 1rst, make a profilesList extrude.
-	this.profilesList.deleteObjects(); // init.
-	this.profilesList.extrude(profile, extrusionVector, extrusionDist, extrudeSegmentsCount);
-	
-	// now, make the bottomCap, topCap, and lateral triangles.
-	this.trianglesMatrix = new TrianglesMatrix();
-	
-	
-};
-/**
-* 어떤 일을 하고 있습니까?
-* @class Point2D
-*/
-var Point2D = function() 
-{
-	if (!(this instanceof Point2D)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.x = 0.0;
-	this.y = 0.0;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point2D.prototype.deleteObjects = function() 
-{
-	this.x = undefined;
-	this.y = undefined;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point2D.prototype.copyFrom = function(point2d) 
-{
-	this.x = point2d.x;
-	this.y = point2d.y;
-};
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Profile
- */
-var Profile = function() 
-{
-	if (!(this instanceof Profile)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.outer; // one vertexList. no.
-	this.inners; // vertexLists array. no.
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.getOuter = function() 
-{
-	if (this.outer === undefined)
-	{ this.outer = new VertexList(); }
-	
-	return this.outer;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.newInner = function() 
-{
-	if (this.inners === undefined)
-	{ this.inners = []; }
-	
-	var innerVertexList = new VertexList();
-	this.inners.push(innerVertexList);
-	
-	return innerVertexList;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.deleteObjects = function() 
-{
-	if (this.outer)
-	{
-		this.outer.deleteObjects();
-		this.outer = undefined;
-	}
-
-	if (this.inners)
-	{
-		var innersCount = this.inners.length;
-		for (var i=0; i<innersCount; i++)
-		{
-			this.inners[i].deleteObjects();
-			this.inners[i] = undefined;
-		}
-		this.inners = undefined;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.copyFrom = function(profileRef) 
-{
-	// outer vertex list.
-	if (profileRef.outer)
-	{
-		if (this.outer === undefined)
-		{ this.outer = new VertexList(); }
-		
-		this.outer.copyFrom(profileRef.outer);
-	}
-	
-	// inner vertex lists.
-	if (profileRef.inners && profileRef.inners.length > 0)
-	{
-		if (this.inners === undefined)
-		{ this.inners = []; }
-		
-		var innersCount = profileRef.inners.length;
-		var myInner;
-		for (var i=0; i<innersCount; i++)
-		{
-			myInner = this.newInner();
-			myInner.copyFrom(profileRef.inners[i]);
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.getSurfaceOuterConvex = function(resultSurface) 
-{
-	// this function return a face made by convex outer.
-	if (this.outer === undefined)
-	{ return; }
-	
-	var vertex;
-	var outerVertexCount = this.outer.getVertexCount();
-	for (var i=0; i<outerVertexCount; i++)
-	{
-		vertex = this.outer.getVertex(i);
-		
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.getSurface = function(resultSurface) 
-{
-	
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class ProfilesList
- */
-var ProfilesList = function() 
-{
-	if (!(this instanceof ProfilesList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.profilesArray;
-	this.auxiliarAxis;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-ProfilesList.prototype.newProfile = function() 
-{
-	if (this.profilesArray === undefined)
-	{ this.profilesArray = []; }
-	
-	var profile = new Profile();
-	this.profilesArray.push(profile);
-	return profile;
-};
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-ProfilesList.prototype.deleteObjects = function() 
-{
-	if (this.profilesArray)
-	{
-		var profilesCount = this.profilesArray.length;
-		for (var i=0; i<profilesCount; i++)
-		{
-			this.profilesArray[i].deleteObjects();
-			this.profilesArray = undefined;
-		}
-		this.profilesArray = undefined;
-	}
-};
-
-ProfilesList.prototype.extrude = function(profileReference, extrusionVector, extrusionDist, extrudeSegmentsCount) 
-{
-	if (this.profilesArray === undefined)
-	{ this.profilesArray = []; }
-	
-	if (extrudeSegmentsCount === undefined)
-	{ extrudeSegmentsCount = 1; }
-
-	// 1rst, copy the profileReference to this first profile.
-	var firstProfile = this.newProfile();
-	firstProfile.copyFrom(profileReference);
-	
-	// now make the extrusion.
-	var nextProfile;
-	var nextOuter;
-	var firstOuter = firstProfile.getOuter();
-	var outerVertexCount;
-	var nextVertex;
-	var firstVertex;
-	var currentSegExtDist;
-	for (var i=0; i<extrudeSegmentsCount; i++)
-	{
-		nextProfile = this.newProfile();
-		
-		// outer vertex list.
-		nextOuter = nextProfile.getOuter();
-		currentSegExtDist = (extrusionDist/extrudeSegmentsCount)*(i+1);
-		outerVertexCount = firstOuter.getVertexCount();
-		for (var j=0; j<outerVertexCount; j++)
-		{
-			firstVertex = firstOuter.getVertex(j);
-			nextVertex = nextOuter.newVertex();
-			nextVertex.setPosition(firstVertex.point3d.x + extrusionVector.x * currentSegExtDist, firstVertex.point3d.y + extrusionVector.y * currentSegExtDist, firstVertex.point3d.z + extrusionVector.z * currentSegExtDist);
-		}
-		
-		// inner vertices list.
-		if (firstProfile.inners && firstProfile.inners.length > 0)
-		{
-			// todo:
-		}
-	}
-	
-};
-
-ProfilesList.prototype.getMesh = function(resultMesh) 
-{
-	// a mesh made by a bottomCap + lateralSides + topCap.
-	
-	// provisionally get only lateral side surface.
-	
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Surface
- */
-var Surface = function() 
-{
-	if (!(this instanceof Surface)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.facesArray;
-};
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class TrianglesList
- */
-var TrianglesList= function() 
-{
-	if (!(this instanceof TrianglesList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.trianglesArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param idx 변수
- * @returns vertexArray[idx]
- */
-TrianglesList.prototype.newTriangle = function() 
-{
-	if (this.trianglesArray === undefined)
-	{ this.trianglesArray = []; }
-	
-	var triangle = new Triangle();
-	this.trianglesArray.push(triangle);
-	return triangle;
-};
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class TrianglesMatrix
- */
-var TrianglesMatrix= function() 
-{
-	if (!(this instanceof TrianglesMatrix)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.trianglesListsArray;
-};
-'use strict';
-
-/**
  * mago3djs API
  * 
  * @alias API
@@ -17460,7 +17029,7 @@ var Policy = function()
 	// LOD1
 	this.lod0DistInMeters = 2;
 	this.lod1DistInMeters = 5;
-	this.lod2DistInMeters = 60;
+	this.lod2DistInMeters = 40;
 	this.lod3DistInMeters = 200;
 	this.lod4DistInMeters = 1000;
 	this.lod5DistInMeters = 50000;
@@ -28576,11 +28145,11 @@ NeoBuilding.prototype.deleteObjects = function(gl, vboMemoryManager)
 		{
 			if (this.texturesLoaded[i])
 			{
-				gl.deleteTexture(this.texturesLoaded[i].texId);
-				this.texturesLoaded[i].deleteObjects();
+				this.texturesLoaded[i].deleteObjects(gl);
 			}
 			this.texturesLoaded[i] = undefined;
 		}
+		this.texturesLoaded.length = 0;
 	}
 	this.texturesLoaded = undefined;
 	
@@ -28711,6 +28280,18 @@ NeoBuilding.prototype.updateCurrentAllIndicesExterior = function()
 NeoBuilding.prototype.isCameraInsideOfBuilding = function(eyeX, eyeY, eyeZ) 
 {
 	return this.metaData.bbox.isPoint3dInside(eyeX, eyeY, eyeZ);
+	/*
+	var intersectedOctree = this.octree.getIntersectedSubBoxByPoint3D(eyeX, eyeY, eyeZ);
+	if(intersectedOctree)
+	{
+		if(intersectedOctree.triPolyhedronsCount > 0)
+			return true;
+		else
+			return false;
+	}
+	else
+		return false;
+	*/
 };
 
 /**
@@ -28760,6 +28341,8 @@ NeoBuilding.prototype.getHeaderVersion = function()
  */
 NeoBuilding.prototype.manageNeoReferenceTexture = function(neoReference, magoManager) 
 {
+	var texture = undefined;
+	
 	if (this.metaData.version[0] === "v")
 	{
 		// this is the version beta.
@@ -28800,45 +28383,41 @@ NeoBuilding.prototype.manageNeoReferenceTexture = function(neoReference, magoMan
 				}
 			}
 		}
+		
+		return neoReference.texture.fileLoadState;
 	}
-	else if (this.metaData.version[0] === 0 && this.metaData.version[2] === 0 && this.metaData.version[4] === 1 )
+	else if (this.metaData.version[0] === '0' && this.metaData.version[2] === '0' && this.metaData.version[4] === '1' )
 	{
-		if (magoManager.backGround_fileReadings_count > 10) 
-		{ return; }
+		if(neoReference.texture === undefined)
+		{
+			// provisionally use materialId as textureId.
+			var textureId = neoReference.materialId;
+			texture = this.texturesLoaded[textureId];
+			neoReference.texture = texture;
 			
-		// provisionally use materialId as textureId.
-		var textureId = neoReference.materialId;
-		var texture = this.texturesLoaded[textureId];
-		
-		if (texture === undefined)
-		{
-			//texture = new Texture();
-			//texture.fileLoadState = CODE.fileLoadState.READY
-			//this.texturesLoaded[textureId] = texture;
-		}
-		
-		if (texture.fileLoadState === CODE.fileLoadState.READY) 
-		{
-			var gl = magoManager.sceneState.gl;
-			neoReference.texture.texId = gl.createTexture();
-			// Load the texture.***
-			var geometryDataPath = magoManager.readerWriter.getCurrentDataPath();
-			var filePath_inServer = geometryDataPath + "/" + this.buildingFileName + "/Images_Resized/" + neoReference.texture.textureImageFileName;
-
-			this.texturesLoaded.push(neoReference.texture);
-			magoManager.readerWriter.readNeoReferenceTexture(gl, filePath_inServer, neoReference.texture, this, magoManager);
-			magoManager.backGround_fileReadings_count ++;
-		}
-		else 
-		{
-			if (texture.fileLoadState === CODE.fileLoadState.LOADING_FINISHED)
+			if(texture.texId === undefined && texture.textureImageFileName !== "")
 			{
-				neoReference.texture = texture;
+				if (magoManager.backGround_fileReadings_count > 10) 
+				{ return undefined; }
+	
+				if (texture.fileLoadState === CODE.fileLoadState.READY) 
+				{
+					var gl = magoManager.sceneState.gl;
+					texture.texId = gl.createTexture();
+					// Load the texture.***
+					var projectFolderName = this.projectFolderName;
+					var geometryDataPath = magoManager.readerWriter.getCurrentDataPath();
+					var filePath_inServer = geometryDataPath + "/" + projectFolderName + "/" + this.buildingFileName + "/Images_Resized/" + texture.textureImageFileName;
+
+					magoManager.readerWriter.readNeoReferenceTexture(gl, filePath_inServer, texture, this, magoManager);
+					magoManager.backGround_fileReadings_count ++;
+				}
 			}
 		}
+		
+		return neoReference.texture.fileLoadState;
 	}
 	
-	return neoReference.texture.fileLoadState;
 };
 
 
@@ -29384,6 +28963,9 @@ NeoReferencesMotherAndIndices.prototype.parseArrayBufferReferencesVersioned = fu
 			neoRef.objectId = objectId;
 			bytes_readed += objectIdLength;
 			
+			if(neoRef.objectId === "20046")
+					var hola = 0;
+			
 			neoBuilding.putReferenceObject(neoRef, neoRef._id);
 
 			// 2) Block's Idx.***
@@ -29545,7 +29127,9 @@ NeoReferencesMotherAndIndices.prototype.parseArrayBufferReferencesVersioned = fu
 			neoRef.materialId = readWriter.readInt32(arrayBuffer, bytes_readed, bytes_readed+4); bytes_readed += 4;
 			if (neoRef.materialId === -1)
 			{ neoRef.hasTexture = false; }
-			else { neoRef.hasTexture = true; }
+			else { 
+				neoRef.hasTexture = true; 
+			}
 
 			if (tMatrix4)
 			{
@@ -30363,7 +29947,8 @@ Octree.prototype.deleteObjects = function(gl, vboMemManager)
 	}
 	
 	this.legoDataArrayBuffer = undefined;
-	this.centerPos.deleteObjects();
+	if(this.centerPos)
+		this.centerPos.deleteObjects();
 	this.centerPos = undefined;
 	this.half_dx = undefined; // half width.***
 	this.half_dy = undefined; // half length.***
@@ -30422,6 +30007,30 @@ Octree.prototype.deleteLod0GlObjects = function(gl, vboMemManager)
 		for (var i=0, subOctreesCount = this.subOctrees_array.length; i<subOctreesCount; i++) 
 		{
 			this.subOctrees_array[i].deleteLod0GlObjects(gl, vboMemManager);
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param treeDepth 변수
+ */
+Octree.prototype.deleteLod2GlObjects = function(gl, vboMemManager) 
+{
+	if (this.lego !== undefined) 
+	{
+		this.lego.deleteObjects(gl, vboMemManager);
+		this.lego = undefined;
+	}
+	
+	if (this.neoReferencesMotherAndIndices)
+	{ this.neoReferencesMotherAndIndices.deleteObjects(gl, vboMemManager); }
+
+	if (this.subOctrees_array !== undefined) 
+	{
+		for (var i=0, subOctreesCount = this.subOctrees_array.length; i<subOctreesCount; i++) 
+		{
+			this.subOctrees_array[i].deleteLod2GlObjects(gl, vboMemManager);
 		}
 	}
 };
@@ -30857,6 +30466,114 @@ Octree.prototype.getFrustumVisibleLowestOctreesByLOD = function(cullingVolume, v
 
 	visibleOctreesArray = undefined;
 	return find;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ * @returns intersects
+ */
+Octree.prototype.intersectsWithPoint3D = function(x, y, z) 
+{
+	//this.centerPos = new Point3D();
+	//this.half_dx = 0.0; // half width.***
+	//this.half_dy = 0.0; // half length.***
+	//this.half_dz = 0.0; // half height.***
+	var minX = this.centerPos.x - this.half_dx;
+	var minY = this.centerPos.y - this.half_dz;
+	var minZ = this.centerPos.z - this.half_dz;
+	var maxX = this.centerPos.x + this.half_dx;
+	var maxY = this.centerPos.y + this.half_dz;
+	var maxZ = this.centerPos.z + this.half_dz;
+	
+	var intersects = false;
+	if (x> minX && x<maxX) 
+	{
+		if (y> minY && y<maxY) 
+		{
+			if (z> minZ && z<maxZ) 
+			{
+				intersects = true;
+			}
+		}
+	}
+	
+	return intersects;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ * @returns intersectedSubBox
+ */
+Octree.prototype.getIntersectedSubBoxByPoint3D = function(x, y, z) 
+{
+	if (this.octree_owner === undefined) 
+	{
+		// This is the mother_cell.***
+		if (!this.intersectsWithPoint3D(x, y, z)) 
+		{
+			return false;
+		}
+	}
+	
+	var intersectedSubBox = undefined;
+	var subBoxes_count = this.subOctrees_array.length;
+	if (subBoxes_count > 0) 
+	{
+		var center_x = this.centerPos.x;
+		var center_y = this.centerPos.y;
+		var center_z = this.centerPos.z;
+		
+		var intersectedSubBox_aux = undefined;
+		var intersectedSubBox_idx;
+		if (x<center_x) 
+		{
+			// Here are the boxes number 0, 3, 4, 7.***
+			if (y<center_y) 
+			{
+				// Here are 0, 4.***
+				if (z<center_z) { intersectedSubBox_idx = 0; }
+				else { intersectedSubBox_idx = 4; }
+			}
+			else 
+			{
+				// Here are 3, 7.***
+				if (z<center_z) { intersectedSubBox_idx = 3; }
+				else { intersectedSubBox_idx = 7; }
+			}
+		}
+		else 
+		{
+			// Here are the boxes number 1, 2, 5, 6.***
+			if (y<center_y) 
+			{
+				// Here are 1, 5.***
+				if (z<center_z) { intersectedSubBox_idx = 1; }
+				else { intersectedSubBox_idx = 5; }
+			}
+			else 
+			{
+				// Here are 2, 6.***
+				if (z<center_z) { intersectedSubBox_idx = 2; }
+				else { intersectedSubBox_idx = 6; }
+			}
+		}
+		
+		intersectedSubBox_aux = this.subOctrees_array[intersectedSubBox_idx];
+		intersectedSubBox = intersectedSubBox_aux.getIntersectedSubBoxByPoint3D(x, y, z);
+		
+	}
+	else 
+	{
+		intersectedSubBox = this;
+	}
+	
+	return intersectedSubBox;
 };
 
 /**
@@ -32757,7 +32474,7 @@ ReaderWriter.prototype.getNeoHeaderAsimetricVersion = function(gl, fileName, neo
 			var ver1 = neoBuilding.metaData.version[2];
 			var ver2 = neoBuilding.metaData.version[4];
 			
-			if (ver0 === 0 && ver1 === 0 && ver2 === 1)
+			if (ver0 === '0' && ver1 === '0' && ver2 === '1')
 			{
 				// read materials list.
 				var materialsCount = readerWriter.readInt32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
@@ -32784,6 +32501,10 @@ ReaderWriter.prototype.getNeoHeaderAsimetricVersion = function(gl, fileName, neo
 						var texture = new Texture();
 						texture.textureTypeName = textureTypeName;
 						texture.textureImageFileName = textureImageFileName;
+						
+						if(neoBuilding.texturesLoaded === undefined)
+							neoBuilding.texturesLoaded = [];
+						
 						neoBuilding.texturesLoaded.push(texture);
 					}
 				}
@@ -33019,7 +32740,7 @@ ReaderWriter.prototype.readNeoReferenceTexture = function(gl, filePath_inServer,
 	
 	if (extension === "tga" || extension === "TGA" || extension === "Tga")
 	{
-		//texture.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
+		texture.fileLoadState = CODE.fileLoadState.LOADING_STARTED;
 		loadWithXhr(filePath_inServer).done(function(response) 
 		{
 			var arrayBuffer = response;
@@ -33378,6 +33099,461 @@ ReaderWriter.prototype.handleTextureLoaded = function(gl, image, texture)
 
 /**
  * 어떤 일을 하고 있습니까?
+ * @class Face
+ */
+var Face = function() 
+{
+	if (!(this instanceof Face)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.halfEdge;
+};
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class HalfEdge
+ */
+var HalfEdge = function() 
+{
+	if (!(this instanceof HalfEdge)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.origenVertex;
+	this.nextEdge;
+	this.twinEdge;
+	this.face;
+};
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Mesh
+ */
+var Mesh = function() 
+{
+	if (!(this instanceof Mesh)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.surfacesArray;
+};
+
+'use strict';
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class ParametricMesh
+ */
+var ParametricMesh = function() 
+{
+	if (!(this instanceof ParametricMesh)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.profilesList; // class: ProfilesList.
+	this.trianglesMatrix;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ParametricMesh.prototype.extrude = function(profile, extrusionVector, extrusionDist, extrudeSegmentsCount) 
+{
+	if (this.profilesList === undefined)
+	{
+		this.profilesList = new ProfilesList();
+	}
+	
+	if (extrudeSegmentsCount === undefined)
+	{ extrudeSegmentsCount = 1; }
+	
+	// 1rst, make a profilesList extrude.
+	this.profilesList.deleteObjects(); // init.
+	this.profilesList.extrude(profile, extrusionVector, extrusionDist, extrudeSegmentsCount);
+	
+	// now, make the bottomCap, topCap, and lateral triangles.
+	this.trianglesMatrix = new TrianglesMatrix();
+	
+	
+};
+/**
+* 어떤 일을 하고 있습니까?
+* @class Point2D
+*/
+var Point2D = function() 
+{
+	if (!(this instanceof Point2D)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.x = 0.0;
+	this.y = 0.0;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.deleteObjects = function() 
+{
+	this.x = undefined;
+	this.y = undefined;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.copyFrom = function(point2d) 
+{
+	this.x = point2d.x;
+	this.y = point2d.y;
+};
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Profile
+ */
+var Profile = function() 
+{
+	if (!(this instanceof Profile)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.outer; // one vertexList. no.
+	this.inners; // vertexLists array. no.
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.getOuter = function() 
+{
+	if (this.outer === undefined)
+	{ this.outer = new VertexList(); }
+	
+	return this.outer;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.newInner = function() 
+{
+	if (this.inners === undefined)
+	{ this.inners = []; }
+	
+	var innerVertexList = new VertexList();
+	this.inners.push(innerVertexList);
+	
+	return innerVertexList;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.deleteObjects = function() 
+{
+	if (this.outer)
+	{
+		this.outer.deleteObjects();
+		this.outer = undefined;
+	}
+
+	if (this.inners)
+	{
+		var innersCount = this.inners.length;
+		for (var i=0; i<innersCount; i++)
+		{
+			this.inners[i].deleteObjects();
+			this.inners[i] = undefined;
+		}
+		this.inners = undefined;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.copyFrom = function(profileRef) 
+{
+	// outer vertex list.
+	if (profileRef.outer)
+	{
+		if (this.outer === undefined)
+		{ this.outer = new VertexList(); }
+		
+		this.outer.copyFrom(profileRef.outer);
+	}
+	
+	// inner vertex lists.
+	if (profileRef.inners && profileRef.inners.length > 0)
+	{
+		if (this.inners === undefined)
+		{ this.inners = []; }
+		
+		var innersCount = profileRef.inners.length;
+		var myInner;
+		for (var i=0; i<innersCount; i++)
+		{
+			myInner = this.newInner();
+			myInner.copyFrom(profileRef.inners[i]);
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.getSurfaceOuterConvex = function(resultSurface) 
+{
+	// this function return a face made by convex outer.
+	if (this.outer === undefined)
+	{ return; }
+	
+	var vertex;
+	var outerVertexCount = this.outer.getVertexCount();
+	for (var i=0; i<outerVertexCount; i++)
+	{
+		vertex = this.outer.getVertex(i);
+		
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.getSurface = function(resultSurface) 
+{
+	
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class ProfilesList
+ */
+var ProfilesList = function() 
+{
+	if (!(this instanceof ProfilesList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.profilesArray;
+	this.auxiliarAxis;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+ProfilesList.prototype.newProfile = function() 
+{
+	if (this.profilesArray === undefined)
+	{ this.profilesArray = []; }
+	
+	var profile = new Profile();
+	this.profilesArray.push(profile);
+	return profile;
+};
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+ProfilesList.prototype.deleteObjects = function() 
+{
+	if (this.profilesArray)
+	{
+		var profilesCount = this.profilesArray.length;
+		for (var i=0; i<profilesCount; i++)
+		{
+			this.profilesArray[i].deleteObjects();
+			this.profilesArray = undefined;
+		}
+		this.profilesArray = undefined;
+	}
+};
+
+ProfilesList.prototype.extrude = function(profileReference, extrusionVector, extrusionDist, extrudeSegmentsCount) 
+{
+	if (this.profilesArray === undefined)
+	{ this.profilesArray = []; }
+	
+	if (extrudeSegmentsCount === undefined)
+	{ extrudeSegmentsCount = 1; }
+
+	// 1rst, copy the profileReference to this first profile.
+	var firstProfile = this.newProfile();
+	firstProfile.copyFrom(profileReference);
+	
+	// now make the extrusion.
+	var nextProfile;
+	var nextOuter;
+	var firstOuter = firstProfile.getOuter();
+	var outerVertexCount;
+	var nextVertex;
+	var firstVertex;
+	var currentSegExtDist;
+	for (var i=0; i<extrudeSegmentsCount; i++)
+	{
+		nextProfile = this.newProfile();
+		
+		// outer vertex list.
+		nextOuter = nextProfile.getOuter();
+		currentSegExtDist = (extrusionDist/extrudeSegmentsCount)*(i+1);
+		outerVertexCount = firstOuter.getVertexCount();
+		for (var j=0; j<outerVertexCount; j++)
+		{
+			firstVertex = firstOuter.getVertex(j);
+			nextVertex = nextOuter.newVertex();
+			nextVertex.setPosition(firstVertex.point3d.x + extrusionVector.x * currentSegExtDist, firstVertex.point3d.y + extrusionVector.y * currentSegExtDist, firstVertex.point3d.z + extrusionVector.z * currentSegExtDist);
+		}
+		
+		// inner vertices list.
+		if (firstProfile.inners && firstProfile.inners.length > 0)
+		{
+			// todo:
+		}
+	}
+	
+};
+
+ProfilesList.prototype.getMesh = function(resultMesh) 
+{
+	// a mesh made by a bottomCap + lateralSides + topCap.
+	
+	// provisionally get only lateral side surface.
+	
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Surface
+ */
+var Surface = function() 
+{
+	if (!(this instanceof Surface)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.facesArray;
+};
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class TrianglesList
+ */
+var TrianglesList= function() 
+{
+	if (!(this instanceof TrianglesList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.trianglesArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+TrianglesList.prototype.newTriangle = function() 
+{
+	if (this.trianglesArray === undefined)
+	{ this.trianglesArray = []; }
+	
+	var triangle = new Triangle();
+	this.trianglesArray.push(triangle);
+	return triangle;
+};
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class TrianglesMatrix
+ */
+var TrianglesMatrix= function() 
+{
+	if (!(this instanceof TrianglesMatrix)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.trianglesListsArray;
+};
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
  * @class Renderer
  */
 var Renderer = function() 
@@ -33717,6 +33893,7 @@ Renderer.prototype.renderNeoRefListsAsimetricVersion = function(gl, neoReference
 	var current_tex_id;
 	//var current_vbo_id;
 	//var textureBinded = false;
+	var texFileLoadState;
 
 	gl.activeTexture(gl.TEXTURE2); // ...***
 	if (renderTexture) 
@@ -33773,10 +33950,14 @@ Renderer.prototype.renderNeoRefListsAsimetricVersion = function(gl, neoReference
 		//if(renderTexture)
 		{
 			//if (neoReference.texture !== undefined || neoReference.materialId != -1)
-			if (neoReference.texture !== undefined)
+			if (neoReference.hasTexture)// && neoReference.texture !== undefined)
 			{
 				// note: in the future use only "neoReference.materialId".
-				if (neoBuilding.manageNeoReferenceTexture(neoReference, magoManager) !== CODE.fileLoadState.LOADING_FINISHED)
+				texFileLoadState = neoBuilding.manageNeoReferenceTexture(neoReference, magoManager);
+				if (texFileLoadState !== CODE.fileLoadState.LOADING_FINISHED)
+				{ continue; }
+			
+				if (neoReference.texture === undefined)
 				{ continue; }
 			
 				if (neoReference.texture.texId === undefined)
@@ -33837,6 +34018,9 @@ Renderer.prototype.renderNeoRefListsAsimetricVersion = function(gl, neoReference
 			}
 			else
 			{
+				if(neoReference.objectId === "20046")
+					var hola = 0;
+				
 				if (renderTexture && neoReference.hasTexture) 
 				{
 					if (neoReference.texture !== undefined && neoReference.texture.texId !== undefined) 
