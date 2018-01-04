@@ -23,8 +23,8 @@
 </head>
 
 <body>
-<input type="hidden" id="now_latitude" name="now_latitude" value="${now_latitude }" />
-<input type="hidden" id="now_longitude" name="now_longitude" value="${now_longitude }"  />
+	<input type="hidden" id="now_latitude" name="now_latitude" value="${now_latitude }" />
+	<input type="hidden" id="now_longitude" name="now_longitude" value="${now_longitude }"  />
 
 <ul class="nav">
 	<li id="homeMenu" class="home">

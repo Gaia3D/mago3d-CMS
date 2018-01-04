@@ -23,8 +23,8 @@
 </head>
 
 <body>
-<input type="hidden" id="now_latitude" name="now_latitude" value="${now_latitude }" />
-<input type="hidden" id="now_longitude" name="now_longitude" value="${now_longitude }"  />
+	<input type="hidden" id="now_latitude" name="now_latitude" value="${now_latitude }" />
+	<input type="hidden" id="now_longitude" name="now_longitude" value="${now_longitude }"  />
 
 <ul class="nav">
 	<li id="homeMenu" class="home">
@@ -79,10 +79,11 @@
 <c:if test="${!empty issueList }">
 	<c:forEach var="issue" items="${issueList}" varStatus="status">
 		<li>
-			<button type="button" title="Shortcuts" onclick="flyTo('${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">Shortcuts</button>
+			<button type="button" title="Shortcuts" 
+				onclick="gotoIssue('${issue.project_id}', '${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">Shortcuts</button>
 			<div class="info">
 				<p class="title">
-					<span>${issue.data_group_name }</span>
+					<span>${issue.project_name }</span>
 					${issue.title }
 				</p>
 				<ul class="tag">
@@ -100,13 +101,14 @@
 	<div id="searchMenuContent" class="searchWrap">
 		<table>
 			<tr style="height: 35px;">
-				<td style="width: 80px;"><label for="data_group_id">Data Group</label></td>
-				<td><select id="data_group_id" name="data_group_id" class="select">
-					<option value=""> ALL </option>
-<c:forEach var="dataGroup" items="${projectDataGroupList}">
-					<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name}</option>
+				<td style="width: 80px;"><label for="project_id">Project</label></td>
+				<td><select id="project_id" name="project_id" class="select">
+						<option value=""> ALL </option>
+<c:forEach var="project" items="${projectList}">
+						<option value="${project.project_id}">${project.project_name}</option>
 </c:forEach>
-				</select></td>
+					</select>
+				</td>
 			</tr>
 			<tr style="height: 35px;">
 				<td><label for="search_word">Category</label></td>
@@ -160,35 +162,123 @@
 	
 	<div id="apiMenuContent" class="apiWrap">
 		<div>
+			<h3>Local(Browser) Search</h3>
+			<ul class="apiLoca">
+				<li>
+					<label for="localSearchProjectId">Project </label>
+					<select id="localSearchProjectId" name="localSearchProjectId" class="select">
+<c:forEach var="project" items="${projectList}">
+						<option value="${project.project_id}">${project.project_name}</option>
+</c:forEach>
+					</select>
+				</li>
+				<li>
+					<label for="localSearchDataKey">Data Key</label>
+					<input type="text" id="localSearchDataKey" name="localSearchDataKey" size="23" />
+					<button type="button" id="localSearch" class="btn">Search</button> 
+				</li>
+			</ul>
+		</div>
+		<div>
+			<h3>Property Rendering</h3>
+			<ul class="apiLoca">
+				<li>
+					<input type="radio" id="showPropertyRendering" name="propertyRendering" value="true" />
+					<label for="showLabel"> Show </label>
+					<input type="radio" id="hidePropertyRendering" name="propertyRendering" value="false" />
+					<label for="hideLabel"> Hide </label>
+				</li>
+				<li>
+					<label for="propertyRenderingProjectId">Project </label>
+					<select id="propertyRenderingProjectId" name="propertyRenderingProjectId" class="select">
+<c:forEach var="project" items="${projectList}">
+						<option value="${project.project_id}">${project.project_name}</option>
+</c:forEach>
+					</select>
+				</li>
+				<li>
+					<label for="propertyRenderingWord">Property</label>
+					<input type="text" id="propertyRenderingWord" name="propertyRenderingWord" size="23" placeholder="isMain=true" />
+					<button type="button" id="changePropertyRendering" class="btn">Change</button> 
+				</li>
+			</ul>
+		</div>
+		<div>
+			<h3>Color Change</h3>
+			<ul class="apiLoca">
+				<li>
+					<label for="colorProjectId">Project </label>
+					<select id="colorProjectId" name="colorProjectId" class="select">
+<c:forEach var="project" items="${projectList}">
+						<option value="${project.project_id}">${project.project_name}</option>
+</c:forEach>
+					</select>
+				</li>
+				<li>
+					<label for="colorDataKey">Data Key</label>
+					<input type="text" id="colorDataKey" name="colorDataKey" size="30" />
+				</li>
+				<li>
+					<label for="colorObjectIds">Object Id</label>
+					<input type="text" id="colorObjectIds" name="colorObjectIds" placeholder="   , Delimiter" size="30" />
+				</li>
+				<li>
+					<label for="colorProperty">Property</label>
+					<input type="text" id="colorProperty" name="colorProperty" size="30" placeholder="isMain=true" />
+				</li>
+				<li>
+					<label for="updateColor">Color</label>
+					<select id="updateColor" name="updateColor" class="select">
+						<option value="255,0,0"> Red </option>
+						<option value="255,255,0"> Yellow </option>
+						<option value="0,255,0"> Green </option>
+						<option value="0,0,255"> Blue </option>
+						<option value="255,0,255"> Pink </option>
+						<option value="0,0,0"> Black </option>
+					</select>
+					<button type="button" id="changeColor" class="btn">Change</button> 
+					<button type="button" id="deleteAllChangeColor" class="btn">All Delete</button>
+				</li>
+			</ul>
+		</div>
+		<div>
 			<h3>Location and Rotation</h3>
 			<ul class="apiLoca">
 				<li>
-					<label for="move_data_key">Data Key</label>
-					<input type="text" id="move_data_key" name="move_data_key" size="25" />
+					<label for="moveProjectId">Project </label>
+					<select id="moveProjectId" name="moveProjectId" class="select">
+<c:forEach var="project" items="${projectList}">
+						<option value="${project.project_id}">${project.project_name}</option>
+</c:forEach>
+					</select>
 				</li>
 				<li>
-					<label for="move_latitude">Latitude</label>
-					<input type="text" id="move_latitude" name="move_latitude" size="25"/>
+					<label for="moveDataKey">Data Key</label>
+					<input type="text" id="moveDataKey" name="moveDataKey" size="25" />
 				</li>
 				<li>
-					<label for="move_longitude">Longitude</label>
-					<input type="text" id="move_longitude" name="move_longitude" size="25"/>
+					<label for="moveLatitude">Latitude</label>
+					<input type="text" id="moveLatitude" name="moveLatitude" size="25"/>
 				</li>
 				<li>
-					<label for="move_height">Altitude</label>
-					<input type="text" id="move_height" name="move_height" size="25" />
+					<label for="moveLongitude">Longitude</label>
+					<input type="text" id="moveLongitude" name="moveLongitude" size="25"/>
 				</li>
 				<li>
-					<label for="move_heading">Heading</label>
-					<input type="text" id="move_heading" name="move_heading" size="25" />
+					<label for="moveHeight">Altitude</label>
+					<input type="text" id="moveHeight" name="moveHeight" size="25" />
 				</li>
 				<li>
-					<label for="move_pitch">Pitch</label>
-					<input type="text" id="move_pitch" name="move_pitch" size="25" />
+					<label for="moveHeading">Heading</label>
+					<input type="text" id="moveHeading" name="moveHeading" size="25" />
 				</li>
 				<li>
-					<label for="move_roll">Roll</label>
-					<input type="text" id="move_roll" name="move_roll" size="25" />
+					<label for="movePitch">Pitch</label>
+					<input type="text" id="movePitch" name="movePitch" size="25" />
+				</li>
+				<li>
+					<label for="moveRoll">Roll</label>
+					<input type="text" id="moveRoll" name="moveRoll" size="25" />
 					<button type="button" id="changeLocationAndRotationAPI" class="btn">Transform</button> 
 				</li>
 			</ul>
@@ -224,13 +314,13 @@
 		<table>
 			<tr style="height: 35px;">
 				<td style="width: 100px;" nowrap="nowrap">
-					<form:label path="data_group_id">Data Group</form:label>
+					<form:label path="project_id">Project</form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
-					<form:select path="data_group_id" cssClass="select">
-<c:forEach var="dataGroup" items="${projectDataGroupList}">
-						<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name}</option>
+					<form:select path="project_id" cssClass="select">
+<c:forEach var="project" items="${projectList}">
+						<option value="${project.project_id}">${project.project_name}</option>
 </c:forEach>
 					</form:select>
 				</td>
@@ -377,6 +467,18 @@
 			<label for="hideBoundingBox"> Hide </label>
 		</div>
 		<div>
+			<h3>Selecting And Moving</h3>
+			<input type="radio" id="objectNoneMove" name="objectMoveMode" value="2" onclick="changeObjectMove('2');"/>
+			<label for="objectNoneMove"> None </label>
+			<input type="radio" id="mouseAllMove" name="objectMoveMode" value="0" onclick="changeObjectMove('0');"/>
+			<label for="objectAllMove"> ALL </label>
+			<input type="radio" id="objectMove" name="objectMoveMode" value="1" onclick="changeObjectMove('1');"/>
+			<label for="objectMove"> Object </label>
+			
+			<button type="button" id="saveObjectMoveButton" class="btn">Save</button>
+			<button type="button" id="deleteAllObjectMoveButton" class="btn">All Delete</button>
+		</div>
+		<div>
 			<h3>Object Occlusion Culling</h3>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">Select</div>
@@ -390,15 +492,6 @@
 				<input type="text" id="occlusion_culling_data_key" name="occlusion_culling_data_key" size="23" />
 				<button type="button" id="changeOcclusionCullingButton" class="btn">Change</button>
 			</div>
-		</div>
-		<div>
-			<h3>Selecting And Moving</h3>
-			<input type="radio" id="mouseNoneMove" name="mouseMoveMode" value="2" onclick="changeMouseMove('2');"/>
-			<label for="mouseNoneMove"> None </label>
-			<input type="radio" id="mouseAllMove" name="mouseMoveMode" value="0" onclick="changeMouseMove('0');"/>
-			<label for="mouseAllMove"> ALL </label>
-			<input type="radio" id="mouseObjectMove" name="mouseMoveMode" value="1" onclick="changeMouseMove('1');"/>
-			<label for="mouseObjectMove"> Object </label>
 		</div>
 		<div>
 			<h3>LOD</h3>
@@ -471,6 +564,7 @@
 									"#fdeada","#fbd5b5","#fac08f","#e36c09","#974806" ]' />
 				&nbsp;
 			</div> -->
+			
 			<div style="text-align: center">
 			</div>
 		</div>
@@ -490,9 +584,9 @@
 </div>
 
 <ul class="shortcut">
-	<c:forEach var="dataGroup" items="${projectDataGroupList}" varStatus="status">
-	<li onclick="flyTo(null, null, '${dataGroup.longitude}', '${dataGroup.latitude}', '${dataGroup.height}', '${dataGroup.duration}')">${dataGroup.data_group_name }</li>
-	</c:forEach>	
+	<c:forEach var="project" items="${projectList}" varStatus="status">
+	<li onclick="gotoProject('${project.project_id }', '${project.longitude}', '${project.latitude}', '${project.height}', '${project.duration}')">${project.project_name }</li>
+	</c:forEach>
 </ul>
 
 <!-- 맵영역 -->
@@ -522,8 +616,9 @@
 		alert("This page is optimized for the Chrome browser for massive data processing.\nPlease use the Chrome browser for seamless service.");
 	}
 
+	var managerFactory = null;
 	var policyJson = ${policyJson};
-	var dataGroupMap = ${dataGroupMap};
+	var initProjectJsonMap = ${initProjectJsonMap};
 	var menuMap = new Map();
 	menuMap.set("homeMenu", false);
 	menuMap.set("myIssueMenu", false);
@@ -533,45 +628,126 @@
 	menuMap.set("configMenu", false);
 	var insertIssueEnable = false;
 	var FPVModeFlag = false;
+	
 	var imagePath = "/images/${lang}";
-	var managerFactory = new ManagerFactory(null, "magoContainer", policyJson, dataGroupMap, imagePath);
+	var dataInformationUrl = "/data/ajax-project-data-by-project-id.do";
+	magoStart();
+	var intervalCount = 0;
+	var timerId = setInterval("startMogoUI()", 1000);
 	
 	$(document).ready(function() {
-		initJqueryCalendar();
-		// Label 표시
-		changeLabel(false);
-		// object 정보 표시
-		changeObjectInfoViewMode(false);
-		// BoundingBox
-		changeBoundingBox(false);
-		// Selecting And Moving
-		changeMouseMove("2");
-		// slider, color-picker
-		initRendering();
-		// 3PView Mode
-		changeViewMode(false);
 	});
 	
-	function flyTo(issueId, issueType, longitude, latitude, height, duration) {
-		managerFactory.flyTo(issueId, issueType, longitude, latitude, height, duration);
+	function startMogoUI() {
+		intervalCount++;
+		if(managerFactory != null && managerFactory.getMagoManagerState() === CODE.magoManagerState.READY) {
+			initJqueryCalendar();
+			// Label 표시
+			changeLabel(false);
+			// object 정보 표시
+			changeObjectInfoViewMode(false);
+			// BoundingBox
+			changeBoundingBox(false);
+			// Selecting And Moving
+			changeObjectMove("2");
+			// slider, color-picker
+			initRendering();
+			// 3PView Mode
+			changeViewMode(false);
+			
+			clearInterval(timerId);
+			console.log(" managerFactory != null, managerFactory.getMagoManagerState() = " + managerFactory.getMagoManagerState() + ", intervalCount = " + intervalCount);
+			return;
+		}
+		console.log("--------- intervalCount = " + intervalCount);
+	}
+	
+	// mago3d 시작, 정책 데이터 파일을 로딩
+	function magoStart() {
+		var initProjectsLength = ${initProjectsLength};
+		if(initProjectsLength === null || initProjectsLength === 0) {
+			managerFactory = new ManagerFactory(null, "magoContainer", policyJson, null, null, null, imagePath);
+		} else {
+			var projectIdArray = new Array(initProjectsLength);
+			var projectDataArray = new Array(initProjectsLength);
+			var projectDataFolderArray = new Array(initProjectsLength);
+			var index = 0;
+			for(var projectId in initProjectJsonMap) {
+				projectIdArray[index] = projectId;
+				var projectJson = JSON.parse(initProjectJsonMap[projectId]);
+				projectDataArray[index] = projectJson;
+				projectDataFolderArray[index] = projectJson.data_key;
+				index++;
+			}
+			
+			managerFactory = new ManagerFactory(null, "magoContainer", policyJson, projectIdArray, projectDataArray, projectDataFolderArray, imagePath);			
+		}
+	}
+	
+	// 프로젝트를 로딩한 후 이동
+	function gotoProject(projectId, longitude, latitude, height, duration) {
+		var projectData = getDataAPI(CODE.PROJECT_ID_PREFIX + projectId);
+		if (projectData === null || projectData === undefined) {
+			ajaxCall(dataInformationUrl, "project_id=" + projectId, gotoProjectCallback, errorCallback, null, projectId, longitude, latitude, height, duration);
+		} else {
+			gotoProjectAPI(managerFactory, projectId, projectData, projectData.data_key, longitude, latitude, height, duration);	
+		}
+		
 		// 현재 좌표를 저장
-		$("#now_latitude").val(latitude);
-		$("#now_longitude").val(longitude);
+		saveCurrentLocation(latitude, longitude);
+	}
+	function gotoProjectCallback(msg, theArgs) {
+		if(msg.result == "success") {
+			var projectDataJson = msg.projectDataJson;
+			if(projectDataJson === null || projectDataJson === undefined) {
+				alert("Project data does not exist.");
+				return;
+			}
+			gotoProjectAPI(managerFactory, theArgs[0], projectDataJson, projectDataJson.data_key, theArgs[1], theArgs[2], theArgs[3], theArgs[4]);
+		} else {
+			alert(JS_MESSAGE[msg.result]);
+		}
+	}
+	
+	// 이슈 위치로 이동
+	function gotoIssue(projectId, issueId, issueType, longitude, latitude, height, duration) {
+		var projectData = getDataAPI(CODE.PROJECT_ID_PREFIX + projectId);
+		if (projectData === null || projectData === undefined) {
+			ajaxCall(dataInformationUrl, "project_id=" + projectId, gotoIssueCallback, errorCallback, null, projectId, issueId, issueType, longitude, latitude, height, duration);
+		} else {
+			gotoIssueAPI(managerFactory, projectId, projectData, projectData.data_key, issueId, issueType, longitude, latitude, height, duration);	
+		}
+		
+		// 현재 좌표를 저장
+		saveCurrentLocation(latitude, longitude);
+	}
+	function gotoIssueCallback(msg, theArgs) {
+		if(msg.result == "success") {
+			var projectDataJson = msg.projectDataJson;
+			if(projectDataJson === null || projectDataJson === undefined) {
+				alert("Project data does not exist.");
+				return;
+			}
+			gotoIssueAPI(managerFactory, theArgs[0], projectDataJson, projectDataJson.data_key, theArgs[1], theArgs[2], theArgs[3], theArgs[4], theArgs[5], theArgs[6]);
+		} else {
+			alert(JS_MESSAGE[msg.result]);
+		}
 	}
 	
 	// issue 위치 버튼을 클릭 했을 경우
 	$("#insertIssueEnableButton").click(function() {
 		if(insertIssueEnable) {
 			$("#insertIssueEnableButton").removeClass("on");
-			$("#insertIssueEnableButton").text("Please select object after click.");
+			$("#insertIssueEnableButton").text("Please select object after clicking.");
 			insertIssueEnable = false;
 		} else {
 			$("#insertIssueEnableButton").addClass("on");
-			$("#insertIssueEnableButton").text("Issue registration is active.");
+			$("#insertIssueEnableButton").text("Status of issue registration activation");
 			insertIssueEnable = true;
 		}
-		changeInsertIssueModeAPI(insertIssueEnable);
+		changeInsertIssueModeAPI(managerFactory, insertIssueEnable);
 	});
+	
 	// issue input layer call back function
 	function showInsertIssueLayer(data_key, object_key, latitude, longitude, height) {
 		if(insertIssueEnable) {
@@ -582,55 +758,46 @@
 			$("#height").val(height);
 			
 			// 현재 좌표를 저장
-			$("#now_latitude").val(latitude);
-			$("#now_longitude").val(longitude);
+			saveCurrentLocation(latitude, longitude);
 		}
 	}
 	
-	var isInsertIssue = true;
+	// 이슈 등록
+	var isInsertIssue = { "enable" : true };
 	$("#issueSaveButton").click(function() {
 		if (check() == false) {
 			return false;
 		}
-		if(isInsertIssue) {
-			isInsertIssue = false;
-			var info = $("#issue").serialize();		
-			$.ajax({
-				url: "/issue/ajax-insert-issue.do",
-				type: "POST",
-				data: info,
-				cache: false,
-				dataType: "json",
-				success: function(msg){
-					if(msg.result == "success") {
-						alert(JS_MESSAGE["insert"]);
-						// pin image를 그림
-						drawInsertIssueImageAPI(1, msg.issue.issue_id, msg.issue.issue_type, $("#data_key").val(), $("#latitude").val(), $("#longitude").val(), $("#height").val());
-					} else {
-						alert(JS_MESSAGE[msg.result]);
-					}
-					
-					isInsertIssue = true;
-					ajaxIssueList();
-				},
-				error:function(request,status,error){
-			        alert(JS_MESSAGE["ajax.error.message"]);
-					console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-			        isInsertIssue = true;
-				}
-			});
+		if(isInsertIssue["enable"]) {
+			isInsertIssue["enable"] = false;
+			var url = "/issue/ajax-insert-issue.do";
+			var info = $("#issue").serialize();
+			ajaxCall(url, info, issueSaveCallback, errorCallback, isInsertIssue);
 			
 			// issue 등록 버튼, css, 상태를 변경
 			$("#insertIssueEnableButton").removeClass("on");
-			$("#insertIssueEnableButton").text("Please select object after click.");
-			insertIssueEnable = false;
+			$("#insertIssueEnableButton").text("Please select object after clicking.");
+			insertIssueEnable["enable"] = false;
 			
-			changeInsertIssueStateAPI(0);
+			changeInsertIssueStateAPI(managerFactory, 0);
 		} else {
 			alert(JS_MESSAGE["button.dobule.click"]);
 			return;
 		}
 	});
+	function issueSaveCallback(msg, theArgs) {
+		if(msg.result == "success") {
+			alert(JS_MESSAGE["insert"]);
+			// pin image를 그림
+			drawInsertIssueImageAPI(managerFactory, 1, msg.issue.issue_id, msg.issue.issue_type, 
+					$("#data_key").val(), $("#latitude").val(), $("#longitude").val(), $("#height").val());
+		} else {
+			alert(JS_MESSAGE[msg.result]);
+		}
+		
+		isInsertIssue = true;
+		ajaxIssueList();
+	}
 	function check() {
 		if ($("#data_key").val() == "") {
 			alert(JS_MESSAGE["issue.datakey.empty"]);
@@ -651,61 +818,53 @@
 	
 	// TODO issue url 밑에 있어야 할지도 모르겠다.
 	function ajaxIssueList() {
-		var info = "";		
-		$.ajax({
-			url: "/homepage/ajax-list-issue.do",
-			type: "GET",
-			data: info,
-			dataType: "json",
-			success: function(msg){
-				if(msg.result == "success") {
-					var issueList = msg.issueList;
-					var content = "";
-					var issueListCount = 0;
-					content = content 
-						+	"<li style=\"margin-bottom: 8px; font-size: 1em; font-weight: normal; color: #2955a6;\">"
-						+ 		"Show up to 10 latest issues"
+		var info = "";
+		var url = "/homepage/ajax-list-issue.do";
+		ajaxCall(url, info, ajaxIssueListCallback, errorCallback, null);
+	}
+	function ajaxIssueListCallback(msg, theArgs) {
+		if(msg.result == "success") {
+			var issueList = msg.issueList;
+			var content = "";
+			var issueListCount = 0;
+			content = content 
+				+	"<li style=\"margin-bottom: 8px; font-size: 1em; font-weight: normal; color: #2955a6;\">"
+				+ 		"Show up to 10 latest issues"
+				+	"</li>";
+			if(issueList == null || issueList.length == 0) {
+				content += 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
+						+	"	The issue does not exist."
 						+	"</li>";
-					if(issueList == null || issueList.length == 0) {
-						content += 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-								+	"	The issue does not exist."
-								+	"</li>";
-					} else {
-						issueListCount = issueList.length;
-						for(i=0; i<issueListCount; i++ ) {
-							var issue = issueList[i];
-							content = content 
-								+ 	"<li>"
-								+ 	"	<button type=\"button\" title=\"Shortcuts\""
-								+			"onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
-								+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">Shortcuts</button>"
-								+ 	"	<div class=\"info\">"
-								+ 	"		<p class=\"title\">"
-								+ 	"			<span>" + issue.data_group_name + "</span>"
-								+ 				issue.title
-								+ 	"		</p>"
-								+ 	"		<ul class=\"tag\">"
-								+ 	"			<li><span class=\"" + issue.issue_type_css_class + "\"></span>" + issue.issue_type_name + "</li>"
-								+ 	"			<li><span class=\"" + issue.priority_css_class + "\"></span>" + issue.priority_name + "</li>"
-								+ 	"			<li class=\"date\">" + issue.insert_date.substring(0,19) + "</li>"
-								+ 	"		</ul>"
-								+ 	"	</div>"
-								+ 	"</li>";
-						}
-					}
-					$("#issueListCount").empty();
-					$("#issueListCount").html(msg.totalCount);
-					$("#myIssueMenuContent").empty();
-					$("#myIssueMenuContent").html(content);
-				} else {
-					alert(JS_MESSAGE[msg.result]);
+			} else {
+				issueListCount = issueList.length;
+				for(i=0; i<issueListCount; i++ ) {
+					var issue = issueList[i];
+					content = content 
+						+ 	"<li>"
+						+ 	"	<button type=\"button\" title=\"Shortcuts\""
+						+			"onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+						+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">Shortcuts</button>"
+						+ 	"	<div class=\"info\">"
+						+ 	"		<p class=\"title\">"
+						+ 	"			<span>" + issue.project_name + "</span>"
+						+ 				issue.title
+						+ 	"		</p>"
+						+ 	"		<ul class=\"tag\">"
+						+ 	"			<li><span class=\"" + issue.issue_type_css_class + "\"></span>" + issue.issue_type_name + "</li>"
+						+ 	"			<li><span class=\"" + issue.priority_css_class + "\"></span>" + issue.priority_name + "</li>"
+						+ 	"			<li class=\"date\">" + issue.insert_date.substring(0,19) + "</li>"
+						+ 	"		</ul>"
+						+ 	"	</div>"
+						+ 	"</li>";
 				}
-			},
-			error:function(request,status,error){
-		        //alert(JS_MESSAGE["ajax.error.message"]);
-				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			}
-		});
+			$("#issueListCount").empty();
+			$("#issueListCount").html(msg.totalCount);
+			$("#myIssueMenuContent").empty();
+			$("#myIssueMenuContent").html(content);
+		} else {
+			alert(JS_MESSAGE[msg.result]);
+		}
 	}
 
 	// 왼쪽 메뉴 클릭시 ui 처리
@@ -760,12 +919,12 @@
 			}
 		}
 		// 이슈 등록 비활성화 상태
-		changeInsertIssueStateAPI(0);
+		changeInsertIssueStateAPI(managerFactory, 0);
 	});
 	
 	// 검색 메뉴 시작
 	// Data 검색
-	var searchDataFlag = true;
+	var searchDataFlag = { "enable" : true }
 	$("#searchData").click(function() {
 		if ($.trim($("#search_value").val()) === ""){
 			alert("Please enter a search word.");
@@ -773,120 +932,128 @@
 			return false;
 		}
 		
-		if(searchDataFlag) {
-			searchDataFlag = false;
-			var info = $("#searchForm").serialize();		
-			$.ajax({
-				url: "/homepage/ajax-list-issue.do",
-				type: "POST",
-				data: info,
-				cache: false,
-				dataType: "json",
-				success: function(msg){
-					if(msg.result == "success") {
-						var searchType = $("#search_word").val();
-						var content = "";
-						if(searchType === "data_name") {
-							var dataInfoList = msg.dataInfoList;
-							if(dataInfoList == null || dataInfoList.length == 0) {
-								content = content	
-									+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-									+	"	Data does not exist."
-									+	"</li>";
-							} else {
-								dataInfoListCount = dataInfoList.length;
-								for(i=0; i<dataInfoListCount; i++ ) {
-									var dataInfo = dataInfoList[i];
-									content = content 
-										+ 	"<li>"
-										+ 	"	<button type=\"button\" title=\"Shortcuts\""
-										+			"onclick=\"flyToBounding('" + dataInfo.data_key + "');\">Shortcuts</button>"
-										+ 	"	<div class=\"info\">"
-										+ 	"		<p class=\"title\">"
-										+ 	"			<span>" + dataInfo.data_group_name + "</span>"
-										+ 				dataInfo.data_name
-										+ 	"		</p>"
-										+ 	"		<ul class=\"tag\">"
-										+ 	"			<li><span class=\"t3\"></span>" + dataInfo.latitude + "</li>"
-										+ 	"			<li><span class=\"t3\"></span>" + dataInfo.longitude + "</li>"
-										+ 	"			<li class=\"date\">" + dataInfo.insert_date.substring(0,19) + "</li>"
-										+ 	"		</ul>"
-										+ 	"	</div>"
-										+ 	"</li>";
-								}
-							}
-						} else {
-							var issueList = msg.issueList;
-							if(issueList == null || issueList.length == 0) {
-								content = content	
-									+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-									+	"	Issue does not exist."
-									+	"</li>";
-							} else {
-								issueListCount = issueList.length;
-								for(i=0; i<issueListCount; i++ ) {
-									var issue = issueList[i];
-									content = content 
-										+ 	"<li>"
-										+ 	"	<button type=\"button\" title=\"Shortcuts\""
-										+			"onclick=\"flyTo('" + issue.issue_id + "', '" + issue.issue_type + "', '" 
-										+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">Shortcuts</button>"
-										+ 	"	<div class=\"info\">"
-										+ 	"		<p class=\"title\">"
-										+ 	"			<span>" + issue.data_group_name + "</span>"
-										+ 				issue.title
-										+ 	"		</p>"
-										+ 	"		<ul class=\"tag\">"
-										+ 	"			<li><span class=\"" + issue.issue_type_css_class + "\"></span>" + issue.issue_type_name + "</li>"
-										+ 	"			<li><span class=\"" + issue.priority_css_class + "\"></span>" + issue.priority_name + "</li>"
-										+ 	"			<li class=\"date\">" + issue.insert_date.substring(0,19) + "</li>"
-										+ 	"		</ul>"
-										+ 	"	</div>"
-										+ 	"</li>";
-								}
-							}
-						}
-						
-						$("#searchList").empty();
-						$("#searchList").html(content);
-					} else {
-						alert(JS_MESSAGE[msg.result]);
-					}
-					searchDataFlag = true;
-				},
-				error:function(request,status,error){
-			        alert(JS_MESSAGE["ajax.error.message"]);
-					console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-					searchDataFlag = true;
-				}
-			});
+		if(searchDataFlag["enable"]) {
+			searchDataFlag["enable"] = false;
+			var info = $("#searchForm").serialize();
+			var url = null;
+			if($("#search_word").val() === "data_name") {
+				url = "/data/ajax-search-data.do";
+			} else {
+				url = "/homepage/ajax-list-issue.do";
+			}
+			ajaxCall(url, info, searchDataCallback, errorCallback, searchDataFlag);
 		} else {
 			alert(JS_MESSAGE["button.dobule.click"]);
 			return;
 		}
 	});
-	
-	function flyToBounding(dataKey) {
-		searchDataAPI(dataKey);
+	function searchDataCallback(msg, theArgs) {
+		if(msg.result == "success") {
+			var searchType = $("#search_word").val();
+			var content = "";
+			if(searchType === "data_name") {
+				var dataInfoList = msg.dataInfoList;
+				if(dataInfoList == null || dataInfoList.length == 0) {
+					content = content	
+						+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
+						+	"	Data does not exist."
+						+	"</li>";
+				} else {
+					dataInfoListCount = dataInfoList.length;
+					for(i=0; i<dataInfoListCount; i++ ) {
+						var dataInfo = dataInfoList[i];
+						content = content 
+							+ 	"<li>";
+						if(dataInfo.parent !== 0) {	
+							content = content 
+							+ 	"	<button type=\"button\" title=\"Shortcuts\""
+							+ 	" 		onclick=\"gotoData('" + dataInfo.project_id + "', '" + dataInfo.data_key + "');\">Shortcuts</button>";
+						}
+						content = content 
+							+ 	"	<div class=\"info\">"
+							+ 	"		<p class=\"title\">"
+							+ 	"			<span>" + dataInfo.project_name + "</span>"
+							+ 				dataInfo.data_name
+							+ 	"		</p>"
+							+ 	"		<ul class=\"tag\">"
+							+ 	"			<li><span class=\"t3\"></span>" + dataInfo.latitude + "</li>"
+							+ 	"			<li><span class=\"t3\"></span>" + dataInfo.longitude + "</li>"
+							+ 	"			<li class=\"date\">" + dataInfo.insert_date.substring(0,19) + "</li>"
+							+ 	"		</ul>"
+							+ 	"	</div>"
+							+ 	"</li>";
+					}
+				}
+			} else {
+				var issueList = msg.issueList;
+				if(issueList == null || issueList.length == 0) {
+					content = content	
+						+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
+						+	"	Issue does not exist."
+						+	"</li>";
+				} else {
+					issueListCount = issueList.length;
+					for(i=0; i<issueListCount; i++ ) {
+						var issue = issueList[i];
+						content = content 
+							+ 	"<li>"
+							+ 	"	<button type=\"button\" title=\"Shortcuts\""
+							+			" onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+							+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2');\">Shortcuts</button>"
+							+ 	"	<div class=\"info\">"
+							+ 	"		<p class=\"title\">"
+							+ 	"			<span>" + issue.project_name + "</span>"
+							+ 				issue.title
+							+ 	"		</p>"
+							+ 	"		<ul class=\"tag\">"
+							+ 	"			<li><span class=\"" + issue.issue_type_css_class + "\"></span>" + issue.issue_type_name + "</li>"
+							+ 	"			<li><span class=\"" + issue.priority_css_class + "\"></span>" + issue.priority_name + "</li>"
+							+ 	"			<li class=\"date\">" + issue.insert_date.substring(0,19) + "</li>"
+							+ 	"		</ul>"
+							+ 	"	</div>"
+							+ 	"</li>";
+					}
+				}
+			}
+			
+			$("#searchList").empty();
+			$("#searchList").html(content);
+		} else {
+			alert(JS_MESSAGE[msg.result]);
+		}
 	}
+	
+	// 데이터 위치로 이동
+	function gotoData(projectId, dataKey) {
+		searchDataAPI(managerFactory, projectId, dataKey);
+	}
+	
+	$("#localSearch").click(function() {
+		if ($.trim($("#localSearchDataKey").val()) === ""){
+			alert("Please enter data key.");
+			$("#localSearchDataKey").focus();
+			return false;
+		}
+		searchDataAPI(managerFactory, $("#localSearchProjectId").val(), $("#localSearchDataKey").val());
+	});
 	
 	// API 메뉴시작
 	// object 정보 표시 call back function
-	function showSelectedObject(data_key, objectId, latitude, longitude, height, heading, pitch, roll) {
+	function showSelectedObject(dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
 		var objectInfoViewFlag = $(':radio[name="objectInfo"]:checked').val();
 		if(objectInfoViewFlag) {
-			$("#move_data_key").val(data_key);
-			$("#move_latitude").val(latitude);
-			$("#move_longitude").val(longitude);
-			$("#move_height").val(height);
-			$("#move_heading").val(heading);
-			$("#move_pitch").val(pitch);
-			$("#move_roll").val(roll);
+			$("#moveDataKey").val(dataKey);
+			$("#moveLatitude").val(latitude);
+			$("#moveLongitude").val(longitude);
+			$("#moveHeight").val(height);
+			$("#moveHeading").val(heading);
+			$("#movePitch").val(pitch);
+			$("#moveRoll").val(roll);
 			
 			$.toast({
 			    heading: 'Click Object Info',
 			    text: [
-			    	'dataKey : ' + data_key, 
+			        'dataKey : ' + dataKey, 
 			        'objectId : ' + objectId,
 			        'latitude : ' + latitude,
 			        'longitude : ' + longitude,
@@ -902,52 +1069,87 @@
 			});
 			
 			// occlusion culling
-			$("#occlusion_culling_data_key").val(data_key);
+			$("#occlusion_culling_data_key").val(dataKey);
 			// 현재 좌표를 저장
-			$("#now_latitude").val(latitude);
-			$("#now_longitude").val(longitude);
+			saveCurrentLocation(latitude, longitude);
 		}
 	}
+	// 속성 가시화
+	$("#changePropertyRendering").click(function(e) {
+		var isShow = $(':radio[name="propertyRendering"]:checked').val();
+		if(isShow === undefined){
+			alert("Select Show / Hide.");
+			return false;
+		}
+		if ($.trim($("#propertyRenderingWord").val()) === ""){
+			alert("Please enter property.");
+			$("#propertyRenderingWord").focus();
+			return false;
+		}
+		changePropertyRenderingAPI(managerFactory, isShow, $("#propertyRenderingProjectId").val(), $("#propertyRenderingWord").val());
+	});
+	
+	// 색변경
+	$("#changeColor").click(function(e) {
+		if ($.trim($("#colorDataKey").val()) === ""){
+			alert("Please enter data key.");
+			$("#colorDataKey").focus();
+			return false;
+		}
+		
+		var objectIds = null;
+		var colorObjectIds = $("#colorObjectIds").val();
+		if(colorObjectIds !== null && colorObjectIds !=="") objectIds = colorObjectIds.split(",");
+		changeColorAPI(managerFactory, $("#colorProjectId").val(), $("#colorDataKey").val(), objectIds, $("#colorProperty").val(), $("#updateColor").val());
+	});
+	// 색깔 변경 이력 삭제
+	$("#deleteAllChangeColor").click(function () {
+		if(confirm("Are you sure you want to delete?")) {
+			deleteAllChangeColorAPI(managerFactory);
+		}
+	});
+	
 	// 변환행렬
-	$("#changeLocationAndRotationAPI").click(function() {
+	$("#changeLocationAndRotation").click(function() {
 		if(!changeLocationAndRotationCheck()) return false;
-		changeLocationAndRotationAPI(	$("#move_data_key").val(), $("#move_latitude").val(), $("#move_longitude").val(), 
-										$("#move_height").val(), $("#move_heading").val(), $("#move_pitch").val(), $("#move_roll").val());
+		changeLocationAndRotationAPI(	managerFactory, $("#moveProjectId").val(),
+										$("#moveDataKey").val(), $("#moveLatitude").val(), $("#moveLongitude").val(), 
+										$("#moveHeight").val(), $("#moveHeading").val(), $("#movePitch").val(), $("#moveRoll").val());
 	});
 	function changeLocationAndRotationCheck() {
-		if ($.trim($("#move_data_key").val()) === ""){
+		if ($.trim($("#moveDataKey").val()) === ""){
 			alert("Please enter data key.");
-			$("#move_data_key").focus();
+			$("#moveDataKey").focus();
 			return false;
 		}
-		if ($.trim($("#move_latitude").val()) === ""){
+		if ($.trim($("#moveLatitude").val()) === ""){
 			alert("Please enter latitude.");
-			$("#move_latitude").focus();
+			$("#moveLatitude").focus();
 			return false;
 		}
-		if ($.trim($("#move_longitude").val()) === ""){
+		if ($.trim($("#moveLongitude").val()) === ""){
 			alert("Please enter longitude.");
-			$("#move_longitude").focus();
+			$("#moveLongitude").focus();
 			return false;
 		}
-		if ($.trim($("#move_height").val()) === ""){
-			alert("Please enter altitude.");
-			$("#move_height").focus();
+		if ($.trim($("#moveHeight").val()) === ""){
+			alert("Please enter height.");
+			$("#moveHeight").focus();
 			return false;
 		}
-		if ($.trim($("#move_heading").val()) === ""){
+		if ($.trim($("#moveHeading").val()) === ""){
 			alert("Please enter heading.");
-			$("#move_heading").focus();
+			$("#moveHeading").focus();
 			return false;
 		}
-		if ($.trim($("#move_pitch").val()) === ""){
+		if ($.trim($("#movePitch").val()) === ""){
 			alert("Please enter pitch.");
-			$("#move_pitch").focus();
+			$("#movePitch").focus();
 			return false;
 		}
-		if ($.trim($("#move_roll").val()) === ""){
+		if ($.trim($("#moveRoll").val()) === ""){
 			alert("Please enter roll.");
-			$("#move_roll").focus();
+			$("#moveRoll").focus();
 			return false;
 		}
 		return true;
@@ -960,63 +1162,72 @@
 			// 현재 위치의 latitude, logitude를 가지고 가장 가까이에 있는 데이터 그룹에 속하는 이슈 목록을 최대 100건 받아서 표시
 			var now_latitude = $("#now_latitude").val();
 			var now_longitude = $("#now_longitude").val();
-			var info = "latitude=" + now_latitude + "&longitude=" + now_longitude;		
-			$.ajax({
-				url: "/issue/ajax-list-issue-by-geo.do",
-				type: "GET",
-				data: info,
-				dataType: "json",
-				success: function(msg){
-					if(msg.result == "success") {
-						var issueList = msg.issueList;
-						if(issueList != null && issueList.length > 0) {
-							for(i=0; i<issueList.length; i++ ) {
-								var issue = issueList[i];
-								drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
-							}
-						}
-					} else {
-						alert(JS_MESSAGE[msg.result]);
-					}
-				},
-				error:function(request,status,error){
-			        //alert(JS_MESSAGE["ajax.error.message"]);
-					console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-				}
-			});
+			var info = "latitude=" + now_latitude + "&longitude=" + now_longitude;
+			var url = "/issue/ajax-list-issue-by-geo.do";
+			ajaxCall(url, info, changeNearGeoIssueListCallback, errorCallback, searchDataFlag);
 		}
-		changeNearGeoIssueListViewModeAPI(isShow);
+		changeNearGeoIssueListViewModeAPI(managerFactory, isShow);
+	}
+	function changeNearGeoIssueListCallback(msg, theArgs) {
+		if(msg.result == "success") {
+			var issueList = msg.issueList;
+			if(issueList != null && issueList.length > 0) {
+				for(i=0; i<issueList.length; i++ ) {
+					var issue = issueList[i];
+					drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
+				}
+			}
+		} else {
+			alert(JS_MESSAGE[msg.result]);
+		}
 	}
 	
 	// 설정 메뉴 시작
 	// Label 표시
 	function changeLabel(isShow) {
 		$("input:radio[name='labelInfo']:radio[value='" + isShow + "']").prop("checked", true);
-		changeLabelAPI(isShow);
+		changeLabelAPI(managerFactory, isShow);
 	}
 	// object info 표시
 	function changeObjectInfoViewMode(isShow) {
 		$("input:radio[name='objectInfo']:radio[value='" + isShow + "']").prop("checked", true);
-		changeObjectInfoViewModeAPI(isShow);
+		changeObjectInfoViewModeAPI(managerFactory, isShow);
 	}
 	// boundingBox 표시/비표시
 	function changeBoundingBox(isShow) {
 		$("input:radio[name='boundingBox']:radio[value='" + isShow + "']").prop("checked", true);
-		changeBoundingBoxAPI(isShow);
+		changeBoundingBoxAPI(managerFactory, isShow);
 	}
+	// 마우스 클릭 객체 이동 모드 변경
+	function changeObjectMove(objectMoveMode) {
+		$("input:radio[name='objectMoveMode']:radio[value='" + objectMoveMode + "']").prop("checked", true);
+		changeObjectMoveAPI(managerFactory, objectMoveMode);
+	}
+	// 마우스 클릭 객체 이동 모드 변경 저장
+	$("#saveObjectMoveButton").click(function () {
+		alert("Comming soon");
+		var objectMoveMode = $(':radio[name="objectMoveMode"]:checked').val();
+		if(objectMoveMode === "2") {
+			alert("Can not be saved in None mode.");
+			return;
+		}
+		saveObjectMoveAPI(managerFactory, objectMoveMode);
+	});
+	// 마우스 클릭 객체 이동 모드 변경 삭제
+	$("#deleteAllObjectMoveButton").click(function () {
+		var objectMoveMode = $(':radio[name="objectMoveMode"]:checked').val();
+		if(confirm("Are you sure you want to delete?")) {
+			deleteAllObjectMoveAPI(managerFactory, objectMoveMode);
+		}
+	});
 	// Object Occlusion culling
 	$("#changeOcclusionCullingButton").click(function () {
-		changeOcclusionCullingAPI(($(':radio[name="occlusionCulling"]:checked').val() === "true"), $("#occlusion_culling_data_key").val());		
+		changeOcclusionCullingAPI(managerFactory, ($(':radio[name="occlusionCulling"]:checked').val() === "true"), $("#occlusion_culling_data_key").val());		
 	});
-	// 마우스 클릭 객체 이동 모드 변경
-	function changeMouseMove(mouseMoveMode) {
-		$("input:radio[name='mouseMoveMode']:radio[value='" + mouseMoveMode + "']").prop("checked", true);
-		changeMouseMoveAPI(mouseMoveMode);
-	}
 	// 카메라 모드 전환
 	function changeViewMode(isFPVMode) {
 		$("input:radio[name='viewMode']:radio[value='" + isFPVMode + "']").prop("checked", true);
-		changeFPVModeAPI(isFPVMode);
+		changeFPVModeAPI(managerFactory, isFPVMode);
 	}
 	
 	// rendering 설정
@@ -1081,15 +1292,15 @@
 	
 	// LOD 설정
 	$("#changeLodButton").click(function() {
-		changeLodAPI($("#geo_lod0").val(), $("#geo_lod1").val(), $("#geo_lod2").val(), null);
+		changeLodAPI(managerFactory, $("#geo_lod0").val(), $("#geo_lod1").val(), $("#geo_lod2").val(), null);
 	});
 	// Lighting 설정
 	$("#changeLightingButton").click(function() {
-		changeLightingAPI(	$("#geo_ambient_reflection_coef").val(), $("#geo_diffuse_reflection_coef").val(), $("#geo_specular_reflection_coef").val(), null, null);
+		changeLightingAPI(managerFactory, $("#geo_ambient_reflection_coef").val(), $("#geo_diffuse_reflection_coef").val(), $("#geo_specular_reflection_coef").val(), null, null);
 	});
 	// Ssadradius 설정
-	$("#changeSsadRadiusButton").click(function() {
-		changeSsadRadiusAPI($("#geo_ssao_radius").val());
+	$("#changeSsaoRadiusButton").click(function() {
+		changeSsaoRadiusAPI(managerFactory, $("#geo_ssao_radius").val());
 	});
 
 	// click poisition call back function
@@ -1097,6 +1308,26 @@
 		$("#positionLatitude").val(position.lat);
 		$("#positionLongitude").val(position.lon);
 		$("#positionAltitude").val(position.alt);
+	}
+	
+	// 모든 데이터 비표시
+	function clearAllData() {
+		clearAllDataAPI(managerFactory);
+	}
+	
+	// general callback alert function
+	function showApiResult(apiName, result) {
+		if(apiName === "searchData") {
+			if(result === "-1") {
+				alert(" Information that has not yet been loaded. Please search after loading. ");
+			}
+		}
+	}
+	
+	function saveCurrentLocation(latitude, longitude) {
+		// 현재 좌표를 저장
+		$("#now_latitude").val(latitude);
+		$("#now_longitude").val(longitude);
 	}
 </script>
 </body>
