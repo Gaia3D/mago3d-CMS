@@ -57,7 +57,7 @@
 				<li class="on">FAQ<span></span></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO"><a href="#" onclick="changeLanguage('ko');">KO</a></li>
+				<li id="languageKO"><a href="/homepage/faq.do" onclick="changeLanguage('ko');">KO</a></li>
 				<li id="languageEN" class="on">EN</li>
 			</ul>
 		</div>
@@ -98,7 +98,10 @@
 				<div>
 					<div class="sub_title"><span id="License">Mago3D.js, F4D Converter How do I use each license?</span></div>
 					<p>	
-						mago3D.js follows Apache2.0 and F4D Converter follows Dual License based on LGPL. Organizations or individuals who use the F4D Converter but do not want to release the source code must obtain a commercial license from Gaia ThreeD. Except for commercial licenses, all are subject to the AGPL and are subject to source code disclosure. For more information, please contact <a href="mailto:info@gaia3d.com">info@gaia3d.com</a>
+						mago3D.js follows Apache2.0 and F4D Converter follows Dual License based on AGPL3.0. 
+						Organizations or individuals who use the F4D Converter but do not want to release the source code must obtain a commercial license from Gaia3D(www.gaia3d.com). 
+						Except for commercial licenses, all are subject to the AGPL3.0 and are subject to source code disclosure. 
+						For more information, please contact <a href="mailto:info@gaia3d.com">info@gaia3d.com</a>
 					</p>
 				</div>
 				<div>

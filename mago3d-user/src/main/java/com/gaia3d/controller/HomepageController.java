@@ -163,6 +163,7 @@ public class HomepageController {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
+		model.addAttribute("policy", policy);
 		model.addAttribute("geoViewLibrary", policy.getGeo_view_library());
 		model.addAttribute("issue", issue);
 		model.addAttribute("now_latitude", policy.getGeo_init_latitude());
@@ -179,7 +180,7 @@ public class HomepageController {
 		model.addAttribute("issueTypeList", issueTypeList);
 		
 		log.info("@@@@@@ viewName = {}", viewName);
-		log.info("@@@@@@ policy = {}", mapper.writeValueAsString(policy));
+		log.info("@@@@@@ policy = {}", policy);
 		log.info("@@@@@@ initProjectsLength = {}", initProjectsLength);
 		log.info("@@@@@@ initProjectJsonMap = {}", mapper.writeValueAsString(initProjectJsonMap));
 		

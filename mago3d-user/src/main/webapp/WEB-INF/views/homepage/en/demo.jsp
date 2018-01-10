@@ -30,10 +30,11 @@
 	<li id="homeMenu" class="home">
 		<img src="/images/ko/homepage/home-icon.png" style="width: 35px; height: 35px; padding-right: 2px;"/>
 	</li>
-	<li id="myIssueMenu" class="issue" data-tooltip-text="Shows the latest 10 issues sorted chronologically from the entire Issue List.">Issue<span id="issueListCount">${totalCount }</span></li>
+	<li id="myIssueMenu" class="issue" data-tooltip-text="Shows the latest 10 issues sorted chronologically from the entire Issue List.">Issue
+		<br /><span id="issueListCount">${totalCount }</span></li>
 	<li id="searchMenu" class="search" data-tooltip-text="searching such as issue, object, and spatial information.">Search</li>
 	<li id="apiMenu" class="api" data-tooltip-text="APIs to control various functions of mago3D.">API</li>	
-	<li id="insertIssueMenu" class="regist" data-tooltip-text="Issue registration for Object.">Regist.</li>
+	<li id="insertIssueMenu" class="regist" data-tooltip-text="Issue registration for Object.">Regist</li>
 	<li id="configMenu" class="config" data-tooltip-text="Settings related to rendering.">Settings</li>	
 </ul>
 
@@ -43,7 +44,10 @@
 	</div>
 	
 	<ul id="homeMenuContent" class="menuList">
-		<li><a href="/homepage/index.do">Home</a></li>
+		<li><a href="/homepage/index.do">Home</a>
+			(<a href="/homepage/about.do" onclick ="changeLanguage('ko');">KO</a> | 
+			<a href="/homepage/about.do" onclick ="changeLanguage('en');">EN</a>)
+		</li>
 		<li><a href="/homepage/about.do">mago3D</a></li>
 		<li>Demo
 			<ul>
@@ -125,7 +129,7 @@
 			</tr>
 			<tr style="height: 35px;">
 				<td>
-				<label for="search_value">Search Word</label></td>
+				<label for="search_value">Word</label></td>
 				<td><input type="text" id="search_value" name="search_value" size="31" /></td>
 			</tr>
 			<tr style="height: 35px;">
@@ -137,18 +141,18 @@
 			<tr style="height: 30px;">
 				<td><label for="order_word">View Order</label></td>
 				<td><select style="width:85px;" id="order_word" name="order_word" class="select">
-					<option value=""> Basic </option>
-			       	<option value="register_date"> Registration Date </option>
+					<option value="">Basic</option>
+			       	<option value="register_date">Registration Date</option>
 				</select>
 				<select style="width:85px;" id="order_value" name="order_value" class="select">
-					<option value=""> Basic </option>
-				   	<option value="ASC"> Ascending </option>
-					<option value="DESC"> Descending </option>
+					<option value="">Basic</option>
+				   	<option value="ASC">Ascending</option>
+					<option value="DESC">Descending</option>
 				</select>
 				<select style="width:85px;" id="list_counter" name="list_counter" class="select">
-					<option value="5"> listing 5 </option>
-				 	<option value="10"> listing 10 </option>
-					<option value="50"> listing 50 </option>
+					<option value="5">listing 5</option>
+				 	<option value="10">listing 10</option>
+					<option value="50">listing 50</option>
 				</select>
 				</td>
 			</tr>
@@ -174,7 +178,7 @@
 				</li>
 				<li>
 					<label for="localSearchDataKey">Data Key</label>
-					<input type="text" id="localSearchDataKey" name="localSearchDataKey" size="23" />
+					<input type="text" id="localSearchDataKey" name="localSearchDataKey" size="22" />
 					<button type="button" id="localSearch" class="btn">Search</button> 
 				</li>
 			</ul>
@@ -198,7 +202,7 @@
 				</li>
 				<li>
 					<label for="propertyRenderingWord">Property</label>
-					<input type="text" id="propertyRenderingWord" name="propertyRenderingWord" size="23" placeholder="isMain=true" />
+					<input type="text" id="propertyRenderingWord" name="propertyRenderingWord" size="21" placeholder="isMain=true" />
 					<button type="button" id="changePropertyRendering" class="btn">Change</button> 
 				</li>
 			</ul>
@@ -220,7 +224,7 @@
 				</li>
 				<li>
 					<label for="colorObjectIds">Object Id</label>
-					<input type="text" id="colorObjectIds" name="colorObjectIds" placeholder="   , Delimiter" size="30" />
+					<input type="text" id="colorObjectIds" name="colorObjectIds" placeholder=" , Delimiter" size="30" />
 				</li>
 				<li>
 					<label for="colorProperty">Property</label>
@@ -254,32 +258,32 @@
 				</li>
 				<li>
 					<label for="moveDataKey">Data Key</label>
-					<input type="text" id="moveDataKey" name="moveDataKey" size="25" />
+					<input type="text" id="moveDataKey" name="moveDataKey" size="19" />
 				</li>
 				<li>
 					<label for="moveLatitude">Latitude</label>
-					<input type="text" id="moveLatitude" name="moveLatitude" size="25"/>
+					<input type="text" id="moveLatitude" name="moveLatitude" size="19"/>
 				</li>
 				<li>
 					<label for="moveLongitude">Longitude</label>
-					<input type="text" id="moveLongitude" name="moveLongitude" size="25"/>
+					<input type="text" id="moveLongitude" name="moveLongitude" size="19"/>
 				</li>
 				<li>
 					<label for="moveHeight">Altitude</label>
-					<input type="text" id="moveHeight" name="moveHeight" size="25" />
+					<input type="text" id="moveHeight" name="moveHeight" size="19" />
 				</li>
 				<li>
 					<label for="moveHeading">Heading</label>
-					<input type="text" id="moveHeading" name="moveHeading" size="25" />
+					<input type="text" id="moveHeading" name="moveHeading" size="19" />
 				</li>
 				<li>
 					<label for="movePitch">Pitch</label>
-					<input type="text" id="movePitch" name="movePitch" size="25" />
+					<input type="text" id="movePitch" name="movePitch" size="19" />
 				</li>
 				<li>
 					<label for="moveRoll">Roll</label>
-					<input type="text" id="moveRoll" name="moveRoll" size="25" />
-					<button type="button" id="changeLocationAndRotationAPI" class="btn">Transform</button> 
+					<input type="text" id="moveRoll" name="moveRoll" size="19" />
+					<button type="button" id="changeLocationAndRotation" class="btn">Transform</button> 
 				</li>
 			</ul>
 		</div>
@@ -497,15 +501,27 @@
 			<h3>LOD</h3>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">LOD0</div>
-				<input type="text" id="geo_lod0" name="geo_lod0" value="22" size="19" />&nbsp;M
+				<input type="text" id="geo_lod0" name="geo_lod0" value="${policy.geo_lod0 }" size="15" />&nbsp;M
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">LOD1</div>
-				<input type="text" id="geo_lod1" name="geo_lod1" value="70" size="19" />&nbsp;M
+				<input type="text" id="geo_lod1" name="geo_lod1" value="${policy.geo_lod1 }" size="15" />&nbsp;M
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">LOD2</div>
-				<input type="text" id="geo_lod2" name="geo_lod2" value="22360" size="19" />&nbsp;M&nbsp;&nbsp;
+				<input type="text" id="geo_lod2" name="geo_lod2" value="${policy.geo_lod2 }" size="15" />&nbsp;M
+			</div>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">LOD3</div>
+				<input type="text" id="geo_lod3" name="geo_lod3" value="${policy.geo_lod3 }" size="15" />&nbsp;M
+			</div>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">LOD4</div>
+				<input type="text" id="geo_lod4" name="geo_lod4" value="${policy.geo_lod4 }" size="15" />&nbsp;M
+			</div>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">LOD5</div>
+				<input type="text" id="geo_lod5" name="geo_lod5" value="${policy.geo_lod5 }" size="15" />&nbsp;M&nbsp;&nbsp;
 				<button type="button" id="changeLodButton" class="btn">Change</button>
 			</div>
 		</div>
@@ -531,47 +547,13 @@
 					<button type="button" id="changeLightingButton" class="btn">Change</button>
 				</div>
 			</div>
-			<!-- <div style="height: 30px;">
-				<label for="geo_ambient_color">AmbientColor</label>
-				<input type="text" id="geo_ambient_color" name="geo_ambient_color" class="m" size="15"
-					data-palette='[	"#c00000","#ff0000","#ffc000","#ffff00","#92d050",
-									"#00b050","#00b0f0","#0070c0","#002060","#7030a0",
-									"#f2f2f2","#d8d8d8","#bfbfbf","#a5a5a5","#7f7f7f",
-									"#7f7f7f","#595959","#3f3f3f","#262626","#0c0c0c",
-									"#ddd9c3","#c4bd97","#938953","#494429","#1d1b10",
-									"#c6d9f0","#8db3e2","#548dd4","#17365d","#0f243e",
-									"#dbe5f1","#b8cce4","#95b3d7","#366092","#244061",
-									"#f2dcdb","#e5b9b7","#d99694","#953734","#632423",
-									"#ebf1dd","#d7e3bc","#c3d69b","#76923c","#4f6128",
-									"#e5e0ec","#ccc1d9","#b2a2c7","#5f497a","#3f3151",
-									"#dbeef3","#b7dde8","#92cddc","#31859b","#205867",
-									"#fdeada","#fbd5b5","#fac08f","#e36c09","#974806" ]' />
-			</div>
-			<div style="height: 30px;">
-				<label for="geo_specular_color">SpecularColor</label>
-				<input type="text" id="geo_specular_color" name="geo_specular_color" class="m" size="15"
-					data-palette='[ "#c00000","#ff0000","#ffc000","#ffff00","#92d050",
-									"#00b050","#00b0f0","#0070c0","#002060","#7030a0",
-									"#f2f2f2","#d8d8d8","#bfbfbf","#a5a5a5","#7f7f7f",
-									"#7f7f7f","#595959","#3f3f3f","#262626","#0c0c0c",
-									"#ddd9c3","#c4bd97","#938953","#494429","#1d1b10",
-									"#c6d9f0","#8db3e2","#548dd4","#17365d","#0f243e",
-									"#dbe5f1","#b8cce4","#95b3d7","#366092","#244061",
-									"#f2dcdb","#e5b9b7","#d99694","#953734","#632423",
-									"#ebf1dd","#d7e3bc","#c3d69b","#76923c","#4f6128",
-									"#e5e0ec","#ccc1d9","#b2a2c7","#5f497a","#3f3151",
-									"#dbeef3","#b7dde8","#92cddc","#31859b","#205867",
-									"#fdeada","#fbd5b5","#fac08f","#e36c09","#974806" ]' />
-				&nbsp;
-			</div> -->
-			
 			<div style="text-align: center">
 			</div>
 		</div>
 		<div>
 			<h3><label for="geo_ssao_radius">SSAO Radius</label></h3>
 			<input type="text" id="geo_ssao_radius" name="geo_ssao_radius" />
-			<button type="button" id="changeSsadRadiusButton" class="btn">Change</button>
+			<button type="button" id="changeSsaoRadiusButton" class="btn">Change</button>
 		</div>
 		<div>
 			<h3>View Mode</h3>
@@ -777,7 +759,7 @@
 			// issue 등록 버튼, css, 상태를 변경
 			$("#insertIssueEnableButton").removeClass("on");
 			$("#insertIssueEnableButton").text("Please select object after clicking.");
-			insertIssueEnable["enable"] = false;
+			insertIssueEnable = false;
 			
 			changeInsertIssueStateAPI(managerFactory, 0);
 		} else {
@@ -1099,7 +1081,7 @@
 		
 		var objectIds = null;
 		var colorObjectIds = $("#colorObjectIds").val();
-		if(colorObjectIds !== null && colorObjectIds !=="") objectIds = colorObjectIds.split(",");
+		if(colorObjectIds !== null && colorObjectIds !== "") objectIds = colorObjectIds.split(",");
 		changeColorAPI(managerFactory, $("#colorProjectId").val(), $("#colorDataKey").val(), objectIds, $("#colorProperty").val(), $("#updateColor").val());
 	});
 	// 색깔 변경 이력 삭제
@@ -1169,12 +1151,12 @@
 		changeNearGeoIssueListViewModeAPI(managerFactory, isShow);
 	}
 	function changeNearGeoIssueListCallback(msg, theArgs) {
-		if(msg.result == "success") {
+		if(msg.result === "success") {
 			var issueList = msg.issueList;
 			if(issueList != null && issueList.length > 0) {
 				for(i=0; i<issueList.length; i++ ) {
 					var issue = issueList[i];
-					drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
+					drawInsertIssueImageAPI(managerFactory, 0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
 				}
 			}
 		} else {
@@ -1206,6 +1188,7 @@
 	// 마우스 클릭 객체 이동 모드 변경 저장
 	$("#saveObjectMoveButton").click(function () {
 		alert("Comming soon");
+		return;
 		var objectMoveMode = $(':radio[name="objectMoveMode"]:checked').val();
 		if(objectMoveMode === "2") {
 			alert("Can not be saved in None mode.");
@@ -1277,17 +1260,6 @@
 				$("#geo_specular_reflection_coef" ).val(ui.value);
 			}
 		});
-		
-		/* $('[name="geo_ambient_color"]').paletteColorPicker({
-			clear_btn: 'last',
-			//position: 'downside',
-			close_all_but_this: true // Default is false
-		});
-		$('[name="geo_specular_color"]').paletteColorPicker({
-			clear_btn: 'last',
-			//position: 'downside',
-			close_all_but_this: true // Default is false
-		}); */
 	}
 	
 	// LOD 설정

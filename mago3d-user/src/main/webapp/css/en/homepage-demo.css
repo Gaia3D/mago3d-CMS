@@ -25,7 +25,7 @@ ul, li {margin:0; padding:0; }
 .nav {
 	position: absolute;
 	float: left;
-	width: 40px;
+	width: 65px;
 	height: 100%;
 	background-color: #393946;
 	z-index: 9999;
@@ -69,18 +69,15 @@ nav li.issue > span * {
 }
 .nav li.regist {
 	background-position: 0 -50px;
-	font-size: smaller;
 }
 .nav li.search {
 	background-position: 0 -50px;
-	font-size: smaller;
 }
 .nav li.api {
 	background-position: 0 -50px;
 }
 .nav li.config {
 	background-position: 0 -50px;
-	font-size: xx-small;
 }
 
 /* ///// LAYER ///// */
@@ -206,7 +203,7 @@ button.btn.on {
 	display:none;
 	position: absolute;
 	float: left;
-	width: 417px;
+	width: 442px;
 	height: 100%;
 	overflow: auto;
 	background-color: #fff;
@@ -242,7 +239,7 @@ button.btn.on {
 
 /* Home */
 .navContents ul.menuList {
-	margin: 10px 15px 0px 55px;
+	margin: 10px 15px 0px 80px;
 }
 .menuList > li {
 	position: relative;
@@ -260,7 +257,7 @@ button.btn.on {
 /* issue */
 .issueList > li {
 	position: relative;
-	padding: 5px 10px 0px 50px;
+	padding: 5px 10px 0px 75px;
 	border-bottom: 1px dotted #ccc;
 	cursor: pointer;
 }
@@ -342,7 +339,7 @@ button.btn.on {
 
 /* Search */
 .navContents div.searchWrap {
-	margin: 10px 15px 0px 55px;
+	margin: 10px 15px 0px 80px;
 }
 .navContents div.searchWrap > div h3 {
 	margin-bottom: 8px;
@@ -419,7 +416,7 @@ button.btn.on {
 
 /* API */
 .navContents div.apiWrap {
-	margin: 10px 15px 0px 55px;
+	margin: 10px 15px 0px 80px;
 }
 .navContents div.apiWrap > div h3 {
 	margin-bottom: 8px;
@@ -451,7 +448,7 @@ button.btn.on {
 
 /* ISSUE 등록 */
 .navContents div.insertIssueWrap {
-	margin: 10px 15px 0px 55px;
+	margin: 10px 15px 0px 80px;
 }
 .navContents div.insertIssueWrap h3 {
 	margin: 5px 0;
@@ -473,7 +470,7 @@ button.btn.on {
 
 /* 설정 */
 .navContents div.configWrap {
-	margin: 10px 15px 0px 55px;
+	margin: 10px 15px 0px 80px;
 }
 .navContents div.configWrap > div h3 {
 	margin-bottom: 8px;
@@ -498,7 +495,7 @@ button.btn.on {
 	position: absolute;
 	left: 50%;
 	margin: 0 auto;
-	margin-left: -200px;
+	margin-left: -320px;
 	border-radius: 0 0 10px 10px;
 	background-color: tomato;
 	z-index: 90;
@@ -585,7 +582,7 @@ button.btn.on {
 
 [data-tooltip-text]:hover:after {
 	top: 50%;
-	left: 45px;
+	left: 70px;
 	opacity: 1;
 }
 

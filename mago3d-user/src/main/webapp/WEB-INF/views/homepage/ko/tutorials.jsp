@@ -53,7 +53,7 @@
 			</ul>
 			<ul class="language">
 				<li id="languageKO" class="on">KO</li>
-				<li id="languageEN"><a href="#" onclick="changeLanguage('en');">EN</a></li>
+				<li id="languageEN"><a href="/homepage/tutorials.do" onclick="changeLanguage('en');">EN</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -145,6 +145,7 @@
 <!-- 							</a> -->
 <!-- 						</div> -->
 <!-- 					</div> -->
+					</div>
 				</div>
 			</div>
 		</div>

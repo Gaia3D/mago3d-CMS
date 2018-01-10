@@ -126,14 +126,18 @@ public class Policy {
 	// field of view. 기본값 0(1.8 적용)
 	private Long geo_init_default_fov;
 	
-	// LOD0. 기본값 22M
+	// LOD0. 기본값 15M
 	private String geo_lod0;
-	// LOD1. 기본값 70M
+	// LOD1. 기본값 60M
 	private String geo_lod1;
-	// LOD2. 기본값 22360M
+	// LOD2. 기본값 900M
 	private String geo_lod2;
-	// LOD3. 기본값 50000M
+	// LOD3. 기본값 200M
 	private String geo_lod3;
+	// LOD3. 기본값 1000M
+	private String geo_lod4;
+	// LOD3. 기본값 50000M
+	private String geo_lod5;
 	
 	// 다이렉트 빛이 아닌 반사율 범위. 기본값 0.5
 	private String geo_ambient_reflection_coef;

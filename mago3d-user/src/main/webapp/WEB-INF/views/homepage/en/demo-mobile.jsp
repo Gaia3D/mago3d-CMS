@@ -34,7 +34,8 @@
 		<img src="/images/ko/homepage/home-icon.png" style="width: 35px; height: 35px; padding-right: 2px;"/>
 	</li>
 	<li id="shortCutMenu" class="shortCuts" data-tooltip-text="Provides a shortcut function.">Link</li>
-	<li id="myIssueMenu" class="issue" data-tooltip-text="Shows the latest 10 issues sorted chronologically from the entire Issue List.">Issue<span id="issueListCount">${totalCount }</span></li>
+	<li id="myIssueMenu" class="issue" data-tooltip-text="Shows the latest 10 issues sorted chronologically from the entire Issue List.">Issue
+		<br /><span id="issueListCount">${totalCount }</span></li>
 	<li id="searchMenu" class="search" data-tooltip-text="searching such as issue, object, and spatial information.">Search</li>
 	<li id="apiMenu" class="api" data-tooltip-text="APIs to control various functions of mago3D.">API</li>	
 	<li id="insertIssueMenu" class="regist" data-tooltip-text="Issue registration for Object.">Regist.</li>
@@ -45,7 +46,7 @@
 	<div class="alignRight">
 		<button type="button" id="menuContentClose" class="navClose">Close</button>
 	</div>
-
+	
 	<ul id="homeMenuContent" class="menuList">
 		<li><a href="/homepage/index.do">Home</a></li>
 		<li><a href="/homepage/about.do">mago3D</a></li>
@@ -118,8 +119,9 @@
 				</td>
 			</tr>
 			<tr style="height: 35px;">
-				<td><label for="search_word">분류</label></td>
-				<td><select id="search_word" name="search_word" class="select">
+				<td><label for="search_word">Category</label></td>
+				<td>
+					<select id="search_word" name="search_word" class="select">
 						<option value="data_name">Data Name</option>
 						<option value="title">Issue Name</option>
 					</select>
@@ -130,11 +132,12 @@
 				</td>
 			</tr>
 			<tr style="height: 35px;">
-				<td><label for="search_value">Search</label></td>
+				<td>
+				<label for="search_value">Word</label></td>
 				<td><input type="text" id="search_value" name="search_value" size="31" /></td>
 			</tr>
 			<tr style="height: 35px;">
-				<td><label for="start_date">Word Date</label></td>
+				<td><label for="start_date">Date</label></td>
 				<td><input type="text" class="s date" id="start_date" name="start_date" size="12" />
 					<span class="delimeter tilde">~</span> 
 					<input type="text" class="s date" id="end_date" name="end_date" size="12" /></td>
@@ -164,7 +167,7 @@
 		<ul id="searchList" class="searchList"></ul>
 	</div>
 	</form:form>
-
+	
 	<div id="apiMenuContent" class="apiWrap">
 		<div>
 			<h3>Local(Browser) Search</h3>
@@ -274,17 +277,17 @@
 					<input type="text" id="moveHeight" name="moveHeight" size="15" />
 				</li>
 				<li>
-					<label for="moveHeading">HEADING </label> 
+					<label for="moveHeading">Heading </label> 
 					<input type="text" id="moveHeading" name="moveHeading" size="15" />
 				</li>
 				<li>
-					<label for="movePitch">PITCH </label> 
+					<label for="movePitch">Pitch </label> 
 					<input type="text" id="movePitch" name="movePitch" size="15" />
 				</li>
 				<li>
-					<label for="moveRoll">ROLL </label> 
+					<label for="moveRoll">Roll </label> 
 					<input type="text" id="moveRoll" name="moveRoll" size="15" />
-					<button type="button" id="changeLocationAndRotationAPI" class="btn">Transform</button>
+					<button type="button" id="changeLocationAndRotation" class="btn">Transform</button>
 				</li>
 			</ul>
 		</div>
@@ -319,7 +322,7 @@
 			<table>
 				<tr style="height: 35px;">
 					<td style="width: 100px;" nowrap="nowrap">
-						<form:label path="data_group_id">Date Group</form:label> 
+						<form:label path="project_id">Project</form:label> 
 						<span class="icon-glyph glyph-emark-dot color-warning"></span></td>
 					<td><form:select path="project_id" cssClass="select">
 <c:forEach var="project" items="${projectList}">
@@ -470,15 +473,27 @@
 			<h3>LOD</h3>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">LOD0</div>
-				<input type="text" id="geo_lod0" name="geo_lod0" value="22" size="15" />&nbsp;M
+				<input type="text" id="geo_lod0" name="geo_lod0" value="${policy.geo_lod0 }" size="15" />&nbsp;M
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">LOD1</div>
-				<input type="text" id="geo_lod1" name="geo_lod1" value="70" size="15" />&nbsp;M
+				<input type="text" id="geo_lod1" name="geo_lod1" value="${policy.geo_lod1 }" size="15" />&nbsp;M
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">LOD2</div>
-				<input type="text" id="geo_lod2" name="geo_lod2" value="22360" size="15" />&nbsp;M&nbsp;&nbsp;
+				<input type="text" id="geo_lod2" name="geo_lod2" value="${policy.geo_lod2 }" size="15" />&nbsp;M
+			</div>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">LOD3</div>
+				<input type="text" id="geo_lod3" name="geo_lod3" value="${policy.geo_lod3 }" size="15" />&nbsp;M
+			</div>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">LOD4</div>
+				<input type="text" id="geo_lod4" name="geo_lod4" value="${policy.geo_lod4 }" size="15" />&nbsp;M
+			</div>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">LOD5</div>
+				<input type="text" id="geo_lod5" name="geo_lod5" value="${policy.geo_lod5 }" size="15" />&nbsp;M&nbsp;&nbsp;
 				<button type="button" id="changeLodButton" class="btn">Change</button>
 			</div>
 		</div>
@@ -509,7 +524,7 @@
 		<div>
 			<h3><label for="geo_ssao_radius">SSAO Radius</label></h3>
 			<input type="text" id="geo_ssao_radius" name="geo_ssao_radius" />
-			<button type="button" id="changeSsadRadiusButton" class="btn">Change</button>
+			<button type="button" id="changeSsaoRadiusButton" class="btn">Change</button>
 		</div>
 		<div>
 			<h3>View Mode</h3>
@@ -746,7 +761,7 @@
 			// issue 등록 버튼, css, 상태를 변경
 			$("#insertIssueEnableButton").removeClass("on");
 			$("#insertIssueEnableButton").text("Please select object after clicking.");
-			insertIssueEnable["enable"] = false;
+			insertIssueEnable = false;
 			
 			changeInsertIssueStateAPI(managerFactory, 0);
 		} else {

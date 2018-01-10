@@ -50,7 +50,7 @@
 				<li><a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO"><a href="#" onclick="changeLanguage('ko');">KO</a></li>
+				<li id="languageKO"><a href="/homepage/spec.do" onclick="changeLanguage('ko');">KO</a></li>
 				<li id="languageEN" class="on">EN</li>
 			</ul>
 		</div>

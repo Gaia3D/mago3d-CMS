@@ -29,8 +29,8 @@
 	<object class="vod" data="https://www.youtube.com/embed/68XWIC2K-kA?autoplay=1&loop=1&playlist=n5jdRzLwegg&controls=0&showinfo=0&origin=http://www.mago3d.com"></object>
 	<div class="mainMenu">
 		<ul class="nav">
-			<li><a href="#" onclick ="changeLanguage('ko', '/homepage/about.do');">KOREAN</a></li>
-			<li><a href="#" onclick ="changeLanguage('en', '/homepage/about.do');">ENGLISH</a></li>
+			<li><a href="/homepage/about.do" onclick ="changeLanguage('ko');">KOREAN</a></li>
+			<li><a href="/homepage/about.do" onclick ="changeLanguage('en');">ENGLISH</a></li>
 		</ul> 
 	</div>
 	

@@ -74,6 +74,8 @@
 			geo_lod1 = #{geo_lod1},
 			geo_lod2 = #{geo_lod2},
 			geo_lod3 = #{geo_lod3},
+			geo_lod4 = #{geo_lod4},
+			geo_lod5 = #{geo_lod5},
 			geo_ambient_reflection_coef = #{geo_ambient_reflection_coef},
 			geo_diffuse_reflection_coef = #{geo_diffuse_reflection_coef},
 			geo_specular_reflection_coef = #{geo_specular_reflection_coef},

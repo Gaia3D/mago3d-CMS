@@ -34,7 +34,8 @@
 		<img src="/images/ko/homepage/home-icon.png" style="width: 35px; height: 35px; padding-right: 2px;"/>
 	</li>
 	<li id="shortCutMenu" class="shortCuts" data-tooltip-text="바로가기 기능을 제공 합니다.">Link</li>
-	<li id="myIssueMenu" class="issue" data-tooltip-text="전체 Issue 리스트 중에서 최신 Issue 10개를 시간 순으로 정렬하여 보여 줍니다.">Issue<span id="issueListCount">${totalCount }</span></li>
+	<li id="myIssueMenu" class="issue" data-tooltip-text="전체 Issue 리스트 중에서 최신 Issue 10개를 시간 순으로 정렬하여 보여 줍니다.">Issue
+		<br /><span id="issueListCount">${totalCount }</span></li>
 	<li id="searchMenu" class="search" data-tooltip-text="Issue, Object, 공간 정보 등을 활용한 검색 기능을 제공 합니다.">검색</li>
 	<li id="apiMenu" class="api" data-tooltip-text="mago3D 여러 기능을 Control 할 수 있는 다양한 API들을 제공 합니다.">API</li>	
 	<li id="insertIssueMenu" class="regist" data-tooltip-text="Object에 대한 Issue 등록 기능을 제공 합니다.">등록</li>
@@ -45,7 +46,7 @@
 	<div class="alignRight">
 		<button type="button" id="menuContentClose" class="navClose">닫기</button>
 	</div>
-
+	
 	<ul id="homeMenuContent" class="menuList">
 		<li><a href="/homepage/index.do">Home</a></li>
 		<li><a href="/homepage/about.do">mago3D</a></li>
@@ -164,7 +165,7 @@
 		<ul id="searchList" class="searchList"></ul>
 	</div>
 	</form:form>
-
+	
 	<div id="apiMenuContent" class="apiWrap">
 		<div>
 			<h3>로컬(Browser) 검색</h3>
@@ -470,15 +471,27 @@
 			<h3>LOD</h3>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">LOD0</div>
-				<input type="text" id="geo_lod0" name="geo_lod0" value="22" size="15" />&nbsp;M
+				<input type="text" id="geo_lod0" name="geo_lod0" value="${policy.geo_lod0 }" size="15" />&nbsp;M
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">LOD1</div>
-				<input type="text" id="geo_lod1" name="geo_lod1" value="70" size="15" />&nbsp;M
+				<input type="text" id="geo_lod1" name="geo_lod1" value="${policy.geo_lod1 }" size="15" />&nbsp;M
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">LOD2</div>
-				<input type="text" id="geo_lod2" name="geo_lod2" value="22360" size="15" />&nbsp;M&nbsp;&nbsp;
+				<input type="text" id="geo_lod2" name="geo_lod2" value="${policy.geo_lod2 }" size="15" />&nbsp;M
+			</div>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">LOD3</div>
+				<input type="text" id="geo_lod3" name="geo_lod3" value="${policy.geo_lod3 }" size="15" />&nbsp;M
+			</div>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">LOD4</div>
+				<input type="text" id="geo_lod4" name="geo_lod4" value="${policy.geo_lod4 }" size="15" />&nbsp;M
+			</div>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;">LOD5</div>
+				<input type="text" id="geo_lod5" name="geo_lod5" value="${policy.geo_lod5 }" size="15" />&nbsp;M&nbsp;&nbsp;
 				<button type="button" id="changeLodButton" class="btn">변경</button>
 			</div>
 		</div>
@@ -509,7 +522,7 @@
 		<div>
 			<h3><label for="geo_ssao_radius">SSAO Radius</label></h3>
 			<input type="text" id="geo_ssao_radius" name="geo_ssao_radius" />
-			<button type="button" id="changeSsadRadiusButton" class="btn">변경</button>
+			<button type="button" id="changeSsaoRadiusButton" class="btn">변경</button>
 		</div>
 		<div>
 			<h3>View Mode</h3>
@@ -630,7 +643,7 @@
 		saveCurrentLocation(latitude, longitude);
 	}
 	function gotoProjectCallback(msg, theArgs) {
-		if(msg.result == "success") {
+		if(msg.result === "success") {
 			var projectDataJson = msg.projectDataJson;
 			if(projectDataJson === null || projectDataJson === undefined) {
 				alert("프로젝트가 데이터가 존재하지 않습니다.");
@@ -655,7 +668,7 @@
 		saveCurrentLocation(latitude, longitude);
 	}
 	function gotoIssueCallback(msg, theArgs) {
-		if(msg.result == "success") {
+		if(msg.result === "success") {
 			var projectDataJson = msg.projectDataJson;
 			if(projectDataJson === null || projectDataJson === undefined) {
 				alert("프로젝트가 데이터가 존재하지 않습니다.");
@@ -746,7 +759,7 @@
 			// issue 등록 버튼, css, 상태를 변경
 			$("#insertIssueEnableButton").removeClass("on");
 			$("#insertIssueEnableButton").text("클릭 후 객체를 선택해 주세요.");
-			insertIssueEnable["enable"] = false;
+			insertIssueEnable = false;
 			
 			changeInsertIssueStateAPI(managerFactory, 0);
 		} else {
@@ -755,7 +768,7 @@
 		}
 	});
 	function issueSaveCallback(msg, theArgs) {
-		if(msg.result == "success") {
+		if(msg.result === "success") {
 			alert(JS_MESSAGE["insert"]);
 			// pin image를 그림
 			drawInsertIssueImageAPI(managerFactory, 1, msg.issue.issue_id, msg.issue.issue_type, 
@@ -768,17 +781,17 @@
 		ajaxIssueList();
 	}
 	function check() {
-		if ($("#data_key").val() == "") {
+		if ($("#data_key").val() === "") {
 			alert(JS_MESSAGE["issue.datakey.empty"]);
 			$("#data_key").focus();
 			return false;
 		}
-		if ($("#title").val() == "") {
+		if ($("#title").val() === "") {
 			alert(JS_MESSAGE["issue.title.empty"]);
 			$("#title").focus();
 			return false;
 		}
-		if ($("#contents").val() == "") {
+		if ($("#contents").val() === "") {
 			alert(JS_MESSAGE["issue.contents.empty"]);
 			$("#contents").focus();
 			return false;
@@ -792,7 +805,7 @@
 		ajaxCall(url, info, ajaxIssueListCallback, errorCallback, null);
 	}
 	function ajaxIssueListCallback(msg, theArgs) {
-		if(msg.result == "success") {
+		if(msg.result === "success") {
 			var issueList = msg.issueList;
 			var content = "";
 			var issueListCount = 0;
@@ -800,11 +813,10 @@
 				+	"<li style=\"margin-bottom: 8px; font-size: 1em; font-weight: normal; color: #2955a6;\">"
 				+ 		"최신 Issue 10개 표시"
 				+	"</li>";
-			if(issueList == null || issueList.length == 0) {
-				content = content	
-					+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-					+	"	Issue가 존재하지 않습니다."
-					+	"</li>";
+			if(issueList === null || issueList.length === 0) {
+				content += 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
+						+	"	Issue가 존재하지 않습니다."
+						+	"</li>";
 			} else {
 				issueListCount = issueList.length;
 				for(i=0; i<issueListCount; i++ ) {
@@ -921,7 +933,7 @@
 		}
 	});
 	function searchDataCallback(msg, theArgs) {
-		if(msg.result == "success") {
+		if(msg.result === "success") {
 			var searchType = $("#search_word").val();
 			var content = "";
 			if(searchType === "data_name") {
@@ -959,7 +971,7 @@
 				}
 			} else {
 				var issueList = msg.issueList;
-				if(issueList == null || issueList.length == 0) {
+				if(issueList === null || issueList.length === 0) {
 					content = content	
 						+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
 						+	"	Issue가 존재하지 않습니다."
@@ -1047,7 +1059,6 @@
 			saveCurrentLocation(latitude, longitude);
 		}
 	}
-	
 	// 속성 가시화
 	$("#changePropertyRendering").click(function(e) {
 		var isShow = $(':radio[name="propertyRendering"]:checked').val();
@@ -1073,7 +1084,7 @@
 		
 		var objectIds = null;
 		var colorObjectIds = $("#colorObjectIds").val();
-		if(colorObjectIds !== null && colorObjectIds !=="") objectIds = colorObjectIds.split(",");
+		if(colorObjectIds !== null && colorObjectIds !== "") objectIds = colorObjectIds.split(",");
 		changeColorAPI(managerFactory, $("#colorProjectId").val(), $("#colorDataKey").val(), objectIds, $("#colorProperty").val(), $("#updateColor").val());
 	});
 	// 색깔 변경 이력 삭제
@@ -1143,12 +1154,12 @@
 		changeNearGeoIssueListViewModeAPI(managerFactory, isShow);
 	}
 	function changeNearGeoIssueListCallback(msg, theArgs) {
-		if(msg.result == "success") {
+		if(msg.result === "success") {
 			var issueList = msg.issueList;
 			if(issueList != null && issueList.length > 0) {
 				for(i=0; i<issueList.length; i++ ) {
 					var issue = issueList[i];
-					drawInsertIssueImageAPI(0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
+					drawInsertIssueImageAPI(managerFactory, 0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
 				}
 			}
 		} else {
@@ -1180,6 +1191,7 @@
 	// 마우스 클릭 객체 이동 모드 변경 저장
 	$("#saveObjectMoveButton").click(function () {
 		alert("준비중 입니다.");
+		return;
 		var objectMoveMode = $(':radio[name="objectMoveMode"]:checked').val();
 		if(objectMoveMode === "2") {
 			alert("None 모드일 경우 저장할 수 없습니다.");
@@ -1251,17 +1263,6 @@
 				$("#geo_specular_reflection_coef" ).val(ui.value);
 			}
 		});
-		
-		/* $('[name="geo_ambient_color"]').paletteColorPicker({
-			clear_btn: 'last',
-			//position: 'downside',
-			close_all_but_this: true // Default is false
-		});
-		$('[name="geo_specular_color"]').paletteColorPicker({
-			clear_btn: 'last',
-			//position: 'downside',
-			close_all_but_this: true // Default is false
-		}); */
 	}
 	
 	// LOD 설정

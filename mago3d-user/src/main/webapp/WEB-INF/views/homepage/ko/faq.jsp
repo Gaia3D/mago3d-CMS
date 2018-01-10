@@ -58,7 +58,7 @@
 			</ul>
 			<ul class="language">
 				<li id="languageKO" class="on">KO</li>
-				<li id="languageEN"><a href="#" onclick="changeLanguage('en');">EN</a></li>
+				<li id="languageEN"><a href="/homepage/faq.do" onclick="changeLanguage('en');">EN</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -98,9 +98,9 @@
 				<div>
 					<div class="sub_title"><span id="License">mago3D.js, F4D Converter각 라이센스는 어떻게 사용해야 합니까?</span></div>
 					<p>
-						mago3D.js는 Apache2.0을 F4D Converter는 LGPL을 기본으로 한 Dual License를 따릅니다. 
-						F4D Converter를 사용하되 소스코드를 공개하고 싶지 않은 기관이나 개인은 가이아쓰리디로부터 상업적 라이선스를 취득하셔야 합니다.
-						 상업적 라이선스를 취득한 경우 외에는 모두 AGPL의 적용을 받아 소스코드 공개의무를 집니다. 더 자세한 사항은 <a href="mailto:info@gaia3d.com">info@gaia3d.com</a>으로 문의해 주시기 바랍니다.
+						mago3D.js는 Apache2.0, F4D Converter는 AGPL3.0을 기반으로 한 듀얼 라이센스를 따릅니다. 
+						F4D 변환기를 사용하지만 소스 코드를 공개하지 않으려는 조직이나 개인은 Gaia3D(www.gaia3d.com)에서 상업용 라이센스를 취득해야 합니다. 
+						상업용 라이센스를 제외하고 모두 AGPL3.0의 적용을받으며 소스 코드가 공개되어 있습니다. 더 자세한 사항은 <a href="mailto:info@gaia3d.com">info@gaia3d.com</a>으로 문의해 주시기 바랍니다.
 					</p>
 				</div>
 				<div>

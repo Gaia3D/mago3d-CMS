@@ -148,6 +148,33 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
+				<form:label path="geo_lod3"><spring:message code='config.geo.lod3'/></form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_lod3" cssClass="m" />&nbsp;M
+				<form:errors path="geo_lod3" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_lod4"><spring:message code='config.geo.lod4'/></form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_lod4" cssClass="m" />&nbsp;M
+				<form:errors path="geo_lod4" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
+				<form:label path="geo_lod5"><spring:message code='config.geo.lod5'/></form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_lod5" cssClass="m" />&nbsp;M
+				<form:errors path="geo_lod5" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
 				<form:label path="geo_ambient_reflection_coef"><spring:message code='config.geo.ambient_reflection_coeficient'/></form:label>
 			</th>
 			<td class="col-input" style="padding-left: 20px;">
