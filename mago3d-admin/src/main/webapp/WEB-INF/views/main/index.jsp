@@ -396,7 +396,7 @@
 	// 사용자 추적
 	function callAccessLog() {
 		ajaxAccessLogWidget();
-		//setInterval(ajaxAccessLogWidget, refreshTime);
+		setInterval(ajaxAccessLogWidget, refreshTime);
 	}
 	
 	// 사용자 상태별 현황

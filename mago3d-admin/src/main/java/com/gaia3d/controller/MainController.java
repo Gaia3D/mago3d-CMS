@@ -79,8 +79,26 @@ public class MainController {
 	 */
 	@GetMapping(value = "index.do")
 	public String index(HttpServletRequest request, Model model) {
+//		if(!ConfigCache.isCompanyConfigValidation()) {
+//			log.error("@@@@@@@@@@@@@@@@@ 설정 파일을 잘못 로딩 하였습니다. Properties, Quartz 파일등을 확인해 주십시오.");
+//			return "/error/config-error";
+//		}
 		
 		Policy policy = CacheManager.getPolicy();
+		boolean isActive = true;
+//		if("UNIX".equals(OS_TYPE)) {
+//			SystemConfig systemConfig = loadBalancingService.getSystemConfig();
+//			String hostname = ConfigCache.getHostname();
+//			if(hostname == null || "".equals(hostname)) {
+//				hostname = WebUtil.getHostName();
+//			}
+//			if(systemConfig == null 
+//					|| !SystemConfig.ACTIVE.equals(systemConfig.getLoad_balancing_status()) 
+//					|| !hostname.equals(systemConfig.getHostname())) {
+//				log.error("@@@@@@@@@ hostname = {}, load_balancing_status = {}", hostname, systemConfig);
+//				isActive = false;
+//			}
+//		}
 		
 		Widget widget = new Widget();
 		widget.setLimit(policy.getContent_main_widget_count());
@@ -130,6 +148,7 @@ public class MainController {
 		model.addAttribute(widget);
 		model.addAttribute(widgetList);
 		
+		model.addAttribute("isActive", isActive);
 		model.addAttribute("issueDraw", issueDraw);
 		model.addAttribute("userDraw", userDraw);
 		model.addAttribute("scheduleLogListDraw", scheduleLogListDraw);
@@ -360,7 +379,7 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "ajax-dbcp-widget.do", produces = "application/json; charset=utf8")
+	@GetMapping(value = "ajax-dbcp-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDbcpWidget(HttpServletRequest request) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
@@ -403,7 +422,7 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "ajax-access-log-widget.do", produces = "application/json; charset=utf8")
+	@GetMapping(value = "ajax-access-log-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxAccessLogWidget(HttpServletRequest request) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
@@ -424,7 +443,7 @@ public class MainController {
 			accessLog.setLimit(WIDGET_LIST_VIEW_COUNT);
 			List<AccessLog> accessLogList = logService.getListAccessLog(accessLog);
 			
-//			jSONObject.put("accessLogList", JSONArray.fromObject(accessLogList));
+			jSONObject.put("accessLogList", accessLogList);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
