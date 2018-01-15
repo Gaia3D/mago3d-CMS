@@ -94,21 +94,21 @@
 	<select id="getListDataByProjectId" parameterType="dataInfo" resultType="dataInfo">
 		/* getListDataByProjectId */
 		WITH RECURSIVE project_data_info (
-			data_id, data_key, data_name, parent, depth, view_order, latitude, longitude, height, public_yn, child_yn, attributes, insert_date, path, cycle
+			data_id, data_key, data_name, parent, depth, view_order, latitude, longitude, height, heading, pitch, roll, public_yn, child_yn, attributes, insert_date, path, cycle
 		) AS (
 	        SELECT A.data_id, A.data_key, A.data_name, A.parent, A.depth, A.view_order,
-	        	A.latitude, A.longitude, A.height, 
+	        	A.latitude, A.longitude, A.height, A.heading, A.pitch, A.roll,
 	        	A.public_yn, A.child_yn, A.attributes, A.insert_date, ARRAY[A.view_order], false
 			FROM data_info A
 	        WHERE A.parent = 0 AND A.project_id = #{project_id}
 	        UNION ALL
 	        SELECT A.data_id, A.data_key, A.data_name, A.parent, A.depth, A.view_order,
-	        	A.latitude, A.longitude, A.height,  
+	        	A.latitude, A.longitude, A.height, A.heading, A.pitch, A.roll,  
 	        	A.public_yn, A.child_yn, A.attributes, A.insert_date, path || A.view_order, A.parent = ANY(path)
 	        FROM data_info A, project_data_info B
 	        WHERE A.parent = B.data_id AND not cycle
 		)
-	    SELECT data_id, data_key, data_name, parent, depth, view_order, latitude, longitude, height, public_yn, child_yn, attributes, insert_date, path
+	    SELECT data_id, data_key, data_name, parent, depth, view_order, latitude, longitude, height, heading, pitch, roll, public_yn, child_yn, attributes, insert_date, path
 	    FROM project_data_info
 	    ORDER BY path
 	</select>
