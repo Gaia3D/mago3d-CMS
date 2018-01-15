@@ -12,7 +12,7 @@ create table project(
 	use_yn					char(1)								default 'Y',
 	latitude				numeric(13,10),
 	longitude				numeric(13,10),
-	height					numeric(7,10),
+	height					numeric(7,3),
 	duration				smallint,
 	description				varchar(256),
 	insert_date				timestamp with time zone			default now(),

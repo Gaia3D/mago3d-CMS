@@ -154,6 +154,7 @@ public class FileUtil {
 	 */
 	private static FileInfo fileCopy(MultipartFile multipartFile, FileInfo fileInfo, String directory) {
 		
+		log.info("@@@@@@@@@ directory = {}", directory);
 		// 최상위 /upload/user/ 생성
 		File rootDirectory = new File(directory);
 		if(!rootDirectory.exists()) {
