@@ -22,7 +22,7 @@ create table project(
 comment on table project is 'project(F4D Data) 그룹';
 comment on column project.project_id is '고유번호';
 comment on column project.project_key is '링크 활용 등을 위한 확장 컬럼';
-comment on column project.project_name is '그룹명';
+comment on column project.project_name is '프로젝트';
 comment on column project.view_order is '나열 순서';
 comment on column project.default_yn is '삭제 불가, Y : 기본, N : 선택';
 comment on column project.use_yn is '사용유무, Y : 사용, N : 사용안함';
@@ -40,7 +40,7 @@ create table data_info(
 	project_id					smallint							not null,
 	data_key					varchar(128)						not null,
 	data_name					varchar(64),
-	parent						smallint							default 1,
+	parent						bigint								default 1,
 	depth						smallint							default 1,
 	view_order					smallint							default 1,
 	child_yn					char(1)								default 'N',

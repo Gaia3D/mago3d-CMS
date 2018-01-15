@@ -1,7 +1,5 @@
 package com.gaia3d.service;
 
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.FileParseLog;
 
@@ -42,9 +40,10 @@ public interface FileService {
 	
 	/**
 	 * Data 일괄 등록
+	 * @param project_id
 	 * @param fileInfo
 	 * @return
 	 */
-	public FileInfo insertExcelData(FileInfo fileInfo, String userId);
+	public FileInfo insertDataFile(Long project_id, FileInfo fileInfo, String userId);
 	
 }

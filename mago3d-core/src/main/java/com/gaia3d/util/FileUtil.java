@@ -6,13 +6,13 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gaia3d.domain.FileInfo;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -32,16 +32,22 @@ public class FileUtil {
 	 */
 	
 	// 사용자 일괄 등록
-	public static final String EXCEL_USER_UPLOAD = "EXCEL_USER_UPLOAD";
+	public static final String USER_FILE_UPLOAD = "USER_FILE_UPLOAD";
 	// Data 일괄 등록
-	public static final String EXCEL_DATA_UPLOAD = "EXCEL_DATA_UPLOAD";
+	public static final String DATA_FILE_UPLOAD = "DATA_FILE_UPLOAD";
 	// Issue 등록
-	public static final String ISSUE_DATA_UPLOAD = "ISSUE_DATA_UPLOAD";
+	public static final String ISSUE_FILE_UPLOAD = "ISSUE_FILE_UPLOAD";
 	
 	// 사용자 일괄 등록의 경우 허용 문서 타입
-	public static final String[] FILE_TYPE_EXCEL = {"xlsx", "xls"};
+	public static final String[] USER_FILE_TYPE = {"xlsx", "xls"};
+	// 데이터 일괄 등록 문서 타입
+	public static final String[] DATA_FILE_TYPE = {"xlsx", "xls", "json", "txt"};
 	// issue 등록의 경우 허용 문서 타입
-	public static final String[] ISSUE_TYPE_EXCEL = {"png", "jpg", "jpeg", "gif", "tiff", "xlsx", "xls", "docx", "doc", "pptx", "ppt"};
+	public static final String[] ISSUE_FILE_TYPE = {"png", "jpg", "jpeg", "gif", "tiff", "xlsx", "xls", "docx", "doc", "pptx", "ppt"};
+	// json 파일
+	public static final String EXTENSION_JSON = "json";
+	// txt 파일
+	public static final String EXTENSION_TXT = "txt";
 	// 엑셀 처리 기본 프로그램
 	public static final String EXCEL_EXTENSION_XLS = "xls";
 	// JEXCEL이 2007버전(xlsx) 을 읽지 못하기 때문에 POI를 병행해서 사용
@@ -113,10 +119,12 @@ public class FileUtil {
 		}
 		String extension = fileNameValues[1];
 		List<String> extList = null;
-		if(EXCEL_USER_UPLOAD.equals(fileInfo.getJob_type()) || EXCEL_DATA_UPLOAD.equals(fileInfo.getJob_type())) {
-			extList = Arrays.asList(FILE_TYPE_EXCEL);
+		if(USER_FILE_UPLOAD.equals(fileInfo.getJob_type())) {
+			extList = Arrays.asList(USER_FILE_TYPE);
+		} else if(DATA_FILE_UPLOAD.equals(fileInfo.getJob_type())) {
+			extList = Arrays.asList(DATA_FILE_TYPE);
 		} else {
-			extList =  Arrays.asList(ISSUE_TYPE_EXCEL);
+			extList =  Arrays.asList(ISSUE_FILE_TYPE);
 		}
 		if(!extList.contains(extension)) {
 			log.info("@@ extList = {}, extension = {}", extList, extension);

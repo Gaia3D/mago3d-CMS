@@ -1,10 +1,6 @@
 package com.gaia3d.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,20 +21,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CommonCode;
-import com.gaia3d.domain.Project;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Policy;
+import com.gaia3d.domain.Project;
 import com.gaia3d.domain.UserSession;
-import com.gaia3d.service.ProjectService;
 import com.gaia3d.service.DataService;
 import com.gaia3d.service.FileService;
+import com.gaia3d.service.ProjectService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.FileUtil;
 import com.gaia3d.util.StringUtil;
@@ -658,51 +652,52 @@ public class DataController {
 //		
 //		return "/data/popup-input-excel-data";
 //	}
-//	
-//	/**
-//	 * Data 일괄 등록
-//	 * @param model
-//	 * @return
-//	 */
-//	@PostMapping(value = "ajax-insert-excel-data.do", produces = "application/json; charset=utf8")
-//	@ResponseBody
-//	public Map<String, Object> ajaxInsertExcelData(MultipartHttpServletRequest request) {
-//		
-//		Map<String, Object> jSONObject = new HashMap<String, Object>();
-//		String result = "success";
-//		try {
-//			MultipartFile multipartFile = request.getFile("file_name");
-//			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.EXCEL_DATA_UPLOAD, propertiesConfig.getExcelDataUploadDir());
-//			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
-//				jSONObject.put("result", fileInfo.getError_code());
-//				return jSONObject;
-//			}
-//			
-//			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-//			fileInfo.setUser_id(userSession.getUser_id());
-//			
-//			fileInfo = fileService.insertExcelData(fileInfo, userSession.getUser_id());
-//			
-//			jSONObject.put("total_count", fileInfo.getTotal_count());
-//			jSONObject.put("parse_success_count", fileInfo.getParse_success_count());
-//			jSONObject.put("parse_error_count", fileInfo.getParse_error_count());
-//			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
-//			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
-//			
-//			// 파일 삭제
-//			File copyFile = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());
-//			if(copyFile.exists()) {
-//				copyFile.delete();
-//			}
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			result = "db.exception";
-//		}
-//	
-//		jSONObject.put("result", result);
-//		
-//		return jSONObject;
-//	}
+	
+	/**
+	 * Data 일괄 등록
+	 * @param model
+	 * @return
+	 */
+	@PostMapping(value = "ajax-insert-data-file.do")
+	@ResponseBody
+	public Map<String, Object> ajaxInsertDataFile(MultipartHttpServletRequest request) {
+		
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		String result = "success";
+		try {
+			Long project_id = Long.valueOf(request.getParameter("project_id"));
+			MultipartFile multipartFile = request.getFile("file_name");
+			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.DATA_FILE_UPLOAD, propertiesConfig.getDataUploadDir());
+			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
+				jSONObject.put("result", fileInfo.getError_code());
+				return jSONObject;
+			}
+			
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			fileInfo.setUser_id(userSession.getUser_id());
+			
+			fileInfo = fileService.insertDataFile(project_id, fileInfo, userSession.getUser_id());
+			
+			jSONObject.put("total_count", fileInfo.getTotal_count());
+			jSONObject.put("parse_success_count", fileInfo.getParse_success_count());
+			jSONObject.put("parse_error_count", fileInfo.getParse_error_count());
+			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
+			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
+			
+			// 파일 삭제
+			File copyFile = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());
+			if(copyFile.exists()) {
+				copyFile.delete();
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		jSONObject.put("result", result);
+		
+		return jSONObject;
+	}
 	
 //	/**
 //	 * Data Excel 다운로드

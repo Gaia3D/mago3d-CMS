@@ -20,9 +20,9 @@ public class PropertiesConfig {
 	private String licenseFile;
 	private String licenseFileChecker;
 	
-	private String excelUserUploadDir;
-	private String excelDataUploadDir;
-	private String excelSampleUploadDir;
+	private String userUploadDir;
+	private String dataUploadDir;
+	private String sampleUploadDir;
 	
-	private String issueDataUploadDir;
+	private String issueUploadDir;
 }

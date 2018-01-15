@@ -112,7 +112,7 @@
 										<a href="#" onclick="updateDataStatus('DATA', 'LOCK'); return false;" class="button"><spring:message code='data.lock'/></a>
 										<a href="#" onclick="updateDataStatus('DATA', 'UNLOCK'); return false;" class="button"><spring:message code='data.lock.release'/></a>
 										<a href="#" onclick="deleteDatas(); return false;" class="button"><spring:message code='data.all.delete'/></a>
-										<a href="#" onclick="inputExcelData(); return false;" class="button"><spring:message code='data.all.insert'/></a>
+										<a href="#" onclick="insertDataFile(); return false;" class="button"><spring:message code='data.all.insert'/></a>
 <c:if test="${txtDownloadFlag ne 'true' }">
 										<a href="/data/download-excel-data.do" class="button"><spring:message code='data.download'/></a>
 </c:if>
@@ -227,21 +227,21 @@
 	</div>
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 	
-	<div class="dialog" title="Data 그룹 정보">
+	<div class="projectDialog" title="프로젝트 정보">
 		<table class="inner-table scope-row">
 			<col class="col-label" />
 			<col class="col-data" />
 			<tr>
 				<th class="col-label" scope="row">프로젝트명</th>
-				<td id="group_name_info" class="col-data"></td>
+				<td id="project_name_info" class="col-data"></td>
 			</tr>
 			<tr>
-				<th class="col-label" scope="row">프로젝트명(영문)</th>
-				<td id="group_key_info" class="col-data"></td>
+				<th class="col-label" scope="row">프로젝트 Key</th>
+				<td id="project_key_info" class="col-data"></td>
 			</tr>
 			<tr>
 				<th class="col-label" scope="row"><spring:message code='data.use.not'/></th>
-				<td id="viewUseYn_info" class="col-data"></td>
+				<td id="use_yn_info" class="col-data"></td>
 			</tr>
 			<tr>
 				<th class="col-label" scope="row"><spring:message code='description'/></th>
@@ -249,15 +249,29 @@
 			</tr>
 		</table>
 	</div>
-	<%-- 일괄등록(Excel) --%>
-	<div class="dialog_excel" title="<spring:message code='data.all.insert.data'/>">
-		<form id="fileInfo" name="fileInfo" action="/data/ajax-insert-excel-data.do" method="post" enctype="multipart/form-data">
-			<table id="excelDataUpload" class="inner-table scope-row">
+	<%-- 일괄등록(File) --%>
+	<div class="dataFileDialog" title="<spring:message code='data.all.insert.data'/>">
+		<form id="fileInfo" name="fileInfo" action="/data/ajax-insert-data-file.do" method="post" enctype="multipart/form-data">
+			<table id="dataFileUpload" class="inner-table scope-row">
 				<col class="col-sub-label xl" />
 				<col class="col-data" />
 				<tbody>
 					<tr>
-						<th class="col-sub-label xl"><spring:message code='data.upload.file'/></th>
+						<th class="col-sub-label">
+							<label for="project_id">프로젝트명</label>
+						</th>
+						<td>
+							<select id="project_id" name="project_id" class="select">
+								<option value="0"><spring:message code='all'/></option>
+<c:forEach var="project" items="${projectList}">
+								<option value="${project.project_id}">${project.project_name}</option>
+</c:forEach>
+							</select>
+						</td>
+					</tr>
+					
+					<tr>
+						<th class="col-sub-label"><spring:message code='data.upload.file'/></th>
 						<td>
 							<div class="inner-data">
 								<input type="file" id="file_name" name="file_name" class="col-data" />
@@ -290,7 +304,7 @@
 		$( ".select" ).selectmenu();
 	});
 	
-	var dialog = $( ".dialog" ).dialog({
+	var projectDialog = $( ".projectDialog" ).dialog({
 		autoOpen: false,
 		height: 300,
 		width: 400,
@@ -298,7 +312,7 @@
 		resizable: false
 	});
 	
-	var dialog_excel = $( ".dialog_excel" ).dialog({
+	var dataFileDialog = $( ".dataFileDialog" ).dialog({
 		autoOpen: false,
 		height: 445,
 		width: 600,
@@ -312,13 +326,13 @@
 		$(":checkbox[name=data_id]").prop("checked", this.checked);
 	});
 	
-	// Data 등록 Layer 생성
-	function inputExcelData() {
-		dialog_excel.dialog( "open" );
+	// Data 일괄 등록 Layer 생성
+	function insertDataFile() {
+		dataFileDialog.dialog( "open" );
 	}
 	// Data 등록 Layer 닫기
 	function popClose() {
-		dialog_excel.dialog( "close" );
+		dataFileDialog.dialog( "close" );
 		location.reload();
 	}
 	
@@ -376,13 +390,18 @@
 
 	var fileUploadFlag = true;
 	function fileUpload() {
-		if($("#file_name").val() == "") {
+		var fileName = $("#file_name").val();
+		if(fileName === "") {
 			alert(JS_MESSAGE["data.file.name"]);
 			$("#file_name").focus();
 			return false;
 		}
-		if(!isExcelFile($("#file_name").val())) {
-			alert(JS_MESSAGE["data.file.excel"]);
+		
+		if( fileName.lastIndexOf("xlsx") <=0 
+				&& fileName.lastIndexOf("xls") <=0
+				&& fileName.lastIndexOf("json") <=0 
+				&& fileName.lastIndexOf("txt") <=0 ) {
+			alert(JS_MESSAGE["data.file.invalid"]);
 			$("#file_name").focus();
 			return false;
 		}
@@ -391,13 +410,11 @@
 			fileUploadFlag = false;
 			$("#fileInfo").ajaxSubmit({
 				type: "POST",
-				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
 						if(msg.parse_error_count != 0 || msg.insert_error_count != 0) {
-							$("#file_name").val('');
+							$("#file_name").val("");
 							alert(JS_MESSAGE["fail.count.retry.select"]);
 						} else {
 							alert(JS_MESSAGE["update"]);
@@ -426,7 +443,7 @@
 						+ 	"<td> DB 등록 실패 건수</td>"
 						+ 	"<td> " + msg.insert_error_count + "</td>"
 						+ "</tr>";
-						$("#excelDataUpload > tbody:last").append(content);
+						$("#dataFileUpload > tbody:last").append(content);
 					}
 					fileUploadFlag = true;
 				},
@@ -441,24 +458,22 @@
 		}
 	}
 	
-	// Data 그룹 정보
-    function detailDataGroupInfo(dataGroupId) {
-    	dialog.dialog( "open" );
-    	ajaxDataGroupInfo(dataGroupId);
+	// project 정보
+    function detailProject(projectId) {
+    	projectDialog.dialog( "open" );
+    	ajaxProject(projectId);
 	}
 	
-	// Data 그룹 정보
-    function ajaxDataGroupInfo(dataGroupId) {
+	// project 정보
+    function ajaxProject(projectId) {
     	$.ajax({
-    		url: "/data/ajax-data-group-info.do",
-    		data: { data_group_id : dataGroupId },
-    		type: "POST",
-    		cache: false,
-    		async:false,
+    		url: "/data/ajax-project.do",
+    		data: { projectId : projectId },
+    		type: "GET",
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == "success") {
-    				drawDataGroupInfo(msg.dataGroup);
+    				drawProject(msg.project);
 				} else {
     				alert(JS_MESSAGE[msg.result]);
     			}
@@ -469,12 +484,12 @@
     	});
     }
 	
-	// Data 그룹 정보
-	function drawDataGroupInfo(jsonData) {
-		$("#group_name_info").html(jsonData.group_name);
-		$("#group_key_info").html(jsonData.group_key);
-		$("#viewUseYn_info").html(jsonData.viewUseYn);
-		$("#description_info").html(jsonData.description);
+	// 프로젝트 정보
+	function drawProject(project) {
+		$("#project_name_info").html(project.project_name);
+		$("#project_key_info").html(project.project_key);
+		$("#use_yn_info").html(project.use_yn);
+		$("#description_info").html(project.description);
 	}
 	
 	// Data 일괄 삭제

@@ -199,7 +199,7 @@ public class IssueController {
 		MultipartFile multipartFile = request.getFile("file_name");
 		IssueFile issueFile = new IssueFile();
 		if(multipartFile != null && multipartFile.getSize() != 0l) {
-			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.ISSUE_DATA_UPLOAD, propertiesConfig.getExcelDataUploadDir());
+			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.ISSUE_FILE_UPLOAD, propertiesConfig.getExcelDataUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				bindingResult.rejectValue("file_name", fileInfo.getError_code());
 				

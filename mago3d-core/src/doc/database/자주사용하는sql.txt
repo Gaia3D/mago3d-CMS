@@ -7,7 +7,8 @@ alter 문
 ALTER TABLE policy ADD content_object_group_root			varchar(60)			default 'Mago3D';
 삭제
 ALTER TABLE policy DROP COLUMN content_account_group_root;
-
+컬럼 타입 변경
+alter table data_info alter column parent type bigint;
 
 select *, ST_Distance(
 ST_GeographyFromText('SRID=4326;POINT('||longitude||' '||latitude||')'), 

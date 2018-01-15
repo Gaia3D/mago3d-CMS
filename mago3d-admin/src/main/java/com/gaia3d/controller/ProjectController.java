@@ -72,6 +72,36 @@ public class ProjectController {
 	}
 	
 	/**
+	 * Project 정보
+	 * @param projectId
+	 * @return
+	 */
+	@GetMapping(value = "ajax-project.do")
+	@ResponseBody
+	public Map<String, Object> ajaxProject(Long projectId) {
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		String result = "success";
+		try {
+						
+			log.info("@@ projectId = {} ", projectId);
+			if(projectId == null) {
+				result = "input.invalid";
+				jSONObject.put("result", result);
+				return jSONObject;
+			}
+			
+			Project project = projectService.getProject(projectId);
+			jSONObject.put("project", project);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		jSONObject.put("result", result);
+		return jSONObject;
+	}
+	
+	/**
 	 * Project 등록 화면
 	 * @param model
 	 * @return

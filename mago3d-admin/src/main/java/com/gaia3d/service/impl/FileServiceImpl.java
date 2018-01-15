@@ -26,6 +26,8 @@ import com.gaia3d.domain.FileParseLog;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.UserSession;
+import com.gaia3d.parser.DataFileParser;
+import com.gaia3d.parser.impl.DataFileJsonParser;
 import com.gaia3d.persistence.FileMapper;
 import com.gaia3d.service.DataService;
 import com.gaia3d.service.FileService;
@@ -486,22 +488,28 @@ public class FileServiceImpl implements FileService {
 	
 	/**
 	 * DATA 일괄 등록
+	 * @param project_id
 	 * @param fileInfo
 	 * @return
 	 */
 	@Transactional
-	public FileInfo insertExcelData(FileInfo fileInfo,  String userId) {
+	public FileInfo insertDataFile(Long project_id, FileInfo fileInfo,  String userId) {
 		
 		// 파일 이력을 저장
 		insertFileInfo(fileInfo);
 		
-		// 파일 확장자가 xls 인 경우는 jexcel 로 파싱하고, xlsx 인 경우는 poi 로 파싱함, 6만 5천건 이상은 파싱 불가처리
-		Map<String, Object> map = null;
+		DataFileParser dataFileParser = null;
 		if(FileUtil.EXCEL_EXTENSION_XLS.equals(fileInfo.getFile_ext())) {
-//			map = excelParseJExcelServer(fileInfo, request);
+			// 파일 확장자가 xls 인 경우는 jexcel 로 파싱하고, xlsx 인 경우는 poi 로 파싱함, 6만 5천건 이상은 파싱 불가처리
+			//excelParseJExcelServer(fileInfo, request);
+		} else if(FileUtil.EXCEL_EXTENSION_XLSX.equals(fileInfo.getFile_ext())) {
+			//excelParsePoiData(fileInfo, userId);
+		} else if(FileUtil.EXTENSION_JSON.equals(fileInfo.getFile_ext())) {
+			dataFileParser = new DataFileJsonParser();
+		} else if(FileUtil.EXTENSION_TXT.equals(fileInfo.getFile_ext())) {
 		} else {
-			map = excelParsePoiData(fileInfo, userId);
 		}
+		Map<String, Object> map = dataFileParser.parse(project_id, fileInfo, userId);
 		
 		@SuppressWarnings("unchecked")
 		List<DataInfo> dataInfoList = (List<DataInfo>) map.get("dataInfoList");
@@ -512,9 +520,12 @@ public class FileServiceImpl implements FileService {
 		
 		int insertSuccessCount = 0;
 		int insertErrorCount = 0;
+		long parent = 0l;
 		for(DataInfo dataInfo : dataInfoList) {
 			try {
+				dataInfo.setParent(parent);
 				dataService.insertData(dataInfo);
+				parent = dataInfo.getData_id();
 				insertSuccessCount++;
 			} catch(Exception e) {
 				e.printStackTrace();
@@ -631,96 +642,6 @@ public class FileServiceImpl implements FileService {
 //		
 //		return server;
 //	}
-	
-	/**
-	 * Data 일괄 등록 Excel 파일 확장자가 xls일 경우 JExcel 을 이용하여 파싱
-	 * @param fileInfo
-	 * @return
-	 */
-	private Map<String, Object> excelParsePoiData(FileInfo fileInfo, String userId) {
-		
-		int totalCount = 0;
-		int parseSuccessCount = 0;
-		int parseErrorCount = 0;
-		
-		List<DataInfo> dataInfoList = new ArrayList<DataInfo>();
-		
-		FileParseLog fileParseLog = new FileParseLog();
-		fileParseLog.setFile_info_id(fileInfo.getFile_info_id());
-		fileParseLog.setLog_type(FileParseLog.FILE_PARSE_LOG);		
-		FileInputStream fis = null;
-		org.apache.poi.ss.usermodel.Workbook workbook = null;
-		try {
-			File file = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());
-			fis = new FileInputStream(file);
-			
-			workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook(fis);
-			org.apache.poi.ss.usermodel.Sheet sheet = workbook.getSheetAt(0);
-			totalCount = sheet.getLastRowNum();
-			log.info("@@@@@@@@@@@ rows = {}", totalCount);
-			for(int i=1; i<= totalCount; i++) {
-				DataInfo dataInfo = null;
-//				UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-				try {
-					List<Object> excelObject = new ArrayList<Object>();
-					Row row = sheet.getRow(i);
-					for(int j=0; j<EXCEL_UPLOAD_DATA_COLUMN; j++) {					
-						Cell cell = row.getCell(j, Row.RETURN_BLANK_AS_NULL);
-						if(cell != null) {
-							switch(cell.getCellType()) {
-								case Cell.CELL_TYPE_STRING:
-									excelObject.add(cell.getStringCellValue().trim());
-									break;
-								case Cell.CELL_TYPE_NUMERIC:
-									excelObject.add(Long.toString((long) cell.getNumericCellValue()));
-									break;
-							}
-						}
-					}
-					
-					dataInfo = getDataInfoFromPoi(excelObject);
-					String errorCode = parseValidCheckerData(dataInfo);
-					if(StringUtil.isNotEmpty(errorCode)) {
-						throw new Exception(errorCode);
-					}
-					fileParseLog.setIdentifier_value(userId);
-					fileParseLog.setStatus(FileParseLog.EXCEL_PARSE_SUCCESS);
-					parseSuccessCount++;
-				} catch(Exception e) {
-					e.printStackTrace();
-					parseErrorCount++;
-					if(userId == null || "".equals(userId)) {
-						fileParseLog.setIdentifier_value("ADMIN_ERROR_ID");
-					} else {
-						fileParseLog.setIdentifier_value(userId);
-					}
-					fileParseLog.setStatus(FileParseLog.EXCEL_PARSE_FAIL);
-					fileParseLog.setError_code(e.getMessage());
-				}
-				
-				if(userId != null) {
-					// TODO user_id 가 문제 생길때 어떻게 해야 하지?
-					fileMapper.insertFileParseLog(fileParseLog);
-					dataInfoList.add(dataInfo);
-				}
-			}                         
-			workbook.close();
-			fis.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Data 일괄 등록(POI) 파일 파싱 오류!");
-		} finally {
-			if(workbook != null) { try { workbook.close(); } catch(Exception e) { e.printStackTrace(); } }
-			if(fis != null) { try { fis.close(); } catch(Exception e) { e.printStackTrace(); } }
-		}
-		
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("dataInfoList", dataInfoList);
-		result.put("totalCount", totalCount);
-		result.put("parseSuccessCount", parseSuccessCount);
-		result.put("parseErrorCount", parseErrorCount);
-		return result;
-	}
 	
 	/**
 	 * POI를 이용해서 서버 정보를 파싱
