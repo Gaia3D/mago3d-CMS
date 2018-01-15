@@ -6,7 +6,7 @@ public class CacheNameTest {
 
 	@Test
 	public void test() {
-		CacheName name = CacheName.valueOf("DATA_GROUP");
+		CacheName name = CacheName.valueOf("PROJECT");
 		CacheType type = CacheType.valueOf("BROADCAST");
 		
 		System.out.println(name.toString());

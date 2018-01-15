@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.Ignore;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,10 +14,10 @@ import com.gaia3d.domain.DataInfo;
 
 public class DataFileJsonParser {
 
-	@Test
+	@Ignore
 	public void parse() throws Exception {
 		byte[] jsonData = Files.readAllBytes(
-				Paths.get("C:\\\\git\\\\repository\\\\mago3d\\\\mago3d-core\\\\src\\\\test\\\\java\\\\com\\\\gaia3d\\\\parser\\\\2119_fullship.json"));
+				Paths.get("C:\\git\\repository\\mago3d\\mago3d-core\\src\\test\\java\\com\\gaia3d\\parser\\2119_fullship.json"));
 
 		//create ObjectMapper instance
 		ObjectMapper objectMapper = new ObjectMapper();
