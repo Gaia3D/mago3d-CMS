@@ -9,7 +9,7 @@ insert into user_group(
 insert into user_info(
 	user_id, user_group_id, user_name, password, salt, user_role_check_yn, last_login_date
 ) values (
-	'admin', 1, '슈퍼관리자', '97ff5bf5cccb4d2bd1299186c5ac29b0b06d5d72a2791aa83bf7614968856ded49012f32903f43938b804e99ad25388b1564b28a251aa8873e55251fe02202f8', '$2a$10$yVIIaCS3Nl.sLVWHhLghCO', 'N', now()
+	'admin', 1, '슈퍼관리자', '비밀번호', 'salt', 'N', now()
 );
 
 -- 메뉴
