@@ -1,4 +1,3 @@
-drop index if exists sso_log_2017_idx;
 drop index if exists sso_log_2018_idx;
 drop index if exists sso_log_2019_idx;
 drop index if exists sso_log_2020_idx;
@@ -15,7 +14,6 @@ drop index if exists sso_log_2030_idx;
 drop index if exists sso_log_2031_idx;
 
 
-create index sso_log_2017_idx on sso_log_2017 using btree(insert_date desc);
 create index sso_log_2018_idx on sso_log_2018 using btree(insert_date desc);
 create index sso_log_2019_idx on sso_log_2019 using btree(insert_date desc);
 create index sso_log_2020_idx on sso_log_2020 using btree(insert_date desc);

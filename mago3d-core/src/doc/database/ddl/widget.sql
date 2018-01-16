@@ -2,7 +2,7 @@ drop table if exists widget cascade;
 
 
 
--- ìœ„ì ¯
+-- À§Á¬
 create table widget(
 	widget_id			smallint 				not null,
 	name				varchar(100)			not null ,
@@ -14,9 +14,9 @@ create table widget(
 
 
 
-comment on table widget is 'ìœ„ì ¯';
-comment on column widget.widget_id is 'ê³ ìœ ë²ˆí˜¸';
-comment on column widget.name is 'ì´ë¦„';
-comment on column widget.view_order is 'ë‚˜ì—´ ìˆœì„œ';
-comment on column widget.user_id is 'ì‚¬ìš©ì ì•„ì´ë””';
-comment on column widget.insert_date is 'ë“±ë¡ì¼';
+comment on table widget is 'À§Á¬';
+comment on column widget.widget_id is '°íÀ¯¹øÈ£';
+comment on column widget.name is 'ÀÌ¸§';
+comment on column widget.view_order is '³ª¿­ ¼ø¼­';
+comment on column widget.user_id is '»ç¿ëÀÚ ¾ÆÀÌµğ';
+comment on column widget.insert_date is 'µî·ÏÀÏ';

@@ -6,9 +6,7 @@ drop trigger if exists sso_log_update_trigger on sso_log;
 CREATE OR REPLACE FUNCTION sso_log_insert()
 RETURNS TRIGGER AS $$
 BEGIN
-	IF( NEW.insert_date >= to_timestamp('20170101000000000000', 'YYYYMMDDHH24MISSUS') and NEW.insert_date < to_timestamp('20180101000000000000', 'YYYYMMDDHH24MISSUS') ) THEN
-		insert into sso_log_2017 values (NEW.*);
-	ELSIF( NEW.insert_date >= to_timestamp('20180101000000000000', 'YYYYMMDDHH24MISSUS') and NEW.insert_date < to_timestamp('20190101000000000000', 'YYYYMMDDHH24MISSUS') ) THEN
+	IF( NEW.insert_date >= to_timestamp('20180101000000000000', 'YYYYMMDDHH24MISSUS') and NEW.insert_date < to_timestamp('20190101000000000000', 'YYYYMMDDHH24MISSUS') ) THEN
 		insert into sso_log_2018 values (NEW.*);
 	ELSIF( NEW.insert_date >= to_timestamp('20190101000000000000', 'YYYYMMDDHH24MISSUS') and NEW.insert_date < to_timestamp('20200101000000000000', 'YYYYMMDDHH24MISSUS') ) THEN
 		insert into sso_log_2019 values (NEW.*);

@@ -1,4 +1,3 @@
-drop index if exists access_log_2017_idx;
 drop index if exists access_log_2018_idx;
 drop index if exists access_log_2019_idx;
 drop index if exists access_log_2020_idx;
@@ -15,7 +14,6 @@ drop index if exists access_log_2030_idx;
 drop index if exists access_log_2031_idx;
 
 
-create index access_log_2017_idx on access_log_2017 using btree(insert_date desc);
 create index access_log_2018_idx on access_log_2018 using btree(insert_date desc);
 create index access_log_2019_idx on access_log_2019 using btree(insert_date desc);
 create index access_log_2020_idx on access_log_2020 using btree(insert_date desc);
