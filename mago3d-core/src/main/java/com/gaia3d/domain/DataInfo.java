@@ -72,6 +72,8 @@ public class DataInfo {
 	private String data_key;
 	// data 고유 식별번호
 	private String old_data_key;
+	// 부모 data 고유 식별번호
+	private String parent_data_key;
 	// data 이름
 	private String data_name;
 	// 부모 고유번호

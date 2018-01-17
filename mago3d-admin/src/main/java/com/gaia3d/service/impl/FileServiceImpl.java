@@ -520,12 +520,14 @@ public class FileServiceImpl implements FileService {
 		
 		int insertSuccessCount = 0;
 		int insertErrorCount = 0;
-		long parent = 0l;
+		Map<String, Long> parentDataKeyMap = new HashMap<>();
 		for(DataInfo dataInfo : dataInfoList) {
 			try {
-				dataInfo.setParent(parent);
+				if(dataInfo.getDepth() != 1) {
+					dataInfo.setParent(parentDataKeyMap.get(dataInfo.getParent_data_key())); 
+				}
 				dataService.insertData(dataInfo);
-				parent = dataInfo.getData_id();
+				parentDataKeyMap.put(dataInfo.getData_key(), dataInfo.getData_id());
 				insertSuccessCount++;
 			} catch(Exception e) {
 				e.printStackTrace();

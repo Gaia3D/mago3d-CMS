@@ -65,7 +65,7 @@ public class DataFileJsonParser implements DataFileParser {
 			dataInfoList.add(dataInfo);
 			
 			if(childrenNode.isArray() && childrenNode.size() != 0) {
-				dataInfoList.addAll(parseChildren(projectId, null, dataInfo.getDepth(), childrenNode));
+				dataInfoList.addAll(parseChildren(projectId, dataInfo.getData_key(),  null, dataInfo.getDepth(), childrenNode));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,11 +84,12 @@ public class DataFileJsonParser implements DataFileParser {
 	 * 자식 data 들을 재귀적으로 파싱
 	 * @param projectId
 	 * @param dataInfoList
+	 * @param parentDataKey
 	 * @param depth
 	 * @param childrenNode
 	 * @return
 	 */
-	private List<DataInfo> parseChildren(Long projectId, List<DataInfo> dataInfoList, int depth, JsonNode childrenNode) {
+	private List<DataInfo> parseChildren(Long projectId, String parentDataKey, List<DataInfo> dataInfoList, int depth, JsonNode childrenNode) {
 		if(dataInfoList == null) dataInfoList = new ArrayList<>();
 		
 		depth++;
@@ -109,6 +110,7 @@ public class DataFileJsonParser implements DataFileParser {
 			dataInfo.setProject_id(projectId);
 			dataInfo.setData_name(dataName);
 			dataInfo.setData_key(dataKey);
+			dataInfo.setParent_data_key(parentDataKey);
 			if(latitude != null && !"".equals(latitude)) dataInfo.setLatitude(new BigDecimal(latitude));
 			if(longitude != null && !"".equals(longitude)) dataInfo.setLongitude(new BigDecimal(longitude));
 			if(height != null && !"".equals(height)) dataInfo.setHeight(new BigDecimal(height));
@@ -122,7 +124,7 @@ public class DataFileJsonParser implements DataFileParser {
 			dataInfoList.add(dataInfo);
 			
 			if(childrene.isArray() && childrene.size() != 0) {
-				parseChildren(projectId, dataInfoList, depth, childrene);
+				parseChildren(projectId, dataInfo.getData_key(), dataInfoList, depth, childrene);
 			}
 			
 			viewOrder++;

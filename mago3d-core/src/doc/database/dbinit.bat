@@ -30,7 +30,7 @@ psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\da
 psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\database\trigger\api_log_trigger.sql
 psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\database\trigger\sso_log_trigger.sql
 
-:: psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\database\dml\insert.sql
+psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\database\dml\insert.sql
 
 echo .................. ddl init end ...................
 echo ...................................................

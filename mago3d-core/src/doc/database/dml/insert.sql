@@ -9,7 +9,7 @@ insert into user_group(
 insert into user_info(
 	user_id, user_group_id, user_name, password, salt, user_role_check_yn, last_login_date
 ) values (
-	'admin', 1, '슈퍼관리자', '비밀번호', 'salt', 'N', now()
+	'admin', 1, '슈퍼관리자', '140b6578632b603242cb24b80579acf4ebb28483dd0692348ab1fb4df05a67195a662887a9133505b0dc806e4620355e330889f28c82a35bd4f801419824cdc1', '$2a$10$6LUxkbUh/rpniuEsV7U1mu', 'N', now()
 );
 
 -- 메뉴
@@ -194,6 +194,25 @@ insert into common_code (
 ) values (
   	'DATA_REGISTER_TYPE', 'DATA_REGISTER_SELF', '관리자 등록', 'ADMIN INSERT', 'SELF', 'Y', 1
 );
+commit;
+
+update policy set 
+geo_init_latitude = '37.58199267183209',
+geo_init_longitude = '126.60856869381428',
+geo_init_height = '550',
+geo_init_duration = 5,
+geo_server_add_url = 'http://localhost:8081/geoserver/gaia3d/wms',
+geo_server_add_layers = 'gaia3d:backgroundForSHI',
+geo_server_add_parameters_service = 'WMS',
+geo_server_add_parameters_version = '1.1.1',
+geo_server_add_parameters_request = 'GetMap',
+geo_server_add_parameters_transparent = 'true',
+geo_server_add_parameters_format = 'image/png',
+geo_callback_apiresult = 'showApiResult',
+geo_callback_selectedobject = 'showSelectedObject',
+geo_callback_insertissue = 'showInsertIssueLayer',
+geo_callback_clickposition = 'showClickPosition';
+commit;
 
 
 
