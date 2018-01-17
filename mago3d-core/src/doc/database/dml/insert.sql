@@ -9,7 +9,7 @@ insert into user_group(
 insert into user_info(
 	user_id, user_group_id, user_name, password, salt, user_role_check_yn, last_login_date
 ) values (
-	'admin', 1, '슈퍼관리자', '140b6578632b603242cb24b80579acf4ebb28483dd0692348ab1fb4df05a67195a662887a9133505b0dc806e4620355e330889f28c82a35bd4f801419824cdc1', '$2a$10$6LUxkbUh/rpniuEsV7U1mu', 'N', now()
+	'admin', 1, '슈퍼관리자', '비밀번호', 'salt', 'N', now()
 );
 
 -- 메뉴
@@ -195,6 +195,43 @@ insert into common_code (
   	'DATA_REGISTER_TYPE', 'DATA_REGISTER_SELF', '관리자 등록', 'ADMIN INSERT', 'SELF', 'Y', 1
 );
 commit;
+
+insert into project(
+	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
+) values(
+	nextval('project_seq'), '3ds', '3DS 통합 가시화', '1', 'Y', '37.5819926718', '126.6085686938', '550', 3
+);
+insert into project(
+	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
+) values(
+	nextval('project_seq'), 'ifc_cultural_assets', 'IFC(Cultural Assets)', '2', 'Y', '37.5798100000', '126.9777299570', '80', 3
+);
+insert into project(
+	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
+) values(
+	nextval('project_seq'), 'ifc', 'IFC', '3', 'Y', '-62.2233225162', '-58.7842660818', '200.000', 5
+);
+insert into project(
+	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
+) values(
+	nextval('project_seq'), 'ifc_mep', 'IFC(MEP)', '4', 'Y', '37.6641800089', '126.7381182745', '550', 3
+);
+insert into project(
+	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
+) values(
+	nextval('project_seq'), 'sea_port', 'Sea Port', '5', 'Y', '37.4410452033', '126.5984055268', '550', 3
+);
+insert into project(
+	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
+) values(
+	nextval('project_seq'), 'collada', 'Collada 통합 가시화', '6', 'Y', '37.5681500000', '126.7994030000', '550', 3
+);
+insert into project(
+	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
+) values(
+	nextval('project_seq'), 'ifc_japan', 'IFC(Japan)', '7', 'Y', '35.6624000000', '139.6845000000', '550', 3
+);
+
 
 update policy set 
 geo_init_latitude = '37.58199267183209',
