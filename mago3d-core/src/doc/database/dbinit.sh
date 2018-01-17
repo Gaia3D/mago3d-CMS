@@ -55,10 +55,28 @@ done
 
 
 
-# psql -U postgres mago3d < bdr_global_sequences.sql
-# psql -U postgres mago3d < index/access_log.sql
-# psql -U postgres mago3d < index/user_otp_log.sql
-# psql -U postgres mago3d < access_log_trigger.sql
-# psql -U postgres mago3d < user_log_trigger.sql
-# psql -U postgres mago3d < replication_exception_table.sql
-# psql -U postgres mago3d < insert.sql
+# psql -U postgres mago3d < ./ddl/access_log.sql
+# psql -U postgres mago3d < ./ddl/api.sql
+# psql -U postgres mago3d < ./ddl/common_code.sql
+# psql -U postgres mago3d < ./ddl/dataInfo.sql
+# psql -U postgres mago3d < ./ddl/file_info.sql
+# psql -U postgres mago3d < ./ddl/issue.sql
+# psql -U postgres mago3d < ./ddl/menu.sql
+# psql -U postgres mago3d < ./ddl/policy.sql
+# psql -U postgres mago3d < ./ddl/role.sql
+# psql -U postgres mago3d < ./ddl/schedule.sql
+# psql -U postgres mago3d < ./ddl/sso_log.sql
+# psql -U postgres mago3d < ./ddl/user_info.sql
+# psql -U postgres mago3d < ./ddl/widget.sql
+
+# psql -U postgres mago3d < ./ddl/sequence/sequence.sql
+
+# psql -U postgres mago3d < ./index/access_log.sql
+# psql -U postgres mago3d < ./index/api_log.sql
+# psql -U postgres mago3d < ./index/sso_log.sql
+
+# psql -U postgres mago3d < ./trigger/access_log_trigger.sql
+# psql -U postgres mago3d < ./trigger/api_log_trigger.sql
+# psql -U postgres mago3d < ./trigger/sso_log_trigger.sql
+
+# psql -U postgres mago3d < ./dml/insert.sql

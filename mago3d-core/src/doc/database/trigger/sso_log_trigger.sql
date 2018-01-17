@@ -46,9 +46,7 @@ LANGUAGE PLPGSQL;
 CREATE OR REPLACE FUNCTION sso_log_update()
 RETURNS TRIGGER AS $$
 BEGIN
-	IF( NEW.insert_date >= to_timestamp('20170101000000000000', 'YYYYMMDDHH24MISSUS') and NEW.insert_date <= to_timestamp('20171231235959999999', 'YYYYMMDDHH24MISSUS') ) THEN
-		update sso_log_2017 SET token_status = NEW.token_status, device_kind = NEW.device_kind, request_type = NEW.request_type, redirect_url = NEW.redirect_url, update_date = NEW.update_date WHERE sso_log_id = NEW.sso_log_id;
-	ELSIF( NEW.insert_date >= to_timestamp('20180101000000000000', 'YYYYMMDDHH24MISSUS') and NEW.insert_date <= to_timestamp('20181231235959999999', 'YYYYMMDDHH24MISSUS') ) THEN
+	IF( NEW.insert_date >= to_timestamp('20180101000000000000', 'YYYYMMDDHH24MISSUS') and NEW.insert_date <= to_timestamp('20181231235959999999', 'YYYYMMDDHH24MISSUS') ) THEN
 		update sso_log_2018 SET token_status = NEW.token_status, device_kind = NEW.device_kind, request_type = NEW.request_type, redirect_url = NEW.redirect_url, update_date = NEW.update_date WHERE sso_log_id = NEW.sso_log_id;
 	ELSIF( NEW.insert_date >= to_timestamp('20190101000000000000', 'YYYYMMDDHH24MISSUS') and NEW.insert_date <= to_timestamp('20191231235959999999', 'YYYYMMDDHH24MISSUS') ) THEN
 		update sso_log_2019 SET token_status = NEW.token_status, device_kind = NEW.device_kind, request_type = NEW.request_type, redirect_url = NEW.redirect_url, update_date = NEW.update_date WHERE sso_log_id = NEW.sso_log_id;
