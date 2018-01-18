@@ -82,7 +82,7 @@ public class CacheConfig {
 		// 공통 코드 캐시 갱신
 		
 		// 데이터를 그룹별로 로딩
-		data(CacheType.SELF);
+		project(CacheType.SELF);
 		
 		// Private API Cache 갱신
 		externalServiceCache(CacheType.SELF);
@@ -99,7 +99,7 @@ public class CacheConfig {
 		else if(cacheName == CacheName.POLICY) policy(cacheType);
 		else if(cacheName == CacheName.MENU) menu(cacheType);
 		else if(cacheName == CacheName.COMMON_CODE) commonCode(cacheType);
-		else if(cacheName == CacheName.PROJECT) data(cacheType);
+		else if(cacheName == CacheName.PROJECT) project(cacheType);
 	}
 	
 	private void license(CacheType cacheType) {
@@ -156,7 +156,7 @@ public class CacheConfig {
 	/**
 	 * @param cacheType
 	 */
-	private void data(CacheType cacheType) {
+	private void project(CacheType cacheType) {
 		List<Project> projectList = projectService.getListProject(new Project());
 		Map<Long, Project> projectMap = new HashMap<>();
 		for(Project project : projectList) {

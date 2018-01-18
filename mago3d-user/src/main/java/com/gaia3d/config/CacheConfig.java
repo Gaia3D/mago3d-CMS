@@ -72,6 +72,7 @@ public class CacheConfig {
 		// loadServerGroup();
 		// 공통 코드 캐시 갱신
 		
+		// TODO project, data 분리하자.
 		// 데이터를 그룹별로 로딩
 		data(CacheType.SELF);
 		

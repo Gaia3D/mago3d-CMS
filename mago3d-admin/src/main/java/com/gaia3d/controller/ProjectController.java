@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gaia3d.config.CacheConfig;
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.CacheName;
+import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.Project;
 import com.gaia3d.service.ProjectService;
@@ -31,6 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/data/")
 public class ProjectController {
 	
+	@Autowired
+	CacheConfig cacheConfig;
 	@Autowired
 	private ProjectService projectService;
 	
@@ -179,6 +184,7 @@ public class ProjectController {
 			}
 			
 			projectService.insertProject(project);
+			cacheConfig.loadCache(CacheName.PROJECT, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -227,6 +233,7 @@ public class ProjectController {
 			}
 			
 			projectService.updateProject(project);
+			cacheConfig.loadCache(CacheName.PROJECT, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -259,6 +266,7 @@ public class ProjectController {
 //			projectService.deleteDataGroup(dataGroup.getData_group_id());
 //			dataGroupList.addAll(projectService.getListDataGroup(new Project()));
 			
+			cacheConfig.loadCache(CacheName.PROJECT, CacheType.BROADCAST);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
