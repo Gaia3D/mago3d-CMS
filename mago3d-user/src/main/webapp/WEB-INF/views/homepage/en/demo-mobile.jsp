@@ -132,8 +132,7 @@
 				</td>
 			</tr>
 			<tr style="height: 35px;">
-				<td>
-				<label for="search_value">Word</label></td>
+				<td><label for="search_value">Word</label></td>
 				<td><input type="text" id="search_value" name="search_value" size="31" /></td>
 			</tr>
 			<tr style="height: 35px;">
@@ -646,7 +645,7 @@
 	}
 	function gotoProjectCallback(msg, theArgs) {
 		if(msg.result == "success") {
-			var projectDataJson = msg.projectDataJson;
+			var projectDataJson = JSON.parse(msg.projectDataJson);
 			if(projectDataJson === null || projectDataJson === undefined) {
 				alert("Project data does not exist.");
 				return;
@@ -671,7 +670,7 @@
 	}
 	function gotoIssueCallback(msg, theArgs) {
 		if(msg.result == "success") {
-			var projectDataJson = msg.projectDataJson;
+			var projectDataJson = JSON.parse(msg.projectDataJson);
 			if(projectDataJson === null || projectDataJson === undefined) {
 				alert("Project data does not exist.");
 				return;
@@ -816,10 +815,9 @@
 				+ 		"Show up to 10 latest issues"
 				+	"</li>";
 			if(issueList == null || issueList.length == 0) {
-				content = content	
-					+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-					+	"	The issue does not exist."
-					+	"</li>";
+				content += 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
+						+	"	The issue does not exist."
+						+	"</li>";
 			} else {
 				issueListCount = issueList.length;
 				for(i=0; i<issueListCount; i++ ) {
@@ -1195,6 +1193,7 @@
 	// 마우스 클릭 객체 이동 모드 변경 저장
 	$("#saveObjectMoveButton").click(function () {
 		alert("준비중 입니다.");
+		return;
 		var objectMoveMode = $(':radio[name="objectMoveMode"]:checked').val();
 		if(objectMoveMode === "2") {
 			alert("Can not be saved in None mode.");
@@ -1266,17 +1265,6 @@
 				$("#geo_specular_reflection_coef" ).val(ui.value);
 			}
 		});
-		
-		/* $('[name="geo_ambient_color"]').paletteColorPicker({
-			clear_btn: 'last',
-			//position: 'downside',
-			close_all_but_this: true // Default is false
-		});
-		$('[name="geo_specular_color"]').paletteColorPicker({
-			clear_btn: 'last',
-			//position: 'downside',
-			close_all_but_this: true // Default is false
-		}); */
 	}
 	
 	// LOD 설정

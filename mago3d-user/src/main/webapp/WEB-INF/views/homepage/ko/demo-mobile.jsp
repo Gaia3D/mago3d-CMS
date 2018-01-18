@@ -120,7 +120,8 @@
 			</tr>
 			<tr style="height: 35px;">
 				<td><label for="search_word">분류</label></td>
-				<td><select id="search_word" name="search_word" class="select">
+				<td>
+					<select id="search_word" name="search_word" class="select">
 						<option value="data_name">Data 명</option>
 						<option value="title">Issue 명</option>
 					</select>
@@ -1059,6 +1060,7 @@
 			saveCurrentLocation(latitude, longitude);
 		}
 	}
+	
 	// 속성 가시화
 	$("#changePropertyRendering").click(function(e) {
 		var isShow = $(':radio[name="propertyRendering"]:checked').val();

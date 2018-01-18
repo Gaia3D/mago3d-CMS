@@ -680,7 +680,7 @@
 	}
 	function gotoProjectCallback(msg, theArgs) {
 		if(msg.result == "success") {
-			var projectDataJson = msg.projectDataJson;
+			var projectDataJson = JSON.parse(msg.projectDataJson);
 			if(projectDataJson === null || projectDataJson === undefined) {
 				alert("Project data does not exist.");
 				return;
@@ -705,7 +705,7 @@
 	}
 	function gotoIssueCallback(msg, theArgs) {
 		if(msg.result == "success") {
-			var projectDataJson = msg.projectDataJson;
+			var projectDataJson = JSON.parse(msg.projectDataJson);
 			if(projectDataJson === null || projectDataJson === undefined) {
 				alert("Project data does not exist.");
 				return;
