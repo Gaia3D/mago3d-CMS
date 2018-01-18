@@ -199,37 +199,37 @@ commit;
 insert into project(
 	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
 ) values(
-	nextval('project_seq'), '3ds', '3DS 통합 가시화', '1', 'Y', '37.5819926718', '126.6085686938', '550', 3
+	nextval('project_seq'), '3ds', '3DS 통합 가시화', '1', 'Y', '37.58210', '126.60856869381428', '550', 3
 );
 insert into project(
 	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
 ) values(
-	nextval('project_seq'), 'ifc_cultural_assets', 'IFC(Cultural Assets)', '2', 'Y', '37.5798100000', '126.9777299570', '80', 3
+	nextval('project_seq'), 'ifc_cultural_assets', 'IFC(Cultural Assets)', '2', 'Y', '37.57981', '126.97772995695296', '80', 3
 );
 insert into project(
 	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
 ) values(
-	nextval('project_seq'), 'ifc', 'IFC', '3', 'Y', '-62.2233225162', '-58.7842660818', '200.000', 5
+	nextval('project_seq'), 'ifc', 'IFC', '3', 'Y', '-62.2237', '-58.787', '270', 5
 );
 insert into project(
 	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
 ) values(
-	nextval('project_seq'), 'ifc_mep', 'IFC(MEP)', '4', 'Y', '37.6641800089', '126.7381182745', '550', 3
+	nextval('project_seq'), 'ifc_mep', 'IFC(MEP)', '4', 'Y', '37.6636', '126.738234', '150', 3
 );
 insert into project(
 	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
 ) values(
-	nextval('project_seq'), 'sea_port', 'Sea Port', '5', 'Y', '37.4410452033', '126.5984055268', '550', 3
+	nextval('project_seq'), 'sea_port', 'Sea Port', '5', 'Y', '37.440778', '126.598426', '630', 3
 );
 insert into project(
 	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
 ) values(
-	nextval('project_seq'), 'collada', 'Collada 통합 가시화', '6', 'Y', '37.5681500000', '126.7994030000', '550', 3
+	nextval('project_seq'), 'collada', 'Collada 통합 가시화', '6', 'Y', '37.567450', '126.7987', '320', 3
 );
 insert into project(
 	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
 ) values(
-	nextval('project_seq'), 'ifc_japan', 'IFC(Japan)', '7', 'Y', '35.6624000000', '139.6845000000', '550', 3
+	nextval('project_seq'), 'ifc_japan', 'IFC(Japan)', '7', 'Y', '35.6624', '139.6842', '320', 3
 );
 
 

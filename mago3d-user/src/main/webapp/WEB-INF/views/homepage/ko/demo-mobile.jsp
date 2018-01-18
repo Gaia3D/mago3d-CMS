@@ -644,7 +644,7 @@
 	}
 	function gotoProjectCallback(msg, theArgs) {
 		if(msg.result === "success") {
-			var projectDataJson = msg.projectDataJson;
+			var projectDataJson = JSON.parse(msg.projectDataJson);
 			if(projectDataJson === null || projectDataJson === undefined) {
 				alert("프로젝트가 데이터가 존재하지 않습니다.");
 				return;
@@ -669,7 +669,7 @@
 	}
 	function gotoIssueCallback(msg, theArgs) {
 		if(msg.result === "success") {
-			var projectDataJson = msg.projectDataJson;
+			var projectDataJson = JSON.parse(msg.projectDataJson);
 			if(projectDataJson === null || projectDataJson === undefined) {
 				alert("프로젝트가 데이터가 존재하지 않습니다.");
 				return;
