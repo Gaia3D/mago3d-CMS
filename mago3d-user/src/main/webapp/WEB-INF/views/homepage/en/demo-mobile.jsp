@@ -778,7 +778,7 @@
 			alert(JS_MESSAGE[msg.result]);
 		}
 		
-		isInsertIssue = true;
+		isInsertIssue["enable"] = true;
 		ajaxIssueList();
 	}
 	function check() {
