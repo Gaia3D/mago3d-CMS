@@ -3,7 +3,7 @@ drop table if exists role cascade;
 
 -- Role role_key unique 제약 조건 걸어야 함
 create table role(
-	role_id				bigint 									not null,
+	role_id				bigint,
 	role_name			varchar(100)							not null,
 	role_key			varchar(50)								not null,
 	role_type			char(1)									not null,

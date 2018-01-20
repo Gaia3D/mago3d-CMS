@@ -2,7 +2,7 @@ drop table if exists policy cascade;
 
 -- 운영정책
 create table policy(
-	policy_id							smallint 			not null,
+	policy_id							smallint,
 	
 	user_id_min_length					smallint			default 5,
 	user_fail_login_count				smallint			default 3,

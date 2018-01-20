@@ -7,7 +7,7 @@ drop table if exists user_device cascade;
 
 -- 사용자 그룹
 create table user_group(
-	user_group_id				smallint							not null,
+	user_group_id				smallint,
 	group_key					varchar(60)							not null ,
 	group_name					varchar(100)						not null,
 	ancestor					smallint							default 0,
@@ -38,7 +38,7 @@ comment on column user_group.insert_date is '등록일';
 
 -- 사용자 그룹별 Role
 create table user_group_role (
-	user_group_role_id				smallint 								not null,
+	user_group_role_id				smallint,
 	user_group_id					smallint 								not null,
 	role_id							smallint	 							not null,
 	insert_date						timestamp without time zone				default now(),
@@ -53,7 +53,7 @@ comment on column user_group_role.insert_date is '등록일';
 
 -- 사용자 그룹 권한
 create table user_group_menu(
-	user_group_menu_id				smallint 							not null,
+	user_group_menu_id				smallint,
 	user_group_id					smallint 							not null,
 	menu_id							smallint 							not null,
 	all_yn							char(1)								default 'N',
@@ -79,7 +79,7 @@ comment on column user_group_menu.insert_date is '등록일';
 
 -- 사용자 기본정보
 create table user_info(
-	user_id						varchar(32)	 						not null,
+	user_id						varchar(32),
 	user_group_id				smallint								not null,
 	user_name					varchar(64)							not null,
 	password					varchar(512)						not null,
@@ -137,7 +137,7 @@ comment on column user_info.insert_date is '등록일';
 
 -- 사용자 사용 디바이스
 create table user_device (
-	user_device_id				bigint 								not null,
+	user_device_id				bigint,
 	user_id						varchar(32)	 						not null,
 	device_name1				varchar(60)							not null,
 	device_type1				char(1)								default '0',

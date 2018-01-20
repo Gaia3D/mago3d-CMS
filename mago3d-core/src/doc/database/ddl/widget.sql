@@ -4,7 +4,7 @@ drop table if exists widget cascade;
 
 -- À§Á¬
 create table widget(
-	widget_id			smallint 				not null,
+	widget_id			smallint,
 	name				varchar(100)			not null ,
 	view_order			smallint								default '1',
 	user_id				varchar(32)	 			not null,

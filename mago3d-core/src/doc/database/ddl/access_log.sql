@@ -2,7 +2,7 @@ drop table if exists access_log cascade;
 
 -- 서비스 요청 이력
 create table access_log(
-	access_log_id				bigint 			not null,
+	access_log_id				bigint,
 	user_id						varchar(32)	 		not null,
 	user_name					varchar(64)			not null,
 	client_ip					varchar(45)			not null,

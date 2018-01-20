@@ -6,7 +6,7 @@ drop table if exists issue_people cascade;
 
 -- 이슈
 create table issue (
-	issue_id					bigint				not null,
+	issue_id					bigint,
 	project_id					smallint			not null,
 	user_id						varchar(32)	 		not null,
 	
@@ -67,7 +67,7 @@ comment on column issue.insert_date is '등록일';
 
 -- 이슈 상세
 create table issue_detail (
-	issue_detail_id				bigint					not null,
+	issue_detail_id				bigint,
 	issue_id					bigint 					not null,
 	contents					text					not null,
 	insert_date					timestamp without 		time zone			default now(),
@@ -82,7 +82,7 @@ comment on column issue.insert_date is '등록일';
 
 -- 이슈 파일
 create table issue_file(
-	issue_file_id				bigint				not null,
+	issue_file_id				bigint,
 	issue_id					bigint 				not null,
 	file_name					varchar(100)		not null,
 	file_real_name				varchar(100)		not null,
@@ -105,7 +105,7 @@ comment on column issue_file.insert_date is '등록일';
 
 -- 이슈 댓글(Comment)
 create table issue_comment (
-	issue_comment_id			bigint 				not null,
+	issue_comment_id			bigint,
 	issue_id					bigint				not null,
 	user_id						varchar(32)	 		not null,
 	comment						varchar(4000)		not null,
@@ -124,7 +124,7 @@ comment on column issue_comment.insert_date is '등록일';
 
 -- 이슈 관계자
 create table issue_people (
-	issue_people_id				bigint			not null,
+	issue_people_id				bigint,
 	issue_id					bigint			not null,
 	role_type					char(1),
 	user_id						varchar(32),

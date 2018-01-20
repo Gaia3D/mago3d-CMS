@@ -4,7 +4,7 @@ drop table if exists schedule cascade;
 
 -- 스케줄
 create table schedule(
-	schedule_id					bigint 				not null,
+	schedule_id					bigint,
 	schedule_name				varchar(100)		not null,
 	schedule_code				varchar(30)			not null,
 	expression					varchar(50),
@@ -34,7 +34,7 @@ comment on column schedule.insert_date is '등록일';
 
 -- 스케줄 실행 이력
 create table schedule_log(
-	schedule_log_id				bigint 				not null,
+	schedule_log_id				bigint,
 	schedule_id					bigint 				not null,
 	execute_result				char(1)				not null,
 	execute_total_count			int									default 0,
@@ -53,7 +53,7 @@ comment on column schedule_log.insert_date is '등록일';
 
 -- 스케줄 실행 상세 이력
 create table schedule_detail_log(
-	schedule_detail_log_id		bigint 				not null,
+	schedule_detail_log_id		bigint,
 	schedule_log_id				bigint 				not null,
 	execute_detail_result		char(1)				not null,
 	execute_detail_message		varchar(1000)		not null,

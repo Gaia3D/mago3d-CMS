@@ -3,7 +3,7 @@ drop table if exists sso_log cascade;
 
 -- SSO ภฬทย
 create table sso_log (
-	sso_log_id 			bigint 				not null,
+	sso_log_id 			bigint,
   	user_id 			varchar(30) 		not null, 
   	server_ip 			varchar(45) 		not null,
   	device_kind			varchar(1),

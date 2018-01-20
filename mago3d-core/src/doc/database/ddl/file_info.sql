@@ -3,7 +3,7 @@ drop table if exists file_parse_log cascade;
 
 -- 파일 관리(Excel, Pdf등)
 create table file_info(
-	file_info_id				bigint			not null,
+	file_info_id				bigint,
 	user_id						varchar(32)	 		not null,
 	job_type					varchar(50)			not null,
 	file_name					varchar(100)		not null,
@@ -38,7 +38,7 @@ comment on column file_info.register_date is '등록일';
 
 -- 파일 파싱 이력(Excel, Pdf등)
 create table file_parse_log(
-	file_parse_log_id			bigint 				not null,
+	file_parse_log_id			bigint,
 	file_info_id				bigint 				not null,
 	identifier_value			varchar(100)	 		not null,
 	error_code					varchar(4000),

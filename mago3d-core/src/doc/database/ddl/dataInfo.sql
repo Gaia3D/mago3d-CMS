@@ -4,7 +4,7 @@ drop table if exists data_info cascade;
 
 -- 사용자 그룹
 create table project(
-	project_id				smallint							not null,
+	project_id				smallint,
 	project_key				varchar(60)							not null ,
 	project_name			varchar(100)						not null,
 	view_order				smallint							default 1,
@@ -36,7 +36,7 @@ comment on column project.insert_date is '등록일';
 
 -- Data 기본정보
 create table data_info(
-	data_id						bigint			not null,
+	data_id						bigint,
 	project_id					smallint							not null,
 	data_key					varchar(128)						not null,
 	data_name					varchar(64),

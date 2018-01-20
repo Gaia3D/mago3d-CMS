@@ -3,7 +3,7 @@ drop table if exists menu cascade;
 
 -- ¸Þ´º
 create table menu(
-	menu_id				smallint 								not null,
+	menu_id				smallint,
 	name				varchar(100)							not null,
 	name_en				varchar(30)								not null,
 	lang				varchar(10)								default 'ko',

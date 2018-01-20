@@ -2,7 +2,7 @@ drop table if exists common_code cascade;
 
 -- 공통 코드
 create table common_code (
-	code_key					varchar(50)							not null,	
+	code_key					varchar(50),	
 	code_type					varchar(50)							not null,
 	code_name					varchar(60)							not null,
 	code_name_en				varchar(60),

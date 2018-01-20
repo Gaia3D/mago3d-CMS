@@ -3,7 +3,7 @@ drop table if exists external_service cascade;
 
 -- API 호출 이력
 create table api_log(
-	api_log_id					bigint			not null,
+	api_log_id					bigint,
 	service_code				varchar(100)		not null,
 	service_name				varchar(100)		not null,
 	client_ip					varchar(45)			not null,
@@ -131,7 +131,7 @@ alter table only api_log_2031 add constraint api_log_2031_pk primary key (api_lo
 
 -- Private API
 create table external_service (
-	external_service_id			bigint 			not null,
+	external_service_id			bigint,
 	service_code				varchar(30)			not null,
 	service_name				varchar(60)			not null,
 	service_type				char(1)				not null,
