@@ -31,7 +31,8 @@
 				<form:label path="geo_data_default_projects">시작시 로딩 프로젝트</form:label>
 			</th>
 			<td class="col-input">
-				<form:input path="geo_data_default_projects" cssClass="l" />
+				<form:input path="geo_data_default_projects_view" cssClass="l" />
+				<form:hidden path="geo_data_default_projects" />
 				<input type="button" id="projectFind" value="찾기" />
 			</td>
 		</tr>

@@ -71,7 +71,6 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$( ".tabs" ).tabs();
-		initJqueryCalendar();
 		initGeo();
 		
 		$("#user_delete_type").val("${policyUser.user_delete_type}");
@@ -345,12 +344,19 @@
 		if(updatePolicyGeoFlag) {
 			// validation 나중에
 			updatePolicyGeoFlag = false;
-			var info = $("#policyGeo").serializeArray();
-			//var info = $("#policyGeo").serialize();
-			info.find(item => item.name === "geo_ambient_reflection_coef").value = $("#geo_ambient_reflection_coef").val();
-			info.find(item => item.name === "geo_diffuse_reflection_coef").value = $("#geo_diffuse_reflection_coef").val();
-			info.find(item => item.name === "geo_specular_reflection_coef").value = $("#geo_specular_reflection_coef").val();
-			info = $.param(info) + "&policy_id=" + $("#policy_id").val();
+			var info = {};
+			info["policy_id"] = $("#policy_id").val();
+			$.each( $("#policyGeo").serializeArray(), function(i, obj) { 
+				if(obj.name === "geo_ambient_reflection_coef") {
+					info[obj.name] = $("#geo_ambient_reflection_coef").val();
+				} else if(obj.name === "geo_diffuse_reflection_coef") {
+					info[obj.name] = $("#geo_diffuse_reflection_coef").val();
+				} else if(obj.name === "geo_specular_reflection_coef") {
+					info[obj.name] = $("#geo_specular_reflection_coef").val();
+				} else {
+					info[obj.name] = obj.value;
+				}
+			});
 			$.ajax({
 				url: "/config/ajax-update-policy-geo.do",
 				type: "POST",
@@ -474,7 +480,7 @@
 							content = content 
 								+ 	"<tr>"
 								+ 	"	<td class=\"col-checkbox\"><input type=\"checkbox\" id=\"project_id_" + project.project_id 
-								+ 											"\" name=\"project_id\" value=\"" + project.project_id + "\" /></td>"
+								+ 											"\" name=\"project_id\" value=\"" + project.project_id + "," + project.project_name + "\" /></td>"
 								+ 	"	<td class=\"col-name\">" + project.project_key + " </td>"
 								+ 	"	<td class=\"col-name\">" + project.project_name + " </td>"
 								+ 	"	<td class=\"col-number\">" + project.view_order + "</td>"
@@ -509,14 +515,19 @@
 	
 	$( "#projectSelect" ).on( "click", function() {
 		var checkedValue = "";
+		var checkedName = "";
 		$("input:checkbox[name=project_id]:checked").each(function(index){
-			checkedValue += $(this).val() + ",";
+			var tempValue = $(this).val().split(",");
+			checkedValue += tempValue[0] + ",";
+			checkedName += tempValue[1] + ",";
 		});
 		if(checkedValue.indexOf(",") > 0) {
 			checkedValue =checkedValue.substring(0, checkedValue.lastIndexOf(","));
+			checkedName =checkedName.substring(0, checkedName.lastIndexOf(","));
 		}
 		
 		$("#geo_data_default_projects").val(checkedValue);
+		$("#geo_data_default_projects_view").val(checkedName);
 		dataDialog.dialog( "close" );
 	});
 	

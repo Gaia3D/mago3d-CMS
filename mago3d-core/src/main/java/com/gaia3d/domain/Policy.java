@@ -106,6 +106,7 @@ public class Policy {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	private String geo_data_default_projects;
+	private String geo_data_default_projects_view;
 	// cullFace 사용유무. 기본 false
 	private String geo_cull_face_enable;
 	// timeLine 사용유무. 기본 false
