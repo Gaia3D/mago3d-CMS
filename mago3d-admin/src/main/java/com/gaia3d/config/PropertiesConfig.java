@@ -13,6 +13,7 @@ import lombok.Data;
 public class PropertiesConfig {
 
 	private String osType;
+	private boolean callRemoteEnable;
 	private String serverIp;
 	private String serverInfo;
 	private String restAuthKey;

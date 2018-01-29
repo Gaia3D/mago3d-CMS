@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.gaia3d.config.CacheConfig;
 import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.CacheName;
+import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Policy;
+import com.gaia3d.domain.Project;
 import com.gaia3d.security.Crypt;
 import com.gaia3d.service.PolicyService;
 
@@ -48,6 +50,24 @@ public class PolicyController {
 		
 		Policy policy = policyService.getPolicy();
 		log.info("@@@@@@@@@@ policy = {}", policy);
+		
+		String defaultProjects = policy.getGeo_data_default_projects();
+		if(defaultProjects != null && !"".equals(defaultProjects)) {
+			String[] projectIds = defaultProjects.split(",");
+			Map<Long, Project> projectMap = CacheManager.getProjectMap();
+			String defaultProjectsView = "";
+			for(String projectId : projectIds) {
+				Project project = projectMap.get(Long.valueOf(projectId));
+				if("".equals(defaultProjectsView)) {
+					defaultProjectsView += project.getProject_name();
+				} else {
+					defaultProjectsView += "," + project.getProject_name();
+				}
+			}
+			policy.setGeo_data_default_projects_view(defaultProjectsView);
+			
+		}
+		
 		policy.setSite_admin_mobile_phone(policy.getViewSiteAdminMobilePhone());
 		policy.setSite_admin_email(policy.getViewSiteAdminEmail());
 		policy.setBackoffice_user_db_url(Crypt.decrypt(policy.getBackoffice_user_db_url()));
@@ -109,7 +129,11 @@ public class PolicyController {
 			}
 			
 			policyService.updatePolicyUser(policy);
-			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.POLICY);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -155,7 +179,11 @@ public class PolicyController {
 			}
 			
 			policyService.updatePolicyPassword(policy);
-			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.POLICY);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -185,7 +213,11 @@ public class PolicyController {
 			}
 			
 			policyService.updatePolicyGeo(policy);
-			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.POLICY);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -215,7 +247,11 @@ public class PolicyController {
 			}
 			
 			policyService.updatePolicyGeoServer(policy);
-			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.POLICY);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -245,7 +281,11 @@ public class PolicyController {
 			}
 			
 			policyService.updatePolicyGeoCallBack(policy);
-			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.POLICY);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -285,7 +325,11 @@ public class PolicyController {
 			}
 			
 			policyService.updatePolicyNotice(policy);
-			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.POLICY);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -323,7 +367,11 @@ public class PolicyController {
 			}
 			
 			policyService.updatePolicySecurity(policy);
-			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.POLICY);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -373,7 +421,10 @@ public class PolicyController {
 //				}
 //			}
 			
-			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.POLICY);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -415,7 +466,10 @@ public class PolicyController {
 //			policy.setSite_admin_email(Crypt.encrypt(policy.getSite_admin_email()));
 //			policyService.updatePolicySite(policy);
 
-			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.POLICY);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -474,7 +528,10 @@ public class PolicyController {
 			// TODO OS 시간 설정 후 
 			// /sbin/hwclock --systohc --localtime
 			
-			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.POLICY);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -510,7 +567,10 @@ public class PolicyController {
 			policy.setBackoffice_user_db_password(Crypt.encrypt(policy.getBackoffice_user_db_password()));
 			policyService.updatePolicyBackoffice(policy);
 
-			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.POLICY);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -547,7 +607,11 @@ public class PolicyController {
 			policy.setSolution_manager_email(Crypt.encrypt(policy.getSolution_manager_email()));
 			
 			policyService.updatePolicySolution(policy);
-			cacheConfig.loadCache(CacheName.POLICY, CacheType.BROADCAST);
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.POLICY);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

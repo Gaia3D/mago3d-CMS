@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CacheName;
+import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataInfo;
@@ -59,65 +60,56 @@ public class CacheConfig {
 		log.info("*************************************************");
 		log.info("************* User Cache Init Start *************");
 		log.info("*************************************************");
+		
+		CacheParams cacheParams = new CacheParams();
+		cacheParams.setCacheType(CacheType.SELF);
 
 		// 라이선스 유호성 체크
-		license(CacheType.SELF);
+		license(cacheParams);
 		// 운영 정책 캐시 갱신
-		policy(CacheType.SELF);
+		policy(cacheParams);
 		// 메뉴, 사용자 그룹 메뉴 갱신
-		menu(CacheType.SELF);
+		menu(cacheParams);
 		// 사용자 그룹 캐시, 확장용
 		// loadUserGroup();
 		// 서버 그룹 캐시 갱신, 확장용
 		// loadServerGroup();
 		// 공통 코드 캐시 갱신
 		
-		// TODO project, data 분리하자.
-		// 데이터를 그룹별로 로딩
-		data(CacheType.SELF);
+		// 프로젝트 갱신
+		project(cacheParams);
+		// 데이터를 프로젝트별로 로딩
+		data(cacheParams);
 		
-		commonCode(CacheType.SELF);
+		commonCode(cacheParams);
 
 		log.info("*************************************************");
 		log.info("************* User Cache Init End ***************");
 		log.info("*************************************************");
 	}
 
-	public void loadCache(CacheName cacheName, CacheType cacheType) {
-		log.info(" *************** loadCache cacheName = {}, cacheType = {}", cacheName.name(), cacheType.name());
+	public void loadCache(CacheParams cacheParams) {
+		CacheName cacheName = cacheParams.getCacheName();
+		log.info(" *************** loadCache cacheName = {}", cacheName.name());
 		
-		if(cacheName == CacheName.LICENSE) license(cacheType);
-		else if(cacheName == CacheName.POLICY) policy(cacheType);
-		else if(cacheName == CacheName.MENU) menu(cacheType);
-		else if(cacheName == CacheName.COMMON_CODE) commonCode(cacheType);
-		else if(cacheName == CacheName.PROJECT) data(cacheType);
+		if(cacheName == CacheName.LICENSE) license(cacheParams);
+		else if(cacheName == CacheName.POLICY) policy(cacheParams);
+		else if(cacheName == CacheName.MENU) menu(cacheParams);
+		else if(cacheName == CacheName.COMMON_CODE) commonCode(cacheParams);
+		else if(cacheName == CacheName.PROJECT) project(cacheParams);
+		else if(cacheName == CacheName.DATA_INFO) data(cacheParams);
 	}
 	
-	private void license(CacheType cacheType) {
-		// 사용자 도메인 cache를 갱신
-		if(cacheType == CacheType.USER || cacheType == CacheType.BROADCAST) {
-			
-		}
-		// 이중화 도메인 사용자, 관리자 cache를 갱신
-		if(cacheType == CacheType.BROADCAST) {
-			
-		}
+	private void license(CacheParams cacheParams) {
+		//CacheType cacheType = cacheParams.getCacheType();
 	}
 
-	private void policy(CacheType cacheType) {
+	private void policy(CacheParams cacheParams) {
 		Policy policy = policyService.getPolicy();
 		CacheManager.setPolicy(policy);
-		// 사용자 도메인 cache를 갱신
-		if(cacheType == CacheType.USER || cacheType == CacheType.BROADCAST) {
-			
-		}
-		// 이중화 도메인 사용자, 관리자 cache를 갱신
-		if(cacheType == CacheType.BROADCAST) {
-			
-		}
 	}
 
-	private void menu(CacheType cacheType) {
+	private void menu(CacheParams cacheParams) {
 		Map<Long, Menu> menuMap = new HashMap<Long, Menu>();
 		List<Menu> menuList = menuService.getListMenu(null);
 		for(Menu menu : menuList) {
@@ -133,43 +125,63 @@ public class CacheConfig {
 		
 		CacheManager.setMenuMap(menuMap);
 		CacheManager.setUserGroupMenuMap(userGroupMenuMap);
-		
-		// 사용자 도메인 cache를 갱신
-		if(cacheType == CacheType.USER || cacheType == CacheType.BROADCAST) {
-			
-		}
-		// 이중화 도메인 사용자, 관리자 cache를 갱신
-		if(cacheType == CacheType.BROADCAST) {
-			
-		}
 	}
 	
 	/**
 	 * @param cacheType
 	 */
-	private void data(CacheType cacheType) {
+	private void project(CacheParams cacheParams) {
 		List<Project> projectList = projectService.getListProject(new Project());
 		Map<Long, Project> projectMap = new HashMap<>();
-		Map<Long, List<DataInfo>> projectDataMap = new HashMap<>();
-		Map<Long, String> projectDataJsonMap = new HashMap<>();
 		for(Project project : projectList) {
 			projectMap.put(project.getProject_id(), project);
-			
-			DataInfo dataInfo = new DataInfo();
-			dataInfo.setProject_id(project.getProject_id());
-			List<DataInfo> dataInfoList = dataService.getListDataByProjectId(dataInfo);
-			projectDataMap.put(project.getProject_id(), dataInfoList);
-		
-			projectDataJsonMap.put(project.getProject_id(), getProjectDataJson(project, dataInfoList));
 		}
 		
 		CacheManager.setProjectList(projectList);
 		CacheManager.setProjectMap(projectMap);
+	}
+	
+	/**
+	 * @param cacheType
+	 */
+	private void data(CacheParams cacheParams) {
+		Long projectId = cacheParams.getProject_id();
+		
+		Map<Long, List<DataInfo>> projectDataMap = null;
+		Map<Long, String> projectDataJsonMap = null;
+		if(projectId == null) {
+			// 최초 로딩시
+			projectDataMap = new HashMap<>();
+			projectDataJsonMap = new HashMap<>();
+			
+			List<Project> projectList = projectService.getListProject(new Project());
+			for(Project project : projectList) {
+				DataInfo dataInfo = new DataInfo();
+				dataInfo.setProject_id(project.getProject_id());
+				List<DataInfo> dataInfoList = dataService.getListDataByProjectId(dataInfo);
+				
+				projectDataMap.put(project.getProject_id(), dataInfoList);
+				projectDataJsonMap.put(project.getProject_id(), getProjectDataJson(project, dataInfoList));
+			}
+		} else {
+			// 관리자 페이지에서 data 정보가 갱신되었을때
+			Project project = projectService.getProject(projectId);
+			DataInfo dataInfo = new DataInfo();
+			dataInfo.setProject_id(projectId);
+			List<DataInfo> dataInfoList = dataService.getListDataByProjectId(dataInfo);
+			
+			projectDataMap = CacheManager.getProjectDataMap();
+			projectDataJsonMap = CacheManager.getProjectDataJsonMap();
+			
+			projectDataMap.put(projectId, dataInfoList);
+			projectDataJsonMap.put(projectId, getProjectDataJson(project, dataInfoList));
+		}
+		
 		CacheManager.setProjectDataMap(projectDataMap);
 		CacheManager.setProjectDataJsonMap(projectDataJsonMap);
 	}
 
-	private void commonCode(CacheType cacheType) {
+	private void commonCode(CacheParams cacheParams) {
 		List<CommonCode> commonCodeList = commonCodeService.getListCommonCode();
 		log.info(" commonCodeList size = {}", commonCodeList.size());
 		Map<String, Object> commonCodeMap = new HashMap<>();
@@ -212,15 +224,6 @@ public class CacheConfig {
 		commonCodeMap.put(CommonCode.ISSUE_STATUS, issueStatusList);
 		commonCodeMap.put(CommonCode.DATA_REGISTER_TYPE, dataRegisterTypeList);
 		CacheManager.setCommonCodeMap(commonCodeMap);
-		
-		// 사용자 도메인 cache를 갱신
-		if(cacheType == CacheType.USER || cacheType == CacheType.BROADCAST) {
-			
-		}
-		// 이중화 도메인 사용자, 관리자 cache를 갱신
-		if(cacheType == CacheType.BROADCAST) {
-			
-		}
 	}
 	
 	private String getProjectDataJson(Project project, List<DataInfo> dataInfoList) {

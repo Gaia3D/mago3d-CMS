@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.gaia3d.config.CacheConfig;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CacheName;
+import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.Project;
@@ -184,7 +185,11 @@ public class ProjectController {
 			}
 			
 			projectService.insertProject(project);
-			cacheConfig.loadCache(CacheName.PROJECT, CacheType.BROADCAST);
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.PROJECT);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -233,7 +238,11 @@ public class ProjectController {
 			}
 			
 			projectService.updateProject(project);
-			cacheConfig.loadCache(CacheName.PROJECT, CacheType.BROADCAST);
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.PROJECT);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -266,7 +275,10 @@ public class ProjectController {
 //			projectService.deleteDataGroup(dataGroup.getData_group_id());
 //			dataGroupList.addAll(projectService.getListDataGroup(new Project()));
 			
-			cacheConfig.loadCache(CacheName.PROJECT, CacheType.BROADCAST);
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.PROJECT);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

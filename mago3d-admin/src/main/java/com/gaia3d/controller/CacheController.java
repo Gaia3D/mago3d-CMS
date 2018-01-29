@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gaia3d.config.CacheConfig;
 import com.gaia3d.domain.CacheName;
+import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheType;
 
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,10 @@ public class CacheController {
 				return jSONObject;
 			}
 			
-			cacheConfig.loadCache(CacheName.valueOf(cacheName), CacheType.valueOf(cacheType));
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.valueOf(cacheName));
+			cacheParams.setCacheType(CacheType.valueOf(cacheType));
+			cacheConfig.loadCache(cacheParams);
 			
 		} catch(Exception e) {
 			e.printStackTrace();

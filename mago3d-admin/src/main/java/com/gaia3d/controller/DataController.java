@@ -22,8 +22,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.gaia3d.config.CacheConfig;
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.CacheName;
+import com.gaia3d.domain.CacheParams;
+import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.FileInfo;
@@ -52,6 +56,9 @@ import lombok.extern.slf4j.Slf4j;
 public class DataController {
 	@Autowired
 	private PropertiesConfig propertiesConfig;
+	
+	@Autowired
+	private CacheConfig cacheConfig;
 	
 	@Resource(name="dataValidator")
 	private DataValidator dataValidator;
@@ -279,6 +286,12 @@ public class DataController {
 			log.info("@@@@@@@@@@@@@@@@@@ after dataInfo = {}", dataInfo);
 			
 			dataService.insertData(dataInfo);
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.DATA_INFO);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheParams.setProject_id(dataInfo.getProject_id());
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -486,6 +499,12 @@ public class DataController {
 			log.info("@@@@@@@@ dataInfo = {}", dataInfo);
 			
 			dataService.updateData(dataInfo);
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.DATA_INFO);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheParams.setProject_id(dataInfo.getProject_id());
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -556,6 +575,10 @@ public class DataController {
 		
 		// validation 체크 해야 함
 		dataService.deleteData(Long.valueOf(data_id));
+		CacheParams cacheParams = new CacheParams();
+		cacheParams.setCacheName(CacheName.DATA_INFO);
+		cacheParams.setCacheType(CacheType.BROADCAST);
+		cacheConfig.loadCache(cacheParams);
 		return "redirect:/data/list-data.do";
 	}
 	
@@ -580,6 +603,11 @@ public class DataController {
 			}
 			
 			dataService.deleteDataList(check_ids);
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.DATA_INFO);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			jSONObject.put("result", "db.exception");
@@ -689,6 +717,11 @@ public class DataController {
 			if(copyFile.exists()) {
 				copyFile.delete();
 			}
+			
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.DATA_INFO);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
