@@ -8,7 +8,7 @@
 mago3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. mago3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 이에 따라, mago3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.
 
 ## Mission
-mago3DJs 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립트 라이브러리를 사용한 가시화 데이터를 통합 과제 & 이슈 관리를 할 수 있습니다.
+mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립트 라이브러리를 사용한 가시화 데이터를 통합 과제 & 이슈 관리를 할 수 있습니다.
 
 ## Features
  - 이슈 현황 신규 이슈, 진행 중인 이슈, 완료된 이슈를 볼 수 있습니다.
@@ -53,7 +53,8 @@ mago3DJs 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 	  dml 폴더의 sql을 실행하여 초기 데이터 등록합니다.
 	- dbinit.bat 파일을 실행하여 데이터를 초기화 합니다.
 	  (파일 경로 예시: C:\git\repository\mago3d\mago3d-core\src\doc\database)
-	i  - 데이터 링크
+	i
+  - 데이터 링크
 	- root folder인 data 폴더 아래 프로젝트 별로 디렉토리를 생성하여 관리합니다.<br>
 	  <code>C:\data\프로젝트명 </code>
 	- mago3d-user에서 변환된 데이터를 저장하기 위해  D드라이브에 mago3d\data 폴더 생성한 후 링크를 걸어줍니다.
@@ -66,7 +67,8 @@ mago3DJs 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
   - PostgreSQL에서 Extensions를 실시 <br>
     <code>CREATE EXTENSION postgis</code>
   - PosGIS Extensions이 성공적으로 끝나면 spatial_ref_sys라는 테이블이 자동 생성됩니다
-
+
+
 
 - [gradle 4.1](https://gradle.org/docs/
   - 설치경로 C:/gradl
