@@ -213,7 +213,7 @@
 			public_yn = #{public_yn},
 			</if>
 			<if test="attributes != null and attributes != ''">
-			attributes = TO_JSON(#{attributes}::json)
+			attributes = TO_JSON(#{attributes}::json),
 			</if>
 			<if test="description != null and description != ''">
 			description = #{description},

@@ -1145,7 +1145,7 @@
 		changeLocationAndRotationAPI(	managerFactory, $("#moveProjectId").val(),
 										$("#moveDataKey").val(), $("#moveLatitude").val(), $("#moveLongitude").val(), 
 										$("#moveHeight").val(), $("#moveHeading").val(), $("#movePitch").val(), $("#moveRoll").val());
-		
+								
 		if(isUpdateLocationAndRotation["enable"]) {
 			isUpdateLocationAndRotation["enable"] = false;
 			var url = "/data/ajax-update-location-and-rotation.do";
