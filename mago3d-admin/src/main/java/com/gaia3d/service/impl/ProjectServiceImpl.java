@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.Project;
+import com.gaia3d.persistence.DataMapper;
 import com.gaia3d.persistence.ProjectMapper;
 import com.gaia3d.service.ProjectService;
 
@@ -21,6 +23,8 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Autowired
 	private ProjectMapper projectMapper;
+	@Autowired
+	private DataMapper dataMapper;
 
 	/**
 	 * Project 목록
@@ -62,7 +66,17 @@ public class ProjectServiceImpl implements ProjectService {
 	 */
 	@Transactional
 	public int insertProject(Project project) {
-		return projectMapper.insertProject(project);
+		projectMapper.insertProject(project);
+		
+		DataInfo dataInfo = new DataInfo();
+		dataInfo.setProject_id(project.getProject_id());
+		dataInfo.setData_key(project.getProject_key());
+		dataInfo.setData_name(project.getProject_name());
+		dataInfo.setParent(0l);
+		dataInfo.setDepth(1);
+		dataInfo.setView_order(1);
+		dataInfo.setAttributes("{}");
+		return dataMapper.insertData(dataInfo);
 	}
 
 	/**

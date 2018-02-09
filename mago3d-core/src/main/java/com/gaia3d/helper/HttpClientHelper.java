@@ -114,7 +114,7 @@ public class HttpClientHelper {
 								+ ":" + externalService.getUrl_port() + "/" + externalService.getUrl_path();
 		    log.info("@@@@@@@@@@@@ url = {}", requestUrl);
 			HttpPost httpPost = new HttpPost(requestUrl);
-			httpPost.addHeader("content-type", "application/json;charset=UTF-8");
+			//httpPost.addHeader("content-type", "application/json;charset=UTF-8");
 			List <NameValuePair> nameValuePair = new ArrayList <NameValuePair>();
 			nameValuePair.add(new BasicNameValuePair("auth_data", authData));
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair, "utf-8"));

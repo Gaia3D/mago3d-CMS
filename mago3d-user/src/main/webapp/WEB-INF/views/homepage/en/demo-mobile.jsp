@@ -443,22 +443,23 @@
 		</div>
 		<div>
 			<h3>Selecting And Moving</h3>
-			<input type="radio" id="mouseNoneMove" name="mouseMoveMode" value="2" onclick="changeMouseMove('2');"/>
-			<label for="mouseNoneMove"> None </label>
-			<input type="radio" id="mouseAllMove" name="mouseMoveMode" value="0" onclick="changeMouseMove('0');"/>
-			<label for="mouseAllMove"> ALL </label>
-			<input type="radio" id="mouseObjectMove" name="mouseMoveMode" value="1" onclick="changeMouseMove('1');"/>
-			<label for="mouseObjectMove"> Object </label>
+			<input type="radio" id="objectNoneMove" name="objectMoveMode" value="2" onclick="changeObjectMove('2');"/>
+			<label for="objectNoneMove"> None </label>
+			<input type="radio" id="objectAllMove" name="objectMoveMode" value="0" onclick="changeObjectMove('0');"/>
+			<label for="objectAllMove"> ALL </label>
+			<input type="radio" id="objectMove" name="objectMoveMode" value="1" onclick="changeObjectMove('1');"/>
+			<label for="objectMove"> Object </label>
 			
 			<button type="button" id="saveObjectMoveButton" class="btn">Save</button>
 			<button type="button" id="deleteAllObjectMoveButton" class="btn">All Delete</button>
 		</div>
+		
 		<div>
 			<h3>Object Occlusion Culling</h3>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">Select</div>
 				<input type="radio" id="useOcclusionCulling" name="occlusionCulling" value="true" />
-				<label for="useOccusionCulling"> use </label>
+				<label for="useOcclusionCulling"> use </label>
 				<input type="radio" id="unusedOcclusionCulling" name="occlusionCulling" value="false" />
 				<label for="unusedOcclusionCulling"> unused </label>
 			</div>

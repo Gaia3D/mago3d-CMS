@@ -291,15 +291,16 @@ public class CacheConfig {
 		}
 		
 		CacheName cacheName = cacheParams.getCacheName();
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@ cacheName ={}", cacheName.toString());
 		
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("api-key=" + Crypt.decrypt(propertiesConfig.getRestAuthKey()));
-		stringBuilder.append("&");
-		stringBuilder.append("cache_name=" + cacheName.toString());
-		stringBuilder.append("&");
+		stringBuilder.append("api-key=" + Crypt.decrypt(propertiesConfig.getRestAuthKey()))
+		.append("&")
+		.append("cache_name=" + cacheName.toString())
+		.append("&");
 		if(cacheParams.getProject_id() != null) stringBuilder.append("project_id=" + cacheParams.getProject_id());
-		stringBuilder.append("&");
-		stringBuilder.append("time=" + System.nanoTime());
+		stringBuilder.append("&")
+		.append("time=" + System.nanoTime());
 		
 		String authData = Crypt.encrypt(stringBuilder.toString());
 		

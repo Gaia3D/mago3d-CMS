@@ -274,16 +274,17 @@
 				</li>
 				<li>
 					<label for="moveHeading">HEADING </label>
-					<input type="text" id="moveHeading" name="moveHeading" size="25" />
+					<input type="text" id="moveHeading" name="moveHeading" size="15" />
 				</li>
 				<li>
 					<label for="movePitch">PITCH </label>
-					<input type="text" id="movePitch" name="movePitch" size="25" />
+					<input type="text" id="movePitch" name="movePitch" size="15" />
 				</li>
 				<li>
 					<label for="moveRoll">ROLL </label>
-					<input type="text" id="moveRoll" name="moveRoll" size="18" />
-					<button type="button" id="changeLocationAndRotation" class="btn">변환</button> 
+					<input type="text" id="moveRoll" name="moveRoll" size="15" />
+					<button type="button" id="changeLocationAndRotation" class="btn">변환</button>
+					<button type="button" id="updateLocationAndRotation" class="btn">저장</button>
 				</li>
 			</ul>
 		</div>
@@ -474,7 +475,7 @@
 			<h3>Selecting And Moving</h3>
 			<input type="radio" id="objectNoneMove" name="objectMoveMode" value="2" onclick="changeObjectMove('2');"/>
 			<label for="objectNoneMove"> None </label>
-			<input type="radio" id="mouseAllMove" name="objectMoveMode" value="0" onclick="changeObjectMove('0');"/>
+			<input type="radio" id="objectAllMove" name="objectMoveMode" value="0" onclick="changeObjectMove('0');"/>
 			<label for="objectAllMove"> ALL </label>
 			<input type="radio" id="objectMove" name="objectMoveMode" value="1" onclick="changeObjectMove('1');"/>
 			<label for="objectMove"> Object </label>
@@ -487,7 +488,7 @@
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">사용유무</div>
 				<input type="radio" id="useOcclusionCulling" name="occlusionCulling" value="true" />
-				<label for="useOccusionCulling"> 사용 </label>
+				<label for="useOcclusionCulling"> 사용 </label>
 				<input type="radio" id="unusedOcclusionCulling" name="occlusionCulling" value="false" />
 				<label for="unusedOcclusionCulling"> 미사용 </label>
 			</div>
@@ -1136,6 +1137,35 @@
 		}
 		return true;
 	}
+	
+	// 변환행렬 수정
+	var isUpdateLocationAndRotation = { "enable" : true };
+	$("#updateLocationAndRotation").click(function() {
+		if(!changeLocationAndRotationCheck()) return false;
+		changeLocationAndRotationAPI(	managerFactory, $("#moveProjectId").val(),
+										$("#moveDataKey").val(), $("#moveLatitude").val(), $("#moveLongitude").val(), 
+										$("#moveHeight").val(), $("#moveHeading").val(), $("#movePitch").val(), $("#moveRoll").val());
+		
+		if(isUpdateLocationAndRotation["enable"]) {
+			isUpdateLocationAndRotation["enable"] = false;
+			var url = "/data/ajax-update-location-and-rotation.do";
+			var info = "data_key=" ;
+			ajaxCall(url, info, issueSaveCallback, errorCallback, isUpdateLocationAndRotation);
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	});
+	function updateLocationAndRotationCallback(msg, theArgs) {
+		if(msg.result === "success") {
+			alert(JS_MESSAGE["update"]);
+		} else {
+			alert(JS_MESSAGE[msg.result]);
+		}
+		
+		isUpdateLocationAndRotation["enable"] = true;
+	}
+	
 	
 	// 인접 지역 이슈 표시
 	function changeNearGeoIssueList(isShow) {
