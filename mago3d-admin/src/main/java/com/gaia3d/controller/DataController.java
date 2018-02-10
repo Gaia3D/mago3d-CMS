@@ -474,6 +474,8 @@ public class DataController {
 	public Map<String, Object> ajaxUpdateDataInfo(HttpServletRequest request, DataInfo dataInfo) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
+		
+		log.info("@@ dataInfo = {}", dataInfo);
 		try {
 			dataInfo.setMethod_mode("update");
 			String errorcode = dataValidate(dataInfo);

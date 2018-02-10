@@ -35,6 +35,7 @@
 							<div id="data_info_tab">
 								<form:form id="dataInfo" modelAttribute="dataInfo" method="post" onsubmit="return false;">
 								<form:hidden path="data_id"/>
+								<form:hidden path="depth"/>
 								<form:hidden path="old_data_key"/>
 								<table class="input-table scope-row">
 									<col class="col-label" />

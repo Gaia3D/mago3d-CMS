@@ -275,7 +275,7 @@
 			TO_TIMESTAMP(#{due_date}, 'YYYYMMDDHH24MISSUS'),
 			</if>
 			<if test="location != null and location != ''">
-			ST_GeographyFromText(#{location})
+			ST_GeographyFromText(#{location}),
 			</if>
 			<if test="latitude != null">
 			latitude = #{latitude},
