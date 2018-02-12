@@ -21,7 +21,7 @@ position: relative;
 height: 80px;
 background-repeat: repeat-x;
 background-color: #323140;
-background-image: url(/images/ko/homepage/header.png);
+background-image: url(/images/ja/homepage/header.png);
 }
 header.about {
 background-position: 0 0;
@@ -36,7 +36,7 @@ header > div {
 width: 1200px;
 margin: 0 auto;
 padding-top: 120px;
-background: url(/images/ko/homepage/logo_header.png) no-repeat center 40px;
+background: url(/images/ja/homepage/logo_header.png) no-repeat center 40px;
 }
 header > div p {
 color: #fff;
@@ -109,7 +109,7 @@ height: 47px;
 margin: 15px 0 0 0;
 text-indent: -999em;
 cursor: pointer;
-background: url(/images/ko/homepage/logo.png) no-repeat 0 0;
+background: url(/images/ja/homepage/logo.png) no-repeat 0 0;
 }
 h1 > a {
 display: block;
@@ -145,7 +145,7 @@ margin:20px 0 10px;
 padding-left: 20px;
 font-size: 22px;
 font-weight: 200;
-background: url(/images/ko/homepage/bullet_h4.png) no-repeat left 50%;
+background: url(/images/ja/homepage/bullet_h4.png) no-repeat left 50%;
 }
 h5 {
 
@@ -319,7 +319,7 @@ cursor: pointer;
 text-indent: -999em;
 border-radius: 25px;
 border: 1px solid #dedede;
-background: url(/images/ko/homepage/contact.png) no-repeat center -430px;
+background: url(/images/ja/homepage/contact.png) no-repeat center -430px;
 }
 
 
@@ -359,7 +359,7 @@ color: #fff;
 border-radius: 5px;
 border: none;
 background-color: #0066cc;
-background-image: url(/images/ko/homepage/ico.png);
+background-image: url(/images/ja/homepage/ico.png);
 background-repeat: no-repeat;
 background-position: 30px 20px;
 }
@@ -457,7 +457,7 @@ text-align: center;
 display: inline-block;
 margin-right: 30px;
 padding-top: 70px;
-background-image:url(/images/ko/homepage/contact.png);
+background-image:url(/images/ja/homepage/contact.png);
 background-repeat: no-repeat;
 }
 .contact:last-child li {
@@ -702,7 +702,7 @@ box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
 /* /////// MAIN //////// */
 
 .pattern_bg {
-background: rgba(0, 0, 0, 0) url("/images/ko/homepage/pattern_bg.png") repeat scroll 0 0;
+background: rgba(0, 0, 0, 0) url("/images/ja/homepage/pattern_bg.png") repeat scroll 0 0;
 display: block;
 left: 0;
 position: absolute;
@@ -835,7 +835,7 @@ position: relative;
 margin: 0 auto;
 height: 100%;
 min-width: 1500px;
-background-image: url(/images/ko/homepage/vod_bg.png);
+background-image: url(/images/ja/homepage/vod_bg.png);
 background-repeat: repeat-x;
 background-color: #323140;
 }
@@ -850,7 +850,7 @@ left: 0;
 width: 100%;
 height: 100%;
 opacity: 0.7;
-background-image: url(/images/ko/homepage/vod_bg.png);
+background-image: url(/images/ja/homepage/vod_bg.png);
 background-repeat: repeat-x;
 background-color: #323140;
 }
@@ -862,7 +862,7 @@ width: 900px;
 margin-left: -450px;
 padding-top: 150px;
 text-align: center;
-background: url(/images/ko/homepage/logo_header.png) no-repeat 50% 50%;
+background: url(/images/ja/homepage/logo_header.png) no-repeat 50% 50%;
 }
 .vodBlock p span {
 display: block;
