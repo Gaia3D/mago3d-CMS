@@ -733,7 +733,7 @@ select + .ui-selectmenu-button + input {
 	display: block;
 	float: left;
 	height: 30px;
-	min-width: 160px;
+	min-width: 200px;
 	box-sizing: border-box; }
 	
 .ui-selectmenu-button span.ui-icon {
