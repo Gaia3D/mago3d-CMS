@@ -1,6 +1,6 @@
 // 삭제 처리 경고
 function deleteWarning() {
-	if(confirm("삭제 하시겠습니까?")) {
+	if(confirm("削除しますか？")) {
 		return true;
 	} else {
 		return false;
@@ -34,7 +34,7 @@ function isNumber(control) {
 	var Num = "1234567890";
 	for (var i=0; i<val.length; i++) {
 		if(Num.indexOf(val.substring(i,i+1))<0) {
-			alert("숫자만 입력 가능 합니다.");
+			alert("数字のみ入力可能です.");
 			return false;
 		}
 	}
@@ -78,15 +78,15 @@ function checkedStatus(element) {
 function initJqueryCalendar() {
 	$( ".date" ).datepicker({ 
 		dateFormat : "yymmdd",
-		dayNames : [ "일", "월", "화", "수", "목", "금", "토" ],
-		dayNamesShort : [ "일", "월", "화", "수", "목", "금", "토" ],
-		dayNamesMin : [ "일", "월", "화", "수", "목", "금", "토" ],
-		monthNames : [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
-		monthNamesShort : [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+		dayNames : [ "日", "月", "火", "水", "木", "金", "土" ],
+		dayNamesShort : [ "日", "月", "火", "水", "木", "金", "土" ],
+		dayNamesMin : [ "日", "月", "火", "水", "木", "金", "土" ],
+		monthNames : [ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+		monthNamesShort : [ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
 		prevText : "",
 		nextText : "",
 		showMonthAfterYear : true,
-		yearSuffix : "년"
+		yearSuffix : "年"
 	});
 }
 
