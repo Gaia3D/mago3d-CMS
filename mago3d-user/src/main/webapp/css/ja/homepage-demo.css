@@ -106,7 +106,7 @@ nav li.issue > span * {
 	padding-left: 20px;
 	font-size: 16px;
 	font-weight: 600;
-	background: url(/images/ko/homepage/bullet_h4.png) no-repeat left 50%;
+	background: url(/images/ja/homepage/bullet_h4.png) no-repeat left 50%;
 }
 .layerHeader > div {
 	position: absolute;
@@ -120,7 +120,7 @@ nav li.issue > span * {
 	height: 30px;
 	border: none;
 	text-indent: -999em;
-	background-image: url(/images/ko/homepage/ico.png);
+	background-image: url(/images/ja/homepage/ico.png);
 	background-color: transparent;
 	background-position: 1px -264px;
 }
@@ -218,7 +218,7 @@ button.btn.on {
 	height: 27px;
 	text-indent: -999em;
 	border: none;
-	background: url(/images/ko/homepage/ico.png) no-repeat -90px -265px;
+	background: url(/images/ja/homepage/ico.png) no-repeat -90px -265px;
 }
 
 .menuList {
@@ -304,7 +304,7 @@ button.btn.on {
 	margin-top: 5px;
 	text-indent: -999em;
 	border: none;
-	background-image: url(/images/ko/homepage/ico.png);
+	background-image: url(/images/ja/homepage/ico.png);
 	background-repeat: no-repeat;
 	background-position: 10px -468px;
 	background-color: transparent;
@@ -407,7 +407,7 @@ button.btn.on {
 	margin-top: 5px;
 	text-indent: -999em;
 	border: none;
-	background-image: url(/images/ko/homepage/ico.png);
+	background-image: url(/images/ja/homepage/ico.png);
 	background-repeat: no-repeat;
 	background-position: 10px -468px;
 	background-color: transparent;
@@ -530,7 +530,7 @@ button.btn.on {
 }
 
 .color-warning {
-	background: rgba(0, 0, 0, 0) url("/images/ko/common/bg_point.png") no-repeat scroll center center;
+	background: rgba(0, 0, 0, 0) url("/images/ja/common/bg_point.png") no-repeat scroll center center;
     display: inline-block;
     height: 4px;
     margin: 0 5px;
