@@ -1269,7 +1269,7 @@
 	
 	// LOD 설정
 	$("#changeLodButton").click(function() {
-		changeLodAPI(managerFactory, $("#geo_lod0").val(), $("#geo_lod1").val(), $("#geo_lod2").val(), null);
+		changeLodAPI(managerFactory, $("#geo_lod0").val(), $("#geo_lod1").val(), $("#geo_lod2").val(), $("#geo_lod3").val(), $("#geo_lod4").val(), $("#geo_lod5").val());
 	});
 	// Lighting 설정
 	$("#changeLightingButton").click(function() {
