@@ -23,7 +23,6 @@ mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 - PostGIS
 - Gradle
 
-<br>
 
 ## Getting Started
 
@@ -53,7 +52,7 @@ mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 - 설치경로 C:/gradle
 - 시스템 변수 추가 <br> 
   Path) C:\gradle\gradle-4.1 
-- eclipse BuildShip Gradle Plugin을 사용하여 build합니다.
+- eclipse BuildShip Gradle Plugin을 이용하여 gradle을 사용할 수 있습니다.
 
 
 #### [lombok](https://projectlombok.org/)
@@ -65,9 +64,10 @@ mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 ### 2. DB 생성 및 초기 데이터 등록
 
 - Database & Extensions
-	- 데이터베이스를 생성합니다.
-	  <pre><code>Name:mago3d, Encoding:UTF-8, Template:template0, Collation:C, Character type:C, Connection Limit:-1)</code></pre>
-	- PostgreSQL에서 Extensions를 실시합니다.
+	- mago3d 데이터베이스를 생성합니다.
+	    한글 정렬을 위해 데이터베이스를 다음과 같이 설정합니다.
+	  <pre><code>Name:mago3d, Encoding:UTF-8, Template:template0, Collation:C, Character type:C, Connection Limit:-1</code></pre>
+	- psql(SQL Shell) 혹은 pgAdmin에서 Extensions를 실행합니다.
 	  <pre><code>CREATE EXTENSION postgis</code></pre>
 	  PosGIS Extensions이 성공적으로 끝나면 데이터베이스 생성 및 초기 데이더 등록 후 spatial_ref_sys라는 테이블이 자동 생성됩니다.
 
@@ -87,15 +87,12 @@ mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 ### 3. symbolic link
 
 - 데이터 링크
-	- F4D Converter 파일을 서비스하기 위한 폴더를 지정합니다. <br>
+	- F4D 파일을 서비스하기 위한 폴더를 지정합니다. <br>
 	  ex) data 폴더 하위에 프로젝트 별로 디렉토리를 생성하여 관리 → <code>  C:\data\프로젝트명    </code>
 	- mago3d-user 데이터를 저장하기 위한 심볼릭 링크(symbolic link)를 걸어줍니다.
 	- 관리자 권한으로 Command Line Prompt(cmd.exe)를 실행
 	- mago3d-user\src\main\webapp 디렉토리로 이동
 	  <pre><code>C:\git\repository\mago3d\mago3d-user\src\main\webapp > mklink /d "C:\git\repository\mago3d\mago3d-user\src\main\webapp\data" "C:\data"</code></pre>
-	- 사용자가 데이터를 업로드 할 폴더를 생성합니다. <br>
-	  ex) D드라이브에 mago3d\data 폴더 생성	
-	  mago3d-admin\src\main\resources\mago3d.properties 에서 변경 가능
 
 
 ### 4. Execution
@@ -145,7 +142,6 @@ mago3DJS Integrate visualization data with open source JavaScript library for 3-
 - PostGIS
 - Gradle
 
-<br>
 
 ## Getting Started
 
@@ -174,7 +170,7 @@ mago3DJS Integrate visualization data with open source JavaScript library for 3-
 - Installation path C:/gradle
 - Add System Variable <br>
   Path) C:\grade\grade-4.1
-- Build using eclipse BuildShip Gradle Plugin.
+- You can use gradle with eclipse BuildShip Gradle Plugin.
 
 
 #### [lombok](https://projectlombok.org/)
@@ -186,9 +182,10 @@ mago3DJS Integrate visualization data with open source JavaScript library for 3-
 ### 2. DB creation & initial data registration
 
 - Database & Extensions
-	- Create a database.
-	  <pre><code>Name:mago3d, Encoding:UTF-8, Template:template0, Collation:C, Character type:C, Connection Limit:-1)</code></pre
-	- Execute Extensions in PostgreSQL.
+	- Create the mago3d database.
+	  Set the database as follows for sorting.
+	  <pre><code>Name:mago3d, Encoding:UTF-8, Template:template0, Collation:C, Character type:C, Connection Limit:-1</code></pre
+	- Run Extensions from psql(SQL Shell) or pgAdmin.
 	  <pre><code> CREATE EXTENSION postgis </code></pre>
 	  When PosGIS Extensions is successfully completed, a table called spatial_ref_sys is automatically created after creating the database and registering the initial data.
 
@@ -208,15 +205,12 @@ mago3DJS Integrate visualization data with open source JavaScript library for 3-
 ### 3. symbolic link
 
 - Data link
-	- F4D Converter Specify the folder to serve the file. <br>
+	- F4D Specify the folder to serve the file. <br>
 	  ex) Create and manage a project-specific directory under the data folder → <code>C:\data\project name</code>
 	- mago3d-user Makes a symbolic link for storing data.
 	- Execute Command Line Prompt (cmd.exe) with administrative privileges
 	- Go to mago3d-user\src\main\webapp directory
 	  <pre><code>C:\git\repository\mago3d\mago3d-user\src\main\webapp > mklink /d "C:\git\repository\mago3d\mago3d-user\src\main\webapp\data" "C:\data"</code></pre>
-	- Creates a folder where users can upload data. <br>
-	  ex) Create mago3d\data folder on drive D.
-	  mago3d-admin\src\main\resources\mago3d.properties
 
 
 ### 4. Execution
@@ -245,7 +239,6 @@ mago3DJS Integrate visualization data with open source JavaScript library for 3-
 
 
 
-
 ###### Googleの翻訳を使用して
 # <a name="japan"></a>mago3D
 mago3DはAEC（Architecture、Engineering、Construction）領域と、伝統的な3次元空間情報（3D GIS）を統合的に管理、可視化してくれる次世代3次元のプラットフォームです。 mago3Dは、従来のソリューションとは異なり、室内外の区別なくシームレスにAECと3D GISをWebブラウザに統合されています。これにより、mago3Dユーザーは超大容量BIM（Building Information Modelling）、JT（Jupiter Tessellation）、3D GISファイルなどを、別のプログラムをインストールすることなく、Webブラウザ上ですぐに見てコラボレーションを行うことができます。
@@ -266,7 +259,6 @@ mago3DJS 3次元マルチブロック可視化のためのオープンソース�
 - PostGIS
 - Gradle
 
-<br>
 
 ## Getting Started
 
@@ -295,7 +287,7 @@ mago3DJS 3次元マルチブロック可視化のためのオープンソース�
 - インストールパスはC：/ gradle
 - システム変数の追加 <br>
   Path) C:\gradle\gradle-4.1
-- eclipse BuildShip Gradle Pluginを使用してbuildします。
+- eclipse BuildShip Gradle Pluginを利用して、gradleを使用することができます。
 
 
 #### [lombok](https://projectlombok.org/)
@@ -307,9 +299,10 @@ mago3DJS 3次元マルチブロック可視化のためのオープンソース�
 ### 2. DBの作成と初期データの登録
 
 - Database＆Extensions
-	- データベースを作成します。
-	  <pre><code> Name：mago3d、Encoding：UTF-8、Template：template0、Collat​​ion：C、Character type：C、Connection Limit：-1）</code></pre>
-	- PostgreSQLでExtensionsを行います。
+	- mago3dデータベースを作成します。
+	    ハングルのソートのためにデータベースを次のように設定します。
+	  <pre><code>Name：mago3d、Encoding：UTF-8、Template：template0、Collat​​ion：C、Character type：C、Connection Limit：-1</code></pre>
+	- psql(SQL Shell)でのpgAdminの拡張機能の実行。
 	  <pre><code> CREATE EXTENSION postgis </code></pre>
 	  PosGIS Extensionsが正常に完了したら、データベースの作成と初期データより登録後spatial_ref_sysというテーブルが自動的に作成されます。
 
@@ -329,15 +322,12 @@ mago3DJS 3次元マルチブロック可視化のためのオープンソース�
 ### 3. symbolic link
 
 - データリンク
-	- F4D Converterファイルをサービスするためのフォルダを指定します。 <br>
+	- F4D ファイルをサービスするためのフォルダを指定します。 <br>
 	  ex）dataフォルダサブプロジェクトごとにディレクトリを作成して管理  → <code>C:\data\プロジェクト名</code>
 	- mago3d-userデータを格納するためのシンボリックリンク（symbolic link）をかけます。
 	- 管理者権限でCommand Line Prompt(cmd.exe)を実行
 	- mago3d-user\src\main\webapp ディレクトリに移動
 	  <pre><code>C:\git\repository\mago3d\mago3d-user\src\main\webapp> mklink /d "C:\git\repository\mago3d\mago3d-user\src\main\webapp\data" "C:\data"</code></pre>
-	- ユーザーがデータをアップロードするフォルダを作成します。 <br>
-	  ex）Dドライブにmago3d \ dataフォルダの作成
-	  mago3d-admin\src\main\resources\mago3d.properties で変更可能
 
 
 ### 4. Execution
