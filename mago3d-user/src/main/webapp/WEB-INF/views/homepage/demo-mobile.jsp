@@ -6,7 +6,7 @@
 <html lang="${accessibility}">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width">
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
 	<title>demo | mago3D User</title>
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css?cache_version=${cache_version}" />
 <c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
@@ -17,19 +17,23 @@
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-toast/jquery.toast.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/hammer/hammer.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
+	<style>
+		input {height: 29px;}
+		body, th, td, input, select, textarea { color:#444; font-family:'Malgun Gothic','돋움',dotum, sans-serif; font-size:12px; line-height:1.8em; }
+	</style>
 </head>
-
 <body>
 	<input type="hidden" id="now_latitude" name="now_latitude" value="${now_latitude }" />
 	<input type="hidden" id="now_longitude" name="now_longitude" value="${now_longitude }"  />
-
-<ul class="nav">
+<ul class="mobile-nav">
 	<li id="homeMenu" class="home">
 		<img src="/images/ko/homepage/home-icon.png" style="width: 35px; height: 35px; padding-right: 2px;"/>
 	</li>
+	<li id="shortCutMenu" class="shortCuts" data-tooltip-text="바로가기 기능을 제공 합니다.">Link</li>
 	<li id="myIssueMenu" class="issue" data-tooltip-text="전체 Issue 리스트 중에서 최신 Issue 10개를 시간 순으로 정렬하여 보여 줍니다.">Issue
 		<br /><span id="issueListCount">${totalCount }</span></li>
 	<li id="searchMenu" class="search" data-tooltip-text="Issue, Object, 공간 정보 등을 활용한 검색 기능을 제공 합니다.">검색</li>
@@ -38,16 +42,13 @@
 	<li id="configMenu" class="config" data-tooltip-text="Rendering 관련 각종 설정이 가능 합니다.">설정</li>	
 </ul>
 
-<div id="menuContent" class="navContents">
+<div id="menuContent" class="mobile-navContents">
 	<div class="alignRight">
 		<button type="button" id="menuContentClose" class="navClose">닫기</button>
 	</div>
 	
 	<ul id="homeMenuContent" class="menuList">
-		<li><a href="/homepage/index.do">Home</a>
-			(<a href="/homepage/about.do" onclick ="changeLanguage('ko');">KO</a> | 
-			<a href="/homepage/about.do" onclick ="changeLanguage('en');">EN</a>)
-		</li>
+		<li><a href="/homepage/index.do">Home</a></li>
 		<li><a href="/homepage/about.do">mago3D</a></li>
 		<li>Demo
 			<ul>
@@ -70,20 +71,23 @@
 		</li>
 		<li><a href="/homepage/faq.do">FAQ</a></li>
 	</ul>
-	
+		
+	<ul id="shortCutMenuContent" class="shortList">
+<c:forEach var="project" items="${projectList}" varStatus="status">
+		<li class="shortCutbtn" 
+			onclick="gotoProject('${project.project_id }', '${project.longitude}', '${project.latitude}', '${project.height}', '${project.duration}')">${project.project_name }</li>
+</c:forEach>
+	</ul>
+		
 	<ul id="myIssueMenuContent" class="issueList">
-		<li style="margin-bottom: 8px; font-size: 1em; font-weight: normal; color: #2955a6;">
-			최신 Issue 10개 표시
-		</li>
+		<li style="margin-bottom: 8px; font-size: 1em; font-weight: normal; color: #2955a6;">최신 Issue 10개 표시</li>
 <c:if test="${empty issueList }">
-		<li style="text-align: center; padding-top:20px; height: 50px;">
-			Issue가 존재하지 않습니다.
-		</li>
+		<li style="text-align: center; padding-top: 20px; height: 50px;">Issue가 존재하지 않습니다.</li>
 </c:if>
 <c:if test="${!empty issueList }">
 	<c:forEach var="issue" items="${issueList}" varStatus="status">
 		<li>
-			<button type="button" title="바로가기" 
+			<button class="issueBtn" type="button" title="바로가기" 
 				onclick="gotoIssue('${issue.project_id}', '${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">바로가기</button>
 			<div class="info">
 				<p class="title">
@@ -100,12 +104,12 @@
 	</c:forEach>
 </c:if>
 	</ul>
-	
+
 	<form:form id="searchForm" modelAttribute="issue" method="post" onsubmit="return false;">
 	<div id="searchMenuContent" class="searchWrap">
 		<table>
 			<tr style="height: 35px;">
-				<td style="width: 80px;"><label for="project_id">프로젝트</label></td>
+				<td style="width: 380px;"><label for="project_id">프로젝트</label></td>
 				<td><select id="project_id" name="project_id" class="select">
 						<option value=""> 전체 </option>
 <c:forEach var="project" items="${projectList}">
@@ -128,30 +132,29 @@
 				</td>
 			</tr>
 			<tr style="height: 35px;">
-				<td>
-					<label for="search_value">검색어</label></td>
+				<td><label for="search_value">검색어</label></td>
 				<td><input type="text" id="search_value" name="search_value" size="31" /></td>
 			</tr>
 			<tr style="height: 35px;">
 				<td><label for="start_date">날짜</label></td>
 				<td><input type="text" class="s date" id="start_date" name="start_date" size="12" />
-					<span class="delimeter tilde">~</span>
+					<span class="delimeter tilde">~</span> 
 					<input type="text" class="s date" id="end_date" name="end_date" size="12" /></td>
 			</tr>
 			<tr style="height: 30px;">
 				<td><label for="order_word">표시순서</label></td>
-				<td><select id="order_word" name="order_word" class="select">
+				<td><select id="order_word" style="width: 60px;" name="order_word" class="select">
 						<option value=""> 기본 </option>
-				       	<option value="register_date"> 등록일 </option>
+						<option value="register_date"> 등록일 </option>
 					</select>
-					<select id="order_value" name="order_value" class="select">
+					<select id="order_value" style="width: 60px;" name="order_value" class="select">
 						<option value=""> 기본 </option>
-					   	<option value="ASC"> 오름차순 </option>
+						<option value="ASC"> 오름차순 </option>
 						<option value="DESC"> 내림차순 </option>
 					</select>
-					<select id="list_counter" name="list_counter" class="select">
+					<select id="list_counter" style="width: 80px;" name="list_counter" class="select">
 						<option value="5"> 5 개씩 </option>
-					 	<option value="10"> 10 개씩 </option>
+						<option value="10"> 10 개씩 </option>
 						<option value="50"> 50 개씩 </option>
 					</select>
 				</td>
@@ -178,7 +181,7 @@
 				</li>
 				<li>
 					<label for="localSearchDataKey">Data Key</label>
-					<input type="text" id="localSearchDataKey" name="localSearchDataKey" size="23" />
+					<input type="text" id="localSearchDataKey" name="localSearchDataKey" size="15" />
 					<button type="button" id="localSearch" class="btn">검색</button> 
 				</li>
 			</ul>
@@ -202,8 +205,8 @@
 				</li>
 				<li>
 					<label for="propertyRenderingWord">속성</label>
-					<input type="text" id="propertyRenderingWord" name="propertyRenderingWord" size="23" placeholder="isMain=true" />
-					<button type="button" id="changePropertyRendering" class="btn"><spring:message code='demo.change'/></button> 
+					<input type="text" id="propertyRenderingWord" name="propertyRenderingWord" size="15" placeholder="isMain=true" />
+					<button type="button" id="changePropertyRendering" class="btn">변경</button> 
 				</li>
 			</ul>
 		</div>
@@ -220,15 +223,15 @@
 				</li>
 				<li>
 					<label for="colorDataKey">Data Key</label>
-					<input type="text" id="colorDataKey" name="colorDataKey" size="30" />
+					<input type="text" id="colorDataKey" name="colorDataKey" size="15" />
 				</li>
 				<li>
 					<label for="colorObjectIds">Object Id</label>
-					<input type="text" id="colorObjectIds" name="colorObjectIds" placeholder=" , 구분" size="30" />
+					<input type="text" id="colorObjectIds" name="colorObjectIds" placeholder="   , 구분" size="15" />
 				</li>
 				<li>
 					<label for="colorProperty">속성</label>
-					<input type="text" id="colorProperty" name="colorProperty" size="30" placeholder="isMain=true" />
+					<input type="text" id="colorProperty" name="colorProperty" size="15" placeholder="isMain=true" />
 				</li>
 				<li>
 					<label for="updateColor">색깔</label>
@@ -258,19 +261,19 @@
 				</li>
 				<li>
 					<label for="moveDataKey">Data Key</label>
-					<input type="text" id="moveDataKey" name="moveDataKey" size="25" />
+					<input type="text" id="moveDataKey" name="moveDataKey" size="15" />
 				</li>
 				<li>
 					<label for="moveLatitude">위도 </label>
-					<input type="text" id="moveLatitude" name="moveLatitude" size="25"/>
+					<input type="text" id="moveLatitude" name="moveLatitude" size="15"/>
 				</li>
 				<li>
 					<label for="moveLongitude">경도 </label>
-					<input type="text" id="moveLongitude" name="moveLongitude" size="25"/>
+					<input type="text" id="moveLongitude" name="moveLongitude" size="15"/>
 				</li>
 				<li>
 					<label for="moveHeight">높이 </label>
-					<input type="text" id="moveHeight" name="moveHeight" size="25" />
+					<input type="text" id="moveHeight" name="moveHeight" size="15" />
 				</li>
 				<li>
 					<label for="moveHeading">HEADING </label>
@@ -283,8 +286,7 @@
 				<li>
 					<label for="moveRoll">ROLL </label>
 					<input type="text" id="moveRoll" name="moveRoll" size="15" />
-					<button type="button" id="changeLocationAndRotation" class="btn">변환</button>
-					<button type="button" id="updateLocationAndRotation" class="btn">저장</button>
+					<button type="button" id="changeLocationAndRotation" class="btn">변환</button> 
 				</li>
 			</ul>
 		</div>
@@ -300,155 +302,123 @@
 			<ul class="apiLoca">
 				<li>
 					<label for="positionLatitude"> 위도 </label>
-					<input type="text" id="positionLatitude" name="positionLatitude" size="25" />
+					<input type="text" id="positionLatitude" name="positionLatitude" size="15" />
 				</li>
 				<li>
 					<label for="positionLongitude"> 경도 </label>
-					<input type="text" id="positionLongitude" name="positionLongitude" size="25" />
+					<input type="text" id="positionLongitude" name="positionLongitude" size="15" />
 				</li>
 				<li>
 					<label for="positionAltitude"> 높이 </label>
-					<input type="text" id="positionAltitude" name="positionAltitude" size="25" />
+					<input type="text" id="positionAltitude" name="positionAltitude" size="15" />
 				</li>
 			</ul>
 		</div>
 	</div>
-	
+
 	<form:form id="issue" modelAttribute="issue" method="post" onsubmit="return false;">
-	<div id="insertIssueMenuContent" class="insertIssueWrap">
-		<table>
-			<tr style="height: 35px;">
-				<td style="width: 100px;" nowrap="nowrap">
-					<form:label path="project_id">프로젝트</form:label>
-					<span class="icon-glyph glyph-emark-dot color-warning"></span>
-				</td>
-				<td>
-					<form:select path="project_id" cssClass="select">
+		<div id="insertIssueMenuContent" class="insertIssueWrap">
+			<table>
+				<tr style="height: 35px;">
+					<td style="width: 100px;" nowrap="nowrap">
+						<form:label path="project_id">프로젝트</form:label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span></td>
+					<td><form:select path="project_id" cssClass="select">
 <c:forEach var="project" items="${projectList}">
-						<option value="${project.project_id}">${project.project_name}</option>
+							<option value="${project.project_id}">${project.project_name}</option>
 </c:forEach>
-					</form:select>
-				</td>
-			</tr>
-			<tr style="height: 35px;">
-				<td>
-					<form:label path="issue_type">Type</form:label>
-					<span class="icon-glyph glyph-emark-dot color-warning"></span>
-				</td>
-				<td>
-					<form:select path="issue_type" cssClass="select">
+						</form:select></td>
+				</tr>
+				<tr style="height: 35px;">
+					<td><form:label path="issue_type">Type</form:label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span></td>
+					<td><form:select path="issue_type" cssClass="select">
 <c:forEach var="commonCode" items="${issueTypeList}">
-						<option value="${commonCode.code_key}">${commonCode.code_name}</option>
+							<option value="${commonCode.code_key}">${commonCode.code_name}</option>
 </c:forEach>
-					</form:select>
-				</td>
-			</tr>
-			<tr style="height: 35px;">
-				<td>
-					Issue 위치
-				</td>
-				<td>
-					<button type="button" id="insertIssueEnableButton" class="btn">클릭 후 객체를 선택해 주세요.</button> 
-				</td>
-			</tr>
-			<tr style="height: 35px;">
-				<td>
-					<form:label path="data_key">데이터명</form:label>
-					<span class="icon-glyph glyph-emark-dot color-warning"></span>
-				</td>
-				<td>
-					<form:input path="data_key" readonly="true" size="25" cssStyle="background-color: #CBCBCB;" />
-					<form:errors path="data_key" cssClass="error" />
-					<form:hidden path="object_key"/>
-					<form:hidden path="height"/>
-				</td>
-			</tr>
-			<tr style="height: 35px;">
-				<td>
-					<form:label path="latitude">위도</form:label>
-					<span class="icon-glyph glyph-emark-dot color-warning"></span>
-				</td>
-				<td>
-					<form:input path="latitude" readonly="true" size="25" cssStyle="background-color: #CBCBCB;" />
-					<form:errors path="latitude" cssClass="error" />
-				</td>
-			</tr>
-			<tr style="height: 35px;">
-				<td>
-					<form:label path="longitude">경도</form:label>
-					<span class="icon-glyph glyph-emark-dot color-warning"></span>
-				</td>
-				<td>
-					<form:input path="longitude" readonly="true" size="25" cssStyle="background-color: #CBCBCB;" />
-					<form:errors path="longitude" cssClass="error" />
-				</td>
-			</tr>
-			<tr style="height: 60px;">
-				<td><form:label path="title">제목</form:label>
-					<span class="icon-glyph glyph-emark-dot color-warning"></span>
-				</td>
-				<td>
-					<form:textarea path="title" rows="2" cols="32" />
-					<form:errors path="title" cssClass="error" />
-				</td>
-			</tr>
-			
-			<tr style="height: 35px;">
-				<td><form:label path="priority">Priority</form:label>
-					<span class="icon-glyph glyph-emark-dot color-warning"></span>
-				</td>
-				<td>
-					<form:select path="priority" cssClass="select">
+						</form:select></td>
+				</tr>
+				<tr style="height: 35px;">
+					<td>Issue 위치</td>
+					<td>
+						<button type="button" id="insertIssueEnableButton" class="btn">클릭 후 객체를 선택해 주세요.</button>
+					</td>
+				</tr>
+				<tr style="height: 35px;">
+					<td><form:label path="data_key">데이터명</form:label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span></td>
+					<td><form:input path="data_key" readonly="true" size="25" cssStyle="background-color: #CBCBCB;" />
+						<form:errors path="data_key" cssClass="error" />
+						<form:hidden path="object_key" />
+						<form:hidden path="height" /></td>
+				</tr>
+				<tr style="height: 35px;">
+					<td><form:label path="latitude">위도</form:label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span></td>
+					<td><form:input path="latitude" readonly="true" size="25" cssStyle="background-color: #CBCBCB;" />
+						<form:errors path="latitude" cssClass="error" /></td>
+				</tr>
+				<tr style="height: 35px;">
+					<td><form:label path="longitude">경도</form:label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span></td>
+					<td><form:input path="longitude" readonly="true" size="25" cssStyle="background-color: #CBCBCB;" />
+						<form:errors path="longitude" cssClass="error" /></td>
+				</tr>
+				<tr style="height: 60px;">
+					<td><form:label path="title">제목</form:label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span></td>
+					<td><form:textarea path="title" rows="2" cols="32" />
+						<form:errors path="title" cssClass="error" /></td>
+				</tr>
+
+				<tr style="height: 35px;">
+					<td><form:label path="priority">Priority</form:label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span></td>
+					<td><form:select path="priority" cssClass="select">
 <c:forEach var="commonCode" items="${issuePriorityList}">
 						<option value="${commonCode.code_key}">${commonCode.code_name}</option>
 </c:forEach>
-					</form:select>
-				</td>
-			</tr>
-			
-			<tr style="height: 35px;">
-				<td><form:label path="due_day">마감일</form:label></td>
-				<td><form:hidden path="due_date" />
-					<input type="text" id="due_day" name="due_day" class="date" size="10" maxlength="10" />
-					일&nbsp;&nbsp;
-					<input type="text" id="due_hour" name="due_hour" placeholder=" 00" size="2" maxlength="2" /> :
-					<input type="text" id="due_minute" name="due_minute" placeholder=" 00" size="2" maxlength="2" />
-					분
-				</td>
-			</tr>
-			
-			<tr style="height: 35px;">
-				<td><form:label path="assignee">Assignee</form:label></td>
-				<td><form:input path="assignee" cssClass="m" placeholder=" 대리자" size="24" />
-					<button type="button" class="btn" onclick="alert('준비중입니다.');">선택</button> 
-					<form:errors path="assignee" cssClass="error" />
-				</td>
-			</tr>
-			
-			<tr style="height: 35px;">
-				<td><form:label path="reporter">reporter</form:label></td>
-				<td><form:input path="reporter" cssClass="m" placeholder=" 보고 해야 하는 사람" size="24" />
-					<button type="button" class="btn" onclick="alert('준비중입니다.');">선택</button> 
-					<form:errors path="reporter" cssClass="error" />
-				</td>
-			</tr>
-			
-			<tr>
-				<td><form:label path="contents">내용</form:label>
-					<span class="icon-glyph glyph-emark-dot color-warning"></span>
-				</td>
-				<td><form:textarea path="contents" rows="5" cols="32" />
-					<form:errors path="contents" cssClass="error" />
-				</td>
-			</tr>
-		</table>
-		
-		<div class="btns">
-			<button type="button" id="issueSaveButton" class="full">저장</button>
+						</form:select></td>
+				</tr>
+
+				<tr style="height: 35px;">
+					<td><form:label path="due_day">마감일</form:label></td>
+					<td><form:hidden path="due_date" />
+						<input type="text" id="due_day" name="due_day" class="date" size="10" maxlength="10" /> 
+						일 <input type="text" id="due_hour" name="due_hour" placeholder=" 00" size="2" maxlength="2" style="width: 30px;" /> : 
+						<input type="text" id="due_minute" name="due_minute" placeholder=" 00" size="2" maxlength="2" style="width: 30px;"/> 
+						분
+					</td>
+				</tr>
+
+				<tr style="height: 35px;">
+					<td><form:label path="assignee">Assignee</form:label></td>
+					<td><form:input path="assignee" cssClass="m" placeholder=" 대리자" size="24" style="width: 147px"/>
+						<button type="button" class="btn" onclick="alert('준비중입니다.');">선택</button>
+						<form:errors path="assignee" cssClass="error" /></td>
+				</tr>
+
+				<tr style="height: 35px;">
+					<td><form:label path="reporter">reporter</form:label></td>
+					<td><form:input path="reporter" cssClass="m" placeholder=" 보고 해야 하는 사람" size="24" style="width: 147px"/>
+						<button type="button" class="btn" onclick="alert('준비중입니다.');">선택</button>
+						<form:errors path="reporter" cssClass="error" /></td>
+				</tr>
+
+				<tr>
+					<td><form:label path="contents">내용</form:label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span></td>
+					<td><form:textarea path="contents" rows="5" cols="32"/>
+						<form:errors path="contents" cssClass="error" /></td>
+				</tr>
+			</table>
+
+			<div class="btns">
+				<button type="button" id="issueSaveButton" class="full">저장</button>
+			</div>
 		</div>
-	</div>
 	</form:form>
-	
+
 	<div id="configMenuContent" class="configWrap">
 		<div>
 			<h3>Label</h3>
@@ -494,7 +464,7 @@
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;">Data Key</div>
-				<input type="text" id="occlusion_culling_data_key" name="occlusion_culling_data_key" size="25" />
+				<input type="text" id="occlusion_culling_data_key" name="occlusion_culling_data_key" size="15" />
 				<button type="button" id="changeOcclusionCullingButton" class="btn">변경</button>
 			</div>
 		</div>
@@ -529,25 +499,24 @@
 		<div>
 			<h3>Lighting</h3>
 			<div style="height: 30px;">AmbientReflectionCoeficient</div>
-			<div id="ambient_reflection_coef" style="display: inline-block; width: 245px;">
+			<div id="ambient_reflection_coef" style="display: inline-block; width: 287px;">
 				<div id="geo_ambient_reflection_coef_view" class="ui-slider-handle"></div>
 				<input type="hidden" id="geo_ambient_reflection_coef" name="geo_ambient_reflection_coef" value="0.5" />
 			</div>
 			<div style="height: 30px;">DiffuseReflectionCoeficient</div>
-			<div id="diffuse_reflection_coef" style="display: inline-block; width: 245px;">
+			<div id="diffuse_reflection_coef" style="display: inline-block; width: 287px;">
 				<div id="geo_diffuse_reflection_coef_view" class="ui-slider-handle"></div>
 				<input type="hidden" id="geo_diffuse_reflection_coef" name="geo_diffuse_reflection_coef" value="1" />
 			</div>
 			<div style="height: 30px;">SpecularReflectionCoeficient</div>
-			<div>
-				<div id="specular_reflection_coef" style="display: inline-block; width: 245px;">
-					<div id="geo_specular_reflection_coef_view" class="ui-slider-handle"></div>
-					<input type="hidden" id="geo_specular_reflection_coef" name="geo_specular_reflection_coef" value="1" />
-				</div>
-				<div style="float: right;">
-					<button type="button" id="changeLightingButton" class="btn">변경</button>
-				</div>
+			<div id="specular_reflection_coef" style="display: inline-block; width: 287px;">
+				<div id="geo_specular_reflection_coef_view" class="ui-slider-handle"></div>
+				<input type="hidden" id="geo_specular_reflection_coef" name="geo_specular_reflection_coef" value="1" />
 			</div>
+			<div style="height: 30px; text-align: center;">
+				<button type="button" id="changeLightingButton" class="btn">변경</button>
+			</div>
+			
 			<div style="text-align: center">
 			</div>
 		</div>
@@ -565,12 +534,6 @@
 		</div>
 	</div>
 </div>
-
-<ul class="shortcut">
-	<c:forEach var="project" items="${projectList}" varStatus="status">
-	<li onclick="gotoProject('${project.project_id }', '${project.longitude}', '${project.latitude}', '${project.height}', '${project.duration}')">${project.project_name }</li>
-	</c:forEach>	
-</ul>
 
 <!-- 맵영역 -->
 <c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
@@ -604,6 +567,7 @@
 	var initProjectJsonMap = ${initProjectJsonMap};
 	var menuMap = new Map();
 	menuMap.set("homeMenu", false);
+	menuMap.set("shortCutMenu", false);
 	menuMap.set("myIssueMenu", false);
 	menuMap.set("searchMenu", false);
 	menuMap.set("apiMenu", false);
@@ -715,6 +679,42 @@
 		} else {
 			alert(JS_MESSAGE[msg.result]);
 		}
+	}
+	
+	var swipe = new Hammer(document);
+	// detect swipe and call to a function
+	swipe.on('swiperight swipeleft', function(e) {
+		e.preventDefault();
+		if (e.type == 'swiperight') {
+			// open menu
+	    	$('.mobile-nav').animate({
+	      		left: '0'
+			});
+		} else {
+			// close/hide menu
+			$('.mobile-nav').animate({
+				left: '-100%'
+			});
+		}
+	});
+
+	//	Close
+	$(".issueBtn").click(function (){
+		CloseMenuContent(".issue");
+	});
+	$(".shortCutbtn").click(function (){
+		CloseMenuContent(".shortCuts");
+	});
+	$("#mode1PV").click(function () {
+		CloseMenuContent(".config");
+	});
+ 	$("#mode3PV").click(function () {
+ 		CloseMenuContent(".config");
+ 	});
+	
+	function CloseMenuContent(className) {
+		$("#menuContent").hide();
+		$(className).removeClass("on");
 	}
 	
 	// issue 위치 버튼을 클릭 했을 경우
@@ -854,6 +854,9 @@
 	$("#homeMenu").click(function() {
 		menuSlideControl("homeMenu");
 	});
+	$("#shortCutMenu").click(function() {
+		menuSlideControl("shortCutMenu");
+	})
 	$("#myIssueMenu").click(function() {
 		menuSlideControl("myIssueMenu");
 	});
@@ -1057,6 +1060,7 @@
 			saveCurrentLocation(latitude, longitude);
 		}
 	}
+	
 	// 속성 가시화
 	$("#changePropertyRendering").click(function(e) {
 		var isShow = $(':radio[name="propertyRendering"]:checked').val();
@@ -1137,35 +1141,6 @@
 		}
 		return true;
 	}
-	
-	// 변환행렬 수정
-	var isUpdateLocationAndRotation = { "enable" : true };
-	$("#updateLocationAndRotation").click(function() {
-		if(!changeLocationAndRotationCheck()) return false;
-		changeLocationAndRotationAPI(	managerFactory, $("#moveProjectId").val(),
-										$("#moveDataKey").val(), $("#moveLatitude").val(), $("#moveLongitude").val(), 
-										$("#moveHeight").val(), $("#moveHeading").val(), $("#movePitch").val(), $("#moveRoll").val());
-								
-		if(isUpdateLocationAndRotation["enable"]) {
-			isUpdateLocationAndRotation["enable"] = false;
-			var url = "/data/ajax-update-location-and-rotation.do";
-			var info = "data_key=" ;
-			ajaxCall(url, info, issueSaveCallback, errorCallback, isUpdateLocationAndRotation);
-		} else {
-			alert(JS_MESSAGE["button.dobule.click"]);
-			return;
-		}
-	});
-	function updateLocationAndRotationCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			alert(JS_MESSAGE["update"]);
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
-		
-		isUpdateLocationAndRotation["enable"] = true;
-	}
-	
 	
 	// 인접 지역 이슈 표시
 	function changeNearGeoIssueList(isShow) {

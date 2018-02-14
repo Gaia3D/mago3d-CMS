@@ -204,9 +204,9 @@ public class LoginController {
 			try {
 				ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(512);
 				shaPasswordEncoder.setIterations(1000);
-				String encriptPassword = shaPasswordEncoder.encodePassword(loginForm.getPassword(), userSession.getSalt()) ;
-				log.info("@@ dbpassword = {}, encriptPassword = {}", userSession.getPassword(), encriptPassword);
-				if(userSession.getPassword().equals(encriptPassword)) {
+				String encryptPassword = shaPasswordEncoder.encodePassword(loginForm.getPassword(), userSession.getSalt()) ;
+				log.info("@@ dbpassword = {}, encriptPassword = {}", userSession.getPassword(), encryptPassword);
+				if(userSession.getPassword().equals(encryptPassword)) {
 					isPasswordEquals = true;
 				}
 			} catch(Exception e) {

@@ -30,17 +30,17 @@
 	<li id="homeMenu" class="home">
 		<img src="/images/ko/homepage/home-icon.png" style="width: 35px; height: 35px; padding-right: 2px;"/>
 	</li>
-	<li id="myIssueMenu" class="issue" data-tooltip-text="전체 Issue 리스트 중에서 최신 Issue 10개를 시간 순으로 정렬하여 보여 줍니다.">Issue
+	<li id="myIssueMenu" class="issue" data-tooltip-text="<spring:message code='demo.myissue.menu.description'/>"><spring:message code='common.issue'/>
 		<br /><span id="issueListCount">${totalCount }</span></li>
-	<li id="searchMenu" class="search" data-tooltip-text="Issue, Object, 공간 정보 등을 활용한 검색 기능을 제공 합니다.">검색</li>
-	<li id="apiMenu" class="api" data-tooltip-text="mago3D 여러 기능을 Control 할 수 있는 다양한 API들을 제공 합니다.">API</li>	
-	<li id="insertIssueMenu" class="regist" data-tooltip-text="Object에 대한 Issue 등록 기능을 제공 합니다.">등록</li>
-	<li id="configMenu" class="config" data-tooltip-text="Rendering 관련 각종 설정이 가능 합니다.">설정</li>	
+	<li id="searchMenu" class="search" data-tooltip-text="<spring:message code='demo.search.menu.description'/>"><spring:message code='common.search'/></li>
+	<li id="apiMenu" class="api" data-tooltip-text="<spring:message code='demo.api.menu.description'/>"><spring:message code='common.api'/></li>	
+	<li id="insertIssueMenu" class="regist" data-tooltip-text="<spring:message code='demo.insert-issue.menu.description'/>"><spring:message code='common.registeration'/></li>
+	<li id="configMenu" class="config" data-tooltip-text="<spring:message code='demo.config.menu.description'/>"><spring:message code='common.config'/></li>	
 </ul>
 
 <div id="menuContent" class="navContents">
 	<div class="alignRight">
-		<button type="button" id="menuContentClose" class="navClose">닫기</button>
+		<button type="button" id="menuContentClose" class="navClose"><spring:message code='common.close'/></button>
 	</div>
 	
 	<ul id="homeMenuContent" class="menuList">
@@ -73,18 +73,19 @@
 	
 	<ul id="myIssueMenuContent" class="issueList">
 		<li style="margin-bottom: 8px; font-size: 1em; font-weight: normal; color: #2955a6;">
-			최신 Issue 10개 표시
+			<spring:message code='issue.recent.list.10'/>
 		</li>
 <c:if test="${empty issueList }">
 		<li style="text-align: center; padding-top:20px; height: 50px;">
-			Issue가 존재하지 않습니다.
+			<spring:message code='issue.not.exist'/>
 		</li>
 </c:if>
 <c:if test="${!empty issueList }">
 	<c:forEach var="issue" items="${issueList}" varStatus="status">
 		<li>
-			<button type="button" title="바로가기" 
-				onclick="gotoIssue('${issue.project_id}', '${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">바로가기</button>
+			<button type="button" title="<spring:message code='common.shortcut'/>" 
+				onclick="gotoIssue('${issue.project_id}', '${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">
+				<spring:message code='common.shortcut'/></button>
 			<div class="info">
 				<p class="title">
 					<span>${issue.project_name }</span>
@@ -105,9 +106,9 @@
 	<div id="searchMenuContent" class="searchWrap">
 		<table>
 			<tr style="height: 35px;">
-				<td style="width: 80px;"><label for="project_id">프로젝트</label></td>
+				<td style="width: 80px;"><label for="project_id"><spring:message code='common.project'/></label></td>
 				<td><select id="project_id" name="project_id" class="select">
-						<option value=""> 전체 </option>
+						<option value=""> <spring:message code='common.all'/></option>
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
 </c:forEach>
@@ -115,50 +116,50 @@
 				</td>
 			</tr>
 			<tr style="height: 35px;">
-				<td><label for="search_word">분류</label></td>
+				<td><label for="search_word"><spring:message code='common.categorize'/></label></td>
 				<td>
 					<select id="search_word" name="search_word" class="select">
-						<option value="data_name">Data 명</option>
-						<option value="title">Issue 명</option>
+						<option value="data_name"><spring:message code='common.data.name'/></option>
+						<option value="title"><spring:message code='common.issue.name'/></option>
 					</select>
 					<select id="search_option" name="search_option" class="select">
-						<option value="1">포함</option>
-						<option value="0">일치</option>
+						<option value="1"><spring:message code='common.included'/></option>
+						<option value="0"><spring:message code='common.matches'/></option>
 					</select>
 				</td>
 			</tr>
 			<tr style="height: 35px;">
 				<td>
-					<label for="search_value">검색어</label></td>
+					<label for="search_value"><spring:message code='common.search.word'/></label></td>
 				<td><input type="text" id="search_value" name="search_value" size="31" /></td>
 			</tr>
 			<tr style="height: 35px;">
-				<td><label for="start_date">날짜</label></td>
+				<td><label for="start_date"><spring:message code='common.day'/></label></td>
 				<td><input type="text" class="s date" id="start_date" name="start_date" size="12" />
 					<span class="delimeter tilde">~</span>
 					<input type="text" class="s date" id="end_date" name="end_date" size="12" /></td>
 			</tr>
 			<tr style="height: 30px;">
-				<td><label for="order_word">표시순서</label></td>
+				<td><label for="order_word"><spring:message code='common.view.order'/></label></td>
 				<td><select id="order_word" name="order_word" class="select">
-						<option value=""> 기본 </option>
-				       	<option value="register_date"> 등록일 </option>
+						<option value=""> <spring:message code='common.basic'/> </option>
+				       	<option value="register_date"> <spring:message code='common.register.date'/> </option>
 					</select>
 					<select id="order_value" name="order_value" class="select">
-						<option value=""> 기본 </option>
-					   	<option value="ASC"> 오름차순 </option>
-						<option value="DESC"> 내림차순 </option>
+						<option value=""> <spring:message code='common.basic'/> </option>
+					   	<option value="ASC"> <spring:message code='common.asc'/> </option>
+						<option value="DESC"> <spring:message code='common.desc'/> </option>
 					</select>
 					<select id="list_counter" name="list_counter" class="select">
-						<option value="5"> 5 개씩 </option>
-					 	<option value="10"> 10 개씩 </option>
-						<option value="50"> 50 개씩 </option>
+						<option value="5"> <spring:message code='common.listing.5'/> </option>
+					 	<option value="10"> <spring:message code='common.listing.10'/> </option>
+						<option value="50"> <spring:message code='common.listing.50'/> </option>
 					</select>
 				</td>
 			</tr>
 		</table>
 		<div class="btns">
-			<button type="button" id="searchData" class="full">검색</button>
+			<button type="button" id="searchData" class="full"><spring:message code='common.search'/></button>
 		</div>
 		<ul id="searchList" class="searchList"></ul>
 	</div>
@@ -166,10 +167,10 @@
 	
 	<div id="apiMenuContent" class="apiWrap">
 		<div>
-			<h3>로컬(Browser) 검색</h3>
+			<h3><spring:message code='demo.local.search'/></h3>
 			<ul class="apiLoca">
 				<li>
-					<label for="localSearchProjectId">프로젝트 </label>
+					<label for="localSearchProjectId"><spring:message code='common.project'/></label>
 					<select id="localSearchProjectId" name="localSearchProjectId" class="select">
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
@@ -177,23 +178,23 @@
 					</select>
 				</li>
 				<li>
-					<label for="localSearchDataKey">Data Key</label>
+					<label for="localSearchDataKey"><spring:message code='common.data.key'/></label>
 					<input type="text" id="localSearchDataKey" name="localSearchDataKey" size="23" />
-					<button type="button" id="localSearch" class="btn">검색</button> 
+					<button type="button" id="localSearch" class="btn"><spring:message code='common.search'/></button> 
 				</li>
 			</ul>
 		</div>
 		<div>
-			<h3>속성 가시화</h3>
+			<h3><spring:message code='demo.property.rendering'/></h3>
 			<ul class="apiLoca">
 				<li>
 					<input type="radio" id="showPropertyRendering" name="propertyRendering" value="true" />
-					<label for="showLabel"> 표시 </label>
+					<label for="showLabel"> <spring:message code='common.show'/> </label>
 					<input type="radio" id="hidePropertyRendering" name="propertyRendering" value="false" />
-					<label for="hideLabel"> 비표시 </label>
+					<label for="hideLabel"> <spring:message code='common.hide'/> </label>
 				</li>
 				<li>
-					<label for="propertyRenderingProjectId">프로젝트 </label>
+					<label for="propertyRenderingProjectId"><spring:message code='common.project'/> </label>
 					<select id="propertyRenderingProjectId" name="propertyRenderingProjectId" class="select">
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
@@ -201,17 +202,17 @@
 					</select>
 				</li>
 				<li>
-					<label for="propertyRenderingWord">속성</label>
+					<label for="propertyRenderingWord"><spring:message code='common.property'/></label>
 					<input type="text" id="propertyRenderingWord" name="propertyRenderingWord" size="23" placeholder="isMain=true" />
-					<button type="button" id="changePropertyRendering" class="btn"><spring:message code='demo.change'/></button> 
+					<button type="button" id="changePropertyRendering" class="btn"><spring:message code='common.change'/></button> 
 				</li>
 			</ul>
 		</div>
 		<div>
-			<h3>색깔 변경</h3>
+			<h3><spring:message code='demo.color.change'/></h3>
 			<ul class="apiLoca">
 				<li>
-					<label for="colorProjectId">프로젝트 </label>
+					<label for="colorProjectId"><spring:message code='common.project'/> </label>
 					<select id="colorProjectId" name="colorProjectId" class="select">
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
@@ -219,37 +220,37 @@
 					</select>
 				</li>
 				<li>
-					<label for="colorDataKey">Data Key</label>
+					<label for="colorDataKey"><spring:message code='common.data.key'/></label>
 					<input type="text" id="colorDataKey" name="colorDataKey" size="30" />
 				</li>
 				<li>
-					<label for="colorObjectIds">Object Id</label>
-					<input type="text" id="colorObjectIds" name="colorObjectIds" placeholder=" , 구분" size="30" />
+					<label for="colorObjectIds"><spring:message code='common.object.id'/></label>
+					<input type="text" id="colorObjectIds" name="colorObjectIds" placeholder=" , <spring:message code='common.delimiter'/>" size="30" />
 				</li>
 				<li>
-					<label for="colorProperty">속성</label>
+					<label for="colorProperty"><spring:message code='common.property'/></label>
 					<input type="text" id="colorProperty" name="colorProperty" size="30" placeholder="isMain=true" />
 				</li>
 				<li>
-					<label for="updateColor">색깔</label>
+					<label for="updateColor"><spring:message code='common.color'/></label>
 					<select id="updateColor" name="updateColor" class="select">
-						<option value="255,0,0"> 빨강 </option>
-						<option value="255,255,0"> 노랑 </option>
-						<option value="0,255,0"> 녹색 </option>
-						<option value="0,0,255"> 파랑 </option>
-						<option value="255,0,255"> 분홍 </option>
-						<option value="0,0,0"> 검정 </option>
+						<option value="255,0,0"> <spring:message code='common.color.red'/></option>
+						<option value="255,255,0"> <spring:message code='common.color.yellow'/></option>
+						<option value="0,255,0"> <spring:message code='common.color.green'/></option>
+						<option value="0,0,255"> <spring:message code='common.color.blue'/></option>
+						<option value="255,0,255"> <spring:message code='common.color.pink'/></option>
+						<option value="0,0,0"> <spring:message code='common.color.black'/></option>
 					</select>
-					<button type="button" id="changeColor" class="btn">변경</button> 
-					<button type="button" id="deleteAllChangeColor" class="btn">전체 삭제</button>
+					<button type="button" id="changeColor" class="btn"><spring:message code='common.change'/></button> 
+					<button type="button" id="deleteAllChangeColor" class="btn"><spring:message code='common.all.delete'/></button>
 				</li>
 			</ul>
 		</div>
 		<div>
-			<h3>Location and Rotation</h3>
+			<h3><spring:message code='demo.location.and.rotation'/></h3>
 			<ul class="apiLoca">
 				<li>
-					<label for="moveProjectId">프로젝트 </label>
+					<label for="moveProjectId"><spring:message code='common.project'/></label>
 					<select id="moveProjectId" name="moveProjectId" class="select">
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
@@ -257,57 +258,57 @@
 					</select>
 				</li>
 				<li>
-					<label for="moveDataKey">Data Key</label>
+					<label for="moveDataKey"><spring:message code='common.data.key'/></label>
 					<input type="text" id="moveDataKey" name="moveDataKey" size="25" />
 				</li>
 				<li>
-					<label for="moveLatitude">위도 </label>
+					<label for="moveLatitude"><spring:message code='common.latitude'/> </label>
 					<input type="text" id="moveLatitude" name="moveLatitude" size="25"/>
 				</li>
 				<li>
-					<label for="moveLongitude">경도 </label>
+					<label for="moveLongitude"><spring:message code='common.longitude'/> </label>
 					<input type="text" id="moveLongitude" name="moveLongitude" size="25"/>
 				</li>
 				<li>
-					<label for="moveHeight">높이 </label>
+					<label for="moveHeight"><spring:message code='common.height'/> </label>
 					<input type="text" id="moveHeight" name="moveHeight" size="25" />
 				</li>
 				<li>
-					<label for="moveHeading">HEADING </label>
+					<label for="moveHeading"><spring:message code='common.heading'/> </label>
 					<input type="text" id="moveHeading" name="moveHeading" size="15" />
 				</li>
 				<li>
-					<label for="movePitch">PITCH </label>
+					<label for="movePitch"><spring:message code='common.pitch'/> </label>
 					<input type="text" id="movePitch" name="movePitch" size="15" />
 				</li>
 				<li>
-					<label for="moveRoll">ROLL </label>
+					<label for="moveRoll"><spring:message code='common.roll'/> </label>
 					<input type="text" id="moveRoll" name="moveRoll" size="15" />
-					<button type="button" id="changeLocationAndRotation" class="btn">변환</button>
-					<button type="button" id="updateLocationAndRotation" class="btn">저장</button>
+					<button type="button" id="changeLocationAndRotation" class="btn"><spring:message code='common.change'/></button>
+					<button type="button" id="updateLocationAndRotation" class="btn"><spring:message code='common.save'/></button>
 				</li>
 			</ul>
 		</div>
 		<div>
-			<h3>현재 위치 근처 Issue List(100개)</h3>
+			<h3><spring:message code='demo.now.location.issue.list'/></h3>
 			<input type="radio" id="showNearGeoIssueList" name="nearGeoIssueList" value="true" onclick="changeNearGeoIssueList(true);" />
-			<label for="showNearGeoIssueList"> 표시 </label>
+			<label for="showNearGeoIssueList"> <spring:message code='common.show'/> </label>
 			<input type="radio" id="hideNearGeoIssueList" name="nearGeoIssueList" value="false" onclick="changeNearGeoIssueList(false);"/>
-			<label for="hideNearGeoIssueList"> 비표시 </label>
+			<label for="hideNearGeoIssueList"> <spring:message code='common.hide'/> </label>
 		</div>
 		<div>
-			<h3>클릭 지점의 위치 정보</h3>
+			<h3><spring:message code='demo.click.point.location'/></h3>
 			<ul class="apiLoca">
 				<li>
-					<label for="positionLatitude"> 위도 </label>
+					<label for="positionLatitude"> <spring:message code='common.latitude'/> </label>
 					<input type="text" id="positionLatitude" name="positionLatitude" size="25" />
 				</li>
 				<li>
-					<label for="positionLongitude"> 경도 </label>
+					<label for="positionLongitude"> <spring:message code='common.longitude'/> </label>
 					<input type="text" id="positionLongitude" name="positionLongitude" size="25" />
 				</li>
 				<li>
-					<label for="positionAltitude"> 높이 </label>
+					<label for="positionAltitude"> <spring:message code='common.height'/> </label>
 					<input type="text" id="positionAltitude" name="positionAltitude" size="25" />
 				</li>
 			</ul>
@@ -319,7 +320,7 @@
 		<table>
 			<tr style="height: 35px;">
 				<td style="width: 100px;" nowrap="nowrap">
-					<form:label path="project_id">프로젝트</form:label>
+					<form:label path="project_id"><spring:message code='common.project'/></form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
@@ -332,7 +333,7 @@
 			</tr>
 			<tr style="height: 35px;">
 				<td>
-					<form:label path="issue_type">Type</form:label>
+					<form:label path="issue_type"><spring:message code='issue.type'/></form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
@@ -345,15 +346,15 @@
 			</tr>
 			<tr style="height: 35px;">
 				<td>
-					Issue 위치
+					<spring:message code='issue.location'/>
 				</td>
 				<td>
-					<button type="button" id="insertIssueEnableButton" class="btn">클릭 후 객체를 선택해 주세요.</button> 
+					<button type="button" id="insertIssueEnableButton" class="btn"><spring:message code='issue.insert.control.button'/></button> 
 				</td>
 			</tr>
 			<tr style="height: 35px;">
 				<td>
-					<form:label path="data_key">데이터명</form:label>
+					<form:label path="data_key"><spring:message code='common.data.name'/></form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
@@ -365,7 +366,7 @@
 			</tr>
 			<tr style="height: 35px;">
 				<td>
-					<form:label path="latitude">위도</form:label>
+					<form:label path="latitude"><spring:message code='common.latitude'/></form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
@@ -375,7 +376,7 @@
 			</tr>
 			<tr style="height: 35px;">
 				<td>
-					<form:label path="longitude">경도</form:label>
+					<form:label path="longitude"><spring:message code='common.longitude'/></form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
@@ -384,7 +385,7 @@
 				</td>
 			</tr>
 			<tr style="height: 60px;">
-				<td><form:label path="title">제목</form:label>
+				<td><form:label path="title"><spring:message code='issue.title'/></form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
@@ -394,7 +395,7 @@
 			</tr>
 			
 			<tr style="height: 35px;">
-				<td><form:label path="priority">Priority</form:label>
+				<td><form:label path="priority"><spring:message code='issue.priority'/></form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
@@ -407,34 +408,39 @@
 			</tr>
 			
 			<tr style="height: 35px;">
-				<td><form:label path="due_day">마감일</form:label></td>
+				<td><form:label path="due_day"><spring:message code='issue.duedate'/></form:label></td>
 				<td><form:hidden path="due_date" />
 					<input type="text" id="due_day" name="due_day" class="date" size="10" maxlength="10" />
-					일&nbsp;&nbsp;
+					<spring:message code='common.day'/>&nbsp;&nbsp;
 					<input type="text" id="due_hour" name="due_hour" placeholder=" 00" size="2" maxlength="2" /> :
 					<input type="text" id="due_minute" name="due_minute" placeholder=" 00" size="2" maxlength="2" />
-					분
+					<spring:message code='common.minute'/>
 				</td>
 			</tr>
 			
 			<tr style="height: 35px;">
-				<td><form:label path="assignee">Assignee</form:label></td>
-				<td><form:input path="assignee" cssClass="m" placeholder=" 대리자" size="24" />
-					<button type="button" class="btn" onclick="alert('준비중입니다.');">선택</button> 
+				<td><form:label path="assignee"><spring:message code='issue.assignee'/></form:label></td>
+				<td>
+					<spring:message code='common.notice.preparing' var='noticePreparing' />
+					<spring:message code='issue.assignee.description' var="assigneeDescription"/>
+					<form:input path="assignee" cssClass="m" placeholder=" ${assigneeDescription }" size="24" />
+					<button type="button" class="btn" onclick="alert('${noticePreparing}');"><spring:message code='common.selection'/></button> 
 					<form:errors path="assignee" cssClass="error" />
 				</td>
 			</tr>
 			
 			<tr style="height: 35px;">
-				<td><form:label path="reporter">reporter</form:label></td>
-				<td><form:input path="reporter" cssClass="m" placeholder=" 보고 해야 하는 사람" size="24" />
-					<button type="button" class="btn" onclick="alert('준비중입니다.');">선택</button> 
+				<td><form:label path="reporter"><spring:message code='issue.reporter'/></form:label></td>
+				<td>
+					<spring:message code='issue.reporter.description' var="reporterDescription" />
+					<form:input path="reporter" cssClass="m" placeholder=" ${reporterDescription }" size="24" />
+					<button type="button" class="btn" onclick="alert('${noticePreparing}');"><spring:message code='common.selection'/></button> 
 					<form:errors path="reporter" cssClass="error" />
 				</td>
 			</tr>
 			
 			<tr>
-				<td><form:label path="contents">내용</form:label>
+				<td><form:label path="contents"><spring:message code='issue.contents'/></form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td><form:textarea path="contents" rows="5" cols="32" />
@@ -444,124 +450,124 @@
 		</table>
 		
 		<div class="btns">
-			<button type="button" id="issueSaveButton" class="full">저장</button>
+			<button type="button" id="issueSaveButton" class="full"><spring:message code='common.save'/></button>
 		</div>
 	</div>
 	</form:form>
 	
 	<div id="configMenuContent" class="configWrap">
 		<div>
-			<h3>Label</h3>
+			<h3><spring:message code='common.label'/></h3>
 			<input type="radio" id="showLabel" name="labelInfo" value="true" onclick="changeLabel(true);" />
-			<label for="showLabel"> 표시 </label>
+			<label for="showLabel"> <spring:message code='common.show'/> </label>
 			<input type="radio" id="hideLabel" name="labelInfo" value="false" onclick="changeLabel(false);"/>
-			<label for="hideLabel"> 비표시 </label>
+			<label for="hideLabel"> <spring:message code='common.hide'/> </label>
 		</div>
 		<div>
-			<h3>Object 정보</h3>
+			<h3><spring:message code='common.object.info'/></h3>
 			<input type="radio" id="showObjectInfo" name="objectInfo" value="true" onclick="changeObjectInfoViewMode(true);" />
-			<label for="showObjectInfo"> 표시 </label>
+			<label for="showObjectInfo"> <spring:message code='common.show'/> </label>
 			<input type="radio" id="hideObjectInfo" name="objectInfo" value="false" onclick="changeObjectInfoViewMode(false);"/>
-			<label for="hideObjectInfo"> 비표시 </label>
+			<label for="hideObjectInfo"> <spring:message code='common.hide'/> </label>
 		</div>
 		<div>
-			<h3>Bounding Box</h3>
+			<h3><spring:message code='common.boundingbox'/></h3>
 			<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />
-			<label for="showBoundingBox"> 표시 </label>
+			<label for="showBoundingBox"> <spring:message code='common.show'/> </label>
 			<input type="radio" id="hideBoundingBox" name="boundingBox" value="false" onclick="changeBoundingBox(false);"/>
-			<label for="hideBoundingBox"> 비표시 </label>
+			<label for="hideBoundingBox"> <spring:message code='common.hide'/> </label>
 		</div>
 		<div>
-			<h3>Selecting And Moving</h3>
+			<h3><spring:message code='demon.selection.and.moving'/></h3>
 			<input type="radio" id="objectNoneMove" name="objectMoveMode" value="2" onclick="changeObjectMove('2');"/>
-			<label for="objectNoneMove"> None </label>
+			<label for="objectNoneMove"> <spring:message code='demo.object.none.move'/> </label>
 			<input type="radio" id="objectAllMove" name="objectMoveMode" value="0" onclick="changeObjectMove('0');"/>
-			<label for="objectAllMove"> ALL </label>
+			<label for="objectAllMove"> <spring:message code='demo.object.all.move'/> </label>
 			<input type="radio" id="objectMove" name="objectMoveMode" value="1" onclick="changeObjectMove('1');"/>
-			<label for="objectMove"> Object </label>
+			<label for="objectMove"> <spring:message code='demo.object.move'/> </label>
 			
-			<button type="button" id="saveObjectMoveButton" class="btn">저장</button>
-			<button type="button" id="deleteAllObjectMoveButton" class="btn">전체 삭제</button>
+			<button type="button" id="saveObjectMoveButton" class="btn"><spring:message code='common.save'/></button>
+			<button type="button" id="deleteAllObjectMoveButton" class="btn"><spring:message code='common.all.delete'/></button>
 		</div>
 		<div>
-			<h3>Object Occlusion Culling</h3>
+			<h3><spring:message code='demo.object.occlusion.culling'/></h3>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;">사용유무</div>
+				<div style="display: inline-block; width: 70px;"><spring:message code='common.selection'/></div>
 				<input type="radio" id="useOcclusionCulling" name="occlusionCulling" value="true" />
-				<label for="useOcclusionCulling"> 사용 </label>
+				<label for="useOcclusionCulling"> <spring:message code='common.use'/> </label>
 				<input type="radio" id="unusedOcclusionCulling" name="occlusionCulling" value="false" />
-				<label for="unusedOcclusionCulling"> 미사용 </label>
+				<label for="unusedOcclusionCulling"> <spring:message code='common.unused'/> </label>
 			</div>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;">Data Key</div>
+				<div style="display: inline-block; width: 70px;"><spring:message code='common.data.key'/></div>
 				<input type="text" id="occlusion_culling_data_key" name="occlusion_culling_data_key" size="25" />
-				<button type="button" id="changeOcclusionCullingButton" class="btn">변경</button>
+				<button type="button" id="changeOcclusionCullingButton" class="btn"><spring:message code='common.change'/></button>
 			</div>
 		</div>
 		<div>
-			<h3>LOD</h3>
+			<h3><spring:message code='common.lod'/></h3>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;">LOD0</div>
-				<input type="text" id="geo_lod0" name="geo_lod0" value="${policy.geo_lod0 }" size="15" />&nbsp;M
+				<div style="display: inline-block; width: 70px;"><spring:message code='common.lod0'/></div>
+				<input type="text" id="geo_lod0" name="geo_lod0" value="${policy.geo_lod0 }" size="15" />&nbsp;<spring:message code='common.meter'/>
 			</div>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;">LOD1</div>
-				<input type="text" id="geo_lod1" name="geo_lod1" value="${policy.geo_lod1 }" size="15" />&nbsp;M
+				<div style="display: inline-block; width: 70px;"><spring:message code='common.lod1'/></div>
+				<input type="text" id="geo_lod1" name="geo_lod1" value="${policy.geo_lod1 }" size="15" />&nbsp;<spring:message code='common.meter'/>
 			</div>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;">LOD2</div>
-				<input type="text" id="geo_lod2" name="geo_lod2" value="${policy.geo_lod2 }" size="15" />&nbsp;M
+				<div style="display: inline-block; width: 70px;"><spring:message code='common.lod2'/></div>
+				<input type="text" id="geo_lod2" name="geo_lod2" value="${policy.geo_lod2 }" size="15" />&nbsp;<spring:message code='common.meter'/>
 			</div>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;">LOD3</div>
-				<input type="text" id="geo_lod3" name="geo_lod3" value="${policy.geo_lod3 }" size="15" />&nbsp;M
+				<div style="display: inline-block; width: 70px;"><spring:message code='common.lod3'/></div>
+				<input type="text" id="geo_lod3" name="geo_lod3" value="${policy.geo_lod3 }" size="15" />&nbsp;<spring:message code='common.meter'/>
 			</div>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;">LOD4</div>
-				<input type="text" id="geo_lod4" name="geo_lod4" value="${policy.geo_lod4 }" size="15" />&nbsp;M
+				<div style="display: inline-block; width: 70px;"><spring:message code='common.lod4'/></div>
+				<input type="text" id="geo_lod4" name="geo_lod4" value="${policy.geo_lod4 }" size="15" />&nbsp;<spring:message code='common.meter'/>
 			</div>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;">LOD5</div>
-				<input type="text" id="geo_lod5" name="geo_lod5" value="${policy.geo_lod5 }" size="15" />&nbsp;M&nbsp;&nbsp;
-				<button type="button" id="changeLodButton" class="btn">변경</button>
+				<div style="display: inline-block; width: 70px;"><spring:message code='common.lod5'/></div>
+				<input type="text" id="geo_lod5" name="geo_lod5" value="${policy.geo_lod5 }" size="15" />&nbsp;<spring:message code='common.meter'/>&nbsp;&nbsp;
+				<button type="button" id="changeLodButton" class="btn"><spring:message code='common.change'/></button>
 			</div>
 		</div>
 		<div>
-			<h3>Lighting</h3>
-			<div style="height: 30px;">AmbientReflectionCoeficient</div>
+			<h3><spring:message code='common.lighting'/></h3>
+			<div style="height: 30px;"><spring:message code='demo.ambient.reflection.coef'/></div>
 			<div id="ambient_reflection_coef" style="display: inline-block; width: 245px;">
 				<div id="geo_ambient_reflection_coef_view" class="ui-slider-handle"></div>
 				<input type="hidden" id="geo_ambient_reflection_coef" name="geo_ambient_reflection_coef" value="0.5" />
 			</div>
-			<div style="height: 30px;">DiffuseReflectionCoeficient</div>
+			<div style="height: 30px;"><spring:message code='demo.diffuse.reflection.coef'/></div>
 			<div id="diffuse_reflection_coef" style="display: inline-block; width: 245px;">
 				<div id="geo_diffuse_reflection_coef_view" class="ui-slider-handle"></div>
 				<input type="hidden" id="geo_diffuse_reflection_coef" name="geo_diffuse_reflection_coef" value="1" />
 			</div>
-			<div style="height: 30px;">SpecularReflectionCoeficient</div>
+			<div style="height: 30px;"><spring:message code='demo.specular_reflection.coef'/></div>
 			<div>
 				<div id="specular_reflection_coef" style="display: inline-block; width: 245px;">
 					<div id="geo_specular_reflection_coef_view" class="ui-slider-handle"></div>
 					<input type="hidden" id="geo_specular_reflection_coef" name="geo_specular_reflection_coef" value="1" />
 				</div>
 				<div style="float: right;">
-					<button type="button" id="changeLightingButton" class="btn">변경</button>
+					<button type="button" id="changeLightingButton" class="btn"><spring:message code='common.change'/></button>
 				</div>
 			</div>
 			<div style="text-align: center">
 			</div>
 		</div>
 		<div>
-			<h3><label for="geo_ssao_radius">SSAO Radius</label></h3>
+			<h3><label for="geo_ssao_radius"><spring:message code='demo.ssao.radius'/></label></h3>
 			<input type="text" id="geo_ssao_radius" name="geo_ssao_radius" />
-			<button type="button" id="changeSsaoRadiusButton" class="btn">변경</button>
+			<button type="button" id="changeSsaoRadiusButton" class="btn"><spring:message code='common.change'/></button>
 		</div>
 		<div>
-			<h3>View Mode</h3>
+			<h3><spring:message code='demo.view.mode'/></h3>
 			<input type="radio" id="mode3PV" name="viewMode" value ="false" onclick="changeViewMode(false);"/>
-			<label for="mode3PV"> 3인칭 모드 </label>
+			<label for="mode3PV"> <spring:message code='demo.third.person.mode'/> </label>
 			<input type="radio" id="mode1PV" name="viewMode" value ="true" onclick="changeViewMode(true);"/>
-			<label for="mode1PV"> 1인칭 모드 </label>
+			<label for="mode1PV"> <spring:message code='demo.first.person.mode'/> </label>
 		</div>
 	</div>
 </div>
@@ -580,7 +586,7 @@
 <c:if test="${geoViewLibrary eq 'worldwind' }">
 <div style="position: absolute; width: 100%; height: 100%; margin-top: 0; padding: 0; overflow: hidden;">
 	<canvas id="magoContainer" style="width: 100%; height: 100%">
-        Your browser does not support HTML5 Canvas.
+        <spring:message code='demo.canvas.warning'/>
     </canvas>
     <canvas id="objectLabel"></canvas>
 </div>
@@ -596,7 +602,7 @@
 <script>
 	var agent = navigator.userAgent.toLowerCase();
 	if(agent.indexOf('chrome') < 0) { 
-		alert("이 데모 페이지는 대용량 웹 데이터 처리를 위해 Chrome 브라우저에 최적화 되어 있습니다. \n원활한 서비스 이용을 위해 Chrome 브라우저를 이용  하시기 바랍니다.");
+		alert(JS_MESSAGE["demo.browser.recommend"]);
 	}
 
 	var managerFactory = null;
@@ -683,7 +689,7 @@
 		if(msg.result === "success") {
 			var projectDataJson = JSON.parse(msg.projectDataJson);
 			if(projectDataJson === null || projectDataJson === undefined) {
-				alert("프로젝트가 데이터가 존재하지 않습니다.");
+				alert(JS_MESSAGE["project.data.no.found"]);
 				return;
 			}
 			gotoProjectAPI(managerFactory, theArgs[0], projectDataJson, projectDataJson.data_key, theArgs[1], theArgs[2], theArgs[3], theArgs[4]);
@@ -708,7 +714,7 @@
 		if(msg.result === "success") {
 			var projectDataJson = JSON.parse(msg.projectDataJson);
 			if(projectDataJson === null || projectDataJson === undefined) {
-				alert("프로젝트가 데이터가 존재하지 않습니다.");
+				alert(JS_MESSAGE["project.data.no.found"]);
 				return;
 			}
 			gotoIssueAPI(managerFactory, theArgs[0], projectDataJson, projectDataJson.data_key, theArgs[1], theArgs[2], theArgs[3], theArgs[4], theArgs[5], theArgs[6]);
@@ -721,11 +727,11 @@
 	$("#insertIssueEnableButton").click(function() {
 		if(insertIssueEnable) {
 			$("#insertIssueEnableButton").removeClass("on");
-			$("#insertIssueEnableButton").text("클릭 후 객체를 선택해 주세요.");
+			$("#insertIssueEnableButton").text(JS_MESSAGE["demo.select.object.message"]);
 			insertIssueEnable = false;
 		} else {
 			$("#insertIssueEnableButton").addClass("on");
-			$("#insertIssueEnableButton").text("Issue 등록 활성화 상태");
+			$("#insertIssueEnableButton").text(JS_MESSAGE["demo.issue.enable.status"]);
 			insertIssueEnable = true;
 		}
 		changeInsertIssueModeAPI(managerFactory, insertIssueEnable);
@@ -759,7 +765,7 @@
 			
 			// issue 등록 버튼, css, 상태를 변경
 			$("#insertIssueEnableButton").removeClass("on");
-			$("#insertIssueEnableButton").text("클릭 후 객체를 선택해 주세요.");
+			$("#insertIssueEnableButton").text(JS_MESSAGE["demo.select.object.message"]);
 			insertIssueEnable = false;
 			
 			changeInsertIssueStateAPI(managerFactory, 0);
@@ -807,16 +813,20 @@
 	}
 	function ajaxIssueListCallback(msg, theArgs) {
 		if(msg.result === "success") {
+			var issueRecentList10Message = "<spring:message code='issue.recent.list.10'/>";
+			var issueDoesNotExistMessage = "<spring:message code='issue.not.exist'/>";
+			var commonShortcutMessage = "<spring:message code='common.shortcut'/>";
+			
 			var issueList = msg.issueList;
 			var content = "";
 			var issueListCount = 0;
 			content = content 
 				+	"<li style=\"margin-bottom: 8px; font-size: 1em; font-weight: normal; color: #2955a6;\">"
-				+ 		"최신 Issue 10개 표시"
+				+ 		issueRecentList10Message
 				+	"</li>";
 			if(issueList === null || issueList.length === 0) {
 				content += 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-						+	"	Issue가 존재하지 않습니다."
+						+	issueDoesNotExistMessage
 						+	"</li>";
 			} else {
 				issueListCount = issueList.length;
@@ -824,9 +834,9 @@
 					var issue = issueList[i];
 					content = content 
 						+ 	"<li>"
-						+ 	"	<button type=\"button\" title=\"바로가기\""
+						+ 	"	<button type=\"button\" title=\"" + commonShortcutMessage + "\""
 						+			"onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
-						+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">바로가기</button>"
+						+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">" + commonShortcutMessage + "</button>"
 						+ 	"	<div class=\"info\">"
 						+ 	"		<p class=\"title\">"
 						+ 	"			<span>" + issue.project_name + "</span>"
@@ -910,7 +920,7 @@
 	var searchDataFlag = { "enable" : true }
 	$("#searchData").click(function() {
 		if ($.trim($("#search_value").val()) === ""){
-			alert("검색어를 입력해 주세요.");
+			alert(JS_MESSAGE["search.word.empty"]);
 			$("#search_value").focus();
 			return false;
 		}
@@ -932,6 +942,10 @@
 	});
 	function searchDataCallback(msg, theArgs) {
 		if(msg.result === "success") {
+			var issueDoesNotExistMessage = "<spring:message code='issue.not.exist'/>";
+			var dataDoesNotExistMessage = "<spring:message code='data.not.exist'/>";
+			var commonShortcutMessage = "<spring:message code='common.shortcut'/>";
+			
 			var searchType = $("#search_word").val();
 			var content = "";
 			if(searchType === "data_name") {
@@ -939,7 +953,7 @@
 				if(dataInfoList == null || dataInfoList.length == 0) {
 					content = content	
 						+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-						+	"	Data가 존재하지 않습니다."
+						+	dataDoesNotExistMessage
 						+	"</li>";
 				} else {
 					dataInfoListCount = dataInfoList.length;
@@ -949,8 +963,8 @@
 							+ 	"<li>";
 						if(dataInfo.parent !== 0) {	
 							content = content 
-							+ 	"	<button type=\"button\" title=\"바로가기\""
-							+ 	" 		onclick=\"gotoData('" + dataInfo.project_id + "', '" + dataInfo.data_key + "');\">바로가기</button>";
+							+ 	"	<button type=\"button\" title=\"" + commonShortcutMessage + "\""
+							+ 	" 		onclick=\"gotoData('" + dataInfo.project_id + "', '" + dataInfo.data_key + "');\">" + commonShortcutMessage + "</button>";
 						}
 						content = content 
 							+ 	"	<div class=\"info\">"
@@ -972,7 +986,7 @@
 				if(issueList === null || issueList.length === 0) {
 					content = content	
 						+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-						+	"	Issue가 존재하지 않습니다."
+						+	issueDoesNotExistMessage
 						+	"</li>";
 				} else {
 					issueListCount = issueList.length;
@@ -980,9 +994,9 @@
 						var issue = issueList[i];
 						content = content 
 							+ 	"<li>"
-							+ 	"	<button type=\"button\" title=\"바로가기\""
+							+ 	"	<button type=\"button\" title=\"" + commonShortcutMessage + "\""
 							+			" onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
-							+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2');\">바로가기</button>"
+							+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2');\">" + commonShortcutMessage + "</button>"
 							+ 	"	<div class=\"info\">"
 							+ 	"		<p class=\"title\">"
 							+ 	"			<span>" + issue.project_name + "</span>"
@@ -1013,7 +1027,7 @@
 	
 	$("#localSearch").click(function() {
 		if ($.trim($("#localSearchDataKey").val()) === ""){
-			alert("Data Key를 입력해 주세요.");
+			alert(JS_MESSAGE["data.key.empty"]);
 			$("#localSearchDataKey").focus();
 			return false;
 		}
@@ -1061,11 +1075,11 @@
 	$("#changePropertyRendering").click(function(e) {
 		var isShow = $(':radio[name="propertyRendering"]:checked').val();
 		if(isShow === undefined){
-			alert("표시/비표시 를 선택하여 주십시오..");
+			alert(JS_MESSAGE["demo.selection"]);
 			return false;
 		}
 		if ($.trim($("#propertyRenderingWord").val()) === ""){
-			alert("속성값을 입력해 주세요.");
+			alert(JS_MESSAGE["demo.property.empty"]);
 			$("#propertyRenderingWord").focus();
 			return false;
 		}
@@ -1075,7 +1089,7 @@
 	// 색변경
 	$("#changeColor").click(function(e) {
 		if ($.trim($("#colorDataKey").val()) === ""){
-			alert("Data Key를 입력해 주세요.");
+			alert(JS_MESSAGE["data.key.empty"]);
 			$("#colorDataKey").focus();
 			return false;
 		}
@@ -1101,37 +1115,37 @@
 	});
 	function changeLocationAndRotationCheck() {
 		if ($.trim($("#moveDataKey").val()) === ""){
-			alert("Data Key를 입력해 주세요.");
+			alert(JS_MESSAGE["data.key.empty"]);
 			$("#moveDataKey").focus();
 			return false;
 		}
 		if ($.trim($("#moveLatitude").val()) === ""){
-			alert("위도를 입력해 주세요.");
+			alert(JS_MESSAGE["data.latitude.empty"]);
 			$("#moveLatitude").focus();
 			return false;
 		}
 		if ($.trim($("#moveLongitude").val()) === ""){
-			alert("경도를 입력해 주세요.");
+			alert(JS_MESSAGE["data.longitude.empty"]);
 			$("#moveLongitude").focus();
 			return false;
 		}
 		if ($.trim($("#moveHeight").val()) === ""){
-			alert("높이를 입력해 주세요.");
+			alert(JS_MESSAGE["data.height.empty"]);
 			$("#moveHeight").focus();
 			return false;
 		}
 		if ($.trim($("#moveHeading").val()) === ""){
-			alert("heading을 입력해 주세요.");
+			alert(JS_MESSAGE["data.heading.empty"]);
 			$("#moveHeading").focus();
 			return false;
 		}
 		if ($.trim($("#movePitch").val()) === ""){
-			alert("pitch를 입력해 주세요.");
+			alert(JS_MESSAGE["data.pitch.empty"]);
 			$("#movePitch").focus();
 			return false;
 		}
 		if ($.trim($("#moveRoll").val()) === ""){
-			alert("roll를 입력해 주세요.");
+			alert(JS_MESSAGE["data.roll.empty"]);
 			$("#moveRoll").focus();
 			return false;
 		}
@@ -1217,11 +1231,11 @@
 	}
 	// 마우스 클릭 객체 이동 모드 변경 저장
 	$("#saveObjectMoveButton").click(function () {
-		alert("준비중 입니다.");
+		alert(JS_MESSAGE["preparing"]);
 		return;
 		var objectMoveMode = $(':radio[name="objectMoveMode"]:checked').val();
 		if(objectMoveMode === "2") {
-			alert("None 모드일 경우 저장할 수 없습니다.");
+			alert(JS_MESSAGE["demo.none.mode.not.save"]);
 			return;
 		}
 		saveObjectMoveAPI(managerFactory, objectMoveMode);
@@ -1321,7 +1335,7 @@
 	function showApiResult(apiName, result) {
 		if(apiName === "searchData") {
 			if(result === "-1") {
-				alert(" 아직 로딩하지 않은 정보 입니다. 로딩 후 검색해 주십시오. ");
+				alert(JS_MESSAGE["demo.information.not.loading"]);
 			}
 		}
 	}

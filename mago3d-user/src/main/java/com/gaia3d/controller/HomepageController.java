@@ -102,9 +102,21 @@ public class HomepageController {
 		
 		log.info("@@ viewLibrary = {}", viewLibrary);
 		String viewName = "demo";
-		String lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+		String lang = (String)request.getParameter("lang");
 		if(lang == null || "".equals(lang)) {
-			lang = "ko";
+			lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+			if(lang == null || "".equals(lang)) {
+				lang = "ko";
+			}
+		}
+		
+		if(Locale.KOREA.getLanguage().equals(lang) 
+				|| Locale.ENGLISH.getLanguage().equals(lang)
+				|| Locale.JAPAN.getLanguage().equals(lang)) {
+			request.getSession().setAttribute(SessionKey.LANG.name(), lang);
+			Locale locale = new Locale(lang);
+//			LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+			localeResolver.setLocale(request, response, locale);
 		}
 		
 		Issue issue = new Issue();
@@ -184,7 +196,7 @@ public class HomepageController {
 		log.info("@@@@@@ initProjectsLength = {}", initProjectsLength);
 		log.info("@@@@@@ initProjectJsonMap = {}", mapper.writeValueAsString(initProjectJsonMap));
 		
-		return "/homepage/" + lang + "/" + viewName;
+		return "/homepage/" + viewName;
 	}
 	
 	private boolean isMobile(HttpServletRequest request) { 
@@ -393,7 +405,6 @@ public class HomepageController {
 				request.getSession().setAttribute(SessionKey.LANG.name(), lang);
 				Locale locale = new Locale(lang);
 //				LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
-//				localeResolver.setLocale(request, response, locale);
 				localeResolver.setLocale(request, response, locale);
 			}
 		} catch(Exception e) {

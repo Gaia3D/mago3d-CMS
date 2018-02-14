@@ -178,8 +178,8 @@ public class UserServiceImpl implements UserService {
 			} else {
 				tempPassword = initChar;
 			}
-			String encriptPassword = shaPasswordEncoder.encodePassword(tempPassword, userInfo.getSalt());
-			userInfo.setPassword(encriptPassword);
+			String encryptPassword = shaPasswordEncoder.encodePassword(tempPassword, userInfo.getSalt());
+			userInfo.setPassword(encryptPassword);
 			
 			// DB 처리
 			if(UserInfo.STATUS_FAIL_LOGIN_COUNT_OVER.equals(userInfo.getStatus())) {

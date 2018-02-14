@@ -304,7 +304,7 @@ public class UserController {
 			String salt = BCrypt.gensalt();
 			ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(512);
 			shaPasswordEncoder.setIterations(1000);
-			String encriptPassword = shaPasswordEncoder.encodePassword(userInfo.getPassword(), salt);
+			String encryptPassword = shaPasswordEncoder.encodePassword(userInfo.getPassword(), salt);
 			
 			if(userInfo.getTelephone1() != null && !"".equals(userInfo.getTelephone1()) &&
 					userInfo.getTelephone2() != null && !"".equals(userInfo.getTelephone2()) &&
@@ -322,7 +322,7 @@ public class UserController {
 			}
 			
 			userInfo.setSalt(salt);
-			userInfo.setPassword(encriptPassword);
+			userInfo.setPassword(encryptPassword);
 			userInfo.setTelephone(Crypt.encrypt(userInfo.getTelephone()));
 			userInfo.setMobile_phone(Crypt.encrypt(userInfo.getMobile_phone()));
 			userInfo.setEmail(Crypt.encrypt(userInfo.getEmail()));
@@ -579,15 +579,15 @@ public class UserController {
 			}
 						
 			UserInfo dbUserInfo = userService.getUser(userInfo.getUser_id());
-			String encriptPassword = null;
+			String encryptPassword = null;
 			ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(512);
 			shaPasswordEncoder.setIterations(1000);
 			// 비밀번호의 경우 입력값이 있을때만 수정
 			if(userInfo.getPassword() != null && !"".equals(userInfo.getPassword())
 					&& userInfo.getPassword_confirm() != null && !"".equals(userInfo.getPassword_confirm())) {
 				
-				encriptPassword = shaPasswordEncoder.encodePassword(userInfo.getPassword(), dbUserInfo.getSalt()) ;
-				if("".equals(encriptPassword)) {
+				encryptPassword = shaPasswordEncoder.encodePassword(userInfo.getPassword(), dbUserInfo.getSalt()) ;
+				if("".equals(encryptPassword)) {
 					log.info("@@ password error!");
 					result = "user.password.exception";
 					jSONObject.put("result", result);
@@ -610,7 +610,7 @@ public class UserController {
 				userInfo.setEmail(userInfo.getEmail1()+"@"+userInfo.getEmail2());
 			}
 			
-			userInfo.setPassword(encriptPassword);
+			userInfo.setPassword(encryptPassword);
 			userInfo.setTelephone(Crypt.encrypt(userInfo.getTelephone()));
 			userInfo.setMobile_phone(Crypt.encrypt(userInfo.getMobile_phone()));
 			userInfo.setEmail(Crypt.encrypt(userInfo.getEmail()));
@@ -1152,9 +1152,9 @@ public class UserController {
 			return "/user/modify-password";
 		}
 		
-		String encriptPassword = shaPasswordEncoder.encodePassword(userInfo.getNew_password(), dbUserInfo.getSalt());
+		String encryptPassword = shaPasswordEncoder.encodePassword(userInfo.getNew_password(), dbUserInfo.getSalt());
 		userInfo.setUser_id(userSession.getUser_id());
-		userInfo.setPassword(encriptPassword);
+		userInfo.setPassword(encryptPassword);
 		userInfo.setStatus(UserInfo.STATUS_USE);
 		userService.updatePassword(userInfo);
 		

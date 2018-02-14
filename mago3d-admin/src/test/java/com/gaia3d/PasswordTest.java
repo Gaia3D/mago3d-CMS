@@ -11,9 +11,9 @@ public class PasswordTest {
 		String salt = BCrypt.gensalt();
 		ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(512);
 		shaPasswordEncoder.setIterations(1000);
-		String encriptPassword = shaPasswordEncoder.encodePassword("test", salt);
+		String encryptPassword = shaPasswordEncoder.encodePassword("test", salt);
 		System.out.println("salt = " + salt);
-		System.out.println(encriptPassword);
+		System.out.println(encryptPassword);
 	}
 
 }
