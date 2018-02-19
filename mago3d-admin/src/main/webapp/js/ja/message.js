@@ -1,11 +1,11 @@
 var JS_MESSAGE  =  new Object();
 
-JS_MESSAGE["create"] =  "作成しました。";
+JS_MESSAGE["create"] =  "作成されました。";
 JS_MESSAGE["insert"] =  "登録されました。";
 JS_MESSAGE["update"] =  "修正されました。";
 JS_MESSAGE["delete"] =  "削除されました。";
 JS_MESSAGE["success"] =  "成功しました。";
-JS_MESSAGE["apply"] =  "適用された。";
+JS_MESSAGE["apply"] =  "適用されました。";
 JS_MESSAGE["upload"] =  "アップロード中です。";
 JS_MESSAGE["move.confirm"] =  "移動しますか？";
 JS_MESSAGE["delete.confirm"] =  "削除しますか？";
@@ -38,12 +38,12 @@ JS_MESSAGE["password.correct.empty"] =  "パスワードの確認を入力して
 JS_MESSAGE["user.name.empty"] =  "名前を入力してください。";
 JS_MESSAGE["user.input.invalid"] =  "必須入力値が有効ではありません。";
 JS_MESSAGE["user.id.duplication"] =  "使用中のIDです。他のIDを選択してください。";
-JS_MESSAGE["user.password.invalid"] =  "入力したパスワードが設定されたパスワードポリシーに不適合ます。";
-JS_MESSAGE["user.password.digit.invalid"] =  "入力したパスワードが設定されたパスワードポリシーに（数字の数）不適合ます。";
-JS_MESSAGE["user.password.upper.invalid"] =  "入力したパスワードが設定されたパスワードポリシーに（英語の大文字数）不適合ます。";
-JS_MESSAGE["user.password.lower.invalid"] =  "入力したパスワードが設定されたパスワードポリシーに（英語の小文字数）不適合ます。";
-JS_MESSAGE["user.password.special.invalid"] =  "入力したパスワードが設定されたパスワードポリシーに（特殊文字の数）不適合ます。";
-JS_MESSAGE["user.password.continuous.char.invalid"] =  "継続文字制限数がパスワードポリシーに不適合ます。";
+JS_MESSAGE["user.password.invalid"] =  "入力したパスワードが設定されたパスワードポリシーに不適合です。";
+JS_MESSAGE["user.password.digit.invalid"] =  "入力したパスワードが設定されたパスワードポリシーに（数字の数）不適合です。";
+JS_MESSAGE["user.password.upper.invalid"] =  "入力したパスワードが設定されたパスワードポリシーに（英語の大文字数）不適合です。";
+JS_MESSAGE["user.password.lower.invalid"] =  "入力したパスワードが設定されたパスワードポリシーに（英語の小文字数）不適合です。";
+JS_MESSAGE["user.password.special.invalid"] =  "入力したパスワードが設定されたパスワードポリシーに（特殊文字の数）不適合です。";
+JS_MESSAGE["user.password.continuous.char.invalid"] =  "継続文字制限数がパスワードポリシーに不適合です。";
 JS_MESSAGE["user.password.exception.char.message1"] =  "管理者が設定した特殊文字";
 JS_MESSAGE["user.password.exception.char.message2"] =  "は、パスワードとして使用することができません。";
 JS_MESSAGE["user.password.exception"] =  "パスワードの登録処理中にエラーが発生しました。";
@@ -73,53 +73,53 @@ JS_MESSAGE["policy.solution.update"] =  "製品情報を修正しました。";
 JS_MESSAGE["policy.content.invalid"] =  "必須入力値が有効ではありません。";
 
 //データ
-JS_MESSAGE["data.key.empty"] =  "Keyを入力してください。";
+JS_MESSAGE["data.key.empty"] =  "キーを入力してください。";
 JS_MESSAGE["data.key.enable"] =  "使用可能なKeyです。";
-JS_MESSAGE["data.key.same"] =  "同じKeyです。";
-JS_MESSAGE["data.key.duplication"] =  "使用中のKeyです。他のKeyを選択してください。";
-JS_MESSAGE["data.key.duplication_value.check"] =  "Key重複確認をしてください。"
-JS_MESSAGE["data.key.duplication_value.already"] =  "使用中のKeyです。他のKeyを選択してください。";
+JS_MESSAGE["data.key.same"] =  "同じキーです。";
+JS_MESSAGE["data.key.duplication"] =  "使用中のキーです。他のKeyを選択してください。";
+JS_MESSAGE["data.key.duplication_value.check"] =  "キー重複確認をしてください。"
+JS_MESSAGE["data.key.duplication_value.already"] =  "使用中のキーです。他のKeyを選択してください。";
 JS_MESSAGE["data.group.id.empty"] =  "データグループを選択してください。";
 JS_MESSAGE["data.latitude.empty"] =  "緯度を入力してください。";
-JS_MESSAGE["data.longitude.empty"] =  "硬さを入力してください。";
+JS_MESSAGE["data.longitude.empty"] =  "経度を入力してください。";
 JS_MESSAGE["data.height.empty"] =  "高さを入力してください。";
 JS_MESSAGE["data.heading.empty"] =  "Headingを入力してください。";
-JS_MESSAGE["data.longitude.empty"] =  "硬さを入力してください。";
-JS_MESSAGE["data.pitch.empty"] =  "Pitchを入力してください。";
-JS_MESSAGE["data.roll.empty"] =  "Rollを入力してください。";
+JS_MESSAGE["data.longitude.empty"] =  "経度を入力してください。";
+JS_MESSAGE["data.pitch.empty"] =  "ピッチを入力してください。";
+JS_MESSAGE["data.roll.empty"] =  "ロールを入力してください。";
 JS_MESSAGE["data.insert"] =  "データを登録しました。";
 JS_MESSAGE["data.update"] =  "データの情報を修正しました。";
 
 //問題
 JS_MESSAGE["issue.datagroup.empty"] =  "データグループを選択してください。";
-JS_MESSAGE["issue.issuetype.empty"] =  "Issue Typeを選択してください。";
-JS_MESSAGE["issue.datakey.empty"] =  "Data Keyを入力してください。";
+JS_MESSAGE["issue.issuetype.empty"] =  "問題タイプを選択してください。";
+JS_MESSAGE["issue.datakey.empty"] =  "データキーを入力してください。";
 JS_MESSAGE["issue.title.empty"] =  "タイトルを入力してください。";
-JS_MESSAGE["issue.assignee.empty"] =  "デリゲートを入力してください";
-JS_MESSAGE["issue.reporter.empty"] =  "見なければならない人を入力してください。";
+JS_MESSAGE["issue.assignee.empty"] =  "委任者を入力してください";
+JS_MESSAGE["issue.reporter.empty"] =  "報告者を入力してください。";
 JS_MESSAGE["issue.contents.empty"] =  "内容を入力してください。";
-JS_MESSAGE["issue.start_hour.proper"] =  "issue開始時間を正しく設定してください。";
-JS_MESSAGE["issue.start_minute.proper"] =  "issue開始時間を正しく設定してください。";
+JS_MESSAGE["issue.start_hour.proper"] =  "問題開始時間を正しく設定してください。";
+JS_MESSAGE["issue.start_minute.proper"] =  "問題開始時間を正しく設定してください。";
 
 //ticks
 JS_MESSAGE["main.status.in.use"] =  "使用中";
 JS_MESSAGE["main.status.stop.use"] =  "無効";
 JS_MESSAGE["main.status.fail.count"] =  "失敗回数";
 JS_MESSAGE["main.status.dormancy"] =  "休眠";
-JS_MESSAGE["main.status.expires"] =  "期間の満了」";
+JS_MESSAGE["main.status.expires"] =  "期間の満了";
 JS_MESSAGE["main.status.temporary.password"] =  "仮パスワード";
 
 // user group
 JS_MESSAGE["user.group.select"] =  "ユーザーグループを選択してください。";
 JS_MESSAGE["user.group.top.not.insert"] =  "最上位グループにユーザーを登録することができません。";
-JS_MESSAGE["user.group.role.top.not.insert"] =  "最上位グループには、Roleを登録することができません。";
+JS_MESSAGE["user.group.role.top.not.insert"] =  "最上位グループには、ロールを登録することができません。";
 JS_MESSAGE["user.group.not.group.id"] =  "グループ名がありません。";
 JS_MESSAGE["user.group.not.select"] =  "選択された項目がありません。";
 
 //input group
 JS_MESSAGE["user.group.id.minlength"] = "ユーザー名最小の長さは、";
 JS_MESSAGE["user.group.id.minlength.2"] = "です";
-JS_MESSAGE["user.group.password.not.same"] = "パスワードがパスワードの確認やら一致しません。";
+JS_MESSAGE["user.group.password.not.same"] = "パスワードが一致しません。";
 JS_MESSAGE["user.group.phone.number.type"] = "電話番号の形式に合わせて入力してください。";
 JS_MESSAGE["user.basic.information.input"] = "ユーザーの基本情報登録後利用可能です。";
 JS_MESSAGE["use.device.name.input"] = "使用機器名を入力してください。";
@@ -136,9 +136,9 @@ JS_MESSAGE["data.no.insert.data"] = "登録されたデータがありません�
 JS_MESSAGE["data.up.group.no.insert"] = "最上位グループに登録することはできません。";
 
 //role
-JS_MESSAGE["role.insert.name"] = "Role名を入力してください。";
-JS_MESSAGE["role.insert.key"] = "Role Keyを入力してください。";
-JS_MESSAGE["role.insert.type"] = "Roleタイプを選択してください。";
+JS_MESSAGE["role.insert.name"] = "ロール名を入力してください。";
+JS_MESSAGE["role.insert.key"] = "ロールキーを入力してください。";
+JS_MESSAGE["role.insert.type"] = "ロールタイプタイプを選択してください。";
 
 //code
 JS_MESSAGE["code.insert.name"] = "コード名を入力してください。";
