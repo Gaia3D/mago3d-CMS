@@ -1,6 +1,6 @@
 // 삭제 처리 경고
 function deleteWarning() {
-	if(confirm("삭제 하시겠습니까?")) {
+	if(confirm("削除しますか?")) {
 		return true;
 	} else {
 		return false;
@@ -16,7 +16,7 @@ function startSpinner(loadingId) {
 
 // 팝업
 function popupOpen(url, title, width, height) {
-	var popWin = window.open(url, "","toolbar=no ,width=" + width + " ,height=" + height 
+	var popWin = window.open(url, "","toolbar=no ,width=" + width + " ,height=" + height
 			+ ", directories=no,status=yes,scrollbars=no,menubar=no,location=no");
 	popWin.document.title = title;
 }
@@ -27,7 +27,7 @@ function isNumber(control) {
 	var Num = "1234567890";
 	for (var i=0; i<val.length; i++) {
 		if(Num.indexOf(val.substring(i,i+1))<0) {
-			alert("숫자만 입력 가능 합니다.");
+			alert("数字のみ入力可能です。");
 			return false;
 		}
 	}
@@ -56,7 +56,7 @@ function isExcelFile(fileName) {
 function checkedStatus(element) {
 	var returnVal = true;
 	var checkStatusVal = 0;
-	$.each(element, function(index) {			
+	$.each(element, function(index) {
 		if (element[index].checked == true) {
 			checkStatusVal++;
 		}
@@ -64,22 +64,22 @@ function checkedStatus(element) {
 	console.log("@@@@@@@@@@@@@@@@@ checkStatusVal = " + checkStatusVal);
 	if (checkStatusVal == 0) {
 		returnVal = false;
-	}		
-	return returnVal; 
+	}
+	return returnVal;
 }
 
 function initJqueryCalendar() {
-	$( ".date" ).datepicker({ 
+	$( ".date" ).datepicker({
 		dateFormat : "yymmdd",
-		dayNames : [ "일", "월", "화", "수", "목", "금", "토" ],
-		dayNamesShort : [ "일", "월", "화", "수", "목", "금", "토" ],
-		dayNamesMin : [ "일", "월", "화", "수", "목", "금", "토" ],
-		monthNames : [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
-		monthNamesShort : [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+		dayNames : [ "日", "月", "火", "水", "木", "金", "土" ],
+		dayNamesShort : [ "日", "月", "火", "水", "木", "金", "土" ],
+		dayNamesMin : [ "日", "月", "火", "水", "木", "金", "土" ],
+		monthNames : [ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+		monthNamesShort : [ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
 		prevText : "",
 		nextText : "",
 		showMonthAfterYear : true,
-		yearSuffix : "년"
+		yearSuffix : "年"
 	});
 }
 
@@ -160,7 +160,7 @@ function drawPage(pagination, jobtype, areaId) {
 		}
 		pagecontent +=			"<a href=\"#\" class=\"last\" onclick=\"drawGroupPage('" + pagination.lastPage + "', '" + jobtype + "'); return false;\"><span class=\"icon-glyph glyph-last\"></span></a>";
 	}
-	
+
 	$("#" + areaId).empty();
 	$("#" + areaId).html(pagecontent);
 }
@@ -170,37 +170,37 @@ function drawPage(pagination, jobtype, areaId) {
  */
 function isContinueSameChar(input){
 	var result = false;
-   
+
 //         result = /(\w)\1\1/.test(input);
-   
+
 	for(var i=0; i < input.length; i++){
 		tmp = input.charAt(i);
-		if(tmp == input.charAt(i+1) && tmp == input.charAt(i+2)){                                    
+		if(tmp == input.charAt(i+1) && tmp == input.charAt(i+2)){
 			result = true;
 		}
-		
+
 	}
-	
+
 	return result;
  }
- 
+
 /**
  * 연속되는 문자 입력 검증 (123, abc)
  */
 function isSequenceChar(input){
 	var result = false;
-	
+
 	for(var i=0; i <  input.length; i++){
-		
+
 		tmp = input.charCodeAt(i);
-		
+
 		if(input.charCodeAt(i + 1) - tmp == 1 && input.charCodeAt(i + 2) - input.charCodeAt(i + 1) == 1){
 			result = true;
-		}                              
-		
+		}
+
 	}
 
-	return result;             
+	return result;
 }
 
 function changeLanguage(lang) {
