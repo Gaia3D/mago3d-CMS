@@ -131,7 +131,7 @@
 			<tr style="height: 35px;">
 				<td>
 					<label for="search_value"><spring:message code='common.search.word'/></label></td>
-				<td><input type="text" id="search_value" name="search_value" size="31" /></td>
+				<td><input type="text" id="search_value" name="search_value" size="31"/></td>
 			</tr>
 			<tr style="height: 35px;">
 				<td><label for="start_date"><spring:message code='common.day'/></label></td>
@@ -141,16 +141,16 @@
 			</tr>
 			<tr style="height: 30px;">
 				<td><label for="order_word"><spring:message code='common.view.order'/></label></td>
-				<td><select id="order_word" name="order_word" class="select">
+				<td><select id="order_word" name="order_word" class="select" style="width: 30%">
 						<option value=""> <spring:message code='common.basic'/> </option>
 				       	<option value="register_date"> <spring:message code='common.register.date'/> </option>
 					</select>
-					<select id="order_value" name="order_value" class="select">
+					<select id="order_value" name="order_value" class="select" style="width: 30%">
 						<option value=""> <spring:message code='common.basic'/> </option>
 					   	<option value="ASC"> <spring:message code='common.asc'/> </option>
 						<option value="DESC"> <spring:message code='common.desc'/> </option>
 					</select>
-					<select id="list_counter" name="list_counter" class="select">
+					<select id="list_counter" name="list_counter" class="select" style="width: 30%">
 						<option value="5"> <spring:message code='common.listing.5'/> </option>
 					 	<option value="10"> <spring:message code='common.listing.10'/> </option>
 						<option value="50"> <spring:message code='common.listing.50'/> </option>
@@ -179,7 +179,7 @@
 				</li>
 				<li>
 					<label for="localSearchDataKey"><spring:message code='common.data.key'/></label>
-					<input type="text" id="localSearchDataKey" name="localSearchDataKey" size="23" />
+					<input type="text" id="localSearchDataKey" name="localSearchDataKey" size="20" />
 					<button type="button" id="localSearch" class="btn"><spring:message code='common.search'/></button> 
 				</li>
 			</ul>
@@ -203,7 +203,7 @@
 				</li>
 				<li>
 					<label for="propertyRenderingWord"><spring:message code='common.property'/></label>
-					<input type="text" id="propertyRenderingWord" name="propertyRenderingWord" size="23" placeholder="isMain=true" />
+					<input type="text" id="propertyRenderingWord" name="propertyRenderingWord" size="21" placeholder="isMain=true" />
 					<button type="button" id="changePropertyRendering" class="btn"><spring:message code='common.change'/></button> 
 				</li>
 			</ul>
@@ -349,7 +349,7 @@
 					<spring:message code='issue.location'/>
 				</td>
 				<td>
-					<button type="button" id="insertIssueEnableButton" class="btn"><spring:message code='issue.insert.control.button'/></button> 
+					<button type="button" id="insertIssueEnableButton" class="btn" style="font-size: 11px;"><spring:message code='issue.insert.control.button'/></button> 
 				</td>
 			</tr>
 			<tr style="height: 35px;">
@@ -410,10 +410,10 @@
 			<tr style="height: 35px;">
 				<td><form:label path="due_day"><spring:message code='issue.duedate'/></form:label></td>
 				<td><form:hidden path="due_date" />
-					<input type="text" id="due_day" name="due_day" class="date" size="10" maxlength="10" />
+					<input type="text" id="due_day" name="due_day" class="date" maxlength="10" style="width: 33%"/>
 					<spring:message code='common.day'/>&nbsp;&nbsp;
-					<input type="text" id="due_hour" name="due_hour" placeholder=" 00" size="2" maxlength="2" /> :
-					<input type="text" id="due_minute" name="due_minute" placeholder=" 00" size="2" maxlength="2" />
+					<input type="text" id="due_hour" name="due_hour" placeholder=" 00" maxlength="2" style="width: 12%;"/> :
+					<input type="text" id="due_minute" name="due_minute" placeholder=" 00" maxlength="2" style="width: 12%;"/>
 					<spring:message code='common.minute'/>
 				</td>
 			</tr>
@@ -423,7 +423,7 @@
 				<td>
 					<spring:message code='common.notice.preparing' var='noticePreparing' />
 					<spring:message code='issue.assignee.description' var="assigneeDescription"/>
-					<form:input path="assignee" cssClass="m" placeholder=" ${assigneeDescription }" size="24" />
+					<form:input path="assignee" cssClass="m" placeholder="${assigneeDescription}" size="22" />
 					<button type="button" class="btn" onclick="alert('${noticePreparing}');"><spring:message code='common.selection'/></button> 
 					<form:errors path="assignee" cssClass="error" />
 				</td>
@@ -433,7 +433,7 @@
 				<td><form:label path="reporter"><spring:message code='issue.reporter'/></form:label></td>
 				<td>
 					<spring:message code='issue.reporter.description' var="reporterDescription" />
-					<form:input path="reporter" cssClass="m" placeholder=" ${reporterDescription }" size="24" />
+					<form:input path="reporter" cssClass="m" placeholder="${reporterDescription}" size="22" />
 					<button type="button" class="btn" onclick="alert('${noticePreparing}');"><spring:message code='common.selection'/></button> 
 					<form:errors path="reporter" cssClass="error" />
 				</td>
@@ -500,7 +500,7 @@
 			</div>
 			<div style="height: 30px;">
 				<div style="display: inline-block; width: 70px;"><spring:message code='common.data.key'/></div>
-				<input type="text" id="occlusion_culling_data_key" name="occlusion_culling_data_key" size="25" />
+				<input type="text" id="occlusion_culling_data_key" name="occlusion_culling_data_key" size="22" />
 				<button type="button" id="changeOcclusionCullingButton" class="btn"><spring:message code='common.change'/></button>
 			</div>
 		</div>
@@ -535,18 +535,18 @@
 		<div>
 			<h3><spring:message code='common.lighting'/></h3>
 			<div style="height: 30px;"><spring:message code='demo.ambient.reflection.coef'/></div>
-			<div id="ambient_reflection_coef" style="display: inline-block; width: 245px;">
+			<div id="ambient_reflection_coef" style="display: inline-block; width: 65%;">
 				<div id="geo_ambient_reflection_coef_view" class="ui-slider-handle"></div>
 				<input type="hidden" id="geo_ambient_reflection_coef" name="geo_ambient_reflection_coef" value="0.5" />
 			</div>
 			<div style="height: 30px;"><spring:message code='demo.diffuse.reflection.coef'/></div>
-			<div id="diffuse_reflection_coef" style="display: inline-block; width: 245px;">
+			<div id="diffuse_reflection_coef" style="display: inline-block; width: 65%;">
 				<div id="geo_diffuse_reflection_coef_view" class="ui-slider-handle"></div>
 				<input type="hidden" id="geo_diffuse_reflection_coef" name="geo_diffuse_reflection_coef" value="1" />
 			</div>
 			<div style="height: 30px;"><spring:message code='demo.specular_reflection.coef'/></div>
 			<div>
-				<div id="specular_reflection_coef" style="display: inline-block; width: 245px;">
+				<div id="specular_reflection_coef" style="display: inline-block; width: 65%;">
 					<div id="geo_specular_reflection_coef_view" class="ui-slider-handle"></div>
 					<input type="hidden" id="geo_specular_reflection_coef" name="geo_specular_reflection_coef" value="1" />
 				</div>
@@ -1180,7 +1180,6 @@
 		isUpdateLocationAndRotation["enable"] = true;
 	}
 	
-	
 	// 인접 지역 이슈 표시
 	function changeNearGeoIssueList(isShow) {
 		$("input:radio[name='nearGeoIssueList']:radio[value='" + isShow + "']").prop("checked", true);
@@ -1248,9 +1247,20 @@
 		}
 	});
 	// Object Occlusion culling
-	$("#changeOcclusionCullingButton").click(function () {
-		changeOcclusionCullingAPI(managerFactory, ($(':radio[name="occlusionCulling"]:checked').val() === "true"), $("#occlusion_culling_data_key").val());		
+	$("#changeOcclusionCullingButton").click(function() {
+		var isUse = $(':radio[name="occlusionCulling"]:checked').val();
+		if(isUse === undefined){
+			alert(JS_MESSAGE["demo.occlusion.culling.selection"]);
+			return;
+		}
+		if($.trim($("#occlusion_culling_data_key").val()) === ""){
+			alert(JS_MESSAGE["data.key.empty"]);
+			$("#occlusion_culling_data_key").focus();
+			return;
+		}
+		changeOcclusionCullingAPI(managerFactory, ($(':radio[name="occlusionCulling"]:checked').val() === "true"), $("#occlusion_culling_data_key").val());
 	});
+	
 	// 카메라 모드 전환
 	function changeViewMode(isFPVMode) {
 		$("input:radio[name='viewMode']:radio[value='" + isFPVMode + "']").prop("checked", true);
@@ -1316,6 +1326,11 @@
 	});
 	// Ssadradius 설정
 	$("#changeSsaoRadiusButton").click(function() {
+		if($.trim($("#geo_ssao_radius").val())==="") {
+			alert(JS_MESSAGE["demo.ssao.empty"]);
+			$("#geo_ssao_radius").focus();
+			return;
+		}
 		changeSsaoRadiusAPI(managerFactory, $("#geo_ssao_radius").val());
 	});
 

@@ -10,6 +10,9 @@ JS_MESSAGE["upload"] = "アップロード中です。";
 JS_MESSAGE["move.confirm"] = "移動しますか？";
 JS_MESSAGE["delete.confirm"] = "削除しますか？";
 JS_MESSAGE["check.value.required"] = "選択された項目がありません。";
+JS_MESSAGE["preparing"] = "準備中です。";
+
+JS_MESSAGE["search.word.empty"] = "検索語を入力してください。";
 
 //共通
 JS_MESSAGE["user.session.empty"] = "ログイン後に使用可能なサービスです。";
@@ -21,52 +24,8 @@ JS_MESSAGE["usersession.grant.invalid"] = "アクセス許可が有効ではあ�
 
 JS_MESSAGE["login.password.decrypt.exception"] = "ログインパスワード処理中にエラーが発生しました。";
 
-//ユーザー
-JS_MESSAGE["user.id.empty"] = "ユーザ名を入力してください。";
-JS_MESSAGE["user.id.min_length.invalid"] = "ユーザー名が短すぎます。";
-JS_MESSAGE["password.empty"] = "パスワードを入力してください。";
-JS_MESSAGE["password.correct.empty"] = "パスワードの確認を入力してください。";
-JS_MESSAGE["user.name.empty"] = "名前を入力してください。";
-JS_MESSAGE["user.input.invalid"] = "必須入力値が有効ではありません。";
-JS_MESSAGE["user.id.duplication"] = "使用中のIDです。他のIDを選択してください。";
-JS_MESSAGE["user.password.invalid"] = "入力したパスワードが設定されたパスワードポリシーに不適合です。";
-JS_MESSAGE["user.password.digit.invalid"] = "入力したパスワードが設定されたパスワードポリシーの（数字の数）に不適合です。";
-JS_MESSAGE["user.password.upper.invalid"] = "入力したパスワードが設定されたパスワードポリシーの（英語の大文字数）に不適合です。";
-JS_MESSAGE["user.password.lower.invalid"] = "入力したパスワードが設定されたパスワードポリシーの（英語の小文字数）に不適合です。";
-JS_MESSAGE["user.password.special.invalid"] = "入力したパスワードが設定されたパスワードポリシーの（特殊文字の数）に不適合です。";
-JS_MESSAGE["user.password.continuous.char.invalid"] = "継続文字制限数がパスワードポリシーに不適合です。";
-JS_MESSAGE["user.password.exception.char.message1"] = "管理者が設定した特殊文字";
-JS_MESSAGE["user.password.exception.char.message2"] = "は、パスワードとして使用することができません。";
-JS_MESSAGE["user.password.exception"] = "パスワードの登録処理中にエラーが発生しました。";
-JS_MESSAGE["user.session.notexist"] = "セッション情報が存在しません。";
-JS_MESSAGE["user.session.closed"] = "セッション終了処理しました。";
-JS_MESSAGE["user.session.close"] = "選択したユーザーのセッションを終了しますか？";
-JS_MESSAGE["user.id.enable"] = "使用可能なIDです。";
-JS_MESSAGE["user.insert"] = "ユーザーを登録しました。";
-JS_MESSAGE["user.info.update"] = "ユーザー情報を修正しました。";
-JS_MESSAGE["user.id.notexist"] = "ユーザ名が存在しません。";
-
-
-//運営ポリシー
-JS_MESSAGE["policy.server.datetime"] = "サーバーの時間がリセットされました。"
-JS_MESSAGE["policy.user.update"] = "ユーザーポリシーを変更しました。";
-JS_MESSAGE["policy.password.update"] = "パスワードポリシーを変更しました。";
-JS_MESSAGE["policy.geo.update"] = "空間情報を修正しました。";
-JS_MESSAGE["policy.geoserver.update"] = "GeoServerを修正しました。";
-JS_MESSAGE["policy.geocallback.update"] = "CallBack関数を修正しました。";
-JS_MESSAGE["policy.notice.update"] = "通知ポリシーを修正しました。";
-JS_MESSAGE["policy.security.update"] = "セキュリティポリシーを変更しました。";
-JS_MESSAGE["policy.content.update"] = "コンテンツポリシーを変更しました。";
-JS_MESSAGE["policy.site.update"] = "サイトの情報を修正しました。";
-JS_MESSAGE["policy.os.update"] = "OSの設定情報を変更しました。";
-JS_MESSAGE["policy.backoffice.update"] = "Back Officeの情報を修正しました。";
-JS_MESSAGE["policy.solution.update"] = "製品情報を修正しました。";
-JS_MESSAGE["policy.content.invalid"] = "必須入力値が有効ではありません。";
-
 //データ
 JS_MESSAGE["data.key.empty"] = "Keyを入力してください。";
-JS_MESSAGE["data.key.duplication_value.check"] = "Key重複確認をしてください。"
-JS_MESSAGE["data.key.duplication_value.already"] = "使用中のKeyです。他のKeyを選択してください。";
 JS_MESSAGE["data.project.id.empty"] = "プロジェクトを選択してください。";
 JS_MESSAGE["data.latitude.empty"] = "緯度を入力してください。";
 JS_MESSAGE["data.longitude.empty"] = "経度を入力してください。";
@@ -89,3 +48,15 @@ JS_MESSAGE["issue.reporter.empty"] = "報告者を入力してください。";
 JS_MESSAGE["issue.contents.empty"] = "内容を入力してください。";
 JS_MESSAGE["issue.due_day.invalid"] = "issue期限を正しく入力してください。";
 JS_MESSAGE["issue.due_time.invalid"] = "issue締切を正しく入力してください。";
+
+JS_MESSAGE["project.data.no.found"] = "プロジェクトは、データが存在しません。";
+
+JS_MESSAGE["demo.browser.recommend"] = "このデモページには、大容量のWebデータ処理のためにChromeブラウザに最適化されています。 \n 円滑なサービス利用のためにChromeブラウザをご利用ください。";
+JS_MESSAGE["demo.select.object.message"] = "クリックして、オブジェクトを選択してください。";
+JS_MESSAGE["demo.issue.enable.status"] = "Issue 登録アクティブ";
+JS_MESSAGE["demo.selection"] = "表示/非表示を選択してください。";
+JS_MESSAGE["demo.property.empty"] = "属性値を入力してください。";
+JS_MESSAGE["demo.none.mode.not.save"] = "Noneモードの場合保存することができません。";
+JS_MESSAGE["demo.information.not.loading"] = "まだ読み込まれていない情報。 読み込んだ後に検索してください。 ";
+
+

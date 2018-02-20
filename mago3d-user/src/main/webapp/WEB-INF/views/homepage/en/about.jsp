@@ -155,7 +155,7 @@
 						<td>JT (Jupiter Tessellation) Lightweight 3D model format developed by Siemens PLM Software - Please contact us if you need JT format support</td>
 					</tr>
 				</table>
-				<h4>Rendering Algoritm</h4>
+				<h4>Rendering Algorithm</h4>
 				<div class="wrapper-algo">
 					<div class="algo-row">
 						<a href="#">
