@@ -8,10 +8,10 @@
 
 var pageID = "DataGroupTreeControl";
 var dataGroupTree = new AXTree();
-	
+
 var fnObj = {
 	pageStart: function() {
-		fnObj.tree1();			
+		fnObj.tree1();
 	},
 	tree1: function(){
 		dataGroupTree.setConfig({
@@ -50,12 +50,12 @@ var fnObj = {
 				}
 			],
 			body: {
-				onclick:function(idx, item) {					
-					
+				onclick:function(idx, item) {
+
 					var obj = dataGroupTree.getSelectedList();
 					document.dataGroupForm.reset();
 					document.dataGroupForm.writeMode.value = "modify";
-					
+
 					$("#data_group_id").val(item.data_group_id);
 					$("#depth").val(item.depth);
 					document.dataGroupForm.data_group_name.value = item.data_group_name;
@@ -72,17 +72,17 @@ var fnObj = {
 					$("#parent").val(item.parent);
 					$("#view_order").val(item.view_order);
 					$("#update_type").val(item.update_type);
-					
+
 					if (item.depth > 0) {
 						ajaxListDataGroupData(1);
 					} else {
 						drawParent("data");
 					}
-					
+
 					$("#data_manager").dialog("option", "title", item.data_group_name + " 그룹 데이터 관리");
 				},
 				addClass: function(){
-					return "myClass";	
+					return "myClass";
 				}
 			},
 			contextMenu: {
@@ -132,39 +132,39 @@ var fnObj = {
 			var pno = 0;
 			if(obj.item){
 				pno = obj.item.data_group_id;
-			}			
+			}
 			//document.treeWriteForm.depth.value = parseInt(obj.item.depth) + parseInt(1);
 //			myTree.appendTree(obj.index, obj.item, [{menuId:"N", menuName:frm.menuName.value, writer:'mondo', type:"file", parentMenuId:pno}]);
 			ajaxInsertDataGroup();
 		}else if(writeMode == "modify") {
 			var obj = dataGroupTree.getSelectedList();
 			if(obj.error){
-				alert("그룹을 선택해 주세요");
+				alert("グループを選択してください");
 				return;
 			}
 			if(obj.item.data_group_id == "0") {
-				alert("수정할 수 없는 그룹 입니다.")
+				alert("変更できないグループです。");
 				return;
 			}
 			//console.log($("#depth").val() + ", " + $(":radio[name='use_yn']:checked").val());
 			if($("#depth").val() == "1" && $(':radio[name="use_yn"]:checked').val() == "N") {
-				if(confirm("미사용으로 선택하실 경우 하위 그룹을 전부 사용할수 없습니다. \n 계속 진행하시겠습니까?")) {							
+				if(confirm("未使用を選択した場合、サブグループすべてを使用することができません。\n 続行しますか？")) {
 					ajaxUpdateDataGroup();
 				}
 			} else {
 				ajaxUpdateDataGroup();
 			}
 		}
-		
+
 		return false;
 	},
 	addTree: function() {
 		var obj = dataGroupTree.getSelectedList();
 		if(obj.item == null || obj.item == "" || obj.item == undefined || obj.item == "undefined" || obj.item.data_group_id == "0") {
-			alert("하위 그룹을 추가하여 주십시오.");
+			alert("サブグループを追加してください。");
 			return;
 		}
-		
+
 		document.dataGroupForm.reset();
 		document.dataGroupForm.writeMode.value = "append";
 		document.dataGroupForm.ancestor.value = obj.item.ancestor;
@@ -172,25 +172,25 @@ var fnObj = {
 		document.dataGroupForm.depth.value = obj.item.depth;
 		$("[name=use_yn]").removeAttr("checked");
 		$("[name=use_yn]").filter("[value='Y']").prop("checked",true);
-		
+
 		document.dataGroupForm.data_group_name.focus();
 	},
 	addChildTree: function(){
 		var obj = dataGroupTree.getSelectedList();
 		if(obj.error){
-			alert("상위 그룹을 선택해 주세요");
+			alert("親グループを選択してください");
 			return;
 		}
 		if(obj.item.use_yn == "N") {
-			alert("상위 그룹이 미사용이므로 하위 그룹을 생성할 수 없습니다.");
+			alert("親グループが未使用であるため、サブグループを作成することができません。");
 			return;
 		}
-		
+
 		document.dataGroupForm.reset();
 		document.dataGroupForm.writeMode.value = "child";
 		console.log("obj.item.ancestor = " + obj.item.ancestor);
 		document.dataGroupForm.ancestor.value = obj.item.ancestor;
-		document.dataGroupForm.parent.value = obj.item.data_group_id;		
+		document.dataGroupForm.parent.value = obj.item.data_group_id;
 		document.dataGroupForm.depth.value = parseInt(obj.item.depth) + parseInt(1);
 		$("[name=use_yn]").removeAttr("checked");
 		$("[name=use_yn]").filter("[value='Y']").prop("checked",true);
@@ -199,15 +199,15 @@ var fnObj = {
 	delTree: function(){
 		var obj = dataGroupTree.getSelectedList();
 		if(obj.error){
-			alert("그룹을 선택해 주세요");
+			alert("グループを選択してください");
 			return;
 		}
 		if(obj.item.data_group_id == "0" || obj.item.default_yn == "Y") {
-			alert("삭제할 수 없는 그룹 입니다.")
+			alert("削除できないグループです。");
 			return;
 		}
-		
-		$("#data_group_id").val(obj.item.data_group_id);		
+
+		$("#data_group_id").val(obj.item.data_group_id);
 		ajaxDeleteDataGroup();
 		//myTree.removeTree(obj.index, obj.item);
 		document.dataGroupForm.reset();
@@ -217,11 +217,11 @@ var fnObj = {
 		//console.log("group : " + obj.item.data_group_id);
 		$("#data_group_id").val(obj.item.data_group_id);
 		if(obj.error){
-			alert("그룹을 선택해 주세요");
+			alert("グループを選択してください");
 			return;
 		}
 		if(obj.item.data_group_id == "0") {
-			alert("수정할 수 없는 그룹 입니다.")
+			alert("変更できないグループです。");
 			return;
 		}
 		document.dataGroupForm.reset();
@@ -239,15 +239,15 @@ var fnObj = {
 	updateMoveUpTree: function() {
 		var obj = dataGroupTree.getSelectedList();
 		if(obj.error){
-			alert("그룹을 선택해 주세요");
+			alert("グループを選択してください");
 			return;
 		}
 		if(obj.item.data_group_id == "0") {
-			alert("이동할 수 없는 그룹입니다.")
+			alert("移動できないグループです。");
 			return;
 		}
 		if(obj.item.view_order == "1") {
-			alert("제일 처음 입니다.")
+			alert("一番最初にあります。");
 			return;
 		}
 		$("#data_group_id").val(obj.item.data_group_id);
@@ -260,11 +260,11 @@ var fnObj = {
 	updateMoveDownTree: function() {
 		var obj = dataGroupTree.getSelectedList();
 		if(obj.error){
-			alert("그룹을 선택해 주세요");
+			alert("グループを選択してください");
 			return;
 		}
 		if(obj.item.data_group_id == "0") {
-			alert("이동할 수 없는 그룹입니다.")
+			alert("移動できないグループです。");
 			return;
 		}
 		$("#data_group_id").val(obj.item.data_group_id);
@@ -278,7 +278,7 @@ var fnObj = {
 		dataGroupTree.moveTree({
 			startMove: function(){
 				dataGroupTree.addClassItem({
-					className:"disable", 
+					className:"disable",
 					addClass:function(){
 						return (this.data_group_id == "N");
 					}
@@ -286,23 +286,23 @@ var fnObj = {
 			},
 			validate:function(){
 				if(this.targetObj.data_group_id == "N"){
-					alert("이동할 수 없는 대상을 선택하셨습니다.");
+					alert("移動できない対象を選択しました。");
 					return false;
 				}else{
-					return true;	
+					return true;
 				}
 			},
 			endMove: function(){
 				dataGroupTree.removeClassItem({
-					className:"disable", 
+					className:"disable",
 					removeClass:function(){
 						return (this.data_group_id == "N");
 					}
 				});
 			}
 		});
-	}		
-	
+	}
+
 };
 
 // 동일 레벨의 그룹 추가
@@ -335,7 +335,7 @@ function moveUpTree() {
 		}
 		upFlag = true;
 	} else {
-		alert("진행 중입니다.");
+		alert("処理中です。");
 		return;
 	}
 }
@@ -353,7 +353,7 @@ function moveDownTree() {
 		}
 		downFlag = true;
 	} else {
-		alert("진행 중입니다.");
+		alert("処理中です。");
 		return;
 	}
 }
@@ -369,7 +369,7 @@ function appendTree() {
 // 그룹 트리 초기화 값
 function initDataGroup(groupTree) {
 	DATA_GROUP_TREE_DATA = groupTree;
-} 
+}
 
 // 사용자 그룹 목록
 function getAjaxDataGroupList() {
@@ -404,21 +404,21 @@ function ajaxInsertDataGroup() {
 	var data_group_name = $("#data_group_name").val();
 	var data_group_key = $("#data_group_key").val();
 	var description = $("#description").val();
-	
+
 	if (data_group_name == '') {
-		alert("그룹명을 입력해 주세요.");
+		alert("グループ名を入力してください。");
 		return;
 	}
 	if (data_group_key == '') {
-		alert("그룹명(영문)을 입력해 주세요");
+		alert("グループ名（英語）を入力してください");
 		return;
 	}
 	var regExp = /^[0-9A-Za-z;\-_#$]*$/;
 	if (!regExp.test(data_group_key)) {
-		alert("그룹명(영문)은 영문 대, 소문자만 입력할 수 있습니다.");
+		alert("グループ名（英語）は、英文台、小文字のみを入力することができます。");
 		return;
 	}
-	
+
 	var info = $("#dataGroupForm").serialize();
 	$.ajax({
 		url: "/data/ajax-insert-data-group.do",
@@ -468,7 +468,7 @@ function ajaxUpdateDataGroup() {
 
 // 그룹 삭제
 function ajaxDeleteDataGroup() {
-	if(confirm("삭제하시겠습니까?")) {
+	if(confirm("削除しますか？")) {
 		var info = $("#dataGroupForm").serialize();
 		info.data_group_id = $("#data_group_id").val();
 		$.ajax({
@@ -480,10 +480,10 @@ function ajaxDeleteDataGroup() {
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "success") {
-					alert("삭제되었습니다.");
+					alert("削除されました。");
 					dataGroupTree.setTree(msg.groupTree);
 				} else if (msg.result == "usergroupserver.exists") {
-					alert("등록된 서버가 있어 삭제할 수 없습니다.");
+					alert("登録されたサーバーがあり、削除できません。");
 					return;
 				} else {
 					alert(JS_MESSAGE[msg.result]);
@@ -498,7 +498,7 @@ function ajaxDeleteDataGroup() {
 
 // 그룹 위로/아래로 수정
 function ajaxUpdateMoveDataGroup() {
-	if(confirm("이동하시겠습니까?")) {
+	if(confirm("移動しますか？")) {
 		var info = $("#dataGroupForm").serialize();
 		$.ajax({
 			url: "/data/ajax-update-move-data-group.do",
@@ -509,11 +509,11 @@ function ajaxUpdateMoveDataGroup() {
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "user.session.empty"){
-					alert("로그인 후 사용 가능한 서비스 입니다.");
+					alert("ログイン後に使用可能なサービスです。");
 				} else if(msg.result == "user.group.invalid") {
-					alert("필수 입력값이 유효하지 않습니다.");
+					alert("必須入力値が有効ではありません。");
 				} else if(msg.result == "db.exception") {
-					alert("데이터 베이스 장애가 발생하였습니다. 잠시 후 다시 이용하여 주시기 바랍니다.");
+					alert("データベースに障害が発生しました。しばらくしてから再度ご利用ください。");
 				} else if(msg.result == "success") {
 					dataGroupTree.setTree(msg.groupTree);
 				}
