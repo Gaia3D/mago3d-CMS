@@ -59,3 +59,5 @@ JS_MESSAGE["demo.property.empty"] = "Please enter attribute value.";
 JS_MESSAGE["demo.none.mode.not.save"] = "Can not be saved in None mode.";
 JS_MESSAGE["demo.information.not.loading"] = "Information that has not yet been loaded. Please search after loading.";
 
+JS_MESSAGE["demo.occlusion.culling.selection"] = "Select whether or not Occlusion Culling is enabled.";
+JS_MESSAGE["demo.ssao.empty"] = "Enter the SSAO value.";
