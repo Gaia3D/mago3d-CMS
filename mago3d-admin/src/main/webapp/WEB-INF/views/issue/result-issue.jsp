@@ -24,62 +24,72 @@
 				<div class="page-area">
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
-						
-						<div class="list">
-							<div class="main_content_title">
-					    	<ul>
-					        	<li><spring:message code='issue.result'/></li>
-					        </ul>
-					    </div>
-						<ul>
-							<li style="line-height: 30px;">
-				<c:if test="${method_mode eq 'insert'}"><spring:message code='issue.insert'/></c:if>
-				<c:if test="${method_mode eq 'update'}"><spring:message code='issue.modify'/></c:if>
-				<c:if test="${method_mode eq 'delete'}"><spring:message code='issue.delete'/></c:if>
-					  		</li>
-				<c:if test="${method_mode eq 'insert' || method_mode eq 'update'}">
-					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.data.group'/></span>
-					 			<span>${issue.project_name}</span>
-					  		</li>
-					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.name'/></span>
-					 			<span>${issue.title}</span>
-					  		</li>
-					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.priority'/></span>
-					 			<span>${issue.priority}</span>
-					  		</li>
-					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.due.date'/></span>
-					 			<span>${issue.due_date}</span>
-					  		</li>
-					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.type'/></span>
-					 			<span>${issue.issue_type}</span>
-					  		</li>
-					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.status'/></span>
-					 			<span>${issue.status}</span>
-					  		</li>
-					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.latitude'/></span>
-					 			<span>${issue.latitude}</span>
-					  		</li>
-					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.longitude'/></span>
-					 			<span>${issue.longitude}</span>
-					  		</li>
-					  		<li style="line-height: 30px;">
-					  			<span style="display:inline-block; width: 200px;"><spring:message code='issue.insert.date'/></span>
-					 			<span>${issue.viewInsertDate}</span>
-					  		</li>
-				</c:if>
-					  		<li style="text-align: center;">
-					  			<a href="/issue/list-issue.do"><spring:message code='list'/></a>
-					  		</li>
-					 	</ul>
-						</div>
+					
+					<div>
+						<c:if test="${method_mode eq 'insert'}"><spring:message code='issue.insert'/></c:if><br>
+						<c:if test="${method_mode eq 'update'}"><spring:message code='issue.modify'/></c:if><br>
+						<c:if test="${method_mode eq 'delete'}"><spring:message code='issue.delete'/></c:if><br>
+					</div>
+					
+					<table class="input-table scope-row">
+
+							<tr>
+								<th class="col-label" scope="row"><spring:message code='issue.project_name'/></th>
+					 			<td>${issue.project_name}</td>
+							</tr>
+							<tr>
+								<th class="col-label" scope="row"><spring:message code='issue.type'/></th>
+					 			<td>${issue.issue_type}</td>
+							</tr>
+							<tr>
+								<th class="col-label" scope="row"><spring:message code='issue.name'/></th>
+					 			<td>${issue.title}</td>
+							</tr>
+							<tr>
+								<th class="col-label" scope="row"><spring:message code='issue.priority'/></th>
+					 			<td>${issue.priority}</td>
+							</tr>
+							<tr>
+								<th class="col-label" scope="row"><spring:message code='issue.insert.date'/></th>
+					 			<td>${issue.viewInsertDate}</td>
+							</tr>
+							<tr>
+								<th class="col-label" scope="row"><spring:message code='issue.due.date'/></th>
+					 			<td>${issue.due_date}</td>
+							</tr>
+							<tr>
+								<th class="col-label" scope="row"><spring:message code='issue.status'/></th>
+					 			<td>${issue.status}</td>
+							</tr>
+							<tr>
+								<th class="col-label" scope="row"><spring:message code='issue.latitude'/></th>
+					 			<td>${issue.latitude}</td>
+							</tr>
+							<tr>
+								<th class="col-label" scope="row"><spring:message code='issue.longitude'/></th>
+					 			<td>${issue.longitude}</td>
+							</tr>
+							
+							<tr>
+								<th class="col-label" scope="row"><spring:message code='issue.assignee'/></th>
+					 			<td>${issue.assignee}</td>
+							</tr>
+							<tr>
+								<th class="col-label" scope="row"><spring:message code='issue.reporter'/></th>
+					 			<td>${issue.reporter}</td>
+							</tr>
+							<tr>
+								<th class="col-label" scope="row"><spring:message code='issue.comment'/></th>
+					 			<td>${issue.comment}</td>
+							</tr>
+							
+						</table>
+							
+						<div class="button-group">
+							<div id="insertIssueLink" class="center-buttons">
+								<a href="/issue/list-issue.do" class="button"><spring:message code='list' /></a>
+							</div>
+						</div>	
 						
 					</div>
 				</div>

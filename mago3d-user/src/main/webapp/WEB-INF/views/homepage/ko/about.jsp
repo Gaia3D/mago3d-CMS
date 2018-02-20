@@ -88,7 +88,7 @@
 				<div class="row_demo">
 					<div class="wrapper_demo">
 						<div class="highlight">
-								<a href="/homepag/demo.do"> 
+								<a href="/homepage/demo.do"> 
 								<span class="image left"> <img
 										src="/images/${lang}/homepage/gangbuk.png"
 										alt="3DS포맷이 mago3D에 올라간 화면입니다.">
@@ -162,7 +162,7 @@
 						<td>JT(Jupiter Tessellation) Siemens PLM Software 에서 개발된 경량화 3D 모델 포맷 - JT포맷 지원이 필요한 경우 별도 연락 요망</td>
 					</tr>
 				</table>
-				<h4>Rendering Algoritm</h4>
+				<h4>Rendering Algorithm</h4>
 				<div class="wrapper-algo">
 					<div class="algo-row">
 						<a href="#">

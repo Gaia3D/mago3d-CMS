@@ -57,5 +57,9 @@ JS_MESSAGE["demo.issue.enable.status"] = "Issue 등록 활성화 상태";
 JS_MESSAGE["demo.selection"] = "표시/비표시 를 선택하여 주십시오.";
 JS_MESSAGE["demo.property.empty"] = "속성값을 입력해 주세요.";
 JS_MESSAGE["demo.none.mode.not.save"] = "None 모드일 경우 저장할 수 없습니다.";
-JS_MESSAGE["demo.information.not.loading"] = " Information that has not yet been loaded. Please search after loading. ";
+JS_MESSAGE["demo.information.not.loading"] = "아직 로드되지 않은 정보입니다. 로드 후 검색하십시오.";
+
+JS_MESSAGE["demo.occlusion.culling.selection"] = "Occlusion Culling 사용 여부를 선택하십시오.";
+JS_MESSAGE["demo.ssao.empty"] = "SSAO 값을 입력하여 주십시오.";
+
 
