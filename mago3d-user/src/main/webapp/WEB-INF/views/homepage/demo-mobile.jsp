@@ -1213,9 +1213,20 @@
 		}
 	});
 	// Object Occlusion culling
-	$("#changeOcclusionCullingButton").click(function () {
-		changeOcclusionCullingAPI(managerFactory, ($(':radio[name="occlusionCulling"]:checked').val() === "true"), $("#occlusion_culling_data_key").val());		
+	$("#changeOcclusionCullingButton").click(function() {
+		var isUse = $(':radio[name="occlusionCulling"]:checked').val();
+		if(isUse === undefined){
+			alert(JS_MESSAGE["demo.occlusion.culling.selection"]);
+			return;
+		}
+		if($.trim($("#occlusion_culling_data_key").val()) === ""){
+			alert(JS_MESSAGE["data.key.empty"]);
+			$("#occlusion_culling_data_key").focus();
+			return;
+		}
+		changeOcclusionCullingAPI(managerFactory, ($(':radio[name="occlusionCulling"]:checked').val() === "true"), $("#occlusion_culling_data_key").val());
 	});
+
 	// 카메라 모드 전환
 	function changeViewMode(isFPVMode) {
 		$("input:radio[name='viewMode']:radio[value='" + isFPVMode + "']").prop("checked", true);
@@ -1281,9 +1292,14 @@
 	});
 	// Ssadradius 설정
 	$("#changeSsaoRadiusButton").click(function() {
+		if($.trim($("#geo_ssao_radius").val())==="") {
+			alert(JS_MESSAGE["demo.ssao.empty"]);
+			$("#geo_ssao_radius").focus();
+			return;
+		}
 		changeSsaoRadiusAPI(managerFactory, $("#geo_ssao_radius").val());
 	});
-
+	
 	// click poisition call back function
 	function showClickPosition(position) {
 		$("#positionLatitude").val(position.lat);

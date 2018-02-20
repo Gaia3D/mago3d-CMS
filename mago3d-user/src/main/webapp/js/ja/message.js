@@ -59,4 +59,6 @@ JS_MESSAGE["demo.property.empty"] = "属性値を入力してください。";
 JS_MESSAGE["demo.none.mode.not.save"] = "Noneモードの場合保存することができません。";
 JS_MESSAGE["demo.information.not.loading"] = "まだ読み込まれていない情報。 読み込んだ後に検索してください。 ";
 
+JS_MESSAGE["demo.occlusion.culling.selection"] = "Occlusion Culling使用するかどうかを選択します。";
+JS_MESSAGE["demo.ssao.empty"] = "SSAO値を入力してください。";
 
