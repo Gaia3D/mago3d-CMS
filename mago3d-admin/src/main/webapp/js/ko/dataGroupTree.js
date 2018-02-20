@@ -143,7 +143,7 @@ var fnObj = {
 				return;
 			}
 			if(obj.item.data_group_id == "0") {
-				alert("수정할 수 없는 그룹 입니다.")
+				alert("수정할 수 없는 그룹 입니다.");
 				return;
 			}
 			//console.log($("#depth").val() + ", " + $(":radio[name='use_yn']:checked").val());
@@ -203,7 +203,7 @@ var fnObj = {
 			return;
 		}
 		if(obj.item.data_group_id == "0" || obj.item.default_yn == "Y") {
-			alert("삭제할 수 없는 그룹 입니다.")
+			alert("삭제할 수 없는 그룹 입니다.");
 			return;
 		}
 		
@@ -221,7 +221,7 @@ var fnObj = {
 			return;
 		}
 		if(obj.item.data_group_id == "0") {
-			alert("수정할 수 없는 그룹 입니다.")
+			alert("수정할 수 없는 그룹 입니다.");
 			return;
 		}
 		document.dataGroupForm.reset();
@@ -243,11 +243,11 @@ var fnObj = {
 			return;
 		}
 		if(obj.item.data_group_id == "0") {
-			alert("이동할 수 없는 그룹입니다.")
+			alert("이동할 수 없는 그룹입니다.");
 			return;
 		}
 		if(obj.item.view_order == "1") {
-			alert("제일 처음 입니다.")
+			alert("제일 처음 입니다.");
 			return;
 		}
 		$("#data_group_id").val(obj.item.data_group_id);
@@ -264,7 +264,7 @@ var fnObj = {
 			return;
 		}
 		if(obj.item.data_group_id == "0") {
-			alert("이동할 수 없는 그룹입니다.")
+			alert("이동할 수 없는 그룹입니다.");
 			return;
 		}
 		$("#data_group_id").val(obj.item.data_group_id);
