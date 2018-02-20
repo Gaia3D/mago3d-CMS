@@ -8,13 +8,13 @@ import com.gaia3d.domain.FileInfo;
  * @author Cheon JeongDae
  *
  */
-public interface DataFileParser {
+public interface DataAttributeFileParser {
 	
 	/**
 	 * parse
-	 * @param project_id
+	 * @param dataId
 	 * @param fileInfo
 	 * @return
 	 */
-	Map<String, Object> parse(Long project_id, FileInfo fileInfo);
+	Map<String, Object> parse(Long dataId, FileInfo fileInfo);
 }

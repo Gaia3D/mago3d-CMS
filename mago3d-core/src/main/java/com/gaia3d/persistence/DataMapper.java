@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.DataInfoAttribute;
 
 /**
  * Data
@@ -83,6 +84,13 @@ public interface DataMapper {
 	 * @return
 	 */
 	int insertData(DataInfo dataInfo);
+	
+	/**
+	 * Data 속성 등록
+	 * @param dataInfoAttribute
+	 * @return
+	 */
+	int insertDataAttribute(DataInfoAttribute dataInfoAttribute);
 	
 	/**
 	 * Data 수정

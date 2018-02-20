@@ -12,17 +12,17 @@ public interface FileService {
 	
 	/**
 	 * 파일 정보 획득
-	 * @param file_info_id
+	 * @param fileInfoId
 	 * @return
 	 */
-	public FileInfo getFileInfo(Long file_info_id);
+	public FileInfo getFileInfo(Long fileInfoId);
 	
 	/**
 	 * 파일 파싱 로그 획득
-	 * @param file_parse_log_id
+	 * @param fileParseLogId
 	 * @return
 	 */
-	public FileParseLog getFileParseLog(Long file_parse_log_id);
+	public FileParseLog getFileParseLog(Long fileParseLogId);
 
 	/**
 	 * 파일 정보 등록
@@ -40,10 +40,25 @@ public interface FileService {
 	
 	/**
 	 * Data 일괄 등록
-	 * @param project_id
+	 * @param projectId
 	 * @param fileInfo
 	 * @return
 	 */
-	public FileInfo insertDataFile(Long project_id, FileInfo fileInfo, String userId);
+	public FileInfo insertDataFile(Long projectId, FileInfo fileInfo);
 	
+	/**
+	 * Data Attribute 등록
+	 * @param dataId
+	 * @param fileInfo
+	 * @return
+	 */
+	public FileInfo insertDataAttributeFile(Long dataId, FileInfo fileInfo);
+	
+	/**
+	 * Data Object Attribute 등록
+	 * @param dataId
+	 * @param fileInfo
+	 * @return
+	 */
+	public FileInfo insertDataObjectAttributeFile(Long dataId, FileInfo fileInfo);
 }

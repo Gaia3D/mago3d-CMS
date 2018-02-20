@@ -8,34 +8,21 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Data 정보
+ * Data 정보 이력
  * @author Cheon JeongDae
  *
  */
 @Getter
 @Setter
 @ToString
-public class DataInfo {
+public class DataInfoLog {
 	
-	// Data 상태가 사용중
-	public static final String STATUS_USE = "0";
-	// Data 상태가 중지(관리자)
-	public static final String STATUS_FORBID = "1";
-	// Data 상태가 삭제(화면 비표시)
-	public static final String STATUS_LOGICAL_DELETE = "5";
-	
-	// data_group 에 등록되지 않은 Data
-	private String[] data_all_id;
-	// data_group 에 등록된 Data
-	private String[] data_select_id;
-	
-	/******** 화면 오류 표시용 ********/
-	private String message_code;
-	private String error_code;
-	// 아이디 중복 확인 hidden 값
-	private String duplication_value;
-	// 논리 삭제 
-	private String delete_flag;
+	// Data 변경 대기중
+	public static final String STATUS_REQUEST = "0";
+	// Data 변경 완료
+	public static final String STATUS_COMPLETE = "1";
+	// Data 변경 요청 기각
+	public static final String STATUS_REJECT = "2";
 	
 	// 페이지 처리를 위한 시작
 	private Long offset;
@@ -100,7 +87,7 @@ public class DataInfo {
 	private BigDecimal pitch;
 	// roll
 	private BigDecimal roll;
-	// Data Control 속성
+	// 속성
 	private String attributes;
 	// data 상태. 0:사용중, 1:사용중지(관리자), 2:기타
 	private String status;

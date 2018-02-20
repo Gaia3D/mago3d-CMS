@@ -706,7 +706,7 @@ public class DataController {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 			fileInfo.setUser_id(userSession.getUser_id());
 			
-			fileInfo = fileService.insertDataFile(project_id, fileInfo, userSession.getUser_id());
+			fileInfo = fileService.insertDataFile(project_id, fileInfo);
 			
 			jSONObject.put("total_count", fileInfo.getTotal_count());
 			jSONObject.put("parse_success_count", fileInfo.getParse_success_count());
@@ -724,6 +724,102 @@ public class DataController {
 			cacheParams.setCacheName(CacheName.DATA_INFO);
 			cacheParams.setCacheType(CacheType.BROADCAST);
 			cacheConfig.loadCache(cacheParams);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		jSONObject.put("result", result);
+		
+		return jSONObject;
+	}
+	
+	/**
+	 * Data Attribute 등록
+	 * @param model
+	 * @return
+	 */
+	@PostMapping(value = "ajax-insert-data-attribute-file.do")
+	@ResponseBody
+	public Map<String, Object> ajaxInsertDataAttributeFile(MultipartHttpServletRequest request) {
+		
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		String result = "success";
+		try {
+			Long data_id = Long.valueOf(request.getParameter("attribute_file_data_id"));
+			MultipartFile multipartFile = request.getFile("attribute_file_name");
+			// TODO
+			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.DATA_ATTRIBUTE_UPLOAD, propertiesConfig.getDataAttributeUploadDir());
+			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
+				log.info("@@@@@@@@@@@@@@@@@@@@ error_code = {}", fileInfo.getError_code());
+				jSONObject.put("result", fileInfo.getError_code());
+				return jSONObject;
+			}
+			
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			fileInfo.setUser_id(userSession.getUser_id());
+			
+			fileInfo = fileService.insertDataAttributeFile(data_id, fileInfo);
+			
+			jSONObject.put("total_count", fileInfo.getTotal_count());
+			jSONObject.put("parse_success_count", fileInfo.getParse_success_count());
+			jSONObject.put("parse_error_count", fileInfo.getParse_error_count());
+			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
+			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
+			
+			// 파일 삭제
+			File copyFile = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());
+			if(copyFile.exists()) {
+				copyFile.delete();
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		jSONObject.put("result", result);
+		
+		return jSONObject;
+	}
+	
+	/**
+	 * Data Object Attribute 등록
+	 * @param model
+	 * @return
+	 */
+	@PostMapping(value = "ajax-insert-data-object-attribute-file.do")
+	@ResponseBody
+	public Map<String, Object> ajaxInsertDataObjectAttributeFile(MultipartHttpServletRequest request) {
+		
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		String result = "success";
+		try {
+			Long data_id = Long.valueOf(request.getParameter("object_attribute_file_data_id"));
+			MultipartFile multipartFile = request.getFile("object_attribute_file_name");
+			// TODO
+			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.DATA_OBJECT_ATTRIBUTE_UPLOAD, propertiesConfig.getDataObjectAttributeUploadDir());
+			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
+				log.info("@@@@@@@@@@@@@@@@@@@@ error_code = {}", fileInfo.getError_code());
+				jSONObject.put("result", fileInfo.getError_code());
+				return jSONObject;
+			}
+			
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			fileInfo.setUser_id(userSession.getUser_id());
+			
+			fileInfo = fileService.insertDataObjectAttributeFile(data_id, fileInfo);
+			
+			jSONObject.put("total_count", fileInfo.getTotal_count());
+			jSONObject.put("parse_success_count", fileInfo.getParse_success_count());
+			jSONObject.put("parse_error_count", fileInfo.getParse_error_count());
+			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
+			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
+			
+			// 파일 삭제
+			File copyFile = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());
+			if(copyFile.exists()) {
+				copyFile.delete();
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

@@ -25,5 +25,8 @@ public class PropertiesConfig {
 	private String dataUploadDir;
 	private String sampleUploadDir;
 	
+	private String dataAttributeUploadDir;
+	private String dataObjectAttributeUploadDir;
+	
 	private String issueUploadDir;
 }

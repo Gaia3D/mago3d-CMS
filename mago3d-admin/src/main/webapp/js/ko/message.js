@@ -22,6 +22,10 @@ JS_MESSAGE["account"] = "계정";
 JS_MESSAGE["use"] = "사용";
 JS_MESSAGE["not.use"] = "미사용";
 
+JS_MESSAGE["file.name.empty"] = "파일명을 입력하여 주십시오.";
+JS_MESSAGE["file.ext.invalid"] = "파일 확장자가 유효하지 않습니다.";
+JS_MESSAGE["fileinfo.size.invalid"] = "업로딩 가능한 파일 사이즈를 초과 하였습니다.";
+
 // 공통
 JS_MESSAGE["user.session.empty"] = "로그인 후 사용 가능한 서비스 입니다.";
 JS_MESSAGE["db.exception"] = "데이터 베이스 장애가 발생하였습니다. 잠시 후 다시 이용하여 주시기 바랍니다.";

@@ -14,6 +14,7 @@
 		<typeAlias type="com.gaia3d.domain.CommonCode" alias="commonCode"/>
 		<typeAlias type="com.gaia3d.domain.Project" alias="project"/>
 		<typeAlias type="com.gaia3d.domain.DataInfo" alias="dataInfo"/>
+		<typeAlias type="com.gaia3d.domain.DataInfoAttribute" alias="dataInfoAttribute"/>
 		<typeAlias type="com.gaia3d.domain.ExternalService" alias="externalService"/>
 		<typeAlias type="com.gaia3d.domain.FileInfo" alias="fileInfo"/>
 		<typeAlias type="com.gaia3d.domain.FileParseLog" alias="fileParseLog"/>

@@ -37,6 +37,10 @@ public class FileUtil {
 	public static final String DATA_FILE_UPLOAD = "DATA_FILE_UPLOAD";
 	// Issue 등록
 	public static final String ISSUE_FILE_UPLOAD = "ISSUE_FILE_UPLOAD";
+	// Data Attribute
+	public static final String DATA_ATTRIBUTE_UPLOAD = "DATA_ATTRIBUTE_UPLOAD";
+	// Data Object Attribute
+	public static final String DATA_OBJECT_ATTRIBUTE_UPLOAD = "DATA_OBJECT_ATTRIBUTE_UPLOAD";
 	
 	// 사용자 일괄 등록의 경우 허용 문서 타입
 	public static final String[] USER_FILE_TYPE = {"xlsx", "xls"};
@@ -44,6 +48,10 @@ public class FileUtil {
 	public static final String[] DATA_FILE_TYPE = {"xlsx", "xls", "json", "txt"};
 	// issue 등록의 경우 허용 문서 타입
 	public static final String[] ISSUE_FILE_TYPE = {"png", "jpg", "jpeg", "gif", "tiff", "xlsx", "xls", "docx", "doc", "pptx", "ppt"};
+	// data attribute 허용 문서 타입
+	public static final String[] DATA_ATTRIBUTE_FILE_TYPE = {"json", "txt"};
+	// data object attribute 허용 문서 타입
+	public static final String[] DATA_OBJECT_ATTRIBUTE_FILE_TYPE = {"json", "txt"};
 	// json 파일
 	public static final String EXTENSION_JSON = "json";
 	// txt 파일
@@ -89,6 +97,16 @@ public class FileUtil {
 	 * @return
 	 */
 	private static FileInfo fileValidation(MultipartFile multipartFile, FileInfo fileInfo) {
+		return fileValidation(multipartFile, fileInfo, 0l);
+	}
+	
+	/**
+	 * 업로딩 파일에 대한 기본적인 validation 체크. 이름, 확장자, 사이즈
+	 * @param multipartFile
+	 * @param fileInfo
+	 * @return
+	 */
+	private static FileInfo fileValidation(MultipartFile multipartFile, FileInfo fileInfo, long fileUploadSize) {
 		
 		// 1 파일 공백 체크
 		if(multipartFile == null || multipartFile.getSize() == 0l) {
@@ -123,6 +141,10 @@ public class FileUtil {
 			extList = Arrays.asList(USER_FILE_TYPE);
 		} else if(DATA_FILE_UPLOAD.equals(fileInfo.getJob_type())) {
 			extList = Arrays.asList(DATA_FILE_TYPE);
+		} else if(DATA_ATTRIBUTE_UPLOAD.equals(fileInfo.getJob_type())) {
+			extList = Arrays.asList(DATA_ATTRIBUTE_FILE_TYPE);
+		} else if(DATA_OBJECT_ATTRIBUTE_UPLOAD.equals(fileInfo.getJob_type())) {
+			extList = Arrays.asList(DATA_OBJECT_ATTRIBUTE_FILE_TYPE);
 		} else {
 			extList =  Arrays.asList(ISSUE_FILE_TYPE);
 		}
@@ -133,10 +155,14 @@ public class FileUtil {
 		}
 		
 		// 4 파일 사이즈
-		long fileSize = multipartFile.getSize();
-		if(fileSize > FILE_UPLOAD_SIZE) {
-			fileInfo.setError_code("fileinfo.size.invalid");
-			return fileInfo;
+		// TODO data object attribute 파일은 사이즈가 커서 제한을 하지 않음
+		if(!DATA_OBJECT_ATTRIBUTE_UPLOAD.equals(fileInfo.getJob_type())) {
+			long fileSize = multipartFile.getSize();
+			if(fileSize > FILE_UPLOAD_SIZE) {
+				log.info("@@ fileSize = {}, limit = {}", fileSize, FILE_UPLOAD_SIZE);
+				fileInfo.setError_code("fileinfo.size.invalid");
+				return fileInfo;
+			}
 		}
 		
 		fileInfo.setFile_name(fileName);

@@ -18,7 +18,7 @@ import com.gaia3d.parser.DataFileParser;
 public class DataFileJsonParser implements DataFileParser {
 
 	@Override
-	public Map<String, Object> parse(Long projectId, FileInfo fileInfo, String userId) {
+	public Map<String, Object> parse(Long projectId, FileInfo fileInfo) {
 		
 		int totalCount = 0;
 		int parseSuccessCount = 0;

@@ -127,16 +127,15 @@
 									<col class="col-checkbox" />
 									<col class="col-number" />
 									<col class="col-name" />
-									<col class="col-name" />
-									<col class="col-number" />
 									<col class="col-id" />
 									<col class="col-name" />
 									<col class="col-toggle" />
 									<col class="col-toggle" />
 									<col class="col-toggle" />
 									<col class="col-toggle" />
-									<col class="col-toggle" />
-									<col class="col-name" />
+									<col class="col-functions" />
+									<col class="col-functions" />
+									<col class="col-functions" />
 									<col class="col-date" />
 									<col class="col-functions" />
 									<thead>
@@ -144,16 +143,15 @@
 											<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
 											<th scope="col" class="col-number"><spring:message code='number'/></th>
 											<th scope="col" class="col-name">프로젝트명</th>
-											<th scope="col" class="col-name">상위 Node</th>
-											<th scope="col" class="col-number">Depth</th>
 											<th scope="col" class="col-id"><spring:message code='key'/></th>
 											<th scope="col" class="col-name"><spring:message code='name'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='height'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='status'/></th>
-											<th scope="col" class="col-toggle"><spring:message code='use.not'/></th>
-											<th scope="col" class="col-name">속성</th>
+											<th scope="col" class="col-name">제어 속성</th>
+											<th scope="col" class="col-name">Origin 속성</th>
+											<th scope="col" class="col-name">Object 속성</th>
 											<th scope="col" class="col-date">등록일</th>
 											<th scope="col" class="col-functions"><spring:message code='modified.and.inser'/></th>
 										</tr>
@@ -161,7 +159,7 @@
 									<tbody>
 <c:if test="${empty dataList }">
 										<tr>
-											<td colspan="15" class="col-none"><spring:message code='data.no.data'/></td>
+											<td colspan="14" class="col-none"><spring:message code='data.no.data'/></td>
 										</tr>
 </c:if>
 <c:if test="${!empty dataList }">
@@ -171,9 +169,8 @@
 												<input type="checkbox" id="data_id_${dataInfo.data_id}" name="data_id" value="${dataInfo.data_id}" />
 											</td>
 											<td class="col-number">${pagination.rowNumber - status.index }</td>
-											<td class="col-name"><a href="#" class="view-group-detail" onclick="detailProject('${dataInfo.project_id }'); return false;">${dataInfo.project_name }</a></td>
-											<td class="col-id">${dataInfo.parent }</td>
-											<td class="col-id">${dataInfo.depth }</td>
+											<td class="col-name">
+												<a href="#" class="view-group-detail" onclick="detailProject('${dataInfo.project_id }'); return false;">${dataInfo.project_name }</a></td>
 											<td class="col-id">${dataInfo.data_key }</td>
 											<td class="col-name"><a href="/data/detail-data.do?data_id=${dataInfo.data_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}">${dataInfo.data_name }</a></td>
 											<td class="col-toggle">${dataInfo.latitude}</td>
@@ -188,8 +185,21 @@
 		</c:if>
 												<span class="icon-text">${dataInfo.viewStatus }</span>
 											</td>
-											<td class="col-toggle">${dataInfo.public_yn }</td>
-											<td class="col-name"><a href="#" onclick="viewAttributes('${dataInfo.data_id }'); return false;">속성</a></td>
+											<td class="col-name"><a href="#" onclick="viewAttributes('${dataInfo.data_id }'); return false;">제어 속성</a></td>
+											<td class="col-functions">
+												<span class="button-group">
+													<a href="#" onclick="return deleteWarning();">보기</a>
+													<a href="#" class="image-button button-edit" onclick="insertDataAttribute('${dataInfo.data_id }', '${dataInfo.data_name }'); return false;">
+														<spring:message code='modified'/></a>
+												</span>
+											</td>
+											<td class="col-functions">
+												<span class="button-group">
+													<a href="#" onclick="return deleteWarning();">보기</a>
+													<a href="#" class="image-button button-edit" onclick="insertDataObjectAttribute('${dataInfo.data_id }', '${dataInfo.data_name }'); return false;">
+														<spring:message code='modified'/></a>
+												</span>
+											</td>
 											<td class="col-date">${dataInfo.viewInsertDate }</td>
 											<td class="col-functions">
 												<span class="button-group">
@@ -227,65 +237,10 @@
 	</div>
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 	
-	<div class="projectDialog" title="프로젝트 정보">
-		<table class="inner-table scope-row">
-			<col class="col-label" />
-			<col class="col-data" />
-			<tr>
-				<th class="col-label" scope="row">프로젝트명</th>
-				<td id="project_name_info" class="col-data"></td>
-			</tr>
-			<tr>
-				<th class="col-label" scope="row">프로젝트 Key</th>
-				<td id="project_key_info" class="col-data"></td>
-			</tr>
-			<tr>
-				<th class="col-label" scope="row"><spring:message code='data.use.not'/></th>
-				<td id="use_yn_info" class="col-data"></td>
-			</tr>
-			<tr>
-				<th class="col-label" scope="row"><spring:message code='description'/></th>
-				<td id="description_info" class="col-data"></td>
-			</tr>
-		</table>
-	</div>
-	<%-- 일괄등록(File) --%>
-	<div class="dataFileDialog" title="<spring:message code='data.all.insert.data'/>">
-		<form id="fileInfo" name="fileInfo" action="/data/ajax-insert-data-file.do" method="post" enctype="multipart/form-data">
-			<table id="dataFileUpload" class="inner-table scope-row">
-				<col class="col-sub-label xl" />
-				<col class="col-data" />
-				<tbody>
-					<tr>
-						<th class="col-sub-label">
-							<label for="project_id">프로젝트명</label>
-						</th>
-						<td>
-							<select id="project_id" name="project_id" class="select">
-								<option value="0"><spring:message code='all'/></option>
-<c:forEach var="project" items="${projectList}">
-								<option value="${project.project_id}">${project.project_name}</option>
-</c:forEach>
-							</select>
-						</td>
-					</tr>
-					
-					<tr>
-						<th class="col-sub-label"><spring:message code='data.upload.file'/></th>
-						<td>
-							<div class="inner-data">
-								<input type="file" id="file_name" name="file_name" class="col-data" />
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="button-group">
-				<input type="button" onclick="fileUpload();" class="button" value="<spring:message code='data.file.save'/>"/>
-			</div>
-		</form>
-	</div>
-	<%-- 일괄등록(Excel) --%>
+	<%@ include file="/WEB-INF/views/data/project-dialog.jsp" %>
+	<%@ include file="/WEB-INF/views/data/data-file-dialog.jsp" %>
+	<%@ include file="/WEB-INF/views/data/data-attribute-dialog.jsp" %>
+	<%@ include file="/WEB-INF/views/data/data-object-attribute-dialog.jsp" %>
 	
 <script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 <script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
@@ -313,6 +268,24 @@
 	});
 	
 	var dataFileDialog = $( ".dataFileDialog" ).dialog({
+		autoOpen: false,
+		height: 445,
+		width: 600,
+		modal: true,
+		resizable: false,
+		close: function() { location.reload(); }
+	});
+	
+	var dataAttributeDialog = $( ".dataAttributeDialog" ).dialog({
+		autoOpen: false,
+		height: 445,
+		width: 600,
+		modal: true,
+		resizable: false,
+		close: function() { location.reload(); }
+	});
+	
+	var dataObjectAttributeDialog = $( ".dataObjectAttributeDialog" ).dialog({
 		autoOpen: false,
 		height: 445,
 		width: 600,
@@ -392,7 +365,7 @@
 	function fileUpload() {
 		var fileName = $("#file_name").val();
 		if(fileName === "") {
-			alert(JS_MESSAGE["data.file.name"]);
+			alert(JS_MESSAGE["file.name.empty"]);
 			$("#file_name").focus();
 			return false;
 		}
@@ -401,7 +374,7 @@
 				&& fileName.lastIndexOf("xls") <=0
 				&& fileName.lastIndexOf("json") <=0 
 				&& fileName.lastIndexOf("txt") <=0 ) {
-			alert(JS_MESSAGE["data.file.invalid"]);
+			alert(JS_MESSAGE["file.ext.invalid"]);
 			$("#file_name").focus();
 			return false;
 		}
@@ -444,7 +417,9 @@
 						+ 	"<td> " + msg.insert_error_count + "</td>"
 						+ "</tr>";
 						$("#dataFileUpload > tbody:last").append(content);
-					}
+					} else {
+	    				alert(JS_MESSAGE[msg.result]);
+	    			}
 					fileUploadFlag = true;
 				},
 				error:function(request,status,error){
@@ -558,6 +533,108 @@
 			}
 		}
 		return true;
+	}
+	
+	// Data Attribute Dialog
+	function insertDataAttribute(dataId, dataName) {
+		dataAttributeDialog.dialog( "open" );
+		$("#attribute_file_data_id").val(dataId);
+		$("#attributeDataName").html(dataName);
+	}
+	
+	var dataAttributeFileUploadFlag = true;
+	function dataAttributeFileUpload() {
+		var fileName = $("#attribute_file_name").val();
+		if(fileName === "") {
+			alert(JS_MESSAGE["file.name.empty"]);
+			$("#attribute_file_name").focus();
+			return false;
+		}
+		
+		if( fileName.lastIndexOf("json") <=0 && fileName.lastIndexOf("txt") <=0 ) {
+			alert(JS_MESSAGE["file.ext.invalid"]);
+			$("#file_name").focus();
+			return false;
+		}
+		
+		if(dataAttributeFileUploadFlag) {
+			dataAttributeFileUploadFlag = false;
+			$("#dataAttributeInfo").ajaxSubmit({
+				type: "POST",
+				dataType: "json",
+				success: function(msg){
+					if(msg.result == "success") {
+						if(msg.parse_error_count != 0 || msg.insert_error_count != 0) {
+							$("#attribute_file_name").val("");
+							alert("업로딩 실패 건수가 있습니다");
+						} else {
+							alert(JS_MESSAGE["update"]);
+						}
+					} else {
+	    				alert(JS_MESSAGE[msg.result]);
+	    			}
+					dataAttributeFileUploadFlag = true;
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
+					dataAttributeFileUploadFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+	
+	// Data Object Attribute Daialog
+	function insertDataObjectAttribute(dataId, dataName) {
+		dataObjectAttributeDialog.dialog( "open" );
+		$("#object_attribute_file_data_id").val(dataId);
+		$("#objectAttributeDataName").html(dataName);
+	}
+	
+	var dataObjectAttributeFileUploadFlag = true;
+	function dataObjectAttributeFileUpload() {
+		var fileName = $("#object_attribute_file_name").val();
+		if(fileName === "") {
+			alert(JS_MESSAGE["file.name.empty"]);
+			$("#object_attribute_file_name").focus();
+			return false;
+		}
+		
+		if( fileName.lastIndexOf("json") <=0 && fileName.lastIndexOf("txt") <=0 ) {
+			alert(JS_MESSAGE["file.ext.invalid"]);
+			$("#file_name").focus();
+			return false;
+		}
+		
+		if(dataObjectAttributeFileUploadFlag) {
+			dataObjectAttributeFileUploadFlag = false;
+			$("#dataObjectAttributeInfo").ajaxSubmit({
+				type: "POST",
+				dataType: "json",
+				success: function(msg){
+					if(msg.result == "success") {
+						if(msg.parse_error_count != 0 || msg.insert_error_count != 0) {
+							$("#object_attribute_file_name").val("");
+							alert("업로딩 실패 건수가 있습니다");
+						} else {
+							alert(JS_MESSAGE["update"]);
+						}
+					} else {
+	    				alert(JS_MESSAGE[msg.result]);
+	    			}
+					dataObjectAttributeFileUploadFlag = true;
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
+					dataObjectAttributeFileUploadFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
 	}
 </script>
 </body>

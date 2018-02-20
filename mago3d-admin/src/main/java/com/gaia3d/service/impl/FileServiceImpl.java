@@ -21,12 +21,15 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.DataInfoAttribute;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.FileParseLog;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.UserSession;
+import com.gaia3d.parser.DataAttributeFileParser;
 import com.gaia3d.parser.DataFileParser;
+import com.gaia3d.parser.impl.DataAttributeFileJsonParser;
 import com.gaia3d.parser.impl.DataFileJsonParser;
 import com.gaia3d.persistence.FileMapper;
 import com.gaia3d.service.DataService;
@@ -62,22 +65,22 @@ public class FileServiceImpl implements FileService {
 	
 	/**
 	 * 파일 정보 획득
-	 * @param file_info_id
+	 * @param fileInfoId
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public FileInfo getFileInfo(Long file_info_id) {
-		return fileMapper.getFileInfo(file_info_id);
+	public FileInfo getFileInfo(Long fileInfoId) {
+		return fileMapper.getFileInfo(fileInfoId);
 	}
 	
 	/**
 	 * 파일 파싱 로그 획득
-	 * @param file_parse_log_id
+	 * @param fileParseLogId
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public FileParseLog getFileParseLog(Long file_parse_log_id) {
-		return fileMapper.getFileParseLog(file_parse_log_id);
+	public FileParseLog getFileParseLog(Long fileParseLogId) {
+		return fileMapper.getFileParseLog(fileParseLogId);
 	}
 
 	/**
@@ -493,7 +496,7 @@ public class FileServiceImpl implements FileService {
 	 * @return
 	 */
 	@Transactional
-	public FileInfo insertDataFile(Long project_id, FileInfo fileInfo,  String userId) {
+	public FileInfo insertDataFile(Long project_id, FileInfo fileInfo) {
 		
 		// 파일 이력을 저장
 		insertFileInfo(fileInfo);
@@ -509,7 +512,7 @@ public class FileServiceImpl implements FileService {
 		} else if(FileUtil.EXTENSION_TXT.equals(fileInfo.getFile_ext())) {
 		} else {
 		}
-		Map<String, Object> map = dataFileParser.parse(project_id, fileInfo, userId);
+		Map<String, Object> map = dataFileParser.parse(project_id, fileInfo);
 		
 		@SuppressWarnings("unchecked")
 		List<DataInfo> dataInfoList = (List<DataInfo>) map.get("dataInfoList");
@@ -536,6 +539,110 @@ public class FileServiceImpl implements FileService {
 				fileMapper.insertFileParseLog(fileParseLog);
 				insertErrorCount++;
 			}
+		}
+		
+		fileInfo.setTotal_count((Integer) map.get("totalCount"));
+		fileInfo.setParse_success_count((Integer) map.get("parseSuccessCount"));
+		fileInfo.setParse_error_count((Integer) map.get("parseErrorCount"));
+		fileInfo.setInsert_success_count(insertSuccessCount);
+		fileInfo.setInsert_error_count(insertErrorCount);
+		fileMapper.updateFileInfo(fileInfo);
+		
+		return fileInfo;
+	}
+	
+	/**
+	 * DATA Attribute 등록
+	 * @param dataId
+	 * @param fileInfo
+	 * @return
+	 */
+	@Transactional
+	public FileInfo insertDataAttributeFile(Long dataId, FileInfo fileInfo) {
+		
+		// 파일 이력을 저장
+		insertFileInfo(fileInfo);
+		
+		DataAttributeFileParser dataAttributeFileParser = null;
+		if(FileUtil.EXTENSION_JSON.equals(fileInfo.getFile_ext())) {
+			dataAttributeFileParser = new DataAttributeFileJsonParser();
+		} else {
+			dataAttributeFileParser = new DataAttributeFileJsonParser();
+		}
+		Map<String, Object> map = dataAttributeFileParser.parse(dataId, fileInfo);
+		
+		String attribute = (String) map.get("attribute");
+		
+		FileParseLog fileParseLog = new FileParseLog();
+		fileParseLog.setFile_info_id(fileInfo.getFile_info_id());
+		fileParseLog.setLog_type(FileParseLog.DB_INSERT_LOG);
+		
+		int insertSuccessCount = 0;
+		int insertErrorCount = 0;
+		try {
+			DataInfoAttribute dataInfoAttribute = new DataInfoAttribute();
+			dataInfoAttribute.setData_id(dataId);
+			dataInfoAttribute.setAttributes(attribute);
+			dataService.insertDataAttribute(dataInfoAttribute);
+			insertSuccessCount++;
+		} catch(Exception e) {
+			e.printStackTrace();
+			fileParseLog.setIdentifier_value(fileInfo.getUser_id());
+			fileParseLog.setError_code(e.getMessage());
+			fileMapper.insertFileParseLog(fileParseLog);
+			insertErrorCount++;
+		}
+		
+		fileInfo.setTotal_count((Integer) map.get("totalCount"));
+		fileInfo.setParse_success_count((Integer) map.get("parseSuccessCount"));
+		fileInfo.setParse_error_count((Integer) map.get("parseErrorCount"));
+		fileInfo.setInsert_success_count(insertSuccessCount);
+		fileInfo.setInsert_error_count(insertErrorCount);
+		fileMapper.updateFileInfo(fileInfo);
+		
+		return fileInfo;
+	}
+	
+	/**
+	 * DATA Object Attribute 등록
+	 * @param dataId
+	 * @param fileInfo
+	 * @return
+	 */
+	@Transactional
+	public FileInfo insertDataObjectAttributeFile(Long dataId, FileInfo fileInfo) {
+		
+		// 파일 이력을 저장
+		insertFileInfo(fileInfo);
+		
+		DataAttributeFileParser dataAttributeFileParser = null;
+		if(FileUtil.EXTENSION_JSON.equals(fileInfo.getFile_ext())) {
+			dataAttributeFileParser = new DataAttributeFileJsonParser();
+		} else {
+			dataAttributeFileParser = new DataAttributeFileJsonParser();
+		}
+		Map<String, Object> map = dataAttributeFileParser.parse(dataId, fileInfo);
+		
+		String attribute = (String) map.get("attribute");
+		
+		FileParseLog fileParseLog = new FileParseLog();
+		fileParseLog.setFile_info_id(fileInfo.getFile_info_id());
+		fileParseLog.setLog_type(FileParseLog.DB_INSERT_LOG);
+		
+		int insertSuccessCount = 0;
+		int insertErrorCount = 0;
+		try {
+			DataInfoAttribute dataInfoAttribute = new DataInfoAttribute();
+			dataInfoAttribute.setData_id(dataId);
+			dataInfoAttribute.setAttributes(attribute);
+			dataService.insertDataAttribute(dataInfoAttribute);
+			insertSuccessCount++;
+		} catch(Exception e) {
+			e.printStackTrace();
+			fileParseLog.setIdentifier_value(fileInfo.getUser_id());
+			fileParseLog.setError_code(e.getMessage());
+			fileMapper.insertFileParseLog(fileParseLog);
+			insertErrorCount++;
 		}
 		
 		fileInfo.setTotal_count((Integer) map.get("totalCount"));
