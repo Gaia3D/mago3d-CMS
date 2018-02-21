@@ -125,6 +125,16 @@
 			AND A.project_id = B.project_id
 	</select>
 	
+	<!-- Project Data 정보 -->
+	<select id="getDataByProjectId" parameterType="long" resultType="dataInfo">
+		/* getDataByProjectId */
+		SELECT *
+		FROM data_info
+		WHERE project_id = #{project_id}
+			AND parent = 0
+			AND depth = 1
+	</select>
+	
 	<!-- Data 아이디 중복 체크 -->
 	<select id="getDuplicationKeyCount" parameterType="dataInfo" resultType="int">
 		/* getDuplicationKeyCount */

@@ -491,12 +491,12 @@ public class FileServiceImpl implements FileService {
 	
 	/**
 	 * DATA 일괄 등록
-	 * @param project_id
+	 * @param projectId
 	 * @param fileInfo
 	 * @return
 	 */
 	@Transactional
-	public FileInfo insertDataFile(Long project_id, FileInfo fileInfo) {
+	public FileInfo insertDataFile(Long projectId, FileInfo fileInfo) {
 		
 		// 파일 이력을 저장
 		insertFileInfo(fileInfo);
@@ -512,7 +512,8 @@ public class FileServiceImpl implements FileService {
 		} else if(FileUtil.EXTENSION_TXT.equals(fileInfo.getFile_ext())) {
 		} else {
 		}
-		Map<String, Object> map = dataFileParser.parse(project_id, fileInfo);
+		
+		Map<String, Object> map = dataFileParser.parse(projectId, fileInfo);
 		
 		@SuppressWarnings("unchecked")
 		List<DataInfo> dataInfoList = (List<DataInfo>) map.get("dataInfoList");
@@ -521,9 +522,11 @@ public class FileServiceImpl implements FileService {
 		fileParseLog.setFile_info_id(fileInfo.getFile_info_id());
 		fileParseLog.setLog_type(FileParseLog.DB_INSERT_LOG);
 		
+		DataInfo projectDataInfo = dataService.getDataByProjectId(projectId);
+		Map<String, Long> parentDataKeyMap = new HashMap<>();
+		parentDataKeyMap.put(projectDataInfo.getData_key(), projectDataInfo.getData_id());
 		int insertSuccessCount = 0;
 		int insertErrorCount = 0;
-		Map<String, Long> parentDataKeyMap = new HashMap<>();
 		for(DataInfo dataInfo : dataInfoList) {
 			try {
 				if(dataInfo.getDepth() != 1) {

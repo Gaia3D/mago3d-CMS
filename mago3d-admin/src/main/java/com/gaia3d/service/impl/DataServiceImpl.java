@@ -94,6 +94,16 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	/**
+	 * Project Data 정보 취득
+	 * @param project_id
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public DataInfo getDataByProjectId(Long project_id) {
+		return dataMapper.getDataByProjectId(project_id);
+	}
+	
+	/**
 	 * 표시 순서
 	 * @param dvataInfo
 	 * @return

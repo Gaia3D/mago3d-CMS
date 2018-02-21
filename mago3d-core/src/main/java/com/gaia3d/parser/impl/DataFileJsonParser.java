@@ -62,7 +62,7 @@ public class DataFileJsonParser implements DataFileParser {
 			dataInfo.setDepth(1);
 			dataInfo.setView_order(1);
 			
-			dataInfoList.add(dataInfo);
+			//dataInfoList.add(dataInfo);
 			
 			if(childrenNode.isArray() && childrenNode.size() != 0) {
 				dataInfoList.addAll(parseChildren(projectId, dataInfo.getData_key(),  null, dataInfo.getDepth(), childrenNode));
