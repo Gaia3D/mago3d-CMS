@@ -63,6 +63,7 @@ public class RootConfig {
 //		spring.datasource.hikari.validation-timeout=10000
 
 		HikariDataSource dataSource = new HikariDataSource();
+		dataSource.setPoolName("mago3DUserPool");
 		dataSource.setDriverClassName(driverClassName);
 		dataSource.setJdbcUrl(Crypt.decrypt(url));
 		dataSource.setUsername(Crypt.decrypt(username));
