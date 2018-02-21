@@ -53,8 +53,7 @@ public class RootConfig {
 	@Value("${spring.datasource.hikari.minimum-idle}")
 	private Integer minimumIdle;
 	
-	@Bean
-	@Qualifier("datasourceUser")
+	@Bean(name="datasourceUser")
 	public DataSource dataSource() {
 		
 		// TODO hikari 에서는 min, max 를 동일값을 해 주길 권장
