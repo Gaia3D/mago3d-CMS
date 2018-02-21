@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jmx.export.MBeanExporter;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
@@ -52,6 +54,7 @@ public class RootConfig {
 	private Integer minimumIdle;
 	
 	@Bean
+	@Qualifier("datasourceAdmin")
 	public DataSource dataSource() {
 		
 		// TODO hikari 에서는 min, max 를 동일값을 해 주길 권장
@@ -93,6 +96,14 @@ public class RootConfig {
         final DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource());
         return transactionManager;
     }
+	
+//	@Bean
+//    public MBeanExporter exporter() {
+//		final MBeanExporter exporter = new MBeanExporter();
+//		// we exclude the "datasource" beans because it's already managed by hikari itself
+//		exporter.setExcludedBeans("datasourceAdmin", "datasourceUser");
+//		return exporter;
+//	}
 	
 	@Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {
