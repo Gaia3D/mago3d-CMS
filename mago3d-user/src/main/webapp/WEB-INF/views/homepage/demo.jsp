@@ -586,7 +586,7 @@
 <c:if test="${geoViewLibrary eq 'worldwind' }">
 <div style="position: absolute; width: 100%; height: 100%; margin-top: 0; padding: 0; overflow: hidden;">
 	<canvas id="magoContainer" style="width: 100%; height: 100%">
-        <spring:message code='demo.canvas.warning'/>
+        Your browser does not support HTML5 Canvas.
     </canvas>
     <canvas id="objectLabel"></canvas>
 </div>
@@ -608,13 +608,7 @@
 	var managerFactory = null;
 	var policyJson = ${policyJson};
 	var initProjectJsonMap = ${initProjectJsonMap};
-	var menuMap = new Map();
-	menuMap.set("homeMenu", false);
-	menuMap.set("myIssueMenu", false);
-	menuMap.set("searchMenu", false);
-	menuMap.set("apiMenu", false);
-	menuMap.set("insertIssueMenu", false);
-	menuMap.set("configMenu", false);
+	var menuObject = { homeMenu : false, myIssueMenu : false, searchMenu : false, apiMenu : false, insertIssueMenu : false, configMenu : false };
 	var insertIssueEnable = false;
 	var FPVModeFlag = false;
 	
@@ -677,7 +671,29 @@
 	function gotoProject(projectId, longitude, latitude, height, duration) {
 		var projectData = getDataAPI(CODE.PROJECT_ID_PREFIX + projectId);
 		if (projectData === null || projectData === undefined) {
-			ajaxCall(dataInformationUrl, "project_id=" + projectId, gotoProjectCallback, errorCallback, null, projectId, longitude, latitude, height, duration);
+			$.ajax({
+				url: dataInformationUrl,
+				type: "POST",
+				data: "project_id=" + projectId,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+				success : function(msg) {
+					if(msg.result === "success") {
+						var projectDataJson = JSON.parse(msg.projectDataJson);
+						if(projectDataJson === null || projectDataJson === undefined) {
+							alert(JS_MESSAGE["project.data.no.found"]);
+							return;
+						}
+						gotoProjectAPI(managerFactory, projectId, projectDataJson, projectDataJson.data_key, longitude, latitude, height, duration);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+				},
+				error : function(request, status, error) {
+					alert(JS_MESSAGE["ajax.error.message"]);
+					console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+				}
+			});
 		} else {
 			gotoProjectAPI(managerFactory, projectId, projectData, projectData.data_key, longitude, latitude, height, duration);	
 		}
@@ -685,42 +701,40 @@
 		// 현재 좌표를 저장
 		saveCurrentLocation(latitude, longitude);
 	}
-	function gotoProjectCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			var projectDataJson = JSON.parse(msg.projectDataJson);
-			if(projectDataJson === null || projectDataJson === undefined) {
-				alert(JS_MESSAGE["project.data.no.found"]);
-				return;
-			}
-			gotoProjectAPI(managerFactory, theArgs[0], projectDataJson, projectDataJson.data_key, theArgs[1], theArgs[2], theArgs[3], theArgs[4]);
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
-	}
 	
 	// 이슈 위치로 이동
 	function gotoIssue(projectId, issueId, issueType, longitude, latitude, height, duration) {
 		var projectData = getDataAPI(CODE.PROJECT_ID_PREFIX + projectId);
 		if (projectData === null || projectData === undefined) {
-			ajaxCall(dataInformationUrl, "project_id=" + projectId, gotoIssueCallback, errorCallback, null, projectId, issueId, issueType, longitude, latitude, height, duration);
+			$.ajax({
+				url: dataInformationUrl,
+				type: "POST",
+				data: "project_id=" + projectId,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+				success : function(msg) {
+					if(msg.result === "success") {
+						var projectDataJson = JSON.parse(msg.projectDataJson);
+						if(projectDataJson === null || projectDataJson === undefined) {
+							alert(JS_MESSAGE["project.data.no.found"]);
+							return;
+						}
+						gotoIssueAPI(managerFactory, projectId, projectDataJson, projectDataJson.data_key, issueId, issueType, longitude, latitude, height, duration);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+				},
+				error : function(request, status, error) {
+					alert(JS_MESSAGE["ajax.error.message"]);
+					console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+				}
+			});
 		} else {
 			gotoIssueAPI(managerFactory, projectId, projectData, projectData.data_key, issueId, issueType, longitude, latitude, height, duration);	
 		}
 		
 		// 현재 좌표를 저장
 		saveCurrentLocation(latitude, longitude);
-	}
-	function gotoIssueCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			var projectDataJson = JSON.parse(msg.projectDataJson);
-			if(projectDataJson === null || projectDataJson === undefined) {
-				alert(JS_MESSAGE["project.data.no.found"]);
-				return;
-			}
-			gotoIssueAPI(managerFactory, theArgs[0], projectDataJson, projectDataJson.data_key, theArgs[1], theArgs[2], theArgs[3], theArgs[4], theArgs[5], theArgs[6]);
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
 	}
 	
 	// issue 위치 버튼을 클릭 했을 경우
@@ -752,16 +766,40 @@
 	}
 	
 	// 이슈 등록
-	var isInsertIssue = { "enable" : true };
+	var isInsertIssue = true;
 	$("#issueSaveButton").click(function() {
 		if (check() == false) {
 			return false;
 		}
-		if(isInsertIssue["enable"]) {
-			isInsertIssue["enable"] = false;
+		if(isInsertIssue) {
+			isInsertIssue = false;
 			var url = "/issue/ajax-insert-issue.do";
 			var info = $("#issue").serialize();
-			ajaxCall(url, info, issueSaveCallback, errorCallback, isInsertIssue);
+			$.ajax({
+				url: url,
+				type: "POST",
+				data: info,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+				success : function(msg) {
+					if(msg.result === "success") {
+						alert(JS_MESSAGE["insert"]);
+						// pin image를 그림
+						drawInsertIssueImageAPI(managerFactory, 1, msg.issue.issue_id, msg.issue.issue_type, 
+								$("#data_key").val(), $("#latitude").val(), $("#longitude").val(), $("#height").val());
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+					
+					isInsertIssue = true;
+					ajaxIssueList();
+				},
+				error : function(request, status, error) {
+					alert(JS_MESSAGE["ajax.error.message"]);
+					console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+					isInsertIssue
+				}
+			});
 			
 			// issue 등록 버튼, css, 상태를 변경
 			$("#insertIssueEnableButton").removeClass("on");
@@ -774,19 +812,7 @@
 			return;
 		}
 	});
-	function issueSaveCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			alert(JS_MESSAGE["insert"]);
-			// pin image를 그림
-			drawInsertIssueImageAPI(managerFactory, 1, msg.issue.issue_id, msg.issue.issue_type, 
-					$("#data_key").val(), $("#latitude").val(), $("#longitude").val(), $("#height").val());
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
-		
-		isInsertIssue["enable"] = true;
-		ajaxIssueList();
-	}
+	
 	function check() {
 		if ($("#data_key").val() === "") {
 			alert(JS_MESSAGE["issue.datakey.empty"]);
@@ -809,57 +835,67 @@
 	function ajaxIssueList() {
 		var info = "";
 		var url = "/homepage/ajax-list-issue.do";
-		ajaxCall(url, info, ajaxIssueListCallback, errorCallback, null);
-	}
-	function ajaxIssueListCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			var issueRecentList10Message = "<spring:message code='issue.recent.list.10'/>";
-			var issueDoesNotExistMessage = "<spring:message code='issue.not.exist'/>";
-			var commonShortcutMessage = "<spring:message code='common.shortcut'/>";
-			
-			var issueList = msg.issueList;
-			var content = "";
-			var issueListCount = 0;
-			content = content 
-				+	"<li style=\"margin-bottom: 8px; font-size: 1em; font-weight: normal; color: #2955a6;\">"
-				+ 		issueRecentList10Message
-				+	"</li>";
-			if(issueList === null || issueList.length === 0) {
-				content += 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-						+	issueDoesNotExistMessage
-						+	"</li>";
-			} else {
-				issueListCount = issueList.length;
-				for(i=0; i<issueListCount; i++ ) {
-					var issue = issueList[i];
+		$.ajax({
+			url: url,
+			type: "POST",
+			data: info,
+			dataType: "json",
+			headers: { "X-mago3D-Header" : "mago3D"},
+			success : function(msg) {
+				if(msg.result === "success") {
+					var issueRecentList10Message = "<spring:message code='issue.recent.list.10'/>";
+					var issueDoesNotExistMessage = "<spring:message code='issue.not.exist'/>";
+					var commonShortcutMessage = "<spring:message code='common.shortcut'/>";
+					
+					var issueList = msg.issueList;
+					var content = "";
+					var issueListCount = 0;
 					content = content 
-						+ 	"<li>"
-						+ 	"	<button type=\"button\" title=\"" + commonShortcutMessage + "\""
-						+			"onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
-						+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">" + commonShortcutMessage + "</button>"
-						+ 	"	<div class=\"info\">"
-						+ 	"		<p class=\"title\">"
-						+ 	"			<span>" + issue.project_name + "</span>"
-						+ 				issue.title
-						+ 	"		</p>"
-						+ 	"		<ul class=\"tag\">"
-						+ 	"			<li><span class=\"" + issue.issue_type_css_class + "\"></span>" + issue.issue_type_name + "</li>"
-						+ 	"			<li><span class=\"" + issue.priority_css_class + "\"></span>" + issue.priority_name + "</li>"
-						+ 	"			<li class=\"date\">" + issue.insert_date.substring(0,19) + "</li>"
-						+ 	"		</ul>"
-						+ 	"	</div>"
-						+ 	"</li>";
+						+	"<li style=\"margin-bottom: 8px; font-size: 1em; font-weight: normal; color: #2955a6;\">"
+						+ 		issueRecentList10Message
+						+	"</li>";
+					if(issueList === null || issueList.length === 0) {
+						content += 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
+								+	issueDoesNotExistMessage
+								+	"</li>";
+					} else {
+						issueListCount = issueList.length;
+						for(i=0; i<issueListCount; i++ ) {
+							var issue = issueList[i];
+							content = content 
+								+ 	"<li>"
+								+ 	"	<button type=\"button\" title=\"" + commonShortcutMessage + "\""
+								+			"onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+								+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">" + commonShortcutMessage + "</button>"
+								+ 	"	<div class=\"info\">"
+								+ 	"		<p class=\"title\">"
+								+ 	"			<span>" + issue.project_name + "</span>"
+								+ 				issue.title
+								+ 	"		</p>"
+								+ 	"		<ul class=\"tag\">"
+								+ 	"			<li><span class=\"" + issue.issue_type_css_class + "\"></span>" + issue.issue_type_name + "</li>"
+								+ 	"			<li><span class=\"" + issue.priority_css_class + "\"></span>" + issue.priority_name + "</li>"
+								+ 	"			<li class=\"date\">" + issue.insert_date.substring(0,19) + "</li>"
+								+ 	"		</ul>"
+								+ 	"	</div>"
+								+ 	"</li>";
+						}
+					}
+					$("#issueListCount").empty();
+					$("#issueListCount").html(msg.totalCount);
+					$("#myIssueMenuContent").empty();
+					$("#myIssueMenuContent").html(content);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
 				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
 			}
-			$("#issueListCount").empty();
-			$("#issueListCount").html(msg.totalCount);
-			$("#myIssueMenuContent").empty();
-			$("#myIssueMenuContent").html(content);
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
+		});
 	}
-
+	
 	// 왼쪽 메뉴 클릭시 ui 처리
 	$("#homeMenu").click(function() {
 		menuSlideControl("homeMenu");
@@ -879,11 +915,13 @@
 	$("#configMenu").click(function() {
 		menuSlideControl("configMenu");
 	});
+	
 	function menuSlideControl(menuName) {
-		var compareMenuState = menuMap.get(menuName);
-		for(var [key, value] of menuMap) {
-			// state 값 변경하고, css 변경
+		var compareMenuState = menuObject[menuName];
+		for(var key in menuObject) {
+		    // state 값 변경하고, css 변경
 			if(key === menuName) {
+			    var value = menuObject[key];
 				if(value) {
 					$("#" + menuName).removeClass("on");
 					$("#menuContent").hide();
@@ -893,7 +931,7 @@
 					$("#menuContent").show();
 					$("#" + menuName + "Content").show();
 				}
-				menuMap.set(menuName, !compareMenuState);
+				menuObject[menuName] = !compareMenuState;
 			} else {
 				$("#" + key).removeClass("on");
 				$("#" + key + "Content").hide();
@@ -903,21 +941,21 @@
 	
 	// menu content close 버튼
 	$("#menuContentClose").click(function() {
-		for(var [key, value] of menuMap) {
-			if(value) {
+		for(var key in menuObject) {
+            var value = menuObject[key];
+            if(value) {
 				$("#menuContent").hide();
 				$("#" + key + "Content").hide();
 				$("#" + key).removeClass("on");
-				menuMap.set(key, !value);
+				menuObject[key] = !value;
 			}
 		}
 		// 이슈 등록 비활성화 상태
 		changeInsertIssueStateAPI(managerFactory, 0);
 	});
 	
-	// 검색 메뉴 시작
 	// Data 검색
-	var searchDataFlag = { "enable" : true }
+	var searchDataFlag = true;
 	$("#searchData").click(function() {
 		if ($.trim($("#search_value").val()) === ""){
 			alert(JS_MESSAGE["search.word.empty"]);
@@ -925,8 +963,8 @@
 			return false;
 		}
 		
-		if(searchDataFlag["enable"]) {
-			searchDataFlag["enable"] = false;
+		if(searchDataFlag) {
+			searchDataFlag = false;
 			var info = $("#searchForm").serialize();
 			var url = null;
 			if($("#search_word").val() === "data_name") {
@@ -934,91 +972,104 @@
 			} else {
 				url = "/homepage/ajax-list-issue.do";
 			}
-			ajaxCall(url, info, searchDataCallback, errorCallback, searchDataFlag);
+			
+			$.ajax({
+				url: url,
+				type: "POST",
+				data: info,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+				success : function(msg) {
+					if(msg.result === "success") {
+						var issueDoesNotExistMessage = "<spring:message code='issue.not.exist'/>";
+						var dataDoesNotExistMessage = "<spring:message code='data.not.exist'/>";
+						var commonShortcutMessage = "<spring:message code='common.shortcut'/>";
+						
+						var searchType = $("#search_word").val();
+						var content = "";
+						if(searchType === "data_name") {
+							var dataInfoList = msg.dataInfoList;
+							if(dataInfoList == null || dataInfoList.length == 0) {
+								content = content	
+									+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
+									+	dataDoesNotExistMessage
+									+	"</li>";
+							} else {
+								dataInfoListCount = dataInfoList.length;
+								for(i=0; i<dataInfoListCount; i++ ) {
+									var dataInfo = dataInfoList[i];
+									content = content 
+										+ 	"<li>";
+									if(dataInfo.parent !== 0) {	
+										content = content 
+										+ 	"	<button type=\"button\" title=\"" + commonShortcutMessage + "\""
+										+ 	" 		onclick=\"gotoData('" + dataInfo.project_id + "', '" + dataInfo.data_key + "');\">" + commonShortcutMessage + "</button>";
+									}
+									content = content 
+										+ 	"	<div class=\"info\">"
+										+ 	"		<p class=\"title\">"
+										+ 	"			<span>" + dataInfo.project_name + "</span>"
+										+ 				dataInfo.data_name
+										+ 	"		</p>"
+										+ 	"		<ul class=\"tag\">"
+										+ 	"			<li><span class=\"t3\"></span>" + dataInfo.latitude + "</li>"
+										+ 	"			<li><span class=\"t3\"></span>" + dataInfo.longitude + "</li>"
+										+ 	"			<li class=\"date\">" + dataInfo.insert_date.substring(0,19) + "</li>"
+										+ 	"		</ul>"
+										+ 	"	</div>"
+										+ 	"</li>";
+								}
+							}
+						} else {
+							var issueList = msg.issueList;
+							if(issueList === null || issueList.length === 0) {
+								content = content	
+									+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
+									+	issueDoesNotExistMessage
+									+	"</li>";
+							} else {
+								issueListCount = issueList.length;
+								for(i=0; i<issueListCount; i++ ) {
+									var issue = issueList[i];
+									content = content 
+										+ 	"<li>"
+										+ 	"	<button type=\"button\" title=\"" + commonShortcutMessage + "\""
+										+			" onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+										+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2');\">" + commonShortcutMessage + "</button>"
+										+ 	"	<div class=\"info\">"
+										+ 	"		<p class=\"title\">"
+										+ 	"			<span>" + issue.project_name + "</span>"
+										+ 				issue.title
+										+ 	"		</p>"
+										+ 	"		<ul class=\"tag\">"
+										+ 	"			<li><span class=\"" + issue.issue_type_css_class + "\"></span>" + issue.issue_type_name + "</li>"
+										+ 	"			<li><span class=\"" + issue.priority_css_class + "\"></span>" + issue.priority_name + "</li>"
+										+ 	"			<li class=\"date\">" + issue.insert_date.substring(0,19) + "</li>"
+										+ 	"		</ul>"
+										+ 	"	</div>"
+										+ 	"</li>";
+								}
+							}
+						}
+						
+						$("#searchList").empty();
+						$("#searchList").html(content);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+					searchDataFlag = true;
+				},
+				error : function(request, status, error) {
+					alert(JS_MESSAGE["ajax.error.message"]);
+			    	console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+					searchDataFlag = true;
+				}
+			});
 		} else {
 			alert(JS_MESSAGE["button.dobule.click"]);
 			return;
 		}
 	});
-	function searchDataCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			var issueDoesNotExistMessage = "<spring:message code='issue.not.exist'/>";
-			var dataDoesNotExistMessage = "<spring:message code='data.not.exist'/>";
-			var commonShortcutMessage = "<spring:message code='common.shortcut'/>";
-			
-			var searchType = $("#search_word").val();
-			var content = "";
-			if(searchType === "data_name") {
-				var dataInfoList = msg.dataInfoList;
-				if(dataInfoList == null || dataInfoList.length == 0) {
-					content = content	
-						+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-						+	dataDoesNotExistMessage
-						+	"</li>";
-				} else {
-					dataInfoListCount = dataInfoList.length;
-					for(i=0; i<dataInfoListCount; i++ ) {
-						var dataInfo = dataInfoList[i];
-						content = content 
-							+ 	"<li>";
-						if(dataInfo.parent !== 0) {	
-							content = content 
-							+ 	"	<button type=\"button\" title=\"" + commonShortcutMessage + "\""
-							+ 	" 		onclick=\"gotoData('" + dataInfo.project_id + "', '" + dataInfo.data_key + "');\">" + commonShortcutMessage + "</button>";
-						}
-						content = content 
-							+ 	"	<div class=\"info\">"
-							+ 	"		<p class=\"title\">"
-							+ 	"			<span>" + dataInfo.project_name + "</span>"
-							+ 				dataInfo.data_name
-							+ 	"		</p>"
-							+ 	"		<ul class=\"tag\">"
-							+ 	"			<li><span class=\"t3\"></span>" + dataInfo.latitude + "</li>"
-							+ 	"			<li><span class=\"t3\"></span>" + dataInfo.longitude + "</li>"
-							+ 	"			<li class=\"date\">" + dataInfo.insert_date.substring(0,19) + "</li>"
-							+ 	"		</ul>"
-							+ 	"	</div>"
-							+ 	"</li>";
-					}
-				}
-			} else {
-				var issueList = msg.issueList;
-				if(issueList === null || issueList.length === 0) {
-					content = content	
-						+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-						+	issueDoesNotExistMessage
-						+	"</li>";
-				} else {
-					issueListCount = issueList.length;
-					for(i=0; i<issueListCount; i++ ) {
-						var issue = issueList[i];
-						content = content 
-							+ 	"<li>"
-							+ 	"	<button type=\"button\" title=\"" + commonShortcutMessage + "\""
-							+			" onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
-							+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2');\">" + commonShortcutMessage + "</button>"
-							+ 	"	<div class=\"info\">"
-							+ 	"		<p class=\"title\">"
-							+ 	"			<span>" + issue.project_name + "</span>"
-							+ 				issue.title
-							+ 	"		</p>"
-							+ 	"		<ul class=\"tag\">"
-							+ 	"			<li><span class=\"" + issue.issue_type_css_class + "\"></span>" + issue.issue_type_name + "</li>"
-							+ 	"			<li><span class=\"" + issue.priority_css_class + "\"></span>" + issue.priority_name + "</li>"
-							+ 	"			<li class=\"date\">" + issue.insert_date.substring(0,19) + "</li>"
-							+ 	"		</ul>"
-							+ 	"	</div>"
-							+ 	"</li>";
-					}
-				}
-			}
-			
-			$("#searchList").empty();
-			$("#searchList").html(content);
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
-	}
 	
 	// 데이터 위치로 이동
 	function gotoData(projectId, dataKey) {
@@ -1153,32 +1204,43 @@
 	}
 	
 	// 변환행렬 수정
-	var isUpdateLocationAndRotation = { "enable" : true };
+	var isUpdateLocationAndRotation = true;
 	$("#updateLocationAndRotation").click(function() {
 		if(!changeLocationAndRotationCheck()) return false;
+		
 		changeLocationAndRotationAPI(	managerFactory, $("#moveProjectId").val(),
 										$("#moveDataKey").val(), $("#moveLatitude").val(), $("#moveLongitude").val(), 
 										$("#moveHeight").val(), $("#moveHeading").val(), $("#movePitch").val(), $("#moveRoll").val());
 								
-		if(isUpdateLocationAndRotation["enable"]) {
-			isUpdateLocationAndRotation["enable"] = false;
+		if(isUpdateLocationAndRotation) {
+			isUpdateLocationAndRotation = false;
 			var url = "/data/ajax-update-location-and-rotation.do";
 			var info = "data_key=" ;
-			ajaxCall(url, info, issueSaveCallback, errorCallback, isUpdateLocationAndRotation);
+			$.ajax({
+				url: url,
+				type: "POST",
+				data: info,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+				success : function(msg) {
+					if(msg.result === "success") {
+						alert(JS_MESSAGE["update"]);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+					isUpdateLocationAndRotation = true;
+				},
+				error : function(request, status, error) {
+					alert(JS_MESSAGE["ajax.error.message"]);
+			    	console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			    	isUpdateLocationAndRotation = true;
+				}
+			});
 		} else {
 			alert(JS_MESSAGE["button.dobule.click"]);
 			return;
 		}
 	});
-	function updateLocationAndRotationCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			alert(JS_MESSAGE["update"]);
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
-		
-		isUpdateLocationAndRotation["enable"] = true;
-	}
 	
 	// 인접 지역 이슈 표시
 	function changeNearGeoIssueList(isShow) {
@@ -1189,22 +1251,32 @@
 			var now_longitude = $("#now_longitude").val();
 			var info = "latitude=" + now_latitude + "&longitude=" + now_longitude;
 			var url = "/issue/ajax-list-issue-by-geo.do";
-			ajaxCall(url, info, changeNearGeoIssueListCallback, errorCallback, searchDataFlag);
+			$.ajax({
+				url: url,
+				type: "POST",
+				data: info,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+				success : function(msg) {
+					if(msg.result === "success") {
+						var issueList = msg.issueList;
+						if(issueList != null && issueList.length > 0) {
+							for(i=0; i<issueList.length; i++ ) {
+								var issue = issueList[i];
+								drawInsertIssueImageAPI(managerFactory, 0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
+							}
+						}
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+				},
+				error : function(request, status, error) {
+					alert(JS_MESSAGE["ajax.error.message"]);
+			    	console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+				}
+			});
 		}
 		changeNearGeoIssueListViewModeAPI(managerFactory, isShow);
-	}
-	function changeNearGeoIssueListCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			var issueList = msg.issueList;
-			if(issueList != null && issueList.length > 0) {
-				for(i=0; i<issueList.length; i++ ) {
-					var issue = issueList[i];
-					drawInsertIssueImageAPI(managerFactory, 0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
-				}
-			}
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
 	}
 	
 	// 설정 메뉴 시작

@@ -48,7 +48,10 @@
 	</div>
 	
 	<ul id="homeMenuContent" class="menuList">
-		<li><a href="/homepage/index.do">Home</a></li>
+		<li><a href="/homepage/index.do">Home</a>
+			(<a href="/homepage/about.do" onclick ="changeLanguage('ko');">KO</a> | 
+			<a href="/homepage/about.do" onclick ="changeLanguage('en');">EN</a>)
+		</li>
 		<li><a href="/homepage/about.do">mago3D</a></li>
 		<li>Demo
 			<ul>
@@ -111,7 +114,7 @@
 			<tr style="height: 35px;">
 				<td style="width: 380px;"><label for="project_id"><spring:message code='common.project'/></label></td>
 				<td><select id="project_id" name="project_id" class="select">
-						<option value=""> <spring:message code='common.project.total'/> </option>
+						<option value=""> <spring:message code='common.all'/></option>
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
 </c:forEach>
@@ -132,13 +135,14 @@
 				</td>
 			</tr>
 			<tr style="height: 35px;">
-				<td><label for="search_value"><spring:message code='common.search.word'/></label></td>
-				<td><input type="text" id="search_value" name="search_value" size="31" /></td>
+				<td>
+					<label for="search_value"><spring:message code='common.search.word'/></label></td>
+				<td><input type="text" id="search_value" name="search_value" size="31"/></td>
 			</tr>
 			<tr style="height: 35px;">
 				<td><label for="start_date"><spring:message code='common.day'/></label></td>
 				<td><input type="text" class="s date" id="start_date" name="start_date" size="12" />
-					<span class="delimeter tilde">~</span> 
+					<span class="delimeter tilde">~</span>
 					<input type="text" class="s date" id="end_date" name="end_date" size="12" /></td>
 			</tr>
 			<tr style="height: 30px;">
@@ -286,7 +290,8 @@
 				<li>
 					<label for="moveRoll"><spring:message code='common.roll'/></label>
 					<input type="text" id="moveRoll" name="moveRoll" size="15" />
-					<button type="button" id="changeLocationAndRotation" class="btn" style="margin-top: 3px;"><spring:message code='common.change'/></button> 
+					<button type="button" id="changeLocationAndRotation" class="btn" style="margin-top: 3px;"><spring:message code='common.change'/></button>
+					<button type="button" id="updateLocationAndRotation" class="btn"><spring:message code='common.save'/></button>
 				</li>
 			</ul>
 		</div>
@@ -317,26 +322,32 @@
 	</div>
 
 	<form:form id="issue" modelAttribute="issue" method="post" onsubmit="return false;">
-		<div id="insertIssueMenuContent" class="insertIssueWrap">
-			<table>
-				<tr style="height: 35px;">
-					<td style="width: 100px;" nowrap="nowrap">
-						<form:label path="project_id"><spring:message code='common.project'/></form:label>
-						<span class="icon-glyph glyph-emark-dot color-warning"></span></td>
-					<td><form:select path="project_id" cssClass="select">
+	<div id="insertIssueMenuContent" class="insertIssueWrap">
+		<table>
+			<tr style="height: 35px;">
+				<td style="width: 100px;" nowrap="nowrap">
+					<form:label path="project_id"><spring:message code='common.project'/></form:label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</td>
+				<td>
+					<form:select path="project_id" cssClass="select">
 <c:forEach var="project" items="${projectList}">
-							<option value="${project.project_id}">${project.project_name}</option>
+						<option value="${project.project_id}">${project.project_name}</option>
 </c:forEach>
-						</form:select></td>
-				</tr>
-				<tr style="height: 35px;">
-					<td><form:label path="issue_type"><spring:message code='issue.type'/></form:label>
-						<span class="icon-glyph glyph-emark-dot color-warning"></span></td>
-					<td><form:select path="issue_type" cssClass="select">
+					</form:select>
+				</td>
+			</tr>
+			<tr style="height: 35px;">
+				<td>
+					<form:label path="issue_type"><spring:message code='issue.type'/></form:label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</td>
+				<td>
+					<form:select path="issue_type" cssClass="select">
 <c:forEach var="commonCode" items="${issueTypeList}">
-							<option value="${commonCode.code_key}">${commonCode.code_name}</option>
+						<option value="${commonCode.code_key}">${commonCode.code_name}</option>
 </c:forEach>
-						</form:select></td>
+					</form:select></td>
 				</tr>
 				<tr style="height: 35px;">
 					<td><spring:message code='issue.location'/></td>
@@ -563,20 +574,13 @@
 <script>
 	var agent = navigator.userAgent.toLowerCase();
 	if(agent.indexOf('chrome') < 0) { 
-		alert("이 데모 페이지는 대용량 웹 데이터 처리를 위해 Chrome 브라우저에 최적화 되어 있습니다. \n원활한 서비스 이용을 위해 Chrome 브라우저를 이용  하시기 바랍니다.");
+		alert(JS_MESSAGE["demo.browser.recommend"]);
 	}
 
 	var managerFactory = null;
 	var policyJson = ${policyJson};
 	var initProjectJsonMap = ${initProjectJsonMap};
-	var menuMap = new Map();
-	menuMap.set("homeMenu", false);
-	menuMap.set("shortCutMenu", false);
-	menuMap.set("myIssueMenu", false);
-	menuMap.set("searchMenu", false);
-	menuMap.set("apiMenu", false);
-	menuMap.set("insertIssueMenu", false);
-	menuMap.set("configMenu", false);
+	var menuObject = { homeMenu : false, shortCutMenu : false, myIssueMenu : false, searchMenu : false, apiMenu : false, insertIssueMenu : false, configMenu : false };
 	var insertIssueEnable = false;
 	var FPVModeFlag = false;
 	
@@ -639,7 +643,29 @@
 	function gotoProject(projectId, longitude, latitude, height, duration) {
 		var projectData = getDataAPI(CODE.PROJECT_ID_PREFIX + projectId);
 		if (projectData === null || projectData === undefined) {
-			ajaxCall(dataInformationUrl, "project_id=" + projectId, gotoProjectCallback, errorCallback, null, projectId, longitude, latitude, height, duration);
+			$.ajax({
+				url: dataInformationUrl,
+				type: "POST",
+				data: "project_id=" + projectId,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+				success : function(msg) {
+					if(msg.result === "success") {
+						var projectDataJson = JSON.parse(msg.projectDataJson);
+						if(projectDataJson === null || projectDataJson === undefined) {
+							alert(JS_MESSAGE["project.data.no.found"]);
+							return;
+						}
+						gotoProjectAPI(managerFactory, projectId, projectDataJson, projectDataJson.data_key, longitude, latitude, height, duration);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+				},
+				error : function(request, status, error) {
+					alert(JS_MESSAGE["ajax.error.message"]);
+					console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+				}
+			});
 		} else {
 			gotoProjectAPI(managerFactory, projectId, projectData, projectData.data_key, longitude, latitude, height, duration);	
 		}
@@ -647,24 +673,34 @@
 		// 현재 좌표를 저장
 		saveCurrentLocation(latitude, longitude);
 	}
-	function gotoProjectCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			var projectDataJson = JSON.parse(msg.projectDataJson);
-			if(projectDataJson === null || projectDataJson === undefined) {
-				alert("프로젝트가 데이터가 존재하지 않습니다.");
-				return;
-			}
-			gotoProjectAPI(managerFactory, theArgs[0], projectDataJson, projectDataJson.data_key, theArgs[1], theArgs[2], theArgs[3], theArgs[4]);
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
-	}
 	
 	// 이슈 위치로 이동
 	function gotoIssue(projectId, issueId, issueType, longitude, latitude, height, duration) {
 		var projectData = getDataAPI(CODE.PROJECT_ID_PREFIX + projectId);
 		if (projectData === null || projectData === undefined) {
-			ajaxCall(dataInformationUrl, "project_id=" + projectId, gotoIssueCallback, errorCallback, null, projectId, issueId, issueType, longitude, latitude, height, duration);
+			$.ajax({
+				url: dataInformationUrl,
+				type: "POST",
+				data: "project_id=" + projectId,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+				success : function(msg) {
+					if(msg.result === "success") {
+						var projectDataJson = JSON.parse(msg.projectDataJson);
+						if(projectDataJson === null || projectDataJson === undefined) {
+							alert(JS_MESSAGE["project.data.no.found"]);
+							return;
+						}
+						gotoIssueAPI(managerFactory, projectId, projectDataJson, projectDataJson.data_key, issueId, issueType, longitude, latitude, height, duration);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+				},
+				error : function(request, status, error) {
+					alert(JS_MESSAGE["ajax.error.message"]);
+					console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+				}
+			});
 		} else {
 			gotoIssueAPI(managerFactory, projectId, projectData, projectData.data_key, issueId, issueType, longitude, latitude, height, duration);	
 		}
@@ -672,19 +708,7 @@
 		// 현재 좌표를 저장
 		saveCurrentLocation(latitude, longitude);
 	}
-	function gotoIssueCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			var projectDataJson = JSON.parse(msg.projectDataJson);
-			if(projectDataJson === null || projectDataJson === undefined) {
-				alert("프로젝트가 데이터가 존재하지 않습니다.");
-				return;
-			}
-			gotoIssueAPI(managerFactory, theArgs[0], projectDataJson, projectDataJson.data_key, theArgs[1], theArgs[2], theArgs[3], theArgs[4], theArgs[5], theArgs[6]);
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
-	}
-	
+		
 	var swipe = new Hammer(document);
 	// detect swipe and call to a function
 	swipe.on('swiperight swipeleft', function(e) {
@@ -725,11 +749,11 @@
 	$("#insertIssueEnableButton").click(function() {
 		if(insertIssueEnable) {
 			$("#insertIssueEnableButton").removeClass("on");
-			$("#insertIssueEnableButton").text("클릭 후 객체를 선택해 주세요.");
+			$("#insertIssueEnableButton").text(JS_MESSAGE["demo.select.object.message"]);
 			insertIssueEnable = false;
 		} else {
 			$("#insertIssueEnableButton").addClass("on");
-			$("#insertIssueEnableButton").text("Issue 등록 활성화 상태");
+			$("#insertIssueEnableButton").text(JS_MESSAGE["demo.issue.enable.status"]);
 			insertIssueEnable = true;
 		}
 		changeInsertIssueModeAPI(managerFactory, insertIssueEnable);
@@ -750,20 +774,44 @@
 	}
 	
 	// 이슈 등록
-	var isInsertIssue = { "enable" : true };
+	var isInsertIssue = true;
 	$("#issueSaveButton").click(function() {
 		if (check() == false) {
 			return false;
 		}
-		if(isInsertIssue["enable"]) {
-			isInsertIssue["enable"] = false;
+		if(isInsertIssue) {
+			isInsertIssue = false;
 			var url = "/issue/ajax-insert-issue.do";
 			var info = $("#issue").serialize();
-			ajaxCall(url, info, issueSaveCallback, errorCallback, isInsertIssue);
+			$.ajax({
+				url: url,
+				type: "POST",
+				data: info,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+				success : function(msg) {
+					if(msg.result === "success") {
+						alert(JS_MESSAGE["insert"]);
+						// pin image를 그림
+						drawInsertIssueImageAPI(managerFactory, 1, msg.issue.issue_id, msg.issue.issue_type, 
+								$("#data_key").val(), $("#latitude").val(), $("#longitude").val(), $("#height").val());
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+					
+					isInsertIssue = true;
+					ajaxIssueList();
+				},
+				error : function(request, status, error) {
+					alert(JS_MESSAGE["ajax.error.message"]);
+					console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+					isInsertIssue
+				}
+			});
 			
 			// issue 등록 버튼, css, 상태를 변경
 			$("#insertIssueEnableButton").removeClass("on");
-			$("#insertIssueEnableButton").text("클릭 후 객체를 선택해 주세요.");
+			$("#insertIssueEnableButton").text(JS_MESSAGE["demo.select.object.message"]);
 			insertIssueEnable = false;
 			
 			changeInsertIssueStateAPI(managerFactory, 0);
@@ -772,19 +820,7 @@
 			return;
 		}
 	});
-	function issueSaveCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			alert(JS_MESSAGE["insert"]);
-			// pin image를 그림
-			drawInsertIssueImageAPI(managerFactory, 1, msg.issue.issue_id, msg.issue.issue_type, 
-					$("#data_key").val(), $("#latitude").val(), $("#longitude").val(), $("#height").val());
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
-		
-		isInsertIssue["enable"] = true;
-		ajaxIssueList();
-	}
+	
 	function check() {
 		if ($("#data_key").val() === "") {
 			alert(JS_MESSAGE["issue.datakey.empty"]);
@@ -807,53 +843,67 @@
 	function ajaxIssueList() {
 		var info = "";
 		var url = "/homepage/ajax-list-issue.do";
-		ajaxCall(url, info, ajaxIssueListCallback, errorCallback, null);
-	}
-	function ajaxIssueListCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			var issueList = msg.issueList;
-			var content = "";
-			var issueListCount = 0;
-			content = content 
-				+	"<li style=\"margin-bottom: 8px; font-size: 1em; font-weight: normal; color: #2955a6;\">"
-				+ 		"최신 Issue 10개 표시"
-				+	"</li>";
-			if(issueList === null || issueList.length === 0) {
-				content += 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-						+	"	Issue가 존재하지 않습니다."
-						+	"</li>";
-			} else {
-				issueListCount = issueList.length;
-				for(i=0; i<issueListCount; i++ ) {
-					var issue = issueList[i];
+		$.ajax({
+			url: url,
+			type: "POST",
+			data: info,
+			dataType: "json",
+			headers: { "X-mago3D-Header" : "mago3D"},
+			success : function(msg) {
+				if(msg.result === "success") {
+					var issueRecentList10Message = "<spring:message code='issue.recent.list.10'/>";
+					var issueDoesNotExistMessage = "<spring:message code='issue.not.exist'/>";
+					var commonShortcutMessage = "<spring:message code='common.shortcut'/>";
+					
+					var issueList = msg.issueList;
+					var content = "";
+					var issueListCount = 0;
 					content = content 
-						+ 	"<li>"
-						+ 	"	<button type=\"button\" title=\"바로가기\""
-						+			"onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
-						+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">바로가기</button>"
-						+ 	"	<div class=\"info\">"
-						+ 	"		<p class=\"title\">"
-						+ 	"			<span>" + issue.project_name + "</span>"
-						+ 				issue.title
-						+ 	"		</p>"
-						+ 	"		<ul class=\"tag\">"
-						+ 	"			<li><span class=\"" + issue.issue_type_css_class + "\"></span>" + issue.issue_type_name + "</li>"
-						+ 	"			<li><span class=\"" + issue.priority_css_class + "\"></span>" + issue.priority_name + "</li>"
-						+ 	"			<li class=\"date\">" + issue.insert_date.substring(0,19) + "</li>"
-						+ 	"		</ul>"
-						+ 	"	</div>"
-						+ 	"</li>";
+						+	"<li style=\"margin-bottom: 8px; font-size: 1em; font-weight: normal; color: #2955a6;\">"
+						+ 		issueRecentList10Message
+						+	"</li>";
+					if(issueList === null || issueList.length === 0) {
+						content += 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
+								+	issueDoesNotExistMessage
+								+	"</li>";
+					} else {
+						issueListCount = issueList.length;
+						for(i=0; i<issueListCount; i++ ) {
+							var issue = issueList[i];
+							content = content 
+								+ 	"<li>"
+								+ 	"	<button type=\"button\" title=\"" + commonShortcutMessage + "\""
+								+			"onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+								+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2')\">" + commonShortcutMessage + "</button>"
+								+ 	"	<div class=\"info\">"
+								+ 	"		<p class=\"title\">"
+								+ 	"			<span>" + issue.project_name + "</span>"
+								+ 				issue.title
+								+ 	"		</p>"
+								+ 	"		<ul class=\"tag\">"
+								+ 	"			<li><span class=\"" + issue.issue_type_css_class + "\"></span>" + issue.issue_type_name + "</li>"
+								+ 	"			<li><span class=\"" + issue.priority_css_class + "\"></span>" + issue.priority_name + "</li>"
+								+ 	"			<li class=\"date\">" + issue.insert_date.substring(0,19) + "</li>"
+								+ 	"		</ul>"
+								+ 	"	</div>"
+								+ 	"</li>";
+						}
+					}
+					$("#issueListCount").empty();
+					$("#issueListCount").html(msg.totalCount);
+					$("#myIssueMenuContent").empty();
+					$("#myIssueMenuContent").html(content);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
 				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
 			}
-			$("#issueListCount").empty();
-			$("#issueListCount").html(msg.totalCount);
-			$("#myIssueMenuContent").empty();
-			$("#myIssueMenuContent").html(content);
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
+		});
 	}
-
+	
 	// 왼쪽 메뉴 클릭시 ui 처리
 	$("#homeMenu").click(function() {
 		menuSlideControl("homeMenu");
@@ -876,11 +926,13 @@
 	$("#configMenu").click(function() {
 		menuSlideControl("configMenu");
 	});
+	
 	function menuSlideControl(menuName) {
-		var compareMenuState = menuMap.get(menuName);
-		for(var [key, value] of menuMap) {
-			// state 값 변경하고, css 변경
+		var compareMenuState = menuObject[menuName];
+		for(var key in menuObject) {
+		    // state 값 변경하고, css 변경
 			if(key === menuName) {
+			    var value = menuObject[key];
 				if(value) {
 					$("#" + menuName).removeClass("on");
 					$("#menuContent").hide();
@@ -890,7 +942,7 @@
 					$("#menuContent").show();
 					$("#" + menuName + "Content").show();
 				}
-				menuMap.set(menuName, !compareMenuState);
+				menuObject[menuName] = !compareMenuState;
 			} else {
 				$("#" + key).removeClass("on");
 				$("#" + key + "Content").hide();
@@ -900,30 +952,30 @@
 	
 	// menu content close 버튼
 	$("#menuContentClose").click(function() {
-		for(var [key, value] of menuMap) {
-			if(value) {
+		for(var key in menuObject) {
+            var value = menuObject[key];
+            if(value) {
 				$("#menuContent").hide();
 				$("#" + key + "Content").hide();
 				$("#" + key).removeClass("on");
-				menuMap.set(key, !value);
+				menuObject[key] = !value;
 			}
 		}
 		// 이슈 등록 비활성화 상태
 		changeInsertIssueStateAPI(managerFactory, 0);
 	});
 	
-	// 검색 메뉴 시작
 	// Data 검색
-	var searchDataFlag = { "enable" : true }
+	var searchDataFlag = true;
 	$("#searchData").click(function() {
 		if ($.trim($("#search_value").val()) === ""){
-			alert("검색어를 입력해 주세요.");
+			alert(JS_MESSAGE["search.word.empty"]);
 			$("#search_value").focus();
 			return false;
 		}
 		
-		if(searchDataFlag["enable"]) {
-			searchDataFlag["enable"] = false;
+		if(searchDataFlag) {
+			searchDataFlag = false;
 			var info = $("#searchForm").serialize();
 			var url = null;
 			if($("#search_word").val() === "data_name") {
@@ -931,87 +983,104 @@
 			} else {
 				url = "/homepage/ajax-list-issue.do";
 			}
-			ajaxCall(url, info, searchDataCallback, errorCallback, searchDataFlag);
+			
+			$.ajax({
+				url: url,
+				type: "POST",
+				data: info,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+				success : function(msg) {
+					if(msg.result === "success") {
+						var issueDoesNotExistMessage = "<spring:message code='issue.not.exist'/>";
+						var dataDoesNotExistMessage = "<spring:message code='data.not.exist'/>";
+						var commonShortcutMessage = "<spring:message code='common.shortcut'/>";
+						
+						var searchType = $("#search_word").val();
+						var content = "";
+						if(searchType === "data_name") {
+							var dataInfoList = msg.dataInfoList;
+							if(dataInfoList == null || dataInfoList.length == 0) {
+								content = content	
+									+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
+									+	dataDoesNotExistMessage
+									+	"</li>";
+							} else {
+								dataInfoListCount = dataInfoList.length;
+								for(i=0; i<dataInfoListCount; i++ ) {
+									var dataInfo = dataInfoList[i];
+									content = content 
+										+ 	"<li>";
+									if(dataInfo.parent !== 0) {	
+										content = content 
+										+ 	"	<button type=\"button\" title=\"" + commonShortcutMessage + "\""
+										+ 	" 		onclick=\"gotoData('" + dataInfo.project_id + "', '" + dataInfo.data_key + "');\">" + commonShortcutMessage + "</button>";
+									}
+									content = content 
+										+ 	"	<div class=\"info\">"
+										+ 	"		<p class=\"title\">"
+										+ 	"			<span>" + dataInfo.project_name + "</span>"
+										+ 				dataInfo.data_name
+										+ 	"		</p>"
+										+ 	"		<ul class=\"tag\">"
+										+ 	"			<li><span class=\"t3\"></span>" + dataInfo.latitude + "</li>"
+										+ 	"			<li><span class=\"t3\"></span>" + dataInfo.longitude + "</li>"
+										+ 	"			<li class=\"date\">" + dataInfo.insert_date.substring(0,19) + "</li>"
+										+ 	"		</ul>"
+										+ 	"	</div>"
+										+ 	"</li>";
+								}
+							}
+						} else {
+							var issueList = msg.issueList;
+							if(issueList === null || issueList.length === 0) {
+								content = content	
+									+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
+									+	issueDoesNotExistMessage
+									+	"</li>";
+							} else {
+								issueListCount = issueList.length;
+								for(i=0; i<issueListCount; i++ ) {
+									var issue = issueList[i];
+									content = content 
+										+ 	"<li>"
+										+ 	"	<button type=\"button\" title=\"" + commonShortcutMessage + "\""
+										+			" onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
+										+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2');\">" + commonShortcutMessage + "</button>"
+										+ 	"	<div class=\"info\">"
+										+ 	"		<p class=\"title\">"
+										+ 	"			<span>" + issue.project_name + "</span>"
+										+ 				issue.title
+										+ 	"		</p>"
+										+ 	"		<ul class=\"tag\">"
+										+ 	"			<li><span class=\"" + issue.issue_type_css_class + "\"></span>" + issue.issue_type_name + "</li>"
+										+ 	"			<li><span class=\"" + issue.priority_css_class + "\"></span>" + issue.priority_name + "</li>"
+										+ 	"			<li class=\"date\">" + issue.insert_date.substring(0,19) + "</li>"
+										+ 	"		</ul>"
+										+ 	"	</div>"
+										+ 	"</li>";
+								}
+							}
+						}
+						
+						$("#searchList").empty();
+						$("#searchList").html(content);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+					searchDataFlag = true;
+				},
+				error : function(request, status, error) {
+					alert(JS_MESSAGE["ajax.error.message"]);
+			    	console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+					searchDataFlag = true;
+				}
+			});
 		} else {
 			alert(JS_MESSAGE["button.dobule.click"]);
 			return;
 		}
 	});
-	function searchDataCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			var searchType = $("#search_word").val();
-			var content = "";
-			if(searchType === "data_name") {
-				var dataInfoList = msg.dataInfoList;
-				if(dataInfoList == null || dataInfoList.length == 0) {
-					content = content	
-						+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-						+	"	Data가 존재하지 않습니다."
-						+	"</li>";
-				} else {
-					dataInfoListCount = dataInfoList.length;
-					for(i=0; i<dataInfoListCount; i++ ) {
-						var dataInfo = dataInfoList[i];
-						content = content 
-							+ 	"<li>";
-						if(dataInfo.parent !== 0) {	
-							content = content 
-							+ 	"	<button type=\"button\" title=\"바로가기\""
-							+ 	" 		onclick=\"gotoData('" + dataInfo.project_id + "', '" + dataInfo.data_key + "');\">바로가기</button>";
-						}
-						content = content 
-							+ 	"	<div class=\"info\">"
-							+ 	"		<p class=\"title\">"
-							+ 	"			<span>" + dataInfo.project_name + "</span>"
-							+ 				dataInfo.data_name
-							+ 	"		</p>"
-							+ 	"		<ul class=\"tag\">"
-							+ 	"			<li><span class=\"t3\"></span>" + dataInfo.latitude + "</li>"
-							+ 	"			<li><span class=\"t3\"></span>" + dataInfo.longitude + "</li>"
-							+ 	"			<li class=\"date\">" + dataInfo.insert_date.substring(0,19) + "</li>"
-							+ 	"		</ul>"
-							+ 	"	</div>"
-							+ 	"</li>";
-					}
-				}
-			} else {
-				var issueList = msg.issueList;
-				if(issueList === null || issueList.length === 0) {
-					content = content	
-						+ 	"<li style=\"text-align: center; padding-top:20px; height: 50px;\">"
-						+	"	Issue가 존재하지 않습니다."
-						+	"</li>";
-				} else {
-					issueListCount = issueList.length;
-					for(i=0; i<issueListCount; i++ ) {
-						var issue = issueList[i];
-						content = content 
-							+ 	"<li>"
-							+ 	"	<button type=\"button\" title=\"바로가기\""
-							+			" onclick=\"gotoIssue('" + issue.project_id + "', '" + issue.issue_id + "', '" + issue.issue_type + "', '" 
-							+ 				issue.longitude + "', '" + issue.latitude + "', '" + issue.height + "', '2');\">바로가기</button>"
-							+ 	"	<div class=\"info\">"
-							+ 	"		<p class=\"title\">"
-							+ 	"			<span>" + issue.project_name + "</span>"
-							+ 				issue.title
-							+ 	"		</p>"
-							+ 	"		<ul class=\"tag\">"
-							+ 	"			<li><span class=\"" + issue.issue_type_css_class + "\"></span>" + issue.issue_type_name + "</li>"
-							+ 	"			<li><span class=\"" + issue.priority_css_class + "\"></span>" + issue.priority_name + "</li>"
-							+ 	"			<li class=\"date\">" + issue.insert_date.substring(0,19) + "</li>"
-							+ 	"		</ul>"
-							+ 	"	</div>"
-							+ 	"</li>";
-					}
-				}
-			}
-			
-			$("#searchList").empty();
-			$("#searchList").html(content);
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
-	}
 	
 	// 데이터 위치로 이동
 	function gotoData(projectId, dataKey) {
@@ -1020,7 +1089,7 @@
 	
 	$("#localSearch").click(function() {
 		if ($.trim($("#localSearchDataKey").val()) === ""){
-			alert("Data Key를 입력해 주세요.");
+			alert(JS_MESSAGE["data.key.empty"]);
 			$("#localSearchDataKey").focus();
 			return false;
 		}
@@ -1064,16 +1133,15 @@
 			saveCurrentLocation(latitude, longitude);
 		}
 	}
-	
 	// 속성 가시화
 	$("#changePropertyRendering").click(function(e) {
 		var isShow = $(':radio[name="propertyRendering"]:checked').val();
 		if(isShow === undefined){
-			alert("표시/비표시 를 선택하여 주십시오..");
+			alert(JS_MESSAGE["demo.selection"]);
 			return false;
 		}
 		if ($.trim($("#propertyRenderingWord").val()) === ""){
-			alert("속성값을 입력해 주세요.");
+			alert(JS_MESSAGE["demo.property.empty"]);
 			$("#propertyRenderingWord").focus();
 			return false;
 		}
@@ -1083,7 +1151,7 @@
 	// 색변경
 	$("#changeColor").click(function(e) {
 		if ($.trim($("#colorDataKey").val()) === ""){
-			alert("Data Key를 입력해 주세요.");
+			alert(JS_MESSAGE["data.key.empty"]);
 			$("#colorDataKey").focus();
 			return false;
 		}
@@ -1109,42 +1177,81 @@
 	});
 	function changeLocationAndRotationCheck() {
 		if ($.trim($("#moveDataKey").val()) === ""){
-			alert("Data Key를 입력해 주세요.");
+			alert(JS_MESSAGE["data.key.empty"]);
 			$("#moveDataKey").focus();
 			return false;
 		}
 		if ($.trim($("#moveLatitude").val()) === ""){
-			alert("위도를 입력해 주세요.");
+			alert(JS_MESSAGE["data.latitude.empty"]);
 			$("#moveLatitude").focus();
 			return false;
 		}
 		if ($.trim($("#moveLongitude").val()) === ""){
-			alert("경도를 입력해 주세요.");
+			alert(JS_MESSAGE["data.longitude.empty"]);
 			$("#moveLongitude").focus();
 			return false;
 		}
 		if ($.trim($("#moveHeight").val()) === ""){
-			alert("높이를 입력해 주세요.");
+			alert(JS_MESSAGE["data.height.empty"]);
 			$("#moveHeight").focus();
 			return false;
 		}
 		if ($.trim($("#moveHeading").val()) === ""){
-			alert("heading을 입력해 주세요.");
+			alert(JS_MESSAGE["data.heading.empty"]);
 			$("#moveHeading").focus();
 			return false;
 		}
 		if ($.trim($("#movePitch").val()) === ""){
-			alert("pitch를 입력해 주세요.");
+			alert(JS_MESSAGE["data.pitch.empty"]);
 			$("#movePitch").focus();
 			return false;
 		}
 		if ($.trim($("#moveRoll").val()) === ""){
-			alert("roll를 입력해 주세요.");
+			alert(JS_MESSAGE["data.roll.empty"]);
 			$("#moveRoll").focus();
 			return false;
 		}
 		return true;
 	}
+	
+	// 변환행렬 수정
+	var isUpdateLocationAndRotation = true;
+	$("#updateLocationAndRotation").click(function() {
+		if(!changeLocationAndRotationCheck()) return false;
+		
+		changeLocationAndRotationAPI(	managerFactory, $("#moveProjectId").val(),
+										$("#moveDataKey").val(), $("#moveLatitude").val(), $("#moveLongitude").val(), 
+										$("#moveHeight").val(), $("#moveHeading").val(), $("#movePitch").val(), $("#moveRoll").val());
+								
+		if(isUpdateLocationAndRotation) {
+			isUpdateLocationAndRotation = false;
+			var url = "/data/ajax-update-location-and-rotation.do";
+			var info = "data_key=" ;
+			$.ajax({
+				url: url,
+				type: "POST",
+				data: info,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+				success : function(msg) {
+					if(msg.result === "success") {
+						alert(JS_MESSAGE["update"]);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+					isUpdateLocationAndRotation = true;
+				},
+				error : function(request, status, error) {
+					alert(JS_MESSAGE["ajax.error.message"]);
+			    	console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			    	isUpdateLocationAndRotation = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	});
 	
 	// 인접 지역 이슈 표시
 	function changeNearGeoIssueList(isShow) {
@@ -1155,22 +1262,32 @@
 			var now_longitude = $("#now_longitude").val();
 			var info = "latitude=" + now_latitude + "&longitude=" + now_longitude;
 			var url = "/issue/ajax-list-issue-by-geo.do";
-			ajaxCall(url, info, changeNearGeoIssueListCallback, errorCallback, searchDataFlag);
+			$.ajax({
+				url: url,
+				type: "POST",
+				data: info,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+				success : function(msg) {
+					if(msg.result === "success") {
+						var issueList = msg.issueList;
+						if(issueList != null && issueList.length > 0) {
+							for(i=0; i<issueList.length; i++ ) {
+								var issue = issueList[i];
+								drawInsertIssueImageAPI(managerFactory, 0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
+							}
+						}
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+				},
+				error : function(request, status, error) {
+					alert(JS_MESSAGE["ajax.error.message"]);
+			    	console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+				}
+			});
 		}
 		changeNearGeoIssueListViewModeAPI(managerFactory, isShow);
-	}
-	function changeNearGeoIssueListCallback(msg, theArgs) {
-		if(msg.result === "success") {
-			var issueList = msg.issueList;
-			if(issueList != null && issueList.length > 0) {
-				for(i=0; i<issueList.length; i++ ) {
-					var issue = issueList[i];
-					drawInsertIssueImageAPI(managerFactory, 0, issue.issue_id, issue.issue_type, issue.data_key, issue.latitude, issue.longitude, issue.height);
-				}
-			}
-		} else {
-			alert(JS_MESSAGE[msg.result]);
-		}
 	}
 	
 	// 설정 메뉴 시작
@@ -1196,11 +1313,11 @@
 	}
 	// 마우스 클릭 객체 이동 모드 변경 저장
 	$("#saveObjectMoveButton").click(function () {
-		alert("준비중 입니다.");
+		alert(JS_MESSAGE["preparing"]);
 		return;
 		var objectMoveMode = $(':radio[name="objectMoveMode"]:checked').val();
 		if(objectMoveMode === "2") {
-			alert("None 모드일 경우 저장할 수 없습니다.");
+			alert(JS_MESSAGE["demo.none.mode.not.save"]);
 			return;
 		}
 		saveObjectMoveAPI(managerFactory, objectMoveMode);
@@ -1226,7 +1343,7 @@
 		}
 		changeOcclusionCullingAPI(managerFactory, ($(':radio[name="occlusionCulling"]:checked').val() === "true"), $("#occlusion_culling_data_key").val());
 	});
-
+	
 	// 카메라 모드 전환
 	function changeViewMode(isFPVMode) {
 		$("input:radio[name='viewMode']:radio[value='" + isFPVMode + "']").prop("checked", true);
@@ -1299,7 +1416,7 @@
 		}
 		changeSsaoRadiusAPI(managerFactory, $("#geo_ssao_radius").val());
 	});
-	
+
 	// click poisition call back function
 	function showClickPosition(position) {
 		$("#positionLatitude").val(position.lat);
@@ -1316,7 +1433,7 @@
 	function showApiResult(apiName, result) {
 		if(apiName === "searchData") {
 			if(result === "-1") {
-				alert(" 아직 로딩하지 않은 정보 입니다. 로딩 후 검색해 주십시오. ");
+				alert(JS_MESSAGE["demo.information.not.loading"]);
 			}
 		}
 	}
