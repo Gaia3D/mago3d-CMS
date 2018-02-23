@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gaia3d.config.CacheConfig;
@@ -21,7 +22,11 @@ import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.Project;
+import com.gaia3d.domain.UserGroupRole;
+import com.gaia3d.domain.UserSession;
+import com.gaia3d.helper.GroupRoleHelper;
 import com.gaia3d.service.ProjectService;
+import com.gaia3d.service.RoleService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +44,8 @@ public class ProjectController {
 	CacheConfig cacheConfig;
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private RoleService roleService;
 	
 	/**
 	 * Project 목록
@@ -258,33 +265,29 @@ public class ProjectController {
 	 * @param project
 	 * @return
 	 */
-	@PostMapping(value = "ajax-delete-project.do")
-	@ResponseBody
-	public Map<String, Object> ajaxDeleteProject(HttpServletRequest request, Project project) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
-		String result = "success";
-		try {
-			log.info("@@ project = {} ", project);
-//			if(dataGroup.getData_group_id() == null || dataGroup.getData_group_id().longValue() == 0l) {				
-//				dataGroupList.addAll(projectService.getListDataGroup(new Project()));
-//				
-//				result = "input.invalid";
-//				return JSONUtil.getResultTreeString(result, dataGroupTree);
-//			}
-//			
-//			projectService.deleteDataGroup(dataGroup.getData_group_id());
-//			dataGroupList.addAll(projectService.getListDataGroup(new Project()));
-			
-			CacheParams cacheParams = new CacheParams();
-			cacheParams.setCacheName(CacheName.PROJECT);
-			cacheParams.setCacheType(CacheType.BROADCAST);
-			cacheConfig.loadCache(cacheParams);
-		} catch(Exception e) {
-			e.printStackTrace();
-			result = "db.exception";
-		}
+	@GetMapping(value = "delete-project.do")
+	public String deleteProject(@RequestParam("project_id")String project_id, HttpServletRequest request) {
+
+		log.info("@@ project_id = {} ", project_id);
+
+		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+		// 사용자 그룹 ROLE 확인
+		UserGroupRole userGroupRole = new UserGroupRole();
+		userGroupRole.setUser_id(userSession.getUser_id());
 		
-		jSONObject.put("result", result);
-		return jSONObject;
+		// TODO get 방식으로 권한 오류를 넘겨준다.
+		if(!GroupRoleHelper.isUserGroupRoleValid(roleService.getListUserGroupRoleByUserId(userGroupRole), UserGroupRole.PROJECT_DELETE)) {
+			log.info("@@ 접근 권한이 없어 실행할 수 없습니다. RoleName = {}",  UserGroupRole.PROJECT_DELETE);
+			return "redirect:/data/list-project.do";
+		}
+
+		projectService.deleteProject(Long.valueOf(project_id));
+			
+		CacheParams cacheParams = new CacheParams();
+		cacheParams.setCacheName(CacheName.PROJECT);
+		cacheParams.setCacheType(CacheType.BROADCAST);
+		cacheConfig.loadCache(cacheParams);
+	
+		return "redirect:/data/list-project.do";
 	}
 }
