@@ -106,6 +106,8 @@ insert into policy(	policy_id, password_exception_char, site_name, site_admin_mo
 
 -- Role
 insert into role(role_id, role_name, role_key, role_type, business_type, use_yn, default_yn) values(1, '관리자 페이지 접근 권한', 'USER_ADMIN_LOGIN', '0', '0', 'Y', 'N');
+insert into role(role_id, role_name, role_key, role_type, business_type, use_yn, default_yn) values(1, '프로젝트 삭제 권한', 'PROJECT_DELETE', '0', '0', 'Y', 'N');
+insert into role(role_id, role_name, role_key, role_type, business_type, use_yn, default_yn) values(1, '데이터 삭제 권한', 'DATA_DELETE', '0', '0', 'Y', 'N');
 
 
 -- Private API
