@@ -112,14 +112,15 @@
 										<a href="#" onclick="updateDataStatus('DATA', 'LOCK'); return false;" class="button"><spring:message code='data.lock'/></a>
 										<a href="#" onclick="updateDataStatus('DATA', 'UNLOCK'); return false;" class="button"><spring:message code='data.lock.release'/></a>
 										<a href="#" onclick="deleteDatas(); return false;" class="button"><spring:message code='data.all.delete'/></a>
-										<a href="#" onclick="insertDataFile(); return false;" class="button"><spring:message code='data.all.insert'/></a>
+										<a href="#" onclick="uploadDataFile(); return false;" class="button"><spring:message code='data.all.insert'/></a>
+										<a href="#" onclick="uploadDataAttributeFile(); return false;" class="button"><spring:message code='data.attribute.insert'/></a>
+										<a href="#" onclick="uploadDataObjectAttributeFile(); return false;" class="button"><spring:message code='data.object.attribute.insert'/></a>
 <c:if test="${txtDownloadFlag ne 'true' }">
 										<a href="/data/download-excel-data.do" class="button"><spring:message code='data.download'/></a>
 </c:if>
 <c:if test="${txtDownloadFlag eq 'true' }">
 										<a href="/data/download-txt-data.do" class="button"><spring:message code='data.download.txt'/></a>
 </c:if>
-										<a href="/data/download-excel-data-sample.do" class="image-button button-area button-batch-download" title="<spring:message code='data.all.example.file'/>"><span><spring:message code='data.all.example.file'/></span></a>
 									</div>
 								</div>
 							</div>
@@ -300,7 +301,7 @@
 	});
 	
 	// Data 일괄 등록 Layer 생성
-	function insertDataFile() {
+	function uploadDataFile() {
 		dataFileDialog.dialog( "open" );
 	}
 	// Data 등록 Layer 닫기

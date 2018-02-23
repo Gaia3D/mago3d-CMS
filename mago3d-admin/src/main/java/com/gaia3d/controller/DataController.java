@@ -713,6 +713,8 @@ public class DataController {
 			jSONObject.put("parse_error_count", fileInfo.getParse_error_count());
 			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
 			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
+			jSONObject.put("update_success_count", fileInfo.getUpdate_success_count());
+			jSONObject.put("update_error_count", fileInfo.getUpdate_error_count());
 			
 			// 파일 삭제
 			File copyFile = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());

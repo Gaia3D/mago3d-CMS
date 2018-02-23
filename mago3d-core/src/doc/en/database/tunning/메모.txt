@@ -1,0 +1,84 @@
+1 설치시 유의 사항
+ - 자료와 transaction은 분리해라.
+   상기님 문서 참조
+ c에 postgresql을 설치 했다면 data 는 d
+
+2 wal writer 는 ssd 로 하면 더 빠르다.
+3 sharded buffer
+ 8g --> 2,3 g
+ 32g --> 4g
+ 64g --> 8g
+
+3 autovacuum
+ - 기본은 20%이상 변경일때 발생한다.
+  대용량이나 clob 타입의 경우 그 수치를 줄여서 더 자주 발생하게 해 줘야 함
+  대용량은 경우에 따라서는 1% 정도가 맞을수도 있다.
+ - autovacuum_max_workers 의 경우 500M 이상의 테이블이 많을 경우 그 갯수를 max 최대 9개 정도로 늘려줘라.
+ 기본이 3개인데... 늘어나면 다른 성능이 줄어 들겠지? 잘 고려해서
+ 
+4 pg-ctl -w start/stop 
+ -w 버릇이 좋음
+ 
+5 ps x
+명령만 해도 ps -ef | grep postgresql 만큼 보여줌
+
+6 number type integer 보다 느리다. 필요한 경우만 사용
+
+log-min-duration-statement 는 느린 sql을 찾아 줌
+
+database 생성시
+CREATE DATABASE mago3d
+  WITH ENCODING='UTF8'
+       OWNER=postgres
+       TEMPLATE=template0
+       LC_COLLATE='C'
+       LC_CTYPE='C'
+       CONNECTION LIMIT=-1;
+encodding, template, lc등을 저렇게 하지 않으면 한글 정렬이나 검색이 안됨
+
+8 날짜
+ 23.59.59 초로만 하면.... 59.999999가 짤림 내일 0000000로 해라.
+ 
+insert into 테이블 ~~~~~~~~ on conflict do update 문이 새로 지원됨
+
+9 통계
+maintenance analyze 해 줘야 통계가 잡힘
+
+explain option--> buffers를 체트 하고 실행해 봐라.
+explain(analyze, buffer)
+
+통계 수집
+analyze 테이블 이름
+
+analyze, vacuum을 같이 해 줘야 함
+
+>psql
+postgresql # \1+
+하면 db 사이즈 나옴
+du -sh *
+
+kill -9 으로 postgresql pid 를 죽이면 database 전체가 초기화됨.
+잘 안 죽는 경우도 많음. stat가 D인 상태는 kill로 못 죽임
+os 리부팅 해라.
+
+connection 최적화 테스트 시
+최적 60개, 30 ~ 40개가 최고 속도 였음
+
+postgresql max connection은 100개가 적당
+
+pg-blocking-pid() ....................... lock 문제 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,29 @@
+psql -U postgres 디비명
+
+
+alter 문
+
+추가
+ALTER TABLE policy ADD content_object_group_root			varchar(60)			default 'Mago3D';
+삭제
+ALTER TABLE policy DROP COLUMN content_account_group_root;
+컬럼 타입 변경
+alter table data_info alter column parent type bigint;
+
+select *, ST_Distance(
+ST_GeographyFromText('SRID=4326;POINT('||longitude||' '||latitude||')'), 
+ST_GeographyFromText('SRID=4326;POINT(126.927232 37.520575)')
+) as dis from data_group order by dis;
+
+alter sequence data_info_seq restart with 2000;
+
+array colum update
+update policy
+set geo_data_default_projects = '{3ds.json, ifc_cultural_assets.json, ifc_mep.json, ifc.json, ifc_japan.json, sea_port.json, collada.json}';
+
+WITH RECURSIVE [view명](보여주고 싶은 컬럼) as (
+	부모쿼리 작성, 데이터의 시작 조건을 구하는 쿼리
+	UNION ALL
+	계층구조 작성, 하위 데이터를 찾아가기 위한 반복 쿼리
+)
+view 쿼리

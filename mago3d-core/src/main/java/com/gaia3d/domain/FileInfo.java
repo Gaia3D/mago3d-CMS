@@ -43,6 +43,10 @@ public class FileInfo {
 	private Integer insert_success_count;
 	// Excel 데이터 Target Table SQL Insert 실패 건수
 	private Integer insert_error_count;
+	// Excel 데이터 Target Table SQL update 성공 건수
+	private Integer update_success_count;
+	// Excel 데이터 Target Table SQL Insert 실패 건수
+	private Integer update_error_count;
 	// 등록일
 	private String insert_date;
 	

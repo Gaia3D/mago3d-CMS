@@ -126,13 +126,11 @@
 	</select>
 	
 	<!-- Project Data 정보 -->
-	<select id="getDataByProjectId" parameterType="long" resultType="dataInfo">
-		/* getDataByProjectId */
+	<select id="getDataByDataKey" parameterType="string" resultType="dataInfo">
+		/* getDataByDataKey */
 		SELECT *
 		FROM data_info
-		WHERE project_id = #{project_id}
-			AND parent = 0
-			AND depth = 1
+		WHERE data_key = #{data_key}
 	</select>
 	
 	<!-- Data 아이디 중복 체크 -->

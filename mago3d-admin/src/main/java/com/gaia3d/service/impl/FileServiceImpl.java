@@ -522,19 +522,28 @@ public class FileServiceImpl implements FileService {
 		fileParseLog.setFile_info_id(fileInfo.getFile_info_id());
 		fileParseLog.setLog_type(FileParseLog.DB_INSERT_LOG);
 		
-		DataInfo projectDataInfo = dataService.getDataByProjectId(projectId);
 		Map<String, Long> parentDataKeyMap = new HashMap<>();
-		parentDataKeyMap.put(projectDataInfo.getData_key(), projectDataInfo.getData_id());
 		int insertSuccessCount = 0;
+		int updateSuccessCount = 0;
 		int insertErrorCount = 0;
 		for(DataInfo dataInfo : dataInfoList) {
 			try {
 				if(dataInfo.getDepth() != 1) {
 					dataInfo.setParent(parentDataKeyMap.get(dataInfo.getParent_data_key())); 
 				}
-				dataService.insertData(dataInfo);
+				
+				DataInfo dbDataInfo = dataService.getDataByDataKey(dataInfo.getData_key());
+				if(dbDataInfo == null) {
+					dataService.insertData(dataInfo);
+					insertSuccessCount++;
+				} else {
+					dataInfo.setData_id(dbDataInfo.getData_id());
+					dataService.updateData(dataInfo);
+					updateSuccessCount++;
+				}
+	
 				parentDataKeyMap.put(dataInfo.getData_key(), dataInfo.getData_id());
-				insertSuccessCount++;
+				
 			} catch(Exception e) {
 				e.printStackTrace();
 				fileParseLog.setIdentifier_value(fileInfo.getUser_id());
@@ -548,6 +557,7 @@ public class FileServiceImpl implements FileService {
 		fileInfo.setParse_success_count((Integer) map.get("parseSuccessCount"));
 		fileInfo.setParse_error_count((Integer) map.get("parseErrorCount"));
 		fileInfo.setInsert_success_count(insertSuccessCount);
+		fileInfo.setUpdate_success_count(updateSuccessCount);
 		fileInfo.setInsert_error_count(insertErrorCount);
 		fileMapper.updateFileInfo(fileInfo);
 		

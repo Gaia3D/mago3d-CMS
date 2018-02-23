@@ -61,8 +61,12 @@ public class DataFileJsonParser implements DataFileParser {
 			dataInfo.setParent(0l);
 			dataInfo.setDepth(1);
 			dataInfo.setView_order(1);
+			if(dataInfo.getLatitude() != null && dataInfo.getLatitude().floatValue() != 0f &&
+					dataInfo.getLongitude() != null && dataInfo.getLongitude().floatValue() != 0f) {
+				dataInfo.setLocation("POINT(" + dataInfo.getLongitude() + " " + dataInfo.getLatitude() + ")");
+			}
 			
-			//dataInfoList.add(dataInfo);
+			dataInfoList.add(dataInfo);
 			
 			if(childrenNode.isArray() && childrenNode.size() != 0) {
 				dataInfoList.addAll(parseChildren(projectId, dataInfo.getData_key(),  null, dataInfo.getDepth(), childrenNode));
@@ -120,6 +124,10 @@ public class DataFileJsonParser implements DataFileParser {
 			dataInfo.setAttributes(attributes.toString());
 			dataInfo.setDepth(depth);
 			dataInfo.setView_order(viewOrder);
+			if(dataInfo.getLatitude() != null && dataInfo.getLatitude().floatValue() != 0f &&
+					dataInfo.getLongitude() != null && dataInfo.getLongitude().floatValue() != 0f) {
+				dataInfo.setLocation("POINT(" + dataInfo.getLongitude() + " " + dataInfo.getLatitude() + ")");
+			}
 			
 			dataInfoList.add(dataInfo);
 			

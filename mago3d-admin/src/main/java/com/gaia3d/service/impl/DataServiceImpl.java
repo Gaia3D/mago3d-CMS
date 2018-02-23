@@ -94,13 +94,13 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	/**
-	 * Project Data 정보 취득
-	 * @param project_id
+	 * Data 정보 취득
+	 * @param data_key
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public DataInfo getDataByProjectId(Long project_id) {
-		return dataMapper.getDataByProjectId(project_id);
+	public DataInfo getDataByDataKey(String data_key) {
+		return dataMapper.getDataByDataKey(data_key);
 	}
 	
 	/**

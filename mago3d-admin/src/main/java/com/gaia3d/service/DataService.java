@@ -62,11 +62,11 @@ public interface DataService {
 	DataInfo getData(Long data_id);
 	
 	/**
-	 * Project Data 정보 취득
-	 * @param project_id
+	 * Data 정보 취득
+	 * @param data_key
 	 * @return
 	 */
-	DataInfo getDataByProjectId(Long project_id);
+	DataInfo getDataByDataKey(String data_key);
 	
 	/**
 	 * 표시 순서
