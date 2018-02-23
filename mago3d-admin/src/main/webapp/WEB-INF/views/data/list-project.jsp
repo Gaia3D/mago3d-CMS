@@ -54,8 +54,8 @@
 									<col class="col-number" />
 									<col class="col-functions" />
 									<col class="col-functions" />
-									<col class="col-functions" />
 									<col class="col-date" />
+									<col class="col-functions" />
 									<thead>
 										<tr>
 											<th scope="col" class="col-number"><spring:message code='number'/></th>
@@ -70,8 +70,8 @@
 											<th scope="col" class="col-number">이동시간</th>
 											<th scope="col" class="col-functions">데이터 관리</th>
 											<th scope="col" class="col-functions">Role 관리</th>
-											<th scope="col" class="col-functions">수정</th>
 											<th scope="col" class="col-date">등록일</th>
+											<th scope="col" class="col-functions">수정/삭제</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -95,8 +95,14 @@
 											<td class="col-toggle">${project.duration}</td>
 											<td class="col-functions"><a href="#" onclick="viewDataList('${project.project_id}', '${project.project_name}'); return false;">보기</a></td>
 											<td class="col-functions"><a href="/data/modify-project.do?project_id=${project.project_id}">보기</a></td>
-											<td class="col-functions"><a href="/data/modify-project.do?project_id=${project.project_id}">수정</a></td>
 											<td class="col-date">${project.viewInsertDate }</td>
+											
+											<td class="col-functions">
+												<span class="button-group">
+													<a href="/data/modify-project.do?project_id=${project.project_id}" class="image-button button-edit"><spring:message code='modified'/></a>
+													<a href="/data/delete-project.do?project_id=${project.project_id}" onclick="return deleteWarning();" class="image-button button-delete"><spring:message code='delete'/></a>
+												</span>
+											</td>
 										</tr>
 	</c:forEach>
 </c:if>

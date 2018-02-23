@@ -1,18 +1,18 @@
--- 사용자 그룹 테이블 기본값 입력
+-- ユーザーグループのテーブルのデフォルトの入力
 insert into user_group(
 	user_group_id, group_key, group_name, parent, depth, view_order, default_yn, use_yn, description
 ) values(
 	1, 'SUPER_ADMIN', '슈퍼 관리자', 0, 1, 1, 'Y', 'Y', '기본값'
 );
 
--- 슈퍼 관리자 등록
+-- スーパー管理者登録
 insert into user_info(
 	user_id, user_group_id, user_name, password, salt, user_role_check_yn, last_login_date
 ) values (
 	'admin', 1, '슈퍼관리자', '비밀번호', 'salt', 'N', now()
 );
 
--- 메뉴
+-- メニュー
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(1, '홈', 'HOME', 0 , 1, 1, '/main/index.do', 'glyph-home', 'N', 'N');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(2, '사용자', 'USER', 0 , 1, 2, '/user/list-user.do', 'glyph-users', 'Y', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(21, '사용자 그룹', 'USER', 2 , 2, 1, '/user/list-user-group.do', 'glyph-users', 'N', 'Y');
@@ -55,7 +55,7 @@ insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_cla
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(101, '공지 목록', 'BOARD', 10 , 2, 1, '/board/list-board.do', 'glyph-imark-dot', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(102, '공지사항 등록', 'BOARD', 10 , 2, 2, '/board/input-board.do', 'glyph-imark-dot', 'N', 'Y');
 
--- 사용자 그룹별 메뉴
+-- ユーザーグループ別メニュー
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (1, 1, 1);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (2, 1, 2);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (21, 1, 21);
@@ -92,7 +92,7 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (101, 1, 101);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (102, 1, 102);
 
--- 메인 화면 위젯
+-- メイン画面のウィジェット
 insert into widget(	widget_id, name, view_order, user_id) values( 1, 'issueWidget', 1, 'admin' );
 insert into widget(	widget_id, name, view_order, user_id) values( 2, 'userWidget', 4, 'admin' );
 insert into widget(	widget_id, name, view_order, user_id) values( 3, 'scheduleLogListWidget', 7, 'admin' );
@@ -100,13 +100,14 @@ insert into widget(	widget_id, name, view_order, user_id) values( 4, 'accessLogW
 insert into widget(	widget_id, name, view_order, user_id) values( 5, 'dbcpWidget', 9, 'admin' );
 insert into widget(	widget_id, name, view_order, user_id) values( 6, 'dbSessionWidget', 10, 'admin' );
 
--- 운영 정책
+-- 運営ポリシー
 insert into policy(	policy_id, password_exception_char, site_name, site_admin_mobile_phone, site_admin_email) 
 			values( 1, '<>&''"', 'Mago3D', '000-0000-0000', 'test@test.com');
 
 -- Role
 insert into role(role_id, role_name, role_key, role_type, business_type, use_yn, default_yn) values(1, '관리자 페이지 접근 권한', 'USER_ADMIN_LOGIN', '0', '0', 'Y', 'N');
-
+insert into role(role_id, role_name, role_key, role_type, business_type, use_yn, default_yn) values(1, '프로젝트 삭제 권한', 'PROJECT_DELETE', '0', '0', 'Y', 'N');
+insert into role(role_id, role_name, role_key, role_type, business_type, use_yn, default_yn) values(1, '데이터 삭제 권한', 'DATA_DELETE', '0', '0', 'Y', 'N');
 
 -- Private API
 insert into external_service (
@@ -115,7 +116,7 @@ insert into external_service (
 	1, 'CACHE', '사용자 CACHE 갱신', '0', '127.0.0.1', 'M5mru2GcGZOyc+Tdy7AYUw==', 'http', 'localhost', '80', 'cache/call-cache.do', 'Y', 'test'
 );
 
--- 공통 코드
+-- 共通コード
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order
 ) values (
