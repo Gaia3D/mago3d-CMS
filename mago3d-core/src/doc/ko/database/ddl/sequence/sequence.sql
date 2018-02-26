@@ -43,7 +43,7 @@ create sequence user_group_seq increment 1 minvalue 1 maxvalue 999999999999 star
 create sequence user_group_role_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence user_group_menu_seq increment 1 minvalue 1 maxvalue 999999999999 start 200 cache 1;
 create sequence user_device_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
-create sequence role_seq increment 1 minvalue 1 maxvalue 999999999999 start 100 cache 1;
+create sequence role_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence menu_seq increment 1 minvalue 1 maxvalue 999999999999 start 200 cache 1;
 create sequence widget_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence common_code_seq increment 1 minvalue 1 maxvalue 999999999999 start 100 cache 1;

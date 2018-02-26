@@ -93,12 +93,12 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (102, 1, 102);
 
 -- 메인 화면 위젯
-insert into widget(	widget_id, name, view_order, user_id) values( NEXTVAL('widget_seq'), 'issueWidget', 1, 'admin' );
-insert into widget(	widget_id, name, view_order, user_id) values( NEXTVAL('widget_seq'), 'userWidget', 4, 'admin' );
-insert into widget(	widget_id, name, view_order, user_id) values( NEXTVAL('widget_seq'), 'scheduleLogListWidget', 7, 'admin' );
-insert into widget(	widget_id, name, view_order, user_id) values( NEXTVAL('widget_seq'), 'accessLogWidget', 8, 'admin' );
-insert into widget(	widget_id, name, view_order, user_id) values( NEXTVAL('widget_seq'), 'dbcpWidget', 9, 'admin' );
-insert into widget(	widget_id, name, view_order, user_id) values( NEXTVAL('widget_seq'), 'dbSessionWidget', 10, 'admin' );
+insert into widget(	widget_id, name, view_order, user_id) values(NEXTVAL('widget_seq'), 'issueWidget', 1, 'admin' );
+insert into widget(	widget_id, name, view_order, user_id) values(NEXTVAL('widget_seq'), 'userWidget', 4, 'admin' );
+insert into widget(	widget_id, name, view_order, user_id) values(NEXTVAL('widget_seq'), 'scheduleLogListWidget', 7, 'admin' );
+insert into widget(	widget_id, name, view_order, user_id) values(NEXTVAL('widget_seq'), 'accessLogWidget', 8, 'admin' );
+insert into widget(	widget_id, name, view_order, user_id) values(NEXTVAL('widget_seq'), 'dbcpWidget', 9, 'admin' );
+insert into widget(	widget_id, name, view_order, user_id) values(NEXTVAL('widget_seq'), 'dbSessionWidget', 10, 'admin' );
 
 -- 운영 정책
 insert into policy(	policy_id, password_exception_char, site_name, site_admin_mobile_phone, site_admin_email) 
