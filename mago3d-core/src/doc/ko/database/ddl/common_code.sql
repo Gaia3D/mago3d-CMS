@@ -1,6 +1,6 @@
 drop table if exists common_code cascade;
 
--- °øÅë ÄÚµå
+-- ê³µí†µ ì½”ë“œ
 create table common_code (
 	code_key					varchar(50),	
 	code_type					varchar(50)							not null,
@@ -16,15 +16,15 @@ create table common_code (
 	constraint common_code_pk primary key (code_key)	
 );
 
-comment on table common_code is '°øÅë ÄÚµå';
-comment on column common_code.code_key is '°íÀ¯Å°';
-comment on column common_code.code_type is 'ÄÚµå ºĞ·ù';
-comment on column common_code.code_name is 'ÄÚµå¸í';
-comment on column common_code.code_name_en is '¿µ¾î ÄÚµå¸í';
-comment on column common_code.code_value is 'ÄÚµå°ª';
-comment on column common_code.use_yn is '»ç¿ëÀ¯¹«, Y : »ç¿ë(±âº»), N : »ç¿ë¾ÈÇÔ';
-comment on column common_code.view_order is 'Ç¥½Ã¼ø¼­. ±âº»°ª 1';
+comment on table common_code is 'ê³µí†µ ì½”ë“œ';
+comment on column common_code.code_key is 'ê³ ìœ í‚¤';
+comment on column common_code.code_type is 'ì½”ë“œ ë¶„ë¥˜';
+comment on column common_code.code_name is 'ì½”ë“œëª…';
+comment on column common_code.code_name_en is 'ì˜ì–´ ì½”ë“œëª…';
+comment on column common_code.code_value is 'ì½”ë“œê°’';
+comment on column common_code.use_yn is 'ì‚¬ìš©ìœ ë¬´, Y : ì‚¬ìš©(ê¸°ë³¸), N : ì‚¬ìš©ì•ˆí•¨';
+comment on column common_code.view_order is 'í‘œì‹œìˆœì„œ. ê¸°ë³¸ê°’ 1';
 comment on column common_code.css_class is 'css class';
-comment on column common_code.image is 'ÀÌ¹ÌÁö °æ·Î';
-comment on column common_code.description is '¼³¸í';
-comment on column common_code.insert_date is 'µî·ÏÀÏ';
+comment on column common_code.image is 'ì´ë¯¸ì§€ ê²½ë¡œ';
+comment on column common_code.description is 'ì„¤ëª…';
+comment on column common_code.insert_date is 'ë“±ë¡ì¼';

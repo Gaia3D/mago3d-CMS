@@ -1,7 +1,7 @@
 drop table if exists api_log cascade;
 drop table if exists external_service cascade;
 
--- API È£Ãâ ÀÌ·Â
+-- API í˜¸ì¶œ ì´ë ¥
 create table api_log(
 	api_log_id					bigint,
 	service_code				varchar(100)		not null,
@@ -36,37 +36,37 @@ create table api_log(
 	constraint api_log_pk primary key (api_log_id)	
 );
 
-comment on table api_log is 'API È£Ãâ ÀÌ·Â';
-comment on column api_log.api_log_id is '°íÀ¯Å°';
-comment on column api_log.service_code is 'API ÄÚµå';
-comment on column api_log.service_name is 'API ÀÌ¸§ ';
-comment on column api_log.client_ip is '¼­ºñ½º Á¦°øÀ» ¿äÃ»ÇÑ Client IP';
-comment on column api_log.client_server_name is '¼­ºñ½º Á¦°øÀ» ¿äÃ»ÇÑ ¼­¹ö¸í';
+comment on table api_log is 'API í˜¸ì¶œ ì´ë ¥';
+comment on column api_log.api_log_id is 'ê³ ìœ í‚¤';
+comment on column api_log.service_code is 'API ì½”ë“œ';
+comment on column api_log.service_name is 'API ì´ë¦„ ';
+comment on column api_log.client_ip is 'ì„œë¹„ìŠ¤ ì œê³µì„ ìš”ì²­í•œ Client IP';
+comment on column api_log.client_server_name is 'ì„œë¹„ìŠ¤ ì œê³µì„ ìš”ì²­í•œ ì„œë²„ëª…';
 comment on column api_log.api_key is 'API KEY';
-comment on column api_log.device_kind is '»ç¿ë ¸ÅÃ¼( 0 : À¥, 1 : ±âÅ¸)';
-comment on column api_log.request_type is '¼­ºñ½º ¿äÃ» Å¸ÀÔ. ÀÎÁõ : ADMIN_PASSWORD, Å×½ºÆ® : ADMIN_TEST, ·Î±×ÀÎ : ADMIN_LOGIN, Å×½ºÆ® : USER_TEST, ·Î±×ÀÎ : USER_LOGIN, ¿ÜºÎ : API';
-comment on column api_log.user_id is '»ç¿ëÀÚ ¾ÆÀÌµğ';
-comment on column api_log.user_ip is '»ç¿ëÀÚ IP';
-comment on column api_log.data_count is 'µ¥ÀÌÅÍ °Ç¼ö';
-comment on column api_log.data_delimiter is 'µ¥¾îÅÍ ±¸ºĞÀÚ';
-comment on column api_log.phone is 'ÀüÈ­¹øÈ£';
+comment on column api_log.device_kind is 'ì‚¬ìš© ë§¤ì²´( 0 : ì›¹, 1 : ê¸°íƒ€)';
+comment on column api_log.request_type is 'ì„œë¹„ìŠ¤ ìš”ì²­ íƒ€ì…. ì¸ì¦ : ADMIN_PASSWORD, í…ŒìŠ¤íŠ¸ : ADMIN_TEST, ë¡œê·¸ì¸ : ADMIN_LOGIN, í…ŒìŠ¤íŠ¸ : USER_TEST, ë¡œê·¸ì¸ : USER_LOGIN, ì™¸ë¶€ : API';
+comment on column api_log.user_id is 'ì‚¬ìš©ì ì•„ì´ë””';
+comment on column api_log.user_ip is 'ì‚¬ìš©ì IP';
+comment on column api_log.data_count is 'ë°ì´í„° ê±´ìˆ˜';
+comment on column api_log.data_delimiter is 'ë°ì–´í„° êµ¬ë¶„ì';
+comment on column api_log.phone is 'ì „í™”ë²ˆí˜¸';
 comment on column api_log.email is 'email';
-comment on column api_log.messanger is '¸Ş½ÅÀú';
-comment on column api_log.field1 is 'ÀÓ½Ã ÇÊµå1';
-comment on column api_log.field2 is 'ÀÓ½Ã ÇÊµå2';
-comment on column api_log.field3 is 'ÀÓ½Ã ÇÊµå3';
-comment on column api_log.field4 is 'ÀÓ½Ã ÇÊµå4';
-comment on column api_log.field5 is 'ÀÓ½Ã ÇÊµå5';
-comment on column api_log.success_yn is 'API È£Ãâ ¼º°ø À¯¹«( Y : ¼º°ø, N : ½ÇÆĞ )';
-comment on column api_log.business_success_yn is '¾÷¹« ¿¹¿Ü ¹ß»ı À¯¹«(¿À·ù°¡ ¹ß»ıÇßÁö¸¸ ¹«½ÃÇØµµ µÇ´Â °æ¿ì, Y : ¼º°ø, N : ½ÇÆĞ)';
-comment on column api_log.result_message is '¼­ºñ½º È£Ãâ ¸Ş½ÃÁö';
-comment on column api_log.business_result_message is '¾÷¹« È£Ãâ ¸Ş½ÃÁö';
-comment on column api_log.result_value1 is '°á°ú °ª1';
-comment on column api_log.result_value2 is '°á°ú °ª2';
-comment on column api_log.result_value3 is '°á°ú °ª3';
-comment on column api_log.result_value4 is '°á°ú °ª4';
-comment on column api_log.result_value5 is '°á°ú °ª5';
-comment on column api_log.insert_date is 'µî·ÏÀÏ';
+comment on column api_log.messanger is 'ë©”ì‹ ì €';
+comment on column api_log.field1 is 'ì„ì‹œ í•„ë“œ1';
+comment on column api_log.field2 is 'ì„ì‹œ í•„ë“œ2';
+comment on column api_log.field3 is 'ì„ì‹œ í•„ë“œ3';
+comment on column api_log.field4 is 'ì„ì‹œ í•„ë“œ4';
+comment on column api_log.field5 is 'ì„ì‹œ í•„ë“œ5';
+comment on column api_log.success_yn is 'API í˜¸ì¶œ ì„±ê³µ ìœ ë¬´( Y : ì„±ê³µ, N : ì‹¤íŒ¨ )';
+comment on column api_log.business_success_yn is 'ì—…ë¬´ ì˜ˆì™¸ ë°œìƒ ìœ ë¬´(ì˜¤ë¥˜ê°€ ë°œìƒí–ˆì§€ë§Œ ë¬´ì‹œí•´ë„ ë˜ëŠ” ê²½ìš°, Y : ì„±ê³µ, N : ì‹¤íŒ¨)';
+comment on column api_log.result_message is 'ì„œë¹„ìŠ¤ í˜¸ì¶œ ë©”ì‹œì§€';
+comment on column api_log.business_result_message is 'ì—…ë¬´ í˜¸ì¶œ ë©”ì‹œì§€';
+comment on column api_log.result_value1 is 'ê²°ê³¼ ê°’1';
+comment on column api_log.result_value2 is 'ê²°ê³¼ ê°’2';
+comment on column api_log.result_value3 is 'ê²°ê³¼ ê°’3';
+comment on column api_log.result_value4 is 'ê²°ê³¼ ê°’4';
+comment on column api_log.result_value5 is 'ê²°ê³¼ ê°’5';
+comment on column api_log.insert_date is 'ë“±ë¡ì¼';
 
 
 create table api_log_2018 (
@@ -155,24 +155,24 @@ create table external_service (
 );
 
 comment on table external_service is 'Private API';
-comment on column external_service.external_service_id is '°íÀ¯Å°';
-comment on column external_service.service_code is '¼­ºñ½º ÄÚµå';
-comment on column external_service.service_name is '¼­ºñ½º¸í';
-comment on column external_service.service_type is '¼­ºñ½º À¯Çü. 0 : Cache(Ä³½Ã Reload)';
-comment on column external_service.server_ip is '¼­¹ö IP';
+comment on column external_service.external_service_id is 'ê³ ìœ í‚¤';
+comment on column external_service.service_code is 'ì„œë¹„ìŠ¤ ì½”ë“œ';
+comment on column external_service.service_name is 'ì„œë¹„ìŠ¤ëª…';
+comment on column external_service.service_type is 'ì„œë¹„ìŠ¤ ìœ í˜•. 0 : Cache(ìºì‹œ Reload)';
+comment on column external_service.server_ip is 'ì„œë²„ IP';
 comment on column external_service.api_key is 'API KEY';
-comment on column external_service.url_scheme is '»ç¿ëÇÒ ÇÁ·ÎÅäÄİ';
-comment on column external_service.url_host is 'È£½ºÆ®';
-comment on column external_service.url_port is 'Æ÷Æ®';
-comment on column external_service.url_path is '°æ·Î, ¸®¼Ò½º À§Ä¡';
-comment on column external_service.status is '»óÅÂ. 0 : »ç¿ë, 1 : ¹Ì»ç¿ë';
-comment on column external_service.default_yn is '»èÁ¦ ºÒ°¡, Y : ±âº», N : ¼±ÅÃ';
-comment on column external_service.description is '¼³¸í';
-comment on column external_service.extra_key1 is '¿©ºĞ Å° 1';
-comment on column external_service.extra_key2 is '¿©ºĞ Å° 2';
-comment on column external_service.extra_key3 is '¿©ºĞ Å° 3';
-comment on column external_service.extra_value1 is '¿©ºĞ Å° °ª 1';
-comment on column external_service.extra_value2 is '¿©ºĞ Å° °ª 2';
-comment on column external_service.extra_value3 is '¿©ºĞ Å° °ª 3';
-comment on column external_service.insert_date is 'µî·ÏÀÏ';
+comment on column external_service.url_scheme is 'ì‚¬ìš©í•  í”„ë¡œí† ì½œ';
+comment on column external_service.url_host is 'í˜¸ìŠ¤íŠ¸';
+comment on column external_service.url_port is 'í¬íŠ¸';
+comment on column external_service.url_path is 'ê²½ë¡œ, ë¦¬ì†ŒìŠ¤ ìœ„ì¹˜';
+comment on column external_service.status is 'ìƒíƒœ. 0 : ì‚¬ìš©, 1 : ë¯¸ì‚¬ìš©';
+comment on column external_service.default_yn is 'ì‚­ì œ ë¶ˆê°€, Y : ê¸°ë³¸, N : ì„ íƒ';
+comment on column external_service.description is 'ì„¤ëª…';
+comment on column external_service.extra_key1 is 'ì—¬ë¶„ í‚¤ 1';
+comment on column external_service.extra_key2 is 'ì—¬ë¶„ í‚¤ 2';
+comment on column external_service.extra_key3 is 'ì—¬ë¶„ í‚¤ 3';
+comment on column external_service.extra_value1 is 'ì—¬ë¶„ í‚¤ ê°’ 1';
+comment on column external_service.extra_value2 is 'ì—¬ë¶„ í‚¤ ê°’ 2';
+comment on column external_service.extra_value3 is 'ì—¬ë¶„ í‚¤ ê°’ 3';
+comment on column external_service.insert_date is 'ë“±ë¡ì¼';
 

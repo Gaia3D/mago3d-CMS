@@ -1,4 +1,4 @@
--- FK, Index ´Â º°µµ ÆÄÀÏ·Î ºĞ¸®. ¸Ç ¸¶Áö¸·¿¡ ÀÛ¾÷ ¿¹Á¤
+-- FK, Index ëŠ” ë³„ë„ íŒŒì¼ë¡œ ë¶„ë¦¬. ë§¨ ë§ˆì§€ë§‰ì— ì‘ì—… ì˜ˆì •
 drop table if exists data_info_log cascade;
 
 create table data_info_log(
@@ -19,21 +19,21 @@ create table data_info_log(
 	constraint data_info_log_pk 	primary key(data_info_log_id)
 );
 
-comment on table data_info_log is 'Data ÀÌ·Â Á¤º¸';
-comment on column data_info_log.data_info_log_id is '°íÀ¯¹øÈ£';
-comment on column data_info_log.data_id is 'Data °íÀ¯¹øÈ£';
-comment on column data_info_log.user_id is '»ç¿ëÀÚ °íÀ¯¹øÈ£';
-comment on column data_info_log.latitude is 'À§µµ';
-comment on column data_info_log.longitude is '°æµµ';
-comment on column data_info_log.height is '³ôÀÌ';
+comment on table data_info_log is 'Data ì´ë ¥ ì •ë³´';
+comment on column data_info_log.data_info_log_id is 'ê³ ìœ ë²ˆí˜¸';
+comment on column data_info_log.data_id is 'Data ê³ ìœ ë²ˆí˜¸';
+comment on column data_info_log.user_id is 'ì‚¬ìš©ì ê³ ìœ ë²ˆí˜¸';
+comment on column data_info_log.latitude is 'ìœ„ë„';
+comment on column data_info_log.longitude is 'ê²½ë„';
+comment on column data_info_log.height is 'ë†’ì´';
 comment on column data_info_log.heading is 'heading';
 comment on column data_info_log.pitch is 'pitch';
 comment on column data_info_log.roll is 'roll';
-comment on column data_info_log.status is '»óÅÂ. 0:º¯°æ´ë±â, 1:º¯°æ¿Ï·á, 2:±â°¢';
-comment on column data_info_log.change_type is '¿äÃ» Å¸ÀÔ';
-comment on column data_info_log.description is '¼³¸í';
-comment on column data_info_log.update_date is '¼öÁ¤ÀÏ';
-comment on column data_info_log.insert_date is 'µî·ÏÀÏ';
+comment on column data_info_log.status is 'ìƒíƒœ. 0:ë³€ê²½ëŒ€ê¸°, 1:ë³€ê²½ì™„ë£Œ, 2:ê¸°ê°';
+comment on column data_info_log.change_type is 'ìš”ì²­ íƒ€ì…';
+comment on column data_info_log.description is 'ì„¤ëª…';
+comment on column data_info_log.update_date is 'ìˆ˜ì •ì¼';
+comment on column data_info_log.insert_date is 'ë“±ë¡ì¼';
 
 
 create table data_info_log_2018 (

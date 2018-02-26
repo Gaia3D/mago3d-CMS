@@ -1,7 +1,7 @@
 drop table if exists role cascade;
 
 
--- Role role_key unique Á¦¾à Á¶°Ç °É¾î¾ß ÇÔ
+-- Role role_key unique ì œì•½ ì¡°ê±´ ê±¸ì–´ì•¼ í•¨
 create table role(
 	role_id				bigint,
 	role_name			varchar(100)							not null,
@@ -16,12 +16,12 @@ create table role(
 );
 
 comment on table role is 'Role';
-comment on column role.role_id is '°íÀ¯¹øÈ£';
-comment on column role.role_name is 'Role ¸í';
+comment on column role.role_id is 'ê³ ìœ ë²ˆí˜¸';
+comment on column role.role_name is 'Role ëª…';
 comment on column role.role_key is 'Role KEY';
-comment on column role.role_type is 'Role À¯Çü. 0 : »ç¿ëÀÚ, 1 : ¼­¹ö, 2 : °èÁ¤';
-comment on column role.business_type is '¾÷¹« À¯Çü. 0 : »ç¿ëÀÚ, 1 : ¼­¹ö, 2 : °èÁ¤';
-comment on column role.use_yn is '»ç¿ëÀ¯¹«. Y : »ç¿ë, N : »ç¿ë¾ÈÇÔ';
-comment on column role.default_yn is '±âº»»ç¿ë À¯¹«. Y : »ç¿ë, N : »ç¿ë¾ÈÇÔ';
-comment on column role.description is '¼³¸í';
-comment on column role.insert_date is 'µî·ÏÀÏ';
+comment on column role.role_type is 'Role ìœ í˜•. 0 : ì‚¬ìš©ì, 1 : ì„œë²„, 2 : ê³„ì •';
+comment on column role.business_type is 'ì—…ë¬´ ìœ í˜•. 0 : ì‚¬ìš©ì, 1 : ì„œë²„, 2 : ê³„ì •';
+comment on column role.use_yn is 'ì‚¬ìš©ìœ ë¬´. Y : ì‚¬ìš©, N : ì‚¬ìš©ì•ˆí•¨';
+comment on column role.default_yn is 'ê¸°ë³¸ì‚¬ìš© ìœ ë¬´. Y : ì‚¬ìš©, N : ì‚¬ìš©ì•ˆí•¨';
+comment on column role.description is 'ì„¤ëª…';
+comment on column role.insert_date is 'ë“±ë¡ì¼';
