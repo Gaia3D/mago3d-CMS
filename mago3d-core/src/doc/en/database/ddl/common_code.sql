@@ -1,6 +1,6 @@
 drop table if exists common_code cascade;
 
--- 공통 코드
+-- Common code
 create table common_code (
 	code_key					varchar(50),	
 	code_type					varchar(50)							not null,
@@ -16,15 +16,15 @@ create table common_code (
 	constraint common_code_pk primary key (code_key)	
 );
 
-comment on table common_code is '공통 코드';
-comment on column common_code.code_key is '고유키';
-comment on column common_code.code_type is '코드 분류';
-comment on column common_code.code_name is '코드명';
-comment on column common_code.code_name_en is '영어 코드명';
-comment on column common_code.code_value is '코드값';
-comment on column common_code.use_yn is '사용유무, Y : 사용(기본), N : 사용안함';
-comment on column common_code.view_order is '표시순서. 기본값 1';
+comment on table common_code is 'common code';
+comment on column common_code.code_key is 'unique key';
+comment on column common_code.code_type is 'code classification';
+comment on column common_code.code_name is 'code name';
+comment on column common_code.code_name_en is 'English code name';
+comment on column common_code.code_value is 'code value';
+comment on column common_code.use_yn is 'Use. Y: Use (default), N: Do not use';
+comment on column common_code.view_order is 'Display order. Default 1';
 comment on column common_code.css_class is 'css class';
-comment on column common_code.image is '이미지 경로';
-comment on column common_code.description is '설명';
-comment on column common_code.insert_date is '등록일';
+comment on column common_code.image is 'Image path';
+comment on column common_code.description is 'Description';
+comment on column common_code.insert_date is 'Registered Date';

@@ -1,7 +1,6 @@
 drop table if exists menu cascade;
 
-
--- 메뉴
+-- menu
 create table menu(
 	menu_id				smallint,
 	name				varchar(100)							not null,
@@ -22,20 +21,19 @@ create table menu(
 );
 
 
-
-comment on table menu is '메뉴';
-comment on column menu.menu_id is '고유번호';
-comment on column menu.name is '메뉴명';
-comment on column menu.name_en is '영어 메뉴명';
-comment on column menu.lang is '언어';
-comment on column menu.parent is '부모 고유번호';
-comment on column menu.depth is '깊이';
-comment on column menu.view_order is '나열 순서';
+comment on table menu is 'menu';
+comment on column menu.menu_id is 'unique number';
+comment on column menu.name is 'menu name';
+comment on column menu.name_en is 'English menu name';
+comment on column menu.lang is 'language';
+comment on column menu.parent is 'parent number';
+comment on column menu.depth is 'depth';
+comment on column menu.view_order is 'List order';
 comment on column menu.url is 'URL';
-comment on column menu.image is '이미지';
-comment on column menu.image_alt is '이미지 Alt';
-comment on column menu.css_class is 'css class명';
-comment on column menu.default_yn is '기본 표시 메뉴, Y : 기본, N : 선택';
-comment on column menu.use_yn is '사용유무, Y : 사용, N : 사용안함';
-comment on column menu.description is '설명';
-comment on column menu.insert_date is '등록일';
+comment on column menu.image is 'image';
+comment on column menu.image_alt is 'Image Alt';
+comment on column menu.css_class is 'css class name';
+comment on column menu.default_yn is 'Default display menu, Y: Basic, N: Select';
+comment on column menu.use_yn is 'Use, Y: Use, N: Do not use';
+comment on column menu.description is 'Description';
+comment on column menu.insert_date is 'Registered Date';

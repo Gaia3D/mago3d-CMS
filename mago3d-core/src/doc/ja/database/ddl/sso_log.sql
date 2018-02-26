@@ -1,7 +1,7 @@
 drop table if exists sso_log cascade;
 
 
--- SSO ÀÌ·Â
+-- SSOå±¥æ­´
 create table sso_log (
 	sso_log_id 			bigint,
   	user_id 			varchar(30) 		not null, 
@@ -24,21 +24,21 @@ create table sso_log (
 );
 
 
-comment on table sso_log is 'SSO ·Î±×';
-comment on column sso_log.sso_log_id is '°íÀ¯Å°';
-comment on column sso_log.user_id is '»ç¿ëÀÚ ¾ÆÀÌµğ';
-comment on column sso_log.server_ip is '¼­¹ö ip';
-comment on column sso_log.device_kind is '»ç¿ë ¸ÅÃ¼( 0 : À¥, 1 : ±âÅ¸)';
-comment on column sso_log.request_type is '°ü¸®ÀÚ ¿äÃ» : ADMIN_REQUEST, »ç¿ëÀÚ ¿äÃ» : USER_REQUEST';
-comment on column sso_log.token is 'ÅäÅ«';
-comment on column sso_log.token_status is 'ÅäÅ« »óÅÂ. 0 : »ı¼º, 1 : ÀÎÁõ¼º°ø, 2 : ½ÇÆĞ, 3 : ½Ã°£¸¸·á';
-comment on column sso_log.redirect_url is 'SSO ÀÎÁõ ÈÄ ÀÌµ¿ÇÒ URL';
-comment on column sso_log.update_date is '¼öÁ¤ÀÏ';
-comment on column sso_log.year is '³â';
-comment on column sso_log.month is '¿ù';
-comment on column sso_log.day is 'ÀÏ';
-comment on column sso_log.year_week is 'ÀÏ³âÁß ¸îÁÖ';
-comment on column sso_log.week is 'ÀÌ¹ø´Ş ¸îÁÖ';
-comment on column sso_log.hour is '½Ã°£';
-comment on column sso_log.minute is 'ºĞ';
-comment on column sso_log.insert_date is 'µî·ÏÀÏ';
+comment on table sso_log is 'SSOãƒ­ã‚°';
+comment on column sso_log.sso_log_id is 'å›ºæœ‰ã®ã‚­ãƒ¼';
+comment on column sso_log.user_id is 'ãƒ¦ãƒ¼ã‚¶ID';
+comment on column sso_log.server_ip is 'ã‚µãƒ¼ãƒãƒ¼ip';
+comment on column sso_log.device_kind is 'ã‚’ä½¿ç”¨åª’ä½“(0ï¼šã‚¦ã‚§ãƒ–ã€1ï¼šãã®ä»–)';
+comment on column sso_log.request_type is 'ç®¡ç†è€…ã®è¦æ±‚ï¼šADMIN_REQUESTã€ãƒ¦ãƒ¼ã‚¶ã®è¦æ±‚ï¼šUSER_REQUEST';
+comment on column sso_log.token is 'ãƒˆãƒ¼ã‚¯ãƒ³';
+comment on column sso_log.token_status is 'ãƒˆãƒ¼ã‚¯ãƒ³ã®çŠ¶æ…‹ã€‚ 0ï¼šä½œæˆã€1ï¼šèªè¨¼æˆåŠŸã€2ï¼šå¤±æ•—ã™ã‚‹ã¨ã€3ï¼šã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆ';
+comment on column sso_log.redirect_url is 'SSOèªè¨¼å¾Œç§»å‹•å…ˆã®URL';
+comment on column sso_log.update_date is 'æ›´æ–°æ—¥';
+comment on column sso_log.year is 'å¹´';
+comment on column sso_log.month is 'æœˆ';
+comment on column sso_log.day is 'ã§ã‚ã‚‹';
+comment on column sso_log.year_week is 'ä»Šå¹´ã®æ•°é€±é–“';
+comment on column sso_log.week is 'ä»Šæœˆæ•°é€±é–“';
+comment on column sso_log.hour is 'æ™‚é–“';
+comment on column sso_log.minute is 'åˆ†';
+comment on column sso_log.insert_date is 'ç™»éŒ²';

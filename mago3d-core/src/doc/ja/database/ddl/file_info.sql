@@ -1,7 +1,7 @@
 drop table if exists file_info cascade;
 drop table if exists file_parse_log cascade;
 
--- ÆÄÀÏ °ü¸®(Excel, Pdfµî)
+-- ãƒ•ã‚¡ã‚¤ãƒ«ç®¡ç†ï¼ˆExcelã€Pdfãªã©ï¼‰
 create table file_info(
 	file_info_id				bigint,
 	user_id						varchar(32)	 		not null,
@@ -20,23 +20,23 @@ create table file_info(
 	constraint file_info_pk primary key (file_info_id)	
 );
 
-comment on table file_info is 'ÆÄÀÏ °ü¸®';
-comment on column file_info.file_info_id is '°íÀ¯¹øÈ£';
-comment on column file_info.user_id is '»ç¿ëÀÚ ¾ÆÀÌµğ';
-comment on column file_info.job_type is '¾÷¹« Å¸ÀÔ';
-comment on column file_info.file_name is 'ÆÄÀÏ ÀÌ¸§';
-comment on column file_info.file_real_name is 'ÆÄÀÏ ½ÇÁ¦ ÀÌ¸§';
-comment on column file_info.file_path is 'ÆÄÀÏ °æ·Î';
-comment on column file_info.file_size is 'ÆÄÀÏ »çÀÌÁî';
-comment on column file_info.file_ext is 'ÆÄÀÏ È®ÀåÀÚ';
-comment on column file_info.total_count is 'Excel ÀüÃ¼ µ¥ÀÌÅÍ °Ç¼ö';
-comment on column file_info.parse_success_count is 'Excel ÆÄ½Ì ¼º°ø °Ç¼ö';
-comment on column file_info.parse_error_count is 'Excel ÆÄ½Ì ¿À·ù';
-comment on column file_info.insert_success_count is 'Excel µ¥ÀÌÅÍ Target Table SQL Insert ¼º°ø °Ç¼ö';
-comment on column file_info.insert_error_count is 'Excel µ¥ÀÌÅÍ Target Table SQL Insert ½ÇÆĞ °Ç¼ö';
-comment on column file_info.register_date is 'µî·ÏÀÏ';
+comment on table file_info is 'ãƒ•ã‚¡ã‚¤ãƒ«ç®¡ç†';
+comment on column file_info.file_info_id is 'å›ºæœ‰ç•ªå·';
+comment on column file_info.user_id is 'ãƒ¦ãƒ¼ã‚¶ID';
+comment on column file_info.job_type is 'æ¥­å‹™ã‚¿ã‚¤ãƒ—';
+comment on column file_info.file_name is 'ãƒ•ã‚¡ã‚¤ãƒ«å';
+comment on column file_info.file_real_name is 'ãƒ•ã‚¡ã‚¤ãƒ«å®Ÿéš›ã®åå‰';
+comment on column file_info.file_path is 'ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹';
+comment on column file_info.file_size is 'ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º';
+comment on column file_info.file_ext is 'ãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­';
+comment on column file_info.total_count is 'Excelå…¨ä½“ã®ãƒ‡ãƒ¼ã‚¿ä»¶æ•°';
+comment on column file_info.parse_success_count is 'Excelè§£æã«æˆåŠŸä»¶æ•°';
+comment on column file_info.parse_error_count is 'Excelè§£æã‚¨ãƒ©ãƒ¼';
+comment on column file_info.insert_success_count is 'Excelã®ãƒ‡ãƒ¼ã‚¿Target Table SQL InsertæˆåŠŸä»¶æ•°';
+comment on column file_info.insert_error_count is 'Excelã®ãƒ‡ãƒ¼ã‚¿Target Table SQL Insertå¤±æ•—ä»¶æ•°';
+comment on column file_info.register_date is 'ç™»éŒ²';
 
--- ÆÄÀÏ ÆÄ½Ì ÀÌ·Â(Excel, Pdfµî)
+-- ãƒ•ã‚¡ã‚¤ãƒ«è§£æå±¥æ­´ï¼ˆExcelã€Pdfãªã©ï¼‰
 create table file_parse_log(
 	file_parse_log_id			bigint,
 	file_info_id				bigint 				not null,
@@ -48,12 +48,12 @@ create table file_parse_log(
 	constraint file_parse_log_pk primary key (file_parse_log_id)	
 );
 
-comment on table file_parse_log is 'ÆÄÀÏ ÆÄ½Ì ÀÌ·Â';
-comment on column file_parse_log.file_parse_log_id is '°íÀ¯¹øÈ£';
-comment on column file_parse_log.file_info_id is 'ÆÄÀÏ Á¤º¸ °íÀ¯¹øÈ£';
-comment on column file_parse_log.identifier_value is '½Äº°ÀÚ °ª';
-comment on column file_parse_log.error_code is '¿¡·¯ ÄÚµå';
-comment on column file_parse_log.log_type is '·Î±× Å¸ÀÔ 0: ÆÄÀÏ, 1: DB Insert';
-comment on column file_parse_log.status is '»óÅÂ. 0: success, 1: error';
-comment on column file_parse_log.register_date is 'µî·ÏÀÏ';
+comment on table file_parse_log is 'ãƒ•ã‚¡ã‚¤ãƒ«è§£æå±¥æ­´';
+comment on column file_parse_log.file_parse_log_id is 'å›ºæœ‰ç•ªå·';
+comment on column file_parse_log.file_info_id is 'ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±å›ºæœ‰ã®ç•ªå·';
+comment on column file_parse_log.identifier_value is 'è­˜åˆ¥å­ã®å€¤';
+comment on column file_parse_log.error_code is 'ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰';
+comment on column file_parse_log.log_type is 'ã®ãƒ­ã‚°ã‚¿ã‚¤ãƒ—0ï¼šãƒ•ã‚¡ã‚¤ãƒ«ã€1ï¼šDB Insert';
+comment on column file_parse_log.status is 'çŠ¶æ…‹ã€‚0ï¼šsuccessã€1ï¼šerror';
+comment on column file_parse_log.register_date is 'ç™»éŒ²';
 

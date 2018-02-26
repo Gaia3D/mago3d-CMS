@@ -1,7 +1,6 @@
 drop table if exists role cascade;
 
-
--- Role role_key unique 제약 조건 걸어야 함
+-- Role role_key unique constraint
 create table role(
 	role_id				bigint,
 	role_name			varchar(100)							not null,
@@ -16,12 +15,12 @@ create table role(
 );
 
 comment on table role is 'Role';
-comment on column role.role_id is '고유번호';
-comment on column role.role_name is 'Role 명';
+comment on column role.role_id is 'unique number';
+comment on column role.role_name is 'Role name';
 comment on column role.role_key is 'Role KEY';
-comment on column role.role_type is 'Role 유형. 0 : 사용자, 1 : 서버, 2 : 계정';
-comment on column role.business_type is '업무 유형. 0 : 사용자, 1 : 서버, 2 : 계정';
-comment on column role.use_yn is '사용유무. Y : 사용, N : 사용안함';
-comment on column role.default_yn is '기본사용 유무. Y : 사용, N : 사용안함';
-comment on column role.description is '설명';
-comment on column role.insert_date is '등록일';
+comment on column role.role_type is' Role type. 0: user, 1: server, 2: account ';
+comment on column role.business_type is' Business type. 0: user, 1: server, 2: account ';
+comment on column role.use_yn is' Use or not. Y: Use, N: Do not use ';
+comment on column role.default_yn is' Default enabled or disabled. Y: Use, N: Do not use ';
+comment on column role.description is 'Description';
+comment on column role.insert_date is 'Registered Date';

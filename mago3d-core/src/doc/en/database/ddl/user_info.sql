@@ -1,11 +1,11 @@
--- FK, Index ´Â º°µµ ÆÄÀÏ·Î ºĞ¸®. ¸Ç ¸¶Áö¸·¿¡ ÀÛ¾÷ ¿¹Á¤
+-- Separate FK and Index into separate files. Scheduled to work last
 drop table if exists user_group cascade;
 drop table if exists user_group_role cascade;
 drop table if exists user_group_menu;
 drop table if exists user_info cascade;
 drop table if exists user_device cascade;
 
--- »ç¿ëÀÚ ±×·ì
+-- User groups
 create table user_group(
 	user_group_id				smallint,
 	group_key					varchar(60)							not null ,
@@ -22,21 +22,21 @@ create table user_group(
 	constraint user_group_pk 	primary key (user_group_id)	
 );
 
-comment on table user_group is '»ç¿ëÀÚ ±×·ì';
-comment on column user_group.user_group_id is '°íÀ¯¹øÈ£';
-comment on column user_group.group_key is '¸µÅ© È°¿ë µîÀ» À§ÇÑ È®Àå ÄÃ·³';
-comment on column user_group.group_name is '±×·ì¸í';
-comment on column user_group.ancestor is 'Á¶»ó °íÀ¯¹øÈ£';
-comment on column user_group.parent is 'ºÎ¸ğ °íÀ¯¹øÈ£';
-comment on column user_group.depth is '±íÀÌ';
-comment on column user_group.view_order is '³ª¿­ ¼ø¼­';
-comment on column user_group.child_yn is 'ÀÚ½Ä Á¸ÀçÀ¯¹«, Y : Á¸Àç, N : Á¸Àç¾ÈÇÔ(±âº»)';
-comment on column user_group.default_yn is '»èÁ¦ ºÒ°¡, Y : ±âº», N : ¼±ÅÃ';
-comment on column user_group.use_yn is '»ç¿ëÀ¯¹«, Y : »ç¿ë, N : »ç¿ë¾ÈÇÔ';
-comment on column user_group.description is '¼³¸í';
-comment on column user_group.insert_date is 'µî·ÏÀÏ';
+comment on table user_group is 'user group';
+comment on column user_group.user_group_id is 'unique number';
+comment on column user_group.group_key is 'Extension column for link utilization';
+comment on column user_group.group_name is 'group name';
+comment on column user_group.ancestor is 'ancestor unique number';
+comment on column user_group.parent is 'Parent number';
+comment on column user_group.depth is 'depth';
+comment on column user_group.view_order is 'List order';
+comment on column user_group.child_yn is 'child exists, Y: exists, N: does not exist (default)';
+comment on column user_group.default_yn is 'Unable to delete, Y: Default, N: select';
+comment on column user_group.use_yn is 'Use. Y: Use, N: Do not use';
+comment on column user_group.description is 'Description';
+comment on column user_group.insert_date is 'Registered Date';
 
--- »ç¿ëÀÚ ±×·ìº° Role
+-- Role by user group
 create table user_group_role (
 	user_group_role_id				smallint,
 	user_group_id					smallint 								not null,
@@ -45,13 +45,14 @@ create table user_group_role (
 	constraint user_group_role_pk 	primary key (user_group_role_id)
 );
 
-comment on table user_group_role is '»ç¿ëÀÚ ±×·ìº° Role';
-comment on column user_group_role.user_group_role_id is '°íÀ¯¹øÈ£';
-comment on column user_group_role.user_group_id is '»ç¿ëÀÚ ±×·ì °íÀ¯Å°';
-comment on column user_group_role.role_id is 'Role °íÀ¯Å°';
-comment on column user_group_role.insert_date is 'µî·ÏÀÏ';
+comment on table user_group_role is 'Role by user group';
+comment on column user_group_role.user_group_role_id is 'unique number';
+comment on column user_group_role.user_group_id is 'User group unique key';
+comment on column user_group_role.role_id is 'Role unique key';
+comment on column user_group_role.insert_date is 'Registered Date';
 
--- »ç¿ëÀÚ ±×·ì ±ÇÇÑ
+
+-- User group permissions
 create table user_group_menu(
 	user_group_menu_id				smallint,
 	user_group_id					smallint 							not null,
@@ -65,19 +66,18 @@ create table user_group_menu(
 	constraint user_group_menu_pk 	primary key (user_group_menu_id)
 );
 
-comment on table user_group_menu is '»ç¿ëÀÚ ±×·ì ¸Ş´º';
-comment on column user_group_menu.user_group_menu_id is '°íÀ¯¹øÈ£';
-comment on column user_group_menu.user_group_id is '»ç¿ëÀÚ ±×·ì °íÀ¯Å°';
-comment on column user_group_menu.menu_id is '¸Ş´º °íÀ¯Å°';
-comment on column user_group_menu.all_yn is '¸Ş´º Á¢±Ù ¸ğµç ±ÇÇÑ';
-comment on column user_group_menu.read_yn is 'ÀĞ±â ±ÇÇÑ';
-comment on column user_group_menu.write_yn is '¾²±â ±ÇÇÑ';
-comment on column user_group_menu.update_yn is '¼öÁ¤ ±ÇÇÑ';
-comment on column user_group_menu.delete_yn is '»èÁ¦ ±ÇÇÑ';
-comment on column user_group_menu.insert_date is 'µî·ÏÀÏ';
+comment on table user_group_menu is 'User group menu';
+comment on column user_group_menu.user_group_menu_id is 'unique number';
+comment on column user_group_menu.user_group_id is 'User group unique key';
+comment on column user_group_menu.menu_id is 'Menu unique key';
+comment on column user_group_menu.all_yn is 'Menu access all permissions';
+comment on column user_group_menu.read_yn is 'Read permission';
+comment on column user_group_menu.write_yn is 'Write permission';
+comment on column user_group_menu.update_yn is 'Modify permission';
+comment on column user_group_menu.delete_yn is 'Delete permission';
+comment on column user_group_menu.insert_date is 'Registered Date';
 
-
--- »ç¿ëÀÚ ±âº»Á¤º¸
+-- User basics
 create table user_info(
 	user_id						varchar(32),
 	user_group_id				smallint								not null,
@@ -107,35 +107,35 @@ create table user_info(
 	constraint user_info_pk primary key(user_id)
 );
 
-comment on table user_info is '»ç¿ëÀÚ ±âº»Á¤º¸';
-comment on column user_info.user_id is '°íÀ¯¹øÈ£';
-comment on column user_info.user_group_id is '»ç¿ëÀÚ ±×·ì °íÀ¯¹øÈ£';
-comment on column user_info.user_name is 'ÀÌ¸§';
-comment on column user_info.password is 'ºñ¹Ğ¹øÈ£';
+comment on table user_info is 'User Basic Information';
+comment on column user_info.user_id is 'unique number';
+comment on column user_info.user_group_id is 'User group unique number';
+comment on column user_info.user_name is 'name';
+comment on column user_info.password is 'Password';
 comment on column user_info.salt is 'SALT';
-comment on column user_info.telephone is 'ÀüÈ­¹øÈ£';
-comment on column user_info.mobile_phone is 'ÇÚµåÆù ¹øÈ£';
-comment on column user_info.email is 'ÀÌ¸ŞÀÏ';
-comment on column user_info.messanger is '¸Ş½ÅÀú ¾ÆÀÌµğ';
-comment on column user_info.employee_id is '»ç¹ø';
-comment on column user_info.postal_code is '¿ìÆí¹øÈ£';
-comment on column user_info.address is 'ÁÖ¼Ò';
-comment on column user_info.address_etc is '»ó¼¼ÁÖ¼Ò';
-comment on column user_info.ci is '½Ç¸í ÀÎÁõ CI °íÀ¯°ª';
-comment on column user_info.di is '½Ç¸í ÀÎÁõ DI µµ¸ŞÀÎ °íÀ¯°ª';
-comment on column user_info.user_role_check_yn is 'ÃÖÃÊ ·Î±×ÀÎ½Ã »ç¿ëÀÚ Role ±ÇÇÑ Ã¼Å© ÆĞ½º ±â´É. ±âº»°ª Y : Ã¼Å©';
-comment on column user_info.status is '»ç¿ëÀÚ »óÅÂ. 0:»ç¿ëÁß, 1:»ç¿ëÁßÁö(°ü¸®ÀÚ), 2:Àá±İ(ºñ¹Ğ¹øÈ£ ½ÇÆĞÈ½¼ö ÃÊ°ú), 3:ÈŞ¸é(·Î±×ÀÎ ±â°£), 4:¸¸·á(»ç¿ë±â°£ Á¾·á), 5:»èÁ¦(È­¸é ºñÇ¥½Ã, policy.user_delete_type=0), 6:ÀÓ½Ãºñ¹Ğ¹øÈ£';
-comment on column user_info.user_insert_type is '»ç¿ëÀÚ µî·Ï ¹æ¹ı. ±âº» : SELF';
-comment on column user_info.sso_use_yn is 'Single Sign-On »ç¿ëÀ¯¹«. ±âº»°ª N : »ç¿ë¾ÈÇÔ';
-comment on column user_info.login_count is '·Î±×ÀÎ È½¼ö';
-comment on column user_info.fail_login_count is '·Î±×ÀÎ ½ÇÆĞ È½¼ö';
-comment on column user_info.last_login_date is '¸¶Áö¸· ·Î±×ÀÎ ³¯Â¥';
-comment on column user_info.last_password_change_date is '¸¶Áö¸· ·Î±×ÀÎ ºñ¹Ğ¹øÈ£ º¯°æ ³¯Â¥';
-comment on column user_info.update_date is '°³ÀÎÁ¤º¸ ¼öÁ¤ ³¯Â¥';
-comment on column user_info.insert_date is 'µî·ÏÀÏ';
+comment on column user_info.telephone is 'phone number';
+comment on column user_info.mobile_phone is 'cell phone number';
+comment on column user_info.email is 'email';
+comment on column user_info.messanger is 'Messenger ID';
+comment on column user_info.employee_id is 'employee';
+comment on column user_info.postal_code is 'zip code';
+comment on column user_info.address is 'Address';
+comment on column user_info.address_etc is 'Detailed address';
+comment on column user_info.ci is 'real name authentication CI eigenvalue';
+comment on column user_info.di is 'real name authentication DI domain unique value';
+comment on column user_info.user_role_check_yn is 'User Role privilege check pass for initial login. Default Y: Check';
+comment on column user_info.status is 'User state. 0: In use, 1: Disabled (administrator), 2: Locked (password failure exceeded), 3: Sleeping (login period), 4: Expiration = 0), 6: temporary password';
+comment on column user_info.user_insert_type is 'User registration method. Default: SELF';
+comment on column user_info.sso_use_yn is 'Enable or disable single sign-on. Default is N: Disabled';
+comment on column user_info.login_count is 'Login count';
+comment on column user_info.fail_login_count is 'Number of login failures';
+comment on column user_info.last_login_date is 'Last login date';
+comment on column user_info.last_password_change_date is 'Last login password changed on';
+comment on column user_info.update_date is 'Personal information modification date';
+comment on column user_info.insert_date is 'Registered Date';
 
 
--- »ç¿ëÀÚ »ç¿ë µğ¹ÙÀÌ½º
+-- User-Used Device
 create table user_device (
 	user_device_id				bigint,
 	user_id						varchar(32)	 						not null,
@@ -174,37 +174,37 @@ create table user_device (
 );
 
 
-comment on table user_device is '»ç¿ëÀÚ »ç¿ë µğ¹ÙÀÌ½º';
-comment on column user_device.user_device_id is '°íÀ¯¹øÈ£';
-comment on column user_device.user_id is '»ç¿ëÀÚ ¾ÆÀÌµğ';
-comment on column user_device.device_name1 is '»ç¿ë ±â±â¸í1';
-comment on column user_device.device_type1 is '»ç¿ë ±â±â Å¸ÀÔ1. 0 : PC, 1 : ÇÚµåÆù';
+comment on table user_device is 'User-Used Device';
+comment on column user_device.user_device_id is 'unique number';
+comment on column user_device.user_id is 'User ID';
+comment on column user_device.device_name1 is 'used device name 1';
+comment on column user_device.device_type1 is 'Used device type 1. 0: PC, 1: cell phone';
 comment on column user_device.device_ip1 is 'IP1';
-comment on column user_device.device_priority1 is '¿ì¼±¼øÀ§1';
-comment on column user_device.use_yn1 is '»ç¿ëÀ¯¹«1. Y : »ç¿ë, N : ¹Ì»ç¿ë';
-comment on column user_device.description1 is '¼³¸í1';
-comment on column user_device.device_name2 is '»ç¿ë ±â±â¸í2';
-comment on column user_device.device_type2 is '»ç¿ë ±â±â Å¸ÀÔ2. 0 : PC, 1 : ÇÚµåÆù';
+comment on column user_device.device_priority1 is 'priority 1';
+comment on column user_device.use_yn1 is 'Use 1. Y: used, N: not used';
+comment on column user_device.description1 is 'Description 1';
+comment on column user_device.device_name2 is 'Used device name 2';
+comment on column user_device.device_type2 is 'Used device type 2. 0: PC, 1: cell phone';
 comment on column user_device.device_ip2 is 'IP2';
-comment on column user_device.device_priority2 is '¿ì¼±¼øÀ§2';
-comment on column user_device.use_yn2 is '»ç¿ëÀ¯¹«2. Y : »ç¿ë, N : ¹Ì»ç¿ë';
-comment on column user_device.description2 is '¼³¸í2';
-comment on column user_device.device_name3 is '»ç¿ë ±â±â¸í3';
-comment on column user_device.device_type3 is '»ç¿ë ±â±â Å¸ÀÔ3. 0 : PC, 1 : ÇÚµåÆù';
+comment on column user_device.device_priority2 is 'priority 2';
+comment on column user_device.use_yn2 is 'Usage 2. Y: used, N: not used';
+comment on column user_device.description2 is 'Description 2';
+comment on column user_device.device_name3 is 'Used device name 3';
+comment on column user_device.device_type3 is 'Used device type 3. 0: PC, 1: cell phone';
 comment on column user_device.device_ip3 is 'IP3';
-comment on column user_device.device_priority3 is '¿ì¼±¼øÀ§3';
-comment on column user_device.use_yn3 is '»ç¿ëÀ¯¹«3. Y : »ç¿ë, N : ¹Ì»ç¿ë';
-comment on column user_device.description3 is '¼³¸í3';
-comment on column user_device.device_name4 is '»ç¿ë ±â±â¸í4';
-comment on column user_device.device_type4 is '»ç¿ë ±â±â Å¸ÀÔ4. 0 : PC, 1 : ÇÚµåÆù';
+comment on column user_device.device_priority3 is 'priority 3';
+comment on column user_device.use_yn3 is 'Use 3. Y: used, N: not used';
+comment on column user_device.description3 is 'Description 3';
+comment on column user_device.device_name4 is 'used device name 4';
+comment on column user_device.device_type4 is 'Used device type 4. 0: PC, 1: cell phone';
 comment on column user_device.device_ip4 is 'IP4';
-comment on column user_device.device_priority4 is '¿ì¼±¼øÀ§4';
-comment on column user_device.use_yn4 is '»ç¿ëÀ¯¹«4. Y : »ç¿ë, N : ¹Ì»ç¿ë';
-comment on column user_device.description4 is '¼³¸í4';
-comment on column user_device.device_name5 is '»ç¿ë ±â±â¸í5';
-comment on column user_device.device_type5 is '»ç¿ë ±â±â Å¸ÀÔ5. 0 : PC, 1 : ÇÚµåÆù';
+comment on column user_device.device_priority4 is 'priority 4';
+comment on column user_device.use_yn4 is 'Yes â€‹â€‹4. Y: used, N: not used';
+comment on column user_device.description4 is 'Description 4';
+comment on column user_device.device_name5 is 'Used device name 5';
+comment on column user_device.device_type5 is 'Used device type 5. 0: PC, 1: cell phone';
 comment on column user_device.device_ip5 is 'IP5';
-comment on column user_device.device_priority5 is '¿ì¼±¼øÀ§5';
-comment on column user_device.use_yn5 is '»ç¿ëÀ¯¹«5. Y : »ç¿ë, N : ¹Ì»ç¿ë';
-comment on column user_device.description5 is '¼³¸í5';
-comment on column user_device.insert_date is 'µî·ÏÀÏ';
+comment on column user_device.device_priority5 is 'priority 5';
+comment on column user_device.use_yn5 is '5. Y: used, N: not used';
+comment on column user_device.description5 is 'Description 5';
+comment on column user_device.insert_date is 'Registered Date';
