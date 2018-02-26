@@ -1,8 +1,8 @@
--- FK, Index ëŠ” ë³„ë„ íŒŒì¼ë¡œ ë¶„ë¦¬. ë§¨ ë§ˆì§€ë§‰ì— ì‘ì—… ì˜ˆì •
+-- FK, Index ´Â º°µµ ÆÄÀÏ·Î ºĞ¸®. ¸Ç ¸¶Áö¸·¿¡ ÀÛ¾÷ ¿¹Á¤
 drop table if exists project cascade;
 drop table if exists data_info cascade;
 
--- ì‚¬ìš©ì ê·¸ë£¹
+-- »ç¿ëÀÚ ±×·ì
 create table project(
 	project_id				smallint,
 	project_key				varchar(60)							not null ,
@@ -19,22 +19,22 @@ create table project(
 	constraint project_pk 	primary key (project_id)	
 );
 
-comment on table project is 'project(F4D Data) ê·¸ë£¹';
-comment on column project.project_id is 'ê³ ìœ ë²ˆí˜¸';
-comment on column project.project_key is 'ë§í¬ í™œìš© ë“±ì„ ìœ„í•œ í™•ì¥ ì»¬ëŸ¼';
-comment on column project.project_name is 'í”„ë¡œì íŠ¸';
-comment on column project.view_order is 'ë‚˜ì—´ ìˆœì„œ';
-comment on column project.default_yn is 'ì‚­ì œ ë¶ˆê°€, Y : ê¸°ë³¸, N : ì„ íƒ';
-comment on column project.use_yn is 'ì‚¬ìš©ìœ ë¬´, Y : ì‚¬ìš©, N : ì‚¬ìš©ì•ˆí•¨';
-comment on column project.latitude is 'ìœ„ë„';
-comment on column project.longitude is 'ê²½ë„';
-comment on column project.height is 'ë†’ì´';
-comment on column project.duration is 'flyTo ì´ë™ì‹œê°„';
-comment on column project.description is 'ì„¤ëª…';
-comment on column project.insert_date is 'ë“±ë¡ì¼';
+comment on table project is 'project(F4D Data) ±×·ì';
+comment on column project.project_id is '°íÀ¯¹øÈ£';
+comment on column project.project_key is '¸µÅ© È°¿ë µîÀ» À§ÇÑ È®Àå ÄÃ·³';
+comment on column project.project_name is 'ÇÁ·ÎÁ§Æ®';
+comment on column project.view_order is '³ª¿­ ¼ø¼­';
+comment on column project.default_yn is '»èÁ¦ ºÒ°¡, Y : ±âº», N : ¼±ÅÃ';
+comment on column project.use_yn is '»ç¿ëÀ¯¹«, Y : »ç¿ë, N : »ç¿ë¾ÈÇÔ';
+comment on column project.latitude is 'À§µµ';
+comment on column project.longitude is '°æµµ';
+comment on column project.height is '³ôÀÌ';
+comment on column project.duration is 'flyTo ÀÌµ¿½Ã°£';
+comment on column project.description is '¼³¸í';
+comment on column project.insert_date is 'µî·ÏÀÏ';
 
 
--- Data ê¸°ë³¸ì •ë³´
+-- Data ±âº»Á¤º¸
 create table data_info(
 	data_id						bigint,
 	project_id					smallint							not null,
@@ -61,25 +61,25 @@ create table data_info(
 	constraint data_info_pk 	primary key(data_id)
 );
 
-comment on table data_info is 'Data ì •ë³´';
-comment on column data_info.data_id is 'ê³ ìœ ë²ˆí˜¸';
-comment on column data_info.project_id is 'project ê³ ìœ ë²ˆí˜¸';
-comment on column data_info.data_key is 'data ê³ ìœ  ì‹ë³„ë²ˆí˜¸';
-comment on column data_info.data_name is 'data ì´ë¦„';
-comment on column data_info.location is 'ìœ„ë„, ê²½ë„ ì •ë³´';
-comment on column data_info.latitude is 'ìœ„ë„';
-comment on column data_info.longitude is 'ê²½ë„';
-comment on column data_info.height is 'ë†’ì´';
+comment on table data_info is 'Data Á¤º¸';
+comment on column data_info.data_id is '°íÀ¯¹øÈ£';
+comment on column data_info.project_id is 'project °íÀ¯¹øÈ£';
+comment on column data_info.data_key is 'data °íÀ¯ ½Äº°¹øÈ£';
+comment on column data_info.data_name is 'data ÀÌ¸§';
+comment on column data_info.location is 'À§µµ, °æµµ Á¤º¸';
+comment on column data_info.latitude is 'À§µµ';
+comment on column data_info.longitude is '°æµµ';
+comment on column data_info.height is '³ôÀÌ';
 comment on column data_info.heading is 'heading';
 comment on column data_info.pitch is 'pitch';
 comment on column data_info.roll is 'roll';
-comment on column data_info.attributes is 'Data Control ì†ì„±';
-comment on column data_info.public_yn is 'ê³µê°œ ìœ ë¬´. ê¸°ë³¸ê°’ N(ë¹„ê³µê°œ)';
-comment on column data_info.status is 'Data ìƒíƒœ. 0:ì‚¬ìš©ì¤‘, 1:ì‚¬ìš©ì¤‘ì§€(ê´€ë¦¬ì), 2:ê¸°íƒ€';
-comment on column data_info.data_insert_type is 'data ë“±ë¡ ë°©ë²•. ê¸°ë³¸ : SELF';
-comment on column data_info.description is 'ì„¤ëª…';
-comment on column data_info.update_date is 'ìˆ˜ì •ì¼';
-comment on column data_info.insert_date is 'ë“±ë¡ì¼';
+comment on column data_info.attributes is 'Data Control ¼Ó¼º';
+comment on column data_info.public_yn is '°ø°³ À¯¹«. ±âº»°ª N(ºñ°ø°³)';
+comment on column data_info.status is 'Data »óÅÂ. 0:»ç¿ëÁß, 1:»ç¿ëÁßÁö(°ü¸®ÀÚ), 2:±âÅ¸';
+comment on column data_info.data_insert_type is 'data µî·Ï ¹æ¹ı. ±âº» : SELF';
+comment on column data_info.description is '¼³¸í';
+comment on column data_info.update_date is '¼öÁ¤ÀÏ';
+comment on column data_info.insert_date is 'µî·ÏÀÏ';
 
--- point ëŠ” ê²½ë„, ìœ„ë„ ìˆœì„œë‹¤.
+-- point ´Â °æµµ, À§µµ ¼ø¼­´Ù.
 -- insert into data_info(location) values(st_geometryfromtext('POINT(128.5952254 34.93630567)'))

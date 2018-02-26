@@ -1,6 +1,6 @@
 drop table if exists access_log cascade;
 
--- ì„œë¹„ìŠ¤ ìš”ì²­ ì´ë ¥
+-- ¼­ºñ½º ¿äÃ» ÀÌ·Â
 create table access_log(
 	access_log_id				bigint,
 	user_id						varchar(32)	 		not null,
@@ -22,23 +22,23 @@ create table access_log(
 );
 
 
-comment on table access_log is 'ì„œë¹„ìŠ¤ ìš”ì²­ ì´ë ¥';
-comment on column access_log.access_log_id is 'ê³ ìœ ë²ˆí˜¸';
-comment on column access_log.user_id is 'ì‚¬ìš©ì ì•„ì´ë””';
-comment on column access_log.user_name is 'ì‚¬ìš©ì ì´ë¦„';
-comment on column access_log.client_ip is 'ìš”ì²­ IP';
+comment on table access_log is '¼­ºñ½º ¿äÃ» ÀÌ·Â';
+comment on column access_log.access_log_id is '°íÀ¯¹øÈ£';
+comment on column access_log.user_id is '»ç¿ëÀÚ ¾ÆÀÌµğ';
+comment on column access_log.user_name is '»ç¿ëÀÚ ÀÌ¸§';
+comment on column access_log.client_ip is '¿äÃ» IP';
 comment on column access_log.request_uri is 'URI';
-comment on column access_log.parameters is 'ìš”ì²­ Paramter';
+comment on column access_log.parameters is '¿äÃ» Paramter';
 comment on column access_log.user_agent is 'User-Agent';
 comment on column access_log.parameters is 'Referer';
-comment on column access_log.year is 'ë…„';
-comment on column access_log.month is 'ì›”';
-comment on column access_log.day is 'ì¼';
-comment on column access_log.year_week is 'ì¼ë…„ì¤‘ ëª‡ì£¼';
-comment on column access_log.week is 'ì´ë²ˆë‹¬ ëª‡ì£¼';
-comment on column access_log.hour is 'ì‹œê°„';
-comment on column access_log.minute is 'ë¶„';
-comment on column access_log.insert_date is 'ë“±ë¡ì¼';
+comment on column access_log.year is '³â';
+comment on column access_log.month is '¿ù';
+comment on column access_log.day is 'ÀÏ';
+comment on column access_log.year_week is 'ÀÏ³âÁß ¸îÁÖ';
+comment on column access_log.week is 'ÀÌ¹ø´Ş ¸îÁÖ';
+comment on column access_log.hour is '½Ã°£';
+comment on column access_log.minute is 'ºĞ';
+comment on column access_log.insert_date is 'µî·ÏÀÏ';
 
 
 create table access_log_2017 (
