@@ -1,15 +1,14 @@
 package com.gaia3d.service.impl;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 //import org.apache.commons.lang.StringUtils;
 //import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 //import org.apache.poi.ss.usermodel.Cell;
@@ -17,16 +16,18 @@ import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.gaia3d.domain.CacheManager;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gaia3d.config.PropertiesConfig;
+import com.gaia3d.domain.DataAttributeFilter;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoAttribute;
+import com.gaia3d.domain.DataInfoObjectAttribute;
+import com.gaia3d.domain.DataObjectAttributeFilter;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.FileParseLog;
-import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserInfo;
-import com.gaia3d.domain.UserSession;
 import com.gaia3d.parser.DataAttributeFileParser;
 import com.gaia3d.parser.DataFileParser;
 import com.gaia3d.parser.impl.DataAttributeFileJsonParser;
@@ -36,7 +37,6 @@ import com.gaia3d.service.DataService;
 import com.gaia3d.service.FileService;
 import com.gaia3d.service.UserService;
 import com.gaia3d.util.FileUtil;
-import com.gaia3d.util.StringUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,6 +48,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class FileServiceImpl implements FileService {
+	
+	@Autowired
+	private PropertiesConfig propertiesConfig;
 	
 	@Autowired
 	private UserService userService;
@@ -662,6 +665,162 @@ public class FileServiceImpl implements FileService {
 		fileInfo.setParse_success_count((Integer) map.get("parseSuccessCount"));
 		fileInfo.setParse_error_count((Integer) map.get("parseErrorCount"));
 		fileInfo.setInsert_success_count(insertSuccessCount);
+		fileInfo.setInsert_error_count(insertErrorCount);
+		fileMapper.updateFileInfo(fileInfo);
+		
+		return fileInfo;
+	}
+	
+	/**
+	 * DATA Attribute Batch 등록
+	 * @param userId
+	 * @return
+	 */
+	@Transactional
+	public FileInfo insertDataAttributeBatch(String userId) {
+		
+		// 파일 이력을 저장
+//		insertFileInfo(fileInfo);
+		
+		int totalCount = 0;
+		int insertSuccessCount = 0;
+		int updateSuccessCount = 0;
+		int insertErrorCount = 0;
+		
+		FileParseLog fileParseLog = new FileParseLog();
+		fileParseLog.setFile_info_id(0l);
+		fileParseLog.setLog_type(FileParseLog.DB_INSERT_LOG);
+		
+		FileInfo fileInfo = new FileInfo();
+		fileInfo.setUser_id(userId);
+		try {
+			File dataAttributeDirFile = new File(propertiesConfig.getDataAttributeUploadDir());
+			if(!dataAttributeDirFile.exists()) {
+				log.info("@@@ Data Attribute Directory doest not Exist. path = {}", propertiesConfig.getDataAttributeUploadDir());
+				fileInfo.setError_code("data.attribute.dir.invalid");
+				return fileInfo;
+			}
+			
+			File[] fileList = dataAttributeDirFile.listFiles(new DataAttributeFilter());
+			totalCount = fileList.length;
+			for(File file : fileList) {
+				try {
+					String fileName = file.getName();
+					int startIndex = fileName.indexOf("F4D_");
+					int endIndex = fileName.toLowerCase().indexOf("_attribute");
+					String dataKey = fileName.substring(startIndex + 4, endIndex);
+					DataInfoAttribute dataInfoAttribute = dataService.getDataIdAndDataAttributeIDByDataKey(dataKey);
+					
+					byte[] jsonData = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
+					String attributes = new String(jsonData);
+					dataInfoAttribute.setAttributes(attributes);
+					
+					if(dataInfoAttribute.getData_attribute_id() == null || dataInfoAttribute.getData_attribute_id() == 0l) {
+						dataService.insertDataAttribute(dataInfoAttribute);
+						insertSuccessCount++;
+					} else {
+						dataService.updateDataAttribute(dataInfoAttribute);
+						updateSuccessCount++;
+						
+					}
+				} catch(Exception e1) {
+					e1.printStackTrace();
+					fileParseLog.setIdentifier_value(fileInfo.getUser_id());
+					fileParseLog.setError_code(e1.getMessage());
+					fileMapper.insertFileParseLog(fileParseLog);
+					insertErrorCount++;
+				}
+			}
+		} catch(Exception e) {
+			log.info("@@@ Data Attribute Parse Error");
+			e.printStackTrace();
+		}
+		
+		fileInfo.setTotal_count(totalCount);
+		fileInfo.setInsert_success_count(insertSuccessCount);
+		fileInfo.setUpdate_success_count(updateSuccessCount);
+		fileInfo.setInsert_error_count(insertErrorCount);
+		fileMapper.updateFileInfo(fileInfo);
+		
+		return fileInfo;
+	}
+	
+	/**
+	 * DATA Object Attribute Batch 등록
+	 * @param userId
+	 * @return
+	 */
+	@Transactional
+	public FileInfo insertDataObjectAttributeBatch(String userId) {
+		
+		// 파일 이력을 저장
+//		insertFileInfo(fileInfo);
+		
+		int totalCount = 0;
+		int insertSuccessCount = 0;
+		int updateSuccessCount = 0;
+		int insertErrorCount = 0;
+		
+		FileParseLog fileParseLog = new FileParseLog();
+		fileParseLog.setFile_info_id(0l);
+		fileParseLog.setLog_type(FileParseLog.DB_INSERT_LOG);
+		
+		FileInfo fileInfo = new FileInfo();
+		fileInfo.setUser_id(userId);
+		try {
+			File dataObjectAttributeDirFile = new File(propertiesConfig.getDataObjectAttributeUploadDir());
+			if(!dataObjectAttributeDirFile.exists()) {
+				log.info("@@@ Data Object Attribute Directory doest not Exist. path = {}", propertiesConfig.getDataObjectAttributeUploadDir());
+				fileInfo.setError_code("data.object.attribute.dir.invalid");
+				return fileInfo;
+			}
+			
+			File[] fileList = dataObjectAttributeDirFile.listFiles(new DataObjectAttributeFilter());
+			totalCount = fileList.length;
+			for(File file : fileList) {
+				try {
+					String fileName = file.getName();
+					int startIndex = fileName.indexOf("F4D_");
+					int endIndex = fileName.toLowerCase().indexOf("_object_attribute");
+					String dataKey = fileName.substring(startIndex + 4, endIndex);
+					log.info("@@@@@@@@@@ dataKey = {}", dataKey);
+					
+					DataInfo dataInfo = dataService.getDataByDataKey(dataKey);
+					// 모든 object id를 삭제 후 등록
+					dataService.deleteDataObjects(dataInfo.getData_id());
+					
+					DataInfoObjectAttribute dataInfoObjectAttribute = new DataInfoObjectAttribute();
+					dataInfoObjectAttribute.setData_id(dataInfo.getData_id());
+					
+					byte[] jsonData = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
+					ObjectMapper objectMapper = new ObjectMapper();
+					//read JSON like DOM Parser
+					JsonNode jsonNode = objectMapper.readTree(jsonData);
+					Iterator<Map.Entry<String, JsonNode>> fields = jsonNode.fields();
+					while (fields.hasNext()) {
+						Map.Entry<String, JsonNode> entry = fields.next();
+						dataInfoObjectAttribute.setObject_id(entry.getKey());
+						dataInfoObjectAttribute.setAttributes(entry.getValue().toString());
+						dataService.insertDataObjectAttribute(dataInfoObjectAttribute);
+						totalCount++;
+						insertSuccessCount++;
+					}
+				} catch(Exception e1) {
+					e1.printStackTrace();
+					fileParseLog.setIdentifier_value(fileInfo.getUser_id());
+					fileParseLog.setError_code(e1.getMessage());
+					fileMapper.insertFileParseLog(fileParseLog);
+					insertErrorCount++;
+				}
+			}
+		} catch(Exception e) {
+			log.info("@@@ Data Object Attribute Parse Error");
+			e.printStackTrace();
+		}
+		
+		fileInfo.setTotal_count(totalCount);
+		fileInfo.setInsert_success_count(insertSuccessCount);
+		fileInfo.setUpdate_success_count(updateSuccessCount);
 		fileInfo.setInsert_error_count(insertErrorCount);
 		fileMapper.updateFileInfo(fileInfo);
 		

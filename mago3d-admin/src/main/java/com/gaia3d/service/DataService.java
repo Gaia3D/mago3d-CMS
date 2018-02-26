@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoAttribute;
+import com.gaia3d.domain.DataInfoObjectAttribute;
 
 /**
  * Data 관리
@@ -83,6 +84,14 @@ public interface DataService {
 	Integer getRootParentCount(DataInfo dvataInfo);
 	
 	/**
+	 * data_key 를 이용하여 data_attribute_id 를 얻음
+	 * TODO 9.6 이후에 merge로 변경 예정 
+	 * @param data_key
+	 * @return
+	 */
+	DataInfoAttribute getDataIdAndDataAttributeIDByDataKey(String data_key);
+	
+	/**
 	 * Data 등록
 	 * @param dataInfo
 	 * @return
@@ -97,6 +106,13 @@ public interface DataService {
 	int insertDataAttribute(DataInfoAttribute dataInfoAttribute);
 	
 	/**
+	 * Data Object 속성 등록
+	 * @param dataInfoObjectAttribute
+	 * @return
+	 */
+	int insertDataObjectAttribute(DataInfoObjectAttribute dataInfoObjectAttribute);
+	
+	/**
 	 * Data 그룹에 Data 등록
 	 * @param dataInfo
 	 * @return
@@ -109,6 +125,13 @@ public interface DataService {
 	 * @return
 	 */
 	int updateData(DataInfo dataInfo);
+	
+	/**
+	 * Data Attribute 수정
+	 * @param dataInfoAttribute
+	 * @return
+	 */
+	int updateDataAttribute(DataInfoAttribute dataInfoAttribute);
 	
 	/**
 	 * Data 상태 수정
@@ -142,4 +165,11 @@ public interface DataService {
 	 * @return
 	 */
 	int deleteDataList(String dataIds);
+	
+	/**
+	 * Data 에 속하는 모든 Object ID를 삭제
+	 * @param dataId
+	 * @return
+	 */
+	int deleteDataObjects(Long dataId);
 }

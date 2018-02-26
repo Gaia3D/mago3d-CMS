@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoAttribute;
+import com.gaia3d.domain.DataInfoObjectAttribute;
 
 /**
  * Data
@@ -86,6 +87,14 @@ public interface DataMapper {
 	Integer getRootParentCount(DataInfo dvataInfo);
 	
 	/**
+	 * data_key 를 이용하여 data_attribute_id 를 얻음
+	 * TODO 9.6 이후에 merge로 변경 예정 
+	 * @param data_key
+	 * @return
+	 */
+	DataInfoAttribute getDataIdAndDataAttributeIDByDataKey(String data_key);
+	
+	/**
 	 * Data 등록
 	 * @param dataInfo
 	 * @return
@@ -100,11 +109,25 @@ public interface DataMapper {
 	int insertDataAttribute(DataInfoAttribute dataInfoAttribute);
 	
 	/**
+	 * Data Object 속성 등록
+	 * @param dataInfoObjectAttribute
+	 * @return
+	 */
+	int insertDataObjectAttribute(DataInfoObjectAttribute dataInfoObjectAttribute);
+	
+	/**
 	 * Data 수정
 	 * @param dataInfo
 	 * @return
 	 */
 	int updateData(DataInfo dataInfo);
+	
+	/**
+	 * Data 속성 수정
+	 * @param dataInfoAttribute
+	 * @return
+	 */
+	int updateDataAttribute(DataInfoAttribute dataInfoAttribute);
 	
 	/**
 	 * Data 테이블의 Data 그룹 정보 변경
@@ -126,4 +149,11 @@ public interface DataMapper {
 	 * @return
 	 */
 	int deleteData(Long data_id);
+	
+	/**
+	 * Data 에 속하는 모든 Object ID를 삭제
+	 * @param dataId
+	 * @return
+	 */
+	int deleteDataObjects(Long data_id);
 }

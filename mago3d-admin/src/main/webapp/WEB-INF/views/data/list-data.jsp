@@ -637,6 +637,82 @@
 			return;
 		}
 	}
+	
+	// data attribute batch 등록
+	var uploadDataAttributeFileFlag = true;
+	function uploadDataAttributeFile() {
+		if(uploadDataAttributeFileFlag) {
+			uploadDataAttributeFileFlag = false;
+			var info = "";
+			$.ajax({
+				url: "/data/ajax-insert-data-attribute-batch.do",
+				type: "POST",
+				data: info,
+				dataType: "json",
+				success: function(msg){
+					if(msg.result == "success") {
+						if(msg.insert_error_count != 0) {
+							alert("Batch 실패 건수가 있습니다");
+						} else {
+							alert(JS_MESSAGE["success"]);
+						}
+					} else {
+	    				alert(JS_MESSAGE[msg.result]);
+	    			}
+					uploadDataAttributeFileFlag = true;
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
+					uploadDataAttributeFileFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+	
+	// Data Object Attribute Daialog
+	function insertDataObjectAttribute(dataId, dataName) {
+		dataObjectAttributeDialog.dialog( "open" );
+		$("#object_attribute_file_data_id").val(dataId);
+		$("#objectAttributeDataName").html(dataName);
+	}
+	
+	// data object attribute batch 등록
+	var uploadDataObjectAttributeFileFlag = true;
+	function uploadDataObjectAttributeFile() {
+		if(confirm("이 실행은 수백만건의 데이터를 등록하기 때문에 수십분의 시간이 소요될 수 있습니다.\n 정말 실행 하시겠습니까?")) {
+			if(uploadDataObjectAttributeFileFlag) {
+				uploadDataObjectAttributeFileFlag = false;
+				var info = "";
+				$.ajax({
+					url: "/data/ajax-insert-data-object-attribute-batch.do",
+					type: "POST",
+					dataType: "json",
+					success: function(msg){
+						if(msg.result == "success") {
+							if(msg.insert_error_count != 0) {
+								alert("Batch 실패 건수가 있습니다");
+							} else {
+								alert(JS_MESSAGE["success"]);
+							}
+						} else {
+		    				alert(JS_MESSAGE[msg.result]);
+		    			}
+						uploadDataObjectAttributeFileFlag = true;
+					},
+					error:function(request,status,error){
+						alert(JS_MESSAGE["ajax.error.message"]);
+						uploadDataObjectAttributeFileFlag = true;
+					}
+				});
+			} else {
+				alert(JS_MESSAGE["button.dobule.click"]);
+				return;
+			}
+		}
+	}
 </script>
 </body>
 </html>

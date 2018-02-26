@@ -61,4 +61,18 @@ public interface FileService {
 	 * @return
 	 */
 	public FileInfo insertDataObjectAttributeFile(Long dataId, FileInfo fileInfo);
+	
+	/**
+	 * Data Attribute Batch 등록
+	 * @param userId
+	 * @return
+	 */
+	public FileInfo insertDataAttributeBatch(String userId);
+	
+	/**
+	 * Data Object Attribute Batch 등록
+	 * @param userId
+	 * @return
+	 */
+	public FileInfo insertDataObjectAttributeBatch(String userId);
 }

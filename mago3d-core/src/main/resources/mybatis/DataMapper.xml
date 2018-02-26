@@ -161,6 +161,17 @@
 			AND data_id != #{data_id}
 	</select>
 	
+	<!-- data_key 를 이용하여 data_attribute_id 를 얻음. 9.6 이후에 merge로 변경 예정 -->
+	<select id="getDataIdAndDataAttributeIDByDataKey" parameterType="string" resultType="dataInfoAttribute">
+		/* getDataIdAndDataAttributeIDByDataKey */
+		SELECT A.data_id, B.data_attribute_id
+		FROM (
+			SELECT data_id
+			FROM data_info
+			WHERE data_key = #{data_key}
+		) A LEFT JOIN data_info_attribute B ON A.data_id = B.data_id
+	</select>
+	
 	<!-- Data 등록 -->
 	<insert id="insertData" parameterType="dataInfo">
 		/* insertData */
@@ -192,6 +203,19 @@
 			data_attribute_id, data_id, attributes
 		) values(
 			#{data_attribute_id}, #{data_id}, TO_JSON(#{attributes}::json)
+		)
+	</insert>
+	
+	<!-- Data Object Attribute 등록 -->
+	<insert id="insertDataObjectAttribute" parameterType="dataInfoObjectAttribute">
+		/* insertDataObjectAttribute */
+		<selectKey keyProperty="data_object_attribute_id" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('data_info_object_attribute_seq')
+  		</selectKey>
+		INSERT INTO data_info_object_attribute(
+			data_object_attribute_id, data_id, object_id, attributes
+		) values(
+			#{data_object_attribute_id}, #{data_id}, #{object_id}, TO_JSON(#{attributes}::json)
 		)
 	</insert>
 	
@@ -243,6 +267,15 @@
 		WHERE data_id = #{data_id}
 	</update>
 	
+	<!-- Data Attribute update -->
+	<update id="updateDataAttribute" parameterType="dataInfoAttribute">
+		/* updateDataAttribute */
+		UPDATE data_info_attribute
+		SET attributes = TO_JSON(#{attributes}::json),
+			update_date = now()
+		WHERE data_attribute_id = ${data_attribute_id}
+	</update>
+	
 	<!-- Data 테이블의 사용자 그룹 정보 변경 -->	
 	<update id="updateDataGroupData" parameterType="dataInfo">
 		/* updateDataGroupData */
@@ -266,4 +299,9 @@
 		DELETE FROM data_info WHERE data_id = #{data_id}
 	</delete>
 	
+	<!-- Data 에 속하는 모든 Object ID를 삭제 -->
+	<delete id="deleteDataObjects" parameterType="long">
+		/* deleteDataObjects */
+		DELETE FROM data_info_object_attribute WHERE data_id = #{data_id}
+	</delete>
 </mapper>

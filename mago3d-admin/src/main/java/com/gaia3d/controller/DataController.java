@@ -832,6 +832,68 @@ public class DataController {
 		return jSONObject;
 	}
 	
+	/**
+	 * Data Attribute batch 등록
+	 * @param model
+	 * @return
+	 */
+	@PostMapping(value = "ajax-insert-data-attribute-batch.do")
+	@ResponseBody
+	public Map<String, Object> ajaxInsertDataAttributeBatch(HttpServletRequest request) {
+		
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		String result = "success";
+		try {
+			
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			FileInfo fileInfo = fileService.insertDataAttributeBatch(userSession.getUser_id());
+			
+			jSONObject.put("total_count", fileInfo.getTotal_count());
+			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
+			jSONObject.put("update_success_count", fileInfo.getUpdate_success_count());
+			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		jSONObject.put("result", result);
+		
+		return jSONObject;
+	}
+	
+	/**
+	 * Data Object Attribute batch 등록
+	 * @param model
+	 * @return
+	 */
+	@PostMapping(value = "ajax-insert-data-object-attribute-batch.do")
+	@ResponseBody
+	public Map<String, Object> ajaxInsertDataObjectAttributeBatch(HttpServletRequest request) {
+		
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		String result = "success";
+		try {
+			
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			FileInfo fileInfo = fileService.insertDataObjectAttributeBatch(userSession.getUser_id());
+			
+			jSONObject.put("total_count", fileInfo.getTotal_count());
+			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
+			jSONObject.put("update_success_count", fileInfo.getUpdate_success_count());
+			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		jSONObject.put("result", result);
+		
+		return jSONObject;
+	}
+	
 //	/**
 //	 * Data Excel 다운로드
 //	 * @param model

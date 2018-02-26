@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoAttribute;
+import com.gaia3d.domain.DataInfoObjectAttribute;
 import com.gaia3d.persistence.DataMapper;
 import com.gaia3d.service.DataService;
 
@@ -124,6 +125,17 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	/**
+	 * data_key 를 이용하여 data_attribute_id 를 얻음
+	 * TODO 9.6 이후에 merge로 변경 예정 
+	 * @param data_key
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public DataInfoAttribute getDataIdAndDataAttributeIDByDataKey(String data_key) {
+		return dataMapper.getDataIdAndDataAttributeIDByDataKey(data_key);
+	}
+	
+	/**
 	 * Data 등록
 	 * @param dataInfo
 	 * @return
@@ -141,6 +153,16 @@ public class DataServiceImpl implements DataService {
 	@Transactional
 	public int insertDataAttribute(DataInfoAttribute dataInfoAttribute) {
 		return dataMapper.insertDataAttribute(dataInfoAttribute);
+	}
+	
+	/**
+	 * Data Object 속성 등록
+	 * @param dataInfoObjectAttribute
+	 * @return
+	 */
+	@Transactional
+	public int insertDataObjectAttribute(DataInfoObjectAttribute dataInfoObjectAttribute) {
+		return dataMapper.insertDataObjectAttribute(dataInfoObjectAttribute);
 	}
 	
 	/**
@@ -182,6 +204,16 @@ public class DataServiceImpl implements DataService {
 	public int updateData(DataInfo dataInfo) {
 		// TODO 환경 설정 값을 읽어 와서 update 할 건지, delete 할건지 분기를 타야 함
 		return dataMapper.updateData(dataInfo);
+	}
+	
+	/**
+	 * Data 속성 수정
+	 * @param dataInfoAttribute
+	 * @return
+	 */
+	@Transactional
+	public int updateDataAttribute(DataInfoAttribute dataInfoAttribute) {
+		return dataMapper.updateDataAttribute(dataInfoAttribute);
 	}
 	
 	/**
@@ -247,5 +279,15 @@ public class DataServiceImpl implements DataService {
 		}
 		
 		return check_ids.length();
+	}
+	
+	/**
+	 * Data 에 속하는 모든 Object ID를 삭제
+	 * @param dataId
+	 * @return
+	 */
+	@Transactional
+	public int deleteDataObjects(Long dataId) {
+		return dataMapper.deleteDataObjects(dataId);
 	}
 }
