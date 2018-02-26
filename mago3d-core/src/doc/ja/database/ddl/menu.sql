@@ -1,7 +1,7 @@
 drop table if exists menu cascade;
 
 
--- ¸Ş´º
+-- ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 create table menu(
 	menu_id				smallint,
 	name				varchar(100)							not null,
@@ -23,19 +23,19 @@ create table menu(
 
 
 
-comment on table menu is '¸Ş´º';
-comment on column menu.menu_id is '°íÀ¯¹øÈ£';
-comment on column menu.name is '¸Ş´º¸í';
-comment on column menu.name_en is '¿µ¾î ¸Ş´º¸í';
-comment on column menu.lang is '¾ğ¾î';
-comment on column menu.parent is 'ºÎ¸ğ °íÀ¯¹øÈ£';
-comment on column menu.depth is '±íÀÌ';
-comment on column menu.view_order is '³ª¿­ ¼ø¼­';
+comment on table menu is 'ãƒ¡ãƒ‹ãƒ¥ãƒ¼';
+comment on column menu.menu_id is 'å›ºæœ‰ç•ªå·';
+comment on column menu.name is 'ãƒ¡ãƒ‹ãƒ¥ãƒ¼å';
+comment on column menu.name_en is 'è‹±èªãƒ¡ãƒ‹ãƒ¥ãƒ¼å';
+comment on column menu.lang is 'è¨€èª';
+comment on column menu.parent is 'ä¸¡è¦ªå›ºæœ‰ç•ªå·';
+comment on column menu.depth is 'æ·±ã•';
+comment on column menu.view_order is 'ä¸€è¦§è¡¨ç¤ºé †';
 comment on column menu.url is 'URL';
-comment on column menu.image is 'ÀÌ¹ÌÁö';
-comment on column menu.image_alt is 'ÀÌ¹ÌÁö Alt';
-comment on column menu.css_class is 'css class¸í';
-comment on column menu.default_yn is '±âº» Ç¥½Ã ¸Ş´º, Y : ±âº», N : ¼±ÅÃ';
-comment on column menu.use_yn is '»ç¿ëÀ¯¹«, Y : »ç¿ë, N : »ç¿ë¾ÈÇÔ';
-comment on column menu.description is '¼³¸í';
-comment on column menu.insert_date is 'µî·ÏÀÏ';
+comment on column menu.image is 'ã‚¤ãƒ¡ãƒ¼ã‚¸';
+comment on column menu.image_alt is 'ç”»åƒAlt';
+comment on column menu.css_class is 'css classäºº';
+comment on column menu.default_yn is 'ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®è¡¨ç¤ºãƒ¡ãƒ‹ãƒ¥ãƒ¼ã€Yï¼šåŸºæœ¬ã€Nï¼šé¸æŠ';
+comment on column menu.use_yn is 'ã‚’ä½¿ç”¨ã®æœ‰ç„¡ã€Yï¼šä½¿ç”¨ã™ã‚‹ã¨ã€Nï¼šã‚’ç„¡åŠ¹ã«ã™ã‚‹';
+comment on column menu.description is 'ã®èª¬æ˜';
+comment on column menu.insert_date is 'ç™»éŒ²';

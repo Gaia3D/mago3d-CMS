@@ -1,4 +1,4 @@
--- FK, Index ´Â º°µµ ÆÄÀÏ·Î ºÐ¸®. ¸Ç ¸¶Áö¸·¿¡ ÀÛ¾÷ ¿¹Á¤
+-- FKã€Indexã¯åˆ¥é€”ãƒ•ã‚¡ã‚¤ãƒ«ã«åˆ†é›¢ã—ãŸã€‚æœ€å¾Œã«ä½œæ¥­äºˆå®š
 drop table if exists data_info_log cascade;
 
 create table data_info_log(
@@ -19,22 +19,21 @@ create table data_info_log(
 	constraint data_info_log_pk 	primary key(data_info_log_id)
 );
 
-comment on table data_info_log is 'Data ÀÌ·Â Á¤º¸';
-comment on column data_info_log.data_info_log_id is '°íÀ¯¹øÈ£';
-comment on column data_info_log.data_id is 'Data °íÀ¯¹øÈ£';
-comment on column data_info_log.user_id is '»ç¿ëÀÚ °íÀ¯¹øÈ£';
-comment on column data_info_log.latitude is 'À§µµ';
-comment on column data_info_log.longitude is '°æµµ';
-comment on column data_info_log.height is '³ôÀÌ';
+comment on table data_info_log is 'Dataå±¥æ­´æƒ…å ±';
+comment on column data_info_log.data_info_log_id is 'å›ºæœ‰ç•ªå·';
+comment on column data_info_log.data_id is 'Dataå›ºæœ‰ç•ªå·';
+comment on column data_info_log.user_id is 'ãƒ¦ãƒ¼ã‚¶ãƒ¼å›ºæœ‰ç•ªå·';
+comment on column data_info_log.latitude is 'ç·¯åº¦';
+comment on column data_info_log.longitude is 'ç¡¬åº¦';
+comment on column data_info_log.height is'é«˜';
 comment on column data_info_log.heading is 'heading';
 comment on column data_info_log.pitch is 'pitch';
 comment on column data_info_log.roll is 'roll';
-comment on column data_info_log.status is '»óÅÂ. 0:º¯°æ´ë±â, 1:º¯°æ¿Ï·á, 2:±â°¢';
-comment on column data_info_log.change_type is '¿äÃ» Å¸ÀÔ';
-comment on column data_info_log.description is '¼³¸í';
-comment on column data_info_log.update_date is '¼öÁ¤ÀÏ';
-comment on column data_info_log.insert_date is 'µî·ÏÀÏ';
-
+comment on column data_info_log.status is 'çŠ¶æ…‹ã€‚0ï¼šå¤‰æ›´ã‚’å¾…ã£ã¦ã€1ï¼šå¤‰æ›´å®Œäº†ã€2ï¼šæ£„å´';
+comment on column data_info_log.change_type is 'ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚¿ã‚¤ãƒ—';
+comment on column data_info_log.description is 'ã®èª¬æ˜Ž';
+comment on column data_info_log.update_date is 'æ›´æ–°æ—¥';
+comment on column data_info_log.insert_date is 'ç™»éŒ²';
 
 create table data_info_log_2018 (
 	check ( insert_date >= to_timestamp('20180101000000000000', 'YYYYMMDDHH24MISSUS') and insert_date <= to_timestamp('20181231235959999999', 'YYYYMMDDHH24MISSUS') )

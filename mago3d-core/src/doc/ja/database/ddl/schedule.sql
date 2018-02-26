@@ -2,7 +2,7 @@ drop table if exists schedule_log cascade;
 drop table if exists schedule_detail_log cascade;
 drop table if exists schedule cascade;
 
--- ½ºÄÉÁÙ
+-- ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«
 create table schedule(
 	schedule_id					bigint,
 	schedule_name				varchar(100)		not null,
@@ -18,21 +18,21 @@ create table schedule(
 	constraint schedule_pk primary key (schedule_id)	
 );
 
-comment on table schedule is '½ºÄÉÁÙ';
-comment on column schedule.schedule_id is '°íÀ¯¹øÈ£';
-comment on column schedule.schedule_name is '½ºÄÉÁÙ¸í';
-comment on column schedule.schedule_code is '½ºÄÉÁÙ KEY';
-comment on column schedule.expression is '½ºÄÉÁÙ ½ÇÇà Quartz Ç¥Çö½Ä';
-comment on column schedule.use_yn is '»ç¿ëÀ¯¹«, Y : »ç¿ë, N : »ç¿ë¾ÈÇÔ';
-comment on column schedule.start_date is '½ÃÀÛ ½Ã°£';
-comment on column schedule.end_date is 'Á¾·á ½Ã°£';
-comment on column schedule.user_id is 'µî·ÏÀÚ ¾ÆÀÌµğ';
-comment on column schedule.execute_type is '½ÇÇà ÁÖÃ¼, 0 : WEB';
-comment on column schedule.description is '¼³¸í';
-comment on column schedule.insert_date is 'µî·ÏÀÏ';
+comment on table schedule is 'ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«';
+comment on column schedule.schedule_id is 'å›ºæœ‰ç•ªå·';
+comment on column schedule.schedule_name is 'ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«å';
+comment on column schedule.schedule_code is 'ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«KEY';
+comment on column schedule.expression is 'ã®ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«å®Ÿè¡ŒQuartzå¼';
+comment on column schedule.use_yn is 'ã‚’ä½¿ç”¨ã®æœ‰ç„¡ã€Yï¼šä½¿ç”¨ã™ã‚‹ã¨ã€Nï¼šã‚’ç„¡åŠ¹ã«ã™ã‚‹';
+comment on column schedule.start_date is 'é–‹å§‹æ™‚é–“';
+comment on column schedule.end_date is 'çµ‚äº†æ™‚é–“';
+comment on column schedule.user_id is 'ç™»éŒ²è€…å';
+comment on column schedule.execute_type is 'å®Ÿè¡Œä¸»ä½“ã€0ï¼šWEB';
+comment on column schedule.description is 'ã®èª¬æ˜';
+comment on column schedule.insert_date is 'ç™»éŒ²';
 
 
--- ½ºÄÉÁÙ ½ÇÇà ÀÌ·Â
+-- ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«å®Ÿè¡Œå±¥æ­´
 create table schedule_log(
 	schedule_log_id				bigint,
 	schedule_id					bigint 				not null,
@@ -43,15 +43,15 @@ create table schedule_log(
 	constraint schedule_log_pk primary key (schedule_log_id)	
 );
 
-comment on table schedule_log is '½ºÄÉÁÙ ½ÇÇà ÀÌ·Â';
-comment on column schedule_log.schedule_log_id is '½ºÄÉÁÙ ½ÇÇà ÀÌ·Â °íÀ¯¹øÈ£';
-comment on column schedule_log.schedule_id is '½ºÄÉÁÙ °íÀ¯¹øÈ£';
-comment on column schedule_log.execute_result is '½ºÄÉÁÙ ½ÇÇà ÀüÃ¼ °á°ú. 0 : ¼º°ø, 1 : ½ÇÆĞ, 2 : ºÎºĞ¼º°ø';
-comment on column schedule_log.execute_total_count is '½ºÄÉÁÙ ½ÇÇà ÃÑ °Ç¼ö';
-comment on column schedule_log.execute_message is '½ºÄÉÁÙ ½ÇÇà °á°ú »ó¼¼ ³»¿ë';
-comment on column schedule_log.insert_date is 'µî·ÏÀÏ';
+comment on table schedule_log is 'ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«ã®å®Ÿè¡Œå±¥æ­´';
+comment on column schedule_log.schedule_log_id is 'ã®ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«å®Ÿè¡Œå±¥æ­´ä¸€æ„ã®ç•ªå·';
+comment on column schedule_log.schedule_id is 'ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«å›ºæœ‰ç•ªå·';
+comment on column schedule_log.execute_result is 'ã®ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«å®Ÿè¡Œå…¨ä½“ã®çµæœã€‚0ï¼šæˆåŠŸã€1ï¼šå¤±æ•—ã™ã‚‹ã¨ã€2ï¼šéƒ¨åˆ†æˆåŠŸ';
+comment on column schedule_log.execute_total_count is 'ã®ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«å®Ÿè¡Œã®åˆè¨ˆä»¶æ•°';
+comment on column schedule_log.execute_message is 'ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«ã®å®Ÿè¡Œçµæœè©³ç´°';
+comment on column schedule_log.insert_date is 'ç™»éŒ²';
 
--- ½ºÄÉÁÙ ½ÇÇà »ó¼¼ ÀÌ·Â
+-- ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«å®Ÿè¡Œã®è©³ç´°å±¥æ­´
 create table schedule_detail_log(
 	schedule_detail_log_id		bigint,
 	schedule_log_id				bigint 				not null,
@@ -61,9 +61,9 @@ create table schedule_detail_log(
 	constraint schedule_detail_log_pk primary key (schedule_detail_log_id)	
 );
 
-comment on table schedule_detail_log is '½ºÄÉÁÙ ½ÇÇà »ó¼¼ ÀÌ·Â';
-comment on column schedule_detail_log.schedule_detail_log_id is '½ºÄÉÁÙ ½ÇÇà »ó¼¼ ÀÌ·Â °íÀ¯¹øÈ£';
-comment on column schedule_detail_log.schedule_log_id is '½ºÄÉÁÙ ½ÇÇà ÀÌ·Â °íÀ¯¹øÈ£';
-comment on column schedule_detail_log.execute_detail_result is '½ÇÇà °á°ú. 0 : ¼º°ø, 1 : ½ÇÆĞ';
-comment on column schedule_detail_log.execute_detail_message is '½ÇÇà °á°ú »ó¼¼ ³»¿ë';
-comment on column schedule_detail_log.insert_date is 'µî·ÏÀÏ';
+comment on table schedule_detail_log is 'ã®ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«å®Ÿè¡Œã®è©³ç´°å±¥æ­´';
+comment on column schedule_detail_log.schedule_detail_log_id is 'ã®ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«å®Ÿè¡Œã®è©³ç´°å±¥æ­´ä¸€æ„ã®ç•ªå·';
+comment on column schedule_detail_log.schedule_log_id is 'ã®ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«å®Ÿè¡Œå±¥æ­´ä¸€æ„ã®ç•ªå·';
+comment on column schedule_detail_log.execute_detail_result is 'ã®å®Ÿè¡Œçµæœã€‚0ï¼šæˆåŠŸã€1ï¼šå¤±æ•—';
+comment on column schedule_detail_log.execute_detail_message is 'ã®å®Ÿè¡Œçµæœè©³ç´°';
+comment on column schedule_detail_log.insert_date is 'ç™»éŒ²';

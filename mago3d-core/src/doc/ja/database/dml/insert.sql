@@ -1,61 +1,61 @@
--- »ç¿ëÀÚ ±×·ì Å×ÀÌºí ±âº»°ª ÀÔ·Â
+-- ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚°ãƒ«ãƒ¼ãƒ—ã®ãƒ†ãƒ¼ãƒ–ãƒ«ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®å…¥åŠ›
 insert into user_group(
 	user_group_id, group_key, group_name, parent, depth, view_order, default_yn, use_yn, description
 ) values(
-	1, 'SUPER_ADMIN', '½´ÆÛ °ü¸®ÀÚ', 0, 1, 1, 'Y', 'Y', '±âº»°ª'
+	1, 'SUPER_ADMIN', 'ìŠˆí¼ ê´€ë¦¬ì', 0, 1, 1, 'Y', 'Y', 'ê¸°ë³¸ê°’'
 );
 
--- ½´ÆÛ °ü¸®ÀÚ µî·Ï
+-- ã‚¹ãƒ¼ãƒ‘ãƒ¼ç®¡ç†è€…ç™»éŒ²
 insert into user_info(
 	user_id, user_group_id, user_name, password, salt, user_role_check_yn, last_login_date
 ) values (
-	'admin', 1, '½´ÆÛ°ü¸®ÀÚ', 'ºñ¹Ğ¹øÈ£', 'salt', 'N', now()
+	'admin', 1, 'ìŠˆí¼ê´€ë¦¬ì', 'ë¹„ë°€ë²ˆí˜¸', 'salt', 'N', now()
 );
 
--- ¸Ş´º
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(1, 'È¨', 'HOME', 0 , 1, 1, '/main/index.do', 'glyph-home', 'N', 'N');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(2, '»ç¿ëÀÚ', 'USER', 0 , 1, 2, '/user/list-user.do', 'glyph-users', 'Y', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(21, '»ç¿ëÀÚ ±×·ì', 'USER', 2 , 2, 1, '/user/list-user-group.do', 'glyph-users', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(22, '»ç¿ëÀÚ ¸ñ·Ï', 'USER', 2 , 2, 2, '/user/list-user.do', 'glyph-users', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(23, '»ç¿ëÀÚ µî·Ï', 'USER', 2 , 2, 3, '/user/input-user.do', 'glyph-users', 'N', 'Y');
+-- ãƒ¡ãƒ‹ãƒ¥ãƒ¼
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(1, 'í™ˆ', 'HOME', 0 , 1, 1, '/main/index.do', 'glyph-home', 'N', 'N');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(2, 'ì‚¬ìš©ì', 'USER', 0 , 1, 2, '/user/list-user.do', 'glyph-users', 'Y', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(21, 'ì‚¬ìš©ì ê·¸ë£¹', 'USER', 2 , 2, 1, '/user/list-user-group.do', 'glyph-users', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(22, 'ì‚¬ìš©ì ëª©ë¡', 'USER', 2 , 2, 2, '/user/list-user.do', 'glyph-users', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(23, 'ì‚¬ìš©ì ë“±ë¡', 'USER', 2 , 2, 3, '/user/input-user.do', 'glyph-users', 'N', 'Y');
 
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(3, 'µ¥ÀÌÅÍ', 'DATA', 0 , 1, 3, '/data/list-data.do', 'glyph-monitor', 'Y', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(31, 'ÇÁ·ÎÁ§Æ® ¸ñ·Ï', 'DATA', 3 , 2, 1, '/data/list-project.do', 'glyph-monitor', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(32, 'ÇÁ·ÎÁ§Æ® µî·Ï', 'DATA', 3 , 2, 2, '/data/input-project.do', 'glyph-monitor', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(33, 'µ¥ÀÌÅÍ ¸ñ·Ï', 'DATA', 3 , 2, 3, '/data/list-data.do', 'glyph-monitor', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(34, 'µ¥ÀÌÅÍ µî·Ï', 'DATA', 3 , 2, 4, '/data/input-data.do', 'glyph-monitor', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(3, 'ë°ì´í„°', 'DATA', 0 , 1, 3, '/data/list-data.do', 'glyph-monitor', 'Y', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(31, 'í”„ë¡œì íŠ¸ ëª©ë¡', 'DATA', 3 , 2, 1, '/data/list-project.do', 'glyph-monitor', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(32, 'í”„ë¡œì íŠ¸ ë“±ë¡', 'DATA', 3 , 2, 2, '/data/input-project.do', 'glyph-monitor', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(33, 'ë°ì´í„° ëª©ë¡', 'DATA', 3 , 2, 3, '/data/list-data.do', 'glyph-monitor', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(34, 'ë°ì´í„° ë“±ë¡', 'DATA', 3 , 2, 4, '/data/input-data.do', 'glyph-monitor', 'N', 'Y');
 
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(4, 'ÀÌ½´', 'ISSUE', 0 , 1, 4, '/issue/list-issue.do', 'glyph-dashboard', 'Y', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(41, 'ÀÌ½´ ÀÏ°ı', 'ISSUE', 4 , 2, 1, '/issue/all-issue.do', 'glyph-dashboard', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(42, 'ÀÌ½´ ¸ñ·Ï', 'ISSUE', 4 , 2, 2, '/issue/list-issue.do', 'glyph-dashboard', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(43, 'ÀÌ½´ µî·Ï', 'ISSUE', 4 , 2, 3, '/issue/input-issue.do', 'glyph-dashboard', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(4, 'ì´ìŠˆ', 'ISSUE', 0 , 1, 4, '/issue/list-issue.do', 'glyph-dashboard', 'Y', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(41, 'ì´ìŠˆ ì¼ê´„', 'ISSUE', 4 , 2, 1, '/issue/all-issue.do', 'glyph-dashboard', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(42, 'ì´ìŠˆ ëª©ë¡', 'ISSUE', 4 , 2, 2, '/issue/list-issue.do', 'glyph-dashboard', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(43, 'ì´ìŠˆ ë“±ë¡', 'ISSUE', 4 , 2, 3, '/issue/input-issue.do', 'glyph-dashboard', 'N', 'Y');
 
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(5, 'Åë°è¹×ÀÌ·Â', 'STATISTICS', 0 , 1, 5, '/statistic/index.do', 'glyph-chart', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(51, 'Åë°è', 'STATISTICS', 5 , 2, 1, '/statistic/index.do', 'glyph-chart', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(52, 'Á¢±Ù ÀÌ·Â', 'STATISTICS', 5 , 2, 2, '/log/list-access-log.do', 'glyph-chart', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(53, 'Á¤±â Á¡°Ë', 'STATISTICS', 5 , 2, 3, '/report/list-report-maintenance.do', 'glyph-chart', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(5, 'í†µê³„ë°ì´ë ¥', 'STATISTICS', 0 , 1, 5, '/statistic/index.do', 'glyph-chart', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(51, 'í†µê³„', 'STATISTICS', 5 , 2, 1, '/statistic/index.do', 'glyph-chart', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(52, 'ì ‘ê·¼ ì´ë ¥', 'STATISTICS', 5 , 2, 2, '/log/list-access-log.do', 'glyph-chart', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(53, 'ì •ê¸° ì ê²€', 'STATISTICS', 5 , 2, 3, '/report/list-report-maintenance.do', 'glyph-chart', 'N', 'Y');
 
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(6, '½ºÄÉÁÙ', 'SCHEDULE', 0 , 1, 6, '/schedule/list-schedule.do', 'glyph-check', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(61, '½ºÄÉÁÙ ¸ñ·Ï', 'STATISTICS', 6 , 2, 1, '/schedule/list-schedule.do', 'glyph-check', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(62, '½ºÄÉÁÙ ½ÇÇà ÀÌ·Â', 'STATISTICS', 6 , 2, 2, '/schedule/list-schedule-log.do', 'glyph-check', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(6, 'ìŠ¤ì¼€ì¤„', 'SCHEDULE', 0 , 1, 6, '/schedule/list-schedule.do', 'glyph-check', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(61, 'ìŠ¤ì¼€ì¤„ ëª©ë¡', 'STATISTICS', 6 , 2, 1, '/schedule/list-schedule.do', 'glyph-check', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(62, 'ìŠ¤ì¼€ì¤„ ì‹¤í–‰ ì´ë ¥', 'STATISTICS', 6 , 2, 2, '/schedule/list-schedule-log.do', 'glyph-check', 'N', 'Y');
 
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(7, 'API', 'API', 0 , 1, 7, '/api/api-guide.do', 'glyph-lock', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(71, '»ç¿ë °¡ÀÌµå', 'API', 7 , 2, 1, '/api/api-guide.do', 'glyph-lock', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(72, '»ç¿ë ¸ñ·Ï', 'API', 7 , 2, 2, '/api/list-api-log.do', 'glyph-lock', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(73, 'Private API ¸ñ·Ï', 'API', 7 , 2, 3, '/api/list-external-service.do', 'glyph-lock', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(71, 'ì‚¬ìš© ê°€ì´ë“œ', 'API', 7 , 2, 1, '/api/api-guide.do', 'glyph-lock', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(72, 'ì‚¬ìš© ëª©ë¡', 'API', 7 , 2, 2, '/api/list-api-log.do', 'glyph-lock', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(73, 'Private API ëª©ë¡', 'API', 7 , 2, 3, '/api/list-external-service.do', 'glyph-lock', 'N', 'Y');
 
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(8, 'È¯°æ¼³Á¤', 'CONFIGURATION', 0 , 1, 8, '/config/modify-policy.do', 'glyph-settings', 'Y', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(81, '¿î¿µÁ¤Ã¥', 'CONFIGURATION', 8 , 2, 1, '/config/modify-policy.do', 'glyph-settings', 'Y', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(82, '¸Ş´º¼³Á¤', 'CONFIGURATION', 8 , 2, 2, '/config/list-menu.do', 'glyph-settings', 'Y', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(83, '¶óÀÌ¼±½º', 'CONFIGURATION', 8 , 2, 3, '/config/modify-license.do', 'glyph-settings', 'Y', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(84, 'À§Á¬¼³Á¤', 'CONFIGURATION', 8 , 2, 4, '/config/modify-widget.do', 'glyph-settings', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(85, '±ÇÇÑ¼³Á¤', 'CONFIGURATION', 8 , 2, 5, '/role/list-role.do', 'glyph-settings', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(86, '°øÅë ÄÚµå ¼³Á¤', 'CONFIGURATION', 8 , 2, 6, '/code/list-code.do', 'glyph-settings', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(10, '°øÁö»çÇ×', 'BOARD', 0 , 1, 10, '/board/list-board.do', 'glyph-imark-dot', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(101, '°øÁö ¸ñ·Ï', 'BOARD', 10 , 2, 1, '/board/list-board.do', 'glyph-imark-dot', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(102, '°øÁö»çÇ× µî·Ï', 'BOARD', 10 , 2, 2, '/board/input-board.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(8, 'í™˜ê²½ì„¤ì •', 'CONFIGURATION', 0 , 1, 8, '/config/modify-policy.do', 'glyph-settings', 'Y', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(81, 'ìš´ì˜ì •ì±…', 'CONFIGURATION', 8 , 2, 1, '/config/modify-policy.do', 'glyph-settings', 'Y', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(82, 'ë©”ë‰´ì„¤ì •', 'CONFIGURATION', 8 , 2, 2, '/config/list-menu.do', 'glyph-settings', 'Y', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(83, 'ë¼ì´ì„ ìŠ¤', 'CONFIGURATION', 8 , 2, 3, '/config/modify-license.do', 'glyph-settings', 'Y', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(84, 'ìœ„ì ¯ì„¤ì •', 'CONFIGURATION', 8 , 2, 4, '/config/modify-widget.do', 'glyph-settings', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(85, 'ê¶Œí•œì„¤ì •', 'CONFIGURATION', 8 , 2, 5, '/role/list-role.do', 'glyph-settings', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(86, 'ê³µí†µ ì½”ë“œ ì„¤ì •', 'CONFIGURATION', 8 , 2, 6, '/code/list-code.do', 'glyph-settings', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(10, 'ê³µì§€ì‚¬í•­', 'BOARD', 0 , 1, 10, '/board/list-board.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(101, 'ê³µì§€ ëª©ë¡', 'BOARD', 10 , 2, 1, '/board/list-board.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(102, 'ê³µì§€ì‚¬í•­ ë“±ë¡', 'BOARD', 10 , 2, 2, '/board/input-board.do', 'glyph-imark-dot', 'N', 'Y');
 
--- »ç¿ëÀÚ ±×·ìº° ¸Ş´º
+-- ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚°ãƒ«ãƒ¼ãƒ—åˆ¥ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (1, 1, 1);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (2, 1, 2);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (21, 1, 21);
@@ -92,7 +92,7 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (101, 1, 101);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (102, 1, 102);
 
--- ¸ŞÀÎ È­¸é À§Á¬
+-- ãƒ¡ã‚¤ãƒ³ç”»é¢ã®ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
 insert into widget(	widget_id, name, view_order, user_id) values( 1, 'issueWidget', 1, 'admin' );
 insert into widget(	widget_id, name, view_order, user_id) values( 2, 'userWidget', 4, 'admin' );
 insert into widget(	widget_id, name, view_order, user_id) values( 3, 'scheduleLogListWidget', 7, 'admin' );
@@ -100,26 +100,26 @@ insert into widget(	widget_id, name, view_order, user_id) values( 4, 'accessLogW
 insert into widget(	widget_id, name, view_order, user_id) values( 5, 'dbcpWidget', 9, 'admin' );
 insert into widget(	widget_id, name, view_order, user_id) values( 6, 'dbSessionWidget', 10, 'admin' );
 
--- ¿î¿µ Á¤Ã¥
+-- é‹å–¶ãƒãƒªã‚·ãƒ¼
 insert into policy(	policy_id, password_exception_char, site_name, site_admin_mobile_phone, site_admin_email) 
 			values( 1, '<>&''"', 'Mago3D', '000-0000-0000', 'test@test.com');
 
 -- Role
-insert into role(role_id, role_name, role_key, role_type, business_type, use_yn, default_yn) values(1, '°ü¸®ÀÚ ÆäÀÌÁö Á¢±Ù ±ÇÇÑ', 'USER_ADMIN_LOGIN', '0', '0', 'Y', 'N');
+insert into role(role_id, role_name, role_key, role_type, business_type, use_yn, default_yn) values(1, 'ê´€ë¦¬ì í˜ì´ì§€ ì ‘ê·¼ ê¶Œí•œ', 'USER_ADMIN_LOGIN', '0', '0', 'Y', 'N');
 
 
 -- Private API
 insert into external_service (
 	external_service_id, service_code, service_name, service_type, server_ip, api_key, url_scheme, url_host, url_port, url_path, default_yn, description
 ) values(
-	1, 'CACHE', '»ç¿ëÀÚ CACHE °»½Å', '0', '127.0.0.1', 'M5mru2GcGZOyc+Tdy7AYUw==', 'http', 'localhost', '80', 'cache/call-cache.do', 'Y', 'test'
+	1, 'CACHE', 'ì‚¬ìš©ì CACHE ê°±ì‹ ', '0', '127.0.0.1', 'M5mru2GcGZOyc+Tdy7AYUw==', 'http', 'localhost', '80', 'cache/call-cache.do', 'Y', 'test'
 );
 
--- °øÅë ÄÚµå
+-- å…±é€šã‚³ãƒ¼ãƒ‰
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order
 ) values (
-  	'USER_REGISTER_TYPE', 'USER_REGISTER_SELF', '°ü¸®ÀÚ µî·Ï', 'ADMIN INSERT', 'SELF', 'Y', 1
+  	'USER_REGISTER_TYPE', 'USER_REGISTER_SELF', 'ê´€ë¦¬ì ë“±ë¡', 'ADMIN INSERT', 'SELF', 'Y', 1
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order
@@ -130,76 +130,76 @@ insert into common_code (
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL1', '¸Å¿ìÁß¿ä', 'LEVLE1', 'LEVLE1', 'Y', 1, 'i1', ''
+	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL1', 'ë§¤ìš°ì¤‘ìš”', 'LEVLE1', 'LEVLE1', 'Y', 1, 'i1', ''
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL2', 'Áß¿ä', 'LEVLE2', 'LEVLE2', 'Y', 2, 'i2', ''
+	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL2', 'ì¤‘ìš”', 'LEVLE2', 'LEVLE2', 'Y', 2, 'i2', ''
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL3', 'º¸Åë', 'LEVLE3', 'LEVLE3', 'Y', 3, 'i3', ''
+	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL3', 'ë³´í†µ', 'LEVLE3', 'LEVLE3', 'Y', 3, 'i3', ''
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL4', '³·À½', 'LEVLE4', 'LEVLE4', 'Y', 4, 'i4', ''
+	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL4', 'ë‚®ìŒ', 'LEVLE4', 'LEVLE4', 'Y', 4, 'i4', ''
 );
 
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_TYPE', 'ISSUE_TYPE_BUGGER', '¹ö±×', 'BUGGER', 'BUGGER', 'Y', 1, 't1', 'bugger'
+	'ISSUE_TYPE', 'ISSUE_TYPE_BUGGER', 'ë²„ê·¸', 'BUGGER', 'BUGGER', 'Y', 1, 't1', 'bugger'
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_TYPE', 'ISSUE_TYPE_IMPROVE', '°³¼±', 'IMPROVE', 'IMPROVE', 'Y', 2, 't2', 'improve'
+	'ISSUE_TYPE', 'ISSUE_TYPE_IMPROVE', 'ê°œì„ ', 'IMPROVE', 'IMPROVE', 'Y', 2, 't2', 'improve'
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_TYPE', 'ISSUE_TYPE_MODIFY', '¼öÁ¤', 'MODIFY', 'MODIFY', 'Y', 3, 't3', 'modify'
+	'ISSUE_TYPE', 'ISSUE_TYPE_MODIFY', 'ìˆ˜ì •', 'MODIFY', 'MODIFY', 'Y', 3, 't3', 'modify'
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_TYPE', 'ISSUE_TYPE_ETC', '±âÅ¸', 'ETC', 'ETC', 'Y', 4, 't4', 'etc'
+	'ISSUE_TYPE', 'ISSUE_TYPE_ETC', 'ê¸°íƒ€', 'ETC', 'ETC', 'Y', 4, 't4', 'etc'
 );
 
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order
 ) values (
-	'ISSUE_STATUS', 'ISSUE_STATUS_INSERT', 'µî·Ï', 'INSERT', 'INSERT', 'Y', 1
+	'ISSUE_STATUS', 'ISSUE_STATUS_INSERT', 'ë“±ë¡', 'INSERT', 'INSERT', 'Y', 1
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order
 ) values (
-	'ISSUE_STATUS', 'ISSUE_STATUS_PROGRESS', 'ÁøÇàÁß', 'PROGRESS', 'PROGRESS', 'Y', 2
+	'ISSUE_STATUS', 'ISSUE_STATUS_PROGRESS', 'ì§„í–‰ì¤‘', 'PROGRESS', 'PROGRESS', 'Y', 2
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order
 ) values (
-	'ISSUE_STATUS', 'ISSUE_STATUS_COMPLETE', '¿Ï·á', 'COMPLETE', 'COMPLETE', 'Y', 3
+	'ISSUE_STATUS', 'ISSUE_STATUS_COMPLETE', 'ì™„ë£Œ', 'COMPLETE', 'COMPLETE', 'Y', 3
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order
 ) values (
-	'ISSUE_STATUS', 'ISSUE_STATUS_REJECT', '¹İ·Á', 'REJECT', 'REJECT', 'Y', 4
+	'ISSUE_STATUS', 'ISSUE_STATUS_REJECT', 'ë°˜ë ¤', 'REJECT', 'REJECT', 'Y', 4
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order
 ) values (
-  	'DATA_REGISTER_TYPE', 'DATA_REGISTER_SELF', '°ü¸®ÀÚ µî·Ï', 'ADMIN INSERT', 'SELF', 'Y', 1
+  	'DATA_REGISTER_TYPE', 'DATA_REGISTER_SELF', 'ê´€ë¦¬ì ë“±ë¡', 'ADMIN INSERT', 'SELF', 'Y', 1
 );
 commit;
 
 insert into project(
 	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
 ) values(
-	nextval('project_seq'), '3ds', '3DS ÅëÇÕ °¡½ÃÈ­', '1', 'Y', '37.58210', '126.60856869381428', '550', 3
+	nextval('project_seq'), '3ds', '3DS í†µí•© ê°€ì‹œí™”', '1', 'Y', '37.58210', '126.60856869381428', '550', 3
 );
 insert into project(
 	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
@@ -224,7 +224,7 @@ insert into project(
 insert into project(
 	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
 ) values(
-	nextval('project_seq'), 'collada', 'Collada ÅëÇÕ °¡½ÃÈ­', '6', 'Y', '37.567450', '126.7987', '320', 3
+	nextval('project_seq'), 'collada', 'Collada í†µí•© ê°€ì‹œí™”', '6', 'Y', '37.567450', '126.7987', '320', 3
 );
 insert into project(
 	project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration
@@ -251,19 +251,6 @@ geo_callback_selectedobject = 'showSelectedObject',
 geo_callback_insertissue = 'showInsertIssueLayer',
 geo_callback_clickposition = 'showClickPosition';
 commit;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

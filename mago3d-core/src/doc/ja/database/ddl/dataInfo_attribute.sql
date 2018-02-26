@@ -1,9 +1,9 @@
--- FK, Index ´Â º°µµ ÆÄÀÏ·Î ºĞ¸®. ¸Ç ¸¶Áö¸·¿¡ ÀÛ¾÷ ¿¹Á¤
+-- FKã€Indexã¯åˆ¥é€”ãƒ•ã‚¡ã‚¤ãƒ«ã«åˆ†é›¢ã—ãŸã€‚æœ€å¾Œã«ä½œæ¥­äºˆå®š
 drop table if exists data_info_attribute cascade;
 drop table if exists data_info_object_attribute cascade;
 
 
--- Data ±âº»Á¤º¸
+-- DataåŸºæœ¬æƒ…å ±
 create table data_info_attribute(
 	data_attribute_id			bigint,
 	data_id						bigint,
@@ -13,12 +13,12 @@ create table data_info_attribute(
 	constraint data_info_attribute_pk 	primary key(data_attribute_id)
 );
 
-comment on table data_info_attribute is 'Data ¼³°è ÆÄÀÏ ¼Ó¼º Á¤º¸';
-comment on column data_info_attribute.data_attribute_id is '°íÀ¯¹øÈ£';
-comment on column data_info_attribute.data_id is 'Data °íÀ¯¹øÈ£';
-comment on column data_info_attribute.attributes is '¼Ó¼º';
-comment on column data_info_attribute.update_date is '¼öÁ¤ÀÏ';
-comment on column data_info_attribute.insert_date is 'µî·ÏÀÏ';
+comment on table data_info_attribute is 'Dataè¨­è¨ˆãƒ•ã‚¡ã‚¤ãƒ«ã®å±æ€§æƒ…å ±';
+comment on column data_info_attribute.data_attribute_id is 'å›ºæœ‰ç•ªå·';
+comment on column data_info_attribute.data_id is 'Dataå›ºæœ‰ç•ªå·';
+comment on column data_info_attribute.attributes is 'å±æ€§';
+comment on column data_info_attribute.update_date is 'æ›´æ–°æ—¥';
+comment on column data_info_attribute.insert_date is 'ç™»éŒ²';
 
 
 create table data_info_object_attribute(
@@ -31,9 +31,9 @@ create table data_info_object_attribute(
 	constraint data_info_object_attribute_pk 	primary key(data_object_attribute_id)
 );
 
-comment on table data_info_object_attribute is 'Object ¼Ó¼º Á¤º¸';
-comment on column data_info_object_attribute.data_object_attribute_id is '°íÀ¯¹øÈ£';
-comment on column data_info_object_attribute.data_id is 'Data °íÀ¯¹øÈ£';
-comment on column data_info_object_attribute.attributes is 'Object ¼Ó¼º';
-comment on column data_info_object_attribute.update_date is '¼öÁ¤ÀÏ';
-comment on column data_info_object_attribute.insert_date is 'µî·ÏÀÏ';
+comment on table data_info_object_attribute is 'Objectãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®è©³ç´°';
+comment on column data_info_object_attribute.data_object_attribute_id is 'å›ºæœ‰ç•ªå·';
+comment on column data_info_object_attribute.data_id is 'Dataå›ºæœ‰ç•ªå·';
+comment on column data_info_object_attribute.attributes is 'Objectãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®';
+comment on column data_info_object_attribute.update_date is 'æ›´æ–°æ—¥';
+comment on column data_info_object_attribute.insert_date is 'ç™»éŒ²';
