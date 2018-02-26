@@ -4,7 +4,7 @@ drop table if exists issue_comment cascade;
 drop table if exists issue_file cascade;
 drop table if exists issue_people cascade;
 
--- 이슈
+-- issue
 create table issue (
 	issue_id					bigint,
 	project_id					smallint			not null,
@@ -37,35 +37,35 @@ create table issue (
 	constraint issue_pk primary key (issue_id)	
 );
 
-comment on table issue is '이슈';
-comment on column issue.issue_id is '고유번호';
-comment on column issue.project_id is '프로젝트 아이디';
-comment on column issue.user_id is '사용자 아이디';
-comment on column issue.title is '이슈명';
-comment on column issue.priority is '우선순위. common_code 동적 생성';
-comment on column issue.due_date is '예정일. 마감일';
-comment on column issue.issue_type is '이슈 유형. common_code 동적 생성';
-comment on column issue.status is '상태. common_code 동적 생성';
+comment on table issue is 'issue';
+comment on column issue.issue_id is 'unique number';
+comment on column issue.project_id is 'project id';
+comment on column issue.user_id is 'User ID';
+comment on column issue.title is 'issue name';
+comment on column issue.priority is 'priority. common_code dynamic creation';
+comment on column issue.due_date is 'due date. deadline';
+comment on column issue.issue_type is 'Issue type. common_code dynamic creation';
+comment on column issue.status is 'state. common_code dynamic creation';
 comment on column issue.data_key is 'Data key';
 comment on column issue.object_key is 'Object key';
-comment on column issue.location is 'location(위도, 경도)';
-comment on column issue.latitude is '위도';
-comment on column issue.longitude is '경도';
-comment on column issue.height is '높이';
-comment on column issue.client_ip is '요청 IP';
+comment on column issue.location is 'location (latitude, longitude)';
+comment on column issue.latitude is 'latitude';
+comment on column issue.longitude is 'longitude';
+comment on column issue.height is 'height';
+comment on column issue.client_ip is 'Request IP';
 
-comment on column access_log.year is '년';
-comment on column access_log.month is '월';
-comment on column access_log.day is '일';
-comment on column access_log.year_week is '일년중 몇주';
-comment on column access_log.week is '이번달 몇주';
-comment on column access_log.hour is '시간';
-comment on column access_log.minute is '분';
+comment on column access_log.year is 'year';
+comment on column access_log.month is 'month';
+comment on column access_log.day is 'day';
+comment on column access_log.year_week is 'a few weeks of the year';
+comment on column access_log.week is 'several weeks this month';
+comment on column access_log.hour is 'Time';
+comment on column access_log.minute is 'minutes';
 
-comment on column issue.update_date is '수정일';
-comment on column issue.insert_date is '등록일';
+comment on column issue.update_date is 'Modified';
+comment on column issue.insert_date is 'Registered Date';
 
--- 이슈 상세
+-- Issue Details
 create table issue_detail (
 	issue_detail_id				bigint,
 	issue_id					bigint 					not null,
@@ -74,13 +74,13 @@ create table issue_detail (
 	constraint issue_detail_pk 	primary key (issue_detail_id)	
 );
 
-comment on table issue_detail is '이슈 상세';
-comment on column issue_detail.issue_detail_id is '이슈 상세 고유번호';
-comment on column issue_detail.issue_id is '이슈 고유번호';
-comment on column issue_detail.contents is '내용';
-comment on column issue.insert_date is '등록일';
+comment on table issue_detail is 'issue details';
+comment on column issue_detail.issue_detail_id is 'issue detail number';
+comment on column issue_detail.issue_id is 'issue unique number';
+comment on column issue_detail.contents is 'content';
+comment on column issue.insert_date is 'Registered Date';
 
--- 이슈 파일
+-- Issue files
 create table issue_file(
 	issue_file_id				bigint,
 	issue_id					bigint 				not null,
@@ -93,17 +93,17 @@ create table issue_file(
 	constraint issue_file_pk primary key (issue_file_id)	
 );
 
-comment on table issue_file is '이슈 파일 관리';
-comment on column issue_file.issue_file_id is '고유번호';
-comment on column issue_file.issue_id is '고유번호';
-comment on column issue_file.file_name is '파일 이름';
-comment on column issue_file.file_real_name is '파일 실제 이름';
-comment on column issue_file.file_path is '파일 경로';
-comment on column issue_file.file_size is '파일 사이즈';
-comment on column issue_file.file_ext is '파일 확장자';
-comment on column issue_file.insert_date is '등록일';
+comment on table issue_file is 'Manage issue files';
+comment on column issue_file.issue_file_id is 'unique number';
+comment on column issue_file.issue_id is 'unique number';
+comment on column issue_file.file_name is 'filename';
+comment on column issue_file.file_real_name is 'file actual name';
+comment on column issue_file.file_path is 'file path';
+comment on column issue_file.file_size is 'file size';
+comment on column issue_file.file_ext is 'file extension';
+comment on column issue_file.insert_date is 'Registered Date';
 
--- 이슈 댓글(Comment)
+-- Issue comment
 create table issue_comment (
 	issue_comment_id			bigint,
 	issue_id					bigint				not null,
@@ -114,15 +114,15 @@ create table issue_comment (
 	constraint issue_comment_pk primary key (issue_comment_id)	
 );
 
-comment on table issue_comment is '이슈 댓글(Comment)';
-comment on column issue_comment.issue_comment_id is '고유번호';
-comment on column issue_comment.issue_id is '이슈 고유번호';
-comment on column issue_comment.user_id is '사용자 아이디';
-comment on column issue_comment.comment is '댓글(Comment)';
-comment on column issue_comment.client_ip is '요청 IP';
-comment on column issue_comment.insert_date is '등록일';
+comment on table issue_comment is 'issue comment';
+comment on column issue_comment.issue_comment_id is 'unique number';
+comment on column issue_comment.issue_id is 'issue unique number';
+comment on column issue_comment.user_id is 'User ID';
+comment on column issue_comment.comment is 'Comment';
+comment on column issue_comment.client_ip is 'Request IP';
+comment on column issue_comment.insert_date is 'Registered Date';
 
--- 이슈 관계자
+-- issue officials
 create table issue_people (
 	issue_people_id				bigint,
 	issue_id					bigint			not null,
@@ -132,9 +132,9 @@ create table issue_people (
 	constraint issue_people_pk primary key (issue_people_id)	
 );
 
-comment on table issue_people is '이슈 관계자';
-comment on column issue_people.issue_people_id is '고유번호';
-comment on column issue_people.issue_id is '이슈 고유번호';
-comment on column issue_people.role_type is '이슈 관계자 유형. 1 : 대리자, 2 : 담당자';
-comment on column issue_people.user_id is '사용자 아이디';
-comment on column issue_people.insert_date is '등록일';
+comment on table issue_people is 'issue person';
+comment on column issue_people.issue_people_id is 'unique number';
+comment on column issue_people.issue_id is 'issue unique number';
+comment on column issue_people.role_type is 'Issue type. 1: Delegate, 2: Contact';
+comment on column issue_people.user_id is 'User ID';
+comment on column issue_people.insert_date is 'Registered Date';

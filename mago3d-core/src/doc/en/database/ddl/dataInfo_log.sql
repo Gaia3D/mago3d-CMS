@@ -1,4 +1,4 @@
--- FK, Index 는 별도 파일로 분리. 맨 마지막에 작업 예정
+-- Separate FK and Index into separate files. Scheduled to work last
 drop table if exists data_info_log cascade;
 
 create table data_info_log(
@@ -19,21 +19,21 @@ create table data_info_log(
 	constraint data_info_log_pk 	primary key(data_info_log_id)
 );
 
-comment on table data_info_log is 'Data 이력 정보';
-comment on column data_info_log.data_info_log_id is '고유번호';
-comment on column data_info_log.data_id is 'Data 고유번호';
-comment on column data_info_log.user_id is '사용자 고유번호';
-comment on column data_info_log.latitude is '위도';
-comment on column data_info_log.longitude is '경도';
-comment on column data_info_log.height is '높이';
+comment on table data_info_log is 'Data history information';
+comment on column data_info_log.data_info_log_id is 'unique number';
+comment on column data_info_log.data_id is 'Data unique number';
+comment on column data_info_log.user_id is 'User unique number';
+comment on column data_info_log.latitude is 'latitude';
+comment on column data_info_log.longitude is 'longitude';
+comment on column data_info_log.height is 'height';
 comment on column data_info_log.heading is 'heading';
 comment on column data_info_log.pitch is 'pitch';
 comment on column data_info_log.roll is 'roll';
-comment on column data_info_log.status is '상태. 0:변경대기, 1:변경완료, 2:기각';
-comment on column data_info_log.change_type is '요청 타입';
-comment on column data_info_log.description is '설명';
-comment on column data_info_log.update_date is '수정일';
-comment on column data_info_log.insert_date is '등록일';
+comment on column data_info_log.status is 'status. 0: Waiting for change, 1: Completed, 2: Rejected';
+comment on column data_info_log.change_type is 'request type';
+comment on column data_info_log.description is 'Description';
+comment on column data_info_log.update_date is 'Modified';
+comment on column data_info_log.insert_date is 'Registered Date';
 
 
 create table data_info_log_2018 (

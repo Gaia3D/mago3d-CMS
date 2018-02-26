@@ -1,7 +1,6 @@
 drop table if exists sso_log cascade;
 
-
--- SSO 이력
+-- SSO history
 create table sso_log (
 	sso_log_id 			bigint,
   	user_id 			varchar(30) 		not null, 
@@ -24,21 +23,21 @@ create table sso_log (
 );
 
 
-comment on table sso_log is 'SSO 로그';
-comment on column sso_log.sso_log_id is '고유키';
-comment on column sso_log.user_id is '사용자 아이디';
-comment on column sso_log.server_ip is '서버 ip';
-comment on column sso_log.device_kind is '사용 매체( 0 : 웹, 1 : 기타)';
-comment on column sso_log.request_type is '관리자 요청 : ADMIN_REQUEST, 사용자 요청 : USER_REQUEST';
-comment on column sso_log.token is '토큰';
-comment on column sso_log.token_status is '토큰 상태. 0 : 생성, 1 : 인증성공, 2 : 실패, 3 : 시간만료';
-comment on column sso_log.redirect_url is 'SSO 인증 후 이동할 URL';
-comment on column sso_log.update_date is '수정일';
-comment on column sso_log.year is '년';
-comment on column sso_log.month is '월';
-comment on column sso_log.day is '일';
-comment on column sso_log.year_week is '일년중 몇주';
-comment on column sso_log.week is '이번달 몇주';
-comment on column sso_log.hour is '시간';
-comment on column sso_log.minute is '분';
-comment on column sso_log.insert_date is '등록일';
+comment on table sso_log is 'SSO log';
+comment on column sso_log.sso_log_id is 'unique key';
+comment on column sso_log.user_id is 'User ID';
+comment on column sso_log.server_ip is 'server ip';
+comment on column sso_log.device_kind is 'Used media (0: Web, 1: Other)';
+comment on column sso_log.request_type is 'Administrator request: ADMIN_REQUEST, user request: USER_REQUEST';
+comment on column sso_log.token is 'token';
+comment on column sso_log.token_status is' Token state. 0: generated, 1: authentication succeeded, 2: failed, 3: timeout ';
+comment on column sso_log.redirect_url is 'URL to move to after SSO authentication';
+comment on column sso_log.update_date is 'Modified';
+comment on column sso_log.year is 'year';
+comment on column sso_log.month is 'month';
+comment on column sso_log.day is 'day';
+comment on column sso_log.year_week is 'a few weeks of the year';
+comment on column sso_log.week is 'several weeks this month';
+comment on column sso_log.hour is 'Time';
+comment on column sso_log.minute is 'minutes';
+comment on column sso_log.insert_date is 'Registered Date';

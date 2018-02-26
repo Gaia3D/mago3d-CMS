@@ -1,7 +1,7 @@
 drop table if exists api_log cascade;
 drop table if exists external_service cascade;
 
--- API 호출 이력
+-- API call history
 create table api_log(
 	api_log_id					bigint,
 	service_code				varchar(100)		not null,
@@ -36,37 +36,37 @@ create table api_log(
 	constraint api_log_pk primary key (api_log_id)	
 );
 
-comment on table api_log is 'API 호출 이력';
-comment on column api_log.api_log_id is '고유키';
-comment on column api_log.service_code is 'API 코드';
-comment on column api_log.service_name is 'API 이름 ';
-comment on column api_log.client_ip is '서비스 제공을 요청한 Client IP';
-comment on column api_log.client_server_name is '서비스 제공을 요청한 서버명';
+comment on table api_log is 'API call history';
+comment on column api_log.api_log_id is 'unique key';
+comment on column api_log.service_code is 'API code';
+comment on column api_log.service_name is 'API name';
+comment on column api_log.client_ip is 'Client IP requesting service provisioning';
+comment on column api_log.client_server_name is 'The name of the server that requested the service';
 comment on column api_log.api_key is 'API KEY';
-comment on column api_log.device_kind is '사용 매체( 0 : 웹, 1 : 기타)';
-comment on column api_log.request_type is '서비스 요청 타입. 인증 : ADMIN_PASSWORD, 테스트 : ADMIN_TEST, 로그인 : ADMIN_LOGIN, 테스트 : USER_TEST, 로그인 : USER_LOGIN, 외부 : API';
-comment on column api_log.user_id is '사용자 아이디';
-comment on column api_log.user_ip is '사용자 IP';
-comment on column api_log.data_count is '데이터 건수';
-comment on column api_log.data_delimiter is '데어터 구분자';
-comment on column api_log.phone is '전화번호';
+comment on column api_log.device_kind is 'Used Media (0: Web, 1: Other)';
+comment on column api_log.request_type is 'Type of service request. Authentication: ADMIN_PASSWORD, Test: ADMIN_TEST, Login: ADMIN_LOGIN, Test: USER_TEST, Login: USER_LOGIN, External: API';
+comment on column api_log.user_id is 'User ID';
+comment on column api_log.user_ip is 'User IP';
+comment on column api_log.data_count is 'Number of data';
+comment on column api_log.data_delimiter is 'data delimiter';
+comment on column api_log.phone is 'phone number';
 comment on column api_log.email is 'email';
-comment on column api_log.messanger is '메신저';
-comment on column api_log.field1 is '임시 필드1';
-comment on column api_log.field2 is '임시 필드2';
-comment on column api_log.field3 is '임시 필드3';
-comment on column api_log.field4 is '임시 필드4';
-comment on column api_log.field5 is '임시 필드5';
-comment on column api_log.success_yn is 'API 호출 성공 유무( Y : 성공, N : 실패 )';
-comment on column api_log.business_success_yn is '업무 예외 발생 유무(오류가 발생했지만 무시해도 되는 경우, Y : 성공, N : 실패)';
-comment on column api_log.result_message is '서비스 호출 메시지';
-comment on column api_log.business_result_message is '업무 호출 메시지';
-comment on column api_log.result_value1 is '결과 값1';
-comment on column api_log.result_value2 is '결과 값2';
-comment on column api_log.result_value3 is '결과 값3';
-comment on column api_log.result_value4 is '결과 값4';
-comment on column api_log.result_value5 is '결과 값5';
-comment on column api_log.insert_date is '등록일';
+comment on column api_log.messanger is 'Messenger';
+comment on column api_log.field1 is 'Temporary field 1';
+comment on column api_log.field2 is 'Temporary field 2';
+comment on column api_log.field3 is 'Temporary field 3';
+comment on column api_log.field4 is 'Temporary field 4';
+comment on column api_log.field5 is 'Temporary field 5';
+comment on column api_log.success_yn is 'API call successful (Y: success, N: failure)';
+comment on column api_log.business_success_yn is 'Occurrence of business exceptions (Y: success, N: failure if an error occurred but can be ignored)';
+comment on column api_log.result_message is 'Service invocation message';
+comment on column api_log.business_result_message is 'Business call message';
+comment on column api_log.result_value1 is 'result value 1';
+comment on column api_log.result_value2 is 'result value 2';
+comment on column api_log.result_value3 is 'result value 3';
+comment on column api_log.result_value4 is 'result value 4';
+comment on column api_log.result_value5 is 'result value 5';
+comment on column api_log.insert_date is 'Registered Date';
 
 
 create table api_log_2018 (
@@ -155,24 +155,23 @@ create table external_service (
 );
 
 comment on table external_service is 'Private API';
-comment on column external_service.external_service_id is '고유키';
-comment on column external_service.service_code is '서비스 코드';
-comment on column external_service.service_name is '서비스명';
-comment on column external_service.service_type is '서비스 유형. 0 : Cache(캐시 Reload)';
-comment on column external_service.server_ip is '서버 IP';
+comment on column external_service.external_service_id is 'unique key';
+comment on column external_service.service_code is 'Service code';
+comment on column external_service.service_name is 'service name';
+comment on column external_service.service_type is' Service type. 0: Cache (Reload Reload) ';
+comment on column external_service.server_ip is 'Server IP';
 comment on column external_service.api_key is 'API KEY';
-comment on column external_service.url_scheme is '사용할 프로토콜';
-comment on column external_service.url_host is '호스트';
-comment on column external_service.url_port is '포트';
-comment on column external_service.url_path is '경로, 리소스 위치';
-comment on column external_service.status is '상태. 0 : 사용, 1 : 미사용';
-comment on column external_service.default_yn is '삭제 불가, Y : 기본, N : 선택';
-comment on column external_service.description is '설명';
-comment on column external_service.extra_key1 is '여분 키 1';
-comment on column external_service.extra_key2 is '여분 키 2';
-comment on column external_service.extra_key3 is '여분 키 3';
-comment on column external_service.extra_value1 is '여분 키 값 1';
-comment on column external_service.extra_value2 is '여분 키 값 2';
-comment on column external_service.extra_value3 is '여분 키 값 3';
-comment on column external_service.insert_date is '등록일';
-
+comment on column external_service.url_scheme is 'Protocol to use';
+comment on column external_service.url_host is 'host';
+comment on column external_service.url_port is 'port';
+comment on column external_service.url_path is 'path, resource location';
+comment on column external_service.status is 'status. 0: used, 1: unused';
+comment on column external_service.default_yn is 'Unable to delete, Y: default, N: select';
+comment on column external_service.description is 'Description';
+comment on column external_service.extra_key1 is 'Extra key 1';
+comment on column external_service.extra_key2 is 'extra key 2';
+comment on column external_service.extra_key3 is 'Extra key 3';
+comment on column external_service.extra_value1 is 'extra key value 1';
+comment on column external_service.extra_value2 is 'extra key value 2';
+comment on column external_service.extra_value3 is 'extra key value 3';
+comment on column external_service.insert_date is 'Registered Date';

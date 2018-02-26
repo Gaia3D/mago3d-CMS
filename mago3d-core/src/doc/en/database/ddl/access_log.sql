@@ -1,6 +1,6 @@
 drop table if exists access_log cascade;
 
--- 서비스 요청 이력
+-- Service request history
 create table access_log(
 	access_log_id				bigint,
 	user_id						varchar(32)	 		not null,
@@ -22,23 +22,23 @@ create table access_log(
 );
 
 
-comment on table access_log is '서비스 요청 이력';
-comment on column access_log.access_log_id is '고유번호';
-comment on column access_log.user_id is '사용자 아이디';
-comment on column access_log.user_name is '사용자 이름';
-comment on column access_log.client_ip is '요청 IP';
+comment on table access_log is 'Service request history';
+comment on column access_log.access_log_id is 'unique number';
+comment on column access_log.user_id is 'User ID';
+comment on column access_log.user_name is 'username';
+comment on column access_log.client_ip is 'Request IP';
 comment on column access_log.request_uri is 'URI';
-comment on column access_log.parameters is '요청 Paramter';
+comment on column access_log.parameters is 'Request Paramter';
 comment on column access_log.user_agent is 'User-Agent';
 comment on column access_log.parameters is 'Referer';
-comment on column access_log.year is '년';
-comment on column access_log.month is '월';
-comment on column access_log.day is '일';
-comment on column access_log.year_week is '일년중 몇주';
-comment on column access_log.week is '이번달 몇주';
-comment on column access_log.hour is '시간';
-comment on column access_log.minute is '분';
-comment on column access_log.insert_date is '등록일';
+comment on column access_log.year is 'year';
+comment on column access_log.month is 'month';
+comment on column access_log.day is 'day';
+comment on column access_log.year_week is 'a few weeks of the year';
+comment on column access_log.week is 'several weeks this month';
+comment on column access_log.hour is 'Time';
+comment on column access_log.minute is 'minutes';
+comment on column access_log.insert_date is 'Registered Date';
 
 
 create table access_log_2017 (

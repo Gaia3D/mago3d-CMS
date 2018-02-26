@@ -1,8 +1,6 @@
 drop table if exists widget cascade;
 
-
-
--- 위젯
+-- Widget
 create table widget(
 	widget_id			smallint,
 	name				varchar(100)			not null ,
@@ -13,10 +11,9 @@ create table widget(
 );
 
 
-
-comment on table widget is '위젯';
-comment on column widget.widget_id is '고유번호';
-comment on column widget.name is '이름';
-comment on column widget.view_order is '나열 순서';
-comment on column widget.user_id is '사용자 아이디';
-comment on column widget.insert_date is '등록일';
+comment on table widget is 'widget';
+comment on column widget.widget_id is 'unique number';
+comment on column widget.name is 'Name';
+comment on column widget.view_order is 'List order';
+comment on column widget.user_id is 'User ID';
+comment on column widget.insert_date is 'Registered Date';
