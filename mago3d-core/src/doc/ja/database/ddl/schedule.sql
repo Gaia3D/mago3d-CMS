@@ -66,4 +66,4 @@ comment on column schedule_detail_log.schedule_detail_log_id is 'のスケジュ
 comment on column schedule_detail_log.schedule_log_id is 'のスケジュール実行履歴一意の番号';
 comment on column schedule_detail_log.execute_detail_result is 'の実行結果。0：成功、1：失敗';
 comment on column schedule_detail_log.execute_detail_message is 'の実行結果詳細';
-comment on column schedule_detail_log.insert_date is '登録';
+comment on column schedule_detail_log.insert_date is '登録日';

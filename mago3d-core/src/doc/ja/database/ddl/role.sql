@@ -24,4 +24,4 @@ comment on column role.business_type is '業務の種類。0：ユーザー、1�
 comment on column role.use_yn is 'を使用の有無。Y：使用すると、N：を無効にする';
 comment on column role.default_yn is 'の基本使用の有無。Y：使用すると、N：を無効にする';
 comment on column role.description is 'の説明';
-comment on column role.insert_date is '登録';
+comment on column role.insert_date is '登録日';

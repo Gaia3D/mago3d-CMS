@@ -41,4 +41,4 @@ comment on column sso_log.year_week is '今年の数週間';
 comment on column sso_log.week is '今月数週間';
 comment on column sso_log.hour is '時間';
 comment on column sso_log.minute is '分';
-comment on column sso_log.insert_date is '登録';
+comment on column sso_log.insert_date is '登録日';

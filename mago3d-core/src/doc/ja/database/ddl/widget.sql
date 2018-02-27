@@ -16,4 +16,4 @@ comment on column widget.widget_id is '固有番号';
 comment on column widget.name is 'name';
 comment on column widget.view_order is '一覧表示順';
 comment on column widget.user_id is 'ユーザID';
-comment on column widget.insert_date is '登録';
+comment on column widget.insert_date is '登録日';

@@ -1,6 +1,5 @@
 drop table if exists menu cascade;
 
-
 -- メニュー
 create table menu(
 	menu_id				smallint,
@@ -22,7 +21,6 @@ create table menu(
 );
 
 
-
 comment on table menu is 'メニュー';
 comment on column menu.menu_id is '固有番号';
 comment on column menu.name is 'メニュー名';
@@ -39,3 +37,4 @@ comment on column menu.default_yn is 'デフォルトの表示メニュー、Y�
 comment on column menu.use_yn is 'を使用の有無、Y：使用すると、N：を無効にする';
 comment on column menu.description is 'の説明';
 comment on column menu.insert_date is '登録';
+

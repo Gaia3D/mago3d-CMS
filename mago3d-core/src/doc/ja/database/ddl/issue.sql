@@ -93,15 +93,15 @@ create table issue_file(
 	constraint issue_file_pk primary key (issue_file_id)	
 );
 
-comment on table issue_file is」問題のファイルの管理';
-comment on column issue_file.issue_file_id is「固有番号」;
-comment on column issue_file.issue_id is「固有番号」;
-comment on column issue_file.file_name is「ファイル名';
-comment on column issue_file.file_real_name is」ファイル実際の名前';
-comment on column issue_file.file_path is」ファイルのパス';
-comment on column issue_file.file_size is」ファイルサイズ';
-comment on column issue_file.file_ext is」ファイルの拡張子';
-comment on column issue_file.insert_date is'登録';
+comment on table issue_file is '問題のファイルの管理';
+comment on column issue_file.issue_file_id is '固有番号';
+comment on column issue_file.issue_id is '固有番号';
+comment on column issue_file.file_name is'ファイル名';
+comment on column issue_file.file_real_name is 'ファイル実際の名前';
+comment on column issue_file.file_path is 'ファイルのパス';
+comment on column issue_file.file_size is 'ファイルサイズ';
+comment on column issue_file.file_ext is 'ファイルの拡張子';
+comment on column issue_file.insert_date is '登録';
 
 -- 問題のコメント（Comment）
 create table issue_comment (
