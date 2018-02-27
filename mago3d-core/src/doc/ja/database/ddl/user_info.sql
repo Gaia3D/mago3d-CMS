@@ -49,7 +49,7 @@ comment on table user_group_role is 'ユーザーグループごとRole';
 comment on column user_group_role.user_group_role_id is '固有番号';
 comment on column user_group_role.user_group_id is 'ユーザーグループ固有のキー';
 comment on column user_group_role.role_id is 'Role固有のキー';
-comment on column user_group_role.insert_date is '登録';
+comment on column user_group_role.insert_date is '登録日';
 
 -- ユーザーグループの権限
 create table user_group_menu(
@@ -65,16 +65,16 @@ create table user_group_menu(
 	constraint user_group_menu_pk 	primary key (user_group_menu_id)
 );
 
-comment on table user_group_menu is '사용자 그룹 메뉴';
-comment on column user_group_menu.user_group_menu_id is '고유번호';
-comment on column user_group_menu.user_group_id is '사용자 그룹 고유키';
-comment on column user_group_menu.menu_id is '메뉴 고유키';
-comment on column user_group_menu.all_yn is '메뉴 접근 모든 권한';
-comment on column user_group_menu.read_yn is '읽기 권한';
-comment on column user_group_menu.write_yn is '쓰기 권한';
-comment on column user_group_menu.update_yn is '수정 권한';
-comment on column user_group_menu.delete_yn is '삭제 권한';
-comment on column user_group_menu.insert_date is '등록일';
+comment on table user_group_menu is 'ユーザーグループメニュー';
+comment on column user_group_menu.user_group_menu_id is '固有番号';
+comment on column user_group_menu.user_group_id is 'ユーザーグループ固有のキー';
+comment on column user_group_menu.menu_id is 'メニュー固有のキー';
+comment on column user_group_menu.all_yn is 'メニューアクセスのすべての権限';
+comment on column user_group_menu.read_yn is '読み取り権限';
+comment on column user_group_menu.write_yn is '書き込み権限';
+comment on column user_group_menu.update_yn is '修正権限';
+comment on column user_group_menu.delete_yn is '削除権限';
+comment on column user_group_menu.insert_date is '登録日';
 
 
 -- ユーザーの基本情報
@@ -132,7 +132,8 @@ comment on column user_info.fail_login_count is 'ログイン失敗回数';
 comment on column user_info.last_login_date is '最終ログイン ';
 comment on column user_info.last_password_change_date is '最終ログインパスワード変更日';
 comment on column user_info.update_date is '個人情報の変更日付';
-comment on column user_info.insert_date is '登録';
+comment on column user_info.insert_date is '登録日';
+
 
 -- ユーザーの使用デバイス
 create table user_device (
@@ -206,4 +207,4 @@ comment on column user_device.device_ip5 is 'IP5';
 comment on column user_device.device_priority5 is 'の優先順位5';
 comment on column user_device.use_yn5 is 'を使用の有無5。 Y：使用すると、N：未使用';
 comment on column user_device.description5 is 'の説明5';
-comment on column user_device.insert_date is '登録';
+comment on column user_device.insert_date is '登録日';

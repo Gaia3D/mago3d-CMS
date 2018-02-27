@@ -35,6 +35,7 @@ comment on column data_info_log.description is 'の説明';
 comment on column data_info_log.update_date is '更新日';
 comment on column data_info_log.insert_date is '登録';
 
+
 create table data_info_log_2018 (
 	check ( insert_date >= to_timestamp('20180101000000000000', 'YYYYMMDDHH24MISSUS') and insert_date <= to_timestamp('20181231235959999999', 'YYYYMMDDHH24MISSUS') )
 ) inherits (data_info_log);
