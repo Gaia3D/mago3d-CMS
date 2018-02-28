@@ -42,7 +42,7 @@
 									<col class="col-input" />
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="project_id">프로젝트명</form:label>
+											<form:label path="project_id"><spring:message code='data.project.name'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -55,7 +55,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="parent">상위 Node</form:label>
+											<form:label path="parent"><spring:message code='data.project.parent.node'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -144,7 +144,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="attributes">속성</form:label>
+											<form:label path="attributes"><spring:message code='data.properties.property'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -154,7 +154,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="description">설명</form:label>
+											<form:label path="description"><spring:message code='data.properties.explain'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="description" class="xl" />

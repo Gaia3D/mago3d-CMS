@@ -120,20 +120,20 @@ public class DataInfo {
 	private String search_data_name;
 	private String search_except_data_name;
 	
-	public String getViewStatus() {
-		// 사용자 상태. 0:사용중, 1:사용중지(관리자), 2:기타)
-		if(this.status == null || "".equals(this.status)) {
-			return "";
-		}
-		if("0".equals(this.status)) {
-			return "사용중";
-		} else if("1".equals(this.status)) {
-			return "사용중지";
-		} else if("2".equals(this.status)) {
-			return "기타";
-		}
-		return "";
-	}
+//	public String getViewStatus() {
+//		// 사용자 상태. 0:사용중, 1:사용중지(관리자), 2:기타)
+//		if(this.status == null || "".equals(this.status)) {
+//			return "";
+//		}
+//		if("0".equals(this.status)) {
+//			return "사용중";
+//		} else if("1".equals(this.status)) {
+//			return "사용중지";
+//		} else if("2".equals(this.status)) {
+//			return "기타";
+//		}
+//		return "";
+//	}
 	
 	public String getViewDataInsertType() {
 		// TODO 이건 뭔가 아닌거 같은데... 어떻게 처리 하지?

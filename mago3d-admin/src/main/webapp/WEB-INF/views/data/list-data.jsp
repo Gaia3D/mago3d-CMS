@@ -143,17 +143,17 @@
 										<tr>
 											<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
 											<th scope="col" class="col-number"><spring:message code='number'/></th>
-											<th scope="col" class="col-name">프로젝트명</th>
-											<th scope="col" class="col-id"><spring:message code='key'/></th>
+											<th scope="col" class="col-name"><spring:message code='data.project.name'/></th>
+											<th scope="col" class="col-id"><spring:message code='data.project.key'/></th>
 											<th scope="col" class="col-name"><spring:message code='name'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='height'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='status'/></th>
-											<th scope="col" class="col-name">제어 속성</th>
-											<th scope="col" class="col-name">Origin 속성</th>
-											<th scope="col" class="col-name">Object 속성</th>
-											<th scope="col" class="col-date">등록일</th>
+											<th scope="col" class="col-name"><spring:message code='data.control.properties'/></th>
+											<th scope="col" class="col-name"><spring:message code='data.origin.properties'/></th>
+											<th scope="col" class="col-name"><spring:message code='data.object.properties'/></th>
+											<th scope="col" class="col-date"><spring:message code='data.registration.date'/></th>
 											<th scope="col" class="col-functions"><spring:message code='modified.and.inser'/></th>
 										</tr>
 									</thead>
@@ -178,13 +178,16 @@
 											<td class="col-toggle">${dataInfo.longitude}</td>
 											<td class="col-toggle">${dataInfo.height}</td>
 											<td class="col-toggle">
+											${dataInfo.status}
 		<c:if test="${dataInfo.status eq '0'}">
 												<span class="icon-glyph glyph-on on"></span>
+												<span class="icon-text"><spring:message code='data.status.use'/></span>
 		</c:if>
 		<c:if test="${dataInfo.status ne '0'}">
 												<span class="icon-glyph glyph-off off"></span>
+												<span class="icon-text"><spring:message code='data.status.unused'/></span>
 		</c:if>
-												<span class="icon-text">${dataInfo.viewStatus }</span>
+												
 											</td>
 											<td class="col-name"><a href="#" onclick="viewAttributes('${dataInfo.data_id }'); return false;">제어 속성</a></td>
 											<td class="col-functions">
