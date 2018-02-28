@@ -34,7 +34,8 @@
 					<div class="page-content">
 						<div class="content-header row">
 							<h3 class="content-title u-pull-left">
-								프로젝트 (<a href="#" onclick="reloadProjectCache();">캐시 갱신</a>)
+								<spring:message code='common.project'/> (<a href="#" onclick="reloadProjectCache();"><spring:message code='common.cache.update'/></a>)
+								
 							</h3>
 						</div>
 						<div class="list">
@@ -60,18 +61,18 @@
 										<tr>
 											<th scope="col" class="col-number"><spring:message code='number'/></th>
 											<th scope="col" class="col-name">Key</th>
-											<th scope="col" class="col-name">프로젝트명</th>
-											<th scope="col" class="col-number">순서</th>
-											<th scope="col" class="col-toggle">기본값</th>
-											<th scope="col" class="col-toggle">사용유무</th>
-											<th scope="col" class="col-toggle">위도</th>
-											<th scope="col" class="col-toggle">경도</th>
-											<th scope="col" class="col-toggle">높이</th>
-											<th scope="col" class="col-number">이동시간</th>
-											<th scope="col" class="col-functions">데이터 관리</th>
-											<th scope="col" class="col-functions">Role 관리</th>
-											<th scope="col" class="col-date">등록일</th>
-											<th scope="col" class="col-functions">수정/삭제</th>
+											<th scope="col" class="col-name"><spring:message code='data.project.name'/></th>
+											<th scope="col" class="col-number"><spring:message code='common.order'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='common.default.value'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='code.use.not'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='height'/></th>
+											<th scope="col" class="col-number"><spring:message code='movement.time'/></th>
+											<th scope="col" class="col-functions"><spring:message code='data.management'/></th>
+											<th scope="col" class="col-functions"><spring:message code='user.group.control.roll'/></th>
+											<th scope="col" class="col-date"><spring:message code='search.insert.date'/></th>
+											<th scope="col" class="col-functions"><spring:message code='code.modify.delete'/></th>
 										</tr>
 									</thead>
 									<tbody>
