@@ -972,4 +972,24 @@ public class FileServiceImpl implements FileService {
 		}
 		return uuid;
 	}
+	
+	/**
+	 * 파일 파싱 로그 등록
+	 * @param fileParseLog
+	 * @return
+	 */
+	@Transactional
+	public int insertFileParseLog(FileParseLog fileParseLog) {
+		return fileMapper.insertFileParseLog(fileParseLog);
+	}
+	
+	/**
+	 * 파일 정보 수정
+	 * @param fileInfo
+	 * @return
+	 */
+	@Transactional
+	public int updateFileInfo(FileInfo fileInfo) {
+		return fileMapper.updateFileInfo(fileInfo);
+	}
 }

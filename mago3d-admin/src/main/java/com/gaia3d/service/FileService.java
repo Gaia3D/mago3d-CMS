@@ -75,4 +75,18 @@ public interface FileService {
 	 * @return
 	 */
 	public FileInfo insertDataObjectAttributeBatch(String userId);
+	
+	/**
+	 * 파일 파싱 로그 등록
+	 * @param fileParseLog
+	 * @return
+	 */
+	public int insertFileParseLog(FileParseLog fileParseLog);
+	
+	/**
+	 * 파일 정보 수정
+	 * @param fileInfo
+	 * @return
+	 */
+	public int updateFileInfo(FileInfo fileInfo);
 }

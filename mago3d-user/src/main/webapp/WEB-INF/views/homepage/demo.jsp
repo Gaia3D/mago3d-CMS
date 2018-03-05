@@ -10,13 +10,13 @@
 	<title>demo | mago3D User</title>
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css?cache_version=${cache_version}" />
 <c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
-	<link rel="stylesheet" href="/externlib/${lang}/cesium/Widgets/widgets.css?cache_version=${cache_version}" />
+	<link rel="stylesheet" href="/externlib/cesium/Widgets/widgets.css?cache_version=${cache_version}" />
 </c:if>
-	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css?cache_version=${cache_version}" />
-	<link rel="stylesheet" href="/externlib/${lang}/jquery-toast/jquery.toast.css" />
-	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js?cache_version=${cache_version}"></script>
-	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js?cache_version=${cache_version}"></script>
-	<script type="text/javascript" src="/externlib/${lang}/jquery-toast/jquery.toast.js"></script>
+	<link rel="stylesheet" href="/externlib/jquery-ui/jquery-ui.css?cache_version=${cache_version}" />
+	<link rel="stylesheet" href="/externlib/jquery-toast/jquery.toast.css" />
+	<script type="text/javascript" src="/externlib/jquery/jquery.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/jquery-ui/jquery-ui.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/jquery-toast/jquery.toast.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
@@ -593,12 +593,12 @@
 </c:if>
 
 <c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
-<script type="text/javascript" src="/externlib/${lang}/cesium/Cesium.js?cache_version=${cache_version}"></script>
+<script type="text/javascript" src="/externlib/cesium/Cesium.js?cache_version=${cache_version}"></script>
 </c:if>
 <c:if test="${geoViewLibrary eq 'worldwind' }">
-<script type="text/javascript" src="/externlib/${lang}/webworldwind/worldwind.js?cache_version=${cache_version}"></script>
+<script type="text/javascript" src="/externlib/webworldwind/worldwind.js?cache_version=${cache_version}"></script>
 </c:if>
-<script type="text/javascript" src="/js/${lang}/mago3d.js?cache_version=${cache_version}"></script>
+<script type="text/javascript" src="/js/mago3d.js?cache_version=${cache_version}"></script>
 <script>
 	var agent = navigator.userAgent.toLowerCase();
 	if(agent.indexOf('chrome') < 0) { 

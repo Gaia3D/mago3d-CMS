@@ -2,9 +2,13 @@ package com.gaia3d.controller;
 
 import java.io.File;
 import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -12,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.config.CacheConfig;
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
@@ -30,7 +37,10 @@ import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.DataInfoObjectAttribute;
+import com.gaia3d.domain.DataObjectAttributeFilter;
 import com.gaia3d.domain.FileInfo;
+import com.gaia3d.domain.FileParseLog;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.Project;
@@ -56,6 +66,8 @@ import lombok.extern.slf4j.Slf4j;
 public class DataController {
 	@Autowired
 	private PropertiesConfig propertiesConfig;
+	@Autowired
+	private MessageSource messageSource;
 	
 	@Autowired
 	private CacheConfig cacheConfig;
@@ -80,7 +92,7 @@ public class DataController {
 	 * @return
 	 */
 	@RequestMapping(value = "list-data.do")
-	public String listData(	HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo, Model model) {
+	public String listData(Locale locale, HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo, Model model) {
 		
 		log.info("@@ dataInfo = {}", dataInfo);
 		Project project = new Project();
@@ -114,6 +126,11 @@ public class DataController {
 		
 		@SuppressWarnings("unchecked")
 		List<CommonCode> dataRegisterTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.DATA_REGISTER_TYPE);
+		
+		// TODO 다국어 처리를 여기서 해야 할거 같은데....
+//		Map<String, String> statusMap = new HashMap<>();
+//		String welcome = messageSource.getMessage("xxx.xxxx", new Object[]{}, locale);
+		log.info("@@ locale = {}", locale.toString());
 		
 		model.addAttribute(pagination);
 		model.addAttribute("dataRegisterTypeList", dataRegisterTypeList);
@@ -877,7 +894,71 @@ public class DataController {
 		try {
 			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-			FileInfo fileInfo = fileService.insertDataObjectAttributeBatch(userSession.getUser_id());
+			//FileInfo fileInfo = fileService.insertDataObjectAttributeBatch(userSession.getUser_id());
+			
+			int totalCount = 0;
+			int insertSuccessCount = 0;
+			int updateSuccessCount = 0;
+			int insertErrorCount = 0;
+			
+			FileParseLog fileParseLog = new FileParseLog();
+			fileParseLog.setFile_info_id(0l);
+			fileParseLog.setLog_type(FileParseLog.DB_INSERT_LOG);
+			
+			FileInfo fileInfo = new FileInfo();
+			fileInfo.setUser_id(userSession.getUser_id());
+			
+			File dataObjectAttributeDirFile = new File(propertiesConfig.getDataObjectAttributeUploadDir());
+			if(!dataObjectAttributeDirFile.exists()) {
+				log.info("@@@ Data Object Attribute Directory doest not Exist. path = {}", propertiesConfig.getDataObjectAttributeUploadDir());
+				fileInfo.setError_code("data.object.attribute.dir.invalid");
+				jSONObject.put("result", fileInfo.getError_code());
+				return jSONObject;
+			}
+				
+			File[] fileList = dataObjectAttributeDirFile.listFiles(new DataObjectAttributeFilter());
+			totalCount = fileList.length;
+			for(File file : fileList) {
+				try {
+					String fileName = file.getName();
+					int startIndex = fileName.indexOf("F4D_");
+					int endIndex = fileName.toLowerCase().indexOf("_object_attribute");
+					String dataKey = fileName.substring(startIndex + 4, endIndex);
+					log.info("@@@@@@@@@@ dataKey = {}", dataKey);
+					
+					DataInfo dataInfo = dataService.getDataByDataKey(dataKey);
+					// 모든 object id를 삭제 후 등록
+					dataService.deleteDataObjects(dataInfo.getData_id());
+					
+					byte[] jsonData = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
+					ObjectMapper objectMapper = new ObjectMapper();
+					//read JSON like DOM Parser
+					JsonNode jsonNode = objectMapper.readTree(jsonData);
+					Iterator<Map.Entry<String, JsonNode>> fields = jsonNode.fields();
+					while (fields.hasNext()) {
+						Map.Entry<String, JsonNode> entry = fields.next();
+						DataInfoObjectAttribute dataInfoObjectAttribute = new DataInfoObjectAttribute();
+						dataInfoObjectAttribute.setData_id(dataInfo.getData_id());
+						dataInfoObjectAttribute.setObject_id(entry.getKey());
+						dataInfoObjectAttribute.setAttributes(entry.getValue().toString());
+						dataService.insertDataObjectAttribute(dataInfoObjectAttribute);
+						totalCount++;
+						insertSuccessCount++;
+					}
+				} catch(Exception e1) {
+					e1.printStackTrace();
+					fileParseLog.setIdentifier_value(fileInfo.getUser_id());
+					fileParseLog.setError_code(e1.getMessage());
+					fileService.insertFileParseLog(fileParseLog);
+					insertErrorCount++;
+				}
+			}
+			
+			fileInfo.setTotal_count(totalCount);
+			fileInfo.setInsert_success_count(insertSuccessCount);
+			fileInfo.setUpdate_success_count(updateSuccessCount);
+			fileInfo.setInsert_error_count(insertErrorCount);
+			fileService.updateFileInfo(fileInfo);
 			
 			jSONObject.put("total_count", fileInfo.getTotal_count());
 			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());

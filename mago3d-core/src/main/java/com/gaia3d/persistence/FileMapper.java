@@ -36,16 +36,16 @@ public interface FileMapper {
 	int insertFileInfo(FileInfo fileInfo);
 	
 	/**
-	 * 파일 정보 수정
-	 * @param fileInfo
-	 * @return
-	 */
-	int updateFileInfo(FileInfo fileInfo);
-	
-	/**
 	 * 파일 파싱 로그 등록
 	 * @param fileParseLog
 	 * @return
 	 */
 	int insertFileParseLog(FileParseLog fileParseLog);
+	
+	/**
+	 * 파일 정보 수정
+	 * @param fileInfo
+	 * @return
+	 */
+	int updateFileInfo(FileInfo fileInfo);
 }
