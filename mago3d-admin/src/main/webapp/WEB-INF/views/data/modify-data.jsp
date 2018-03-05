@@ -144,7 +144,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="attributes"><spring:message code='data.properties.property'/></form:label>
+											<form:label path="attributes"><spring:message code='properties'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
