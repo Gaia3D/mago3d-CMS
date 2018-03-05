@@ -137,7 +137,7 @@
 					<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
 					<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
 					<th scope="col" class="col-toggle"><spring:message code='height'/></th>
-					<th scope="col" class="col-toggle"><spring:message code='data.properties.property'/></th>
+					<th scope="col" class="col-toggle"><spring:message code='properties'/></th>
 				</tr>
 			</thead>
 			<tbody id="projectDataList">
