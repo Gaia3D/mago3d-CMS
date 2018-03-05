@@ -16,6 +16,15 @@ JS_MESSAGE["check.id.duplication"] =  "ユーザ名の重複チェックをし�
 JS_MESSAGE["use.id.other.id.select"] =  "使用中のIDです。他のIDを選択してください。";
 JS_MESSAGE["total.count"] = "総件数：";
 JS_MESSAGE["total.few"] =  "何件";
+JS_MESSAGE["user"] = "ユーザー";
+JS_MESSAGE["server"] = "サーバー";
+JS_MESSAGE["account"] = "アカウント";
+JS_MESSAGE["use"] = "使用";
+JS_MESSAGE["not.use"] = "未使用";
+
+JS_MESSAGE["file.name.empty"] = "ファイル名を入力してください。";
+JS_MESSAGE["file.ext.invalid"] = "ファイルの拡張子が無効です。";
+JS_MESSAGE["fileinfo.size.invalid"] = "アップロード可能なファイルサイズを超えました。";
 
 //共通
 JS_MESSAGE["user.session.empty"] =  "ログイン後に使用可能なサービスです。";
@@ -57,7 +66,7 @@ JS_MESSAGE["user.id.notexist"] =  "ユーザ名が存在しません。";
 
 
 //運営ポリシー
-JS_MESSAGE["policy.server.datetime"] =  "サーバーの時間がリセットされました。"
+JS_MESSAGE["policy.server.datetime"] =  "サーバーの時間がリセットされました。";
 JS_MESSAGE["policy.user.update"] =  "ユーザーポリシーを変更しました。";
 JS_MESSAGE["policy.password.update"] =  "パスワードポリシーを変更しました。";
 JS_MESSAGE["policy.geo.update"] =  "空間情報を修正しました。";
@@ -72,6 +81,42 @@ JS_MESSAGE["policy.backoffice.update"] =  "Back Officeの情報を修正しま�
 JS_MESSAGE["policy.solution.update"] =  "製品情報を修正しました。";
 JS_MESSAGE["policy.content.invalid"] =  "必須入力値が有効ではありません。";
 
+JS_MESSAGE ["policy.user.id.min.length"] = "ユーザーの最小長を入力してください。";
+JS_MESSAGE ["policy.user.id.min.length.rule"] = "ユーザーアイディー長さは4です。";
+JS_MESSAGE ["policy.user.login.fail"] = "ログインの失敗を入力してください。";
+JS_MESSAGE ["policy.user.lockout.period"] = "最後にログインします。";
+
+JS_MESSAGE["policy.password.period"] = "変更周期を入力してください。";
+JS_MESSAGE["policy.password.min.length"] = "最小の長さを入力してください。";
+JS_MESSAGE["policy.password.max.length"] = "最大の長さを入力してください。";
+JS_MESSAGE["policy.password.uppercase"] = "英語の大文字の数を入力してください。";
+JS_MESSAGE["policy.password.lowercase"] = "英語小文字数を入力してください。";
+JS_MESSAGE["policy.password.number"] = "数字の数を入力してください。";
+JS_MESSAGE["policy.password.special.letters"] = "特殊文字の数を入力してください。";
+JS_MESSAGE["policy.password.serial.limit"] = "パスワードの連続文字の制限数を入力してください。";
+
+JS_MESSAGE ["policy.contents.main.display"] = "劇的に変化します。";
+JS_MESSAGE ["policy.contents.widget.interval"] = "メイン画面ウィジェットリフレッシュ間隔を入力して。";
+JS_MESSAGE ["policy.statistics_.interval"] = "基本検索期間を選択解除します。";
+JS_MESSAGE ["load.balancing.interval"] = "現在のサーバはアクティブ、スタンバイは状態を表示します。";
+JS_MESSAGE ["policy.contents.menu.group.root"] = "メニューグループ上位グループ名を入力してください。";
+JS_MESSAGE ["policy.contents.user.group.root"] = "ユーザーグループ上位グループ名を入力してください。";
+JS_MESSAGE ["policy.contents.main.display"] = "劇的に変化します。";
+JS_MESSAGE ["policy.contents.main.display"] = "劇的に変化します。";
+JS_MESSAGE ["policy.contents.main.display"] = "劇的に変化します。";
+
+JS_MESSAGE ["policy.os.time"] = "時間を入力してください。";
+
+JS_MESSAGE["policy.site.ip"] = "IP形式に合わせて入力してください。";
+JS_MESSAGE["policy.site.service.name"] = "サービス名を入力してください。";
+JS_MESSAGE["policy.site.admin.mobile"] = "管理者の携帯電話番号を入力してください。";
+JS_MESSAGE["policy.site.admin.email"] = "管理者の電子メールを入力してください。";
+
+JS_MESSAGE["policy.product.name"] = "商品名を入力してください。";
+JS_MESSAGE["policy.product.version"] = "製品のバージョンを入力してください。";
+JS_MESSAGE["policy.product.admin"] = "製品会社の担当者を入力してください。";
+
+
 //データ
 JS_MESSAGE["data.key.empty"] =  "キーを入力してください。";
 JS_MESSAGE["data.key.enable"] =  "使用可能なKeyです。";
@@ -79,7 +124,9 @@ JS_MESSAGE["data.key.same"] =  "同じキーです。";
 JS_MESSAGE["data.key.duplication"] =  "使用中のキーです。他のKeyを選択してください。";
 JS_MESSAGE["data.key.duplication_value.check"] =  "キー重複確認をしてください。"
 JS_MESSAGE["data.key.duplication_value.already"] =  "使用中のキーです。他のKeyを選択してください。";
+JS_MESSAGE["data.project.root.duplication"] = "プロジェクトRootが存在します。";
 JS_MESSAGE["data.group.id.empty"] =  "データグループを選択してください。";
+JS_MESSAGE["data.parent.empty"] = "親ノードを選択してください。";
 JS_MESSAGE["data.latitude.empty"] =  "緯度を入力してください。";
 JS_MESSAGE["data.longitude.empty"] =  "経度を入力してください。";
 JS_MESSAGE["data.height.empty"] =  "高さを入力してください。";
@@ -89,6 +136,22 @@ JS_MESSAGE["data.pitch.empty"] =  "ピッチを入力してください。";
 JS_MESSAGE["data.roll.empty"] =  "ロールを入力してください。";
 JS_MESSAGE["data.insert"] =  "データを登録しました。";
 JS_MESSAGE["data.update"] =  "データの情報を修正しました。";
+
+// project
+JS_MESSAGE ["project.insert"] = "プロジェクトを登録しました。";
+JS_MESSAGE ["project.update"] = "プロジェクトを修正しました。";
+JS_MESSAGE ["project.project_id.empty"] = "Project Idを入力してください。";
+JS_MESSAGE ["project.key.empty"] = "Keyを入力してください。";
+JS_MESSAGE ["project.key.enable"] = "使用可能なKeyです。";
+JS_MESSAGE ["project.key.same"] = "同じKeyです。";
+JS_MESSAGE ["project.key.duplication"] = "使用中のKeyです。他のKeyを選択してください。";
+JS_MESSAGE ["project.key.duplication_value.check"] = "Key重複確認をしてください。";
+JS_MESSAGE ["project.key.duplication_value.already"] = "使用中のKeyです。他のKeyを選択してください。";
+JS_MESSAGE ["project.name.empty"] = "プロジェクト名を入力してください。";
+JS_MESSAGE ["project.latitude.empty"] = "緯度を入力してください。";
+JS_MESSAGE ["project.longitude.empty"] = "硬さを入力してください。";
+JS_MESSAGE ["project.height.empty"] = "高さを入力してください。";
+JS_MESSAGE ["project.height.empty"] = "移動時間を入力してください。";
 
 //問題
 JS_MESSAGE["issue.datagroup.empty"] =  "データグループを選択してください。";
@@ -158,3 +221,9 @@ JS_MESSAGE["config.widget.dormancy"] = "休眠";
 JS_MESSAGE["config.widget.expires"] = "期間の満了";
 JS_MESSAGE["config.widget.temporary.password"] = "仮パスワード";
 JS_MESSAGE["config.widget.content.does.not.exit"] = "修正されたコンテンツが存在しません。";
+
+
+
+
+
+	

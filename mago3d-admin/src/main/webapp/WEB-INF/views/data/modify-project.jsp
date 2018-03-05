@@ -30,7 +30,7 @@
 						<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='user.input.check.box'/></div>
 						<div class="tabs">
 							<ul>
-								<li><a href="#project_tab">프로젝트 정보</a></li>
+								<li><a href="#project_tab"><spring:message code='data.project.information'/></a></li>
 							</ul>
 							<div id="project_tab">
 								<form:form id="project" modelAttribute="project" method="post" onsubmit="return false;">
@@ -53,7 +53,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="project_name">프로젝트명</form:label>
+											<form:label path="project_name"><spring:message code='data.project.name'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -63,7 +63,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="view_order">순서</form:label>
+											<form:label path="view_order"><spring:message code='common.order'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="view_order" class="m" />
@@ -72,20 +72,24 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="default_yn">기본값</form:label>
+											<form:label path="default_yn"><spring:message code='common.default.value'/></form:label>
 										</th>
 										<td class="col-input">
-											<form:radiobutton path="default_yn" value="Y" label="기본"/>
-											<form:radiobutton path="default_yn" value="N" label="선택" />
+										<spring:message var='basic' code='common.basic'/>
+										<spring:message var='select' code='common.select'/>
+											<form:radiobutton path="default_yn" value="Y" label="${basic}"/>
+											<form:radiobutton path="default_yn" value="N" label="${select}" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="use_yn">사용유무</form:label>
+											<form:label path="use_yn"><spring:message code='common.status'/></form:label>
 										</th>
 										<td class="col-input">
-											<form:radiobutton path="use_yn" value="Y" label="사용" />
-											<form:radiobutton path="use_yn" value="N" label="사용안함" />
+										<spring:message var='use' code='use'/>
+										<spring:message var='noUse' code='no.use'/>
+											<form:radiobutton path="use_yn" value="Y" label="${use}" />
+											<form:radiobutton path="use_yn" value="N" label="${noUse}" />
 										</td>
 									</tr>
 									<tr>
@@ -120,7 +124,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="duration">이동시간</form:label>
+											<form:label path="duration"><spring:message code='movement.time'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -130,7 +134,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="description">설명</form:label>
+											<form:label path="description"><spring:message code='description'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="description" class="xl" />
@@ -141,7 +145,7 @@
 								
 								<div class="button-group">
 									<div id="insertProjectLink" class="center-buttons">
-										<input type="submit" value="수정" onclick="updateProject();" />
+										<input type="submit" value="<spring:message code='modified'/>" onclick="updateProject();" />
 										<a href="/data/list-project.do" class="button"><spring:message code='list'/></a>
 									</div>
 								</div>

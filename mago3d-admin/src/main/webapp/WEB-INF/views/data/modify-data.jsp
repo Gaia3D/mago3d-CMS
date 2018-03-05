@@ -62,7 +62,7 @@
 											<form:hidden path="parent" />
 											<form:hidden path="parent_depth" />
 				 							<form:input path="parent_name" cssClass="l" readonly="true" />
-											<input type="button" id="parentFind" value="찾기" />
+											<input type="button" id="parentFind" value="<spring:message code='common.search'/>" />
 										</td>
 									</tr>
 									<tr>
@@ -201,15 +201,15 @@
 					<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
 					<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
 					<th scope="col" class="col-toggle"><spring:message code='height'/></th>
-					<th scope="col" class="col-toggle">속성</th>
-					<th scope="col" class="col-toggle">선택</th>
+					<th scope="col" class="col-toggle"><spring:message code='properties'/></th>
+					<th scope="col" class="col-toggle"><spring:message code='select'/></th>
 				</tr>
 			</thead>
 			<tbody id="projectDataList">
 			</tbody>
 		</table>
 		<div class="button-group">
-			<input type="button" id="rootParentSelect" class="button" value="최상위(ROOT) 폴더로 저장"/>
+			<input type="button" id="rootParentSelect" class="button" value="<spring:message code='data.save.folder.root'/>"/>
 		</div>
 	</div>
 
@@ -270,6 +270,7 @@
 							var dataInfo = dataList[i];
 							var viewAttributes = dataInfo.attributes;
 							var viewDepth = getViewDepth(preViewDepth, dataInfo.data_id, preDepth, dataInfo.depth);
+							var select = "<spring:message code='select'/>";
 							if(viewAttributes !== null && viewAttributes !== "" && viewAttributes.length > 20) viewAttributes = viewAttributes.substring(0, 20) + "...";
 							content = content 
 								+ 	"<tr>"
@@ -282,7 +283,7 @@
 								+ 	"	<td class=\"col-toggle\">" + dataInfo.height + "</td>"
 								+ 	"	<td class=\"col-toggle\">" + viewAttributes + "</td>"
 								+ 	"	<td class=\"col-toggle\"><a href=\"#\" onclick=\"confirmParent('" 
-								+ 									dataInfo.data_id + "', '" + dataInfo.data_name + "', '" + dataInfo.depth + "'); return false;\">선택</a></td>"
+								+ 									dataInfo.data_id + "', '" + dataInfo.data_name + "', '" + dataInfo.depth + "'); return false;\">" + select + "</a></td>"
 								+ 	"	</tr>";
 								
 							preDataId = dataInfo.data_id;

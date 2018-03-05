@@ -313,8 +313,16 @@
 		var expireUserTotalCount = parseInt("${expireUserTotalCount}");
 		var tempPasswordUserTotalCount = parseInt("${tempPasswordUserTotalCount}");
 		
+		var used = "<spring:message code='config.widget.use'/>";
+		var disable = "<spring:message code='config.widget.stop.use'/>";
+		var failureCount = "<spring:message code='config.widget.failure.count'/>";
+		var dormancy = "<spring:message code='config.widget.dormancy'/>";
+		var expiration = "<spring:message code='config.widget.expiration'/>";
+		var temporaryPassword = "<spring:message code='config.widget.temporary.password'/>";
+		
+		
 		var userValues = [ activeUserTotalCount, fobidUserTotalCount, failUserTotalCount, sleepUserTotalCount, expireUserTotalCount, tempPasswordUserTotalCount];
-		var ticks = ["사용중", "사용중지", "실패횟수", "휴면", "기간만료", "임시비밀번호"];
+		var ticks = [used, disable, failureCount, dormancy, expiration, temporaryPassword];
 		var yMax = 10;
 		if(activeUserTotalCount > 10 || fobidUserTotalCount > 10 || failUserTotalCount > 10 || sleepUserTotalCount > 10 || expireUserTotalCount > 10 || tempPasswordUserTotalCount > 10) {
 			yMax = Math.max(activeUserTotalCount, fobidUserTotalCount, failUserTotalCount, sleepUserTotalCount, expireUserTotalCount, tempPasswordUserTotalCount) + (activeUserTotalCount * 0.2);

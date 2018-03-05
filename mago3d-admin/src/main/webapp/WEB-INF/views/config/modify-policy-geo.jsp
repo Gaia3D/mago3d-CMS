@@ -28,12 +28,12 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_data_default_projects">시작시 로딩 프로젝트</form:label>
+				<form:label path="geo_data_default_projects"><spring:message code='config.geo.project.loading'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_data_default_projects_view" cssClass="l" />
 				<form:hidden path="geo_data_default_projects" />
-				<input type="button" id="projectFind" value="찾기" />
+				<input type="button" id="projectFind" value="<spring:message code='common.search'/>" />
 			</td>
 		</tr>
   		<tr>
@@ -246,7 +246,7 @@
 </div>
 
 <!-- Dialog -->
-<div id="dataDialog" class="dataDialog" title="프로젝트 목록">
+<div id="dataDialog" class="dataDialog" title="<spring:message code='common.search'/>">
 	<table class="list-table scope-col">
 		<col class="col-number" />
 		<col class="col-name" />
@@ -263,21 +263,21 @@
 			<tr>
 				<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
 				<th scope="col" class="col-name">Key</th>
-				<th scope="col" class="col-name">프로젝트명</th>
-				<th scope="col" class="col-number">순서</th>
-				<th scope="col" class="col-toggle">기본값</th>
-				<th scope="col" class="col-toggle">사용유무</th>
-				<th scope="col" class="col-toggle">위도</th>
-				<th scope="col" class="col-toggle">경도</th>
-				<th scope="col" class="col-toggle">높이</th>
-				<th scope="col" class="col-number">이동시간</th>
-				<th scope="col" class="col-date">등록일</th>
+				<th scope="col" class="col-name"><spring:message code='data.project.name'/></th>
+				<th scope="col" class="col-number"><spring:message code='common.order'/></th>
+				<th scope="col" class="col-toggle"><spring:message code='common.default.value'/></th>
+				<th scope="col" class="col-toggle"><spring:message code='common.status'/></th>
+				<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
+				<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
+				<th scope="col" class="col-toggle"><spring:message code='height'/></th>
+				<th scope="col" class="col-number"><spring:message code='movement.time'/></th>
+				<th scope="col" class="col-date"><spring:message code='data.insert.date'/></th>
 			</tr>
 		</thead>
 		<tbody id="projectList">
 		</tbody>
 	</table>
 	<div class="button-group">
-		<input type="button" id="projectSelect" class="button" value="선택"/>
+		<input type="button" id="projectSelect" class="button" value="<spring:message code='common.select'/>"/>
 	</div>
 </div>

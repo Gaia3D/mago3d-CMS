@@ -28,7 +28,7 @@
 		    				<form:form id="searchForm" modelAttribute="dataInfo" method="post" action="/data/list-data.do" onsubmit="return searchCheck();">
 							<div class="input-group row">
 								<div class="input-set">
-									<label for="project_id">프로젝트명</label>
+									<label for="project_id"><spring:message code='data.project.name'/></label>
 									<form:select path="project_id" cssClass="select">
 										<option value="0"><spring:message code='all'/></option>
 <c:forEach var="project" items="${projectList}">
@@ -153,7 +153,7 @@
 											<th scope="col" class="col-name"><spring:message code='data.control.properties'/></th>
 											<th scope="col" class="col-name"><spring:message code='data.origin.properties'/></th>
 											<th scope="col" class="col-name"><spring:message code='data.object.properties'/></th>
-											<th scope="col" class="col-date"><spring:message code='data.registration.date'/></th>
+											<th scope="col" class="col-date"><spring:message code='data.insert.date'/></th>
 											<th scope="col" class="col-functions"><spring:message code='modified.and.inser'/></th>
 										</tr>
 									</thead>
@@ -178,7 +178,6 @@
 											<td class="col-toggle">${dataInfo.longitude}</td>
 											<td class="col-toggle">${dataInfo.height}</td>
 											<td class="col-toggle">
-											${dataInfo.status}
 		<c:if test="${dataInfo.status eq '0'}">
 												<span class="icon-glyph glyph-on on"></span>
 												<span class="icon-text"><spring:message code='data.status.use'/></span>
@@ -389,6 +388,12 @@
 				type: "POST",
 				dataType: "json",
 				success: function(msg){
+					var totalNumber = "<spring:message code='data.total.number'/>";
+					var successParsing = "<spring:message code='data.success.parsing'/>";
+					var failedParsing = "<spring:message code='data.fail.parsing'/>";
+					var successRegisterDB = "<spring:message code='data.register.success.db'/>";
+					var failedRegisterDB = "<spring:message code='data.register.fail.db'/>";
+					
 					if(msg.result == "success") {
 						if(msg.parse_error_count != 0 || msg.insert_error_count != 0) {
 							$("#file_name").val("");
@@ -401,23 +406,23 @@
 						+ 	"<td colspan=\"2\">&nbsp;</td>"
 						+ "</tr>"
 						+ "<tr>"
-						+ 	"<td> 총건수</td>"
+						+ 	"<td> " + totalNumber + "</td>"
 						+ 	"<td> " + msg.total_count + "</td>"
 						+ "</tr>"
 						+ "<tr>"
-						+ 	"<td> 파싱 성공 건수</td>"
+						+ 	"<td> " + successParsing + "</td>"
 						+ 	"<td> " + msg.parse_success_count + "</td>"
 						+ "</tr>"
 						+ "<tr>"
-						+ 	"<td> 파싱 실패 건수</td>"
+						+ 	"<td> " + failedParsing + "</td>"
 						+ 	"<td> " + msg.parse_error_count + "</td>"
 						+ "</tr>"
 						+ "<tr>"
-						+ 	"<td> DB 등록 성공 건수</td>"
+						+ 	"<td> " + successRegisterDB + "</td>"
 						+ 	"<td> " + msg.insert_success_count + "</td>"
 						+ "</tr>"
 						+ "<tr>"
-						+ 	"<td> DB 등록 실패 건수</td>"
+						+ 	"<td> " +failedRegisterDB + "</td>"
 						+ 	"<td> " + msg.insert_error_count + "</td>"
 						+ "</tr>";
 						$("#dataFileUpload > tbody:last").append(content);

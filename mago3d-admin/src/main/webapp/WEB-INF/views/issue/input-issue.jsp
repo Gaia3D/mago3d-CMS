@@ -34,7 +34,7 @@
 							<col class="col-input" />
 							<tr>
 								<th class="col-label" scope="row">
-									<form:label path="project_id">프로젝트명</form:label>
+									<form:label path="project_id"><spring:message code='data.project.name'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">

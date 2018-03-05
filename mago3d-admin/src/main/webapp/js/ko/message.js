@@ -81,6 +81,42 @@ JS_MESSAGE["policy.backoffice.update"] = "Back Office 정보를 수정 하였습
 JS_MESSAGE["policy.solution.update"] = "제품 정보를 수정 하였습니다.";
 JS_MESSAGE["policy.content.invalid"] = "필수 입력값이 유효하지 않습니다.";
 
+JS_MESSAGE["config.user.id.min.length"] = "사용자 아이디 최소 길이를 입력하여 주십시오.";
+JS_MESSAGE["config.user.id.min.length.rule"] = "사용자 아이디 최소 길이는 4 이상 입니다.";
+JS_MESSAGE["config.user.login.fail"] = "로그인 실패 횟수를 입력하여 주십시오.";
+JS_MESSAGE["config.user.lockout.period"] = "마지막 로그인으로 부터 잠금 기간을 입력하여 주십시오.";
+
+JS_MESSAGE["config.password.period"] = "변경 주기를 입력하여 주십시오.";
+JS_MESSAGE["config.password.min.length"] = "최소 길이를 입력하여 주십시오.";
+JS_MESSAGE["config.password.max.length"] = "최대 길이를 입력하여 주십시오.";
+JS_MESSAGE["config.password.uppercase"] = "영문 대문자 개수를 입력하여 주십시오.";
+JS_MESSAGE["config.password.lowercase"] = "영문 소문자 개수를 입력하여 주십시오.";
+JS_MESSAGE["config.password.number"] = "숫자 개수를 입력하여 주십시오.";
+JS_MESSAGE["config.password.special.letters"] = "특수 문자 개수를 입력하여 주십시오.";
+JS_MESSAGE["config.password.serial.limit"] = "패스워드 연속문자 제한 개수를 입력하여 주십시오.";
+
+JS_MESSAGE["policy.contents.main.display"] = "메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.";
+JS_MESSAGE["policy.contents.widget.interval"] = "메인 화면 위젯 Refresh 간격을 입력하여 주십시오.";
+JS_MESSAGE["policy.statistics_.interval"] = "통계 기본 검색 기간을 선택해 주십시오.";
+JS_MESSAGE["load.balancing.interval"] = "현재 서버가 Active, Standby 인지 상태를 표시하는 주기를 입력하여 주십시오.";
+JS_MESSAGE["policy.contents.menu.group.root"] = "메뉴 그룹 최상위 그룹명을 입력하여 주십시오.";
+JS_MESSAGE["policy.contents.user.group.root"] = "사용자 그룹 최상위 그룹명을 입력하여 주십시오.";
+JS_MESSAGE["policy.contents.main.display"] = "메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.";
+JS_MESSAGE["policy.contents.main.display"] = "메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.";
+JS_MESSAGE["policy.contents.main.display"] = "메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.";
+
+JS_MESSAGE["policy.os.time"] = "시간을 입력해 주세요";
+
+JS_MESSAGE["policy.site.ip"] = "IP 형식에 맞게 입력해 주십시오.";
+JS_MESSAGE["policy.site.service.name"] = "서비스명을 입력해 주십시오.";
+JS_MESSAGE["policy.site.admin.mobile"] = "관리자 핸드폰 번호를 입력해 주십시오.";
+JS_MESSAGE["policy.site.admin.email"] = "관리자 이메일을 입력해 주십시오.";
+
+JS_MESSAGE["policy.product.name"] = "제품명을 입력해 주십시오.";
+JS_MESSAGE["policy.product.version"]  = "제품 버전을 입력해 주십시오.";
+JS_MESSAGE["policy.product.admin"] = "제품 회사 담당자를 입력해 주십시오.";
+
+
 // 데이터
 JS_MESSAGE["data.key.empty"] = "Key를 입력하여 주십시오.";
 JS_MESSAGE["data.key.enable"] = "사용 가능한 Key 입니다.";
@@ -89,7 +125,7 @@ JS_MESSAGE["data.key.duplication"] = "사용중인 Key 입니다. 다른 Key를 
 JS_MESSAGE["data.key.duplication_value.check"] = "Key 중복확인을 해주십시오."
 JS_MESSAGE["data.key.duplication_value.already"] = "사용중인 Key 입니다. 다른 Key를 선택해 주십시오.";
 JS_MESSAGE["data.project.root.duplication"] = "프로젝트 Root가 존재합니다.";
-JS_MESSAGE["data.project.id.empty"] = "프로젝트를 선택하여 주십시오.";
+JS_MESSAGE["data.group.id.empty"] = "데이터 그룹을 선택하십시오.";
 JS_MESSAGE["data.parent.empty"] = "상위 노드를 선택하여 주십시오.";
 JS_MESSAGE["data.latitude.empty"] = "위도를 입력하여 주십시오.";
 JS_MESSAGE["data.longitude.empty"] = "경도를  입력하여 주십시오.";

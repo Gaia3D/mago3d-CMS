@@ -61,7 +61,7 @@
 					<li>
 						<a href="#">
 							<span class="icon-glyph glyph-qmark-circle"></span>
-							<span class="icon-text">도움말</span>
+							<span class="icon-text"><spring:message code='common.help'/></span>
 						</a>
 					</li>
 					<li>
@@ -71,14 +71,14 @@
 %>
 						<a href="/login/logout.do">
 							<span class="icon-glyph glyph-out"></span>
-							<span class="icon-text">로그아웃</span>
+							<span class="icon-text"><spring:message code='common.logout'/></span>
 						</a>
 <%
 	} else {
 %>
 						<a href="/login/login.do">
 							<span class="icon-glyph glyph-on"></span>
-							<span class="icon-text">로그인</span>
+							<span class="icon-text"><spring:message code='common.login'/>로그인</span>
 						</a>
 <%
 	}

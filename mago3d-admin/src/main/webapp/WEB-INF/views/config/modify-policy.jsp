@@ -124,7 +124,7 @@
 	function updatePolicyOs() {
 		var os_ntp = $("#os_ntp option:selected").val();
 		if (os_ntp== "" && ($("#os_ntp_hour").val() == "" || $("#os_ntp_minute").val() == "")) {
-			alert("시간을 입력해 주세요");
+			alert(JS_MESSAGE["policy.os.time"]);
 			return;
 		}
 		
@@ -161,7 +161,7 @@
 	function updatePolicyUser() {
 		if(updateUserFlag) {
 			if($("#user_id_min_length").val() == "") {
-				alert("사용자 아이디 최소 길이를 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.user.id.min.length"]);
 				$("#user_id_min_length").focus();
 				return;
 			}
@@ -170,12 +170,12 @@
 				return;
 			}
 			if(parseInt($("#user_id_min_length").val()) < 4) {
-				alert("사용자 아이디 최소 길이는 4 이상 입니다.");
+				alert(JS_MESSAGE["policy.user.id.min.length.rule"]);
 				$("#user_id_min_length").focus();
 				return;
 			}
 			if($("#user_fail_login_count").val() == "") {
-				alert("로그인 실패 횟수를 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.user.login.fail"]);
 				$("#user_fail_login_count").focus();
 				return;
 			}
@@ -193,7 +193,7 @@
 				return;
 			} */
 			if($("#user_last_login_lock").val() == "") {
-				alert("마지막 로그인으로 부터 잠금 기간을 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.user.lockout.period"]);
 				$("#user_last_login_lock").focus();
 				return;
 			}
@@ -234,7 +234,7 @@
 	function updatePolicyPassword() {
 		if(updatePasswordFlag) {
 			if($("#password_change_term").val() == "") {
-				alert("변경 주기를 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.password.period"]);
 				$("#password_change_term").focus();
 				return;
 			}
@@ -243,7 +243,7 @@
 				return;
 			}
 			if($("#password_min_length").val() == "") {
-				alert("최소 길이를 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.password.min.length"]);
 				$("#password_min_length").focus();
 				return;
 			}
@@ -252,7 +252,7 @@
 				return;
 			}
 			if($("#password_max_length").val() == "") {
-				alert("최대 길이를 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.password.max.length"]);
 				$("#password_max_length").focus();
 				return;
 			}
@@ -261,7 +261,7 @@
 				return;
 			}
 			if($("#password_eng_upper_count").val() == "") {
-				alert("영문 대문자 개수를 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.password.uppercase"]);
 				$("#password_eng_upper_count").focus();
 				return;
 			}
@@ -270,7 +270,7 @@
 				return;
 			}
 			if($("#password_eng_lower_count").val() == "") {
-				alert("영문 소문자 개수를 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.password.lowercase"]);
 				$("#password_eng_lower_count").focus();
 				return;
 			}
@@ -279,7 +279,7 @@
 				return;
 			}
 			if($("#password_number_count").val() == "") {
-				alert("숫자 개수를 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.password.number"]);
 				$("#password_number_count").focus();
 				return;
 			}
@@ -288,7 +288,7 @@
 				return;
 			}
 			if($("#password_special_char_count").val() == "") {
-				alert("특수 문자 개수를 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.password.special.letters"]);
 				$("#password_special_char_count").focus();
 				return;
 			}
@@ -297,7 +297,7 @@
 				return;
 			}
 			if($("#password_continuous_char_count").val() == "") {
-				alert("패스워드 연속문자 제한 개수를 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.password.serial.limit"]);
 				$("#password_continuous_char_count").focus();
 				return;
 			}
@@ -646,7 +646,7 @@
 				return;
 			}
 			if($("#content_main_widget_count").val() == "") {
-				alert("메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.contents.main.display"]);
 				$("#content_main_widget_count").focus();
 				return;
 			}
@@ -655,7 +655,7 @@
 				return;
 			}
 			if($("#content_main_widget_interval").val() == "") {
-				alert("메인 화면 위젯 Refresh 간격을 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.contents.widget.interval"]);
 				$("#content_main_widget_interval").focus();
 				return;
 			}
@@ -663,14 +663,13 @@
 				$("#content_main_widget_interval").focus();
 				return;
 			}
-			
 			if($("#content_statistics_interval").val() == "") {
-				alert("통계 기본 검색 기간을 선택해 주십시오.");
+				alert(JS_MESSAGE["policy.statistics_.interval"]);
 				$("#content_statistics_interval").focus();
 				return;
 			}
 			if($("#content_load_balancing_interval").val() == "") {
-				alert("현재 서버가 Active, Standby 인지 상태를 표시하는 주기를 입력하여 주십시오.");
+				alert(JS_MESSAGE["load.balancing.interval"]);
 				$("#content_load_balancing_interval").focus();
 				return;
 			}
@@ -679,12 +678,12 @@
 				return;
 			}
 			if($("#content_menu_group_root").val() == "") {
-				alert("메뉴 그룹 최상위 그룹명을 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.contents.menu.group.root"]);
 				$("#content_menu_group_root").focus();
 				return;
 			}
 			if($("#content_user_group_root").val() == "") {
-				alert("사용자 그룹 최상위 그룹명을 입력하여 주십시오.");
+				alert(JS_MESSAGE["policy.contents.user.group.root"]);
 				$("#content_user_group_root").focus();
 				return;
 			}
@@ -752,23 +751,23 @@
 	function updatePolicySite() {
 		if(updateSiteFlag) {
 			if(!isIP($("#server_ip").val())) {
-				alert("IP 형식에 맞게 입력해 주십시오.");
+				alert(JS_MESSAGE["policy.site.ip"]);
 				$("#server_ip").focus();
 				return false;
 			}
 			
 			if($("#site_name").val() == "") {
-				alert("서비스명을 입력해 주십시오.");
+				alert(JS_MESSAGE["policy.site.service.name"]);
 				$("#site_name").focus();
 				return;
 			}
 			if($("#site_admin_mobile_phone").val() == "") {
-				alert("관리자 핸드폰 번호를 입력해 주십시오.");
+				alert(JS_MESSAGE["policy.site.admin.mobile"]);
 				$("#site_admin_mobile_phone").focus();
 				return;
 			}
 			if($("#site_admin_email").val() == "") {
-				alert("관리자 이메일을 입력해 주십시오.");
+				alert(JS_MESSAGE["policy.site.admin.email"]);
 				$("#site_admin_email").focus();
 				return;
 			}
@@ -810,17 +809,17 @@
 	function updatePolicySolution() {
 		if(updateSolutionFlag) {
 			if($("#solution_name").val() == "") {
-				alert("제품명을 입력해 주십시오.");
+				alert(JS_MESSAGE["policy.product.name"]);
 				$("#solution_name").focus();
 				return;
 			}
 			if($("#solution_version").val() == "") {
-				alert("제품 버전을 입력해 주십시오.");
+				alert(JS_MESSAGE["policy.product.version"]);
 				$("#solution_version").focus();
 				return;
 			}
 			if($("#solution_manager").val() == "") {
-				alert("제품 회사 담당자를 입력해 주십시오.");
+				alert(JS_MESSAGE["policy.product.admin"]);
 				$("#solution_manager").focus();
 				return;
 			}

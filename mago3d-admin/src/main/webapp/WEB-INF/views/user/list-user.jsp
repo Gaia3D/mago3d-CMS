@@ -180,11 +180,13 @@
 											<td class="col-toggle">
 		<c:if test="${userInfo.status eq '0'}">
 												<span class="icon-glyph glyph-on on"></span>
+												<span class="icon-text"><spring:message code='user.status.use'/></span>
 		</c:if>
 		<c:if test="${userInfo.status ne '0'}">
 												<span class="icon-glyph glyph-off off"></span>
+												<span class="icon-text"><spring:message code='user.status.unused.'/></span>
 		</c:if>
-												<span class="icon-text">${userInfo.viewStatus }</span>
+
 											</td>
 											<td class="col-toggle">${userInfo.viewUserInsertType }</td>
 											<%-- <td class="col-tel">${userInfo.viewMaskingMobilePhone }</td> --%>
@@ -227,7 +229,7 @@
 	</div>
 	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 	
-	<div class="dialog" title="사용자 그룹 정보">
+	<div class="dialog" title="<spring:message code='user.group.user.information'/>">
 		<table class="inner-table scope-row">
 			<col class="col-label" />
 			<col class="col-data" />
@@ -250,7 +252,7 @@
 		</table>
 	</div>
 	<%-- 일괄등록(Excel) --%>
-	<div class="dialog_excel" title="사용자 일괄 등록">
+	<div class="dialog_excel" title="<spring:message code='user.group.user.insert.all'/>">
 		<form id="fileInfo" name="fileInfo" action="/user/ajax-insert-excel-user.do" method="post" enctype="multipart/form-data">
 			<table id="excelUserUpload" class="inner-table scope-row">
 				<col class="col-sub-label xl" />
@@ -267,7 +269,7 @@
 				</tbody>
 			</table>
 			<div class="button-group">
-				<input type="button" onclick="fileUpload();" class="button" value="파일저장" />
+				<input type="button" onclick="fileUpload();" class="button" value="<spring:message code='user.group.file.save'/>" />
 			</div>
 		</form>
 	</div>

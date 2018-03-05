@@ -8,7 +8,7 @@
 				<tbody>
 					<tr>
 						<th class="col-sub-label">
-							<label for="project_id">프로젝트명</label>
+							<label for="project_id"><spring:message code='data.project.name'/></label>
 						</th>
 						<td>
 							<select id="project_id" name="project_id" class="select">

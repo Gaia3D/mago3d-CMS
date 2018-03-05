@@ -77,7 +77,17 @@
 										<td class="col-name">${commonCode.code_name}</td>
 										<%-- <td class="col-name">${commonCode.code_name_en}</td> --%>
 										<td class="col-name">${commonCode.code_value}</td>
-										<td class="col-toggle">${commonCode.viewUseYn}</td>
+										
+										<td class="col-toggle">
+		<c:if test="${commonCode.use_yn eq 'Y'}">
+										<spring:message code='use'/>
+		</c:if>
+		<c:if test="${commonCode.use_yn eq 'N'}">
+										<spring:message code='no.use'/>
+		</c:if>
+										
+										</td>
+										
 										<td class="col-toggle">${commonCode.view_order}</td>
 										<td class="col-name">${commonCode.css_class}</td>
 										<td class="col-name">${commonCode.image}</td>

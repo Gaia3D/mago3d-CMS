@@ -116,8 +116,28 @@
 											<td class="col-number">${roleListSize - status.index }</td>
 											<td class="col-name"><a href="/role/detail-role.do?role_id=${role.role_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}">${role.role_name }</a></td>
 											<td class="col-key">${role.role_key }</td>
-											<td class="col-type">${role.viewRoleType }</td>
-											<td class="col-toggle">${role.viewUseYn }</td>
+											
+											<td class="col-type">
+		<c:if test="${role.role_type eq '0' }">								
+											<spring:message code='role.user'/>
+		</c:if>
+		<c:if test="${role.role_type eq '1' }">								
+											<spring:message code='role.server'/>
+		</c:if>
+		<c:if test="${role.role_type eq '2' }">								
+											<spring:message code='role.account'/>
+		</c:if>
+											</td>
+							
+											<td class="col-toggle">
+		<c:if test="${role.use_yn eq 'Y' }">
+											<spring:message code='use'/>
+		</c:if>
+		<c:if test="${role.use_yn eq 'N' }">
+											<spring:message code='no.use'/>
+		</c:if>
+											</td>
+											
 											<td class="col-desc">${role.description }</td>
 											<td class="col-date-time">${role.viewInsertDate }</td>
 											<td class="col-functions">

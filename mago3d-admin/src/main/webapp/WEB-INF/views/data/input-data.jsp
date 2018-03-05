@@ -39,7 +39,7 @@
 									<col class="col-input" />
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="project_id">프로젝트명</form:label>
+											<form:label path="project_id"><spring:message code='data.project.name'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -52,14 +52,14 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="parent">상위 Node</form:label>
+											<form:label path="parent"><spring:message code='data.project.name'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
 											<form:hidden path="parent" />
 											<form:hidden path="parent_depth" />
 				 							<form:input path="parent_name" cssClass="l" readonly="true" />
-											<input type="button" id="parentFind" value="찾기" />
+											<input type="button" id="parentFind" value="<spring:message code='common.search'/>" />
 										</td>
 									</tr>
 									<tr>
@@ -140,7 +140,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="attributes">속성</form:label>
+											<form:label path="attributes"><spring:message code='properties'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -150,7 +150,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="description">설명</form:label>
+											<form:label path="description"><spring:message code='description'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="description" class="xl" />
@@ -197,8 +197,8 @@
 					<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
 					<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
 					<th scope="col" class="col-toggle"><spring:message code='height'/></th>
-					<th scope="col" class="col-toggle">속성</th>
-					<th scope="col" class="col-toggle">선택</th>
+					<th scope="col" class="col-toggle"><spring:message code='properties'/></th>
+					<th scope="col" class="col-toggle"><spring:message code='select'/></th>
 				</tr>
 			</thead>
 			<tbody id="projectDataList">
@@ -251,16 +251,18 @@
 				if(msg.result == "success") {
 					var content = "";
 					var dataList = msg.dataList;
+					var projectDataNone = "<spring:message code='data.none'/>";
 					if(dataList == null || dataList.length == 0) {
 						content = content
 							+ 	"<tr>"
-							+ 	"	<td colspan=\"9\" class=\"col-none\">데이터가 존재하지 않습니다.</td>"
+							+ 	"	<td colspan=\"9\" class=\"col-none\">" + projectDataNone + "</td>"
 							+ 	"</tr>";
 					} else {
 						dataListCount = dataList.length;
 						var preViewDepth = "";
 						var preDataId = 0;
 						var preDepth = 0;
+						var select = "<spring:message code='select'/>";
 						for(i=0; i<dataListCount; i++ ) {
 							var dataInfo = dataList[i];
 							var viewAttributes = dataInfo.attributes;
@@ -277,8 +279,8 @@
 								+ 	"	<td class=\"col-toggle\">" + dataInfo.height + "</td>"
 								+ 	"	<td class=\"col-toggle\">" + viewAttributes + "</td>"
 								+ 	"	<td class=\"col-toggle\"><a href=\"#\" onclick=\"confirmParent('" 
-								+ 									dataInfo.data_id + "', '" + dataInfo.data_name + "', '" + dataInfo.depth + "'); return false;\">선택</a></td>"
-								+ 	"	</tr>";
+								+ 									dataInfo.data_id + "', '" + dataInfo.data_name + "', '" + dataInfo.depth + "'); return false;\">" + select + "</a></td>"
+								+ 	"</tr>";
 								
 							preDataId = dataInfo.data_id;
 							preDepth = dataInfo.depth;
