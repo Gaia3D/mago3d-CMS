@@ -52,9 +52,7 @@
 										<th scope="col" class="col-name"><spring:message code='code.name'/></th>
 										<!-- <th scope="col" class="col-name">코드명(영어)</th> -->
 										<th scope="col" class="col-name"><spring:message code='code.result'/></th>
-										
 										<th scope="col" class="col-toggle"><spring:message code='code.use.not'/></th>
-										
 										<th scope="col" class="col-number"><spring:message code='code.order'/></th>
 										<th scope="col" class="col-name">Css</th>
 										<th scope="col" class="col-name">Image</th>
@@ -79,7 +77,17 @@
 										<td class="col-name">${commonCode.code_name}</td>
 										<%-- <td class="col-name">${commonCode.code_name_en}</td> --%>
 										<td class="col-name">${commonCode.code_value}</td>
-										<td class="col-toggle">${commonCode.viewUseYn}</td>
+										
+										<td class="col-toggle">
+		<c:if test="${commonCode.use_yn eq 'Y'}">
+										<spring:message code='use'/>
+		</c:if>
+		<c:if test="${commonCode.use_yn eq 'N'}">
+										<spring:message code='no.use'/>
+		</c:if>
+										
+										</td>
+										
 										<td class="col-toggle">${commonCode.view_order}</td>
 										<td class="col-name">${commonCode.css_class}</td>
 										<td class="col-name">${commonCode.image}</td>

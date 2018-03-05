@@ -97,10 +97,8 @@
 											<th scope="col" class="col-number"><spring:message code='role.number'/></th>
 											<th scope="col" class="col-name"><spring:message code='role.name'/></th>
 											<th scope="col" class="col-key">Role Key</th>
-											
 											<th scope="col" class="col-type"><spring:message code='role.type'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='role.use.not'/></th>
-											
 											<th scope="col" class="col-desc"><spring:message code='description'/></th>
 											<th scope="col" class="col-date-time"><spring:message code='role.insert.date'/></th>
 											<th scope="col" class="col-functions"><spring:message code='role.modify.or.delete'/></th>
@@ -118,8 +116,28 @@
 											<td class="col-number">${roleListSize - status.index }</td>
 											<td class="col-name"><a href="/role/detail-role.do?role_id=${role.role_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}">${role.role_name }</a></td>
 											<td class="col-key">${role.role_key }</td>
-											<td class="col-type">${role.viewRoleType }</td>
-											<td class="col-toggle">${role.viewUseYn }</td>
+											
+											<td class="col-type">
+		<c:if test="${role.role_type eq '0' }">								
+											<spring:message code='role.user'/>
+		</c:if>
+		<c:if test="${role.role_type eq '1' }">								
+											<spring:message code='role.server'/>
+		</c:if>
+		<c:if test="${role.role_type eq '2' }">								
+											<spring:message code='role.account'/>
+		</c:if>
+											</td>
+							
+											<td class="col-toggle">
+		<c:if test="${role.use_yn eq 'Y' }">
+											<spring:message code='use'/>
+		</c:if>
+		<c:if test="${role.use_yn eq 'N' }">
+											<spring:message code='no.use'/>
+		</c:if>
+											</td>
+											
 											<td class="col-desc">${role.description }</td>
 											<td class="col-date-time">${role.viewInsertDate }</td>
 											<td class="col-functions">
