@@ -196,9 +196,29 @@
 														<th scope="col" class="col-id"><spring:message code='user.group.id'/></th>
 														<th scope="col" class="col-name"><spring:message code='user.group.name'/></th>
 														<th scope="col" class="col-email"><spring:message code='user.group.email'/></th>
+														<th scope="col" class="col-toggle">
 				<c:if test="${userInfo.status eq '0'}">
-														<th scope="col" class="col-toggle"><spring:message code='user.group.user.status'/></th>
+														<spring:message code='user.group.user.status'/>
 				</c:if>
+				<c:if test="${userInfo.status eq '1'}">
+														<spring:message code='user.group.stop.use'/>
+				</c:if>
+				<c:if test="${userInfo.status eq '2'}">
+														<spring:message code='user.group.lock.password'/>
+				</c:if>
+				<c:if test="${userInfo.status eq '3'}">
+														<spring:message code='user.group.dormancy'/>
+				</c:if>
+				<c:if test="${userInfo.status eq '4'}">
+														<spring:message code='user.group.expires'/>
+				</c:if>
+				<c:if test="${userInfo.status eq '5'}">
+														<spring:message code='user.group.delete'/>
+				</c:if>
+				<c:if test="${userInfo.status eq '6'}">
+														<spring:message code='user.group.temporary.password'/>
+				</c:if>
+														</th>
 														
 														<th scope="col" class="col-date-time"><spring:message code='user.group.insert.date'/></th>
 													</tr>
