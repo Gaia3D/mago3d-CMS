@@ -94,8 +94,8 @@
 											<td class="col-toggle">${project.longitude}</td>
 											<td class="col-toggle">${project.height}</td>
 											<td class="col-toggle">${project.duration}</td>
-											<td class="col-functions"><a href="#" onclick="viewDataList('${project.project_id}', '${project.project_name}'); return false;">보기</a></td>
-											<td class="col-functions"><a href="/data/modify-project.do?project_id=${project.project_id}">보기</a></td>
+											<td class="col-functions"><a href="#" onclick="viewDataList('${project.project_id}', '${project.project_name}'); return false;"><spring:message code='common.view'/></a></td>
+											<td class="col-functions"><a href="/data/modify-project.do?project_id=${project.project_id}"><spring:message code='common.view'/></a></td>
 											<td class="col-date">${project.viewInsertDate }</td>
 											
 											<td class="col-functions">
@@ -137,7 +137,7 @@
 					<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
 					<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
 					<th scope="col" class="col-toggle"><spring:message code='height'/></th>
-					<th scope="col" class="col-toggle">속성</th>
+					<th scope="col" class="col-toggle"><spring:message code='data.properties.property'/></th>
 				</tr>
 			</thead>
 			<tbody id="projectDataList">
@@ -181,10 +181,11 @@
 				if(msg.result == "success") {
 					var content = "";
 					var dataList = msg.dataList;
+					var projectDataNone = "<spring:message code='data.none'/>";
 					if(dataList == null || dataList.length == 0) {
 						content = content
 							+ 	"<tr>"
-							+ 	"	<td colspan=\"8\" class=\"col-none\">데이터가 존재하지 않습니다.</td>"
+							+ 	"<td colspan=\"8\" class=\"col-none\">" + projectDataNone +	"</td>"
 							+ 	"</tr>";
 					} else {
 						dataListCount = dataList.length;

@@ -4531,7 +4531,7 @@ myTree.removeTree(obj.index, obj.item);
 		if (nowChildIndex < 1) {
 			//이동불가
 			//toast.push("순서의 처음입니다.");
-			alert("순서의 처음입니다.");
+			alert("順序の最初です。");
 			return "-1";
 		} else {
 			return "1";
@@ -4620,7 +4620,7 @@ myTree.removeTree(obj.index, obj.item);
 		if (nowChildIndex > subTreeLength - 2) {
 			//이동불가
 			//toast.push("순서의 마지막입니다.");
-			alert("순서의 마지막입니다.");
+			alert("順序の最後です。");
 			return "-1";
 		} else {
 			return "1";
@@ -5140,7 +5140,7 @@ trace(SL);
 		if (this.selectedRow != undefined && this.selectedRow != null && this.selectedRow.length > 0) {
 			return { index: this.selectedRow.first(), item: this.list[this.selectedRow.first()] };
 		} else {
-			return { error: "noselected", description: "선택된 item이 없습니다." };
+			return { error: "noselected", description: "アイテムはありません。" };
 		}
 	},
 /**

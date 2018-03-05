@@ -196,7 +196,10 @@
 														<th scope="col" class="col-id"><spring:message code='user.group.id'/></th>
 														<th scope="col" class="col-name"><spring:message code='user.group.name'/></th>
 														<th scope="col" class="col-email"><spring:message code='user.group.email'/></th>
+				<c:if test="${userInfo.status eq '0'}">
 														<th scope="col" class="col-toggle"><spring:message code='user.group.user.status'/></th>
+				</c:if>
+														
 														<th scope="col" class="col-date-time"><spring:message code='user.group.insert.date'/></th>
 													</tr>
 												</thead>

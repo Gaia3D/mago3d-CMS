@@ -103,7 +103,7 @@
 										<th scope="col" class="col-number"><spring:message code='number'/></th>
 										<th scope="col" class="col-id"><spring:message code='id'/></th>
 										<th scope="col" class="col-name"><spring:message code='name'/></th>
-										<th scope="col" class="col-toggle">프로젝트명</th>
+										<th scope="col" class="col-toggle"><spring:message code='data.project.name'/></th>
 										<th scope="col" class="col-title"><spring:message code='title'/></th>
 										<th scope="col" class="col-toggle"><spring:message code='user.device.priority'/></th>
 										<th scope="col" class="col-toggle"><spring:message code='type'/></th>
@@ -178,7 +178,7 @@
 	});
 	
 	function deleteWarning() {
-		if(confirm("삭제 하시겠습니까?")) {
+		if(confirm(JS_MESSAGE["delete.confirm"])) {
 			return true;
 		} else {
 			return false;

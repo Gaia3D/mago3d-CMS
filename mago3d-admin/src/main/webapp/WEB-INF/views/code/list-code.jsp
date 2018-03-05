@@ -52,7 +52,9 @@
 										<th scope="col" class="col-name"><spring:message code='code.name'/></th>
 										<!-- <th scope="col" class="col-name">코드명(영어)</th> -->
 										<th scope="col" class="col-name"><spring:message code='code.result'/></th>
+										
 										<th scope="col" class="col-toggle"><spring:message code='code.use.not'/></th>
+										
 										<th scope="col" class="col-number"><spring:message code='code.order'/></th>
 										<th scope="col" class="col-name">Css</th>
 										<th scope="col" class="col-name">Image</th>

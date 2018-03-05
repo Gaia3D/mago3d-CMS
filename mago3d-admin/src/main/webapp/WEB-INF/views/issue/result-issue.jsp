@@ -34,7 +34,7 @@
 					<table class="input-table scope-row">
 
 							<tr>
-								<th class="col-label" scope="row"><spring:message code='issue.project_name'/></th>
+								<th class="col-label" scope="row"><spring:message code='data.project.name'/></th>
 					 			<td>${issue.project_name}</td>
 							</tr>
 							<tr>

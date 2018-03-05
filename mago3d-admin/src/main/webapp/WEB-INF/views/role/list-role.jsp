@@ -97,8 +97,10 @@
 											<th scope="col" class="col-number"><spring:message code='role.number'/></th>
 											<th scope="col" class="col-name"><spring:message code='role.name'/></th>
 											<th scope="col" class="col-key">Role Key</th>
+											
 											<th scope="col" class="col-type"><spring:message code='role.type'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='role.use.not'/></th>
+											
 											<th scope="col" class="col-desc"><spring:message code='description'/></th>
 											<th scope="col" class="col-date-time"><spring:message code='role.insert.date'/></th>
 											<th scope="col" class="col-functions"><spring:message code='role.modify.or.delete'/></th>

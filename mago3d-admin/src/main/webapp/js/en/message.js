@@ -16,6 +16,15 @@ JS_MESSAGE["check.id.duplication"] = "Please check duplicate ID.";
 JS_MESSAGE["use.id.other.id.select"] = "This is the ID you are using. Please choose a different one.";
 JS_MESSAGE["total.count"] = "C:";
 JS_MESSAGE["total.few"] = "few";
+JS_MESSAGE ["user"] = "User";
+JS_MESSAGE ["server"] = "server";
+JS_MESSAGE ["account"] = "Account";
+JS_MESSAGE ["use"] = "use";
+JS_MESSAGE ["not.use"] = "Not used";
+
+JS_MESSAGE ["file.name.empty"] = "Please enter a filename.";
+JS_MESSAGE ["file.ext.invalid"] = "The file extension is invalid.";
+JS_MESSAGE ["fileinfo.size.invalid"] = "The uploadable file size has been exceeded.";
 
 // common
 JS_MESSAGE["user.session.empty"]= "Available after login";
@@ -55,6 +64,7 @@ JS_MESSAGE["user.insert"]= "You have registered users";
 JS_MESSAGE["user.info.update"]= "User information has been modified.";
 JS_MESSAGE["user.id.notexist"]= "Username does not exist";
 
+
 //Operational policy
 JS_MESSAGE["policy.server.datetime"]= "Server time has been reset."
 JS_MESSAGE["policy.user.update"]= "You have modified your user policy.";
@@ -71,6 +81,42 @@ JS_MESSAGE["policy.backoffice.update"]= "Back Office information has been modifi
 JS_MESSAGE["policy.solution.update"]= "Product information has been modified.";
 JS_MESSAGE["policy.content.invalid"]= "The required input value is invalid.";
 
+JS_MESSAGE ["config.user.id.min.length"] = "Please enter the minimum length of the user ID.";
+JS_MESSAGE ["config.user.id.min.length.rule"] = "User ID minimum length is at least 4";
+JS_MESSAGE ["config.user.login.fail"] = "Please enter the number of login failures.";
+JS_MESSAGE ["config.user.lockout.period"] = "Please enter the lockout period from the last login.";
+
+JS_MESSAGE ["config.password.period"] = "Please enter a change interval.";
+JS_MESSAGE ["config.password.min.length"] = "Please enter the minimum length.";
+JS_MESSAGE ["config.password.max.length"] = "Please enter the maximum length.";
+JS_MESSAGE ["config.password.uppercase"] = "Please enter the number of uppercase letters in English.";
+JS_MESSAGE ["config.password.lowercase"] = "Please enter lower case letters.";
+JS_MESSAGE ["config.password.number"] = "Please enter the number of digits.";
+JS_MESSAGE ["config.password.special.letters"] = "Please enter the number of special characters.";
+JS_MESSAGE ["config.password.serial.limit"] = "Please enter the password consecutive character limit number.";
+
+JS_MESSAGE ["policy.contents.main.display"] = "Please enter the main screen content number.";
+JS_MESSAGE ["policy.contents.widget.interval"] = "Please enter the main screen widget refresh interval.";
+JS_MESSAGE ["policy.statistics_.interval"] = "Please select a statistical default search period.";
+JS_MESSAGE ["load.balancing.interval"] = "Please enter a period to indicate whether the current server is Active or Standby.";
+JS_MESSAGE ["policy.contents.menu.group.root"] = "Please enter the top group name of the menu group.";
+JS_MESSAGE ["policy.contents.user.group.root"] = "Please enter the user group top group name.";
+JS_MESSAGE ["policy.contents.main.display"] = "Please enter the main screen content number.";
+JS_MESSAGE ["policy.contents.main.display"] = "Please enter the main screen content number.";
+JS_MESSAGE ["policy.contents.main.display"] = "Please enter the main screen content number.";
+
+JS_MESSAGE ["policy.os.time"] = "Please enter your time";
+
+JS_MESSAGE ["policy.site.ip"] = "Please enter the IP format.";
+JS_MESSAGE ["policy.site.service.name"] = "Please enter a service name.";
+JS_MESSAGE ["policy.site.admin.mobile"] = "Please enter your administrator mobile phone number.";
+JS_MESSAGE ["policy.site.admin.email"] = "Please enter your administrator email.";
+
+JS_MESSAGE ["policy.product.name"] = "Please enter the product name.";
+JS_MESSAGE ["policy.product.version"] = "Please enter the product version.";
+JS_MESSAGE ["policy.product.admin"] = "Please enter the product company contact.";
+
+
 // data
 JS_MESSAGE["data.key.empty"]= "Please enter Key.";
 JS_MESSAGE["data.key.enable"]= "Key is available.";
@@ -78,7 +124,9 @@ JS_MESSAGE["data.key.same"]= "This is the same Key.";
 JS_MESSAGE["data.key.duplication"]= "Key in use, please choose another key";
 JS_MESSAGE["data.key.duplication_value.check"]= "Please check the duplicate key."
 JS_MESSAGE["data.key.duplication_value.already"]= "Key in use, please choose another key";
+JS_MESSAGE ["data.project.root.duplication"] = "Project root exists";
 JS_MESSAGE["data.group.id.empty"]= "Please select a data group";
+JS_MESSAGE ["data.parent.empty"] = "Please select a parent node.";
 JS_MESSAGE["data.latitude.empty"]= "Please enter latitude.";
 JS_MESSAGE["data.longitude.empty"]= "Please enter longitude.";
 JS_MESSAGE["data.height.empty"]= "Please enter the height.";
@@ -88,6 +136,22 @@ JS_MESSAGE["data.pitch.empty"]= "Please enter the pitch";
 JS_MESSAGE["data.roll.empty"]= "Please enter a roll.";
 JS_MESSAGE["data.insert"]= "Data is registered.";
 JS_MESSAGE["data.update"]= "Data information has been modified";
+
+// project
+JS_MESSAGE ["project.insert"] = "Registered project";
+JS_MESSAGE ["project.update"] = "You have modified your project";
+JS_MESSAGE ["project.project_id.empty"] = "Please enter the Project Id.";
+JS_MESSAGE ["project.key.empty"] = "Please enter Key.";
+JS_MESSAGE ["project.key.enable"] = "Key is available.";
+JS_MESSAGE ["project.key.same"] = "This is the same Key.";
+JS_MESSAGE ["project.key.duplication"] = "Key being used, please choose another key";
+JS_MESSAGE ["project.key.duplication_value.check"] = "Please check for duplicate keys."
+JS_MESSAGE ["project.key.duplication_value.already"] = "Key in use, please choose another key";
+JS_MESSAGE ["project.name.empty"] = "Please enter the project name";
+JS_MESSAGE ["project.latitude.empty"] = "Please enter your latitude.";
+JS_MESSAGE ["project.longitude.empty"] = "Please enter longitude.";
+JS_MESSAGE ["project.height.empty"] = "Please enter a height.";
+JS_MESSAGE ["project.height.empty"] = "Please enter the movement time.";
 
 // issue
 JS_MESSAGE["issue.datagroup.empty"]= "Please select a data group.";

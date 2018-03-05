@@ -8,7 +8,7 @@
 				<col class="col-data" />
 				<tbody>
 					<tr>
-						<th class="col-sub-label">데이터명</th>
+						<th class="col-sub-label"><spring:message code='data.name'/></th>
 						<td id="attributeDataName"></td>
 					</tr>
 					

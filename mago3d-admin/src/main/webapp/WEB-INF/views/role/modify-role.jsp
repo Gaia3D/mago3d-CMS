@@ -62,7 +62,7 @@
 								</td>
 							</tr>
 							<tr>
-								<th class="col-label l" scope="row"><form:label path="business_type">업무 유형</form:label></th>
+								<th class="col-label l" scope="row"><form:label path="business_type"><spring:message code='role.work.type'/></form:label></th>
 								<spring:message code='role.login' var='login'/>
 								<spring:message code='role.main' var='main'/>
 								<td class="col-input">
