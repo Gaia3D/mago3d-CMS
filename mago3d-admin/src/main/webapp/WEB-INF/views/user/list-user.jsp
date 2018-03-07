@@ -182,11 +182,10 @@
 												<span class="icon-glyph glyph-on on"></span>
 												<span class="icon-text"><spring:message code='user.status.use'/></span>
 		</c:if>
-		<c:if test="${userInfo.status ne '0'}">
+		<c:if test="${userInfo.status eq '1'}">
 												<span class="icon-glyph glyph-off off"></span>
 												<span class="icon-text"><spring:message code='user.status.unused.'/></span>
 		</c:if>
-
 											</td>
 											<td class="col-toggle">${userInfo.viewUserInsertType }</td>
 											<%-- <td class="col-tel">${userInfo.viewMaskingMobilePhone }</td> --%>
@@ -195,8 +194,8 @@
 											<td class="col-date">${userInfo.viewInsertDate }</td>
 											<td class="col-functions">
 												<span class="button-group">
-													<a href="/user/modify-user.do?user_id=${userInfo.user_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}" class="image-button button-edit">수정</a>
-													<a href="/user/delete-user.do?user_id=${userInfo.user_id }" onclick="return deleteWarning();" class="image-button button-delete">삭제</a>
+													<a href="/user/modify-user.do?user_id=${userInfo.user_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}" class="image-button button-edit"><spring:message code='modified'/></a>
+													<a href="/user/delete-user.do?user_id=${userInfo.user_id }" onclick="return deleteWarning();" class="image-button button-delete"><spring:message code='delete'/></a>
 												</span>
 											</td>
 										</tr>
@@ -242,7 +241,7 @@
 				<td id="group_key_info" class="col-data"></td>
 			</tr>
 			<tr>
-				<th class="col-label" scope="row"><spring:message code='user.device.use.not'/></th>
+				<th class="col-label" scope="row"><spring:message code='user.group.use.not'/></th>
 				<td id="viewUseYn_info" class="col-data"></td>
 			</tr>
 			<tr>
@@ -441,6 +440,11 @@
 				async:false,
 				dataType: "json",
 				success: function(msg){
+					var totalNumber = "<spring:message code='data.total.number'/>";
+					var successParsing = "<spring:message code='data.success.parsing'/>";
+					var failedParsing = "<spring:message code='data.fail.parsing'/>";
+					var successRegisterDB = "<spring:message code='data.register.success.db'/>";
+					var failedRegisterDB = "<spring:message code='data.register.fail.db'/>";
 					if(msg.result == "success") {
 						if(msg.parse_error_count != 0 || msg.insert_error_count != 0) {
 							$("#file_name").val('');
@@ -449,29 +453,29 @@
 							alert(JS_MESSAGE["update"]);
 						}
 						var content = ""
-						+ "<tr>"
-						+ 	"<td colspan=\"2\">&nbsp;</td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ 	"<td> 총건수</td>"
-						+ 	"<td> " + msg.total_count + "</td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ 	"<td> 파싱 성공 건수</td>"
-						+ 	"<td> " + msg.parse_success_count + "</td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ 	"<td> 파싱 실패 건수</td>"
-						+ 	"<td> " + msg.parse_error_count + "</td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ 	"<td> DB 등록 성공 건수</td>"
-						+ 	"<td> " + msg.insert_success_count + "</td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ 	"<td> DB 등록 실패 건수</td>"
-						+ 	"<td> " + msg.insert_error_count + "</td>"
-						+ "</tr>";
+							+ "<tr>"
+							+ 	"<td colspan=\"2\">&nbsp;</td>"
+							+ "</tr>"
+							+ "<tr>"
+							+ 	"<td> " + totalNumber + "</td>"
+							+ 	"<td> " + msg.total_count + "</td>"
+							+ "</tr>"
+							+ "<tr>"
+							+ 	"<td> " + successParsing + "</td>"
+							+ 	"<td> " + msg.parse_success_count + "</td>"
+							+ "</tr>"
+							+ "<tr>"
+							+ 	"<td> " + failedParsing + "</td>"
+							+ 	"<td> " + msg.parse_error_count + "</td>"
+							+ "</tr>"
+							+ "<tr>"
+							+ 	"<td> " + successRegisterDB + "</td>"
+							+ 	"<td> " + msg.insert_success_count + "</td>"
+							+ "</tr>"
+							+ "<tr>"
+							+ 	"<td> " +failedRegisterDB + "</td>"
+							+ 	"<td> " + msg.insert_error_count + "</td>"
+							+ "</tr>";
 						$("#excelUserUpload > tbody:last").append(content);
 					}
 					fileUploadFlag = true;
@@ -519,7 +523,15 @@
 	function drawUserGroupInfo(jsonData) {
 		$("#group_name_info").html(jsonData.group_name);
 		$("#group_key_info").html(jsonData.group_key);
-		$("#viewUseYn_info").html(jsonData.viewUseYn);
+		
+		var use = "<spring:message code='use'/>";
+		var noUse = "<spring:message code='no.use'/>";
+		if(jsonData.use_yn == 'Y'){
+			$('#viewUseYn_info').append(use);
+		}else{
+			$('#viewUseYn_info').append(noUse);
+		}
+		
 		$("#description_info").html(jsonData.description);
 	}
 	

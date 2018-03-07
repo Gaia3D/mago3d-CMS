@@ -35,24 +35,24 @@
 							<tr>
 								<th scope="row" class="col-label">아이디</th>
 								<td class="col-data">${issue.user_id}</td>
-								<th scope="row" class="col-label">이름</th>
-								<td class="col-data">${issue.user_name}</td>
+								<%-- <th scope="row" class="col-label">이름</th>
+								<td class="col-data">${issue.user_name}</td> --%>
 							</tr>
 							<tr>
-								<th scope="row" class="col-label">게시기간</th>
-								<td class="col-data">${issue.viewStartDate} ~ ${issue.viewEndDate}</td>
+<%--								<th scope="row" class="col-label">게시기간</th>
+								<td class="col-data">${issue.viewStartDate} ~ ${issue.viewEndDate}</td> --%>
 								<th scope="row" class="col-label">등록일</th>
-								<td class="col-data">${issue.viewRegisterDate}</td>
-							</tr>
+								<td class="col-data">${issue.insert_date}</td>
+							</tr> 
 							<tr>
 								<th scope="row" class="col-label">제목</th>
 								<td class="col-data">${issue.title}</td>
-								<th scope="row" class="col-label">사용여부</th>
-								<td class="col-data">${issue.viewUseYn}</td>
+<%-- 								<th scope="row" class="col-label">사용여부</th>						
+								<td class="col-data">${issue.status}</td> --%>
 							</tr>
 							<tr>
 								<th scope="row" class="col-label">내용</th>
-								<td class="col-data" colspan="3">${issue.viewContents}</td>
+								<td class="col-data" colspan="3">${issue_detail.contents}</td>
 							</tr>	
 						</table>	
 						<div class="button-group">

@@ -619,28 +619,28 @@
 		var mobilephone_regExp1 = /^\d{3,3}$/;
 		var mobile_phone1 = $("#mobile_phone1").val();
 		if (mobile_phone1 != null && mobile_phone1 != "" && !mobilephone_regExp1.test(mobile_phone1)) {
-			alert(JS_MESSAGE["user.group.phone.number.type"]);
+			alert(JS_MESSAGE["user.group.mobiler.type"]);
 			$("#mobile_phone1").focus();
 			return false;
 		}
 		var mobilephone_regExp2 = /^\d{3,4}$/;
 		var mobile_phone2 = $("#mobile_phone2").val();
 		if (mobile_phone2 != null && mobile_phone2 != "" && !mobilephone_regExp2.test(mobile_phone2)) {
-			alert(JS_MESSAGE["user.group.phone.number.type"]);
+			alert(JS_MESSAGE["user.group.mobiler.type"]);
 			$("#mobile_phone2").focus();
 			return false;
 		}
 		var mobilephone_regExp3 = /^\d{4,4}$/;
 		var mobile_phone3 = $("#mobile_phone3").val();
 		if (mobile_phone3 != null && mobile_phone3 != "" && !mobilephone_regExp3.test(mobile_phone3)) {
-			alert(JS_MESSAGE["user.group.phone.number.type"]);
+			alert(JS_MESSAGE["user.group.mobiler.type"]);
 			$("#mobile_phone3").focus();
 			return false;
 		}
 		var email_regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 		if ($("#email1").val() != null && $("#email1").val() != "" && $("#email2").val() != null && $("#email2").val() != "") {
 			if (!email_regExp.test($("#email1").val() + "@" + $("#email2").val())) {
-				alert();
+				alert(JS_MESSAGE["user.group.email.type"]);
 				return false;
 			}
 		}

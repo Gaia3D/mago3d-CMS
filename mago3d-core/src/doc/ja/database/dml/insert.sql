@@ -102,7 +102,7 @@ insert into widget(	widget_id, name, view_order, user_id) values( NEXTVAL('widge
 
 -- 運営ポリシー
 insert into policy(	policy_id, password_exception_char, site_name, site_admin_mobile_phone, site_admin_email) 
-			values( 1, '<>&''"', 'Mago3D', '000-0000-0000', 'test@test.com');
+			values( 1, '<>&''"', 'Mago3D', 'u1Cgl3H66Gx6ruL48dZzgw==', '88qb9Zh2qZAaxa0MR2LXJA==');
 
 -- Role
 insert into role(role_id, role_name, role_key, role_type, business_type, use_yn, default_yn) values(NEXTVAL('role_seq'), '管理者ページアクセス', 'USER_ADMIN_LOGIN', '0', '0', 'Y', 'N');

@@ -1657,7 +1657,7 @@ var myArray = myTree.getCheckedList(0);
 		var eventTarget = event.target;
 
 		if (this.editorOpend) {
-			toast.push("Editor 활성화 상태에서는 기능을 사용할 수 없습니다.");
+			toast.push("The function is not available when the Editor is active.");
 			return; // 에디터가 오픈된 상태이면 비활성화
 		}
 
@@ -1675,7 +1675,7 @@ var myArray = myTree.getCheckedList(0);
 		//trace(myColHead);
 
 		if (myColHead.colSeq == undefined || myColHead.colSeq == null) {
-			trace("정렬할 수 없는 컬럼 입니다.");
+			trace("Columns that can not be sorted.");
 		} else {
 			/* -- 현재 기술로는 정렬 지원 어려움
 			 if(this.nowSortHeadID){
@@ -1729,7 +1729,7 @@ var myArray = myTree.getCheckedList(0);
 		var eventTarget = event.target;
 
 		if (this.editorOpend) {
-			toast.push("Editor 활성화 상태에서는 기능을 사용할 수 없습니다.");
+			toast.push("The function is not available when the Editor is active.");
 			return; // 에디터가 오픈된 상태이면 비활성화
 		}
 
@@ -4531,7 +4531,7 @@ myTree.removeTree(obj.index, obj.item);
 		if (nowChildIndex < 1) {
 			//이동불가
 			//toast.push("순서의 처음입니다.");
-			alert("순서의 처음입니다.");
+			alert("It is the beginning of the order.");
 			return "-1";
 		} else {
 			return "1";
@@ -4620,7 +4620,7 @@ myTree.removeTree(obj.index, obj.item);
 		if (nowChildIndex > subTreeLength - 2) {
 			//이동불가
 			//toast.push("순서의 마지막입니다.");
-			alert("순서의 마지막입니다.");
+			alert("It's the end of the sequence.");
 			return "-1";
 		} else {
 			return "1";
@@ -4728,7 +4728,7 @@ myTree.moveTree({
 			var hashs = item.hash.split(/_/g);
 
 			this.body.find(".gridBodyTr_" + itemIndex).addClass("copied");
-			toast.push({ type: "Warning", body: "선택하신 아이템을 이동시킬 부모 아이템을 선택하세요" });
+			toast.push({ type: "Warning", body: "Please select the parent item to move the selected item" });
 			this.readyMoved = true;
 			this.moveTarget = { itemIndex: itemIndex };
 			this.moveValidate = Option.validate;
@@ -4761,7 +4761,7 @@ myTree.moveTree({
 		var relation = cfg.relation;
 
 		if (moveIndex == targetIndex) {
-			alert("이동 위치와 이동대상이 같습니다. 이동 할 수 없습니다.");
+			alert("The movement position is the same as the movement destination. Can not move.");
 			return;
 		}
 
@@ -4769,11 +4769,11 @@ myTree.moveTree({
 		var targetObj = this.list[targetIndex];
 
 		if (moveObj[reserveKeys.parentHashKey] == targetObj[reserveKeys.hashKey]) {
-			alert("이동 위치가 현재 위치와 다르지 않습니다. 이동 할 수 없습니다.");
+			alert("The move position does not differ from the current position. Can not move.");
 			return;
 		}
 		if (moveObj[reserveKeys.hashKey] == targetObj[reserveKeys.hashKey].left(moveObj[reserveKeys.hashKey].length)) {
-			alert("이동 위치가 자식위치입니다. 이동 할 수 없습니다.");
+			alert("The move position is the child position. Can not move.");
 			return;
 		}
 
@@ -5050,7 +5050,7 @@ myTree.moveTree({
 		relation = cfg.relation;
 
 		if (!relation) {
-			toast.push("relation 속성이 지정되지 않아 요청을 수행 할 수 없습니다. relation:{parentKey:'', childKey:''}");
+			toast.push("The relation property is not specified and the request can not be performed. relation:{parentKey:'', childKey:''}");
 			return;
 		}
 
@@ -5140,7 +5140,7 @@ trace(SL);
 		if (this.selectedRow != undefined && this.selectedRow != null && this.selectedRow.length > 0) {
 			return { index: this.selectedRow.first(), item: this.list[this.selectedRow.first()] };
 		} else {
-			return { error: "noselected", description: "선택된 item이 없습니다." };
+			return { error: "noselected", description: "No item selected." };
 		}
 	},
 /**

@@ -109,7 +109,7 @@ JS_MESSAGE["policy.os.time"] = "시간을 입력해 주세요";
 
 JS_MESSAGE["policy.site.ip"] = "IP 형식에 맞게 입력해 주십시오.";
 JS_MESSAGE["policy.site.service.name"] = "서비스명을 입력해 주십시오.";
-JS_MESSAGE["policy.site.admin.mobile"] = "관리자 핸드폰 번호를 입력해 주십시오.";
+JS_MESSAGE["policy.site.admin.mobile"] = "관리자 휴대폰 번호를 입력해 주십시오.";
 JS_MESSAGE["policy.site.admin.email"] = "관리자 이메일을 입력해 주십시오.";
 
 JS_MESSAGE["policy.product.name"] = "제품명을 입력해 주십시오.";
@@ -184,6 +184,8 @@ JS_MESSAGE["user.group.id.minlength"] = "사용자 아이디 최소 길이는";
 JS_MESSAGE["user.group.id.minlength.2"] = "입니다";
 JS_MESSAGE["user.group.password.not.same"] = "비밀번호가 비밀번호 확인 이랑 일치하지 않습니다.";
 JS_MESSAGE["user.group.phone.number.type"] = "전화번호 형식에 맞게 입력해 주십시오.";
+JS_MESSAGE["user.group.email.type"] = "이메일 형식에 맞게 입력해 주십시오."
+JS_MESSAGE["user.group.mobiler.type"] = "휴대폰 번호 형식에맞게 입력해 주십시오."
 JS_MESSAGE["user.basic.information.input"] = "사용자 기본 정보 등록 후 이용 가능 합니다.";
 JS_MESSAGE["use.device.name.input"] = "사용 기기명을 입력해 주십시오.";
 JS_MESSAGE["input.ip"] = "IP 형식에 맞게 입력해 주십시오.";
