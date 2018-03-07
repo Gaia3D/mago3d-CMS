@@ -56,15 +56,15 @@ public class UserGroup {
 	// 등록일
 	private String insert_date;
 
-	public String getViewUseYn() {
-		if("Y".equals(this.use_yn)) {
-			return "사용";
-		} else if("N".equals(this.use_yn)) {
-			return "미사용";
-		} else {
-			return "";
-		}
-	}
+//	public String getViewUseYn() {
+//		if("Y".equals(this.use_yn)) {
+//			return "사용";
+//		} else if("N".equals(this.use_yn)) {
+//			return "미사용";
+//		} else {
+//			return "";
+//		}
+//	}
 
 	public String getViewInsertDate() {
 		if(this.insert_date == null || "".equals( insert_date)) {
