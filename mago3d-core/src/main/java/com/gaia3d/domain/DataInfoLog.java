@@ -3,6 +3,7 @@ package com.gaia3d.domain;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -48,11 +49,13 @@ public class DataInfoLog {
 	private String method_mode;
 
 	// 고유번호
-	private Long data_id;
-	// Data Group 고유번호
+	private Long data_info_log_id;
+	// Data project 고유번호
 	private Long project_id;
-	// Data Group 이름
+	// Data project 이름
 	private String project_name;
+	// Data 고유번호
+	private Long data_id;
 	// data 고유 식별번호
 	private String data_key;
 	// data 고유 식별번호
@@ -87,6 +90,18 @@ public class DataInfoLog {
 	private BigDecimal pitch;
 	// roll
 	private BigDecimal roll;
+	// 변경전 위도
+	private BigDecimal before_latitude;
+	// 변경전 경도
+	private BigDecimal before_longitude;
+	// 변경전 높이
+	private BigDecimal before_height;
+	// 변경전 heading
+	private BigDecimal before_heading;
+	// 변경전 pitch
+	private BigDecimal before_pitch;
+	// 변경전 roll
+	private BigDecimal before_roll;
 	// 속성
 	private String attributes;
 	// data 상태. 0:사용중, 1:사용중지(관리자), 2:기타
@@ -101,27 +116,21 @@ public class DataInfoLog {
 	private String description;
 	// 수정일 
 	private String update_date;
+	// 표시용 등록일
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private String view_insert_date;
 	// 등록일
 	private String insert_date;
 	
 	private String search_data_name;
 	private String search_except_data_name;
 	
-	public String getViewStatus() {
-		// 사용자 상태. 0:사용중, 1:사용중지(관리자), 2:기타)
-		if(this.status == null || "".equals(this.status)) {
-			return "";
-		}
-		if("0".equals(this.status)) {
-			return "사용중";
-		} else if("1".equals(this.status)) {
-			return "사용중지";
-		} else if("2".equals(this.status)) {
-			return "기타";
-		}
-		return "";
+	public String validate() {
+		// TODO 구현해야 한다.
+		return null;
 	}
-	
+		
 	public String getViewDataInsertType() {
 		// TODO 이건 뭔가 아닌거 같은데... 어떻게 처리 하지?
 		if(this.data_insert_type == null || "".equals(this.data_insert_type)) {
@@ -141,10 +150,27 @@ public class DataInfoLog {
 		return attributes.substring(0, 20) + "...";
 	}
 	
-	public String getViewInsertDate() {
+	public String setViewInsertDate() {
 		if(this.insert_date == null || "".equals( insert_date)) {
 			return "";
 		}
 		return insert_date.substring(0, 19);
+	}
+
+	public String getView_insert_date() {
+		if(this.insert_date == null || "".equals( insert_date)) {
+			view_insert_date = "";
+		} else {
+			this.view_insert_date = insert_date.substring(0, 19);
+		}
+		return view_insert_date;
+	}
+
+	public void setView_insert_date(String view_insert_date) {
+		if(this.insert_date == null || "".equals( insert_date)) {
+			view_insert_date = "";
+		} else {
+			this.view_insert_date = insert_date.substring(0, 19);
+		}
 	}
 }

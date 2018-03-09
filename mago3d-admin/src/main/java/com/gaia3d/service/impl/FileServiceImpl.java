@@ -535,7 +535,7 @@ public class FileServiceImpl implements FileService {
 					dataInfo.setParent(parentDataKeyMap.get(dataInfo.getParent_data_key())); 
 				}
 				
-				DataInfo dbDataInfo = dataService.getDataByDataKey(dataInfo.getData_key());
+				DataInfo dbDataInfo = dataService.getDataByDataKey(dataInfo);
 				if(dbDataInfo == null) {
 					dataService.insertData(dataInfo);
 					insertSuccessCount++;
@@ -568,7 +568,7 @@ public class FileServiceImpl implements FileService {
 	}
 	
 	/**
-	 * DATA Attribute 등록
+	 * DATA Attribute 한건 등록
 	 * @param dataId
 	 * @param fileInfo
 	 * @return
@@ -747,11 +747,13 @@ public class FileServiceImpl implements FileService {
 	
 	/**
 	 * DATA Object Attribute Batch 등록
+	 * TODO 여기서 처리하다 서버 죽어서 controller로 옮김. 사용안함
+	 * @param projectId
 	 * @param userId
 	 * @return
 	 */
 	@Transactional
-	public FileInfo insertDataObjectAttributeBatch(String userId) {
+	public FileInfo insertDataObjectAttributeBatch(Long projectId, String userId) {
 		
 		// 파일 이력을 저장
 //		insertFileInfo(fileInfo);
@@ -785,7 +787,10 @@ public class FileServiceImpl implements FileService {
 					String dataKey = fileName.substring(startIndex + 4, endIndex);
 					log.info("@@@@@@@@@@ dataKey = {}", dataKey);
 					
-					DataInfo dataInfo = dataService.getDataByDataKey(dataKey);
+					DataInfo dataInfo = new DataInfo();
+					dataInfo.setProject_id(projectId);
+					dataInfo.setData_key(dataKey);
+					dataInfo = dataService.getDataByDataKey(dataInfo);
 					// 모든 object id를 삭제 후 등록
 					dataService.deleteDataObjects(dataInfo.getData_id());
 					

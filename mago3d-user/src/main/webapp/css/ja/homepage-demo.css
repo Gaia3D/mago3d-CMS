@@ -734,6 +734,19 @@ button.btn.on {
 	pointer-events:none;
 }
 
+.dataShortcut {
+	float: right;
+	width: 47px;
+	height: 25px;
+	margin-top: 5px;
+	text-indent: -999em;
+	border: none;
+	background-image: url(/images/ko/homepage/ico.png);
+	background-repeat: no-repeat;
+	background-position: 10px -468px;
+	background-color: transparent;
+}
+
 /* List Table
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .list-table {

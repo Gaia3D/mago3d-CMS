@@ -10,6 +10,7 @@ import lombok.ToString;
 
 /**
  * 운영 정책
+ * TODO 도메인 답게 나누자.
  * @author jeongdae
  *
  */
@@ -32,6 +33,10 @@ public class Policy {
 	public static final String SECURITY_SESSION_HIJACKING_NOT_USE = "0";
 	public static final String SECURITY_SESSION_HIJACKING_USE = "1";
 	public static final String SECURITY_SESSION_HIJACKING_OTP = "2";
+	
+	// 데이터 정보 변경 요청 자동 승인
+	public static final String DATA_CHANGE_REQUEST_DECISION_AUTO = "0";
+	public static final String DATA_CHANGE_REQUEST_DECISION_CONFIRM = "1";
 	
 	// Single Sign-On 사용 안함
 	public static final String SECURITY_SSO_USE_N = "0";
@@ -107,6 +112,8 @@ public class Policy {
 	@Setter(AccessLevel.NONE)
 	private String geo_data_default_projects;
 	private String geo_data_default_projects_view;
+	// 데이터 정보 변경 요청에 대한 처리. 0 : 자동승인, 1 : 결재(초기값)
+	private String geo_data_change_request_decision;
 	// cullFace 사용유무. 기본 false
 	private String geo_cull_face_enable;
 	// timeLine 사용유무. 기본 false
@@ -194,6 +201,8 @@ public class Policy {
 	private String geo_callback_enable;
 	// api 처리 결과 callback function 이름
 	private String geo_callback_apiresult;
+	// data info 표시 callback function 이름
+	private String geo_callback_dataInfo;
 	// object 선택 callback function 이름
 	private String geo_callback_selectedobject;
 	// issue 등록 callback function 이름

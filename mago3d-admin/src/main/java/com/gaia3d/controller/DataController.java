@@ -754,7 +754,7 @@ public class DataController {
 	}
 	
 	/**
-	 * Data Attribute 등록
+	 * Data Attribute 한건 등록
 	 * @param model
 	 * @return
 	 */
@@ -802,7 +802,7 @@ public class DataController {
 	}
 	
 	/**
-	 * Data Object Attribute 등록
+	 * Data Object Attribute 한건 등록
 	 * @param model
 	 * @return
 	 */
@@ -850,7 +850,8 @@ public class DataController {
 	}
 	
 	/**
-	 * Data Attribute batch 등록
+	 * Data Attribute batch 등록(project 단위 등록)
+	 * TODO project_id를 입력 받도록 수정해야 함. 
 	 * @param model
 	 * @return
 	 */
@@ -882,7 +883,8 @@ public class DataController {
 	
 	/**
 	 * Data Object Attribute batch 등록
-	 * @param model
+	 * TODO project_id를 입력 받도록 수정해야 함. project 
+	 * @param request
 	 * @return
 	 */
 	@PostMapping(value = "ajax-insert-data-object-attribute-batch.do")
@@ -892,6 +894,8 @@ public class DataController {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
+			
+			Long project_id = Long.valueOf(request.getParameter("project_id"));
 			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 			//FileInfo fileInfo = fileService.insertDataObjectAttributeBatch(userSession.getUser_id());
@@ -926,7 +930,10 @@ public class DataController {
 					String dataKey = fileName.substring(startIndex + 4, endIndex);
 					log.info("@@@@@@@@@@ dataKey = {}", dataKey);
 					
-					DataInfo dataInfo = dataService.getDataByDataKey(dataKey);
+					DataInfo dataInfo = new DataInfo();
+					dataInfo.setProject_id(project_id);
+					dataInfo.setData_key(dataKey);
+					dataInfo = dataService.getDataByDataKey(dataInfo);
 					// 모든 object id를 삭제 후 등록
 					dataService.deleteDataObjects(dataInfo.getData_id());
 					

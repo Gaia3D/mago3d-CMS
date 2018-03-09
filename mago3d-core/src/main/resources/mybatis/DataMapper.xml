@@ -18,9 +18,6 @@
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
 			AND ${search_word} LIKE '%' || #{search_value} || '%'
 			</if>
-			<if test="status == null or status == ''">
-			AND (status IS NULL OR status != '5')
-			</if>
 			<if test="status != null and status != ''">
 			AND status = #{status}
 			</if>
@@ -40,6 +37,14 @@
 		</trim>
 	</select>
 	
+	<!-- 데이터 상태별 통계 정보 -->
+	<select id="getDataTotalCountByStatus" parameterType="string" resultType="long">
+		/* getDataTotalCountByStatus */
+		SELECT COUNT(data_id) 
+		FROM data_info
+		WHERE status = #{status} AND parent > 0
+	</select>
+	
 	<!-- Data 목록 -->
 	<select id="getListData" parameterType="dataInfo" resultType="dataInfo">
 		/* getListData */
@@ -57,9 +62,6 @@
 				</if>
 				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
 				AND ${search_word} LIKE '%' || #{search_value} || '%'
-				</if>
-				<if test="status == null or status == ''">
-				AND (status IS NULL OR status != '5')
 				</if>
 				<if test="status != null and status != ''">
 				AND status = #{status}
@@ -126,11 +128,20 @@
 	</select>
 	
 	<!-- Project Data 정보 -->
-	<select id="getDataByDataKey" parameterType="string" resultType="dataInfo">
+	<select id="getDataByDataKey" parameterType="dataInfo" resultType="dataInfo">
 		/* getDataByDataKey */
 		SELECT *
 		FROM data_info
-		WHERE data_key = #{data_key}
+		WHERE project_id = #{project_id} 
+			AND data_key = #{data_key}
+	</select>
+	
+	<!-- Project Data 정보 -->
+	<select id="getDataAttribute" parameterType="long" resultType="dataInfoAttribute">
+		/* getDataAttribute */
+		SELECT *
+		FROM data_info_attribute
+		WHERE data_id = #{data_id}
 	</select>
 	
 	<!-- Data 아이디 중복 체크 -->

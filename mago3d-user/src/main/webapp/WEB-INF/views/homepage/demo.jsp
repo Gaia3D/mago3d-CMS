@@ -14,11 +14,19 @@
 </c:if>
 	<link rel="stylesheet" href="/externlib/jquery-ui/jquery-ui.css?cache_version=${cache_version}" />
 	<link rel="stylesheet" href="/externlib/jquery-toast/jquery.toast.css" />
+	<link rel="stylesheet" href="/externlib/treegrid/jquery.treegrid.css?cache_version=${cache_version}" />
+	<link rel="stylesheet" href="/externlib/jqplot/jquery.jqplot.min.css?cache_version=${cache_version}" />
 	<script type="text/javascript" src="/externlib/jquery/jquery.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/jquery-ui/jquery-ui.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/jquery-toast/jquery.toast.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/treegrid/jquery.treegrid.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/treegrid/jquery.treegrid.bootstrap3.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/jqplot/jquery.jqplot.min.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.pieRenderer.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.barRenderer.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.categoryAxisRenderer.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 
@@ -35,6 +43,10 @@
 	<li id="searchMenu" class="search" data-tooltip-text="<spring:message code='demo.search.menu.description'/>"><spring:message code='common.search'/></li>
 	<li id="apiMenu" class="api" data-tooltip-text="<spring:message code='demo.api.menu.description'/>"><spring:message code='common.api'/></li>	
 	<li id="insertIssueMenu" class="regist" data-tooltip-text="<spring:message code='demo.insert-issue.menu.description'/>"><spring:message code='common.registeration'/></li>
+	<li id="treeMenu" class="tree" data-tooltip-text="<spring:message code='demo.tree.menu.description'/>"><spring:message code='common.tree'/></li>
+	<li id="chartMenu" class="chart" data-tooltip-text="<spring:message code='demo.chart.menu.description'/>"><spring:message code='common.chart'/></li>
+	<li id="logMenu" class="log" data-tooltip-text="<spring:message code='demo.log.menu.description'/>"><spring:message code='common.log'/></li>
+	<li id="attributeMenu" class="attribute" data-tooltip-text="<spring:message code='demo.attribute.menu.description'/>"><spring:message code='common.attribute'/></li>
 	<li id="configMenu" class="config" data-tooltip-text="<spring:message code='demo.config.menu.description'/>"><spring:message code='common.config'/></li>	
 </ul>
 
@@ -455,6 +467,100 @@
 	</div>
 	</form:form>
 	
+	<div id="treeMenuContent" class="treeWrap">
+		<div>
+			<h3><spring:message code='demo.data.tree'/></h3>
+			<ul>
+				<li>
+					<label for="treeProjectId">Project </label>
+					<select id="treeProjectId" name="treeProjectId" onchange="initDataTree();" class="select">
+<c:forEach var="project" items="${projectList}">
+						<option value="${project.project_id}">${project.project_name}</option>
+</c:forEach>					
+					</select>
+				</li>
+			</ul>
+		</div>
+		<div style="margin-top: 20px; margin-left: 10px; margin-bottom: 20px;">
+			<table id="dataTree" class="table dataTree table-bordered table-striped table-condensed" style="padding-bottom: 20px; width: 310px;">
+			</table>
+		</div>
+	</div>
+
+	<div id="chartMenuContent" class="chartWrap">
+		<div>
+			<h3><spring:message code='demo.chart.data.number'/></h3>
+		</div>
+		<div id="projectChart" style="width: 340px; height: 340px; font-size: 18px;"></div>
+		<div style="height: 20px;"></div>
+		<div style="margin-top: 30px;">
+			<h3><spring:message code='demo.chart.data.status'/></h3>
+		</div>
+		<div id="dataStatusChart" style="width: 340px; height: 340px; font-size: 18px; margin-bottom: 30px;"></div>
+	</div>
+
+	<div id="logMenuContent" class="logWrap">
+		<div>
+			<h3><spring:message code='demo.log.data.change'/> (<spring:message code='demo.data.change.request.log.list.10'/>)</h3>
+		</div>
+		<table class="list-table scope-col" style="width: 100%; margin-top: 10px;">
+			<col class="col-number" />
+			<col class="col-name" />
+			<col class="col-name" />
+			<col class="col-toggle" />
+			<col class="col-date" />
+			<tr>
+				<th rowspan="2" scope="col" class="col-number">No</th>
+				<th scope="col" class="col-name">Name</th>
+				<th scope="col" class="col-name">Data Name</th>
+			</tr>
+			<tr>
+				<th scope="col" class="col-toggle">Status</th>
+				<th scope="col" class="col-date">Date</th>
+			</tr>
+			<tbody id="dataInfoChangeRequestLog">
+			</tbody>
+		</table>
+	</div>
+
+	<form id="attributeForm" action="#" method="post" onsubmit="return false;">
+	<div id="attributeMenuContent" class="attributeWrap">
+		<div>
+			<h3><spring:message code='demo.object.attribute.search'/></h3>
+		</div>
+		<div>It is under development.</div>
+		<table style="margin-top: 30px;">
+			<tr style="height: 35px;">
+				<td style="width: 80px;"><label for="project_id">Project</label></td>
+				<td>
+					<select id="project_id" name="project_id" class="select">
+<c:forEach var="project" items="${projectList}">
+						<option value="${project.project_id}">${project.project_name}</option>
+</c:forEach>
+					</select>
+				</td>
+			</tr>
+			<tr style="height: 35px;">
+				<td><label for="search_word">Category</label></td>
+				<td>
+					<select id="search_word" name="search_word" class="select">
+						<option value="data_name">Data Name</option>
+						<option value="data_key">Data Key</option>
+					</select>
+				</td>
+			</tr>
+			<tr style="height: 35px;">
+				<td>
+					<label for="search_value">SearchWord</label></td>
+				<td><input type="text" id="search_value" name="search_value" size="31" /></td>
+			</tr>
+		</table>
+		<div class="btns">
+			<button type="button" id="searchData" class="full">Search</button>
+		</div>
+	</div>
+	</form>
+	
 	<div id="configMenuContent" class="configWrap">
 		<div>
 			<h3><spring:message code='common.label'/></h3>
@@ -592,6 +698,9 @@
 </div>
 </c:if>
 
+<%@ include file="/WEB-INF/views/homepage/data-attribute-dialog.jsp" %>
+<%@ include file="/WEB-INF/views/homepage/data-info-dialog.jsp" %>
+
 <c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 <script type="text/javascript" src="/externlib/cesium/Cesium.js?cache_version=${cache_version}"></script>
 </c:if>
@@ -608,7 +717,8 @@
 	var managerFactory = null;
 	var policyJson = ${policyJson};
 	var initProjectJsonMap = ${initProjectJsonMap};
-	var menuObject = { homeMenu : false, myIssueMenu : false, searchMenu : false, apiMenu : false, insertIssueMenu : false, configMenu : false };
+	var menuObject = { 	homeMenu : false, myIssueMenu : false, searchMenu : false, apiMenu : false, insertIssueMenu : false, 
+						treeMenu : false, chartMenu : false, logMenu : false, attributeMenu : false, configMenu : false };
 	var insertIssueEnable = false;
 	var FPVModeFlag = false;
 	
@@ -912,6 +1022,21 @@
 	$("#insertIssueMenu").click(function() {
 		menuSlideControl("insertIssueMenu");
 	});
+	$("#treeMenu").click(function() {
+        menuSlideControl("treeMenu");
+        initDataTree();
+    });
+    $("#chartMenu").click(function() {
+        menuSlideControl("chartMenu");
+        initDataChart();
+    });
+    $("#logMenu").click(function() {
+        menuSlideControl("logMenu");
+        dataInfoChangeRequestLogList();
+    });
+    $("#attributeMenu").click(function() {
+        menuSlideControl("attributeMenu");
+    });
 	$("#configMenu").click(function() {
 		menuSlideControl("configMenu");
 	});
@@ -1207,15 +1332,18 @@
 	var isUpdateLocationAndRotation = true;
 	$("#updateLocationAndRotation").click(function() {
 		if(!changeLocationAndRotationCheck()) return false;
-		
-		changeLocationAndRotationAPI(	managerFactory, $("#moveProjectId").val(),
-										$("#moveDataKey").val(), $("#moveLatitude").val(), $("#moveLongitude").val(), 
-										$("#moveHeight").val(), $("#moveHeading").val(), $("#movePitch").val(), $("#moveRoll").val());
 								
 		if(isUpdateLocationAndRotation) {
 			isUpdateLocationAndRotation = false;
-			var url = "/data/ajax-update-location-and-rotation.do";
-			var info = "data_key=" ;
+			var url = "/data/ajax-update-data-location-and-rotation.do";
+			var info = 	"project_id=" + $("#moveProjectId").val()
+						+ "&data_key=" + $("#moveDataKey").val()
+						+ "&latitude=" + $("#moveLatitude").val()
+						+ "&longitude=" + $("#moveLongitude").val()
+						+ "&height=" + $("#moveHeight").val()
+						+ "&heading=" + $("#moveHeading").val()
+						+ "&pitch=" + $("#movePitch").val()
+						+ "&roll=" + $("#moveRoll").val();
 			$.ajax({
 				url: url,
 				type: "POST",
@@ -1224,7 +1352,8 @@
 				headers: { "X-mago3D-Header" : "mago3D"},
 				success : function(msg) {
 					if(msg.result === "success") {
-						alert(JS_MESSAGE["update"]);
+						alert(JS_MESSAGE["insert"]);
+						// ajax
 					} else {
 						alert(JS_MESSAGE[msg.result]);
 					}
@@ -1277,6 +1406,454 @@
 			});
 		}
 		changeNearGeoIssueListViewModeAPI(managerFactory, isShow);
+	}
+	
+	function initDataTree() {
+        var projectId = $("#treeProjectId").val();
+		var projectData = getDataAPI(CODE.PROJECT_ID_PREFIX + projectId);
+        if (projectData === null || projectData === undefined) {
+            $.ajax({
+            	url: dataInformationUrl,
+				type: "POST",
+				data: "project_id=" + projectId,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+                success: function(msg) {
+                	if(msg.result === "success") {
+						var projectDataJson = JSON.parse(msg.projectDataJson);
+						if(projectDataJson === null || projectDataJson === undefined) {
+							alert(JS_MESSAGE["project.data.no.found"]);
+							return;
+						}
+						drawDataTree(projectId, projectDataJson);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+                },
+                error : function(request, status, error) {
+                	alert(JS_MESSAGE["ajax.error.message"]);
+                    console.log("code : " + request.status + "\n" + "message : " + request.responseText + "\n" + "error : " + error);
+                }
+            });
+        } else {
+            drawDataTree(projectId, projectData);
+        }
+	}
+
+	function drawDataTree(projectId, projectData) {
+	    var content = 	"";
+	    var dataCssId = 1;
+	    content 	= 	content
+					+ 	"<tr class=\"treegrid-" + dataCssId + "\" style=\"height: 25px; background-color: #F79F81\">"
+					+ 		"<td style=\"padding-left: 10px\" nowrap=\"nowrap\"></td>"
+					+		"<td colspan=\"3\"> <b>" + projectData.data_name + "</b></td>"
+					+	"</tr>";
+	    var childrenCount = projectData.children.length;
+	    if(childrenCount > 0) {
+            var childrenContent = getChildrenContent(projectId, dataCssId, projectData.children);
+            content = content + childrenContent;
+        }
+
+        $("#dataTree").html("");
+		$("#dataTree").append(content);
+        $('.dataTree').treegrid({
+            expanderExpandedClass: 'glyphicon glyphicon-minus',
+            expanderCollapsedClass: 'glyphicon glyphicon-plus'
+        });
+	}
+
+	function getChildrenContent(projectId, dataCssId, children) {
+        var content = 	"";
+       	var count = children.length;
+       	var parentClass = " treegrid-parent-" + dataCssId;
+       	var evenColor = "background-color: #ccc";
+       	var oddColor = "background-color: #eee";
+       	for(var i=0; i<count; i++) {
+       		dataCssId++;
+			var bgcolor = (dataCssId % 2 == 0) ? evenColor : oddColor;
+			var myClass = "treegrid-" + dataCssId;
+	        var dataInfo = children[i];
+			content 	= 	content
+                + 	"<tr class=\"" + myClass + parentClass + "\" style=\"height: 25px;" + bgcolor + "\">"
+                + 		"<td style=\"padding-left: 2px\" nowrap=\"nowrap\"></td>"
+                +		"<td title=\"" + dataInfo.data_key + "\"> " + dataInfo.data_name + "</td>"
+                +		"<td style=\"padding-left: 5px\"><button type=\"button\" title=\"Shortcuts\" class=\"dataShortcut\" onclick=\"gotoData('" + projectId + "', '" + dataInfo.data_key + "');\">Shortcuts</button></td>"
+                +		"<td style=\"padding-left: 5px; padding-right: 5px;\"><a href=\"#\" onclick=\"viewDataAttribute('" + dataInfo.data_id + "'); return false; \">Details</a></td>"
+                +	"</tr>";
+            var childrenCount = dataInfo.children.length;
+            if(childrenCount > 0) {
+                var childrenContent = getChildrenContent(projectId, dataCssId, dataInfo.children);
+                content = content + childrenContent;
+            }
+		}
+		return content;
+	}
+
+    var dataAttributeDialog = $( ".dataAttributeDialog" ).dialog({
+        autoOpen: false,
+        width: 400,
+        height: 550,
+		modal: true,
+        resizable: false
+    });
+
+    // data key 를 이용하여 dataInfo 정보를 취득
+    function viewDataAttribute(dataId) {
+    	var url = "/data/ajax-data-by-data-id.do";
+		var info = "data_id=" + dataId;
+		$.ajax({
+			url: url,
+			type: "GET",
+			data: info,
+			dataType: "json",
+			headers: { "X-mago3D-Header" : "mago3D"},
+			success : function(msg) {
+				if(msg.result === "success") {
+					showDataInfo(msg.dataInfo);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			}
+		});
+    }
+
+    // data info daialog callback
+    function showDataInfo(dataInfo) {
+        dataAttributeDialog.dialog( "open" );
+        $("#detailDataKey").html(dataInfo.data_key);
+        $("#detailDataName").html(dataInfo.data_name);
+        $("#detailLatitude").html(dataInfo.latitude);
+        $("#detailLongitude").html(dataInfo.longitude);
+        $("#detailHeight").html(dataInfo.height);
+        $("#detailHeading").html(dataInfo.heading);
+        $("#detailPitch").html(dataInfo.pitch);
+        $("#detailRoll").html(dataInfo.roll);
+        showDataAttribute(dataInfo.data_id);
+	}
+    
+    function showDataAttribute(dataId) {
+    	var url = "/data/ajax-data-attribute-by-data-id.do";
+		var info = "data_id=" + dataId;
+		$.ajax({
+			url: url,
+			type: "GET",
+			data: info,
+			dataType: "json",
+			headers: { "X-mago3D-Header" : "mago3D"},
+			success : function(msg) {
+				if(msg.result === "success") {
+					if(msg.dataInfoAttribute === null || msg.dataInfoAttribute.attributes === null || msg.dataInfoAttribute.attributes === "") {
+						var message = "<spring:message code='demo.data.attribute.not.exist'/>";
+						$("#detailAttribute").html(message);
+					} else {
+						$("#detailAttribute").html("");
+						$("#detailAttribute").html(msg.dataInfoAttribute.attributes);
+					}
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			}
+		});
+	}
+    
+    function showDataObjectAttribute(dataObjectId) {
+    	/* var url = "/data/ajax-data-attribute-by-data-id.do";
+		var info = "data_object_attribute_id=" + data_object_attribute_id;
+		$.ajax({
+			url: url,
+			type: "GET",
+			data: info,
+			dataType: "json",
+			headers: { "X-mago3D-Header" : "mago3D"},
+			success : function(msg) {
+				if(msg.result === "success") {
+					$("#detailAttribute").html(msg.dataInfoAttribute.attributes);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			}
+		}); */
+	}
+
+	// chart 표시
+	function initDataChart() {
+        projectChart();
+        dataStatusChart();
+	}
+
+	// project 별 chart
+	function projectChart() {
+		var url = "/data/ajax-project-data-statistics.do";
+		var info = "";
+		$.ajax({
+			url: url,
+			type: "GET",
+			data: info,
+			dataType: "json",
+			headers: { "X-mago3D-Header" : "mago3D"},
+			success : function(msg) {
+				if(msg.result === "success") {
+					drawProjectChart(msg.projectNameList, msg.dataTotalCountList);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			}
+		});
+	}
+	
+	function drawProjectChart(projectNameList, dataTotalCountList) {
+		if(projectNameList == null || projectNameList.length == 0) {
+			return;
+		} 
+		
+		var data = [];
+		var projectCount =  projectNameList.length;
+		for(i=0; i<projectCount; i++ ) {
+			var projectStatisticsArray = [ projectNameList[i], dataTotalCountList[i]];
+			data.push(projectStatisticsArray);
+		}
+		
+		$("#projectChart").html("");
+        //var data = [["3DS", 37],["IFC(Cultural Assets)", 1],["IFC", 42],["IFC(MEP)", 1],["Sea Port", 7],["Collada", 7],["IFC(Japan)", 5]];
+        var plot = $.jqplot("projectChart", [data], {
+            //title : "project 별 chart",
+            seriesColors: [ "#a67ee9", "#FE642E", "#01DF01", "#2E9AFE", "#F781F3", "#F6D8CE", "#99a0ac" ],
+            grid: {
+                drawBorder: false,
+                drawGridlines: false,
+                background: "#ffffff",
+                shadow:false
+            },
+            gridPadding: {top:0, bottom:115, left:0, right:20},
+            seriesDefaults:{
+                renderer:$.jqplot.PieRenderer,
+                trendline : { show : false},
+                rendererOptions: {
+                    padding:8,
+                    showDataLabels: true,
+                    dataLabels: "value",
+                    //dataLabelFormatString: "%.1f%"
+                },
+            },
+            legend: {
+                show: true,
+                fontSize: "10pt",
+                placement : "outside",
+                rendererOptions: {
+                    numberRows: 3,
+                    numberCols: 3
+                },
+                location: "s",
+                border: "none",
+                marginLeft: "10px"
+            }
+        });
+	}
+
+	function dataStatusChart() {
+		var url = "/data/ajax-data-status-statistics.do";
+		var info = "";
+		$.ajax({
+			url: url,
+			type: "GET",
+			data: info,
+			dataType: "json",
+			headers: { "X-mago3D-Header" : "mago3D"},
+			success : function(msg) {
+				if(msg.result === "success") {
+					drawDataStatusChart(msg.useTotalCount, msg.forbidTotalCount, msg.etcTotalCount);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			}
+		});
+	}
+	
+	function drawDataStatusChart(useTotalCount, forbidTotalCount, etcTotalCount) {
+        $("#dataStatusChart").html("");
+        
+        var useTotalCountLabel = "<spring:message code='demo.data.statistics.use'/>";
+        var forbidTotalCountLabel = "<spring:message code='demo.data.statistics.forbid'/>";
+        var etcTotalCountLabel = "<spring:message code='demo.data.statistics.etc'/>";
+        var otpValues = [ useTotalCount, forbidTotalCount, etcTotalCount];
+        var ticks = [useTotalCountLabel, forbidTotalCountLabel, etcTotalCountLabel];
+        var yMax = 100;
+        if(useTotalCount > 100 || forbidTotalCount > 100 || etcTotalCount > 100) {
+			yMax = Math.max(useTotalCount, forbidTotalCount, etcTotalCount) + (useTotalCount * 0.2);
+		}
+
+        var plot = $.jqplot("dataStatusChart", [otpValues], {
+            //title : "data 상태별 차트",
+            height: 205,
+            animate: !$.jqplot.use_excanvas,
+            seriesColors: [ "#ffa076"],
+            grid: {
+                background: "#fff",
+                //background: "#14BA6C"
+                gridLineWidth: 0.7,
+                //borderColor: 'transparent',
+                shadow: false,
+                borderWidth:0.1
+                //shadowColor: 'transparent'
+            },
+            gridPadding:{
+                left:35,
+                right:1,
+                to:40,
+                bottom:27
+            },
+            seriesDefaults:{
+                shadow:false,
+                renderer:$.jqplot.BarRenderer,
+                pointLabels: { show: true },
+                rendererOptions: {
+                    barWidth: 40
+                }
+            },
+            axes: {
+                xaxis: {
+                    renderer: $.jqplot.CategoryAxisRenderer,
+                    ticks: ticks,
+                    tickOptions:{
+                        formatString: "%'d",
+                        fontSize: "10pt"
+                    }
+                },
+                yaxis: {
+                    numberTicks : 6,
+                    min : 0,
+                    max : yMax,
+                    tickOptions:{
+                        formatString: "%'d",
+                        fontSize: "10pt"
+                    }
+                }
+            },
+            highlighter: { show: false }
+        });
+	}
+	
+	function dataInfoChangeRequestLogList() {
+		var dataInfoLogListDoesNotExistMessage = "<spring:message code='demo.data.change.request.log.not.exist'/>";
+		var requestMessage = "<spring:message code='common.request'/>";
+		var completeMessage = "<spring:message code='common.complete'/>";
+		var rejectMessage = "<spring:message code='common.reject'/>";
+		
+		var url = "/data/ajax-list-data-change-request-log.do";
+		var info = "";
+		$.ajax({
+			url: url,
+			type: "GET",
+			data: info,
+			dataType: "json",
+			headers: { "X-mago3D-Header" : "mago3D"},
+			success : function(msg) {
+				if(msg.result === "success") {
+					var dataInfoLogList = msg.dataInfoLogList;
+					var totalCount = msg.totalCount;
+					var content = "";
+					var dataInfoLogListCount = 0;
+					if(dataInfoLogList === null || dataInfoLogList.length === 0) {
+						content += 	"<tr style=\"text-align: center; vertical-align: middle; padding-top:20px; height: 50px;\">"
+								+	"	<td colspan=\"3\" rowspan=\"2\">" +	dataInfoLogListDoesNotExistMessage + "</td>"
+								+	"</tr>";
+					} else {
+						dataInfoLogListCount = dataInfoLogList.length;
+						for(i=0; i<dataInfoLogListCount; i++ ) {
+							var dataInfoLog = dataInfoLogList[i];
+							var status = "";
+							if(dataInfoLog.status == "0") status = requestMessage;
+							else if(dataInfoLog.status == "1") status = completeMessage;
+							else if(dataInfoLog.status == "2") status = rejectMessage;
+							
+							content = content 
+							+	"<tr style=\"height: 30px;\">"
+							+	"	<td rowspan=\"2\">" + (totalCount - i) + "</td>"
+							+	"	<td>" + dataInfoLog.user_id + "</td>"
+							+	"	<td><a href=\"#\" onclick=\"dataChangeLog('" + dataInfoLog.data_info_log_id + "'); return false;\">" + dataInfoLog.data_name + "</a></td>"
+							+	"</tr>"
+							+	"<tr style=\"height: 30px;\">"
+							+	"	<td>" + status + "</td>"
+							+	"	<td>" + dataInfoLog.view_insert_date + "</td>"
+							+	"</tr>";
+						}
+					}
+					$("#dataInfoChangeRequestLog").empty();
+					$("#dataInfoChangeRequestLog").html(content);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			}
+		});
+	}
+	
+	// data info change request log
+    var dataInfoChangeDialog = $( ".dataInfoChangeDialog" ).dialog({
+        autoOpen: false,
+        width: 400,
+        height: 300,
+        modal: true,
+        resizable: false
+    });
+	function dataChangeLog(dataInfoLogId) {
+		var url = "/data/ajax-data-info-log.do";
+		var info = "data_info_log_id=" + dataInfoLogId;
+		$.ajax({
+			url: url,
+			type: "GET",
+			data: info,
+			dataType: "json",
+			headers: { "X-mago3D-Header" : "mago3D"},
+			success : function(msg) {
+				if(msg.result === "success") {
+					var dataInfoLog = msg.dataInfoLog;
+					$("#beforeLatitude").html(dataInfoLog.before_latitude);
+					$("#afterLatitude").html(dataInfoLog.latitude);
+					$("#beforeLongitude").html(dataInfoLog.before_longitude);
+					$("#afterLongitude").html(dataInfoLog.longitude);
+					$("#beforeHeight").html(dataInfoLog.before_height);
+					$("#afterHeight").html(dataInfoLog.height);
+					$("#beforeHeading").html(dataInfoLog.before_heading);
+					$("#afterHeading").html(dataInfoLog.heading);
+					$("#beforePitch").html(dataInfoLog.before_pitch);
+					$("#afterPitch").html(dataInfoLog.pitch);
+					$("#beforeRoll").html(dataInfoLog.before_roll);
+					$("#afterRoll").html(dataInfoLog.roll);
+					
+					dataInfoChangeDialog.dialog({title: dataInfoLog.data_name + " Change Request Log"}).dialog( "open" );
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			}
+		});
 	}
 	
 	// 설정 메뉴 시작

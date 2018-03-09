@@ -29,6 +29,7 @@ create table policy(
 	geo_view_library					varchar(20)			default 'cesium',
 	geo_data_path						varchar(100)		default '/data',
 	geo_data_default_projects			varchar(30)[],
+	geo_data_change_request_decision	char(1)				default '1',
 	geo_cull_face_enable				varchar(5)			default 'false',
 	geo_time_line_enable				varchar(5)			default 'false',
 	
@@ -71,6 +72,7 @@ create table policy(
 	
 	geo_callback_enable 					varchar(5)			default 'false',
 	geo_callback_apiresult					varchar(64),
+	geo_callback_dataInfo					varchar(64),
 	geo_callback_selectedObject				varchar(64),
 	geo_callback_insertIssue				varchar(64),
 	geo_callback_listIssue					varchar(64),
@@ -165,6 +167,7 @@ comment on column policy.password_exception_char is 'Special character (XSS) tha
 comment on column policy.geo_view_library is 'view library. Basic cesium';
 comment on column policy.geo_data_path is 'data folder. Default / data';
 comment on column policy.geo_data_default_projects is 'Loading project at startup. Save as array';
+comment on column policy.geo_data_change_request_decision is '데이터 정보 변경 요청에 대한 처리. 0 : 자동승인, 1 : 결재(초기값)';
 comment on column policy.geo_cull_face_enable is 'Use of cullFace. Default false';
 comment on column policy.geo_time_line_enable is 'Use timeLine. Default false';
 	
@@ -206,6 +209,7 @@ comment on column policy.geo_server_add_parameters_format is 'geo server Additio
 	
 comment on column policy.geo_callback_enable is 'Enable or disable callback function. Default false';
 comment on column policy.geo_callback_apiresult is 'api processing result callback function name';
+comment on column policy.geo_callback_dataInfo is 'data info 표시 callback function 이름';
 comment on column policy.geo_callback_selectedObject is 'select object callback function name';
 comment on column policy.geo_callback_insertIssue is 'issue registration callback function name';
 comment on column policy.geo_callback_listIssue is 'issue list callback function name';
@@ -262,4 +266,3 @@ comment on column policy.solution_manager_phone IS 'Product Company Contact Phon
 comment on column policy.solution_manager_email IS 'Product contact person email';
 
 comment on column policy.insert_date is 'Registered Date';
-

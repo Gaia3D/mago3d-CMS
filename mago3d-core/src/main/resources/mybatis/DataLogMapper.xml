@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaia3d.persistence.DataLogMapper">
+
+	<!-- 데이터 변경 요청 수 -->
+	<select id="getDataInfoLogTotalCountByUserId" parameterType="dataInfoLog" resultType="long">
+		/* getDataInfoLogTotalCountByUserId */
+		SELECT COUNT(data_info_log_id) 
+		FROM data_info_log
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="data_id != null and data_id > 0">
+			data_id = #{data_id}
+			</if>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+			AND ${search_word} = #{search_value}
+			</if>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+			AND ${search_word} LIKE '%' || #{search_value} || '%'
+			</if>
+			<if test="status != null and status != ''">
+			AND status = #{status}
+			</if>
+			<if test="start_date != null and start_date != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="end_date != null and end_date != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="search_data_name != null and search_data_name != ''">
+			AND data_id LIKE '${search_data_name}%'
+			</if>
+		</trim>
+	</select>
+	
+	<!-- 데이터 변경 요청 로그 목록 -->
+	<select id="getListDataInfoLogByUserId" parameterType="dataInfoLog" resultType="dataInfoLog">
+		/* getListDataInfoLogByUserId */
+		SELECT X.*, 
+			(SELECT project_name FROM project WHERE project_id = X.project_id) AS project_name
+		FROM (
+			SELECT A.*, B.data_name
+			FROM(
+				SELECT *
+				FROM data_info_log
+				<trim prefix="WHERE" prefixOverrides="AND">
+					<if test="data_id != null and data_id > 0">
+					data_id = #{data_id}
+					</if>
+					<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+					AND ${search_word} = #{search_value}
+					</if>
+					<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+					AND ${search_word} LIKE '%' || #{search_value} || '%'
+					</if>
+					<if test="status != null and status != ''">
+					AND status = #{status}
+					</if>
+					<if test="search_data_name != null and search_data_name != ''">
+					AND data_id LIKE '${search_data_name}%'
+					</if>
+					<if test="start_date != null and start_date != ''">
+					<![CDATA[
+					AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+					]]>
+					</if>
+					<if test="end_date != null and end_date != ''">
+					<![CDATA[
+					AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+					]]>
+					</if>
+				</trim>
+				<choose>
+				<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
+				ORDER BY ${order_word} ${order_value}
+				</when>
+				<otherwise>
+				ORDER BY insert_date DESC, data_id DESC
+				</otherwise>
+				</choose>
+				OFFSET #{offset} LIMIT #{limit}
+			) A, data_info B
+			WHERE A.data_id = B.data_id
+		) X
+	</select>
+	
+	<select id="getDataInfoLog" parameterType="long" resultType="dataInfoLog">
+		/* getDataInfoLog */
+		SELECT A.*, B.data_name
+		FROM data_info_log A, data_info B
+		WHERE A.data_info_log_id = #{data_info_log_id}
+			AND A.data_id = B.data_id
+	</select>
+
+	<!-- Data Info 변경 이력 등록 -->
+	<insert id="insertDataInfoLog" parameterType="dataInfoLog">
+		/* insertDataInfoLog */
+		<selectKey keyProperty="data_info_log_id" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('data_info_log_seq')
+  		</selectKey>
+		INSERT INTO data_info_log(
+			data_info_log_id, project_id, data_id, user_id, latitude, longitude, height, heading, pitch, roll,
+			before_latitude, before_longitude, before_height, before_heading, before_pitch, before_roll, description
+		) values(
+			#{data_info_log_id}, #{project_id}, #{data_id}, #{user_id}, #{latitude}, #{longitude}, #{height}, #{heading}, #{pitch}, #{roll},
+			#{before_latitude}, #{before_longitude}, #{before_height}, #{before_heading}, #{before_pitch}, #{before_roll}, #{description}
+		)
+	</insert>
+</mapper>

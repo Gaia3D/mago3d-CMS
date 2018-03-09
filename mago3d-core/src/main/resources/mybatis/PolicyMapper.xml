@@ -61,6 +61,7 @@
 			<if test="geo_data_default_projects != null and geo_data_default_projects != ''">
 			geo_data_default_projects = STRING_TO_ARRAY(#{geo_data_default_projects}, ','),
 			</if>
+			geo_data_change_request_decision = #{geo_data_change_request_decision},
 			geo_cull_face_enable = #{geo_cull_face_enable},
 			geo_time_line_enable = #{geo_time_line_enable},
 			geo_init_camera_enable = #{geo_init_camera_enable},
@@ -113,6 +114,7 @@
 		UPDATE policy
 		SET geo_callback_enable = #{geo_callback_enable},
 			geo_callback_apiresult = #{geo_callback_apiresult},
+			geo_callback_dataInfo = #{geo_callback_dataInfo},
 			geo_callback_selectedobject = #{geo_callback_selectedobject},
 			geo_callback_insertissue = #{geo_callback_insertissue},
 			geo_callback_listissue = #{geo_callback_listissue},

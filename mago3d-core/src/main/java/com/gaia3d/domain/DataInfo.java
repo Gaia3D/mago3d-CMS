@@ -22,7 +22,7 @@ public class DataInfo {
 	// Data 상태가 중지(관리자)
 	public static final String STATUS_FORBID = "1";
 	// Data 상태가 삭제(화면 비표시)
-	public static final String STATUS_LOGICAL_DELETE = "5";
+	public static final String STATUS_ETC = "2";
 	
 	// data_group 에 등록되지 않은 Data
 	private String[] data_all_id;
@@ -62,9 +62,9 @@ public class DataInfo {
 
 	// 고유번호
 	private Long data_id;
-	// Data Group 고유번호
+	// Data project 고유번호
 	private Long project_id;
-	// Data Group 이름
+	// Data project 이름
 	private String project_name;
 	// data 고유 식별번호
 	private String data_key;

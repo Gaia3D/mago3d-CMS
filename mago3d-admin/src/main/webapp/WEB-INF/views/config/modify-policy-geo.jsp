@@ -36,6 +36,17 @@
 				<input type="button" id="projectFind" value="<spring:message code='common.search'/>" />
 			</td>
 		</tr>
+		<tr>
+  			<th>
+		  		<span><spring:message code='config.geo.data.change.request.decision'/></span>
+ 			</th>
+ 			<spring:message code='config.geo.data.change.request.decision.auto' var='auto'/>
+ 			<spring:message code='config.geo.data.change.request.decision.confirm' var='confirm'/>
+ 			<td class="col-input radio-set">
+ 				<form:radiobutton path="geo_data_change_request_decision" value="0" label="${auto}" />
+				<form:radiobutton path="geo_data_change_request_decision" value="1" label="${confirm}" />
+	  		</td>
+  		</tr>
   		<tr>
   			<th>
 		  		<span><spring:message code='config.cullface.use.not'/></span>

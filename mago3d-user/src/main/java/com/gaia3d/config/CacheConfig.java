@@ -292,6 +292,7 @@ public class CacheConfig {
 	}
 	
 	private StringBuilder getLocationAndAttributes(StringBuilder builder, DataInfo dataInfo) {
+		builder.append("\"data_id\"").append(":").append("\"").append(dataInfo.getData_id()).append("\"").append(",");
 		builder.append("\"data_key\"").append(":").append("\"").append(dataInfo.getData_key()).append("\"").append(",");
 		builder.append("\"data_name\"").append(":").append("\"").append(dataInfo.getData_name()).append("\"").append(",");
 		builder.append("\"parent\"").append(":").append(dataInfo.getParent()).append(",");

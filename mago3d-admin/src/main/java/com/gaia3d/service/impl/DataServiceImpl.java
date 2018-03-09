@@ -35,16 +35,6 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	/**
-	 * data_group_id를 제외한 Data 수
-	 * @param dataInfo
-	 * @return
-	 */
-	@Transactional(readOnly=true)
-	public Long getExceptDataGroupDataByGroupIdTotalCount(DataInfo dataInfo) {
-		return dataMapper.getExceptDataGroupDataByGroupIdTotalCount(dataInfo);
-	}
-	
-	/**
 	 * Data 목록
 	 * @param dataInfo
 	 * @return
@@ -96,32 +86,32 @@ public class DataServiceImpl implements DataService {
 	
 	/**
 	 * Data 정보 취득
-	 * @param data_key
+	 * @param dataInfo
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public DataInfo getDataByDataKey(String data_key) {
-		return dataMapper.getDataByDataKey(data_key);
+	public DataInfo getDataByDataKey(DataInfo dataInfo) {
+		return dataMapper.getDataByDataKey(dataInfo);
 	}
 	
 	/**
 	 * 표시 순서
-	 * @param dvataInfo
+	 * @param dataInfo
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public Integer getViewOrderByParent(DataInfo dvataInfo) {
-		return dataMapper.getViewOrderByParent(dvataInfo);
+	public Integer getViewOrderByParent(DataInfo dataInfo) {
+		return dataMapper.getViewOrderByParent(dataInfo);
 	}
 	
 	/**
 	 * 한 프로젝트 내 Root Parent 개수를 체크
-	 * @param dvataInfo
+	 * @param dataInfo
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public Integer getRootParentCount(DataInfo dvataInfo) {
-		return dataMapper.getRootParentCount(dvataInfo);
+	public Integer getRootParentCount(DataInfo dataInfo) {
+		return dataMapper.getRootParentCount(dataInfo);
 	}
 	
 	/**

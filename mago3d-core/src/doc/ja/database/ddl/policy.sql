@@ -29,6 +29,7 @@ create table policy(
 	geo_view_library					varchar(20)			default 'cesium',
 	geo_data_path						varchar(100)		default '/data',
 	geo_data_default_projects			varchar(30)[],
+	geo_data_change_request_decision	char(1)				default '1',
 	geo_cull_face_enable				varchar(5)			default 'false',
 	geo_time_line_enable				varchar(5)			default 'false',
 	
@@ -71,6 +72,7 @@ create table policy(
 	
 	geo_callback_enable 					varchar(5)			default 'false',
 	geo_callback_apiresult					varchar(64),
+	geo_callback_dataInfo					varchar(64),
 	geo_callback_selectedObject				varchar(64),
 	geo_callback_insertIssue				varchar(64),
 	geo_callback_listIssue					varchar(64),
@@ -165,6 +167,7 @@ comment on column policy.password_exception_char is 'パスワードで使用で
 comment on column policy.geo_view_library is 'view library。基本cesium';
 comment on column policy.geo_data_path is 'dataフォルダ。基本/ data';
 comment on column policy.geo_data_default_projects is 'の起動時にロードするプロジェクト。配列に格納';
+comment on column policy.geo_data_change_request_decision is '데이터 정보 변경 요청에 대한 처리. 0 : 자동승인, 1 : 결재(초기값)';
 comment on column policy.geo_cull_face_enable is 'cullFace使用の有無。基本false';
 comment on column policy.geo_time_line_enable is 'timeLine使用の有無。基本false';
 	
@@ -206,6 +209,7 @@ comment on column policy.geo_server_add_parameters_format is 'geo server追加La
 	
 comment on column policy.geo_callback_enable is 'のコールバックfunction使用の有無。デフォルトfalse';
 comment on column policy.geo_callback_apiresult is 'api処理結果callback function名';
+comment on column policy.geo_callback_dataInfo is 'data info 표시 callback function 이름';
 comment on column policy.geo_callback_selectedObject is 'object選択callback function名';
 comment on column policy.geo_callback_insertIssue is 'issue登録callback function名';
 comment on column policy.geo_callback_listIssue is 'issueリストcallback function名';

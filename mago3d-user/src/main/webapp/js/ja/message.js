@@ -61,4 +61,3 @@ JS_MESSAGE["demo.information.not.loading"] = "まだ読み込まれていない�
 
 JS_MESSAGE["demo.occlusion.culling.selection"] = "Occlusion Culling使用するかどうかを選択します。";
 JS_MESSAGE["demo.ssao.empty"] = "SSAO値を入力してください。";
-

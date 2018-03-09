@@ -29,6 +29,7 @@ create table policy(
 	geo_view_library					varchar(20)			default 'cesium',
 	geo_data_path						varchar(100)		default '/data',
 	geo_data_default_projects			varchar(30)[],
+	geo_data_change_request_decision	char(1)				default '1',
 	geo_cull_face_enable				varchar(5)			default 'false',
 	geo_time_line_enable				varchar(5)			default 'false',
 	
@@ -71,6 +72,7 @@ create table policy(
 	
 	geo_callback_enable 					varchar(5)			default 'false',
 	geo_callback_apiresult					varchar(64),
+	geo_callback_dataInfo					varchar(64),
 	geo_callback_selectedObject				varchar(64),
 	geo_callback_insertIssue				varchar(64),
 	geo_callback_listIssue					varchar(64),
@@ -165,6 +167,7 @@ comment on column policy.password_exception_char is '패스워드로 사용할수 없는 특
 comment on column policy.geo_view_library is 'view library. 기본 cesium';
 comment on column policy.geo_data_path is 'data 폴더. 기본 /data';
 comment on column policy.geo_data_default_projects is '시작시 로딩 프로젝트. 배열로 저장';
+comment on column policy.geo_data_change_request_decision is '데이터 정보 변경 요청에 대한 처리. 0 : 자동승인, 1 : 결재(초기값)';
 comment on column policy.geo_cull_face_enable is 'cullFace 사용유무. 기본 false';
 comment on column policy.geo_time_line_enable is 'timeLine 사용유무. 기본 false';
 	
@@ -206,6 +209,7 @@ comment on column policy.geo_server_add_parameters_format is 'geo server 추가 La
 	
 comment on column policy.geo_callback_enable is '콜백 function 사용유무. 기본값 false';
 comment on column policy.geo_callback_apiresult is 'api 처리 결과 callback function 이름';
+comment on column policy.geo_callback_dataInfo is 'data info 표시 callback function 이름';
 comment on column policy.geo_callback_selectedObject is 'object 선택 callback function 이름';
 comment on column policy.geo_callback_insertIssue is 'issue 등록 callback function 이름';
 comment on column policy.geo_callback_listIssue is 'issue 목록 callback function 이름';
@@ -262,4 +266,3 @@ comment on column policy.solution_manager_phone IS '제품 회사 담당자 전화번호';
 comment on column policy.solution_manager_email IS '제품 회사 담당자 이메일';
 
 comment on column policy.insert_date is '등록일';
-

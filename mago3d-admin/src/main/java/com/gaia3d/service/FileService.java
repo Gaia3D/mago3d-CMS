@@ -71,10 +71,11 @@ public interface FileService {
 	
 	/**
 	 * Data Object Attribute Batch 등록
+	 * @param projectId
 	 * @param userId
 	 * @return
 	 */
-	public FileInfo insertDataObjectAttributeBatch(String userId);
+	public FileInfo insertDataObjectAttributeBatch(Long projectId, String userId);
 	
 	/**
 	 * 파일 파싱 로그 등록

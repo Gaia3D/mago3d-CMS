@@ -2,7 +2,8 @@
 drop table if exists data_info_log cascade;
 
 create table data_info_log(
-	data_info_log_id				bigint,					
+	data_info_log_id				bigint,
+	project_id						smallint,
 	data_id							bigint,
 	user_id							varchar(32),
 	latitude						numeric(13,10),
@@ -11,6 +12,12 @@ create table data_info_log(
 	heading							numeric(8,5),
 	pitch							numeric(8,5),
 	roll							numeric(8,5),
+	before_latitude					numeric(13,10),
+	before_longitude				numeric(13,10),
+	before_height					numeric(7,3),
+	before_heading					numeric(8,5),
+	before_pitch					numeric(8,5),
+	before_roll						numeric(8,5),
 	status							char(1)								default '0',
 	change_type						varchar(30),
 	description						varchar(256),
@@ -19,8 +26,9 @@ create table data_info_log(
 	constraint data_info_log_pk 	primary key(data_info_log_id)
 );
 
-comment on table data_info_log is 'Data 이력 정보';
+comment on table data_info_log is 'Data 변경 이력 정보';
 comment on column data_info_log.data_info_log_id is '고유번호';
+comment on column data_info_log.project_id is 'project 고유번호, join 성능때문에 중복 허용';
 comment on column data_info_log.data_id is 'Data 고유번호';
 comment on column data_info_log.user_id is '사용자 고유번호';
 comment on column data_info_log.latitude is '위도';
@@ -29,7 +37,13 @@ comment on column data_info_log.height is '높이';
 comment on column data_info_log.heading is 'heading';
 comment on column data_info_log.pitch is 'pitch';
 comment on column data_info_log.roll is 'roll';
-comment on column data_info_log.status is '상태. 0:변경대기, 1:변경완료, 2:기각';
+comment on column data_info_log.before_latitude is '변경전 위도';
+comment on column data_info_log.before_longitude is '변경전 경도';
+comment on column data_info_log.before_height is '변경전 높이';
+comment on column data_info_log.before_heading is '변경전 heading';
+comment on column data_info_log.before_pitch is '변경전 pitch';
+comment on column data_info_log.before_roll is '변경전 roll';
+comment on column data_info_log.status is '상태. 0:대기, 1:완료, 2:기각';
 comment on column data_info_log.change_type is '요청 타입';
 comment on column data_info_log.description is '설명';
 comment on column data_info_log.update_date is '수정일';

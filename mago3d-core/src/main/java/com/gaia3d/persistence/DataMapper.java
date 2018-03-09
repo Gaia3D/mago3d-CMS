@@ -24,11 +24,11 @@ public interface DataMapper {
 	Long getDataTotalCount(DataInfo dataInfo);
 	
 	/**
-	 * data_group_id 그룹을 제외한 Data 수
-	 * @param dataInfo
+	 * 데이터 상태별 통계 정보
+	 * @param status
 	 * @return
 	 */
-	Long getExceptDataGroupDataByGroupIdTotalCount(DataInfo dataInfo);
+	Long getDataTotalCountByStatus(String status);
 	
 	/**
 	 * Data 목록
@@ -67,24 +67,31 @@ public interface DataMapper {
 	
 	/**
 	 * Data 정보 취득
-	 * @param data_key
+	 * @param dataInfo
 	 * @return
 	 */
-	DataInfo getDataByDataKey(String data_key);
+	DataInfo getDataByDataKey(DataInfo dataInfo);
+	
+	/**
+	 * Data Attribute 정보 취득
+	 * @param data_id
+	 * @return
+	 */
+	DataInfoAttribute getDataAttribute(Long data_id);
 	
 	/**
 	 * 표시 순서
-	 * @param dvataInfo
+	 * @param dataInfo
 	 * @return
 	 */
-	Integer getViewOrderByParent(DataInfo dvataInfo);
+	Integer getViewOrderByParent(DataInfo dataInfo);
 	
 	/**
 	 * 한 프로젝트 내 Root Parent 개수를 체크
-	 * @param dvataInfo
+	 * @param dataInfo
 	 * @return
 	 */
-	Integer getRootParentCount(DataInfo dvataInfo);
+	Integer getRootParentCount(DataInfo dataInfo);
 	
 	/**
 	 * data_key 를 이용하여 data_attribute_id 를 얻음
