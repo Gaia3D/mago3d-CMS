@@ -154,7 +154,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="description"><spring:message code='data.properties.explain'/></form:label>
+											<form:label path="description"><spring:message code='description'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="description" class="xl" />

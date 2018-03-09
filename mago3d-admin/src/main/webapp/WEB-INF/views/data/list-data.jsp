@@ -154,7 +154,7 @@
 											<th scope="col" class="col-name"><spring:message code='data.origin.properties'/></th>
 											<th scope="col" class="col-name"><spring:message code='data.object.properties'/></th>
 											<th scope="col" class="col-date"><spring:message code='data.insert.date'/></th>
-											<th scope="col" class="col-functions"><spring:message code='modified.and.inser'/></th>
+											<th scope="col" class="col-functions"><spring:message code='modified.and.insert'/></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -188,17 +188,17 @@
 		</c:if>
 												
 											</td>
-											<td class="col-name"><a href="#" onclick="viewAttributes('${dataInfo.data_id }'); return false;">제어 속성</a></td>
+											<td class="col-name"><a href="#" onclick="viewAttributes('${dataInfo.data_id }'); return false;"><spring:message code='data.control.property'/></a></td>
 											<td class="col-functions">
 												<span class="button-group">
-													<a href="#" onclick="return deleteWarning();">보기</a>
+													<a href="#" onclick="return deleteWarning();"><spring:message code='common.view'/></a>
 													<a href="#" class="image-button button-edit" onclick="insertDataAttribute('${dataInfo.data_id }', '${dataInfo.data_name }'); return false;">
 														<spring:message code='modified'/></a>
 												</span>
 											</td>
 											<td class="col-functions">
 												<span class="button-group">
-													<a href="#" onclick="return deleteWarning();">보기</a>
+													<a href="#" onclick="return deleteWarning();"><spring:message code='common.view'/></a>
 													<a href="#" class="image-button button-edit" onclick="insertDataObjectAttribute('${dataInfo.data_id }', '${dataInfo.data_name }'); return false;">
 														<spring:message code='modified'/></a>
 												</span>
