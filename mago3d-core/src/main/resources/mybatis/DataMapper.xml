@@ -119,7 +119,7 @@
 	<select id="getData" parameterType="long" resultType="dataInfo">
 		/* getData */
 		SELECT A.*, B.project_name,
-			CASE WHEN A.parent = 0 THEN '최상위 Node'
+			CASE WHEN A.parent = 0 THEN 'TOP Node'
 				ELSE (SELECT data_name FROM data_info WHERE data_id = A.parent)
 			END AS parent_name
 		FROM data_info A, project B
