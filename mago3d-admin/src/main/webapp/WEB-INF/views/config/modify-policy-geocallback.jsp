@@ -35,6 +35,15 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
+				<form:label path="geo_callback_moveddata">Moved Data Callback</form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_callback_moveddata" cssClass="l" />
+				<form:errors path="geo_callback_moveddata" cssClass="error" />
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label l" scope="row">
 				<form:label path="geo_callback_selectedobject">Object Select Callback</form:label>
 			</th>
 			<td class="col-input">

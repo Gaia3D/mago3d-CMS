@@ -1758,6 +1758,7 @@
 		var requestMessage = "<spring:message code='common.request'/>";
 		var completeMessage = "<spring:message code='common.complete'/>";
 		var rejectMessage = "<spring:message code='common.reject'/>";
+		var resetMessage = "<spring:message code='common.reset'/>";
 		
 		var url = "/data/ajax-list-data-change-request-log.do";
 		var info = "";
@@ -1785,6 +1786,7 @@
 							if(dataInfoLog.status == "0") status = requestMessage;
 							else if(dataInfoLog.status == "1") status = completeMessage;
 							else if(dataInfoLog.status == "2") status = rejectMessage;
+							else if(dataInfoLog.status == "3") status = resetMessage;
 							
 							content = content 
 							+	"<tr style=\"height: 30px;\">"
@@ -2009,6 +2011,17 @@
 		$("#now_latitude").val(latitude);
 		$("#now_longitude").val(longitude);
 	}
+	
+	// moved data callback
+	function showMovedData(dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
+		$("#moveDataKey").val(dataKey);
+        $("#moveLatitude").val(latitude);
+        $("#moveLongitude").val(longitude);
+        $("#moveHeight").val(height);
+        $("#moveHeading").val(heading);
+        $("#movePitch").val(pitch);
+        $("#moveRoll").val(roll);
+    }
 </script>
 </body>
 </html>

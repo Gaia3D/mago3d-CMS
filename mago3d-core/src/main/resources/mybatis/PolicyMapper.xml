@@ -115,6 +115,7 @@
 		SET geo_callback_enable = #{geo_callback_enable},
 			geo_callback_apiresult = #{geo_callback_apiresult},
 			geo_callback_dataInfo = #{geo_callback_dataInfo},
+			geo_callback_moveddata = #{geo_callback_moveddata},
 			geo_callback_selectedobject = #{geo_callback_selectedobject},
 			geo_callback_insertissue = #{geo_callback_insertissue},
 			geo_callback_listissue = #{geo_callback_listissue},
