@@ -856,6 +856,18 @@ nav li.issue > span * {
 .mobile-nav li.api {
 	background-position: 0 -50px;
 }
+.mobile-nav li.tree {
+	background-position: 0 -50px;
+}
+.mobile-nav li.chart {
+	background-position: 0 -50px;
+}
+.mobile-nav li.log {
+	background-position: 0 -50px;
+}
+.mobile-nav li.attribute {
+	background-position: 0 -50px;
+}
 .mobile-nav li.config {
 	background-position: 0 -50px;
 }
@@ -913,6 +925,50 @@ nav li.issue > span * {
 	margin: 10px 15px 0px 55px;
 }
 .mobile-navContents div.insertIssueWrap h3 {
+	margin: 5px 0;
+	font-size: 1em;
+	font-weight: normal;
+	color: #2955a6;
+}
+
+/* Tree */
+.mobile-navContents div.treeWrap {
+	margin: 10px 15px 0px 55px;
+}
+.mobile-navContents div.treeWrap h3 {
+	margin: 5px 0;
+	font-size: 1em;
+	font-weight: normal;
+	color: #2955a6;
+}
+
+/* Chart */
+.mobile-navContents div.chartWrap {
+	margin: 10px 15px 0px 55px;
+}
+.mobile-navContents div.chartWrap h3 {
+	margin: 5px 0;
+	font-size: 1em;
+	font-weight: normal;
+	color: #2955a6;
+}
+
+/* Log */
+.mobile-navContents div.logWrap {
+	margin: 10px 15px 0px 55px;
+}
+.mobile-navContents div.logWrap h3 {
+	margin: 5px 0;
+	font-size: 1em;
+	font-weight: normal;
+	color: #2955a6;
+}
+
+/* Attribute */
+.mobile-navContents div.attributeWrap {
+	margin: 10px 15px 0px 55px;
+}
+.mobile-navContents div.attributeWrap h3 {
 	margin: 5px 0;
 	font-size: 1em;
 	font-weight: normal;

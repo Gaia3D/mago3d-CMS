@@ -206,7 +206,7 @@
 					<label for="hideLabel"> <spring:message code='common.hide'/> </label>
 				</li>
 				<li>
-					<label for="propertyRenderingProjectId"><spring:message code='common.project'/> </label>
+					<label for="propertyRenderingProjectId"> <spring:message code='common.project'/> </label>
 					<select id="propertyRenderingProjectId" name="propertyRenderingProjectId" class="select">
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
@@ -224,7 +224,7 @@
 			<h3><spring:message code='demo.color.change'/></h3>
 			<ul class="apiLoca">
 				<li>
-					<label for="colorProjectId"><spring:message code='common.project'/> </label>
+					<label for="colorProjectId"> <spring:message code='common.project'/> </label>
 					<select id="colorProjectId" name="colorProjectId" class="select">
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
