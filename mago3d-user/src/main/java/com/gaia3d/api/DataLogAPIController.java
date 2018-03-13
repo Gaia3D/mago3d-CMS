@@ -64,7 +64,7 @@ public class DataLogAPIController {
 				dataInfoLog.setEnd_date(dataInfoLog.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
 			}
 			
-			long totalCount = dataLogService.getDataInfoLogTotalCountByUserId(dataInfoLog);
+			long totalCount = dataLogService.getDataInfoLogTotalCount(dataInfoLog);
 			
 			long pageRows = 10l;
 			if(dataInfoLog.getList_counter() != null && dataInfoLog.getList_counter().longValue() > 0) pageRows = dataInfoLog.getList_counter().longValue();
@@ -75,7 +75,7 @@ public class DataLogAPIController {
 			dataInfoLog.setLimit(pagination.getPageRows());
 			List<DataInfoLog> dataInfoLogList = new ArrayList<>();
 			if(totalCount > 0l) {
-				dataInfoLogList = dataLogService.getListDataInfoLogByUserId(dataInfoLog);
+				dataInfoLogList = dataLogService.getListDataInfoLog(dataInfoLog);
 			}
 			map.put("dataInfoLogList", dataInfoLogList);
 			map.put("totalCount", totalCount);

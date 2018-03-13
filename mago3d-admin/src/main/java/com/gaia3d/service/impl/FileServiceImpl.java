@@ -165,7 +165,7 @@ public class FileServiceImpl implements FileService {
 //		int totalCount = 0;
 //		int parseSuccessCount = 0;
 //		int parseErrorCount = 0;
-//		List<UserInfo> userList = new ArrayList<UserInfo>();		
+//		List<UserInfo> userList = new ArrayList<>();		
 //		jxl.Workbook workBook = null;
 //		try {
 //			File file = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());
@@ -299,7 +299,7 @@ public class FileServiceImpl implements FileService {
 //			passwordCreateWithUserId = true;
 //		} 
 //		String passwordCreateChar = StringUtil.getDefaultValue(policy.getPassword_create_char());
-//		List<UserInfo> userList = new ArrayList<UserInfo>();		
+//		List<UserInfo> userList = new ArrayList<>();		
 //		
 //		FileParseLog fileParseLog = new FileParseLog();
 //		fileParseLog.setFile_info_id(fileInfo.getFile_info_id());
@@ -322,7 +322,7 @@ public class FileServiceImpl implements FileService {
 //			for(int i=1; i<= totalCount; i++) {
 //				UserInfo userInfo = null;
 //				try {
-//					List<Object> excelObject = new ArrayList<Object>();
+//					List<Object> excelObject = new ArrayList<>();
 //					Row row = sheet.getRow(i);
 //					for(int j=0; j<EXCEL_UPLOAD_USER_COLUMN; j++) {					
 //						Cell cell = row.getCell(j, Row.RETURN_BLANK_AS_NULL);
@@ -842,7 +842,7 @@ public class FileServiceImpl implements FileService {
 //		int totalCount = 0;
 //		int parseSuccessCount = 0;
 //		int parseErrorCount = 0;
-//		List<Server> serverList = new ArrayList<Server>();		
+//		List<Server> serverList = new ArrayList<>();		
 //		jxl.Workbook workBook = null;
 //		try {
 //			File file = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());

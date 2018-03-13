@@ -43,7 +43,7 @@ comment on column data_info_log.before_height is '변경전 높이';
 comment on column data_info_log.before_heading is '변경전 heading';
 comment on column data_info_log.before_pitch is '변경전 pitch';
 comment on column data_info_log.before_roll is '변경전 roll';
-comment on column data_info_log.status is '상태. 0:대기, 1:완료, 2:기각';
+comment on column data_info_log.status is '상태. 0:대기, 1:완료, 2:기각, 3:원복';
 comment on column data_info_log.change_type is '요청 타입';
 comment on column data_info_log.description is '설명';
 comment on column data_info_log.update_date is '수정일';

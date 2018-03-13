@@ -7,6 +7,7 @@ JS_MESSAGE["delete"] =  "削除されました。";
 JS_MESSAGE["success"] =  "成功しました。";
 JS_MESSAGE["apply"] =  "適用されました。";
 JS_MESSAGE["upload"] =  "アップロード中です。";
+JS_MESSAGE["proceed.confirm"] = "Do you want to proceed?";
 JS_MESSAGE["move.confirm"] =  "移動しますか？";
 JS_MESSAGE["delete.confirm"] =  "削除しますか？";
 JS_MESSAGE["check.value.required"] =  "選択された項目がありません。";

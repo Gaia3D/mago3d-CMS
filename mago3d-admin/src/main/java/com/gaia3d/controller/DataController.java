@@ -114,7 +114,7 @@ public class DataController {
 		
 		dataInfo.setOffset(pagination.getOffset());
 		dataInfo.setLimit(pagination.getPageRows());
-		List<DataInfo> dataList = new ArrayList<DataInfo>();
+		List<DataInfo> dataList = new ArrayList<>();
 		if(totalCount > 0l) {
 			dataList = dataService.getListData(dataInfo);
 		}
@@ -151,7 +151,7 @@ public class DataController {
 	public Map<String, Object> ajaxListDataByProjectId(HttpServletRequest request, @RequestParam("project_id") Long project_id) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
-		List<DataInfo> dataList = new ArrayList<DataInfo>();
+		List<DataInfo> dataList = new ArrayList<>();
 		try {		
 			DataInfo dataInfo = new DataInfo();
 			dataInfo.setProject_id(project_id);
@@ -178,7 +178,7 @@ public class DataController {
 //		Map<String, Object> jSONObject = new HashMap<String, Object>();
 //		String result = "success";
 //		Pagination pagination = null;
-//		List<DataInfo> dataList = new ArrayList<DataInfo>();
+//		List<DataInfo> dataList = new ArrayList<>();
 //		try {
 //			long totalCount = dataService.getExceptDataGroupDataByGroupIdTotalCount(dataInfo);
 //			pagination = new Pagination(request.getRequestURI(), getSearchParameters(dataInfo), totalCount, Long.valueOf(pageNo).longValue());
@@ -209,7 +209,7 @@ public class DataController {
 //		Map<String, Object> jSONObject = new HashMap<String, Object>();
 //		String result = "success";
 //		Pagination pagination = null;
-//		List<DataInfo> dataList = new ArrayList<DataInfo>();
+//		List<DataInfo> dataList = new ArrayList<>();
 //		try {
 //			
 //			long totalCount = dataService.getDataTotalCount(dataInfo);
@@ -335,8 +335,8 @@ public class DataController {
 //		
 //		log.info("@@@ data_group_id = {}, data_all_id = {}", data_group_id, data_all_id);
 //		Map<String, Object> jSONObject = new HashMap<String, Object>();
-//		List<DataInfo> exceptDataList = new ArrayList<DataInfo>();
-//		List<DataInfo> dataList = new ArrayList<DataInfo>();
+//		List<DataInfo> exceptDataList = new ArrayList<>();
+//		List<DataInfo> dataList = new ArrayList<>();
 //		String result = "success";
 //		try {
 //			if(data_group_id == null || data_group_id.longValue() == 0l ||				
@@ -652,8 +652,8 @@ public class DataController {
 //		
 //		log.info("@@@ data_group_id = {}, data_select_id = {}", data_group_id, data_select_id);
 //		Map<String, Object> jSONObject = new HashMap<String, Object>();
-//		List<DataInfo> exceptDataList = new ArrayList<DataInfo>();
-//		List<DataInfo> dataList = new ArrayList<DataInfo>();
+//		List<DataInfo> exceptDataList = new ArrayList<>();
+//		List<DataInfo> dataList = new ArrayList<>();
 //		String result = "success";
 //		try {
 //			if(data_group_id == null || data_group_id.longValue() == 0l ||				
@@ -1001,7 +1001,7 @@ public class DataController {
 //		}
 //		
 //		long totalCount = 0l;
-//		List<DataInfo> dataList = new ArrayList<DataInfo>();
+//		List<DataInfo> dataList = new ArrayList<>();
 //		try {
 //			// 논리적 삭제는 SELECT에서 제외
 ////			dataInfo.setDelete_flag(DataInfo.STATUS_LOGICAL_DELETE);

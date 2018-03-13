@@ -27,7 +27,7 @@ public class MonitoringServiceImpl implements MonitoringService {
 	 */
 	public List<PGStatActivity> getListDBSession() {
 		List<PGStatActivity> dbSessionList =  monitoringMapper.getListDBSession();
-		if(dbSessionList == null) dbSessionList = new ArrayList<PGStatActivity>();
+		if(dbSessionList == null) dbSessionList = new ArrayList<>();
 		return dbSessionList;
 	}
 }

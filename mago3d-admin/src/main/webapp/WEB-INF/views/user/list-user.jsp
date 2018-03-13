@@ -40,7 +40,7 @@
 								<div class="input-set">
 									<label for="search_word"><spring:message code='user.group.search.word'/></label>
 									<select id="search_word" name="search_word" class="select">
-										<option value=""><spring:message code='user.group.select'/></option>
+										<option value=""><spring:message code='common.select'/></option>
 					                	<option value="user_id"><spring:message code='user.group.id'/></option>
 										<option value="user_name"><spring:message code='user.group.user.name'/></option>
 									</select>
@@ -86,7 +86,7 @@
 					                	<option value="user_id"><spring:message code='user.group.id'/></option>
 										<option value="user_name"><spring:message code='user.group.user.name'/> </option>
 										<option value="last_login_date"><spring:message code='user.group.login.date'/></option>
-										<option value="register_date"> <spring:message code='user.group.insert.date'/> </option>
+										<option value="insert_date"> <spring:message code='user.group.insert.date'/> </option>
 									</select>
 									<select id="order_value" name="order_value" class="select">
 				                		<option value=""> <spring:message code='user.group.basic'/> </option>

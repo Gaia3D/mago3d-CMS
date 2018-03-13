@@ -54,7 +54,7 @@ public class RoleController {
 		
 		role.setOffset(pagination.getOffset());
 		role.setLimit(pagination.getPageRows());
-		List<Role> roleList = new ArrayList<Role>();
+		List<Role> roleList = new ArrayList<>();
 		if(totalCount > 0l) {
 			roleList = roleService.getListRole(role);
 		}
@@ -248,7 +248,7 @@ public class RoleController {
 	public Map<String, Object> ajaxListUserGroupRole(HttpServletRequest request, @RequestParam("user_group_id") Long user_group_id, @RequestParam(defaultValue="1") String pageNo) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
-		List<UserGroupRole> listUserGroupRole = new ArrayList<UserGroupRole>();
+		List<UserGroupRole> listUserGroupRole = new ArrayList<>();
 		Pagination pagination = null;
 		try {			
 			UserGroupRole userGroupRole = new UserGroupRole();
@@ -285,7 +285,7 @@ public class RoleController {
 	public Map<String, Object> ajaxListAccountGroupRole(HttpServletRequest request, @RequestParam("account_group_id") Long account_group_id) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
-		//List<UserGroupRole> listUserGroupRole = new ArrayList<UserGroupRole>();
+		//List<UserGroupRole> listUserGroupRole = new ArrayList<>();
 		try {			
 			
 		} catch(Exception e) {
@@ -307,7 +307,7 @@ public class RoleController {
 	public Map<String, Object> ajaxListExceptUserGroupRoleForUpdate(HttpServletRequest request, UserGroupRole userGroupRole, @RequestParam(defaultValue="1") String pageNo) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
-		List<UserGroupRole> listExceptUserGroupRoleByGroupId = new ArrayList<UserGroupRole>();
+		List<UserGroupRole> listExceptUserGroupRoleByGroupId = new ArrayList<>();
 		Pagination pagination = null;
 		try {		
 			userGroupRole.setRole_type(UserGroupRole.ROLE_TYPE_USER);
@@ -341,7 +341,7 @@ public class RoleController {
 	public Map<String, Object> ajaxListUserGroupRoleForUpdate(HttpServletRequest request, UserGroupRole userGroupRole, @RequestParam(defaultValue="1") String pageNo) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
-		List<UserGroupRole> listUserGroupRole = new ArrayList<UserGroupRole>();
+		List<UserGroupRole> listUserGroupRole = new ArrayList<>();
 		Pagination pagination = null;
 		try {
 			userGroupRole.setRole_type(UserGroupRole.ROLE_TYPE_USER);
@@ -381,8 +381,8 @@ public class RoleController {
 		
 		log.info("@@@ user_group_id = {}, role_all_id = {}", user_group_id, role_all_id);
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
-		List<UserGroupRole> listExceptUserGroupRoleByGroupId = new ArrayList<UserGroupRole>();
-		List<UserGroupRole> listUserGroupRole = new ArrayList<UserGroupRole>();
+		List<UserGroupRole> listExceptUserGroupRoleByGroupId = new ArrayList<>();
+		List<UserGroupRole> listUserGroupRole = new ArrayList<>();
 		String result = "success";
 		try {
 			if(user_group_id == null || user_group_id.longValue() == 0l ||				
@@ -428,8 +428,8 @@ public class RoleController {
 		
 		log.info("@@@ user_group_id = {}, role_select_id = {}", user_group_id, role_select_id);
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
-		List<UserGroupRole> listExceptUserGroupRoleByGroupId = new ArrayList<UserGroupRole>();
-		List<UserGroupRole> listUserGroupRole = new ArrayList<UserGroupRole>();
+		List<UserGroupRole> listExceptUserGroupRoleByGroupId = new ArrayList<>();
+		List<UserGroupRole> listUserGroupRole = new ArrayList<>();
 		String result = "success";
 		try {
 			if(user_group_id == null || user_group_id.longValue() == 0l ||				

@@ -170,7 +170,7 @@ public class WidgetController {
 				return jSONObject;
 			}
 			
-			List<Widget> widgetList = new ArrayList<Widget>();
+			List<Widget> widgetList = new ArrayList<>();
 			String[] orders = widget.getWidget_order().split(",");
 			int count = orders.length;
 			for(int i=1; i<count; i++) {

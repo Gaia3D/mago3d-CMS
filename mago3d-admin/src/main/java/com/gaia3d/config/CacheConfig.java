@@ -266,7 +266,7 @@ public class CacheConfig {
 		service.setStatus(ExternalService.STATUS_USE);
 		List<ExternalService> externalCacheList = aPIService.getListExternalService(service);
 		
-//		List<ExternalService> remoteCacheServiceList = new ArrayList<ExternalService>();
+//		List<ExternalService> remoteCacheServiceList = new ArrayList<>();
 //		for(ExternalService externalService : externalCacheList) {
 //			if(ExternalService.EXTERNAL_CACHE.equals(externalService.getService_type())) {
 //				remoteCacheServiceList.add(externalService);

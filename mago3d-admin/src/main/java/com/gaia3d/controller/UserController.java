@@ -115,7 +115,7 @@ public class UserController {
 		
 		userInfo.setOffset(pagination.getOffset());
 		userInfo.setLimit(pagination.getPageRows());
-		List<UserInfo> userList = new ArrayList<UserInfo>();
+		List<UserInfo> userList = new ArrayList<>();
 		if(totalCount > 0l) {
 			userList = userService.getListUser(userInfo);
 		}
@@ -149,7 +149,7 @@ public class UserController {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		Pagination pagination = null;
-		List<UserInfo> userList = new ArrayList<UserInfo>();
+		List<UserInfo> userList = new ArrayList<>();
 		try {		
 			UserInfo userInfo = new UserInfo();
 			userInfo.setUser_group_id(user_group_id);
@@ -187,7 +187,7 @@ public class UserController {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		Pagination pagination = null;
-		List<UserInfo> userList = new ArrayList<UserInfo>();
+		List<UserInfo> userList = new ArrayList<>();
 		try {
 			long totalCount = userService.getExceptUserGroupUserByGroupIdTotalCount(userInfo);
 			pagination = new Pagination(request.getRequestURI(), getSearchParameters(userInfo), totalCount, Long.valueOf(pageNo).longValue());
@@ -218,7 +218,7 @@ public class UserController {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		Pagination pagination = null;
-		List<UserInfo> userList = new ArrayList<UserInfo>();
+		List<UserInfo> userList = new ArrayList<>();
 		try {
 			
 			long totalCount = userService.getUserTotalCount(userInfo);
@@ -361,8 +361,8 @@ public class UserController {
 		
 		log.info("@@@ user_group_id = {}, user_all_id = {}", user_group_id, user_all_id);
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
-		List<UserInfo> exceptUserList = new ArrayList<UserInfo>();
-		List<UserInfo> userList = new ArrayList<UserInfo>();
+		List<UserInfo> exceptUserList = new ArrayList<>();
+		List<UserInfo> userList = new ArrayList<>();
 		String result = "success";
 		try {
 			if(user_group_id == null || user_group_id.longValue() == 0l ||				
@@ -826,8 +826,8 @@ public class UserController {
 		
 		log.info("@@@ user_group_id = {}, user_select_id = {}", user_group_id, user_select_id);
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
-		List<UserInfo> exceptUserList = new ArrayList<UserInfo>();
-		List<UserInfo> userList = new ArrayList<UserInfo>();
+		List<UserInfo> exceptUserList = new ArrayList<>();
+		List<UserInfo> userList = new ArrayList<>();
 		String result = "success";
 		try {
 			if(user_group_id == null || user_group_id.longValue() == 0l ||				
@@ -938,7 +938,7 @@ public class UserController {
 		}
 		
 		long totalCount = 0l;
-		List<UserInfo> userList = new ArrayList<UserInfo>();
+		List<UserInfo> userList = new ArrayList<>();
 		try {
 			// 논리적 삭제는 SELECT에서 제외
 //			userInfo.setDelete_flag(UserInfo.STATUS_LOGICAL_DELETE);

@@ -205,7 +205,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public List<String> updateUserStatus(String business_type, String status_value, String check_ids) {
 		
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		String[] userIds = check_ids.split(",");
 		
 		for(String user_id : userIds) {

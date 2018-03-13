@@ -58,7 +58,7 @@ public class MenuController {
 //		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		String menuTree = null;
-		List<Menu> menuList = new ArrayList<Menu>();
+		List<Menu> menuList = new ArrayList<>();
 		menuList.add(getRootMenu());
 		try {
 			menuList.addAll(menuService.getListMenu(null));
@@ -87,7 +87,7 @@ public class MenuController {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		String menuTree = null;
-		List<Menu> menuList = new ArrayList<Menu>();
+		List<Menu> menuList = new ArrayList<>();
 		menuList.add(getRootMenu());
 		try {
 			log.info("@@ menu = {} ", menu);
@@ -151,7 +151,7 @@ public class MenuController {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		String menuTree = null;
-		List<Menu> menuList = new ArrayList<Menu>();
+		List<Menu> menuList = new ArrayList<>();
 		menuList.add(getRootMenu());
 		try {
 			log.info("@@ menu = {} ", menu);
@@ -204,7 +204,7 @@ public class MenuController {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		String menuTree = null;
-		List<Menu> menuList = new ArrayList<Menu>();
+		List<Menu> menuList = new ArrayList<>();
 		menuList.add(getRootMenu());
 		try {
 			log.info("@@ menu = {} ", menu);
@@ -248,7 +248,7 @@ public class MenuController {
 		Map<String, String> jSONObject = new HashMap<String, String>();
 		String result = "success";
 		String menuTree = null;
-		List<Menu> menuList = new ArrayList<Menu>();
+		List<Menu> menuList = new ArrayList<>();
 		menuList.add(getRootMenu());
 		try {
 			log.info("@@ menu = {} ", menu);

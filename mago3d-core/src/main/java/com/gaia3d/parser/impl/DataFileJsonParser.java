@@ -23,7 +23,7 @@ public class DataFileJsonParser implements DataFileParser {
 		int totalCount = 0;
 		int parseSuccessCount = 0;
 		int parseErrorCount = 0;
-		List<DataInfo> dataInfoList = new ArrayList<DataInfo>();
+		List<DataInfo> dataInfoList = new ArrayList<>();
 		
 		FileParseLog fileParseLog = new FileParseLog();
 		fileParseLog.setFile_info_id(fileInfo.getFile_info_id());

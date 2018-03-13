@@ -31,9 +31,11 @@
 			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
 			]]>
 			</if>
+			<!-- 
+				TODO 버그 같은데.... 왜 있지? 지워야 할거 같음
 			<if test="search_data_name != null and search_data_name != ''">
 			AND data_id LIKE '${search_data_name}%'
-			</if>
+			</if> -->
 		</trim>
 	</select>
 	
@@ -66,9 +68,11 @@
 				<if test="status != null and status != ''">
 				AND status = #{status}
 				</if>
+				<!-- 
+				TODO 버그 같은데.... 왜 있지? 지워야 할거 같음
 				<if test="search_data_name != null and search_data_name != ''">
 				AND data_id LIKE '${search_data_name}%'
-				</if>
+				</if> -->
 				<if test="start_date != null and start_date != ''">
 				<![CDATA[
 				AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
@@ -285,14 +289,6 @@
 		SET attributes = TO_JSON(#{attributes}::json),
 			update_date = now()
 		WHERE data_attribute_id = ${data_attribute_id}
-	</update>
-	
-	<!-- Data 테이블의 사용자 그룹 정보 변경 -->	
-	<update id="updateDataGroupData" parameterType="dataInfo">
-		/* updateDataGroupData */
-		UPDATE data_info
-		SET data_group_id = #{data_group_id}
-		WHERE data_id = #{data_id}
 	</update>
 	
 	<!-- Data 상태 수정 -->	

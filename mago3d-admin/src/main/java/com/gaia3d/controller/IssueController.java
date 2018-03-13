@@ -86,7 +86,7 @@ public class IssueController {
 		
 		issue.setOffset(pagination.getOffset());
 		issue.setLimit(pagination.getPageRows());
-		List<Issue> issueList = new ArrayList<Issue>();
+		List<Issue> issueList = new ArrayList<>();
 		if(totalCount > 0l) {
 			issueList = issueService.getListIssue(issue);
 		}

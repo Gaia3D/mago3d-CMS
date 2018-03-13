@@ -43,7 +43,7 @@ comment on column data_info_log.before_height is '변경전 높이';
 comment on column data_info_log.before_heading is '변경전 heading';
 comment on column data_info_log.before_pitch is '변경전 pitch';
 comment on column data_info_log.before_roll is '변경전 roll';
-comment on column data_info_log.status is '状態。0：変更を待って、1：変更完了、2：棄却';
+comment on column data_info_log.status is '状態。0：変更を待って、1：変更完了、2：棄却, 3:Reset';
 comment on column data_info_log.change_type is 'リクエストタイプ';
 comment on column data_info_log.description is 'の説明';
 comment on column data_info_log.update_date is '更新日';
