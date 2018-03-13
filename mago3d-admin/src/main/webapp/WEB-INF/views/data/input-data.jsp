@@ -59,7 +59,7 @@
 											<form:hidden path="parent" />
 											<form:hidden path="parent_depth" />
 				 							<form:input path="parent_name" cssClass="l" readonly="true" />
-											<input type="button" id="parentFind" value="<spring:message code='common.search'/>" />
+											<input type="button" id="parentFind" value="<spring:message code='search'/>" />
 										</td>
 									</tr>
 									<tr>
@@ -86,7 +86,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="latitude"><spring:message code='lat'/></form:label>
+											<form:label path="latitude"><spring:message code='latitude'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="latitude" class="m" />
@@ -95,7 +95,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="longitude"><spring:message code='lon'/></form:label>
+											<form:label path="longitude"><spring:message code='longitude'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="longitude" class="m" />
@@ -194,8 +194,8 @@
 					<th scope="col" class="col-number">Depth</th>
 					<th scope="col" class="col-id"><spring:message code='key'/></th>
 					<th scope="col" class="col-name"><spring:message code='name'/></th>
-					<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
-					<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
+					<th scope="col" class="col-toggle"><spring:message code='latitude'/></th>
+					<th scope="col" class="col-toggle"><spring:message code='longitude'/></th>
 					<th scope="col" class="col-toggle"><spring:message code='height'/></th>
 					<th scope="col" class="col-toggle"><spring:message code='properties'/></th>
 					<th scope="col" class="col-toggle"><spring:message code='select'/></th>
@@ -251,7 +251,7 @@
 				if(msg.result == "success") {
 					var content = "";
 					var dataList = msg.dataList;
-					var projectDataNone = "<spring:message code='data.none'/>";
+					var projectDataNone = "<spring:message code='data.does.not.exist'/>";
 					if(dataList == null || dataList.length == 0) {
 						content = content
 							+ 	"<tr>"

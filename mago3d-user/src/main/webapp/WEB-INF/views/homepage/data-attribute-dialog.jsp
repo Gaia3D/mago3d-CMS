@@ -1,38 +1,38 @@
 <div class="dataAttributeDialog" title="Data Detail Info">
-	<div><b><spring:message code='common.geo.spatial.info'/></b></div>
+	<div><b><spring:message code='geo.spatial.info'/></b></div>
 	<table class="list-table scope-col" style="width: 100%;">
 		<col class="col-label" />
 		<col class="col-data" />
 		<tr>
-			<th class="col-label" scope="row" style="text-align: left; width: 30%"><spring:message code='common.data.key'/></th>
+			<th class="col-label" scope="row" style="text-align: left; width: 30%"><spring:message code='data.key'/></th>
 			<td id="detailDataKey" class="col-data" style="width: 70%;"></td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row" style="text-align: left"><spring:message code='common.data.name'/></th>
+			<th class="col-label" scope="row" style="text-align: left"><spring:message code='data.name'/></th>
 			<td id="detailDataName" class="col-data"></td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row" style="text-align: left"><spring:message code='common.latitude'/></th>
+			<th class="col-label" scope="row" style="text-align: left"><spring:message code='latitude'/></th>
 			<td id="detailLatitude" class="col-data"></td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row" style="text-align: left"><spring:message code='common.longitude'/></th>
+			<th class="col-label" scope="row" style="text-align: left"><spring:message code='longitude'/></th>
 			<td id="detailLongitude" class="col-data"></td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row" style="text-align: left"><spring:message code='common.height'/></th>
+			<th class="col-label" scope="row" style="text-align: left"><spring:message code='height'/></th>
 			<td id="detailHeight" class="col-data"></td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row" style="text-align: left"><spring:message code='common.heading'/></th>
+			<th class="col-label" scope="row" style="text-align: left"><spring:message code='heading'/></th>
 			<td id="detailHeading" class="col-data"></td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row" style="text-align: left"><spring:message code='common.pitch'/></th>
+			<th class="col-label" scope="row" style="text-align: left"><spring:message code='pitch'/></th>
 			<td id="detailPitch" class="col-data"></td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row" style="text-align: left"><spring:message code='common.roll'/></th>
+			<th class="col-label" scope="row" style="text-align: left"><spring:message code='roll'/></th>
 			<td id="detailRoll" class="col-data"></td>
 		</tr>
 	</table>

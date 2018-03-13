@@ -110,7 +110,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="mobile_phone1"><spring:message code='cell.phone.number'/></form:label>
+											<form:label path="mobile_phone1"><spring:message code='mobile'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="mobile_phone1" class="xs" maxlength="3" />
@@ -238,7 +238,7 @@
 											<td class="col-type-select">
 												<select id="device_type1" name="device_type1" class="select">
 					               		 			<option value="0">PC</option>
-													<option value="1"><spring:message code='cellphone'/></option>
+													<option value="1"><spring:message code='mobile'/></option>
 												</select>
 											</td>
 											<td class="col-ip"><form:input path="device_ip1" class="m"/></td>
@@ -259,7 +259,7 @@
 											<td class="col-type-select">
 												<select id="device_type2" name="device_type2" class="select">
 					               		 			<option value="0">PC</option>
-													<option value="1"><spring:message code='cellphone'/></option>
+													<option value="1"><spring:message code='mobile'/></option>
 												</select>
 											</td>
 											<td class="col-ip"><form:input path="device_ip2" class="m"/></td>
@@ -280,7 +280,7 @@
 											<td class="col-type-select">
 												<select id="device_type3" name="device_type3" class="select">
 					               		 			<option value="0">PC</option>
-													<option value="1"><spring:message code='cellphone'/></option>
+													<option value="1"><spring:message code='mobile'/></option>
 												</select>
 											</td>
 											<td class="col-ip"><form:input path="device_ip3" class="m"/></td>
@@ -300,7 +300,7 @@
 											<td class="col-type-select">
 												<select id="device_type4" name="device_type4" class="select">
 					               		 			<option value="0">PC</option>
-													<option value="1"><spring:message code='cellphone'/></option>
+													<option value="1"><spring:message code='mobile'/></option>
 												</select>
 											</td>
 											<td class="col-ip"><form:input path="device_ip4" class="m"/></td>
@@ -320,7 +320,7 @@
 											<td class="col-type-select">
 												<select id="device_type5" name="device_type5" class="select">
 					               		 			<option value="0">PC</option>
-													<option value="1"><spring:message code='cellphone'/></option>
+													<option value="1"><spring:message code='mobile'/></option>
 												</select>
 											</td>
 											<td class="col-ip"><form:input path="device_ip5" class="m"/></td>

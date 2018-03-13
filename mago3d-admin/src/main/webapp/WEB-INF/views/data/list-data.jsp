@@ -39,8 +39,8 @@
 								<div class="input-set">
 									<label for="search_word"><spring:message code='search.word'/></label>
 									<select id="search_word" name="search_word" class="select">
-										<option value=""><spring:message code='common.select'/></option>
-					                	<option value="data_name"><spring:message code='data.name'/></option>
+										<option value=""><spring:message code='select'/></option>
+					          <option value="data_name"><spring:message code='name'/></option>
 									</select>
 									<select id="search_option" name="search_option" class="select">
 										<option value="0"><spring:message code='search.same'/></option>
@@ -137,8 +137,8 @@
 											<th scope="col" class="col-name"><spring:message code='data.project.name'/></th>
 											<th scope="col" class="col-id"><spring:message code='data.project.key'/></th>
 											<th scope="col" class="col-name"><spring:message code='name'/></th>
-											<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
-											<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='latitude'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='longitude'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='height'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='status'/></th>
 											<th scope="col" class="col-name"><spring:message code='data.control.properties'/></th>
@@ -151,7 +151,7 @@
 									<tbody>
 <c:if test="${empty dataList }">
 										<tr>
-											<td colspan="14" class="col-none"><spring:message code='data.no.data'/></td>
+											<td colspan="14" class="col-none"><spring:message code='data.does.not.exist'/></td>
 										</tr>
 </c:if>
 <c:if test="${!empty dataList }">
@@ -182,14 +182,14 @@
 											<td class="col-name"><a href="#" onclick="viewAttributes('${dataInfo.data_id }'); return false;"><spring:message code='data.control.property'/></a></td>
 											<td class="col-functions">
 												<span class="button-group">
-													<a href="#" onclick="return deleteWarning();"><spring:message code='common.view'/></a>
+													<a href="#" onclick="return deleteWarning();"><spring:message code='view'/></a>
 													<a href="#" class="image-button button-edit" onclick="insertDataAttribute('${dataInfo.data_id }', '${dataInfo.data_name }'); return false;">
 														<spring:message code='modified'/></a>
 												</span>
 											</td>
 											<td class="col-functions">
 												<span class="button-group">
-													<a href="#" onclick="return deleteWarning();"><spring:message code='common.view'/></a>
+													<a href="#" onclick="return deleteWarning();"><spring:message code='view'/></a>
 													<a href="#" class="image-button button-edit" onclick="insertDataObjectAttribute('${dataInfo.data_id }', '${dataInfo.data_name }'); return false;">
 														<spring:message code='modified'/></a>
 												</span>

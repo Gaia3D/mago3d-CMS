@@ -33,7 +33,7 @@
 			<td class="col-input">
 				<form:input path="geo_data_default_projects_view" cssClass="l" />
 				<form:hidden path="geo_data_default_projects" />
-				<input type="button" id="projectFind" value="<spring:message code='common.search'/>" />
+				<input type="button" id="projectFind" value="<spring:message code='search'/>" />
 			</td>
 		</tr>
 		<tr>
@@ -257,7 +257,7 @@
 </div>
 
 <!-- Dialog -->
-<div id="dataDialog" class="dataDialog" title="<spring:message code='common.search'/>">
+<div id="dataDialog" class="dataDialog" title="<spring:message code='search'/>">
 	<table class="list-table scope-col">
 		<col class="col-number" />
 		<col class="col-name" />
@@ -275,11 +275,11 @@
 				<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
 				<th scope="col" class="col-name">Key</th>
 				<th scope="col" class="col-name"><spring:message code='data.project.name'/></th>
-				<th scope="col" class="col-number"><spring:message code='common.order'/></th>
-				<th scope="col" class="col-toggle"><spring:message code='common.default.value'/></th>
-				<th scope="col" class="col-toggle"><spring:message code='common.status'/></th>
-				<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
-				<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
+				<th scope="col" class="col-number"><spring:message code='order'/></th>
+				<th scope="col" class="col-toggle"><spring:message code='default.value'/></th>
+				<th scope="col" class="col-toggle"><spring:message code='status'/></th>
+				<th scope="col" class="col-toggle"><spring:message code='latitude'/></th>
+				<th scope="col" class="col-toggle"><spring:message code='longitude'/></th>
 				<th scope="col" class="col-toggle"><spring:message code='height'/></th>
 				<th scope="col" class="col-number"><spring:message code='movement.time'/></th>
 				<th scope="col" class="col-date"><spring:message code='data.insert.date'/></th>
@@ -289,6 +289,6 @@
 		</tbody>
 	</table>
 	<div class="button-group">
-		<input type="button" id="projectSelect" class="button" value="<spring:message code='common.select'/>"/>
+		<input type="button" id="projectSelect" class="button" value="<spring:message code='select'/>"/>
 	</div>
 </div>

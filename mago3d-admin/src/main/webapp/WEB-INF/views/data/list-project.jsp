@@ -34,7 +34,7 @@
 					<div class="page-content">
 						<div class="content-header row">
 							<h3 class="content-title u-pull-left">
-								<spring:message code='common.project'/> (<a href="#" onclick="reloadProjectCache();"><spring:message code='common.cache.update'/></a>)
+								<spring:message code='project'/> (<a href="#" onclick="reloadProjectCache();"><spring:message code='cache.update'/></a>)
 								
 							</h3>
 						</div>
@@ -62,11 +62,11 @@
 											<th scope="col" class="col-number"><spring:message code='number'/></th>
 											<th scope="col" class="col-name">Key</th>
 											<th scope="col" class="col-name"><spring:message code='data.project.name'/></th>
-											<th scope="col" class="col-number"><spring:message code='common.order'/></th>
-											<th scope="col" class="col-toggle"><spring:message code='common.default.value'/></th>
+											<th scope="col" class="col-number"><spring:message code='order'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='default.value'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='code.use.not'/></th>
-											<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
-											<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='latitude'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='longitude'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='height'/></th>
 											<th scope="col" class="col-number"><spring:message code='movement.time'/></th>
 											<th scope="col" class="col-functions"><spring:message code='data.management'/></th>
@@ -78,7 +78,7 @@
 									<tbody>
 <c:if test="${empty projectList }">
 										<tr>
-											<td colspan="14" class="col-none">프로젝트가 존재하지 않습니다.</td>
+											<td colspan="14" class="col-none"><spring:message code='data.project.none'/></td>
 										</tr>
 </c:if>
 <c:if test="${!empty projectList }">
@@ -94,8 +94,8 @@
 											<td class="col-toggle">${project.longitude}</td>
 											<td class="col-toggle">${project.height}</td>
 											<td class="col-toggle">${project.duration}</td>
-											<td class="col-functions"><a href="#" onclick="viewDataList('${project.project_id}', '${project.project_name}'); return false;"><spring:message code='common.view'/></a></td>
-											<td class="col-functions"><a href="/data/modify-project.do?project_id=${project.project_id}"><spring:message code='common.view'/></a></td>
+											<td class="col-functions"><a href="#" onclick="viewDataList('${project.project_id}', '${project.project_name}'); return false;"><spring:message code='view'/></a></td>
+											<td class="col-functions"><a href="/data/modify-project.do?project_id=${project.project_id}"><spring:message code='view'/></a></td>
 											<td class="col-date">${project.viewInsertDate }</td>
 											
 											<td class="col-functions">
@@ -134,8 +134,8 @@
 					<th scope="col" class="col-number">Depth</th>
 					<th scope="col" class="col-id"><spring:message code='key'/></th>
 					<th scope="col" class="col-name"><spring:message code='name'/></th>
-					<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
-					<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
+					<th scope="col" class="col-toggle"><spring:message code='latitude'/></th>
+					<th scope="col" class="col-toggle"><spring:message code='longitude'/></th>
 					<th scope="col" class="col-toggle"><spring:message code='height'/></th>
 					<th scope="col" class="col-toggle"><spring:message code='properties'/></th>
 				</tr>
@@ -181,7 +181,7 @@
 				if(msg.result == "success") {
 					var content = "";
 					var dataList = msg.dataList;
-					var projectDataNone = "<spring:message code='data.none'/>";
+					var projectDataNone = "<spring:message code='data.does.not.exist'/>";
 					if(dataList == null || dataList.length == 0) {
 						content = content
 							+ 	"<tr>"
