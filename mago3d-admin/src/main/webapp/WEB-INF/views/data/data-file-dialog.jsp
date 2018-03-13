@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-	<%-- 일괄등록(File) --%>
 	<div class="dataFileDialog" title="<spring:message code='data.all.insert.data'/>">
 		<form id="fileInfo" name="fileInfo" action="/data/ajax-insert-data-file.do" method="post" enctype="multipart/form-data">
 			<table id="dataFileUpload" class="inner-table scope-row">
@@ -35,4 +34,3 @@
 			</div>
 		</form>
 	</div>
-	<%-- 일괄등록(Excel) --%>

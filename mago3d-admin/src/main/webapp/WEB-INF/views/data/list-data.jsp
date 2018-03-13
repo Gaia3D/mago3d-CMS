@@ -179,7 +179,11 @@
 		</c:if>
 												
 											</td>
-											<td class="col-name"><a href="#" onclick="viewAttributes('${dataInfo.data_id }'); return false;"><spring:message code='data.control.property'/></a></td>
+											<td class="col-name">
+												<a href="#" onclick="viewControlAttributes('${dataInfo.data_id }'); return false;">
+													보기
+												</a>
+											</td>
 											<td class="col-functions">
 												<span class="button-group">
 													<a href="#" onclick="return deleteWarning();"><spring:message code='common.view'/></a>
