@@ -60,7 +60,7 @@
 										<option value=""><spring:message code='search.basic'/></option>
 										<option value="user_id"><spring:message code='id'/></option>
 										<option value="user_name"><spring:message code='name'/></option>
-										<option value="register_date"><spring:message code='search.insert.date'/></option>
+										<option value="insert_date"><spring:message code='search.insert.date'/></option>
 									</select>
 									<select id="order_value" name="order_value" class="select">
 										<option value=""><spring:message code='search.basic'/></option>

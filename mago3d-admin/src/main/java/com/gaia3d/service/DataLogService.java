@@ -1,19 +1,16 @@
-package com.gaia3d.persistence;
+package com.gaia3d.service;
 
 import java.util.List;
-
-import org.springframework.stereotype.Repository;
 
 import com.gaia3d.domain.DataInfoLog;
 
 /**
- * Data Info 변경 이력
+ * Data 관리
  * @author jeongdae
  *
  */
-@Repository
-public interface DataLogMapper {
-
+public interface DataLogService {
+	
 	/**
 	 * 데이터 변경 요청 수
 	 * @param dataInfo
@@ -30,17 +27,10 @@ public interface DataLogMapper {
 	
 	/**
 	 * data info log 조회
-	 * @param data_info_log_id
+	 * @param dataInfoLogId
 	 * @return
 	 */
-	DataInfoLog getDataInfoLog(Long data_info_log_id);
-	
-	/**
-	 * Data Info 변경 이력을 저장
-	 * @param dataInfoLog
-	 * @return
-	 */
-	int insertDataInfoLog(DataInfoLog dataInfoLog);
+	DataInfoLog getDataInfoLog(Long dataInfoLogId);
 	
 	/**
 	 * 데이터 로그 상태 변경

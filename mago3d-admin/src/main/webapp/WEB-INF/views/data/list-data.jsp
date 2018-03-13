@@ -39,9 +39,8 @@
 								<div class="input-set">
 									<label for="search_word"><spring:message code='search.word'/></label>
 									<select id="search_word" name="search_word" class="select">
-										<option value=""><spring:message code='search.word'/></option>
-					                	<option value="data_id"><spring:message code='select'/></option>
-										<option value="data_name"><spring:message code='name'/></option>
+										<option value=""><spring:message code='common.select'/></option>
+					                	<option value="data_name"><spring:message code='name'/></option>
 									</select>
 									<select id="search_option" name="search_option" class="select">
 										<option value="0"><spring:message code='search.same'/></option>
@@ -80,7 +79,7 @@
 										<option value=""> <spring:message code='search.basic'/> </option>
 					                	<option value="data_id"> <spring:message code='id'/> </option>
 										<option value="data_name"> <spring:message code='name'/> </option>
-										<option value="register_date"> <spring:message code='search.insert.date'/> </option>
+										<option value="insert_date"> <spring:message code='search.insert.date'/> </option>
 									</select>
 									<select id="order_value" name="order_value" class="select">
 				                		<option value=""> <spring:message code='search.basic'/> </option>

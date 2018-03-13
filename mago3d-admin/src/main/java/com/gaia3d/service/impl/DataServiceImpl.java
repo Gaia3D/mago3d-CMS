@@ -226,7 +226,7 @@ public class DataServiceImpl implements DataService {
 	@Transactional
 	public List<String> updateDataStatus(String business_type, String status_value, String check_ids) {
 		
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		String[] dataIds = check_ids.split(",");
 		
 		for(String data_id : dataIds) {

@@ -16,14 +16,14 @@ public interface DataLogService {
 	 * @param dataInfo
 	 * @return
 	 */
-	Long getDataInfoLogTotalCountByUserId(DataInfoLog dataInfoLog);
+	Long getDataInfoLogTotalCount(DataInfoLog dataInfoLog);
 	
 	/**
 	 * 데이터 변경 요청 로그
 	 * @param dataInfoLog
 	 * @return
 	 */
-	List<DataInfoLog> getListDataInfoLogByUserId(DataInfoLog dataInfoLog);
+	List<DataInfoLog> getListDataInfoLog(DataInfoLog dataInfoLog);
 	
 	/**
 	 * data info log 조회

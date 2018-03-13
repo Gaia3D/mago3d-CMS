@@ -104,7 +104,7 @@
 			                	<select id="order_word" name="order_word">
 									<option value=""> 기본 </option>
 				                	<option value="status"> 상태 </option>
-									<option value="register_date"> 등록일 </option>
+									<option value="insert_date"> 등록일 </option>
 		                		</select>
 			                	<select id="order_value" name="order_value">
 			                		<option value=""> 기본 </option>

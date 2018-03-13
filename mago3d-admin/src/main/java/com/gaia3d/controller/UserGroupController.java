@@ -144,7 +144,7 @@ public class UserGroupController {
 	public String ajaxListUserGroup(HttpServletRequest request) {
 		String result = "success";
 		String userGroupTree = null;
-		List<UserGroup> userGroupList = new ArrayList<UserGroup>();
+		List<UserGroup> userGroupList = new ArrayList<>();
 		userGroupList.add(getRootUserGroup());
 		try {
 			userGroupList.addAll(userGroupService.getListUserGroup(new UserGroup()));
@@ -169,7 +169,7 @@ public class UserGroupController {
 	public String ajaxInsertUserGroup(HttpServletRequest request, UserGroup userGroup) {
 		String result = "success";
 		String userGroupTree = null;
-		List<UserGroup> userGroupList = new ArrayList<UserGroup>();
+		List<UserGroup> userGroupList = new ArrayList<>();
 		userGroupList.add(getRootUserGroup());
 		try {
 			log.info("@@ userGroup = {} ", userGroup);
@@ -221,7 +221,7 @@ public class UserGroupController {
 	public String ajaxUpdateUserGroup(HttpServletRequest request, UserGroup userGroup) {
 		String result = "success";
 		String userGroupTree = null;
-		List<UserGroup> userGroupList = new ArrayList<UserGroup>();
+		List<UserGroup> userGroupList = new ArrayList<>();
 		userGroupList.add(getRootUserGroup());
 		try {
 						
@@ -261,7 +261,7 @@ public class UserGroupController {
 	public String ajaxUpdateMoveUserGroup(HttpServletRequest request, UserGroup userGroup) {
 		String result = "success";
 		String userGroupTree = null;		
-		List<UserGroup> userGroupList = new ArrayList<UserGroup>();
+		List<UserGroup> userGroupList = new ArrayList<>();
 		userGroupList.add(getRootUserGroup());
 		try {
 			log.info("@@ userGroup = {} ", userGroup);
@@ -299,7 +299,7 @@ public class UserGroupController {
 	public String ajaxDeleteUserGroup(HttpServletRequest request, UserGroup userGroup) {
 		String result = "success";
 		String userGroupTree = null;
-		List<UserGroup> userGroupList = new ArrayList<UserGroup>();
+		List<UserGroup> userGroupList = new ArrayList<>();
 		userGroupList.add(getRootUserGroup());
 		try {
 			log.info("@@ userGroup = {} ", userGroup);

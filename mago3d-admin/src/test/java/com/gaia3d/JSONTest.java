@@ -21,7 +21,7 @@
 //		Gson gson = new Gson();
 //		Map<String, String> jSONObject = new HashMap<String, String>();
 //		String menuTree = null;
-//		List<Menu> menuList = new ArrayList<Menu>();
+//		List<Menu> menuList = new ArrayList<>();
 //		menuList.add(getRootMenu());
 //		menuTree = getMenuTree(menuList);
 //		jSONObject.put("menuTree", menuTree);

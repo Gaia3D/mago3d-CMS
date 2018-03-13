@@ -7,6 +7,7 @@ JS_MESSAGE["delete"]= "Deleted";
 JS_MESSAGE["success"]= "Success!";
 JS_MESSAGE["apply"]= "Applied.";
 JS_MESSAGE["upload"]= "Uploading is in progress";
+JS_MESSAGE["proceed.confirm"] = "Do you want to proceed?";
 JS_MESSAGE["move.confirm"]= "Are you sure you want to move?";
 JS_MESSAGE["delete.confirm"]= "Are you sure?";
 JS_MESSAGE["check.value.required"]= "No items selected.";

@@ -97,7 +97,7 @@ public class DataController {
 			
 			dataInfo.setOffset(pagination.getOffset());
 			dataInfo.setLimit(pagination.getPageRows());
-			List<DataInfo> dataInfoList = new ArrayList<DataInfo>();
+			List<DataInfo> dataInfoList = new ArrayList<>();
 			if(totalCount > 0l) {
 				dataInfoList = dataService.getListData(dataInfo);
 			}

@@ -155,7 +155,7 @@
 				<td><label for="order_word"><spring:message code='common.view.order'/></label></td>
 				<td><select id="order_word" name="order_word" class="select" style="width: 30%">
 						<option value=""> <spring:message code='common.basic'/> </option>
-				       	<option value="register_date"> <spring:message code='common.register.date'/> </option>
+				       	<option value="insert_date"> <spring:message code='common.register.date'/> </option>
 					</select>
 					<select id="order_value" name="order_value" class="select" style="width: 30%">
 						<option value=""> <spring:message code='common.basic'/> </option>
@@ -699,7 +699,7 @@
 </c:if>
 
 <%@ include file="/WEB-INF/views/homepage/data-attribute-dialog.jsp" %>
-<%@ include file="/WEB-INF/views/homepage/data-info-dialog.jsp" %>
+<%@ include file="/WEB-INF/views/homepage/data-info-log-dialog.jsp" %>
 
 <c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 <script type="text/javascript" src="/externlib/cesium/Cesium.js?cache_version=${cache_version}"></script>

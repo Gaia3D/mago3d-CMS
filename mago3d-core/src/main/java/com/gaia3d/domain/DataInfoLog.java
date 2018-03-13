@@ -24,6 +24,13 @@ public class DataInfoLog {
 	public static final String STATUS_COMPLETE = "1";
 	// Data 변경 요청 기각
 	public static final String STATUS_REJECT = "2";
+	// Data 변경 요청 되돌리기
+	public static final String STATUS_RESET = "3";
+	
+	// Data info Log Confirm
+	public static final String STATUS_LEVEL_CONFIRM = "CONFIRM";
+	public static final String STATUS_LEVEL_REJECT = "REJECT";
+	public static final String STATUS_LEVEL_RESET = "RESET";
 	
 	// 페이지 처리를 위한 시작
 	private Long offset;
@@ -58,24 +65,8 @@ public class DataInfoLog {
 	private Long data_id;
 	// data 고유 식별번호
 	private String data_key;
-	// data 고유 식별번호
-	private String old_data_key;
-	// 부모 data 고유 식별번호
-	private String parent_data_key;
 	// data 이름
 	private String data_name;
-	// 부모 고유번호
-	private Long parent;
-	// 부모 이름(화면 표시용)
-	private String parent_name;
-	// 부모 깊이
-	private Integer parent_depth;
-	// 깊이
-	private Integer depth;
-	// 나열 순서
-	private Integer view_order;
-	// 자식 존재 유무, Y : 존재, N : 존재안함(기본)
-	private String child_yn;
 	// 위도, 경도 정보 geometry 타입
 	private String location;
 	// 위도
@@ -102,14 +93,10 @@ public class DataInfoLog {
 	private BigDecimal before_pitch;
 	// 변경전 roll
 	private BigDecimal before_roll;
-	// 속성
-	private String attributes;
 	// data 상태. 0:사용중, 1:사용중지(관리자), 2:기타
 	private String status;
-	// 사용유무, Y : 사용, N : 사용안함
-	private String use_yn;
-	// 공개 유무. 기본값 비공개 N
-	private String public_yn;
+	// status 의 ajax 처리 값
+	private String status_level;
 	// data 등록 방법. 기본 : SELF
 	private String data_insert_type;
 	// 설명
@@ -122,9 +109,6 @@ public class DataInfoLog {
 	private String view_insert_date;
 	// 등록일
 	private String insert_date;
-	
-	private String search_data_name;
-	private String search_except_data_name;
 	
 	public String validate() {
 		// TODO 구현해야 한다.
@@ -141,13 +125,6 @@ public class DataInfoLog {
 		CommonCode commonCode = (CommonCode)commonCodeMap.get(this.data_insert_type);
 		if(commonCode == null) return "";
 		else return commonCode.getCode_name();
-	}
-	
-	public String getViewAttributes() {
-		if(this.attributes == null || "".equals( attributes) || attributes.length() < 20) {
-			return attributes;
-		}
-		return attributes.substring(0, 20) + "...";
 	}
 	
 	public String setViewInsertDate() {
