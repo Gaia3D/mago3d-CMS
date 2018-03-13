@@ -39,7 +39,7 @@
 								<div class="input-set">
 									<label for="search_word"><spring:message code='search.word'/></label>
 									<select id="search_word" name="search_word" class="select">
-										<option value=""><spring:message code='common.select'/></option>
+										<option value=""><spring:message code='select'/></option>
 					                	<option value="user_id"><spring:message code='user.id'/></option>
 									</select>
 									<select id="search_option" name="search_option" class="select">
@@ -52,9 +52,9 @@
 									<label for="status"><spring:message code='search.status'/></label>
 									<select id="status" name="status" class="select">
 										<option value=""> <spring:message code='all'/> </option>
-										<option value="0"> <spring:message code='common.request'/>  </option>
-										<option value="1"> <spring:message code='common.complete'/> </option>
-										<option value="2"> <spring:message code='common.reject'/> </option>
+										<option value="0"> <spring:message code='request'/>  </option>
+										<option value="1"> <spring:message code='complete'/> </option>
+										<option value="2"> <spring:message code='reject'/> </option>
 									</select>
 								</div>
 								<div class="input-set">
@@ -119,12 +119,12 @@
 											<th scope="col" class="col-name"><spring:message code='data.project.name'/></th>
 											<th scope="col" class="col-id"><spring:message code='data.name'/></th>
 											<th scope="col" class="col-name"><spring:message code='user.id'/></th>
-											<th scope="col" class="col-toggle"><spring:message code='lat'/></th>
-											<th scope="col" class="col-toggle"><spring:message code='lon'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='latitude'/></th>
+											<th scope="col" class="col-toggle"><spring:message code='longitude'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='height'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='status'/></th>
 											<th scope="col" class="col-date"><spring:message code='data.insert.date'/></th>
-											<th scope="col" class="col-functions"><spring:message code='common.approval'/></th>
+											<th scope="col" class="col-functions"><spring:message code='approval'/></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -155,15 +155,15 @@
 											<td class="col-toggle">
 		<c:if test="${dataInfoLog.status eq '0'}">
 												<span class="icon-glyph glyph-on on"></span>
-												<span class="icon-text"><spring:message code='common.request'/></span>
+												<span class="icon-text"><spring:message code='request'/></span>
 		</c:if>
 		<c:if test="${dataInfoLog.status eq '1'}">
 												<span class="icon-glyph glyph-on on"></span>
-												<span class="icon-text"><spring:message code='common.complete'/></span>
+												<span class="icon-text"><spring:message code='complete'/></span>
 		</c:if>
 		<c:if test="${dataInfoLog.status eq '2'}">
 												<span class="icon-glyph glyph-on on"></span>
-												<span class="icon-text"><spring:message code='common.reject'/></span>
+												<span class="icon-text"><spring:message code='reject'/></span>
 		</c:if>
 		<c:if test="${dataInfoLog.status eq '3'}">
 												<span class="icon-glyph glyph-on on"></span>
@@ -176,15 +176,15 @@
 												<span class="button-group">
 		<c:if test="${dataInfoLog.status eq '0'}">
 													<a href="#" onclick="return warning('CONFIRM', '${dataInfoLog.project_id}', '${dataInfoLog.data_info_log_id}');" class="button" >
-														<spring:message code='common.confirm'/>
+														<spring:message code='confirm'/>
 													</a>
 													<a href="#" onclick="return warning('REJECT', '${dataInfoLog.project_id}', '${dataInfoLog.data_info_log_id}');" class="button" >
-														<spring:message code='common.reject'/>
+														<spring:message code='reject'/>
 													</a>
 		</c:if>
 		<c:if test="${dataInfoLog.status eq '1'}">
 													<a href="#" onclick="return warning('RESET', '${dataInfoLog.project_id}', '${dataInfoLog.data_info_log_id}');" class="button" >
-														<spring:message code='common.reset'/>
+														<spring:message code='reset'/>
 													</a>
 		</c:if>
 												</span>

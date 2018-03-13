@@ -110,7 +110,7 @@
 										<th scope="col" class="col-toggle"><spring:message code='status'/></th>
 										<th scope="col" class="col-date-time"><spring:message code='search.insert.date'/></th>
 										<th scope="col" class="col-date-time"><spring:message code='deadline'/></th>
-										<th scope="col" class="col-functions"><spring:message code='look.map'/></th>
+										<th scope="col" class="col-functions"><spring:message code='view.map'/></th>
 										<th scope="col" class="col-functions"><spring:message code='user.group.modified.and.insert'/></th>
 									</tr>
 								</thead>
@@ -141,7 +141,7 @@
 										<td class="col-toggle">${issue.status}</td>
 										<td class="col-period">${issue.viewInsertDate}</td>
 										<td class="col-date-time">${issue.viewDueDate}</td>
-										<td class="col-functions">[<spring:message code='look'/>]</td>
+										<td class="col-functions">[<spring:message code='view'/>]</td>
 										<td class="col-functions">
 											<span class="button-group">
 												<a href="/issue/modify-issue.do?issue_id=${issue.issue_id}&amp;pageNo=${pagination.pageNo}${pagination.searchParameters}" class="image-button button-edit">수정</a>

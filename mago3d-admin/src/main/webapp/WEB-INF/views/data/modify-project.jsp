@@ -63,7 +63,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="view_order"><spring:message code='common.order'/></form:label>
+											<form:label path="view_order"><spring:message code='order'/></form:label>
 										</th>
 										<td class="col-input">
 											<form:input path="view_order" class="m" />
@@ -72,18 +72,18 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="default_yn"><spring:message code='common.default.value'/></form:label>
+											<form:label path="default_yn"><spring:message code='default.value'/></form:label>
 										</th>
 										<td class="col-input">
-										<spring:message var='basic' code='common.basic'/>
-										<spring:message var='select' code='common.select'/>
+										<spring:message var='basic' code='basic'/>
+										<spring:message var='select' code='select'/>
 											<form:radiobutton path="default_yn" value="Y" label="${basic}"/>
 											<form:radiobutton path="default_yn" value="N" label="${select}" />
 										</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="use_yn"><spring:message code='common.status'/></form:label>
+											<form:label path="use_yn"><spring:message code='status'/></form:label>
 										</th>
 										<td class="col-input">
 										<spring:message var='use' code='use'/>
@@ -94,7 +94,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="latitude"><spring:message code='lat'/></form:label>
+											<form:label path="latitude"><spring:message code='latitude'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -104,7 +104,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="longitude"><spring:message code='lon'/></form:label>
+											<form:label path="longitude"><spring:message code='longitude'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">

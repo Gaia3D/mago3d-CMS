@@ -150,12 +150,12 @@
 				async : false,
 				dataType : "json",
 				success : function(msg) {
-					if (msg.result == "user.session.empty") {
-						alert("로그인 후 사용 가능한 서비스 입니다.");
+					if (msg.result == "user.session.does.not.exist") {
+						alert(JS_MESSAGE["user.session.empty"]);
 					} else if(msg.result == "license.input.invalid") {
-						alert("필수 입력값이 유효하지 않습니다.");
+						alert(JS_MESSAGE["cache.input.invalid"]);
 					} else if (msg.result == "db.exception") {
-						alert("데이터 베이스 장애가 발생하였습니다. 잠시 후 다시 이용하여 주시기 바랍니다.");
+						alert(JS_MESSAGE["db.exception"]);
 					} else if(msg.result == "license.checker.invalid") {
 						alert("라이선스 수정에 실패하였습니다.");
 					} else if (msg.result == "success") {
@@ -164,12 +164,12 @@
 					updateFlag = true;
 				},
 				error : function(request, status, error) {
-					alert("잠시 후 이용해 주시기 바랍니다. 장시간 같은 현상이 반복될 경우 관리자에게 문의하여 주십시오.");
+					alert(JS_MESSAGE["ajax.error.message"]);
 					updateFlag = true;
 				}
 			});
 		} else {
-			alert("진행 중입니다.");
+			alert(JS_MESSAGE["button.dobule.click"]);
 			return;
 		}
 	}
