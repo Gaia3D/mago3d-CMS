@@ -54,7 +54,7 @@
 										<td class="col-data">${userInfo.viewMaskingTelePhone}</td>
 									</tr>	
 									<tr>
-										<th class="col-label" scope="row"><spring:message code='cell.phone.number'/></th>
+										<th class="col-label" scope="row"><spring:message code='mobile'/></th>
 										<td class="col-data">${userInfo.viewMaskingMobilePhone}</td>
 									</tr>
 									<tr>

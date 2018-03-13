@@ -40,7 +40,7 @@
 								<div class="input-set">
 									<label for="search_word"><spring:message code='user.group.search.word'/></label>
 									<select id="search_word" name="search_word" class="select">
-										<option value=""><spring:message code='common.select'/></option>
+										<option value=""><spring:message code='select'/></option>
 					                	<option value="user_id"><spring:message code='user.group.id'/></option>
 										<option value="user_name"><spring:message code='user.group.user.name'/></option>
 									</select>

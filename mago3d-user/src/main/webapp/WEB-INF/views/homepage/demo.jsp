@@ -38,21 +38,21 @@
 	<li id="homeMenu" class="home">
 		<img src="/images/ko/homepage/home-icon.png" style="width: 35px; height: 35px; padding-right: 2px;"/>
 	</li>
-	<li id="myIssueMenu" class="issue" data-tooltip-text="<spring:message code='demo.myissue.menu.description'/>"><spring:message code='common.issue'/>
+	<li id="myIssueMenu" class="issue" data-tooltip-text="<spring:message code='demo.myissue.menu.description'/>"><spring:message code='issue'/>
 		<br /><span id="issueListCount">${totalCount }</span></li>
-	<li id="searchMenu" class="search" data-tooltip-text="<spring:message code='demo.search.menu.description'/>"><spring:message code='common.search'/></li>
-	<li id="apiMenu" class="api" data-tooltip-text="<spring:message code='demo.api.menu.description'/>"><spring:message code='common.api'/></li>	
-	<li id="insertIssueMenu" class="regist" data-tooltip-text="<spring:message code='demo.insert-issue.menu.description'/>"><spring:message code='common.registeration'/></li>
-	<li id="treeMenu" class="tree" data-tooltip-text="<spring:message code='demo.tree.menu.description'/>"><spring:message code='common.tree'/></li>
-	<li id="chartMenu" class="chart" data-tooltip-text="<spring:message code='demo.chart.menu.description'/>"><spring:message code='common.chart'/></li>
-	<li id="logMenu" class="log" data-tooltip-text="<spring:message code='demo.log.menu.description'/>"><spring:message code='common.log'/></li>
-	<li id="attributeMenu" class="attribute" data-tooltip-text="<spring:message code='demo.attribute.menu.description'/>"><spring:message code='common.attribute'/></li>
-	<li id="configMenu" class="config" data-tooltip-text="<spring:message code='demo.config.menu.description'/>"><spring:message code='common.config'/></li>	
+	<li id="searchMenu" class="search" data-tooltip-text="<spring:message code='demo.search.menu.description'/>"><spring:message code='search'/></li>
+	<li id="apiMenu" class="api" data-tooltip-text="<spring:message code='demo.api.menu.description'/>"><spring:message code='api'/></li>	
+	<li id="insertIssueMenu" class="regist" data-tooltip-text="<spring:message code='demo.insert-issue.menu.description'/>"><spring:message code='registeration'/></li>
+	<li id="treeMenu" class="tree" data-tooltip-text="<spring:message code='demo.tree.menu.description'/>"><spring:message code='tree'/></li>
+	<li id="chartMenu" class="chart" data-tooltip-text="<spring:message code='demo.chart.menu.description'/>"><spring:message code='chart'/></li>
+	<li id="logMenu" class="log" data-tooltip-text="<spring:message code='demo.log.menu.description'/>"><spring:message code='log'/></li>
+	<li id="attributeMenu" class="attribute" data-tooltip-text="<spring:message code='demo.attribute.menu.description'/>"><spring:message code='attribute'/></li>
+	<li id="configMenu" class="config" data-tooltip-text="<spring:message code='demo.config.menu.description'/>"><spring:message code='config'/></li>	
 </ul>
 
 <div id="menuContent" class="navContents">
 	<div class="alignRight">
-		<button type="button" id="menuContentClose" class="navClose"><spring:message code='common.close'/></button>
+		<button type="button" id="menuContentClose" class="navClose"><spring:message code='close'/></button>
 	</div>
 	
 	<ul id="homeMenuContent" class="menuList">
@@ -95,9 +95,9 @@
 <c:if test="${!empty issueList }">
 	<c:forEach var="issue" items="${issueList}" varStatus="status">
 		<li>
-			<button type="button" title="<spring:message code='common.shortcut'/>" 
+			<button type="button" title="<spring:message code='shortcut'/>" 
 				onclick="gotoIssue('${issue.project_id}', '${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">
-				<spring:message code='common.shortcut'/></button>
+				<spring:message code='shortcut'/></button>
 			<div class="info">
 				<p class="title">
 					<span>${issue.project_name }</span>
@@ -118,9 +118,9 @@
 	<div id="searchMenuContent" class="searchWrap">
 		<table>
 			<tr style="height: 35px;">
-				<td style="width: 80px;"><label for="project_id"><spring:message code='common.project'/></label></td>
+				<td style="width: 80px;"><label for="project_id"><spring:message code='project'/></label></td>
 				<td><select id="project_id" name="project_id" class="select">
-						<option value=""> <spring:message code='common.all'/></option>
+						<option value=""> <spring:message code='all'/></option>
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
 </c:forEach>
@@ -128,50 +128,50 @@
 				</td>
 			</tr>
 			<tr style="height: 35px;">
-				<td><label for="search_word"><spring:message code='common.categorize'/></label></td>
+				<td><label for="search_word"><spring:message code='categorize'/></label></td>
 				<td>
 					<select id="search_word" name="search_word" class="select">
-						<option value="data_name"><spring:message code='common.data.name'/></option>
-						<option value="title"><spring:message code='common.issue.name'/></option>
+						<option value="data_name"><spring:message code='data.name'/></option>
+						<option value="title"><spring:message code='issue.name'/></option>
 					</select>
 					<select id="search_option" name="search_option" class="select">
-						<option value="1"><spring:message code='common.included'/></option>
-						<option value="0"><spring:message code='common.matches'/></option>
+						<option value="1"><spring:message code='included'/></option>
+						<option value="0"><spring:message code='matches'/></option>
 					</select>
 				</td>
 			</tr>
 			<tr style="height: 35px;">
 				<td>
-					<label for="search_value"><spring:message code='common.search.word'/></label></td>
+					<label for="search_value"><spring:message code='search.word'/></label></td>
 				<td><input type="text" id="search_value" name="search_value" size="31"/></td>
 			</tr>
 			<tr style="height: 35px;">
-				<td><label for="start_date"><spring:message code='common.day'/></label></td>
+				<td><label for="start_date"><spring:message code='day'/></label></td>
 				<td><input type="text" class="s date" id="start_date" name="start_date" size="12" />
 					<span class="delimeter tilde">~</span>
 					<input type="text" class="s date" id="end_date" name="end_date" size="12" /></td>
 			</tr>
 			<tr style="height: 30px;">
-				<td><label for="order_word"><spring:message code='common.view.order'/></label></td>
+				<td><label for="order_word"><spring:message code='view.order'/></label></td>
 				<td><select id="order_word" name="order_word" class="select" style="width: 30%">
-						<option value=""> <spring:message code='common.basic'/> </option>
-				       	<option value="insert_date"> <spring:message code='common.register.date'/> </option>
+						<option value=""> <spring:message code='basic'/> </option>
+				       	<option value="insert_date"> <spring:message code='register.date'/> </option>
 					</select>
 					<select id="order_value" name="order_value" class="select" style="width: 30%">
-						<option value=""> <spring:message code='common.basic'/> </option>
-					   	<option value="ASC"> <spring:message code='common.asc'/> </option>
-						<option value="DESC"> <spring:message code='common.desc'/> </option>
+						<option value=""> <spring:message code='basic'/> </option>
+					   	<option value="ASC"> <spring:message code='asc'/> </option>
+						<option value="DESC"> <spring:message code='desc'/> </option>
 					</select>
 					<select id="list_counter" name="list_counter" class="select" style="width: 30%">
-						<option value="5"> <spring:message code='common.listing.5'/> </option>
-					 	<option value="10"> <spring:message code='common.listing.10'/> </option>
-						<option value="50"> <spring:message code='common.listing.50'/> </option>
+						<option value="5"> <spring:message code='listing.5'/> </option>
+					 	<option value="10"> <spring:message code='listing.10'/> </option>
+						<option value="50"> <spring:message code='listing.50'/> </option>
 					</select>
 				</td>
 			</tr>
 		</table>
 		<div class="btns">
-			<button type="button" id="searchData" class="full"><spring:message code='common.search'/></button>
+			<button type="button" id="searchData" class="full"><spring:message code='search'/></button>
 		</div>
 		<ul id="searchList" class="searchList"></ul>
 	</div>
@@ -182,7 +182,7 @@
 			<h3><spring:message code='demo.local.search'/></h3>
 			<ul class="apiLoca">
 				<li>
-					<label for="localSearchProjectId"><spring:message code='common.project'/></label>
+					<label for="localSearchProjectId"><spring:message code='project'/></label>
 					<select id="localSearchProjectId" name="localSearchProjectId" class="select">
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
@@ -190,9 +190,9 @@
 					</select>
 				</li>
 				<li>
-					<label for="localSearchDataKey"><spring:message code='common.data.key'/></label>
+					<label for="localSearchDataKey"><spring:message code='data.key'/></label>
 					<input type="text" id="localSearchDataKey" name="localSearchDataKey" size="20" />
-					<button type="button" id="localSearch" class="btn"><spring:message code='common.search'/></button> 
+					<button type="button" id="localSearch" class="btn"><spring:message code='search'/></button> 
 				</li>
 			</ul>
 		</div>
@@ -201,12 +201,12 @@
 			<ul class="apiLoca">
 				<li>
 					<input type="radio" id="showPropertyRendering" name="propertyRendering" value="true" />
-					<label for="showLabel"> <spring:message code='common.show'/> </label>
+					<label for="showLabel"> <spring:message code='show'/> </label>
 					<input type="radio" id="hidePropertyRendering" name="propertyRendering" value="false" />
-					<label for="hideLabel"> <spring:message code='common.hide'/> </label>
+					<label for="hideLabel"> <spring:message code='hide'/> </label>
 				</li>
 				<li>
-					<label for="propertyRenderingProjectId"> <spring:message code='common.project'/> </label>
+					<label for="propertyRenderingProjectId"> <spring:message code='project'/> </label>
 					<select id="propertyRenderingProjectId" name="propertyRenderingProjectId" class="select">
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
@@ -214,9 +214,9 @@
 					</select>
 				</li>
 				<li>
-					<label for="propertyRenderingWord"><spring:message code='common.property'/></label>
+					<label for="propertyRenderingWord"><spring:message code='property'/></label>
 					<input type="text" id="propertyRenderingWord" name="propertyRenderingWord" size="21" placeholder="isMain=true" />
-					<button type="button" id="changePropertyRendering" class="btn"><spring:message code='common.change'/></button> 
+					<button type="button" id="changePropertyRendering" class="btn"><spring:message code='change'/></button> 
 				</li>
 			</ul>
 		</div>
@@ -224,7 +224,7 @@
 			<h3><spring:message code='demo.color.change'/></h3>
 			<ul class="apiLoca">
 				<li>
-					<label for="colorProjectId"> <spring:message code='common.project'/> </label>
+					<label for="colorProjectId"> <spring:message code='project'/> </label>
 					<select id="colorProjectId" name="colorProjectId" class="select">
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
@@ -232,29 +232,29 @@
 					</select>
 				</li>
 				<li>
-					<label for="colorDataKey"><spring:message code='common.data.key'/></label>
+					<label for="colorDataKey"><spring:message code='data.key'/></label>
 					<input type="text" id="colorDataKey" name="colorDataKey" size="30" />
 				</li>
 				<li>
-					<label for="colorObjectIds"><spring:message code='common.object.id'/></label>
-					<input type="text" id="colorObjectIds" name="colorObjectIds" placeholder=" , <spring:message code='common.delimiter'/>" size="30" />
+					<label for="colorObjectIds"><spring:message code='object.id'/></label>
+					<input type="text" id="colorObjectIds" name="colorObjectIds" placeholder=" , <spring:message code='delimiter'/>" size="30" />
 				</li>
 				<li>
-					<label for="colorProperty"><spring:message code='common.property'/></label>
+					<label for="colorProperty"><spring:message code='property'/></label>
 					<input type="text" id="colorProperty" name="colorProperty" size="30" placeholder="isMain=true" />
 				</li>
 				<li>
-					<label for="updateColor"><spring:message code='common.color'/></label>
+					<label for="updateColor"><spring:message code='color'/></label>
 					<select id="updateColor" name="updateColor" class="select">
-						<option value="255,0,0"> <spring:message code='common.color.red'/></option>
-						<option value="255,255,0"> <spring:message code='common.color.yellow'/></option>
-						<option value="0,255,0"> <spring:message code='common.color.green'/></option>
-						<option value="0,0,255"> <spring:message code='common.color.blue'/></option>
-						<option value="255,0,255"> <spring:message code='common.color.pink'/></option>
-						<option value="0,0,0"> <spring:message code='common.color.black'/></option>
+						<option value="255,0,0"> <spring:message code='color.red'/></option>
+						<option value="255,255,0"> <spring:message code='color.yellow'/></option>
+						<option value="0,255,0"> <spring:message code='color.green'/></option>
+						<option value="0,0,255"> <spring:message code='color.blue'/></option>
+						<option value="255,0,255"> <spring:message code='color.pink'/></option>
+						<option value="0,0,0"> <spring:message code='color.black'/></option>
 					</select>
-					<button type="button" id="changeColor" class="btn"><spring:message code='common.change'/></button> 
-					<button type="button" id="deleteAllChangeColor" class="btn"><spring:message code='common.all.delete'/></button>
+					<button type="button" id="changeColor" class="btn"><spring:message code='change'/></button> 
+					<button type="button" id="deleteAllChangeColor" class="btn"><spring:message code='all.delete'/></button>
 				</li>
 			</ul>
 		</div>
@@ -262,7 +262,7 @@
 			<h3><spring:message code='demo.location.and.rotation'/></h3>
 			<ul class="apiLoca">
 				<li>
-					<label for="moveProjectId"><spring:message code='common.project'/></label>
+					<label for="moveProjectId"><spring:message code='project'/></label>
 					<select id="moveProjectId" name="moveProjectId" class="select">
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
@@ -270,57 +270,57 @@
 					</select>
 				</li>
 				<li>
-					<label for="moveDataKey"><spring:message code='common.data.key'/></label>
+					<label for="moveDataKey"><spring:message code='data.key'/></label>
 					<input type="text" id="moveDataKey" name="moveDataKey" size="25" />
 				</li>
 				<li>
-					<label for="moveLatitude"><spring:message code='common.latitude'/> </label>
+					<label for="moveLatitude"><spring:message code='latitude'/> </label>
 					<input type="text" id="moveLatitude" name="moveLatitude" size="25"/>
 				</li>
 				<li>
-					<label for="moveLongitude"><spring:message code='common.longitude'/> </label>
+					<label for="moveLongitude"><spring:message code='longitude'/> </label>
 					<input type="text" id="moveLongitude" name="moveLongitude" size="25"/>
 				</li>
 				<li>
-					<label for="moveHeight"><spring:message code='common.height'/> </label>
+					<label for="moveHeight"><spring:message code='height'/> </label>
 					<input type="text" id="moveHeight" name="moveHeight" size="25" />
 				</li>
 				<li>
-					<label for="moveHeading"><spring:message code='common.heading'/> </label>
+					<label for="moveHeading"><spring:message code='heading'/> </label>
 					<input type="text" id="moveHeading" name="moveHeading" size="15" />
 				</li>
 				<li>
-					<label for="movePitch"><spring:message code='common.pitch'/> </label>
+					<label for="movePitch"><spring:message code='pitch'/> </label>
 					<input type="text" id="movePitch" name="movePitch" size="15" />
 				</li>
 				<li>
-					<label for="moveRoll"><spring:message code='common.roll'/> </label>
+					<label for="moveRoll"><spring:message code='roll'/> </label>
 					<input type="text" id="moveRoll" name="moveRoll" size="15" />
-					<button type="button" id="changeLocationAndRotation" class="btn"><spring:message code='common.change'/></button>
-					<button type="button" id="updateLocationAndRotation" class="btn"><spring:message code='common.save'/></button>
+					<button type="button" id="changeLocationAndRotation" class="btn"><spring:message code='change'/></button>
+					<button type="button" id="updateLocationAndRotation" class="btn"><spring:message code='.save'/></button>
 				</li>
 			</ul>
 		</div>
 		<div>
 			<h3><spring:message code='demo.now.location.issue.list'/></h3>
 			<input type="radio" id="showNearGeoIssueList" name="nearGeoIssueList" value="true" onclick="changeNearGeoIssueList(true);" />
-			<label for="showNearGeoIssueList"> <spring:message code='common.show'/> </label>
+			<label for="showNearGeoIssueList"> <spring:message code='show'/> </label>
 			<input type="radio" id="hideNearGeoIssueList" name="nearGeoIssueList" value="false" onclick="changeNearGeoIssueList(false);"/>
-			<label for="hideNearGeoIssueList"> <spring:message code='common.hide'/> </label>
+			<label for="hideNearGeoIssueList"> <spring:message code='hide'/> </label>
 		</div>
 		<div>
 			<h3><spring:message code='demo.click.point.location'/></h3>
 			<ul class="apiLoca">
 				<li>
-					<label for="positionLatitude"> <spring:message code='common.latitude'/> </label>
+					<label for="positionLatitude"> <spring:message code='latitude'/> </label>
 					<input type="text" id="positionLatitude" name="positionLatitude" size="25" />
 				</li>
 				<li>
-					<label for="positionLongitude"> <spring:message code='common.longitude'/> </label>
+					<label for="positionLongitude"> <spring:message code='longitude'/> </label>
 					<input type="text" id="positionLongitude" name="positionLongitude" size="25" />
 				</li>
 				<li>
-					<label for="positionAltitude"> <spring:message code='common.height'/> </label>
+					<label for="positionAltitude"> <spring:message code='height'/> </label>
 					<input type="text" id="positionAltitude" name="positionAltitude" size="25" />
 				</li>
 			</ul>
@@ -332,7 +332,7 @@
 		<table>
 			<tr style="height: 35px;">
 				<td style="width: 100px;" nowrap="nowrap">
-					<form:label path="project_id"><spring:message code='common.project'/></form:label>
+					<form:label path="project_id"><spring:message code='project'/></form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
@@ -366,7 +366,7 @@
 			</tr>
 			<tr style="height: 35px;">
 				<td>
-					<form:label path="data_key"><spring:message code='common.data.name'/></form:label>
+					<form:label path="data_key"><spring:message code='data.name'/></form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
@@ -378,7 +378,7 @@
 			</tr>
 			<tr style="height: 35px;">
 				<td>
-					<form:label path="latitude"><spring:message code='common.latitude'/></form:label>
+					<form:label path="latitude"><spring:message code='latitude'/></form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
@@ -388,7 +388,7 @@
 			</tr>
 			<tr style="height: 35px;">
 				<td>
-					<form:label path="longitude"><spring:message code='common.longitude'/></form:label>
+					<form:label path="longitude"><spring:message code='longitude'/></form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
@@ -423,20 +423,20 @@
 				<td><form:label path="due_day"><spring:message code='issue.duedate'/></form:label></td>
 				<td><form:hidden path="due_date" />
 					<input type="text" id="due_day" name="due_day" class="date" maxlength="10" style="width: 33%"/>
-					<spring:message code='common.day'/>&nbsp;&nbsp;
+					<spring:message code='day'/>&nbsp;&nbsp;
 					<input type="text" id="due_hour" name="due_hour" placeholder=" 00" maxlength="2" style="width: 12%;"/> :
 					<input type="text" id="due_minute" name="due_minute" placeholder=" 00" maxlength="2" style="width: 12%;"/>
-					<spring:message code='common.minute'/>
+					<spring:message code='minute'/>
 				</td>
 			</tr>
 			
 			<tr style="height: 35px;">
 				<td><form:label path="assignee"><spring:message code='issue.assignee'/></form:label></td>
 				<td>
-					<spring:message code='common.notice.preparing' var='noticePreparing' />
+					<spring:message code='notice.preparing' var='noticePreparing' />
 					<spring:message code='issue.assignee.description' var="assigneeDescription"/>
 					<form:input path="assignee" cssClass="m" placeholder="${assigneeDescription}" size="22" />
-					<button type="button" class="btn" onclick="alert('${noticePreparing}');"><spring:message code='common.selection'/></button> 
+					<button type="button" class="btn" onclick="alert('${noticePreparing}');"><spring:message code='selection'/></button> 
 					<form:errors path="assignee" cssClass="error" />
 				</td>
 			</tr>
@@ -446,7 +446,7 @@
 				<td>
 					<spring:message code='issue.reporter.description' var="reporterDescription" />
 					<form:input path="reporter" cssClass="m" placeholder="${reporterDescription}" size="22" />
-					<button type="button" class="btn" onclick="alert('${noticePreparing}');"><spring:message code='common.selection'/></button> 
+					<button type="button" class="btn" onclick="alert('${noticePreparing}');"><spring:message code='selection'/></button> 
 					<form:errors path="reporter" cssClass="error" />
 				</td>
 			</tr>
@@ -462,7 +462,7 @@
 		</table>
 		
 		<div class="btns">
-			<button type="button" id="issueSaveButton" class="full"><spring:message code='common.save'/></button>
+			<button type="button" id="issueSaveButton" class="full"><spring:message code='save'/></button>
 		</div>
 	</div>
 	</form:form>
@@ -563,25 +563,25 @@
 	
 	<div id="configMenuContent" class="configWrap">
 		<div>
-			<h3><spring:message code='common.label'/></h3>
+			<h3><spring:message code='label'/></h3>
 			<input type="radio" id="showLabel" name="labelInfo" value="true" onclick="changeLabel(true);" />
-			<label for="showLabel"> <spring:message code='common.show'/> </label>
+			<label for="showLabel"> <spring:message code='show'/> </label>
 			<input type="radio" id="hideLabel" name="labelInfo" value="false" onclick="changeLabel(false);"/>
-			<label for="hideLabel"> <spring:message code='common.hide'/> </label>
+			<label for="hideLabel"> <spring:message code='hide'/> </label>
 		</div>
 		<div>
-			<h3><spring:message code='common.object.info'/></h3>
+			<h3><spring:message code='object.info'/></h3>
 			<input type="radio" id="showObjectInfo" name="objectInfo" value="true" onclick="changeObjectInfoViewMode(true);" />
-			<label for="showObjectInfo"> <spring:message code='common.show'/> </label>
+			<label for="showObjectInfo"> <spring:message code='show'/> </label>
 			<input type="radio" id="hideObjectInfo" name="objectInfo" value="false" onclick="changeObjectInfoViewMode(false);"/>
-			<label for="hideObjectInfo"> <spring:message code='common.hide'/> </label>
+			<label for="hideObjectInfo"> <spring:message code='hide'/> </label>
 		</div>
 		<div>
-			<h3><spring:message code='common.boundingbox'/></h3>
+			<h3><spring:message code='boundingbox'/></h3>
 			<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />
-			<label for="showBoundingBox"> <spring:message code='common.show'/> </label>
+			<label for="showBoundingBox"> <spring:message code='show'/> </label>
 			<input type="radio" id="hideBoundingBox" name="boundingBox" value="false" onclick="changeBoundingBox(false);"/>
-			<label for="hideBoundingBox"> <spring:message code='common.hide'/> </label>
+			<label for="hideBoundingBox"> <spring:message code='hide'/> </label>
 		</div>
 		<div>
 			<h3><spring:message code='demon.selection.and.moving'/></h3>
@@ -592,54 +592,54 @@
 			<input type="radio" id="objectMove" name="objectMoveMode" value="1" onclick="changeObjectMove('1');"/>
 			<label for="objectMove"> <spring:message code='demo.object.move'/> </label>
 			
-			<button type="button" id="saveObjectMoveButton" class="btn"><spring:message code='common.save'/></button>
-			<button type="button" id="deleteAllObjectMoveButton" class="btn"><spring:message code='common.all.delete'/></button>
+			<button type="button" id="saveObjectMoveButton" class="btn"><spring:message code='save'/></button>
+			<button type="button" id="deleteAllObjectMoveButton" class="btn"><spring:message code='all.delete'/></button>
 		</div>
 		<div>
 			<h3><spring:message code='demo.object.occlusion.culling'/></h3>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;"><spring:message code='common.selection'/></div>
+				<div style="display: inline-block; width: 70px;"><spring:message code='selection'/></div>
 				<input type="radio" id="useOcclusionCulling" name="occlusionCulling" value="true" />
-				<label for="useOcclusionCulling"> <spring:message code='common.use'/> </label>
+				<label for="useOcclusionCulling"> <spring:message code='use'/> </label>
 				<input type="radio" id="unusedOcclusionCulling" name="occlusionCulling" value="false" />
-				<label for="unusedOcclusionCulling"> <spring:message code='common.unused'/> </label>
+				<label for="unusedOcclusionCulling"> <spring:message code='unused'/> </label>
 			</div>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;"><spring:message code='common.data.key'/></div>
+				<div style="display: inline-block; width: 70px;"><spring:message code='data.key'/></div>
 				<input type="text" id="occlusion_culling_data_key" name="occlusion_culling_data_key" size="22" />
-				<button type="button" id="changeOcclusionCullingButton" class="btn"><spring:message code='common.change'/></button>
+				<button type="button" id="changeOcclusionCullingButton" class="btn"><spring:message code='change'/></button>
 			</div>
 		</div>
 		<div>
-			<h3><spring:message code='common.lod'/></h3>
+			<h3><spring:message code='lod'/></h3>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;"><spring:message code='common.lod0'/></div>
-				<input type="text" id="geo_lod0" name="geo_lod0" value="${policy.geo_lod0 }" size="15" />&nbsp;<spring:message code='common.meter'/>
+				<div style="display: inline-block; width: 70px;"><spring:message code='lod0'/></div>
+				<input type="text" id="geo_lod0" name="geo_lod0" value="${policy.geo_lod0 }" size="15" />&nbsp;<spring:message code='meter'/>
 			</div>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;"><spring:message code='common.lod1'/></div>
-				<input type="text" id="geo_lod1" name="geo_lod1" value="${policy.geo_lod1 }" size="15" />&nbsp;<spring:message code='common.meter'/>
+				<div style="display: inline-block; width: 70px;"><spring:message code='lod1'/></div>
+				<input type="text" id="geo_lod1" name="geo_lod1" value="${policy.geo_lod1 }" size="15" />&nbsp;<spring:message code='meter'/>
 			</div>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;"><spring:message code='common.lod2'/></div>
-				<input type="text" id="geo_lod2" name="geo_lod2" value="${policy.geo_lod2 }" size="15" />&nbsp;<spring:message code='common.meter'/>
+				<div style="display: inline-block; width: 70px;"><spring:message code='lod2'/></div>
+				<input type="text" id="geo_lod2" name="geo_lod2" value="${policy.geo_lod2 }" size="15" />&nbsp;<spring:message code='meter'/>
 			</div>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;"><spring:message code='common.lod3'/></div>
-				<input type="text" id="geo_lod3" name="geo_lod3" value="${policy.geo_lod3 }" size="15" />&nbsp;<spring:message code='common.meter'/>
+				<div style="display: inline-block; width: 70px;"><spring:message code='lod3'/></div>
+				<input type="text" id="geo_lod3" name="geo_lod3" value="${policy.geo_lod3 }" size="15" />&nbsp;<spring:message code='meter'/>
 			</div>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;"><spring:message code='common.lod4'/></div>
-				<input type="text" id="geo_lod4" name="geo_lod4" value="${policy.geo_lod4 }" size="15" />&nbsp;<spring:message code='common.meter'/>
+				<div style="display: inline-block; width: 70px;"><spring:message code='lod4'/></div>
+				<input type="text" id="geo_lod4" name="geo_lod4" value="${policy.geo_lod4 }" size="15" />&nbsp;<spring:message code='meter'/>
 			</div>
 			<div style="height: 30px;">
-				<div style="display: inline-block; width: 70px;"><spring:message code='common.lod5'/></div>
-				<input type="text" id="geo_lod5" name="geo_lod5" value="${policy.geo_lod5 }" size="15" />&nbsp;<spring:message code='common.meter'/>&nbsp;&nbsp;
-				<button type="button" id="changeLodButton" class="btn"><spring:message code='common.change'/></button>
+				<div style="display: inline-block; width: 70px;"><spring:message code='lod5'/></div>
+				<input type="text" id="geo_lod5" name="geo_lod5" value="${policy.geo_lod5 }" size="15" />&nbsp;<spring:message code='meter'/>&nbsp;&nbsp;
+				<button type="button" id="changeLodButton" class="btn"><spring:message code='change'/></button>
 			</div>
 		</div>
 		<div>
-			<h3><spring:message code='common.lighting'/></h3>
+			<h3><spring:message code='lighting'/></h3>
 			<div style="height: 30px;"><spring:message code='demo.ambient.reflection.coef'/></div>
 			<div id="ambient_reflection_coef" style="display: inline-block; width: 65%;">
 				<div id="geo_ambient_reflection_coef_view" class="ui-slider-handle"></div>
@@ -657,7 +657,7 @@
 					<input type="hidden" id="geo_specular_reflection_coef" name="geo_specular_reflection_coef" value="1" />
 				</div>
 				<div style="float: right;">
-					<button type="button" id="changeLightingButton" class="btn"><spring:message code='common.change'/></button>
+					<button type="button" id="changeLightingButton" class="btn"><spring:message code='change'/></button>
 				</div>
 			</div>
 			<div style="text-align: center">
@@ -666,7 +666,7 @@
 		<div>
 			<h3><label for="geo_ssao_radius"><spring:message code='demo.ssao.radius'/></label></h3>
 			<input type="text" id="geo_ssao_radius" name="geo_ssao_radius" />
-			<button type="button" id="changeSsaoRadiusButton" class="btn"><spring:message code='common.change'/></button>
+			<button type="button" id="changeSsaoRadiusButton" class="btn"><spring:message code='change'/></button>
 		</div>
 		<div>
 			<h3><spring:message code='demo.view.mode'/></h3>
@@ -955,7 +955,7 @@
 				if(msg.result === "success") {
 					var issueRecentList10Message = "<spring:message code='issue.recent.list.10'/>";
 					var issueDoesNotExistMessage = "<spring:message code='issue.not.exist'/>";
-					var commonShortcutMessage = "<spring:message code='common.shortcut'/>";
+					var commonShortcutMessage = "<spring:message code='shortcut'/>";
 					
 					var issueList = msg.issueList;
 					var content = "";
@@ -1108,7 +1108,7 @@
 					if(msg.result === "success") {
 						var issueDoesNotExistMessage = "<spring:message code='issue.not.exist'/>";
 						var dataDoesNotExistMessage = "<spring:message code='data.not.exist'/>";
-						var commonShortcutMessage = "<spring:message code='common.shortcut'/>";
+						var commonShortcutMessage = "<spring:message code='shortcut'/>";
 						
 						var searchType = $("#search_word").val();
 						var content = "";
@@ -1755,9 +1755,9 @@
 	
 	function dataInfoChangeRequestLogList() {
 		var dataInfoLogListDoesNotExistMessage = "<spring:message code='demo.data.change.request.log.not.exist'/>";
-		var requestMessage = "<spring:message code='common.request'/>";
-		var completeMessage = "<spring:message code='common.complete'/>";
-		var rejectMessage = "<spring:message code='common.reject'/>";
+		var requestMessage = "<spring:message code='request'/>";
+		var completeMessage = "<spring:message code='complete'/>";
+		var rejectMessage = "<spring:message code='reject'/>";
 		
 		var url = "/data/ajax-list-data-change-request-log.do";
 		var info = "";

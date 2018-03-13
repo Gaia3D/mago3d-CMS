@@ -53,11 +53,11 @@
 										<td class="col-data">${dataInfo.data_name }</td>
 									</tr>
 									<tr>
-										<th class="col-label" scope="row"><spring:message code='lat'/></th>
+										<th class="col-label" scope="row"><spring:message code='latitude'/></th>
 										<td class="col-data">${dataInfo.latitude }</td>
 									</tr>	
 									<tr>
-										<th class="col-label" scope="row"><spring:message code='lon'/></th>
+										<th class="col-label" scope="row"><spring:message code='longitude'/></th>
 										<td class="col-data">${dataInfo.longitude }</td>
 									</tr>
 									<tr>
