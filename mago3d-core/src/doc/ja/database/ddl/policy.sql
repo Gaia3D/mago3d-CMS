@@ -73,7 +73,8 @@ create table policy(
 	geo_callback_enable 					varchar(5)			default 'false',
 	geo_callback_apiresult					varchar(64),
 	geo_callback_dataInfo					varchar(64),
-	geo_callback_selectedObject				varchar(64),
+	geo_callback_selectedobject				varchar(64),
+	geo_callback_moveddata					varchar(64),
 	geo_callback_insertIssue				varchar(64),
 	geo_callback_listIssue					varchar(64),
 	geo_callback_clickposition				varchar(64),
@@ -209,10 +210,11 @@ comment on column policy.geo_server_add_parameters_format is 'geo server追加La
 	
 comment on column policy.geo_callback_enable is 'のコールバックfunction使用の有無。デフォルトfalse';
 comment on column policy.geo_callback_apiresult is 'api処理結果callback function名';
-comment on column policy.geo_callback_dataInfo is 'data info 표시 callback function 이름';
-comment on column policy.geo_callback_selectedObject is 'object選択callback function名';
-comment on column policy.geo_callback_insertIssue is 'issue登録callback function名';
-comment on column policy.geo_callback_listIssue is 'issueリストcallback function名';
+comment on column policy.geo_callback_datainfo is 'data info 表示 callback function';
+comment on column policy.geo_callback_moveddata is 'moved data callback function';
+comment on column policy.geo_callback_selectedobject is 'object選択callback function名';
+comment on column policy.geo_callback_insertissue is 'issue登録callback function名';
+comment on column policy.geo_callback_listissue is 'issueリストcallback function名';
 comment on column policy.geo_callback_clickposition is 'mouse click時の位置情報callback function名';
 
 comment on column policy.notice_service_yn is 'の通知サービスを使用の有無。 Y：使用すると、N：を使用しない(デフォルト)';
