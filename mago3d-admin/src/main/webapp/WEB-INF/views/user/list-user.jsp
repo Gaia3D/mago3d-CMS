@@ -68,7 +68,6 @@
 										<option value="">${userGroupAll}</option>
 <c:forEach var="commonCode" items="${userRegisterTypeList}" varStatus="status">
 										<option value="${commonCode.code_value }"> ${commonCode.code_name } </option>
-										<option value="${commonCode.code_value }"> ${commonCode.code_name } </option>
 </c:forEach>
 									</select>
 								</div>
