@@ -265,6 +265,7 @@
 		resizable: false
 	});
 	
+	// 데이터 일괄 등록
 	var dataFileDialog = $( ".dataFileDialog" ).dialog({
 		autoOpen: false,
 		height: 445,

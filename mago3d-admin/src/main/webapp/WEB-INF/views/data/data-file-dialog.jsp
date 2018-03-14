@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-	<div class="dataFileDialog" title="<spring:message code='data.all.insert.data'/>">
+	<div class="dataFileDialog" title="<spring:message code='data.all.insert'/>">
 		<form id="fileInfo" name="fileInfo" action="/data/ajax-insert-data-file.do" method="post" enctype="multipart/form-data">
 			<table id="dataFileUpload" class="inner-table scope-row">
 				<col class="col-sub-label xl" />
