@@ -297,7 +297,7 @@
 					<label for="moveRoll"><spring:message code='roll'/> </label>
 					<input type="text" id="moveRoll" name="moveRoll" size="15" />
 					<button type="button" id="changeLocationAndRotation" class="btn"><spring:message code='change'/></button>
-					<button type="button" id="updateLocationAndRotation" class="btn"><spring:message code='.save'/></button>
+					<button type="button" id="updateLocationAndRotation" class="btn"><spring:message code='save'/></button>
 				</li>
 			</ul>
 		</div>
