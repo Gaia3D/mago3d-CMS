@@ -165,6 +165,10 @@
 												<span class="icon-glyph glyph-on on"></span>
 												<span class="icon-text"><spring:message code='reject'/></span>
 		</c:if>
+		<c:if test="${dataInfoLog.status eq '3'}">
+												<span class="icon-glyph glyph-on on"></span>
+												<span class="icon-text"><spring:message code='common.reset'/></span>
+		</c:if>
 												
 											</td>
 											<td class="col-date">${dataInfoLog.view_insert_date }</td>

@@ -40,7 +40,7 @@
 									<label for="search_word"><spring:message code='search.word'/></label>
 									<select id="search_word" name="search_word" class="select">
 										<option value=""><spring:message code='select'/></option>
-					                	<option value="data_name"><spring:message code='name'/></option>
+					          <option value="data_name"><spring:message code='name'/></option>
 									</select>
 									<select id="search_option" name="search_option" class="select">
 										<option value="0"><spring:message code='search.same'/></option>
@@ -63,7 +63,6 @@
 										<option value=""><spring:message code='all'/></option>
 <c:forEach var="commonCode" items="${dataRegisterTypeList}" varStatus="status">
 										<option value="${commonCode.code_value }"> ${commonCode.code_name } </option>
-										<option value="${commonCode.code_value }"> ${commonCode.code_name } </option>
 </c:forEach>
 									</select>
 								</div>
@@ -77,8 +76,7 @@
 									<label for="order_word"><spring:message code='search.order'/></label>
 									<select id="order_word" name="order_word" class="select">
 										<option value=""> <spring:message code='search.basic'/> </option>
-					                	<option value="data_id"> <spring:message code='id'/> </option>
-										<option value="data_name"> <spring:message code='name'/> </option>
+					                	<option value="data_name"> <spring:message code='data.name'/> </option>
 										<option value="insert_date"> <spring:message code='search.insert.date'/> </option>
 									</select>
 									<select id="order_value" name="order_value" class="select">
@@ -114,12 +112,6 @@
 										<a href="#" onclick="uploadDataFile(); return false;" class="button"><spring:message code='data.all.insert'/></a>
 										<a href="#" onclick="uploadDataAttributeFile(); return false;" class="button"><spring:message code='data.attribute.insert'/></a>
 										<a href="#" onclick="uploadDataObjectAttributeFile(); return false;" class="button"><spring:message code='data.object.attribute.insert'/></a>
-<c:if test="${txtDownloadFlag ne 'true' }">
-										<a href="/data/download-excel-data.do" class="button"><spring:message code='data.download'/></a>
-</c:if>
-<c:if test="${txtDownloadFlag eq 'true' }">
-										<a href="/data/download-txt-data.do" class="button"><spring:message code='data.download.txt'/></a>
-</c:if>
 									</div>
 								</div>
 							</div>
@@ -187,7 +179,11 @@
 		</c:if>
 												
 											</td>
-											<td class="col-name"><a href="#" onclick="viewAttributes('${dataInfo.data_id }'); return false;"><spring:message code='data.control.property'/></a></td>
+											<td class="col-name">
+												<a href="#" onclick="viewControlAttributes('${dataInfo.data_id }'); return false;">
+													보기
+												</a>
+											</td>
 											<td class="col-functions">
 												<span class="button-group">
 													<a href="#" onclick="return deleteWarning();"><spring:message code='view'/></a>
@@ -269,6 +265,7 @@
 		resizable: false
 	});
 	
+	// 데이터 일괄 등록
 	var dataFileDialog = $( ".dataFileDialog" ).dialog({
 		autoOpen: false,
 		height: 445,
@@ -313,6 +310,8 @@
 	
 	var updateDataStatusFlag = true;
 	function updateDataStatus(business_type, status_value) {
+		alert("Coming soon.");
+		return false;
 		if($("input:checkbox[name=data_id]:checked").length == 0) {
 			alert(JS_MESSAGE["check.value.required"]);
 			return false;

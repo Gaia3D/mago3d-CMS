@@ -203,6 +203,8 @@ public class Policy {
 	private String geo_callback_apiresult;
 	// data info 표시 callback function 이름
 	private String geo_callback_dataInfo;
+	// moved data callback function 이름
+	private String geo_callback_moveddata;
 	// object 선택 callback function 이름
 	private String geo_callback_selectedobject;
 	// issue 등록 callback function 이름

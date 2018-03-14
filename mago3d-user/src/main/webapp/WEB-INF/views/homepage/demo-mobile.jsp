@@ -2047,6 +2047,16 @@
 		$("#now_longitude").val(longitude);
 	}
 	
+	// moved data callback
+	function showMovedData(dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
+		$("#moveDataKey").val(dataKey);
+        $("#moveLatitude").val(latitude);
+        $("#moveLongitude").val(longitude);
+        $("#moveHeight").val(height);
+        $("#moveHeading").val(heading);
+        $("#movePitch").val(pitch);
+        $("#moveRoll").val(roll);
+    }
 </script>
 </body>
 </html>
