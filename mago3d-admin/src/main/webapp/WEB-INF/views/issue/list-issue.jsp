@@ -117,7 +117,7 @@
 								<tbody>
 <c:if test="${empty issueList }">
 							<tr>
-								<td colspan="12" class="col-none"><spring:message code='issue.no.issue'/></td>
+								<td colspan="12" class="col-none"><spring:message code='issue.does.not.exist'/></td>
 							</tr>
 </c:if>
 <c:if test="${!empty issueList }">

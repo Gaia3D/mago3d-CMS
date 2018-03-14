@@ -78,7 +78,7 @@
 									<tbody>
 <c:if test="${empty projectList }">
 										<tr>
-											<td colspan="14" class="col-none"><spring:message code='data.project.none'/></td>
+											<td colspan="14" class="col-none"><spring:message code='data.project.does.not.exist'/></td>
 										</tr>
 </c:if>
 <c:if test="${!empty projectList }">
