@@ -36,7 +36,7 @@ public class DataAttributeFileJsonParser implements DataAttributeFileParser {
 			throw new RuntimeException("Data 일괄 등록 Json 파일 파싱 오류!");
 		}
 		
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		result.put("attribute", attribute);
 		result.put("totalCount", 1);
 		result.put("parseSuccessCount", parseSuccessCount);

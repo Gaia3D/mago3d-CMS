@@ -93,8 +93,8 @@
 						
 						<div class="button-group">
 							<div class="center-buttons">
-								<a href="/user/list-user.do?${listParameters}" class="button"><spring:message code='list'/></a>
-								<a href="/user/modify-user.do?user_id=${userInfo.user_id }&amp;${listParameters}" class="button"><spring:message code='modified'/></a>
+								<a href="/data/list-data.do?${listParameters}" class="button"><spring:message code='list'/></a>
+								<a href="/data/modify-data.do?data_id=${userInfo.user_id }&amp;${listParameters}" class="button"><spring:message code='modified'/></a>
 							</div>
 						</div>
 					</div>

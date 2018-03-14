@@ -224,7 +224,7 @@ public class UserController {
 	@PostMapping(value = "ajax-update-user-info.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateUserInfo(HttpServletRequest request, UserInfo userInfo) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			Policy policy = CacheManager.getPolicy();
@@ -355,7 +355,7 @@ public class UserController {
 	@ResponseBody
 	public Map<String, Object> ajaxInitUserPassword(	HttpServletRequest request, 
 										@RequestParam("check_ids") String check_ids) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			if(check_ids.length() <= 0) {
@@ -451,7 +451,7 @@ public class UserController {
 	public Map<String, Object> ajaxUserGroupInfo(HttpServletRequest request, @RequestParam("user_group_id") Long user_group_id) {
 		
 		log.info("@@@@@@@ user_group_id = {}", user_group_id);
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		UserGroup userGroup = null;
 		try {	

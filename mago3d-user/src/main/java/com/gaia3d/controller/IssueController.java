@@ -117,7 +117,7 @@ public class IssueController {
 		
 		log.info("@@ project = {}", project);
 		
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			Issue issue = new Issue();
@@ -274,7 +274,7 @@ public class IssueController {
 	@PostMapping(value = "ajax-insert-issue.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertIssue(HttpServletRequest request, Issue issue) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -402,7 +402,7 @@ public class IssueController {
 	@PostMapping(value = "ajax-update-issue.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateIssue(Issue issue) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ issue = {}", issue);
@@ -472,7 +472,7 @@ public class IssueController {
 	@PostMapping(value = "ajax-insert-issue-comment.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertIssueComment(HttpServletRequest request, Issue issue) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -517,7 +517,7 @@ public class IssueController {
 	@PostMapping(value = "ajax-delete-issue-comment.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDeleteIssueComment(HttpServletRequest request, Long issue_comment_id) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ issue_comment_id = {} ", issue_comment_id);

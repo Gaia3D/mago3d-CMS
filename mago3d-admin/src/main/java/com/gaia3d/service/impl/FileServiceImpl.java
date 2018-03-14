@@ -213,7 +213,7 @@ public class FileServiceImpl implements FileService {
 //			if(workBook != null) workBook.close();
 //		}
 		
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 //		result.put("userList", userList);
 //		result.put("totalCount", totalCount);
 //		result.put("parseSuccessCount", parseSuccessCount);
@@ -372,7 +372,7 @@ public class FileServiceImpl implements FileService {
 //			if(fis != null) { try { fis.close(); } catch(Exception e) { e.printStackTrace(); } }
 //		}
 //		
-//		Map<String, Object> result = new HashMap<String, Object>();
+//		Map<String, Object> result = new HashMap<>();
 //		result.put("userList", userList);
 //		result.put("totalCount", totalCount);
 //		result.put("parseSuccessCount", parseSuccessCount);
@@ -891,7 +891,7 @@ public class FileServiceImpl implements FileService {
 //			if(workBook != null) workBook.close();
 //		}
 //		
-//		Map<String, Object> result = new HashMap<String, Object>();
+//		Map<String, Object> result = new HashMap<>();
 //		result.put("serverList", serverList);
 //		result.put("totalCount", totalCount);
 //		result.put("parseSuccessCount", parseSuccessCount);

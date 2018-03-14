@@ -70,7 +70,7 @@ public class ProjectController {
 	@PostMapping(value = "ajax-list-project.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListProject(HttpServletRequest request) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			List<Project> projectList = projectService.getListProject(new Project());
@@ -92,7 +92,7 @@ public class ProjectController {
 	@GetMapping(value = "ajax-project.do")
 	@ResponseBody
 	public Map<String, Object> ajaxProject(Long projectId) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 						
@@ -138,7 +138,7 @@ public class ProjectController {
 	@ResponseBody
 	public Map<String, Object> ajaxProjectKeyDuplicationCheck(HttpServletRequest request, Project project) {
 		
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		String duplication_value = "";
 		
@@ -179,7 +179,7 @@ public class ProjectController {
 	@PostMapping(value = "ajax-insert-project.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertProject(HttpServletRequest request, Project project) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ project = {} ", project);
@@ -231,7 +231,7 @@ public class ProjectController {
 	@PostMapping(value = "ajax-update-project.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateProject(HttpServletRequest request, Project project) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 						

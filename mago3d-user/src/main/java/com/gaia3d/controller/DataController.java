@@ -45,7 +45,7 @@ public class DataController {
 	@RequestMapping(value = "ajax-project-data-by-project-id.do")
 	@ResponseBody
 	public Map<String, Object> ajaxProjectDataByProjectId(HttpServletRequest request, @RequestParam("project_id") Long project_id) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {		
 			String projectDataJson =  CacheManager.getProjectDataJson(project_id);
@@ -68,7 +68,7 @@ public class DataController {
 	@ResponseBody
 	public Map<String, Object> ajaxSearchData(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) {
 		
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);

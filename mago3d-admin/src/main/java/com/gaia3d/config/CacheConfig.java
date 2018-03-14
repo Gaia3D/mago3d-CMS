@@ -146,13 +146,13 @@ public class CacheConfig {
 	 * @param cacheParams
 	 */
 	private void menu(CacheParams cacheParams) {
-		Map<Long, Menu> menuMap = new HashMap<Long, Menu>();
+		Map<Long, Menu> menuMap = new HashMap<>();
 		List<Menu> menuList = menuService.getListMenu(null);
 		for(Menu menu : menuList) {
 			menuMap.put(menu.getMenu_id(), menu);
 		}
 		
-		Map<Long, List<UserGroupMenu>> userGroupMenuMap = new HashMap<Long, List<UserGroupMenu>>();
+		Map<Long, List<UserGroupMenu>> userGroupMenuMap = new HashMap<>();
 		List<UserGroup> userGroupList = userGroupService.getListUserGroup(new UserGroup());
 		for(UserGroup userGroup : userGroupList) {
 			List<UserGroupMenu> userGroupMenuList = userGroupService.getListUserGroupMenu(userGroup);

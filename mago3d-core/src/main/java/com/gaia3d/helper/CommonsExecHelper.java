@@ -31,7 +31,7 @@ public class CommonsExecHelper {
 		Boolean isSuccess = Boolean.FALSE;
 		String errorCode = null;
 		String message = null;
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		
 		Executor executor = new DefaultExecutor();
 		executor.setExitValue(0);
@@ -75,7 +75,7 @@ public class CommonsExecHelper {
 		Boolean isSuccess = Boolean.FALSE;
 		String errorCode = null;
 		String message = null;
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		
 		Executor executor = new DefaultExecutor();
 		executor.setExitValue(0);
@@ -119,7 +119,7 @@ public class CommonsExecHelper {
 		Boolean isSuccess = Boolean.FALSE;
 		String errorCode = null;
 		String message = null;
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		
 		Executor executor = new DefaultExecutor();
 		executor.setExitValue(0);
@@ -197,7 +197,7 @@ public class CommonsExecHelper {
 		Boolean isSuccess = Boolean.FALSE;
 		String errorCode = null;
 		String message = null;
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		
 		Executor executor = new DefaultExecutor();
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -243,7 +243,7 @@ public class CommonsExecHelper {
 		Boolean isSuccess = Boolean.FALSE;
 		String errorCode = null;
 		String message = null;
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		
 		Executor executor = new DefaultExecutor();
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {

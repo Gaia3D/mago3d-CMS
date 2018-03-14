@@ -92,7 +92,7 @@ public class APIController {
 	@PostMapping(value = "ajax-update-external-service.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateExternalService(HttpServletRequest request, ExternalService externalService) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			externalService.setMethod_mode("update");

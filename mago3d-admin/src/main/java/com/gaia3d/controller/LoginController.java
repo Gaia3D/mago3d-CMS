@@ -291,7 +291,7 @@ public class LoginController {
 	@GetMapping(value = "ajax-change-language.do")
 	@ResponseBody
 	public Map<String, Object> ajaxChangeLanguage(HttpServletRequest request, HttpServletResponse response, @RequestParam("lang") String lang, Model model) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ lang = {}", lang);

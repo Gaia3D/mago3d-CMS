@@ -179,10 +179,8 @@
 		</c:if>
 												
 											</td>
-											<td class="col-name">
-												<a href="#" onclick="viewControlAttributes('${dataInfo.data_id }'); return false;">
-													보기
-												</a>
+											<td class="col-name" style="text-align: center;">
+												<a href="#" onclick="detailDataControlAttribute('${dataInfo.data_id }'); return false;">보기</a>
 											</td>
 											<td class="col-functions">
 												<span class="button-group">
@@ -257,54 +255,83 @@
 		$( ".select" ).selectmenu();
 	});
 	
-	var projectDialog = $( ".projectDialog" ).dialog({
-		autoOpen: false,
-		height: 300,
-		width: 400,
-		modal: true,
-		resizable: false
-	});
-	
-	// 데이터 일괄 등록
-	var dataFileDialog = $( ".dataFileDialog" ).dialog({
-		autoOpen: false,
-		height: 445,
-		width: 600,
-		modal: true,
-		resizable: false,
-		close: function() { location.reload(); }
-	});
-	
-	var dataAttributeDialog = $( ".dataAttributeDialog" ).dialog({
-		autoOpen: false,
-		height: 445,
-		width: 600,
-		modal: true,
-		resizable: false,
-		close: function() { location.reload(); }
-	});
-	
-	var dataObjectAttributeDialog = $( ".dataObjectAttributeDialog" ).dialog({
-		autoOpen: false,
-		height: 445,
-		width: 600,
-		modal: true,
-		resizable: false,
-		close: function() { location.reload(); }
-	});
-	
 	// 전체 선택 
 	$("#chk_all").click(function() {
 		$(":checkbox[name=data_id]").prop("checked", this.checked);
 	});
 	
+	// project 정보
+    function detailProject(projectId) {
+    	projectDialog.dialog( "open" );
+    	
+    	$.ajax({
+    		url: "/data/ajax-project.do",
+    		data: { projectId : projectId },
+    		type: "GET",
+    		dataType: "json",
+    		success: function(msg){
+    			if (msg.result == "success") {
+    				$("#project_name_info").html(msg.project.project_name);
+    				$("#project_key_info").html(msg.project.project_key);
+    				$("#use_yn_info").html(msg.project.use_yn);
+    				$("#description_info").html(msg.project.description);
+				} else {
+    				alert(JS_MESSAGE[msg.result]);
+    			}
+    		},
+    		error:function(request,status,error){
+    			alert(JS_MESSAGE["ajax.error.message"]);
+    		}
+    	});
+	}
+	
+ 	// project 정보
+    function detailDataControlAttribute(dataId) {
+    	dataControlAttributeDialog.dialog( "open" );
+    	
+    	$.ajax({
+    		url: "/data/ajax-project.do",
+    		data: { projectId : projectId },
+    		type: "GET",
+    		dataType: "json",
+    		success: function(msg){
+    			if (msg.result == "success") {
+    				$("#project_name_info").html(msg.project.project_name);
+    				$("#project_key_info").html(msg.project.project_key);
+    				$("#use_yn_info").html(msg.project.use_yn);
+    				$("#description_info").html(msg.project.description);
+				} else {
+    				alert(JS_MESSAGE[msg.result]);
+    			}
+    		},
+    		error:function(request,status,error){
+    			alert(JS_MESSAGE["ajax.error.message"]);
+    		}
+    	});
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// Data 일괄 등록 Layer 생성
 	function uploadDataFile() {
-		dataFileDialog.dialog( "open" );
+		insertDataFileDialog.dialog( "open" );
 	}
 	// Data 등록 Layer 닫기
 	function popClose() {
-		dataFileDialog.dialog( "close" );
+		insertDataFileDialog.dialog( "close" );
 		location.reload();
 	}
 	
@@ -438,40 +465,6 @@
 			alert(JS_MESSAGE["button.dobule.click"]);
 			return;
 		}
-	}
-	
-	// project 정보
-    function detailProject(projectId) {
-    	projectDialog.dialog( "open" );
-    	ajaxProject(projectId);
-	}
-	
-	// project 정보
-    function ajaxProject(projectId) {
-    	$.ajax({
-    		url: "/data/ajax-project.do",
-    		data: { projectId : projectId },
-    		type: "GET",
-    		dataType: "json",
-    		success: function(msg){
-    			if (msg.result == "success") {
-    				drawProject(msg.project);
-				} else {
-    				alert(JS_MESSAGE[msg.result]);
-    			}
-    		},
-    		error:function(request,status,error){
-    			alert(JS_MESSAGE["ajax.error.message"]);
-    		}
-    	});
-    }
-	
-	// 프로젝트 정보
-	function drawProject(project) {
-		$("#project_name_info").html(project.project_name);
-		$("#project_key_info").html(project.project_key);
-		$("#use_yn_info").html(project.use_yn);
-		$("#description_info").html(project.description);
 	}
 	
 	// Data 일괄 삭제
@@ -719,6 +712,88 @@
 			}
 		}
 	}
+	
+	// 프로젝트 다이얼 로그
+	var projectDialog = $( ".projectDialog" ).dialog({
+		autoOpen: false,
+		height: 300,
+		width: 400,
+		modal: true,
+		resizable: false
+	});
+	
+	// 데이터 일괄 등록 다이얼 로그
+	var insertDataFileDialog = $( ".insertDataFileDialog" ).dialog({
+		autoOpen: false,
+		height: 445,
+		width: 600,
+		modal: true,
+		resizable: false,
+		close: function() { location.reload(); }
+	});
+	
+	// 데이터 제어 속성 다이얼 로그
+	var dataControlAttributeDialog = $( ".dataControlAttributeDialog" ).dialog({
+		autoOpen: false,
+		height: 445,
+		width: 600,
+		modal: true,
+		resizable: false
+	});
+	
+	// 데이터 속성 다이얼 로그
+	var dataAttributeDialog = $( ".dataAttributeDialog" ).dialog({
+		autoOpen: false,
+		height: 445,
+		width: 600,
+		modal: true,
+		resizable: false
+	});
+	
+	// 데이터 속성 하나 등록 다이얼 로그
+	var insertDataAttributeDialog = $( ".insertDataAttributeDialog" ).dialog({
+		autoOpen: false,
+		height: 445,
+		width: 600,
+		modal: true,
+		resizable: false
+	});
+	
+	// 데이터 속성 프로젝트 전체 등록 다이얼 로그
+	var insertProjectDataAttributeDialog = $( ".insertProjectDataAttributeDialog" ).dialog({
+		autoOpen: false,
+		height: 445,
+		width: 600,
+		modal: true,
+		resizable: false
+	});
+	
+	// 데이터  Object 속성 다이얼 로그
+	var dataObjectAttributeDialog = $( ".dataObjectAttributeDialog" ).dialog({
+		autoOpen: false,
+		height: 445,
+		width: 600,
+		modal: true,
+		resizable: false
+	});
+	
+	// 데이터 Object 속성 하나 등록
+	var insertDataObjectAttributeDialog = $( ".insertDataObjectAttributeDialog" ).dialog({
+		autoOpen: false,
+		height: 445,
+		width: 600,
+		modal: true,
+		resizable: false
+	});
+	
+	// 프로젝트 데이터 Object 속성 하나 등록
+	var insertProjectDataObjectAttributeDialog = $( ".insertProjectDataObjectAttributeDialog" ).dialog({
+		autoOpen: false,
+		height: 445,
+		width: 600,
+		modal: true,
+		resizable: false
+	});
 </script>
 </body>
 </html>

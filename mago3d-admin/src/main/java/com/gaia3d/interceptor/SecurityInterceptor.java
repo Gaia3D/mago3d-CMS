@@ -66,7 +66,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 			} else {
 				log.info("## uri = {}, ajax_uri >= 0 ", uri);
 				ObjectMapper mapper = new ObjectMapper();
-				Map<String, String> jSONObject = new HashMap<String, String>();
+				Map<String, String> jSONObject = new HashMap<>();
     			jSONObject.put("result", "user.session.empty");
     			response.getWriter().write(mapper.writeValueAsString(jSONObject));
     			

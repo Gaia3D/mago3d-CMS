@@ -39,7 +39,7 @@ public class CacheController {
 	@PostMapping(value = "ajax-reload-config-cache.do")
 	@ResponseBody
 	public Map<String, Object> ajaxReloadConfigCache(HttpServletRequest request, String cacheName, String cacheType) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			if(cacheName == null || "".equals(cacheName) || cacheType == null || "".equals(cacheType)) {

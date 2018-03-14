@@ -157,7 +157,7 @@ public class WidgetController {
 	@PostMapping(value = "ajax-update-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateWidget(HttpServletRequest request, Widget widget) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			
@@ -200,7 +200,7 @@ public class WidgetController {
 	@GetMapping(value = "ajax-access-log-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, Object> ajaxAccessLogWidget(HttpServletRequest request) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
@@ -237,7 +237,7 @@ public class WidgetController {
 	@GetMapping(value = "ajax-schedule-log-list-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, Object> ajaxScheduleLogListWidget(HttpServletRequest request) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
@@ -272,7 +272,7 @@ public class WidgetController {
 	 */
 	private Map<String, Integer> getUserDbcp() {
 		// 사용자 페이지에서 API로 가져와야 함
-		Map<String, Integer> userDbcp = new HashMap<String, Integer>();
+		Map<String, Integer> userDbcp = new HashMap<>();
 		String success_yn = null;
 		String result_message = "";
 		Integer userSessionCount = 0;

@@ -250,7 +250,7 @@ public class MainController {
 	 */
 	private Map<String, Integer> getUserDbcp() {
 		// 사용자 페이지에서 API로 가져와야 함
-		Map<String, Integer> userDbcp = new HashMap<String, Integer>();
+		Map<String, Integer> userDbcp = new HashMap<>();
 		String success_yn = null;
 		String result_message = "";
 		Integer userSessionCount = 0;
@@ -301,7 +301,7 @@ public class MainController {
 	@GetMapping(value = "ajax-user-widget.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, Object> ajaxUserWidget(HttpServletRequest request) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			// 사용자 현황
@@ -345,7 +345,7 @@ public class MainController {
 	@ResponseBody
 	public Map<String, Object> ajaxScheduleLogListWidget(HttpServletRequest request) {
 		
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
@@ -382,7 +382,7 @@ public class MainController {
 	@GetMapping(value = "ajax-dbcp-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDbcpWidget(HttpServletRequest request) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			jSONObject.put("userSessionCount", SessionUserHelper.loginUsersMap.size());
@@ -425,7 +425,7 @@ public class MainController {
 	@GetMapping(value = "ajax-access-log-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxAccessLogWidget(HttpServletRequest request) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);

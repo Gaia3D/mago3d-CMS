@@ -111,7 +111,7 @@ public class DataLogController {
 	@PostMapping(value = "ajax-update-data-log-status.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateDataInfoLogStatus(HttpServletRequest request, DataInfoLog dataInfoLog) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		
 		log.info("@@ dataInfoLog = {}", dataInfoLog);

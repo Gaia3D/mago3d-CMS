@@ -152,7 +152,7 @@ public class PolicyController {
 	@PostMapping(value = "ajax-update-policy-password.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyPassword(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -202,7 +202,7 @@ public class PolicyController {
 	@PostMapping(value = "ajax-update-policy-geo.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyGeo(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -236,7 +236,7 @@ public class PolicyController {
 	@PostMapping(value = "ajax-update-policy-geoserver.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyGeoServer(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -270,7 +270,7 @@ public class PolicyController {
 	@PostMapping(value = "ajax-update-policy-geocallback.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyGeoCallBack(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -304,7 +304,7 @@ public class PolicyController {
 	@PostMapping(value = "ajax-update-policy-notice.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyNotice(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -348,7 +348,7 @@ public class PolicyController {
 	@PostMapping(value = "ajax-update-policy-security.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicySecurity(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -390,7 +390,7 @@ public class PolicyController {
 	@PostMapping(value = "ajax-update-policy-content.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyContent(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -443,7 +443,7 @@ public class PolicyController {
 	@PostMapping(value = "ajax-update-policy-site.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicySite(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 //			log.info("@@ policy = {} ", policy);
@@ -488,7 +488,7 @@ public class PolicyController {
 	@PostMapping(value = "ajax-update-policy-os.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyOs(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		String timeType = "";
 		String timeValue = "";
@@ -551,7 +551,7 @@ public class PolicyController {
 	@PostMapping(value = "ajax-update-policy-backoffice.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyBackoffice(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -589,7 +589,7 @@ public class PolicyController {
 	@PostMapping(value = "ajax-update-policy-solution.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicySolution(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);

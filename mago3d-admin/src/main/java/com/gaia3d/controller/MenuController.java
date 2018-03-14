@@ -55,7 +55,7 @@ public class MenuController {
 	@ResponseBody
 	public String ajaxListMenu(HttpServletRequest request) {
 //		Gson gson = new Gson();
-//		Map<String, String> jSONObject = new HashMap<String, String>();
+//		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
 		List<Menu> menuList = new ArrayList<>();
@@ -84,7 +84,7 @@ public class MenuController {
 	@PostMapping(value = "ajax-insert-menu.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxInsertMenu(HttpServletRequest request, Menu menu) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
 		List<Menu> menuList = new ArrayList<>();
@@ -148,7 +148,7 @@ public class MenuController {
 	@PostMapping(value = "ajax-update-menu.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdateMenu(HttpServletRequest request, Menu menu) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
 		List<Menu> menuList = new ArrayList<>();
@@ -201,7 +201,7 @@ public class MenuController {
 	@PostMapping(value = "ajax-update-move-menu.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxUpdateMoveMenu(HttpServletRequest request, Menu menu) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
 		List<Menu> menuList = new ArrayList<>();
@@ -245,7 +245,7 @@ public class MenuController {
 	@PostMapping(value = "ajax-delete-menu.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxDeleteMenu(HttpServletRequest request, Menu menu) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
 		List<Menu> menuList = new ArrayList<>();

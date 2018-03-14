@@ -76,7 +76,7 @@ public class DataFileJsonParser implements DataFileParser {
 			throw new RuntimeException("Data 일괄 등록 Json 파일 파싱 오류!");
 		}
 		
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		result.put("dataInfoList", dataInfoList);
 		result.put("totalCount", dataInfoList.size());
 		result.put("parseSuccessCount", dataInfoList.size());
