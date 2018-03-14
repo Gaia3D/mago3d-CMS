@@ -73,7 +73,8 @@ create table policy(
 	geo_callback_enable 					varchar(5)			default 'false',
 	geo_callback_apiresult					varchar(64),
 	geo_callback_dataInfo					varchar(64),
-	geo_callback_selectedObject				varchar(64),
+	geo_callback_selectedobject				varchar(64),
+	geo_callback_moveddata					varchar(64),
 	geo_callback_insertIssue				varchar(64),
 	geo_callback_listIssue					varchar(64),
 	geo_callback_clickposition				varchar(64),
@@ -209,10 +210,11 @@ comment on column policy.geo_server_add_parameters_format is 'geo server Additio
 	
 comment on column policy.geo_callback_enable is 'Enable or disable callback function. Default false';
 comment on column policy.geo_callback_apiresult is 'api processing result callback function name';
-comment on column policy.geo_callback_dataInfo is 'data info 표시 callback function 이름';
-comment on column policy.geo_callback_selectedObject is 'select object callback function name';
-comment on column policy.geo_callback_insertIssue is 'issue registration callback function name';
-comment on column policy.geo_callback_listIssue is 'issue list callback function name';
+comment on column policy.geo_callback_datainfo is 'data info 표시 callback function 이름';
+comment on column policy.geo_callback_moveddata is 'moved data callback function 이름';
+comment on column policy.geo_callback_selectedobject is 'select object callback function name';
+comment on column policy.geo_callback_insertissue is 'issue registration callback function name';
+comment on column policy.geo_callback_listissue is 'issue list callback function name';
 comment on column policy.geo_callback_clickposition is 'Position information callback function name at mouse click';
 
 comment on column policy.notice_service_yn is 'Enable or disable notification service. Y: Enabled, N: Disabled (default)';
