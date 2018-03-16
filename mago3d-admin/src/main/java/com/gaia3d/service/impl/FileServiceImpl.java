@@ -594,13 +594,21 @@ public class FileServiceImpl implements FileService {
 		fileParseLog.setLog_type(FileParseLog.DB_INSERT_LOG);
 		
 		int insertSuccessCount = 0;
+		int updateSuccessCount = 0;
 		int insertErrorCount = 0;
 		try {
-			DataInfoAttribute dataInfoAttribute = new DataInfoAttribute();
-			dataInfoAttribute.setData_id(dataId);
-			dataInfoAttribute.setAttributes(attribute);
-			dataService.insertDataAttribute(dataInfoAttribute);
-			insertSuccessCount++;
+			DataInfoAttribute dataInfoAttribute = dataService.getDataAttribute(dataId);
+			if(dataInfoAttribute == null) {
+				dataInfoAttribute = new DataInfoAttribute();
+				dataInfoAttribute.setData_id(dataId);
+				dataInfoAttribute.setAttributes(attribute);
+				dataService.insertDataAttribute(dataInfoAttribute);
+				insertSuccessCount++;
+			} else {
+				dataInfoAttribute.setAttributes(attribute);
+				dataService.updateDataAttribute(dataInfoAttribute);
+				updateSuccessCount++;
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 			fileParseLog.setIdentifier_value(fileInfo.getUser_id());
@@ -613,6 +621,7 @@ public class FileServiceImpl implements FileService {
 		fileInfo.setParse_success_count((Integer) map.get("parseSuccessCount"));
 		fileInfo.setParse_error_count((Integer) map.get("parseErrorCount"));
 		fileInfo.setInsert_success_count(insertSuccessCount);
+		fileInfo.setUpdate_success_count(updateSuccessCount);
 		fileInfo.setInsert_error_count(insertErrorCount);
 		fileMapper.updateFileInfo(fileInfo);
 		
@@ -631,16 +640,6 @@ public class FileServiceImpl implements FileService {
 		// 파일 이력을 저장
 		insertFileInfo(fileInfo);
 		
-		DataAttributeFileParser dataAttributeFileParser = null;
-		if(FileUtil.EXTENSION_JSON.equals(fileInfo.getFile_ext())) {
-			dataAttributeFileParser = new DataAttributeFileJsonParser();
-		} else {
-			dataAttributeFileParser = new DataAttributeFileJsonParser();
-		}
-		Map<String, Object> map = dataAttributeFileParser.parse(dataId, fileInfo);
-		
-		String attribute = (String) map.get("attribute");
-		
 		FileParseLog fileParseLog = new FileParseLog();
 		fileParseLog.setFile_info_id(fileInfo.getFile_info_id());
 		fileParseLog.setLog_type(FileParseLog.DB_INSERT_LOG);
@@ -648,11 +647,24 @@ public class FileServiceImpl implements FileService {
 		int insertSuccessCount = 0;
 		int insertErrorCount = 0;
 		try {
-			DataInfoAttribute dataInfoAttribute = new DataInfoAttribute();
-			dataInfoAttribute.setData_id(dataId);
-			dataInfoAttribute.setAttributes(attribute);
-			dataService.insertDataAttribute(dataInfoAttribute);
-			insertSuccessCount++;
+			// 모든 data object 를 삭제
+			dataService.deleteDataObjects(dataId);
+			
+			byte[] jsonData = Files.readAllBytes(Paths.get(fileInfo.getFile_path() + fileInfo.getFile_real_name()));
+			ObjectMapper objectMapper = new ObjectMapper();
+			//read JSON like DOM Parser
+			JsonNode rootNode = objectMapper.readTree(jsonData);
+			JsonNode objectsNode = rootNode.path("objects");
+			if(objectsNode.isArray() && objectsNode.size() != 0) {
+				DataInfoObjectAttribute dataInfoObjectAttribute = new DataInfoObjectAttribute();
+				dataInfoObjectAttribute.setData_id(dataId);
+				for(JsonNode node : objectsNode) {
+					dataInfoObjectAttribute.setObject_id(node.path("guid").asText());
+					dataInfoObjectAttribute.setAttributes(node.path("propertySets").toString());
+					dataService.insertDataObjectAttribute(dataInfoObjectAttribute);
+					insertSuccessCount++;
+				}
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 			fileParseLog.setIdentifier_value(fileInfo.getUser_id());
@@ -661,9 +673,9 @@ public class FileServiceImpl implements FileService {
 			insertErrorCount++;
 		}
 		
-		fileInfo.setTotal_count((Integer) map.get("totalCount"));
-		fileInfo.setParse_success_count((Integer) map.get("parseSuccessCount"));
-		fileInfo.setParse_error_count((Integer) map.get("parseErrorCount"));
+		fileInfo.setTotal_count(insertSuccessCount + insertErrorCount);
+		fileInfo.setParse_success_count(insertSuccessCount);
+		fileInfo.setParse_error_count(insertErrorCount);
 		fileInfo.setInsert_success_count(insertSuccessCount);
 		fileInfo.setInsert_error_count(insertErrorCount);
 		fileMapper.updateFileInfo(fileInfo);

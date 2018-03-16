@@ -110,6 +110,7 @@ public class FileUtil {
 		
 		// 1 파일 공백 체크
 		if(multipartFile == null || multipartFile.getSize() == 0l) {
+			log.info("@@ multipartFile is null");
 			fileInfo.setError_code("fileinfo.invalid");
 			return fileInfo;
 		}

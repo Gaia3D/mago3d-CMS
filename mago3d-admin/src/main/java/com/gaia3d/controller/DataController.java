@@ -36,6 +36,7 @@ import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.DataInfoAttribute;
 import com.gaia3d.domain.DataInfoObjectAttribute;
 import com.gaia3d.domain.DataObjectAttributeFilter;
 import com.gaia3d.domain.FileInfo;
@@ -145,7 +146,7 @@ public class DataController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-detail-data.do")
+	@GetMapping(value = "ajax-detail-data.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDetailData(HttpServletRequest request, @RequestParam("data_id") Long data_id) {
 		Map<String, Object> jSONObject = new HashMap<>();
@@ -561,7 +562,7 @@ public class DataController {
 		String result = "success";
 		try {
 			Long project_id = Long.valueOf(request.getParameter("project_id"));
-			MultipartFile multipartFile = request.getFile("file_name");
+			MultipartFile multipartFile = request.getFile("data_file_name");
 			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.DATA_FILE_UPLOAD, propertiesConfig.getDataUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				jSONObject.put("result", fileInfo.getError_code());
@@ -602,7 +603,31 @@ public class DataController {
 	}
 	
 	/**
-	 * Data Attribute 한건 등록
+	 * 데이터 attribute 취득
+	 * @param request
+	 * @param data_id
+	 * @return
+	 */
+	@GetMapping(value = "ajax-detail-data-attribute.do")
+	@ResponseBody
+	public Map<String, Object> ajaxDetailDataAttribute(HttpServletRequest request, @RequestParam("data_id") Long data_id) {
+		log.info("@@@@@@@@@@@@@@@@@@@@ data_id = {}", data_id);
+		Map<String, Object> jSONObject = new HashMap<>();
+		String result = "success";
+		try {		
+			DataInfoAttribute dataInfoAttribute = dataService.getDataAttribute(data_id);
+			jSONObject.put("dataInfoAttribute", dataInfoAttribute);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		jSONObject.put("result", result);
+		return jSONObject;
+	}
+	
+	/**
+	 * Data Origin Attribute 한건 수정
 	 * @param model
 	 * @return
 	 */

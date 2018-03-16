@@ -23,7 +23,6 @@ import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheName;
 import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheType;
-import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoLog;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Project;

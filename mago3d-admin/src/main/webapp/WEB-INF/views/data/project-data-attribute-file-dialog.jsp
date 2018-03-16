@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<div class="uploadDataFileDialog" title="<spring:message code='data.all.insert'/>">
-	<form id="dataFileInfo" name="dataFileInfo" action="/data/ajax-insert-data-file.do" method="post" enctype="multipart/form-data">
+<%-- data object attribute 등록 --%>
+<div class="uploadProjectDataAttributeDialog" title="Project Data Attribute">
+	<form id="projectDataAttributeInfo" name="projectDataAttributeInfo" action="/data/ajax-insert-project-data-attribute-file.do" method="post" enctype="multipart/form-data">
 		<table class="inner-table scope-row" style="width: 95%;">
 			<col class="col-sub-label xl" />
 			<col class="col-data" />
@@ -18,21 +19,20 @@
 						</select>
 					</td>
 				</tr>
-				
 				<tr>
-					<th class="col-sub-label"><spring:message code='data.upload.file'/></th>
+					<th class="col-sub-label">데이터 경로</th>
 					<td>
 						<div class="inner-data">
-							<input type="file" id="data_file_name" name="data_file_name" class="col-data" />
+							<input type="text" id="project_data_attribute_file" name="project_data_attribute_file"/>
 						</div>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 		<div class="button-group">
-			<input type="button" onclick="dataFileUpload();" class="button" value="<spring:message code='data.file.save'/>"/>
+			<input type="button" onclick="projectDataAttributeFileUpload();" class="button" value="<spring:message code='data.file.save'/>"/>
 		</div>
-		<table id="dataFileUploadLog" class="inner-table scope-row" style="width: 95%;">
+		<table id="projectDataAttributeUploadLog" class="inner-table scope-row" style="width: 95%;">
 			<col class="col-sub-label xl" />
 			<col class="col-data" />
 			<tbody>
@@ -40,3 +40,4 @@
 		</table>
 	</form>
 </div>
+	

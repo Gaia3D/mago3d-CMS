@@ -68,7 +68,7 @@ function checkedStatus(element) {
 			checkStatusVal++;
 		}
 	});
-	console.log("@@@@@@@@@@@@@@@@@ checkStatusVal = " + checkStatusVal);
+	//console.log("@@@@@@@@@@@@@@@@@ checkStatusVal = " + checkStatusVal);
 	if (checkStatusVal == 0) {
 		returnVal = false;
 	}		
@@ -94,7 +94,7 @@ function initJqueryCalendar() {
 function initSelect(idArray, valueArray) {
 	for(var i=0; i<idArray.length; i++) {
 		if(valueArray[i] != null && valueArray[i] != "") {
-			console.log(idArray[i] + ", " + valueArray[i]);
+			//console.log(idArray[i] + ", " + valueArray[i]);
 			$("#" + idArray[i]).val(valueArray[i]);
 		}
 	}
