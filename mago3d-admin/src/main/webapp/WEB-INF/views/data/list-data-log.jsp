@@ -167,7 +167,7 @@
 		</c:if>
 		<c:if test="${dataInfoLog.status eq '3'}">
 												<span class="icon-glyph glyph-on on"></span>
-												<span class="icon-text"><spring:message code='common.reset'/></span>
+												<span class="icon-text"><spring:message code='reset'/></span>
 		</c:if>
 												
 											</td>
