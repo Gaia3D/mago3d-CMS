@@ -101,8 +101,26 @@
 												</td>
 											</tr>
 											<tr>
-												<th class="col-label" scope="row"><label for="url">Url</label></th>
+												<th class="col-label" scope="row">
+													<span><spring:message code='config.menu.display'/></span>
+												</th>
+												<td class="col-input radio-set">
+													<input type="radio" id="displayY" name="display_yn" value="Y"/>
+													<label for="displayY"><spring:message code='config.menu.display.use'/></label>
+													<input type="radio" id="displayN" name="display_yn" value="N"/>
+													<label for="displayN"><spring:message code='config.menu.display.not.use'/></label>
+												</td>
+											</tr>
+											<tr>
+												<th class="col-label" scope="row">
+												<label for="url">Url</label>
+												<span class="icon-glyph glyph-emark-dot color-warning"></span>
+												</th>
 												<td class="col-input"><input type="text" id="url" name="url" class="l" /></td>
+											</tr>
+											<tr>
+												<th class="col-label" scope="row"><label for="url_alias">Url Alias</label></th>
+												<td class="col-input"><input type="text" id="urlAlias" name="url_alias" class="l" /></td>
 											</tr>
 											<tr>
 												<th class="col-label" scope="row"><label for="image"><spring:message code='config.menu.image'/></label></th>
