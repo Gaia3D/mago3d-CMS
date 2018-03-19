@@ -40,6 +40,8 @@ public class Menu {
 	private Integer view_order;
 	// URL
 	private String url;
+	// URL Alias
+	private String url_alias;
 	// 이미지
 	private String image;
 	// 이미지 Alt
@@ -50,20 +52,12 @@ public class Menu {
 	private String default_yn;
 	// 사용유무, Y : 사용, N : 사용안함
 	private String use_yn;
+	// 화면표시 여부, Y : 표시, N : 비표시
+	private String display_yn;
 	// 설명
 	private String description;
 	// 등록일
 	private String insert_date;
-
-	public String getViewUseYn() {
-		if ("Y".equals(this.use_yn)) {
-			return "사용";
-		} else if ("N".equals(this.use_yn)) {
-			return "미사용";
-		} else {
-			return "";
-		}
-	}
 
 	public String getViewInsertDate() {
 		if(this.insert_date == null || "".equals( insert_date)) {
