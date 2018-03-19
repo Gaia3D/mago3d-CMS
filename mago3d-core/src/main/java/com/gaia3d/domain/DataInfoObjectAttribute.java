@@ -38,9 +38,14 @@ public class DataInfoObjectAttribute {
 	
 	/****** validator ********/
 	private String method_mode;
+	
+	// 프로젝트별 데이터 object attribute 파일 경로
+	private String project_data_object_attribute_path;
 
 	// Data Attribute 고유번호
 	private Long data_object_attribute_id;
+	// Project 고유번호
+	private Long project_id;
 	// Data 고유번호
 	private Long data_id;
 	// Data Object 고유번호

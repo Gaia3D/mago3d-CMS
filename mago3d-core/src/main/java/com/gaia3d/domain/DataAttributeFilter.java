@@ -15,10 +15,10 @@ public class DataAttributeFilter implements FileFilter {
 		
 		if(filename.indexOf(includeName) < 0) return false;
 		
-		if(filename.indexOf(objectAttributeFileName) >=0) {
-			// object attribute
-			return false;
-		}
+//		if(filename.indexOf(objectAttributeFileName) >=0) {
+//			// object attribute
+//			return false;
+//		}
 		return true;
 	}
 }

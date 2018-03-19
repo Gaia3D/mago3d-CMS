@@ -5,13 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gaia3d.domain.DataAttributeFilter;
 import com.gaia3d.domain.DataObjectAttributeFilter;
 
 public class DataObjectAttributeFileJsonParser {

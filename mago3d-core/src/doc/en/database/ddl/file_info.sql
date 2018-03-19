@@ -34,7 +34,7 @@ comment on column file_info.parse_success_count is 'Number of successful Excel p
 comment on column file_info.parse_error_count is 'Excel parsing error';
 comment on column file_info.insert_success_count is 'Excel Data Target Table SQL Insert Success Count';
 comment on column file_info.insert_error_count is 'Excel Data Target Table SQL Insert Failure Count';
-comment on column file_info.register_date is 'Registered Date';
+comment on column file_info.insert_date is 'Registered Date';
 
 -- File parsing history (Excel, Pdf, etc.)
 create table file_parse_log(
@@ -44,7 +44,7 @@ create table file_parse_log(
 	error_code					varchar(4000),
 	log_type					char(1)				default '0',
 	status						char(1)				default '0',
-	register_date				timestamp without time zone			default now(),
+	insert_date				timestamp without time zone			default now(),
 	constraint file_parse_log_pk primary key (file_parse_log_id)	
 );
 
@@ -55,5 +55,5 @@ comment on column file_parse_log.identifier_value is 'identifier value';
 comment on column file_parse_log.error_code is 'Error code';
 comment on column file_parse_log.log_type is 'Log type. 0: file, 1: DB Insert';
 comment on column file_parse_log.status is 'status. 0: success, 1: error';
-comment on column file_parse_log.register_date is 'Registered Date';
+comment on column file_parse_log.insert_date is 'Registered Date';
 

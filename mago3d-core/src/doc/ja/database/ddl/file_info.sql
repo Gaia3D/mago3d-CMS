@@ -16,7 +16,7 @@ create table file_info(
 	parse_error_count			bigint				default 0,
 	insert_success_count		bigint				default 0,
 	insert_error_count			bigint				default 0,
-	register_date				timestamp without time zone			default now(),
+	insert_date				timestamp without time zone			default now(),
 	constraint file_info_pk primary key (file_info_id)	
 );
 
@@ -34,7 +34,7 @@ comment on column file_info.parse_success_count is 'Excel解析に成功件数';
 comment on column file_info.parse_error_count is 'Excel解析エラー';
 comment on column file_info.insert_success_count is 'ExcelのデータTarget Table SQL Insert成功件数';
 comment on column file_info.insert_error_count is 'ExcelのデータTarget Table SQL Insert失敗件数';
-comment on column file_info.register_date is '登録';
+comment on column file_info.insert_date is '登録';
 
 -- ファイル解析履歴（Excel、Pdfなど）
 create table file_parse_log(
@@ -44,7 +44,7 @@ create table file_parse_log(
 	error_code					varchar(4000),
 	log_type					char(1)				default '0',
 	status						char(1)				default '0',
-	register_date				timestamp without time zone			default now(),
+	insert_date				timestamp without time zone			default now(),
 	constraint file_parse_log_pk primary key (file_parse_log_id)	
 );
 
@@ -55,5 +55,5 @@ comment on column file_parse_log.identifier_value is '識別子の値';
 comment on column file_parse_log.error_code is 'エラーコード';
 comment on column file_parse_log.log_type is 'のログタイプ0：ファイル、1：DB Insert';
 comment on column file_parse_log.status is '状態。0：success、1：error';
-comment on column file_parse_log.register_date is '登録';
+comment on column file_parse_log.insert_date is '登録';
 

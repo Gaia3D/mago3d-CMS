@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -35,6 +34,7 @@ import com.gaia3d.domain.CacheName;
 import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.CommonCode;
+import com.gaia3d.domain.DataAttributeFilter;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoAttribute;
 import com.gaia3d.domain.DataInfoObjectAttribute;
@@ -723,21 +723,86 @@ public class DataController {
 	}
 	
 	/**
-	 * Data Attribute batch 등록(project 단위 등록)
-	 * TODO project_id를 입력 받도록 수정해야 함. 
-	 * @param model
+	 * data attribute 일괄 등록
+	 * @param request
+	 * @param dataInfoAttribute
 	 * @return
 	 */
-	@PostMapping(value = "ajax-insert-data-attribute-batch.do")
+	@PostMapping(value = "ajax-insert-project-data-attribute.do")
 	@ResponseBody
-	public Map<String, Object> ajaxInsertDataAttributeBatch(HttpServletRequest request) {
+	public Map<String, Object> ajaxInsertProjectDataAttribute(HttpServletRequest request, DataInfoAttribute dataInfoAttribute) {
+		
+		log.info("@@ dataInfoAttribute = {}", dataInfoAttribute);
 		
 		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
-			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-			FileInfo fileInfo = fileService.insertDataAttributeBatch(userSession.getUser_id());
+			
+			int totalCount = 0;
+			int insertSuccessCount = 0;
+			int updateSuccessCount = 0;
+			int insertErrorCount = 0;
+			
+			FileParseLog fileParseLog = new FileParseLog();
+			fileParseLog.setFile_info_id(0l);
+			fileParseLog.setLog_type(FileParseLog.DB_INSERT_LOG);
+			
+			FileInfo fileInfo = new FileInfo();
+			fileInfo.setUser_id(userSession.getUser_id());
+			
+			File dataAttributeDirFile = new File(dataInfoAttribute.getProject_data_attribute_path());
+			if(!dataAttributeDirFile.exists()) {
+				log.info("@@@ Data Attribute Directory doest not Exist. path = {}", dataInfoAttribute.getProject_data_attribute_path());
+				result = "data.attribute.dir.invalid";
+				jSONObject.put("result", result);
+				return jSONObject;
+			}
+			
+			File[] fileList = dataAttributeDirFile.listFiles(new DataAttributeFilter());
+			totalCount = fileList.length;
+			for(File file : fileList) {
+				try {
+					String fileName = file.getName();
+					int startIndex = 0;
+					if(fileName.indexOf("F4D_") >= 0) startIndex = fileName.indexOf("F4D_") + 4;
+					int endIndex = fileName.toLowerCase().indexOf("_attribute");
+					String dataKey = fileName.substring(startIndex, endIndex);
+					
+					DataInfoAttribute dbDataInfoAttribute = dataService.getDataIdAndDataAttributeIDByDataKey(dataKey);
+					if(dbDataInfoAttribute == null) {
+						log.info("@@@ data_id does not exist. data_key = {}", dataKey);
+						continue;
+					}
+					
+					dataInfoAttribute.setData_attribute_id(dbDataInfoAttribute.getData_attribute_id());
+					dataInfoAttribute.setData_id(dbDataInfoAttribute.getData_id());
+					
+					byte[] jsonData = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
+					String attributes = new String(jsonData);
+					dataInfoAttribute.setAttributes(attributes);
+					
+					if(dataInfoAttribute.getData_attribute_id() == null || dataInfoAttribute.getData_attribute_id() == 0l) {
+						dataService.insertDataAttribute(dataInfoAttribute);
+						insertSuccessCount++;
+					} else {
+						dataService.updateDataAttribute(dataInfoAttribute);
+						updateSuccessCount++;
+					}
+				} catch(Exception e1) {
+					e1.printStackTrace();
+					fileParseLog.setIdentifier_value(fileInfo.getUser_id());
+					fileParseLog.setError_code(e1.getMessage());
+					fileService.insertFileParseLog(fileParseLog);
+					insertErrorCount++;
+				}
+			}
+		
+			fileInfo.setTotal_count(totalCount);
+			fileInfo.setInsert_success_count(insertSuccessCount);
+			fileInfo.setUpdate_success_count(updateSuccessCount);
+			fileInfo.setInsert_error_count(insertErrorCount);
+			fileService.updateFileInfo(fileInfo);
 			
 			jSONObject.put("total_count", fileInfo.getTotal_count());
 			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
@@ -755,23 +820,20 @@ public class DataController {
 	}
 	
 	/**
-	 * Data Object Attribute batch 등록
-	 * TODO project_id를 입력 받도록 수정해야 함. project 
+	 * Data Object Attribute 일괄 등록
 	 * @param request
 	 * @return
 	 */
-	@PostMapping(value = "ajax-insert-data-object-attribute-batch.do")
+	@PostMapping(value = "ajax-insert-project-data-object-attribute.do")
 	@ResponseBody
-	public Map<String, Object> ajaxInsertDataObjectAttributeBatch(HttpServletRequest request) {
+	public Map<String, Object> ajaxInsertProjectDataObjectAttribute(HttpServletRequest request, DataInfoObjectAttribute dataInfoObjectAttribute) {
+		
+		log.info("@@ dataInfoObjectAttribute = {}", dataInfoObjectAttribute);
 		
 		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
-			
-			Long project_id = Long.valueOf(request.getParameter("project_id"));
-			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-			//FileInfo fileInfo = fileService.insertDataObjectAttributeBatch(userSession.getUser_id());
 			
 			int totalCount = 0;
 			int insertSuccessCount = 0;
@@ -785,45 +847,55 @@ public class DataController {
 			FileInfo fileInfo = new FileInfo();
 			fileInfo.setUser_id(userSession.getUser_id());
 			
-			File dataObjectAttributeDirFile = new File(propertiesConfig.getDataObjectAttributeUploadDir());
+			File dataObjectAttributeDirFile = new File(dataInfoObjectAttribute.getProject_data_object_attribute_path());
 			if(!dataObjectAttributeDirFile.exists()) {
-				log.info("@@@ Data Object Attribute Directory doest not Exist. path = {}", propertiesConfig.getDataObjectAttributeUploadDir());
-				fileInfo.setError_code("data.object.attribute.dir.invalid");
-				jSONObject.put("result", fileInfo.getError_code());
+				log.info("@@@ Data Object Attribute Directory doest not Exist. path = {}", dataInfoObjectAttribute.getProject_data_object_attribute_path());
+				result = "data.object.attribute.dir.invalid";
+				jSONObject.put("result", result);
 				return jSONObject;
 			}
 				
 			File[] fileList = dataObjectAttributeDirFile.listFiles(new DataObjectAttributeFilter());
 			totalCount = fileList.length;
+			log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ totalCount = {}", totalCount);
+			int i=0;
 			for(File file : fileList) {
 				try {
 					String fileName = file.getName();
-					int startIndex = fileName.indexOf("F4D_");
-					int endIndex = fileName.toLowerCase().indexOf("_object_attribute");
-					String dataKey = fileName.substring(startIndex + 4, endIndex);
+					int startIndex = 0;
+					if(fileName.indexOf("F4D_") >= 0) startIndex = fileName.indexOf("F4D_") + 4;
+					int endIndex = fileName.toLowerCase().indexOf("_object");
+					String dataKey = fileName.substring(startIndex, endIndex);
 					log.info("@@@@@@@@@@ dataKey = {}", dataKey);
 					
 					DataInfo dataInfo = new DataInfo();
-					dataInfo.setProject_id(project_id);
+					dataInfo.setProject_id(dataInfoObjectAttribute.getProject_id());
 					dataInfo.setData_key(dataKey);
 					dataInfo = dataService.getDataByDataKey(dataInfo);
+					if(dataInfo == null) {
+						log.info("@@@@@@@@@@ data_info is null dataKey = {}", dataKey);
+						continue;
+					}
+					
 					// 모든 object id를 삭제 후 등록
 					dataService.deleteDataObjects(dataInfo.getData_id());
 					
 					byte[] jsonData = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
 					ObjectMapper objectMapper = new ObjectMapper();
 					//read JSON like DOM Parser
-					JsonNode jsonNode = objectMapper.readTree(jsonData);
-					Iterator<Map.Entry<String, JsonNode>> fields = jsonNode.fields();
-					while (fields.hasNext()) {
-						Map.Entry<String, JsonNode> entry = fields.next();
-						DataInfoObjectAttribute dataInfoObjectAttribute = new DataInfoObjectAttribute();
-						dataInfoObjectAttribute.setData_id(dataInfo.getData_id());
-						dataInfoObjectAttribute.setObject_id(entry.getKey());
-						dataInfoObjectAttribute.setAttributes(entry.getValue().toString());
-						dataService.insertDataObjectAttribute(dataInfoObjectAttribute);
-						totalCount++;
-						insertSuccessCount++;
+					JsonNode rootNode = objectMapper.readTree(jsonData);
+					JsonNode objectsNode = rootNode.path("objects");
+					Long dataId = dataInfo.getData_id();
+					if(objectsNode.isArray() && objectsNode.size() != 0) {
+						for(JsonNode node : objectsNode) {
+							DataInfoObjectAttribute jsonDataInfoObjectAttribute = new DataInfoObjectAttribute();
+							jsonDataInfoObjectAttribute.setData_id(dataId);
+							jsonDataInfoObjectAttribute.setObject_id(node.path("guid").asText());
+							jsonDataInfoObjectAttribute.setAttributes(node.path("propertySets").toString());
+							dataService.insertDataObjectAttribute(jsonDataInfoObjectAttribute);
+							totalCount++;
+							insertSuccessCount++;
+						}
 					}
 				} catch(Exception e1) {
 					e1.printStackTrace();
@@ -832,6 +904,8 @@ public class DataController {
 					fileService.insertFileParseLog(fileParseLog);
 					insertErrorCount++;
 				}
+				log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ i = {}", i);
+				i++;
 			}
 			
 			fileInfo.setTotal_count(totalCount);

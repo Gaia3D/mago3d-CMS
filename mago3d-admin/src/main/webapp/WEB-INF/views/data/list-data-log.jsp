@@ -153,20 +153,17 @@
 											<td class="col-toggle">${dataInfoLog.longitude}</td>
 											<td class="col-toggle">${dataInfoLog.height}</td>
 											<td class="col-toggle">
-		<c:if test="${dataInfoLog.status eq '0'}">
 												<span class="icon-glyph glyph-on on"></span>
+		<c:if test="${dataInfoLog.status eq '0'}">
 												<span class="icon-text"><spring:message code='request'/></span>
 		</c:if>
 		<c:if test="${dataInfoLog.status eq '1'}">
-												<span class="icon-glyph glyph-on on"></span>
 												<span class="icon-text"><spring:message code='complete'/></span>
 		</c:if>
 		<c:if test="${dataInfoLog.status eq '2'}">
-												<span class="icon-glyph glyph-on on"></span>
 												<span class="icon-text"><spring:message code='reject'/></span>
 		</c:if>
 		<c:if test="${dataInfoLog.status eq '3'}">
-												<span class="icon-glyph glyph-on on"></span>
 												<span class="icon-text"><spring:message code='reset'/></span>
 		</c:if>
 												

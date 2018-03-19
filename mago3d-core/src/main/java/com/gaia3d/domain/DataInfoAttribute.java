@@ -38,6 +38,9 @@ public class DataInfoAttribute {
 	
 	/****** validator ********/
 	private String method_mode;
+	
+	// 프로젝트별 데이터 attribute 파일 경로
+	private String project_data_attribute_path;
 
 	// Data Attribute 고유번호
 	private Long data_attribute_id;

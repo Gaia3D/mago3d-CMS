@@ -1,5 +1,7 @@
 package com.gaia3d.service;
 
+import com.gaia3d.domain.DataInfoAttribute;
+import com.gaia3d.domain.DataInfoObjectAttribute;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.FileParseLog;
 
@@ -61,21 +63,6 @@ public interface FileService {
 	 * @return
 	 */
 	public FileInfo insertDataObjectAttributeFile(Long dataId, FileInfo fileInfo);
-	
-	/**
-	 * Data Attribute Batch 등록
-	 * @param userId
-	 * @return
-	 */
-	public FileInfo insertDataAttributeBatch(String userId);
-	
-	/**
-	 * Data Object Attribute Batch 등록
-	 * @param projectId
-	 * @param userId
-	 * @return
-	 */
-	public FileInfo insertDataObjectAttributeBatch(Long projectId, String userId);
 	
 	/**
 	 * 파일 파싱 로그 등록

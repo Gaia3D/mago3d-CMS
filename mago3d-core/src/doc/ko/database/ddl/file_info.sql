@@ -16,7 +16,7 @@ create table file_info(
 	parse_error_count			bigint				default 0,
 	insert_success_count		bigint				default 0,
 	insert_error_count			bigint				default 0,
-	register_date				timestamp without time zone			default now(),
+	insert_date					timestamp without time zone			default now(),
 	constraint file_info_pk primary key (file_info_id)	
 );
 
@@ -34,7 +34,7 @@ comment on column file_info.parse_success_count is 'Excel 파싱 성공 건수';
 comment on column file_info.parse_error_count is 'Excel 파싱 오류';
 comment on column file_info.insert_success_count is 'Excel 데이터 Target Table SQL Insert 성공 건수';
 comment on column file_info.insert_error_count is 'Excel 데이터 Target Table SQL Insert 실패 건수';
-comment on column file_info.register_date is '등록일';
+comment on column file_info.insert_date is '등록일';
 
 -- 파일 파싱 이력(Excel, Pdf등)
 create table file_parse_log(
@@ -44,7 +44,7 @@ create table file_parse_log(
 	error_code					varchar(4000),
 	log_type					char(1)				default '0',
 	status						char(1)				default '0',
-	register_date				timestamp without time zone			default now(),
+	insert_date					timestamp without time zone			default now(),
 	constraint file_parse_log_pk primary key (file_parse_log_id)	
 );
 
@@ -55,5 +55,5 @@ comment on column file_parse_log.identifier_value is '식별자 값';
 comment on column file_parse_log.error_code is '에러 코드';
 comment on column file_parse_log.log_type is '로그 타입 0: 파일, 1: DB Insert';
 comment on column file_parse_log.status is '상태. 0: success, 1: error';
-comment on column file_parse_log.register_date is '등록일';
+comment on column file_parse_log.insert_date is '등록일';
 

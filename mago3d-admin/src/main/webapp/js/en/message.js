@@ -137,6 +137,9 @@ JS_MESSAGE["data.pitch.empty"]= "Please enter the pitch";
 JS_MESSAGE["data.roll.empty"]= "Please enter a roll.";
 JS_MESSAGE["data.insert"]= "Data is registered.";
 JS_MESSAGE["data.update"]= "Data information has been modified";
+JS_MESSAGE["data.attribute.dir.invalid"]="The Data property directory path is incorrect.";
+JS_MESSAGE["data.object.attribute.dir.invalid"]="Data object attribute directory path is invalid";
+
 
 // project
 JS_MESSAGE ["project.insert"] = "Registered project";
@@ -191,7 +194,7 @@ JS_MESSAGE["user.basic.information.input"] = "Available after registering user's
 JS_MESSAGE["use.device.name.input"] = "Please enter your device name.";
 JS_MESSAGE["input.ip"] = "Please enter the IP format.";
 JS_MESSAGE["user.device.input.max.five"] = "You can register up to 5 user devices.";
-JS_MESSAGE["fail.count.retry.select"] = "The number of failures exists. Please select the file again.";
+JS_MESSAGE["error.exist.in.processing"] = "An error occurred during processing. Please check.";
 
 //data
 JS_MESSAGE["data.group.select"] = "Please select a data group.";

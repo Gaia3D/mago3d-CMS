@@ -137,6 +137,9 @@ JS_MESSAGE["data.pitch.empty"] = "Pitch를 입력하여 주십시오.";
 JS_MESSAGE["data.roll.empty"] = "Roll을 입력하여 주십시오.";
 JS_MESSAGE["data.insert"] = "데이터를 등록 하였습니다.";
 JS_MESSAGE["data.update"] = "데이터 정보를 수정 하였습니다.";
+JS_MESSAGE["data.attribute.dir.invalid"] = "Data 속성 디렉토리 경로가 올바르지 않습니다.";
+JS_MESSAGE["data.object.attribute.dir.invalid"] = "Data Object 속성 디렉토리 경로가 올바르지 않습니다.";
+
 
 // project
 JS_MESSAGE["project.insert"] = "프로젝트를 등록 하였습니다.";
@@ -191,7 +194,7 @@ JS_MESSAGE["user.basic.information.input"] = "사용자 기본 정보 등록 후
 JS_MESSAGE["use.device.name.input"] = "사용 기기명을 입력해 주십시오.";
 JS_MESSAGE["input.ip"] = "IP 형식에 맞게 입력해 주십시오.";
 JS_MESSAGE["user.device.input.max.five"] = "사용자 디바이스 등록은 최대 5개 까지 가능합니다.";
-JS_MESSAGE["fail.count.retry.select"] = "실패 건수가 존재합니다. 파일을 다시 선택해주세요.";
+JS_MESSAGE["error.exist.in.processing"] = "처리 과정에서 오류가 발생하였습니다. 확인하여 주십시오.";
 
 //data
 JS_MESSAGE["data.group.select"] = "데이터 그룹을 선택해 주세요.";

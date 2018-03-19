@@ -137,6 +137,8 @@ JS_MESSAGE["data.pitch.empty"] =  "ピッチを入力してください。";
 JS_MESSAGE["data.roll.empty"] =  "ロールを入力してください。";
 JS_MESSAGE["data.insert"] =  "データを登録しました。";
 JS_MESSAGE["data.update"] =  "データの情報を修正しました。";
+JS_MESSAGE["data.attribute.dir.invalid"]="The Data property directory path is incorrect.";
+JS_MESSAGE["data.object.attribute.dir.invalid"]="Data object attribute directory path is invalid";
 
 // project
 JS_MESSAGE ["project.insert"] = "プロジェクトを登録しました。";
@@ -191,7 +193,7 @@ JS_MESSAGE["user.basic.information.input"] = "ユーザーの基本情報登録�
 JS_MESSAGE["use.device.name.input"] = "使用機器名を入力してください。";
 JS_MESSAGE["input.ip"] = "IP形式に合わせて入力してください。";
 JS_MESSAGE["user.device.input.max.five"] =  "ユーザーのデバイスの登録は最大5個まで可能です。";
-JS_MESSAGE["fail.count.retry.select"] = "失敗件数が存在します。ファイルをもう一度選択してください。";
+JS_MESSAGE["error.exist.in.processing"] = "An error occurred during processing. Please check.";
 
 //data
 JS_MESSAGE["data.group.select"] = "データのグループを選択してください。";

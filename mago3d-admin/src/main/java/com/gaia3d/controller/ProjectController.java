@@ -266,7 +266,7 @@ public class ProjectController {
 	 * @return
 	 */
 	@GetMapping(value = "delete-project.do")
-	public String deleteProject(@RequestParam("project_id")String project_id, HttpServletRequest request) {
+	public String deleteProject(HttpServletRequest request, @RequestParam("project_id")String project_id) {
 
 		log.info("@@ project_id = {} ", project_id);
 
