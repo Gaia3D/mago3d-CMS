@@ -64,7 +64,10 @@ var fnObj = {
 					$("#name_en").val(obj.item.name_en);
 					$("[name=use_yn]").removeAttr("checked");
 					$("[name=use_yn]").filter("[value='" + obj.item.use_yn + "']").prop("checked",true);
+					$("[name=display_yn]").removeAttr("checked");
+					$("[name=display_yn]").filter("[value='" + obj.item.display_yn + "']").prop("checked",true);
 					$("#url").val(obj.item.url);
+					$("#url_alias").val(obj.item.url_alias);
 					$("#image").val(obj.item.image);
 					$("#image_alt").val(obj.item.image_alt);
 					$("#css_class").val(obj.item.css_class);
@@ -135,7 +138,7 @@ var fnObj = {
 		}else if(writeMode == "modify") {
 			var obj = menuTree.getSelectedList();
 			if(obj.error){
-				alert("メニューを選択してください");
+				alert("メニューを選択してください。");
 				return;
 			}
 			if(obj.item.menu_id == "0") {
@@ -168,6 +171,8 @@ var fnObj = {
 		document.treeWriteForm.depth.value = obj.item.depth;
 		$("[name=use_yn]").removeAttr("checked");
 		$("[name=use_yn]").filter("[value='Y']").prop("checked",true);
+		$("[name=display_yn]").removeAttr("checked");
+		$("[name=display_yn]").filter("[value='Y']").prop("checked",true);
 
 		/*myModal.openDiv({
 			modalID:"addTreeModal",
@@ -180,7 +185,7 @@ var fnObj = {
 	addChildTree: function(){
 		var obj = menuTree.getSelectedList();
 		if(obj.error){
-			alert("上位メニューを選択してください");
+			alert("上位メニューを選択してください。");
 			return;
 		}
 		if(obj.item.use_yn == "N") {
@@ -197,6 +202,8 @@ var fnObj = {
 		document.treeWriteForm.depth.value = parseInt(obj.item.depth) + parseInt(1);
 		$("[name=use_yn]").removeAttr("checked");
 		$("[name=use_yn]").filter("[value='Y']").prop("checked",true);
+		$("[name=display_yn]").removeAttr("checked");
+		$("[name=display_yn]").filter("[value='Y']").prop("checked",true);
 		/*myModal.openDiv({
 			modalID:"addTreeModal",
 			targetID:"modalContent",
@@ -208,7 +215,7 @@ var fnObj = {
 	delTree: function(){
 		var obj = menuTree.getSelectedList();
 		if(obj.error){
-			alert("メニューを選択してください");
+			alert("メニューを選択してください。");
 			return;
 		}
 		if(obj.item.menu_id == "0" || obj.item.default_yn == "Y") {
@@ -223,7 +230,7 @@ var fnObj = {
 	updateTree: function(){
 		var obj = menuTree.getSelectedList();
 		if(obj.error){
-			alert("メニューを選択してください");
+			alert("メニューを選択してください。");
 			return;
 		}
 		if(obj.item.menu_id == "0") {
@@ -244,7 +251,10 @@ var fnObj = {
 		$("#name_en").val(obj.item.name_en);
 		$("[name=use_yn]").removeAttr("checked");
 		$("[name=use_yn]").filter("[value='" + obj.item.use_yn + "']").prop("checked",true);
+		$("[name=display_yn]").removeAttr("checked");
+		$("[name=display_yn]").filter("[value='" + obj.item.display_yn + "']").prop("checked", true);
 		$("#url").val(obj.item.url);
+		$("#url_alias").val(obj.item.url_alias);
 		$("#image").val(obj.item.image);
 		$("#image_alt").val(obj.item.image_alt);
 		$("#css_class").val(obj.item.css_class);
@@ -254,7 +264,7 @@ var fnObj = {
 	updateMoveUpTree: function() {
 		var obj = menuTree.getSelectedList();
 		if(obj.error){
-			alert("メニューを選択してください");
+			alert("メニューを選択してください。");
 			return;
 		}
 		if(obj.item.menu_id == "0") {
@@ -274,7 +284,7 @@ var fnObj = {
 	updateMoveDownTree: function() {
 		var obj = menuTree.getSelectedList();
 		if(obj.error){
-			alert("メニューを選択してください");
+			alert("メニューを選択してください。");
 			return;
 		}
 		if(obj.item.menu_id == "0") {

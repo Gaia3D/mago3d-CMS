@@ -7,22 +7,22 @@
 	<select id="getListMenu" resultType="menu">
 		/* getListMenu */
 		WITH RECURSIVE menu_tree (
-			menu_id, name, name_en, parent, depth, view_order, url, image, image_alt, css_class, default_yn, use_yn, description, insert_date, path, cycle
+			menu_id, name, name_en, parent, depth, view_order, url, url_alias, image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date, path, cycle
 		) AS (
-	        SELECT A.menu_id, A.name, A.name_en, A.parent, A.depth, A.view_order, A.url, A.image, A.image_alt, A.css_class,
-	        	A.default_yn, A.use_yn, A.description, A.insert_date, ARRAY[A.view_order], false
+	        SELECT A.menu_id, A.name, A.name_en, A.parent, A.depth, A.view_order, A.url, A.url_alias, A.image, A.image_alt, A.css_class,
+	        	A.default_yn, A.use_yn, A.display_yn,  A.description, A.insert_date, ARRAY[A.view_order], false
 			FROM menu A
 	        WHERE A.parent = 0
 	        <if test="default_yn != null and default_yn != ''">
 	        	AND default_yn = #{default_yn}
 	        </if>
 	        UNION ALL
-	        SELECT A.menu_id, A.name, A.name_en, A.parent, A.depth, A.view_order, A.url, A.image, A.image_alt, A.css_class, 
-	        	A.default_yn, A.use_yn, A.description, A.insert_date, path || A.view_order, A.menu_id = ANY(path)
+	        SELECT A.menu_id, A.name, A.name_en, A.parent, A.depth, A.view_order, A.url, A.url_alias, A.image, A.image_alt, A.css_class, 
+	        	A.default_yn, A.use_yn, A.display_yn, A.description, A.insert_date, path || A.view_order, A.menu_id = ANY(path)
 	        FROM menu A, menu_tree B
 	        WHERE A.parent = B.menu_id AND not cycle
 		)
-	    SELECT menu_id, name, name_en, parent, depth, view_order, url, image, image_alt, css_class, default_yn, use_yn, description, insert_date, path
+	    SELECT menu_id, name, name_en, parent, depth, view_order, url, url_alias, image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date, path
 	    FROM menu_tree
 	    ORDER BY path
 	</select>
@@ -80,9 +80,9 @@
 	<insert id="insertMenu" parameterType="menu" >
 		/* insertMenu */
 		INSERT INTO menu(
-			menu_id, name, name_en, parent, depth, view_order, url, image, image_alt, css_class, use_yn, description
+			menu_id, name, name_en, parent, depth, view_order, url, url_alias, image, image_alt, css_class, use_yn, display_yn, description
 		) values(
-			#{menu_id}, #{name}, #{name_en}, #{parent}, #{depth}, #{view_order}, #{url}, #{image}, #{image_alt}, #{css_class}, #{use_yn}, #{description}
+			#{menu_id}, #{name}, #{name_en}, #{parent}, #{depth}, #{view_order}, #{url}, #{url_alias}, #{image}, #{image_alt}, #{css_class}, #{use_yn}, #{display_yn}, #{description} 
 		)
 	</insert>
 	
@@ -96,10 +96,12 @@
 			depth = #{depth},
 			view_order = #{view_order}, -->
 			url = #{url},
+			url_alias = #{url_alias},
 			image = #{image},
 			image_alt = #{image_alt},
 			css_class = #{css_class},
 			use_yn = #{use_yn},
+			display_yn = #{display_yn},
 			description = #{description}
 		WHERE menu_id = #{menu_id}
 	</update>

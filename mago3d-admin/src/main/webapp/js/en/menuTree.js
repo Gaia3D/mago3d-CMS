@@ -12,7 +12,7 @@ var menuTree = new AXTree();
 	
 var fnObj = {
 	pageStart: function() {
-		fnObj.tree1();			
+		fnObj.tree1();
 	},
 	tree1: function(){
 		menuTree.setConfig({
@@ -64,7 +64,10 @@ var fnObj = {
 					$("#name_en").val(obj.item.name_en);
 					$("[name=use_yn]").removeAttr("checked");
 					$("[name=use_yn]").filter("[value='" + obj.item.use_yn + "']").prop("checked",true);
+					$("[name=display_yn]").removeAttr("checked");
+					$("[name=display_yn]").filter("[value='" + obj.item.display_yn + "']").prop("checked",true);
 					$("#url").val(obj.item.url);
+					$("#url_alias").val(obj.item.url_alias);
 					$("#image").val(obj.item.image);
 					$("#image_alt").val(obj.item.image_alt);
 					$("#css_class").val(obj.item.css_class);
@@ -80,15 +83,15 @@ var fnObj = {
 				theme:"AXContextMenu", // 선택항목
 				width:"150", // 선택항목
 				menu:[
-					{ userType:0, label:"위로", className:"up", onclick:function(id) {
+					{ userType:0, label:"Up", className:"up", onclick:function(id) {
 						menuTree.moveUpTree();
 					}},
-					{ userType:0, label:"아래로", className:"down", onclick:function(id) {
+					{ userType:0, label:"Down", className:"down", onclick:function(id) {
 						menuTree.moveDownTree();
 					}},
-					{userType:1, label:"추가", className:"plus", onclick:fnObj.addTree},
-					{userType:1, label:"하위메뉴추가", className:"plus", onclick:fnObj.addChildTree},
-					{userType:1, label:"선택삭제", className:"", onclick:fnObj.delTree}
+					{userType:1, label:"Add", className:"plus", onclick:fnObj.addTree},
+					{userType:1, label:"Add submenu", className:"plus", onclick:fnObj.addChildTree},
+					{userType:1, label:"Delete selected", className:"", onclick:fnObj.delTree}
 					/*{userType:1, label:"수정", className:"", onclick:fnObj.updateTree}*/
 				],
 				filter:function(id){
@@ -112,7 +115,7 @@ var fnObj = {
 		var frm = document.treeWriteForm;
 		var writeMode = document.treeWriteForm.writeMode.value;
 		if(writeMode === null || writeMode === "") {
-			alert("메뉴를 선택해 주세요.");
+			alert("Please select menu.");
 			return;
 		}
 		//myModal.close('addTreeModal');
@@ -135,17 +138,17 @@ var fnObj = {
 		}else if(writeMode == "modify") {
 			var obj = menuTree.getSelectedList();
 			if(obj.error){
-				alert("메뉴를 선택해 주세요");
+				alert("Please select menu.");
 				return;
 			}
 			if(obj.item.menu_id == "0") {
-				alert("수정할 수 없는 메뉴 입니다.")
+				alert("This menu is not editable.")
 				return;
 			}
 			
 			console.log($("#depth").val() + ", " + $(":radio[name='use_yn']:checked").val());
 			if($("#depth").val() == "1" && $(":radio[name='use_yn']:checked").val() == "N") {
-				if(confirm("미사용으로 선택하실 경우 하위 메뉴를 전부 사용할수 없습니다. \n 계속 진행하시겠습니까?")) {
+				if(confirm("If you choose not to use it, you can not use all submenus. \n Do you want to continue?")) {
 					ajaxUpdateMenu();
 				}
 			} else {
@@ -158,7 +161,7 @@ var fnObj = {
 	addTree: function() {
 		var obj = menuTree.getSelectedList();
 		if(obj.item == null || obj.item == "" || obj.item == undefined || obj.item == "undefined" || obj.item.menu_id == "0") {
-			alert("하위 메뉴를 추가하여 주십시오.");
+			alert("Add a submenu.");
 			return;
 		}
 		
@@ -168,6 +171,8 @@ var fnObj = {
 		document.treeWriteForm.depth.value = obj.item.depth;
 		$("[name=use_yn]").removeAttr("checked");
 		$("[name=use_yn]").filter("[value='Y']").prop("checked",true);
+		$("[name=display_yn]").removeAttr("checked");
+		$("[name=display_yn]").filter("[value='Y']").prop("checked",true);
 		
 		/*myModal.openDiv({
 			modalID:"addTreeModal",
@@ -180,11 +185,11 @@ var fnObj = {
 	addChildTree: function(){
 		var obj = menuTree.getSelectedList();
 		if(obj.error){
-			alert("상위메뉴를 선택해 주세요");
+			alert("Please select top menu.");
 			return;
 		}
 		if(obj.item.use_yn == "N") {
-			alert("상위 메뉴가 미사용이므로 하위 메뉴를 생성할 수 없습니다.");
+			alert("You can not create a submenu because the top menu is unused.");
 			return;
 		}
 		/*if(parseInt(obj.item.depth) == 2) {
@@ -197,6 +202,8 @@ var fnObj = {
 		document.treeWriteForm.depth.value = parseInt(obj.item.depth) + parseInt(1);
 		$("[name=use_yn]").removeAttr("checked");
 		$("[name=use_yn]").filter("[value='Y']").prop("checked",true);
+		$("[name=display_yn]").removeAttr("checked");
+		$("[name=display_yn]").filter("[value='Y']").prop("checked",true);
 		/*myModal.openDiv({
 			modalID:"addTreeModal",
 			targetID:"modalContent",
@@ -208,11 +215,11 @@ var fnObj = {
 	delTree: function(){
 		var obj = menuTree.getSelectedList();
 		if(obj.error){
-			alert("메뉴를 선택해 주세요");
+			alert("Please select menu.");
 			return;
 		}
 		if(obj.item.menu_id == "0" || obj.item.default_yn == "Y") {
-			alert("삭제할 수 없는 메뉴 입니다.")
+			alert("This menu can not be deleted.")
 			return;
 		}
 		$("#menu_id").val(obj.item.menu_id);
@@ -223,11 +230,11 @@ var fnObj = {
 	updateTree: function(){
 		var obj = menuTree.getSelectedList();
 		if(obj.error){
-			alert("메뉴를 선택해 주세요");
+			alert("Please select menu.");
 			return;
 		}
 		if(obj.item.menu_id == "0") {
-			alert("수정할 수 없는 메뉴 입니다.")
+			alert("This menu is not editable.")
 			return;
 		}
 		document.treeWriteForm.reset();
@@ -244,7 +251,10 @@ var fnObj = {
 		$("#name_en").val(obj.item.name_en);
 		$("[name=use_yn]").removeAttr("checked");
 		$("[name=use_yn]").filter("[value='" + obj.item.use_yn + "']").prop("checked",true);
+		$("[name=display_yn]").removeAttr("checked");
+		$("[name=display_yn]").filter("[value='" + obj.item.display_yn + "']").prop("checked", true);
 		$("#url").val(obj.item.url);
+		$("#url_alias").val(obj.item.url_alias);
 		$("#image").val(obj.item.image);
 		$("#image_alt").val(obj.item.image_alt);
 		$("#css_class").val(obj.item.css_class);
@@ -254,15 +264,15 @@ var fnObj = {
 	updateMoveUpTree: function() {
 		var obj = menuTree.getSelectedList();
 		if(obj.error){
-			alert("메뉴를 선택해 주세요");
+			alert("Please select menu.");
 			return;
 		}
 		if(obj.item.menu_id == "0") {
-			alert("이동할 수 없는 메뉴입니다.")
+			alert("It is a menu that can not be moved.")
 			return;
 		}
 		if(obj.item.view_order == "1") {
-			alert("제일 처음 입니다.")
+			alert("It is the first time.")
 			return;
 		}
 		$("#menu_id").val(obj.item.menu_id);
@@ -274,11 +284,11 @@ var fnObj = {
 	updateMoveDownTree: function() {
 		var obj = menuTree.getSelectedList();
 		if(obj.error){
-			alert("메뉴를 선택해 주세요");
+			alert("Please select menu.");
 			return;
 		}
 		if(obj.item.menu_id == "0") {
-			alert("이동할 수 없는 메뉴입니다.")
+			alert("It's a menu that can not be moved.")
 			return;
 		}
 		$("#menu_id").val(obj.item.menu_id);
@@ -291,7 +301,7 @@ var fnObj = {
 		menuTree.moveTree({
 			startMove: function(){
 				menuTree.addClassItem({
-					className:"disable", 
+					className:"disable",
 					addClass:function(){
 						return (this.menu_id == "N");
 					}
@@ -305,22 +315,22 @@ var fnObj = {
 					return false;
 				}*/
 				if(this.targetObj.menu_id == "N"){
-					alert("이동할 수 없는 대상을 선택하셨습니다.");
+					alert("You have selected a destination that can not be moved.");
 					return false;
 				}else{
-					return true;	
+					return true
 				}
 			},
 			endMove: function(){
 				menuTree.removeClassItem({
-					className:"disable", 
+					className:"disable",
 					removeClass:function(){
 						return (this.menu_id == "N");
 					}
 				});
 			}
 		});
-	}		
+	}
 };
 
 // 동일 레벨의 메뉴 추가
@@ -353,7 +363,7 @@ function moveUpTree() {
 		}
 		upFlag = true;
 	} else {
-		alert("진행 중입니다.");
+		alert("It is in progress.");
 		return;
 	}
 }
@@ -371,7 +381,7 @@ function moveDownTree() {
 		}
 		downFlag = true;
 	} else {
-		alert("진행 중입니다.");
+		alert("It is in progress.");
 		return;
 	}
 }

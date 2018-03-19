@@ -82,19 +82,19 @@ JS_MESSAGE["policy.backoffice.update"] = "Back Office 정보를 수정 하였습
 JS_MESSAGE["policy.solution.update"] = "제품 정보를 수정 하였습니다.";
 JS_MESSAGE["policy.content.invalid"] = "필수 입력값이 유효하지 않습니다.";
 
-JS_MESSAGE["config.user.id.min.length"] = "사용자 아이디 최소 길이를 입력하여 주십시오.";
-JS_MESSAGE["config.user.id.min.length.rule"] = "사용자 아이디 최소 길이는 4 이상 입니다.";
-JS_MESSAGE["config.user.login.fail"] = "로그인 실패 횟수를 입력하여 주십시오.";
-JS_MESSAGE["config.user.lockout.period"] = "마지막 로그인으로 부터 잠금 기간을 입력하여 주십시오.";
+JS_MESSAGE["policy.user.id.min.length"] = "사용자 아이디 최소 길이를 입력하여 주십시오.";
+JS_MESSAGE["policy.user.id.min.length.rule"] = "사용자 아이디 최소 길이는 4 이상 입니다.";
+JS_MESSAGE["policy.user.login.fail"] = "로그인 실패 횟수를 입력하여 주십시오.";
+JS_MESSAGE["policy.user.lockout.period"] = "마지막 로그인으로 부터 잠금 기간을 입력하여 주십시오.";
 
-JS_MESSAGE["config.password.period"] = "변경 주기를 입력하여 주십시오.";
-JS_MESSAGE["config.password.min.length"] = "최소 길이를 입력하여 주십시오.";
-JS_MESSAGE["config.password.max.length"] = "최대 길이를 입력하여 주십시오.";
-JS_MESSAGE["config.password.uppercase"] = "영문 대문자 개수를 입력하여 주십시오.";
-JS_MESSAGE["config.password.lowercase"] = "영문 소문자 개수를 입력하여 주십시오.";
-JS_MESSAGE["config.password.number"] = "숫자 개수를 입력하여 주십시오.";
-JS_MESSAGE["config.password.special.letters"] = "특수 문자 개수를 입력하여 주십시오.";
-JS_MESSAGE["config.password.serial.limit"] = "패스워드 연속문자 제한 개수를 입력하여 주십시오.";
+JS_MESSAGE["policy.password.period"] = "변경 주기를 입력하여 주십시오.";
+JS_MESSAGE["policy.password.min.length"] = "최소 길이를 입력하여 주십시오.";
+JS_MESSAGE["policy.password.max.length"] = "최대 길이를 입력하여 주십시오.";
+JS_MESSAGE["policy.password.uppercase"] = "영문 대문자 개수를 입력하여 주십시오.";
+JS_MESSAGE["policy.password.lowercase"] = "영문 소문자 개수를 입력하여 주십시오.";
+JS_MESSAGE["policy.password.number"] = "숫자 개수를 입력하여 주십시오.";
+JS_MESSAGE["policy.password.special.letters"] = "특수 문자 개수를 입력하여 주십시오.";
+JS_MESSAGE["policy.password.serial.limit"] = "패스워드 연속문자 제한 개수를 입력하여 주십시오.";
 
 JS_MESSAGE["policy.contents.main.display"] = "메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.";
 JS_MESSAGE["policy.contents.widget.interval"] = "메인 화면 위젯 Refresh 간격을 입력하여 주십시오.";
@@ -114,9 +114,10 @@ JS_MESSAGE["policy.site.admin.mobile"] = "관리자 휴대폰 번호를 입력�
 JS_MESSAGE["policy.site.admin.email"] = "관리자 이메일을 입력해 주십시오.";
 
 JS_MESSAGE["policy.product.name"] = "제품명을 입력해 주십시오.";
-JS_MESSAGE["policy.product.version"]  = "제품 버전을 입력해 주십시오.";
+JS_MESSAGE["policy.product.version"] = "제품 버전을 입력해 주십시오.";
 JS_MESSAGE["policy.product.admin"] = "제품 회사 담당자를 입력해 주십시오.";
 
+JS_MESSAGE["policy.menu.invalid"] = "필수 입력값이 유효하지 않습니다.";
 
 // 데이터
 JS_MESSAGE["data.key.empty"] = "Key를 입력하여 주십시오.";
