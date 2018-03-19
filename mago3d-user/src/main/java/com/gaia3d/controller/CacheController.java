@@ -53,7 +53,7 @@ public class CacheController {
 		log.info("@@@@@@@@@@@@@@@ mago3d-user callCache Start @@@@@@@@@@@@@@@@");
 		
 		ObjectMapper mapper = new ObjectMapper();
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = Result.FAIL.toString();
 		String result_message = "";
 		HttpStatus httpStatus = null;

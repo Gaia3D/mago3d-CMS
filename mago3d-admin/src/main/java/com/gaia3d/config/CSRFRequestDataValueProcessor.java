@@ -34,7 +34,7 @@ public class CSRFRequestDataValueProcessor implements RequestDataValueProcessor 
 
 	@Override
 	public Map<String, String> getExtraHiddenFields(HttpServletRequest request) {
-		Map<String, String> hiddenFields = new HashMap<String, String>();
+		Map<String, String> hiddenFields = new HashMap<>();
 		hiddenFields.put(CSRFTokenManager.CSRF_PARAM_NAME, CSRFTokenManager.getTokenForSession(request.getSession()));
 		return hiddenFields;
 	}

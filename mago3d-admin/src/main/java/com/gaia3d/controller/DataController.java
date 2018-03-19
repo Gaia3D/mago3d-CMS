@@ -13,7 +13,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -37,6 +36,7 @@ import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.DataInfoAttribute;
 import com.gaia3d.domain.DataInfoObjectAttribute;
 import com.gaia3d.domain.DataObjectAttributeFilter;
 import com.gaia3d.domain.FileInfo;
@@ -146,10 +146,32 @@ public class DataController {
 	 * @param request
 	 * @return
 	 */
+	@GetMapping(value = "ajax-detail-data.do")
+	@ResponseBody
+	public Map<String, Object> ajaxDetailData(HttpServletRequest request, @RequestParam("data_id") Long data_id) {
+		Map<String, Object> jSONObject = new HashMap<>();
+		String result = "success";
+		try {		
+			DataInfo dataInfo = dataService.getData(data_id);
+			jSONObject.put("dataInfo", dataInfo);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		jSONObject.put("result", result);
+		return jSONObject;
+	}
+	
+	/**
+	 * 프로젝트에 등록된 Data 목록
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "ajax-list-data-by-project-id.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListDataByProjectId(HttpServletRequest request, @RequestParam("project_id") Long project_id) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		List<DataInfo> dataList = new ArrayList<>();
 		try {		
@@ -166,69 +188,6 @@ public class DataController {
 		
 		return jSONObject;
 	}
-	
-//	/**
-//	 * Data 그룹 전체 Data 에서 선택한 Data 그룹에 등록된 Data 를 제외한 Data 목록
-//	 * @param request
-//	 * @return
-//	 */
-//	@RequestMapping(value = "ajax-list-except-data-group-data-by-group-id.do")
-//	@ResponseBody
-//	public Map<String, Object> ajaxListExceptDataGroupDataByGroupId(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) {
-//		Map<String, Object> jSONObject = new HashMap<String, Object>();
-//		String result = "success";
-//		Pagination pagination = null;
-//		List<DataInfo> dataList = new ArrayList<>();
-//		try {
-//			long totalCount = dataService.getExceptDataGroupDataByGroupIdTotalCount(dataInfo);
-//			pagination = new Pagination(request.getRequestURI(), getSearchParameters(dataInfo), totalCount, Long.valueOf(pageNo).longValue());
-//			
-//			dataInfo.setOffset(pagination.getOffset());
-//			dataInfo.setLimit(pagination.getPageRows());
-//			if(totalCount > 0l) {
-//				dataList = dataService.getListExceptDataGroupDataByGroupId(dataInfo);
-//			}
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			result = "db.exception";
-//		}
-//		jSONObject.put("result", result);
-//		jSONObject.put("pagination", pagination);
-//		jSONObject.put("dataList", dataList);
-//		return jSONObject;
-//	}
-//	
-//	/**
-//	 * 선택한 Data 그룹에 등록된 Data 목록
-//	 * @param request
-//	 * @return
-//	 */
-//	@RequestMapping(value = "ajax-list-data-group-data-by-group-id.do")
-//	@ResponseBody
-//	public Map<String, Object> ajaxListDataGroupDataByGroupId(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) {
-//		Map<String, Object> jSONObject = new HashMap<String, Object>();
-//		String result = "success";
-//		Pagination pagination = null;
-//		List<DataInfo> dataList = new ArrayList<>();
-//		try {
-//			
-//			long totalCount = dataService.getDataTotalCount(dataInfo);
-//			pagination = new Pagination(request.getRequestURI(), getSearchParameters(dataInfo), totalCount, Long.valueOf(pageNo).longValue());
-//			
-//			dataInfo.setOffset(pagination.getOffset());
-//			dataInfo.setLimit(pagination.getPageRows());
-//			if(totalCount > 0l) {
-//				dataList = dataService.getListData(dataInfo);
-//			}
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			result = "db.exception";
-//		}
-//		jSONObject.put("result", result);
-//		jSONObject.put("pagination", pagination);
-//		jSONObject.put("dataList", dataList);
-//		return jSONObject;
-//	}
 	
 	/**
 	 * Data 등록 화면
@@ -259,7 +218,7 @@ public class DataController {
 	@PostMapping(value = "ajax-insert-data-info.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertDataInfo(HttpServletRequest request, DataInfo dataInfo) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		
 		log.info("@@@@@@@@@@@@@@@@@@ before dataInfo = {}", dataInfo);
@@ -319,52 +278,6 @@ public class DataController {
 		return jSONObject;
 	}
 	
-//	/**
-//	 * 선택 Data 그룹내 Data 등록
-//	 * @param request
-//	 * @param data_all_id
-//	 * @param data_group_id
-//	 * @param model
-//	 * @return
-//	 */
-//	@PostMapping(value = "ajax-insert-data-group-data.do", produces = "application/json; charset=utf8")
-//	@ResponseBody
-//	public Map<String, Object> ajaxInsertDataGroupData(HttpServletRequest request,
-//			@RequestParam("data_group_id") Long data_group_id,
-//			@RequestParam("data_all_id") String[] data_all_id) {
-//		
-//		log.info("@@@ data_group_id = {}, data_all_id = {}", data_group_id, data_all_id);
-//		Map<String, Object> jSONObject = new HashMap<String, Object>();
-//		List<DataInfo> exceptDataList = new ArrayList<>();
-//		List<DataInfo> dataList = new ArrayList<>();
-//		String result = "success";
-//		try {
-//			if(data_group_id == null || data_group_id.longValue() == 0l ||				
-//					data_all_id == null || data_all_id.length < 1) {
-//				result = "input.invalid";
-//				jSONObject.put("result", result);
-//				return jSONObject;
-//			}
-//			
-//			DataInfo dataInfo = new DataInfo();
-//			dataInfo.setData_group_id(data_group_id);
-//			dataInfo.setData_all_id(data_all_id);
-//			
-//			dataService.updateDataGroupData(dataInfo);
-//			
-//			dataList = dataService.getListData(dataInfo);
-//			exceptDataList = dataService.getListExceptDataGroupDataByGroupId(dataInfo);
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			jSONObject.put("result", "db.exception");
-//		}
-//		
-//		jSONObject.put("result", result	);
-//		jSONObject.put("exceptDataList", exceptDataList);
-//		jSONObject.put("dataList", dataList);
-//		return jSONObject;
-//	}
-	
 	/**
 	 * ajax 용 Data validation 체크
 	 * @param dataInfo
@@ -391,7 +304,7 @@ public class DataController {
 	@PostMapping(value = "ajax-data-key-duplication-check.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDataKeyDuplicationCheck(HttpServletRequest request, DataInfo dataInfo) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		String duplication_value = "";
 		try {
@@ -489,7 +402,7 @@ public class DataController {
 	@PostMapping(value = "ajax-update-data-info.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateDataInfo(HttpServletRequest request, DataInfo dataInfo) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		
 		log.info("@@ dataInfo = {}", dataInfo);
@@ -547,7 +460,7 @@ public class DataController {
 //										@RequestParam("status_value") String status_value) {
 //		
 //		log.info("@@@@@@@ check_ids = {}, business_type = {}, status_value = {}", check_ids, business_type, status_value);
-//		Map<String, Object> jSONObject = new HashMap<String, Object>();
+//		Map<String, Object> jSONObject = new HashMap<>();
 //		String result = "success";
 //		String result_message = "";
 //		try {
@@ -613,7 +526,7 @@ public class DataController {
 	public Map<String, Object> ajaxDeleteDatas(HttpServletRequest request, @RequestParam("check_ids") String check_ids) {
 		
 		log.info("@@@@@@@ check_ids = {}", check_ids);
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			if(check_ids.length() <= 0) {
@@ -636,70 +549,6 @@ public class DataController {
 		return jSONObject;
 	}
 	
-//	/**
-//	 * 선택 Data 그룹내 Data 삭제
-//	 * @param request
-//	 * @param data_select_id
-//	 * @param data_group_id
-//	 * @param model
-//	 * @return
-//	 */
-//	@PostMapping(value = "ajax-delete-data-group-data.do", produces = "application/json; charset=utf8")
-//	@ResponseBody
-//	public Map<String, Object> ajaxDeleteDataGroupData(HttpServletRequest request,
-//			@RequestParam("data_group_id") Long data_group_id,
-//			@RequestParam("data_select_id") String[] data_select_id) {
-//		
-//		log.info("@@@ data_group_id = {}, data_select_id = {}", data_group_id, data_select_id);
-//		Map<String, Object> jSONObject = new HashMap<String, Object>();
-//		List<DataInfo> exceptDataList = new ArrayList<>();
-//		List<DataInfo> dataList = new ArrayList<>();
-//		String result = "success";
-//		try {
-//			if(data_group_id == null || data_group_id.longValue() == 0l ||				
-//					data_select_id == null || data_select_id.length < 1) {
-//				result = "input.invalid";
-//				jSONObject.put("result", result);
-//				return jSONObject;
-//			}
-//			
-//			DataInfo dataInfo = new DataInfo();
-//			dataInfo.setData_group_id(data_group_id);
-//			dataInfo.setData_select_id(data_select_id);
-//			
-//			dataService.updateDataGroupData(dataInfo);
-//			
-//			// UPDATE 문에서 data_group_id 를 temp 그룹으로 변경
-//			dataInfo.setData_group_id(data_group_id);
-//			
-//			dataList = dataService.getListData(dataInfo);
-//			exceptDataList = dataService.getListExceptDataGroupDataByGroupId(dataInfo);
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			jSONObject.put("result", "db.exception");
-//		}
-//		
-//		jSONObject.put("result", result	);
-//		jSONObject.put("exceptDataList", exceptDataList);
-//		jSONObject.put("dataList", dataList);
-//		return jSONObject;
-//	}
-	
-//	/**
-//	 * Data 일괄 등록 화면
-//	 * @param model
-//	 * @return
-//	 */
-//	@GetMapping(value = "popup-input-excel-data.do", produces = "application/json; charset=utf8")
-//	public String popupInputExcelData(Model model) {
-//		
-//		FileInfo fileInfo = new FileInfo();
-//		
-//		model.addAttribute("fileInfo", fileInfo);
-//		
-//		return "/data/popup-input-excel-data";
-//	}
-	
 	/**
 	 * Data 일괄 등록
 	 * @param model
@@ -709,11 +558,11 @@ public class DataController {
 	@ResponseBody
 	public Map<String, Object> ajaxInsertDataFile(MultipartHttpServletRequest request) {
 		
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			Long project_id = Long.valueOf(request.getParameter("project_id"));
-			MultipartFile multipartFile = request.getFile("file_name");
+			MultipartFile multipartFile = request.getFile("data_file_name");
 			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.DATA_FILE_UPLOAD, propertiesConfig.getDataUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				jSONObject.put("result", fileInfo.getError_code());
@@ -754,7 +603,31 @@ public class DataController {
 	}
 	
 	/**
-	 * Data Attribute 한건 등록
+	 * 데이터 attribute 취득
+	 * @param request
+	 * @param data_id
+	 * @return
+	 */
+	@GetMapping(value = "ajax-detail-data-attribute.do")
+	@ResponseBody
+	public Map<String, Object> ajaxDetailDataAttribute(HttpServletRequest request, @RequestParam("data_id") Long data_id) {
+		log.info("@@@@@@@@@@@@@@@@@@@@ data_id = {}", data_id);
+		Map<String, Object> jSONObject = new HashMap<>();
+		String result = "success";
+		try {		
+			DataInfoAttribute dataInfoAttribute = dataService.getDataAttribute(data_id);
+			jSONObject.put("dataInfoAttribute", dataInfoAttribute);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		jSONObject.put("result", result);
+		return jSONObject;
+	}
+	
+	/**
+	 * Data Origin Attribute 한건 수정
 	 * @param model
 	 * @return
 	 */
@@ -762,7 +635,7 @@ public class DataController {
 	@ResponseBody
 	public Map<String, Object> ajaxInsertDataAttributeFile(MultipartHttpServletRequest request) {
 		
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			Long data_id = Long.valueOf(request.getParameter("attribute_file_data_id"));
@@ -810,7 +683,7 @@ public class DataController {
 	@ResponseBody
 	public Map<String, Object> ajaxInsertDataObjectAttributeFile(MultipartHttpServletRequest request) {
 		
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			Long data_id = Long.valueOf(request.getParameter("object_attribute_file_data_id"));
@@ -859,7 +732,7 @@ public class DataController {
 	@ResponseBody
 	public Map<String, Object> ajaxInsertDataAttributeBatch(HttpServletRequest request) {
 		
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			
@@ -891,7 +764,7 @@ public class DataController {
 	@ResponseBody
 	public Map<String, Object> ajaxInsertDataObjectAttributeBatch(HttpServletRequest request) {
 		
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			
@@ -981,198 +854,6 @@ public class DataController {
 		
 		return jSONObject;
 	}
-	
-//	/**
-//	 * Data Excel 다운로드
-//	 * @param model
-//	 * @return
-//	 */
-//	@RequestMapping(value = "download-excel-data.do")
-//	public ModelAndView downloadExcelData(HttpServletRequest request, HttpServletResponse response, DataInfo dataInfo, Model model) {
-//		log.info("@@ dataInfo = {}", dataInfo);
-//		if(dataInfo.getData_group_id() == null) {
-//			dataInfo.setData_group_id(Long.valueOf(0l));
-//		}
-//		if(StringUtil.isNotEmpty(dataInfo.getStart_date())) {
-//			dataInfo.setStart_date(dataInfo.getStart_date().substring(0, 8) + DateUtil.START_TIME);
-//		}
-//		if(StringUtil.isNotEmpty(dataInfo.getEnd_date())) {
-//			dataInfo.setEnd_date(dataInfo.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
-//		}
-//		
-//		long totalCount = 0l;
-//		List<DataInfo> dataList = new ArrayList<>();
-//		try {
-//			// 논리적 삭제는 SELECT에서 제외
-////			dataInfo.setDelete_flag(DataInfo.STATUS_LOGICAL_DELETE);
-//			totalCount = dataService.getDataTotalCount(dataInfo);
-//			long pageNo = 1l;
-//			long lastPage = 0l;
-//			long pagePerCount = 1000l;
-//			long pageListCount = 1000l;
-//			if(totalCount > 0l) {
-//				Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(dataInfo), totalCount, pageNo, pagePerCount, pageListCount);
-//				lastPage = pagination.getLastPage();
-//				for(; pageNo<= lastPage; pageNo++) {
-//					pagination = new Pagination(request.getRequestURI(), getSearchParameters(dataInfo), totalCount, pageNo, pagePerCount, pageListCount);
-//					log.info("@@ pagination = {}", pagination);
-//					
-//					dataInfo.setOffset(pagination.getOffset());
-//					dataInfo.setLimit(pagination.getPageRows());
-//					List<DataInfo> subDataList = dataService.getListData(dataInfo);
-//					
-//					dataList.addAll(subDataList);
-//					
-//					Thread.sleep(3000);
-//				}
-//			}			
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//	
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.setViewName("pOIExcelView");
-//		modelAndView.addObject("fileType", "USER_LIST");
-//		modelAndView.addObject("fileName", "USER_LIST");
-//		modelAndView.addObject("dataList", dataList);	
-//		return modelAndView;
-//	}
-	
-	/**
-	 * Data Txt 다운로드
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "download-txt-data.do")
-	@ResponseBody
-	public String downloadTxtData(HttpServletRequest request, HttpServletResponse response, DataInfo dataInfo, Model model) {
-		
-		response.setContentType("application/force-download");
-		response.setHeader("Content-Transfer-Encoding", "binary");
-		response.setHeader("Content-Disposition", "attachment; filename=\"data_info.txt\"");
-		
-//		log.info("@@ dataInfo = {}", dataInfo);
-//		if(dataInfo.getData_group_id() == null) {
-//			dataInfo.setData_group_id(Long.valueOf(0l));
-//		}
-//		if(StringUtil.isNotEmpty(dataInfo.getStart_date())) {
-//			dataInfo.setStart_date(dataInfo.getStart_date().substring(0, 8) + DateUtil.START_TIME);
-//		}
-//		if(StringUtil.isNotEmpty(dataInfo.getEnd_date())) {
-//			dataInfo.setEnd_date(dataInfo.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
-//		}
-//		
-//		long totalCount = 0l;
-//		try {
-//			// 논리적 삭제는 SELECT에서 제외
-////			dataInfo.setDelete_flag(DataInfo.STATUS_LOGICAL_DELETE);
-//			totalCount = dataService.getDataTotalCount(dataInfo);
-//			long pageNo = 1l;
-//			long lastPage = 0l;
-//			long pagePerCount = 1000l;
-//			long pageListCount = 1000l;
-//			long number = 1l;
-//			String SEPARATE = "|";
-//			String NEW_LINE = "\n";
-//			if(totalCount > 0l) {
-//				Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(dataInfo), totalCount, pageNo, pagePerCount, pageListCount);
-//				lastPage = pagination.getLastPage();
-//				for(; pageNo<= lastPage; pageNo++) {
-//					pagination = new Pagination(request.getRequestURI(), getSearchParameters(dataInfo), totalCount, pageNo, pagePerCount, pageListCount);
-//					log.info("@@ pagination = {}", pagination);
-//					
-//					dataInfo.setOffset(pagination.getOffset());
-//					dataInfo.setLimit(pagination.getPageRows());
-//					List<DataInfo> dataList = dataService.getListData(dataInfo);
-//					
-//					int count = dataList.size();
-//					for(int j=0; j<count; j++) {
-//						DataInfo dbDataInfo = dataList.get(j);
-//						String data = number 
-//									+ SEPARATE + dbDataInfo.getData_group_name() + SEPARATE + dbDataInfo.getData_id()
-//									+ SEPARATE + dbDataInfo.getData_name()+ SEPARATE + dbDataInfo.getViewStatus()
-//									+ NEW_LINE;
-//						response.getWriter().write(data);
-//						number++;
-//					}
-//					Thread.sleep(3000);
-//				}
-//			}			
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
-	
-		return null;
-	}
-	
-//	/**
-//	 * Data 다운로드 Sample
-//	 * @param model
-//	 * @return
-//	 */
-//	@RequestMapping(value = "download-excel-data-sample.do")
-//	@ResponseBody
-//	public void downloadExcelDataSample(HttpServletRequest request, HttpServletResponse response, Model model) {
-//		
-//		File rootDirectory = new File(propertiesConfig.getExcelSampleUploadDir());
-//		if(!rootDirectory.exists()) {
-//			rootDirectory.mkdir();
-//		}
-//				
-//		File file = new File(propertiesConfig.getExcelSampleUploadDir() + "sample.xlsx");
-//		if(file.exists()) {
-//			String mimetype = "application/x-msdownload";
-//			response.setContentType(mimetype);
-//			String dispositionPrefix = "attachment; filename=";
-//			String encodedFilename = "sample.xlsx";
-//
-//			response.setHeader("Content-Disposition", dispositionPrefix + encodedFilename);
-//			response.setContentLength((int)file.length());
-//
-//			try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file)); BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream())) {
-//				FileCopyUtils.copy(in, out);
-//				out.flush();
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		} else {
-//			response.setContentType("application/x-msdownload");
-//			try (PrintWriter printwriter = response.getWriter()) {
-//				printwriter.println("샘플 파일이 존재하지 않습니다.");
-//				printwriter.flush();
-//				printwriter.close();
-//			} catch(Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-//	
-//	/**
-//	 * Data 그룹 정보
-//	 * @param request
-//	 * @return
-//	 */
-//	@RequestMapping(value = "ajax-data-group-info.do")
-//	@ResponseBody
-//	public Map<String, Object> ajaxDataGroupInfo(HttpServletRequest request, @RequestParam("data_group_id") Long data_group_id) {
-//		
-//		log.info("@@@@@@@ data_group_id = {}", data_group_id);
-//		
-//		Map<String, Object> jSONObject = new HashMap<String, Object>();
-//		String result = "success";
-//		Project dataGroup = null;
-//		try {	
-//			dataGroup = dataGroupService.getDataGroup(data_group_id);
-//			log.info("@@@@@@@ dataGroup = {}", dataGroup);
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			result = "db.exception";
-//		}
-//		jSONObject.put("result", result);
-//		jSONObject.put("dataGroup", dataGroup);
-//		
-//		return jSONObject;
-//	}
 	
 	/**
 	 * 검색 조건

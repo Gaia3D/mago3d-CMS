@@ -146,7 +146,7 @@ public class UserController {
 	@RequestMapping(value = "ajax-list-user-group-user.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, Object> ajaxListUserGroupUser(HttpServletRequest request, @RequestParam("user_group_id") Long user_group_id, @RequestParam(defaultValue="1") String pageNo) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		Pagination pagination = null;
 		List<UserInfo> userList = new ArrayList<>();
@@ -184,7 +184,7 @@ public class UserController {
 	@RequestMapping(value = "ajax-list-except-user-group-user-by-group-id.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, Object> ajaxListExceptUserGroupUserByGroupId(HttpServletRequest request, UserInfo userInfo, @RequestParam(defaultValue="1") String pageNo) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		Pagination pagination = null;
 		List<UserInfo> userList = new ArrayList<>();
@@ -215,7 +215,7 @@ public class UserController {
 	@RequestMapping(value = "ajax-list-user-group-user-by-group-id.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, Object> ajaxListUserGroupUserByGroupId(HttpServletRequest request, UserInfo userInfo, @RequestParam(defaultValue="1") String pageNo) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		Pagination pagination = null;
 		List<UserInfo> userList = new ArrayList<>();
@@ -283,7 +283,7 @@ public class UserController {
 	@PostMapping(value = "ajax-insert-user-info.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertUserInfo(HttpServletRequest request, UserInfo userInfo) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			userInfo.setMethod_mode("insert");
@@ -360,7 +360,7 @@ public class UserController {
 			@RequestParam("user_all_id") String[] user_all_id) {
 		
 		log.info("@@@ user_group_id = {}, user_all_id = {}", user_group_id, user_all_id);
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		List<UserInfo> exceptUserList = new ArrayList<>();
 		List<UserInfo> userList = new ArrayList<>();
 		String result = "success";
@@ -438,7 +438,7 @@ public class UserController {
 	@PostMapping(value = "ajax-user-id-duplication-check.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, Object> ajaxUserIdDuplicationCheck(HttpServletRequest request, UserInfo userInfo) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		String duplication_value = "";
 		try {
@@ -566,7 +566,7 @@ public class UserController {
 	@PostMapping(value = "ajax-update-user-info.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateUserInfo(HttpServletRequest request, UserInfo userInfo) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			Policy policy = CacheManager.getPolicy();
@@ -697,7 +697,7 @@ public class UserController {
 	@ResponseBody
 	public Map<String, Object> ajaxInitUserPassword(	HttpServletRequest request, 
 										@RequestParam("check_ids") String check_ids) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			if(check_ids.length() <= 0) {
@@ -729,7 +729,7 @@ public class UserController {
 										@RequestParam("status_value") String status_value) {
 		
 		log.info("@@@@@@@ check_ids = {}, business_type = {}, status_value = {}", check_ids, business_type, status_value);
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		String result_message = "";
 		try {
@@ -792,7 +792,7 @@ public class UserController {
 	public Map<String, Object> ajaxDeleteUsers(HttpServletRequest request, @RequestParam("check_ids") String check_ids) {
 		
 		log.info("@@@@@@@ check_ids = {}", check_ids);
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			if(check_ids.length() <= 0) {
@@ -825,7 +825,7 @@ public class UserController {
 			@RequestParam("user_select_id") String[] user_select_id) {
 		
 		log.info("@@@ user_group_id = {}, user_select_id = {}", user_group_id, user_select_id);
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		List<UserInfo> exceptUserList = new ArrayList<>();
 		List<UserInfo> userList = new ArrayList<>();
 		String result = "success";
@@ -883,7 +883,7 @@ public class UserController {
 	@ResponseBody
 	public Map<String, Object> ajaxInsertExcelUser(MultipartHttpServletRequest request) {
 		
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			MultipartFile multipartFile = request.getFile("file_name");
@@ -1175,7 +1175,7 @@ public class UserController {
 	@ResponseBody
 	public Map<String, Object> ajaxUserGroupInfo(HttpServletRequest request, @RequestParam("user_group_id") Long user_group_id) {
 		log.info("@@@@@@@ user_group_id = {}", user_group_id);
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		UserGroup userGroup = null;
 		try {	

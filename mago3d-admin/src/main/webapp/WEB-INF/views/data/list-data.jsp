@@ -110,8 +110,8 @@
 										<a href="#" onclick="updateDataStatus('DATA', 'UNLOCK'); return false;" class="button"><spring:message code='data.lock.release'/></a>
 										<a href="#" onclick="deleteDatas(); return false;" class="button"><spring:message code='data.all.delete'/></a>
 										<a href="#" onclick="uploadDataFile(); return false;" class="button"><spring:message code='data.all.insert'/></a>
-										<a href="#" onclick="uploadDataAttributeFile(); return false;" class="button"><spring:message code='data.attribute.insert'/></a>
-										<a href="#" onclick="uploadDataObjectAttributeFile(); return false;" class="button"><spring:message code='data.object.attribute.insert'/></a>
+										<a href="#" onclick="uploadProjectDataAttribute(); return false;" class="button"><spring:message code='data.attribute.insert'/></a>
+										<a href="#" onclick="uploadProjectDataObjectAttribute(); return false;" class="button"><spring:message code='data.object.attribute.insert'/></a>
 									</div>
 								</div>
 							</div>
@@ -179,30 +179,31 @@
 		</c:if>
 												
 											</td>
-											<td class="col-name">
-												<a href="#" onclick="viewControlAttributes('${dataInfo.data_id }'); return false;">
-													보기
-												</a>
+											<td class="col-name" style="text-align: center;">
+												<a href="#" onclick="detailDataControlAttribute('${dataInfo.data_id }'); return false;"><spring:message code='view'/></a>
 											</td>
 											<td class="col-functions">
 												<span class="button-group">
-													<a href="#" onclick="return deleteWarning();"><spring:message code='view'/></a>
-													<a href="#" class="image-button button-edit" onclick="insertDataAttribute('${dataInfo.data_id }', '${dataInfo.data_name }'); return false;">
+													<a href="#" onclick="detailDataAttribute('${dataInfo.data_id }', '${dataInfo.data_name }'); return false;"><spring:message code='view'/></a>
+													<a href="#" class="image-button button-edit" 
+														onclick="uploadDataAttribute('${dataInfo.data_id }', '${dataInfo.data_name }'); return false;">
 														<spring:message code='modified'/></a>
 												</span>
 											</td>
 											<td class="col-functions">
 												<span class="button-group">
-													<a href="#" onclick="return deleteWarning();"><spring:message code='view'/></a>
-													<a href="#" class="image-button button-edit" onclick="insertDataObjectAttribute('${dataInfo.data_id }', '${dataInfo.data_name }'); return false;">
+													<a href="#" class="image-button button-edit" 
+														onclick="uploadDataObjectAttribute('${dataInfo.data_id }', '${dataInfo.data_name }'); return false;">
 														<spring:message code='modified'/></a>
 												</span>
 											</td>
 											<td class="col-date">${dataInfo.viewInsertDate }</td>
 											<td class="col-functions">
 												<span class="button-group">
-													<a href="/data/modify-data.do?data_id=${dataInfo.data_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}" class="image-button button-edit"><spring:message code='modified'/></a>
-													<a href="/data/delete-data.do?data_id=${dataInfo.data_id }" onclick="return deleteWarning();" class="image-button button-delete"><spring:message code='delete'/></a>
+													<a href="/data/modify-data.do?data_id=${dataInfo.data_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}" 
+														class="image-button button-edit"><spring:message code='modified'/></a>
+													<a href="/data/delete-data.do?data_id=${dataInfo.data_id }" onclick="return deleteWarning();" 
+														class="image-button button-delete"><spring:message code='delete'/></a>
 												</span>
 											</td>
 										</tr>
@@ -212,20 +213,6 @@
 							</table>
 							</form:form>
 							
-							<%-- 엑셀 다운로드 --%>
-							<form:form id="excelDataInfo" modelAttribute="excelDataInfo" method="post" action="/data/download-excel-data.do">
-								<form:hidden path="project_id" />
-								<form:hidden path="search_word" />
-								<form:hidden path="search_option" />
-								<form:hidden path="search_value" />
-								<form:hidden path="status" />
-								<form:hidden path="data_insert_type" />
-								<form:hidden path="start_date" />
-								<form:hidden path="end_date" />
-								<form:hidden path="order_word" />
-								<form:hidden path="order_value" />
-							</form:form>
-							<%-- 엑셀 다운로드 --%>
 						</div>
 						<%@ include file="/WEB-INF/views/common/pagination.jsp" %>
 					</div>
@@ -237,8 +224,12 @@
 	
 	<%@ include file="/WEB-INF/views/data/project-dialog.jsp" %>
 	<%@ include file="/WEB-INF/views/data/data-file-dialog.jsp" %>
+	<%@ include file="/WEB-INF/views/data/data-control-attribute-dialog.jsp" %>
 	<%@ include file="/WEB-INF/views/data/data-attribute-dialog.jsp" %>
-	<%@ include file="/WEB-INF/views/data/data-object-attribute-dialog.jsp" %>
+	<%@ include file="/WEB-INF/views/data/data-attribute-file-dialog.jsp" %>
+	<%@ include file="/WEB-INF/views/data/data-object-attribute-file-dialog.jsp" %>
+	<%@ include file="/WEB-INF/views/data/project-data-attribute-file-dialog.jsp" %>
+	<%@ include file="/WEB-INF/views/data/project-data-object-attribute-file-dialog.jsp" %>
 	
 <script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 <script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
@@ -257,196 +248,15 @@
 		$( ".select" ).selectmenu();
 	});
 	
-	var projectDialog = $( ".projectDialog" ).dialog({
-		autoOpen: false,
-		height: 300,
-		width: 400,
-		modal: true,
-		resizable: false
-	});
-	
-	var dataFileDialog = $( ".dataFileDialog" ).dialog({
-		autoOpen: false,
-		height: 445,
-		width: 600,
-		modal: true,
-		resizable: false,
-		close: function() { location.reload(); }
-	});
-	
-	var dataAttributeDialog = $( ".dataAttributeDialog" ).dialog({
-		autoOpen: false,
-		height: 445,
-		width: 600,
-		modal: true,
-		resizable: false,
-		close: function() { location.reload(); }
-	});
-	
-	var dataObjectAttributeDialog = $( ".dataObjectAttributeDialog" ).dialog({
-		autoOpen: false,
-		height: 445,
-		width: 600,
-		modal: true,
-		resizable: false,
-		close: function() { location.reload(); }
-	});
-	
 	// 전체 선택 
 	$("#chk_all").click(function() {
 		$(":checkbox[name=data_id]").prop("checked", this.checked);
 	});
 	
-	// Data 일괄 등록 Layer 생성
-	function uploadDataFile() {
-		dataFileDialog.dialog( "open" );
-	}
-	// Data 등록 Layer 닫기
-	function popClose() {
-		dataFileDialog.dialog( "close" );
-		location.reload();
-	}
-	
-	var updateDataStatusFlag = true;
-	function updateDataStatus(business_type, status_value) {
-		alert("Coming soon.");
-		return false;
-		if($("input:checkbox[name=data_id]:checked").length == 0) {
-			alert(JS_MESSAGE["check.value.required"]);
-			return false;
-		} else {
-			var checkedValue = "";
-			$("input:checkbox[name=data_id]:checked").each(function(index){
-				checkedValue += $(this).val() + ",";
-			});
-			$("#check_ids").val(checkedValue);
-		}
-		var info = $("#listForm").serialize() + "&business_type=" + business_type + "&status_value=" + status_value;		
-		if(updateDataStatusFlag) {
-			updateDataStatusFlag = false;
-			$.ajax({
-				url: "/data/ajax-update-data-status.do",
-				type: "POST",
-				data: info,
-				cache: false,
-				async:false,
-				dataType: "json",
-				success: function(msg){
-					if(msg.result == "success") {
-						if(msg.result_message != null && msg.result_message != "" && business_type == "OTP") {
-							var updateMessage = JS_MESSAGE["data.data_otp.update.warning"];
-							var patternCount = /{update_count}/ig; // notice "g" here now!
-							var pattern = /{data_ids}/ig; // notice "g" here now!
-							updateMessage = updateMessage.replace( patternCount, msg.update_count );
-							updateMessage = updateMessage.replace( pattern, msg.result_message );
-							alert(updateMessage);
-						} else {
-							alert(JS_MESSAGE["update"]);	
-						}
-						location.reload();
-						$(":checkbox[name=data_id]").prop("checked", false);
-					} else {
-						alert(JS_MESSAGE[msg.result]);
-					}
-					updateDataStatusFlag = true;
-				},
-				error:function(request,status,error){
-			        alert(JS_MESSAGE["ajax.error.message"]);
-			        updateDataStatusFlag = true;
-				}
-			});
-		} else {
-			alert(JS_MESSAGE["button.dobule.click"]);
-			return;
-		} 
-	}
-
-	var fileUploadFlag = true;
-	function fileUpload() {
-		var fileName = $("#file_name").val();
-		if(fileName === "") {
-			alert(JS_MESSAGE["file.name.empty"]);
-			$("#file_name").focus();
-			return false;
-		}
-		
-		if( fileName.lastIndexOf("xlsx") <=0 
-				&& fileName.lastIndexOf("xls") <=0
-				&& fileName.lastIndexOf("json") <=0 
-				&& fileName.lastIndexOf("txt") <=0 ) {
-			alert(JS_MESSAGE["file.ext.invalid"]);
-			$("#file_name").focus();
-			return false;
-		}
-		
-		if(fileUploadFlag) {
-			fileUploadFlag = false;
-			$("#fileInfo").ajaxSubmit({
-				type: "POST",
-				dataType: "json",
-				success: function(msg){
-					var totalNumber = "<spring:message code='data.total.number'/>";
-					var successParsing = "<spring:message code='data.success.parsing'/>";
-					var failedParsing = "<spring:message code='data.fail.parsing'/>";
-					var successRegisterDB = "<spring:message code='data.register.success.db'/>";
-					var failedRegisterDB = "<spring:message code='data.register.fail.db'/>";
-					
-					if(msg.result == "success") {
-						if(msg.parse_error_count != 0 || msg.insert_error_count != 0) {
-							$("#file_name").val("");
-							alert(JS_MESSAGE["fail.count.retry.select"]);
-						} else {
-							alert(JS_MESSAGE["update"]);
-						}
-						var content = ""
-						+ "<tr>"
-						+ 	"<td colspan=\"2\">&nbsp;</td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ 	"<td> " + totalNumber + "</td>"
-						+ 	"<td> " + msg.total_count + "</td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ 	"<td> " + successParsing + "</td>"
-						+ 	"<td> " + msg.parse_success_count + "</td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ 	"<td> " + failedParsing + "</td>"
-						+ 	"<td> " + msg.parse_error_count + "</td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ 	"<td> " + successRegisterDB + "</td>"
-						+ 	"<td> " + msg.insert_success_count + "</td>"
-						+ "</tr>"
-						+ "<tr>"
-						+ 	"<td> " +failedRegisterDB + "</td>"
-						+ 	"<td> " + msg.insert_error_count + "</td>"
-						+ "</tr>";
-						$("#dataFileUpload > tbody:last").append(content);
-					} else {
-	    				alert(JS_MESSAGE[msg.result]);
-	    			}
-					fileUploadFlag = true;
-				},
-				error:function(request,status,error){
-					alert(JS_MESSAGE["ajax.error.message"]);
-			        fileUploadFlag = true;
-				}
-			});
-		} else {
-			alert(JS_MESSAGE["button.dobule.click"]);
-			return;
-		}
-	}
-	
 	// project 정보
     function detailProject(projectId) {
     	projectDialog.dialog( "open" );
-    	ajaxProject(projectId);
-	}
-	
-	// project 정보
-    function ajaxProject(projectId) {
+    	
     	$.ajax({
     		url: "/data/ajax-project.do",
     		data: { projectId : projectId },
@@ -454,7 +264,10 @@
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == "success") {
-    				drawProject(msg.project);
+    				$("#project_name_info").html(msg.project.project_name);
+    				$("#project_key_info").html(msg.project.project_key);
+    				$("#use_yn_info").html(msg.project.use_yn);
+    				$("#description_info").html(msg.project.description);
 				} else {
     				alert(JS_MESSAGE[msg.result]);
     			}
@@ -463,14 +276,232 @@
     			alert(JS_MESSAGE["ajax.error.message"]);
     		}
     	});
-    }
+	}
 	
-	// 프로젝트 정보
-	function drawProject(project) {
-		$("#project_name_info").html(project.project_name);
-		$("#project_key_info").html(project.project_key);
-		$("#use_yn_info").html(project.use_yn);
-		$("#description_info").html(project.description);
+ 	// 제어 속성
+    function detailDataControlAttribute(dataId) {
+    	dataControlAttributeDialog.dialog( "open" );
+    	
+    	$.ajax({
+    		url: "/data/ajax-detail-data.do",
+    		data: { data_id : dataId },
+    		type: "GET",
+    		dataType: "json",
+    		success: function(msg){
+    			if (msg.result == "success") {
+    				$("#data_control_attribute").html(msg.dataInfo.attributes);
+				} else {
+    				alert(JS_MESSAGE[msg.result]);
+    			}
+    		},
+    		error:function(request,status,error){
+    			alert(JS_MESSAGE["ajax.error.message"]);
+    		}
+    	});
+	}
+	
+	// Origin 속성
+    function detailDataAttribute(dataId, dataName) {
+    	dataAttributeDialog.dialog( "open" );
+    	$("#data_name_for_origin").html(dataName);
+    	
+    	$.ajax({
+    		url: "/data/ajax-detail-data-attribute.do",
+    		data: { data_id : dataId },
+    		type: "GET",
+    		dataType: "json",
+    		success: function(msg){
+    			if (msg.result == "success") {
+    				if(msg.dataInfoAttribute !== null) {
+						$("#data_attribute_for_origin").html(msg.dataInfoAttribute.attributes);
+    				}
+				} else {
+    				alert(JS_MESSAGE[msg.result]);
+    			}
+    		},
+    		error:function(request,status,error){
+    			alert(JS_MESSAGE["ajax.error.message"]);
+    		}
+    	});
+	}
+ 	
+    // origin 속성 수정
+ 	function uploadDataAttribute(dataId, dataName) {
+ 		uploadDataAttributeDialog.dialog( "open" );
+ 		$("#attribute_file_name").val("");
+ 		$("#dataAttributeUploadLog > tbody:last").html("");
+		$("#attribute_file_data_id").val(dataId);
+		$("#attributeDataName").html(dataName);
+	}
+	
+    // origin 속성 파일 upload
+	var dataAttributeFileUploadFlag = true;
+	function dataAttributeFileUpload() {
+		var fileName = $("#attribute_file_name").val();
+		if(fileName === "") {
+			alert(JS_MESSAGE["file.name.empty"]);
+			$("#attribute_file_name").focus();
+			return false;
+		}
+		if( fileName.lastIndexOf("json") <=0 && fileName.lastIndexOf("txt") <=0 ) {
+			alert(JS_MESSAGE["file.ext.invalid"]);
+			$("#file_name").focus();
+			return false;
+		}
+		
+		if(dataAttributeFileUploadFlag) {
+			dataAttributeFileUploadFlag = false;
+			var totalNumber = "<spring:message code='data.total.number'/>";
+			var successParsing = "<spring:message code='data.success.parsing'/>";
+			var failedParsing = "<spring:message code='data.fail.parsing'/>";
+			var insertSuccessCount = "<spring:message code='data.insert.success.db'/>";
+			var updateSuccessCount = "<spring:message code='data.update.success.db'/>";
+			var failCount = "<spring:message code='data.insert.fail.db'/>";
+			$("#dataAttributeInfo").ajaxSubmit({
+				type: "POST",
+				dataType: "json",
+				success: function(msg){
+					if(msg.result == "success") {
+						if(msg.parse_error_count != 0 || msg.insert_error_count != 0) {
+							$("#data_file_name").val("");
+							alert(JS_MESSAGE["fail.count.retry.select"]);
+						} else {
+							alert(JS_MESSAGE["update"]);
+						}
+						var content = ""
+							+ "<tr>"
+							+ 	"<td colspan=\"2\" style=\"text-align: center;\">Result of parsing</td>"
+							+ "</tr>"
+							+ "<tr>"
+							+ 	"<td> " + totalNumber + "</td>"
+							+ 	"<td> " + msg.total_count + "</td>"
+							+ "</tr>"
+							+ "<tr>"
+							+ 	"<td> " + successParsing + "</td>"
+							+ 	"<td> " + msg.parse_success_count + "</td>"
+							+ "</tr>"
+							+ "<tr>"
+							+ 	"<td> " + failedParsing + "</td>"
+							+ 	"<td> " + msg.parse_error_count + "</td>"
+							+ "</tr>"
+							+ "<tr>"
+							+ 	"<td> " + insertSuccessCount + "</td>"
+							+ 	"<td> " + msg.insert_success_count + "</td>"
+							+ "</tr>"
+							/* + "<tr>"
+							+ 	"<td> " + updateSuccessCount + "</td>"
+							+ 	"<td> " + msg.update_success_count + "</td>"
+							+ "</tr>" */
+							+ "<tr>"
+							+ 	"<td> " + failCount + "</td>"
+							+ 	"<td> " + msg.insert_error_count + "</td>"
+							+ "</tr>";
+							$("#dataAttributeUploadLog > tbody:last").html("");
+							$("#dataAttributeUploadLog > tbody:last").append(content);
+					} else {
+	    				alert(JS_MESSAGE[msg.result]);
+	    			}
+					dataAttributeFileUploadFlag = true;
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
+					dataAttributeFileUploadFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+	
+	// Data Object Attribute 파일 수정
+	function uploadDataObjectAttribute(dataId, dataName) {
+		uploadDataObjectAttributeDialog.dialog( "open" );
+		$("#object_attribute_file_name").val("");
+ 		$("#dataObjectAttributeUploadLog > tbody:last").html("");
+		$("#object_attribute_file_data_id").val(dataId);
+		$("#objectAttributeDataName").html(dataName);
+	}
+	
+	// Data Object 속성 파일 upload
+	var dataObjectAttributeFileUploadFlag = true;
+	function dataObjectAttributeFileUpload() {
+		var fileName = $("#object_attribute_file_name").val();
+		if(fileName === "") {
+			alert(JS_MESSAGE["file.name.empty"]);
+			$("#object_attribute_file_name").focus();
+			return false;
+		}
+		
+		if( fileName.lastIndexOf("json") <=0 && fileName.lastIndexOf("txt") <=0 ) {
+			alert(JS_MESSAGE["file.ext.invalid"]);
+			$("#file_name").focus();
+			return false;
+		}
+		
+		if(dataObjectAttributeFileUploadFlag) {
+			dataObjectAttributeFileUploadFlag = false;
+			var totalNumber = "<spring:message code='data.total.number'/>";
+			var successParsing = "<spring:message code='data.success.parsing'/>";
+			var failedParsing = "<spring:message code='data.fail.parsing'/>";
+			var insertSuccessCount = "<spring:message code='data.insert.success.db'/>";
+			var updateSuccessCount = "<spring:message code='data.update.success.db'/>";
+			var failCount = "<spring:message code='data.insert.fail.db'/>";
+			$("#dataObjectAttributeInfo").ajaxSubmit({
+				type: "POST",
+				dataType: "json",
+				success: function(msg){
+					if(msg.result == "success") {
+						if(msg.parse_error_count != 0 || msg.insert_error_count != 0) {
+							$("#data_file_name").val("");
+							alert(JS_MESSAGE["fail.count.retry.select"]);
+						} else {
+							alert(JS_MESSAGE["update"]);
+						}
+						var content = ""
+							+ "<tr>"
+							+ 	"<td colspan=\"2\" style=\"text-align: center;\">Result of parsing</td>"
+							+ "</tr>"
+							+ "<tr>"
+							+ 	"<td> " + totalNumber + "</td>"
+							+ 	"<td> " + msg.total_count + "</td>"
+							+ "</tr>"
+							+ "<tr>"
+							+ 	"<td> " + successParsing + "</td>"
+							+ 	"<td> " + msg.parse_success_count + "</td>"
+							+ "</tr>"
+							+ "<tr>"
+							+ 	"<td> " + failedParsing + "</td>"
+							+ 	"<td> " + msg.parse_error_count + "</td>"
+							+ "</tr>"
+							+ "<tr>"
+							+ 	"<td> " + insertSuccessCount + "</td>"
+							+ 	"<td> " + msg.insert_success_count + "</td>"
+							+ "</tr>"
+							/* + "<tr>"
+							+ 	"<td> " + updateSuccessCount + "</td>"
+							+ 	"<td> " + msg.update_success_count + "</td>"
+							+ "</tr>" */
+							+ "<tr>"
+							+ 	"<td> " + failCount + "</td>"
+							+ 	"<td> " + msg.insert_error_count + "</td>"
+							+ "</tr>";
+							$("#dataObjectAttributeUploadLog > tbody:last").html("");
+							$("#dataObjectAttributeUploadLog > tbody:last").append(content);
+					} else {
+	    				alert(JS_MESSAGE[msg.result]);
+	    			}
+					dataObjectAttributeFileUploadFlag = true;
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
+					dataObjectAttributeFileUploadFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
 	}
 	
 	// Data 일괄 삭제
@@ -541,49 +572,94 @@
 		return true;
 	}
 	
-	// Data Attribute Dialog
-	function insertDataAttribute(dataId, dataName) {
-		dataAttributeDialog.dialog( "open" );
-		$("#attribute_file_data_id").val(dataId);
-		$("#attributeDataName").html(dataName);
+	// Data 일괄 등록 Layer 생성
+	function uploadDataFile() {
+		uploadDataFileDialog.dialog( "open" );
+		$("#data_file_name").val("");
+ 		$("#dataFileUploadLog > tbody:last").html("");
+	}
+	// Data 일괄 등록 Layer 닫기
+	function popClose() {
+		uploadDataFileDialog.dialog( "close" );
+		location.reload();
 	}
 	
-	var dataAttributeFileUploadFlag = true;
-	function dataAttributeFileUpload() {
-		var fileName = $("#attribute_file_name").val();
+	// 일괄등록(파일)
+	var dataFileUploadFlag = true;
+	function dataFileUpload() {
+		var fileName = $("#data_file_name").val();
 		if(fileName === "") {
 			alert(JS_MESSAGE["file.name.empty"]);
-			$("#attribute_file_name").focus();
+			$("#data_file_name").focus();
 			return false;
 		}
 		
-		if( fileName.lastIndexOf("json") <=0 && fileName.lastIndexOf("txt") <=0 ) {
+		if( fileName.lastIndexOf("xlsx") <=0 
+				&& fileName.lastIndexOf("xls") <=0
+				&& fileName.lastIndexOf("json") <=0 
+				&& fileName.lastIndexOf("txt") <=0 ) {
 			alert(JS_MESSAGE["file.ext.invalid"]);
-			$("#file_name").focus();
+			$("#data_file_name").focus();
 			return false;
 		}
 		
-		if(dataAttributeFileUploadFlag) {
-			dataAttributeFileUploadFlag = false;
-			$("#dataAttributeInfo").ajaxSubmit({
+		if(dataFileUploadFlag) {
+			dataFileUploadFlag = false;
+			var totalNumber = "<spring:message code='data.total.number'/>";
+			var successParsing = "<spring:message code='data.success.parsing'/>";
+			var failedParsing = "<spring:message code='data.fail.parsing'/>";
+			var insertSuccessCount = "<spring:message code='data.insert.success.db'/>";
+			var updateSuccessCount = "<spring:message code='data.update.success.db'/>";
+			var failCount = "<spring:message code='data.insert.fail.db'/>";
+			$("#dataFileInfo").ajaxSubmit({
 				type: "POST",
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
 						if(msg.parse_error_count != 0 || msg.insert_error_count != 0) {
-							$("#attribute_file_name").val("");
-							alert("업로딩 실패 건수가 있습니다");
+							$("#data_file_name").val("");
+							alert(JS_MESSAGE["fail.count.retry.select"]);
 						} else {
 							alert(JS_MESSAGE["update"]);
 						}
+						var content = ""
+						+ "<tr>"
+						+ 	"<td colspan=\"2\" style=\"text-align: center;\">Result of parsing</td>"
+						+ "</tr>"
+						+ "<tr>"
+						+ 	"<td> " + totalNumber + "</td>"
+						+ 	"<td> " + msg.total_count + "</td>"
+						+ "</tr>"
+						+ "<tr>"
+						+ 	"<td> " + successParsing + "</td>"
+						+ 	"<td> " + msg.parse_success_count + "</td>"
+						+ "</tr>"
+						+ "<tr>"
+						+ 	"<td> " + failedParsing + "</td>"
+						+ 	"<td> " + msg.parse_error_count + "</td>"
+						+ "</tr>"
+						+ "<tr>"
+						+ 	"<td> " + insertSuccessCount + "</td>"
+						+ 	"<td> " + msg.insert_success_count + "</td>"
+						+ "</tr>"
+						+ "<tr>"
+						+ 	"<td> " + updateSuccessCount + "</td>"
+						+ 	"<td> " + msg.update_success_count + "</td>"
+						+ "</tr>"
+						+ "<tr>"
+						+ 	"<td> " + failCount + "</td>"
+						+ 	"<td> " + msg.insert_error_count + "</td>"
+						+ "</tr>";
+						$("#dataFileUploadLog > tbody:last").html("");
+						$("#dataFileUploadLog > tbody:last").append(content);
 					} else {
 	    				alert(JS_MESSAGE[msg.result]);
 	    			}
-					dataAttributeFileUploadFlag = true;
+					dataFileUploadFlag = true;
 				},
 				error:function(request,status,error){
 					alert(JS_MESSAGE["ajax.error.message"]);
-					dataAttributeFileUploadFlag = true;
+					dataFileUploadFlag = true;
 				}
 			});
 		} else {
@@ -592,55 +668,13 @@
 		}
 	}
 	
-	// Data Object Attribute Daialog
-	function insertDataObjectAttribute(dataId, dataName) {
-		dataObjectAttributeDialog.dialog( "open" );
+	// Data Attribute 일괄 등록
+	function uploadProjectDataAttribute(dataId, dataName) {
+		uploadProjectDataAttributeDialog.dialog( "open" );
+		$("#object_attribute_file_name").val("");
+ 		$("#dataObjectAttributeUploadLog > tbody:last").html("");
 		$("#object_attribute_file_data_id").val(dataId);
 		$("#objectAttributeDataName").html(dataName);
-	}
-	
-	var dataObjectAttributeFileUploadFlag = true;
-	function dataObjectAttributeFileUpload() {
-		var fileName = $("#object_attribute_file_name").val();
-		if(fileName === "") {
-			alert(JS_MESSAGE["file.name.empty"]);
-			$("#object_attribute_file_name").focus();
-			return false;
-		}
-		
-		if( fileName.lastIndexOf("json") <=0 && fileName.lastIndexOf("txt") <=0 ) {
-			alert(JS_MESSAGE["file.ext.invalid"]);
-			$("#file_name").focus();
-			return false;
-		}
-		
-		if(dataObjectAttributeFileUploadFlag) {
-			dataObjectAttributeFileUploadFlag = false;
-			$("#dataObjectAttributeInfo").ajaxSubmit({
-				type: "POST",
-				dataType: "json",
-				success: function(msg){
-					if(msg.result == "success") {
-						if(msg.parse_error_count != 0 || msg.insert_error_count != 0) {
-							$("#object_attribute_file_name").val("");
-							alert("업로딩 실패 건수가 있습니다");
-						} else {
-							alert(JS_MESSAGE["update"]);
-						}
-					} else {
-	    				alert(JS_MESSAGE[msg.result]);
-	    			}
-					dataObjectAttributeFileUploadFlag = true;
-				},
-				error:function(request,status,error){
-					alert(JS_MESSAGE["ajax.error.message"]);
-					dataObjectAttributeFileUploadFlag = true;
-				}
-			});
-		} else {
-			alert(JS_MESSAGE["button.dobule.click"]);
-			return;
-		}
 	}
 	
 	// data attribute batch 등록
@@ -677,13 +711,6 @@
 		}
 	}
 	
-	// Data Object Attribute Daialog
-	function insertDataObjectAttribute(dataId, dataName) {
-		dataObjectAttributeDialog.dialog( "open" );
-		$("#object_attribute_file_data_id").val(dataId);
-		$("#objectAttributeDataName").html(dataName);
-	}
-	
 	// data object attribute batch 등록
 	var uploadDataObjectAttributeFileFlag = true;
 	function uploadDataObjectAttributeFile() {
@@ -718,6 +745,72 @@
 			}
 		}
 	}
+	
+	// 프로젝트 다이얼 로그
+	var projectDialog = $( ".projectDialog" ).dialog({
+		autoOpen: false,
+		width: 400,
+		height: 300,
+		modal: true,
+		resizable: false
+	});
+	// 데이터 일괄 등록 다이얼 로그
+	var uploadDataFileDialog = $( ".uploadDataFileDialog" ).dialog({
+		autoOpen: false,
+		width: 600,
+		height: 445,
+		modal: true,
+		resizable: false,
+		close: function() { location.reload(); }
+	});
+	// 데이터 제어 속성 다이얼 로그
+	var dataControlAttributeDialog = $( ".dataControlAttributeDialog" ).dialog({
+		autoOpen: false,
+		width: 500,
+		height: 255,
+		modal: true,
+		resizable: false
+	});
+	// 데이터 속성 다이얼 로그
+	var dataAttributeDialog = $( ".dataAttributeDialog" ).dialog({
+		autoOpen: false,
+		width: 600,
+		height: 350,
+		modal: true,
+		resizable: false
+	});
+	// 데이터 속성 하나 등록 다이얼 로그
+	var uploadDataAttributeDialog = $( ".uploadDataAttributeDialog" ).dialog({
+		autoOpen: false,
+		width: 600,
+		height: 445,
+		modal: true,
+		resizable: false
+	});
+	// 데이터 Object 속성 하나 등록
+	var uploadDataObjectAttributeDialog = $( ".uploadDataObjectAttributeDialog" ).dialog({
+		autoOpen: false,
+		width: 600,
+		height: 445,
+		modal: true,
+		resizable: false
+	});
+	// 데이터 속성 프로젝트 전체 등록 다이얼 로그
+	var uploadProjectDataAttributeDialog = $( ".uploadProjectDataAttributeDialog" ).dialog({
+		autoOpen: false,
+		width: 600,
+		height: 445,
+		modal: true,
+		resizable: false
+	});
+	// 프로젝트 데이터 Object 속성 하나 등록
+	var uploadProjectDataObjectAttributeDialog = $( ".uploadProjectDataObjectAttributeDialog" ).dialog({
+		autoOpen: false,
+		width: 600,
+		height: 445,
+		modal: true,
+		resizable: false
+	});
 </script>
 </body>
 </html>

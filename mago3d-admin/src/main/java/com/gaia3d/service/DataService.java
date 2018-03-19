@@ -77,6 +77,13 @@ public interface DataService {
 	Integer getRootParentCount(DataInfo dataInfo);
 	
 	/**
+	 * Data Attribute 정보 취득
+	 * @param data_id
+	 * @return
+	 */
+	DataInfoAttribute getDataAttribute(Long data_id);
+	
+	/**
 	 * data_key 를 이용하여 data_attribute_id 를 얻음
 	 * TODO 9.6 이후에 merge로 변경 예정 
 	 * @param data_key

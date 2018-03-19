@@ -233,7 +233,7 @@ public class WebUtil {
 //	}
 	
 	public static String getHostName() {
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		result = CommonsExecHelper.execute("hostname");
 		return (String)result.get("message");
 	}

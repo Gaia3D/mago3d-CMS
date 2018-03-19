@@ -46,7 +46,7 @@ public class DataLogAPIController {
 	@ResponseBody
 	public Map<String, Object> ajaxListDataChangeRequestLog(HttpServletRequest request, DataInfoLog dataInfoLog, @RequestParam(defaultValue="1") String pageNo) {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -97,7 +97,7 @@ public class DataLogAPIController {
 	@ResponseBody
 	public Map<String, Object> ajaxDataInfoLog(HttpServletRequest request, @RequestParam Long data_info_log_id) {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			DataInfoLog dataInfoLog = dataLogService.getDataInfoLog(data_info_log_id);

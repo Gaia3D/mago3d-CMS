@@ -46,7 +46,7 @@ public class DataAPIController {
 	public Map<String, Object> ajaxDataByDataId(HttpServletRequest request, @RequestParam("data_id") Long data_id) {
 		
 		log.info("@@@@@@@@@ data_id = {}", data_id);
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			map.put("dataInfo", dataService.getData(data_id));
@@ -69,7 +69,7 @@ public class DataAPIController {
 	public Map<String, Object> ajaxDataAttributeByDataId(HttpServletRequest request, @RequestParam("data_id") Long data_id) {
 		
 		log.info("@@@@@@@@@ data_id = {}", data_id);
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			map.put("dataInfoAttribute", dataService.getDataAttribute(data_id));
@@ -91,7 +91,7 @@ public class DataAPIController {
 	@ResponseBody
 	public Map<String, Object> ajaxProjectDataStatistics(HttpServletRequest request) {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			List<Project> projectList = CacheManager.getProjectList();
@@ -123,7 +123,7 @@ public class DataAPIController {
 	@ResponseBody
 	public Map<String, Object> ajaxDataStatusStatistics(HttpServletRequest request) {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			long useTotalCount = dataService.getDataTotalCountByStatus(DataInfo.STATUS_USE);
@@ -151,7 +151,7 @@ public class DataAPIController {
 	public Map<String, Object> ajaxUpdateDataLocationAndRotation(HttpServletRequest request, DataInfoLog dataInfoLog) {
 		
 		log.info("@@@@@@@@@ dataInfoLog = {}", dataInfoLog);
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);

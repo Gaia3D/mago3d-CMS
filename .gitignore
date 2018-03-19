@@ -1,3 +1,4 @@
 .gradle/
 .settings/
 mago3d-user/src/main/webapp/mklink
+.idea/

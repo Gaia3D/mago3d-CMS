@@ -72,7 +72,7 @@ public class CommonCodeController {
 	@PostMapping(value = "ajax-insert-code.do", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxInsertCode(HttpServletRequest request, CommonCode commonCode) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@@@@@ commonCode = {}", commonCode);
@@ -119,7 +119,7 @@ public class CommonCodeController {
 	@ResponseBody
 	public Map<String, String> ajaxUpdateCode(HttpServletRequest request, CommonCode commonCode) {
 		
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@@@@@ commonCode = {}", commonCode);
@@ -152,7 +152,7 @@ public class CommonCodeController {
 	@PostMapping(value = "ajax-delete-code.do", produces ="application/json; charset=utf8")
 	@ResponseBody
 	public Map<String, String> ajaxDeleteCode(HttpServletRequest request, CommonCode commonCode) {
-		Map<String, String> jSONObject = new HashMap<String, String>();
+		Map<String, String> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@@@@@ code_key = {}, view_order = {}", commonCode.getCode_key(), commonCode.getView_order());

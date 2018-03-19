@@ -23,7 +23,6 @@ import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheName;
 import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheType;
-import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoLog;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Project;
@@ -111,7 +110,7 @@ public class DataLogController {
 	@PostMapping(value = "ajax-update-data-log-status.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateDataInfoLogStatus(HttpServletRequest request, DataInfoLog dataInfoLog) {
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		
 		log.info("@@ dataInfoLog = {}", dataInfoLog);

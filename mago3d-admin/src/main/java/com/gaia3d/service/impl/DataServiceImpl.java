@@ -126,6 +126,16 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	/**
+	 * Data Attribute 정보 취득
+	 * @param data_id
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public DataInfoAttribute getDataAttribute(Long data_id) {
+		return dataMapper.getDataAttribute(data_id);
+	}
+	
+	/**
 	 * Data 등록
 	 * @param dataInfo
 	 * @return

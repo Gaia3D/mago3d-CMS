@@ -35,7 +35,7 @@ public class UserDeviceController {
 	@ResponseBody
 	public Map<String, Object> ajaxInsertUserDevice(HttpServletRequest request, UserDevice userDevice) {
 		
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			userDevice.setMethod_mode("insert");
@@ -67,7 +67,7 @@ public class UserDeviceController {
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateUserDevice(HttpServletRequest request, UserDevice userDevice) {
 		
-		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		Map<String, Object> jSONObject = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ userDevice = {}", userDevice);
