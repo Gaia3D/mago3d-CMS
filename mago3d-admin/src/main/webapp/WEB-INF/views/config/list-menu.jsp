@@ -95,13 +95,9 @@
 												</th>
 												<td class="col-input radio-set">
 													<input type="radio" id="useY" name="use_yn" value="Y"/>
-				<c:if test="${menu.use_yn eq 'Y' || 'N' }">
 													<label for="useY"><spring:message code='use'/></label>
-				</c:if>
 													<input type="radio" id="useN" name="use_yn" value="N"/>
-				<c:if test="${menu.use_yn eq 'Y' || 'N' }">
 													<label for="useN"><spring:message code='not.use'/></label>
-				</c:if>
 												</td>
 											</tr>
 											<tr>
@@ -110,13 +106,9 @@
 												</th>
 												<td class="col-input radio-set">
 													<input type="radio" id="displayY" name="display_yn" value="Y"/>
-				<c:if test="${menu.display_yn eq 'Y' || 'N' }">
 													<label for="displayY"><spring:message code='config.menu.display.use'/></label>
-				</c:if>
 													<input type="radio" id="displayN" name="display_yn" value="N"/>
-				<c:if test="${menu.display_yn eq 'Y' || 'N' }">
 													<label for="displayN"><spring:message code='config.menu.display.not.use'/></label>
-				</c:if>
 												</td>
 											</tr>
 											<tr>
