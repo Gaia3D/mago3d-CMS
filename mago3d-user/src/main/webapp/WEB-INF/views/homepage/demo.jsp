@@ -507,8 +507,6 @@
 			<col class="col-number" />
 			<col class="col-name" />
 			<col class="col-name" />
-			<col class="col-toggle" />
-			<col class="col-date" />
 			<tr>
 				<th rowspan="2" scope="col" class="col-number">No</th>
 				<th scope="col" class="col-name">Name</th>
