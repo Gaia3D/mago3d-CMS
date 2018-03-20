@@ -16,7 +16,7 @@ create table menu(
 	css_class			varchar(30),
 	default_yn			char(1)									default 'N',
 	use_yn				char(1)									default 'Y',
-	display_yn			char(1),
+	display_yn			char(1)									default 'Y',
 	description			varchar(256),
 	insert_date				timestamp without time zone			default now(),
 	constraint menu_pk primary key (menu_id)	

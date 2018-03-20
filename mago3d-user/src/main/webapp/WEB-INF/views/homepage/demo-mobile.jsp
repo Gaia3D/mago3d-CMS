@@ -99,15 +99,16 @@
 			<spring:message code='issue.recent.list.10'/>
 		</li>
 <c:if test="${empty issueList }">
-		<li style="text-align: center; padding-top: 20px; height: 50px;">
+		<li style="text-align: center; padding-top:20px; height: 50px;">
 			<spring:message code='issue.not.exist'/>
 		</li>
 </c:if>
 <c:if test="${!empty issueList }">
 	<c:forEach var="issue" items="${issueList}" varStatus="status">
 		<li>
-			<button class="issueBtn" type="button" title="<spring:message code='shortcut'/>" 
-				onclick="gotoIssue('${issue.project_id}', '${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">바로가기</button>
+			<button type="button" title="<spring:message code='shortcut'/>" 
+				onclick="gotoIssue('${issue.project_id}', '${issue.issue_id}', '${issue.issue_type}', '${issue.longitude}', '${issue.latitude}', '${issue.height}', '2')">
+				<spring:message code='shortcut'/></button>
 			<div class="info">
 				<p class="title">
 					<span>${issue.project_name }</span>
@@ -123,7 +124,7 @@
 	</c:forEach>
 </c:if>
 	</ul>
-
+	
 	<form:form id="searchForm" modelAttribute="issue" method="post" onsubmit="return false;">
 	<div id="searchMenuContent" class="searchWrap" style="margin-right: 20px;">
 		<table>
@@ -164,17 +165,17 @@
 			<tr style="height: 30px;">
 				<td><label for="order_word"><spring:message code='view.order'/></label></td>
 				<td><select id="order_word" name="order_word" class="select" style="width: 35%;">
-						<option value=""><spring:message code='basic'/></option>
-						<option value="insert_date"><spring:message code='register.date'/></option>
+						<option value=""> <spring:message code='basic'/> </option>
+				       	<option value="insert_date"> <spring:message code='register.date'/> </option>
 					</select>
 					<select id="order_value" name="order_value" class="select" style="width: 35%;">
 						<option value=""> <spring:message code='basic'/> </option>
-						<option value="ASC"> <spring:message code='asc'/> </option>
+					   	<option value="ASC"> <spring:message code='asc'/> </option>
 						<option value="DESC"> <spring:message code='desc'/> </option>
 					</select>
 					<select id="list_counter" name="list_counter" class="select" style="width: 25%;">
 						<option value="5"> <spring:message code='listing.5'/> </option>
-						<option value="10"> <spring:message code='listing.10'/> </option>
+					 	<option value="10"> <spring:message code='listing.10'/> </option>
 						<option value="50"> <spring:message code='listing.50'/> </option>
 					</select>
 				</td>
@@ -336,7 +337,7 @@
 			</ul>
 		</div>
 	</div>
-
+	
 	<form:form id="issue" modelAttribute="issue" method="post" onsubmit="return false;">
 	<div id="insertIssueMenuContent" class="insertIssueWrap">
 		<table>
@@ -363,115 +364,116 @@
 <c:forEach var="commonCode" items="${issueTypeList}">
 						<option value="${commonCode.code_key}">${commonCode.code_name}</option>
 </c:forEach>
-					</form:select></td>
-				</tr>
-				<tr style="height: 35px;">
-					<td>
-						<spring:message code='issue.location'/>
-					</td>
-					<td>
-						<button type="button" id="insertIssueEnableButton" class="btn" style="width: 93%; font-size: 10.5px; margin-bottom: 2px;"><spring:message code='issue.insert.control.button'/></button>
-					</td>
-				</tr>
-				<tr style="height: 35px;">
-					<td>
-						<form:label path="data_key"><spring:message code='data.name'/></form:label>
-						<span class="icon-glyph glyph-emark-dot color-warning"></span>
-					</td>
-					<td>
-						<form:input path="data_key" readonly="true" size="25" cssStyle="background-color: #CBCBCB;" />
-						<form:errors path="data_key" cssClass="error" />
-						<form:hidden path="object_key"/>
-						<form:hidden path="height"/>
-					</td>
-				</tr>
-				<tr style="height: 35px;">
-					<td>
-						<form:label path="latitude"><spring:message code='latitude'/></form:label>
-						<span class="icon-glyph glyph-emark-dot color-warning"></span>
-					</td>
-					<td>
-						<form:input path="latitude" readonly="true" size="25" cssStyle="background-color: #CBCBCB;" />
-						<form:errors path="latitude" cssClass="error" />
-					</td>
-				</tr>
-				<tr style="height: 35px;">
-					<td>
-						<form:label path="longitude"><spring:message code='longitude'/></form:label>
-						<span class="icon-glyph glyph-emark-dot color-warning"></span>
-					</td>
-					<td>
-						<form:input path="longitude" readonly="true" size="25" cssStyle="background-color: #CBCBCB;" />
-						<form:errors path="longitude" cssClass="error" />
-					</td>
-				</tr>
-				<tr style="height: 60px;">
-					<td><form:label path="title"><spring:message code='issue.title'/></form:label>
-						<span class="icon-glyph glyph-emark-dot color-warning"></span>
-					</td>
-					<td>
-						<form:textarea path="title" rows="2" cols="32" />
-						<form:errors path="title" cssClass="error" />
-					</td>
-				</tr>
-
-				<tr style="height: 35px;">
-					<td><form:label path="priority"><spring:message code='issue.priority'/></form:label>
-						<span class="icon-glyph glyph-emark-dot color-warning"></span>
-					</td>
-					<td>
-						<form:select path="priority" cssClass="select">
+					</form:select>
+				</td>
+			</tr>
+			<tr style="height: 35px;">
+				<td>
+					<spring:message code='issue.location'/>
+				</td>
+				<td>
+					<button type="button" id="insertIssueEnableButton" class="btn" style="width: 93%; font-size: 10.5px; margin-bottom: 2px;"><spring:message code='issue.insert.control.button'/></button>
+				</td>
+			</tr>
+			<tr style="height: 35px;">
+				<td>
+					<form:label path="data_key"><spring:message code='data.name'/></form:label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</td>
+				<td>
+					<form:input path="data_key" readonly="true" size="25" cssStyle="background-color: #CBCBCB;" />
+					<form:errors path="data_key" cssClass="error" />
+					<form:hidden path="object_key"/>
+					<form:hidden path="height"/>
+				</td>
+			</tr>
+			<tr style="height: 35px;">
+				<td>
+					<form:label path="latitude"><spring:message code='latitude'/></form:label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</td>
+				<td>
+					<form:input path="latitude" readonly="true" size="25" cssStyle="background-color: #CBCBCB;" />
+					<form:errors path="latitude" cssClass="error" />
+				</td>
+			</tr>
+			<tr style="height: 35px;">
+				<td>
+					<form:label path="longitude"><spring:message code='longitude'/></form:label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</td>
+				<td>
+					<form:input path="longitude" readonly="true" size="25" cssStyle="background-color: #CBCBCB;" />
+					<form:errors path="longitude" cssClass="error" />
+				</td>
+			</tr>
+			<tr style="height: 60px;">
+				<td><form:label path="title"><spring:message code='issue.title'/></form:label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</td>
+				<td>
+					<form:textarea path="title" rows="2" cols="32" />
+					<form:errors path="title" cssClass="error" />
+				</td>
+			</tr>
+			
+			<tr style="height: 35px;">
+				<td><form:label path="priority"><spring:message code='issue.priority'/></form:label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</td>
+				<td>
+					<form:select path="priority" cssClass="select">
 <c:forEach var="commonCode" items="${issuePriorityList}">
 						<option value="${commonCode.code_key}">${commonCode.code_name}</option>
 </c:forEach>
-						</form:select>
-					</td>
-				</tr>
-
-				<tr style="height: 35px;">
-					<td><form:label path="due_day"><spring:message code='issue.duedate'/></form:label></td>
-					<td><form:hidden path="due_date" />
-						<input type="text" id="due_day" name="due_day" class="date" style="width: 33%;" maxlength="10" /> 
-						<spring:message code='day'/> 
-						<input type="text" id="due_hour" name="due_hour" placeholder=" 00" maxlength="2" style="width: 12%;"/> : 
-						<input type="text" id="due_minute" name="due_minute" placeholder=" 00" maxlength="2" style="width: 12%;"/> 
-						<spring:message code='minute'/>
-					</td>
-				</tr>
-
-				<tr style="height: 35px;">
+					</form:select>
+				</td>
+			</tr>
+			
+			<tr style="height: 35px;">
+				<td><form:label path="due_day"><spring:message code='issue.duedate'/></form:label></td>
+				<td><form:hidden path="due_date" />
+					<input type="text" id="due_day" name="due_day" class="date" style="width: 33%;" maxlength="10" /> 
+					<spring:message code='day'/> 
+					<input type="text" id="due_hour" name="due_hour" placeholder=" 00" maxlength="2" style="width: 12%;"/> : 
+					<input type="text" id="due_minute" name="due_minute" placeholder=" 00" maxlength="2" style="width: 12%;"/> 
+					<spring:message code='minute'/>
+				</td>
+			</tr>
+			
+			<tr style="height: 35px;">
 				<spring:message code='notice.preparing' var='noticePreparing' />
 				<spring:message code='issue.assignee.description' var="assigneeDescription"/>
-					<td><form:label path="assignee"><spring:message code='issue.assignee'/></form:label></td>
-					<td><form:input path="assignee" cssClass="m" placeholder="${assigneeDescription}" style="width: 65%"/>
-						<button type="button" class="btn" onclick="alert('${noticePreparing}');" style="width: 26%; margin-top: 3px;"><spring:message code='selection'/></button>
-						<form:errors path="assignee" cssClass="error" />
-					</td>
-				</tr>
-
-				<tr style="height: 35px;">
+				<td><form:label path="assignee"><spring:message code='issue.assignee'/></form:label></td>
+				<td><form:input path="assignee" cssClass="m" placeholder="${assigneeDescription}" style="width: 65%"/>
+					<button type="button" class="btn" onclick="alert('${noticePreparing}');" style="width: 26%; margin-top: 3px;"><spring:message code='selection'/></button>
+					<form:errors path="assignee" cssClass="error" />
+				</td>
+			</tr>
+			
+			<tr style="height: 35px;">
 				<spring:message code='issue.reporter.description' var="reporterDescription"/>
-					<td><form:label path="reporter"><spring:message code='issue.reporter'/></form:label></td>
-					<td><form:input path="reporter" cssClass="m" placeholder="${reporterDescription}" style="width: 65%"/>
-						<button type="button" class="btn" onclick="alert('${noticePreparing}');" style="width: 26%; margin-top: 3px;"><spring:message code='selection'/></button>
-						<form:errors path="reporter" cssClass="error" />
-					</td>
-				</tr>
-
-				<tr>
-					<td><form:label path="contents"><spring:message code='issue.contents'/></form:label>
-						<span class="icon-glyph glyph-emark-dot color-warning"></span>
-					</td>
-					<td><form:textarea path="contents" rows="5" cols="32"/>
-						<form:errors path="contents" cssClass="error" />
-					</td>
-				</tr>
-			</table>
-
-			<div class="btns">
-				<button type="button" id="issueSaveButton" class="full"><spring:message code='save'/></button>
-			</div>
+				<td><form:label path="reporter"><spring:message code='issue.reporter'/></form:label></td>
+				<td><form:input path="reporter" cssClass="m" placeholder="${reporterDescription}" style="width: 65%"/>
+					<button type="button" class="btn" onclick="alert('${noticePreparing}');" style="width: 26%; margin-top: 3px;"><spring:message code='selection'/></button>
+					<form:errors path="reporter" cssClass="error" />
+				</td>
+			</tr>
+			
+			<tr>
+				<td><form:label path="contents"><spring:message code='issue.contents'/></form:label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</td>
+				<td><form:textarea path="contents" rows="5" cols="32"/>
+					<form:errors path="contents" cssClass="error" />
+				</td>
+			</tr>
+		</table>
+		
+		<div class="btns">
+			<button type="button" id="issueSaveButton" class="full"><spring:message code='save'/></button>
 		</div>
+	</div>
 	</form:form>
 	
 	<div id="treeMenuContent" class="treeWrap">
@@ -493,7 +495,7 @@
 			</table>
 		</div>
 	</div>
-	
+
 	<div id="chartMenuContent" class="chartWrap">
 		<div>
 			<h3><spring:message code='demo.chart.data.number'/></h3>
@@ -565,7 +567,7 @@
 		</div>
 	</div>
 	</form>
-
+	
 	<div id="configMenuContent" class="configWrap">
 		<div>
 			<h3><spring:message code='label'/></h3>
@@ -1250,7 +1252,7 @@
 	
 	// API 메뉴시작
 	// object 정보 표시 call back function
-	function showSelectedObject(dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
+	function showSelectedObject(projectId, dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
 		var objectInfoViewFlag = $(':radio[name="objectInfo"]:checked').val();
 		if(objectInfoViewFlag) {
 			$("#moveDataKey").val(dataKey);
@@ -1370,7 +1372,7 @@
 	var isUpdateLocationAndRotation = true;
 	$("#updateLocationAndRotation").click(function() {
 		if(!changeLocationAndRotationCheck()) return false;
-		
+								
 		if(isUpdateLocationAndRotation) {
 			isUpdateLocationAndRotation = false;
 			var url = "/data/ajax-update-data-location-and-rotation.do";
@@ -1390,7 +1392,8 @@
 				headers: { "X-mago3D-Header" : "mago3D"},
 				success : function(msg) {
 					if(msg.result === "success") {
-						alert(JS_MESSAGE["update"]);
+						alert(JS_MESSAGE["insert"]);
+						// ajax
 					} else {
 						alert(JS_MESSAGE[msg.result]);
 					}
@@ -1795,6 +1798,7 @@
 		var requestMessage = "<spring:message code='request'/>";
 		var completeMessage = "<spring:message code='complete'/>";
 		var rejectMessage = "<spring:message code='reject'/>";
+		var resetMessage = "<spring:message code='reset'/>";
 		
 		var url = "/data/ajax-list-data-change-request-log.do";
 		var info = "";
@@ -1822,6 +1826,7 @@
 							if(dataInfoLog.status == "0") status = requestMessage;
 							else if(dataInfoLog.status == "1") status = completeMessage;
 							else if(dataInfoLog.status == "2") status = rejectMessage;
+							else if(dataInfoLog.status == "3") status = resetMessage;
 							
 							content = content 
 							+	"<tr style=\"height: 30px;\">"
@@ -2048,7 +2053,7 @@
 	}
 	
 	// moved data callback
-	function showMovedData(dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
+	function showMovedData(projectId, dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
 		$("#moveDataKey").val(dataKey);
         $("#moveLatitude").val(latitude);
         $("#moveLongitude").val(longitude);

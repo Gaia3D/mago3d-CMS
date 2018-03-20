@@ -1212,7 +1212,7 @@
 	
 	// API 메뉴시작
 	// object 정보 표시 call back function
-	function showSelectedObject(dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
+	function showSelectedObject(projectId, dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
 		var objectInfoViewFlag = $(':radio[name="objectInfo"]:checked').val();
 		if(objectInfoViewFlag) {
 			$("#moveDataKey").val(dataKey);
@@ -2013,7 +2013,7 @@
 	}
 	
 	// moved data callback
-	function showMovedData(dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
+	function showMovedData(projectId, dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
 		$("#moveDataKey").val(dataKey);
         $("#moveLatitude").val(latitude);
         $("#moveLongitude").val(longitude);
