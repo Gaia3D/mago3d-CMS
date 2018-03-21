@@ -1,1651 +1,677 @@
+/* eslint-env jquery */
 'use strict';
 
 /**
- * mago3djs API
- * 
- * @alias API
- * @class API
- * 
- * @param {any} apiName api이름
+ * An API that interacts with the on-screen UI. Class name to be modified by APIGateWay or API class
+ * @class MagoFacade
  */
-function API(apiName)
+/**
+ * mago3d 활성화/비활성화
+ * @param {ManagerFactory} managerFactoryInstance 
+ * @param {boolean} isShow true = show, false = hide
+ */
+function changeMagoStateAPI(managerFactoryInstance, isShow) 
 {
-	if (!(this instanceof API)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	// mago3d 활성화/비활성화 여부
-	this.magoEnable = true;
-
-	// api 이름
-	this.apiName = apiName;
+	if (managerFactoryInstance === null) { return; } 
 	
-	// project id
-	this.projectId = null;
-	this.projectDataFolder = null;
-	// objectIds
-	this.objectIds = null;
-	// data_key
-	this.dataKey = null;
-	// issueId
-	this.issueId = null;
-	// issueType
-	this.issueType = null;
-	// drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
-	this.drawType = 0;
-
-	// 위도
-	this.latitude = 0;
-	// 경도
-	this.longitude = 0;
-	// 높이
-	this.elevation = 0;
-	// heading
-	this.heading = 0;
-	// pitch
-	this.pitch = 0;
-	// roll
-	this.roll = 0;
-	// duration
-	this.duration = 0;
-
-	// 속성
-	this.property = null;
-	// 색깔
-	this.color = 0;
-	// structs = MSP, outfitting = MOP
-	this.blockType = null;
-	// outfitting 표시/비표시
-	this.showOutFitting = false;
-	// label 표시/비표시
-	this.showLabelInfo = true;
-	// boundingBox 표시/비표시
-	this.showBoundingBox = false;
-	// 그림자 표시/비표시
-	this.showShadow = false;
-	// frustum culling 가시 거리(M단위)
-	this.frustumFarDistance = 0;
-	// move mode 
-	this.objectMoveMode = CODE.moveMode.NONE;
-	// 이슈 등록 표시
-	this.issueInsertEnable = false;
-	// object 정보 표시
-	this.objectInfoViewEnable = false;
-	// 이슈 목록 표시
-	this.nearGeoIssueListEnable = false;
-	// occlusion culling
-	this.occlusionCullingEnable = false;
-	//
-	this.insertIssueState = 0;
-	
-	// LOD1
-	this.lod0DistInMeters = null;
-	this.lod1DistInMeters = null;
-	this.lod2DistInMeters = null;
-	this.lod3DistInMeters = null;
-	this.lod4DistInMeters = null;
-	this.lod5DistInMeters = null;
-	
-	// Lighting
-	this.ambientReflectionCoef = null;
-	this.diffuseReflectionCoef = null;
-	this.specularReflectionCoef = null;
-	this.ambientColor = null;
-	this.specularColor = null;
-	
-	this.ssaoRadius = null;
-	//
-	this.FPVMode = false;
+	var api = new API("changeMagoState");
+	api.setMagoEnable(isShow);
+	managerFactoryInstance.callAPI(api);
 };
-
-API.prototype.getMagoEnable = function() 
-{
-	return this.magoEnable;
-};
-API.prototype.setMagoEnable = function(magoEnable) 
-{
-	this.magoEnable = magoEnable;
-};
-
-API.prototype.getAPIName = function() 
-{
-	return this.apiName;
-};
-
-API.prototype.getProjectId = function() 
-{
-	return this.projectId;
-};
-API.prototype.setProjectId = function(projectId) 
-{
-	this.projectId = projectId;
-};
-
-API.prototype.getProjectDataFolder = function() 
-{
-	return this.projectDataFolder;
-};
-API.prototype.setProjectDataFolder = function(projectDataFolder) 
-{
-	this.projectDataFolder = projectDataFolder;
-};
-
-API.prototype.getObjectIds = function() 
-{
-	return this.objectIds;
-};
-API.prototype.setObjectIds = function(objectIds) 
-{
-	this.objectIds = objectIds;
-};
-
-API.prototype.getIssueId = function() 
-{
-	return this.issueId;
-};
-API.prototype.setIssueId = function(issueId) 
-{
-	this.issueId = issueId;
-};
-API.prototype.getIssueType = function() 
-{
-	return this.issueType;
-};
-API.prototype.setIssueType = function(issueType) 
-{
-	this.issueId = issueType;
-};
-
-API.prototype.getDataKey = function() 
-{
-	return this.dataKey;
-};
-API.prototype.setDataKey = function(dataKey) 
-{
-	this.dataKey = dataKey;
-};
-
-API.prototype.getLatitude = function() 
-{
-	return this.latitude;
-};
-API.prototype.setLatitude = function(latitude) 
-{
-	this.latitude = latitude;
-};
-
-API.prototype.getLongitude = function() 
-{
-	return this.longitude;
-};
-API.prototype.setLongitude = function(longitude) 
-{
-	this.longitude = longitude;
-};
-
-API.prototype.getElevation = function() 
-{
-	return this.elevation;
-};
-API.prototype.setElevation = function(elevation) 
-{
-	this.elevation = elevation;
-};
-
-API.prototype.getHeading = function() 
-{
-	return this.heading;
-};
-API.prototype.setHeading = function(heading) 
-{
-	this.heading = heading;
-};
-
-API.prototype.getPitch = function() 
-{
-	return this.pitch;
-};
-API.prototype.setPitch = function(pitch) 
-{
-	this.pitch = pitch;
-};
-
-API.prototype.getRoll = function() 
-{
-	return this.roll;
-};
-API.prototype.setRoll = function(roll) 
-{
-	this.roll = roll;
-};
-
-API.prototype.getProperty = function() 
-{
-	return this.property;
-};
-API.prototype.setProperty = function(property) 
-{
-	this.property = property;
-};
-
-API.prototype.getColor = function() 
-{
-	return this.color;
-};
-API.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-
-API.prototype.getBlockType = function() 
-{
-	return this.blockType;
-};
-API.prototype.setBlockType = function(blockType) 
-{
-	this.blockType = blockType;
-};
-
-API.prototype.getShowOutFitting = function() 
-{
-	return this.showOutFitting;
-};
-API.prototype.setShowOutFitting = function(showOutFitting) 
-{
-	this.showOutFitting = showOutFitting;
-};
-
-
-API.prototype.getShowLabelInfo = function() 
-{
-	return this.showLabelInfo;
-};
-API.prototype.setShowLabelInfo = function(showLabelInfo) 
-{
-	this.showLabelInfo = showLabelInfo;
-};
-API.prototype.getShowBoundingBox = function() 
-{
-	return this.showBoundingBox;
-};
-API.prototype.setShowBoundingBox = function(showBoundingBox) 
-{
-	this.showBoundingBox = showBoundingBox;
-};
-
-API.prototype.getShowShadow = function() 
-{
-	return this.showShadow;
-};
-API.prototype.setShowShadow = function(showShadow) 
-{
-	this.showShadow = showShadow;
-};
-
-API.prototype.getFrustumFarDistance = function() 
-{
-	return this.frustumFarDistance;
-};
-API.prototype.setFrustumFarDistance = function(frustumFarDistance) 
-{
-	this.frustumFarDistance = frustumFarDistance;
-};
-
-API.prototype.getObjectMoveMode = function() 
-{
-	return this.objectMoveMode;
-};
-API.prototype.setObjectMoveMode = function(objectMoveMode) 
-{
-	this.objectMoveMode = objectMoveMode;
-};
-
-API.prototype.getIssueInsertEnable = function() 
-{
-	return this.issueInsertEnable;
-};
-API.prototype.setIssueInsertEnable = function(issueInsertEnable) 
-{
-	this.issueInsertEnable = issueInsertEnable;
-};
-API.prototype.getObjectInfoViewEnable = function() 
-{
-	return this.objectInfoViewEnable;
-};
-API.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
-{
-	this.objectInfoViewEnable = objectInfoViewEnable;
-};
-API.prototype.getOcclusionCullingEnable = function() 
-{
-	return this.occlusionCullingEnable;
-};
-API.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
-{
-	this.occlusionCullingEnable = occlusionCullingEnable;
-};
-API.prototype.getNearGeoIssueListEnable = function() 
-{
-	return this.nearGeoIssueListEnable;
-};
-API.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
-{
-	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
-};
-
-API.prototype.getInsertIssueState = function() 
-{
-	return this.insertIssueState;
-};
-API.prototype.setInsertIssueState = function(insertIssueState) 
-{
-	this.insertIssueState = insertIssueState;
-};
-
-API.prototype.getDrawType = function() 
-{
-	return this.drawType;
-};
-API.prototype.setDrawType = function(drawType) 
-{
-	this.drawType = drawType;
-};
-
-API.prototype.getLod0DistInMeters = function() 
-{
-	return this.lod0DistInMeters;
-};
-API.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
-{
-	this.lod0DistInMeters = lod0DistInMeters;
-};
-API.prototype.getLod1DistInMeters = function() 
-{
-	return this.lod1DistInMeters;
-};
-API.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
-{
-	this.lod1DistInMeters = lod1DistInMeters;
-};
-API.prototype.getLod2DistInMeters = function() 
-{
-	return this.lod2DistInMeters;
-};
-API.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
-{
-	this.lod2DistInMeters = lod2DistInMeters;
-};
-API.prototype.getLod3DistInMeters = function() 
-{
-	return this.lod3DistInMeters;
-};
-API.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
-{
-	this.lod3DistInMeters = lod3DistInMeters;
-};
-API.prototype.getLod4DistInMeters = function() 
-{
-	return this.lod4DistInMeters;
-};
-API.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
-{
-	this.lod4DistInMeters = lod4DistInMeters;
-};
-API.prototype.getLod5DistInMeters = function() 
-{
-	return this.lod5DistInMeters;
-};
-API.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
-{
-	this.lod5DistInMeters = lod5DistInMeters;
-};
-
-API.prototype.getAmbientReflectionCoef = function() 
-{
-	return this.ambientReflectionCoef;
-};
-API.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
-{
-	this.ambientReflectionCoef = ambientReflectionCoef;
-};
-API.prototype.getDiffuseReflectionCoef = function() 
-{
-	return this.diffuseReflectionCoef;
-};
-API.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
-{
-	this.diffuseReflectionCoef = diffuseReflectionCoef;
-};
-API.prototype.getSpecularReflectionCoef = function() 
-{
-	return this.specularReflectionCoef;
-};
-API.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
-{
-	this.specularReflectionCoef = specularReflectionCoef;
-};
-API.prototype.getAmbientColor = function() 
-{
-	return this.ambientColor;
-};
-API.prototype.setAmbientColor = function(ambientColor) 
-{
-	this.ambientColor = ambientColor;
-};
-API.prototype.getSpecularColor = function() 
-{
-	return this.specularColor;
-};
-API.prototype.setSpecularColor = function(specularColor) 
-{
-	this.specularColor = specularColor;
-};
-API.prototype.getSsaoRadius = function() 
-{
-	return this.ssaoRadius;
-};
-API.prototype.setSsaoRadius = function(ssaoRadius) 
-{
-	this.ssaoRadius = ssaoRadius;
-};
-API.prototype.getFPVMode = function()
-{
-	return this.FPVMode;
-};
-API.prototype.setFPVMode = function(value)
-{
-	this.FPVMode = value;
-};
-
-API.prototype.getDuration = function()
-{
-	return this.duration;
-};
-API.prototype.setDuration = function(duration)
-{
-	this.duration = duration;
-};
-'use strict';
 
 /**
- * api 처리 결과를 담당하는 callback function
- * @param functionName policy json의 geo_callback_apiresult 속성값
- * @param apiName 호출한 api 이름
- * @param result 결과값
+ * Label show/hide
+ * @param {ManagerFactory} managerFactoryInstance 
+ * @param {boolean} isShow true = show, false = hide
  */
-function apiResultCallback(functionName, apiName, result) 
+function changeLabelAPI(managerFactoryInstance, isShow) 
 {
-	window[functionName](apiName, result);
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeLabel");
+	api.setShowLabelInfo(isShow);
+	managerFactoryInstance.callAPI(api);
 }
 
 /**
- * 선택한 object 정보를 화면에 표시
- * @param functionName callback
- * @param projectId
- * @param data_key
- * @param objectId
- * @param latitude
- * @param longitude
- * @param elevation
- * @param heading
- * @param pitch
- * @param roll
+ * boundingBox show/hide
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} isShow true = show, false = hide
+ */
+function changeBoundingBoxAPI(managerFactoryInstance, isShow) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeBoundingBox");
+	api.setShowBoundingBox(isShow);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 속성값에 의한 가시화 유무설정
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} isShow true = 표시, false = 비표시
+ */
+function changePropertyRenderingAPI(managerFactoryInstance, isShow, projectId, property) 
+{
+	if (managerFactoryInstance === null) { return; } 
+		
+	var api = new API("changePropertyRendering");
+	api.setShowShadow(isShow);
+	api.setProjectId(projectId);
+	api.setProperty(property);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 그림자 표시/비표시
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} isShow true = 활성화, false = 비활성화
+ */
+function changeShadowAPI(managerFactoryInstance, isShow) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeShadow");
+	api.setShowShadow(isShow);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * color 변경
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} projectId 프로젝트 아이디
+ * @param {string} dataKey data key
+ * @param {string} objectIds object id. 복수개의 경우 , 로 입력
+ * @param {string} property 속성값 예)isMain=true
+ * @param {string} color R, G, B 색깔을 ',' 로 연결한 string 값을 받음.
+ */
+function changeColorAPI(managerFactoryInstance, projectId, dataKey, objectIds, property, color) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeColor");
+	api.setProjectId(projectId);
+	api.setDataKey(dataKey);
+	api.setObjectIds(objectIds);
+	api.setProperty(property);
+	api.setColor(color);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * location and rotation 변경
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} projectId
+ * @param {string} dataKey
+ * @param {string} latitude 위도
+ * @param {string} longitude 경도
+ * @param {string} height 높이
+ * @param {string} heading 좌, 우
+ * @param {string} pitch 위, 아래
+ * @param {string} roll 좌, 우 기울기
+ */
+function changeLocationAndRotationAPI(managerFactoryInstance, projectId, dataKey, latitude, longitude, height, heading, pitch, roll) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeLocationAndRotation");
+	api.setProjectId(projectId);
+	api.setDataKey(dataKey);
+	api.setLatitude(latitude);
+	api.setLongitude(longitude);
+	api.setElevation(height);
+	api.setHeading(heading);
+	api.setPitch(pitch);
+	api.setRoll(roll);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 마우스 클릭 객체 이동 대상 변경
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} objectMoveMode 0 = All, 1 = object, 2 = None
+ */
+function changeObjectMoveAPI(managerFactoryInstance, objectMoveMode) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeObjectMove");
+	api.setObjectMoveMode(objectMoveMode);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 마우스로 이동한 객체 정보를 브라우저내 저장
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} objectMoveMode 0 = All, 1 = object, 2 = None
+ */
+function saveObjectMoveAPI(managerFactoryInstance, objectMoveMode) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("saveObjectMove");
+	api.setObjectMoveMode(objectMoveMode);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 브라우저내 모든 마우스 이동 정보를 삭제
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} objectMoveMode 0 = All, 1 = object, 2 = None
+ */
+function deleteAllObjectMoveAPI(managerFactoryInstance, objectMoveMode) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("deleteAllObjectMove");
+	api.setObjectMoveMode(objectMoveMode);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 브라우저내 모든 색깔 변경 이력을 삭제
+ * @param {ManagerFactory} managerFactoryInstance
+ */
+function deleteAllChangeColorAPI(managerFactoryInstance) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("deleteAllChangeColor");
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 이슈 등록 활성화 유무
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} flag true = 활성화, false = 비활성화
+ */
+function changeInsertIssueModeAPI(managerFactoryInstance, flag) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeInsertIssueMode");
+	api.setIssueInsertEnable(flag);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * object 정보 표시 활성화 유무
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} flag true = 활성화, false = 비활성화
+ */
+function changeObjectInfoViewModeAPI(managerFactoryInstance, flag) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeObjectInfoViewMode");
+	api.setObjectInfoViewEnable(flag);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * Object Occlusion culling
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} flag true = 활성화, false = 비활성화
+ * @param {string} dataKey
+ */
+function changeOcclusionCullingAPI(managerFactoryInstance, flag, dataKey) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeOcclusionCulling");
+	api.setOcclusionCullingEnable(flag);
+	api.setDataKey(dataKey);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 1인칭, 3인칭 모드 개발중...
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} flag true = 활성화, false = 비활성화
+ */
+function changeFPVModeAPI(managerFactoryInstance, flag)
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeFPVMode");
+	api.setFPVMode(flag);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 현재 위치 근처 issue list. false인 경우 clear
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} flag true = 활성화, false = 비활성화
+ */
+function changeNearGeoIssueListViewModeAPI(managerFactoryInstance, flag) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeNearGeoIssueListViewMode");
+	api.setNearGeoIssueListEnable(flag);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * TODO 이건 위에 이슈 등록 활성화, 비활성화 api로 통합이 가능할거 같음
+ * issue 등록 geo 정보 관련 상태 변경
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} insertIssueState 이슈 등록 좌표 상태
+ */
+function changeInsertIssueStateAPI(managerFactoryInstance, insertIssueState) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeInsertIssueState");
+	api.setInsertIssueState(insertIssueState);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * LOD 설정을 변경
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} lod0DistInMeters
+ * @param {string} lod1DistInMeters
+ * @param {string} lod2DistInMeters
+ * @param {string} lod3DistInMeters
+ * @param {string} lod4DistInMeters
+ * @param {string} lod5DistInMeters
+ */
+function changeLodAPI(managerFactoryInstance, lod0DistInMeters, lod1DistInMeters, lod2DistInMeters, lod3DistInMeters, lod4DistInMeters, lod5DistInMeters)
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeLod");
+	api.setLod0DistInMeters(lod0DistInMeters);
+	api.setLod1DistInMeters(lod1DistInMeters);
+	api.setLod2DistInMeters(lod2DistInMeters);
+	api.setLod3DistInMeters(lod3DistInMeters);
+	api.setLod4DistInMeters(lod4DistInMeters);
+	api.setLod5DistInMeters(lod5DistInMeters);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * Lighting 설정
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} ambientReflectionCoef
+ * @param {string} diffuseReflectionCoef
+ * @param {string} specularReflectionCoef
+ * @param {string} ambientColor
+ * @param {string} specularColor
+ */
+function changeLightingAPI(managerFactoryInstance, ambientReflectionCoef, diffuseReflectionCoef, specularReflectionCoef, ambientColor, specularColor)
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeLighting");
+	api.setAmbientReflectionCoef(ambientReflectionCoef);
+	api.setDiffuseReflectionCoef(diffuseReflectionCoef);
+	api.setSpecularReflectionCoef(specularReflectionCoef);
+	api.setAmbientColor(ambientColor);
+	api.setSpecularColor(specularColor);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * SSAO Radius 설정
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} ssaoRadius
+ */
+function changeSsaoRadiusAPI(managerFactoryInstance, ssaoRadius)
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeSsaoRadius");
+	api.setSsaoRadius(ssaoRadius);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 화면에 있는 모든 데이터를 삭제, 비표시
+ * @param {ManagerFactory} managerFactoryInstance
+ */
+function clearAllDataAPI(managerFactoryInstance)
+{	
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("clearAllData");
+	MagoConfig.clearAllData();
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * pin image를 그림
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
+ * @param {string} issue_id 이슈 고유키
+ * @param {string} issue_type 이슈 고유키
+ * @param {string} data_key 데이터 고유키
+ * @param {string} latitude 데이터 고유키
+ * @param {string} longitude 데이터 고유키
+ * @param {string} height 데이터 고유키
+ */
+function drawInsertIssueImageAPI(managerFactoryInstance, drawType, issue_id, issue_type, data_key, latitude, longitude, height) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("drawInsertIssueImage");
+	api.setDrawType(drawType);
+	api.setIssueId(issue_id);
+	api.setIssueId(issue_type);
+	api.setDataKey(data_key);
+	api.setLatitude(latitude);
+	api.setLongitude(longitude);
+	api.setElevation(height);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 해당 프로젝트를 로딩하고 이동하기
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} projectId project id
+ * @param {string} latitude 데이터 고유키
+ * @param {string} longitude 데이터 고유키
+ * @param {string} height 데이터 고유키
+ * @param {string} duration 이동하는 시간
+ */
+function gotoProjectAPI(managerFactoryInstance, projectId, projectData, projectDataFolder, longitude, latitude, height, duration) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	MagoConfig.setData(CODE.PROJECT_ID_PREFIX + projectId, projectData);
+	MagoConfig.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder, projectDataFolder);
+	
+	var api = new API("gotoProject");
+	api.setProjectId(projectId);
+	api.setProjectDataFolder(projectDataFolder);
+	api.setLatitude(latitude);
+	api.setLongitude(longitude);
+	api.setElevation(height);
+	api.setDuration(duration);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 해당 프로젝트를 로딩하고 Issue 등록 지점으로 이동하기
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} projectId project id
+ * @param {string} issueId issue id
+ * @param {string} issueType issue type
+ * @param {string} latitude 데이터 고유키
+ * @param {string} longitude 데이터 고유키
+ * @param {string} height 데이터 고유키
+ * @param {string} duration 이동하는 시간
+ */
+function gotoIssueAPI(managerFactoryInstance, projectId, projectData, projectDataFolder, issueId, issueType, longitude, latitude, height, duration)
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	MagoConfig.setData(CODE.PROJECT_ID_PREFIX + projectId, projectData);
+	MagoConfig.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder, projectDataFolder);
+	
+	var api = new API("gotoIssue");
+	api.setProjectId(projectId);
+	api.setProjectDataFolder(projectDataFolder);
+	api.setIssueId(issueId);
+	api.setIssueType(issueType);
+	api.setLatitude(latitude);
+	api.setLongitude(longitude);
+	api.setElevation(height);
+	api.setDuration(duration);
+	managerFactoryInstance.callAPI(api);
+}
+
+
+/**
+ * 마우스를 사용할 수 없는 환경에서 버튼 이벤트로 대체
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} eventType 어떤 마우스 동작을 원하는지를 구분
+ */
+function mouseMoveAPI(managerFactoryInstance, eventType) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	managerFactoryInstance.mouseMove(eventType);
+}
+
+/**
+ * 데이터 검색
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} projectId 데이터 고유키
+ * @param {string} dataKey 데이터 고유키
+ */
+function searchDataAPI(managerFactoryInstance, projectId, dataKey) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("searchData");
+	api.setProjectId(projectId);
+	api.setDataKey(dataKey);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 환경 설정 data Object에 key 값의 존재 유무를 판별
+ * @param {string} key 검색 키
+ * @param 
+ */
+function isDataExistAPI(key) 
+{
+	if (MagoConfig.isDataExist(key)) { return true; }
+	else { return false; }
+}
+
+/**
+ * 환경 설정 data map에서 key 값을 취득
+ * @param {string} key 검색 키
+ * @param 
+ */
+function getDataAPI(key) 
+{
+	return MagoConfig.getData(key);
+}
+
+/**
+ * Data Key 를 이용하여 Geo Spatial Info를 취득
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {String} projectId 고유키
+ * @param {String} dataKey Data 고유키
  * @param
  */
-function selectedObjectCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll)
+function getDataInfoByDataKeyAPI(managerFactoryInstance, projectId, dataKey)
 {
-	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll);
+	if (managerFactoryInstance === null) { return; }
+
+	var api = new API("getDataInfoByDataKey");
+	api.setProjectId(projectId);
+	api.setDataKey(dataKey);
+	managerFactoryInstance.callAPI(api);
 }
 
 /**
- * 이동한 data 정보를 화면에 표시
- * @param functionName callback
- * @param projectId
- * @param data_key
- * @param objectId
- * @param latitude
- * @param longitude
- * @param elevation
- * @param heading
- * @param pitch
- * @param roll
- * @param
+ * 데이터를 Rendering
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {Object[]} projectIdArray 프로젝트 이름들
+ * @param {Object[]} projectDataArray 프로젝트 데이터들
+ * @param {Object[]} projectDataFolderArray 프로젝트 f4d 파일 경로
+ * @param 
  */
-function movedDataCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll)
+function drawAppendDataAPI(managerFactoryInstance, projectIdArray, projectDataArray, projectDataFolderArray) 
 {
-	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll);
-}
-
-/**
- * Data Key 를 이용하여 Geo Spatial Info를 획득하여 화면에 표시
- * @param functionName callback
- * @param projectId
- * @param data_key
- * @param dataName
- * @param latitude
- * @param longitude
- * @param elevation
- * @param heading
- * @param pitch
- * @param roll
- * @param
- */
-function dataInfoCallback(functionName, projectId, dataKey, dataName, latitude, longitude, elevation, heading, pitch, roll)
-{
-	window[functionName](projectId, dataKey, dataName, latitude, longitude, elevation, heading, pitch, roll);
-}
-
-/**
- * 선택한 object 정보를 화면에 표시
- * @param functionName
- * @param projectId
- * @param data_key
- * @param objectId
- * @param latitude
- * @param longitude
- * @param elevation
- */
-function insertIssueCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation)
-{
-	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation);
-}
-
-/**
- * mouse click 위치 정보를 화면에 표시
- * @param functionName
- * @param position
- */
-function clickPositionCallback(functionName, position) 
-{
-	window[functionName](position);
+	if (managerFactoryInstance === null) { return; } 
+	
+	if (projectIdArray.length <= 0) { return; }
+	
+	var api = new API("drawAppendData");
+	projectIdArray.forEach(function(dataName, index) 
+	{
+			
+		MagoConfig.setData(CODE.PROJECT_ID_PREFIX + dataName, projectDataArray[index]);
+		MagoConfig.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolderArray[index], projectDataFolderArray[index]);
+		
+		api.setProjectId(dataName);
+		api.setProjectDataFolder(projectDataFolderArray[index]);
+		managerFactoryInstance.callAPI(api);
+	});
 }
 
 'use strict';
 
 /**
- * 사용자가 변경한 moving, color, rotation 등 이력 정보를 위한 domain
- * @class Policy
+ * color 처리 관련 도메인
+ * @class ColorAPI
  */
-var ChangeHistory = function() 
+var ColorAPI = {};
+
+ColorAPI.changeColor = function(api, magoManager) 
 {
-	if (!(this instanceof ChangeHistory)) 
+	var projectId = api.getProjectId();
+	var dataKey = api.getDataKey();
+	var objectIds = api.getObjectIds();
+	var property = api.getProperty();
+	var propertyKey = null;
+	var propertyValue = null;
+	if (property !== null && property !== "") 
 	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
+		var properties = property.split("=");
+		propertyKey = properties[0];
+		propertyValue = properties[1];
 	}
-
-	this.moveHistory = false;
-	this.colorHistory = false;
-	this.rotationHistory = false;
+	var color = api.getColor().split(",");
+	var rgbColor = [ color[0]/255, color[1]/255, color[2]/255 ] ;
 	
-	// move mode. ALL : 0 , OBJECT : 1, NONE : 2
-	this.objectMoveMode = null;
-	
-	// project id
-	this.projectId = null;
-	// project data folder
-	this.projectDataFolder = null;
-	// data_key
-	this.dataKey = null;	
-	// objectId
-	this.objectId = null;
-	// objectIndexOrder
-	this.objectIndexOrder = 0;
-	
-	// referenceObject aditional movement.
-	this.refObjectAditionalMove;
-	this.refObjectAditionalMoveRelToBuilding;
-	
-	// 위도
-	this.latitude = 0.0;
-	// 경도
-	this.longitude = 0.0;
-	// 높이
-	this.elevation = 0.0;
-	// heading
-	this.heading = 0.0;
-	// pitch
-	this.pitch = 0.0;
-	// roll
-	this.roll = 0.0;
-	// duration
-	this.duration = 0;
-	// 색깔
-	this.color = 0;
-	// color rgb
-	this.rgbColor = [];
-	// 속성
-	this.property = null;
-	this.propertyKey = null;
-	this.propertyValue = null;
-};
-
-ChangeHistory.prototype.getReferenceObjectAditionalMovement = function() 
-{
-	if (this.refObjectAditionalMove === undefined)
-	{ this.refObjectAditionalMove = new Point3D(); }
-	
-	return this.refObjectAditionalMove;
-};
-
-ChangeHistory.prototype.getReferenceObjectAditionalMovementRelToBuilding = function() 
-{
-	if (this.refObjectAditionalMoveRelToBuilding === undefined)
-	{ this.refObjectAditionalMoveRelToBuilding = new Point3D(); }
-	
-	return this.refObjectAditionalMoveRelToBuilding;
-};
-
-ChangeHistory.prototype.getProjectId = function() 
-{
-	return this.projectId;
-};
-ChangeHistory.prototype.setProjectId = function(projectId) 
-{
-	this.projectId = projectId;
-};
-
-ChangeHistory.prototype.getProjectDataFolder = function() 
-{
-	return this.projectDataFolder;
-};
-ChangeHistory.prototype.setProjectDataFolder = function(projectDataFolder) 
-{
-	this.projectDataFolder = projectDataFolder;
-};
-
-ChangeHistory.prototype.getDataKey = function() 
-{
-	return this.dataKey;
-};
-ChangeHistory.prototype.setDataKey = function(dataKey) 
-{
-	this.dataKey = dataKey;
-};
-
-ChangeHistory.prototype.getObjectId = function() 
-{
-	return this.objectId;
-};
-ChangeHistory.prototype.setObjectId = function(objectId) 
-{
-	this.objectId = objectId;
-};
-
-ChangeHistory.prototype.getObjectIndexOrder = function() 
-{
-	return this.objectIndexOrder;
-};
-ChangeHistory.prototype.setObjectIndexOrder = function(objectIndexOrder) 
-{
-	this.objectIndexOrder = objectIndexOrder;
-};
-
-ChangeHistory.prototype.getLatitude = function() 
-{
-	return this.latitude;
-};
-ChangeHistory.prototype.setLatitude = function(latitude) 
-{
-	this.latitude = latitude;
-};
-
-ChangeHistory.prototype.getLongitude = function() 
-{
-	return this.longitude;
-};
-ChangeHistory.prototype.setLongitude = function(longitude) 
-{
-	this.longitude = longitude;
-};
-
-ChangeHistory.prototype.getElevation = function() 
-{
-	return this.elevation;
-};
-ChangeHistory.prototype.setElevation = function(elevation) 
-{
-	this.elevation = elevation;
-};
-
-ChangeHistory.prototype.getHeading = function() 
-{
-	return this.heading;
-};
-ChangeHistory.prototype.setHeading = function(heading) 
-{
-	this.heading = heading;
-};
-
-ChangeHistory.prototype.getPitch = function() 
-{
-	return this.pitch;
-};
-ChangeHistory.prototype.setPitch = function(pitch) 
-{
-	this.pitch = pitch;
-};
-
-ChangeHistory.prototype.getRoll = function() 
-{
-	return this.roll;
-};
-ChangeHistory.prototype.setRoll = function(roll) 
-{
-	this.roll = roll;
-};
-
-ChangeHistory.prototype.getColor = function() 
-{
-	return this.color;
-};
-ChangeHistory.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-ChangeHistory.prototype.getRgbColor = function() 
-{
-	return this.rgbColor;
-};
-ChangeHistory.prototype.setRgbColor = function(rgbColor) 
-{
-	this.rgbColor = rgbColor;
-};
-
-ChangeHistory.prototype.getProperty = function() 
-{
-	return this.property;
-};
-ChangeHistory.prototype.setProperty = function(property) 
-{
-	this.property = property;
-};
-ChangeHistory.prototype.getPropertyKey = function() 
-{
-	return this.propertyKey;
-};
-ChangeHistory.prototype.setPropertyKey = function(propertyKey) 
-{
-	this.propertyKey = propertyKey;
-};
-ChangeHistory.prototype.getPropertyValue = function() 
-{
-	return this.propertyValue;
-};
-ChangeHistory.prototype.setPropertyValue = function(propertyValue) 
-{
-	this.propertyValue = propertyValue;
-};
-
-ChangeHistory.prototype.getDuration = function()
-{
-	return this.duration;
-};
-ChangeHistory.prototype.setDuration = function(duration)
-{
-	this.duration = duration;
-};
-
-ChangeHistory.prototype.getObjectMoveMode = function() 
-{
-	return this.objectMoveMode;
-};
-ChangeHistory.prototype.setObjectMoveMode = function(objectMoveMode) 
-{
-	this.objectMoveMode = objectMoveMode;
-};
-"use strict";
-
-var CODE = {};
-
-// magoManager가 다 로딩 되지 않은 상태에서 화면으로 부터 호출 되는 것을 막기 위해
-CODE.magoManagerState = {
-	"INIT"   	: 0,
-	"STARTED"	: 1,
-	"READY"   : 2
-};
-
-//0 = no started to load. 1 = started loading. 2 = finished loading. 3 = parse started. 4 = parse finished.***
-CODE.fileLoadState = {
-	"READY"            : 0,
-	"LOADING_STARTED"  : 1,
-	"LOADING_FINISHED" : 2,
-	"PARSE_STARTED"    : 3,
-	"PARSE_FINISHED"   : 4
-};
-
-CODE.moveMode = {
-	"ALL"    : "0",
-	"OBJECT" : "1",
-	"NONE"   : "2"
-};
-
-CODE.PROJECT_ID_PREFIX = "projectId_";
-CODE.PROJECT_DATA_FOLDER_PREFIX = "projectDataFolder_";
-
-'use strict';
-
-/**
- * 상수 설정
- * @class Constant
- */
-var Constant = {};
-
-Constant.CESIUM = "cesium";
-Constant.WORLDWIND = "worldwind";
-Constant.OBJECT_INDEX_FILE = "/objectIndexFile.ihe";
-Constant.CACHE_VERSION = "?cache_version=";
-Constant.SIMPLE_BUILDING_TEXTURE3x3_BMP = "/SimpleBuildingTexture3x3.bmp";
-Constant.RESULT_XDO2F4D = "/Result_xdo2f4d/Images/";
-Constant.RESULT_XDO2F4D_TERRAINTILES = "/Result_xdo2f4d/F4D_TerrainTiles/";
-Constant.RESULT_XDO2F4D_TERRAINTILEFILE_TXT = "/Result_xdo2f4d/f4dTerranTileFile.txt";
-
-Constant.INTERSECTION_OUTSIDE = 0;
-Constant.INTERSECTION_INTERSECT= 1;
-Constant.INTERSECTION_INSIDE = 2;
-
-'use strict';
-
-/**
- * mago3D 전체 환경 설정을 관리
- * @class MagoConfig
- */
-var MagoConfig = {};
-
-MagoConfig.getPolicy = function() 
-{
-	return this.serverPolicy;
-};
-
-MagoConfig.getData = function(key) 
-{
-	return this.dataObject[key];
-};
-
-MagoConfig.isDataExist = function(key) 
-{
-	return this.dataObject.hasOwnProperty(key);
-};
-
-MagoConfig.deleteData = function(key) 
-{
-	return delete this.dataObject[key];
-};
-
-/**
- * data 를 map에 저장
- * @param key map에 저장될 key
- * @param value map에 저장될 value
- */
-MagoConfig.setData = function(key, value) 
-{
-	if (!this.isDataExist(key)) 
+	var isExistObjectIds = false;
+	if (objectIds !== null && objectIds.length !== 0) 
 	{
-		this.dataObject[key] = value;
+		isExistObjectIds = true;
 	}
-};
-
-/**
- * F4D Converter 실행 결과물이 저장된 project data folder 명을 획득
- * @param projectDataFolder data folder
- */
-MagoConfig.getProjectDataFolder = function(projectDataFolder) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	return this.dataObject[key];
-};
-
-/**
- * project map에 data folder명의 존재 유무를 검사
- * @param projectDataFolder
- */
-MagoConfig.isProjectDataFolderExist = function(projectDataFolder) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	return this.dataObject.hasOwnProperty(key);
-};
-
-/**
- * project data folder명을 map에서 삭제
- * @param projectDataFolder
- */
-MagoConfig.deleteProjectDataFolder = function(projectDataFolder) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	return delete this.dataObject[key];
-};
-
-/**
- * project data folder명을 Object에서 삭제
- * @param projectDataFolder Object에 저장될 key
- * @param value Object에 저장될 value
- */
-MagoConfig.setProjectDataFolder = function(projectDataFolder, value) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	if (!this.isProjectDataFolderExist(key))
-	{
-		this.dataObject[key] = value;
-	}
-};
-
-/**
- * 환경설정 초기화
- * @param serverPolicy mago3d policy(json)
- * @param projectIdArray data 정보를 map 저장할 key name
- * @param projectDataArray data 정보(json)
- */
-MagoConfig.init = function(serverPolicy, projectIdArray, projectDataArray) 
-{
-	this.dataObject = {};
 	
-	this.selectHistoryObject = {};
-	this.movingHistoryObject = {};
-	this.colorHistoryObject = {};
-	this.locationAndRotationHistoryObject = {};
-	
-	this.serverPolicy = serverPolicy;
-	if (projectIdArray !== null && projectIdArray.length > 0) 
+	var changeHistorys = [];
+	if (isExistObjectIds) 
 	{
-		for (var i=0; i<projectIdArray.length; i++) 
+		for (var i=0, objectCount = objectIds.length; i<objectCount; i++) 
 		{
-			if (!this.isDataExist(CODE.PROJECT_ID_PREFIX + projectIdArray[i])) 
-			{
-				this.setData(CODE.PROJECT_ID_PREFIX + projectIdArray[i], projectDataArray[i]);
-				this.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataArray[i].data_key, projectDataArray[i].data_key);
-			}
+			var changeHistory = new ChangeHistory();
+			changeHistory.setProjectId(projectId);
+			changeHistory.setDataKey(dataKey);
+			changeHistory.setObjectId(objectIds[i]);
+			changeHistory.setProperty(property);
+			changeHistory.setPropertyKey(propertyKey);
+			changeHistory.setPropertyValue(propertyValue);
+			changeHistory.setRgbColor(rgbColor);
+			
+			changeHistorys.push(changeHistory);
 		}
-	}
-};
-
-/**
- * 모든 데이터를 삭제함
- */
-MagoConfig.clearAllData = function() 
-{
-	this.dataObject = {};
-};
-
-/**
- * 모든 선택 히스토리 삭제
- */
-MagoConfig.clearSelectHistory = function() 
-{
-	this.selectHistoryObject = {};
-};
-
-/**
- * 모든 object 선택 내용 이력을 취득
- */
-MagoConfig.getAllSelectHistory = function()
-{
-	return this.selectHistoryObject;
-};
-
-/**
- * project 별 해당 키에 해당하는 모든 object 선택 내용 이력을 취득
- */
-MagoConfig.getSelectHistoryObjects = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.selectHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	return dataKeyObject;
-};
-
-/**
- * object 선택 내용 이력을 취득
- */
-MagoConfig.getSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.selectHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return dataKeyObject[objectIndexOrder];
-};
-
-/**
- * object 선택 내용을 저장
- */
-MagoConfig.saveSelectHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.selectHistoryObject.get(projectId);
-	if (projectIdObject === undefined)
-	{
-		projectIdObject = {};
-		this.selectHistoryObject[projectId] = projectIdObject;
-	}
-	
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined)
-	{
-		dataKeyObject = {};
-		projectIdObject[dataKey] = dataKeyObject;
-	}
-	
-	// objectIndexOrder 를 저장
-	dataKeyObject[objectIndexOrder] = changeHistory;
-};
-
-/**
- * object 선택 내용을 삭제
- */
-MagoConfig.deleteSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.selectHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return delete dataKeyObject[objectIndexOrder];
-};
-
-/**
- * 모든 이동 히스토리 삭제
- */
-MagoConfig.clearMovingHistory = function() 
-{
-	this.movingHistoryObject = {};
-};
-
-/**
- * 모든 object 선택 내용 이력을 취득
- */
-MagoConfig.getAllMovingHistory = function()
-{
-	return this.movingHistoryObject;
-};
-
-/**
- * project별 입력키 값과 일치하는 object 이동 내용 이력을 취득
- */
-MagoConfig.getMovingHistoryObjects = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.movingHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	return dataKeyObject;
-};
-
-/**
- * object 이동 내용 이력을 취득
- */
-MagoConfig.getMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.movingHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return dataKeyObject[objectIndexOrder];
-};
-
-/**
- * object 이동 내용을 저장
- */
-MagoConfig.saveMovingHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.movingHistoryObject[projectId];
-	if (projectIdObject === undefined)
-	{
-		projectIdObject = {};
-		this.movingHistoryObject[projectId] = projectIdObject;
-	}
-	
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined)
-	{
-		dataKeyObject = {};
-		projectIdObject[dataKey] = dataKeyObject;
-	}
-	
-	// objectIndexOrder 를 저장
-	dataKeyObject[objectIndexOrder] = changeHistory;
-};
-
-/**
- * object 이동 내용을 삭제
- */
-MagoConfig.deleteMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.movingHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return delete dataKeyObject[objectIndexOrder];
-};
-
-/**
- * 모든 색깔 변경 이력을 획득
- */
-MagoConfig.getAllColorHistory = function() 
-{
-	return this.colorHistoryObject;
-};
-
-/**
- * 모든 색깔변경 히스토리 삭제
- */
-MagoConfig.clearColorHistory = function() 
-{
-	this.colorHistoryObject = {};
-};
-
-/**
- * project별 키에 해당하는 모든 색깔 변경 이력을 획득
- */
-MagoConfig.getColorHistorys = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.colorHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	return dataKeyObject;
-};
-
-/**
- * 색깝 변경 이력을 획득
- */
-MagoConfig.getColorHistory = function(projectId, dataKey, objectId)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.colorHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectId 를 저장
-	return dataKeyObject[objectId];
-};
-
-/**
- * 색깝 변경 내용을 저장
- */
-MagoConfig.saveColorHistory = function(projectId, dataKey, objectId, changeHistory) 
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.colorHistoryObject[projectId];
-	if (projectIdObject === undefined)
-	{
-		projectIdObject = {};
-		this.colorHistoryObject[projectId] = projectIdObject;
-	}
-	
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined)
-	{
-		dataKeyObject = {};
-		projectIdObject[dataKey] = dataKeyObject;
-	}
-
-	if (objectId === null || objectId === "") 
-	{
-		dataKeyObject[dataKey] = changeHistory;
 	}
 	else 
 	{
-		dataKeyObject[objectId] = changeHistory;
+		var changeHistory = new ChangeHistory();
+		changeHistory.setProjectId(projectId);
+		changeHistory.setDataKey(dataKey);
+		changeHistory.setObjectId(null);
+		changeHistory.setProperty(property);
+		changeHistory.setPropertyKey(propertyKey);
+		changeHistory.setPropertyValue(propertyValue);
+		changeHistory.setRgbColor(rgbColor);
+		
+		changeHistorys.push(changeHistory);
 	}
-};
 
-/**
- * 색깔 변경 이력을 삭제
- */
-MagoConfig.deleteColorHistory = function(projectId, dataKey, objectId)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.colorHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return delete dataKeyObject[objectId];
-};
-
-/**
- * 모든 색깔변경 히스토리 삭제
- */
-MagoConfig.clearColorHistory = function() 
-{
-	this.colorHistoryObject = {};
-};
-
-/**
- * 모든 location and rotation 변경 이력을 획득
- */
-MagoConfig.getAllLocationAndRotationHistory = function() 
-{
-	return this.locationAndRotationHistoryObject;
-};
-
-/**
- * 프로젝트별 해당 키 값을 갖는 모든 location and rotation 이력을 획득
- */
-MagoConfig.getLocationAndRotationHistorys = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	return dataKeyObject;
-};
-
-/**
- * location and rotation 이력을 획득
- */
-MagoConfig.getLocationAndRotationHistory = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	
-	return dataKeyObject;
-};
-
-/**
- * location and rotation 내용을 저장
- */
-MagoConfig.saveLocationAndRotationHistory = function(projectId, dataKey, changeHistory) 
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
-	if (projectIdObject === undefined)
+	var changeHistory;
+	var historiesCount = changeHistorys.length;
+	for (var i=0; i<historiesCount; i++)
 	{
-		projectIdObject = {};
-		this.locationAndRotationHistoryObject[projectId] = projectIdObject;
+		changeHistory = changeHistorys[i];
+		MagoConfig.saveColorHistory(projectId, dataKey, changeHistory.getObjectId(), changeHistory);
 	}
-	
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined)
-	{
-		dataKeyObject = {};
-	}
-
-	dataKeyObject[dataKey] = changeHistory;
 };
-
-/**
- * location and rotation 이력을 삭제
- */
-MagoConfig.deleteLocationAndRotationHistory = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = delete projectIdObject[dataKey];
-};
-
-/**
- * 모든 location and rotation 히스토리 삭제
- */
-MagoConfig.clearLocationAndRotationHistory = function() 
-{
-	this.locationAndRotationHistoryObject = {};
-};
-	
-/**
- * TODO 이건 나중에 활요. 사용하지 않음
- * check 되지 않은 데이터들을 삭제함
- * @param keyObject 비교할 맵
- */
-/*MagoConfig.clearUnSelectedData = function(keyObject)
-{
-	for (var key of this.dataObject.keys())
-	{
-		if (!keyObject.hasxxxxx(key))
-		{
-			// data folder path가 존재하면....
-			if (key.indexOf(CODE.PROJECT_DATA_FOLDER_PREFIX) >= 0) 
-			{
-				// 지우는 처리가 있어야 함
-			}
-			this.dataObject.delete(key);
-		}
-	}
-};*/
-
 'use strict';
 
 /**
- * Policy
- * @class Policy
+ * Draw 관련 API를 담당하는 클래스
+ * 원래는 이렇게 만들려고 한게 아니지만, legacy 파일이랑 이름, function 등이 중복되서 이렇게 만들었음
+ * @class DrawAPI
  */
-var Policy = function() 
+var DrawAPI = {};
+
+DrawAPI.drawAppendData = function(api, magoManager) 
 {
-	if (!(this instanceof Policy)) 
+	magoManager.getObjectIndexFile(api.getProjectId(), api.getProjectDataFolder());
+};
+
+DrawAPI.drawInsertIssueImage = function(api, magoManager) 
+{
+	// pin 을 표시
+	if (magoManager.objMarkerSC === undefined || api.getDrawType() === 0) 
 	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
+		magoManager.objMarkerSC = new ObjectMarker();
+		magoManager.objMarkerSC.geoLocationData.geographicCoord = new GeographicCoord();
+		ManagerUtils.calculateGeoLocationData(parseFloat(api.getLongitude()), parseFloat(api.getLatitude()), parseFloat(api.getElevation()), 
+			undefined, undefined, undefined, magoManager.objMarkerSC.geoLocationData, magoManager);
 	}
-
-	// mago3d 활성화/비활성화 여부
-	this.magoEnable = true;
-
-	// outfitting 표시 여부
-	this.showOutFitting = false;
-	// label 표시/비표시
-	this.showLabelInfo = false;
-	// boundingBox 표시/비표시
-	this.showBoundingBox = false;
-	// 그림자 표시/비표시
-	this.showShadow = false;
-	// squared far frustum 거리
-	this.frustumFarSquaredDistance = 5000000;
-	// far frustum
-	this.frustumFarDistance = 2300;
-
-	// highlighting
-	this.highLightedBuildings = [];
-	// color
-	this.colorBuildings = [];
-	// color
-	this.color = [];
-	// show/hide
-	this.hideBuildings = [];
-	// move mode
-	this.objectMoveMode = CODE.moveMode.NONE;
-	// 이슈 등록 표시
-	this.issueInsertEnable = false;
-	// object 정보 표시
-	this.objectInfoViewEnable = false;
-	// 이슈 목록 표시
-	this.nearGeoIssueListEnable = false;
-	// occlusion culling
-	this.occlusionCullingEnable = false;
 	
-	// 이미지 경로
-	this.imagePath = "";
+	var objMarker = magoManager.objMarkerManager.newObjectMarker();
 	
-	// provisional.***
-	this.colorChangedObjectId;
+	magoManager.objMarkerSC.issue_id = api.getIssueId();
+	magoManager.objMarkerSC.issue_type = api.getIssueType();
+	magoManager.objMarkerSC.geoLocationData.geographicCoord.setLonLatAlt(parseFloat(api.getLongitude()), parseFloat(api.getLatitude()), parseFloat(api.getElevation()));
 	
-	// LOD1
-	this.lod0DistInMeters = 15;
-	this.lod1DistInMeters = 50;
-	this.lod2DistInMeters = 90;
-	this.lod3DistInMeters = 200;
-	this.lod4DistInMeters = 1000;
-	this.lod5DistInMeters = 50000;
+	objMarker.copyFrom(magoManager.objMarkerSC);
+	magoManager.objMarkerSC = undefined;
+};
+'use strict';
+
+/**
+ * 변환 행렬 API
+ * @class LocationAndRotationAPI
+ */
+var LocationAndRotationAPI = {};
+
+LocationAndRotationAPI.changeLocationAndRotation = function(api, magoManager) 
+{
+//	var buildingId = api.getDataKey();
+//	var buildingType = "structure";
+//	var building = this.getNeoBuildingByTypeId(buildingType, buildingId);
+
+	var changeHistory = new ChangeHistory();
+	changeHistory.setProjectId(api.getProjectId());
+	changeHistory.setDataKey(api.getDataKey());
+	changeHistory.setLatitude(parseFloat(api.getLatitude()));
+	changeHistory.setLongitude(parseFloat(api.getLongitude()));
+	changeHistory.setElevation(parseFloat(api.getElevation()));
+	changeHistory.setHeading(parseFloat(api.getHeading()));
+	changeHistory.setPitch(parseFloat(api.getPitch()));
+	changeHistory.setRoll(parseFloat(api.getRoll()));
 	
-	// Lighting
-	this.ambientReflectionCoef = 0.45; // 0.2.
-	this.diffuseReflectionCoef = 0.75; // 1.0
-	this.specularReflectionCoef = 0.6; // 0.7
-	this.ambientColor = null;
-	this.specularColor = new Float32Array([0.6, 0.6, 0.6]);
+	magoManager.changeLocationAndRotation(	api.getProjectId(),
+		api.getDataKey(),
+		parseFloat(api.getLatitude()),
+		parseFloat(api.getLongitude()),
+		parseFloat(api.getElevation()),
+		parseFloat(api.getHeading()),
+		parseFloat(api.getPitch()),
+		parseFloat(api.getRoll()));
 	
-	this.ssaoRadius = 0.15;
+	// MagoConfig에 저장......?
 };
+'use strict';
 
-Policy.prototype.getMagoEnable = function() 
-{
-	return this.magoEnable;
-};
-Policy.prototype.setMagoEnable = function(magoEnable) 
-{
-	this.magoEnable = magoEnable;
-};
+/**
+ * lod 처리 관련 도메인
+ * @class LodAPI
+ */
+var LodAPI = {};
 
-Policy.prototype.getShowOutFitting = function() 
+LodAPI.changeLod = function(api, magoManager) 
 {
-	return this.showOutFitting;
-};
-Policy.prototype.setShowOutFitting = function(showOutFitting) 
-{
-	this.showOutFitting = showOutFitting;
-};
-Policy.prototype.getShowLabelInfo = function() 
-{
-	return this.showLabelInfo;
-};
-Policy.prototype.setShowLabelInfo = function(showLabelInfo) 
-{
-	this.showLabelInfo = showLabelInfo;
-};
-Policy.prototype.getShowBoundingBox = function() 
-{
-	return this.showBoundingBox;
-};
-Policy.prototype.setShowBoundingBox = function(showBoundingBox) 
-{
-	this.showBoundingBox = showBoundingBox;
-};
-
-Policy.prototype.getShowShadow = function() 
-{
-	return this.showShadow;
-};
-Policy.prototype.setShowShadow = function(showShadow) 
-{
-	this.showShadow = showShadow;
-};
-
-Policy.prototype.getFrustumFarSquaredDistance = function() 
-{
-	return this.frustumFarSquaredDistance;
-};
-Policy.prototype.setFrustumFarSquaredDistance = function(frustumFarSquaredDistance) 
-{
-	this.frustumFarSquaredDistance = frustumFarSquaredDistance;
-};
-
-Policy.prototype.getFrustumFarDistance = function() 
-{
-	return this.frustumFarDistance;
-};
-Policy.prototype.setFrustumFarDistance = function(frustumFarDistance) 
-{
-	this.frustumFarDistance = frustumFarDistance;
-};
-
-Policy.prototype.getHighLightedBuildings = function() 
-{
-	return this.highLightedBuildings;
-};
-Policy.prototype.setHighLightedBuildings = function(highLightedBuildings) 
-{
-	this.highLightedBuildings = highLightedBuildings;
-};
-
-Policy.prototype.getColorBuildings = function() 
-{
-	return this.colorBuildings;
-};
-Policy.prototype.setColorBuildings = function(colorBuildings) 
-{
-	this.colorBuildings = colorBuildings;
-};
-
-Policy.prototype.getColor = function() 
-{
-	return this.color;
-};
-Policy.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-
-Policy.prototype.getHideBuildings = function() 
-{
-	return this.hideBuildings;
-};
-Policy.prototype.setHideBuildings = function(hideBuildings) 
-{
-	this.hideBuildings = hideBuildings;
-};
-
-Policy.prototype.getObjectMoveMode = function() 
-{
-	return this.objectMoveMode;
-};
-Policy.prototype.setObjectMoveMode = function(objectMoveMode) 
-{
-	this.objectMoveMode = objectMoveMode;
-};
-
-Policy.prototype.getIssueInsertEnable = function() 
-{
-	return this.issueInsertEnable;
-};
-Policy.prototype.setIssueInsertEnable = function(issueInsertEnable) 
-{
-	this.issueInsertEnable = issueInsertEnable;
-};
-Policy.prototype.getObjectInfoViewEnable = function() 
-{
-	return this.objectInfoViewEnable;
-};
-Policy.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
-{
-	this.objectInfoViewEnable = objectInfoViewEnable;
-};
-Policy.prototype.getOcclusionCullingEnable = function() 
-{
-	return this.occlusionCullingEnable;
-};
-Policy.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
-{
-	this.occlusionCullingEnable = occlusionCullingEnable;
-};
-Policy.prototype.getNearGeoIssueListEnable = function() 
-{
-	return this.nearGeoIssueListEnable;
-};
-Policy.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
-{
-	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
-};
-
-Policy.prototype.getImagePath = function() 
-{
-	return this.imagePath;
-};
-Policy.prototype.setImagePath = function(imagePath) 
-{
-	this.imagePath = imagePath;
-};
-
-Policy.prototype.getLod0DistInMeters = function() 
-{
-	return this.lod0DistInMeters;
-};
-Policy.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
-{
-	this.lod0DistInMeters = lod0DistInMeters;
-};
-Policy.prototype.getLod1DistInMeters = function() 
-{
-	return this.lod1DistInMeters;
-};
-Policy.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
-{
-	this.lod1DistInMeters = lod1DistInMeters;
-};
-Policy.prototype.getLod2DistInMeters = function() 
-{
-	return this.lod2DistInMeters;
-};
-Policy.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
-{
-	this.lod2DistInMeters = lod2DistInMeters;
-};
-Policy.prototype.getLod3DistInMeters = function() 
-{
-	return this.lod3DistInMeters;
-};
-Policy.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
-{
-	this.lod3DistInMeters = lod3DistInMeters;
-};
-Policy.prototype.getLod4DistInMeters = function() 
-{
-	return this.lod4DistInMeters;
-};
-Policy.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
-{
-	this.lod4DistInMeters = lod4DistInMeters;
-};
-Policy.prototype.getLod5DistInMeters = function() 
-{
-	return this.lod5DistInMeters;
-};
-Policy.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
-{
-	this.lod5DistInMeters = lod5DistInMeters;
-};
-Policy.prototype.getAmbientReflectionCoef = function() 
-{
-	return this.ambientReflectionCoef;
-};
-Policy.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
-{
-	this.ambientReflectionCoef = ambientReflectionCoef;
-};
-Policy.prototype.getDiffuseReflectionCoef = function() 
-{
-	return this.diffuseReflectionCoef;
-};
-Policy.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
-{
-	this.diffuseReflectionCoef = diffuseReflectionCoef;
-};
-Policy.prototype.getSpecularReflectionCoef = function() 
-{
-	return this.specularReflectionCoef;
-};
-Policy.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
-{
-	this.specularReflectionCoef = specularReflectionCoef;
-};
-Policy.prototype.getAmbientColor = function() 
-{
-	return this.ambientColor;
-};
-Policy.prototype.setAmbientColor = function(ambientColor) 
-{
-	this.ambientColor = ambientColor;
-};
-Policy.prototype.getSpecularColor = function() 
-{
-	return this.specularColor;
-};
-Policy.prototype.setSpecularColor = function(specularColor) 
-{
-	this.specularColor = specularColor;
-};
-Policy.prototype.getSsaoRadius = function() 
-{
-	return this.ssaoRadius;
-};
-Policy.prototype.setSsaoRadius = function(ssaoRadius) 
-{
-	this.ssaoRadius = ssaoRadius;
+	if (api.getLod0DistInMeters() !== null && api.getLod0DistInMeters() !== "") { magoManager.magoPolicy.setLod0DistInMeters(api.getLod0DistInMeters()); }
+	if (api.getLod1DistInMeters() !== null && api.getLod1DistInMeters() !== "") { magoManager.magoPolicy.setLod1DistInMeters(api.getLod1DistInMeters()); }
+	if (api.getLod2DistInMeters() !== null && api.getLod2DistInMeters() !== "") { magoManager.magoPolicy.setLod2DistInMeters(api.getLod2DistInMeters()); }
+	if (api.getLod3DistInMeters() !== null && api.getLod3DistInMeters() !== "") { magoManager.magoPolicy.setLod3DistInMeters(api.getLod3DistInMeters()); }
+	if (api.getLod4DistInMeters() !== null && api.getLod4DistInMeters() !== "") { magoManager.magoPolicy.setLod4DistInMeters(api.getLod4DistInMeters()); }
+	if (api.getLod5DistInMeters() !== null && api.getLod5DistInMeters() !== "") { magoManager.magoPolicy.setLod5DistInMeters(api.getLod5DistInMeters()); }
 };
 'use strict';
 
@@ -6030,19 +5056,34 @@ MagoManager.prototype.prepareVisibleLowLodNodes = function(lowLodNodesArray)
 		var lodString;
 		var lodIdx; // old.***
 		
-		if (neoBuilding.distToCam < this.magoPolicy.getLod3DistInMeters())
+		if (neoBuilding.distToCam < this.magoPolicy.getLod0DistInMeters())
 		{
 			lodIdx = 0;
+			neoBuilding.currentLod = 0;
+		}
+		else if (neoBuilding.distToCam < this.magoPolicy.getLod1DistInMeters())
+		{
+			lodIdx = 1;
+			neoBuilding.currentLod = 1;
+		}
+		else if (neoBuilding.distToCam < this.magoPolicy.getLod2DistInMeters())
+		{
+			lodIdx = 2;
+			neoBuilding.currentLod = 2;
+		}
+		else if (neoBuilding.distToCam < this.magoPolicy.getLod3DistInMeters())
+		{
+			lodIdx = 3;
 			neoBuilding.currentLod = 3;
 		}
 		else if (neoBuilding.distToCam < this.magoPolicy.getLod4DistInMeters())
 		{
-			lodIdx = 1;
+			lodIdx = 4;
 			neoBuilding.currentLod = 4;
 		}
 		else if (neoBuilding.distToCam < this.magoPolicy.getLod5DistInMeters())
 		{
-			lodIdx = 2;
+			lodIdx = 5;
 			neoBuilding.currentLod = 5;
 		}
 		else { continue; }
@@ -6051,6 +5092,9 @@ MagoManager.prototype.prepareVisibleLowLodNodes = function(lowLodNodesArray)
 		var lodBuildingData = neoBuilding.getLodBuildingData(neoBuilding.currentLod);
 		if (lodBuildingData === undefined)
 		{ continue; }
+	
+		if(lodBuildingData.isModelRef)
+			continue;
 		
 		textureFileName = lodBuildingData.textureFileName;
 		lodString = lodBuildingData.geometryFileName;
@@ -7871,13 +6915,19 @@ MagoManager.prototype.manageQueue = function()
 		
 		    // check the current lod of the building.***
 			var currentBuildingLod = neoBuilding.currentLod;
-			var lodIdx = currentBuildingLod - 3;
+			var lodIdx = currentBuildingLod;
 			
 			if (lodIdx < 0)
 			{ continue; }// old.***
 		
 			var lodString = undefined;
-			if (currentBuildingLod === 3)
+			if (currentBuildingLod === 0)
+			{ lodString = "lod0"; }
+			else if (currentBuildingLod === 1)
+			{ lodString = "lod1"; }
+			else if (currentBuildingLod === 2)
+			{ lodString = "lod2"; }
+			else if (currentBuildingLod === 3)
 			{ lodString = "lod3"; }
 			else if (currentBuildingLod === 4)
 			{ lodString = "lod4"; }
@@ -10396,6 +9446,7 @@ MagoManager.prototype.tilesFrustumCullingFinished = function(intersectedLowestTi
 	var geoLoc;
 	var geoLocDataManager;
 	var realBuildingPos;
+	var metaData;
 	var longitude, latitude, altitude, heading, pitch, roll;
 
 	for (var i=0; i<tilesCount; i++)
@@ -10430,6 +9481,7 @@ MagoManager.prototype.tilesFrustumCullingFinished = function(intersectedLowestTi
 				geoLoc = geoLocDataManager.getCurrentGeoLocationData();
 					
 				neoBuilding = node.data.neoBuilding;
+				metaData = neoBuilding.metaData;
 				if (geoLoc === undefined || geoLoc.pivotPoint === undefined)
 				{ 
 					if (neoBuilding.metaData.geographicCoord === undefined)
@@ -10461,8 +9513,6 @@ MagoManager.prototype.tilesFrustumCullingFinished = function(intersectedLowestTi
 						var hola = 0; 
 					}
 					
-					// test.
-					//***********************************************************************************************************
 					if (node.data.attributes.centerOfBBoxAsOrigen !== undefined)
 					{
 						if (node.data.attributes.centerOfBBoxAsOrigen === true)
@@ -10476,19 +9526,7 @@ MagoManager.prototype.tilesFrustumCullingFinished = function(intersectedLowestTi
 							}
 						}
 					}
-					else 
-					{
-						/*
-						var rootNode = node.getRoot();
-						if (rootNode)
-						{
-							// now, calculate the root center of bbox.
-							this.pointSC = rootNode.data.bbox.getCenterPoint(this.pointSC);
-							ManagerUtils.translatePivotPointGeoLocationData(geoLoc, this.pointSC );
-						}
-						*/
-					}
-					//------------------------------------------------------------------------------------------------------------
+
 					continue;
 					
 				}
@@ -10522,15 +9560,28 @@ MagoManager.prototype.tilesFrustumCullingFinished = function(intersectedLowestTi
 				//-------------------------------------------------------------------------------------------
 				if (distToCamera < lod0_minDist) 
 				{
-					this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles0, node);
+					// check if the lod0, lod1, lod2 are modelReference type.***
+					var lodBuildingData = neoBuilding.getLodBuildingData(0);
+					if(lodBuildingData && lodBuildingData.isModelRef)
+						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles0, node);
+					else
+						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles3, node);
 				}
 				else if (distToCamera < lod1_minDist) 
 				{
-					this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles1, node);
+					var lodBuildingData = neoBuilding.getLodBuildingData(1);
+					if(lodBuildingData && lodBuildingData.isModelRef)
+						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles1, node);
+					else
+						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles3, node);
 				}
 				else if (distToCamera < lod2_minDist) 
 				{
-					this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles2, node);
+					var lodBuildingData = neoBuilding.getLodBuildingData(2);
+					if(lodBuildingData && lodBuildingData.isModelRef)
+						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles2, node);
+					else
+						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles3, node);
 				}
 				else if (distToCamera < lod5_minDist) 
 				{
@@ -26444,681 +25495,1658 @@ var forEach = exports.forEach = function () {
 
 })(this);
 
-/* eslint-env jquery */
 'use strict';
 
 /**
- * An API that interacts with the on-screen UI. Class name to be modified by APIGateWay or API class
- * @class MagoFacade
+ * mago3djs API
+ * 
+ * @alias API
+ * @class API
+ * 
+ * @param {any} apiName api이름
  */
-/**
- * mago3d 활성화/비활성화
- * @param {ManagerFactory} managerFactoryInstance 
- * @param {boolean} isShow true = show, false = hide
- */
-function changeMagoStateAPI(managerFactoryInstance, isShow) 
+function API(apiName)
 {
-	if (managerFactoryInstance === null) { return; } 
+	if (!(this instanceof API)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	// mago3d 활성화/비활성화 여부
+	this.magoEnable = true;
+
+	// api 이름
+	this.apiName = apiName;
 	
-	var api = new API("changeMagoState");
-	api.setMagoEnable(isShow);
-	managerFactoryInstance.callAPI(api);
+	// project id
+	this.projectId = null;
+	this.projectDataFolder = null;
+	// objectIds
+	this.objectIds = null;
+	// data_key
+	this.dataKey = null;
+	// issueId
+	this.issueId = null;
+	// issueType
+	this.issueType = null;
+	// drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
+	this.drawType = 0;
+
+	// 위도
+	this.latitude = 0;
+	// 경도
+	this.longitude = 0;
+	// 높이
+	this.elevation = 0;
+	// heading
+	this.heading = 0;
+	// pitch
+	this.pitch = 0;
+	// roll
+	this.roll = 0;
+	// duration
+	this.duration = 0;
+
+	// 속성
+	this.property = null;
+	// 색깔
+	this.color = 0;
+	// structs = MSP, outfitting = MOP
+	this.blockType = null;
+	// outfitting 표시/비표시
+	this.showOutFitting = false;
+	// label 표시/비표시
+	this.showLabelInfo = true;
+	// boundingBox 표시/비표시
+	this.showBoundingBox = false;
+	// 그림자 표시/비표시
+	this.showShadow = false;
+	// frustum culling 가시 거리(M단위)
+	this.frustumFarDistance = 0;
+	// move mode 
+	this.objectMoveMode = CODE.moveMode.NONE;
+	// 이슈 등록 표시
+	this.issueInsertEnable = false;
+	// object 정보 표시
+	this.objectInfoViewEnable = false;
+	// 이슈 목록 표시
+	this.nearGeoIssueListEnable = false;
+	// occlusion culling
+	this.occlusionCullingEnable = false;
+	//
+	this.insertIssueState = 0;
+	
+	// LOD1
+	this.lod0DistInMeters = null;
+	this.lod1DistInMeters = null;
+	this.lod2DistInMeters = null;
+	this.lod3DistInMeters = null;
+	this.lod4DistInMeters = null;
+	this.lod5DistInMeters = null;
+	
+	// Lighting
+	this.ambientReflectionCoef = null;
+	this.diffuseReflectionCoef = null;
+	this.specularReflectionCoef = null;
+	this.ambientColor = null;
+	this.specularColor = null;
+	
+	this.ssaoRadius = null;
+	//
+	this.FPVMode = false;
+};
+
+API.prototype.getMagoEnable = function() 
+{
+	return this.magoEnable;
+};
+API.prototype.setMagoEnable = function(magoEnable) 
+{
+	this.magoEnable = magoEnable;
+};
+
+API.prototype.getAPIName = function() 
+{
+	return this.apiName;
+};
+
+API.prototype.getProjectId = function() 
+{
+	return this.projectId;
+};
+API.prototype.setProjectId = function(projectId) 
+{
+	this.projectId = projectId;
+};
+
+API.prototype.getProjectDataFolder = function() 
+{
+	return this.projectDataFolder;
+};
+API.prototype.setProjectDataFolder = function(projectDataFolder) 
+{
+	this.projectDataFolder = projectDataFolder;
+};
+
+API.prototype.getObjectIds = function() 
+{
+	return this.objectIds;
+};
+API.prototype.setObjectIds = function(objectIds) 
+{
+	this.objectIds = objectIds;
+};
+
+API.prototype.getIssueId = function() 
+{
+	return this.issueId;
+};
+API.prototype.setIssueId = function(issueId) 
+{
+	this.issueId = issueId;
+};
+API.prototype.getIssueType = function() 
+{
+	return this.issueType;
+};
+API.prototype.setIssueType = function(issueType) 
+{
+	this.issueId = issueType;
+};
+
+API.prototype.getDataKey = function() 
+{
+	return this.dataKey;
+};
+API.prototype.setDataKey = function(dataKey) 
+{
+	this.dataKey = dataKey;
+};
+
+API.prototype.getLatitude = function() 
+{
+	return this.latitude;
+};
+API.prototype.setLatitude = function(latitude) 
+{
+	this.latitude = latitude;
+};
+
+API.prototype.getLongitude = function() 
+{
+	return this.longitude;
+};
+API.prototype.setLongitude = function(longitude) 
+{
+	this.longitude = longitude;
+};
+
+API.prototype.getElevation = function() 
+{
+	return this.elevation;
+};
+API.prototype.setElevation = function(elevation) 
+{
+	this.elevation = elevation;
+};
+
+API.prototype.getHeading = function() 
+{
+	return this.heading;
+};
+API.prototype.setHeading = function(heading) 
+{
+	this.heading = heading;
+};
+
+API.prototype.getPitch = function() 
+{
+	return this.pitch;
+};
+API.prototype.setPitch = function(pitch) 
+{
+	this.pitch = pitch;
+};
+
+API.prototype.getRoll = function() 
+{
+	return this.roll;
+};
+API.prototype.setRoll = function(roll) 
+{
+	this.roll = roll;
+};
+
+API.prototype.getProperty = function() 
+{
+	return this.property;
+};
+API.prototype.setProperty = function(property) 
+{
+	this.property = property;
+};
+
+API.prototype.getColor = function() 
+{
+	return this.color;
+};
+API.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+
+API.prototype.getBlockType = function() 
+{
+	return this.blockType;
+};
+API.prototype.setBlockType = function(blockType) 
+{
+	this.blockType = blockType;
+};
+
+API.prototype.getShowOutFitting = function() 
+{
+	return this.showOutFitting;
+};
+API.prototype.setShowOutFitting = function(showOutFitting) 
+{
+	this.showOutFitting = showOutFitting;
+};
+
+
+API.prototype.getShowLabelInfo = function() 
+{
+	return this.showLabelInfo;
+};
+API.prototype.setShowLabelInfo = function(showLabelInfo) 
+{
+	this.showLabelInfo = showLabelInfo;
+};
+API.prototype.getShowBoundingBox = function() 
+{
+	return this.showBoundingBox;
+};
+API.prototype.setShowBoundingBox = function(showBoundingBox) 
+{
+	this.showBoundingBox = showBoundingBox;
+};
+
+API.prototype.getShowShadow = function() 
+{
+	return this.showShadow;
+};
+API.prototype.setShowShadow = function(showShadow) 
+{
+	this.showShadow = showShadow;
+};
+
+API.prototype.getFrustumFarDistance = function() 
+{
+	return this.frustumFarDistance;
+};
+API.prototype.setFrustumFarDistance = function(frustumFarDistance) 
+{
+	this.frustumFarDistance = frustumFarDistance;
+};
+
+API.prototype.getObjectMoveMode = function() 
+{
+	return this.objectMoveMode;
+};
+API.prototype.setObjectMoveMode = function(objectMoveMode) 
+{
+	this.objectMoveMode = objectMoveMode;
+};
+
+API.prototype.getIssueInsertEnable = function() 
+{
+	return this.issueInsertEnable;
+};
+API.prototype.setIssueInsertEnable = function(issueInsertEnable) 
+{
+	this.issueInsertEnable = issueInsertEnable;
+};
+API.prototype.getObjectInfoViewEnable = function() 
+{
+	return this.objectInfoViewEnable;
+};
+API.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
+{
+	this.objectInfoViewEnable = objectInfoViewEnable;
+};
+API.prototype.getOcclusionCullingEnable = function() 
+{
+	return this.occlusionCullingEnable;
+};
+API.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
+{
+	this.occlusionCullingEnable = occlusionCullingEnable;
+};
+API.prototype.getNearGeoIssueListEnable = function() 
+{
+	return this.nearGeoIssueListEnable;
+};
+API.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
+{
+	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
+};
+
+API.prototype.getInsertIssueState = function() 
+{
+	return this.insertIssueState;
+};
+API.prototype.setInsertIssueState = function(insertIssueState) 
+{
+	this.insertIssueState = insertIssueState;
+};
+
+API.prototype.getDrawType = function() 
+{
+	return this.drawType;
+};
+API.prototype.setDrawType = function(drawType) 
+{
+	this.drawType = drawType;
+};
+
+API.prototype.getLod0DistInMeters = function() 
+{
+	return this.lod0DistInMeters;
+};
+API.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
+{
+	this.lod0DistInMeters = lod0DistInMeters;
+};
+API.prototype.getLod1DistInMeters = function() 
+{
+	return this.lod1DistInMeters;
+};
+API.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
+{
+	this.lod1DistInMeters = lod1DistInMeters;
+};
+API.prototype.getLod2DistInMeters = function() 
+{
+	return this.lod2DistInMeters;
+};
+API.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
+{
+	this.lod2DistInMeters = lod2DistInMeters;
+};
+API.prototype.getLod3DistInMeters = function() 
+{
+	return this.lod3DistInMeters;
+};
+API.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
+{
+	this.lod3DistInMeters = lod3DistInMeters;
+};
+API.prototype.getLod4DistInMeters = function() 
+{
+	return this.lod4DistInMeters;
+};
+API.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
+{
+	this.lod4DistInMeters = lod4DistInMeters;
+};
+API.prototype.getLod5DistInMeters = function() 
+{
+	return this.lod5DistInMeters;
+};
+API.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
+{
+	this.lod5DistInMeters = lod5DistInMeters;
+};
+
+API.prototype.getAmbientReflectionCoef = function() 
+{
+	return this.ambientReflectionCoef;
+};
+API.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
+{
+	this.ambientReflectionCoef = ambientReflectionCoef;
+};
+API.prototype.getDiffuseReflectionCoef = function() 
+{
+	return this.diffuseReflectionCoef;
+};
+API.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
+{
+	this.diffuseReflectionCoef = diffuseReflectionCoef;
+};
+API.prototype.getSpecularReflectionCoef = function() 
+{
+	return this.specularReflectionCoef;
+};
+API.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
+{
+	this.specularReflectionCoef = specularReflectionCoef;
+};
+API.prototype.getAmbientColor = function() 
+{
+	return this.ambientColor;
+};
+API.prototype.setAmbientColor = function(ambientColor) 
+{
+	this.ambientColor = ambientColor;
+};
+API.prototype.getSpecularColor = function() 
+{
+	return this.specularColor;
+};
+API.prototype.setSpecularColor = function(specularColor) 
+{
+	this.specularColor = specularColor;
+};
+API.prototype.getSsaoRadius = function() 
+{
+	return this.ssaoRadius;
+};
+API.prototype.setSsaoRadius = function(ssaoRadius) 
+{
+	this.ssaoRadius = ssaoRadius;
+};
+API.prototype.getFPVMode = function()
+{
+	return this.FPVMode;
+};
+API.prototype.setFPVMode = function(value)
+{
+	this.FPVMode = value;
+};
+
+API.prototype.getDuration = function()
+{
+	return this.duration;
+};
+API.prototype.setDuration = function(duration)
+{
+	this.duration = duration;
+};
+'use strict';
+
+/**
+ * api 처리 결과를 담당하는 callback function
+ * @param functionName policy json의 geo_callback_apiresult 속성값
+ * @param apiName 호출한 api 이름
+ * @param result 결과값
+ */
+function apiResultCallback(functionName, apiName, result) 
+{
+	window[functionName](apiName, result);
+}
+
+/**
+ * 선택한 object 정보를 화면에 표시
+ * @param functionName callback
+ * @param projectId
+ * @param data_key
+ * @param objectId
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ * @param heading
+ * @param pitch
+ * @param roll
+ * @param
+ */
+function selectedObjectCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll)
+{
+	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll);
+}
+
+/**
+ * 이동한 data 정보를 화면에 표시
+ * @param functionName callback
+ * @param projectId
+ * @param data_key
+ * @param objectId
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ * @param heading
+ * @param pitch
+ * @param roll
+ * @param
+ */
+function movedDataCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll)
+{
+	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll);
+}
+
+/**
+ * Data Key 를 이용하여 Geo Spatial Info를 획득하여 화면에 표시
+ * @param functionName callback
+ * @param projectId
+ * @param data_key
+ * @param dataName
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ * @param heading
+ * @param pitch
+ * @param roll
+ * @param
+ */
+function dataInfoCallback(functionName, projectId, dataKey, dataName, latitude, longitude, elevation, heading, pitch, roll)
+{
+	window[functionName](projectId, dataKey, dataName, latitude, longitude, elevation, heading, pitch, roll);
+}
+
+/**
+ * 선택한 object 정보를 화면에 표시
+ * @param functionName
+ * @param projectId
+ * @param data_key
+ * @param objectId
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ */
+function insertIssueCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation)
+{
+	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation);
+}
+
+/**
+ * mouse click 위치 정보를 화면에 표시
+ * @param functionName
+ * @param position
+ */
+function clickPositionCallback(functionName, position) 
+{
+	window[functionName](position);
+}
+
+'use strict';
+
+/**
+ * 사용자가 변경한 moving, color, rotation 등 이력 정보를 위한 domain
+ * @class Policy
+ */
+var ChangeHistory = function() 
+{
+	if (!(this instanceof ChangeHistory)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.moveHistory = false;
+	this.colorHistory = false;
+	this.rotationHistory = false;
+	
+	// move mode. ALL : 0 , OBJECT : 1, NONE : 2
+	this.objectMoveMode = null;
+	
+	// project id
+	this.projectId = null;
+	// project data folder
+	this.projectDataFolder = null;
+	// data_key
+	this.dataKey = null;	
+	// objectId
+	this.objectId = null;
+	// objectIndexOrder
+	this.objectIndexOrder = 0;
+	
+	// referenceObject aditional movement.
+	this.refObjectAditionalMove;
+	this.refObjectAditionalMoveRelToBuilding;
+	
+	// 위도
+	this.latitude = 0.0;
+	// 경도
+	this.longitude = 0.0;
+	// 높이
+	this.elevation = 0.0;
+	// heading
+	this.heading = 0.0;
+	// pitch
+	this.pitch = 0.0;
+	// roll
+	this.roll = 0.0;
+	// duration
+	this.duration = 0;
+	// 색깔
+	this.color = 0;
+	// color rgb
+	this.rgbColor = [];
+	// 속성
+	this.property = null;
+	this.propertyKey = null;
+	this.propertyValue = null;
+};
+
+ChangeHistory.prototype.getReferenceObjectAditionalMovement = function() 
+{
+	if (this.refObjectAditionalMove === undefined)
+	{ this.refObjectAditionalMove = new Point3D(); }
+	
+	return this.refObjectAditionalMove;
+};
+
+ChangeHistory.prototype.getReferenceObjectAditionalMovementRelToBuilding = function() 
+{
+	if (this.refObjectAditionalMoveRelToBuilding === undefined)
+	{ this.refObjectAditionalMoveRelToBuilding = new Point3D(); }
+	
+	return this.refObjectAditionalMoveRelToBuilding;
+};
+
+ChangeHistory.prototype.getProjectId = function() 
+{
+	return this.projectId;
+};
+ChangeHistory.prototype.setProjectId = function(projectId) 
+{
+	this.projectId = projectId;
+};
+
+ChangeHistory.prototype.getProjectDataFolder = function() 
+{
+	return this.projectDataFolder;
+};
+ChangeHistory.prototype.setProjectDataFolder = function(projectDataFolder) 
+{
+	this.projectDataFolder = projectDataFolder;
+};
+
+ChangeHistory.prototype.getDataKey = function() 
+{
+	return this.dataKey;
+};
+ChangeHistory.prototype.setDataKey = function(dataKey) 
+{
+	this.dataKey = dataKey;
+};
+
+ChangeHistory.prototype.getObjectId = function() 
+{
+	return this.objectId;
+};
+ChangeHistory.prototype.setObjectId = function(objectId) 
+{
+	this.objectId = objectId;
+};
+
+ChangeHistory.prototype.getObjectIndexOrder = function() 
+{
+	return this.objectIndexOrder;
+};
+ChangeHistory.prototype.setObjectIndexOrder = function(objectIndexOrder) 
+{
+	this.objectIndexOrder = objectIndexOrder;
+};
+
+ChangeHistory.prototype.getLatitude = function() 
+{
+	return this.latitude;
+};
+ChangeHistory.prototype.setLatitude = function(latitude) 
+{
+	this.latitude = latitude;
+};
+
+ChangeHistory.prototype.getLongitude = function() 
+{
+	return this.longitude;
+};
+ChangeHistory.prototype.setLongitude = function(longitude) 
+{
+	this.longitude = longitude;
+};
+
+ChangeHistory.prototype.getElevation = function() 
+{
+	return this.elevation;
+};
+ChangeHistory.prototype.setElevation = function(elevation) 
+{
+	this.elevation = elevation;
+};
+
+ChangeHistory.prototype.getHeading = function() 
+{
+	return this.heading;
+};
+ChangeHistory.prototype.setHeading = function(heading) 
+{
+	this.heading = heading;
+};
+
+ChangeHistory.prototype.getPitch = function() 
+{
+	return this.pitch;
+};
+ChangeHistory.prototype.setPitch = function(pitch) 
+{
+	this.pitch = pitch;
+};
+
+ChangeHistory.prototype.getRoll = function() 
+{
+	return this.roll;
+};
+ChangeHistory.prototype.setRoll = function(roll) 
+{
+	this.roll = roll;
+};
+
+ChangeHistory.prototype.getColor = function() 
+{
+	return this.color;
+};
+ChangeHistory.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+ChangeHistory.prototype.getRgbColor = function() 
+{
+	return this.rgbColor;
+};
+ChangeHistory.prototype.setRgbColor = function(rgbColor) 
+{
+	this.rgbColor = rgbColor;
+};
+
+ChangeHistory.prototype.getProperty = function() 
+{
+	return this.property;
+};
+ChangeHistory.prototype.setProperty = function(property) 
+{
+	this.property = property;
+};
+ChangeHistory.prototype.getPropertyKey = function() 
+{
+	return this.propertyKey;
+};
+ChangeHistory.prototype.setPropertyKey = function(propertyKey) 
+{
+	this.propertyKey = propertyKey;
+};
+ChangeHistory.prototype.getPropertyValue = function() 
+{
+	return this.propertyValue;
+};
+ChangeHistory.prototype.setPropertyValue = function(propertyValue) 
+{
+	this.propertyValue = propertyValue;
+};
+
+ChangeHistory.prototype.getDuration = function()
+{
+	return this.duration;
+};
+ChangeHistory.prototype.setDuration = function(duration)
+{
+	this.duration = duration;
+};
+
+ChangeHistory.prototype.getObjectMoveMode = function() 
+{
+	return this.objectMoveMode;
+};
+ChangeHistory.prototype.setObjectMoveMode = function(objectMoveMode) 
+{
+	this.objectMoveMode = objectMoveMode;
+};
+"use strict";
+
+var CODE = {};
+
+// magoManager가 다 로딩 되지 않은 상태에서 화면으로 부터 호출 되는 것을 막기 위해
+CODE.magoManagerState = {
+	"INIT"   	: 0,
+	"STARTED"	: 1,
+	"READY"   : 2
+};
+
+//0 = no started to load. 1 = started loading. 2 = finished loading. 3 = parse started. 4 = parse finished.***
+CODE.fileLoadState = {
+	"READY"            : 0,
+	"LOADING_STARTED"  : 1,
+	"LOADING_FINISHED" : 2,
+	"PARSE_STARTED"    : 3,
+	"PARSE_FINISHED"   : 4
+};
+
+CODE.moveMode = {
+	"ALL"    : "0",
+	"OBJECT" : "1",
+	"NONE"   : "2"
+};
+
+CODE.PROJECT_ID_PREFIX = "projectId_";
+CODE.PROJECT_DATA_FOLDER_PREFIX = "projectDataFolder_";
+
+'use strict';
+
+/**
+ * 상수 설정
+ * @class Constant
+ */
+var Constant = {};
+
+Constant.CESIUM = "cesium";
+Constant.WORLDWIND = "worldwind";
+Constant.OBJECT_INDEX_FILE = "/objectIndexFile.ihe";
+Constant.CACHE_VERSION = "?cache_version=";
+Constant.SIMPLE_BUILDING_TEXTURE3x3_BMP = "/SimpleBuildingTexture3x3.bmp";
+Constant.RESULT_XDO2F4D = "/Result_xdo2f4d/Images/";
+Constant.RESULT_XDO2F4D_TERRAINTILES = "/Result_xdo2f4d/F4D_TerrainTiles/";
+Constant.RESULT_XDO2F4D_TERRAINTILEFILE_TXT = "/Result_xdo2f4d/f4dTerranTileFile.txt";
+
+Constant.INTERSECTION_OUTSIDE = 0;
+Constant.INTERSECTION_INTERSECT= 1;
+Constant.INTERSECTION_INSIDE = 2;
+
+'use strict';
+
+/**
+ * mago3D 전체 환경 설정을 관리
+ * @class MagoConfig
+ */
+var MagoConfig = {};
+
+MagoConfig.getPolicy = function() 
+{
+	return this.serverPolicy;
+};
+
+MagoConfig.getData = function(key) 
+{
+	return this.dataObject[key];
+};
+
+MagoConfig.isDataExist = function(key) 
+{
+	return this.dataObject.hasOwnProperty(key);
+};
+
+MagoConfig.deleteData = function(key) 
+{
+	return delete this.dataObject[key];
 };
 
 /**
- * Label show/hide
- * @param {ManagerFactory} managerFactoryInstance 
- * @param {boolean} isShow true = show, false = hide
+ * data 를 map에 저장
+ * @param key map에 저장될 key
+ * @param value map에 저장될 value
  */
-function changeLabelAPI(managerFactoryInstance, isShow) 
+MagoConfig.setData = function(key, value) 
 {
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeLabel");
-	api.setShowLabelInfo(isShow);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * boundingBox show/hide
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} isShow true = show, false = hide
- */
-function changeBoundingBoxAPI(managerFactoryInstance, isShow) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeBoundingBox");
-	api.setShowBoundingBox(isShow);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 속성값에 의한 가시화 유무설정
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} isShow true = 표시, false = 비표시
- */
-function changePropertyRenderingAPI(managerFactoryInstance, isShow, projectId, property) 
-{
-	if (managerFactoryInstance === null) { return; } 
-		
-	var api = new API("changePropertyRendering");
-	api.setShowShadow(isShow);
-	api.setProjectId(projectId);
-	api.setProperty(property);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 그림자 표시/비표시
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} isShow true = 활성화, false = 비활성화
- */
-function changeShadowAPI(managerFactoryInstance, isShow) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeShadow");
-	api.setShowShadow(isShow);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * color 변경
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} projectId 프로젝트 아이디
- * @param {string} dataKey data key
- * @param {string} objectIds object id. 복수개의 경우 , 로 입력
- * @param {string} property 속성값 예)isMain=true
- * @param {string} color R, G, B 색깔을 ',' 로 연결한 string 값을 받음.
- */
-function changeColorAPI(managerFactoryInstance, projectId, dataKey, objectIds, property, color) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeColor");
-	api.setProjectId(projectId);
-	api.setDataKey(dataKey);
-	api.setObjectIds(objectIds);
-	api.setProperty(property);
-	api.setColor(color);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * location and rotation 변경
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} projectId
- * @param {string} dataKey
- * @param {string} latitude 위도
- * @param {string} longitude 경도
- * @param {string} height 높이
- * @param {string} heading 좌, 우
- * @param {string} pitch 위, 아래
- * @param {string} roll 좌, 우 기울기
- */
-function changeLocationAndRotationAPI(managerFactoryInstance, projectId, dataKey, latitude, longitude, height, heading, pitch, roll) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeLocationAndRotation");
-	api.setProjectId(projectId);
-	api.setDataKey(dataKey);
-	api.setLatitude(latitude);
-	api.setLongitude(longitude);
-	api.setElevation(height);
-	api.setHeading(heading);
-	api.setPitch(pitch);
-	api.setRoll(roll);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 마우스 클릭 객체 이동 대상 변경
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} objectMoveMode 0 = All, 1 = object, 2 = None
- */
-function changeObjectMoveAPI(managerFactoryInstance, objectMoveMode) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeObjectMove");
-	api.setObjectMoveMode(objectMoveMode);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 마우스로 이동한 객체 정보를 브라우저내 저장
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} objectMoveMode 0 = All, 1 = object, 2 = None
- */
-function saveObjectMoveAPI(managerFactoryInstance, objectMoveMode) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("saveObjectMove");
-	api.setObjectMoveMode(objectMoveMode);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 브라우저내 모든 마우스 이동 정보를 삭제
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} objectMoveMode 0 = All, 1 = object, 2 = None
- */
-function deleteAllObjectMoveAPI(managerFactoryInstance, objectMoveMode) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("deleteAllObjectMove");
-	api.setObjectMoveMode(objectMoveMode);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 브라우저내 모든 색깔 변경 이력을 삭제
- * @param {ManagerFactory} managerFactoryInstance
- */
-function deleteAllChangeColorAPI(managerFactoryInstance) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("deleteAllChangeColor");
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 이슈 등록 활성화 유무
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} flag true = 활성화, false = 비활성화
- */
-function changeInsertIssueModeAPI(managerFactoryInstance, flag) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeInsertIssueMode");
-	api.setIssueInsertEnable(flag);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * object 정보 표시 활성화 유무
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} flag true = 활성화, false = 비활성화
- */
-function changeObjectInfoViewModeAPI(managerFactoryInstance, flag) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeObjectInfoViewMode");
-	api.setObjectInfoViewEnable(flag);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * Object Occlusion culling
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} flag true = 활성화, false = 비활성화
- * @param {string} dataKey
- */
-function changeOcclusionCullingAPI(managerFactoryInstance, flag, dataKey) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeOcclusionCulling");
-	api.setOcclusionCullingEnable(flag);
-	api.setDataKey(dataKey);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 1인칭, 3인칭 모드 개발중...
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} flag true = 활성화, false = 비활성화
- */
-function changeFPVModeAPI(managerFactoryInstance, flag)
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeFPVMode");
-	api.setFPVMode(flag);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 현재 위치 근처 issue list. false인 경우 clear
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} flag true = 활성화, false = 비활성화
- */
-function changeNearGeoIssueListViewModeAPI(managerFactoryInstance, flag) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeNearGeoIssueListViewMode");
-	api.setNearGeoIssueListEnable(flag);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * TODO 이건 위에 이슈 등록 활성화, 비활성화 api로 통합이 가능할거 같음
- * issue 등록 geo 정보 관련 상태 변경
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} insertIssueState 이슈 등록 좌표 상태
- */
-function changeInsertIssueStateAPI(managerFactoryInstance, insertIssueState) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeInsertIssueState");
-	api.setInsertIssueState(insertIssueState);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * LOD 설정을 변경
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} lod0DistInMeters
- * @param {string} lod1DistInMeters
- * @param {string} lod2DistInMeters
- * @param {string} lod3DistInMeters
- * @param {string} lod4DistInMeters
- * @param {string} lod5DistInMeters
- */
-function changeLodAPI(managerFactoryInstance, lod0DistInMeters, lod1DistInMeters, lod2DistInMeters, lod3DistInMeters, lod4DistInMeters, lod5DistInMeters)
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeLod");
-	api.setLod0DistInMeters(lod0DistInMeters);
-	api.setLod1DistInMeters(lod1DistInMeters);
-	api.setLod2DistInMeters(lod2DistInMeters);
-	api.setLod3DistInMeters(lod3DistInMeters);
-	api.setLod4DistInMeters(lod4DistInMeters);
-	api.setLod5DistInMeters(lod5DistInMeters);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * Lighting 설정
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} ambientReflectionCoef
- * @param {string} diffuseReflectionCoef
- * @param {string} specularReflectionCoef
- * @param {string} ambientColor
- * @param {string} specularColor
- */
-function changeLightingAPI(managerFactoryInstance, ambientReflectionCoef, diffuseReflectionCoef, specularReflectionCoef, ambientColor, specularColor)
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeLighting");
-	api.setAmbientReflectionCoef(ambientReflectionCoef);
-	api.setDiffuseReflectionCoef(diffuseReflectionCoef);
-	api.setSpecularReflectionCoef(specularReflectionCoef);
-	api.setAmbientColor(ambientColor);
-	api.setSpecularColor(specularColor);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * SSAO Radius 설정
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} ssaoRadius
- */
-function changeSsaoRadiusAPI(managerFactoryInstance, ssaoRadius)
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeSsaoRadius");
-	api.setSsaoRadius(ssaoRadius);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 화면에 있는 모든 데이터를 삭제, 비표시
- * @param {ManagerFactory} managerFactoryInstance
- */
-function clearAllDataAPI(managerFactoryInstance)
-{	
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("clearAllData");
-	MagoConfig.clearAllData();
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * pin image를 그림
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
- * @param {string} issue_id 이슈 고유키
- * @param {string} issue_type 이슈 고유키
- * @param {string} data_key 데이터 고유키
- * @param {string} latitude 데이터 고유키
- * @param {string} longitude 데이터 고유키
- * @param {string} height 데이터 고유키
- */
-function drawInsertIssueImageAPI(managerFactoryInstance, drawType, issue_id, issue_type, data_key, latitude, longitude, height) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("drawInsertIssueImage");
-	api.setDrawType(drawType);
-	api.setIssueId(issue_id);
-	api.setIssueId(issue_type);
-	api.setDataKey(data_key);
-	api.setLatitude(latitude);
-	api.setLongitude(longitude);
-	api.setElevation(height);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 해당 프로젝트를 로딩하고 이동하기
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} projectId project id
- * @param {string} latitude 데이터 고유키
- * @param {string} longitude 데이터 고유키
- * @param {string} height 데이터 고유키
- * @param {string} duration 이동하는 시간
- */
-function gotoProjectAPI(managerFactoryInstance, projectId, projectData, projectDataFolder, longitude, latitude, height, duration) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	MagoConfig.setData(CODE.PROJECT_ID_PREFIX + projectId, projectData);
-	MagoConfig.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder, projectDataFolder);
-	
-	var api = new API("gotoProject");
-	api.setProjectId(projectId);
-	api.setProjectDataFolder(projectDataFolder);
-	api.setLatitude(latitude);
-	api.setLongitude(longitude);
-	api.setElevation(height);
-	api.setDuration(duration);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 해당 프로젝트를 로딩하고 Issue 등록 지점으로 이동하기
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} projectId project id
- * @param {string} issueId issue id
- * @param {string} issueType issue type
- * @param {string} latitude 데이터 고유키
- * @param {string} longitude 데이터 고유키
- * @param {string} height 데이터 고유키
- * @param {string} duration 이동하는 시간
- */
-function gotoIssueAPI(managerFactoryInstance, projectId, projectData, projectDataFolder, issueId, issueType, longitude, latitude, height, duration)
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	MagoConfig.setData(CODE.PROJECT_ID_PREFIX + projectId, projectData);
-	MagoConfig.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder, projectDataFolder);
-	
-	var api = new API("gotoIssue");
-	api.setProjectId(projectId);
-	api.setProjectDataFolder(projectDataFolder);
-	api.setIssueId(issueId);
-	api.setIssueType(issueType);
-	api.setLatitude(latitude);
-	api.setLongitude(longitude);
-	api.setElevation(height);
-	api.setDuration(duration);
-	managerFactoryInstance.callAPI(api);
-}
-
-
-/**
- * 마우스를 사용할 수 없는 환경에서 버튼 이벤트로 대체
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} eventType 어떤 마우스 동작을 원하는지를 구분
- */
-function mouseMoveAPI(managerFactoryInstance, eventType) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	managerFactoryInstance.mouseMove(eventType);
-}
-
-/**
- * 데이터 검색
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} projectId 데이터 고유키
- * @param {string} dataKey 데이터 고유키
- */
-function searchDataAPI(managerFactoryInstance, projectId, dataKey) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("searchData");
-	api.setProjectId(projectId);
-	api.setDataKey(dataKey);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 환경 설정 data Object에 key 값의 존재 유무를 판별
- * @param {string} key 검색 키
- * @param 
- */
-function isDataExistAPI(key) 
-{
-	if (MagoConfig.isDataExist(key)) { return true; }
-	else { return false; }
-}
-
-/**
- * 환경 설정 data map에서 key 값을 취득
- * @param {string} key 검색 키
- * @param 
- */
-function getDataAPI(key) 
-{
-	return MagoConfig.getData(key);
-}
-
-/**
- * Data Key 를 이용하여 Geo Spatial Info를 취득
- * @param {ManagerFactory} managerFactoryInstance
- * @param {String} projectId 고유키
- * @param {String} dataKey Data 고유키
- * @param
- */
-function getDataInfoByDataKeyAPI(managerFactoryInstance, projectId, dataKey)
-{
-	if (managerFactoryInstance === null) { return; }
-
-	var api = new API("getDataInfoByDataKey");
-	api.setProjectId(projectId);
-	api.setDataKey(dataKey);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 데이터를 Rendering
- * @param {ManagerFactory} managerFactoryInstance
- * @param {Object[]} projectIdArray 프로젝트 이름들
- * @param {Object[]} projectDataArray 프로젝트 데이터들
- * @param {Object[]} projectDataFolderArray 프로젝트 f4d 파일 경로
- * @param 
- */
-function drawAppendDataAPI(managerFactoryInstance, projectIdArray, projectDataArray, projectDataFolderArray) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	if (projectIdArray.length <= 0) { return; }
-	
-	var api = new API("drawAppendData");
-	projectIdArray.forEach(function(dataName, index) 
+	if (!this.isDataExist(key)) 
 	{
-			
-		MagoConfig.setData(CODE.PROJECT_ID_PREFIX + dataName, projectDataArray[index]);
-		MagoConfig.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolderArray[index], projectDataFolderArray[index]);
-		
-		api.setProjectId(dataName);
-		api.setProjectDataFolder(projectDataFolderArray[index]);
-		managerFactoryInstance.callAPI(api);
-	});
-}
-
-'use strict';
-
-/**
- * color 처리 관련 도메인
- * @class ColorAPI
- */
-var ColorAPI = {};
-
-ColorAPI.changeColor = function(api, magoManager) 
-{
-	var projectId = api.getProjectId();
-	var dataKey = api.getDataKey();
-	var objectIds = api.getObjectIds();
-	var property = api.getProperty();
-	var propertyKey = null;
-	var propertyValue = null;
-	if (property !== null && property !== "") 
-	{
-		var properties = property.split("=");
-		propertyKey = properties[0];
-		propertyValue = properties[1];
+		this.dataObject[key] = value;
 	}
-	var color = api.getColor().split(",");
-	var rgbColor = [ color[0]/255, color[1]/255, color[2]/255 ] ;
-	
-	var isExistObjectIds = false;
-	if (objectIds !== null && objectIds.length !== 0) 
+};
+
+/**
+ * F4D Converter 실행 결과물이 저장된 project data folder 명을 획득
+ * @param projectDataFolder data folder
+ */
+MagoConfig.getProjectDataFolder = function(projectDataFolder) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	return this.dataObject[key];
+};
+
+/**
+ * project map에 data folder명의 존재 유무를 검사
+ * @param projectDataFolder
+ */
+MagoConfig.isProjectDataFolderExist = function(projectDataFolder) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	return this.dataObject.hasOwnProperty(key);
+};
+
+/**
+ * project data folder명을 map에서 삭제
+ * @param projectDataFolder
+ */
+MagoConfig.deleteProjectDataFolder = function(projectDataFolder) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	return delete this.dataObject[key];
+};
+
+/**
+ * project data folder명을 Object에서 삭제
+ * @param projectDataFolder Object에 저장될 key
+ * @param value Object에 저장될 value
+ */
+MagoConfig.setProjectDataFolder = function(projectDataFolder, value) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	if (!this.isProjectDataFolderExist(key))
 	{
-		isExistObjectIds = true;
+		this.dataObject[key] = value;
 	}
+};
+
+/**
+ * 환경설정 초기화
+ * @param serverPolicy mago3d policy(json)
+ * @param projectIdArray data 정보를 map 저장할 key name
+ * @param projectDataArray data 정보(json)
+ */
+MagoConfig.init = function(serverPolicy, projectIdArray, projectDataArray) 
+{
+	this.dataObject = {};
 	
-	var changeHistorys = [];
-	if (isExistObjectIds) 
+	this.selectHistoryObject = {};
+	this.movingHistoryObject = {};
+	this.colorHistoryObject = {};
+	this.locationAndRotationHistoryObject = {};
+	
+	this.serverPolicy = serverPolicy;
+	if (projectIdArray !== null && projectIdArray.length > 0) 
 	{
-		for (var i=0, objectCount = objectIds.length; i<objectCount; i++) 
+		for (var i=0; i<projectIdArray.length; i++) 
 		{
-			var changeHistory = new ChangeHistory();
-			changeHistory.setProjectId(projectId);
-			changeHistory.setDataKey(dataKey);
-			changeHistory.setObjectId(objectIds[i]);
-			changeHistory.setProperty(property);
-			changeHistory.setPropertyKey(propertyKey);
-			changeHistory.setPropertyValue(propertyValue);
-			changeHistory.setRgbColor(rgbColor);
-			
-			changeHistorys.push(changeHistory);
+			if (!this.isDataExist(CODE.PROJECT_ID_PREFIX + projectIdArray[i])) 
+			{
+				this.setData(CODE.PROJECT_ID_PREFIX + projectIdArray[i], projectDataArray[i]);
+				this.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataArray[i].data_key, projectDataArray[i].data_key);
+			}
 		}
+	}
+};
+
+/**
+ * 모든 데이터를 삭제함
+ */
+MagoConfig.clearAllData = function() 
+{
+	this.dataObject = {};
+};
+
+/**
+ * 모든 선택 히스토리 삭제
+ */
+MagoConfig.clearSelectHistory = function() 
+{
+	this.selectHistoryObject = {};
+};
+
+/**
+ * 모든 object 선택 내용 이력을 취득
+ */
+MagoConfig.getAllSelectHistory = function()
+{
+	return this.selectHistoryObject;
+};
+
+/**
+ * project 별 해당 키에 해당하는 모든 object 선택 내용 이력을 취득
+ */
+MagoConfig.getSelectHistoryObjects = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * object 선택 내용 이력을 취득
+ */
+MagoConfig.getSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * object 선택 내용을 저장
+ */
+MagoConfig.saveSelectHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject.get(projectId);
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.selectHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+		projectIdObject[dataKey] = dataKeyObject;
+	}
+	
+	// objectIndexOrder 를 저장
+	dataKeyObject[objectIndexOrder] = changeHistory;
+};
+
+/**
+ * object 선택 내용을 삭제
+ */
+MagoConfig.deleteSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return delete dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * 모든 이동 히스토리 삭제
+ */
+MagoConfig.clearMovingHistory = function() 
+{
+	this.movingHistoryObject = {};
+};
+
+/**
+ * 모든 object 선택 내용 이력을 취득
+ */
+MagoConfig.getAllMovingHistory = function()
+{
+	return this.movingHistoryObject;
+};
+
+/**
+ * project별 입력키 값과 일치하는 object 이동 내용 이력을 취득
+ */
+MagoConfig.getMovingHistoryObjects = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * object 이동 내용 이력을 취득
+ */
+MagoConfig.getMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * object 이동 내용을 저장
+ */
+MagoConfig.saveMovingHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.movingHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+		projectIdObject[dataKey] = dataKeyObject;
+	}
+	
+	// objectIndexOrder 를 저장
+	dataKeyObject[objectIndexOrder] = changeHistory;
+};
+
+/**
+ * object 이동 내용을 삭제
+ */
+MagoConfig.deleteMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return delete dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * 모든 색깔 변경 이력을 획득
+ */
+MagoConfig.getAllColorHistory = function() 
+{
+	return this.colorHistoryObject;
+};
+
+/**
+ * 모든 색깔변경 히스토리 삭제
+ */
+MagoConfig.clearColorHistory = function() 
+{
+	this.colorHistoryObject = {};
+};
+
+/**
+ * project별 키에 해당하는 모든 색깔 변경 이력을 획득
+ */
+MagoConfig.getColorHistorys = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * 색깝 변경 이력을 획득
+ */
+MagoConfig.getColorHistory = function(projectId, dataKey, objectId)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectId 를 저장
+	return dataKeyObject[objectId];
+};
+
+/**
+ * 색깝 변경 내용을 저장
+ */
+MagoConfig.saveColorHistory = function(projectId, dataKey, objectId, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.colorHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+		projectIdObject[dataKey] = dataKeyObject;
+	}
+
+	if (objectId === null || objectId === "") 
+	{
+		dataKeyObject[dataKey] = changeHistory;
 	}
 	else 
 	{
-		var changeHistory = new ChangeHistory();
-		changeHistory.setProjectId(projectId);
-		changeHistory.setDataKey(dataKey);
-		changeHistory.setObjectId(null);
-		changeHistory.setProperty(property);
-		changeHistory.setPropertyKey(propertyKey);
-		changeHistory.setPropertyValue(propertyValue);
-		changeHistory.setRgbColor(rgbColor);
-		
-		changeHistorys.push(changeHistory);
+		dataKeyObject[objectId] = changeHistory;
 	}
+};
 
-	var changeHistory;
-	var historiesCount = changeHistorys.length;
-	for (var i=0; i<historiesCount; i++)
+/**
+ * 색깔 변경 이력을 삭제
+ */
+MagoConfig.deleteColorHistory = function(projectId, dataKey, objectId)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return delete dataKeyObject[objectId];
+};
+
+/**
+ * 모든 색깔변경 히스토리 삭제
+ */
+MagoConfig.clearColorHistory = function() 
+{
+	this.colorHistoryObject = {};
+};
+
+/**
+ * 모든 location and rotation 변경 이력을 획득
+ */
+MagoConfig.getAllLocationAndRotationHistory = function() 
+{
+	return this.locationAndRotationHistoryObject;
+};
+
+/**
+ * 프로젝트별 해당 키 값을 갖는 모든 location and rotation 이력을 획득
+ */
+MagoConfig.getLocationAndRotationHistorys = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * location and rotation 이력을 획득
+ */
+MagoConfig.getLocationAndRotationHistory = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	
+	return dataKeyObject;
+};
+
+/**
+ * location and rotation 내용을 저장
+ */
+MagoConfig.saveLocationAndRotationHistory = function(projectId, dataKey, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined)
 	{
-		changeHistory = changeHistorys[i];
-		MagoConfig.saveColorHistory(projectId, dataKey, changeHistory.getObjectId(), changeHistory);
+		projectIdObject = {};
+		this.locationAndRotationHistoryObject[projectId] = projectIdObject;
 	}
-};
-'use strict';
-
-/**
- * Draw 관련 API를 담당하는 클래스
- * 원래는 이렇게 만들려고 한게 아니지만, legacy 파일이랑 이름, function 등이 중복되서 이렇게 만들었음
- * @class DrawAPI
- */
-var DrawAPI = {};
-
-DrawAPI.drawAppendData = function(api, magoManager) 
-{
-	magoManager.getObjectIndexFile(api.getProjectId(), api.getProjectDataFolder());
-};
-
-DrawAPI.drawInsertIssueImage = function(api, magoManager) 
-{
-	// pin 을 표시
-	if (magoManager.objMarkerSC === undefined || api.getDrawType() === 0) 
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
 	{
-		magoManager.objMarkerSC = new ObjectMarker();
-		magoManager.objMarkerSC.geoLocationData.geographicCoord = new GeographicCoord();
-		ManagerUtils.calculateGeoLocationData(parseFloat(api.getLongitude()), parseFloat(api.getLatitude()), parseFloat(api.getElevation()), 
-			undefined, undefined, undefined, magoManager.objMarkerSC.geoLocationData, magoManager);
+		dataKeyObject = {};
 	}
-	
-	var objMarker = magoManager.objMarkerManager.newObjectMarker();
-	
-	magoManager.objMarkerSC.issue_id = api.getIssueId();
-	magoManager.objMarkerSC.issue_type = api.getIssueType();
-	magoManager.objMarkerSC.geoLocationData.geographicCoord.setLonLatAlt(parseFloat(api.getLongitude()), parseFloat(api.getLatitude()), parseFloat(api.getElevation()));
-	
-	objMarker.copyFrom(magoManager.objMarkerSC);
-	magoManager.objMarkerSC = undefined;
+
+	dataKeyObject[dataKey] = changeHistory;
 };
+
+/**
+ * location and rotation 이력을 삭제
+ */
+MagoConfig.deleteLocationAndRotationHistory = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = delete projectIdObject[dataKey];
+};
+
+/**
+ * 모든 location and rotation 히스토리 삭제
+ */
+MagoConfig.clearLocationAndRotationHistory = function() 
+{
+	this.locationAndRotationHistoryObject = {};
+};
+	
+/**
+ * TODO 이건 나중에 활요. 사용하지 않음
+ * check 되지 않은 데이터들을 삭제함
+ * @param keyObject 비교할 맵
+ */
+/*MagoConfig.clearUnSelectedData = function(keyObject)
+{
+	for (var key of this.dataObject.keys())
+	{
+		if (!keyObject.hasxxxxx(key))
+		{
+			// data folder path가 존재하면....
+			if (key.indexOf(CODE.PROJECT_DATA_FOLDER_PREFIX) >= 0) 
+			{
+				// 지우는 처리가 있어야 함
+			}
+			this.dataObject.delete(key);
+		}
+	}
+};*/
+
 'use strict';
 
 /**
- * 변환 행렬 API
- * @class LocationAndRotationAPI
+ * Policy
+ * @class Policy
  */
-var LocationAndRotationAPI = {};
-
-LocationAndRotationAPI.changeLocationAndRotation = function(api, magoManager) 
+var Policy = function() 
 {
-//	var buildingId = api.getDataKey();
-//	var buildingType = "structure";
-//	var building = this.getNeoBuildingByTypeId(buildingType, buildingId);
+	if (!(this instanceof Policy)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
 
-	var changeHistory = new ChangeHistory();
-	changeHistory.setProjectId(api.getProjectId());
-	changeHistory.setDataKey(api.getDataKey());
-	changeHistory.setLatitude(parseFloat(api.getLatitude()));
-	changeHistory.setLongitude(parseFloat(api.getLongitude()));
-	changeHistory.setElevation(parseFloat(api.getElevation()));
-	changeHistory.setHeading(parseFloat(api.getHeading()));
-	changeHistory.setPitch(parseFloat(api.getPitch()));
-	changeHistory.setRoll(parseFloat(api.getRoll()));
+	// mago3d 활성화/비활성화 여부
+	this.magoEnable = true;
+
+	// outfitting 표시 여부
+	this.showOutFitting = false;
+	// label 표시/비표시
+	this.showLabelInfo = false;
+	// boundingBox 표시/비표시
+	this.showBoundingBox = false;
+	// 그림자 표시/비표시
+	this.showShadow = false;
+	// squared far frustum 거리
+	this.frustumFarSquaredDistance = 5000000;
+	// far frustum
+	this.frustumFarDistance = 2300;
+
+	// highlighting
+	this.highLightedBuildings = [];
+	// color
+	this.colorBuildings = [];
+	// color
+	this.color = [];
+	// show/hide
+	this.hideBuildings = [];
+	// move mode
+	this.objectMoveMode = CODE.moveMode.NONE;
+	// 이슈 등록 표시
+	this.issueInsertEnable = false;
+	// object 정보 표시
+	this.objectInfoViewEnable = false;
+	// 이슈 목록 표시
+	this.nearGeoIssueListEnable = false;
+	// occlusion culling
+	this.occlusionCullingEnable = false;
 	
-	magoManager.changeLocationAndRotation(	api.getProjectId(),
-		api.getDataKey(),
-		parseFloat(api.getLatitude()),
-		parseFloat(api.getLongitude()),
-		parseFloat(api.getElevation()),
-		parseFloat(api.getHeading()),
-		parseFloat(api.getPitch()),
-		parseFloat(api.getRoll()));
+	// 이미지 경로
+	this.imagePath = "";
 	
-	// MagoConfig에 저장......?
+	// provisional.***
+	this.colorChangedObjectId;
+	
+	// LOD1
+	this.lod0DistInMeters = 15;
+	this.lod1DistInMeters = 50;
+	this.lod2DistInMeters = 90;
+	this.lod3DistInMeters = 200;
+	this.lod4DistInMeters = 1000;
+	this.lod5DistInMeters = 50000;
+	
+	// Lighting
+	this.ambientReflectionCoef = 0.45; // 0.2.
+	this.diffuseReflectionCoef = 0.75; // 1.0
+	this.specularReflectionCoef = 0.6; // 0.7
+	this.ambientColor = null;
+	this.specularColor = new Float32Array([0.6, 0.6, 0.6]);
+	
+	this.ssaoRadius = 0.15;
 };
-'use strict';
 
-/**
- * lod 처리 관련 도메인
- * @class LodAPI
- */
-var LodAPI = {};
-
-LodAPI.changeLod = function(api, magoManager) 
+Policy.prototype.getMagoEnable = function() 
 {
-	if (api.getLod0DistInMeters() !== null && api.getLod0DistInMeters() !== "") { magoManager.magoPolicy.setLod0DistInMeters(api.getLod0DistInMeters()); }
-	if (api.getLod1DistInMeters() !== null && api.getLod1DistInMeters() !== "") { magoManager.magoPolicy.setLod1DistInMeters(api.getLod1DistInMeters()); }
-	if (api.getLod2DistInMeters() !== null && api.getLod2DistInMeters() !== "") { magoManager.magoPolicy.setLod2DistInMeters(api.getLod2DistInMeters()); }
-	if (api.getLod3DistInMeters() !== null && api.getLod3DistInMeters() !== "") { magoManager.magoPolicy.setLod3DistInMeters(api.getLod3DistInMeters()); }
-	if (api.getLod4DistInMeters() !== null && api.getLod4DistInMeters() !== "") { magoManager.magoPolicy.setLod4DistInMeters(api.getLod4DistInMeters()); }
-	if (api.getLod5DistInMeters() !== null && api.getLod5DistInMeters() !== "") { magoManager.magoPolicy.setLod5DistInMeters(api.getLod5DistInMeters()); }
+	return this.magoEnable;
 };
+Policy.prototype.setMagoEnable = function(magoEnable) 
+{
+	this.magoEnable = magoEnable;
+};
+
+Policy.prototype.getShowOutFitting = function() 
+{
+	return this.showOutFitting;
+};
+Policy.prototype.setShowOutFitting = function(showOutFitting) 
+{
+	this.showOutFitting = showOutFitting;
+};
+Policy.prototype.getShowLabelInfo = function() 
+{
+	return this.showLabelInfo;
+};
+Policy.prototype.setShowLabelInfo = function(showLabelInfo) 
+{
+	this.showLabelInfo = showLabelInfo;
+};
+Policy.prototype.getShowBoundingBox = function() 
+{
+	return this.showBoundingBox;
+};
+Policy.prototype.setShowBoundingBox = function(showBoundingBox) 
+{
+	this.showBoundingBox = showBoundingBox;
+};
+
+Policy.prototype.getShowShadow = function() 
+{
+	return this.showShadow;
+};
+Policy.prototype.setShowShadow = function(showShadow) 
+{
+	this.showShadow = showShadow;
+};
+
+Policy.prototype.getFrustumFarSquaredDistance = function() 
+{
+	return this.frustumFarSquaredDistance;
+};
+Policy.prototype.setFrustumFarSquaredDistance = function(frustumFarSquaredDistance) 
+{
+	this.frustumFarSquaredDistance = frustumFarSquaredDistance;
+};
+
+Policy.prototype.getFrustumFarDistance = function() 
+{
+	return this.frustumFarDistance;
+};
+Policy.prototype.setFrustumFarDistance = function(frustumFarDistance) 
+{
+	this.frustumFarDistance = frustumFarDistance;
+};
+
+Policy.prototype.getHighLightedBuildings = function() 
+{
+	return this.highLightedBuildings;
+};
+Policy.prototype.setHighLightedBuildings = function(highLightedBuildings) 
+{
+	this.highLightedBuildings = highLightedBuildings;
+};
+
+Policy.prototype.getColorBuildings = function() 
+{
+	return this.colorBuildings;
+};
+Policy.prototype.setColorBuildings = function(colorBuildings) 
+{
+	this.colorBuildings = colorBuildings;
+};
+
+Policy.prototype.getColor = function() 
+{
+	return this.color;
+};
+Policy.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+
+Policy.prototype.getHideBuildings = function() 
+{
+	return this.hideBuildings;
+};
+Policy.prototype.setHideBuildings = function(hideBuildings) 
+{
+	this.hideBuildings = hideBuildings;
+};
+
+Policy.prototype.getObjectMoveMode = function() 
+{
+	return this.objectMoveMode;
+};
+Policy.prototype.setObjectMoveMode = function(objectMoveMode) 
+{
+	this.objectMoveMode = objectMoveMode;
+};
+
+Policy.prototype.getIssueInsertEnable = function() 
+{
+	return this.issueInsertEnable;
+};
+Policy.prototype.setIssueInsertEnable = function(issueInsertEnable) 
+{
+	this.issueInsertEnable = issueInsertEnable;
+};
+Policy.prototype.getObjectInfoViewEnable = function() 
+{
+	return this.objectInfoViewEnable;
+};
+Policy.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
+{
+	this.objectInfoViewEnable = objectInfoViewEnable;
+};
+Policy.prototype.getOcclusionCullingEnable = function() 
+{
+	return this.occlusionCullingEnable;
+};
+Policy.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
+{
+	this.occlusionCullingEnable = occlusionCullingEnable;
+};
+Policy.prototype.getNearGeoIssueListEnable = function() 
+{
+	return this.nearGeoIssueListEnable;
+};
+Policy.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
+{
+	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
+};
+
+Policy.prototype.getImagePath = function() 
+{
+	return this.imagePath;
+};
+Policy.prototype.setImagePath = function(imagePath) 
+{
+	this.imagePath = imagePath;
+};
+
+Policy.prototype.getLod0DistInMeters = function() 
+{
+	return this.lod0DistInMeters;
+};
+Policy.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
+{
+	this.lod0DistInMeters = lod0DistInMeters;
+};
+Policy.prototype.getLod1DistInMeters = function() 
+{
+	return this.lod1DistInMeters;
+};
+Policy.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
+{
+	this.lod1DistInMeters = lod1DistInMeters;
+};
+Policy.prototype.getLod2DistInMeters = function() 
+{
+	return this.lod2DistInMeters;
+};
+Policy.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
+{
+	this.lod2DistInMeters = lod2DistInMeters;
+};
+Policy.prototype.getLod3DistInMeters = function() 
+{
+	return this.lod3DistInMeters;
+};
+Policy.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
+{
+	this.lod3DistInMeters = lod3DistInMeters;
+};
+Policy.prototype.getLod4DistInMeters = function() 
+{
+	return this.lod4DistInMeters;
+};
+Policy.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
+{
+	this.lod4DistInMeters = lod4DistInMeters;
+};
+Policy.prototype.getLod5DistInMeters = function() 
+{
+	return this.lod5DistInMeters;
+};
+Policy.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
+{
+	this.lod5DistInMeters = lod5DistInMeters;
+};
+Policy.prototype.getAmbientReflectionCoef = function() 
+{
+	return this.ambientReflectionCoef;
+};
+Policy.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
+{
+	this.ambientReflectionCoef = ambientReflectionCoef;
+};
+Policy.prototype.getDiffuseReflectionCoef = function() 
+{
+	return this.diffuseReflectionCoef;
+};
+Policy.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
+{
+	this.diffuseReflectionCoef = diffuseReflectionCoef;
+};
+Policy.prototype.getSpecularReflectionCoef = function() 
+{
+	return this.specularReflectionCoef;
+};
+Policy.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
+{
+	this.specularReflectionCoef = specularReflectionCoef;
+};
+Policy.prototype.getAmbientColor = function() 
+{
+	return this.ambientColor;
+};
+Policy.prototype.setAmbientColor = function(ambientColor) 
+{
+	this.ambientColor = ambientColor;
+};
+Policy.prototype.getSpecularColor = function() 
+{
+	return this.specularColor;
+};
+Policy.prototype.setSpecularColor = function(specularColor) 
+{
+	this.specularColor = specularColor;
+};
+Policy.prototype.getSsaoRadius = function() 
+{
+	return this.ssaoRadius;
+};
+Policy.prototype.setSsaoRadius = function(ssaoRadius) 
+{
+	this.ssaoRadius = ssaoRadius;
+};
+var MAGO3DJS_MESSAGE = new Object();
+
+
 'use strict';
 
 /**
@@ -28828,7 +28856,73 @@ NeoBuilding.prototype.getCurrentSkin = function()
 	{ return undefined; }
 	
 	var skinLego;
-	if (this.currentLod === 3)
+	if (this.currentLod === 0)
+	{
+		skinLego = this.lodMeshesMap.lod0;
+		
+		if (skinLego === undefined || !skinLego.isReadyToRender())
+		{
+			skinLego = this.lodMeshesMap.lod1;
+			if (skinLego === undefined || !skinLego.isReadyToRender())
+			{
+				skinLego = this.lodMeshesMap.lod2;
+				if (skinLego === undefined || !skinLego.isReadyToRender())
+				{
+					skinLego = this.lodMeshesMap.lod3;
+					if (skinLego === undefined || !skinLego.isReadyToRender())
+					{
+						skinLego = this.lodMeshesMap.lod4;
+						if (skinLego === undefined || !skinLego.isReadyToRender())
+						{
+							skinLego = this.lodMeshesMap.lod5;
+						}
+					}
+				}
+			}
+		}
+		
+	}
+	else if (this.currentLod === 1)
+	{
+		skinLego = this.lodMeshesMap.lod1;
+		
+		if (skinLego === undefined || !skinLego.isReadyToRender())
+		{
+			skinLego = this.lodMeshesMap.lod2;
+			if (skinLego === undefined || !skinLego.isReadyToRender())
+			{
+				skinLego = this.lodMeshesMap.lod3;
+				if (skinLego === undefined || !skinLego.isReadyToRender())
+				{
+					skinLego = this.lodMeshesMap.lod4;
+					if (skinLego === undefined || !skinLego.isReadyToRender())
+					{
+						skinLego = this.lodMeshesMap.lod5;
+					}
+				}
+			}
+		}
+		
+	}
+	else if (this.currentLod === 2)
+	{
+		skinLego = this.lodMeshesMap.lod2;
+		
+		if (skinLego === undefined || !skinLego.isReadyToRender())
+		{
+			skinLego = this.lodMeshesMap.lod3;
+			if (skinLego === undefined || !skinLego.isReadyToRender())
+			{
+				skinLego = this.lodMeshesMap.lod4;
+				if (skinLego === undefined || !skinLego.isReadyToRender())
+				{
+					skinLego = this.lodMeshesMap.lod5;
+				}
+			}
+		}
+		
+	}
+	else if (this.currentLod === 3)
 	{
 		skinLego = this.lodMeshesMap.lod3;
 		
@@ -34246,3252 +34340,6 @@ var TrianglesMatrix= function()
 
 	this.trianglesListsArray;
 };
-var MAGO3DJS_MESSAGE = new Object();
-
-
-'use strict';
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class UniformMatrix4fvDataPair
- * @param gl 변수
- */
-var UniformMatrix4fvDataPair = function(gl, uniformName) 
-{
-	if (!(this instanceof UniformMatrix4fvDataPair)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	this.gl = gl;
-	this.name = uniformName;
-	this.uniformLocation;
-	this.matrix4fv; 
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-UniformMatrix4fvDataPair.prototype.bindUniform = function() 
-{
-	this.gl.uniformMatrix4fv(this.uniformLocation, false, this.matrix4fv);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class UniformVec2fvDataPair
- * @param gl 변수
- */
-var UniformVec2fvDataPair = function(gl, uniformName) 
-{
-	if (!(this instanceof UniformVec2fvDataPair)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	this.gl = gl;
-	this.name = uniformName;
-	this.uniformLocation;
-	this.vec2fv; 
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-UniformVec2fvDataPair.prototype.bindUniform = function() 
-{
-	this.gl.uniform2fv(this.uniformLocation, false, this.vec2fv);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class UniformVec3fvDataPair
- * @param gl 변수
- */
-var UniformVec3fvDataPair = function(gl, uniformName) 
-{
-	if (!(this instanceof UniformVec3fvDataPair)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	this.gl = gl;
-	this.name = uniformName;
-	this.uniformLocation;
-	this.vec3fv; 
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-UniformVec3fvDataPair.prototype.bindUniform = function() 
-{
-	this.gl.uniform3fv(this.uniformLocation, false, this.vec3fv);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class UniformVec4fvDataPair
- * @param gl 변수
- */
-var UniformVec4fvDataPair = function(gl, uniformName) 
-{
-	if (!(this instanceof UniformVec4fvDataPair)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	this.gl = gl;
-	this.name = uniformName;
-	this.uniformLocation;
-	this.vec4fv; 
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-UniformVec4fvDataPair.prototype.bindUniform = function() 
-{
-	this.gl.uniform4fv(this.uniformLocation, false, this.vec4fv);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Uniform1fDataPair
- * @param gl 변수
- */
-var Uniform1fDataPair = function(gl, uniformName) 
-{
-	if (!(this instanceof Uniform1fDataPair)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	this.gl = gl;
-	this.name = uniformName;
-	this.uniformLocation;
-	this.floatValue; 
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-Uniform1fDataPair.prototype.bindUniform = function() 
-{
-	this.gl.uniform1f(this.uniformLocation, false, this.floatValue);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Uniform1iDataPair
- * @param gl 변수
- */
-var Uniform1iDataPair = function(gl, uniformName) 
-{
-	if (!(this instanceof Uniform1iDataPair)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	this.gl = gl;
-	this.name = uniformName;
-	this.uniformLocation;
-	this.intValue; 
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-Uniform1iDataPair.prototype.bindUniform = function() 
-{
-	this.gl.uniform1i(this.uniformLocation, false, this.intValue);
-};
-
-//**********************************************************************************************************************************************************
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class PostFxShader
- * @param gl 변수
- */
-var PostFxShader = function(gl) 
-{
-	if (!(this instanceof PostFxShader)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	this.gl = gl;
-	this.name;
-	this.attribLocationCacheObj = {};
-	this.uniformsArray = []; // this array has the same uniforms that "uniformsCacheObj".***
-	this.uniformsCacheObj = {}; // this object has the same uniforms that "uniformsArray".***
-	
-	// shader program.***
-	this.program;
-	this.shader_vertex;
-	this.shader_fragment;
-	
-	/*
-	// attributes.***
-	this.position3_loc;
-	this.color3_loc;
-	this.normal3_loc;
-	this.texCoord2_loc;
-
-	// uniforms matrix.***
-	this.projectionMatrix4_loc; // usually no used.***
-	this.modelViewMatrix4_loc;
-	this.modelViewProjectionMatrix4_loc;
-	this.modelViewMatrix4RelToEye_loc;
-	this.modelViewProjectionMatrix4RelToEye_loc;
-	this.normalMatrix4_loc;
-	this.normalMatrix3_loc;
-	this.RefTransfMatrix;
-
-	// uniform vectors.***
-	this.buildingPosHIGH_loc;
-	this.buildingPosLOW_loc;
-	this.cameraPosHIGH_loc;
-	this.cameraPosLOW_loc;
-	this.noiseScale2_loc;
-	this.kernel16_loc;
-
-	// uniform values.***
-	this.near_loc;
-	this.far_loc;
-	this.fov_loc;
-	this.aspectRatio_loc;
-	this.screenWidth_loc;
-	this.screenHeight_loc;
-
-	// uniform samplers.***
-	this.diffuseTex_loc;
-	this.depthTex_loc;
-	this.noiseTex_loc;
-
-	// blur.***
-	this.texelSize_loc;
-	this.colorTex_loc;
-
-	// Model Reference meshes.***
-	this.useRefTransfMatrix_loc;
-	this.useTexture_loc;
-	this.invertNormals_loc;
-	*/
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param shaderName 변수
- * @returns shader
- */
-PostFxShader.prototype.bindUniforms = function()
-{
-	var uniformsDataPairsCount = this.uniformsArray.length;
-	for (var i=0; i<uniformsDataPairsCount; i++)
-	{
-		this.uniformsArray[i].bindUniform();
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param shaderName 변수
- * @returns shader
- */
-PostFxShader.prototype.newUniformDataPair = function(uniformType, uniformName)
-{
-	var uniformDataPair;//
-	if (uniformType === "Matrix4fv")
-	{
-		uniformDataPair = new UniformMatrix4fvDataPair(this.gl, uniformName);
-		this.uniformsArray.push(uniformDataPair);
-		this.uniformsCacheObj[uniformName] = uniformDataPair;
-	}
-	else if (uniformType === "Vec4fv")
-	{
-		uniformDataPair = new UniformVec4fvDataPair(this.gl, uniformName);
-		this.uniformsArray.push(uniformDataPair);
-		this.uniformsCacheObj[uniformName] = uniformDataPair;
-	}
-	else if (uniformType === "Vec3fv")
-	{
-		uniformDataPair = new UniformVec3fvDataPair(this.gl, uniformName);
-		this.uniformsArray.push(uniformDataPair);
-		this.uniformsCacheObj[uniformName] = uniformDataPair;
-	}
-	else if (uniformType === "Vec2fv")
-	{
-		uniformDataPair = new UniformVec2fvDataPair(this.gl, uniformName);
-		this.uniformsArray.push(uniformDataPair);
-		this.uniformsCacheObj[uniformName] = uniformDataPair;
-	}
-	else if (uniformType === "1f")
-	{
-		uniformDataPair = new Uniform1fDataPair(this.gl, uniformName);
-		this.uniformsArray.push(uniformDataPair);
-		this.uniformsCacheObj[uniformName] = uniformDataPair;
-	}
-	else if (uniformType === "1i")
-	{
-		uniformDataPair = new Uniform1iDataPair(this.gl, uniformName);
-		this.uniformsArray.push(uniformDataPair);
-		this.uniformsCacheObj[uniformName] = uniformDataPair;
-	}
-	
-	return uniformDataPair;
-};
-
-//*********************************************************************************************************************
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class PostFxShadersManager
- */
-var PostFxShadersManager = function() 
-{
-	if (!(this instanceof PostFxShadersManager)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	this.gl;
-	this.pFx_shaders_array = []; // old.***
-	this.shadersCache = {};
-	
-	// preCreated shaders.***
-	this.modelRefShader;
-	this.modelRefSilhouetteShader;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param shaderName 변수
- * @returns shader
- */
-PostFxShadersManager.prototype.newShader = function(shaderName)
-{
-	var shader = new PostFxShader(this.gl);
-	shader.name = shaderName;
-	this.shadersCache[shaderName] = shader;
-	return shader;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param source 변수
- * @param type 변수
- * @param typeString 변수
- * @returns shader
- */
-PostFxShadersManager.prototype.getShader = function(gl, source, type, typeString) 
-{
-	// Source from internet.***
-	var shader = gl.createShader(type);
-	gl.shaderSource(shader, source);
-	gl.compileShader(shader);
-	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) 
-	{
-		alert("ERROR IN "+typeString+ " SHADER : " + gl.getShaderInfoLog(shader));
-		return false;
-	}
-	return shader;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createDefaultShaders = function(gl) 
-{
-	this.createRenderDepthShader(gl); // 0.***
-	this.createSsaoShader(gl); // 1.***
-	this.createBlurShader(gl); // 2.***
-
-	// Now, create shaders for modelReference geometries.****
-	this.createRenderDepthShaderModelRef(gl); // 3.***
-	this.modelRefShader = this.createSsaoShaderModelRef(gl); // 4.***
-	//this.createBlurShader_ModelRef(gl); // 5.***
-
-	this.createColorSelectionShaderModelRef(gl);// 5.***
-	this.createSimpleDepthShaderModelRef(gl);// 6.***
-
-	this.createRenderDepthShaderLODBuilding(gl);// 7.***
-	this.createSsaoShaderLODBuilding(gl);// 8.***
-
-	this.createRenderDepthShaderLego(gl);// 9.***
-	this.createSsaoShaderLego(gl);// 10.***
-
-	this.createDepthShaderBox(gl); // 11.***
-	this.createSsaoShaderBox(gl); // 12.***
-
-	this.createPngImageShader(gl); // 13.***
-	this.modelRefSilhouetteShader = this.createSilhouetteShaderModelRef(gl); // 14.***
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-PostFxShadersManager.prototype.getModelRefShader = function() 
-{
-	return this.modelRefShader;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-PostFxShadersManager.prototype.getModelRefSilhouetteShader = function() 
-{
-	return this.modelRefSilhouetteShader;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createBlurShader = function(gl) 
-{
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var blur_vs_source = ShaderSource.BlurVS;
-	var blur_fs_source = ShaderSource.BlurFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, blur_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, blur_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.projectionMatrix4_loc = gl.getUniformLocation(shader.program, "projectionMatrix");
-	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	shader.texCoord2_loc = gl.getAttribLocation(shader.program, "texCoord");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.texCoord = gl.getAttribLocation(shader.program, "texCoord");
-
-	shader.texelSize_loc = gl.getUniformLocation(shader.program, "texelSize");
-	shader.colorTex_loc = gl.getUniformLocation(shader.program, "colorTex");
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createSsaoShader = function(gl) 
-{
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var ssao_vs_source = ShaderSource.SsaoVS;
-	var ssao_fs_source = ShaderSource.SsaoFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.normalMatrix4_loc = gl.getUniformLocation(shader.program, "normalMatrix4");
-	shader.projectionMatrix4_loc = gl.getUniformLocation(shader.program, "projectionMatrix");
-	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	shader.texCoord2_loc = gl.getAttribLocation(shader.program, "texCoord");
-	shader.normal3_loc = gl.getAttribLocation(shader.program, "normal");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.normal = gl.getAttribLocation(shader.program, "normal");
-	shader.attribLocationCacheObj.texCoord = gl.getAttribLocation(shader.program, "texCoord");
-	// ssao uniforms.**********************************************************************
-	shader.noiseScale2_loc = gl.getUniformLocation(shader.program, "noiseScale");
-	shader.kernel16_loc = gl.getUniformLocation(shader.program, "kernel");
-
-	// uniform values.***
-	shader.near_loc = gl.getUniformLocation(shader.program, "near");
-	shader.far_loc = gl.getUniformLocation(shader.program, "far");
-	shader.fov_loc = gl.getUniformLocation(shader.program, "fov");
-	shader.aspectRatio_loc = gl.getUniformLocation(shader.program, "aspectRatio");
-
-	shader.screenWidth_loc = gl.getUniformLocation(shader.program, "screenWidth");
-	shader.screenHeight_loc = gl.getUniformLocation(shader.program, "screenHeight");
-
-	// uniform samplers.***
-	shader.depthTex_loc = gl.getUniformLocation(shader.program, "depthTex");
-	shader.noiseTex_loc = gl.getUniformLocation(shader.program, "noiseTex");
-	shader.diffuseTex_loc = gl.getUniformLocation(shader.program, "diffuseTex");
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createRenderDepthShader = function(gl) 
-{
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var showDepth_vs_source = ShaderSource.ShowDepthVS;
-	var showDepth_fs_source = ShaderSource.ShowDepthFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, showDepth_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, showDepth_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.normalMatrix4_loc = gl.getUniformLocation(shader.program, "normalMatrix4");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	shader.normal3_loc = gl.getAttribLocation(shader.program, "normal");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.normal = gl.getAttribLocation(shader.program, "normal");
-
-	shader.near_loc = gl.getUniformLocation(shader.program, "near");
-	shader.far_loc = gl.getUniformLocation(shader.program, "far");
-};
-
-// Ref Model.***********************************************************************************************************************
-// Ref Model.***********************************************************************************************************************
-// Ref Model.***********************************************************************************************************************
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createSsaoShaderModelRef = function(gl) 
-{
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(undefined); // old.***
-
-	var ssao_vs_source = ShaderSource.ModelRefSsaoVS;
-	var ssao_fs_source = ShaderSource.ModelRefSsaoFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh"); // sceneState.***
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow"); // sceneState.***
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye"); // sceneState.***
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye"); // sceneState.***
-	shader.normalMatrix4_loc = gl.getUniformLocation(shader.program, "normalMatrix4"); // sceneState.***
-	shader.projectionMatrix4_loc = gl.getUniformLocation(shader.program, "projectionMatrix"); // sceneState.***
-	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
-	
-	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
-	shader.refMatrixType_loc = gl.getUniformLocation(shader.program, "refMatrixType");
-	shader.refTranslationVec_loc = gl.getUniformLocation(shader.program, "refTranslationVec");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	shader.texCoord2_loc = gl.getAttribLocation(shader.program, "texCoord");
-	shader.normal3_loc = gl.getAttribLocation(shader.program, "normal");
-	
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.texCoord = gl.getAttribLocation(shader.program, "texCoord");
-	shader.attribLocationCacheObj.normal = gl.getAttribLocation(shader.program, "normal");
-	//*********************************************************************************
-	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
-
-	// ssao uniforms.**********************************************************************
-	shader.noiseScale2_loc = gl.getUniformLocation(shader.program, "noiseScale");
-	shader.kernel16_loc = gl.getUniformLocation(shader.program, "kernel");
-
-	// uniform values.***
-	shader.near_loc = gl.getUniformLocation(shader.program, "near"); // sceneState.***
-	shader.far_loc = gl.getUniformLocation(shader.program, "far"); // sceneState.***
-	shader.fov_loc = gl.getUniformLocation(shader.program, "fov"); // sceneState.***
-	shader.aspectRatio_loc = gl.getUniformLocation(shader.program, "aspectRatio"); // sceneState.***
-
-	shader.screenWidth_loc = gl.getUniformLocation(shader.program, "screenWidth"); // sceneState.***
-	shader.screenHeight_loc = gl.getUniformLocation(shader.program, "screenHeight"); // sceneState.***
-	
-	shader.shininessValue_loc = gl.getUniformLocation(shader.program, "shininessValue");
-
-	shader.hasTexture_loc = gl.getUniformLocation(shader.program, "hasTexture");
-	shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
-	shader.textureFlipYAxis_loc = gl.getUniformLocation(shader.program, "textureFlipYAxis");
-
-	// uniform samplers.***
-	shader.depthTex_loc = gl.getUniformLocation(shader.program, "depthTex");
-	shader.noiseTex_loc = gl.getUniformLocation(shader.program, "noiseTex");
-	shader.diffuseTex_loc = gl.getUniformLocation(shader.program, "diffuseTex"); 
-	
-	// lighting.
-	shader.specularColor_loc = gl.getUniformLocation(shader.program, "specularColor");
-	shader.ssaoRadius_loc = gl.getUniformLocation(shader.program, "radius");  
-
-	shader.ambientReflectionCoef_loc = gl.getUniformLocation(shader.program, "ambientReflectionCoef");
-	shader.diffuseReflectionCoef_loc = gl.getUniformLocation(shader.program, "diffuseReflectionCoef");
-	shader.specularReflectionCoef_loc = gl.getUniformLocation(shader.program, "specularReflectionCoef");
-	
-	return shader;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createRenderDepthShaderModelRef = function(gl, sceneState) 
-{
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var showDepth_vs_source = ShaderSource.RenderShowDepthVS;
-	var showDepth_fs_source = ShaderSource.RenderShowDepthFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, showDepth_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, showDepth_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
-	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
-	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
-	shader.refMatrixType_loc = gl.getUniformLocation(shader.program, "refMatrixType");
-	shader.refTranslationVec_loc = gl.getUniformLocation(shader.program, "refTranslationVec");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
-
-	shader.near_loc = gl.getUniformLocation(shader.program, "near");
-	shader.far_loc = gl.getUniformLocation(shader.program, "far");
-};
-
-// Selection shader.***********************************************************************************************************************
-// Selection shader.***********************************************************************************************************************
-// Selection shader.***********************************************************************************************************************
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createColorSelectionShaderModelRef = function(gl) 
-{
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var ssao_vs_source = ShaderSource.ColorSelectionSsaoVS;
-	var ssao_fs_source = ShaderSource.ColorSelectionSsaoFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
-	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
-	shader.refMatrixType_loc = gl.getUniformLocation(shader.program, "refMatrixType");
-	shader.refTranslationVec_loc = gl.getUniformLocation(shader.program, "refTranslationVec");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-
-	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
-
-	shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
-};
-
-// SimpleDepth shader.***********************************************************************************************************************
-// SimpleDepth shader.***********************************************************************************************************************
-// SimpleDepth shader.***********************************************************************************************************************
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createSimpleDepthShaderModelRef = function(gl) 
-{
-	// no used.!!!!!!!!!!!!!!!
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var ssao_vs_source = ShaderSource.SimpleDepthSsaoVS;
-	var ssao_fs_source = ShaderSource.SimpleDepthSsaoFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
-	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-
-	//shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
-	shader.far_loc = gl.getUniformLocation(shader.program, "far");
-};
-
-// LOD 2 Building Shader.***********************************************************************************************************************
-// LOD 2 Building Shader.***********************************************************************************************************************
-// LOD 2 Building Shader.***********************************************************************************************************************
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createSsaoShaderLODBuilding = function(gl) 
-{
-	// 8.***
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var ssao_vs_source = ShaderSource.LodBuildingSsaoVS;
-	var ssao_fs_source = ShaderSource.LodBuildingSsaoFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.normalMatrix4_loc = gl.getUniformLocation(shader.program, "normalMatrix4");
-	shader.projectionMatrix4_loc = gl.getUniformLocation(shader.program, "projectionMatrix");
-	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
-	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
-	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
-	shader.bUse1Color_loc = gl.getUniformLocation(shader.program, "bUse1Color");
-	shader.oneColor4_loc = gl.getUniformLocation(shader.program, "oneColor4");
-	shader.hasTexture_loc = gl.getUniformLocation(shader.program, "hasTexture");
-	shader.textureFlipYAxis_loc = gl.getUniformLocation(shader.program, "textureFlipYAxis");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	shader.texCoord2_loc = gl.getAttribLocation(shader.program, "texCoord");
-	shader.normal3_loc = gl.getAttribLocation(shader.program, "normal");
-	shader.color4_loc = gl.getAttribLocation(shader.program, "color4");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.normal = gl.getAttribLocation(shader.program, "normal");
-	shader.attribLocationCacheObj.color4 = gl.getAttribLocation(shader.program, "color4");
-
-	//*********************************************************************************
-	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
-
-	// ssao uniforms.**********************************************************************
-	shader.shininessValue_loc = gl.getUniformLocation(shader.program, "shininessValue");
-	shader.noiseScale2_loc = gl.getUniformLocation(shader.program, "noiseScale");
-	shader.kernel16_loc = gl.getUniformLocation(shader.program, "kernel");
-
-	// uniform values.***
-	shader.near_loc = gl.getUniformLocation(shader.program, "near");
-	shader.far_loc = gl.getUniformLocation(shader.program, "far");
-	shader.fov_loc = gl.getUniformLocation(shader.program, "fov");
-	shader.aspectRatio_loc = gl.getUniformLocation(shader.program, "aspectRatio");
-
-	shader.screenWidth_loc = gl.getUniformLocation(shader.program, "screenWidth");
-	shader.screenHeight_loc = gl.getUniformLocation(shader.program, "screenHeight");
-
-	//shader.hasTexture_loc = gl.getUniformLocation(shader.program, "hasTexture");
-	shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
-	shader.specularColor_loc = gl.getUniformLocation(shader.program, "specularColor");
-
-	// uniform samplers.***
-	shader.depthTex_loc = gl.getUniformLocation(shader.program, "depthTex");
-	shader.noiseTex_loc = gl.getUniformLocation(shader.program, "noiseTex");
-	shader.diffuseTex_loc = gl.getUniformLocation(shader.program, "diffuseTex");
-
-	// ModelReference.****
-	shader.useRefTransfMatrix_loc = gl.getUniformLocation(shader.program, "useRefTransfMatrix");
-	shader.useTexture_loc = gl.getUniformLocation(shader.program, "useTexture");
-	shader.invertNormals_loc  = gl.getUniformLocation(shader.program, "invertNormals");
-	shader.ssaoRadius_loc = gl.getUniformLocation(shader.program, "radius"); 
-	
-	shader.ambientReflectionCoef_loc = gl.getUniformLocation(shader.program, "ambientReflectionCoef");
-	shader.diffuseReflectionCoef_loc = gl.getUniformLocation(shader.program, "diffuseReflectionCoef");
-	shader.specularReflectionCoef_loc = gl.getUniformLocation(shader.program, "specularReflectionCoef");
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createRenderDepthShaderLODBuilding = function(gl) 
-{
-	// 7.***
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var showDepth_vs_source = ShaderSource.LodBuildingDepthVS;
-	var showDepth_fs_source = ShaderSource.LodBuildingDepthFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, showDepth_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, showDepth_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
-	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
-	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
-
-	shader.near_loc = gl.getUniformLocation(shader.program, "near");
-	shader.far_loc = gl.getUniformLocation(shader.program, "far");
-};
-
-// Lego Shader.***********************************************************************************************************************
-// Lego Shader.***********************************************************************************************************************
-// Lego Shader.***********************************************************************************************************************
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createSsaoShaderLego = function(gl) 
-{
-	// 10.***
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var ssao_vs_source = ShaderSource.LegoSsaoVS;
-	var ssao_fs_source = ShaderSource.LegoSsaoFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.normalMatrix4_loc = gl.getUniformLocation(shader.program, "normalMatrix4");
-	shader.projectionMatrix4_loc = gl.getUniformLocation(shader.program, "projectionMatrix");
-	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
-	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
-	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	//shader.texCoord2_loc = gl.getAttribLocation(shader.program, "texCoord");
-	shader.normal3_loc = gl.getAttribLocation(shader.program, "normal");
-	shader.color4_loc = gl.getAttribLocation(shader.program, "color4");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.normal = gl.getAttribLocation(shader.program, "normal");
-	shader.attribLocationCacheObj.color4 = gl.getAttribLocation(shader.program, "color4");
-
-	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
-
-	// ssao uniforms.**********************************************************************
-	shader.noiseScale2_loc = gl.getUniformLocation(shader.program, "noiseScale");
-	shader.kernel16_loc = gl.getUniformLocation(shader.program, "kernel");
-
-	// uniform values.***
-	shader.near_loc = gl.getUniformLocation(shader.program, "near");
-	shader.far_loc = gl.getUniformLocation(shader.program, "far");
-	shader.fov_loc = gl.getUniformLocation(shader.program, "fov");
-	shader.aspectRatio_loc = gl.getUniformLocation(shader.program, "aspectRatio");
-
-	shader.screenWidth_loc = gl.getUniformLocation(shader.program, "screenWidth");
-	shader.screenHeight_loc = gl.getUniformLocation(shader.program, "screenHeight");
-
-	shader.hasTexture_loc = gl.getUniformLocation(shader.program, "hasTexture");
-	shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
-
-	// uniform samplers.***
-	shader.depthTex_loc = gl.getUniformLocation(shader.program, "depthTex");
-	shader.noiseTex_loc = gl.getUniformLocation(shader.program, "noiseTex");
-	shader.diffuseTex_loc = gl.getUniformLocation(shader.program, "diffuseTex");
-
-	// ModelReference.****
-	shader.useRefTransfMatrix_loc = gl.getUniformLocation(shader.program, "useRefTransfMatrix");
-	shader.useTexture_loc = gl.getUniformLocation(shader.program, "useTexture");
-	shader.invertNormals_loc  = gl.getUniformLocation(shader.program, "invertNormals");
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createRenderDepthShaderLego = function(gl) 
-{
-	// 9.***
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var showDepth_vs_source = ShaderSource.LegoDepthVS;
-	var showDepth_fs_source = ShaderSource.LegoDepthFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, showDepth_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, showDepth_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
-	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
-	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
-
-	shader.near_loc = gl.getUniformLocation(shader.program, "near");
-	shader.far_loc = gl.getUniformLocation(shader.program, "far");
-};
-
-
-
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createRenderDepthShaderLODBuilding = function(gl) 
-{
-	// 7.***
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var showDepth_vs_source = ShaderSource.LodBuildingDepthVS;
-	var showDepth_fs_source = ShaderSource.LodBuildingDepthFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, showDepth_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, showDepth_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
-	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
-	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
-
-	shader.near_loc = gl.getUniformLocation(shader.program, "near");
-	shader.far_loc = gl.getUniformLocation(shader.program, "far");
-};
-
-// box depth Shader.***********************************************************************************************************************
-// box depth Shader.***********************************************************************************************************************
-// box depth Shader.***********************************************************************************************************************
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createDepthShaderBox = function(gl) 
-{
-	// 7.***
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var showDepth_vs_source = ShaderSource.BoxDepthVS;
-	var showDepth_fs_source = ShaderSource.BoxDepthFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, showDepth_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, showDepth_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
-	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
-	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
-
-	shader.near_loc = gl.getUniformLocation(shader.program, "near");
-	shader.far_loc = gl.getUniformLocation(shader.program, "far");
-};
-
-// box Shader.***********************************************************************************************************************
-// box Shader.***********************************************************************************************************************
-// box Shader.***********************************************************************************************************************
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createSsaoShaderBox = function(gl) 
-{
-	// 8.***
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var ssao_vs_source = ShaderSource.BoxSsaoVS;
-	var ssao_fs_source = ShaderSource.BoxSsaoFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.normalMatrix4_loc = gl.getUniformLocation(shader.program, "normalMatrix4");
-	shader.projectionMatrix4_loc = gl.getUniformLocation(shader.program, "projectionMatrix");
-	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
-	//shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
-	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
-	shader.bUse1Color_loc = gl.getUniformLocation(shader.program, "bUse1Color");
-	shader.oneColor4_loc = gl.getUniformLocation(shader.program, "oneColor4");
-	shader.bScale_loc = gl.getUniformLocation(shader.program, "bScale");
-	shader.scale_loc = gl.getUniformLocation(shader.program, "scale");
-
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	//shader.texCoord2_loc = gl.getAttribLocation(shader.program, "texCoord");
-	shader.normal3_loc = gl.getAttribLocation(shader.program, "normal");
-	shader.color4_loc = gl.getAttribLocation(shader.program, "color4");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.normal = gl.getAttribLocation(shader.program, "normal");
-	shader.attribLocationCacheObj.color4 = gl.getAttribLocation(shader.program, "color4");
-
-	//*********************************************************************************
-	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
-
-	// ssao uniforms.**********************************************************************
-	shader.noiseScale2_loc = gl.getUniformLocation(shader.program, "noiseScale");
-	shader.kernel16_loc = gl.getUniformLocation(shader.program, "kernel");
-
-	// uniform values.***
-	shader.near_loc = gl.getUniformLocation(shader.program, "near");
-	shader.far_loc = gl.getUniformLocation(shader.program, "far");
-	shader.fov_loc = gl.getUniformLocation(shader.program, "fov");
-	shader.aspectRatio_loc = gl.getUniformLocation(shader.program, "aspectRatio");
-
-	shader.screenWidth_loc = gl.getUniformLocation(shader.program, "screenWidth");
-	shader.screenHeight_loc = gl.getUniformLocation(shader.program, "screenHeight");
-
-	shader.hasTexture_loc = gl.getUniformLocation(shader.program, "hasTexture");
-	shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
-
-	// uniform samplers.***
-	shader.depthTex_loc = gl.getUniformLocation(shader.program, "depthTex");
-	shader.noiseTex_loc = gl.getUniformLocation(shader.program, "noiseTex");
-	shader.diffuseTex_loc = gl.getUniformLocation(shader.program, "diffuseTex");
-
-	// ModelReference.****
-	shader.useRefTransfMatrix_loc = gl.getUniformLocation(shader.program, "useRefTransfMatrix");
-	shader.useTexture_loc = gl.getUniformLocation(shader.program, "useTexture");
-	shader.invertNormals_loc  = gl.getUniformLocation(shader.program, "invertNormals");
-};
-
-// PNG images shader.**************************************************************************************************
-// PNG images shader.**************************************************************************************************
-// PNG images shader.**************************************************************************************************
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createPngImageShader = function(gl) 
-{
-	// 13.***
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(shader);
-
-	var ssao_vs_source = ShaderSource.PngImageVS;
-	var ssao_fs_source = ShaderSource.PngImageFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.texture_loc = gl.getUniformLocation(shader.program, "u_texture"); 
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
-	
-	shader.position3_loc = gl.getAttribLocation(shader.program, "a_position");
-	shader.texCoord2_loc = gl.getAttribLocation(shader.program, "a_texcoord");
-	
-	shader.textureFlipYAxis_loc = gl.getUniformLocation(shader.program, "textureFlipYAxis");
-	
-};
-
-// 14) Silhouette shader.***********************************************************************************************************************
-// 14) Silhouette shader.***********************************************************************************************************************
-// 14) Silhouette shader.***********************************************************************************************************************
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-PostFxShadersManager.prototype.createSilhouetteShaderModelRef = function(gl) 
-{
-	// 14.***
-	var shader = new PostFxShader(this.gl);
-	this.pFx_shaders_array.push(undefined);
-
-	var ssao_vs_source = ShaderSource.SilhouetteVS;
-	var ssao_fs_source = ShaderSource.SilhouetteFS;
-
-	shader.program = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(shader.program, shader.shader_vertex);
-	gl.attachShader(shader.program, shader.shader_fragment);
-	gl.linkProgram(shader.program);
-
-	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
-	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
-	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
-	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
-
-	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
-	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
-	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
-	shader.refMatrixType_loc = gl.getUniformLocation(shader.program, "refMatrixType");
-	shader.refTranslationVec_loc = gl.getUniformLocation(shader.program, "refTranslationVec");
-
-	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
-	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
-
-	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
-
-	shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
-	shader.camSpacePixelTranslation_loc = gl.getUniformLocation(shader.program, "camSpacePixelTranslation");
-	shader.screenSize_loc = gl.getUniformLocation(shader.program, "screenSize");
-	shader.ProjectionMatrix_loc = gl.getUniformLocation(shader.program, "ProjectionMatrix");
-	shader.ModelViewMatrixRelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewMatrixRelToEye");
-	
-	return shader;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-// An basic example.***********************************************************
-/*
-	var shader_vertex_source="\n\
-		attribute vec3 position;\n\
-		uniform mat4 Pmatrix;\n\
-		uniform mat4 Vmatrix;\n\
-		uniform mat4 Mmatrix;\n\
-		attribute vec3 color; //the color of the point\n\
-		varying vec3 vColor;\n\
-		void main(void) { //pre-built function\n\
-		gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
-		vColor=color;\n\
-		}";
-
-	var shader_fragment_source="\n\
-		precision mediump float;\n\
-		varying vec3 vColor;\n\
-		void main(void) {\n\
-		gl_FragColor = vec4(vColor, 1.);\n\
-		}";
-		*/
-// End example.-----------------------------------------------------------------
-
-// http://learningwebgl.com/blog/?p=507
-/*
-		http://blogs.agi.com/insight3d/index.php/2008/09/03/precisions-precisions/ // GPU RTE HighValue-LowValue
-		uniform vec3 uViewerHigh;
-		uniform vec3 uViewerLow;
-
-		void main(void)
-		{
-			vec3 highDifference = vec3(gl_Vertex.xyz - uViewerHigh);
-			vec3 lowDifference = vec3(gl_Normal.xyz - uViewerLow);
-			gl_Position = gl_ModelViewProjectionMatrix *
-				 vec4(highDifference + lowDifference, 1.0);
-		}
-		//-----------------------------------------------
-		void CDoubleToTwoFloats::Convert(double doubleValue,
-		float&amp; floatHigh, float&amp; floatLow)
-		{
-			if (doubleValue &gt;= 0.0)
-			{
-				double doubleHigh = floor(doubleValue / 65536.0) * 65536.0;
-				floatHigh = (float)doubleHigh;
-				floatLow = (float)(doubleValue - doubleHigh);
-			}
-			else
-			{
-				double doubleHigh = floor(-doubleValue / 65536.0) * 65536.0;
-				floatHigh = (float)-doubleHigh;
-				floatLow = (float)(doubleValue + doubleHigh);
-			}
-		}
-		//-----------------------------------------------
-		*/
-/*
-		vec4 czm_translateRelativeToEye(vec3 high, vec3 low)\n\
-		{\n\
-			vec3 highDifference = high - czm_encodedCameraPositionMCHigh;\n\
-			vec3 lowDifference = low - czm_encodedCameraPositionMCLow;\n\
-		\n\
-			return vec4(highDifference + lowDifference, 1.0);\n\
-		}\n\
-		*/
-
-/**
- * 조명 입력 및 재질 구성을 기반으로 렌더링 된 각 픽셀의 색상을 계산하기위한 수학적 계산 및 알고리즘을 포함하는 작은 스크립트
- * @class Shader
- */
-var Shader = function() 
-{
-	if (!(this instanceof Shader)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.shader_name;
-	this.shader_vertex_source;
-	this.shader_fragment_source;
-	this.SHADER_PROGRAM;
-
-	this.shader_vertex;
-	this.shader_fragment;
-
-	this._ModelViewProjectionMatrixRelToEye;
-	this._RefTransfMatrix;
-	this._NormalMatrix;
-
-	this._encodedCamPosHIGH;
-	this._encodedCamPosLOW;
-	this._BuildingPosHIGH;
-	this._BuildingPosLOW;
-	this._lightDirection;
-
-	this._color;
-	this._position;
-	this._texcoord;
-	this._normal;
-
-	// test.***
-	this.samplerUniform;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class ShadersManager
- */
-var ShadersManager = function() 
-{
-	if (!(this instanceof ShadersManager)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.shaders_array = [];
-
-	// Create shaders to render F4D_Format.**********************
-	// 1) Standard shader, that can render light mapping.***
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param idx = 변수
- * returns shader
- */
-ShadersManager.prototype.getMagoShader = function(idx) 
-{
-	var shader;
-
-	if (idx >= 0 && idx < this.shaders_array.length) 
-	{
-		shader = this.shaders_array[idx];
-	}
-
-	return shader;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ShadersManager.prototype.getShader = function(gl, source, type, typeString) 
-{
-	// Source from internet.***
-	var shader = gl.createShader(type);
-	gl.shaderSource(shader, source);
-	gl.compileShader(shader);
-	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) 
-	{
-		alert("ERROR IN "+typeString+ " SHADER : " + gl.getShaderInfoLog(shader));
-		return false;
-	}
-	return shader;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ShadersManager.prototype.createDefaultShader = function(gl) 
-{
-	this.createStandardShader(gl);                // 0.***
-	this.createTextureSimpleObjectShader(gl);     // 1.***
-	this.createColorSelectionShader(gl);          // 2.***
-	this.createTextureSimpleObjectA1Shader(gl);   // 3.***
-	this.createCloudShader(gl);                   // 4.***
-	this.createBlendingCubeShader(gl);            // 5.***
-	this.createPCloudShader(gl);                  // 6.***
-	this.createSimpleObjectTexNormalShader(gl); // 7.***
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ShadersManager.prototype.createColorSelectionShader = function(gl) 
-{
-	var shader = new Shader();
-	this.shaders_array.push(shader);
-
-	shader.shader_vertex_source = ShaderSource.ColorVS;
-	//http://www.lighthouse3d.com/tutorials/opengl-selection-tutorial/
-
-	shader.shader_fragment_source = ShaderSource.ColorFS;
-
-	// https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf
-	shader.SHADER_PROGRAM = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_vertex);
-	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_fragment);
-	gl.linkProgram(shader.SHADER_PROGRAM);
-
-	shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
-	shader._encodedCamPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
-	shader._encodedCamPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
-	shader._BuildingPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosHIGH");
-	shader._BuildingPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosLOW");
-	shader._RefTransfMatrix = gl.getUniformLocation(shader.SHADER_PROGRAM, "RefTransfMatrix");
-
-	shader._position = gl.getAttribLocation(shader.SHADER_PROGRAM, "position");
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ShadersManager.prototype.createTextureSimpleObjectShader = function(gl) 
-{
-	var shader = new Shader();
-	this.shaders_array.push(shader);
-
-	shader.shader_vertex_source = ShaderSource.TextureVS;
-	shader.shader_fragment_source = ShaderSource.TextureFS;
-
-	//http://learningwebgl.com/blog/?p=507
-	//https://gist.github.com/elnaqah/5070979
-	shader.SHADER_PROGRAM = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_vertex);
-	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_fragment);
-	gl.linkProgram(shader.SHADER_PROGRAM);
-
-	shader._encodedCamPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
-	shader._encodedCamPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
-	shader._BuildingPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosHIGH");
-	shader._BuildingPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosLOW");
-	shader._Mmatrix = gl.getUniformLocation(shader.SHADER_PROGRAM, "Mmatrix");
-	shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
-	shader.SHADER_PROGRAM.samplerUniform = gl.getUniformLocation(shader.SHADER_PROGRAM, "uSampler");
-
-	shader._position = gl.getAttribLocation(shader.SHADER_PROGRAM, "position");
-	shader._texcoord = gl.getAttribLocation(shader.SHADER_PROGRAM, "aTextureCoord");
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ShadersManager.prototype.createTextureSimpleObjectA1Shader = function(gl) 
-{
-	var shader = new Shader();
-	this.shaders_array.push(shader);
-
-	shader.shader_vertex_source = ShaderSource.TextureA1VS;
-	shader.shader_fragment_source = ShaderSource.TextureA1FS;
-
-	//http://learningwebgl.com/blog/?p=507
-	//https://gist.github.com/elnaqah/5070979
-	shader.SHADER_PROGRAM = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_vertex);
-	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_fragment);
-	gl.linkProgram(shader.SHADER_PROGRAM);
-
-	shader._encodedCamPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
-	shader._encodedCamPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
-	shader._BuildingPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosHIGH");
-	shader._BuildingPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosLOW");
-	shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
-	shader.SHADER_PROGRAM.samplerUniform = gl.getUniformLocation(shader.SHADER_PROGRAM, "uSampler");
-
-	shader._position = gl.getAttribLocation(shader.SHADER_PROGRAM, "position");
-	shader._texcoord = gl.getAttribLocation(shader.SHADER_PROGRAM, "aTextureCoord");
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ShadersManager.prototype.createStandardShader = function(gl) 
-{
-	// This shader renders the normal f4d geometry.***
-	var standard_shader = new Shader();
-	this.shaders_array.push(standard_shader);
-
-	standard_shader.shader_vertex_source = ShaderSource.StandardVS;
-	standard_shader.shader_fragment_source = ShaderSource.StandardFS;
-
-	// Default ShaderProgram.********************************************************************
-	standard_shader.SHADER_PROGRAM = gl.createProgram();
-	standard_shader.shader_vertex = this.getShader(gl, standard_shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
-	standard_shader.shader_fragment = this.getShader(gl, standard_shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_vertex);
-	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_fragment);
-	gl.linkProgram(standard_shader.SHADER_PROGRAM);
-
-	standard_shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
-	standard_shader._RefTransfMatrix = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "RefTransfMatrix");
-	standard_shader._encodedCamPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
-	standard_shader._encodedCamPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
-	standard_shader._BuildingPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "buildingPosHIGH");
-	standard_shader._BuildingPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "buildingPosLOW");
-
-	standard_shader._color = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "color");
-	standard_shader._position = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "position");
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ShadersManager.prototype.createCloudShader = function(gl) 
-{
-	// This shader renders the f4d clouds.***
-	var standard_shader = new Shader();
-	this.shaders_array.push(standard_shader);
-
-	standard_shader.shader_vertex_source = ShaderSource.CloudVS;
-	standard_shader.shader_fragment_source = ShaderSource.CloudFS;
-
-	// Default ShaderProgram.********************************************************************
-	standard_shader.SHADER_PROGRAM = gl.createProgram();
-	standard_shader.shader_vertex = this.getShader(gl, standard_shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
-	standard_shader.shader_fragment = this.getShader(gl, standard_shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_vertex);
-	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_fragment);
-	gl.linkProgram(standard_shader.SHADER_PROGRAM);
-
-	standard_shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
-	standard_shader._encodedCamPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
-	standard_shader._encodedCamPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
-	standard_shader._cloudPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "cloudPosHIGH");
-	standard_shader._cloudPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "cloudPosLOW");
-
-	standard_shader._color = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "color");
-	standard_shader._position = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "position");
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ShadersManager.prototype.createBlendingCubeShader = function(gl) 
-{
-	// This shader renders the f4d clouds.***
-	var standard_shader = new Shader();
-	this.shaders_array.push(standard_shader);
-
-	standard_shader.shader_vertex_source = ShaderSource.BlendingCubeVS;
-	standard_shader.shader_fragment_source = ShaderSource.BlendingCubeFS;
-
-	// Default ShaderProgram.********************************************************************
-	standard_shader.SHADER_PROGRAM = gl.createProgram();
-	standard_shader.shader_vertex = this.getShader(gl, standard_shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
-	standard_shader.shader_fragment = this.getShader(gl, standard_shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_vertex);
-	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_fragment);
-	gl.linkProgram(standard_shader.SHADER_PROGRAM);
-
-	standard_shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
-	standard_shader._encodedCamPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
-	standard_shader._encodedCamPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
-
-	standard_shader._color = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "color");
-	standard_shader._position = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "position");
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ShadersManager.prototype.createPCloudShader = function(gl) 
-{
-	// This shader renders the f4d clouds.***
-	var standard_shader = new Shader();
-	this.shaders_array.push(standard_shader);
-
-	standard_shader.shader_vertex_source = ShaderSource.PointCloudVS;
-	standard_shader.shader_fragment_source = ShaderSource.PointCloudFS;
-
-	// Default ShaderProgram.********************************************************************
-	standard_shader.SHADER_PROGRAM = gl.createProgram();
-	standard_shader.shader_vertex = this.getShader(gl, standard_shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
-	standard_shader.shader_fragment = this.getShader(gl, standard_shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-
-	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_vertex);
-	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_fragment);
-	gl.linkProgram(standard_shader.SHADER_PROGRAM);
-
-	standard_shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
-	standard_shader._encodedCamPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
-	standard_shader._encodedCamPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
-	standard_shader._BuildingPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "buildingPosHIGH");
-	standard_shader._BuildingPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "buildingPosLOW");
-
-	standard_shader._color = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "color");
-	standard_shader._position = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "position");
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ShadersManager.prototype.createSimpleObjectTexNormalShader = function(gl) 
-{
-	var shader = new Shader();
-	this.shaders_array.push(shader);
-	shader.shader_vertex_source = ShaderSource.TextureNormalVS;
-	shader.shader_fragment_source = ShaderSource.TextureNormalFS;
-
-	//http://learningwebgl.com/blog/?p=507
-	//https://gist.github.com/elnaqah/5070979
-	//https://dannywoodz.wordpress.com/2014/12/14/webgl-from-scratch-directional-lighting-part-1/
-	//http://learningwebgl.com/blog/?p=684 // good.***
-	shader.SHADER_PROGRAM = gl.createProgram();
-	shader.shader_vertex = this.getShader(gl, shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
-	shader.shader_fragment = this.getShader(gl, shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
-	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_vertex);
-	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_fragment);
-	gl.linkProgram(shader.SHADER_PROGRAM);
-
-	shader._encodedCamPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
-	shader._encodedCamPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
-	shader._BuildingPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosHIGH");
-	shader._BuildingPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosLOW");
-
-	shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
-	shader._NormalMatrix = gl.getUniformLocation(shader.SHADER_PROGRAM, "uNMatrix");
-
-	//shader.SHADER_PROGRAM.samplerUniform = gl.getUniformLocation(shader.SHADER_PROGRAM, "uSampler");
-	shader.samplerUniform = gl.getUniformLocation(shader.SHADER_PROGRAM, "uSampler");
-	shader._lightDirection = gl.getUniformLocation(shader.SHADER_PROGRAM, "uLightingDirection");
-
-	shader._position = gl.getAttribLocation(shader.SHADER_PROGRAM, "position");
-	shader._texcoord = gl.getAttribLocation(shader.SHADER_PROGRAM, "aTextureCoord");
-	shader._normal = gl.getAttribLocation(shader.SHADER_PROGRAM, "aVertexNormal");
-};
-
-//# sourceURL=Shader.js
-
-'use strict';
-var ShaderSource = {};
-ShaderSource.BlendingCubeFS = "	precision lowp float;\n\
-	varying vec4 vColor;\n\
-\n\
-	void main()\n\
-    {\n\
-		gl_FragColor = vColor;\n\
-	}";
-ShaderSource.BlendingCubeVS = "attribute vec3 position;\n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-attribute vec4 color;\n\
-varying vec4 vColor;\n\
-\n\
-void main()\n\
-{\n\
-    vec3 highDifference = -encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = position.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos = vec4(position.xyz, 1.0);\n\
-\n\
-    vColor=color;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
-}";
-ShaderSource.BlurFS = "#ifdef GL_ES\n\
-    precision highp float;\n\
-    #endif\n\
-uniform sampler2D colorTex;\n\
-uniform vec2 texelSize;\n\
-varying vec2 vTexCoord; 	 	\n\
-\n\
-void main()\n\
-{\n\
-    vec3 result = vec3(0.0);\n\
-    for (int i = 0; i < 4; ++i) {\n\
-        for (int j = 0; j < 4; ++j) {\n\
-            vec2 offset = vec2(texelSize.x * float(j), texelSize.y * float(i));\n\
-            result += texture2D(colorTex, vTexCoord + offset).rgb;\n\
-        }\n\
-    }\n\
-            \n\
-    gl_FragColor.rgb = vec3(result * 0.0625); \n\
-    gl_FragColor.a = 1.0;\n\
-}\n\
-";
-ShaderSource.BlurVS = "attribute vec4 position;\n\
-attribute vec2 texCoord;\n\
-\n\
-uniform mat4 projectionMatrix;\n\
-uniform mat4 modelViewMatrix;  \n\
-\n\
-varying vec2 vTexCoord;\n\
-\n\
-void main()\n\
-{	\n\
-    vTexCoord = texCoord;\n\
-    \n\
-    gl_Position = projectionMatrix * modelViewMatrix * position;\n\
-}\n\
-";
-ShaderSource.BoxDepthFS = "#ifdef GL_ES\n\
-    precision highp float;\n\
-#endif\n\
-uniform float near;\n\
-uniform float far;\n\
-\n\
-varying float depth;  \n\
-\n\
-vec4 packDepth(const in float depth)\n\
-{\n\
-    const vec4 bit_shift = vec4(16777216.0, 65536.0, 256.0, 1.0);\n\
-    const vec4 bit_mask  = vec4(0.0, 0.00390625, 0.00390625, 0.00390625); \n\
-    vec4 res = fract(depth * bit_shift);\n\
-    res -= res.xxyz * bit_mask;\n\
-    return res;  \n\
-}\n\
-\n\
-void main()\n\
-{     \n\
-    gl_FragData[0] = packDepth(-depth);\n\
-}\n\
-";
-ShaderSource.BoxDepthVS = "attribute vec3 position;\n\
-\n\
-uniform mat4 modelViewMatrixRelToEye; \n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform mat4 buildingRotMatrix;  \n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-uniform float near;\n\
-uniform float far;\n\
-uniform vec3 aditionalPosition;\n\
-\n\
-varying float depth;  \n\
-void main()\n\
-{	\n\
-    vec4 rotatedPos = buildingRotMatrix * vec4(position.xyz + aditionalPosition.xyz, 1.0);\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-    \n\
-    //linear depth in camera space (0..far)\n\
-    depth = (modelViewMatrixRelToEye * pos4).z/far;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-}\n\
-";
-ShaderSource.BoxSsaoFS = "#ifdef GL_ES\n\
-    precision highp float;\n\
-#endif\n\
-uniform sampler2D depthTex;\n\
-uniform sampler2D noiseTex;  \n\
-uniform sampler2D diffuseTex;\n\
-uniform bool hasTexture;\n\
-varying vec3 vNormal;\n\
-uniform mat4 projectionMatrix;\n\
-uniform mat4 m;\n\
-uniform vec2 noiseScale;\n\
-uniform float near;\n\
-uniform float far;            \n\
-uniform float fov;\n\
-uniform float aspectRatio;    \n\
-uniform float screenWidth;    \n\
-uniform float screenHeight;    \n\
-uniform vec3 kernel[16];   \n\
-uniform vec4 vColor4Aux;\n\
-\n\
-varying vec2 vTexCoord;   \n\
-varying vec3 vLightWeighting;\n\
-varying vec4 vcolor4;\n\
-\n\
-const int kernelSize = 16;  \n\
-const float radius = 0.5;      \n\
-\n\
-float unpackDepth(const in vec4 rgba_depth)\n\
-{\n\
-    const vec4 bit_shift = vec4(0.000000059605, 0.000015258789, 0.00390625, 1.0);\n\
-    float depth = dot(rgba_depth, bit_shift);\n\
-    return depth;\n\
-}                \n\
-\n\
-vec3 getViewRay(vec2 tc)\n\
-{\n\
-    float hfar = 2.0 * tan(fov/2.0) * far;\n\
-    float wfar = hfar * aspectRatio;    \n\
-    vec3 ray = vec3(wfar * (tc.x - 0.5), hfar * (tc.y - 0.5), -far);    \n\
-    return ray;                      \n\
-}         \n\
-            \n\
-//linear view space depth\n\
-float getDepth(vec2 coord)\n\
-{                          \n\
-    return unpackDepth(texture2D(depthTex, coord.xy));\n\
-}    \n\
-\n\
-void main()\n\
-{          \n\
-    vec2 screenPos = vec2(gl_FragCoord.x / screenWidth, gl_FragCoord.y / screenHeight);		                 \n\
-    float linearDepth = getDepth(screenPos);          \n\
-    vec3 origin = getViewRay(screenPos) * linearDepth;   \n\
-    vec3 normal2 = vNormal;   \n\
-            \n\
-    vec3 rvec = texture2D(noiseTex, screenPos.xy * noiseScale).xyz * 2.0 - 1.0;\n\
-    vec3 tangent = normalize(rvec - normal2 * dot(rvec, normal2));\n\
-    vec3 bitangent = cross(normal2, tangent);\n\
-    mat3 tbn = mat3(tangent, bitangent, normal2);        \n\
-    \n\
-    float occlusion = 0.0;\n\
-    for(int i = 0; i < kernelSize; ++i)\n\
-    {    	 \n\
-        vec3 sample = origin + (tbn * kernel[i]) * radius;\n\
-        vec4 offset = projectionMatrix * vec4(sample, 1.0);		\n\
-        offset.xy /= offset.w;\n\
-        offset.xy = offset.xy * 0.5 + 0.5;        \n\
-        float sampleDepth = -sample.z/far;\n\
-        float depthBufferValue = getDepth(offset.xy);				              \n\
-        float range_check = abs(linearDepth - depthBufferValue)+radius*0.998;\n\
-        if (range_check < radius*1.001 && depthBufferValue <= sampleDepth)\n\
-        {\n\
-            occlusion +=  1.0;\n\
-        }\n\
-        \n\
-    }   \n\
-        \n\
-    occlusion = 1.0 - occlusion / float(kernelSize);\n\
-                                \n\
-    vec3 lightPos = vec3(10.0, 10.0, 10.0);\n\
-    vec3 L = normalize(lightPos);\n\
-    float DiffuseFactor = dot(normal2, L);\n\
-    float NdotL = abs(DiffuseFactor);\n\
-    vec3 diffuse = vec3(NdotL);\n\
-    vec3 ambient = vec3(1.0);\n\
-    vec4 textureColor;\n\
-    textureColor = vcolor4;\n\
-\n\
-    gl_FragColor.rgb = vec3((textureColor.xyz)*vLightWeighting * occlusion); \n\
-    gl_FragColor.a = 1.0;   \n\
-}\n\
-";
-ShaderSource.BoxSsaoVS = "attribute vec3 position;\n\
-attribute vec3 normal;\n\
-attribute vec4 color4;\n\
-\n\
-uniform mat4 projectionMatrix;  \n\
-uniform mat4 modelViewMatrix;\n\
-uniform mat4 modelViewMatrixRelToEye; \n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform mat4 normalMatrix4;\n\
-uniform mat4 buildingRotMatrix;  \n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-uniform vec3 aditionalPosition;\n\
-uniform vec4 oneColor4;\n\
-uniform bool bUse1Color;\n\
-uniform vec3 scale;\n\
-uniform bool bScale;\n\
-\n\
-varying vec3 vNormal;\n\
-varying vec2 vTexCoord;  \n\
-varying vec3 uAmbientColor;\n\
-varying vec3 vLightWeighting;\n\
-varying vec4 vcolor4;\n\
-\n\
-void main()\n\
-{	\n\
-    vec4 position2 = vec4(position.xyz, 1.0);\n\
-    if(bScale)\n\
-    {\n\
-        position2.x *= scale.x;\n\
-        position2.y *= scale.y;\n\
-        position2.z *= scale.z;\n\
-    }\n\
-    vec4 rotatedPos = buildingRotMatrix * vec4(position2.xyz + aditionalPosition.xyz, 1.0);\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-   \n\
-    vec4 rotatedNormal = buildingRotMatrix * vec4(normal.xyz, 1.0);\n\
-    vLightWeighting = vec3(1.0, 1.0, 1.0);\n\
-    uAmbientColor = vec3(0.8, 0.8, 0.8);\n\
-    vec3 uLightingDirection = vec3(0.5, 0.5, 0.5);\n\
-    vec3 directionalLightColor = vec3(0.6, 0.6, 0.6);\n\
-    vNormal = (normalMatrix4 * vec4(rotatedNormal.x, rotatedNormal.y, rotatedNormal.z, 1.0)).xyz;\n\
-    float directionalLightWeighting = max(dot(vNormal, uLightingDirection), 0.0);\n\
-    vLightWeighting = uAmbientColor + directionalLightColor * directionalLightWeighting;\n\
-    if(bUse1Color)\n\
-    {\n\
-        vcolor4 = oneColor4;\n\
-    }\n\
-    else\n\
-    {\n\
-        vcolor4 = color4;\n\
-    }\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-}\n\
-";
-ShaderSource.CloudFS = "precision lowp float;\n\
-varying vec3 vColor;\n\
-\n\
-void main()\n\
-{\n\
-    gl_FragColor = vec4(vColor, 1.);\n\
-}";
-ShaderSource.CloudVS = "attribute vec3 position;\n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform vec3 cloudPosHIGH;\n\
-uniform vec3 cloudPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-attribute vec3 color;\n\
-varying vec3 vColor;\n\
-\n\
-void main()\n\
-{\n\
-    vec3 objPosHigh = cloudPosHIGH;\n\
-    vec3 objPosLow = cloudPosLOW.xyz + position.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-\n\
-    vColor=color;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
-}";
-ShaderSource.ColorFS = "precision mediump float;\n\
-uniform int byteColor_r;\n\
-uniform int byteColor_g;\n\
-uniform int byteColor_b;\n\
-\n\
-void main()\n\
-{\n\
-    float byteMaxValue = 255.0;\n\
-\n\
-    gl_FragColor = vec4(float(byteColor_r)/byteMaxValue, float(byteColor_g)/byteMaxValue, float(byteColor_b)/byteMaxValue, 1);\n\
-}\n\
-";
-ShaderSource.ColorSelectionSsaoFS = "precision highp float;\n\
-uniform vec4 vColor4Aux;\n\
-\n\
-void main()\n\
-{          \n\
-    gl_FragColor = vColor4Aux;\n\
-}\n\
-";
-ShaderSource.ColorSelectionSsaoVS = "attribute vec3 position;\n\
-\n\
-uniform mat4 buildingRotMatrix;\n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform mat4 RefTransfMatrix;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-uniform vec3 aditionalPosition;\n\
-uniform vec3 refTranslationVec;\n\
-uniform int refMatrixType; // 0= identity, 1= translate, 2= transform\n\
-\n\
-void main()\n\
-{\n\
-    vec4 rotatedPos;\n\
-	if(refMatrixType == 0)\n\
-	{\n\
-		rotatedPos = buildingRotMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
-	}\n\
-	else if(refMatrixType == 1)\n\
-	{\n\
-		rotatedPos = buildingRotMatrix * vec4(position.xyz + refTranslationVec.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
-	}\n\
-	else if(refMatrixType == 2)\n\
-	{\n\
-		rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
-	}\n\
-\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-    \n\
-    gl_PointSize = 10.0;\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-}\n\
-";
-ShaderSource.ColorVS = "attribute vec3 position;\n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-uniform mat4 RefTransfMatrix;\n\
-\n\
-void main()\n\
-{\n\
-    vec4 rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0);\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-    \n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
-}\n\
-";
-ShaderSource.LegoDepthFS = "#ifdef GL_ES\n\
-precision highp float;\n\
-#endif\n\
-uniform float near;\n\
-uniform float far;\n\
-\n\
-varying float depth;  \n\
-\n\
-vec4 packDepth(const in float depth)\n\
-{\n\
-    const vec4 bit_shift = vec4(16777216.0, 65536.0, 256.0, 1.0);\n\
-    const vec4 bit_mask  = vec4(0.0, 0.00390625, 0.00390625, 0.00390625); \n\
-    vec4 res = fract(depth * bit_shift);\n\
-    res -= res.xxyz * bit_mask;\n\
-    return res;  \n\
-}\n\
-\n\
-void main()\n\
-{     \n\
-    gl_FragData[0] = packDepth(-depth);\n\
-}\n\
-";
-ShaderSource.LegoDepthVS = "attribute vec3 position;\n\
-attribute vec3 normal;\n\
-attribute vec2 texCoord;\n\
-\n\
-uniform mat4 modelViewMatrixRelToEye; \n\
-uniform mat4 RefTransfMatrix;\n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-uniform float near;\n\
-uniform float far;\n\
-uniform vec3 aditionalPosition;\n\
-\n\
-varying float depth;  \n\
-void main()\n\
-{	\n\
-    vec4 rotatedPos = RefTransfMatrix * vec4(position.xyz + aditionalPosition.xyz, 1.0);\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-\n\
-    depth = (modelViewMatrixRelToEye * pos4).z/far;\n\
-    \n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-}\n\
-";
-ShaderSource.LegoSsaoFS = "#ifdef GL_ES\n\
-    precision highp float;\n\
-#endif\n\
-uniform sampler2D depthTex;\n\
-uniform sampler2D noiseTex;  \n\
-uniform sampler2D diffuseTex;\n\
-uniform bool hasTexture;\n\
-varying vec3 vNormal;\n\
-uniform mat4 projectionMatrix;\n\
-uniform mat4 m;\n\
-uniform vec2 noiseScale;\n\
-uniform float near;\n\
-uniform float far;            \n\
-uniform float fov;\n\
-uniform float aspectRatio;    \n\
-uniform float screenWidth;    \n\
-uniform float screenHeight;    \n\
-uniform vec3 kernel[16];   \n\
-uniform vec4 vColor4Aux;\n\
-\n\
-varying vec2 vTexCoord;   \n\
-varying vec3 vLightWeighting;\n\
-varying vec4 vcolor4;\n\
-\n\
-const int kernelSize = 16;  \n\
-const float radius = 0.5;      \n\
-\n\
-float unpackDepth(const in vec4 rgba_depth)\n\
-{\n\
-    const vec4 bit_shift = vec4(0.000000059605, 0.000015258789, 0.00390625, 1.0);\n\
-    float depth = dot(rgba_depth, bit_shift);\n\
-    return depth;\n\
-}                \n\
-\n\
-vec3 getViewRay(vec2 tc)\n\
-{\n\
-    float hfar = 2.0 * tan(fov/2.0) * far;\n\
-    float wfar = hfar * aspectRatio;    \n\
-    vec3 ray = vec3(wfar * (tc.x - 0.5), hfar * (tc.y - 0.5), -far);    \n\
-    return ray;                      \n\
-}         \n\
-            \n\
-//linear view space depth\n\
-float getDepth(vec2 coord)\n\
-{                          \n\
-    return unpackDepth(texture2D(depthTex, coord.xy));\n\
-}    \n\
-\n\
-void main()\n\
-{          \n\
-    vec2 screenPos = vec2(gl_FragCoord.x / screenWidth, gl_FragCoord.y / screenHeight);		                 \n\
-    float linearDepth = getDepth(screenPos);          \n\
-    vec3 origin = getViewRay(screenPos) * linearDepth;   \n\
-    vec3 normal2 = vNormal;   \n\
-            \n\
-    vec3 rvec = texture2D(noiseTex, screenPos.xy * noiseScale).xyz * 2.0 - 1.0;\n\
-    vec3 tangent = normalize(rvec - normal2 * dot(rvec, normal2));\n\
-    vec3 bitangent = cross(normal2, tangent);\n\
-    mat3 tbn = mat3(tangent, bitangent, normal2);        \n\
-    \n\
-    float occlusion = 0.0;\n\
-    for(int i = 0; i < kernelSize; ++i)\n\
-    {    	 \n\
-        vec3 sample = origin + (tbn * kernel[i]) * radius;\n\
-        vec4 offset = projectionMatrix * vec4(sample, 1.0);		\n\
-        offset.xy /= offset.w;\n\
-        offset.xy = offset.xy * 0.5 + 0.5;        \n\
-        float sampleDepth = -sample.z/far;\n\
-        float depthBufferValue = getDepth(offset.xy);				              \n\
-        float range_check = abs(linearDepth - depthBufferValue)+radius*0.998;\n\
-        if (range_check < radius*1.001 && depthBufferValue <= sampleDepth)\n\
-        {\n\
-            occlusion +=  1.0;\n\
-        }\n\
-        \n\
-    }   \n\
-        \n\
-    occlusion = 1.0 - occlusion / float(kernelSize);\n\
-                                \n\
-    vec3 lightPos = vec3(10.0, 10.0, 10.0);\n\
-    vec3 L = normalize(lightPos);\n\
-    float DiffuseFactor = dot(normal2, L);\n\
-    float NdotL = abs(DiffuseFactor);\n\
-    vec3 diffuse = vec3(NdotL);\n\
-    vec3 ambient = vec3(1.0);\n\
-    vec4 textureColor;\n\
-    textureColor = vcolor4;\n\
-\n\
-    gl_FragColor.rgb = vec3((textureColor.xyz)*vLightWeighting * occlusion); \n\
-    gl_FragColor.a = 1.0;   \n\
-}\n\
-";
-ShaderSource.LegoSsaoVS = "attribute vec3 position;\n\
-attribute vec3 normal;\n\
-attribute vec4 color4;\n\
-attribute vec2 texCoord;\n\
-\n\
-uniform mat4 projectionMatrix;  \n\
-uniform mat4 modelViewMatrix;\n\
-uniform mat4 modelViewMatrixRelToEye; \n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform mat4 RefTransfMatrix;\n\
-uniform mat4 normalMatrix4;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-uniform vec3 aditionalPosition;\n\
-\n\
-varying vec3 vNormal;\n\
-varying vec2 vTexCoord;  \n\
-varying vec3 uAmbientColor;\n\
-varying vec3 vLightWeighting;\n\
-varying vec4 vcolor4;\n\
-\n\
-void main()\n\
-{	\n\
-    vec4 rotatedPos = RefTransfMatrix * vec4(position.xyz + aditionalPosition.xyz, 1.0);\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-    \n\
-    vec3 rotatedNormal = mat3(RefTransfMatrix) * normal;\n\
-    vLightWeighting = vec3(1.0, 1.0, 1.0);\n\
-    uAmbientColor = vec3(0.8, 0.8, 0.8);\n\
-    vec3 uLightingDirection = vec3(0.5, 0.5, 0.5);\n\
-    vec3 directionalLightColor = vec3(0.6, 0.6, 0.6);\n\
-    vNormal = (normalMatrix4 * vec4(rotatedNormal.x, rotatedNormal.y, rotatedNormal.z, 1.0)).xyz;\n\
-\n\
-    float directionalLightWeighting = max(dot(vNormal, uLightingDirection), 0.0);\n\
-    vLightWeighting = uAmbientColor + directionalLightColor * directionalLightWeighting;\n\
-    vcolor4 = color4;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-}\n\
-";
-ShaderSource.LodBuildingDepthFS = "#ifdef GL_ES\n\
-    precision highp float;\n\
-#endif\n\
-uniform float near;\n\
-uniform float far;\n\
-\n\
-varying float depth;  \n\
-\n\
-vec4 packDepth(const in float depth)\n\
-{\n\
-    const vec4 bit_shift = vec4(16777216.0, 65536.0, 256.0, 1.0);\n\
-    const vec4 bit_mask  = vec4(0.0, 0.00390625, 0.00390625, 0.00390625); \n\
-    vec4 res = fract(depth * bit_shift);\n\
-    res -= res.xxyz * bit_mask;\n\
-    return res;  \n\
-}\n\
-\n\
-void main()\n\
-{     \n\
-    gl_FragData[0] = packDepth(-depth);\n\
-}\n\
-";
-ShaderSource.LodBuildingDepthVS = "attribute vec3 position;\n\
-\n\
-uniform mat4 modelViewMatrixRelToEye; \n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform mat4 buildingRotMatrix;  \n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-uniform float near;\n\
-uniform float far;\n\
-uniform vec3 aditionalPosition;\n\
-\n\
-varying float depth;  \n\
-void main()\n\
-{	\n\
-    vec4 rotatedPos = buildingRotMatrix * vec4(position.xyz + aditionalPosition.xyz, 1.0);\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-        \n\
-    depth = (modelViewMatrixRelToEye * pos4).z/far;\n\
-    \n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-}\n\
-";
-ShaderSource.LodBuildingSsaoFS = "#ifdef GL_ES\n\
-    precision highp float;\n\
-#endif\n\
-uniform sampler2D depthTex;\n\
-uniform sampler2D noiseTex;  \n\
-uniform sampler2D diffuseTex;\n\
-uniform bool hasTexture;\n\
-uniform bool textureFlipYAxis;\n\
-varying vec3 vNormal;\n\
-uniform mat4 projectionMatrix;\n\
-uniform mat4 m;\n\
-uniform vec2 noiseScale;\n\
-uniform float near;\n\
-uniform float far;            \n\
-uniform float fov;\n\
-uniform float aspectRatio;    \n\
-uniform float screenWidth;    \n\
-uniform float screenHeight;   \n\
-uniform float shininessValue; \n\
-uniform vec3 kernel[16];   \n\
-uniform vec4 vColor4Aux;\n\
-\n\
-varying vec2 vTexCoord;   \n\
-varying vec3 vLightWeighting;\n\
-varying vec4 vcolor4;\n\
-uniform vec3 specularColor;\n\
-varying vec3 vertexPos;\n\
-\n\
-const int kernelSize = 16;  \n\
-uniform float radius;    \n\
-\n\
-uniform float ambientReflectionCoef;\n\
-uniform float diffuseReflectionCoef;  \n\
-uniform float specularReflectionCoef;  \n\
-\n\
-float unpackDepth(const in vec4 rgba_depth)\n\
-{\n\
-    const vec4 bit_shift = vec4(0.000000059605, 0.000015258789, 0.00390625, 1.0);\n\
-    float depth = dot(rgba_depth, bit_shift);\n\
-    return depth;\n\
-}                \n\
-\n\
-vec3 getViewRay(vec2 tc)\n\
-{\n\
-    float hfar = 2.0 * tan(fov/2.0) * far;\n\
-    float wfar = hfar * aspectRatio;    \n\
-    vec3 ray = vec3(wfar * (tc.x - 0.5), hfar * (tc.y - 0.5), -far);    \n\
-    return ray;                      \n\
-}         \n\
-            \n\
-//linear view space depth\n\
-float getDepth(vec2 coord)\n\
-{                          \n\
-    return unpackDepth(texture2D(depthTex, coord.xy));\n\
-}    \n\
-\n\
-void main()\n\
-{          \n\
-    vec2 screenPos = vec2(gl_FragCoord.x / screenWidth, gl_FragCoord.y / screenHeight);		                 \n\
-    float linearDepth = getDepth(screenPos);          \n\
-    vec3 origin = getViewRay(screenPos) * linearDepth;   \n\
-\n\
-    vec3 normal2 = vNormal;   \n\
-            \n\
-    vec3 rvec = texture2D(noiseTex, screenPos.xy * noiseScale).xyz * 2.0 - 1.0;\n\
-    vec3 tangent = normalize(rvec - normal2 * dot(rvec, normal2));\n\
-    vec3 bitangent = cross(normal2, tangent);\n\
-    mat3 tbn = mat3(tangent, bitangent, normal2);        \n\
-    \n\
-    float occlusion = 0.0;\n\
-    for(int i = 0; i < kernelSize; ++i)\n\
-    {    	 \n\
-        vec3 sample = origin + (tbn * kernel[i]) * radius;\n\
-        vec4 offset = projectionMatrix * vec4(sample, 1.0);		\n\
-        offset.xy /= offset.w;\n\
-        offset.xy = offset.xy * 0.5 + 0.5;        \n\
-        float sampleDepth = -sample.z/far;\n\
-		if(sampleDepth > 0.49)\n\
-			continue;\n\
-        float depthBufferValue = getDepth(offset.xy);				              \n\
-        float range_check = abs(linearDepth - depthBufferValue)+radius*0.998;\n\
-        if (range_check < radius*1.001 && depthBufferValue <= sampleDepth)\n\
-        {\n\
-            occlusion +=  1.0;\n\
-        }\n\
-        \n\
-    }   \n\
-        \n\
-    occlusion = 1.0 - occlusion / float(kernelSize);\n\
-                                \n\
-    vec3 lightPos = vec3(20.0, 60.0, 20.0);\n\
-    vec3 L = normalize(lightPos - vertexPos);\n\
-    float lambertian = max(dot(normal2, L), 0.0);\n\
-    float specular = 0.0;\n\
-    if(lambertian > 0.0)\n\
-    {\n\
-        vec3 R = reflect(-L, normal2);      // Reflected light vector\n\
-        vec3 V = normalize(-vertexPos); // Vector to viewer\n\
-        \n\
-        // Compute the specular term\n\
-        float specAngle = max(dot(R, V), 0.0);\n\
-        specular = pow(specAngle, shininessValue);\n\
-    }\n\
-	\n\
-	if(lambertian < 0.5)\n\
-    {\n\
-		lambertian = 0.5;\n\
-	}\n\
-\n\
-    vec4 textureColor;\n\
-    if(hasTexture)\n\
-    {\n\
-        if(textureFlipYAxis)\n\
-        {\n\
-            textureColor = texture2D(diffuseTex, vec2(vTexCoord.s, 1.0 - vTexCoord.t));\n\
-        }\n\
-        else{\n\
-            textureColor = texture2D(diffuseTex, vec2(vTexCoord.s, vTexCoord.t));\n\
-        }\n\
-		\n\
-        if(textureColor.w == 0.0)\n\
-        {\n\
-            discard;\n\
-        }\n\
-    }\n\
-    else{\n\
-        textureColor = vColor4Aux;\n\
-    }\n\
-	\n\
-	vec3 ambientColor = vec3(textureColor.x, textureColor.y, textureColor.z);\n\
-\n\
-    gl_FragColor = vec4((ambientReflectionCoef * ambientColor + diffuseReflectionCoef * lambertian * textureColor.xyz + specularReflectionCoef * specular * specularColor)*vLightWeighting * occlusion, 1.0); \n\
-}\n\
-";
-ShaderSource.LodBuildingSsaoVS = "attribute vec3 position;\n\
-attribute vec3 normal;\n\
-attribute vec4 color4;\n\
-attribute vec2 texCoord;\n\
-\n\
-uniform sampler2D diffuseTex;\n\
-uniform mat4 projectionMatrix;  \n\
-uniform mat4 modelViewMatrix;\n\
-uniform mat4 modelViewMatrixRelToEye; \n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform mat4 normalMatrix4;\n\
-uniform mat4 buildingRotMatrix;  \n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-uniform vec3 aditionalPosition;\n\
-uniform vec4 oneColor4;\n\
-uniform bool bUse1Color;\n\
-uniform bool hasTexture;\n\
-\n\
-varying vec3 vNormal;\n\
-varying vec2 vTexCoord;   \n\
-varying vec3 uAmbientColor;\n\
-varying vec3 vLightWeighting;\n\
-varying vec4 vcolor4;\n\
-varying vec3 vertexPos;\n\
-\n\
-void main()\n\
-{	\n\
-    vec4 rotatedPos = buildingRotMatrix * vec4(position.xyz + aditionalPosition.xyz, 1.0);\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-	\n\
-	vertexPos = vec3(modelViewMatrixRelToEye * pos4);\n\
-    vec4 rotatedNormal = buildingRotMatrix * vec4(normal.xyz, 1.0);\n\
-    vLightWeighting = vec3(1.0, 1.0, 1.0);\n\
-    uAmbientColor = vec3(0.8, 0.8, 0.8);\n\
-    vec3 uLightingDirection = vec3(0.6, 0.6, 0.6);\n\
-    vec3 directionalLightColor = vec3(0.7, 0.7, 0.7);\n\
-    vNormal = (normalMatrix4 * vec4(rotatedNormal.x, rotatedNormal.y, rotatedNormal.z, 1.0)).xyz;\n\
-    float directionalLightWeighting = max(dot(vNormal, uLightingDirection), 0.0);\n\
-    vLightWeighting = uAmbientColor + directionalLightColor * directionalLightWeighting;\n\
-\n\
-    if(bUse1Color)\n\
-    {\n\
-        vcolor4 = oneColor4;\n\
-    }\n\
-    else\n\
-    {\n\
-        vcolor4 = color4;\n\
-    }\n\
-    vTexCoord = texCoord;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-}\n\
-";
-ShaderSource.ModelRefSsaoFS = "#ifdef GL_ES\n\
-    precision highp float;\n\
-#endif\n\
-\n\
-uniform sampler2D depthTex;\n\
-uniform sampler2D noiseTex;  \n\
-uniform sampler2D diffuseTex;\n\
-uniform bool hasTexture;\n\
-uniform bool textureFlipYAxis;\n\
-varying vec3 vNormal;\n\
-uniform mat4 projectionMatrix;\n\
-uniform mat4 m;\n\
-uniform vec2 noiseScale;\n\
-uniform float near;\n\
-uniform float far;            \n\
-uniform float fov;\n\
-uniform float aspectRatio;    \n\
-uniform float screenWidth;    \n\
-uniform float screenHeight;    \n\
-uniform float shininessValue;\n\
-uniform vec3 kernel[16];   \n\
-uniform vec4 vColor4Aux;\n\
-\n\
-varying vec2 vTexCoord;   \n\
-varying vec3 vLightWeighting;\n\
-\n\
-varying vec3 diffuseColor;\n\
-uniform vec3 specularColor;\n\
-varying vec3 vertexPos;\n\
-\n\
-const int kernelSize = 16;  \n\
-uniform float radius;      \n\
-\n\
-uniform float ambientReflectionCoef;\n\
-uniform float diffuseReflectionCoef;  \n\
-uniform float specularReflectionCoef; \n\
-\n\
-float unpackDepth(const in vec4 rgba_depth)\n\
-{\n\
-    const vec4 bit_shift = vec4(0.000000059605, 0.000015258789, 0.00390625, 1.0);\n\
-    float depth = dot(rgba_depth, bit_shift);\n\
-    return depth;\n\
-}                \n\
-\n\
-vec3 getViewRay(vec2 tc)\n\
-{\n\
-    float hfar = 2.0 * tan(fov/2.0) * far;\n\
-    float wfar = hfar * aspectRatio;    \n\
-    vec3 ray = vec3(wfar * (tc.x - 0.5), hfar * (tc.y - 0.5), -far);    \n\
-    return ray;                      \n\
-}         \n\
-            \n\
-//linear view space depth\n\
-float getDepth(vec2 coord)\n\
-{\n\
-    return unpackDepth(texture2D(depthTex, coord.xy));\n\
-}    \n\
-\n\
-void main()\n\
-{          \n\
-    vec2 screenPos = vec2(gl_FragCoord.x / screenWidth, gl_FragCoord.y / screenHeight);		                 \n\
-    float linearDepth = getDepth(screenPos);          \n\
-    vec3 origin = getViewRay(screenPos) * linearDepth;   \n\
-\n\
-    vec3 normal2 = vNormal;\n\
-            \n\
-    vec3 rvec = texture2D(noiseTex, screenPos.xy * noiseScale).xyz * 2.0 - 1.0;\n\
-    vec3 tangent = normalize(rvec - normal2 * dot(rvec, normal2));\n\
-    vec3 bitangent = cross(normal2, tangent);\n\
-    mat3 tbn = mat3(tangent, bitangent, normal2);        \n\
-    \n\
-    float occlusion = 0.0;\n\
-    for(int i = 0; i < kernelSize; ++i)\n\
-    {    	 \n\
-        vec3 sample = origin + (tbn * kernel[i]) * radius;\n\
-        vec4 offset = projectionMatrix * vec4(sample, 1.0);		\n\
-        offset.xy /= offset.w;\n\
-        offset.xy = offset.xy * 0.5 + 0.5;        \n\
-        float sampleDepth = -sample.z/far;\n\
-		if(sampleDepth > 0.49)\n\
-			continue;\n\
-        float depthBufferValue = getDepth(offset.xy);				              \n\
-        float range_check = abs(linearDepth - depthBufferValue)+radius*0.998;\n\
-        if (range_check < radius*1.001 && depthBufferValue <= sampleDepth)\n\
-        {\n\
-            occlusion +=  1.0;\n\
-        }\n\
-    }   \n\
-        \n\
-    occlusion = 1.0 - occlusion / float(kernelSize);\n\
-\n\
-    vec3 lightPos = vec3(20.0, 60.0, 20.0);\n\
-    vec3 L = normalize(lightPos - vertexPos);\n\
-    float lambertian = max(dot(normal2, L), 0.0);\n\
-    float specular = 0.0;\n\
-    if(lambertian > 0.0)\n\
-    {\n\
-        vec3 R = reflect(-L, normal2);      // Reflected light vector\n\
-        vec3 V = normalize(-vertexPos); // Vector to viewer\n\
-        \n\
-        // Compute the specular term\n\
-        float specAngle = max(dot(R, V), 0.0);\n\
-        specular = pow(specAngle, shininessValue);\n\
-    }\n\
-	\n\
-	if(lambertian < 0.5)\n\
-    {\n\
-		lambertian = 0.5;\n\
-	}\n\
-\n\
-    vec4 textureColor;\n\
-    if(hasTexture)\n\
-    {\n\
-        if(textureFlipYAxis)\n\
-        {\n\
-            textureColor = texture2D(diffuseTex, vec2(vTexCoord.s, 1.0 - vTexCoord.t));\n\
-        }\n\
-        else{\n\
-            textureColor = texture2D(diffuseTex, vec2(vTexCoord.s, vTexCoord.t));\n\
-        }\n\
-		\n\
-        if(textureColor.w == 0.0)\n\
-        {\n\
-            discard;\n\
-        }\n\
-    }\n\
-    else{\n\
-        textureColor = vColor4Aux;\n\
-    }\n\
-	\n\
-	vec3 ambientColor = vec3(textureColor.x, textureColor.y, textureColor.z);\n\
-\n\
-    gl_FragColor = vec4((ambientReflectionCoef * ambientColor + diffuseReflectionCoef * lambertian * textureColor.xyz + specularReflectionCoef * specular * specularColor)*vLightWeighting * occlusion, 1.0); \n\
-}\n\
-";
-ShaderSource.ModelRefSsaoVS = "	attribute vec3 position;\n\
-	attribute vec3 normal;\n\
-	attribute vec2 texCoord;\n\
-	\n\
-	uniform mat4 buildingRotMatrix; \n\
-	uniform mat4 projectionMatrix;  \n\
-	uniform mat4 modelViewMatrix;\n\
-	uniform mat4 modelViewMatrixRelToEye; \n\
-	uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-	uniform mat4 RefTransfMatrix;\n\
-	uniform mat4 normalMatrix4;\n\
-	uniform vec3 buildingPosHIGH;\n\
-	uniform vec3 buildingPosLOW;\n\
-	uniform vec3 encodedCameraPositionMCHigh;\n\
-	uniform vec3 encodedCameraPositionMCLow;\n\
-	uniform vec3 aditionalPosition;\n\
-	uniform vec3 refTranslationVec;\n\
-	uniform int refMatrixType; // 0= identity, 1= translate, 2= transform\n\
-\n\
-	varying vec3 vNormal;\n\
-	varying vec2 vTexCoord;  \n\
-	varying vec3 uAmbientColor;\n\
-	varying vec3 vLightWeighting;\n\
-	varying vec3 vertexPos;\n\
-	\n\
-	void main()\n\
-    {	\n\
-		vec4 rotatedPos;\n\
-		mat3 currentTMat;\n\
-		if(refMatrixType == 0)\n\
-		{\n\
-			rotatedPos = buildingRotMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
-			currentTMat = mat3(buildingRotMatrix);\n\
-		}\n\
-		else if(refMatrixType == 1)\n\
-		{\n\
-			rotatedPos = buildingRotMatrix * vec4(position.xyz + refTranslationVec.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
-			currentTMat = mat3(buildingRotMatrix);\n\
-		}\n\
-		else if(refMatrixType == 2)\n\
-		{\n\
-			rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
-			currentTMat = mat3(RefTransfMatrix);\n\
-		}\n\
-\n\
-		vec3 objPosHigh = buildingPosHIGH;\n\
-		vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-		vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-		vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-		vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-\n\
-		vertexPos = vec3(modelViewMatrixRelToEye * pos4);\n\
-		vec3 rotatedNormal = currentTMat * normal;\n\
-		vLightWeighting = vec3(1.0, 1.0, 1.0);\n\
-		uAmbientColor = vec3(0.8);\n\
-		vec3 uLightingDirection = vec3(0.6, 0.6, 0.6);\n\
-		vec3 directionalLightColor = vec3(0.7, 0.7, 0.7);\n\
-		vNormal = (normalMatrix4 * vec4(rotatedNormal.x, rotatedNormal.y, rotatedNormal.z, 1.0)).xyz;\n\
-		vTexCoord = texCoord;\n\
-		float directionalLightWeighting = max(dot(vNormal, uLightingDirection), 0.0);\n\
-		vLightWeighting = uAmbientColor + directionalLightColor * directionalLightWeighting;\n\
-\n\
-        gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-	}\n\
-";
-ShaderSource.PngImageFS = "precision mediump float;\n\
-varying vec2 v_texcoord;\n\
-uniform bool textureFlipYAxis;\n\
-uniform sampler2D u_texture;\n\
-\n\
-void main()\n\
-{\n\
-    vec4 textureColor;\n\
-    if(textureFlipYAxis)\n\
-    {\n\
-        textureColor = texture2D(u_texture, vec2(v_texcoord.s, 1.0 - v_texcoord.t));\n\
-    }\n\
-    else\n\
-    {\n\
-        textureColor = texture2D(u_texture, v_texcoord);\n\
-    }\n\
-    if(textureColor.w < 0.1)\n\
-    {\n\
-        discard;\n\
-    }\n\
-\n\
-    gl_FragColor = textureColor;\n\
-}";
-ShaderSource.PngImageVS = "attribute vec3 a_position;\n\
-attribute vec2 a_texcoord;\n\
-uniform mat4 buildingRotMatrix;  \n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;  \n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-varying vec2 v_texcoord;\n\
-\n\
-void main()\n\
-{\n\
-    vec4 position2 = vec4(a_position.xyz, 1.0);\n\
-    vec4 rotatedPos = buildingRotMatrix * vec4(position2.xyz, 1.0);\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-\n\
-    v_texcoord = a_texcoord;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-}\n\
-";
-ShaderSource.PointCloudFS = "	precision lowp float;\n\
-	varying vec4 vColor;\n\
-\n\
-	void main()\n\
-    {\n\
-		gl_FragColor = vColor;\n\
-	}";
-ShaderSource.PointCloudVS = "attribute vec3 position;\n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-attribute vec4 color;\n\
-varying vec4 vColor;\n\
-\n\
-void main()\n\
-{\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + position.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-\n\
-    vColor=color;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
-}";
-ShaderSource.RenderShowDepthFS = "#ifdef GL_ES\n\
-precision highp float;\n\
-#endif\n\
-uniform float near;\n\
-uniform float far;\n\
-\n\
-varying float depth;  \n\
-\n\
-vec4 packDepth(const in float depth)\n\
-{\n\
-    const vec4 bit_shift = vec4(16777216.0, 65536.0, 256.0, 1.0);\n\
-    const vec4 bit_mask  = vec4(0.0, 0.00390625, 0.00390625, 0.00390625); \n\
-    vec4 res = fract(depth * bit_shift);\n\
-    res -= res.xxyz * bit_mask;\n\
-    return res;  \n\
-}\n\
-\n\
-void main()\n\
-{     \n\
-    gl_FragData[0] = packDepth(-depth);\n\
-}\n\
-";
-ShaderSource.RenderShowDepthVS = "attribute vec3 position;\n\
-\n\
-uniform mat4 buildingRotMatrix; \n\
-uniform mat4 modelViewMatrixRelToEye; \n\
-uniform mat4 RefTransfMatrix;\n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-uniform float near;\n\
-uniform float far;\n\
-uniform vec3 aditionalPosition;\n\
-uniform vec3 refTranslationVec;\n\
-uniform int refMatrixType; // 0= identity, 1= translate, 2= transform\n\
-\n\
-varying float depth;\n\
-  \n\
-void main()\n\
-{	\n\
-	vec4 rotatedPos;\n\
-\n\
-	if(refMatrixType == 0)\n\
-	{\n\
-		rotatedPos = buildingRotMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
-	}\n\
-	else if(refMatrixType == 1)\n\
-	{\n\
-		rotatedPos = buildingRotMatrix * vec4(position.xyz + refTranslationVec.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
-	}\n\
-	else if(refMatrixType == 2)\n\
-	{\n\
-		rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
-	}\n\
-\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-    \n\
-    //linear depth in camera space (0..far)\n\
-    depth = (modelViewMatrixRelToEye * pos4).z/far;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-}\n\
-";
-ShaderSource.ShowDepthFS = "#ifdef GL_ES\n\
-    precision highp float;\n\
-#endif\n\
-uniform float near;\n\
-uniform float far;\n\
-\n\
-varying float depth;  \n\
-varying vec3 vN; \n\
-varying vec4 vVSPos;\n\
-\n\
-// from http://spidergl.org/example.php?id=6\n\
-vec4 packDepth(const in float depth)\n\
-{\n\
-    const vec4 bit_shift = vec4(16777216.0, 65536.0, 256.0, 1.0);\n\
-    const vec4 bit_mask  = vec4(0.0, 0.00390625, 0.00390625, 0.00390625); \n\
-    vec4 res = fract(depth * bit_shift);\n\
-    res -= res.xxyz * bit_mask;\n\
-\n\
-    return res;  \n\
-}\n\
-\n\
-void main()\n\
-{\n\
-    gl_FragData[0] = packDepth(-depth);\n\
-    gl_FragData[0].r = -depth/far;\n\
-}\n\
-";
-ShaderSource.ShowDepthVS = "attribute vec3 position;\n\
-attribute vec3 normal;\n\
-\n\
-uniform mat4 modelViewMatrixRelToEye; \n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform mat4 normalMatrix3;\n\
-uniform mat4 normalMatrix4;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-uniform float near;\n\
-uniform float far;\n\
-\n\
-varying vec3 vN;\n\
-varying float depth;  \n\
-varying vec4 vVSPos;\n\
-\n\
-void main()\n\
-{	\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + position.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-\n\
-    vN = normalize((normalMatrix4 * vec4(normal, 1.0)).xyz);\n\
-    \n\
-    //linear depth in camera space (0..far)\n\
-    depth = (modelViewMatrixRelToEye * pos4).z/far;\n\
-    vVSPos = modelViewMatrixRelToEye * pos4;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-}\n\
-";
-ShaderSource.SilhouetteFS = "precision highp float;\n\
-uniform vec4 vColor4Aux;\n\
-\n\
-void main()\n\
-{          \n\
-    gl_FragColor = vColor4Aux;\n\
-}";
-ShaderSource.SilhouetteVS = "attribute vec3 position;\n\
-\n\
-uniform mat4 buildingRotMatrix; \n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform mat4 ModelViewMatrixRelToEye;\n\
-uniform mat4 ProjectionMatrix;\n\
-uniform mat4 RefTransfMatrix;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-uniform vec3 aditionalPosition;\n\
-uniform vec3 refTranslationVec;\n\
-uniform int refMatrixType; // 0= identity, 1= translate, 2= transform\n\
-uniform vec2 camSpacePixelTranslation;\n\
-uniform vec2 screenSize;    \n\
-varying vec2 camSpaceTranslation;\n\
-\n\
-void main()\n\
-{    \n\
-    vec4 rotatedPos;\n\
-	if(refMatrixType == 0)\n\
-	{\n\
-		rotatedPos = buildingRotMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
-	}\n\
-	else if(refMatrixType == 1)\n\
-	{\n\
-		rotatedPos = buildingRotMatrix * vec4(position.xyz + refTranslationVec.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
-	}\n\
-	else if(refMatrixType == 2)\n\
-	{\n\
-		rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
-	}\n\
-\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-    vec4 camSpacePos = ModelViewMatrixRelToEye * pos4;\n\
-    vec4 translationVec = ProjectionMatrix * vec4(camSpacePixelTranslation.x*(-camSpacePos.z), camSpacePixelTranslation.y*(-camSpacePos.z), 0.0, 1.0);\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-    gl_Position += translationVec;  \n\
-}";
-ShaderSource.SimpleDepthSsaoFS = "precision highp float;\n\
-const vec4 bitEnc = vec4(1.0,255.0,65025.0,16581375.0);\n\
-const vec4 bitDec = 1.0/bitEnc;\n\
-varying float zDepth;\n\
-\n\
-vec4 EncodeFloatRGBA (float v)\n\
-{\n\
-    vec4 enc = bitEnc * v;\n\
-    enc = fract(enc);\n\
-    enc -= enc.yzww * vec2(1.0/255.0, 0.0).xxxy;\n\
-    return enc;\n\
-}\n\
-\n\
-void main()\n\
-{          \n\
-    vec4 encodedZ = EncodeFloatRGBA(zDepth);\n\
-    gl_FragData[0] = encodedZ;\n\
-}\n\
-";
-ShaderSource.SimpleDepthSsaoVS = "attribute vec3 position;\n\
-\n\
-uniform mat4 modelViewMatrixRelToEye; \n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform mat4 RefTransfMatrix;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-varying float zDepth;\n\
-uniform float far;\n\
-\n\
-void main()\n\
-{	\n\
-    vec4 rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0);\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-    \n\
-    zDepth = (modelViewMatrixRelToEye * pos4).z/far;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-}\n\
-";
-ShaderSource.SsaoFS = "#ifdef GL_ES\n\
-    precision highp float;\n\
-#endif\n\
-uniform sampler2D depthTex;\n\
-uniform sampler2D noiseTex;  \n\
-uniform sampler2D diffuseTex;\n\
-varying vec3 vNormal;\n\
-uniform mat4 projectionMatrix;\n\
-uniform mat4 m;\n\
-uniform vec2 noiseScale;\n\
-uniform float near;\n\
-uniform float far;            \n\
-uniform float fov;\n\
-uniform float aspectRatio;    \n\
-uniform float screenWidth;    \n\
-uniform float screenHeight;    \n\
-uniform vec3 kernel[16];   \n\
-\n\
-varying vec2 vTexCoord;   \n\
-\n\
-const int kernelSize = 16;  \n\
-const float radius = 1.0;      \n\
-\n\
-float unpackDepth(const in vec4 rgba_depth)\n\
-{\n\
-    const vec4 bit_shift = vec4(0.000000059605, 0.000015258789, 0.00390625, 1.0);\n\
-    float depth = dot(rgba_depth, bit_shift);\n\
-    return depth;\n\
-}                \n\
-\n\
-vec3 getViewRay(vec2 tc)\n\
-{\n\
-    float hfar = 2.0 * tan(fov/2.0) * far;\n\
-    float wfar = hfar * aspectRatio;    \n\
-    vec3 ray = vec3(wfar * (tc.x - 0.5), hfar * (tc.y - 0.5), -far);    \n\
-    return ray;                      \n\
-}         \n\
-            \n\
-//linear view space depth\n\
-float getDepth(vec2 coord)\n\
-{                          \n\
-    return unpackDepth(texture2D(depthTex, coord.xy));\n\
-}    \n\
-\n\
-void main()\n\
-{          \n\
-    vec2 screenPos = vec2(gl_FragCoord.x / screenWidth, gl_FragCoord.y / screenHeight);		                 \n\
-    float linearDepth = getDepth(screenPos);          \n\
-    vec3 origin = getViewRay(screenPos) * linearDepth;   \n\
- \n\
-    vec3 normal2 = vNormal;   \n\
-            \n\
-    vec3 rvec = texture2D(noiseTex, screenPos.xy * noiseScale).xyz * 2.0 - 1.0;\n\
-    vec3 tangent = normalize(rvec - normal2 * dot(rvec, normal2));\n\
-    vec3 bitangent = cross(normal2, tangent);\n\
-    mat3 tbn = mat3(tangent, bitangent, normal2);        \n\
-    \n\
-    float occlusion = 0.0;\n\
-    for(int i = 0; i < kernelSize; ++i)\n\
-    {    	 \n\
-        vec3 sample = origin + (tbn * kernel[i]) * radius;\n\
-        vec4 offset = projectionMatrix * vec4(sample, 1.0);		\n\
-        offset.xy /= offset.w;\n\
-        offset.xy = offset.xy * 0.5 + 0.5;        \n\
-        float sampleDepth = -sample.z/far;\n\
-        float depthBufferValue = getDepth(offset.xy);				              \n\
-\n\
-        float range_check = abs(linearDepth - depthBufferValue)+radius*0.998;\n\
-        if (range_check < radius && depthBufferValue <= sampleDepth)\n\
-        {\n\
-            occlusion +=  1.0;\n\
-        }\n\
-        \n\
-    }   \n\
-        \n\
-    occlusion = 1.0 - (occlusion) / float(kernelSize);\n\
-                                \n\
-    vec3 lightPos = vec3(10.0, 10.0, 10.0);\n\
-    vec3 L = normalize(lightPos);\n\
-    float NdotL = abs(dot(normal2, L));\n\
-    vec3 diffuse = vec3(NdotL);\n\
-    vec3 ambient = vec3(1.0);\n\
-    vec4 textureColor = texture2D(diffuseTex, vec2(vTexCoord.s, vTexCoord.t));\n\
-\n\
-    gl_FragColor.rgb = vec3((textureColor.xyz*0.2 + textureColor.xyz*0.8) * occlusion); // with texture.***\n\
-    gl_FragColor.a = 1.0;   \n\
-}\n\
-";
-ShaderSource.SsaoVS = "attribute vec3 position;\n\
-attribute vec3 normal;\n\
-attribute vec2 texCoord;\n\
-\n\
-uniform mat4 projectionMatrix;  \n\
-uniform mat4 modelViewMatrix;\n\
-uniform mat4 modelViewMatrixRelToEye; \n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform mat4 normalMatrix4;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-\n\
-varying vec3 vNormal;\n\
-varying vec2 vTexCoord;  \n\
-\n\
-void main()\n\
-{	\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + position.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-\n\
-    vNormal = (normalMatrix4 * vec4(-normal.x, -normal.y, -normal.z, 1.0)).xyz;\n\
-    vTexCoord = texCoord;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
-}";
-ShaderSource.StandardFS = "precision lowp float;\n\
-varying vec3 vColor;\n\
-\n\
-void main()\n\
-{\n\
-    gl_FragColor = vec4(vColor, 1.);\n\
-}";
-ShaderSource.StandardVS = "attribute vec3 position;\n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-uniform mat4 RefTransfMatrix;\n\
-attribute vec3 color;\n\
-varying vec3 vColor;\n\
-\n\
-void main()\n\
-{\n\
-    vec4 rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0);\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
- \n\
-    vColor=color;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
-}";
-ShaderSource.TextureA1FS = "precision mediump float;\n\
-varying vec4 vColor;\n\
-varying vec2 vTextureCoord;\n\
-uniform sampler2D uSampler;\n\
-\n\
-void main()\n\
-{\n\
-    gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\n\
-}\n\
-";
-ShaderSource.TextureA1VS = "attribute vec3 position;\n\
-attribute vec4 aVertexColor;\n\
-attribute vec2 aTextureCoord;\n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-varying vec4 vColor;\n\
-varying vec2 vTextureCoord;\n\
-\n\
-void main()\n\
-{\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + position.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
- \n\
-    vColor=aVertexColor;\n\
-    vTextureCoord = aTextureCoord;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
-}";
-ShaderSource.TextureFS = "precision mediump float;\n\
-varying vec4 vColor;\n\
-varying vec2 vTextureCoord;\n\
-uniform sampler2D uSampler;\n\
-\n\
-void main()\n\
-{\n\
-    gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\n\
-}";
-ShaderSource.TextureNormalFS = "	precision mediump float;\n\
-	varying vec4 vColor;\n\
-	varying vec2 vTextureCoord;\n\
-	uniform sampler2D uSampler;\n\
-	varying vec3 vLightWeighting;\n\
-\n\
-	void main()\n\
-    {\n\
-		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\n\
-        \n\
-		gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);\n\
-	}\n\
-";
-ShaderSource.TextureNormalVS = "attribute vec3 position;\n\
-attribute vec4 aVertexColor;\n\
-attribute vec2 aTextureCoord;\n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-varying vec4 vColor;\n\
-varying vec2 vTextureCoord;\n\
-attribute vec3 aVertexNormal;\n\
-varying vec3 uAmbientColor;\n\
-varying vec3 vLightWeighting;\n\
-uniform mat3 uNMatrix;\n\
-\n\
-void main()\n\
-{\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + position.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-    \n\
-    vColor = aVertexColor;\n\
-    vTextureCoord = aTextureCoord;\n\
-    \n\
-    vLightWeighting = vec3(1.0, 1.0, 1.0);\n\
-    uAmbientColor = vec3(0.7, 0.7, 0.7);\n\
-    vec3 uLightingDirection = vec3(0.8, 0.2, -0.9);\n\
-    vec3 directionalLightColor = vec3(0.4, 0.4, 0.4);\n\
-    vec3 transformedNormal = uNMatrix * aVertexNormal;\n\
-    float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);\n\
-    vLightWeighting = uAmbientColor + directionalLightColor * directionalLightWeighting;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
-}\n\
-";
-ShaderSource.TextureVS = "attribute vec3 position;\n\
-attribute vec4 aVertexColor;\n\
-attribute vec2 aTextureCoord;\n\
-uniform mat4 Mmatrix;\n\
-uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
-uniform vec3 buildingPosHIGH;\n\
-uniform vec3 buildingPosLOW;\n\
-uniform vec3 encodedCameraPositionMCHigh;\n\
-uniform vec3 encodedCameraPositionMCLow;\n\
-varying vec4 vColor;\n\
-varying vec2 vTextureCoord;\n\
-\n\
-void main()\n\
-{\n\
-    vec4 rotatedPos = Mmatrix * vec4(position.xyz, 1.0);\n\
-    vec3 objPosHigh = buildingPosHIGH;\n\
-    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
-    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
-    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
-    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
-\n\
-    vColor=aVertexColor;\n\
-    vTextureCoord = aTextureCoord;\n\
-\n\
-    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
-    \n\
-}";
-
 'use strict';
 
 /**
@@ -40777,3 +37625,3246 @@ search: while (true) {
   postMessage(n);
 }
 */
+
+'use strict';
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class UniformMatrix4fvDataPair
+ * @param gl 변수
+ */
+var UniformMatrix4fvDataPair = function(gl, uniformName) 
+{
+	if (!(this instanceof UniformMatrix4fvDataPair)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	this.gl = gl;
+	this.name = uniformName;
+	this.uniformLocation;
+	this.matrix4fv; 
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+UniformMatrix4fvDataPair.prototype.bindUniform = function() 
+{
+	this.gl.uniformMatrix4fv(this.uniformLocation, false, this.matrix4fv);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class UniformVec2fvDataPair
+ * @param gl 변수
+ */
+var UniformVec2fvDataPair = function(gl, uniformName) 
+{
+	if (!(this instanceof UniformVec2fvDataPair)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	this.gl = gl;
+	this.name = uniformName;
+	this.uniformLocation;
+	this.vec2fv; 
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+UniformVec2fvDataPair.prototype.bindUniform = function() 
+{
+	this.gl.uniform2fv(this.uniformLocation, false, this.vec2fv);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class UniformVec3fvDataPair
+ * @param gl 변수
+ */
+var UniformVec3fvDataPair = function(gl, uniformName) 
+{
+	if (!(this instanceof UniformVec3fvDataPair)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	this.gl = gl;
+	this.name = uniformName;
+	this.uniformLocation;
+	this.vec3fv; 
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+UniformVec3fvDataPair.prototype.bindUniform = function() 
+{
+	this.gl.uniform3fv(this.uniformLocation, false, this.vec3fv);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class UniformVec4fvDataPair
+ * @param gl 변수
+ */
+var UniformVec4fvDataPair = function(gl, uniformName) 
+{
+	if (!(this instanceof UniformVec4fvDataPair)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	this.gl = gl;
+	this.name = uniformName;
+	this.uniformLocation;
+	this.vec4fv; 
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+UniformVec4fvDataPair.prototype.bindUniform = function() 
+{
+	this.gl.uniform4fv(this.uniformLocation, false, this.vec4fv);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Uniform1fDataPair
+ * @param gl 변수
+ */
+var Uniform1fDataPair = function(gl, uniformName) 
+{
+	if (!(this instanceof Uniform1fDataPair)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	this.gl = gl;
+	this.name = uniformName;
+	this.uniformLocation;
+	this.floatValue; 
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+Uniform1fDataPair.prototype.bindUniform = function() 
+{
+	this.gl.uniform1f(this.uniformLocation, false, this.floatValue);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Uniform1iDataPair
+ * @param gl 변수
+ */
+var Uniform1iDataPair = function(gl, uniformName) 
+{
+	if (!(this instanceof Uniform1iDataPair)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	this.gl = gl;
+	this.name = uniformName;
+	this.uniformLocation;
+	this.intValue; 
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+Uniform1iDataPair.prototype.bindUniform = function() 
+{
+	this.gl.uniform1i(this.uniformLocation, false, this.intValue);
+};
+
+//**********************************************************************************************************************************************************
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class PostFxShader
+ * @param gl 변수
+ */
+var PostFxShader = function(gl) 
+{
+	if (!(this instanceof PostFxShader)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	this.gl = gl;
+	this.name;
+	this.attribLocationCacheObj = {};
+	this.uniformsArray = []; // this array has the same uniforms that "uniformsCacheObj".***
+	this.uniformsCacheObj = {}; // this object has the same uniforms that "uniformsArray".***
+	
+	// shader program.***
+	this.program;
+	this.shader_vertex;
+	this.shader_fragment;
+	
+	/*
+	// attributes.***
+	this.position3_loc;
+	this.color3_loc;
+	this.normal3_loc;
+	this.texCoord2_loc;
+
+	// uniforms matrix.***
+	this.projectionMatrix4_loc; // usually no used.***
+	this.modelViewMatrix4_loc;
+	this.modelViewProjectionMatrix4_loc;
+	this.modelViewMatrix4RelToEye_loc;
+	this.modelViewProjectionMatrix4RelToEye_loc;
+	this.normalMatrix4_loc;
+	this.normalMatrix3_loc;
+	this.RefTransfMatrix;
+
+	// uniform vectors.***
+	this.buildingPosHIGH_loc;
+	this.buildingPosLOW_loc;
+	this.cameraPosHIGH_loc;
+	this.cameraPosLOW_loc;
+	this.noiseScale2_loc;
+	this.kernel16_loc;
+
+	// uniform values.***
+	this.near_loc;
+	this.far_loc;
+	this.fov_loc;
+	this.aspectRatio_loc;
+	this.screenWidth_loc;
+	this.screenHeight_loc;
+
+	// uniform samplers.***
+	this.diffuseTex_loc;
+	this.depthTex_loc;
+	this.noiseTex_loc;
+
+	// blur.***
+	this.texelSize_loc;
+	this.colorTex_loc;
+
+	// Model Reference meshes.***
+	this.useRefTransfMatrix_loc;
+	this.useTexture_loc;
+	this.invertNormals_loc;
+	*/
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param shaderName 변수
+ * @returns shader
+ */
+PostFxShader.prototype.bindUniforms = function()
+{
+	var uniformsDataPairsCount = this.uniformsArray.length;
+	for (var i=0; i<uniformsDataPairsCount; i++)
+	{
+		this.uniformsArray[i].bindUniform();
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param shaderName 변수
+ * @returns shader
+ */
+PostFxShader.prototype.newUniformDataPair = function(uniformType, uniformName)
+{
+	var uniformDataPair;//
+	if (uniformType === "Matrix4fv")
+	{
+		uniformDataPair = new UniformMatrix4fvDataPair(this.gl, uniformName);
+		this.uniformsArray.push(uniformDataPair);
+		this.uniformsCacheObj[uniformName] = uniformDataPair;
+	}
+	else if (uniformType === "Vec4fv")
+	{
+		uniformDataPair = new UniformVec4fvDataPair(this.gl, uniformName);
+		this.uniformsArray.push(uniformDataPair);
+		this.uniformsCacheObj[uniformName] = uniformDataPair;
+	}
+	else if (uniformType === "Vec3fv")
+	{
+		uniformDataPair = new UniformVec3fvDataPair(this.gl, uniformName);
+		this.uniformsArray.push(uniformDataPair);
+		this.uniformsCacheObj[uniformName] = uniformDataPair;
+	}
+	else if (uniformType === "Vec2fv")
+	{
+		uniformDataPair = new UniformVec2fvDataPair(this.gl, uniformName);
+		this.uniformsArray.push(uniformDataPair);
+		this.uniformsCacheObj[uniformName] = uniformDataPair;
+	}
+	else if (uniformType === "1f")
+	{
+		uniformDataPair = new Uniform1fDataPair(this.gl, uniformName);
+		this.uniformsArray.push(uniformDataPair);
+		this.uniformsCacheObj[uniformName] = uniformDataPair;
+	}
+	else if (uniformType === "1i")
+	{
+		uniformDataPair = new Uniform1iDataPair(this.gl, uniformName);
+		this.uniformsArray.push(uniformDataPair);
+		this.uniformsCacheObj[uniformName] = uniformDataPair;
+	}
+	
+	return uniformDataPair;
+};
+
+//*********************************************************************************************************************
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class PostFxShadersManager
+ */
+var PostFxShadersManager = function() 
+{
+	if (!(this instanceof PostFxShadersManager)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	this.gl;
+	this.pFx_shaders_array = []; // old.***
+	this.shadersCache = {};
+	
+	// preCreated shaders.***
+	this.modelRefShader;
+	this.modelRefSilhouetteShader;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param shaderName 변수
+ * @returns shader
+ */
+PostFxShadersManager.prototype.newShader = function(shaderName)
+{
+	var shader = new PostFxShader(this.gl);
+	shader.name = shaderName;
+	this.shadersCache[shaderName] = shader;
+	return shader;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param source 변수
+ * @param type 변수
+ * @param typeString 변수
+ * @returns shader
+ */
+PostFxShadersManager.prototype.getShader = function(gl, source, type, typeString) 
+{
+	// Source from internet.***
+	var shader = gl.createShader(type);
+	gl.shaderSource(shader, source);
+	gl.compileShader(shader);
+	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) 
+	{
+		alert("ERROR IN "+typeString+ " SHADER : " + gl.getShaderInfoLog(shader));
+		return false;
+	}
+	return shader;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createDefaultShaders = function(gl) 
+{
+	this.createRenderDepthShader(gl); // 0.***
+	this.createSsaoShader(gl); // 1.***
+	this.createBlurShader(gl); // 2.***
+
+	// Now, create shaders for modelReference geometries.****
+	this.createRenderDepthShaderModelRef(gl); // 3.***
+	this.modelRefShader = this.createSsaoShaderModelRef(gl); // 4.***
+	//this.createBlurShader_ModelRef(gl); // 5.***
+
+	this.createColorSelectionShaderModelRef(gl);// 5.***
+	this.createSimpleDepthShaderModelRef(gl);// 6.***
+
+	this.createRenderDepthShaderLODBuilding(gl);// 7.***
+	this.createSsaoShaderLODBuilding(gl);// 8.***
+
+	this.createRenderDepthShaderLego(gl);// 9.***
+	this.createSsaoShaderLego(gl);// 10.***
+
+	this.createDepthShaderBox(gl); // 11.***
+	this.createSsaoShaderBox(gl); // 12.***
+
+	this.createPngImageShader(gl); // 13.***
+	this.modelRefSilhouetteShader = this.createSilhouetteShaderModelRef(gl); // 14.***
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+PostFxShadersManager.prototype.getModelRefShader = function() 
+{
+	return this.modelRefShader;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+PostFxShadersManager.prototype.getModelRefSilhouetteShader = function() 
+{
+	return this.modelRefSilhouetteShader;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createBlurShader = function(gl) 
+{
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var blur_vs_source = ShaderSource.BlurVS;
+	var blur_fs_source = ShaderSource.BlurFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, blur_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, blur_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.projectionMatrix4_loc = gl.getUniformLocation(shader.program, "projectionMatrix");
+	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	shader.texCoord2_loc = gl.getAttribLocation(shader.program, "texCoord");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.texCoord = gl.getAttribLocation(shader.program, "texCoord");
+
+	shader.texelSize_loc = gl.getUniformLocation(shader.program, "texelSize");
+	shader.colorTex_loc = gl.getUniformLocation(shader.program, "colorTex");
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createSsaoShader = function(gl) 
+{
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var ssao_vs_source = ShaderSource.SsaoVS;
+	var ssao_fs_source = ShaderSource.SsaoFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.normalMatrix4_loc = gl.getUniformLocation(shader.program, "normalMatrix4");
+	shader.projectionMatrix4_loc = gl.getUniformLocation(shader.program, "projectionMatrix");
+	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	shader.texCoord2_loc = gl.getAttribLocation(shader.program, "texCoord");
+	shader.normal3_loc = gl.getAttribLocation(shader.program, "normal");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.normal = gl.getAttribLocation(shader.program, "normal");
+	shader.attribLocationCacheObj.texCoord = gl.getAttribLocation(shader.program, "texCoord");
+	// ssao uniforms.**********************************************************************
+	shader.noiseScale2_loc = gl.getUniformLocation(shader.program, "noiseScale");
+	shader.kernel16_loc = gl.getUniformLocation(shader.program, "kernel");
+
+	// uniform values.***
+	shader.near_loc = gl.getUniformLocation(shader.program, "near");
+	shader.far_loc = gl.getUniformLocation(shader.program, "far");
+	shader.fov_loc = gl.getUniformLocation(shader.program, "fov");
+	shader.aspectRatio_loc = gl.getUniformLocation(shader.program, "aspectRatio");
+
+	shader.screenWidth_loc = gl.getUniformLocation(shader.program, "screenWidth");
+	shader.screenHeight_loc = gl.getUniformLocation(shader.program, "screenHeight");
+
+	// uniform samplers.***
+	shader.depthTex_loc = gl.getUniformLocation(shader.program, "depthTex");
+	shader.noiseTex_loc = gl.getUniformLocation(shader.program, "noiseTex");
+	shader.diffuseTex_loc = gl.getUniformLocation(shader.program, "diffuseTex");
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createRenderDepthShader = function(gl) 
+{
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var showDepth_vs_source = ShaderSource.ShowDepthVS;
+	var showDepth_fs_source = ShaderSource.ShowDepthFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, showDepth_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, showDepth_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.normalMatrix4_loc = gl.getUniformLocation(shader.program, "normalMatrix4");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	shader.normal3_loc = gl.getAttribLocation(shader.program, "normal");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.normal = gl.getAttribLocation(shader.program, "normal");
+
+	shader.near_loc = gl.getUniformLocation(shader.program, "near");
+	shader.far_loc = gl.getUniformLocation(shader.program, "far");
+};
+
+// Ref Model.***********************************************************************************************************************
+// Ref Model.***********************************************************************************************************************
+// Ref Model.***********************************************************************************************************************
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createSsaoShaderModelRef = function(gl) 
+{
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(undefined); // old.***
+
+	var ssao_vs_source = ShaderSource.ModelRefSsaoVS;
+	var ssao_fs_source = ShaderSource.ModelRefSsaoFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh"); // sceneState.***
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow"); // sceneState.***
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye"); // sceneState.***
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye"); // sceneState.***
+	shader.normalMatrix4_loc = gl.getUniformLocation(shader.program, "normalMatrix4"); // sceneState.***
+	shader.projectionMatrix4_loc = gl.getUniformLocation(shader.program, "projectionMatrix"); // sceneState.***
+	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
+	
+	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
+	shader.refMatrixType_loc = gl.getUniformLocation(shader.program, "refMatrixType");
+	shader.refTranslationVec_loc = gl.getUniformLocation(shader.program, "refTranslationVec");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	shader.texCoord2_loc = gl.getAttribLocation(shader.program, "texCoord");
+	shader.normal3_loc = gl.getAttribLocation(shader.program, "normal");
+	
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.texCoord = gl.getAttribLocation(shader.program, "texCoord");
+	shader.attribLocationCacheObj.normal = gl.getAttribLocation(shader.program, "normal");
+	//*********************************************************************************
+	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
+
+	// ssao uniforms.**********************************************************************
+	shader.noiseScale2_loc = gl.getUniformLocation(shader.program, "noiseScale");
+	shader.kernel16_loc = gl.getUniformLocation(shader.program, "kernel");
+
+	// uniform values.***
+	shader.near_loc = gl.getUniformLocation(shader.program, "near"); // sceneState.***
+	shader.far_loc = gl.getUniformLocation(shader.program, "far"); // sceneState.***
+	shader.fov_loc = gl.getUniformLocation(shader.program, "fov"); // sceneState.***
+	shader.aspectRatio_loc = gl.getUniformLocation(shader.program, "aspectRatio"); // sceneState.***
+
+	shader.screenWidth_loc = gl.getUniformLocation(shader.program, "screenWidth"); // sceneState.***
+	shader.screenHeight_loc = gl.getUniformLocation(shader.program, "screenHeight"); // sceneState.***
+	
+	shader.shininessValue_loc = gl.getUniformLocation(shader.program, "shininessValue");
+
+	shader.hasTexture_loc = gl.getUniformLocation(shader.program, "hasTexture");
+	shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
+	shader.textureFlipYAxis_loc = gl.getUniformLocation(shader.program, "textureFlipYAxis");
+
+	// uniform samplers.***
+	shader.depthTex_loc = gl.getUniformLocation(shader.program, "depthTex");
+	shader.noiseTex_loc = gl.getUniformLocation(shader.program, "noiseTex");
+	shader.diffuseTex_loc = gl.getUniformLocation(shader.program, "diffuseTex"); 
+	
+	// lighting.
+	shader.specularColor_loc = gl.getUniformLocation(shader.program, "specularColor");
+	shader.ssaoRadius_loc = gl.getUniformLocation(shader.program, "radius");  
+
+	shader.ambientReflectionCoef_loc = gl.getUniformLocation(shader.program, "ambientReflectionCoef");
+	shader.diffuseReflectionCoef_loc = gl.getUniformLocation(shader.program, "diffuseReflectionCoef");
+	shader.specularReflectionCoef_loc = gl.getUniformLocation(shader.program, "specularReflectionCoef");
+	
+	return shader;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createRenderDepthShaderModelRef = function(gl, sceneState) 
+{
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var showDepth_vs_source = ShaderSource.RenderShowDepthVS;
+	var showDepth_fs_source = ShaderSource.RenderShowDepthFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, showDepth_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, showDepth_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
+	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
+	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
+	shader.refMatrixType_loc = gl.getUniformLocation(shader.program, "refMatrixType");
+	shader.refTranslationVec_loc = gl.getUniformLocation(shader.program, "refTranslationVec");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
+
+	shader.near_loc = gl.getUniformLocation(shader.program, "near");
+	shader.far_loc = gl.getUniformLocation(shader.program, "far");
+};
+
+// Selection shader.***********************************************************************************************************************
+// Selection shader.***********************************************************************************************************************
+// Selection shader.***********************************************************************************************************************
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createColorSelectionShaderModelRef = function(gl) 
+{
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var ssao_vs_source = ShaderSource.ColorSelectionSsaoVS;
+	var ssao_fs_source = ShaderSource.ColorSelectionSsaoFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
+	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
+	shader.refMatrixType_loc = gl.getUniformLocation(shader.program, "refMatrixType");
+	shader.refTranslationVec_loc = gl.getUniformLocation(shader.program, "refTranslationVec");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+
+	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
+
+	shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
+};
+
+// SimpleDepth shader.***********************************************************************************************************************
+// SimpleDepth shader.***********************************************************************************************************************
+// SimpleDepth shader.***********************************************************************************************************************
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createSimpleDepthShaderModelRef = function(gl) 
+{
+	// no used.!!!!!!!!!!!!!!!
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var ssao_vs_source = ShaderSource.SimpleDepthSsaoVS;
+	var ssao_fs_source = ShaderSource.SimpleDepthSsaoFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
+	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+
+	//shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
+	shader.far_loc = gl.getUniformLocation(shader.program, "far");
+};
+
+// LOD 2 Building Shader.***********************************************************************************************************************
+// LOD 2 Building Shader.***********************************************************************************************************************
+// LOD 2 Building Shader.***********************************************************************************************************************
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createSsaoShaderLODBuilding = function(gl) 
+{
+	// 8.***
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var ssao_vs_source = ShaderSource.LodBuildingSsaoVS;
+	var ssao_fs_source = ShaderSource.LodBuildingSsaoFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.normalMatrix4_loc = gl.getUniformLocation(shader.program, "normalMatrix4");
+	shader.projectionMatrix4_loc = gl.getUniformLocation(shader.program, "projectionMatrix");
+	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
+	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
+	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
+	shader.bUse1Color_loc = gl.getUniformLocation(shader.program, "bUse1Color");
+	shader.oneColor4_loc = gl.getUniformLocation(shader.program, "oneColor4");
+	shader.hasTexture_loc = gl.getUniformLocation(shader.program, "hasTexture");
+	shader.textureFlipYAxis_loc = gl.getUniformLocation(shader.program, "textureFlipYAxis");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	shader.texCoord2_loc = gl.getAttribLocation(shader.program, "texCoord");
+	shader.normal3_loc = gl.getAttribLocation(shader.program, "normal");
+	shader.color4_loc = gl.getAttribLocation(shader.program, "color4");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.normal = gl.getAttribLocation(shader.program, "normal");
+	shader.attribLocationCacheObj.color4 = gl.getAttribLocation(shader.program, "color4");
+
+	//*********************************************************************************
+	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
+
+	// ssao uniforms.**********************************************************************
+	shader.shininessValue_loc = gl.getUniformLocation(shader.program, "shininessValue");
+	shader.noiseScale2_loc = gl.getUniformLocation(shader.program, "noiseScale");
+	shader.kernel16_loc = gl.getUniformLocation(shader.program, "kernel");
+
+	// uniform values.***
+	shader.near_loc = gl.getUniformLocation(shader.program, "near");
+	shader.far_loc = gl.getUniformLocation(shader.program, "far");
+	shader.fov_loc = gl.getUniformLocation(shader.program, "fov");
+	shader.aspectRatio_loc = gl.getUniformLocation(shader.program, "aspectRatio");
+
+	shader.screenWidth_loc = gl.getUniformLocation(shader.program, "screenWidth");
+	shader.screenHeight_loc = gl.getUniformLocation(shader.program, "screenHeight");
+
+	//shader.hasTexture_loc = gl.getUniformLocation(shader.program, "hasTexture");
+	shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
+	shader.specularColor_loc = gl.getUniformLocation(shader.program, "specularColor");
+
+	// uniform samplers.***
+	shader.depthTex_loc = gl.getUniformLocation(shader.program, "depthTex");
+	shader.noiseTex_loc = gl.getUniformLocation(shader.program, "noiseTex");
+	shader.diffuseTex_loc = gl.getUniformLocation(shader.program, "diffuseTex");
+
+	// ModelReference.****
+	shader.useRefTransfMatrix_loc = gl.getUniformLocation(shader.program, "useRefTransfMatrix");
+	shader.useTexture_loc = gl.getUniformLocation(shader.program, "useTexture");
+	shader.invertNormals_loc  = gl.getUniformLocation(shader.program, "invertNormals");
+	shader.ssaoRadius_loc = gl.getUniformLocation(shader.program, "radius"); 
+	
+	shader.ambientReflectionCoef_loc = gl.getUniformLocation(shader.program, "ambientReflectionCoef");
+	shader.diffuseReflectionCoef_loc = gl.getUniformLocation(shader.program, "diffuseReflectionCoef");
+	shader.specularReflectionCoef_loc = gl.getUniformLocation(shader.program, "specularReflectionCoef");
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createRenderDepthShaderLODBuilding = function(gl) 
+{
+	// 7.***
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var showDepth_vs_source = ShaderSource.LodBuildingDepthVS;
+	var showDepth_fs_source = ShaderSource.LodBuildingDepthFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, showDepth_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, showDepth_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
+	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
+	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
+
+	shader.near_loc = gl.getUniformLocation(shader.program, "near");
+	shader.far_loc = gl.getUniformLocation(shader.program, "far");
+};
+
+// Lego Shader.***********************************************************************************************************************
+// Lego Shader.***********************************************************************************************************************
+// Lego Shader.***********************************************************************************************************************
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createSsaoShaderLego = function(gl) 
+{
+	// 10.***
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var ssao_vs_source = ShaderSource.LegoSsaoVS;
+	var ssao_fs_source = ShaderSource.LegoSsaoFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.normalMatrix4_loc = gl.getUniformLocation(shader.program, "normalMatrix4");
+	shader.projectionMatrix4_loc = gl.getUniformLocation(shader.program, "projectionMatrix");
+	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
+	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
+	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	//shader.texCoord2_loc = gl.getAttribLocation(shader.program, "texCoord");
+	shader.normal3_loc = gl.getAttribLocation(shader.program, "normal");
+	shader.color4_loc = gl.getAttribLocation(shader.program, "color4");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.normal = gl.getAttribLocation(shader.program, "normal");
+	shader.attribLocationCacheObj.color4 = gl.getAttribLocation(shader.program, "color4");
+
+	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
+
+	// ssao uniforms.**********************************************************************
+	shader.noiseScale2_loc = gl.getUniformLocation(shader.program, "noiseScale");
+	shader.kernel16_loc = gl.getUniformLocation(shader.program, "kernel");
+
+	// uniform values.***
+	shader.near_loc = gl.getUniformLocation(shader.program, "near");
+	shader.far_loc = gl.getUniformLocation(shader.program, "far");
+	shader.fov_loc = gl.getUniformLocation(shader.program, "fov");
+	shader.aspectRatio_loc = gl.getUniformLocation(shader.program, "aspectRatio");
+
+	shader.screenWidth_loc = gl.getUniformLocation(shader.program, "screenWidth");
+	shader.screenHeight_loc = gl.getUniformLocation(shader.program, "screenHeight");
+
+	shader.hasTexture_loc = gl.getUniformLocation(shader.program, "hasTexture");
+	shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
+
+	// uniform samplers.***
+	shader.depthTex_loc = gl.getUniformLocation(shader.program, "depthTex");
+	shader.noiseTex_loc = gl.getUniformLocation(shader.program, "noiseTex");
+	shader.diffuseTex_loc = gl.getUniformLocation(shader.program, "diffuseTex");
+
+	// ModelReference.****
+	shader.useRefTransfMatrix_loc = gl.getUniformLocation(shader.program, "useRefTransfMatrix");
+	shader.useTexture_loc = gl.getUniformLocation(shader.program, "useTexture");
+	shader.invertNormals_loc  = gl.getUniformLocation(shader.program, "invertNormals");
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createRenderDepthShaderLego = function(gl) 
+{
+	// 9.***
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var showDepth_vs_source = ShaderSource.LegoDepthVS;
+	var showDepth_fs_source = ShaderSource.LegoDepthFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, showDepth_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, showDepth_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
+	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
+	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
+
+	shader.near_loc = gl.getUniformLocation(shader.program, "near");
+	shader.far_loc = gl.getUniformLocation(shader.program, "far");
+};
+
+
+
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createRenderDepthShaderLODBuilding = function(gl) 
+{
+	// 7.***
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var showDepth_vs_source = ShaderSource.LodBuildingDepthVS;
+	var showDepth_fs_source = ShaderSource.LodBuildingDepthFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, showDepth_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, showDepth_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
+	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
+	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
+
+	shader.near_loc = gl.getUniformLocation(shader.program, "near");
+	shader.far_loc = gl.getUniformLocation(shader.program, "far");
+};
+
+// box depth Shader.***********************************************************************************************************************
+// box depth Shader.***********************************************************************************************************************
+// box depth Shader.***********************************************************************************************************************
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createDepthShaderBox = function(gl) 
+{
+	// 7.***
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var showDepth_vs_source = ShaderSource.BoxDepthVS;
+	var showDepth_fs_source = ShaderSource.BoxDepthFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, showDepth_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, showDepth_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
+	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
+	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
+
+	shader.near_loc = gl.getUniformLocation(shader.program, "near");
+	shader.far_loc = gl.getUniformLocation(shader.program, "far");
+};
+
+// box Shader.***********************************************************************************************************************
+// box Shader.***********************************************************************************************************************
+// box Shader.***********************************************************************************************************************
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createSsaoShaderBox = function(gl) 
+{
+	// 8.***
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var ssao_vs_source = ShaderSource.BoxSsaoVS;
+	var ssao_fs_source = ShaderSource.BoxSsaoFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "modelViewMatrixRelToEye");
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.normalMatrix4_loc = gl.getUniformLocation(shader.program, "normalMatrix4");
+	shader.projectionMatrix4_loc = gl.getUniformLocation(shader.program, "projectionMatrix");
+	shader.modelViewMatrix4_loc = gl.getUniformLocation(shader.program, "modelViewMatrix");
+	//shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
+	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
+	shader.bUse1Color_loc = gl.getUniformLocation(shader.program, "bUse1Color");
+	shader.oneColor4_loc = gl.getUniformLocation(shader.program, "oneColor4");
+	shader.bScale_loc = gl.getUniformLocation(shader.program, "bScale");
+	shader.scale_loc = gl.getUniformLocation(shader.program, "scale");
+
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	//shader.texCoord2_loc = gl.getAttribLocation(shader.program, "texCoord");
+	shader.normal3_loc = gl.getAttribLocation(shader.program, "normal");
+	shader.color4_loc = gl.getAttribLocation(shader.program, "color4");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.normal = gl.getAttribLocation(shader.program, "normal");
+	shader.attribLocationCacheObj.color4 = gl.getAttribLocation(shader.program, "color4");
+
+	//*********************************************************************************
+	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
+
+	// ssao uniforms.**********************************************************************
+	shader.noiseScale2_loc = gl.getUniformLocation(shader.program, "noiseScale");
+	shader.kernel16_loc = gl.getUniformLocation(shader.program, "kernel");
+
+	// uniform values.***
+	shader.near_loc = gl.getUniformLocation(shader.program, "near");
+	shader.far_loc = gl.getUniformLocation(shader.program, "far");
+	shader.fov_loc = gl.getUniformLocation(shader.program, "fov");
+	shader.aspectRatio_loc = gl.getUniformLocation(shader.program, "aspectRatio");
+
+	shader.screenWidth_loc = gl.getUniformLocation(shader.program, "screenWidth");
+	shader.screenHeight_loc = gl.getUniformLocation(shader.program, "screenHeight");
+
+	shader.hasTexture_loc = gl.getUniformLocation(shader.program, "hasTexture");
+	shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
+
+	// uniform samplers.***
+	shader.depthTex_loc = gl.getUniformLocation(shader.program, "depthTex");
+	shader.noiseTex_loc = gl.getUniformLocation(shader.program, "noiseTex");
+	shader.diffuseTex_loc = gl.getUniformLocation(shader.program, "diffuseTex");
+
+	// ModelReference.****
+	shader.useRefTransfMatrix_loc = gl.getUniformLocation(shader.program, "useRefTransfMatrix");
+	shader.useTexture_loc = gl.getUniformLocation(shader.program, "useTexture");
+	shader.invertNormals_loc  = gl.getUniformLocation(shader.program, "invertNormals");
+};
+
+// PNG images shader.**************************************************************************************************
+// PNG images shader.**************************************************************************************************
+// PNG images shader.**************************************************************************************************
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createPngImageShader = function(gl) 
+{
+	// 13.***
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(shader);
+
+	var ssao_vs_source = ShaderSource.PngImageVS;
+	var ssao_fs_source = ShaderSource.PngImageFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.texture_loc = gl.getUniformLocation(shader.program, "u_texture"); 
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
+	
+	shader.position3_loc = gl.getAttribLocation(shader.program, "a_position");
+	shader.texCoord2_loc = gl.getAttribLocation(shader.program, "a_texcoord");
+	
+	shader.textureFlipYAxis_loc = gl.getUniformLocation(shader.program, "textureFlipYAxis");
+	
+};
+
+// 14) Silhouette shader.***********************************************************************************************************************
+// 14) Silhouette shader.***********************************************************************************************************************
+// 14) Silhouette shader.***********************************************************************************************************************
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+PostFxShadersManager.prototype.createSilhouetteShaderModelRef = function(gl) 
+{
+	// 14.***
+	var shader = new PostFxShader(this.gl);
+	this.pFx_shaders_array.push(undefined);
+
+	var ssao_vs_source = ShaderSource.SilhouetteVS;
+	var ssao_fs_source = ShaderSource.SilhouetteFS;
+
+	shader.program = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, ssao_vs_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, ssao_fs_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(shader.program, shader.shader_vertex);
+	gl.attachShader(shader.program, shader.shader_fragment);
+	gl.linkProgram(shader.program);
+
+	shader.cameraPosHIGH_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCHigh");
+	shader.cameraPosLOW_loc = gl.getUniformLocation(shader.program, "encodedCameraPositionMCLow");
+	shader.buildingPosHIGH_loc = gl.getUniformLocation(shader.program, "buildingPosHIGH");
+	shader.buildingPosLOW_loc = gl.getUniformLocation(shader.program, "buildingPosLOW");
+
+	shader.modelViewProjectionMatrix4RelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewProjectionMatrixRelToEye");
+	shader.RefTransfMatrix = gl.getUniformLocation(shader.program, "RefTransfMatrix");
+	shader.buildingRotMatrix_loc = gl.getUniformLocation(shader.program, "buildingRotMatrix");
+	shader.refMatrixType_loc = gl.getUniformLocation(shader.program, "refMatrixType");
+	shader.refTranslationVec_loc = gl.getUniformLocation(shader.program, "refTranslationVec");
+
+	shader.position3_loc = gl.getAttribLocation(shader.program, "position");
+	shader.attribLocationCacheObj.position = gl.getAttribLocation(shader.program, "position");
+
+	shader.aditionalMov_loc = gl.getUniformLocation(shader.program, "aditionalPosition");
+
+	shader.color4Aux_loc = gl.getUniformLocation(shader.program, "vColor4Aux");
+	shader.camSpacePixelTranslation_loc = gl.getUniformLocation(shader.program, "camSpacePixelTranslation");
+	shader.screenSize_loc = gl.getUniformLocation(shader.program, "screenSize");
+	shader.ProjectionMatrix_loc = gl.getUniformLocation(shader.program, "ProjectionMatrix");
+	shader.ModelViewMatrixRelToEye_loc = gl.getUniformLocation(shader.program, "ModelViewMatrixRelToEye");
+	
+	return shader;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+// An basic example.***********************************************************
+/*
+	var shader_vertex_source="\n\
+		attribute vec3 position;\n\
+		uniform mat4 Pmatrix;\n\
+		uniform mat4 Vmatrix;\n\
+		uniform mat4 Mmatrix;\n\
+		attribute vec3 color; //the color of the point\n\
+		varying vec3 vColor;\n\
+		void main(void) { //pre-built function\n\
+		gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
+		vColor=color;\n\
+		}";
+
+	var shader_fragment_source="\n\
+		precision mediump float;\n\
+		varying vec3 vColor;\n\
+		void main(void) {\n\
+		gl_FragColor = vec4(vColor, 1.);\n\
+		}";
+		*/
+// End example.-----------------------------------------------------------------
+
+// http://learningwebgl.com/blog/?p=507
+/*
+		http://blogs.agi.com/insight3d/index.php/2008/09/03/precisions-precisions/ // GPU RTE HighValue-LowValue
+		uniform vec3 uViewerHigh;
+		uniform vec3 uViewerLow;
+
+		void main(void)
+		{
+			vec3 highDifference = vec3(gl_Vertex.xyz - uViewerHigh);
+			vec3 lowDifference = vec3(gl_Normal.xyz - uViewerLow);
+			gl_Position = gl_ModelViewProjectionMatrix *
+				 vec4(highDifference + lowDifference, 1.0);
+		}
+		//-----------------------------------------------
+		void CDoubleToTwoFloats::Convert(double doubleValue,
+		float&amp; floatHigh, float&amp; floatLow)
+		{
+			if (doubleValue &gt;= 0.0)
+			{
+				double doubleHigh = floor(doubleValue / 65536.0) * 65536.0;
+				floatHigh = (float)doubleHigh;
+				floatLow = (float)(doubleValue - doubleHigh);
+			}
+			else
+			{
+				double doubleHigh = floor(-doubleValue / 65536.0) * 65536.0;
+				floatHigh = (float)-doubleHigh;
+				floatLow = (float)(doubleValue + doubleHigh);
+			}
+		}
+		//-----------------------------------------------
+		*/
+/*
+		vec4 czm_translateRelativeToEye(vec3 high, vec3 low)\n\
+		{\n\
+			vec3 highDifference = high - czm_encodedCameraPositionMCHigh;\n\
+			vec3 lowDifference = low - czm_encodedCameraPositionMCLow;\n\
+		\n\
+			return vec4(highDifference + lowDifference, 1.0);\n\
+		}\n\
+		*/
+
+/**
+ * 조명 입력 및 재질 구성을 기반으로 렌더링 된 각 픽셀의 색상을 계산하기위한 수학적 계산 및 알고리즘을 포함하는 작은 스크립트
+ * @class Shader
+ */
+var Shader = function() 
+{
+	if (!(this instanceof Shader)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.shader_name;
+	this.shader_vertex_source;
+	this.shader_fragment_source;
+	this.SHADER_PROGRAM;
+
+	this.shader_vertex;
+	this.shader_fragment;
+
+	this._ModelViewProjectionMatrixRelToEye;
+	this._RefTransfMatrix;
+	this._NormalMatrix;
+
+	this._encodedCamPosHIGH;
+	this._encodedCamPosLOW;
+	this._BuildingPosHIGH;
+	this._BuildingPosLOW;
+	this._lightDirection;
+
+	this._color;
+	this._position;
+	this._texcoord;
+	this._normal;
+
+	// test.***
+	this.samplerUniform;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class ShadersManager
+ */
+var ShadersManager = function() 
+{
+	if (!(this instanceof ShadersManager)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.shaders_array = [];
+
+	// Create shaders to render F4D_Format.**********************
+	// 1) Standard shader, that can render light mapping.***
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx = 변수
+ * returns shader
+ */
+ShadersManager.prototype.getMagoShader = function(idx) 
+{
+	var shader;
+
+	if (idx >= 0 && idx < this.shaders_array.length) 
+	{
+		shader = this.shaders_array[idx];
+	}
+
+	return shader;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ShadersManager.prototype.getShader = function(gl, source, type, typeString) 
+{
+	// Source from internet.***
+	var shader = gl.createShader(type);
+	gl.shaderSource(shader, source);
+	gl.compileShader(shader);
+	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) 
+	{
+		alert("ERROR IN "+typeString+ " SHADER : " + gl.getShaderInfoLog(shader));
+		return false;
+	}
+	return shader;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ShadersManager.prototype.createDefaultShader = function(gl) 
+{
+	this.createStandardShader(gl);                // 0.***
+	this.createTextureSimpleObjectShader(gl);     // 1.***
+	this.createColorSelectionShader(gl);          // 2.***
+	this.createTextureSimpleObjectA1Shader(gl);   // 3.***
+	this.createCloudShader(gl);                   // 4.***
+	this.createBlendingCubeShader(gl);            // 5.***
+	this.createPCloudShader(gl);                  // 6.***
+	this.createSimpleObjectTexNormalShader(gl); // 7.***
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ShadersManager.prototype.createColorSelectionShader = function(gl) 
+{
+	var shader = new Shader();
+	this.shaders_array.push(shader);
+
+	shader.shader_vertex_source = ShaderSource.ColorVS;
+	//http://www.lighthouse3d.com/tutorials/opengl-selection-tutorial/
+
+	shader.shader_fragment_source = ShaderSource.ColorFS;
+
+	// https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf
+	shader.SHADER_PROGRAM = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_vertex);
+	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_fragment);
+	gl.linkProgram(shader.SHADER_PROGRAM);
+
+	shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
+	shader._encodedCamPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
+	shader._encodedCamPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
+	shader._BuildingPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosHIGH");
+	shader._BuildingPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosLOW");
+	shader._RefTransfMatrix = gl.getUniformLocation(shader.SHADER_PROGRAM, "RefTransfMatrix");
+
+	shader._position = gl.getAttribLocation(shader.SHADER_PROGRAM, "position");
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ShadersManager.prototype.createTextureSimpleObjectShader = function(gl) 
+{
+	var shader = new Shader();
+	this.shaders_array.push(shader);
+
+	shader.shader_vertex_source = ShaderSource.TextureVS;
+	shader.shader_fragment_source = ShaderSource.TextureFS;
+
+	//http://learningwebgl.com/blog/?p=507
+	//https://gist.github.com/elnaqah/5070979
+	shader.SHADER_PROGRAM = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_vertex);
+	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_fragment);
+	gl.linkProgram(shader.SHADER_PROGRAM);
+
+	shader._encodedCamPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
+	shader._encodedCamPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
+	shader._BuildingPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosHIGH");
+	shader._BuildingPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosLOW");
+	shader._Mmatrix = gl.getUniformLocation(shader.SHADER_PROGRAM, "Mmatrix");
+	shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
+	shader.SHADER_PROGRAM.samplerUniform = gl.getUniformLocation(shader.SHADER_PROGRAM, "uSampler");
+
+	shader._position = gl.getAttribLocation(shader.SHADER_PROGRAM, "position");
+	shader._texcoord = gl.getAttribLocation(shader.SHADER_PROGRAM, "aTextureCoord");
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ShadersManager.prototype.createTextureSimpleObjectA1Shader = function(gl) 
+{
+	var shader = new Shader();
+	this.shaders_array.push(shader);
+
+	shader.shader_vertex_source = ShaderSource.TextureA1VS;
+	shader.shader_fragment_source = ShaderSource.TextureA1FS;
+
+	//http://learningwebgl.com/blog/?p=507
+	//https://gist.github.com/elnaqah/5070979
+	shader.SHADER_PROGRAM = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_vertex);
+	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_fragment);
+	gl.linkProgram(shader.SHADER_PROGRAM);
+
+	shader._encodedCamPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
+	shader._encodedCamPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
+	shader._BuildingPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosHIGH");
+	shader._BuildingPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosLOW");
+	shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
+	shader.SHADER_PROGRAM.samplerUniform = gl.getUniformLocation(shader.SHADER_PROGRAM, "uSampler");
+
+	shader._position = gl.getAttribLocation(shader.SHADER_PROGRAM, "position");
+	shader._texcoord = gl.getAttribLocation(shader.SHADER_PROGRAM, "aTextureCoord");
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ShadersManager.prototype.createStandardShader = function(gl) 
+{
+	// This shader renders the normal f4d geometry.***
+	var standard_shader = new Shader();
+	this.shaders_array.push(standard_shader);
+
+	standard_shader.shader_vertex_source = ShaderSource.StandardVS;
+	standard_shader.shader_fragment_source = ShaderSource.StandardFS;
+
+	// Default ShaderProgram.********************************************************************
+	standard_shader.SHADER_PROGRAM = gl.createProgram();
+	standard_shader.shader_vertex = this.getShader(gl, standard_shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
+	standard_shader.shader_fragment = this.getShader(gl, standard_shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_vertex);
+	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_fragment);
+	gl.linkProgram(standard_shader.SHADER_PROGRAM);
+
+	standard_shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
+	standard_shader._RefTransfMatrix = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "RefTransfMatrix");
+	standard_shader._encodedCamPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
+	standard_shader._encodedCamPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
+	standard_shader._BuildingPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "buildingPosHIGH");
+	standard_shader._BuildingPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "buildingPosLOW");
+
+	standard_shader._color = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "color");
+	standard_shader._position = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "position");
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ShadersManager.prototype.createCloudShader = function(gl) 
+{
+	// This shader renders the f4d clouds.***
+	var standard_shader = new Shader();
+	this.shaders_array.push(standard_shader);
+
+	standard_shader.shader_vertex_source = ShaderSource.CloudVS;
+	standard_shader.shader_fragment_source = ShaderSource.CloudFS;
+
+	// Default ShaderProgram.********************************************************************
+	standard_shader.SHADER_PROGRAM = gl.createProgram();
+	standard_shader.shader_vertex = this.getShader(gl, standard_shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
+	standard_shader.shader_fragment = this.getShader(gl, standard_shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_vertex);
+	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_fragment);
+	gl.linkProgram(standard_shader.SHADER_PROGRAM);
+
+	standard_shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
+	standard_shader._encodedCamPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
+	standard_shader._encodedCamPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
+	standard_shader._cloudPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "cloudPosHIGH");
+	standard_shader._cloudPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "cloudPosLOW");
+
+	standard_shader._color = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "color");
+	standard_shader._position = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "position");
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ShadersManager.prototype.createBlendingCubeShader = function(gl) 
+{
+	// This shader renders the f4d clouds.***
+	var standard_shader = new Shader();
+	this.shaders_array.push(standard_shader);
+
+	standard_shader.shader_vertex_source = ShaderSource.BlendingCubeVS;
+	standard_shader.shader_fragment_source = ShaderSource.BlendingCubeFS;
+
+	// Default ShaderProgram.********************************************************************
+	standard_shader.SHADER_PROGRAM = gl.createProgram();
+	standard_shader.shader_vertex = this.getShader(gl, standard_shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
+	standard_shader.shader_fragment = this.getShader(gl, standard_shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_vertex);
+	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_fragment);
+	gl.linkProgram(standard_shader.SHADER_PROGRAM);
+
+	standard_shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
+	standard_shader._encodedCamPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
+	standard_shader._encodedCamPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
+
+	standard_shader._color = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "color");
+	standard_shader._position = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "position");
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ShadersManager.prototype.createPCloudShader = function(gl) 
+{
+	// This shader renders the f4d clouds.***
+	var standard_shader = new Shader();
+	this.shaders_array.push(standard_shader);
+
+	standard_shader.shader_vertex_source = ShaderSource.PointCloudVS;
+	standard_shader.shader_fragment_source = ShaderSource.PointCloudFS;
+
+	// Default ShaderProgram.********************************************************************
+	standard_shader.SHADER_PROGRAM = gl.createProgram();
+	standard_shader.shader_vertex = this.getShader(gl, standard_shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
+	standard_shader.shader_fragment = this.getShader(gl, standard_shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+
+	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_vertex);
+	gl.attachShader(standard_shader.SHADER_PROGRAM, standard_shader.shader_fragment);
+	gl.linkProgram(standard_shader.SHADER_PROGRAM);
+
+	standard_shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
+	standard_shader._encodedCamPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
+	standard_shader._encodedCamPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
+	standard_shader._BuildingPosHIGH = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "buildingPosHIGH");
+	standard_shader._BuildingPosLOW = gl.getUniformLocation(standard_shader.SHADER_PROGRAM, "buildingPosLOW");
+
+	standard_shader._color = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "color");
+	standard_shader._position = gl.getAttribLocation(standard_shader.SHADER_PROGRAM, "position");
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ShadersManager.prototype.createSimpleObjectTexNormalShader = function(gl) 
+{
+	var shader = new Shader();
+	this.shaders_array.push(shader);
+	shader.shader_vertex_source = ShaderSource.TextureNormalVS;
+	shader.shader_fragment_source = ShaderSource.TextureNormalFS;
+
+	//http://learningwebgl.com/blog/?p=507
+	//https://gist.github.com/elnaqah/5070979
+	//https://dannywoodz.wordpress.com/2014/12/14/webgl-from-scratch-directional-lighting-part-1/
+	//http://learningwebgl.com/blog/?p=684 // good.***
+	shader.SHADER_PROGRAM = gl.createProgram();
+	shader.shader_vertex = this.getShader(gl, shader.shader_vertex_source, gl.VERTEX_SHADER, "VERTEX");
+	shader.shader_fragment = this.getShader(gl, shader.shader_fragment_source, gl.FRAGMENT_SHADER, "FRAGMENT");
+	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_vertex);
+	gl.attachShader(shader.SHADER_PROGRAM, shader.shader_fragment);
+	gl.linkProgram(shader.SHADER_PROGRAM);
+
+	shader._encodedCamPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCHigh");
+	shader._encodedCamPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "encodedCameraPositionMCLow");
+	shader._BuildingPosHIGH = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosHIGH");
+	shader._BuildingPosLOW = gl.getUniformLocation(shader.SHADER_PROGRAM, "buildingPosLOW");
+
+	shader._ModelViewProjectionMatrixRelToEye = gl.getUniformLocation(shader.SHADER_PROGRAM, "ModelViewProjectionMatrixRelToEye");
+	shader._NormalMatrix = gl.getUniformLocation(shader.SHADER_PROGRAM, "uNMatrix");
+
+	//shader.SHADER_PROGRAM.samplerUniform = gl.getUniformLocation(shader.SHADER_PROGRAM, "uSampler");
+	shader.samplerUniform = gl.getUniformLocation(shader.SHADER_PROGRAM, "uSampler");
+	shader._lightDirection = gl.getUniformLocation(shader.SHADER_PROGRAM, "uLightingDirection");
+
+	shader._position = gl.getAttribLocation(shader.SHADER_PROGRAM, "position");
+	shader._texcoord = gl.getAttribLocation(shader.SHADER_PROGRAM, "aTextureCoord");
+	shader._normal = gl.getAttribLocation(shader.SHADER_PROGRAM, "aVertexNormal");
+};
+
+//# sourceURL=Shader.js
+
+'use strict';
+var ShaderSource = {};
+ShaderSource.BlendingCubeFS = "	precision lowp float;\n\
+	varying vec4 vColor;\n\
+\n\
+	void main()\n\
+    {\n\
+		gl_FragColor = vColor;\n\
+	}";
+ShaderSource.BlendingCubeVS = "attribute vec3 position;\n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+attribute vec4 color;\n\
+varying vec4 vColor;\n\
+\n\
+void main()\n\
+{\n\
+    vec3 highDifference = -encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = position.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos = vec4(position.xyz, 1.0);\n\
+\n\
+    vColor=color;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
+}";
+ShaderSource.BlurFS = "#ifdef GL_ES\n\
+    precision highp float;\n\
+    #endif\n\
+uniform sampler2D colorTex;\n\
+uniform vec2 texelSize;\n\
+varying vec2 vTexCoord; 	 	\n\
+\n\
+void main()\n\
+{\n\
+    vec3 result = vec3(0.0);\n\
+    for (int i = 0; i < 4; ++i) {\n\
+        for (int j = 0; j < 4; ++j) {\n\
+            vec2 offset = vec2(texelSize.x * float(j), texelSize.y * float(i));\n\
+            result += texture2D(colorTex, vTexCoord + offset).rgb;\n\
+        }\n\
+    }\n\
+            \n\
+    gl_FragColor.rgb = vec3(result * 0.0625); \n\
+    gl_FragColor.a = 1.0;\n\
+}\n\
+";
+ShaderSource.BlurVS = "attribute vec4 position;\n\
+attribute vec2 texCoord;\n\
+\n\
+uniform mat4 projectionMatrix;\n\
+uniform mat4 modelViewMatrix;  \n\
+\n\
+varying vec2 vTexCoord;\n\
+\n\
+void main()\n\
+{	\n\
+    vTexCoord = texCoord;\n\
+    \n\
+    gl_Position = projectionMatrix * modelViewMatrix * position;\n\
+}\n\
+";
+ShaderSource.BoxDepthFS = "#ifdef GL_ES\n\
+    precision highp float;\n\
+#endif\n\
+uniform float near;\n\
+uniform float far;\n\
+\n\
+varying float depth;  \n\
+\n\
+vec4 packDepth(const in float depth)\n\
+{\n\
+    const vec4 bit_shift = vec4(16777216.0, 65536.0, 256.0, 1.0);\n\
+    const vec4 bit_mask  = vec4(0.0, 0.00390625, 0.00390625, 0.00390625); \n\
+    vec4 res = fract(depth * bit_shift);\n\
+    res -= res.xxyz * bit_mask;\n\
+    return res;  \n\
+}\n\
+\n\
+void main()\n\
+{     \n\
+    gl_FragData[0] = packDepth(-depth);\n\
+}\n\
+";
+ShaderSource.BoxDepthVS = "attribute vec3 position;\n\
+\n\
+uniform mat4 modelViewMatrixRelToEye; \n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform mat4 buildingRotMatrix;  \n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+uniform float near;\n\
+uniform float far;\n\
+uniform vec3 aditionalPosition;\n\
+\n\
+varying float depth;  \n\
+void main()\n\
+{	\n\
+    vec4 rotatedPos = buildingRotMatrix * vec4(position.xyz + aditionalPosition.xyz, 1.0);\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+    \n\
+    //linear depth in camera space (0..far)\n\
+    depth = (modelViewMatrixRelToEye * pos4).z/far;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+}\n\
+";
+ShaderSource.BoxSsaoFS = "#ifdef GL_ES\n\
+    precision highp float;\n\
+#endif\n\
+uniform sampler2D depthTex;\n\
+uniform sampler2D noiseTex;  \n\
+uniform sampler2D diffuseTex;\n\
+uniform bool hasTexture;\n\
+varying vec3 vNormal;\n\
+uniform mat4 projectionMatrix;\n\
+uniform mat4 m;\n\
+uniform vec2 noiseScale;\n\
+uniform float near;\n\
+uniform float far;            \n\
+uniform float fov;\n\
+uniform float aspectRatio;    \n\
+uniform float screenWidth;    \n\
+uniform float screenHeight;    \n\
+uniform vec3 kernel[16];   \n\
+uniform vec4 vColor4Aux;\n\
+\n\
+varying vec2 vTexCoord;   \n\
+varying vec3 vLightWeighting;\n\
+varying vec4 vcolor4;\n\
+\n\
+const int kernelSize = 16;  \n\
+const float radius = 0.5;      \n\
+\n\
+float unpackDepth(const in vec4 rgba_depth)\n\
+{\n\
+    const vec4 bit_shift = vec4(0.000000059605, 0.000015258789, 0.00390625, 1.0);\n\
+    float depth = dot(rgba_depth, bit_shift);\n\
+    return depth;\n\
+}                \n\
+\n\
+vec3 getViewRay(vec2 tc)\n\
+{\n\
+    float hfar = 2.0 * tan(fov/2.0) * far;\n\
+    float wfar = hfar * aspectRatio;    \n\
+    vec3 ray = vec3(wfar * (tc.x - 0.5), hfar * (tc.y - 0.5), -far);    \n\
+    return ray;                      \n\
+}         \n\
+            \n\
+//linear view space depth\n\
+float getDepth(vec2 coord)\n\
+{                          \n\
+    return unpackDepth(texture2D(depthTex, coord.xy));\n\
+}    \n\
+\n\
+void main()\n\
+{          \n\
+    vec2 screenPos = vec2(gl_FragCoord.x / screenWidth, gl_FragCoord.y / screenHeight);		                 \n\
+    float linearDepth = getDepth(screenPos);          \n\
+    vec3 origin = getViewRay(screenPos) * linearDepth;   \n\
+    vec3 normal2 = vNormal;   \n\
+            \n\
+    vec3 rvec = texture2D(noiseTex, screenPos.xy * noiseScale).xyz * 2.0 - 1.0;\n\
+    vec3 tangent = normalize(rvec - normal2 * dot(rvec, normal2));\n\
+    vec3 bitangent = cross(normal2, tangent);\n\
+    mat3 tbn = mat3(tangent, bitangent, normal2);        \n\
+    \n\
+    float occlusion = 0.0;\n\
+    for(int i = 0; i < kernelSize; ++i)\n\
+    {    	 \n\
+        vec3 sample = origin + (tbn * kernel[i]) * radius;\n\
+        vec4 offset = projectionMatrix * vec4(sample, 1.0);		\n\
+        offset.xy /= offset.w;\n\
+        offset.xy = offset.xy * 0.5 + 0.5;        \n\
+        float sampleDepth = -sample.z/far;\n\
+        float depthBufferValue = getDepth(offset.xy);				              \n\
+        float range_check = abs(linearDepth - depthBufferValue)+radius*0.998;\n\
+        if (range_check < radius*1.001 && depthBufferValue <= sampleDepth)\n\
+        {\n\
+            occlusion +=  1.0;\n\
+        }\n\
+        \n\
+    }   \n\
+        \n\
+    occlusion = 1.0 - occlusion / float(kernelSize);\n\
+                                \n\
+    vec3 lightPos = vec3(10.0, 10.0, 10.0);\n\
+    vec3 L = normalize(lightPos);\n\
+    float DiffuseFactor = dot(normal2, L);\n\
+    float NdotL = abs(DiffuseFactor);\n\
+    vec3 diffuse = vec3(NdotL);\n\
+    vec3 ambient = vec3(1.0);\n\
+    vec4 textureColor;\n\
+    textureColor = vcolor4;\n\
+\n\
+    gl_FragColor.rgb = vec3((textureColor.xyz)*vLightWeighting * occlusion); \n\
+    gl_FragColor.a = 1.0;   \n\
+}\n\
+";
+ShaderSource.BoxSsaoVS = "attribute vec3 position;\n\
+attribute vec3 normal;\n\
+attribute vec4 color4;\n\
+\n\
+uniform mat4 projectionMatrix;  \n\
+uniform mat4 modelViewMatrix;\n\
+uniform mat4 modelViewMatrixRelToEye; \n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform mat4 normalMatrix4;\n\
+uniform mat4 buildingRotMatrix;  \n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+uniform vec3 aditionalPosition;\n\
+uniform vec4 oneColor4;\n\
+uniform bool bUse1Color;\n\
+uniform vec3 scale;\n\
+uniform bool bScale;\n\
+\n\
+varying vec3 vNormal;\n\
+varying vec2 vTexCoord;  \n\
+varying vec3 uAmbientColor;\n\
+varying vec3 vLightWeighting;\n\
+varying vec4 vcolor4;\n\
+\n\
+void main()\n\
+{	\n\
+    vec4 position2 = vec4(position.xyz, 1.0);\n\
+    if(bScale)\n\
+    {\n\
+        position2.x *= scale.x;\n\
+        position2.y *= scale.y;\n\
+        position2.z *= scale.z;\n\
+    }\n\
+    vec4 rotatedPos = buildingRotMatrix * vec4(position2.xyz + aditionalPosition.xyz, 1.0);\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+   \n\
+    vec4 rotatedNormal = buildingRotMatrix * vec4(normal.xyz, 1.0);\n\
+    vLightWeighting = vec3(1.0, 1.0, 1.0);\n\
+    uAmbientColor = vec3(0.8, 0.8, 0.8);\n\
+    vec3 uLightingDirection = vec3(0.5, 0.5, 0.5);\n\
+    vec3 directionalLightColor = vec3(0.6, 0.6, 0.6);\n\
+    vNormal = (normalMatrix4 * vec4(rotatedNormal.x, rotatedNormal.y, rotatedNormal.z, 1.0)).xyz;\n\
+    float directionalLightWeighting = max(dot(vNormal, uLightingDirection), 0.0);\n\
+    vLightWeighting = uAmbientColor + directionalLightColor * directionalLightWeighting;\n\
+    if(bUse1Color)\n\
+    {\n\
+        vcolor4 = oneColor4;\n\
+    }\n\
+    else\n\
+    {\n\
+        vcolor4 = color4;\n\
+    }\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+}\n\
+";
+ShaderSource.CloudFS = "precision lowp float;\n\
+varying vec3 vColor;\n\
+\n\
+void main()\n\
+{\n\
+    gl_FragColor = vec4(vColor, 1.);\n\
+}";
+ShaderSource.CloudVS = "attribute vec3 position;\n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform vec3 cloudPosHIGH;\n\
+uniform vec3 cloudPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+attribute vec3 color;\n\
+varying vec3 vColor;\n\
+\n\
+void main()\n\
+{\n\
+    vec3 objPosHigh = cloudPosHIGH;\n\
+    vec3 objPosLow = cloudPosLOW.xyz + position.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+\n\
+    vColor=color;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
+}";
+ShaderSource.ColorFS = "precision mediump float;\n\
+uniform int byteColor_r;\n\
+uniform int byteColor_g;\n\
+uniform int byteColor_b;\n\
+\n\
+void main()\n\
+{\n\
+    float byteMaxValue = 255.0;\n\
+\n\
+    gl_FragColor = vec4(float(byteColor_r)/byteMaxValue, float(byteColor_g)/byteMaxValue, float(byteColor_b)/byteMaxValue, 1);\n\
+}\n\
+";
+ShaderSource.ColorSelectionSsaoFS = "precision highp float;\n\
+uniform vec4 vColor4Aux;\n\
+\n\
+void main()\n\
+{          \n\
+    gl_FragColor = vColor4Aux;\n\
+}\n\
+";
+ShaderSource.ColorSelectionSsaoVS = "attribute vec3 position;\n\
+\n\
+uniform mat4 buildingRotMatrix;\n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform mat4 RefTransfMatrix;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+uniform vec3 aditionalPosition;\n\
+uniform vec3 refTranslationVec;\n\
+uniform int refMatrixType; // 0= identity, 1= translate, 2= transform\n\
+\n\
+void main()\n\
+{\n\
+    vec4 rotatedPos;\n\
+	if(refMatrixType == 0)\n\
+	{\n\
+		rotatedPos = buildingRotMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
+	}\n\
+	else if(refMatrixType == 1)\n\
+	{\n\
+		rotatedPos = buildingRotMatrix * vec4(position.xyz + refTranslationVec.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
+	}\n\
+	else if(refMatrixType == 2)\n\
+	{\n\
+		rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
+	}\n\
+\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+    \n\
+    gl_PointSize = 10.0;\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+}\n\
+";
+ShaderSource.ColorVS = "attribute vec3 position;\n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+uniform mat4 RefTransfMatrix;\n\
+\n\
+void main()\n\
+{\n\
+    vec4 rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0);\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+    \n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
+}\n\
+";
+ShaderSource.LegoDepthFS = "#ifdef GL_ES\n\
+precision highp float;\n\
+#endif\n\
+uniform float near;\n\
+uniform float far;\n\
+\n\
+varying float depth;  \n\
+\n\
+vec4 packDepth(const in float depth)\n\
+{\n\
+    const vec4 bit_shift = vec4(16777216.0, 65536.0, 256.0, 1.0);\n\
+    const vec4 bit_mask  = vec4(0.0, 0.00390625, 0.00390625, 0.00390625); \n\
+    vec4 res = fract(depth * bit_shift);\n\
+    res -= res.xxyz * bit_mask;\n\
+    return res;  \n\
+}\n\
+\n\
+void main()\n\
+{     \n\
+    gl_FragData[0] = packDepth(-depth);\n\
+}\n\
+";
+ShaderSource.LegoDepthVS = "attribute vec3 position;\n\
+attribute vec3 normal;\n\
+attribute vec2 texCoord;\n\
+\n\
+uniform mat4 modelViewMatrixRelToEye; \n\
+uniform mat4 RefTransfMatrix;\n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+uniform float near;\n\
+uniform float far;\n\
+uniform vec3 aditionalPosition;\n\
+\n\
+varying float depth;  \n\
+void main()\n\
+{	\n\
+    vec4 rotatedPos = RefTransfMatrix * vec4(position.xyz + aditionalPosition.xyz, 1.0);\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+\n\
+    depth = (modelViewMatrixRelToEye * pos4).z/far;\n\
+    \n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+}\n\
+";
+ShaderSource.LegoSsaoFS = "#ifdef GL_ES\n\
+    precision highp float;\n\
+#endif\n\
+uniform sampler2D depthTex;\n\
+uniform sampler2D noiseTex;  \n\
+uniform sampler2D diffuseTex;\n\
+uniform bool hasTexture;\n\
+varying vec3 vNormal;\n\
+uniform mat4 projectionMatrix;\n\
+uniform mat4 m;\n\
+uniform vec2 noiseScale;\n\
+uniform float near;\n\
+uniform float far;            \n\
+uniform float fov;\n\
+uniform float aspectRatio;    \n\
+uniform float screenWidth;    \n\
+uniform float screenHeight;    \n\
+uniform vec3 kernel[16];   \n\
+uniform vec4 vColor4Aux;\n\
+\n\
+varying vec2 vTexCoord;   \n\
+varying vec3 vLightWeighting;\n\
+varying vec4 vcolor4;\n\
+\n\
+const int kernelSize = 16;  \n\
+const float radius = 0.5;      \n\
+\n\
+float unpackDepth(const in vec4 rgba_depth)\n\
+{\n\
+    const vec4 bit_shift = vec4(0.000000059605, 0.000015258789, 0.00390625, 1.0);\n\
+    float depth = dot(rgba_depth, bit_shift);\n\
+    return depth;\n\
+}                \n\
+\n\
+vec3 getViewRay(vec2 tc)\n\
+{\n\
+    float hfar = 2.0 * tan(fov/2.0) * far;\n\
+    float wfar = hfar * aspectRatio;    \n\
+    vec3 ray = vec3(wfar * (tc.x - 0.5), hfar * (tc.y - 0.5), -far);    \n\
+    return ray;                      \n\
+}         \n\
+            \n\
+//linear view space depth\n\
+float getDepth(vec2 coord)\n\
+{                          \n\
+    return unpackDepth(texture2D(depthTex, coord.xy));\n\
+}    \n\
+\n\
+void main()\n\
+{          \n\
+    vec2 screenPos = vec2(gl_FragCoord.x / screenWidth, gl_FragCoord.y / screenHeight);		                 \n\
+    float linearDepth = getDepth(screenPos);          \n\
+    vec3 origin = getViewRay(screenPos) * linearDepth;   \n\
+    vec3 normal2 = vNormal;   \n\
+            \n\
+    vec3 rvec = texture2D(noiseTex, screenPos.xy * noiseScale).xyz * 2.0 - 1.0;\n\
+    vec3 tangent = normalize(rvec - normal2 * dot(rvec, normal2));\n\
+    vec3 bitangent = cross(normal2, tangent);\n\
+    mat3 tbn = mat3(tangent, bitangent, normal2);        \n\
+    \n\
+    float occlusion = 0.0;\n\
+    for(int i = 0; i < kernelSize; ++i)\n\
+    {    	 \n\
+        vec3 sample = origin + (tbn * kernel[i]) * radius;\n\
+        vec4 offset = projectionMatrix * vec4(sample, 1.0);		\n\
+        offset.xy /= offset.w;\n\
+        offset.xy = offset.xy * 0.5 + 0.5;        \n\
+        float sampleDepth = -sample.z/far;\n\
+        float depthBufferValue = getDepth(offset.xy);				              \n\
+        float range_check = abs(linearDepth - depthBufferValue)+radius*0.998;\n\
+        if (range_check < radius*1.001 && depthBufferValue <= sampleDepth)\n\
+        {\n\
+            occlusion +=  1.0;\n\
+        }\n\
+        \n\
+    }   \n\
+        \n\
+    occlusion = 1.0 - occlusion / float(kernelSize);\n\
+                                \n\
+    vec3 lightPos = vec3(10.0, 10.0, 10.0);\n\
+    vec3 L = normalize(lightPos);\n\
+    float DiffuseFactor = dot(normal2, L);\n\
+    float NdotL = abs(DiffuseFactor);\n\
+    vec3 diffuse = vec3(NdotL);\n\
+    vec3 ambient = vec3(1.0);\n\
+    vec4 textureColor;\n\
+    textureColor = vcolor4;\n\
+\n\
+    gl_FragColor.rgb = vec3((textureColor.xyz)*vLightWeighting * occlusion); \n\
+    gl_FragColor.a = 1.0;   \n\
+}\n\
+";
+ShaderSource.LegoSsaoVS = "attribute vec3 position;\n\
+attribute vec3 normal;\n\
+attribute vec4 color4;\n\
+attribute vec2 texCoord;\n\
+\n\
+uniform mat4 projectionMatrix;  \n\
+uniform mat4 modelViewMatrix;\n\
+uniform mat4 modelViewMatrixRelToEye; \n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform mat4 RefTransfMatrix;\n\
+uniform mat4 normalMatrix4;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+uniform vec3 aditionalPosition;\n\
+\n\
+varying vec3 vNormal;\n\
+varying vec2 vTexCoord;  \n\
+varying vec3 uAmbientColor;\n\
+varying vec3 vLightWeighting;\n\
+varying vec4 vcolor4;\n\
+\n\
+void main()\n\
+{	\n\
+    vec4 rotatedPos = RefTransfMatrix * vec4(position.xyz + aditionalPosition.xyz, 1.0);\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+    \n\
+    vec3 rotatedNormal = mat3(RefTransfMatrix) * normal;\n\
+    vLightWeighting = vec3(1.0, 1.0, 1.0);\n\
+    uAmbientColor = vec3(0.8, 0.8, 0.8);\n\
+    vec3 uLightingDirection = vec3(0.5, 0.5, 0.5);\n\
+    vec3 directionalLightColor = vec3(0.6, 0.6, 0.6);\n\
+    vNormal = (normalMatrix4 * vec4(rotatedNormal.x, rotatedNormal.y, rotatedNormal.z, 1.0)).xyz;\n\
+\n\
+    float directionalLightWeighting = max(dot(vNormal, uLightingDirection), 0.0);\n\
+    vLightWeighting = uAmbientColor + directionalLightColor * directionalLightWeighting;\n\
+    vcolor4 = color4;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+}\n\
+";
+ShaderSource.LodBuildingDepthFS = "#ifdef GL_ES\n\
+    precision highp float;\n\
+#endif\n\
+uniform float near;\n\
+uniform float far;\n\
+\n\
+varying float depth;  \n\
+\n\
+vec4 packDepth(const in float depth)\n\
+{\n\
+    const vec4 bit_shift = vec4(16777216.0, 65536.0, 256.0, 1.0);\n\
+    const vec4 bit_mask  = vec4(0.0, 0.00390625, 0.00390625, 0.00390625); \n\
+    vec4 res = fract(depth * bit_shift);\n\
+    res -= res.xxyz * bit_mask;\n\
+    return res;  \n\
+}\n\
+\n\
+void main()\n\
+{     \n\
+    gl_FragData[0] = packDepth(-depth);\n\
+}\n\
+";
+ShaderSource.LodBuildingDepthVS = "attribute vec3 position;\n\
+\n\
+uniform mat4 modelViewMatrixRelToEye; \n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform mat4 buildingRotMatrix;  \n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+uniform float near;\n\
+uniform float far;\n\
+uniform vec3 aditionalPosition;\n\
+\n\
+varying float depth;  \n\
+void main()\n\
+{	\n\
+    vec4 rotatedPos = buildingRotMatrix * vec4(position.xyz + aditionalPosition.xyz, 1.0);\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+        \n\
+    depth = (modelViewMatrixRelToEye * pos4).z/far;\n\
+    \n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+}\n\
+";
+ShaderSource.LodBuildingSsaoFS = "#ifdef GL_ES\n\
+    precision highp float;\n\
+#endif\n\
+uniform sampler2D depthTex;\n\
+uniform sampler2D noiseTex;  \n\
+uniform sampler2D diffuseTex;\n\
+uniform bool hasTexture;\n\
+uniform bool textureFlipYAxis;\n\
+varying vec3 vNormal;\n\
+uniform mat4 projectionMatrix;\n\
+uniform mat4 m;\n\
+uniform vec2 noiseScale;\n\
+uniform float near;\n\
+uniform float far;            \n\
+uniform float fov;\n\
+uniform float aspectRatio;    \n\
+uniform float screenWidth;    \n\
+uniform float screenHeight;   \n\
+uniform float shininessValue; \n\
+uniform vec3 kernel[16];   \n\
+uniform vec4 vColor4Aux;\n\
+\n\
+varying vec2 vTexCoord;   \n\
+varying vec3 vLightWeighting;\n\
+varying vec4 vcolor4;\n\
+uniform vec3 specularColor;\n\
+varying vec3 vertexPos;\n\
+\n\
+const int kernelSize = 16;  \n\
+uniform float radius;    \n\
+\n\
+uniform float ambientReflectionCoef;\n\
+uniform float diffuseReflectionCoef;  \n\
+uniform float specularReflectionCoef;  \n\
+\n\
+float unpackDepth(const in vec4 rgba_depth)\n\
+{\n\
+    const vec4 bit_shift = vec4(0.000000059605, 0.000015258789, 0.00390625, 1.0);\n\
+    float depth = dot(rgba_depth, bit_shift);\n\
+    return depth;\n\
+}                \n\
+\n\
+vec3 getViewRay(vec2 tc)\n\
+{\n\
+    float hfar = 2.0 * tan(fov/2.0) * far;\n\
+    float wfar = hfar * aspectRatio;    \n\
+    vec3 ray = vec3(wfar * (tc.x - 0.5), hfar * (tc.y - 0.5), -far);    \n\
+    return ray;                      \n\
+}         \n\
+            \n\
+//linear view space depth\n\
+float getDepth(vec2 coord)\n\
+{                          \n\
+    return unpackDepth(texture2D(depthTex, coord.xy));\n\
+}    \n\
+\n\
+void main()\n\
+{          \n\
+    vec2 screenPos = vec2(gl_FragCoord.x / screenWidth, gl_FragCoord.y / screenHeight);		                 \n\
+    float linearDepth = getDepth(screenPos);          \n\
+    vec3 origin = getViewRay(screenPos) * linearDepth;   \n\
+\n\
+    vec3 normal2 = vNormal;   \n\
+            \n\
+    vec3 rvec = texture2D(noiseTex, screenPos.xy * noiseScale).xyz * 2.0 - 1.0;\n\
+    vec3 tangent = normalize(rvec - normal2 * dot(rvec, normal2));\n\
+    vec3 bitangent = cross(normal2, tangent);\n\
+    mat3 tbn = mat3(tangent, bitangent, normal2);        \n\
+    \n\
+    float occlusion = 0.0;\n\
+    for(int i = 0; i < kernelSize; ++i)\n\
+    {    	 \n\
+        vec3 sample = origin + (tbn * kernel[i]) * radius;\n\
+        vec4 offset = projectionMatrix * vec4(sample, 1.0);		\n\
+        offset.xy /= offset.w;\n\
+        offset.xy = offset.xy * 0.5 + 0.5;        \n\
+        float sampleDepth = -sample.z/far;\n\
+		if(sampleDepth > 0.49)\n\
+			continue;\n\
+        float depthBufferValue = getDepth(offset.xy);				              \n\
+        float range_check = abs(linearDepth - depthBufferValue)+radius*0.998;\n\
+        if (range_check < radius*1.001 && depthBufferValue <= sampleDepth)\n\
+        {\n\
+            occlusion +=  1.0;\n\
+        }\n\
+        \n\
+    }   \n\
+        \n\
+    occlusion = 1.0 - occlusion / float(kernelSize);\n\
+                                \n\
+    vec3 lightPos = vec3(20.0, 60.0, 20.0);\n\
+    vec3 L = normalize(lightPos - vertexPos);\n\
+    float lambertian = max(dot(normal2, L), 0.0);\n\
+    float specular = 0.0;\n\
+    if(lambertian > 0.0)\n\
+    {\n\
+        vec3 R = reflect(-L, normal2);      // Reflected light vector\n\
+        vec3 V = normalize(-vertexPos); // Vector to viewer\n\
+        \n\
+        // Compute the specular term\n\
+        float specAngle = max(dot(R, V), 0.0);\n\
+        specular = pow(specAngle, shininessValue);\n\
+    }\n\
+	\n\
+	if(lambertian < 0.5)\n\
+    {\n\
+		lambertian = 0.5;\n\
+	}\n\
+\n\
+    vec4 textureColor;\n\
+    if(hasTexture)\n\
+    {\n\
+        if(textureFlipYAxis)\n\
+        {\n\
+            textureColor = texture2D(diffuseTex, vec2(vTexCoord.s, 1.0 - vTexCoord.t));\n\
+        }\n\
+        else{\n\
+            textureColor = texture2D(diffuseTex, vec2(vTexCoord.s, vTexCoord.t));\n\
+        }\n\
+		\n\
+        if(textureColor.w == 0.0)\n\
+        {\n\
+            discard;\n\
+        }\n\
+    }\n\
+    else{\n\
+        textureColor = vColor4Aux;\n\
+    }\n\
+	\n\
+	vec3 ambientColor = vec3(textureColor.x, textureColor.y, textureColor.z);\n\
+\n\
+    gl_FragColor = vec4((ambientReflectionCoef * ambientColor + diffuseReflectionCoef * lambertian * textureColor.xyz + specularReflectionCoef * specular * specularColor)*vLightWeighting * occlusion, 1.0); \n\
+}\n\
+";
+ShaderSource.LodBuildingSsaoVS = "attribute vec3 position;\n\
+attribute vec3 normal;\n\
+attribute vec4 color4;\n\
+attribute vec2 texCoord;\n\
+\n\
+uniform sampler2D diffuseTex;\n\
+uniform mat4 projectionMatrix;  \n\
+uniform mat4 modelViewMatrix;\n\
+uniform mat4 modelViewMatrixRelToEye; \n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform mat4 normalMatrix4;\n\
+uniform mat4 buildingRotMatrix;  \n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+uniform vec3 aditionalPosition;\n\
+uniform vec4 oneColor4;\n\
+uniform bool bUse1Color;\n\
+uniform bool hasTexture;\n\
+\n\
+varying vec3 vNormal;\n\
+varying vec2 vTexCoord;   \n\
+varying vec3 uAmbientColor;\n\
+varying vec3 vLightWeighting;\n\
+varying vec4 vcolor4;\n\
+varying vec3 vertexPos;\n\
+\n\
+void main()\n\
+{	\n\
+    vec4 rotatedPos = buildingRotMatrix * vec4(position.xyz + aditionalPosition.xyz, 1.0);\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+	\n\
+	vertexPos = vec3(modelViewMatrixRelToEye * pos4);\n\
+    vec4 rotatedNormal = buildingRotMatrix * vec4(normal.xyz, 1.0);\n\
+    vLightWeighting = vec3(1.0, 1.0, 1.0);\n\
+    uAmbientColor = vec3(0.8, 0.8, 0.8);\n\
+    vec3 uLightingDirection = vec3(0.6, 0.6, 0.6);\n\
+    vec3 directionalLightColor = vec3(0.7, 0.7, 0.7);\n\
+    vNormal = (normalMatrix4 * vec4(rotatedNormal.x, rotatedNormal.y, rotatedNormal.z, 1.0)).xyz;\n\
+    float directionalLightWeighting = max(dot(vNormal, uLightingDirection), 0.0);\n\
+    vLightWeighting = uAmbientColor + directionalLightColor * directionalLightWeighting;\n\
+\n\
+    if(bUse1Color)\n\
+    {\n\
+        vcolor4 = oneColor4;\n\
+    }\n\
+    else\n\
+    {\n\
+        vcolor4 = color4;\n\
+    }\n\
+    vTexCoord = texCoord;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+}\n\
+";
+ShaderSource.ModelRefSsaoFS = "#ifdef GL_ES\n\
+    precision highp float;\n\
+#endif\n\
+\n\
+uniform sampler2D depthTex;\n\
+uniform sampler2D noiseTex;  \n\
+uniform sampler2D diffuseTex;\n\
+uniform bool hasTexture;\n\
+uniform bool textureFlipYAxis;\n\
+varying vec3 vNormal;\n\
+uniform mat4 projectionMatrix;\n\
+uniform mat4 m;\n\
+uniform vec2 noiseScale;\n\
+uniform float near;\n\
+uniform float far;            \n\
+uniform float fov;\n\
+uniform float aspectRatio;    \n\
+uniform float screenWidth;    \n\
+uniform float screenHeight;    \n\
+uniform float shininessValue;\n\
+uniform vec3 kernel[16];   \n\
+uniform vec4 vColor4Aux;\n\
+\n\
+varying vec2 vTexCoord;   \n\
+varying vec3 vLightWeighting;\n\
+\n\
+varying vec3 diffuseColor;\n\
+uniform vec3 specularColor;\n\
+varying vec3 vertexPos;\n\
+\n\
+const int kernelSize = 16;  \n\
+uniform float radius;      \n\
+\n\
+uniform float ambientReflectionCoef;\n\
+uniform float diffuseReflectionCoef;  \n\
+uniform float specularReflectionCoef; \n\
+\n\
+float unpackDepth(const in vec4 rgba_depth)\n\
+{\n\
+    const vec4 bit_shift = vec4(0.000000059605, 0.000015258789, 0.00390625, 1.0);\n\
+    float depth = dot(rgba_depth, bit_shift);\n\
+    return depth;\n\
+}                \n\
+\n\
+vec3 getViewRay(vec2 tc)\n\
+{\n\
+    float hfar = 2.0 * tan(fov/2.0) * far;\n\
+    float wfar = hfar * aspectRatio;    \n\
+    vec3 ray = vec3(wfar * (tc.x - 0.5), hfar * (tc.y - 0.5), -far);    \n\
+    return ray;                      \n\
+}         \n\
+            \n\
+//linear view space depth\n\
+float getDepth(vec2 coord)\n\
+{\n\
+    return unpackDepth(texture2D(depthTex, coord.xy));\n\
+}    \n\
+\n\
+void main()\n\
+{          \n\
+    vec2 screenPos = vec2(gl_FragCoord.x / screenWidth, gl_FragCoord.y / screenHeight);		                 \n\
+    float linearDepth = getDepth(screenPos);          \n\
+    vec3 origin = getViewRay(screenPos) * linearDepth;   \n\
+\n\
+    vec3 normal2 = vNormal;\n\
+            \n\
+    vec3 rvec = texture2D(noiseTex, screenPos.xy * noiseScale).xyz * 2.0 - 1.0;\n\
+    vec3 tangent = normalize(rvec - normal2 * dot(rvec, normal2));\n\
+    vec3 bitangent = cross(normal2, tangent);\n\
+    mat3 tbn = mat3(tangent, bitangent, normal2);        \n\
+    \n\
+    float occlusion = 0.0;\n\
+    for(int i = 0; i < kernelSize; ++i)\n\
+    {    	 \n\
+        vec3 sample = origin + (tbn * kernel[i]) * radius;\n\
+        vec4 offset = projectionMatrix * vec4(sample, 1.0);		\n\
+        offset.xy /= offset.w;\n\
+        offset.xy = offset.xy * 0.5 + 0.5;        \n\
+        float sampleDepth = -sample.z/far;\n\
+		if(sampleDepth > 0.49)\n\
+			continue;\n\
+        float depthBufferValue = getDepth(offset.xy);				              \n\
+        float range_check = abs(linearDepth - depthBufferValue)+radius*0.998;\n\
+        if (range_check < radius*1.001 && depthBufferValue <= sampleDepth)\n\
+        {\n\
+            occlusion +=  1.0;\n\
+        }\n\
+    }   \n\
+        \n\
+    occlusion = 1.0 - occlusion / float(kernelSize);\n\
+\n\
+    vec3 lightPos = vec3(20.0, 60.0, 20.0);\n\
+    vec3 L = normalize(lightPos - vertexPos);\n\
+    float lambertian = max(dot(normal2, L), 0.0);\n\
+    float specular = 0.0;\n\
+    if(lambertian > 0.0)\n\
+    {\n\
+        vec3 R = reflect(-L, normal2);      // Reflected light vector\n\
+        vec3 V = normalize(-vertexPos); // Vector to viewer\n\
+        \n\
+        // Compute the specular term\n\
+        float specAngle = max(dot(R, V), 0.0);\n\
+        specular = pow(specAngle, shininessValue);\n\
+    }\n\
+	\n\
+	if(lambertian < 0.5)\n\
+    {\n\
+		lambertian = 0.5;\n\
+	}\n\
+\n\
+    vec4 textureColor;\n\
+    if(hasTexture)\n\
+    {\n\
+        if(textureFlipYAxis)\n\
+        {\n\
+            textureColor = texture2D(diffuseTex, vec2(vTexCoord.s, 1.0 - vTexCoord.t));\n\
+        }\n\
+        else{\n\
+            textureColor = texture2D(diffuseTex, vec2(vTexCoord.s, vTexCoord.t));\n\
+        }\n\
+		\n\
+        if(textureColor.w == 0.0)\n\
+        {\n\
+            discard;\n\
+        }\n\
+    }\n\
+    else{\n\
+        textureColor = vColor4Aux;\n\
+    }\n\
+	\n\
+	vec3 ambientColor = vec3(textureColor.x, textureColor.y, textureColor.z);\n\
+\n\
+    gl_FragColor = vec4((ambientReflectionCoef * ambientColor + diffuseReflectionCoef * lambertian * textureColor.xyz + specularReflectionCoef * specular * specularColor)*vLightWeighting * occlusion, 1.0); \n\
+}\n\
+";
+ShaderSource.ModelRefSsaoVS = "	attribute vec3 position;\n\
+	attribute vec3 normal;\n\
+	attribute vec2 texCoord;\n\
+	\n\
+	uniform mat4 buildingRotMatrix; \n\
+	uniform mat4 projectionMatrix;  \n\
+	uniform mat4 modelViewMatrix;\n\
+	uniform mat4 modelViewMatrixRelToEye; \n\
+	uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+	uniform mat4 RefTransfMatrix;\n\
+	uniform mat4 normalMatrix4;\n\
+	uniform vec3 buildingPosHIGH;\n\
+	uniform vec3 buildingPosLOW;\n\
+	uniform vec3 encodedCameraPositionMCHigh;\n\
+	uniform vec3 encodedCameraPositionMCLow;\n\
+	uniform vec3 aditionalPosition;\n\
+	uniform vec3 refTranslationVec;\n\
+	uniform int refMatrixType; // 0= identity, 1= translate, 2= transform\n\
+\n\
+	varying vec3 vNormal;\n\
+	varying vec2 vTexCoord;  \n\
+	varying vec3 uAmbientColor;\n\
+	varying vec3 vLightWeighting;\n\
+	varying vec3 vertexPos;\n\
+	\n\
+	void main()\n\
+    {	\n\
+		vec4 rotatedPos;\n\
+		mat3 currentTMat;\n\
+		if(refMatrixType == 0)\n\
+		{\n\
+			rotatedPos = buildingRotMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
+			currentTMat = mat3(buildingRotMatrix);\n\
+		}\n\
+		else if(refMatrixType == 1)\n\
+		{\n\
+			rotatedPos = buildingRotMatrix * vec4(position.xyz + refTranslationVec.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
+			currentTMat = mat3(buildingRotMatrix);\n\
+		}\n\
+		else if(refMatrixType == 2)\n\
+		{\n\
+			rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
+			currentTMat = mat3(RefTransfMatrix);\n\
+		}\n\
+\n\
+		vec3 objPosHigh = buildingPosHIGH;\n\
+		vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+		vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+		vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+		vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+\n\
+		vertexPos = vec3(modelViewMatrixRelToEye * pos4);\n\
+		vec3 rotatedNormal = currentTMat * normal;\n\
+		vLightWeighting = vec3(1.0, 1.0, 1.0);\n\
+		uAmbientColor = vec3(0.8);\n\
+		vec3 uLightingDirection = vec3(0.6, 0.6, 0.6);\n\
+		vec3 directionalLightColor = vec3(0.7, 0.7, 0.7);\n\
+		vNormal = (normalMatrix4 * vec4(rotatedNormal.x, rotatedNormal.y, rotatedNormal.z, 1.0)).xyz;\n\
+		vTexCoord = texCoord;\n\
+		float directionalLightWeighting = max(dot(vNormal, uLightingDirection), 0.0);\n\
+		vLightWeighting = uAmbientColor + directionalLightColor * directionalLightWeighting;\n\
+\n\
+        gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+	}\n\
+";
+ShaderSource.PngImageFS = "precision mediump float;\n\
+varying vec2 v_texcoord;\n\
+uniform bool textureFlipYAxis;\n\
+uniform sampler2D u_texture;\n\
+\n\
+void main()\n\
+{\n\
+    vec4 textureColor;\n\
+    if(textureFlipYAxis)\n\
+    {\n\
+        textureColor = texture2D(u_texture, vec2(v_texcoord.s, 1.0 - v_texcoord.t));\n\
+    }\n\
+    else\n\
+    {\n\
+        textureColor = texture2D(u_texture, v_texcoord);\n\
+    }\n\
+    if(textureColor.w < 0.1)\n\
+    {\n\
+        discard;\n\
+    }\n\
+\n\
+    gl_FragColor = textureColor;\n\
+}";
+ShaderSource.PngImageVS = "attribute vec3 a_position;\n\
+attribute vec2 a_texcoord;\n\
+uniform mat4 buildingRotMatrix;  \n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;  \n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+varying vec2 v_texcoord;\n\
+\n\
+void main()\n\
+{\n\
+    vec4 position2 = vec4(a_position.xyz, 1.0);\n\
+    vec4 rotatedPos = buildingRotMatrix * vec4(position2.xyz, 1.0);\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+\n\
+    v_texcoord = a_texcoord;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+}\n\
+";
+ShaderSource.PointCloudFS = "	precision lowp float;\n\
+	varying vec4 vColor;\n\
+\n\
+	void main()\n\
+    {\n\
+		gl_FragColor = vColor;\n\
+	}";
+ShaderSource.PointCloudVS = "attribute vec3 position;\n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+attribute vec4 color;\n\
+varying vec4 vColor;\n\
+\n\
+void main()\n\
+{\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + position.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+\n\
+    vColor=color;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
+}";
+ShaderSource.RenderShowDepthFS = "#ifdef GL_ES\n\
+precision highp float;\n\
+#endif\n\
+uniform float near;\n\
+uniform float far;\n\
+\n\
+varying float depth;  \n\
+\n\
+vec4 packDepth(const in float depth)\n\
+{\n\
+    const vec4 bit_shift = vec4(16777216.0, 65536.0, 256.0, 1.0);\n\
+    const vec4 bit_mask  = vec4(0.0, 0.00390625, 0.00390625, 0.00390625); \n\
+    vec4 res = fract(depth * bit_shift);\n\
+    res -= res.xxyz * bit_mask;\n\
+    return res;  \n\
+}\n\
+\n\
+void main()\n\
+{     \n\
+    gl_FragData[0] = packDepth(-depth);\n\
+}\n\
+";
+ShaderSource.RenderShowDepthVS = "attribute vec3 position;\n\
+\n\
+uniform mat4 buildingRotMatrix; \n\
+uniform mat4 modelViewMatrixRelToEye; \n\
+uniform mat4 RefTransfMatrix;\n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+uniform float near;\n\
+uniform float far;\n\
+uniform vec3 aditionalPosition;\n\
+uniform vec3 refTranslationVec;\n\
+uniform int refMatrixType; // 0= identity, 1= translate, 2= transform\n\
+\n\
+varying float depth;\n\
+  \n\
+void main()\n\
+{	\n\
+	vec4 rotatedPos;\n\
+\n\
+	if(refMatrixType == 0)\n\
+	{\n\
+		rotatedPos = buildingRotMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
+	}\n\
+	else if(refMatrixType == 1)\n\
+	{\n\
+		rotatedPos = buildingRotMatrix * vec4(position.xyz + refTranslationVec.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
+	}\n\
+	else if(refMatrixType == 2)\n\
+	{\n\
+		rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
+	}\n\
+\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+    \n\
+    //linear depth in camera space (0..far)\n\
+    depth = (modelViewMatrixRelToEye * pos4).z/far;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+}\n\
+";
+ShaderSource.ShowDepthFS = "#ifdef GL_ES\n\
+    precision highp float;\n\
+#endif\n\
+uniform float near;\n\
+uniform float far;\n\
+\n\
+varying float depth;  \n\
+varying vec3 vN; \n\
+varying vec4 vVSPos;\n\
+\n\
+// from http://spidergl.org/example.php?id=6\n\
+vec4 packDepth(const in float depth)\n\
+{\n\
+    const vec4 bit_shift = vec4(16777216.0, 65536.0, 256.0, 1.0);\n\
+    const vec4 bit_mask  = vec4(0.0, 0.00390625, 0.00390625, 0.00390625); \n\
+    vec4 res = fract(depth * bit_shift);\n\
+    res -= res.xxyz * bit_mask;\n\
+\n\
+    return res;  \n\
+}\n\
+\n\
+void main()\n\
+{\n\
+    gl_FragData[0] = packDepth(-depth);\n\
+    gl_FragData[0].r = -depth/far;\n\
+}\n\
+";
+ShaderSource.ShowDepthVS = "attribute vec3 position;\n\
+attribute vec3 normal;\n\
+\n\
+uniform mat4 modelViewMatrixRelToEye; \n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform mat4 normalMatrix3;\n\
+uniform mat4 normalMatrix4;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+uniform float near;\n\
+uniform float far;\n\
+\n\
+varying vec3 vN;\n\
+varying float depth;  \n\
+varying vec4 vVSPos;\n\
+\n\
+void main()\n\
+{	\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + position.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+\n\
+    vN = normalize((normalMatrix4 * vec4(normal, 1.0)).xyz);\n\
+    \n\
+    //linear depth in camera space (0..far)\n\
+    depth = (modelViewMatrixRelToEye * pos4).z/far;\n\
+    vVSPos = modelViewMatrixRelToEye * pos4;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+}\n\
+";
+ShaderSource.SilhouetteFS = "precision highp float;\n\
+uniform vec4 vColor4Aux;\n\
+\n\
+void main()\n\
+{          \n\
+    gl_FragColor = vColor4Aux;\n\
+}";
+ShaderSource.SilhouetteVS = "attribute vec3 position;\n\
+\n\
+uniform mat4 buildingRotMatrix; \n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform mat4 ModelViewMatrixRelToEye;\n\
+uniform mat4 ProjectionMatrix;\n\
+uniform mat4 RefTransfMatrix;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+uniform vec3 aditionalPosition;\n\
+uniform vec3 refTranslationVec;\n\
+uniform int refMatrixType; // 0= identity, 1= translate, 2= transform\n\
+uniform vec2 camSpacePixelTranslation;\n\
+uniform vec2 screenSize;    \n\
+varying vec2 camSpaceTranslation;\n\
+\n\
+void main()\n\
+{    \n\
+    vec4 rotatedPos;\n\
+	if(refMatrixType == 0)\n\
+	{\n\
+		rotatedPos = buildingRotMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
+	}\n\
+	else if(refMatrixType == 1)\n\
+	{\n\
+		rotatedPos = buildingRotMatrix * vec4(position.xyz + refTranslationVec.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
+	}\n\
+	else if(refMatrixType == 2)\n\
+	{\n\
+		rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0) + vec4(aditionalPosition.xyz, 0.0);\n\
+	}\n\
+\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+    vec4 camSpacePos = ModelViewMatrixRelToEye * pos4;\n\
+    vec4 translationVec = ProjectionMatrix * vec4(camSpacePixelTranslation.x*(-camSpacePos.z), camSpacePixelTranslation.y*(-camSpacePos.z), 0.0, 1.0);\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+    gl_Position += translationVec;  \n\
+}";
+ShaderSource.SimpleDepthSsaoFS = "precision highp float;\n\
+const vec4 bitEnc = vec4(1.0,255.0,65025.0,16581375.0);\n\
+const vec4 bitDec = 1.0/bitEnc;\n\
+varying float zDepth;\n\
+\n\
+vec4 EncodeFloatRGBA (float v)\n\
+{\n\
+    vec4 enc = bitEnc * v;\n\
+    enc = fract(enc);\n\
+    enc -= enc.yzww * vec2(1.0/255.0, 0.0).xxxy;\n\
+    return enc;\n\
+}\n\
+\n\
+void main()\n\
+{          \n\
+    vec4 encodedZ = EncodeFloatRGBA(zDepth);\n\
+    gl_FragData[0] = encodedZ;\n\
+}\n\
+";
+ShaderSource.SimpleDepthSsaoVS = "attribute vec3 position;\n\
+\n\
+uniform mat4 modelViewMatrixRelToEye; \n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform mat4 RefTransfMatrix;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+varying float zDepth;\n\
+uniform float far;\n\
+\n\
+void main()\n\
+{	\n\
+    vec4 rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0);\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+    \n\
+    zDepth = (modelViewMatrixRelToEye * pos4).z/far;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+}\n\
+";
+ShaderSource.SsaoFS = "#ifdef GL_ES\n\
+    precision highp float;\n\
+#endif\n\
+uniform sampler2D depthTex;\n\
+uniform sampler2D noiseTex;  \n\
+uniform sampler2D diffuseTex;\n\
+varying vec3 vNormal;\n\
+uniform mat4 projectionMatrix;\n\
+uniform mat4 m;\n\
+uniform vec2 noiseScale;\n\
+uniform float near;\n\
+uniform float far;            \n\
+uniform float fov;\n\
+uniform float aspectRatio;    \n\
+uniform float screenWidth;    \n\
+uniform float screenHeight;    \n\
+uniform vec3 kernel[16];   \n\
+\n\
+varying vec2 vTexCoord;   \n\
+\n\
+const int kernelSize = 16;  \n\
+const float radius = 1.0;      \n\
+\n\
+float unpackDepth(const in vec4 rgba_depth)\n\
+{\n\
+    const vec4 bit_shift = vec4(0.000000059605, 0.000015258789, 0.00390625, 1.0);\n\
+    float depth = dot(rgba_depth, bit_shift);\n\
+    return depth;\n\
+}                \n\
+\n\
+vec3 getViewRay(vec2 tc)\n\
+{\n\
+    float hfar = 2.0 * tan(fov/2.0) * far;\n\
+    float wfar = hfar * aspectRatio;    \n\
+    vec3 ray = vec3(wfar * (tc.x - 0.5), hfar * (tc.y - 0.5), -far);    \n\
+    return ray;                      \n\
+}         \n\
+            \n\
+//linear view space depth\n\
+float getDepth(vec2 coord)\n\
+{                          \n\
+    return unpackDepth(texture2D(depthTex, coord.xy));\n\
+}    \n\
+\n\
+void main()\n\
+{          \n\
+    vec2 screenPos = vec2(gl_FragCoord.x / screenWidth, gl_FragCoord.y / screenHeight);		                 \n\
+    float linearDepth = getDepth(screenPos);          \n\
+    vec3 origin = getViewRay(screenPos) * linearDepth;   \n\
+ \n\
+    vec3 normal2 = vNormal;   \n\
+            \n\
+    vec3 rvec = texture2D(noiseTex, screenPos.xy * noiseScale).xyz * 2.0 - 1.0;\n\
+    vec3 tangent = normalize(rvec - normal2 * dot(rvec, normal2));\n\
+    vec3 bitangent = cross(normal2, tangent);\n\
+    mat3 tbn = mat3(tangent, bitangent, normal2);        \n\
+    \n\
+    float occlusion = 0.0;\n\
+    for(int i = 0; i < kernelSize; ++i)\n\
+    {    	 \n\
+        vec3 sample = origin + (tbn * kernel[i]) * radius;\n\
+        vec4 offset = projectionMatrix * vec4(sample, 1.0);		\n\
+        offset.xy /= offset.w;\n\
+        offset.xy = offset.xy * 0.5 + 0.5;        \n\
+        float sampleDepth = -sample.z/far;\n\
+        float depthBufferValue = getDepth(offset.xy);				              \n\
+\n\
+        float range_check = abs(linearDepth - depthBufferValue)+radius*0.998;\n\
+        if (range_check < radius && depthBufferValue <= sampleDepth)\n\
+        {\n\
+            occlusion +=  1.0;\n\
+        }\n\
+        \n\
+    }   \n\
+        \n\
+    occlusion = 1.0 - (occlusion) / float(kernelSize);\n\
+                                \n\
+    vec3 lightPos = vec3(10.0, 10.0, 10.0);\n\
+    vec3 L = normalize(lightPos);\n\
+    float NdotL = abs(dot(normal2, L));\n\
+    vec3 diffuse = vec3(NdotL);\n\
+    vec3 ambient = vec3(1.0);\n\
+    vec4 textureColor = texture2D(diffuseTex, vec2(vTexCoord.s, vTexCoord.t));\n\
+\n\
+    gl_FragColor.rgb = vec3((textureColor.xyz*0.2 + textureColor.xyz*0.8) * occlusion); // with texture.***\n\
+    gl_FragColor.a = 1.0;   \n\
+}\n\
+";
+ShaderSource.SsaoVS = "attribute vec3 position;\n\
+attribute vec3 normal;\n\
+attribute vec2 texCoord;\n\
+\n\
+uniform mat4 projectionMatrix;  \n\
+uniform mat4 modelViewMatrix;\n\
+uniform mat4 modelViewMatrixRelToEye; \n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform mat4 normalMatrix4;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+\n\
+varying vec3 vNormal;\n\
+varying vec2 vTexCoord;  \n\
+\n\
+void main()\n\
+{	\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + position.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos4 = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+\n\
+    vNormal = (normalMatrix4 * vec4(-normal.x, -normal.y, -normal.z, 1.0)).xyz;\n\
+    vTexCoord = texCoord;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos4;\n\
+}";
+ShaderSource.StandardFS = "precision lowp float;\n\
+varying vec3 vColor;\n\
+\n\
+void main()\n\
+{\n\
+    gl_FragColor = vec4(vColor, 1.);\n\
+}";
+ShaderSource.StandardVS = "attribute vec3 position;\n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+uniform mat4 RefTransfMatrix;\n\
+attribute vec3 color;\n\
+varying vec3 vColor;\n\
+\n\
+void main()\n\
+{\n\
+    vec4 rotatedPos = RefTransfMatrix * vec4(position.xyz, 1.0);\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+ \n\
+    vColor=color;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
+}";
+ShaderSource.TextureA1FS = "precision mediump float;\n\
+varying vec4 vColor;\n\
+varying vec2 vTextureCoord;\n\
+uniform sampler2D uSampler;\n\
+\n\
+void main()\n\
+{\n\
+    gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\n\
+}\n\
+";
+ShaderSource.TextureA1VS = "attribute vec3 position;\n\
+attribute vec4 aVertexColor;\n\
+attribute vec2 aTextureCoord;\n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+varying vec4 vColor;\n\
+varying vec2 vTextureCoord;\n\
+\n\
+void main()\n\
+{\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + position.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+ \n\
+    vColor=aVertexColor;\n\
+    vTextureCoord = aTextureCoord;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
+}";
+ShaderSource.TextureFS = "precision mediump float;\n\
+varying vec4 vColor;\n\
+varying vec2 vTextureCoord;\n\
+uniform sampler2D uSampler;\n\
+\n\
+void main()\n\
+{\n\
+    gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\n\
+}";
+ShaderSource.TextureNormalFS = "	precision mediump float;\n\
+	varying vec4 vColor;\n\
+	varying vec2 vTextureCoord;\n\
+	uniform sampler2D uSampler;\n\
+	varying vec3 vLightWeighting;\n\
+\n\
+	void main()\n\
+    {\n\
+		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\n\
+        \n\
+		gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);\n\
+	}\n\
+";
+ShaderSource.TextureNormalVS = "attribute vec3 position;\n\
+attribute vec4 aVertexColor;\n\
+attribute vec2 aTextureCoord;\n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+varying vec4 vColor;\n\
+varying vec2 vTextureCoord;\n\
+attribute vec3 aVertexNormal;\n\
+varying vec3 uAmbientColor;\n\
+varying vec3 vLightWeighting;\n\
+uniform mat3 uNMatrix;\n\
+\n\
+void main()\n\
+{\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + position.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+    \n\
+    vColor = aVertexColor;\n\
+    vTextureCoord = aTextureCoord;\n\
+    \n\
+    vLightWeighting = vec3(1.0, 1.0, 1.0);\n\
+    uAmbientColor = vec3(0.7, 0.7, 0.7);\n\
+    vec3 uLightingDirection = vec3(0.8, 0.2, -0.9);\n\
+    vec3 directionalLightColor = vec3(0.4, 0.4, 0.4);\n\
+    vec3 transformedNormal = uNMatrix * aVertexNormal;\n\
+    float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);\n\
+    vLightWeighting = uAmbientColor + directionalLightColor * directionalLightWeighting;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
+}\n\
+";
+ShaderSource.TextureVS = "attribute vec3 position;\n\
+attribute vec4 aVertexColor;\n\
+attribute vec2 aTextureCoord;\n\
+uniform mat4 Mmatrix;\n\
+uniform mat4 ModelViewProjectionMatrixRelToEye;\n\
+uniform vec3 buildingPosHIGH;\n\
+uniform vec3 buildingPosLOW;\n\
+uniform vec3 encodedCameraPositionMCHigh;\n\
+uniform vec3 encodedCameraPositionMCLow;\n\
+varying vec4 vColor;\n\
+varying vec2 vTextureCoord;\n\
+\n\
+void main()\n\
+{\n\
+    vec4 rotatedPos = Mmatrix * vec4(position.xyz, 1.0);\n\
+    vec3 objPosHigh = buildingPosHIGH;\n\
+    vec3 objPosLow = buildingPosLOW.xyz + rotatedPos.xyz;\n\
+    vec3 highDifference = objPosHigh.xyz - encodedCameraPositionMCHigh.xyz;\n\
+    vec3 lowDifference = objPosLow.xyz - encodedCameraPositionMCLow.xyz;\n\
+    vec4 pos = vec4(highDifference.xyz + lowDifference.xyz, 1.0);\n\
+\n\
+    vColor=aVertexColor;\n\
+    vTextureCoord = aTextureCoord;\n\
+\n\
+    gl_Position = ModelViewProjectionMatrixRelToEye * pos;\n\
+    \n\
+}";

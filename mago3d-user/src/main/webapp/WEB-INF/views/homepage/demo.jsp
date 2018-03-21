@@ -1213,6 +1213,7 @@
 	function showSelectedObject(projectId, dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
 		var objectInfoViewFlag = $(':radio[name="objectInfo"]:checked').val();
 		if(objectInfoViewFlag) {
+			$("#moveProjectId").val(projectId);
 			$("#moveDataKey").val(dataKey);
 			$("#moveLatitude").val(latitude);
 			$("#moveLongitude").val(longitude);
