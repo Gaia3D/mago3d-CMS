@@ -24,8 +24,13 @@ JS_MESSAGE["usersession.grant.invalid"] = "The permissions are invalid.";
 
 JS_MESSAGE["login.password.decrypt.exception"] = "There was an error processing the login password.";
 
+
+JS_MESSAGE["object.id.empty"] = "Object Id Please select.";
+
+
 // 데이터
 JS_MESSAGE["data.key.empty"] = "Enter the Data Key.";
+JS_MESSAGE["data.key.invalid"] = "The data key is invalid.";
 JS_MESSAGE["data.project.id.empty"] = "Please select a project.";
 JS_MESSAGE["data.latitude.empty"] = "Please enter your latitude.";
 JS_MESSAGE["data.longitude.empty"] = "Please enter the longitude.";

@@ -51,7 +51,7 @@ create table data_info(
 	heading						numeric(8,5),
 	pitch						numeric(8,5),
 	roll						numeric(8,5),
-	attributes					jsonb,
+	attributes					json,
 	status						char(1)								default '0',
 	public_yn					char(1)								default 'N',
 	data_insert_type			varchar(30)							default 'SELF',

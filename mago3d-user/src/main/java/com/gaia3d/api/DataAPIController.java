@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoLog;
+import com.gaia3d.domain.DataInfoObjectAttribute;
+import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Project;
 import com.gaia3d.domain.UserSession;
 import com.gaia3d.service.DataService;
+import com.gaia3d.util.DateUtil;
+import com.gaia3d.util.StringUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,6 +77,89 @@ public class DataAPIController {
 		String result = "success";
 		try {
 			map.put("dataInfoAttribute", dataService.getDataAttribute(data_id));
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		map.put("result", result);
+		return map;
+	}
+	
+	/**
+	 * Data Object Attribute 검색
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "ajax-list-data-object-attribute.do")
+	@ResponseBody
+	public Map<String, Object> ajaxListDataObjectAttribute(HttpServletRequest request, DataInfoObjectAttribute dataInfoObjectAttribute, @RequestParam(defaultValue="1") String pageNo) {
+		log.info("@@ dataInfoObjectAttribute = {}", dataInfoObjectAttribute);
+		
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			if(StringUtil.isNotEmpty(dataInfoObjectAttribute.getStart_date())) {
+				dataInfoObjectAttribute.setStart_date(dataInfoObjectAttribute.getStart_date().substring(0, 8) + DateUtil.START_TIME);
+			}
+			if(StringUtil.isNotEmpty(dataInfoObjectAttribute.getEnd_date())) {
+				dataInfoObjectAttribute.setEnd_date(dataInfoObjectAttribute.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
+			}
+			
+			DataInfo dataInfo = new DataInfo();
+			dataInfo.setProject_id(dataInfoObjectAttribute.getProject_id());
+			dataInfo.setData_key(dataInfoObjectAttribute.getData_key());
+			dataInfo = dataService.getDataByDataKey(dataInfo);
+			if(dataInfo == null) {
+				map.put("result", "data.key.invalid");
+				log.info("validate error 발생: {} ", map.toString());
+				return map;
+			}
+			
+			dataInfoObjectAttribute.setData_id(dataInfo.getData_id());
+			long totalCount = dataService.getDataObjectAttributeTotalCount(dataInfoObjectAttribute);
+			
+			long pageRows = 10l;
+			if(dataInfoObjectAttribute.getList_counter() != null && dataInfoObjectAttribute.getList_counter().longValue() > 0) pageRows = dataInfoObjectAttribute.getList_counter().longValue();
+//			Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(dataInfoObjectAttribute), totalCount, Long.valueOf(pageNo).longValue(), pageRows);
+//			log.info("@@ pagination = {}", pagination);
+			
+//			dataInfoObjectAttribute.setOffset(pagination.getOffset());
+//			dataInfoObjectAttribute.setLimit(pagination.getPageRows());
+			dataInfoObjectAttribute.setOffset(0l);
+			dataInfoObjectAttribute.setLimit(50l);
+			
+			List<DataInfoObjectAttribute> dataInfoObjectAttributeList = new ArrayList<>();
+			if(totalCount > 0l) {
+				dataInfoObjectAttributeList = dataService.getListDataObjectAttribute(dataInfoObjectAttribute);
+			}
+			
+			map.put("dataInfoObjectAttributeList", dataInfoObjectAttributeList);
+			map.put("totalCount", totalCount);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		map.put("result", result);
+		return map;
+	}
+	
+	/**
+	 * 데이터 Object 속성 정보를 취득
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "ajax-data-object-attribute.do")
+	@ResponseBody
+	public Map<String, Object> ajaxDataObjectAttribute(HttpServletRequest request, @RequestParam("data_object_attribute_id") Long data_object_attribute_id) {
+		
+		log.info("@@@@@@@@@ data_object_attribute_id = {}", data_object_attribute_id);
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			map.put("dataInfoObjectAttribute", dataService.getDataObjectAttribute(data_object_attribute_id));
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <div class="dataAttributeDialog" title="Data Detail Info">
 	<div><b><spring:message code='geo.spatial.info'/></b></div>
 	<table class="list-table scope-col" style="width: 100%;">

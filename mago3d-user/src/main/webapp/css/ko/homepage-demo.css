@@ -448,10 +448,10 @@ button.btn.on {
 	font-weight: normal;
 	color: #2955a6;
 }
-.apiLoca > li {
+.apiLocal > li {
 	margin-bottom: 5px;
 }
-.apiLoca > li label {
+.apiLocal > li label {
 	display: inline-block;
 	width: 70px;
 }

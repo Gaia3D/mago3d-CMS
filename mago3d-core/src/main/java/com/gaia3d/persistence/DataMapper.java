@@ -31,6 +31,13 @@ public interface DataMapper {
 	Long getDataTotalCountByStatus(String status);
 	
 	/**
+	 * Data Object 총건수
+	 * @param dataInfoObjectAttribute
+	 * @return
+	 */
+	Long getDataObjectAttributeTotalCount(DataInfoObjectAttribute dataInfoObjectAttribute);
+	
+	/**
 	 * Data 목록
 	 * @param dataInfo
 	 * @return
@@ -80,6 +87,13 @@ public interface DataMapper {
 	DataInfoAttribute getDataAttribute(Long data_id);
 	
 	/**
+	 * Data Object Attribute 정보 취득
+	 * @param data_object_attribute_id
+	 * @return
+	 */
+	DataInfoObjectAttribute getDataObjectAttribute(Long data_object_attribute_id);
+	
+	/**
 	 * 표시 순서
 	 * @param dataInfo
 	 * @return
@@ -100,6 +114,13 @@ public interface DataMapper {
 	 * @return
 	 */
 	DataInfoAttribute getDataIdAndDataAttributeIDByDataKey(String data_key);
+	
+	/**
+	 * Data Object 조회
+	 * @param dataInfoObjectAttribute
+	 * @return
+	 */
+	List<DataInfoObjectAttribute> getListDataObjectAttribute(DataInfoObjectAttribute dataInfoObjectAttribute);
 	
 	/**
 	 * Data 등록

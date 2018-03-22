@@ -191,7 +191,7 @@
 	<div id="apiMenuContent" class="apiWrap">
 		<div>
 			<h3><spring:message code='demo.local.search'/></h3>
-			<ul class="apiLoca">
+			<ul class="apiLocal">
 				<li>
 					<label for="localSearchProjectId"><spring:message code='project'/></label>
 					<select id="localSearchProjectId" name="localSearchProjectId" class="select">
@@ -209,7 +209,7 @@
 		</div>
 		<div>
 			<h3><spring:message code='demo.property.rendering'/></h3>
-			<ul class="apiLoca">
+			<ul class="apiLocal">
 				<li>
 					<input type="radio" id="showPropertyRendering" name="propertyRendering" value="true" />
 					<label for="showLabel"> <spring:message code='show'/> </label>
@@ -233,7 +233,7 @@
 		</div>
 		<div>
 			<h3><spring:message code='demo.color.change'/></h3>
-			<ul class="apiLoca">
+			<ul class="apiLocal">
 				<li>
 					<label for="colorProjectId"> <spring:message code='project'/> </label>
 					<select id="colorProjectId" name="colorProjectId" class="select">
@@ -271,7 +271,7 @@
 		</div>
 		<div>
 			<h3><spring:message code='demo.location.and.rotation'/></h3>
-			<ul class="apiLoca">
+			<ul class="apiLocal">
 				<li>
 					<label for="moveProjectId"><spring:message code='project'/></label>
 					<select id="moveProjectId" name="moveProjectId" class="select">
@@ -321,7 +321,7 @@
 		</div>
 		<div>
 			<h3><spring:message code='demo.click.point.location'/></h3>
-			<ul class="apiLoca">
+			<ul class="apiLocal">
 				<li>
 					<label for="positionLatitude"> <spring:message code='latitude'/> </label>
 					<input type="text" id="positionLatitude" name="positionLatitude" size="15" />

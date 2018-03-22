@@ -24,8 +24,13 @@ JS_MESSAGE["usersession.grant.invalid"] = "アクセス許可が有効ではあ�
 
 JS_MESSAGE["login.password.decrypt.exception"] = "ログインパスワード処理中にエラーが発生しました。";
 
+
+JS_MESSAGE["object.id.empty"] = "Object Idを選択してください。";
+
+
 //データ
 JS_MESSAGE["data.key.empty"] = "Keyを入力してください。";
+JS_MESSAGE["data.key.invalid"] = "Data Keyが正しくありません。";
 JS_MESSAGE["data.project.id.empty"] = "プロジェクトを選択してください。";
 JS_MESSAGE["data.latitude.empty"] = "緯度を入力してください。";
 JS_MESSAGE["data.longitude.empty"] = "経度を入力してください。";

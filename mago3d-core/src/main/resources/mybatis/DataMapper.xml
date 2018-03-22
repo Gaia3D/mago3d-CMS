@@ -31,11 +31,6 @@
 			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
 			]]>
 			</if>
-			<!-- 
-				TODO 버그 같은데.... 왜 있지? 지워야 할거 같음
-			<if test="search_data_name != null and search_data_name != ''">
-			AND data_id LIKE '${search_data_name}%'
-			</if> -->
 		</trim>
 	</select>
 	
@@ -45,6 +40,17 @@
 		SELECT COUNT(data_id) 
 		FROM data_info
 		WHERE status = #{status} AND parent > 0
+	</select>
+	
+	<select id="getDataObjectAttributeTotalCount" parameterType="dataInfoObjectAttribute" resultType="long">
+		/* getDataObjectAttributeTotalCount */
+		SELECT COUNT(data_object_attribute_id) 
+		FROM data_info_object_attribute
+		WHERE data_id = #{data_id}
+			AND object_id = #{object_id}
+			<if test="search_value != null and search_value != ''">
+			AND attributes LIKE '%' || #{search_value} || '%'
+			</if>
 	</select>
 	
 	<!-- Data 목록 -->
@@ -68,11 +74,6 @@
 				<if test="status != null and status != ''">
 				AND status = #{status}
 				</if>
-				<!-- 
-				TODO 버그 같은데.... 왜 있지? 지워야 할거 같음
-				<if test="search_data_name != null and search_data_name != ''">
-				AND data_id LIKE '${search_data_name}%'
-				</if> -->
 				<if test="start_date != null and start_date != ''">
 				<![CDATA[
 				AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
@@ -119,6 +120,19 @@
 	    ORDER BY path
 	</select>
 	
+	<select id="getListDataObjectAttribute" parameterType="dataInfoObjectAttribute" resultType="dataInfoObjectAttribute">
+		/* getListDataObjectAttribute */
+		SELECT *
+		FROM data_info_object_attribute
+		WHERE data_id = #{data_id}
+			AND object_id = #{object_id}
+			<if test="search_value != null and search_value != ''">
+			AND attributes LIKE '%' || #{search_value} || '%'
+			</if>
+		ORDER BY insert_date DESC, data_id DESC
+		OFFSET #{offset} LIMIT #{limit}
+	</select>
+	
 	<!-- Data 정보 -->
 	<select id="getData" parameterType="long" resultType="dataInfo">
 		/* getData */
@@ -140,12 +154,20 @@
 			AND data_key = #{data_key}
 	</select>
 	
-	<!-- Project Data 정보 -->
+	<!-- Data Attribute 정보 -->
 	<select id="getDataAttribute" parameterType="long" resultType="dataInfoAttribute">
 		/* getDataAttribute */
 		SELECT *
 		FROM data_info_attribute
 		WHERE data_id = #{data_id}
+	</select>
+	
+	<!-- Data Object Attribute 정보 -->
+	<select id="getDataObjectAttribute" parameterType="long" resultType="dataInfoObjectAttribute">
+		/* getDataObjectAttribute */
+		SELECT *
+		FROM data_info_object_attribute
+		WHERE data_object_attribute_id = #{data_object_attribute_id}
 	</select>
 	
 	<!-- Data 아이디 중복 체크 -->

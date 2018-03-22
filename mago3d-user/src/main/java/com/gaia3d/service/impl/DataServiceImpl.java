@@ -10,6 +10,7 @@ import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoAttribute;
 import com.gaia3d.domain.DataInfoLog;
+import com.gaia3d.domain.DataInfoObjectAttribute;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.persistence.DataLogMapper;
 import com.gaia3d.persistence.DataMapper;
@@ -46,6 +47,16 @@ public class DataServiceImpl implements DataService {
 	@Transactional(readOnly=true)
 	public Long getDataTotalCountByStatus(String status) {
 		return dataMapper.getDataTotalCountByStatus(status);
+	}
+	
+	/**
+	 * Data Object 총건수
+	 * @param dataInfoObjectAttribute
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public Long getDataObjectAttributeTotalCount(DataInfoObjectAttribute dataInfoObjectAttribute) {
+		return dataMapper.getDataObjectAttributeTotalCount(dataInfoObjectAttribute);
 	}
 	
 	/**
@@ -96,6 +107,26 @@ public class DataServiceImpl implements DataService {
 	@Transactional(readOnly=true)
 	public DataInfoAttribute getDataAttribute(Long data_id) {
 		return dataMapper.getDataAttribute(data_id);
+	}
+	
+	/**
+	 * Data Object Attribute 정보 취득
+	 * @param data_object_attribute_id
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public DataInfoObjectAttribute getDataObjectAttribute(Long data_object_attribute_id) {
+		return dataMapper.getDataObjectAttribute(data_object_attribute_id);
+	}
+	
+	/**
+	 * Data Object 조회
+	 * @param dataInfoObjectAttribute
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public List<DataInfoObjectAttribute> getListDataObjectAttribute(DataInfoObjectAttribute dataInfoObjectAttribute) {
+		return dataMapper.getListDataObjectAttribute(dataInfoObjectAttribute);
 	}
 	
 	/**

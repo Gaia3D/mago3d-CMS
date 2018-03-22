@@ -5,6 +5,7 @@ import java.util.List;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoAttribute;
 import com.gaia3d.domain.DataInfoLog;
+import com.gaia3d.domain.DataInfoObjectAttribute;
 
 /**
  * Data 관리
@@ -26,6 +27,13 @@ public interface DataService {
 	 * @return
 	 */
 	Long getDataTotalCountByStatus(String status);
+	
+	/**
+	 * Data Object 총건수
+	 * @param dataInfoObjectAttribute
+	 * @return
+	 */
+	Long getDataObjectAttributeTotalCount(DataInfoObjectAttribute dataInfoObjectAttribute);
 	
 	/**
 	 * Data 목록
@@ -61,6 +69,20 @@ public interface DataService {
 	 * @return
 	 */
 	DataInfoAttribute getDataAttribute(Long data_id);
+	
+	/**
+	 * Data Object Attribute 정보 취득
+	 * @param data_object_attribute_id
+	 * @return
+	 */
+	DataInfoObjectAttribute getDataObjectAttribute(Long data_object_attribute_id);
+	
+	/**
+	 * Data Object 조회
+	 * @param dataInfoObjectAttribute
+	 * @return
+	 */
+	List<DataInfoObjectAttribute> getListDataObjectAttribute(DataInfoObjectAttribute dataInfoObjectAttribute);
 	
 	/**
 	 * 데이터 공간 정보 변경 요청

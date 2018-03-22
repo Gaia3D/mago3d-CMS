@@ -24,8 +24,13 @@ JS_MESSAGE["usersession.grant.invalid"] = "사용 권한이 유효하지 않습�
 
 JS_MESSAGE["login.password.decrypt.exception"] = "로그인 비밀번호 처리 과정에서 오류가 발생하였습니다.";
 
+
+JS_MESSAGE["object.id.empty"] = "Object Id 선택하여 주십시오.";
+
+
 // 데이터
 JS_MESSAGE["data.key.empty"] = "Data Key를 입력하여 주십시오.";
+JS_MESSAGE["data.key.invalid"] = "Data Key가 올바르지 않습니다.";
 JS_MESSAGE["data.project.id.empty"] = "프로젝트을 선택하여 주십시오.";
 JS_MESSAGE["data.latitude.empty"] = "위도를 입력하여 주십시오.";
 JS_MESSAGE["data.longitude.empty"] = "경도를  입력하여 주십시오.";
