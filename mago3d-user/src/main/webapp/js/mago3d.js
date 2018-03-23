@@ -673,6 +673,1655 @@ LodAPI.changeLod = function(api, magoManager)
 	if (api.getLod4DistInMeters() !== null && api.getLod4DistInMeters() !== "") { magoManager.magoPolicy.setLod4DistInMeters(api.getLod4DistInMeters()); }
 	if (api.getLod5DistInMeters() !== null && api.getLod5DistInMeters() !== "") { magoManager.magoPolicy.setLod5DistInMeters(api.getLod5DistInMeters()); }
 };
+'use strict';
+
+/**
+ * mago3djs API
+ * 
+ * @alias API
+ * @class API
+ * 
+ * @param {any} apiName api이름
+ */
+function API(apiName)
+{
+	if (!(this instanceof API)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	// mago3d 활성화/비활성화 여부
+	this.magoEnable = true;
+
+	// api 이름
+	this.apiName = apiName;
+	
+	// project id
+	this.projectId = null;
+	this.projectDataFolder = null;
+	// objectIds
+	this.objectIds = null;
+	// data_key
+	this.dataKey = null;
+	// issueId
+	this.issueId = null;
+	// issueType
+	this.issueType = null;
+	// drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
+	this.drawType = 0;
+
+	// 위도
+	this.latitude = 0;
+	// 경도
+	this.longitude = 0;
+	// 높이
+	this.elevation = 0;
+	// heading
+	this.heading = 0;
+	// pitch
+	this.pitch = 0;
+	// roll
+	this.roll = 0;
+	// duration
+	this.duration = 0;
+
+	// 속성
+	this.property = null;
+	// 색깔
+	this.color = 0;
+	// structs = MSP, outfitting = MOP
+	this.blockType = null;
+	// outfitting 표시/비표시
+	this.showOutFitting = false;
+	// label 표시/비표시
+	this.showLabelInfo = true;
+	// boundingBox 표시/비표시
+	this.showBoundingBox = false;
+	// 그림자 표시/비표시
+	this.showShadow = false;
+	// frustum culling 가시 거리(M단위)
+	this.frustumFarDistance = 0;
+	// move mode 
+	this.objectMoveMode = CODE.moveMode.NONE;
+	// 이슈 등록 표시
+	this.issueInsertEnable = false;
+	// object 정보 표시
+	this.objectInfoViewEnable = false;
+	// 이슈 목록 표시
+	this.nearGeoIssueListEnable = false;
+	// occlusion culling
+	this.occlusionCullingEnable = false;
+	//
+	this.insertIssueState = 0;
+	
+	// LOD1
+	this.lod0DistInMeters = null;
+	this.lod1DistInMeters = null;
+	this.lod2DistInMeters = null;
+	this.lod3DistInMeters = null;
+	this.lod4DistInMeters = null;
+	this.lod5DistInMeters = null;
+	
+	// Lighting
+	this.ambientReflectionCoef = null;
+	this.diffuseReflectionCoef = null;
+	this.specularReflectionCoef = null;
+	this.ambientColor = null;
+	this.specularColor = null;
+	
+	this.ssaoRadius = null;
+	//
+	this.FPVMode = false;
+};
+
+API.prototype.getMagoEnable = function() 
+{
+	return this.magoEnable;
+};
+API.prototype.setMagoEnable = function(magoEnable) 
+{
+	this.magoEnable = magoEnable;
+};
+
+API.prototype.getAPIName = function() 
+{
+	return this.apiName;
+};
+
+API.prototype.getProjectId = function() 
+{
+	return this.projectId;
+};
+API.prototype.setProjectId = function(projectId) 
+{
+	this.projectId = projectId;
+};
+
+API.prototype.getProjectDataFolder = function() 
+{
+	return this.projectDataFolder;
+};
+API.prototype.setProjectDataFolder = function(projectDataFolder) 
+{
+	this.projectDataFolder = projectDataFolder;
+};
+
+API.prototype.getObjectIds = function() 
+{
+	return this.objectIds;
+};
+API.prototype.setObjectIds = function(objectIds) 
+{
+	this.objectIds = objectIds;
+};
+
+API.prototype.getIssueId = function() 
+{
+	return this.issueId;
+};
+API.prototype.setIssueId = function(issueId) 
+{
+	this.issueId = issueId;
+};
+API.prototype.getIssueType = function() 
+{
+	return this.issueType;
+};
+API.prototype.setIssueType = function(issueType) 
+{
+	this.issueId = issueType;
+};
+
+API.prototype.getDataKey = function() 
+{
+	return this.dataKey;
+};
+API.prototype.setDataKey = function(dataKey) 
+{
+	this.dataKey = dataKey;
+};
+
+API.prototype.getLatitude = function() 
+{
+	return this.latitude;
+};
+API.prototype.setLatitude = function(latitude) 
+{
+	this.latitude = latitude;
+};
+
+API.prototype.getLongitude = function() 
+{
+	return this.longitude;
+};
+API.prototype.setLongitude = function(longitude) 
+{
+	this.longitude = longitude;
+};
+
+API.prototype.getElevation = function() 
+{
+	return this.elevation;
+};
+API.prototype.setElevation = function(elevation) 
+{
+	this.elevation = elevation;
+};
+
+API.prototype.getHeading = function() 
+{
+	return this.heading;
+};
+API.prototype.setHeading = function(heading) 
+{
+	this.heading = heading;
+};
+
+API.prototype.getPitch = function() 
+{
+	return this.pitch;
+};
+API.prototype.setPitch = function(pitch) 
+{
+	this.pitch = pitch;
+};
+
+API.prototype.getRoll = function() 
+{
+	return this.roll;
+};
+API.prototype.setRoll = function(roll) 
+{
+	this.roll = roll;
+};
+
+API.prototype.getProperty = function() 
+{
+	return this.property;
+};
+API.prototype.setProperty = function(property) 
+{
+	this.property = property;
+};
+
+API.prototype.getColor = function() 
+{
+	return this.color;
+};
+API.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+
+API.prototype.getBlockType = function() 
+{
+	return this.blockType;
+};
+API.prototype.setBlockType = function(blockType) 
+{
+	this.blockType = blockType;
+};
+
+API.prototype.getShowOutFitting = function() 
+{
+	return this.showOutFitting;
+};
+API.prototype.setShowOutFitting = function(showOutFitting) 
+{
+	this.showOutFitting = showOutFitting;
+};
+
+
+API.prototype.getShowLabelInfo = function() 
+{
+	return this.showLabelInfo;
+};
+API.prototype.setShowLabelInfo = function(showLabelInfo) 
+{
+	this.showLabelInfo = showLabelInfo;
+};
+API.prototype.getShowBoundingBox = function() 
+{
+	return this.showBoundingBox;
+};
+API.prototype.setShowBoundingBox = function(showBoundingBox) 
+{
+	this.showBoundingBox = showBoundingBox;
+};
+
+API.prototype.getShowShadow = function() 
+{
+	return this.showShadow;
+};
+API.prototype.setShowShadow = function(showShadow) 
+{
+	this.showShadow = showShadow;
+};
+
+API.prototype.getFrustumFarDistance = function() 
+{
+	return this.frustumFarDistance;
+};
+API.prototype.setFrustumFarDistance = function(frustumFarDistance) 
+{
+	this.frustumFarDistance = frustumFarDistance;
+};
+
+API.prototype.getObjectMoveMode = function() 
+{
+	return this.objectMoveMode;
+};
+API.prototype.setObjectMoveMode = function(objectMoveMode) 
+{
+	this.objectMoveMode = objectMoveMode;
+};
+
+API.prototype.getIssueInsertEnable = function() 
+{
+	return this.issueInsertEnable;
+};
+API.prototype.setIssueInsertEnable = function(issueInsertEnable) 
+{
+	this.issueInsertEnable = issueInsertEnable;
+};
+API.prototype.getObjectInfoViewEnable = function() 
+{
+	return this.objectInfoViewEnable;
+};
+API.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
+{
+	this.objectInfoViewEnable = objectInfoViewEnable;
+};
+API.prototype.getOcclusionCullingEnable = function() 
+{
+	return this.occlusionCullingEnable;
+};
+API.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
+{
+	this.occlusionCullingEnable = occlusionCullingEnable;
+};
+API.prototype.getNearGeoIssueListEnable = function() 
+{
+	return this.nearGeoIssueListEnable;
+};
+API.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
+{
+	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
+};
+
+API.prototype.getInsertIssueState = function() 
+{
+	return this.insertIssueState;
+};
+API.prototype.setInsertIssueState = function(insertIssueState) 
+{
+	this.insertIssueState = insertIssueState;
+};
+
+API.prototype.getDrawType = function() 
+{
+	return this.drawType;
+};
+API.prototype.setDrawType = function(drawType) 
+{
+	this.drawType = drawType;
+};
+
+API.prototype.getLod0DistInMeters = function() 
+{
+	return this.lod0DistInMeters;
+};
+API.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
+{
+	this.lod0DistInMeters = lod0DistInMeters;
+};
+API.prototype.getLod1DistInMeters = function() 
+{
+	return this.lod1DistInMeters;
+};
+API.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
+{
+	this.lod1DistInMeters = lod1DistInMeters;
+};
+API.prototype.getLod2DistInMeters = function() 
+{
+	return this.lod2DistInMeters;
+};
+API.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
+{
+	this.lod2DistInMeters = lod2DistInMeters;
+};
+API.prototype.getLod3DistInMeters = function() 
+{
+	return this.lod3DistInMeters;
+};
+API.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
+{
+	this.lod3DistInMeters = lod3DistInMeters;
+};
+API.prototype.getLod4DistInMeters = function() 
+{
+	return this.lod4DistInMeters;
+};
+API.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
+{
+	this.lod4DistInMeters = lod4DistInMeters;
+};
+API.prototype.getLod5DistInMeters = function() 
+{
+	return this.lod5DistInMeters;
+};
+API.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
+{
+	this.lod5DistInMeters = lod5DistInMeters;
+};
+
+API.prototype.getAmbientReflectionCoef = function() 
+{
+	return this.ambientReflectionCoef;
+};
+API.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
+{
+	this.ambientReflectionCoef = ambientReflectionCoef;
+};
+API.prototype.getDiffuseReflectionCoef = function() 
+{
+	return this.diffuseReflectionCoef;
+};
+API.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
+{
+	this.diffuseReflectionCoef = diffuseReflectionCoef;
+};
+API.prototype.getSpecularReflectionCoef = function() 
+{
+	return this.specularReflectionCoef;
+};
+API.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
+{
+	this.specularReflectionCoef = specularReflectionCoef;
+};
+API.prototype.getAmbientColor = function() 
+{
+	return this.ambientColor;
+};
+API.prototype.setAmbientColor = function(ambientColor) 
+{
+	this.ambientColor = ambientColor;
+};
+API.prototype.getSpecularColor = function() 
+{
+	return this.specularColor;
+};
+API.prototype.setSpecularColor = function(specularColor) 
+{
+	this.specularColor = specularColor;
+};
+API.prototype.getSsaoRadius = function() 
+{
+	return this.ssaoRadius;
+};
+API.prototype.setSsaoRadius = function(ssaoRadius) 
+{
+	this.ssaoRadius = ssaoRadius;
+};
+API.prototype.getFPVMode = function()
+{
+	return this.FPVMode;
+};
+API.prototype.setFPVMode = function(value)
+{
+	this.FPVMode = value;
+};
+
+API.prototype.getDuration = function()
+{
+	return this.duration;
+};
+API.prototype.setDuration = function(duration)
+{
+	this.duration = duration;
+};
+'use strict';
+
+/**
+ * api 처리 결과를 담당하는 callback function
+ * @param functionName policy json의 geo_callback_apiresult 속성값
+ * @param apiName 호출한 api 이름
+ * @param result 결과값
+ */
+function apiResultCallback(functionName, apiName, result) 
+{
+	window[functionName](apiName, result);
+}
+
+/**
+ * 선택한 object 정보를 화면에 표시
+ * @param functionName callback
+ * @param projectId
+ * @param data_key
+ * @param objectId
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ * @param heading
+ * @param pitch
+ * @param roll
+ * @param
+ */
+function selectedObjectCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll)
+{
+	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll);
+}
+
+/**
+ * 이동한 data 정보를 화면에 표시
+ * @param functionName callback
+ * @param projectId
+ * @param data_key
+ * @param objectId
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ * @param heading
+ * @param pitch
+ * @param roll
+ * @param
+ */
+function movedDataCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll)
+{
+	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll);
+}
+
+/**
+ * Data Key 를 이용하여 Geo Spatial Info를 획득하여 화면에 표시
+ * @param functionName callback
+ * @param projectId
+ * @param data_key
+ * @param dataName
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ * @param heading
+ * @param pitch
+ * @param roll
+ * @param
+ */
+function dataInfoCallback(functionName, projectId, dataKey, dataName, latitude, longitude, elevation, heading, pitch, roll)
+{
+	window[functionName](projectId, dataKey, dataName, latitude, longitude, elevation, heading, pitch, roll);
+}
+
+/**
+ * 선택한 object 정보를 화면에 표시
+ * @param functionName
+ * @param projectId
+ * @param data_key
+ * @param objectId
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ */
+function insertIssueCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation)
+{
+	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation);
+}
+
+/**
+ * mouse click 위치 정보를 화면에 표시
+ * @param functionName
+ * @param position
+ */
+function clickPositionCallback(functionName, position) 
+{
+	window[functionName](position);
+}
+
+'use strict';
+
+/**
+ * 사용자가 변경한 moving, color, rotation 등 이력 정보를 위한 domain
+ * @class Policy
+ */
+var ChangeHistory = function() 
+{
+	if (!(this instanceof ChangeHistory)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.moveHistory = false;
+	this.colorHistory = false;
+	this.rotationHistory = false;
+	
+	// move mode. ALL : 0 , OBJECT : 1, NONE : 2
+	this.objectMoveMode = null;
+	
+	// project id
+	this.projectId = null;
+	// project data folder
+	this.projectDataFolder = null;
+	// data_key
+	this.dataKey = null;	
+	// objectId
+	this.objectId = null;
+	// objectIndexOrder
+	this.objectIndexOrder = 0;
+	
+	// referenceObject aditional movement.
+	this.refObjectAditionalMove;
+	this.refObjectAditionalMoveRelToBuilding;
+	
+	// 위도
+	this.latitude = 0.0;
+	// 경도
+	this.longitude = 0.0;
+	// 높이
+	this.elevation = 0.0;
+	// heading
+	this.heading = 0.0;
+	// pitch
+	this.pitch = 0.0;
+	// roll
+	this.roll = 0.0;
+	// duration
+	this.duration = 0;
+	// 색깔
+	this.color = 0;
+	// color rgb
+	this.rgbColor = [];
+	// 속성
+	this.property = null;
+	this.propertyKey = null;
+	this.propertyValue = null;
+};
+
+ChangeHistory.prototype.getReferenceObjectAditionalMovement = function() 
+{
+	if (this.refObjectAditionalMove === undefined)
+	{ this.refObjectAditionalMove = new Point3D(); }
+	
+	return this.refObjectAditionalMove;
+};
+
+ChangeHistory.prototype.getReferenceObjectAditionalMovementRelToBuilding = function() 
+{
+	if (this.refObjectAditionalMoveRelToBuilding === undefined)
+	{ this.refObjectAditionalMoveRelToBuilding = new Point3D(); }
+	
+	return this.refObjectAditionalMoveRelToBuilding;
+};
+
+ChangeHistory.prototype.getProjectId = function() 
+{
+	return this.projectId;
+};
+ChangeHistory.prototype.setProjectId = function(projectId) 
+{
+	this.projectId = projectId;
+};
+
+ChangeHistory.prototype.getProjectDataFolder = function() 
+{
+	return this.projectDataFolder;
+};
+ChangeHistory.prototype.setProjectDataFolder = function(projectDataFolder) 
+{
+	this.projectDataFolder = projectDataFolder;
+};
+
+ChangeHistory.prototype.getDataKey = function() 
+{
+	return this.dataKey;
+};
+ChangeHistory.prototype.setDataKey = function(dataKey) 
+{
+	this.dataKey = dataKey;
+};
+
+ChangeHistory.prototype.getObjectId = function() 
+{
+	return this.objectId;
+};
+ChangeHistory.prototype.setObjectId = function(objectId) 
+{
+	this.objectId = objectId;
+};
+
+ChangeHistory.prototype.getObjectIndexOrder = function() 
+{
+	return this.objectIndexOrder;
+};
+ChangeHistory.prototype.setObjectIndexOrder = function(objectIndexOrder) 
+{
+	this.objectIndexOrder = objectIndexOrder;
+};
+
+ChangeHistory.prototype.getLatitude = function() 
+{
+	return this.latitude;
+};
+ChangeHistory.prototype.setLatitude = function(latitude) 
+{
+	this.latitude = latitude;
+};
+
+ChangeHistory.prototype.getLongitude = function() 
+{
+	return this.longitude;
+};
+ChangeHistory.prototype.setLongitude = function(longitude) 
+{
+	this.longitude = longitude;
+};
+
+ChangeHistory.prototype.getElevation = function() 
+{
+	return this.elevation;
+};
+ChangeHistory.prototype.setElevation = function(elevation) 
+{
+	this.elevation = elevation;
+};
+
+ChangeHistory.prototype.getHeading = function() 
+{
+	return this.heading;
+};
+ChangeHistory.prototype.setHeading = function(heading) 
+{
+	this.heading = heading;
+};
+
+ChangeHistory.prototype.getPitch = function() 
+{
+	return this.pitch;
+};
+ChangeHistory.prototype.setPitch = function(pitch) 
+{
+	this.pitch = pitch;
+};
+
+ChangeHistory.prototype.getRoll = function() 
+{
+	return this.roll;
+};
+ChangeHistory.prototype.setRoll = function(roll) 
+{
+	this.roll = roll;
+};
+
+ChangeHistory.prototype.getColor = function() 
+{
+	return this.color;
+};
+ChangeHistory.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+ChangeHistory.prototype.getRgbColor = function() 
+{
+	return this.rgbColor;
+};
+ChangeHistory.prototype.setRgbColor = function(rgbColor) 
+{
+	this.rgbColor = rgbColor;
+};
+
+ChangeHistory.prototype.getProperty = function() 
+{
+	return this.property;
+};
+ChangeHistory.prototype.setProperty = function(property) 
+{
+	this.property = property;
+};
+ChangeHistory.prototype.getPropertyKey = function() 
+{
+	return this.propertyKey;
+};
+ChangeHistory.prototype.setPropertyKey = function(propertyKey) 
+{
+	this.propertyKey = propertyKey;
+};
+ChangeHistory.prototype.getPropertyValue = function() 
+{
+	return this.propertyValue;
+};
+ChangeHistory.prototype.setPropertyValue = function(propertyValue) 
+{
+	this.propertyValue = propertyValue;
+};
+
+ChangeHistory.prototype.getDuration = function()
+{
+	return this.duration;
+};
+ChangeHistory.prototype.setDuration = function(duration)
+{
+	this.duration = duration;
+};
+
+ChangeHistory.prototype.getObjectMoveMode = function() 
+{
+	return this.objectMoveMode;
+};
+ChangeHistory.prototype.setObjectMoveMode = function(objectMoveMode) 
+{
+	this.objectMoveMode = objectMoveMode;
+};
+"use strict";
+
+var CODE = {};
+
+// magoManager가 다 로딩 되지 않은 상태에서 화면으로 부터 호출 되는 것을 막기 위해
+CODE.magoManagerState = {
+	"INIT"   	: 0,
+	"STARTED"	: 1,
+	"READY"   : 2
+};
+
+//0 = no started to load. 1 = started loading. 2 = finished loading. 3 = parse started. 4 = parse finished.***
+CODE.fileLoadState = {
+	"READY"            : 0,
+	"LOADING_STARTED"  : 1,
+	"LOADING_FINISHED" : 2,
+	"PARSE_STARTED"    : 3,
+	"PARSE_FINISHED"   : 4
+};
+
+CODE.moveMode = {
+	"ALL"    : "0",
+	"OBJECT" : "1",
+	"NONE"   : "2"
+};
+
+CODE.PROJECT_ID_PREFIX = "projectId_";
+CODE.PROJECT_DATA_FOLDER_PREFIX = "projectDataFolder_";
+
+'use strict';
+
+/**
+ * 상수 설정
+ * @class Constant
+ */
+var Constant = {};
+
+Constant.CESIUM = "cesium";
+Constant.WORLDWIND = "worldwind";
+Constant.OBJECT_INDEX_FILE = "/objectIndexFile.ihe";
+Constant.CACHE_VERSION = "?cache_version=";
+Constant.SIMPLE_BUILDING_TEXTURE3x3_BMP = "/SimpleBuildingTexture3x3.bmp";
+Constant.RESULT_XDO2F4D = "/Result_xdo2f4d/Images/";
+Constant.RESULT_XDO2F4D_TERRAINTILES = "/Result_xdo2f4d/F4D_TerrainTiles/";
+Constant.RESULT_XDO2F4D_TERRAINTILEFILE_TXT = "/Result_xdo2f4d/f4dTerranTileFile.txt";
+
+Constant.INTERSECTION_OUTSIDE = 0;
+Constant.INTERSECTION_INTERSECT= 1;
+Constant.INTERSECTION_INSIDE = 2;
+
+'use strict';
+
+/**
+ * mago3D 전체 환경 설정을 관리
+ * @class MagoConfig
+ */
+var MagoConfig = {};
+
+MagoConfig.getPolicy = function() 
+{
+	return this.serverPolicy;
+};
+
+MagoConfig.getData = function(key) 
+{
+	return this.dataObject[key];
+};
+
+MagoConfig.isDataExist = function(key) 
+{
+	return this.dataObject.hasOwnProperty(key);
+};
+
+MagoConfig.deleteData = function(key) 
+{
+	return delete this.dataObject[key];
+};
+
+/**
+ * data 를 map에 저장
+ * @param key map에 저장될 key
+ * @param value map에 저장될 value
+ */
+MagoConfig.setData = function(key, value) 
+{
+	if (!this.isDataExist(key)) 
+	{
+		this.dataObject[key] = value;
+	}
+};
+
+/**
+ * F4D Converter 실행 결과물이 저장된 project data folder 명을 획득
+ * @param projectDataFolder data folder
+ */
+MagoConfig.getProjectDataFolder = function(projectDataFolder) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	return this.dataObject[key];
+};
+
+/**
+ * project map에 data folder명의 존재 유무를 검사
+ * @param projectDataFolder
+ */
+MagoConfig.isProjectDataFolderExist = function(projectDataFolder) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	return this.dataObject.hasOwnProperty(key);
+};
+
+/**
+ * project data folder명을 map에서 삭제
+ * @param projectDataFolder
+ */
+MagoConfig.deleteProjectDataFolder = function(projectDataFolder) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	return delete this.dataObject[key];
+};
+
+/**
+ * project data folder명을 Object에서 삭제
+ * @param projectDataFolder Object에 저장될 key
+ * @param value Object에 저장될 value
+ */
+MagoConfig.setProjectDataFolder = function(projectDataFolder, value) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	if (!this.isProjectDataFolderExist(key))
+	{
+		this.dataObject[key] = value;
+	}
+};
+
+/**
+ * 환경설정 초기화
+ * @param serverPolicy mago3d policy(json)
+ * @param projectIdArray data 정보를 map 저장할 key name
+ * @param projectDataArray data 정보(json)
+ */
+MagoConfig.init = function(serverPolicy, projectIdArray, projectDataArray) 
+{
+	this.dataObject = {};
+	
+	this.selectHistoryObject = {};
+	this.movingHistoryObject = {};
+	this.colorHistoryObject = {};
+	this.locationAndRotationHistoryObject = {};
+	
+	this.serverPolicy = serverPolicy;
+	if (projectIdArray !== null && projectIdArray.length > 0) 
+	{
+		for (var i=0; i<projectIdArray.length; i++) 
+		{
+			if (!this.isDataExist(CODE.PROJECT_ID_PREFIX + projectIdArray[i])) 
+			{
+				this.setData(CODE.PROJECT_ID_PREFIX + projectIdArray[i], projectDataArray[i]);
+				this.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataArray[i].data_key, projectDataArray[i].data_key);
+			}
+		}
+	}
+};
+
+/**
+ * 모든 데이터를 삭제함
+ */
+MagoConfig.clearAllData = function() 
+{
+	this.dataObject = {};
+};
+
+/**
+ * 모든 선택 히스토리 삭제
+ */
+MagoConfig.clearSelectHistory = function() 
+{
+	this.selectHistoryObject = {};
+};
+
+/**
+ * 모든 object 선택 내용 이력을 취득
+ */
+MagoConfig.getAllSelectHistory = function()
+{
+	return this.selectHistoryObject;
+};
+
+/**
+ * project 별 해당 키에 해당하는 모든 object 선택 내용 이력을 취득
+ */
+MagoConfig.getSelectHistoryObjects = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * object 선택 내용 이력을 취득
+ */
+MagoConfig.getSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * object 선택 내용을 저장
+ */
+MagoConfig.saveSelectHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject.get(projectId);
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.selectHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+		projectIdObject[dataKey] = dataKeyObject;
+	}
+	
+	// objectIndexOrder 를 저장
+	dataKeyObject[objectIndexOrder] = changeHistory;
+};
+
+/**
+ * object 선택 내용을 삭제
+ */
+MagoConfig.deleteSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return delete dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * 모든 이동 히스토리 삭제
+ */
+MagoConfig.clearMovingHistory = function() 
+{
+	this.movingHistoryObject = {};
+};
+
+/**
+ * 모든 object 선택 내용 이력을 취득
+ */
+MagoConfig.getAllMovingHistory = function()
+{
+	return this.movingHistoryObject;
+};
+
+/**
+ * project별 입력키 값과 일치하는 object 이동 내용 이력을 취득
+ */
+MagoConfig.getMovingHistoryObjects = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * object 이동 내용 이력을 취득
+ */
+MagoConfig.getMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * object 이동 내용을 저장
+ */
+MagoConfig.saveMovingHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.movingHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+		projectIdObject[dataKey] = dataKeyObject;
+	}
+	
+	// objectIndexOrder 를 저장
+	dataKeyObject[objectIndexOrder] = changeHistory;
+};
+
+/**
+ * object 이동 내용을 삭제
+ */
+MagoConfig.deleteMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return delete dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * 모든 색깔 변경 이력을 획득
+ */
+MagoConfig.getAllColorHistory = function() 
+{
+	return this.colorHistoryObject;
+};
+
+/**
+ * 모든 색깔변경 히스토리 삭제
+ */
+MagoConfig.clearColorHistory = function() 
+{
+	this.colorHistoryObject = {};
+};
+
+/**
+ * project별 키에 해당하는 모든 색깔 변경 이력을 획득
+ */
+MagoConfig.getColorHistorys = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * 색깝 변경 이력을 획득
+ */
+MagoConfig.getColorHistory = function(projectId, dataKey, objectId)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectId 를 저장
+	return dataKeyObject[objectId];
+};
+
+/**
+ * 색깝 변경 내용을 저장
+ */
+MagoConfig.saveColorHistory = function(projectId, dataKey, objectId, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.colorHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+		projectIdObject[dataKey] = dataKeyObject;
+	}
+
+	if (objectId === null || objectId === "") 
+	{
+		dataKeyObject[dataKey] = changeHistory;
+	}
+	else 
+	{
+		dataKeyObject[objectId] = changeHistory;
+	}
+};
+
+/**
+ * 색깔 변경 이력을 삭제
+ */
+MagoConfig.deleteColorHistory = function(projectId, dataKey, objectId)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return delete dataKeyObject[objectId];
+};
+
+/**
+ * 모든 색깔변경 히스토리 삭제
+ */
+MagoConfig.clearColorHistory = function() 
+{
+	this.colorHistoryObject = {};
+};
+
+/**
+ * 모든 location and rotation 변경 이력을 획득
+ */
+MagoConfig.getAllLocationAndRotationHistory = function() 
+{
+	return this.locationAndRotationHistoryObject;
+};
+
+/**
+ * 프로젝트별 해당 키 값을 갖는 모든 location and rotation 이력을 획득
+ */
+MagoConfig.getLocationAndRotationHistorys = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * location and rotation 이력을 획득
+ */
+MagoConfig.getLocationAndRotationHistory = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	
+	return dataKeyObject;
+};
+
+/**
+ * location and rotation 내용을 저장
+ */
+MagoConfig.saveLocationAndRotationHistory = function(projectId, dataKey, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.locationAndRotationHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+	}
+
+	dataKeyObject[dataKey] = changeHistory;
+};
+
+/**
+ * location and rotation 이력을 삭제
+ */
+MagoConfig.deleteLocationAndRotationHistory = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = delete projectIdObject[dataKey];
+};
+
+/**
+ * 모든 location and rotation 히스토리 삭제
+ */
+MagoConfig.clearLocationAndRotationHistory = function() 
+{
+	this.locationAndRotationHistoryObject = {};
+};
+	
+/**
+ * TODO 이건 나중에 활요. 사용하지 않음
+ * check 되지 않은 데이터들을 삭제함
+ * @param keyObject 비교할 맵
+ */
+/*MagoConfig.clearUnSelectedData = function(keyObject)
+{
+	for (var key of this.dataObject.keys())
+	{
+		if (!keyObject.hasxxxxx(key))
+		{
+			// data folder path가 존재하면....
+			if (key.indexOf(CODE.PROJECT_DATA_FOLDER_PREFIX) >= 0) 
+			{
+				// 지우는 처리가 있어야 함
+			}
+			this.dataObject.delete(key);
+		}
+	}
+};*/
+
+'use strict';
+
+/**
+ * Policy
+ * @class Policy
+ */
+var Policy = function() 
+{
+	if (!(this instanceof Policy)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	// mago3d 활성화/비활성화 여부
+	this.magoEnable = true;
+
+	// outfitting 표시 여부
+	this.showOutFitting = false;
+	// label 표시/비표시
+	this.showLabelInfo = false;
+	// boundingBox 표시/비표시
+	this.showBoundingBox = false;
+	// 그림자 표시/비표시
+	this.showShadow = false;
+	// squared far frustum 거리
+	this.frustumFarSquaredDistance = 5000000;
+	// far frustum
+	this.frustumFarDistance = 5000;
+
+	// highlighting
+	this.highLightedBuildings = [];
+	// color
+	this.colorBuildings = [];
+	// color
+	this.color = [];
+	// show/hide
+	this.hideBuildings = [];
+	// move mode
+	this.objectMoveMode = CODE.moveMode.NONE;
+	// 이슈 등록 표시
+	this.issueInsertEnable = false;
+	// object 정보 표시
+	this.objectInfoViewEnable = false;
+	// 이슈 목록 표시
+	this.nearGeoIssueListEnable = false;
+	// occlusion culling
+	this.occlusionCullingEnable = false;
+	
+	// 이미지 경로
+	this.imagePath = "";
+	
+	// provisional.***
+	this.colorChangedObjectId;
+	
+	// LOD1
+	this.lod0DistInMeters = 15;
+	this.lod1DistInMeters = 50;
+	this.lod2DistInMeters = 90;
+	this.lod3DistInMeters = 200;
+	this.lod4DistInMeters = 1000;
+	this.lod5DistInMeters = 50000;
+	
+	// Lighting
+	this.ambientReflectionCoef = 0.45; // 0.2.
+	this.diffuseReflectionCoef = 0.75; // 1.0
+	this.specularReflectionCoef = 0.6; // 0.7
+	this.ambientColor = null;
+	this.specularColor = new Float32Array([0.6, 0.6, 0.6]);
+	
+	this.ssaoRadius = 0.15;
+};
+
+Policy.prototype.getMagoEnable = function() 
+{
+	return this.magoEnable;
+};
+Policy.prototype.setMagoEnable = function(magoEnable) 
+{
+	this.magoEnable = magoEnable;
+};
+
+Policy.prototype.getShowOutFitting = function() 
+{
+	return this.showOutFitting;
+};
+Policy.prototype.setShowOutFitting = function(showOutFitting) 
+{
+	this.showOutFitting = showOutFitting;
+};
+Policy.prototype.getShowLabelInfo = function() 
+{
+	return this.showLabelInfo;
+};
+Policy.prototype.setShowLabelInfo = function(showLabelInfo) 
+{
+	this.showLabelInfo = showLabelInfo;
+};
+Policy.prototype.getShowBoundingBox = function() 
+{
+	return this.showBoundingBox;
+};
+Policy.prototype.setShowBoundingBox = function(showBoundingBox) 
+{
+	this.showBoundingBox = showBoundingBox;
+};
+
+Policy.prototype.getShowShadow = function() 
+{
+	return this.showShadow;
+};
+Policy.prototype.setShowShadow = function(showShadow) 
+{
+	this.showShadow = showShadow;
+};
+
+Policy.prototype.getFrustumFarSquaredDistance = function() 
+{
+	return this.frustumFarSquaredDistance;
+};
+Policy.prototype.setFrustumFarSquaredDistance = function(frustumFarSquaredDistance) 
+{
+	this.frustumFarSquaredDistance = frustumFarSquaredDistance;
+};
+
+Policy.prototype.getFrustumFarDistance = function() 
+{
+	return this.frustumFarDistance;
+};
+Policy.prototype.setFrustumFarDistance = function(frustumFarDistance) 
+{
+	this.frustumFarDistance = frustumFarDistance;
+};
+
+Policy.prototype.getHighLightedBuildings = function() 
+{
+	return this.highLightedBuildings;
+};
+Policy.prototype.setHighLightedBuildings = function(highLightedBuildings) 
+{
+	this.highLightedBuildings = highLightedBuildings;
+};
+
+Policy.prototype.getColorBuildings = function() 
+{
+	return this.colorBuildings;
+};
+Policy.prototype.setColorBuildings = function(colorBuildings) 
+{
+	this.colorBuildings = colorBuildings;
+};
+
+Policy.prototype.getColor = function() 
+{
+	return this.color;
+};
+Policy.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+
+Policy.prototype.getHideBuildings = function() 
+{
+	return this.hideBuildings;
+};
+Policy.prototype.setHideBuildings = function(hideBuildings) 
+{
+	this.hideBuildings = hideBuildings;
+};
+
+Policy.prototype.getObjectMoveMode = function() 
+{
+	return this.objectMoveMode;
+};
+Policy.prototype.setObjectMoveMode = function(objectMoveMode) 
+{
+	this.objectMoveMode = objectMoveMode;
+};
+
+Policy.prototype.getIssueInsertEnable = function() 
+{
+	return this.issueInsertEnable;
+};
+Policy.prototype.setIssueInsertEnable = function(issueInsertEnable) 
+{
+	this.issueInsertEnable = issueInsertEnable;
+};
+Policy.prototype.getObjectInfoViewEnable = function() 
+{
+	return this.objectInfoViewEnable;
+};
+Policy.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
+{
+	this.objectInfoViewEnable = objectInfoViewEnable;
+};
+Policy.prototype.getOcclusionCullingEnable = function() 
+{
+	return this.occlusionCullingEnable;
+};
+Policy.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
+{
+	this.occlusionCullingEnable = occlusionCullingEnable;
+};
+Policy.prototype.getNearGeoIssueListEnable = function() 
+{
+	return this.nearGeoIssueListEnable;
+};
+Policy.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
+{
+	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
+};
+
+Policy.prototype.getImagePath = function() 
+{
+	return this.imagePath;
+};
+Policy.prototype.setImagePath = function(imagePath) 
+{
+	this.imagePath = imagePath;
+};
+
+Policy.prototype.getLod0DistInMeters = function() 
+{
+	return this.lod0DistInMeters;
+};
+Policy.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
+{
+	this.lod0DistInMeters = lod0DistInMeters;
+};
+Policy.prototype.getLod1DistInMeters = function() 
+{
+	return this.lod1DistInMeters;
+};
+Policy.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
+{
+	this.lod1DistInMeters = lod1DistInMeters;
+};
+Policy.prototype.getLod2DistInMeters = function() 
+{
+	return this.lod2DistInMeters;
+};
+Policy.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
+{
+	this.lod2DistInMeters = lod2DistInMeters;
+};
+Policy.prototype.getLod3DistInMeters = function() 
+{
+	return this.lod3DistInMeters;
+};
+Policy.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
+{
+	this.lod3DistInMeters = lod3DistInMeters;
+};
+Policy.prototype.getLod4DistInMeters = function() 
+{
+	return this.lod4DistInMeters;
+};
+Policy.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
+{
+	this.lod4DistInMeters = lod4DistInMeters;
+};
+Policy.prototype.getLod5DistInMeters = function() 
+{
+	return this.lod5DistInMeters;
+};
+Policy.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
+{
+	this.lod5DistInMeters = lod5DistInMeters;
+};
+Policy.prototype.getAmbientReflectionCoef = function() 
+{
+	return this.ambientReflectionCoef;
+};
+Policy.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
+{
+	this.ambientReflectionCoef = ambientReflectionCoef;
+};
+Policy.prototype.getDiffuseReflectionCoef = function() 
+{
+	return this.diffuseReflectionCoef;
+};
+Policy.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
+{
+	this.diffuseReflectionCoef = diffuseReflectionCoef;
+};
+Policy.prototype.getSpecularReflectionCoef = function() 
+{
+	return this.specularReflectionCoef;
+};
+Policy.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
+{
+	this.specularReflectionCoef = specularReflectionCoef;
+};
+Policy.prototype.getAmbientColor = function() 
+{
+	return this.ambientColor;
+};
+Policy.prototype.setAmbientColor = function(ambientColor) 
+{
+	this.ambientColor = ambientColor;
+};
+Policy.prototype.getSpecularColor = function() 
+{
+	return this.specularColor;
+};
+Policy.prototype.setSpecularColor = function(specularColor) 
+{
+	this.specularColor = specularColor;
+};
+Policy.prototype.getSsaoRadius = function() 
+{
+	return this.ssaoRadius;
+};
+Policy.prototype.setSsaoRadius = function(ssaoRadius) 
+{
+	this.ssaoRadius = ssaoRadius;
+};
 /**
   DataStream reads scalars, arrays and structs of data from an ArrayBuffer.
   It's like a file-like DataView on steroids.
@@ -14507,7 +16156,33 @@ MagoManager.prototype.renderMagoGeometries = function()
 	if (this.parametricMeshTest == undefined)
 	{
 		this.parametricMeshTest = new ParametricMesh();
-
+		
+		this.profileAux = new Profile();
+		
+		var ringAux = this.profileAux.newOuterRing();
+		
+		// test draw a "U" form polyLine.***
+		var polyLineAux = ringAux.newElement("POLYLINE");
+		var point3d = polyLineAux.newPoint3d(0.0, 0.0, 0.0); // 0
+		point3d = polyLineAux.newPoint3d(7.0, 0.0, 0.0); // 1
+		point3d = polyLineAux.newPoint3d(7.0, 8.0, 0.0); // 2
+		point3d = polyLineAux.newPoint3d(5.0, 8.0, 0.0); // 3
+		point3d = polyLineAux.newPoint3d(5.0, 2.0, 0.0); // 4
+		point3d = polyLineAux.newPoint3d(2.0, 2.0, 0.0); // 5
+		point3d = polyLineAux.newPoint3d(2.0, 8.0, 0.0); // 6
+		point3d = polyLineAux.newPoint3d(0.0, 8.0, 0.0); // 7
+		
+		var arcAux = ringAux.newElement("ARC");
+		arcAux.setCenterPosition(0, 0, 0);
+		arcAux.setRadius(1);
+		arcAux.setStartAngleDegree(90.0);
+		arcAux.setSweepAngleDegree(-45.0);
+		var pointsArray;
+		pointsArray = arcAux.getPoints(pointsArray, 36);
+		
+		
+		var hola = 0;
+		
 		/*
 		// make a extrude object.***
 		// create a profile.
@@ -18782,6 +20457,7 @@ MagoManager.prototype.createBuildingsByBuildingSeedsOnLowestTile = function(lowe
  */
 MagoManager.prototype.calculate_geoLocDataOfNode = function(node) 
 {
+	// this function creates the geoLocationData of "node" using the data inside of "buildingSeed".***
 	var nodeRoot = node.getRoot();
 	
 	if (nodeRoot.data.geoLocDataManager === undefined)
@@ -18897,7 +20573,7 @@ MagoManager.prototype.tilesFrustumCullingFinished = function(intersectedLowestTi
 				neoBuilding.distToCam = distToCamera;
 				
 				var frustumFar = this.magoPolicy.getFrustumFarDistance();
-				if (distToCamera > frustumFar*10)
+				if (distToCamera > frustumFar)
 				{ continue; }
 				
 				// If necessary do frustum culling.*************************************************************************
@@ -18911,34 +20587,58 @@ MagoManager.prototype.tilesFrustumCullingFinished = function(intersectedLowestTi
 					}
 				}
 				//-------------------------------------------------------------------------------------------
-				if (distToCamera < lod0_minDist) 
+				
+				// provisionally fork versions.***
+				var version = neoBuilding.getHeaderVersion();
+				if(version[0] === 'v')
 				{
-					// check if the lod0, lod1, lod2 are modelReference type.***
-					var lodBuildingData = neoBuilding.getLodBuildingData(0);
-					if(lodBuildingData && lodBuildingData.isModelRef)
+					if (distToCamera < lod0_minDist) 
+					{
 						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles0, node);
-					else
-						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles3, node);
-				}
-				else if (distToCamera < lod1_minDist) 
-				{
-					var lodBuildingData = neoBuilding.getLodBuildingData(1);
-					if(lodBuildingData && lodBuildingData.isModelRef)
+					}
+					else if (distToCamera < lod1_minDist) 
+					{
 						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles1, node);
-					else
-						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles3, node);
-				}
-				else if (distToCamera < lod2_minDist) 
-				{
-					var lodBuildingData = neoBuilding.getLodBuildingData(2);
-					if(lodBuildingData && lodBuildingData.isModelRef)
+					}
+					else if (distToCamera < lod2_minDist) 
+					{
 						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles2, node);
-					else
-						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles3, node);
+					}
+					else if (distToCamera < lod5_minDist) 
+					{
+						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles2, node);
+					}
 				}
-				else if (distToCamera < lod5_minDist) 
-				{
-					this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles3, node);
+				else{
+					if (distToCamera < lod0_minDist) 
+					{
+						// check if the lod0, lod1, lod2 are modelReference type.***
+						var lodBuildingData = neoBuilding.getLodBuildingData(0);
+						if(lodBuildingData && lodBuildingData.isModelRef)
+							this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles0, node);
+						else
+							this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles3, node);
+					}
+					else if (distToCamera < lod1_minDist) 
+					{
+						var lodBuildingData = neoBuilding.getLodBuildingData(1);
+						if(lodBuildingData && lodBuildingData.isModelRef)
+							this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles1, node);
+						else
+							this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles3, node);
+					}
+					else if (distToCamera < lod2_minDist) 
+					{
+						var lodBuildingData = neoBuilding.getLodBuildingData(2);
+						if(lodBuildingData && lodBuildingData.isModelRef)
+							this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles2, node);
+						else
+							this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles3, node);
+					}
+					else if (distToCamera < lod5_minDist) 
+					{
+						this.putNodeToArraySortedByDist(this.visibleObjControlerNodes.currentVisibles3, node);
+					}
 				}
 			}
 			
@@ -19001,29 +20701,20 @@ MagoManager.prototype.flyToBuilding = function(apiName, projectId, dataKey)
 	var geoLoc;
 	if (geoLocDataManager === undefined)
 	{ 
-		nodeRoot.data.geoLocDataManager = new GeoLocationDataManager(); 
-		geoLocDataManager = nodeRoot.data.geoLocDataManager;
-		geoLoc = geoLocDataManager.getCurrentGeoLocationData();
-			
-		if (geoLoc === undefined || geoLoc.pivotPoint === undefined)
-		{ 
-			geoLoc = this.calculate_geoLocDataOfNode(node);
-		}
-		
+		geoLoc = this.calculate_geoLocDataOfNode(node);
 		if(geoLoc === undefined)
 		{
 			apiResultCallback( MagoConfig.getPolicy().geo_callback_apiresult, apiName, "-1");
 			return; 
 		}
 	}
-
+	geoLocDataManager = nodeRoot.data.geoLocDataManager;
 	geoLoc = geoLocDataManager.getCurrentGeoLocationData();
 	var realBuildingPos = node.getBBoxCenterPositionWorldCoord(geoLoc);
 
 	if (realBuildingPos === undefined)
 	{ return; }
 
-	//this.radiusAprox_aux = (nodeRoot.data.bbox.maxX - nodeRoot.data.bbox.minX) * 1.2/2.0;
 	this.radiusAprox_aux = nodeRoot.data.bbox.getRadiusAprox();
 
 	if (this.boundingSphere_Aux === undefined)
@@ -19034,7 +20725,6 @@ MagoManager.prototype.flyToBuilding = function(apiName, projectId, dataKey)
 	if (this.configInformation.geo_view_library === Constant.CESIUM)
 	{
 		this.boundingSphere_Aux.center = Cesium.Cartesian3.clone(realBuildingPos);
-		//var viewer = this.scene.viewer;
 		var seconds = 3;
 		this.scene.camera.flyToBoundingSphere(this.boundingSphere_Aux, seconds);
 	}
@@ -22174,246 +23864,6 @@ Plane.prototype.intersectionSphere = function(sphere)
 'use strict';
 
 /**
- * 3차원 정보
- * @class Point3D
- */
-var Point3D = function() 
-{
-	if (!(this instanceof Point3D)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.x = 0.0;
-	this.y = 0.0;
-	this.z = 0.0;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point3D.prototype.deleteObjects = function() 
-{
-	this.x = undefined;
-	this.y = undefined;
-	this.z = undefined;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point3D.prototype.copyFrom = function(point3d) 
-{
-	this.x = point3d.x;
-	this.y = point3d.y;
-	this.z = point3d.z;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns this.x*this.x + this.y*this.y + this.z*this.z;
- */
-Point3D.prototype.getSquaredModul = function() 
-{
-	return this.x*this.x + this.y*this.y + this.z*this.z;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z );
- */
-Point3D.prototype.getModul = function() 
-{
-	return Math.sqrt(this.getSquaredModul());
-};
-
-/**
- * 
- * 어떤 일을 하고 있습니까?
- */
-Point3D.prototype.unitary = function() 
-{
-	var modul = this.getModul();
-	this.x /= modul;
-	this.y /= modul;
-	this.z /= modul;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point3D.prototype.crossProduct = function(point, resultPoint) 
-{
-	if (resultPoint === undefined) { resultPoint = new Point3D(); }
-
-	resultPoint.x = this.y * point.z - point.y * this.z;
-	resultPoint.y = point.x * this.z - this.x * point.z;
-	resultPoint.z = this.x * point.y - point.x * this.y;
-
-	return resultPoint;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.squareDistToPoint = function(point) 
-{
-	var dx = this.x - point.x;
-	var dy = this.y - point.y;
-	var dz = this.z - point.z;
-
-	return dx*dx + dy*dy + dz*dz;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.squareDistTo = function(x, y, z) 
-{
-	var dx = this.x - x;
-	var dy = this.y - y;
-	var dz = this.z - z;
-
-	return dx*dx + dy*dy + dz*dz;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.distTo = function(x, y, z) 
-{
-	return Math.sqrt(this.squareDistTo(x, y, z));
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.distToPoint = function(point) 
-{
-	return Math.sqrt(this.squareDistToPoint(point));
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.distToSphere = function(sphere) 
-{
-	return Math.sqrt(this.squareDistToPoint(sphere.centerPoint)) - sphere.r;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.aproxDistTo = function(pointB, sqrtTable) 
-{
-	var difX = Math.abs(this.x - pointB.x);
-	var difY = Math.abs(this.y - pointB.y);
-	var difZ = Math.abs(this.z - pointB.z);
-	
-	// find the big value.
-	var maxValue, value1, value2;
-	var value1Idx, value2Idx;
-	
-	if (difX > difY)
-	{
-		if (difX > difZ)
-		{
-			maxValue = difX;
-			value1 = difY/maxValue;
-			value1Idx = Math.floor(value1*10);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difZ/middleDist;
-			value2Idx = Math.floor(value2*10);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-		else 
-		{
-			maxValue = difZ;
-			value1 = difX/maxValue;
-			value1Idx = Math.floor(value1*10);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difY/middleDist;
-			value2Idx = Math.floor(value2*10);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-	}
-	else 
-	{
-		if (difY > difZ)
-		{
-			maxValue = difY;
-			value1 = difX/maxValue;
-			value1Idx = Math.floor(value1*10);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difZ/middleDist;
-			value2Idx = Math.floor(value2*10);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-		else 
-		{
-			maxValue = difZ;
-			value1 = difX/maxValue;
-			value1Idx = Math.floor(value1*10);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difY/middleDist;
-			value2Idx = Math.floor(value2*10);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Point3D.prototype.set = function(x, y, z) 
-{
-	this.x = x; this.y = y; this.z = z;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Point3D.prototype.add = function(x, y, z) 
-{
-	this.x += x; this.y += y; this.z += z;
-};
-
-'use strict';
-
-/**
 * 어떤 일을 하고 있습니까?
 * @class Quaternion
 */
@@ -24938,18 +26388,19 @@ VBOMemoryManager.prototype.getClassifiedBufferSize = function(currentBufferSize)
  * 어떤 일을 하고 있습니까?
  * @class Vertex
  */
-var Vertex = function() 
+var Vertex = function(posX, posY, posZ) 
 {
 	if (!(this instanceof Vertex)) 
 	{
 		throw new Error(Messages.CONSTRUCT_ERROR);
 	}
 	
-	this.point3d = new Point3D();
+	this.point3d = new Point3D(posX, posY, posZ);
 	this.normal; // class: Point3D.
 	this.texCoord; // class: Point2D.
 	this.color4; // class: Color.
 	this.outHalfEdgesArray; // Array [class: HalfEdge]. 
+	this.vertexType; // 1 = important vertex.***
 };
 
 /**
@@ -25516,1655 +26967,6 @@ VisibleObjectsController.prototype.clear = function()
 	this.currentVisibles3.length = 0;
 };
 
-'use strict';
-
-/**
- * mago3djs API
- * 
- * @alias API
- * @class API
- * 
- * @param {any} apiName api이름
- */
-function API(apiName)
-{
-	if (!(this instanceof API)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	// mago3d 활성화/비활성화 여부
-	this.magoEnable = true;
-
-	// api 이름
-	this.apiName = apiName;
-	
-	// project id
-	this.projectId = null;
-	this.projectDataFolder = null;
-	// objectIds
-	this.objectIds = null;
-	// data_key
-	this.dataKey = null;
-	// issueId
-	this.issueId = null;
-	// issueType
-	this.issueType = null;
-	// drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
-	this.drawType = 0;
-
-	// 위도
-	this.latitude = 0;
-	// 경도
-	this.longitude = 0;
-	// 높이
-	this.elevation = 0;
-	// heading
-	this.heading = 0;
-	// pitch
-	this.pitch = 0;
-	// roll
-	this.roll = 0;
-	// duration
-	this.duration = 0;
-
-	// 속성
-	this.property = null;
-	// 색깔
-	this.color = 0;
-	// structs = MSP, outfitting = MOP
-	this.blockType = null;
-	// outfitting 표시/비표시
-	this.showOutFitting = false;
-	// label 표시/비표시
-	this.showLabelInfo = true;
-	// boundingBox 표시/비표시
-	this.showBoundingBox = false;
-	// 그림자 표시/비표시
-	this.showShadow = false;
-	// frustum culling 가시 거리(M단위)
-	this.frustumFarDistance = 0;
-	// move mode 
-	this.objectMoveMode = CODE.moveMode.NONE;
-	// 이슈 등록 표시
-	this.issueInsertEnable = false;
-	// object 정보 표시
-	this.objectInfoViewEnable = false;
-	// 이슈 목록 표시
-	this.nearGeoIssueListEnable = false;
-	// occlusion culling
-	this.occlusionCullingEnable = false;
-	//
-	this.insertIssueState = 0;
-	
-	// LOD1
-	this.lod0DistInMeters = null;
-	this.lod1DistInMeters = null;
-	this.lod2DistInMeters = null;
-	this.lod3DistInMeters = null;
-	this.lod4DistInMeters = null;
-	this.lod5DistInMeters = null;
-	
-	// Lighting
-	this.ambientReflectionCoef = null;
-	this.diffuseReflectionCoef = null;
-	this.specularReflectionCoef = null;
-	this.ambientColor = null;
-	this.specularColor = null;
-	
-	this.ssaoRadius = null;
-	//
-	this.FPVMode = false;
-};
-
-API.prototype.getMagoEnable = function() 
-{
-	return this.magoEnable;
-};
-API.prototype.setMagoEnable = function(magoEnable) 
-{
-	this.magoEnable = magoEnable;
-};
-
-API.prototype.getAPIName = function() 
-{
-	return this.apiName;
-};
-
-API.prototype.getProjectId = function() 
-{
-	return this.projectId;
-};
-API.prototype.setProjectId = function(projectId) 
-{
-	this.projectId = projectId;
-};
-
-API.prototype.getProjectDataFolder = function() 
-{
-	return this.projectDataFolder;
-};
-API.prototype.setProjectDataFolder = function(projectDataFolder) 
-{
-	this.projectDataFolder = projectDataFolder;
-};
-
-API.prototype.getObjectIds = function() 
-{
-	return this.objectIds;
-};
-API.prototype.setObjectIds = function(objectIds) 
-{
-	this.objectIds = objectIds;
-};
-
-API.prototype.getIssueId = function() 
-{
-	return this.issueId;
-};
-API.prototype.setIssueId = function(issueId) 
-{
-	this.issueId = issueId;
-};
-API.prototype.getIssueType = function() 
-{
-	return this.issueType;
-};
-API.prototype.setIssueType = function(issueType) 
-{
-	this.issueId = issueType;
-};
-
-API.prototype.getDataKey = function() 
-{
-	return this.dataKey;
-};
-API.prototype.setDataKey = function(dataKey) 
-{
-	this.dataKey = dataKey;
-};
-
-API.prototype.getLatitude = function() 
-{
-	return this.latitude;
-};
-API.prototype.setLatitude = function(latitude) 
-{
-	this.latitude = latitude;
-};
-
-API.prototype.getLongitude = function() 
-{
-	return this.longitude;
-};
-API.prototype.setLongitude = function(longitude) 
-{
-	this.longitude = longitude;
-};
-
-API.prototype.getElevation = function() 
-{
-	return this.elevation;
-};
-API.prototype.setElevation = function(elevation) 
-{
-	this.elevation = elevation;
-};
-
-API.prototype.getHeading = function() 
-{
-	return this.heading;
-};
-API.prototype.setHeading = function(heading) 
-{
-	this.heading = heading;
-};
-
-API.prototype.getPitch = function() 
-{
-	return this.pitch;
-};
-API.prototype.setPitch = function(pitch) 
-{
-	this.pitch = pitch;
-};
-
-API.prototype.getRoll = function() 
-{
-	return this.roll;
-};
-API.prototype.setRoll = function(roll) 
-{
-	this.roll = roll;
-};
-
-API.prototype.getProperty = function() 
-{
-	return this.property;
-};
-API.prototype.setProperty = function(property) 
-{
-	this.property = property;
-};
-
-API.prototype.getColor = function() 
-{
-	return this.color;
-};
-API.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-
-API.prototype.getBlockType = function() 
-{
-	return this.blockType;
-};
-API.prototype.setBlockType = function(blockType) 
-{
-	this.blockType = blockType;
-};
-
-API.prototype.getShowOutFitting = function() 
-{
-	return this.showOutFitting;
-};
-API.prototype.setShowOutFitting = function(showOutFitting) 
-{
-	this.showOutFitting = showOutFitting;
-};
-
-
-API.prototype.getShowLabelInfo = function() 
-{
-	return this.showLabelInfo;
-};
-API.prototype.setShowLabelInfo = function(showLabelInfo) 
-{
-	this.showLabelInfo = showLabelInfo;
-};
-API.prototype.getShowBoundingBox = function() 
-{
-	return this.showBoundingBox;
-};
-API.prototype.setShowBoundingBox = function(showBoundingBox) 
-{
-	this.showBoundingBox = showBoundingBox;
-};
-
-API.prototype.getShowShadow = function() 
-{
-	return this.showShadow;
-};
-API.prototype.setShowShadow = function(showShadow) 
-{
-	this.showShadow = showShadow;
-};
-
-API.prototype.getFrustumFarDistance = function() 
-{
-	return this.frustumFarDistance;
-};
-API.prototype.setFrustumFarDistance = function(frustumFarDistance) 
-{
-	this.frustumFarDistance = frustumFarDistance;
-};
-
-API.prototype.getObjectMoveMode = function() 
-{
-	return this.objectMoveMode;
-};
-API.prototype.setObjectMoveMode = function(objectMoveMode) 
-{
-	this.objectMoveMode = objectMoveMode;
-};
-
-API.prototype.getIssueInsertEnable = function() 
-{
-	return this.issueInsertEnable;
-};
-API.prototype.setIssueInsertEnable = function(issueInsertEnable) 
-{
-	this.issueInsertEnable = issueInsertEnable;
-};
-API.prototype.getObjectInfoViewEnable = function() 
-{
-	return this.objectInfoViewEnable;
-};
-API.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
-{
-	this.objectInfoViewEnable = objectInfoViewEnable;
-};
-API.prototype.getOcclusionCullingEnable = function() 
-{
-	return this.occlusionCullingEnable;
-};
-API.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
-{
-	this.occlusionCullingEnable = occlusionCullingEnable;
-};
-API.prototype.getNearGeoIssueListEnable = function() 
-{
-	return this.nearGeoIssueListEnable;
-};
-API.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
-{
-	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
-};
-
-API.prototype.getInsertIssueState = function() 
-{
-	return this.insertIssueState;
-};
-API.prototype.setInsertIssueState = function(insertIssueState) 
-{
-	this.insertIssueState = insertIssueState;
-};
-
-API.prototype.getDrawType = function() 
-{
-	return this.drawType;
-};
-API.prototype.setDrawType = function(drawType) 
-{
-	this.drawType = drawType;
-};
-
-API.prototype.getLod0DistInMeters = function() 
-{
-	return this.lod0DistInMeters;
-};
-API.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
-{
-	this.lod0DistInMeters = lod0DistInMeters;
-};
-API.prototype.getLod1DistInMeters = function() 
-{
-	return this.lod1DistInMeters;
-};
-API.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
-{
-	this.lod1DistInMeters = lod1DistInMeters;
-};
-API.prototype.getLod2DistInMeters = function() 
-{
-	return this.lod2DistInMeters;
-};
-API.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
-{
-	this.lod2DistInMeters = lod2DistInMeters;
-};
-API.prototype.getLod3DistInMeters = function() 
-{
-	return this.lod3DistInMeters;
-};
-API.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
-{
-	this.lod3DistInMeters = lod3DistInMeters;
-};
-API.prototype.getLod4DistInMeters = function() 
-{
-	return this.lod4DistInMeters;
-};
-API.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
-{
-	this.lod4DistInMeters = lod4DistInMeters;
-};
-API.prototype.getLod5DistInMeters = function() 
-{
-	return this.lod5DistInMeters;
-};
-API.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
-{
-	this.lod5DistInMeters = lod5DistInMeters;
-};
-
-API.prototype.getAmbientReflectionCoef = function() 
-{
-	return this.ambientReflectionCoef;
-};
-API.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
-{
-	this.ambientReflectionCoef = ambientReflectionCoef;
-};
-API.prototype.getDiffuseReflectionCoef = function() 
-{
-	return this.diffuseReflectionCoef;
-};
-API.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
-{
-	this.diffuseReflectionCoef = diffuseReflectionCoef;
-};
-API.prototype.getSpecularReflectionCoef = function() 
-{
-	return this.specularReflectionCoef;
-};
-API.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
-{
-	this.specularReflectionCoef = specularReflectionCoef;
-};
-API.prototype.getAmbientColor = function() 
-{
-	return this.ambientColor;
-};
-API.prototype.setAmbientColor = function(ambientColor) 
-{
-	this.ambientColor = ambientColor;
-};
-API.prototype.getSpecularColor = function() 
-{
-	return this.specularColor;
-};
-API.prototype.setSpecularColor = function(specularColor) 
-{
-	this.specularColor = specularColor;
-};
-API.prototype.getSsaoRadius = function() 
-{
-	return this.ssaoRadius;
-};
-API.prototype.setSsaoRadius = function(ssaoRadius) 
-{
-	this.ssaoRadius = ssaoRadius;
-};
-API.prototype.getFPVMode = function()
-{
-	return this.FPVMode;
-};
-API.prototype.setFPVMode = function(value)
-{
-	this.FPVMode = value;
-};
-
-API.prototype.getDuration = function()
-{
-	return this.duration;
-};
-API.prototype.setDuration = function(duration)
-{
-	this.duration = duration;
-};
-'use strict';
-
-/**
- * api 처리 결과를 담당하는 callback function
- * @param functionName policy json의 geo_callback_apiresult 속성값
- * @param apiName 호출한 api 이름
- * @param result 결과값
- */
-function apiResultCallback(functionName, apiName, result) 
-{
-	window[functionName](apiName, result);
-}
-
-/**
- * 선택한 object 정보를 화면에 표시
- * @param functionName callback
- * @param projectId
- * @param data_key
- * @param objectId
- * @param latitude
- * @param longitude
- * @param elevation
- * @param heading
- * @param pitch
- * @param roll
- * @param
- */
-function selectedObjectCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll)
-{
-	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll);
-}
-
-/**
- * 이동한 data 정보를 화면에 표시
- * @param functionName callback
- * @param projectId
- * @param data_key
- * @param objectId
- * @param latitude
- * @param longitude
- * @param elevation
- * @param heading
- * @param pitch
- * @param roll
- * @param
- */
-function movedDataCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll)
-{
-	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll);
-}
-
-/**
- * Data Key 를 이용하여 Geo Spatial Info를 획득하여 화면에 표시
- * @param functionName callback
- * @param projectId
- * @param data_key
- * @param dataName
- * @param latitude
- * @param longitude
- * @param elevation
- * @param heading
- * @param pitch
- * @param roll
- * @param
- */
-function dataInfoCallback(functionName, projectId, dataKey, dataName, latitude, longitude, elevation, heading, pitch, roll)
-{
-	window[functionName](projectId, dataKey, dataName, latitude, longitude, elevation, heading, pitch, roll);
-}
-
-/**
- * 선택한 object 정보를 화면에 표시
- * @param functionName
- * @param projectId
- * @param data_key
- * @param objectId
- * @param latitude
- * @param longitude
- * @param elevation
- */
-function insertIssueCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation)
-{
-	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation);
-}
-
-/**
- * mouse click 위치 정보를 화면에 표시
- * @param functionName
- * @param position
- */
-function clickPositionCallback(functionName, position) 
-{
-	window[functionName](position);
-}
-
-'use strict';
-
-/**
- * 사용자가 변경한 moving, color, rotation 등 이력 정보를 위한 domain
- * @class Policy
- */
-var ChangeHistory = function() 
-{
-	if (!(this instanceof ChangeHistory)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.moveHistory = false;
-	this.colorHistory = false;
-	this.rotationHistory = false;
-	
-	// move mode. ALL : 0 , OBJECT : 1, NONE : 2
-	this.objectMoveMode = null;
-	
-	// project id
-	this.projectId = null;
-	// project data folder
-	this.projectDataFolder = null;
-	// data_key
-	this.dataKey = null;	
-	// objectId
-	this.objectId = null;
-	// objectIndexOrder
-	this.objectIndexOrder = 0;
-	
-	// referenceObject aditional movement.
-	this.refObjectAditionalMove;
-	this.refObjectAditionalMoveRelToBuilding;
-	
-	// 위도
-	this.latitude = 0.0;
-	// 경도
-	this.longitude = 0.0;
-	// 높이
-	this.elevation = 0.0;
-	// heading
-	this.heading = 0.0;
-	// pitch
-	this.pitch = 0.0;
-	// roll
-	this.roll = 0.0;
-	// duration
-	this.duration = 0;
-	// 색깔
-	this.color = 0;
-	// color rgb
-	this.rgbColor = [];
-	// 속성
-	this.property = null;
-	this.propertyKey = null;
-	this.propertyValue = null;
-};
-
-ChangeHistory.prototype.getReferenceObjectAditionalMovement = function() 
-{
-	if (this.refObjectAditionalMove === undefined)
-	{ this.refObjectAditionalMove = new Point3D(); }
-	
-	return this.refObjectAditionalMove;
-};
-
-ChangeHistory.prototype.getReferenceObjectAditionalMovementRelToBuilding = function() 
-{
-	if (this.refObjectAditionalMoveRelToBuilding === undefined)
-	{ this.refObjectAditionalMoveRelToBuilding = new Point3D(); }
-	
-	return this.refObjectAditionalMoveRelToBuilding;
-};
-
-ChangeHistory.prototype.getProjectId = function() 
-{
-	return this.projectId;
-};
-ChangeHistory.prototype.setProjectId = function(projectId) 
-{
-	this.projectId = projectId;
-};
-
-ChangeHistory.prototype.getProjectDataFolder = function() 
-{
-	return this.projectDataFolder;
-};
-ChangeHistory.prototype.setProjectDataFolder = function(projectDataFolder) 
-{
-	this.projectDataFolder = projectDataFolder;
-};
-
-ChangeHistory.prototype.getDataKey = function() 
-{
-	return this.dataKey;
-};
-ChangeHistory.prototype.setDataKey = function(dataKey) 
-{
-	this.dataKey = dataKey;
-};
-
-ChangeHistory.prototype.getObjectId = function() 
-{
-	return this.objectId;
-};
-ChangeHistory.prototype.setObjectId = function(objectId) 
-{
-	this.objectId = objectId;
-};
-
-ChangeHistory.prototype.getObjectIndexOrder = function() 
-{
-	return this.objectIndexOrder;
-};
-ChangeHistory.prototype.setObjectIndexOrder = function(objectIndexOrder) 
-{
-	this.objectIndexOrder = objectIndexOrder;
-};
-
-ChangeHistory.prototype.getLatitude = function() 
-{
-	return this.latitude;
-};
-ChangeHistory.prototype.setLatitude = function(latitude) 
-{
-	this.latitude = latitude;
-};
-
-ChangeHistory.prototype.getLongitude = function() 
-{
-	return this.longitude;
-};
-ChangeHistory.prototype.setLongitude = function(longitude) 
-{
-	this.longitude = longitude;
-};
-
-ChangeHistory.prototype.getElevation = function() 
-{
-	return this.elevation;
-};
-ChangeHistory.prototype.setElevation = function(elevation) 
-{
-	this.elevation = elevation;
-};
-
-ChangeHistory.prototype.getHeading = function() 
-{
-	return this.heading;
-};
-ChangeHistory.prototype.setHeading = function(heading) 
-{
-	this.heading = heading;
-};
-
-ChangeHistory.prototype.getPitch = function() 
-{
-	return this.pitch;
-};
-ChangeHistory.prototype.setPitch = function(pitch) 
-{
-	this.pitch = pitch;
-};
-
-ChangeHistory.prototype.getRoll = function() 
-{
-	return this.roll;
-};
-ChangeHistory.prototype.setRoll = function(roll) 
-{
-	this.roll = roll;
-};
-
-ChangeHistory.prototype.getColor = function() 
-{
-	return this.color;
-};
-ChangeHistory.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-ChangeHistory.prototype.getRgbColor = function() 
-{
-	return this.rgbColor;
-};
-ChangeHistory.prototype.setRgbColor = function(rgbColor) 
-{
-	this.rgbColor = rgbColor;
-};
-
-ChangeHistory.prototype.getProperty = function() 
-{
-	return this.property;
-};
-ChangeHistory.prototype.setProperty = function(property) 
-{
-	this.property = property;
-};
-ChangeHistory.prototype.getPropertyKey = function() 
-{
-	return this.propertyKey;
-};
-ChangeHistory.prototype.setPropertyKey = function(propertyKey) 
-{
-	this.propertyKey = propertyKey;
-};
-ChangeHistory.prototype.getPropertyValue = function() 
-{
-	return this.propertyValue;
-};
-ChangeHistory.prototype.setPropertyValue = function(propertyValue) 
-{
-	this.propertyValue = propertyValue;
-};
-
-ChangeHistory.prototype.getDuration = function()
-{
-	return this.duration;
-};
-ChangeHistory.prototype.setDuration = function(duration)
-{
-	this.duration = duration;
-};
-
-ChangeHistory.prototype.getObjectMoveMode = function() 
-{
-	return this.objectMoveMode;
-};
-ChangeHistory.prototype.setObjectMoveMode = function(objectMoveMode) 
-{
-	this.objectMoveMode = objectMoveMode;
-};
-"use strict";
-
-var CODE = {};
-
-// magoManager가 다 로딩 되지 않은 상태에서 화면으로 부터 호출 되는 것을 막기 위해
-CODE.magoManagerState = {
-	"INIT"   	: 0,
-	"STARTED"	: 1,
-	"READY"   : 2
-};
-
-//0 = no started to load. 1 = started loading. 2 = finished loading. 3 = parse started. 4 = parse finished.***
-CODE.fileLoadState = {
-	"READY"            : 0,
-	"LOADING_STARTED"  : 1,
-	"LOADING_FINISHED" : 2,
-	"PARSE_STARTED"    : 3,
-	"PARSE_FINISHED"   : 4
-};
-
-CODE.moveMode = {
-	"ALL"    : "0",
-	"OBJECT" : "1",
-	"NONE"   : "2"
-};
-
-CODE.PROJECT_ID_PREFIX = "projectId_";
-CODE.PROJECT_DATA_FOLDER_PREFIX = "projectDataFolder_";
-
-'use strict';
-
-/**
- * 상수 설정
- * @class Constant
- */
-var Constant = {};
-
-Constant.CESIUM = "cesium";
-Constant.WORLDWIND = "worldwind";
-Constant.OBJECT_INDEX_FILE = "/objectIndexFile.ihe";
-Constant.CACHE_VERSION = "?cache_version=";
-Constant.SIMPLE_BUILDING_TEXTURE3x3_BMP = "/SimpleBuildingTexture3x3.bmp";
-Constant.RESULT_XDO2F4D = "/Result_xdo2f4d/Images/";
-Constant.RESULT_XDO2F4D_TERRAINTILES = "/Result_xdo2f4d/F4D_TerrainTiles/";
-Constant.RESULT_XDO2F4D_TERRAINTILEFILE_TXT = "/Result_xdo2f4d/f4dTerranTileFile.txt";
-
-Constant.INTERSECTION_OUTSIDE = 0;
-Constant.INTERSECTION_INTERSECT= 1;
-Constant.INTERSECTION_INSIDE = 2;
-
-'use strict';
-
-/**
- * mago3D 전체 환경 설정을 관리
- * @class MagoConfig
- */
-var MagoConfig = {};
-
-MagoConfig.getPolicy = function() 
-{
-	return this.serverPolicy;
-};
-
-MagoConfig.getData = function(key) 
-{
-	return this.dataObject[key];
-};
-
-MagoConfig.isDataExist = function(key) 
-{
-	return this.dataObject.hasOwnProperty(key);
-};
-
-MagoConfig.deleteData = function(key) 
-{
-	return delete this.dataObject[key];
-};
-
-/**
- * data 를 map에 저장
- * @param key map에 저장될 key
- * @param value map에 저장될 value
- */
-MagoConfig.setData = function(key, value) 
-{
-	if (!this.isDataExist(key)) 
-	{
-		this.dataObject[key] = value;
-	}
-};
-
-/**
- * F4D Converter 실행 결과물이 저장된 project data folder 명을 획득
- * @param projectDataFolder data folder
- */
-MagoConfig.getProjectDataFolder = function(projectDataFolder) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	return this.dataObject[key];
-};
-
-/**
- * project map에 data folder명의 존재 유무를 검사
- * @param projectDataFolder
- */
-MagoConfig.isProjectDataFolderExist = function(projectDataFolder) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	return this.dataObject.hasOwnProperty(key);
-};
-
-/**
- * project data folder명을 map에서 삭제
- * @param projectDataFolder
- */
-MagoConfig.deleteProjectDataFolder = function(projectDataFolder) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	return delete this.dataObject[key];
-};
-
-/**
- * project data folder명을 Object에서 삭제
- * @param projectDataFolder Object에 저장될 key
- * @param value Object에 저장될 value
- */
-MagoConfig.setProjectDataFolder = function(projectDataFolder, value) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	if (!this.isProjectDataFolderExist(key))
-	{
-		this.dataObject[key] = value;
-	}
-};
-
-/**
- * 환경설정 초기화
- * @param serverPolicy mago3d policy(json)
- * @param projectIdArray data 정보를 map 저장할 key name
- * @param projectDataArray data 정보(json)
- */
-MagoConfig.init = function(serverPolicy, projectIdArray, projectDataArray) 
-{
-	this.dataObject = {};
-	
-	this.selectHistoryObject = {};
-	this.movingHistoryObject = {};
-	this.colorHistoryObject = {};
-	this.locationAndRotationHistoryObject = {};
-	
-	this.serverPolicy = serverPolicy;
-	if (projectIdArray !== null && projectIdArray.length > 0) 
-	{
-		for (var i=0; i<projectIdArray.length; i++) 
-		{
-			if (!this.isDataExist(CODE.PROJECT_ID_PREFIX + projectIdArray[i])) 
-			{
-				this.setData(CODE.PROJECT_ID_PREFIX + projectIdArray[i], projectDataArray[i]);
-				this.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataArray[i].data_key, projectDataArray[i].data_key);
-			}
-		}
-	}
-};
-
-/**
- * 모든 데이터를 삭제함
- */
-MagoConfig.clearAllData = function() 
-{
-	this.dataObject = {};
-};
-
-/**
- * 모든 선택 히스토리 삭제
- */
-MagoConfig.clearSelectHistory = function() 
-{
-	this.selectHistoryObject = {};
-};
-
-/**
- * 모든 object 선택 내용 이력을 취득
- */
-MagoConfig.getAllSelectHistory = function()
-{
-	return this.selectHistoryObject;
-};
-
-/**
- * project 별 해당 키에 해당하는 모든 object 선택 내용 이력을 취득
- */
-MagoConfig.getSelectHistoryObjects = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.selectHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	return dataKeyObject;
-};
-
-/**
- * object 선택 내용 이력을 취득
- */
-MagoConfig.getSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.selectHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return dataKeyObject[objectIndexOrder];
-};
-
-/**
- * object 선택 내용을 저장
- */
-MagoConfig.saveSelectHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.selectHistoryObject.get(projectId);
-	if (projectIdObject === undefined)
-	{
-		projectIdObject = {};
-		this.selectHistoryObject[projectId] = projectIdObject;
-	}
-	
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined)
-	{
-		dataKeyObject = {};
-		projectIdObject[dataKey] = dataKeyObject;
-	}
-	
-	// objectIndexOrder 를 저장
-	dataKeyObject[objectIndexOrder] = changeHistory;
-};
-
-/**
- * object 선택 내용을 삭제
- */
-MagoConfig.deleteSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.selectHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return delete dataKeyObject[objectIndexOrder];
-};
-
-/**
- * 모든 이동 히스토리 삭제
- */
-MagoConfig.clearMovingHistory = function() 
-{
-	this.movingHistoryObject = {};
-};
-
-/**
- * 모든 object 선택 내용 이력을 취득
- */
-MagoConfig.getAllMovingHistory = function()
-{
-	return this.movingHistoryObject;
-};
-
-/**
- * project별 입력키 값과 일치하는 object 이동 내용 이력을 취득
- */
-MagoConfig.getMovingHistoryObjects = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.movingHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	return dataKeyObject;
-};
-
-/**
- * object 이동 내용 이력을 취득
- */
-MagoConfig.getMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.movingHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return dataKeyObject[objectIndexOrder];
-};
-
-/**
- * object 이동 내용을 저장
- */
-MagoConfig.saveMovingHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.movingHistoryObject[projectId];
-	if (projectIdObject === undefined)
-	{
-		projectIdObject = {};
-		this.movingHistoryObject[projectId] = projectIdObject;
-	}
-	
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined)
-	{
-		dataKeyObject = {};
-		projectIdObject[dataKey] = dataKeyObject;
-	}
-	
-	// objectIndexOrder 를 저장
-	dataKeyObject[objectIndexOrder] = changeHistory;
-};
-
-/**
- * object 이동 내용을 삭제
- */
-MagoConfig.deleteMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.movingHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return delete dataKeyObject[objectIndexOrder];
-};
-
-/**
- * 모든 색깔 변경 이력을 획득
- */
-MagoConfig.getAllColorHistory = function() 
-{
-	return this.colorHistoryObject;
-};
-
-/**
- * 모든 색깔변경 히스토리 삭제
- */
-MagoConfig.clearColorHistory = function() 
-{
-	this.colorHistoryObject = {};
-};
-
-/**
- * project별 키에 해당하는 모든 색깔 변경 이력을 획득
- */
-MagoConfig.getColorHistorys = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.colorHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	return dataKeyObject;
-};
-
-/**
- * 색깝 변경 이력을 획득
- */
-MagoConfig.getColorHistory = function(projectId, dataKey, objectId)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.colorHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectId 를 저장
-	return dataKeyObject[objectId];
-};
-
-/**
- * 색깝 변경 내용을 저장
- */
-MagoConfig.saveColorHistory = function(projectId, dataKey, objectId, changeHistory) 
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.colorHistoryObject[projectId];
-	if (projectIdObject === undefined)
-	{
-		projectIdObject = {};
-		this.colorHistoryObject[projectId] = projectIdObject;
-	}
-	
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined)
-	{
-		dataKeyObject = {};
-		projectIdObject[dataKey] = dataKeyObject;
-	}
-
-	if (objectId === null || objectId === "") 
-	{
-		dataKeyObject[dataKey] = changeHistory;
-	}
-	else 
-	{
-		dataKeyObject[objectId] = changeHistory;
-	}
-};
-
-/**
- * 색깔 변경 이력을 삭제
- */
-MagoConfig.deleteColorHistory = function(projectId, dataKey, objectId)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.colorHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return delete dataKeyObject[objectId];
-};
-
-/**
- * 모든 색깔변경 히스토리 삭제
- */
-MagoConfig.clearColorHistory = function() 
-{
-	this.colorHistoryObject = {};
-};
-
-/**
- * 모든 location and rotation 변경 이력을 획득
- */
-MagoConfig.getAllLocationAndRotationHistory = function() 
-{
-	return this.locationAndRotationHistoryObject;
-};
-
-/**
- * 프로젝트별 해당 키 값을 갖는 모든 location and rotation 이력을 획득
- */
-MagoConfig.getLocationAndRotationHistorys = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	return dataKeyObject;
-};
-
-/**
- * location and rotation 이력을 획득
- */
-MagoConfig.getLocationAndRotationHistory = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	
-	return dataKeyObject;
-};
-
-/**
- * location and rotation 내용을 저장
- */
-MagoConfig.saveLocationAndRotationHistory = function(projectId, dataKey, changeHistory) 
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
-	if (projectIdObject === undefined)
-	{
-		projectIdObject = {};
-		this.locationAndRotationHistoryObject[projectId] = projectIdObject;
-	}
-	
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined)
-	{
-		dataKeyObject = {};
-	}
-
-	dataKeyObject[dataKey] = changeHistory;
-};
-
-/**
- * location and rotation 이력을 삭제
- */
-MagoConfig.deleteLocationAndRotationHistory = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = delete projectIdObject[dataKey];
-};
-
-/**
- * 모든 location and rotation 히스토리 삭제
- */
-MagoConfig.clearLocationAndRotationHistory = function() 
-{
-	this.locationAndRotationHistoryObject = {};
-};
-	
-/**
- * TODO 이건 나중에 활요. 사용하지 않음
- * check 되지 않은 데이터들을 삭제함
- * @param keyObject 비교할 맵
- */
-/*MagoConfig.clearUnSelectedData = function(keyObject)
-{
-	for (var key of this.dataObject.keys())
-	{
-		if (!keyObject.hasxxxxx(key))
-		{
-			// data folder path가 존재하면....
-			if (key.indexOf(CODE.PROJECT_DATA_FOLDER_PREFIX) >= 0) 
-			{
-				// 지우는 처리가 있어야 함
-			}
-			this.dataObject.delete(key);
-		}
-	}
-};*/
-
-'use strict';
-
-/**
- * Policy
- * @class Policy
- */
-var Policy = function() 
-{
-	if (!(this instanceof Policy)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	// mago3d 활성화/비활성화 여부
-	this.magoEnable = true;
-
-	// outfitting 표시 여부
-	this.showOutFitting = false;
-	// label 표시/비표시
-	this.showLabelInfo = false;
-	// boundingBox 표시/비표시
-	this.showBoundingBox = false;
-	// 그림자 표시/비표시
-	this.showShadow = false;
-	// squared far frustum 거리
-	this.frustumFarSquaredDistance = 5000000;
-	// far frustum
-	this.frustumFarDistance = 5000;
-
-	// highlighting
-	this.highLightedBuildings = [];
-	// color
-	this.colorBuildings = [];
-	// color
-	this.color = [];
-	// show/hide
-	this.hideBuildings = [];
-	// move mode
-	this.objectMoveMode = CODE.moveMode.NONE;
-	// 이슈 등록 표시
-	this.issueInsertEnable = false;
-	// object 정보 표시
-	this.objectInfoViewEnable = false;
-	// 이슈 목록 표시
-	this.nearGeoIssueListEnable = false;
-	// occlusion culling
-	this.occlusionCullingEnable = false;
-	
-	// 이미지 경로
-	this.imagePath = "";
-	
-	// provisional.***
-	this.colorChangedObjectId;
-	
-	// LOD1
-	this.lod0DistInMeters = 15;
-	this.lod1DistInMeters = 50;
-	this.lod2DistInMeters = 90;
-	this.lod3DistInMeters = 200;
-	this.lod4DistInMeters = 1000;
-	this.lod5DistInMeters = 50000;
-	
-	// Lighting
-	this.ambientReflectionCoef = 0.45; // 0.2.
-	this.diffuseReflectionCoef = 0.75; // 1.0
-	this.specularReflectionCoef = 0.6; // 0.7
-	this.ambientColor = null;
-	this.specularColor = new Float32Array([0.6, 0.6, 0.6]);
-	
-	this.ssaoRadius = 0.15;
-};
-
-Policy.prototype.getMagoEnable = function() 
-{
-	return this.magoEnable;
-};
-Policy.prototype.setMagoEnable = function(magoEnable) 
-{
-	this.magoEnable = magoEnable;
-};
-
-Policy.prototype.getShowOutFitting = function() 
-{
-	return this.showOutFitting;
-};
-Policy.prototype.setShowOutFitting = function(showOutFitting) 
-{
-	this.showOutFitting = showOutFitting;
-};
-Policy.prototype.getShowLabelInfo = function() 
-{
-	return this.showLabelInfo;
-};
-Policy.prototype.setShowLabelInfo = function(showLabelInfo) 
-{
-	this.showLabelInfo = showLabelInfo;
-};
-Policy.prototype.getShowBoundingBox = function() 
-{
-	return this.showBoundingBox;
-};
-Policy.prototype.setShowBoundingBox = function(showBoundingBox) 
-{
-	this.showBoundingBox = showBoundingBox;
-};
-
-Policy.prototype.getShowShadow = function() 
-{
-	return this.showShadow;
-};
-Policy.prototype.setShowShadow = function(showShadow) 
-{
-	this.showShadow = showShadow;
-};
-
-Policy.prototype.getFrustumFarSquaredDistance = function() 
-{
-	return this.frustumFarSquaredDistance;
-};
-Policy.prototype.setFrustumFarSquaredDistance = function(frustumFarSquaredDistance) 
-{
-	this.frustumFarSquaredDistance = frustumFarSquaredDistance;
-};
-
-Policy.prototype.getFrustumFarDistance = function() 
-{
-	return this.frustumFarDistance;
-};
-Policy.prototype.setFrustumFarDistance = function(frustumFarDistance) 
-{
-	this.frustumFarDistance = frustumFarDistance;
-};
-
-Policy.prototype.getHighLightedBuildings = function() 
-{
-	return this.highLightedBuildings;
-};
-Policy.prototype.setHighLightedBuildings = function(highLightedBuildings) 
-{
-	this.highLightedBuildings = highLightedBuildings;
-};
-
-Policy.prototype.getColorBuildings = function() 
-{
-	return this.colorBuildings;
-};
-Policy.prototype.setColorBuildings = function(colorBuildings) 
-{
-	this.colorBuildings = colorBuildings;
-};
-
-Policy.prototype.getColor = function() 
-{
-	return this.color;
-};
-Policy.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-
-Policy.prototype.getHideBuildings = function() 
-{
-	return this.hideBuildings;
-};
-Policy.prototype.setHideBuildings = function(hideBuildings) 
-{
-	this.hideBuildings = hideBuildings;
-};
-
-Policy.prototype.getObjectMoveMode = function() 
-{
-	return this.objectMoveMode;
-};
-Policy.prototype.setObjectMoveMode = function(objectMoveMode) 
-{
-	this.objectMoveMode = objectMoveMode;
-};
-
-Policy.prototype.getIssueInsertEnable = function() 
-{
-	return this.issueInsertEnable;
-};
-Policy.prototype.setIssueInsertEnable = function(issueInsertEnable) 
-{
-	this.issueInsertEnable = issueInsertEnable;
-};
-Policy.prototype.getObjectInfoViewEnable = function() 
-{
-	return this.objectInfoViewEnable;
-};
-Policy.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
-{
-	this.objectInfoViewEnable = objectInfoViewEnable;
-};
-Policy.prototype.getOcclusionCullingEnable = function() 
-{
-	return this.occlusionCullingEnable;
-};
-Policy.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
-{
-	this.occlusionCullingEnable = occlusionCullingEnable;
-};
-Policy.prototype.getNearGeoIssueListEnable = function() 
-{
-	return this.nearGeoIssueListEnable;
-};
-Policy.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
-{
-	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
-};
-
-Policy.prototype.getImagePath = function() 
-{
-	return this.imagePath;
-};
-Policy.prototype.setImagePath = function(imagePath) 
-{
-	this.imagePath = imagePath;
-};
-
-Policy.prototype.getLod0DistInMeters = function() 
-{
-	return this.lod0DistInMeters;
-};
-Policy.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
-{
-	this.lod0DistInMeters = lod0DistInMeters;
-};
-Policy.prototype.getLod1DistInMeters = function() 
-{
-	return this.lod1DistInMeters;
-};
-Policy.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
-{
-	this.lod1DistInMeters = lod1DistInMeters;
-};
-Policy.prototype.getLod2DistInMeters = function() 
-{
-	return this.lod2DistInMeters;
-};
-Policy.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
-{
-	this.lod2DistInMeters = lod2DistInMeters;
-};
-Policy.prototype.getLod3DistInMeters = function() 
-{
-	return this.lod3DistInMeters;
-};
-Policy.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
-{
-	this.lod3DistInMeters = lod3DistInMeters;
-};
-Policy.prototype.getLod4DistInMeters = function() 
-{
-	return this.lod4DistInMeters;
-};
-Policy.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
-{
-	this.lod4DistInMeters = lod4DistInMeters;
-};
-Policy.prototype.getLod5DistInMeters = function() 
-{
-	return this.lod5DistInMeters;
-};
-Policy.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
-{
-	this.lod5DistInMeters = lod5DistInMeters;
-};
-Policy.prototype.getAmbientReflectionCoef = function() 
-{
-	return this.ambientReflectionCoef;
-};
-Policy.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
-{
-	this.ambientReflectionCoef = ambientReflectionCoef;
-};
-Policy.prototype.getDiffuseReflectionCoef = function() 
-{
-	return this.diffuseReflectionCoef;
-};
-Policy.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
-{
-	this.diffuseReflectionCoef = diffuseReflectionCoef;
-};
-Policy.prototype.getSpecularReflectionCoef = function() 
-{
-	return this.specularReflectionCoef;
-};
-Policy.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
-{
-	this.specularReflectionCoef = specularReflectionCoef;
-};
-Policy.prototype.getAmbientColor = function() 
-{
-	return this.ambientColor;
-};
-Policy.prototype.setAmbientColor = function(ambientColor) 
-{
-	this.ambientColor = ambientColor;
-};
-Policy.prototype.getSpecularColor = function() 
-{
-	return this.specularColor;
-};
-Policy.prototype.setSpecularColor = function(specularColor) 
-{
-	this.specularColor = specularColor;
-};
-Policy.prototype.getSsaoRadius = function() 
-{
-	return this.ssaoRadius;
-};
-Policy.prototype.setSsaoRadius = function(ssaoRadius) 
-{
-	this.ssaoRadius = ssaoRadius;
-};
 'use strict';
 
 /**
@@ -33917,6 +33719,1050 @@ var MAGO3DJS_MESSAGE = new Object();
 
 /**
  * 어떤 일을 하고 있습니까?
+ * @class Arc
+ */
+var Arc = function() 
+{
+	if (!(this instanceof Arc)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	// sweeping in CounterClockWise is positive.***
+	// zero startAngle is in "X" axis positive.***
+	this.centerPoint; // Point3D.***
+	this.radius;
+	this.startAngleDeg;
+	this.sweepAngleDeg;
+	this.numPointsFor360Deg; // interpolation param.***
+};
+
+/**
+ * Set the center position of arc.
+ * @class Arc
+ */
+Arc.prototype.deleteObjects = function()
+{
+	this.centerPoint.deleteObjects(); // Point3D.***
+	this.centerPoint = undefined;
+	this.radius = undefined;
+	this.startAngleDeg = undefined;
+	this.sweepAngleDeg = undefined;
+	this.numPointsFor360Deg = undefined;
+};
+
+/**
+ * Set the center position of arc.
+ * @class Arc
+ */
+Arc.prototype.setCenterPosition = function(cx, cy, cz)
+{
+	if(this.centerPoint === undefined)
+		this.centerPoint = new Point3D();
+	
+	this.centerPoint.set(cx, cy, cz);
+};
+
+/**
+ * Set the center position of arc.
+ * @class Arc
+ */
+Arc.prototype.setRadius = function(radius)
+{
+	this.radius = radius;
+};
+
+/**
+ * Set the start angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setStartAngleDegree = function(startAngleDegree)
+{
+	this.startAngleDeg = startAngleDegree;
+};
+
+/**
+ * Set the sweep angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setSweepAngleDegree = function(sweepAngleDegree)
+{
+	this.sweepAngleDeg = sweepAngleDegree;
+};
+
+/**
+ * Returns the points of the arc.
+ * @class Arc
+ */
+Arc.prototype.getPoints = function(resultPointsArray, pointsCountFor360Deg)
+{
+	if(pointsCountFor360Deg === undefined)
+		this.numPointsFor360Deg = 36;
+	else
+		this.numPointsFor360Deg = pointsCountFor360Deg;
+	
+	if(resultPointsArray === undefined)
+		resultPointsArray = [];
+	
+	var increAngRad = 2.0 * Math.PI / this.numPointsFor360Deg;
+	var cx = this.centerPoint.x;
+	var cy = this.centerPoint.y;
+	var cz = this.centerPoint.z;
+	var x, y;
+	var z = 0;
+	var startAngRad = Math.PI/180.0 * this.startAngleDeg;
+	var sweepAngRad = Math.PI/180.0 * this.sweepAngleDeg;
+	var point;
+	
+	if(sweepAngRad >=0)
+	{
+		for(var currAngRad = 0.0; currAngRad<sweepAngRad; currAngRad += increAngRad)
+		{
+			x = cx + this.radius * Math.cos(currAngRad + startAngRad);
+			y = cy + this.radius * Math.sin(currAngRad + startAngRad);
+			point = new Point3D(x, y, z);
+			resultPointsArray.push(point);
+		}
+	}
+	else{
+		for(var currAngRad = 0.0; currAngRad>sweepAngRad; currAngRad -= increAngRad)
+		{
+			x = cx + this.radius * Math.cos(currAngRad + startAngRad);
+			y = cy + this.radius * Math.sin(currAngRad + startAngRad);
+			point = new Point3D(x, y, z);
+			resultPointsArray.push(point);
+		}
+	}
+	
+	// once finished, mark the 1rst point and the last point as"important point".***
+	var pointsCount = resultPointsArray.length;
+	if(pointsCount > 0)
+	{
+		resultPointsArray[0].pointType = 1;
+		resultPointsArray[pointsCount-1].pointType = 1;
+	}
+	
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Face
+ */
+var Face = function() 
+{
+	if (!(this instanceof Face)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.halfEdge;
+};
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class HalfEdge
+ */
+var HalfEdge = function() 
+{
+	if (!(this instanceof HalfEdge)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.origenVertex;
+	this.nextEdge;
+	this.twinEdge;
+	this.face;
+};
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Mesh
+ */
+var Mesh = function() 
+{
+	if (!(this instanceof Mesh)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.surfacesArray;
+};
+
+'use strict';
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class ParametricMesh
+ */
+var ParametricMesh = function() 
+{
+	if (!(this instanceof ParametricMesh)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.profilesList; // class: ProfilesList.
+	this.trianglesMatrix;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ParametricMesh.prototype.extrude = function(profile, extrusionVector, extrusionDist, extrudeSegmentsCount) 
+{
+	if (this.profilesList === undefined)
+	{
+		this.profilesList = new ProfilesList();
+	}
+	
+	if (extrudeSegmentsCount === undefined)
+	{ extrudeSegmentsCount = 1; }
+	
+	// 1rst, make a profilesList extrude.
+	this.profilesList.deleteObjects(); // init.
+	this.profilesList.extrude(profile, extrusionVector, extrusionDist, extrudeSegmentsCount);
+	
+	// now, make the bottomCap, topCap, and lateral triangles.
+	this.trianglesMatrix = new TrianglesMatrix();
+	
+	
+};
+/**
+* 어떤 일을 하고 있습니까?
+* @class Point2D
+*/
+var Point2D = function() 
+{
+	if (!(this instanceof Point2D)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.x = 0.0;
+	this.y = 0.0;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.deleteObjects = function() 
+{
+	this.x = undefined;
+	this.y = undefined;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.copyFrom = function(point2d) 
+{
+	this.x = point2d.x;
+	this.y = point2d.y;
+};
+'use strict';
+
+/**
+ * 3차원 정보
+ * @class Point3D
+ */
+var Point3D = function(x, y, z) 
+{
+	if (!(this instanceof Point3D)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	if(x !== undefined)
+		this.x = x;
+	else
+		this.x = 0.0;
+	
+	if(y !== undefined)
+		this.y = y;
+	else
+		this.y = 0.0;
+	
+	if(z !== undefined)
+		this.z = z;
+	else
+		this.z = 0.0;
+	
+	this.pointType; // 1 = important point.***
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point3D.prototype.deleteObjects = function() 
+{
+	this.x = undefined;
+	this.y = undefined;
+	this.z = undefined;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point3D.prototype.copyFrom = function(point3d) 
+{
+	this.x = point3d.x;
+	this.y = point3d.y;
+	this.z = point3d.z;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns this.x*this.x + this.y*this.y + this.z*this.z;
+ */
+Point3D.prototype.getSquaredModul = function() 
+{
+	return this.x*this.x + this.y*this.y + this.z*this.z;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z );
+ */
+Point3D.prototype.getModul = function() 
+{
+	return Math.sqrt(this.getSquaredModul());
+};
+
+/**
+ * 
+ * 어떤 일을 하고 있습니까?
+ */
+Point3D.prototype.unitary = function() 
+{
+	var modul = this.getModul();
+	this.x /= modul;
+	this.y /= modul;
+	this.z /= modul;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point3D.prototype.crossProduct = function(point, resultPoint) 
+{
+	if (resultPoint === undefined) { resultPoint = new Point3D(); }
+
+	resultPoint.x = this.y * point.z - point.y * this.z;
+	resultPoint.y = point.x * this.z - this.x * point.z;
+	resultPoint.z = this.x * point.y - point.x * this.y;
+
+	return resultPoint;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.squareDistToPoint = function(point) 
+{
+	var dx = this.x - point.x;
+	var dy = this.y - point.y;
+	var dz = this.z - point.z;
+
+	return dx*dx + dy*dy + dz*dz;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.squareDistTo = function(x, y, z) 
+{
+	var dx = this.x - x;
+	var dy = this.y - y;
+	var dz = this.z - z;
+
+	return dx*dx + dy*dy + dz*dz;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.distTo = function(x, y, z) 
+{
+	return Math.sqrt(this.squareDistTo(x, y, z));
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.distToPoint = function(point) 
+{
+	return Math.sqrt(this.squareDistToPoint(point));
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.distToSphere = function(sphere) 
+{
+	return Math.sqrt(this.squareDistToPoint(sphere.centerPoint)) - sphere.r;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.aproxDistTo = function(pointB, sqrtTable) 
+{
+	var difX = Math.abs(this.x - pointB.x);
+	var difY = Math.abs(this.y - pointB.y);
+	var difZ = Math.abs(this.z - pointB.z);
+	
+	// find the big value.
+	var maxValue, value1, value2;
+	var value1Idx, value2Idx;
+	
+	if (difX > difY)
+	{
+		if (difX > difZ)
+		{
+			maxValue = difX;
+			value1 = difY/maxValue;
+			value1Idx = Math.floor(value1*10);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difZ/middleDist;
+			value2Idx = Math.floor(value2*10);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+		else 
+		{
+			maxValue = difZ;
+			value1 = difX/maxValue;
+			value1Idx = Math.floor(value1*10);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difY/middleDist;
+			value2Idx = Math.floor(value2*10);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+	}
+	else 
+	{
+		if (difY > difZ)
+		{
+			maxValue = difY;
+			value1 = difX/maxValue;
+			value1Idx = Math.floor(value1*10);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difZ/middleDist;
+			value2Idx = Math.floor(value2*10);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+		else 
+		{
+			maxValue = difZ;
+			value1 = difX/maxValue;
+			value1Idx = Math.floor(value1*10);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difY/middleDist;
+			value2Idx = Math.floor(value2*10);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Point3D.prototype.set = function(x, y, z) 
+{
+	this.x = x; this.y = y; this.z = z;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Point3D.prototype.add = function(x, y, z) 
+{
+	this.x += x; this.y += y; this.z += z;
+};
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class PolyLine
+ */
+var PolyLine = function() 
+{
+	if (!(this instanceof PolyLine)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.point3dArray;
+};
+
+/**
+ * Creates a new Point3D.
+ * @class PolyLine
+ */
+PolyLine.prototype.newPoint3d = function(x, y, z)
+{
+	if(this.point3dArray === undefined)
+		this.point3dArray = [];
+	
+	var point3d = new Point3D(x, y, z);
+	this.point3dArray.push(point3d);
+	return point3d;
+};
+
+/**
+ * Creates a new Point3D.
+ * @class PolyLine
+ */
+PolyLine.prototype.deleteObjects = function()
+{
+	var pointsCount = this.point3dArray.length;
+	for(var i=0; i<pointsCount; i++)
+	{
+		this.point3dArray[i].deleteObjects();
+		this.point3dArray[i] = undefined;
+	}
+	this.point3dArray = undefined;
+};
+
+/**
+ * Creates a new Point3D.
+ * @class PolyLine
+ */
+PolyLine.prototype.getPoints = function(resultPointsArray)
+{
+	if(resultPointsArray === undefined)
+		resultPointsArray = [];
+	
+	var point;
+	
+	var pointsCount = this.point3dArray.length;
+	for(var i=0; i<pointsCount; i++)
+	{
+		point = new Point3D();
+		point.copyFrom(this.point3dArray[i]); 
+		point.pointType = 1; // mark as "important point".***
+		resultPointsArray.push(point);
+	}
+	
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Profile
+ */
+var Profile = function() 
+{
+	if (!(this instanceof Profile)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.outer; // one Ring. 
+	this.inners; // Rings array. 
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.newOuterRing = function() 
+{
+	if (this.outer === undefined)
+	{ this.outer = new Ring(); }
+	
+	return this.outer;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.newInnerRing = function() 
+{
+	if (this.inners === undefined)
+	{ this.inners = []; }
+	
+	var innerRing = new Ring();
+	this.inners.push(innerRing);
+	
+	return innerRing;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.deleteObjects = function() 
+{
+	if (this.outer)
+	{
+		this.outer.deleteObjects();
+		this.outer = undefined;
+	}
+
+	if (this.inners)
+	{
+		var innersCount = this.inners.length;
+		for (var i=0; i<innersCount; i++)
+		{
+			this.inners[i].deleteObjects();
+			this.inners[i] = undefined;
+		}
+		this.inners = undefined;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.copyFrom = function(profileRef) 
+{
+	// outer vertex list.
+	if (profileRef.outer)
+	{
+		if (this.outer === undefined)
+		{ this.outer = new VertexList(); }
+		
+		this.outer.copyFrom(profileRef.outer);
+	}
+	
+	// inner vertex lists.
+	if (profileRef.inners && profileRef.inners.length > 0)
+	{
+		if (this.inners === undefined)
+		{ this.inners = []; }
+		
+		var innersCount = profileRef.inners.length;
+		var myInner;
+		for (var i=0; i<innersCount; i++)
+		{
+			myInner = this.newInner();
+			myInner.copyFrom(profileRef.inners[i]);
+		}
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class ProfilesList
+ */
+var ProfilesList = function() 
+{
+	if (!(this instanceof ProfilesList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.profilesArray;
+	this.auxiliarAxis;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+ProfilesList.prototype.newProfile = function() 
+{
+	if (this.profilesArray === undefined)
+	{ this.profilesArray = []; }
+	
+	var profile = new Profile();
+	this.profilesArray.push(profile);
+	return profile;
+};
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+ProfilesList.prototype.deleteObjects = function() 
+{
+	if (this.profilesArray)
+	{
+		var profilesCount = this.profilesArray.length;
+		for (var i=0; i<profilesCount; i++)
+		{
+			this.profilesArray[i].deleteObjects();
+			this.profilesArray = undefined;
+		}
+		this.profilesArray = undefined;
+	}
+};
+
+ProfilesList.prototype.extrude = function(profileReference, extrusionVector, extrusionDist, extrudeSegmentsCount) 
+{
+	if (this.profilesArray === undefined)
+	{ this.profilesArray = []; }
+	
+	if (extrudeSegmentsCount === undefined)
+	{ extrudeSegmentsCount = 1; }
+
+	// 1rst, copy the profileReference to this first profile.
+	var firstProfile = this.newProfile();
+	firstProfile.copyFrom(profileReference);
+	
+	// now make the extrusion.
+	var nextProfile;
+	var nextOuter;
+	var firstOuter = firstProfile.getOuter();
+	var outerVertexCount;
+	var nextVertex;
+	var firstVertex;
+	var currentSegExtDist;
+	for (var i=0; i<extrudeSegmentsCount; i++)
+	{
+		nextProfile = this.newProfile();
+		
+		// outer vertex list.
+		nextOuter = nextProfile.getOuter();
+		currentSegExtDist = (extrusionDist/extrudeSegmentsCount)*(i+1);
+		outerVertexCount = firstOuter.getVertexCount();
+		for (var j=0; j<outerVertexCount; j++)
+		{
+			firstVertex = firstOuter.getVertex(j);
+			nextVertex = nextOuter.newVertex();
+			nextVertex.setPosition(firstVertex.point3d.x + extrusionVector.x * currentSegExtDist, firstVertex.point3d.y + extrusionVector.y * currentSegExtDist, firstVertex.point3d.z + extrusionVector.z * currentSegExtDist);
+		}
+		
+		// inner vertices list.
+		if (firstProfile.inners && firstProfile.inners.length > 0)
+		{
+			// todo:
+		}
+	}
+	
+};
+
+ProfilesList.prototype.getMesh = function(resultMesh) 
+{
+	// a mesh made by a bottomCap + lateralSides + topCap.
+	
+	// provisionally get only lateral side surface.
+	
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Ring
+ */
+var Ring = function() 
+{
+	if (!(this instanceof Ring)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.elemsArray;
+};
+
+/**
+ * @class Ring
+ */
+Ring.prototype.newElement = function(elementTypeString)
+{
+	var elem;
+	
+	if(elementTypeString === "POLYLINE")
+	{
+		if(this.elemsArray === undefined)
+			this.elemsArray = [];
+		
+		elem = new PolyLine();
+		this.elemsArray.push(elem);
+	}
+	else if(elementTypeString === "ARC")
+	{
+		if(this.elemsArray === undefined)
+			this.elemsArray = [];
+		
+		elem = new Arc();
+		this.elemsArray.push(elem);
+	}
+	
+	return elem;
+};
+
+/**
+ * @class Ring
+ */
+Ring.prototype.getPoints = function(resultPointsArray)
+{
+	if(resultPointsArray === undefined)
+		resultPointsArray = [];
+	
+	if(this.elemsArray === undefined)
+		return resultPointsArray;
+	
+	var elem;
+	var elemsCount = this.elemsArray.length;
+	for(var i=0; i<elemsCount; i++)
+	{
+		elem = this.elemsArray[i];
+		elem.getPoints(resultPointsArray);
+	}
+	
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Surface
+ */
+var Surface = function() 
+{
+	if (!(this instanceof Surface)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.facesArray;
+};
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class TrianglesList
+ */
+var TrianglesList= function() 
+{
+	if (!(this instanceof TrianglesList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.trianglesArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+TrianglesList.prototype.newTriangle = function() 
+{
+	if (this.trianglesArray === undefined)
+	{ this.trianglesArray = []; }
+	
+	var triangle = new Triangle();
+	this.trianglesArray.push(triangle);
+	return triangle;
+};
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class TrianglesMatrix
+ */
+var TrianglesMatrix= function() 
+{
+	if (!(this instanceof TrianglesMatrix)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.trianglesListsArray;
+};
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
  * @class Renderer
  */
 var Renderer = function() 
@@ -38967,476 +39813,6 @@ void main()\n\
     \n\
 }";
 
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Face
- */
-var Face = function() 
-{
-	if (!(this instanceof Face)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.halfEdge;
-};
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class HalfEdge
- */
-var HalfEdge = function() 
-{
-	if (!(this instanceof HalfEdge)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.origenVertex;
-	this.nextEdge;
-	this.twinEdge;
-	this.face;
-};
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Mesh
- */
-var Mesh = function() 
-{
-	if (!(this instanceof Mesh)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.surfacesArray;
-};
-
-'use strict';
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class ParametricMesh
- */
-var ParametricMesh = function() 
-{
-	if (!(this instanceof ParametricMesh)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	this.profilesList; // class: ProfilesList.
-	this.trianglesMatrix;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ParametricMesh.prototype.extrude = function(profile, extrusionVector, extrusionDist, extrudeSegmentsCount) 
-{
-	if (this.profilesList === undefined)
-	{
-		this.profilesList = new ProfilesList();
-	}
-	
-	if (extrudeSegmentsCount === undefined)
-	{ extrudeSegmentsCount = 1; }
-	
-	// 1rst, make a profilesList extrude.
-	this.profilesList.deleteObjects(); // init.
-	this.profilesList.extrude(profile, extrusionVector, extrusionDist, extrudeSegmentsCount);
-	
-	// now, make the bottomCap, topCap, and lateral triangles.
-	this.trianglesMatrix = new TrianglesMatrix();
-	
-	
-};
-/**
-* 어떤 일을 하고 있습니까?
-* @class Point2D
-*/
-var Point2D = function() 
-{
-	if (!(this instanceof Point2D)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.x = 0.0;
-	this.y = 0.0;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point2D.prototype.deleteObjects = function() 
-{
-	this.x = undefined;
-	this.y = undefined;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point2D.prototype.copyFrom = function(point2d) 
-{
-	this.x = point2d.x;
-	this.y = point2d.y;
-};
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class PolyLine
- */
-var PolyLine = function() 
-{
-	if (!(this instanceof PolyLine)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.point3dArray;
-};
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Profile
- */
-var Profile = function() 
-{
-	if (!(this instanceof Profile)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.outer; // one vertexList. no.
-	this.inners; // vertexLists array. no.
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.getOuter = function() 
-{
-	if (this.outer === undefined)
-	{ this.outer = new VertexList(); }
-	
-	return this.outer;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.newInner = function() 
-{
-	if (this.inners === undefined)
-	{ this.inners = []; }
-	
-	var innerVertexList = new VertexList();
-	this.inners.push(innerVertexList);
-	
-	return innerVertexList;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.deleteObjects = function() 
-{
-	if (this.outer)
-	{
-		this.outer.deleteObjects();
-		this.outer = undefined;
-	}
-
-	if (this.inners)
-	{
-		var innersCount = this.inners.length;
-		for (var i=0; i<innersCount; i++)
-		{
-			this.inners[i].deleteObjects();
-			this.inners[i] = undefined;
-		}
-		this.inners = undefined;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.copyFrom = function(profileRef) 
-{
-	// outer vertex list.
-	if (profileRef.outer)
-	{
-		if (this.outer === undefined)
-		{ this.outer = new VertexList(); }
-		
-		this.outer.copyFrom(profileRef.outer);
-	}
-	
-	// inner vertex lists.
-	if (profileRef.inners && profileRef.inners.length > 0)
-	{
-		if (this.inners === undefined)
-		{ this.inners = []; }
-		
-		var innersCount = profileRef.inners.length;
-		var myInner;
-		for (var i=0; i<innersCount; i++)
-		{
-			myInner = this.newInner();
-			myInner.copyFrom(profileRef.inners[i]);
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.getSurfaceOuterConvex = function(resultSurface) 
-{
-	// this function return a face made by convex outer.
-	if (this.outer === undefined)
-	{ return; }
-	
-	var vertex;
-	var outerVertexCount = this.outer.getVertexCount();
-	for (var i=0; i<outerVertexCount; i++)
-	{
-		vertex = this.outer.getVertex(i);
-		
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.getSurface = function(resultSurface) 
-{
-	
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class ProfilesList
- */
-var ProfilesList = function() 
-{
-	if (!(this instanceof ProfilesList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.profilesArray;
-	this.auxiliarAxis;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-ProfilesList.prototype.newProfile = function() 
-{
-	if (this.profilesArray === undefined)
-	{ this.profilesArray = []; }
-	
-	var profile = new Profile();
-	this.profilesArray.push(profile);
-	return profile;
-};
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-ProfilesList.prototype.deleteObjects = function() 
-{
-	if (this.profilesArray)
-	{
-		var profilesCount = this.profilesArray.length;
-		for (var i=0; i<profilesCount; i++)
-		{
-			this.profilesArray[i].deleteObjects();
-			this.profilesArray = undefined;
-		}
-		this.profilesArray = undefined;
-	}
-};
-
-ProfilesList.prototype.extrude = function(profileReference, extrusionVector, extrusionDist, extrudeSegmentsCount) 
-{
-	if (this.profilesArray === undefined)
-	{ this.profilesArray = []; }
-	
-	if (extrudeSegmentsCount === undefined)
-	{ extrudeSegmentsCount = 1; }
-
-	// 1rst, copy the profileReference to this first profile.
-	var firstProfile = this.newProfile();
-	firstProfile.copyFrom(profileReference);
-	
-	// now make the extrusion.
-	var nextProfile;
-	var nextOuter;
-	var firstOuter = firstProfile.getOuter();
-	var outerVertexCount;
-	var nextVertex;
-	var firstVertex;
-	var currentSegExtDist;
-	for (var i=0; i<extrudeSegmentsCount; i++)
-	{
-		nextProfile = this.newProfile();
-		
-		// outer vertex list.
-		nextOuter = nextProfile.getOuter();
-		currentSegExtDist = (extrusionDist/extrudeSegmentsCount)*(i+1);
-		outerVertexCount = firstOuter.getVertexCount();
-		for (var j=0; j<outerVertexCount; j++)
-		{
-			firstVertex = firstOuter.getVertex(j);
-			nextVertex = nextOuter.newVertex();
-			nextVertex.setPosition(firstVertex.point3d.x + extrusionVector.x * currentSegExtDist, firstVertex.point3d.y + extrusionVector.y * currentSegExtDist, firstVertex.point3d.z + extrusionVector.z * currentSegExtDist);
-		}
-		
-		// inner vertices list.
-		if (firstProfile.inners && firstProfile.inners.length > 0)
-		{
-			// todo:
-		}
-	}
-	
-};
-
-ProfilesList.prototype.getMesh = function(resultMesh) 
-{
-	// a mesh made by a bottomCap + lateralSides + topCap.
-	
-	// provisionally get only lateral side surface.
-	
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Surface
- */
-var Surface = function() 
-{
-	if (!(this instanceof Surface)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.facesArray;
-};
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class TrianglesList
- */
-var TrianglesList= function() 
-{
-	if (!(this instanceof TrianglesList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.trianglesArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param idx 변수
- * @returns vertexArray[idx]
- */
-TrianglesList.prototype.newTriangle = function() 
-{
-	if (this.trianglesArray === undefined)
-	{ this.trianglesArray = []; }
-	
-	var triangle = new Triangle();
-	this.trianglesArray.push(triangle);
-	return triangle;
-};
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class TrianglesMatrix
- */
-var TrianglesMatrix= function() 
-{
-	if (!(this instanceof TrianglesMatrix)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.trianglesListsArray;
-};
 'use strict';
 
 /**
