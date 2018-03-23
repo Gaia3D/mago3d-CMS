@@ -343,11 +343,11 @@
 		<table>
 			<tr style="height: 35px;">
 				<td style="width: 100px;" nowrap="nowrap">
-					<form:label path="project_id"><spring:message code='project'/></form:label>
+					<form:label path="issueProjectId"><spring:message code='project'/></form:label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</td>
 				<td>
-					<form:select path="project_id" cssClass="select">
+					<form:select path="issueProjectId" cssClass="select">
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
 </c:forEach>
@@ -530,41 +530,48 @@
 		</table>
 	</div>
 
-	<form id="attributeForm" action="#" method="post" onsubmit="return false;">
+	<<form id="attributeForm" action="#" method="post" onsubmit="return false;">
 	<div id="attributeMenuContent" class="attributeWrap">
 		<div>
-			<h3><spring:message code='demo.object.attribute.search'/></h3>
+			<h3>Object Attribute Search</h3>
 		</div>
-		<div>It is under development.</div>
 		<table style="margin-top: 30px;">
 			<tr style="height: 35px;">
-				<td style="width: 80px;"><label for="project_id">Project</label></td>
-				<td>
-					<select id="project_id" name="project_id" class="select">
+				<td style="width: 80px;"><label for="objectAttributeProjectId">Project</label></td>
+				<td><select id="objectAttributeProjectId" name="objectAttributeProjectId" class="select">
 <c:forEach var="project" items="${projectList}">
 						<option value="${project.project_id}">${project.project_name}</option>
 </c:forEach>
-					</select>
+				</select>
 				</td>
 			</tr>
 			<tr style="height: 35px;">
-				<td><label for="search_word">Category</label></td>
+				<td><label for="objectAttributeDataKey">Data Key</label></td>
 				<td>
-					<select id="search_word" name="search_word" class="select">
-						<option value="data_name">Data Name</option>
-						<option value="data_key">Data Key</option>
-					</select>
+					<input type="text" id="objectAttributeDataKey" name="objectAttributeDataKey" size="22" />
+				</td>
+			</tr>
+			<tr style="height: 35px;">
+				<td><label for="objectAttributeObjectId">Object Id</label></td>
+				<td>
+					<input type="text" id="objectAttributeObjectId" name="objectAttributeObjectId" size="22" />
 				</td>
 			</tr>
 			<tr style="height: 35px;">
 				<td>
-					<label for="search_value">SearchWord</label></td>
-				<td><input type="text" id="search_value" name="search_value" size="31" /></td>
+					<label for="objectAttributeSearchValue">SearchWord</label></td>
+				<td><input type="text" id="objectAttributeSearchValue" name="objectAttributeSearchValue" size="31" /></td>
 			</tr>
 		</table>
 		<div class="btns">
-			<button type="button" id="searchData">Search</button>
+			<button type="button" id="objectAttributeSearch" class="full">Search</button>
 		</div>
+		<table id="objectAttributeSearchList" class="" style="width: 100%;">
+			<col style="width: 30%;" />
+			<col style="width: 40%;" />
+			<col style="width: 30%;" />
+			<tbody></tbody>
+		</table>
 	</div>
 	</form>
 	
@@ -701,6 +708,7 @@
 
 <%@ include file="/WEB-INF/views/homepage/data-attribute-dialog.jsp" %>
 <%@ include file="/WEB-INF/views/homepage/data-info-log-dialog.jsp" %>
+<%@ include file="/WEB-INF/views/homepage/data-object-attribute-dialog.jsp" %>
 
 <c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 <script type="text/javascript" src="/externlib/cesium/Cesium.js?cache_version=${cache_version}"></script>
@@ -899,10 +907,11 @@
 	});
 	
 	// issue input layer call back function
-	function showInsertIssueLayer(data_key, object_key, latitude, longitude, height) {
+	function showInsertIssueLayer(projectId, dataKey, objectKey, latitude, longitude, height) {
 		if(insertIssueEnable) {
-			$("#data_key").val(data_key);
-			$("#object_key").val(object_key);
+			$("#issueProjectId").val(projectId);
+			$("#data_key").val(dataKey);
+			$("#object_key").val(objectKey);
 			$("#latitude").val(latitude);
 			$("#longitude").val(longitude);
 			$("#height").val(height);
@@ -921,7 +930,7 @@
 		if(isInsertIssue) {
 			isInsertIssue = false;
 			var url = "/issue/ajax-insert-issue.do";
-			var info = $("#issue").serialize();
+			var info = $("#issue").serialize() + "&project_id=" + $("#issueProjectId").val();
 			$.ajax({
 				url: url,
 				type: "POST",
@@ -1250,7 +1259,6 @@
 		searchDataAPI(managerFactory, $("#localSearchProjectId").val(), $("#localSearchDataKey").val());
 	});
 	
-	// API 메뉴시작
 	// object 정보 표시 call back function
 	function showSelectedObject(projectId, dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
 		var objectInfoViewFlag = $(':radio[name="objectInfo"]:checked').val();
@@ -1266,6 +1274,7 @@
 			$.toast({
 			    heading: 'Click Object Info',
 			    text: [
+			    	'projectId : ' + projectId,
 			        'dataKey : ' + dataKey, 
 			        'objectId : ' + objectId,
 			        'latitude : ' + latitude,
@@ -1604,29 +1613,6 @@
 		});
 	}
     
-    function showDataObjectAttribute(dataObjectId) {
-    	/* var url = "/data/ajax-data-attribute-by-data-id.do";
-		var info = "data_object_attribute_id=" + data_object_attribute_id;
-		$.ajax({
-			url: url,
-			type: "GET",
-			data: info,
-			dataType: "json",
-			headers: { "X-mago3D-Header" : "mago3D"},
-			success : function(msg) {
-				if(msg.result === "success") {
-					$("#detailAttribute").html(msg.dataInfoAttribute.attributes);
-				} else {
-					alert(JS_MESSAGE[msg.result]);
-				}
-			},
-			error : function(request, status, error) {
-				alert(JS_MESSAGE["ajax.error.message"]);
-				console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
-			}
-		}); */
-	}
-
 	// chart 표시
 	function initDataChart() {
         projectChart();
@@ -1897,7 +1883,116 @@
 			}
 		});
 	}
-	
+
+	// Data Object Attribute 검색
+	var objectAttributeSearchFlag = true;
+    $("#objectAttributeSearch").click(function() {
+        if ($.trim($("#objectAttributeDataKey").val()) === "") {
+            alert(JS_MESSAGE["data.key.empty"]);
+            $("#objectAttributeDataKey").focus();
+            return false;
+        }
+        if ($.trim($("#objectAttributeObjectId").val()) === "") {
+        	alert(JS_MESSAGE["object.id.empty"]);
+            $("#objectAttributeObjectId").focus();
+            return false;
+        }
+
+        if(objectAttributeSearchFlag) {
+            objectAttributeSearchFlag = false;
+            var doesNotExistMessage = "<spring:message code='data.object.does.not.exist'/>";
+            
+			var url = "/data/ajax-list-data-object-attribute.do";
+			var info = 	"project_id=" + $("#objectAttributeProjectId").val()
+						+ "&data_key=" + $("#objectAttributeDataKey").val()
+						+ "&object_id=" + $("#objectAttributeObjectId").val()
+						+ "&search_value=" + $("#objectAttributeSearchValue").val();
+			$.ajax({
+				url: url,
+				type: "GET",
+				data: info,
+				dataType: "json",
+				headers: { "X-mago3D-Header" : "mago3D"},
+				success : function(msg) {
+					if(msg.result === "success") {
+						var dataInfoObjectAttributeList = msg.dataInfoObjectAttributeList;
+						var totalCount = msg.totalCount;
+						var content = "";
+						var dataInfoObjectAttributeListCount = 0;
+						if(dataInfoObjectAttributeList === null || dataInfoObjectAttributeList.length === 0) {
+							content += 	"<tr style=\"text-align: center; vertical-align: middle; padding-top:20px; height: 50px;\">"
+									+	"	<td colspan=\"3\">" +	doesNotExistMessage + "</td>"
+									+	"</tr>";
+						} else {
+							dataInfoObjectAttributeListCount = dataInfoObjectAttributeList.length;
+							for(i=0; i<dataInfoObjectAttributeListCount; i++ ) {
+								var dataInfoObjectAttribute = dataInfoObjectAttributeList[i];
+								
+								content = content
+								+ 	"<tr style=\"height: 30px; background-color: #eee\">"
+								+ 		"<td style=\"padding-left: 2px\" nowrap=\"nowrap\">" + dataInfoObjectAttribute.data_id + "</td>"
+								+		"<td>" + dataInfoObjectAttribute.object_id + "</td>"
+								+		"<td style=\"padding-left: 5px; padding-right: 5px;\">"
+								+		"	<a href=\"#\" onclick=\"viewDataObjectAttribute('" 
+								+ 				dataInfoObjectAttribute.data_object_attribute_id + "'); return false; \">Details</a></td>"
+								+	"</tr>";	
+							}
+						}
+						
+						$("#objectAttributeSearchList > tbody:last").html("");
+			            $("#objectAttributeSearchList > tbody:last").append(content);
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+					objectAttributeSearchFlag = true;
+				},
+				error : function(request, status, error) {
+					alert(JS_MESSAGE["ajax.error.message"]);
+			    	console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			    	objectAttributeSearchFlag = true;
+				}
+			});
+        } else {
+            alert("In progress.");
+            return;
+        }
+    });
+
+    var dataObjectAttributeDialog = $( ".dataObjectAttributeDialog" ).dialog({
+        autoOpen: false,
+        width: 250,
+        height: 350,
+        modal: true,
+        resizable: false
+    });
+
+    // data key 를 이용하여 dataInfo 정보를 취득
+	function viewDataObjectAttribute(dataObjectAttributeId) {
+        dataObjectAttributeDialog.dialog( "open" );
+        
+        var url = "/data/ajax-data-object-attribute.do";
+		var info = "data_object_attribute_id=" + dataObjectAttributeId;
+		$.ajax({
+			url: url,
+			type: "GET",
+			data: info,
+			dataType: "json",
+			headers: { "X-mago3D-Header" : "mago3D"},
+			success : function(msg) {
+				if(msg.result === "success") {
+					//var jsonAttribute = JSON.stringify(msg.dataInfoObjectAttribute.attributes, null, 2);
+	                $("#dataObjectAttributeContent").append(msg.dataInfoObjectAttribute.attributes);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			}
+		});
+    }
+    	
 	// 설정 메뉴 시작
 	// Label 표시
 	function changeLabel(isShow) {
@@ -2054,6 +2149,7 @@
 	
 	// moved data callback
 	function showMovedData(projectId, dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
+		$("#moveProjectId").val(projectId);
 		$("#moveDataKey").val(dataKey);
         $("#moveLatitude").val(latitude);
         $("#moveLongitude").val(longitude);
