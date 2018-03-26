@@ -20,7 +20,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th class="col-sub-label">데이터 경로</th>
+					<th class="col-sub-label"><spring:message code='data.attribute.path'/></th>
 					<td>
 						<div class="inner-data">
 							<input type="text" id="project_data_attribute_path" name="project_data_attribute_path" class="l" />
