@@ -53,21 +53,6 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 			Menu menu = null;
 			Menu parentMenu = null;
 			
-			// aliasURL을 먼저 찾음
-			String[][] arrayURI = URLHelper.ALIAS_URI;
-			String aliasURI = null;
-			String aliasName = null;
-			int count = arrayURI.length;
-			for(int i=0; i<count; i++) {
-				if(uri.equals(arrayURI[i][0])) {
-					aliasURI = arrayURI[i][1];
-					aliasName = arrayURI[i][2];
-					break;
-				}
-			}
-			if(aliasURI != null) uri = aliasURI;
-			
-//			log.info("## userGroupMenuList = {}", userGroupMenuList);
 			for(UserGroupMenu userGroupMenu : userGroupMenuList) {
 				if(uri.equals(userGroupMenu.getUrl())) {
 					clickMenuId = userGroupMenu.getMenu_id();
@@ -88,16 +73,19 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 				}
 			}
 			
-			menu = CacheManager.getMapMenu().get(clickMenuId);
-			parentMenu = CacheManager.getMapMenu().get(clickParentId);
-			if(aliasURI == null) {
-				if(menu != null) {
+			menu = CacheManager.getMenuMap().get(clickMenuId);
+			parentMenu = CacheManager.getMenuMap().get(clickParentId);
+			
+			if(menu != null) {
+				if(Menu.Y.equals(menu.getDisplay_yn())) {
 					menu.setAlias_name(null);
 					parentMenu.setAlias_name(null);
+				} else {
+					Long aliasMenuId = CacheManager.getMenuUrlMap().get(menu.getUrl_alias());
+					Menu aliasMenu = CacheManager.getMenuMap().get(aliasMenuId);
+					menu.setAlias_name(aliasMenu.getName());
+					parentMenu.setAlias_name(aliasMenu.getName());
 				}
-			} else {
-				menu.setAlias_name(aliasName);
-				parentMenu.setAlias_name(aliasName);
 			}
 			
 			String standByServerStatus = CacheManager.getStandByServerStatus();
@@ -115,7 +103,7 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 			request.setAttribute("parentMenu", parentMenu);
 			
 			request.setAttribute("cacheUserGroupMenuList", userGroupMenuList);
-			request.setAttribute("cacheUserGroupMenuListSize", userGroupMenuList);
+			request.setAttribute("cacheUserGroupMenuListSize", userGroupMenuList.size());
     	}
     	
         return true;

@@ -8,7 +8,7 @@ create table common_code (
 	code_name_en				varchar(60),
 	code_value					varchar(256)						not null,
 	use_yn						char(1)								default 'Y',
-	view_order					smallint							default 1,
+	view_order					int				default 1,
 	css_class					varchar(30),
 	image						varchar(256),
 	description					varchar(256),

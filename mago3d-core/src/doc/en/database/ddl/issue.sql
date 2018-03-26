@@ -7,7 +7,7 @@ drop table if exists issue_people cascade;
 -- issue
 create table issue (
 	issue_id					bigint,
-	project_id					smallint			not null,
+	project_id					int			not null,
 	user_id						varchar(32)	 		not null,
 	
 	title						varchar(300)		not null,

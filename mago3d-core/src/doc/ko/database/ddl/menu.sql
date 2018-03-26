@@ -2,13 +2,13 @@ drop table if exists menu cascade;
 
 -- ¸Þ´º
 create table menu(
-	menu_id				smallint,
+	menu_id				int,
 	name				varchar(100)							not null,
 	name_en				varchar(30)								not null,
 	lang				varchar(10)								default 'ko',
-	parent				smallint								default '1',
-	depth				smallint								default '1',
-	view_order			smallint								default '1',
+	parent				int								default '1',
+	depth				int								default '1',
+	view_order			int								default '1',
 	url					varchar(256)							not null,
 	url_alias			varchar(256),
 	image				varchar(256),

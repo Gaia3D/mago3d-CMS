@@ -36,6 +36,8 @@ public class CacheManager {
 	private Map<String, Object> commonCodeMap = null;
 	// 대메뉴 정보
 	private Map<Long, Menu> menuMap = null;
+	// url과 menu_id를 매핑
+	private Map<String, Long> menuUrlMap = null;
 	// 사용자 그룹별 메뉴
 	private Map<Long, List<UserGroupMenu>> userGroupMenuMap = null;
 	// 운영 정책
@@ -144,7 +146,7 @@ public class CacheManager {
 	 * @param userGroupId
 	 * @return
 	 */
-	public static Map<Long, Menu> getMapMenu() {
+	public static Map<Long, Menu> getMenuMap() {
 		if(cacheManager.menuMap == null) {
 			return new HashMap<Long, Menu>();
 		}
@@ -153,6 +155,22 @@ public class CacheManager {
 	
 	public static void setMenuMap(Map<Long, Menu> menuMap) {
 		cacheManager.menuMap = menuMap;
+	}
+	
+	/**
+	 * url과 menu_id를 매핑
+	 * @param url
+	 * @return
+	 */
+	public static Map<String, Long> getMenuUrlMap() {
+		if(cacheManager.menuUrlMap == null) {
+			return new HashMap<String, Long>();
+		}
+		return cacheManager.menuUrlMap;
+	}
+	
+	public static void setMenuUrlMap(Map<String, Long> menuUrlMap) {
+		cacheManager.menuUrlMap = menuUrlMap;
 	}
 	
 	public static List<Project> getProjectList() {

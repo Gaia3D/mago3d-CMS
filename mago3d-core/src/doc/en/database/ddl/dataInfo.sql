@@ -4,16 +4,16 @@ drop table if exists data_info cascade;
 
 -- User groups
 create table project(
-	project_id				smallint,
+	project_id				int,
 	project_key				varchar(60)							not null ,
 	project_name			varchar(100)						not null,
-	view_order				smallint							default 1,
+	view_order				int									default 1,
 	default_yn				char(1)								default 'N',
 	use_yn					char(1)								default 'Y',
 	latitude				numeric(13,10),
 	longitude				numeric(13,10),
 	height					numeric(7,3),
-	duration				smallint,
+	duration				int,
 	description				varchar(256),
 	insert_date				timestamp with time zone			default now(),
 	constraint project_pk 	primary key (project_id)	
@@ -37,12 +37,12 @@ comment on column project.insert_date is 'Registered Date';
 -- Data basic information
 create table data_info(
 	data_id						bigint,
-	project_id					smallint							not null,
+	project_id					int							not null,
 	data_key					varchar(128)						not null,
 	data_name					varchar(64),
 	parent						bigint								default 1,
-	depth						smallint							default 1,
-	view_order					smallint							default 1,
+	depth						int							default 1,
+	view_order					int							default 1,
 	child_yn					char(1)								default 'N',
 	location		 			GEOGRAPHY(POINT, 4326),
 	latitude					numeric(13,10),
@@ -51,7 +51,7 @@ create table data_info(
 	heading						numeric(8,5),
 	pitch						numeric(8,5),
 	roll						numeric(8,5),
-	attributes					json,
+	attributes					jsonb,
 	status						char(1)								default '0',
 	public_yn					char(1)								default 'N',
 	data_insert_type			varchar(30)							default 'SELF',

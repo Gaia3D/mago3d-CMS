@@ -10,7 +10,7 @@
 	
 	<ul>
 <c:forEach var="userGroupMenu" items="${cacheUserGroupMenuList }" varStatus="status">
-	<c:if test="${userGroupMenu.depth eq 2 && userGroupMenu.parent eq parentMenu.menu_id }">
+	<c:if test="${userGroupMenu.depth eq 2 and userGroupMenu.display_yn eq 'Y' and userGroupMenu.parent eq parentMenu.menu_id }">
 		<c:if test="${userGroupMenu.menu_id eq clickMenuId }">
 		<li class="current-page"><a href="${userGroupMenu.url }">${userGroupMenu.name }</a></li>
 		</c:if>

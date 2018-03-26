@@ -41,9 +41,6 @@ comment on column access_log.minute is '분';
 comment on column access_log.insert_date is '등록일';
 
 
-create table access_log_2017 (
-	check ( insert_date >= to_timestamp('20170101000000000000', 'YYYYMMDDHH24MISSUS') and insert_date <= to_timestamp('20171231235959999999', 'YYYYMMDDHH24MISSUS') )
-) inherits (access_log);
 create table access_log_2018 (
 	check ( insert_date >= to_timestamp('20180101000000000000', 'YYYYMMDDHH24MISSUS') and insert_date <= to_timestamp('20181231235959999999', 'YYYYMMDDHH24MISSUS') )
 ) inherits (access_log);

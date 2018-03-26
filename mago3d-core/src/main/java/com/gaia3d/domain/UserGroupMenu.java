@@ -26,6 +26,7 @@ public class UserGroupMenu {
 	private Integer view_order;
 	// URL
 	private String url;
+	private String url_alias;
 	// 설명
 	private String descritpion;
 	// 이미지
@@ -36,6 +37,7 @@ public class UserGroupMenu {
 	private String css_class;
 	private String use_yn;
 	private String default_yn;
+	private String display_yn;
 	
 	/********* DB *********/
 	// 고유번호

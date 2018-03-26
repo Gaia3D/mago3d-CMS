@@ -14,6 +14,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Menu {
+	
+	public static final String Y = "Y";
+	public static final String N = "N";
 
 	/******** 화면 트리 표시용 ********/
 	private String open = "open";

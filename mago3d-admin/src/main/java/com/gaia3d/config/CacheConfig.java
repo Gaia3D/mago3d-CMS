@@ -147,9 +147,11 @@ public class CacheConfig {
 	 */
 	private void menu(CacheParams cacheParams) {
 		Map<Long, Menu> menuMap = new HashMap<>();
+		Map<String, Long> menuUrlMap = new HashMap<>();
 		List<Menu> menuList = menuService.getListMenu(null);
 		for(Menu menu : menuList) {
 			menuMap.put(menu.getMenu_id(), menu);
+			menuUrlMap.put(menu.getUrl(), menu.getMenu_id());
 		}
 		
 		Map<Long, List<UserGroupMenu>> userGroupMenuMap = new HashMap<>();
@@ -160,6 +162,7 @@ public class CacheConfig {
 		}
 		
 		CacheManager.setMenuMap(menuMap);
+		CacheManager.setMenuUrlMap(menuUrlMap);
 		CacheManager.setUserGroupMenuMap(userGroupMenuMap);
 		
 		CacheType cacheType = cacheParams.getCacheType();

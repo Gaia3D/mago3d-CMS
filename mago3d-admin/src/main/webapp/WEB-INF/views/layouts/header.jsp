@@ -78,7 +78,7 @@
 %>
 						<a href="/login/login.do">
 							<span class="icon-glyph glyph-on"></span>
-							<span class="icon-text"><spring:message code='login'/>로그인</span>
+							<span class="icon-text"><spring:message code='login'/></span>
 						</a>
 <%
 	}

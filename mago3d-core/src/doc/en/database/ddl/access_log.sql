@@ -17,7 +17,7 @@ create table access_log(
 	week						varchar(2)			default to_char(now(), 'W'),
 	hour						varchar(2)			default to_char(now(), 'HH24'),
 	minute						varchar(2)			default to_char(now(), 'MI'),
-	insert_date				timestamp without time zone			default now(),
+	insert_date					timestamp without time zone			default now(),
 	constraint access_log_pk primary key (access_log_id)	
 );
 
@@ -41,9 +41,6 @@ comment on column access_log.minute is 'minutes';
 comment on column access_log.insert_date is 'Registered Date';
 
 
-create table access_log_2017 (
-	check ( insert_date >= to_timestamp('20170101000000000000', 'YYYYMMDDHH24MISSUS') and insert_date <= to_timestamp('20171231235959999999', 'YYYYMMDDHH24MISSUS') )
-) inherits (access_log);
 create table access_log_2018 (
 	check ( insert_date >= to_timestamp('20180101000000000000', 'YYYYMMDDHH24MISSUS') and insert_date <= to_timestamp('20181231235959999999', 'YYYYMMDDHH24MISSUS') )
 ) inherits (access_log);

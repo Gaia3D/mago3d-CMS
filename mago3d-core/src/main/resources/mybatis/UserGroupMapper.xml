@@ -6,11 +6,6 @@
 	<!-- 사용자 그룹 목록 -->
 	<select id="getListUserGroup" parameterType="userGroup" resultType="userGroup">
 		/* getListUserGroup */
-		<!-- SELECT A.*, 
-			( SELECT COUNT(user_id) FROM user_info WHERE user_group_id = A.user_group_id ) AS user_count  
-		FROM user_group A 
-		ORDER BY depth, view_order -->
-		
 		WITH RECURSIVE user_group_tree (
 			user_group_id, group_key, group_name, ancestor, parent, depth, view_order, default_yn, use_yn, child_yn, description, insert_date, path, cycle
 		) AS (
@@ -56,15 +51,16 @@
 		/* getListUserGroupMenu */
 		WITH RECURSIVE menu_tree (
 			user_group_menu_id, user_group_id, all_yn, read_yn, write_yn, update_yn, delete_yn, 
-			menu_id, name, name_en, parent, depth, view_order, default_yn, use_yn, url, image, image_alt, css_class, path, cycle
+			menu_id, name, name_en, parent, depth, view_order, default_yn, use_yn, display_yn, url, url_alias, image, image_alt, css_class, path, cycle
 		) AS (
 	        SELECT X.user_group_menu_id, X.user_group_id, X.all_yn, X.read_yn, X.write_yn, X.update_yn, X.delete_yn, 
-				X.menu_id, X.name, X.name_en, X.parent, X.depth, X.view_order, X.default_yn, X.use_yn, X.url, X.image, X.image_alt, X.css_class, ARRAY[X.view_order], false
+				X.menu_id, X.name, X.name_en, X.parent, X.depth, X.view_order, X.default_yn, X.use_yn, 
+				X.display_yn, X.url, x.url_alias, X.image, X.image_alt, X.css_class, ARRAY[X.view_order], false
 			FROM (
 				SELECT A.user_group_menu_id, A.user_group_id, 
 					COALESCE(A.all_yn, 'N') AS all_yn, COALESCE(A.read_yn, 'N') AS read_yn, COALESCE(A.write_yn, 'N') AS write_yn, 
 					COALESCE(A.update_yn, 'N') AS update_yn, COALESCE(A.delete_yn, 'N') AS delete_yn,
-					B.menu_id, B.name, B.name_en, B.parent, B.depth, B.view_order, B.default_yn, B.use_yn, B.url, B.image, B.image_alt, B.css_class
+					B.menu_id, B.name, B.name_en, B.parent, B.depth, B.view_order, B.default_yn, B.use_yn, B.display_yn, B.url, B.url_alias, B.image, B.image_alt, B.css_class
 				FROM user_group_menu A, menu B
 				WHERE user_group_id = #{user_group_id}
 					AND A.menu_id = B.menu_id
@@ -73,13 +69,13 @@
 	        WHERE X.parent = 0
 	        UNION ALL
 	        SELECT X.user_group_menu_id, X.user_group_id, X.all_yn, X.read_yn, X.write_yn, X.update_yn, X.delete_yn, 
-				X.menu_id, X.name, X.name_en, X.parent, X.depth, X.view_order, X.default_yn, X.use_yn, X.url, X.image, X.image_alt, X.css_class,
+				X.menu_id, X.name, X.name_en, X.parent, X.depth, X.view_order, X.default_yn, X.use_yn, X.display_yn, X.url, x.url_alias, X.image, X.image_alt, X.css_class,
 				path || X.view_order, X.menu_id = ANY(path)
 	        FROM (
 	        	SELECT A.user_group_menu_id, A.user_group_id,
 	        		COALESCE(A.all_yn, 'N') AS all_yn, COALESCE(A.read_yn, 'N') AS read_yn, COALESCE(A.write_yn, 'N') AS write_yn, 
 					COALESCE(A.update_yn, 'N') AS update_yn, COALESCE(A.delete_yn, 'N') AS delete_yn, 
-					B.menu_id, B.name, B.name_en, B.parent, B.depth, B.view_order, B.default_yn, B.use_yn, B.url, B.image, B.image_alt, B.css_class
+					B.menu_id, B.name, B.name_en, B.parent, B.depth, B.view_order, B.default_yn, B.use_yn, B.display_yn, B.url, B.url_alias, B.image, B.image_alt, B.css_class
 				FROM user_group_menu A, menu B
 				WHERE user_group_id = #{user_group_id}
 					AND A.menu_id = B.menu_id
@@ -88,7 +84,7 @@
 	        WHERE X.parent = Y.menu_id AND not cycle
 		)
 	    SELECT user_group_menu_id, user_group_id, all_yn, read_yn, write_yn, update_yn, delete_yn, 
-			menu_id, name, name_en, parent, depth, view_order, default_yn, use_yn, url, path, image, image_alt, css_class
+			menu_id, name, name_en, parent, depth, view_order, default_yn, use_yn, display_yn, url, url_alias, path, image, image_alt, css_class
 	    FROM menu_tree
 	    ORDER BY path
 	</select>

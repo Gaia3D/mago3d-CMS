@@ -6,7 +6,7 @@
 			<ul>
 <c:set var="menuDepthValue" value="0" />			
 <c:forEach var="userGroupMenu" items="${cacheUserGroupMenuList }" varStatus="status">
-	<c:if test="${userGroupMenu.depth eq 1 }">
+	<c:if test="${userGroupMenu.depth eq 1 and userGroupMenu.display_yn eq 'Y'}">
 		<c:if test="${menuDepthValue eq '1'}">
 				</li>
 		</c:if>
@@ -25,17 +25,17 @@
 						<span class="icon-text">${userGroupMenu.name }</span>
 					</a>
 	</c:if>
-	<c:if test="${userGroupMenu.depth eq 2 }">
+	<c:if test="${userGroupMenu.depth eq 2 and userGroupMenu.display_yn eq 'Y'}">
 		<c:if test="${menuDepthValue eq '1'}">
 					<ul id="sub-menu-${userGroupMenu.parent }">
 		</c:if>
 						<li><a href="${userGroupMenu.url }">${userGroupMenu.name }</a></li>
 	</c:if>	
 	
-	<c:if test="${menuDepthValue eq '1' && status.last }">
+	<c:if test="${menuDepthValue eq '1' and userGroupMenu.display_yn eq 'Y' and status.last }">
 				</li>
 	</c:if>
-	<c:if test="${menuDepthValue eq '2' && status.last }">
+	<c:if test="${menuDepthValue eq '2' and userGroupMenu.display_yn eq 'Y' and status.last }">
 					</ul>
 				</li>
 	</c:if>

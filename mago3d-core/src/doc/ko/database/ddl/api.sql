@@ -13,7 +13,7 @@ create table api_log(
 	request_type 				varchar(20)			not null,
 	user_id						varchar(32),
 	user_ip						varchar(45),
-	data_count					smallint,
+	data_count					int,
 	data_delimiter				varchar(3),
 	phone						varchar(256),
 	email						varchar(256),
