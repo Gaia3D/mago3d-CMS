@@ -4,7 +4,7 @@ drop table if exists data_info_log cascade;
 create table data_info_log(
 	data_info_log_id				bigint,
 	project_id						int,
-	dainteger				bigint,
+	dainteger						bigint,
 	user_id							varchar(32),
 	latitude						numeric(13,10),
 	longitude						numeric(13,10),

@@ -7,7 +7,7 @@ drop table if exists data_info_object_attribute cascade;
 create table data_info_attribute(
 	data_attribute_id			bigint,
 	data_id						bigint,
-	attributes					jsonb,
+	attributes					json,
 	update_date					timestamp without time zone,
 	insert_date					timestamp without time zone			default now(),
 	constraint data_info_attribute_pk 	primary key(data_attribute_id)
@@ -25,7 +25,7 @@ create table data_info_object_attribute(
 	data_object_attribute_id			bigint,
 	data_id								bigint,
 	object_id							varchar(256),
-	attributes							jsonb,
+	attributes							json,
 	update_date							timestamp without time zone,
 	insert_date							timestamp without time zone			default now(),
 	constraint data_info_object_attribute_pk 	primary key(data_object_attribute_id)
