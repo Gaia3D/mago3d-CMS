@@ -439,12 +439,12 @@
 				async:false,
 				dataType: "json",
 				success: function(msg){
-					var totalNumber = "<spring:message code='data.total.number'/>";
-					var successParsing = "<spring:message code='data.success.parsing'/>";
-					var failedParsing = "<spring:message code='data.fail.parsing'/>";
-					var successRegisterDB = "<spring:message code='data.register.success.db'/>";
-					var failedRegisterDB = "<spring:message code='data.register.fail.db'/>";
-					if(msg.result == "success") {
+					var totalCount = "<spring:message code='total.count'/>";
+					var successParsing = "<spring:message code='parse.success.count'/>";
+					var failedParsing = "<spring:message code='parse.error.count'/>";
+					var successRegisterDB = "<spring:message code='insert.success.count'/>";
+					var failedRegisterDB = "<spring:message code='insert.error.count'/>";
+					if(msg.result === "success") {
 						if(msg.parse_error_count != 0 || msg.insert_error_count != 0) {
 							$("#file_name").val('');
 							alert(JS_MESSAGE ["fail.count.retry.select"]);
@@ -456,7 +456,7 @@
 							+ 	"<td colspan=\"2\">&nbsp;</td>"
 							+ "</tr>"
 							+ "<tr>"
-							+ 	"<td> " + totalNumber + "</td>"
+							+ 	"<td> " + totalCount + "</td>"
 							+ 	"<td> " + msg.total_count + "</td>"
 							+ "</tr>"
 							+ "<tr>"
