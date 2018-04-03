@@ -9,7 +9,7 @@ JS_MESSAGE["apply"] = "Applied.";
 JS_MESSAGE["upload"] = "Uploading.";
 JS_MESSAGE["move.confirm"] = "Are you sure you want to move?";
 JS_MESSAGE["delete.confirm"] = "Are you sure you want to delete?";
-JS_MESSAGE["check.value.required"] = "선택된 항목이 없습니다.";
+JS_MESSAGE["check.value.required"] = "No items selected.";
 JS_MESSAGE["preparing"] = "Coming soon.";
 
 JS_MESSAGE["search.word.empty"] = "Please enter a search term.";

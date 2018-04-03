@@ -18,7 +18,7 @@
 	<link rel="stylesheet" href="/externlib/${lang}/PgwSlider/pgwslider.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/PgwSlider/pgwslider.js"></script>
-	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
+	<script type="text/javascript" src="/js/homepage-scrolling.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>

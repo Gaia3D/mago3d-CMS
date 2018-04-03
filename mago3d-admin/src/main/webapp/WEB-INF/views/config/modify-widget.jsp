@@ -282,7 +282,7 @@
 <script type="text/javascript" src="/externlib/${lang}/spinner/raphael.js"></script>
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
-<script type="text/javascript" src="/js/${lang}/navigation.js"></script>
+<script type="text/javascript" src="/js/navigation.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#sortable").sortable({  

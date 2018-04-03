@@ -15,7 +15,7 @@
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
-	<script type="text/javascript" src="/js/${lang}/gibberish-aes.js"></script>
+	<script type="text/javascript" src="/js/gibberish-aes.js"></script>
 </head>
 <body class="sign">
 	<div class="site-body">

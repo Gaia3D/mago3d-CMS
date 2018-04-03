@@ -462,7 +462,7 @@
 <script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>	
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
-<script type="text/javascript" src="/js/${lang}/navigation.js"></script>
+<script type="text/javascript" src="/js/navigation.js"></script>
 <script type="text/javascript">
 	// 0은 비표시, 1은 표시
 	var userDeviceArray = new Array("0", "0", "0", "0", "0", "0");
