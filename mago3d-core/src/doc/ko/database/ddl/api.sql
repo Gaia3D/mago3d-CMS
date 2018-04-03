@@ -32,7 +32,7 @@ create table api_log(
 	result_value3				varchar(256),
 	result_value4				varchar(256),
 	result_value5				varchar(256),
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp wiwith time zone	default now(),
 	constraint api_log_pk primary key (api_log_id)	
 );
 
@@ -154,7 +154,7 @@ create table external_service (
 	constraint external_service_pk primary key (external_service_id)	
 );
 
-comment on table external_service is 'Private API';
+comment on twith time zonevice is 'Private API';
 comment on column external_service.external_service_id is '고유키';
 comment on column external_service.service_code is '서비스 코드';
 comment on column external_service.service_name is '서비스명';

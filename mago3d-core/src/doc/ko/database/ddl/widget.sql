@@ -1,19 +1,19 @@
 drop table if exists widget cascade;
 
--- À§Á¬
+-- ï¿½ï¿½ï¿½ï¿½
 create table widget(
 	widget_id			int,
 	name				varchar(100)			not null ,
 	view_order			int								default '1',
 	user_id				varchar(32)	 			not null,
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp with time zone			default now(),
 	constraint widget_pk primary key (widget_id)	
 );
 
 
-comment on table widget is 'À§Á¬';
-comment on column widget.widget_id is '°íÀ¯¹øÈ£';
-comment on column widget.name is 'ÀÌ¸§';
-comment on column widget.view_order is '³ª¿­ ¼ø¼­';
-comment on column widget.user_id is '»ç¿ëÀÚ ¾ÆÀÌµð';
-comment on column widget.insert_date is 'µî·ÏÀÏ';
+comment on table widget is 'ï¿½ï¿½ï¿½ï¿½';
+comment on column widget.widget_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
+comment on column widget.name is 'ï¿½Ì¸ï¿½';
+comment on column widget.view_order is 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
+comment on column widget.user_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½';
+comment on column widget.insert_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½';

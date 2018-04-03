@@ -11,7 +11,7 @@ create table sso_log (
   	token				varchar(256),
 	token_status 		char(1) 			default '0',
 	redirect_url		varchar(256),
-  	update_date 		timestamp without time zone,
+  	update_date 		timestamp with time zone,
 	year				char(4)				default to_char(now(), 'YYYY'),
 	month				varchar(2)			default to_char(now(), 'MM'),
 	day					varchar(2)			default to_char(now(), 'DD'),
@@ -19,7 +19,7 @@ create table sso_log (
 	week				varchar(2)			default to_char(now(), 'W'),
 	hour				varchar(2)			default to_char(now(), 'HH24'),
 	minute				varchar(2)			default to_char(now(), 'MI'),
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp with time zone			default now(),
   	constraint sso_log_pk primary key (sso_log_id)
 );
 

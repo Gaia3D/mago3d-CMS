@@ -9,12 +9,10 @@ create table schedule(
 	schedule_code				varchar(30)			not null,
 	expression					varchar(50),
 	use_yn						char(1)				default 'Y',
-	start_date					timestamp without time zone,
-	end_date					timestamp without time zone,
-	user_id						varchar(32),
+	start_date					timestamp witwith time zone	end_date					timestamp witwith time zone	user_id						varchar(32),
 	execute_type				char(1)				default '0',
 	description					varchar(256),
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp witwith time zonedefault now(),
 	constraint schedule_pk primary key (schedule_id)	
 );
 
@@ -40,7 +38,7 @@ create table schedule_log(
 	execute_total_count			int									default 0,
 	execute_message				varchar(1000)		not null,
 	insert_date				timestamp without time zone			default now(),
-	constraint schedule_log_pk primary key (schedule_log_id)	
+	constraint schwith time zoneary key (schedule_log_id)	
 );
 
 comment on table schedule_log is '스케줄 실행 이력';
@@ -58,10 +56,7 @@ create table schedule_detail_log(
 	execute_detail_result		char(1)				not null,
 	execute_detail_message		varchar(1000)		not null,
 	insert_date				timestamp without time zone			default now(),
-	constraint schedule_detail_log_pk primary key (schedule_detail_log_id)	
-);
-
-comment on table schedule_detail_log is '스케줄 실행 상세 이력';
+	constraint schedule_detail_log_pk primary key (schedule_detail_log_id)	with time zonen table schedule_detail_log is '스케줄 실행 상세 이력';
 comment on column schedule_detail_log.schedule_detail_log_id is '스케줄 실행 상세 이력 고유번호';
 comment on column schedule_detail_log.schedule_log_id is '스케줄 실행 이력 고유번호';
 comment on column schedule_detail_log.execute_detail_result is '실행 결과. 0 : 성공, 1 : 실패';

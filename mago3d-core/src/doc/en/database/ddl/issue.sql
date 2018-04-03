@@ -32,8 +32,8 @@ create table issue (
 	minute						varchar(2)			default to_char(now(), 'MI'),
 	
 	client_ip					varchar(45)			not null,
-	update_date					timestamp without time zone,
-	insert_date					timestamp without time zone			default now(),
+	update_date					timestamp with time zone,
+	insert_date					timestamp with time zone			default now(),
 	constraint issue_pk primary key (issue_id)	
 );
 
@@ -110,7 +110,7 @@ create table issue_comment (
 	user_id						varchar(32)	 		not null,
 	comment						varchar(4000)		not null,
 	client_ip					varchar(45)			not null,
-	insert_date					timestamp without time zone			default now(),
+	insert_date					timestamp with time zone			default now(),
 	constraint issue_comment_pk primary key (issue_comment_id)	
 );
 
@@ -128,7 +128,7 @@ create table issue_people (
 	issue_id					bigint			not null,
 	role_type					char(1),
 	user_id						varchar(32),
-	insert_date					timestamp without time zone			default now(),
+	insert_date					timestamp with time zone			default now(),
 	constraint issue_people_pk primary key (issue_people_id)	
 );
 

@@ -41,7 +41,7 @@ create table user_group_role (
 	user_group_role_id				int,
 	user_group_id					int 								not null,
 	role_id							int	 							not null,
-	insert_date						timestamp without time zone				default now(),
+	insert_date						timestamp with time zone				default now(),
 	constraint user_group_role_pk 	primary key (user_group_role_id)
 );
 
@@ -62,7 +62,7 @@ create table user_group_menu(
 	write_yn						char(1)								default 'N',
 	update_yn						char(1)								default 'N',
 	delete_yn						char(1)								default 'N',
-	insert_date						timestamp without time zone			default now(),
+	insert_date						timestamp with time zone			default now(),
 	constraint user_group_menu_pk 	primary key (user_group_menu_id)
 );
 
@@ -100,10 +100,10 @@ create table user_info(
 	sso_use_yn					char(1)								default 'N',
 	login_count					bigint								default 0,
 	fail_login_count			int							default 0,
-	last_login_date				timestamp without time zone,
-	last_password_change_date	timestamp without time zone			default now(),
-	update_date					timestamp without time zone,
-	insert_date				timestamp without time zone			default now(),
+	last_login_date				timestamp with time zone,
+	last_password_change_date	timestamp with time zone			default now(),
+	update_date					timestamp with time zone,
+	insert_date				timestamp with time zone			default now(),
 	constraint user_info_pk primary key(user_id)
 );
 
@@ -169,7 +169,7 @@ create table user_device (
 	device_priority5			int							default 5,
 	use_yn5						char(1)								default 'Y',
 	description5				varchar(256),
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp with time zone			default now(),
 	constraint user_device_pk primary key (user_device_id)
 );
 

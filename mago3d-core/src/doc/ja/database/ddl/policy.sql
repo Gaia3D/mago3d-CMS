@@ -136,7 +136,7 @@ create table policy(
 	solution_manager_phone				varchar(256),
 	solution_manager_email				varchar(256),
 	
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp with time zone			default now(),
 	constraint policy_pk primary key (policy_id)	
 );
 

@@ -17,7 +17,7 @@ create table access_log(
 	week						varchar(2)			default to_char(now(), 'W'),
 	hour						varchar(2)			default to_char(now(), 'HH24'),
 	minute						varchar(2)			default to_char(now(), 'MI'),
-	insert_date				timestamp without time zone			default now(),
+	insert_date					timestamp with time zone			default now(),
 	constraint access_log_pk primary key (access_log_id)	
 );
 
@@ -84,7 +84,6 @@ create table access_log_2031 (
 	check ( insert_date >= to_timestamp('20310101000000000000', 'YYYYMMDDHH24MISSUS') and insert_date <= to_timestamp('20311231235959999999', 'YYYYMMDDHH24MISSUS') )
 ) inherits (access_log);
 
-alter table only access_log_2017 add constraint access_log_2017_pk primary key (access_log_id);
 alter table only access_log_2018 add constraint access_log_2018_pk primary key (access_log_id);
 alter table only access_log_2019 add constraint access_log_2019_pk primary key (access_log_id);
 alter table only access_log_2020 add constraint access_log_2020_pk primary key (access_log_id);

@@ -8,8 +8,7 @@ create table data_info_attribute(
 	data_attribute_id			bigint,
 	data_id						bigint,
 	attributes					json,
-	update_date					timestamp without time zone,
-	insert_date					timestamp without time zone			default now(),
+	update_date					timestamp without time zonwith time zone				timestamp without time zonwith time zone,
 	constraint data_info_attribute_pk 	primary key(data_attribute_id)
 );
 
@@ -27,8 +26,7 @@ create table data_info_object_attribute(
 	object_id							varchar(256),
 	attributes							json,
 	update_date							timestamp without time zone,
-	insert_date							timestamp without time zone			default now(),
-	constraint data_info_object_attribute_pk 	primary key(data_object_attribute_id)
+	insert_date			with time zonehout time zone			default now(),with time zone_info_object_attribute_pk 	primary key(data_object_attribute_id)
 );
 
 comment on table data_info_object_attribute is 'Object 속성 정보';

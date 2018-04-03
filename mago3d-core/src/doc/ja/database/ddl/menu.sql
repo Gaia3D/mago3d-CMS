@@ -18,7 +18,7 @@ create table menu(
 	use_yn				char(1)									default 'Y',
 	display_yn			char(1)									default 'Y',
 	description			varchar(256),
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp with time zone			default now(),
 	constraint menu_pk primary key (menu_id)	
 );
 

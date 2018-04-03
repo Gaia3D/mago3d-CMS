@@ -9,12 +9,12 @@ create table schedule(
 	schedule_code				varchar(30)			not null,
 	expression					varchar(50),
 	use_yn						char(1)				default 'Y',
-	start_date					timestamp without time zone,
-	end_date					timestamp without time zone,
+	start_date					timestamp with time zone,
+	end_date					timestamp with time zone,
 	user_id						varchar(32),
 	execute_type				char(1)				default '0',
 	description					varchar(256),
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp with time zone			default now(),
 	constraint schedule_pk primary key (schedule_id)	
 );
 
@@ -39,7 +39,7 @@ create table schedule_log(
 	execute_result				char(1)				not null,
 	execute_total_count			int									default 0,
 	execute_message				varchar(1000)		not null,
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp with time zone			default now(),
 	constraint schedule_log_pk primary key (schedule_log_id)	
 );
 
@@ -57,7 +57,7 @@ create table schedule_detail_log(
 	schedule_log_id				bigint 				not null,
 	execute_detail_result		char(1)				not null,
 	execute_detail_message		varchar(1000)		not null,
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp with time zone			default now(),
 	constraint schedule_detail_log_pk primary key (schedule_detail_log_id)	
 );
 

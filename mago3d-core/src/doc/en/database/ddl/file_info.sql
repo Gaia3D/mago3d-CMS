@@ -16,7 +16,7 @@ create table file_info(
 	parse_error_count			bigint				default 0,
 	insert_success_count		bigint				default 0,
 	insert_error_count			bigint				default 0,
-	register_date				timestamp without time zone			default now(),
+	register_date				timestamp with time zone			default now(),
 	constraint file_info_pk primary key (file_info_id)	
 );
 
@@ -44,7 +44,7 @@ create table file_parse_log(
 	error_code					varchar(4000),
 	log_type					char(1)				default '0',
 	status						char(1)				default '0',
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp with time zone			default now(),
 	constraint file_parse_log_pk primary key (file_parse_log_id)	
 );
 

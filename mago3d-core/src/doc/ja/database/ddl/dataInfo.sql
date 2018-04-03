@@ -56,8 +56,8 @@ create table data_info(
 	public_yn					char(1)								default 'N',
 	data_insert_type			varchar(30)							default 'SELF',
 	description					varchar(256),
-	update_date					timestamp without time zone,
-	insert_date					timestamp without time zone			default now(),
+	update_date					timestamp with time zone,
+	insert_date					timestamp with time zone			default now(),
 	constraint data_info_pk 	primary key(data_id)
 );
 

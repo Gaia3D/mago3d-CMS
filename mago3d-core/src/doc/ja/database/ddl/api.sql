@@ -32,7 +32,7 @@ create table api_log(
 	result_value3				varchar(256),
 	result_value4				varchar(256),
 	result_value5				varchar(256),
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp with time zone			default now(),
 	constraint api_log_pk primary key (api_log_id)	
 );
 
@@ -150,7 +150,7 @@ create table external_service (
 	extra_value1				varchar(50),
 	extra_value2				varchar(50),
 	extra_value3				varchar(50),
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp with time zone			default now(),
 	constraint external_service_pk primary key (external_service_id)	
 );
 
