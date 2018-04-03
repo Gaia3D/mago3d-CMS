@@ -1,3 +1,678 @@
+/* eslint-env jquery */
+'use strict';
+
+/**
+ * An API that interacts with the on-screen UI. Class name to be modified by APIGateWay or API class
+ * @class MagoFacade
+ */
+/**
+ * mago3d 활성화/비활성화
+ * @param {ManagerFactory} managerFactoryInstance 
+ * @param {boolean} isShow true = show, false = hide
+ */
+function changeMagoStateAPI(managerFactoryInstance, isShow) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeMagoState");
+	api.setMagoEnable(isShow);
+	managerFactoryInstance.callAPI(api);
+};
+
+/**
+ * Label show/hide
+ * @param {ManagerFactory} managerFactoryInstance 
+ * @param {boolean} isShow true = show, false = hide
+ */
+function changeLabelAPI(managerFactoryInstance, isShow) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeLabel");
+	api.setShowLabelInfo(isShow);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * boundingBox show/hide
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} isShow true = show, false = hide
+ */
+function changeBoundingBoxAPI(managerFactoryInstance, isShow) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeBoundingBox");
+	api.setShowBoundingBox(isShow);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 속성값에 의한 가시화 유무설정
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} isShow true = 표시, false = 비표시
+ */
+function changePropertyRenderingAPI(managerFactoryInstance, isShow, projectId, property) 
+{
+	if (managerFactoryInstance === null) { return; } 
+		
+	var api = new API("changePropertyRendering");
+	api.setShowShadow(isShow);
+	api.setProjectId(projectId);
+	api.setProperty(property);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 그림자 표시/비표시
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} isShow true = 활성화, false = 비활성화
+ */
+function changeShadowAPI(managerFactoryInstance, isShow) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeShadow");
+	api.setShowShadow(isShow);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * color 변경
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} projectId 프로젝트 아이디
+ * @param {string} dataKey data key
+ * @param {string} objectIds object id. 복수개의 경우 , 로 입력
+ * @param {string} property 속성값 예)isMain=true
+ * @param {string} color R, G, B 색깔을 ',' 로 연결한 string 값을 받음.
+ */
+function changeColorAPI(managerFactoryInstance, projectId, dataKey, objectIds, property, color) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeColor");
+	api.setProjectId(projectId);
+	api.setDataKey(dataKey);
+	api.setObjectIds(objectIds);
+	api.setProperty(property);
+	api.setColor(color);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * location and rotation 변경
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} projectId
+ * @param {string} dataKey
+ * @param {string} latitude 위도
+ * @param {string} longitude 경도
+ * @param {string} height 높이
+ * @param {string} heading 좌, 우
+ * @param {string} pitch 위, 아래
+ * @param {string} roll 좌, 우 기울기
+ */
+function changeLocationAndRotationAPI(managerFactoryInstance, projectId, dataKey, latitude, longitude, height, heading, pitch, roll) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeLocationAndRotation");
+	api.setProjectId(projectId);
+	api.setDataKey(dataKey);
+	api.setLatitude(latitude);
+	api.setLongitude(longitude);
+	api.setElevation(height);
+	api.setHeading(heading);
+	api.setPitch(pitch);
+	api.setRoll(roll);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 마우스 클릭 객체 이동 대상 변경
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} objectMoveMode 0 = All, 1 = object, 2 = None
+ */
+function changeObjectMoveAPI(managerFactoryInstance, objectMoveMode) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeObjectMove");
+	api.setObjectMoveMode(objectMoveMode);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 마우스로 이동한 객체 정보를 브라우저내 저장
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} objectMoveMode 0 = All, 1 = object, 2 = None
+ */
+function saveObjectMoveAPI(managerFactoryInstance, objectMoveMode) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("saveObjectMove");
+	api.setObjectMoveMode(objectMoveMode);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 브라우저내 모든 마우스 이동 정보를 삭제
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} objectMoveMode 0 = All, 1 = object, 2 = None
+ */
+function deleteAllObjectMoveAPI(managerFactoryInstance, objectMoveMode) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("deleteAllObjectMove");
+	api.setObjectMoveMode(objectMoveMode);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 브라우저내 모든 색깔 변경 이력을 삭제
+ * @param {ManagerFactory} managerFactoryInstance
+ */
+function deleteAllChangeColorAPI(managerFactoryInstance) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("deleteAllChangeColor");
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 이슈 등록 활성화 유무
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} flag true = 활성화, false = 비활성화
+ */
+function changeInsertIssueModeAPI(managerFactoryInstance, flag) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeInsertIssueMode");
+	api.setIssueInsertEnable(flag);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * object 정보 표시 활성화 유무
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} flag true = 활성화, false = 비활성화
+ */
+function changeObjectInfoViewModeAPI(managerFactoryInstance, flag) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeObjectInfoViewMode");
+	api.setObjectInfoViewEnable(flag);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * Object Occlusion culling
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} flag true = 활성화, false = 비활성화
+ * @param {string} dataKey
+ */
+function changeOcclusionCullingAPI(managerFactoryInstance, flag, dataKey) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeOcclusionCulling");
+	api.setOcclusionCullingEnable(flag);
+	api.setDataKey(dataKey);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 1인칭, 3인칭 모드 개발중...
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} flag true = 활성화, false = 비활성화
+ */
+function changeFPVModeAPI(managerFactoryInstance, flag)
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeFPVMode");
+	api.setFPVMode(flag);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 현재 위치 근처 issue list. false인 경우 clear
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {boolean} flag true = 활성화, false = 비활성화
+ */
+function changeNearGeoIssueListViewModeAPI(managerFactoryInstance, flag) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeNearGeoIssueListViewMode");
+	api.setNearGeoIssueListEnable(flag);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * TODO 이건 위에 이슈 등록 활성화, 비활성화 api로 통합이 가능할거 같음
+ * issue 등록 geo 정보 관련 상태 변경
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} insertIssueState 이슈 등록 좌표 상태
+ */
+function changeInsertIssueStateAPI(managerFactoryInstance, insertIssueState) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeInsertIssueState");
+	api.setInsertIssueState(insertIssueState);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * LOD 설정을 변경
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} lod0DistInMeters
+ * @param {string} lod1DistInMeters
+ * @param {string} lod2DistInMeters
+ * @param {string} lod3DistInMeters
+ * @param {string} lod4DistInMeters
+ * @param {string} lod5DistInMeters
+ */
+function changeLodAPI(managerFactoryInstance, lod0DistInMeters, lod1DistInMeters, lod2DistInMeters, lod3DistInMeters, lod4DistInMeters, lod5DistInMeters)
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeLod");
+	api.setLod0DistInMeters(lod0DistInMeters);
+	api.setLod1DistInMeters(lod1DistInMeters);
+	api.setLod2DistInMeters(lod2DistInMeters);
+	api.setLod3DistInMeters(lod3DistInMeters);
+	api.setLod4DistInMeters(lod4DistInMeters);
+	api.setLod5DistInMeters(lod5DistInMeters);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * Lighting 설정
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} ambientReflectionCoef
+ * @param {string} diffuseReflectionCoef
+ * @param {string} specularReflectionCoef
+ * @param {string} ambientColor
+ * @param {string} specularColor
+ */
+function changeLightingAPI(managerFactoryInstance, ambientReflectionCoef, diffuseReflectionCoef, specularReflectionCoef, ambientColor, specularColor)
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeLighting");
+	api.setAmbientReflectionCoef(ambientReflectionCoef);
+	api.setDiffuseReflectionCoef(diffuseReflectionCoef);
+	api.setSpecularReflectionCoef(specularReflectionCoef);
+	api.setAmbientColor(ambientColor);
+	api.setSpecularColor(specularColor);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * SSAO Radius 설정
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} ssaoRadius
+ */
+function changeSsaoRadiusAPI(managerFactoryInstance, ssaoRadius)
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("changeSsaoRadius");
+	api.setSsaoRadius(ssaoRadius);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 화면에 있는 모든 데이터를 삭제, 비표시
+ * @param {ManagerFactory} managerFactoryInstance
+ */
+function clearAllDataAPI(managerFactoryInstance)
+{	
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("clearAllData");
+	MagoConfig.clearAllData();
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * pin image를 그림
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
+ * @param {string} issue_id 이슈 고유키
+ * @param {string} issue_type 이슈 고유키
+ * @param {string} data_key 데이터 고유키
+ * @param {string} latitude 데이터 고유키
+ * @param {string} longitude 데이터 고유키
+ * @param {string} height 데이터 고유키
+ */
+function drawInsertIssueImageAPI(managerFactoryInstance, drawType, issue_id, issue_type, data_key, latitude, longitude, height) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("drawInsertIssueImage");
+	api.setDrawType(drawType);
+	api.setIssueId(issue_id);
+	api.setIssueId(issue_type);
+	api.setDataKey(data_key);
+	api.setLatitude(latitude);
+	api.setLongitude(longitude);
+	api.setElevation(height);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 해당 프로젝트를 로딩하고 이동하기
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} projectId project id
+ * @param {string} latitude 데이터 고유키
+ * @param {string} longitude 데이터 고유키
+ * @param {string} height 데이터 고유키
+ * @param {string} duration 이동하는 시간
+ */
+function gotoProjectAPI(managerFactoryInstance, projectId, projectData, projectDataFolder, longitude, latitude, height, duration) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	MagoConfig.setData(CODE.PROJECT_ID_PREFIX + projectId, projectData);
+	MagoConfig.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder, projectDataFolder);
+	
+	var api = new API("gotoProject");
+	api.setProjectId(projectId);
+	api.setProjectDataFolder(projectDataFolder);
+	api.setLatitude(latitude);
+	api.setLongitude(longitude);
+	api.setElevation(height);
+	api.setDuration(duration);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 해당 프로젝트를 로딩하고 Issue 등록 지점으로 이동하기
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} projectId project id
+ * @param {string} issueId issue id
+ * @param {string} issueType issue type
+ * @param {string} latitude 데이터 고유키
+ * @param {string} longitude 데이터 고유키
+ * @param {string} height 데이터 고유키
+ * @param {string} duration 이동하는 시간
+ */
+function gotoIssueAPI(managerFactoryInstance, projectId, projectData, projectDataFolder, issueId, issueType, longitude, latitude, height, duration)
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	MagoConfig.setData(CODE.PROJECT_ID_PREFIX + projectId, projectData);
+	MagoConfig.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder, projectDataFolder);
+	
+	var api = new API("gotoIssue");
+	api.setProjectId(projectId);
+	api.setProjectDataFolder(projectDataFolder);
+	api.setIssueId(issueId);
+	api.setIssueType(issueType);
+	api.setLatitude(latitude);
+	api.setLongitude(longitude);
+	api.setElevation(height);
+	api.setDuration(duration);
+	managerFactoryInstance.callAPI(api);
+}
+
+
+/**
+ * 마우스를 사용할 수 없는 환경에서 버튼 이벤트로 대체
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} eventType 어떤 마우스 동작을 원하는지를 구분
+ */
+function mouseMoveAPI(managerFactoryInstance, eventType) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	managerFactoryInstance.mouseMove(eventType);
+}
+
+/**
+ * 데이터 검색
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {string} projectId 데이터 고유키
+ * @param {string} dataKey 데이터 고유키
+ */
+function searchDataAPI(managerFactoryInstance, projectId, dataKey) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	var api = new API("searchData");
+	api.setProjectId(projectId);
+	api.setDataKey(dataKey);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 환경 설정 data Object에 key 값의 존재 유무를 판별
+ * @param {string} key 검색 키
+ * @param 
+ */
+function isDataExistAPI(key) 
+{
+	if (MagoConfig.isDataExist(key)) { return true; }
+	else { return false; }
+}
+
+/**
+ * 환경 설정 data map에서 key 값을 취득
+ * @param {string} key 검색 키
+ * @param 
+ */
+function getDataAPI(key) 
+{
+	return MagoConfig.getData(key);
+}
+
+/**
+ * Data Key 를 이용하여 Geo Spatial Info를 취득
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {String} projectId 고유키
+ * @param {String} dataKey Data 고유키
+ * @param
+ */
+function getDataInfoByDataKeyAPI(managerFactoryInstance, projectId, dataKey)
+{
+	if (managerFactoryInstance === null) { return; }
+
+	var api = new API("getDataInfoByDataKey");
+	api.setProjectId(projectId);
+	api.setDataKey(dataKey);
+	managerFactoryInstance.callAPI(api);
+}
+
+/**
+ * 데이터를 Rendering
+ * @param {ManagerFactory} managerFactoryInstance
+ * @param {Object[]} projectIdArray 프로젝트 이름들
+ * @param {Object[]} projectDataArray 프로젝트 데이터들
+ * @param {Object[]} projectDataFolderArray 프로젝트 f4d 파일 경로
+ * @param 
+ */
+function drawAppendDataAPI(managerFactoryInstance, projectIdArray, projectDataArray, projectDataFolderArray) 
+{
+	if (managerFactoryInstance === null) { return; } 
+	
+	if (projectIdArray.length <= 0) { return; }
+	
+	var api = new API("drawAppendData");
+	projectIdArray.forEach(function(dataName, index) 
+	{
+			
+		MagoConfig.setData(CODE.PROJECT_ID_PREFIX + dataName, projectDataArray[index]);
+		MagoConfig.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolderArray[index], projectDataFolderArray[index]);
+		
+		api.setProjectId(dataName);
+		api.setProjectDataFolder(projectDataFolderArray[index]);
+		managerFactoryInstance.callAPI(api);
+	});
+}
+
+'use strict';
+
+/**
+ * color 처리 관련 도메인
+ * @class ColorAPI
+ */
+var ColorAPI = {};
+
+ColorAPI.changeColor = function(api, magoManager) 
+{
+	var projectId = api.getProjectId();
+	var dataKey = api.getDataKey();
+	var objectIds = api.getObjectIds();
+	var property = api.getProperty();
+	var propertyKey = null;
+	var propertyValue = null;
+	if (property !== null && property !== "") 
+	{
+		var properties = property.split("=");
+		propertyKey = properties[0];
+		propertyValue = properties[1];
+	}
+	var color = api.getColor().split(",");
+	var rgbColor = [ color[0]/255, color[1]/255, color[2]/255 ] ;
+	
+	var isExistObjectIds = false;
+	if (objectIds !== null && objectIds.length !== 0) 
+	{
+		isExistObjectIds = true;
+	}
+	
+	var changeHistorys = [];
+	if (isExistObjectIds) 
+	{
+		for (var i=0, objectCount = objectIds.length; i<objectCount; i++) 
+		{
+			var changeHistory = new ChangeHistory();
+			changeHistory.setProjectId(projectId);
+			changeHistory.setDataKey(dataKey);
+			changeHistory.setObjectId(objectIds[i]);
+			changeHistory.setProperty(property);
+			changeHistory.setPropertyKey(propertyKey);
+			changeHistory.setPropertyValue(propertyValue);
+			changeHistory.setRgbColor(rgbColor);
+			
+			changeHistorys.push(changeHistory);
+		}
+	}
+	else 
+	{
+		var changeHistory = new ChangeHistory();
+		changeHistory.setProjectId(projectId);
+		changeHistory.setDataKey(dataKey);
+		changeHistory.setObjectId(null);
+		changeHistory.setProperty(property);
+		changeHistory.setPropertyKey(propertyKey);
+		changeHistory.setPropertyValue(propertyValue);
+		changeHistory.setRgbColor(rgbColor);
+		
+		changeHistorys.push(changeHistory);
+	}
+
+	var changeHistory;
+	var historiesCount = changeHistorys.length;
+	for (var i=0; i<historiesCount; i++)
+	{
+		changeHistory = changeHistorys[i];
+		MagoConfig.saveColorHistory(projectId, dataKey, changeHistory.getObjectId(), changeHistory);
+	}
+};
+'use strict';
+
+/**
+ * Draw 관련 API를 담당하는 클래스
+ * 원래는 이렇게 만들려고 한게 아니지만, legacy 파일이랑 이름, function 등이 중복되서 이렇게 만들었음
+ * @class DrawAPI
+ */
+var DrawAPI = {};
+
+DrawAPI.drawAppendData = function(api, magoManager) 
+{
+	magoManager.getObjectIndexFile(api.getProjectId(), api.getProjectDataFolder());
+};
+
+DrawAPI.drawInsertIssueImage = function(api, magoManager) 
+{
+	// pin 을 표시
+	if (magoManager.objMarkerSC === undefined || api.getDrawType() === 0) 
+	{
+		magoManager.objMarkerSC = new ObjectMarker();
+		magoManager.objMarkerSC.geoLocationData.geographicCoord = new GeographicCoord();
+		ManagerUtils.calculateGeoLocationData(parseFloat(api.getLongitude()), parseFloat(api.getLatitude()), parseFloat(api.getElevation()), 
+			undefined, undefined, undefined, magoManager.objMarkerSC.geoLocationData, magoManager);
+	}
+	
+	var objMarker = magoManager.objMarkerManager.newObjectMarker();
+	
+	magoManager.objMarkerSC.issue_id = api.getIssueId();
+	magoManager.objMarkerSC.issue_type = api.getIssueType();
+	magoManager.objMarkerSC.geoLocationData.geographicCoord.setLonLatAlt(parseFloat(api.getLongitude()), parseFloat(api.getLatitude()), parseFloat(api.getElevation()));
+	
+	objMarker.copyFrom(magoManager.objMarkerSC);
+	magoManager.objMarkerSC = undefined;
+};
+'use strict';
+
+/**
+ * 변환 행렬 API
+ * @class LocationAndRotationAPI
+ */
+var LocationAndRotationAPI = {};
+
+LocationAndRotationAPI.changeLocationAndRotation = function(api, magoManager) 
+{
+//	var buildingId = api.getDataKey();
+//	var buildingType = "structure";
+//	var building = this.getNeoBuildingByTypeId(buildingType, buildingId);
+
+	var changeHistory = new ChangeHistory();
+	changeHistory.setProjectId(api.getProjectId());
+	changeHistory.setDataKey(api.getDataKey());
+	changeHistory.setLatitude(parseFloat(api.getLatitude()));
+	changeHistory.setLongitude(parseFloat(api.getLongitude()));
+	changeHistory.setElevation(parseFloat(api.getElevation()));
+	changeHistory.setHeading(parseFloat(api.getHeading()));
+	changeHistory.setPitch(parseFloat(api.getPitch()));
+	changeHistory.setRoll(parseFloat(api.getRoll()));
+	
+	magoManager.changeLocationAndRotation(	api.getProjectId(),
+		api.getDataKey(),
+		parseFloat(api.getLatitude()),
+		parseFloat(api.getLongitude()),
+		parseFloat(api.getElevation()),
+		parseFloat(api.getHeading()),
+		parseFloat(api.getPitch()),
+		parseFloat(api.getRoll()));
+	
+	// MagoConfig에 저장......?
+};
+'use strict';
+
+/**
+ * lod 처리 관련 도메인
+ * @class LodAPI
+ */
+var LodAPI = {};
+
+LodAPI.changeLod = function(api, magoManager) 
+{
+	if (api.getLod0DistInMeters() !== null && api.getLod0DistInMeters() !== "") { magoManager.magoPolicy.setLod0DistInMeters(api.getLod0DistInMeters()); }
+	if (api.getLod1DistInMeters() !== null && api.getLod1DistInMeters() !== "") { magoManager.magoPolicy.setLod1DistInMeters(api.getLod1DistInMeters()); }
+	if (api.getLod2DistInMeters() !== null && api.getLod2DistInMeters() !== "") { magoManager.magoPolicy.setLod2DistInMeters(api.getLod2DistInMeters()); }
+	if (api.getLod3DistInMeters() !== null && api.getLod3DistInMeters() !== "") { magoManager.magoPolicy.setLod3DistInMeters(api.getLod3DistInMeters()); }
+	if (api.getLod4DistInMeters() !== null && api.getLod4DistInMeters() !== "") { magoManager.magoPolicy.setLod4DistInMeters(api.getLod4DistInMeters()); }
+	if (api.getLod5DistInMeters() !== null && api.getLod5DistInMeters() !== "") { magoManager.magoPolicy.setLod5DistInMeters(api.getLod5DistInMeters()); }
+};
 'use strict';
 
 /**
@@ -3166,6 +3841,9 @@ var MagoManager = function()
 	this.unitaryBoxSC.makeAABB(1.0, 1.0, 1.0); // make a unitary box.***
 	this.unitaryBoxSC.vBOVertexIdxCacheKey = this.unitaryBoxSC.triPolyhedron.getVBOArrayModePosNorCol(this.unitaryBoxSC.vBOVertexIdxCacheKey);
 	
+	this.axisXYZ = new AxisXYZ();
+	this.axisXYZ.vboKey = this.axisXYZ.getVbo(this.axisXYZ.vboKey);
+	
 	this.invertedBox = new Box();
 	this.invertedBox.makeAABB(0.1, 0.1, 0.1); // make a 0.1m length box.***
 	this.invertedBox.triPolyhedron.invertTrianglesSenses();
@@ -4292,7 +4970,7 @@ MagoManager.prototype.startRender = function(scene, isLastFrustum, frustumIdx, n
 	this.swapRenderingFase();
 	
 	// 3) test mago geometries.***********************************************************************************************************
-	this.renderMagoGeometries(); //TEST
+	//this.renderMagoGeometries(); //TEST
 	
 	// test. Draw the buildingNames.***
 	if (this.magoPolicy.getShowLabelInfo())
@@ -4458,58 +5136,23 @@ MagoManager.prototype.renderMagoGeometries = function()
 		mesh.profile = new Profile(); // provisional.***
 		var profileAux = mesh.profile; // provisional.***
 		
-		var outerRing = profileAux.newOuterRing();
 		
-		
-		// test draw a "L" form polyLine.***
-		var polyLineAux = outerRing.newElement("POLYLINE");
-		var point3d = polyLineAux.newPoint2d(0.0, 0.0); // 0
-		point3d = polyLineAux.newPoint2d(3.0, 0.0); // 1
-		point3d = polyLineAux.newPoint2d(2.0, 1.0); // 2
-		point3d = polyLineAux.newPoint2d(1.0, 1.0); // 3
-		point3d = polyLineAux.newPoint2d(1.0, 2.0); // 4
-		point3d = polyLineAux.newPoint2d(0.0, 2.0); // 5
-		
-		
-		/*
-		// test draw a "L" form polyLine.***
-		var polyLineAux = outerRing.newElement("POLYLINE");
-		var point3d = polyLineAux.newPoint3d(-0.5, 0.0, 0.0); // 0
-		point3d = polyLineAux.newPoint3d(-0.5, 3.0, 0.0); // 1
-		point3d = polyLineAux.newPoint3d(-1.0, -2.0, 0.0); // 2
-		point3d = polyLineAux.newPoint3d(0.0, -6.0, 0.0); // 3
-		point3d = polyLineAux.newPoint3d(1.0, -2.0, 0.0); // 4
-		point3d = polyLineAux.newPoint3d(0.5, 3.0, 0.0); // 5
-		point3d = polyLineAux.newPoint3d(0.5, 0.0, 0.0); // 6
-		*/
-		
-		// create a convex polygon to test.***
-		/*
-		var polyLineAux = outerRing.newElement("POLYLINE");
-		var point3d = polyLineAux.newPoint3d(0.0, 0.0, 0.0); // 0
-		point3d = polyLineAux.newPoint3d(3.0, 0.0, 0.0); // 1
-		point3d = polyLineAux.newPoint3d(4.0, 2.0, 0.0); // 2
-		point3d = polyLineAux.newPoint3d(1.0, 4.0, 0.0); // 3
-		point3d = polyLineAux.newPoint3d(-1.0, 2.0, 0.0); // 4
-		*/
-		
-		/*
-		var arc = outerRing.newElement("ARC");
-		arc.setCenterPosition(0, 0, 0);
-		arc.setRadius(10);
-		arc.setStartAngleDegree(0.0);
-		arc.setSweepAngleDegree(360.0);
-		arc.numPointsFor360Deg = 36;
-		*/
-		
-		outerRing.makePolygon();
-		outerRing.polygon.tessellate();
+		//profileAux.TEST__setFigureConcave_1();
+		//profileAux.TEST__setFigureConcave_2();
+		//profileAux.TEST__setFigureConcave_simpleArc();
+		//profileAux.TEST__setFigureConcave_TShirt();
+		//profileAux.TEST__setFigureConcave_spiral();
+		//profileAux.TEST__setFigureConcave_duckMouth();
+		//profileAux.TEST__setFigureConcave_almostHole();
+		//profileAux.TEST__setFigureConcave_almostHole_2();
+		//profileAux.TEST__setFigureHole_1();
 		
 		if(mesh.vboKeyContainer === undefined)
 			mesh.vboKeyContainer = new VBOVertexIdxCacheKeysContainer();
 		var vboKeys = mesh.vboKeyContainer.newVBOVertexIdxCacheKey();
-		outerRing.polygon.getVbo(vboKeys);
 		
+		profileAux.getVBO(vboKeys);
+
 		var hola = 0;
 		
 		// Now, provisionally make a geoLocationData for the nativeProject.*************************************
@@ -7421,6 +8064,12 @@ MagoManager.prototype.renderGeometry = function(gl, cameraPosition, shader, rend
 				
 			}
 			
+			// draw the axis.***
+			node = this.nodeSelected;
+			var geoLocDataManager = this.getNodeGeoLocDataManager(node);
+			var nodes = [node];
+			
+			this.renderAxisNodes(gl, nodes, true);
 		}
 		
 		// 3) now render bboxes.*******************************************************************************************************************
@@ -7587,6 +8236,105 @@ MagoManager.prototype.renderBoundingBoxesNodes = function(gl, nodesArray, color)
 		gl.uniform3fv(currentShader.aditionalMov_loc, [this.pointSC.x, this.pointSC.y, this.pointSC.z]); //.***
 		//gl.uniform3fv(currentShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
 		this.renderer.renderObject(gl, this.unitaryBoxSC, this, currentShader, ssao_idx);
+	}
+	
+	if (currentShader)
+	{
+		if (currentShader.texCoord2_loc !== -1){ gl.disableVertexAttribArray(currentShader.texCoord2_loc); }
+		if (currentShader.position3_loc !== -1){ gl.disableVertexAttribArray(currentShader.position3_loc); }
+		if (currentShader.normal3_loc !== -1){ gl.disableVertexAttribArray(currentShader.normal3_loc); }
+		if (currentShader.color4_loc !== -1){ gl.disableVertexAttribArray(currentShader.color4_loc); }
+	}
+	
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, null);  // original.***
+	gl.activeTexture(gl.TEXTURE1);
+	gl.bindTexture(gl.TEXTURE_2D, null);
+	gl.activeTexture(gl.TEXTURE2); 
+	gl.bindTexture(gl.TEXTURE_2D, null);
+	
+	gl.disable(gl.BLEND);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param cameraPosition 카메라 입장에서 화면에 그리기 전에 객체를 그릴 필요가 있는지 유무를 판단하는 값
+ * @param scene 변수
+ * @param shader 변수
+ * @param renderTexture 변수
+ * @param ssao_idx 변수
+ * @param neoRefLists_array 변수
+ */
+
+MagoManager.prototype.renderAxisNodes = function(gl, nodesArray, bRenderLines) 
+{
+	var node;
+	var currentShader = this.postFxShadersManager.getTriPolyhedronShader(); // box ssao.***
+	var shaderProgram = currentShader.program;
+	gl.enable(gl.BLEND);
+	gl.frontFace(gl.CCW);
+	gl.useProgram(shaderProgram);
+	gl.enableVertexAttribArray(currentShader.position3_loc);
+	gl.enableVertexAttribArray(currentShader.normal3_loc);
+	gl.enableVertexAttribArray(currentShader.color4_loc);
+
+	gl.uniformMatrix4fv(currentShader.modelViewProjectionMatrix4RelToEye_loc, false, this.sceneState.modelViewProjRelToEyeMatrix._floatArrays);
+	gl.uniformMatrix4fv(currentShader.modelViewMatrix4RelToEye_loc, false, this.sceneState.modelViewRelToEyeMatrix._floatArrays); // original.***
+	gl.uniformMatrix4fv(currentShader.modelViewMatrix4_loc, false, this.sceneState.modelViewMatrix._floatArrays);
+	gl.uniformMatrix4fv(currentShader.projectionMatrix4_loc, false, this.sceneState.projectionMatrix._floatArrays);
+	gl.uniform3fv(currentShader.cameraPosHIGH_loc, this.sceneState.encodedCamPosHigh);
+	gl.uniform3fv(currentShader.cameraPosLOW_loc, this.sceneState.encodedCamPosLow);
+
+	gl.uniform1f(currentShader.near_loc, this.sceneState.camera.frustum.near);
+	gl.uniform1f(currentShader.far_loc, this.sceneState.camera.frustum.far);
+
+	gl.uniformMatrix4fv(currentShader.normalMatrix4_loc, false, this.sceneState.normalMatrix4._floatArrays);
+	//-----------------------------------------------------------------------------------------------------------
+
+	gl.uniform1i(currentShader.hasAditionalMov_loc, true);
+	gl.uniform3fv(currentShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
+	gl.uniform1i(currentShader.bScale_loc, true);
+
+	gl.uniform1i(currentShader.bUse1Color_loc, true);
+
+		gl.uniform4fv(currentShader.oneColor4_loc, [1.0, 0.0, 0.0, 1.0]); //.***
+
+
+	gl.uniform1i(currentShader.depthTex_loc, 0);
+	gl.uniform1i(currentShader.noiseTex_loc, 1);
+	gl.uniform1i(currentShader.diffuseTex_loc, 2); // no used.***
+	gl.uniform1f(currentShader.fov_loc, this.sceneState.camera.frustum.fovyRad);	// "frustum._fov" is in radians.***
+	gl.uniform1f(currentShader.aspectRatio_loc, this.sceneState.camera.frustum.aspectRatio);
+	gl.uniform1f(currentShader.screenWidth_loc, this.sceneState.drawingBufferWidth);	
+	gl.uniform1f(currentShader.screenHeight_loc, this.sceneState.drawingBufferHeight);
+
+
+	gl.uniform2fv(currentShader.noiseScale2_loc, [this.depthFboNeo.width/this.noiseTexture.width, this.depthFboNeo.height/this.noiseTexture.height]);
+	gl.uniform3fv(currentShader.kernel16_loc, this.kernel);
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, this.depthFboNeo.colorBuffer);  // original.***
+	gl.activeTexture(gl.TEXTURE1);
+	gl.bindTexture(gl.TEXTURE_2D, this.noiseTexture);
+
+	var neoBuilding;
+	var ssao_idx = 1;
+	var nodesCount = nodesArray.length;
+	for (var b=0; b<nodesCount; b++)
+	{
+		node = nodesArray[b];
+		neoBuilding = node.data.neoBuilding;
+
+		gl.uniform3fv(currentShader.scale_loc, [1,1,1]); //.***
+		var buildingGeoLocation = this.getNodeGeoLocDataManager(node).getCurrentGeoLocationData();
+		gl.uniformMatrix4fv(currentShader.buildingRotMatrix_loc, false, buildingGeoLocation.rotMatrix._floatArrays);
+		gl.uniform3fv(currentShader.buildingPosHIGH_loc, buildingGeoLocation.positionHIGH);
+		gl.uniform3fv(currentShader.buildingPosLOW_loc, buildingGeoLocation.positionLOW);
+
+		this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
+		//gl.uniform3fv(currentShader.aditionalMov_loc, [this.pointSC.x, this.pointSC.y, this.pointSC.z]); //.***
+		gl.uniform3fv(currentShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
+		this.renderer.renderObject(gl, this.axisXYZ, this, currentShader, ssao_idx, bRenderLines);
 	}
 	
 	if (currentShader)
@@ -8377,6 +9125,8 @@ MagoManager.prototype.calculate_geoLocDataOfNode = function(node)
 {
 	// this function creates the geoLocationData of "node" using the data inside of "buildingSeed".***
 	var nodeRoot = node.getRoot();
+	
+	
 	
 	if (nodeRoot.data.geoLocDataManager === undefined)
 	{ nodeRoot.data.geoLocDataManager = new GeoLocationDataManager(); }
@@ -9342,8 +10092,12 @@ MagoManager.prototype.makeNode = function(jasonObject, resultPhysicalNodesArray,
 			}
 		}
 		
-		bbox = new BoundingBox();
-		node.data.bbox = bbox;
+		if(node.data.buildingSeed && node.data.buildingSeed.bBox)
+			node.data.bbox = node.data.buildingSeed.bBox;
+		else
+			node.data.bbox = new BoundingBox();
+		
+		bbox = node.data.bbox;
 
 		if (children !== undefined)
 		{
@@ -9486,7 +10240,6 @@ MagoManager.prototype.makeSmartTile = function(buildingSeedList, projectId)
 	{
 		buildingSeed = buildingSeedList.buildingSeedArray[i];
 		buildingId = buildingSeed.buildingId;
-		
 		buildingSeedMap[buildingId] = buildingSeed;
 	}
 	var projectFolderName = realTimeLocBlocksList.data_key;
@@ -24501,681 +25254,6 @@ var forEach = exports.forEach = function () {
 
 })(this);
 
-/* eslint-env jquery */
-'use strict';
-
-/**
- * An API that interacts with the on-screen UI. Class name to be modified by APIGateWay or API class
- * @class MagoFacade
- */
-/**
- * mago3d 활성화/비활성화
- * @param {ManagerFactory} managerFactoryInstance 
- * @param {boolean} isShow true = show, false = hide
- */
-function changeMagoStateAPI(managerFactoryInstance, isShow) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeMagoState");
-	api.setMagoEnable(isShow);
-	managerFactoryInstance.callAPI(api);
-};
-
-/**
- * Label show/hide
- * @param {ManagerFactory} managerFactoryInstance 
- * @param {boolean} isShow true = show, false = hide
- */
-function changeLabelAPI(managerFactoryInstance, isShow) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeLabel");
-	api.setShowLabelInfo(isShow);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * boundingBox show/hide
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} isShow true = show, false = hide
- */
-function changeBoundingBoxAPI(managerFactoryInstance, isShow) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeBoundingBox");
-	api.setShowBoundingBox(isShow);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 속성값에 의한 가시화 유무설정
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} isShow true = 표시, false = 비표시
- */
-function changePropertyRenderingAPI(managerFactoryInstance, isShow, projectId, property) 
-{
-	if (managerFactoryInstance === null) { return; } 
-		
-	var api = new API("changePropertyRendering");
-	api.setShowShadow(isShow);
-	api.setProjectId(projectId);
-	api.setProperty(property);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 그림자 표시/비표시
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} isShow true = 활성화, false = 비활성화
- */
-function changeShadowAPI(managerFactoryInstance, isShow) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeShadow");
-	api.setShowShadow(isShow);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * color 변경
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} projectId 프로젝트 아이디
- * @param {string} dataKey data key
- * @param {string} objectIds object id. 복수개의 경우 , 로 입력
- * @param {string} property 속성값 예)isMain=true
- * @param {string} color R, G, B 색깔을 ',' 로 연결한 string 값을 받음.
- */
-function changeColorAPI(managerFactoryInstance, projectId, dataKey, objectIds, property, color) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeColor");
-	api.setProjectId(projectId);
-	api.setDataKey(dataKey);
-	api.setObjectIds(objectIds);
-	api.setProperty(property);
-	api.setColor(color);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * location and rotation 변경
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} projectId
- * @param {string} dataKey
- * @param {string} latitude 위도
- * @param {string} longitude 경도
- * @param {string} height 높이
- * @param {string} heading 좌, 우
- * @param {string} pitch 위, 아래
- * @param {string} roll 좌, 우 기울기
- */
-function changeLocationAndRotationAPI(managerFactoryInstance, projectId, dataKey, latitude, longitude, height, heading, pitch, roll) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeLocationAndRotation");
-	api.setProjectId(projectId);
-	api.setDataKey(dataKey);
-	api.setLatitude(latitude);
-	api.setLongitude(longitude);
-	api.setElevation(height);
-	api.setHeading(heading);
-	api.setPitch(pitch);
-	api.setRoll(roll);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 마우스 클릭 객체 이동 대상 변경
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} objectMoveMode 0 = All, 1 = object, 2 = None
- */
-function changeObjectMoveAPI(managerFactoryInstance, objectMoveMode) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeObjectMove");
-	api.setObjectMoveMode(objectMoveMode);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 마우스로 이동한 객체 정보를 브라우저내 저장
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} objectMoveMode 0 = All, 1 = object, 2 = None
- */
-function saveObjectMoveAPI(managerFactoryInstance, objectMoveMode) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("saveObjectMove");
-	api.setObjectMoveMode(objectMoveMode);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 브라우저내 모든 마우스 이동 정보를 삭제
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} objectMoveMode 0 = All, 1 = object, 2 = None
- */
-function deleteAllObjectMoveAPI(managerFactoryInstance, objectMoveMode) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("deleteAllObjectMove");
-	api.setObjectMoveMode(objectMoveMode);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 브라우저내 모든 색깔 변경 이력을 삭제
- * @param {ManagerFactory} managerFactoryInstance
- */
-function deleteAllChangeColorAPI(managerFactoryInstance) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("deleteAllChangeColor");
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 이슈 등록 활성화 유무
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} flag true = 활성화, false = 비활성화
- */
-function changeInsertIssueModeAPI(managerFactoryInstance, flag) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeInsertIssueMode");
-	api.setIssueInsertEnable(flag);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * object 정보 표시 활성화 유무
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} flag true = 활성화, false = 비활성화
- */
-function changeObjectInfoViewModeAPI(managerFactoryInstance, flag) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeObjectInfoViewMode");
-	api.setObjectInfoViewEnable(flag);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * Object Occlusion culling
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} flag true = 활성화, false = 비활성화
- * @param {string} dataKey
- */
-function changeOcclusionCullingAPI(managerFactoryInstance, flag, dataKey) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeOcclusionCulling");
-	api.setOcclusionCullingEnable(flag);
-	api.setDataKey(dataKey);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 1인칭, 3인칭 모드 개발중...
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} flag true = 활성화, false = 비활성화
- */
-function changeFPVModeAPI(managerFactoryInstance, flag)
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeFPVMode");
-	api.setFPVMode(flag);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 현재 위치 근처 issue list. false인 경우 clear
- * @param {ManagerFactory} managerFactoryInstance
- * @param {boolean} flag true = 활성화, false = 비활성화
- */
-function changeNearGeoIssueListViewModeAPI(managerFactoryInstance, flag) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeNearGeoIssueListViewMode");
-	api.setNearGeoIssueListEnable(flag);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * TODO 이건 위에 이슈 등록 활성화, 비활성화 api로 통합이 가능할거 같음
- * issue 등록 geo 정보 관련 상태 변경
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} insertIssueState 이슈 등록 좌표 상태
- */
-function changeInsertIssueStateAPI(managerFactoryInstance, insertIssueState) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeInsertIssueState");
-	api.setInsertIssueState(insertIssueState);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * LOD 설정을 변경
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} lod0DistInMeters
- * @param {string} lod1DistInMeters
- * @param {string} lod2DistInMeters
- * @param {string} lod3DistInMeters
- * @param {string} lod4DistInMeters
- * @param {string} lod5DistInMeters
- */
-function changeLodAPI(managerFactoryInstance, lod0DistInMeters, lod1DistInMeters, lod2DistInMeters, lod3DistInMeters, lod4DistInMeters, lod5DistInMeters)
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeLod");
-	api.setLod0DistInMeters(lod0DistInMeters);
-	api.setLod1DistInMeters(lod1DistInMeters);
-	api.setLod2DistInMeters(lod2DistInMeters);
-	api.setLod3DistInMeters(lod3DistInMeters);
-	api.setLod4DistInMeters(lod4DistInMeters);
-	api.setLod5DistInMeters(lod5DistInMeters);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * Lighting 설정
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} ambientReflectionCoef
- * @param {string} diffuseReflectionCoef
- * @param {string} specularReflectionCoef
- * @param {string} ambientColor
- * @param {string} specularColor
- */
-function changeLightingAPI(managerFactoryInstance, ambientReflectionCoef, diffuseReflectionCoef, specularReflectionCoef, ambientColor, specularColor)
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeLighting");
-	api.setAmbientReflectionCoef(ambientReflectionCoef);
-	api.setDiffuseReflectionCoef(diffuseReflectionCoef);
-	api.setSpecularReflectionCoef(specularReflectionCoef);
-	api.setAmbientColor(ambientColor);
-	api.setSpecularColor(specularColor);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * SSAO Radius 설정
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} ssaoRadius
- */
-function changeSsaoRadiusAPI(managerFactoryInstance, ssaoRadius)
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("changeSsaoRadius");
-	api.setSsaoRadius(ssaoRadius);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 화면에 있는 모든 데이터를 삭제, 비표시
- * @param {ManagerFactory} managerFactoryInstance
- */
-function clearAllDataAPI(managerFactoryInstance)
-{	
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("clearAllData");
-	MagoConfig.clearAllData();
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * pin image를 그림
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
- * @param {string} issue_id 이슈 고유키
- * @param {string} issue_type 이슈 고유키
- * @param {string} data_key 데이터 고유키
- * @param {string} latitude 데이터 고유키
- * @param {string} longitude 데이터 고유키
- * @param {string} height 데이터 고유키
- */
-function drawInsertIssueImageAPI(managerFactoryInstance, drawType, issue_id, issue_type, data_key, latitude, longitude, height) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("drawInsertIssueImage");
-	api.setDrawType(drawType);
-	api.setIssueId(issue_id);
-	api.setIssueId(issue_type);
-	api.setDataKey(data_key);
-	api.setLatitude(latitude);
-	api.setLongitude(longitude);
-	api.setElevation(height);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 해당 프로젝트를 로딩하고 이동하기
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} projectId project id
- * @param {string} latitude 데이터 고유키
- * @param {string} longitude 데이터 고유키
- * @param {string} height 데이터 고유키
- * @param {string} duration 이동하는 시간
- */
-function gotoProjectAPI(managerFactoryInstance, projectId, projectData, projectDataFolder, longitude, latitude, height, duration) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	MagoConfig.setData(CODE.PROJECT_ID_PREFIX + projectId, projectData);
-	MagoConfig.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder, projectDataFolder);
-	
-	var api = new API("gotoProject");
-	api.setProjectId(projectId);
-	api.setProjectDataFolder(projectDataFolder);
-	api.setLatitude(latitude);
-	api.setLongitude(longitude);
-	api.setElevation(height);
-	api.setDuration(duration);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 해당 프로젝트를 로딩하고 Issue 등록 지점으로 이동하기
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} projectId project id
- * @param {string} issueId issue id
- * @param {string} issueType issue type
- * @param {string} latitude 데이터 고유키
- * @param {string} longitude 데이터 고유키
- * @param {string} height 데이터 고유키
- * @param {string} duration 이동하는 시간
- */
-function gotoIssueAPI(managerFactoryInstance, projectId, projectData, projectDataFolder, issueId, issueType, longitude, latitude, height, duration)
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	MagoConfig.setData(CODE.PROJECT_ID_PREFIX + projectId, projectData);
-	MagoConfig.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder, projectDataFolder);
-	
-	var api = new API("gotoIssue");
-	api.setProjectId(projectId);
-	api.setProjectDataFolder(projectDataFolder);
-	api.setIssueId(issueId);
-	api.setIssueType(issueType);
-	api.setLatitude(latitude);
-	api.setLongitude(longitude);
-	api.setElevation(height);
-	api.setDuration(duration);
-	managerFactoryInstance.callAPI(api);
-}
-
-
-/**
- * 마우스를 사용할 수 없는 환경에서 버튼 이벤트로 대체
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} eventType 어떤 마우스 동작을 원하는지를 구분
- */
-function mouseMoveAPI(managerFactoryInstance, eventType) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	managerFactoryInstance.mouseMove(eventType);
-}
-
-/**
- * 데이터 검색
- * @param {ManagerFactory} managerFactoryInstance
- * @param {string} projectId 데이터 고유키
- * @param {string} dataKey 데이터 고유키
- */
-function searchDataAPI(managerFactoryInstance, projectId, dataKey) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	var api = new API("searchData");
-	api.setProjectId(projectId);
-	api.setDataKey(dataKey);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 환경 설정 data Object에 key 값의 존재 유무를 판별
- * @param {string} key 검색 키
- * @param 
- */
-function isDataExistAPI(key) 
-{
-	if (MagoConfig.isDataExist(key)) { return true; }
-	else { return false; }
-}
-
-/**
- * 환경 설정 data map에서 key 값을 취득
- * @param {string} key 검색 키
- * @param 
- */
-function getDataAPI(key) 
-{
-	return MagoConfig.getData(key);
-}
-
-/**
- * Data Key 를 이용하여 Geo Spatial Info를 취득
- * @param {ManagerFactory} managerFactoryInstance
- * @param {String} projectId 고유키
- * @param {String} dataKey Data 고유키
- * @param
- */
-function getDataInfoByDataKeyAPI(managerFactoryInstance, projectId, dataKey)
-{
-	if (managerFactoryInstance === null) { return; }
-
-	var api = new API("getDataInfoByDataKey");
-	api.setProjectId(projectId);
-	api.setDataKey(dataKey);
-	managerFactoryInstance.callAPI(api);
-}
-
-/**
- * 데이터를 Rendering
- * @param {ManagerFactory} managerFactoryInstance
- * @param {Object[]} projectIdArray 프로젝트 이름들
- * @param {Object[]} projectDataArray 프로젝트 데이터들
- * @param {Object[]} projectDataFolderArray 프로젝트 f4d 파일 경로
- * @param 
- */
-function drawAppendDataAPI(managerFactoryInstance, projectIdArray, projectDataArray, projectDataFolderArray) 
-{
-	if (managerFactoryInstance === null) { return; } 
-	
-	if (projectIdArray.length <= 0) { return; }
-	
-	var api = new API("drawAppendData");
-	projectIdArray.forEach(function(dataName, index) 
-	{
-			
-		MagoConfig.setData(CODE.PROJECT_ID_PREFIX + dataName, projectDataArray[index]);
-		MagoConfig.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolderArray[index], projectDataFolderArray[index]);
-		
-		api.setProjectId(dataName);
-		api.setProjectDataFolder(projectDataFolderArray[index]);
-		managerFactoryInstance.callAPI(api);
-	});
-}
-
-'use strict';
-
-/**
- * color 처리 관련 도메인
- * @class ColorAPI
- */
-var ColorAPI = {};
-
-ColorAPI.changeColor = function(api, magoManager) 
-{
-	var projectId = api.getProjectId();
-	var dataKey = api.getDataKey();
-	var objectIds = api.getObjectIds();
-	var property = api.getProperty();
-	var propertyKey = null;
-	var propertyValue = null;
-	if (property !== null && property !== "") 
-	{
-		var properties = property.split("=");
-		propertyKey = properties[0];
-		propertyValue = properties[1];
-	}
-	var color = api.getColor().split(",");
-	var rgbColor = [ color[0]/255, color[1]/255, color[2]/255 ] ;
-	
-	var isExistObjectIds = false;
-	if (objectIds !== null && objectIds.length !== 0) 
-	{
-		isExistObjectIds = true;
-	}
-	
-	var changeHistorys = [];
-	if (isExistObjectIds) 
-	{
-		for (var i=0, objectCount = objectIds.length; i<objectCount; i++) 
-		{
-			var changeHistory = new ChangeHistory();
-			changeHistory.setProjectId(projectId);
-			changeHistory.setDataKey(dataKey);
-			changeHistory.setObjectId(objectIds[i]);
-			changeHistory.setProperty(property);
-			changeHistory.setPropertyKey(propertyKey);
-			changeHistory.setPropertyValue(propertyValue);
-			changeHistory.setRgbColor(rgbColor);
-			
-			changeHistorys.push(changeHistory);
-		}
-	}
-	else 
-	{
-		var changeHistory = new ChangeHistory();
-		changeHistory.setProjectId(projectId);
-		changeHistory.setDataKey(dataKey);
-		changeHistory.setObjectId(null);
-		changeHistory.setProperty(property);
-		changeHistory.setPropertyKey(propertyKey);
-		changeHistory.setPropertyValue(propertyValue);
-		changeHistory.setRgbColor(rgbColor);
-		
-		changeHistorys.push(changeHistory);
-	}
-
-	var changeHistory;
-	var historiesCount = changeHistorys.length;
-	for (var i=0; i<historiesCount; i++)
-	{
-		changeHistory = changeHistorys[i];
-		MagoConfig.saveColorHistory(projectId, dataKey, changeHistory.getObjectId(), changeHistory);
-	}
-};
-'use strict';
-
-/**
- * Draw 관련 API를 담당하는 클래스
- * 원래는 이렇게 만들려고 한게 아니지만, legacy 파일이랑 이름, function 등이 중복되서 이렇게 만들었음
- * @class DrawAPI
- */
-var DrawAPI = {};
-
-DrawAPI.drawAppendData = function(api, magoManager) 
-{
-	magoManager.getObjectIndexFile(api.getProjectId(), api.getProjectDataFolder());
-};
-
-DrawAPI.drawInsertIssueImage = function(api, magoManager) 
-{
-	// pin 을 표시
-	if (magoManager.objMarkerSC === undefined || api.getDrawType() === 0) 
-	{
-		magoManager.objMarkerSC = new ObjectMarker();
-		magoManager.objMarkerSC.geoLocationData.geographicCoord = new GeographicCoord();
-		ManagerUtils.calculateGeoLocationData(parseFloat(api.getLongitude()), parseFloat(api.getLatitude()), parseFloat(api.getElevation()), 
-			undefined, undefined, undefined, magoManager.objMarkerSC.geoLocationData, magoManager);
-	}
-	
-	var objMarker = magoManager.objMarkerManager.newObjectMarker();
-	
-	magoManager.objMarkerSC.issue_id = api.getIssueId();
-	magoManager.objMarkerSC.issue_type = api.getIssueType();
-	magoManager.objMarkerSC.geoLocationData.geographicCoord.setLonLatAlt(parseFloat(api.getLongitude()), parseFloat(api.getLatitude()), parseFloat(api.getElevation()));
-	
-	objMarker.copyFrom(magoManager.objMarkerSC);
-	magoManager.objMarkerSC = undefined;
-};
-'use strict';
-
-/**
- * 변환 행렬 API
- * @class LocationAndRotationAPI
- */
-var LocationAndRotationAPI = {};
-
-LocationAndRotationAPI.changeLocationAndRotation = function(api, magoManager) 
-{
-//	var buildingId = api.getDataKey();
-//	var buildingType = "structure";
-//	var building = this.getNeoBuildingByTypeId(buildingType, buildingId);
-
-	var changeHistory = new ChangeHistory();
-	changeHistory.setProjectId(api.getProjectId());
-	changeHistory.setDataKey(api.getDataKey());
-	changeHistory.setLatitude(parseFloat(api.getLatitude()));
-	changeHistory.setLongitude(parseFloat(api.getLongitude()));
-	changeHistory.setElevation(parseFloat(api.getElevation()));
-	changeHistory.setHeading(parseFloat(api.getHeading()));
-	changeHistory.setPitch(parseFloat(api.getPitch()));
-	changeHistory.setRoll(parseFloat(api.getRoll()));
-	
-	magoManager.changeLocationAndRotation(	api.getProjectId(),
-		api.getDataKey(),
-		parseFloat(api.getLatitude()),
-		parseFloat(api.getLongitude()),
-		parseFloat(api.getElevation()),
-		parseFloat(api.getHeading()),
-		parseFloat(api.getPitch()),
-		parseFloat(api.getRoll()));
-	
-	// MagoConfig에 저장......?
-};
-'use strict';
-
-/**
- * lod 처리 관련 도메인
- * @class LodAPI
- */
-var LodAPI = {};
-
-LodAPI.changeLod = function(api, magoManager) 
-{
-	if (api.getLod0DistInMeters() !== null && api.getLod0DistInMeters() !== "") { magoManager.magoPolicy.setLod0DistInMeters(api.getLod0DistInMeters()); }
-	if (api.getLod1DistInMeters() !== null && api.getLod1DistInMeters() !== "") { magoManager.magoPolicy.setLod1DistInMeters(api.getLod1DistInMeters()); }
-	if (api.getLod2DistInMeters() !== null && api.getLod2DistInMeters() !== "") { magoManager.magoPolicy.setLod2DistInMeters(api.getLod2DistInMeters()); }
-	if (api.getLod3DistInMeters() !== null && api.getLod3DistInMeters() !== "") { magoManager.magoPolicy.setLod3DistInMeters(api.getLod3DistInMeters()); }
-	if (api.getLod4DistInMeters() !== null && api.getLod4DistInMeters() !== "") { magoManager.magoPolicy.setLod4DistInMeters(api.getLod4DistInMeters()); }
-	if (api.getLod5DistInMeters() !== null && api.getLod5DistInMeters() !== "") { magoManager.magoPolicy.setLod5DistInMeters(api.getLod5DistInMeters()); }
-};
 'use strict';
 
 /**
@@ -30197,7 +30275,6 @@ Node.prototype.getBBoxCenterPositionWorldCoord = function(geoLoc)
 Node.prototype.calculateBBoxCenterPositionWorldCoord = function(geoLoc) 
 {
 	var bboxCenterPoint;
-	
 	bboxCenterPoint = this.data.bbox.getCenterPoint(bboxCenterPoint); // local bbox.
 	this.bboxAbsoluteCenterPos = geoLoc.tMatrix.transformPoint3D(bboxCenterPoint, this.bboxAbsoluteCenterPos);
 	
@@ -33593,975 +33670,1429 @@ var MAGO3DJS_MESSAGE = new Object();
 'use strict';
 
 /**
- * Returns the first parameter if not undefined, otherwise the second parameter.
- * Useful for setting a default value for a parameter.
- *
- * @exports defaultValue
- *
- * @param {*} a
- * @param {*} b
- * @returns {*} Returns the first parameter if not undefined, otherwise the second parameter.
- *
- * @example
- * param = defaultValue(param, 'default');
- * 
- * @copyright https://github.com/AnalyticalGraphicsInc/cesium
- */
-function defaultValue(a, b) 
-{
-	if (a !== undefined) 
-	{
-		return a;
-	}
-	return b;
-}
-'use strict';
-
-/**
  * 어떤 일을 하고 있습니까?
- * @class ByteColor
+ * @class Renderer
  */
-var ByteColor = function() 
+var Renderer = function() 
 {
-	if (!(this instanceof ByteColor)) 
+	if (!(this instanceof Renderer)) 
 	{
 		throw new Error(Messages.CONSTRUCT_ERROR);
 	}
 
-	this.ByteR = 0;
-	this.ByteG = 0;
-	this.ByteB = 0;
-	this.ByteAlfa = 255;
+	this.vbo_vi_cacheKey_aux;
+	this.byteColorAux = new ByteColor();
+
+	// SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.***
+
+	this.currentTimeSC;
+	this.dateSC;
+	this.startTimeSC;
+	this.simpObj_scratch;
 };
 
 /**
  * 어떤 일을 하고 있습니까?
+ * @param gl 변수
  */
-ByteColor.prototype.destroy = function() 
+Renderer.prototype.renderNodes = function(gl, visibleNodesArray, magoManager, standardShader, renderTexture, ssao_idx, maxSizeToRender, refMatrixIdxKey) 
 {
-	this.ByteR = null;
-	this.ByteG = null;
-	this.ByteB = null;
-	this.ByteAlfa = null;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param byteRed 변수
- * @param byteGreen 변수
- * @param byteBlue 변수
- */
-ByteColor.prototype.set = function(byteRed, byteGreen, byteBlue) 
-{
-	this.ByteR = byteRed;
-	this.ByteG = byteGreen;
-	this.ByteB = byteBlue;
-};
-
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Point3DAux
- */
-var Point3DAux = function() 
-{
-	if (!(this instanceof Point3DAux)) 
+	var node;
+	var rootNode;
+	var geoLocDataManager;
+	var neoBuilding;
+	var minSize = 0.0;
+	var lowestOctreesCount;
+	var lowestOctree;
+	var isInterior = false; // no used.***
+	
+	// set webgl options.
+	gl.enable(gl.DEPTH_TEST);
+	gl.depthFunc(gl.LEQUAL);
+	//gl.depthRange(0, 1);
+	if (MagoConfig.getPolicy().geo_cull_face_enable === "true") 
 	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
+		gl.enable(gl.CULL_FACE);
+	}
+	else 
+	{
+		gl.disable(gl.CULL_FACE);
 	}
 
-	this.x = 0.0;
-	this.y = 0.0;
-	this.z = 0.0;
-	//this.IdxInIist;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class TTriangle
- */
-var TTriangle = function() 
-{
-	if (!(this instanceof TTriangle)) 
+	gl.enable(gl.CULL_FACE);
+	gl.frontFace(gl.CCW);
+	
+	var flipYTexCoord = false;
+	
+	// do render.
+	var nodesCount = visibleNodesArray.length;
+	for (var i=0; i<nodesCount; i++)
 	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.mVertex1;
-	this.mVertex2;
-	this.mVertex3;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param vtx1 변수
- * @param vtx2 변수
- * @param vtx3 변수
- */
-TTriangle.prototype.setVertices = function(vtx1, vtx2, vtx3) 
-{
-	this.mVertex1 = vtx1;
-	this.mVertex2 = vtx2;
-	this.mVertex3 = vtx3;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-TTriangle.prototype.invert = function() 
-{
-	var vertexAux = this.mVertex2;
-	this.mVertex2 = this.mVertex3;
-	this.mVertex3 = vertexAux;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class TTrianglesList
- */
-var TTrianglesList = function() 
-{
-	if (!(this instanceof TTrianglesList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.tTrianglesArray = [];
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns tTri
- */
-TTrianglesList.prototype.newTTriangle = function() 
-{
-	var tTri = new TTriangle();
-	this.tTrianglesArray.push(tTri);
-	return tTri;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-TTrianglesList.prototype.invertTrianglesSense= function() 
-{
-	for (var i = 0, triCount = this.tTrianglesArray.length; i < triCount; i++) 
-	{
-		this.tTrianglesArray[i].invert();
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param idx 변수
- * @returns tTrianglesArray[idx]
- */
-TTrianglesList.prototype.getTTriangle = function(idx) 
-{
-	if (idx >= 0 && idx < this.tTrianglesArray.length) 
-	{
-		return this.tTrianglesArray[idx];
-	}
-	else
-	{
-		return undefined;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class TTrianglesMatrix
- */
-var TTrianglesMatrix = function() 
-{
-	if (!(this instanceof TTrianglesMatrix)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.tTrianglesListsArray = [];
-	// SCRATX.*********************
-	this.totalTTrianglesArraySC = [];
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns tTrianglesList
- */
-TTrianglesMatrix.prototype.newTTrianglesList = function() 
-{
-	var tTrianglesList = new TTrianglesList();
-	this.tTrianglesListsArray.push(tTrianglesList);
-	return tTrianglesList;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-TTrianglesMatrix.prototype.invertTrianglesSense = function() 
-{
-	for (var i = 0, tTriListsCount = this.tTrianglesListsArray.length; i < tTriListsCount; i++) 
-	{
-		this.tTrianglesListsArray[i].invertTrianglesSense();
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param resultTotalTTrianglesArray 변수
- * @returns resultTotalTTrianglesArray
- */
-TTrianglesMatrix.prototype.getTotalTTrianglesArray = function(resultTotalTTrianglesArray) 
-{
-	for (var i = 0, tTriListsCount = this.tTrianglesListsArray.length; i < tTriListsCount; i++) 
-	{
-		for (var j = 0, tTrianglesCount = this.tTrianglesListsArray[i].tTrianglesArray.length; j < tTrianglesCount; j++) 
+		node = visibleNodesArray[i];
+		rootNode = node.getRoot();
+		
+		geoLocDataManager = rootNode.data.geoLocDataManager;
+		neoBuilding = node.data.neoBuilding;
+		
+		if (neoBuilding.currentVisibleOctreesControler === undefined)
+		{ continue; }
+	
+		if (node.data.attributes.flipYTexCoords !== undefined)
 		{
-			var tTriangle = this.tTrianglesListsArray[i].getTTriangle(j);
-			resultTotalTTrianglesArray.push(tTriangle);
+			flipYTexCoord = node.data.attributes.flipYTexCoords;
 		}
-	}
-
-	return resultTotalTTrianglesArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns shortArray
- */
-TTrianglesMatrix.prototype.getVBOIndicesShortArray = function() 
-{
-	this.totalTTrianglesArraySC.length = 0;
-	this.totalTTrianglesArraySC = this.getTotalTTrianglesArray(this.totalTTrianglesArraySC);
-
-	var tTriangle;
-	var tTrianglesCount = this.totalTTrianglesArraySC.length;
-	var shortArray = new Uint16Array(tTrianglesCount * 3);
-	for (var i = 0; i < tTrianglesCount; i++) 
-	{
-		tTriangle = this.totalTTrianglesArraySC[i];
-		shortArray[i*3] = tTriangle.mVertex1.mIdxInList;
-		shortArray[i*3+1] = tTriangle.mVertex2.mIdxInList;
-		shortArray[i*3+2] = tTriangle.mVertex3.mIdxInList;
-	}
-
-	return shortArray;
-};
-
-
-
-'use strict';
-
-var ManagerUtils = function() 
-{
-	// sqrtTable.
-	this.sqrtTable = [];
-	// make 100 values.
-	var increValue = 0.01;
-	for (var i=0; i<101; i++)
-	{
-		this.sqrtTable[i] = Math.sqrt(1+(increValue*i)*(increValue*i));
-	}
-	
-};
-
-ManagerUtils.pointToGeographicCoord = function(point, resultGeographicCoord, magoManager) 
-{
-	if (resultGeographicCoord === undefined)
-	{ resultGeographicCoord = new GeographicCoord(); }
-	
-	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
-	{
-		var globe = magoManager.wwd.globe;
-		var origin = new WorldWind.Position();
-		origin = globe.computePositionFromPoint(point.x, point.y, point.z, origin);
-		resultGeographicCoord.setLonLatAlt(origin.longitude, origin.latitude, origin.altitude);
-	}
-	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
-	{
-		var cartographic = Cesium.Cartographic.fromCartesian(new Cesium.Cartesian3(point.x, point.y, point.z));
-		resultGeographicCoord.setLonLatAlt(cartographic.longitude * (180.0/Math.PI), cartographic.latitude * (180.0/Math.PI), cartographic.height);
-	}
-	
-	return resultGeographicCoord;
-};
-
-ManagerUtils.geographicCoordToWorldPoint = function(longitude, latitude, altitude, resultWorldPoint, magoManager) 
-{
-	if (resultWorldPoint === undefined)
-	{ resultWorldPoint = new Point3D(); }
-
-
-	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
-	{
-		var globe = magoManager.wwd.globe;
-		var origin = new WorldWind.Vec3(0, 0, 0);
-		origin = globe.computePointFromPosition(latitude, longitude, altitude, origin);
-		
-		resultWorldPoint.set(origin[0], origin[1], origin[2]);
-		origin = undefined;
-	}
-	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
-	{
-		// *if this in Cesium:
-		var position = Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude);
-		resultWorldPoint.set(position.x, position.y, position.z);
-		position = undefined;
-	}
-	
-	return resultWorldPoint;
-};
-
-ManagerUtils.getTransformationMatrixInPoint = function(point, resultTMatrix, resultMatrixInv, magoManager) 
-{
-	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
-	{
-		;//
-	}
-	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
-	{
-		if (resultTMatrix === undefined)
-		{ resultTMatrix = new Matrix4(); }
-		
-		Cesium.Transforms.eastNorthUpToFixedFrame(new Cesium.Cartesian3(point.x, point.y, point.z), undefined, resultTMatrix._floatArrays);
-		
-		if (resultMatrixInv)
+		else 
 		{
-			Cesium.Matrix4.inverseTransformation(resultTMatrix._floatArrays, resultMatrixInv._floatArrays);
+			flipYTexCoord = false;
 		}
-	}
-	
-	return resultTMatrix;
-};
-
-ManagerUtils.translatePivotPointGeoLocationData = function(geoLocationData, newPivotPoint) 
-{
-	// this function NO modifies the geographic coords.***
-	// "newPivotPoint" is in buildingCoords.***
-	// "newPivotPoint" is the desired position of the new origen of coords, for example:
-	// in a building you can desire the center of the bbox as the origin of the coords.***
-	if (geoLocationData === undefined)
-	{ return; }
-
-	var rawTranslation = new Point3D();
-	rawTranslation.set(-newPivotPoint.x, -newPivotPoint.y, -newPivotPoint.z);
-
-	geoLocationData.pivotPointTraslation = rawTranslation;
-	geoLocationData.doEffectivePivotPointTranslation();
-};
-
-ManagerUtils.calculateGeoLocationMatrixAtWorldPosition = function(worldPosition, resultGeoLocMatrix, magoManager) 
-{
-	// this function calculates the transformation matrix for (x, y, z) coordinate, that has NO heading, pitch or roll rotations.
-	if (resultGeoLocMatrix === undefined)
-	{ resultGeoLocMatrix = new Matrix4(); }
-	
-	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
-	{
-		// * if this in webWorldWind:
-		var xAxis = new WorldWind.Vec3(0, 0, 0),
-			yAxis = new WorldWind.Vec3(0, 0, 0),
-			zAxis = new WorldWind.Vec3(0, 0, 0);
-		var tMatrix = WorldWind.Matrix.fromIdentity();
+		gl.uniform1i(standardShader.textureFlipYAxis_loc, flipYTexCoord);
 		
-		WorldWind.WWMath.localCoordinateAxesAtPoint([worldPosition.x, worldPosition.y, worldPosition.z], magoManager.wwd.globe, xAxis, yAxis, zAxis);
-				
-		tMatrix.set(
-			xAxis[0], yAxis[0], zAxis[0], worldPosition.x,
-			xAxis[1], yAxis[1], zAxis[1], worldPosition.y,
-			xAxis[2], yAxis[2], zAxis[2], worldPosition.z,
-			0, 0, 0, 1);
-		
-		var tMatrixColMajorArray = WorldWind.Matrix.fromIdentity();
-		tMatrixColMajorArray = tMatrix.columnMajorComponents(tMatrixColMajorArray);
-		resultGeoLocMatrix.setByFloat32Array(tMatrixColMajorArray);
-	}
-	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
-	{
-		// *if this in Cesium:
-		Cesium.Transforms.eastNorthUpToFixedFrame(worldPosition, undefined, resultGeoLocMatrix._floatArrays);
-	}
-	
-	return resultGeoLocMatrix;
-};
-
-ManagerUtils.calculateGeoLocationMatrixAtLonLatAlt = function(longitude, latitude, altitude, resultGeoLocMatrix, magoManager) 
-{
-	// this function calculates the transformation matrix for (longitude, latitude, altitude) coordinate, that has NO heading, pitch or roll rotations.
-	if (resultGeoLocMatrix === undefined)
-	{ resultGeoLocMatrix = new Matrix4(); }
-	
-	var worldPosition;
-	worldPosition = this.geographicCoordToWorldPoint(longitude, latitude, altitude, worldPosition, magoManager);
-	resultGeoLocMatrix = ManagerUtils.calculateGeoLocationMatrixAtWorldPosition(worldPosition, resultGeoLocMatrix, magoManager);
-	
-	return resultGeoLocMatrix;
-};
-
-ManagerUtils.calculateTransformMatrixAtWorldPosition = function(worldPosition, heading, pitch, roll, resultGeoLocMatrix, resultTransformMatrix, magoManager) 
-{
-	// This function calculates the "resultGeoLocMatrix" & "resultTransformMatrix".
-	// note: "resultGeoLocMatrix" is the transformMatrix without the heading, pitch, roll rotations.
-	// note: "resultTransformMatrix" is the transformMatrix including the heading, pitch, roll rotations.
-	var xRotMatrix = new Matrix4();  // created as identity matrix.
-	var yRotMatrix = new Matrix4();  // created as identity matrix.
-	var zRotMatrix = new Matrix4();  // created as identity matrix.
-	
-	if (heading !== undefined && heading !== 0)
-	{ zRotMatrix.rotationAxisAngDeg(heading, 0.0, 0.0, -1.0); }
-
-	if (pitch !== undefined && pitch !== 0)
-	{ xRotMatrix.rotationAxisAngDeg(pitch, -1.0, 0.0, 0.0); }
-
-	if (roll !== undefined && roll !== 0)
-	{ yRotMatrix.rotationAxisAngDeg(roll, 0.0, -1.0, 0.0); }
-
-	if (resultGeoLocMatrix === undefined)
-	{ resultGeoLocMatrix = new Matrix4(); }  // created as identity matrix.
-	
-	if (resultTransformMatrix === undefined)
-	{ resultTransformMatrix = new Matrix4(); }  // created as identity matrix.
-
-	// 1rst, calculate the transformation matrix for the location.
-	resultGeoLocMatrix = ManagerUtils.calculateGeoLocationMatrixAtWorldPosition(worldPosition, resultGeoLocMatrix, magoManager);
-	
-	resultTransformMatrix.copyFromMatrix4(resultGeoLocMatrix);
-	var zRotatedTMatrix;
-	var zxRotatedTMatrix;
-	var zxyRotatedTMatrix;
-
-	zRotatedTMatrix = zRotMatrix.getMultipliedByMatrix(resultTransformMatrix, zRotatedTMatrix);
-	zxRotatedTMatrix = xRotMatrix.getMultipliedByMatrix(zRotatedTMatrix, zxRotatedTMatrix);
-	zxyRotatedTMatrix = yRotMatrix.getMultipliedByMatrix(zxRotatedTMatrix, zxyRotatedTMatrix);
-	
-	resultTransformMatrix = zxyRotatedTMatrix;
-	return resultTransformMatrix;
-};
-
-ManagerUtils.calculateGeoLocationData = function(longitude, latitude, altitude, heading, pitch, roll, resultGeoLocationData, magoManager) 
-{
-	// This function calculates all data and matrices for the location(longitude, latitude, altitude) and rotation(heading, pitch, roll).
-	if (resultGeoLocationData === undefined)
-	{ resultGeoLocationData = new GeoLocationData(); }
-
-	// 0) Position.********************************************************************************************
-	if (resultGeoLocationData.geographicCoord === undefined)
-	{ resultGeoLocationData.geographicCoord = new GeographicCoord(); }
-
-	if (longitude !== undefined)
-	{ resultGeoLocationData.geographicCoord.longitude = longitude; }
-	else 
-	{ longitude = resultGeoLocationData.geographicCoord.longitude; }
-
-	if (latitude !== undefined)
-	{ resultGeoLocationData.geographicCoord.latitude = latitude; }
-	else 
-	{ latitude = resultGeoLocationData.geographicCoord.latitude; }
-
-	if (altitude !== undefined)
-	{ resultGeoLocationData.geographicCoord.altitude = altitude; }
-	else 
-	{ altitude = resultGeoLocationData.geographicCoord.altitude; }
-
-	if (heading !== undefined)
-	{ resultGeoLocationData.heading = heading; }
-
-	if (pitch !== undefined)
-	{ resultGeoLocationData.pitch = pitch; }
-
-	if (roll !== undefined)
-	{ resultGeoLocationData.roll = roll; }
-
-	if (resultGeoLocationData.geographicCoord.longitude === undefined || resultGeoLocationData.geographicCoord.latitude === undefined)
-	{ return; }
-	
-	if (magoManager.configInformation === undefined)
-	{ return; }
-
-	resultGeoLocationData.position = this.geographicCoordToWorldPoint(longitude, latitude, altitude, resultGeoLocationData.position, magoManager);
-	
-	// High and Low values of the position.********************************************************************
-	if (resultGeoLocationData.positionHIGH === undefined)
-	{ resultGeoLocationData.positionHIGH = new Float32Array([0.0, 0.0, 0.0]); }
-	if (resultGeoLocationData.positionLOW === undefined)
-	{ resultGeoLocationData.positionLOW = new Float32Array([0.0, 0.0, 0.0]); }
-	this.calculateSplited3fv([resultGeoLocationData.position.x, resultGeoLocationData.position.y, resultGeoLocationData.position.z], resultGeoLocationData.positionHIGH, resultGeoLocationData.positionLOW);
-
-	// Determine the elevation of the position.***********************************************************
-	//var cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
-	//var height = cartographic.height;
-	// End Determine the elevation of the position.-------------------------------------------------------
-	if (resultGeoLocationData.tMatrix === undefined)
-	{ resultGeoLocationData.tMatrix = new Matrix4(); }
-	else
-	{ resultGeoLocationData.tMatrix.Identity(); }
-
-	if (resultGeoLocationData.geoLocMatrix === undefined)
-	{ resultGeoLocationData.geoLocMatrix = new Matrix4(); }
-	else
-	{ resultGeoLocationData.geoLocMatrix.Identity(); }
-
-	if (resultGeoLocationData.geoLocMatrixInv === undefined)
-	{ resultGeoLocationData.geoLocMatrixInv = new Matrix4(); }
-	else
-	{ resultGeoLocationData.geoLocMatrixInv.Identity(); }
-
-	//---------------------------------------------------------
-
-	if (resultGeoLocationData.tMatrixInv === undefined)
-	{ resultGeoLocationData.tMatrixInv = new Matrix4(); }
-	else
-	{ resultGeoLocationData.tMatrixInv.Identity(); }
-
-	if (resultGeoLocationData.rotMatrix === undefined)
-	{ resultGeoLocationData.rotMatrix = new Matrix4(); }
-	else
-	{ resultGeoLocationData.rotMatrix.Identity(); }
-
-	if (resultGeoLocationData.rotMatrixInv === undefined)
-	{ resultGeoLocationData.rotMatrixInv = new Matrix4(); }
-	else
-	{ resultGeoLocationData.rotMatrixInv.Identity(); }
-
-	// 1rst, calculate the transformation matrix for the location.
-	resultGeoLocationData.tMatrix = ManagerUtils.calculateTransformMatrixAtWorldPosition(resultGeoLocationData.position, resultGeoLocationData.heading, resultGeoLocationData.pitch, resultGeoLocationData.roll, 
-		resultGeoLocationData.geoLocMatrix, resultGeoLocationData.tMatrix, magoManager);
-	resultGeoLocationData.rotMatrix.copyFromMatrix4(resultGeoLocationData.tMatrix);
-	resultGeoLocationData.rotMatrix._floatArrays[12] = 0;
-	resultGeoLocationData.rotMatrix._floatArrays[13] = 0;
-	resultGeoLocationData.rotMatrix._floatArrays[14] = 0;
-		
-	// now calculate the inverse matrices.
-	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
-	{
-		// * if this in webWorldWind:
-		var tMatrixInv = WorldWind.Matrix.fromIdentity();
-		tMatrixInv.invertMatrix(resultGeoLocationData.tMatrix._floatArrays);
-		resultGeoLocationData.tMatrixInv.setByFloat32Array(tMatrixInv);
-		
-		var rotMatrixInv = WorldWind.Matrix.fromIdentity();
-		rotMatrixInv.invertMatrix(resultGeoLocationData.rotMatrix._floatArrays);
-		resultGeoLocationData.rotMatrixInv.setByFloat32Array(rotMatrixInv);
-		
-		var geoLocMatrixInv = WorldWind.Matrix.fromIdentity();
-		geoLocMatrixInv.invertMatrix(resultGeoLocationData.geoLocMatrix._floatArrays);
-		resultGeoLocationData.geoLocMatrixInv.setByFloat32Array(geoLocMatrixInv);
-	}
-	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
-	{
-		// *if this in Cesium:
-		Cesium.Matrix4.inverseTransformation(resultGeoLocationData.tMatrix._floatArrays, resultGeoLocationData.tMatrixInv._floatArrays);
-		Cesium.Matrix4.inverseTransformation(resultGeoLocationData.rotMatrix._floatArrays, resultGeoLocationData.rotMatrixInv._floatArrays);
-		Cesium.Matrix4.inverseTransformation(resultGeoLocationData.geoLocMatrix._floatArrays, resultGeoLocationData.geoLocMatrixInv._floatArrays);
-	}
-
-	// finally assing the pivotPoint.***
-	if (resultGeoLocationData.pivotPoint === undefined)
-	{ resultGeoLocationData.pivotPoint = new Point3D(); }
-
-	resultGeoLocationData.pivotPoint.set(resultGeoLocationData.position.x, resultGeoLocationData.position.y, resultGeoLocationData.position.z);
-	resultGeoLocationData.doEffectivePivotPointTranslation();
-	
-	return resultGeoLocationData;
-};
-
-ManagerUtils.calculateGeoLocationDataByAbsolutePoint = function(absoluteX, absoluteY, absoluteZ, resultGeoLocationData, magoManager) 
-{
-
-	if (resultGeoLocationData === undefined)
-	{ resultGeoLocationData = new GeoLocationData(); }
-
-	// 0) Position.********************************************************************************************
-	if (resultGeoLocationData.geographicCoord === undefined)
-	{ resultGeoLocationData.geographicCoord = new GeographicCoord(); }
-	
-	if (magoManager.configInformation === undefined)
-	{ return; }
-	
-	if (resultGeoLocationData.position === undefined)
-	{ resultGeoLocationData.position = new Point3D(); }
-		
-	resultGeoLocationData.position.x = absoluteX;
-	resultGeoLocationData.position.y = absoluteY;
-	resultGeoLocationData.position.z = absoluteZ;
-		
-	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
-	{
-		var globe = magoManager.wwd.globe;
-		var resultCartographic = new WorldWind.Vec3(0, 0, 0);
-		resultCartographic = globe.computePositionFromPoint(absoluteX, absoluteY, absoluteZ, resultCartographic);
-		resultGeoLocationData.geographicCoord.longitude = resultCartographic.longitude;
-		resultGeoLocationData.geographicCoord.latitude = resultCartographic.latitude;
-		resultGeoLocationData.geographicCoord.altitude = resultCartographic.altitude;
-	}
-	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
-	{
-		// *if this in Cesium:
-		//resultGeoLocationData.position = Cesium.Cartesian3.fromDegrees(resultGeoLocationData.geographicCoord.longitude, resultGeoLocationData.geographicCoord.latitude, resultGeoLocationData.geographicCoord.altitude);
-		// must find cartographic data.***
-		var cartographic = new Cesium.Cartographic();
-		var cartesian = new Cesium.Cartesian3();
-		cartesian.x = absoluteX;
-		cartesian.y = absoluteY;
-		cartesian.z = absoluteZ;
-		cartographic = Cesium.Cartographic.fromCartesian(cartesian, magoManager.scene._globe._ellipsoid, cartographic);
-		resultGeoLocationData.geographicCoord.longitude = cartographic.longitude * 180.0/Math.PI;
-		resultGeoLocationData.geographicCoord.latitude = cartographic.latitude * 180.0/Math.PI;
-		resultGeoLocationData.geographicCoord.altitude = cartographic.height;
-	}
-
-	// High and Low values of the position.********************************************************************
-	if (resultGeoLocationData.positionHIGH === undefined)
-	{ resultGeoLocationData.positionHIGH = new Float32Array([0.0, 0.0, 0.0]); }
-	if (resultGeoLocationData.positionLOW === undefined)
-	{ resultGeoLocationData.positionLOW = new Float32Array([0.0, 0.0, 0.0]); }
-	this.calculateSplited3fv([resultGeoLocationData.position.x, resultGeoLocationData.position.y, resultGeoLocationData.position.z], resultGeoLocationData.positionHIGH, resultGeoLocationData.positionLOW);
-
-	// Determine the elevation of the position.***********************************************************
-	//var cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
-	//var height = cartographic.height;
-	// End Determine the elevation of the position.-------------------------------------------------------
-	if (resultGeoLocationData.tMatrix === undefined)
-	{ resultGeoLocationData.tMatrix = new Matrix4(); }
-	else
-	{ resultGeoLocationData.tMatrix.Identity(); }
-
-	if (resultGeoLocationData.geoLocMatrix === undefined)
-	{ resultGeoLocationData.geoLocMatrix = new Matrix4(); }
-	else
-	{ resultGeoLocationData.geoLocMatrix.Identity(); }
-
-	if (resultGeoLocationData.geoLocMatrixInv === undefined)
-	{ resultGeoLocationData.geoLocMatrixInv = new Matrix4(); }
-	else
-	{ resultGeoLocationData.geoLocMatrixInv.Identity(); }
-
-	//---------------------------------------------------------
-
-	if (resultGeoLocationData.tMatrixInv === undefined)
-	{ resultGeoLocationData.tMatrixInv = new Matrix4(); }
-	else
-	{ resultGeoLocationData.tMatrixInv.Identity(); }
-
-	if (resultGeoLocationData.rotMatrix === undefined)
-	{ resultGeoLocationData.rotMatrix = new Matrix4(); }
-	else
-	{ resultGeoLocationData.rotMatrix.Identity(); }
-
-	if (resultGeoLocationData.rotMatrixInv === undefined)
-	{ resultGeoLocationData.rotMatrixInv = new Matrix4(); }
-	else
-	{ resultGeoLocationData.rotMatrixInv.Identity(); }
-
-	var xRotMatrix = new Matrix4();  // created as identity matrix.***
-	var yRotMatrix = new Matrix4();  // created as identity matrix.***
-	var zRotMatrix = new Matrix4();  // created as identity matrix.***
-
-	if (resultGeoLocationData.heading !== undefined && resultGeoLocationData.heading !== 0)
-	{
-		zRotMatrix.rotationAxisAngDeg(resultGeoLocationData.heading, 0.0, 0.0, -1.0);
-	}
-
-	if (resultGeoLocationData.pitch !== undefined && resultGeoLocationData.pitch !== 0)
-	{
-		xRotMatrix.rotationAxisAngDeg(resultGeoLocationData.pitch, -1.0, 0.0, 0.0);
-	}
-
-	if (resultGeoLocationData.roll !== undefined && resultGeoLocationData.roll !== 0)
-	{
-		yRotMatrix.rotationAxisAngDeg(resultGeoLocationData.roll, 0.0, -1.0, 0.0);
-	}
-	
-	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
-	{
-		// * if this in webWorldWind:
-		var xAxis = new WorldWind.Vec3(0, 0, 0),
-			yAxis = new WorldWind.Vec3(0, 0, 0),
-			zAxis = new WorldWind.Vec3(0, 0, 0);
-		var rotMatrix = WorldWind.Matrix.fromIdentity();
-		var tMatrix = WorldWind.Matrix.fromIdentity();
-		
-		WorldWind.WWMath.localCoordinateAxesAtPoint([resultGeoLocationData.position.x, resultGeoLocationData.position.y, resultGeoLocationData.position.z], magoManager.wwd.globe, xAxis, yAxis, zAxis);
-
-		rotMatrix.set(
-			xAxis[0], yAxis[0], zAxis[0], 0,
-			xAxis[1], yAxis[1], zAxis[1], 0,
-			xAxis[2], yAxis[2], zAxis[2], 0,
-			0, 0, 0, 1); 
-				
-		tMatrix.set(
-			xAxis[0], yAxis[0], zAxis[0], resultGeoLocationData.position.x,
-			xAxis[1], yAxis[1], zAxis[1], resultGeoLocationData.position.y,
-			xAxis[2], yAxis[2], zAxis[2], resultGeoLocationData.position.z,
-			0, 0, 0, 1);
-				
-		var columnMajorArray = WorldWind.Matrix.fromIdentity(); 
-		columnMajorArray = rotMatrix.columnMajorComponents(columnMajorArray); // no used.***
+		var buildingGeoLocation = geoLocDataManager.getCurrentGeoLocationData();
+		gl.uniformMatrix4fv(standardShader.buildingRotMatrix_loc, false, buildingGeoLocation.rotMatrix._floatArrays);
+		gl.uniform3fv(standardShader.buildingPosHIGH_loc, buildingGeoLocation.positionHIGH);
+		gl.uniform3fv(standardShader.buildingPosLOW_loc, buildingGeoLocation.positionLOW);
 			
-		var matrixInv = WorldWind.Matrix.fromIdentity();
-		matrixInv.invertMatrix(rotMatrix);
-		var columnMajorArrayAux_inv = WorldWind.Matrix.fromIdentity();
-		var columnMajorArray_inv = matrixInv.columnMajorComponents(columnMajorArrayAux_inv); 
-		
-		var tMatrixColMajorArray = WorldWind.Matrix.fromIdentity();
-		tMatrixColMajorArray = tMatrix.columnMajorComponents(tMatrixColMajorArray);
-		resultGeoLocationData.tMatrix.setByFloat32Array(tMatrixColMajorArray);
-		
-		resultGeoLocationData.geoLocMatrix.copyFromMatrix4(resultGeoLocationData.tMatrix); // "geoLocMatrix" is the pure transformation matrix, without heading or pitch or roll.***
-
-		var zRotatedTMatrix = zRotMatrix.getMultipliedByMatrix(resultGeoLocationData.tMatrix, zRotatedTMatrix);
-		var zxRotatedTMatrix = xRotMatrix.getMultipliedByMatrix(zRotatedTMatrix, zxRotatedTMatrix);
-		var zxyRotatedTMatrix = yRotMatrix.getMultipliedByMatrix(zxRotatedTMatrix, zxyRotatedTMatrix);
-		resultGeoLocationData.tMatrix = zxyRotatedTMatrix;
-
-		resultGeoLocationData.rotMatrix.copyFromMatrix4(resultGeoLocationData.tMatrix);
-		resultGeoLocationData.rotMatrix._floatArrays[12] = 0;
-		resultGeoLocationData.rotMatrix._floatArrays[13] = 0;
-		resultGeoLocationData.rotMatrix._floatArrays[14] = 0;
-		
-		// now calculate the inverses of the matrices.***
-		var tMatrixInv = WorldWind.Matrix.fromIdentity();
-		tMatrixInv.invertMatrix(resultGeoLocationData.tMatrix._floatArrays);
-		resultGeoLocationData.tMatrixInv.setByFloat32Array(tMatrixInv);
-		
-		var rotMatrixInv = WorldWind.Matrix.fromIdentity();
-		rotMatrixInv.invertMatrix(resultGeoLocationData.rotMatrix._floatArrays);
-		resultGeoLocationData.rotMatrixInv.setByFloat32Array(rotMatrixInv);
-		
-		var geoLocMatrixInv = WorldWind.Matrix.fromIdentity();
-		geoLocMatrixInv.invertMatrix(resultGeoLocationData.geoLocMatrix._floatArrays);
-		resultGeoLocationData.geoLocMatrixInv.setByFloat32Array(geoLocMatrixInv);
-	}
-	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
-	{
-		// *if this in Cesium:
-		Cesium.Transforms.eastNorthUpToFixedFrame(resultGeoLocationData.position, undefined, resultGeoLocationData.tMatrix._floatArrays);
-		resultGeoLocationData.geoLocMatrix.copyFromMatrix4(resultGeoLocationData.tMatrix);// "geoLocMatrix" is the pure transformation matrix, without heading or pitch or roll.***
-
-		var zRotatedTMatrix = zRotMatrix.getMultipliedByMatrix(resultGeoLocationData.tMatrix, zRotatedTMatrix);
-		var zxRotatedTMatrix = xRotMatrix.getMultipliedByMatrix(zRotatedTMatrix, zxRotatedTMatrix);
-		var zxyRotatedTMatrix = yRotMatrix.getMultipliedByMatrix(zxRotatedTMatrix, zxyRotatedTMatrix);
-		resultGeoLocationData.tMatrix = zxyRotatedTMatrix;
-		
-		// test.***
-		//var yRotatedTMatrix = yRotMatrix.getMultipliedByMatrix(resultGeoLocationData.tMatrix, yRotatedTMatrix);
-		//var yxRotatedTMatrix = xRotMatrix.getMultipliedByMatrix(yRotatedTMatrix, yxRotatedTMatrix);
-		//var yxzRotatedTMatrix = zRotMatrix.getMultipliedByMatrix(yxRotatedTMatrix, yxzRotatedTMatrix);
-		//resultGeoLocationData.tMatrix = yxzRotatedTMatrix;
-		// end test.---
-
-		resultGeoLocationData.rotMatrix.copyFromMatrix4(resultGeoLocationData.tMatrix);
-		resultGeoLocationData.rotMatrix._floatArrays[12] = 0;
-		resultGeoLocationData.rotMatrix._floatArrays[13] = 0;
-		resultGeoLocationData.rotMatrix._floatArrays[14] = 0;
-
-		// now, calculates the inverses.***
-		Cesium.Matrix4.inverse(resultGeoLocationData.tMatrix._floatArrays, resultGeoLocationData.tMatrixInv._floatArrays);
-		Cesium.Matrix4.inverse(resultGeoLocationData.rotMatrix._floatArrays, resultGeoLocationData.rotMatrixInv._floatArrays);
-		Cesium.Matrix4.inverse(resultGeoLocationData.geoLocMatrix._floatArrays, resultGeoLocationData.geoLocMatrixInv._floatArrays);
-	}
-
-	// finally assing the pivotPoint.***
-	if (resultGeoLocationData.pivotPoint === undefined)
-	{ resultGeoLocationData.pivotPoint = new Point3D(); }
-
-	resultGeoLocationData.pivotPoint.set(resultGeoLocationData.position.x, resultGeoLocationData.position.y, resultGeoLocationData.position.z);
-
-	return resultGeoLocationData;
-};
-
-ManagerUtils.calculateSplitedValues = function(value, resultSplitValue)
-{
-	if (resultSplitValue === undefined)
-	{ resultSplitValue = new SplitValue(); }
-
-	var doubleHigh;
-	if (value >= 0.0) 
-	{
-		doubleHigh = Math.floor(value / 65536.0) * 65536.0;
-		resultSplitValue.high = doubleHigh;
-		resultSplitValue.low = value - doubleHigh;
-	}
-	else 
-	{
-		doubleHigh = Math.floor(-value / 65536.0) * 65536.0;
-		resultSplitValue.high = -doubleHigh;
-		resultSplitValue.low = value + doubleHigh;
-	}
-
-	return resultSplitValue;
-};
-
-ManagerUtils.calculateSplited3fv = function(point3fv, resultSplitPoint3fvHigh, resultSplitPoint3fvLow)
-{
-	if (point3fv === undefined)
-	{ return undefined; }
-
-	if (resultSplitPoint3fvHigh === undefined)
-	{ resultSplitPoint3fvHigh = new Float32Array(3); }
-
-	if (resultSplitPoint3fvLow === undefined)
-	{ resultSplitPoint3fvLow = new Float32Array(3); }
-
-	var posSplitX = new SplitValue();
-	posSplitX = this.calculateSplitedValues(point3fv[0], posSplitX);
-	var posSplitY = new SplitValue();
-	posSplitY = this.calculateSplitedValues(point3fv[1], posSplitY);
-	var posSplitZ = new SplitValue();
-	posSplitZ = this.calculateSplitedValues(point3fv[2], posSplitZ);
-
-	resultSplitPoint3fvHigh[0] = posSplitX.high;
-	resultSplitPoint3fvHigh[1] = posSplitY.high;
-	resultSplitPoint3fvHigh[2] = posSplitZ.high;
-
-	resultSplitPoint3fvLow[0] = posSplitX.low;
-	resultSplitPoint3fvLow[1] = posSplitY.low;
-	resultSplitPoint3fvLow[2] = posSplitZ.low;
-};
-
-ManagerUtils.calculateAproxDist2D = function(pointA, pointB, sqrtTable)
-{
-	// test function.
-	var difX = Math.abs(pointA.x - pointB.x);
-	var difY = Math.abs(pointA.y - pointB.y);
-	
-	// find the big value.
-	var maxValue, value1;
-	
-	if (difX > difY)
-	{
-		maxValue = difX;
-		value1 = difY/maxValue;
-	}
-	else 
-	{
-		maxValue = difY;
-		value1 = difX/maxValue;
-	}
-	
-	var value1Idx = Math.floor(value1*100);
-	var aproxDist = maxValue * sqrtTable[value1Idx];
-	return aproxDist;
-};
-
-var sqrtTable = new Float32Array(11);
-// make 10 values.
-var increValue = 0.1;
-for (var i=0; i<11; i++)
-{
-	sqrtTable[i] = Math.sqrt(1+(increValue*i)*(increValue*i));
-}
-	
-ManagerUtils.calculateAproxDist3D = function(pointA, pointB)
-{
-	var difX = Math.abs(pointA.x - pointB.x);
-	var difY = Math.abs(pointA.y - pointB.y);
-	var difZ = Math.abs(pointA.z - pointB.z);
-	
-	// find the big value.
-	var maxValue, value1, value2;
-	var value1Idx, value2Idx;
-	var aproxDist;
-	
-	if (difX > difY)
-	{
-		if (difX > difZ)
+		if (ssao_idx === 0)
 		{
-			maxValue = difX;
-			value1 = difY/maxValue;
-			value1Idx = Math.floor(value1*100);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difZ/middleDist;
-			value2Idx = Math.floor(value2*100);
-			return (middleDist * sqrtTable[value2Idx]);
+			renderTexture = false;
 		}
-		else 
+		else if (ssao_idx === 1)
 		{
-			maxValue = difZ;
-			value1 = difX/maxValue;
-			value1Idx = Math.floor(value1*100);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difY/middleDist;
-			value2Idx = Math.floor(value2*100);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-	}
-	else 
-	{
-		if (difY > difZ)
-		{
-			maxValue = difY;
-			value1 = difX/maxValue;
-			value1Idx = Math.floor(value1*100);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difZ/middleDist;
-			value2Idx = Math.floor(value2*100);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-		else 
-		{
-			maxValue = difZ;
-			value1 = difX/maxValue;
-			value1Idx = Math.floor(value1*100);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difY/middleDist;
-			value2Idx = Math.floor(value2*100);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-	}
-	
-};
-/*
-ManagerUtils.getBuildingCurrentPosition = function(renderingMode, neoBuilding) 
-{
-	// renderingMode = 0 => assembled.***
-	// renderingMode = 1 => dispersed.***
-
-	if (neoBuilding === undefined) { return undefined; }
-
-	var realBuildingPos;
-
-	// 0 = assembled mode. 1 = dispersed mode.***
-	if (renderingMode === 1) 
-	{
-		if (neoBuilding.geoLocationDataAux === undefined) 
-		{
-			var realTimeLocBlocksList = MagoConfig.getData().alldata;
-			var newLocation = realTimeLocBlocksList[neoBuilding.buildingId];
-			// must calculate the realBuildingPosition (bbox_center_position).***
-
-			if (newLocation) 
+			if (neoBuilding.texturesLoaded && neoBuilding.texturesLoaded.length>0)
 			{
-				neoBuilding.geoLocationDataAux = ManagerUtils.calculateGeoLocationData(newLocation.LONGITUDE, newLocation.LATITUDE, newLocation.ELEVATION, neoBuilding.geoLocationDataAux);
+				renderTexture = true;
+			}
+			else { renderTexture = false; }
+			
+			if (magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.ALL && magoManager.buildingSelected === neoBuilding)
+			{
+				// active stencil buffer to draw silhouette.***
+				this.enableStencilBuffer(gl);
+			}
+			
+		}
+		
+		// LOD0.***
+		minSize = 0.0;
+		lowestOctreesCount = neoBuilding.currentVisibleOctreesControler.currentVisibles0.length;
+		for (var j=0; j<lowestOctreesCount; j++) 
+		{
+			lowestOctree = neoBuilding.currentVisibleOctreesControler.currentVisibles0[j];
+			if (lowestOctree.neoReferencesMotherAndIndices === undefined) 
+			{ continue; }
 
-				//this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
-				neoBuilding.point3dScratch.set(0.0, 0.0, 50.0);
-				realBuildingPos = neoBuilding.geoLocationDataAux.tMatrix.transformPoint3D(neoBuilding.point3dScratch, realBuildingPos );
+			this.renderNeoRefListsAsimetricVersion(gl, lowestOctree.neoReferencesMotherAndIndices, neoBuilding, magoManager, isInterior, standardShader, renderTexture, ssao_idx, minSize, 0, refMatrixIdxKey);
+			//this.renderNeoRefListsGroupedVersion(gl, lowestOctree.neoReferencesMotherAndIndices, neoBuilding, magoManager, isInterior, standardShader, renderTexture, ssao_idx, minSize, 0, refMatrixIdxKey);
+		}
+		
+		// LOD1.***
+		minSize = 0.45;
+		lowestOctreesCount = neoBuilding.currentVisibleOctreesControler.currentVisibles1.length;
+		for (var j=0; j<lowestOctreesCount; j++) 
+		{
+			lowestOctree = neoBuilding.currentVisibleOctreesControler.currentVisibles1[j];
+			if (lowestOctree.neoReferencesMotherAndIndices === undefined) 
+			{ continue; }
+
+			this.renderNeoRefListsAsimetricVersion(gl, lowestOctree.neoReferencesMotherAndIndices, neoBuilding, magoManager, isInterior, standardShader, renderTexture, ssao_idx, minSize, 1, refMatrixIdxKey);
+			//this.renderNeoRefListsGroupedVersion(gl, lowestOctree.neoReferencesMotherAndIndices, neoBuilding, magoManager, isInterior, standardShader, renderTexture, ssao_idx, minSize, 1, refMatrixIdxKey);
+		}
+		
+		if (ssao_idx === 1)
+		{
+			if (magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.ALL && magoManager.buildingSelected === neoBuilding)
+			{
+				// deactive stencil buffer to draw silhouette.***
+				this.disableStencilBuffer(gl);
+			}
+			
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+Renderer.prototype.renderNeoBuildingsLOD2AsimetricVersion = function(gl, visibleNodesArray, magoManager, standardShader, renderTexture, ssao_idx) 
+{
+	var node;
+	var rootNode;
+	var geoLocDataManager;
+	var neoBuilding;
+	//var minSize = 0.0;
+	var lowestOctreesCount;
+	var lowestOctree;
+	//var isInterior = false; // no used.***
+	var lastExtureId;
+	
+	var nodesCount = visibleNodesArray.length;
+	for (var i=0; i<nodesCount; i++)
+	{
+		node = visibleNodesArray[i];
+		rootNode = node.getRoot();
+		geoLocDataManager = rootNode.data.geoLocDataManager;
+		neoBuilding = node.data.neoBuilding;
+		
+		if (neoBuilding.currentVisibleOctreesControler === undefined)
+		{ continue; }
+	
+		lowestOctreesCount = neoBuilding.currentVisibleOctreesControler.currentVisibles2.length;
+		if (lowestOctreesCount === 0)
+		{ continue; }
+		
+		if (ssao_idx === 1 && magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.ALL && magoManager.buildingSelected === neoBuilding)
+		{
+			// active stencil buffer to draw silhouette.***
+			this.enableStencilBuffer(gl);
+		}
+		
+		var buildingGeoLocation = geoLocDataManager.getCurrentGeoLocationData();
+		gl.uniformMatrix4fv(standardShader.buildingRotMatrix_loc, false, buildingGeoLocation.rotMatrix._floatArrays);
+		gl.uniform3fv(standardShader.buildingPosHIGH_loc, buildingGeoLocation.positionHIGH);
+		gl.uniform3fv(standardShader.buildingPosLOW_loc, buildingGeoLocation.positionLOW);
+
+		for (var j=0; j<lowestOctreesCount; j++) 
+		{
+			lowestOctree = neoBuilding.currentVisibleOctreesControler.currentVisibles2[j];
+
+			if (lowestOctree.lego === undefined) 
+			{
+				lowestOctree.lego = new Lego();
+				lowestOctree.lego.fileLoadState = CODE.fileLoadState.READY;
+				lowestOctree.lego.legoKey = lowestOctree.octreeKey + "_lego";
+			}
+
+			if (neoBuilding === undefined)
+			{ continue; }
+
+			// if the building is highlighted, the use highlight oneColor4.*********************
+			if (ssao_idx === 1)
+			{
+				if (neoBuilding.isHighLighted)
+				{
+					gl.uniform1i(standardShader.bUse1Color_loc, true);
+					gl.uniform4fv(standardShader.oneColor4_loc, this.highLightColor4); //.***
+				}
+				else if (neoBuilding.isColorChanged)
+				{
+					gl.uniform1i(standardShader.bUse1Color_loc, true);
+					gl.uniform4fv(standardShader.oneColor4_loc, [neoBuilding.aditionalColor.r, neoBuilding.aditionalColor.g, neoBuilding.aditionalColor.b, neoBuilding.aditionalColor.a]); //.***
+				}
+				else
+				{
+					gl.uniform1i(standardShader.bUse1Color_loc, false);
+				}
+				//----------------------------------------------------------------------------------
+				renderTexture = true;
+				if (neoBuilding.simpleBuilding3x3Texture !== undefined && neoBuilding.simpleBuilding3x3Texture.texId)
+				{
+					gl.enableVertexAttribArray(standardShader.texCoord2_loc);
+					//gl.activeTexture(gl.TEXTURE2); 
+					gl.uniform1i(standardShader.hasTexture_loc, true);
+					if (lastExtureId !== neoBuilding.simpleBuilding3x3Texture.texId)
+					{
+						gl.bindTexture(gl.TEXTURE_2D, neoBuilding.simpleBuilding3x3Texture.texId);
+						lastExtureId = neoBuilding.simpleBuilding3x3Texture.texId;
+					}
+				}
+				else 
+				{
+					//gl.bindTexture(gl.TEXTURE_2D, magoManager.textureAux_1x1.texId);
+					continue;
+					//gl.uniform1i(standardShader.hasTexture_loc, false);
+					//gl.disableVertexAttribArray(standardShader.texCoord2_loc);
+					//renderTexture = false;
+				}
+			}
+
+			this.renderLodBuilding(gl, lowestOctree.lego, magoManager, standardShader, ssao_idx, renderTexture);
+		}
+		
+		if (ssao_idx === 1 && magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.ALL && magoManager.buildingSelected === neoBuilding)
+		{
+			// active stencil buffer to draw silhouette.***
+			this.disableStencilBuffer(gl);
+		}
+	}
+};
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ */
+Renderer.prototype.renderNeoBuildingsLowLOD = function(gl, visibleNodesArray, magoManager, standardShader, renderTexture, ssao_idx) 
+{
+	var node;
+	var rootNode;
+	var geoLocDataManager;
+	var neoBuilding;
+	var lastExtureId;
+	var skinLego;
+	
+	var nodesCount = visibleNodesArray.length;
+	for (var i=0; i<nodesCount; i++)
+	{
+		node = visibleNodesArray[i];
+		rootNode = node.getRoot();
+		geoLocDataManager = rootNode.data.geoLocDataManager;
+		neoBuilding = node.data.neoBuilding;
+		if (neoBuilding === undefined)
+		{ continue; }
+		
+		skinLego = neoBuilding.getCurrentSkin();
+		
+		if (skinLego === undefined)
+		{ continue; }
+	
+		if (ssao_idx === 1 && magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.ALL && magoManager.buildingSelected === neoBuilding)
+		{
+			// active stencil buffer to draw silhouette.***
+			this.enableStencilBuffer(gl);
+		}
+			
+		var buildingGeoLocation = geoLocDataManager.getCurrentGeoLocationData();
+		gl.uniformMatrix4fv(standardShader.buildingRotMatrix_loc, false, buildingGeoLocation.rotMatrix._floatArrays);
+		gl.uniform3fv(standardShader.buildingPosHIGH_loc, buildingGeoLocation.positionHIGH);
+		gl.uniform3fv(standardShader.buildingPosLOW_loc, buildingGeoLocation.positionLOW);
+
+		//if (skinLego.dataArrayBuffer === undefined) 
+		//{ continue; }
+
+		// if the building is highlighted, the use highlight oneColor4.*********************
+		if (ssao_idx === 1)
+		{
+			if (neoBuilding.isHighLighted)
+			{
+				gl.uniform1i(standardShader.bUse1Color_loc, true);
+				gl.uniform4fv(standardShader.oneColor4_loc, this.highLightColor4); //.***
+			}
+			else if (neoBuilding.isColorChanged)
+			{
+				gl.uniform1i(standardShader.bUse1Color_loc, true);
+				gl.uniform4fv(standardShader.oneColor4_loc, [neoBuilding.aditionalColor.r, neoBuilding.aditionalColor.g, neoBuilding.aditionalColor.b, neoBuilding.aditionalColor.a]); //.***
+			}
+			else
+			{
+				gl.uniform1i(standardShader.bUse1Color_loc, false);
+			}
+			//----------------------------------------------------------------------------------
+			renderTexture = true;
+			if (skinLego.texture !== undefined && skinLego.texture.texId)
+			{
+				gl.enableVertexAttribArray(standardShader.texCoord2_loc);
+				//gl.activeTexture(gl.TEXTURE2); 
+				gl.uniform1i(standardShader.hasTexture_loc, true);
+				if (lastExtureId !== skinLego.texture.texId)
+				{
+					gl.bindTexture(gl.TEXTURE_2D, skinLego.texture.texId);
+					lastExtureId = skinLego.texture.texId;
+				}
 			}
 			else 
 			{
-				// use the normal data.***
-				neoBuilding.point3dScratch = neoBuilding.bbox.getCenterPoint(neoBuilding.point3dScratch);
-				realBuildingPos = neoBuilding.transfMat.transformPoint3D(neoBuilding.point3dScratch, realBuildingPos );
+				if (magoManager.textureAux_1x1 !== undefined)
+				{
+					gl.enableVertexAttribArray(standardShader.texCoord2_loc);
+					//gl.activeTexture(gl.TEXTURE2); 
+					gl.uniform1i(standardShader.hasTexture_loc, true);
+					gl.bindTexture(gl.TEXTURE_2D, magoManager.textureAux_1x1);
+					//gl.uniform1i(standardShader.hasTexture_loc, false);
+					//gl.disableVertexAttribArray(standardShader.texCoord2_loc);
+					//renderTexture = false;
+				}
 			}
 		}
-		else 
+
+		this.renderLodBuilding(gl, skinLego, magoManager, standardShader, ssao_idx, renderTexture);
+		skinLego = undefined;
+		
+		if (ssao_idx === 1 && magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.ALL && magoManager.buildingSelected === neoBuilding)
 		{
-			//this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
-			neoBuilding.point3dScratch.set(0.0, 0.0, 50.0);
-			realBuildingPos = neoBuilding.geoLocationDataAux.tMatrix.transformPoint3D(neoBuilding.point3dScratch, realBuildingPos );
+			// active stencil buffer to draw silhouette.***
+			this.disableStencilBuffer(gl);
 		}
+	}
+};
+
+Renderer.prototype.enableStencilBuffer = function(gl)
+{
+	// Active stencil if the object is selected.
+	gl.enable(gl.STENCIL_TEST);
+	
+	gl.stencilFunc(gl.ALWAYS, 1, 1);
+	// (stencil-fail: replace), (stencil-pass & depth-fail: replace), (stencil-pass & depth-pass: replace).***
+	//gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
+	gl.stencilOp(gl.KEEP, gl.REPLACE, gl.REPLACE);
+	gl.enable(gl.POLYGON_OFFSET_FILL);
+	//gl.disable(gl.CULL_FACE);
+};
+
+Renderer.prototype.disableStencilBuffer = function(gl)
+{
+	gl.disable(gl.STENCIL_TEST);
+	gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
+	gl.disable(gl.POLYGON_OFFSET_FILL);
+	//gl.enable(gl.CULL_FACE);
+};
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param neoRefList_array 변수
+ * @param neoBuilding 변수
+ * @param magoManager 변수
+ * @param isInterior 변수
+ * @param standardShader 변수
+ * @param renderTexture 변수
+ * @param ssao_idx 변수
+ */
+Renderer.prototype.renderNeoRefListsAsimetricVersion = function(gl, neoReferencesMotherAndIndices, neoBuilding, magoManager,
+	isInterior, standardShader, renderTexture, ssao_idx, maxSizeToRender, lod, refMatrixIdxKey) 
+{
+	// render_neoRef
+	if (neoReferencesMotherAndIndices.neoRefsIndices === undefined)
+	{ return; }
+	
+	var neoRefsCount = neoReferencesMotherAndIndices.neoRefsIndices.length;
+	if (neoRefsCount === 0) 
+	{ return; }
+	
+	if (ssao_idx === 0) // do depth render.***
+	{
+		this.depthRenderNeoRefListsAsimetricVersion(gl, neoReferencesMotherAndIndices, neoBuilding, magoManager,
+			isInterior, standardShader, renderTexture, ssao_idx, maxSizeToRender, lod, refMatrixIdxKey);
+		return;
+	}
+
+	//var timeControlCounter = 0;
+
+	var cacheKeys_count;
+	var block_idx;
+	var block;
+	var current_tex_id;
+	var texFileLoadState;
+
+	gl.activeTexture(gl.TEXTURE2); // ...***
+	if (renderTexture) 
+	{
+		if (ssao_idx === 1) { gl.uniform1i(standardShader.hasTexture_loc, true); } //.***
 	}
 	else 
 	{
-		neoBuilding.point3dScratch = neoBuilding.bbox.getCenterPoint(neoBuilding.point3dScratch);
-		realBuildingPos = neoBuilding.transfMat.transformPoint3D(neoBuilding.point3dScratch, realBuildingPos );
+		gl.bindTexture(gl.TEXTURE_2D, magoManager.textureAux_1x1);
+	}
+	gl.bindTexture(gl.TEXTURE_2D, magoManager.textureAux_1x1);
+
+	var myBlocksList = neoReferencesMotherAndIndices.blocksList;
+	if (myBlocksList === undefined)
+	{ return; }
+
+	if (myBlocksList.fileLoadState !== CODE.fileLoadState.PARSE_FINISHED) { return; }
+		
+	// New version. Use occlussion indices.***
+	//var visibleIndices_count = neoReferencesMotherAndIndices.neoRefsIndices.length; // no occludeCulling mode.***
+	var visibleIndices_count = neoReferencesMotherAndIndices.currentVisibleIndices.length;
+
+	for (var k=0; k<visibleIndices_count; k++) 
+	{
+		//var neoReference = neoReferencesMotherAndIndices.motherNeoRefsList[neoReferencesMotherAndIndices.neoRefsIndices[k]]; // no occludeCulling mode.***
+		var neoReference = neoReferencesMotherAndIndices.motherNeoRefsList[neoReferencesMotherAndIndices.currentVisibleIndices[k]];
+		if (neoReference === undefined)
+		{ continue; }
+		
+		if (neoReference.renderingFase === magoManager.renderingFase)
+		{ continue; }
+		if (neoReference.tMatrixAuxArray === undefined)
+		{
+			//neoReference.multiplyKeyTransformMatrix(refMatrixIdxKey, neoBuilding.geoLocationDataAux.rotMatrix);
+			// we must collect all the neoReferences that has no tMatrixAuxArray and make it.***
+			continue;
+		}
+
+		block_idx = neoReference._block_idx;
+		block = neoBuilding.motherBlocksArray[block_idx];
+
+		if (block === undefined)
+		{ continue; }
+
+		if (maxSizeToRender && (block.radius < maxSizeToRender))
+		{ continue; }
+		
+		if (magoManager.isCameraMoving && block.radius < magoManager.smallObjectSize && magoManager.objectSelected !== neoReference)
+		{ continue; }
+		
+		// Check if the texture is loaded.
+		//if(renderTexture)
+		{
+			//if (neoReference.texture !== undefined || neoReference.materialId != -1)
+			if (neoReference.hasTexture)// && neoReference.texture !== undefined)
+			{
+				// note: in the future use only "neoReference.materialId".
+				texFileLoadState = neoBuilding.manageNeoReferenceTexture(neoReference, magoManager);
+				if (texFileLoadState !== CODE.fileLoadState.LOADING_FINISHED)
+				{ continue; }
+			
+				if (neoReference.texture === undefined)
+				{ continue; }
+			
+				if (neoReference.texture.texId === undefined)
+				{ continue; }
+			}
+		}
+		
+		// Check the color or texture of reference object.
+		if (neoBuilding.isHighLighted)
+		{
+			gl.uniform1i(standardShader.hasTexture_loc, false); //.***
+			gl.uniform4fv(standardShader.color4Aux_loc, magoManager.highLightColor4);
+		}
+		else if (neoBuilding.isColorChanged)
+		{
+			gl.uniform1i(standardShader.hasTexture_loc, false); //.***
+			if (magoManager.objectSelected === neoReference) 
+			{
+				gl.uniform4fv(standardShader.color4Aux_loc, [255.0/255.0, 0/255.0, 0/255.0, 255.0/255.0]);
+			}
+			else
+			{
+				gl.uniform4fv(standardShader.color4Aux_loc, [neoBuilding.aditionalColor.r, neoBuilding.aditionalColor.g, neoBuilding.aditionalColor.b, neoBuilding.aditionalColor.a] );
+			}
+		}
+		else if (neoReference.aditionalColor)
+		{
+			gl.uniform1i(standardShader.hasTexture_loc, false); //.***
+			if (magoManager.objectSelected === neoReference) 
+			{
+				gl.uniform4fv(standardShader.color4Aux_loc, [255.0/255.0, 0/255.0, 0/255.0, 255.0/255.0]);
+			}
+			else
+			{
+				gl.uniform4fv(standardShader.color4Aux_loc, [neoReference.aditionalColor.r, neoReference.aditionalColor.g, neoReference.aditionalColor.b, neoReference.aditionalColor.a] );
+			}
+		}
+		else
+		{
+			// Normal rendering.
+			if (magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.OBJECT && magoManager.objectSelected === neoReference) 
+			{
+				gl.uniform1i(standardShader.hasTexture_loc, false); //.***
+				gl.uniform4fv(standardShader.color4Aux_loc, [255.0/255.0, 0/255.0, 0/255.0, 255.0/255.0]);
+				
+				// Active stencil if the object is selected.
+				this.enableStencilBuffer(gl);
+			}
+			else if (magoManager.magoPolicy.colorChangedObjectId === neoReference.objectId)
+			{
+				gl.uniform1i(standardShader.hasTexture_loc, false); //.***
+				gl.uniform4fv(standardShader.color4Aux_loc, [magoManager.magoPolicy.color[0], magoManager.magoPolicy.color[1], magoManager.magoPolicy.color[2], 1.0]);
+			}
+			else
+			{
+				
+				if (renderTexture && neoReference.hasTexture) 
+				{
+					if (neoReference.texture !== undefined && neoReference.texture.texId !== undefined) 
+					{
+						//textureBinded = true;
+						gl.uniform1i(standardShader.hasTexture_loc, true); //.***
+						if (current_tex_id !== neoReference.texture.texId) 
+						{
+							gl.bindTexture(gl.TEXTURE_2D, neoReference.texture.texId);
+							current_tex_id = neoReference.texture.texId;
+						}
+					}
+					else 
+					{
+						gl.uniform1i(standardShader.hasTexture_loc, false); //.***
+						gl.uniform4fv(standardShader.color4Aux_loc, [0.8, 0.8, 0.8, 1.0]);
+					}
+				}
+				else 
+				{
+					// if no render texture, then use a color.***
+					if (neoReference.color4) 
+					{
+						gl.uniform1i(standardShader.hasTexture_loc, false); //.***
+						gl.uniform4fv(standardShader.color4Aux_loc, [neoReference.color4.r/255.0, neoReference.color4.g/255.0, neoReference.color4.b/255.0, neoReference.color4.a/255.0]);
+					}
+					else
+					{
+						gl.uniform1i(standardShader.hasTexture_loc, false); //.***
+						gl.uniform4fv(standardShader.color4Aux_loc, [0.8, 0.8, 0.8, 1.0]);
+					}
+				}
+			}
+		}
+		
+		cacheKeys_count = block.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray.length;
+		// Must applicate the transformMatrix of the reference object.***
+		
+		// test.***
+		//if(neoBuilding.buildingId === "testID")
+		//neoReference.refMatrixType = 0;
+	
+		gl.uniform1i(standardShader.refMatrixType_loc, neoReference.refMatrixType);
+		if (refMatrixIdxKey === undefined || refMatrixIdxKey === -1)
+		{ // never enter here...
+			if (neoReference.refMatrixType === 1)
+			{ gl.uniform3fv(standardShader.refTranslationVec_loc, neoReference.refTranslationVec); }
+			else if (neoReference.refMatrixType === 2)
+			{ gl.uniformMatrix4fv(standardShader.RefTransfMatrix, false, neoReference._matrix4._floatArrays); } 
+		}
+		else 
+		{
+			if (neoReference.refMatrixType === 1)
+			{ gl.uniform3fv(standardShader.refTranslationVec_loc, neoReference.refTranslationVec); }
+			else if (neoReference.refMatrixType === 2)
+			{ gl.uniformMatrix4fv(standardShader.RefTransfMatrix, false, neoReference.tMatrixAuxArray[refMatrixIdxKey]._floatArrays); }
+		}
+
+		if (neoReference.moveVector !== undefined) 
+		{
+			gl.uniform1i(standardShader.hasAditionalMov_loc, true);
+			gl.uniform3fv(standardShader.aditionalMov_loc, [neoReference.moveVector.x, neoReference.moveVector.y, neoReference.moveVector.z]); //.***
+		}
+		else 
+		{
+			gl.uniform1i(standardShader.hasAditionalMov_loc, false);
+			gl.uniform3fv(standardShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
+		}
+
+		for (var n=0; n<cacheKeys_count; n++) // Original.***
+		{
+			//var mesh_array = block.viArraysContainer._meshArrays[n];
+			this.vbo_vi_cacheKey_aux = block.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray[n];
+			if (!this.vbo_vi_cacheKey_aux.isReadyPositions(gl, magoManager.vboMemoryManager) || !this.vbo_vi_cacheKey_aux.isReadyNormals(gl, magoManager.vboMemoryManager) || !this.vbo_vi_cacheKey_aux.isReadyFaces(gl, magoManager.vboMemoryManager))
+			{ continue; }
+			
+			// Positions.***
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshVertexCacheKey);
+			gl.vertexAttribPointer(standardShader.position3_loc, 3, gl.FLOAT, false, 0, 0);
+			//gl.vertexAttribPointer(standardShader.attribLocationCacheObj["position"], 3, gl.FLOAT, false,0,0);
+
+			// Normals.***
+			if (standardShader.normal3_loc !== -1) 
+			{
+				gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshNormalCacheKey);
+				gl.vertexAttribPointer(standardShader.normal3_loc, 3, gl.BYTE, true, 0, 0);
+			}
+
+			if (renderTexture && neoReference.hasTexture) 
+			{
+				if (block.vertexCount <= neoReference.vertexCount) 
+				{
+					var refVboData = neoReference.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray[n];
+					if (!refVboData.isReadyTexCoords(gl, magoManager.vboMemoryManager))
+					{ continue; }
+
+					gl.enableVertexAttribArray(standardShader.texCoord2_loc);
+					gl.bindBuffer(gl.ARRAY_BUFFER, refVboData.meshTexcoordsCacheKey);
+					gl.vertexAttribPointer(standardShader.texCoord2_loc, 2, gl.FLOAT, false, 0, 0);
+				}
+				else 
+				{
+					if (standardShader.texCoord2_loc !== -1) { gl.disableVertexAttribArray(standardShader.texCoord2_loc); }
+				}
+			}
+			else 
+			{
+				if (standardShader.texCoord2_loc !== -1) { gl.disableVertexAttribArray(standardShader.texCoord2_loc); }
+			}
+
+			// Indices.***
+			var indicesCount;
+			if (magoManager.isCameraMoving)// && !isInterior && magoManager.isCameraInsideBuilding)
+			{
+				if (magoManager.objectSelected === neoReference)
+				{ indicesCount = this.vbo_vi_cacheKey_aux.indicesCount; }
+				else
+				{
+					indicesCount = this.vbo_vi_cacheKey_aux.bigTrianglesIndicesCount;
+					if (indicesCount > this.vbo_vi_cacheKey_aux.indicesCount)
+					{ indicesCount = this.vbo_vi_cacheKey_aux.indicesCount; }
+				}
+			}
+			else
+			{
+				//if(lod > 0)
+				//{
+				//	indicesCount = this.vbo_vi_cacheKey_aux.bigTrianglesIndicesCount;
+				//	if(indicesCount > this.vbo_vi_cacheKey_aux.indicesCount)
+				//		indicesCount = this.vbo_vi_cacheKey_aux.indicesCount;
+				//}
+				//else indicesCount = this.vbo_vi_cacheKey_aux.indicesCount;
+				if (magoManager.thereAreUrgentOctrees)
+				{
+					indicesCount = this.vbo_vi_cacheKey_aux.bigTrianglesIndicesCount;
+					if (indicesCount > this.vbo_vi_cacheKey_aux.indicesCount)
+					{ indicesCount = this.vbo_vi_cacheKey_aux.indicesCount; }
+				}
+				else 
+				{
+					indicesCount = this.vbo_vi_cacheKey_aux.indicesCount;
+				}
+			}
+
+			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshFacesCacheKey);
+			gl.drawElements(gl.TRIANGLES, indicesCount, gl.UNSIGNED_SHORT, 0); // Fill.***
+			//gl.drawElements(gl.LINES, this.vbo_vi_cacheKey_aux.indicesCount, gl.UNSIGNED_SHORT, 0); // Wireframe.***
+		}
+
+		neoReference.swapRenderingFase();
+		if (magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.OBJECT && magoManager.objectSelected === neoReference)
+		{
+			this.disableStencilBuffer(gl);
+			gl.disable(gl.POLYGON_OFFSET_FILL);
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param neoRefList_array 변수
+ * @param neoBuilding 변수
+ * @param magoManager 변수
+ * @param isInterior 변수
+ * @param standardShader 변수
+ * @param renderTexture 변수
+ * @param ssao_idx 변수
+ */
+Renderer.prototype.depthRenderNeoRefListsAsimetricVersion = function(gl, neoReferencesMotherAndIndices, neoBuilding, magoManager,
+	isInterior, standardShader, renderTexture, ssao_idx, maxSizeToRender, lod, refMatrixIdxKey) 
+{
+	// render_neoRef
+	var neoRefsCount = neoReferencesMotherAndIndices.neoRefsIndices.length;
+	if (neoRefsCount === 0) 
+	{ return; }
+	
+
+	var cacheKeys_count;
+	//var reference;
+	var block_idx;
+	var block;
+	//var vbo_ByteColorsCacheKeys_Container;
+
+	//var geometryDataPath = magoManager.readerWriter.geometryDataPath;
+
+	for (var j=0; j<1; j++) 
+	{
+		var myBlocksList = neoReferencesMotherAndIndices.blocksList;
+		if (myBlocksList === undefined)
+		{ continue; }
+
+		if (myBlocksList.fileLoadState !== CODE.fileLoadState.PARSE_FINISHED) { continue; }
+			
+		// New version. Use occlussion indices.***
+		//var visibleIndices_count = neoReferencesMotherAndIndices.neoRefsIndices.length; // no occludeCulling mode.***
+		var visibleIndices_count = neoReferencesMotherAndIndices.currentVisibleIndices.length;
+
+		for (var k=0; k<visibleIndices_count; k++) 
+		{
+			//var neoReference = neoReferencesMotherAndIndices.motherNeoRefsList[neoReferencesMotherAndIndices.neoRefsIndices[k]]; // no occludeCulling mode.***
+			var neoReference = neoReferencesMotherAndIndices.motherNeoRefsList[neoReferencesMotherAndIndices.currentVisibleIndices[k]];
+			if (neoReference === undefined) 
+			{ continue; }
+
+			if (neoReference.renderingFase === magoManager.renderingFase)
+			{ continue; }
+			
+			if (neoReference.tMatrixAuxArray === undefined)
+			{
+				//neoReference.multiplyKeyTransformMatrix(refMatrixIdxKey, neoBuilding.geoLocationDataAux.rotMatrix);
+				// we must collect all the neoReferences that has no tMatrixAuxArray and make it.***
+				continue;
+			}
+
+			block_idx = neoReference._block_idx;
+			block = neoBuilding.motherBlocksArray[block_idx];
+
+			if (block === undefined)
+			{ continue; }
+
+			if (maxSizeToRender && (block.radius < maxSizeToRender))
+			{ continue; }
+			
+			if (magoManager.isCameraMoving && block.radius < magoManager.smallObjectSize && magoManager.objectSelected !== neoReference)
+			{ continue; }
+			
+			gl.uniform1i(standardShader.hasTexture_loc, false); //.***
+			gl.uniform4fv(standardShader.color4Aux_loc, [0.0/255.0, 0.0/255.0, 0.0/255.0, 1.0]);
+
+
+			cacheKeys_count = block.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray.length;
+			// Must applicate the transformMatrix of the reference object.***
+			// Must applicate the transformMatrix of the reference object.***
+			gl.uniform1i(standardShader.refMatrixType_loc, neoReference.refMatrixType);
+			if (refMatrixIdxKey === undefined || refMatrixIdxKey === -1)
+			{ // never enter here...
+				if (neoReference.refMatrixType === 1)
+				{ gl.uniform3fv(standardShader.refTranslationVec_loc, neoReference.refTranslationVec); }
+				else if (neoReference.refMatrixType === 2)
+				{ gl.uniformMatrix4fv(standardShader.RefTransfMatrix, false, neoReference._matrix4._floatArrays); } 
+			}
+			else 
+			{
+				if (neoReference.refMatrixType === 1)
+				{ gl.uniform3fv(standardShader.refTranslationVec_loc, neoReference.refTranslationVec); }
+				else if (neoReference.refMatrixType === 2)
+				{ gl.uniformMatrix4fv(standardShader.RefTransfMatrix, false, neoReference.tMatrixAuxArray[refMatrixIdxKey]._floatArrays); }
+			}
+
+			if (neoReference.moveVector !== undefined) 
+			{
+				gl.uniform1i(standardShader.hasAditionalMov_loc, true);
+				gl.uniform3fv(standardShader.aditionalMov_loc, [neoReference.moveVector.x, neoReference.moveVector.y, neoReference.moveVector.z]); //.***
+			}
+			else 
+			{
+				gl.uniform1i(standardShader.hasAditionalMov_loc, false);
+				gl.uniform3fv(standardShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
+			}
+
+			for (var n=0; n<cacheKeys_count; n++) // Original.***
+			{
+				//var mesh_array = block.viArraysContainer._meshArrays[n];
+				this.vbo_vi_cacheKey_aux = block.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray[n];
+				if (!this.vbo_vi_cacheKey_aux.isReadyPositions(gl, magoManager.vboMemoryManager))
+				{ continue; }
+
+				if (!this.vbo_vi_cacheKey_aux.isReadyFaces(gl, magoManager.vboMemoryManager))
+				{ continue; }
+				
+				// Positions.***
+				gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshVertexCacheKey);
+				gl.vertexAttribPointer(standardShader.position3_loc, 3, gl.FLOAT, false, 0, 0);
+				
+				// Indices.***
+				var indicesCount;
+				if (magoManager.isCameraMoving)// && !isInterior && magoManager.isCameraInsideBuilding)
+				{
+					if (magoManager.objectSelected === neoReference)
+					{ indicesCount = this.vbo_vi_cacheKey_aux.indicesCount; }
+					else 
+					{
+						indicesCount = this.vbo_vi_cacheKey_aux.bigTrianglesIndicesCount;
+						if (indicesCount > this.vbo_vi_cacheKey_aux.indicesCount)
+						{ indicesCount = this.vbo_vi_cacheKey_aux.indicesCount; }
+						
+						//if(indicesCount === 0)
+						//	indicesCount = this.vbo_vi_cacheKey_aux.indicesCount;
+					}
+				}
+				else
+				{
+					indicesCount = this.vbo_vi_cacheKey_aux.indicesCount;
+				}
+
+				gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshFacesCacheKey);
+				gl.drawElements(gl.TRIANGLES, indicesCount, gl.UNSIGNED_SHORT, 0); // Fill.***
+				//gl.drawElements(gl.LINES, this.vbo_vi_cacheKey_aux.indicesCount, gl.UNSIGNED_SHORT, 0); // Wireframe.***
+			}
+
+			neoReference.swapRenderingFase();
+		}
+	}
+};
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param neoRefList_array 변수
+ * @param neoBuilding 변수
+ * @param magoManager 변수
+ * @param isInterior 변수
+ * @param standardShader 변수
+ */
+Renderer.prototype.renderNeoRefListsAsimetricVersionColorSelection = function(gl, lowestOctree, node, magoManager, isInterior, standardShader, maxSizeToRender, refMatrixIdxKey, glPrimitive) 
+{
+	var neoBuilding = node.data.neoBuilding;
+	// render_neoRef
+	var neoReferencesMotherAndIndices = lowestOctree.neoReferencesMotherAndIndices;
+	if (neoReferencesMotherAndIndices === undefined)
+	{ return; }
+	
+	var neoRefsCount = neoReferencesMotherAndIndices.neoRefsIndices.length;
+	if (neoRefsCount === 0) { return; }
+
+	//var timeControlCounter = 0;
+	//var geometryDataPath = magoManager.readerWriter.geometryDataPath;
+	var myBlocksList = neoReferencesMotherAndIndices.blocksList;
+
+	if (myBlocksList === undefined)
+	{ return; }
+
+	if (myBlocksList.fileLoadState === CODE.fileLoadState.LOADING_FINISHED && !magoManager.isCameraMoving)
+	{ return; }
+
+	if (myBlocksList.fileLoadState !== CODE.fileLoadState.PARSE_FINISHED) { return; }
+
+	// New version. Use occlussion indices.***
+	var visibleIndices_count = neoReferencesMotherAndIndices.currentVisibleIndices.length;
+	var selCandidates = magoManager.selectionCandidates;
+	var idxKey;
+
+	for (var k=0; k<visibleIndices_count; k++) 
+	{
+		var neoReference = neoReferencesMotherAndIndices.motherNeoRefsList[neoReferencesMotherAndIndices.currentVisibleIndices[k]];
+		
+		if (neoReference.renderingFase === magoManager.renderingFase)
+		{ continue; }
+	
+		neoReference.selColor4 = magoManager.selectionColor.getAvailableColor(neoReference.selColor4); // new.
+		idxKey = magoManager.selectionColor.decodeColor3(neoReference.selColor4.r, neoReference.selColor4.g, neoReference.selColor4.b);
+		selCandidates.setCandidates(idxKey, neoReference, lowestOctree, neoBuilding, node);
+		
+		if (neoReference.selColor4) 
+		{
+			//if(neoReference.color4.a < 255) // if transparent object, then skip. provisional.***
+			//gl.uniform1i(standardShader.hasTexture_loc, false); //.***
+			gl.uniform4fv(standardShader.color4Aux_loc, [neoReference.selColor4.r/255.0, neoReference.selColor4.g/255.0, neoReference.selColor4.b/255.0, 1.0]);
+		}
+
+		this.renderNeoReferenceAsimetricVersionColorSelection(gl, neoReference, neoReferencesMotherAndIndices, neoBuilding, magoManager, standardShader, maxSizeToRender, refMatrixIdxKey, glPrimitive);
+		
+		neoReference.swapRenderingFase();
 	}
 
-	return realBuildingPos;
+	//gl.enable(gl.DEPTH_TEST);
 };
-*/
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param neoRefList_array 변수
+ * @param neoBuilding 변수
+ * @param magoManager 변수
+ * @param isInterior 변수
+ * @param standardShader 변수
+ */
+Renderer.prototype.renderNeoReferenceAsimetricVersionColorSelection = function(gl, neoReference, neoReferencesMotherAndIndices, neoBuilding, magoManager, standardShader, maxSizeToRender, refMatrixIdxKey, glPrimitive) 
+{
+	if (neoReferencesMotherAndIndices === undefined)
+	{ return; }
+
+	var cacheKeys_count;
+	var block_idx;
+	var block;
+
+	var myBlocksList = neoReferencesMotherAndIndices.blocksList;
+
+	if (myBlocksList === undefined)
+	{ return; }
+
+	if (myBlocksList.fileLoadState === CODE.fileLoadState.LOADING_FINISHED && !magoManager.isCameraMoving)
+	{ return; }
+
+	if (myBlocksList.fileLoadState !== CODE.fileLoadState.PARSE_FINISHED) 
+	{ return; }
+
+	if (neoReference=== undefined) 
+	{ return; }
+
+	block_idx = neoReference._block_idx;
+	block = neoBuilding.motherBlocksArray[block_idx];
+
+	if (block === undefined)
+	{ return; }
+
+	if (maxSizeToRender && (block.radius < maxSizeToRender))
+	{ return; }
+	
+	if (magoManager.isCameraMoving && block.isSmallObj && magoManager.objectSelected !== neoReference)
+	{ return; }
+	
+	// End checking textures loaded.------------------------------------------------------------------------------------
+	cacheKeys_count = block.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray.length;
+	// Must applicate the transformMatrix of the reference object.***
+
+	gl.uniform1i(standardShader.refMatrixType_loc, neoReference.refMatrixType);
+	if (refMatrixIdxKey === undefined || refMatrixIdxKey === -1)
+	{ // never enter here...
+		if (neoReference.refMatrixType === 1)
+		{ gl.uniform3fv(standardShader.refTranslationVec_loc, neoReference.refTranslationVec); }
+		else if (neoReference.refMatrixType === 2)
+		{ gl.uniformMatrix4fv(standardShader.RefTransfMatrix, false, neoReference._matrix4._floatArrays); } 
+	}
+	else 
+	{
+		if (neoReference.tMatrixAuxArray === undefined)
+		{
+			//neoReference.multiplyKeyTransformMatrix(refMatrixIdxKey, neoBuilding.geoLocationDataAux.rotMatrix);
+			// we must collect all the neoReferences that has no tMatrixAuxArray and make it.***
+			return;
+		}
+		
+		if (neoReference.refMatrixType === 1)
+		{ gl.uniform3fv(standardShader.refTranslationVec_loc, neoReference.refTranslationVec); }
+		else if (neoReference.refMatrixType === 2)
+		{ gl.uniformMatrix4fv(standardShader.RefTransfMatrix, false, neoReference.tMatrixAuxArray[refMatrixIdxKey]._floatArrays); }
+
+	}
+
+	if (neoReference.moveVector !== undefined) 
+	{
+		gl.uniform1i(standardShader.hasAditionalMov_loc, true);
+		gl.uniform3fv(standardShader.aditionalMov_loc, [neoReference.moveVector.x, neoReference.moveVector.y, neoReference.moveVector.z]); //.***
+	}
+	else 
+	{
+		gl.uniform1i(standardShader.hasAditionalMov_loc, false);
+		gl.uniform3fv(standardShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
+	}
+
+	for (var n=0; n<cacheKeys_count; n++) // Original.***
+	{
+		//var mesh_array = block.viArraysContainer._meshArrays[n];
+		this.vbo_vi_cacheKey_aux = block.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray[n];
+
+		if (!this.vbo_vi_cacheKey_aux.isReadyPositions(gl, magoManager.vboMemoryManager))
+		{ continue; }
+		
+		if (!this.vbo_vi_cacheKey_aux.isReadyFaces(gl, magoManager.vboMemoryManager))
+		{ continue; }
+
+		// Positions.***
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshVertexCacheKey);
+		gl.vertexAttribPointer(standardShader.position3_loc, 3, gl.FLOAT, false, 0, 0);
+
+		// Indices.***
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshFacesCacheKey);
+		gl.drawElements(glPrimitive, this.vbo_vi_cacheKey_aux.indicesCount, gl.UNSIGNED_SHORT, 0); 
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param neoRefList_array 변수
+ * @param neoBuilding 변수
+ * @param magoManager 변수
+ * @param isInterior 변수
+ * @param standardShader 변수
+ * @param renderTexture 변수
+ * @param ssao_idx 변수
+ */
+Renderer.prototype.renderLodBuilding = function(gl, lodBuilding, magoManager, shader, ssao_idx, renderTexture) 
+{
+	if (lodBuilding.vbo_vicks_container.vboCacheKeysArray.length === 0) 
+	{
+		return;
+	}
+	gl.frontFace(gl.CCW);
+	// ssao_idx = -1 -> pickingMode.***
+	// ssao_idx = 0 -> depth.***
+	// ssao_idx = 1 -> ssao.***
+
+	if (ssao_idx === 0) // depth.***
+	{
+		// 1) Position.*********************************************
+		var vbo_vicky = lodBuilding.vbo_vicks_container.vboCacheKeysArray[0]; // there are only one.***
+		if (!vbo_vicky.isReadyPositions(gl, magoManager.vboMemoryManager))
+		{ return; }
+
+		var vertices_count = vbo_vicky.vertexCount;
+		if (vertices_count === 0) 
+		{
+			return;
+		}
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshVertexCacheKey);
+		gl.vertexAttribPointer(shader.position3_loc, 3, gl.FLOAT, false, 0, 0);
+		gl.drawArrays(gl.TRIANGLES, 0, vertices_count);
+	}
+	else if (ssao_idx === 1) // ssao.***
+	{
+		var vbo_vicky = lodBuilding.vbo_vicks_container.vboCacheKeysArray[0]; // there are only one.***
+		var vertices_count = vbo_vicky.vertexCount;
+
+		if (vertices_count === 0) 
+		{
+			return;
+		}
+		
+		if (!vbo_vicky.isReadyPositions(gl, magoManager.vboMemoryManager))
+		{ return; }
+		
+		if (!vbo_vicky.isReadyNormals(gl, magoManager.vboMemoryManager))
+		{ return; }
+		
+		if (!renderTexture && !vbo_vicky.isReadyColors(gl, magoManager.vboMemoryManager))
+		{ return; }
+		
+		// 4) Texcoord.*********************************************
+		if (renderTexture)
+		{
+			if (!vbo_vicky.isReadyTexCoords(gl, magoManager.vboMemoryManager))
+			{ return; }
+		}
+
+		gl.disableVertexAttribArray(shader.color4_loc);
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshVertexCacheKey);
+		gl.vertexAttribPointer(shader.position3_loc, 3, gl.FLOAT, false, 0, 0);
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshNormalCacheKey);
+		gl.vertexAttribPointer(shader.normal3_loc, 3, gl.BYTE, true, 0, 0);
+
+		if (vbo_vicky.meshColorCacheKey !== undefined )
+		{
+			gl.enableVertexAttribArray(shader.color4_loc);
+			gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshColorCacheKey);
+			gl.vertexAttribPointer(shader.color4_loc, 4, gl.UNSIGNED_BYTE, true, 0, 0);
+		}
+		
+		if (renderTexture && vbo_vicky.meshTexcoordsCacheKey)
+		{
+			gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshTexcoordsCacheKey);
+			gl.vertexAttribPointer(shader.texCoord2_loc, 2, gl.FLOAT, false, 0, 0);
+		}
+
+		gl.drawArrays(gl.TRIANGLES, 0, vertices_count);
+		//gl.drawArrays(gl.LINES, 0, vertices_count);
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param neoRefList_array 변수
+ * @param neoBuilding 변수
+ * @param magoManager 변수
+ * @param isInterior 변수
+ * @param standardShader 변수
+ * @param renderTexture 변수
+ * @param ssao_idx 변수
+ */
+Renderer.prototype.renderLodBuildingColorSelection = function(gl, lodBuilding, magoManager, shader)
+{
+	if (lodBuilding.vbo_vicks_container.vboCacheKeysArray.length === 0) 
+	{
+		return;
+	}
+	gl.frontFace(gl.CCW);
+
+	// 1) Position.*********************************************
+	var vbo_vicky = lodBuilding.vbo_vicks_container.vboCacheKeysArray[0]; // there are only one.***
+	if (!vbo_vicky.isReadyPositions(gl, magoManager.vboMemoryManager))
+	{ return; }
+
+	var vertices_count = vbo_vicky.vertexCount;
+	if (vertices_count === 0) 
+	{
+		return;
+	}
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshVertexCacheKey);
+	gl.vertexAttribPointer(shader.position3_loc, 3, gl.FLOAT, false, 0, 0);
+	gl.drawArrays(gl.TRIANGLES, 0, vertices_count);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param neoRefList_array 변수
+ * @param magoManager 변수
+ * @param shader 변수
+ * @param renderTexture 변수
+ * @param ssao_idx 변수
+ */
+Renderer.prototype.renderObject = function(gl, renderable, magoManager, shader, ssao_idx, bRenderLines)
+{
+	var vbo_vicks_container = renderable.getVboKeysContainer();
+	
+	if(vbo_vicks_container === undefined)
+		return;
+	
+	if (vbo_vicks_container.vboCacheKeysArray.length === 0) 
+		return;
+	
+	// ssao_idx = -1 -> pickingMode.***
+	// ssao_idx = 0 -> depth.***
+	// ssao_idx = 1 -> ssao.***
+
+	// 1) Position.*********************************************
+	var vbo_vicky = vbo_vicks_container.vboCacheKeysArray[0]; // there are only one.***
+	if (!vbo_vicky.isReadyPositions(gl, magoManager.vboMemoryManager))
+	{ return; }
+
+	var vertices_count = vbo_vicky.vertexCount;
+	if (vertices_count === 0) 
+		return;
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshVertexCacheKey);
+	gl.vertexAttribPointer(shader.position3_loc, 3, gl.FLOAT, false, 0, 0);
+	
+	if (ssao_idx === 1) // ssao.***
+	{
+		if (!vbo_vicky.isReadyNormals(gl, magoManager.vboMemoryManager)) // do this optional. TODO.***
+		{ 
+			return;
+		}
+		
+		if (!vbo_vicky.isReadyColors(gl, magoManager.vboMemoryManager)) // do this optional. TODO.***
+		{ 
+			gl.disableVertexAttribArray(shader.color4_loc);
+		}
+		else{
+			gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshColorCacheKey);
+			gl.vertexAttribPointer(shader.color4_loc, 4, gl.BYTE, true, 0, 0);
+		}
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshNormalCacheKey);
+		gl.vertexAttribPointer(shader.normal3_loc, 3, gl.BYTE, true, 0, 0);
+
+		//gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshColorCacheKey);
+		//gl.vertexAttribPointer(shader.color4_loc, 4, gl.UNSIGNED_BYTE, true, 0, 0);
+		
+		
+	}
+	
+	if(bRenderLines === undefined || bRenderLines === false)
+	{
+		if(vbo_vicky.indicesCount > 0)
+		{
+			if (!vbo_vicky.isReadyFaces(gl, magoManager.vboMemoryManager)) 
+			{ return; }
+			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vbo_vicky.meshFacesCacheKey);
+			gl.drawElements(gl.TRIANGLES, vbo_vicky.indicesCount, gl.UNSIGNED_SHORT, 0); // Fill.***
+		}
+		else{
+			gl.drawArrays(gl.TRIANGLES, 0, vertices_count);
+			//gl.drawArrays(gl.LINE_STRIP, 0, vertices_count);
+		}
+	}
+	else{
+		gl.drawArrays(gl.LINES, 0, vertices_count);
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * ??
+ * @class SceneState
+ */
+var SceneState = function() 
+{
+	if (!(this instanceof SceneState)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.gl;
+
+	// this contains the model matrices and camera position.***
+	this.modelViewProjRelToEyeMatrix = new Matrix4(); // created as identity matrix.***
+	this.modelViewRelToEyeMatrix = new Matrix4(); // created as identity matrix.***
+	this.modelViewRelToEyeMatrixInv = new Matrix4(); // created as identity matrix.***
+	this.modelViewMatrix = new Matrix4(); // created as identity matrix.***
+	this.modelViewMatrixInv = new Matrix4(); // created as identity matrix.***
+	this.projectionMatrix = new Matrix4(); // created as identity matrix.***
+	this.modelViewProjMatrix = new Matrix4(); // created as identity matrix.***
+	this.normalMatrix4 = new Matrix4(); // created as identity matrix.***
+	this.identityMatrix4 = new Matrix4(); // created as identity matrix.***
+
+	this.encodedCamPosHigh = new Float32Array([0.0, 0.0, 0.0]);
+	this.encodedCamPosLow = new Float32Array([0.0, 0.0, 0.0]);
+	
+	this.camera = new Camera();
+	this.drawingBufferWidth = new Int32Array([1000]);
+	this.drawingBufferHeight = new Int32Array([1000]);
+	
+	this.bMust = false;
+	
+	// webWorldWind vars.***
+	this.dc;
+	
+	// insertIssue states.***
+	this.insertIssueState = 0; // 0 = no started. 1 = started.***
+	
+	// provisionally.***
+	this.textureFlipYAxis = false;
+};
+
+'use strict';
+
+// NO USED.
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Selection
+ */
+var Selection = function() 
+{
+	if (!(this instanceof Selection)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.drawing_height;
+	this.drawing_width;
+	this.GAIA_selectFrameBuffer;
+	this.GAIA_selectRenderBuffer;
+	this.GAIA_selectRttTexture;
+	
+	this.currentByteColorPicked = new Uint8Array(4);
+	this.currentSelectedObj_idx = -1;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param gl 변수
+ * @param drawingBufferWidth 변수
+ * @param drawingBufferHeight 변수
+ */
+Selection.prototype.init = function(gl, drawingBufferWidth, drawingBufferHeight) 
+{
+	// http://www.webglacademy.com/courses.php?courses=0|1|20|2|3|4|23|5|6|7|10#10
+	this.drawing_height = drawingBufferHeight;
+	this.drawing_width = drawingBufferWidth;
+	//this.lastCapturedColourMap = new Uint8Array(this.drawing_width * this.drawing_height * 4);
+	this.GAIA_selectFrameBuffer = gl.createFramebuffer();
+	gl.bindFramebuffer(gl.FRAMEBUFFER, this.GAIA_selectFrameBuffer);
+	
+	this.GAIA_selectRenderBuffer = gl.createRenderbuffer();
+	gl.bindRenderbuffer(gl.RENDERBUFFER, this.GAIA_selectRenderBuffer);
+	gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, this.drawing_width, this.drawing_height);
+
+	this.GAIA_selectRttTexture = gl.createTexture();
+	gl.bindTexture(gl.TEXTURE_2D, this.GAIA_selectRttTexture);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.drawing_width, this.drawing_height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.GAIA_selectRttTexture, 0);
+	gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this.GAIA_selectRenderBuffer);
+	
+	// Finally...
+	gl.bindTexture(gl.TEXTURE_2D, null);
+	gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+};
+'use strict';
+
+/**
+ * SelectionCandidates
+ * 
+ * @alias SelectionCandidates
+ * @class SelectionCandidates
+ */
+var SelectionCandidates = function() 
+{
+	if (!(this instanceof SelectionCandidates)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.referencesMap = {};
+	this.octreesMap = {};
+	this.buildingsMap = {};
+	this.nodesMap = {};
+	
+	this.currentReferenceSelected;
+	this.currentOctreeSelected;
+	this.currentBuildingSelected;
+	this.currentNodeSelected;
+};
+
+/**
+ * SelectionCandidates
+ * 
+ * @alias SelectionCandidates
+ * @class SelectionCandidates
+ */
+SelectionCandidates.prototype.setCandidates = function(idxKey, reference, octree, building, node)
+{
+	if (reference)
+	{
+		this.referencesMap[idxKey] = reference;
+	}
+	
+	if (octree)
+	{
+		this.octreesMap[idxKey] = octree;
+	}
+	
+	if (building)
+	{
+		this.buildingsMap[idxKey] = building;
+	}
+	
+	if (node)
+	{
+		this.nodesMap[idxKey] = node;
+	}
+};
+
+/**
+ * SelectionCandidates
+ * 
+ * @alias SelectionCandidates
+ * @class SelectionCandidates
+ */
+SelectionCandidates.prototype.clearCandidates = function()
+{
+	this.referencesMap = {};
+	this.octreesMap = {};
+	this.buildingsMap = {};
+	this.nodesMap = {};
+};
+
+/**
+ * SelectionCandidates
+ * 
+ * @alias SelectionCandidates
+ * @class SelectionCandidates
+ */
+SelectionCandidates.prototype.selectObjects = function(idxKey)
+{
+	this.currentReferenceSelected = this.referencesMap[idxKey];
+	this.currentOctreeSelected = this.octreesMap[idxKey];
+	this.currentBuildingSelected = this.buildingsMap[idxKey];
+	this.currentNodeSelected = this.nodesMap[idxKey];
+};
+
+/**
+ * SelectionCandidates
+ * 
+ * @alias SelectionCandidates
+ * @class SelectionCandidates
+ */
+SelectionCandidates.prototype.clearCurrents = function(idxKey)
+{
+	this.currentReferenceSelected = undefined;
+	this.currentOctreeSelected = undefined;
+	this.currentBuildingSelected = undefined;
+	this.currentNodeSelected = undefined;
+};
 'use strict';
 
 /**
@@ -34581,6 +35112,11 @@ var Arc = function()
 	this.startAngleDeg;
 	this.sweepAngleDeg;
 	this.numPointsFor360Deg; // interpolation param.***
+	
+	// Alternative vars.***
+	this.startPoint; // if no exist radius, then startPoint define the radius.***
+	this.endPoint;
+	this.sweepSense; // 1=CCW, -1=CW.***
 };
 
 /**
@@ -34589,12 +35125,24 @@ var Arc = function()
  */
 Arc.prototype.deleteObjects = function()
 {
-	this.centerPoint.deleteObjects(); // Point3D.***
+	if(this.centerPoint !== undefined)
+		this.centerPoint.deleteObjects(); // Point3D.***
 	this.centerPoint = undefined;
 	this.radius = undefined;
 	this.startAngleDeg = undefined;
 	this.sweepAngleDeg = undefined;
 	this.numPointsFor360Deg = undefined;
+	
+	if(this.startPoint !== undefined)
+		this.startPoint.deleteObjects(); 
+	
+	this.startPoint = undefined;
+	
+	if(this.endPoint !== undefined)
+		this.endPoint.deleteObjects(); 
+	
+	this.endPoint = undefined;
+	this.sweepSense = undefined; // 1=CCW, -1=CW.***
 };
 
 /**
@@ -34628,6 +35176,41 @@ Arc.prototype.setStartAngleDegree = function(startAngleDegree)
 };
 
 /**
+ * Set the start angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setStartPoint = function(x, y)
+{
+	// If no exist startAngle, then use this to calculate startAngle.***
+	if (this.startPoint === undefined)
+	{ this.startPoint = new Point2D(); }
+	
+	this.startPoint.set(x, y);
+};
+
+/**
+ * Set the start angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setEndPoint = function(x, y)
+{
+	// If no exist sweepAngle, then use this to calculate sweepAngle.***
+	if (this.endPoint === undefined)
+	{ this.endPoint = new Point2D(); }
+	
+	this.endPoint.set(x, y);
+};
+
+/**
+ * Set the start angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setSense = function(sense)
+{
+	this.sweepSense = sense; // 1=CCW, -1=CW.***
+};
+
+/**
  * Set the sweep angle of the arc.
  * @class Arc
  */
@@ -34642,15 +35225,80 @@ Arc.prototype.setSweepAngleDegree = function(sweepAngleDegree)
  */
 Arc.prototype.getPoints = function(resultPointsArray, pointsCountFor360Deg)
 {
+	if(this.centerPoint === undefined)
+		return resultPointsArray;
+	
 	if(pointsCountFor360Deg)
 		this.numPointsFor360Deg = pointsCountFor360Deg
 
 	if(this.numPointsFor360Deg === undefined)
 		this.numPointsFor360Deg = 36;
 
+	// Check if exist strAng.*********************************************************************************
+	var strVector, endVector;
+	var strVectorModul;
+	if(this.startAngleDeg === undefined)
+	{
+		if(this.startPoint === undefined)
+			return resultPointsArray;
+		
+		strVector = new Point2D();
+		strVector.set(this.startPoint.x - this.centerPoint.x, this.startPoint.y - this.centerPoint.y);
+		strVectorModul = strVector.modul();
+		
+		var angRad = Math.acos(x/strVectorModul);
+		if(this.startPoint.y < 0)
+		{
+			angRad *= -1;
+		}
+		
+		this.startAngleDeg = angRad * 180.0/Math.PI;
+	}
+	
+	// Check if exist radius.*********************************************************************************
+	if(this.radius === undefined)
+	{
+		// calculate by startPoint.***
+		if(this.startPoint === undefined)
+			return resultPointsArray;
+		
+		if(strVectorModul === undefined)
+		{
+			if(strVector === undefined)
+			{
+				strVector = new Point2D();
+				strVector.set(this.startPoint.x - this.centerPoint.x, this.startPoint.y - this.centerPoint.y);
+			}
+			strVectorModul = strVector.modul();
+		}
+		
+		this.radius = strVectorModul;
+	}
+	
+	// check if exist sweepAng.*********************************************************************************
+	if(this.sweepAngleDeg === undefined)
+	{
+		if(this.endPoint === undefined || this.sweepSense === undefined)
+			return resultPointsArray;
+		
+		endVector = new Point2D();
+		endVector.set(this.endPoint.x - this.centerPoint.x, this.endPoint.y - this.endPoint.y);
+		var endVectorModul = endPoint.modul();
+		
+		var angRad = Math.acos(x/strVectorModul);
+		if(this.endPoint.y < 0)
+		{
+			angRad *= -1;
+		}
+		
+		this.sweepAngleDeg = angRad * 180.0/Math.PI;
+		
+		if(this.sweepSense < 0)
+			this.sweepAngleDeg = 360 - this.sweepAngleDeg;
+	}
+	
 	if(resultPointsArray === undefined)
 		resultPointsArray = [];
-
 	
 	var pointsArray = [];
 	
@@ -34721,6 +35369,215 @@ Arc.prototype.getPoints = function(resultPointsArray, pointsCountFor360Deg)
 	
 	return resultPointsArray;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 선
+ * @class AxisXYZ
+ */
+var AxisXYZ = function() 
+{
+	if (!(this instanceof AxisXYZ)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.xLength = 60;
+	this.yLength = 60;
+	this.zLength = 60;
+	this.vbo_vicks_container = new VBOVertexIdxCacheKeysContainer();
+	this.vboKey = this.vbo_vicks_container.newVBOVertexIdxCacheKey();
+};
+
+AxisXYZ.prototype.setDimension = function(xLength, yLength, zLength)
+{
+	this.xLength = xLength;
+	this.yLength = yLength;
+	this.zLength = zLength;
+};
+
+AxisXYZ.prototype.getVboKeysContainer = function()
+{
+	return this.vbo_vicks_container;
+};
+
+AxisXYZ.prototype.getVbo = function(resultVboKey)
+{
+	if(resultVboKey === undefined)
+		resultVboKey = new VBOVertexIdxCacheKey();
+	
+	if (resultVboKey.posVboDataArray === undefined)
+	{ resultVboKey.posVboDataArray = []; }
+
+	if (resultVboKey.colVboDataArray === undefined)
+	{ resultVboKey.colVboDataArray = []; }
+
+	if (resultVboKey.norVboDataArray === undefined)
+	{ resultVboKey.norVboDataArray = []; }
+
+	var positions = [];
+	var normals = [];
+	var colors = [];
+	
+	// xAxis.***
+	positions.push(0,0,0, this.xLength,0,0);
+	colors.push(255,0,0,255, 255,0,0,255);
+	normals.push(0,0,255, 0,0,255);
+	
+	// yAxis.***
+	positions.push(0,0,0, 0,this.yLength,0);
+	colors.push(0,255,0,255, 0,255,0,255);
+	normals.push(0,0,255, 0,0,255);
+	
+	// zAxis.***
+	positions.push(0,0,0, 0,0,this.zLength);
+	colors.push(0,0,255,255, 0,0,255,255);
+	normals.push(255,0,0, 255,0,0);
+
+	resultVboKey.posVboDataArray = Float32Array.from(positions);
+	resultVboKey.colVboDataArray = Int8Array.from(colors);
+	resultVboKey.norVboDataArray = Int8Array.from(normals);
+	
+	resultVboKey.vertexCount = 6;
+	
+	return resultVboKey;
+};
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class BoundingRectangle
+*/
+var BoundingRectangle = function(x, y) 
+{
+	if (!(this instanceof BoundingRectangle)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.minX = 100000;
+	this.maxX = -100000;
+	this.minY = 100000;
+	this.maxY = -100000;
+};
+
+BoundingRectangle.prototype.setInit = function(point)
+{
+	if(point === undefined)
+		return;
+	
+	this.minX = point.x;
+	this.minY = point.y;
+	this.maxX = point.x;
+	this.maxY = point.y;
+};
+
+BoundingRectangle.prototype.setInitByRectangle = function(bRect)
+{
+	if(bRect === undefined)
+		return;
+	
+	this.minX = bRect.minX;
+	this.minY = bRect.minY;
+	this.maxX = bRect.maxX;
+	this.maxY = bRect.maxY;
+};
+
+BoundingRectangle.prototype.addPoint = function(point)
+{
+	if(point === undefined)
+		return;
+	
+	if(point.x < this.minX)
+		this.minX = point.x;
+	else if(point.x > this.maxX)
+		this.maxX = point.x;
+	
+	if(point.y < this.minY)
+		this.minY = point.y;
+	else if(point.y > this.maxY)
+		this.maxY = point.y;
+};
+
+BoundingRectangle.prototype.addRectangle = function(bRect)
+{
+	if(bRect === undefined)
+		return;
+	
+	if(bRect.minX < this.minX)
+		this.minX = bRect.minX;
+	if(bRect.maxX > this.maxX)
+		this.maxX = bRect.maxX;
+	
+	if(bRect.minY < this.minY)
+		this.minY = bRect.minY;
+	if(bRect.maxY > this.maxY)
+		this.maxY = bRect.maxY;
+};
+
+BoundingRectangle.prototype.intersectsWithRectangle = function(bRect)
+{
+	if(bRect === undefined)
+		return false;
+	
+	if(bRect.minX > this.maxX)
+		return false;
+	else if(bRect.maxX < this.minX)
+		return false;
+	else if(bRect.minY > this.maxY)
+		return false;
+	else if(bRect.maxY < this.minY)
+		return false;
+	
+	return true;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -34852,6 +35709,247 @@ Line.prototype.isCoincidentPoint = function(point, error)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 선
+ * @class Line2D
+ */
+var Line2D = function() 
+{
+	if (!(this instanceof Line2D)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	// (x,y) = (x0,y0) + lambda * (u, v);
+	this.point = new Point2D();
+	this.direction = new Point2D();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param dx 변수
+ * @param dy 변수
+ */
+Line2D.prototype.setPointAndDir = function(px, py, dx, dy) 
+{
+	this.point.set(px, py);
+	this.direction.set(dx, dy);
+	this.direction.unitary();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.getPerpendicularRight = function(point) 
+{
+	var perpendicular = new Line2D();
+	
+	if(point)
+		perpendicular.point.set(point.x, point.y);
+	else
+		perpendicular.point.set(this.point.x, this.point.y);
+	
+	perpendicular.direction.set(this.direction.y, -this.direction.x);
+	return perpendicular;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.getPerpendicularLeft = function(point) 
+{
+	var perpendicular = new Line2D();
+	
+	if(point)
+		perpendicular.point.set(point.x, point.y);
+	else
+		perpendicular.point.set(this.point.x, this.point.y);
+	
+	perpendicular.direction.set(-this.direction.y, this.direction.x);
+	return perpendicular;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.getProjectedPoint = function(point, projectedPoint) 
+{
+	if(projectedPoint === undefined)
+		projectedPoint = new Point2D();
+	
+	var perpendicular = this.getPerpendicularLeft(point);
+	projectedPoint = this.intersectionWithLine(perpendicular, projectedPoint);
+	
+	return projectedPoint;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.isCoincidentPoint = function(point, error) 
+{
+	if(point === undefined)
+		return false;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	var projectedPoint = this.getProjectedPoint(point, projectedPoint);
+	var squaredDist = point.squareDistToPoint(projectedPoint);
+	
+	if(squaredDist < error*error)
+		return true;
+
+	return false;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.isParallelToLine = function(line) 
+{
+	if(line === undefined)
+		return false;
+	
+	var zero = 10E-10;
+	var angRad = this.direction.angleRadToVector(line.direction);
+	
+	// if angle is zero or 180 degree, then this is parallel to "line".***
+	if(angRad < zero || Math.abs(angRad - Math.PI) < zero)
+		return true;
+	
+	return false;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.intersectionWithLine = function(line, resultIntersectPoint) 
+{
+	if(line === undefined)
+		return undefined;
+	
+	// 1rst, check that this is not parallel to "line".***
+	if(this.isParallelToLine(line))
+		return undefined;
+	
+	// now, check if this or "line" are vertical or horizontal.***
+	var intersectX;
+	var intersectY;
+	
+	var zero = 10E-10;
+	if(Math.abs(this.direction.x) < zero)
+	{
+		// this is a vertical line.***
+		var slope = line.direction.y / line.direction.x;
+		var b = line.point.y - slope * line.point.x;
+		
+		intersectX = this.point.x;
+		intersectY = slope * this.point.x + b;
+	}
+	else if(Math.abs(this.direction.y) < zero)
+	{
+		// this is a horizontal line.***
+		// must check if the "line" is vertical.***
+		if(Math.abs(line.direction.x) < zero)
+		{
+			// "line" is vertical.***
+			intersectX = line.point.x;
+			intersectY = this.point.y;
+		}
+		else{
+			var slope = line.direction.y / line.direction.x;
+			var b = line.point.y - slope * line.point.x;
+			
+			intersectX = (this.point.y - b)/slope;
+			intersectY = this.point.y;
+		}	
+	}
+	else{
+		// this is oblique.***
+		if(Math.abs(line.direction.x) < zero)
+		{
+			// "line" is vertical.***
+			var mySlope = this.direction.y / this.direction.x;
+			var myB = this.point.y - mySlope * this.point.x;
+			intersectX = line.point.x;
+			intersectY = line.point.x * mySlope + myB;
+		}
+		else{
+			var mySlope = this.direction.y / this.direction.x;
+			var myB = this.point.y - mySlope * this.point.x;
+			
+			var slope = line.direction.y / line.direction.x;
+			var b = line.point.y - slope * line.point.x;
+			
+			intersectX = (myB - b)/ (slope - mySlope);
+			intersectY = slope * intersectX + b;
+		}
+	}
+	
+	if(resultIntersectPoint === undefined)
+		resultIntersectPoint = new Point2D();
+	
+	resultIntersectPoint.set(intersectX, intersectY);
+	return resultIntersectPoint;
+};
 
 
 
@@ -35287,6 +36385,53 @@ Point2D.prototype.scalarProduct = function(point)
 	return scalarProd;
 };
 
+/**
+ * nomal 계산
+ * @param vector 변수
+ */
+Point2D.prototype.angleRadToVector = function(vector) 
+{
+	if(vector === undefined)
+		return undefined;
+	
+	//******************************************************
+	//var scalarProd = this.scalarProduct(vector);
+	var myModul = this.getModul();
+	var vecModul = vector.getModul();
+	
+	// calcule by cos.***
+	//var cosAlfa = scalarProd / (myModul * vecModul); 
+	//var angRad = Math.acos(cosAlfa);
+	//var angDeg = alfa * 180.0/Math.PI;
+	//------------------------------------------------------
+	var error = 10E-10;
+	if(myModul < error || vecModul < error)
+		return undefined;
+	
+	return Math.acos(this.scalarProduct(vector) / (myModul * vecModul));
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2D.prototype.angleDegToVector = function(vector) 
+{
+	if(vector === undefined)
+		return undefined;
+	
+	var angRad = this.angleRadToVector(vector);
+	
+	if(angRad === undefined)
+		return undefined;
+		
+	return angRad * 180.0/Math.PI;
+};
+
+
+
 
 
 
@@ -35362,6 +36507,16 @@ Point2DList.prototype.deleteObjects = function()
 	this.pointsArray = undefined;
 };
 
+Point2DList.prototype.newPoint = function(x, y)
+{
+	if(this.pointsArray === undefined)
+		this.pointsArray = [];
+	
+	var point = new Point2D(x, y);
+	this.pointsArray.push(point);
+	return point;
+};
+
 Point2DList.prototype.getPoint = function(idx)
 {
 	return this.pointsArray[idx];
@@ -35435,8 +36590,193 @@ Point2DList.prototype.getSegment = function(idx, resultSegment)
 	return resultSegment;
 };
 
+Point2DList.prototype.setIdxInList = function()
+{
+	var pointsCount = this.pointsArray.length;
+	for(var i=0; i<pointsCount; i++)
+	{
+		this.pointsArray[i].idxInList = i;
+	}
+};
 
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2DList.prototype.getBoundingRectangle = function(resultBRect) 
+{
+	var pointsCount = this.getPointsCount();
+	if(pointsCount === 0)
+		return resultBRect;
+	
+	if(resultBRect === undefined)
+		resultBRect = new BoundingRectangle();
+	
+	var point;
+	for(var i=0; i<pointsCount; i++)
+	{
+		if(i === 0)
+			resultBRect.setInit(this.getPoint(i));
+		else
+			resultBRect.addPoint(this.getPoint(i));
+	}
+	
+	return resultBRect;
+};
 
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2DList.prototype.getNearestPointIdxToPoint = function(point) 
+{
+	if(point === undefined)
+		return undefined;
+	
+	var currPoint, candidatePointIdx;
+	var currSquaredDist, candidateSquaredDist;
+	var pointsCount = this.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		currPoint = this.getPoint(i);
+		currSquaredDist = currPoint.squareDistToPoint(point);
+		if(candidatePointIdx === undefined)
+		{
+			candidatePointIdx = i;
+			candidateSquaredDist = currSquaredDist;
+		}
+		else{
+			if(currSquaredDist < candidateSquaredDist)
+			{
+				candidatePointIdx = i;
+				candidateSquaredDist = currSquaredDist;
+			}
+		}
+	}
+	
+	return candidatePointIdx;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2DList.prototype.reverse = function() 
+{
+	if(this.pointsArray !== undefined)
+		this.pointsArray.reverse();
+};
+
+Point2DList.prototype.getPointsIdxSortedByDistToPoint = function(thePoint, resultSortedPointsIdxArray)
+{
+	if(this.pointsArray === undefined)
+		return resultSortedPointsIdxArray;
+	
+	// Static function.***
+	// Sorting minDist to maxDist.***
+	if(resultSortedPointsIdxArray === undefined)
+		resultSortedPointsIdxArray = [];
+	
+	var pointsArray = this.pointsArray;
+	
+	var objectAux;
+	var objectsAuxArray = [];
+	var point;
+	var squaredDist;
+	var startIdx, endIdx, insertIdx;
+	var pointsCount = pointsArray.length;
+	for(var i=0; i<pointsCount; i++)
+	{
+		point = pointsArray[i];
+		if(point === thePoint)
+			continue;
+		
+		squaredDist = thePoint.squareDistToPoint(point);
+		objectAux = {};
+		objectAux.pointIdx = i;
+		objectAux.squaredDist = squaredDist;
+		startIdx = 0;
+		endIdx = objectsAuxArray.length - 1;
+		
+		insertIdx = this.getIndexToInsertBySquaredDist(objectsAuxArray, objectAux, startIdx, endIdx);
+		objectsAuxArray.splice(insertIdx, 0, objectAux);
+	}
+	
+	resultSortedPointsIdxArray.length = 0;
+	var objectsCount = objectsAuxArray.length;
+	for(var i=0; i<objectsCount; i++)
+	{
+		resultSortedPointsIdxArray.push(objectsAuxArray[i].pointIdx);
+	}
+	
+	return resultSortedPointsIdxArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns result_idx
+ */
+Point2DList.prototype.getIndexToInsertBySquaredDist = function(objectsArray, object, startIdx, endIdx) 
+{
+	// this do a dicotomic search of idx in a ordered table.
+	// 1rst, check the range.
+	
+	var range = endIdx - startIdx;
+	
+	if(range <= 0)
+		return 0;
+	
+	if (range < 6)
+	{
+		// in this case do a lineal search.
+		var finished = false;
+		var i = startIdx;
+		var idx;
+		//var objectsCount = objectsArray.length;
+		while (!finished && i<=endIdx)
+		{
+			if (object.squaredDist < objectsArray[i].squaredDist)
+			{
+				idx = i;
+				finished = true;
+			}
+			i++;
+		}
+		
+		if (finished)
+		{
+			return idx;
+		}
+		else 
+		{
+			return endIdx+1;
+		}
+	}
+	else 
+	{
+		// in this case do the dicotomic search.
+		var middleIdx = startIdx + Math.floor(range/2);
+		var newStartIdx;
+		var newEndIdx;
+		if (objectsArray[middleIdx].squaredDist > object.squaredDist)
+		{
+			newStartIdx = startIdx;
+			newEndIdx = middleIdx;
+		}
+		else 
+		{
+			newStartIdx = middleIdx;
+			newEndIdx = endIdx;
+		}
+		return this.getIndexToInsertBySquaredDist(objectsArray, object, newStartIdx, newEndIdx);
+	}
+};
 
 
 
@@ -35610,16 +36950,19 @@ Point3D.prototype.angleRadToVector = function(vector)
 	
 	//******************************************************
 	//var scalarProd = this.scalarProd(vector);
-	//var myModul = this.modul();
-	//var vecModul = vector.modul();
+	var myModul = this.modul();
+	var vecModul = vector.modul();
 	
 	// calcule by cos.***
 	//var cosAlfa = scalarProd / (myModul * vecModul); 
 	//var angRad = Math.acos(cosAlfa);
 	//var angDeg = alfa * 180.0/Math.PI;
 	//------------------------------------------------------
+	var error = 10E-10;
+	if(myModul < error || vecModul < error)
+		return undefined;
 	
-	return Math.acos(this.scalarProd(vector) / (this.modul() * vector.modul()));
+	return Math.acos(this.scalarProd(vector) / (myModul * vecModul));
 };
 
 /**
@@ -35907,6 +37250,8 @@ var Polygon = function()
 
 	this.point2dList;
 	this.normal; // polygon sense. (normal = 1) -> CCW. (normal = -1) -> CW.***
+	this.convexPolygonsArray; // tessellation result.***
+	this.bRect; // boundary rectangle.***
 };
 
 Polygon.prototype.deleteObjects = function()
@@ -35918,6 +37263,15 @@ Polygon.prototype.deleteObjects = function()
 	}
 	
 	this.normal = undefined;
+};
+
+Polygon.prototype.getBoundingRectangle = function(resultBRect)
+{
+	if(this.point2dList === undefined)
+		return resultBRect;
+	
+	resultBRect = this.point2dList.getBoundingRectangle(resultBRect);
+	return resultBRect;
 };
 
 Polygon.prototype.getEdgeDirection = function(idx)
@@ -35935,10 +37289,14 @@ Polygon.prototype.getEdgeVector = function(idx)
 	return vector;
 };
 
+Polygon.prototype.reverseSense = function()
+{
+	if(this.point2dList !== undefined)
+		this.point2dList.reverse();
+};
+
 Polygon.prototype.calculateNormal = function(resultConcavePointsIdxArray)
 {
-	// this is a false 2d polygon.***
-	
 	// must check if the verticesCount is 3. Then is a convex polygon.***
 	
 	// A & B are vectors.
@@ -35970,14 +37328,16 @@ Polygon.prototype.calculateNormal = function(resultConcavePointsIdxArray)
 		
 		if(crossProd < 0.0) 
 		{
+			crossProd = -1;
 			resultConcavePointsIdxArray.push(i);
+		}
+		else if(crossProd > 0.0) {
+			crossProd = 1;
 		}
 		// calcule by cos.***
 		// cosAlfa = scalarProd / (strModul * endModul); (but strVecModul = 1 & endVecModul = 1), so:
 		var cosAlfa = scalarProd;
 		var alfa = Math.acos(cosAlfa);
-		//var angDeg = alfa * 180.0/Math.PI;
-
 		this.normal += (crossProd * alfa);
 	}
 	
@@ -35989,11 +37349,16 @@ Polygon.prototype.calculateNormal = function(resultConcavePointsIdxArray)
 	return resultConcavePointsIdxArray;
 };
 
-Polygon.prototype.tessellate = function(resultConvexPolygons)
+
+Polygon.prototype.tessellate = function(concaveVerticesIndices, convexPolygonsArray)
 {
-	// 1rst, must find concave vertices.***
-	var concaveVerticesIndices = this.calculateNormal();
 	var concaveVerticesCount = concaveVerticesIndices.length;
+	
+	if(concaveVerticesCount === 0)
+	{
+		convexPolygonsArray.push(this);
+		return convexPolygonsArray;
+	}
 	
 	// now, for any concave vertex, find the closest vertex to split the polygon.***
 	var find = false;
@@ -36007,12 +37372,11 @@ Polygon.prototype.tessellate = function(resultConvexPolygons)
 		var resultSortedPointsIdxArray = [];
 		
 		// get vertices indices sorted by distance to "point".***
-		this.getVerticesIdxSortedByDistToVertex(point, this.point2dList.pointsArray, resultSortedPointsIdxArray);
+		this.getPointsIdxSortedByDistToPoint(point, resultSortedPointsIdxArray);
 		
-		var finished = false;
 		var sortedVerticesCount = resultSortedPointsIdxArray.length;
 		var j=0;
-		while(!finished && j<sortedVerticesCount)
+		while(!find && j<sortedVerticesCount)
 		{
 			idx_B = resultSortedPointsIdxArray[j];
 			
@@ -36025,35 +37389,98 @@ Polygon.prototype.tessellate = function(resultConvexPolygons)
 			
 			// check if is splittable by idx-idx_B.***
 			var segment = new Segment2D(this.point2dList.getPoint(idx), this.point2dList.getPoint(idx_B));
-			
+			if(this.intersectionWithSegment(segment))
+			{
+				j++;
+				continue;
+			}
 			
 			var resultSplittedPolygons = this.splitPolygon(idx, idx_B);
 			
 			if(resultSplittedPolygons.length < 2)
+			{
+				j++;
 				continue;
+			}
 			
 			// now, compare splittedPolygon's normals with myNormal.***
 			var polygon_A = resultSplittedPolygons[0];
 			var polygon_B = resultSplittedPolygons[1];
-			var concaveVtx_A = polygon_A.calculateNormal();
-			var concaveVtx_B = polygon_B.calculateNormal();
+			var concavePoints_A = polygon_A.calculateNormal();
+			var concavePoints_B = polygon_B.calculateNormal();
 			
 			var normal_A = polygon_A.normal;
-			var normal_B = polygon_A.normal;
-			
+			var normal_B = polygon_B.normal;
+			if(normal_A === this.normal && normal_B === this.normal)
+			{
+				find = true;
+				// polygon_A.***
+				if(concavePoints_A.length > 0)
+				{
+					convexPolygonsArray = polygon_A.tessellate(concavePoints_A, convexPolygonsArray);
+				}
+				else{
+					if(convexPolygonsArray === undefined)
+						convexPolygonsArray = [];
+					
+					convexPolygonsArray.push(polygon_A);
+				}
+				
+				// polygon_B.***
+				if(concavePoints_B.length > 0)
+				{
+					convexPolygonsArray = polygon_B.tessellate(concavePoints_B, convexPolygonsArray);
+				}
+				else{
+					if(convexPolygonsArray === undefined)
+						convexPolygonsArray = [];
+					
+					convexPolygonsArray.push(polygon_B);
+				}
+			}
 			
 			j++;
 		}
 		i++;
 	}
+	
+	return convexPolygonsArray;
 };
 
-Polygon.prototype.intersectionWithVtxSegment = function(vtxSeg)
+Polygon.prototype.intersectionWithSegment = function(segment)
 {
-	// "vtxSeg" cut a polygons edge.***
-	// "vtxSeg" coincident with a polygons vertex.***
-	// 1rst check if the vtxSeg is coincident with any polygons vertex.***
+	// "segment" cut a polygons edge.***
+	// "segment" coincident with a polygons vertex.***
+	if(this.bRect !== undefined)
+	{
+		// if exist boundary rectangle, check bRect intersection.***
+		var segmentsBRect = segment.getBoundaryRectangle(segmentsBRect);
+		if(!this.bRect.intersectsWithRectangle(segmentsBRect))
+			return false;
+	}
 	
+	// 1rst check if the segment is coincident with any polygons vertex.***
+	var mySegment;
+	var intersectionType;
+	var error = 10E-8;
+	var pointsCount = this.point2dList.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		mySegment = this.point2dList.getSegment(i, mySegment);
+		
+		// if segment shares points, then must not cross.***
+		if(segment.sharesPointsWithSegment(mySegment))
+		{
+			continue;
+		}
+		
+		if(segment.intersectionWithSegment(mySegment, error))
+		{
+			return true;
+		}
+	}
+	
+	return false;
 };
 
 Polygon.prototype.splitPolygon = function(idx1, idx2, resultSplittedPolygonsArray)
@@ -36122,104 +37549,16 @@ Polygon.prototype.splitPolygon = function(idx1, idx2, resultSplittedPolygonsArra
 	return resultSplittedPolygonsArray;
 };
 
-Polygon.prototype.getVerticesIdxSortedByDistToVertex = function(thePoint, pointsArray, resultSortedPointsIdxArray)
+Polygon.prototype.getPointsIdxSortedByDistToPoint = function(thePoint, resultSortedPointsIdxArray)
 {
 	// Static function.***
 	// Sorting minDist to maxDist.***
 	if(resultSortedPointsIdxArray === undefined)
 		resultSortedPointsIdxArray = [];
 	
-	var objectAux;
-	var objectsAuxArray = [];
-	var point;
-	var squaredDist;
-	var startIdx, endIdx, insertIdx;
-	var pointsCount = pointsArray.length;
-	for(var i=0; i<pointsCount; i++)
-	{
-		point = pointsArray[i];
-		if(point === thePoint)
-			continue;
-		
-		squaredDist = thePoint.squareDistToPoint(point);
-		objectAux = {};
-		objectAux.pointIdx = i;
-		objectAux.squaredDist = squaredDist;
-		startIdx = 0;
-		endIdx = objectsAuxArray.length - 1;
-		
-		insertIdx = this.getIndexToInsertBySquaredDist(objectsAuxArray, objectAux, startIdx, endIdx);
-		objectsAuxArray.splice(insertIdx, 0, objectAux);
-	}
-	
-	resultSortedPointsIdxArray.length = 0;
-	var objectsCount = objectsAuxArray.length;
-	for(var i=0; i<objectsCount; i++)
-	{
-		resultSortedPointsIdxArray.push(objectsAuxArray[i].pointIdx);
-	}
+	resultSortedPointsIdxArray = this.point2dList.getPointsIdxSortedByDistToPoint(thePoint, resultSortedPointsIdxArray);
 	
 	return resultSortedPointsIdxArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns result_idx
- */
-Polygon.prototype.getIndexToInsertBySquaredDist = function(objectsArray, object, startIdx, endIdx) 
-{
-	// this do a dicotomic search of idx in a ordered table.
-	// 1rst, check the range.
-	
-	var range = endIdx - startIdx;
-	
-	if(range <= 0)
-		return 0;
-	
-	if (range < 6)
-	{
-		// in this case do a lineal search.
-		var finished = false;
-		var i = startIdx;
-		var idx;
-		//var objectsCount = objectsArray.length;
-		while (!finished && i<=endIdx)
-		{
-			if (object.squaredDist < objectsArray[i].squaredDist)
-			{
-				idx = i;
-				finished = true;
-			}
-			i++;
-		}
-		
-		if (finished)
-		{
-			return idx;
-		}
-		else 
-		{
-			return endIdx+1;
-		}
-	}
-	else 
-	{
-		// in this case do the dicotomic search.
-		var middleIdx = startIdx + Math.floor(range/2);
-		var newStartIdx;
-		var newEndIdx;
-		if (objectsArray[middleIdx].squaredDist > object.squaredDist)
-		{
-			newStartIdx = startIdx;
-			newEndIdx = middleIdx;
-		}
-		else 
-		{
-			newStartIdx = middleIdx;
-			newEndIdx = endIdx;
-		}
-		return this.getIndexToInsertBySquaredDist(objectsArray, object, newStartIdx, newEndIdx);
-	}
 };
 
 Polygon.prototype.isPolygonSplittableByVtxSegment = function(vertexSegment)
@@ -36241,9 +37580,14 @@ Polygon.prototype.getTrianglesConvexPolygon = function(resultTrianglesList)
 	for(var i=1; i<pointsCount-1; i++)
 	{
 		triangle = resultTrianglesList.newTriangle();
-		triangle.vtxIdx0 = 0;
-		triangle.vtxIdx1 = i;
-		triangle.vtxIdx2 = i+1;
+		
+		var point0idx = this.point2dList.getPoint(0).idxInList;
+		var point1idx = this.point2dList.getPoint(i).idxInList;
+		var point2idx = this.point2dList.getPoint(i+1).idxInList;
+		
+		triangle.vtxIdx0 = point0idx;
+		triangle.vtxIdx1 = point1idx;
+		triangle.vtxIdx2 = point2idx;
 	}
 	
 	return resultTrianglesList;
@@ -36283,9 +37627,15 @@ Polygon.prototype.getVbo = function(resultVbo)
 	resultVbo.norVboDataArray = Int8Array.from(norArray);
 	
 	// now calculate triangles indices.***
-	var trianglesList = new TrianglesList();
-	trianglesList = this.getTrianglesConvexPolygon(trianglesList);
+	this.point2dList.setIdxInList(); // use this function instead a map.***
 	
+	var trianglesList = new TrianglesList();
+	var convexPolygonsCount = this.convexPolygonsArray.length;
+	for(var i=0; i<convexPolygonsCount; i++)
+	{
+		var convexPolygon = this.convexPolygonsArray[i];
+		trianglesList = convexPolygon.getTrianglesConvexPolygon(trianglesList);
+	}
 	trianglesList.getFaceDataArray(resultVbo);
 
 	return resultVbo;
@@ -36370,6 +37720,7 @@ PolyLine.prototype.getPoints = function(resultPointsArray)
 	{ resultPointsArray = []; }
 	
 	var point;
+	var errorDist = 10E-8;
 	var resultExistentPointsCount = resultPointsArray.length;
 	var pointsCount = this.point2dArray.length;
 	for (var i=0; i<pointsCount; i++)
@@ -36467,7 +37818,7 @@ var Profile = function()
 	}
 
 	this.outerRing; // one Ring. 
-	this.innerRingsArray; // Rings array. 
+	this.innerRingsList; // class: RingsList. 
 };
 
 /**
@@ -36478,6 +37829,9 @@ Profile.prototype.newOuterRing = function()
 {
 	if (this.outerRing === undefined)
 	{ this.outerRing = new Ring(); }
+	else{
+		this.outerRing.deleteObjects();
+	}
 	
 	return this.outerRing;
 };
@@ -36488,11 +37842,10 @@ Profile.prototype.newOuterRing = function()
  */
 Profile.prototype.newInnerRing = function() 
 {
-	if (this.innerRingsArray === undefined)
-	{ this.innerRingsArray = []; }
+	if (this.innerRingsList === undefined)
+	{ this.innerRingsList = new RingsList(); }
 	
-	var innerRing = new Ring();
-	this.innerRingsArray.push(innerRing);
+	var innerRing = this.innerRingsList.newRing();
 	
 	return innerRing;
 };
@@ -36509,15 +37862,10 @@ Profile.prototype.deleteObjects = function()
 		this.outerRing = undefined;
 	}
 
-	if (this.innerRingsArray)
+	if (this.innerRingsList)
 	{
-		var innersCount = this.innerRingsArray.length;
-		for (var i=0; i<innersCount; i++)
-		{
-			this.innerRingsArray[i].deleteObjects();
-			this.innerRingsArray[i] = undefined;
-		}
-		this.innerRingsArray = undefined;
+		this.innerRingsList.deleteObjects();
+		this.innerRingsList = undefined;
 	}
 };
 
@@ -36527,17 +37875,18 @@ Profile.prototype.deleteObjects = function()
  */
 Profile.prototype.tessellate = function(resultTrianglesIndices) 
 {
+	if(this.outerRing === undefined)
+		return undefined;
+	
 	if(resultTrianglesIndices === undefined)
 		resultTrianglesIndices = [];
 	
-	var innerRingsCount;
-	if(this.innerRingsArray === undefined)
-		innerRingsCount = 0;
-	else
-		innerRingsCount = this.innerRingsArray.length;
+	innerRingsCount = this.innerRingsList.getRingsCount();
 	
-	// test.***
-	// provisionally tessellate the outerRing.***
+	if(innerRingsCount > 0)
+	{
+		
+	}
 	
 	
 	return resultTrianglesIndices;
@@ -36547,9 +37896,582 @@ Profile.prototype.tessellate = function(resultTrianglesIndices)
  * 어떤 일을 하고 있습니까?
  * @returns vertexList
  */
+
+Profile.prototype.hasHoles = function() 
+{
+	if(this.innerRingsList === undefined || this.innerRingsList.getRingsCount() === 0)
+		return false;
+	
+	return true;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+ 
 Profile.prototype.getVBO = function(resultVBOCacheKeys) 
 {
+	if(this.outerRing === undefined)
+		return resultVBOCacheKeys;
 	
+	if(!this.hasHoles())
+	{
+		var outerRing = this.outerRing;
+		outerRing.makePolygon();
+		outerRing.polygon.convexPolygonsArray = [];
+		var concavePointsIndices = outerRing.polygon.calculateNormal(concavePointsIndices);
+		outerRing.polygon.convexPolygonsArray = outerRing.polygon.tessellate(concavePointsIndices, outerRing.polygon.convexPolygonsArray);
+
+		outerRing.polygon.getVbo(resultVBOCacheKeys);
+	}
+	else{
+		// 1rst, check normals congruences.***
+		this.checkNormals();
+		var resultConvexPolygons = this.tessellate(resultConvexPolygons);
+		var hola = 0;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.eliminateHolePolygonBySplitPoints = function(outerPolygon, innerPolygon, outerPointIdx, innerPointIdx, resultPolygon) 
+{
+	if(resultPolygon === undefined)
+		resultPolygon = new Polygon();
+	
+	if(resultPolygon.point2dList === undefined)
+		resultPolygon.point2dList = new Point2DList();
+	
+	// 1rst, copy in newPolygon the outerPolygon.***
+	var outerPointsCount = outerPolygon.point2dList.getPointsCount();
+	var finished = false;
+	var i=0;
+	var newPoint;
+	var outerPoint;
+	var currIdx = outerPointIdx;
+	while(!finished && i<outerPointsCount)
+	{
+		outerPoint = outerPolygon.point2dList.getPoint(currIdx);
+		newPoint = resultPolygon.point2dList.newPoint(outerPoint.x, outerPoint.y);
+		
+		currIdx = outerPolygon.point2dList.getNextIdx(currIdx);
+		if(currIdx === outerPointIdx)
+			finished = true;
+		
+		i++;
+	}
+	
+	// now add innerPolygon's points.***
+	var innerPointsCount = innerPolygon.point2dList.getPointsCount();
+	finished = false;
+	i=0;
+	newPoint;
+	innerPoint;
+	currIdx = innerPointIdx;
+	while(!finished && i<innerPointsCount)
+	{
+		innerPoint = innerPolygon.point2dList.getPoint(currIdx);
+		newPoint = resultPolygon.point2dList.newPoint(outerPoint.x, outerPoint.y);
+		
+		currIdx = innerPolygon.point2dList.getNextIdx(currIdx);
+		if(currIdx === innerPointIdx)
+			finished = true;
+		
+		i++;
+	}
+	
+	return resultPolygon;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.eliminateHolePolygon = function(outerPolygon, innerPolygon, innerPointIdx, resultPolygon) 
+{
+	// 1rst, make a sorted by dist of points of outer to "innerPoint".***
+	var resultSortedPointsIdxArray = [];
+	var innerPoint = innerPolygon.point2dList.getPoint(innerPointIdx);
+	resultSortedPointsIdxArray = outerPolygon.getPointsIdxSortedByDistToPoint(innerPoint, resultSortedPointsIdxArray);
+	
+	var outerSortedPointsCount = resultSortedPointsIdxArray.length;
+	var splitSegment = new Segment2D();;
+	var finished = false;
+	var i=0;
+	var outPointIdx;
+	var outPoint;
+	while(!finished && i<outerSortedPointsCount)
+	{
+		outPointIdx = resultSortedPointsIdxArray[i];
+		outPoint = outerPolygon.point2dList.getPoint(outPointIdx);
+		splitSegment.setPoints(outPoint, innerPoint);
+		
+		// check if splitSegment intersects the outerPolygon or any innerPolygons.***
+		if(outerPolygon.intersectionWithSegment(splitSegment) || innerPolygon.intersectionWithSegment(splitSegment))
+		{
+			i++;
+			continue;
+		}
+		
+		resultPolygon = this.eliminateHolePolygonBySplitPoints(outerPolygon, innerPolygon, outPointIdx, innerPointIdx, resultPolygon);
+		finished = true;
+		
+		i++;
+	}
+	
+	return resultPolygon;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.checkNormals = function() 
+{
+	if(this.outerRing === undefined)
+		return;
+	
+	// 1rst, calculate the outerNormal.***
+	var outerRing = this.outerRing;
+	if(outerRing.polygon === undefined)
+		outerRing.makePolygon();
+	var outerPolygon = outerRing.polygon;
+	var concavePointsIndices = outerPolygon.calculateNormal(concavePointsIndices);
+	var outerNormal = outerPolygon.normal;
+	
+	// if there are inners, the innerNormals must be inverse of the outerNormal.***
+	var innerRing;
+	var innerPolygon;
+	var innerNormal;
+	var innersCount = this.innerRingsList.getRingsCount();
+	for(var i=0; i<innersCount; i++)
+	{
+		innerRing = this.innerRingsList.getRing(i);
+		if(innerRing.polygon === undefined)
+			innerRing.makePolygon();
+		var innerPolygon = innerRing.polygon;
+		innerPolygon.calculateNormal();
+		var innerNormal = innerPolygon.normal;
+		
+		if(innerNormal === outerNormal)
+		{
+			// then reverse innerPolygon.***
+			innerPolygon.reverseSense();
+			innerPolygon.normal = -innerNormal;
+		}
+		
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.tessellate = function(resultConvexPolygons) 
+{
+	if(this.outerRing === undefined)
+		return undefined;
+	
+	if(resultConvexPolygons === undefined)
+		resultConvexPolygons = [];
+	
+	if(this.hasHoles())
+	{
+		// 1rst, calculate the most left-down innerRing.***
+		var innersBRect = this.innerRingsList.getBoundingRectangle(innersBRect);
+		var innersBRectLeftDownPoint = new Point2D(innersBRect.minX, innersBRect.minY);
+		var objectsArray = [];
+		objectsArray = this.innerRingsList.getSortedRingsByDistToPoint(innersBRectLeftDownPoint, objectsArray);
+		
+		// now, for each hole, calculate the nearest point to outerRing.***
+		var hole;
+		var holePolygon;
+		var objectAux;
+		var innerPointIdx;
+		var holeNormal;
+		var splitSegment;
+		var resultPolygon;
+		
+		// prepare outerRing.***
+		var outerRing = this.outerRing;
+		if(outerRing.polygon === undefined)
+			outerRing.makePolygon();
+		var outerPolygon = outerRing.polygon;
+		var concavePointsIndices = outerPolygon.calculateNormal(concavePointsIndices);
+		
+		// now, for each innerRing, try to merge to outerRing by splitSegment.***
+		var innerRingsCount = objectsArray.length;
+		for(var i=0; i<innerRingsCount; i++)
+		{
+			objectAux = objectsArray[i];
+			hole = objectAux.ring;
+			holePolygon = hole.polygon;
+			innerPointIdx = objectAux.pointIdx;
+			holePolygon.calculateNormal();
+			holeNormal = holePolygon.normal;
+			
+			// compare outerNormal with hole normal.***
+			
+			
+			this.eliminateHolePolygon(outerPolygon, holePolygon, innerPointIdx, resultPolygon);
+			
+			// now find 
+			/*
+			// create a segment( mostLeftDownPoint, innerPoint ) and check if intersects another holes or the outerPolygon.***
+			if(splitSegment === undefined)
+				splitSegment = new Segment2D();
+			
+			splitSegment.setPoints(mostLeftDownPoint, innerPoint);
+			
+			// 1) check if splitSegment intersects the outerPolygon.***
+			if(outerPolygon.intersectionWithSegment(splitSegment))
+			{
+				continue;
+			}
+			
+			// 2) check if splitSegment intersects any holePolygon.***
+			if(this.innerRingsList.intersectionWithSegment(splitSegment))
+			{
+				continue;
+			}
+			
+			// 3) now split the outerPolygon-hole and recalculate the normal.***
+			this.eliminateHolePolygon(outerPolygon, holePolygon, splitSegment, resultPolygon);
+			*/
+		}
+	}
+	else{
+		
+	}
+	
+	return resultConvexPolygons;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureHole_1 = function() 
+{
+	// profile with holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	var rect;
+	
+	rect = outerRing.newElement("RECTANGLE");
+	rect.setCenterPosition(0, 0);
+	rect.setDimensions(10, 6);
+	
+	var innerRing = this.newInnerRing();
+	rect = innerRing.newElement("RECTANGLE");
+	rect.setCenterPosition(1, 0);
+	rect.setDimensions(5, 3);
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_almostHole_2 = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(3.0, 4.0); // 0
+	point3d = polyLine.newPoint2d(5.0, 6.0); // 1
+	point3d = polyLine.newPoint2d(0.0, 6.0); // 2
+	point3d = polyLine.newPoint2d(0.0, 0.0); // 3
+	point3d = polyLine.newPoint2d(9.0, 0.0); // 4
+	point3d = polyLine.newPoint2d(9.0, 6.0); // 5
+	point3d = polyLine.newPoint2d(5.0, 6.0); // 6
+	point3d = polyLine.newPoint2d(3.0, 4.0); // 7
+	point3d = polyLine.newPoint2d(4.0, 4.0); // 8
+	point3d = polyLine.newPoint2d(4.0, 3.0); // 9
+	point3d = polyLine.newPoint2d(3.0, 3.0); // 10
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_almostHole = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(0.0, 0.0); // 0
+	point3d = polyLine.newPoint2d(7.0, 0.0); // 1
+	point3d = polyLine.newPoint2d(7.0, 5.0); // 2
+	point3d = polyLine.newPoint2d(5.0, 4.0); // 3
+	point3d = polyLine.newPoint2d(5.0, 2.0); // 4
+	point3d = polyLine.newPoint2d(1.0, 2.0); // 5
+	point3d = polyLine.newPoint2d(1.0, 4.0); // 6
+	point3d = polyLine.newPoint2d(5.0, 4.0); // 7
+	point3d = polyLine.newPoint2d(7.0, 5.0); // 8
+	point3d = polyLine.newPoint2d(0.0, 5.0); // 9
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_duckMouth = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(3.0, 0.0); // 0
+	point3d = polyLine.newPoint2d(8.0, 0.0); // 1
+	point3d = polyLine.newPoint2d(8.0, 5.0); // 2
+	point3d = polyLine.newPoint2d(2.0, 5.0); // 3
+	point3d = polyLine.newPoint2d(0.0, 0.0); // 4
+	point3d = polyLine.newPoint2d(6.0, 4.0); // 5
+	point3d = polyLine.newPoint2d(6.0, 2.0); // 6
+	point3d = polyLine.newPoint2d(3.0, 2.0); // 7
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_spiral = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(0.0, -3.0); // 0
+	point3d = polyLine.newPoint2d(3.0, -2.0); // 1
+	point3d = polyLine.newPoint2d(5.0, -2.0); // 2
+	point3d = polyLine.newPoint2d(5.0, 3.0); // 3
+	point3d = polyLine.newPoint2d(-2.0, 4.0); // 4
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(-3, 3);
+	arc.setRadius(Math.sqrt(2));
+	arc.setStartAngleDegree(45.0);
+	arc.setSweepAngleDegree(-180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-4.0, 2.0); // 0
+	point3d = polyLine.newPoint2d(-4.0, -5.0); // 1
+	point3d = polyLine.newPoint2d(-5.0, -5.0); // 2
+	point3d = polyLine.newPoint2d(-5.0, -3.0); // 3
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(-6, -3);
+	arc.setRadius(1);
+	arc.setStartAngleDegree(0.0);
+	arc.setSweepAngleDegree(180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-7.0, -3.0); // 0
+	point3d = polyLine.newPoint2d(-7.0, -7.0); // 1
+	point3d = polyLine.newPoint2d(8.0, -5.0); // 2
+	point3d = polyLine.newPoint2d(8.0, 8.0); // 3
+	point3d = polyLine.newPoint2d(3.0, 8.0); // 4
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(0, 8);
+	arc.setRadius(3);
+	arc.setStartAngleDegree(0.0);
+	arc.setSweepAngleDegree(180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-3.0, 8.0); // 0
+	point3d = polyLine.newPoint2d(-9.0, 8.0); // 1
+	point3d = polyLine.newPoint2d(-9.0, 9.0); // 2
+	point3d = polyLine.newPoint2d(-5.0, 9.0); // 3
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(-5, 10);
+	arc.setRadius(1);
+	arc.setStartAngleDegree(-90);
+	arc.setSweepAngleDegree(180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-5.0, 11.0); // 0
+	point3d = polyLine.newPoint2d(-10.0, 9.0); // 1
+	point3d = polyLine.newPoint2d(-10.0, -10.0); // 2
+	point3d = polyLine.newPoint2d(-3.0, -8.0); // 3
+	point3d = polyLine.newPoint2d(-8.0, -8.0); // 4
+	point3d = polyLine.newPoint2d(-8.0, -1.0); // 5
+	point3d = polyLine.newPoint2d(-5.0, -1.0); // 6
+	point3d = polyLine.newPoint2d(-6.0, 1.0); // 7
+	point3d = polyLine.newPoint2d(-6.0, 6.0); // 8
+	point3d = polyLine.newPoint2d(5.0, 6.0); // 9
+	point3d = polyLine.newPoint2d(7.0, -4.0); // 10
+	point3d = polyLine.newPoint2d(-2.0, -4.0); // 11
+	point3d = polyLine.newPoint2d(-2.0, -2.0); // 12
+	point3d = polyLine.newPoint2d(3.0, 1.0); // 13
+	point3d = polyLine.newPoint2d(3.0, -1.0); // 14
+	point3d = polyLine.newPoint2d(0.0, -1.0); // 15
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_simpleArc = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-2.0, 0.0); // 0
+	point3d = polyLine.newPoint2d(-2.0, -3.0); // 1
+	point3d = polyLine.newPoint2d(0.0, -3.0); // 2
+	point3d = polyLine.newPoint2d(0.0, -1.0); // 3
+	point3d = polyLine.newPoint2d(1.0, -1.0); // 4
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(0, 0);
+	arc.setRadius(2);
+	arc.setStartAngleDegree(-45.0);
+	arc.setSweepAngleDegree(225.0);
+	arc.numPointsFor360Deg = 36;
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_2 = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-5.0, 2.0); // 0
+	point3d = polyLine.newPoint2d(-5.0, -4.0); // 1
+	point3d = polyLine.newPoint2d(4.0, -4.0); // 2
+	point3d = polyLine.newPoint2d(4.0, 7.0); // 3
+	point3d = polyLine.newPoint2d(1.0, 8.0); // 4
+	point3d = polyLine.newPoint2d(-1.0, 6.0); // 5
+	point3d = polyLine.newPoint2d(1.0, 4.0); // 6
+	point3d = polyLine.newPoint2d(1.0, 6.0); // 7
+	point3d = polyLine.newPoint2d(3.0, 3.0); // 8
+	point3d = polyLine.newPoint2d(0.0, -3.0); // 9
+	point3d = polyLine.newPoint2d(-3.0, -3.0); // 10
+	point3d = polyLine.newPoint2d(-3.0, 1.0); // 11
+	point3d = polyLine.newPoint2d(-2.0, 1.0); // 12
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(-3, 2);
+	arc.setRadius(2);
+	arc.setStartAngleDegree(-45.0);
+	arc.setSweepAngleDegree(225.0);
+	arc.numPointsFor360Deg = 77;
+	
+};
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_1 = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(9.0, 0.0); // 0
+	point3d = polyLine.newPoint2d(9.0, 3.0); // 1
+	point3d = polyLine.newPoint2d(8.0, 3.0); // 2
+	point3d = polyLine.newPoint2d(6.0, 1.0); // 3
+	point3d = polyLine.newPoint2d(6.0, 2.0); // 4
+	point3d = polyLine.newPoint2d(8.0, 4.0); // 5
+	point3d = polyLine.newPoint2d(8.0, 5.0); // 6
+	point3d = polyLine.newPoint2d(6.0, 5.0); // 7
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(4, 5);
+	arc.setRadius(2);
+	arc.setStartAngleDegree(0.0);
+	arc.setSweepAngleDegree(-180.0);
+	arc.numPointsFor360Deg = 36;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(2.0, 5.0); // 0
+	point3d = polyLine.newPoint2d(0.0, 5.0); // 1
+	point3d = polyLine.newPoint2d(0.0, 0.0); // 2
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_TShirt = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(2.0, 3.0); // 0
+	point3d = polyLine.newPoint2d(0.0, 3.0); // 1
+	point3d = polyLine.newPoint2d(0.0, 0.0); // 2
+	point3d = polyLine.newPoint2d(8.0, 0.0); // 3
+	point3d = polyLine.newPoint2d(8.0, 3.0); // 4
+	point3d = polyLine.newPoint2d(6.0, 3.0); // 5
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(4, 3);
+	arc.setRadius(2);
+	arc.setStartAngleDegree(0.0);
+	arc.setSweepAngleDegree(-180.0);
+	arc.numPointsFor360Deg = 36;
 };
 
 
@@ -36648,6 +38570,119 @@ ProfilesList.prototype.deleteObjects = function()
 
 
 'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class Rectangle
+*/
+var Rectangle = function() 
+{
+	if (!(this instanceof Rectangle)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.centerPoint;
+	this.width;
+	this.height;
+};
+
+Rectangle.prototype.setCenterPosition = function(cx, cy)
+{
+	if(this.centerPoint === undefined)
+		this.centerPoint = new Point2D();
+	
+	this.centerPoint.set(cx, cy);
+};
+
+Rectangle.prototype.setDimensions = function(width, height)
+{
+	this.width = width;
+	this.height = height;
+};
+
+/**
+ * Returns the points of the Rectangle.
+ * @class Rectangle
+ */
+Rectangle.prototype.getPoints = function(resultPointsArray)
+{
+	if(this.centerPoint === undefined || this.width === undefined || this.height === undefined)
+		return resultPointsArray;
+	
+	if(resultPointsArray === undefined)
+		resultPointsArray = [];
+	
+	var point;
+	var halfWidth = this.width / 2;
+	var halfHeight = this.height / 2;
+	
+	// starting in left-down corner, go in CCW.***
+	point = new Point2D(this.centerPoint.x - halfWidth, this.centerPoint.y - halfHeight);
+	resultPointsArray.push(point);
+	
+	point = new Point2D(this.centerPoint.x + halfWidth, this.centerPoint.y - halfHeight);
+	resultPointsArray.push(point);
+	
+	point = new Point2D(this.centerPoint.x + halfWidth, this.centerPoint.y + halfHeight);
+	resultPointsArray.push(point);
+	
+	point = new Point2D(this.centerPoint.x - halfWidth, this.centerPoint.y + halfHeight);
+	resultPointsArray.push(point);
+	
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
 
 /**
  * 어떤 일을 하고 있습니까?
@@ -36662,6 +38697,28 @@ var Ring = function()
 
 	this.elemsArray;
 	this.polygon; // auxiliar.***
+};
+
+/**
+ * @class Ring
+ */
+Ring.prototype.deleteObjects = function()
+{
+	if(this.elemsArray !== undefined)
+	{
+		var elemsCount = this.elemsArray.length;
+		for(var i=0; i<elemsCount; i++)
+		{
+			this.elemsArray[i].deleteObjects();
+			this.elemsArray[i] = undefined;
+		}
+		this.elemsArray = undefined;
+	}
+	
+	if(this.polygon !== undefined)
+		this.polygon.deleteObjects();
+	
+	this.polygon = undefined;
 };
 
 /**
@@ -36687,6 +38744,14 @@ Ring.prototype.newElement = function(elementTypeString)
 		elem = new Arc();
 		this.elemsArray.push(elem);
 	}
+	else if (elementTypeString === "RECTANGLE")
+	{
+		if (this.elemsArray === undefined)
+		{ this.elemsArray = []; }
+		
+		elem = new Rectangle();
+		this.elemsArray.push(elem);
+	}
 	
 	return elem;
 };
@@ -36698,6 +38763,7 @@ Ring.prototype.newElement = function(elementTypeString)
 Ring.prototype.makePolygon = function()
 {
 	this.polygon = this.getPolygon(this.polygon);
+	return this.polygon;
 };
 
 /**
@@ -36742,7 +38808,7 @@ Ring.prototype.getPoints = function(resultPointsArray)
 	var totalPointsCount = resultPointsArray.length;
 	if(totalPointsCount > 1)
 	{
-		var errorDist = 0.0001;
+		var errorDist = 10E-8;
 		var firstPoint = resultPointsArray[0];
 		var lastPoint = resultPointsArray[totalPointsCount-1];
 		if(firstPoint.isCoincidentToPoint(lastPoint, errorDist))
@@ -36756,6 +38822,295 @@ Ring.prototype.getPoints = function(resultPointsArray)
 	
 	return resultPointsArray;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class RingsList
+*/
+var RingsList = function() 
+{
+	if (!(this instanceof RingsList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.ringsArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.newRing = function() 
+{
+	if (this.ringsArray === undefined)
+	{ this.ringsArray = []; }
+	
+	var ring = new Ring();
+	this.ringsArray.push(ring);
+	
+	return ring;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.deleteObjects = function() 
+{
+	if (this.ringsArray)
+	{
+		var ringsCount = this.ringsArray.length;
+		for (var i=0; i<ringsCount; i++)
+		{
+			this.ringsArray[i].deleteObjects();
+			this.ringsArray[i] = undefined;
+		}
+		this.ringsArray = undefined;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.getRingsCount = function() 
+{
+	if (this.ringsArray === undefined)
+		return 0;
+
+	return this.ringsArray.length;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.getRing = function(idx) 
+{
+	if (this.ringsArray === undefined)
+		return undefined;
+
+	return this.ringsArray[idx];
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.getBoundingRectangle = function(resultBRect) 
+{
+	if (this.resultBRect === undefined)
+		resultBRect = new BoundingRectangle();
+	
+	var ring;
+	var currBRect;
+	var ringsCount = this.getRingsCount();
+	for(var i=0; i<ringsCount; i++)
+	{
+		ring = this.getRing(i);
+		if(ring.polygon === undefined)
+			ring.makePolygon();
+		
+		currBRect = ring.polygon.getBoundingRectangle(currBRect);
+		if(i === 0)
+			resultBRect.setInitByRectangle(currBRect);
+		else{
+			resultBRect.addRectangle(currBRect);
+		}
+	}
+
+	return resultBRect;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.intersectionWithSegment = function(segment) 
+{
+	// returns true if any ring's polygon intersects with "segment".***
+	if(segment === undefined)
+		return false;
+	
+	var intersects = false;
+	var ringsCount = this.getRingsCount();
+	var i=0;
+	while(!intersects && i<ringsCount)
+	{
+		if(this.ringsArray[i].intersectionWithSegment(segment))
+		{
+			intersects = true;
+		}
+		i++;
+	}
+	
+	return intersects;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.getSortedRingsByDistToPoint = function(point, resultSortedObjectsArray) 
+{
+	if(point === undefined)
+		return resultSortedObjectsArray;
+	
+	if(resultSortedObjectsArray === undefined)
+		resultSortedObjectsArray = [];
+	
+	var objectsAuxArray = [];
+	var ring;
+	var ringPoint;
+	var ringPointIdx;
+	var squaredDist;
+	var objectAux;
+	var startIdx, endIdx, insertIdx;
+	var ringsCount = this.getRingsCount();
+	for(var i=0; i<ringsCount; i++)
+	{
+		ring = this.getRing(i);
+		if(ring.polygon === undefined)
+			ring.makePolygon();
+		ringPointIdx = ring.polygon.point2dList.getNearestPointIdxToPoint(point);
+		ringPoint = ring.polygon.point2dList.getPoint(ringPointIdx);
+		squaredDist = ringPoint.squareDistToPoint(point);
+		objectAux = {};
+		objectAux.ring = ring;
+		objectAux.pointIdx = ringPointIdx;
+		objectAux.squaredDist = squaredDist;
+		
+		startIdx = 0;
+		endIdx = objectsAuxArray.length - 1;
+		
+		insertIdx = this.getIndexToInsertBySquaredDist(objectsAuxArray, objectAux, startIdx, endIdx);
+		objectsAuxArray.splice(insertIdx, 0, objectAux);
+	}
+	
+	if(resultSortedObjectsArray === undefined)
+		resultSortedObjectsArray = [];
+	
+	resultSortedObjectsArray.length = 0;
+	
+	var objectsCount = objectsAuxArray.length;
+	for(var i=0; i<objectsCount; i++)
+	{
+		resultSortedObjectsArray.push(objectsAuxArray[i]);
+	}
+	
+	return resultSortedObjectsArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns result_idx
+ */
+RingsList.prototype.getIndexToInsertBySquaredDist = function(objectsArray, object, startIdx, endIdx) 
+{
+	// this do a dicotomic search of idx in a ordered table.
+	// 1rst, check the range.
+	
+	var range = endIdx - startIdx;
+	
+	if(range <= 0)
+		return 0;
+	
+	if (range < 6)
+	{
+		// in this case do a lineal search.
+		var finished = false;
+		var i = startIdx;
+		var idx;
+		//var objectsCount = objectsArray.length;
+		while (!finished && i<=endIdx)
+		{
+			if (object.squaredDist < objectsArray[i].squaredDist)
+			{
+				idx = i;
+				finished = true;
+			}
+			i++;
+		}
+		
+		if (finished)
+		{
+			return idx;
+		}
+		else 
+		{
+			return endIdx+1;
+		}
+	}
+	else 
+	{
+		// in this case do the dicotomic search.
+		var middleIdx = startIdx + Math.floor(range/2);
+		var newStartIdx;
+		var newEndIdx;
+		if (objectsArray[middleIdx].squaredDist > object.squaredDist)
+		{
+			newStartIdx = startIdx;
+			newEndIdx = middleIdx;
+		}
+		else 
+		{
+			newStartIdx = middleIdx;
+			newEndIdx = endIdx;
+		}
+		return this.getIndexToInsertBySquaredDist(objectsArray, object, newStartIdx, newEndIdx);
+	}
+};
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -36849,6 +39204,184 @@ Segment2D.prototype.getDirection = function(resultDir)
 	
 	return resultDir;
 };
+
+Segment2D.prototype.getBoundaryRectangle = function(resultBRect)
+{
+	if(resultBRect === undefined)
+		resultBRect = new BoundaryRectangle();
+	
+	resultBRect.setInit(this.startPoint2d);
+	resultBRect.addPoint(this.endPoint2d);
+	
+	return resultBRect;
+};
+
+Segment2D.prototype.getLine = function(resultLine)
+{
+	if(resultLine === undefined)
+		resultLine = new Line2D();
+	
+	var dir = this.getDirection(); // unitary direction.***
+	var strPoint = this.startPoint2d;
+	resultLine.setPointAndDir(strPoint.x, strPoint.y, dir.x, dir.y);
+	return resultLine;
+};
+
+Segment2D.prototype.getSquaredLength = function()
+{
+	return this.startPoint2d.squareDistToPoint(this.endPoint2d);
+};
+
+Segment2D.prototype.getLength = function()
+{
+	return Math.sqrt(this.getSquaredLength());
+};
+
+Segment2D.prototype.intersectionWithPointByDistances = function(point, error)
+{
+	if(point === undefined)
+		return undefined;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	// here no check line-point coincidance.***
+	
+	// now, check if is inside of the segment or if is coincident with any vertex of segment.***
+	var distA = this.startPoint2d.distToPoint(point);
+	var distB = this.endPoint2d.distToPoint(point);
+	var distTotal = this.getLength();
+	
+	if(distA < error)
+		return Constant.INTERSECTION_POINT_A;
+	
+	if(distB < error)
+		return Constant.INTERSECTION_POINT_B;
+	
+	if(distA> distTotal || distB> distTotal)
+	{
+		return Constant.INTERSECTION_OUTSIDE;
+	}
+	
+	if(Math.abs(distA + distB - distTotal) < error)
+		return Constant.INTERSECTION_INSIDE;
+};
+
+Segment2D.prototype.intersectionWithPoint = function(point, error)
+{
+	if(point === undefined)
+		return undefined;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	var line = this.getLine();
+	if(!line.isCoincidentPoint(point, error))
+		return Constant.INTERSECTION_OUTSIDE; // no intersection.***
+	
+	return this.intersectionWithPointByDistances(point, error);
+};
+
+Segment2D.prototype.intersectionWithSegment = function(segment_B, error)
+{
+	if(segment_B === undefined)
+		return undefined;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	var myLine = this.getLine();
+	var line = segment_B.getLine();
+	var intersectionPoint = myLine.intersectionWithLine(line);
+	
+	if(intersectionPoint === undefined)
+		return undefined; // are parallels.***
+	
+	// now use "intersectionWithPointByDistances" instead "intersectionWithPoint" bcos line-point intersection check is no necesary.***
+	var intersectionType_A = this.intersectionWithPointByDistances(intersectionPoint);
+	
+	if(intersectionType_A === Constant.INTERSECTION_OUTSIDE)
+		return Constant.INTERSECTION_OUTSIDE;
+	
+	var intersectionType_B = segment_B.intersectionWithPointByDistances(intersectionPoint);
+	
+	if(intersectionType_B === Constant.INTERSECTION_OUTSIDE)
+		return Constant.INTERSECTION_OUTSIDE;
+	
+	return Constant.INTERSECTION_INTERSECT;
+};
+
+Segment2D.prototype.hasPoint = function(point)
+{
+	// returns if this segment has "point" as startPoint or endPoint.***
+	if(point === undefined)
+		return false;
+	
+	if(point === this.startPoint2d || point === this.endPoint2d)
+		return true;
+	
+	return false;
+};
+
+Segment2D.prototype.sharesPointsWithSegment = function(segment)
+{
+	if(segment === undefined)
+		return false;
+	
+	if(this.hasPoint(segment.startPoint2d) || this.hasPoint(segment.endPoint2d))
+		return true;
+	
+	return false;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 'use strict';
 
 /**
@@ -36864,6 +39397,74 @@ var Surface = function()
 
 	this.facesArray;
 };
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Tessellator
+ */
+var Tessellator = function() 
+{
+	if (!(this instanceof Tessellator)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 'use strict';
 
 /**
@@ -37130,11 +39731,6 @@ VtxSegment.prototype.intersectionWithPoint = function(point, error)
 	
 	if(Math.abs(distA + distB - distTotal) < error)
 		return Constant.INTERSECTION_INSIDE;
-	
-};
-
-VtxSegment.prototype.intersectionWithVtxSegment = function(vtxSeg, error)
-{
 	
 };
 
@@ -40442,1403 +43038,6 @@ void main()\n\
 'use strict';
 
 /**
- * 어떤 일을 하고 있습니까?
- * @class Renderer
- */
-var Renderer = function() 
-{
-	if (!(this instanceof Renderer)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.vbo_vi_cacheKey_aux;
-	this.byteColorAux = new ByteColor();
-
-	// SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.*** SCRATCH.***
-
-	this.currentTimeSC;
-	this.dateSC;
-	this.startTimeSC;
-	this.simpObj_scratch;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-Renderer.prototype.renderNodes = function(gl, visibleNodesArray, magoManager, standardShader, renderTexture, ssao_idx, maxSizeToRender, refMatrixIdxKey) 
-{
-	var node;
-	var rootNode;
-	var geoLocDataManager;
-	var neoBuilding;
-	var minSize = 0.0;
-	var lowestOctreesCount;
-	var lowestOctree;
-	var isInterior = false; // no used.***
-	
-	// set webgl options.
-	gl.enable(gl.DEPTH_TEST);
-	gl.depthFunc(gl.LEQUAL);
-	//gl.depthRange(0, 1);
-	if (MagoConfig.getPolicy().geo_cull_face_enable === "true") 
-	{
-		gl.enable(gl.CULL_FACE);
-	}
-	else 
-	{
-		gl.disable(gl.CULL_FACE);
-	}
-
-	gl.enable(gl.CULL_FACE);
-	gl.frontFace(gl.CCW);
-	
-	var flipYTexCoord = false;
-	
-	// do render.
-	var nodesCount = visibleNodesArray.length;
-	for (var i=0; i<nodesCount; i++)
-	{
-		node = visibleNodesArray[i];
-		rootNode = node.getRoot();
-		
-		geoLocDataManager = rootNode.data.geoLocDataManager;
-		neoBuilding = node.data.neoBuilding;
-		
-		if (neoBuilding.currentVisibleOctreesControler === undefined)
-		{ continue; }
-	
-		if (node.data.attributes.flipYTexCoords !== undefined)
-		{
-			flipYTexCoord = node.data.attributes.flipYTexCoords;
-		}
-		else 
-		{
-			flipYTexCoord = false;
-		}
-		gl.uniform1i(standardShader.textureFlipYAxis_loc, flipYTexCoord);
-		
-		var buildingGeoLocation = geoLocDataManager.getCurrentGeoLocationData();
-		gl.uniformMatrix4fv(standardShader.buildingRotMatrix_loc, false, buildingGeoLocation.rotMatrix._floatArrays);
-		gl.uniform3fv(standardShader.buildingPosHIGH_loc, buildingGeoLocation.positionHIGH);
-		gl.uniform3fv(standardShader.buildingPosLOW_loc, buildingGeoLocation.positionLOW);
-			
-		if (ssao_idx === 0)
-		{
-			renderTexture = false;
-		}
-		else if (ssao_idx === 1)
-		{
-			if (neoBuilding.texturesLoaded && neoBuilding.texturesLoaded.length>0)
-			{
-				renderTexture = true;
-			}
-			else { renderTexture = false; }
-			
-			if (magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.ALL && magoManager.buildingSelected === neoBuilding)
-			{
-				// active stencil buffer to draw silhouette.***
-				this.enableStencilBuffer(gl);
-			}
-			
-		}
-		
-		// LOD0.***
-		minSize = 0.0;
-		lowestOctreesCount = neoBuilding.currentVisibleOctreesControler.currentVisibles0.length;
-		for (var j=0; j<lowestOctreesCount; j++) 
-		{
-			lowestOctree = neoBuilding.currentVisibleOctreesControler.currentVisibles0[j];
-			if (lowestOctree.neoReferencesMotherAndIndices === undefined) 
-			{ continue; }
-
-			this.renderNeoRefListsAsimetricVersion(gl, lowestOctree.neoReferencesMotherAndIndices, neoBuilding, magoManager, isInterior, standardShader, renderTexture, ssao_idx, minSize, 0, refMatrixIdxKey);
-			//this.renderNeoRefListsGroupedVersion(gl, lowestOctree.neoReferencesMotherAndIndices, neoBuilding, magoManager, isInterior, standardShader, renderTexture, ssao_idx, minSize, 0, refMatrixIdxKey);
-		}
-		
-		// LOD1.***
-		minSize = 0.45;
-		lowestOctreesCount = neoBuilding.currentVisibleOctreesControler.currentVisibles1.length;
-		for (var j=0; j<lowestOctreesCount; j++) 
-		{
-			lowestOctree = neoBuilding.currentVisibleOctreesControler.currentVisibles1[j];
-			if (lowestOctree.neoReferencesMotherAndIndices === undefined) 
-			{ continue; }
-
-			this.renderNeoRefListsAsimetricVersion(gl, lowestOctree.neoReferencesMotherAndIndices, neoBuilding, magoManager, isInterior, standardShader, renderTexture, ssao_idx, minSize, 1, refMatrixIdxKey);
-			//this.renderNeoRefListsGroupedVersion(gl, lowestOctree.neoReferencesMotherAndIndices, neoBuilding, magoManager, isInterior, standardShader, renderTexture, ssao_idx, minSize, 1, refMatrixIdxKey);
-		}
-		
-		if (ssao_idx === 1)
-		{
-			if (magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.ALL && magoManager.buildingSelected === neoBuilding)
-			{
-				// deactive stencil buffer to draw silhouette.***
-				this.disableStencilBuffer(gl);
-			}
-			
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-Renderer.prototype.renderNeoBuildingsLOD2AsimetricVersion = function(gl, visibleNodesArray, magoManager, standardShader, renderTexture, ssao_idx) 
-{
-	var node;
-	var rootNode;
-	var geoLocDataManager;
-	var neoBuilding;
-	//var minSize = 0.0;
-	var lowestOctreesCount;
-	var lowestOctree;
-	//var isInterior = false; // no used.***
-	var lastExtureId;
-	
-	var nodesCount = visibleNodesArray.length;
-	for (var i=0; i<nodesCount; i++)
-	{
-		node = visibleNodesArray[i];
-		rootNode = node.getRoot();
-		geoLocDataManager = rootNode.data.geoLocDataManager;
-		neoBuilding = node.data.neoBuilding;
-		
-		if (neoBuilding.currentVisibleOctreesControler === undefined)
-		{ continue; }
-	
-		lowestOctreesCount = neoBuilding.currentVisibleOctreesControler.currentVisibles2.length;
-		if (lowestOctreesCount === 0)
-		{ continue; }
-		
-		if (ssao_idx === 1 && magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.ALL && magoManager.buildingSelected === neoBuilding)
-		{
-			// active stencil buffer to draw silhouette.***
-			this.enableStencilBuffer(gl);
-		}
-		
-		var buildingGeoLocation = geoLocDataManager.getCurrentGeoLocationData();
-		gl.uniformMatrix4fv(standardShader.buildingRotMatrix_loc, false, buildingGeoLocation.rotMatrix._floatArrays);
-		gl.uniform3fv(standardShader.buildingPosHIGH_loc, buildingGeoLocation.positionHIGH);
-		gl.uniform3fv(standardShader.buildingPosLOW_loc, buildingGeoLocation.positionLOW);
-
-		for (var j=0; j<lowestOctreesCount; j++) 
-		{
-			lowestOctree = neoBuilding.currentVisibleOctreesControler.currentVisibles2[j];
-
-			if (lowestOctree.lego === undefined) 
-			{
-				lowestOctree.lego = new Lego();
-				lowestOctree.lego.fileLoadState = CODE.fileLoadState.READY;
-				lowestOctree.lego.legoKey = lowestOctree.octreeKey + "_lego";
-			}
-
-			if (neoBuilding === undefined)
-			{ continue; }
-
-			// if the building is highlighted, the use highlight oneColor4.*********************
-			if (ssao_idx === 1)
-			{
-				if (neoBuilding.isHighLighted)
-				{
-					gl.uniform1i(standardShader.bUse1Color_loc, true);
-					gl.uniform4fv(standardShader.oneColor4_loc, this.highLightColor4); //.***
-				}
-				else if (neoBuilding.isColorChanged)
-				{
-					gl.uniform1i(standardShader.bUse1Color_loc, true);
-					gl.uniform4fv(standardShader.oneColor4_loc, [neoBuilding.aditionalColor.r, neoBuilding.aditionalColor.g, neoBuilding.aditionalColor.b, neoBuilding.aditionalColor.a]); //.***
-				}
-				else
-				{
-					gl.uniform1i(standardShader.bUse1Color_loc, false);
-				}
-				//----------------------------------------------------------------------------------
-				renderTexture = true;
-				if (neoBuilding.simpleBuilding3x3Texture !== undefined && neoBuilding.simpleBuilding3x3Texture.texId)
-				{
-					gl.enableVertexAttribArray(standardShader.texCoord2_loc);
-					//gl.activeTexture(gl.TEXTURE2); 
-					gl.uniform1i(standardShader.hasTexture_loc, true);
-					if (lastExtureId !== neoBuilding.simpleBuilding3x3Texture.texId)
-					{
-						gl.bindTexture(gl.TEXTURE_2D, neoBuilding.simpleBuilding3x3Texture.texId);
-						lastExtureId = neoBuilding.simpleBuilding3x3Texture.texId;
-					}
-				}
-				else 
-				{
-					//gl.bindTexture(gl.TEXTURE_2D, magoManager.textureAux_1x1.texId);
-					continue;
-					//gl.uniform1i(standardShader.hasTexture_loc, false);
-					//gl.disableVertexAttribArray(standardShader.texCoord2_loc);
-					//renderTexture = false;
-				}
-			}
-
-			this.renderLodBuilding(gl, lowestOctree.lego, magoManager, standardShader, ssao_idx, renderTexture);
-		}
-		
-		if (ssao_idx === 1 && magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.ALL && magoManager.buildingSelected === neoBuilding)
-		{
-			// active stencil buffer to draw silhouette.***
-			this.disableStencilBuffer(gl);
-		}
-	}
-};
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- */
-Renderer.prototype.renderNeoBuildingsLowLOD = function(gl, visibleNodesArray, magoManager, standardShader, renderTexture, ssao_idx) 
-{
-	var node;
-	var rootNode;
-	var geoLocDataManager;
-	var neoBuilding;
-	var lastExtureId;
-	var skinLego;
-	
-	var nodesCount = visibleNodesArray.length;
-	for (var i=0; i<nodesCount; i++)
-	{
-		node = visibleNodesArray[i];
-		rootNode = node.getRoot();
-		geoLocDataManager = rootNode.data.geoLocDataManager;
-		neoBuilding = node.data.neoBuilding;
-		if (neoBuilding === undefined)
-		{ continue; }
-		
-		skinLego = neoBuilding.getCurrentSkin();
-		
-		if (skinLego === undefined)
-		{ continue; }
-	
-		if (ssao_idx === 1 && magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.ALL && magoManager.buildingSelected === neoBuilding)
-		{
-			// active stencil buffer to draw silhouette.***
-			this.enableStencilBuffer(gl);
-		}
-			
-		var buildingGeoLocation = geoLocDataManager.getCurrentGeoLocationData();
-		gl.uniformMatrix4fv(standardShader.buildingRotMatrix_loc, false, buildingGeoLocation.rotMatrix._floatArrays);
-		gl.uniform3fv(standardShader.buildingPosHIGH_loc, buildingGeoLocation.positionHIGH);
-		gl.uniform3fv(standardShader.buildingPosLOW_loc, buildingGeoLocation.positionLOW);
-
-		//if (skinLego.dataArrayBuffer === undefined) 
-		//{ continue; }
-
-		// if the building is highlighted, the use highlight oneColor4.*********************
-		if (ssao_idx === 1)
-		{
-			if (neoBuilding.isHighLighted)
-			{
-				gl.uniform1i(standardShader.bUse1Color_loc, true);
-				gl.uniform4fv(standardShader.oneColor4_loc, this.highLightColor4); //.***
-			}
-			else if (neoBuilding.isColorChanged)
-			{
-				gl.uniform1i(standardShader.bUse1Color_loc, true);
-				gl.uniform4fv(standardShader.oneColor4_loc, [neoBuilding.aditionalColor.r, neoBuilding.aditionalColor.g, neoBuilding.aditionalColor.b, neoBuilding.aditionalColor.a]); //.***
-			}
-			else
-			{
-				gl.uniform1i(standardShader.bUse1Color_loc, false);
-			}
-			//----------------------------------------------------------------------------------
-			renderTexture = true;
-			if (skinLego.texture !== undefined && skinLego.texture.texId)
-			{
-				gl.enableVertexAttribArray(standardShader.texCoord2_loc);
-				//gl.activeTexture(gl.TEXTURE2); 
-				gl.uniform1i(standardShader.hasTexture_loc, true);
-				if (lastExtureId !== skinLego.texture.texId)
-				{
-					gl.bindTexture(gl.TEXTURE_2D, skinLego.texture.texId);
-					lastExtureId = skinLego.texture.texId;
-				}
-			}
-			else 
-			{
-				if (magoManager.textureAux_1x1 !== undefined)
-				{
-					gl.enableVertexAttribArray(standardShader.texCoord2_loc);
-					//gl.activeTexture(gl.TEXTURE2); 
-					gl.uniform1i(standardShader.hasTexture_loc, true);
-					gl.bindTexture(gl.TEXTURE_2D, magoManager.textureAux_1x1);
-					//gl.uniform1i(standardShader.hasTexture_loc, false);
-					//gl.disableVertexAttribArray(standardShader.texCoord2_loc);
-					//renderTexture = false;
-				}
-			}
-		}
-
-		this.renderLodBuilding(gl, skinLego, magoManager, standardShader, ssao_idx, renderTexture);
-		skinLego = undefined;
-		
-		if (ssao_idx === 1 && magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.ALL && magoManager.buildingSelected === neoBuilding)
-		{
-			// active stencil buffer to draw silhouette.***
-			this.disableStencilBuffer(gl);
-		}
-	}
-};
-
-Renderer.prototype.enableStencilBuffer = function(gl)
-{
-	// Active stencil if the object is selected.
-	gl.enable(gl.STENCIL_TEST);
-	
-	gl.stencilFunc(gl.ALWAYS, 1, 1);
-	// (stencil-fail: replace), (stencil-pass & depth-fail: replace), (stencil-pass & depth-pass: replace).***
-	//gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
-	gl.stencilOp(gl.KEEP, gl.REPLACE, gl.REPLACE);
-	gl.enable(gl.POLYGON_OFFSET_FILL);
-	//gl.disable(gl.CULL_FACE);
-};
-
-Renderer.prototype.disableStencilBuffer = function(gl)
-{
-	gl.disable(gl.STENCIL_TEST);
-	gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
-	gl.disable(gl.POLYGON_OFFSET_FILL);
-	//gl.enable(gl.CULL_FACE);
-};
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param neoRefList_array 변수
- * @param neoBuilding 변수
- * @param magoManager 변수
- * @param isInterior 변수
- * @param standardShader 변수
- * @param renderTexture 변수
- * @param ssao_idx 변수
- */
-Renderer.prototype.renderNeoRefListsAsimetricVersion = function(gl, neoReferencesMotherAndIndices, neoBuilding, magoManager,
-	isInterior, standardShader, renderTexture, ssao_idx, maxSizeToRender, lod, refMatrixIdxKey) 
-{
-	// render_neoRef
-	if (neoReferencesMotherAndIndices.neoRefsIndices === undefined)
-	{ return; }
-	
-	var neoRefsCount = neoReferencesMotherAndIndices.neoRefsIndices.length;
-	if (neoRefsCount === 0) 
-	{ return; }
-	
-	if (ssao_idx === 0) // do depth render.***
-	{
-		this.depthRenderNeoRefListsAsimetricVersion(gl, neoReferencesMotherAndIndices, neoBuilding, magoManager,
-			isInterior, standardShader, renderTexture, ssao_idx, maxSizeToRender, lod, refMatrixIdxKey);
-		return;
-	}
-
-	//var timeControlCounter = 0;
-
-	var cacheKeys_count;
-	var block_idx;
-	var block;
-	var current_tex_id;
-	var texFileLoadState;
-
-	gl.activeTexture(gl.TEXTURE2); // ...***
-	if (renderTexture) 
-	{
-		if (ssao_idx === 1) { gl.uniform1i(standardShader.hasTexture_loc, true); } //.***
-	}
-	else 
-	{
-		gl.bindTexture(gl.TEXTURE_2D, magoManager.textureAux_1x1);
-	}
-	gl.bindTexture(gl.TEXTURE_2D, magoManager.textureAux_1x1);
-
-	var myBlocksList = neoReferencesMotherAndIndices.blocksList;
-	if (myBlocksList === undefined)
-	{ return; }
-
-	if (myBlocksList.fileLoadState !== CODE.fileLoadState.PARSE_FINISHED) { return; }
-		
-	// New version. Use occlussion indices.***
-	//var visibleIndices_count = neoReferencesMotherAndIndices.neoRefsIndices.length; // no occludeCulling mode.***
-	var visibleIndices_count = neoReferencesMotherAndIndices.currentVisibleIndices.length;
-
-	for (var k=0; k<visibleIndices_count; k++) 
-	{
-		//var neoReference = neoReferencesMotherAndIndices.motherNeoRefsList[neoReferencesMotherAndIndices.neoRefsIndices[k]]; // no occludeCulling mode.***
-		var neoReference = neoReferencesMotherAndIndices.motherNeoRefsList[neoReferencesMotherAndIndices.currentVisibleIndices[k]];
-		if (neoReference === undefined)
-		{ continue; }
-		
-		if (neoReference.renderingFase === magoManager.renderingFase)
-		{ continue; }
-		if (neoReference.tMatrixAuxArray === undefined)
-		{
-			//neoReference.multiplyKeyTransformMatrix(refMatrixIdxKey, neoBuilding.geoLocationDataAux.rotMatrix);
-			// we must collect all the neoReferences that has no tMatrixAuxArray and make it.***
-			continue;
-		}
-
-		block_idx = neoReference._block_idx;
-		block = neoBuilding.motherBlocksArray[block_idx];
-
-		if (block === undefined)
-		{ continue; }
-
-		if (maxSizeToRender && (block.radius < maxSizeToRender))
-		{ continue; }
-		
-		if (magoManager.isCameraMoving && block.radius < magoManager.smallObjectSize && magoManager.objectSelected !== neoReference)
-		{ continue; }
-		
-		// Check if the texture is loaded.
-		//if(renderTexture)
-		{
-			//if (neoReference.texture !== undefined || neoReference.materialId != -1)
-			if (neoReference.hasTexture)// && neoReference.texture !== undefined)
-			{
-				// note: in the future use only "neoReference.materialId".
-				texFileLoadState = neoBuilding.manageNeoReferenceTexture(neoReference, magoManager);
-				if (texFileLoadState !== CODE.fileLoadState.LOADING_FINISHED)
-				{ continue; }
-			
-				if (neoReference.texture === undefined)
-				{ continue; }
-			
-				if (neoReference.texture.texId === undefined)
-				{ continue; }
-			}
-		}
-		
-		// Check the color or texture of reference object.
-		if (neoBuilding.isHighLighted)
-		{
-			gl.uniform1i(standardShader.hasTexture_loc, false); //.***
-			gl.uniform4fv(standardShader.color4Aux_loc, magoManager.highLightColor4);
-		}
-		else if (neoBuilding.isColorChanged)
-		{
-			gl.uniform1i(standardShader.hasTexture_loc, false); //.***
-			if (magoManager.objectSelected === neoReference) 
-			{
-				gl.uniform4fv(standardShader.color4Aux_loc, [255.0/255.0, 0/255.0, 0/255.0, 255.0/255.0]);
-			}
-			else
-			{
-				gl.uniform4fv(standardShader.color4Aux_loc, [neoBuilding.aditionalColor.r, neoBuilding.aditionalColor.g, neoBuilding.aditionalColor.b, neoBuilding.aditionalColor.a] );
-			}
-		}
-		else if (neoReference.aditionalColor)
-		{
-			gl.uniform1i(standardShader.hasTexture_loc, false); //.***
-			if (magoManager.objectSelected === neoReference) 
-			{
-				gl.uniform4fv(standardShader.color4Aux_loc, [255.0/255.0, 0/255.0, 0/255.0, 255.0/255.0]);
-			}
-			else
-			{
-				gl.uniform4fv(standardShader.color4Aux_loc, [neoReference.aditionalColor.r, neoReference.aditionalColor.g, neoReference.aditionalColor.b, neoReference.aditionalColor.a] );
-			}
-		}
-		else
-		{
-			// Normal rendering.
-			if (magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.OBJECT && magoManager.objectSelected === neoReference) 
-			{
-				gl.uniform1i(standardShader.hasTexture_loc, false); //.***
-				gl.uniform4fv(standardShader.color4Aux_loc, [255.0/255.0, 0/255.0, 0/255.0, 255.0/255.0]);
-				
-				// Active stencil if the object is selected.
-				this.enableStencilBuffer(gl);
-			}
-			else if (magoManager.magoPolicy.colorChangedObjectId === neoReference.objectId)
-			{
-				gl.uniform1i(standardShader.hasTexture_loc, false); //.***
-				gl.uniform4fv(standardShader.color4Aux_loc, [magoManager.magoPolicy.color[0], magoManager.magoPolicy.color[1], magoManager.magoPolicy.color[2], 1.0]);
-			}
-			else
-			{
-				
-				if (renderTexture && neoReference.hasTexture) 
-				{
-					if (neoReference.texture !== undefined && neoReference.texture.texId !== undefined) 
-					{
-						//textureBinded = true;
-						gl.uniform1i(standardShader.hasTexture_loc, true); //.***
-						if (current_tex_id !== neoReference.texture.texId) 
-						{
-							gl.bindTexture(gl.TEXTURE_2D, neoReference.texture.texId);
-							current_tex_id = neoReference.texture.texId;
-						}
-					}
-					else 
-					{
-						gl.uniform1i(standardShader.hasTexture_loc, false); //.***
-						gl.uniform4fv(standardShader.color4Aux_loc, [0.8, 0.8, 0.8, 1.0]);
-					}
-				}
-				else 
-				{
-					// if no render texture, then use a color.***
-					if (neoReference.color4) 
-					{
-						gl.uniform1i(standardShader.hasTexture_loc, false); //.***
-						gl.uniform4fv(standardShader.color4Aux_loc, [neoReference.color4.r/255.0, neoReference.color4.g/255.0, neoReference.color4.b/255.0, neoReference.color4.a/255.0]);
-					}
-					else
-					{
-						gl.uniform1i(standardShader.hasTexture_loc, false); //.***
-						gl.uniform4fv(standardShader.color4Aux_loc, [0.8, 0.8, 0.8, 1.0]);
-					}
-				}
-			}
-		}
-		
-		cacheKeys_count = block.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray.length;
-		// Must applicate the transformMatrix of the reference object.***
-		
-		// test.***
-		//if(neoBuilding.buildingId === "testID")
-		//neoReference.refMatrixType = 0;
-	
-		gl.uniform1i(standardShader.refMatrixType_loc, neoReference.refMatrixType);
-		if (refMatrixIdxKey === undefined || refMatrixIdxKey === -1)
-		{ // never enter here...
-			if (neoReference.refMatrixType === 1)
-			{ gl.uniform3fv(standardShader.refTranslationVec_loc, neoReference.refTranslationVec); }
-			else if (neoReference.refMatrixType === 2)
-			{ gl.uniformMatrix4fv(standardShader.RefTransfMatrix, false, neoReference._matrix4._floatArrays); } 
-		}
-		else 
-		{
-			if (neoReference.refMatrixType === 1)
-			{ gl.uniform3fv(standardShader.refTranslationVec_loc, neoReference.refTranslationVec); }
-			else if (neoReference.refMatrixType === 2)
-			{ gl.uniformMatrix4fv(standardShader.RefTransfMatrix, false, neoReference.tMatrixAuxArray[refMatrixIdxKey]._floatArrays); }
-		}
-
-		if (neoReference.moveVector !== undefined) 
-		{
-			gl.uniform1i(standardShader.hasAditionalMov_loc, true);
-			gl.uniform3fv(standardShader.aditionalMov_loc, [neoReference.moveVector.x, neoReference.moveVector.y, neoReference.moveVector.z]); //.***
-		}
-		else 
-		{
-			gl.uniform1i(standardShader.hasAditionalMov_loc, false);
-			gl.uniform3fv(standardShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
-		}
-
-		for (var n=0; n<cacheKeys_count; n++) // Original.***
-		{
-			//var mesh_array = block.viArraysContainer._meshArrays[n];
-			this.vbo_vi_cacheKey_aux = block.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray[n];
-			if (!this.vbo_vi_cacheKey_aux.isReadyPositions(gl, magoManager.vboMemoryManager) || !this.vbo_vi_cacheKey_aux.isReadyNormals(gl, magoManager.vboMemoryManager) || !this.vbo_vi_cacheKey_aux.isReadyFaces(gl, magoManager.vboMemoryManager))
-			{ continue; }
-			
-			// Positions.***
-			gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshVertexCacheKey);
-			gl.vertexAttribPointer(standardShader.position3_loc, 3, gl.FLOAT, false, 0, 0);
-			//gl.vertexAttribPointer(standardShader.attribLocationCacheObj["position"], 3, gl.FLOAT, false,0,0);
-
-			// Normals.***
-			if (standardShader.normal3_loc !== -1) 
-			{
-				gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshNormalCacheKey);
-				gl.vertexAttribPointer(standardShader.normal3_loc, 3, gl.BYTE, true, 0, 0);
-			}
-
-			if (renderTexture && neoReference.hasTexture) 
-			{
-				if (block.vertexCount <= neoReference.vertexCount) 
-				{
-					var refVboData = neoReference.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray[n];
-					if (!refVboData.isReadyTexCoords(gl, magoManager.vboMemoryManager))
-					{ continue; }
-
-					gl.enableVertexAttribArray(standardShader.texCoord2_loc);
-					gl.bindBuffer(gl.ARRAY_BUFFER, refVboData.meshTexcoordsCacheKey);
-					gl.vertexAttribPointer(standardShader.texCoord2_loc, 2, gl.FLOAT, false, 0, 0);
-				}
-				else 
-				{
-					if (standardShader.texCoord2_loc !== -1) { gl.disableVertexAttribArray(standardShader.texCoord2_loc); }
-				}
-			}
-			else 
-			{
-				if (standardShader.texCoord2_loc !== -1) { gl.disableVertexAttribArray(standardShader.texCoord2_loc); }
-			}
-
-			// Indices.***
-			var indicesCount;
-			if (magoManager.isCameraMoving)// && !isInterior && magoManager.isCameraInsideBuilding)
-			{
-				if (magoManager.objectSelected === neoReference)
-				{ indicesCount = this.vbo_vi_cacheKey_aux.indicesCount; }
-				else
-				{
-					indicesCount = this.vbo_vi_cacheKey_aux.bigTrianglesIndicesCount;
-					if (indicesCount > this.vbo_vi_cacheKey_aux.indicesCount)
-					{ indicesCount = this.vbo_vi_cacheKey_aux.indicesCount; }
-				}
-			}
-			else
-			{
-				//if(lod > 0)
-				//{
-				//	indicesCount = this.vbo_vi_cacheKey_aux.bigTrianglesIndicesCount;
-				//	if(indicesCount > this.vbo_vi_cacheKey_aux.indicesCount)
-				//		indicesCount = this.vbo_vi_cacheKey_aux.indicesCount;
-				//}
-				//else indicesCount = this.vbo_vi_cacheKey_aux.indicesCount;
-				if (magoManager.thereAreUrgentOctrees)
-				{
-					indicesCount = this.vbo_vi_cacheKey_aux.bigTrianglesIndicesCount;
-					if (indicesCount > this.vbo_vi_cacheKey_aux.indicesCount)
-					{ indicesCount = this.vbo_vi_cacheKey_aux.indicesCount; }
-				}
-				else 
-				{
-					indicesCount = this.vbo_vi_cacheKey_aux.indicesCount;
-				}
-			}
-
-			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshFacesCacheKey);
-			gl.drawElements(gl.TRIANGLES, indicesCount, gl.UNSIGNED_SHORT, 0); // Fill.***
-			//gl.drawElements(gl.LINES, this.vbo_vi_cacheKey_aux.indicesCount, gl.UNSIGNED_SHORT, 0); // Wireframe.***
-		}
-
-		neoReference.swapRenderingFase();
-		if (magoManager.magoPolicy.getObjectMoveMode() === CODE.moveMode.OBJECT && magoManager.objectSelected === neoReference)
-		{
-			this.disableStencilBuffer(gl);
-			gl.disable(gl.POLYGON_OFFSET_FILL);
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param neoRefList_array 변수
- * @param neoBuilding 변수
- * @param magoManager 변수
- * @param isInterior 변수
- * @param standardShader 변수
- * @param renderTexture 변수
- * @param ssao_idx 변수
- */
-Renderer.prototype.depthRenderNeoRefListsAsimetricVersion = function(gl, neoReferencesMotherAndIndices, neoBuilding, magoManager,
-	isInterior, standardShader, renderTexture, ssao_idx, maxSizeToRender, lod, refMatrixIdxKey) 
-{
-	// render_neoRef
-	var neoRefsCount = neoReferencesMotherAndIndices.neoRefsIndices.length;
-	if (neoRefsCount === 0) 
-	{ return; }
-	
-
-	var cacheKeys_count;
-	//var reference;
-	var block_idx;
-	var block;
-	//var vbo_ByteColorsCacheKeys_Container;
-
-	//var geometryDataPath = magoManager.readerWriter.geometryDataPath;
-
-	for (var j=0; j<1; j++) 
-	{
-		var myBlocksList = neoReferencesMotherAndIndices.blocksList;
-		if (myBlocksList === undefined)
-		{ continue; }
-
-		if (myBlocksList.fileLoadState !== CODE.fileLoadState.PARSE_FINISHED) { continue; }
-			
-		// New version. Use occlussion indices.***
-		//var visibleIndices_count = neoReferencesMotherAndIndices.neoRefsIndices.length; // no occludeCulling mode.***
-		var visibleIndices_count = neoReferencesMotherAndIndices.currentVisibleIndices.length;
-
-		for (var k=0; k<visibleIndices_count; k++) 
-		{
-			//var neoReference = neoReferencesMotherAndIndices.motherNeoRefsList[neoReferencesMotherAndIndices.neoRefsIndices[k]]; // no occludeCulling mode.***
-			var neoReference = neoReferencesMotherAndIndices.motherNeoRefsList[neoReferencesMotherAndIndices.currentVisibleIndices[k]];
-			if (neoReference === undefined) 
-			{ continue; }
-
-			if (neoReference.renderingFase === magoManager.renderingFase)
-			{ continue; }
-			
-			if (neoReference.tMatrixAuxArray === undefined)
-			{
-				//neoReference.multiplyKeyTransformMatrix(refMatrixIdxKey, neoBuilding.geoLocationDataAux.rotMatrix);
-				// we must collect all the neoReferences that has no tMatrixAuxArray and make it.***
-				continue;
-			}
-
-			block_idx = neoReference._block_idx;
-			block = neoBuilding.motherBlocksArray[block_idx];
-
-			if (block === undefined)
-			{ continue; }
-
-			if (maxSizeToRender && (block.radius < maxSizeToRender))
-			{ continue; }
-			
-			if (magoManager.isCameraMoving && block.radius < magoManager.smallObjectSize && magoManager.objectSelected !== neoReference)
-			{ continue; }
-			
-			gl.uniform1i(standardShader.hasTexture_loc, false); //.***
-			gl.uniform4fv(standardShader.color4Aux_loc, [0.0/255.0, 0.0/255.0, 0.0/255.0, 1.0]);
-
-
-			cacheKeys_count = block.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray.length;
-			// Must applicate the transformMatrix of the reference object.***
-			// Must applicate the transformMatrix of the reference object.***
-			gl.uniform1i(standardShader.refMatrixType_loc, neoReference.refMatrixType);
-			if (refMatrixIdxKey === undefined || refMatrixIdxKey === -1)
-			{ // never enter here...
-				if (neoReference.refMatrixType === 1)
-				{ gl.uniform3fv(standardShader.refTranslationVec_loc, neoReference.refTranslationVec); }
-				else if (neoReference.refMatrixType === 2)
-				{ gl.uniformMatrix4fv(standardShader.RefTransfMatrix, false, neoReference._matrix4._floatArrays); } 
-			}
-			else 
-			{
-				if (neoReference.refMatrixType === 1)
-				{ gl.uniform3fv(standardShader.refTranslationVec_loc, neoReference.refTranslationVec); }
-				else if (neoReference.refMatrixType === 2)
-				{ gl.uniformMatrix4fv(standardShader.RefTransfMatrix, false, neoReference.tMatrixAuxArray[refMatrixIdxKey]._floatArrays); }
-			}
-
-			if (neoReference.moveVector !== undefined) 
-			{
-				gl.uniform1i(standardShader.hasAditionalMov_loc, true);
-				gl.uniform3fv(standardShader.aditionalMov_loc, [neoReference.moveVector.x, neoReference.moveVector.y, neoReference.moveVector.z]); //.***
-			}
-			else 
-			{
-				gl.uniform1i(standardShader.hasAditionalMov_loc, false);
-				gl.uniform3fv(standardShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
-			}
-
-			for (var n=0; n<cacheKeys_count; n++) // Original.***
-			{
-				//var mesh_array = block.viArraysContainer._meshArrays[n];
-				this.vbo_vi_cacheKey_aux = block.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray[n];
-				if (!this.vbo_vi_cacheKey_aux.isReadyPositions(gl, magoManager.vboMemoryManager))
-				{ continue; }
-
-				if (!this.vbo_vi_cacheKey_aux.isReadyFaces(gl, magoManager.vboMemoryManager))
-				{ continue; }
-				
-				// Positions.***
-				gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshVertexCacheKey);
-				gl.vertexAttribPointer(standardShader.position3_loc, 3, gl.FLOAT, false, 0, 0);
-				
-				// Indices.***
-				var indicesCount;
-				if (magoManager.isCameraMoving)// && !isInterior && magoManager.isCameraInsideBuilding)
-				{
-					if (magoManager.objectSelected === neoReference)
-					{ indicesCount = this.vbo_vi_cacheKey_aux.indicesCount; }
-					else 
-					{
-						indicesCount = this.vbo_vi_cacheKey_aux.bigTrianglesIndicesCount;
-						if (indicesCount > this.vbo_vi_cacheKey_aux.indicesCount)
-						{ indicesCount = this.vbo_vi_cacheKey_aux.indicesCount; }
-						
-						//if(indicesCount === 0)
-						//	indicesCount = this.vbo_vi_cacheKey_aux.indicesCount;
-					}
-				}
-				else
-				{
-					indicesCount = this.vbo_vi_cacheKey_aux.indicesCount;
-				}
-
-				gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshFacesCacheKey);
-				gl.drawElements(gl.TRIANGLES, indicesCount, gl.UNSIGNED_SHORT, 0); // Fill.***
-				//gl.drawElements(gl.LINES, this.vbo_vi_cacheKey_aux.indicesCount, gl.UNSIGNED_SHORT, 0); // Wireframe.***
-			}
-
-			neoReference.swapRenderingFase();
-		}
-	}
-};
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param neoRefList_array 변수
- * @param neoBuilding 변수
- * @param magoManager 변수
- * @param isInterior 변수
- * @param standardShader 변수
- */
-Renderer.prototype.renderNeoRefListsAsimetricVersionColorSelection = function(gl, lowestOctree, node, magoManager, isInterior, standardShader, maxSizeToRender, refMatrixIdxKey, glPrimitive) 
-{
-	var neoBuilding = node.data.neoBuilding;
-	// render_neoRef
-	var neoReferencesMotherAndIndices = lowestOctree.neoReferencesMotherAndIndices;
-	if (neoReferencesMotherAndIndices === undefined)
-	{ return; }
-	
-	var neoRefsCount = neoReferencesMotherAndIndices.neoRefsIndices.length;
-	if (neoRefsCount === 0) { return; }
-
-	//var timeControlCounter = 0;
-	//var geometryDataPath = magoManager.readerWriter.geometryDataPath;
-	var myBlocksList = neoReferencesMotherAndIndices.blocksList;
-
-	if (myBlocksList === undefined)
-	{ return; }
-
-	if (myBlocksList.fileLoadState === CODE.fileLoadState.LOADING_FINISHED && !magoManager.isCameraMoving)
-	{ return; }
-
-	if (myBlocksList.fileLoadState !== CODE.fileLoadState.PARSE_FINISHED) { return; }
-
-	// New version. Use occlussion indices.***
-	var visibleIndices_count = neoReferencesMotherAndIndices.currentVisibleIndices.length;
-	var selCandidates = magoManager.selectionCandidates;
-	var idxKey;
-
-	for (var k=0; k<visibleIndices_count; k++) 
-	{
-		var neoReference = neoReferencesMotherAndIndices.motherNeoRefsList[neoReferencesMotherAndIndices.currentVisibleIndices[k]];
-		
-		if (neoReference.renderingFase === magoManager.renderingFase)
-		{ continue; }
-	
-		neoReference.selColor4 = magoManager.selectionColor.getAvailableColor(neoReference.selColor4); // new.
-		idxKey = magoManager.selectionColor.decodeColor3(neoReference.selColor4.r, neoReference.selColor4.g, neoReference.selColor4.b);
-		selCandidates.setCandidates(idxKey, neoReference, lowestOctree, neoBuilding, node);
-		
-		if (neoReference.selColor4) 
-		{
-			//if(neoReference.color4.a < 255) // if transparent object, then skip. provisional.***
-			//gl.uniform1i(standardShader.hasTexture_loc, false); //.***
-			gl.uniform4fv(standardShader.color4Aux_loc, [neoReference.selColor4.r/255.0, neoReference.selColor4.g/255.0, neoReference.selColor4.b/255.0, 1.0]);
-		}
-
-		this.renderNeoReferenceAsimetricVersionColorSelection(gl, neoReference, neoReferencesMotherAndIndices, neoBuilding, magoManager, standardShader, maxSizeToRender, refMatrixIdxKey, glPrimitive);
-		
-		neoReference.swapRenderingFase();
-	}
-
-	//gl.enable(gl.DEPTH_TEST);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param neoRefList_array 변수
- * @param neoBuilding 변수
- * @param magoManager 변수
- * @param isInterior 변수
- * @param standardShader 변수
- */
-Renderer.prototype.renderNeoReferenceAsimetricVersionColorSelection = function(gl, neoReference, neoReferencesMotherAndIndices, neoBuilding, magoManager, standardShader, maxSizeToRender, refMatrixIdxKey, glPrimitive) 
-{
-	if (neoReferencesMotherAndIndices === undefined)
-	{ return; }
-
-	var cacheKeys_count;
-	var block_idx;
-	var block;
-
-	var myBlocksList = neoReferencesMotherAndIndices.blocksList;
-
-	if (myBlocksList === undefined)
-	{ return; }
-
-	if (myBlocksList.fileLoadState === CODE.fileLoadState.LOADING_FINISHED && !magoManager.isCameraMoving)
-	{ return; }
-
-	if (myBlocksList.fileLoadState !== CODE.fileLoadState.PARSE_FINISHED) 
-	{ return; }
-
-	if (neoReference=== undefined) 
-	{ return; }
-
-	block_idx = neoReference._block_idx;
-	block = neoBuilding.motherBlocksArray[block_idx];
-
-	if (block === undefined)
-	{ return; }
-
-	if (maxSizeToRender && (block.radius < maxSizeToRender))
-	{ return; }
-	
-	if (magoManager.isCameraMoving && block.isSmallObj && magoManager.objectSelected !== neoReference)
-	{ return; }
-	
-	// End checking textures loaded.------------------------------------------------------------------------------------
-	cacheKeys_count = block.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray.length;
-	// Must applicate the transformMatrix of the reference object.***
-
-	gl.uniform1i(standardShader.refMatrixType_loc, neoReference.refMatrixType);
-	if (refMatrixIdxKey === undefined || refMatrixIdxKey === -1)
-	{ // never enter here...
-		if (neoReference.refMatrixType === 1)
-		{ gl.uniform3fv(standardShader.refTranslationVec_loc, neoReference.refTranslationVec); }
-		else if (neoReference.refMatrixType === 2)
-		{ gl.uniformMatrix4fv(standardShader.RefTransfMatrix, false, neoReference._matrix4._floatArrays); } 
-	}
-	else 
-	{
-		if (neoReference.tMatrixAuxArray === undefined)
-		{
-			//neoReference.multiplyKeyTransformMatrix(refMatrixIdxKey, neoBuilding.geoLocationDataAux.rotMatrix);
-			// we must collect all the neoReferences that has no tMatrixAuxArray and make it.***
-			return;
-		}
-		
-		if (neoReference.refMatrixType === 1)
-		{ gl.uniform3fv(standardShader.refTranslationVec_loc, neoReference.refTranslationVec); }
-		else if (neoReference.refMatrixType === 2)
-		{ gl.uniformMatrix4fv(standardShader.RefTransfMatrix, false, neoReference.tMatrixAuxArray[refMatrixIdxKey]._floatArrays); }
-
-	}
-
-	if (neoReference.moveVector !== undefined) 
-	{
-		gl.uniform1i(standardShader.hasAditionalMov_loc, true);
-		gl.uniform3fv(standardShader.aditionalMov_loc, [neoReference.moveVector.x, neoReference.moveVector.y, neoReference.moveVector.z]); //.***
-	}
-	else 
-	{
-		gl.uniform1i(standardShader.hasAditionalMov_loc, false);
-		gl.uniform3fv(standardShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
-	}
-
-	for (var n=0; n<cacheKeys_count; n++) // Original.***
-	{
-		//var mesh_array = block.viArraysContainer._meshArrays[n];
-		this.vbo_vi_cacheKey_aux = block.vBOVertexIdxCacheKeysContainer.vboCacheKeysArray[n];
-
-		if (!this.vbo_vi_cacheKey_aux.isReadyPositions(gl, magoManager.vboMemoryManager))
-		{ continue; }
-		
-		if (!this.vbo_vi_cacheKey_aux.isReadyFaces(gl, magoManager.vboMemoryManager))
-		{ continue; }
-
-		// Positions.***
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshVertexCacheKey);
-		gl.vertexAttribPointer(standardShader.position3_loc, 3, gl.FLOAT, false, 0, 0);
-
-		// Indices.***
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vbo_vi_cacheKey_aux.meshFacesCacheKey);
-		gl.drawElements(glPrimitive, this.vbo_vi_cacheKey_aux.indicesCount, gl.UNSIGNED_SHORT, 0); 
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param neoRefList_array 변수
- * @param neoBuilding 변수
- * @param magoManager 변수
- * @param isInterior 변수
- * @param standardShader 변수
- * @param renderTexture 변수
- * @param ssao_idx 변수
- */
-Renderer.prototype.renderLodBuilding = function(gl, lodBuilding, magoManager, shader, ssao_idx, renderTexture) 
-{
-	if (lodBuilding.vbo_vicks_container.vboCacheKeysArray.length === 0) 
-	{
-		return;
-	}
-	gl.frontFace(gl.CCW);
-	// ssao_idx = -1 -> pickingMode.***
-	// ssao_idx = 0 -> depth.***
-	// ssao_idx = 1 -> ssao.***
-
-	if (ssao_idx === 0) // depth.***
-	{
-		// 1) Position.*********************************************
-		var vbo_vicky = lodBuilding.vbo_vicks_container.vboCacheKeysArray[0]; // there are only one.***
-		if (!vbo_vicky.isReadyPositions(gl, magoManager.vboMemoryManager))
-		{ return; }
-
-		var vertices_count = vbo_vicky.vertexCount;
-		if (vertices_count === 0) 
-		{
-			return;
-		}
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshVertexCacheKey);
-		gl.vertexAttribPointer(shader.position3_loc, 3, gl.FLOAT, false, 0, 0);
-		gl.drawArrays(gl.TRIANGLES, 0, vertices_count);
-	}
-	else if (ssao_idx === 1) // ssao.***
-	{
-		var vbo_vicky = lodBuilding.vbo_vicks_container.vboCacheKeysArray[0]; // there are only one.***
-		var vertices_count = vbo_vicky.vertexCount;
-
-		if (vertices_count === 0) 
-		{
-			return;
-		}
-		
-		if (!vbo_vicky.isReadyPositions(gl, magoManager.vboMemoryManager))
-		{ return; }
-		
-		if (!vbo_vicky.isReadyNormals(gl, magoManager.vboMemoryManager))
-		{ return; }
-		
-		if (!renderTexture && !vbo_vicky.isReadyColors(gl, magoManager.vboMemoryManager))
-		{ return; }
-		
-		// 4) Texcoord.*********************************************
-		if (renderTexture)
-		{
-			if (!vbo_vicky.isReadyTexCoords(gl, magoManager.vboMemoryManager))
-			{ return; }
-		}
-
-		gl.disableVertexAttribArray(shader.color4_loc);
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshVertexCacheKey);
-		gl.vertexAttribPointer(shader.position3_loc, 3, gl.FLOAT, false, 0, 0);
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshNormalCacheKey);
-		gl.vertexAttribPointer(shader.normal3_loc, 3, gl.BYTE, true, 0, 0);
-
-		if (vbo_vicky.meshColorCacheKey !== undefined )
-		{
-			gl.enableVertexAttribArray(shader.color4_loc);
-			gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshColorCacheKey);
-			gl.vertexAttribPointer(shader.color4_loc, 4, gl.UNSIGNED_BYTE, true, 0, 0);
-		}
-		
-		if (renderTexture && vbo_vicky.meshTexcoordsCacheKey)
-		{
-			gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshTexcoordsCacheKey);
-			gl.vertexAttribPointer(shader.texCoord2_loc, 2, gl.FLOAT, false, 0, 0);
-		}
-
-		gl.drawArrays(gl.TRIANGLES, 0, vertices_count);
-		//gl.drawArrays(gl.LINES, 0, vertices_count);
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param neoRefList_array 변수
- * @param neoBuilding 변수
- * @param magoManager 변수
- * @param isInterior 변수
- * @param standardShader 변수
- * @param renderTexture 변수
- * @param ssao_idx 변수
- */
-Renderer.prototype.renderLodBuildingColorSelection = function(gl, lodBuilding, magoManager, shader)
-{
-	if (lodBuilding.vbo_vicks_container.vboCacheKeysArray.length === 0) 
-	{
-		return;
-	}
-	gl.frontFace(gl.CCW);
-
-	// 1) Position.*********************************************
-	var vbo_vicky = lodBuilding.vbo_vicks_container.vboCacheKeysArray[0]; // there are only one.***
-	if (!vbo_vicky.isReadyPositions(gl, magoManager.vboMemoryManager))
-	{ return; }
-
-	var vertices_count = vbo_vicky.vertexCount;
-	if (vertices_count === 0) 
-	{
-		return;
-	}
-
-	gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshVertexCacheKey);
-	gl.vertexAttribPointer(shader.position3_loc, 3, gl.FLOAT, false, 0, 0);
-	gl.drawArrays(gl.TRIANGLES, 0, vertices_count);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param neoRefList_array 변수
- * @param magoManager 변수
- * @param shader 변수
- * @param renderTexture 변수
- * @param ssao_idx 변수
- */
-Renderer.prototype.renderObject = function(gl, renderable, magoManager, shader, ssao_idx)
-{
-	var vbo_vicks_container = renderable.getVboKeysContainer();
-	
-	if(vbo_vicks_container === undefined)
-		return;
-	
-	if (vbo_vicks_container.vboCacheKeysArray.length === 0) 
-		return;
-	
-	// ssao_idx = -1 -> pickingMode.***
-	// ssao_idx = 0 -> depth.***
-	// ssao_idx = 1 -> ssao.***
-
-	// 1) Position.*********************************************
-	var vbo_vicky = vbo_vicks_container.vboCacheKeysArray[0]; // there are only one.***
-	if (!vbo_vicky.isReadyPositions(gl, magoManager.vboMemoryManager))
-	{ return; }
-
-	var vertices_count = vbo_vicky.vertexCount;
-	if (vertices_count === 0) 
-		return;
-
-	gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshVertexCacheKey);
-	gl.vertexAttribPointer(shader.position3_loc, 3, gl.FLOAT, false, 0, 0);
-	
-	if (ssao_idx === 1) // ssao.***
-	{
-		if (!vbo_vicky.isReadyNormals(gl, magoManager.vboMemoryManager)) // do this optional. TODO.***
-		{ return; }
-		
-		if (!vbo_vicky.isReadyColors(gl, magoManager.vboMemoryManager)) // do this optional. TODO.***
-		{ 
-			gl.disableVertexAttribArray(shader.normal3_loc);
-		}
-		else{
-			gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshVertexCacheKey);
-			gl.vertexAttribPointer(shader.position3_loc, 3, gl.FLOAT, false, 0, 0);
-		}
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshNormalCacheKey);
-		gl.vertexAttribPointer(shader.normal3_loc, 3, gl.BYTE, true, 0, 0);
-
-		//gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshColorCacheKey);
-		//gl.vertexAttribPointer(shader.color4_loc, 4, gl.UNSIGNED_BYTE, true, 0, 0);
-		
-		
-	}
-	
-	if(vbo_vicky.indicesCount > 0)
-	{
-		if (!vbo_vicky.isReadyFaces(gl, magoManager.vboMemoryManager)) 
-		{ return; }
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vbo_vicky.meshFacesCacheKey);
-		gl.drawElements(gl.TRIANGLES, vbo_vicky.indicesCount, gl.UNSIGNED_SHORT, 0); // Fill.***
-	}
-	else{
-		gl.drawArrays(gl.TRIANGLES, 0, vertices_count);
-		//gl.drawArrays(gl.LINE_STRIP, 0, vertices_count);
-	}
-	
-};
-
-
-'use strict';
-
-/**
- * ??
- * @class SceneState
- */
-var SceneState = function() 
-{
-	if (!(this instanceof SceneState)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	this.gl;
-
-	// this contains the model matrices and camera position.***
-	this.modelViewProjRelToEyeMatrix = new Matrix4(); // created as identity matrix.***
-	this.modelViewRelToEyeMatrix = new Matrix4(); // created as identity matrix.***
-	this.modelViewRelToEyeMatrixInv = new Matrix4(); // created as identity matrix.***
-	this.modelViewMatrix = new Matrix4(); // created as identity matrix.***
-	this.modelViewMatrixInv = new Matrix4(); // created as identity matrix.***
-	this.projectionMatrix = new Matrix4(); // created as identity matrix.***
-	this.modelViewProjMatrix = new Matrix4(); // created as identity matrix.***
-	this.normalMatrix4 = new Matrix4(); // created as identity matrix.***
-	this.identityMatrix4 = new Matrix4(); // created as identity matrix.***
-
-	this.encodedCamPosHigh = new Float32Array([0.0, 0.0, 0.0]);
-	this.encodedCamPosLow = new Float32Array([0.0, 0.0, 0.0]);
-	
-	this.camera = new Camera();
-	this.drawingBufferWidth = new Int32Array([1000]);
-	this.drawingBufferHeight = new Int32Array([1000]);
-	
-	this.bMust = false;
-	
-	// webWorldWind vars.***
-	this.dc;
-	
-	// insertIssue states.***
-	this.insertIssueState = 0; // 0 = no started. 1 = started.***
-	
-	// provisionally.***
-	this.textureFlipYAxis = false;
-};
-
-'use strict';
-
-// NO USED.
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Selection
- */
-var Selection = function() 
-{
-	if (!(this instanceof Selection)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	this.drawing_height;
-	this.drawing_width;
-	this.GAIA_selectFrameBuffer;
-	this.GAIA_selectRenderBuffer;
-	this.GAIA_selectRttTexture;
-	
-	this.currentByteColorPicked = new Uint8Array(4);
-	this.currentSelectedObj_idx = -1;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param gl 변수
- * @param drawingBufferWidth 변수
- * @param drawingBufferHeight 변수
- */
-Selection.prototype.init = function(gl, drawingBufferWidth, drawingBufferHeight) 
-{
-	// http://www.webglacademy.com/courses.php?courses=0|1|20|2|3|4|23|5|6|7|10#10
-	this.drawing_height = drawingBufferHeight;
-	this.drawing_width = drawingBufferWidth;
-	//this.lastCapturedColourMap = new Uint8Array(this.drawing_width * this.drawing_height * 4);
-	this.GAIA_selectFrameBuffer = gl.createFramebuffer();
-	gl.bindFramebuffer(gl.FRAMEBUFFER, this.GAIA_selectFrameBuffer);
-	
-	this.GAIA_selectRenderBuffer = gl.createRenderbuffer();
-	gl.bindRenderbuffer(gl.RENDERBUFFER, this.GAIA_selectRenderBuffer);
-	gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, this.drawing_width, this.drawing_height);
-
-	this.GAIA_selectRttTexture = gl.createTexture();
-	gl.bindTexture(gl.TEXTURE_2D, this.GAIA_selectRttTexture);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.drawing_width, this.drawing_height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-
-	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.GAIA_selectRttTexture, 0);
-	gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this.GAIA_selectRenderBuffer);
-	
-	// Finally...
-	gl.bindTexture(gl.TEXTURE_2D, null);
-	gl.bindRenderbuffer(gl.RENDERBUFFER, null);
-	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-};
-'use strict';
-
-/**
- * SelectionCandidates
- * 
- * @alias SelectionCandidates
- * @class SelectionCandidates
- */
-var SelectionCandidates = function() 
-{
-	if (!(this instanceof SelectionCandidates)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.referencesMap = {};
-	this.octreesMap = {};
-	this.buildingsMap = {};
-	this.nodesMap = {};
-	
-	this.currentReferenceSelected;
-	this.currentOctreeSelected;
-	this.currentBuildingSelected;
-	this.currentNodeSelected;
-};
-
-/**
- * SelectionCandidates
- * 
- * @alias SelectionCandidates
- * @class SelectionCandidates
- */
-SelectionCandidates.prototype.setCandidates = function(idxKey, reference, octree, building, node)
-{
-	if (reference)
-	{
-		this.referencesMap[idxKey] = reference;
-	}
-	
-	if (octree)
-	{
-		this.octreesMap[idxKey] = octree;
-	}
-	
-	if (building)
-	{
-		this.buildingsMap[idxKey] = building;
-	}
-	
-	if (node)
-	{
-		this.nodesMap[idxKey] = node;
-	}
-};
-
-/**
- * SelectionCandidates
- * 
- * @alias SelectionCandidates
- * @class SelectionCandidates
- */
-SelectionCandidates.prototype.clearCandidates = function()
-{
-	this.referencesMap = {};
-	this.octreesMap = {};
-	this.buildingsMap = {};
-	this.nodesMap = {};
-};
-
-/**
- * SelectionCandidates
- * 
- * @alias SelectionCandidates
- * @class SelectionCandidates
- */
-SelectionCandidates.prototype.selectObjects = function(idxKey)
-{
-	this.currentReferenceSelected = this.referencesMap[idxKey];
-	this.currentOctreeSelected = this.octreesMap[idxKey];
-	this.currentBuildingSelected = this.buildingsMap[idxKey];
-	this.currentNodeSelected = this.nodesMap[idxKey];
-};
-
-/**
- * SelectionCandidates
- * 
- * @alias SelectionCandidates
- * @class SelectionCandidates
- */
-SelectionCandidates.prototype.clearCurrents = function(idxKey)
-{
-	this.currentReferenceSelected = undefined;
-	this.currentOctreeSelected = undefined;
-	this.currentBuildingSelected = undefined;
-	this.currentNodeSelected = undefined;
-};
-'use strict';
-
-/**
  * 사용하지 않음
  */
 !(function() 
@@ -42338,4 +43537,977 @@ search: while (true) {
   // found a prime!
   postMessage(n);
 }
+*/
+
+'use strict';
+
+/**
+ * Returns the first parameter if not undefined, otherwise the second parameter.
+ * Useful for setting a default value for a parameter.
+ *
+ * @exports defaultValue
+ *
+ * @param {*} a
+ * @param {*} b
+ * @returns {*} Returns the first parameter if not undefined, otherwise the second parameter.
+ *
+ * @example
+ * param = defaultValue(param, 'default');
+ * 
+ * @copyright https://github.com/AnalyticalGraphicsInc/cesium
+ */
+function defaultValue(a, b) 
+{
+	if (a !== undefined) 
+	{
+		return a;
+	}
+	return b;
+}
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class ByteColor
+ */
+var ByteColor = function() 
+{
+	if (!(this instanceof ByteColor)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.ByteR = 0;
+	this.ByteG = 0;
+	this.ByteB = 0;
+	this.ByteAlfa = 255;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ByteColor.prototype.destroy = function() 
+{
+	this.ByteR = null;
+	this.ByteG = null;
+	this.ByteB = null;
+	this.ByteAlfa = null;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param byteRed 변수
+ * @param byteGreen 변수
+ * @param byteBlue 변수
+ */
+ByteColor.prototype.set = function(byteRed, byteGreen, byteBlue) 
+{
+	this.ByteR = byteRed;
+	this.ByteG = byteGreen;
+	this.ByteB = byteBlue;
+};
+
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Point3DAux
+ */
+var Point3DAux = function() 
+{
+	if (!(this instanceof Point3DAux)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.x = 0.0;
+	this.y = 0.0;
+	this.z = 0.0;
+	//this.IdxInIist;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class TTriangle
+ */
+var TTriangle = function() 
+{
+	if (!(this instanceof TTriangle)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.mVertex1;
+	this.mVertex2;
+	this.mVertex3;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param vtx1 변수
+ * @param vtx2 변수
+ * @param vtx3 변수
+ */
+TTriangle.prototype.setVertices = function(vtx1, vtx2, vtx3) 
+{
+	this.mVertex1 = vtx1;
+	this.mVertex2 = vtx2;
+	this.mVertex3 = vtx3;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+TTriangle.prototype.invert = function() 
+{
+	var vertexAux = this.mVertex2;
+	this.mVertex2 = this.mVertex3;
+	this.mVertex3 = vertexAux;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class TTrianglesList
+ */
+var TTrianglesList = function() 
+{
+	if (!(this instanceof TTrianglesList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.tTrianglesArray = [];
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns tTri
+ */
+TTrianglesList.prototype.newTTriangle = function() 
+{
+	var tTri = new TTriangle();
+	this.tTrianglesArray.push(tTri);
+	return tTri;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+TTrianglesList.prototype.invertTrianglesSense= function() 
+{
+	for (var i = 0, triCount = this.tTrianglesArray.length; i < triCount; i++) 
+	{
+		this.tTrianglesArray[i].invert();
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns tTrianglesArray[idx]
+ */
+TTrianglesList.prototype.getTTriangle = function(idx) 
+{
+	if (idx >= 0 && idx < this.tTrianglesArray.length) 
+	{
+		return this.tTrianglesArray[idx];
+	}
+	else
+	{
+		return undefined;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class TTrianglesMatrix
+ */
+var TTrianglesMatrix = function() 
+{
+	if (!(this instanceof TTrianglesMatrix)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.tTrianglesListsArray = [];
+	// SCRATX.*********************
+	this.totalTTrianglesArraySC = [];
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns tTrianglesList
+ */
+TTrianglesMatrix.prototype.newTTrianglesList = function() 
+{
+	var tTrianglesList = new TTrianglesList();
+	this.tTrianglesListsArray.push(tTrianglesList);
+	return tTrianglesList;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+TTrianglesMatrix.prototype.invertTrianglesSense = function() 
+{
+	for (var i = 0, tTriListsCount = this.tTrianglesListsArray.length; i < tTriListsCount; i++) 
+	{
+		this.tTrianglesListsArray[i].invertTrianglesSense();
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param resultTotalTTrianglesArray 변수
+ * @returns resultTotalTTrianglesArray
+ */
+TTrianglesMatrix.prototype.getTotalTTrianglesArray = function(resultTotalTTrianglesArray) 
+{
+	for (var i = 0, tTriListsCount = this.tTrianglesListsArray.length; i < tTriListsCount; i++) 
+	{
+		for (var j = 0, tTrianglesCount = this.tTrianglesListsArray[i].tTrianglesArray.length; j < tTrianglesCount; j++) 
+		{
+			var tTriangle = this.tTrianglesListsArray[i].getTTriangle(j);
+			resultTotalTTrianglesArray.push(tTriangle);
+		}
+	}
+
+	return resultTotalTTrianglesArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns shortArray
+ */
+TTrianglesMatrix.prototype.getVBOIndicesShortArray = function() 
+{
+	this.totalTTrianglesArraySC.length = 0;
+	this.totalTTrianglesArraySC = this.getTotalTTrianglesArray(this.totalTTrianglesArraySC);
+
+	var tTriangle;
+	var tTrianglesCount = this.totalTTrianglesArraySC.length;
+	var shortArray = new Uint16Array(tTrianglesCount * 3);
+	for (var i = 0; i < tTrianglesCount; i++) 
+	{
+		tTriangle = this.totalTTrianglesArraySC[i];
+		shortArray[i*3] = tTriangle.mVertex1.mIdxInList;
+		shortArray[i*3+1] = tTriangle.mVertex2.mIdxInList;
+		shortArray[i*3+2] = tTriangle.mVertex3.mIdxInList;
+	}
+
+	return shortArray;
+};
+
+
+
+'use strict';
+
+var ManagerUtils = function() 
+{
+	// sqrtTable.
+	this.sqrtTable = [];
+	// make 100 values.
+	var increValue = 0.01;
+	for (var i=0; i<101; i++)
+	{
+		this.sqrtTable[i] = Math.sqrt(1+(increValue*i)*(increValue*i));
+	}
+	
+};
+
+ManagerUtils.pointToGeographicCoord = function(point, resultGeographicCoord, magoManager) 
+{
+	if (resultGeographicCoord === undefined)
+	{ resultGeographicCoord = new GeographicCoord(); }
+	
+	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
+	{
+		var globe = magoManager.wwd.globe;
+		var origin = new WorldWind.Position();
+		origin = globe.computePositionFromPoint(point.x, point.y, point.z, origin);
+		resultGeographicCoord.setLonLatAlt(origin.longitude, origin.latitude, origin.altitude);
+	}
+	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
+	{
+		var cartographic = Cesium.Cartographic.fromCartesian(new Cesium.Cartesian3(point.x, point.y, point.z));
+		resultGeographicCoord.setLonLatAlt(cartographic.longitude * (180.0/Math.PI), cartographic.latitude * (180.0/Math.PI), cartographic.height);
+	}
+	
+	return resultGeographicCoord;
+};
+
+ManagerUtils.geographicCoordToWorldPoint = function(longitude, latitude, altitude, resultWorldPoint, magoManager) 
+{
+	if (resultWorldPoint === undefined)
+	{ resultWorldPoint = new Point3D(); }
+
+
+	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
+	{
+		var globe = magoManager.wwd.globe;
+		var origin = new WorldWind.Vec3(0, 0, 0);
+		origin = globe.computePointFromPosition(latitude, longitude, altitude, origin);
+		
+		resultWorldPoint.set(origin[0], origin[1], origin[2]);
+		origin = undefined;
+	}
+	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
+	{
+		// *if this in Cesium:
+		var position = Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude);
+		resultWorldPoint.set(position.x, position.y, position.z);
+		position = undefined;
+	}
+	
+	return resultWorldPoint;
+};
+
+ManagerUtils.getTransformationMatrixInPoint = function(point, resultTMatrix, resultMatrixInv, magoManager) 
+{
+	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
+	{
+		;//
+	}
+	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
+	{
+		if (resultTMatrix === undefined)
+		{ resultTMatrix = new Matrix4(); }
+		
+		Cesium.Transforms.eastNorthUpToFixedFrame(new Cesium.Cartesian3(point.x, point.y, point.z), undefined, resultTMatrix._floatArrays);
+		
+		if (resultMatrixInv)
+		{
+			Cesium.Matrix4.inverseTransformation(resultTMatrix._floatArrays, resultMatrixInv._floatArrays);
+		}
+	}
+	
+	return resultTMatrix;
+};
+
+ManagerUtils.translatePivotPointGeoLocationData = function(geoLocationData, newPivotPoint) 
+{
+	// this function NO modifies the geographic coords.***
+	// "newPivotPoint" is in buildingCoords.***
+	// "newPivotPoint" is the desired position of the new origen of coords, for example:
+	// in a building you can desire the center of the bbox as the origin of the coords.***
+	if (geoLocationData === undefined)
+	{ return; }
+
+	var rawTranslation = new Point3D();
+	rawTranslation.set(-newPivotPoint.x, -newPivotPoint.y, -newPivotPoint.z);
+
+	geoLocationData.pivotPointTraslation = rawTranslation;
+	geoLocationData.doEffectivePivotPointTranslation();
+};
+
+ManagerUtils.calculateGeoLocationMatrixAtWorldPosition = function(worldPosition, resultGeoLocMatrix, magoManager) 
+{
+	// this function calculates the transformation matrix for (x, y, z) coordinate, that has NO heading, pitch or roll rotations.
+	if (resultGeoLocMatrix === undefined)
+	{ resultGeoLocMatrix = new Matrix4(); }
+	
+	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
+	{
+		// * if this in webWorldWind:
+		var xAxis = new WorldWind.Vec3(0, 0, 0),
+			yAxis = new WorldWind.Vec3(0, 0, 0),
+			zAxis = new WorldWind.Vec3(0, 0, 0);
+		var tMatrix = WorldWind.Matrix.fromIdentity();
+		
+		WorldWind.WWMath.localCoordinateAxesAtPoint([worldPosition.x, worldPosition.y, worldPosition.z], magoManager.wwd.globe, xAxis, yAxis, zAxis);
+				
+		tMatrix.set(
+			xAxis[0], yAxis[0], zAxis[0], worldPosition.x,
+			xAxis[1], yAxis[1], zAxis[1], worldPosition.y,
+			xAxis[2], yAxis[2], zAxis[2], worldPosition.z,
+			0, 0, 0, 1);
+		
+		var tMatrixColMajorArray = WorldWind.Matrix.fromIdentity();
+		tMatrixColMajorArray = tMatrix.columnMajorComponents(tMatrixColMajorArray);
+		resultGeoLocMatrix.setByFloat32Array(tMatrixColMajorArray);
+	}
+	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
+	{
+		// *if this in Cesium:
+		Cesium.Transforms.eastNorthUpToFixedFrame(worldPosition, undefined, resultGeoLocMatrix._floatArrays);
+	}
+	
+	return resultGeoLocMatrix;
+};
+
+ManagerUtils.calculateGeoLocationMatrixAtLonLatAlt = function(longitude, latitude, altitude, resultGeoLocMatrix, magoManager) 
+{
+	// this function calculates the transformation matrix for (longitude, latitude, altitude) coordinate, that has NO heading, pitch or roll rotations.
+	if (resultGeoLocMatrix === undefined)
+	{ resultGeoLocMatrix = new Matrix4(); }
+	
+	var worldPosition;
+	worldPosition = this.geographicCoordToWorldPoint(longitude, latitude, altitude, worldPosition, magoManager);
+	resultGeoLocMatrix = ManagerUtils.calculateGeoLocationMatrixAtWorldPosition(worldPosition, resultGeoLocMatrix, magoManager);
+	
+	return resultGeoLocMatrix;
+};
+
+ManagerUtils.calculateTransformMatrixAtWorldPosition = function(worldPosition, heading, pitch, roll, resultGeoLocMatrix, resultTransformMatrix, magoManager) 
+{
+	// This function calculates the "resultGeoLocMatrix" & "resultTransformMatrix".
+	// note: "resultGeoLocMatrix" is the transformMatrix without the heading, pitch, roll rotations.
+	// note: "resultTransformMatrix" is the transformMatrix including the heading, pitch, roll rotations.
+	var xRotMatrix = new Matrix4();  // created as identity matrix.
+	var yRotMatrix = new Matrix4();  // created as identity matrix.
+	var zRotMatrix = new Matrix4();  // created as identity matrix.
+	
+	if (heading !== undefined && heading !== 0)
+	{ zRotMatrix.rotationAxisAngDeg(heading, 0.0, 0.0, -1.0); }
+
+	if (pitch !== undefined && pitch !== 0)
+	{ xRotMatrix.rotationAxisAngDeg(pitch, -1.0, 0.0, 0.0); }
+
+	if (roll !== undefined && roll !== 0)
+	{ yRotMatrix.rotationAxisAngDeg(roll, 0.0, -1.0, 0.0); }
+
+	if (resultGeoLocMatrix === undefined)
+	{ resultGeoLocMatrix = new Matrix4(); }  // created as identity matrix.
+	
+	if (resultTransformMatrix === undefined)
+	{ resultTransformMatrix = new Matrix4(); }  // created as identity matrix.
+
+	// 1rst, calculate the transformation matrix for the location.
+	resultGeoLocMatrix = ManagerUtils.calculateGeoLocationMatrixAtWorldPosition(worldPosition, resultGeoLocMatrix, magoManager);
+	
+	resultTransformMatrix.copyFromMatrix4(resultGeoLocMatrix);
+	var zRotatedTMatrix;
+	var zxRotatedTMatrix;
+	var zxyRotatedTMatrix;
+
+	zRotatedTMatrix = zRotMatrix.getMultipliedByMatrix(resultTransformMatrix, zRotatedTMatrix);
+	zxRotatedTMatrix = xRotMatrix.getMultipliedByMatrix(zRotatedTMatrix, zxRotatedTMatrix);
+	zxyRotatedTMatrix = yRotMatrix.getMultipliedByMatrix(zxRotatedTMatrix, zxyRotatedTMatrix);
+	
+	resultTransformMatrix = zxyRotatedTMatrix;
+	return resultTransformMatrix;
+};
+
+ManagerUtils.calculateGeoLocationData = function(longitude, latitude, altitude, heading, pitch, roll, resultGeoLocationData, magoManager) 
+{
+	// This function calculates all data and matrices for the location(longitude, latitude, altitude) and rotation(heading, pitch, roll).
+	if (resultGeoLocationData === undefined)
+	{ resultGeoLocationData = new GeoLocationData(); }
+
+	// 0) Position.********************************************************************************************
+	if (resultGeoLocationData.geographicCoord === undefined)
+	{ resultGeoLocationData.geographicCoord = new GeographicCoord(); }
+
+	if (longitude !== undefined)
+	{ resultGeoLocationData.geographicCoord.longitude = longitude; }
+	else 
+	{ longitude = resultGeoLocationData.geographicCoord.longitude; }
+
+	if (latitude !== undefined)
+	{ resultGeoLocationData.geographicCoord.latitude = latitude; }
+	else 
+	{ latitude = resultGeoLocationData.geographicCoord.latitude; }
+
+	if (altitude !== undefined)
+	{ resultGeoLocationData.geographicCoord.altitude = altitude; }
+	else 
+	{ altitude = resultGeoLocationData.geographicCoord.altitude; }
+
+	if (heading !== undefined)
+	{ resultGeoLocationData.heading = heading; }
+
+	if (pitch !== undefined)
+	{ resultGeoLocationData.pitch = pitch; }
+
+	if (roll !== undefined)
+	{ resultGeoLocationData.roll = roll; }
+
+	if (resultGeoLocationData.geographicCoord.longitude === undefined || resultGeoLocationData.geographicCoord.latitude === undefined)
+	{ return; }
+	
+	if (magoManager.configInformation === undefined)
+	{ return; }
+
+	resultGeoLocationData.position = this.geographicCoordToWorldPoint(longitude, latitude, altitude, resultGeoLocationData.position, magoManager);
+	
+	// High and Low values of the position.********************************************************************
+	if (resultGeoLocationData.positionHIGH === undefined)
+	{ resultGeoLocationData.positionHIGH = new Float32Array([0.0, 0.0, 0.0]); }
+	if (resultGeoLocationData.positionLOW === undefined)
+	{ resultGeoLocationData.positionLOW = new Float32Array([0.0, 0.0, 0.0]); }
+	this.calculateSplited3fv([resultGeoLocationData.position.x, resultGeoLocationData.position.y, resultGeoLocationData.position.z], resultGeoLocationData.positionHIGH, resultGeoLocationData.positionLOW);
+
+	// Determine the elevation of the position.***********************************************************
+	//var cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
+	//var height = cartographic.height;
+	// End Determine the elevation of the position.-------------------------------------------------------
+	if (resultGeoLocationData.tMatrix === undefined)
+	{ resultGeoLocationData.tMatrix = new Matrix4(); }
+	else
+	{ resultGeoLocationData.tMatrix.Identity(); }
+
+	if (resultGeoLocationData.geoLocMatrix === undefined)
+	{ resultGeoLocationData.geoLocMatrix = new Matrix4(); }
+	else
+	{ resultGeoLocationData.geoLocMatrix.Identity(); }
+
+	if (resultGeoLocationData.geoLocMatrixInv === undefined)
+	{ resultGeoLocationData.geoLocMatrixInv = new Matrix4(); }
+	else
+	{ resultGeoLocationData.geoLocMatrixInv.Identity(); }
+
+	//---------------------------------------------------------
+
+	if (resultGeoLocationData.tMatrixInv === undefined)
+	{ resultGeoLocationData.tMatrixInv = new Matrix4(); }
+	else
+	{ resultGeoLocationData.tMatrixInv.Identity(); }
+
+	if (resultGeoLocationData.rotMatrix === undefined)
+	{ resultGeoLocationData.rotMatrix = new Matrix4(); }
+	else
+	{ resultGeoLocationData.rotMatrix.Identity(); }
+
+	if (resultGeoLocationData.rotMatrixInv === undefined)
+	{ resultGeoLocationData.rotMatrixInv = new Matrix4(); }
+	else
+	{ resultGeoLocationData.rotMatrixInv.Identity(); }
+
+	// 1rst, calculate the transformation matrix for the location.
+	resultGeoLocationData.tMatrix = ManagerUtils.calculateTransformMatrixAtWorldPosition(resultGeoLocationData.position, resultGeoLocationData.heading, resultGeoLocationData.pitch, resultGeoLocationData.roll, 
+		resultGeoLocationData.geoLocMatrix, resultGeoLocationData.tMatrix, magoManager);
+	resultGeoLocationData.rotMatrix.copyFromMatrix4(resultGeoLocationData.tMatrix);
+	resultGeoLocationData.rotMatrix._floatArrays[12] = 0;
+	resultGeoLocationData.rotMatrix._floatArrays[13] = 0;
+	resultGeoLocationData.rotMatrix._floatArrays[14] = 0;
+		
+	// now calculate the inverse matrices.
+	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
+	{
+		// * if this in webWorldWind:
+		var tMatrixInv = WorldWind.Matrix.fromIdentity();
+		tMatrixInv.invertMatrix(resultGeoLocationData.tMatrix._floatArrays);
+		resultGeoLocationData.tMatrixInv.setByFloat32Array(tMatrixInv);
+		
+		var rotMatrixInv = WorldWind.Matrix.fromIdentity();
+		rotMatrixInv.invertMatrix(resultGeoLocationData.rotMatrix._floatArrays);
+		resultGeoLocationData.rotMatrixInv.setByFloat32Array(rotMatrixInv);
+		
+		var geoLocMatrixInv = WorldWind.Matrix.fromIdentity();
+		geoLocMatrixInv.invertMatrix(resultGeoLocationData.geoLocMatrix._floatArrays);
+		resultGeoLocationData.geoLocMatrixInv.setByFloat32Array(geoLocMatrixInv);
+	}
+	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
+	{
+		// *if this in Cesium:
+		Cesium.Matrix4.inverseTransformation(resultGeoLocationData.tMatrix._floatArrays, resultGeoLocationData.tMatrixInv._floatArrays);
+		Cesium.Matrix4.inverseTransformation(resultGeoLocationData.rotMatrix._floatArrays, resultGeoLocationData.rotMatrixInv._floatArrays);
+		Cesium.Matrix4.inverseTransformation(resultGeoLocationData.geoLocMatrix._floatArrays, resultGeoLocationData.geoLocMatrixInv._floatArrays);
+	}
+
+	// finally assing the pivotPoint.***
+	if (resultGeoLocationData.pivotPoint === undefined)
+	{ resultGeoLocationData.pivotPoint = new Point3D(); }
+
+	resultGeoLocationData.pivotPoint.set(resultGeoLocationData.position.x, resultGeoLocationData.position.y, resultGeoLocationData.position.z);
+	resultGeoLocationData.doEffectivePivotPointTranslation();
+	
+	return resultGeoLocationData;
+};
+
+ManagerUtils.calculateGeoLocationDataByAbsolutePoint = function(absoluteX, absoluteY, absoluteZ, resultGeoLocationData, magoManager) 
+{
+
+	if (resultGeoLocationData === undefined)
+	{ resultGeoLocationData = new GeoLocationData(); }
+
+	// 0) Position.********************************************************************************************
+	if (resultGeoLocationData.geographicCoord === undefined)
+	{ resultGeoLocationData.geographicCoord = new GeographicCoord(); }
+	
+	if (magoManager.configInformation === undefined)
+	{ return; }
+	
+	if (resultGeoLocationData.position === undefined)
+	{ resultGeoLocationData.position = new Point3D(); }
+		
+	resultGeoLocationData.position.x = absoluteX;
+	resultGeoLocationData.position.y = absoluteY;
+	resultGeoLocationData.position.z = absoluteZ;
+		
+	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
+	{
+		var globe = magoManager.wwd.globe;
+		var resultCartographic = new WorldWind.Vec3(0, 0, 0);
+		resultCartographic = globe.computePositionFromPoint(absoluteX, absoluteY, absoluteZ, resultCartographic);
+		resultGeoLocationData.geographicCoord.longitude = resultCartographic.longitude;
+		resultGeoLocationData.geographicCoord.latitude = resultCartographic.latitude;
+		resultGeoLocationData.geographicCoord.altitude = resultCartographic.altitude;
+	}
+	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
+	{
+		// *if this in Cesium:
+		//resultGeoLocationData.position = Cesium.Cartesian3.fromDegrees(resultGeoLocationData.geographicCoord.longitude, resultGeoLocationData.geographicCoord.latitude, resultGeoLocationData.geographicCoord.altitude);
+		// must find cartographic data.***
+		var cartographic = new Cesium.Cartographic();
+		var cartesian = new Cesium.Cartesian3();
+		cartesian.x = absoluteX;
+		cartesian.y = absoluteY;
+		cartesian.z = absoluteZ;
+		cartographic = Cesium.Cartographic.fromCartesian(cartesian, magoManager.scene._globe._ellipsoid, cartographic);
+		resultGeoLocationData.geographicCoord.longitude = cartographic.longitude * 180.0/Math.PI;
+		resultGeoLocationData.geographicCoord.latitude = cartographic.latitude * 180.0/Math.PI;
+		resultGeoLocationData.geographicCoord.altitude = cartographic.height;
+	}
+
+	// High and Low values of the position.********************************************************************
+	if (resultGeoLocationData.positionHIGH === undefined)
+	{ resultGeoLocationData.positionHIGH = new Float32Array([0.0, 0.0, 0.0]); }
+	if (resultGeoLocationData.positionLOW === undefined)
+	{ resultGeoLocationData.positionLOW = new Float32Array([0.0, 0.0, 0.0]); }
+	this.calculateSplited3fv([resultGeoLocationData.position.x, resultGeoLocationData.position.y, resultGeoLocationData.position.z], resultGeoLocationData.positionHIGH, resultGeoLocationData.positionLOW);
+
+	// Determine the elevation of the position.***********************************************************
+	//var cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
+	//var height = cartographic.height;
+	// End Determine the elevation of the position.-------------------------------------------------------
+	if (resultGeoLocationData.tMatrix === undefined)
+	{ resultGeoLocationData.tMatrix = new Matrix4(); }
+	else
+	{ resultGeoLocationData.tMatrix.Identity(); }
+
+	if (resultGeoLocationData.geoLocMatrix === undefined)
+	{ resultGeoLocationData.geoLocMatrix = new Matrix4(); }
+	else
+	{ resultGeoLocationData.geoLocMatrix.Identity(); }
+
+	if (resultGeoLocationData.geoLocMatrixInv === undefined)
+	{ resultGeoLocationData.geoLocMatrixInv = new Matrix4(); }
+	else
+	{ resultGeoLocationData.geoLocMatrixInv.Identity(); }
+
+	//---------------------------------------------------------
+
+	if (resultGeoLocationData.tMatrixInv === undefined)
+	{ resultGeoLocationData.tMatrixInv = new Matrix4(); }
+	else
+	{ resultGeoLocationData.tMatrixInv.Identity(); }
+
+	if (resultGeoLocationData.rotMatrix === undefined)
+	{ resultGeoLocationData.rotMatrix = new Matrix4(); }
+	else
+	{ resultGeoLocationData.rotMatrix.Identity(); }
+
+	if (resultGeoLocationData.rotMatrixInv === undefined)
+	{ resultGeoLocationData.rotMatrixInv = new Matrix4(); }
+	else
+	{ resultGeoLocationData.rotMatrixInv.Identity(); }
+
+	var xRotMatrix = new Matrix4();  // created as identity matrix.***
+	var yRotMatrix = new Matrix4();  // created as identity matrix.***
+	var zRotMatrix = new Matrix4();  // created as identity matrix.***
+
+	if (resultGeoLocationData.heading !== undefined && resultGeoLocationData.heading !== 0)
+	{
+		zRotMatrix.rotationAxisAngDeg(resultGeoLocationData.heading, 0.0, 0.0, -1.0);
+	}
+
+	if (resultGeoLocationData.pitch !== undefined && resultGeoLocationData.pitch !== 0)
+	{
+		xRotMatrix.rotationAxisAngDeg(resultGeoLocationData.pitch, -1.0, 0.0, 0.0);
+	}
+
+	if (resultGeoLocationData.roll !== undefined && resultGeoLocationData.roll !== 0)
+	{
+		yRotMatrix.rotationAxisAngDeg(resultGeoLocationData.roll, 0.0, -1.0, 0.0);
+	}
+	
+	if (magoManager.configInformation.geo_view_library === Constant.WORLDWIND)
+	{
+		// * if this in webWorldWind:
+		var xAxis = new WorldWind.Vec3(0, 0, 0),
+			yAxis = new WorldWind.Vec3(0, 0, 0),
+			zAxis = new WorldWind.Vec3(0, 0, 0);
+		var rotMatrix = WorldWind.Matrix.fromIdentity();
+		var tMatrix = WorldWind.Matrix.fromIdentity();
+		
+		WorldWind.WWMath.localCoordinateAxesAtPoint([resultGeoLocationData.position.x, resultGeoLocationData.position.y, resultGeoLocationData.position.z], magoManager.wwd.globe, xAxis, yAxis, zAxis);
+
+		rotMatrix.set(
+			xAxis[0], yAxis[0], zAxis[0], 0,
+			xAxis[1], yAxis[1], zAxis[1], 0,
+			xAxis[2], yAxis[2], zAxis[2], 0,
+			0, 0, 0, 1); 
+				
+		tMatrix.set(
+			xAxis[0], yAxis[0], zAxis[0], resultGeoLocationData.position.x,
+			xAxis[1], yAxis[1], zAxis[1], resultGeoLocationData.position.y,
+			xAxis[2], yAxis[2], zAxis[2], resultGeoLocationData.position.z,
+			0, 0, 0, 1);
+				
+		var columnMajorArray = WorldWind.Matrix.fromIdentity(); 
+		columnMajorArray = rotMatrix.columnMajorComponents(columnMajorArray); // no used.***
+			
+		var matrixInv = WorldWind.Matrix.fromIdentity();
+		matrixInv.invertMatrix(rotMatrix);
+		var columnMajorArrayAux_inv = WorldWind.Matrix.fromIdentity();
+		var columnMajorArray_inv = matrixInv.columnMajorComponents(columnMajorArrayAux_inv); 
+		
+		var tMatrixColMajorArray = WorldWind.Matrix.fromIdentity();
+		tMatrixColMajorArray = tMatrix.columnMajorComponents(tMatrixColMajorArray);
+		resultGeoLocationData.tMatrix.setByFloat32Array(tMatrixColMajorArray);
+		
+		resultGeoLocationData.geoLocMatrix.copyFromMatrix4(resultGeoLocationData.tMatrix); // "geoLocMatrix" is the pure transformation matrix, without heading or pitch or roll.***
+
+		var zRotatedTMatrix = zRotMatrix.getMultipliedByMatrix(resultGeoLocationData.tMatrix, zRotatedTMatrix);
+		var zxRotatedTMatrix = xRotMatrix.getMultipliedByMatrix(zRotatedTMatrix, zxRotatedTMatrix);
+		var zxyRotatedTMatrix = yRotMatrix.getMultipliedByMatrix(zxRotatedTMatrix, zxyRotatedTMatrix);
+		resultGeoLocationData.tMatrix = zxyRotatedTMatrix;
+
+		resultGeoLocationData.rotMatrix.copyFromMatrix4(resultGeoLocationData.tMatrix);
+		resultGeoLocationData.rotMatrix._floatArrays[12] = 0;
+		resultGeoLocationData.rotMatrix._floatArrays[13] = 0;
+		resultGeoLocationData.rotMatrix._floatArrays[14] = 0;
+		
+		// now calculate the inverses of the matrices.***
+		var tMatrixInv = WorldWind.Matrix.fromIdentity();
+		tMatrixInv.invertMatrix(resultGeoLocationData.tMatrix._floatArrays);
+		resultGeoLocationData.tMatrixInv.setByFloat32Array(tMatrixInv);
+		
+		var rotMatrixInv = WorldWind.Matrix.fromIdentity();
+		rotMatrixInv.invertMatrix(resultGeoLocationData.rotMatrix._floatArrays);
+		resultGeoLocationData.rotMatrixInv.setByFloat32Array(rotMatrixInv);
+		
+		var geoLocMatrixInv = WorldWind.Matrix.fromIdentity();
+		geoLocMatrixInv.invertMatrix(resultGeoLocationData.geoLocMatrix._floatArrays);
+		resultGeoLocationData.geoLocMatrixInv.setByFloat32Array(geoLocMatrixInv);
+	}
+	else if (magoManager.configInformation.geo_view_library === Constant.CESIUM)
+	{
+		// *if this in Cesium:
+		Cesium.Transforms.eastNorthUpToFixedFrame(resultGeoLocationData.position, undefined, resultGeoLocationData.tMatrix._floatArrays);
+		resultGeoLocationData.geoLocMatrix.copyFromMatrix4(resultGeoLocationData.tMatrix);// "geoLocMatrix" is the pure transformation matrix, without heading or pitch or roll.***
+
+		var zRotatedTMatrix = zRotMatrix.getMultipliedByMatrix(resultGeoLocationData.tMatrix, zRotatedTMatrix);
+		var zxRotatedTMatrix = xRotMatrix.getMultipliedByMatrix(zRotatedTMatrix, zxRotatedTMatrix);
+		var zxyRotatedTMatrix = yRotMatrix.getMultipliedByMatrix(zxRotatedTMatrix, zxyRotatedTMatrix);
+		resultGeoLocationData.tMatrix = zxyRotatedTMatrix;
+		
+		// test.***
+		//var yRotatedTMatrix = yRotMatrix.getMultipliedByMatrix(resultGeoLocationData.tMatrix, yRotatedTMatrix);
+		//var yxRotatedTMatrix = xRotMatrix.getMultipliedByMatrix(yRotatedTMatrix, yxRotatedTMatrix);
+		//var yxzRotatedTMatrix = zRotMatrix.getMultipliedByMatrix(yxRotatedTMatrix, yxzRotatedTMatrix);
+		//resultGeoLocationData.tMatrix = yxzRotatedTMatrix;
+		// end test.---
+
+		resultGeoLocationData.rotMatrix.copyFromMatrix4(resultGeoLocationData.tMatrix);
+		resultGeoLocationData.rotMatrix._floatArrays[12] = 0;
+		resultGeoLocationData.rotMatrix._floatArrays[13] = 0;
+		resultGeoLocationData.rotMatrix._floatArrays[14] = 0;
+
+		// now, calculates the inverses.***
+		Cesium.Matrix4.inverse(resultGeoLocationData.tMatrix._floatArrays, resultGeoLocationData.tMatrixInv._floatArrays);
+		Cesium.Matrix4.inverse(resultGeoLocationData.rotMatrix._floatArrays, resultGeoLocationData.rotMatrixInv._floatArrays);
+		Cesium.Matrix4.inverse(resultGeoLocationData.geoLocMatrix._floatArrays, resultGeoLocationData.geoLocMatrixInv._floatArrays);
+	}
+
+	// finally assing the pivotPoint.***
+	if (resultGeoLocationData.pivotPoint === undefined)
+	{ resultGeoLocationData.pivotPoint = new Point3D(); }
+
+	resultGeoLocationData.pivotPoint.set(resultGeoLocationData.position.x, resultGeoLocationData.position.y, resultGeoLocationData.position.z);
+
+	return resultGeoLocationData;
+};
+
+ManagerUtils.calculateSplitedValues = function(value, resultSplitValue)
+{
+	if (resultSplitValue === undefined)
+	{ resultSplitValue = new SplitValue(); }
+
+	var doubleHigh;
+	if (value >= 0.0) 
+	{
+		doubleHigh = Math.floor(value / 65536.0) * 65536.0;
+		resultSplitValue.high = doubleHigh;
+		resultSplitValue.low = value - doubleHigh;
+	}
+	else 
+	{
+		doubleHigh = Math.floor(-value / 65536.0) * 65536.0;
+		resultSplitValue.high = -doubleHigh;
+		resultSplitValue.low = value + doubleHigh;
+	}
+
+	return resultSplitValue;
+};
+
+ManagerUtils.calculateSplited3fv = function(point3fv, resultSplitPoint3fvHigh, resultSplitPoint3fvLow)
+{
+	if (point3fv === undefined)
+	{ return undefined; }
+
+	if (resultSplitPoint3fvHigh === undefined)
+	{ resultSplitPoint3fvHigh = new Float32Array(3); }
+
+	if (resultSplitPoint3fvLow === undefined)
+	{ resultSplitPoint3fvLow = new Float32Array(3); }
+
+	var posSplitX = new SplitValue();
+	posSplitX = this.calculateSplitedValues(point3fv[0], posSplitX);
+	var posSplitY = new SplitValue();
+	posSplitY = this.calculateSplitedValues(point3fv[1], posSplitY);
+	var posSplitZ = new SplitValue();
+	posSplitZ = this.calculateSplitedValues(point3fv[2], posSplitZ);
+
+	resultSplitPoint3fvHigh[0] = posSplitX.high;
+	resultSplitPoint3fvHigh[1] = posSplitY.high;
+	resultSplitPoint3fvHigh[2] = posSplitZ.high;
+
+	resultSplitPoint3fvLow[0] = posSplitX.low;
+	resultSplitPoint3fvLow[1] = posSplitY.low;
+	resultSplitPoint3fvLow[2] = posSplitZ.low;
+};
+
+ManagerUtils.calculateAproxDist2D = function(pointA, pointB, sqrtTable)
+{
+	// test function.
+	var difX = Math.abs(pointA.x - pointB.x);
+	var difY = Math.abs(pointA.y - pointB.y);
+	
+	// find the big value.
+	var maxValue, value1;
+	
+	if (difX > difY)
+	{
+		maxValue = difX;
+		value1 = difY/maxValue;
+	}
+	else 
+	{
+		maxValue = difY;
+		value1 = difX/maxValue;
+	}
+	
+	var value1Idx = Math.floor(value1*100);
+	var aproxDist = maxValue * sqrtTable[value1Idx];
+	return aproxDist;
+};
+
+var sqrtTable = new Float32Array(11);
+// make 10 values.
+var increValue = 0.1;
+for (var i=0; i<11; i++)
+{
+	sqrtTable[i] = Math.sqrt(1+(increValue*i)*(increValue*i));
+}
+	
+ManagerUtils.calculateAproxDist3D = function(pointA, pointB)
+{
+	var difX = Math.abs(pointA.x - pointB.x);
+	var difY = Math.abs(pointA.y - pointB.y);
+	var difZ = Math.abs(pointA.z - pointB.z);
+	
+	// find the big value.
+	var maxValue, value1, value2;
+	var value1Idx, value2Idx;
+	var aproxDist;
+	
+	if (difX > difY)
+	{
+		if (difX > difZ)
+		{
+			maxValue = difX;
+			value1 = difY/maxValue;
+			value1Idx = Math.floor(value1*100);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difZ/middleDist;
+			value2Idx = Math.floor(value2*100);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+		else 
+		{
+			maxValue = difZ;
+			value1 = difX/maxValue;
+			value1Idx = Math.floor(value1*100);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difY/middleDist;
+			value2Idx = Math.floor(value2*100);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+	}
+	else 
+	{
+		if (difY > difZ)
+		{
+			maxValue = difY;
+			value1 = difX/maxValue;
+			value1Idx = Math.floor(value1*100);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difZ/middleDist;
+			value2Idx = Math.floor(value2*100);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+		else 
+		{
+			maxValue = difZ;
+			value1 = difX/maxValue;
+			value1Idx = Math.floor(value1*100);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difY/middleDist;
+			value2Idx = Math.floor(value2*100);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+	}
+	
+};
+/*
+ManagerUtils.getBuildingCurrentPosition = function(renderingMode, neoBuilding) 
+{
+	// renderingMode = 0 => assembled.***
+	// renderingMode = 1 => dispersed.***
+
+	if (neoBuilding === undefined) { return undefined; }
+
+	var realBuildingPos;
+
+	// 0 = assembled mode. 1 = dispersed mode.***
+	if (renderingMode === 1) 
+	{
+		if (neoBuilding.geoLocationDataAux === undefined) 
+		{
+			var realTimeLocBlocksList = MagoConfig.getData().alldata;
+			var newLocation = realTimeLocBlocksList[neoBuilding.buildingId];
+			// must calculate the realBuildingPosition (bbox_center_position).***
+
+			if (newLocation) 
+			{
+				neoBuilding.geoLocationDataAux = ManagerUtils.calculateGeoLocationData(newLocation.LONGITUDE, newLocation.LATITUDE, newLocation.ELEVATION, neoBuilding.geoLocationDataAux);
+
+				//this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
+				neoBuilding.point3dScratch.set(0.0, 0.0, 50.0);
+				realBuildingPos = neoBuilding.geoLocationDataAux.tMatrix.transformPoint3D(neoBuilding.point3dScratch, realBuildingPos );
+			}
+			else 
+			{
+				// use the normal data.***
+				neoBuilding.point3dScratch = neoBuilding.bbox.getCenterPoint(neoBuilding.point3dScratch);
+				realBuildingPos = neoBuilding.transfMat.transformPoint3D(neoBuilding.point3dScratch, realBuildingPos );
+			}
+		}
+		else 
+		{
+			//this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
+			neoBuilding.point3dScratch.set(0.0, 0.0, 50.0);
+			realBuildingPos = neoBuilding.geoLocationDataAux.tMatrix.transformPoint3D(neoBuilding.point3dScratch, realBuildingPos );
+		}
+	}
+	else 
+	{
+		neoBuilding.point3dScratch = neoBuilding.bbox.getCenterPoint(neoBuilding.point3dScratch);
+		realBuildingPos = neoBuilding.transfMat.transformPoint3D(neoBuilding.point3dScratch, realBuildingPos );
+	}
+
+	return realBuildingPos;
+};
 */
