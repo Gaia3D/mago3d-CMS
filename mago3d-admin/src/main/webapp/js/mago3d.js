@@ -1323,6 +1323,25 @@ BoundingBox.prototype.copyFrom = function(bbox)
 /**
  * 영역박스 확대
  * 
+ */
+BoundingBox.prototype.translateToOrigin = function() 
+{
+	var semiXLength = this.getXLength() /2;
+	var semiYLength = this.getYLength() /2;
+	var semiZLength = this.getZLength() /2;
+	
+	this.minX = -semiXLength;
+	this.minY = -semiYLength;
+	this.minZ = -semiZLength;
+
+	this.maxX = semiXLength;
+	this.maxY = semiYLength;
+	this.maxZ = semiZLength;
+};
+
+/**
+ * 영역박스 확대
+ * 
  * @param {Number} distance
  */
 BoundingBox.prototype.expand = function(distance) 
@@ -4970,7 +4989,7 @@ MagoManager.prototype.startRender = function(scene, isLastFrustum, frustumIdx, n
 	this.swapRenderingFase();
 	
 	// 3) test mago geometries.***********************************************************************************************************
-	//this.renderMagoGeometries(); //TEST
+	this.renderMagoGeometries(); //TEST
 	
 	// test. Draw the buildingNames.***
 	if (this.magoPolicy.getShowLabelInfo())
@@ -5145,13 +5164,13 @@ MagoManager.prototype.renderMagoGeometries = function()
 		//profileAux.TEST__setFigureConcave_duckMouth();
 		//profileAux.TEST__setFigureConcave_almostHole();
 		//profileAux.TEST__setFigureConcave_almostHole_2();
-		//profileAux.TEST__setFigureHole_1();
+		profileAux.TEST__setFigureHole_1();
 		
 		if(mesh.vboKeyContainer === undefined)
 			mesh.vboKeyContainer = new VBOVertexIdxCacheKeysContainer();
 		var vboKeys = mesh.vboKeyContainer.newVBOVertexIdxCacheKey();
 		
-		profileAux.getVBO(vboKeys);
+		//profileAux.getVBO(vboKeys);
 
 		var hola = 0;
 		
@@ -8075,8 +8094,9 @@ MagoManager.prototype.renderGeometry = function(gl, cameraPosition, shader, rend
 		// 3) now render bboxes.*******************************************************************************************************************
 		if (this.magoPolicy.getShowBoundingBox())
 		{
-			this.renderBoundingBoxesNodes(gl, this.visibleObjControlerNodes.currentVisibles0);
-			this.renderBoundingBoxesNodes(gl, this.visibleObjControlerNodes.currentVisibles2);
+			var bRenderLines = true;
+			this.renderBoundingBoxesNodes(gl, this.visibleObjControlerNodes.currentVisibles0, undefined, bRenderLines);
+			this.renderBoundingBoxesNodes(gl, this.visibleObjControlerNodes.currentVisibles2, undefined, bRenderLines);
 		}
 		
 		// 4) Render ObjectMarkers.********************************************************************************************************
@@ -8163,7 +8183,7 @@ MagoManager.prototype.renderGeometry = function(gl, cameraPosition, shader, rend
  * @param neoRefLists_array 변수
  */
 
-MagoManager.prototype.renderBoundingBoxesNodes = function(gl, nodesArray, color) 
+MagoManager.prototype.renderBoundingBoxesNodes = function(gl, nodesArray, color, bRenderLines) 
 {
 	var node;
 	var currentShader = this.postFxShadersManager.getTriPolyhedronShader(); // box ssao.***
@@ -8191,15 +8211,15 @@ MagoManager.prototype.renderBoundingBoxesNodes = function(gl, nodesArray, color)
 	gl.uniform1i(currentShader.hasAditionalMov_loc, true);
 	gl.uniform3fv(currentShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
 	gl.uniform1i(currentShader.bScale_loc, true);
-
+	var alfa = 1.0;
 	gl.uniform1i(currentShader.bUse1Color_loc, true);
 	if (color)
 	{
-		gl.uniform4fv(currentShader.oneColor4_loc, [color.r, color.g, color.b, 0.3]); //.***
+		gl.uniform4fv(currentShader.oneColor4_loc, [color.r, color.g, color.b, alfa]); //.***
 	}
 	else 
 	{
-		gl.uniform4fv(currentShader.oneColor4_loc, [1.0, 0.0, 1.0, 0.3]); //.***
+		gl.uniform4fv(currentShader.oneColor4_loc, [1.0, 0.0, 1.0, alfa]); //.***
 	}
 
 	gl.uniform1i(currentShader.depthTex_loc, 0);
@@ -8235,7 +8255,7 @@ MagoManager.prototype.renderBoundingBoxesNodes = function(gl, nodesArray, color)
 		this.pointSC = neoBuilding.bbox.getCenterPoint(this.pointSC);
 		gl.uniform3fv(currentShader.aditionalMov_loc, [this.pointSC.x, this.pointSC.y, this.pointSC.z]); //.***
 		//gl.uniform3fv(currentShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
-		this.renderer.renderObject(gl, this.unitaryBoxSC, this, currentShader, ssao_idx);
+		this.renderer.renderObject(gl, this.unitaryBoxSC, this, currentShader, ssao_idx, bRenderLines);
 	}
 	
 	if (currentShader)
@@ -9123,11 +9143,9 @@ MagoManager.prototype.createBuildingsByBuildingSeedsOnLowestTile = function(lowe
  */
 MagoManager.prototype.calculate_geoLocDataOfNode = function(node) 
 {
-	// this function creates the geoLocationData of "node" using the data inside of "buildingSeed".***
+	// this function creates the geoLocationData of "node".***
 	var nodeRoot = node.getRoot();
-	
-	
-	
+
 	if (nodeRoot.data.geoLocDataManager === undefined)
 	{ nodeRoot.data.geoLocDataManager = new GeoLocationDataManager(); }
 	var geoLocDataManager = nodeRoot.data.geoLocDataManager;
@@ -9136,29 +9154,40 @@ MagoManager.prototype.calculate_geoLocDataOfNode = function(node)
 	if (geoLoc === undefined || geoLoc.pivotPoint === undefined)
 	{ 
 		geoLoc = geoLocDataManager.newGeoLocationData("deploymentLoc"); 
-		var buildingSeed = node.data.buildingSeed;
+		var geographicCoord;
+		var rotationsDegree;
 		
-		var longitude = buildingSeed.geographicCoord.longitude;
-		var latitude = buildingSeed.geographicCoord.latitude;
-		var altitude = buildingSeed.geographicCoord.altitude;
-		var heading = buildingSeed.rotationsDegree.z;
-		var pitch = buildingSeed.rotationsDegree.x;
-		var roll = buildingSeed.rotationsDegree.y;
-
-		ManagerUtils.calculateGeoLocationData(longitude, latitude, altitude, heading, pitch, roll, geoLoc, this);
-		this.pointSC = buildingSeed.bBox.getCenterPoint(this.pointSC);
-		
-		if (node.data.attributes.centerOfBBoxAsOrigen !== undefined)
+		if(node.data.geographicCoord === undefined)
 		{
-			if (node.data.attributes.centerOfBBoxAsOrigen === true)
+			var buildingSeed = node.data.buildingSeed;
+			geographicCoord = buildingSeed.geographicCoord;
+			rotationsDegree = buildingSeed.rotationsDegree;
+		}
+		else{
+			geographicCoord = node.data.geographicCoord;
+			rotationsDegree = node.data.rotationsDegree;
+		}
+		
+		var longitude = geographicCoord.longitude;
+		var latitude = geographicCoord.latitude;
+		var altitude = geographicCoord.altitude;
+		var heading = rotationsDegree.z;
+		var pitch = rotationsDegree.x;
+		var roll = rotationsDegree.y;
+		ManagerUtils.calculateGeoLocationData(longitude, latitude, altitude, heading, pitch, roll, geoLoc, this);
+		this.pointSC = node.data.bbox.getCenterPoint(this.pointSC);
+
+		// check if use "centerOfBoundingBoxAsOrigin".***
+		if(node.data.mapping_type !== undefined && node.data.mapping_type.toLowerCase() === "boundingboxcenter")
+		{
+			var rootNode = node.getRoot();
+			if (rootNode)
 			{
-				var rootNode = node.getRoot();
-				if (rootNode)
-				{
-					// now, calculate the root center of bbox.
-					this.pointSC = rootNode.data.bbox.getCenterPoint(this.pointSC);
-					ManagerUtils.translatePivotPointGeoLocationData(geoLoc, this.pointSC );
-				}
+				// now, calculate the root center of bbox.
+				var buildingSeed = node.data.buildingSeed;
+				var buildingSeedBBox = buildingSeed.bBox;
+				this.pointSC = buildingSeedBBox.getCenterPoint(this.pointSC);
+				ManagerUtils.translatePivotPointGeoLocationData(geoLoc, this.pointSC );
 			}
 		}
 	}
@@ -9219,7 +9248,10 @@ MagoManager.prototype.tilesFrustumCullingFinished = function(intersectedLowestTi
 				// determine LOD for each building.
 				node = lowestTile.nodesArray[j];
 				nodeRoot = node.getRoot();
-					
+				
+				if(node.data.nodeId === "Tile_173078_LD_010_017_L22")
+					var hola = 0;
+
 				// now, create a geoLocDataManager for node if no exist.
 				if (nodeRoot.data.geoLocDataManager === undefined)
 				{
@@ -10006,6 +10038,7 @@ MagoManager.prototype.makeNode = function(jasonObject, resultPhysicalNodesArray,
 	var longitude = undefined;
 	var pitch = undefined;
 	var roll = undefined;
+	var mapping_type = undefined;
 	
 	if (jasonObject !== undefined)
 	{
@@ -10022,6 +10055,7 @@ MagoManager.prototype.makeNode = function(jasonObject, resultPhysicalNodesArray,
 		longitude = jasonObject.longitude;
 		pitch = jasonObject.pitch;
 		roll = jasonObject.roll;
+		mapping_type = jasonObject.mapping_type;
 	}
 	
 	// now make the node.
@@ -10041,6 +10075,8 @@ MagoManager.prototype.makeNode = function(jasonObject, resultPhysicalNodesArray,
 		node.data.projectId = projectId;
 		node.data.data_name = data_name;
 		node.data.attributes = attributes;
+		node.data.mapping_type = mapping_type;
+		var tMatrix;
 		
 		if (attributes.isPhysical)
 		{
@@ -10066,6 +10102,7 @@ MagoManager.prototype.makeNode = function(jasonObject, resultPhysicalNodesArray,
 			{ node.data.rotationsDegree = new Point3D(); }
 			node.data.rotationsDegree.set(pitch, roll, heading);
 			
+			
 			if (buildingSeed !== undefined)
 			{
 				if (buildingSeed.geographicCoord === undefined)
@@ -10083,20 +10120,38 @@ MagoManager.prototype.makeNode = function(jasonObject, resultPhysicalNodesArray,
 			
 				// calculate the transformation matrix at (longitude, latitude, height).
 				var worldCoordPosition = ManagerUtils.geographicCoordToWorldPoint(longitude, latitude, height, worldCoordPosition, this);
-				var tMatrix = ManagerUtils.calculateTransformMatrixAtWorldPosition(worldCoordPosition, heading, pitch, roll, undefined, tMatrix, this);
+				tMatrix = ManagerUtils.calculateTransformMatrixAtWorldPosition(worldCoordPosition, heading, pitch, roll, undefined, tMatrix, this);
 				
 				// now calculate the geographicCoord of the center of the bBox.
-				var bboxCenterPoint = buildingSeed.bBox.getCenterPoint(bboxCenterPoint);
+				var bboxCenterPoint;
+				//if(node.data.mapping_type !== undefined && node.data.mapping_type.toLowerCase() === "boundingboxcenter")
+				//	bboxCenterPoint = new Point3D(0,0,0);
+
+				bboxCenterPoint = buildingSeed.bBox.getCenterPoint(bboxCenterPoint);
 				var bboxCenterPointWorldCoord = tMatrix.transformPoint3D(bboxCenterPoint, bboxCenterPointWorldCoord);
 				buildingSeed.geographicCoordOfBBox = ManagerUtils.pointToGeographicCoord(bboxCenterPointWorldCoord, buildingSeed.geographicCoordOfBBox, this); // original.
 			}
 		}
+
+		// now, calculate the bbox.***
+		node.data.bbox = new BoundingBox();
 		
 		if(node.data.buildingSeed && node.data.buildingSeed.bBox)
-			node.data.bbox = node.data.buildingSeed.bBox;
-		else
-			node.data.bbox = new BoundingBox();
+			node.data.bbox.copyFrom(buildingSeed.bBox);
 		
+		if(node.data.mapping_type && node.data.mapping_type.toLowerCase() === "boundingboxcenter")
+		{
+			node.data.bbox.translateToOrigin();
+		}
+		
+		// calculate the geographicCoordOfTheBBox.***
+		if(tMatrix !== undefined)
+		{
+			bboxCenterPoint = node.data.bbox.getCenterPoint(bboxCenterPoint);
+			var bboxCenterPointWorldCoord = tMatrix.transformPoint3D(bboxCenterPoint, bboxCenterPointWorldCoord);
+			node.data.bbox.geographicCoord = ManagerUtils.pointToGeographicCoord(bboxCenterPointWorldCoord, node.data.bbox.geographicCoord, this);
+		}
+
 		bbox = node.data.bbox;
 
 		if (children !== undefined)
@@ -10113,12 +10168,6 @@ MagoManager.prototype.makeNode = function(jasonObject, resultPhysicalNodesArray,
 					node.addChildren(childNode);
 				}
 			}
-		}
-		else 
-		{
-		    // there are no children.
-			if (node.data.buildingSeed)
-			{ node.data.bbox.copyFrom(node.data.buildingSeed.bBox); }
 		}
 	}
 	return node;
@@ -10198,19 +10247,48 @@ MagoManager.prototype.calculateBoundingBoxesNodes = function()
 		for (var j=0; j<nodesCount; j++)
 		{
 			node = nodesArray[j];
-			if (node.data.attributes && node.data.attributes.isMain)
+			var nodeBBox = node.data.bbox;
+			
+			if(node.data.nodeId === "Tile_173078_LD_010_017_L22")
+				var hola = 0;
+			if (nodeBBox)
 			{
-				buildingSeed = node.data.buildingSeed;
-				if (buildingSeed)
+				if (node.data.attributes)
 				{
+					if(node.data.attributes.isMain)
+					{
+						//buildingSeed = node.data.buildingSeed;
+						if (bboxStarted === false)
+						{
+							nodeRoot.data.bbox.copyFrom(nodeBBox);
+							bboxStarted = true;
+						}
+						else 
+						{
+							nodeRoot.data.bbox.addBox(nodeBBox);
+						}
+					}
+					else{
+						if (bboxStarted === false)
+						{
+							nodeRoot.data.bbox.copyFrom(nodeBBox);
+							bboxStarted = true;
+						}
+						else 
+						{
+							nodeRoot.data.bbox.addBox(nodeBBox);
+						}
+					}
+				}
+				else{
 					if (bboxStarted === false)
 					{
-						nodeRoot.data.bbox.copyFrom(buildingSeed.bBox);
+						nodeRoot.data.bbox.copyFrom(nodeBBox);
 						bboxStarted = true;
 					}
 					else 
 					{
-						nodeRoot.data.bbox.addBox(buildingSeed.bBox);
+						nodeRoot.data.bbox.addBox(nodeBBox);
 					}
 				}
 			}
@@ -13001,14 +13079,31 @@ SmartTile.prototype.takeIntersectedBuildingSeeds = function(nodeSeedsArray)
 	// this function intersects the buildingSeeds with this tile.
 	// this function is used only one time when load a initial buildings distributions on the globe.
 	var buildingSeed;
-	var node;
+	var node, rootNode;
 	var buildingSeedsCount = nodeSeedsArray.length;
 	for (var i=0; i<buildingSeedsCount; i++)
 	{
 		node = nodeSeedsArray[i];
 		buildingSeed = node.data.buildingSeed;
 		
-		if (this.intersectPoint(buildingSeed.geographicCoordOfBBox.longitude, buildingSeed.geographicCoordOfBBox.latitude))
+		if(node.data.nodeId ==="Tile_173078_LD_010_017_L22")
+			var hola = 0;
+		
+		rootNode = node.getRoot();
+		
+		var longitude, latitude;
+		if(rootNode.data.bbox.geographicCoord === undefined)
+		{
+			// in this case take the data from buildingSeed.***
+			longitude = buildingSeed.geographicCoordOfBBox.longitude;
+			latitude = buildingSeed.geographicCoordOfBBox.latitude;
+		}
+		else{
+			longitude = rootNode.data.bbox.geographicCoord.longitude;
+			latitude = rootNode.data.bbox.geographicCoord.latitude;
+		}
+		
+		if (this.intersectPoint(longitude, latitude))
 		{
 			nodeSeedsArray.splice(i, 1);
 			i--;
@@ -33671,6 +33766,4793 @@ var MAGO3DJS_MESSAGE = new Object();
 
 /**
  * 어떤 일을 하고 있습니까?
+ * @class Arc
+ */
+var Arc = function() 
+{
+	if (!(this instanceof Arc)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	// sweeping in CounterClockWise is positive.***
+	// zero startAngle is in "X" axis positive.***
+	this.centerPoint; // Point3D.***
+	this.radius;
+	this.startAngleDeg;
+	this.sweepAngleDeg;
+	this.numPointsFor360Deg; // interpolation param.***
+	
+	// Alternative vars.***
+	this.startPoint; // if no exist radius, then startPoint define the radius.***
+	this.endPoint;
+	this.sweepSense; // 1=CCW, -1=CW.***
+};
+
+/**
+ * Set the center position of arc.
+ * @class Arc
+ */
+Arc.prototype.deleteObjects = function()
+{
+	if(this.centerPoint !== undefined)
+		this.centerPoint.deleteObjects(); // Point3D.***
+	this.centerPoint = undefined;
+	this.radius = undefined;
+	this.startAngleDeg = undefined;
+	this.sweepAngleDeg = undefined;
+	this.numPointsFor360Deg = undefined;
+	
+	if(this.startPoint !== undefined)
+		this.startPoint.deleteObjects(); 
+	
+	this.startPoint = undefined;
+	
+	if(this.endPoint !== undefined)
+		this.endPoint.deleteObjects(); 
+	
+	this.endPoint = undefined;
+	this.sweepSense = undefined; // 1=CCW, -1=CW.***
+};
+
+/**
+ * Set the center position of arc.
+ * @class Arc
+ */
+Arc.prototype.setCenterPosition = function(cx, cy)
+{
+	if (this.centerPoint === undefined)
+	{ this.centerPoint = new Point2D(); }
+	
+	this.centerPoint.set(cx, cy);
+};
+
+/**
+ * Set the center position of arc.
+ * @class Arc
+ */
+Arc.prototype.setRadius = function(radius)
+{
+	this.radius = radius;
+};
+
+/**
+ * Set the start angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setStartAngleDegree = function(startAngleDegree)
+{
+	this.startAngleDeg = startAngleDegree;
+};
+
+/**
+ * Set the start angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setStartPoint = function(x, y)
+{
+	// If no exist startAngle, then use this to calculate startAngle.***
+	if (this.startPoint === undefined)
+	{ this.startPoint = new Point2D(); }
+	
+	this.startPoint.set(x, y);
+};
+
+/**
+ * Set the start angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setEndPoint = function(x, y)
+{
+	// If no exist sweepAngle, then use this to calculate sweepAngle.***
+	if (this.endPoint === undefined)
+	{ this.endPoint = new Point2D(); }
+	
+	this.endPoint.set(x, y);
+};
+
+/**
+ * Set the start angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setSense = function(sense)
+{
+	this.sweepSense = sense; // 1=CCW, -1=CW.***
+};
+
+/**
+ * Set the sweep angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setSweepAngleDegree = function(sweepAngleDegree)
+{
+	this.sweepAngleDeg = sweepAngleDegree;
+};
+
+/**
+ * Returns the points of the arc.
+ * @class Arc
+ */
+Arc.prototype.getPoints = function(resultPointsArray, pointsCountFor360Deg)
+{
+	if(this.centerPoint === undefined)
+		return resultPointsArray;
+	
+	if(pointsCountFor360Deg)
+		this.numPointsFor360Deg = pointsCountFor360Deg
+
+	if(this.numPointsFor360Deg === undefined)
+		this.numPointsFor360Deg = 36;
+
+	// Check if exist strAng.*********************************************************************************
+	var strVector, endVector;
+	var strVectorModul;
+	if(this.startAngleDeg === undefined)
+	{
+		if(this.startPoint === undefined)
+			return resultPointsArray;
+		
+		strVector = new Point2D();
+		strVector.set(this.startPoint.x - this.centerPoint.x, this.startPoint.y - this.centerPoint.y);
+		strVectorModul = strVector.modul();
+		
+		var angRad = Math.acos(x/strVectorModul);
+		if(this.startPoint.y < 0)
+		{
+			angRad *= -1;
+		}
+		
+		this.startAngleDeg = angRad * 180.0/Math.PI;
+	}
+	
+	// Check if exist radius.*********************************************************************************
+	if(this.radius === undefined)
+	{
+		// calculate by startPoint.***
+		if(this.startPoint === undefined)
+			return resultPointsArray;
+		
+		if(strVectorModul === undefined)
+		{
+			if(strVector === undefined)
+			{
+				strVector = new Point2D();
+				strVector.set(this.startPoint.x - this.centerPoint.x, this.startPoint.y - this.centerPoint.y);
+			}
+			strVectorModul = strVector.modul();
+		}
+		
+		this.radius = strVectorModul;
+	}
+	
+	// check if exist sweepAng.*********************************************************************************
+	if(this.sweepAngleDeg === undefined)
+	{
+		if(this.endPoint === undefined || this.sweepSense === undefined)
+			return resultPointsArray;
+		
+		endVector = new Point2D();
+		endVector.set(this.endPoint.x - this.centerPoint.x, this.endPoint.y - this.endPoint.y);
+		var endVectorModul = endPoint.modul();
+		
+		var angRad = Math.acos(x/strVectorModul);
+		if(this.endPoint.y < 0)
+		{
+			angRad *= -1;
+		}
+		
+		this.sweepAngleDeg = angRad * 180.0/Math.PI;
+		
+		if(this.sweepSense < 0)
+			this.sweepAngleDeg = 360 - this.sweepAngleDeg;
+	}
+	
+	if(resultPointsArray === undefined)
+		resultPointsArray = [];
+	
+	var pointsArray = [];
+	
+	var increAngRad = 2.0 * Math.PI / this.numPointsFor360Deg;
+	var cx = this.centerPoint.x;
+	var cy = this.centerPoint.y;
+	var x, y;
+	var startAngRad = Math.PI/180.0 * this.startAngleDeg;
+	var sweepAngRad = Math.PI/180.0 * this.sweepAngleDeg;
+	var point;
+	
+	if (sweepAngRad >=0)
+	{
+		for (var currAngRad = 0.0; currAngRad<sweepAngRad; currAngRad += increAngRad)
+		{
+			x = cx + this.radius * Math.cos(currAngRad + startAngRad);
+			y = cy + this.radius * Math.sin(currAngRad + startAngRad);
+			point = new Point2D(x, y);
+			pointsArray.push(point);
+		}
+	}
+	else 
+	{
+		for (var currAngRad = 0.0; currAngRad>sweepAngRad; currAngRad -= increAngRad)
+		{
+			x = cx + this.radius * Math.cos(currAngRad + startAngRad);
+			y = cy + this.radius * Math.sin(currAngRad + startAngRad);
+			point = new Point2D(x, y);
+			pointsArray.push(point);
+		}
+	}
+	
+	// once finished, mark the 1rst point and the last point as"important point".***
+	var pointsCount = pointsArray.length;
+	if(pointsCount > 0)
+	{
+		pointsArray[0].pointType = 1;
+		pointsArray[pointsCount-1].pointType = 1;
+	}
+	
+	// now merge points into "resultPointsArray".***
+	var errorDist = 0.0001; // 0.1mm.***
+	var resultExistentPointsCount = resultPointsArray.length;
+	for(var i=0; i<pointsCount; i++)
+	{
+		if(i===0)
+		{
+			if(resultExistentPointsCount > 0)
+			{
+				// check if the last point of "resultPointsArray" and the 1rst point of "this" is coincident.***
+				var lastExistentPoint = resultPointsArray[resultExistentPointsCount-1];
+				point = pointsArray[i];
+				if(!lastExistentPoint.isCoincidentToPoint(point, errorDist))
+				{
+					resultPointsArray.push(point);
+				}
+			}
+			else
+			{
+				resultPointsArray.push(pointsArray[i]);
+			}
+		}
+		else
+		{
+			resultPointsArray.push(pointsArray[i]);
+		}
+	}
+	
+	// Last check: finally, in case of sweepAngle = 360 degrees, or is closed pointsArray, then pop the last insertedPoint.***
+	resultExistentPointsCount = resultPointsArray.length;
+	if(resultExistentPointsCount > 0)
+	{
+		// check if the last point of "resultPointsArray" and the 1rst point of "this" is coincident.***
+		var lastPoint = resultPointsArray[resultExistentPointsCount-1];
+		var firstPoint = resultPointsArray[0];
+		if(lastPoint.isCoincidentToPoint(firstPoint, errorDist))
+		{
+			resultPointsArray.pop();
+			lastPoint.deleteObjects();
+		}
+	}
+	
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 선
+ * @class AxisXYZ
+ */
+var AxisXYZ = function() 
+{
+	if (!(this instanceof AxisXYZ)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.xLength = 60;
+	this.yLength = 60;
+	this.zLength = 60;
+	this.vbo_vicks_container = new VBOVertexIdxCacheKeysContainer();
+	this.vboKey = this.vbo_vicks_container.newVBOVertexIdxCacheKey();
+};
+
+AxisXYZ.prototype.setDimension = function(xLength, yLength, zLength)
+{
+	this.xLength = xLength;
+	this.yLength = yLength;
+	this.zLength = zLength;
+};
+
+AxisXYZ.prototype.getVboKeysContainer = function()
+{
+	return this.vbo_vicks_container;
+};
+
+AxisXYZ.prototype.getVbo = function(resultVboKey)
+{
+	if(resultVboKey === undefined)
+		resultVboKey = new VBOVertexIdxCacheKey();
+	
+	if (resultVboKey.posVboDataArray === undefined)
+	{ resultVboKey.posVboDataArray = []; }
+
+	if (resultVboKey.colVboDataArray === undefined)
+	{ resultVboKey.colVboDataArray = []; }
+
+	if (resultVboKey.norVboDataArray === undefined)
+	{ resultVboKey.norVboDataArray = []; }
+
+	var positions = [];
+	var normals = [];
+	var colors = [];
+	
+	// xAxis.***
+	positions.push(0,0,0, this.xLength,0,0);
+	colors.push(255,0,0,255, 255,0,0,255);
+	normals.push(0,0,255, 0,0,255);
+	
+	// yAxis.***
+	positions.push(0,0,0, 0,this.yLength,0);
+	colors.push(0,255,0,255, 0,255,0,255);
+	normals.push(0,0,255, 0,0,255);
+	
+	// zAxis.***
+	positions.push(0,0,0, 0,0,this.zLength);
+	colors.push(0,0,255,255, 0,0,255,255);
+	normals.push(255,0,0, 255,0,0);
+
+	resultVboKey.posVboDataArray = Float32Array.from(positions);
+	resultVboKey.colVboDataArray = Int8Array.from(colors);
+	resultVboKey.norVboDataArray = Int8Array.from(normals);
+	
+	resultVboKey.vertexCount = 6;
+	
+	return resultVboKey;
+};
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class BoundingRectangle
+*/
+var BoundingRectangle = function(x, y) 
+{
+	if (!(this instanceof BoundingRectangle)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.minX = 100000;
+	this.maxX = -100000;
+	this.minY = 100000;
+	this.maxY = -100000;
+};
+
+BoundingRectangle.prototype.setInit = function(point)
+{
+	if(point === undefined)
+		return;
+	
+	this.minX = point.x;
+	this.minY = point.y;
+	this.maxX = point.x;
+	this.maxY = point.y;
+};
+
+BoundingRectangle.prototype.setInitByRectangle = function(bRect)
+{
+	if(bRect === undefined)
+		return;
+	
+	this.minX = bRect.minX;
+	this.minY = bRect.minY;
+	this.maxX = bRect.maxX;
+	this.maxY = bRect.maxY;
+};
+
+BoundingRectangle.prototype.addPoint = function(point)
+{
+	if(point === undefined)
+		return;
+	
+	if(point.x < this.minX)
+		this.minX = point.x;
+	else if(point.x > this.maxX)
+		this.maxX = point.x;
+	
+	if(point.y < this.minY)
+		this.minY = point.y;
+	else if(point.y > this.maxY)
+		this.maxY = point.y;
+};
+
+BoundingRectangle.prototype.addRectangle = function(bRect)
+{
+	if(bRect === undefined)
+		return;
+	
+	if(bRect.minX < this.minX)
+		this.minX = bRect.minX;
+	if(bRect.maxX > this.maxX)
+		this.maxX = bRect.maxX;
+	
+	if(bRect.minY < this.minY)
+		this.minY = bRect.minY;
+	if(bRect.maxY > this.maxY)
+		this.maxY = bRect.maxY;
+};
+
+BoundingRectangle.prototype.intersectsWithRectangle = function(bRect)
+{
+	if(bRect === undefined)
+		return false;
+	
+	if(bRect.minX > this.maxX)
+		return false;
+	else if(bRect.maxX < this.minX)
+		return false;
+	else if(bRect.minY > this.maxY)
+		return false;
+	else if(bRect.maxY < this.minY)
+		return false;
+	
+	return true;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Circle
+ */
+var Circle = function() 
+{
+	if (!(this instanceof Circle)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	// sweeping in CounterClockWise is positive.***
+	// zero startAngle is in "X" axis positive.***
+	this.centerPoint; // Point3D.***
+	this.radius;
+	this.numPointsFor360Deg; // interpolation param.***
+};
+
+/**
+ * Set the center position of Circle.
+ * @class Circle
+ */
+Circle.prototype.setCenterPosition = function(cx, cy)
+{
+	if (this.centerPoint === undefined)
+	{ this.centerPoint = new Point2D(); }
+	
+	this.centerPoint.set(cx, cy);
+};
+
+/**
+ * Set the center position of Circle.
+ * @class Circle
+ */
+Circle.prototype.setRadius = function(radius)
+{
+	this.radius = radius;
+};
+
+/**
+ * Returns the points of the arc.
+ * @class Arc
+ */
+Circle.prototype.getPoints = function(resultPointsArray, pointsCountFor360Deg)
+{
+	if(pointsCountFor360Deg)
+		this.numPointsFor360Deg = pointsCountFor360Deg
+
+	if(this.numPointsFor360Deg === undefined)
+		this.numPointsFor360Deg = 36;
+	
+	// use an arc to make points.***
+	if(this.centerPoint === undefined || this.radius === undefined)
+		return resultPointsArray;
+	
+	var arc = new Arc();
+	arc.setCenterPosition(this.centerPoint.x, this.centerPoint.y);
+	
+	arc.setRadius(this.radius);
+	arc.setStartAngleDegree(0);
+	arc.setSweepAngleDegree(360.0);
+	arc.setSense(1);
+	
+	if(resultPointsArray === undefined)
+		resultPointsArray = [];
+	
+	resultPointsArray = arc.getPoints(resultPointsArray, this.numPointsFor360Deg);
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Face
+ */
+var Face = function() 
+{
+	if (!(this instanceof Face)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.halfEdge;
+};
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class HalfEdge
+ */
+var HalfEdge = function() 
+{
+	if (!(this instanceof HalfEdge)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.origenVertex;
+	this.nextEdge;
+	this.twinEdge;
+	this.face;
+};
+'use strict';
+
+/**
+ * 선
+ * @class Line
+ */
+var Line = function() 
+{
+	if (!(this instanceof Line)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	// (x,y,z) = (x0,y0,z0) + lambda * (u, v, w);
+	this.point = new Point3D();
+	this.direction = new Point3D();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @param dx 변수
+ * @param dy 변수
+ * @param dz 변수
+ */
+Line.prototype.setPointAndDir = function(px, py, pz, dx, dy, dz) 
+{
+	this.point.set(px, py, pz);
+	this.direction.set(dx, dy, dz);
+	this.direction.unitary();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line.prototype.getProjectedPoint = function(point, projectedPoint) 
+{
+	if(projectedPoint === undefined)
+		projectedPoint = new Point3D();
+	
+	var plane = new Plane();
+	plane.setPointAndNormal(point.x, point.y, point.z, this.direction.x, this.direction.y, this.direction.z);
+	projectedPoint = plane.intersectionLine(this, projectedPoint);
+	
+	return projectedPoint;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line.prototype.isCoincidentPoint = function(point, error) 
+{
+	if(point === undefined)
+		return false;
+	
+	var projectedPoint = this.getProjectedPoint(point);
+	
+	if(projectedPoint === undefined)
+		return false;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	var squaredDist = projectedPoint.squareDistToPoint(point);
+	
+	if(squaredDist < error*error)
+		return true;
+	
+	return false;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 선
+ * @class Line2D
+ */
+var Line2D = function() 
+{
+	if (!(this instanceof Line2D)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	// (x,y) = (x0,y0) + lambda * (u, v);
+	this.point = new Point2D();
+	this.direction = new Point2D();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param dx 변수
+ * @param dy 변수
+ */
+Line2D.prototype.setPointAndDir = function(px, py, dx, dy) 
+{
+	this.point.set(px, py);
+	this.direction.set(dx, dy);
+	this.direction.unitary();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.getPerpendicularRight = function(point) 
+{
+	var perpendicular = new Line2D();
+	
+	if(point)
+		perpendicular.point.set(point.x, point.y);
+	else
+		perpendicular.point.set(this.point.x, this.point.y);
+	
+	perpendicular.direction.set(this.direction.y, -this.direction.x);
+	return perpendicular;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.getPerpendicularLeft = function(point) 
+{
+	var perpendicular = new Line2D();
+	
+	if(point)
+		perpendicular.point.set(point.x, point.y);
+	else
+		perpendicular.point.set(this.point.x, this.point.y);
+	
+	perpendicular.direction.set(-this.direction.y, this.direction.x);
+	return perpendicular;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.getProjectedPoint = function(point, projectedPoint) 
+{
+	if(projectedPoint === undefined)
+		projectedPoint = new Point2D();
+	
+	var perpendicular = this.getPerpendicularLeft(point);
+	projectedPoint = this.intersectionWithLine(perpendicular, projectedPoint);
+	
+	return projectedPoint;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.isCoincidentPoint = function(point, error) 
+{
+	if(point === undefined)
+		return false;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	var projectedPoint = this.getProjectedPoint(point, projectedPoint);
+	var squaredDist = point.squareDistToPoint(projectedPoint);
+	
+	if(squaredDist < error*error)
+		return true;
+
+	return false;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.isParallelToLine = function(line) 
+{
+	if(line === undefined)
+		return false;
+	
+	var zero = 10E-10;
+	var angRad = this.direction.angleRadToVector(line.direction);
+	
+	// if angle is zero or 180 degree, then this is parallel to "line".***
+	if(angRad < zero || Math.abs(angRad - Math.PI) < zero)
+		return true;
+	
+	return false;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.intersectionWithLine = function(line, resultIntersectPoint) 
+{
+	if(line === undefined)
+		return undefined;
+	
+	// 1rst, check that this is not parallel to "line".***
+	if(this.isParallelToLine(line))
+		return undefined;
+	
+	// now, check if this or "line" are vertical or horizontal.***
+	var intersectX;
+	var intersectY;
+	
+	var zero = 10E-10;
+	if(Math.abs(this.direction.x) < zero)
+	{
+		// this is a vertical line.***
+		var slope = line.direction.y / line.direction.x;
+		var b = line.point.y - slope * line.point.x;
+		
+		intersectX = this.point.x;
+		intersectY = slope * this.point.x + b;
+	}
+	else if(Math.abs(this.direction.y) < zero)
+	{
+		// this is a horizontal line.***
+		// must check if the "line" is vertical.***
+		if(Math.abs(line.direction.x) < zero)
+		{
+			// "line" is vertical.***
+			intersectX = line.point.x;
+			intersectY = this.point.y;
+		}
+		else{
+			var slope = line.direction.y / line.direction.x;
+			var b = line.point.y - slope * line.point.x;
+			
+			intersectX = (this.point.y - b)/slope;
+			intersectY = this.point.y;
+		}	
+	}
+	else{
+		// this is oblique.***
+		if(Math.abs(line.direction.x) < zero)
+		{
+			// "line" is vertical.***
+			var mySlope = this.direction.y / this.direction.x;
+			var myB = this.point.y - mySlope * this.point.x;
+			intersectX = line.point.x;
+			intersectY = line.point.x * mySlope + myB;
+		}
+		else{
+			var mySlope = this.direction.y / this.direction.x;
+			var myB = this.point.y - mySlope * this.point.x;
+			
+			var slope = line.direction.y / line.direction.x;
+			var b = line.point.y - slope * line.point.x;
+			
+			intersectX = (myB - b)/ (slope - mySlope);
+			intersectY = slope * intersectX + b;
+		}
+	}
+	
+	if(resultIntersectPoint === undefined)
+		resultIntersectPoint = new Point2D();
+	
+	resultIntersectPoint.set(intersectX, intersectY);
+	return resultIntersectPoint;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class MagoNativeProject
+ */
+var MagoNativeProject = function() 
+{
+	if (!(this instanceof MagoNativeProject)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	// This is a "ParametricMeshes" composition.***
+	this.meshesArray;
+	this.geoLocDataManager;
+	this.vboKeysContainer; // class: VBOVertexIdxCacheKeysContainer
+};
+
+MagoNativeProject.prototype.newParametricMesh = function()
+{
+	if(this.meshesArray === undefined)
+		this.meshesArray = [];
+	
+	var parametricMesh = new ParametricMesh();
+	this.meshesArray.push(parametricMesh);
+	return parametricMesh;
+};
+
+MagoNativeProject.prototype.deleteObjects = function()
+{
+	if(this.meshesArray === undefined)
+		return;
+	
+	var parametricMeshesCount = this.meshesArray.length;
+	for(var i=0; i<parametricMeshesCount; i++)
+	{
+		this.meshesArray[i].deleteObjects();
+		this.meshesArray[i] = undefined;
+	}
+	this.meshesArray = undefined;
+	
+	if(this.geoLocDataManager)
+		this.geoLocDataManager.deleteObjects();
+	
+	this.geoLocDataManager = undefined;
+};
+
+MagoNativeProject.prototype.getMeshesCount = function()
+{
+	if(this.meshesArray === undefined)
+		return 0;
+	
+	return this.meshesArray.length;
+};
+
+MagoNativeProject.prototype.getMesh = function(idx)
+{
+	if(this.meshesArray === undefined)
+		return undefined;
+	
+	return this.meshesArray[idx];
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Mesh
+ */
+var Mesh = function() 
+{
+	if (!(this instanceof Mesh)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.surfacesArray;
+};
+
+'use strict';
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class ParametricMesh
+ */
+var ParametricMesh = function() 
+{
+	if (!(this instanceof ParametricMesh)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.profilesList; // class: ProfilesList
+	this.trianglesMatrix;
+	this.profile;
+	this.vboKeyContainer;//VBOVertexIdxCacheKey
+	this.bbox;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ParametricMesh.prototype.deleteObjects = function() 
+{
+	if(this.profilesList)
+		this.profilesList.deleteObjects();
+	
+	this.profilesList = undefined;
+	
+	if(this.trianglesMatrix)
+		this.trianglesMatrix.deleteObjects();
+	
+	this.trianglesMatrix = undefined;
+	
+	if(this.profile)
+		this.profile.deleteObjects();
+	
+	this.profile = undefined;
+};
+
+ParametricMesh.prototype.getVboKeysContainer = function()
+{
+	return this.vboKeyContainer;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ParametricMesh.prototype.extrude = function(profile, extrusionVector, extrusionDist, extrudeSegmentsCount) 
+{
+	
+	
+	// now, make the bottomCap, topCap, and lateral triangles.
+	this.trianglesMatrix = new TrianglesMatrix();
+	
+	
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class Point2D
+*/
+var Point2D = function(x, y) 
+{
+	if (!(this instanceof Point2D)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	if(x)this.x = x;
+	else this.x = 0.0;
+	if(y)this.y = y;
+	else this.y = 0.0;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.deleteObjects = function() 
+{
+	this.x = undefined;
+	this.y = undefined;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.copyFrom = function(point2d) 
+{
+	this.x = point2d.x;
+	this.y = point2d.y;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.set = function(x, y) 
+{
+	this.x = x;
+	this.y = y;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns this.x*this.x + this.y*this.y + this.z*this.z;
+ */
+Point2D.prototype.getSquaredModul = function() 
+{
+	return this.x*this.x + this.y*this.y;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z );
+ */
+Point2D.prototype.getModul = function() 
+{
+	return Math.sqrt(this.getSquaredModul());
+};
+
+/**
+ * 
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.unitary = function() 
+{
+	var modul = this.getModul();
+	this.x /= modul;
+	this.y /= modul;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point2D.prototype.squareDistToPoint = function(point) 
+{
+	var dx = this.x - point.x;
+	var dy = this.y - point.y;
+
+	return dx*dx + dy*dy;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point2D.prototype.distToPoint = function(point) 
+{
+	return Math.sqrt(this.squareDistToPoint(point));
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point2D.prototype.isCoincidentToPoint = function(point, errorDist) 
+{
+	var squareDist = this.distToPoint(point);
+	var coincident = false;
+	if(squareDist < errorDist*errorDist)
+	{
+		coincident = true;
+	}
+
+	return coincident;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ */
+Point2D.prototype.getVectorToPoint = function(targetPoint, resultVector) 
+{
+	// this returns a vector that points to "targetPoint" from "this".***
+	// the "resultVector" has the direction from "this" to "targetPoint", but is NOT normalized.***
+	if(targetPoint === undefined)
+		return undefined;
+	
+	if(resultVector === undefined)
+		resultVector = new Point2D();
+	
+	resultVector.set(targetPoint.x - this.x, targetPoint.y - this.y);
+	
+	return resultVector;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2D.prototype.crossProduct = function(point) 
+{
+	return this.x * point.y - point.x * this.y;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2D.prototype.scalarProduct = function(point) 
+{
+	var scalarProd = this.x*point.x + this.y*point.y;
+	return scalarProd;
+};
+
+/**
+ * nomal 계산
+ * @param vector 변수
+ */
+Point2D.prototype.angleRadToVector = function(vector) 
+{
+	if(vector === undefined)
+		return undefined;
+	
+	//******************************************************
+	//var scalarProd = this.scalarProduct(vector);
+	var myModul = this.getModul();
+	var vecModul = vector.getModul();
+	
+	// calcule by cos.***
+	//var cosAlfa = scalarProd / (myModul * vecModul); 
+	//var angRad = Math.acos(cosAlfa);
+	//var angDeg = alfa * 180.0/Math.PI;
+	//------------------------------------------------------
+	var error = 10E-10;
+	if(myModul < error || vecModul < error)
+		return undefined;
+	
+	return Math.acos(this.scalarProduct(vector) / (myModul * vecModul));
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2D.prototype.angleDegToVector = function(vector) 
+{
+	if(vector === undefined)
+		return undefined;
+	
+	var angRad = this.angleRadToVector(vector);
+	
+	if(angRad === undefined)
+		return undefined;
+		
+	return angRad * 180.0/Math.PI;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class Point2DList
+*/
+var Point2DList = function(x, y) 
+{
+	if (!(this instanceof Point2DList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.pointsArray;
+};
+
+Point2DList.prototype.deleteObjects = function()
+{
+	if(this.pointsArray === undefined)
+		return;
+	
+	var pointsCount = this.pointsArray.length;
+	for(var i=0; i<pointsCount; i++)
+	{
+		this.pointsArray[i].deleteObjects();
+		this.pointsArray[i] = undefined;
+	}
+	this.pointsArray = undefined;
+};
+
+Point2DList.prototype.newPoint = function(x, y)
+{
+	if(this.pointsArray === undefined)
+		this.pointsArray = [];
+	
+	var point = new Point2D(x, y);
+	this.pointsArray.push(point);
+	return point;
+};
+
+Point2DList.prototype.getPoint = function(idx)
+{
+	return this.pointsArray[idx];
+};
+
+Point2DList.prototype.getPointsCount = function()
+{
+	if(this.pointsArray === undefined)
+		return 0;
+	
+	return this.pointsArray.length;
+};
+
+Point2DList.prototype.getPrevIdx = function(idx)
+{
+	var pointsCount = this.pointsArray.length;
+	var prevIdx;
+	
+	if(idx === 0)
+		prevIdx = pointsCount - 1;
+	else
+		prevIdx = idx - 1;
+
+	return prevIdx;
+};
+
+Point2DList.prototype.getNextIdx = function(idx)
+{
+	var pointsCount = this.pointsArray.length;
+	var nextIdx;
+	
+	if(idx === pointsCount - 1)
+		nextIdx = 0;
+	else
+		nextIdx = idx + 1;
+
+	return nextIdx;
+};
+
+Point2DList.prototype.getIdxOfPoint = function(point)
+{
+	var pointsCount = this.pointsArray.length;
+	var i=0;
+	var idx = -1;
+	var found = false;
+	while(!found && i<pointsCount)
+	{
+		if(this.pointsArray[i] === point)
+		{
+			found = true;
+			idx = i;
+		}
+		i++;
+	}
+	
+	return idx;
+};
+
+Point2DList.prototype.getSegment = function(idx, resultSegment)
+{
+	var currPoint = this.getPoint(idx);
+	var nextIdx = this.getNextIdx(idx);
+	var nextPoint = this.getPoint(nextIdx);
+	
+	if(resultSegment === undefined)
+		resultSegment = new Segment2D(currPoint, nextPoint);
+	else{
+		resultSegment.setPoints(currPoint, nextPoint);
+	}
+
+	return resultSegment;
+};
+
+Point2DList.prototype.setIdxInList = function()
+{
+	var pointsCount = this.pointsArray.length;
+	for(var i=0; i<pointsCount; i++)
+	{
+		this.pointsArray[i].idxInList = i;
+	}
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2DList.prototype.getBoundingRectangle = function(resultBRect) 
+{
+	var pointsCount = this.getPointsCount();
+	if(pointsCount === 0)
+		return resultBRect;
+	
+	if(resultBRect === undefined)
+		resultBRect = new BoundingRectangle();
+	
+	var point;
+	for(var i=0; i<pointsCount; i++)
+	{
+		if(i === 0)
+			resultBRect.setInit(this.getPoint(i));
+		else
+			resultBRect.addPoint(this.getPoint(i));
+	}
+	
+	return resultBRect;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2DList.prototype.getNearestPointIdxToPoint = function(point) 
+{
+	if(point === undefined)
+		return undefined;
+	
+	var currPoint, candidatePointIdx;
+	var currSquaredDist, candidateSquaredDist;
+	var pointsCount = this.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		currPoint = this.getPoint(i);
+		currSquaredDist = currPoint.squareDistToPoint(point);
+		if(candidatePointIdx === undefined)
+		{
+			candidatePointIdx = i;
+			candidateSquaredDist = currSquaredDist;
+		}
+		else{
+			if(currSquaredDist < candidateSquaredDist)
+			{
+				candidatePointIdx = i;
+				candidateSquaredDist = currSquaredDist;
+			}
+		}
+	}
+	
+	return candidatePointIdx;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2DList.prototype.reverse = function() 
+{
+	if(this.pointsArray !== undefined)
+		this.pointsArray.reverse();
+};
+
+Point2DList.prototype.getPointsIdxSortedByDistToPoint = function(thePoint, resultSortedPointsIdxArray)
+{
+	if(this.pointsArray === undefined)
+		return resultSortedPointsIdxArray;
+	
+	// Static function.***
+	// Sorting minDist to maxDist.***
+	if(resultSortedPointsIdxArray === undefined)
+		resultSortedPointsIdxArray = [];
+	
+	var pointsArray = this.pointsArray;
+	
+	var objectAux;
+	var objectsAuxArray = [];
+	var point;
+	var squaredDist;
+	var startIdx, endIdx, insertIdx;
+	var pointsCount = pointsArray.length;
+	for(var i=0; i<pointsCount; i++)
+	{
+		point = pointsArray[i];
+		if(point === thePoint)
+			continue;
+		
+		squaredDist = thePoint.squareDistToPoint(point);
+		objectAux = {};
+		objectAux.pointIdx = i;
+		objectAux.squaredDist = squaredDist;
+		startIdx = 0;
+		endIdx = objectsAuxArray.length - 1;
+		
+		insertIdx = this.getIndexToInsertBySquaredDist(objectsAuxArray, objectAux, startIdx, endIdx);
+		objectsAuxArray.splice(insertIdx, 0, objectAux);
+	}
+	
+	resultSortedPointsIdxArray.length = 0;
+	var objectsCount = objectsAuxArray.length;
+	for(var i=0; i<objectsCount; i++)
+	{
+		resultSortedPointsIdxArray.push(objectsAuxArray[i].pointIdx);
+	}
+	
+	return resultSortedPointsIdxArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns result_idx
+ */
+Point2DList.prototype.getIndexToInsertBySquaredDist = function(objectsArray, object, startIdx, endIdx) 
+{
+	// this do a dicotomic search of idx in a ordered table.
+	// 1rst, check the range.
+	
+	var range = endIdx - startIdx;
+	
+	if(objectsArray.length === 0)
+		return 0;
+	
+	if (range < 6)
+	{
+		// in this case do a lineal search.
+		var finished = false;
+		var i = startIdx;
+		var idx;
+		//var objectsCount = objectsArray.length;
+		while (!finished && i<=endIdx)
+		{
+			if (object.squaredDist < objectsArray[i].squaredDist)
+			{
+				idx = i;
+				finished = true;
+			}
+			i++;
+		}
+		
+		if (finished)
+		{
+			return idx;
+		}
+		else 
+		{
+			return endIdx+1;
+		}
+	}
+	else 
+	{
+		// in this case do the dicotomic search.
+		var middleIdx = startIdx + Math.floor(range/2);
+		var newStartIdx;
+		var newEndIdx;
+		if (objectsArray[middleIdx].squaredDist > object.squaredDist)
+		{
+			newStartIdx = startIdx;
+			newEndIdx = middleIdx;
+		}
+		else 
+		{
+			newStartIdx = middleIdx;
+			newEndIdx = endIdx;
+		}
+		return this.getIndexToInsertBySquaredDist(objectsArray, object, newStartIdx, newEndIdx);
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 3차원 정보
+ * @class Point3D
+ */
+var Point3D = function(x, y, z) 
+{
+	if (!(this instanceof Point3D)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	if (x !== undefined)
+	{ this.x = x; }
+	else
+	{ this.x = 0.0; }
+	
+	if (y !== undefined)
+	{ this.y = y; }
+	else
+	{ this.y = 0.0; }
+	
+	if (z !== undefined)
+	{ this.z = z; }
+	else
+	{ this.z = 0.0; }
+	
+	this.pointType; // 1 = important point.***
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point3D.prototype.deleteObjects = function() 
+{
+	this.x = undefined;
+	this.y = undefined;
+	this.z = undefined;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point3D.prototype.copyFrom = function(point3d) 
+{
+	this.x = point3d.x;
+	this.y = point3d.y;
+	this.z = point3d.z;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns this.x*this.x + this.y*this.y + this.z*this.z;
+ */
+Point3D.prototype.getSquaredModul = function() 
+{
+	return this.x*this.x + this.y*this.y + this.z*this.z;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z );
+ */
+Point3D.prototype.getModul = function() 
+{
+	return Math.sqrt(this.getSquaredModul());
+};
+
+/**
+ * 
+ * 어떤 일을 하고 있습니까?
+ */
+Point3D.prototype.unitary = function() 
+{
+	var modul = this.getModul();
+	this.x /= modul;
+	this.y /= modul;
+	this.z /= modul;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point3D.prototype.crossProduct = function(point, resultPoint) 
+{
+	if (resultPoint === undefined) { resultPoint = new Point3D(); }
+
+	resultPoint.x = this.y * point.z - point.y * this.z;
+	resultPoint.y = point.x * this.z - this.x * point.z;
+	resultPoint.z = this.x * point.y - point.x * this.y;
+
+	return resultPoint;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point3D.prototype.scalarProduct = function(point) 
+{
+	var scalarProd = this.x*point.x + this.y*point.y + this.z*point.z;
+	return scalarProd;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point3D.prototype.angleRadToVector = function(vector) 
+{
+	if(vector === undefined)
+		return undefined;
+	
+	//******************************************************
+	//var scalarProd = this.scalarProd(vector);
+	var myModul = this.modul();
+	var vecModul = vector.modul();
+	
+	// calcule by cos.***
+	//var cosAlfa = scalarProd / (myModul * vecModul); 
+	//var angRad = Math.acos(cosAlfa);
+	//var angDeg = alfa * 180.0/Math.PI;
+	//------------------------------------------------------
+	var error = 10E-10;
+	if(myModul < error || vecModul < error)
+		return undefined;
+	
+	return Math.acos(this.scalarProd(vector) / (myModul * vecModul));
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point3D.prototype.angleDegToVector = function(vector) 
+{
+	if(vector === undefined)
+		return undefined;
+	
+	var angRad = this.angleRadToVector(vector);
+	
+	if(angRad === undefined)
+		return undefined;
+		
+	return angRad * 180.0/Math.PI;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.squareDistToPoint = function(point) 
+{
+	var dx = this.x - point.x;
+	var dy = this.y - point.y;
+	var dz = this.z - point.z;
+
+	return dx*dx + dy*dy + dz*dz;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.isCoincidentToPoint = function(point, errorDist) 
+{
+	var squareDist = this.distToPoint(point);
+	var coincident = false;
+	if(squareDist < errorDist*errorDist)
+	{
+		coincident = true;
+	}
+
+	return coincident;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.squareDistTo = function(x, y, z) 
+{
+	var dx = this.x - x;
+	var dy = this.y - y;
+	var dz = this.z - z;
+
+	return dx*dx + dy*dy + dz*dz;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.distTo = function(x, y, z) 
+{
+	return Math.sqrt(this.squareDistTo(x, y, z));
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.distToPoint = function(point) 
+{
+	return Math.sqrt(this.squareDistToPoint(point));
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.distToSphere = function(sphere) 
+{
+	return Math.sqrt(this.squareDistToPoint(sphere.centerPoint)) - sphere.r;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.aproxDistTo = function(pointB, sqrtTable) 
+{
+	var difX = Math.abs(this.x - pointB.x);
+	var difY = Math.abs(this.y - pointB.y);
+	var difZ = Math.abs(this.z - pointB.z);
+	
+	// find the big value.
+	var maxValue, value1, value2;
+	var value1Idx, value2Idx;
+	
+	if (difX > difY)
+	{
+		if (difX > difZ)
+		{
+			maxValue = difX;
+			value1 = difY/maxValue;
+			value1Idx = Math.floor(value1*10);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difZ/middleDist;
+			value2Idx = Math.floor(value2*10);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+		else 
+		{
+			maxValue = difZ;
+			value1 = difX/maxValue;
+			value1Idx = Math.floor(value1*10);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difY/middleDist;
+			value2Idx = Math.floor(value2*10);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+	}
+	else 
+	{
+		if (difY > difZ)
+		{
+			maxValue = difY;
+			value1 = difX/maxValue;
+			value1Idx = Math.floor(value1*10);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difZ/middleDist;
+			value2Idx = Math.floor(value2*10);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+		else 
+		{
+			maxValue = difZ;
+			value1 = difX/maxValue;
+			value1Idx = Math.floor(value1*10);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difY/middleDist;
+			value2Idx = Math.floor(value2*10);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Point3D.prototype.getVectorToPoint = function(targetPoint, resultVector) 
+{
+	// this returns a vector that points to "targetPoint" from "this".***
+	// the "resultVector" has the direction from "this" to "targetPoint", but is NOT normalized.***
+	if(targetPoint === undefined)
+		return undefined;
+	
+	if(resultVector === undefined)
+		resultVector = new Point3D();
+	
+	resultVector.set(targetPoint.x - this.x, targetPoint.y - this.y, targetPoint.z - this.z);
+	
+	return resultVector;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Point3D.prototype.set = function(x, y, z) 
+{
+	this.x = x; this.y = y; this.z = z;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Point3D.prototype.add = function(x, y, z) 
+{
+	this.x += x; this.y += y; this.z += z;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Point3D.prototype.addPoint = function(point) 
+{
+	this.x += point.x; this.y += point.y; this.z += point.z;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Point3D.prototype.scale = function(scaleFactor) 
+{
+	this.x *= scaleFactor; this.y *= scaleFactor; this.z *= scaleFactor;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Polygon
+ */
+var Polygon = function() 
+{
+	if (!(this instanceof Polygon)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.point2dList;
+	this.normal; // polygon sense. (normal = 1) -> CCW. (normal = -1) -> CW.***
+	this.convexPolygonsArray; // tessellation result.***
+	this.bRect; // boundary rectangle.***
+};
+
+Polygon.prototype.deleteObjects = function()
+{
+	if(this.point2dList !== undefined)
+	{
+		this.point2dList.deleteObjects();
+		this.point2dList = undefined;
+	}
+	
+	this.normal = undefined;
+};
+
+Polygon.prototype.getBoundingRectangle = function(resultBRect)
+{
+	if(this.point2dList === undefined)
+		return resultBRect;
+	
+	resultBRect = this.point2dList.getBoundingRectangle(resultBRect);
+	return resultBRect;
+};
+
+Polygon.prototype.getEdgeDirection = function(idx)
+{
+	// the direction is unitary vector.***
+	var segment = this.point2dList.getSegment(idx);
+	var direction = segment.getDirection(direction);
+	return direction;
+};
+
+Polygon.prototype.getEdgeVector = function(idx)
+{
+	var segment = this.point2dList.getSegment(idx);
+	var vector = segment.getVector(vector);
+	return vector;
+};
+
+Polygon.prototype.reverseSense = function()
+{
+	if(this.point2dList !== undefined)
+		this.point2dList.reverse();
+};
+
+Polygon.prototype.calculateNormal = function(resultConcavePointsIdxArray)
+{
+	// must check if the verticesCount is 3. Then is a convex polygon.***
+	
+	// A & B are vectors.
+	// A*B is scalarProduct.
+	// A*B = |A|*|B|*cos(alfa)
+	var point;
+	var crossProd;
+	
+	if(resultConcavePointsIdxArray === undefined)
+		resultConcavePointsIdxArray = [];
+	
+	//var candidate_1 = {}; // normal candidate 1.***
+	//var candidate_2 = {}; // normal candidate 2.***
+	
+	this.normal = 0; // unknown sense.***
+	var pointsCount = this.point2dList.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		point = this.point2dList.getPoint(i);
+		var prevIdx = this.point2dList.getPrevIdx(i);
+		
+		// get unitari directions of the vertex.***
+		var startVec = this.getEdgeDirection(prevIdx); // Point3D.
+		var endVec = this.getEdgeDirection(i); // Point3D.
+		
+		// calculate the cross product.***
+		var crossProd = startVec.crossProduct(endVec, crossProd); // Point3D.
+		var scalarProd = startVec.scalarProduct(endVec);
+		
+		if(crossProd < 0.0) 
+		{
+			crossProd = -1;
+			resultConcavePointsIdxArray.push(i);
+		}
+		else if(crossProd > 0.0) {
+			crossProd = 1;
+		}
+		// calcule by cos.***
+		// cosAlfa = scalarProd / (strModul * endModul); (but strVecModul = 1 & endVecModul = 1), so:
+		var cosAlfa = scalarProd;
+		var alfa = Math.acos(cosAlfa);
+		this.normal += (crossProd * alfa);
+	}
+	
+	if(this.normal > 0 )
+		this.normal = 1;
+	else
+		this.normal = -1;
+	
+	return resultConcavePointsIdxArray;
+};
+
+
+Polygon.prototype.tessellate = function(concaveVerticesIndices, convexPolygonsArray)
+{
+	var concaveVerticesCount = concaveVerticesIndices.length;
+	
+	if(concaveVerticesCount === 0)
+	{
+		convexPolygonsArray.push(this);
+		return convexPolygonsArray;
+	}
+	
+	// now, for any concave vertex, find the closest vertex to split the polygon.***
+	var find = false;
+	var idx_B;
+	var i=0;
+	
+	while(!find && i<concaveVerticesCount)
+	{
+		var idx = concaveVerticesIndices[i];
+		var point = this.point2dList.getPoint(idx);
+		var resultSortedPointsIdxArray = [];
+		
+		// get vertices indices sorted by distance to "point".***
+		this.getPointsIdxSortedByDistToPoint(point, resultSortedPointsIdxArray);
+		
+		var sortedVerticesCount = resultSortedPointsIdxArray.length;
+		var j=0;
+		while(!find && j<sortedVerticesCount)
+		{
+			idx_B = resultSortedPointsIdxArray[j];
+			
+			// skip adjacent vertices.***
+			if(this.point2dList.getPrevIdx(idx) === idx_B || this.point2dList.getNextIdx(idx) === idx_B)
+			{
+				j++;
+				continue;
+			}
+			
+			// check if is splittable by idx-idx_B.***
+			var segment = new Segment2D(this.point2dList.getPoint(idx), this.point2dList.getPoint(idx_B));
+			if(this.intersectionWithSegment(segment))
+			{
+				j++;
+				continue;
+			}
+			
+			var resultSplittedPolygons = this.splitPolygon(idx, idx_B);
+			
+			if(resultSplittedPolygons.length < 2)
+			{
+				j++;
+				continue;
+			}
+			
+			// now, compare splittedPolygon's normals with myNormal.***
+			var polygon_A = resultSplittedPolygons[0];
+			var polygon_B = resultSplittedPolygons[1];
+			var concavePoints_A = polygon_A.calculateNormal();
+			var concavePoints_B = polygon_B.calculateNormal();
+			
+			var normal_A = polygon_A.normal;
+			var normal_B = polygon_B.normal;
+			if(normal_A === this.normal && normal_B === this.normal)
+			{
+				find = true;
+				// polygon_A.***
+				if(concavePoints_A.length > 0)
+				{
+					convexPolygonsArray = polygon_A.tessellate(concavePoints_A, convexPolygonsArray);
+				}
+				else{
+					if(convexPolygonsArray === undefined)
+						convexPolygonsArray = [];
+					
+					convexPolygonsArray.push(polygon_A);
+				}
+				
+				// polygon_B.***
+				if(concavePoints_B.length > 0)
+				{
+					convexPolygonsArray = polygon_B.tessellate(concavePoints_B, convexPolygonsArray);
+				}
+				else{
+					if(convexPolygonsArray === undefined)
+						convexPolygonsArray = [];
+					
+					convexPolygonsArray.push(polygon_B);
+				}
+			}
+			
+			j++;
+		}
+		i++;
+	}
+	
+	return convexPolygonsArray;
+};
+
+Polygon.prototype.intersectionWithSegment = function(segment)
+{
+	// "segment" cut a polygons edge.***
+	// "segment" coincident with a polygons vertex.***
+	if(this.bRect !== undefined)
+	{
+		// if exist boundary rectangle, check bRect intersection.***
+		var segmentsBRect = segment.getBoundaryRectangle(segmentsBRect);
+		if(!this.bRect.intersectsWithRectangle(segmentsBRect))
+			return false;
+	}
+	
+	// 1rst check if the segment is coincident with any polygons vertex.***
+	var mySegment;
+	var intersectionType;
+	var error = 10E-8;
+	var pointsCount = this.point2dList.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		mySegment = this.point2dList.getSegment(i, mySegment);
+		
+		// if segment shares points, then must not cross.***
+		if(segment.sharesPointsWithSegment(mySegment))
+		{
+			continue;
+		}
+		
+		if(segment.intersectionWithSegment(mySegment, error))
+		{
+			return true;
+		}
+	}
+	
+	return false;
+};
+
+Polygon.prototype.splitPolygon = function(idx1, idx2, resultSplittedPolygonsArray)
+{
+	if(resultSplittedPolygonsArray === undefined)
+		resultSplittedPolygonsArray = [];
+	
+	// polygon A. idx1 -> idx2.***
+	var polygon_A = new Polygon();
+	polygon_A.point2dList = new Point2DList();
+	polygon_A.point2dList.pointsArray = [];
+	
+	// 1rst, put vertex1 & vertex2 in to the polygon_A.***
+	polygon_A.point2dList.pointsArray.push(this.point2dList.getPoint(idx1));
+	polygon_A.point2dList.pointsArray.push(this.point2dList.getPoint(idx2));
+	
+	var finished = false;
+	var currIdx = idx2;
+	var startIdx = idx1;
+	var i=0;
+	var totalPointsCount = this.point2dList.getPointsCount();
+	while(!finished && i<totalPointsCount)
+	{
+		var nextIdx = this.point2dList.getNextIdx(currIdx);
+		if(nextIdx === startIdx)
+		{
+			finished = true;
+		}
+		else{
+			polygon_A.point2dList.pointsArray.push(this.point2dList.getPoint(nextIdx));
+			currIdx = nextIdx;
+		}
+		i++;
+	}
+	
+	resultSplittedPolygonsArray.push(polygon_A);
+	
+	// polygon B. idx2 -> idx1.***
+	var polygon_B = new Polygon();
+	polygon_B.point2dList = new Point2DList();
+	polygon_B.point2dList.pointsArray = [];
+	
+	// 1rst, put vertex2 & vertex1 in to the polygon_B.***
+	polygon_B.point2dList.pointsArray.push(this.point2dList.getPoint(idx2));
+	polygon_B.point2dList.pointsArray.push(this.point2dList.getPoint(idx1));
+	
+	finished = false;
+	currIdx = idx1;
+	startIdx = idx2;
+	i=0;
+	while(!finished && i<totalPointsCount)
+	{
+		var nextIdx = this.point2dList.getNextIdx(currIdx);
+		if(nextIdx === startIdx)
+		{
+			finished = true;
+		}
+		else{
+			polygon_B.point2dList.pointsArray.push(this.point2dList.getPoint(nextIdx));
+			currIdx = nextIdx;
+		}
+		i++;
+	}
+	
+	resultSplittedPolygonsArray.push(polygon_B);
+	return resultSplittedPolygonsArray;
+};
+
+Polygon.prototype.getPointsIdxSortedByDistToPoint = function(thePoint, resultSortedPointsIdxArray)
+{
+	// Static function.***
+	// Sorting minDist to maxDist.***
+	if(resultSortedPointsIdxArray === undefined)
+		resultSortedPointsIdxArray = [];
+	
+	resultSortedPointsIdxArray = this.point2dList.getPointsIdxSortedByDistToPoint(thePoint, resultSortedPointsIdxArray);
+	
+	return resultSortedPointsIdxArray;
+};
+
+Polygon.prototype.isPolygonSplittableByVtxSegment = function(vertexSegment)
+{
+	
+};
+
+Polygon.prototype.getTrianglesConvexPolygon = function(resultTrianglesList)
+{
+	// in this case, consider the polygon is convex.***
+	if(resultTrianglesList === undefined)
+		resultTrianglesList = new TrianglesList();
+
+	var pointsCount = this.point2dList.getPointsCount();
+	if(pointsCount <3)
+		return resultTrianglesList;
+	
+	var triangle;
+	for(var i=1; i<pointsCount-1; i++)
+	{
+		triangle = resultTrianglesList.newTriangle();
+		
+		var point0idx = this.point2dList.getPoint(0).idxInList;
+		var point1idx = this.point2dList.getPoint(i).idxInList;
+		var point2idx = this.point2dList.getPoint(i+1).idxInList;
+		
+		triangle.vtxIdx0 = point0idx;
+		triangle.vtxIdx1 = point1idx;
+		triangle.vtxIdx2 = point2idx;
+	}
+	
+	return resultTrianglesList;
+};
+
+Polygon.prototype.getVbo = function(resultVbo)
+{
+	// return positions, normals and indices.***
+	if(resultVbo === undefined)
+		resultVbo = new VBOVertexIdxCacheKey();
+	
+	// 1rst, obtain pos, nor.***
+	var posArray = [];
+	var norArray = [];
+	var point;
+	var normal;
+	if(this.normal > 0)
+		normal = 1;
+	else
+		normal = -1;
+		
+	var pointsCount = this.point2dList.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		point = this.point2dList.getPoint(i);
+		
+		posArray.push(point.x);
+		posArray.push(point.y);
+		posArray.push(0.0);
+		
+		norArray.push(0);
+		norArray.push(0);
+		norArray.push(normal*255);
+	}
+	
+	resultVbo.posVboDataArray = Float32Array.from(posArray);
+	resultVbo.norVboDataArray = Int8Array.from(norArray);
+	
+	// now calculate triangles indices.***
+	this.point2dList.setIdxInList(); // use this function instead a map.***
+	
+	var trianglesList = new TrianglesList();
+	var convexPolygonsCount = this.convexPolygonsArray.length;
+	for(var i=0; i<convexPolygonsCount; i++)
+	{
+		var convexPolygon = this.convexPolygonsArray[i];
+		trianglesList = convexPolygon.getTrianglesConvexPolygon(trianglesList);
+	}
+	trianglesList.getFaceDataArray(resultVbo);
+
+	return resultVbo;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class PolyLine
+ */
+var PolyLine = function() 
+{
+	if (!(this instanceof PolyLine)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.point2dArray;
+};
+
+/**
+ * Creates a new Point2D.
+ * @class PolyLine
+ */
+PolyLine.prototype.newPoint2d = function(x, y)
+{
+	if (this.point2dArray === undefined)
+	{ this.point2dArray = []; }
+	
+	var point2d = new Point2D(x, y);
+	this.point2dArray.push(point2d);
+	return point2d;
+};
+
+/**
+ * Creates a new Point2D.
+ * @class PolyLine
+ */
+PolyLine.prototype.deleteObjects = function()
+{
+	var pointsCount = this.point2dArray.length;
+	for (var i=0; i<pointsCount; i++)
+	{
+		this.point2dArray[i].deleteObjects();
+		this.point2dArray[i] = undefined;
+	}
+	this.point2dArray = undefined;
+};
+
+/**
+ * Creates a new Point2D.
+ * @class PolyLine
+ */
+PolyLine.prototype.getPoints = function(resultPointsArray)
+{
+	if (resultPointsArray === undefined)
+	{ resultPointsArray = []; }
+	
+	var point;
+	var errorDist = 10E-8;
+	var resultExistentPointsCount = resultPointsArray.length;
+	var pointsCount = this.point2dArray.length;
+	for (var i=0; i<pointsCount; i++)
+	{
+		if(i===0)
+		{
+			if(resultExistentPointsCount > 0)
+			{
+				// check if the last point of "resultPointsArray" and the 1rst point of "this" is coincident.***
+				var lastExistentPoint = resultPointsArray[resultExistentPointsCount-1];
+				var point0 = this.point2dArray[i];
+				if(!lastExistentPoint.isCoincidentToPoint(point0, errorDist))
+				{
+					point = new Point2D();
+					point.copyFrom(this.point2dArray[i]); 
+					point.pointType = 1; // mark as "important point".***
+					resultPointsArray.push(point);
+				}
+			}
+			else
+			{
+				point = new Point2D();
+				point.copyFrom(this.point2dArray[i]); 
+				point.pointType = 1; // mark as "important point".***
+				resultPointsArray.push(point);
+			}
+		}
+		else
+		{
+			point = new Point2D();
+			point.copyFrom(this.point2dArray[i]); 
+			point.pointType = 1; // mark as "important point".***
+			resultPointsArray.push(point);
+		}
+	}
+	
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Profile
+ */
+var Profile = function() 
+{
+	if (!(this instanceof Profile)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.outerRing; // one Ring. 
+	this.innerRingsList; // class: RingsList. 
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.newOuterRing = function() 
+{
+	if (this.outerRing === undefined)
+	{ this.outerRing = new Ring(); }
+	else{
+		this.outerRing.deleteObjects();
+	}
+	
+	return this.outerRing;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.newInnerRing = function() 
+{
+	if (this.innerRingsList === undefined)
+	{ this.innerRingsList = new RingsList(); }
+	
+	var innerRing = this.innerRingsList.newRing();
+	
+	return innerRing;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.deleteObjects = function() 
+{
+	if (this.outerRing)
+	{
+		this.outerRing.deleteObjects();
+		this.outerRing = undefined;
+	}
+
+	if (this.innerRingsList)
+	{
+		this.innerRingsList.deleteObjects();
+		this.innerRingsList = undefined;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+
+Profile.prototype.hasHoles = function() 
+{
+	if(this.innerRingsList === undefined || this.innerRingsList.getRingsCount() === 0)
+		return false;
+	
+	return true;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+ 
+Profile.prototype.getVBO = function(resultVBOCacheKeys) 
+{
+	if(this.outerRing === undefined)
+		return resultVBOCacheKeys;
+	
+	if(!this.hasHoles())
+	{
+		var outerRing = this.outerRing;
+		outerRing.makePolygon();
+		outerRing.polygon.convexPolygonsArray = [];
+		var concavePointsIndices = outerRing.polygon.calculateNormal(concavePointsIndices);
+		outerRing.polygon.convexPolygonsArray = outerRing.polygon.tessellate(concavePointsIndices, outerRing.polygon.convexPolygonsArray);
+
+		outerRing.polygon.getVbo(resultVBOCacheKeys);
+	}
+	else{
+		// 1rst, check normals congruences.***
+		this.checkNormals();
+		var resultConvexPolygons = this.tessellate(resultConvexPolygons);
+		
+		if(resultConvexPolygons.length > 0)
+		{
+			var polygon = resultConvexPolygons[0];
+			
+			polygon.convexPolygonsArray = [];
+			var concavePointsIndices = polygon.calculateNormal(concavePointsIndices);
+			polygon.convexPolygonsArray = polygon.tessellate(concavePointsIndices, polygon.convexPolygonsArray);
+			polygon.getVbo(resultVBOCacheKeys);
+		}
+		var hola = 0;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.eliminateHolePolygonBySplitPoints = function(outerPolygon, innerPolygon, outerPointIdx, innerPointIdx, resultPolygon) 
+{
+	if(resultPolygon === undefined)
+		resultPolygon = new Polygon();
+	
+	if(resultPolygon.point2dList === undefined)
+		resultPolygon.point2dList = new Point2DList();
+	
+	// 1rst, copy in newPolygon the outerPolygon.***
+	var outerPointsCount = outerPolygon.point2dList.getPointsCount();
+	var finished = false;
+	var i=0;
+	var newPoint;
+	var outerPoint;
+	var currIdx = outerPointIdx;
+	while(!finished && i<outerPointsCount)
+	{
+		outerPoint = outerPolygon.point2dList.getPoint(currIdx);
+		newPoint = resultPolygon.point2dList.newPoint(outerPoint.x, outerPoint.y);
+		
+		currIdx = outerPolygon.point2dList.getNextIdx(currIdx);
+		if(currIdx === outerPointIdx)
+		{
+			finished = true;
+			
+			// must add the firstPoint point.***
+			outerPoint = outerPolygon.point2dList.getPoint(currIdx);
+			newPoint = resultPolygon.point2dList.newPoint(outerPoint.x, outerPoint.y);
+		}
+		
+		i++;
+	}
+	
+	// now add innerPolygon's points.***
+	var innerPointsCount = innerPolygon.point2dList.getPointsCount();
+	finished = false;
+	i=0;
+	newPoint;
+	var innerPoint;
+	currIdx = innerPointIdx;
+	while(!finished && i<innerPointsCount)
+	{
+		innerPoint = innerPolygon.point2dList.getPoint(currIdx);
+		newPoint = resultPolygon.point2dList.newPoint(innerPoint.x, innerPoint.y);
+		
+		currIdx = innerPolygon.point2dList.getNextIdx(currIdx);
+		if(currIdx === innerPointIdx)
+		{
+			finished = true;
+			// must add the firstPoint point.***
+			innerPoint = innerPolygon.point2dList.getPoint(currIdx);
+			newPoint = resultPolygon.point2dList.newPoint(innerPoint.x, innerPoint.y);
+		}
+		
+		i++;
+	}
+	
+	return resultPolygon;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.eliminateHolePolygon = function(outerPolygon, innerPolygon, innerPointIdx, resultPolygon) 
+{
+	// 1rst, make a sorted by dist of points of outer to "innerPoint".***
+	var resultSortedPointsIdxArray = [];
+	var innerPoint = innerPolygon.point2dList.getPoint(innerPointIdx);
+	resultSortedPointsIdxArray = outerPolygon.getPointsIdxSortedByDistToPoint(innerPoint, resultSortedPointsIdxArray);
+	
+	var outerSortedPointsCount = resultSortedPointsIdxArray.length;
+	var splitSegment = new Segment2D();;
+	var finished = false;
+	var i=0;
+	var outPointIdx;
+	var outPoint;
+	while(!finished && i<outerSortedPointsCount)
+	{
+		outPointIdx = resultSortedPointsIdxArray[i];
+		outPoint = outerPolygon.point2dList.getPoint(outPointIdx);
+		splitSegment.setPoints(outPoint, innerPoint);
+		
+		// check if splitSegment intersects the outerPolygon or any innerPolygons.***
+		if(outerPolygon.intersectionWithSegment(splitSegment) || innerPolygon.intersectionWithSegment(splitSegment))
+		{
+			i++;
+			continue;
+		}
+		
+		resultPolygon = this.eliminateHolePolygonBySplitPoints(outerPolygon, innerPolygon, outPointIdx, innerPointIdx, resultPolygon);
+		finished = true;
+		
+		i++;
+	}
+	
+	return resultPolygon;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.checkNormals = function() 
+{
+	if(this.outerRing === undefined)
+		return;
+	
+	// 1rst, calculate the outerNormal.***
+	var outerRing = this.outerRing;
+	if(outerRing.polygon === undefined)
+		outerRing.makePolygon();
+	var outerPolygon = outerRing.polygon;
+	var concavePointsIndices = outerPolygon.calculateNormal(concavePointsIndices);
+	var outerNormal = outerPolygon.normal;
+	
+	// if there are inners, the innerNormals must be inverse of the outerNormal.***
+	var innerRing;
+	var innerPolygon;
+	var innerNormal;
+	var innersCount = this.innerRingsList.getRingsCount();
+	for(var i=0; i<innersCount; i++)
+	{
+		innerRing = this.innerRingsList.getRing(i);
+		if(innerRing.polygon === undefined)
+			innerRing.makePolygon();
+		var innerPolygon = innerRing.polygon;
+		innerPolygon.calculateNormal();
+		var innerNormal = innerPolygon.normal;
+		
+		if(innerNormal === outerNormal)
+		{
+			// then reverse innerPolygon.***
+			innerPolygon.reverseSense();
+			innerPolygon.normal = -innerNormal;
+		}
+		
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.tessellate = function(resultConvexPolygons) 
+{
+	if(this.outerRing === undefined)
+		return undefined;
+	
+	if(resultConvexPolygons === undefined)
+		resultConvexPolygons = [];
+	
+	if(this.hasHoles())
+	{
+		// 1rst, calculate the most left-down innerRing.***
+		var innersBRect = this.innerRingsList.getBoundingRectangle(innersBRect);
+		var innersBRectLeftDownPoint = new Point2D(innersBRect.minX, innersBRect.minY);
+		var objectsArray = [];
+		objectsArray = this.innerRingsList.getSortedRingsByDistToPoint(innersBRectLeftDownPoint, objectsArray);
+		
+		// now, for each hole, calculate the nearest point to outerRing.***
+		var hole;
+		var holePolygon;
+		var objectAux;
+		var innerPointIdx;
+		var holeNormal;
+		var splitSegment;
+		var resultPolygon;
+		
+		// prepare outerRing.***
+		var outerRing = this.outerRing;
+		if(outerRing.polygon === undefined)
+			outerRing.makePolygon();
+		var outerPolygon = outerRing.polygon;
+		var concavePointsIndices = outerPolygon.calculateNormal(concavePointsIndices);
+		
+		// now, for each innerRing, try to merge to outerRing by splitSegment.***
+		var innerRingsCount = objectsArray.length;
+		for(var i=0; i<innerRingsCount; i++)
+		{
+			objectAux = objectsArray[i];
+			hole = objectAux.ring;
+			holePolygon = hole.polygon;
+			innerPointIdx = objectAux.pointIdx;
+			holePolygon.calculateNormal();
+			//holeNormal = holePolygon.normal;
+			
+			resultPolygon = this.eliminateHolePolygon(outerPolygon, holePolygon, innerPointIdx, resultPolygon);
+			resultConvexPolygons.push(resultPolygon);
+		}
+	}
+	
+	return resultConvexPolygons;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureHole_1 = function() 
+{
+	// profile with holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	var rect;
+	
+	rect = outerRing.newElement("RECTANGLE");
+	rect.setCenterPosition(0, 0);
+	rect.setDimensions(10, 6);
+	/*
+	var innerRing = this.newInnerRing();
+	rect = innerRing.newElement("RECTANGLE");
+	rect.setCenterPosition(1, 0);
+	rect.setDimensions(5, 3);
+	*/
+	
+	var innerRing = this.newInnerRing();
+	rect = innerRing.newElement("CIRCLE");
+	rect.setCenterPosition(1, 0);
+	rect.setRadius(2.2);
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_almostHole_2 = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(3.0, 4.0); // 0
+	point3d = polyLine.newPoint2d(5.0, 6.0); // 1
+	point3d = polyLine.newPoint2d(0.0, 6.0); // 2
+	point3d = polyLine.newPoint2d(0.0, 0.0); // 3
+	point3d = polyLine.newPoint2d(9.0, 0.0); // 4
+	point3d = polyLine.newPoint2d(9.0, 6.0); // 5
+	point3d = polyLine.newPoint2d(5.0, 6.0); // 6
+	point3d = polyLine.newPoint2d(3.0, 4.0); // 7
+	point3d = polyLine.newPoint2d(4.0, 4.0); // 8
+	point3d = polyLine.newPoint2d(4.0, 3.0); // 9
+	point3d = polyLine.newPoint2d(3.0, 3.0); // 10
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_almostHole = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(0.0, 0.0); // 0
+	point3d = polyLine.newPoint2d(7.0, 0.0); // 1
+	point3d = polyLine.newPoint2d(7.0, 5.0); // 2
+	point3d = polyLine.newPoint2d(5.0, 4.0); // 3
+	point3d = polyLine.newPoint2d(5.0, 2.0); // 4
+	point3d = polyLine.newPoint2d(1.0, 2.0); // 5
+	point3d = polyLine.newPoint2d(1.0, 4.0); // 6
+	point3d = polyLine.newPoint2d(5.0, 4.0); // 7
+	point3d = polyLine.newPoint2d(7.0, 5.0); // 8
+	point3d = polyLine.newPoint2d(0.0, 5.0); // 9
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_duckMouth = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(3.0, 0.0); // 0
+	point3d = polyLine.newPoint2d(8.0, 0.0); // 1
+	point3d = polyLine.newPoint2d(8.0, 5.0); // 2
+	point3d = polyLine.newPoint2d(2.0, 5.0); // 3
+	point3d = polyLine.newPoint2d(0.0, 0.0); // 4
+	point3d = polyLine.newPoint2d(6.0, 4.0); // 5
+	point3d = polyLine.newPoint2d(6.0, 2.0); // 6
+	point3d = polyLine.newPoint2d(3.0, 2.0); // 7
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_spiral = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(0.0, -3.0); // 0
+	point3d = polyLine.newPoint2d(3.0, -2.0); // 1
+	point3d = polyLine.newPoint2d(5.0, -2.0); // 2
+	point3d = polyLine.newPoint2d(5.0, 3.0); // 3
+	point3d = polyLine.newPoint2d(-2.0, 4.0); // 4
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(-3, 3);
+	arc.setRadius(Math.sqrt(2));
+	arc.setStartAngleDegree(45.0);
+	arc.setSweepAngleDegree(-180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-4.0, 2.0); // 0
+	point3d = polyLine.newPoint2d(-4.0, -5.0); // 1
+	point3d = polyLine.newPoint2d(-5.0, -5.0); // 2
+	point3d = polyLine.newPoint2d(-5.0, -3.0); // 3
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(-6, -3);
+	arc.setRadius(1);
+	arc.setStartAngleDegree(0.0);
+	arc.setSweepAngleDegree(180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-7.0, -3.0); // 0
+	point3d = polyLine.newPoint2d(-7.0, -7.0); // 1
+	point3d = polyLine.newPoint2d(8.0, -5.0); // 2
+	point3d = polyLine.newPoint2d(8.0, 8.0); // 3
+	point3d = polyLine.newPoint2d(3.0, 8.0); // 4
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(0, 8);
+	arc.setRadius(3);
+	arc.setStartAngleDegree(0.0);
+	arc.setSweepAngleDegree(180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-3.0, 8.0); // 0
+	point3d = polyLine.newPoint2d(-9.0, 8.0); // 1
+	point3d = polyLine.newPoint2d(-9.0, 9.0); // 2
+	point3d = polyLine.newPoint2d(-5.0, 9.0); // 3
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(-5, 10);
+	arc.setRadius(1);
+	arc.setStartAngleDegree(-90);
+	arc.setSweepAngleDegree(180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-5.0, 11.0); // 0
+	point3d = polyLine.newPoint2d(-10.0, 9.0); // 1
+	point3d = polyLine.newPoint2d(-10.0, -10.0); // 2
+	point3d = polyLine.newPoint2d(-3.0, -8.0); // 3
+	point3d = polyLine.newPoint2d(-8.0, -8.0); // 4
+	point3d = polyLine.newPoint2d(-8.0, -1.0); // 5
+	point3d = polyLine.newPoint2d(-5.0, -1.0); // 6
+	point3d = polyLine.newPoint2d(-6.0, 1.0); // 7
+	point3d = polyLine.newPoint2d(-6.0, 6.0); // 8
+	point3d = polyLine.newPoint2d(5.0, 6.0); // 9
+	point3d = polyLine.newPoint2d(7.0, -4.0); // 10
+	point3d = polyLine.newPoint2d(-2.0, -4.0); // 11
+	point3d = polyLine.newPoint2d(-2.0, -2.0); // 12
+	point3d = polyLine.newPoint2d(3.0, 1.0); // 13
+	point3d = polyLine.newPoint2d(3.0, -1.0); // 14
+	point3d = polyLine.newPoint2d(0.0, -1.0); // 15
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_simpleArc = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-2.0, 0.0); // 0
+	point3d = polyLine.newPoint2d(-2.0, -3.0); // 1
+	point3d = polyLine.newPoint2d(0.0, -3.0); // 2
+	point3d = polyLine.newPoint2d(0.0, -1.0); // 3
+	point3d = polyLine.newPoint2d(1.0, -1.0); // 4
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(0, 0);
+	arc.setRadius(2);
+	arc.setStartAngleDegree(-45.0);
+	arc.setSweepAngleDegree(225.0);
+	arc.numPointsFor360Deg = 36;
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_2 = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-5.0, 2.0); // 0
+	point3d = polyLine.newPoint2d(-5.0, -4.0); // 1
+	point3d = polyLine.newPoint2d(4.0, -4.0); // 2
+	point3d = polyLine.newPoint2d(4.0, 7.0); // 3
+	point3d = polyLine.newPoint2d(1.0, 8.0); // 4
+	point3d = polyLine.newPoint2d(-1.0, 6.0); // 5
+	point3d = polyLine.newPoint2d(1.0, 4.0); // 6
+	point3d = polyLine.newPoint2d(1.0, 6.0); // 7
+	point3d = polyLine.newPoint2d(3.0, 3.0); // 8
+	point3d = polyLine.newPoint2d(0.0, -3.0); // 9
+	point3d = polyLine.newPoint2d(-3.0, -3.0); // 10
+	point3d = polyLine.newPoint2d(-3.0, 1.0); // 11
+	point3d = polyLine.newPoint2d(-2.0, 1.0); // 12
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(-3, 2);
+	arc.setRadius(2);
+	arc.setStartAngleDegree(-45.0);
+	arc.setSweepAngleDegree(225.0);
+	arc.numPointsFor360Deg = 77;
+	
+};
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_1 = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(9.0, 0.0); // 0
+	point3d = polyLine.newPoint2d(9.0, 3.0); // 1
+	point3d = polyLine.newPoint2d(8.0, 3.0); // 2
+	point3d = polyLine.newPoint2d(6.0, 1.0); // 3
+	point3d = polyLine.newPoint2d(6.0, 2.0); // 4
+	point3d = polyLine.newPoint2d(8.0, 4.0); // 5
+	point3d = polyLine.newPoint2d(8.0, 5.0); // 6
+	point3d = polyLine.newPoint2d(6.0, 5.0); // 7
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(4, 5);
+	arc.setRadius(2);
+	arc.setStartAngleDegree(0.0);
+	arc.setSweepAngleDegree(-180.0);
+	arc.numPointsFor360Deg = 36;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(2.0, 5.0); // 0
+	point3d = polyLine.newPoint2d(0.0, 5.0); // 1
+	point3d = polyLine.newPoint2d(0.0, 0.0); // 2
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureConcave_TShirt = function() 
+{
+	// profile without holes.***
+	var outerRing = this.newOuterRing();
+	
+	var polyLine;
+	var arc;
+	var point3d;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(2.0, 3.0); // 0
+	point3d = polyLine.newPoint2d(0.0, 3.0); // 1
+	point3d = polyLine.newPoint2d(0.0, 0.0); // 2
+	point3d = polyLine.newPoint2d(8.0, 0.0); // 3
+	point3d = polyLine.newPoint2d(8.0, 3.0); // 4
+	point3d = polyLine.newPoint2d(6.0, 3.0); // 5
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(4, 3);
+	arc.setRadius(2);
+	arc.setStartAngleDegree(0.0);
+	arc.setSweepAngleDegree(-180.0);
+	arc.numPointsFor360Deg = 36;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class ProfilesList
+ */
+var ProfilesList = function() 
+{
+	if (!(this instanceof ProfilesList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.profilesArray;
+	this.auxiliarAxis;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+ProfilesList.prototype.newProfile = function() 
+{
+	if (this.profilesArray === undefined)
+	{ this.profilesArray = []; }
+	
+	var profile = new Profile();
+	this.profilesArray.push(profile);
+	return profile;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+ProfilesList.prototype.deleteObjects = function() 
+{
+	if (this.profilesArray)
+	{
+		var profilesCount = this.profilesArray.length;
+		for (var i=0; i<profilesCount; i++)
+		{
+			this.profilesArray[i].deleteObjects();
+			this.profilesArray = undefined;
+		}
+		this.profilesArray = undefined;
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class Rectangle
+*/
+var Rectangle = function() 
+{
+	if (!(this instanceof Rectangle)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.centerPoint;
+	this.width;
+	this.height;
+};
+
+Rectangle.prototype.setCenterPosition = function(cx, cy)
+{
+	if(this.centerPoint === undefined)
+		this.centerPoint = new Point2D();
+	
+	this.centerPoint.set(cx, cy);
+};
+
+Rectangle.prototype.setDimensions = function(width, height)
+{
+	this.width = width;
+	this.height = height;
+};
+
+/**
+ * Returns the points of the Rectangle.
+ * @class Rectangle
+ */
+Rectangle.prototype.getPoints = function(resultPointsArray)
+{
+	if(this.centerPoint === undefined || this.width === undefined || this.height === undefined)
+		return resultPointsArray;
+	
+	if(resultPointsArray === undefined)
+		resultPointsArray = [];
+	
+	var point;
+	var halfWidth = this.width / 2;
+	var halfHeight = this.height / 2;
+	
+	// starting in left-down corner, go in CCW.***
+	point = new Point2D(this.centerPoint.x - halfWidth, this.centerPoint.y - halfHeight);
+	resultPointsArray.push(point);
+	
+	point = new Point2D(this.centerPoint.x + halfWidth, this.centerPoint.y - halfHeight);
+	resultPointsArray.push(point);
+	
+	point = new Point2D(this.centerPoint.x + halfWidth, this.centerPoint.y + halfHeight);
+	resultPointsArray.push(point);
+	
+	point = new Point2D(this.centerPoint.x - halfWidth, this.centerPoint.y + halfHeight);
+	resultPointsArray.push(point);
+	
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Ring
+ */
+var Ring = function() 
+{
+	if (!(this instanceof Ring)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.elemsArray;
+	this.polygon; // auxiliar.***
+};
+
+/**
+ * @class Ring
+ */
+Ring.prototype.deleteObjects = function()
+{
+	if(this.elemsArray !== undefined)
+	{
+		var elemsCount = this.elemsArray.length;
+		for(var i=0; i<elemsCount; i++)
+		{
+			this.elemsArray[i].deleteObjects();
+			this.elemsArray[i] = undefined;
+		}
+		this.elemsArray = undefined;
+	}
+	
+	if(this.polygon !== undefined)
+		this.polygon.deleteObjects();
+	
+	this.polygon = undefined;
+};
+
+/**
+ * @class Ring
+ */
+Ring.prototype.newElement = function(elementTypeString)
+{
+	var elem;
+	
+	if (elementTypeString === "ARC")
+		elem = new Arc();
+	else if (elementTypeString === "CIRCLE")
+		elem = new Circle();
+	else if (elementTypeString === "POLYLINE")
+		elem = new PolyLine();
+	else if (elementTypeString === "RECTANGLE")
+		elem = new Rectangle();
+	
+	if(elem === undefined)
+		return undefined;
+	
+	if (this.elemsArray === undefined)
+	{ this.elemsArray = []; }
+
+	this.elemsArray.push(elem);
+	
+	return elem;
+};
+
+/**
+ * returns the points array of the ring.
+ * @class Ring
+ */
+Ring.prototype.makePolygon = function()
+{
+	this.polygon = this.getPolygon(this.polygon);
+	return this.polygon;
+};
+
+/**
+ * returns the points array of the ring.
+ * @class Ring
+ */
+Ring.prototype.getPolygon = function(resultPolygon)
+{
+	if(resultPolygon === undefined)
+		resultPolygon = new Polygon();
+	
+	if(resultPolygon.point2dList === undefined)
+		resultPolygon.point2dList = new Point2DList();
+	
+	// reset polygon.***
+	resultPolygon.point2dList.deleteObjects();
+	resultPolygon.point2dList.pointsArray = this.getPoints(resultPolygon.point2dList.pointsArray);
+	return resultPolygon;
+};
+
+/**
+ * returns the points array of the ring.
+ * @class Ring
+ */
+Ring.prototype.getPoints = function(resultPointsArray)
+{
+	if (resultPointsArray === undefined)
+	{ resultPointsArray = []; }
+	
+	if (this.elemsArray === undefined)
+	{ return resultPointsArray; }
+	
+	var elem;
+	var elemsCount = this.elemsArray.length;
+	for (var i=0; i<elemsCount; i++)
+	{
+		elem = this.elemsArray[i];
+		elem.getPoints(resultPointsArray);
+	}
+	
+	// finally check if the 1rst point and the last point are coincidents.***
+	var totalPointsCount = resultPointsArray.length;
+	if(totalPointsCount > 1)
+	{
+		var errorDist = 10E-8;
+		var firstPoint = resultPointsArray[0];
+		var lastPoint = resultPointsArray[totalPointsCount-1];
+		if(firstPoint.isCoincidentToPoint(lastPoint, errorDist))
+		{
+			// delete the last point.***
+			lastPoint = resultPointsArray.pop();
+			lastPoint.deleteObjects();
+			lastPoint = undefined;
+		}
+	}
+	
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class RingsList
+*/
+var RingsList = function() 
+{
+	if (!(this instanceof RingsList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.ringsArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.newRing = function() 
+{
+	if (this.ringsArray === undefined)
+	{ this.ringsArray = []; }
+	
+	var ring = new Ring();
+	this.ringsArray.push(ring);
+	
+	return ring;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.deleteObjects = function() 
+{
+	if (this.ringsArray)
+	{
+		var ringsCount = this.ringsArray.length;
+		for (var i=0; i<ringsCount; i++)
+		{
+			this.ringsArray[i].deleteObjects();
+			this.ringsArray[i] = undefined;
+		}
+		this.ringsArray = undefined;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.getRingsCount = function() 
+{
+	if (this.ringsArray === undefined)
+		return 0;
+
+	return this.ringsArray.length;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.getRing = function(idx) 
+{
+	if (this.ringsArray === undefined)
+		return undefined;
+
+	return this.ringsArray[idx];
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.getBoundingRectangle = function(resultBRect) 
+{
+	if (this.resultBRect === undefined)
+		resultBRect = new BoundingRectangle();
+	
+	var ring;
+	var currBRect;
+	var ringsCount = this.getRingsCount();
+	for(var i=0; i<ringsCount; i++)
+	{
+		ring = this.getRing(i);
+		if(ring.polygon === undefined)
+			ring.makePolygon();
+		
+		currBRect = ring.polygon.getBoundingRectangle(currBRect);
+		if(i === 0)
+			resultBRect.setInitByRectangle(currBRect);
+		else{
+			resultBRect.addRectangle(currBRect);
+		}
+	}
+
+	return resultBRect;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.intersectionWithSegment = function(segment) 
+{
+	// returns true if any ring's polygon intersects with "segment".***
+	if(segment === undefined)
+		return false;
+	
+	var intersects = false;
+	var ringsCount = this.getRingsCount();
+	var i=0;
+	while(!intersects && i<ringsCount)
+	{
+		if(this.ringsArray[i].intersectionWithSegment(segment))
+		{
+			intersects = true;
+		}
+		i++;
+	}
+	
+	return intersects;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.getSortedRingsByDistToPoint = function(point, resultSortedObjectsArray) 
+{
+	if(point === undefined)
+		return resultSortedObjectsArray;
+	
+	if(resultSortedObjectsArray === undefined)
+		resultSortedObjectsArray = [];
+	
+	var objectsAuxArray = [];
+	var ring;
+	var ringPoint;
+	var ringPointIdx;
+	var squaredDist;
+	var objectAux;
+	var startIdx, endIdx, insertIdx;
+	var ringsCount = this.getRingsCount();
+	for(var i=0; i<ringsCount; i++)
+	{
+		ring = this.getRing(i);
+		if(ring.polygon === undefined)
+			ring.makePolygon();
+		ringPointIdx = ring.polygon.point2dList.getNearestPointIdxToPoint(point);
+		ringPoint = ring.polygon.point2dList.getPoint(ringPointIdx);
+		squaredDist = ringPoint.squareDistToPoint(point);
+		objectAux = {};
+		objectAux.ring = ring;
+		objectAux.pointIdx = ringPointIdx;
+		objectAux.squaredDist = squaredDist;
+		
+		startIdx = 0;
+		endIdx = objectsAuxArray.length - 1;
+		
+		insertIdx = this.getIndexToInsertBySquaredDist(objectsAuxArray, objectAux, startIdx, endIdx);
+		objectsAuxArray.splice(insertIdx, 0, objectAux);
+	}
+	
+	if(resultSortedObjectsArray === undefined)
+		resultSortedObjectsArray = [];
+	
+	resultSortedObjectsArray.length = 0;
+	
+	var objectsCount = objectsAuxArray.length;
+	for(var i=0; i<objectsCount; i++)
+	{
+		resultSortedObjectsArray.push(objectsAuxArray[i]);
+	}
+	
+	return resultSortedObjectsArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns result_idx
+ */
+RingsList.prototype.getIndexToInsertBySquaredDist = function(objectsArray, object, startIdx, endIdx) 
+{
+	// this do a dicotomic search of idx in a ordered table.
+	// 1rst, check the range.
+	
+	var range = endIdx - startIdx;
+	
+	if(range <= 0)
+		return 0;
+	
+	if (range < 6)
+	{
+		// in this case do a lineal search.
+		var finished = false;
+		var i = startIdx;
+		var idx;
+		//var objectsCount = objectsArray.length;
+		while (!finished && i<=endIdx)
+		{
+			if (object.squaredDist < objectsArray[i].squaredDist)
+			{
+				idx = i;
+				finished = true;
+			}
+			i++;
+		}
+		
+		if (finished)
+		{
+			return idx;
+		}
+		else 
+		{
+			return endIdx+1;
+		}
+	}
+	else 
+	{
+		// in this case do the dicotomic search.
+		var middleIdx = startIdx + Math.floor(range/2);
+		var newStartIdx;
+		var newEndIdx;
+		if (objectsArray[middleIdx].squaredDist > object.squaredDist)
+		{
+			newStartIdx = startIdx;
+			newEndIdx = middleIdx;
+		}
+		else 
+		{
+			newStartIdx = middleIdx;
+			newEndIdx = endIdx;
+		}
+		return this.getIndexToInsertBySquaredDist(objectsArray, object, newStartIdx, newEndIdx);
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class Segment2D
+*/
+var Segment2D = function(strPoint2D, endPoint2D) 
+{
+	if (!(this instanceof Segment2D)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.startPoint2d;
+	this.endPoint2d;
+	
+	if(strPoint2D)
+		this.startPoint2d = strPoint2D;
+	
+	if(endPoint2D)
+		this.endPoint2d = endPoint2D;
+};
+
+Segment2D.prototype.setPoints = function(strPoint2D, endPoint2D)
+{
+	if(strPoint2D)
+		this.startPoint2d = strPoint2D;
+	
+	if(endPoint2D)
+		this.endPoint2d = endPoint2D;
+};
+
+Segment2D.prototype.getVector = function(resultVector)
+{
+	if(this.startPoint2d === undefined || this.endPoint2d === undefined)
+		return undefined;
+	
+	if(resultVector === undefined)
+		resultVector = new Point2D();
+	
+	resultVector = this.startPoint2d.getVectorToPoint(this.endPoint2d, resultVector);
+	return resultVector;
+};
+
+Segment2D.prototype.getDirection = function(resultDir)
+{
+	if(resultDir === undefined)
+		resultDir = new Point2D();
+	
+	resultDir = this.getVector(resultDir);
+	resultDir.unitary();
+	
+	return resultDir;
+};
+
+Segment2D.prototype.getBoundaryRectangle = function(resultBRect)
+{
+	if(resultBRect === undefined)
+		resultBRect = new BoundaryRectangle();
+	
+	resultBRect.setInit(this.startPoint2d);
+	resultBRect.addPoint(this.endPoint2d);
+	
+	return resultBRect;
+};
+
+Segment2D.prototype.getLine = function(resultLine)
+{
+	if(resultLine === undefined)
+		resultLine = new Line2D();
+	
+	var dir = this.getDirection(); // unitary direction.***
+	var strPoint = this.startPoint2d;
+	resultLine.setPointAndDir(strPoint.x, strPoint.y, dir.x, dir.y);
+	return resultLine;
+};
+
+Segment2D.prototype.getSquaredLength = function()
+{
+	return this.startPoint2d.squareDistToPoint(this.endPoint2d);
+};
+
+Segment2D.prototype.getLength = function()
+{
+	return Math.sqrt(this.getSquaredLength());
+};
+
+Segment2D.prototype.intersectionWithPointByDistances = function(point, error)
+{
+	if(point === undefined)
+		return undefined;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	// here no check line-point coincidance.***
+	
+	// now, check if is inside of the segment or if is coincident with any vertex of segment.***
+	var distA = this.startPoint2d.distToPoint(point);
+	var distB = this.endPoint2d.distToPoint(point);
+	var distTotal = this.getLength();
+	
+	if(distA < error)
+		return Constant.INTERSECTION_POINT_A;
+	
+	if(distB < error)
+		return Constant.INTERSECTION_POINT_B;
+	
+	if(distA> distTotal || distB> distTotal)
+	{
+		return Constant.INTERSECTION_OUTSIDE;
+	}
+	
+	if(Math.abs(distA + distB - distTotal) < error)
+		return Constant.INTERSECTION_INSIDE;
+};
+
+Segment2D.prototype.intersectionWithPoint = function(point, error)
+{
+	if(point === undefined)
+		return undefined;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	var line = this.getLine();
+	if(!line.isCoincidentPoint(point, error))
+		return Constant.INTERSECTION_OUTSIDE; // no intersection.***
+	
+	return this.intersectionWithPointByDistances(point, error);
+};
+
+Segment2D.prototype.intersectionWithSegment = function(segment_B, error)
+{
+	if(segment_B === undefined)
+		return undefined;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	var myLine = this.getLine();
+	var line = segment_B.getLine();
+	var intersectionPoint = myLine.intersectionWithLine(line);
+	
+	if(intersectionPoint === undefined)
+		return undefined; // are parallels.***
+	
+	// now use "intersectionWithPointByDistances" instead "intersectionWithPoint" bcos line-point intersection check is no necesary.***
+	var intersectionType_A = this.intersectionWithPointByDistances(intersectionPoint);
+	
+	if(intersectionType_A === Constant.INTERSECTION_OUTSIDE)
+		return Constant.INTERSECTION_OUTSIDE;
+	
+	var intersectionType_B = segment_B.intersectionWithPointByDistances(intersectionPoint);
+	
+	if(intersectionType_B === Constant.INTERSECTION_OUTSIDE)
+		return Constant.INTERSECTION_OUTSIDE;
+	
+	return Constant.INTERSECTION_INTERSECT;
+};
+
+Segment2D.prototype.hasPoint = function(point)
+{
+	// returns if this segment has "point" as startPoint or endPoint.***
+	if(point === undefined)
+		return false;
+	
+	if(point === this.startPoint2d || point === this.endPoint2d)
+		return true;
+	
+	return false;
+};
+
+Segment2D.prototype.sharesPointsWithSegment = function(segment)
+{
+	if(segment === undefined)
+		return false;
+	
+	if(this.hasPoint(segment.startPoint2d) || this.hasPoint(segment.endPoint2d))
+		return true;
+	
+	return false;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Surface
+ */
+var Surface = function() 
+{
+	if (!(this instanceof Surface)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.facesArray;
+};
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Tessellator
+ */
+var Tessellator = function() 
+{
+	if (!(this instanceof Tessellator)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class TrianglesList
+ */
+var TrianglesList = function() 
+{
+	if (!(this instanceof TrianglesList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.trianglesArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+TrianglesList.prototype.newTriangle = function() 
+{
+	if (this.trianglesArray === undefined)
+	{ this.trianglesArray = []; }
+	
+	var triangle = new Triangle();
+	this.trianglesArray.push(triangle);
+	return triangle;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+TrianglesList.prototype.deleteObjects = function() 
+{
+	if (this.trianglesArray === undefined)
+		return;
+	
+	var trianglesCount = this.trianglesArray.length;
+	for(var i=0; i<trianglesCount; i++)
+	{
+		this.trianglesArray[i].deleteObjects();
+		this.trianglesArray[i] = undefined;
+	}
+	this.trianglesArray = undefined;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+TrianglesList.prototype.getFaceDataArray = function(resultVbo) 
+{
+	if (this.trianglesArray === undefined)
+		return resultVbo;
+	
+	var trianglesCount = this.trianglesArray.length;
+	if(trianglesCount === 0)
+		return resultVbo;
+	
+	if(resultVbo === undefined)
+		resultVbo = new VBOVertexIdxCacheKey();
+
+	var indicesArray = [];
+	
+	var triangle;
+	for(var i=0; i<trianglesCount; i++)
+	{
+		triangle = this.trianglesArray[i];
+		if(triangle.vtxIdx0 !== undefined && triangle.vtxIdx1 !== undefined && triangle.vtxIdx2 !== undefined )
+		{
+			indicesArray.push(triangle.vtxIdx0);
+			indicesArray.push(triangle.vtxIdx1);
+			indicesArray.push(triangle.vtxIdx2);
+		}
+	}
+	resultVbo.idxVboDataArray = Int16Array.from(indicesArray);
+	resultVbo.indicesCount = resultVbo.idxVboDataArray.length;
+	return resultVbo;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class TrianglesMatrix
+ */
+var TrianglesMatrix= function() 
+{
+	if (!(this instanceof TrianglesMatrix)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.trianglesListsArray;
+};
+
+TrianglesMatrix.prototype.deleteObjects = function()
+{
+	if(this.trianglesListsArray === undefined)
+		return;
+	
+	var trianglesListsCount = this.trianglesListsArray.length;
+	for(var i=0; i<trianglesListsCount; i++)
+	{
+		this.trianglesListsArray[i].deleteObjects();
+		this.trianglesListsArray[i] = undefined;
+	}
+	this.trianglesListsArray = undefined;
+}
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class VtxSegment
+ */
+var VtxSegment = function(startVertex, endVertex) 
+{
+	if (!(this instanceof VtxSegment)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.startVertex;
+	this.endVertex;
+	
+	if(startVertex)
+		this.startVertex = startVertex;
+	
+	if(endVertex)
+		this.endVertex = endVertex;
+};
+
+VtxSegment.prototype.setVertices = function(startVertex, endVertex)
+{
+	this.startVertex = startVertex;
+	this.endVertex = endVertex;
+};
+
+VtxSegment.prototype.getDirection = function(resultDirection)
+{
+	// the direction is an unitary vector.***
+	var resultDirection = this.getVector();
+	
+	if(resultDirection === undefined)
+		return undefined;
+	
+	resultDirection.unitary();
+	return resultDirection;
+};
+
+VtxSegment.prototype.getVector = function(resultVector)
+{
+	if(this.startVertex === undefined || this.endVertex === undefined)
+		return undefined;
+	
+	var startPoint = this.startVertex.point3d;
+	var endPoint = this.endVertex.point3d;
+	
+	if(startPoint === undefined || endPoint === undefined)
+		return undefined;
+	
+	resultVector = startPoint.getVectorToPoint(endPoint, resultVector);
+	return resultVector;
+};
+
+VtxSegment.prototype.getLine = function(resultLine)
+{
+	if(resultLine === undefined)
+		resultLine = new Line();
+	
+	var dir = this.getDirection(); // unitary direction.***
+	var strPoint = this.startVertex.point3d;
+	resultLine.setPointAndDir(strPoint.x, strPoint.y, strPoint.z, dir.x, dir.y, dir.z);
+	return resultLine;
+};
+
+VtxSegment.prototype.getSquaredLength = function()
+{
+	return this.startVertex.point3d.squareDistToPoint(this.endVertex.point3d);
+};
+
+VtxSegment.prototype.getLength = function()
+{
+	return Math.sqrt(this.getSquaredLength());
+};
+
+VtxSegment.prototype.intersectionWithPoint = function(point, error)
+{
+	// check if the point intersects the vtxSegment's line.***
+	var line = this.getLine();
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	if(!line.isCoincidentPoint(point, error))
+		return Constant.INTERSECTION_OUTSIDE; // no intersection.***
+	
+	//Constant.INTERSECTION_OUTSIDE = 0;
+	//Constant.INTERSECTION_INTERSECT= 1;
+	//Constant.INTERSECTION_INSIDE = 2;
+	//Constant.INTERSECTION_POINT_A = 3;
+	//Constant.INTERSECTION_POINT_B = 4;
+	
+	// now, check if is inside of the segment or if is coincident with any vertex of segment.***
+	var distA = this.startVertex.point3d.distToPoint(point);
+	var distB = this.endVertex.point3d.distToPoint(point);
+	var distTotal = this.getLength();
+	
+	if(distA < error)
+		return Constant.INTERSECTION_POINT_A;
+	
+	if(distB < error)
+		return Constant.INTERSECTION_POINT_B;
+	
+	if(distA> distTotal || distB> distTotal)
+	{
+		return Constant.INTERSECTION_OUTSIDE;
+	}
+	
+	if(Math.abs(distA + distB - distTotal) < error)
+		return Constant.INTERSECTION_INSIDE;
+	
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
  * @class Renderer
  */
 var Renderer = function() 
@@ -34867,7 +39749,7 @@ Renderer.prototype.renderObject = function(gl, renderable, magoManager, shader, 
 		}
 	}
 	else{
-		gl.drawArrays(gl.LINES, 0, vertices_count);
+		gl.drawArrays(gl.LINE_STRIP, 0, vertices_count);
 	}
 };
 
@@ -35093,4694 +39975,6 @@ SelectionCandidates.prototype.clearCurrents = function(idxKey)
 	this.currentBuildingSelected = undefined;
 	this.currentNodeSelected = undefined;
 };
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Arc
- */
-var Arc = function() 
-{
-	if (!(this instanceof Arc)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	// sweeping in CounterClockWise is positive.***
-	// zero startAngle is in "X" axis positive.***
-	this.centerPoint; // Point3D.***
-	this.radius;
-	this.startAngleDeg;
-	this.sweepAngleDeg;
-	this.numPointsFor360Deg; // interpolation param.***
-	
-	// Alternative vars.***
-	this.startPoint; // if no exist radius, then startPoint define the radius.***
-	this.endPoint;
-	this.sweepSense; // 1=CCW, -1=CW.***
-};
-
-/**
- * Set the center position of arc.
- * @class Arc
- */
-Arc.prototype.deleteObjects = function()
-{
-	if(this.centerPoint !== undefined)
-		this.centerPoint.deleteObjects(); // Point3D.***
-	this.centerPoint = undefined;
-	this.radius = undefined;
-	this.startAngleDeg = undefined;
-	this.sweepAngleDeg = undefined;
-	this.numPointsFor360Deg = undefined;
-	
-	if(this.startPoint !== undefined)
-		this.startPoint.deleteObjects(); 
-	
-	this.startPoint = undefined;
-	
-	if(this.endPoint !== undefined)
-		this.endPoint.deleteObjects(); 
-	
-	this.endPoint = undefined;
-	this.sweepSense = undefined; // 1=CCW, -1=CW.***
-};
-
-/**
- * Set the center position of arc.
- * @class Arc
- */
-Arc.prototype.setCenterPosition = function(cx, cy)
-{
-	if (this.centerPoint === undefined)
-	{ this.centerPoint = new Point2D(); }
-	
-	this.centerPoint.set(cx, cy);
-};
-
-/**
- * Set the center position of arc.
- * @class Arc
- */
-Arc.prototype.setRadius = function(radius)
-{
-	this.radius = radius;
-};
-
-/**
- * Set the start angle of the arc.
- * @class Arc
- */
-Arc.prototype.setStartAngleDegree = function(startAngleDegree)
-{
-	this.startAngleDeg = startAngleDegree;
-};
-
-/**
- * Set the start angle of the arc.
- * @class Arc
- */
-Arc.prototype.setStartPoint = function(x, y)
-{
-	// If no exist startAngle, then use this to calculate startAngle.***
-	if (this.startPoint === undefined)
-	{ this.startPoint = new Point2D(); }
-	
-	this.startPoint.set(x, y);
-};
-
-/**
- * Set the start angle of the arc.
- * @class Arc
- */
-Arc.prototype.setEndPoint = function(x, y)
-{
-	// If no exist sweepAngle, then use this to calculate sweepAngle.***
-	if (this.endPoint === undefined)
-	{ this.endPoint = new Point2D(); }
-	
-	this.endPoint.set(x, y);
-};
-
-/**
- * Set the start angle of the arc.
- * @class Arc
- */
-Arc.prototype.setSense = function(sense)
-{
-	this.sweepSense = sense; // 1=CCW, -1=CW.***
-};
-
-/**
- * Set the sweep angle of the arc.
- * @class Arc
- */
-Arc.prototype.setSweepAngleDegree = function(sweepAngleDegree)
-{
-	this.sweepAngleDeg = sweepAngleDegree;
-};
-
-/**
- * Returns the points of the arc.
- * @class Arc
- */
-Arc.prototype.getPoints = function(resultPointsArray, pointsCountFor360Deg)
-{
-	if(this.centerPoint === undefined)
-		return resultPointsArray;
-	
-	if(pointsCountFor360Deg)
-		this.numPointsFor360Deg = pointsCountFor360Deg
-
-	if(this.numPointsFor360Deg === undefined)
-		this.numPointsFor360Deg = 36;
-
-	// Check if exist strAng.*********************************************************************************
-	var strVector, endVector;
-	var strVectorModul;
-	if(this.startAngleDeg === undefined)
-	{
-		if(this.startPoint === undefined)
-			return resultPointsArray;
-		
-		strVector = new Point2D();
-		strVector.set(this.startPoint.x - this.centerPoint.x, this.startPoint.y - this.centerPoint.y);
-		strVectorModul = strVector.modul();
-		
-		var angRad = Math.acos(x/strVectorModul);
-		if(this.startPoint.y < 0)
-		{
-			angRad *= -1;
-		}
-		
-		this.startAngleDeg = angRad * 180.0/Math.PI;
-	}
-	
-	// Check if exist radius.*********************************************************************************
-	if(this.radius === undefined)
-	{
-		// calculate by startPoint.***
-		if(this.startPoint === undefined)
-			return resultPointsArray;
-		
-		if(strVectorModul === undefined)
-		{
-			if(strVector === undefined)
-			{
-				strVector = new Point2D();
-				strVector.set(this.startPoint.x - this.centerPoint.x, this.startPoint.y - this.centerPoint.y);
-			}
-			strVectorModul = strVector.modul();
-		}
-		
-		this.radius = strVectorModul;
-	}
-	
-	// check if exist sweepAng.*********************************************************************************
-	if(this.sweepAngleDeg === undefined)
-	{
-		if(this.endPoint === undefined || this.sweepSense === undefined)
-			return resultPointsArray;
-		
-		endVector = new Point2D();
-		endVector.set(this.endPoint.x - this.centerPoint.x, this.endPoint.y - this.endPoint.y);
-		var endVectorModul = endPoint.modul();
-		
-		var angRad = Math.acos(x/strVectorModul);
-		if(this.endPoint.y < 0)
-		{
-			angRad *= -1;
-		}
-		
-		this.sweepAngleDeg = angRad * 180.0/Math.PI;
-		
-		if(this.sweepSense < 0)
-			this.sweepAngleDeg = 360 - this.sweepAngleDeg;
-	}
-	
-	if(resultPointsArray === undefined)
-		resultPointsArray = [];
-	
-	var pointsArray = [];
-	
-	var increAngRad = 2.0 * Math.PI / this.numPointsFor360Deg;
-	var cx = this.centerPoint.x;
-	var cy = this.centerPoint.y;
-	var x, y;
-	var startAngRad = Math.PI/180.0 * this.startAngleDeg;
-	var sweepAngRad = Math.PI/180.0 * this.sweepAngleDeg;
-	var point;
-	
-	if (sweepAngRad >=0)
-	{
-		for (var currAngRad = 0.0; currAngRad<sweepAngRad; currAngRad += increAngRad)
-		{
-			x = cx + this.radius * Math.cos(currAngRad + startAngRad);
-			y = cy + this.radius * Math.sin(currAngRad + startAngRad);
-			point = new Point2D(x, y);
-			pointsArray.push(point);
-		}
-	}
-	else 
-	{
-		for (var currAngRad = 0.0; currAngRad>sweepAngRad; currAngRad -= increAngRad)
-		{
-			x = cx + this.radius * Math.cos(currAngRad + startAngRad);
-			y = cy + this.radius * Math.sin(currAngRad + startAngRad);
-			point = new Point2D(x, y);
-			pointsArray.push(point);
-		}
-	}
-	
-	// once finished, mark the 1rst point and the last point as"important point".***
-	var pointsCount = pointsArray.length;
-	if(pointsCount > 0)
-	{
-		pointsArray[0].pointType = 1;
-		pointsArray[pointsCount-1].pointType = 1;
-	}
-	
-	// now merge points into "resultPointsArray".***
-	var errorDist = 0.0001; // 0.1mm.***
-	var resultExistentPointsCount = resultPointsArray.length;
-	for(var i=0; i<pointsCount; i++)
-	{
-		if(i===0)
-		{
-			if(resultExistentPointsCount > 0)
-			{
-				// check if the last point of "resultPointsArray" and the 1rst point of "this" is coincident.***
-				var lastExistentPoint = resultPointsArray[resultExistentPointsCount-1];
-				point = pointsArray[i];
-				if(!lastExistentPoint.isCoincidentToPoint(point, errorDist))
-				{
-					resultPointsArray.push(point);
-				}
-			}
-			else
-			{
-				resultPointsArray.push(pointsArray[i]);
-			}
-		}
-		else
-		{
-			resultPointsArray.push(pointsArray[i]);
-		}
-	}
-	
-	return resultPointsArray;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 선
- * @class AxisXYZ
- */
-var AxisXYZ = function() 
-{
-	if (!(this instanceof AxisXYZ)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	this.xLength = 60;
-	this.yLength = 60;
-	this.zLength = 60;
-	this.vbo_vicks_container = new VBOVertexIdxCacheKeysContainer();
-	this.vboKey = this.vbo_vicks_container.newVBOVertexIdxCacheKey();
-};
-
-AxisXYZ.prototype.setDimension = function(xLength, yLength, zLength)
-{
-	this.xLength = xLength;
-	this.yLength = yLength;
-	this.zLength = zLength;
-};
-
-AxisXYZ.prototype.getVboKeysContainer = function()
-{
-	return this.vbo_vicks_container;
-};
-
-AxisXYZ.prototype.getVbo = function(resultVboKey)
-{
-	if(resultVboKey === undefined)
-		resultVboKey = new VBOVertexIdxCacheKey();
-	
-	if (resultVboKey.posVboDataArray === undefined)
-	{ resultVboKey.posVboDataArray = []; }
-
-	if (resultVboKey.colVboDataArray === undefined)
-	{ resultVboKey.colVboDataArray = []; }
-
-	if (resultVboKey.norVboDataArray === undefined)
-	{ resultVboKey.norVboDataArray = []; }
-
-	var positions = [];
-	var normals = [];
-	var colors = [];
-	
-	// xAxis.***
-	positions.push(0,0,0, this.xLength,0,0);
-	colors.push(255,0,0,255, 255,0,0,255);
-	normals.push(0,0,255, 0,0,255);
-	
-	// yAxis.***
-	positions.push(0,0,0, 0,this.yLength,0);
-	colors.push(0,255,0,255, 0,255,0,255);
-	normals.push(0,0,255, 0,0,255);
-	
-	// zAxis.***
-	positions.push(0,0,0, 0,0,this.zLength);
-	colors.push(0,0,255,255, 0,0,255,255);
-	normals.push(255,0,0, 255,0,0);
-
-	resultVboKey.posVboDataArray = Float32Array.from(positions);
-	resultVboKey.colVboDataArray = Int8Array.from(colors);
-	resultVboKey.norVboDataArray = Int8Array.from(normals);
-	
-	resultVboKey.vertexCount = 6;
-	
-	return resultVboKey;
-};
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class BoundingRectangle
-*/
-var BoundingRectangle = function(x, y) 
-{
-	if (!(this instanceof BoundingRectangle)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.minX = 100000;
-	this.maxX = -100000;
-	this.minY = 100000;
-	this.maxY = -100000;
-};
-
-BoundingRectangle.prototype.setInit = function(point)
-{
-	if(point === undefined)
-		return;
-	
-	this.minX = point.x;
-	this.minY = point.y;
-	this.maxX = point.x;
-	this.maxY = point.y;
-};
-
-BoundingRectangle.prototype.setInitByRectangle = function(bRect)
-{
-	if(bRect === undefined)
-		return;
-	
-	this.minX = bRect.minX;
-	this.minY = bRect.minY;
-	this.maxX = bRect.maxX;
-	this.maxY = bRect.maxY;
-};
-
-BoundingRectangle.prototype.addPoint = function(point)
-{
-	if(point === undefined)
-		return;
-	
-	if(point.x < this.minX)
-		this.minX = point.x;
-	else if(point.x > this.maxX)
-		this.maxX = point.x;
-	
-	if(point.y < this.minY)
-		this.minY = point.y;
-	else if(point.y > this.maxY)
-		this.maxY = point.y;
-};
-
-BoundingRectangle.prototype.addRectangle = function(bRect)
-{
-	if(bRect === undefined)
-		return;
-	
-	if(bRect.minX < this.minX)
-		this.minX = bRect.minX;
-	if(bRect.maxX > this.maxX)
-		this.maxX = bRect.maxX;
-	
-	if(bRect.minY < this.minY)
-		this.minY = bRect.minY;
-	if(bRect.maxY > this.maxY)
-		this.maxY = bRect.maxY;
-};
-
-BoundingRectangle.prototype.intersectsWithRectangle = function(bRect)
-{
-	if(bRect === undefined)
-		return false;
-	
-	if(bRect.minX > this.maxX)
-		return false;
-	else if(bRect.maxX < this.minX)
-		return false;
-	else if(bRect.minY > this.maxY)
-		return false;
-	else if(bRect.maxY < this.minY)
-		return false;
-	
-	return true;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Face
- */
-var Face = function() 
-{
-	if (!(this instanceof Face)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.halfEdge;
-};
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class HalfEdge
- */
-var HalfEdge = function() 
-{
-	if (!(this instanceof HalfEdge)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.origenVertex;
-	this.nextEdge;
-	this.twinEdge;
-	this.face;
-};
-'use strict';
-
-/**
- * 선
- * @class Line
- */
-var Line = function() 
-{
-	if (!(this instanceof Line)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	// (x,y,z) = (x0,y0,z0) + lambda * (u, v, w);
-	this.point = new Point3D();
-	this.direction = new Point3D();
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @param dx 변수
- * @param dy 변수
- * @param dz 변수
- */
-Line.prototype.setPointAndDir = function(px, py, pz, dx, dy, dz) 
-{
-	this.point.set(px, py, pz);
-	this.direction.set(dx, dy, dz);
-	this.direction.unitary();
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line.prototype.getProjectedPoint = function(point, projectedPoint) 
-{
-	if(projectedPoint === undefined)
-		projectedPoint = new Point3D();
-	
-	var plane = new Plane();
-	plane.setPointAndNormal(point.x, point.y, point.z, this.direction.x, this.direction.y, this.direction.z);
-	projectedPoint = plane.intersectionLine(this, projectedPoint);
-	
-	return projectedPoint;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line.prototype.isCoincidentPoint = function(point, error) 
-{
-	if(point === undefined)
-		return false;
-	
-	var projectedPoint = this.getProjectedPoint(point);
-	
-	if(projectedPoint === undefined)
-		return false;
-	
-	if(error === undefined)
-		error = 10E-8;
-	
-	var squaredDist = projectedPoint.squareDistToPoint(point);
-	
-	if(squaredDist < error*error)
-		return true;
-	
-	return false;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 선
- * @class Line2D
- */
-var Line2D = function() 
-{
-	if (!(this instanceof Line2D)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	// (x,y) = (x0,y0) + lambda * (u, v);
-	this.point = new Point2D();
-	this.direction = new Point2D();
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param dx 변수
- * @param dy 변수
- */
-Line2D.prototype.setPointAndDir = function(px, py, dx, dy) 
-{
-	this.point.set(px, py);
-	this.direction.set(dx, dy);
-	this.direction.unitary();
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line2D.prototype.getPerpendicularRight = function(point) 
-{
-	var perpendicular = new Line2D();
-	
-	if(point)
-		perpendicular.point.set(point.x, point.y);
-	else
-		perpendicular.point.set(this.point.x, this.point.y);
-	
-	perpendicular.direction.set(this.direction.y, -this.direction.x);
-	return perpendicular;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line2D.prototype.getPerpendicularLeft = function(point) 
-{
-	var perpendicular = new Line2D();
-	
-	if(point)
-		perpendicular.point.set(point.x, point.y);
-	else
-		perpendicular.point.set(this.point.x, this.point.y);
-	
-	perpendicular.direction.set(-this.direction.y, this.direction.x);
-	return perpendicular;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line2D.prototype.getProjectedPoint = function(point, projectedPoint) 
-{
-	if(projectedPoint === undefined)
-		projectedPoint = new Point2D();
-	
-	var perpendicular = this.getPerpendicularLeft(point);
-	projectedPoint = this.intersectionWithLine(perpendicular, projectedPoint);
-	
-	return projectedPoint;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line2D.prototype.isCoincidentPoint = function(point, error) 
-{
-	if(point === undefined)
-		return false;
-	
-	if(error === undefined)
-		error = 10E-8;
-	
-	var projectedPoint = this.getProjectedPoint(point, projectedPoint);
-	var squaredDist = point.squareDistToPoint(projectedPoint);
-	
-	if(squaredDist < error*error)
-		return true;
-
-	return false;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line2D.prototype.isParallelToLine = function(line) 
-{
-	if(line === undefined)
-		return false;
-	
-	var zero = 10E-10;
-	var angRad = this.direction.angleRadToVector(line.direction);
-	
-	// if angle is zero or 180 degree, then this is parallel to "line".***
-	if(angRad < zero || Math.abs(angRad - Math.PI) < zero)
-		return true;
-	
-	return false;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line2D.prototype.intersectionWithLine = function(line, resultIntersectPoint) 
-{
-	if(line === undefined)
-		return undefined;
-	
-	// 1rst, check that this is not parallel to "line".***
-	if(this.isParallelToLine(line))
-		return undefined;
-	
-	// now, check if this or "line" are vertical or horizontal.***
-	var intersectX;
-	var intersectY;
-	
-	var zero = 10E-10;
-	if(Math.abs(this.direction.x) < zero)
-	{
-		// this is a vertical line.***
-		var slope = line.direction.y / line.direction.x;
-		var b = line.point.y - slope * line.point.x;
-		
-		intersectX = this.point.x;
-		intersectY = slope * this.point.x + b;
-	}
-	else if(Math.abs(this.direction.y) < zero)
-	{
-		// this is a horizontal line.***
-		// must check if the "line" is vertical.***
-		if(Math.abs(line.direction.x) < zero)
-		{
-			// "line" is vertical.***
-			intersectX = line.point.x;
-			intersectY = this.point.y;
-		}
-		else{
-			var slope = line.direction.y / line.direction.x;
-			var b = line.point.y - slope * line.point.x;
-			
-			intersectX = (this.point.y - b)/slope;
-			intersectY = this.point.y;
-		}	
-	}
-	else{
-		// this is oblique.***
-		if(Math.abs(line.direction.x) < zero)
-		{
-			// "line" is vertical.***
-			var mySlope = this.direction.y / this.direction.x;
-			var myB = this.point.y - mySlope * this.point.x;
-			intersectX = line.point.x;
-			intersectY = line.point.x * mySlope + myB;
-		}
-		else{
-			var mySlope = this.direction.y / this.direction.x;
-			var myB = this.point.y - mySlope * this.point.x;
-			
-			var slope = line.direction.y / line.direction.x;
-			var b = line.point.y - slope * line.point.x;
-			
-			intersectX = (myB - b)/ (slope - mySlope);
-			intersectY = slope * intersectX + b;
-		}
-	}
-	
-	if(resultIntersectPoint === undefined)
-		resultIntersectPoint = new Point2D();
-	
-	resultIntersectPoint.set(intersectX, intersectY);
-	return resultIntersectPoint;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class MagoNativeProject
- */
-var MagoNativeProject = function() 
-{
-	if (!(this instanceof MagoNativeProject)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	// This is a "ParametricMeshes" composition.***
-	this.meshesArray;
-	this.geoLocDataManager;
-	this.vboKeysContainer; // class: VBOVertexIdxCacheKeysContainer
-};
-
-MagoNativeProject.prototype.newParametricMesh = function()
-{
-	if(this.meshesArray === undefined)
-		this.meshesArray = [];
-	
-	var parametricMesh = new ParametricMesh();
-	this.meshesArray.push(parametricMesh);
-	return parametricMesh;
-};
-
-MagoNativeProject.prototype.deleteObjects = function()
-{
-	if(this.meshesArray === undefined)
-		return;
-	
-	var parametricMeshesCount = this.meshesArray.length;
-	for(var i=0; i<parametricMeshesCount; i++)
-	{
-		this.meshesArray[i].deleteObjects();
-		this.meshesArray[i] = undefined;
-	}
-	this.meshesArray = undefined;
-	
-	if(this.geoLocDataManager)
-		this.geoLocDataManager.deleteObjects();
-	
-	this.geoLocDataManager = undefined;
-};
-
-MagoNativeProject.prototype.getMeshesCount = function()
-{
-	if(this.meshesArray === undefined)
-		return 0;
-	
-	return this.meshesArray.length;
-};
-
-MagoNativeProject.prototype.getMesh = function(idx)
-{
-	if(this.meshesArray === undefined)
-		return undefined;
-	
-	return this.meshesArray[idx];
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Mesh
- */
-var Mesh = function() 
-{
-	if (!(this instanceof Mesh)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.surfacesArray;
-};
-
-'use strict';
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class ParametricMesh
- */
-var ParametricMesh = function() 
-{
-	if (!(this instanceof ParametricMesh)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	this.profilesList; // class: ProfilesList
-	this.trianglesMatrix;
-	this.profile;
-	this.vboKeyContainer;//VBOVertexIdxCacheKey
-	this.bbox;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ParametricMesh.prototype.deleteObjects = function() 
-{
-	if(this.profilesList)
-		this.profilesList.deleteObjects();
-	
-	this.profilesList = undefined;
-	
-	if(this.trianglesMatrix)
-		this.trianglesMatrix.deleteObjects();
-	
-	this.trianglesMatrix = undefined;
-	
-	if(this.profile)
-		this.profile.deleteObjects();
-	
-	this.profile = undefined;
-};
-
-ParametricMesh.prototype.getVboKeysContainer = function()
-{
-	return this.vboKeyContainer;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ParametricMesh.prototype.extrude = function(profile, extrusionVector, extrusionDist, extrudeSegmentsCount) 
-{
-	
-	
-	// now, make the bottomCap, topCap, and lateral triangles.
-	this.trianglesMatrix = new TrianglesMatrix();
-	
-	
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class Point2D
-*/
-var Point2D = function(x, y) 
-{
-	if (!(this instanceof Point2D)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	if(x)this.x = x;
-	else this.x = 0.0;
-	if(y)this.y = y;
-	else this.y = 0.0;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point2D.prototype.deleteObjects = function() 
-{
-	this.x = undefined;
-	this.y = undefined;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point2D.prototype.copyFrom = function(point2d) 
-{
-	this.x = point2d.x;
-	this.y = point2d.y;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point2D.prototype.set = function(x, y) 
-{
-	this.x = x;
-	this.y = y;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns this.x*this.x + this.y*this.y + this.z*this.z;
- */
-Point2D.prototype.getSquaredModul = function() 
-{
-	return this.x*this.x + this.y*this.y;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z );
- */
-Point2D.prototype.getModul = function() 
-{
-	return Math.sqrt(this.getSquaredModul());
-};
-
-/**
- * 
- * 어떤 일을 하고 있습니까?
- */
-Point2D.prototype.unitary = function() 
-{
-	var modul = this.getModul();
-	this.x /= modul;
-	this.y /= modul;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point2D.prototype.squareDistToPoint = function(point) 
-{
-	var dx = this.x - point.x;
-	var dy = this.y - point.y;
-
-	return dx*dx + dy*dy;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point2D.prototype.distToPoint = function(point) 
-{
-	return Math.sqrt(this.squareDistToPoint(point));
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point2D.prototype.isCoincidentToPoint = function(point, errorDist) 
-{
-	var squareDist = this.distToPoint(point);
-	var coincident = false;
-	if(squareDist < errorDist*errorDist)
-	{
-		coincident = true;
-	}
-
-	return coincident;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- */
-Point2D.prototype.getVectorToPoint = function(targetPoint, resultVector) 
-{
-	// this returns a vector that points to "targetPoint" from "this".***
-	// the "resultVector" has the direction from "this" to "targetPoint", but is NOT normalized.***
-	if(targetPoint === undefined)
-		return undefined;
-	
-	if(resultVector === undefined)
-		resultVector = new Point2D();
-	
-	resultVector.set(targetPoint.x - this.x, targetPoint.y - this.y);
-	
-	return resultVector;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point2D.prototype.crossProduct = function(point) 
-{
-	return this.x * point.y - point.x * this.y;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point2D.prototype.scalarProduct = function(point) 
-{
-	var scalarProd = this.x*point.x + this.y*point.y;
-	return scalarProd;
-};
-
-/**
- * nomal 계산
- * @param vector 변수
- */
-Point2D.prototype.angleRadToVector = function(vector) 
-{
-	if(vector === undefined)
-		return undefined;
-	
-	//******************************************************
-	//var scalarProd = this.scalarProduct(vector);
-	var myModul = this.getModul();
-	var vecModul = vector.getModul();
-	
-	// calcule by cos.***
-	//var cosAlfa = scalarProd / (myModul * vecModul); 
-	//var angRad = Math.acos(cosAlfa);
-	//var angDeg = alfa * 180.0/Math.PI;
-	//------------------------------------------------------
-	var error = 10E-10;
-	if(myModul < error || vecModul < error)
-		return undefined;
-	
-	return Math.acos(this.scalarProduct(vector) / (myModul * vecModul));
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point2D.prototype.angleDegToVector = function(vector) 
-{
-	if(vector === undefined)
-		return undefined;
-	
-	var angRad = this.angleRadToVector(vector);
-	
-	if(angRad === undefined)
-		return undefined;
-		
-	return angRad * 180.0/Math.PI;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class Point2DList
-*/
-var Point2DList = function(x, y) 
-{
-	if (!(this instanceof Point2DList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.pointsArray;
-};
-
-Point2DList.prototype.deleteObjects = function()
-{
-	if(this.pointsArray === undefined)
-		return;
-	
-	var pointsCount = this.pointsArray.length;
-	for(var i=0; i<pointsCount; i++)
-	{
-		this.pointsArray[i].deleteObjects();
-		this.pointsArray[i] = undefined;
-	}
-	this.pointsArray = undefined;
-};
-
-Point2DList.prototype.newPoint = function(x, y)
-{
-	if(this.pointsArray === undefined)
-		this.pointsArray = [];
-	
-	var point = new Point2D(x, y);
-	this.pointsArray.push(point);
-	return point;
-};
-
-Point2DList.prototype.getPoint = function(idx)
-{
-	return this.pointsArray[idx];
-};
-
-Point2DList.prototype.getPointsCount = function()
-{
-	if(this.pointsArray === undefined)
-		return 0;
-	
-	return this.pointsArray.length;
-};
-
-Point2DList.prototype.getPrevIdx = function(idx)
-{
-	var pointsCount = this.pointsArray.length;
-	var prevIdx;
-	
-	if(idx === 0)
-		prevIdx = pointsCount - 1;
-	else
-		prevIdx = idx - 1;
-
-	return prevIdx;
-};
-
-Point2DList.prototype.getNextIdx = function(idx)
-{
-	var pointsCount = this.pointsArray.length;
-	var nextIdx;
-	
-	if(idx === pointsCount - 1)
-		nextIdx = 0;
-	else
-		nextIdx = idx + 1;
-
-	return nextIdx;
-};
-
-Point2DList.prototype.getIdxOfPoint = function(point)
-{
-	var pointsCount = this.pointsArray.length;
-	var i=0;
-	var idx = -1;
-	var found = false;
-	while(!found && i<pointsCount)
-	{
-		if(this.pointsArray[i] === point)
-		{
-			found = true;
-			idx = i;
-		}
-		i++;
-	}
-	
-	return idx;
-};
-
-Point2DList.prototype.getSegment = function(idx, resultSegment)
-{
-	var currPoint = this.getPoint(idx);
-	var nextIdx = this.getNextIdx(idx);
-	var nextPoint = this.getPoint(nextIdx);
-	
-	if(resultSegment === undefined)
-		resultSegment = new Segment2D(currPoint, nextPoint);
-	else{
-		resultSegment.setPoints(currPoint, nextPoint);
-	}
-
-	return resultSegment;
-};
-
-Point2DList.prototype.setIdxInList = function()
-{
-	var pointsCount = this.pointsArray.length;
-	for(var i=0; i<pointsCount; i++)
-	{
-		this.pointsArray[i].idxInList = i;
-	}
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point2DList.prototype.getBoundingRectangle = function(resultBRect) 
-{
-	var pointsCount = this.getPointsCount();
-	if(pointsCount === 0)
-		return resultBRect;
-	
-	if(resultBRect === undefined)
-		resultBRect = new BoundingRectangle();
-	
-	var point;
-	for(var i=0; i<pointsCount; i++)
-	{
-		if(i === 0)
-			resultBRect.setInit(this.getPoint(i));
-		else
-			resultBRect.addPoint(this.getPoint(i));
-	}
-	
-	return resultBRect;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point2DList.prototype.getNearestPointIdxToPoint = function(point) 
-{
-	if(point === undefined)
-		return undefined;
-	
-	var currPoint, candidatePointIdx;
-	var currSquaredDist, candidateSquaredDist;
-	var pointsCount = this.getPointsCount();
-	for(var i=0; i<pointsCount; i++)
-	{
-		currPoint = this.getPoint(i);
-		currSquaredDist = currPoint.squareDistToPoint(point);
-		if(candidatePointIdx === undefined)
-		{
-			candidatePointIdx = i;
-			candidateSquaredDist = currSquaredDist;
-		}
-		else{
-			if(currSquaredDist < candidateSquaredDist)
-			{
-				candidatePointIdx = i;
-				candidateSquaredDist = currSquaredDist;
-			}
-		}
-	}
-	
-	return candidatePointIdx;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point2DList.prototype.reverse = function() 
-{
-	if(this.pointsArray !== undefined)
-		this.pointsArray.reverse();
-};
-
-Point2DList.prototype.getPointsIdxSortedByDistToPoint = function(thePoint, resultSortedPointsIdxArray)
-{
-	if(this.pointsArray === undefined)
-		return resultSortedPointsIdxArray;
-	
-	// Static function.***
-	// Sorting minDist to maxDist.***
-	if(resultSortedPointsIdxArray === undefined)
-		resultSortedPointsIdxArray = [];
-	
-	var pointsArray = this.pointsArray;
-	
-	var objectAux;
-	var objectsAuxArray = [];
-	var point;
-	var squaredDist;
-	var startIdx, endIdx, insertIdx;
-	var pointsCount = pointsArray.length;
-	for(var i=0; i<pointsCount; i++)
-	{
-		point = pointsArray[i];
-		if(point === thePoint)
-			continue;
-		
-		squaredDist = thePoint.squareDistToPoint(point);
-		objectAux = {};
-		objectAux.pointIdx = i;
-		objectAux.squaredDist = squaredDist;
-		startIdx = 0;
-		endIdx = objectsAuxArray.length - 1;
-		
-		insertIdx = this.getIndexToInsertBySquaredDist(objectsAuxArray, objectAux, startIdx, endIdx);
-		objectsAuxArray.splice(insertIdx, 0, objectAux);
-	}
-	
-	resultSortedPointsIdxArray.length = 0;
-	var objectsCount = objectsAuxArray.length;
-	for(var i=0; i<objectsCount; i++)
-	{
-		resultSortedPointsIdxArray.push(objectsAuxArray[i].pointIdx);
-	}
-	
-	return resultSortedPointsIdxArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns result_idx
- */
-Point2DList.prototype.getIndexToInsertBySquaredDist = function(objectsArray, object, startIdx, endIdx) 
-{
-	// this do a dicotomic search of idx in a ordered table.
-	// 1rst, check the range.
-	
-	var range = endIdx - startIdx;
-	
-	if(range <= 0)
-		return 0;
-	
-	if (range < 6)
-	{
-		// in this case do a lineal search.
-		var finished = false;
-		var i = startIdx;
-		var idx;
-		//var objectsCount = objectsArray.length;
-		while (!finished && i<=endIdx)
-		{
-			if (object.squaredDist < objectsArray[i].squaredDist)
-			{
-				idx = i;
-				finished = true;
-			}
-			i++;
-		}
-		
-		if (finished)
-		{
-			return idx;
-		}
-		else 
-		{
-			return endIdx+1;
-		}
-	}
-	else 
-	{
-		// in this case do the dicotomic search.
-		var middleIdx = startIdx + Math.floor(range/2);
-		var newStartIdx;
-		var newEndIdx;
-		if (objectsArray[middleIdx].squaredDist > object.squaredDist)
-		{
-			newStartIdx = startIdx;
-			newEndIdx = middleIdx;
-		}
-		else 
-		{
-			newStartIdx = middleIdx;
-			newEndIdx = endIdx;
-		}
-		return this.getIndexToInsertBySquaredDist(objectsArray, object, newStartIdx, newEndIdx);
-	}
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 3차원 정보
- * @class Point3D
- */
-var Point3D = function(x, y, z) 
-{
-	if (!(this instanceof Point3D)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	if (x !== undefined)
-	{ this.x = x; }
-	else
-	{ this.x = 0.0; }
-	
-	if (y !== undefined)
-	{ this.y = y; }
-	else
-	{ this.y = 0.0; }
-	
-	if (z !== undefined)
-	{ this.z = z; }
-	else
-	{ this.z = 0.0; }
-	
-	this.pointType; // 1 = important point.***
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point3D.prototype.deleteObjects = function() 
-{
-	this.x = undefined;
-	this.y = undefined;
-	this.z = undefined;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point3D.prototype.copyFrom = function(point3d) 
-{
-	this.x = point3d.x;
-	this.y = point3d.y;
-	this.z = point3d.z;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns this.x*this.x + this.y*this.y + this.z*this.z;
- */
-Point3D.prototype.getSquaredModul = function() 
-{
-	return this.x*this.x + this.y*this.y + this.z*this.z;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z );
- */
-Point3D.prototype.getModul = function() 
-{
-	return Math.sqrt(this.getSquaredModul());
-};
-
-/**
- * 
- * 어떤 일을 하고 있습니까?
- */
-Point3D.prototype.unitary = function() 
-{
-	var modul = this.getModul();
-	this.x /= modul;
-	this.y /= modul;
-	this.z /= modul;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point3D.prototype.crossProduct = function(point, resultPoint) 
-{
-	if (resultPoint === undefined) { resultPoint = new Point3D(); }
-
-	resultPoint.x = this.y * point.z - point.y * this.z;
-	resultPoint.y = point.x * this.z - this.x * point.z;
-	resultPoint.z = this.x * point.y - point.x * this.y;
-
-	return resultPoint;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point3D.prototype.scalarProduct = function(point) 
-{
-	var scalarProd = this.x*point.x + this.y*point.y + this.z*point.z;
-	return scalarProd;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point3D.prototype.angleRadToVector = function(vector) 
-{
-	if(vector === undefined)
-		return undefined;
-	
-	//******************************************************
-	//var scalarProd = this.scalarProd(vector);
-	var myModul = this.modul();
-	var vecModul = vector.modul();
-	
-	// calcule by cos.***
-	//var cosAlfa = scalarProd / (myModul * vecModul); 
-	//var angRad = Math.acos(cosAlfa);
-	//var angDeg = alfa * 180.0/Math.PI;
-	//------------------------------------------------------
-	var error = 10E-10;
-	if(myModul < error || vecModul < error)
-		return undefined;
-	
-	return Math.acos(this.scalarProd(vector) / (myModul * vecModul));
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point3D.prototype.angleDegToVector = function(vector) 
-{
-	if(vector === undefined)
-		return undefined;
-	
-	var angRad = this.angleRadToVector(vector);
-	
-	if(angRad === undefined)
-		return undefined;
-		
-	return angRad * 180.0/Math.PI;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.squareDistToPoint = function(point) 
-{
-	var dx = this.x - point.x;
-	var dy = this.y - point.y;
-	var dz = this.z - point.z;
-
-	return dx*dx + dy*dy + dz*dz;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.isCoincidentToPoint = function(point, errorDist) 
-{
-	var squareDist = this.distToPoint(point);
-	var coincident = false;
-	if(squareDist < errorDist*errorDist)
-	{
-		coincident = true;
-	}
-
-	return coincident;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.squareDistTo = function(x, y, z) 
-{
-	var dx = this.x - x;
-	var dy = this.y - y;
-	var dz = this.z - z;
-
-	return dx*dx + dy*dy + dz*dz;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.distTo = function(x, y, z) 
-{
-	return Math.sqrt(this.squareDistTo(x, y, z));
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.distToPoint = function(point) 
-{
-	return Math.sqrt(this.squareDistToPoint(point));
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.distToSphere = function(sphere) 
-{
-	return Math.sqrt(this.squareDistToPoint(sphere.centerPoint)) - sphere.r;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.aproxDistTo = function(pointB, sqrtTable) 
-{
-	var difX = Math.abs(this.x - pointB.x);
-	var difY = Math.abs(this.y - pointB.y);
-	var difZ = Math.abs(this.z - pointB.z);
-	
-	// find the big value.
-	var maxValue, value1, value2;
-	var value1Idx, value2Idx;
-	
-	if (difX > difY)
-	{
-		if (difX > difZ)
-		{
-			maxValue = difX;
-			value1 = difY/maxValue;
-			value1Idx = Math.floor(value1*10);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difZ/middleDist;
-			value2Idx = Math.floor(value2*10);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-		else 
-		{
-			maxValue = difZ;
-			value1 = difX/maxValue;
-			value1Idx = Math.floor(value1*10);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difY/middleDist;
-			value2Idx = Math.floor(value2*10);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-	}
-	else 
-	{
-		if (difY > difZ)
-		{
-			maxValue = difY;
-			value1 = difX/maxValue;
-			value1Idx = Math.floor(value1*10);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difZ/middleDist;
-			value2Idx = Math.floor(value2*10);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-		else 
-		{
-			maxValue = difZ;
-			value1 = difX/maxValue;
-			value1Idx = Math.floor(value1*10);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difY/middleDist;
-			value2Idx = Math.floor(value2*10);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Point3D.prototype.getVectorToPoint = function(targetPoint, resultVector) 
-{
-	// this returns a vector that points to "targetPoint" from "this".***
-	// the "resultVector" has the direction from "this" to "targetPoint", but is NOT normalized.***
-	if(targetPoint === undefined)
-		return undefined;
-	
-	if(resultVector === undefined)
-		resultVector = new Point3D();
-	
-	resultVector.set(targetPoint.x - this.x, targetPoint.y - this.y, targetPoint.z - this.z);
-	
-	return resultVector;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Point3D.prototype.set = function(x, y, z) 
-{
-	this.x = x; this.y = y; this.z = z;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Point3D.prototype.add = function(x, y, z) 
-{
-	this.x += x; this.y += y; this.z += z;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Point3D.prototype.addPoint = function(point) 
-{
-	this.x += point.x; this.y += point.y; this.z += point.z;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Point3D.prototype.scale = function(scaleFactor) 
-{
-	this.x *= scaleFactor; this.y *= scaleFactor; this.z *= scaleFactor;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Polygon
- */
-var Polygon = function() 
-{
-	if (!(this instanceof Polygon)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.point2dList;
-	this.normal; // polygon sense. (normal = 1) -> CCW. (normal = -1) -> CW.***
-	this.convexPolygonsArray; // tessellation result.***
-	this.bRect; // boundary rectangle.***
-};
-
-Polygon.prototype.deleteObjects = function()
-{
-	if(this.point2dList !== undefined)
-	{
-		this.point2dList.deleteObjects();
-		this.point2dList = undefined;
-	}
-	
-	this.normal = undefined;
-};
-
-Polygon.prototype.getBoundingRectangle = function(resultBRect)
-{
-	if(this.point2dList === undefined)
-		return resultBRect;
-	
-	resultBRect = this.point2dList.getBoundingRectangle(resultBRect);
-	return resultBRect;
-};
-
-Polygon.prototype.getEdgeDirection = function(idx)
-{
-	// the direction is unitary vector.***
-	var segment = this.point2dList.getSegment(idx);
-	var direction = segment.getDirection(direction);
-	return direction;
-};
-
-Polygon.prototype.getEdgeVector = function(idx)
-{
-	var segment = this.point2dList.getSegment(idx);
-	var vector = segment.getVector(vector);
-	return vector;
-};
-
-Polygon.prototype.reverseSense = function()
-{
-	if(this.point2dList !== undefined)
-		this.point2dList.reverse();
-};
-
-Polygon.prototype.calculateNormal = function(resultConcavePointsIdxArray)
-{
-	// must check if the verticesCount is 3. Then is a convex polygon.***
-	
-	// A & B are vectors.
-	// A*B is scalarProduct.
-	// A*B = |A|*|B|*cos(alfa)
-	var point;
-	var crossProd;
-	
-	if(resultConcavePointsIdxArray === undefined)
-		resultConcavePointsIdxArray = [];
-	
-	//var candidate_1 = {}; // normal candidate 1.***
-	//var candidate_2 = {}; // normal candidate 2.***
-	
-	this.normal = 0; // unknown sense.***
-	var pointsCount = this.point2dList.getPointsCount();
-	for(var i=0; i<pointsCount; i++)
-	{
-		point = this.point2dList.getPoint(i);
-		var prevIdx = this.point2dList.getPrevIdx(i);
-		
-		// get unitari directions of the vertex.***
-		var startVec = this.getEdgeDirection(prevIdx); // Point3D.
-		var endVec = this.getEdgeDirection(i); // Point3D.
-		
-		// calculate the cross product.***
-		var crossProd = startVec.crossProduct(endVec, crossProd); // Point3D.
-		var scalarProd = startVec.scalarProduct(endVec);
-		
-		if(crossProd < 0.0) 
-		{
-			crossProd = -1;
-			resultConcavePointsIdxArray.push(i);
-		}
-		else if(crossProd > 0.0) {
-			crossProd = 1;
-		}
-		// calcule by cos.***
-		// cosAlfa = scalarProd / (strModul * endModul); (but strVecModul = 1 & endVecModul = 1), so:
-		var cosAlfa = scalarProd;
-		var alfa = Math.acos(cosAlfa);
-		this.normal += (crossProd * alfa);
-	}
-	
-	if(this.normal > 0 )
-		this.normal = 1;
-	else
-		this.normal = -1;
-	
-	return resultConcavePointsIdxArray;
-};
-
-
-Polygon.prototype.tessellate = function(concaveVerticesIndices, convexPolygonsArray)
-{
-	var concaveVerticesCount = concaveVerticesIndices.length;
-	
-	if(concaveVerticesCount === 0)
-	{
-		convexPolygonsArray.push(this);
-		return convexPolygonsArray;
-	}
-	
-	// now, for any concave vertex, find the closest vertex to split the polygon.***
-	var find = false;
-	var idx_B;
-	var i=0;
-	
-	while(!find && i<concaveVerticesCount)
-	{
-		var idx = concaveVerticesIndices[i];
-		var point = this.point2dList.getPoint(idx);
-		var resultSortedPointsIdxArray = [];
-		
-		// get vertices indices sorted by distance to "point".***
-		this.getPointsIdxSortedByDistToPoint(point, resultSortedPointsIdxArray);
-		
-		var sortedVerticesCount = resultSortedPointsIdxArray.length;
-		var j=0;
-		while(!find && j<sortedVerticesCount)
-		{
-			idx_B = resultSortedPointsIdxArray[j];
-			
-			// skip adjacent vertices.***
-			if(this.point2dList.getPrevIdx(idx) === idx_B || this.point2dList.getNextIdx(idx) === idx_B)
-			{
-				j++;
-				continue;
-			}
-			
-			// check if is splittable by idx-idx_B.***
-			var segment = new Segment2D(this.point2dList.getPoint(idx), this.point2dList.getPoint(idx_B));
-			if(this.intersectionWithSegment(segment))
-			{
-				j++;
-				continue;
-			}
-			
-			var resultSplittedPolygons = this.splitPolygon(idx, idx_B);
-			
-			if(resultSplittedPolygons.length < 2)
-			{
-				j++;
-				continue;
-			}
-			
-			// now, compare splittedPolygon's normals with myNormal.***
-			var polygon_A = resultSplittedPolygons[0];
-			var polygon_B = resultSplittedPolygons[1];
-			var concavePoints_A = polygon_A.calculateNormal();
-			var concavePoints_B = polygon_B.calculateNormal();
-			
-			var normal_A = polygon_A.normal;
-			var normal_B = polygon_B.normal;
-			if(normal_A === this.normal && normal_B === this.normal)
-			{
-				find = true;
-				// polygon_A.***
-				if(concavePoints_A.length > 0)
-				{
-					convexPolygonsArray = polygon_A.tessellate(concavePoints_A, convexPolygonsArray);
-				}
-				else{
-					if(convexPolygonsArray === undefined)
-						convexPolygonsArray = [];
-					
-					convexPolygonsArray.push(polygon_A);
-				}
-				
-				// polygon_B.***
-				if(concavePoints_B.length > 0)
-				{
-					convexPolygonsArray = polygon_B.tessellate(concavePoints_B, convexPolygonsArray);
-				}
-				else{
-					if(convexPolygonsArray === undefined)
-						convexPolygonsArray = [];
-					
-					convexPolygonsArray.push(polygon_B);
-				}
-			}
-			
-			j++;
-		}
-		i++;
-	}
-	
-	return convexPolygonsArray;
-};
-
-Polygon.prototype.intersectionWithSegment = function(segment)
-{
-	// "segment" cut a polygons edge.***
-	// "segment" coincident with a polygons vertex.***
-	if(this.bRect !== undefined)
-	{
-		// if exist boundary rectangle, check bRect intersection.***
-		var segmentsBRect = segment.getBoundaryRectangle(segmentsBRect);
-		if(!this.bRect.intersectsWithRectangle(segmentsBRect))
-			return false;
-	}
-	
-	// 1rst check if the segment is coincident with any polygons vertex.***
-	var mySegment;
-	var intersectionType;
-	var error = 10E-8;
-	var pointsCount = this.point2dList.getPointsCount();
-	for(var i=0; i<pointsCount; i++)
-	{
-		mySegment = this.point2dList.getSegment(i, mySegment);
-		
-		// if segment shares points, then must not cross.***
-		if(segment.sharesPointsWithSegment(mySegment))
-		{
-			continue;
-		}
-		
-		if(segment.intersectionWithSegment(mySegment, error))
-		{
-			return true;
-		}
-	}
-	
-	return false;
-};
-
-Polygon.prototype.splitPolygon = function(idx1, idx2, resultSplittedPolygonsArray)
-{
-	if(resultSplittedPolygonsArray === undefined)
-		resultSplittedPolygonsArray = [];
-	
-	// polygon A. idx1 -> idx2.***
-	var polygon_A = new Polygon();
-	polygon_A.point2dList = new Point2DList();
-	polygon_A.point2dList.pointsArray = [];
-	
-	// 1rst, put vertex1 & vertex2 in to the polygon_A.***
-	polygon_A.point2dList.pointsArray.push(this.point2dList.getPoint(idx1));
-	polygon_A.point2dList.pointsArray.push(this.point2dList.getPoint(idx2));
-	
-	var finished = false;
-	var currIdx = idx2;
-	var startIdx = idx1;
-	var i=0;
-	var totalPointsCount = this.point2dList.getPointsCount();
-	while(!finished && i<totalPointsCount)
-	{
-		var nextIdx = this.point2dList.getNextIdx(currIdx);
-		if(nextIdx === startIdx)
-		{
-			finished = true;
-		}
-		else{
-			polygon_A.point2dList.pointsArray.push(this.point2dList.getPoint(nextIdx));
-			currIdx = nextIdx;
-		}
-		i++;
-	}
-	
-	resultSplittedPolygonsArray.push(polygon_A);
-	
-	// polygon B. idx2 -> idx1.***
-	var polygon_B = new Polygon();
-	polygon_B.point2dList = new Point2DList();
-	polygon_B.point2dList.pointsArray = [];
-	
-	// 1rst, put vertex2 & vertex1 in to the polygon_B.***
-	polygon_B.point2dList.pointsArray.push(this.point2dList.getPoint(idx2));
-	polygon_B.point2dList.pointsArray.push(this.point2dList.getPoint(idx1));
-	
-	finished = false;
-	currIdx = idx1;
-	startIdx = idx2;
-	i=0;
-	while(!finished && i<totalPointsCount)
-	{
-		var nextIdx = this.point2dList.getNextIdx(currIdx);
-		if(nextIdx === startIdx)
-		{
-			finished = true;
-		}
-		else{
-			polygon_B.point2dList.pointsArray.push(this.point2dList.getPoint(nextIdx));
-			currIdx = nextIdx;
-		}
-		i++;
-	}
-	
-	resultSplittedPolygonsArray.push(polygon_B);
-	return resultSplittedPolygonsArray;
-};
-
-Polygon.prototype.getPointsIdxSortedByDistToPoint = function(thePoint, resultSortedPointsIdxArray)
-{
-	// Static function.***
-	// Sorting minDist to maxDist.***
-	if(resultSortedPointsIdxArray === undefined)
-		resultSortedPointsIdxArray = [];
-	
-	resultSortedPointsIdxArray = this.point2dList.getPointsIdxSortedByDistToPoint(thePoint, resultSortedPointsIdxArray);
-	
-	return resultSortedPointsIdxArray;
-};
-
-Polygon.prototype.isPolygonSplittableByVtxSegment = function(vertexSegment)
-{
-	
-};
-
-Polygon.prototype.getTrianglesConvexPolygon = function(resultTrianglesList)
-{
-	// in this case, consider the polygon is convex.***
-	if(resultTrianglesList === undefined)
-		resultTrianglesList = new TrianglesList();
-
-	var pointsCount = this.point2dList.getPointsCount();
-	if(pointsCount <3)
-		return resultTrianglesList;
-	
-	var triangle;
-	for(var i=1; i<pointsCount-1; i++)
-	{
-		triangle = resultTrianglesList.newTriangle();
-		
-		var point0idx = this.point2dList.getPoint(0).idxInList;
-		var point1idx = this.point2dList.getPoint(i).idxInList;
-		var point2idx = this.point2dList.getPoint(i+1).idxInList;
-		
-		triangle.vtxIdx0 = point0idx;
-		triangle.vtxIdx1 = point1idx;
-		triangle.vtxIdx2 = point2idx;
-	}
-	
-	return resultTrianglesList;
-};
-
-Polygon.prototype.getVbo = function(resultVbo)
-{
-	// return positions, normals and indices.***
-	if(resultVbo === undefined)
-		resultVbo = new VBOVertexIdxCacheKey();
-	
-	// 1rst, obtain pos, nor.***
-	var posArray = [];
-	var norArray = [];
-	var point;
-	var normal;
-	if(this.normal > 0)
-		normal = 1;
-	else
-		normal = -1;
-		
-	var pointsCount = this.point2dList.getPointsCount();
-	for(var i=0; i<pointsCount; i++)
-	{
-		point = this.point2dList.getPoint(i);
-		
-		posArray.push(point.x);
-		posArray.push(point.y);
-		posArray.push(0.0);
-		
-		norArray.push(0);
-		norArray.push(0);
-		norArray.push(normal*255);
-	}
-	
-	resultVbo.posVboDataArray = Float32Array.from(posArray);
-	resultVbo.norVboDataArray = Int8Array.from(norArray);
-	
-	// now calculate triangles indices.***
-	this.point2dList.setIdxInList(); // use this function instead a map.***
-	
-	var trianglesList = new TrianglesList();
-	var convexPolygonsCount = this.convexPolygonsArray.length;
-	for(var i=0; i<convexPolygonsCount; i++)
-	{
-		var convexPolygon = this.convexPolygonsArray[i];
-		trianglesList = convexPolygon.getTrianglesConvexPolygon(trianglesList);
-	}
-	trianglesList.getFaceDataArray(resultVbo);
-
-	return resultVbo;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class PolyLine
- */
-var PolyLine = function() 
-{
-	if (!(this instanceof PolyLine)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.point2dArray;
-};
-
-/**
- * Creates a new Point2D.
- * @class PolyLine
- */
-PolyLine.prototype.newPoint2d = function(x, y)
-{
-	if (this.point2dArray === undefined)
-	{ this.point2dArray = []; }
-	
-	var point2d = new Point2D(x, y);
-	this.point2dArray.push(point2d);
-	return point2d;
-};
-
-/**
- * Creates a new Point2D.
- * @class PolyLine
- */
-PolyLine.prototype.deleteObjects = function()
-{
-	var pointsCount = this.point2dArray.length;
-	for (var i=0; i<pointsCount; i++)
-	{
-		this.point2dArray[i].deleteObjects();
-		this.point2dArray[i] = undefined;
-	}
-	this.point2dArray = undefined;
-};
-
-/**
- * Creates a new Point2D.
- * @class PolyLine
- */
-PolyLine.prototype.getPoints = function(resultPointsArray)
-{
-	if (resultPointsArray === undefined)
-	{ resultPointsArray = []; }
-	
-	var point;
-	var errorDist = 10E-8;
-	var resultExistentPointsCount = resultPointsArray.length;
-	var pointsCount = this.point2dArray.length;
-	for (var i=0; i<pointsCount; i++)
-	{
-		if(i===0)
-		{
-			if(resultExistentPointsCount > 0)
-			{
-				// check if the last point of "resultPointsArray" and the 1rst point of "this" is coincident.***
-				var lastExistentPoint = resultPointsArray[resultExistentPointsCount-1];
-				var point0 = this.point2dArray[i];
-				if(!lastExistentPoint.isCoincidentToPoint(point0, errorDist))
-				{
-					point = new Point2D();
-					point.copyFrom(this.point2dArray[i]); 
-					point.pointType = 1; // mark as "important point".***
-					resultPointsArray.push(point);
-				}
-			}
-			else
-			{
-				point = new Point2D();
-				point.copyFrom(this.point2dArray[i]); 
-				point.pointType = 1; // mark as "important point".***
-				resultPointsArray.push(point);
-			}
-		}
-		else
-		{
-			point = new Point2D();
-			point.copyFrom(this.point2dArray[i]); 
-			point.pointType = 1; // mark as "important point".***
-			resultPointsArray.push(point);
-		}
-	}
-	
-	return resultPointsArray;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Profile
- */
-var Profile = function() 
-{
-	if (!(this instanceof Profile)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.outerRing; // one Ring. 
-	this.innerRingsList; // class: RingsList. 
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.newOuterRing = function() 
-{
-	if (this.outerRing === undefined)
-	{ this.outerRing = new Ring(); }
-	else{
-		this.outerRing.deleteObjects();
-	}
-	
-	return this.outerRing;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.newInnerRing = function() 
-{
-	if (this.innerRingsList === undefined)
-	{ this.innerRingsList = new RingsList(); }
-	
-	var innerRing = this.innerRingsList.newRing();
-	
-	return innerRing;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.deleteObjects = function() 
-{
-	if (this.outerRing)
-	{
-		this.outerRing.deleteObjects();
-		this.outerRing = undefined;
-	}
-
-	if (this.innerRingsList)
-	{
-		this.innerRingsList.deleteObjects();
-		this.innerRingsList = undefined;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.tessellate = function(resultTrianglesIndices) 
-{
-	if(this.outerRing === undefined)
-		return undefined;
-	
-	if(resultTrianglesIndices === undefined)
-		resultTrianglesIndices = [];
-	
-	innerRingsCount = this.innerRingsList.getRingsCount();
-	
-	if(innerRingsCount > 0)
-	{
-		
-	}
-	
-	
-	return resultTrianglesIndices;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-
-Profile.prototype.hasHoles = function() 
-{
-	if(this.innerRingsList === undefined || this.innerRingsList.getRingsCount() === 0)
-		return false;
-	
-	return true;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
- 
-Profile.prototype.getVBO = function(resultVBOCacheKeys) 
-{
-	if(this.outerRing === undefined)
-		return resultVBOCacheKeys;
-	
-	if(!this.hasHoles())
-	{
-		var outerRing = this.outerRing;
-		outerRing.makePolygon();
-		outerRing.polygon.convexPolygonsArray = [];
-		var concavePointsIndices = outerRing.polygon.calculateNormal(concavePointsIndices);
-		outerRing.polygon.convexPolygonsArray = outerRing.polygon.tessellate(concavePointsIndices, outerRing.polygon.convexPolygonsArray);
-
-		outerRing.polygon.getVbo(resultVBOCacheKeys);
-	}
-	else{
-		// 1rst, check normals congruences.***
-		this.checkNormals();
-		var resultConvexPolygons = this.tessellate(resultConvexPolygons);
-		var hola = 0;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.eliminateHolePolygonBySplitPoints = function(outerPolygon, innerPolygon, outerPointIdx, innerPointIdx, resultPolygon) 
-{
-	if(resultPolygon === undefined)
-		resultPolygon = new Polygon();
-	
-	if(resultPolygon.point2dList === undefined)
-		resultPolygon.point2dList = new Point2DList();
-	
-	// 1rst, copy in newPolygon the outerPolygon.***
-	var outerPointsCount = outerPolygon.point2dList.getPointsCount();
-	var finished = false;
-	var i=0;
-	var newPoint;
-	var outerPoint;
-	var currIdx = outerPointIdx;
-	while(!finished && i<outerPointsCount)
-	{
-		outerPoint = outerPolygon.point2dList.getPoint(currIdx);
-		newPoint = resultPolygon.point2dList.newPoint(outerPoint.x, outerPoint.y);
-		
-		currIdx = outerPolygon.point2dList.getNextIdx(currIdx);
-		if(currIdx === outerPointIdx)
-			finished = true;
-		
-		i++;
-	}
-	
-	// now add innerPolygon's points.***
-	var innerPointsCount = innerPolygon.point2dList.getPointsCount();
-	finished = false;
-	i=0;
-	newPoint;
-	innerPoint;
-	currIdx = innerPointIdx;
-	while(!finished && i<innerPointsCount)
-	{
-		innerPoint = innerPolygon.point2dList.getPoint(currIdx);
-		newPoint = resultPolygon.point2dList.newPoint(outerPoint.x, outerPoint.y);
-		
-		currIdx = innerPolygon.point2dList.getNextIdx(currIdx);
-		if(currIdx === innerPointIdx)
-			finished = true;
-		
-		i++;
-	}
-	
-	return resultPolygon;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.eliminateHolePolygon = function(outerPolygon, innerPolygon, innerPointIdx, resultPolygon) 
-{
-	// 1rst, make a sorted by dist of points of outer to "innerPoint".***
-	var resultSortedPointsIdxArray = [];
-	var innerPoint = innerPolygon.point2dList.getPoint(innerPointIdx);
-	resultSortedPointsIdxArray = outerPolygon.getPointsIdxSortedByDistToPoint(innerPoint, resultSortedPointsIdxArray);
-	
-	var outerSortedPointsCount = resultSortedPointsIdxArray.length;
-	var splitSegment = new Segment2D();;
-	var finished = false;
-	var i=0;
-	var outPointIdx;
-	var outPoint;
-	while(!finished && i<outerSortedPointsCount)
-	{
-		outPointIdx = resultSortedPointsIdxArray[i];
-		outPoint = outerPolygon.point2dList.getPoint(outPointIdx);
-		splitSegment.setPoints(outPoint, innerPoint);
-		
-		// check if splitSegment intersects the outerPolygon or any innerPolygons.***
-		if(outerPolygon.intersectionWithSegment(splitSegment) || innerPolygon.intersectionWithSegment(splitSegment))
-		{
-			i++;
-			continue;
-		}
-		
-		resultPolygon = this.eliminateHolePolygonBySplitPoints(outerPolygon, innerPolygon, outPointIdx, innerPointIdx, resultPolygon);
-		finished = true;
-		
-		i++;
-	}
-	
-	return resultPolygon;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.checkNormals = function() 
-{
-	if(this.outerRing === undefined)
-		return;
-	
-	// 1rst, calculate the outerNormal.***
-	var outerRing = this.outerRing;
-	if(outerRing.polygon === undefined)
-		outerRing.makePolygon();
-	var outerPolygon = outerRing.polygon;
-	var concavePointsIndices = outerPolygon.calculateNormal(concavePointsIndices);
-	var outerNormal = outerPolygon.normal;
-	
-	// if there are inners, the innerNormals must be inverse of the outerNormal.***
-	var innerRing;
-	var innerPolygon;
-	var innerNormal;
-	var innersCount = this.innerRingsList.getRingsCount();
-	for(var i=0; i<innersCount; i++)
-	{
-		innerRing = this.innerRingsList.getRing(i);
-		if(innerRing.polygon === undefined)
-			innerRing.makePolygon();
-		var innerPolygon = innerRing.polygon;
-		innerPolygon.calculateNormal();
-		var innerNormal = innerPolygon.normal;
-		
-		if(innerNormal === outerNormal)
-		{
-			// then reverse innerPolygon.***
-			innerPolygon.reverseSense();
-			innerPolygon.normal = -innerNormal;
-		}
-		
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.tessellate = function(resultConvexPolygons) 
-{
-	if(this.outerRing === undefined)
-		return undefined;
-	
-	if(resultConvexPolygons === undefined)
-		resultConvexPolygons = [];
-	
-	if(this.hasHoles())
-	{
-		// 1rst, calculate the most left-down innerRing.***
-		var innersBRect = this.innerRingsList.getBoundingRectangle(innersBRect);
-		var innersBRectLeftDownPoint = new Point2D(innersBRect.minX, innersBRect.minY);
-		var objectsArray = [];
-		objectsArray = this.innerRingsList.getSortedRingsByDistToPoint(innersBRectLeftDownPoint, objectsArray);
-		
-		// now, for each hole, calculate the nearest point to outerRing.***
-		var hole;
-		var holePolygon;
-		var objectAux;
-		var innerPointIdx;
-		var holeNormal;
-		var splitSegment;
-		var resultPolygon;
-		
-		// prepare outerRing.***
-		var outerRing = this.outerRing;
-		if(outerRing.polygon === undefined)
-			outerRing.makePolygon();
-		var outerPolygon = outerRing.polygon;
-		var concavePointsIndices = outerPolygon.calculateNormal(concavePointsIndices);
-		
-		// now, for each innerRing, try to merge to outerRing by splitSegment.***
-		var innerRingsCount = objectsArray.length;
-		for(var i=0; i<innerRingsCount; i++)
-		{
-			objectAux = objectsArray[i];
-			hole = objectAux.ring;
-			holePolygon = hole.polygon;
-			innerPointIdx = objectAux.pointIdx;
-			holePolygon.calculateNormal();
-			holeNormal = holePolygon.normal;
-			
-			// compare outerNormal with hole normal.***
-			
-			
-			this.eliminateHolePolygon(outerPolygon, holePolygon, innerPointIdx, resultPolygon);
-			
-			// now find 
-			/*
-			// create a segment( mostLeftDownPoint, innerPoint ) and check if intersects another holes or the outerPolygon.***
-			if(splitSegment === undefined)
-				splitSegment = new Segment2D();
-			
-			splitSegment.setPoints(mostLeftDownPoint, innerPoint);
-			
-			// 1) check if splitSegment intersects the outerPolygon.***
-			if(outerPolygon.intersectionWithSegment(splitSegment))
-			{
-				continue;
-			}
-			
-			// 2) check if splitSegment intersects any holePolygon.***
-			if(this.innerRingsList.intersectionWithSegment(splitSegment))
-			{
-				continue;
-			}
-			
-			// 3) now split the outerPolygon-hole and recalculate the normal.***
-			this.eliminateHolePolygon(outerPolygon, holePolygon, splitSegment, resultPolygon);
-			*/
-		}
-	}
-	else{
-		
-	}
-	
-	return resultConvexPolygons;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.TEST__setFigureHole_1 = function() 
-{
-	// profile with holes.***
-	var outerRing = this.newOuterRing();
-	
-	var polyLine;
-	var arc;
-	var point3d;
-	var rect;
-	
-	rect = outerRing.newElement("RECTANGLE");
-	rect.setCenterPosition(0, 0);
-	rect.setDimensions(10, 6);
-	
-	var innerRing = this.newInnerRing();
-	rect = innerRing.newElement("RECTANGLE");
-	rect.setCenterPosition(1, 0);
-	rect.setDimensions(5, 3);
-	
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.TEST__setFigureConcave_almostHole_2 = function() 
-{
-	// profile without holes.***
-	var outerRing = this.newOuterRing();
-	
-	var polyLine;
-	var arc;
-	var point3d;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(3.0, 4.0); // 0
-	point3d = polyLine.newPoint2d(5.0, 6.0); // 1
-	point3d = polyLine.newPoint2d(0.0, 6.0); // 2
-	point3d = polyLine.newPoint2d(0.0, 0.0); // 3
-	point3d = polyLine.newPoint2d(9.0, 0.0); // 4
-	point3d = polyLine.newPoint2d(9.0, 6.0); // 5
-	point3d = polyLine.newPoint2d(5.0, 6.0); // 6
-	point3d = polyLine.newPoint2d(3.0, 4.0); // 7
-	point3d = polyLine.newPoint2d(4.0, 4.0); // 8
-	point3d = polyLine.newPoint2d(4.0, 3.0); // 9
-	point3d = polyLine.newPoint2d(3.0, 3.0); // 10
-	
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.TEST__setFigureConcave_almostHole = function() 
-{
-	// profile without holes.***
-	var outerRing = this.newOuterRing();
-	
-	var polyLine;
-	var arc;
-	var point3d;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(0.0, 0.0); // 0
-	point3d = polyLine.newPoint2d(7.0, 0.0); // 1
-	point3d = polyLine.newPoint2d(7.0, 5.0); // 2
-	point3d = polyLine.newPoint2d(5.0, 4.0); // 3
-	point3d = polyLine.newPoint2d(5.0, 2.0); // 4
-	point3d = polyLine.newPoint2d(1.0, 2.0); // 5
-	point3d = polyLine.newPoint2d(1.0, 4.0); // 6
-	point3d = polyLine.newPoint2d(5.0, 4.0); // 7
-	point3d = polyLine.newPoint2d(7.0, 5.0); // 8
-	point3d = polyLine.newPoint2d(0.0, 5.0); // 9
-	
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.TEST__setFigureConcave_duckMouth = function() 
-{
-	// profile without holes.***
-	var outerRing = this.newOuterRing();
-	
-	var polyLine;
-	var arc;
-	var point3d;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(3.0, 0.0); // 0
-	point3d = polyLine.newPoint2d(8.0, 0.0); // 1
-	point3d = polyLine.newPoint2d(8.0, 5.0); // 2
-	point3d = polyLine.newPoint2d(2.0, 5.0); // 3
-	point3d = polyLine.newPoint2d(0.0, 0.0); // 4
-	point3d = polyLine.newPoint2d(6.0, 4.0); // 5
-	point3d = polyLine.newPoint2d(6.0, 2.0); // 6
-	point3d = polyLine.newPoint2d(3.0, 2.0); // 7
-	
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.TEST__setFigureConcave_spiral = function() 
-{
-	// profile without holes.***
-	var outerRing = this.newOuterRing();
-	
-	var polyLine;
-	var arc;
-	var point3d;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(0.0, -3.0); // 0
-	point3d = polyLine.newPoint2d(3.0, -2.0); // 1
-	point3d = polyLine.newPoint2d(5.0, -2.0); // 2
-	point3d = polyLine.newPoint2d(5.0, 3.0); // 3
-	point3d = polyLine.newPoint2d(-2.0, 4.0); // 4
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(-3, 3);
-	arc.setRadius(Math.sqrt(2));
-	arc.setStartAngleDegree(45.0);
-	arc.setSweepAngleDegree(-180.0);
-	arc.numPointsFor360Deg = 24;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(-4.0, 2.0); // 0
-	point3d = polyLine.newPoint2d(-4.0, -5.0); // 1
-	point3d = polyLine.newPoint2d(-5.0, -5.0); // 2
-	point3d = polyLine.newPoint2d(-5.0, -3.0); // 3
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(-6, -3);
-	arc.setRadius(1);
-	arc.setStartAngleDegree(0.0);
-	arc.setSweepAngleDegree(180.0);
-	arc.numPointsFor360Deg = 24;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(-7.0, -3.0); // 0
-	point3d = polyLine.newPoint2d(-7.0, -7.0); // 1
-	point3d = polyLine.newPoint2d(8.0, -5.0); // 2
-	point3d = polyLine.newPoint2d(8.0, 8.0); // 3
-	point3d = polyLine.newPoint2d(3.0, 8.0); // 4
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(0, 8);
-	arc.setRadius(3);
-	arc.setStartAngleDegree(0.0);
-	arc.setSweepAngleDegree(180.0);
-	arc.numPointsFor360Deg = 24;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(-3.0, 8.0); // 0
-	point3d = polyLine.newPoint2d(-9.0, 8.0); // 1
-	point3d = polyLine.newPoint2d(-9.0, 9.0); // 2
-	point3d = polyLine.newPoint2d(-5.0, 9.0); // 3
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(-5, 10);
-	arc.setRadius(1);
-	arc.setStartAngleDegree(-90);
-	arc.setSweepAngleDegree(180.0);
-	arc.numPointsFor360Deg = 24;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(-5.0, 11.0); // 0
-	point3d = polyLine.newPoint2d(-10.0, 9.0); // 1
-	point3d = polyLine.newPoint2d(-10.0, -10.0); // 2
-	point3d = polyLine.newPoint2d(-3.0, -8.0); // 3
-	point3d = polyLine.newPoint2d(-8.0, -8.0); // 4
-	point3d = polyLine.newPoint2d(-8.0, -1.0); // 5
-	point3d = polyLine.newPoint2d(-5.0, -1.0); // 6
-	point3d = polyLine.newPoint2d(-6.0, 1.0); // 7
-	point3d = polyLine.newPoint2d(-6.0, 6.0); // 8
-	point3d = polyLine.newPoint2d(5.0, 6.0); // 9
-	point3d = polyLine.newPoint2d(7.0, -4.0); // 10
-	point3d = polyLine.newPoint2d(-2.0, -4.0); // 11
-	point3d = polyLine.newPoint2d(-2.0, -2.0); // 12
-	point3d = polyLine.newPoint2d(3.0, 1.0); // 13
-	point3d = polyLine.newPoint2d(3.0, -1.0); // 14
-	point3d = polyLine.newPoint2d(0.0, -1.0); // 15
-	
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.TEST__setFigureConcave_simpleArc = function() 
-{
-	// profile without holes.***
-	var outerRing = this.newOuterRing();
-	
-	var polyLine;
-	var arc;
-	var point3d;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(-2.0, 0.0); // 0
-	point3d = polyLine.newPoint2d(-2.0, -3.0); // 1
-	point3d = polyLine.newPoint2d(0.0, -3.0); // 2
-	point3d = polyLine.newPoint2d(0.0, -1.0); // 3
-	point3d = polyLine.newPoint2d(1.0, -1.0); // 4
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(0, 0);
-	arc.setRadius(2);
-	arc.setStartAngleDegree(-45.0);
-	arc.setSweepAngleDegree(225.0);
-	arc.numPointsFor360Deg = 36;
-	
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.TEST__setFigureConcave_2 = function() 
-{
-	// profile without holes.***
-	var outerRing = this.newOuterRing();
-	
-	var polyLine;
-	var arc;
-	var point3d;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(-5.0, 2.0); // 0
-	point3d = polyLine.newPoint2d(-5.0, -4.0); // 1
-	point3d = polyLine.newPoint2d(4.0, -4.0); // 2
-	point3d = polyLine.newPoint2d(4.0, 7.0); // 3
-	point3d = polyLine.newPoint2d(1.0, 8.0); // 4
-	point3d = polyLine.newPoint2d(-1.0, 6.0); // 5
-	point3d = polyLine.newPoint2d(1.0, 4.0); // 6
-	point3d = polyLine.newPoint2d(1.0, 6.0); // 7
-	point3d = polyLine.newPoint2d(3.0, 3.0); // 8
-	point3d = polyLine.newPoint2d(0.0, -3.0); // 9
-	point3d = polyLine.newPoint2d(-3.0, -3.0); // 10
-	point3d = polyLine.newPoint2d(-3.0, 1.0); // 11
-	point3d = polyLine.newPoint2d(-2.0, 1.0); // 12
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(-3, 2);
-	arc.setRadius(2);
-	arc.setStartAngleDegree(-45.0);
-	arc.setSweepAngleDegree(225.0);
-	arc.numPointsFor360Deg = 77;
-	
-};
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.TEST__setFigureConcave_1 = function() 
-{
-	// profile without holes.***
-	var outerRing = this.newOuterRing();
-	
-	var polyLine;
-	var arc;
-	var point3d;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(9.0, 0.0); // 0
-	point3d = polyLine.newPoint2d(9.0, 3.0); // 1
-	point3d = polyLine.newPoint2d(8.0, 3.0); // 2
-	point3d = polyLine.newPoint2d(6.0, 1.0); // 3
-	point3d = polyLine.newPoint2d(6.0, 2.0); // 4
-	point3d = polyLine.newPoint2d(8.0, 4.0); // 5
-	point3d = polyLine.newPoint2d(8.0, 5.0); // 6
-	point3d = polyLine.newPoint2d(6.0, 5.0); // 7
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(4, 5);
-	arc.setRadius(2);
-	arc.setStartAngleDegree(0.0);
-	arc.setSweepAngleDegree(-180.0);
-	arc.numPointsFor360Deg = 36;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(2.0, 5.0); // 0
-	point3d = polyLine.newPoint2d(0.0, 5.0); // 1
-	point3d = polyLine.newPoint2d(0.0, 0.0); // 2
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.TEST__setFigureConcave_TShirt = function() 
-{
-	// profile without holes.***
-	var outerRing = this.newOuterRing();
-	
-	var polyLine;
-	var arc;
-	var point3d;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(2.0, 3.0); // 0
-	point3d = polyLine.newPoint2d(0.0, 3.0); // 1
-	point3d = polyLine.newPoint2d(0.0, 0.0); // 2
-	point3d = polyLine.newPoint2d(8.0, 0.0); // 3
-	point3d = polyLine.newPoint2d(8.0, 3.0); // 4
-	point3d = polyLine.newPoint2d(6.0, 3.0); // 5
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(4, 3);
-	arc.setRadius(2);
-	arc.setStartAngleDegree(0.0);
-	arc.setSweepAngleDegree(-180.0);
-	arc.numPointsFor360Deg = 36;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class ProfilesList
- */
-var ProfilesList = function() 
-{
-	if (!(this instanceof ProfilesList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.profilesArray;
-	this.auxiliarAxis;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-ProfilesList.prototype.newProfile = function() 
-{
-	if (this.profilesArray === undefined)
-	{ this.profilesArray = []; }
-	
-	var profile = new Profile();
-	this.profilesArray.push(profile);
-	return profile;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-ProfilesList.prototype.deleteObjects = function() 
-{
-	if (this.profilesArray)
-	{
-		var profilesCount = this.profilesArray.length;
-		for (var i=0; i<profilesCount; i++)
-		{
-			this.profilesArray[i].deleteObjects();
-			this.profilesArray = undefined;
-		}
-		this.profilesArray = undefined;
-	}
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class Rectangle
-*/
-var Rectangle = function() 
-{
-	if (!(this instanceof Rectangle)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.centerPoint;
-	this.width;
-	this.height;
-};
-
-Rectangle.prototype.setCenterPosition = function(cx, cy)
-{
-	if(this.centerPoint === undefined)
-		this.centerPoint = new Point2D();
-	
-	this.centerPoint.set(cx, cy);
-};
-
-Rectangle.prototype.setDimensions = function(width, height)
-{
-	this.width = width;
-	this.height = height;
-};
-
-/**
- * Returns the points of the Rectangle.
- * @class Rectangle
- */
-Rectangle.prototype.getPoints = function(resultPointsArray)
-{
-	if(this.centerPoint === undefined || this.width === undefined || this.height === undefined)
-		return resultPointsArray;
-	
-	if(resultPointsArray === undefined)
-		resultPointsArray = [];
-	
-	var point;
-	var halfWidth = this.width / 2;
-	var halfHeight = this.height / 2;
-	
-	// starting in left-down corner, go in CCW.***
-	point = new Point2D(this.centerPoint.x - halfWidth, this.centerPoint.y - halfHeight);
-	resultPointsArray.push(point);
-	
-	point = new Point2D(this.centerPoint.x + halfWidth, this.centerPoint.y - halfHeight);
-	resultPointsArray.push(point);
-	
-	point = new Point2D(this.centerPoint.x + halfWidth, this.centerPoint.y + halfHeight);
-	resultPointsArray.push(point);
-	
-	point = new Point2D(this.centerPoint.x - halfWidth, this.centerPoint.y + halfHeight);
-	resultPointsArray.push(point);
-	
-	return resultPointsArray;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Ring
- */
-var Ring = function() 
-{
-	if (!(this instanceof Ring)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.elemsArray;
-	this.polygon; // auxiliar.***
-};
-
-/**
- * @class Ring
- */
-Ring.prototype.deleteObjects = function()
-{
-	if(this.elemsArray !== undefined)
-	{
-		var elemsCount = this.elemsArray.length;
-		for(var i=0; i<elemsCount; i++)
-		{
-			this.elemsArray[i].deleteObjects();
-			this.elemsArray[i] = undefined;
-		}
-		this.elemsArray = undefined;
-	}
-	
-	if(this.polygon !== undefined)
-		this.polygon.deleteObjects();
-	
-	this.polygon = undefined;
-};
-
-/**
- * @class Ring
- */
-Ring.prototype.newElement = function(elementTypeString)
-{
-	var elem;
-	
-	if (elementTypeString === "POLYLINE")
-	{
-		if (this.elemsArray === undefined)
-		{ this.elemsArray = []; }
-		
-		elem = new PolyLine();
-		this.elemsArray.push(elem);
-	}
-	else if (elementTypeString === "ARC")
-	{
-		if (this.elemsArray === undefined)
-		{ this.elemsArray = []; }
-		
-		elem = new Arc();
-		this.elemsArray.push(elem);
-	}
-	else if (elementTypeString === "RECTANGLE")
-	{
-		if (this.elemsArray === undefined)
-		{ this.elemsArray = []; }
-		
-		elem = new Rectangle();
-		this.elemsArray.push(elem);
-	}
-	
-	return elem;
-};
-
-/**
- * returns the points array of the ring.
- * @class Ring
- */
-Ring.prototype.makePolygon = function()
-{
-	this.polygon = this.getPolygon(this.polygon);
-	return this.polygon;
-};
-
-/**
- * returns the points array of the ring.
- * @class Ring
- */
-Ring.prototype.getPolygon = function(resultPolygon)
-{
-	if(resultPolygon === undefined)
-		resultPolygon = new Polygon();
-	
-	if(resultPolygon.point2dList === undefined)
-		resultPolygon.point2dList = new Point2DList();
-	
-	// reset polygon.***
-	resultPolygon.point2dList.deleteObjects();
-	resultPolygon.point2dList.pointsArray = this.getPoints(resultPolygon.point2dList.pointsArray);
-	return resultPolygon;
-};
-
-/**
- * returns the points array of the ring.
- * @class Ring
- */
-Ring.prototype.getPoints = function(resultPointsArray)
-{
-	if (resultPointsArray === undefined)
-	{ resultPointsArray = []; }
-	
-	if (this.elemsArray === undefined)
-	{ return resultPointsArray; }
-	
-	var elem;
-	var elemsCount = this.elemsArray.length;
-	for (var i=0; i<elemsCount; i++)
-	{
-		elem = this.elemsArray[i];
-		elem.getPoints(resultPointsArray);
-	}
-	
-	// finally check if the 1rst point and the last point are coincidents.***
-	var totalPointsCount = resultPointsArray.length;
-	if(totalPointsCount > 1)
-	{
-		var errorDist = 10E-8;
-		var firstPoint = resultPointsArray[0];
-		var lastPoint = resultPointsArray[totalPointsCount-1];
-		if(firstPoint.isCoincidentToPoint(lastPoint, errorDist))
-		{
-			// delete the last point.***
-			lastPoint = resultPointsArray.pop();
-			lastPoint.deleteObjects();
-			lastPoint = undefined;
-		}
-	}
-	
-	return resultPointsArray;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class RingsList
-*/
-var RingsList = function() 
-{
-	if (!(this instanceof RingsList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.ringsArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.prototype.newRing = function() 
-{
-	if (this.ringsArray === undefined)
-	{ this.ringsArray = []; }
-	
-	var ring = new Ring();
-	this.ringsArray.push(ring);
-	
-	return ring;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.prototype.deleteObjects = function() 
-{
-	if (this.ringsArray)
-	{
-		var ringsCount = this.ringsArray.length;
-		for (var i=0; i<ringsCount; i++)
-		{
-			this.ringsArray[i].deleteObjects();
-			this.ringsArray[i] = undefined;
-		}
-		this.ringsArray = undefined;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.prototype.getRingsCount = function() 
-{
-	if (this.ringsArray === undefined)
-		return 0;
-
-	return this.ringsArray.length;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.prototype.getRing = function(idx) 
-{
-	if (this.ringsArray === undefined)
-		return undefined;
-
-	return this.ringsArray[idx];
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.prototype.getBoundingRectangle = function(resultBRect) 
-{
-	if (this.resultBRect === undefined)
-		resultBRect = new BoundingRectangle();
-	
-	var ring;
-	var currBRect;
-	var ringsCount = this.getRingsCount();
-	for(var i=0; i<ringsCount; i++)
-	{
-		ring = this.getRing(i);
-		if(ring.polygon === undefined)
-			ring.makePolygon();
-		
-		currBRect = ring.polygon.getBoundingRectangle(currBRect);
-		if(i === 0)
-			resultBRect.setInitByRectangle(currBRect);
-		else{
-			resultBRect.addRectangle(currBRect);
-		}
-	}
-
-	return resultBRect;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.prototype.intersectionWithSegment = function(segment) 
-{
-	// returns true if any ring's polygon intersects with "segment".***
-	if(segment === undefined)
-		return false;
-	
-	var intersects = false;
-	var ringsCount = this.getRingsCount();
-	var i=0;
-	while(!intersects && i<ringsCount)
-	{
-		if(this.ringsArray[i].intersectionWithSegment(segment))
-		{
-			intersects = true;
-		}
-		i++;
-	}
-	
-	return intersects;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.prototype.getSortedRingsByDistToPoint = function(point, resultSortedObjectsArray) 
-{
-	if(point === undefined)
-		return resultSortedObjectsArray;
-	
-	if(resultSortedObjectsArray === undefined)
-		resultSortedObjectsArray = [];
-	
-	var objectsAuxArray = [];
-	var ring;
-	var ringPoint;
-	var ringPointIdx;
-	var squaredDist;
-	var objectAux;
-	var startIdx, endIdx, insertIdx;
-	var ringsCount = this.getRingsCount();
-	for(var i=0; i<ringsCount; i++)
-	{
-		ring = this.getRing(i);
-		if(ring.polygon === undefined)
-			ring.makePolygon();
-		ringPointIdx = ring.polygon.point2dList.getNearestPointIdxToPoint(point);
-		ringPoint = ring.polygon.point2dList.getPoint(ringPointIdx);
-		squaredDist = ringPoint.squareDistToPoint(point);
-		objectAux = {};
-		objectAux.ring = ring;
-		objectAux.pointIdx = ringPointIdx;
-		objectAux.squaredDist = squaredDist;
-		
-		startIdx = 0;
-		endIdx = objectsAuxArray.length - 1;
-		
-		insertIdx = this.getIndexToInsertBySquaredDist(objectsAuxArray, objectAux, startIdx, endIdx);
-		objectsAuxArray.splice(insertIdx, 0, objectAux);
-	}
-	
-	if(resultSortedObjectsArray === undefined)
-		resultSortedObjectsArray = [];
-	
-	resultSortedObjectsArray.length = 0;
-	
-	var objectsCount = objectsAuxArray.length;
-	for(var i=0; i<objectsCount; i++)
-	{
-		resultSortedObjectsArray.push(objectsAuxArray[i]);
-	}
-	
-	return resultSortedObjectsArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns result_idx
- */
-RingsList.prototype.getIndexToInsertBySquaredDist = function(objectsArray, object, startIdx, endIdx) 
-{
-	// this do a dicotomic search of idx in a ordered table.
-	// 1rst, check the range.
-	
-	var range = endIdx - startIdx;
-	
-	if(range <= 0)
-		return 0;
-	
-	if (range < 6)
-	{
-		// in this case do a lineal search.
-		var finished = false;
-		var i = startIdx;
-		var idx;
-		//var objectsCount = objectsArray.length;
-		while (!finished && i<=endIdx)
-		{
-			if (object.squaredDist < objectsArray[i].squaredDist)
-			{
-				idx = i;
-				finished = true;
-			}
-			i++;
-		}
-		
-		if (finished)
-		{
-			return idx;
-		}
-		else 
-		{
-			return endIdx+1;
-		}
-	}
-	else 
-	{
-		// in this case do the dicotomic search.
-		var middleIdx = startIdx + Math.floor(range/2);
-		var newStartIdx;
-		var newEndIdx;
-		if (objectsArray[middleIdx].squaredDist > object.squaredDist)
-		{
-			newStartIdx = startIdx;
-			newEndIdx = middleIdx;
-		}
-		else 
-		{
-			newStartIdx = middleIdx;
-			newEndIdx = endIdx;
-		}
-		return this.getIndexToInsertBySquaredDist(objectsArray, object, newStartIdx, newEndIdx);
-	}
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class Segment2D
-*/
-var Segment2D = function(strPoint2D, endPoint2D) 
-{
-	if (!(this instanceof Segment2D)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.startPoint2d;
-	this.endPoint2d;
-	
-	if(strPoint2D)
-		this.startPoint2d = strPoint2D;
-	
-	if(endPoint2D)
-		this.endPoint2d = endPoint2D;
-};
-
-Segment2D.prototype.setPoints = function(strPoint2D, endPoint2D)
-{
-	if(strPoint2D)
-		this.startPoint2d = strPoint2D;
-	
-	if(endPoint2D)
-		this.endPoint2d = endPoint2D;
-};
-
-Segment2D.prototype.getVector = function(resultVector)
-{
-	if(this.startPoint2d === undefined || this.endPoint2d === undefined)
-		return undefined;
-	
-	if(resultVector === undefined)
-		resultVector = new Point2D();
-	
-	resultVector = this.startPoint2d.getVectorToPoint(this.endPoint2d, resultVector);
-	return resultVector;
-};
-
-Segment2D.prototype.getDirection = function(resultDir)
-{
-	if(resultDir === undefined)
-		resultDir = new Point2D();
-	
-	resultDir = this.getVector(resultDir);
-	resultDir.unitary();
-	
-	return resultDir;
-};
-
-Segment2D.prototype.getBoundaryRectangle = function(resultBRect)
-{
-	if(resultBRect === undefined)
-		resultBRect = new BoundaryRectangle();
-	
-	resultBRect.setInit(this.startPoint2d);
-	resultBRect.addPoint(this.endPoint2d);
-	
-	return resultBRect;
-};
-
-Segment2D.prototype.getLine = function(resultLine)
-{
-	if(resultLine === undefined)
-		resultLine = new Line2D();
-	
-	var dir = this.getDirection(); // unitary direction.***
-	var strPoint = this.startPoint2d;
-	resultLine.setPointAndDir(strPoint.x, strPoint.y, dir.x, dir.y);
-	return resultLine;
-};
-
-Segment2D.prototype.getSquaredLength = function()
-{
-	return this.startPoint2d.squareDistToPoint(this.endPoint2d);
-};
-
-Segment2D.prototype.getLength = function()
-{
-	return Math.sqrt(this.getSquaredLength());
-};
-
-Segment2D.prototype.intersectionWithPointByDistances = function(point, error)
-{
-	if(point === undefined)
-		return undefined;
-	
-	if(error === undefined)
-		error = 10E-8;
-	
-	// here no check line-point coincidance.***
-	
-	// now, check if is inside of the segment or if is coincident with any vertex of segment.***
-	var distA = this.startPoint2d.distToPoint(point);
-	var distB = this.endPoint2d.distToPoint(point);
-	var distTotal = this.getLength();
-	
-	if(distA < error)
-		return Constant.INTERSECTION_POINT_A;
-	
-	if(distB < error)
-		return Constant.INTERSECTION_POINT_B;
-	
-	if(distA> distTotal || distB> distTotal)
-	{
-		return Constant.INTERSECTION_OUTSIDE;
-	}
-	
-	if(Math.abs(distA + distB - distTotal) < error)
-		return Constant.INTERSECTION_INSIDE;
-};
-
-Segment2D.prototype.intersectionWithPoint = function(point, error)
-{
-	if(point === undefined)
-		return undefined;
-	
-	if(error === undefined)
-		error = 10E-8;
-	
-	var line = this.getLine();
-	if(!line.isCoincidentPoint(point, error))
-		return Constant.INTERSECTION_OUTSIDE; // no intersection.***
-	
-	return this.intersectionWithPointByDistances(point, error);
-};
-
-Segment2D.prototype.intersectionWithSegment = function(segment_B, error)
-{
-	if(segment_B === undefined)
-		return undefined;
-	
-	if(error === undefined)
-		error = 10E-8;
-	
-	var myLine = this.getLine();
-	var line = segment_B.getLine();
-	var intersectionPoint = myLine.intersectionWithLine(line);
-	
-	if(intersectionPoint === undefined)
-		return undefined; // are parallels.***
-	
-	// now use "intersectionWithPointByDistances" instead "intersectionWithPoint" bcos line-point intersection check is no necesary.***
-	var intersectionType_A = this.intersectionWithPointByDistances(intersectionPoint);
-	
-	if(intersectionType_A === Constant.INTERSECTION_OUTSIDE)
-		return Constant.INTERSECTION_OUTSIDE;
-	
-	var intersectionType_B = segment_B.intersectionWithPointByDistances(intersectionPoint);
-	
-	if(intersectionType_B === Constant.INTERSECTION_OUTSIDE)
-		return Constant.INTERSECTION_OUTSIDE;
-	
-	return Constant.INTERSECTION_INTERSECT;
-};
-
-Segment2D.prototype.hasPoint = function(point)
-{
-	// returns if this segment has "point" as startPoint or endPoint.***
-	if(point === undefined)
-		return false;
-	
-	if(point === this.startPoint2d || point === this.endPoint2d)
-		return true;
-	
-	return false;
-};
-
-Segment2D.prototype.sharesPointsWithSegment = function(segment)
-{
-	if(segment === undefined)
-		return false;
-	
-	if(this.hasPoint(segment.startPoint2d) || this.hasPoint(segment.endPoint2d))
-		return true;
-	
-	return false;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Surface
- */
-var Surface = function() 
-{
-	if (!(this instanceof Surface)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.facesArray;
-};
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Tessellator
- */
-var Tessellator = function() 
-{
-	if (!(this instanceof Tessellator)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class TrianglesList
- */
-var TrianglesList = function() 
-{
-	if (!(this instanceof TrianglesList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.trianglesArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param idx 변수
- * @returns vertexArray[idx]
- */
-TrianglesList.prototype.newTriangle = function() 
-{
-	if (this.trianglesArray === undefined)
-	{ this.trianglesArray = []; }
-	
-	var triangle = new Triangle();
-	this.trianglesArray.push(triangle);
-	return triangle;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param idx 변수
- * @returns vertexArray[idx]
- */
-TrianglesList.prototype.deleteObjects = function() 
-{
-	if (this.trianglesArray === undefined)
-		return;
-	
-	var trianglesCount = this.trianglesArray.length;
-	for(var i=0; i<trianglesCount; i++)
-	{
-		this.trianglesArray[i].deleteObjects();
-		this.trianglesArray[i] = undefined;
-	}
-	this.trianglesArray = undefined;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param idx 변수
- * @returns vertexArray[idx]
- */
-TrianglesList.prototype.getFaceDataArray = function(resultVbo) 
-{
-	if (this.trianglesArray === undefined)
-		return resultVbo;
-	
-	var trianglesCount = this.trianglesArray.length;
-	if(trianglesCount === 0)
-		return resultVbo;
-	
-	if(resultVbo === undefined)
-		resultVbo = new VBOVertexIdxCacheKey();
-
-	var indicesArray = [];
-	
-	var triangle;
-	for(var i=0; i<trianglesCount; i++)
-	{
-		triangle = this.trianglesArray[i];
-		if(triangle.vtxIdx0 !== undefined && triangle.vtxIdx1 !== undefined && triangle.vtxIdx2 !== undefined )
-		{
-			indicesArray.push(triangle.vtxIdx0);
-			indicesArray.push(triangle.vtxIdx1);
-			indicesArray.push(triangle.vtxIdx2);
-		}
-	}
-	resultVbo.idxVboDataArray = Int16Array.from(indicesArray);
-	resultVbo.indicesCount = resultVbo.idxVboDataArray.length;
-	return resultVbo;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class TrianglesMatrix
- */
-var TrianglesMatrix= function() 
-{
-	if (!(this instanceof TrianglesMatrix)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.trianglesListsArray;
-};
-
-TrianglesMatrix.prototype.deleteObjects = function()
-{
-	if(this.trianglesListsArray === undefined)
-		return;
-	
-	var trianglesListsCount = this.trianglesListsArray.length;
-	for(var i=0; i<trianglesListsCount; i++)
-	{
-		this.trianglesListsArray[i].deleteObjects();
-		this.trianglesListsArray[i] = undefined;
-	}
-	this.trianglesListsArray = undefined;
-}
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class VtxSegment
- */
-var VtxSegment = function(startVertex, endVertex) 
-{
-	if (!(this instanceof VtxSegment)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.startVertex;
-	this.endVertex;
-	
-	if(startVertex)
-		this.startVertex = startVertex;
-	
-	if(endVertex)
-		this.endVertex = endVertex;
-};
-
-VtxSegment.prototype.setVertices = function(startVertex, endVertex)
-{
-	this.startVertex = startVertex;
-	this.endVertex = endVertex;
-};
-
-VtxSegment.prototype.getDirection = function(resultDirection)
-{
-	// the direction is an unitary vector.***
-	var resultDirection = this.getVector();
-	
-	if(resultDirection === undefined)
-		return undefined;
-	
-	resultDirection.unitary();
-	return resultDirection;
-};
-
-VtxSegment.prototype.getVector = function(resultVector)
-{
-	if(this.startVertex === undefined || this.endVertex === undefined)
-		return undefined;
-	
-	var startPoint = this.startVertex.point3d;
-	var endPoint = this.endVertex.point3d;
-	
-	if(startPoint === undefined || endPoint === undefined)
-		return undefined;
-	
-	resultVector = startPoint.getVectorToPoint(endPoint, resultVector);
-	return resultVector;
-};
-
-VtxSegment.prototype.getLine = function(resultLine)
-{
-	if(resultLine === undefined)
-		resultLine = new Line();
-	
-	var dir = this.getDirection(); // unitary direction.***
-	var strPoint = this.startVertex.point3d;
-	resultLine.setPointAndDir(strPoint.x, strPoint.y, strPoint.z, dir.x, dir.y, dir.z);
-	return resultLine;
-};
-
-VtxSegment.prototype.getSquaredLength = function()
-{
-	return this.startVertex.point3d.squareDistToPoint(this.endVertex.point3d);
-};
-
-VtxSegment.prototype.getLength = function()
-{
-	return Math.sqrt(this.getSquaredLength());
-};
-
-VtxSegment.prototype.intersectionWithPoint = function(point, error)
-{
-	// check if the point intersects the vtxSegment's line.***
-	var line = this.getLine();
-	
-	if(error === undefined)
-		error = 10E-8;
-	
-	if(!line.isCoincidentPoint(point, error))
-		return Constant.INTERSECTION_OUTSIDE; // no intersection.***
-	
-	//Constant.INTERSECTION_OUTSIDE = 0;
-	//Constant.INTERSECTION_INTERSECT= 1;
-	//Constant.INTERSECTION_INSIDE = 2;
-	//Constant.INTERSECTION_POINT_A = 3;
-	//Constant.INTERSECTION_POINT_B = 4;
-	
-	// now, check if is inside of the segment or if is coincident with any vertex of segment.***
-	var distA = this.startVertex.point3d.distToPoint(point);
-	var distB = this.endVertex.point3d.distToPoint(point);
-	var distTotal = this.getLength();
-	
-	if(distA < error)
-		return Constant.INTERSECTION_POINT_A;
-	
-	if(distB < error)
-		return Constant.INTERSECTION_POINT_B;
-	
-	if(distA> distTotal || distB> distTotal)
-	{
-		return Constant.INTERSECTION_OUTSIDE;
-	}
-	
-	if(Math.abs(distA + distB - distTotal) < error)
-		return Constant.INTERSECTION_INSIDE;
-	
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 'use strict';
 
 
@@ -43038,510 +43232,6 @@ void main()\n\
 'use strict';
 
 /**
- * 사용하지 않음
- */
-!(function() 
-{
-
-	var URL = window.URL || window.webkitURL;
-	if (!URL) 
-	{
-		throw new Error('This browser does not support Blob URLs');
-	}
-
-	if (!window.Worker) 
-	{
-		throw new Error('This browser does not support Web Workers');
-	}
-
-	function Multithread(threads) 
-	{
-		this.threads = Math.max(2, threads | 0);
-		this._queue = [];
-		this._queueSize = 0;
-		this._activeThreads = 0;
-		this._debug = {
-			start : 0,
-			end   : 0,
-			time  : 0
-		};
-	}
-
-	Multithread.prototype._worker = {
-		JSON: function() 
-		{
-			var /**/name/**/ = (/**/func/**/);
-			self.addEventListener('message', function(e) 
-			{
-				var data = e.data;
-				var view = new DataView(data);
-				var len = data.byteLength;
-				var str = Array(len);
-				for (var i=0;i<len;i++) 
-				{
-					str[i] = String.fromCharCode(view.getUint8(i));
-				}
-				var args = JSON.parse(str.join(''));
-				var value = (/**/name/**/).apply(/**/name/**/, args);
-				try 
-				{
-					data = JSON.stringify(value);
-				}
-				catch (ex) 
-				{
-					throw new Error('Parallel function must return JSON serializable response');
-				}
-				len = typeof(data)==='undefined'?0:data.length;
-				var buffer = new ArrayBuffer(len);
-				view = new DataView(buffer);
-				for (i=0;i<len;i++) 
-				{
-					view.setUint8(i, data.charCodeAt(i) & 255);
-				}
-				self.postMessage(buffer, [buffer]);
-				self.close();
-			});
-		},
-		Int32: function() 
-		{
-			var /**/name/**/ = (/**/func/**/);
-			self.addEventListener('message', function(e) 
-			{
-				var data = e.data;
-				var view = new DataView(data);
-				var len = data.byteLength / 4;
-				var arr = Array(len);
-				for (var i=0;i<len;i++) 
-				{
-					arr[i] = view.getInt32(i*4);
-				}
-				var value = (/**/name/**/).apply(/**/name/**/, arr);
-				if (!(value instanceof Array)) { value = [value]; }
-				len = value.length;
-				var buffer = new ArrayBuffer(len * 4);
-				view = new DataView(buffer);
-				for (i=0;i<len;i++) 
-				{
-					view.setInt32(i*4, value[i]);
-				}
-				self.postMessage(buffer, [buffer]);
-				self.close();
-			});
-		},
-		Float64: function() 
-		{
-			var /**/name/**/ = (/**/func/**/);
-			self.addEventListener('message', function(e) 
-			{
-				var data = e.data;
-				var view = new DataView(data);
-				var len = data.byteLength / 8;
-				var arr = Array(len);
-				for (var i=0;i<len;i++) 
-				{
-					arr[i] = view.getFloat64(i*8);
-				}
-				var value = (/**/name/**/).apply(/**/name/**/, arr);
-				if (!(value instanceof Array)) { value = [value]; }
-				len = value.length;
-				var buffer = new ArrayBuffer(len * 8);
-				view = new DataView(buffer);
-				for (i=0;i<len;i++) 
-				{
-					view.setFloat64(i*8, value[i]);
-				}
-				self.postMessage(buffer, [buffer]);
-				self.close();
-			});
-		}
-	};
-
-	Multithread.prototype._encode = {
-		JSON: function(args) 
-		{
-			try 
-			{
-				var data = JSON.stringify(args);
-			}
-			catch (e) 
-			{
-				throw new Error('Arguments provided to parallel function must be JSON serializable');
-			}
-			len = data.length;
-			var buffer = new ArrayBuffer(len);
-			var view = new DataView(buffer);
-			for (var i=0;i<len;i++) 
-			{
-				view.setUint8(i, data.charCodeAt(i) & 255);
-			}
-			return buffer;
-		},
-		Int32: function(args) 
-		{
-			len = args.length;
-			var buffer = new ArrayBuffer(len*4);
-			var view = new DataView(buffer);
-			for (var i=0;i<len;i++) 
-			{
-				view.setInt32(i*4, args[i]);
-			}
-			return buffer;
-		},
-		Float64: function(args) 
-		{
-			len = args.length;
-			var buffer = new ArrayBuffer(len*8);
-			var view = new DataView(buffer);
-			for (var i=0;i<len;i++) 
-			{
-				view.setFloat64(i*8, args[i]);
-			}
-			return buffer;
-		}
-	};
-
-	Multithread.prototype._decode = {
-		JSON: function(data) 
-		{
-			var view = new DataView(data);
-			var len = data.byteLength;
-			var str = Array(len);
-			for (var i=0;i<len;i++) 
-			{
-				str[i] = String.fromCharCode(view.getUint8(i));
-			}
-			if (!str.length) 
-			{
-				return;
-			}
-			else 
-			{
-				return JSON.parse(str.join(''));
-			}
-		},
-		Int32: function(data) 
-		{
-			var view = new DataView(data);
-			var len = data.byteLength / 4;
-			var arr = Array(len);
-			for (var i=0;i<len;i++) 
-			{
-				arr[i] = view.getInt32(i*4);
-			}
-			return arr;
-		},
-		Float64: function(data) 
-		{
-			var view = new DataView(data);
-			var len = data.byteLength / 8;
-			var arr = Array(len);
-			for (var i=0;i<len;i++) 
-			{
-				arr[i] = view.getFloat64(i*8);
-			}
-			return arr;
-		},
-	};
-
-	Multithread.prototype._execute = function(resource, args, type, callback) 
-	{
-		if (!this._activeThreads) 
-		{
-			this._debug.start = (new Date()).valueOf();
-		}
-		if (this._activeThreads < this.threads) 
-		{
-			this._activeThreads++;
-			var t = (new Date()).valueOf();
-			var worker = new Worker(resource);
-			var buffer = this._encode[type](args);
-			var decode = this._decode[type];
-			var self = this;
-			if (type==='JSON') 
-			{
-				var listener = function(e) 
-				{
-					callback.call(self, decode(e.data));
-					self.ready();
-				};
-			}
-			else 
-			{
-				var listener = function(e) 
-				{
-					callback.apply(self, decode(e.data));
-					self.ready();
-				};
-			}
-			worker.addEventListener('message', listener);
-			worker.postMessage(buffer, [buffer]);
-		}
-		else 
-		{
-			this._queueSize++;
-			this._queue.push([resource, args, type, callback]);
-		}
-	};
-
-	Multithread.prototype.ready = function() 
-	{
-		this._activeThreads--;
-		if (this._queueSize) 
-		{
-			this._execute.apply(this, this._queue.shift());
-			this._queueSize--;
-		}
-		else if (!this._activeThreads) 
-		{
-			this._debug.end = (new Date()).valueOf();
-			this._debug.time = this._debug.end - this._debug.start;
-		}
-	};
-
-	Multithread.prototype._prepare = function(fn, type) 
-	{
-
-		fn = fn;
-
-		var name = fn.name;
-		var fnStr = fn.toString();
-		if (!name) 
-		{
-			name = '$' + ((Math.random()*10)|0);
-			while (fnStr.indexOf(name) !== -1) 
-			{
-				name += ((Math.random()*10)|0);
-			}
-		}
-
-		var script = this._worker[type]
-			.toString()
-			.replace(/^.*?[\n\r]+/gi, '')
-			.replace(/\}[\s]*$/, '')
-			.replace(/\/\*\*\/name\/\*\*\//gi, name)
-			.replace(/\/\*\*\/func\/\*\*\//gi, fnStr);
-
-		var resource = URL.createObjectURL(new Blob([script], {type: 'text/javascript'}));
-
-		return resource;
-
-	};
-
-	Multithread.prototype.process = function(fn, callback) 
-	{
-
-		var resource = this._prepare(fn, 'JSON');
-		var self = this;
-
-		return function() 
-		{
-			self._execute(resource, [].slice.call(arguments), 'JSON', callback);
-		};
-
-	};
-
-	Multithread.prototype.processInt32 = function(fn, callback) 
-	{
-
-		var resource = this._prepare(fn, 'Int32');
-		var self = this;
-
-		return function() 
-		{
-			self._execute(resource, [].slice.call(arguments), 'Int32', callback);
-		};
-
-	};
-
-	Multithread.prototype.processFloat64 = function(fn, callback) 
-	{
-
-		var resource = this._prepare(fn, 'Float64');
-		var self = this;
-
-		return function() 
-		{
-			self._execute(resource, [].slice.call(arguments), 'Float64', callback);
-		};
-
-	};
-
-	window.Multithread = Multithread;
-
-})();
-'use strict';
-
-//importScripts('../Build/CesiumUnminified/SonGeometryJScript.js'); // No.***
-//importScripts('GeometryUtil.js'); // Yes.***
-//importScripts('GeometryModifier.js');
-//importScripts('Point3D.js');
-//importScripts('CullingVolume.js');
-
-// Test son.*****************************************************
-var currentCamPos = new Point3D();
-var lastCamPos = new Point3D();
-var squareDistUmbral = 22.0;
-var building_project;
-var compRefList_array_background;
-
-//var compRefList_Container = new CompoundReferencesListContainer();
-//var interiorCompRefList_Container = new CompoundReferencesListContainer();
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-var geoModifier = new GeometryModifier();
-// End test son.-------------------------------------------------
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param e 변수
- */
-function possibleCameraPositionChanged(e) 
-{
-	var compRefList_Container = e.data[0];
-	var interiorCompRefList_Container = e.data[1];
-	var camPos = e.data[2];
-	//var compRefList_array = e.data[2];
-
-	var eye_x = camPos.x;
-	var eye_y = camPos.y;
-	var eye_z = camPos.z;
-
-	var interior_visibleCompRefLists = geoModifier.compoundReferencesListContainerGetVisibleCompRefObjectsList(interiorCompRefList_Container, eye_x, eye_y, eye_z);
-	var visibleCompRefLists = geoModifier.compoundReferencesListContainerGetVisibleCompRefObjectsList(compRefList_Container, eye_x, eye_y, eye_z);
-	var total_visibleCompRefLists = visibleCompRefLists.concat(interior_visibleCompRefLists);
-	//var interior_visibleCompRefLists = interiorCompRefList_Container.get_visibleCompRefObjectsList(eye_x, eye_y, eye_z); // Cannot use alien functions.***
-	//var visibleCompRefLists = compRefList_Container.get_visibleCompRefObjectsList(eye_x, eye_y, eye_z); // Cannot use alien functions.***
-	//var total_visibleCompRefLists = visibleCompRefLists.concat(interior_visibleCompRefLists);
-
-	return total_visibleCompRefLists;
-	/*
-	// 1rst, frustum culling.*******************
-	var projectsList = e.data[0];
-	var cullingVolume = e.data[1];
-	//var projects_list = getFrustumIntersectedProjectBuildings(projectsList, cullingVolume);
-
-
-	var squaredDist = lastCamPos.squareDistTo(currentCamPos.x, currentCamPos.y, currentCamPos.z);
-	if(squaredDist > squareDistUmbral)
-	{
-		// Camera position changed.***
-		lastCamPos.set(currentCamPos.x, currentCamPos.y, currentCamPos.z);
-
-	}
-	else{
-		// Camera doesnt moved.***
-	}
-	*/
-}
-
-onmessage = function(e) 
-{
-	console.log('Message received from main script');
-	var workerResult = 'Result: sonete';
-
-	console.log('Posting message back to main script');
-	//postMessage(workerResult);
-	var result = possibleCameraPositionChanged(e);
-	postMessage([result]);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param value 변수
- */
-function setTest(value) 
-{
-	squareDistUmbral = value;
-}
-
-/*
-function getFrustumIntersectedProjectBuildings(projectsList, cullingVolume)
-{
-	var buildings_array = [];
-	var last_squared_dist = undefined;
-	var detailed_building = undefined;
-	var building_projects_count = projectsList._BR_buildingsArray.length;
-
-	for(var p_counter = 0; p_counter<building_projects_count; p_counter++)
-	{
-		var BR_Project = projectsList._BR_buildingsArray[p_counter];
-		var squaredDistToCamera = Cartesian3.distanceSquared(cameraPosition, BR_Project.buildingPosition);
-		var min_squaredDist_to_see_detailed = 40000;
-		var min_squaredDist_to_see = 10000000;
-
-		if(squaredDistToCamera > min_squaredDist_to_see)
-			continue;
-
-		var boundingSphere_Aux = new BoundingSphere();
-		boundingSphere_Aux.center = BR_Project.buildingPosition;
-		boundingSphere_Aux.radius = 50.0; // 50m. Provisional.***
-
-		//----------------------------------------------------------------------------------------------------------------------------
-		// var frameState = scene._frameState;
-
-		var frustumCull = frameState.cullingVolume.computeVisibility(boundingSphere_Aux);
-		if(frustumCull !== Intersect.OUTSIDE)
-		{
-			if(squaredDistToCamera < min_squaredDist_to_see_detailed)// min dist to see detailed.***
-			{
-				if(last_squared_dist)
-				{
-					if(squaredDistToCamera < last_squared_dist)
-					{
-						last_squared_dist = squaredDistToCamera;
-						buildings_array.push(detailed_building);
-						detailed_building = BR_Project;
-					}
-					else{
-						buildings_array.push(BR_Project);
-					}
-				}
-				else{
-					last_squared_dist = squaredDistToCamera;
-					detailed_building = BR_Project;
-				}
-			}
-			else{
-				buildings_array.push(BR_Project);
-			}
-		}
-
-	}
-
-
-	return buildings_array;
-};
-*/
-
-/*
-// An example.***
-var i = 0;
-
-function timedCount() {
-    i = i + 1;
-    postMessage(i);
-    setTimeout("timedCount()",500);
-}
-
-//timedCount();
-*/
-/*
-var n = 1;
-search: while (true) {
-  n += 1;
-  for (var i = 2; i <= Math.sqrt(n); i += 1)
-    if (n % i == 0)
-     continue search;
-  // found a prime!
-  postMessage(n);
-}
-*/
-
-'use strict';
-
-/**
  * Returns the first parameter if not undefined, otherwise the second parameter.
  * Useful for setting a default value for a parameter.
  *
@@ -44510,4 +44200,507 @@ ManagerUtils.getBuildingCurrentPosition = function(renderingMode, neoBuilding)
 
 	return realBuildingPos;
 };
+*/
+'use strict';
+
+/**
+ * 사용하지 않음
+ */
+!(function() 
+{
+
+	var URL = window.URL || window.webkitURL;
+	if (!URL) 
+	{
+		throw new Error('This browser does not support Blob URLs');
+	}
+
+	if (!window.Worker) 
+	{
+		throw new Error('This browser does not support Web Workers');
+	}
+
+	function Multithread(threads) 
+	{
+		this.threads = Math.max(2, threads | 0);
+		this._queue = [];
+		this._queueSize = 0;
+		this._activeThreads = 0;
+		this._debug = {
+			start : 0,
+			end   : 0,
+			time  : 0
+		};
+	}
+
+	Multithread.prototype._worker = {
+		JSON: function() 
+		{
+			var /**/name/**/ = (/**/func/**/);
+			self.addEventListener('message', function(e) 
+			{
+				var data = e.data;
+				var view = new DataView(data);
+				var len = data.byteLength;
+				var str = Array(len);
+				for (var i=0;i<len;i++) 
+				{
+					str[i] = String.fromCharCode(view.getUint8(i));
+				}
+				var args = JSON.parse(str.join(''));
+				var value = (/**/name/**/).apply(/**/name/**/, args);
+				try 
+				{
+					data = JSON.stringify(value);
+				}
+				catch (ex) 
+				{
+					throw new Error('Parallel function must return JSON serializable response');
+				}
+				len = typeof(data)==='undefined'?0:data.length;
+				var buffer = new ArrayBuffer(len);
+				view = new DataView(buffer);
+				for (i=0;i<len;i++) 
+				{
+					view.setUint8(i, data.charCodeAt(i) & 255);
+				}
+				self.postMessage(buffer, [buffer]);
+				self.close();
+			});
+		},
+		Int32: function() 
+		{
+			var /**/name/**/ = (/**/func/**/);
+			self.addEventListener('message', function(e) 
+			{
+				var data = e.data;
+				var view = new DataView(data);
+				var len = data.byteLength / 4;
+				var arr = Array(len);
+				for (var i=0;i<len;i++) 
+				{
+					arr[i] = view.getInt32(i*4);
+				}
+				var value = (/**/name/**/).apply(/**/name/**/, arr);
+				if (!(value instanceof Array)) { value = [value]; }
+				len = value.length;
+				var buffer = new ArrayBuffer(len * 4);
+				view = new DataView(buffer);
+				for (i=0;i<len;i++) 
+				{
+					view.setInt32(i*4, value[i]);
+				}
+				self.postMessage(buffer, [buffer]);
+				self.close();
+			});
+		},
+		Float64: function() 
+		{
+			var /**/name/**/ = (/**/func/**/);
+			self.addEventListener('message', function(e) 
+			{
+				var data = e.data;
+				var view = new DataView(data);
+				var len = data.byteLength / 8;
+				var arr = Array(len);
+				for (var i=0;i<len;i++) 
+				{
+					arr[i] = view.getFloat64(i*8);
+				}
+				var value = (/**/name/**/).apply(/**/name/**/, arr);
+				if (!(value instanceof Array)) { value = [value]; }
+				len = value.length;
+				var buffer = new ArrayBuffer(len * 8);
+				view = new DataView(buffer);
+				for (i=0;i<len;i++) 
+				{
+					view.setFloat64(i*8, value[i]);
+				}
+				self.postMessage(buffer, [buffer]);
+				self.close();
+			});
+		}
+	};
+
+	Multithread.prototype._encode = {
+		JSON: function(args) 
+		{
+			try 
+			{
+				var data = JSON.stringify(args);
+			}
+			catch (e) 
+			{
+				throw new Error('Arguments provided to parallel function must be JSON serializable');
+			}
+			len = data.length;
+			var buffer = new ArrayBuffer(len);
+			var view = new DataView(buffer);
+			for (var i=0;i<len;i++) 
+			{
+				view.setUint8(i, data.charCodeAt(i) & 255);
+			}
+			return buffer;
+		},
+		Int32: function(args) 
+		{
+			len = args.length;
+			var buffer = new ArrayBuffer(len*4);
+			var view = new DataView(buffer);
+			for (var i=0;i<len;i++) 
+			{
+				view.setInt32(i*4, args[i]);
+			}
+			return buffer;
+		},
+		Float64: function(args) 
+		{
+			len = args.length;
+			var buffer = new ArrayBuffer(len*8);
+			var view = new DataView(buffer);
+			for (var i=0;i<len;i++) 
+			{
+				view.setFloat64(i*8, args[i]);
+			}
+			return buffer;
+		}
+	};
+
+	Multithread.prototype._decode = {
+		JSON: function(data) 
+		{
+			var view = new DataView(data);
+			var len = data.byteLength;
+			var str = Array(len);
+			for (var i=0;i<len;i++) 
+			{
+				str[i] = String.fromCharCode(view.getUint8(i));
+			}
+			if (!str.length) 
+			{
+				return;
+			}
+			else 
+			{
+				return JSON.parse(str.join(''));
+			}
+		},
+		Int32: function(data) 
+		{
+			var view = new DataView(data);
+			var len = data.byteLength / 4;
+			var arr = Array(len);
+			for (var i=0;i<len;i++) 
+			{
+				arr[i] = view.getInt32(i*4);
+			}
+			return arr;
+		},
+		Float64: function(data) 
+		{
+			var view = new DataView(data);
+			var len = data.byteLength / 8;
+			var arr = Array(len);
+			for (var i=0;i<len;i++) 
+			{
+				arr[i] = view.getFloat64(i*8);
+			}
+			return arr;
+		},
+	};
+
+	Multithread.prototype._execute = function(resource, args, type, callback) 
+	{
+		if (!this._activeThreads) 
+		{
+			this._debug.start = (new Date()).valueOf();
+		}
+		if (this._activeThreads < this.threads) 
+		{
+			this._activeThreads++;
+			var t = (new Date()).valueOf();
+			var worker = new Worker(resource);
+			var buffer = this._encode[type](args);
+			var decode = this._decode[type];
+			var self = this;
+			if (type==='JSON') 
+			{
+				var listener = function(e) 
+				{
+					callback.call(self, decode(e.data));
+					self.ready();
+				};
+			}
+			else 
+			{
+				var listener = function(e) 
+				{
+					callback.apply(self, decode(e.data));
+					self.ready();
+				};
+			}
+			worker.addEventListener('message', listener);
+			worker.postMessage(buffer, [buffer]);
+		}
+		else 
+		{
+			this._queueSize++;
+			this._queue.push([resource, args, type, callback]);
+		}
+	};
+
+	Multithread.prototype.ready = function() 
+	{
+		this._activeThreads--;
+		if (this._queueSize) 
+		{
+			this._execute.apply(this, this._queue.shift());
+			this._queueSize--;
+		}
+		else if (!this._activeThreads) 
+		{
+			this._debug.end = (new Date()).valueOf();
+			this._debug.time = this._debug.end - this._debug.start;
+		}
+	};
+
+	Multithread.prototype._prepare = function(fn, type) 
+	{
+
+		fn = fn;
+
+		var name = fn.name;
+		var fnStr = fn.toString();
+		if (!name) 
+		{
+			name = '$' + ((Math.random()*10)|0);
+			while (fnStr.indexOf(name) !== -1) 
+			{
+				name += ((Math.random()*10)|0);
+			}
+		}
+
+		var script = this._worker[type]
+			.toString()
+			.replace(/^.*?[\n\r]+/gi, '')
+			.replace(/\}[\s]*$/, '')
+			.replace(/\/\*\*\/name\/\*\*\//gi, name)
+			.replace(/\/\*\*\/func\/\*\*\//gi, fnStr);
+
+		var resource = URL.createObjectURL(new Blob([script], {type: 'text/javascript'}));
+
+		return resource;
+
+	};
+
+	Multithread.prototype.process = function(fn, callback) 
+	{
+
+		var resource = this._prepare(fn, 'JSON');
+		var self = this;
+
+		return function() 
+		{
+			self._execute(resource, [].slice.call(arguments), 'JSON', callback);
+		};
+
+	};
+
+	Multithread.prototype.processInt32 = function(fn, callback) 
+	{
+
+		var resource = this._prepare(fn, 'Int32');
+		var self = this;
+
+		return function() 
+		{
+			self._execute(resource, [].slice.call(arguments), 'Int32', callback);
+		};
+
+	};
+
+	Multithread.prototype.processFloat64 = function(fn, callback) 
+	{
+
+		var resource = this._prepare(fn, 'Float64');
+		var self = this;
+
+		return function() 
+		{
+			self._execute(resource, [].slice.call(arguments), 'Float64', callback);
+		};
+
+	};
+
+	window.Multithread = Multithread;
+
+})();
+'use strict';
+
+//importScripts('../Build/CesiumUnminified/SonGeometryJScript.js'); // No.***
+//importScripts('GeometryUtil.js'); // Yes.***
+//importScripts('GeometryModifier.js');
+//importScripts('Point3D.js');
+//importScripts('CullingVolume.js');
+
+// Test son.*****************************************************
+var currentCamPos = new Point3D();
+var lastCamPos = new Point3D();
+var squareDistUmbral = 22.0;
+var building_project;
+var compRefList_array_background;
+
+//var compRefList_Container = new CompoundReferencesListContainer();
+//var interiorCompRefList_Container = new CompoundReferencesListContainer();
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+var geoModifier = new GeometryModifier();
+// End test son.-------------------------------------------------
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param e 변수
+ */
+function possibleCameraPositionChanged(e) 
+{
+	var compRefList_Container = e.data[0];
+	var interiorCompRefList_Container = e.data[1];
+	var camPos = e.data[2];
+	//var compRefList_array = e.data[2];
+
+	var eye_x = camPos.x;
+	var eye_y = camPos.y;
+	var eye_z = camPos.z;
+
+	var interior_visibleCompRefLists = geoModifier.compoundReferencesListContainerGetVisibleCompRefObjectsList(interiorCompRefList_Container, eye_x, eye_y, eye_z);
+	var visibleCompRefLists = geoModifier.compoundReferencesListContainerGetVisibleCompRefObjectsList(compRefList_Container, eye_x, eye_y, eye_z);
+	var total_visibleCompRefLists = visibleCompRefLists.concat(interior_visibleCompRefLists);
+	//var interior_visibleCompRefLists = interiorCompRefList_Container.get_visibleCompRefObjectsList(eye_x, eye_y, eye_z); // Cannot use alien functions.***
+	//var visibleCompRefLists = compRefList_Container.get_visibleCompRefObjectsList(eye_x, eye_y, eye_z); // Cannot use alien functions.***
+	//var total_visibleCompRefLists = visibleCompRefLists.concat(interior_visibleCompRefLists);
+
+	return total_visibleCompRefLists;
+	/*
+	// 1rst, frustum culling.*******************
+	var projectsList = e.data[0];
+	var cullingVolume = e.data[1];
+	//var projects_list = getFrustumIntersectedProjectBuildings(projectsList, cullingVolume);
+
+
+	var squaredDist = lastCamPos.squareDistTo(currentCamPos.x, currentCamPos.y, currentCamPos.z);
+	if(squaredDist > squareDistUmbral)
+	{
+		// Camera position changed.***
+		lastCamPos.set(currentCamPos.x, currentCamPos.y, currentCamPos.z);
+
+	}
+	else{
+		// Camera doesnt moved.***
+	}
+	*/
+}
+
+onmessage = function(e) 
+{
+	console.log('Message received from main script');
+	var workerResult = 'Result: sonete';
+
+	console.log('Posting message back to main script');
+	//postMessage(workerResult);
+	var result = possibleCameraPositionChanged(e);
+	postMessage([result]);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param value 변수
+ */
+function setTest(value) 
+{
+	squareDistUmbral = value;
+}
+
+/*
+function getFrustumIntersectedProjectBuildings(projectsList, cullingVolume)
+{
+	var buildings_array = [];
+	var last_squared_dist = undefined;
+	var detailed_building = undefined;
+	var building_projects_count = projectsList._BR_buildingsArray.length;
+
+	for(var p_counter = 0; p_counter<building_projects_count; p_counter++)
+	{
+		var BR_Project = projectsList._BR_buildingsArray[p_counter];
+		var squaredDistToCamera = Cartesian3.distanceSquared(cameraPosition, BR_Project.buildingPosition);
+		var min_squaredDist_to_see_detailed = 40000;
+		var min_squaredDist_to_see = 10000000;
+
+		if(squaredDistToCamera > min_squaredDist_to_see)
+			continue;
+
+		var boundingSphere_Aux = new BoundingSphere();
+		boundingSphere_Aux.center = BR_Project.buildingPosition;
+		boundingSphere_Aux.radius = 50.0; // 50m. Provisional.***
+
+		//----------------------------------------------------------------------------------------------------------------------------
+		// var frameState = scene._frameState;
+
+		var frustumCull = frameState.cullingVolume.computeVisibility(boundingSphere_Aux);
+		if(frustumCull !== Intersect.OUTSIDE)
+		{
+			if(squaredDistToCamera < min_squaredDist_to_see_detailed)// min dist to see detailed.***
+			{
+				if(last_squared_dist)
+				{
+					if(squaredDistToCamera < last_squared_dist)
+					{
+						last_squared_dist = squaredDistToCamera;
+						buildings_array.push(detailed_building);
+						detailed_building = BR_Project;
+					}
+					else{
+						buildings_array.push(BR_Project);
+					}
+				}
+				else{
+					last_squared_dist = squaredDistToCamera;
+					detailed_building = BR_Project;
+				}
+			}
+			else{
+				buildings_array.push(BR_Project);
+			}
+		}
+
+	}
+
+
+	return buildings_array;
+};
+*/
+
+/*
+// An example.***
+var i = 0;
+
+function timedCount() {
+    i = i + 1;
+    postMessage(i);
+    setTimeout("timedCount()",500);
+}
+
+//timedCount();
+*/
+/*
+var n = 1;
+search: while (true) {
+  n += 1;
+  for (var i = 2; i <= Math.sqrt(n); i += 1)
+    if (n % i == 0)
+     continue search;
+  // found a prime!
+  postMessage(n);
+}
 */
