@@ -37,13 +37,14 @@ comment on column project.insert_date is '등록일';
 -- Data 기본정보
 create table data_info(
 	data_id						bigint,
-	project_id					int							not null,
+	project_id					int									not null,
 	data_key					varchar(128)						not null,
 	data_name					varchar(64),
 	parent						bigint								default 1,
-	depth						int							default 1,
-	view_order					int							default 1,
+	depth						int									default 1,
+	view_order					int									default 1,
 	child_yn					char(1)								default 'N',
+	mapping_type				varchar(30)							default 'origin',
 	location		 			GEOGRAPHY(POINT, 4326),
 	latitude					numeric(13,10),
 	longitude					numeric(13,10),
@@ -66,6 +67,11 @@ comment on column data_info.data_id is '고유번호';
 comment on column data_info.project_id is 'project 고유번호';
 comment on column data_info.data_key is 'data 고유 식별번호';
 comment on column data_info.data_name is 'data 이름';
+comment on column data_info.parent is '부모 data_id';
+comment on column data_info.depth is 'depth';
+comment on column data_info.view_order is '정렬 순서';
+comment on column data_info.child_yn is '자식 존재 유무';
+comment on column data_info.mapping_type is '기본값 origin : latitude, longitude, height를 origin에 맞춤. boundingboxcenter : latitude, longitude, height를 boundingboxcenter 맞춤';
 comment on column data_info.location is '위도, 경도 정보';
 comment on column data_info.latitude is '위도';
 comment on column data_info.longitude is '경도';

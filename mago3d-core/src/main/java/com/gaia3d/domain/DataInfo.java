@@ -86,6 +86,8 @@ public class DataInfo {
 	private Integer view_order;
 	// 자식 존재 유무, Y : 존재, N : 존재안함(기본)
 	private String child_yn;
+	// origin : latitude, longitude, height 를 origin에 맟춤. boundingboxcenter : latitude, longitude, height 를 boundingboxcenter에 맟춤.
+	private String mapping_type;
 	// 위도, 경도 정보 geometry 타입
 	private String location;
 	// 위도

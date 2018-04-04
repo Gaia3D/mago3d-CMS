@@ -184,4 +184,11 @@ public interface DataMapper {
 	 * @return
 	 */
 	int deleteDataObjects(Long data_id);
+	
+	/**
+	 * TODO 프로젝트에 속한 데이터들은 삭제해야 하나?
+	 * project 이름으로 등록된 최상위 data를 삭제
+	 * @return
+	 */
+	int deleteDataByProjectId(Long project_id);
 }

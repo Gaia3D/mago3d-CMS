@@ -44,6 +44,7 @@ create table data_info(
 	depth						int							default 1,
 	view_order					int							default 1,
 	child_yn					char(1)								default 'N',
+	mapping_type				varchar(30)							default 'origin',
 	location		 			GEOGRAPHY(POINT, 4326),
 	latitude					numeric(13,10),
 	longitude					numeric(13,10),
@@ -66,6 +67,11 @@ comment on column data_info.data_id is 'unique number';
 comment on column data_info.project_id is 'project unique number';
 comment on column data_info.data_key is 'data unique identification number';
 comment on column data_info.data_name is 'data name';
+comment on column data_info.parent is 'parent data_id';
+comment on column data_info.depth is 'depth';
+comment on column data_info.view_order is 'sort';
+comment on column data_info.child_yn is 'children';
+comment on column data_info.mapping_type is 'Defaults to origin: aligns latitude, longitude, and height to origin. boundingboxcenter: align latitude, longitude, height boundingboxcenter';
 comment on column data_info.location is 'latitude, longitude information';
 comment on column data_info.latitude is 'latitude';
 comment on column data_info.longitude is 'longitude';

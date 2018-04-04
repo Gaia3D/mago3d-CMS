@@ -49,8 +49,12 @@
 											<td class="col-data">${dataInfo.data_key }</td>
 									</tr>	
 									<tr>
-										<th class="col-label" scope="row"><spring:message code='name'/></th>
+										<th class="col-label" scope="row"><spring:message code='data.name'/></th>
 										<td class="col-data">${dataInfo.data_name }</td>
+									</tr>
+									<tr>
+										<th class="col-label" scope="row"><spring:message code='data.mapping.type'/></th>
+										<td class="col-data">${dataInfo.mapping_type }</td>
 									</tr>
 									<tr>
 										<th class="col-label" scope="row"><spring:message code='latitude'/></th>
@@ -94,7 +98,7 @@
 						<div class="button-group">
 							<div class="center-buttons">
 								<a href="/data/list-data.do?${listParameters}" class="button"><spring:message code='list'/></a>
-								<a href="/data/modify-data.do?data_id=${userInfo.user_id }&amp;${listParameters}" class="button"><spring:message code='modified'/></a>
+								<a href="/data/modify-data.do?data_id=${dataInfo.data_id }&amp;${listParameters}" class="button"><spring:message code='modified'/></a>
 							</div>
 						</div>
 					</div>

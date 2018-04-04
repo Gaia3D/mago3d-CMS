@@ -101,21 +101,21 @@
 	<select id="getListDataByProjectId" parameterType="dataInfo" resultType="dataInfo">
 		/* getListDataByProjectId */
 		WITH RECURSIVE project_data_info (
-			data_id, data_key, data_name, parent, depth, view_order, latitude, longitude, height, heading, pitch, roll, public_yn, child_yn, attributes, insert_date, path, cycle
+			data_id, data_key, data_name, parent, depth, view_order, mapping_type, latitude, longitude, height, heading, pitch, roll, public_yn, child_yn, attributes, insert_date, path, cycle
 		) AS (
-	        SELECT A.data_id, A.data_key, A.data_name, A.parent, A.depth, A.view_order,
+	        SELECT A.data_id, A.data_key, A.data_name, A.parent, A.depth, A.view_order, A.mapping_type,
 	        	A.latitude, A.longitude, A.height, A.heading, A.pitch, A.roll,
 	        	A.public_yn, A.child_yn, A.attributes, A.insert_date, ARRAY[A.view_order], false
 			FROM data_info A
 	        WHERE A.parent = 0 AND A.project_id = #{project_id}
 	        UNION ALL
-	        SELECT A.data_id, A.data_key, A.data_name, A.parent, A.depth, A.view_order,
+	        SELECT A.data_id, A.data_key, A.data_name, A.parent, A.depth, A.view_order, A.mapping_type,
 	        	A.latitude, A.longitude, A.height, A.heading, A.pitch, A.roll,  
 	        	A.public_yn, A.child_yn, A.attributes, A.insert_date, path || A.view_order, A.parent = ANY(path)
 	        FROM data_info A, project_data_info B
 	        WHERE A.parent = B.data_id AND not cycle
 		)
-	    SELECT data_id, data_key, data_name, parent, depth, view_order, latitude, longitude, height, heading, pitch, roll, public_yn, child_yn, attributes, insert_date, path
+	    SELECT data_id, data_key, data_name, parent, depth, view_order, mapping_type, latitude, longitude, height, heading, pitch, roll, public_yn, child_yn, attributes, insert_date, path
 	    FROM project_data_info
 	    ORDER BY path
 	</select>
@@ -218,12 +218,18 @@
 		INSERT INTO data_info(
 			data_id, project_id, data_key, data_name, parent, depth, view_order, 
 			location, latitude, longitude, height, heading, pitch, roll, description
+			<if test="mapping_type != null and mapping_type != ''">
+			, mapping_type
+			</if>
 			<if test="attributes != null and attributes != ''">
 			, attributes
 			</if>
 		) values(
 			#{data_id}, #{project_id}, #{data_key}, #{data_name}, #{parent}, #{depth}, #{view_order}, 
 			ST_GeographyFromText(#{location}), #{latitude}, #{longitude}, #{height}, #{heading}, #{pitch}, #{roll}, #{description}
+			<if test="mapping_type != null and mapping_type != ''">
+			, #{mapping_type}
+			</if>
 			<if test="attributes != null and attributes != ''">
 			, TO_JSON(#{attributes}::json)
 			</if>
@@ -269,6 +275,9 @@
 			</if>
 			<if test="data_name != null and data_name != ''">
 			data_name = #{data_name},
+			</if>
+			<if test="mapping_type != null and mapping_type != ''">
+			mapping_type = #{mapping_type},
 			</if>
 			<if test="location != null">
 			location = ST_GeographyFromText(#{location}),
@@ -332,5 +341,11 @@
 	<delete id="deleteDataObjects" parameterType="long">
 		/* deleteDataObjects */
 		DELETE FROM data_info_object_attribute WHERE data_id = #{data_id}
+	</delete>
+	
+	<!-- Data 에 속하는 모든 Object ID를 삭제 -->
+	<delete id="deleteDataByProjectId" parameterType="long">
+		/* deleteDataByProjectId */
+		DELETE FROM data_info WHERE project_id = #{project_id} AND parent = 0 AND depth = 1
 	</delete>
 </mapper>

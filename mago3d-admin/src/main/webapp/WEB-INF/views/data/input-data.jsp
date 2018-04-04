@@ -52,7 +52,7 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="parent"><spring:message code='data.project.name'/></form:label>
+											<form:label path="parent"><spring:message code='data.project.parent.node'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
@@ -76,12 +76,21 @@
 									</tr>
 									<tr>
 										<th class="col-label" scope="row">
-											<form:label path="data_name"><spring:message code='name'/></form:label>
+											<form:label path="data_name"><spring:message code='data.name'/></form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
 											<form:input path="data_name" class="l" />
 					  						<form:errors path="data_name" cssClass="error" />
+										</td>
+									</tr>
+									<tr>
+										<th class="col-label" scope="row">
+											<form:label path="mapping_type"><spring:message code='data.mapping.type'/></form:label>
+										</th>
+										<td class="col-input">
+											<form:input path="mapping_type" class="m" />
+					  						<form:errors path="mapping_type" cssClass="error" />
 										</td>
 									</tr>
 									<tr>

@@ -302,6 +302,7 @@ public class CacheConfig {
 		builder.append("\"parent\"").append(":").append(dataInfo.getParent()).append(",");
 		builder.append("\"depth\"").append(":").append(dataInfo.getDepth()).append(",");
 		builder.append("\"view_order\"").append(":").append(dataInfo.getView_order()).append(",");
+		if(dataInfo.getMapping_type() != null) builder.append("\"mapping_type\"").append(":").append("\"").append(dataInfo.getMapping_type()).append("\"").append(",");
 		if(dataInfo.getLatitude() != null) builder.append("\"latitude\"").append(":").append(dataInfo.getLatitude()).append(",");
 		if(dataInfo.getLongitude() != null) builder.append("\"longitude\"").append(":").append(dataInfo.getLongitude()).append(",");
 		if(dataInfo.getHeight() != null) builder.append("\"height\"").append(":").append(dataInfo.getHeight()).append(",");
