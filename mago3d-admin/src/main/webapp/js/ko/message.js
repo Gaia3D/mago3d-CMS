@@ -195,6 +195,7 @@ JS_MESSAGE["use.device.name.input"] = "사용 기기명을 입력해 주십시�
 JS_MESSAGE["input.ip"] = "IP 형식에 맞게 입력해 주십시오.";
 JS_MESSAGE["user.device.input.max.five"] = "사용자 디바이스 등록은 최대 5개 까지 가능합니다.";
 JS_MESSAGE["error.exist.in.processing"] = "처리 과정에서 오류가 발생하였습니다. 확인하여 주십시오.";
+JS_MESSAGE["user.group.role.invalid"] = "사용자 그룹 권한이 유효하지 않습니다.";
 
 //data
 JS_MESSAGE["data.group.select"] = "데이터 그룹을 선택해 주세요.";

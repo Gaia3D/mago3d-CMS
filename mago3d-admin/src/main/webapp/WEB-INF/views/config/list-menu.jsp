@@ -120,7 +120,7 @@
 											</tr>
 											<tr>
 												<th class="col-label" scope="row"><label for="url_alias">Url Alias</label></th>
-												<td class="col-input"><input type="text" id="urlAlias" name="url_alias" class="l" /></td>
+												<td class="col-input"><input type="text" id="url_alias" name="url_alias" class="l" /></td>
 											</tr>
 											<tr>
 												<th class="col-label" scope="row"><label for="image"><spring:message code='config.menu.image'/></label></th>

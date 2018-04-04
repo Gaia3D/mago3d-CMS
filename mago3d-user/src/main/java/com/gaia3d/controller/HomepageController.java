@@ -110,6 +110,7 @@ public class HomepageController {
 			}
 		}
 		
+		log.info("@@ lang = {}", lang);
 		if(Locale.KOREA.getLanguage().equals(lang) 
 				|| Locale.ENGLISH.getLanguage().equals(lang)
 				|| Locale.JAPAN.getLanguage().equals(lang)) {

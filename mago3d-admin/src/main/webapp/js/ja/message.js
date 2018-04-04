@@ -195,6 +195,7 @@ JS_MESSAGE["use.device.name.input"] = "使用機器名を入力してくださ�
 JS_MESSAGE["input.ip"] = "IP形式に合わせて入力してください。";
 JS_MESSAGE["user.device.input.max.five"]="ユーザーのデバイスの登録は最大5個まで可能です。";
 JS_MESSAGE["error.exist.in.processing"]="An error occurred during processing. Please check.";
+JS_MESSAGE["user.group.role.invalid"] = "ユーザーグループの権限が無効です。";
 
 //data
 JS_MESSAGE["data.group.select"] = "データのグループを選択してください。";

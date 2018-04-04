@@ -6,11 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gaia3d.controller.ProjectController;
+import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.Project;
 import com.gaia3d.persistence.DataMapper;
+import com.gaia3d.persistence.PolicyMapper;
 import com.gaia3d.persistence.ProjectMapper;
 import com.gaia3d.service.ProjectService;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Project
@@ -18,9 +24,12 @@ import com.gaia3d.service.ProjectService;
  * @author jeongdae
  *
  */
+@Slf4j
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
+	@Autowired
+	private PolicyMapper policyMapper;
 	@Autowired
 	private ProjectMapper projectMapper;
 	@Autowired
@@ -98,6 +107,28 @@ public class ProjectServiceImpl implements ProjectService {
 	 */
 	@Transactional
 	public int deleteProject(Long project_id) {
+		// 환경 설정에서 init project 에도 삭제해 줘야 함
+		Policy policy = CacheManager.getPolicy();
+		String geo_data_default_projects = policy.getGeo_data_default_projects();
+		
+		log.info("@@ geo_data_default_projects = {} ", geo_data_default_projects);
+		if(geo_data_default_projects != null && !"".equals(geo_data_default_projects)) {
+			String[] projectIds = geo_data_default_projects.split(",");
+			int count = projectIds.length;
+			String tempIds = "";
+			for(int i=0; i<count; i++) {
+				if(project_id.longValue() != Long.valueOf(projectIds[i]).longValue()) {
+					if("".equals(tempIds)) {
+						tempIds += projectIds[i];
+					} else {
+						tempIds += "," + projectIds[i];
+					}
+				}
+			}
+			policy.setGeo_data_default_projects(tempIds);
+			policyMapper.updatePolicyGeo(policy);
+		}
+		
 		return projectMapper.deleteProject(project_id);
 	}
 }

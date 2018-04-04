@@ -101,7 +101,9 @@
 											<td class="col-functions">
 												<span class="button-group">
 													<a href="/data/modify-project.do?project_id=${project.project_id}" class="image-button button-edit"><spring:message code='modified'/></a>
-													<a href="/data/delete-project.do?project_id=${project.project_id}" onclick="return deleteWarning();" class="image-button button-delete"><spring:message code='delete'/></a>
+													<a href="#" onclick="deleteProject('${project.project_id}'); return false;" class="image-button button-delete">
+														<spring:message code='delete'/>
+													</a>
 												</span>
 											</td>
 										</tr>
@@ -247,6 +249,41 @@
 			result =  result.substring(0, result.lastIndexOf(".") + 1) + dataId;
 		}
 		return result;
+	}
+	
+	// project 삭제
+	var deleteProjectFlag = true;
+	function deleteProject(project_id) {
+		if(confirm(JS_MESSAGE["delete.confirm"])) {
+			if(deleteProjectFlag) {
+				deleteProjectFlag = false;
+				var info = "project_id=" + project_id;
+				$.ajax({
+					url: "/data/ajax-delete-project.do",
+					type: "POST",
+					data: info,
+					cache: false,
+					async:false,
+					dataType: "json",
+					success: function(msg){
+						if(msg.result == "success") {
+							alert(JS_MESSAGE["delete"]);	
+							location.reload();
+						} else {
+							alert(JS_MESSAGE[msg.result]);
+						}
+						deleteProjectFlag = true;
+					},
+					error:function(request,status,error){
+				        alert(JS_MESSAGE["ajax.error.message"]);
+				        deleteProjectFlag = true;
+					}
+				});
+			} else {
+				alert(JS_MESSAGE["button.dobule.click"]);
+				return;
+			}
+		}
 	}
 </script>
 </body>

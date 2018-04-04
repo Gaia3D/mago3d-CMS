@@ -195,6 +195,7 @@ JS_MESSAGE["use.device.name.input"] = "Please enter your device name.";
 JS_MESSAGE["input.ip"] = "Please enter the IP format.";
 JS_MESSAGE["user.device.input.max.five"] = "You can register up to 5 user devices.";
 JS_MESSAGE["error.exist.in.processing"] = "An error occurred during processing. Please check.";
+JS_MESSAGE["user.group.role.invalid"] = "The user group permissions are invalid.";
 
 //data
 JS_MESSAGE["data.group.select"] = "Please select a data group.";

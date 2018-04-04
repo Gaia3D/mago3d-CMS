@@ -262,32 +262,78 @@ public class ProjectController {
 	/**
 	 * Project 삭제
 	 * @param request
-	 * @param project
+	 * @param project_id
+	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "delete-project.do")
-	public String deleteProject(HttpServletRequest request, @RequestParam("project_id")String project_id) {
-
-		log.info("@@ project_id = {} ", project_id);
-
-		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-		// 사용자 그룹 ROLE 확인
-		UserGroupRole userGroupRole = new UserGroupRole();
-		userGroupRole.setUser_id(userSession.getUser_id());
-		
-		// TODO get 방식으로 권한 오류를 넘겨준다.
-		if(!GroupRoleHelper.isUserGroupRoleValid(roleService.getListUserGroupRoleByUserId(userGroupRole), UserGroupRole.PROJECT_DELETE)) {
-			log.info("@@ 접근 권한이 없어 실행할 수 없습니다. RoleName = {}",  UserGroupRole.PROJECT_DELETE);
-			return "redirect:/data/list-project.do";
-		}
-
-		projectService.deleteProject(Long.valueOf(project_id));
+	@PostMapping(value = "ajax-delete-project.do")
+	@ResponseBody
+	public Map<String, Object> ajaxDeleteProject(HttpServletRequest request, Long project_id) {
+		log.info("@@@@@@@ project_id = {}", project_id);
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			if(project_id == null || project_id.longValue() <=0) {
+				map.put("result", "project.project_id.empty");
+				return map;
+			}
 			
-		CacheParams cacheParams = new CacheParams();
-		cacheParams.setCacheName(CacheName.PROJECT);
-		cacheParams.setCacheType(CacheType.BROADCAST);
-		cacheConfig.loadCache(cacheParams);
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			// 사용자 그룹 ROLE 확인
+			UserGroupRole userGroupRole = new UserGroupRole();
+			userGroupRole.setUser_id(userSession.getUser_id());
+			
+			// TODO get 방식으로 권한 오류를 넘겨준다.
+			if(!GroupRoleHelper.isUserGroupRoleValid(roleService.getListUserGroupRoleByUserId(userGroupRole), UserGroupRole.PROJECT_DELETE)) {
+				log.info("@@ 접근 권한이 없어 실행할 수 없습니다. RoleName = {}",  UserGroupRole.PROJECT_DELETE);
+				map.put("result", "user.group.role.invalid");
+				return map;
+			}
 	
-		return "redirect:/data/list-project.do";
+			projectService.deleteProject(project_id);
+				
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.PROJECT);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
+		} catch(Exception e) {
+			e.printStackTrace();
+			map.put("result", "db.exception");
+		}
+		
+		map.put("result", result	);
+		return map;
 	}
+	
+//	/**
+//	 * Project 삭제
+//	 * @param request
+//	 * @param project
+//	 * @return
+//	 */
+//	@GetMapping(value = "delete-project.do")
+//	public String deleteProject(HttpServletRequest request, @RequestParam("project_id")String project_id) {
+//
+//		log.info("@@ project_id = {} ", project_id);
+//
+//		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+//		// 사용자 그룹 ROLE 확인
+//		UserGroupRole userGroupRole = new UserGroupRole();
+//		userGroupRole.setUser_id(userSession.getUser_id());
+//		
+//		// TODO get 방식으로 권한 오류를 넘겨준다.
+//		if(!GroupRoleHelper.isUserGroupRoleValid(roleService.getListUserGroupRoleByUserId(userGroupRole), UserGroupRole.PROJECT_DELETE)) {
+//			log.info("@@ 접근 권한이 없어 실행할 수 없습니다. RoleName = {}",  UserGroupRole.PROJECT_DELETE);
+//			return "redirect:/data/list-project.do";
+//		}
+//
+//		projectService.deleteProject(Long.valueOf(project_id));
+//			
+//		CacheParams cacheParams = new CacheParams();
+//		cacheParams.setCacheName(CacheName.PROJECT);
+//		cacheParams.setCacheType(CacheType.BROADCAST);
+//		cacheConfig.loadCache(cacheParams);
+//	
+//		return "redirect:/data/list-project.do";
+//	}
 }

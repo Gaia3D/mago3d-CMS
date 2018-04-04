@@ -187,6 +187,10 @@ public class CacheConfig {
 		}
 		CacheManager.setProjectMap(projectMap);
 		
+		// init project 때문에 policy 도 갱신해야 함
+		Policy policy = policyService.getPolicy();
+		CacheManager.setPolicy(policy);
+		
 		CacheType cacheType = cacheParams.getCacheType();
 		if(cacheType == CacheType.BROADCAST) {
 			callRemoteCache(cacheParams);
