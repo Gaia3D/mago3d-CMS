@@ -27,7 +27,7 @@ create table policy(
 	password_exception_char				varchar(10)			default '<>&',
 	
 	geo_view_library					varchar(20)			default 'cesium',
-	geo_data_path						varchar(100)		default '/data',
+	geo_data_path						varchar(100)		default '/f4d',
 	geo_data_default_projects			varchar(30)[],
 	geo_data_change_request_decision	char(1)				default '1',
 	geo_cull_face_enable				varchar(5)			default 'false',
