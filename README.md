@@ -88,11 +88,11 @@ mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 
 - 데이터 링크
 	- F4D 파일을 서비스하기 위한 폴더를 지정합니다. <br>
-	  ex) data 폴더 하위에 프로젝트 별로 디렉토리를 생성하여 관리 → <code>  C:\data\프로젝트명    </code>
+	  ex) data 폴더 하위에 프로젝트 별로 디렉토리를 생성하여 관리 → <code>  C:\f4d\프로젝트명    </code>
 	- mago3d-user 데이터를 저장하기 위한 심볼릭 링크(symbolic link)를 걸어줍니다.
 	- 관리자 권한으로 Command Line Prompt(cmd.exe)를 실행
 	- mago3d-user\src\main\webapp 디렉토리로 이동
-	  <pre><code>C:\git\repository\mago3d\mago3d-user\src\main\webapp > mklink /d "C:\git\repository\mago3d\mago3d-user\src\main\webapp\data" "C:\data"</code></pre>
+	  <pre><code>C:\git\repository\mago3d\mago3d-user\src\main\webapp > mklink /d "C:\git\repository\mago3d\mago3d-user\src\main\webapp\f4d" "C:\f4d"</code></pre>
 
 
 ### 4. Execution
@@ -206,11 +206,11 @@ mago3DJS Integrate visualization data with open source JavaScript library for 3-
 
 - Data link
 	- F4D Specify the folder to serve the file. <br>
-	  ex) Create and manage a project-specific directory under the data folder → <code>C:\data\project name</code>
+	  ex) Create and manage a project-specific directory under the data folder → <code>C:\f4d\project name</code>
 	- mago3d-user Makes a symbolic link for storing data.
 	- Execute Command Line Prompt (cmd.exe) with administrative privileges
 	- Go to mago3d-user\src\main\webapp directory
-	  <pre><code>C:\git\repository\mago3d\mago3d-user\src\main\webapp > mklink /d "C:\git\repository\mago3d\mago3d-user\src\main\webapp\data" "C:\data"</code></pre>
+	  <pre><code>C:\git\repository\mago3d\mago3d-user\src\main\webapp > mklink /d "C:\git\repository\mago3d\mago3d-user\src\main\webapp\f4d" "C:\f4d"</code></pre>
 
 
 ### 4. Execution
@@ -323,11 +323,11 @@ mago3DJS 3次元マルチブロック可視化のためのオープンソース�
 
 - データリンク
 	- F4D ファイルをサービスするためのフォルダを指定します。 <br>
-	  ex）dataフォルダサブプロジェクトごとにディレクトリを作成して管理  → <code>C:\data\プロジェクト名</code>
+	  ex）dataフォルダサブプロジェクトごとにディレクトリを作成して管理  → <code>C:\f4d\プロジェクト名</code>
 	- mago3d-userデータを格納するためのシンボリックリンク（symbolic link）をかけます。
 	- 管理者権限でCommand Line Prompt(cmd.exe)を実行
 	- mago3d-user\src\main\webapp ディレクトリに移動
-	  <pre><code>C:\git\repository\mago3d\mago3d-user\src\main\webapp> mklink /d "C:\git\repository\mago3d\mago3d-user\src\main\webapp\data" "C:\data"</code></pre>
+	  <pre><code>C:\git\repository\mago3d\mago3d-user\src\main\webapp> mklink /d "C:\git\repository\mago3d\mago3d-user\src\main\webapp\f4d" "C:\f4d"</code></pre>
 
 
 ### 4. Execution
