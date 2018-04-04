@@ -12,7 +12,7 @@ create table issue (
 	
 	title						varchar(300)		not null,
 	priority					varchar(30),
-	due_date					timestamp without 	time zone,
+	due_date					timestamp with time zone,
 	issue_type					varchar(30),
 	status						varchar(30),
 	
@@ -70,7 +70,7 @@ create table issue_detail (
 	issue_detail_id				bigint,
 	issue_id					bigint 					not null,
 	contents					text					not null,
-	insert_date					timestamp without 		time zone			default now(),
+	insert_date					timestamp with time zone			default now(),
 	constraint issue_detail_pk 	primary key (issue_detail_id)	
 );
 
@@ -89,7 +89,7 @@ create table issue_file(
 	file_path					varchar(256)		not null,
 	file_size					varchar(12)			not null,
 	file_ext					varchar(10)			not null,
-	insert_date					timestamp without 	time zone			default now(),
+	insert_date					timestamp with time zone			default now(),
 	constraint issue_file_pk primary key (issue_file_id)	
 );
 

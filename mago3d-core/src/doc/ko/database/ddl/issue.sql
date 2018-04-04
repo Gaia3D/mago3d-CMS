@@ -4,7 +4,7 @@ drop table if exists issue_comment cascade;
 drop table if exists issue_file cascade;
 drop table if exists issue_people cascade;
 
--- ï¿½Ì½ï¿½
+-- ÀÌ½´
 create table issue (
 	issue_id					bigint,
 	project_id					int			not null,
@@ -12,7 +12,7 @@ create table issue (
 	
 	title						varchar(300)		not null,
 	priority					varchar(30),
-	due_date					timestamp without 	time zone,
+	due_date					timestamp with time zone,
 	issue_type					varchar(30),
 	status						varchar(30),
 	
@@ -37,50 +37,50 @@ create table issue (
 	constraint issue_pk primary key (issue_id)	
 );
 
-comment on table issue is 'ï¿½Ì½ï¿½';
-comment on column issue.issue_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column issue.project_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½Ìµï¿½';
-comment on column issue.user_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½';
-comment on column issue.title is 'ï¿½Ì½ï¿½ï¿½ï¿½';
-comment on column issue.priority is 'ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½. common_code ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
-comment on column issue.due_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
-comment on column issue.issue_type is 'ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½. common_code ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
-comment on column issue.status is 'ï¿½ï¿½ï¿½ï¿½. common_code ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
+comment on table issue is 'ÀÌ½´';
+comment on column issue.issue_id is '°íÀ¯¹øÈ£';
+comment on column issue.project_id is 'ÇÁ·ÎÁ§Æ® ¾ÆÀÌµð';
+comment on column issue.user_id is '»ç¿ëÀÚ ¾ÆÀÌµð';
+comment on column issue.title is 'ÀÌ½´¸í';
+comment on column issue.priority is '¿ì¼±¼øÀ§. common_code µ¿Àû »ý¼º';
+comment on column issue.due_date is '¿¹Á¤ÀÏ. ¸¶°¨ÀÏ';
+comment on column issue.issue_type is 'ÀÌ½´ À¯Çü. common_code µ¿Àû »ý¼º';
+comment on column issue.status is '»óÅÂ. common_code µ¿Àû »ý¼º';
 comment on column issue.data_key is 'Data key';
 comment on column issue.object_key is 'Object key';
-comment on column issue.location is 'location(ï¿½ï¿½ï¿½ï¿½, ï¿½æµµ)';
-comment on column issue.latitude is 'ï¿½ï¿½ï¿½ï¿½';
-comment on column issue.longitude is 'ï¿½æµµ';
-comment on column issue.height is 'ï¿½ï¿½ï¿½ï¿½';
-comment on column issue.client_ip is 'ï¿½ï¿½Ã» IP';
+comment on column issue.location is 'location(À§µµ, °æµµ)';
+comment on column issue.latitude is 'À§µµ';
+comment on column issue.longitude is '°æµµ';
+comment on column issue.height is '³ôÀÌ';
+comment on column issue.client_ip is '¿äÃ» IP';
 
-comment on column access_log.year is 'ï¿½ï¿½';
-comment on column access_log.month is 'ï¿½ï¿½';
-comment on column access_log.day is 'ï¿½ï¿½';
-comment on column access_log.year_week is 'ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
-comment on column access_log.week is 'ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
-comment on column access_log.hour is 'ï¿½Ã°ï¿½';
-comment on column access_log.minute is 'ï¿½ï¿½';
+comment on column access_log.year is '³â';
+comment on column access_log.month is '¿ù';
+comment on column access_log.day is 'ÀÏ';
+comment on column access_log.year_week is 'ÀÏ³âÁß ¸îÁÖ';
+comment on column access_log.week is 'ÀÌ¹ø´Þ ¸îÁÖ';
+comment on column access_log.hour is '½Ã°£';
+comment on column access_log.minute is 'ºÐ';
 
-comment on column issue.update_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
-comment on column issue.insert_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½';
+comment on column issue.update_date is '¼öÁ¤ÀÏ';
+comment on column issue.insert_date is 'µî·ÏÀÏ';
 
--- ï¿½Ì½ï¿½ ï¿½ï¿½
+-- ÀÌ½´ »ó¼¼
 create table issue_detail (
 	issue_detail_id				bigint,
 	issue_id					bigint 					not null,
 	contents					text					not null,
-	insert_date					timestamp without 		time zone			default now(),
+	insert_date					timestamp with time zone			default now(),
 	constraint issue_detail_pk 	primary key (issue_detail_id)	
 );
 
-comment on table issue_detail is 'ï¿½Ì½ï¿½ ï¿½ï¿½';
-comment on column issue_detail.issue_detail_id is 'ï¿½Ì½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column issue_detail.issue_id is 'ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column issue_detail.contents is 'ï¿½ï¿½ï¿½ï¿½';
-comment on column issue.insert_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½';
+comment on table issue_detail is 'ÀÌ½´ »ó¼¼';
+comment on column issue_detail.issue_detail_id is 'ÀÌ½´ »ó¼¼ °íÀ¯¹øÈ£';
+comment on column issue_detail.issue_id is 'ÀÌ½´ °íÀ¯¹øÈ£';
+comment on column issue_detail.contents is '³»¿ë';
+comment on column issue.insert_date is 'µî·ÏÀÏ';
 
--- ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½
+-- ÀÌ½´ ÆÄÀÏ
 create table issue_file(
 	issue_file_id				bigint,
 	issue_id					bigint 				not null,
@@ -89,21 +89,21 @@ create table issue_file(
 	file_path					varchar(256)		not null,
 	file_size					varchar(12)			not null,
 	file_ext					varchar(10)			not null,
-	insert_date					timestamp without 	time zone			default now(),
+	insert_date					timestamp with time zone			default now(),
 	constraint issue_file_pk primary key (issue_file_id)	
 );
 
-comment on table issue_file is 'ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
-comment on column issue_file.issue_file_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column issue_file.issue_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column issue_file.file_name is 'ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½';
-comment on column issue_file.file_real_name is 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½';
-comment on column issue_file.file_path is 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½';
-comment on column issue_file.file_size is 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
-comment on column issue_file.file_ext is 'ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½';
-comment on column issue_file.insert_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½';
+comment on table issue_file is 'ÀÌ½´ ÆÄÀÏ °ü¸®';
+comment on column issue_file.issue_file_id is '°íÀ¯¹øÈ£';
+comment on column issue_file.issue_id is '°íÀ¯¹øÈ£';
+comment on column issue_file.file_name is 'ÆÄÀÏ ÀÌ¸§';
+comment on column issue_file.file_real_name is 'ÆÄÀÏ ½ÇÁ¦ ÀÌ¸§';
+comment on column issue_file.file_path is 'ÆÄÀÏ °æ·Î';
+comment on column issue_file.file_size is 'ÆÄÀÏ »çÀÌÁî';
+comment on column issue_file.file_ext is 'ÆÄÀÏ È®ÀåÀÚ';
+comment on column issue_file.insert_date is 'µî·ÏÀÏ';
 
--- ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½(Comment)
+-- ÀÌ½´ ´ñ±Û(Comment)
 create table issue_comment (
 	issue_comment_id			bigint,
 	issue_id					bigint				not null,
@@ -114,15 +114,15 @@ create table issue_comment (
 	constraint issue_comment_pk primary key (issue_comment_id)	
 );
 
-comment on table issue_comment is 'ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½(Comment)';
-comment on column issue_comment.issue_comment_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column issue_comment.issue_id is 'ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column issue_comment.user_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½';
-comment on column issue_comment.comment is 'ï¿½ï¿½ï¿½(Comment)';
-comment on column issue_comment.client_ip is 'ï¿½ï¿½Ã» IP';
-comment on column issue_comment.insert_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½';
+comment on table issue_comment is 'ÀÌ½´ ´ñ±Û(Comment)';
+comment on column issue_comment.issue_comment_id is '°íÀ¯¹øÈ£';
+comment on column issue_comment.issue_id is 'ÀÌ½´ °íÀ¯¹øÈ£';
+comment on column issue_comment.user_id is '»ç¿ëÀÚ ¾ÆÀÌµð';
+comment on column issue_comment.comment is '´ñ±Û(Comment)';
+comment on column issue_comment.client_ip is '¿äÃ» IP';
+comment on column issue_comment.insert_date is 'µî·ÏÀÏ';
 
--- ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+-- ÀÌ½´ °ü°èÀÚ
 create table issue_people (
 	issue_people_id				bigint,
 	issue_id					bigint			not null,
@@ -132,9 +132,9 @@ create table issue_people (
 	constraint issue_people_pk primary key (issue_people_id)	
 );
 
-comment on table issue_people is 'ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
-comment on column issue_people.issue_people_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column issue_people.issue_id is 'ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column issue_people.role_type is 'ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. 1 : ï¿½ë¸®ï¿½ï¿½, 2 : ï¿½ï¿½ï¿½ï¿½ï¿½';
-comment on column issue_people.user_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½';
-comment on column issue_people.insert_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½';
+comment on table issue_people is 'ÀÌ½´ °ü°èÀÚ';
+comment on column issue_people.issue_people_id is '°íÀ¯¹øÈ£';
+comment on column issue_people.issue_id is 'ÀÌ½´ °íÀ¯¹øÈ£';
+comment on column issue_people.role_type is 'ÀÌ½´ °ü°èÀÚ À¯Çü. 1 : ´ë¸®ÀÚ, 2 : ´ã´çÀÚ';
+comment on column issue_people.user_id is '»ç¿ëÀÚ ¾ÆÀÌµð';
+comment on column issue_people.insert_date is 'µî·ÏÀÏ';

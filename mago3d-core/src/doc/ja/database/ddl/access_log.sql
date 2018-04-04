@@ -17,7 +17,7 @@ create table access_log(
 	week						varchar(2)			default to_char(now(), 'W'),
 	hour						varchar(2)			default to_char(now(), 'HH24'),
 	minute						varchar(2)			default to_char(now(), 'MI'),
-	insert_date				timestamp with time zone			default now(),
+	insert_date					timestamp with time zone			default now(),
 	constraint access_log_pk primary key (access_log_id)	
 );
 

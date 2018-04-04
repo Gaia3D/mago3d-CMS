@@ -1,11 +1,11 @@
--- FK, Index ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½Ð¸ï¿½. ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Û¾ï¿½ ï¿½ï¿½ï¿½ï¿½
+-- FK, Index ´Â º°µµ ÆÄÀÏ·Î ºÐ¸®. ¸Ç ¸¶Áö¸·¿¡ ÀÛ¾÷ ¿¹Á¤
 drop table if exists user_group cascade;
 drop table if exists user_group_role cascade;
 drop table if exists user_group_menu;
 drop table if exists user_info cascade;
 drop table if exists user_device cascade;
 
--- ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×·ï¿½
+-- »ç¿ëÀÚ ±×·ì
 create table user_group(
 	user_group_id				int,
 	group_key					varchar(60)							not null ,
@@ -22,21 +22,21 @@ create table user_group(
 	constraint user_group_pk 	primary key (user_group_id)	
 );
 
-comment on table user_group is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×·ï¿½';
-comment on column user_group.user_group_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column user_group.group_key is 'ï¿½ï¿½Å© È°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½Ã·ï¿½';
-comment on column user_group.group_name is 'ï¿½×·ï¿½ï¿½';
-comment on column user_group.ancestor is 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column user_group.parent is 'ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column user_group.depth is 'ï¿½ï¿½ï¿½ï¿½';
-comment on column user_group.view_order is 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
-comment on column user_group.child_yn is 'ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, Y : ï¿½ï¿½ï¿½ï¿½, N : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½âº»)';
-comment on column user_group.default_yn is 'ï¿½ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½, Y : ï¿½âº», N : ï¿½ï¿½ï¿½ï¿½';
-comment on column user_group.use_yn is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, Y : ï¿½ï¿½ï¿½, N : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
-comment on column user_group.description is 'ï¿½ï¿½ï¿½ï¿½';
-comment on column user_group.insert_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½';
+comment on table user_group is '»ç¿ëÀÚ ±×·ì';
+comment on column user_group.user_group_id is '°íÀ¯¹øÈ£';
+comment on column user_group.group_key is '¸µÅ© È°¿ë µîÀ» À§ÇÑ È®Àå ÄÃ·³';
+comment on column user_group.group_name is '±×·ì¸í';
+comment on column user_group.ancestor is 'Á¶»ó °íÀ¯¹øÈ£';
+comment on column user_group.parent is 'ºÎ¸ð °íÀ¯¹øÈ£';
+comment on column user_group.depth is '±íÀÌ';
+comment on column user_group.view_order is '³ª¿­ ¼ø¼­';
+comment on column user_group.child_yn is 'ÀÚ½Ä Á¸ÀçÀ¯¹«, Y : Á¸Àç, N : Á¸Àç¾ÈÇÔ(±âº»)';
+comment on column user_group.default_yn is '»èÁ¦ ºÒ°¡, Y : ±âº», N : ¼±ÅÃ';
+comment on column user_group.use_yn is '»ç¿ëÀ¯¹«, Y : »ç¿ë, N : »ç¿ë¾ÈÇÔ';
+comment on column user_group.description is '¼³¸í';
+comment on column user_group.insert_date is 'µî·ÏÀÏ';
 
--- ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×·ìº° Role
+-- »ç¿ëÀÚ ±×·ìº° Role
 create table user_group_role (
 	user_group_role_id				int,
 	user_group_id					int 								not null,
@@ -45,13 +45,13 @@ create table user_group_role (
 	constraint user_group_role_pk 	primary key (user_group_role_id)
 );
 
-comment on table user_group_role is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×·ìº° Role';
-comment on column user_group_role.user_group_role_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column user_group_role.user_group_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×·ï¿½ ï¿½ï¿½ï¿½ï¿½Å°';
-comment on column user_group_role.role_id is 'Role ï¿½ï¿½ï¿½ï¿½Å°';
-comment on column user_group_role.insert_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½';
+comment on table user_group_role is '»ç¿ëÀÚ ±×·ìº° Role';
+comment on column user_group_role.user_group_role_id is '°íÀ¯¹øÈ£';
+comment on column user_group_role.user_group_id is '»ç¿ëÀÚ ±×·ì °íÀ¯Å°';
+comment on column user_group_role.role_id is 'Role °íÀ¯Å°';
+comment on column user_group_role.insert_date is 'µî·ÏÀÏ';
 
--- ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×·ï¿½ ï¿½ï¿½ï¿½ï¿½
+-- »ç¿ëÀÚ ±×·ì ±ÇÇÑ
 create table user_group_menu(
 	user_group_menu_id				int,
 	user_group_id					int 							not null,
@@ -65,19 +65,19 @@ create table user_group_menu(
 	constraint user_group_menu_pk 	primary key (user_group_menu_id)
 );
 
-comment on table user_group_menu is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×·ï¿½ ï¿½Þ´ï¿½';
-comment on column user_group_menu.user_group_menu_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column user_group_menu.user_group_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×·ï¿½ ï¿½ï¿½ï¿½ï¿½Å°';
-comment on column user_group_menu.menu_id is 'ï¿½Þ´ï¿½ ï¿½ï¿½ï¿½ï¿½Å°';
-comment on column user_group_menu.all_yn is 'ï¿½Þ´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
-comment on column user_group_menu.read_yn is 'ï¿½Ð±ï¿½ ï¿½ï¿½ï¿½ï¿½';
-comment on column user_group_menu.write_yn is 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
-comment on column user_group_menu.update_yn is 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
-comment on column user_group_menu.delete_yn is 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
-comment on column user_group_menu.insert_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½';
+comment on table user_group_menu is '»ç¿ëÀÚ ±×·ì ¸Þ´º';
+comment on column user_group_menu.user_group_menu_id is '°íÀ¯¹øÈ£';
+comment on column user_group_menu.user_group_id is '»ç¿ëÀÚ ±×·ì °íÀ¯Å°';
+comment on column user_group_menu.menu_id is '¸Þ´º °íÀ¯Å°';
+comment on column user_group_menu.all_yn is '¸Þ´º Á¢±Ù ¸ðµç ±ÇÇÑ';
+comment on column user_group_menu.read_yn is 'ÀÐ±â ±ÇÇÑ';
+comment on column user_group_menu.write_yn is '¾²±â ±ÇÇÑ';
+comment on column user_group_menu.update_yn is '¼öÁ¤ ±ÇÇÑ';
+comment on column user_group_menu.delete_yn is '»èÁ¦ ±ÇÇÑ';
+comment on column user_group_menu.insert_date is 'µî·ÏÀÏ';
 
 
--- ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½âº»ï¿½ï¿½ï¿½ï¿½
+-- »ç¿ëÀÚ ±âº»Á¤º¸
 create table user_info(
 	user_id						varchar(32),
 	user_group_id				int								not null,
@@ -107,35 +107,35 @@ create table user_info(
 	constraint user_info_pk primary key(user_id)
 );
 
-comment on table user_info is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½âº»ï¿½ï¿½ï¿½ï¿½';
-comment on column user_info.user_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column user_info.user_group_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column user_info.user_name is 'ï¿½Ì¸ï¿½';
-comment on column user_info.password is 'ï¿½ï¿½Ð¹ï¿½È£';
+comment on table user_info is '»ç¿ëÀÚ ±âº»Á¤º¸';
+comment on column user_info.user_id is '°íÀ¯¹øÈ£';
+comment on column user_info.user_group_id is '»ç¿ëÀÚ ±×·ì °íÀ¯¹øÈ£';
+comment on column user_info.user_name is 'ÀÌ¸§';
+comment on column user_info.password is 'ºñ¹Ð¹øÈ£';
 comment on column user_info.salt is 'SALT';
-comment on column user_info.telephone is 'ï¿½ï¿½È­ï¿½ï¿½È£';
-comment on column user_info.mobile_phone is 'ï¿½Úµï¿½ï¿½ï¿½ ï¿½ï¿½È£';
-comment on column user_info.email is 'ï¿½Ì¸ï¿½ï¿½ï¿½';
-comment on column user_info.messanger is 'ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½';
-comment on column user_info.employee_id is 'ï¿½ï¿½ï¿½';
-comment on column user_info.postal_code is 'ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column user_info.address is 'ï¿½Ö¼ï¿½';
-comment on column user_info.address_etc is 'ï¿½ï¿½ï¿½Ö¼ï¿½';
-comment on column user_info.ci is 'ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ï¿½ CI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
-comment on column user_info.di is 'ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ï¿½ DI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
-comment on column user_info.user_role_check_yn is 'ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½Î½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Role ï¿½ï¿½ï¿½ï¿½ Ã¼Å© ï¿½Ð½ï¿½ ï¿½ï¿½ï¿½. ï¿½âº»ï¿½ï¿½ Y : Ã¼Å©';
-comment on column user_info.status is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. 0:ï¿½ï¿½ï¿½ï¿½ï¿½, 1:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½), 2:ï¿½ï¿½ï¿½(ï¿½ï¿½Ð¹ï¿½È£ ï¿½ï¿½ï¿½ï¿½È½ï¿½ï¿½ ï¿½Ê°ï¿½), 3:ï¿½Þ¸ï¿½(ï¿½Î±ï¿½ï¿½ï¿½ ï¿½â°£), 4:ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½â°£ ï¿½ï¿½ï¿½ï¿½), 5:ï¿½ï¿½ï¿½ï¿½(È­ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½, policy.user_delete_type=0), 6:ï¿½Ó½Ãºï¿½Ð¹ï¿½È£';
-comment on column user_info.user_insert_type is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½. ï¿½âº» : SELF';
-comment on column user_info.sso_use_yn is 'Single Sign-On ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½âº»ï¿½ï¿½ N : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
-comment on column user_info.login_count is 'ï¿½Î±ï¿½ï¿½ï¿½ È½ï¿½ï¿½';
-comment on column user_info.fail_login_count is 'ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È½ï¿½ï¿½';
-comment on column user_info.last_login_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥';
-comment on column user_info.last_password_change_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½Ð¹ï¿½È£ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥';
-comment on column user_info.update_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥';
-comment on column user_info.insert_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½';
+comment on column user_info.telephone is 'ÀüÈ­¹øÈ£';
+comment on column user_info.mobile_phone is 'ÇÚµåÆù ¹øÈ£';
+comment on column user_info.email is 'ÀÌ¸ÞÀÏ';
+comment on column user_info.messanger is '¸Þ½ÅÀú ¾ÆÀÌµð';
+comment on column user_info.employee_id is '»ç¹ø';
+comment on column user_info.postal_code is '¿ìÆí¹øÈ£';
+comment on column user_info.address is 'ÁÖ¼Ò';
+comment on column user_info.address_etc is '»ó¼¼ÁÖ¼Ò';
+comment on column user_info.ci is '½Ç¸í ÀÎÁõ CI °íÀ¯°ª';
+comment on column user_info.di is '½Ç¸í ÀÎÁõ DI µµ¸ÞÀÎ °íÀ¯°ª';
+comment on column user_info.user_role_check_yn is 'ÃÖÃÊ ·Î±×ÀÎ½Ã »ç¿ëÀÚ Role ±ÇÇÑ Ã¼Å© ÆÐ½º ±â´É. ±âº»°ª Y : Ã¼Å©';
+comment on column user_info.status is '»ç¿ëÀÚ »óÅÂ. 0:»ç¿ëÁß, 1:»ç¿ëÁßÁö(°ü¸®ÀÚ), 2:Àá±Ý(ºñ¹Ð¹øÈ£ ½ÇÆÐÈ½¼ö ÃÊ°ú), 3:ÈÞ¸é(·Î±×ÀÎ ±â°£), 4:¸¸·á(»ç¿ë±â°£ Á¾·á), 5:»èÁ¦(È­¸é ºñÇ¥½Ã, policy.user_delete_type=0), 6:ÀÓ½Ãºñ¹Ð¹øÈ£';
+comment on column user_info.user_insert_type is '»ç¿ëÀÚ µî·Ï ¹æ¹ý. ±âº» : SELF';
+comment on column user_info.sso_use_yn is 'Single Sign-On »ç¿ëÀ¯¹«. ±âº»°ª N : »ç¿ë¾ÈÇÔ';
+comment on column user_info.login_count is '·Î±×ÀÎ È½¼ö';
+comment on column user_info.fail_login_count is '·Î±×ÀÎ ½ÇÆÐ È½¼ö';
+comment on column user_info.last_login_date is '¸¶Áö¸· ·Î±×ÀÎ ³¯Â¥';
+comment on column user_info.last_password_change_date is '¸¶Áö¸· ·Î±×ÀÎ ºñ¹Ð¹øÈ£ º¯°æ ³¯Â¥';
+comment on column user_info.update_date is '°³ÀÎÁ¤º¸ ¼öÁ¤ ³¯Â¥';
+comment on column user_info.insert_date is 'µî·ÏÀÏ';
 
 
--- ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ì½ï¿½
+-- »ç¿ëÀÚ »ç¿ë µð¹ÙÀÌ½º
 create table user_device (
 	user_device_id				bigint,
 	user_id						varchar(32)	 						not null,
@@ -174,37 +174,37 @@ create table user_device (
 );
 
 
-comment on table user_device is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ì½ï¿½';
-comment on column user_device.user_device_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column user_device.user_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½';
-comment on column user_device.device_name1 is 'ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½1';
-comment on column user_device.device_type1 is 'ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½1. 0 : PC, 1 : ï¿½Úµï¿½ï¿½ï¿½';
+comment on table user_device is '»ç¿ëÀÚ »ç¿ë µð¹ÙÀÌ½º';
+comment on column user_device.user_device_id is '°íÀ¯¹øÈ£';
+comment on column user_device.user_id is '»ç¿ëÀÚ ¾ÆÀÌµð';
+comment on column user_device.device_name1 is '»ç¿ë ±â±â¸í1';
+comment on column user_device.device_type1 is '»ç¿ë ±â±â Å¸ÀÔ1. 0 : PC, 1 : ÇÚµåÆù';
 comment on column user_device.device_ip1 is 'IP1';
-comment on column user_device.device_priority1 is 'ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½1';
-comment on column user_device.use_yn1 is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1. Y : ï¿½ï¿½ï¿½, N : ï¿½Ì»ï¿½ï¿½';
-comment on column user_device.description1 is 'ï¿½ï¿½ï¿½ï¿½1';
-comment on column user_device.device_name2 is 'ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½2';
-comment on column user_device.device_type2 is 'ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½2. 0 : PC, 1 : ï¿½Úµï¿½ï¿½ï¿½';
+comment on column user_device.device_priority1 is '¿ì¼±¼øÀ§1';
+comment on column user_device.use_yn1 is '»ç¿ëÀ¯¹«1. Y : »ç¿ë, N : ¹Ì»ç¿ë';
+comment on column user_device.description1 is '¼³¸í1';
+comment on column user_device.device_name2 is '»ç¿ë ±â±â¸í2';
+comment on column user_device.device_type2 is '»ç¿ë ±â±â Å¸ÀÔ2. 0 : PC, 1 : ÇÚµåÆù';
 comment on column user_device.device_ip2 is 'IP2';
-comment on column user_device.device_priority2 is 'ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½2';
-comment on column user_device.use_yn2 is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2. Y : ï¿½ï¿½ï¿½, N : ï¿½Ì»ï¿½ï¿½';
-comment on column user_device.description2 is 'ï¿½ï¿½ï¿½ï¿½2';
-comment on column user_device.device_name3 is 'ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½3';
-comment on column user_device.device_type3 is 'ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½3. 0 : PC, 1 : ï¿½Úµï¿½ï¿½ï¿½';
+comment on column user_device.device_priority2 is '¿ì¼±¼øÀ§2';
+comment on column user_device.use_yn2 is '»ç¿ëÀ¯¹«2. Y : »ç¿ë, N : ¹Ì»ç¿ë';
+comment on column user_device.description2 is '¼³¸í2';
+comment on column user_device.device_name3 is '»ç¿ë ±â±â¸í3';
+comment on column user_device.device_type3 is '»ç¿ë ±â±â Å¸ÀÔ3. 0 : PC, 1 : ÇÚµåÆù';
 comment on column user_device.device_ip3 is 'IP3';
-comment on column user_device.device_priority3 is 'ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½3';
-comment on column user_device.use_yn3 is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½3. Y : ï¿½ï¿½ï¿½, N : ï¿½Ì»ï¿½ï¿½';
-comment on column user_device.description3 is 'ï¿½ï¿½ï¿½ï¿½3';
-comment on column user_device.device_name4 is 'ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½4';
-comment on column user_device.device_type4 is 'ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½4. 0 : PC, 1 : ï¿½Úµï¿½ï¿½ï¿½';
+comment on column user_device.device_priority3 is '¿ì¼±¼øÀ§3';
+comment on column user_device.use_yn3 is '»ç¿ëÀ¯¹«3. Y : »ç¿ë, N : ¹Ì»ç¿ë';
+comment on column user_device.description3 is '¼³¸í3';
+comment on column user_device.device_name4 is '»ç¿ë ±â±â¸í4';
+comment on column user_device.device_type4 is '»ç¿ë ±â±â Å¸ÀÔ4. 0 : PC, 1 : ÇÚµåÆù';
 comment on column user_device.device_ip4 is 'IP4';
-comment on column user_device.device_priority4 is 'ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½4';
-comment on column user_device.use_yn4 is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½4. Y : ï¿½ï¿½ï¿½, N : ï¿½Ì»ï¿½ï¿½';
-comment on column user_device.description4 is 'ï¿½ï¿½ï¿½ï¿½4';
-comment on column user_device.device_name5 is 'ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½5';
-comment on column user_device.device_type5 is 'ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½5. 0 : PC, 1 : ï¿½Úµï¿½ï¿½ï¿½';
+comment on column user_device.device_priority4 is '¿ì¼±¼øÀ§4';
+comment on column user_device.use_yn4 is '»ç¿ëÀ¯¹«4. Y : »ç¿ë, N : ¹Ì»ç¿ë';
+comment on column user_device.description4 is '¼³¸í4';
+comment on column user_device.device_name5 is '»ç¿ë ±â±â¸í5';
+comment on column user_device.device_type5 is '»ç¿ë ±â±â Å¸ÀÔ5. 0 : PC, 1 : ÇÚµåÆù';
 comment on column user_device.device_ip5 is 'IP5';
-comment on column user_device.device_priority5 is 'ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½5';
-comment on column user_device.use_yn5 is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½5. Y : ï¿½ï¿½ï¿½, N : ï¿½Ì»ï¿½ï¿½';
-comment on column user_device.description5 is 'ï¿½ï¿½ï¿½ï¿½5';
-comment on column user_device.insert_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½';
+comment on column user_device.device_priority5 is '¿ì¼±¼øÀ§5';
+comment on column user_device.use_yn5 is '»ç¿ëÀ¯¹«5. Y : »ç¿ë, N : ¹Ì»ç¿ë';
+comment on column user_device.description5 is '¼³¸í5';
+comment on column user_device.insert_date is 'µî·ÏÀÏ';

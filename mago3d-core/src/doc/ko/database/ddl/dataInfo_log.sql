@@ -21,7 +21,8 @@ create table data_info_log(
 	status							char(1)								default '0',
 	change_type						varchar(30),
 	description						varchar(256),
-	update_date						timestamp without time zwith time zonee						timestamp without time zwith time zone(),
+	update_date						timestamp with time zone,
+	insert_date						timestamp with time zone			default now(),
 	constraint data_info_log_pk 	primary key(data_info_log_id)
 );
 

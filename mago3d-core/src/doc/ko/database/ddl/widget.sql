@@ -1,6 +1,6 @@
 drop table if exists widget cascade;
 
--- ï¿½ï¿½ï¿½ï¿½
+-- À§Á¬
 create table widget(
 	widget_id			int,
 	name				varchar(100)			not null ,
@@ -11,9 +11,9 @@ create table widget(
 );
 
 
-comment on table widget is 'ï¿½ï¿½ï¿½ï¿½';
-comment on column widget.widget_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column widget.name is 'ï¿½Ì¸ï¿½';
-comment on column widget.view_order is 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
-comment on column widget.user_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½';
-comment on column widget.insert_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½';
+comment on table widget is 'À§Á¬';
+comment on column widget.widget_id is '°íÀ¯¹øÈ£';
+comment on column widget.name is 'ÀÌ¸§';
+comment on column widget.view_order is '³ª¿­ ¼ø¼­';
+comment on column widget.user_id is '»ç¿ëÀÚ ¾ÆÀÌµð';
+comment on column widget.insert_date is 'µî·ÏÀÏ';

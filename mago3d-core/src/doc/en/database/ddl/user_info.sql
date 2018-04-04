@@ -103,7 +103,7 @@ create table user_info(
 	last_login_date				timestamp with time zone,
 	last_password_change_date	timestamp with time zone			default now(),
 	update_date					timestamp with time zone,
-	insert_date				timestamp with time zone			default now(),
+	insert_date					timestamp with time zone			default now(),
 	constraint user_info_pk primary key(user_id)
 );
 
@@ -169,7 +169,7 @@ create table user_device (
 	device_priority5			int							default 5,
 	use_yn5						char(1)								default 'Y',
 	description5				varchar(256),
-	insert_date				timestamp with time zone			default now(),
+	insert_date					timestamp with time zone			default now(),
 	constraint user_device_pk primary key (user_device_id)
 );
 

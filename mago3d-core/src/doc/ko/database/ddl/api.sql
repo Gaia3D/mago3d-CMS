@@ -150,11 +150,11 @@ create table external_service (
 	extra_value1				varchar(50),
 	extra_value2				varchar(50),
 	extra_value3				varchar(50),
-	insert_date				timestamp without time zone			default now(),
+	insert_date				timestamp with time zone			default now(),
 	constraint external_service_pk primary key (external_service_id)	
 );
 
-comment on twith time zonevice is 'Private API';
+comment on table external_service is 'Private API';
 comment on column external_service.external_service_id is '고유키';
 comment on column external_service.service_code is '서비스 코드';
 comment on column external_service.service_name is '서비스명';

@@ -1,6 +1,6 @@
 drop table if exists menu cascade;
 
--- ï¿½Þ´ï¿½
+-- ¸Þ´º
 create table menu(
 	menu_id				int,
 	name				varchar(100)							not null,
@@ -23,21 +23,21 @@ create table menu(
 );
 
 
-comment on table menu is 'ï¿½Þ´ï¿½';
-comment on column menu.menu_id is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column menu.name is 'ï¿½Þ´ï¿½ï¿½ï¿½';
-comment on column menu.name_en is 'ï¿½ï¿½ï¿½ï¿½ ï¿½Þ´ï¿½ï¿½ï¿½';
-comment on column menu.lang is 'ï¿½ï¿½ï¿½';
-comment on column menu.parent is 'ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£';
-comment on column menu.depth is 'ï¿½ï¿½ï¿½ï¿½';
-comment on column menu.view_order is 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
+comment on table menu is '¸Þ´º';
+comment on column menu.menu_id is '°íÀ¯¹øÈ£';
+comment on column menu.name is '¸Þ´º¸í';
+comment on column menu.name_en is '¿µ¾î ¸Þ´º¸í';
+comment on column menu.lang is '¾ð¾î';
+comment on column menu.parent is 'ºÎ¸ð °íÀ¯¹øÈ£';
+comment on column menu.depth is '±íÀÌ';
+comment on column menu.view_order is '³ª¿­ ¼ø¼­';
 comment on column menu.url is 'URL';
 comment on column menu.url_alias is 'URL Alias';
-comment on column menu.image is 'ï¿½Ì¹ï¿½ï¿½ï¿½';
-comment on column menu.image_alt is 'ï¿½Ì¹ï¿½ï¿½ï¿½ Alt';
-comment on column menu.css_class is 'css classï¿½ï¿½';
-comment on column menu.default_yn is 'ï¿½âº» Ç¥ï¿½ï¿½ ï¿½Þ´ï¿½, Y : ï¿½âº», N : ï¿½ï¿½ï¿½ï¿½';
-comment on column menu.use_yn is 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, Y : ï¿½ï¿½ï¿½, N : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
-comment on column menu.display_yn is 'È­ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, Y : Ç¥ï¿½ï¿½, N : ï¿½ï¿½Ç¥ï¿½ï¿½';
-comment on column menu.description is 'ï¿½ï¿½ï¿½ï¿½';
-comment on column menu.insert_date is 'ï¿½ï¿½ï¿½ï¿½ï¿½';
+comment on column menu.image is 'ÀÌ¹ÌÁö';
+comment on column menu.image_alt is 'ÀÌ¹ÌÁö Alt';
+comment on column menu.css_class is 'css class¸í';
+comment on column menu.default_yn is '±âº» Ç¥½Ã ¸Þ´º, Y : ±âº», N : ¼±ÅÃ';
+comment on column menu.use_yn is '»ç¿ëÀ¯¹«, Y : »ç¿ë, N : »ç¿ë¾ÈÇÔ';
+comment on column menu.display_yn is 'È­¸éÇ¥½Ã ¿©ºÎ, Y : Ç¥½Ã, N : ºñÇ¥½Ã';
+comment on column menu.description is '¼³¸í';
+comment on column menu.insert_date is 'µî·ÏÀÏ';
