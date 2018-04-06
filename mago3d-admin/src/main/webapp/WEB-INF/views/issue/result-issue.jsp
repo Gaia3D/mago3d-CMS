@@ -79,8 +79,8 @@
 					 			<td>${issue.reporter}</td>
 							</tr>
 							<tr>
-								<th class="col-label" scope="row"><spring:message code='issue.comment'/></th>
-					 			<td>${issue.comment}</td>
+								<th class="col-label" scope="row"><spring:message code='issue.contents'/></th>
+					 			<td>${issue.contents}</td>
 							</tr>
 							
 						</table>

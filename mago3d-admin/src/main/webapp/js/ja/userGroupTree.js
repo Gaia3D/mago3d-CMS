@@ -380,7 +380,7 @@ function getAjaxUserGroupList() {
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
-				initUserGroup(msg.userGroupTree);
+				initUserGroup(JSON.parse(msg.userGroupTree));
 				fnObj.pageStart.delay(0.1);
 			} else {
 				alert(JS_MESSAGE[msg.result]);
@@ -426,7 +426,7 @@ function ajaxInsertUserGroup() {
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
-				userGroupTree.setTree(msg.userGroupTree);
+				userGroupTree.setTree(JSON.parse(msg.userGroupTree));
 				alert(JS_MESSAGE["insert"]);
 			} else {
 				alert(JS_MESSAGE[msg.result]);
@@ -451,7 +451,7 @@ function ajaxUpdateUserGroup() {
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
-				userGroupTree.setTree(msg.userGroupTree);
+				userGroupTree.setTree(JSON.parse(msg.userGroupTree));
 				alert(JS_MESSAGE["update"]);
 			} else {
 				alert(JS_MESSAGE[msg.result]);
@@ -478,7 +478,7 @@ function ajaxDeleteUserGroup() {
 			success: function(msg){
 				if(msg.result == "success") {
 					alert("削除されました。");
-					userGroupTree.setTree(msg.userGroupTree);
+					userGroupTree.setTree(JSON.parse(msg.userGroupTree));
 				} else if (msg.result == "usergroupserver.exists") {
 					alert("登録されたサーバーがあり、削除できません。");
 					return;
@@ -512,7 +512,7 @@ function ajaxUpdateMoveUserGroup() {
 				} else if(msg.result == "db.exception") {
 					alert("データベースに障害が発生しました。しばらくしてから再度ご利用ください。");
 				} else if(msg.result == "success") {
-					userGroupTree.setTree(msg.userGroupTree);
+					userGroupTree.setTree(JSON.parse(msg.userGroupTree));
 				}
 			},
 			error:function(request,status,error){

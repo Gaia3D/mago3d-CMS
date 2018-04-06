@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -85,10 +84,10 @@ public class RoleController {
 	 * @param userDevice
 	 * @return
 	 */
-	@PostMapping(value = "ajax-insert-role.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-insert-role.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertRole(HttpServletRequest request, Role role) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@@@@@ role = {}", role);
@@ -97,9 +96,9 @@ public class RoleController {
 			String errorcode = role.validate();
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				log.info("validate error 발생: {} " ,jSONObject.toString());
-				return jSONObject;
+				map.put("result", result);
+				log.info("validate error 발생: {} ", errorcode);
+				return map;
 			}			
 			roleService.insertRole(role);
 		} catch(Exception e) {
@@ -107,9 +106,9 @@ public class RoleController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -140,10 +139,10 @@ public class RoleController {
 	 * @param userDevice
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-role.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-role.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateRole(HttpServletRequest request, Role role) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@@@@@ role = {}", role);
@@ -152,9 +151,9 @@ public class RoleController {
 			String errorcode = role.validate();
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				log.info("validate error 발생: {} " ,jSONObject.toString());
-				return jSONObject;
+				map.put("result", result);
+				log.info("validate error 발생: {}", errorcode);
+				return map;
 			}			
 			roleService.updateRole(role);
 		} catch(Exception e) {
@@ -162,9 +161,9 @@ public class RoleController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -172,17 +171,17 @@ public class RoleController {
 	 * @param request
 	 * @return
 	 */
-	@PostMapping(value = "ajax-delete-role.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-delete-role.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDeleteRole(HttpServletRequest request, @RequestParam("role_id") String role_id) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@@@@@ role_id = {}", role_id);
 			if(role_id == null || "".equals(role_id)) {
-				jSONObject.put("result", "role.role_id.required");
-				log.info("validate error 발생: {} " ,jSONObject.toString());
-				return jSONObject;
+				map.put("result", "role.role_id.required");
+				log.info("validate error 발생: {}", "role.role_id.required");
+				return map;
 			}
 			roleService.deleteRole(Long.valueOf(role_id));
 		} catch(Exception e) {
@@ -190,9 +189,9 @@ public class RoleController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -243,10 +242,10 @@ public class RoleController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-user-group-role.do", produces = "application/json; charset=utf8")
+	@RequestMapping(value = "ajax-list-user-group-role.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListUserGroupRole(HttpServletRequest request, @RequestParam("user_group_id") Long user_group_id, @RequestParam(defaultValue="1") String pageNo) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		List<UserGroupRole> listUserGroupRole = new ArrayList<>();
 		Pagination pagination = null;
@@ -269,10 +268,10 @@ public class RoleController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-		jSONObject.put("result", result);
-		jSONObject.put("pagination", pagination);
-		jSONObject.put("listUserGroupRole", listUserGroupRole);
-		return jSONObject;
+		map.put("result", result);
+		map.put("pagination", pagination);
+		map.put("listUserGroupRole", listUserGroupRole);
+		return map;
 	}
 	
 	/**
@@ -280,10 +279,10 @@ public class RoleController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-account-group-role.do", produces = "application/json; charset=utf8")
+	@RequestMapping(value = "ajax-list-account-group-role.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListAccountGroupRole(HttpServletRequest request, @RequestParam("account_group_id") Long account_group_id) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		//List<UserGroupRole> listUserGroupRole = new ArrayList<>();
 		try {			
@@ -292,9 +291,9 @@ public class RoleController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-		jSONObject.put("result", result);
-		//jSONObject.put("listUserGroupRole", listUserGroupRole);
-		return jSONObject;
+		map.put("result", result);
+		//map.put("listUserGroupRole", listUserGroupRole);
+		return map;
 	}
 	
 	/**
@@ -302,10 +301,10 @@ public class RoleController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-except-user-group-role-for-update.do", produces = "application/json; charset=utf8")
+	@RequestMapping(value = "ajax-list-except-user-group-role-for-update.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListExceptUserGroupRoleForUpdate(HttpServletRequest request, UserGroupRole userGroupRole, @RequestParam(defaultValue="1") String pageNo) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		List<UserGroupRole> listExceptUserGroupRoleByGroupId = new ArrayList<>();
 		Pagination pagination = null;
@@ -325,10 +324,10 @@ public class RoleController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-		jSONObject.put("result", result);
-		jSONObject.put("pagination", pagination);
-		jSONObject.put("listExceptUserGroupRoleByGroupId", listExceptUserGroupRoleByGroupId);
-		return jSONObject;
+		map.put("result", result);
+		map.put("pagination", pagination);
+		map.put("listExceptUserGroupRoleByGroupId", listExceptUserGroupRoleByGroupId);
+		return map;
 	}
 	
 	/**
@@ -336,10 +335,10 @@ public class RoleController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-user-group-role-for-update.do", produces = "application/json; charset=utf8")
+	@RequestMapping(value = "ajax-list-user-group-role-for-update.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListUserGroupRoleForUpdate(HttpServletRequest request, UserGroupRole userGroupRole, @RequestParam(defaultValue="1") String pageNo) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		List<UserGroupRole> listUserGroupRole = new ArrayList<>();
 		Pagination pagination = null;
@@ -359,10 +358,10 @@ public class RoleController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-		jSONObject.put("result", result);
-		jSONObject.put("pagination", pagination);
-		jSONObject.put("listUserGroupRole", listUserGroupRole);
-		return jSONObject;
+		map.put("result", result);
+		map.put("pagination", pagination);
+		map.put("listUserGroupRole", listUserGroupRole);
+		return map;
 	}
 	
 	/**
@@ -373,14 +372,14 @@ public class RoleController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-insert-user-group-role.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-insert-user-group-role.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertUserGroupRole(HttpServletRequest request,
 			@RequestParam("user_group_id") Long user_group_id,
 			@RequestParam("role_all_id") Long[] role_all_id) {
 		
 		log.info("@@@ user_group_id = {}, role_all_id = {}", user_group_id, role_all_id);
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		List<UserGroupRole> listExceptUserGroupRoleByGroupId = new ArrayList<>();
 		List<UserGroupRole> listUserGroupRole = new ArrayList<>();
 		String result = "success";
@@ -388,8 +387,8 @@ public class RoleController {
 			if(user_group_id == null || user_group_id.longValue() == 0l ||				
 					role_all_id == null || role_all_id.length < 1) {
 				result = "input.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			UserGroupRole userGroupRole = new UserGroupRole();
@@ -403,13 +402,13 @@ public class RoleController {
 			listUserGroupRole = roleService.getListUserGroupRole(userGroupRole);
 		} catch(Exception e) {
 			e.printStackTrace();
-			jSONObject.put("result", "db.exception");
+			map.put("result", "db.exception");
 		}
 		
-		jSONObject.put("result", result);
-		jSONObject.put("listExceptUserGroupRoleByGroupId", listExceptUserGroupRoleByGroupId);
-		jSONObject.put("listUserGroupRole", listUserGroupRole);
-		return jSONObject;
+		map.put("result", result);
+		map.put("listExceptUserGroupRoleByGroupId", listExceptUserGroupRoleByGroupId);
+		map.put("listUserGroupRole", listUserGroupRole);
+		return map;
 	}
 	
 	/**
@@ -420,14 +419,14 @@ public class RoleController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-delete-user-group-role.do", produces = "application/json")
+	@PostMapping(value = "ajax-delete-user-group-role.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDeleteUserGroupRole(HttpServletRequest request,
 			@RequestParam("user_group_id") Long user_group_id,
 			@RequestParam("role_select_id") Long[] role_select_id) {
 		
 		log.info("@@@ user_group_id = {}, role_select_id = {}", user_group_id, role_select_id);
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		List<UserGroupRole> listExceptUserGroupRoleByGroupId = new ArrayList<>();
 		List<UserGroupRole> listUserGroupRole = new ArrayList<>();
 		String result = "success";
@@ -435,8 +434,8 @@ public class RoleController {
 			if(user_group_id == null || user_group_id.longValue() == 0l ||				
 					role_select_id == null || role_select_id.length < 1) {
 				result = "input.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			UserGroupRole userGroupRole = new UserGroupRole();
@@ -450,13 +449,13 @@ public class RoleController {
 			listUserGroupRole = roleService.getListUserGroupRole(userGroupRole);
 		} catch(Exception e) {
 			e.printStackTrace();
-			jSONObject.put("result", "db.exception");
+			map.put("result", "db.exception");
 		}
 		
-		jSONObject.put("result", result);
-		jSONObject.put("listExceptUserGroupRoleByGroupId", listExceptUserGroupRoleByGroupId);
-		jSONObject.put("listUserGroupRole", listUserGroupRole);
-		return jSONObject;
+		map.put("result", result);
+		map.put("listExceptUserGroupRoleByGroupId", listExceptUserGroupRoleByGroupId);
+		map.put("listUserGroupRole", listUserGroupRole);
+		return map;
 	}
 	
 	/**

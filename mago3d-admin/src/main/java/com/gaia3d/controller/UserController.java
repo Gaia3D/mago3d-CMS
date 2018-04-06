@@ -143,10 +143,10 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-user-group-user.do", produces = "application/json; charset=utf8")
+	@RequestMapping(value = "ajax-list-user-group-user.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListUserGroupUser(HttpServletRequest request, @RequestParam("user_group_id") Long user_group_id, @RequestParam(defaultValue="1") String pageNo) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		Pagination pagination = null;
 		List<UserInfo> userList = new ArrayList<>();
@@ -167,13 +167,13 @@ public class UserController {
 			result = "db.exception";
 		}
 		
-		jSONObject.put("result", result);
-		jSONObject.put("pagination", pagination);
-		jSONObject.put("userList", userList);
+		map.put("result", result);
+		map.put("pagination", pagination);
+		map.put("userList", userList);
 		
-		log.info(">>>>>>>>>>>>>>>>>> userlist = {}", jSONObject);
+		log.info(">>>>>>>>>>>>>>>>>> userlist = {}", map);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -181,10 +181,10 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-except-user-group-user-by-group-id.do", produces = "application/json; charset=utf8")
+	@RequestMapping(value = "ajax-list-except-user-group-user-by-group-id.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListExceptUserGroupUserByGroupId(HttpServletRequest request, UserInfo userInfo, @RequestParam(defaultValue="1") String pageNo) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		Pagination pagination = null;
 		List<UserInfo> userList = new ArrayList<>();
@@ -201,10 +201,10 @@ public class UserController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-		jSONObject.put("result", result);
-		jSONObject.put("pagination", pagination);
-		jSONObject.put("userList", userList);
-		return jSONObject;
+		map.put("result", result);
+		map.put("pagination", pagination);
+		map.put("userList", userList);
+		return map;
 	}
 	
 	/**
@@ -212,10 +212,10 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-list-user-group-user-by-group-id.do", produces = "application/json; charset=utf8")
+	@RequestMapping(value = "ajax-list-user-group-user-by-group-id.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListUserGroupUserByGroupId(HttpServletRequest request, UserInfo userInfo, @RequestParam(defaultValue="1") String pageNo) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		Pagination pagination = null;
 		List<UserInfo> userList = new ArrayList<>();
@@ -233,10 +233,10 @@ public class UserController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-		jSONObject.put("result", result);
-		jSONObject.put("pagination", pagination);
-		jSONObject.put("userList", userList);
-		return jSONObject;
+		map.put("result", result);
+		map.put("pagination", pagination);
+		map.put("userList", userList);
+		return map;
 	}
 	
 	/**
@@ -283,22 +283,22 @@ public class UserController {
 	@PostMapping(value = "ajax-insert-user-info.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertUserInfo(HttpServletRequest request, UserInfo userInfo) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			userInfo.setMethod_mode("insert");
 			String errorcode = userValidate(CacheManager.getPolicy(), userInfo);
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			int count = userService.getDuplicationIdCount(userInfo.getUser_id());
 			if(count > 0) {
 				result = "user.id.duplication";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			String salt = BCrypt.gensalt();
@@ -332,17 +332,17 @@ public class UserController {
 			
 			userInfo.setMobile_phone(userInfo.getViewMobilePhone());
 			userInfo.setEmail(userInfo.getViewEmail());
-			jSONObject.put("maskingMobilePhone", userInfo.getMaskingMobilePhone());
-			jSONObject.put("maskingEmail", userInfo.getMaskingEmail());
-			jSONObject.put("messanger", userInfo.getMessanger());
+			map.put("maskingMobilePhone", userInfo.getMaskingMobilePhone());
+			map.put("maskingEmail", userInfo.getMaskingEmail());
+			map.put("messanger", userInfo.getMessanger());
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -353,14 +353,14 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-insert-user-group-user.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-insert-user-group-user.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertUserGroupUser(HttpServletRequest request,
 			@RequestParam("user_group_id") Long user_group_id,
 			@RequestParam("user_all_id") String[] user_all_id) {
 		
 		log.info("@@@ user_group_id = {}, user_all_id = {}", user_group_id, user_all_id);
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		List<UserInfo> exceptUserList = new ArrayList<>();
 		List<UserInfo> userList = new ArrayList<>();
 		String result = "success";
@@ -368,8 +368,8 @@ public class UserController {
 			if(user_group_id == null || user_group_id.longValue() == 0l ||				
 					user_all_id == null || user_all_id.length < 1) {
 				result = "input.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			UserInfo userInfo = new UserInfo();
@@ -382,13 +382,13 @@ public class UserController {
 			exceptUserList = userService.getListExceptUserGroupUserByGroupId(userInfo);
 		} catch(Exception e) {
 			e.printStackTrace();
-			jSONObject.put("result", "db.exception");
+			map.put("result", "db.exception");
 		}
 		
-		jSONObject.put("result", result	);
-		jSONObject.put("exceptUserList", exceptUserList);
-		jSONObject.put("userList", userList);
-		return jSONObject;
+		map.put("result", result	);
+		map.put("exceptUserList", exceptUserList);
+		map.put("userList", userList);
+		return map;
 	}
 	
 	/**
@@ -435,17 +435,17 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-user-id-duplication-check.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-user-id-duplication-check.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUserIdDuplicationCheck(HttpServletRequest request, UserInfo userInfo) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String duplication_value = "";
 		try {
 			if(userInfo.getUser_id() == null || "".equals(userInfo.getUser_id())) {
 				result = "user.id.empty";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			int count = userService.getDuplicationIdCount(userInfo.getUser_id());
@@ -456,10 +456,10 @@ public class UserController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		jSONObject.put("duplication_value", duplication_value);
+		map.put("result", result);
+		map.put("duplication_value", duplication_value);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -563,10 +563,10 @@ public class UserController {
 	 * @param userInfo
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-user-info.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-user-info.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateUserInfo(HttpServletRequest request, UserInfo userInfo) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			Policy policy = CacheManager.getPolicy();
@@ -574,8 +574,8 @@ public class UserController {
 			String errorcode = userValidate(policy,userInfo);
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 						
 			UserInfo dbUserInfo = userService.getUser(userInfo.getUser_id());
@@ -590,8 +590,8 @@ public class UserController {
 				if("".equals(encryptPassword)) {
 					log.info("@@ password error!");
 					result = "user.password.exception";
-					jSONObject.put("result", result);
-					return jSONObject;
+					map.put("result", result);
+					return map;
 				}
 			}
 			
@@ -673,18 +673,18 @@ public class UserController {
 			
 			userInfo.setMobile_phone(userInfo.getViewMobilePhone());
 			userInfo.setEmail(userInfo.getViewEmail());
-			jSONObject.put("maskingMobilePhone", userInfo.getMaskingMobilePhone());
-			jSONObject.put("maskingEmail", userInfo.getMaskingEmail());
-			jSONObject.put("messanger", userInfo.getMessanger());
+			map.put("maskingMobilePhone", userInfo.getMaskingMobilePhone());
+			map.put("maskingEmail", userInfo.getMaskingEmail());
+			map.put("messanger", userInfo.getMessanger());
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -693,16 +693,16 @@ public class UserController {
 	 * @param userInfo
 	 * @return
 	 */
-	@PostMapping(value = "ajax-init-user-password.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-init-user-password.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInitUserPassword(	HttpServletRequest request, 
 										@RequestParam("check_ids") String check_ids) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			if(check_ids.length() <= 0) {
-				jSONObject.put("result", "check.value.required");
-				return jSONObject;
+				map.put("result", "check.value.required");
+				return map;
 			}
 			userService.updateUserPasswordInit(check_ids);
 		} catch(Exception e) {
@@ -710,9 +710,9 @@ public class UserController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -721,7 +721,7 @@ public class UserController {
 	 * @param userInfo
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-user-status.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-user-status.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateUserStatus(	HttpServletRequest request, 
 										@RequestParam("check_ids") String check_ids, 
@@ -729,13 +729,13 @@ public class UserController {
 										@RequestParam("status_value") String status_value) {
 		
 		log.info("@@@@@@@ check_ids = {}, business_type = {}, status_value = {}", check_ids, business_type, status_value);
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String result_message = "";
 		try {
 			if(check_ids.length() <= 0) {
-				jSONObject.put("result", "check.value.required");
-				return jSONObject;
+				map.put("result", "check.value.required");
+				return map;
 			}
 			List<String> userList = userService.updateUserStatus(business_type, status_value, check_ids);
 			if(!userList.isEmpty()) {
@@ -751,18 +751,18 @@ public class UserController {
 				}
 				
 				String[] userIds = check_ids.split(",");
-				jSONObject.put("update_count", userIds.length - userList.size());
-				jSONObject.put("business_type", business_type);
-				jSONObject.put("result_message", result_message);
+				map.put("update_count", userIds.length - userList.size());
+				map.put("business_type", business_type);
+				map.put("result_message", result_message);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -787,27 +787,27 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-delete-users.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-delete-users.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDeleteUsers(HttpServletRequest request, @RequestParam("check_ids") String check_ids) {
 		
 		log.info("@@@@@@@ check_ids = {}", check_ids);
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			if(check_ids.length() <= 0) {
-				jSONObject.put("result", "check.value.required");
-				return jSONObject;
+				map.put("result", "check.value.required");
+				return map;
 			}
 			
 			userService.deleteUserList(check_ids);
 		} catch(Exception e) {
 			e.printStackTrace();
-			jSONObject.put("result", "db.exception");
+			map.put("result", "db.exception");
 		}
 		
-		jSONObject.put("result", result	);
-		return jSONObject;
+		map.put("result", result	);
+		return map;
 	}
 	
 	/**
@@ -818,14 +818,14 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-delete-user-group-user.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-delete-user-group-user.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDeleteUserGroupUser(HttpServletRequest request,
 			@RequestParam("user_group_id") Long user_group_id,
 			@RequestParam("user_select_id") String[] user_select_id) {
 		
 		log.info("@@@ user_group_id = {}, user_select_id = {}", user_group_id, user_select_id);
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		List<UserInfo> exceptUserList = new ArrayList<>();
 		List<UserInfo> userList = new ArrayList<>();
 		String result = "success";
@@ -833,8 +833,8 @@ public class UserController {
 			if(user_group_id == null || user_group_id.longValue() == 0l ||				
 					user_select_id == null || user_select_id.length < 1) {
 				result = "input.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			UserInfo userInfo = new UserInfo();
@@ -850,13 +850,13 @@ public class UserController {
 			exceptUserList = userService.getListExceptUserGroupUserByGroupId(userInfo);
 		} catch(Exception e) {
 			e.printStackTrace();
-			jSONObject.put("result", "db.exception");
+			map.put("result", "db.exception");
 		}
 		
-		jSONObject.put("result", result	);
-		jSONObject.put("exceptUserList", exceptUserList);
-		jSONObject.put("userList", userList);
-		return jSONObject;
+		map.put("result", result	);
+		map.put("exceptUserList", exceptUserList);
+		map.put("userList", userList);
+		return map;
 	}
 	
 	/**
@@ -879,18 +879,18 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-insert-excel-user.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-insert-excel-user.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertExcelUser(MultipartHttpServletRequest request) {
 		
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			MultipartFile multipartFile = request.getFile("file_name");
 			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.USER_FILE_UPLOAD, propertiesConfig.getUserUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
-				jSONObject.put("result", fileInfo.getError_code());
-				return jSONObject;
+				map.put("result", fileInfo.getError_code());
+				return map;
 			}
 			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -898,11 +898,11 @@ public class UserController {
 			
 //			fileInfo = fileService.insertExcelUser(fileInfo);
 			
-			jSONObject.put("total_count", fileInfo.getTotal_count());
-			jSONObject.put("parse_success_count", fileInfo.getParse_success_count());
-			jSONObject.put("parse_error_count", fileInfo.getParse_error_count());
-			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
-			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
+			map.put("total_count", fileInfo.getTotal_count());
+			map.put("parse_success_count", fileInfo.getParse_success_count());
+			map.put("parse_error_count", fileInfo.getParse_error_count());
+			map.put("insert_success_count", fileInfo.getInsert_success_count());
+			map.put("insert_error_count", fileInfo.getInsert_error_count());
 			
 			// 파일 삭제
 			File copyFile = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());
@@ -914,9 +914,9 @@ public class UserController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -1171,11 +1171,11 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-user-group-info.do", produces = "application/json; charset=utf8")
+	@RequestMapping(value = "ajax-user-group-info.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUserGroupInfo(HttpServletRequest request, @RequestParam("user_group_id") Long user_group_id) {
 		log.info("@@@@@@@ user_group_id = {}", user_group_id);
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		UserGroup userGroup = null;
 		try {	
@@ -1185,10 +1185,10 @@ public class UserController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-		jSONObject.put("result", result);
-		jSONObject.put("userGroup", userGroup);
+		map.put("result", result);
+		map.put("userGroup", userGroup);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**

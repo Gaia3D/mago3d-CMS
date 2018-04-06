@@ -380,19 +380,16 @@ function getAjaxUserGroupList() {
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
-				initUserGroup(msg.userGroupTree);
+				initUserGroup(JSON.parse(msg.userGroupTree));
 				fnObj.pageStart.delay(0.1);
 			} else {
 				alert(JS_MESSAGE[msg.result]);
 			}
 		},
-//		error: function() {
-//			alert(JS_MESSAGE["ajax.error.message"]);
-//		}
 		error:function(request, status, error) {
-			alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			alert(JS_MESSAGE["ajax.error.message"]);
+			console.log("code : " + request.status + "\n" + " message : " + request.responseText + "\n" + " error : " +error);
 		}
-
 	});
 }
 
@@ -426,7 +423,7 @@ function ajaxInsertUserGroup() {
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
-				userGroupTree.setTree(msg.userGroupTree);
+				userGroupTree.setTree(JSON.parse(msg.userGroupTree));
 				alert(JS_MESSAGE["insert"]);
 			} else {
 				alert(JS_MESSAGE[msg.result]);
@@ -451,7 +448,7 @@ function ajaxUpdateUserGroup() {
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
-				userGroupTree.setTree(msg.userGroupTree);
+				userGroupTree.setTree(JSON.parse(msg.userGroupTree));
 				alert(JS_MESSAGE["update"]);
 			} else {
 				alert(JS_MESSAGE[msg.result]);
@@ -478,7 +475,7 @@ function ajaxDeleteUserGroup() {
 			success: function(msg){
 				if(msg.result == "success") {
 					alert("삭제되었습니다.");
-					userGroupTree.setTree(msg.userGroupTree);
+					userGroupTree.setTree(JSON.parse(msg.userGroupTree));
 				} else if (msg.result == "usergroupserver.exists") {
 					alert("등록된 서버가 있어 삭제할 수 없습니다.");
 					return;
@@ -512,7 +509,7 @@ function ajaxUpdateMoveUserGroup() {
 				} else if(msg.result == "db.exception") {
 					alert("데이터 베이스 장애가 발생하였습니다. 잠시 후 다시 이용하여 주시기 바랍니다.");
 				} else if(msg.result == "success") {
-					userGroupTree.setTree(msg.userGroupTree);
+					userGroupTree.setTree(JSON.parse(msg.userGroupTree));
 				}
 			},
 			error:function(request,status,error){

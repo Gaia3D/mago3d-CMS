@@ -69,19 +69,19 @@ public class CommonCodeController {
 	 * @param commonCode
 	 * @return
 	 */
-	@PostMapping(value = "ajax-insert-code.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-insert-code.do")
 	@ResponseBody
 	public Map<String, String> ajaxInsertCode(HttpServletRequest request, CommonCode commonCode) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@@@@@ commonCode = {}", commonCode);
 			String errorcode = commonCode.validate();
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				log.info("validate error 발생: {} " ,jSONObject.toString());
-				return jSONObject;
+				map.put("result", result);
+				log.info("validate error 발생: {} ", errorcode);
+				return map;
 			}			
 			commonCodeService.insertCommonCode(commonCode);
 		} catch(Exception e) {
@@ -89,9 +89,9 @@ public class CommonCodeController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -115,20 +115,20 @@ public class CommonCodeController {
 	 * @param commonCode
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-code.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-code.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdateCode(HttpServletRequest request, CommonCode commonCode) {
 		
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@@@@@ commonCode = {}", commonCode);
 			String errorcode = commonCode.validate();
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				log.info("validate error 발생: {} " ,jSONObject.toString());
-				return jSONObject;
+				map.put("result", result);
+				log.info("validate error 발생: {}", errorcode);
+				return map;
 			}
 			commonCodeService.updateCommonCode(commonCode);
 			
@@ -138,9 +138,9 @@ public class CommonCodeController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -149,18 +149,18 @@ public class CommonCodeController {
 	 * @param commonCode
 	 * @return
 	 */
-	@PostMapping(value = "ajax-delete-code.do", produces ="application/json; charset=utf8")
+	@PostMapping(value = "ajax-delete-code.do")
 	@ResponseBody
 	public Map<String, String> ajaxDeleteCode(HttpServletRequest request, CommonCode commonCode) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@@@@@ code_key = {}, view_order = {}", commonCode.getCode_key(), commonCode.getView_order());
 			if(commonCode.getCode_key() == null || "".equals(commonCode.getCode_key())
 					|| commonCode.getView_order() == null || commonCode.getView_order().intValue() <= 0) {
-				jSONObject.put("result", "common_code.code_key.required");
-				log.info("validate error 발생: {} " ,jSONObject.toString());
-				return jSONObject;
+				map.put("result", "common_code.code_key.required");
+				log.info("validate error 발생: {} ", "common_code.code_key.required");
+				return map;
 			}
 			commonCodeService.deleteCommonCode(commonCode.getCode_key());
 		} catch(Exception e) {
@@ -168,9 +168,9 @@ public class CommonCodeController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**

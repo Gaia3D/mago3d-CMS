@@ -104,10 +104,10 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-user.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-policy-user.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyUser(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -124,8 +124,8 @@ public class PolicyController {
 //					|| policy.getUser_device_modify_yn() == null || "".equals(policy.getUser_device_modify_yn())
 					) {
 				result = "policy.user.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			policyService.updatePolicyUser(policy);
@@ -139,8 +139,8 @@ public class PolicyController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 
 	/**
@@ -149,10 +149,10 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-password.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-policy-password.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyPassword(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -167,15 +167,15 @@ public class PolicyController {
 //					|| policy.getPassword_create_char() == null || "".equals(policy.getPassword_create_char())
 					) {
 				result = "policy.password.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			if( policy.getPassword_eng_upper_count().intValue() == 0 && policy.getPassword_eng_lower_count().intValue() == 0 
 					&& policy.getPassword_number_count().intValue() == 0 && policy.getPassword_special_char_count().intValue() == 0 ) {
 				result = "policy.password.role.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			policyService.updatePolicyPassword(policy);
@@ -189,8 +189,8 @@ public class PolicyController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 
 	/**
@@ -199,17 +199,17 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-geo.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-policy-geo.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyGeo(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
 			if(policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0) {
 				result = "policy.geo.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			policyService.updatePolicyGeo(policy);
@@ -223,8 +223,8 @@ public class PolicyController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -233,17 +233,17 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-geoserver.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-policy-geoserver.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyGeoServer(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
 			if(policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0) {
 				result = "policy.geo.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			policyService.updatePolicyGeoServer(policy);
@@ -257,8 +257,8 @@ public class PolicyController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -267,17 +267,17 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-geocallback.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-policy-geocallback.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyGeoCallBack(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
 			if(policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0) {
 				result = "policy.geo.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			policyService.updatePolicyGeoCallBack(policy);
@@ -291,8 +291,8 @@ public class PolicyController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -301,10 +301,10 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-notice.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-policy-notice.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyNotice(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -320,8 +320,8 @@ public class PolicyController {
 					|| policy.getNotice_risk_grade() == null || "".equals(policy.getNotice_risk_grade())
 					) {
 				result = "policy.notice.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			policyService.updatePolicyNotice(policy);
@@ -335,8 +335,8 @@ public class PolicyController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -345,10 +345,10 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-security.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-policy-security.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicySecurity(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -362,8 +362,8 @@ public class PolicyController {
 					|| policy.getSecurity_dynamic_block_yn() == null || "".equals(policy.getSecurity_dynamic_block_yn())
 					) {
 				result = "policy.security.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			policyService.updatePolicySecurity(policy);
@@ -377,8 +377,8 @@ public class PolicyController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -387,10 +387,10 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-content.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-policy-content.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyContent(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -399,8 +399,8 @@ public class PolicyController {
 					|| ( policy.getContent_main_widget_count() == null || policy.getContent_main_widget_count().intValue() < 0 )
 					|| ( policy.getContent_main_widget_interval() == null || policy.getContent_main_widget_interval().intValue() < 5 )) {
 				result = "policy.content.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			policyService.updatePolicyContent(policy);
@@ -430,8 +430,8 @@ public class PolicyController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -440,22 +440,22 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-site.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-policy-site.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicySite(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 //			log.info("@@ policy = {} ", policy);
 //			if( ( policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0 )) {
 //				result = "policy.site.invalid";
-//				jSONObject.put("result", result);
+//				map.put("result", result);
 //				return jSONObject.toString();
 //			}
 //			
 //			if(policy.getServer_ip() == null || "".equals(policy.getServer_ip()) || !WebUtil.isIP(policy.getServer_ip())) {
 //				result = "policy.os.server_ip.invalid";
-//				jSONObject.put("result", result);
+//				map.put("result", result);
 //				return jSONObject.toString();
 //			}
 //			
@@ -475,8 +475,8 @@ public class PolicyController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -485,10 +485,10 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-os.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-policy-os.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyOs(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		String timeType = "";
 		String timeValue = "";
@@ -496,8 +496,8 @@ public class PolicyController {
 //			log.info("@@ policy = {} ", policy);
 //			if( ( policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0 ) ) {
 //				result = "policy.os.invalid";
-//				jSONObject.put("result", result);
-//				return jSONObject.toString();
+//				map.put("result", result);
+//				return map;
 //			}
 //			// -i : 수동설정 / -t : ntp server
 //			if ("".equals(policy.getOs_ntp())) {
@@ -538,8 +538,8 @@ public class PolicyController {
 		}
 		
 		log.info("@@ result = {} ", result);
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -548,17 +548,17 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-backoffice.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-policy-backoffice.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicyBackoffice(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
 			if( ( policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0 )) {
 				result = "policy.backoffice.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			policy.setBackoffice_email_password(Crypt.encrypt(policy.getBackoffice_email_password()));
@@ -576,8 +576,8 @@ public class PolicyController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -586,10 +586,10 @@ public class PolicyController {
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-policy-solution.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-policy-solution.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdatePolicySolution(HttpServletRequest request, Policy policy) {
-		Map<String, String> jSONObject = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ policy = {} ", policy);
@@ -598,8 +598,8 @@ public class PolicyController {
 					|| policy.getSolution_version() == null || "".equals(policy.getSolution_version())
 					|| policy.getSolution_manager() == null || "".equals(policy.getSolution_manager())) {
 				result = "policy.solution.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			policy.setSolution_company_phone(Crypt.encrypt(policy.getSolution_company_phone()));
@@ -617,37 +617,7 @@ public class PolicyController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
-     
-//	@RequestMapping(value = "change-logo.do", method = RequestMethod.POST)
-//	public String changeLogo(HttpServletRequest request, Policy policy, @RequestParam("uploadfile_top_value") String uploadfile_top_value, @RequestParam("uploadfile_bottom_value") String uploadfile_bottom_value) {
-//
-//		HttpSession session  = request.getSession();
-//		String root = session.getServletContext().getRealPath("/");
-//		String fileName = "";
-//		MultipartFile uploadfile_top = policy.getUploadfile_top();
-//		MultipartFile uploadfile_bottom = policy.getUploadfile_bottom();
-//		
-//		if (uploadfile_top_value.equals("logo")) {
-//			fileName = LOGO_TOP;
-//			try {
-//				File file = new File(root + fileName);
-//				uploadfile_top.transferTo(file);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		if (uploadfile_bottom_value.equals("logo")) {
-//			fileName = LOGO_BOTTOM;
-//			try {
-//				File file = new File(root + fileName);
-//				uploadfile_bottom.transferTo(file);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		return "redirect:/config/modify-policy.do";
-//	}
 }

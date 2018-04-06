@@ -298,10 +298,10 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "ajax-user-widget.do", produces = "application/json; charset=utf8")
+	@GetMapping(value = "ajax-user-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUserWidget(HttpServletRequest request) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			// 사용자 현황
@@ -319,21 +319,21 @@ public class MainController {
 			userInfo.setStatus(UserInfo.STATUS_TEMP_PASSWORD);
 			Long tempPasswordUserTotalCount = userService.getUserTotalCount(userInfo);
 			
-			jSONObject.put("activeUserTotalCount", activeUserTotalCount);
-			jSONObject.put("fobidUserTotalCount", fobidUserTotalCount);
-			jSONObject.put("failUserTotalCount", String.valueOf(failUserTotalCount));
-			jSONObject.put("sleepUserTotalCount", sleepUserTotalCount);
-			jSONObject.put("expireUserTotalCount", expireUserTotalCount);
-			jSONObject.put("tempPasswordUserTotalCount", tempPasswordUserTotalCount);
+			map.put("activeUserTotalCount", activeUserTotalCount);
+			map.put("fobidUserTotalCount", fobidUserTotalCount);
+			map.put("failUserTotalCount", String.valueOf(failUserTotalCount));
+			map.put("sleepUserTotalCount", sleepUserTotalCount);
+			map.put("expireUserTotalCount", expireUserTotalCount);
+			map.put("tempPasswordUserTotalCount", tempPasswordUserTotalCount);
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -341,11 +341,11 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "ajax-schedule-log-list-widget.do", produces = "application/json; charset=utf8")
+	@GetMapping(value = "ajax-schedule-log-list-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxScheduleLogListWidget(HttpServletRequest request) {
 		
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
@@ -369,9 +369,9 @@ public class MainController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**

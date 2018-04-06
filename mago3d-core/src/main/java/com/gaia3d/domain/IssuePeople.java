@@ -15,8 +15,8 @@ import lombok.ToString;
 public class IssuePeople {
 	
 	// TODO enum 으로 바꿔야 할거 같은데.... ㅠ.ㅠ
-	public static final String ASSIGNEE = "0";
-	public static final String REPORTER = "1";
+	public static final String ASSIGNEE = "1";
+	public static final String REPORTER = "2";
 	
 	// 고유번호
 	private Long issue_people_id;

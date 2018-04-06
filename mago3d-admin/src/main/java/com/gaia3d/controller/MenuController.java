@@ -51,11 +51,10 @@ public class MenuController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-list-menu.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-list-menu.do")
 	@ResponseBody
-	public String ajaxListMenu(HttpServletRequest request) {
-//		Gson gson = new Gson();
-//		Map<String, String> jSONObject = new HashMap<>();
+	public Map<String, Object> ajaxListMenu(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
 		List<Menu> menuList = new ArrayList<>();
@@ -69,11 +68,9 @@ public class MenuController {
 			result = "db.exception";
 		}
 	
-//		jSONObject.put("result", result);
-//		jSONObject.put("menuTree", menuTree);
-		
-		String jsonResult = "{\"result\": \"" + result + "\",\"menuTree\":" + menuTree + "}";
-		return jsonResult;
+		map.put("result", result);
+		map.put("menuTree", menuTree);
+		return map;
 	}
 	
 	/**
@@ -81,10 +78,10 @@ public class MenuController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-insert-menu.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-insert-menu.do")
 	@ResponseBody
-	public Map<String, String> ajaxInsertMenu(HttpServletRequest request, Menu menu) {
-		Map<String, String> jSONObject = new HashMap<>();
+	public Map<String, Object> ajaxInsertMenu(HttpServletRequest request, Menu menu) {
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
 		List<Menu> menuList = new ArrayList<>();
@@ -103,10 +100,10 @@ public class MenuController {
 				menuList.addAll(menuService.getListMenu(null));
 				
 				result = "policy.menu.invalid";
-				jSONObject.put("result", result);
-				jSONObject.put("menuTree", getMenuTree(menuList));
-				
-				return jSONObject;
+				menuTree = getMenuTree(menuList);
+				map.put("result", result);
+				map.put("menuTree", menuTree);
+				return map;
 			}
 			
 			menu.setParent(Long.parseLong(parent));
@@ -124,6 +121,8 @@ public class MenuController {
 			if("\"null\"".equals(menu.getImage_alt()) || "null".equals(menu.getImage_alt())) menu.setImage_alt("");
 			if("\"null\"".equals(menu.getCss_class()) || "null".equals(menu.getCss_class())) menu.setCss_class("");
 			if("\"null\"".equals(menu.getDescription()) || "null".equals(menu.getDescription())) menu.setDescription("");
+			if("\"null\"".equals(menu.getDisplay_yn()) || "null".equals(menu.getDisplay_yn())) menu.setDisplay_yn("");
+			if("\"null\"".equals(menu.getUrl_alias()) || "null".equals(menu.getUrl_alias())) menu.setUrl_alias("");
 			
 			menuService.insertMenu(menu);
 			menuList.addAll(menuService.getListMenu(null));
@@ -135,10 +134,9 @@ public class MenuController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		jSONObject.put("menuTree", menuTree);
-		
-		return jSONObject;
+		map.put("result", result);
+		map.put("menuTree", menuTree);
+		return map;
 	}
 	
 	/**
@@ -146,10 +144,10 @@ public class MenuController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-menu.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-menu.do")
 	@ResponseBody
-	public Map<String, String> ajaxUpdateMenu(HttpServletRequest request, Menu menu) {
-		Map<String, String> jSONObject = new HashMap<>();
+	public Map<String, Object> ajaxUpdateMenu(HttpServletRequest request, Menu menu) {
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
 		List<Menu> menuList = new ArrayList<>();
@@ -163,12 +161,11 @@ public class MenuController {
 					|| menu.getUse_yn() == null || "".equals(menu.getUse_yn())) {
 				
 				menuList.addAll(menuService.getListMenu(null));
-				
 				result = "policy.menu.invalid";
-				jSONObject.put("result", result);
-				jSONObject.put("menuTree", getMenuTree(menuList));
-				
-				return jSONObject;
+				menuTree = getMenuTree(menuList);
+				map.put("result", result);
+				map.put("menuTree", menuTree);
+				return map;
 			}
 			
 			// TODO null 이라는 문자가 들어가면 트리가 표시되지 않음. 나중에 잡자.
@@ -190,10 +187,9 @@ public class MenuController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		jSONObject.put("menuTree", menuTree);
-		
-		return jSONObject;
+		map.put("result", result);
+		map.put("menuTree", menuTree);
+		return map;
 	}
 	
 	/**
@@ -201,10 +197,10 @@ public class MenuController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-move-menu.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-move-menu.do")
 	@ResponseBody
-	public Map<String, String> ajaxUpdateMoveMenu(HttpServletRequest request, Menu menu) {
-		Map<String, String> jSONObject = new HashMap<>();
+	public Map<String, Object> ajaxUpdateMoveMenu(HttpServletRequest request, Menu menu) {
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
 		List<Menu> menuList = new ArrayList<>();
@@ -216,12 +212,11 @@ public class MenuController {
 					|| menu.getUpdate_type() == null || "".equals(menu.getUpdate_type())) {
 				
 				menuList.addAll(menuService.getListMenu(null));
-				
 				result = "menu.invalid";
-				jSONObject.put("result", result);
-				jSONObject.put("menuTree", getMenuTree(menuList));
-				
-				return jSONObject;
+				menuTree = getMenuTree(menuList);
+				map.put("result", result);
+				map.put("menuTree", menuTree);
+				return map;
 			}
 			
 			menuService.updateMoveMenu(menu);
@@ -234,10 +229,9 @@ public class MenuController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		jSONObject.put("menuTree", menuTree);
-		
-		return jSONObject;
+		map.put("result", result);
+		map.put("menuTree", menuTree);
+		return map;
 	}
 	
 	/**
@@ -245,10 +239,10 @@ public class MenuController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-delete-menu.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-delete-menu.do")
 	@ResponseBody
-	public Map<String, String> ajaxDeleteMenu(HttpServletRequest request, Menu menu) {
-		Map<String, String> jSONObject = new HashMap<>();
+	public Map<String, Object> ajaxDeleteMenu(HttpServletRequest request, Menu menu) {
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
 		List<Menu> menuList = new ArrayList<>();
@@ -260,10 +254,10 @@ public class MenuController {
 				menuList.addAll(menuService.getListMenu(null));
 				
 				result = "menu.invalid";
-				jSONObject.put("result", result);
-				jSONObject.put("menuTree", getMenuTree(menuList));
-				
-				return jSONObject;
+				menuTree = getMenuTree(menuList);
+				map.put("result", result);
+				map.put("menuTree", menuTree);
+				return map;
 			}
 			
 			menuService.deleteMenu(menu.getMenu_id());
@@ -276,10 +270,9 @@ public class MenuController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		jSONObject.put("menuTree", menuTree);
-		
-		return jSONObject;
+		map.put("result", result);
+		map.put("menuTree", menuTree);
+		return map;
 	}
 	
 	/**
@@ -291,7 +284,11 @@ public class MenuController {
 		
 		Menu menu = new Menu();
 		menu.setMenu_id(0l);
-		menu.setName(policy.getContent_menu_group_root());
+		if(policy.getContent_menu_group_root() != null && !"".equals(policy.getContent_menu_group_root())) {
+			menu.setName(policy.getContent_menu_group_root());
+		} else {
+			menu.setName("TOP");
+		}
 		menu.setName_en("TOP");
 		menu.setOpen("true");
 		menu.setNode_type("company");
@@ -311,7 +308,7 @@ public class MenuController {
 	}
 	
 	private String getMenuTree(List<Menu> menuList) {
-		StringBuilder builder = new StringBuilder();
+		StringBuilder builder = new StringBuilder(256);
 		
 		int menuCount = menuList.size();
 		Menu menu = menuList.get(0);
@@ -410,5 +407,4 @@ public class MenuController {
 		
 		return builder.toString();
 	}
-	
 }

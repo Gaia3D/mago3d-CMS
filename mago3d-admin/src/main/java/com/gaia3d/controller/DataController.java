@@ -446,56 +446,6 @@ public class DataController {
 		return jSONObject;
 	}
 	
-//	/**
-//	 * Data 상태 수정(패스워드 실패 잠금, 해제 등)
-//	 * @param request
-//	 * @param dataInfo
-//	 * @return
-//	 */
-//	@PostMapping(value = "ajax-update-data-status.do", produces = "application/json; charset=utf8")
-//	@ResponseBody
-//	public Map<String, Object> ajaxUpdateDataStatus(	HttpServletRequest request, 
-//										@RequestParam("check_ids") String check_ids, 
-//										@RequestParam("business_type") String business_type, 
-//										@RequestParam("status_value") String status_value) {
-//		
-//		log.info("@@@@@@@ check_ids = {}, business_type = {}, status_value = {}", check_ids, business_type, status_value);
-//		Map<String, Object> jSONObject = new HashMap<>();
-//		String result = "success";
-//		String result_message = "";
-//		try {
-//			if(check_ids.length() <= 0) {
-//				jSONObject.put("result", "check.value.required");
-//				return jSONObject;
-//			}
-//			List<String> dataList = dataService.updateDataStatus(business_type, status_value, check_ids);
-//			if(!dataList.isEmpty()) {
-//				int count = dataList.size();
-//				int i = 1;
-//				for(String dataId : dataList) {
-//					if(count == i) {
-//						result_message = result_message + dataId;
-//					} else {
-//						result_message = result_message + dataId + ", ";
-//					}
-//					i++;
-//				}
-//				
-//				String[] dataIds = check_ids.split(",");
-//				jSONObject.put("update_count", dataIds.length - dataList.size());
-//				jSONObject.put("business_type", business_type);
-//				jSONObject.put("result_message", result_message);
-//			}
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			result = "db.exception";
-//		}
-//	
-//		jSONObject.put("result", result);
-//		
-//		return jSONObject;
-//	}
-	
 	/**
 	 * Data 삭제
 	 * @param data_id

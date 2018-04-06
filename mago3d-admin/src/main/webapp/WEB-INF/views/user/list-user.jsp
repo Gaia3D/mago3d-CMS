@@ -183,7 +183,7 @@
 		</c:if>
 		<c:if test="${userInfo.status eq '1'}">
 												<span class="icon-glyph glyph-off off"></span>
-												<span class="icon-text"><spring:message code='user.status.unused.'/></span>
+												<span class="icon-text"><spring:message code='user.status.unused'/></span>
 		</c:if>
 											</td>
 											<td class="col-toggle">${userInfo.viewUserInsertType }</td>

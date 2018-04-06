@@ -415,8 +415,7 @@ function getAjaxMenuList() {
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
-				console.log(msg.menuTree);
-				initMenu(msg.menuTree);
+				initMenu(JSON.parse(msg.menuTree));
 			} else {
 				alert(JS_MESSAGE[msg.result]);
 			}
@@ -439,7 +438,7 @@ function ajaxInsertMenu() {
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
-				menuTree.setTree(msg.menuTree);
+				menuTree.setTree(JSON.parse(msg.menuTree));
 				alert(JS_MESSAGE["insert"]);
 			} else {
 				alert(JS_MESSAGE[msg.result]);
@@ -463,7 +462,7 @@ function ajaxUpdateMenu() {
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
-				menuTree.setTree(msg.menuTree);
+				menuTree.setTree(JSON.parse(msg.menuTree));
 				alert(JS_MESSAGE["update"]);
 			} else {
 				alert(JS_MESSAGE[msg.result]);
@@ -488,7 +487,7 @@ function ajaxDeleteMenu() {
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "success") {
-					menuTree.setTree(msg.menuTree);
+					menuTree.setTree(JSON.parse(msg.menuTree));
 					alert(JS_MESSAGE["delete"]);
 				} else {
 					alert(JS_MESSAGE[msg.result]);
@@ -514,7 +513,7 @@ function ajaxUpdateMoveMenu() {
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "success") {
-					menuTree.setTree(msg.menuTree);
+					menuTree.setTree(JSON.parse(msg.menuTree));
 				} else {
 					alert(JS_MESSAGE[msg.result]);
 				}

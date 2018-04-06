@@ -30,18 +30,21 @@ values(27, '사용자 상세 정보', 'USER', 2 , 2, 7, '/user/detail-user.do', '/user/
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(3, '데이터', 'DATA', 0 , 1, 3, '/data/list-data.do', 'glyph-monitor', 'Y', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(31, '프로젝트 목록', 'DATA', 3 , 2, 1, '/data/list-project.do', 'glyph-monitor', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(32, '프로젝트 등록', 'DATA', 3 , 2, 2, '/data/input-project.do', 'glyph-monitor', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(33, '데이터 목록', 'DATA', 3 , 2, 3, '/data/list-data.do', 'glyph-monitor', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(34, '데이터 등록', 'DATA', 3 , 2, 4, '/data/input-data.do', 'glyph-monitor', 'N', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(35, '변경 요청 목록', 'DATA', 3 , 2, 5, '/data/list-data-log.do', 'glyph-monitor', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
-values(36, '데이터 상세', 'DATA', 3 , 2, 6, '/data/detail-data.do', '/data/list-data.do', 'glyph-monitor', 'N', 'Y', 'N');
+values(33, '프로젝트 상세', 'DATA', 3 , 2, 3, '/data/modify-project.do', '/data/list-project.do', 'glyph-monitor', 'N', 'Y', 'N');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(35, '데이터 목록', 'DATA', 3 , 2, 5, '/data/list-data.do', 'glyph-monitor', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(36, '데이터 등록', 'DATA', 3 , 2, 6, '/data/input-data.do', 'glyph-monitor', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(37, '변경 요청 목록', 'DATA', 3 , 2, 7, '/data/list-data-log.do', 'glyph-monitor', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
-values(37, '데이터 수정', 'DATA', 3 , 2, 7, '/data/modify-data.do', '/data/list-data.do', 'glyph-monitor', 'N', 'Y', 'N');
+values(38, '데이터 상세', 'DATA', 3 , 2, 8, '/data/detail-data.do', '/data/list-data.do', 'glyph-monitor', 'N', 'Y', 'N');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
+values(39, '데이터 수정', 'DATA', 3 , 2, 9, '/data/modify-data.do', '/data/list-data.do', 'glyph-monitor', 'N', 'Y', 'N');
 
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(4, '이슈', 'ISSUE', 0 , 1, 4, '/issue/list-issue.do', 'glyph-dashboard', 'Y', 'Y');
-insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(41, '이슈 일괄', 'ISSUE', 4 , 2, 1, '/issue/all-issue.do', 'glyph-dashboard', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(42, '이슈 목록', 'ISSUE', 4 , 2, 2, '/issue/list-issue.do', 'glyph-dashboard', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(43, '이슈 등록', 'ISSUE', 4 , 2, 3, '/issue/input-issue.do', 'glyph-dashboard', 'N', 'Y');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
+values(44, '결과', 'ISSUE', 4 , 2, 4, '/issue/result-issue.do', '/issue/list-issue.do', 'glyph-dashboard', 'N', 'Y', 'N');
 
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(5, '통계및이력', 'STATISTICS', 0 , 1, 5, '/statistic/index.do', 'glyph-chart', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(51, '통계', 'STATISTICS', 5 , 2, 1, '/statistic/index.do', 'glyph-chart', 'N', 'Y');
@@ -91,14 +94,15 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (31, 1, 31);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (32, 1, 32);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (33, 1, 33);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (34, 1, 34);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (35, 1, 35);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (36, 1, 36);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (37, 1, 37);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (38, 1, 38);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (39, 1, 39);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (4, 1, 4);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (41, 1, 41);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (42, 1, 42);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (43, 1, 43);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (44, 1, 44);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (5, 1, 5);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (51, 1, 51);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (52, 1, 52);

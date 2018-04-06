@@ -1,26 +1,17 @@
 package com.gaia3d.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,17 +19,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CommonCode;
-import com.gaia3d.domain.FileInfo;
-import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Policy;
-import com.gaia3d.domain.UserDevice;
 import com.gaia3d.domain.UserGroup;
 import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.UserSession;
@@ -46,8 +31,6 @@ import com.gaia3d.helper.PasswordHelper;
 import com.gaia3d.security.Crypt;
 import com.gaia3d.service.UserGroupService;
 import com.gaia3d.service.UserService;
-import com.gaia3d.util.DateUtil;
-import com.gaia3d.util.FileUtil;
 import com.gaia3d.util.StringUtil;
 import com.gaia3d.validator.UserValidator;
 
@@ -110,6 +93,7 @@ public class UserController {
 	 */
 	@GetMapping(value = "modify-user.do")
 	public String modifyUser(@RequestParam("user_id") String user_id, HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo, Model model) {
+		log.info("@@@@@@@@ user_id = {}", user_id);
 		
 		String listParameters = getListParameters(request);
 		
@@ -221,10 +205,10 @@ public class UserController {
 	 * @param userInfo
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-user-info.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-user-info.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateUserInfo(HttpServletRequest request, UserInfo userInfo) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			Policy policy = CacheManager.getPolicy();
@@ -232,8 +216,8 @@ public class UserController {
 			String errorcode = userValidate(policy,userInfo);
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 						
 			UserInfo dbUserInfo = userService.getUser(userInfo.getUser_id());
@@ -248,8 +232,8 @@ public class UserController {
 				if("".equals(encryptPassword)) {
 					log.info("@@ password error!");
 					result = "user.password.exception";
-					jSONObject.put("result", result);
-					return jSONObject;
+					map.put("result", result);
+					return map;
 				}
 			}
 			
@@ -331,18 +315,18 @@ public class UserController {
 			
 			userInfo.setMobile_phone(userInfo.getViewMobilePhone());
 			userInfo.setEmail(userInfo.getViewEmail());
-			jSONObject.put("maskingMobilePhone", userInfo.getMaskingMobilePhone());
-			jSONObject.put("maskingEmail", userInfo.getMaskingEmail());
-			jSONObject.put("messanger", userInfo.getMessanger());
+			map.put("maskingMobilePhone", userInfo.getMaskingMobilePhone());
+			map.put("maskingEmail", userInfo.getMaskingEmail());
+			map.put("messanger", userInfo.getMessanger());
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -351,16 +335,16 @@ public class UserController {
 	 * @param userInfo
 	 * @return
 	 */
-	@PostMapping(value = "ajax-init-user-password.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-init-user-password.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInitUserPassword(	HttpServletRequest request, 
 										@RequestParam("check_ids") String check_ids) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			if(check_ids.length() <= 0) {
-				jSONObject.put("result", "check.value.required");
-				return jSONObject;
+				map.put("result", "check.value.required");
+				return map;
 			}
 			userService.updateUserPasswordInit(check_ids);
 		} catch(Exception e) {
@@ -368,9 +352,9 @@ public class UserController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -446,12 +430,12 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-user-group-info.do", produces = "application/json; charset=utf8")
+	@RequestMapping(value = "ajax-user-group-info.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUserGroupInfo(HttpServletRequest request, @RequestParam("user_group_id") Long user_group_id) {
 		
 		log.info("@@@@@@@ user_group_id = {}", user_group_id);
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		UserGroup userGroup = null;
 		try {	
@@ -461,10 +445,10 @@ public class UserController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-		jSONObject.put("result", result);
-		jSONObject.put("userGroup", userGroup);
+		map.put("result", result);
+		map.put("userGroup", userGroup);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**

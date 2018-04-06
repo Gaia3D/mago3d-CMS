@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -154,10 +153,10 @@ public class WidgetController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-widget.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateWidget(HttpServletRequest request, Widget widget) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			
@@ -166,8 +165,8 @@ public class WidgetController {
 			log.info("@@ widget = {} ", widget);
 			if(widget.getWidget_order() == null || "".equals(widget.getWidget_order())) {
 				result = "widget.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			List<Widget> widgetList = new ArrayList<>();
@@ -188,8 +187,8 @@ public class WidgetController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -197,10 +196,10 @@ public class WidgetController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "ajax-access-log-widget.do", produces = "application/json; charset=utf8")
+	@GetMapping(value = "ajax-access-log-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxAccessLogWidget(HttpServletRequest request) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
@@ -219,14 +218,14 @@ public class WidgetController {
 			List<AccessLog> accessLogList = logService.getListAccessLog(accessLog);
 			
 //			jSONObject.put("accessLogList", JSONArray.fromObject(accessLogList));
-			jSONObject.put("accessLogList", accessLogList);
+			map.put("accessLogList", accessLogList);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -234,10 +233,10 @@ public class WidgetController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "ajax-schedule-log-list-widget.do", produces = "application/json; charset=utf8")
+	@GetMapping(value = "ajax-schedule-log-list-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxScheduleLogListWidget(HttpServletRequest request) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
@@ -256,14 +255,14 @@ public class WidgetController {
 			List<ScheduleLog> scheduleLogList = scheduleService.getListScheduleLog(scheduleLog);
 			
 //			jSONObject.put("scheduleLogList", JSONArray.fromObject(scheduleLogList));
-			jSONObject.put("scheduleLogList", scheduleLogList);
+			map.put("scheduleLogList", scheduleLogList);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**

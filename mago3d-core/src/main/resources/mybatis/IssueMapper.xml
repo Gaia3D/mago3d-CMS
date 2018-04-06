@@ -157,14 +157,21 @@
 		ORDER BY insert_date DESC
 	</select>
 	
-	<!-- 이슈 정보 -->
+	<!-- TODO assignee, reporter 값은 N개 이므로 subquery로 하면 안됨
+		이슈 정보 -->
 	<select id="getIssue" parameterType="long" resultType="issue">
 		/* getIssue */
 		SELECT A.*,
-			(SELECT user_name FROM user_info WHERE user_id = A.user_id) AS user_name, 
-			(SELECT contents FROM issue_detail WHERE issue_id = A.issue_id) AS contents 
+			(SELECT project_name FROM project WHERE project_id = A.project_id) AS project_name,
+			(SELECT user_name FROM user_info WHERE user_id = A.user_id) AS user_name,
+<!-- 			(SELECT user_id FROM issue_people WHERE issue_id = A.issue_id AND role_type = '0') AS assignee,
+			(SELECT user_id FROM issue_people WHERE issue_id = A.issue_id AND role_type = '1') AS reporter, -->
+			B.contents, D.file_name, E.comment
 		FROM issue A
-		WHERE issue_id = #{issue_id}
+			LEFT OUTER JOIN issue_detail B ON A.issue_id = B.issue_id
+			LEFT OUTER JOIN issue_file D ON A.issue_id = D.issue_id
+			LEFT OUTER JOIN issue_comment E ON A.issue_id = E.issue_id
+		WHERE A.issue_id = #{issue_id}
 	</select>
 	
 	<!-- 이슈 Comment 정보 -->

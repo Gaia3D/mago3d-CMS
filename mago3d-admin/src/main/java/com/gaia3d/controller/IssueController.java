@@ -331,11 +331,11 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-issue.do", produces="application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-issue.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateIssue(Issue issue) {
 		
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ issue = {}", issue);
@@ -345,8 +345,8 @@ public class IssueController {
 			log.info("@@@@@@@@@@@@ errorcode = {}", errorcode);
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}			
 			issueService.updateIssue(issue);
 		} catch(Exception e) {
@@ -354,9 +354,9 @@ public class IssueController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -402,10 +402,10 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-insert-issue-comment.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-insert-issue-comment.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertIssueComment(HttpServletRequest request, Issue issue) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -413,13 +413,13 @@ public class IssueController {
 			log.info("@@ issue = {} ", issue);
 			if(issue.getIssue_id() == null || issue.getIssue_id().longValue() <= 0l) {
 				result = "issuecomment.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			if(issue.getComment() == null || "".equals(issue.getComment())) {
 				result = "issuecomment.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			IssueComment issueComment = new IssueComment();
@@ -432,14 +432,14 @@ public class IssueController {
 			issueService.insertIssueComment(issueComment);
 			
 			List<IssueComment> issueCommentList = issueService.getListIssueComment(issue.getIssue_id());
-			jSONObject.put("issueCommentList", issueCommentList);
+			map.put("issueCommentList", issueCommentList);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -447,30 +447,30 @@ public class IssueController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "ajax-delete-issue-comment.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-delete-issue-comment.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDeleteIssueComment(HttpServletRequest request, Long issue_comment_id) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ issue_comment_id = {} ", issue_comment_id);
 			if(issue_comment_id == null || issue_comment_id.longValue() <= 0l) {
 				result = "issuecomment.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			IssueComment issueComment = issueService.getIssueComment(issue_comment_id);
 			issueService.deleteIssueComment(issue_comment_id);
 			List<IssueComment> issueCommentList = issueService.getListIssueComment(issueComment.getIssue_id());
-			jSONObject.put("issueCommentList", issueCommentList);
+			map.put("issueCommentList", issueCommentList);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**

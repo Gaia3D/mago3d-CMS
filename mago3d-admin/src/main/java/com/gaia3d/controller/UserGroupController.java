@@ -1,7 +1,9 @@
 package com.gaia3d.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -139,9 +141,10 @@ public class UserGroupController {
 	 * @param request
 	 * @return
 	 */
-	@PostMapping(value = "ajax-list-user-group.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-list-user-group.do")
 	@ResponseBody
-	public String ajaxListUserGroup(HttpServletRequest request) {
+	public Map<String, Object> ajaxListUserGroup(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String userGroupTree = null;
 		List<UserGroup> userGroupList = new ArrayList<>();
@@ -155,7 +158,9 @@ public class UserGroupController {
 			result = "db.execption";
 		}
 		
-		return "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+		map.put("result", result);
+		map.put("userGroupTree", userGroupTree);
+		return map;
 	}
 	
 	/**
@@ -164,9 +169,10 @@ public class UserGroupController {
 	 * @param userGroup
 	 * @return
 	 */
-	@PostMapping(value = "ajax-insert-user-group.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-insert-user-group.do")
 	@ResponseBody
-	public String ajaxInsertUserGroup(HttpServletRequest request, UserGroup userGroup) {
+	public Map<String, Object> ajaxInsertUserGroup(HttpServletRequest request, UserGroup userGroup) {
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String userGroupTree = null;
 		List<UserGroup> userGroupList = new ArrayList<>();
@@ -184,7 +190,9 @@ public class UserGroupController {
 				userGroupTree = getUserGroupTree(userGroupList);
 				
 				result = "input.invalid";
-				return "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+				map.put("result", result);
+				map.put("userGroupTree", userGroupTree);
+				return map;
 			}
 			
 			// TODO group_key 중복 체크 해야 함
@@ -207,7 +215,9 @@ public class UserGroupController {
 			result = "db.exception";
 		}
 		
-		return "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+		map.put("result", result);
+		map.put("userGroupTree", userGroupTree);
+		return map;
 	}
 	
 	/**
@@ -216,9 +226,10 @@ public class UserGroupController {
 	 * @param userGroup
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-user-group.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-user-group.do")
 	@ResponseBody
-	public String ajaxUpdateUserGroup(HttpServletRequest request, UserGroup userGroup) {
+	public Map<String, Object> ajaxUpdateUserGroup(HttpServletRequest request, UserGroup userGroup) {
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String userGroupTree = null;
 		List<UserGroup> userGroupList = new ArrayList<>();
@@ -234,7 +245,9 @@ public class UserGroupController {
 				userGroupTree = getUserGroupTree(userGroupList);
 				
 				result = "input.invalid";
-				return "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+				map.put("result", result);
+				map.put("userGroupTree", userGroupTree);
+				return map;
 			}
 			
 			userGroupService.updateUserGroup(userGroup);
@@ -247,7 +260,9 @@ public class UserGroupController {
 			result = "db.exception";
 		}
 		
-		return "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+		map.put("result", result);
+		map.put("userGroupTree", userGroupTree);
+		return map;
 	}
 	
 	/**
@@ -256,9 +271,10 @@ public class UserGroupController {
 	 * @param userGroup
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-move-user-group.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-update-move-user-group.do")
 	@ResponseBody
-	public String ajaxUpdateMoveUserGroup(HttpServletRequest request, UserGroup userGroup) {
+	public Map<String, Object> ajaxUpdateMoveUserGroup(HttpServletRequest request, UserGroup userGroup) {
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String userGroupTree = null;		
 		List<UserGroup> userGroupList = new ArrayList<>();
@@ -272,7 +288,9 @@ public class UserGroupController {
 				userGroupList.addAll(userGroupService.getListUserGroup(new UserGroup()));
 				
 				result = "input.invalid";
-				return "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+				map.put("result", result);
+				map.put("userGroupTree", userGroupTree);
+				return map;
 			}
 			
 			userGroupService.updateMoveUserGroup(userGroup);
@@ -285,7 +303,9 @@ public class UserGroupController {
 			result = "db.exception";
 		}
 		
-		return "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+		map.put("result", result);
+		map.put("userGroupTree", userGroupTree);
+		return map;
 	}
 	
 	/**
@@ -294,9 +314,10 @@ public class UserGroupController {
 	 * @param userGroup
 	 * @return
 	 */
-	@PostMapping(value = "ajax-delete-user-group.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-delete-user-group.do")
 	@ResponseBody
-	public String ajaxDeleteUserGroup(HttpServletRequest request, UserGroup userGroup) {
+	public Map<String, Object> ajaxDeleteUserGroup(HttpServletRequest request, UserGroup userGroup) {
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String userGroupTree = null;
 		List<UserGroup> userGroupList = new ArrayList<>();
@@ -307,7 +328,9 @@ public class UserGroupController {
 				userGroupList.addAll(userGroupService.getListUserGroup(new UserGroup()));
 				
 				result = "input.invalid";
-				return "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+				map.put("result", result);
+				map.put("userGroupTree", userGroupTree);
+				return map;
 			}
 			
 			userGroupService.deleteUserGroup(userGroup.getUser_group_id());
@@ -319,7 +342,9 @@ public class UserGroupController {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-		return "{\"result\": \"" + result + "\",\"userGroupTree\":" + userGroupTree + "}";
+		map.put("result", result);
+		map.put("userGroupTree", userGroupTree);
+		return map;
 	}
 	
 	/**
