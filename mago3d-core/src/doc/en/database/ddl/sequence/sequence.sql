@@ -1,5 +1,8 @@
 drop sequence if exists access_log_seq;
 drop sequence if exists api_log_seq;
+drop sequence if exists board_seq;
+drop sequence if exists board_comment_seq;
+drop sequence if exists board_detail_seq;
 drop sequence if exists common_code_seq;
 drop sequence if exists file_info_seq;
 drop sequence if exists file_parse_log_seq;
@@ -27,6 +30,9 @@ drop sequence if exists widget_seq;
 
 create sequence access_log_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence api_log_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
+create sequence board_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
+create sequence board_detail_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
+create sequence board_comment_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence file_info_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence file_parse_log_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence issue_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
