@@ -14,7 +14,7 @@ create table schedule(
 	user_id						varchar(32),
 	execute_type				char(1)				default '0',
 	description					varchar(256),
-	insert_date				timestamp witwith time zonedefault now(),
+	insert_date				timestamp with time zone default now(),
 	constraint schedule_pk primary key (schedule_id)	
 );
 
