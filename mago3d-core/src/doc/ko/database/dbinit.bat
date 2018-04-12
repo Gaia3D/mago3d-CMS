@@ -1,40 +1,19 @@
-:: psql -U postgres -d mago3d -a -f script.sql
-
 @echo off
 echo .................. ddl init start .................
 echo ...................................................
+SET CUR_PATH=%~dp0
 
 cd C:\PostgreSQL\9.6\bin\
 
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\access_log.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\api.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\common_code.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\datainfo.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\datainfo_log.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\file_info.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\issue.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\menu.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\policy.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\role.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\schedule.sql
-:: psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\sso_log.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\user_info.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\widget.sql
+for /f %%f in ('dir /b %CUR_PATH%ddl\*.sql') do psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\%%f
 
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\ddl\sequence\sequence.sql
+for /f %%f in ('dir /b %CUR_PATH%ddl\sequence\*.sql') do psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\sequence\%%f
 
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\index\access_log.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\index\api_log.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\index\data_info_log.sql
-:: psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\index\sso_log.sql
+for /f %%f in ('dir /b %CUR_PATH%index\*.sql') do psql -U postgres -d mago3d -a -f %CUR_PATH%index\%%f
 
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\trigger\access_log_trigger.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\trigger\api_log_trigger.sql
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\trigger\data_info_log_trigger.sql
-:: psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\trigger\sso_log_trigger.sql
+for /f %%f in ('dir /b %CUR_PATH%trigger\*.sql') do psql -U postgres -d mago3d -a -f %CUR_PATH%trigger\%%f
 
-psql -U postgres -d mago3d -a -f C:\git\repository\mago3d\mago3d-core\src\doc\ko\database\dml\insert.sql
+for /f %%f in ('dir /b %CUR_PATH%dml\*.sql') do psql -U postgres -d mago3d -a -f %CUR_PATH%dml\%%f
 
 echo .................. ddl init end ...................
 echo ...................................................
-pause
