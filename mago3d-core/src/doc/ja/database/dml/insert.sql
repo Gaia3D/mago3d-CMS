@@ -168,22 +168,22 @@ insert into common_code (
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL1', '非常に重要', 'LEVLE1', 'LEVLE1', 'Y', 1, 'i1', ''
+	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL1', '非常に重要', 'LEVEL1', 'LEVEL1', 'Y', 1, 'i1', ''
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL2', '重要', 'LEVLE2', 'LEVLE2', 'Y', 2, 'i2', ''
+	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL2', '重要', 'LEVEL2', 'LEVEL2', 'Y', 2, 'i2', ''
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL3', '通常', 'LEVLE3', 'LEVLE3', 'Y', 3, 'i3', ''
+	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL3', '通常', 'LEVEL3', 'LEVEL3', 'Y', 3, 'i3', ''
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL4', '低', 'LEVLE4', 'LEVLE4', 'Y', 4, 'i4', ''
+	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL4', '低', 'LEVEL4', 'LEVEL4', 'Y', 4, 'i4', ''
 );
 
 insert into common_code (
