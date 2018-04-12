@@ -12,7 +12,7 @@ create table common_code (
 	css_class					varchar(30),
 	image						varchar(256),
 	description					varchar(256),
-	insert_date					timestamp witwith time zonedefault now(),
+	insert_date					timestamp with time zone default now(),
 	constraint common_code_pk primary key (code_key)	
 );
 
