@@ -11,7 +11,7 @@ create table role(
 	use_yn				char(1)									default 'Y',
 	default_yn			char(1)									default 'N',
 	description			varchar(256),
-	insert_date				timestamp withouwith time zoneault now(),
+	insert_date				timestamp with time zone default now(),
 	constraint role_pk primary key (role_id)	
 );
 

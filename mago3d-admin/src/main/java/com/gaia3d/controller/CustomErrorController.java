@@ -30,6 +30,6 @@ public class CustomErrorController implements ErrorController {
 		Map<String, Object> attrs = errorAttributes.getErrorAttributes(new ServletRequestAttributes(servletRequest), false);
 		model.addAttribute("attrs", attrs);
 		log.info("@@@@@@@@@@@@@@@@@@@@@@@ CustomErrorController attrs = {}", attrs.toString());
-		return "error/error";
+		return "/error/error";
 	}
 }
