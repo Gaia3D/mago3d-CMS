@@ -161,7 +161,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
         simpleMappingExceptionResolver.setStatusCodes(statusCodes);
 
 	 	simpleMappingExceptionResolver.setOrder(1);
-	 	simpleMappingExceptionResolver.setDefaultErrorView("error/error");
+	 	simpleMappingExceptionResolver.setDefaultErrorView("/error/error");
 	 	
 	 	return simpleMappingExceptionResolver;
 	}
