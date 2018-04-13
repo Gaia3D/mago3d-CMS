@@ -33,6 +33,7 @@ mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립�
 
 #### [eclipse](https://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R/eclipse-inst-win64.exe)
 - eclipse Oxygen(neon버전 이상 설치)
+  IntelliJ IDEA 에서 InternalResourceViewResolver 에서 jsp 찾지 못하는 치명적 버그 있음
 - eclipse를 실행 후 Project Import <br>
   File → import → Gradle → Existing Gradle Project
 
@@ -152,6 +153,7 @@ mago3DJS Integrate visualization data with open source JavaScript library for 3-
 
 #### [eclipse](https://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R/eclipse-inst-win64.exe)
 - eclipse Oxygen (neon version or higher installed)
+  In IntelliJ IDEA, there is a fatal bug that jsp can not find in InternalResourceViewResolver
 - After running eclipse Project Import <br>
   File → import → Gradle → Existing Gradle Project
 
@@ -269,6 +271,7 @@ mago3DJS 3次元マルチブロック可視化のためのオープンソース�
 
 #### [eclipse](https://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R/eclipse-inst-win64.exe)
 - eclipse Oxygen（neon以降のインストール）
+  IntelliJ IDEAでInternalResourceViewResolverでjsp見つからない致命的バグあり
 - eclipseを実行した後Project Import <br>
   File → import → Gradle → Existing Gradle Project
 
