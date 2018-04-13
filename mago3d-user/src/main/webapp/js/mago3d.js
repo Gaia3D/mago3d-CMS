@@ -4968,6 +4968,8 @@ MagoManager.prototype.startRender = function(scene, isLastFrustum, frustumIdx, n
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	gl.viewport(0, 0, this.sceneState.drawingBufferWidth, this.sceneState.drawingBufferHeight);
 	this.renderGeometry(gl, cameraPosition, currentShader, renderTexture, ssao_idx, this.visibleObjControlerNodes);
+	// test mago geometries.***********************************************************************************************************
+	//this.renderMagoGeometries(ssao_idx); //TEST
 	this.depthFboNeo.unbind();
 	this.swapRenderingFase();
 	
@@ -4989,7 +4991,7 @@ MagoManager.prototype.startRender = function(scene, isLastFrustum, frustumIdx, n
 	this.swapRenderingFase();
 	
 	// 3) test mago geometries.***********************************************************************************************************
-	//this.renderMagoGeometries(); //TEST
+	//this.renderMagoGeometries(ssao_idx); //TEST
 	
 	// test. Draw the buildingNames.***
 	if (this.magoPolicy.getShowLabelInfo())
@@ -5141,7 +5143,7 @@ MagoManager.prototype.prepareVisibleLowLodNodes = function(lowLodNodesArray)
 /**
  * Mago geometries generation test.***
  */
-MagoManager.prototype.renderMagoGeometries = function() 
+MagoManager.prototype.renderMagoGeometries = function(ssao_idx) 
 {
 	// 1rst, make the test object if no exist.***
 	if(this.nativeProjectsArray === undefined)
@@ -5150,23 +5152,39 @@ MagoManager.prototype.renderMagoGeometries = function()
 		var natProject = new MagoNativeProject();
 		this.nativeProjectsArray.push(natProject);
 		
-		var mesh = natProject.newParametricMesh();
+		var pMesh = natProject.newParametricMesh();
 		
-		mesh.profile = new Profile(); // provisional.***
-		var profileAux = mesh.profile; // provisional.***
+		pMesh.profile = new Profile(); // provisional.***
+		var profileAux = pMesh.profile; // provisional.***
 		
-		profileAux.TEST__setFigureHole_2();
+		//profileAux.TEST__setFigureHole_2();
+		profileAux.TEST__setFigure_1();
 		
-		if(mesh.vboKeyContainer === undefined)
-			mesh.vboKeyContainer = new VBOVertexIdxCacheKeysContainer();
-		var vboKeys = mesh.vboKeyContainer.newVBOVertexIdxCacheKey();
+		if(pMesh.vboKeyContainer === undefined)
+			pMesh.vboKeyContainer = new VBOVertexIdxCacheKeysContainer();
 		
-		profileAux.getVBO(vboKeys);
+		var bIncludeBottomCap, bIncludeTopCap;
+		//var extrusionVector, extrusionDist, extrudeSegmentsCount;
+		//extrudeSegmentsCount = 1;
+		//extrusionDist = 5.0;
+		//pMesh.extrude(profileAux, extrusionDist, extrudeSegmentsCount, extrusionVector);
 		
-		var extrusionVector, extrusionDist, extrudeSegmentsCount;
-		extrusionDist = 10.0;
-		mesh.extrude(profileAux, extrusionDist, extrudeSegmentsCount, extrusionVector);
-
+		var revolveAngDeg, revolveSegmentsCount, revolveSegment2d;
+		revolveAngDeg = 360.0;
+		revolveSegment2d = new Segment2D();
+		var strPoint2d = new Point2D(0, -10);
+		var endPoint2d = new Point2D(0, 10);
+		revolveSegment2d.setPoints(strPoint2d, endPoint2d);
+		revolveSegmentsCount = 20;
+		pMesh.revolve(profileAux, revolveAngDeg, revolveSegmentsCount, revolveSegment2d);
+		
+		bIncludeBottomCap = false;
+		bIncludeTopCap = false;
+		var vboKeysExtruded = pMesh.vboKeyContainer.newVBOVertexIdxCacheKey();
+		var mesh = pMesh.getSurfaceIndependentMesh(undefined, bIncludeBottomCap, bIncludeTopCap);
+		mesh.setColor(0.1, 1.0, 0.1, 1.0);
+		mesh.getVbo(vboKeysExtruded);
+		
 		var hola = 0;
 		
 		// Now, provisionally make a geoLocationData for the nativeProject.*************************************
@@ -5189,23 +5207,30 @@ MagoManager.prototype.renderMagoGeometries = function()
 	}
 	//---------------------------------------------------------------------------------------------------------------
 	
-	// provisionally render all native projects.***
 	var gl = this.sceneState.gl;
 	var color;
 	var node;
-	var currentShader = this.postFxShadersManager.getTriPolyhedronShader(); // triPolyhedron ssao.***
+	var currentShader;
+	if(ssao_idx === 0)
+	{
+		currentShader = this.postFxShadersManager.getTriPolyhedronDepthShader(); // triPolyhedron ssao.***
+		gl.disable(gl.BLEND);
+	}
+	if(ssao_idx === 1)
+	{
+		currentShader = this.postFxShadersManager.getTriPolyhedronShader(); // triPolyhedron ssao.***
+		gl.enable(gl.BLEND);
+	}
+	
 	var shaderProgram = currentShader.program;
-	gl.enable(gl.BLEND);
+	
 	gl.frontFace(gl.CCW);
 	gl.useProgram(shaderProgram);
 	gl.enableVertexAttribArray(currentShader.position3_loc);
-	gl.enableVertexAttribArray(currentShader.normal3_loc);
-	gl.disableVertexAttribArray(currentShader.color4_loc);
-
+	
 	gl.uniformMatrix4fv(currentShader.modelViewProjectionMatrix4RelToEye_loc, false, this.sceneState.modelViewProjRelToEyeMatrix._floatArrays);
 	gl.uniformMatrix4fv(currentShader.modelViewMatrix4RelToEye_loc, false, this.sceneState.modelViewRelToEyeMatrix._floatArrays); // original.***
-	gl.uniformMatrix4fv(currentShader.modelViewMatrix4_loc, false, this.sceneState.modelViewMatrix._floatArrays);
-	gl.uniformMatrix4fv(currentShader.projectionMatrix4_loc, false, this.sceneState.projectionMatrix._floatArrays);
+	
 	gl.uniform3fv(currentShader.cameraPosHIGH_loc, this.sceneState.encodedCamPosHigh);
 	gl.uniform3fv(currentShader.cameraPosLOW_loc, this.sceneState.encodedCamPosLow);
 
@@ -5214,41 +5239,46 @@ MagoManager.prototype.renderMagoGeometries = function()
 
 	gl.uniformMatrix4fv(currentShader.normalMatrix4_loc, false, this.sceneState.normalMatrix4._floatArrays);
 	//-----------------------------------------------------------------------------------------------------------
-
-	gl.uniform1i(currentShader.hasAditionalMov_loc, true);
-	gl.uniform3fv(currentShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
-	gl.uniform1i(currentShader.bScale_loc, true);
-
-	gl.uniform1i(currentShader.bUse1Color_loc, true);
-	if (color)
+		
+	if(ssao_idx === 1)
 	{
-		gl.uniform4fv(currentShader.oneColor4_loc, [color.r, color.g, color.b, 1.0]); //.***
+		// provisionally render all native projects.***
+		gl.enableVertexAttribArray(currentShader.normal3_loc);
+		gl.enableVertexAttribArray(currentShader.color4_loc);
+
+		gl.uniform1i(currentShader.bUse1Color_loc, false);
+		if (color)
+		{
+			gl.uniform4fv(currentShader.oneColor4_loc, [color.r, color.g, color.b, 1.0]); //.***
+		}
+		else 
+		{
+			gl.uniform4fv(currentShader.oneColor4_loc, [1.0, 0.1, 0.1, 1.0]); //.***
+		}
+		
+		gl.uniformMatrix4fv(currentShader.modelViewMatrix4_loc, false, this.sceneState.modelViewMatrix._floatArrays);
+		gl.uniformMatrix4fv(currentShader.projectionMatrix4_loc, false, this.sceneState.projectionMatrix._floatArrays);
+
+		gl.uniform1i(currentShader.depthTex_loc, 0);
+		gl.uniform1i(currentShader.noiseTex_loc, 1);
+		gl.uniform1i(currentShader.diffuseTex_loc, 2); // no used.***
+		gl.uniform1f(currentShader.fov_loc, this.sceneState.camera.frustum.fovyRad);	// "frustum._fov" is in radians.***
+		gl.uniform1f(currentShader.aspectRatio_loc, this.sceneState.camera.frustum.aspectRatio);
+		gl.uniform1f(currentShader.screenWidth_loc, this.sceneState.drawingBufferWidth);	
+		gl.uniform1f(currentShader.screenHeight_loc, this.sceneState.drawingBufferHeight);
+
+
+		gl.uniform2fv(currentShader.noiseScale2_loc, [this.depthFboNeo.width/this.noiseTexture.width, this.depthFboNeo.height/this.noiseTexture.height]);
+		gl.uniform3fv(currentShader.kernel16_loc, this.kernel);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, this.depthFboNeo.colorBuffer);  // original.***
+		gl.activeTexture(gl.TEXTURE1);
+		gl.bindTexture(gl.TEXTURE_2D, this.noiseTexture);
 	}
-	else 
-	{
-		gl.uniform4fv(currentShader.oneColor4_loc, [0.7, 0.4, 0.95, 1.0]); //.***
-	}
-
-	gl.uniform1i(currentShader.depthTex_loc, 0);
-	gl.uniform1i(currentShader.noiseTex_loc, 1);
-	gl.uniform1i(currentShader.diffuseTex_loc, 2); // no used.***
-	gl.uniform1f(currentShader.fov_loc, this.sceneState.camera.frustum.fovyRad);	// "frustum._fov" is in radians.***
-	gl.uniform1f(currentShader.aspectRatio_loc, this.sceneState.camera.frustum.aspectRatio);
-	gl.uniform1f(currentShader.screenWidth_loc, this.sceneState.drawingBufferWidth);	
-	gl.uniform1f(currentShader.screenHeight_loc, this.sceneState.drawingBufferHeight);
-
-
-	gl.uniform2fv(currentShader.noiseScale2_loc, [this.depthFboNeo.width/this.noiseTexture.width, this.depthFboNeo.height/this.noiseTexture.height]);
-	gl.uniform3fv(currentShader.kernel16_loc, this.kernel);
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, this.depthFboNeo.colorBuffer);  // original.***
-	gl.activeTexture(gl.TEXTURE1);
-	gl.bindTexture(gl.TEXTURE_2D, this.noiseTexture);
-
+	
 	var neoBuilding;
 	var natProject, mesh;
 	var geoLocDataManager;
-	var ssao_idx = 1;
 	var buildingGeoLocation;
 	var nativeProjectsCount = this.nativeProjectsArray.length;
 	for(var i=0; i<nativeProjectsCount; i++)
@@ -5290,7 +5320,7 @@ MagoManager.prototype.renderMagoGeometries = function()
 	gl.bindTexture(gl.TEXTURE_2D, null);
 	
 	gl.disable(gl.BLEND);
-
+	
 };
 
 /**
@@ -10186,9 +10216,10 @@ MagoManager.prototype.calculateBoundingBoxesNodes = function()
 			var tMatrix = ManagerUtils.calculateTransformMatrixAtWorldPosition(worldCoordPosition, heading, pitch, roll, undefined, tMatrix, this);
 			
 			// now calculate the geographicCoord of the center of the bBox.
-			var bboxCenterPoint = buildingSeed.bBox.getCenterPoint(bboxCenterPoint);
-			var bboxCenterPointWorldCoord = tMatrix.transformPoint3D(bboxCenterPoint, bboxCenterPointWorldCoord);
-			buildingSeed.geographicCoordOfBBox = ManagerUtils.pointToGeographicCoord(bboxCenterPointWorldCoord, buildingSeed.geographicCoordOfBBox, this); // original.
+			//var bboxCenterPoint = buildingSeed.bBox.getCenterPoint(bboxCenterPoint);
+			//var bboxCenterPointWorldCoord = tMatrix.transformPoint3D(bboxCenterPoint, bboxCenterPointWorldCoord);
+			//buildingSeed.geographicCoordOfBBox = ManagerUtils.pointToGeographicCoord(bboxCenterPointWorldCoord, buildingSeed.geographicCoordOfBBox, this); // original.
+			buildingSeed.geographicCoordOfBBox.setLonLatAlt(longitude, latitude, height);
 		}
 	}
 	
@@ -14108,143 +14139,6 @@ Texture.prototype.deleteObjects = function(gl)
 'use strict';
 
 /**
- * 어떤 일을 하고 있습니까?
- * @class Triangle
- */
-var Triangle= function() 
-{
-	if (!(this instanceof Triangle)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.vertex0;
-	this.vertex1;
-	this.vertex2;
-	this.vtxIdx0;
-	this.vtxIdx1;
-	this.vtxIdx2;
-	this.normal; // plainNormal.
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-Triangle.prototype.deleteObjects = function() 
-{
-	// the triangle no delete vertices.***
-	if (this.vertex0)
-	{
-		//this.vertex0.deleteObjects();
-		this.vertex0 = undefined;
-	}
-	if (this.vertex1)
-	{
-		//this.vertex1.deleteObjects();
-		this.vertex1 = undefined;
-	}
-	if (this.vertex2)
-	{
-		//this.vertex2.deleteObjects();
-		this.vertex2 = undefined;
-	}
-	if (this.normal)
-	{
-		this.normal.deleteObjects();
-		this.normal = undefined;
-	}
-	
-	this.vtxIdx0 = undefined;
-	this.vtxIdx1 = undefined;
-	this.vtxIdx2 = undefined;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param vertex0 변수
- * @param vertex1 변수
- * @param vertex2 변수
- */
-Triangle.prototype.setVertices = function(vertex0, vertex1, vertex2) 
-{
-	this.vertex0 = vertex0;
-	this.vertex1 = vertex1;
-	this.vertex2 = vertex2;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-Triangle.prototype.invertSense = function() 
-{
-	var vertexAux = this.vertex1;
-	this.vertex1 = this.vertex2;
-	this.vertex2 = vertexAux;
-	
-	this.calculatePlaneNormal();
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-Triangle.prototype.calculatePlaneNormal = function() 
-{
-	if (this.normal === undefined)
-	{ this.normal = new Point3D(); }
-
-	this.getCrossProduct(0, this.normal);
-	this.normal.unitary();
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param idxVertex 변수
- * @param resultCrossProduct 변수
- * @returns resultCrossProduct
- */
-Triangle.prototype.getCrossProduct = function(idxVertex, resultCrossProduct) 
-{
-	if (resultCrossProduct === undefined)
-	{ resultCrossProduct = new Point3D(); }
-
-	var currentPoint, prevPoint, nextPoint;
-
-	if (idxVertex === 0)
-	{
-		currentPoint = this.vertex0.point3d;
-		prevPoint = this.vertex2.point3d;
-		nextPoint = this.vertex1.point3d;
-	}
-	else if (idxVertex === 1)
-	{
-		currentPoint = this.vertex1.point3d;
-		prevPoint = this.vertex0.point3d;
-		nextPoint = this.vertex2.point3d;
-	}
-	else if (idxVertex === 2)
-	{
-		currentPoint = this.vertex2.point3d;
-		prevPoint = this.vertex1.point3d;
-		nextPoint = this.vertex0.point3d;
-	}
-
-	var v1 = new Point3D();
-	var v2 = new Point3D();
-
-	v1.set(currentPoint.x - prevPoint.x,     currentPoint.y - prevPoint.y,     currentPoint.z - prevPoint.z);
-	v2.set(nextPoint.x - currentPoint.x,     nextPoint.y - currentPoint.y,     nextPoint.z - currentPoint.z);
-
-	v1.unitary();
-	v2.unitary();
-
-	resultCrossProduct = v1.crossProduct(v2, resultCrossProduct);
-
-	return resultCrossProduct;
-};
-
-'use strict';
-
-/**
  * 영역 박스
  * @class TriPolyhedron
  */
@@ -14418,11 +14312,16 @@ var TriSurface = function()
 		throw new Error(Messages.CONSTRUCT_ERROR);
 	}
 
-	this.trianglesArray = [];
+	this.vertexList;
+	this.trianglesArray;
+	this.trianglesList;
 };
 
 TriSurface.prototype.newTriangle = function() 
 {
+	if(this.trianglesArray === undefined)
+		this.trianglesArray = [];
+	
 	var triangle = new Triangle();
 	this.trianglesArray.push(triangle);
 	return triangle;
@@ -14436,6 +14335,8 @@ TriSurface.prototype.invertTrianglesSenses = function()
 		this.trianglesArray[i].invertSense();
 	}
 };
+
+
 
 'use strict';
 
@@ -15098,866 +14999,6 @@ VBOMemoryManager.prototype.getClassifiedBufferSize = function(currentBufferSize)
 
 
 
-
-
-
-'use strict';
-
-  
-/**
- * 어떤 일을 하고 있습니까?
- * @class Vertex
- */
-var Vertex = function(position) 
-{
-	if (!(this instanceof Vertex)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	this.point3d;
-	this.normal; // class: Point3D.
-	this.texCoord; // class: Point2D.
-	this.color4; // class: Color.
-	this.outHalfEdgesArray; // Array [class: HalfEdge]. 
-	this.vertexType; // 1 = important vertex.***
-	
-	if(position)
-		this.point3d = position;
-	else
-	{
-		this.point3d = new Point3D();
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Vertex.prototype.deleteObjects = function() 
-{
-	if (this.point3d)
-	{ this.point3d.deleteObjects(); }
-	if (this.normal)
-	{ this.normal.deleteObjects(); }
-	if (this.texCoord)
-	{ this.texCoord.deleteObjects(); }
-	if (this.color4)
-	{ this.color4.deleteObjects(); }
-	
-	this.point3d = undefined;
-	this.normal = undefined;
-	this.texCoord = undefined;
-	this.color4 = undefined;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Vertex.prototype.copyFrom = function(vertex) 
-{
-	// copy position if exist.
-	if (vertex.point3d)
-	{
-		if (this.point3d === undefined)
-		{ this.point3d = new Point3D(); }
-		
-		this.point3d.copyFrom(vertex.point3d);
-	}
-	
-	// copy normal if exist.
-	if (vertex.normal)
-	{
-		if (this.normal === undefined)
-		{ this.normal = new Point3D(); }
-		
-		this.normal.copyFrom(vertex.normal);
-	}
-	
-	// copy texCoord if exist.
-	if (vertex.texCoord)
-	{
-		if (this.texCoord === undefined)
-		{ this.texCoord = new Point2D(); }
-		
-		this.texCoord.copyFrom(vertex.texCoord);
-	}
-	
-	// copy color4 if exist.
-	if (vertex.color4)
-	{
-		if (this.color4 === undefined)
-		{ this.color4 = new Color(); }
-		
-		this.color4.copyFrom(vertex.color4);
-	}
-	
-	this.vertexType = vertex.vertexType;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Vertex.prototype.setPosition = function(x, y, z) 
-{
-	this.point3d.set(x, y, z);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param r 변수
- * @param g 변수
- * @param b 변수
- */
-Vertex.prototype.setColorRGB = function(r, g, b) 
-{
-	if (this.color4 === undefined) { this.color4 = new Color(); }
-	
-	this.color4.setRGB(r, g, b);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param r 변수
- * @param g 변수
- * @param b 변수
- * @param alpha 변수
- */
-Vertex.prototype.setColorRGBA = function(r, g, b, alpha) 
-{
-	if (this.color4 === undefined) { this.color4 = new Color(); }
-	
-	this.color4.setRGBA(r, g, b, alpha);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param r 변수
- * @param g 변수
- * @param b 변수
- * @param alpha 변수
- */
-Vertex.prototype.setNormal = function(nx, ny, nz) 
-{
-	if (this.normal === undefined) { this.normal = new Point3D(); }
-	
-	this.normal.set(nx, ny, nz);
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param dirX 변수
- * @param dirY 변수
- * @param dirZ 변수
- * @param distance 변수
- */
-Vertex.prototype.translate = function(dx, dy, dz) 
-{
-	this.point3d.add(dx, dy, dz);
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class VertexList
- */
-var VertexList = function() 
-{
-	if (!(this instanceof VertexList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.vertexArray = [];
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertex
- */
-VertexList.prototype.deleteObjects = function() 
-{
-	for (var i = 0, vertexCount = this.vertexArray.length; i < vertexCount; i++) 
-	{
-		this.vertexArray[i].deleteObjects();
-		this.vertexArray[i] = undefined;
-	}
-	this.vertexArray = undefined;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertex
- */
-VertexList.prototype.copyFrom = function(vertexList) 
-{
-	// first reset vertexArray.
-	this.deleteObjects();
-	this.vertexArray = [];
-	
-	var vertex;
-	var myVertex;
-	var vertexCount = vertexList.getVertexCount();
-	for (var i=0; i<vertexCount; i++)
-	{
-		vertex = vertexList.getVertex(i);
-		myVertex = this.newVertex();
-		myVertex.copyFrom(vertex);
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertex
- */
-VertexList.prototype.copyFromPoint2DList = function(point2dList, z) 
-{
-	// first reset vertexArray.
-	this.deleteObjects();
-	this.vertexArray = [];
-	
-	var point2d;
-	var vertex;
-	if(z === undefined)
-		z = 0;
-
-	var pointsCount = point2dList.getPointsCount();
-	for(var i=0; i<pointsCount; i++)
-	{
-		point2d = point2dList.getPoint(i);
-		vertex = this.newVertex();
-		vertex.point3d = new Point3D();
-		vertex.point3d.set(point2d.x, point2d.y, z);
-		vertex.vertexType = point2d.pointType;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertex
- */
-VertexList.prototype.setNormal = function(nx, ny, nz) 
-{
-	var vertex;
-	var vertexCount = this.getVertexCount();
-	for (var i=0; i<vertexCount; i++)
-	{
-		vertex = this.getVertex(i);
-		vertex.setNormal(nx, ny, nz);
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertex
- */
-VertexList.prototype.newVertex = function() 
-{
-	var vertex = new Vertex();
-	this.vertexArray.push(vertex);
-	return vertex;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param idx 변수
- * @returns vertexArray[idx]
- */
-VertexList.prototype.getVertex = function(idx) 
-{
-	return this.vertexArray[idx];
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexArray.length
- */
-VertexList.prototype.getVertexCount = function() 
-{
-	return this.vertexArray.length;
-};
-
-VertexList.prototype.getPrevIdx = function(idx)
-{
-	var verticesCount = this.vertexArray.length;
-	var prevIdx;
-	
-	if(idx === 0)
-		prevIdx = verticesCount - 1;
-	else
-		prevIdx = idx - 1;
-
-	return prevIdx;
-};
-
-VertexList.prototype.getNextIdx = function(idx)
-{
-	var verticesCount = this.vertexArray.length;
-	var nextIdx;
-	
-	if(idx === verticesCount - 1)
-		nextIdx = 0;
-	else
-		nextIdx = idx + 1;
-
-	return nextIdx;
-};
-
-VertexList.prototype.getIdxOfVertex = function(vertex)
-{
-	var verticesCount = this.vertexArray.length;
-	var i=0;
-	var idx = -1;
-	var found = false;
-	while(!found && i<verticesCount)
-	{
-		if(this.vertexArray[i] === vertex)
-		{
-			found = true;
-			idx = i;
-		}
-		i++;
-	}
-	
-	return idx;
-};
-
-VertexList.prototype.getVtxSegment = function(idx, resultVtxSegment)
-{
-	var currVertex = this.getVertex(idx);
-	var nextIdx = this.getNextIdx(idx);
-	var nextVertex = this.getVertex(nextIdx);
-	
-	if(resultVtxSegment === undefined)
-		resultVtxSegment = new VtxSegment(currVertex, nextVertex);
-	else{
-		resultVtxSegment.setVertices(currVertex, nextVertex);
-	}
-
-	return resultVtxSegment;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param dirX 변수
- * @param dirY 변수
- * @param dirZ 변수
- * @param distance 변수
- */
-VertexList.prototype.translateVertices = function(dx, dy, dz) 
-{
-	for (var i = 0, vertexCount = this.vertexArray.length; i < vertexCount; i++) 
-	{
-		this.vertexArray[i].translate(dx, dy, dz);
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param resultBox 변수
- * @returns resultBox
- */
-VertexList.prototype.getBoundingBox = function(resultBox) 
-{
-	if (resultBox === undefined) { resultBox = new BoundingBox(); }
-
-	for (var i = 0, vertexCount = this.vertexArray.length; i < vertexCount; i++) 
-	{
-		if (i === 0) { resultBox.init(this.vertexArray[i].point3d); }
-		else { resultBox.addPoint(this.vertexArray[i].point3d); }
-	}
-	return resultBox;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param transformMatrix 변수
- */
-VertexList.prototype.transformPointsByMatrix4 = function(transformMatrix) 
-{
-	for (var i = 0, vertexCount = this.vertexArray.length; i < vertexCount; i++) 
-	{
-		var vertex = this.vertexArray[i];
-		transformMatrix.transformPoint3D(vertex.point3d, vertex.point3d);
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param transformMatrix 변수
- */
-VertexList.prototype.getVboDataArrays = function(resultVbo) 
-{
-	// returns positions, and if exist, normals, colors, texCoords.***
-	var verticesCount = this.vertexArray.length;
-	if(verticesCount === 0)
-		return resultVbo;
-	
-	if(resultVbo === undefined)
-		resultVbo = new VBOVertexIdxCacheKey();
-	
-	var posArray = [];
-	var norArray;
-	var colArray;
-	var texCoordArray;
-	
-	var vertex, position, normal, color, texCoord;
-	
-	for (var i = 0; i < verticesCount; i++) 
-	{
-		vertex = this.vertexArray[i];
-		if(vertex.point3d === undefined)
-			continue;
-		
-		position = vertex.point3d;
-		posArray.push(position.x);
-		posArray.push(position.y);
-		posArray.push(position.z);
-		
-		normal = vertex.normal;
-		if(normal)
-		{
-			if(norArray === undefined)
-				norArray = [];
-			
-			norArray.push(normal.x*255);
-			norArray.push(normal.y*255);
-			norArray.push(normal.z*255);
-		}
-		
-		color = vertex.color4;
-		if(color)
-		{
-			if(colArray === undefined)
-				colArray = [];
-			
-			colArray.push(color.r);
-			colArray.push(color.g);
-			colArray.push(color.b);
-			colArray.push(color.a);
-		}
-		
-		texCoord = vertex.texCoord;
-		if(texCoord)
-		{
-			if(texCoordArray === undefined)
-				texCoordArray = [];
-			
-			texCoordArray.push(texCoord.x);
-			texCoordArray.push(texCoord.y);
-		}
-	}
-	
-	resultVbo.posVboDataArray = Float32Array.from(posArray);
-	if(normal)
-		resultVbo.norVboDataArray = Int8Array.from(norArray);
-	
-	if(color)
-		resultVbo.colVboDataArray = Int8Array.from(colArray);
-	
-	if(texCoord)
-		resultVbo.tcoordVboDataArray = Float32Array.from(texCoordArray);
-	
-	return resultVbo;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class VertexMatrix
- */
-var VertexMatrix = function() 
-{
-	if (!(this instanceof VertexMatrix)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	this.vertexListsArray = [];
-	// SCTRATXH.******************
-	this.totalVertexArraySC = [];
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-VertexMatrix.prototype.deleteObjects = function() 
-{
-	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount; i++) 
-	{
-		this.vertexListsArray[i].deleteObjects();
-		this.vertexListsArray[i] = undefined;
-	}
-	this.vertexListsArray = undefined;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-VertexMatrix.prototype.newVertexList = function() 
-{
-	var vertexList = new VertexList();
-	this.vertexListsArray.push(vertexList);
-	return vertexList;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param idx 변수
- * @returns vertexListArray[idx]
- */
-VertexMatrix.prototype.getVertexList = function(idx) 
-{
-	if (idx >= 0 && idx < this.vertexListsArray.length) 
-	{
-		return this.vertexListsArray[idx];
-	}
-	else 
-	{
-		return undefined;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param vertexMatrix 변수
- */
-VertexMatrix.prototype.copyFrom = function(vertexMatrix) 
-{
-	if(vertexMatrix === undefined)
-		return;
-	
-	var vertexList, myVertexList;
-	var vertexListsCount = vertexMatrix.vertexListsArray.length;
-	for(var i=0; i<vertexListsCount; i++)
-	{
-		vertexList = vertexMatrix.getVertexList(i);
-		myVertexList = this.newVertexList();
-		myVertexList.copyFrom(vertexList);
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param resultBox
- * @returns resultBox
- */
-VertexMatrix.prototype.getBoundingBox = function(resultBox) 
-{
-	if (resultBox === undefined) { resultBox = new BoundingBox(); }
-	
-	this.totalVertexArraySC.length = 0;
-	this.totalVertexArraySC = this.getTotalVertexArray(this.totalVertexArraySC);
-	for (var i = 0, totalVertexCount = this.totalVertexArraySC.length; i < totalVertexCount; i++) 
-	{
-		if (i === 0) { resultBox.init(this.totalVertexArraySC[i].point3d); }
-		else { resultBox.addPoint(this.totalVertexArraySC[i].point3d); }
-	}
-	return resultBox;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-VertexMatrix.prototype.setVertexIdxInList = function() 
-{
-	var idxInList = 0;
-	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount; i++) 
-	{
-		var vtxList = this.vertexListsArray[i];
-		for (var j = 0, vertexCount = vtxList.vertexArray.length; j < vertexCount; j++) 
-		{
-			var vertex = vtxList.getVertex(j);
-			vertex.mIdxInList = idxInList;
-			idxInList++;
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexCount
- */
-VertexMatrix.prototype.getVertexCount = function() 
-{
-	var vertexCount = 0;
-	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount; i++) 
-	{
-		vertexCount += this.vertexListsArray[i].getVertexCount();
-	}
-	
-	return vertexCount;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param resultTotalVertexArray 변수
- * @returns resultTotalVertexArray
- */
-VertexMatrix.prototype.getTotalVertexArray = function(resultTotalVertexArray) 
-{
-	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount; i++) 
-	{
-		var vtxList = this.vertexListsArray[i];
-		for (var j = 0, vertexCount = vtxList.vertexArray.length; j < vertexCount; j++) 
-		{
-			var vertex = vtxList.getVertex(j);
-			resultTotalVertexArray.push(vertex);
-		}
-	}
-	
-	return resultTotalVertexArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param resultFloatArray 변수
- * @returns resultFloatArray
- */
-VertexMatrix.prototype.getVBOVertexColorFloatArray = function(resultFloatArray) 
-{
-	this.totalVertexArraySC.length = 0;
-	this.totalVertexArraySC = this.getTotalVertexArray(this.totalVertexArraySC);
-	
-	var totalVertexCount = this.totalVertexArraySC.length;
-	if (resultFloatArray === undefined) { resultFloatArray = new Float32Array(totalVertexCount * 6); }
-	
-	for (var i = 0; i < totalVertexCount; i++) 
-	{
-		var vertex = this.totalVertexArraySC[i];
-		resultFloatArray[i*6] = vertex.point3d.x;
-		resultFloatArray[i*6+1] = vertex.point3d.y;
-		resultFloatArray[i*6+2] = vertex.point3d.z;
-		
-		resultFloatArray[i*6+3] = vertex.color4.r;
-		resultFloatArray[i*6+4] = vertex.color4.g;
-		resultFloatArray[i*6+5] = vertex.color4.b;
-	}
-	
-	return resultFloatArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param resultFloatArray 변수
- * @returns resultFloatArray
- */
-VertexMatrix.prototype.getVBOVertexColorRGBAFloatArray = function(resultFloatArray) 
-{
-	this.totalVertexArraySC.length = 0;
-	this.totalVertexArraySC = this.getTotalVertexArray(this.totalVertexArraySC);
-	
-	var totalVertexCount = this.totalVertexArraySC.length;
-	if (resultFloatArray === undefined) { resultFloatArray = new Float32Array(totalVertexCount * 7); }
-	
-	for (var i = 0; i < totalVertexCount; i++) 
-	{
-		var vertex = this.totalVertexArraySC[i];
-		resultFloatArray[i*7] = vertex.point3d.x;
-		resultFloatArray[i*7+1] = vertex.point3d.y;
-		resultFloatArray[i*7+2] = vertex.point3d.z;
-		
-		resultFloatArray[i*7+3] = vertex.color4.r;
-		resultFloatArray[i*7+4] = vertex.color4.g;
-		resultFloatArray[i*7+5] = vertex.color4.b;
-		resultFloatArray[i*7+6] = vertex.color4.a;
-	}
-	
-	return resultFloatArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param resultFloatArray 변수
- * @returns resultFloatArray
- */
-VertexMatrix.prototype.getVBOVertexFloatArray = function(resultFloatArray) 
-{
-	this.totalVertexArraySC.length = 0;
-	this.totalVertexArraySC = this.getTotalVertexArray(this.totalVertexArraySC);
-	
-	var totalVertexCount = this.totalVertexArraySC.length;
-	if (resultFloatArray === undefined) { resultFloatArray = new Float32Array(totalVertexCount * 3); }
-	
-	for (var i = 0; i < totalVertexCount; i++) 
-	{
-		var vertex = this.totalVertexArraySC[i];
-		resultFloatArray[i*3] = vertex.point3d.x;
-		resultFloatArray[i*3+1] = vertex.point3d.y;
-		resultFloatArray[i*3+2] = vertex.point3d.z;
-	}
-	
-	return resultFloatArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param dirX 변수
- * @param dirY 변수
- * @param dirZ 변수
- * @param distance 변수
- */
-VertexMatrix.prototype.translateVertices = function(dx, dy, dz) 
-{
-	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount; i++) 
-	{
-		this.vertexListsArray[i].translateVertices(dx, dy, dz);
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param tTrianglesMatrix 변수
- */
-VertexMatrix.prototype.makeTTrianglesLateralSidesLOOP = function(tTrianglesMatrix) 
-{
-	// condition: all the vertex lists must have the same number of vertex.***
-	var vtxList1;
-	var vtxList2;
-	var tTrianglesList;
-	var tTriangle1;
-	var tTriangle2;
-	var vertexCount = 0;
-	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount-1; i++) 
-	{
-		vtxList1 = this.vertexListsArray[i];
-		vtxList2 = this.vertexListsArray[i+1];
-		tTrianglesList = tTrianglesMatrix.newTTrianglesList();
-		
-		vertexCount = vtxList1.vertexArray.length;
-		for (var j = 0; j < vertexCount; j++) 
-		{
-			tTriangle1 = tTrianglesList.newTTriangle();
-			tTriangle2 = tTrianglesList.newTTriangle();
-			
-			if (j === vertexCount-1) 
-			{
-				tTriangle1.setVertices(vtxList1.getVertex(j), vtxList2.getVertex(j), vtxList2.getVertex(0)); 
-				tTriangle2.setVertices(vtxList1.getVertex(j), vtxList2.getVertex(0), vtxList1.getVertex(0)); 
-			}
-			else 
-			{
-				tTriangle1.setVertices(vtxList1.getVertex(j), vtxList2.getVertex(j), vtxList2.getVertex(j+1)); 
-				tTriangle2.setVertices(vtxList1.getVertex(j), vtxList2.getVertex(j+1), vtxList1.getVertex(j+1)); 
-			}
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param transformMatrix
- */
-VertexMatrix.prototype.transformPointsByMatrix4 = function(transformMatrix) 
-{
-	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount; i++) 
-	{
-		var vtxList = this.vertexListsArray[i];
-		vtxList.transformPointsByMatrix4(transformMatrix);
-	}
-};
-
-
 'use strict';
 
 /**
@@ -15993,6 +15034,1657 @@ VisibleObjectsController.prototype.clear = function()
 	this.currentVisibles3.length = 0;
 };
 
+'use strict';
+
+/**
+ * mago3djs API
+ * 
+ * @alias API
+ * @class API
+ * 
+ * @param {any} apiName api이름
+ */
+function API(apiName)
+{
+	if (!(this instanceof API)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	// mago3d 활성화/비활성화 여부
+	this.magoEnable = true;
+
+	// api 이름
+	this.apiName = apiName;
+	
+	// project id
+	this.projectId = null;
+	this.projectDataFolder = null;
+	// objectIds
+	this.objectIds = null;
+	// data_key
+	this.dataKey = null;
+	// issueId
+	this.issueId = null;
+	// issueType
+	this.issueType = null;
+	// drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
+	this.drawType = 0;
+
+	// 위도
+	this.latitude = 0;
+	// 경도
+	this.longitude = 0;
+	// 높이
+	this.elevation = 0;
+	// heading
+	this.heading = 0;
+	// pitch
+	this.pitch = 0;
+	// roll
+	this.roll = 0;
+	// duration
+	this.duration = 0;
+
+	// 속성
+	this.property = null;
+	// 색깔
+	this.color = 0;
+	// structs = MSP, outfitting = MOP
+	this.blockType = null;
+	// outfitting 표시/비표시
+	this.showOutFitting = false;
+	// label 표시/비표시
+	this.showLabelInfo = true;
+	// boundingBox 표시/비표시
+	this.showBoundingBox = false;
+	// 그림자 표시/비표시
+	this.showShadow = false;
+	// frustum culling 가시 거리(M단위)
+	this.frustumFarDistance = 0;
+	// move mode 
+	this.objectMoveMode = CODE.moveMode.NONE;
+	// 이슈 등록 표시
+	this.issueInsertEnable = false;
+	// object 정보 표시
+	this.objectInfoViewEnable = false;
+	// 이슈 목록 표시
+	this.nearGeoIssueListEnable = false;
+	// occlusion culling
+	this.occlusionCullingEnable = false;
+	//
+	this.insertIssueState = 0;
+	
+	// LOD1
+	this.lod0DistInMeters = null;
+	this.lod1DistInMeters = null;
+	this.lod2DistInMeters = null;
+	this.lod3DistInMeters = null;
+	this.lod4DistInMeters = null;
+	this.lod5DistInMeters = null;
+	
+	// Lighting
+	this.ambientReflectionCoef = null;
+	this.diffuseReflectionCoef = null;
+	this.specularReflectionCoef = null;
+	this.ambientColor = null;
+	this.specularColor = null;
+	
+	this.ssaoRadius = null;
+	//
+	this.FPVMode = false;
+};
+
+API.prototype.getMagoEnable = function() 
+{
+	return this.magoEnable;
+};
+API.prototype.setMagoEnable = function(magoEnable) 
+{
+	this.magoEnable = magoEnable;
+};
+
+API.prototype.getAPIName = function() 
+{
+	return this.apiName;
+};
+
+API.prototype.getProjectId = function() 
+{
+	return this.projectId;
+};
+API.prototype.setProjectId = function(projectId) 
+{
+	this.projectId = projectId;
+};
+
+API.prototype.getProjectDataFolder = function() 
+{
+	return this.projectDataFolder;
+};
+API.prototype.setProjectDataFolder = function(projectDataFolder) 
+{
+	this.projectDataFolder = projectDataFolder;
+};
+
+API.prototype.getObjectIds = function() 
+{
+	return this.objectIds;
+};
+API.prototype.setObjectIds = function(objectIds) 
+{
+	this.objectIds = objectIds;
+};
+
+API.prototype.getIssueId = function() 
+{
+	return this.issueId;
+};
+API.prototype.setIssueId = function(issueId) 
+{
+	this.issueId = issueId;
+};
+API.prototype.getIssueType = function() 
+{
+	return this.issueType;
+};
+API.prototype.setIssueType = function(issueType) 
+{
+	this.issueId = issueType;
+};
+
+API.prototype.getDataKey = function() 
+{
+	return this.dataKey;
+};
+API.prototype.setDataKey = function(dataKey) 
+{
+	this.dataKey = dataKey;
+};
+
+API.prototype.getLatitude = function() 
+{
+	return this.latitude;
+};
+API.prototype.setLatitude = function(latitude) 
+{
+	this.latitude = latitude;
+};
+
+API.prototype.getLongitude = function() 
+{
+	return this.longitude;
+};
+API.prototype.setLongitude = function(longitude) 
+{
+	this.longitude = longitude;
+};
+
+API.prototype.getElevation = function() 
+{
+	return this.elevation;
+};
+API.prototype.setElevation = function(elevation) 
+{
+	this.elevation = elevation;
+};
+
+API.prototype.getHeading = function() 
+{
+	return this.heading;
+};
+API.prototype.setHeading = function(heading) 
+{
+	this.heading = heading;
+};
+
+API.prototype.getPitch = function() 
+{
+	return this.pitch;
+};
+API.prototype.setPitch = function(pitch) 
+{
+	this.pitch = pitch;
+};
+
+API.prototype.getRoll = function() 
+{
+	return this.roll;
+};
+API.prototype.setRoll = function(roll) 
+{
+	this.roll = roll;
+};
+
+API.prototype.getProperty = function() 
+{
+	return this.property;
+};
+API.prototype.setProperty = function(property) 
+{
+	this.property = property;
+};
+
+API.prototype.getColor = function() 
+{
+	return this.color;
+};
+API.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+
+API.prototype.getBlockType = function() 
+{
+	return this.blockType;
+};
+API.prototype.setBlockType = function(blockType) 
+{
+	this.blockType = blockType;
+};
+
+API.prototype.getShowOutFitting = function() 
+{
+	return this.showOutFitting;
+};
+API.prototype.setShowOutFitting = function(showOutFitting) 
+{
+	this.showOutFitting = showOutFitting;
+};
+
+
+API.prototype.getShowLabelInfo = function() 
+{
+	return this.showLabelInfo;
+};
+API.prototype.setShowLabelInfo = function(showLabelInfo) 
+{
+	this.showLabelInfo = showLabelInfo;
+};
+API.prototype.getShowBoundingBox = function() 
+{
+	return this.showBoundingBox;
+};
+API.prototype.setShowBoundingBox = function(showBoundingBox) 
+{
+	this.showBoundingBox = showBoundingBox;
+};
+
+API.prototype.getShowShadow = function() 
+{
+	return this.showShadow;
+};
+API.prototype.setShowShadow = function(showShadow) 
+{
+	this.showShadow = showShadow;
+};
+
+API.prototype.getFrustumFarDistance = function() 
+{
+	return this.frustumFarDistance;
+};
+API.prototype.setFrustumFarDistance = function(frustumFarDistance) 
+{
+	this.frustumFarDistance = frustumFarDistance;
+};
+
+API.prototype.getObjectMoveMode = function() 
+{
+	return this.objectMoveMode;
+};
+API.prototype.setObjectMoveMode = function(objectMoveMode) 
+{
+	this.objectMoveMode = objectMoveMode;
+};
+
+API.prototype.getIssueInsertEnable = function() 
+{
+	return this.issueInsertEnable;
+};
+API.prototype.setIssueInsertEnable = function(issueInsertEnable) 
+{
+	this.issueInsertEnable = issueInsertEnable;
+};
+API.prototype.getObjectInfoViewEnable = function() 
+{
+	return this.objectInfoViewEnable;
+};
+API.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
+{
+	this.objectInfoViewEnable = objectInfoViewEnable;
+};
+API.prototype.getOcclusionCullingEnable = function() 
+{
+	return this.occlusionCullingEnable;
+};
+API.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
+{
+	this.occlusionCullingEnable = occlusionCullingEnable;
+};
+API.prototype.getNearGeoIssueListEnable = function() 
+{
+	return this.nearGeoIssueListEnable;
+};
+API.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
+{
+	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
+};
+
+API.prototype.getInsertIssueState = function() 
+{
+	return this.insertIssueState;
+};
+API.prototype.setInsertIssueState = function(insertIssueState) 
+{
+	this.insertIssueState = insertIssueState;
+};
+
+API.prototype.getDrawType = function() 
+{
+	return this.drawType;
+};
+API.prototype.setDrawType = function(drawType) 
+{
+	this.drawType = drawType;
+};
+
+API.prototype.getLod0DistInMeters = function() 
+{
+	return this.lod0DistInMeters;
+};
+API.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
+{
+	this.lod0DistInMeters = lod0DistInMeters;
+};
+API.prototype.getLod1DistInMeters = function() 
+{
+	return this.lod1DistInMeters;
+};
+API.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
+{
+	this.lod1DistInMeters = lod1DistInMeters;
+};
+API.prototype.getLod2DistInMeters = function() 
+{
+	return this.lod2DistInMeters;
+};
+API.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
+{
+	this.lod2DistInMeters = lod2DistInMeters;
+};
+API.prototype.getLod3DistInMeters = function() 
+{
+	return this.lod3DistInMeters;
+};
+API.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
+{
+	this.lod3DistInMeters = lod3DistInMeters;
+};
+API.prototype.getLod4DistInMeters = function() 
+{
+	return this.lod4DistInMeters;
+};
+API.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
+{
+	this.lod4DistInMeters = lod4DistInMeters;
+};
+API.prototype.getLod5DistInMeters = function() 
+{
+	return this.lod5DistInMeters;
+};
+API.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
+{
+	this.lod5DistInMeters = lod5DistInMeters;
+};
+
+API.prototype.getAmbientReflectionCoef = function() 
+{
+	return this.ambientReflectionCoef;
+};
+API.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
+{
+	this.ambientReflectionCoef = ambientReflectionCoef;
+};
+API.prototype.getDiffuseReflectionCoef = function() 
+{
+	return this.diffuseReflectionCoef;
+};
+API.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
+{
+	this.diffuseReflectionCoef = diffuseReflectionCoef;
+};
+API.prototype.getSpecularReflectionCoef = function() 
+{
+	return this.specularReflectionCoef;
+};
+API.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
+{
+	this.specularReflectionCoef = specularReflectionCoef;
+};
+API.prototype.getAmbientColor = function() 
+{
+	return this.ambientColor;
+};
+API.prototype.setAmbientColor = function(ambientColor) 
+{
+	this.ambientColor = ambientColor;
+};
+API.prototype.getSpecularColor = function() 
+{
+	return this.specularColor;
+};
+API.prototype.setSpecularColor = function(specularColor) 
+{
+	this.specularColor = specularColor;
+};
+API.prototype.getSsaoRadius = function() 
+{
+	return this.ssaoRadius;
+};
+API.prototype.setSsaoRadius = function(ssaoRadius) 
+{
+	this.ssaoRadius = ssaoRadius;
+};
+API.prototype.getFPVMode = function()
+{
+	return this.FPVMode;
+};
+API.prototype.setFPVMode = function(value)
+{
+	this.FPVMode = value;
+};
+
+API.prototype.getDuration = function()
+{
+	return this.duration;
+};
+API.prototype.setDuration = function(duration)
+{
+	this.duration = duration;
+};
+'use strict';
+
+/**
+ * api 처리 결과를 담당하는 callback function
+ * @param functionName policy json의 geo_callback_apiresult 속성값
+ * @param apiName 호출한 api 이름
+ * @param result 결과값
+ */
+function apiResultCallback(functionName, apiName, result) 
+{
+	window[functionName](apiName, result);
+}
+
+/**
+ * 선택한 object 정보를 화면에 표시
+ * @param functionName callback
+ * @param projectId
+ * @param data_key
+ * @param objectId
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ * @param heading
+ * @param pitch
+ * @param roll
+ * @param
+ */
+function selectedObjectCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll)
+{
+	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll);
+}
+
+/**
+ * 이동한 data 정보를 화면에 표시
+ * @param functionName callback
+ * @param projectId
+ * @param data_key
+ * @param objectId
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ * @param heading
+ * @param pitch
+ * @param roll
+ * @param
+ */
+function movedDataCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll)
+{
+	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll);
+}
+
+/**
+ * Data Key 를 이용하여 Geo Spatial Info를 획득하여 화면에 표시
+ * @param functionName callback
+ * @param projectId
+ * @param data_key
+ * @param dataName
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ * @param heading
+ * @param pitch
+ * @param roll
+ * @param
+ */
+function dataInfoCallback(functionName, projectId, dataKey, dataName, latitude, longitude, elevation, heading, pitch, roll)
+{
+	window[functionName](projectId, dataKey, dataName, latitude, longitude, elevation, heading, pitch, roll);
+}
+
+/**
+ * 선택한 object 정보를 화면에 표시
+ * @param functionName
+ * @param projectId
+ * @param data_key
+ * @param objectId
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ */
+function insertIssueCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation)
+{
+	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation);
+}
+
+/**
+ * mouse click 위치 정보를 화면에 표시
+ * @param functionName
+ * @param position
+ */
+function clickPositionCallback(functionName, position) 
+{
+	window[functionName](position);
+}
+
+'use strict';
+
+/**
+ * 사용자가 변경한 moving, color, rotation 등 이력 정보를 위한 domain
+ * @class Policy
+ */
+var ChangeHistory = function() 
+{
+	if (!(this instanceof ChangeHistory)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.moveHistory = false;
+	this.colorHistory = false;
+	this.rotationHistory = false;
+	
+	// move mode. ALL : 0 , OBJECT : 1, NONE : 2
+	this.objectMoveMode = null;
+	
+	// project id
+	this.projectId = null;
+	// project data folder
+	this.projectDataFolder = null;
+	// data_key
+	this.dataKey = null;	
+	// objectId
+	this.objectId = null;
+	// objectIndexOrder
+	this.objectIndexOrder = 0;
+	
+	// referenceObject aditional movement.
+	this.refObjectAditionalMove;
+	this.refObjectAditionalMoveRelToBuilding;
+	
+	// 위도
+	this.latitude = 0.0;
+	// 경도
+	this.longitude = 0.0;
+	// 높이
+	this.elevation = 0.0;
+	// heading
+	this.heading = 0.0;
+	// pitch
+	this.pitch = 0.0;
+	// roll
+	this.roll = 0.0;
+	// duration
+	this.duration = 0;
+	// 색깔
+	this.color = 0;
+	// color rgb
+	this.rgbColor = [];
+	// 속성
+	this.property = null;
+	this.propertyKey = null;
+	this.propertyValue = null;
+};
+
+ChangeHistory.prototype.getReferenceObjectAditionalMovement = function() 
+{
+	if (this.refObjectAditionalMove === undefined)
+	{ this.refObjectAditionalMove = new Point3D(); }
+	
+	return this.refObjectAditionalMove;
+};
+
+ChangeHistory.prototype.getReferenceObjectAditionalMovementRelToBuilding = function() 
+{
+	if (this.refObjectAditionalMoveRelToBuilding === undefined)
+	{ this.refObjectAditionalMoveRelToBuilding = new Point3D(); }
+	
+	return this.refObjectAditionalMoveRelToBuilding;
+};
+
+ChangeHistory.prototype.getProjectId = function() 
+{
+	return this.projectId;
+};
+ChangeHistory.prototype.setProjectId = function(projectId) 
+{
+	this.projectId = projectId;
+};
+
+ChangeHistory.prototype.getProjectDataFolder = function() 
+{
+	return this.projectDataFolder;
+};
+ChangeHistory.prototype.setProjectDataFolder = function(projectDataFolder) 
+{
+	this.projectDataFolder = projectDataFolder;
+};
+
+ChangeHistory.prototype.getDataKey = function() 
+{
+	return this.dataKey;
+};
+ChangeHistory.prototype.setDataKey = function(dataKey) 
+{
+	this.dataKey = dataKey;
+};
+
+ChangeHistory.prototype.getObjectId = function() 
+{
+	return this.objectId;
+};
+ChangeHistory.prototype.setObjectId = function(objectId) 
+{
+	this.objectId = objectId;
+};
+
+ChangeHistory.prototype.getObjectIndexOrder = function() 
+{
+	return this.objectIndexOrder;
+};
+ChangeHistory.prototype.setObjectIndexOrder = function(objectIndexOrder) 
+{
+	this.objectIndexOrder = objectIndexOrder;
+};
+
+ChangeHistory.prototype.getLatitude = function() 
+{
+	return this.latitude;
+};
+ChangeHistory.prototype.setLatitude = function(latitude) 
+{
+	this.latitude = latitude;
+};
+
+ChangeHistory.prototype.getLongitude = function() 
+{
+	return this.longitude;
+};
+ChangeHistory.prototype.setLongitude = function(longitude) 
+{
+	this.longitude = longitude;
+};
+
+ChangeHistory.prototype.getElevation = function() 
+{
+	return this.elevation;
+};
+ChangeHistory.prototype.setElevation = function(elevation) 
+{
+	this.elevation = elevation;
+};
+
+ChangeHistory.prototype.getHeading = function() 
+{
+	return this.heading;
+};
+ChangeHistory.prototype.setHeading = function(heading) 
+{
+	this.heading = heading;
+};
+
+ChangeHistory.prototype.getPitch = function() 
+{
+	return this.pitch;
+};
+ChangeHistory.prototype.setPitch = function(pitch) 
+{
+	this.pitch = pitch;
+};
+
+ChangeHistory.prototype.getRoll = function() 
+{
+	return this.roll;
+};
+ChangeHistory.prototype.setRoll = function(roll) 
+{
+	this.roll = roll;
+};
+
+ChangeHistory.prototype.getColor = function() 
+{
+	return this.color;
+};
+ChangeHistory.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+ChangeHistory.prototype.getRgbColor = function() 
+{
+	return this.rgbColor;
+};
+ChangeHistory.prototype.setRgbColor = function(rgbColor) 
+{
+	this.rgbColor = rgbColor;
+};
+
+ChangeHistory.prototype.getProperty = function() 
+{
+	return this.property;
+};
+ChangeHistory.prototype.setProperty = function(property) 
+{
+	this.property = property;
+};
+ChangeHistory.prototype.getPropertyKey = function() 
+{
+	return this.propertyKey;
+};
+ChangeHistory.prototype.setPropertyKey = function(propertyKey) 
+{
+	this.propertyKey = propertyKey;
+};
+ChangeHistory.prototype.getPropertyValue = function() 
+{
+	return this.propertyValue;
+};
+ChangeHistory.prototype.setPropertyValue = function(propertyValue) 
+{
+	this.propertyValue = propertyValue;
+};
+
+ChangeHistory.prototype.getDuration = function()
+{
+	return this.duration;
+};
+ChangeHistory.prototype.setDuration = function(duration)
+{
+	this.duration = duration;
+};
+
+ChangeHistory.prototype.getObjectMoveMode = function() 
+{
+	return this.objectMoveMode;
+};
+ChangeHistory.prototype.setObjectMoveMode = function(objectMoveMode) 
+{
+	this.objectMoveMode = objectMoveMode;
+};
+"use strict";
+
+var CODE = {};
+
+// magoManager가 다 로딩 되지 않은 상태에서 화면으로 부터 호출 되는 것을 막기 위해
+CODE.magoManagerState = {
+	"INIT"   	: 0,
+	"STARTED"	: 1,
+	"READY"   : 2
+};
+
+//0 = no started to load. 1 = started loading. 2 = finished loading. 3 = parse started. 4 = parse finished.***
+CODE.fileLoadState = {
+	"READY"            : 0,
+	"LOADING_STARTED"  : 1,
+	"LOADING_FINISHED" : 2,
+	"PARSE_STARTED"    : 3,
+	"PARSE_FINISHED"   : 4
+};
+
+CODE.moveMode = {
+	"ALL"    : "0",
+	"OBJECT" : "1",
+	"NONE"   : "2"
+};
+
+CODE.PROJECT_ID_PREFIX = "projectId_";
+CODE.PROJECT_DATA_FOLDER_PREFIX = "projectDataFolder_";
+
+'use strict';
+
+/**
+ * 상수 설정
+ * @class Constant
+ */
+var Constant = {};
+
+Constant.CESIUM = "cesium";
+Constant.WORLDWIND = "worldwind";
+Constant.OBJECT_INDEX_FILE = "/objectIndexFile.ihe";
+Constant.CACHE_VERSION = "?cache_version=";
+Constant.SIMPLE_BUILDING_TEXTURE3x3_BMP = "/SimpleBuildingTexture3x3.bmp";
+Constant.RESULT_XDO2F4D = "/Result_xdo2f4d/Images/";
+Constant.RESULT_XDO2F4D_TERRAINTILES = "/Result_xdo2f4d/F4D_TerrainTiles/";
+Constant.RESULT_XDO2F4D_TERRAINTILEFILE_TXT = "/Result_xdo2f4d/f4dTerranTileFile.txt";
+
+Constant.INTERSECTION_OUTSIDE = 0;
+Constant.INTERSECTION_INTERSECT= 1;
+Constant.INTERSECTION_INSIDE = 2;
+Constant.INTERSECTION_POINT_A = 3;
+Constant.INTERSECTION_POINT_B = 4;
+
+'use strict';
+
+/**
+ * mago3D 전체 환경 설정을 관리
+ * @class MagoConfig
+ */
+var MagoConfig = {};
+
+MagoConfig.getPolicy = function() 
+{
+	return this.serverPolicy;
+};
+
+MagoConfig.getData = function(key) 
+{
+	return this.dataObject[key];
+};
+
+MagoConfig.isDataExist = function(key) 
+{
+	return this.dataObject.hasOwnProperty(key);
+};
+
+MagoConfig.deleteData = function(key) 
+{
+	return delete this.dataObject[key];
+};
+
+/**
+ * data 를 map에 저장
+ * @param key map에 저장될 key
+ * @param value map에 저장될 value
+ */
+MagoConfig.setData = function(key, value) 
+{
+	if (!this.isDataExist(key)) 
+	{
+		this.dataObject[key] = value;
+	}
+};
+
+/**
+ * F4D Converter 실행 결과물이 저장된 project data folder 명을 획득
+ * @param projectDataFolder data folder
+ */
+MagoConfig.getProjectDataFolder = function(projectDataFolder) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	return this.dataObject[key];
+};
+
+/**
+ * project map에 data folder명의 존재 유무를 검사
+ * @param projectDataFolder
+ */
+MagoConfig.isProjectDataFolderExist = function(projectDataFolder) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	return this.dataObject.hasOwnProperty(key);
+};
+
+/**
+ * project data folder명을 map에서 삭제
+ * @param projectDataFolder
+ */
+MagoConfig.deleteProjectDataFolder = function(projectDataFolder) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	return delete this.dataObject[key];
+};
+
+/**
+ * project data folder명을 Object에서 삭제
+ * @param projectDataFolder Object에 저장될 key
+ * @param value Object에 저장될 value
+ */
+MagoConfig.setProjectDataFolder = function(projectDataFolder, value) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	if (!this.isProjectDataFolderExist(key))
+	{
+		this.dataObject[key] = value;
+	}
+};
+
+/**
+ * 환경설정 초기화
+ * @param serverPolicy mago3d policy(json)
+ * @param projectIdArray data 정보를 map 저장할 key name
+ * @param projectDataArray data 정보(json)
+ */
+MagoConfig.init = function(serverPolicy, projectIdArray, projectDataArray) 
+{
+	this.dataObject = {};
+	
+	this.selectHistoryObject = {};
+	this.movingHistoryObject = {};
+	this.colorHistoryObject = {};
+	this.locationAndRotationHistoryObject = {};
+	
+	this.serverPolicy = serverPolicy;
+	if (projectIdArray !== null && projectIdArray.length > 0) 
+	{
+		for (var i=0; i<projectIdArray.length; i++) 
+		{
+			if (!this.isDataExist(CODE.PROJECT_ID_PREFIX + projectIdArray[i])) 
+			{
+				this.setData(CODE.PROJECT_ID_PREFIX + projectIdArray[i], projectDataArray[i]);
+				this.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataArray[i].data_key, projectDataArray[i].data_key);
+			}
+		}
+	}
+};
+
+/**
+ * 모든 데이터를 삭제함
+ */
+MagoConfig.clearAllData = function() 
+{
+	this.dataObject = {};
+};
+
+/**
+ * 모든 선택 히스토리 삭제
+ */
+MagoConfig.clearSelectHistory = function() 
+{
+	this.selectHistoryObject = {};
+};
+
+/**
+ * 모든 object 선택 내용 이력을 취득
+ */
+MagoConfig.getAllSelectHistory = function()
+{
+	return this.selectHistoryObject;
+};
+
+/**
+ * project 별 해당 키에 해당하는 모든 object 선택 내용 이력을 취득
+ */
+MagoConfig.getSelectHistoryObjects = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * object 선택 내용 이력을 취득
+ */
+MagoConfig.getSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * object 선택 내용을 저장
+ */
+MagoConfig.saveSelectHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject.get(projectId);
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.selectHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+		projectIdObject[dataKey] = dataKeyObject;
+	}
+	
+	// objectIndexOrder 를 저장
+	dataKeyObject[objectIndexOrder] = changeHistory;
+};
+
+/**
+ * object 선택 내용을 삭제
+ */
+MagoConfig.deleteSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return delete dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * 모든 이동 히스토리 삭제
+ */
+MagoConfig.clearMovingHistory = function() 
+{
+	this.movingHistoryObject = {};
+};
+
+/**
+ * 모든 object 선택 내용 이력을 취득
+ */
+MagoConfig.getAllMovingHistory = function()
+{
+	return this.movingHistoryObject;
+};
+
+/**
+ * project별 입력키 값과 일치하는 object 이동 내용 이력을 취득
+ */
+MagoConfig.getMovingHistoryObjects = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * object 이동 내용 이력을 취득
+ */
+MagoConfig.getMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * object 이동 내용을 저장
+ */
+MagoConfig.saveMovingHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.movingHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+		projectIdObject[dataKey] = dataKeyObject;
+	}
+	
+	// objectIndexOrder 를 저장
+	dataKeyObject[objectIndexOrder] = changeHistory;
+};
+
+/**
+ * object 이동 내용을 삭제
+ */
+MagoConfig.deleteMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return delete dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * 모든 색깔 변경 이력을 획득
+ */
+MagoConfig.getAllColorHistory = function() 
+{
+	return this.colorHistoryObject;
+};
+
+/**
+ * 모든 색깔변경 히스토리 삭제
+ */
+MagoConfig.clearColorHistory = function() 
+{
+	this.colorHistoryObject = {};
+};
+
+/**
+ * project별 키에 해당하는 모든 색깔 변경 이력을 획득
+ */
+MagoConfig.getColorHistorys = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * 색깝 변경 이력을 획득
+ */
+MagoConfig.getColorHistory = function(projectId, dataKey, objectId)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectId 를 저장
+	return dataKeyObject[objectId];
+};
+
+/**
+ * 색깝 변경 내용을 저장
+ */
+MagoConfig.saveColorHistory = function(projectId, dataKey, objectId, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.colorHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+		projectIdObject[dataKey] = dataKeyObject;
+	}
+
+	if (objectId === null || objectId === "") 
+	{
+		dataKeyObject[dataKey] = changeHistory;
+	}
+	else 
+	{
+		dataKeyObject[objectId] = changeHistory;
+	}
+};
+
+/**
+ * 색깔 변경 이력을 삭제
+ */
+MagoConfig.deleteColorHistory = function(projectId, dataKey, objectId)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return delete dataKeyObject[objectId];
+};
+
+/**
+ * 모든 색깔변경 히스토리 삭제
+ */
+MagoConfig.clearColorHistory = function() 
+{
+	this.colorHistoryObject = {};
+};
+
+/**
+ * 모든 location and rotation 변경 이력을 획득
+ */
+MagoConfig.getAllLocationAndRotationHistory = function() 
+{
+	return this.locationAndRotationHistoryObject;
+};
+
+/**
+ * 프로젝트별 해당 키 값을 갖는 모든 location and rotation 이력을 획득
+ */
+MagoConfig.getLocationAndRotationHistorys = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * location and rotation 이력을 획득
+ */
+MagoConfig.getLocationAndRotationHistory = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	
+	return dataKeyObject;
+};
+
+/**
+ * location and rotation 내용을 저장
+ */
+MagoConfig.saveLocationAndRotationHistory = function(projectId, dataKey, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.locationAndRotationHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+	}
+
+	dataKeyObject[dataKey] = changeHistory;
+};
+
+/**
+ * location and rotation 이력을 삭제
+ */
+MagoConfig.deleteLocationAndRotationHistory = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = delete projectIdObject[dataKey];
+};
+
+/**
+ * 모든 location and rotation 히스토리 삭제
+ */
+MagoConfig.clearLocationAndRotationHistory = function() 
+{
+	this.locationAndRotationHistoryObject = {};
+};
+	
+/**
+ * TODO 이건 나중에 활요. 사용하지 않음
+ * check 되지 않은 데이터들을 삭제함
+ * @param keyObject 비교할 맵
+ */
+/*MagoConfig.clearUnSelectedData = function(keyObject)
+{
+	for (var key of this.dataObject.keys())
+	{
+		if (!keyObject.hasxxxxx(key))
+		{
+			// data folder path가 존재하면....
+			if (key.indexOf(CODE.PROJECT_DATA_FOLDER_PREFIX) >= 0) 
+			{
+				// 지우는 처리가 있어야 함
+			}
+			this.dataObject.delete(key);
+		}
+	}
+};*/
+
+'use strict';
+
+/**
+ * Policy
+ * @class Policy
+ */
+var Policy = function() 
+{
+	if (!(this instanceof Policy)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	// mago3d 활성화/비활성화 여부
+	this.magoEnable = true;
+
+	// outfitting 표시 여부
+	this.showOutFitting = false;
+	// label 표시/비표시
+	this.showLabelInfo = false;
+	// boundingBox 표시/비표시
+	this.showBoundingBox = false;
+	// 그림자 표시/비표시
+	this.showShadow = false;
+	// squared far frustum 거리
+	this.frustumFarSquaredDistance = 5000000;
+	// far frustum
+	this.frustumFarDistance = 5000;
+
+	// highlighting
+	this.highLightedBuildings = [];
+	// color
+	this.colorBuildings = [];
+	// color
+	this.color = [];
+	// show/hide
+	this.hideBuildings = [];
+	// move mode
+	this.objectMoveMode = CODE.moveMode.NONE;
+	// 이슈 등록 표시
+	this.issueInsertEnable = false;
+	// object 정보 표시
+	this.objectInfoViewEnable = false;
+	// 이슈 목록 표시
+	this.nearGeoIssueListEnable = false;
+	// occlusion culling
+	this.occlusionCullingEnable = false;
+	
+	// 이미지 경로
+	this.imagePath = "";
+	
+	// provisional.***
+	this.colorChangedObjectId;
+	
+	// LOD1
+	this.lod0DistInMeters = 15;
+	this.lod1DistInMeters = 50;
+	this.lod2DistInMeters = 90;
+	this.lod3DistInMeters = 200;
+	this.lod4DistInMeters = 1000;
+	this.lod5DistInMeters = 50000;
+	
+	// Lighting
+	this.ambientReflectionCoef = 0.45; // 0.2.
+	this.diffuseReflectionCoef = 0.75; // 1.0
+	this.specularReflectionCoef = 0.6; // 0.7
+	this.ambientColor = null;
+	this.specularColor = new Float32Array([0.6, 0.6, 0.6]);
+	
+	this.ssaoRadius = 0.15;
+};
+
+Policy.prototype.getMagoEnable = function() 
+{
+	return this.magoEnable;
+};
+Policy.prototype.setMagoEnable = function(magoEnable) 
+{
+	this.magoEnable = magoEnable;
+};
+
+Policy.prototype.getShowOutFitting = function() 
+{
+	return this.showOutFitting;
+};
+Policy.prototype.setShowOutFitting = function(showOutFitting) 
+{
+	this.showOutFitting = showOutFitting;
+};
+Policy.prototype.getShowLabelInfo = function() 
+{
+	return this.showLabelInfo;
+};
+Policy.prototype.setShowLabelInfo = function(showLabelInfo) 
+{
+	this.showLabelInfo = showLabelInfo;
+};
+Policy.prototype.getShowBoundingBox = function() 
+{
+	return this.showBoundingBox;
+};
+Policy.prototype.setShowBoundingBox = function(showBoundingBox) 
+{
+	this.showBoundingBox = showBoundingBox;
+};
+
+Policy.prototype.getShowShadow = function() 
+{
+	return this.showShadow;
+};
+Policy.prototype.setShowShadow = function(showShadow) 
+{
+	this.showShadow = showShadow;
+};
+
+Policy.prototype.getFrustumFarSquaredDistance = function() 
+{
+	return this.frustumFarSquaredDistance;
+};
+Policy.prototype.setFrustumFarSquaredDistance = function(frustumFarSquaredDistance) 
+{
+	this.frustumFarSquaredDistance = frustumFarSquaredDistance;
+};
+
+Policy.prototype.getFrustumFarDistance = function() 
+{
+	return this.frustumFarDistance;
+};
+Policy.prototype.setFrustumFarDistance = function(frustumFarDistance) 
+{
+	this.frustumFarDistance = frustumFarDistance;
+};
+
+Policy.prototype.getHighLightedBuildings = function() 
+{
+	return this.highLightedBuildings;
+};
+Policy.prototype.setHighLightedBuildings = function(highLightedBuildings) 
+{
+	this.highLightedBuildings = highLightedBuildings;
+};
+
+Policy.prototype.getColorBuildings = function() 
+{
+	return this.colorBuildings;
+};
+Policy.prototype.setColorBuildings = function(colorBuildings) 
+{
+	this.colorBuildings = colorBuildings;
+};
+
+Policy.prototype.getColor = function() 
+{
+	return this.color;
+};
+Policy.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+
+Policy.prototype.getHideBuildings = function() 
+{
+	return this.hideBuildings;
+};
+Policy.prototype.setHideBuildings = function(hideBuildings) 
+{
+	this.hideBuildings = hideBuildings;
+};
+
+Policy.prototype.getObjectMoveMode = function() 
+{
+	return this.objectMoveMode;
+};
+Policy.prototype.setObjectMoveMode = function(objectMoveMode) 
+{
+	this.objectMoveMode = objectMoveMode;
+};
+
+Policy.prototype.getIssueInsertEnable = function() 
+{
+	return this.issueInsertEnable;
+};
+Policy.prototype.setIssueInsertEnable = function(issueInsertEnable) 
+{
+	this.issueInsertEnable = issueInsertEnable;
+};
+Policy.prototype.getObjectInfoViewEnable = function() 
+{
+	return this.objectInfoViewEnable;
+};
+Policy.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
+{
+	this.objectInfoViewEnable = objectInfoViewEnable;
+};
+Policy.prototype.getOcclusionCullingEnable = function() 
+{
+	return this.occlusionCullingEnable;
+};
+Policy.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
+{
+	this.occlusionCullingEnable = occlusionCullingEnable;
+};
+Policy.prototype.getNearGeoIssueListEnable = function() 
+{
+	return this.nearGeoIssueListEnable;
+};
+Policy.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
+{
+	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
+};
+
+Policy.prototype.getImagePath = function() 
+{
+	return this.imagePath;
+};
+Policy.prototype.setImagePath = function(imagePath) 
+{
+	this.imagePath = imagePath;
+};
+
+Policy.prototype.getLod0DistInMeters = function() 
+{
+	return this.lod0DistInMeters;
+};
+Policy.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
+{
+	this.lod0DistInMeters = lod0DistInMeters;
+};
+Policy.prototype.getLod1DistInMeters = function() 
+{
+	return this.lod1DistInMeters;
+};
+Policy.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
+{
+	this.lod1DistInMeters = lod1DistInMeters;
+};
+Policy.prototype.getLod2DistInMeters = function() 
+{
+	return this.lod2DistInMeters;
+};
+Policy.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
+{
+	this.lod2DistInMeters = lod2DistInMeters;
+};
+Policy.prototype.getLod3DistInMeters = function() 
+{
+	return this.lod3DistInMeters;
+};
+Policy.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
+{
+	this.lod3DistInMeters = lod3DistInMeters;
+};
+Policy.prototype.getLod4DistInMeters = function() 
+{
+	return this.lod4DistInMeters;
+};
+Policy.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
+{
+	this.lod4DistInMeters = lod4DistInMeters;
+};
+Policy.prototype.getLod5DistInMeters = function() 
+{
+	return this.lod5DistInMeters;
+};
+Policy.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
+{
+	this.lod5DistInMeters = lod5DistInMeters;
+};
+Policy.prototype.getAmbientReflectionCoef = function() 
+{
+	return this.ambientReflectionCoef;
+};
+Policy.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
+{
+	this.ambientReflectionCoef = ambientReflectionCoef;
+};
+Policy.prototype.getDiffuseReflectionCoef = function() 
+{
+	return this.diffuseReflectionCoef;
+};
+Policy.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
+{
+	this.diffuseReflectionCoef = diffuseReflectionCoef;
+};
+Policy.prototype.getSpecularReflectionCoef = function() 
+{
+	return this.specularReflectionCoef;
+};
+Policy.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
+{
+	this.specularReflectionCoef = specularReflectionCoef;
+};
+Policy.prototype.getAmbientColor = function() 
+{
+	return this.ambientColor;
+};
+Policy.prototype.setAmbientColor = function(ambientColor) 
+{
+	this.ambientColor = ambientColor;
+};
+Policy.prototype.getSpecularColor = function() 
+{
+	return this.specularColor;
+};
+Policy.prototype.setSpecularColor = function(specularColor) 
+{
+	this.specularColor = specularColor;
+};
+Policy.prototype.getSsaoRadius = function() 
+{
+	return this.ssaoRadius;
+};
+Policy.prototype.setSsaoRadius = function(ssaoRadius) 
+{
+	this.ssaoRadius = ssaoRadius;
+};
 /**
   DataStream reads scalars, arrays and structs of data from an ArrayBuffer.
   It's like a file-like DataView on steroids.
@@ -25356,7183 +26048,6 @@ var forEach = exports.forEach = function () {
 'use strict';
 
 /**
- * mago3djs API
- * 
- * @alias API
- * @class API
- * 
- * @param {any} apiName api이름
- */
-function API(apiName)
-{
-	if (!(this instanceof API)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	// mago3d 활성화/비활성화 여부
-	this.magoEnable = true;
-
-	// api 이름
-	this.apiName = apiName;
-	
-	// project id
-	this.projectId = null;
-	this.projectDataFolder = null;
-	// objectIds
-	this.objectIds = null;
-	// data_key
-	this.dataKey = null;
-	// issueId
-	this.issueId = null;
-	// issueType
-	this.issueType = null;
-	// drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
-	this.drawType = 0;
-
-	// 위도
-	this.latitude = 0;
-	// 경도
-	this.longitude = 0;
-	// 높이
-	this.elevation = 0;
-	// heading
-	this.heading = 0;
-	// pitch
-	this.pitch = 0;
-	// roll
-	this.roll = 0;
-	// duration
-	this.duration = 0;
-
-	// 속성
-	this.property = null;
-	// 색깔
-	this.color = 0;
-	// structs = MSP, outfitting = MOP
-	this.blockType = null;
-	// outfitting 표시/비표시
-	this.showOutFitting = false;
-	// label 표시/비표시
-	this.showLabelInfo = true;
-	// boundingBox 표시/비표시
-	this.showBoundingBox = false;
-	// 그림자 표시/비표시
-	this.showShadow = false;
-	// frustum culling 가시 거리(M단위)
-	this.frustumFarDistance = 0;
-	// move mode 
-	this.objectMoveMode = CODE.moveMode.NONE;
-	// 이슈 등록 표시
-	this.issueInsertEnable = false;
-	// object 정보 표시
-	this.objectInfoViewEnable = false;
-	// 이슈 목록 표시
-	this.nearGeoIssueListEnable = false;
-	// occlusion culling
-	this.occlusionCullingEnable = false;
-	//
-	this.insertIssueState = 0;
-	
-	// LOD1
-	this.lod0DistInMeters = null;
-	this.lod1DistInMeters = null;
-	this.lod2DistInMeters = null;
-	this.lod3DistInMeters = null;
-	this.lod4DistInMeters = null;
-	this.lod5DistInMeters = null;
-	
-	// Lighting
-	this.ambientReflectionCoef = null;
-	this.diffuseReflectionCoef = null;
-	this.specularReflectionCoef = null;
-	this.ambientColor = null;
-	this.specularColor = null;
-	
-	this.ssaoRadius = null;
-	//
-	this.FPVMode = false;
-};
-
-API.prototype.getMagoEnable = function() 
-{
-	return this.magoEnable;
-};
-API.prototype.setMagoEnable = function(magoEnable) 
-{
-	this.magoEnable = magoEnable;
-};
-
-API.prototype.getAPIName = function() 
-{
-	return this.apiName;
-};
-
-API.prototype.getProjectId = function() 
-{
-	return this.projectId;
-};
-API.prototype.setProjectId = function(projectId) 
-{
-	this.projectId = projectId;
-};
-
-API.prototype.getProjectDataFolder = function() 
-{
-	return this.projectDataFolder;
-};
-API.prototype.setProjectDataFolder = function(projectDataFolder) 
-{
-	this.projectDataFolder = projectDataFolder;
-};
-
-API.prototype.getObjectIds = function() 
-{
-	return this.objectIds;
-};
-API.prototype.setObjectIds = function(objectIds) 
-{
-	this.objectIds = objectIds;
-};
-
-API.prototype.getIssueId = function() 
-{
-	return this.issueId;
-};
-API.prototype.setIssueId = function(issueId) 
-{
-	this.issueId = issueId;
-};
-API.prototype.getIssueType = function() 
-{
-	return this.issueType;
-};
-API.prototype.setIssueType = function(issueType) 
-{
-	this.issueId = issueType;
-};
-
-API.prototype.getDataKey = function() 
-{
-	return this.dataKey;
-};
-API.prototype.setDataKey = function(dataKey) 
-{
-	this.dataKey = dataKey;
-};
-
-API.prototype.getLatitude = function() 
-{
-	return this.latitude;
-};
-API.prototype.setLatitude = function(latitude) 
-{
-	this.latitude = latitude;
-};
-
-API.prototype.getLongitude = function() 
-{
-	return this.longitude;
-};
-API.prototype.setLongitude = function(longitude) 
-{
-	this.longitude = longitude;
-};
-
-API.prototype.getElevation = function() 
-{
-	return this.elevation;
-};
-API.prototype.setElevation = function(elevation) 
-{
-	this.elevation = elevation;
-};
-
-API.prototype.getHeading = function() 
-{
-	return this.heading;
-};
-API.prototype.setHeading = function(heading) 
-{
-	this.heading = heading;
-};
-
-API.prototype.getPitch = function() 
-{
-	return this.pitch;
-};
-API.prototype.setPitch = function(pitch) 
-{
-	this.pitch = pitch;
-};
-
-API.prototype.getRoll = function() 
-{
-	return this.roll;
-};
-API.prototype.setRoll = function(roll) 
-{
-	this.roll = roll;
-};
-
-API.prototype.getProperty = function() 
-{
-	return this.property;
-};
-API.prototype.setProperty = function(property) 
-{
-	this.property = property;
-};
-
-API.prototype.getColor = function() 
-{
-	return this.color;
-};
-API.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-
-API.prototype.getBlockType = function() 
-{
-	return this.blockType;
-};
-API.prototype.setBlockType = function(blockType) 
-{
-	this.blockType = blockType;
-};
-
-API.prototype.getShowOutFitting = function() 
-{
-	return this.showOutFitting;
-};
-API.prototype.setShowOutFitting = function(showOutFitting) 
-{
-	this.showOutFitting = showOutFitting;
-};
-
-
-API.prototype.getShowLabelInfo = function() 
-{
-	return this.showLabelInfo;
-};
-API.prototype.setShowLabelInfo = function(showLabelInfo) 
-{
-	this.showLabelInfo = showLabelInfo;
-};
-API.prototype.getShowBoundingBox = function() 
-{
-	return this.showBoundingBox;
-};
-API.prototype.setShowBoundingBox = function(showBoundingBox) 
-{
-	this.showBoundingBox = showBoundingBox;
-};
-
-API.prototype.getShowShadow = function() 
-{
-	return this.showShadow;
-};
-API.prototype.setShowShadow = function(showShadow) 
-{
-	this.showShadow = showShadow;
-};
-
-API.prototype.getFrustumFarDistance = function() 
-{
-	return this.frustumFarDistance;
-};
-API.prototype.setFrustumFarDistance = function(frustumFarDistance) 
-{
-	this.frustumFarDistance = frustumFarDistance;
-};
-
-API.prototype.getObjectMoveMode = function() 
-{
-	return this.objectMoveMode;
-};
-API.prototype.setObjectMoveMode = function(objectMoveMode) 
-{
-	this.objectMoveMode = objectMoveMode;
-};
-
-API.prototype.getIssueInsertEnable = function() 
-{
-	return this.issueInsertEnable;
-};
-API.prototype.setIssueInsertEnable = function(issueInsertEnable) 
-{
-	this.issueInsertEnable = issueInsertEnable;
-};
-API.prototype.getObjectInfoViewEnable = function() 
-{
-	return this.objectInfoViewEnable;
-};
-API.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
-{
-	this.objectInfoViewEnable = objectInfoViewEnable;
-};
-API.prototype.getOcclusionCullingEnable = function() 
-{
-	return this.occlusionCullingEnable;
-};
-API.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
-{
-	this.occlusionCullingEnable = occlusionCullingEnable;
-};
-API.prototype.getNearGeoIssueListEnable = function() 
-{
-	return this.nearGeoIssueListEnable;
-};
-API.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
-{
-	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
-};
-
-API.prototype.getInsertIssueState = function() 
-{
-	return this.insertIssueState;
-};
-API.prototype.setInsertIssueState = function(insertIssueState) 
-{
-	this.insertIssueState = insertIssueState;
-};
-
-API.prototype.getDrawType = function() 
-{
-	return this.drawType;
-};
-API.prototype.setDrawType = function(drawType) 
-{
-	this.drawType = drawType;
-};
-
-API.prototype.getLod0DistInMeters = function() 
-{
-	return this.lod0DistInMeters;
-};
-API.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
-{
-	this.lod0DistInMeters = lod0DistInMeters;
-};
-API.prototype.getLod1DistInMeters = function() 
-{
-	return this.lod1DistInMeters;
-};
-API.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
-{
-	this.lod1DistInMeters = lod1DistInMeters;
-};
-API.prototype.getLod2DistInMeters = function() 
-{
-	return this.lod2DistInMeters;
-};
-API.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
-{
-	this.lod2DistInMeters = lod2DistInMeters;
-};
-API.prototype.getLod3DistInMeters = function() 
-{
-	return this.lod3DistInMeters;
-};
-API.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
-{
-	this.lod3DistInMeters = lod3DistInMeters;
-};
-API.prototype.getLod4DistInMeters = function() 
-{
-	return this.lod4DistInMeters;
-};
-API.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
-{
-	this.lod4DistInMeters = lod4DistInMeters;
-};
-API.prototype.getLod5DistInMeters = function() 
-{
-	return this.lod5DistInMeters;
-};
-API.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
-{
-	this.lod5DistInMeters = lod5DistInMeters;
-};
-
-API.prototype.getAmbientReflectionCoef = function() 
-{
-	return this.ambientReflectionCoef;
-};
-API.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
-{
-	this.ambientReflectionCoef = ambientReflectionCoef;
-};
-API.prototype.getDiffuseReflectionCoef = function() 
-{
-	return this.diffuseReflectionCoef;
-};
-API.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
-{
-	this.diffuseReflectionCoef = diffuseReflectionCoef;
-};
-API.prototype.getSpecularReflectionCoef = function() 
-{
-	return this.specularReflectionCoef;
-};
-API.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
-{
-	this.specularReflectionCoef = specularReflectionCoef;
-};
-API.prototype.getAmbientColor = function() 
-{
-	return this.ambientColor;
-};
-API.prototype.setAmbientColor = function(ambientColor) 
-{
-	this.ambientColor = ambientColor;
-};
-API.prototype.getSpecularColor = function() 
-{
-	return this.specularColor;
-};
-API.prototype.setSpecularColor = function(specularColor) 
-{
-	this.specularColor = specularColor;
-};
-API.prototype.getSsaoRadius = function() 
-{
-	return this.ssaoRadius;
-};
-API.prototype.setSsaoRadius = function(ssaoRadius) 
-{
-	this.ssaoRadius = ssaoRadius;
-};
-API.prototype.getFPVMode = function()
-{
-	return this.FPVMode;
-};
-API.prototype.setFPVMode = function(value)
-{
-	this.FPVMode = value;
-};
-
-API.prototype.getDuration = function()
-{
-	return this.duration;
-};
-API.prototype.setDuration = function(duration)
-{
-	this.duration = duration;
-};
-'use strict';
-
-/**
- * api 처리 결과를 담당하는 callback function
- * @param functionName policy json의 geo_callback_apiresult 속성값
- * @param apiName 호출한 api 이름
- * @param result 결과값
- */
-function apiResultCallback(functionName, apiName, result) 
-{
-	window[functionName](apiName, result);
-}
-
-/**
- * 선택한 object 정보를 화면에 표시
- * @param functionName callback
- * @param projectId
- * @param data_key
- * @param objectId
- * @param latitude
- * @param longitude
- * @param elevation
- * @param heading
- * @param pitch
- * @param roll
- * @param
- */
-function selectedObjectCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll)
-{
-	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll);
-}
-
-/**
- * 이동한 data 정보를 화면에 표시
- * @param functionName callback
- * @param projectId
- * @param data_key
- * @param objectId
- * @param latitude
- * @param longitude
- * @param elevation
- * @param heading
- * @param pitch
- * @param roll
- * @param
- */
-function movedDataCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll)
-{
-	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation, heading, pitch, roll);
-}
-
-/**
- * Data Key 를 이용하여 Geo Spatial Info를 획득하여 화면에 표시
- * @param functionName callback
- * @param projectId
- * @param data_key
- * @param dataName
- * @param latitude
- * @param longitude
- * @param elevation
- * @param heading
- * @param pitch
- * @param roll
- * @param
- */
-function dataInfoCallback(functionName, projectId, dataKey, dataName, latitude, longitude, elevation, heading, pitch, roll)
-{
-	window[functionName](projectId, dataKey, dataName, latitude, longitude, elevation, heading, pitch, roll);
-}
-
-/**
- * 선택한 object 정보를 화면에 표시
- * @param functionName
- * @param projectId
- * @param data_key
- * @param objectId
- * @param latitude
- * @param longitude
- * @param elevation
- */
-function insertIssueCallback(functionName, projectId, dataKey, objectId, latitude, longitude, elevation)
-{
-	window[functionName](projectId, dataKey, objectId, latitude, longitude, elevation);
-}
-
-/**
- * mouse click 위치 정보를 화면에 표시
- * @param functionName
- * @param position
- */
-function clickPositionCallback(functionName, position) 
-{
-	window[functionName](position);
-}
-
-'use strict';
-
-/**
- * 사용자가 변경한 moving, color, rotation 등 이력 정보를 위한 domain
- * @class Policy
- */
-var ChangeHistory = function() 
-{
-	if (!(this instanceof ChangeHistory)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.moveHistory = false;
-	this.colorHistory = false;
-	this.rotationHistory = false;
-	
-	// move mode. ALL : 0 , OBJECT : 1, NONE : 2
-	this.objectMoveMode = null;
-	
-	// project id
-	this.projectId = null;
-	// project data folder
-	this.projectDataFolder = null;
-	// data_key
-	this.dataKey = null;	
-	// objectId
-	this.objectId = null;
-	// objectIndexOrder
-	this.objectIndexOrder = 0;
-	
-	// referenceObject aditional movement.
-	this.refObjectAditionalMove;
-	this.refObjectAditionalMoveRelToBuilding;
-	
-	// 위도
-	this.latitude = 0.0;
-	// 경도
-	this.longitude = 0.0;
-	// 높이
-	this.elevation = 0.0;
-	// heading
-	this.heading = 0.0;
-	// pitch
-	this.pitch = 0.0;
-	// roll
-	this.roll = 0.0;
-	// duration
-	this.duration = 0;
-	// 색깔
-	this.color = 0;
-	// color rgb
-	this.rgbColor = [];
-	// 속성
-	this.property = null;
-	this.propertyKey = null;
-	this.propertyValue = null;
-};
-
-ChangeHistory.prototype.getReferenceObjectAditionalMovement = function() 
-{
-	if (this.refObjectAditionalMove === undefined)
-	{ this.refObjectAditionalMove = new Point3D(); }
-	
-	return this.refObjectAditionalMove;
-};
-
-ChangeHistory.prototype.getReferenceObjectAditionalMovementRelToBuilding = function() 
-{
-	if (this.refObjectAditionalMoveRelToBuilding === undefined)
-	{ this.refObjectAditionalMoveRelToBuilding = new Point3D(); }
-	
-	return this.refObjectAditionalMoveRelToBuilding;
-};
-
-ChangeHistory.prototype.getProjectId = function() 
-{
-	return this.projectId;
-};
-ChangeHistory.prototype.setProjectId = function(projectId) 
-{
-	this.projectId = projectId;
-};
-
-ChangeHistory.prototype.getProjectDataFolder = function() 
-{
-	return this.projectDataFolder;
-};
-ChangeHistory.prototype.setProjectDataFolder = function(projectDataFolder) 
-{
-	this.projectDataFolder = projectDataFolder;
-};
-
-ChangeHistory.prototype.getDataKey = function() 
-{
-	return this.dataKey;
-};
-ChangeHistory.prototype.setDataKey = function(dataKey) 
-{
-	this.dataKey = dataKey;
-};
-
-ChangeHistory.prototype.getObjectId = function() 
-{
-	return this.objectId;
-};
-ChangeHistory.prototype.setObjectId = function(objectId) 
-{
-	this.objectId = objectId;
-};
-
-ChangeHistory.prototype.getObjectIndexOrder = function() 
-{
-	return this.objectIndexOrder;
-};
-ChangeHistory.prototype.setObjectIndexOrder = function(objectIndexOrder) 
-{
-	this.objectIndexOrder = objectIndexOrder;
-};
-
-ChangeHistory.prototype.getLatitude = function() 
-{
-	return this.latitude;
-};
-ChangeHistory.prototype.setLatitude = function(latitude) 
-{
-	this.latitude = latitude;
-};
-
-ChangeHistory.prototype.getLongitude = function() 
-{
-	return this.longitude;
-};
-ChangeHistory.prototype.setLongitude = function(longitude) 
-{
-	this.longitude = longitude;
-};
-
-ChangeHistory.prototype.getElevation = function() 
-{
-	return this.elevation;
-};
-ChangeHistory.prototype.setElevation = function(elevation) 
-{
-	this.elevation = elevation;
-};
-
-ChangeHistory.prototype.getHeading = function() 
-{
-	return this.heading;
-};
-ChangeHistory.prototype.setHeading = function(heading) 
-{
-	this.heading = heading;
-};
-
-ChangeHistory.prototype.getPitch = function() 
-{
-	return this.pitch;
-};
-ChangeHistory.prototype.setPitch = function(pitch) 
-{
-	this.pitch = pitch;
-};
-
-ChangeHistory.prototype.getRoll = function() 
-{
-	return this.roll;
-};
-ChangeHistory.prototype.setRoll = function(roll) 
-{
-	this.roll = roll;
-};
-
-ChangeHistory.prototype.getColor = function() 
-{
-	return this.color;
-};
-ChangeHistory.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-ChangeHistory.prototype.getRgbColor = function() 
-{
-	return this.rgbColor;
-};
-ChangeHistory.prototype.setRgbColor = function(rgbColor) 
-{
-	this.rgbColor = rgbColor;
-};
-
-ChangeHistory.prototype.getProperty = function() 
-{
-	return this.property;
-};
-ChangeHistory.prototype.setProperty = function(property) 
-{
-	this.property = property;
-};
-ChangeHistory.prototype.getPropertyKey = function() 
-{
-	return this.propertyKey;
-};
-ChangeHistory.prototype.setPropertyKey = function(propertyKey) 
-{
-	this.propertyKey = propertyKey;
-};
-ChangeHistory.prototype.getPropertyValue = function() 
-{
-	return this.propertyValue;
-};
-ChangeHistory.prototype.setPropertyValue = function(propertyValue) 
-{
-	this.propertyValue = propertyValue;
-};
-
-ChangeHistory.prototype.getDuration = function()
-{
-	return this.duration;
-};
-ChangeHistory.prototype.setDuration = function(duration)
-{
-	this.duration = duration;
-};
-
-ChangeHistory.prototype.getObjectMoveMode = function() 
-{
-	return this.objectMoveMode;
-};
-ChangeHistory.prototype.setObjectMoveMode = function(objectMoveMode) 
-{
-	this.objectMoveMode = objectMoveMode;
-};
-"use strict";
-
-var CODE = {};
-
-// magoManager가 다 로딩 되지 않은 상태에서 화면으로 부터 호출 되는 것을 막기 위해
-CODE.magoManagerState = {
-	"INIT"   	: 0,
-	"STARTED"	: 1,
-	"READY"   : 2
-};
-
-//0 = no started to load. 1 = started loading. 2 = finished loading. 3 = parse started. 4 = parse finished.***
-CODE.fileLoadState = {
-	"READY"            : 0,
-	"LOADING_STARTED"  : 1,
-	"LOADING_FINISHED" : 2,
-	"PARSE_STARTED"    : 3,
-	"PARSE_FINISHED"   : 4
-};
-
-CODE.moveMode = {
-	"ALL"    : "0",
-	"OBJECT" : "1",
-	"NONE"   : "2"
-};
-
-CODE.PROJECT_ID_PREFIX = "projectId_";
-CODE.PROJECT_DATA_FOLDER_PREFIX = "projectDataFolder_";
-
-'use strict';
-
-/**
- * 상수 설정
- * @class Constant
- */
-var Constant = {};
-
-Constant.CESIUM = "cesium";
-Constant.WORLDWIND = "worldwind";
-Constant.OBJECT_INDEX_FILE = "/objectIndexFile.ihe";
-Constant.CACHE_VERSION = "?cache_version=";
-Constant.SIMPLE_BUILDING_TEXTURE3x3_BMP = "/SimpleBuildingTexture3x3.bmp";
-Constant.RESULT_XDO2F4D = "/Result_xdo2f4d/Images/";
-Constant.RESULT_XDO2F4D_TERRAINTILES = "/Result_xdo2f4d/F4D_TerrainTiles/";
-Constant.RESULT_XDO2F4D_TERRAINTILEFILE_TXT = "/Result_xdo2f4d/f4dTerranTileFile.txt";
-
-Constant.INTERSECTION_OUTSIDE = 0;
-Constant.INTERSECTION_INTERSECT= 1;
-Constant.INTERSECTION_INSIDE = 2;
-Constant.INTERSECTION_POINT_A = 3;
-Constant.INTERSECTION_POINT_B = 4;
-
-'use strict';
-
-/**
- * mago3D 전체 환경 설정을 관리
- * @class MagoConfig
- */
-var MagoConfig = {};
-
-MagoConfig.getPolicy = function() 
-{
-	return this.serverPolicy;
-};
-
-MagoConfig.getData = function(key) 
-{
-	return this.dataObject[key];
-};
-
-MagoConfig.isDataExist = function(key) 
-{
-	return this.dataObject.hasOwnProperty(key);
-};
-
-MagoConfig.deleteData = function(key) 
-{
-	return delete this.dataObject[key];
-};
-
-/**
- * data 를 map에 저장
- * @param key map에 저장될 key
- * @param value map에 저장될 value
- */
-MagoConfig.setData = function(key, value) 
-{
-	if (!this.isDataExist(key)) 
-	{
-		this.dataObject[key] = value;
-	}
-};
-
-/**
- * F4D Converter 실행 결과물이 저장된 project data folder 명을 획득
- * @param projectDataFolder data folder
- */
-MagoConfig.getProjectDataFolder = function(projectDataFolder) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	return this.dataObject[key];
-};
-
-/**
- * project map에 data folder명의 존재 유무를 검사
- * @param projectDataFolder
- */
-MagoConfig.isProjectDataFolderExist = function(projectDataFolder) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	return this.dataObject.hasOwnProperty(key);
-};
-
-/**
- * project data folder명을 map에서 삭제
- * @param projectDataFolder
- */
-MagoConfig.deleteProjectDataFolder = function(projectDataFolder) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	return delete this.dataObject[key];
-};
-
-/**
- * project data folder명을 Object에서 삭제
- * @param projectDataFolder Object에 저장될 key
- * @param value Object에 저장될 value
- */
-MagoConfig.setProjectDataFolder = function(projectDataFolder, value) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	if (!this.isProjectDataFolderExist(key))
-	{
-		this.dataObject[key] = value;
-	}
-};
-
-/**
- * 환경설정 초기화
- * @param serverPolicy mago3d policy(json)
- * @param projectIdArray data 정보를 map 저장할 key name
- * @param projectDataArray data 정보(json)
- */
-MagoConfig.init = function(serverPolicy, projectIdArray, projectDataArray) 
-{
-	this.dataObject = {};
-	
-	this.selectHistoryObject = {};
-	this.movingHistoryObject = {};
-	this.colorHistoryObject = {};
-	this.locationAndRotationHistoryObject = {};
-	
-	this.serverPolicy = serverPolicy;
-	if (projectIdArray !== null && projectIdArray.length > 0) 
-	{
-		for (var i=0; i<projectIdArray.length; i++) 
-		{
-			if (!this.isDataExist(CODE.PROJECT_ID_PREFIX + projectIdArray[i])) 
-			{
-				this.setData(CODE.PROJECT_ID_PREFIX + projectIdArray[i], projectDataArray[i]);
-				this.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataArray[i].data_key, projectDataArray[i].data_key);
-			}
-		}
-	}
-};
-
-/**
- * 모든 데이터를 삭제함
- */
-MagoConfig.clearAllData = function() 
-{
-	this.dataObject = {};
-};
-
-/**
- * 모든 선택 히스토리 삭제
- */
-MagoConfig.clearSelectHistory = function() 
-{
-	this.selectHistoryObject = {};
-};
-
-/**
- * 모든 object 선택 내용 이력을 취득
- */
-MagoConfig.getAllSelectHistory = function()
-{
-	return this.selectHistoryObject;
-};
-
-/**
- * project 별 해당 키에 해당하는 모든 object 선택 내용 이력을 취득
- */
-MagoConfig.getSelectHistoryObjects = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.selectHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	return dataKeyObject;
-};
-
-/**
- * object 선택 내용 이력을 취득
- */
-MagoConfig.getSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.selectHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return dataKeyObject[objectIndexOrder];
-};
-
-/**
- * object 선택 내용을 저장
- */
-MagoConfig.saveSelectHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.selectHistoryObject.get(projectId);
-	if (projectIdObject === undefined)
-	{
-		projectIdObject = {};
-		this.selectHistoryObject[projectId] = projectIdObject;
-	}
-	
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined)
-	{
-		dataKeyObject = {};
-		projectIdObject[dataKey] = dataKeyObject;
-	}
-	
-	// objectIndexOrder 를 저장
-	dataKeyObject[objectIndexOrder] = changeHistory;
-};
-
-/**
- * object 선택 내용을 삭제
- */
-MagoConfig.deleteSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.selectHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return delete dataKeyObject[objectIndexOrder];
-};
-
-/**
- * 모든 이동 히스토리 삭제
- */
-MagoConfig.clearMovingHistory = function() 
-{
-	this.movingHistoryObject = {};
-};
-
-/**
- * 모든 object 선택 내용 이력을 취득
- */
-MagoConfig.getAllMovingHistory = function()
-{
-	return this.movingHistoryObject;
-};
-
-/**
- * project별 입력키 값과 일치하는 object 이동 내용 이력을 취득
- */
-MagoConfig.getMovingHistoryObjects = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.movingHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	return dataKeyObject;
-};
-
-/**
- * object 이동 내용 이력을 취득
- */
-MagoConfig.getMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.movingHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return dataKeyObject[objectIndexOrder];
-};
-
-/**
- * object 이동 내용을 저장
- */
-MagoConfig.saveMovingHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.movingHistoryObject[projectId];
-	if (projectIdObject === undefined)
-	{
-		projectIdObject = {};
-		this.movingHistoryObject[projectId] = projectIdObject;
-	}
-	
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined)
-	{
-		dataKeyObject = {};
-		projectIdObject[dataKey] = dataKeyObject;
-	}
-	
-	// objectIndexOrder 를 저장
-	dataKeyObject[objectIndexOrder] = changeHistory;
-};
-
-/**
- * object 이동 내용을 삭제
- */
-MagoConfig.deleteMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.movingHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return delete dataKeyObject[objectIndexOrder];
-};
-
-/**
- * 모든 색깔 변경 이력을 획득
- */
-MagoConfig.getAllColorHistory = function() 
-{
-	return this.colorHistoryObject;
-};
-
-/**
- * 모든 색깔변경 히스토리 삭제
- */
-MagoConfig.clearColorHistory = function() 
-{
-	this.colorHistoryObject = {};
-};
-
-/**
- * project별 키에 해당하는 모든 색깔 변경 이력을 획득
- */
-MagoConfig.getColorHistorys = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.colorHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	return dataKeyObject;
-};
-
-/**
- * 색깝 변경 이력을 획득
- */
-MagoConfig.getColorHistory = function(projectId, dataKey, objectId)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.colorHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectId 를 저장
-	return dataKeyObject[objectId];
-};
-
-/**
- * 색깝 변경 내용을 저장
- */
-MagoConfig.saveColorHistory = function(projectId, dataKey, objectId, changeHistory) 
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.colorHistoryObject[projectId];
-	if (projectIdObject === undefined)
-	{
-		projectIdObject = {};
-		this.colorHistoryObject[projectId] = projectIdObject;
-	}
-	
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined)
-	{
-		dataKeyObject = {};
-		projectIdObject[dataKey] = dataKeyObject;
-	}
-
-	if (objectId === null || objectId === "") 
-	{
-		dataKeyObject[dataKey] = changeHistory;
-	}
-	else 
-	{
-		dataKeyObject[objectId] = changeHistory;
-	}
-};
-
-/**
- * 색깔 변경 이력을 삭제
- */
-MagoConfig.deleteColorHistory = function(projectId, dataKey, objectId)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.colorHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return delete dataKeyObject[objectId];
-};
-
-/**
- * 모든 색깔변경 히스토리 삭제
- */
-MagoConfig.clearColorHistory = function() 
-{
-	this.colorHistoryObject = {};
-};
-
-/**
- * 모든 location and rotation 변경 이력을 획득
- */
-MagoConfig.getAllLocationAndRotationHistory = function() 
-{
-	return this.locationAndRotationHistoryObject;
-};
-
-/**
- * 프로젝트별 해당 키 값을 갖는 모든 location and rotation 이력을 획득
- */
-MagoConfig.getLocationAndRotationHistorys = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	return dataKeyObject;
-};
-
-/**
- * location and rotation 이력을 획득
- */
-MagoConfig.getLocationAndRotationHistory = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	
-	return dataKeyObject;
-};
-
-/**
- * location and rotation 내용을 저장
- */
-MagoConfig.saveLocationAndRotationHistory = function(projectId, dataKey, changeHistory) 
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
-	if (projectIdObject === undefined)
-	{
-		projectIdObject = {};
-		this.locationAndRotationHistoryObject[projectId] = projectIdObject;
-	}
-	
-	// dataKey 별 Object을 검사
-	var dataKeyObject = projectIdObject[dataKey];
-	if (dataKeyObject === undefined)
-	{
-		dataKeyObject = {};
-	}
-
-	dataKeyObject[dataKey] = changeHistory;
-};
-
-/**
- * location and rotation 이력을 삭제
- */
-MagoConfig.deleteLocationAndRotationHistory = function(projectId, dataKey)
-{
-	// projectId 별 Object을 검사
-	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
-	if (projectIdObject === undefined) { return undefined; }
-	// dataKey 별 Object을 검사
-	var dataKeyObject = delete projectIdObject[dataKey];
-};
-
-/**
- * 모든 location and rotation 히스토리 삭제
- */
-MagoConfig.clearLocationAndRotationHistory = function() 
-{
-	this.locationAndRotationHistoryObject = {};
-};
-	
-/**
- * TODO 이건 나중에 활요. 사용하지 않음
- * check 되지 않은 데이터들을 삭제함
- * @param keyObject 비교할 맵
- */
-/*MagoConfig.clearUnSelectedData = function(keyObject)
-{
-	for (var key of this.dataObject.keys())
-	{
-		if (!keyObject.hasxxxxx(key))
-		{
-			// data folder path가 존재하면....
-			if (key.indexOf(CODE.PROJECT_DATA_FOLDER_PREFIX) >= 0) 
-			{
-				// 지우는 처리가 있어야 함
-			}
-			this.dataObject.delete(key);
-		}
-	}
-};*/
-
-'use strict';
-
-/**
- * Policy
- * @class Policy
- */
-var Policy = function() 
-{
-	if (!(this instanceof Policy)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	// mago3d 활성화/비활성화 여부
-	this.magoEnable = true;
-
-	// outfitting 표시 여부
-	this.showOutFitting = false;
-	// label 표시/비표시
-	this.showLabelInfo = false;
-	// boundingBox 표시/비표시
-	this.showBoundingBox = false;
-	// 그림자 표시/비표시
-	this.showShadow = false;
-	// squared far frustum 거리
-	this.frustumFarSquaredDistance = 5000000;
-	// far frustum
-	this.frustumFarDistance = 5000;
-
-	// highlighting
-	this.highLightedBuildings = [];
-	// color
-	this.colorBuildings = [];
-	// color
-	this.color = [];
-	// show/hide
-	this.hideBuildings = [];
-	// move mode
-	this.objectMoveMode = CODE.moveMode.NONE;
-	// 이슈 등록 표시
-	this.issueInsertEnable = false;
-	// object 정보 표시
-	this.objectInfoViewEnable = false;
-	// 이슈 목록 표시
-	this.nearGeoIssueListEnable = false;
-	// occlusion culling
-	this.occlusionCullingEnable = false;
-	
-	// 이미지 경로
-	this.imagePath = "";
-	
-	// provisional.***
-	this.colorChangedObjectId;
-	
-	// LOD1
-	this.lod0DistInMeters = 15;
-	this.lod1DistInMeters = 50;
-	this.lod2DistInMeters = 90;
-	this.lod3DistInMeters = 200;
-	this.lod4DistInMeters = 1000;
-	this.lod5DistInMeters = 50000;
-	
-	// Lighting
-	this.ambientReflectionCoef = 0.45; // 0.2.
-	this.diffuseReflectionCoef = 0.75; // 1.0
-	this.specularReflectionCoef = 0.6; // 0.7
-	this.ambientColor = null;
-	this.specularColor = new Float32Array([0.6, 0.6, 0.6]);
-	
-	this.ssaoRadius = 0.15;
-};
-
-Policy.prototype.getMagoEnable = function() 
-{
-	return this.magoEnable;
-};
-Policy.prototype.setMagoEnable = function(magoEnable) 
-{
-	this.magoEnable = magoEnable;
-};
-
-Policy.prototype.getShowOutFitting = function() 
-{
-	return this.showOutFitting;
-};
-Policy.prototype.setShowOutFitting = function(showOutFitting) 
-{
-	this.showOutFitting = showOutFitting;
-};
-Policy.prototype.getShowLabelInfo = function() 
-{
-	return this.showLabelInfo;
-};
-Policy.prototype.setShowLabelInfo = function(showLabelInfo) 
-{
-	this.showLabelInfo = showLabelInfo;
-};
-Policy.prototype.getShowBoundingBox = function() 
-{
-	return this.showBoundingBox;
-};
-Policy.prototype.setShowBoundingBox = function(showBoundingBox) 
-{
-	this.showBoundingBox = showBoundingBox;
-};
-
-Policy.prototype.getShowShadow = function() 
-{
-	return this.showShadow;
-};
-Policy.prototype.setShowShadow = function(showShadow) 
-{
-	this.showShadow = showShadow;
-};
-
-Policy.prototype.getFrustumFarSquaredDistance = function() 
-{
-	return this.frustumFarSquaredDistance;
-};
-Policy.prototype.setFrustumFarSquaredDistance = function(frustumFarSquaredDistance) 
-{
-	this.frustumFarSquaredDistance = frustumFarSquaredDistance;
-};
-
-Policy.prototype.getFrustumFarDistance = function() 
-{
-	return this.frustumFarDistance;
-};
-Policy.prototype.setFrustumFarDistance = function(frustumFarDistance) 
-{
-	this.frustumFarDistance = frustumFarDistance;
-};
-
-Policy.prototype.getHighLightedBuildings = function() 
-{
-	return this.highLightedBuildings;
-};
-Policy.prototype.setHighLightedBuildings = function(highLightedBuildings) 
-{
-	this.highLightedBuildings = highLightedBuildings;
-};
-
-Policy.prototype.getColorBuildings = function() 
-{
-	return this.colorBuildings;
-};
-Policy.prototype.setColorBuildings = function(colorBuildings) 
-{
-	this.colorBuildings = colorBuildings;
-};
-
-Policy.prototype.getColor = function() 
-{
-	return this.color;
-};
-Policy.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-
-Policy.prototype.getHideBuildings = function() 
-{
-	return this.hideBuildings;
-};
-Policy.prototype.setHideBuildings = function(hideBuildings) 
-{
-	this.hideBuildings = hideBuildings;
-};
-
-Policy.prototype.getObjectMoveMode = function() 
-{
-	return this.objectMoveMode;
-};
-Policy.prototype.setObjectMoveMode = function(objectMoveMode) 
-{
-	this.objectMoveMode = objectMoveMode;
-};
-
-Policy.prototype.getIssueInsertEnable = function() 
-{
-	return this.issueInsertEnable;
-};
-Policy.prototype.setIssueInsertEnable = function(issueInsertEnable) 
-{
-	this.issueInsertEnable = issueInsertEnable;
-};
-Policy.prototype.getObjectInfoViewEnable = function() 
-{
-	return this.objectInfoViewEnable;
-};
-Policy.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
-{
-	this.objectInfoViewEnable = objectInfoViewEnable;
-};
-Policy.prototype.getOcclusionCullingEnable = function() 
-{
-	return this.occlusionCullingEnable;
-};
-Policy.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
-{
-	this.occlusionCullingEnable = occlusionCullingEnable;
-};
-Policy.prototype.getNearGeoIssueListEnable = function() 
-{
-	return this.nearGeoIssueListEnable;
-};
-Policy.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
-{
-	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
-};
-
-Policy.prototype.getImagePath = function() 
-{
-	return this.imagePath;
-};
-Policy.prototype.setImagePath = function(imagePath) 
-{
-	this.imagePath = imagePath;
-};
-
-Policy.prototype.getLod0DistInMeters = function() 
-{
-	return this.lod0DistInMeters;
-};
-Policy.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
-{
-	this.lod0DistInMeters = lod0DistInMeters;
-};
-Policy.prototype.getLod1DistInMeters = function() 
-{
-	return this.lod1DistInMeters;
-};
-Policy.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
-{
-	this.lod1DistInMeters = lod1DistInMeters;
-};
-Policy.prototype.getLod2DistInMeters = function() 
-{
-	return this.lod2DistInMeters;
-};
-Policy.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
-{
-	this.lod2DistInMeters = lod2DistInMeters;
-};
-Policy.prototype.getLod3DistInMeters = function() 
-{
-	return this.lod3DistInMeters;
-};
-Policy.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
-{
-	this.lod3DistInMeters = lod3DistInMeters;
-};
-Policy.prototype.getLod4DistInMeters = function() 
-{
-	return this.lod4DistInMeters;
-};
-Policy.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
-{
-	this.lod4DistInMeters = lod4DistInMeters;
-};
-Policy.prototype.getLod5DistInMeters = function() 
-{
-	return this.lod5DistInMeters;
-};
-Policy.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
-{
-	this.lod5DistInMeters = lod5DistInMeters;
-};
-Policy.prototype.getAmbientReflectionCoef = function() 
-{
-	return this.ambientReflectionCoef;
-};
-Policy.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
-{
-	this.ambientReflectionCoef = ambientReflectionCoef;
-};
-Policy.prototype.getDiffuseReflectionCoef = function() 
-{
-	return this.diffuseReflectionCoef;
-};
-Policy.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
-{
-	this.diffuseReflectionCoef = diffuseReflectionCoef;
-};
-Policy.prototype.getSpecularReflectionCoef = function() 
-{
-	return this.specularReflectionCoef;
-};
-Policy.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
-{
-	this.specularReflectionCoef = specularReflectionCoef;
-};
-Policy.prototype.getAmbientColor = function() 
-{
-	return this.ambientColor;
-};
-Policy.prototype.setAmbientColor = function(ambientColor) 
-{
-	this.ambientColor = ambientColor;
-};
-Policy.prototype.getSpecularColor = function() 
-{
-	return this.specularColor;
-};
-Policy.prototype.setSpecularColor = function(specularColor) 
-{
-	this.specularColor = specularColor;
-};
-Policy.prototype.getSsaoRadius = function() 
-{
-	return this.ssaoRadius;
-};
-Policy.prototype.setSsaoRadius = function(ssaoRadius) 
-{
-	this.ssaoRadius = ssaoRadius;
-};
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Arc
- */
-var Arc = function() 
-{
-	if (!(this instanceof Arc)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	// sweeping in CounterClockWise is positive.***
-	// zero startAngle is in "X" axis positive.***
-	this.centerPoint; // Point3D.***
-	this.radius;
-	this.startAngleDeg;
-	this.sweepAngleDeg;
-	this.numPointsFor360Deg; // interpolation param.***
-	
-	// Alternative vars.***
-	this.startPoint; // if no exist radius, then startPoint define the radius.***
-	this.endPoint;
-	this.sweepSense; // 1=CCW, -1=CW.***
-};
-
-/**
- * Set the center position of arc.
- * @class Arc
- */
-Arc.prototype.deleteObjects = function()
-{
-	if(this.centerPoint !== undefined)
-		this.centerPoint.deleteObjects(); // Point3D.***
-	this.centerPoint = undefined;
-	this.radius = undefined;
-	this.startAngleDeg = undefined;
-	this.sweepAngleDeg = undefined;
-	this.numPointsFor360Deg = undefined;
-	
-	if(this.startPoint !== undefined)
-		this.startPoint.deleteObjects(); 
-	
-	this.startPoint = undefined;
-	
-	if(this.endPoint !== undefined)
-		this.endPoint.deleteObjects(); 
-	
-	this.endPoint = undefined;
-	this.sweepSense = undefined; // 1=CCW, -1=CW.***
-};
-
-/**
- * Set the center position of arc.
- * @class Arc
- */
-Arc.prototype.setCenterPosition = function(cx, cy)
-{
-	if (this.centerPoint === undefined)
-	{ this.centerPoint = new Point2D(); }
-	
-	this.centerPoint.set(cx, cy);
-};
-
-/**
- * Set the center position of arc.
- * @class Arc
- */
-Arc.prototype.setRadius = function(radius)
-{
-	this.radius = radius;
-};
-
-/**
- * Set the start angle of the arc.
- * @class Arc
- */
-Arc.prototype.setStartAngleDegree = function(startAngleDegree)
-{
-	this.startAngleDeg = startAngleDegree;
-};
-
-/**
- * Set the start angle of the arc.
- * @class Arc
- */
-Arc.prototype.setStartPoint = function(x, y)
-{
-	// If no exist startAngle, then use this to calculate startAngle.***
-	if (this.startPoint === undefined)
-	{ this.startPoint = new Point2D(); }
-	
-	this.startPoint.set(x, y);
-};
-
-/**
- * Set the start angle of the arc.
- * @class Arc
- */
-Arc.prototype.setEndPoint = function(x, y)
-{
-	// If no exist sweepAngle, then use this to calculate sweepAngle.***
-	if (this.endPoint === undefined)
-	{ this.endPoint = new Point2D(); }
-	
-	this.endPoint.set(x, y);
-};
-
-/**
- * Set the start angle of the arc.
- * @class Arc
- */
-Arc.prototype.setSense = function(sense)
-{
-	this.sweepSense = sense; // 1=CCW, -1=CW.***
-};
-
-/**
- * Set the sweep angle of the arc.
- * @class Arc
- */
-Arc.prototype.setSweepAngleDegree = function(sweepAngleDegree)
-{
-	this.sweepAngleDeg = sweepAngleDegree;
-};
-
-/**
- * Returns the points of the arc.
- * @class Arc
- */
-Arc.prototype.getPoints = function(resultPointsArray, pointsCountFor360Deg)
-{
-	if(this.centerPoint === undefined)
-		return resultPointsArray;
-	
-	if(pointsCountFor360Deg)
-		this.numPointsFor360Deg = pointsCountFor360Deg
-
-	if(this.numPointsFor360Deg === undefined)
-		this.numPointsFor360Deg = 36;
-
-	// Check if exist strAng.*********************************************************************************
-	var strVector, endVector;
-	var strVectorModul;
-	if(this.startAngleDeg === undefined)
-	{
-		if(this.startPoint === undefined)
-			return resultPointsArray;
-		
-		strVector = new Point2D();
-		strVector.set(this.startPoint.x - this.centerPoint.x, this.startPoint.y - this.centerPoint.y);
-		strVectorModul = strVector.modul();
-		
-		var angRad = Math.acos(x/strVectorModul);
-		if(this.startPoint.y < 0)
-		{
-			angRad *= -1;
-		}
-		
-		this.startAngleDeg = angRad * 180.0/Math.PI;
-	}
-	
-	// Check if exist radius.*********************************************************************************
-	if(this.radius === undefined)
-	{
-		// calculate by startPoint.***
-		if(this.startPoint === undefined)
-			return resultPointsArray;
-		
-		if(strVectorModul === undefined)
-		{
-			if(strVector === undefined)
-			{
-				strVector = new Point2D();
-				strVector.set(this.startPoint.x - this.centerPoint.x, this.startPoint.y - this.centerPoint.y);
-			}
-			strVectorModul = strVector.modul();
-		}
-		
-		this.radius = strVectorModul;
-	}
-	
-	// check if exist sweepAng.*********************************************************************************
-	if(this.sweepAngleDeg === undefined)
-	{
-		if(this.endPoint === undefined || this.sweepSense === undefined)
-			return resultPointsArray;
-		
-		endVector = new Point2D();
-		endVector.set(this.endPoint.x - this.centerPoint.x, this.endPoint.y - this.endPoint.y);
-		var endVectorModul = endPoint.modul();
-		
-		var angRad = Math.acos(x/strVectorModul);
-		if(this.endPoint.y < 0)
-		{
-			angRad *= -1;
-		}
-		
-		this.sweepAngleDeg = angRad * 180.0/Math.PI;
-		
-		if(this.sweepSense < 0)
-			this.sweepAngleDeg = 360 - this.sweepAngleDeg;
-	}
-	
-	if(resultPointsArray === undefined)
-		resultPointsArray = [];
-	
-	var pointsArray = [];
-	
-	var increAngRad = 2.0 * Math.PI / this.numPointsFor360Deg;
-	var cx = this.centerPoint.x;
-	var cy = this.centerPoint.y;
-	var x, y;
-	var startAngRad = Math.PI/180.0 * this.startAngleDeg;
-	var sweepAngRad = Math.PI/180.0 * this.sweepAngleDeg;
-	var point;
-	
-	if (sweepAngRad >=0)
-	{
-		for (var currAngRad = 0.0; currAngRad<sweepAngRad; currAngRad += increAngRad)
-		{
-			x = cx + this.radius * Math.cos(currAngRad + startAngRad);
-			y = cy + this.radius * Math.sin(currAngRad + startAngRad);
-			point = new Point2D(x, y);
-			pointsArray.push(point);
-		}
-	}
-	else 
-	{
-		for (var currAngRad = 0.0; currAngRad>sweepAngRad; currAngRad -= increAngRad)
-		{
-			x = cx + this.radius * Math.cos(currAngRad + startAngRad);
-			y = cy + this.radius * Math.sin(currAngRad + startAngRad);
-			point = new Point2D(x, y);
-			pointsArray.push(point);
-		}
-	}
-	
-	// once finished, mark the 1rst point and the last point as"important point".***
-	var pointsCount = pointsArray.length;
-	if(pointsCount > 0)
-	{
-		pointsArray[0].pointType = 1;
-		pointsArray[pointsCount-1].pointType = 1;
-	}
-	
-	// now merge points into "resultPointsArray".***
-	var errorDist = 0.0001; // 0.1mm.***
-	var resultExistentPointsCount = resultPointsArray.length;
-	for(var i=0; i<pointsCount; i++)
-	{
-		if(i===0)
-		{
-			if(resultExistentPointsCount > 0)
-			{
-				// check if the last point of "resultPointsArray" and the 1rst point of "this" is coincident.***
-				var lastExistentPoint = resultPointsArray[resultExistentPointsCount-1];
-				point = pointsArray[i];
-				if(!lastExistentPoint.isCoincidentToPoint(point, errorDist))
-				{
-					resultPointsArray.push(point);
-				}
-			}
-			else
-			{
-				resultPointsArray.push(pointsArray[i]);
-			}
-		}
-		else
-		{
-			resultPointsArray.push(pointsArray[i]);
-		}
-	}
-	
-	// Last check: finally, in case of sweepAngle = 360 degrees, or is closed pointsArray, then pop the last insertedPoint.***
-	resultExistentPointsCount = resultPointsArray.length;
-	if(resultExistentPointsCount > 0)
-	{
-		// check if the last point of "resultPointsArray" and the 1rst point of "this" is coincident.***
-		var lastPoint = resultPointsArray[resultExistentPointsCount-1];
-		var firstPoint = resultPointsArray[0];
-		if(lastPoint.isCoincidentToPoint(firstPoint, errorDist))
-		{
-			resultPointsArray.pop();
-			lastPoint.deleteObjects();
-		}
-	}
-	
-	return resultPointsArray;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 선
- * @class AxisXYZ
- */
-var AxisXYZ = function() 
-{
-	if (!(this instanceof AxisXYZ)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	this.xLength = 60;
-	this.yLength = 60;
-	this.zLength = 60;
-	this.vbo_vicks_container = new VBOVertexIdxCacheKeysContainer();
-	this.vboKey = this.vbo_vicks_container.newVBOVertexIdxCacheKey();
-};
-
-AxisXYZ.prototype.setDimension = function(xLength, yLength, zLength)
-{
-	this.xLength = xLength;
-	this.yLength = yLength;
-	this.zLength = zLength;
-};
-
-AxisXYZ.prototype.getVboKeysContainer = function()
-{
-	return this.vbo_vicks_container;
-};
-
-AxisXYZ.prototype.getVbo = function(resultVboKey)
-{
-	if(resultVboKey === undefined)
-		resultVboKey = new VBOVertexIdxCacheKey();
-	
-	if (resultVboKey.posVboDataArray === undefined)
-	{ resultVboKey.posVboDataArray = []; }
-
-	if (resultVboKey.colVboDataArray === undefined)
-	{ resultVboKey.colVboDataArray = []; }
-
-	if (resultVboKey.norVboDataArray === undefined)
-	{ resultVboKey.norVboDataArray = []; }
-
-	var positions = [];
-	var normals = [];
-	var colors = [];
-	
-	// xAxis.***
-	positions.push(0,0,0, this.xLength,0,0);
-	colors.push(255,0,0,255, 255,0,0,255);
-	normals.push(0,0,255, 0,0,255);
-	
-	// yAxis.***
-	positions.push(0,0,0, 0,this.yLength,0);
-	colors.push(0,255,0,255, 0,255,0,255);
-	normals.push(0,0,255, 0,0,255);
-	
-	// zAxis.***
-	positions.push(0,0,0, 0,0,this.zLength);
-	colors.push(0,0,255,255, 0,0,255,255);
-	normals.push(255,0,0, 255,0,0);
-
-	resultVboKey.posVboDataArray = Float32Array.from(positions);
-	resultVboKey.colVboDataArray = Int8Array.from(colors);
-	resultVboKey.norVboDataArray = Int8Array.from(normals);
-	
-	resultVboKey.vertexCount = 6;
-	
-	return resultVboKey;
-};
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class BoundingRectangle
-*/
-var BoundingRectangle = function(x, y) 
-{
-	if (!(this instanceof BoundingRectangle)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.minX = 100000;
-	this.maxX = -100000;
-	this.minY = 100000;
-	this.maxY = -100000;
-};
-
-BoundingRectangle.prototype.setInit = function(point)
-{
-	if(point === undefined)
-		return;
-	
-	this.minX = point.x;
-	this.minY = point.y;
-	this.maxX = point.x;
-	this.maxY = point.y;
-};
-
-BoundingRectangle.prototype.setInitByRectangle = function(bRect)
-{
-	if(bRect === undefined)
-		return;
-	
-	this.minX = bRect.minX;
-	this.minY = bRect.minY;
-	this.maxX = bRect.maxX;
-	this.maxY = bRect.maxY;
-};
-
-BoundingRectangle.prototype.addPoint = function(point)
-{
-	if(point === undefined)
-		return;
-	
-	if(point.x < this.minX)
-		this.minX = point.x;
-	else if(point.x > this.maxX)
-		this.maxX = point.x;
-	
-	if(point.y < this.minY)
-		this.minY = point.y;
-	else if(point.y > this.maxY)
-		this.maxY = point.y;
-};
-
-BoundingRectangle.prototype.addRectangle = function(bRect)
-{
-	if(bRect === undefined)
-		return;
-	
-	if(bRect.minX < this.minX)
-		this.minX = bRect.minX;
-	if(bRect.maxX > this.maxX)
-		this.maxX = bRect.maxX;
-	
-	if(bRect.minY < this.minY)
-		this.minY = bRect.minY;
-	if(bRect.maxY > this.maxY)
-		this.maxY = bRect.maxY;
-};
-
-BoundingRectangle.prototype.intersectsWithRectangle = function(bRect)
-{
-	if(bRect === undefined)
-		return false;
-	
-	if(bRect.minX > this.maxX)
-		return false;
-	else if(bRect.maxX < this.minX)
-		return false;
-	else if(bRect.minY > this.maxY)
-		return false;
-	else if(bRect.maxY < this.minY)
-		return false;
-	
-	return true;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Circle
- */
-var Circle = function() 
-{
-	if (!(this instanceof Circle)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	// sweeping in CounterClockWise is positive.***
-	// zero startAngle is in "X" axis positive.***
-	this.centerPoint; // Point3D.***
-	this.radius;
-	this.numPointsFor360Deg; // interpolation param.***
-};
-
-/**
- * Set the center position of Circle.
- * @class Circle
- */
-Circle.prototype.setCenterPosition = function(cx, cy)
-{
-	if (this.centerPoint === undefined)
-	{ this.centerPoint = new Point2D(); }
-	
-	this.centerPoint.set(cx, cy);
-};
-
-/**
- * Set the center position of Circle.
- * @class Circle
- */
-Circle.prototype.setRadius = function(radius)
-{
-	this.radius = radius;
-};
-
-/**
- * Returns the points of the arc.
- * @class Arc
- */
-Circle.prototype.getPoints = function(resultPointsArray, pointsCountFor360Deg)
-{
-	if(pointsCountFor360Deg)
-		this.numPointsFor360Deg = pointsCountFor360Deg
-
-	if(this.numPointsFor360Deg === undefined)
-		this.numPointsFor360Deg = 36;
-	
-	// use an arc to make points.***
-	if(this.centerPoint === undefined || this.radius === undefined)
-		return resultPointsArray;
-	
-	var arc = new Arc();
-	arc.setCenterPosition(this.centerPoint.x, this.centerPoint.y);
-	
-	arc.setRadius(this.radius);
-	arc.setStartAngleDegree(0);
-	arc.setSweepAngleDegree(360.0);
-	arc.setSense(1);
-	
-	if(resultPointsArray === undefined)
-		resultPointsArray = [];
-	
-	resultPointsArray = arc.getPoints(resultPointsArray, this.numPointsFor360Deg);
-	return resultPointsArray;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Face
- */
-var Face = function() 
-{
-	if (!(this instanceof Face)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.halfEdge;
-};
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class HalfEdge
- */
-var HalfEdge = function() 
-{
-	if (!(this instanceof HalfEdge)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.origenVertex;
-	this.nextEdge;
-	this.twinEdge;
-	this.face;
-};
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class IndexRange
- */
-var IndexRange = function() 
-{
-	if (!(this instanceof IndexRange)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	this.strIdx;
-	this.endIdx;
-};
-
-IndexRange.prototype.copyFrom = function(indexRange)
-{
-	if(indexRange === undefined)
-		return;
-	
-	this.strIdx = indexRange.strIdx;
-	this.endIdx = indexRange.endIdx;
-};
-'use strict';
-
-/**
- * 선
- * @class Line
- */
-var Line = function() 
-{
-	if (!(this instanceof Line)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	// (x,y,z) = (x0,y0,z0) + lambda * (u, v, w);
-	this.point = new Point3D();
-	this.direction = new Point3D();
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @param dx 변수
- * @param dy 변수
- * @param dz 변수
- */
-Line.prototype.setPointAndDir = function(px, py, pz, dx, dy, dz) 
-{
-	this.point.set(px, py, pz);
-	this.direction.set(dx, dy, dz);
-	this.direction.unitary();
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line.prototype.getProjectedPoint = function(point, projectedPoint) 
-{
-	if(projectedPoint === undefined)
-		projectedPoint = new Point3D();
-	
-	var plane = new Plane();
-	plane.setPointAndNormal(point.x, point.y, point.z, this.direction.x, this.direction.y, this.direction.z);
-	projectedPoint = plane.intersectionLine(this, projectedPoint);
-	
-	return projectedPoint;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line.prototype.isCoincidentPoint = function(point, error) 
-{
-	if(point === undefined)
-		return false;
-	
-	var projectedPoint = this.getProjectedPoint(point);
-	
-	if(projectedPoint === undefined)
-		return false;
-	
-	if(error === undefined)
-		error = 10E-8;
-	
-	var squaredDist = projectedPoint.squareDistToPoint(point);
-	
-	if(squaredDist < error*error)
-		return true;
-	
-	return false;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 선
- * @class Line2D
- */
-var Line2D = function() 
-{
-	if (!(this instanceof Line2D)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	// (x,y) = (x0,y0) + lambda * (u, v);
-	this.point = new Point2D();
-	this.direction = new Point2D();
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param dx 변수
- * @param dy 변수
- */
-Line2D.prototype.setPointAndDir = function(px, py, dx, dy) 
-{
-	this.point.set(px, py);
-	this.direction.set(dx, dy);
-	this.direction.unitary();
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line2D.prototype.getPerpendicularRight = function(point) 
-{
-	var perpendicular = new Line2D();
-	
-	if(point)
-		perpendicular.point.set(point.x, point.y);
-	else
-		perpendicular.point.set(this.point.x, this.point.y);
-	
-	perpendicular.direction.set(this.direction.y, -this.direction.x);
-	return perpendicular;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line2D.prototype.getPerpendicularLeft = function(point) 
-{
-	var perpendicular = new Line2D();
-	
-	if(point)
-		perpendicular.point.set(point.x, point.y);
-	else
-		perpendicular.point.set(this.point.x, this.point.y);
-	
-	perpendicular.direction.set(-this.direction.y, this.direction.x);
-	return perpendicular;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line2D.prototype.getProjectedPoint = function(point, projectedPoint) 
-{
-	if(projectedPoint === undefined)
-		projectedPoint = new Point2D();
-	
-	var perpendicular = this.getPerpendicularLeft(point);
-	projectedPoint = this.intersectionWithLine(perpendicular, projectedPoint);
-	
-	return projectedPoint;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line2D.prototype.isCoincidentPoint = function(point, error) 
-{
-	if(point === undefined)
-		return false;
-	
-	if(error === undefined)
-		error = 10E-8;
-	
-	var projectedPoint = this.getProjectedPoint(point, projectedPoint);
-	var squaredDist = point.squareDistToPoint(projectedPoint);
-	
-	if(squaredDist < error*error)
-		return true;
-
-	return false;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line2D.prototype.isParallelToLine = function(line) 
-{
-	if(line === undefined)
-		return false;
-	
-	var zero = 10E-10;
-	var angRad = this.direction.angleRadToVector(line.direction);
-	
-	// if angle is zero or 180 degree, then this is parallel to "line".***
-	if(angRad < zero || Math.abs(angRad - Math.PI) < zero)
-		return true;
-	
-	return false;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- */
-Line2D.prototype.intersectionWithLine = function(line, resultIntersectPoint) 
-{
-	if(line === undefined)
-		return undefined;
-	
-	// 1rst, check that this is not parallel to "line".***
-	if(this.isParallelToLine(line))
-		return undefined;
-	
-	// now, check if this or "line" are vertical or horizontal.***
-	var intersectX;
-	var intersectY;
-	
-	var zero = 10E-10;
-	if(Math.abs(this.direction.x) < zero)
-	{
-		// this is a vertical line.***
-		var slope = line.direction.y / line.direction.x;
-		var b = line.point.y - slope * line.point.x;
-		
-		intersectX = this.point.x;
-		intersectY = slope * this.point.x + b;
-	}
-	else if(Math.abs(this.direction.y) < zero)
-	{
-		// this is a horizontal line.***
-		// must check if the "line" is vertical.***
-		if(Math.abs(line.direction.x) < zero)
-		{
-			// "line" is vertical.***
-			intersectX = line.point.x;
-			intersectY = this.point.y;
-		}
-		else{
-			var slope = line.direction.y / line.direction.x;
-			var b = line.point.y - slope * line.point.x;
-			
-			intersectX = (this.point.y - b)/slope;
-			intersectY = this.point.y;
-		}	
-	}
-	else{
-		// this is oblique.***
-		if(Math.abs(line.direction.x) < zero)
-		{
-			// "line" is vertical.***
-			var mySlope = this.direction.y / this.direction.x;
-			var myB = this.point.y - mySlope * this.point.x;
-			intersectX = line.point.x;
-			intersectY = line.point.x * mySlope + myB;
-		}
-		else{
-			var mySlope = this.direction.y / this.direction.x;
-			var myB = this.point.y - mySlope * this.point.x;
-			
-			var slope = line.direction.y / line.direction.x;
-			var b = line.point.y - slope * line.point.x;
-			
-			intersectX = (myB - b)/ (slope - mySlope);
-			intersectY = slope * intersectX + b;
-		}
-	}
-	
-	if(resultIntersectPoint === undefined)
-		resultIntersectPoint = new Point2D();
-	
-	resultIntersectPoint.set(intersectX, intersectY);
-	return resultIntersectPoint;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class MagoNativeProject
- */
-var MagoNativeProject = function() 
-{
-	if (!(this instanceof MagoNativeProject)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	// This is a "ParametricMeshes" composition.***
-	this.meshesArray;
-	this.geoLocDataManager;
-	this.vboKeysContainer; // class: VBOVertexIdxCacheKeysContainer
-};
-
-MagoNativeProject.prototype.newParametricMesh = function()
-{
-	if(this.meshesArray === undefined)
-		this.meshesArray = [];
-	
-	var parametricMesh = new ParametricMesh();
-	this.meshesArray.push(parametricMesh);
-	return parametricMesh;
-};
-
-MagoNativeProject.prototype.deleteObjects = function()
-{
-	if(this.meshesArray === undefined)
-		return;
-	
-	var parametricMeshesCount = this.meshesArray.length;
-	for(var i=0; i<parametricMeshesCount; i++)
-	{
-		this.meshesArray[i].deleteObjects();
-		this.meshesArray[i] = undefined;
-	}
-	this.meshesArray = undefined;
-	
-	if(this.geoLocDataManager)
-		this.geoLocDataManager.deleteObjects();
-	
-	this.geoLocDataManager = undefined;
-};
-
-MagoNativeProject.prototype.getMeshesCount = function()
-{
-	if(this.meshesArray === undefined)
-		return 0;
-	
-	return this.meshesArray.length;
-};
-
-MagoNativeProject.prototype.getMesh = function(idx)
-{
-	if(this.meshesArray === undefined)
-		return undefined;
-	
-	return this.meshesArray[idx];
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Mesh
- */
-var Mesh = function() 
-{
-	if (!(this instanceof Mesh)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.surfacesArray;
-};
-
-'use strict';
-
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class ParametricMesh
- */
-var ParametricMesh = function() 
-{
-	if (!(this instanceof ParametricMesh)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-	
-	this.vtxProfilesList; // class: VtxProfilesList.***
-	this.trianglesMatrix;
-	this.profile;
-	this.vboKeyContainer;//VBOVertexIdxCacheKey
-	this.bbox;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ParametricMesh.prototype.deleteObjects = function() 
-{
-	if(this.trianglesMatrix)
-		this.trianglesMatrix.deleteObjects();
-	
-	this.trianglesMatrix = undefined;
-	
-	if(this.profile)
-		this.profile.deleteObjects();
-	
-	this.profile = undefined;
-};
-
-ParametricMesh.prototype.getVboKeysContainer = function()
-{
-	return this.vboKeyContainer;
-};
-
-ParametricMesh.prototype.getVbo = function(resultVBOCacheKeys)
-{
-	if(resultVBOCacheKeys === undefined)
-		resultVBOCacheKeys = new VBOVertexIdxCacheKey();
-	
-	
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- */
-ParametricMesh.prototype.extrude = function(profile, extrusionDist, extrudeSegmentsCount, extrusionVector) 
-{
-	if(profile === undefined || extrusionDist === undefined)
-		return undefined;
-	
-	if(this.vtxProfilesList === undefined)
-		this.vtxProfilesList = new VtxProfilesList();
-	
-	// make the base-vtxProfile.***
-	var baseVtxProfile = this.vtxProfilesList.newVtxProfile();
-	baseVtxProfile.makeByProfile(profile);
-	
-	if(extrusionVector === undefined)
-		extrusionVector = new Point3D(0, 0, 1);
-	
-	// test with a 1 segment extrusion.***
-	var nextVtxProfile = this.vtxProfilesList.newVtxProfile();
-	nextVtxProfile.copyFrom(baseVtxProfile);
-	nextVtxProfile.translate(0, 0, extrusionDist);
-	
-	// now make the triangles.***
-	
-	
-	var hola = 0;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class Point2D
-*/
-var Point2D = function(x, y) 
-{
-	if (!(this instanceof Point2D)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	if(x)this.x = x;
-	else this.x = 0.0;
-	if(y)this.y = y;
-	else this.y = 0.0;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point2D.prototype.deleteObjects = function() 
-{
-	this.x = undefined;
-	this.y = undefined;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point2D.prototype.copyFrom = function(point2d) 
-{
-	this.x = point2d.x;
-	this.y = point2d.y;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point2D.prototype.set = function(x, y) 
-{
-	this.x = x;
-	this.y = y;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns this.x*this.x + this.y*this.y + this.z*this.z;
- */
-Point2D.prototype.getSquaredModul = function() 
-{
-	return this.x*this.x + this.y*this.y;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z );
- */
-Point2D.prototype.getModul = function() 
-{
-	return Math.sqrt(this.getSquaredModul());
-};
-
-/**
- * 
- * 어떤 일을 하고 있습니까?
- */
-Point2D.prototype.unitary = function() 
-{
-	var modul = this.getModul();
-	this.x /= modul;
-	this.y /= modul;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point2D.prototype.squareDistToPoint = function(point) 
-{
-	var dx = this.x - point.x;
-	var dy = this.y - point.y;
-
-	return dx*dx + dy*dy;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point2D.prototype.distToPoint = function(point) 
-{
-	return Math.sqrt(this.squareDistToPoint(point));
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point2D.prototype.isCoincidentToPoint = function(point, errorDist) 
-{
-	var squareDist = this.distToPoint(point);
-	var coincident = false;
-	if(squareDist < errorDist*errorDist)
-	{
-		coincident = true;
-	}
-
-	return coincident;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- */
-Point2D.prototype.getVectorToPoint = function(targetPoint, resultVector) 
-{
-	// this returns a vector that points to "targetPoint" from "this".***
-	// the "resultVector" has the direction from "this" to "targetPoint", but is NOT normalized.***
-	if(targetPoint === undefined)
-		return undefined;
-	
-	if(resultVector === undefined)
-		resultVector = new Point2D();
-	
-	resultVector.set(targetPoint.x - this.x, targetPoint.y - this.y);
-	
-	return resultVector;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point2D.prototype.crossProduct = function(point) 
-{
-	return this.x * point.y - point.x * this.y;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point2D.prototype.scalarProduct = function(point) 
-{
-	var scalarProd = this.x*point.x + this.y*point.y;
-	return scalarProd;
-};
-
-/**
- * nomal 계산
- * @param vector 변수
- */
-Point2D.prototype.angleRadToVector = function(vector) 
-{
-	if(vector === undefined)
-		return undefined;
-	
-	//******************************************************
-	//var scalarProd = this.scalarProduct(vector);
-	var myModul = this.getModul();
-	var vecModul = vector.getModul();
-	
-	// calcule by cos.***
-	//var cosAlfa = scalarProd / (myModul * vecModul); 
-	//var angRad = Math.acos(cosAlfa);
-	//var angDeg = alfa * 180.0/Math.PI;
-	//------------------------------------------------------
-	var error = 10E-10;
-	if(myModul < error || vecModul < error)
-		return undefined;
-	
-	return Math.acos(this.scalarProduct(vector) / (myModul * vecModul));
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point2D.prototype.angleDegToVector = function(vector) 
-{
-	if(vector === undefined)
-		return undefined;
-	
-	var angRad = this.angleRadToVector(vector);
-	
-	if(angRad === undefined)
-		return undefined;
-		
-	return angRad * 180.0/Math.PI;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class Point2DList
-*/
-var Point2DList = function(x, y) 
-{
-	if (!(this instanceof Point2DList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.pointsArray;
-};
-
-Point2DList.prototype.deleteObjects = function()
-{
-	if(this.pointsArray === undefined)
-		return;
-	
-	var pointsCount = this.pointsArray.length;
-	for(var i=0; i<pointsCount; i++)
-	{
-		this.pointsArray[i].deleteObjects();
-		this.pointsArray[i] = undefined;
-	}
-	this.pointsArray = undefined;
-};
-
-Point2DList.prototype.newPoint = function(x, y)
-{
-	if(this.pointsArray === undefined)
-		this.pointsArray = [];
-	
-	var point = new Point2D(x, y);
-	this.pointsArray.push(point);
-	return point;
-};
-
-Point2DList.prototype.getPoint = function(idx)
-{
-	return this.pointsArray[idx];
-};
-
-Point2DList.prototype.getPointsCount = function()
-{
-	if(this.pointsArray === undefined)
-		return 0;
-	
-	return this.pointsArray.length;
-};
-
-Point2DList.prototype.getPrevIdx = function(idx)
-{
-	var pointsCount = this.pointsArray.length;
-	var prevIdx;
-	
-	if(idx === 0)
-		prevIdx = pointsCount - 1;
-	else
-		prevIdx = idx - 1;
-
-	return prevIdx;
-};
-
-Point2DList.prototype.getNextIdx = function(idx)
-{
-	var pointsCount = this.pointsArray.length;
-	var nextIdx;
-	
-	if(idx === pointsCount - 1)
-		nextIdx = 0;
-	else
-		nextIdx = idx + 1;
-
-	return nextIdx;
-};
-
-Point2DList.prototype.getIdxOfPoint = function(point)
-{
-	var pointsCount = this.pointsArray.length;
-	var i=0;
-	var idx = -1;
-	var found = false;
-	while(!found && i<pointsCount)
-	{
-		if(this.pointsArray[i] === point)
-		{
-			found = true;
-			idx = i;
-		}
-		i++;
-	}
-	
-	return idx;
-};
-
-Point2DList.prototype.getSegment = function(idx, resultSegment)
-{
-	var currPoint = this.getPoint(idx);
-	var nextIdx = this.getNextIdx(idx);
-	var nextPoint = this.getPoint(nextIdx);
-	
-	if(resultSegment === undefined)
-		resultSegment = new Segment2D(currPoint, nextPoint);
-	else{
-		resultSegment.setPoints(currPoint, nextPoint);
-	}
-
-	return resultSegment;
-};
-
-Point2DList.prototype.setIdxInList = function()
-{
-	var pointsCount = this.pointsArray.length;
-	for(var i=0; i<pointsCount; i++)
-	{
-		this.pointsArray[i].idxInList = i;
-	}
-};
-
-/**
- * nomal 계산
- */
-Point2DList.prototype.getCopy = function(resultPoint2dList) 
-{
-	if(resultPoint2dList === undefined)
-		resultPoint2dList = new Point2DList();
-	else
-		resultPoint2dList.deleteObjects();
-	
-	var myPoint, copyPoint;
-	var pointsCount = this.getPointsCount();
-	for(var i=0; i<pointsCount; i++)
-	{
-		myPoint = this.getPoint(i);
-		copyPoint = resultPoint2dList.newPoint(myPoint.x, myPoint.y);
-	}
-	
-	return resultPoint2dList;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point2DList.prototype.getBoundingRectangle = function(resultBRect) 
-{
-	var pointsCount = this.getPointsCount();
-	if(pointsCount === 0)
-		return resultBRect;
-	
-	if(resultBRect === undefined)
-		resultBRect = new BoundingRectangle();
-	
-	var point;
-	for(var i=0; i<pointsCount; i++)
-	{
-		if(i === 0)
-			resultBRect.setInit(this.getPoint(i));
-		else
-			resultBRect.addPoint(this.getPoint(i));
-	}
-	
-	return resultBRect;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point2DList.prototype.getNearestPointIdxToPoint = function(point) 
-{
-	if(point === undefined)
-		return undefined;
-	
-	var currPoint, candidatePointIdx;
-	var currSquaredDist, candidateSquaredDist;
-	var pointsCount = this.getPointsCount();
-	for(var i=0; i<pointsCount; i++)
-	{
-		currPoint = this.getPoint(i);
-		currSquaredDist = currPoint.squareDistToPoint(point);
-		if(candidatePointIdx === undefined)
-		{
-			candidatePointIdx = i;
-			candidateSquaredDist = currSquaredDist;
-		}
-		else{
-			if(currSquaredDist < candidateSquaredDist)
-			{
-				candidatePointIdx = i;
-				candidateSquaredDist = currSquaredDist;
-			}
-		}
-	}
-	
-	return candidatePointIdx;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point2DList.prototype.reverse = function() 
-{
-	if(this.pointsArray !== undefined)
-		this.pointsArray.reverse();
-};
-
-Point2DList.prototype.getPointsIdxSortedByDistToPoint = function(thePoint, resultSortedPointsIdxArray)
-{
-	if(this.pointsArray === undefined)
-		return resultSortedPointsIdxArray;
-	
-	// Static function.***
-	// Sorting minDist to maxDist.***
-	if(resultSortedPointsIdxArray === undefined)
-		resultSortedPointsIdxArray = [];
-	
-	var pointsArray = this.pointsArray;
-	
-	var objectAux;
-	var objectsAuxArray = [];
-	var point;
-	var squaredDist;
-	var startIdx, endIdx, insertIdx;
-	var pointsCount = pointsArray.length;
-	for(var i=0; i<pointsCount; i++)
-	{
-		point = pointsArray[i];
-		if(point === thePoint)
-			continue;
-		
-		squaredDist = thePoint.squareDistToPoint(point);
-		objectAux = {};
-		objectAux.pointIdx = i;
-		objectAux.squaredDist = squaredDist;
-		startIdx = 0;
-		endIdx = objectsAuxArray.length - 1;
-		
-		insertIdx = this.getIndexToInsertBySquaredDist(objectsAuxArray, objectAux, startIdx, endIdx);
-		objectsAuxArray.splice(insertIdx, 0, objectAux);
-	}
-	
-	resultSortedPointsIdxArray.length = 0;
-	var objectsCount = objectsAuxArray.length;
-	for(var i=0; i<objectsCount; i++)
-	{
-		resultSortedPointsIdxArray.push(objectsAuxArray[i].pointIdx);
-	}
-	
-	return resultSortedPointsIdxArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns result_idx
- */
-Point2DList.prototype.getIndexToInsertBySquaredDist = function(objectsArray, object, startIdx, endIdx) 
-{
-	// this do a dicotomic search of idx in a ordered table.
-	// 1rst, check the range.
-	
-	var range = endIdx - startIdx;
-	
-	if(objectsArray.length === 0)
-		return 0;
-	
-	if (range < 6)
-	{
-		// in this case do a lineal search.
-		var finished = false;
-		var i = startIdx;
-		var idx;
-		//var objectsCount = objectsArray.length;
-		while (!finished && i<=endIdx)
-		{
-			if (object.squaredDist < objectsArray[i].squaredDist)
-			{
-				idx = i;
-				finished = true;
-			}
-			i++;
-		}
-		
-		if (finished)
-		{
-			return idx;
-		}
-		else 
-		{
-			return endIdx+1;
-		}
-	}
-	else 
-	{
-		// in this case do the dicotomic search.
-		var middleIdx = startIdx + Math.floor(range/2);
-		var newStartIdx;
-		var newEndIdx;
-		if (objectsArray[middleIdx].squaredDist > object.squaredDist)
-		{
-			newStartIdx = startIdx;
-			newEndIdx = middleIdx;
-		}
-		else 
-		{
-			newStartIdx = middleIdx;
-			newEndIdx = endIdx;
-		}
-		return this.getIndexToInsertBySquaredDist(objectsArray, object, newStartIdx, newEndIdx);
-	}
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 3차원 정보
- * @class Point3D
- */
-var Point3D = function(x, y, z) 
-{
-	if (!(this instanceof Point3D)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	if (x !== undefined)
-	{ this.x = x; }
-	else
-	{ this.x = 0.0; }
-	
-	if (y !== undefined)
-	{ this.y = y; }
-	else
-	{ this.y = 0.0; }
-	
-	if (z !== undefined)
-	{ this.z = z; }
-	else
-	{ this.z = 0.0; }
-	
-	this.pointType; // 1 = important point.***
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point3D.prototype.deleteObjects = function() 
-{
-	this.x = undefined;
-	this.y = undefined;
-	this.z = undefined;
-};
-
-/**
- * 포인트값 삭제
- * 어떤 일을 하고 있습니까?
- */
-Point3D.prototype.copyFrom = function(point3d) 
-{
-	this.x = point3d.x;
-	this.y = point3d.y;
-	this.z = point3d.z;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns this.x*this.x + this.y*this.y + this.z*this.z;
- */
-Point3D.prototype.getSquaredModul = function() 
-{
-	return this.x*this.x + this.y*this.y + this.z*this.z;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z );
- */
-Point3D.prototype.getModul = function() 
-{
-	return Math.sqrt(this.getSquaredModul());
-};
-
-/**
- * 
- * 어떤 일을 하고 있습니까?
- */
-Point3D.prototype.unitary = function() 
-{
-	var modul = this.getModul();
-	this.x /= modul;
-	this.y /= modul;
-	this.z /= modul;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point3D.prototype.crossProduct = function(point, resultPoint) 
-{
-	if (resultPoint === undefined) { resultPoint = new Point3D(); }
-
-	resultPoint.x = this.y * point.z - point.y * this.z;
-	resultPoint.y = point.x * this.z - this.x * point.z;
-	resultPoint.z = this.x * point.y - point.x * this.y;
-
-	return resultPoint;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point3D.prototype.scalarProduct = function(point) 
-{
-	var scalarProd = this.x*point.x + this.y*point.y + this.z*point.z;
-	return scalarProd;
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point3D.prototype.angleRadToVector = function(vector) 
-{
-	if(vector === undefined)
-		return undefined;
-	
-	//******************************************************
-	//var scalarProd = this.scalarProd(vector);
-	var myModul = this.modul();
-	var vecModul = vector.modul();
-	
-	// calcule by cos.***
-	//var cosAlfa = scalarProd / (myModul * vecModul); 
-	//var angRad = Math.acos(cosAlfa);
-	//var angDeg = alfa * 180.0/Math.PI;
-	//------------------------------------------------------
-	var error = 10E-10;
-	if(myModul < error || vecModul < error)
-		return undefined;
-	
-	return Math.acos(this.scalarProd(vector) / (myModul * vecModul));
-};
-
-/**
- * nomal 계산
- * @param point 변수
- * @param resultPoint 변수
- * @returns resultPoint
- */
-Point3D.prototype.angleDegToVector = function(vector) 
-{
-	if(vector === undefined)
-		return undefined;
-	
-	var angRad = this.angleRadToVector(vector);
-	
-	if(angRad === undefined)
-		return undefined;
-		
-	return angRad * 180.0/Math.PI;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.squareDistToPoint = function(point) 
-{
-	var dx = this.x - point.x;
-	var dy = this.y - point.y;
-	var dz = this.z - point.z;
-
-	return dx*dx + dy*dy + dz*dz;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.isCoincidentToPoint = function(point, errorDist) 
-{
-	var squareDist = this.distToPoint(point);
-	var coincident = false;
-	if(squareDist < errorDist*errorDist)
-	{
-		coincident = true;
-	}
-
-	return coincident;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.squareDistTo = function(x, y, z) 
-{
-	var dx = this.x - x;
-	var dy = this.y - y;
-	var dz = this.z - z;
-
-	return dx*dx + dy*dy + dz*dz;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.distTo = function(x, y, z) 
-{
-	return Math.sqrt(this.squareDistTo(x, y, z));
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.distToPoint = function(point) 
-{
-	return Math.sqrt(this.squareDistToPoint(point));
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.distToSphere = function(sphere) 
-{
-	return Math.sqrt(this.squareDistToPoint(sphere.centerPoint)) - sphere.r;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param px 변수
- * @param py 변수
- * @param pz 변수
- * @returns dx*dx + dy*dy + dz*dz
- */
-Point3D.prototype.aproxDistTo = function(pointB, sqrtTable) 
-{
-	var difX = Math.abs(this.x - pointB.x);
-	var difY = Math.abs(this.y - pointB.y);
-	var difZ = Math.abs(this.z - pointB.z);
-	
-	// find the big value.
-	var maxValue, value1, value2;
-	var value1Idx, value2Idx;
-	
-	if (difX > difY)
-	{
-		if (difX > difZ)
-		{
-			maxValue = difX;
-			value1 = difY/maxValue;
-			value1Idx = Math.floor(value1*10);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difZ/middleDist;
-			value2Idx = Math.floor(value2*10);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-		else 
-		{
-			maxValue = difZ;
-			value1 = difX/maxValue;
-			value1Idx = Math.floor(value1*10);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difY/middleDist;
-			value2Idx = Math.floor(value2*10);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-	}
-	else 
-	{
-		if (difY > difZ)
-		{
-			maxValue = difY;
-			value1 = difX/maxValue;
-			value1Idx = Math.floor(value1*10);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difZ/middleDist;
-			value2Idx = Math.floor(value2*10);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-		else 
-		{
-			maxValue = difZ;
-			value1 = difX/maxValue;
-			value1Idx = Math.floor(value1*10);
-			var middleDist = maxValue * sqrtTable[value1Idx];
-			value2 = difY/middleDist;
-			value2Idx = Math.floor(value2*10);
-			return (middleDist * sqrtTable[value2Idx]);
-		}
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Point3D.prototype.getVectorToPoint = function(targetPoint, resultVector) 
-{
-	// this returns a vector that points to "targetPoint" from "this".***
-	// the "resultVector" has the direction from "this" to "targetPoint", but is NOT normalized.***
-	if(targetPoint === undefined)
-		return undefined;
-	
-	if(resultVector === undefined)
-		resultVector = new Point3D();
-	
-	resultVector.set(targetPoint.x - this.x, targetPoint.y - this.y, targetPoint.z - this.z);
-	
-	return resultVector;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Point3D.prototype.set = function(x, y, z) 
-{
-	this.x = x; this.y = y; this.z = z;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Point3D.prototype.add = function(x, y, z) 
-{
-	this.x += x; this.y += y; this.z += z;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Point3D.prototype.addPoint = function(point) 
-{
-	this.x += point.x; this.y += point.y; this.z += point.z;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param x 변수
- * @param y 변수
- * @param z 변수
- */
-Point3D.prototype.scale = function(scaleFactor) 
-{
-	this.x *= scaleFactor; this.y *= scaleFactor; this.z *= scaleFactor;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Polygon
- */
-var Polygon = function() 
-{
-	if (!(this instanceof Polygon)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.point2dList;
-	this.normal; // polygon sense. (normal = 1) -> CCW. (normal = -1) -> CW.***
-	this.convexPolygonsArray; // tessellation result.***
-	this.bRect; // boundary rectangle.***
-};
-
-Polygon.prototype.deleteObjects = function()
-{
-	if(this.point2dList !== undefined)
-	{
-		this.point2dList.deleteObjects();
-		this.point2dList = undefined;
-	}
-	
-	this.normal = undefined;
-};
-
-Polygon.prototype.getBoundingRectangle = function(resultBRect)
-{
-	if(this.point2dList === undefined)
-		return resultBRect;
-	
-	resultBRect = this.point2dList.getBoundingRectangle(resultBRect);
-	return resultBRect;
-};
-
-Polygon.prototype.getEdgeDirection = function(idx)
-{
-	// the direction is unitary vector.***
-	var segment = this.point2dList.getSegment(idx);
-	var direction = segment.getDirection(direction);
-	return direction;
-};
-
-Polygon.prototype.getEdgeVector = function(idx)
-{
-	var segment = this.point2dList.getSegment(idx);
-	var vector = segment.getVector(vector);
-	return vector;
-};
-
-Polygon.prototype.reverseSense = function()
-{
-	if(this.point2dList !== undefined)
-		this.point2dList.reverse();
-};
-
-Polygon.prototype.getCopy = function(resultCopyPolygon)
-{
-	if(this.point2dList === undefined)
-		return resultCopyPolygon;
-	
-	if(resultCopyPolygon === undefined)
-		resultCopyPolygon = new Polygon();
-	
-	// copy the point2dList and the normal.***
-	if(resultCopyPolygon.point2dList === undefined)
-		resultCopyPolygon.point2dList = new Point2DList();
-	
-	resultCopyPolygon.point2dList = this.point2dList.getCopy(resultCopyPolygon.point2dList);
-	
-	if(this.normal)
-		resultCopyPolygon.normal = this.normal;
-	
-	return resultCopyPolygon;
-};
-
-Polygon.prototype.calculateNormal = function(resultConcavePointsIdxArray)
-{
-	// must check if the verticesCount is 3. Then is a convex polygon.***
-	
-	// A & B are vectors.
-	// A*B is scalarProduct.
-	// A*B = |A|*|B|*cos(alfa)
-	var point;
-	var crossProd;
-	
-	if(resultConcavePointsIdxArray === undefined)
-		resultConcavePointsIdxArray = [];
-	
-	//var candidate_1 = {}; // normal candidate 1.***
-	//var candidate_2 = {}; // normal candidate 2.***
-	
-	this.normal = 0; // unknown sense.***
-	var pointsCount = this.point2dList.getPointsCount();
-	for(var i=0; i<pointsCount; i++)
-	{
-		point = this.point2dList.getPoint(i);
-		var prevIdx = this.point2dList.getPrevIdx(i);
-		
-		// get unitari directions of the vertex.***
-		var startVec = this.getEdgeDirection(prevIdx); // Point3D.
-		var endVec = this.getEdgeDirection(i); // Point3D.
-		
-		// calculate the cross product.***
-		var crossProd = startVec.crossProduct(endVec, crossProd); // Point3D.
-		var scalarProd = startVec.scalarProduct(endVec);
-		
-		if(crossProd < 0.0) 
-		{
-			crossProd = -1;
-			resultConcavePointsIdxArray.push(i);
-		}
-		else if(crossProd > 0.0) {
-			crossProd = 1;
-		}
-		// calcule by cos.***
-		// cosAlfa = scalarProd / (strModul * endModul); (but strVecModul = 1 & endVecModul = 1), so:
-		var cosAlfa = scalarProd;
-		var alfa = Math.acos(cosAlfa);
-		this.normal += (crossProd * alfa);
-	}
-	
-	if(this.normal > 0 )
-		this.normal = 1;
-	else
-		this.normal = -1;
-	
-	return resultConcavePointsIdxArray;
-};
-
-
-Polygon.prototype.tessellate = function(concaveVerticesIndices, convexPolygonsArray)
-{
-	var concaveVerticesCount = concaveVerticesIndices.length;
-	
-	if(concaveVerticesCount === 0)
-	{
-		convexPolygonsArray.push(this);
-		return convexPolygonsArray;
-	}
-	
-	// now, for any concave vertex, find the closest vertex to split the polygon.***
-	var find = false;
-	var idx_B;
-	var i=0;
-	
-	while(!find && i<concaveVerticesCount)
-	{
-		var idx = concaveVerticesIndices[i];
-		var point = this.point2dList.getPoint(idx);
-		var resultSortedPointsIdxArray = [];
-		
-		// get vertices indices sorted by distance to "point".***
-		this.getPointsIdxSortedByDistToPoint(point, resultSortedPointsIdxArray);
-		
-		var sortedVerticesCount = resultSortedPointsIdxArray.length;
-		var j=0;
-		while(!find && j<sortedVerticesCount)
-		{
-			idx_B = resultSortedPointsIdxArray[j];
-			
-			// skip adjacent vertices.***
-			if(this.point2dList.getPrevIdx(idx) === idx_B || this.point2dList.getNextIdx(idx) === idx_B)
-			{
-				j++;
-				continue;
-			}
-			
-			// check if is splittable by idx-idx_B.***
-			var segment = new Segment2D(this.point2dList.getPoint(idx), this.point2dList.getPoint(idx_B));
-			if(this.intersectionWithSegment(segment))
-			{
-				j++;
-				continue;
-			}
-			
-			var resultSplittedPolygons = this.splitPolygon(idx, idx_B);
-			
-			if(resultSplittedPolygons.length < 2)
-			{
-				j++;
-				continue;
-			}
-			
-			// now, compare splittedPolygon's normals with myNormal.***
-			var polygon_A = resultSplittedPolygons[0];
-			var polygon_B = resultSplittedPolygons[1];
-			var concavePoints_A = polygon_A.calculateNormal();
-			var concavePoints_B = polygon_B.calculateNormal();
-			
-			var normal_A = polygon_A.normal;
-			var normal_B = polygon_B.normal;
-			if(normal_A === this.normal && normal_B === this.normal)
-			{
-				find = true;
-				// polygon_A.***
-				if(concavePoints_A.length > 0)
-				{
-					convexPolygonsArray = polygon_A.tessellate(concavePoints_A, convexPolygonsArray);
-				}
-				else{
-					if(convexPolygonsArray === undefined)
-						convexPolygonsArray = [];
-					
-					convexPolygonsArray.push(polygon_A);
-				}
-				
-				// polygon_B.***
-				if(concavePoints_B.length > 0)
-				{
-					convexPolygonsArray = polygon_B.tessellate(concavePoints_B, convexPolygonsArray);
-				}
-				else{
-					if(convexPolygonsArray === undefined)
-						convexPolygonsArray = [];
-					
-					convexPolygonsArray.push(polygon_B);
-				}
-			}
-			
-			j++;
-		}
-		i++;
-	}
-	
-	return convexPolygonsArray;
-};
-
-Polygon.prototype.intersectionWithSegment = function(segment)
-{
-	// "segment" cut a polygons edge.***
-	// "segment" coincident with a polygons vertex.***
-	if(this.bRect !== undefined)
-	{
-		// if exist boundary rectangle, check bRect intersection.***
-		var segmentsBRect = segment.getBoundaryRectangle(segmentsBRect);
-		if(!this.bRect.intersectsWithRectangle(segmentsBRect))
-			return false;
-	}
-	
-	// 1rst check if the segment is coincident with any polygons vertex.***
-	var mySegment;
-	var intersectionType;
-	var error = 10E-8;
-	var pointsCount = this.point2dList.getPointsCount();
-	for(var i=0; i<pointsCount; i++)
-	{
-		mySegment = this.point2dList.getSegment(i, mySegment);
-		
-		// if segment shares points, then must not cross.***
-		if(segment.sharesPointsWithSegment(mySegment))
-		{
-			continue;
-		}
-		
-		if(segment.intersectionWithSegment(mySegment, error))
-		{
-			return true;
-		}
-	}
-	
-	return false;
-};
-
-Polygon.prototype.splitPolygon = function(idx1, idx2, resultSplittedPolygonsArray)
-{
-	if(resultSplittedPolygonsArray === undefined)
-		resultSplittedPolygonsArray = [];
-	
-	// polygon A. idx1 -> idx2.***
-	var polygon_A = new Polygon();
-	polygon_A.point2dList = new Point2DList();
-	polygon_A.point2dList.pointsArray = [];
-	
-	// 1rst, put vertex1 & vertex2 in to the polygon_A.***
-	polygon_A.point2dList.pointsArray.push(this.point2dList.getPoint(idx1));
-	polygon_A.point2dList.pointsArray.push(this.point2dList.getPoint(idx2));
-	
-	var finished = false;
-	var currIdx = idx2;
-	var startIdx = idx1;
-	var i=0;
-	var totalPointsCount = this.point2dList.getPointsCount();
-	while(!finished && i<totalPointsCount)
-	{
-		var nextIdx = this.point2dList.getNextIdx(currIdx);
-		if(nextIdx === startIdx)
-		{
-			finished = true;
-		}
-		else{
-			polygon_A.point2dList.pointsArray.push(this.point2dList.getPoint(nextIdx));
-			currIdx = nextIdx;
-		}
-		i++;
-	}
-	
-	resultSplittedPolygonsArray.push(polygon_A);
-	
-	// polygon B. idx2 -> idx1.***
-	var polygon_B = new Polygon();
-	polygon_B.point2dList = new Point2DList();
-	polygon_B.point2dList.pointsArray = [];
-	
-	// 1rst, put vertex2 & vertex1 in to the polygon_B.***
-	polygon_B.point2dList.pointsArray.push(this.point2dList.getPoint(idx2));
-	polygon_B.point2dList.pointsArray.push(this.point2dList.getPoint(idx1));
-	
-	finished = false;
-	currIdx = idx1;
-	startIdx = idx2;
-	i=0;
-	while(!finished && i<totalPointsCount)
-	{
-		var nextIdx = this.point2dList.getNextIdx(currIdx);
-		if(nextIdx === startIdx)
-		{
-			finished = true;
-		}
-		else{
-			polygon_B.point2dList.pointsArray.push(this.point2dList.getPoint(nextIdx));
-			currIdx = nextIdx;
-		}
-		i++;
-	}
-	
-	resultSplittedPolygonsArray.push(polygon_B);
-	return resultSplittedPolygonsArray;
-};
-
-Polygon.prototype.getPointsIdxSortedByDistToPoint = function(thePoint, resultSortedPointsIdxArray)
-{
-	// Static function.***
-	// Sorting minDist to maxDist.***
-	if(resultSortedPointsIdxArray === undefined)
-		resultSortedPointsIdxArray = [];
-	
-	resultSortedPointsIdxArray = this.point2dList.getPointsIdxSortedByDistToPoint(thePoint, resultSortedPointsIdxArray);
-	
-	return resultSortedPointsIdxArray;
-};
-
-Polygon.prototype.isPolygonSplittableByVtxSegment = function(vertexSegment)
-{
-	
-};
-
-Polygon.prototype.getTrianglesConvexPolygon = function(resultTrianglesList)
-{
-	// in this case, consider the polygon is convex.***
-	if(resultTrianglesList === undefined)
-		resultTrianglesList = new TrianglesList();
-
-	var pointsCount = this.point2dList.getPointsCount();
-	if(pointsCount <3)
-		return resultTrianglesList;
-	
-	var triangle;
-	for(var i=1; i<pointsCount-1; i++)
-	{
-		triangle = resultTrianglesList.newTriangle();
-		
-		var point0idx = this.point2dList.getPoint(0).idxInList;
-		var point1idx = this.point2dList.getPoint(i).idxInList;
-		var point2idx = this.point2dList.getPoint(i+1).idxInList;
-		
-		triangle.vtxIdx0 = point0idx;
-		triangle.vtxIdx1 = point1idx;
-		triangle.vtxIdx2 = point2idx;
-	}
-	
-	return resultTrianglesList;
-};
-
-Polygon.prototype.getVbo = function(resultVbo)
-{
-	// return positions, normals and indices.***
-	if(resultVbo === undefined)
-		resultVbo = new VBOVertexIdxCacheKey();
-	
-	// 1rst, obtain pos, nor.***
-	var posArray = [];
-	var norArray = [];
-	var point;
-	var normal;
-	if(this.normal > 0)
-		normal = 1;
-	else
-		normal = -1;
-		
-	var pointsCount = this.point2dList.getPointsCount();
-	for(var i=0; i<pointsCount; i++)
-	{
-		point = this.point2dList.getPoint(i);
-		
-		posArray.push(point.x);
-		posArray.push(point.y);
-		posArray.push(0.0);
-		
-		norArray.push(0);
-		norArray.push(0);
-		norArray.push(normal*255);
-	}
-	
-	resultVbo.posVboDataArray = Float32Array.from(posArray);
-	resultVbo.norVboDataArray = Int8Array.from(norArray);
-	
-	// now calculate triangles indices.***
-	this.point2dList.setIdxInList(); // use this function instead a map.***
-	
-	var trianglesList = new TrianglesList();
-	var convexPolygonsCount = this.convexPolygonsArray.length;
-	for(var i=0; i<convexPolygonsCount; i++)
-	{
-		var convexPolygon = this.convexPolygonsArray[i];
-		trianglesList = convexPolygon.getTrianglesConvexPolygon(trianglesList);
-	}
-	trianglesList.getFaceDataArray(resultVbo);
-
-	return resultVbo;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class PolyLine
- */
-var PolyLine = function() 
-{
-	if (!(this instanceof PolyLine)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.point2dArray;
-};
-
-/**
- * Creates a new Point2D.
- * @class PolyLine
- */
-PolyLine.prototype.newPoint2d = function(x, y)
-{
-	if (this.point2dArray === undefined)
-	{ this.point2dArray = []; }
-	
-	var point2d = new Point2D(x, y);
-	this.point2dArray.push(point2d);
-	return point2d;
-};
-
-/**
- * Creates a new Point2D.
- * @class PolyLine
- */
-PolyLine.prototype.deleteObjects = function()
-{
-	var pointsCount = this.point2dArray.length;
-	for (var i=0; i<pointsCount; i++)
-	{
-		this.point2dArray[i].deleteObjects();
-		this.point2dArray[i] = undefined;
-	}
-	this.point2dArray = undefined;
-};
-
-/**
- * Creates a new Point2D.
- * @class PolyLine
- */
-PolyLine.prototype.getPoints = function(resultPointsArray)
-{
-	if (resultPointsArray === undefined)
-	{ resultPointsArray = []; }
-	
-	var point;
-	var errorDist = 10E-8;
-	var resultExistentPointsCount = resultPointsArray.length;
-	var pointsCount = this.point2dArray.length;
-	for (var i=0; i<pointsCount; i++)
-	{
-		if(i===0)
-		{
-			if(resultExistentPointsCount > 0)
-			{
-				// check if the last point of "resultPointsArray" and the 1rst point of "this" is coincident.***
-				var lastExistentPoint = resultPointsArray[resultExistentPointsCount-1];
-				var point0 = this.point2dArray[i];
-				if(!lastExistentPoint.isCoincidentToPoint(point0, errorDist))
-				{
-					point = new Point2D();
-					point.copyFrom(this.point2dArray[i]); 
-					point.pointType = 1; // mark as "important point".***
-					resultPointsArray.push(point);
-				}
-			}
-			else
-			{
-				point = new Point2D();
-				point.copyFrom(this.point2dArray[i]); 
-				point.pointType = 1; // mark as "important point".***
-				resultPointsArray.push(point);
-			}
-		}
-		else
-		{
-			point = new Point2D();
-			point.copyFrom(this.point2dArray[i]); 
-			point.pointType = 1; // mark as "important point".***
-			resultPointsArray.push(point);
-		}
-	}
-	
-	return resultPointsArray;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Profile
- */
-var Profile = function() 
-{
-	if (!(this instanceof Profile)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.outerRing; // one Ring. 
-	this.innerRingsList; // class: RingsList. 
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.newOuterRing = function() 
-{
-	if (this.outerRing === undefined)
-	{ this.outerRing = new Ring(); }
-	else{
-		this.outerRing.deleteObjects();
-	}
-	
-	return this.outerRing;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.newInnerRing = function() 
-{
-	if (this.innerRingsList === undefined)
-	{ this.innerRingsList = new RingsList(); }
-	
-	var innerRing = this.innerRingsList.newRing();
-	
-	return innerRing;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.deleteObjects = function() 
-{
-	if (this.outerRing)
-	{
-		this.outerRing.deleteObjects();
-		this.outerRing = undefined;
-	}
-
-	if (this.innerRingsList)
-	{
-		this.innerRingsList.deleteObjects();
-		this.innerRingsList = undefined;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-
-Profile.prototype.hasHoles = function() 
-{
-	if(this.innerRingsList === undefined || this.innerRingsList.getRingsCount() === 0)
-		return false;
-	
-	return true;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
- 
-Profile.prototype.getVBO = function(resultVBOCacheKeys) 
-{
-	if(this.outerRing === undefined)
-		return resultVBOCacheKeys;
-	
-	if(!this.hasHoles())
-	{
-		var outerRing = this.outerRing;
-		outerRing.makePolygon();
-		outerRing.polygon.convexPolygonsArray = [];
-		var concavePointsIndices = outerRing.polygon.calculateNormal(concavePointsIndices);
-		outerRing.polygon.convexPolygonsArray = outerRing.polygon.tessellate(concavePointsIndices, outerRing.polygon.convexPolygonsArray);
-
-		outerRing.polygon.getVbo(resultVBOCacheKeys);
-	}
-	else{
-		// 1rst, check normals congruences.***
-		this.checkNormals();
-		var resultHolesEliminatedPolygons = this.tessellate(resultHolesEliminatedPolygons);
-		
-		if(resultHolesEliminatedPolygons.length > 0)
-		{
-			// there are only one polygon in "resultHolesEliminatedPolygons".***
-			var polygon = resultHolesEliminatedPolygons[0]; // there are only 1 polygon.***
-			
-			polygon.convexPolygonsArray = [];
-			var concavePointsIndices = polygon.calculateNormal(concavePointsIndices);
-			polygon.convexPolygonsArray = polygon.tessellate(concavePointsIndices, polygon.convexPolygonsArray);
-			polygon.getVbo(resultVBOCacheKeys);
-		}
-		var hola = 0;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.eliminateHolePolygonBySplitPoints = function(outerPolygon, innerPolygon, outerPointIdx, innerPointIdx, resultPolygon) 
-{
-	if(resultPolygon === undefined)
-		resultPolygon = new Polygon();
-	
-	if(resultPolygon.point2dList === undefined)
-		resultPolygon.point2dList = new Point2DList();
-	
-	// 1rst, copy in newPolygon the outerPolygon.***
-	var outerPointsCount = outerPolygon.point2dList.getPointsCount();
-	var finished = false;
-	var i=0;
-	var newPoint;
-	var outerPoint;
-	var currIdx = outerPointIdx;
-	while(!finished && i<outerPointsCount)
-	{
-		outerPoint = outerPolygon.point2dList.getPoint(currIdx);
-		newPoint = resultPolygon.point2dList.newPoint(outerPoint.x, outerPoint.y);
-		
-		currIdx = outerPolygon.point2dList.getNextIdx(currIdx);
-		if(currIdx === outerPointIdx)
-		{
-			finished = true;
-			
-			// must add the firstPoint point.***
-			outerPoint = outerPolygon.point2dList.getPoint(currIdx);
-			newPoint = resultPolygon.point2dList.newPoint(outerPoint.x, outerPoint.y);
-		}
-		
-		i++;
-	}
-	
-	// now add innerPolygon's points.***
-	var innerPointsCount = innerPolygon.point2dList.getPointsCount();
-	finished = false;
-	i=0;
-	newPoint;
-	var innerPoint;
-	currIdx = innerPointIdx;
-	while(!finished && i<innerPointsCount)
-	{
-		innerPoint = innerPolygon.point2dList.getPoint(currIdx);
-		newPoint = resultPolygon.point2dList.newPoint(innerPoint.x, innerPoint.y);
-		
-		currIdx = innerPolygon.point2dList.getNextIdx(currIdx);
-		if(currIdx === innerPointIdx)
-		{
-			finished = true;
-			// must add the firstPoint point.***
-			innerPoint = innerPolygon.point2dList.getPoint(currIdx);
-			newPoint = resultPolygon.point2dList.newPoint(innerPoint.x, innerPoint.y);
-		}
-		
-		i++;
-	}
-	
-	return resultPolygon;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.eliminateHolePolygon = function(outerPolygon, innerPolygon, innerPointIdx, resultPolygon) 
-{
-	// 1rst, make a sorted by dist of points of outer to "innerPoint".***
-	var resultSortedPointsIdxArray = [];
-	var innerPoint = innerPolygon.point2dList.getPoint(innerPointIdx);
-	resultSortedPointsIdxArray = outerPolygon.getPointsIdxSortedByDistToPoint(innerPoint, resultSortedPointsIdxArray);
-	
-	var outerSortedPointsCount = resultSortedPointsIdxArray.length;
-	var splitSegment = new Segment2D();;
-	var finished = false;
-	var i=0;
-	var outPointIdx;
-	var outPoint;
-	while(!finished && i<outerSortedPointsCount)
-	{
-		outPointIdx = resultSortedPointsIdxArray[i];
-		outPoint = outerPolygon.point2dList.getPoint(outPointIdx);
-		splitSegment.setPoints(outPoint, innerPoint);
-		
-		// check if splitSegment intersects the outerPolygon or any innerPolygons.***
-		if(outerPolygon.intersectionWithSegment(splitSegment) || innerPolygon.intersectionWithSegment(splitSegment))
-		{
-			i++;
-			continue;
-		}
-		
-		resultPolygon = this.eliminateHolePolygonBySplitPoints(outerPolygon, innerPolygon, outPointIdx, innerPointIdx, resultPolygon);
-		finished = true;
-		
-		i++;
-	}
-	
-	if(!finished)
-		return false;
-	
-	return true;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.tessellate = function(resultHolesEliminatedPolygons) 
-{
-	if(this.outerRing === undefined)
-		return undefined;
-	
-	if(resultHolesEliminatedPolygons === undefined)
-		resultHolesEliminatedPolygons = [];
-	
-	if(this.hasHoles())
-	{
-		var hole;
-		var holeIdx;
-		var holePolygon;
-		var objectAux;
-		var innerPointIdx;
-		var innersBRect;
-		
-		// prepare outerRing if necessary.***
-		var outerRing = this.outerRing;
-		if(outerRing.polygon === undefined)
-			outerRing.makePolygon();
-		var outerPolygon = outerRing.polygon;
-		var concavePointsIndices = outerPolygon.calculateNormal(concavePointsIndices);
-		
-		// make a innerRingsArray copy.***
-		var innerRingsArray = [];
-		var innerRingsCount = this.innerRingsList.getRingsCount();
-		for(var i=0; i<innerRingsCount; i++)
-		{
-			innerRingsArray.push(this.innerRingsList.getRing(i));
-		}
-		
-		var resultPolygon = new Polygon();
-		var resultPolygonAux = new Polygon();
-		resultPolygonAux = outerPolygon.getCopy(resultPolygonAux);
-		var innersBRectLeftDownPoint = new Point2D();
-		var objectsArray = [];
-		
-		// now, for each innerRing, try to merge to outerRing by splitSegment.***
-		var innerRingsCount = innerRingsArray.length;
-		var i=0;
-		var finished = false;
-		while(!finished && i<innerRingsCount)
-		{
-			// calculate the most left-down innerRing.***
-			innersBRect = RingsList.getBoundingRectangle(innerRingsArray, innersBRect);
-			innersBRectLeftDownPoint.set(innersBRect.minX, innersBRect.minY);
-			
-			objectsArray.length = 0; // init.***
-			objectsArray = RingsList.getSortedRingsByDistToPoint(innersBRectLeftDownPoint, innerRingsArray, objectsArray);
-		
-			objectAux = objectsArray[0];
-			hole = objectAux.ring;
-			holeIdx = objectAux.ringIdx;
-			holePolygon = hole.polygon;
-			innerPointIdx = objectAux.pointIdx;
-			holePolygon.calculateNormal();
-			
-			if(this.eliminateHolePolygon(resultPolygonAux, holePolygon, innerPointIdx, resultPolygon))
-			{
-				if(innerRingsArray.length == 1)
-				{
-					finished = true;
-					break;
-				}
-				// erase the hole from innerRingsArray.***
-				innerRingsArray.splice(holeIdx, 1);
-				resultPolygonAux.deleteObjects();
-				resultPolygonAux = resultPolygon;
-				resultPolygon = new Polygon();
-			}
-			i++;
-		}
-		resultHolesEliminatedPolygons.push(resultPolygon);
-	}
-	
-	return resultHolesEliminatedPolygons;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.checkNormals = function() 
-{
-	if(this.outerRing === undefined)
-		return;
-	
-	// 1rst, calculate the outerNormal.***
-	var outerRing = this.outerRing;
-	if(outerRing.polygon === undefined)
-		outerRing.makePolygon();
-	var outerPolygon = outerRing.polygon;
-	var concavePointsIndices = outerPolygon.calculateNormal(concavePointsIndices);
-	var outerNormal = outerPolygon.normal;
-	
-	// if there are inners, the innerNormals must be inverse of the outerNormal.***
-	var innerRing;
-	var innerPolygon;
-	var innerNormal;
-	var innersCount = this.innerRingsList.getRingsCount();
-	for(var i=0; i<innersCount; i++)
-	{
-		innerRing = this.innerRingsList.getRing(i);
-		if(innerRing.polygon === undefined)
-			innerRing.makePolygon();
-		var innerPolygon = innerRing.polygon;
-		innerPolygon.calculateNormal();
-		var innerNormal = innerPolygon.normal;
-		
-		if(innerNormal === outerNormal)
-		{
-			// then reverse innerPolygon.***
-			innerPolygon.reverseSense();
-			innerPolygon.normal = -innerNormal;
-		}
-		
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-Profile.prototype.TEST__setFigureHole_2 = function() 
-{
-	// complicated polygon with multiple holes.***
-	var polyLine;
-	var arc;
-	var circle;
-	var rect;
-	var point3d;
-	var star;
-	
-	// Outer ring.**************************************
-	var outerRing = this.newOuterRing();
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(-13, 3); // 0
-	point3d = polyLine.newPoint2d(-13, -11); // 1
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(-8, -11);
-	arc.setRadius(5);
-	arc.setStartAngleDegree(180.0);
-	arc.setSweepAngleDegree(90.0);
-	arc.numPointsFor360Deg = 24;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(-8, -16); // 0
-	point3d = polyLine.newPoint2d(-5, -16); // 1
-	point3d = polyLine.newPoint2d(-3, -15); // 2
-	point3d = polyLine.newPoint2d(-3, -14); // 3
-	point3d = polyLine.newPoint2d(-5, -12); // 4
-	point3d = polyLine.newPoint2d(-3, -11); // 5
-	point3d = polyLine.newPoint2d(-2, -9); // 6
-	point3d = polyLine.newPoint2d(3, -9); // 7
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(9, -9);
-	arc.setRadius(6);
-	arc.setStartAngleDegree(180.0);
-	arc.setSweepAngleDegree(180.0);
-	arc.numPointsFor360Deg = 24;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(15, -9); // 0
-	point3d = polyLine.newPoint2d(16, -9); // 1
-	point3d = polyLine.newPoint2d(16, 4); // 2
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(11, 4);
-	arc.setRadius(5);
-	arc.setStartAngleDegree(0.0);
-	arc.setSweepAngleDegree(90.0);
-	arc.numPointsFor360Deg = 24;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(11, 9); // 0
-	point3d = polyLine.newPoint2d(4, 9); // 1
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(4, 11);
-	arc.setRadius(2);
-	arc.setStartAngleDegree(-90.0);
-	arc.setSweepAngleDegree(-180.0);
-	arc.numPointsFor360Deg = 24;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(4, 13); // 0
-	point3d = polyLine.newPoint2d(9, 13); // 1
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(9, 14.5);
-	arc.setRadius(1.5);
-	arc.setStartAngleDegree(-90.0);
-	arc.setSweepAngleDegree(180.0);
-	arc.numPointsFor360Deg = 24;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(9, 16); // 0
-	point3d = polyLine.newPoint2d(2, 16); // 1
-	point3d = polyLine.newPoint2d(0, 14); // 2
-	point3d = polyLine.newPoint2d(-4, 16); // 3
-	point3d = polyLine.newPoint2d(-9, 16); // 4
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(-9, 14);
-	arc.setRadius(2);
-	arc.setStartAngleDegree(90.0);
-	arc.setSweepAngleDegree(180.0);
-	arc.numPointsFor360Deg = 24;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(-9, 12); // 0
-	point3d = polyLine.newPoint2d(-6, 12); // 1
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(-6, 10.5);
-	arc.setRadius(1.5);
-	arc.setStartAngleDegree(90.0);
-	arc.setSweepAngleDegree(-180.0);
-	arc.numPointsFor360Deg = 24;
-	
-	polyLine = outerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(-6, 9); // 0
-	point3d = polyLine.newPoint2d(-7, 9); // 1
-	
-	arc = outerRing.newElement("ARC");
-	arc.setCenterPosition(-7, 3);
-	arc.setRadius(6);
-	arc.setStartAngleDegree(90.0);
-	arc.setSweepAngleDegree(90.0);
-	arc.numPointsFor360Deg = 24;
-	
-	// Holes.**************************************************
-	// Hole 1.*************************************************
-	var innerRing = this.newInnerRing();
-	
-	polyLine = innerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(-9, 3); // 0
-	point3d = polyLine.newPoint2d(-10, -4); // 1
-	point3d = polyLine.newPoint2d(-10, -8); // 2
-	point3d = polyLine.newPoint2d(-8, -11); // 3
-	point3d = polyLine.newPoint2d(-3, -7); // 4
-	point3d = polyLine.newPoint2d(4, -7); // 5
-	
-	arc = innerRing.newElement("ARC");
-	arc.setCenterPosition(8, -7);
-	arc.setRadius(4);
-	arc.setStartAngleDegree(180.0);
-	arc.setSweepAngleDegree(180.0);
-	arc.numPointsFor360Deg = 24;
-	
-	polyLine = innerRing.newElement("POLYLINE");
-	point3d = polyLine.newPoint2d(12, -7); // 0
-	point3d = polyLine.newPoint2d(12, -4); // 1
-	point3d = polyLine.newPoint2d(8, -10); // 2
-	point3d = polyLine.newPoint2d(4, -5); // 3
-	point3d = polyLine.newPoint2d(-8, -5); // 4
-	point3d = polyLine.newPoint2d(-7, 4); // 5
-	point3d = polyLine.newPoint2d(9, 4); // 6
-	point3d = polyLine.newPoint2d(9, -5); // 7
-	point3d = polyLine.newPoint2d(14, 2); // 8
-	point3d = polyLine.newPoint2d(13, 2); // 9
-	point3d = polyLine.newPoint2d(11, 0); // 10
-	point3d = polyLine.newPoint2d(11, 7); // 11
-	point3d = polyLine.newPoint2d(13, 8); // 12
-	point3d = polyLine.newPoint2d(5, 8); // 13
-	point3d = polyLine.newPoint2d(9, 6); // 14
-	point3d = polyLine.newPoint2d(-6, 6); // 15
-	
-	arc = innerRing.newElement("ARC");
-	arc.setCenterPosition(-6, 3);
-	arc.setRadius(3);
-	arc.setStartAngleDegree(90.0);
-	arc.setSweepAngleDegree(90.0);
-	arc.numPointsFor360Deg = 24;
-	
-	// Hole 2.*************************************************
-	innerRing = this.newInnerRing();
-	circle = innerRing.newElement("CIRCLE");
-	circle.setCenterPosition(-10, -13);
-	circle.setRadius(1);
-	
-	// Hole 3.*************************************************
-	innerRing = this.newInnerRing();
-	star = innerRing.newElement("STAR");
-	star.setCenterPosition(-6.5, -14);
-	star.setRadiusCount(5);
-	star.setInteriorRadius(0.6);
-	star.setExteriorRadius(2);
-
-	// Hole 4.*************************************************
-	innerRing = this.newInnerRing();
-	star = innerRing.newElement("STAR");
-	star.setCenterPosition(-9, 14);
-	star.setRadiusCount(6);
-	star.setInteriorRadius(0.5);
-	star.setExteriorRadius(1.5);
-	
-	// Hole 5.*************************************************
-	innerRing = this.newInnerRing();
-	rect = innerRing.newElement("RECTANGLE");
-	rect.setCenterPosition(-4.5, 1.5);
-	rect.setDimensions(3, 3);
-	
-	// Hole 6.*************************************************
-	innerRing = this.newInnerRing();
-	circle = innerRing.newElement("CIRCLE");
-	circle.setCenterPosition(-4.5, -2.5);
-	circle.setRadius(2);
-	
-	// Hole 7.*************************************************
-	innerRing = this.newInnerRing();
-	star = innerRing.newElement("STAR");
-	star.setCenterPosition(0, 0);
-	star.setRadiusCount(5);
-	star.setInteriorRadius(1);
-	star.setExteriorRadius(2.5);
-	
-	// Hole 8.*************************************************
-	innerRing = this.newInnerRing();
-	circle = innerRing.newElement("CIRCLE");
-	circle.setCenterPosition(-6, 14);
-	circle.setRadius(1.5);
-	
-	// Hole 9.*************************************************
-	innerRing = this.newInnerRing();
-	star = innerRing.newElement("STAR");
-	star.setCenterPosition(-1.5, 11);
-	star.setRadiusCount(12);
-	star.setInteriorRadius(0.6);
-	star.setExteriorRadius(2);
-	
-	// Hole 10.*************************************************
-	innerRing = this.newInnerRing();
-	star = innerRing.newElement("STAR");
-	star.setCenterPosition(13.5, 5);
-	star.setRadiusCount(25);
-	star.setInteriorRadius(0.4);
-	star.setExteriorRadius(1.5);
-	
-	// Hole 11.*************************************************
-	innerRing = this.newInnerRing();
-	star = innerRing.newElement("STAR");
-	star.setCenterPosition(9, -13);
-	star.setRadiusCount(10);
-	star.setInteriorRadius(0.4);
-	star.setExteriorRadius(1.5);
-	
-	// Hole 12.*************************************************
-	innerRing = this.newInnerRing();
-	star = innerRing.newElement("STAR");
-	star.setCenterPosition(5.5, 1.5);
-	star.setRadiusCount(7);
-	star.setInteriorRadius(0.7);
-	star.setExteriorRadius(2);
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class ProfilesList
- */
-var ProfilesList = function() 
-{
-	if (!(this instanceof ProfilesList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.profilesArray;
-	this.auxiliarAxis;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-ProfilesList.prototype.newProfile = function() 
-{
-	if (this.profilesArray === undefined)
-	{ this.profilesArray = []; }
-	
-	var profile = new Profile();
-	this.profilesArray.push(profile);
-	return profile;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-ProfilesList.prototype.deleteObjects = function() 
-{
-	if (this.profilesArray)
-	{
-		var profilesCount = this.profilesArray.length;
-		for (var i=0; i<profilesCount; i++)
-		{
-			this.profilesArray[i].deleteObjects();
-			this.profilesArray = undefined;
-		}
-		this.profilesArray = undefined;
-	}
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class Rectangle
-*/
-var Rectangle = function() 
-{
-	if (!(this instanceof Rectangle)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.centerPoint;
-	this.width;
-	this.height;
-};
-
-Rectangle.prototype.setCenterPosition = function(cx, cy)
-{
-	if(this.centerPoint === undefined)
-		this.centerPoint = new Point2D();
-	
-	this.centerPoint.set(cx, cy);
-};
-
-Rectangle.prototype.setDimensions = function(width, height)
-{
-	this.width = width;
-	this.height = height;
-};
-
-/**
- * Returns the points of the Rectangle.
- * @class Rectangle
- */
-Rectangle.prototype.getPoints = function(resultPointsArray)
-{
-	if(this.centerPoint === undefined || this.width === undefined || this.height === undefined)
-		return resultPointsArray;
-	
-	if(resultPointsArray === undefined)
-		resultPointsArray = [];
-	
-	var point;
-	var halfWidth = this.width / 2;
-	var halfHeight = this.height / 2;
-	
-	// starting in left-down corner, go in CCW.***
-	point = new Point2D(this.centerPoint.x - halfWidth, this.centerPoint.y - halfHeight);
-	point.pointType = 1; // mark as "important point".***
-	resultPointsArray.push(point);
-	
-	point = new Point2D(this.centerPoint.x + halfWidth, this.centerPoint.y - halfHeight);
-	point.pointType = 1; // mark as "important point".***
-	resultPointsArray.push(point);
-	
-	point = new Point2D(this.centerPoint.x + halfWidth, this.centerPoint.y + halfHeight);
-	point.pointType = 1; // mark as "important point".***
-	resultPointsArray.push(point);
-	
-	point = new Point2D(this.centerPoint.x - halfWidth, this.centerPoint.y + halfHeight);
-	point.pointType = 1; // mark as "important point".***
-	resultPointsArray.push(point);
-	
-	return resultPointsArray;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Ring
- */
-var Ring = function() 
-{
-	if (!(this instanceof Ring)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.elemsArray;
-	this.polygon; // auxiliar.***
-};
-
-/**
- * @class Ring
- */
-Ring.prototype.deleteObjects = function()
-{
-	if(this.elemsArray !== undefined)
-	{
-		var elemsCount = this.elemsArray.length;
-		for(var i=0; i<elemsCount; i++)
-		{
-			this.elemsArray[i].deleteObjects();
-			this.elemsArray[i] = undefined;
-		}
-		this.elemsArray = undefined;
-	}
-	
-	if(this.polygon !== undefined)
-		this.polygon.deleteObjects();
-	
-	this.polygon = undefined;
-};
-
-/**
- * @class Ring
- */
-Ring.prototype.newElement = function(elementTypeString)
-{
-	var elem;
-	
-	if (elementTypeString === "ARC")
-		elem = new Arc();
-	else if (elementTypeString === "CIRCLE")
-		elem = new Circle();
-	else if (elementTypeString === "POLYLINE")
-		elem = new PolyLine();
-	else if (elementTypeString === "RECTANGLE")
-		elem = new Rectangle();
-	else if (elementTypeString === "STAR")
-		elem = new Star();
-	
-	if(elem === undefined)
-		return undefined;
-	
-	if (this.elemsArray === undefined)
-	{ this.elemsArray = []; }
-
-	this.elemsArray.push(elem);
-	
-	return elem;
-};
-
-/**
- * returns the points array of the ring.
- * @class Ring
- */
-Ring.prototype.makePolygon = function()
-{
-	this.polygon = this.getPolygon(this.polygon);
-	return this.polygon;
-};
-
-/**
- * returns the points array of the ring.
- * @class Ring
- */
-Ring.prototype.getPolygon = function(resultPolygon)
-{
-	if(resultPolygon === undefined)
-		resultPolygon = new Polygon();
-	
-	if(resultPolygon.point2dList === undefined)
-		resultPolygon.point2dList = new Point2DList();
-	
-	// reset polygon.***
-	resultPolygon.point2dList.deleteObjects();
-	resultPolygon.point2dList.pointsArray = this.getPoints(resultPolygon.point2dList.pointsArray);
-	return resultPolygon;
-};
-
-/**
- * returns the points array of the ring.
- * @class Ring
- */
-Ring.prototype.getPoints = function(resultPointsArray)
-{
-	if (resultPointsArray === undefined)
-	{ resultPointsArray = []; }
-	
-	if (this.elemsArray === undefined)
-	{ return resultPointsArray; }
-	
-	var elem;
-	var elemsCount = this.elemsArray.length;
-	for (var i=0; i<elemsCount; i++)
-	{
-		elem = this.elemsArray[i];
-		elem.getPoints(resultPointsArray);
-	}
-	
-	// finally check if the 1rst point and the last point are coincidents.***
-	var totalPointsCount = resultPointsArray.length;
-	if(totalPointsCount > 1)
-	{
-		var errorDist = 10E-8;
-		var firstPoint = resultPointsArray[0];
-		var lastPoint = resultPointsArray[totalPointsCount-1];
-		if(firstPoint.isCoincidentToPoint(lastPoint, errorDist))
-		{
-			// delete the last point.***
-			lastPoint = resultPointsArray.pop();
-			lastPoint.deleteObjects();
-			lastPoint = undefined;
-		}
-	}
-	
-	return resultPointsArray;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class RingsList
-*/
-var RingsList = function() 
-{
-	if (!(this instanceof RingsList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.ringsArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.prototype.newRing = function() 
-{
-	if (this.ringsArray === undefined)
-	{ this.ringsArray = []; }
-	
-	var ring = new Ring();
-	this.ringsArray.push(ring);
-	
-	return ring;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.prototype.deleteObjects = function() 
-{
-	if (this.ringsArray)
-	{
-		var ringsCount = this.ringsArray.length;
-		for (var i=0; i<ringsCount; i++)
-		{
-			this.ringsArray[i].deleteObjects();
-			this.ringsArray[i] = undefined;
-		}
-		this.ringsArray = undefined;
-	}
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.prototype.getRingsCount = function() 
-{
-	if (this.ringsArray === undefined)
-		return 0;
-
-	return this.ringsArray.length;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.prototype.getRing = function(idx) 
-{
-	if (this.ringsArray === undefined)
-		return undefined;
-
-	return this.ringsArray[idx];
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.getBoundingRectangle = function(ringsArray, resultBRect) 
-{
-	if (this.resultBRect === undefined)
-		resultBRect = new BoundingRectangle();
-	
-	var ring;
-	var currBRect;
-	var ringsCount = ringsArray.length;
-	for(var i=0; i<ringsCount; i++)
-	{
-		ring = ringsArray[i];
-		if(ring.polygon === undefined)
-			ring.makePolygon();
-		
-		currBRect = ring.polygon.getBoundingRectangle(currBRect);
-		if(i === 0)
-			resultBRect.setInitByRectangle(currBRect);
-		else{
-			resultBRect.addRectangle(currBRect);
-		}
-	}
-
-	return resultBRect;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.prototype.intersectionWithSegment = function(segment) 
-{
-	// returns true if any ring's polygon intersects with "segment".***
-	if(segment === undefined)
-		return false;
-	
-	var intersects = false;
-	var ringsCount = this.getRingsCount();
-	var i=0;
-	while(!intersects && i<ringsCount)
-	{
-		if(this.ringsArray[i].intersectionWithSegment(segment))
-		{
-			intersects = true;
-		}
-		i++;
-	}
-	
-	return intersects;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns vertexList
- */
-RingsList.getSortedRingsByDistToPoint = function(point, ringsArray, resultSortedObjectsArray) 
-{
-	if(point === undefined)
-		return resultSortedObjectsArray;
-	
-	if(resultSortedObjectsArray === undefined)
-		resultSortedObjectsArray = [];
-	
-	var objectsAuxArray = [];
-	var ring;
-	var ringPoint;
-	var ringPointIdx;
-	var squaredDist;
-	var objectAux;
-	var startIdx, endIdx, insertIdx;
-	var ringsCount = ringsArray.length;
-	for(var i=0; i<ringsCount; i++)
-	{
-		ring = ringsArray[i];
-		if(ring.polygon === undefined)
-			ring.makePolygon();
-		ringPointIdx = ring.polygon.point2dList.getNearestPointIdxToPoint(point);
-		ringPoint = ring.polygon.point2dList.getPoint(ringPointIdx);
-		squaredDist = ringPoint.squareDistToPoint(point);
-		objectAux = {};
-		objectAux.ring = ring;
-		objectAux.ringIdx = i;
-		objectAux.pointIdx = ringPointIdx;
-		objectAux.squaredDist = squaredDist;
-		
-		startIdx = 0;
-		endIdx = objectsAuxArray.length - 1;
-		
-		insertIdx = RingsList.getIndexToInsertBySquaredDist(objectsAuxArray, objectAux, startIdx, endIdx);
-		objectsAuxArray.splice(insertIdx, 0, objectAux);
-	}
-	
-	if(resultSortedObjectsArray === undefined)
-		resultSortedObjectsArray = [];
-	
-	resultSortedObjectsArray.length = 0;
-	
-	var objectsCount = objectsAuxArray.length;
-	for(var i=0; i<objectsCount; i++)
-	{
-		resultSortedObjectsArray.push(objectsAuxArray[i]);
-	}
-	
-	return resultSortedObjectsArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @returns result_idx
- */
-RingsList.getIndexToInsertBySquaredDist = function(objectsArray, object, startIdx, endIdx) 
-{
-	// this do a dicotomic search of idx in a ordered table.
-	// 1rst, check the range.
-	
-	var range = endIdx - startIdx;
-	
-	if(objectsArray.length === 0)
-		return 0;
-	
-	if (range < 6)
-	{
-		// in this case do a lineal search.
-		var finished = false;
-		var i = startIdx;
-		var idx;
-		//var objectsCount = objectsArray.length;
-		while (!finished && i<=endIdx)
-		{
-			if (object.squaredDist < objectsArray[i].squaredDist)
-			{
-				idx = i;
-				finished = true;
-			}
-			i++;
-		}
-		
-		if (finished)
-		{
-			return idx;
-		}
-		else 
-		{
-			return endIdx+1;
-		}
-	}
-	else 
-	{
-		// in this case do the dicotomic search.
-		var middleIdx = startIdx + Math.floor(range/2);
-		var newStartIdx;
-		var newEndIdx;
-		if (objectsArray[middleIdx].squaredDist > object.squaredDist)
-		{
-			newStartIdx = startIdx;
-			newEndIdx = middleIdx;
-		}
-		else 
-		{
-			newStartIdx = middleIdx;
-			newEndIdx = endIdx;
-		}
-		return this.getIndexToInsertBySquaredDist(objectsArray, object, newStartIdx, newEndIdx);
-	}
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class Segment2D
-*/
-var Segment2D = function(strPoint2D, endPoint2D) 
-{
-	if (!(this instanceof Segment2D)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.startPoint2d;
-	this.endPoint2d;
-	
-	if(strPoint2D)
-		this.startPoint2d = strPoint2D;
-	
-	if(endPoint2D)
-		this.endPoint2d = endPoint2D;
-};
-
-Segment2D.prototype.setPoints = function(strPoint2D, endPoint2D)
-{
-	if(strPoint2D)
-		this.startPoint2d = strPoint2D;
-	
-	if(endPoint2D)
-		this.endPoint2d = endPoint2D;
-};
-
-Segment2D.prototype.getVector = function(resultVector)
-{
-	if(this.startPoint2d === undefined || this.endPoint2d === undefined)
-		return undefined;
-	
-	if(resultVector === undefined)
-		resultVector = new Point2D();
-	
-	resultVector = this.startPoint2d.getVectorToPoint(this.endPoint2d, resultVector);
-	return resultVector;
-};
-
-Segment2D.prototype.getDirection = function(resultDir)
-{
-	if(resultDir === undefined)
-		resultDir = new Point2D();
-	
-	resultDir = this.getVector(resultDir);
-	resultDir.unitary();
-	
-	return resultDir;
-};
-
-Segment2D.prototype.getBoundaryRectangle = function(resultBRect)
-{
-	if(resultBRect === undefined)
-		resultBRect = new BoundaryRectangle();
-	
-	resultBRect.setInit(this.startPoint2d);
-	resultBRect.addPoint(this.endPoint2d);
-	
-	return resultBRect;
-};
-
-Segment2D.prototype.getLine = function(resultLine)
-{
-	if(resultLine === undefined)
-		resultLine = new Line2D();
-	
-	var dir = this.getDirection(); // unitary direction.***
-	var strPoint = this.startPoint2d;
-	resultLine.setPointAndDir(strPoint.x, strPoint.y, dir.x, dir.y);
-	return resultLine;
-};
-
-Segment2D.prototype.getSquaredLength = function()
-{
-	return this.startPoint2d.squareDistToPoint(this.endPoint2d);
-};
-
-Segment2D.prototype.getLength = function()
-{
-	return Math.sqrt(this.getSquaredLength());
-};
-
-Segment2D.prototype.intersectionWithPointByDistances = function(point, error)
-{
-	if(point === undefined)
-		return undefined;
-	
-	if(error === undefined)
-		error = 10E-8;
-	
-	// here no check line-point coincidance.***
-	
-	// now, check if is inside of the segment or if is coincident with any vertex of segment.***
-	var distA = this.startPoint2d.distToPoint(point);
-	var distB = this.endPoint2d.distToPoint(point);
-	var distTotal = this.getLength();
-	
-	if(distA < error)
-		return Constant.INTERSECTION_POINT_A;
-	
-	if(distB < error)
-		return Constant.INTERSECTION_POINT_B;
-	
-	if(distA> distTotal || distB> distTotal)
-	{
-		return Constant.INTERSECTION_OUTSIDE;
-	}
-	
-	if(Math.abs(distA + distB - distTotal) < error)
-		return Constant.INTERSECTION_INSIDE;
-};
-
-Segment2D.prototype.intersectionWithPoint = function(point, error)
-{
-	if(point === undefined)
-		return undefined;
-	
-	if(error === undefined)
-		error = 10E-8;
-	
-	var line = this.getLine();
-	if(!line.isCoincidentPoint(point, error))
-		return Constant.INTERSECTION_OUTSIDE; // no intersection.***
-	
-	return this.intersectionWithPointByDistances(point, error);
-};
-
-Segment2D.prototype.intersectionWithSegment = function(segment_B, error)
-{
-	if(segment_B === undefined)
-		return undefined;
-	
-	if(error === undefined)
-		error = 10E-8;
-	
-	var myLine = this.getLine();
-	var line = segment_B.getLine();
-	var intersectionPoint = myLine.intersectionWithLine(line);
-	
-	if(intersectionPoint === undefined)
-		return undefined; // are parallels.***
-	
-	// now use "intersectionWithPointByDistances" instead "intersectionWithPoint" bcos line-point intersection check is no necesary.***
-	var intersectionType_A = this.intersectionWithPointByDistances(intersectionPoint);
-	
-	if(intersectionType_A === Constant.INTERSECTION_OUTSIDE)
-		return Constant.INTERSECTION_OUTSIDE;
-	
-	var intersectionType_B = segment_B.intersectionWithPointByDistances(intersectionPoint);
-	
-	if(intersectionType_B === Constant.INTERSECTION_OUTSIDE)
-		return Constant.INTERSECTION_OUTSIDE;
-	
-	return Constant.INTERSECTION_INTERSECT;
-};
-
-Segment2D.prototype.hasPoint = function(point)
-{
-	// returns if this segment has "point" as startPoint or endPoint.***
-	if(point === undefined)
-		return false;
-	
-	if(point === this.startPoint2d || point === this.endPoint2d)
-		return true;
-	
-	return false;
-};
-
-Segment2D.prototype.sharesPointsWithSegment = function(segment)
-{
-	if(segment === undefined)
-		return false;
-	
-	if(this.hasPoint(segment.startPoint2d) || this.hasPoint(segment.endPoint2d))
-		return true;
-	
-	return false;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Star
- */
-var Star = function() 
-{
-	if (!(this instanceof Star)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	// this is a closed element.***
-	this.centerPoint; // Point3D.***
-	this.interiorRadius;
-	this.exteriorRadius;
-	this.radiusCount;
-
-};
-
-/**
- * Set the center position of Star.
- * @class Star
- */
-Star.prototype.setCenterPosition = function(cx, cy)
-{
-	if (this.centerPoint === undefined)
-	{ this.centerPoint = new Point2D(); }
-	
-	this.centerPoint.set(cx, cy);
-};
-
-/**
- * @class Star
- */
-Star.prototype.setInteriorRadius = function(radius)
-{
-	this.interiorRadius = radius;
-};
-
-/**
- * @class Star
- */
-Star.prototype.setExteriorRadius = function(radius)
-{
-	this.exteriorRadius = radius;
-};
-
-/**
- * @class Star
- */
-Star.prototype.setRadiusCount = function(rediusCount)
-{
-	this.radiusCount = rediusCount;
-};
-
-/**
- * Returns the points of the Star.
- * @class Star
- */
-Star.prototype.getPoints = function(resultPointsArray)
-{
-	// star has an arrow to up.***
-	var increAngDeg = 360 / this.radiusCount;
-	var increAngRad = increAngDeg * Math.PI/180;
-	var halfIncreAngRad = increAngRad / 2;
-	var startAngRad = 90 * Math.PI/180;
-	var currAngRad = startAngRad;
-	var point;
-	var x, y;
-	
-	if(resultPointsArray === undefined)
-		resultPointsArray = [];
-	
-	for(var i=0; i<this.radiusCount; i++)
-	{
-		// exterior.***
-		x = this.centerPoint.x + this.exteriorRadius * Math.cos(currAngRad);
-		y = this.centerPoint.y + this.exteriorRadius * Math.sin(currAngRad);
-		point = new Point2D(x, y);
-		point.pointType = 1; // mark as "important point".***
-		resultPointsArray.push(point);
-		
-		// interior.***
-		x = this.centerPoint.x + this.interiorRadius * Math.cos(currAngRad + halfIncreAngRad);
-		y = this.centerPoint.y + this.interiorRadius * Math.sin(currAngRad + halfIncreAngRad);
-		point = new Point2D(x, y);
-		point.pointType = 1; // mark as "important point".***
-		resultPointsArray.push(point);
-		
-		currAngRad += increAngRad;
-	}
-	
-	return resultPointsArray;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Surface
- */
-var Surface = function() 
-{
-	if (!(this instanceof Surface)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.facesArray;
-};
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class Tessellator
- */
-var Tessellator = function() 
-{
-	if (!(this instanceof Tessellator)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class TrianglesList
- */
-var TrianglesList = function() 
-{
-	if (!(this instanceof TrianglesList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.trianglesArray;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param idx 변수
- * @returns vertexArray[idx]
- */
-TrianglesList.prototype.newTriangle = function() 
-{
-	if (this.trianglesArray === undefined)
-	{ this.trianglesArray = []; }
-	
-	var triangle = new Triangle();
-	this.trianglesArray.push(triangle);
-	return triangle;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param idx 변수
- * @returns vertexArray[idx]
- */
-TrianglesList.prototype.deleteObjects = function() 
-{
-	if (this.trianglesArray === undefined)
-		return;
-	
-	var trianglesCount = this.trianglesArray.length;
-	for(var i=0; i<trianglesCount; i++)
-	{
-		this.trianglesArray[i].deleteObjects();
-		this.trianglesArray[i] = undefined;
-	}
-	this.trianglesArray = undefined;
-};
-
-/**
- * 어떤 일을 하고 있습니까?
- * @param idx 변수
- * @returns vertexArray[idx]
- */
-TrianglesList.prototype.getFaceDataArray = function(resultVbo) 
-{
-	if (this.trianglesArray === undefined)
-		return resultVbo;
-	
-	var trianglesCount = this.trianglesArray.length;
-	if(trianglesCount === 0)
-		return resultVbo;
-	
-	if(resultVbo === undefined)
-		resultVbo = new VBOVertexIdxCacheKey();
-
-	var indicesArray = [];
-	
-	var triangle;
-	for(var i=0; i<trianglesCount; i++)
-	{
-		triangle = this.trianglesArray[i];
-		if(triangle.vtxIdx0 !== undefined && triangle.vtxIdx1 !== undefined && triangle.vtxIdx2 !== undefined )
-		{
-			indicesArray.push(triangle.vtxIdx0);
-			indicesArray.push(triangle.vtxIdx1);
-			indicesArray.push(triangle.vtxIdx2);
-		}
-	}
-	resultVbo.idxVboDataArray = Int16Array.from(indicesArray);
-	resultVbo.indicesCount = resultVbo.idxVboDataArray.length;
-	return resultVbo;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class TrianglesMatrix
- */
-var TrianglesMatrix= function() 
-{
-	if (!(this instanceof TrianglesMatrix)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.trianglesListsArray;
-};
-
-TrianglesMatrix.prototype.deleteObjects = function()
-{
-	if(this.trianglesListsArray === undefined)
-		return;
-	
-	var trianglesListsCount = this.trianglesListsArray.length;
-	for(var i=0; i<trianglesListsCount; i++)
-	{
-		this.trianglesListsArray[i].deleteObjects();
-		this.trianglesListsArray[i] = undefined;
-	}
-	this.trianglesListsArray = undefined;
-}
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class VtxProfile
-*/
-var VtxProfile = function(x, y) 
-{
-	if (!(this instanceof VtxProfile)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.outerVtxRing;
-	this.innerVtxRingsList;
-	
-};
-
-VtxProfile.prototype.copyFrom = function(vtxProfile)
-{
-	if(vtxProfile.outerVtxRing)
-	{
-		if(this.outerVtxRing === undefined)
-			this.outerVtxRing = new VtxRing();
-		
-		this.outerVtxRing.copyFrom(vtxProfile.outerVtxRing);
-	}
-	
-	if(vtxProfile.innerVtxRingsList)
-	{
-		if(this.innerVtxRingsList === undefined)
-			this.innerVtxRingsList = new VtxRingsList();
-		
-		this.innerVtxRingsList.copyFrom(vtxProfile.innerVtxRingsList);
-	}
-};
-
-VtxProfile.prototype.translate = function(dx, dy, dz)
-{
-	if(this.outerVtxRing !== undefined)
-		this.outerVtxRing.translate(dx, dy, dz);
-	
-	if(this.innerVtxRingsList !== undefined)
-		this.innerVtxRingsList.translate(dx, dy, dz);
-};
-
-VtxProfile.prototype.makeByProfile = function(profile)
-{
-	if(profile === undefined || profile.outerRing === undefined)
-		return undefined;
-	
-	var outerRing = profile.outerRing;
-	if(outerRing.polygon === undefined)
-		outerRing.makePolygon();
-	
-	// outer.***************************************
-	if(this.outerVtxRing === undefined)
-		this.outerVtxRing = new VtxRing();
-	
-	var z = 0;
-	var outerPolygon = outerRing.polygon;
-	var point2dList = outerPolygon.point2dList;
-	this.outerVtxRing.makeByPoint2DList(point2dList, z);
-
-	// inners.***************************************
-	if(profile.innerRingsList === undefined)
-		return; 
-	
-	var innerRingsList = profile.innerRingsList;
-	var innerRingsCount = innerRingsList.getRingsCount();
-	
-	if(innerRingsCount === 0)
-		return;
-	
-	if(this.innerVtxRingsList === undefined)
-		this.innerVtxRingsList = new VtxRingsList();
-	
-	var innerRing;
-	var innerPolygon;
-	var innerVtxRing;
-	
-	for(var i=0; i<innerRingsCount; i++)
-	{
-		innerRing = innerRingsList.getRing(i);
-		if(innerRing.polygon === undefined)
-		innerRing.makePolygon();
-		innerPolygon = innerRing.polygon;
-		point2dList = innerPolygon.point2dList;
-		
-		innerVtxRing = this.innerVtxRingsList.newVtxRing();
-		innerVtxRing.makeByPoint2DList(point2dList, z);
-	}
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class VtxProfilesList
-*/
-var VtxProfilesList = function(x, y) 
-{
-	if (!(this instanceof VtxProfilesList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.vtxProfilesArray;
-};
-
-VtxProfilesList.prototype.newVtxProfile = function()
-{
-	if(this.vtxProfilesArray === undefined)
-		this.vtxProfilesArray = [];
-	
-	var vtxProfile = new VtxProfile();
-	this.vtxProfilesArray.push(vtxProfile);
-	return vtxProfile;
-};
-
-VtxProfilesList.prototype.getVtxProfilesCount = function()
-{
-	if(this.vtxProfilesArray === undefined)
-		return 0;
-	
-	return this.vtxProfilesArray.lenght;
-};
-
-VtxProfilesList.prototype.getVtxProfile = function(idx)
-{
-	if(this.vtxProfilesArray === undefined)
-		return undefined;
-	
-	return this.vtxProfilesArray[idx];
-};
-
-VtxProfilesList.prototype.getLateralTrianles = function(resultTrianglesLists)
-{
-	if(this.vtxProfilesArray === undefined)
-		return resultTriangles;
-	
-	// outerLateral.***************************************************
-	var vtxProfilesCount = this.getVtxProfilesCount();
-	
-	if(vtxProfilesCount < 2)
-		return resultTriangles;
-		
-	var bottomVtxProfile, topVtxProfile;
-
-	bottomVtxProfile = this.getVtxProfile(0);
-	var outerVtxRing = bottomVtxProfile.outerVtxRing;
-	var elemIndexRange;
-	var bottomVtxRing, topVtxRing;
-	var elemsCount = outerVtxRing.elemsIndexRangesArray.length;
-	
-	for(var i=0; i<elemsCount; i++)
-	{
-		elemIndexRange = outerVtxRing.getElementIndexRange(i);
-		for(var j=0; j<vtxProfilesCount-1; j++)
-		{
-			bottomVtxProfile = this.getVtxProfile(j);
-			topVtxProfile = this.getVtxProfile(j+1);
-			
-			bottomVtxRing = bottomVtxProfile.outerVtxRing;
-			topVtxRing = topVtxProfile.outerVtxRing;
-			
-			
-		}
-		
-	}
-
-};
-
-VtxProfilesList.prototype.getLateralTrianlesOfElement = function(elemIndexRange)
-{
-	
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class VtxRing
- */
-var VtxRing = function() 
-{
-	if (!(this instanceof VtxRing)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.vertexList;
-	this.elemsIndexRangesArray; // [] array.***
-};
-
-VtxRing.prototype.newElementIndexRange = function()
-{
-	if(this.elemsIndexRangesArray === undefined)
-		this.elemsIndexRangesArray = [];
-	
-	var indexRange = new IndexRange();
-	this.elemsIndexRangesArray.push(indexRange);
-	return indexRange;
-};
-
-VtxRing.prototype.getElementIndexRange = function(idx)
-{
-	if(this.elemsIndexRangesArray === undefined)
-		return undefined;
-	
-	return this.elemsIndexRangesArray[idx];
-};
-
-VtxRing.prototype.copyFrom = function(vtxRing)
-{
-	if(vtxRing.vertexList !== undefined)
-	{
-		if(this.vertexList === undefined)
-			this.vertexList = new VertexList();
-		
-		this.vertexList.copyFrom(vtxRing.vertexList);
-	}
-	
-	if(vtxRing.elemsIndexRangesArray !== undefined)
-	{
-		if(this.elemsIndexRangesArray === undefined)
-			this.elemsIndexRangesArray = [];
-		
-		var indexRange, myIndexRange;
-		var indexRangesCount = vtxRing.elemsIndexRangesArray.length;
-		for(var i=0; i<indexRangesCount; i++)
-		{
-			indexRange = vtxRing.elemsIndexRangesArray[i];
-			myIndexRange = this.newElementIndexRange();
-			myIndexRange.copyFrom(indexRange);
-		}
-	}
-};
-
-VtxRing.prototype.translate = function(x, y, z)
-{
-	if(this.vertexList !== undefined)
-	{
-		this.vertexList.translateVertices(x, y, z);
-	}
-};
-
-VtxRing.prototype.makeByPoint2DList = function(point2dList, z)
-{
-	if(point2dList === undefined)
-		return;
-	
-	if(z === undefined)
-		z = 0;
-	
-	if(this.vertexList === undefined)
-		this.vertexList = new VertexList();
-	
-	this.vertexList.copyFromPoint2DList(point2dList, z);
-	this.calculateElementsIndicesRange();
-};
-
-VtxRing.prototype.calculateElementsIndicesRange = function()
-{
-	if(this.vertexList === undefined)
-		return false;
-	
-	var vertex;
-	var idxRange = undefined;
-	var vertexType;
-	var vertexCount = this.vertexList.getVertexCount();
-	for(var i=0; i<vertexCount; i++)
-	{
-		vertex = this.vertexList.getVertex(i);
-		vertexType = vertex.vertexType;
-		
-		if(vertexType && vertexType === 1)
-		{
-			if(idxRange !== undefined)
-			{
-				idxRange.endIdx = i;
-			}
-			if(i !== vertexCount-1)
-			{
-				idxRange = this.newElementIndexRange();
-				idxRange.strIdx = i;
-			}
-		}
-	}
-	
-	if(idxRange !== undefined)
-		idxRange.endIdx = vertexCount-1;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-/**
-* 어떤 일을 하고 있습니까?
-* @class VtxRingsList
-*/
-var VtxRingsList = function() 
-{
-	if (!(this instanceof VtxRingsList)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.vtxRingsArray;
-};
-
-VtxRingsList.prototype.getVtxRingsCount = function()
-{
-	if(this.vtxRingsArray === undefined)
-		return 0;
-	
-	return this.vtxRingsArray.length;
-};
-
-VtxRingsList.prototype.getVtxRing = function(idx)
-{
-	if(this.vtxRingsArray === undefined)
-		return undefined;
-	
-	return this.vtxRingsArray[idx];
-};
-
-VtxRingsList.prototype.newVtxRing = function()
-{
-	if(this.vtxRingsArray === undefined)
-		this.vtxRingsArray = [];
-	
-	var vtxRing = new VtxRing();
-	this.vtxRingsArray.push(vtxRing);
-	return vtxRing;
-};
-
-VtxRingsList.prototype.copyFrom = function(vtxRingsList)
-{
-	if(vtxRingsList === undefined)
-		return;
-	
-	if(this.vtxRingsArray === undefined)
-		this.vtxRingsArray = [];
-	
-	var vtxRing;
-	var vtxRingsCount = vtxRingsList.getVtxRingsCount();
-	for(var i=0; i<vtxRingsCount; i++)
-	{
-		vtxRing = this.newVtxRing();
-		vtxRing.copyFrom(vtxRingsList.getVtxRing(i));
-	}
-};
-
-VtxRingsList.prototype.translate = function(x, y, z)
-{
-	var vtxRingsCount = this.getVtxRingsCount();
-	for(var i=0; i<vtxRingsCount; i++)
-	{
-		this.vtxRingsArray[i].translate(x, y, z);
-	}
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
- * 어떤 일을 하고 있습니까?
- * @class VtxSegment
- */
-var VtxSegment = function(startVertex, endVertex) 
-{
-	if (!(this instanceof VtxSegment)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.startVertex;
-	this.endVertex;
-	
-	if(startVertex)
-		this.startVertex = startVertex;
-	
-	if(endVertex)
-		this.endVertex = endVertex;
-};
-
-VtxSegment.prototype.setVertices = function(startVertex, endVertex)
-{
-	this.startVertex = startVertex;
-	this.endVertex = endVertex;
-};
-
-VtxSegment.prototype.getDirection = function(resultDirection)
-{
-	// the direction is an unitary vector.***
-	var resultDirection = this.getVector();
-	
-	if(resultDirection === undefined)
-		return undefined;
-	
-	resultDirection.unitary();
-	return resultDirection;
-};
-
-VtxSegment.prototype.getVector = function(resultVector)
-{
-	if(this.startVertex === undefined || this.endVertex === undefined)
-		return undefined;
-	
-	var startPoint = this.startVertex.point3d;
-	var endPoint = this.endVertex.point3d;
-	
-	if(startPoint === undefined || endPoint === undefined)
-		return undefined;
-	
-	resultVector = startPoint.getVectorToPoint(endPoint, resultVector);
-	return resultVector;
-};
-
-VtxSegment.prototype.getLine = function(resultLine)
-{
-	if(resultLine === undefined)
-		resultLine = new Line();
-	
-	var dir = this.getDirection(); // unitary direction.***
-	var strPoint = this.startVertex.point3d;
-	resultLine.setPointAndDir(strPoint.x, strPoint.y, strPoint.z, dir.x, dir.y, dir.z);
-	return resultLine;
-};
-
-VtxSegment.prototype.getSquaredLength = function()
-{
-	return this.startVertex.point3d.squareDistToPoint(this.endVertex.point3d);
-};
-
-VtxSegment.prototype.getLength = function()
-{
-	return Math.sqrt(this.getSquaredLength());
-};
-
-VtxSegment.prototype.intersectionWithPoint = function(point, error)
-{
-	// check if the point intersects the vtxSegment's line.***
-	var line = this.getLine();
-	
-	if(error === undefined)
-		error = 10E-8;
-	
-	if(!line.isCoincidentPoint(point, error))
-		return Constant.INTERSECTION_OUTSIDE; // no intersection.***
-	
-	//Constant.INTERSECTION_OUTSIDE = 0;
-	//Constant.INTERSECTION_INTERSECT= 1;
-	//Constant.INTERSECTION_INSIDE = 2;
-	//Constant.INTERSECTION_POINT_A = 3;
-	//Constant.INTERSECTION_POINT_B = 4;
-	
-	// now, check if is inside of the segment or if is coincident with any vertex of segment.***
-	var distA = this.startVertex.point3d.distToPoint(point);
-	var distB = this.endVertex.point3d.distToPoint(point);
-	var distTotal = this.getLength();
-	
-	if(distA < error)
-		return Constant.INTERSECTION_POINT_A;
-	
-	if(distB < error)
-		return Constant.INTERSECTION_POINT_B;
-	
-	if(distA> distTotal || distB> distTotal)
-	{
-		return Constant.INTERSECTION_OUTSIDE;
-	}
-	
-	if(Math.abs(distA + distB - distTotal) < error)
-		return Constant.INTERSECTION_INSIDE;
-	
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'use strict';
-
-/**
  * 버퍼 안의 데이터를 어떻게 읽어야 할지 키가 되는 객체
  * 
  * @alias Accessor
@@ -39289,6 +32804,8109 @@ ReaderWriter.prototype.handleTextureLoaded = function(gl, image, texture)
 
 'use strict';
 
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Arc
+ */
+var Arc = function() 
+{
+	if (!(this instanceof Arc)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	// sweeping in CounterClockWise is positive.***
+	// zero startAngle is in "X" axis positive.***
+	this.centerPoint; // Point3D.***
+	this.radius;
+	this.startAngleDeg;
+	this.sweepAngleDeg;
+	this.numPointsFor360Deg; // interpolation param.***
+	
+	// Alternative vars.***
+	this.startPoint; // if no exist radius, then startPoint define the radius.***
+	this.endPoint;
+	this.sweepSense; // 1=CCW, -1=CW.***
+};
+
+/**
+ * Set the center position of arc.
+ * @class Arc
+ */
+Arc.prototype.deleteObjects = function()
+{
+	if(this.centerPoint !== undefined)
+		this.centerPoint.deleteObjects(); // Point3D.***
+	this.centerPoint = undefined;
+	this.radius = undefined;
+	this.startAngleDeg = undefined;
+	this.sweepAngleDeg = undefined;
+	this.numPointsFor360Deg = undefined;
+	
+	if(this.startPoint !== undefined)
+		this.startPoint.deleteObjects(); 
+	
+	this.startPoint = undefined;
+	
+	if(this.endPoint !== undefined)
+		this.endPoint.deleteObjects(); 
+	
+	this.endPoint = undefined;
+	this.sweepSense = undefined; // 1=CCW, -1=CW.***
+};
+
+/**
+ * Set the center position of arc.
+ * @class Arc
+ */
+Arc.prototype.setCenterPosition = function(cx, cy)
+{
+	if (this.centerPoint === undefined)
+	{ this.centerPoint = new Point2D(); }
+	
+	this.centerPoint.set(cx, cy);
+};
+
+/**
+ * Set the center position of arc.
+ * @class Arc
+ */
+Arc.prototype.setRadius = function(radius)
+{
+	this.radius = radius;
+};
+
+/**
+ * Set the start angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setStartAngleDegree = function(startAngleDegree)
+{
+	this.startAngleDeg = startAngleDegree;
+};
+
+/**
+ * Set the start angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setStartPoint = function(x, y)
+{
+	// If no exist startAngle, then use this to calculate startAngle.***
+	if (this.startPoint === undefined)
+	{ this.startPoint = new Point2D(); }
+	
+	this.startPoint.set(x, y);
+};
+
+/**
+ * Set the start angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setEndPoint = function(x, y)
+{
+	// If no exist sweepAngle, then use this to calculate sweepAngle.***
+	if (this.endPoint === undefined)
+	{ this.endPoint = new Point2D(); }
+	
+	this.endPoint.set(x, y);
+};
+
+/**
+ * Set the start angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setSense = function(sense)
+{
+	this.sweepSense = sense; // 1=CCW, -1=CW.***
+};
+
+/**
+ * Set the sweep angle of the arc.
+ * @class Arc
+ */
+Arc.prototype.setSweepAngleDegree = function(sweepAngleDegree)
+{
+	this.sweepAngleDeg = sweepAngleDegree;
+};
+
+/**
+ * Returns the points of the arc.
+ * @class Arc
+ */
+Arc.prototype.getPoints = function(resultPointsArray, pointsCountFor360Deg)
+{
+	if(this.centerPoint === undefined)
+		return resultPointsArray;
+	
+	if(pointsCountFor360Deg)
+		this.numPointsFor360Deg = pointsCountFor360Deg
+
+	if(this.numPointsFor360Deg === undefined)
+		this.numPointsFor360Deg = 36;
+
+	// Check if exist strAng.*********************************************************************************
+	var strVector, endVector;
+	var strVectorModul;
+	if(this.startAngleDeg === undefined)
+	{
+		if(this.startPoint === undefined)
+			return resultPointsArray;
+		
+		strVector = new Point2D();
+		strVector.set(this.startPoint.x - this.centerPoint.x, this.startPoint.y - this.centerPoint.y);
+		strVectorModul = strVector.modul();
+		
+		var angRad = Math.acos(x/strVectorModul);
+		if(this.startPoint.y < 0)
+		{
+			angRad *= -1;
+		}
+		
+		this.startAngleDeg = angRad * 180.0/Math.PI;
+	}
+	
+	// Check if exist radius.*********************************************************************************
+	if(this.radius === undefined)
+	{
+		// calculate by startPoint.***
+		if(this.startPoint === undefined)
+			return resultPointsArray;
+		
+		if(strVectorModul === undefined)
+		{
+			if(strVector === undefined)
+			{
+				strVector = new Point2D();
+				strVector.set(this.startPoint.x - this.centerPoint.x, this.startPoint.y - this.centerPoint.y);
+			}
+			strVectorModul = strVector.modul();
+		}
+		
+		this.radius = strVectorModul;
+	}
+	
+	// check if exist sweepAng.*********************************************************************************
+	if(this.sweepAngleDeg === undefined)
+	{
+		if(this.endPoint === undefined || this.sweepSense === undefined)
+			return resultPointsArray;
+		
+		endVector = new Point2D();
+		endVector.set(this.endPoint.x - this.centerPoint.x, this.endPoint.y - this.endPoint.y);
+		var endVectorModul = endPoint.modul();
+		
+		var angRad = Math.acos(x/strVectorModul);
+		if(this.endPoint.y < 0)
+		{
+			angRad *= -1;
+		}
+		
+		this.sweepAngleDeg = angRad * 180.0/Math.PI;
+		
+		if(this.sweepSense < 0)
+			this.sweepAngleDeg = 360 - this.sweepAngleDeg;
+	}
+	
+	if(resultPointsArray === undefined)
+		resultPointsArray = [];
+	
+	var pointsArray = [];
+	
+	var increAngRad = 2.0 * Math.PI / this.numPointsFor360Deg;
+	var cx = this.centerPoint.x;
+	var cy = this.centerPoint.y;
+	var x, y;
+	var startAngRad = Math.PI/180.0 * this.startAngleDeg;
+	var sweepAngRad = Math.PI/180.0 * this.sweepAngleDeg;
+	var point;
+	
+	if (sweepAngRad >=0)
+	{
+		for (var currAngRad = 0.0; currAngRad<sweepAngRad; currAngRad += increAngRad)
+		{
+			x = cx + this.radius * Math.cos(currAngRad + startAngRad);
+			y = cy + this.radius * Math.sin(currAngRad + startAngRad);
+			point = new Point2D(x, y);
+			pointsArray.push(point);
+		}
+	}
+	else 
+	{
+		for (var currAngRad = 0.0; currAngRad>sweepAngRad; currAngRad -= increAngRad)
+		{
+			x = cx + this.radius * Math.cos(currAngRad + startAngRad);
+			y = cy + this.radius * Math.sin(currAngRad + startAngRad);
+			point = new Point2D(x, y);
+			pointsArray.push(point);
+		}
+	}
+	
+	// once finished, mark the 1rst point and the last point as"important point".***
+	var pointsCount = pointsArray.length;
+	if(pointsCount > 0)
+	{
+		pointsArray[0].pointType = 1;
+		pointsArray[pointsCount-1].pointType = 1;
+	}
+	
+	// now merge points into "resultPointsArray".***
+	var errorDist = 0.0001; // 0.1mm.***
+	var resultExistentPointsCount = resultPointsArray.length;
+	for(var i=0; i<pointsCount; i++)
+	{
+		if(i===0)
+		{
+			if(resultExistentPointsCount > 0)
+			{
+				// check if the last point of "resultPointsArray" and the 1rst point of "this" is coincident.***
+				var lastExistentPoint = resultPointsArray[resultExistentPointsCount-1];
+				point = pointsArray[i];
+				if(!lastExistentPoint.isCoincidentToPoint(point, errorDist))
+				{
+					resultPointsArray.push(point);
+				}
+			}
+			else
+			{
+				resultPointsArray.push(pointsArray[i]);
+			}
+		}
+		else
+		{
+			resultPointsArray.push(pointsArray[i]);
+		}
+	}
+	
+	// Last check: finally, in case of sweepAngle = 360 degrees, or is closed pointsArray, then pop the last insertedPoint.***
+	resultExistentPointsCount = resultPointsArray.length;
+	if(resultExistentPointsCount > 0)
+	{
+		// check if the last point of "resultPointsArray" and the 1rst point of "this" is coincident.***
+		var lastPoint = resultPointsArray[resultExistentPointsCount-1];
+		var firstPoint = resultPointsArray[0];
+		if(lastPoint.isCoincidentToPoint(firstPoint, errorDist))
+		{
+			resultPointsArray.pop();
+			lastPoint.deleteObjects();
+		}
+	}
+	
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 선
+ * @class AxisXYZ
+ */
+var AxisXYZ = function() 
+{
+	if (!(this instanceof AxisXYZ)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.xLength = 60;
+	this.yLength = 60;
+	this.zLength = 60;
+	this.vbo_vicks_container = new VBOVertexIdxCacheKeysContainer();
+	this.vboKey = this.vbo_vicks_container.newVBOVertexIdxCacheKey();
+};
+
+AxisXYZ.prototype.setDimension = function(xLength, yLength, zLength)
+{
+	this.xLength = xLength;
+	this.yLength = yLength;
+	this.zLength = zLength;
+};
+
+AxisXYZ.prototype.getVboKeysContainer = function()
+{
+	return this.vbo_vicks_container;
+};
+
+AxisXYZ.prototype.getVbo = function(resultVboKey)
+{
+	if(resultVboKey === undefined)
+		resultVboKey = new VBOVertexIdxCacheKey();
+	
+	if (resultVboKey.posVboDataArray === undefined)
+	{ resultVboKey.posVboDataArray = []; }
+
+	if (resultVboKey.colVboDataArray === undefined)
+	{ resultVboKey.colVboDataArray = []; }
+
+	if (resultVboKey.norVboDataArray === undefined)
+	{ resultVboKey.norVboDataArray = []; }
+
+	var positions = [];
+	var normals = [];
+	var colors = [];
+	
+	// xAxis.***
+	positions.push(0,0,0, this.xLength,0,0);
+	colors.push(255,0,0,255, 255,0,0,255);
+	normals.push(0,0,255, 0,0,255);
+	
+	// yAxis.***
+	positions.push(0,0,0, 0,this.yLength,0);
+	colors.push(0,255,0,255, 0,255,0,255);
+	normals.push(0,0,255, 0,0,255);
+	
+	// zAxis.***
+	positions.push(0,0,0, 0,0,this.zLength);
+	colors.push(0,0,255,255, 0,0,255,255);
+	normals.push(255,0,0, 255,0,0);
+
+	resultVboKey.posVboDataArray = Float32Array.from(positions);
+	resultVboKey.colVboDataArray = Int8Array.from(colors);
+	resultVboKey.norVboDataArray = Int8Array.from(normals);
+	
+	resultVboKey.vertexCount = 6;
+	
+	return resultVboKey;
+};
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class BoundingRectangle
+*/
+var BoundingRectangle = function(x, y) 
+{
+	if (!(this instanceof BoundingRectangle)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.minX = 100000;
+	this.maxX = -100000;
+	this.minY = 100000;
+	this.maxY = -100000;
+};
+
+BoundingRectangle.prototype.setInit = function(point)
+{
+	if(point === undefined)
+		return;
+	
+	this.minX = point.x;
+	this.minY = point.y;
+	this.maxX = point.x;
+	this.maxY = point.y;
+};
+
+BoundingRectangle.prototype.setInitByRectangle = function(bRect)
+{
+	if(bRect === undefined)
+		return;
+	
+	this.minX = bRect.minX;
+	this.minY = bRect.minY;
+	this.maxX = bRect.maxX;
+	this.maxY = bRect.maxY;
+};
+
+BoundingRectangle.prototype.addPoint = function(point)
+{
+	if(point === undefined)
+		return;
+	
+	if(point.x < this.minX)
+		this.minX = point.x;
+	else if(point.x > this.maxX)
+		this.maxX = point.x;
+	
+	if(point.y < this.minY)
+		this.minY = point.y;
+	else if(point.y > this.maxY)
+		this.maxY = point.y;
+};
+
+BoundingRectangle.prototype.addRectangle = function(bRect)
+{
+	if(bRect === undefined)
+		return;
+	
+	if(bRect.minX < this.minX)
+		this.minX = bRect.minX;
+	if(bRect.maxX > this.maxX)
+		this.maxX = bRect.maxX;
+	
+	if(bRect.minY < this.minY)
+		this.minY = bRect.minY;
+	if(bRect.maxY > this.maxY)
+		this.maxY = bRect.maxY;
+};
+
+BoundingRectangle.prototype.intersectsWithRectangle = function(bRect)
+{
+	if(bRect === undefined)
+		return false;
+	
+	if(bRect.minX > this.maxX)
+		return false;
+	else if(bRect.maxX < this.minX)
+		return false;
+	else if(bRect.minY > this.maxY)
+		return false;
+	else if(bRect.maxY < this.minY)
+		return false;
+	
+	return true;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Circle
+ */
+var Circle = function() 
+{
+	if (!(this instanceof Circle)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	// sweeping in CounterClockWise is positive.***
+	// zero startAngle is in "X" axis positive.***
+	this.centerPoint; // Point3D.***
+	this.radius;
+	this.numPointsFor360Deg; // interpolation param.***
+};
+
+/**
+ * Set the center position of Circle.
+ * @class Circle
+ */
+Circle.prototype.setCenterPosition = function(cx, cy)
+{
+	if (this.centerPoint === undefined)
+	{ this.centerPoint = new Point2D(); }
+	
+	this.centerPoint.set(cx, cy);
+};
+
+/**
+ * Set the center position of Circle.
+ * @class Circle
+ */
+Circle.prototype.setRadius = function(radius)
+{
+	this.radius = radius;
+};
+
+/**
+ * Returns the points of the arc.
+ * @class Arc
+ */
+Circle.prototype.getPoints = function(resultPointsArray, pointsCountFor360Deg)
+{
+	if(pointsCountFor360Deg)
+		this.numPointsFor360Deg = pointsCountFor360Deg
+
+	if(this.numPointsFor360Deg === undefined)
+		this.numPointsFor360Deg = 36;
+	
+	// use an arc to make points.***
+	if(this.centerPoint === undefined || this.radius === undefined)
+		return resultPointsArray;
+	
+	var arc = new Arc();
+	arc.setCenterPosition(this.centerPoint.x, this.centerPoint.y);
+	
+	arc.setRadius(this.radius);
+	arc.setStartAngleDegree(0);
+	arc.setSweepAngleDegree(360.0);
+	arc.setSense(1);
+	
+	if(resultPointsArray === undefined)
+		resultPointsArray = [];
+	
+	resultPointsArray = arc.getPoints(resultPointsArray, this.numPointsFor360Deg);
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Face
+ */
+var Face = function() 
+{
+	if (!(this instanceof Face)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.vertexArray;
+	this.halfEdge;
+	this.planeNormal;
+};
+
+Face.prototype.getVerticesCount = function()
+{
+	if(this.vertexArray === undefined)
+		return 0;
+
+	return this.vertexArray.length;
+};
+
+Face.prototype.getVertex = function(idx)
+{
+	if(this.vertexArray === undefined)
+		return undefined;
+
+	return this.vertexArray[idx];
+};
+
+Face.prototype.reverseSense = function()
+{
+	this.vertexArray.reverse();
+};
+
+Face.prototype.setColor = function(r, g, b, a)
+{
+	var vertex;
+	var verticesCount = this.getVerticesCount();
+	for(var i=0; i<verticesCount; i++)
+	{
+		vertex = this.getVertex(i);
+		vertex.setColorRGBA(r, g, b, a);
+	}
+};
+
+Face.prototype.calculateVerticesNormals = function()
+{
+	// provisionally calculate the plane normal and assign to the vertices.***
+	var finished = false;
+	var verticesCount = this.vertexArray.length;
+	var i=0;
+	while(!finished && i<verticesCount)
+	{
+		this.planeNormal = VertexList.getCrossProduct(i, this.vertexArray, this.planeNormal);
+		if(this.planeNormal.x !== 0 || this.planeNormal.y !== 0 || this.planeNormal.z !== 0 )
+		{
+			finished = true;
+		}
+		i++;
+	}
+	this.planeNormal.unitary();
+	var verticesCount = this.getVerticesCount();
+	for(var i=0; i<verticesCount; i++)
+	{
+		this.vertexArray[i].setNormal(this.planeNormal.x, this.planeNormal.y, this.planeNormal.z);
+	}
+};
+
+Face.prototype.getTrianglesConvex = function(resultTrianglesArray)
+{
+	// To call this method, the face must be convex.***
+	if(this.vertexArray === undefined || this.vertexArray.length === 0)
+		return resultTrianglesArray;
+	
+	if(resultTrianglesArray === undefined)
+		resultTrianglesArray = [];
+	
+	var vertex0, vertex1, vertex2;
+	var triangle;
+	vertex0 = this.getVertex(0);
+	var verticesCount = this.getVerticesCount();
+	for(var i=1; i<verticesCount-1; i++)
+	{
+		vertex1 = this.getVertex(i);
+		vertex2 = this.getVertex(i+1);
+		triangle = new Triangle(vertex0, vertex1, vertex2);
+		resultTrianglesArray.push(triangle);
+	}
+	
+	return resultTrianglesArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class HalfEdge
+ */
+var HalfEdge = function() 
+{
+	if (!(this instanceof HalfEdge)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.origenVertex;
+	this.nextEdge;
+	this.twinEdge;
+	this.face;
+};
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class IndexData
+*/
+var IndexData = function() 
+{
+	if (!(this instanceof IndexData)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.owner;
+	this.idx;
+};
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class IndexRange
+ */
+var IndexRange = function() 
+{
+	if (!(this instanceof IndexRange)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	this.strIdx;
+	this.endIdx;
+};
+
+IndexRange.prototype.copyFrom = function(indexRange)
+{
+	if(indexRange === undefined)
+		return;
+	
+	this.strIdx = indexRange.strIdx;
+	this.endIdx = indexRange.endIdx;
+};
+'use strict';
+
+/**
+ * 선
+ * @class Line
+ */
+var Line = function() 
+{
+	if (!(this instanceof Line)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	// (x,y,z) = (x0,y0,z0) + lambda * (u, v, w);
+	this.point = new Point3D();
+	this.direction = new Point3D();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @param dx 변수
+ * @param dy 변수
+ * @param dz 변수
+ */
+Line.prototype.setPointAndDir = function(px, py, pz, dx, dy, dz) 
+{
+	this.point.set(px, py, pz);
+	this.direction.set(dx, dy, dz);
+	this.direction.unitary();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line.prototype.getProjectedPoint = function(point, projectedPoint) 
+{
+	if(projectedPoint === undefined)
+		projectedPoint = new Point3D();
+	
+	var plane = new Plane();
+	plane.setPointAndNormal(point.x, point.y, point.z, this.direction.x, this.direction.y, this.direction.z);
+	projectedPoint = plane.intersectionLine(this, projectedPoint);
+	
+	return projectedPoint;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line.prototype.isCoincidentPoint = function(point, error) 
+{
+	if(point === undefined)
+		return false;
+	
+	var projectedPoint = this.getProjectedPoint(point);
+	
+	if(projectedPoint === undefined)
+		return false;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	var squaredDist = projectedPoint.squareDistToPoint(point);
+	
+	if(squaredDist < error*error)
+		return true;
+	
+	return false;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 선
+ * @class Line2D
+ */
+var Line2D = function() 
+{
+	if (!(this instanceof Line2D)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	// (x,y) = (x0,y0) + lambda * (u, v);
+	this.point = new Point2D();
+	this.direction = new Point2D();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param dx 변수
+ * @param dy 변수
+ */
+Line2D.prototype.setPointAndDir = function(px, py, dx, dy) 
+{
+	this.point.set(px, py);
+	this.direction.set(dx, dy);
+	this.direction.unitary();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.getPerpendicularRight = function(point) 
+{
+	var perpendicular = new Line2D();
+	
+	if(point)
+		perpendicular.point.set(point.x, point.y);
+	else
+		perpendicular.point.set(this.point.x, this.point.y);
+	
+	perpendicular.direction.set(this.direction.y, -this.direction.x);
+	return perpendicular;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.getPerpendicularLeft = function(point) 
+{
+	var perpendicular = new Line2D();
+	
+	if(point)
+		perpendicular.point.set(point.x, point.y);
+	else
+		perpendicular.point.set(this.point.x, this.point.y);
+	
+	perpendicular.direction.set(-this.direction.y, this.direction.x);
+	return perpendicular;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.getProjectedPoint = function(point, projectedPoint) 
+{
+	if(point === undefined)
+		return undefined;
+	
+	if(projectedPoint === undefined)
+		projectedPoint = new Point2D();
+	
+	var perpendicular = this.getPerpendicularLeft(point);
+	projectedPoint = this.intersectionWithLine(perpendicular, projectedPoint);
+	
+	return projectedPoint;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.isCoincidentPoint = function(point, error) 
+{
+	if(point === undefined)
+		return false;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	var projectedPoint = this.getProjectedPoint(point, projectedPoint);
+	var squaredDist = point.squareDistToPoint(projectedPoint);
+	
+	if(squaredDist < error*error)
+		return true;
+
+	return false;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.isParallelToLine = function(line) 
+{
+	if(line === undefined)
+		return false;
+	
+	var zero = 10E-10;
+	var angRad = this.direction.angleRadToVector(line.direction);
+	
+	// if angle is zero or 180 degree, then this is parallel to "line".***
+	if(angRad < zero || Math.abs(angRad - Math.PI) < zero)
+		return true;
+	
+	return false;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ */
+Line2D.prototype.intersectionWithLine = function(line, resultIntersectPoint) 
+{
+	if(line === undefined)
+		return undefined;
+	
+	// 1rst, check that this is not parallel to "line".***
+	if(this.isParallelToLine(line))
+		return undefined;
+	
+	// now, check if this or "line" are vertical or horizontal.***
+	var intersectX;
+	var intersectY;
+	
+	var zero = 10E-10;
+	if(Math.abs(this.direction.x) < zero)
+	{
+		// this is a vertical line.***
+		var slope = line.direction.y / line.direction.x;
+		var b = line.point.y - slope * line.point.x;
+		
+		intersectX = this.point.x;
+		intersectY = slope * this.point.x + b;
+	}
+	else if(Math.abs(this.direction.y) < zero)
+	{
+		// this is a horizontal line.***
+		// must check if the "line" is vertical.***
+		if(Math.abs(line.direction.x) < zero)
+		{
+			// "line" is vertical.***
+			intersectX = line.point.x;
+			intersectY = this.point.y;
+		}
+		else{
+			var slope = line.direction.y / line.direction.x;
+			var b = line.point.y - slope * line.point.x;
+			
+			intersectX = (this.point.y - b)/slope;
+			intersectY = this.point.y;
+		}	
+	}
+	else{
+		// this is oblique.***
+		if(Math.abs(line.direction.x) < zero)
+		{
+			// "line" is vertical.***
+			var mySlope = this.direction.y / this.direction.x;
+			var myB = this.point.y - mySlope * this.point.x;
+			intersectX = line.point.x;
+			intersectY = line.point.x * mySlope + myB;
+		}
+		else{
+			var mySlope = this.direction.y / this.direction.x;
+			var myB = this.point.y - mySlope * this.point.x;
+			
+			var slope = line.direction.y / line.direction.x;
+			var b = line.point.y - slope * line.point.x;
+			
+			intersectX = (myB - b)/ (slope - mySlope);
+			intersectY = slope * intersectX + b;
+		}
+	}
+	
+	if(resultIntersectPoint === undefined)
+		resultIntersectPoint = new Point2D();
+	
+	resultIntersectPoint.set(intersectX, intersectY);
+	return resultIntersectPoint;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class MagoNativeProject
+ */
+var MagoNativeProject = function() 
+{
+	if (!(this instanceof MagoNativeProject)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	// This is a "ParametricMeshes" composition.***
+	this.meshesArray;
+	this.geoLocDataManager;
+	this.vboKeysContainer; // class: VBOVertexIdxCacheKeysContainer
+};
+
+MagoNativeProject.prototype.newParametricMesh = function()
+{
+	if(this.meshesArray === undefined)
+		this.meshesArray = [];
+	
+	var parametricMesh = new ParametricMesh();
+	this.meshesArray.push(parametricMesh);
+	return parametricMesh;
+};
+
+MagoNativeProject.prototype.deleteObjects = function()
+{
+	if(this.meshesArray === undefined)
+		return;
+	
+	var parametricMeshesCount = this.meshesArray.length;
+	for(var i=0; i<parametricMeshesCount; i++)
+	{
+		this.meshesArray[i].deleteObjects();
+		this.meshesArray[i] = undefined;
+	}
+	this.meshesArray = undefined;
+	
+	if(this.geoLocDataManager)
+		this.geoLocDataManager.deleteObjects();
+	
+	this.geoLocDataManager = undefined;
+};
+
+MagoNativeProject.prototype.getMeshesCount = function()
+{
+	if(this.meshesArray === undefined)
+		return 0;
+	
+	return this.meshesArray.length;
+};
+
+MagoNativeProject.prototype.getMesh = function(idx)
+{
+	if(this.meshesArray === undefined)
+		return undefined;
+	
+	return this.meshesArray[idx];
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Mesh
+ */
+var Mesh = function() 
+{
+	if (!(this instanceof Mesh)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	this.vertexList;
+	this.surfacesArray;
+};
+
+Mesh.prototype.newSurface = function()
+{
+	if(this.surfacesArray === undefined)
+		this.surfacesArray = [];
+	
+	var surface = new Surface();
+	this.surfacesArray.push(surface);
+	return surface;
+};
+
+Mesh.prototype.getSurface = function(idx)
+{
+	if(this.surfacesArray === undefined)
+		return undefined;
+	
+	return this.surfacesArray[idx];
+};
+
+Mesh.prototype.addSurface = function(surface)
+{
+	if(surface === undefined)
+		return;
+	
+	if(this.surfacesArray === undefined)
+		this.surfacesArray = [];
+	
+	this.surfacesArray.push(surface);
+};
+
+Mesh.prototype.mergeMesh = function(mesh)
+{
+	if(mesh === undefined)
+		return;
+	
+	if(this.surfacesArray === undefined)
+		this.surfacesArray = [];
+	
+	var surfacesCount = mesh.getSurfacesCount();
+	for(var i=0; i<surfacesCount; i++)
+	{
+		this.addSurface(mesh.getSurface(i));
+	}
+	mesh.surfacesArray = undefined;
+};
+
+Mesh.prototype.getSurfacesCount = function()
+{
+	if(this.surfacesArray === undefined)
+		return 0;
+	
+	return this.surfacesArray.length;
+};
+
+Mesh.prototype.getCopySurfaceIndependetMesh = function(resultMesh)
+{
+	// In a surfaceIndependentMesh, the surfaces are disconex.***
+	if(resultMesh === undefined)
+		resultMesh = new Mesh();
+	
+	var surface, surfaceCopy;
+	var surfacesCount = this.getSurfacesCount();
+	for(var i=0; i<surfacesCount; i++)
+	{
+		surface = this.getSurface(i);
+		surfaceCopy = resultMesh.newSurface();
+		surfaceCopy = surface.getCopyIndependentSurface(surfaceCopy);
+	}
+	
+	return resultMesh;
+};
+
+Mesh.prototype.getTrianglesConvex = function(resultTrianglesArray)
+{
+	// To call this method, the faces must be convex.***
+	if(this.surfacesArray === undefined || this.surfacesArray.length === 0)
+		return resultTrianglesArray;
+	
+	if(resultTrianglesArray === undefined)
+		resultTrianglesArray = [];
+	
+	var surface;
+	var surfacesCount = this.getSurfacesCount();
+	for(var i=0; i<surfacesCount; i++)
+	{
+		surface = this.getSurface(i);
+		resultTrianglesArray = surface.getTrianglesConvex(resultTrianglesArray);
+	}
+	
+	return resultTrianglesArray;
+};
+
+Mesh.prototype.calculateVerticesNormals = function()
+{
+	// PROVISIONAL.***
+	var surface;
+	var surfacesCount = this.getSurfacesCount();
+	for(var i=0; i<surfacesCount; i++)
+	{
+		surface = this.getSurface(i);
+		surface.calculateVerticesNormals();
+	}
+};
+
+Mesh.prototype.setColor = function(r, g, b, a)
+{
+	var surface;
+	var surfacesCount = this.getSurfacesCount();
+	for(var i=0; i<surfacesCount; i++)
+	{
+		surface = this.getSurface(i);
+		surface.setColor(r, g, b, a);
+	}
+};
+
+Mesh.prototype.getVbo = function(resultVbo)
+{
+	if(resultVbo === undefined)
+		resultVbo = new VBOVertexIdxCacheKey();
+
+	// 1rst, make global vertices array.***
+	var globalVerticesArray = [];
+	var surfaceLocalVerticesArray = [];
+	var surface;
+	var surfacesCount = this.getSurfacesCount();
+	for(var i=0; i<surfacesCount; i++)
+	{
+		surface = this.getSurface(i);
+		surfaceLocalVerticesArray.length = 0;
+		if(surface.localVertexList !== undefined)
+		{
+			// if exist localVerticesList use it.***
+			Array.prototype.push.apply(surfaceLocalVerticesArray, surface.localVertexList.vertexArray);
+		}
+		else{
+			surfaceLocalVerticesArray = surface.getNoRepeatedVerticesArray(surfaceLocalVerticesArray);
+		}
+		
+		Array.prototype.push.apply(globalVerticesArray, surfaceLocalVerticesArray);
+	}
+	
+	var globalVertexList = new VertexList();
+	globalVertexList.vertexArray = globalVerticesArray;
+	globalVertexList.setIdxInList();
+	resultVbo = globalVertexList.getVboDataArrays(resultVbo);
+	
+	// now, triangles vbo.***
+	var faceIndicesArray = [];
+	var trianglesArray = this.getTrianglesConvex(undefined);
+	var trianglesCount = trianglesArray.length;
+	var triangle;
+	var idx0, idx1, idx2;
+	for(var i=0; i<trianglesCount; i++)
+	{
+		triangle = trianglesArray[i];
+		if(triangle.vertex0 !== undefined)
+		{
+			idx0 = triangle.vertex0.getIdxInList();
+			idx1 = triangle.vertex1.getIdxInList();
+			idx2 = triangle.vertex2.getIdxInList();
+			Array.prototype.push.apply(faceIndicesArray, [idx0, idx1, idx2]);
+		}
+	}
+	
+	resultVbo.idxVboDataArray = Int16Array.from(faceIndicesArray);
+	resultVbo.indicesCount = resultVbo.idxVboDataArray.length;
+	
+	return resultVbo;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class ParametricMesh
+ */
+var ParametricMesh = function() 
+{
+	if (!(this instanceof ParametricMesh)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.vtxProfilesList; // class: VtxProfilesList.***
+	this.profile; // class: Profile. is a 2d object.***
+	this.vboKeyContainer;//VBOVertexIdxCacheKeyContainer.***
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ParametricMesh.prototype.deleteObjects = function() 
+{
+	if(this.profile)
+		this.profile.deleteObjects();
+	
+	this.profile = undefined;
+};
+
+ParametricMesh.prototype.getVboKeysContainer = function()
+{
+	return this.vboKeyContainer;
+};
+
+ParametricMesh.prototype.getVbo = function(resultVBOCacheKeys)
+{
+	if(resultVBOCacheKeys === undefined)
+		resultVBOCacheKeys = new VBOVertexIdxCacheKey();
+
+	// must separate vbo groups by surfaces.***
+	var surfaceIndependentMesh = this.getSurfaceIndependentMesh(undefined);
+	surfaceIndependentMesh.getVbo(resultVBOCacheKeys);
+	
+	return resultVBOCacheKeys;
+};
+
+ParametricMesh.prototype.getSurfaceIndependentMesh = function(resultMesh, bIncludeBottomCap, bIncludeTopCap)
+{
+	if(resultMesh === undefined)
+		resultMesh = new Mesh();
+
+	// must separate vbo groups by surfaces.***
+	var mesh = this.vtxProfilesList.getMesh(undefined, bIncludeBottomCap, bIncludeTopCap);
+	resultMesh = mesh.getCopySurfaceIndependetMesh(undefined);
+	resultMesh.calculateVerticesNormals();
+	
+	return resultMesh;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ParametricMesh.prototype.revolve = function(profile, revolveAngDeg, revolveSegmentsCount, revolveSegment2d) 
+{
+	if(profile === undefined)
+		return undefined;
+	
+	if(this.vtxProfilesList === undefined)
+		this.vtxProfilesList = new VtxProfilesList();
+	
+	// if want caps in the extruded mesh, must calculate "ConvexFacesIndicesData" of the profile before creating vtxProfiles.***
+	this.vtxProfilesList.convexFacesIndicesData = profile.getConvexFacesIndicesData(undefined);
+	
+	// create vtxProfiles.***
+	// make the base-vtxProfile.***
+	var baseVtxProfile = this.vtxProfilesList.newVtxProfile();
+	baseVtxProfile.makeByProfile(profile);
+	
+	var increAngDeg = revolveAngDeg/revolveSegmentsCount;
+	
+	// calculate the translation.***
+	var line2d = revolveSegment2d.getLine();
+	var origin2d = new Point2D(0,0);
+	var translationVector = line2d.getProjectedPoint(origin2d);
+	translationVector.inverse();
+	
+	var rotMat = new Matrix4();
+	var quaternion = new Quaternion();
+	var rotAxis2d = revolveSegment2d.getDirection();
+	var rotAxis = new Point3D(rotAxis2d.x, rotAxis2d.y, 0);
+	rotAxis.unitary();
+	
+	for(var i=0; i<revolveSegmentsCount; i++)
+	{
+		// calculate rotation.***
+		quaternion.rotationAngDeg(increAngDeg*(i+1), rotAxis.x, rotAxis.y, rotAxis.z);
+		rotMat.rotationByQuaternion(quaternion);
+		
+		// test top profile.***
+		var nextVtxProfile = this.vtxProfilesList.newVtxProfile();
+		nextVtxProfile.copyFrom(baseVtxProfile);
+		nextVtxProfile.translate(translationVector.x, translationVector.y, 0);
+		nextVtxProfile.transformPointsByMatrix4(rotMat);
+		nextVtxProfile.translate(-translationVector.x, -translationVector.y, 0);
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+ParametricMesh.prototype.extrude = function(profile, extrusionDist, extrudeSegmentsCount, extrusionVector) 
+{
+	if(profile === undefined || extrusionDist === undefined)
+		return undefined;
+	
+	if(this.vtxProfilesList === undefined)
+		this.vtxProfilesList = new VtxProfilesList();
+	
+
+	// if want caps in the extruded mesh, must calculate "ConvexFacesIndicesData" of the profile before creating vtxProfiles.***
+	this.vtxProfilesList.convexFacesIndicesData = profile.getConvexFacesIndicesData(undefined);
+	
+	// create vtxProfiles.***
+	// make the base-vtxProfile.***
+	var baseVtxProfile = this.vtxProfilesList.newVtxProfile();
+	baseVtxProfile.makeByProfile(profile);
+	
+	if(extrusionVector === undefined)
+		extrusionVector = new Point3D(0, 0, 1);
+	
+	var increDist = extrusionDist/extrudeSegmentsCount;
+	for(var i=0; i<extrudeSegmentsCount; i++)
+	{
+		// test with a 1 segment extrusion.***
+		var nextVtxProfile = this.vtxProfilesList.newVtxProfile();
+		nextVtxProfile.copyFrom(baseVtxProfile);
+		nextVtxProfile.translate(0, 0, increDist*(i+1));
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class Point2D
+*/
+var Point2D = function(x, y) 
+{
+	if (!(this instanceof Point2D)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	if(x)this.x = x;
+	else this.x = 0.0;
+	if(y)this.y = y;
+	else this.y = 0.0;
+	
+	// aux test.***
+	this.associated;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.deleteObjects = function() 
+{
+	this.x = undefined;
+	this.y = undefined;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.setAssociated = function(associated) 
+{
+	// aux test.***
+	this.associated = associated;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.getAssociated = function() 
+{
+	// aux test.***
+	return this.associated;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.copyFrom = function(point2d) 
+{
+	this.x = point2d.x;
+	this.y = point2d.y;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.inverse = function() 
+{
+	this.x = -this.x;
+	this.y = -this.y;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.set = function(x, y) 
+{
+	this.x = x;
+	this.y = y;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns this.x*this.x + this.y*this.y + this.z*this.z;
+ */
+Point2D.prototype.getSquaredModul = function() 
+{
+	return this.x*this.x + this.y*this.y;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z );
+ */
+Point2D.prototype.getModul = function() 
+{
+	return Math.sqrt(this.getSquaredModul());
+};
+
+/**
+ * 
+ * 어떤 일을 하고 있습니까?
+ */
+Point2D.prototype.unitary = function() 
+{
+	var modul = this.getModul();
+	this.x /= modul;
+	this.y /= modul;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point2D.prototype.squareDistToPoint = function(point) 
+{
+	var dx = this.x - point.x;
+	var dy = this.y - point.y;
+
+	return dx*dx + dy*dy;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point2D.prototype.distToPoint = function(point) 
+{
+	return Math.sqrt(this.squareDistToPoint(point));
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point2D.prototype.isCoincidentToPoint = function(point, errorDist) 
+{
+	var squareDist = this.distToPoint(point);
+	var coincident = false;
+	if(squareDist < errorDist*errorDist)
+	{
+		coincident = true;
+	}
+
+	return coincident;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ */
+Point2D.prototype.getVectorToPoint = function(targetPoint, resultVector) 
+{
+	// this returns a vector that points to "targetPoint" from "this".***
+	// the "resultVector" has the direction from "this" to "targetPoint", but is NOT normalized.***
+	if(targetPoint === undefined)
+		return undefined;
+	
+	if(resultVector === undefined)
+		resultVector = new Point2D();
+	
+	resultVector.set(targetPoint.x - this.x, targetPoint.y - this.y);
+	
+	return resultVector;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2D.prototype.crossProduct = function(point) 
+{
+	return this.x * point.y - point.x * this.y;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2D.prototype.scalarProduct = function(point) 
+{
+	var scalarProd = this.x*point.x + this.y*point.y;
+	return scalarProd;
+};
+
+/**
+ * nomal 계산
+ * @param vector 변수
+ */
+Point2D.prototype.angleRadToVector = function(vector) 
+{
+	if(vector === undefined)
+		return undefined;
+	
+	//******************************************************
+	//var scalarProd = this.scalarProduct(vector);
+	var myModul = this.getModul();
+	var vecModul = vector.getModul();
+	
+	// calcule by cos.***
+	//var cosAlfa = scalarProd / (myModul * vecModul); 
+	//var angRad = Math.acos(cosAlfa);
+	//var angDeg = alfa * 180.0/Math.PI;
+	//------------------------------------------------------
+	var error = 10E-10;
+	if(myModul < error || vecModul < error)
+		return undefined;
+	
+	return Math.acos(this.scalarProduct(vector) / (myModul * vecModul));
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2D.prototype.angleDegToVector = function(vector) 
+{
+	if(vector === undefined)
+		return undefined;
+	
+	var angRad = this.angleRadToVector(vector);
+	
+	if(angRad === undefined)
+		return undefined;
+		
+	return angRad * 180.0/Math.PI;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class Point2DList
+*/
+var Point2DList = function(x, y) 
+{
+	if (!(this instanceof Point2DList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.pointsArray;
+};
+
+Point2DList.prototype.deleteObjects = function()
+{
+	if(this.pointsArray === undefined)
+		return;
+	
+	var pointsCount = this.pointsArray.length;
+	for(var i=0; i<pointsCount; i++)
+	{
+		this.pointsArray[i].deleteObjects();
+		this.pointsArray[i] = undefined;
+	}
+	this.pointsArray = undefined;
+};
+
+Point2DList.prototype.addPoint = function(point2d)
+{
+	if(point2d === undefined)
+		return;
+	
+	if(this.pointsArray === undefined)
+		this.pointsArray = [];
+
+	this.pointsArray.push(point2d);
+};
+
+Point2DList.prototype.newPoint = function(x, y)
+{
+	if(this.pointsArray === undefined)
+		this.pointsArray = [];
+	
+	var point = new Point2D(x, y);
+	this.pointsArray.push(point);
+	return point;
+};
+
+Point2DList.prototype.getPoint = function(idx)
+{
+	return this.pointsArray[idx];
+};
+
+Point2DList.prototype.getPointsCount = function()
+{
+	if(this.pointsArray === undefined)
+		return 0;
+	
+	return this.pointsArray.length;
+};
+
+Point2DList.prototype.getPrevIdx = function(idx)
+{
+	var pointsCount = this.pointsArray.length;
+	var prevIdx;
+	
+	if(idx === 0)
+		prevIdx = pointsCount - 1;
+	else
+		prevIdx = idx - 1;
+
+	return prevIdx;
+};
+
+Point2DList.prototype.getNextIdx = function(idx)
+{
+	var pointsCount = this.pointsArray.length;
+	var nextIdx;
+	
+	if(idx === pointsCount - 1)
+		nextIdx = 0;
+	else
+		nextIdx = idx + 1;
+
+	return nextIdx;
+};
+
+Point2DList.prototype.getIdxOfPoint = function(point)
+{
+	var pointsCount = this.pointsArray.length;
+	var i=0;
+	var idx = -1;
+	var found = false;
+	while(!found && i<pointsCount)
+	{
+		if(this.pointsArray[i] === point)
+		{
+			found = true;
+			idx = i;
+		}
+		i++;
+	}
+	
+	return idx;
+};
+
+Point2DList.prototype.getSegment = function(idx, resultSegment)
+{
+	var currPoint = this.getPoint(idx);
+	var nextIdx = this.getNextIdx(idx);
+	var nextPoint = this.getPoint(nextIdx);
+	
+	if(resultSegment === undefined)
+		resultSegment = new Segment2D(currPoint, nextPoint);
+	else{
+		resultSegment.setPoints(currPoint, nextPoint);
+	}
+
+	return resultSegment;
+};
+
+Point2DList.prototype.setIdxInList = function()
+{
+	var pointsCount = this.pointsArray.length;
+	for(var i=0; i<pointsCount; i++)
+	{
+		this.pointsArray[i].idxInList = i;
+	}
+};
+
+/**
+ * nomal 계산
+ */
+Point2DList.prototype.getCopy = function(resultPoint2dList) 
+{
+	if(resultPoint2dList === undefined)
+		resultPoint2dList = new Point2DList();
+	else
+		resultPoint2dList.deleteObjects();
+	
+	var myPoint, copyPoint;
+	var pointsCount = this.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		myPoint = this.getPoint(i);
+		copyPoint = resultPoint2dList.newPoint(myPoint.x, myPoint.y);
+	}
+	
+	return resultPoint2dList;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2DList.prototype.getBoundingRectangle = function(resultBRect) 
+{
+	var pointsCount = this.getPointsCount();
+	if(pointsCount === 0)
+		return resultBRect;
+	
+	if(resultBRect === undefined)
+		resultBRect = new BoundingRectangle();
+	
+	var point;
+	for(var i=0; i<pointsCount; i++)
+	{
+		if(i === 0)
+			resultBRect.setInit(this.getPoint(i));
+		else
+			resultBRect.addPoint(this.getPoint(i));
+	}
+	
+	return resultBRect;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2DList.prototype.getNearestPointIdxToPoint = function(point) 
+{
+	if(point === undefined)
+		return undefined;
+	
+	var currPoint, candidatePointIdx;
+	var currSquaredDist, candidateSquaredDist;
+	var pointsCount = this.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		currPoint = this.getPoint(i);
+		currSquaredDist = currPoint.squareDistToPoint(point);
+		if(candidatePointIdx === undefined)
+		{
+			candidatePointIdx = i;
+			candidateSquaredDist = currSquaredDist;
+		}
+		else{
+			if(currSquaredDist < candidateSquaredDist)
+			{
+				candidatePointIdx = i;
+				candidateSquaredDist = currSquaredDist;
+			}
+		}
+	}
+	
+	return candidatePointIdx;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point2DList.prototype.reverse = function() 
+{
+	if(this.pointsArray !== undefined)
+		this.pointsArray.reverse();
+};
+
+Point2DList.prototype.getPointsIdxSortedByDistToPoint = function(thePoint, resultSortedPointsIdxArray)
+{
+	if(this.pointsArray === undefined)
+		return resultSortedPointsIdxArray;
+	
+	// Static function.***
+	// Sorting minDist to maxDist.***
+	if(resultSortedPointsIdxArray === undefined)
+		resultSortedPointsIdxArray = [];
+	
+	var pointsArray = this.pointsArray;
+	
+	var objectAux;
+	var objectsAuxArray = [];
+	var point;
+	var squaredDist;
+	var startIdx, endIdx, insertIdx;
+	var pointsCount = pointsArray.length;
+	for(var i=0; i<pointsCount; i++)
+	{
+		point = pointsArray[i];
+		if(point === thePoint)
+			continue;
+		
+		squaredDist = thePoint.squareDistToPoint(point);
+		objectAux = {};
+		objectAux.pointIdx = i;
+		objectAux.squaredDist = squaredDist;
+		startIdx = 0;
+		endIdx = objectsAuxArray.length - 1;
+		
+		insertIdx = this.getIndexToInsertBySquaredDist(objectsAuxArray, objectAux, startIdx, endIdx);
+		objectsAuxArray.splice(insertIdx, 0, objectAux);
+	}
+	
+	resultSortedPointsIdxArray.length = 0;
+	var objectsCount = objectsAuxArray.length;
+	for(var i=0; i<objectsCount; i++)
+	{
+		resultSortedPointsIdxArray.push(objectsAuxArray[i].pointIdx);
+	}
+	
+	return resultSortedPointsIdxArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns result_idx
+ */
+Point2DList.prototype.getIndexToInsertBySquaredDist = function(objectsArray, object, startIdx, endIdx) 
+{
+	// this do a dicotomic search of idx in a ordered table.
+	// 1rst, check the range.
+	
+	var range = endIdx - startIdx;
+	
+	if(objectsArray.length === 0)
+		return 0;
+	
+	if (range < 6)
+	{
+		// in this case do a lineal search.
+		var finished = false;
+		var i = startIdx;
+		var idx;
+		//var objectsCount = objectsArray.length;
+		while (!finished && i<=endIdx)
+		{
+			if (object.squaredDist < objectsArray[i].squaredDist)
+			{
+				idx = i;
+				finished = true;
+			}
+			i++;
+		}
+		
+		if (finished)
+		{
+			return idx;
+		}
+		else 
+		{
+			return endIdx+1;
+		}
+	}
+	else 
+	{
+		// in this case do the dicotomic search.
+		var middleIdx = startIdx + Math.floor(range/2);
+		var newStartIdx;
+		var newEndIdx;
+		if (objectsArray[middleIdx].squaredDist > object.squaredDist)
+		{
+			newStartIdx = startIdx;
+			newEndIdx = middleIdx;
+		}
+		else 
+		{
+			newStartIdx = middleIdx;
+			newEndIdx = endIdx;
+		}
+		return this.getIndexToInsertBySquaredDist(objectsArray, object, newStartIdx, newEndIdx);
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 3차원 정보
+ * @class Point3D
+ */
+var Point3D = function(x, y, z) 
+{
+	if (!(this instanceof Point3D)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	if (x !== undefined)
+	{ this.x = x; }
+	else
+	{ this.x = 0.0; }
+	
+	if (y !== undefined)
+	{ this.y = y; }
+	else
+	{ this.y = 0.0; }
+	
+	if (z !== undefined)
+	{ this.z = z; }
+	else
+	{ this.z = 0.0; }
+	
+	this.pointType; // 1 = important point.***
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point3D.prototype.deleteObjects = function() 
+{
+	this.x = undefined;
+	this.y = undefined;
+	this.z = undefined;
+};
+
+/**
+ * 포인트값 삭제
+ * 어떤 일을 하고 있습니까?
+ */
+Point3D.prototype.copyFrom = function(point3d) 
+{
+	this.x = point3d.x;
+	this.y = point3d.y;
+	this.z = point3d.z;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns this.x*this.x + this.y*this.y + this.z*this.z;
+ */
+Point3D.prototype.getSquaredModul = function() 
+{
+	return this.x*this.x + this.y*this.y + this.z*this.z;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z );
+ */
+Point3D.prototype.getModul = function() 
+{
+	return Math.sqrt(this.getSquaredModul());
+};
+
+/**
+ * 
+ * 어떤 일을 하고 있습니까?
+ */
+Point3D.prototype.unitary = function() 
+{
+	var modul = this.getModul();
+	this.x /= modul;
+	this.y /= modul;
+	this.z /= modul;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point3D.prototype.crossProduct = function(point, resultPoint) 
+{
+	if (resultPoint === undefined) { resultPoint = new Point3D(); }
+
+	resultPoint.x = this.y * point.z - point.y * this.z;
+	resultPoint.y = point.x * this.z - this.x * point.z;
+	resultPoint.z = this.x * point.y - point.x * this.y;
+
+	return resultPoint;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point3D.prototype.scalarProduct = function(point) 
+{
+	var scalarProd = this.x*point.x + this.y*point.y + this.z*point.z;
+	return scalarProd;
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point3D.prototype.angleRadToVector = function(vector) 
+{
+	if(vector === undefined)
+		return undefined;
+	
+	//******************************************************
+	//var scalarProd = this.scalarProd(vector);
+	var myModul = this.modul();
+	var vecModul = vector.modul();
+	
+	// calcule by cos.***
+	//var cosAlfa = scalarProd / (myModul * vecModul); 
+	//var angRad = Math.acos(cosAlfa);
+	//var angDeg = alfa * 180.0/Math.PI;
+	//------------------------------------------------------
+	var error = 10E-10;
+	if(myModul < error || vecModul < error)
+		return undefined;
+	
+	return Math.acos(this.scalarProd(vector) / (myModul * vecModul));
+};
+
+/**
+ * nomal 계산
+ * @param point 변수
+ * @param resultPoint 변수
+ * @returns resultPoint
+ */
+Point3D.prototype.angleDegToVector = function(vector) 
+{
+	if(vector === undefined)
+		return undefined;
+	
+	var angRad = this.angleRadToVector(vector);
+	
+	if(angRad === undefined)
+		return undefined;
+		
+	return angRad * 180.0/Math.PI;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.squareDistToPoint = function(point) 
+{
+	var dx = this.x - point.x;
+	var dy = this.y - point.y;
+	var dz = this.z - point.z;
+
+	return dx*dx + dy*dy + dz*dz;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.isCoincidentToPoint = function(point, errorDist) 
+{
+	var squareDist = this.distToPoint(point);
+	var coincident = false;
+	if(squareDist < errorDist*errorDist)
+	{
+		coincident = true;
+	}
+
+	return coincident;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.squareDistTo = function(x, y, z) 
+{
+	var dx = this.x - x;
+	var dy = this.y - y;
+	var dz = this.z - z;
+
+	return dx*dx + dy*dy + dz*dz;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.distTo = function(x, y, z) 
+{
+	return Math.sqrt(this.squareDistTo(x, y, z));
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.distToPoint = function(point) 
+{
+	return Math.sqrt(this.squareDistToPoint(point));
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.distToSphere = function(sphere) 
+{
+	return Math.sqrt(this.squareDistToPoint(sphere.centerPoint)) - sphere.r;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param px 변수
+ * @param py 변수
+ * @param pz 변수
+ * @returns dx*dx + dy*dy + dz*dz
+ */
+Point3D.prototype.aproxDistTo = function(pointB, sqrtTable) 
+{
+	var difX = Math.abs(this.x - pointB.x);
+	var difY = Math.abs(this.y - pointB.y);
+	var difZ = Math.abs(this.z - pointB.z);
+	
+	// find the big value.
+	var maxValue, value1, value2;
+	var value1Idx, value2Idx;
+	
+	if (difX > difY)
+	{
+		if (difX > difZ)
+		{
+			maxValue = difX;
+			value1 = difY/maxValue;
+			value1Idx = Math.floor(value1*10);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difZ/middleDist;
+			value2Idx = Math.floor(value2*10);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+		else 
+		{
+			maxValue = difZ;
+			value1 = difX/maxValue;
+			value1Idx = Math.floor(value1*10);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difY/middleDist;
+			value2Idx = Math.floor(value2*10);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+	}
+	else 
+	{
+		if (difY > difZ)
+		{
+			maxValue = difY;
+			value1 = difX/maxValue;
+			value1Idx = Math.floor(value1*10);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difZ/middleDist;
+			value2Idx = Math.floor(value2*10);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+		else 
+		{
+			maxValue = difZ;
+			value1 = difX/maxValue;
+			value1Idx = Math.floor(value1*10);
+			var middleDist = maxValue * sqrtTable[value1Idx];
+			value2 = difY/middleDist;
+			value2Idx = Math.floor(value2*10);
+			return (middleDist * sqrtTable[value2Idx]);
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Point3D.prototype.getVectorToPoint = function(targetPoint, resultVector) 
+{
+	// this returns a vector that points to "targetPoint" from "this".***
+	// the "resultVector" has the direction from "this" to "targetPoint", but is NOT normalized.***
+	if(targetPoint === undefined)
+		return undefined;
+	
+	if(resultVector === undefined)
+		resultVector = new Point3D();
+	
+	resultVector.set(targetPoint.x - this.x, targetPoint.y - this.y, targetPoint.z - this.z);
+	
+	return resultVector;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Point3D.prototype.set = function(x, y, z) 
+{
+	this.x = x; this.y = y; this.z = z;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Point3D.prototype.add = function(x, y, z) 
+{
+	this.x += x; this.y += y; this.z += z;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Point3D.prototype.addPoint = function(point) 
+{
+	this.x += point.x; this.y += point.y; this.z += point.z;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Point3D.prototype.scale = function(scaleFactor) 
+{
+	this.x *= scaleFactor; this.y *= scaleFactor; this.z *= scaleFactor;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Polygon
+ */
+var Polygon = function() 
+{
+	if (!(this instanceof Polygon)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.point2dList;
+	this.normal; // polygon sense. (normal = 1) -> CCW. (normal = -1) -> CW.***
+	this.convexPolygonsArray; // tessellation result.***
+	this.bRect; // boundary rectangle.***
+};
+
+Polygon.prototype.deleteObjects = function()
+{
+	if(this.point2dList !== undefined)
+	{
+		this.point2dList.deleteObjects();
+		this.point2dList = undefined;
+	}
+	
+	this.normal = undefined;
+};
+
+Polygon.prototype.getBoundingRectangle = function(resultBRect)
+{
+	if(this.point2dList === undefined)
+		return resultBRect;
+	
+	resultBRect = this.point2dList.getBoundingRectangle(resultBRect);
+	return resultBRect;
+};
+
+Polygon.prototype.getEdgeDirection = function(idx)
+{
+	// the direction is unitary vector.***
+	var segment = this.point2dList.getSegment(idx);
+	var direction = segment.getDirection(undefined);
+	return direction;
+};
+
+Polygon.prototype.getEdgeVector = function(idx)
+{
+	var segment = this.point2dList.getSegment(idx);
+	var vector = segment.getVector(undefined);
+	return vector;
+};
+
+Polygon.prototype.reverseSense = function()
+{
+	if(this.point2dList !== undefined)
+		this.point2dList.reverse();
+};
+
+Polygon.prototype.getCopy = function(resultCopyPolygon)
+{
+	if(this.point2dList === undefined)
+		return resultCopyPolygon;
+	
+	if(resultCopyPolygon === undefined)
+		resultCopyPolygon = new Polygon();
+	
+	// copy the point2dList and the normal.***
+	if(resultCopyPolygon.point2dList === undefined)
+		resultCopyPolygon.point2dList = new Point2DList();
+	
+	resultCopyPolygon.point2dList = this.point2dList.getCopy(resultCopyPolygon.point2dList);
+	
+	if(this.normal)
+		resultCopyPolygon.normal = this.normal;
+	
+	return resultCopyPolygon;
+};
+
+Polygon.prototype.calculateNormal = function(resultConcavePointsIdxArray)
+{
+	// must check if the verticesCount is 3. Then is a convex polygon.***
+	
+	// A & B are vectors.
+	// A*B is scalarProduct.
+	// A*B = |A|*|B|*cos(alfa)
+	var point;
+	var crossProd;
+	
+	if(resultConcavePointsIdxArray === undefined)
+		resultConcavePointsIdxArray = [];
+	
+	//var candidate_1 = {}; // normal candidate 1.***
+	//var candidate_2 = {}; // normal candidate 2.***
+	
+	this.normal = 0; // unknown sense.***
+	var pointsCount = this.point2dList.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		point = this.point2dList.getPoint(i);
+		var prevIdx = this.point2dList.getPrevIdx(i);
+		
+		// get unitari directions of the vertex.***
+		var startVec = this.getEdgeDirection(prevIdx); // Point3D.
+		var endVec = this.getEdgeDirection(i); // Point3D.
+		
+		// calculate the cross product.***
+		var crossProd = startVec.crossProduct(endVec, crossProd); // Point3D.
+		var scalarProd = startVec.scalarProduct(endVec);
+		
+		if(crossProd < 0.0) 
+		{
+			crossProd = -1;
+			resultConcavePointsIdxArray.push(i);
+		}
+		else if(crossProd > 0.0) {
+			crossProd = 1;
+		}
+		// calcule by cos.***
+		// cosAlfa = scalarProd / (strModul * endModul); (but strVecModul = 1 & endVecModul = 1), so:
+		var cosAlfa = scalarProd;
+		var alfa = Math.acos(cosAlfa);
+		this.normal += (crossProd * alfa);
+	}
+	
+	if(this.normal > 0 )
+		this.normal = 1;
+	else
+		this.normal = -1;
+	
+	return resultConcavePointsIdxArray;
+};
+
+
+Polygon.prototype.tessellate = function(concaveVerticesIndices, convexPolygonsArray)
+{
+	var concaveVerticesCount = concaveVerticesIndices.length;
+	
+	if(concaveVerticesCount === 0)
+	{
+		convexPolygonsArray.push(this);
+		return convexPolygonsArray;
+	}
+	
+	// now, for any concave vertex, find the closest vertex to split the polygon.***
+	var find = false;
+	var idx_B;
+	var i=0;
+	
+	while(!find && i<concaveVerticesCount)
+	{
+		var idx = concaveVerticesIndices[i];
+		var point = this.point2dList.getPoint(idx);
+		var resultSortedPointsIdxArray = [];
+		
+		// get vertices indices sorted by distance to "point".***
+		this.getPointsIdxSortedByDistToPoint(point, resultSortedPointsIdxArray);
+		
+		var sortedVerticesCount = resultSortedPointsIdxArray.length;
+		var j=0;
+		while(!find && j<sortedVerticesCount)
+		{
+			idx_B = resultSortedPointsIdxArray[j];
+			
+			// skip adjacent vertices.***
+			if(this.point2dList.getPrevIdx(idx) === idx_B || this.point2dList.getNextIdx(idx) === idx_B)
+			{
+				j++;
+				continue;
+			}
+			
+			// check if is splittable by idx-idx_B.***
+			var segment = new Segment2D(this.point2dList.getPoint(idx), this.point2dList.getPoint(idx_B));
+			if(this.intersectionWithSegment(segment))
+			{
+				j++;
+				continue;
+			}
+			
+			var resultSplittedPolygons = this.splitPolygon(idx, idx_B);
+			
+			if(resultSplittedPolygons.length < 2)
+			{
+				j++;
+				continue;
+			}
+			
+			// now, compare splittedPolygon's normals with myNormal.***
+			var polygon_A = resultSplittedPolygons[0];
+			var polygon_B = resultSplittedPolygons[1];
+			var concavePoints_A = polygon_A.calculateNormal();
+			var concavePoints_B = polygon_B.calculateNormal();
+			
+			var normal_A = polygon_A.normal;
+			var normal_B = polygon_B.normal;
+			if(normal_A === this.normal && normal_B === this.normal)
+			{
+				find = true;
+				// polygon_A.***
+				if(concavePoints_A.length > 0)
+				{
+					convexPolygonsArray = polygon_A.tessellate(concavePoints_A, convexPolygonsArray);
+				}
+				else{
+					if(convexPolygonsArray === undefined)
+						convexPolygonsArray = [];
+					
+					convexPolygonsArray.push(polygon_A);
+				}
+				
+				// polygon_B.***
+				if(concavePoints_B.length > 0)
+				{
+					convexPolygonsArray = polygon_B.tessellate(concavePoints_B, convexPolygonsArray);
+				}
+				else{
+					if(convexPolygonsArray === undefined)
+						convexPolygonsArray = [];
+					
+					convexPolygonsArray.push(polygon_B);
+				}
+			}
+			
+			j++;
+		}
+		i++;
+	}
+	
+	return convexPolygonsArray;
+};
+
+Polygon.prototype.intersectionWithSegment = function(segment)
+{
+	// "segment" cut a polygons edge.***
+	// "segment" coincident with a polygons vertex.***
+	if(this.bRect !== undefined)
+	{
+		// if exist boundary rectangle, check bRect intersection.***
+		var segmentsBRect = segment.getBoundaryRectangle(segmentsBRect);
+		if(!this.bRect.intersectsWithRectangle(segmentsBRect))
+			return false;
+	}
+	
+	// 1rst check if the segment is coincident with any polygons vertex.***
+	var mySegment;
+	var intersectionType;
+	var error = 10E-8;
+	var pointsCount = this.point2dList.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		mySegment = this.point2dList.getSegment(i, mySegment);
+		
+		// if segment shares points, then must not cross.***
+		if(segment.sharesPointsWithSegment(mySegment))
+		{
+			continue;
+		}
+		
+		if(segment.intersectionWithSegment(mySegment, error))
+		{
+			return true;
+		}
+	}
+	
+	return false;
+};
+
+Polygon.prototype.splitPolygon = function(idx1, idx2, resultSplittedPolygonsArray)
+{
+	if(resultSplittedPolygonsArray === undefined)
+		resultSplittedPolygonsArray = [];
+	
+	// polygon A. idx1 -> idx2.***
+	var polygon_A = new Polygon();
+	polygon_A.point2dList = new Point2DList();
+	polygon_A.point2dList.pointsArray = [];
+	
+	// 1rst, put vertex1 & vertex2 in to the polygon_A.***
+	polygon_A.point2dList.pointsArray.push(this.point2dList.getPoint(idx1));
+	polygon_A.point2dList.pointsArray.push(this.point2dList.getPoint(idx2));
+	
+	var finished = false;
+	var currIdx = idx2;
+	var startIdx = idx1;
+	var i=0;
+	var totalPointsCount = this.point2dList.getPointsCount();
+	while(!finished && i<totalPointsCount)
+	{
+		var nextIdx = this.point2dList.getNextIdx(currIdx);
+		if(nextIdx === startIdx)
+		{
+			finished = true;
+		}
+		else{
+			polygon_A.point2dList.pointsArray.push(this.point2dList.getPoint(nextIdx));
+			currIdx = nextIdx;
+		}
+		i++;
+	}
+	
+	resultSplittedPolygonsArray.push(polygon_A);
+	
+	// polygon B. idx2 -> idx1.***
+	var polygon_B = new Polygon();
+	polygon_B.point2dList = new Point2DList();
+	polygon_B.point2dList.pointsArray = [];
+	
+	// 1rst, put vertex2 & vertex1 in to the polygon_B.***
+	polygon_B.point2dList.pointsArray.push(this.point2dList.getPoint(idx2));
+	polygon_B.point2dList.pointsArray.push(this.point2dList.getPoint(idx1));
+	
+	finished = false;
+	currIdx = idx1;
+	startIdx = idx2;
+	i=0;
+	while(!finished && i<totalPointsCount)
+	{
+		var nextIdx = this.point2dList.getNextIdx(currIdx);
+		if(nextIdx === startIdx)
+		{
+			finished = true;
+		}
+		else{
+			polygon_B.point2dList.pointsArray.push(this.point2dList.getPoint(nextIdx));
+			currIdx = nextIdx;
+		}
+		i++;
+	}
+	
+	resultSplittedPolygonsArray.push(polygon_B);
+	return resultSplittedPolygonsArray;
+};
+
+Polygon.prototype.getPointsIdxSortedByDistToPoint = function(thePoint, resultSortedPointsIdxArray)
+{
+	// Static function.***
+	// Sorting minDist to maxDist.***
+	if(resultSortedPointsIdxArray === undefined)
+		resultSortedPointsIdxArray = [];
+	
+	resultSortedPointsIdxArray = this.point2dList.getPointsIdxSortedByDistToPoint(thePoint, resultSortedPointsIdxArray);
+	
+	return resultSortedPointsIdxArray;
+};
+
+Polygon.prototype.getTrianglesConvexPolygon = function(resultTrianglesArray)
+{
+	// PROVISIONAL.***
+	// in this case, consider the polygon is convex.***
+	if(resultTrianglesArray === undefined)
+		resultTrianglesArray = [];
+
+	var pointsCount = this.point2dList.getPointsCount();
+	if(pointsCount <3)
+		return resultTrianglesArray;
+	
+	var triangle;
+	for(var i=1; i<pointsCount-1; i++)
+	{
+		triangle = new Triangle();
+		
+		var point0idx = this.point2dList.getPoint(0).idxInList;
+		var point1idx = this.point2dList.getPoint(i).idxInList;
+		var point2idx = this.point2dList.getPoint(i+1).idxInList;
+		
+		triangle.vtxIdx0 = point0idx;
+		triangle.vtxIdx1 = point1idx;
+		triangle.vtxIdx2 = point2idx;
+		
+		resultTrianglesArray.push(triangle);
+	}
+	
+	return resultTrianglesArray;
+};
+
+Polygon.prototype.getVbo = function(resultVbo)
+{
+	// PROVISIONAL.***
+	// return positions, normals and indices.***
+	if(resultVbo === undefined)
+		resultVbo = new VBOVertexIdxCacheKey();
+	
+	// 1rst, obtain pos, nor.***
+	var posArray = [];
+	var norArray = [];
+	var point;
+	var normal;
+	if(this.normal > 0)
+		normal = 1;
+	else
+		normal = -1;
+		
+	var pointsCount = this.point2dList.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		point = this.point2dList.getPoint(i);
+		
+		posArray.push(point.x);
+		posArray.push(point.y);
+		posArray.push(0.0);
+		
+		norArray.push(0);
+		norArray.push(0);
+		norArray.push(normal*255);
+	}
+	
+	resultVbo.posVboDataArray = Float32Array.from(posArray);
+	resultVbo.norVboDataArray = Int8Array.from(norArray);
+	
+	// now calculate triangles indices.***
+	this.point2dList.setIdxInList(); // use this function instead a map.***
+	
+	var trianglesArray = [];
+	var convexPolygonsCount = this.convexPolygonsArray.length;
+	for(var i=0; i<convexPolygonsCount; i++)
+	{
+		var convexPolygon = this.convexPolygonsArray[i];
+		trianglesArray = convexPolygon.getTrianglesConvexPolygon(trianglesArray); // provisional.***
+	}
+	TrianglesList.getVboFaceDataArray(trianglesArray, resultVbo);
+
+	return resultVbo;
+};
+
+Polygon.getVbo = function(concavePolygon, convexPolygonsArray, resultVbo)
+{
+	// PROVISIONAL.***
+	// return positions, normals and indices.***
+	if(resultVbo === undefined)
+		resultVbo = new VBOVertexIdxCacheKey();
+	
+	// 1rst, obtain pos, nor.***
+	var posArray = [];
+	var norArray = [];
+	var point;
+	var normal;
+	if(concavePolygon.normal > 0)
+		normal = 1;
+	else
+		normal = -1;
+		
+	var pointsCount = concavePolygon.point2dList.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		point = concavePolygon.point2dList.getPoint(i);
+		
+		posArray.push(point.x);
+		posArray.push(point.y);
+		posArray.push(0.0);
+		
+		norArray.push(0);
+		norArray.push(0);
+		norArray.push(normal*255);
+	}
+	
+	resultVbo.posVboDataArray = Float32Array.from(posArray);
+	resultVbo.norVboDataArray = Int8Array.from(norArray);
+	
+	// now calculate triangles indices.***
+	concavePolygon.point2dList.setIdxInList(); // use this function instead a map.***
+	
+	var trianglesArray = [];
+	var convexPolygonsCount = convexPolygonsArray.length;
+	for(var i=0; i<convexPolygonsCount; i++)
+	{
+		var convexPolygon = convexPolygonsArray[i];
+		trianglesArray = convexPolygon.getTrianglesConvexPolygon(trianglesArray); // provisional.***
+	}
+	TrianglesList.getVboFaceDataArray(trianglesArray, resultVbo);
+
+	return resultVbo;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class PolyLine
+ */
+var PolyLine = function() 
+{
+	if (!(this instanceof PolyLine)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.point2dArray;
+};
+
+/**
+ * Creates a new Point2D.
+ * @class PolyLine
+ */
+PolyLine.prototype.newPoint2d = function(x, y)
+{
+	if (this.point2dArray === undefined)
+	{ this.point2dArray = []; }
+	
+	var point2d = new Point2D(x, y);
+	this.point2dArray.push(point2d);
+	return point2d;
+};
+
+/**
+ * Creates a new Point2D.
+ * @class PolyLine
+ */
+PolyLine.prototype.deleteObjects = function()
+{
+	var pointsCount = this.point2dArray.length;
+	for (var i=0; i<pointsCount; i++)
+	{
+		this.point2dArray[i].deleteObjects();
+		this.point2dArray[i] = undefined;
+	}
+	this.point2dArray = undefined;
+};
+
+/**
+ * Creates a new Point2D.
+ * @class PolyLine
+ */
+PolyLine.prototype.getPoints = function(resultPointsArray)
+{
+	if (resultPointsArray === undefined)
+	{ resultPointsArray = []; }
+	
+	var point;
+	var errorDist = 10E-8;
+	var resultExistentPointsCount = resultPointsArray.length;
+	var pointsCount = this.point2dArray.length;
+	for (var i=0; i<pointsCount; i++)
+	{
+		if(i===0)
+		{
+			if(resultExistentPointsCount > 0)
+			{
+				// check if the last point of "resultPointsArray" and the 1rst point of "this" is coincident.***
+				var lastExistentPoint = resultPointsArray[resultExistentPointsCount-1];
+				var point0 = this.point2dArray[i];
+				if(!lastExistentPoint.isCoincidentToPoint(point0, errorDist))
+				{
+					point = new Point2D();
+					point.copyFrom(this.point2dArray[i]); 
+					point.pointType = 1; // mark as "important point".***
+					resultPointsArray.push(point);
+				}
+			}
+			else
+			{
+				point = new Point2D();
+				point.copyFrom(this.point2dArray[i]); 
+				point.pointType = 1; // mark as "important point".***
+				resultPointsArray.push(point);
+			}
+		}
+		else
+		{
+			point = new Point2D();
+			point.copyFrom(this.point2dArray[i]); 
+			point.pointType = 1; // mark as "important point".***
+			resultPointsArray.push(point);
+		}
+	}
+	
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Profile
+ */
+var Profile = function() 
+{
+	if (!(this instanceof Profile)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.outerRing; // one Ring. 
+	this.innerRingsList; // class: RingsList. 
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.newOuterRing = function() 
+{
+	if (this.outerRing === undefined)
+	{ this.outerRing = new Ring(); }
+	else{
+		this.outerRing.deleteObjects();
+	}
+	
+	return this.outerRing;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.newInnerRing = function() 
+{
+	if (this.innerRingsList === undefined)
+	{ this.innerRingsList = new RingsList(); }
+	
+	var innerRing = this.innerRingsList.newRing();
+	
+	return innerRing;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.deleteObjects = function() 
+{
+	if (this.outerRing)
+	{
+		this.outerRing.deleteObjects();
+		this.outerRing = undefined;
+	}
+
+	if (this.innerRingsList)
+	{
+		this.innerRingsList.deleteObjects();
+		this.innerRingsList = undefined;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+
+Profile.prototype.hasHoles = function() 
+{
+	if(this.innerRingsList === undefined || this.innerRingsList.getRingsCount() === 0)
+		return false;
+	
+	return true;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+ 
+Profile.prototype.getVBO = function(resultVbo) 
+{
+	if(this.outerRing === undefined)
+		return resultVbo;
+	
+	var generalPolygon = this.getGeneralPolygon(undefined);
+	generalPolygon.getVbo(resultVbo);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+ 
+Profile.prototype.getConvexFacesIndicesData = function(resultGeneralIndicesData) 
+{
+	if(this.outerRing === undefined)
+		return resultVbo;
+	
+	var generalPolygon = this.getGeneralPolygon(undefined);
+	
+	if(resultGeneralIndicesData === undefined)
+		resultGeneralIndicesData = [];
+	
+	// 1rst, set idxInList all points.***
+	this.outerRing.polygon.point2dList.setIdxInList();
+	
+	if(this.innerRingsList !== undefined)
+	{
+		var innerRingsCount = this.innerRingsList.getRingsCount();
+		for(var i=0; i<innerRingsCount; i++)
+		{
+			var innerRing = this.innerRingsList.getRing(i);
+			innerRing.polygon.point2dList.setIdxInList();
+		}
+	}
+	
+	var convexDatas;
+	var convexPolygon;
+	var indexData;
+	var currRing;
+	var ringIdxInList;
+	var point;
+	var convexPolygonsCount = generalPolygon.convexPolygonsArray.length;
+	for(var i=0; i<convexPolygonsCount; i++)
+	{
+		convexPolygon = generalPolygon.convexPolygonsArray[i];
+		convexDatas = [];
+		var pointsCount = convexPolygon.point2dList.getPointsCount();
+		for(var j=0; j<pointsCount; j++)
+		{
+			point = convexPolygon.point2dList.getPoint(j);
+			indexData = point.indexData;
+			currRing = indexData.owner;
+			indexData.idxInList = point.idxInList;
+			if(currRing === this.outerRing)
+			{
+				ringIdxInList = -1;
+			}
+			else{
+				ringIdxInList = this.innerRingsList.getRingIdx(currRing);
+			}
+			indexData.ownerIdx = ringIdxInList;
+			convexDatas.push(indexData);
+		}
+		resultGeneralIndicesData.push(convexDatas);
+	}
+	
+	return resultGeneralIndicesData;
+};
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+ 
+Profile.prototype.getGeneralPolygon = function(generalPolygon) 
+{
+	// this returns a holesTessellatedPolygon, and inside it has convexPolygons.***
+	this.checkNormals(); // here makes outer & inner's polygons.***
+	
+	if(!this.hasHoles())
+	{
+		// Simply, put all points of outerPolygon into generalPolygon(computingPolygon).***
+		if(generalPolygon === undefined)
+			generalPolygon = new Polygon();
+		
+		if(generalPolygon.point2dList === undefined)
+			generalPolygon.point2dList = new Point2DList();
+		
+		var outerPolygon = this.outerRing.polygon;
+		var point;
+		var outerPointsCount = outerPolygon.point2dList.getPointsCount();
+		for(var i=0; i<outerPointsCount; i++)
+		{
+			point = outerPolygon.point2dList.getPoint(i);
+			generalPolygon.point2dList.addPoint(outerPolygon.point2dList.getPoint(i));
+		}
+	}
+	else{
+		// 1rst, check normals congruences.***
+		generalPolygon = this.tessellateHoles(generalPolygon);
+	}
+	
+	generalPolygon.convexPolygonsArray = [];
+	var concavePointsIndices = generalPolygon.calculateNormal(concavePointsIndices);
+	generalPolygon.convexPolygonsArray = generalPolygon.tessellate(concavePointsIndices, generalPolygon.convexPolygonsArray);
+	
+	return generalPolygon;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.eliminateHolePolygonBySplitPoints = function(outerPolygon, innerPolygon, outerPointIdx, innerPointIdx, resultPolygon) 
+{
+	if(resultPolygon === undefined)
+		resultPolygon = new Polygon();
+	
+	if(resultPolygon.point2dList === undefined)
+		resultPolygon.point2dList = new Point2DList();
+	
+	// 1rst, copy in newPolygon the outerPolygon.***
+	var outerPointsCount = outerPolygon.point2dList.getPointsCount();
+	var finished = false;
+	var i=0;
+	var newPoint;
+	var outerPoint;
+	var currIdx = outerPointIdx;
+	
+	while(!finished && i<outerPointsCount)
+	{
+		outerPoint = outerPolygon.point2dList.getPoint(currIdx);
+		resultPolygon.point2dList.addPoint(outerPoint);
+		
+		currIdx = outerPolygon.point2dList.getNextIdx(currIdx);
+		if(currIdx === outerPointIdx)
+		{
+			finished = true;
+			
+			// must add the firstPoint point.***
+			outerPoint = outerPolygon.point2dList.getPoint(currIdx);
+			resultPolygon.point2dList.addPoint(outerPoint);
+		}
+		
+		i++;
+	}
+	// now add innerPolygon's points.***
+	var innerPointsCount = innerPolygon.point2dList.getPointsCount();
+	finished = false;
+	i=0;
+	newPoint;
+	var innerPoint;
+	currIdx = innerPointIdx;
+	while(!finished && i<innerPointsCount)
+	{
+		innerPoint = innerPolygon.point2dList.getPoint(currIdx);
+		resultPolygon.point2dList.addPoint(innerPoint);
+		
+		currIdx = innerPolygon.point2dList.getNextIdx(currIdx);
+		if(currIdx === innerPointIdx)
+		{
+			finished = true;
+			// must add the firstPoint point.***
+			innerPoint = innerPolygon.point2dList.getPoint(currIdx);
+			resultPolygon.point2dList.addPoint(innerPoint);
+		}
+		
+		i++;
+	}
+	
+	return resultPolygon;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.eliminateHolePolygon = function(computingPolygon, innerRing, innerPointIdx, resultPolygon) 
+{
+	// 1rst, make a sorted by dist of points of outer to "innerPoint".***
+	var resultSortedPointsIdxArray = [];
+	var innerPolygon = innerRing.polygon;
+	var innerPoint = innerPolygon.point2dList.getPoint(innerPointIdx);
+	resultSortedPointsIdxArray = computingPolygon.getPointsIdxSortedByDistToPoint(innerPoint, resultSortedPointsIdxArray);
+	
+	var outerSortedPointsCount = resultSortedPointsIdxArray.length;
+	var splitSegment = new Segment2D();;
+	var finished = false;
+	var i=0;
+	var outPointIdx;
+	var outPoint;
+	while(!finished && i<outerSortedPointsCount)
+	{
+		outPointIdx = resultSortedPointsIdxArray[i];
+		outPoint = computingPolygon.point2dList.getPoint(outPointIdx);
+		splitSegment.setPoints(outPoint, innerPoint);
+		
+		// check if splitSegment intersects the computingPolygon or any innerPolygons.***
+		if(computingPolygon.intersectionWithSegment(splitSegment) || innerPolygon.intersectionWithSegment(splitSegment))
+		{
+			i++;
+			continue;
+		}
+		
+		resultPolygon = this.eliminateHolePolygonBySplitPoints(computingPolygon, innerPolygon, outPointIdx, innerPointIdx, resultPolygon);
+		finished = true;
+		
+		i++;
+	}
+	
+	if(!finished)
+		return false;
+	
+	return true;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.tessellateHoles = function(resultHolesEliminatedPolygon) 
+{
+	if(this.outerRing === undefined)
+		return resultHolesEliminatedPolygon;
+	
+	if(!this.hasHoles())
+		return resultHolesEliminatedPolygon;
+	
+	if(resultHolesEliminatedPolygon === undefined)
+		resultHolesEliminatedPolygon = new Polygon();
+	
+	var hole;
+	var holeIdx;
+	var holePolygon;
+	var objectAux;
+	var innerPointIdx;
+	var innersBRect;
+	
+	// prepare outerRing if necessary.***
+	var outerRing = this.outerRing;
+	if(outerRing.polygon === undefined)
+		outerRing.makePolygon();
+	var outerPolygon = outerRing.polygon;
+	var concavePointsIndices = outerPolygon.calculateNormal(concavePointsIndices);
+	
+	// make a innerRingsArray copy.***
+	var innerRingsArray = [];
+	var innerRingsCount = this.innerRingsList.getRingsCount();
+	for(var i=0; i<innerRingsCount; i++)
+	{
+		innerRingsArray.push(this.innerRingsList.getRing(i));
+	}
+	
+	var resultPolygon = new Polygon();
+	var computingPolygon = new Polygon();
+	computingPolygon.point2dList = new Point2DList();
+	
+	// put all points of outerPolygon into computingPolygon.***
+	var indexData;
+	var point;
+	var outerPointsCount = outerPolygon.point2dList.getPointsCount();
+	for(var i=0; i<outerPointsCount; i++)
+	{
+		point = outerPolygon.point2dList.getPoint(i);
+		//point.owner
+		computingPolygon.point2dList.addPoint(outerPolygon.point2dList.getPoint(i));
+	}
+	
+	var innersBRectLeftDownPoint = new Point2D();
+	var objectsArray = [];
+	
+	// now, for each innerRing, try to merge to outerRing by splitSegment.***
+	var innerRingsCount = innerRingsArray.length;
+	var i=0;
+	var finished = false;
+	while(!finished && i<innerRingsCount)
+	{
+		// calculate the most left-down innerRing.***
+		innersBRect = RingsList.getBoundingRectangle(innerRingsArray, innersBRect);
+		innersBRectLeftDownPoint.set(innersBRect.minX, innersBRect.minY);
+		
+		objectsArray.length = 0; // init.***
+		objectsArray = RingsList.getSortedRingsByDistToPoint(innersBRectLeftDownPoint, innerRingsArray, objectsArray);
+	
+		objectAux = objectsArray[0];
+		hole = objectAux.ring;
+		holeIdx = objectAux.ringIdx;
+		holePolygon = hole.polygon;
+		innerPointIdx = objectAux.pointIdx;
+		holePolygon.calculateNormal();
+		
+		if(this.eliminateHolePolygon(computingPolygon, hole, innerPointIdx, resultPolygon))
+		{
+			computingPolygon = resultPolygon;
+			
+			if(innerRingsArray.length == 1)
+			{
+				finished = true;
+				break;
+			}
+			// erase the hole from innerRingsArray.***
+			innerRingsArray.splice(holeIdx, 1);
+			resultPolygon = new Polygon();
+		}
+		i++;
+	}
+	resultHolesEliminatedPolygon = computingPolygon;
+	return resultHolesEliminatedPolygon;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.checkNormals = function() 
+{
+	if(this.outerRing === undefined)
+		return;
+	
+	// 1rst, calculate the outerNormal.***
+	var outerRing = this.outerRing;
+	if(outerRing.polygon === undefined)
+		outerRing.makePolygon();
+	var outerPolygon = outerRing.polygon;
+	var concavePointsIndices = outerPolygon.calculateNormal(concavePointsIndices);
+	var outerNormal = outerPolygon.normal;
+	
+	if(this.innerRingsList === undefined)
+		return;
+	
+	// if there are inners, the innerNormals must be inverse of the outerNormal.***
+	var innerRing;
+	var innerPolygon;
+	var innerNormal;
+	var innersCount = this.innerRingsList.getRingsCount();
+	for(var i=0; i<innersCount; i++)
+	{
+		innerRing = this.innerRingsList.getRing(i);
+		if(innerRing.polygon === undefined)
+			innerRing.makePolygon();
+		var innerPolygon = innerRing.polygon;
+		innerPolygon.calculateNormal();
+		var innerNormal = innerPolygon.normal;
+		
+		if(innerNormal === outerNormal)
+		{
+			// then reverse innerPolygon.***
+			innerPolygon.reverseSense();
+			innerPolygon.normal = -innerNormal;
+		}
+		
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigure_1 = function() 
+{
+	// complicated polygon with multiple holes.***
+	var polyLine;
+	var arc;
+	var circle;
+	var rect;
+	var point3d;
+	var star;
+	
+	// Outer ring.**************************************
+	var outerRing = this.newOuterRing();
+	/*
+	star = outerRing.newElement("STAR");
+	star.setCenterPosition(-6.5, -14);
+	star.setRadiusCount(5);
+	star.setInteriorRadius(1.2);
+	star.setExteriorRadius(3);
+	*/
+	
+	var arrowLength = 20;
+	var arrowWidth  = 2;
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(0,0); // 0
+	point3d = polyLine.newPoint2d(arrowWidth*0.25, arrowLength*0.25); // 1
+	point3d = polyLine.newPoint2d(arrowWidth*0.25, arrowLength*0.75); // 2
+	point3d = polyLine.newPoint2d(arrowWidth*0.5, arrowLength*0.75); // 3
+	point3d = polyLine.newPoint2d(0, arrowLength); // 3
+	
+	/*
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(-8, -11);
+	arc.setRadius(5);
+	arc.setStartAngleDegree(180.0);
+	arc.setSweepAngleDegree(90.0);
+	arc.numPointsFor360Deg = 24;
+	*/
+	
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+Profile.prototype.TEST__setFigureHole_2 = function() 
+{
+	// complicated polygon with multiple holes.***
+	var polyLine;
+	var arc;
+	var circle;
+	var rect;
+	var point3d;
+	var star;
+	
+	// Outer ring.**************************************
+	var outerRing = this.newOuterRing();
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-13, 3); // 0
+	point3d = polyLine.newPoint2d(-13, -11); // 1
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(-8, -11);
+	arc.setRadius(5);
+	arc.setStartAngleDegree(180.0);
+	arc.setSweepAngleDegree(90.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-8, -16); // 0
+	point3d = polyLine.newPoint2d(-5, -16); // 1
+	point3d = polyLine.newPoint2d(-3, -15); // 2
+	point3d = polyLine.newPoint2d(-3, -14); // 3
+	point3d = polyLine.newPoint2d(-5, -12); // 4
+	point3d = polyLine.newPoint2d(-3, -11); // 5
+	point3d = polyLine.newPoint2d(-2, -9); // 6
+	point3d = polyLine.newPoint2d(3, -9); // 7
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(9, -9);
+	arc.setRadius(6);
+	arc.setStartAngleDegree(180.0);
+	arc.setSweepAngleDegree(180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(15, -9); // 0
+	point3d = polyLine.newPoint2d(16, -9); // 1
+	point3d = polyLine.newPoint2d(16, 4); // 2
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(11, 4);
+	arc.setRadius(5);
+	arc.setStartAngleDegree(0.0);
+	arc.setSweepAngleDegree(90.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(11, 9); // 0
+	point3d = polyLine.newPoint2d(4, 9); // 1
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(4, 11);
+	arc.setRadius(2);
+	arc.setStartAngleDegree(-90.0);
+	arc.setSweepAngleDegree(-180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(4, 13); // 0
+	point3d = polyLine.newPoint2d(9, 13); // 1
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(9, 14.5);
+	arc.setRadius(1.5);
+	arc.setStartAngleDegree(-90.0);
+	arc.setSweepAngleDegree(180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(9, 16); // 0
+	point3d = polyLine.newPoint2d(2, 16); // 1
+	point3d = polyLine.newPoint2d(0, 14); // 2
+	point3d = polyLine.newPoint2d(-4, 16); // 3
+	point3d = polyLine.newPoint2d(-9, 16); // 4
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(-9, 14);
+	arc.setRadius(2);
+	arc.setStartAngleDegree(90.0);
+	arc.setSweepAngleDegree(180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-9, 12); // 0
+	point3d = polyLine.newPoint2d(-6, 12); // 1
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(-6, 10.5);
+	arc.setRadius(1.5);
+	arc.setStartAngleDegree(90.0);
+	arc.setSweepAngleDegree(-180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = outerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-6, 9); // 0
+	point3d = polyLine.newPoint2d(-7, 9); // 1
+	
+	arc = outerRing.newElement("ARC");
+	arc.setCenterPosition(-7, 3);
+	arc.setRadius(6);
+	arc.setStartAngleDegree(90.0);
+	arc.setSweepAngleDegree(90.0);
+	arc.numPointsFor360Deg = 24;
+	
+	// Holes.**************************************************
+	// Hole 1.*************************************************
+	var innerRing = this.newInnerRing();
+	
+	polyLine = innerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(-9, 3); // 0
+	point3d = polyLine.newPoint2d(-10, -4); // 1
+	point3d = polyLine.newPoint2d(-10, -8); // 2
+	point3d = polyLine.newPoint2d(-8, -11); // 3
+	point3d = polyLine.newPoint2d(-3, -7); // 4
+	point3d = polyLine.newPoint2d(4, -7); // 5
+	
+	arc = innerRing.newElement("ARC");
+	arc.setCenterPosition(8, -7);
+	arc.setRadius(4);
+	arc.setStartAngleDegree(180.0);
+	arc.setSweepAngleDegree(180.0);
+	arc.numPointsFor360Deg = 24;
+	
+	polyLine = innerRing.newElement("POLYLINE");
+	point3d = polyLine.newPoint2d(12, -7); // 0
+	point3d = polyLine.newPoint2d(12, -4); // 1
+	point3d = polyLine.newPoint2d(8, -10); // 2
+	point3d = polyLine.newPoint2d(4, -5); // 3
+	point3d = polyLine.newPoint2d(-8, -5); // 4
+	point3d = polyLine.newPoint2d(-7, 4); // 5
+	point3d = polyLine.newPoint2d(9, 4); // 6
+	point3d = polyLine.newPoint2d(9, -5); // 7
+	point3d = polyLine.newPoint2d(14, 2); // 8
+	point3d = polyLine.newPoint2d(13, 2); // 9
+	point3d = polyLine.newPoint2d(11, 0); // 10
+	point3d = polyLine.newPoint2d(11, 7); // 11
+	point3d = polyLine.newPoint2d(13, 8); // 12
+	point3d = polyLine.newPoint2d(5, 8); // 13
+	point3d = polyLine.newPoint2d(9, 6); // 14
+	point3d = polyLine.newPoint2d(-6, 6); // 15
+	
+	arc = innerRing.newElement("ARC");
+	arc.setCenterPosition(-6, 3);
+	arc.setRadius(3);
+	arc.setStartAngleDegree(90.0);
+	arc.setSweepAngleDegree(90.0);
+	arc.numPointsFor360Deg = 24;
+	
+	// Hole 2.*************************************************
+	innerRing = this.newInnerRing();
+	circle = innerRing.newElement("CIRCLE");
+	circle.setCenterPosition(-10, -13);
+	circle.setRadius(1);
+	
+	// Hole 3.*************************************************
+	innerRing = this.newInnerRing();
+	star = innerRing.newElement("STAR");
+	star.setCenterPosition(-6.5, -14);
+	star.setRadiusCount(5);
+	star.setInteriorRadius(0.6);
+	star.setExteriorRadius(2);
+
+	// Hole 4.*************************************************
+	innerRing = this.newInnerRing();
+	star = innerRing.newElement("STAR");
+	star.setCenterPosition(-9, 14);
+	star.setRadiusCount(6);
+	star.setInteriorRadius(0.5);
+	star.setExteriorRadius(1.5);
+	
+	// Hole 5.*************************************************
+	innerRing = this.newInnerRing();
+	rect = innerRing.newElement("RECTANGLE");
+	rect.setCenterPosition(-4.5, 1.5);
+	rect.setDimensions(3, 3);
+	
+	// Hole 6.*************************************************
+	innerRing = this.newInnerRing();
+	circle = innerRing.newElement("CIRCLE");
+	circle.setCenterPosition(-4.5, -2.5);
+	circle.setRadius(2);
+	
+	// Hole 7.*************************************************
+	innerRing = this.newInnerRing();
+	star = innerRing.newElement("STAR");
+	star.setCenterPosition(0, 0);
+	star.setRadiusCount(5);
+	star.setInteriorRadius(1);
+	star.setExteriorRadius(2.5);
+	
+	// Hole 8.*************************************************
+	innerRing = this.newInnerRing();
+	circle = innerRing.newElement("CIRCLE");
+	circle.setCenterPosition(-6, 14);
+	circle.setRadius(1.5);
+	
+	// Hole 9.*************************************************
+	innerRing = this.newInnerRing();
+	star = innerRing.newElement("STAR");
+	star.setCenterPosition(-1.5, 11);
+	star.setRadiusCount(12);
+	star.setInteriorRadius(0.6);
+	star.setExteriorRadius(2);
+	
+	// Hole 10.*************************************************
+	innerRing = this.newInnerRing();
+	star = innerRing.newElement("STAR");
+	star.setCenterPosition(13.5, 5);
+	star.setRadiusCount(25);
+	star.setInteriorRadius(0.4);
+	star.setExteriorRadius(1.5);
+	
+	// Hole 11.*************************************************
+	innerRing = this.newInnerRing();
+	star = innerRing.newElement("STAR");
+	star.setCenterPosition(9, -13);
+	star.setRadiusCount(10);
+	star.setInteriorRadius(0.4);
+	star.setExteriorRadius(1.5);
+	
+	// Hole 12.*************************************************
+	innerRing = this.newInnerRing();
+	star = innerRing.newElement("STAR");
+	star.setCenterPosition(5.5, 1.5);
+	star.setRadiusCount(7);
+	star.setInteriorRadius(0.7);
+	star.setExteriorRadius(2);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class ProfilesList
+ */
+var ProfilesList = function() 
+{
+	if (!(this instanceof ProfilesList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.profilesArray;
+	this.auxiliarAxis;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+ProfilesList.prototype.newProfile = function() 
+{
+	if (this.profilesArray === undefined)
+	{ this.profilesArray = []; }
+	
+	var profile = new Profile();
+	this.profilesArray.push(profile);
+	return profile;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+ProfilesList.prototype.deleteObjects = function() 
+{
+	if (this.profilesArray)
+	{
+		var profilesCount = this.profilesArray.length;
+		for (var i=0; i<profilesCount; i++)
+		{
+			this.profilesArray[i].deleteObjects();
+			this.profilesArray = undefined;
+		}
+		this.profilesArray = undefined;
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class Rectangle
+*/
+var Rectangle = function() 
+{
+	if (!(this instanceof Rectangle)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.centerPoint;
+	this.width;
+	this.height;
+};
+
+Rectangle.prototype.setCenterPosition = function(cx, cy)
+{
+	if(this.centerPoint === undefined)
+		this.centerPoint = new Point2D();
+	
+	this.centerPoint.set(cx, cy);
+};
+
+Rectangle.prototype.setDimensions = function(width, height)
+{
+	this.width = width;
+	this.height = height;
+};
+
+/**
+ * Returns the points of the Rectangle.
+ * @class Rectangle
+ */
+Rectangle.prototype.getPoints = function(resultPointsArray)
+{
+	if(this.centerPoint === undefined || this.width === undefined || this.height === undefined)
+		return resultPointsArray;
+	
+	if(resultPointsArray === undefined)
+		resultPointsArray = [];
+	
+	var point;
+	var halfWidth = this.width / 2;
+	var halfHeight = this.height / 2;
+	
+	// starting in left-down corner, go in CCW.***
+	point = new Point2D(this.centerPoint.x - halfWidth, this.centerPoint.y - halfHeight);
+	point.pointType = 1; // mark as "important point".***
+	resultPointsArray.push(point);
+	
+	point = new Point2D(this.centerPoint.x + halfWidth, this.centerPoint.y - halfHeight);
+	point.pointType = 1; // mark as "important point".***
+	resultPointsArray.push(point);
+	
+	point = new Point2D(this.centerPoint.x + halfWidth, this.centerPoint.y + halfHeight);
+	point.pointType = 1; // mark as "important point".***
+	resultPointsArray.push(point);
+	
+	point = new Point2D(this.centerPoint.x - halfWidth, this.centerPoint.y + halfHeight);
+	point.pointType = 1; // mark as "important point".***
+	resultPointsArray.push(point);
+	
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Ring
+ */
+var Ring = function() 
+{
+	if (!(this instanceof Ring)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.elemsArray;
+	this.polygon; // auxiliar.***
+};
+
+/**
+ * @class Ring
+ */
+Ring.prototype.deleteObjects = function()
+{
+	if(this.elemsArray !== undefined)
+	{
+		var elemsCount = this.elemsArray.length;
+		for(var i=0; i<elemsCount; i++)
+		{
+			this.elemsArray[i].deleteObjects();
+			this.elemsArray[i] = undefined;
+		}
+		this.elemsArray = undefined;
+	}
+	
+	if(this.polygon !== undefined)
+		this.polygon.deleteObjects();
+	
+	this.polygon = undefined;
+};
+
+/**
+ * @class Ring
+ */
+Ring.prototype.newElement = function(elementTypeString)
+{
+	var elem;
+	
+	if (elementTypeString === "ARC")
+		elem = new Arc();
+	else if (elementTypeString === "CIRCLE")
+		elem = new Circle();
+	else if (elementTypeString === "POLYLINE")
+		elem = new PolyLine();
+	else if (elementTypeString === "RECTANGLE")
+		elem = new Rectangle();
+	else if (elementTypeString === "STAR")
+		elem = new Star();
+	
+	if(elem === undefined)
+		return undefined;
+	
+	if (this.elemsArray === undefined)
+	{ this.elemsArray = []; }
+
+	this.elemsArray.push(elem);
+	
+	return elem;
+};
+
+/**
+ * returns the points array of the ring.
+ * @class Ring
+ */
+Ring.prototype.makePolygon = function()
+{
+	this.polygon = this.getPolygon(this.polygon);
+	return this.polygon;
+};
+
+/**
+ * returns the points array of the ring.
+ * @class Ring
+ */
+Ring.prototype.getPolygon = function(resultPolygon)
+{
+	if(resultPolygon === undefined)
+		resultPolygon = new Polygon();
+	
+	if(resultPolygon.point2dList === undefined)
+		resultPolygon.point2dList = new Point2DList();
+	
+	// reset polygon.***
+	resultPolygon.point2dList.deleteObjects();
+	resultPolygon.point2dList.pointsArray = this.getPoints(resultPolygon.point2dList.pointsArray);
+	
+	// set idxData for all points.***
+	var point;
+	var pointsCount = resultPolygon.point2dList.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		point = resultPolygon.point2dList.getPoint(i);
+		point.indexData = new IndexData();
+		point.indexData.owner = this;
+	}
+	
+	return resultPolygon;
+};
+
+/**
+ * returns the points array of the ring.
+ * @class Ring
+ */
+Ring.prototype.getPoints = function(resultPointsArray)
+{
+	if (resultPointsArray === undefined)
+	{ resultPointsArray = []; }
+	
+	if (this.elemsArray === undefined)
+	{ return resultPointsArray; }
+	
+	var elem;
+	var elemsCount = this.elemsArray.length;
+	for (var i=0; i<elemsCount; i++)
+	{
+		elem = this.elemsArray[i];
+		elem.getPoints(resultPointsArray);
+	}
+
+	// finally check if the 1rst point and the last point are coincidents.***
+	var totalPointsCount = resultPointsArray.length;
+	
+	if(totalPointsCount > 1)
+	{
+		// mark the last as pointType = 1
+		resultPointsArray[totalPointsCount-1].pointType = 1;
+		
+		var errorDist = 10E-8;
+		var firstPoint = resultPointsArray[0];
+		var lastPoint = resultPointsArray[totalPointsCount-1];
+		if(firstPoint.isCoincidentToPoint(lastPoint, errorDist))
+		{
+			// delete the last point.***
+			lastPoint = resultPointsArray.pop();
+			lastPoint.deleteObjects();
+			lastPoint = undefined;
+		}
+	}
+	
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class RingsList
+*/
+var RingsList = function() 
+{
+	if (!(this instanceof RingsList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.ringsArray;
+	this.idxInList;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.newRing = function() 
+{
+	if (this.ringsArray === undefined)
+	{ this.ringsArray = []; }
+	
+	var ring = new Ring();
+	this.ringsArray.push(ring);
+	
+	return ring;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.deleteObjects = function() 
+{
+	if (this.ringsArray)
+	{
+		var ringsCount = this.ringsArray.length;
+		for (var i=0; i<ringsCount; i++)
+		{
+			this.ringsArray[i].deleteObjects();
+			this.ringsArray[i] = undefined;
+		}
+		this.ringsArray = undefined;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.getRingsCount = function() 
+{
+	if (this.ringsArray === undefined)
+		return 0;
+
+	return this.ringsArray.length;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.getRingIdx = function(ring) 
+{
+	if (ring === undefined)
+		return undefined;
+
+	var ringIdx;
+	var ringsCount = this.getRingsCount();
+	var find = false;
+	var i=0; 
+	while(!find && i<ringsCount)
+	{
+		if(this.getRing(i) === ring)
+		{
+			find = true;
+			ringIdx = i;
+		}
+		i++;
+	}
+	
+	return ringIdx;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.getRing = function(idx) 
+{
+	if (this.ringsArray === undefined)
+		return undefined;
+
+	return this.ringsArray[idx];
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.getBoundingRectangle = function(ringsArray, resultBRect) 
+{
+	if (this.resultBRect === undefined)
+		resultBRect = new BoundingRectangle();
+	
+	var ring;
+	var currBRect;
+	var ringsCount = ringsArray.length;
+	for(var i=0; i<ringsCount; i++)
+	{
+		ring = ringsArray[i];
+		if(ring.polygon === undefined)
+			ring.makePolygon();
+		
+		currBRect = ring.polygon.getBoundingRectangle(currBRect);
+		if(i === 0)
+			resultBRect.setInitByRectangle(currBRect);
+		else{
+			resultBRect.addRectangle(currBRect);
+		}
+	}
+
+	return resultBRect;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.setIdxInList = function() 
+{
+	var ringsCount = this.ringsArray.length;
+	for (var i=0; i<ringsCount; i++)
+	{
+		this.ringsArray[i].idxInList = i;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.prototype.intersectionWithSegment = function(segment) 
+{
+	// returns true if any ring's polygon intersects with "segment".***
+	if(segment === undefined)
+		return false;
+	
+	var intersects = false;
+	var ringsCount = this.getRingsCount();
+	var i=0;
+	while(!intersects && i<ringsCount)
+	{
+		if(this.ringsArray[i].intersectionWithSegment(segment))
+		{
+			intersects = true;
+		}
+		i++;
+	}
+	
+	return intersects;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+RingsList.getSortedRingsByDistToPoint = function(point, ringsArray, resultSortedObjectsArray) 
+{
+	if(point === undefined)
+		return resultSortedObjectsArray;
+	
+	if(resultSortedObjectsArray === undefined)
+		resultSortedObjectsArray = [];
+	
+	var objectsAuxArray = [];
+	var ring;
+	var ringPoint;
+	var ringPointIdx;
+	var squaredDist;
+	var objectAux;
+	var startIdx, endIdx, insertIdx;
+	var ringsCount = ringsArray.length;
+	for(var i=0; i<ringsCount; i++)
+	{
+		ring = ringsArray[i];
+		if(ring.polygon === undefined)
+			ring.makePolygon();
+		ringPointIdx = ring.polygon.point2dList.getNearestPointIdxToPoint(point);
+		ringPoint = ring.polygon.point2dList.getPoint(ringPointIdx);
+		squaredDist = ringPoint.squareDistToPoint(point);
+		objectAux = {};
+		objectAux.ring = ring;
+		objectAux.ringIdx = i;
+		objectAux.pointIdx = ringPointIdx;
+		objectAux.squaredDist = squaredDist;
+		
+		startIdx = 0;
+		endIdx = objectsAuxArray.length - 1;
+		
+		insertIdx = RingsList.getIndexToInsertBySquaredDist(objectsAuxArray, objectAux, startIdx, endIdx);
+		objectsAuxArray.splice(insertIdx, 0, objectAux);
+	}
+	
+	if(resultSortedObjectsArray === undefined)
+		resultSortedObjectsArray = [];
+	
+	resultSortedObjectsArray.length = 0;
+	
+	var objectsCount = objectsAuxArray.length;
+	for(var i=0; i<objectsCount; i++)
+	{
+		resultSortedObjectsArray.push(objectsAuxArray[i]);
+	}
+	
+	return resultSortedObjectsArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns result_idx
+ */
+RingsList.getIndexToInsertBySquaredDist = function(objectsArray, object, startIdx, endIdx) 
+{
+	// this do a dicotomic search of idx in a ordered table.
+	// 1rst, check the range.
+	
+	var range = endIdx - startIdx;
+	
+	if(objectsArray.length === 0)
+		return 0;
+	
+	if (range < 6)
+	{
+		// in this case do a lineal search.
+		var finished = false;
+		var i = startIdx;
+		var idx;
+		//var objectsCount = objectsArray.length;
+		while (!finished && i<=endIdx)
+		{
+			if (object.squaredDist < objectsArray[i].squaredDist)
+			{
+				idx = i;
+				finished = true;
+			}
+			i++;
+		}
+		
+		if (finished)
+		{
+			return idx;
+		}
+		else 
+		{
+			return endIdx+1;
+		}
+	}
+	else 
+	{
+		// in this case do the dicotomic search.
+		var middleIdx = startIdx + Math.floor(range/2);
+		var newStartIdx;
+		var newEndIdx;
+		if (objectsArray[middleIdx].squaredDist > object.squaredDist)
+		{
+			newStartIdx = startIdx;
+			newEndIdx = middleIdx;
+		}
+		else 
+		{
+			newStartIdx = middleIdx;
+			newEndIdx = endIdx;
+		}
+		return this.getIndexToInsertBySquaredDist(objectsArray, object, newStartIdx, newEndIdx);
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class Segment2D
+*/
+var Segment2D = function(strPoint2D, endPoint2D) 
+{
+	if (!(this instanceof Segment2D)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.startPoint2d;
+	this.endPoint2d;
+	
+	if(strPoint2D)
+		this.startPoint2d = strPoint2D;
+	
+	if(endPoint2D)
+		this.endPoint2d = endPoint2D;
+};
+
+Segment2D.prototype.setPoints = function(strPoint2D, endPoint2D)
+{
+	if(strPoint2D)
+		this.startPoint2d = strPoint2D;
+	
+	if(endPoint2D)
+		this.endPoint2d = endPoint2D;
+};
+
+Segment2D.prototype.getVector = function(resultVector)
+{
+	if(this.startPoint2d === undefined || this.endPoint2d === undefined)
+		return undefined;
+	
+	if(resultVector === undefined)
+		resultVector = new Point2D();
+	
+	resultVector = this.startPoint2d.getVectorToPoint(this.endPoint2d, resultVector);
+	return resultVector;
+};
+
+Segment2D.prototype.getDirection = function(resultDir)
+{
+	if(resultDir === undefined)
+		resultDir = new Point2D();
+	
+	resultDir = this.getVector(resultDir);
+	resultDir.unitary();
+	
+	return resultDir;
+};
+
+Segment2D.prototype.getBoundaryRectangle = function(resultBRect)
+{
+	if(resultBRect === undefined)
+		resultBRect = new BoundaryRectangle();
+	
+	resultBRect.setInit(this.startPoint2d);
+	resultBRect.addPoint(this.endPoint2d);
+	
+	return resultBRect;
+};
+
+Segment2D.prototype.getLine = function(resultLine)
+{
+	if(resultLine === undefined)
+		resultLine = new Line2D();
+	
+	var dir = this.getDirection(); // unitary direction.***
+	var strPoint = this.startPoint2d;
+	resultLine.setPointAndDir(strPoint.x, strPoint.y, dir.x, dir.y);
+	return resultLine;
+};
+
+Segment2D.prototype.getSquaredLength = function()
+{
+	return this.startPoint2d.squareDistToPoint(this.endPoint2d);
+};
+
+Segment2D.prototype.getLength = function()
+{
+	return Math.sqrt(this.getSquaredLength());
+};
+
+Segment2D.prototype.intersectionWithPointByDistances = function(point, error)
+{
+	if(point === undefined)
+		return undefined;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	// here no check line-point coincidance.***
+	
+	// now, check if is inside of the segment or if is coincident with any vertex of segment.***
+	var distA = this.startPoint2d.distToPoint(point);
+	var distB = this.endPoint2d.distToPoint(point);
+	var distTotal = this.getLength();
+	
+	if(distA < error)
+		return Constant.INTERSECTION_POINT_A;
+	
+	if(distB < error)
+		return Constant.INTERSECTION_POINT_B;
+	
+	if(distA> distTotal || distB> distTotal)
+	{
+		return Constant.INTERSECTION_OUTSIDE;
+	}
+	
+	if(Math.abs(distA + distB - distTotal) < error)
+		return Constant.INTERSECTION_INSIDE;
+};
+
+Segment2D.prototype.intersectionWithPoint = function(point, error)
+{
+	if(point === undefined)
+		return undefined;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	var line = this.getLine();
+	if(!line.isCoincidentPoint(point, error))
+		return Constant.INTERSECTION_OUTSIDE; // no intersection.***
+	
+	return this.intersectionWithPointByDistances(point, error);
+};
+
+Segment2D.prototype.intersectionWithSegment = function(segment_B, error)
+{
+	if(segment_B === undefined)
+		return undefined;
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	var myLine = this.getLine();
+	var line = segment_B.getLine();
+	var intersectionPoint = myLine.intersectionWithLine(line);
+	
+	if(intersectionPoint === undefined)
+		return undefined; // are parallels.***
+	
+	// now use "intersectionWithPointByDistances" instead "intersectionWithPoint" bcos line-point intersection check is no necesary.***
+	var intersectionType_A = this.intersectionWithPointByDistances(intersectionPoint);
+	
+	if(intersectionType_A === Constant.INTERSECTION_OUTSIDE)
+		return Constant.INTERSECTION_OUTSIDE;
+	
+	var intersectionType_B = segment_B.intersectionWithPointByDistances(intersectionPoint);
+	
+	if(intersectionType_B === Constant.INTERSECTION_OUTSIDE)
+		return Constant.INTERSECTION_OUTSIDE;
+	
+	return Constant.INTERSECTION_INTERSECT;
+};
+
+Segment2D.prototype.hasPoint = function(point)
+{
+	// returns if this segment has "point" as startPoint or endPoint.***
+	if(point === undefined)
+		return false;
+	
+	if(point === this.startPoint2d || point === this.endPoint2d)
+		return true;
+	
+	return false;
+};
+
+Segment2D.prototype.sharesPointsWithSegment = function(segment)
+{
+	if(segment === undefined)
+		return false;
+	
+	if(this.hasPoint(segment.startPoint2d) || this.hasPoint(segment.endPoint2d))
+		return true;
+	
+	return false;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Star
+ */
+var Star = function() 
+{
+	if (!(this instanceof Star)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	// this is a closed element.***
+	this.centerPoint; // Point3D.***
+	this.interiorRadius;
+	this.exteriorRadius;
+	this.radiusCount;
+
+};
+
+/**
+ * Set the center position of Star.
+ * @class Star
+ */
+Star.prototype.setCenterPosition = function(cx, cy)
+{
+	if (this.centerPoint === undefined)
+	{ this.centerPoint = new Point2D(); }
+	
+	this.centerPoint.set(cx, cy);
+};
+
+/**
+ * @class Star
+ */
+Star.prototype.setInteriorRadius = function(radius)
+{
+	this.interiorRadius = radius;
+};
+
+/**
+ * @class Star
+ */
+Star.prototype.setExteriorRadius = function(radius)
+{
+	this.exteriorRadius = radius;
+};
+
+/**
+ * @class Star
+ */
+Star.prototype.setRadiusCount = function(rediusCount)
+{
+	this.radiusCount = rediusCount;
+};
+
+/**
+ * Returns the points of the Star.
+ * @class Star
+ */
+Star.prototype.getPoints = function(resultPointsArray)
+{
+	// star has an arrow to up.***
+	var increAngDeg = 360 / this.radiusCount;
+	var increAngRad = increAngDeg * Math.PI/180;
+	var halfIncreAngRad = increAngRad / 2;
+	var startAngRad = 90 * Math.PI/180;
+	var currAngRad = startAngRad;
+	var point;
+	var x, y;
+	
+	if(resultPointsArray === undefined)
+		resultPointsArray = [];
+	
+	for(var i=0; i<this.radiusCount; i++)
+	{
+		// exterior.***
+		x = this.centerPoint.x + this.exteriorRadius * Math.cos(currAngRad);
+		y = this.centerPoint.y + this.exteriorRadius * Math.sin(currAngRad);
+		point = new Point2D(x, y);
+		point.pointType = 1; // mark as "important point".***
+		resultPointsArray.push(point);
+		
+		// interior.***
+		x = this.centerPoint.x + this.interiorRadius * Math.cos(currAngRad + halfIncreAngRad);
+		y = this.centerPoint.y + this.interiorRadius * Math.sin(currAngRad + halfIncreAngRad);
+		point = new Point2D(x, y);
+		point.pointType = 1; // mark as "important point".***
+		resultPointsArray.push(point);
+		
+		currAngRad += increAngRad;
+	}
+	
+	return resultPointsArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Surface
+ */
+var Surface = function() 
+{
+	if (!(this instanceof Surface)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.facesArray;
+	this.localVertexList; // vertices used only for this surface.***
+};
+
+Surface.prototype.newFace = function()
+{
+	if(this.facesArray === undefined)
+		this.facesArray = [];
+	
+	var face = new Face();
+	this.facesArray.push(face);
+	return face;
+};
+
+Surface.prototype.getFacesCount = function()
+{
+	if(this.facesArray === undefined)
+		return 0;
+
+	return this.facesArray.length;
+};
+
+Surface.prototype.getFace = function(idx)
+{
+	if(this.facesArray === undefined)
+		return undefined;
+
+	return this.facesArray[idx];
+};
+
+Surface.prototype.setColor = function(r, g, b, a)
+{
+	var face;
+	var facesCount = this.getFacesCount();
+	for(var i=0; i<facesCount; i++)
+	{
+		face = this.getFace(i);
+		face.setColor(r, g, b, a);
+	}
+};
+
+Surface.prototype.getCopyIndependentSurface = function(resultSurface)
+{
+	if(this.facesArray === undefined)
+		return resultSurface;
+	
+	if(resultSurface === undefined)
+		resultSurface = new Surface();
+	
+	if(resultSurface.localVertexList === undefined)
+		resultSurface.localVertexList = new VertexList();
+	
+	var resultLocalvertexList = resultSurface.localVertexList;
+	
+	// 1rst, copy the localVertexList.***
+	var verticesArray = this.getNoRepeatedVerticesArray(undefined);
+	var verticesCount = verticesArray.length;
+	var vertex, vertexCopy;
+	for(var i=0; i<verticesCount; i++)
+	{
+		vertex = verticesArray[i];
+		vertex.setIdxInList(i); // set idxInList.***
+		vertexCopy = resultLocalvertexList.newVertex();
+		vertexCopy.copyFrom(vertex);
+	}
+	
+	// now, copy the faces.***
+	var face, faceCopy;
+	var vertexIdxInList;
+	var facesCount = this.getFacesCount();
+	for(var i=0; i<facesCount; i++)
+	{
+		face = this.getFace(i);
+		faceCopy = resultSurface.newFace();
+		faceCopy.vertexArray = [];
+		
+		verticesCount = face.getVerticesCount();
+		for(var j=0; j<verticesCount; j++)
+		{
+			vertex = face.getVertex(j);
+			vertexIdxInList = vertex.getIdxInList();
+			faceCopy.vertexArray.push(resultLocalvertexList.getVertex(vertexIdxInList));
+		}
+	}
+	
+	return resultSurface;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+Surface.prototype.getNoRepeatedVerticesArray = function(resultVerticesArray) 
+{
+	if(resultVerticesArray === undefined)
+		resultVerticesArray = [];
+	
+	// 1rst, assign vertex-IdxInList for all used vertices.***
+	var facesCount = this.getFacesCount();
+	var face;
+	var idxAux = 0;
+	var vtx;
+	var verticesCount;
+	for(var i=0; i<facesCount; i++)
+	{
+		face = this.getFace(i);
+		verticesCount = face.getVerticesCount();
+		for(var j=0; j<verticesCount; j++)
+		{
+			vtx = face.getVertex(j);
+			if(vtx === undefined)
+				var hola = 0;
+			vtx.setIdxInList(idxAux);
+			idxAux++;
+		}
+	}
+	
+	// now, make a map of unique vertices map using "idxInList" of vertices.***
+	var verticesMap = {};
+	for(var i=0; i<facesCount; i++)
+	{
+		face = this.getFace(i);
+		verticesCount = face.getVerticesCount();
+		for(var j=0; j<verticesCount; j++)
+		{
+			vtx = face.getVertex(j);
+			verticesMap[vtx.getIdxInList().toString()] = vtx;
+		}
+	}
+	
+	// finally make the unique vertices array.***
+	var vertex;
+	for (var key in verticesMap)
+	{
+		vertex = verticesMap[key];
+		resultVerticesArray.push(vertex);
+	}
+	
+	return resultVerticesArray;
+};
+
+Surface.prototype.getTrianglesConvex = function(resultTrianglesArray)
+{
+	// To call this method, the faces must be convex.***
+	if(this.facesArray === undefined || this.facesArray.length ===0)
+		return resultTrianglesArray;
+	
+	if(resultTrianglesArray === undefined)
+		resultTrianglesArray = [];
+	
+	var face;
+	var facesCount = this.getFacesCount();
+	for(var i=0; i<facesCount; i++)
+	{
+		face = this.getFace(i);
+		resultTrianglesArray = face.getTrianglesConvex(resultTrianglesArray);
+	}
+	
+	return resultTrianglesArray;
+};
+
+Surface.prototype.calculateVerticesNormals = function()
+{
+	// PROVISIONAL.***
+	var face;
+	var facesCount = this.getFacesCount();
+	for(var i=0; i<facesCount; i++)
+	{
+		face = this.getFace(i);
+		face.calculateVerticesNormals();
+	}
+};
+
+Surface.prototype.reverseSense = function()
+{
+	var face;
+	var facesCount = this.getFacesCount();
+	for(var i=0; i<facesCount; i++)
+	{
+		face = this.getFace(i);
+		face.reverseSense();
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Tessellator
+ */
+var Tessellator = function() 
+{
+	if (!(this instanceof Tessellator)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Triangle
+ */
+var Triangle= function(vertex0, vertex1, vertex2) 
+{
+	if (!(this instanceof Triangle)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.vertex0;
+	this.vertex1;
+	this.vertex2;
+	this.vtxIdx0;
+	this.vtxIdx1;
+	this.vtxIdx2;
+	this.normal; // plainNormal.
+	
+	if(vertex0 !== undefined)
+		this.vertex0 = vertex0;
+	
+	if(vertex1 !== undefined)
+		this.vertex1 = vertex1;
+	
+	if(vertex2 !== undefined)
+		this.vertex2 = vertex2;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+Triangle.prototype.deleteObjects = function() 
+{
+	// the triangle no deletes vertices.***
+	if (this.vertex0)
+	{
+		this.vertex0 = undefined;
+	}
+	if (this.vertex1)
+	{
+		this.vertex1 = undefined;
+	}
+	if (this.vertex2)
+	{
+		this.vertex2 = undefined;
+	}
+	if (this.normal)
+	{
+		this.normal.deleteObjects();
+		this.normal = undefined;
+	}
+	
+	this.vtxIdx0 = undefined;
+	this.vtxIdx1 = undefined;
+	this.vtxIdx2 = undefined;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param vertex0 변수
+ * @param vertex1 변수
+ * @param vertex2 변수
+ */
+Triangle.prototype.setVertices = function(vertex0, vertex1, vertex2) 
+{
+	this.vertex0 = vertex0;
+	this.vertex1 = vertex1;
+	this.vertex2 = vertex2;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param vertex0 변수
+ * @param vertex1 변수
+ * @param vertex2 변수
+ */
+Triangle.prototype.assignVerticesIdx = function() 
+{
+	if(this.vertex0 === undefined || this.vertex1 === undefined || this.vertex2 === undefined)
+		return;
+	
+	this.vtxIdx0 = this.vertex0.getIdxInList();
+	this.vtxIdx1 = this.vertex1.getIdxInList();
+	this.vtxIdx2 = this.vertex2.getIdxInList();
+};
+
+Triangle.prototype.getIndicesArray = function(indicesArray)
+{
+	if(indicesArray === undefined)
+		indicesArray = [];
+	
+	if(this.vtxIdx0 !== undefined && this.vtxIdx1 !== undefined && this.vtxIdx2 !== undefined )
+	{
+		indicesArray.push(this.vtxIdx0);
+		indicesArray.push(this.vtxIdx1);
+		indicesArray.push(this.vtxIdx2);
+	}
+	
+	return indicesArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+Triangle.prototype.invertSense = function() 
+{
+	var vertexAux = this.vertex1;
+	this.vertex1 = this.vertex2;
+	this.vertex2 = vertexAux;
+	
+	this.calculatePlaneNormal();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+Triangle.prototype.calculatePlaneNormal = function() 
+{
+	if (this.normal === undefined)
+	{ this.normal = new Point3D(); }
+
+	this.getCrossProduct(0, this.normal);
+	this.normal.unitary();
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idxVertex 변수
+ * @param resultCrossProduct 변수
+ * @returns resultCrossProduct
+ */
+Triangle.prototype.getCrossProduct = function(idxVertex, resultCrossProduct) 
+{
+	if (resultCrossProduct === undefined)
+	{ resultCrossProduct = new Point3D(); }
+
+	var currentPoint, prevPoint, nextPoint;
+
+	if (idxVertex === 0)
+	{
+		currentPoint = this.vertex0.point3d;
+		prevPoint = this.vertex2.point3d;
+		nextPoint = this.vertex1.point3d;
+	}
+	else if (idxVertex === 1)
+	{
+		currentPoint = this.vertex1.point3d;
+		prevPoint = this.vertex0.point3d;
+		nextPoint = this.vertex2.point3d;
+	}
+	else if (idxVertex === 2)
+	{
+		currentPoint = this.vertex2.point3d;
+		prevPoint = this.vertex1.point3d;
+		nextPoint = this.vertex0.point3d;
+	}
+
+	var v1 = new Point3D();
+	var v2 = new Point3D();
+
+	v1.set(currentPoint.x - prevPoint.x,     currentPoint.y - prevPoint.y,     currentPoint.z - prevPoint.z);
+	v2.set(nextPoint.x - currentPoint.x,     nextPoint.y - currentPoint.y,     nextPoint.z - currentPoint.z);
+
+	v1.unitary();
+	v2.unitary();
+
+	resultCrossProduct = v1.crossProduct(v2, resultCrossProduct);
+
+	return resultCrossProduct;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class TrianglesList
+ */
+var TrianglesList = function() 
+{
+	if (!(this instanceof TrianglesList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.trianglesArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+TrianglesList.prototype.newTriangle = function(vertex0, vertex1, vertex2) 
+{
+	if (this.trianglesArray === undefined)
+	{ this.trianglesArray = []; }
+	
+	var triangle = new Triangle(vertex0, vertex1, vertex2);
+	this.trianglesArray.push(triangle);
+	return triangle;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+TrianglesList.prototype.deleteObjects = function() 
+{
+	if (this.trianglesArray === undefined)
+		return;
+	
+	var trianglesCount = this.getTrianglesCount();
+	for(var i=0; i<trianglesCount; i++)
+	{
+		this.trianglesArray[i].deleteObjects();
+		this.trianglesArray[i] = undefined;
+	}
+	this.trianglesArray = undefined;
+};
+
+TrianglesList.prototype.getTrianglesCount = function() 
+{
+	if(this.trianglesArray === undefined)
+		return 0;
+	
+	return this.trianglesArray.length;
+};
+
+TrianglesList.prototype.getTriangle = function(idx) 
+{
+	if(this.trianglesArray === undefined)
+		return undefined;
+	
+	return this.trianglesArray[idx];
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+TrianglesList.prototype.assignVerticesIdx = function() 
+{
+	var trianglesCount = this.getTrianglesCount();
+	var trianglesArray = this.trianglesArray;
+	for(var i=0; i<trianglesCount; i++)
+	{
+		trianglesArray[i].assignVerticesIdx();
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+TrianglesList.getTrianglesIndicesArray = function(trianglesArray, indicesArray) 
+{
+	if(indicesArray === undefined)
+		indicesArray = [];
+	
+	var trianglesCount = trianglesArray.length;
+	for(var i=0; i<trianglesCount; i++)
+	{
+		trianglesArray[i].getIndicesArray(indicesArray);
+	}
+	
+	return indicesArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+TrianglesList.prototype.getNoRepeatedVerticesArray = function(resultVerticesArray) 
+{
+	if(resultVerticesArray === undefined)
+		resultVerticesArray = [];
+	
+	// 1rst, assign vertexIdxInList for all used vertives.***
+	var trianglesCount = this.getTrianglesCount();
+	var triangle;
+	var idxAux = 0;
+	var vtx_0, vtx_1, vtx_2;
+	for(var i=0; i<trianglesCount; i++)
+	{
+		triangle = this.getTriangle(i);
+		vtx_0 = triangle.vertex0;
+		vtx_1 = triangle.vertex1;
+		vtx_2 = triangle.vertex2;
+		
+		vtx_0.setIdxInList(idxAux);
+		idxAux++;
+		vtx_1.setIdxInList(idxAux);
+		idxAux++;
+		vtx_2.setIdxInList(idxAux);
+		idxAux++;
+	}
+	
+	// now, make a map of unique vertices map using "idxInList" of vertices.***
+	var verticesMap = {};
+	for(var i=0; i<trianglesCount; i++)
+	{
+		triangle = this.getTriangle(i);
+		vtx_0 = triangle.vertex0;
+		vtx_1 = triangle.vertex1;
+		vtx_2 = triangle.vertex2;
+		
+		verticesMap[vtx_0.getIdxInList().toString()] = vtx_0;
+		verticesMap[vtx_1.getIdxInList().toString()] = vtx_1;
+		verticesMap[vtx_2.getIdxInList().toString()] = vtx_2;
+	}
+	
+	// finally make the unique vertices array.***
+	var vertex;
+	for (var key in verticesMap)
+	{
+		vertex = verticesMap[key];
+		resultVerticesArray.push(vertex);
+	}
+	
+	return resultVerticesArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+TrianglesList.getVboFaceDataArray = function(trianglesArray, resultVbo) 
+{
+	// PROVISIONAL.***
+	if (trianglesArray === undefined)
+		return resultVbo;
+	
+	var trianglesCount = trianglesArray.length;
+	if(trianglesCount === 0)
+		return resultVbo;
+	
+	if(resultVbo === undefined)
+		resultVbo = new VBOVertexIdxCacheKey();
+
+	var indicesArray = TrianglesList.getTrianglesIndicesArray(trianglesArray, undefined);
+	resultVbo.idxVboDataArray = Int16Array.from(indicesArray);
+	resultVbo.indicesCount = resultVbo.idxVboDataArray.length;
+	return resultVbo;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class TrianglesMatrix
+ */
+var TrianglesMatrix= function() 
+{
+	if (!(this instanceof TrianglesMatrix)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.trianglesListsArray;
+};
+
+TrianglesMatrix.prototype.deleteObjects = function()
+{
+	if(this.trianglesListsArray === undefined)
+		return;
+	
+	var trianglesListsCount = this.trianglesListsArray.length;
+	for(var i=0; i<trianglesListsCount; i++)
+	{
+		this.trianglesListsArray[i].deleteObjects();
+		this.trianglesListsArray[i] = undefined;
+	}
+	this.trianglesListsArray = undefined;
+};
+
+TrianglesMatrix.prototype.getTrianglesList = function(idx)
+{
+	if(this.trianglesListsArray === undefined)
+		return undefined;
+	
+	return this.trianglesListsArray[idx];
+};
+
+TrianglesMatrix.prototype.getTrianglesListsCount = function()
+{
+	if(this.trianglesListsArray === undefined)
+		return 0;
+	
+	return this.trianglesListsArray.length;
+};
+
+TrianglesMatrix.prototype.newTrianglesList = function()
+{
+	if(this.trianglesListsArray === undefined)
+		this.trianglesListsArray = [];
+	
+	var trianglesList = new TrianglesList();
+	this.trianglesListsArray.push(trianglesList);
+	return trianglesList;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+TrianglesMatrix.prototype.assignVerticesIdx = function() 
+{
+	var trianglesListsCount = this.trianglesListsArray.length;
+	for(var i=0; i<trianglesListsCount; i++)
+	{
+		this.trianglesListsArray[i].assignVerticesIdx();
+	}
+};
+
+TrianglesMatrix.prototype.getVboFaceDataArray = function(resultVbo)
+{
+	// PROVISIONAL.***
+	if(this.trianglesListsArray === undefined)
+		return resultVbo;
+	
+	var indicesArray = [];
+	
+	var trianglesListsCount = this.trianglesListsArray.length;
+	for(var i=0; i<trianglesListsCount; i++)
+	{
+		indicesArray = this.trianglesListsArray[i].getTrianglesIndicesArray(indicesArray);
+	}
+	
+	resultVbo.idxVboDataArray = Int16Array.from(indicesArray);
+	resultVbo.indicesCount = resultVbo.idxVboDataArray.length;
+	
+	return resultVbo;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+  
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class Vertex
+ */
+var Vertex = function(position) 
+{
+	if (!(this instanceof Vertex)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.point3d;
+	this.normal; // class: Point3D.
+	this.texCoord; // class: Point2D.
+	this.color4; // class: Color.
+	this.outHalfEdgesArray; // Array [class: HalfEdge]. 
+	this.vertexType; // 1 = important vertex.***
+	this.idxInList;
+	
+	if(position)
+		this.point3d = position;
+	else
+	{
+		this.point3d = new Point3D();
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Vertex.prototype.deleteObjects = function() 
+{
+	if (this.point3d)
+	{ this.point3d.deleteObjects(); }
+	if (this.normal)
+	{ this.normal.deleteObjects(); }
+	if (this.texCoord)
+	{ this.texCoord.deleteObjects(); }
+	if (this.color4)
+	{ this.color4.deleteObjects(); }
+	
+	this.point3d = undefined;
+	this.normal = undefined;
+	this.texCoord = undefined;
+	this.color4 = undefined;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Vertex.prototype.getIdxInList = function() 
+{
+	return this.idxInList;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Vertex.prototype.setIdxInList = function(idx) 
+{
+	this.idxInList = idx;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Vertex.prototype.copyFrom = function(vertex) 
+{
+	// copy position if exist.
+	if (vertex.point3d)
+	{
+		if (this.point3d === undefined)
+		{ this.point3d = new Point3D(); }
+		
+		this.point3d.copyFrom(vertex.point3d);
+	}
+	
+	// copy normal if exist.
+	if (vertex.normal)
+	{
+		if (this.normal === undefined)
+		{ this.normal = new Point3D(); }
+		
+		this.normal.copyFrom(vertex.normal);
+	}
+	
+	// copy texCoord if exist.
+	if (vertex.texCoord)
+	{
+		if (this.texCoord === undefined)
+		{ this.texCoord = new Point2D(); }
+		
+		this.texCoord.copyFrom(vertex.texCoord);
+	}
+	
+	// copy color4 if exist.
+	if (vertex.color4)
+	{
+		if (this.color4 === undefined)
+		{ this.color4 = new Color(); }
+		
+		this.color4.copyFrom(vertex.color4);
+	}
+	
+	this.vertexType = vertex.vertexType;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param x 변수
+ * @param y 변수
+ * @param z 변수
+ */
+Vertex.prototype.setPosition = function(x, y, z) 
+{
+	this.point3d.set(x, y, z);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param r 변수
+ * @param g 변수
+ * @param b 변수
+ */
+Vertex.prototype.setColorRGB = function(r, g, b) 
+{
+	if (this.color4 === undefined) { this.color4 = new Color(); }
+	
+	this.color4.setRGB(r, g, b);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param r 변수
+ * @param g 변수
+ * @param b 변수
+ * @param alpha 변수
+ */
+Vertex.prototype.setColorRGBA = function(r, g, b, alpha) 
+{
+	if (this.color4 === undefined) { this.color4 = new Color(); }
+	
+	this.color4.setRGBA(r, g, b, alpha);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param r 변수
+ * @param g 변수
+ * @param b 변수
+ * @param alpha 변수
+ */
+Vertex.prototype.setNormal = function(nx, ny, nz) 
+{
+	if (this.normal === undefined) { this.normal = new Point3D(); }
+	
+	this.normal.set(nx, ny, nz);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param dirX 변수
+ * @param dirY 변수
+ * @param dirZ 변수
+ * @param distance 변수
+ */
+Vertex.prototype.translate = function(dx, dy, dz) 
+{
+	this.point3d.add(dx, dy, dz);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class VertexList
+ */
+var VertexList = function() 
+{
+	if (!(this instanceof VertexList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.vertexArray = [];
+};
+
+VertexList.getPrevIdx = function(idx, vertexArray)
+{
+	var verticesCount = vertexArray.length;
+	
+	if(idx < 0 || idx > verticesCount-1)
+		return undefined;
+	
+	var prevIdx;
+	
+	if(idx === 0)
+		prevIdx = verticesCount - 1;
+	else
+		prevIdx = idx - 1;
+
+	return prevIdx;
+};
+
+VertexList.getNextIdx = function(idx, vertexArray)
+{
+	var verticesCount = vertexArray.length;
+	
+	if(idx < 0 || idx > verticesCount-1)
+		return undefined;
+	
+	var nextIdx;
+	
+	if(idx === verticesCount - 1)
+		nextIdx = 0;
+	else
+		nextIdx = idx + 1;
+
+	return nextIdx;
+};
+
+VertexList.getVtxSegment = function(idx, vertexArray, resultVtxSegment)
+{
+	var currVertex = vertexArray[idx];
+	var nextIdx = VertexList.getNextIdx(idx, vertexArray);
+	var nextVertex = vertexArray[nextIdx];
+	
+	if(resultVtxSegment === undefined)
+		resultVtxSegment = new VtxSegment(currVertex, nextVertex);
+	else{
+		resultVtxSegment.setVertices(currVertex, nextVertex);
+	}
+
+	return resultVtxSegment;
+};
+
+VertexList.getVector = function(idx, vertexArray, resultVector)
+{
+	var currVertex = vertexArray[idx];
+	var nextIdx = VertexList.getNextIdx(idx, vertexArray);
+	var nextVertex = vertexArray[nextIdx];
+	
+	var currPoint = currVertex.point3d;
+	var nextPoint = nextVertex.point3d;
+	
+	if(resultVector === undefined)
+		resultVector = new Point3D(nextPoint.x - currPoint.x, nextPoint.y - currPoint.y, nextPoint.z - currPoint.z);
+	else{
+		resultVector.setVertices(nextPoint.x - currPoint.x, nextPoint.y - currPoint.y, nextPoint.z - currPoint.z);
+	}
+
+	return resultVector;
+};
+
+VertexList.getCrossProduct = function(idx, vertexArray, resultCrossProduct)
+{
+	var currVector = VertexList.getVector(idx, vertexArray, undefined);
+	var prevIdx = VertexList.getPrevIdx(idx, vertexArray);
+	var prevVector = VertexList.getVector(prevIdx, vertexArray, undefined);
+	resultCrossProduct = prevVector.crossProduct(currVector, resultCrossProduct);
+
+	return resultCrossProduct;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertex
+ */
+VertexList.prototype.deleteObjects = function() 
+{
+	for (var i = 0, vertexCount = this.vertexArray.length; i < vertexCount; i++) 
+	{
+		this.vertexArray[i].deleteObjects();
+		this.vertexArray[i] = undefined;
+	}
+	this.vertexArray = undefined;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertex
+ */
+VertexList.prototype.copyFrom = function(vertexList) 
+{
+	// first reset vertexArray.
+	this.deleteObjects();
+	this.vertexArray = [];
+	
+	var vertex;
+	var myVertex;
+	var vertexCount = vertexList.getVertexCount();
+	for (var i=0; i<vertexCount; i++)
+	{
+		vertex = vertexList.getVertex(i);
+		myVertex = this.newVertex();
+		myVertex.copyFrom(vertex);
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertex
+ */
+VertexList.prototype.copyFromPoint2DList = function(point2dList, z) 
+{
+	// first reset vertexArray.
+	this.deleteObjects();
+	this.vertexArray = [];
+	
+	var point2d;
+	var vertex;
+	if(z === undefined)
+		z = 0;
+
+	var pointsCount = point2dList.getPointsCount();
+	for(var i=0; i<pointsCount; i++)
+	{
+		point2d = point2dList.getPoint(i);
+		vertex = this.newVertex();
+		vertex.point3d = new Point3D();
+		vertex.point3d.set(point2d.x, point2d.y, z);
+		vertex.vertexType = point2d.pointType;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertex
+ */
+VertexList.prototype.setNormal = function(nx, ny, nz) 
+{
+	var vertex;
+	var vertexCount = this.getVertexCount();
+	for (var i=0; i<vertexCount; i++)
+	{
+		vertex = this.getVertex(i);
+		vertex.setNormal(nx, ny, nz);
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertex
+ */
+VertexList.prototype.newVertex = function() 
+{
+	var vertex = new Vertex();
+	this.vertexArray.push(vertex);
+	return vertex;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexArray[idx]
+ */
+VertexList.prototype.getVertex = function(idx) 
+{
+	return this.vertexArray[idx];
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexArray.length
+ */
+VertexList.prototype.getVertexCount = function() 
+{
+	return this.vertexArray.length;
+};
+
+VertexList.prototype.getPrevIdx = function(idx)
+{
+	return VertexList.getPrevIdx(idx, this.vertexArray);
+};
+
+VertexList.prototype.getNextIdx = function(idx)
+{
+	return VertexList.getNextIdx(idx, this.vertexArray);
+};
+
+VertexList.prototype.getIdxOfVertex = function(vertex)
+{
+	var verticesCount = this.vertexArray.length;
+	var i=0;
+	var idx = -1;
+	var found = false;
+	while(!found && i<verticesCount)
+	{
+		if(this.vertexArray[i] === vertex)
+		{
+			found = true;
+			idx = i;
+		}
+		i++;
+	}
+	
+	return idx;
+};
+
+VertexList.prototype.getVtxSegment = function(idx, resultVtxSegment)
+{
+	/*
+	var currVertex = this.getVertex(idx);
+	var nextIdx = VertexList.getNextIdx(idx, this.vertexArray);
+	var nextVertex = this.getVertex(nextIdx);
+	
+	if(resultVtxSegment === undefined)
+		resultVtxSegment = new VtxSegment(currVertex, nextVertex);
+	else{
+		resultVtxSegment.setVertices(currVertex, nextVertex);
+	}
+	*/
+	return VertexList.getVtxSegment(idx, this.vertexArray, resultVtxSegment);
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param dirX 변수
+ * @param dirY 변수
+ * @param dirZ 변수
+ * @param distance 변수
+ */
+VertexList.prototype.translateVertices = function(dx, dy, dz) 
+{
+	for (var i = 0, vertexCount = this.vertexArray.length; i < vertexCount; i++) 
+	{
+		this.vertexArray[i].translate(dx, dy, dz);
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param resultBox 변수
+ * @returns resultBox
+ */
+VertexList.prototype.getBoundingBox = function(resultBox) 
+{
+	if (resultBox === undefined) { resultBox = new BoundingBox(); }
+
+	for (var i = 0, vertexCount = this.vertexArray.length; i < vertexCount; i++) 
+	{
+		if (i === 0) { resultBox.init(this.vertexArray[i].point3d); }
+		else { resultBox.addPoint(this.vertexArray[i].point3d); }
+	}
+	return resultBox;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param transformMatrix 변수
+ */
+VertexList.prototype.transformPointsByMatrix4 = function(transformMatrix) 
+{
+	for (var i = 0, vertexCount = this.vertexArray.length; i < vertexCount; i++) 
+	{
+		var vertex = this.vertexArray[i];
+		transformMatrix.transformPoint3D(vertex.point3d, vertex.point3d);
+	}
+};
+
+VertexList.prototype.setIdxInList = function()
+{
+	for (var i = 0, vertexCount = this.vertexArray.length; i < vertexCount; i++) 
+	{
+		this.vertexArray[i].idxInList = i;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param transformMatrix 변수
+ */
+VertexList.prototype.getVboDataArrays = function(resultVbo) 
+{
+	// returns positions, and if exist, normals, colors, texCoords.***
+	var verticesCount = this.vertexArray.length;
+	if(verticesCount === 0)
+		return resultVbo;
+	
+	if(resultVbo === undefined)
+		resultVbo = new VBOVertexIdxCacheKey();
+	
+	var posArray = [];
+	var norArray;
+	var colArray;
+	var texCoordArray;
+	
+	var vertex, position, normal, color, texCoord;
+	
+	for (var i = 0; i < verticesCount; i++) 
+	{
+		vertex = this.vertexArray[i];
+		if(vertex.point3d === undefined)
+			continue;
+		
+		position = vertex.point3d;
+		posArray.push(position.x);
+		posArray.push(position.y);
+		posArray.push(position.z);
+		
+		normal = vertex.normal;
+		if(normal)
+		{
+			if(norArray === undefined)
+				norArray = [];
+			
+			norArray.push(normal.x*127);
+			norArray.push(normal.y*127);
+			norArray.push(normal.z*127);
+		}
+		
+		color = vertex.color4;
+		if(color)
+		{
+			if(colArray === undefined)
+				colArray = [];
+			
+			colArray.push(color.r*255);
+			colArray.push(color.g*255);
+			colArray.push(color.b*255);
+			colArray.push(color.a*255);
+		}
+		
+		texCoord = vertex.texCoord;
+		if(texCoord)
+		{
+			if(texCoordArray === undefined)
+				texCoordArray = [];
+			
+			texCoordArray.push(texCoord.x);
+			texCoordArray.push(texCoord.y);
+		}
+	}
+	
+	resultVbo.posVboDataArray = Float32Array.from(posArray);
+	if(normal)
+		resultVbo.norVboDataArray = Int8Array.from(norArray);
+	
+	if(color)
+		resultVbo.colVboDataArray = Uint8Array.from(colArray);
+	
+	if(texCoord)
+		resultVbo.tcoordVboDataArray = Float32Array.from(texCoordArray);
+	
+	return resultVbo;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class VertexMatrix
+ */
+var VertexMatrix = function() 
+{
+	if (!(this instanceof VertexMatrix)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+	
+	this.vertexListsArray = [];
+	// SCTRATXH.******************
+	this.totalVertexArraySC = [];
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+VertexMatrix.prototype.deleteObjects = function() 
+{
+	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount; i++) 
+	{
+		this.vertexListsArray[i].deleteObjects();
+		this.vertexListsArray[i] = undefined;
+	}
+	this.vertexListsArray = undefined;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexList
+ */
+VertexMatrix.prototype.newVertexList = function() 
+{
+	var vertexList = new VertexList();
+	this.vertexListsArray.push(vertexList);
+	return vertexList;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param idx 변수
+ * @returns vertexListArray[idx]
+ */
+VertexMatrix.prototype.getVertexList = function(idx) 
+{
+	if (idx >= 0 && idx < this.vertexListsArray.length) 
+	{
+		return this.vertexListsArray[idx];
+	}
+	else 
+	{
+		return undefined;
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param vertexMatrix 변수
+ */
+VertexMatrix.prototype.copyFrom = function(vertexMatrix) 
+{
+	if(vertexMatrix === undefined)
+		return;
+	
+	var vertexList, myVertexList;
+	var vertexListsCount = vertexMatrix.vertexListsArray.length;
+	for(var i=0; i<vertexListsCount; i++)
+	{
+		vertexList = vertexMatrix.getVertexList(i);
+		myVertexList = this.newVertexList();
+		myVertexList.copyFrom(vertexList);
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param resultBox
+ * @returns resultBox
+ */
+VertexMatrix.prototype.getBoundingBox = function(resultBox) 
+{
+	if (resultBox === undefined) { resultBox = new BoundingBox(); }
+	
+	this.totalVertexArraySC.length = 0;
+	this.totalVertexArraySC = this.getTotalVertexArray(this.totalVertexArraySC);
+	for (var i = 0, totalVertexCount = this.totalVertexArraySC.length; i < totalVertexCount; i++) 
+	{
+		if (i === 0) { resultBox.init(this.totalVertexArraySC[i].point3d); }
+		else { resultBox.addPoint(this.totalVertexArraySC[i].point3d); }
+	}
+	return resultBox;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+VertexMatrix.prototype.setVertexIdxInList = function() 
+{
+	var idxInList = 0;
+	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount; i++) 
+	{
+		var vtxList = this.vertexListsArray[i];
+		for (var j = 0, vertexCount = vtxList.vertexArray.length; j < vertexCount; j++) 
+		{
+			var vertex = vtxList.getVertex(j);
+			vertex.mIdxInList = idxInList;
+			idxInList++;
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @returns vertexCount
+ */
+VertexMatrix.prototype.getVertexCount = function() 
+{
+	var vertexCount = 0;
+	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount; i++) 
+	{
+		vertexCount += this.vertexListsArray[i].getVertexCount();
+	}
+	
+	return vertexCount;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param resultTotalVertexArray 변수
+ * @returns resultTotalVertexArray
+ */
+VertexMatrix.prototype.getTotalVertexArray = function(resultTotalVertexArray) 
+{
+	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount; i++) 
+	{
+		var vtxList = this.vertexListsArray[i];
+		for (var j = 0, vertexCount = vtxList.vertexArray.length; j < vertexCount; j++) 
+		{
+			var vertex = vtxList.getVertex(j);
+			resultTotalVertexArray.push(vertex);
+		}
+	}
+	
+	return resultTotalVertexArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param resultFloatArray 변수
+ * @returns resultFloatArray
+ */
+VertexMatrix.prototype.getVBOVertexColorFloatArray = function(resultFloatArray) 
+{
+	this.totalVertexArraySC.length = 0;
+	this.totalVertexArraySC = this.getTotalVertexArray(this.totalVertexArraySC);
+	
+	var totalVertexCount = this.totalVertexArraySC.length;
+	if (resultFloatArray === undefined) { resultFloatArray = new Float32Array(totalVertexCount * 6); }
+	
+	for (var i = 0; i < totalVertexCount; i++) 
+	{
+		var vertex = this.totalVertexArraySC[i];
+		resultFloatArray[i*6] = vertex.point3d.x;
+		resultFloatArray[i*6+1] = vertex.point3d.y;
+		resultFloatArray[i*6+2] = vertex.point3d.z;
+		
+		resultFloatArray[i*6+3] = vertex.color4.r;
+		resultFloatArray[i*6+4] = vertex.color4.g;
+		resultFloatArray[i*6+5] = vertex.color4.b;
+	}
+	
+	return resultFloatArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param resultFloatArray 변수
+ * @returns resultFloatArray
+ */
+VertexMatrix.prototype.getVBOVertexColorRGBAFloatArray = function(resultFloatArray) 
+{
+	this.totalVertexArraySC.length = 0;
+	this.totalVertexArraySC = this.getTotalVertexArray(this.totalVertexArraySC);
+	
+	var totalVertexCount = this.totalVertexArraySC.length;
+	if (resultFloatArray === undefined) { resultFloatArray = new Float32Array(totalVertexCount * 7); }
+	
+	for (var i = 0; i < totalVertexCount; i++) 
+	{
+		var vertex = this.totalVertexArraySC[i];
+		resultFloatArray[i*7] = vertex.point3d.x;
+		resultFloatArray[i*7+1] = vertex.point3d.y;
+		resultFloatArray[i*7+2] = vertex.point3d.z;
+		
+		resultFloatArray[i*7+3] = vertex.color4.r;
+		resultFloatArray[i*7+4] = vertex.color4.g;
+		resultFloatArray[i*7+5] = vertex.color4.b;
+		resultFloatArray[i*7+6] = vertex.color4.a;
+	}
+	
+	return resultFloatArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param resultFloatArray 변수
+ * @returns resultFloatArray
+ */
+VertexMatrix.prototype.getVBOVertexFloatArray = function(resultFloatArray) 
+{
+	this.totalVertexArraySC.length = 0;
+	this.totalVertexArraySC = this.getTotalVertexArray(this.totalVertexArraySC);
+	
+	var totalVertexCount = this.totalVertexArraySC.length;
+	if (resultFloatArray === undefined) { resultFloatArray = new Float32Array(totalVertexCount * 3); }
+	
+	for (var i = 0; i < totalVertexCount; i++) 
+	{
+		var vertex = this.totalVertexArraySC[i];
+		resultFloatArray[i*3] = vertex.point3d.x;
+		resultFloatArray[i*3+1] = vertex.point3d.y;
+		resultFloatArray[i*3+2] = vertex.point3d.z;
+	}
+	
+	return resultFloatArray;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param dirX 변수
+ * @param dirY 변수
+ * @param dirZ 변수
+ * @param distance 변수
+ */
+VertexMatrix.prototype.translateVertices = function(dx, dy, dz) 
+{
+	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount; i++) 
+	{
+		this.vertexListsArray[i].translateVertices(dx, dy, dz);
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param tTrianglesMatrix 변수
+ */
+VertexMatrix.prototype.makeTTrianglesLateralSidesLOOP = function(tTrianglesMatrix) 
+{
+	// condition: all the vertex lists must have the same number of vertex.***
+	var vtxList1;
+	var vtxList2;
+	var tTrianglesList;
+	var tTriangle1;
+	var tTriangle2;
+	var vertexCount = 0;
+	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount-1; i++) 
+	{
+		vtxList1 = this.vertexListsArray[i];
+		vtxList2 = this.vertexListsArray[i+1];
+		tTrianglesList = tTrianglesMatrix.newTTrianglesList();
+		
+		vertexCount = vtxList1.vertexArray.length;
+		for (var j = 0; j < vertexCount; j++) 
+		{
+			tTriangle1 = tTrianglesList.newTTriangle();
+			tTriangle2 = tTrianglesList.newTTriangle();
+			
+			if (j === vertexCount-1) 
+			{
+				tTriangle1.setVertices(vtxList1.getVertex(j), vtxList2.getVertex(j), vtxList2.getVertex(0)); 
+				tTriangle2.setVertices(vtxList1.getVertex(j), vtxList2.getVertex(0), vtxList1.getVertex(0)); 
+			}
+			else 
+			{
+				tTriangle1.setVertices(vtxList1.getVertex(j), vtxList2.getVertex(j), vtxList2.getVertex(j+1)); 
+				tTriangle2.setVertices(vtxList1.getVertex(j), vtxList2.getVertex(j+1), vtxList1.getVertex(j+1)); 
+			}
+		}
+	}
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param transformMatrix
+ */
+VertexMatrix.prototype.transformPointsByMatrix4 = function(transformMatrix) 
+{
+	for (var i = 0, vertexListsCount = this.vertexListsArray.length; i < vertexListsCount; i++) 
+	{
+		var vtxList = this.vertexListsArray[i];
+		vtxList.transformPointsByMatrix4(transformMatrix);
+	}
+};
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class VtxProfile
+*/
+var VtxProfile = function(x, y) 
+{
+	if (!(this instanceof VtxProfile)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.outerVtxRing;
+	this.innerVtxRingsList;
+};
+
+VtxProfile.prototype.getInnerVtxRingsCount = function()
+{
+	if(this.innerVtxRingsList === undefined || this.innerVtxRingsList.getRingsCount === 0)
+		return 0;
+	
+	return this.innerVtxRingsList.getVtxRingsCount();
+};
+
+VtxProfile.prototype.getInnerVtxRing = function(idx)
+{
+	if(this.innerVtxRingsList === undefined || this.innerVtxRingsList.getRingsCount === 0)
+		return undefined;
+	
+	return this.innerVtxRingsList.getVtxRing(idx);
+};
+
+VtxProfile.prototype.setVerticesIdxInList = function()
+{
+	if(this.outerVtxRing && this.outerVtxRing.vertexList)
+	{
+		this.outerVtxRing.vertexList.setIdxInList();
+	}
+	
+	if(this.innerVtxRingsList)
+	{
+		this.innerVtxRingsList.setVerticesIdxInList();
+	}
+};
+
+VtxProfile.prototype.copyFrom = function(vtxProfile)
+{
+	if(vtxProfile.outerVtxRing)
+	{
+		if(this.outerVtxRing === undefined)
+			this.outerVtxRing = new VtxRing();
+		
+		this.outerVtxRing.copyFrom(vtxProfile.outerVtxRing);
+	}
+	
+	if(vtxProfile.innerVtxRingsList)
+	{
+		if(this.innerVtxRingsList === undefined)
+			this.innerVtxRingsList = new VtxRingsList();
+		
+		this.innerVtxRingsList.copyFrom(vtxProfile.innerVtxRingsList);
+	}
+};
+
+VtxProfile.prototype.translate = function(dx, dy, dz)
+{
+	if(this.outerVtxRing !== undefined)
+		this.outerVtxRing.translate(dx, dy, dz);
+	
+	if(this.innerVtxRingsList !== undefined)
+		this.innerVtxRingsList.translate(dx, dy, dz);
+};
+
+VtxProfile.prototype.transformPointsByMatrix4 = function(tMat4)
+{
+	if(this.outerVtxRing !== undefined)
+		this.outerVtxRing.transformPointsByMatrix4(tMat4);
+	
+	if(this.innerVtxRingsList !== undefined)
+		this.innerVtxRingsList.transformPointsByMatrix4(tMat4);
+};
+
+VtxProfile.prototype.makeByProfile = function(profile)
+{
+	if(profile === undefined || profile.outerRing === undefined)
+		return undefined;
+	
+	var outerRing = profile.outerRing;
+	if(outerRing.polygon === undefined)
+		outerRing.makePolygon();
+	
+	// outer.***************************************
+	if(this.outerVtxRing === undefined)
+		this.outerVtxRing = new VtxRing();
+	
+	var z = 0;
+	var outerPolygon = outerRing.polygon;
+	var point2dList = outerPolygon.point2dList;
+	this.outerVtxRing.makeByPoint2DList(point2dList, z);
+
+	// inners.***************************************
+	if(profile.innerRingsList === undefined)
+		return; 
+	
+	var innerRingsList = profile.innerRingsList;
+	var innerRingsCount = innerRingsList.getRingsCount();
+	
+	if(innerRingsCount === 0)
+		return;
+	
+	if(this.innerVtxRingsList === undefined)
+		this.innerVtxRingsList = new VtxRingsList();
+	
+	var innerRing;
+	var innerPolygon;
+	var innerVtxRing;
+	
+	for(var i=0; i<innerRingsCount; i++)
+	{
+		innerRing = innerRingsList.getRing(i);
+		if(innerRing.polygon === undefined)
+		innerRing.makePolygon();
+		innerPolygon = innerRing.polygon;
+		point2dList = innerPolygon.point2dList;
+		
+		innerVtxRing = this.innerVtxRingsList.newVtxRing();
+		innerVtxRing.makeByPoint2DList(point2dList, z);
+	}
+};
+
+VtxProfile.prototype.getAllVertices = function(resultVerticesArray)
+{
+	if(this.outerVtxRing !== undefined)
+		this.outerVtxRing.getAllVertices(resultVerticesArray);
+	
+	if(this.innerVtxRingsList !== undefined)
+		this.innerVtxRingsList.getAllVertices(resultVerticesArray);
+	
+	return resultVerticesArray;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class VtxProfilesList
+*/
+var VtxProfilesList = function(x, y) 
+{
+	if (!(this instanceof VtxProfilesList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.vtxProfilesArray;
+	this.convexFacesIndicesData;
+};
+
+VtxProfilesList.getLateralSurface = function(bottomVtxRing, topVtxRing, resultSurface, elemIndexRange)
+{
+	// This returns a lateral surface between "bottomVtxRing" & "topVtxRing" limited by "elemIndexRange".***
+	if(resultSurface === undefined)
+		resultSurface = new Surface();
+	
+	var strIdx, currIdx, endIdx, nextIdx;
+	var vtx0, vtx1, vtx2, vtx3;
+	var face;
+	currIdx = elemIndexRange.strIdx;
+	while(currIdx !== elemIndexRange.endIdx)
+	{
+		nextIdx = bottomVtxRing.vertexList.getNextIdx(currIdx);
+		face = resultSurface.newFace();
+		face.vertexArray = [];
+		
+		vtx0 = bottomVtxRing.vertexList.getVertex(currIdx);
+		vtx1 = bottomVtxRing.vertexList.getVertex(nextIdx);
+		vtx2 = topVtxRing.vertexList.getVertex(nextIdx);
+		vtx3 = topVtxRing.vertexList.getVertex(currIdx);
+		Array.prototype.push.apply(face.vertexArray, [vtx0, vtx1, vtx2, vtx3]);
+
+		currIdx = nextIdx;
+	}
+	
+	return resultSurface;
+};
+
+VtxProfilesList.prototype.newVtxProfile = function()
+{
+	if(this.vtxProfilesArray === undefined)
+		this.vtxProfilesArray = [];
+	
+	var vtxProfile = new VtxProfile();
+	this.vtxProfilesArray.push(vtxProfile);
+	return vtxProfile;
+};
+
+VtxProfilesList.prototype.getVtxProfilesCount = function()
+{
+	if(this.vtxProfilesArray === undefined)
+		return 0;
+	
+	return this.vtxProfilesArray.length;
+};
+
+VtxProfilesList.prototype.getVtxProfile = function(idx)
+{
+	if(this.vtxProfilesArray === undefined)
+		return undefined;
+	
+	return this.vtxProfilesArray[idx];
+};
+
+VtxProfilesList.prototype.getAllVertices = function(resultVerticesArray)
+{
+	// collect all vertices of all vtxProfiles.***
+	if(resultVerticesArray === undefined)
+		resultVerticesArray = [];
+	
+	var vtxProfile;
+	var vtxProfilesCount = this.getVtxProfilesCount();
+	for(var i=0; i<vtxProfilesCount; i++)
+	{
+		vtxProfile = this.getVtxProfile(i);
+		resultVerticesArray = vtxProfile.getAllVertices(resultVerticesArray);
+	}
+	
+	return resultVerticesArray;
+};
+
+VtxProfilesList.prototype.getMesh = function(resultMesh, bIncludeBottomCap, bIncludeTopCap)
+{
+	// face's vertex order.***
+	// 3-------2
+	// |       |
+	// |       |
+	// |       |
+	// 0-------1
+	
+	if(this.vtxProfilesArray === undefined)
+		return resultTriangleMatrix;
+	
+	// outerLateral.***************************************************
+	var vtxProfilesCount = this.getVtxProfilesCount();
+	
+	if(vtxProfilesCount < 2)
+		return resultTriangleMatrix;
+	
+	if(resultMesh === undefined)
+		resultMesh = new Mesh();
+		
+	var bottomVtxProfile, topVtxProfile;
+
+	bottomVtxProfile = this.getVtxProfile(0);
+	var outerVtxRing = bottomVtxProfile.outerVtxRing;
+	var elemIndexRange;
+	var bottomVtxRing, topVtxRing;
+	var elemIndicesCount;
+	var strIdx, currIdx, endIdx, nextIdx;
+	var vtx0, vtx1, vtx2, vtx3;
+	var face, surface;
+	var k;
+	var elemsCount = outerVtxRing.elemsIndexRangesArray.length;
+	
+	for(var i=0; i<elemsCount; i++)
+	{
+		surface = resultMesh.newSurface();
+		elemIndexRange = outerVtxRing.getElementIndexRange(i);
+		for(var j=0; j<vtxProfilesCount-1; j++)
+		{
+			bottomVtxProfile = this.getVtxProfile(j);
+			topVtxProfile = this.getVtxProfile(j+1);
+			
+			bottomVtxRing = bottomVtxProfile.outerVtxRing;
+			topVtxRing = topVtxProfile.outerVtxRing;
+			
+			surface = VtxProfilesList.getLateralSurface(bottomVtxRing, topVtxRing, surface, elemIndexRange);
+		}
+	}
+	
+	// Inner laterals.************************************************************************
+	var innerVtxRing;
+	var innerRinsCount = bottomVtxProfile.getInnerVtxRingsCount();
+	for(var k=0; k<innerRinsCount; k++)
+	{
+		innerVtxRing = bottomVtxProfile.getInnerVtxRing(k);
+		elemsCount = innerVtxRing.elemsIndexRangesArray.length;
+		for(var i=0; i<elemsCount; i++)
+		{
+			surface = resultMesh.newSurface();
+			elemIndexRange = innerVtxRing.getElementIndexRange(i);
+			for(var j=0; j<vtxProfilesCount-1; j++)
+			{
+				bottomVtxProfile = this.getVtxProfile(j);
+				topVtxProfile = this.getVtxProfile(j+1);
+				
+				bottomVtxRing = bottomVtxProfile.getInnerVtxRing(k);
+				topVtxRing = topVtxProfile.getInnerVtxRing(k);
+				
+				surface = VtxProfilesList.getLateralSurface(bottomVtxRing, topVtxRing, surface, elemIndexRange);
+			}
+		}
+	}
+	
+	// Caps (bottom and top).***
+	if(this.convexFacesIndicesData === undefined)
+		return resultMesh;
+	
+	var resultSurface;
+	
+	// Top profile.***********************************************************************
+	// in this case, there are a surface with multiple convex faces.***
+	if(bIncludeTopCap === undefined || bIncludeTopCap === true)
+	{
+		topVtxProfile = this.getVtxProfile(vtxProfilesCount-1);
+		resultSurface = resultMesh.newSurface();
+		resultSurface = VtxProfilesList.getTransversalSurface(topVtxProfile, this.convexFacesIndicesData, resultSurface);
+	}
+
+	// Bottom profile.***********************************************************************
+	if(bIncludeBottomCap === undefined || bIncludeBottomCap === true)
+	{
+		bottomVtxProfile = this.getVtxProfile(0);
+		resultSurface = resultMesh.newSurface();
+		resultSurface = VtxProfilesList.getTransversalSurface(bottomVtxProfile, this.convexFacesIndicesData, resultSurface);
+		
+		// in bottomSurface inverse sense of faces.***
+		resultSurface.reverseSense();
+	}
+	
+	return resultMesh;
+};
+
+VtxProfilesList.getTransversalSurface = function(vtxProfile, convexFacesIndicesData, resultSurface)
+{
+	if(resultSurface === undefined)
+		resultSurface = new Surface();
+	 
+	var currRing;
+	var currVtxRing;
+	var faceIndicesData;
+	var indexData;
+	var ringIdx, vertexIdx;
+	var indicesCount;
+	var face;
+	var vertex;
+	var convexFacesCount = convexFacesIndicesData.length;
+	for(var i=0; i<convexFacesCount; i++)
+	{
+		face = resultSurface.newFace();
+		face.vertexArray = [];
+			
+		faceIndicesData = convexFacesIndicesData[i];
+		indicesCount = faceIndicesData.length;
+		for(var j=0; j<indicesCount; j++)
+		{
+			indexData = faceIndicesData[j];
+			ringIdx = indexData.ownerIdx;
+			vertexIdx = indexData.idxInList;
+			
+			if(ringIdx === -1)
+			{
+				// is the outerRing.***
+				currVtxRing = vtxProfile.outerVtxRing;
+			}
+			else{
+				currVtxRing = vtxProfile.innerVtxRingsList.getVtxRing(ringIdx);
+			}
+			
+			vertex = currVtxRing.vertexList.getVertex(vertexIdx);
+			face.vertexArray.push(vertex);
+		}
+	}
+	
+	return resultSurface;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class VtxRing
+ */
+var VtxRing = function() 
+{
+	if (!(this instanceof VtxRing)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.vertexList;
+	this.elemsIndexRangesArray; // [] array.***
+};
+
+VtxRing.prototype.newElementIndexRange = function()
+{
+	if(this.elemsIndexRangesArray === undefined)
+		this.elemsIndexRangesArray = [];
+	
+	var indexRange = new IndexRange();
+	this.elemsIndexRangesArray.push(indexRange);
+	return indexRange;
+};
+
+VtxRing.prototype.getElementIndexRange = function(idx)
+{
+	if(this.elemsIndexRangesArray === undefined)
+		return undefined;
+	
+	return this.elemsIndexRangesArray[idx];
+};
+
+VtxRing.prototype.getAllVertices = function(resultVerticesArray)
+{
+	if(this.vertexList === undefined || this.vertexList.vertexArray === undefined)
+		return resultVerticesArray;
+	
+	if(resultVerticesArray === undefined)
+		resultVerticesArray = [];
+	
+	resultVerticesArray.push.apply(resultVerticesArray, this.vertexList.vertexArray);
+	
+	return resultVerticesArray;
+};
+
+VtxRing.prototype.copyFrom = function(vtxRing)
+{
+	if(vtxRing.vertexList !== undefined)
+	{
+		if(this.vertexList === undefined)
+			this.vertexList = new VertexList();
+		
+		this.vertexList.copyFrom(vtxRing.vertexList);
+	}
+	
+	if(vtxRing.elemsIndexRangesArray !== undefined)
+	{
+		if(this.elemsIndexRangesArray === undefined)
+			this.elemsIndexRangesArray = [];
+		
+		var indexRange, myIndexRange;
+		var indexRangesCount = vtxRing.elemsIndexRangesArray.length;
+		for(var i=0; i<indexRangesCount; i++)
+		{
+			indexRange = vtxRing.elemsIndexRangesArray[i];
+			myIndexRange = this.newElementIndexRange();
+			myIndexRange.copyFrom(indexRange);
+		}
+	}
+};
+
+VtxRing.prototype.translate = function(x, y, z)
+{
+	if(this.vertexList !== undefined)
+	{
+		this.vertexList.translateVertices(x, y, z);
+	}
+};
+
+VtxRing.prototype.transformPointsByMatrix4 = function(tMat4)
+{
+	if(this.vertexList !== undefined)
+	{
+		this.vertexList.transformPointsByMatrix4(tMat4);
+	}
+};
+
+VtxRing.prototype.makeByPoint2DList = function(point2dList, z)
+{
+	if(point2dList === undefined)
+		return;
+	
+	if(z === undefined)
+		z = 0;
+	
+	if(this.vertexList === undefined)
+		this.vertexList = new VertexList();
+	
+	this.vertexList.copyFromPoint2DList(point2dList, z);
+	this.calculateElementsIndicesRange();
+};
+
+VtxRing.prototype.calculateElementsIndicesRange = function()
+{
+	if(this.vertexList === undefined)
+		return false;
+	
+	var vertex;
+	var idxRange = undefined;
+	var vertexType;
+	var vertexCount = this.vertexList.getVertexCount();
+	for(var i=0; i<vertexCount; i++)
+	{
+		vertex = this.vertexList.getVertex(i);
+		vertexType = vertex.vertexType;
+		
+		//if(vertexType === undefined && i===0)
+		//{
+		//	var prevIdx = this.vertexList.getPrevIdx(i);
+		//	var prevVertex = this.vertexList.getVertex(prevIdx);
+		//	vertexType = prevVertex.vertexType;
+		//}
+		
+		if(vertexType && vertexType === 1)
+		{
+			if(idxRange !== undefined)
+			{
+				idxRange.endIdx = i;
+			}
+			if(i !== vertexCount)
+			{
+				idxRange = this.newElementIndexRange();
+				idxRange.strIdx = i;
+			}
+		}
+	}
+	
+	if(idxRange !== undefined)
+		idxRange.endIdx = 0;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+/**
+* 어떤 일을 하고 있습니까?
+* @class VtxRingsList
+*/
+var VtxRingsList = function() 
+{
+	if (!(this instanceof VtxRingsList)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.vtxRingsArray;
+};
+
+VtxRingsList.prototype.getVtxRingsCount = function()
+{
+	if(this.vtxRingsArray === undefined)
+		return 0;
+	
+	return this.vtxRingsArray.length;
+};
+
+VtxRingsList.prototype.getVtxRing = function(idx)
+{
+	if(this.vtxRingsArray === undefined)
+		return undefined;
+	
+	return this.vtxRingsArray[idx];
+};
+
+VtxRingsList.prototype.newVtxRing = function()
+{
+	if(this.vtxRingsArray === undefined)
+		this.vtxRingsArray = [];
+	
+	var vtxRing = new VtxRing();
+	this.vtxRingsArray.push(vtxRing);
+	return vtxRing;
+};
+
+VtxRingsList.prototype.copyFrom = function(vtxRingsList)
+{
+	if(vtxRingsList === undefined)
+		return;
+	
+	if(this.vtxRingsArray === undefined)
+		this.vtxRingsArray = [];
+	
+	var vtxRing;
+	var vtxRingsCount = vtxRingsList.getVtxRingsCount();
+	for(var i=0; i<vtxRingsCount; i++)
+	{
+		vtxRing = this.newVtxRing();
+		vtxRing.copyFrom(vtxRingsList.getVtxRing(i));
+	}
+};
+
+VtxRingsList.prototype.translate = function(x, y, z)
+{
+	var vtxRingsCount = this.getVtxRingsCount();
+	for(var i=0; i<vtxRingsCount; i++)
+	{
+		this.vtxRingsArray[i].translate(x, y, z);
+	}
+};
+
+VtxRingsList.prototype.transformPointsByMatrix4 = function(tMat4)
+{
+	var vtxRingsCount = this.getVtxRingsCount();
+	for(var i=0; i<vtxRingsCount; i++)
+	{
+		this.vtxRingsArray[i].transformPointsByMatrix4(tMat4);
+	}
+};
+
+VtxRingsList.prototype.getAllVertices = function(resultVerticesArray)
+{
+	if(this.vtxRingsArray === undefined)
+		return resultVerticesArray;
+	
+	var vtxRingsCount = this.getVtxRingsCount();
+	for(var i=0; i<vtxRingsCount; i++)
+	{
+		this.vtxRingsArray[i].getAllVertices(resultVerticesArray);
+	}
+	
+	return resultVerticesArray;
+};
+
+VtxRingsList.prototype.setVerticesIdxInList = function()
+{
+	if(this.vtxRingsArray === undefined)
+		return;
+	
+	var vtxRingsCount = this.getVtxRingsCount();
+	for(var i=0; i<vtxRingsCount; i++)
+	{
+		this.vtxRingsArray[i].setVerticesIdxInList();
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @class VtxSegment
+ */
+var VtxSegment = function(startVertex, endVertex) 
+{
+	if (!(this instanceof VtxSegment)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.startVertex;
+	this.endVertex;
+	
+	if(startVertex)
+		this.startVertex = startVertex;
+	
+	if(endVertex)
+		this.endVertex = endVertex;
+};
+
+VtxSegment.prototype.setVertices = function(startVertex, endVertex)
+{
+	this.startVertex = startVertex;
+	this.endVertex = endVertex;
+};
+
+VtxSegment.prototype.getDirection = function(resultDirection)
+{
+	// the direction is an unitary vector.***
+	var resultDirection = this.getVector();
+	
+	if(resultDirection === undefined)
+		return undefined;
+	
+	resultDirection.unitary();
+	return resultDirection;
+};
+
+VtxSegment.prototype.getVector = function(resultVector)
+{
+	if(this.startVertex === undefined || this.endVertex === undefined)
+		return undefined;
+	
+	var startPoint = this.startVertex.point3d;
+	var endPoint = this.endVertex.point3d;
+	
+	if(startPoint === undefined || endPoint === undefined)
+		return undefined;
+	
+	resultVector = startPoint.getVectorToPoint(endPoint, resultVector);
+	return resultVector;
+};
+
+VtxSegment.prototype.getLine = function(resultLine)
+{
+	if(resultLine === undefined)
+		resultLine = new Line();
+	
+	var dir = this.getDirection(); // unitary direction.***
+	var strPoint = this.startVertex.point3d;
+	resultLine.setPointAndDir(strPoint.x, strPoint.y, strPoint.z, dir.x, dir.y, dir.z);
+	return resultLine;
+};
+
+VtxSegment.prototype.getSquaredLength = function()
+{
+	return this.startVertex.point3d.squareDistToPoint(this.endVertex.point3d);
+};
+
+VtxSegment.prototype.getLength = function()
+{
+	return Math.sqrt(this.getSquaredLength());
+};
+
+VtxSegment.prototype.intersectionWithPoint = function(point, error)
+{
+	// check if the point intersects the vtxSegment's line.***
+	var line = this.getLine();
+	
+	if(error === undefined)
+		error = 10E-8;
+	
+	if(!line.isCoincidentPoint(point, error))
+		return Constant.INTERSECTION_OUTSIDE; // no intersection.***
+	
+	//Constant.INTERSECTION_OUTSIDE = 0;
+	//Constant.INTERSECTION_INTERSECT= 1;
+	//Constant.INTERSECTION_INSIDE = 2;
+	//Constant.INTERSECTION_POINT_A = 3;
+	//Constant.INTERSECTION_POINT_B = 4;
+	
+	// now, check if is inside of the segment or if is coincident with any vertex of segment.***
+	var distA = this.startVertex.point3d.distToPoint(point);
+	var distB = this.endVertex.point3d.distToPoint(point);
+	var distTotal = this.getLength();
+	
+	if(distA < error)
+		return Constant.INTERSECTION_POINT_A;
+	
+	if(distB < error)
+		return Constant.INTERSECTION_POINT_B;
+	
+	if(distA> distTotal || distB> distTotal)
+	{
+		return Constant.INTERSECTION_OUTSIDE;
+	}
+	
+	if(Math.abs(distA + distB - distTotal) < error)
+		return Constant.INTERSECTION_INSIDE;
+	
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
 var MAGO3DJS_MESSAGE = new Object();
 
 
@@ -39667,7 +41285,7 @@ PostFxShadersManager.prototype.createDefaultShaders = function(gl)
 	this.createRenderDepthShaderLego(gl);// 9.***
 	this.createSsaoShaderLego(gl);// 10.***
 
-	this.createDepthShaderBox(gl); // 11.***
+	this.triPolyhedronDepthShader = this.createDepthShaderBox(gl); // 11.***
 	this.triPolyhedronShader = this.createSsaoShaderBox(gl); // 12.***
 
 	this.createPngImageShader(gl); // 13.***
@@ -39688,6 +41306,14 @@ PostFxShadersManager.prototype.getModelRefShader = function()
 PostFxShadersManager.prototype.getModelRefSilhouetteShader = function() 
 {
 	return this.modelRefSilhouetteShader;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ */
+PostFxShadersManager.prototype.getTriPolyhedronDepthShader = function() 
+{
+	return this.triPolyhedronDepthShader;
 };
 
 /**
@@ -40349,6 +41975,8 @@ PostFxShadersManager.prototype.createDepthShaderBox = function(gl)
 
 	shader.near_loc = gl.getUniformLocation(shader.program, "near");
 	shader.far_loc = gl.getUniformLocation(shader.program, "far");
+	
+	return shader;
 };
 
 // box Shader.***********************************************************************************************************************
@@ -43719,7 +45347,7 @@ Renderer.prototype.renderObject = function(gl, renderable, magoManager, shader, 
 		}
 		else{
 			gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshColorCacheKey);
-			gl.vertexAttribPointer(shader.color4_loc, 4, gl.BYTE, true, 0, 0);
+			gl.vertexAttribPointer(shader.color4_loc, 4, gl.UNSIGNED_BYTE, true, 0, 0);
 		}
 
 		gl.bindBuffer(gl.ARRAY_BUFFER, vbo_vicky.meshNormalCacheKey);
