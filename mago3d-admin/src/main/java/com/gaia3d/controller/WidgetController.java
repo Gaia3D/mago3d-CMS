@@ -217,7 +217,7 @@ public class WidgetController {
 			accessLog.setLimit(WIDGET_LIST_VIEW_COUNT);
 			List<AccessLog> accessLogList = logService.getListAccessLog(accessLog);
 			
-//			jSONObject.put("accessLogList", JSONArray.fromObject(accessLogList));
+//			map.put("accessLogList", JSONArray.fromObject(accessLogList));
 			map.put("accessLogList", accessLogList);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -254,7 +254,7 @@ public class WidgetController {
 			scheduleLog.setLimit(WIDGET_LIST_VIEW_COUNT);
 			List<ScheduleLog> scheduleLogList = scheduleService.getListScheduleLog(scheduleLog);
 			
-//			jSONObject.put("scheduleLogList", JSONArray.fromObject(scheduleLogList));
+//			map.put("scheduleLogList", JSONArray.fromObject(scheduleLogList));
 			map.put("scheduleLogList", scheduleLogList);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -306,7 +306,7 @@ public class WidgetController {
 //		String jsonData = HttpClientHelper.httpsPostAPICallWithoutCertificate(targetExternalService, authData);
 //		log.info("@@@@@@@@@@@@@@@@@@@@ jsonData = {}", jsonData);
 //		if(jsonData != null && !"".equals(jsonData)) {
-//			JSONObject resultObject = JSONObject.fromObject(jsonData);
+//			map resultObject = map.fromObject(jsonData);
 //			if(!resultObject.isEmpty()) {
 //				success_yn = resultObject.getString("success_yn");
 //				result_message = resultObject.getString("result_message");

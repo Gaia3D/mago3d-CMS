@@ -149,18 +149,18 @@ public class DataController {
 	@GetMapping(value = "ajax-detail-data.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDetailData(HttpServletRequest request, @RequestParam("data_id") Long data_id) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {		
 			DataInfo dataInfo = dataService.getData(data_id);
-			jSONObject.put("dataInfo", dataInfo);
+			map.put("dataInfo", dataInfo);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 		
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -171,7 +171,7 @@ public class DataController {
 	@RequestMapping(value = "ajax-list-data-by-project-id.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListDataByProjectId(HttpServletRequest request, @RequestParam("project_id") Long project_id) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		List<DataInfo> dataList = new ArrayList<>();
 		try {		
@@ -183,10 +183,10 @@ public class DataController {
 			result = "db.exception";
 		}
 		
-		jSONObject.put("result", result);
-		jSONObject.put("dataList", dataList);
+		map.put("result", result);
+		map.put("dataList", dataList);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -218,7 +218,7 @@ public class DataController {
 	@PostMapping(value = "ajax-insert-data-info.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertDataInfo(HttpServletRequest request, DataInfo dataInfo) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		
 		log.info("@@@@@@@@@@@@@@@@@@ before dataInfo = {}", dataInfo);
@@ -227,15 +227,15 @@ public class DataController {
 			String errorcode = dataValidate(dataInfo);
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			int count = dataService.getDuplicationKeyCount(dataInfo);
 			if(count > 0) {
 				result = "data.key.duplication";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			if(dataInfo.getLatitude() != null && dataInfo.getLatitude().floatValue() != 0f &&
@@ -253,8 +253,8 @@ public class DataController {
 				int rootCount = dataService.getRootParentCount(dataInfo);
 				if(rootCount > 0) {
 					result = "data.project.root.duplication";
-					jSONObject.put("result", result);
-					return jSONObject;
+					map.put("result", result);
+					return map;
 				}
 			}
 			
@@ -273,9 +273,9 @@ public class DataController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -304,24 +304,24 @@ public class DataController {
 	@PostMapping(value = "ajax-data-key-duplication-check.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDataKeyDuplicationCheck(HttpServletRequest request, DataInfo dataInfo) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String duplication_value = "";
 		try {
 			if(dataInfo.getProject_id() == null || dataInfo.getProject_id().longValue() < 0) {
 				result = "project.id.empty";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			else if(dataInfo.getData_key() == null || "".equals(dataInfo.getData_key())) {
 				result = "data.key.empty";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			} else if(dataInfo.getOld_data_key() != null && !"".equals(dataInfo.getOld_data_key())) {
 				if(dataInfo.getData_key().equals(dataInfo.getOld_data_key())) {
 					result = "data.key.same";
-					jSONObject.put("result", result);
-					return jSONObject;
+					map.put("result", result);
+					return map;
 				}
 			}
 			
@@ -333,10 +333,10 @@ public class DataController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		jSONObject.put("duplication_value", duplication_value);
+		map.put("result", result);
+		map.put("duplication_value", duplication_value);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -402,7 +402,7 @@ public class DataController {
 	@PostMapping(value = "ajax-update-data-info.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateDataInfo(HttpServletRequest request, DataInfo dataInfo) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		
 		log.info("@@ dataInfo = {}", dataInfo);
@@ -411,16 +411,16 @@ public class DataController {
 			String errorcode = dataValidate(dataInfo);
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			if(dataInfo.getParent() == 0l && dataInfo.getDepth() == 1) {
 				int rootCount = dataService.getRootParentCount(dataInfo);
 				if(rootCount > 0) {
 					result = "data.project.root.duplication";
-					jSONObject.put("result", result);
-					return jSONObject;
+					map.put("result", result);
+					return map;
 				}
 			}
 
@@ -442,8 +442,8 @@ public class DataController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -476,12 +476,12 @@ public class DataController {
 	public Map<String, Object> ajaxDeleteDatas(HttpServletRequest request, @RequestParam("check_ids") String check_ids) {
 		
 		log.info("@@@@@@@ check_ids = {}", check_ids);
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			if(check_ids.length() <= 0) {
-				jSONObject.put("result", "check.value.required");
-				return jSONObject;
+				map.put("result", "check.value.required");
+				return map;
 			}
 			
 			dataService.deleteDataList(check_ids);
@@ -492,11 +492,11 @@ public class DataController {
 			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
-			jSONObject.put("result", "db.exception");
+			map.put("result", "db.exception");
 		}
 		
-		jSONObject.put("result", result	);
-		return jSONObject;
+		map.put("result", result	);
+		return map;
 	}
 	
 	/**
@@ -508,15 +508,15 @@ public class DataController {
 	@ResponseBody
 	public Map<String, Object> ajaxInsertDataFile(MultipartHttpServletRequest request) {
 		
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			Long project_id = Long.valueOf(request.getParameter("project_id"));
 			MultipartFile multipartFile = request.getFile("data_file_name");
 			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.DATA_FILE_UPLOAD, propertiesConfig.getDataUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
-				jSONObject.put("result", fileInfo.getError_code());
-				return jSONObject;
+				map.put("result", fileInfo.getError_code());
+				return map;
 			}
 			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -524,13 +524,13 @@ public class DataController {
 			
 			fileInfo = fileService.insertDataFile(project_id, fileInfo);
 			
-			jSONObject.put("total_count", fileInfo.getTotal_count());
-			jSONObject.put("parse_success_count", fileInfo.getParse_success_count());
-			jSONObject.put("parse_error_count", fileInfo.getParse_error_count());
-			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
-			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
-			jSONObject.put("update_success_count", fileInfo.getUpdate_success_count());
-			jSONObject.put("update_error_count", fileInfo.getUpdate_error_count());
+			map.put("total_count", fileInfo.getTotal_count());
+			map.put("parse_success_count", fileInfo.getParse_success_count());
+			map.put("parse_error_count", fileInfo.getParse_error_count());
+			map.put("insert_success_count", fileInfo.getInsert_success_count());
+			map.put("insert_error_count", fileInfo.getInsert_error_count());
+			map.put("update_success_count", fileInfo.getUpdate_success_count());
+			map.put("update_error_count", fileInfo.getUpdate_error_count());
 			
 			// 파일 삭제
 			File copyFile = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());
@@ -547,9 +547,9 @@ public class DataController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -562,18 +562,18 @@ public class DataController {
 	@ResponseBody
 	public Map<String, Object> ajaxDetailDataAttribute(HttpServletRequest request, @RequestParam("data_id") Long data_id) {
 		log.info("@@@@@@@@@@@@@@@@@@@@ data_id = {}", data_id);
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {		
 			DataInfoAttribute dataInfoAttribute = dataService.getDataAttribute(data_id);
-			jSONObject.put("dataInfoAttribute", dataInfoAttribute);
+			map.put("dataInfoAttribute", dataInfoAttribute);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 		
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -585,7 +585,7 @@ public class DataController {
 	@ResponseBody
 	public Map<String, Object> ajaxInsertDataAttributeFile(MultipartHttpServletRequest request) {
 		
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			Long data_id = Long.valueOf(request.getParameter("attribute_file_data_id"));
@@ -594,8 +594,8 @@ public class DataController {
 			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.DATA_ATTRIBUTE_UPLOAD, propertiesConfig.getDataAttributeUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				log.info("@@@@@@@@@@@@@@@@@@@@ error_code = {}", fileInfo.getError_code());
-				jSONObject.put("result", fileInfo.getError_code());
-				return jSONObject;
+				map.put("result", fileInfo.getError_code());
+				return map;
 			}
 			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -603,11 +603,11 @@ public class DataController {
 			
 			fileInfo = fileService.insertDataAttributeFile(data_id, fileInfo);
 			
-			jSONObject.put("total_count", fileInfo.getTotal_count());
-			jSONObject.put("parse_success_count", fileInfo.getParse_success_count());
-			jSONObject.put("parse_error_count", fileInfo.getParse_error_count());
-			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
-			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
+			map.put("total_count", fileInfo.getTotal_count());
+			map.put("parse_success_count", fileInfo.getParse_success_count());
+			map.put("parse_error_count", fileInfo.getParse_error_count());
+			map.put("insert_success_count", fileInfo.getInsert_success_count());
+			map.put("insert_error_count", fileInfo.getInsert_error_count());
 			
 			// 파일 삭제
 			File copyFile = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());
@@ -619,9 +619,9 @@ public class DataController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -633,7 +633,7 @@ public class DataController {
 	@ResponseBody
 	public Map<String, Object> ajaxInsertDataObjectAttributeFile(MultipartHttpServletRequest request) {
 		
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			Long data_id = Long.valueOf(request.getParameter("object_attribute_file_data_id"));
@@ -642,8 +642,8 @@ public class DataController {
 			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.DATA_OBJECT_ATTRIBUTE_UPLOAD, propertiesConfig.getDataObjectAttributeUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				log.info("@@@@@@@@@@@@@@@@@@@@ error_code = {}", fileInfo.getError_code());
-				jSONObject.put("result", fileInfo.getError_code());
-				return jSONObject;
+				map.put("result", fileInfo.getError_code());
+				return map;
 			}
 			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -651,11 +651,11 @@ public class DataController {
 			
 			fileInfo = fileService.insertDataObjectAttributeFile(data_id, fileInfo);
 			
-			jSONObject.put("total_count", fileInfo.getTotal_count());
-			jSONObject.put("parse_success_count", fileInfo.getParse_success_count());
-			jSONObject.put("parse_error_count", fileInfo.getParse_error_count());
-			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
-			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
+			map.put("total_count", fileInfo.getTotal_count());
+			map.put("parse_success_count", fileInfo.getParse_success_count());
+			map.put("parse_error_count", fileInfo.getParse_error_count());
+			map.put("insert_success_count", fileInfo.getInsert_success_count());
+			map.put("insert_error_count", fileInfo.getInsert_error_count());
 			
 			// 파일 삭제
 			File copyFile = new File(fileInfo.getFile_path() + fileInfo.getFile_real_name());
@@ -667,9 +667,9 @@ public class DataController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -684,7 +684,7 @@ public class DataController {
 		
 		log.info("@@ dataInfoAttribute = {}", dataInfoAttribute);
 		
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -705,8 +705,8 @@ public class DataController {
 			if(!dataAttributeDirFile.exists()) {
 				log.info("@@@ Data Attribute Directory doest not Exist. path = {}", dataInfoAttribute.getProject_data_attribute_path());
 				result = "data.attribute.dir.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			File[] fileList = dataAttributeDirFile.listFiles(new DataAttributeFilter());
@@ -754,19 +754,19 @@ public class DataController {
 			fileInfo.setInsert_error_count(insertErrorCount);
 			fileService.updateFileInfo(fileInfo);
 			
-			jSONObject.put("total_count", fileInfo.getTotal_count());
-			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
-			jSONObject.put("update_success_count", fileInfo.getUpdate_success_count());
-			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
+			map.put("total_count", fileInfo.getTotal_count());
+			map.put("insert_success_count", fileInfo.getInsert_success_count());
+			map.put("update_success_count", fileInfo.getUpdate_success_count());
+			map.put("insert_error_count", fileInfo.getInsert_error_count());
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -780,7 +780,7 @@ public class DataController {
 		
 		log.info("@@ dataInfoObjectAttribute = {}", dataInfoObjectAttribute);
 		
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -801,8 +801,8 @@ public class DataController {
 			if(!dataObjectAttributeDirFile.exists()) {
 				log.info("@@@ Data Object Attribute Directory doest not Exist. path = {}", dataInfoObjectAttribute.getProject_data_object_attribute_path());
 				result = "data.object.attribute.dir.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 				
 			File[] fileList = dataObjectAttributeDirFile.listFiles(new DataObjectAttributeFilter());
@@ -864,19 +864,19 @@ public class DataController {
 			fileInfo.setInsert_error_count(insertErrorCount);
 			fileService.updateFileInfo(fileInfo);
 			
-			jSONObject.put("total_count", fileInfo.getTotal_count());
-			jSONObject.put("insert_success_count", fileInfo.getInsert_success_count());
-			jSONObject.put("update_success_count", fileInfo.getUpdate_success_count());
-			jSONObject.put("insert_error_count", fileInfo.getInsert_error_count());
+			map.put("total_count", fileInfo.getTotal_count());
+			map.put("insert_success_count", fileInfo.getInsert_success_count());
+			map.put("update_success_count", fileInfo.getUpdate_success_count());
+			map.put("insert_error_count", fileInfo.getInsert_error_count());
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**

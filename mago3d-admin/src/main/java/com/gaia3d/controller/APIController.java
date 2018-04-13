@@ -221,15 +221,15 @@ public class APIController {
 	@PostMapping(value = "ajax-update-external-service.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateExternalService(HttpServletRequest request, ExternalService externalService) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			externalService.setMethod_mode("update");
 			String errorcode = externalService.validate();
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 						
 			externalService.setApi_key(Crypt.encrypt(externalService.getApi_key()));
@@ -241,9 +241,9 @@ public class APIController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	private String getSearchParameters(APILog aPILog) {

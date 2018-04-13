@@ -450,13 +450,13 @@ public class PolicyController {
 //			if( ( policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0 )) {
 //				result = "policy.site.invalid";
 //				map.put("result", result);
-//				return jSONObject.toString();
+//				return map.toString();
 //			}
 //			
 //			if(policy.getServer_ip() == null || "".equals(policy.getServer_ip()) || !WebUtil.isIP(policy.getServer_ip())) {
 //				result = "policy.os.server_ip.invalid";
 //				map.put("result", result);
-//				return jSONObject.toString();
+//				return map.toString();
 //			}
 //			
 //			WebUtil.setServerIp(CACHE_FILE, policy.getServer_ip());

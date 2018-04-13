@@ -18,7 +18,7 @@
 //import kr.co.gt1000.service.LicenseService;
 //import kr.co.gt1000.validator.LicenseValidator;
 //import lombok.extern.slf4j.Slf4j;
-//import net.sf.json.JSONObject;
+//import net.sf.json.map;
 //
 ///**
 // * 라이센스
@@ -88,7 +88,7 @@
 //	@RequestMapping(value = "ajax-update-license.do", method = RequestMethod.POST)
 //	@ResponseBody
 //	public String ajaxUpdatePolicyContent(HttpServletRequest request, License license) {
-//		JSONObject jSONObject = new JSONObject();
+//		map map = new map();
 //		String result = "success";
 //		try {
 //			log.info("@@ license = {} ", license);
@@ -97,18 +97,18 @@
 //					|| license.getOtp_user_count() <= 0
 //					|| StringUtils.isEmpty(license.getLicense())) {
 //				result = "license.input.invalid";
-//				jSONObject.put("result", result);
+//				map.put("result", result);
 //				
-//				return jSONObject.toString();
+//				return map.toString();
 //			}
 //			
 //			log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ license = {}", license);
 //			license = licenseService.updateLicense(license);
 //			if(StringUtils.isNotEmpty(license.getError_code())) {
 //				result = "license.checker.invalid";
-//				jSONObject.put("result", result);
+//				map.put("result", result);
 //				
-//				return jSONObject.toString();
+//				return map.toString();
 //			}
 //			
 //			configCacheController.reloadCheckLicense();
@@ -117,8 +117,8 @@
 //			result = "db.exception";
 //		}
 //	
-//		jSONObject.put("result", result);
-//		return jSONObject.toString();
+//		map.put("result", result);
+//		return map.toString();
 //	}
 //	
 //	/**

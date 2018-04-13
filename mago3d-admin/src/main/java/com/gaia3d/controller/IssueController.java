@@ -221,7 +221,7 @@ public class IssueController {
 //	public String ajaxInsertIssue(MultipartHttpServletRequest request) {
 //		
 //		Gson gson = new Gson();
-//		Map<String, Object> jSONObject = new HashMap<>();
+//		Map<String, Object> map = new HashMap<>();
 //		String result = "success";
 //		try {
 //			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -231,8 +231,8 @@ public class IssueController {
 //			if(multipartFile != null && multipartFile.getSize() != 0l) {
 //				FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.ISSUE_DATA_UPLOAD, propertiesConfig.getExcelDataUploadDir());
 //				if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
-//					jSONObject.put("result", fileInfo.getError_code());
-//					return gson.toJson(jSONObject);
+//					map.put("result", fileInfo.getError_code());
+//					return gson.toJson(map);
 //				}
 //				
 //				issueFile.setFile_name(fileInfo.getFile_name());
@@ -262,9 +262,9 @@ public class IssueController {
 //			String errorcode = issue.validate();
 //			if(errorcode != null) {
 //				result = errorcode;
-//				jSONObject.put("result", result);
-//				log.info("validate error 발생: {} ", jSONObject.toString());
-//				return gson.toJson(jSONObject);
+//				map.put("result", result);
+//				log.info("validate error 발생: {} ", map.toString());
+//				return gson.toJson(map);
 //			}
 //			
 //			// TODO 날짜를 더해서 넣어야 한다 공백 처리 해서
@@ -278,9 +278,9 @@ public class IssueController {
 //			result = "db.exception";
 //		}
 //	
-//		jSONObject.put("result", result);
+//		map.put("result", result);
 //		
-//		return gson.toJson(jSONObject);
+//		return gson.toJson(map);
 //	}
 	
 	/**

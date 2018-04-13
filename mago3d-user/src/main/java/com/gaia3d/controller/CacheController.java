@@ -53,7 +53,7 @@ public class CacheController {
 		log.info("@@@@@@@@@@@@@@@ mago3d-user callCache Start @@@@@@@@@@@@@@@@");
 		
 		ObjectMapper mapper = new ObjectMapper();
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = Result.FAIL.toString();
 		String result_message = "";
 		HttpStatus httpStatus = null;
@@ -73,11 +73,11 @@ public class CacheController {
 				if(values[0].equals("api-key")) {
 					if(!propertiesConfig.getRestAuthKey().equals(Crypt.encrypt(values[1]))) {
 						httpStatus = HttpStatus.UNAUTHORIZED;
-						jSONObject.put("result", result);
-						jSONObject.put("result_message", "REST API KEY가 유효하지 않습니다.");
+						map.put("result", result);
+						map.put("result_message", "REST API KEY가 유효하지 않습니다.");
 						log.info(" *************** RestAuthKey Differerent. key = {}", Crypt.encrypt(values[1]));
 						
-						return new ResponseEntity<String>(mapper.writeValueAsString(jSONObject), responseHeaders, httpStatus);
+						return new ResponseEntity<String>(mapper.writeValueAsString(map), responseHeaders, httpStatus);
 					}
 				} else if(values[0].equals("cache_name")) {
 					cacheParams.setCacheName(CacheName.valueOf(values[1]));
@@ -97,11 +97,11 @@ public class CacheController {
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		
-		jSONObject.put("result", result);
-		jSONObject.put("result_message", result_message);
+		map.put("result", result);
+		map.put("result_message", result_message);
 		
 		log.info("@@@@@@@@@@@@@@@ mago3d-user callCache end @@@@@@@@@@@@@@@@");
 		
-		return new ResponseEntity<String>(mapper.writeValueAsString(jSONObject), responseHeaders, httpStatus);
+		return new ResponseEntity<String>(mapper.writeValueAsString(map), responseHeaders, httpStatus);
 	}
 }

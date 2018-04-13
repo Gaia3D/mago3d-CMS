@@ -117,7 +117,7 @@ public class IssueController {
 		
 		log.info("@@ project = {}", project);
 		
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			Issue issue = new Issue();
@@ -144,14 +144,14 @@ public class IssueController {
 			issue.setLimit(100l);
 			List<Issue> issueList = issueService.getListIssue(issue);
 			
-			jSONObject.put("issueList", issueList);
+			map.put("issueList", issueList);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -274,7 +274,7 @@ public class IssueController {
 	@PostMapping(value = "ajax-insert-issue.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertIssue(HttpServletRequest request, Issue issue) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -285,8 +285,8 @@ public class IssueController {
 //			if(multipartFile != null && multipartFile.getSize() != 0l) {
 //				FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.ISSUE_DATA_UPLOAD, propertiesConfig.getExcelDataUploadDir());
 //				if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
-//					jSONObject.put("result", fileInfo.getError_code());
-//					return gson.toJson(jSONObject);
+//					map.put("result", fileInfo.getError_code());
+//					return gson.toJson(map);
 //				}
 //				
 //				issueFile.setFile_name(fileInfo.getFile_name());
@@ -322,9 +322,9 @@ public class IssueController {
 			String errorcode = issue.validate();
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				log.info("validate error 발생: {} ", jSONObject.toString());
-				return jSONObject;
+				map.put("result", result);
+				log.info("validate error 발생: {} ", errorcode);
+				return map;
 			}
 			
 			if(issue.getDue_day() != null && !"".equals(issue.getDue_day())
@@ -338,7 +338,7 @@ public class IssueController {
 			
 			issueService.insertIssue(issue, issueFile);
 			
-			jSONObject.put("issue", issue);
+			map.put("issue", issue);
 			log.info("@@@ after issue = {}", issue);
 			
 		} catch(Exception e) {
@@ -346,9 +346,9 @@ public class IssueController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -402,7 +402,7 @@ public class IssueController {
 	@PostMapping(value = "ajax-update-issue.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateIssue(Issue issue) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ issue = {}", issue);
@@ -412,8 +412,8 @@ public class IssueController {
 			log.info("@@@@@@@@@@@@ errorcode = {}", errorcode);
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}			
 			issueService.updateIssue(issue);
 		} catch(Exception e) {
@@ -421,9 +421,9 @@ public class IssueController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -472,7 +472,7 @@ public class IssueController {
 	@PostMapping(value = "ajax-insert-issue-comment.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertIssueComment(HttpServletRequest request, Issue issue) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -480,13 +480,13 @@ public class IssueController {
 			log.info("@@ issue = {} ", issue);
 			if(issue.getIssue_id() == null || issue.getIssue_id().longValue() <= 0l) {
 				result = "issuecomment.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			if(issue.getComment() == null || "".equals(issue.getComment())) {
 				result = "issuecomment.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			IssueComment issueComment = new IssueComment();
@@ -499,14 +499,14 @@ public class IssueController {
 			issueService.insertIssueComment(issueComment);
 			
 			List<IssueComment> issueCommentList = issueService.getListIssueComment(issue.getIssue_id());
-			jSONObject.put("issueCommentList", issueCommentList);
+			map.put("issueCommentList", issueCommentList);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -517,27 +517,27 @@ public class IssueController {
 	@PostMapping(value = "ajax-delete-issue-comment.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDeleteIssueComment(HttpServletRequest request, Long issue_comment_id) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ issue_comment_id = {} ", issue_comment_id);
 			if(issue_comment_id == null || issue_comment_id.longValue() <= 0l) {
 				result = "issuecomment.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			IssueComment issueComment = issueService.getIssueComment(issue_comment_id);
 			issueService.deleteIssueComment(issue_comment_id);
 			List<IssueComment> issueCommentList = issueService.getListIssueComment(issueComment.getIssue_id());
-			jSONObject.put("issueCommentList", issueCommentList);
+			map.put("issueCommentList", issueCommentList);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**

@@ -70,18 +70,18 @@ public class ProjectController {
 	@PostMapping(value = "ajax-list-project.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListProject(HttpServletRequest request) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			List<Project> projectList = projectService.getListProject(new Project());
-			jSONObject.put("projectList", projectList);
+			map.put("projectList", projectList);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 		
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -92,26 +92,26 @@ public class ProjectController {
 	@GetMapping(value = "ajax-project.do")
 	@ResponseBody
 	public Map<String, Object> ajaxProject(Long projectId) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 						
 			log.info("@@ projectId = {} ", projectId);
 			if(projectId == null) {
 				result = "input.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			Project project = projectService.getProject(projectId);
-			jSONObject.put("project", project);
+			map.put("project", project);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 		
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -138,7 +138,7 @@ public class ProjectController {
 	@ResponseBody
 	public Map<String, Object> ajaxProjectKeyDuplicationCheck(HttpServletRequest request, Project project) {
 		
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String duplication_value = "";
 		
@@ -146,13 +146,13 @@ public class ProjectController {
 		try {
 			if(project.getProject_key() == null || "".equals(project.getProject_key())) {
 				result = "project.key.empty";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			} else if(project.getOld_project_key() != null && !"".equals(project.getOld_project_key())) {
 				if(project.getProject_key().equals(project.getOld_project_key())) {
 					result = "project.key.same";
-					jSONObject.put("result", result);
-					return jSONObject;
+					map.put("result", result);
+					return map;
 				}
 			}
 			
@@ -164,10 +164,10 @@ public class ProjectController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		jSONObject.put("duplication_value", duplication_value);
+		map.put("result", result);
+		map.put("duplication_value", duplication_value);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -179,7 +179,7 @@ public class ProjectController {
 	@PostMapping(value = "ajax-insert-project.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertProject(HttpServletRequest request, Project project) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ project = {} ", project);
@@ -187,8 +187,8 @@ public class ProjectController {
 			if(project.getProject_key() == null || "".equals(project.getProject_key())
 					|| project.getProject_name() == null || "".equals(project.getProject_name())) {
 				result = "input.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			projectService.insertProject(project);
@@ -202,8 +202,8 @@ public class ProjectController {
 			result = "db.exception";
 		}
 		
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -231,7 +231,7 @@ public class ProjectController {
 	@PostMapping(value = "ajax-update-project.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateProject(HttpServletRequest request, Project project) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 						
@@ -240,8 +240,8 @@ public class ProjectController {
 					|| project.getProject_name() == null || "".equals(project.getProject_name())) {
 				
 				result = "input.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			projectService.updateProject(project);
@@ -255,8 +255,8 @@ public class ProjectController {
 			result = "db.exception";
 		}
 		
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**

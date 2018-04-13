@@ -363,7 +363,7 @@ public class MainController {
 			scheduleLog.setLimit(WIDGET_LIST_VIEW_COUNT);
 			List<ScheduleLog> scheduleLogList = scheduleService.getListScheduleLog(scheduleLog);
 			
-//			jSONObject.put("scheduleLogList", new JSONArray.fromObject(scheduleLogList));
+//			map.put("scheduleLogList", new JSONArray.fromObject(scheduleLogList));
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -382,39 +382,39 @@ public class MainController {
 	@GetMapping(value = "ajax-dbcp-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDbcpWidget(HttpServletRequest request) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
-			jSONObject.put("userSessionCount", SessionUserHelper.loginUsersMap.size());
+			map.put("userSessionCount", SessionUserHelper.loginUsersMap.size());
 			
-			jSONObject.put("initialSize", dataSource.getMaximumPoolSize());
-			jSONObject.put("minIdle", dataSource.getMinimumIdle());
-			jSONObject.put("numIdle", dataSource.getMaximumPoolSize());
+			map.put("initialSize", dataSource.getMaximumPoolSize());
+			map.put("minIdle", dataSource.getMinimumIdle());
+			map.put("numIdle", dataSource.getMaximumPoolSize());
 			
-//			jSONObject.put("initialSize", dataSource.getInitialSize());
-////			jSONObject.put("maxTotal", dataSource.getMaxTotal());
-//			jSONObject.put("maxIdle", dataSource.getMaxIdle());
-//			jSONObject.put("minIdle", dataSource.getMinIdle());
-//			jSONObject.put("numActive", dataSource.getNumActive());
-//			jSONObject.put("numIdle", dataSource.getNumIdle());
+//			map.put("initialSize", dataSource.getInitialSize());
+////			map.put("maxTotal", dataSource.getMaxTotal());
+//			map.put("maxIdle", dataSource.getMaxIdle());
+//			map.put("minIdle", dataSource.getMinIdle());
+//			map.put("numActive", dataSource.getNumActive());
+//			map.put("numIdle", dataSource.getNumIdle());
 			
 			// 사용자 dbcp 정보
 			Map<String, Integer> userDbcp = getUserDbcp();
-			jSONObject.put("userUserSessionCount", userDbcp.get("userSessionCount"));
-			jSONObject.put("userInitialSize", userDbcp.get("initialSize"));
-			jSONObject.put("userMaxTotal", userDbcp.get("maxTotal"));
-			jSONObject.put("userMaxIdle", userDbcp.get("maxIdle"));
-			jSONObject.put("userMinIdle", userDbcp.get("minIdle"));
-			jSONObject.put("userNumActive", userDbcp.get("numActive"));
-			jSONObject.put("userNumIdle", userDbcp.get("numIdle"));
+			map.put("userUserSessionCount", userDbcp.get("userSessionCount"));
+			map.put("userInitialSize", userDbcp.get("initialSize"));
+			map.put("userMaxTotal", userDbcp.get("maxTotal"));
+			map.put("userMaxIdle", userDbcp.get("maxIdle"));
+			map.put("userMinIdle", userDbcp.get("minIdle"));
+			map.put("userNumActive", userDbcp.get("numActive"));
+			map.put("userNumIdle", userDbcp.get("numIdle"));
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**
@@ -425,7 +425,7 @@ public class MainController {
 	@GetMapping(value = "ajax-access-log-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxAccessLogWidget(HttpServletRequest request) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
@@ -443,14 +443,14 @@ public class MainController {
 			accessLog.setLimit(WIDGET_LIST_VIEW_COUNT);
 			List<AccessLog> accessLogList = logService.getListAccessLog(accessLog);
 			
-			jSONObject.put("accessLogList", accessLogList);
+			map.put("accessLogList", accessLogList);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 }

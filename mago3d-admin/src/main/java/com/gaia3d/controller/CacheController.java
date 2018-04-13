@@ -39,13 +39,13 @@ public class CacheController {
 	@PostMapping(value = "ajax-reload-config-cache.do")
 	@ResponseBody
 	public Map<String, Object> ajaxReloadConfigCache(HttpServletRequest request, String cacheName, String cacheType) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			if(cacheName == null || "".equals(cacheName) || cacheType == null || "".equals(cacheType)) {
 				result = "cache.input.invalid";
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			CacheParams cacheParams = new CacheParams();
@@ -58,7 +58,7 @@ public class CacheController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 }

@@ -291,7 +291,7 @@ public class LoginController {
 	@GetMapping(value = "ajax-change-language.do")
 	@ResponseBody
 	public Map<String, Object> ajaxChangeLanguage(HttpServletRequest request, HttpServletResponse response, @RequestParam("lang") String lang, Model model) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ lang = {}", lang);
@@ -309,9 +309,9 @@ public class LoginController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**

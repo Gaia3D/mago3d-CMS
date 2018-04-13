@@ -102,7 +102,7 @@ public class HttpClientHelper {
 	 */
 	@ResponseBody
 	public static Map<String, Object> httpPost(ExternalService externalService, String authData) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = null;
 		CloseableHttpClient httpclient = null;
 		CloseableHttpResponse response = null;
@@ -126,9 +126,9 @@ public class HttpClientHelper {
 			    log.info("@@@@@@@@@@@@ result = {}", result);
 			}
 		    
-		    jSONObject.put("statusCode", httpStatus.value());
-		    jSONObject.put("statusCodeValue", httpStatus.name());
-		    jSONObject.put("result", result);
+		    map.put("statusCode", httpStatus.value());
+		    map.put("statusCodeValue", httpStatus.name());
+		    map.put("result", result);
         } catch(Exception e) {
         	e.printStackTrace();
         } finally {
@@ -147,7 +147,7 @@ public class HttpClientHelper {
         		e.printStackTrace();
         	}
         }
-        return jSONObject;
+        return map;
 	}
 	
 //	/**

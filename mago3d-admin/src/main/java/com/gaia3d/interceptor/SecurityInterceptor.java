@@ -66,9 +66,9 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 			} else {
 				log.info("## uri = {}, ajax_uri >= 0 ", uri);
 				ObjectMapper mapper = new ObjectMapper();
-				Map<String, String> jSONObject = new HashMap<>();
-    			jSONObject.put("result", "user.session.empty");
-    			response.getWriter().write(mapper.writeValueAsString(jSONObject));
+				Map<String, String> map = new HashMap<>();
+				map.put("result", "user.session.empty");
+    			response.getWriter().write(mapper.writeValueAsString(map));
     			
 //    			사용자 정보가 없을 경우는 : 404 (Not Found)
 //    			요청 정보가 정확하지 않을 경우 : 400 (Bad Request)

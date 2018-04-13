@@ -110,7 +110,7 @@ public class DataLogController {
 	@PostMapping(value = "ajax-update-data-log-status.do")
 	@ResponseBody
 	public Map<String, Object> ajaxUpdateDataInfoLogStatus(HttpServletRequest request, DataInfoLog dataInfoLog) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		
 		log.info("@@ dataInfoLog = {}", dataInfoLog);
@@ -119,8 +119,8 @@ public class DataLogController {
 			String errorcode = dataInfoLog.validate();
 			if(errorcode != null) {
 				result = errorcode;
-				jSONObject.put("result", result);
-				return jSONObject;
+				map.put("result", result);
+				return map;
 			}
 			
 			if(DataInfoLog.STATUS_LEVEL_CONFIRM.equals(dataInfoLog.getStatus_level())) {
@@ -146,8 +146,8 @@ public class DataLogController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 		
 	/**

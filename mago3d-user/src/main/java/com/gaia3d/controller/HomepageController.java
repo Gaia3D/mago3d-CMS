@@ -219,7 +219,7 @@ public class HomepageController {
 	@ResponseBody
 	public Map<String, Object> ajaxListIssue(HttpServletRequest request, Issue issue, @RequestParam(defaultValue="1") String pageNo) {
 		
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -252,15 +252,15 @@ public class HomepageController {
 			if(totalCount > 0l) {
 				issueList = issueService.getListIssueByUserId(issue);
 			}
-			jSONObject.put("issueList", issueList);
-			jSONObject.put("totalCount", totalCount);
+			map.put("issueList", issueList);
+			map.put("totalCount", totalCount);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -396,7 +396,7 @@ public class HomepageController {
 	@GetMapping(value = "ajax-change-language.do")
 	@ResponseBody
 	public Map<String, Object> ajaxChangeLanguage(HttpServletRequest request, HttpServletResponse response, @RequestParam("lang") String lang, Model model) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			log.info("@@ lang = {}", lang);
@@ -413,9 +413,9 @@ public class HomepageController {
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
+		map.put("result", result);
 		
-		return jSONObject;
+		return map;
 	}
 	
 	/**

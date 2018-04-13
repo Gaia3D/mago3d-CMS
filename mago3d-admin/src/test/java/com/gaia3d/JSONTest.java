@@ -19,19 +19,19 @@
 //	@Test
 //	public void test() throws Exception {
 //		Gson gson = new Gson();
-//		Map<String, String> jSONObject = new HashMap<String, String>();
+//		Map<String, String> map = new HashMap<String, String>();
 //		String menuTree = null;
 //		List<Menu> menuList = new ArrayList<>();
 //		menuList.add(getRootMenu());
 //		menuTree = getMenuTree(menuList);
-//		jSONObject.put("menuTree", menuTree);
+//		map.put("menuTree", menuTree);
 //		
-//		System.out.println(gson.toJson(jSONObject));
+//		System.out.println(gson.toJson(map));
 //		
-//		String jsonString = gson.toJson(jSONObject);
+//		String jsonString = gson.toJson(map);
 //		System.out.println("================ " + jsonString.replace("\\", ""));
 //		
-////		JSONObject jsObject = new JSONObject();
+////		map jsObject = new map();
 ////		jsObject.put("menuTree", menuTree);
 ////		
 ////		System.out.println(jsObject.toString());

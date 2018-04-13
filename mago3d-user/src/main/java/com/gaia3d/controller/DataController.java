@@ -45,18 +45,18 @@ public class DataController {
 	@RequestMapping(value = "ajax-project-data-by-project-id.do")
 	@ResponseBody
 	public Map<String, Object> ajaxProjectDataByProjectId(HttpServletRequest request, @RequestParam("project_id") Long project_id) {
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {		
 			String projectDataJson =  CacheManager.getProjectDataJson(project_id);
-			jSONObject.put("projectDataJson", projectDataJson);
+			map.put("projectDataJson", projectDataJson);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 		
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class DataController {
 	@ResponseBody
 	public Map<String, Object> ajaxSearchData(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) {
 		
-		Map<String, Object> jSONObject = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -102,15 +102,15 @@ public class DataController {
 				dataInfoList = dataService.getListData(dataInfo);
 			}
 			
-			jSONObject.put("dataInfoList", dataInfoList);
-			jSONObject.put("totalCount", totalCount);
+			map.put("dataInfoList", dataInfoList);
+			map.put("totalCount", totalCount);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
 	
-		jSONObject.put("result", result);
-		return jSONObject;
+		map.put("result", result);
+		return map;
 	}
 	
 	/**
