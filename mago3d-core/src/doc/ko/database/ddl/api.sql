@@ -32,7 +32,7 @@ create table api_log(
 	result_value3				varchar(256),
 	result_value4				varchar(256),
 	result_value5				varchar(256),
-	insert_date				timestamp wiwith time zone	default now(),
+	insert_date				timestamp 			with time zone			default now(),
 	constraint api_log_pk primary key (api_log_id)	
 );
 
