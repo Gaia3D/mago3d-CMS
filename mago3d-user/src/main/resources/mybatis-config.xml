@@ -11,6 +11,8 @@
 	<typeAliases>
 		<typeAlias type="com.gaia3d.domain.AccessLog" alias="accessLog"/>
 		<typeAlias type="com.gaia3d.domain.APILog" alias="aPILog"/>
+		<typeAlias type="com.gaia3d.domain.Board" alias="board"/>
+		<typeAlias type="com.gaia3d.domain.BoardComment" alias="boardComment"/>
 		<typeAlias type="com.gaia3d.domain.CommonCode" alias="commonCode"/>
 		<typeAlias type="com.gaia3d.domain.Project" alias="project"/>
 		<typeAlias type="com.gaia3d.domain.DataInfo" alias="dataInfo"/>
