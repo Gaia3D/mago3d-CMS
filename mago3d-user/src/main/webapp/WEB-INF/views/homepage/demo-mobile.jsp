@@ -2018,7 +2018,6 @@
 		$("input:radio[name='origin']:radio[value='" + isShow + "']").prop("checked", true);
 		changeOriginAPI(managerFactory, isShow);
   	}
-
 	// boundingBox 표시/비표시
 	function changeBoundingBox(isShow) {
 		$("input:radio[name='boundingBox']:radio[value='" + isShow + "']").prop("checked", true);
