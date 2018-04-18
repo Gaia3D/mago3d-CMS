@@ -40,7 +40,6 @@ values(38, 'データ詳細', 'DATA', 3 , 2, 8, '/data/detail-data.do', '/data/l
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
 values(39, 'データ修正', 'DATA', 3 , 2, 9, '/data/modify-data.do', '/data/list-data.do', 'glyph-monitor', 'N', 'Y', 'N');
 
-
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(4, '問題', 'ISSUE', 0 , 1, 4, '/issue/list-issue.do', 'glyph-dashboard', 'Y', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(42, '問題リスト', 'ISSUE', 4 , 2, 2, '/issue/list-issue.do', 'glyph-dashboard', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(43, '問題登録', 'ISSUE', 4 , 2, 3, '/issue/input-issue.do', 'glyph-dashboard', 'N', 'Y');
@@ -103,6 +102,7 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (4, 1, 4);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (42, 1, 42);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (43, 1, 43);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (44, 1, 44);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (5, 1, 5);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (51, 1, 51);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (52, 1, 52);

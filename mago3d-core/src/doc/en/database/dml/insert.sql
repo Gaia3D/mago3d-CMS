@@ -102,6 +102,7 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (4, 1, 4);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (42, 1, 42);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (43, 1, 43);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (44, 1, 44);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (5, 1, 5);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (51, 1, 51);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (52, 1, 52);

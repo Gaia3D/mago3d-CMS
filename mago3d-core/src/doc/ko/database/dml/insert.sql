@@ -168,12 +168,12 @@ insert into common_code (
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL1', '매우중요', 'LEVLE1', 'LEVLE1', 'Y', 1, 'i1', ''
+	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL1', '매우중요', 'LEVEL1', 'LEVEL1', 'Y', 1, 'i1', ''
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL2', '중요', 'LEVELE2', 'LEVELE2', 'Y', 2, 'i2', ''
+	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL2', '중요', 'LEVEL2', 'LEVEL2', 'Y', 2, 'i2', ''
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
@@ -183,13 +183,13 @@ insert into common_code (
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL4', '낮음', 'LELEVEL', 'LELEVEL', 'Y', 4, 'i4', ''
+	'ISSUE_PRIORITY', 'ISSUE_PRIORITY_LEVEL4', '낮음', 'LEVEL4', 'LEVEL4', 'Y', 4, 'i4', ''
 );
 
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
 ) values (
-	'ISSUE_TYPE', 'ISSUE_TYPE_BUGGER', '버그', 'BUGGER', 'BLEVEL', 'YLEVEL', 't1', 'bugger'
+	'ISSUE_TYPE', 'ISSUE_TYPE_BUGGER', '버그', 'BUGGER', 'BUGGER', 'Y', 1, 't1', 'bugger'
 );
 insert into common_code (
 	code_type, code_key, code_name, code_name_en, code_value, use_yn, view_order, css_class, image
