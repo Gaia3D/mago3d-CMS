@@ -591,6 +591,13 @@
 			<label for="hideObjectInfo"> <spring:message code='hide'/> </label>
 		</div>
 		<div>
+			<h3><spring:message code='origin'/></h3>
+			<input type="radio" id="showOrigin" name="origin" value="true" onclick="changeOrigin(true);" />
+			<label for="showOrigin"> <spring:message code='show'/> </label>
+			<input type="radio" id="hideOrigin" name="origin" value="false" onclick="changeOrigin(false);"/>
+			<label for="hideOrigin"> <spring:message code='hide'/> </label>
+      		</div>
+		<div>
 			<h3><spring:message code='boundingbox'/></h3>
 			<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />
 			<label for="showBoundingBox"> <spring:message code='show'/> </label>
@@ -748,6 +755,8 @@
 			changeLabel(false);
 			// object 정보 표시
 			changeObjectInfoViewMode(true);
+			// Origin 표시
+            		changeOrigin(false);
 			// BoundingBox
 			changeBoundingBox(false);
 			// Selecting And Moving
@@ -2004,6 +2013,11 @@
 		$("input:radio[name='objectInfo']:radio[value='" + isShow + "']").prop("checked", true);
 		changeObjectInfoViewModeAPI(managerFactory, isShow);
 	}
+	// Origin 표시/비표
+    	function changeOrigin(isShow) {
+		$("input:radio[name='origin']:radio[value='" + isShow + "']").prop("checked", true);
+		changeOriginAPI(managerFactory, isShow);
+  	}
 	// boundingBox 표시/비표시
 	function changeBoundingBox(isShow) {
 		$("input:radio[name='boundingBox']:radio[value='" + isShow + "']").prop("checked", true);
