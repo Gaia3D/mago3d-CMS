@@ -10,6 +10,7 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		//classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.0'
 	}
 }
 
@@ -17,6 +18,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+//apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'war'
 
 war {
@@ -35,6 +37,10 @@ repositories {
 configurations {
 	providedRuntime
 }
+
+//jar {
+//    finalizedBy shadowJar
+//}
 
 sourceSets {
 	main {
