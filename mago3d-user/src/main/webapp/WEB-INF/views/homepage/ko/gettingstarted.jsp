@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="/css/${lang}/font/font.css" />
 <link rel="stylesheet" href="/externlib/${lang}/highlight/styles/monokai.css" />
 <script type="text/javascript" src="/externlib/${lang}/highlight/highlight.js"></script>
-<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+<script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
 <%-- <script type="text/javascript" src="/js/homepage-scrolling.js"></script> --%>
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>

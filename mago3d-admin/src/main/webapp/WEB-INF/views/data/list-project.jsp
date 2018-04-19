@@ -10,12 +10,12 @@
 	<title>${sessionSiteName }</title>
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
+	<link rel="stylesheet" href="/externlib/normalize/normalize.min.css" />
+	<link rel="stylesheet" href="/externlib/jquery-ui/jquery-ui.css" />
 	<link rel="stylesheet" href="/css/${lang}/style.css" />
 	<link type="text/css" rel="stylesheet" href="/externlib/${lang}/axisj/ui/arongi/font-awesome.min.css" />	
-	<script src="/externlib/${lang}/jquery/jquery.js"></script>
-	<script src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>	
+	<script src="/externlib/jquery/jquery.js"></script>
+	<script src="/externlib/jquery-ui/jquery-ui.js"></script>	
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
 	<script type="text/javascript" src="/js/navigation.js"></script>

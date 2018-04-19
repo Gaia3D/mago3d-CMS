@@ -11,7 +11,7 @@
 	<link type="text/css" rel="stylesheet" href="/css/${lang}/layout.css" />
 	<link type="text/css" rel="stylesheet" href="/css/${lang}/common.css" />
 	<link type="text/css" rel="stylesheet" href="/css/${lang}/admin.css" />
-	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
 </head>

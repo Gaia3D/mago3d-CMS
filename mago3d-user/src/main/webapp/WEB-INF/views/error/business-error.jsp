@@ -14,9 +14,9 @@
 	<title>Mago3D User</title>
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" />
+	<link rel="stylesheet" href="/externlib/normalize/normalize.min.css" />
 	<link rel="stylesheet" href="/css/${lang}/style.css" />
-	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
 </head>

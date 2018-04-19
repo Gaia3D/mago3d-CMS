@@ -10,8 +10,8 @@
 	<title>${sessionSiteName }</title>
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
+	<link rel="stylesheet" href="/externlib/normalize/normalize.min.css" />
+	<link rel="stylesheet" href="/externlib/jquery-ui/jquery-ui.css" />
 	<link rel="stylesheet" href="/css/${lang}/style.css" />
 	
 	<link type="text/css" rel="stylesheet" href="/externlib/${lang}/axisj/ui/arongi/font-awesome.min.css" />
@@ -21,9 +21,9 @@
 	<link type="text/css" rel="stylesheet" href="/externlib/${lang}/axisj/ui/arongi/AXSelect.css" />
 	<link type="text/css" rel="stylesheet" href="/externlib/${lang}/axisj/ui/arongi/AXTree.css" />
 	
-	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery-migrate-1.2.1.min.js"></script>
-	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
+	<script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/externlib/jquery/jquery-migrate-1.2.1.min.js"></script>
+	<script type="text/javascript" src="/externlib/jquery-ui/jquery-ui.js"></script>
 		
 	<script type="text/javascript" src="/externlib/${lang}/axisj/lib/AXJ.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/axisj/lib/AXInput.js"></script>

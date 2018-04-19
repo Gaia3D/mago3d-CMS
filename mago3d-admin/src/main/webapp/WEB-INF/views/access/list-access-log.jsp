@@ -10,8 +10,8 @@
 	<title>${sessionSiteName }</title>
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" />
-	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
+	<link rel="stylesheet" href="/externlib/normalize/normalize.min.css" />
+	<link rel="stylesheet" href="/externlib/jquery-ui/jquery-ui.css" />
 	<link rel="stylesheet" href="/css/${lang}/style.css" />
 </head>
 <body>
@@ -155,14 +155,14 @@
 		</table>
 	</div>
 
-<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-<script type="text/javascript" src="/externlib/${lang}/jquery/jquery-migrate-1.2.1.min.js"></script>
-<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
+<script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
+<script type="text/javascript" src="/externlib/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="/externlib/jquery-ui/jquery-ui.js"></script>
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
 <script type="text/javascript" src="/js/navigation.js"></script>
-<script type="text/javascript" src="/externlib/${lang}/spinner/progressSpin.min.js"></script>
-<script type="text/javascript" src="/externlib/${lang}/spinner/raphael.js"></script>
+<script type="text/javascript" src="/externlib/spinner/progressSpin.min.js"></script>
+<script type="text/javascript" src="/externlib/spinner/raphael.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		initJqueryCalendar();
