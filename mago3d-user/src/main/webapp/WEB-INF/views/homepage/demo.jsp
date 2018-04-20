@@ -1986,6 +1986,19 @@
 	function changeObjectMove(objectMoveMode) {
 		$("input:radio[name='objectMoveMode']:radio[value='" + objectMoveMode + "']").prop("checked", true);
 		changeObjectMoveAPI(managerFactory, objectMoveMode);
+		// ALL 인 경우 Origin도 같이 표시
+        var originValue = $(':radio[name="origin"]:checked').val();
+        if(objectMoveMode === "0") {
+		    if(originValue === "true") {
+            } else {
+            }
+            changeOriginAPI(managerFactory, true);
+        } else {
+            if(originValue === "true") {
+            } else {
+                changeOriginAPI(managerFactory, false);
+            }
+        }
 	}
 	// 마우스 클릭 객체 이동 모드 변경 저장
 	$("#saveObjectMoveButton").click(function () {
