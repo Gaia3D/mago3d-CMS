@@ -5,7 +5,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.FileParseLog;
 import com.gaia3d.parser.DataAttributeFileParser;

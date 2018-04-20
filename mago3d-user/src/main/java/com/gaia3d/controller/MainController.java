@@ -12,11 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.gaia3d.config.CacheConfig;
-import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.Pagination;
-import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserSession;
 import com.gaia3d.service.IssueService;
 import com.gaia3d.util.DateUtil;

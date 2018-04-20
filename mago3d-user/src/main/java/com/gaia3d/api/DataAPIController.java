@@ -17,7 +17,6 @@ import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoLog;
 import com.gaia3d.domain.DataInfoObjectAttribute;
-import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Project;
 import com.gaia3d.domain.UserSession;
 import com.gaia3d.service.DataService;

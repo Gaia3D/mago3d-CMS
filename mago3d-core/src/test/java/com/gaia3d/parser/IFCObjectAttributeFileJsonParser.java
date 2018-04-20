@@ -1,22 +1,17 @@
 package com.gaia3d.parser;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.domain.DataInfo;
-import com.gaia3d.domain.DataObjectAttributeFilter;
 
 public class IFCObjectAttributeFileJsonParser {
 

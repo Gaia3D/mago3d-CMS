@@ -1,7 +1,5 @@
 package com.gaia3d.service;
 
-import com.gaia3d.domain.DataInfoAttribute;
-import com.gaia3d.domain.DataInfoObjectAttribute;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.FileParseLog;
 

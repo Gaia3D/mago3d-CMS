@@ -1,7 +1,5 @@
 package com.gaia3d.domain;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class ListFromString {

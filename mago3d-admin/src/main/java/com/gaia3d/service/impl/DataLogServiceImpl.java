@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoLog;
 import com.gaia3d.persistence.DataLogMapper;
-import com.gaia3d.persistence.DataMapper;
 import com.gaia3d.service.DataLogService;
 import com.gaia3d.service.DataService;
 

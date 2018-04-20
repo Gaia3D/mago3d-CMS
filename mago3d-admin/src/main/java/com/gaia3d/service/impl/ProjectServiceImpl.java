@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gaia3d.controller.ProjectController;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.Policy;
