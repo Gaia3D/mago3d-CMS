@@ -582,12 +582,12 @@
 			<label for="hideObjectInfo"> <spring:message code='hide'/> </label>
 		</div>
 		<div>
-            <h3><spring:message code='origin'/></h3>
-            <input type="radio" id="showOrigin" name="origin" value="true" onclick="changeOrigin(true);" />
-            <label for="showOrigin"> <spring:message code='show'/> </label>
-            <input type="radio" id="hideOrigin" name="origin" value="false" onclick="changeOrigin(false);"/>
-            <label for="hideOrigin"> <spring:message code='hide'/> </label>
-        </div>
+			<h3><spring:message code='origin'/></h3>
+			<input type="radio" id="showOrigin" name="origin" value="true" onclick="changeOrigin(true);" />
+			<label for="showOrigin"> <spring:message code='show'/> </label>
+			<input type="radio" id="hideOrigin" name="origin" value="false" onclick="changeOrigin(false);"/>
+			<label for="hideOrigin"> <spring:message code='hide'/> </label>
+		</div>
 		<div>
 			<h3><spring:message code='boundingbox'/></h3>
 			<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />

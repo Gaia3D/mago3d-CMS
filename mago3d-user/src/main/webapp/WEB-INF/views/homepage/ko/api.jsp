@@ -11,14 +11,14 @@
 <!--[if lt IE 9]>
 	   	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-<link rel="stylesheet" href="/externlib/${lang}/highlight/styles/agate.css" />
+<link rel="stylesheet" href="/externlib/highlight/styles/agate.css" />
 <link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 <link rel="stylesheet" href="/css/${lang}/font/font.css" />
 <script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
 <script type="text/javascript" src="/js/analytics.js"></script>
-<script type="text/javascript" src="/externlib/${lang}/highlight/highlight.js"></script>
+<script type="text/javascript" src="/externlib/highlight/highlight.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 <script>
 // 	$(document).ready(function(){
@@ -41,7 +41,13 @@
 			<ul class="list">
 				<li class="item"><span class="api_title"> <a class="api" href="#changeMagoStateAPI">changeMagoStateAPI</a>
 				</span></li>
+				<li class="item"><span class="api_title"> <a href="#changeLabelAPI">changeLabelAPI</a>
+				</span></li>
+				<li class="item"><span class="api_title"> <a href="#changeOriginAPI">changeOriginAPI</a>
+				</span></li>
 				<li class="item"><span class="api_title"> <a href="#changeBoundingBoxAPI">changeBoundingBoxAPI</a>
+				</span></li>
+				<li class="item"><span class="api_title"> <a href="#changePropertyRenderingAPI">changePropertyRenderingAPI</a>
 				</span></li>
 				<li class="item"><span class="api_title"> <a href="#changeShadowAPI">changeShadowAPI</a>
 				</span></li>
@@ -79,148 +85,74 @@
 				</span></li>
 				<li class="item"><span class="api_title"> <a href="#drawInsertIssueImageAPI">drawInsertIssueImageAPI</a>
 				</span></li>
-				<li class="item"><span class="api_title"> <a href="#searchDataAPI">searchDataAPI</a>
+				<li class="item"><span class="api_title"> <a href="#gotoProjectAPI">gotoProjectAPI</a>
 				</span></li>
-				<li class="item"><span class="api_title"> <a href="#getDataAPI">getDataAPI</a>
-				</span></li>
-				<li class="item"><span class="api_title"> <a href="#isDataExistAPI">isDataExistAPI</a>
-				</span></li>
-				<li class="item"><span class="api_title"> <a href="#changePropertyRenderingAPI">changePropertyRenderingAPI</a>
+				<li class="item"><span class="api_title"> <a href="#gotoIssueAPI">gotoIssueAPI</a>
 				</span></li>
 				<li class="item"><span class="api_title"> <a href="#mouseMoveAPI">mouseMoveAPI</a>
 				</span></li>
-				<li class="item"><span class="api_title"> <a href="#gotoProjectAPI">gotoProjectAPI</a>
+				<li class="item"><span class="api_title"> <a href="#searchDataAPI">searchDataAPI</a>
+				</span></li>
+				<li class="item"><span class="api_title"> <a href="#isDataExistAPI">isDataExistAPI</a>
+				</span></li>
+				<li class="item"><span class="api_title"> <a href="#getDataAPI">getDataAPI</a>
+				</span></li>
+				<li class="item"><span class="api_title"> <a href="#getDataInfoByDataKeyAPI">getDataInfoByDataKeyAPI</a>
 				</span></li>
 				<li class="item"><span class="api_title"> <a href="#drawAppendDataAPI">drawAppendDataAPI</a>
 				</span></li>
 			</ul>
 		</div>
 		<div class="main" id="content">
-<!-- 			<div class="header"> -->
-<!-- 				<h2>mago3D JS API 목록</h2> -->
-<%-- <%-- 				<img src="/images/${lang}/homepage/AC.png" style="margin-bottom: 10px;" /> --%> 
-<!-- 			</div> -->
-<!-- 			<div class="api_list"> -->
-<!-- 				<table> -->
-<!-- 					<thead> -->
-<!-- 						<tr> -->
-<!-- 							<th class="api_name">API 이름</th> -->
-<!-- 							<th class="api_des">설명</th> -->
-<!-- 						</tr> -->
-<!-- 					</thead> -->
-<!-- 					<tbody> -->
-<!-- 						<tr> -->
-<!-- 							<td><a href="#changeMagoStateAPI">changeMagoStateAPI</a></td> -->
-<!-- 							<td>mago3D 상태 변경</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeBoundingBoxAPI</td> -->
-<!-- 							<td>BoundingBox 표시/비표시</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeShadowAPI</td> -->
-<!-- 							<td>그림자 표시/비표시</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeColorAPI</td> -->
-<!-- 							<td>Color 변경</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeLocationAndRotationAPI</td> -->
-<!-- 							<td>Location And Rotation 변경</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeObjectMoveAPI</td> -->
-<!-- 							<td>마우스 클릭 객체 이동 대상 변경</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>saveObjectMoveAPI</td> -->
-<!-- 							<td>모든 객체 마우스 이동 이력 저장(Cache)</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>deleteAllObjectMoveAPI</td> -->
-<!-- 							<td>모든 객체 마우스 이동 이력 삭제(Cache)</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>deleteAllChangeColorAPI</td> -->
-<!-- 							<td>모든 객체 색깔 변경 이력을 삭제(Cache)</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeInsertIssueModeAPI</td> -->
-<!-- 							<td>이슈 등록 활성화 유무</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeObjectInfoViewModeAPI</td> -->
-<!-- 							<td>object 정보 표시 활성화 유무</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeOcclusionCullingAPI</td> -->
-<!-- 							<td>Object Occlusion culling</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeFPVModeAPI</td> -->
-<!-- 							<td>1인칭, 3인칭 모드 변경(개발중)</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeNearGeoIssueListViewModeAPI</td> -->
-<!-- 							<td>현재 위치 근처 issue 불러옴</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeInsertIssueStateAPI</td> -->
-<!-- 							<td>issue 등록 geo 정보 관련 상태 변경</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeLodAPI</td> -->
-<!-- 							<td>LOD(Level Of Detail 설정을 변경</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeLightingAPI</td> -->
-<!-- 							<td>Lighting 설정 </td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changeSsaoRadiusAPI</td> -->
-<!-- 							<td>SSAO Radius 설정</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>clearAllDataAPI</td> -->
-<!-- 							<td>화면에 있는 모든 데이터를 삭제, 비표시</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>drawInsertIssueImageAPI</td> -->
-<!-- 							<td>Pin Image를 그림</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>searchDataAPI</td> -->
-<!-- 							<td>데이터 검색</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>getDataAPI</td> -->
-<!-- 							<td>환경 설정 data map에서 key 값을 취득</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>isDataExistAPI</td> -->
-<!-- 							<td>환경 설정 data map에 key 값의 존재 유무를 판별</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>changePropertyRenderingAPI</td> -->
-<!-- 							<td>속성값에 의한 가시화 유무 설정</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>mouseMoveAPI</td> -->
-<!-- 							<td>마우스를 사용할 수 없는 환경에서 버튼 이벤트로 대체(개발중)</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>gotoProjectAPI</td> -->
-<!-- 							<td>해당 프로젝트를 로딩하고 이동</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td>drawAppendDataAPI</td> -->
-<!-- 							<td>프로젝트 단위 데이터를 추가하고 Rendering</td> -->
-<!-- 						</tr> -->
-<!-- 					</tbody> -->
-<!-- 				</table> -->
-<!-- 			</div> -->
-<!-- 			<hr> -->
+				<article class="api_description" style="margin-top: 50px;">
+				<img src="/images/${lang}/homepage/logo_mago3d.png" style="margin-bottom: 50px; margin-left: 120px;" />
+				<h2>mago3D.JS V1.0.5</h2>
+				<article class="readme">
+				<img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"> <img src="https://img.shields.io/badge/language-English-orange.svg" /> <img src="https://img.shields.io/badge/language-Korean-blue.svg" />
+				<p><b>3D 멀티 블록 시각화를위한 오픈 소스 자바 스크립트 라이브러리</b></p>
+				<p>AEC (Architecture, Engineering, Construction) 영역과 전통적인 3D 공간 정보 (3D GIS)를 통합하고 시각화하는 차세대 3D GIS 플랫폼입니다. 실내 및 실외에서 구별 할 수없는 웹 브라우저에 AEC 및 3D GIS를 통합하십시오. 웹 브라우저에 프로그램을 설치하지 않고도 대규모 BIM (Building Information Modeling), JT (Jupiter Tessellation) 및 3D GIS 파일을 찾아보고 공동 작업 할 수 있습니다.</p>
+				<h4>개발 환경</h4>
+				<div class="list_wrap">
+					<p>java8, eclipse neon, node, apache, Jasmine, Jsdoc, Gulp, eslint, JQuery</p>
+				</div>
+				<h4>Getting Started</h4>
+				<div class="list_wrap">
+					<ul class="readme_list">
+						<li><b style="color: #1E90FF;">소스 설치</b>
+							<ul class="sub_list">
+								<li><a href="https://github.com/Gaia3D/mago3djs" style="display: inline;"><b>github</b> </a>It accepts mago3DJS from.</li>
+								<li>Installation path C:/git/repository/mago3djs</li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="readme_list">
+						<li><b style="color: #1E90FF;">Node 설치</b>
+							<ul class="sub_list">
+								<li>npm install</li>
+								<li>npm install -g gulp</li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="readme_list">
+						<li><b style="color: #1E90FF;">Node Server 실행</b>
+							<ul class="sub_list">
+								<li>Running a local server:  C:\git\repository\mago3djs> node server.js</li>
+								<li>Running a public server:  C:\git\repository\mago3djs> node server.js --public true</li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="readme_list">
+						<li><b style="color: #1E90FF;">Symbolic Link 생성</b>
+							<ul class="sub_list">
+								<li>Create Data Folder: mklink /d "C:\git\repository\mago3djs\data" "C:\data"</li>
+								<li>Delete data folder: C:\git\repository\mago3djs>rmdir data</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</article>
+			</article>
+			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeMagoStateAPI">changeMagoStateAPI</span></h2>
 				<p>mago3D 활성화 상태 값을 변경함으로서 화면에 mago3D Object가 표시, 비표시 됩니다.</p>
@@ -246,14 +178,15 @@
 				<h4>Examples:</h4>
 				<b>html</b>
 				<pre>
-<code>&lt;div&gt;mago3D
+<code>&lt;div&gt;
+	&lt;h3&gt;MagoState&lt;/h3&gt;
 	&lt;input type="radio" id="magoEnable" name="magoState" value="0" checked="checked" onclick="changeMagoState(true);" /&gt;
 	&lt;label for="magoEnable"&gt; 활성화 &lt;/label&gt;
 	&lt;input type="radio" id="magoDisable" name="magoState" value="1"  onclick="changeMagoState(false);" /&gt;
 	&lt;label for="magoDisable"&gt; 비활성화 &lt;/label&gt;
 &lt;/div&gt;
 </code>
-			</pre>
+				</pre>
 				<br> <b>JavaScript</b>
 				<pre>
 <code>function changeMagoState(isShow) {
@@ -261,7 +194,95 @@
 	changeMagoState(managerFactory, isShow);
 }
 </code>
-			</pre>
+				</pre>
+			</article>
+			<hr>
+			<article class="api_description" style="margin-top: 50px;">
+				<h2><span id="changeLabelAPI">changeLabelAPI</span></h2>
+				<p>changeLabelAPI 활성화 상태 값을 변경함으로서 Label이 표시, 비표시 됩니다.</p>
+				<h4>Parameters:</h4>
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>managerFactoryInstance</td>
+							<td>mago3D 시작 부분</td>
+						</tr>
+						<tr>
+							<td>isShow</td>
+							<td>true: 활성화, false: 비활성화</td>
+						</tr>
+					</tbody>
+				</table>
+				<h4>Examples:</h4>
+				<b>html</b>
+				<pre>
+<code>&lt;div&gt;
+	&lt;h3&gt;라벨&lt;/h3&gt;
+	&lt;input type="radio" id="showLabel" name="labelInfo" value="true" onclick="changeLabel(true);" /&gt;
+	&lt;label for="showLabel"&gt; 표시 &lt;/label&gt;
+	&lt;input type="radio" id="hideLabel" name="labelInfo" value="false"  onclick="changeLabel(false);" /&gt;
+	&lt;label for="hideLabel"&gt; 비표시 &lt;/label&gt;
+&lt;/div&gt;
+</code>
+				</pre>
+				<br> <b>JavaScript</b>
+				<pre>
+<code>function changeLabel(isShow) {
+		$("input:radio[name='labelInfo']:radio[value='" + isShow + "']").prop("checked", true);
+		changeLabelAPI(managerFactory, isShow);
+	}
+</code>
+				</pre>
+			</article>
+			<hr>
+			<article class="api_description" style="margin-top: 50px;">
+				<h2><span id="changeOriginAPI">changeOriginAPI</span></h2>
+				<p>changeOriginAPI 활성화 상태 값을 변경함으로서 Origin이 표시, 비표시 됩니다.</p>
+				<h4>Parameters:</h4>
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>managerFactoryInstance</td>
+							<td>mago3D 시작 부분</td>
+						</tr>
+						<tr>
+							<td>isShow</td>
+							<td>true: 활성화, false: 비활성화</td>
+						</tr>
+					</tbody>
+				</table>
+				<h4>Examples:</h4>
+				<b>html</b>
+				<pre>
+<code>&lt;div&gt;
+	&lt;h3&gt;Origin&lt;/h3&gt;
+	&lt;input type="radio" id="showOrigin" name="origin" value="true" onclick="changeOrigin(true);" /&gt;
+	&lt;label for="showOrigin"&gt; 표시 &lt;/label&gt;
+	&lt;input type="radio" id="hideOrigin" name="origin" value="false"  onclick="changeOrigin(false);" /&gt;
+	&lt;label for="hideOrigin"&gt; 비표시 &lt;/label&gt;
+&lt;/div&gt;
+</code>
+				</pre>
+				<br> <b>JavaScript</b>
+				<pre>
+<code>function changeOrigin(isShow) {
+        $("input:radio[name='origin']:radio[value='" + isShow + "']").prop("checked", true);
+        changeOriginAPI(managerFactory, isShow);
+	}
+</code>
+				</pre>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
@@ -277,7 +298,7 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td>managerFactory</td>
+							<td>managerFactoryInstance</td>
 							<td>mago3D 시작 부분</td>
 						</tr>
 						<tr>
@@ -290,14 +311,14 @@
 				<b>html</b>
 				<pre>
 <code>&lt;div&gt;
-	&lt;span&gt;BoundingBox&lt;/span&gt;
+	&lt;h3&gt;BoundingBox&lt;/h3&gt;
 	&lt;input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" /&gt;
 	&lt;label for="showBoundingBox"&gt; 표시 &lt;/label&gt;
 	&lt;input type="radio" id="hideBoundingBox" name="boundingBox" value="false"  onclick="changeBoundingBox(false);" /&gt;
 	&lt;label for="hideBoundingBox"&gt; 비표시 &lt;/label&gt;
 &lt;/div&gt;
 </code>
-			</pre>
+				</pre>
 				<br> <b>JavaScript</b>
 				<pre>
 <code class="JavaScript">function changeBoundingBox(isShow) {
@@ -305,7 +326,83 @@
 	changeBoundingBoxAPI(managerFactory, isShow);
 }
 </code>
-			</pre>
+				</pre>
+			</article>
+			<hr>
+			<article class="api_description" style="margin-top: 50px;">
+				<h2><span id="changePropertyRenderingAPI">changePropertyRenderingAPI</span></h2>
+				<p>속성값에 의한 가시화 유무설정하는 API입니다.</p>
+				<h4>Parameters:</h4>
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>managerFactoryInstance</td>
+							<td>mago3D 시작 부분</td>
+						</tr>
+						<tr>
+							<td>isShow</td>
+							<td>true = 표시, false = 비표시</td>
+						</tr>
+						<tr>
+							<td>projectId</td>
+							<td>프로젝트 아이디</td>
+						</tr>
+						<tr>
+							<td>property</td>
+							<td>속성</td>
+						</tr>
+					</tbody>
+				</table>
+				<h4>Examples:</h4>
+				<b>html</b>
+				<pre>
+<code class="html">&lt;div&gt;
+	&lt;h3&gt;속성 가시화&lt;/h3&gt;
+	&lt;ul class="apiLocal"&gt;
+		&lt;li&gt;
+			&lt;input type="radio" id="showPropertyRendering" name="propertyRendering" value="true" /&gt;
+			&lt;label for="showLabel"&gt; 표시 &lt;/label&gt;
+			&lt;input type="radio" id="hidePropertyRendering" name="propertyRendering" value="false" /&gt;
+			&lt;label for="hideLabel"&gt; 비표시 &lt;/label&gt;
+		&lt;/li&gt;
+		&lt;li&gt;
+			&lt;label for="propertyRenderingProjectId"&gt;프로젝트 &lt;/label&gt;
+			&lt;select id="propertyRenderingProjectId" name="propertyRenderingProjectId" class="select"&gt;
+				&lt;option value="data.json"&gt;...&lt;/option&gt;
+			&lt;/select&gt;
+		&lt;/li&gt;
+		&lt;li&gt;
+			&lt;label for="propertyRenderingWord"&gt;속성&lt;/label&gt;
+			&lt;input type="text" id="propertyRenderingWord" name="propertyRenderingWord" size="23" placeholder="isMain=true" /&gt;
+			&lt;button type="button" id="changePropertyRendering" class="btn"&gt;변경&lt;/button&gt; 
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+</code>
+				</pre>
+				<br><b>JavaScript</b>
+				<pre>
+<code class="javascript">$("#changePropertyRendering").click(function(e) {
+	var isShow = $(':radio[name="propertyRendering"]:checked').val();
+	if(isShow === undefined){
+		alert("표시/비표시 를 선택하여 주십시오.");
+		return false;
+	}
+	if ($.trim($("#propertyRenderingWord").val()) === ""){
+		alert("속성값을 입력해 주세요.");
+		$("#propertyRenderingWord").focus();
+		return false;
+	}
+	changePropertyRenderingAPI(managerFactory, isShow, $("#propertyRenderingProjectId").val(), $("#propertyRenderingWord").val());
+});
+</code>
+				</pre>
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
@@ -333,14 +430,15 @@
 				<h4>Examples:</h4>
 				<b>html</b>
 				<pre>
-<code>&lt;div&gt;Shadow
+<code>&lt;div&gt;
+	&lt;h3&gt;그림자 설정&lt;/h3&gt;
 	&lt;input type="radio" id="showShadow" name="shadow" value="true" onclick="changeShadow(true);" /&gt;
 	&lt;label for="showShadow"&gt; 표시 &lt;/label&gt;
 	&lt;input type="radio" id="hideShadow" name="shadow" value="false"  onclick="changeShadow(false);" /&gt;
 	&lt;label for="hideShadow"&gt; 비표시 &lt;/label&gt;
 &lt;/div&gt;
 </code>
-			</pre>
+				</pre>
 				<br> <b>JavaScript</b>
 				<pre>
 <code>
@@ -376,7 +474,7 @@ function changeShadow(isShow) {
 						</tr>
 						<tr>
 							<td>dataKey</td>
-							<td>데이터 키</td>
+							<td>데이터 고유키</td>
 						</tr>
 						<tr>
 							<td>objectIds</td>
@@ -401,7 +499,7 @@ function changeShadow(isShow) {
 		&lt;li&gt;
 			&lt;label for="colorProjectId"&gt;프로젝트 &lt;/label&gt;
 			&lt;select id="colorProjectId" name="colorProjectId" class="select"&gt;
-			...
+				&lt;option value="data.json"&gt;...&lt;/option&gt;
 			&lt;/select&gt;
 		&lt;/li&gt;
 		&lt;li&gt;
@@ -431,7 +529,7 @@ function changeShadow(isShow) {
 	&lt;/ul&gt;
 &lt;/div&gt;
 </code>
-			</pre>
+				</pre>
 				<br> <b>JavaScript</b>
 				<pre>
 <code>$("#changeColor").click(function(e) {
@@ -472,7 +570,7 @@ function changeShadow(isShow) {
 						</tr>
 						<tr>
 							<td>dataKey</td>
-							<td>데이터 키</td>
+							<td>데이터 고유키</td>
 						</tr>
 						<tr>
 							<td>latitude</td>
@@ -543,14 +641,14 @@ function changeShadow(isShow) {
 	&lt;/ul&gt;
 &lt;/div&gt;
 </code>
-			</pre>
+				</pre>
 				<br> <b>JavaScript</b>
 				<pre>
 <code>$("#changeLocationAndRotation").click(function() {
 	if(!changeLocationAndRotationCheck()) return false;
-	changeLocationAndRotationAPI(	managerFactory, $("#moveProjectId").val(),
-							$("#moveDataKey").val(), $("#moveLatitude").val(), $("#moveLongitude").val(), 
-							$("#moveHeight").val(), $("#moveHeading").val(), $("#movePitch").val(), $("#moveRoll").val());
+	changeLocationAndRotationAPI(managerFactory, $("#moveProjectId").val(), $("#moveDataKey").val(), $("#moveLatitude").val(), 
+					       	     $("#moveLongitude").val(), $("#moveHeight").val(), $("#moveHeading").val(), 
+					    	     $("#movePitch").val(), $("#moveRoll").val());
 });
 </code>
 				</pre>
@@ -591,7 +689,7 @@ function changeShadow(isShow) {
 	&lt;label for="objectMove"&gt; Object &lt;/label&gt;
 &lt;/div&gt;	
 </code>
-			</pre>
+				</pre>
 				<br> <b>JavaScript</b>
 				<pre>
 <code>function changeObjectMove(objectMoveMode) {
@@ -629,7 +727,7 @@ function changeShadow(isShow) {
 				<pre>
 <code>&lt;button type="button" id="saveObjectMoveButton" class="btn"&gt;저장&lt;/button&gt;	
 </code>
-			</pre>
+				</pre>
 				<br> <b>JavaScript</b>
 				<pre>
 <code>$("#saveObjectMoveButton").click(function () {
@@ -672,7 +770,7 @@ function changeShadow(isShow) {
 				<pre>
 <code>&lt;button type="button" id="deleteAllObjectMoveButton" class="btn"&gt;전체 삭제&lt;/button&gt;
 </code>
-			</pre>
+				</pre>
 				<br> <b>JavaScript</b>
 				<pre>
 <code>$("#deleteAllObjectMoveButton").click(function () {
@@ -684,7 +782,7 @@ function changeShadow(isShow) {
 </code>
 				</pre>
 			</article>
-			<hr>
+			<hr>		
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="deleteAllChangeColorAPI">deleteAllChangeColorAPI</span></h2>
 				<p>변경한 색상 이력을 전체 삭제합니다.</p>
@@ -708,7 +806,7 @@ function changeShadow(isShow) {
 				<pre>
 <code>&lt;button type="button" id="deleteAllChangeColor" class="btn"&gt;전체 삭제&lt;/button&gt;
 </code>
-			</pre>
+				</pre>
 				<br> <b>JavaScript</b>
 				<pre>
 <code>$("#deleteAllChangeColor").click(function () {
@@ -765,20 +863,20 @@ function changeShadow(isShow) {
 	changeInsertIssueModeAPI(managerFactory, insertIssueEnable);
 });
 </code>
-			</pre>
-			<br><b>mago3DJS로 부터 호출 되는 callback 함수</b>
+				</pre>
+				<br><b>mago3DJS로 부터 호출 되는 callback 함수</b>
 			<pre>
-<code class=javascript>function showInsertIssueLayer(data_key, object_key, latitude, longitude, height) {
-	if(insertIssueEnable) {
-		$("#data_key").val(data_key);
-		$("#object_key").val(object_key);
-		$("#latitude").val(latitude);
-		$("#longitude").val(longitude);
-		$("#height").val(height);
-		
-		// 현재 좌표를 저장
-		$("#now_latitude").val(latitude);
-		$("#now_longitude").val(longitude);
+<code class=javascript>	function showInsertIssueLayer(projectId, dataKey, objectKey, latitude, longitude, height) {
+		if(insertIssueEnable) {
+		    $("#issueProjectId").val(projectId);
+			$("#data_key").val(dataKey);
+			$("#object_key").val(objectKey);
+			$("#latitude").val(latitude);
+			$("#longitude").val(longitude);
+			$("#height").val(height);
+			
+			// 현재 좌표를 저장
+			saveCurrentLocation(latitude, longitude);
 	}
 }
 </code>
@@ -813,7 +911,7 @@ function changeShadow(isShow) {
 				<br><b>html</b>
 				<pre>
 <code>&lt;div&gt;
-	&lt;h3&gt;Object 정보&lt;/h3&gt;
+	&lt;h3&gt;객체 정보&lt;/h3&gt;
 	&lt;input type="radio" id="showObjectInfo" name="objectInfo" value="true" onclick="changeObjectInfoViewMode(true);" /&gt;
 	&lt;label for="showObjectInfo"&gt; 표시 &lt;/label&gt;
 	&lt;input type="radio" id="hideObjectInfo" name="objectInfo" value="false" onclick="changeObjectInfoViewMode(false);"/&gt;
@@ -831,39 +929,41 @@ function changeShadow(isShow) {
 				</pre>
 				<br><b>mago3DJS로 부터 호출 되는 callback 함수</b>
 				<pre>
-<code>function showSelectedObject(dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
-	var objectInfoViewFlag = $(':radio[name="objectInfo"]:checked').val();
-	if(objectInfoViewFlag) {
-		$("#moveDataKey").val(dataKey);
-		$("#moveLatitude").val(latitude);
-		$("#moveLongitude").val(longitude);
-		$("#moveHeight").val(height);
-		$("#moveHeading").val(heading);
-		$("#movePitch").val(pitch);
-		$("#moveRoll").val(roll);
-		
-		$.toast({
-		    heading: 'Click Object Info',
-		    text: [
-		        'dataKey : ' + dataKey, 
-		        'objectId : ' + objectId,
-		        'latitude : ' + latitude,
-		        'longitude : ' + longitude,
-		        'height : ' + height,
-		        'heading : ' + heading,
-		        'pitch : ' + pitch,
-		        'roll : ' + roll
-		    ],
-			bgColor : '#393946',
-			hideAfter: 5000,
-			icon: 'info',
-			position : 'bottom-right'
-		});
-		// occlusion culling
-		$("#occlusion_culling_data_key").val(dataKey);
-		// 현재 좌표를 저장
-		$("#now_latitude").val(latitude);
-		$("#now_longitude").val(longitude);
+<code>function showSelectedObject(projectId, dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
+		var objectInfoViewFlag = $(':radio[name="objectInfo"]:checked').val();
+		if(objectInfoViewFlag) {
+		    $("#moveProjectId").val(projectId);
+			$("#moveDataKey").val(dataKey);
+			$("#moveLatitude").val(latitude);
+			$("#moveLongitude").val(longitude);
+			$("#moveHeight").val(height);
+			$("#moveHeading").val(heading);
+			$("#movePitch").val(pitch);
+			$("#moveRoll").val(roll);
+			
+			$.toast({
+			    heading: 'Click Object Info',
+			    text: [
+					'ProjectId : ' + projectId,
+			        'dataKey : ' + dataKey,
+			        'objectId : ' + objectId,
+			        'latitude : ' + latitude,
+			        'longitude : ' + longitude,
+			        'height : ' + height,
+			        'heading : ' + heading,
+			        'pitch : ' + pitch,
+			        'roll : ' + roll
+			    ],
+				bgColor : '#393946',
+				hideAfter: 5000,
+				icon: 'info',
+				position : 'bottom-right'
+			});
+			
+			// occlusion culling
+			$("#occlusion_culling_data_key").val(dataKey);
+			// 현재 좌표를 저장
+			saveCurrentLocation(latitude, longitude);
 	}
 }
 </code>
@@ -889,6 +989,10 @@ function changeShadow(isShow) {
 						<tr>
 							<td>flag</td>
 							<td>true = 활성화, false = 비활성화</td>
+						</tr>
+						<tr>
+							<td>dataKey</td>
+							<td>데이터 고유키</td>
 						</tr>
 					</tbody>
 				</table>
@@ -1068,6 +1172,14 @@ function changeShadow(isShow) {
 							<td>lod3DistInMeters</td>
 							<td>lod3DistInMeters</td>
 						</tr>
+						<tr>
+							<td>lod4DistInMeters</td>
+							<td>lod4DistInMeters</td>
+						</tr>
+						<tr>
+							<td>lod5DistInMeters</td>
+							<td>lod5DistInMeters</td>
+						</tr>
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
@@ -1076,11 +1188,17 @@ function changeShadow(isShow) {
 <code class="html">&lt;div&gt;
 	&lt;h3&gt;LOD&lt;/h3&gt;
 	&lt;div&gt;LOD0&lt;/div&gt;
-	&lt;input type="text" id="geo_lod0" name="geo_lod0" value="22" size="15" /&gt;&nbsp;M
+	&lt;input type="text" id="geo_lod0" name="geo_lod0" value="${policy.geo_lod0}" size="15" /&gt;&nbsp;M
 	&lt;div&gt;LOD1&lt;/div&gt;
-	&lt;input type="text" id="geo_lod1" name="geo_lod1" value="70" size="15" /&gt;&nbsp;M
+	&lt;input type="text" id="geo_lod1" name="geo_lod1" value="${policy.geo_lod0}" size="15" /&gt;&nbsp;M
 	&lt;div&gt;LOD2&lt;/div&gt;
-	&lt;input type="text" id="geo_lod2" name="geo_lod2" value="22360" size="15" /&gt;&nbsp;M&nbsp;&nbsp;
+	&lt;input type="text" id="geo_lod2" name="geo_lod2" value="${policy.geo_lod0}" size="15" /&gt;&nbsp;M
+	&lt;div&gt;LOD3&lt;/div&gt;
+	&lt;input type="text" id="geo_lod2" name="geo_lod2" value="${policy.geo_lod0}" size="15" /&gt;&nbsp;M
+	&lt;div&gt;LOD4&lt;/div&gt;
+	&lt;input type="text" id="geo_lod2" name="geo_lod2" value="${policy.geo_lod0}" size="15" /&gt;&nbsp;M
+	&lt;div&gt;LOD5&lt;/div&gt;
+	&lt;input type="text" id="geo_lod2" name="geo_lod2" value="${policy.geo_lod0}" size="15" /&gt;&nbsp;M&nbsp;&nbsp;
 	&lt;button type="button" id="changeLodButton" class="btn"&gt;변경&lt;/button&gt;
 &lt;/div&gt;
 </code>
@@ -1088,13 +1206,13 @@ function changeShadow(isShow) {
 				<br><b>JavaScript</b>
 				<pre>
 <code class="javascript">$("#changeLodButton").click(function() {
-	changeLodAPI(managerFactory, $("#geo_lod0").val(), $("#geo_lod1").val(), $("#geo_lod2").val(), null);
-});
+		changeLodAPI(managerFactory, $("#geo_lod0").val(), $("#geo_lod1").val(), $("#geo_lod2").val(), $("#geo_lod3").val(), $("#geo_lod4").val(), $("#geo_lod5").val());
+	});
 </code>
 				</pre>
 			</article>
 			<hr>
-				<article class="api_description" style="margin-top: 50px;">
+			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeLightingAPI">changeLightingAPI</span></h2>
 				<p>선택한 Object에 밝기를 조절하는 API입니다.</p>
 				<h4>Parameters:</h4>
@@ -1109,6 +1227,10 @@ function changeShadow(isShow) {
 						<tr>
 							<td>managerFactoryInstance</td>
 							<td>mago3D 시작 부분</td>
+						</tr>
+						<tr>
+							<td>ambientReflectionCoef</td>
+							<td>ambientReflectionCoef</td>
 						</tr>
 						<tr>
 							<td>diffuseReflectionCoef</td>
@@ -1159,8 +1281,8 @@ function changeShadow(isShow) {
 				<br><b>JavaScript</b>
 				<pre>
 <code class="javascript">$("#changeLightingButton").click(function() {
-	changeLightingAPI(managerFactory, $("#geo_ambient_reflection_coef").val(), $("#geo_diffuse_reflection_coef").val(), $("#geo_specular_reflection_coef").val(), null, null);
-});
+		changeLightingAPI(managerFactory, $("#geo_ambient_reflection_coef").val(), $("#geo_diffuse_reflection_coef").val(), $("#geo_specular_reflection_coef").val(), null, null);
+	});
 </code>
 				</pre>
 			</article>
@@ -1250,6 +1372,34 @@ function changeShadow(isShow) {
 							<td>managerFactoryInstance</td>
 							<td>mago3D 시작 부분</td>
 						</tr>
+						<tr>
+							<td>drawType</td>
+							<td>이미지 유형</td>
+						</tr>
+						<tr>
+							<td>issue_id</td>
+							<td>이슈 고유키 </td>
+						</tr>
+						<tr>
+							<td>issue_type</td>
+							<td>이슈 타입</td>
+						</tr>
+						<tr>
+							<td>data_key</td>
+							<td>데이터 고유키</td>
+						</tr>
+						<tr>
+							<td>latitude</td>
+							<td>위도</td>
+						</tr>
+						<tr>
+							<td>longitude</td>
+							<td>경도</td>
+						</tr>
+						<tr>
+							<td>height</td>
+							<td>높이</td>
+						</tr>
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
@@ -1260,7 +1410,212 @@ function changeShadow(isShow) {
 </code>
 				</pre>
 			</article>
+			<hr>	
+			<article class="api_description" style="margin-top: 50px;">
+				<h2><span id="gotoProjectAPI">gotoProjectAPI</span></h2>
+				<p>해당 프로젝트를 로딩하고 그 프로젝트로 이동하는 API입니다.</p>
+				<h4>Parameters:</h4>
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>managerFactoryInstance</td>
+							<td>mago3D 시작 부분</td>
+						</tr>
+						<tr>
+							<td>projectId</td>
+							<td>프로젝트 아이디</td>
+						</tr>
+						<tr>
+							<td>projectData</td>
+							<td>프로젝트 데이터</td>
+						</tr>
+						<tr>
+							<td>projectDataFolder</td>
+							<td>프로젝트 데이터 폴더</td>
+						</tr>
+						<tr>
+							<td>latitude</td>
+							<td>위도</td>
+						</tr>
+						<tr>
+							<td>longitude</td>
+							<td>경도</td>
+						</tr>
+						<tr>
+							<td>height</td>
+							<td>높이</td>
+						</tr>
+						<tr>
+							<td>duration</td>
+							<td>이동하는 시간</td>
+						</tr>
+					</tbody>
+				</table>
+				<h4>Examples:</h4>
+				<b>html</b>
+				<pre>
+<code>&lt;ul class="shortcut"&gt;
+	&lt;li onclick="gotoProject('data.json', '126.5252421', '35.425', '550', '3')"&gt;data&lt;/li&gt;
+	&lt;li onclick="gotoProject('data.json', '126.5252421', '35.425', '550', '3')"&gt;data&lt;/li&gt;
+	&lt;li onclick="gotoProject('data.json', '126.5252421', '35.425', '550', '3')"&gt;data&lt;/li&gt;
+&lt;/ul&gt;
+</code>
+				</pre>
+				<br><b>JavaScript</b>
+				<pre>
+<code class="javascript">function gotoProject(projectId, longitude, latitude, height, duration) {
+		var projectData = getDataAPI(CODE.PROJECT_ID_PREFIX + projectId);
+		if (projectData === null || projectData === undefined) {
+			$.ajax({
+				url: dataInformationUrl + projectId,
+				type: "GET",
+				dataType: "json",
+				success: function(serverData) {
+					gotoProjectAPI(managerFactory, projectId, serverData, serverData.data_key, longitude, latitude, height, duration);		
+				},
+				error : function(request, status, error) {
+					console.log("code : " + request.status + "\n" + "message : " + request.responseText + "\n" + "error : " + error);
+				}
+			});
+		} else {
+			gotoProjectAPI(managerFactory, projectId, projectData, projectData.data_key, longitude, latitude, height, duration);	
+		}
+		
+		// 현재 좌표를 저장
+		saveCurrentLocation(latitude, longitude);
+	}
+</code>
+				</pre>
+			</article>
 			<hr>
+			<article class="api_description" style="margin-top: 50px;">
+				<h2><span id="gotoIssueAPI">gotoIssueAPI</span></h2>
+				<p>해당 프로젝트를 로딩하고 그 이슈로 이동하는 API입니다.</p>
+				<h4>Parameters:</h4>
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>managerFactoryInstance</td>
+							<td>mago3D 시작 부분</td>
+						</tr>
+						<tr>
+							<td>projectId</td>
+							<td>프로젝트 아이디</td>
+						</tr>
+						<tr>
+							<td>projectData</td>
+							<td>프로젝트 데이터</td>
+						</tr>
+						<tr>
+							<td>projectDataFolder</td>
+							<td>프로젝트 데이터 폴더</td>
+						</tr>
+						<tr>
+							<td>issueId</td>
+							<td>이슈 아이디</td>
+						</tr>
+						<tr>
+							<td>issueType</td>
+							<td>이슈 타입</td>
+						</tr>
+						<tr>
+							<td>latitude</td>
+							<td>위도</td>
+						</tr>
+						<tr>
+							<td>longitude</td>
+							<td>경도</td>
+						</tr>
+						<tr>
+							<td>height</td>
+							<td>높이</td>
+						</tr>
+						<tr>
+							<td>duration</td>
+							<td>이동하는 시간</td>
+						</tr>
+					</tbody>
+				</table>
+				<h4>Examples:</h4>
+				<b>html</b>
+				<pre>
+<code>&lt;li&gt;
+	&lt;button type="button" title="Shortcuts" onclick="gotoIssue('ifc_mep.json', '128', 'ISSUE_TYPE_BUGGER', '126.6086040', '37.583', '40', '2')"&gt;Shortcuts&lt;/button&gt;
+	&lt;div class="info"&gt;
+		&lt;p class="title"gt;&lt;span&gt;IFC(MEP)&lt;/span&gt; TEST&lt;/p&gt;
+		&lt;ul class="tag"&gt;
+			&lt;li&gt;&lt;span class="i1"&gt;&lt;/span&gt;Bugger&lt;/li&gt;
+			&lt;li&gt;&lt;span class="t1"&gt;&lt;/span&gt;Very Important&lt;/li&gt;
+			&lt;li class="date"&gt;2017-08-25 14:27:42&lt;/li&gt;
+		&lt;/ul&gt;	
+	&lt;/div&gt;
+&lt;/li&gt;
+</code>
+				</pre>
+				<br><b>JavaScript</b>
+				<pre>
+<code class="javascript">function gotoIssue(projectId, issueId, issueType, longitude, latitude, height, duration) {
+		var projectData = getDataAPI(CODE.PROJECT_ID_PREFIX + projectId);
+		if (projectData === null || projectData === undefined) {
+			$.ajax({
+				url: dataInformationUrl + projectId,
+				type: "GET",
+				dataType: "json",
+				success: function(serverData) {
+					gotoIssueAPI(managerFactory, projectId, serverData, serverData.data_key, issueId, issueType, longitude, latitude, height, duration);		
+				},
+				error : function(request, status, error) {
+					console.log("code : " + request.status + "\n" + "message : " + request.responseText + "\n" + "error : " + error);
+				}
+			});
+		} else {
+			gotoIssueAPI(managerFactory, projectId, projectData, projectData.data_key, issueId, issueType, longitude, latitude, height, duration);	
+		}
+		
+		// 현재 좌표를 저장
+		saveCurrentLocation(latitude, longitude);
+	}
+</code>
+				</pre>
+			</article>	
+			<hr>
+			<article class="api_description" style="margin-top: 50px;">
+				<h2><span id="mouseMoveAPI">mouseMoveAPI</span></h2>
+				<p>마우스를 사용할 수 없는 환경에서 버튼 이벤트로 대체하는 API입니다.(개발중)</p>
+				<h4>Parameters:</h4>
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>managerFactoryInstance</td>
+							<td>mago3D 시작 부분</td>
+						</tr>
+						<tr>
+							<td>eventType</td>
+							<td>어떤 마우스 동작을 원하는지를 구분</td>
+						</tr>
+					</tbody>
+				</table>
+				<h4>Examples:</h4>
+			</article>
+			<hr>	
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="searchDataAPI">searchDataAPI</span></h2>
 				<p>데이터를 검색해주는 API입니다.</p>
@@ -1321,33 +1676,7 @@ function changeShadow(isShow) {
 </code>
 				</pre>
 			</article>
-			<hr>
-			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="getDataAPI">getDataAPI</span></h2>
-				<p>data amp에 담겨있는 데이터정보(json)를 불러오는 API입니다.</p>
-				<h4>Parameters:</h4>
-				<table>
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>key</td>
-							<td>검색 키</td>
-						</tr>
-					</tbody>
-				</table>
-				<h4>Examples:</h4>
-				<br><b>JavaScript</b>
-				<pre>
-<code class="javascript">getDataAPI(CODE.PROJECT_ID_PREFIX + projectId);
-</code>
-				</pre>
-			</article>
-			<hr>
+			<hr>			
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="isDataExistAPI">isDataExistAPI</span></h2>
 				<p>환경 설정 data map에 key 값의 존재 유무를 판별하는 API입니다.</p>
@@ -1375,8 +1704,8 @@ function changeShadow(isShow) {
 			</article>
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="isDataExistAPI">changePropertyRenderingAPI</span></h2>
-				<p>속성값에 의한 가시화 유무설정하는 API입니다.</p>
+				<h2><span id="getDataAPI">getDataAPI</span></h2>
+				<p>data amp에 담겨있는 데이터정보(json)를 불러오는 API입니다.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -1387,97 +1716,23 @@ function changeShadow(isShow) {
 					</thead>
 					<tbody>
 						<tr>
-							<td>managerFactoryInstance</td>
-							<td>mago3D 시작 부분</td>
-						</tr>
-						<tr>
-							<td>isShow</td>
-							<td>true = 표시, false = 비표시</td>
-						</tr>
-						<tr>
-							<td>projectId</td>
-							<td>프로젝트 아이디</td>
-						</tr>
-						<tr>
-							<td>property</td>
-							<td>속성</td>
+							<td>key</td>
+							<td>검색 키</td>
 						</tr>
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
-				<b>html</b>
-				<pre>
-<code class="html">&lt;div&gt;
-	&lt;h3&gt;속성 가시화&lt;/h3&gt;
-	&lt;ul class="apiLoca"&gt;
-		&lt;li&gt;
-			&lt;input type="radio" id="showPropertyRendering" name="propertyRendering" value="true" /&gt;
-			&lt;label for="showLabel"&gt; 표시 &lt;/label&gt;
-			&lt;input type="radio" id="hidePropertyRendering" name="propertyRendering" value="false" /&gt;
-			&lt;label for="hideLabel"&gt; 비표시 &lt;/label&gt;
-		&lt;/li&gt;
-		&lt;li&gt;
-			&lt;label for="propertyRenderingProjectId"&gt;프로젝트 &lt;/label&gt;
-			&lt;select id="propertyRenderingProjectId" name="propertyRenderingProjectId" class="select"&gt;
-				&lt;option value="data.json"&gt;...&lt;/option&gt;
-			&lt;/select&gt;
-		&lt;/li&gt;
-		&lt;li&gt;
-			&lt;label for="propertyRenderingWord"&gt;속성&lt;/label&gt;
-			&lt;input type="text" id="propertyRenderingWord" name="propertyRenderingWord" size="23" placeholder="isMain=true" /&gt;
-			&lt;button type="button" id="changePropertyRendering" class="btn"&gt;변경&lt;/button&gt; 
-		&lt;/li&gt;
-	&lt;/ul&gt;
-&lt;/div&gt;
-</code>
-				</pre>
 				<br><b>JavaScript</b>
 				<pre>
-<code class="javascript">$("#changePropertyRendering").click(function(e) {
-	var isShow = $(':radio[name="propertyRendering"]:checked').val();
-	if(isShow === undefined){
-		alert("표시/비표시 를 선택하여 주십시오..");
-		return false;
-	}
-	if ($.trim($("#propertyRenderingWord").val()) === ""){
-		alert("속성값을 입력해 주세요.");
-		$("#propertyRenderingWord").focus();
-		return false;
-	}
-	changePropertyRenderingAPI(managerFactory, isShow, $("#propertyRenderingProjectId").val(), $("#propertyRenderingWord").val());
-});
+<code class="javascript">getDataAPI(CODE.PROJECT_ID_PREFIX + projectId);
 </code>
 				</pre>
 			</article>
-			<hr>
+			<hr>	
+			<!-- getDataInfoByDataKey -->
 			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="mouseMoveAPI">mouseMoveAPI</span></h2>
-				<p>마우스를 사용할 수 없는 환경에서 버튼 이벤트로 대체하는 API입니다.(개발중)</p>
-				<h4>Parameters:</h4>
-				<table>
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>managerFactoryInstance</td>
-							<td>mago3D 시작 부분</td>
-						</tr>
-						<tr>
-							<td>eventType</td>
-							<td>어떤 마우스 동작을 원하는지를 구분</td>
-						</tr>
-					</tbody>
-				</table>
-				<h4>Examples:</h4>
-			</article>
-			<hr>
-			<article class="api_description" style="margin-top: 50px;">
-				<h2><span id="gotoProjectAPI">gotoProjectAPI</span></h2>
-				<p>해당 프로젝트를 로딩하고 그 프로젝트로 이동하는 API입니다.</p>
+				<h2><span id="getDataInfoByDataKeyAPI">getDataInfoByDataKeyAPI</span></h2>
+				<p>data key 를 이용하여 dataInfo 공간정보를 취득하는 API입니다.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -1496,58 +1751,15 @@ function changeShadow(isShow) {
 							<td>프로젝트 아이디</td>
 						</tr>
 						<tr>
-							<td>latitude</td>
-							<td>위도</td>
-						</tr>
-						<tr>
-							<td>longitude</td>
-							<td>경도</td>
-						</tr>
-						<tr>
-							<td>height</td>
-							<td>높이</td>
-						</tr>
-						<tr>
-							<td>duration</td>
-							<td>이동하는 시간</td>
+							<td>dataKey</td>
+							<td>데이터 고유키</td>
 						</tr>
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
-				<b>html</b>
-				<pre>
-<code>&lt;ul&gt;
-	&lt;li onclick="gotoProject('data.json', '126.5252421', '35.425', '550', '3')"&gt;data&lt;/li&gt;
-	&lt;li onclick="gotoProject('data.json', '126.5252421', '35.425', '550', '3')"&gt;data&lt;/li&gt;
-	&lt;li onclick="gotoProject('data.json', '126.5252421', '35.425', '550', '3')"&gt;data&lt;/li&gt;
-&lt;/ul&gt;
-</code>
-				</pre>
 				<br><b>JavaScript</b>
 				<pre>
-<code class="javascript">function gotoProject(projectId, longitude, latitude, height, duration) {
-	//console.log("url = " + dataInformationUrl + projectId);
-	var projectData = getDataAPI(CODE.PROJECT_ID_PREFIX + projectId);
-	if (projectData === null || projectData === undefined) {
-		$.ajax({
-			url: dataInformationUrl + projectId,
-			type: "GET",
-			dataType: "json",
-			success: function(serverData){
-				gotoProjectAPI(managerFactory, projectId, serverData, serverData.data_key, longitude, latitude, height, duration);		
-			},
-			error:function(request,status,error){
-		        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-			}
-		});
-	} else {
-		gotoProjectAPI(managerFactory, projectId, projectData, projectData.data_key, longitude, latitude, height, duration);	
-	}
-	
-	// 현재 좌표를 저장
-	$("#now_latitude").val(latitude);
-	$("#now_longitude").val(longitude);
-}
+<code class="javascript">getDataAPI(CODE.PROJECT_ID_PREFIX + projectId);
 </code>
 				</pre>
 			</article>
@@ -1588,7 +1800,7 @@ function changeShadow(isShow) {
 <code class="javascript">drawAppendDataAPI(managerFactory, projectIdArray, projectDataArray, projectDataFolderArray);
 </code>
 				</pre>
-			</article>
+			</article>	
 		</div>
 	</div>
 </body>
