@@ -1,3 +1,6 @@
+:: If you create a sql file with UTF-8, you will be forced to use MS949 only because it is corrupted.
+:: I did not know what encoding to use in foreign countries, so I decided to use UTF-8.
+
 :: psql -U postgres -d mago3d -a -f script.sql
 
 @echo off

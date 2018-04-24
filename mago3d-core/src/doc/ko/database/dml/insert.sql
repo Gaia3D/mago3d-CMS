@@ -285,11 +285,10 @@ geo_server_parameters_transparent = 'true',
 geo_server_parameters_format = 'image/png',
 geo_callback_enable = 'true',
 geo_callback_apiresult = 'showApiResult',
+geo_callback_dataInfo = 'showDataInfo',
+geo_callback_moveddata = 'showMovedData',
 geo_callback_selectedobject = 'showSelectedObject',
 geo_callback_insertissue = 'showInsertIssueLayer',
 geo_callback_clickposition = 'showClickPosition';
+
 commit;
-
-
-
-

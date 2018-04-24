@@ -17,7 +17,7 @@
   		</tr>
   		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_callback_apiresult">api 처리 결과 Callback</form:label>
+				<form:label path="geo_callback_apiresult"><spring:message code='config.api.call.result.callback'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_callback_apiresult" cssClass="l" />
@@ -26,7 +26,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_callback_dataInfo">Data Info 표시 Callback</form:label>
+				<form:label path="geo_callback_dataInfo"><spring:message code='config.data.display.callback'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_callback_dataInfo" cssClass="l" />
@@ -35,7 +35,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_callback_moveddata">Moved Data Callback</form:label>
+				<form:label path="geo_callback_moveddata"><spring:message code='config.data.moved.callback'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_callback_moveddata" cssClass="l" />
@@ -44,7 +44,7 @@
 		</tr>
 		<tr>
 			<th class="col-label l" scope="row">
-				<form:label path="geo_callback_selectedobject">Object Select Callback</form:label>
+				<form:label path="geo_callback_selectedobject"><spring:message code='config.object.select.callback'/></form:label>
 			</th>
 			<td class="col-input">
 				<form:input path="geo_callback_selectedobject" cssClass="l" />

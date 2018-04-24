@@ -1,3 +1,6 @@
+:: UTF-8でsqlファイルを作成すると、ハングルの化けが発生して仕方なくこのフォルダのみMS949にしたこと、
+:: 外国の場合、どのようEncodingを使用するかどうか分からなくて、一度UTF-8でするべき
+
 :: psql -U postgres -d mago3d -a -f script.sql
 
 @echo off

@@ -1,3 +1,5 @@
+:: UTF-8 로 sql 파일을 만들면 한글깨짐 현상이 발생해서 어쩔 수 없이 이 폴더만 MS949로 했음
+
 :: psql -U postgres -d mago3d -a -f script.sql
 
 @echo off
