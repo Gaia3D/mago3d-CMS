@@ -196,36 +196,13 @@
 														<th scope="col" class="col-id"><spring:message code='user.group.id'/></th>
 														<th scope="col" class="col-name"><spring:message code='user.group.name'/></th>
 														<th scope="col" class="col-email"><spring:message code='user.group.email'/></th>
-														<th scope="col" class="col-toggle">
-				<c:if test="${userInfo.status eq '0'}">
-														<spring:message code='user.group.user.status'/>
-				</c:if>
-				<c:if test="${userInfo.status eq '1'}">
-														<spring:message code='user.group.stop.use'/>
-				</c:if>
-				<c:if test="${userInfo.status eq '2'}">
-														<spring:message code='user.group.lock.password'/>
-				</c:if>
-				<c:if test="${userInfo.status eq '3'}">
-														<spring:message code='user.group.dormancy'/>
-				</c:if>
-				<c:if test="${userInfo.status eq '4'}">
-														<spring:message code='user.group.expires'/>
-				</c:if>
-				<c:if test="${userInfo.status eq '5'}">
-														<spring:message code='user.group.delete'/>
-				</c:if>
-				<c:if test="${userInfo.status eq '6'}">
-														<spring:message code='user.group.temporary.password'/>
-				</c:if>
-														</th>
-														
+														<th scope="col" class="col-toggle"><spring:message code='user.group.user.status'/></th>
 														<th scope="col" class="col-date-time"><spring:message code='user.group.insert.date'/></th>
 													</tr>
 												</thead>
 												<tbody id="user_list">
 													<tr>
-														<td colspan="6" class="col-none"><spring:message code='user.group.user.not'/></td>		
+														<td colspan="6" class="col-none"><spring:message code='user.group.user.not'/></td>	
 													</tr>
 												</tbody>
 											</table>
@@ -928,12 +905,14 @@
 			for(i=0; i<listUserGroupRole.length; i++ ) {
 				var userGroupRole = null;
 				userGroupRole = listUserGroupRole[i];
+				var viewDescription = "";
+				if(userGroupRole.description !== null) viewDescription = userGroupRole.description;
 				content += 	"<tr>"
 						+		"<td class=\"col-number\">" + (i + 1) + "</td>"
 						+ 		"<td class=\"col-name\">" + userGroupRole.role_name + "</td>"
 						+ 		"<td class=\"col-key\">" + userGroupRole.role_key + "</td>"
 						+ 		"<td class=\"col-toggle\">" + userGroupRole.viewUseYn + "</td>"
-						+ 		"<td class=\"col-desc\">" + userGroupRole.description + "</td>"
+						+ 		"<td class=\"col-desc\">" + viewDescription + "</td>"
 						+ 		"<td class=\"col-date-time\">" + userGroupRole.viewInsertDate + "</td>"
 						+ 	"</tr>";
 			}
@@ -957,14 +936,24 @@
 			for(i=0; i<userList.length; i++ ) {
 				var userInfo = null;
 				userInfo = userList[i];
-				content += 	"<tr>"
-						+		"<td class=\"col-number\">" + (i + 1) + "</td>"
-						+ 		"<td class=\"col-id\">" + userInfo.user_id + "</td>"
-						+ 		"<td class=\"col-name\">" + userInfo.user_name + "</td>"
-						+ 		"<td class=\"col-email\">" + userInfo.email + "</td>"
-						+ 		"<td class=\"col-toggle\">" + userInfo.status + "</td>"
-						+ 		"<td  class=\"col-date-time\">" + userInfo.insert_date + "</td>"
-						+ 	"</tr>";
+				var userStatus = "";
+				if(userInfo.status === '0') userStatus = "<spring:message code='user.group.in.use'/>";
+				if(userInfo.status === '1') userStatus = "<spring:message code='user.group.stop.use'/>";
+				if(userInfo.status === '2') userStatus = "<spring:message code='user.group.lock.password'/>";
+				if(userInfo.status === '3') userStatus = "<spring:message code='user.group.dormancy'/>";
+				if(userInfo.status === '4') userStatus = "<spring:message code='user.group.expires'/>";
+				if(userInfo.status === '5') userStatus = "<spring:message code='user.group.delete'/>";
+				if(userInfo.status === '6') userStatus = "<spring:message code='user.group.temporary.password'/>";
+				var email = "";
+				if(userInfo.email !== null) userInfo.email;
+					content += 	"<tr>"
+							+		"<td class=\"col-number\">" + (i + 1) + "</td>"
+							+ 		"<td class=\"col-id\">" + userInfo.user_id + "</td>"
+							+ 		"<td class=\"col-name\">" + userInfo.user_name + "</td>"
+							+ 		"<td class=\"col-email\">" + email + "</td>"
+							+ 		"<td class=\"col-toggle\">" + userStatus + "</td>"
+							+ 		"<td  class=\"col-date-time\">" + userInfo.insert_date + "</td>"
+							+ 	"</tr>";
 			}
 		} else {
 			content += 	"<tr>"
