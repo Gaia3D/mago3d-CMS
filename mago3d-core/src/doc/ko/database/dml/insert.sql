@@ -9,7 +9,7 @@ insert into user_group(
 insert into user_info(
 	user_id, user_group_id, user_name, password, salt, user_role_check_yn, last_login_date
 ) values (
-	'admin', 1, '슈퍼관리자', '비밀번호', 'salt', 'N', now()
+	'admin', 1, '슈퍼관리자', '9f264e769337c466f36bb279a52973162d044d27a7e8b2e562511b297435c522dea47b3780476f5b53930e60907924d6f271d758003ed8be9cc1009851c6d6f7', '$2a$10$3Xf/36Hh2ZqDamdnFq5P6e', 'N', now()
 );
 
 -- 메뉴
@@ -70,7 +70,9 @@ insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_cla
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(85, '권한설정', 'CONFIGURATION', 8 , 2, 5, '/role/list-role.do', 'glyph-settings', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(86, '공통 코드 설정', 'CONFIGURATION', 8 , 2, 6, '/code/list-code.do', 'glyph-settings', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
-values(87, '공통 코드 수정', 'CONFIGURATION', 8 , 2, 7, '/code/modify-code.do', '/code/list-code.do', 'glyph-settings', 'N', 'Y', 'N');
+values(87, '권한 설정 수정', 'CONFIGURATION', 8 , 2, 7, '/role/modify-role.do', '/role/list-role.do', 'glyph-settings', 'N', 'Y', 'N');
+insert into menu(menu_id, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
+values(88, '공통 코드 수정', 'CONFIGURATION', 8 , 2, 8, '/code/modify-code.do', '/code/list-code.do', 'glyph-settings', 'N', 'Y', 'N');
 
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(10, '공지사항', 'BOARD', 0 , 1, 10, '/board/list-board.do', 'glyph-imark-dot', 'N', 'Y');
 insert into menu(menu_id, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(101, '공지 목록', 'BOARD', 10 , 2, 1, '/board/list-board.do', 'glyph-imark-dot', 'N', 'Y');
@@ -123,6 +125,7 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (85, 1, 85);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (86, 1, 86);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (87, 1, 87);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (88, 1, 88);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (10, 1, 10);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (101, 1, 101);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (102, 1, 102);
