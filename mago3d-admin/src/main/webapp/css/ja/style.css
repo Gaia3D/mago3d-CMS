@@ -912,7 +912,7 @@ select + .ui-selectmenu-button + input {
 .u-pull-right {
   float: right; }
 .u-pull-left {
-  float: left; }
+  float: none; }
 .on {
 	color: #06b20e !important; }
 .off {
