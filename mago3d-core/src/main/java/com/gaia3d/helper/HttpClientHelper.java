@@ -334,155 +334,155 @@ public class HttpClientHelper {
 //		return result;
 //    }
 	
-	/**
-	 * 세션 사용자, 사용자 페이지 상태 등 내부 업무용으로 사용하기 위한 API를 호출, 사설 인증서의 경우 통과 시킴
-	 * @param externalService
-	 * @param authData
-	 * @return
-	 */
-	public static String httpsGetAPICallWithoutCertificate(ExternalService externalService, String authData) {
-
-		String result = null;
-		CloseableHttpClient httpclient = null;
-		CloseableHttpResponse response = null;
-		HttpStatus httpStatus = null;
-		
-		TrustManager easyTrustManager = new X509TrustManager() {
-			public X509Certificate[] getAcceptedIssuers() {
-				return new X509Certificate[0];
-            }
-            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-        };
-        
-        try {
-        	SSLContext sslcontext = SSLContext.getInstance("TLS");
-            sslcontext.init(null, new TrustManager[] { easyTrustManager }, null);
-            
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-	                sslcontext,
-	                new String[] {"TLSv1", "TLSv1.1", "TLSv1.2"},
-	                null,
-	                SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-            
-            httpclient = HttpClients.custom()
-	                .setSSLSocketFactory(sslsf)
-	                .setDefaultRequestConfig(defaultConfig)
-	                .build();
-       
-	        StringBuilder requestUrl = new StringBuilder(externalService.getUrl_scheme() + "://" + externalService.getUrl_host() 
-        			+ ":" + externalService.getUrl_port() + "/" + externalService.getUrl_path());
-        	
-			requestUrl.append("?auth_data=").append(authData);
-			
-			log.info("@@@@@@@@@@@@ url = {}", requestUrl.toString());
-			
-	        HttpGet httpget = new HttpGet(requestUrl.toString());
-            response = httpclient.execute(httpget);
-            log.info("@@@@@@@@@@@@ response status = {}", response.getStatusLine().getStatusCode());
-//            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK
-//            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST
-//            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-//				result = getResult(response);
-//			}
-		} catch(Exception e) {
-        	e.printStackTrace();
-        } finally {
-        	try {
-        		if(response != null) {
-        			response.close();
-        		}
-        	} catch(Exception e) {
-        		e.printStackTrace();
-        	}
-        	try {
-        		if(httpclient != null) {
-        			httpclient.close();
-        		}
-        	} catch(Exception e) {
-        		e.printStackTrace();
-        	}
-        }
-		return result;
-	}
+//	/**
+//	 * 세션 사용자, 사용자 페이지 상태 등 내부 업무용으로 사용하기 위한 API를 호출, 사설 인증서의 경우 통과 시킴
+//	 * @param externalService
+//	 * @param authData
+//	 * @return
+//	 */
+//	public static String httpsGetAPICallWithoutCertificate(ExternalService externalService, String authData) {
+//
+//		String result = null;
+//		CloseableHttpClient httpclient = null;
+//		CloseableHttpResponse response = null;
+//		HttpStatus httpStatus = null;
+//		
+//		TrustManager easyTrustManager = new X509TrustManager() {
+//			public X509Certificate[] getAcceptedIssuers() {
+//				return new X509Certificate[0];
+//            }
+//            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+//            }
+//            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+//            }
+//        };
+//        
+//        try {
+//        	SSLContext sslcontext = SSLContext.getInstance("TLS");
+//            sslcontext.init(null, new TrustManager[] { easyTrustManager }, null);
+//            
+//            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+//	                sslcontext,
+//	                new String[] {"TLSv1", "TLSv1.1", "TLSv1.2"},
+//	                null,
+//	                SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+//            
+//            httpclient = HttpClients.custom()
+//	                .setSSLSocketFactory(sslsf)
+//	                .setDefaultRequestConfig(defaultConfig)
+//	                .build();
+//       
+//	        StringBuilder requestUrl = new StringBuilder(externalService.getUrl_scheme() + "://" + externalService.getUrl_host() 
+//        			+ ":" + externalService.getUrl_port() + "/" + externalService.getUrl_path());
+//        	
+//			requestUrl.append("?auth_data=").append(authData);
+//			
+//			log.info("@@@@@@@@@@@@ url = {}", requestUrl.toString());
+//			
+//	        HttpGet httpget = new HttpGet(requestUrl.toString());
+//            response = httpclient.execute(httpget);
+//            log.info("@@@@@@@@@@@@ response status = {}", response.getStatusLine().getStatusCode());
+////            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK
+////            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST
+////            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+////				result = getResult(response);
+////			}
+//		} catch(Exception e) {
+//        	e.printStackTrace();
+//        } finally {
+//        	try {
+//        		if(response != null) {
+//        			response.close();
+//        		}
+//        	} catch(Exception e) {
+//        		e.printStackTrace();
+//        	}
+//        	try {
+//        		if(httpclient != null) {
+//        			httpclient.close();
+//        		}
+//        	} catch(Exception e) {
+//        		e.printStackTrace();
+//        	}
+//        }
+//		return result;
+//	}
 	
-	/**
-	 * 세션 사용자, 사용자 페이지 상태 등 내부 업무용으로 사용하기 위한 API를 호출, 사설 인증서의 경우 통과 시킴
-	 * @param externalService
-	 * @param authData
-	 * @return
-	 */
-	public static String httpsPostAPICallWithoutCertificate(ExternalService externalService, String authData) {
-
-		String result = null;
-		CloseableHttpClient httpclient = null;
-		CloseableHttpResponse response = null;
-		HttpStatus httpStatus = null;
-		
-		TrustManager easyTrustManager = new X509TrustManager() {
-			public X509Certificate[] getAcceptedIssuers() {
-				return new X509Certificate[0];
-            }
-            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-        };
-        
-        try {
-        	SSLContext sslcontext = SSLContext.getInstance("TLS");
-            sslcontext.init(null, new TrustManager[] { easyTrustManager }, null);
-            
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-	                sslcontext,
-	                new String[] {"TLSv1", "TLSv1.1", "TLSv1.2"},
-	                null,
-	                SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-            
-            httpclient = HttpClients.custom()
-	                .setSSLSocketFactory(sslsf)
-	                .setDefaultRequestConfig(defaultConfig)
-	                .build();
-       
-	        String requestUrl = externalService.getUrl_scheme() + "://" + externalService.getUrl_host() 
-        			+ ":" + externalService.getUrl_port() + "/" + externalService.getUrl_path();
-        	
-	        log.info("@@@@@@@@@@@@ url = {}", requestUrl);
-			
-			HttpPost httpPost = new HttpPost(requestUrl);
-			List <NameValuePair> nameValuePair = new ArrayList <NameValuePair>();
-        	nameValuePair.add(new BasicNameValuePair("auth_data", authData));
-        	httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair, "utf-8"));
-			response = httpclient.execute(httpPost);
-            
-			log.info("@@@@@@@@@@@@ response status = {}", response.getStatusLine().getStatusCode());
-//            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK
-//            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST
-//            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-//				result = getResult(response);
-//			}
-		} catch(Exception e) {
-        	e.printStackTrace();
-        } finally {
-        	try {
-        		if(response != null) {
-        			response.close();
-        		}
-        	} catch(Exception e) {
-        		e.printStackTrace();
-        	}
-        	try {
-        		if(httpclient != null) {
-        			httpclient.close();
-        		}
-        	} catch(Exception e) {
-        		e.printStackTrace();
-        	}
-        }
-		return result;
-	}
+//	/**
+//	 * 세션 사용자, 사용자 페이지 상태 등 내부 업무용으로 사용하기 위한 API를 호출, 사설 인증서의 경우 통과 시킴
+//	 * @param externalService
+//	 * @param authData
+//	 * @return
+//	 */
+//	public static String httpsPostAPICallWithoutCertificate(ExternalService externalService, String authData) {
+//
+//		String result = null;
+//		CloseableHttpClient httpclient = null;
+//		CloseableHttpResponse response = null;
+//		HttpStatus httpStatus = null;
+//		
+//		TrustManager easyTrustManager = new X509TrustManager() {
+//			public X509Certificate[] getAcceptedIssuers() {
+//				return new X509Certificate[0];
+//            }
+//            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+//            }
+//            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+//            }
+//        };
+//        
+//        try {
+//        	SSLContext sslcontext = SSLContext.getInstance("TLS");
+//            sslcontext.init(null, new TrustManager[] { easyTrustManager }, null);
+//            
+//            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+//	                sslcontext,
+//	                new String[] {"TLSv1", "TLSv1.1", "TLSv1.2"},
+//	                null,
+//	                SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+//            
+//            httpclient = HttpClients.custom()
+//	                .setSSLSocketFactory(sslsf)
+//	                .setDefaultRequestConfig(defaultConfig)
+//	                .build();
+//       
+//	        String requestUrl = externalService.getUrl_scheme() + "://" + externalService.getUrl_host() 
+//        			+ ":" + externalService.getUrl_port() + "/" + externalService.getUrl_path();
+//        	
+//	        log.info("@@@@@@@@@@@@ url = {}", requestUrl);
+//			
+//			HttpPost httpPost = new HttpPost(requestUrl);
+//			List <NameValuePair> nameValuePair = new ArrayList <NameValuePair>();
+//        	nameValuePair.add(new BasicNameValuePair("auth_data", authData));
+//        	httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair, "utf-8"));
+//			response = httpclient.execute(httpPost);
+//            
+//			log.info("@@@@@@@@@@@@ response status = {}", response.getStatusLine().getStatusCode());
+////            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK
+////            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST
+////            		|| response.getStatusLine().getStatusCode() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+////				result = getResult(response);
+////			}
+//		} catch(Exception e) {
+//        	e.printStackTrace();
+//        } finally {
+//        	try {
+//        		if(response != null) {
+//        			response.close();
+//        		}
+//        	} catch(Exception e) {
+//        		e.printStackTrace();
+//        	}
+//        	try {
+//        		if(httpclient != null) {
+//        			httpclient.close();
+//        		}
+//        	} catch(Exception e) {
+//        		e.printStackTrace();
+//        	}
+//        }
+//		return result;
+//	}
 	
 	/**
 	 * 응답 처리를 위한 메서드

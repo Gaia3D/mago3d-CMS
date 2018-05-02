@@ -35,6 +35,16 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	/**
+	 * 데이터 상태별 통계 정보
+	 * @param status
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public Long getDataTotalCountByStatus(String status) {
+		return dataMapper.getDataTotalCountByStatus(status);
+	}
+	
+	/**
 	 * Data 목록
 	 * @param dataInfo
 	 * @return

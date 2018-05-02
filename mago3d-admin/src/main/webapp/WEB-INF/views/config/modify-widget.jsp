@@ -35,6 +35,48 @@
 						<div id="sortable" class="widgets row">
 <c:forEach var="dbWidget" items="${widgetList }">
 	<c:choose>
+		<c:when test="${dbWidget.name == 'projectWidget'}">		
+							<div id="${dbWidget.widget_id }" class="widget one-third column" style="font-size: 16px;">
+								<div class="widget-header row">
+									<div class="widget-heading u-pull-left">						
+										<h3 class="widget-title">프로젝트 데이터 현황<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+									</div>
+									<div class="widget-functions u-pull-right">
+										<a href="/data/list-data.do" title="<spring:message code='config.widget.project.more'/>"><span class="icon-glyph glyph-plus"></span></a>
+									</div>
+								</div>
+								<div id="${dbWidget.name}" class="widget-content row">
+								</div>
+							</div>
+		</c:when>
+		<c:when test="${dbWidget.name == 'dataInfoWidget'}">		
+							<div id="${dbWidget.widget_id }" class="widget one-third column" style="font-size: 16px;">
+								<div class="widget-header row">
+									<div class="widget-heading u-pull-left">						
+										<h3 class="widget-title">데이터 상태별 현황<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+									</div>
+									<div class="widget-functions u-pull-right">
+										<a href="/data/list-data.do" title="<spring:message code='config.widget.data.info.more'/>"><span class="icon-glyph glyph-plus"></span></a>
+									</div>
+								</div>
+								<div id="${dbWidget.name}" class="widget-content row">
+								</div>
+							</div>
+		</c:when>
+		<c:when test="${dbWidget.name == 'dataInfoLogListWidget'}">		
+							<div id="${dbWidget.widget_id }" class="widget one-third column" style="font-size: 16px;">
+								<div class="widget-header row">
+									<div class="widget-heading u-pull-left">						
+										<h3 class="widget-title">데이터 변경 요청 이력<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+									</div>
+									<div class="widget-functions u-pull-right">
+										<a href="/data/list-data-log.do" title="<spring:message code='config.widget.data.info.log.more'/>"><span class="icon-glyph glyph-plus"></span></a>
+									</div>
+								</div>
+								<div id="${dbWidget.name}" class="widget-content row">
+								</div>
+							</div>
+		</c:when>
 		<c:when test="${dbWidget.name == 'userWidget'}">		
 							<div id="${dbWidget.widget_id }" class="widget one-third column" style="font-size: 16px;">
 								<div class="widget-header row">
@@ -297,12 +339,93 @@
 		});
 		$("#sortable").disableSelection();
 		
+		ajaxProjectWidget();
+		ajaxDataInfoWidget();
+		ajaxDataInfoLogWidget();
  		userWidget();
 		startSpinner("scheduleLogListSpinner");
 		ajaxScheduleLogListWidget();
 		startSpinner("accessLogSpinner");
 		ajaxAccessLogWidget();
 	});
+	
+	function ajaxProjectWidget() {
+		var url = "/config/ajax-project-data-widget.do";
+		var info = "";
+		$.ajax({
+			url: url,
+			type: "GET",
+			data: info,
+			dataType: "json",
+			headers: { "X-mago3D-Header" : "mago3D"},
+			success : function(msg) {
+				if(msg.result === "success") {
+					drawProjectChart(msg.projectNameList, msg.dataTotalCountList);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			}
+		});
+	}
+	
+	function drawProjectChart(projectNameList, dataTotalCountList) {
+		if(projectNameList == null || projectNameList.length == 0) {
+			return;
+		} 
+		
+		var data = [];
+		var projectCount =  projectNameList.length;
+		for(i=0; i<projectCount; i++ ) {
+			var projectStatisticsArray = [ projectNameList[i], dataTotalCountList[i]];
+			data.push(projectStatisticsArray);
+		}
+		
+		var plot = $.jqplot("projectWidget", [data], {
+            //title : "project 별 chart",
+            seriesColors: [ "#a67ee9", "#FE642E", "#01DF01", "#2E9AFE", "#F781F3", "#F6D8CE", "#99a0ac" ],
+            grid: {
+                drawBorder: false,
+                drawGridlines: false,
+                background: "#ffffff",
+                shadow:false
+            },
+            gridPadding: {top:0, bottom:85, left:0, right:170},
+            seriesDefaults:{
+                renderer:$.jqplot.PieRenderer,
+                trendline : { show : false},
+                rendererOptions: {
+                    padding:8,
+                    showDataLabels: true,
+                    dataLabels: "value",
+                    //dataLabelFormatString: "%.1f%"
+                },
+            },
+            legend: {
+                show: true,
+                fontSize: "10pt",
+                placement : "outside",
+                rendererOptions: {
+                    numberRows: 7,
+                    numberCols: 1
+                },
+                location: "e",
+                border: "none",
+                marginLeft: "10px"
+            }
+        });
+	}
+	
+	function ajaxDataInfoWidget() {
+		
+	}
+	
+	function ajaxDataInfoLogWidget() {
+		
+	}
 	
 	// 사용자 상태별 현황
 	function userWidget() {

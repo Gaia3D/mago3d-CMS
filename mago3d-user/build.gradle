@@ -26,7 +26,12 @@ war {
 	rootSpec.exclude ('f4d')
 }
 
-sourceCompatibility = 1.8
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    // gralde 5.0 lombok error
+    //options.compilerArgs += ["-proc:none"]
+}
 compileJava.options.encoding = 'UTF-8'
 
 repositories {

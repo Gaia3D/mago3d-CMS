@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.AccessLog;
+import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.PGStatActivity;
+import com.gaia3d.domain.Project;
 import com.gaia3d.domain.ScheduleLog;
 import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.UserSession;
@@ -27,8 +30,10 @@ import com.gaia3d.domain.Widget;
 import com.gaia3d.helper.SessionUserHelper;
 import com.gaia3d.service.APIService;
 import com.gaia3d.service.AccessLogService;
+import com.gaia3d.service.DataService;
 import com.gaia3d.service.IssueService;
 import com.gaia3d.service.MonitoringService;
+import com.gaia3d.service.ProjectService;
 import com.gaia3d.service.ScheduleService;
 import com.gaia3d.service.UserService;
 import com.gaia3d.service.WidgetService;
@@ -56,7 +61,10 @@ public class WidgetController {
 	
 	@Autowired
 	private HikariDataSource dataSource;
-	
+	@Autowired
+	private ProjectService projectService;
+	@Autowired
+	private DataService dataService;
 	@Autowired
 	private APIService aPIService;
 	@Autowired
@@ -119,10 +127,10 @@ public class WidgetController {
 		
 		// dbcpWidget
 		model.addAttribute("userSessionCount", SessionUserHelper.loginUsersMap.size());
-//		model.addAttribute("initialSize", dataSource.getInitialSize());
+		model.addAttribute("initialSize", dataSource.getMaximumPoolSize());
 ////		model.addAttribute("maxTotal", dataSource.getMaxTotal());
 //		model.addAttribute("maxIdle", dataSource.getMaxIdle());
-//		model.addAttribute("minIdle", dataSource.getMinIdle());
+		model.addAttribute("minIdle", dataSource.getMinimumIdle());
 //		model.addAttribute("numActive", dataSource.getNumActive());
 //		model.addAttribute("numIdle", dataSource.getNumIdle());
 		// 사용자 dbcp 정보
@@ -187,6 +195,70 @@ public class WidgetController {
 			result = "db.exception";
 		}
 	
+		map.put("result", result);
+		return map;
+	}
+	
+	/**
+	 * 프로젝트별 데이터 건수
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "ajax-project-data-widget.do")
+	@ResponseBody
+	public Map<String, Object> ajaxProjectDataWidget(HttpServletRequest request) {
+		
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			Project defaultProject = new Project();
+			defaultProject.setUse_yn(Project.IN_USE);
+			List<Project> projectList = projectService.getListProject(defaultProject);
+			List<String> projectNameList = new ArrayList<>();
+			List<Long> dataTotalCountList = new ArrayList<>();
+			for(Project project : projectList) {
+				projectNameList.add(project.getProject_name());
+				DataInfo dataInfo = new DataInfo();
+				dataInfo.setProject_id(project.getProject_id());
+				Long dataTotalCount = dataService.getDataTotalCount(dataInfo);
+				dataTotalCountList.add(dataTotalCount);
+			}
+			
+			map.put("projectNameList", projectNameList);
+			map.put("dataTotalCountList", dataTotalCountList);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		map.put("result", result);
+		return map;
+	}
+	
+	/**
+	 * 데이터 상태별 통계 정보
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "ajax-data-status-widget.do")
+	@ResponseBody
+	public Map<String, Object> ajaxDataStatusStatistics(HttpServletRequest request) {
+		
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			long useTotalCount = dataService.getDataTotalCountByStatus(DataInfo.STATUS_USE);
+			long forbidTotalCount = dataService.getDataTotalCountByStatus(DataInfo.STATUS_FORBID);
+			long etcTotalCount = dataService.getDataTotalCountByStatus(DataInfo.STATUS_ETC);
+			
+			map.put("useTotalCount", useTotalCount);
+			map.put("forbidTotalCount", forbidTotalCount);
+			map.put("etcTotalCount", etcTotalCount);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
 		map.put("result", result);
 		return map;
 	}
@@ -281,48 +353,6 @@ public class WidgetController {
 		Integer minIdle = 0;
 		Integer numActive = 0;
 		Integer numIdle = 0;
-		
-		// 사용자 서버 8445 포트 license를 갱신해야 함
-//		ExternalService targetExternalService = null;
-//		String activeServerIp = WebUtil.getServerIp(CACHE_FILE);
-//		ExternalService searchExternalService = new ExternalService();
-//		searchExternalService.setService_type(ExternalService.OTP_SERVER);
-//		List<ExternalService> remoteCacheServerList = aPIService.getListExternalService(searchExternalService);
-//		for(ExternalService externalService : remoteCacheServerList) {
-//			if("UNIX".equals(OS_TYPE)) {
-//				if(activeServerIp.equals(externalService.getServer_ip()) && (ExternalService.USER_PORT.intValue() == externalService.getUrl_port().intValue())) {
-//					targetExternalService = externalService;
-//					break;
-//				} 
-//			} else {
-//				targetExternalService = externalService;
-//			}
-//		}
-//		
-//		targetExternalService.setUrl_path("monitoring/call-dbcp.do");
-//		String authData = "api-key=" + Crypt.decrypt(REST_AUTH_KEY) + "&time=" + System.nanoTime();
-//		authData = Crypt.encrypt(authData);
-//		
-//		String jsonData = HttpClientHelper.httpsPostAPICallWithoutCertificate(targetExternalService, authData);
-//		log.info("@@@@@@@@@@@@@@@@@@@@ jsonData = {}", jsonData);
-//		if(jsonData != null && !"".equals(jsonData)) {
-//			map resultObject = map.fromObject(jsonData);
-//			if(!resultObject.isEmpty()) {
-//				success_yn = resultObject.getString("success_yn");
-//				result_message = resultObject.getString("result_message");
-//				if(APILog.RESULT_SUCCESS.equals(success_yn)) {
-//					userSessionCount = resultObject.getInt("userSessionCount");
-//					initialSize = resultObject.getInt("initialSize");
-//					maxTotal = resultObject.getInt("maxTotal");
-//					maxIdle = resultObject.getInt("maxIdle");
-//					minIdle = resultObject.getInt("minIdle");
-//					numActive = resultObject.getInt("numActive");
-//					numIdle = resultObject.getInt("numIdle");
-//				} else {
-//					log.error("@@@ success_yn = N. result_message = {}", result_message);
-//				}
-//			}
-//		}
 		
 		userDbcp.put("userSessionCount", userSessionCount);
 		userDbcp.put("initialSize", initialSize);

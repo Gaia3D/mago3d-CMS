@@ -3,11 +3,12 @@ package com.gaia3d.parser;
 import java.io.File;
 import java.io.FileWriter;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class Sezong {
 
-	@Test
+	@Ignore
 	public void test() throws Exception {
 		String attributeDir = "D:\\프로젝트\\세종시\\세종청사 1식.vol1\\3ds\\세종청사_3ds";
 		
