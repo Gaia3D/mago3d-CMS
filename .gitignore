@@ -3,6 +3,3 @@
 mago3d-user/src/main/webapp/mklink
 .idea/
 mago3d-user/src/main/webapp/f4d
-mago3d-core/src/main/java/com/gaia3d/domain/Server.java
-mago3d-admin/src/main/webapp/WEB-INF/views/api/list-server.jsp
-mago3d-admin/src/main/webapp/WEB-INF/views/api/input-server.jsp
