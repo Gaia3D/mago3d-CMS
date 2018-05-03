@@ -938,12 +938,12 @@
 				userInfo = userList[i];
 				var userStatus = "";
 				if(userInfo.status === '0') userStatus = "<spring:message code='user.group.in.use'/>";
-				if(userInfo.status === '1') userStatus = "<spring:message code='user.group.stop.use'/>";
-				if(userInfo.status === '2') userStatus = "<spring:message code='user.group.lock.password'/>";
-				if(userInfo.status === '3') userStatus = "<spring:message code='user.group.dormancy'/>";
-				if(userInfo.status === '4') userStatus = "<spring:message code='user.group.expires'/>";
-				if(userInfo.status === '5') userStatus = "<spring:message code='user.group.delete'/>";
-				if(userInfo.status === '6') userStatus = "<spring:message code='user.group.temporary.password'/>";
+				else if(userInfo.status === '1') userStatus = "<spring:message code='user.group.stop.use'/>";
+				else if(userInfo.status === '2') userStatus = "<spring:message code='user.group.lock.password'/>";
+				else if(userInfo.status === '3') userStatus = "<spring:message code='user.group.dormancy'/>";
+				else if(userInfo.status === '4') userStatus = "<spring:message code='user.group.expires'/>";
+				else if(userInfo.status === '5') userStatus = "<spring:message code='user.group.delete'/>";
+				else if(userInfo.status === '6') userStatus = "<spring:message code='user.group.temporary.password'/>";
 				var email = "";
 				if(userInfo.email !== null) userInfo.email;
 					content += 	"<tr>"
