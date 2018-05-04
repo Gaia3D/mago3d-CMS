@@ -177,14 +177,36 @@
 											<td class="col-id">${userInfo.user_id }</td>
 											<td class="col-name"><a href="/user/detail-user.do?user_id=${userInfo.user_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}">${userInfo.user_name }</a></td>
 											<td class="col-toggle">
-		<c:if test="${userInfo.status eq '0'}">
-												<span class="icon-glyph glyph-on on"></span>
-												<span class="icon-text"><spring:message code='user.status.use'/></span>
-		</c:if>
-		<c:if test="${userInfo.status eq '1'}">
-												<span class="icon-glyph glyph-off off"></span>
-												<span class="icon-text"><spring:message code='user.status.unused'/></span>
-		</c:if>
+		<c:choose>
+			<c:when test="${userInfo.status eq '0'}">
+				<span class="icon-glyph glyph-on on" style=margin-right:3px;"></span>
+				<span class="icon-text"><spring:message code='user.group.in.use' /></span>
+			</c:when>
+			<c:when test="${userInfo.status eq '1'}">
+				<span class="icon-glyph glyph-off off" style=margin-right:3px;"></span>
+				<span class="icon-text"><spring:message code='user.group.stop.use'/></span>
+			</c:when>
+			<c:when test="${userInfo.status eq '2'}">
+				<span class="icon-glyph glyph-off off" style=margin-right:3px;"></span>
+				<span class="icon-text"><spring:message code='user.group.lock.password'/></span>
+			</c:when>
+			<c:when test="${userInfo.status eq '3'}">
+				<span class="icon-glyph glyph-off off" style=margin-right:3px;"></span>
+				<span class="icon-text"><spring:message code='user.group.dormancy'/></span>
+			</c:when>
+			<c:when test="${userInfo.status eq '4'}">
+				<span class="icon-glyph glyph-off off" style=margin-right:3px;"></span>
+				<span class="icon-text"><spring:message code='user.group.expires'/></span>
+			</c:when>
+			<c:when test="${userInfo.status eq '5'}">
+				<span class="icon-glyph glyph-off off" style=margin-right:3px;"></span>
+				<span class="icon-text"><spring:message code='user.group.delete'/></span>
+			</c:when>
+			<c:when test="${userInfo.status eq '6'}">
+				<span class="icon-glyph glyph-off off" style=margin-right:3px;"></span>
+				<span class="icon-text"><spring:message code='user.group.temporary.password'/></span>
+			</c:when>
+		</c:choose>
 											</td>
 											<td class="col-toggle">${userInfo.viewUserInsertType }</td>
 											<%-- <td class="col-tel">${userInfo.viewMaskingMobilePhone }</td> --%>
