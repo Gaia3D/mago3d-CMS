@@ -60,11 +60,14 @@
 									</div>
 								</div>
 								<div id="${dbWidget.name}" class="widget-content row">
+									<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+					            		<div id="dataInfoSpinner" style="width: 150px; height: 70px;"></div>
+					            	</div>
 								</div>
 							</div>
 		</c:when>
 		<c:when test="${dbWidget.name == 'dataInfoLogListWidget'}">		
-							<div id="${dbWidget.widget_id }" class="widget one-third column" style="font-size: 16px;">
+							<div id="${dbWidget.widget_id }" class="widget one-third column">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
 										<h3 class="widget-title">데이터 변경 요청 이력<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
@@ -74,6 +77,26 @@
 									</div>
 								</div>
 								<div id="${dbWidget.name}" class="widget-content row">
+									<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+					            		<div id="dataInfoLogListSpinner" style="width: 150px; height: 70px;"></div>
+					            	</div>
+								</div>
+							</div>
+		</c:when>
+		<c:when test="${dbWidget.name == 'issueWidget'}">		
+							<div id="${dbWidget.widget_id }" class="widget one-third column">
+								<div class="widget-header row">
+									<div class="widget-heading u-pull-left">						
+										<h3 class="widget-title">최근 이슈<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+									</div>
+									<div class="widget-functions u-pull-right">
+										<a href="/issue/list-issue.do" title="<spring:message code='config.widget.issue.more'/>"><span class="icon-glyph glyph-plus"></span></a>
+									</div>
+								</div>
+								<div id="${dbWidget.name}" class="widget-content row">
+									<div style="text-align: center; padding-top: 80px; padding-left: 30px;">
+					            		Recent Issue List is under development...
+					            	</div>
 								</div>
 							</div>
 		</c:when>
@@ -102,7 +125,7 @@
 									</div>
 								</div>
 								<div id="${dbWidget.name}" class="widget-content row">
-									<div style="text-align: center; padding-top: 60px; padding-left: 200px;">
+									<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 					            		<div id="scheduleLogListSpinner" style="width: 150px; height: 70px;"></div>
 					            	</div>
 								</div>
@@ -120,7 +143,7 @@
 								</div>
 								
 								<div id="${dbWidget.name}" class="widget-content row">
-									<div style="text-align: center; padding-top: 60px; padding-left: 200px;">
+									<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 					            		<div id="accessLogSpinner" style="width: 150px; height: 70px;"></div>
 					            	</div>
 								</div>
@@ -339,17 +362,19 @@
 		});
 		$("#sortable").disableSelection();
 		
-		ajaxProjectWidget();
-		ajaxDataInfoWidget();
-		ajaxDataInfoLogWidget();
+		projectWidget();
+		dataInfoWidget();
+		startSpinner("dataInfoSpinner");
+		dataInfoLogWidget();
+		startSpinner("dataInfoLogListSpinner");
  		userWidget();
 		startSpinner("scheduleLogListSpinner");
-		ajaxScheduleLogListWidget();
+		scheduleLogListWidget();
 		startSpinner("accessLogSpinner");
-		ajaxAccessLogWidget();
+		accessLogWidget();
 	});
 	
-	function ajaxProjectWidget() {
+	function projectWidget() {
 		var url = "/config/ajax-project-data-widget.do";
 		var info = "";
 		$.ajax({
@@ -360,7 +385,7 @@
 			headers: { "X-mago3D-Header" : "mago3D"},
 			success : function(msg) {
 				if(msg.result === "success") {
-					drawProjectChart(msg.projectNameList, msg.dataTotalCountList);
+					showProject(msg.projectNameList, msg.dataTotalCountList);
 				} else {
 					alert(JS_MESSAGE[msg.result]);
 				}
@@ -372,7 +397,7 @@
 		});
 	}
 	
-	function drawProjectChart(projectNameList, dataTotalCountList) {
+	function showProject(projectNameList, dataTotalCountList) {
 		if(projectNameList == null || projectNameList.length == 0) {
 			return;
 		} 
@@ -419,11 +444,147 @@
         });
 	}
 	
-	function ajaxDataInfoWidget() {
-		
+	function dataInfoWidget() {
+		$.ajax({
+			url : "/config/ajax-data-status-widget.do",
+			type : "GET",
+			cache : false,
+			dataType : "json",
+			success : function(msg) {
+				if (msg.result == "success") {
+					showDataInfo(msg);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+			}
+		});
 	}
 	
-	function ajaxDataInfoLogWidget() {
+	function showDataInfo(jsonData) {
+		
+		$("#dataInfoWidget").empty();
+		
+		var useTotalCount = parseInt(jsonData.useTotalCount);
+		var forbidTotalCount = parseInt(jsonData.forbidTotalCount);
+		var etcTotalCount = parseInt(jsonData.etcTotalCount);
+		
+		var use = "<spring:message code='data.status.use'/>";
+		var unused = "<spring:message code='data.status.unused'/>";
+		var etc = "<spring:message code='data.status.etc'/>";
+		
+		var dataValues = [ useTotalCount, forbidTotalCount, etcTotalCount];
+		var ticks = [use, unused, etc];
+		var yMax = 10;
+		if(useTotalCount > 10 || forbidTotalCount > 10 || etcTotalCount > 10) {
+			yMax = Math.max(useTotalCount, forbidTotalCount, etcTotalCount) + (useTotalCount * 0.2);
+		}
+		
+		var plot = $.jqplot("dataInfoWidget", [dataValues], {
+        	//title : "data info status",
+        	height: 205,
+        	animate: !$.jqplot.use_excanvas,
+        	seriesColors: [ "#40a7fe", "#3fbdf8" ],
+        	seriesDefaults:{
+            	shadow:false,
+            	renderer:$.jqplot.BarRenderer,
+                pointLabels: { show: true },
+                rendererOptions: {
+                	barWidth: 50
+                }
+            },
+            grid: {
+				background: "#fff",
+				//background: "#14BA6C"
+				gridLineWidth: 0.7,
+				//borderColor: 'transparent',
+				shadow: false,
+				borderWidth:0.1
+				//shadowColor: 'transparent'
+			},
+            gridPadding:{
+		        left:35,
+		        right:1,
+		        to:40,
+		        bottom:27
+		    },
+            axes: {
+                xaxis: {
+                    renderer: $.jqplot.CategoryAxisRenderer,
+                    ticks: ticks,
+                    tickOptions:{ 
+                    	formatString: "%'d",
+	                	fontSize: "10pt"
+	                } 
+                },
+                yaxis: {
+	            	numberTicks : 6,
+	                min : 0,
+	                max : yMax,
+                    tickOptions:{ 
+                    	formatString: "%'d",
+	                	fontSize: "10pt"
+	                }
+				}
+            },
+            highlighter: { show: false }
+        });
+	}
+	
+	function dataInfoLogWidget() {
+		$.ajax({
+			url : "/config/ajax-data-info-log-widget.do",
+			type : "GET",
+			cache : false,
+			dataType : "json",
+			success : function(msg) {
+				if (msg.result == "success") {
+					var dataInfoLogList = msg.dataInfoLogList;
+					var content = "";
+					content 	= "<table class=\"widget-table\">"
+								+	"<col class=\"col-left\" />"
+								+	"<col class=\"col-left\" />";
+								+	"<col class=\"col-left\" />";
+					if(dataInfoLogList == null || dataInfoLogList.length == 0) {
+						content += 	"<tr>"
+								+	"	<td colspan=\"3\" class=\"col-none\">데이터 변경 요청 이력이 존재하지 않습니다.</td>"
+								+	"</tr>";
+					} else {
+						for(i=0; i<dataInfoLogList.length; i++ ) {
+							var dataInfoLog = null;
+							dataInfoLog = dataInfoLogList[i];
+							var viewStatus = "";
+							if(dataInfoLog.status === "0") viewStatus = "<spring:message code='request'/>";
+							else if(dataInfoLog.status === "1") viewStatus = "<spring:message code='complete'/>";
+							else if(dataInfoLog.status === "2") viewStatus = "<spring:message code='reject'/>";
+							else if(dataInfoLog.status === "3") viewStatus = "<spring:message code='reset'/>";
+							
+							content = content 
+								+ 	"<tr>"
+								+ 	"	<td class=\"col-left\">"
+								+		"	<span class=\"index\"></span>"
+								+		"	<em>" + dataInfoLog.data_name + "</em>"
+								+		"</td>"
+								+ 		"<td class=\"col-left\">" + viewStatus + "</td>"
+								+ 		"<td class=\"col-left\">" + dataInfoLog.view_insert_date + "</td>"
+								+ 	"</tr>";
+						}
+					}
+					$("#dataInfoLogListWidget").empty();
+					$("#dataInfoLogListWidget").html(content);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+			}
+		});
+	}
+	
+	function issueWidget() {
 		
 	}
 	
@@ -503,7 +664,7 @@
 	}
 	
 	// 스케줄 실행 이력 갱신
-	function ajaxScheduleLogListWidget() {
+	function scheduleLogListWidget() {
 		$.ajax({
 			url : "/config/ajax-schedule-log-list-widget.do",
 			type : "GET",
@@ -546,7 +707,7 @@
 	}
 	
 	// 사용자 추적
-	function ajaxAccessLogWidget() {
+	function accessLogWidget() {
 		$.ajax({
 			url : "/config/ajax-access-log-widget.do",
 			type : "GET",

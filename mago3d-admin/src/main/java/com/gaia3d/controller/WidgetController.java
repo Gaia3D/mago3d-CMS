@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.AccessLog;
-import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.DataInfoLog;
 import com.gaia3d.domain.PGStatActivity;
 import com.gaia3d.domain.Project;
 import com.gaia3d.domain.ScheduleLog;
@@ -30,6 +30,7 @@ import com.gaia3d.domain.Widget;
 import com.gaia3d.helper.SessionUserHelper;
 import com.gaia3d.service.APIService;
 import com.gaia3d.service.AccessLogService;
+import com.gaia3d.service.DataLogService;
 import com.gaia3d.service.DataService;
 import com.gaia3d.service.IssueService;
 import com.gaia3d.service.MonitoringService;
@@ -65,6 +66,8 @@ public class WidgetController {
 	private ProjectService projectService;
 	@Autowired
 	private DataService dataService;
+	@Autowired
+	private DataLogService dataLogService;
 	@Autowired
 	private APIService aPIService;
 	@Autowired
@@ -264,6 +267,42 @@ public class WidgetController {
 	}
 	
 	/**
+	 * 데이터 변경 요청 목록
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "ajax-data-info-log-widget.do")
+	@ResponseBody
+	public Map<String, Object> ajaxDataInfoLogWidget(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.DATE, -7);
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+			String searchDay = simpleDateFormat.format(calendar.getTime());
+			String startDate = searchDay + DateUtil.START_TIME;
+			String endDate = today + DateUtil.END_TIME;
+			
+			DataInfoLog dataInfoLog = new DataInfoLog();
+			dataInfoLog.setStart_date(startDate);
+			dataInfoLog.setEnd_date(endDate);
+			dataInfoLog.setOffset(0l);
+			dataInfoLog.setLimit(WIDGET_LIST_VIEW_COUNT);
+			List<DataInfoLog> dataInfoLogList = dataLogService.getListDataInfoLog(dataInfoLog);
+			
+			map.put("dataInfoLogList", dataInfoLogList);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		map.put("result", result);
+		return map;
+	}
+	
+	/**
 	 * 사용자 추적 이력 목록
 	 * @param model
 	 * @return
@@ -289,7 +328,6 @@ public class WidgetController {
 			accessLog.setLimit(WIDGET_LIST_VIEW_COUNT);
 			List<AccessLog> accessLogList = logService.getListAccessLog(accessLog);
 			
-//			map.put("accessLogList", JSONArray.fromObject(accessLogList));
 			map.put("accessLogList", accessLogList);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -326,7 +364,6 @@ public class WidgetController {
 			scheduleLog.setLimit(WIDGET_LIST_VIEW_COUNT);
 			List<ScheduleLog> scheduleLogList = scheduleService.getListScheduleLog(scheduleLog);
 			
-//			map.put("scheduleLogList", JSONArray.fromObject(scheduleLogList));
 			map.put("scheduleLogList", scheduleLogList);
 		} catch(Exception e) {
 			e.printStackTrace();

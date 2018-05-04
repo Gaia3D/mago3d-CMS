@@ -1,6 +1,7 @@
 package com.gaia3d.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -18,17 +19,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.AccessLog;
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.DataInfoLog;
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.PGStatActivity;
 import com.gaia3d.domain.Policy;
+import com.gaia3d.domain.Project;
 import com.gaia3d.domain.ScheduleLog;
 import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.Widget;
 import com.gaia3d.helper.SessionUserHelper;
 import com.gaia3d.service.APIService;
 import com.gaia3d.service.AccessLogService;
+import com.gaia3d.service.DataLogService;
+import com.gaia3d.service.DataService;
 import com.gaia3d.service.IssueService;
 import com.gaia3d.service.MonitoringService;
+import com.gaia3d.service.ProjectService;
 import com.gaia3d.service.ScheduleService;
 import com.gaia3d.service.UserService;
 import com.gaia3d.service.WidgetService;
@@ -59,6 +66,12 @@ public class MainController {
 	
 	@Autowired
 	private APIService aPIService;
+	@Autowired
+	private ProjectService projectService;
+	@Autowired
+	private DataService dataService;
+	@Autowired
+	private DataLogService dataLogService;
 	@Autowired
 	private IssueService issueService;
 	@Autowired
@@ -109,31 +122,42 @@ public class MainController {
 		String startDate = yearMonthDay + DateUtil.START_TIME;
 		String endDate = yearMonthDay + DateUtil.END_TIME;
 		
-		boolean issueDraw = false;
-		boolean scheduleLogListDraw = false;
-		boolean userDraw = false;
-		boolean dbcpDraw = false;
-		boolean accessLogDraw = false;
-		boolean dbSessionDraw = false;
-		boolean isGroupSet = false;
+		boolean isProjectDraw = false;
+		boolean isDataInfoDraw = false;
+		boolean isDataInfoLogListDraw = false;
+		boolean isIssueDraw = false;
+		boolean isUserDraw = false;
+		boolean isScheduleLogListDraw = false;
+		boolean isAccessLogDraw = false;
+		boolean isDbcpDraw = false;
+		boolean isDbSessionDraw = false;
 		for(Widget dbWidget : widgetList) {
-			if("issueWidget".equals(dbWidget.getName())) {
-				issueDraw = true;
+			if("projectWidget".equals(dbWidget.getName())) {
+				isProjectDraw = true;
+				projectWidget(startDate, endDate, model);
+			} else if("dataInfoWidget".equals(dbWidget.getName())) {
+				isDataInfoDraw = true;
+				dataInfoWidget(startDate, endDate, model);
+			} else if("dataInfoLogListWidget".equals(dbWidget.getName())) {
+				isDataInfoLogListDraw = true;
+				dataInfoLogListWidget(startDate, endDate, model);
+			} else if("issueWidget".equals(dbWidget.getName())) {
+				isIssueDraw = true;
 				issueWidget(startDate, endDate, model);
 			} else if("userWidget".equals(dbWidget.getName())) {
-				userDraw = true;
+				isUserDraw = true;
 				userWidget(startDate, endDate, model);
 			} else if("scheduleLogListWidget".equals(dbWidget.getName())) {
-				scheduleLogListDraw = true;
+				isScheduleLogListDraw = true;
 				scheduleLogListWidget(startDate, endDate, model);
-			} else if("dbcpWidget".equals(dbWidget.getName())) {
-				dbcpDraw = true;
-				dbcpWidget(model);
 			} else if("accessLogWidget".equals(dbWidget.getName())) {
-				accessLogDraw = true;
+				isAccessLogDraw = true;
 				accessLogWidget(startDate, endDate, model);
+			} else if("dbcpWidget".equals(dbWidget.getName())) {
+				isDbcpDraw = true;
+				dbcpWidget(model);
 			} else if("dbSessionWidget".equals(dbWidget.getName())) {
-				dbSessionDraw = true;
+				isDbSessionDraw = true;
 				dbSessionWidget(model);	
 			}
 		}
@@ -149,13 +173,47 @@ public class MainController {
 		model.addAttribute(widgetList);
 		
 		model.addAttribute("isActive", isActive);
-		model.addAttribute("issueDraw", issueDraw);
-		model.addAttribute("userDraw", userDraw);
-		model.addAttribute("scheduleLogListDraw", scheduleLogListDraw);
-		model.addAttribute("dbcpDraw", dbcpDraw);
-		model.addAttribute("accessLogDraw", accessLogDraw);
+		model.addAttribute("isProjectDraw", isProjectDraw);
+		model.addAttribute("isDataInfoDraw", isDataInfoDraw);
+		model.addAttribute("isDataInfoLogListDraw", isDataInfoLogListDraw);
+		model.addAttribute("isIssueDraw", isIssueDraw);
+		model.addAttribute("isUserDraw", isUserDraw);
+		model.addAttribute("isScheduleLogListDraw", isScheduleLogListDraw);
+		model.addAttribute("isAccessLogDraw", isAccessLogDraw);
+		model.addAttribute("isDbcpDraw", isDbcpDraw);
+		model.addAttribute("isDbSessionDraw", isDbSessionDraw);
 		
 		return "/main/index";
+	}
+	
+	/**
+	 * project
+	 * @param startDate
+	 * @param endDate
+	 * @param model
+	 */
+	private void projectWidget(String startDate, String endDate, Model model) {
+		// ajax 에서 처리 하기 위해서 여기는 공백
+	}
+	
+	/**
+	 * project
+	 * @param startDate
+	 * @param endDate
+	 * @param model
+	 */
+	private void dataInfoWidget(String startDate, String endDate, Model model) {
+		// ajax 에서 처리 하기 위해서 여기는 공백
+	}
+	
+	/**
+	 * project
+	 * @param startDate
+	 * @param endDate
+	 * @param model
+	 */
+	private void dataInfoLogListWidget(String startDate, String endDate, Model model) {
+		// ajax 에서 처리 하기 위해서 여기는 공백
 	}
 	
 	/**
@@ -291,6 +349,106 @@ public class MainController {
 		if(dbSessionCount > 7) dbSessionList = dbSessionList.subList(0, 7);
 		model.addAttribute("dbSessionCount", dbSessionCount);
 		model.addAttribute("dbSessionList", dbSessionList);
+	}
+	
+	/**
+	 * 프로젝트별 데이터 건수
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "ajax-project-data-widget.do")
+	@ResponseBody
+	public Map<String, Object> ajaxProjectDataWidget(HttpServletRequest request) {
+		
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			Project defaultProject = new Project();
+			defaultProject.setUse_yn(Project.IN_USE);
+			List<Project> projectList = projectService.getListProject(defaultProject);
+			List<String> projectNameList = new ArrayList<>();
+			List<Long> dataTotalCountList = new ArrayList<>();
+			for(Project project : projectList) {
+				projectNameList.add(project.getProject_name());
+				DataInfo dataInfo = new DataInfo();
+				dataInfo.setProject_id(project.getProject_id());
+				Long dataTotalCount = dataService.getDataTotalCount(dataInfo);
+				dataTotalCountList.add(dataTotalCount);
+			}
+			
+			map.put("projectNameList", projectNameList);
+			map.put("dataTotalCountList", dataTotalCountList);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		map.put("result", result);
+		return map;
+	}
+	
+	/**
+	 * 데이터 상태별 통계 정보
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "ajax-data-status-widget.do")
+	@ResponseBody
+	public Map<String, Object> ajaxDataStatusStatistics(HttpServletRequest request) {
+		
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			long useTotalCount = dataService.getDataTotalCountByStatus(DataInfo.STATUS_USE);
+			long forbidTotalCount = dataService.getDataTotalCountByStatus(DataInfo.STATUS_FORBID);
+			long etcTotalCount = dataService.getDataTotalCountByStatus(DataInfo.STATUS_ETC);
+			
+			map.put("useTotalCount", useTotalCount);
+			map.put("forbidTotalCount", forbidTotalCount);
+			map.put("etcTotalCount", etcTotalCount);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		map.put("result", result);
+		return map;
+	}
+	
+	/**
+	 * 데이터 변경 요청 목록
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "ajax-data-info-log-widget.do")
+	@ResponseBody
+	public Map<String, Object> ajaxDataInfoLogWidget(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.DATE, -7);
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+			String searchDay = simpleDateFormat.format(calendar.getTime());
+			String startDate = searchDay + DateUtil.START_TIME;
+			String endDate = today + DateUtil.END_TIME;
+			
+			DataInfoLog dataInfoLog = new DataInfoLog();
+			dataInfoLog.setStart_date(startDate);
+			dataInfoLog.setEnd_date(endDate);
+			dataInfoLog.setOffset(0l);
+			dataInfoLog.setLimit(WIDGET_LIST_VIEW_COUNT);
+			List<DataInfoLog> dataInfoLogList = dataLogService.getListDataInfoLog(dataInfoLog);
+			
+			map.put("dataInfoLogList", dataInfoLogList);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		map.put("result", result);
+		return map;
 	}
 	
 	/**

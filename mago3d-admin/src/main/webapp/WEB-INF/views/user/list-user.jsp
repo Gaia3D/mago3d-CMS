@@ -412,8 +412,7 @@
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
-						if(msg.result_message != null && msg.result_message != "" && business_type == "OTP") {
-							var updateMessage = JS_MESSAGE["user.user_otp.update.warning"];
+						if(msg.result_message != null && msg.result_message != "") {
 							var patternCount = /{update_count}/ig; // notice "g" here now!
 							var pattern = /{user_ids}/ig; // notice "g" here now!
 							updateMessage = updateMessage.replace( patternCount, msg.update_count );

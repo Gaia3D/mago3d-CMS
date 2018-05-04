@@ -215,20 +215,20 @@ em {
 	line-height: 3.3rem;
 	vertical-align: middle; }
 	
-.banner.otp-generates > div:first-child {
+.banner.info-generates > div:first-child {
 	background-color: #36a9e1; }
 	 
-.banner.otp-success > div:first-child {
+.banner.info-success > div:first-child {
 	background-color: #bdea74; }
 	 
-.banner.otp-failures > div:first-child {
+.banner.info-failures > div:first-child {
 	background-color: #ff5454; }
 
 
 
-/* OTP device
+/* device
 –––––––––––––––––––––––––––––––––––––––––––––––––– */	
-.otp-device {
+.info-device {
 	border: 3px solid #fff;
 	-webkit-border-radius: 30px;
 	   -moz-border-radius: 30px;
@@ -239,15 +239,15 @@ em {
 	text-align: left;
 	vertical-align: middle; }
 	
-.otp-device .icon-glyph {
+.info-device .icon-glyph {
 	font-size: 2.4rem;
 	line-height: 30px;
 	padding-left: 3px; }
 	
-.otp-device .otp-numbers { 
+.info-device .info-numbers { 
 	position: relative; }
 
-.otp-device .otp-numbers:after {
+.info-device .info-numbers:after {
 	content: '012345';
 	padding: 0 2px;
 	font-size: .9rem;
@@ -733,7 +733,7 @@ select + .ui-selectmenu-button + input {
 	display: block;
 	float: left;
 	height: 30px;
-	min-width: 160px;
+	min-width: 200px;
 	box-sizing: border-box; }
 	
 .ui-selectmenu-button span.ui-icon {

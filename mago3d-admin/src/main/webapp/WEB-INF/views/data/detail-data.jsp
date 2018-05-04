@@ -117,25 +117,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$( ".tabs" ).tabs();
-		
-		$("[name=otp_use_yn]").filter("[value='${userOTP.otp_use_yn}']").prop("checked",true);
-		$("[name=otp_type]").filter("[value='${userOTP.otp_type}']").prop("checked",true);
-		
-		$("#mobile_app_key").attr("disabled", true);
-		
-		$("#use_constraint_y").attr("disabled", true);
-		$("#use_constraint_n").attr("disabled", true);
-		$("#allow_counter").attr("disabled", true);
-		$("input[name=use_monday_yn]").attr("disabled", true);
-		$("input[name=use_tuesday_yn]").attr("disabled", true);
-		$("input[name=use_wednesday_yn]").attr("disabled", true);
-		$("input[name=use_thursday_yn]").attr("disabled", true);
-		$("input[name=use_friday_yn]").attr("disabled", true);
-		$("input[name=use_saturday_yn]").attr("disabled", true);
-		$("input[name=use_sunday_yn]").attr("disabled", true);
 	});
-	
-
 </script>
 </body>
 </html>

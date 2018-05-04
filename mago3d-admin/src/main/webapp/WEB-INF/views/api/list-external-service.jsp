@@ -66,16 +66,10 @@
 										<td class="col-name">${externalService.service_name}</td>
 										<td class="col-type">
 	<c:if test="${externalService.service_type eq '0' }">
-											Cache(캐시 Reload
+											Cache(캐시 Reload)
 	</c:if>
 	<c:if test="${externalService.service_type eq '1' }">
-											OTP 서버
-	</c:if>
-	<c:if test="${externalService.service_type eq '2' }">
 											고가용성(HA)
-	</c:if>
-	<c:if test="${externalService.service_type eq '3' }">
-											접속자 목록
 	</c:if>							
 										</td>
 										<td class="col-ip">${externalService.server_ip}</td>
