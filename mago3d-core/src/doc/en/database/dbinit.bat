@@ -14,6 +14,7 @@ psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\access_log.sql
 psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\api.sql
 psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\board.sql
 psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\common_code.sql
+psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\dataInfo_attribute.sql
 psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\datainfo.sql
 psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\datainfo_log.sql
 psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\file_info.sql

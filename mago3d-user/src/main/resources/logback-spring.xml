@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration scan="true" scanPeriod="5 minutes">
 	<!-- <include resource="org/springframework/boot/logging/logback/base.xml" /> -->
 	
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
