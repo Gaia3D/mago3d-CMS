@@ -11,6 +11,7 @@ cd C:\PostgreSQL\9.6\bin\
 
 psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\access_log.sql
 psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\api.sql
+psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\board.sql
 psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\common_code.sql
 psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\datainfo.sql
 psql -U postgres -d mago3d -a -f %CUR_PATH%ddl\datainfo_log.sql
