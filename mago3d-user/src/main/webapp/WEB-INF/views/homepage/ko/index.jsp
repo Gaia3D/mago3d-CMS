@@ -25,8 +25,13 @@
 			<span>대용량 3차원 GIS를 쉽고 빠르게 웹에서 구현합니다.</span>
 		</p>
 	</div>
-	
-	<object class="vod" data="https://www.youtube.com/embed/68XWIC2K-kA?autoplay=1&loop=1&playlist=n5jdRzLwegg&controls=0&showinfo=0&origin=http://www.mago3d.com"></object>
+
+	<div class="vod">
+		<iframe frameborder="0" height="100%" width="100%" allow="autoplay; encrypted-media"
+			src="https://www.youtube.com/embed/68XWIC2K-kA?rel=0&autoplay=1&loop=1&playlist=n5jdRzLwegg&controls=0&showinfo=0&autohide=1&origin=http://www.mago3d.com">
+		</iframe>
+	</div>
+
 	<div class="mainMenu">
 		<ul class="nav">
 			<li><a href="/homepage/about.do" onclick ="changeLanguage('ko');">KOREAN</a></li>
