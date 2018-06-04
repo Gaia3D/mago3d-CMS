@@ -217,76 +217,7 @@ em {
 	line-height: 3.3rem;
 	vertical-align: middle; }
 	
-.banner.otp-generates > div:first-child {
-	background-color: #36a9e1; }
-	 
-.banner.otp-success > div:first-child {
-	background-color: #bdea74; }
-	 
-.banner.otp-failures > div:first-child {
-	background-color: #ff5454; }
 
-
-
-/* OTP device
-–––––––––––––––––––––––––––––––––––––––––––––––––– */	
-.otp-device {
-	border: 3px solid #fff;
-	-webkit-border-radius: 30px;
-	   -moz-border-radius: 30px;
-			border-radius: 30px;
-	width: 80px;
-	height: 30px;
-	margin: 0 auto;
-	text-align: left;
-	vertical-align: middle; }
-	
-.otp-device .icon-glyph {
-	font-size: 2.4rem;
-	line-height: 30px;
-	padding-left: 3px; }
-	
-.otp-device .otp-numbers { 
-	position: relative; }
-
-.otp-device .otp-numbers:after {
-	content: '012345';
-	padding: 0 2px;
-	font-size: .9rem;
-	position: absolute;
-	left: 0;
-	top: -9px;
-	z-index: 1;
-	border: 2px solid #fff;
-	display: block; }
-	
-	
-	
-/* Badge
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-.badge {
-	-webkit-border-radius: 16px;
-	   -moz-border-radius: 16px;
-			border-radius: 16px;
-	height: 16px;
-	box-sizing: border-box;
-	padding: 1px 5px 3px 3px;
-	color: #fff; }
-	
-.badge .icon-text {
-	font-size: 70%; }
-	
-.badge.otp-generates {
-	background-color: #36a9e1; }
-	
-.badge.otp-failures {
-	background-color: #ea6576; }
-	
-.badge.otp-success {
-	background-color: #adde5e; }
-	
-	
-	
 /* Status bar
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .status-bar {
@@ -1771,8 +1702,7 @@ tr:hover td {
 .scope-col td.col-toggle,
 .scope-col td.col-status,
 .scope-col td.col-type,
-.scope-col td.col-ip,
-.scope-col td.col-otp {
+.scope-col td.col-ip {
 	text-align: center; }
 
 .scope-col td.col-name,
@@ -2403,17 +2333,6 @@ tr:hover td {
 	width: 100%;
 	position: relative;
 	z-index: 10; }
-	
-.general-user .personal-stats.login .stats-content legend:before {
-	position: absolute;
-	display: block;
-	content: 'OTP 요청';
-	height: 20px;
-	width: 60px;
-	background-color: #3e3e3e;
-	top: 0;
-	left: 100px;
-	z-index: 0; }
 	
 .general-user .personal-stats.login .stats-content legend:after {
 	position: absolute;

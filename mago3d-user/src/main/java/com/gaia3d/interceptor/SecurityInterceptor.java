@@ -1,5 +1,6 @@
 package com.gaia3d.interceptor;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
     	String uri = request.getRequestURI();
     	String requestIp = WebUtil.getClientIp(request);
-    	log.info("## Requst URI = {}, Request Ip = {}, header = {}", uri, requestIp, request.getHeader("X-Requested-With"));
+    	//log.info("## Requst URI = {}, Request Ip = {}, header = {}", uri, requestIp, request.getHeader("X-Requested-With"));
     	
     	// 홈페이지는 통과
     	if(uri.indexOf("/homepage/") >= 0) {
@@ -57,6 +58,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
     	
     	// 예외 URL 은 통과 처리
     	if(isExceptionURI) {
+    		log.info("################################### exception uri");
     		return true;
     	}
     	

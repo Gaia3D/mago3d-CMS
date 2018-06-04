@@ -376,7 +376,6 @@ function getAjaxUserGroupList() {
 		type: "POST",
 		data: info,
 		cache: false,
-//		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
@@ -419,7 +418,6 @@ function ajaxInsertUserGroup() {
 		type: "POST",
 		data: info,
 		cache: false,
-		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
@@ -444,7 +442,6 @@ function ajaxUpdateUserGroup() {
 		type: "POST",
 		data: info,
 		cache: false,
-		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
@@ -470,7 +467,6 @@ function ajaxDeleteUserGroup() {
 			type: "POST",
 			data: info,
 			cache: false,
-			async:false,
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "success") {
@@ -499,7 +495,6 @@ function ajaxUpdateMoveUserGroup() {
 			type: "POST",
 			data: info,
 			cache: false,
-			async:false,
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "user.session.empty"){

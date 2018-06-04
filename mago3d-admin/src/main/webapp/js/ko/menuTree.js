@@ -59,6 +59,7 @@ var fnObj = {
 					document.treeWriteForm.reset();
 					document.treeWriteForm.writeMode.value = "modify";
 					$("#menu_id").val(obj.item.menu_id);
+					$("#menu_type").val(obj.item.menu_type);
 					$("#depth").val(obj.item.depth);
 					$("#name").val(obj.item.name);
 					$("#name_en").val(obj.item.name_en);
@@ -167,6 +168,7 @@ var fnObj = {
 		
 		document.treeWriteForm.reset();
 		document.treeWriteForm.writeMode.value = "append";
+		document.treeWriteForm.menu_type.value = obj.item.menu_type;
 		document.treeWriteForm.parent.value = obj.item.parent;
 		document.treeWriteForm.depth.value = obj.item.depth;
 		$("[name=use_yn]").removeAttr("checked");
@@ -198,6 +200,7 @@ var fnObj = {
 		}*/
 		document.treeWriteForm.reset();
 		document.treeWriteForm.writeMode.value = "child";
+		document.treeWriteForm.menu_type.value = obj.item.menu_type;
 		document.treeWriteForm.parent.value = obj.item.menu_id;
 		document.treeWriteForm.depth.value = parseInt(obj.item.depth) + parseInt(1);
 		$("[name=use_yn]").removeAttr("checked");
@@ -246,6 +249,7 @@ var fnObj = {
 			top:150
 		});*/
 		$("#menu_id").val(obj.item.menu_id);
+		$("#menu_type").val(obj.item.menu_type);
 		$("#depth").val(obj.item.depth);
 		$("#name").val(obj.item.name);
 		$("#name_en").val(obj.item.name_en);
@@ -411,7 +415,6 @@ function getAjaxMenuList() {
 		type: "POST",
 		data: info,
 		cache: false,
-		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
@@ -434,7 +437,6 @@ function ajaxInsertMenu() {
 		type: "POST",
 		data: info,
 		cache: false,
-		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
@@ -458,7 +460,6 @@ function ajaxUpdateMenu() {
 		type: "POST",
 		data: info,
 		cache: false,
-		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
@@ -483,7 +484,6 @@ function ajaxDeleteMenu() {
 			type: "POST",
 			data: info,
 			cache: false,
-			async:false,
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "success") {
@@ -509,7 +509,6 @@ function ajaxUpdateMoveMenu() {
 			type: "POST",
 			data: info,
 			cache: false,
-			async:false,
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "success") {

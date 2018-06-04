@@ -379,7 +379,6 @@ function getAjaxDataGroupList() {
 		type: "POST",
 		data: info,
 		cache: false,
-//		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
@@ -425,7 +424,6 @@ function ajaxInsertDataGroup() {
 		type: "POST",
 		data: info,
 		cache: false,
-		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
@@ -450,7 +448,6 @@ function ajaxUpdateDataGroup() {
 		type: "POST",
 		data: info,
 		cache: false,
-		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
@@ -476,7 +473,6 @@ function ajaxDeleteDataGroup() {
 			type: "POST",
 			data: info,
 			cache: false,
-			async:false,
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "success") {
@@ -505,7 +501,6 @@ function ajaxUpdateMoveDataGroup() {
 			type: "POST",
 			data: info,
 			cache: false,
-			async:false,
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "user.session.empty"){

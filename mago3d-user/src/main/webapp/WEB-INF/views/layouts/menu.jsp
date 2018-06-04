@@ -1,47 +1,47 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<nav class="site-navigation">
-	<div class="main-menu row">
-		<div class="container">
-			<ul>
-<c:set var="menuDepthValue" value="0" />			
-<c:forEach var="userGroupMenu" items="${cacheUserGroupMenuList }" varStatus="status">
-	<c:if test="${userGroupMenu.depth eq 1 and userGroupMenu.display_yn eq 'Y'}">
-		<c:if test="${menuDepthValue eq '1'}">
-				</li>
-		</c:if>
-		<c:if test="${menuDepthValue eq '2'}">
-					</ul>
-				</li>
-		</c:if>
-			<c:if test="${userGroupMenu.menu_id eq parentMenu.menu_id}">
-				<li id="main-menu-${userGroupMenu.menu_id }" class="current-page">
-			</c:if>
-			<c:if test="${userGroupMenu.menu_id ne parentMenu.menu_id}">
-				<li id="main-menu-${userGroupMenu.menu_id }">
-			</c:if>	
-					<a href="${userGroupMenu.url }">
-						<span class="icon-glyph ${userGroupMenu.css_class }"></span>
-						<span class="icon-text">${userGroupMenu.name }</span>
-					</a>
-	</c:if>
-	<c:if test="${userGroupMenu.depth eq 2 and userGroupMenu.display_yn eq 'Y'}">
-		<c:if test="${menuDepthValue eq '1'}">
-					<ul id="sub-menu-${userGroupMenu.parent }">
-		</c:if>
-						<li><a href="${userGroupMenu.url }">${userGroupMenu.name }</a></li>
-	</c:if>	
-	
-	<c:if test="${menuDepthValue eq '1' and userGroupMenu.display_yn eq 'Y' and status.last }">
-				</li>
-	</c:if>
-	<c:if test="${menuDepthValue eq '2' and userGroupMenu.display_yn eq 'Y' and status.last }">
-					</ul>
-				</li>
-	</c:if>
-	<c:set var="menuDepthValue" value="${userGroupMenu.depth }" />
-</c:forEach>
-			</ul>
+<aside id="left-panel" class="left-panel">
+	<nav class="navbar navbar-expand-sm navbar-default">
+
+		<div class="navbar-header">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
+				<i class="fa fa-bars"></i>
+			</button>
+			<a class="navbar-brand" href="/main/index.do"><img src="/images/${lang }/logo.png" alt="Logo"></a>
+			<a class="navbar-brand hidden" href="/main/index.do">M</a>
 		</div>
-	</div>
-</nav>
+
+		<div id="main-menu" class="main-menu collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="active">
+					<a href="/user/modify-user.do"> <i class="menu-icon fa fa-user"></i>Profile </a>
+				</li>
+										
+				<li><h3 class="menu-title">Rendering</h3></li>
+				<li class="menu-item-has-children dropdown">
+					<a href="/project/list-project.do" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="menu-icon fa fa-cubes"></i>프로젝트</a>
+					<ul class="sub-menu children dropdown-menu">
+						<li><i class="fa fa-building"></i><a href="/project/list-project.do">프로젝트 목록</a></li>
+						<li><i class="fa fa-id-badge"></i><a href="/project/input-project.do">프로젝트 등록</a></li>
+					</ul>
+				</li>
+				<li class="menu-item-has-children dropdown">
+					<a href="/data/list-data.do" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="menu-icon fa fa-database"></i>데이터</a>
+					<ul class="sub-menu children dropdown-menu">
+						<li><i class="fa fa-list"></i><a href="/data/list-data.do">데이터 목록</a></li>
+						<li><i class="fa fa-table"></i><a href="/data/list-data-info-log.do">데이터 변경 요청 목록</a></li>
+					</ul>
+				</li>
+
+				<li><h3 class="menu-title">Converter</h3></li>
+				<li><a href="/fileupload/input-fileupload.do"><i class="menu-icon fa fa-cloud-upload"></i>파일 업로딩</a></li>
+				<li><a href="widgets.html"><i class="menu-icon fa fa-calendar-times-o"></i>Converter 실행 결과 </a></li>
+				<li><a href="#"><i class="menu-icon fa fa-sticky-note"></i>F4D 등록</a></li>
+
+				<li><h3 class="menu-title">Settings</h3></li>
+				<li><a href="#"><i class="menu-icon fa fa-cogs"></i>기본 설정</a></li>
+				<li><a href="#"> <i class="menu-icon fa fa-key"></i>mago3D 설정</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</nav>
+</aside>

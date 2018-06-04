@@ -411,7 +411,6 @@ function getAjaxMenuList() {
 		type: "POST",
 		data: info,
 		cache: false,
-		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
@@ -434,7 +433,6 @@ function ajaxInsertMenu() {
 		type: "POST",
 		data: info,
 		cache: false,
-		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
@@ -458,7 +456,6 @@ function ajaxUpdateMenu() {
 		type: "POST",
 		data: info,
 		cache: false,
-		async:false,
 		dataType: "json",
 		success: function(msg){
 			if(msg.result == "success") {
@@ -483,7 +480,6 @@ function ajaxDeleteMenu() {
 			type: "POST",
 			data: info,
 			cache: false,
-			async:false,
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "success") {
@@ -509,7 +505,6 @@ function ajaxUpdateMoveMenu() {
 			type: "POST",
 			data: info,
 			cache: false,
-			async:false,
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "success") {

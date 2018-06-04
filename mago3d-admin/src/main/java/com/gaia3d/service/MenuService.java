@@ -13,10 +13,10 @@ public interface MenuService {
 	
 	/**
 	 * 메뉴 목록
-	 * @param default_yn
+	 * @param menu
 	 * @return
 	 */
-	public List<Menu> getListMenu(String default_yn);
+	public List<Menu> getListMenu(Menu menu);
 	
 	/**
 	 * 메뉴 조회

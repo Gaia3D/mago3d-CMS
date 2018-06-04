@@ -147,7 +147,6 @@
 				type : "POST",
 				data : info,
 				cache : false,
-				async : false,
 				dataType : "json",
 				success : function(msg) {
 					if (msg.result == "user.session.does.not.exist") {

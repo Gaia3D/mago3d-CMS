@@ -4,25 +4,26 @@
 <mapper namespace="com.gaia3d.persistence.MenuMapper">
 
 	<!-- 메뉴 목록 -->
-	<select id="getListMenu" resultType="menu">
+	<select id="getListMenu" parameterType="menu" resultType="menu">
 		/* getListMenu */
 		WITH RECURSIVE menu_tree (
-			menu_id, name, name_en, parent, depth, view_order, url, url_alias, image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date, path, cycle
+			menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date, path, cycle
 		) AS (
-	        SELECT A.menu_id, A.name, A.name_en, A.parent, A.depth, A.view_order, A.url, A.url_alias, A.image, A.image_alt, A.css_class,
+	        SELECT A.menu_id, A.menu_type, A.name, A.name_en, A.parent, A.depth, A.view_order, A.url, A.url_alias, A.image, A.image_alt, A.css_class,
 	        	A.default_yn, A.use_yn, A.display_yn,  A.description, A.insert_date, ARRAY[A.view_order], false
 			FROM menu A
-	        WHERE A.parent = 0
+	        WHERE A.menu_type = #{menu_type} 
+	        	AND A.parent = 0
 	        <if test="default_yn != null and default_yn != ''">
 	        	AND default_yn = #{default_yn}
 	        </if>
 	        UNION ALL
-	        SELECT A.menu_id, A.name, A.name_en, A.parent, A.depth, A.view_order, A.url, A.url_alias, A.image, A.image_alt, A.css_class, 
+	        SELECT A.menu_id, A.menu_type, A.name, A.name_en, A.parent, A.depth, A.view_order, A.url, A.url_alias, A.image, A.image_alt, A.css_class, 
 	        	A.default_yn, A.use_yn, A.display_yn, A.description, A.insert_date, path || A.view_order, A.menu_id = ANY(path)
 	        FROM menu A, menu_tree B
 	        WHERE A.parent = B.menu_id AND not cycle
 		)
-	    SELECT menu_id, name, name_en, parent, depth, view_order, url, url_alias, image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date, path
+	    SELECT menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date, path
 	    FROM menu_tree
 	    ORDER BY path
 	</select>
@@ -80,9 +81,9 @@
 	<insert id="insertMenu" parameterType="menu" >
 		/* insertMenu */
 		INSERT INTO menu(
-			menu_id, name, name_en, parent, depth, view_order, url, url_alias, image, image_alt, css_class, use_yn, display_yn, description
+			menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, image, image_alt, css_class, use_yn, display_yn, description
 		) values(
-			#{menu_id}, #{name}, #{name_en}, #{parent}, #{depth}, #{view_order}, #{url}, #{url_alias}, #{image}, #{image_alt}, #{css_class}, #{use_yn}, #{display_yn}, #{description} 
+			#{menu_id}, #{menu_type}, #{name}, #{name_en}, #{parent}, #{depth}, #{view_order}, #{url}, #{url_alias}, #{image}, #{image_alt}, #{css_class}, #{use_yn}, #{display_yn}, #{description} 
 		)
 	</insert>
 	

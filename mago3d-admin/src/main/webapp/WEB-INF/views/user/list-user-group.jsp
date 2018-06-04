@@ -515,7 +515,6 @@
     		data: { user_group_id : $("#user_group_id").val(), pageNo : pageNo },
     		type: "POST",
     		cache: false,
-    		async:false,
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == "success") {
@@ -536,7 +535,6 @@
     		data: { user_group_id : $("#user_group_id").val(), pageNo : pageNo },
     		type: "POST",
     		cache: false,
-    		async:false,
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == "success") {
@@ -562,7 +560,6 @@
     		data: { user_group_id : $("#user_group_id").val(), pageNo : pageNo, search_except_role_name : search_except_role_name },
     		type: "POST",
     		cache: false,
-    		async:false,
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == 'success') {
@@ -588,7 +585,6 @@
     		data: { user_group_id : $("#user_group_id").val(), pageNo : pageNo, search_role_name : search_role_name },
     		type: "POST",
     		cache: false,
-    		async:false,
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == 'success') {
@@ -614,7 +610,6 @@
     		data: { user_group_id : $("#user_group_id").val(), pageNo : pageNo, search_except_user_name : search_except_user_name },
     		type: "POST",
     		cache: false,
-    		async:false,
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == 'success') {
@@ -640,7 +635,6 @@
     		data: { user_group_id : $("#user_group_id").val(), pageNo : pageNo, search_user_name : search_user_name },
     		type: "POST",
     		cache: false,
-    		async:false,
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == 'success') {
@@ -672,7 +666,6 @@
     		type: "POST",
     		data: param,
     		cache: false,
-    		async:false,
     		dataType: "json",
     		success: function(msg){
     			if(msg.result == "success") {
@@ -705,7 +698,6 @@
     		type: "POST",
     		data: param,
     		cache: false,
-    		async:false,
     		dataType: "json",
     		success: function(msg){
     			if(msg.result == "success") {
@@ -739,7 +731,6 @@
     		type: "POST",
     		data: param,
     		cache: false,
-    		async:false,
     		dataType: "json",
     		success: function(msg){
     			if(msg.result == "success") {
@@ -774,7 +765,6 @@
     		type: "POST",
     		data: param,
     		cache: false,
-    		async:false,
     		dataType: "json",
     		success: function(msg){
     			if(msg.result == "success") {
@@ -820,7 +810,6 @@
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {

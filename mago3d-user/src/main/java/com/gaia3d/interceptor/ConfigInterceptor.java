@@ -87,16 +87,16 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 				}
 			}
 			
-			String standByServerStatus = CacheManager.getStandByServerStatus();
-			if(standByServerStatus == null || "".equals(standByServerStatus)) standByServerStatus = "OFF";
-			
-			request.setAttribute("standByServerStatus", standByServerStatus);
+//			String standByServerStatus = CacheManager.getStandByServerStatus();
+//			if(standByServerStatus == null || "".equals(standByServerStatus)) standByServerStatus = "OFF";
+//			
+//			request.setAttribute("standByServerStatus", standByServerStatus);
 			
 //			Integer contentLoadBalancingIntervalValue = policy.getContent_load_balancing_interval().intValue() * 1000;
 //			request.setAttribute("contentLoadBalancingInterval", contentLoadBalancingIntervalValue);
 			
 			request.setAttribute("clickMenuId", clickMenuId);
-//			request.setAttribute("clickParentId", clickParentId);
+			request.setAttribute("clickParentId", clickParentId);
 //			request.setAttribute("clickDepth", clickDepth);
 			request.setAttribute("menu", menu);
 			request.setAttribute("parentMenu", parentMenu);

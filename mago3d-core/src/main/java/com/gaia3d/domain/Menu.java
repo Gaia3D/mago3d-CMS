@@ -17,6 +17,9 @@ public class Menu {
 	
 	public static final String Y = "Y";
 	public static final String N = "N";
+	
+	public static final String ADMIN = "0";
+	public static final String USER = "1";
 
 	/******** 화면 트리 표시용 ********/
 	private String open = "open";
@@ -29,6 +32,8 @@ public class Menu {
 
 	// 고유번호
 	private Long menu_id;
+	// 메뉴 타입, 0 : 관리자 사이트, 1 : 사용자 사이트
+	private String menu_type;
 	// 메뉴명
 	private String name;
 	// 영어 메뉴명

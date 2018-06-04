@@ -145,7 +145,6 @@
 				url: "/report/ajax-insert-report-maintenance.do",
 				type: "POST",
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {

@@ -67,6 +67,7 @@
 										<form id="treeWriteForm" name="treeWriteForm" method="post" onsubmit="return false;">
 							    			<input type="hidden" id="writeMode" name="writeMode" value="" />
 					                        <input type="hidden" id="menu_id" name="menu_id" value="" />
+					                        <input type="hidden" id="menu_type" name="menu_type" value="" />
 					                        <input type="hidden" id="parent" name="parent" value="" />
 					                        <input type="hidden" id="depth" name="depth" value="" /> 
 					                        <input type="hidden" id="view_order" name="view_order" value="1" />
@@ -180,7 +181,6 @@
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {

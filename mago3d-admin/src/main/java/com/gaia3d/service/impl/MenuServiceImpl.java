@@ -26,12 +26,12 @@ public class MenuServiceImpl implements MenuService {
 
 	/**
 	 * 메뉴 목록
-	 * @param default_yn
+	 * @param menu
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<Menu> getListMenu(String default_yn) {
-		return menuMapper.getListMenu(default_yn);
+	public List<Menu> getListMenu(Menu menu) {
+		return menuMapper.getListMenu(menu);
 	}
 	
 	/**

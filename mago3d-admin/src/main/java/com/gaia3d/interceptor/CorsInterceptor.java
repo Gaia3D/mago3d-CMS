@@ -8,6 +8,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * Same Origin Policy
+ * @author Cheon JeongDae
+ *
+ */
 @Component
 public class CorsInterceptor implements HandlerInterceptor {
     

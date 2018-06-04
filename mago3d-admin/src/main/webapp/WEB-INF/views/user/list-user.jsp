@@ -365,7 +365,6 @@
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -408,7 +407,6 @@
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -457,7 +455,6 @@
 			$("#fileInfo").ajaxSubmit({
 				type: "POST",
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					var totalCount = "<spring:message code='total.count'/>";
@@ -524,7 +521,6 @@
     		data: { user_group_id : userGroupId },
     		type: "POST",
     		cache: false,
-    		async:false,
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == "success") {
@@ -578,7 +574,6 @@
 					type: "POST",
 					data: info,
 					cache: false,
-					async:false,
 					dataType: "json",
 					success: function(msg){
 						if(msg.result == "success") {

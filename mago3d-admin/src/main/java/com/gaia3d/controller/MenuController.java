@@ -57,11 +57,8 @@ public class MenuController {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
-		List<Menu> menuList = new ArrayList<>();
-		menuList.add(getRootMenu());
 		try {
-			menuList.addAll(menuService.getListMenu(null));
-			menuTree = getMenuTree(menuList);
+			menuTree = getMenuTree(getAllListMenu());
 			log.info("@@ menuTree = {} ", menuTree);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -84,30 +81,21 @@ public class MenuController {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
-		List<Menu> menuList = new ArrayList<>();
-		menuList.add(getRootMenu());
 		try {
 			log.info("@@ menu = {} ", menu);
-			
-			String parent = request.getParameter("parent");
-			String depth = request.getParameter("depth");
+//			String parent = request.getParameter("parent");
+//			String depth = request.getParameter("depth");
 			if(menu.getName() == null || "".equals(menu.getName())
 					|| menu.getName_en() == null || "".equals(menu.getName_en())	
-					|| parent == null || "".equals(parent)
+					|| menu.getParent() == null
 					|| menu.getUrl() == null || "".equals(menu.getUrl())
 					|| menu.getUse_yn() == null || "".equals(menu.getUse_yn())) {
 				
-				menuList.addAll(menuService.getListMenu(null));
-				
-				result = "policy.menu.invalid";
-				menuTree = getMenuTree(menuList);
-				map.put("result", result);
+				menuTree = getMenuTree(getAllListMenu());
+				map.put("result", "policy.menu.invalid");
 				map.put("menuTree", menuTree);
 				return map;
 			}
-			
-			menu.setParent(Long.parseLong(parent));
-			menu.setDepth(Integer.parseInt(depth));
 			
 			Menu childMenu = menuService.getMaxViewOrderChildMenu(menu.getParent());
 			if(childMenu == null) {
@@ -125,9 +113,7 @@ public class MenuController {
 			if("\"null\"".equals(menu.getUrl_alias()) || "null".equals(menu.getUrl_alias())) menu.setUrl_alias("");
 			
 			menuService.insertMenu(menu);
-			menuList.addAll(menuService.getListMenu(null));
-			
-			menuTree = getMenuTree(menuList);
+			menuTree = getMenuTree(getAllListMenu());
 			log.info("@@ menuTree = {} ", menuTree);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -150,8 +136,6 @@ public class MenuController {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
-		List<Menu> menuList = new ArrayList<>();
-		menuList.add(getRootMenu());
 		try {
 			log.info("@@ menu = {} ", menu);
 			if(menu.getMenu_id() == null || menu.getMenu_id().longValue() == 0l
@@ -160,10 +144,8 @@ public class MenuController {
 					|| menu.getUrl() == null || "".equals(menu.getUrl())
 					|| menu.getUse_yn() == null || "".equals(menu.getUse_yn())) {
 				
-				menuList.addAll(menuService.getListMenu(null));
-				result = "policy.menu.invalid";
-				menuTree = getMenuTree(menuList);
-				map.put("result", result);
+				menuTree = getMenuTree(getAllListMenu());
+				map.put("result", "policy.menu.invalid");
 				map.put("menuTree", menuTree);
 				return map;
 			}
@@ -178,9 +160,7 @@ public class MenuController {
 			if("\"null\"".equals(menu.getUrl_alias()) || "null".equals(menu.getUrl_alias())) menu.setUrl_alias("");
 			
 			menuService.updateMenu(menu);
-			menuList.addAll(menuService.getListMenu(null));
-			
-			menuTree = getMenuTree(menuList);
+			menuTree = getMenuTree(getAllListMenu());
 			log.info("@@ menuTree = {} ", menuTree);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -203,26 +183,20 @@ public class MenuController {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		String menuTree = null;
-		List<Menu> menuList = new ArrayList<>();
-		menuList.add(getRootMenu());
 		try {
 			log.info("@@ menu = {} ", menu);
 			if(menu.getMenu_id() == null || menu.getMenu_id().longValue() == 0l
 					|| menu.getView_order() == null || menu.getView_order().intValue() == 0
 					|| menu.getUpdate_type() == null || "".equals(menu.getUpdate_type())) {
 				
-				menuList.addAll(menuService.getListMenu(null));
-				result = "menu.invalid";
-				menuTree = getMenuTree(menuList);
-				map.put("result", result);
+				menuTree = getMenuTree(getAllListMenu());
+				map.put("result", "menu.invalid");
 				map.put("menuTree", menuTree);
 				return map;
 			}
 			
 			menuService.updateMoveMenu(menu);
-			menuList.addAll(menuService.getListMenu(null));
-			
-			menuTree = getMenuTree(menuList);
+			menuTree = getMenuTree(getAllListMenu());
 			log.info("@@ menuTree = {} ", menuTree);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -246,24 +220,23 @@ public class MenuController {
 		String result = "success";
 		String menuTree = null;
 		List<Menu> menuList = new ArrayList<>();
-		menuList.add(getRootMenu());
+		
 		try {
+			// 관리자 메뉴
+			menuList.add(getRootMenu(Menu.ADMIN));
+			
+			
 			log.info("@@ menu = {} ", menu);
 			if(menu.getMenu_id() == null || menu.getMenu_id().longValue() == 0l) {
 				
-				menuList.addAll(menuService.getListMenu(null));
-				
-				result = "menu.invalid";
-				menuTree = getMenuTree(menuList);
-				map.put("result", result);
+				menuTree = getMenuTree(getAllListMenu());
+				map.put("result", "menu.invalid");
 				map.put("menuTree", menuTree);
 				return map;
 			}
 			
 			menuService.deleteMenu(menu.getMenu_id());
-			menuList.addAll(menuService.getListMenu(null));
-			
-			menuTree = getMenuTree(menuList);
+			menuTree = getMenuTree(getAllListMenu());
 			log.info("@@ menuTree = {} ", menuTree);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -277,19 +250,33 @@ public class MenuController {
 	
 	/**
 	 * 기본 메뉴 트리
+	 * @param menuType
 	 * @return
 	 */
-	private Menu getRootMenu() {
+	private Menu getRootMenu(String menuType) {
 		Policy policy = CacheManager.getPolicy();
 		
 		Menu menu = new Menu();
 		menu.setMenu_id(0l);
+		menu.setMenu_type(menuType);
 		if(policy.getContent_menu_group_root() != null && !"".equals(policy.getContent_menu_group_root())) {
-			menu.setName(policy.getContent_menu_group_root());
+			if(Menu.ADMIN.equals(menuType)) {
+				menu.setName(policy.getContent_menu_group_root() + " [ADMIN]");
+			} else {
+				menu.setName(policy.getContent_menu_group_root() + " [USER]");
+			}
 		} else {
-			menu.setName("TOP");
+			if(Menu.ADMIN.equals(menuType)) {
+				menu.setName("TOP [ADMIN]");
+			} else {
+				menu.setName("TOP [USER]");
+			}
 		}
-		menu.setName_en("TOP");
+		if(Menu.ADMIN.equals(menuType)) {
+			menu.setName_en("TOP [ADMIN]");
+		} else {
+			menu.setName_en("TOP [USER]");
+		}
 		menu.setOpen("true");
 		menu.setNode_type("company");
 		menu.setParent(-1l);
@@ -317,6 +304,7 @@ public class MenuController {
 		builder.append("{");
 		
 		builder.append("\"menu_id\"").append(":").append("\"" + menu.getMenu_id() + "\"").append(",");
+		builder.append("\"menu_type\"").append(":").append("\"" + menu.getMenu_type() + "\"").append(",");
 		builder.append("\"name\"").append(":").append("\"" + menu.getName() + "\"").append(",");
 		builder.append("\"name_en\"").append(":").append("\"" + menu.getName_en() + "\"").append(",");
 		builder.append("\"open\"").append(":").append("\"" + menu.getOpen() + "\"").append(",");
@@ -329,7 +317,7 @@ public class MenuController {
 		builder.append("\"use_yn\"").append(":").append("\"" + menu.getUse_yn() + "\"").append(",");
 		builder.append("\"display_yn\"").append(":").append("\"" + menu.getDisplay_yn() + "\"").append(",");
 		builder.append("\"url\"").append(":").append("\"" + menu.getUrl() + "\"").append(",");
-		builder.append("\"url_alias\"").append(":").append("\"" + menu.getUrl_alias() + "\"").append(",");
+		builder.append("\"url_alias\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getUrl_alias()) + "\"").append(",");
 		builder.append("\"image\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getImage()) + "\"").append(",");
 		builder.append("\"image_alt\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getImage_alt()) + "\"").append(",");
 		builder.append("\"css_class\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getCss_class()) + "\"").append(",");
@@ -367,6 +355,7 @@ public class MenuController {
 				
 				builder.append("{");
 				builder.append("\"menu_id\"").append(":").append("\"" + menu.getMenu_id() + "\"").append(",");
+				builder.append("\"menu_type\"").append(":").append("\"" + menu.getMenu_type() + "\"").append(",");
 				builder.append("\"name\"").append(":").append("\"" + menu.getName() + "\"").append(",");
 				builder.append("\"name_en\"").append(":").append("\"" + menu.getName_en() + "\"").append(",");
 				builder.append("\"open\"").append(":").append("\"" + menu.getOpen() + "\"").append(",");
@@ -379,7 +368,7 @@ public class MenuController {
 				builder.append("\"use_yn\"").append(":").append("\"" + menu.getUse_yn() + "\"").append(",");
 				builder.append("\"display_yn\"").append(":").append("\"" + menu.getDisplay_yn() + "\"").append(",");
 				builder.append("\"url\"").append(":").append("\"" + menu.getUrl() + "\"").append(",");
-				builder.append("\"url_alias\"").append(":").append("\"" + menu.getUrl_alias() + "\"").append(",");
+				builder.append("\"url_alias\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getUrl_alias()) + "\"").append(",");
 				builder.append("\"image\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getImage()) + "\"").append(",");
 				builder.append("\"image_alt\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getImage_alt()) + "\"").append(",");
 				builder.append("\"css_class\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getCss_class()) + "\"").append(",");
@@ -406,5 +395,18 @@ public class MenuController {
 		builder.append("]");
 		
 		return builder.toString();
+	}
+	
+	private List<Menu> getAllListMenu() {
+		List<Menu> menuList = new ArrayList<>();
+		Menu menu = new Menu();
+		menu.setDefault_yn(null);
+		menu.setMenu_type(Menu.ADMIN);
+		menuList.add(getRootMenu(menu.getMenu_type()));
+		menuList.addAll(menuService.getListMenu(menu));
+		menu.setMenu_type(Menu.USER);
+		menuList.add(getRootMenu(menu.getMenu_type()));
+		menuList.addAll(menuService.getListMenu(menu));
+		return menuList;
 	}
 }

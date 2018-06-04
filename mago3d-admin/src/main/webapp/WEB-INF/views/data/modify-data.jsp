@@ -62,7 +62,9 @@
 											<form:hidden path="parent" />
 											<form:hidden path="parent_depth" />
 				 							<form:input path="parent_name" cssClass="l" readonly="true" />
+<c:if test="${dataInfo.parent ne 0 and dataInfo.depth ne 1 }">
 											<input type="button" id="parentFind" value="<spring:message code='search'/>" />
+</c:if>
 										</td>
 									</tr>
 									<tr>
@@ -364,7 +366,6 @@
 			type: "POST",
 			data: info,
 			cache: false,
-			//async:false,
 			dataType: "json",
 			success: function(msg){
 				if(msg.result == "success") {

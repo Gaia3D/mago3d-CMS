@@ -151,7 +151,6 @@
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -198,7 +197,6 @@
 					type: "POST",
 					data: info,
 					cache: false,
-					async:false,
 					dataType: "json",
 					success: function(msg){
 						if(msg.result == "success") {

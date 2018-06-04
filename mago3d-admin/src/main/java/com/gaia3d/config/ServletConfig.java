@@ -1,6 +1,5 @@
 package com.gaia3d.config;
 
-import java.util.Locale;
 import java.util.Properties;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -55,15 +54,17 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 		log.info(" @@@ ServletConfig addInterceptors @@@@ ");
 		
         registry.addInterceptor(new ConfigInterceptor())
-        		.addPathPatterns("/**");
+        		.addPathPatterns("/**")
+        		.excludePathPatterns("/css/**", "/externlib/**", "/f4d/**", "/images/**", "/js/**");
         registry.addInterceptor(logInterceptor())
-        		.addPathPatterns("/**");
+        		.addPathPatterns("/**")
+        		.excludePathPatterns("/css/**", "/externlib/**", "/f4d/**", "/images/**", "/js/**");
         registry.addInterceptor(new SecurityInterceptor())
         		.addPathPatterns("/**")
-        		.excludePathPatterns("/login/**");
+        		.excludePathPatterns("/login/**", "/css/**", "/externlib/**", "/f4d/**", "/images/**", "/js/**");
         registry.addInterceptor(new CSRFHandlerInterceptor())
         		.addPathPatterns("/**")
-        		.excludePathPatterns("/login/**");
+        		.excludePathPatterns("/login/**", "/css/**", "/externlib/**", "/f4d/**", "/images/**", "/js/**");
     }
 	
 	/**
@@ -78,7 +79,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public LocaleResolver localeResolver() {
 		SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-		sessionLocaleResolver.setDefaultLocale(Locale.KOREA);
+		//sessionLocaleResolver.setDefaultLocale(Locale.KOREA);
 		return sessionLocaleResolver;
 	}
 //	
@@ -106,7 +107,6 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-				
 		log.info(" @@@ ServletConfig addResourceHandlers @@@");
 		registry.addResourceHandler("/css/**").addResourceLocations("/css/");
 		registry.addResourceHandler("/externlib/**").addResourceLocations("/externlib/");

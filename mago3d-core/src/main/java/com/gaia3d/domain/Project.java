@@ -45,6 +45,9 @@ public class Project {
 	private String old_project_key;
 	// 그룹명
 	private String project_name;
+	// 사용자명
+	private String user_id;
+	private String user_name;
 	// 나열 순서
 	private Integer view_order;
 	// 기본 사용 삭제불가, Y : 기본, N : 선택
@@ -65,16 +68,6 @@ public class Project {
 	private String description;
 	// 등록일
 	private String insert_date;
-
-	public String getViewUseYn() {
-		if("Y".equals(this.use_yn)) {
-			return "사용";
-		} else if("N".equals(this.use_yn)) {
-			return "미사용";
-		} else {
-			return "";
-		}
-	}
 
 	public String getViewInsertDate() {
 		if(this.insert_date == null || "".equals( insert_date)) {

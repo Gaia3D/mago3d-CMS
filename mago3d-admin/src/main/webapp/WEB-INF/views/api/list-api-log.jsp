@@ -260,7 +260,6 @@
     		data: { api_log_id : apiLogId },
     		type: "POST",
     		cache: false,
-    		async:false,
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == "success") {

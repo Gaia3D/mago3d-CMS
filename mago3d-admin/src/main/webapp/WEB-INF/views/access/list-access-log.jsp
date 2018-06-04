@@ -249,7 +249,6 @@
     		data: { access_log_id : accessLogId },
     		type: "POST",
     		cache: false,
-    		async:false,
     		dataType: "json",
     		success: function(msg){
     			if (msg.result == "success") {

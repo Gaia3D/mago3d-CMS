@@ -270,6 +270,9 @@
 			<if test="project_id != null and project_id > 0">
 			project_id = #{project_id},
 			</if>
+			<if test="parent != null and parent > 0">
+			parent = #{parent},
+			</if>
 			<if test="data_key != null and data_key != ''">
 			data_key = #{data_key},
 			</if>

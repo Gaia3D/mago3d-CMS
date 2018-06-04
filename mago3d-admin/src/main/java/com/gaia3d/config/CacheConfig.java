@@ -25,7 +25,6 @@ import com.gaia3d.helper.HttpClientHelper;
 import com.gaia3d.security.Crypt;
 import com.gaia3d.service.APIService;
 import com.gaia3d.service.CommonCodeService;
-import com.gaia3d.service.DataService;
 import com.gaia3d.service.MenuService;
 import com.gaia3d.service.PolicyService;
 import com.gaia3d.service.ProjectService;
@@ -39,8 +38,6 @@ public class CacheConfig {
 
 	@Autowired
 	private APIService aPIService;
-	@Autowired
-	private DataService dataService;
 	@Autowired
 	private ProjectService projectService;
 //	@Autowired
@@ -148,7 +145,10 @@ public class CacheConfig {
 	private void menu(CacheParams cacheParams) {
 		Map<Long, Menu> menuMap = new HashMap<>();
 		Map<String, Long> menuUrlMap = new HashMap<>();
-		List<Menu> menuList = menuService.getListMenu(null);
+		Menu adminMenu = new Menu();
+		adminMenu.setDefault_yn(null);
+		adminMenu.setMenu_type(Menu.ADMIN);
+		List<Menu> menuList = menuService.getListMenu(adminMenu);
 		for(Menu menu : menuList) {
 			menuMap.put(menu.getMenu_id(), menu);
 			menuUrlMap.put(menu.getUrl(), menu.getMenu_id());

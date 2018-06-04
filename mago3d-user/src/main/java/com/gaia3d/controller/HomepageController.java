@@ -105,20 +105,19 @@ public class HomepageController {
 		String lang = (String)request.getParameter("lang");
 		if(lang == null || "".equals(lang)) {
 			lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
-			if(lang == null || "".equals(lang)) {
-				lang = "ko";
-			}
 		}
 		
 		log.info("@@ lang = {}", lang);
+		Locale locale = null;
 		if(Locale.KOREA.getLanguage().equals(lang) 
 				|| Locale.ENGLISH.getLanguage().equals(lang)
 				|| Locale.JAPAN.getLanguage().equals(lang)) {
 			request.getSession().setAttribute(SessionKey.LANG.name(), lang);
-			Locale locale = new Locale(lang);
-//			LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
-			localeResolver.setLocale(request, response, locale);
+			locale = new Locale(lang);
+		} else {
+			locale = Locale.getDefault();
 		}
+		localeResolver.setLocale(request, response, locale);
 		
 		Issue issue = new Issue();
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
