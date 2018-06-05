@@ -28,7 +28,7 @@
 
 	<div class="vod">
 		<iframe frameborder="0" height="100%" width="100%" allow="autoplay; encrypted-media"
-			src="https://www.youtube.com/embed/68XWIC2K-kA?rel=0&autoplay=1&loop=1&playlist=n5jdRzLwegg&controls=0&showinfo=0&autohide=1&origin=http://www.mago3d.com">
+			src="https://www.youtube.com/embed/68XWIC2K-kA?rel=0&mute=1&autoplay=1&loop=1&playlist=n5jdRzLwegg&controls=0&showinfo=0&autohide=1&origin=http://www.mago3d.com">
 		</iframe>
 	</div>
 
