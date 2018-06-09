@@ -15,14 +15,16 @@ public class PropertiesConfig {
 	private String osType;
 	private boolean callRemoteEnable;
 	private String serverIp;
-	private String serverInfo;
 	private String restAuthKey;
 	
 	private String licenseFile;
 	private String licenseFileChecker;
 	
+	// User excel batch registration
 	private String userUploadDir;
+	// Data json batch registration
 	private String dataUploadDir;
+	// 
 	private String sampleUploadDir;
 	
 	private String dataAttributeUploadDir;

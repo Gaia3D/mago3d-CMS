@@ -12,9 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataInfo;
@@ -44,18 +48,52 @@ public class FileUploadController {
 	private FileUploadService fileUploadService;
 	
 	/**
-	 * data upload
+	 * data upload 화면
 	 * @param model
 	 * @return
 	 */
 	@GetMapping(value = "input-fileupload.do")
-	public String uploadData(HttpServletRequest request, Model model) {
+	public String inputFileUpload(HttpServletRequest request, Model model) {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 		
 		
 		model.addAttribute("dataInfo", new DataInfo());
 		return "/fileupload/input-fileupload";
+	}
+	
+	/**
+	 * data upload 처리
+	 * @param model
+	 * @return
+	 */
+	@PostMapping(value = "insert-fileupload.do")
+	@ResponseBody
+	public Map<String, Object> insertFileUpload(MultipartHttpServletRequest request, Model model) {
+		
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 왔다");
+		
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			// Getting uploaded files from the request object
+	        Map<String, MultipartFile> fileMap = request.getFileMap();
+	
+	        // Iterate through the map
+	        int i=0;
+	        for (MultipartFile multipartFile : fileMap.values()) {
+	        		log.info("--- {} filename : {}", i, multipartFile.getName());
+	               //
+	        		i++;
+	        }
+
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		map.put("result", result);
+		return map;
 	}
 	
 //	/**

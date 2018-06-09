@@ -76,8 +76,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private FileService fileService;
-	@Autowired
 	private UserDeviceService userDeviceService;
 	
 	/**

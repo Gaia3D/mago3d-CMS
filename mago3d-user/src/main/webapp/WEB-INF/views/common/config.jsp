@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@page import="com.gaia3d.domain.SessionKey"%>
+<%@ page import="java.util.Locale"%>
+<%@ page import="com.gaia3d.domain.SessionKey"%>
 <%
-	String accessibility = "ko-KR";
+	String accessibility = "en-US";
 	
 	String lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 	if("en".equals(lang)) {
@@ -9,7 +10,9 @@
 	} else if("ja".equals(lang)) {
 		accessibility = "ja-JP";
 	} else {
-		lang = "ko";
+		Locale myLocale = request.getLocale();
+		lang = myLocale.getLanguage();
+		accessibility = lang + "-" + myLocale.getCountry().toString();
 	}
 	
 	request.setAttribute("lang", lang);

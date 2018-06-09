@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.AccessLog;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataInfo;
@@ -29,7 +28,6 @@ import com.gaia3d.domain.ScheduleLog;
 import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.Widget;
 import com.gaia3d.helper.SessionUserHelper;
-import com.gaia3d.service.APIService;
 import com.gaia3d.service.AccessLogService;
 import com.gaia3d.service.DataLogService;
 import com.gaia3d.service.DataService;
@@ -59,13 +57,8 @@ public class MainController {
 	private static final long WIDGET_LIST_VIEW_COUNT = 7l;
 	
 	@Autowired
-	private PropertiesConfig propertiesConfig;
-	
-	@Autowired
 	private HikariDataSource dataSource;
 	
-	@Autowired
-	private APIService aPIService;
 	@Autowired
 	private ProjectService projectService;
 	@Autowired

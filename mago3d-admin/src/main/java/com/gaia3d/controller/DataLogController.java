@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gaia3d.config.CacheConfig;
-import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheName;
 import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheType;
@@ -27,7 +25,6 @@ import com.gaia3d.domain.DataInfoLog;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Project;
 import com.gaia3d.service.DataLogService;
-import com.gaia3d.service.DataService;
 import com.gaia3d.service.ProjectService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.StringUtil;
@@ -43,18 +40,12 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/data/")
 public class DataLogController {
-	@Autowired
-	private PropertiesConfig propertiesConfig;
-	@Autowired
-	private MessageSource messageSource;
 	
 	@Autowired
 	private CacheConfig cacheConfig;
 	
 	@Autowired
 	private ProjectService projectService;
-	@Autowired
-	private DataService dataService;
 	@Autowired
 	private DataLogService dataLogService;
 	

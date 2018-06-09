@@ -180,88 +180,88 @@ public class IssueController {
 		return "/issue/input-issue";
 	}
 	
-	/**
-	 * TODO 현재는 사용하지 않음
-	 * issue 등록
-	 * @param issue
-	 * @param bindingResult
-	 * @param model
-	 * @return
-	 */
-	@PostMapping(value = "insert-issue.do")
-	public String insertIssue(MultipartHttpServletRequest request, Issue issue, BindingResult bindingResult, Model model) {
-		
-		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-		
-		Project project = new Project();
-		project.setUse_yn(Project.IN_USE);
-		
-		MultipartFile multipartFile = request.getFile("file_name");
-		IssueFile issueFile = new IssueFile();
-		if(multipartFile != null && multipartFile.getSize() != 0l) {
-			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.ISSUE_FILE_UPLOAD, propertiesConfig.getExcelDataUploadDir());
-			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
-				bindingResult.rejectValue("file_name", fileInfo.getError_code());
-				
-				List<Project> projectList = projectService.getListProject(project);
-				@SuppressWarnings("unchecked")
-				List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
-				@SuppressWarnings("unchecked")
-				List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
-				
-				model.addAttribute(issue);
-				model.addAttribute("projectList", projectList);
-				model.addAttribute("issuePriorityList", issuePriorityList);
-				model.addAttribute("issueTypeList", issueTypeList);
-				
-				return "/issue/input-issue";
-			}
-			
-			issueFile.setFile_name(fileInfo.getFile_name());
-			issueFile.setFile_real_name(fileInfo.getFile_real_name());
-			issueFile.setFile_path(fileInfo.getFile_path());
-			issueFile.setFile_size(fileInfo.getFile_size());
-			issueFile.setFile_ext(fileInfo.getFile_ext());
-		}
-		
-		
-		issue.setUser_id(userSession.getUser_id());
-		issue.setUser_name(userSession.getUser_name());
-		
-		issue.setMethod_mode("insert");
-		String errorcode = issue.validate();
-		if(errorcode != null) {
-			log.info("validate error 발생: {} ", errorcode);
-			if("title.invalid".equals(errorcode)) {
-				bindingResult.rejectValue("title", errorcode);
-			} else if("contents.invalid".equals(errorcode)) {
-				bindingResult.rejectValue("contents", errorcode);
-			}
-			
-			List<Project> projectList = projectService.getListProject(project);
-			@SuppressWarnings("unchecked")
-			List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
-			@SuppressWarnings("unchecked")
-			List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
-			
-			model.addAttribute(issue);
-			model.addAttribute("projectList", projectList);
-			model.addAttribute("issuePriorityList", issuePriorityList);
-			model.addAttribute("issueTypeList", issueTypeList);
-			
-			return "/issue/input-issue";
-		}
-		
-		// TODO 날짜를 더해서 넣어야 한다 공백 처리 해서
-		String client_ip = WebUtil.getClientIp(request);
-		issue.setClient_ip(client_ip);
-		issue.setLocation("POINT(" + issue.getLongitude() + " " + issue.getLatitude() + ")");
-		log.info("@@@ issue = {}", issue);
-		
-		issueService.insertIssue(issue, issueFile);
-		
-		return "redirect:/issue/result-issue.do?issue_id=" + issue.getIssue_id() + "&method_mode=insert";
-	}
+//	/**
+//	 * TODO 현재는 사용하지 않음
+//	 * issue 등록
+//	 * @param issue
+//	 * @param bindingResult
+//	 * @param model
+//	 * @return
+//	 */
+//	@PostMapping(value = "insert-issue.do")
+//	public String insertIssue(MultipartHttpServletRequest request, Issue issue, BindingResult bindingResult, Model model) {
+//		
+//		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+//		
+//		Project project = new Project();
+//		project.setUse_yn(Project.IN_USE);
+//		
+//		MultipartFile multipartFile = request.getFile("file_name");
+//		IssueFile issueFile = new IssueFile();
+//		if(multipartFile != null && multipartFile.getSize() != 0l) {
+//			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.ISSUE_FILE_UPLOAD, propertiesConfig.getExcelDataUploadDir());
+//			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
+//				bindingResult.rejectValue("file_name", fileInfo.getError_code());
+//				
+//				List<Project> projectList = projectService.getListProject(project);
+//				@SuppressWarnings("unchecked")
+//				List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
+//				@SuppressWarnings("unchecked")
+//				List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
+//				
+//				model.addAttribute(issue);
+//				model.addAttribute("projectList", projectList);
+//				model.addAttribute("issuePriorityList", issuePriorityList);
+//				model.addAttribute("issueTypeList", issueTypeList);
+//				
+//				return "/issue/input-issue";
+//			}
+//			
+//			issueFile.setFile_name(fileInfo.getFile_name());
+//			issueFile.setFile_real_name(fileInfo.getFile_real_name());
+//			issueFile.setFile_path(fileInfo.getFile_path());
+//			issueFile.setFile_size(fileInfo.getFile_size());
+//			issueFile.setFile_ext(fileInfo.getFile_ext());
+//		}
+//		
+//		
+//		issue.setUser_id(userSession.getUser_id());
+//		issue.setUser_name(userSession.getUser_name());
+//		
+//		issue.setMethod_mode("insert");
+//		String errorcode = issue.validate();
+//		if(errorcode != null) {
+//			log.info("validate error 발생: {} ", errorcode);
+//			if("title.invalid".equals(errorcode)) {
+//				bindingResult.rejectValue("title", errorcode);
+//			} else if("contents.invalid".equals(errorcode)) {
+//				bindingResult.rejectValue("contents", errorcode);
+//			}
+//			
+//			List<Project> projectList = projectService.getListProject(project);
+//			@SuppressWarnings("unchecked")
+//			List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
+//			@SuppressWarnings("unchecked")
+//			List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
+//			
+//			model.addAttribute(issue);
+//			model.addAttribute("projectList", projectList);
+//			model.addAttribute("issuePriorityList", issuePriorityList);
+//			model.addAttribute("issueTypeList", issueTypeList);
+//			
+//			return "/issue/input-issue";
+//		}
+//		
+//		// TODO 날짜를 더해서 넣어야 한다 공백 처리 해서
+//		String client_ip = WebUtil.getClientIp(request);
+//		issue.setClient_ip(client_ip);
+//		issue.setLocation("POINT(" + issue.getLongitude() + " " + issue.getLatitude() + ")");
+//		log.info("@@@ issue = {}", issue);
+//		
+//		issueService.insertIssue(issue, issueFile);
+//		
+//		return "redirect:/issue/result-issue.do?issue_id=" + issue.getIssue_id() + "&method_mode=insert";
+//	}
 	
 	/**
 	 * TODO F5 멱등 때문에 ajax 말고 submit 방식을 사용해야 함

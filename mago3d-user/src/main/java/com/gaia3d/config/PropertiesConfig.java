@@ -13,16 +13,12 @@ import lombok.Data;
 public class PropertiesConfig {
 
 	private String osType;
+	private boolean callRemoteEnable;
 	private String serverIp;
-	private String serverInfo;
 	private String restAuthKey;
 	
-	private String licenseFile;
-	private String licenseFileChecker;
+	// User excel batch registration
+	private String rawDataFileUploadedDir;
+	private String convertedF4dFileDir;
 	
-	private String excelUserUploadDir;
-	private String excelDataUploadDir;
-	private String excelSampleUploadDir;
-	
-	private String issueDataUploadDir;
 }

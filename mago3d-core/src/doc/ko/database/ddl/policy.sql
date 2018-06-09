@@ -47,6 +47,7 @@ create table policy(
 	geo_lod3								varchar(20)			default '200',
 	geo_lod4								varchar(20)			default '1000',
 	geo_lod5								varchar(20)			default '50000',
+	geo_light_specular_enable				varchar(5)			default 'true',
 	geo_ambient_reflection_coef				varchar(10)			default '0.5',
 	geo_diffuse_reflection_coef				varchar(10)			default '1.0',
 	geo_specular_reflection_coef			varchar(10)			default '1.0',
@@ -185,6 +186,7 @@ comment on column policy.geo_lod2 is 'LOD2. 기본값 90M';
 comment on column policy.geo_lod3 is 'LOD3. 기본값 200M';
 comment on column policy.geo_lod4 is 'LOD4. 기본값 1000M';
 comment on column policy.geo_lod5 is 'LOD5. 기본값 50000M';
+comment on column policy.geo_light_specular_enable is 'light 적용 유무. 기본값 true';
 comment on column policy.geo_ambient_reflection_coef is '다이렉트 빛이 아닌 반사율 범위. 기본값 0.5';
 comment on column policy.geo_diffuse_reflection_coef is '자기 색깔의 반사율 범위. 기본값 1.0';
 comment on column policy.geo_specular_reflection_coef is '표면의 반질거림 범위. 기본값 1.0';
