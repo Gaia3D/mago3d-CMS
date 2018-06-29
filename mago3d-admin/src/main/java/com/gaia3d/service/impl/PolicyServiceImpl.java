@@ -110,6 +110,16 @@ public class PolicyServiceImpl implements PolicyService {
 	}
 	
 	/**
+	 * 사용자 파일 업로딩 정책 수정
+	 * @param policy
+	 * @return
+	 */
+	@Transactional
+	public int updatePolicyUserUpload(Policy policy) {
+		return policyMapper.updatePolicyUserUpload(policy);
+	}
+	
+	/**
 	 * 사이트 정보 수정
 	 * @param policy
 	 * @return
@@ -117,16 +127,6 @@ public class PolicyServiceImpl implements PolicyService {
 	@Transactional
 	public int updatePolicySite(Policy policy) {
 		return policyMapper.updatePolicySite(policy);
-	}
-	
-	/**
-	 * 서버 시간 설정
-	 * @param policy
-	 * @return
-	 */
-	@Transactional
-	public int updatePolicyOs(Policy policy) {
-		return policyMapper.updatePolicyOs(policy);
 	}
 	
 	/**

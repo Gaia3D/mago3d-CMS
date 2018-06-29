@@ -34,9 +34,10 @@
 				</li>
 
 				<li><h3 class="menu-title">Converter</h3></li>
-				<li><a href="/fileupload/input-fileupload.do"><i class="menu-icon fa fa-cloud-upload"></i>파일 업로딩</a></li>
+				<li><a href="/upload/input-upload.do"><i class="menu-icon fa fa-cloud-upload"></i>파일 업로딩</a></li>
+				<li><a href="/upload/list-upload-complete.do"><i class="menu-icon fa fa-cloud-upload"></i>업로딩한 파일 목록</a></li>
 				<li><a href="widgets.html"><i class="menu-icon fa fa-calendar-times-o"></i>Converter 실행 결과 </a></li>
-				<li><a href="#"><i class="menu-icon fa fa-sticky-note"></i>F4D 등록</a></li>
+				<li><a href="#"><i class="menu-icon fa fa-sticky-note"></i>F4D 파일 목록</a></li>
 
 				<li><h3 class="menu-title">Settings</h3></li>
 				<li><a href="#"><i class="menu-icon fa fa-cogs"></i>기본 설정</a></li>

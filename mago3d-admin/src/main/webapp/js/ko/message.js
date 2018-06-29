@@ -77,7 +77,7 @@ JS_MESSAGE["policy.notice.update"] = "알림 정책을 수정 하였습니다.";
 JS_MESSAGE["policy.security.update"] = "보안 정책을 수정 하였습니다.";
 JS_MESSAGE["policy.content.update"] = "컨텐트 정책을 수정 하였습니다.";
 JS_MESSAGE["policy.site.update"] = "사이트 정보를 수정 하였습니다.";
-JS_MESSAGE["policy.os.update"] = "OS 설정 정보를 수정 하였습니다.";
+JS_MESSAGE["policy.userupload.update"] = "사용자 파일 업로드 설정 정보를 수정 하였습니다.";
 JS_MESSAGE["policy.backoffice.update"] = "Back Office 정보를 수정 하였습니다.";
 JS_MESSAGE["policy.solution.update"] = "제품 정보를 수정 하였습니다.";
 JS_MESSAGE["policy.content.invalid"] = "필수 입력값이 유효하지 않습니다.";
@@ -105,8 +105,6 @@ JS_MESSAGE["policy.contents.user.group.root"] = "사용자 그룹 최상위 그�
 JS_MESSAGE["policy.contents.main.display"] = "메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.";
 JS_MESSAGE["policy.contents.main.display"] = "메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.";
 JS_MESSAGE["policy.contents.main.display"] = "메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.";
-
-JS_MESSAGE["policy.os.time"] = "시간을 입력해 주세요";
 
 JS_MESSAGE["policy.site.ip"] = "IP 형식에 맞게 입력해 주십시오.";
 JS_MESSAGE["policy.site.service.name"] = "서비스명을 입력해 주십시오.";

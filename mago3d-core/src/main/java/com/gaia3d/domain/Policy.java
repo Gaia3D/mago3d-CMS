@@ -277,16 +277,12 @@ public class Policy {
 	// 계정 그룹 최상위 그룹명
 	private String content_data_group_root;
 	
-	// Java TimeZone 설정. Asia/Seoul(기본), UTC(Universal Time Coordinated, 세계협정시)
-	private String os_timezone;
-	// 서버 시간 설정 방법. 0 : 직접 이력, 1 : KT, 2 : LG, 3 : 아이네트, 4 : 마이크로소프트
-	private String os_ntp;
-	// 시스템 시간 설정을 위한 임시 파라미터
-	private String os_ntp_day;
-	private String os_ntp_hour;
-	private String os_ntp_minute;
-	// Radius Key
-	private String os_radius_secret;
+	// 업로딩 가능 확장자. 3ds,obj,ifc,dae 등
+	private String user_upload_type;
+	// 최대 업로딩 사이즈(단위M). 기본값 500M
+	private Long user_upload_max_filesize;
+	// 1회, 최대 업로딩 파일 수. 기본값 50개
+	private Integer user_upload_max_count;	
 	
 	// 서비스명
 	private String site_name;

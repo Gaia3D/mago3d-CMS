@@ -44,7 +44,7 @@
 								<li><a href="#geocallback_tab">CallBack</a></li>
 								<li><a href="#security_tab"><spring:message code='security'/></a></li>
 								<li><a href="#content_tab"><spring:message code='content'/></a></li>
-								<li><a href="#os_tab"><spring:message code='os.setting'/></a></li>
+								<li><a href="#userupload_tab">사용자 업로딩 파일</a></li>
 								<li><a href="#backoffice_tab"><spring:message code='back.office.information'/></a></li>
 								<li><a href="#site_tab"><spring:message code='site.information'/></a></li>
 								<li><a href="#solution_tab"><spring:message code='product.information'/></a></li>
@@ -57,7 +57,7 @@
 							<%@ include file="/WEB-INF/views/config/modify-policy-geocallback.jsp" %>
 							<%@ include file="/WEB-INF/views/config/modify-policy-security.jsp" %>
 							<%@ include file="/WEB-INF/views/config/modify-policy-content.jsp" %>
-							<%@ include file="/WEB-INF/views/config/modify-policy-os.jsp" %>
+							<%@ include file="/WEB-INF/views/config/modify-policy-userupload.jsp" %>
 							<%@ include file="/WEB-INF/views/config/modify-policy-backoffice.jsp" %>
 							<%@ include file="/WEB-INF/views/config/modify-policy-site.jsp" %>
 							<%@ include file="/WEB-INF/views/config/modify-policy-solution.jsp" %>
@@ -92,70 +92,8 @@
 		
 		$( ".select" ).selectmenu();
 		
-		// 시간 설정에서 - 시간, 분값 세팅
-		setTimeValue();
 	});
 
-	// 시간 설정에서 시 / 분 세팅
-	function setTimeValue() {
-		for (var i = 0; i < 24; i ++) {
-			$("#os_ntp_hour").append("<option value='"+ i +"'>" + i + "</option>");
-		}
-		for (var i = 0; i < 60; i ++) {
-			$("#os_ntp_minute").append("<option value='"+ i +"'>" + i + "</option>");
-		}
-	}
-	
-	$("#os_ntp").change(function() {
-		var os_ntp = $("#os_ntp option:selected").val();		
-		if (os_ntp != "") {
-			$("#os_ntp_day").prop("disabled", true);
-			$("#os_ntp_hour").prop("disabled", true);
-			$("#os_ntp_minute").prop("disabled", true);
-		} else {
-			$("#os_ntp_day").prop("disabled", false);
-			$("#os_ntp_hour").prop("disabled", false);
-			$("#os_ntp_minute").prop("disabled", false);
-		}
-	});
-	
-	// OS 설정
-	var updateOsFlag = true;
-	function updatePolicyOs() {
-		var os_ntp = $("#os_ntp option:selected").val();
-		if (os_ntp== "" && ($("#os_ntp_hour").val() == "" || $("#os_ntp_minute").val() == "")) {
-			alert(JS_MESSAGE["policy.os.time"]);
-			return;
-		}
-		
-		if(updateOsFlag) {
-			updateOsFlag = false;
-			var info = $("#policyOs").serialize() + "&policy_id=" + $("#policy_id").val();
-			$.ajax({
-				url: "/config/ajax-update-policy-os.do",
-				type: "POST",
-				data: info,
-				cache: false,
-				dataType: "json",
-				success: function(msg){
-					if(msg.result == "success") {
-						alert(JS_MESSAGE["update"]);
-					} else {
-						alert(JS_MESSAGE[msg.result]);
-					}
-					updateOsFlag = true;
-				},
-				error:function(request,status,error){
-			        alert(JS_MESSAGE["ajax.error.message"]);
-			        updateOsFlag = true;
-				}
-			});
-		} else {
-			alert(JS_MESSAGE["button.dobule.click"]);
-			return;
-		}
-	}
-	
 	// 사용자 정책 저장
 	var updateUserFlag = true;
 	function updatePolicyUser() {
@@ -707,6 +645,51 @@
 				error:function(request,status,error){
 			        alert(JS_MESSAGE["ajax.error.message"]);
 			        updateContentFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+	
+	// 사용자 파일 업로드 정책 저장
+	var updateUserUploadFlag = true;
+	function updatePolicyUserUpload() {
+		if(updateUserUploadFlag) {
+			if($("#user_upload_type").val() == "") {
+				alert("업로딩 가능한 타입을 입력하여 주십시오.");
+				$("#user_upload_type").focus();
+				return;
+			}
+			if(!isNumber($("#user_upload_max_filesize").val())) {
+				$("#user_upload_max_filesize").focus();
+				return;
+			}
+			if(!isNumber($("#user_upload_max_count").val())) {
+				$("#user_upload_max_count").focus();
+				return;
+			}
+			
+			updateUserUploadFlag = false;
+			var info = $("#policyUserUpload").serialize() + "&policy_id=" + $("#policy_id").val();
+			$.ajax({
+				url: "/config/ajax-update-policy-userupload.do",
+				type: "POST",
+				data: info,
+				cache: false,
+				dataType: "json",
+				success: function(msg){
+					if(msg.result == "success") {
+						alert("사용자 업로딩 정책이 수정 되었습니다");
+					} else {
+						alert(JS_MESSAGE[msg.result]);
+					}
+					updateUserUploadFlag = true;
+				},
+				error:function(request,status,error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        updateUserUploadFlag = true;
 				}
 			});
 		} else {

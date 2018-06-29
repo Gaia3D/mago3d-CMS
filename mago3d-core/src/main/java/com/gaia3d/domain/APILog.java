@@ -8,7 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * PM이 제공하는 서비스 API 호출 이력
+ * API 호출 이력
  * @author jeongdae
  *
  */

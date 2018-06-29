@@ -105,19 +105,25 @@ public class HomepageController {
 		String lang = (String)request.getParameter("lang");
 		if(lang == null || "".equals(lang)) {
 			lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+			if(lang == null || "".equals(lang)) {
+				Locale myLocale = request.getLocale();
+				lang = myLocale.getLanguage();
+			}
+		}
+		
+		if(!Locale.KOREA.getLanguage().equals(lang) 
+				&& !Locale.ENGLISH.getLanguage().equals(lang)
+				&& !Locale.JAPAN.getLanguage().equals(lang)) {
+			// TODO Because it does not support multilingual besides English and Japanese Based on English
+			lang = "en";
 		}
 		
 		log.info("@@ lang = {}", lang);
-		Locale locale = null;
-		if(Locale.KOREA.getLanguage().equals(lang) 
-				|| Locale.ENGLISH.getLanguage().equals(lang)
-				|| Locale.JAPAN.getLanguage().equals(lang)) {
+		if(lang != null && !"".equals(lang)) {
 			request.getSession().setAttribute(SessionKey.LANG.name(), lang);
-			locale = new Locale(lang);
-		} else {
-			locale = Locale.getDefault();
+			Locale locale = new Locale(lang);
+			localeResolver.setLocale(request, response, locale);
 		}
-		localeResolver.setLocale(request, response, locale);
 		
 		Issue issue = new Issue();
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);

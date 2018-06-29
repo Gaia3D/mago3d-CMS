@@ -64,6 +64,8 @@ public class Project {
 	private BigDecimal height;
 	// flyTo 이동시간
 	private Integer duration;
+	// 속성
+	private String attributes;
 	// 설명
 	private String description;
 	// 등록일

@@ -47,7 +47,6 @@ create table policy(
 	geo_lod3								varchar(20)			default '200',
 	geo_lod4								varchar(20)			default '1000',
 	geo_lod5								varchar(20)			default '50000',
-	geo_light_specular_enable				varchar(5)			default 'true',
 	geo_ambient_reflection_coef				varchar(10)			default '0.5',
 	geo_diffuse_reflection_coef				varchar(10)			default '1.0',
 	geo_specular_reflection_coef			varchar(10)			default '1.0',
@@ -112,6 +111,10 @@ create table policy(
 	content_user_group_root					varchar(60)			default 'Mago3D',
 	content_server_group_root				varchar(60)			default 'Mago3D',
 	content_data_group_root					varchar(60)			default 'Mago3D',
+	
+	user_upload_type						varchar(256)		default '3ds,obj,ifc,dae',
+	user_upload_max_filesize				int					default 500,
+	user_upload_max_count					int					default 50,
 	
 	site_name								varchar(60),
 	site_admin_name							varchar(64),
@@ -186,7 +189,6 @@ comment on column policy.geo_lod2 is 'LOD2. 기본값 90M';
 comment on column policy.geo_lod3 is 'LOD3. 기본값 200M';
 comment on column policy.geo_lod4 is 'LOD4. 기본값 1000M';
 comment on column policy.geo_lod5 is 'LOD5. 기본값 50000M';
-comment on column policy.geo_light_specular_enable is 'light 적용 유무. 기본값 true';
 comment on column policy.geo_ambient_reflection_coef is '다이렉트 빛이 아닌 반사율 범위. 기본값 0.5';
 comment on column policy.geo_diffuse_reflection_coef is '자기 색깔의 반사율 범위. 기본값 1.0';
 comment on column policy.geo_specular_reflection_coef is '표면의 반질거림 범위. 기본값 1.0';
@@ -245,6 +247,10 @@ comment on column policy.content_menu_group_root is '메뉴 그룹 최상위 그룹명';
 comment on column policy.content_user_group_root is '사용자 그룹 최상위 그룹명';
 comment on column policy.content_data_group_root is '데이터 그룹 최상위 그룹명';
 
+comment on column policy.user_upload_type is '업로딩 가능 확장자. 3ds,obj,ifc,dae';
+comment on column policy.user_upload_max_filesize is '최대 업로딩 사이즈(단위M). 500M';
+comment on column policy.user_upload_max_count is '1회, 최대 업로딩 파일 수. 50개';
+	
 comment on column policy.site_name is '서비스명';
 comment on column policy.site_admin_name is '사이트 관리자명';
 comment on column policy.site_admin_mobile_phone is '사이트 관리자 핸드폰 번호';

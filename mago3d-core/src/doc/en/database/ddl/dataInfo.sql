@@ -2,10 +2,10 @@
 drop table if exists project cascade;
 drop table if exists data_info cascade;
 
--- User groups
+-- Logical group of data
 create table project(
 	project_id				int,
-	project_key				varchar(60)							not null ,
+	project_key				varchar(60)							not null,
 	project_name			varchar(100)						not null,
 	view_order				int									default 1,
 	default_yn				char(1)								default 'N',
@@ -39,7 +39,7 @@ create table data_info(
 	data_id						bigint,
 	project_id					int							not null,
 	data_key					varchar(128)						not null,
-	data_name					varchar(64),
+	data_name					varchar(256),
 	parent						bigint								default 1,
 	depth						int							default 1,
 	view_order					int							default 1,

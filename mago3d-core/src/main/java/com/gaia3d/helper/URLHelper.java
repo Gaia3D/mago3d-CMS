@@ -8,8 +8,7 @@ public class URLHelper {
     public static final String POPUP_LOGIN_URL = "/login/popup-login.do";
     
     // login 의 경우 통과
-    public static final String[] EXCEPTION_URI = { 	"error", "login", "call-api", "call-radius", "call-cache", "call-ha-status", "call-list-user-session", "call-icmp-duplication-check", 
-    												"call-dbcp" };
+    public static final String[] EXCEPTION_URI = { 	"error", "login", "call-api", "call-cache", "call-list-user-session", "call-dbcp" };
     public static final String[] USER_STATUS_EXCEPTION_URI = { "/login/login.do", "/login/process-login.do", "/user/modify-password.do", "/user/update-password.do"};
     public static final String[] LICENSE_EXCEPTION_URI = { "modify-license", "update-license", "ajax-update-license" };
     public static final String LICENSE_URL = "/config/modify-license.do";

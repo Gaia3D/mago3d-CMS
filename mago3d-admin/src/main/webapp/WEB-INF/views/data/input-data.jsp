@@ -150,7 +150,6 @@
 									<tr>
 										<th class="col-label" scope="row">
 											<form:label path="attributes"><spring:message code='properties'/></form:label>
-											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
 											<form:input path="attributes" class="xl" value="{\"isPhysical\": true}" />

@@ -50,8 +50,14 @@
   		</selectKey>
 		INSERT INTO project(
 			project_id, project_key, project_name, view_order, use_yn, latitude, longitude, height, duration, description
+			<if test="attributes != null and attributes != ''">
+			, attributes
+			</if>
 		) values(
 			#{project_id}, #{project_key}, #{project_name}, #{view_order}, #{use_yn}, #{latitude}, #{longitude}, #{height}, #{duration}, #{description}
+			<if test="attributes != null and attributes != ''">
+			, TO_JSON(#{attributes}::json)
+			</if>
 		)
 	</insert>
 	
@@ -69,6 +75,9 @@
 			longitude = #{longitude},
 			height = #{height},
 			duration = #{duration},
+			<if test="attributes != null and attributes != ''">
+			attributes = TO_JSON(#{attributes}::json),
+			</if>
 			description = #{description}
 		WHERE project_id = #{project_id}
 	</update>

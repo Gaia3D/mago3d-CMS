@@ -83,7 +83,7 @@ public class ProjectServiceImpl implements ProjectService {
 		dataInfo.setParent(0l);
 		dataInfo.setDepth(1);
 		dataInfo.setView_order(1);
-		dataInfo.setAttributes("{\"isPhysical\" : false}");
+		dataInfo.setAttributes(project.getAttributes());
 		return dataMapper.insertData(dataInfo);
 	}
 

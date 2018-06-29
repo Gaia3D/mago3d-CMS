@@ -13,6 +13,7 @@
 		<typeAlias type="com.gaia3d.domain.APILog" alias="aPILog"/>
 		<typeAlias type="com.gaia3d.domain.Board" alias="board"/>
 		<typeAlias type="com.gaia3d.domain.BoardComment" alias="boardComment"/>
+		<typeAlias type="com.gaia3d.domain.ConverterLog" alias="converterLog"/>
 		<typeAlias type="com.gaia3d.domain.CommonCode" alias="commonCode"/>
 		<typeAlias type="com.gaia3d.domain.Project" alias="project"/>
 		<typeAlias type="com.gaia3d.domain.DataInfo" alias="dataInfo"/>
@@ -41,6 +42,7 @@
 		<typeAlias type="com.gaia3d.domain.UserGroupMenu" alias="userGroupMenu"/>
 		<typeAlias type="com.gaia3d.domain.UserGroupRole" alias="userGroupRole"/>
 		<typeAlias type="com.gaia3d.domain.SSOLog" alias="sSOLog"/>
+		<typeAlias type="com.gaia3d.domain.UploadLog" alias="uploadLog"/>
 		<typeAlias type="com.gaia3d.domain.Widget" alias="widget"/>
 	</typeAliases>
 	

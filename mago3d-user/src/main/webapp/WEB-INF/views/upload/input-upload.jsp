@@ -15,7 +15,7 @@
 	<link rel="stylesheet" href="/externlib/dropzone/dropzone.css">
 	<link rel="stylesheet" href="/css/ko/style.css">
 	
-	<script src="/externlib/dropzone/dropzone.min.js"></script>
+	<script src="/externlib/dropzone/dropzone.js"></script>
 </head>
 <body>
 	
@@ -44,7 +44,7 @@
 				    </div>
 				</div>	 -->
 				
-				<form action="" class="dropzone" id="my-dropzone"></form>
+				<form id="my-dropzone" action="" class="dropzone" ></form>
 
 				<div style="margin-top: 10px; margin-left: 5px;">
 					<button id="allFileUpload">업로드</button>
@@ -67,7 +67,7 @@
 	// http://blog.naver.com/PostView.nhn?blogId=wolfre&logNo=220154561376&parentCategoryNo=&categoryNo=1&viewDate=&isShowPopularPosts=true&from=search
 
 	Dropzone.options.myDropzone = {
-		url: "/fileupload/insert-fileupload.do",	
+		url: "/upload/insert-upload.do",	
 		//paramName: "file",
 		// Prevents Dropzone from uploading dropped files immediately
 		autoProcessQueue: false,
@@ -89,29 +89,49 @@
 		// 업로드 취소 및 추가 삭제 미리 보기 그림 링크 를 기본 추가 하지 않음
 		// 기본 true false 로 주면 아무 동작 못함
 		//clickable: true,
-		removedfile: function(file) {
-			console.log("remove file call");
-			var _ref;
-			(_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
-			setFilesName();
-			return;
-	    },
-	    fallback: function() {
+		fallback: function() {
 	    	// 지원하지 않는 브라우저인 경우
+	    	alert("죄송합니다. 최신의 브라우저로 Update 후 사용해 주십시오.");
+	    	return;
 	    },
-
 		init: function() {
-			var dataDropzone = this; // closure
-			var uploadTask = document.querySelector("#allFileUpload")
+			var magoDropzone = this; // closure
+			var uploadTask = document.querySelector("#allFileUpload");
+			var clearTask = document.querySelector("#allFileClear");
 			
-			uploadTask.addEventListener("click", function() {
-				dataDropzone.processQueue(); // Tell Dropzone to process all queued files.
+			uploadTask.addEventListener("click", function(e) {
+				e.preventDefault();
+	            e.stopPropagation();
+	            magoDropzone.processQueue(); // Tell Dropzone to process all queued files.
 			});
 
-			// You might want to show the submit button only when 
-			// files are dropped here:
-			this.on("addedfile", function() {
-				// Show submit button here and/or inform user to click it.
+			clearTask.addEventListener("click", function () {
+                // Using "_this" here, because "this" doesn't point to the dropzone anymore
+                if (confirm("정말 전체 항목을 삭제하겠습니까?")) {
+                	// true 주면 업로드 중인 파일도 다 같이 삭제
+                	magoDropzone.removeAllFiles(true);
+                }
+            });
+			
+			// maxFiles 카운터를 초과하면 경고창
+			this.on("maxfilesexceeded", function (data) {
+				alert("최대 업로드 파일 수는 20개 입니다.");
+			});
+			
+			this.on("complete", function (data) {
+				console.log("-------------" + data);
+				/* if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+					if (data.xhr != undefined) {
+						var res = eval('(' + data.xhr.responseText + ')');
+						var msg;
+						if (res.Result) {
+							msg = "이미지 업로드 완료( " + res.Count + " )";
+						} else {
+							msg = "업로드 실패: " + res.Message;
+						}
+						alert(msg);
+					}
+				} */
 			});
 		}
 	};

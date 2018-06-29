@@ -18,7 +18,7 @@ public class PropertiesConfig {
 	private String restAuthKey;
 	
 	// User excel batch registration
-	private String rawDataFileUploadedDir;
-	private String convertedF4dFileDir;
+	private String userUploadDir;
+	private String userConverterDir;
 	
 }

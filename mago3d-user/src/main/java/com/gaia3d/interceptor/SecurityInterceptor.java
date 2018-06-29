@@ -1,6 +1,5 @@
 package com.gaia3d.interceptor;
 
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 

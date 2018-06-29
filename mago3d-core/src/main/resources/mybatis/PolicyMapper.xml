@@ -173,6 +173,16 @@
 		WHERE policy_id = #{policy_id}
 	</update>
 	
+	<!-- 사용자 업로드 파일 정책 수정 -->
+	<update id="updatePolicyUserUpload" parameterType="policy">
+		/* updatePolicyUserUpload */
+		UPDATE policy
+		SET user_upload_type = #{user_upload_type},
+			user_upload_max_filesize = #{user_upload_max_filesize},
+			user_upload_max_count = #{user_upload_max_count}
+		WHERE policy_id = #{policy_id}
+	</update>
+	
 	<!-- 사이트 정보 수정 -->	
 	<update id="updatePolicySite" parameterType="policy">
 		/* updatePolicySite */
@@ -198,15 +208,6 @@
 			backoffice_user_db_url = #{backoffice_user_db_url},
 			backoffice_user_db_user = #{backoffice_user_db_user},
 			backoffice_user_db_password = #{backoffice_user_db_password}
-		WHERE policy_id = #{policy_id}
-	</update>
-	
-	<!-- 서버 시간 변경 -->
-	<update id="updatePolicyOs" parameterType="policy">
-		/* updatePolicyOs */
-		UPDATE policy
-		SET os_timezone = #{os_timezone},
-			os_ntp = #{os_ntp}
 		WHERE policy_id = #{policy_id}
 	</update>
 	

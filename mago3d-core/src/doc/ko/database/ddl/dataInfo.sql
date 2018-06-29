@@ -2,7 +2,7 @@
 drop table if exists project cascade;
 drop table if exists data_info cascade;
 
--- 사용자 그룹
+-- data의 논리적인 그룹
 create table project(
 	project_id				int,
 	project_key				varchar(60)							not null ,
@@ -15,6 +15,7 @@ create table project(
 	longitude				numeric(13,10),
 	height					numeric(7,3),
 	duration				int,
+	attributes				jsonb,
 	description				varchar(256),
 	insert_date				timestamp with time zone			default now(),
 	constraint project_pk 	primary key (project_id)	
@@ -32,6 +33,7 @@ comment on column project.latitude is '위도';
 comment on column project.longitude is '경도';
 comment on column project.height is '높이';
 comment on column project.duration is 'flyTo 이동시간';
+comment on column project.attributes is '속성';
 comment on column project.description is '설명';
 comment on column project.insert_date is '등록일';
 
@@ -41,7 +43,7 @@ create table data_info(
 	data_id						bigint,
 	project_id					int									not null,
 	data_key					varchar(128)						not null,
-	data_name					varchar(64),
+	data_name					varchar(256),
 	user_id						varchar(32),
 	parent						bigint								default 1,
 	depth						int									default 1,

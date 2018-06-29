@@ -435,6 +435,43 @@ public class PolicyController {
 	}
 	
 	/**
+	 * 사용자 파일 업로딩 정보 수정
+	 * @param request
+	 * @param policy
+	 * @return
+	 */
+	@PostMapping(value = "ajax-update-policy-userupload.do")
+	@ResponseBody
+	public Map<String, String> ajaxUpdatePolicyUserUpload(HttpServletRequest request, Policy policy) {
+		Map<String, String> map = new HashMap<>();
+		String result = "success";
+		try {
+			log.info("@@ policy = {} ", policy);
+			if( ( policy.getPolicy_id() == null || policy.getPolicy_id().intValue() <= 0 )
+					|| ( policy.getUser_upload_type() == null || "".equals(policy.getUser_upload_type()) )
+					|| ( policy.getUser_upload_max_filesize() == null || policy.getUser_upload_max_filesize().longValue() < 0l )
+					|| ( policy.getUser_upload_max_count() == null || policy.getUser_upload_max_count().intValue() < 0 )) {
+				result = "policy.userupload.invalid";
+				map.put("result", result);
+				return map;
+			}
+			
+			policyService.updatePolicyUserUpload(policy);
+
+			CacheParams cacheParams = new CacheParams();
+			cacheParams.setCacheName(CacheName.POLICY);
+			cacheParams.setCacheType(CacheType.BROADCAST);
+			cacheConfig.loadCache(cacheParams);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		map.put("result", result);
+		return map;
+	}
+	
+	/**
 	 * 사이트 정보 수정
 	 * @param request
 	 * @param policy

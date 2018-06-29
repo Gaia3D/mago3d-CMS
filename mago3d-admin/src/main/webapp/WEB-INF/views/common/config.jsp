@@ -5,14 +5,21 @@
 	String accessibility = "en-US";
 	
 	String lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+	if(lang == null || "".equals(lang)) {
+		Locale myLocale = request.getLocale();
+		lang = myLocale.getLanguage();
+	}
+	
 	if("en".equals(lang)) {
 		accessibility = "en-US";
 	} else if("ja".equals(lang)) {
 		accessibility = "ja-JP";
+	} else if("ko".equals(lang)) {
+		accessibility = "ko-KR";
 	} else {
-		Locale myLocale = request.getLocale();
-		lang = myLocale.getLanguage();
-		accessibility = lang + "-" + myLocale.getCountry().toString();
+		// TODO Because it does not support multilingual besides English and Japanese Based on English
+		lang = "en";
+		accessibility = "en-US";
 	}
 	
 	request.setAttribute("lang", lang);

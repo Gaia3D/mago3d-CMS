@@ -2,18 +2,20 @@
 drop table if exists project cascade;
 drop table if exists data_info cascade;
 
--- ユーザーグループ
+-- Logical group of data
 create table project(
 	project_id				int,
-	project_key				varchar(60)							not null ,
+	project_key				varchar(60)							not null,
 	project_name			varchar(100)						not null,
-	view_order				int							default 1,
+	user_id					varchar(32),
+	view_order				int									default 1,
 	default_yn				char(1)								default 'N',
 	use_yn					char(1)								default 'Y',
 	latitude				numeric(13,10),
 	longitude				numeric(13,10),
 	height					numeric(7,3),
 	duration				int,
+	attributes				jsonb,
 	description				varchar(256),
 	insert_date				timestamp with time zone			default now(),
 	constraint project_pk 	primary key (project_id)	
@@ -23,6 +25,7 @@ comment on table project is 'project（F4D Data）グループ';
 comment on column project.project_id is '固有番号';
 comment on column project.project_key is 'リンクを活用等のための拡張カラム';
 comment on column project.project_name is 'プロジェクト';
+comment on column project.user_id is '固有番号';
 comment on column project.view_order is '一覧表示順';
 comment on column project.default_yn is 'の削除不可、Y：基本、N：選択';
 comment on column project.use_yn is 'を使用の有無、Y：使用すると、N：を無効にする';
@@ -30,6 +33,7 @@ comment on column project.latitude is '緯度';
 comment on column project.longitude is '硬度';
 comment on column project.height is '高';
 comment on column project.duration is 'flyTo移動時間';
+comment on column project.attributes is '属性';
 comment on column project.description is 'の説明';
 comment on column project.insert_date is '登録';
 
@@ -39,7 +43,8 @@ create table data_info(
 	data_id						bigint,
 	project_id					int							not null,
 	data_key					varchar(128)						not null,
-	data_name					varchar(64),
+	data_name					varchar(256),
+	user_id						varchar(32),
 	parent						bigint								default 1,
 	depth						int							default 1,
 	view_order					int							default 1,
@@ -67,6 +72,7 @@ comment on column data_info.data_id is '固有番号';
 comment on column data_info.project_id is 'project固有番号';
 comment on column data_info.data_key is 'data一意の識別番号';
 comment on column data_info.data_name is 'data名';
+comment on column data_info.user_id is 'user id';
 comment on column data_info.parent is '親 data_id';
 comment on column data_info.depth is 'depth';
 comment on column data_info.view_order is 'sort';

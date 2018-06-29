@@ -72,18 +72,18 @@ public interface PolicyService {
 	int updatePolicyContent(Policy policy);
 	
 	/**
+	 * 사용자 파일 업로딩 정책 수정
+	 * @param policy
+	 * @return
+	 */
+	int updatePolicyUserUpload(Policy policy);
+	
+	/**
 	 * 사이트 정보 수정
 	 * @param policy
 	 * @return
 	 */
 	int updatePolicySite(Policy policy);
-	
-	/**
-	 * 서버 시간 설정
-	 * @param policy
-	 * @return
-	 */
-	int updatePolicyOs(Policy policy);
 	
 	/**
 	 * BackOffice 설정
