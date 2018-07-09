@@ -74,7 +74,7 @@ public class UploadController {
 			List<FileInfo> fileList = new ArrayList<>();
 			Map<String, MultipartFile> fileMap = request.getFileMap();
 	        for (MultipartFile multipartFile : fileMap.values()) {
-	        	FileInfo fileInfo = FileUtil.userUpload(null, FileUtil.SUBDIRECTORY_YEAR_MONTH_DAY, multipartFile, CacheManager.getPolicy(), propertiesConfig.getUserUploadDir());
+	        	FileInfo fileInfo = FileUtil.userUpload(userId, FileUtil.SUBDIRECTORY_YEAR_MONTH_DAY, multipartFile, CacheManager.getPolicy(), propertiesConfig.getUserUploadDir());
 				if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 					log.info("@@@@@@@@@@@@@@@@@@@@ error_code = {}", fileInfo.getError_code());
 					result = fileInfo.getError_code();
@@ -102,8 +102,8 @@ public class UploadController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "list-upload-complete.do")
-	public String listUploadComplete(HttpServletRequest request, UploadLog uploadLog, @RequestParam(defaultValue="1") String pageNo, Model model) {
+	@RequestMapping(value = "list-upload-log.do")
+	public String listUploadLog(HttpServletRequest request, UploadLog uploadLog, @RequestParam(defaultValue="1") String pageNo, Model model) {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 		uploadLog.setUser_id(userSession.getUser_id());
@@ -115,21 +115,21 @@ public class UploadController {
 		if(StringUtil.isNotEmpty(uploadLog.getEnd_date())) {
 			uploadLog.setEnd_date(uploadLog.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
 		}
-		long totalCount = uploadService.getListUploadCompleteTotalCount(uploadLog);
+		long totalCount = uploadService.getListUploadLogTotalCount(uploadLog);
 		
 		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(uploadLog), totalCount, Long.valueOf(pageNo).longValue());
 		log.info("@@ pagination = {}", pagination);
 		
 		uploadLog.setOffset(pagination.getOffset());
 		uploadLog.setLimit(pagination.getPageRows());
-		List<UploadLog> uploadCompleteList = new ArrayList<>();
+		List<UploadLog> uploadLogList = new ArrayList<>();
 		if(totalCount > 0l) {
-			uploadCompleteList = uploadService.getListUploadComplete(uploadLog);
+			uploadLogList = uploadService.getListUploadLog(uploadLog);
 		}
 		
 		model.addAttribute(pagination);
-		model.addAttribute("uploadCompleteList", uploadCompleteList);
-		return "/upload/list-upload-complete";
+		model.addAttribute("uploadLogList", uploadLogList);
+		return "/upload/list-upload-log";
 	}
 	
 	/**

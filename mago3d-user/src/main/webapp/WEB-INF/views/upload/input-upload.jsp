@@ -26,7 +26,7 @@
 	<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
 	<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 			
-	<div class="content mt-3" style="min-height: 750px;">
+	<div class="content mt-3" style="min-height: 750px; background-color: white;">
 		
 		<div class="page-content">
 			<div class="input-header row">
@@ -61,7 +61,7 @@
 <script src="/externlib/jquery/jquery.js"></script>
 <script src="/externlib/sufee-template/js/plugins.js"></script>
 <script src="/externlib/sufee-template/js/main.js"></script>
-
+<script src="/js/${lang }/message.js"></script>
 <script type="text/javascript">
 	// https://ncube.net/13905
 	// http://blog.naver.com/PostView.nhn?blogId=wolfre&logNo=220154561376&parentCategoryNo=&categoryNo=1&viewDate=&isShowPopularPosts=true&from=search

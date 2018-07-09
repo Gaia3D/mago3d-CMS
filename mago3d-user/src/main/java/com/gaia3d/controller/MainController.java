@@ -12,9 +12,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.Pagination;
+import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserSession;
+import com.gaia3d.domain.Widget;
+import com.gaia3d.helper.SessionUserHelper;
 import com.gaia3d.service.IssueService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.FormatUtil;
@@ -42,41 +46,93 @@ public class MainController {
 	 *
 	 */	
 	@RequestMapping(value = "index.do")
-	public String listMonitoringLog(HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo, Model model) {
+	public String index(HttpServletRequest request, Model model) {
+		Policy policy = CacheManager.getPolicy();
+		boolean isActive = true;
+//		if("UNIX".equals(OS_TYPE)) {
+//			SystemConfig systemConfig = loadBalancingService.getSystemConfig();
+//			String hostname = ConfigCache.getHostname();
+//			if(hostname == null || "".equals(hostname)) {
+//				hostname = WebUtil.getHostName();
+//			}
+//			if(systemConfig == null 
+//					|| !SystemConfig.ACTIVE.equals(systemConfig.getLoad_balancing_status()) 
+//					|| !hostname.equals(systemConfig.getHostname())) {
+//				log.error("@@@@@@@@@ hostname = {}, load_balancing_status = {}", hostname, systemConfig);
+//				isActive = false;
+//			}
+//		}
 		
-		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-		Issue issue = new Issue();
-		issue.setUser_id(userSession.getUser_id());
-		log.info("@@ issue = {}", issue);
-				
-		String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
-		if(StringUtil.isEmpty(issue.getStart_date())) {
-			issue.setStart_date(today.substring(0,4) + DateUtil.START_DAY_TIME);
-		} else {
-			issue.setStart_date(issue.getStart_date().substring(0, 8) + DateUtil.START_TIME);
-		}
-		if(StringUtil.isEmpty(issue.getEnd_date())) {
-			issue.setEnd_date(today + DateUtil.END_TIME);
-		} else {
-			issue.setEnd_date(issue.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
-		}
-							
-		long totalCount = issueService.getIssueTotalCountByUserId(issue);
-		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(issue), totalCount, Long.valueOf(pageNo).longValue());
-		log.info("@@ pagination = {}", pagination);
+//		Widget widget = new Widget();
+//		widget.setLimit(policy.getContent_main_widget_count());
+//		List<Widget> widgetList = widgetService.getListWidget(widget);
+//		
+		String today = DateUtil.getToday(FormatUtil.VIEW_YEAR_MONTH_DAY_TIME);
+//		String yearMonthDay = today.substring(0, 4) + today.substring(5,7) + today.substring(8,10);
+//		String startDate = yearMonthDay + DateUtil.START_TIME;
+//		String endDate = yearMonthDay + DateUtil.END_TIME;
+//		
+//		boolean isProjectDraw = false;
+//		boolean isDataInfoDraw = false;
+//		boolean isDataInfoLogListDraw = false;
+//		boolean isIssueDraw = false;
+//		boolean isUserDraw = false;
+//		boolean isScheduleLogListDraw = false;
+//		boolean isAccessLogDraw = false;
+//		boolean isDbcpDraw = false;
+//		boolean isDbSessionDraw = false;
+//		for(Widget dbWidget : widgetList) {
+//			if("projectWidget".equals(dbWidget.getName())) {
+//				isProjectDraw = true;
+//				projectWidget(startDate, endDate, model);
+//			} else if("dataInfoWidget".equals(dbWidget.getName())) {
+//				isDataInfoDraw = true;
+//				dataInfoWidget(startDate, endDate, model);
+//			} else if("dataInfoLogListWidget".equals(dbWidget.getName())) {
+//				isDataInfoLogListDraw = true;
+//				dataInfoLogListWidget(startDate, endDate, model);
+//			} else if("issueWidget".equals(dbWidget.getName())) {
+//				isIssueDraw = true;
+//				issueWidget(startDate, endDate, model);
+//			} else if("userWidget".equals(dbWidget.getName())) {
+//				isUserDraw = true;
+//				userWidget(startDate, endDate, model);
+//			} else if("scheduleLogListWidget".equals(dbWidget.getName())) {
+//				isScheduleLogListDraw = true;
+//				scheduleLogListWidget(startDate, endDate, model);
+//			} else if("accessLogWidget".equals(dbWidget.getName())) {
+//				isAccessLogDraw = true;
+//				accessLogWidget(startDate, endDate, model);
+//			} else if("dbcpWidget".equals(dbWidget.getName())) {
+//				isDbcpDraw = true;
+//				dbcpWidget(model);
+//			} else if("dbSessionWidget".equals(dbWidget.getName())) {
+//				isDbSessionDraw = true;
+//				dbSessionWidget(model);	
+//			}
+//		}
 		
-		issue.setOffset(pagination.getOffset());
-		issue.setLimit(pagination.getPageRows());
-			
-		List<Issue> issueList = new ArrayList<>();
-		if(totalCount > 0l) {
-			issueList = issueService.getListIssueByUserId(issue);
-		}
+		model.addAttribute("today", today);
+//		model.addAttribute("yearMonthDay", today.subSequence(0, 10));
+//		model.addAttribute("thisYear", yearMonthDay.subSequence(0, 4));
+		// 메인 페이지 갱신 속도
+		model.addAttribute("widgetInterval", policy.getContent_main_widget_interval());
+//		// 현재 접속자수
+//		model.addAttribute("userSessionCount", SessionUserHelper.loginUsersMap.size());
+//		model.addAttribute(widget);
+//		model.addAttribute(widgetList);
+//		
+//		model.addAttribute("isActive", isActive);
+//		model.addAttribute("isProjectDraw", isProjectDraw);
+//		model.addAttribute("isDataInfoDraw", isDataInfoDraw);
+//		model.addAttribute("isDataInfoLogListDraw", isDataInfoLogListDraw);
+//		model.addAttribute("isIssueDraw", isIssueDraw);
+//		model.addAttribute("isUserDraw", isUserDraw);
+//		model.addAttribute("isScheduleLogListDraw", isScheduleLogListDraw);
+//		model.addAttribute("isAccessLogDraw", isAccessLogDraw);
+//		model.addAttribute("isDbcpDraw", isDbcpDraw);
+//		model.addAttribute("isDbSessionDraw", isDbSessionDraw);
 		
-		//Policy policy = CacheManager.getPolicy();
-		
-		model.addAttribute(pagination);
-		model.addAttribute("issueList", issueList);
 		return "/main/index";
 	}
 	

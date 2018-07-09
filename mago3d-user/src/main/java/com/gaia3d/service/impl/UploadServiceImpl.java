@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gaia3d.domain.ConverterLog;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.UploadLog;
 import com.gaia3d.persistence.UploadMapper;
@@ -28,8 +29,8 @@ public class UploadServiceImpl implements UploadService {
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public Long getListUploadCompleteTotalCount(UploadLog uploadLog) {
-		return uploadMapper.getListUploadCompleteTotalCount(uploadLog);
+	public Long getListUploadLogTotalCount(UploadLog uploadLog) {
+		return uploadMapper.getListUploadLogTotalCount(uploadLog);
 	}
 	
 	/**
@@ -38,8 +39,8 @@ public class UploadServiceImpl implements UploadService {
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<UploadLog> getListUploadComplete(UploadLog uploadLog) {
-		return uploadMapper.getListUploadComplete(uploadLog);
+	public List<UploadLog> getListUploadLog(UploadLog uploadLog) {
+		return uploadMapper.getListUploadLog(uploadLog);
 	}
 	
 	/**
@@ -51,5 +52,14 @@ public class UploadServiceImpl implements UploadService {
 		for(FileInfo fileInfo : fileList) {
 			uploadMapper.insertFileInfo(fileInfo);
 		}
+	}
+	
+	/**
+	 * f4d converter 변환 횟수 업데이트
+	 * @param converterLog
+	 */
+	@Transactional
+	public void updateConverterCount(ConverterLog converterLog) {
+		uploadMapper.updateConverterCount(converterLog);
 	}
 }

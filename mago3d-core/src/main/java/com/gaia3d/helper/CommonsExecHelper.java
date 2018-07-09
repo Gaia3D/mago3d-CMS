@@ -22,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CommonsExecHelper {
 	
+	// http://www.baeldung.com/run-shell-command-in-java
+	
 	/**
 	 * 단순 실행
 	 * @param command

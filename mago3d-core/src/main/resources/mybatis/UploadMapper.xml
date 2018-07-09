@@ -3,8 +3,8 @@
 
 <mapper namespace="com.gaia3d.persistence.UploadMapper">
 	<!-- 사용자가 업로드 완료한 파일 총 건수 -->
-	<select id="getListUploadCompleteTotalCount" parameterType="uploadLog" resultType="long">
-		/* getListUploadCompleteTotalCount */
+	<select id="getListUploadLogTotalCount" parameterType="uploadLog" resultType="long">
+		/* getListUploadLogTotalCount */
 		SELECT COUNT(upload_log_id) 
 		FROM upload_log
 		WHERE user_id = #{user_id}
@@ -27,8 +27,8 @@
 	</select>
 	
 	<!-- 사용자가 업로드 완료한 파일 목록 -->
-	<select id="getListUploadComplete" parameterType="uploadLog" resultType="uploadLog">
-		/* getListUploadComplete */
+	<select id="getListUploadLog" parameterType="uploadLog" resultType="uploadLog">
+		/* getListUploadLog */
 		SELECT *
 		FROM upload_log A
 		WHERE A.user_id = #{user_id}
@@ -70,5 +70,13 @@
 		) values(
 			#{upload_log_id}, #{user_id}, #{file_name}, #{file_real_name}, #{file_path}, #{file_size}, #{file_ext}
 		)
+	</insert>
+	
+	<!-- f4d converter 변환 횟수 업데이트 -->
+	<insert id="updateConverterCount" parameterType="converterLog" >
+		/* updateConverterCount */
+		UPDATE upload_log
+		SET converter_count = converter_count + 1
+		WHERE upload_log_id = #{upload_log_id} AND user_id = #{user_id}
 	</insert>
 </mapper>

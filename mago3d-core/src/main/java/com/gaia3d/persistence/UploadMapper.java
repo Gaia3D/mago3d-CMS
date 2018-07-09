@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.gaia3d.domain.ConverterLog;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.UploadLog;
 
@@ -20,18 +21,24 @@ public interface UploadMapper {
 	 * @param uploadLog
 	 * @return
 	 */
-	public Long getListUploadCompleteTotalCount(UploadLog uploadLog);
+	public Long getListUploadLogTotalCount(UploadLog uploadLog);
 	
 	/**
 	 * 사용자가 업로드 완료한 파일 목록
 	 * @param uploadLog
 	 * @return
 	 */
-	public List<UploadLog> getListUploadComplete(UploadLog uploadLog);
+	public List<UploadLog> getListUploadLog(UploadLog uploadLog);
 
 	/**
 	 * 사용자가 업로딩한 파일 목록을 저장
 	 * @param fileInfo
 	 */
 	public void insertFileInfo(FileInfo fileInfo);
+	
+	/**
+	 * f4d converter 변환 횟수 업데이트
+	 * @param converterLog
+	 */
+	public void updateConverterCount(ConverterLog converterLog);
 }

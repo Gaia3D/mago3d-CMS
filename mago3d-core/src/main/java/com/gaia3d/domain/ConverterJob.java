@@ -5,14 +5,17 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 사용자 파일 upload 이력
- * @author Cheon JeongDae
+ * 사용자 f4d 변환 job
+ * @author jeongdae
  *
  */
 @Getter
 @Setter
 @ToString
-public class UploadLog extends FileInfo {
+public class ConverterJob {
+	
+	// job에 포함된 변환 파일 갯수
+	private Integer converter_file_count;
 	
 	// 페이지 처리를 위한 시작
 	private Long offset;
@@ -33,26 +36,23 @@ public class UploadLog extends FileInfo {
 	/****** validator ********/
 	private String method_mode;
 	
-	// 고유번호
-	private Long upload_log_id;
-	// user id
+	// Primary Key
+	private Long converter_job_id;
+	// 사용자 고유번호
 	private String user_id;
-	// file name
-	private String file_name;
-	// file real name. Name of file uploaded by user
-	private String file_real_name;
-	// file path
-	private String file_path;
-	// file size
-	private String file_size;
-	// fil ext
-	private String file_ext;
-	// f4d converter count
-	private Integer converter_count;
+	// title
+	private String title;
+	// 0: 준비, 1: 성공, 2: 실패
+	private String status;
+	// 에러 코드
+	private String error_code;
+	// 등록일
 	private String insert_date;
-	
-	public String validate() {
-		// TODO 구현해야 한다.
-		return null;
+
+	public String getViewInsertDate() {
+		if(this.insert_date == null || "".equals( insert_date)) {
+			return "";
+		}
+		return insert_date.substring(0, 19);
 	}
 }

@@ -336,7 +336,7 @@ public class HomepageController {
 	 * @return
 	 */
 	@GetMapping(value = "spec.do")
-	public String Spec(HttpServletRequest request, Model model) {
+	public String spec(HttpServletRequest request, Model model) {
 		String lang = null;
 		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 		if(lang == null || "".equals(lang)) {
@@ -384,7 +384,7 @@ public class HomepageController {
 	 * @return
 	 */
 	@GetMapping(value = "faq.do")
-	public String Faq(HttpServletRequest request, Model model) {
+	public String faq(HttpServletRequest request, Model model) {
 		String lang = null;
 		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
 		if(lang == null || "".equals(lang)) {

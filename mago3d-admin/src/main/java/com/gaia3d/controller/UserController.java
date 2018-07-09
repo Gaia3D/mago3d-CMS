@@ -44,7 +44,6 @@ import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.UserSession;
 import com.gaia3d.helper.PasswordHelper;
 import com.gaia3d.security.Crypt;
-import com.gaia3d.service.FileService;
 import com.gaia3d.service.UserDeviceService;
 import com.gaia3d.service.UserGroupService;
 import com.gaia3d.service.UserService;

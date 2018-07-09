@@ -32,7 +32,7 @@
 	<logger name="org.apache.commons" level="INFO" additivity="false" />
 <!-- tomcat 시작시 오류 날때는 이 로그 레벨을 적용하면 상세히 나옴	
 		<logger name="org.springframework.web" level="debug" additivity="false" />  -->
-	<logger name="org.springframework" level="info" additivity="false" />
+	<logger name="org.springframework.web" level="info" additivity="false" />
 	<logger name="java.sql.Connection" level="debug" additivity="false" />
 	<logger name="java.sql.PreparedStatement" level="debug" additivity="false" />
 	<logger name="java.sql.ResultSet" level="debug" additivity="false" />

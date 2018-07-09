@@ -1185,14 +1185,14 @@ dl {
 .breadcrumbs .icon-glyph {
 	color: #573592; }
 
-/* pagination */
-.pagination {
+/* my-pagination */
+.my-pagination {
 	text-align: center;
 	vertical-align: middle;
 	line-height: 21px;
 	height: 21px; }
 
-.pagination a {
+.my-pagination a {
 	padding: 2px 6px;
 	border: 1px solid #dbdbdb;
 	color: #34373d;
@@ -1200,18 +1200,18 @@ dl {
 	line-height: 18px;
 	height: 18px; }
 
-.pagination a:hover {
+.my-pagination a:hover {
 	background-color: #eee; }
 	
-.pagination a.current-page {
+.my-pagination a.current-page {
 	background-color: #573592;
 	border-color: #573592;
 	color: #fff; }
 	
-.pagination .prev {
+.my-pagination .prev {
 	margin-right: 10px; }
 	
-.pagination .next {
+.my-pagination .next {
 	margin-left: 10px; }
 
 /* Layout
@@ -1303,11 +1303,11 @@ html, body {
 .filters {
 	margin-bottom: 30px; }
 	
-.list + .pagination {
+.list + .my-pagination {
 	margin-top: 40px;
 	margin-bottom: 40px; }
 	
-table + .pagination {
+table + .my-pagination {
 	margin-top: 20px; }
 	
 .tabs {

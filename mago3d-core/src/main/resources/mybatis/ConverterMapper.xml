@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaia3d.persistence.ConverterMapper">
+
+	<!-- converter job 총 건수 -->
+	<select id="getListConverterJobTotalCount" parameterType="converterJob" resultType="long">
+		/* getListConverterJobTotalCount */
+		SELECT COUNT(converter_job_id) 
+		FROM converter_job
+		WHERE user_id = #{user_id}
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+			AND ${search_word} = #{search_value}
+			</if>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+			AND ${search_word} LIKE '%' || #{search_value} || '%'
+			</if>
+			<if test="status != null and status != ''">
+			AND status = #{status}
+			</if>
+			<if test="start_date != null and start_date != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="end_date != null and end_date != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+	</select>
+	
+	<!-- converter job 목록 -->
+	<select id="getListConverterJob" parameterType="converterJob" resultType="converterJob">
+		/* getListConverterJob */
+		SELECT X.*, 
+			(SELECT COUNT(converter_log_id) FROM converter_log WHERE converter_job_id = X.converter_job_id) AS converter_file_count
+		FROM (
+			SELECT A.*
+			FROM converter_job A
+			WHERE A.user_id = #{user_id}
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+				AND A.${search_word} = #{search_value}
+				</if>
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+				AND A.${search_word} LIKE '%' || #{search_value} || '%'
+				</if>
+				<if test="status != null and status != ''">
+				AND A.status = #{status}
+				</if>
+				<if test="start_date != null and start_date != ''">
+				<![CDATA[
+				AND A.insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="end_date != null and end_date != ''">
+				<![CDATA[
+				AND A.insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+			<choose>
+			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
+			ORDER BY A.${order_word} ${order_value}
+			</when>
+			<otherwise>
+			ORDER BY A.insert_date DESC, A.converter_job_id DESC
+			</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) X
+	</select>
+	
+	<!-- converter log 총 건수 -->
+	<select id="getListConverterLogTotalCount" parameterType="converterLog" resultType="long">
+		/* getListConverterLogTotalCount */
+		SELECT COUNT(converter_log_id) 
+		FROM converter_log
+		WHERE user_id = #{user_id}
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+			AND ${search_word} = #{search_value}
+			</if>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+			AND ${search_word} LIKE '%' || #{search_value} || '%'
+			</if>
+			<if test="status != null and status != ''">
+			AND status = #{status}
+			</if>
+			<if test="start_date != null and start_date != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="end_date != null and end_date != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+	</select>
+	
+	<!-- converter log 목록 -->
+	<select id="getListConverterLog" parameterType="converterLog" resultType="converterLog">
+		/* getListConverterLog */
+		SELECT X.*, Y.file_name
+		FROM (
+			SELECT A.*
+			FROM converter_log A
+			WHERE A.user_id = #{user_id}
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+				AND A.${search_word} = #{search_value}
+				</if>
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+				AND A.${search_word} LIKE '%' || #{search_value} || '%'
+				</if>
+				<if test="status != null and status != ''">
+				AND A.status = #{status}
+				</if>
+				<if test="start_date != null and start_date != ''">
+				<![CDATA[
+				AND A.insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="end_date != null and end_date != ''">
+				<![CDATA[
+				AND A.insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+			<choose>
+			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
+			ORDER BY A.${order_word} ${order_value}
+			</when>
+			<otherwise>
+			ORDER BY A.insert_date DESC, A.converter_log_id DESC
+			</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) X, upload_log Y
+		WHERE X.upload_log_id = Y.upload_log_id
+	</select>
+	
+	<!-- converter job 등록 -->
+	<insert id="insertConverterJob" parameterType="converterJob">
+		/* insertConverterJob */
+		<selectKey keyProperty="converter_job_id" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('converter_job_seq')
+  		</selectKey>
+		INSERT INTO converter_job(
+			converter_job_id, user_id, title, status, error_code
+		) values(
+			#{converter_job_id}, #{user_id}, #{title}, #{status}, #{error_code}
+		)
+	</insert>
+	
+	<!-- converter log 등록 -->
+	<insert id="insertConverterLog" parameterType="converterLog">
+		/* insertConverterLog */
+		<selectKey keyProperty="converter_log_id" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('converter_log_seq')
+  		</selectKey>
+		INSERT INTO converter_log(
+			converter_log_id, converter_job_id, upload_log_id, user_id, error_code
+		) values(
+			#{converter_log_id}, #{converter_job_id}, #{upload_log_id}, #{user_id}, #{error_code}
+		)
+	</insert>
+</mapper>

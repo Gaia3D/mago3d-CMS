@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <c:if test="${pagination.totalCount > 0}">
-		<div class="pagination">
+		<div class="my-pagination">
 			<a href="${pagination.uri }?pageNo=${pagination.firstPage }${pagination.searchParameters}" class="first"><span class="icon-glyph glyph-first"></span></a>
 	<c:if test="${pagination.existPrePage == 'true' }">
 			<a href="${pagination.uri }?pageNo=${pagination.prePageNo }${pagination.searchParameters}" class="prev"><span class="icon-glyph glyph-prev"></span></a>

@@ -317,7 +317,7 @@ public class FileUtil {
 			sourceDirectory = targetDirectory + year + File.separator + month + File.separator + day + File.separator;
 		}
 		
-		String saveFileName = today + "_" + System.nanoTime() + "." + fileInfo.getFile_ext();
+		String saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + fileInfo.getFile_ext();
 		long size = 0L;
 		try (	InputStream inputStream = multipartFile.getInputStream();
 				OutputStream outputStream = new FileOutputStream(sourceDirectory + saveFileName)) {
