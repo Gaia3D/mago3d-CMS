@@ -3,6 +3,7 @@ drop table if exists menu cascade;
 -- メニュー
 create table menu(
 	menu_id				int,
+	menu_type			char(1),
 	name				varchar(100)							not null,
 	name_en				varchar(30)								not null,
 	lang				varchar(10)								default 'ko',
@@ -25,6 +26,7 @@ create table menu(
 
 comment on table menu is 'メニュー';
 comment on column menu.menu_id is '固有番号';
+comment on column menu.menu_type is 'メニュータイプ、0：管理者サイト、1：ユーザーのサイト';
 comment on column menu.name is 'メニュー名';
 comment on column menu.name_en is '英語メニュー名';
 comment on column menu.lang is '言語';

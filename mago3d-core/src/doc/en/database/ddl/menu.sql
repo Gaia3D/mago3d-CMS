@@ -3,6 +3,7 @@ drop table if exists menu cascade;
 -- menu
 create table menu(
 	menu_id				int,
+	menu_type			char(1),
 	name				varchar(100)							not null,
 	name_en				varchar(30)								not null,
 	lang				varchar(10)								default 'ko',
@@ -25,6 +26,7 @@ create table menu(
 
 comment on table menu is 'menu';
 comment on column menu.menu_id is 'unique number';
+comment on column menu.menu_type is 'Menu type, 0: Admin site, 1: User site';
 comment on column menu.name is 'menu name';
 comment on column menu.name_en is 'English menu name';
 comment on column menu.lang is 'language';

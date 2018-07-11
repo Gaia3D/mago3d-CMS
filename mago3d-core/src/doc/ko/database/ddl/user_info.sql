@@ -1,7 +1,7 @@
 -- FK, Index 는 별도 파일로 분리. 맨 마지막에 작업 예정
 drop table if exists user_group cascade;
 drop table if exists user_group_role cascade;
-drop table if exists user_group_menu;
+drop table if exists user_group_menu cascade;
 drop table if exists user_info cascade;
 drop table if exists user_device cascade;
 

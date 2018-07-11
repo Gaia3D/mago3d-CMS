@@ -38,7 +38,7 @@ values(33, '0', '프로젝트 상세', 'DATA', 3 , 2, 3, '/data/modify-project.do', '/
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(35, '0', '데이터 목록', 'DATA', 3 , 2, 5, '/data/list-data.do', 'glyph-monitor', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(36, '0', '데이터 등록', 'DATA', 3 , 2, 6, '/data/input-data.do', 'glyph-monitor', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(37, '0', '변경 요청 목록', 'DATA', 3 , 2, 7, '/data/list-data-log.do', 'glyph-monitor', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, '0', display_yn) 
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
 values(38, '0', '데이터 상세', 'DATA', 3 , 2, 8, '/data/detail-data.do', '/data/list-data.do', 'glyph-monitor', 'N', 'Y', 'N');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
 values(39, '0', '데이터 수정', 'DATA', 3 , 2, 9, '/data/modify-data.do', '/data/list-data.do', 'glyph-monitor', 'N', 'Y', 'N');
@@ -77,27 +77,31 @@ values(87, '0', '권한 설정 수정', 'CONFIGURATION', 8 , 2, 7, '/role/modify-role.
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
 values(88, '0', '공통 코드 수정', 'CONFIGURATION', 8 , 2, 8, '/code/modify-code.do', '/code/list-code.do', 'glyph-settings', 'N', 'Y', 'N');
 
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(10, '0', '공지사항', 'BOARD', 0 , 1, 10, '/board/list-board.do', 'glyph-imark-dot', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(101, '0', '공지 목록', 'BOARD', 10 , 2, 1, '/board/list-board.do', 'glyph-imark-dot', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(102, '0', '공지사항 등록', 'BOARD', 10 , 2, 2, '/board/input-board.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(10, '0', '게시판', 'BOARD', 0 , 1, 10, '/board/list-notice.do', 'glyph-imark-dot', 'Y', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(101, '0', '공지사항 목록', 'NOTICE', 10 , 2, 1, '/board/list-notice.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(102, '0', '공지사항 등록', 'NOTICE', 10 , 2, 5, '/board/input-notice.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(103, '0', 'FAQ 목록', 'FAQ', 10 , 2, 2, '/board/list-faq.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(104, '0', 'FAQ 등록', 'FAQ', 10 , 2, 6, '/board/input-faq.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(105, '0', '보도자료 목록', 'PRESS', 10 , 2, 3, '/board/list-press.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(106, '0', '보도자료 등록', 'PRESS', 10 , 2, 7, '/board/input-press.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(107, '0', '포럼 목록', 'FORUM', 10 , 2, 4, '/board/list-forum.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(108, '0', '포럼 등록', 'FORUM', 10 , 2, 8, '/board/input-forum.do', 'glyph-imark-dot', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
-values(103, '0', '공지사항 수정', 'BOARD', 10 , 2, 3, '/board/modify-board.do', '/board/list-board.do', 'glyph-imark-dot', 'N', 'Y', 'N');
+values(109, '0', '공지사항 수정', 'NOTICE', 10 , 2, 9, '/board/modify-notice.do', '/board/list-notice.do', 'glyph-imark-dot', 'N', 'Y', 'N');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
-values(104, '0', '공지사항 상세 정보', 'BOARD', 10 , 2, 4, '/board/detail-board.do', '/board/list-board.do', 'glyph-imark-dot', 'N', 'Y', 'N');
-
---사용자 메뉴 --
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(201, '1', '홈', 'HOME', 0 , 1, 1, '/main/index.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(210, '1', '프로젝트', 'PROJECT', 0 , 1, 2, '/project/list-project.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(211, '1', '프로젝트 목록', 'PROJECT', 210 , 2, 1, '/project/list-project.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(212, '1', '프로젝트 등록', 'PROJECT', 210 , 2, 2, '/project/input-project.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(220, '1', '데이터', 'DATA', 0 , 1, 3, '/data/list-data.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(221, '1', '데이터 목록', 'DATA', 220 , 2, 1, '/data/list-data.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(222, '1', '데이터 변경 요청 목록', 'DATA', 220 , 2, 2, '/data/list-data_info_log.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(230, '1', '파일 업로드', 'FILE UPLOAD', 0 , 1, 4, '/upload/input-upload.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(240, '1', 'Converter 실행 결과', 'CONVERTER EXECUTE', 0 , 1, 5, '/main/index.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(250, '1', 'F4D 등록', 'F4D REGISTER', 0 , 1, 6, '/main/index.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(260, '1', '기본 설정', 'CONFIG', 0 , 1, 7, '/main/index.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(270, '1', 'mago3D 설정', 'MAGO3D CONFIG', 0 , 1, 8, '/main/index.do', 'glyph-home', 'N', 'Y');
+values(110, '0', '공지사항 상세 정보', 'NOTICE', 10 , 2, 10, '/board/detail-notice.do', '/board/list-notice.do', 'glyph-imark-dot', 'N', 'Y', 'N');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
+values(111, '0', 'FAQ 수정', 'FAQ', 10 , 2, 11, '/board/modify-faq.do', '/board/list-faq.do', 'glyph-imark-dot', 'N', 'Y', 'N');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
+values(112, '0', 'FAQ 상세 정보', 'FAQ', 10 , 2, 12, '/board/detail-faq.do', '/board/list-faq.do', 'glyph-imark-dot', 'N', 'Y', 'N');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
+values(113, '0', '보도자료 수정', 'PRESS', 10 , 2, 13, '/board/modify-press.do', '/board/list-press.do', 'glyph-imark-dot', 'N', 'Y', 'N');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
+values(114, '0', '보도자료 상세 정보', 'PRESS', 10 , 2, 14, '/board/detail-press.do', '/board/list-press.do', 'glyph-imark-dot', 'N', 'Y', 'N');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
+values(115, '0', '포럼 수정', 'FORUM', 10 , 2, 15, '/board/modify-forum.do', '/board/list-forum.do', 'glyph-imark-dot', 'N', 'Y', 'N');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
+values(116, '0', '포럼 상세 정보', 'FORUM', 10 , 2, 16, '/board/detail-forum.do', '/board/list-forum.do', 'glyph-imark-dot', 'N', 'Y', 'N');
 
 -- 사용자 그룹별 메뉴
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (1, 1, 1);
@@ -145,22 +149,14 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (88, 1, 88);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (10, 1, 10);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (101, 1, 101);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (102, 1, 102);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (103, 1, 103);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (104, 1, 104);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (102, 1, 103);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (103, 1, 105);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (104, 1, 107);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (105, 1, 102);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (106, 1, 104);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (107, 1, 106);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (108, 1, 108);
 
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (201, 2, 201);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (210, 2, 210);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (211, 2, 211);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (212, 2, 212);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (220, 2, 220);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (221, 2, 221);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (222, 2, 222);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (230, 2, 230);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (240, 2, 240);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (250, 2, 250);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (260, 2, 260);
-insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (270, 2, 270);
 
 -- 메인 화면 위젯
 insert into widget(	widget_id, name, view_order, user_id) values(NEXTVAL('widget_seq'), 'projectWidget', 1, 'admin' );
@@ -326,4 +322,5 @@ geo_callback_moveddata = 'showMovedData',
 geo_callback_selectedobject = 'showSelectedObject',
 geo_callback_insertissue = 'showInsertIssueLayer',
 geo_callback_clickposition = 'showClickPosition';
+
 commit;

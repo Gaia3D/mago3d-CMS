@@ -1,7 +1,7 @@
 -- Separate FK and Index into separate files. Scheduled to work last
 drop table if exists user_group cascade;
 drop table if exists user_group_role cascade;
-drop table if exists user_group_menu;
+drop table if exists user_group_menu cascade;
 drop table if exists user_info cascade;
 drop table if exists user_device cascade;
 
