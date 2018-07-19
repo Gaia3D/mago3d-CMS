@@ -1,9 +1,6 @@
 package com.gaia3d.config;
 
-import java.util.Locale;
 import java.util.Properties;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
