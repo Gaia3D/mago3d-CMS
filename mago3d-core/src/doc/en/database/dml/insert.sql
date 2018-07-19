@@ -77,15 +77,15 @@ values(87, '0', 'Permission Setting modification', 'CONFIGURATION', 8 , 2, 7, '/
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
 values(88, '0', 'Common code modification', 'CONFIGURATION', 8 , 2, 8, '/code/modify-code.do', '/code/list-code.do', 'glyph-settings', 'N', 'Y', 'N');
 
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(10, '0', 'board', 'BOARD', 0 , 1, 10, '/board/list-notice.do', 'glyph-imark-dot', 'Y', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(101, '0', 'notice list', 'NOTICE', 10 , 2, 1, '/board/list-notice.do', 'glyph-imark-dot', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(102, '0', 'notice register', 'NOTICE', 10 , 2, 5, '/board/input-notice.do', 'glyph-imark-dot', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(103, '0', 'FAQ list', 'FAQ', 10 , 2, 2, '/board/list-faq.do', 'glyph-imark-dot', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(104, '0', 'FAQ register', 'FAQ', 10 , 2, 6, '/board/input-faq.do', 'glyph-imark-dot', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(105, '0', 'press list', 'PRESS', 10 , 2, 3, '/board/list-press.do', 'glyph-imark-dot', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(106, '0', 'press register', 'PRESS', 10 , 2, 7, '/board/input-press.do', 'glyph-imark-dot', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(107, '0', 'forum list', 'FORUM', 10 , 2, 4, '/board/list-forum.do', 'glyph-imark-dot', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(108, '0', 'forum register', 'FORUM', 10 , 2, 8, '/board/input-forum.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(10, '0', 'BOARD', 'BOARD', 0 , 1, 10, '/board/list-notice.do', 'glyph-imark-dot', 'Y', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(101, '0', 'NOTICE LIST', 'NOTICE', 10 , 2, 1, '/board/list-notice.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(102, '0', 'NOTICE REGISTER', 'NOTICE', 10 , 2, 5, '/board/input-notice.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(103, '0', 'FAQ LIST', 'FAQ', 10 , 2, 2, '/board/list-faq.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(104, '0', 'FAQ REGISTER', 'FAQ', 10 , 2, 6, '/board/input-faq.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(105, '0', 'press LIST', 'PRESS', 10 , 2, 3, '/board/list-press.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(106, '0', 'press REGISTER', 'PRESS', 10 , 2, 7, '/board/input-press.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(107, '0', 'forum LIST', 'FORUM', 10 , 2, 4, '/board/list-forum.do', 'glyph-imark-dot', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(108, '0', 'forum REGISTER', 'FORUM', 10 , 2, 8, '/board/input-forum.do', 'glyph-imark-dot', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
 values(109, '0', 'notice modify', 'NOTICE', 10 , 2, 9, '/board/modify-notice.do', '/board/list-notice.do', 'glyph-imark-dot', 'N', 'Y', 'N');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 

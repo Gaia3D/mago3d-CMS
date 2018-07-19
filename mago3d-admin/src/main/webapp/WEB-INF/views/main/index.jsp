@@ -88,7 +88,7 @@
 					<div id="${dbWidget.widget_id }" class="widget one-third column" style="font-size: 16px;">
 						<div class="widget-header row">
 							<div class="widget-heading u-pull-left">						
-								<h3 class="widget-title">프로젝트 데이터 현황<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+								<h3 class="widget-title"><spring:message code='main.status.project.data'/><span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
 							</div>
 							<div class="widget-functions u-pull-right">
 								<a href="/data/list-data.do" title="<spring:message code='config.widget.project.more'/>"><span class="icon-glyph glyph-plus"></span></a>
@@ -105,7 +105,7 @@
 					<div id="${dbWidget.widget_id }" class="widget one-third column" style="font-size: 16px;">
 						<div class="widget-header row">
 							<div class="widget-heading u-pull-left">						
-								<h3 class="widget-title">데이터 상태별 현황<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+								<h3 class="widget-title"><spring:message code='main.status.use.data'/><span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
 							</div>
 							<div class="widget-functions u-pull-right">
 								<a href="/data/list-data.do" title="<spring:message code='config.widget.data.info.more'/>"><span class="icon-glyph glyph-plus"></span></a>
@@ -122,7 +122,7 @@
 					<div id="${dbWidget.widget_id }" class="widget one-third column">
 						<div class="widget-header row">
 							<div class="widget-heading u-pull-left">						
-								<h3 class="widget-title">데이터 변경 요청 이력<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+								<h3 class="widget-title"><spring:message code='main.status.data.log'/><span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
 							</div>
 							<div class="widget-functions u-pull-right">
 								<a href="/data/list-data-log.do" title="<spring:message code='config.widget.data.info.log.more'/>"><span class="icon-glyph glyph-plus"></span></a>
