@@ -9,7 +9,7 @@
 	<meta name="viewport" content="width=device-width">
 	<title>demo | mago3D User</title>
 	<link rel="apple-touch-icon" href="apple-icon.png">
-    <link rel="shortcut icon" href="favicon.ico">
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" href="/css/${lang}/homepage-demo.css?cache_version=${cache_version}" />
 <c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 	<link rel="stylesheet" href="/externlib/cesium/Widgets/widgets.css?cache_version=${cache_version}" />
@@ -26,9 +26,9 @@
 	<script type="text/javascript" src="/externlib/treegrid/jquery.treegrid.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/treegrid/jquery.treegrid.bootstrap3.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/jqplot/jquery.jqplot.min.js?cache_version=${cache_version}"></script>
-	<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.pieRenderer.js?cache_version=${cache_version}"></script>
-	<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.barRenderer.js?cache_version=${cache_version}"></script>
-	<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.categoryAxisRenderer.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.pieRenderer.min.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.barRenderer.min.js?cache_version=${cache_version}"></script>
+	<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.categoryAxisRenderer.min.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
 </head>
 

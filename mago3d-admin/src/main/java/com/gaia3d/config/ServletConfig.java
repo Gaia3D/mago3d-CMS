@@ -149,15 +149,15 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 		SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
 		
 		Properties exceptionMappings = new Properties();
-	 	exceptionMappings.put("BusinessLogicException", "error/business-error");
-	 	exceptionMappings.put("RuntimeException", "error/runtime-error");
-	 	exceptionMappings.put("Exception", "error/error");
+	 	exceptionMappings.put("BusinessLogicException", "/error/business-error");
+	 	exceptionMappings.put("RuntimeException", "/error/runtime-error");
+	 	exceptionMappings.put("Exception", "/error/error");
 	 	simpleMappingExceptionResolver.setExceptionMappings(exceptionMappings);
 	 	
 	 	Properties statusCodes = new Properties();
-        statusCodes.put("error/error", "403");
-        statusCodes.put("error/error", "404");
-        statusCodes.put("error/error", "500");
+        statusCodes.put("/error/error", "403");
+        statusCodes.put("/error/error", "404");
+        statusCodes.put("/error/error", "500");
         simpleMappingExceptionResolver.setStatusCodes(statusCodes);
 
 	 	simpleMappingExceptionResolver.setOrder(1);
