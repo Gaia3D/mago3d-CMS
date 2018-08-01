@@ -3,7 +3,8 @@ final String DEFAULT_PROFILE = 'local'
 
 buildscript {
 	ext {
-		springBootVersion = '1.5.12.RELEASE'
+		springBootVersion = '1.5.15.RELEASE'
+		lombokVersion = '1.18.2'
 	}
 	repositories {
 		mavenCentral()
@@ -89,7 +90,7 @@ dependencies {
 	compile 'org.apache.httpcomponents:httpclient:4.5.3'
 	compile 'commons-codec:commons-codec:1.10'
 	
-	compile 'com.zaxxer:HikariCP:2.7.7'
+	compile 'com.zaxxer:HikariCP:3.2.0'
 	
 	//compile 'org.apache.commons:commons-dbcp2:2.1.1'
 	compile 'com.fasterxml.jackson.core:jackson-databind:2.8.8'
@@ -106,7 +107,11 @@ dependencies {
 	//compile 'io.springfox:springfox-swagger2:2.7.0'
 	//compile 'io.springfox:springfox-swagger-ui:2.7.0'
 		
-	compileOnly('org.projectlombok:lombok')
+	annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+	compileOnly("org.projectlombok:lombok:$lombokVersion")
+	testAnnotationProcessor("org.projectlombok:lombok:$lombokVersion")
+	testCompileOnly("org.projectlombok:lombok:$lombokVersion")	
+	//compileOnly('org.projectlombok:lombok:1.18.2')
 	
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('org.postgresql:postgresql')
