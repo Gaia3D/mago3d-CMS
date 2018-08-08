@@ -1227,13 +1227,18 @@ margin-bottom: 20px;
 list-style: circle;
 }
 .sub_main img {
-margin-left: 234px;
+width: 60%;
+margin-left: 20%;
+margin-right: 20%;
 margin-top: 30px;
 margin-bottom: 20px;
 }
 .sub_main .description {
 color: gray;
-margin-left: 451px;
+text-align: center;
+width: 60%;
+margin-left: 20%;
+margin-right: 20%;
 }
 .sub_main table {
     font-family: arial, sans-serif;
@@ -1247,6 +1252,8 @@ margin-left: 451px;
     padding: 8px;
 }
 .sub_main .specImage{
+height:30px;
+margin-right: 0px;
 margin-left: 0px;
 margin-top: 0px;
 margin-bottom: 0px;
