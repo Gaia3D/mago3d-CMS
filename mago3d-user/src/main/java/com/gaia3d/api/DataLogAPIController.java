@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gaia3d.domain.DataInfoLog;
@@ -43,7 +42,6 @@ public class DataLogAPIController {
 	 * @return
 	 */
 	@RequestMapping(value = "ajax-list-data-change-request-log.do")
-	@ResponseBody
 	public Map<String, Object> ajaxListDataChangeRequestLog(HttpServletRequest request, DataInfoLog dataInfoLog, @RequestParam(defaultValue="1") String pageNo) {
 		
 		Map<String, Object> map = new HashMap<>();
@@ -94,7 +92,6 @@ public class DataLogAPIController {
 	 * @return
 	 */
 	@RequestMapping(value = "ajax-data-info-log.do")
-	@ResponseBody
 	public Map<String, Object> ajaxDataInfoLog(HttpServletRequest request, @RequestParam Long data_info_log_id) {
 		
 		Map<String, Object> map = new HashMap<>();

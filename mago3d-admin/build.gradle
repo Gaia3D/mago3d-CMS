@@ -93,8 +93,8 @@ dependencies {
 	//compile('org.springframework.boot:spring-boot-starter-cache')
 	//compile 'net.sf.ehcache:ehcache:2.10.4'
 	compile('javax.servlet:javax.servlet-api:3.1.0')
-	compile 'javax.servlet:jstl:1.2'
-	compile 'org.apache.logging.log4j:log4j:2.8.2'
+	compile 'org.apache.taglibs:taglibs-standard-jstlel:1.2.5'
+	compile 'org.apache.logging.log4j:log4j:2.11.1'
 	//compile('org.springframework.boot:spring-boot-starter-actuator')
 	
 	//compile 'io.springfox:springfox-swagger2:2.7.0'

@@ -8,60 +8,50 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<title>main | mago3D User</title>
-	<link rel="stylesheet" href="/externlib/sufee-template/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/externlib/sufee-template/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/externlib/sufee-template/css/themify-icons.css">
-	<link rel="stylesheet" href="/externlib/sufee-template/scss/style.css">
+	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" href="/css/cloud.css">
+	<link rel="stylesheet" href="/css/fontawesome-free-5.2.0-web/css/all.min.css">
 	<link rel="stylesheet" href="/externlib/dropzone/dropzone.css">
-	<link rel="stylesheet" href="/css/ko/style.css">
-	
-	<script src="/externlib/dropzone/dropzone.js"></script>
+	<script type="text/javascript" src="/js/cloud.js"></script>
+	<script type="text/javascript" src="/externlib/dropzone/dropzone.js"></script>
 </head>
 <body>
+
+<div class="default-layout">
+	<!-- 왼쪽 메뉴 -->
+	<%@ include file="/WEB-INF/views/layouts/menu.jsp" %>
+	<!-- 왼쪽 메뉴 -->
 	
-<%@ include file="/WEB-INF/views/layouts/menu.jsp" %>
-
-<div id="right-panel" class="right-panel">
-
-	<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
-	<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
-			
-	<div class="content mt-3" style="min-height: 750px; background-color: white;">
-		
-		<div class="page-content">
-			<div class="input-header row">
-				<div><span style="margin-left:20px; margin-bottom: 10px;" class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='notice.field.required'/></div>
-			</div>
-			<div class="tabs">
-			
-				<!-- <div id="trueForm">
-				<form id="my-dropzone" class="dropzone" style="min-height: 300px;" enctype="multipart/form-data" method="post">
-				</form>
+	<!--  컨텐츠 -->
+	<div class="content-layout">
+		<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
+		<div>
+			<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
+			<div class="content-detail">
 				
-					<div style="margin-top: 10px; margin-left: 5px;">
-						<button type="submit" id="allFileUpload" disabled="disabled">업로드</button>
-						<button id="allFileClear" disabled="disabled">All Clear</button>
-				    </div>
-				</div>	 -->
-				
-				<form id="my-dropzone" action="" class="dropzone" ></form>
-
-				<div style="margin-top: 10px; margin-left: 5px;">
-					<button id="allFileUpload">업로드</button>
-					<button id="allFileClear">All Clear</button>
+				<!-- Start content by page -->
+				<div class="page-content">
+					<div>
+						<div id="data_info_tab">
+							<form id="my-dropzone" action="" class="dropzone" ></form>
+							<div style="margin-top: 10px; margin-left: 5px;">
+								<button id="allFileUpload">업로드</button>
+								<button id="allFileClear">All Clear</button>
+							</div>
+						</div>
+					</div>
 				</div>
+				<!-- End content by page -->
+				
 			</div>
+			<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 		</div>
-					
 	</div>
-	
-	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
+	<!--  컨텐츠 -->
 </div>
 
-<script src="/externlib/jquery/jquery.js"></script>
-<script src="/externlib/sufee-template/js/plugins.js"></script>
-<script src="/externlib/sufee-template/js/main.js"></script>
-<script src="/js/${lang }/message.js"></script>
+<script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
+<script type="text/javascript" src="/js/${lang }/message.js"></script>
 <script type="text/javascript">
 	// https://ncube.net/13905
 	// http://blog.naver.com/PostView.nhn?blogId=wolfre&logNo=220154561376&parentCategoryNo=&categoryNo=1&viewDate=&isShowPopularPosts=true&from=search

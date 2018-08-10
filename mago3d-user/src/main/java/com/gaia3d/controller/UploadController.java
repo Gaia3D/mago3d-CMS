@@ -85,6 +85,9 @@ public class UploadController {
 				fileList.add(fileInfo);
 	        }
 	        
+	        // TODO 예외가 발생하면 중단을 해야 하나? 아님 넘어 가야 하나?
+	        // 2개 중에 하나만 성공하고... 하나가 실패할 경우
+	        
 	        uploadService.insertFiles(fileList);       
 		} catch(Exception e) {
 			e.printStackTrace();

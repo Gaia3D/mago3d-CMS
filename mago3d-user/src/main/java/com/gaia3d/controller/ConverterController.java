@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import com.gaia3d.domain.ConverterJob;
 import com.gaia3d.domain.ConverterLog;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.UserSession;
+import com.gaia3d.service.AMQPPublishService;
 import com.gaia3d.service.ConverterService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.StringUtil;
@@ -38,11 +40,15 @@ public class ConverterController {
 	
 	@Autowired
 	private PropertiesConfig propertiesConfig;
+	
+	@Autowired
+	private AMQPPublishService aMQPPublishService;
+	
 	@Autowired
 	private ConverterService converterService;
 	
 	/**
-	 * 이슈 목록
+	 * converter job insert
 	 * @param model
 	 * @return
 	 */
@@ -64,7 +70,19 @@ public class ConverterController {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 			converterJob.setUser_id(userSession.getUser_id());
 			
-			converterService.insertConverterJob(check_ids, converterJob);
+			Long jobId = converterService.insertConverterJob(check_ids, converterJob);
+			
+			StringBuilder buffer = new StringBuilder()
+					.append("host=" + propertiesConfig.getServerIp())
+					.append("&")
+					.append("port=" + propertiesConfig.getServerPort())
+					.append("&")
+					.append("jobId=" + jobId);
+			
+			// TODO
+			// 조금 미묘하다. transaction 처리를 할지, 관리자 UI 재 실행을 위해서는 여기가 맞는거 같기도 하고....
+			// 별도 기능으로 분리해야 하나?
+			aMQPPublishService.send(buffer.toString());
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
