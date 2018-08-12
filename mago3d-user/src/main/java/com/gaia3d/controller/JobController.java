@@ -39,8 +39,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Controller
-@RequestMapping("/upload/")
-public class UploadController {
+@RequestMapping("/job/")
+public class JobController {
 	
 	@Autowired
 	private PropertiesConfig propertiesConfig;
@@ -105,7 +105,7 @@ public class UploadController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "list-upload-log.do")
+	@RequestMapping(value = "input-job.do")
 	public String listUploadLog(HttpServletRequest request, UploadLog uploadLog, @RequestParam(defaultValue="1") String pageNo, Model model) {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
@@ -132,7 +132,7 @@ public class UploadController {
 		
 		model.addAttribute(pagination);
 		model.addAttribute("uploadLogList", uploadLogList);
-		return "/upload/list-upload-log";
+		return "/job/input-job";
 	}
 	
 	/**

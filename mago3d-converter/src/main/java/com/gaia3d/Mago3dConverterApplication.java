@@ -10,12 +10,14 @@ import org.springframework.boot.context.ApplicationPidFileWriter;
 public class Mago3dConverterApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Mago3dConverterApplication.class, args);
+//		SpringApplication.run(Mago3dConverterApplication.class, args);
 		
-//		SpringApplicationBuilder app = new SpringApplicationBuilder(Mago3dConverterApplication.class)
-//				.web(WebApplicationType.NONE);
-//		
-//		app.build().addListeners(new ApplicationPidFileWriter("./bin/shutdown.pid"));
-//		app.run();
+		SpringApplicationBuilder app = new SpringApplicationBuilder(Mago3dConverterApplication.class)
+				.web(WebApplicationType.NONE);
+		
+		app.build().addListeners(new ApplicationPidFileWriter("./bin/shutdown.pid"));
+		app.run();
+		
+		// kill -9 $(cat ./shutdown.pid)
 	}
 }

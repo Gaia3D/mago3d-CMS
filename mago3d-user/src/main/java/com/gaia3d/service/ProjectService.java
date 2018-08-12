@@ -13,6 +13,13 @@ import com.gaia3d.domain.Project;
 public interface ProjectService {
 
 	/**
+	 * 프로젝트 총건수
+	 * @param project
+	 * @return
+	 */
+	Long getProjectTotalCount(Project project);
+	
+	/**
 	 * 프로젝트 목록
 	 * 
 	 * @param project

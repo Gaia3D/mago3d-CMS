@@ -23,6 +23,16 @@ public class ProjectServiceImpl implements ProjectService {
 	private ProjectMapper projectMapper;
 
 	/**
+	 * 프로젝트 총건수
+	 * @param project
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public Long getProjectTotalCount(Project project) {
+		return projectMapper.getProjectTotalCount(project);
+	}
+	
+	/**
 	 * 프로젝트 목록
 	 * 
 	 * @param project

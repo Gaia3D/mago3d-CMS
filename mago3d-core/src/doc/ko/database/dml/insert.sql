@@ -103,6 +103,25 @@ values(115, '0', '포럼 수정', 'FORUM', 10 , 2, 15, '/board/modify-forum.do', '/b
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, css_class, default_yn, use_yn, display_yn) 
 values(116, '0', '포럼 상세 정보', 'FORUM', 10 , 2, 16, '/board/detail-forum.do', '/board/list-forum.do', 'glyph-imark-dot', 'N', 'Y', 'N');
 
+--사용자 메뉴 --
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(200, '1', '홈', 'HOME', 0 , 1, 1, '/main/index.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(300, '1', '프로젝트', 'PROJECT', 0 , 1, 2, '/project/list-project.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(301, '1', '프로젝트 목록 보기', 'PROJECT', 300 , 2, 1, '/project/list-project.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(302, '1', '프로젝트 Map 보기', 'PROJECT', 300 , 2, 2, '/project/map-project.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(303, '1', '프로젝트 등록', 'PROJECT', 300 , 2, 3, '/project/input-project.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(304, '1', '데이터 목록 보기', 'DATA', 300 , 2, 4, '/data/list-data.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(400, '1', 'Converter', 'FILE UPLOAD', 0 , 1, 3, '/upload/input-upload.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(401, '1', '파일 업로딩', 'PROJECT', 400 , 2, 1, '/upload/input-upload.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(402, '1', 'F4D 변환 Job 등록', 'PROJECT', 400 , 2, 2, '/converter/input-converterjob.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(403, '1', 'Job 실행 결과', 'PROJECT', 400 , 2, 3, '/converter/list-converterjob.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(500, '1', 'Participation Project', 'CONVERTER EXECUTE', 0 , 1, 4, '/share/list-project.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(501, '1', '프로젝트 목록 보기', 'PROJECT', 500 , 2, 1, '/share/list-project.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(502, '1', '프로젝트 Map 보기', 'PROJECT', 500 , 2, 2, '/share/map-project.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(600, '1', 'Cloud Settings', 'F4D REGISTER', 0 , 1, 5, '/setting/detail-membership.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(601, '1', 'MemberShip 설정', 'PROJECT', 600 , 2, 1, '/setting/detail-membership.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(602, '1', 'mago3D 설정', 'PROJECT', 600 , 2, 2, '/setting/detail-mago3d.do', 'glyph-home', 'N', 'Y');
+
+
 -- 사용자 그룹별 메뉴
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (1, 1, 1);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (2, 1, 2);
@@ -156,6 +175,23 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (106, 1, 104);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (107, 1, 106);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (108, 1, 108);
+
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (200, 2, 201);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (300, 2, 300);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (301, 2, 301);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (302, 2, 302);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (303, 2, 303);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (304, 2, 304);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (400, 2, 400);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (401, 2, 401);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (402, 2, 402);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (403, 2, 403);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (500, 2, 500);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (501, 2, 501);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (502, 2, 502);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (600, 2, 600);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (601, 2, 601);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (602, 2, 602);
 
 
 -- 메인 화면 위젯

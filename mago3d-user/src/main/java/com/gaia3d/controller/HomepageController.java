@@ -429,27 +429,27 @@ public class HomepageController {
 	 * @return
 	 */
 	private String getSearchParameters(Issue issue) {
-		StringBuilder builder = new StringBuilder(100);
-		builder.append("&");
-		builder.append("search_word=" + StringUtil.getDefaultValue(issue.getSearch_word()));
-		builder.append("&");
-		builder.append("search_option=" + StringUtil.getDefaultValue(issue.getSearch_option()));
-		builder.append("&");
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("&");
+		buffer.append("search_word=" + StringUtil.getDefaultValue(issue.getSearch_word()));
+		buffer.append("&");
+		buffer.append("search_option=" + StringUtil.getDefaultValue(issue.getSearch_option()));
+		buffer.append("&");
 		try {
-			builder.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(issue.getSearch_value()), "UTF-8"));
+			buffer.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(issue.getSearch_value()), "UTF-8"));
 		} catch(Exception e) {
 			e.printStackTrace();
-			builder.append("search_value=");
+			buffer.append("search_value=");
 		}
-		builder.append("&");
-		builder.append("start_date=" + StringUtil.getDefaultValue(issue.getStart_date()));
-		builder.append("&");
-		builder.append("end_date=" + StringUtil.getDefaultValue(issue.getEnd_date()));
-		builder.append("&");
-		builder.append("order_word=" + StringUtil.getDefaultValue(issue.getOrder_word()));
-		builder.append("&");
-		builder.append("order_value=" + StringUtil.getDefaultValue(issue.getOrder_value()));
-		return builder.toString();
+		buffer.append("&");
+		buffer.append("start_date=" + StringUtil.getDefaultValue(issue.getStart_date()));
+		buffer.append("&");
+		buffer.append("end_date=" + StringUtil.getDefaultValue(issue.getEnd_date()));
+		buffer.append("&");
+		buffer.append("order_word=" + StringUtil.getDefaultValue(issue.getOrder_word()));
+		buffer.append("&");
+		buffer.append("order_value=" + StringUtil.getDefaultValue(issue.getOrder_value()));
+		return buffer.toString();
 	}
 	
 //	/**
@@ -458,28 +458,28 @@ public class HomepageController {
 //	 * @return
 //	 */
 //	private String getListParameters(HttpServletRequest request) {
-//		StringBuilder builder = new StringBuilder(100);
+//		StringBuffer buffer = new StringBuffer(100);
 //		String pageNo = request.getParameter("pageNo");
-//		builder.append("pageNo=" + pageNo);
-//		builder.append("&");
-//		builder.append("search_word=" + StringUtil.getDefaultValue(request.getParameter("search_word")));
-//		builder.append("&");
-//		builder.append("search_option=" + StringUtil.getDefaultValue(request.getParameter("search_option")));
-//		builder.append("&");
+//		buffer.append("pageNo=" + pageNo);
+//		buffer.append("&");
+//		buffer.append("search_word=" + StringUtil.getDefaultValue(request.getParameter("search_word")));
+//		buffer.append("&");
+//		buffer.append("search_option=" + StringUtil.getDefaultValue(request.getParameter("search_option")));
+//		buffer.append("&");
 //		try {
-//			builder.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(request.getParameter("search_value")), "UTF-8"));
+//			buffer.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(request.getParameter("search_value")), "UTF-8"));
 //		} catch(Exception e) {
 //			e.printStackTrace();
-//			builder.append("search_value=");
+//			buffer.append("search_value=");
 //		}
-//		builder.append("&");
-//		builder.append("start_date=" + StringUtil.getDefaultValue(request.getParameter("start_date")));
-//		builder.append("&");
-//		builder.append("end_date=" + StringUtil.getDefaultValue(request.getParameter("end_date")));
-//		builder.append("&");
-//		builder.append("order_word=" + StringUtil.getDefaultValue(request.getParameter("order_word")));
-//		builder.append("&");
-//		builder.append("order_value=" + StringUtil.getDefaultValue(request.getParameter("order_value")));
-//		return builder.toString();
+//		buffer.append("&");
+//		buffer.append("start_date=" + StringUtil.getDefaultValue(request.getParameter("start_date")));
+//		buffer.append("&");
+//		buffer.append("end_date=" + StringUtil.getDefaultValue(request.getParameter("end_date")));
+//		buffer.append("&");
+//		buffer.append("order_word=" + StringUtil.getDefaultValue(request.getParameter("order_word")));
+//		buffer.append("&");
+//		buffer.append("order_value=" + StringUtil.getDefaultValue(request.getParameter("order_value")));
+//		return buffer.toString();
 //	}
 }

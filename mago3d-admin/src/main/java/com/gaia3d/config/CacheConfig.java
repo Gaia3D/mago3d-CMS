@@ -300,16 +300,16 @@ public class CacheConfig {
 		CacheName cacheName = cacheParams.getCacheName();
 		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@ cacheName ={}", cacheName.toString());
 		
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("api-key=" + Crypt.decrypt(propertiesConfig.getRestAuthKey()))
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("api-key=" + Crypt.decrypt(propertiesConfig.getRestAuthKey()))
 		.append("&")
 		.append("cache_name=" + cacheName.toString())
 		.append("&");
-		if(cacheParams.getProject_id() != null) stringBuilder.append("project_id=" + cacheParams.getProject_id());
-		stringBuilder.append("&")
+		if(cacheParams.getProject_id() != null) buffer.append("project_id=" + cacheParams.getProject_id());
+		buffer.append("&")
 		.append("time=" + System.nanoTime());
 		
-		String authData = Crypt.encrypt(stringBuilder.toString());
+		String authData = Crypt.encrypt(buffer.toString());
 		
 		// TODO 로컬, 이중화 등의 분기 처리가 생략되어 있음
 		List<ExternalService> remoteCacheServerList = CacheManager.getRemoteCacheServiceList();

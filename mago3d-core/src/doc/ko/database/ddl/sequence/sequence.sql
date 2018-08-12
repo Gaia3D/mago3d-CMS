@@ -68,7 +68,7 @@ create sequence issue_detail_seq increment 1 minvalue 1 maxvalue 999999999999 st
 create sequence issue_comment_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence issue_file_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence issue_people_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
-create sequence menu_seq increment 1 minvalue 1 maxvalue 999999999999 start 300 cache 1;
+create sequence menu_seq increment 1 minvalue 1 maxvalue 999999999999 start 700 cache 1;
 create sequence policy_seq increment 1 minvalue 1 maxvalue 999999999999 start 2 cache 1;
 create sequence project_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence role_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
@@ -78,7 +78,7 @@ create sequence schedule_detail_log_seq increment 1 minvalue 1 maxvalue 99999999
 create sequence upload_log_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence user_group_seq increment 1 minvalue 1 maxvalue 999999999999 start 100 cache 1;
 create sequence user_group_role_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
-create sequence user_group_menu_seq increment 1 minvalue 1 maxvalue 999999999999 start 300 cache 1;
+create sequence user_group_menu_seq increment 1 minvalue 1 maxvalue 999999999999 start 700 cache 1;
 create sequence user_device_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence widget_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 

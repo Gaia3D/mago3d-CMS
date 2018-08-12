@@ -14,6 +14,13 @@ import com.gaia3d.domain.Project;
  */
 @Repository
 public interface ProjectMapper {
+	
+	/**
+	 * 프로젝트 총건수
+	 * @param project
+	 * @return
+	 */
+	Long getProjectTotalCount(Project project);
 
 	/**
 	 * project 목록

@@ -46,6 +46,8 @@ public class ConverterJob {
 	private String status;
 	// 에러 코드
 	private String error_code;
+	// 수정일 
+	private String update_date;
 	// 등록일
 	private String insert_date;
 

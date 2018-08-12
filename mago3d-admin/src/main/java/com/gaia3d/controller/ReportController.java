@@ -162,15 +162,15 @@ public class ReportController {
 	 */
 	private String getSearchParameters(ReportMaintenance reportMaintenance) {
 		// TODO 아래 메소드랑 통합
-		StringBuilder builder = new StringBuilder(100);
-		builder.append("&");
-		builder.append("start_date=" + StringUtil.getDefaultValue(reportMaintenance.getStart_date()));
-		builder.append("&");
-		builder.append("end_date=" + StringUtil.getDefaultValue(reportMaintenance.getEnd_date()));
-		builder.append("&");
-		builder.append("order_word=" + StringUtil.getDefaultValue(reportMaintenance.getOrder_word()));
-		builder.append("&");
-		builder.append("order_value=" + StringUtil.getDefaultValue(reportMaintenance.getOrder_value()));
-		return builder.toString();
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("&");
+		buffer.append("start_date=" + StringUtil.getDefaultValue(reportMaintenance.getStart_date()));
+		buffer.append("&");
+		buffer.append("end_date=" + StringUtil.getDefaultValue(reportMaintenance.getEnd_date()));
+		buffer.append("&");
+		buffer.append("order_word=" + StringUtil.getDefaultValue(reportMaintenance.getOrder_word()));
+		buffer.append("&");
+		buffer.append("order_value=" + StringUtil.getDefaultValue(reportMaintenance.getOrder_value()));
+		return buffer.toString();
 	}
 }

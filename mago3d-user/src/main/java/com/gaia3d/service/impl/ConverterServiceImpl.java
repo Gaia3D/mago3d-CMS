@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gaia3d.domain.ConverterJob;
 import com.gaia3d.domain.ConverterLog;
+import com.gaia3d.domain.UploadLog;
 import com.gaia3d.persistence.ConverterMapper;
 import com.gaia3d.service.ConverterService;
 import com.gaia3d.service.UploadService;
@@ -67,6 +68,26 @@ public class ConverterServiceImpl implements ConverterService {
 	}
 	
 	/**
+	 * converter job 정보
+	 * @param jobId
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public ConverterJob getConverterJobByJobId(Long jobId) {
+		return converterMapper.getConverterJobByJobId(jobId);
+	}
+	
+	/**
+	 * converter job file list
+	 * @param jobId
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public List<ConverterLog> getAllListConverterLog(Long jobId) {
+		return converterMapper.getAllListConverterLog(jobId);
+	}
+	
+	/**
 	 * f4d converter job register
 	 * @param dataInfoLog
 	 * @return
@@ -88,5 +109,14 @@ public class ConverterServiceImpl implements ConverterService {
 		}
 
 		return converterJobId;
+	}
+	
+	/**
+	 * update
+	 * @param converterJob
+	 */
+	@Transactional
+	public void updateConverterJob(ConverterJob converterJob) {
+		converterMapper.updateConverterJob(converterJob);
 	}
 }

@@ -10,7 +10,7 @@
 		FROM data_info_log
 		<trim prefix="WHERE" prefixOverrides="AND">
 			<if test="user_id != null and user_id != ''">
-			AND user_id = #{user_id}
+			user_id = #{user_id}
 			</if>
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 			AND ${search_word} = #{search_value}

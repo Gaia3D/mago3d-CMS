@@ -114,26 +114,26 @@ public class DataLogAPIController {
 	 * @return
 	 */
 	private String getSearchParameters(DataInfoLog dataInfoLog) {
-		StringBuilder builder = new StringBuilder(100);
-		builder.append("&");
-		builder.append("search_word=" + StringUtil.getDefaultValue(dataInfoLog.getSearch_word()));
-		builder.append("&");
-		builder.append("search_option=" + StringUtil.getDefaultValue(dataInfoLog.getSearch_option()));
-		builder.append("&");
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("&");
+		buffer.append("search_word=" + StringUtil.getDefaultValue(dataInfoLog.getSearch_word()));
+		buffer.append("&");
+		buffer.append("search_option=" + StringUtil.getDefaultValue(dataInfoLog.getSearch_option()));
+		buffer.append("&");
 		try {
-			builder.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(dataInfoLog.getSearch_value()), "UTF-8"));
+			buffer.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(dataInfoLog.getSearch_value()), "UTF-8"));
 		} catch(Exception e) {
 			e.printStackTrace();
-			builder.append("search_value=");
+			buffer.append("search_value=");
 		}
-		builder.append("&");
-		builder.append("start_date=" + StringUtil.getDefaultValue(dataInfoLog.getStart_date()));
-		builder.append("&");
-		builder.append("end_date=" + StringUtil.getDefaultValue(dataInfoLog.getEnd_date()));
-		builder.append("&");
-		builder.append("order_word=" + StringUtil.getDefaultValue(dataInfoLog.getOrder_word()));
-		builder.append("&");
-		builder.append("order_value=" + StringUtil.getDefaultValue(dataInfoLog.getOrder_value()));
-		return builder.toString();
+		buffer.append("&");
+		buffer.append("start_date=" + StringUtil.getDefaultValue(dataInfoLog.getStart_date()));
+		buffer.append("&");
+		buffer.append("end_date=" + StringUtil.getDefaultValue(dataInfoLog.getEnd_date()));
+		buffer.append("&");
+		buffer.append("order_word=" + StringUtil.getDefaultValue(dataInfoLog.getOrder_word()));
+		buffer.append("&");
+		buffer.append("order_value=" + StringUtil.getDefaultValue(dataInfoLog.getOrder_value()));
+		return buffer.toString();
 	}
 }

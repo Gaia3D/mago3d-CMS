@@ -137,20 +137,20 @@ public class MainController {
 	}
 	
 	private String getSearchParameters(Issue issue) {
-		StringBuilder builder = new StringBuilder(100);
-		builder.append("&");
-		builder.append("search_word=" + StringUtil.getDefaultValue(issue.getSearch_word()));
-		builder.append("&");
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("&");
+		buffer.append("search_word=" + StringUtil.getDefaultValue(issue.getSearch_word()));
+		buffer.append("&");
 		try {
-			builder.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(issue.getSearch_value()), "UTF-8"));
+			buffer.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(issue.getSearch_value()), "UTF-8"));
 		} catch(Exception e) {
 			e.printStackTrace();
-			builder.append("search_value=");
+			buffer.append("search_value=");
 		}
-		builder.append("&");
-		builder.append("start_date=" + StringUtil.getDefaultValue(issue.getStart_date()));
-		builder.append("&");
-		builder.append("end_date=" + StringUtil.getDefaultValue(issue.getEnd_date()));
-		return builder.toString();
+		buffer.append("&");
+		buffer.append("start_date=" + StringUtil.getDefaultValue(issue.getStart_date()));
+		buffer.append("&");
+		buffer.append("end_date=" + StringUtil.getDefaultValue(issue.getEnd_date()));
+		return buffer.toString();
 	}
 }

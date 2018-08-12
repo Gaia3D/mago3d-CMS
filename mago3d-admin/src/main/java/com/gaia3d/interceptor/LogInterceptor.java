@@ -161,18 +161,18 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     private String getMultipartRequestParameters(HttpServletRequest request) {
     	MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
     	Map<String, MultipartFile> multipleMap = multipartRequest.getFileMap();
-    	StringBuilder builder = new StringBuilder(32);
+    	StringBuffer buffer = new StringBuffer();
     	
     	if(!multipleMap.isEmpty()) {
 	    	for(MultipartFile multipartFile : multipleMap.values()) {
-	    		builder.append("&");
-				builder.append("file_name=" + multipartFile.getOriginalFilename());
-				builder.append("&");
-				builder.append("file_size=" + multipartFile.getSize());
+	    		buffer.append("&");
+				buffer.append("file_name=" + multipartFile.getOriginalFilename());
+				buffer.append("&");
+				buffer.append("file_size=" + multipartFile.getSize());
 	    	}
     	}
     	
-		String requestParameters = builder.toString();
+		String requestParameters = buffer.toString();
 		
 		return requestParameters;
 	}

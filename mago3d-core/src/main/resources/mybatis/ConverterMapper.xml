@@ -137,6 +137,17 @@
 		WHERE X.upload_log_id = Y.upload_log_id
 	</select>
 	
+	<!-- converter job 정보 -->
+	<select id="getConverterJobByJobId" parameterType="long" resultType="converterJob">
+		/* getConverterJobByJobId */
+		SELECT * FROM converter_job WHERE converter_job_id = #{converter_job_id}
+	</select>
+	
+	<select id="getAllListConverterLog" parameterType="long" resultType="converterLog">
+		/* getAllListConverterLog */
+		SELECT * FROM converter_log WHERE converter_job_id = #{converter_job_id}
+	</select>
+	
 	<!-- converter job 등록 -->
 	<insert id="insertConverterJob" parameterType="converterJob">
 		/* insertConverterJob */
@@ -162,4 +173,22 @@
 			#{converter_log_id}, #{converter_job_id}, #{upload_log_id}, #{user_id}, #{error_code}
 		)
 	</insert>
+	
+	<!-- converter job -->	
+	<update id="updateConverterJob" parameterType="converterJob">
+		/* updateConverterJob */
+		UPDATE converter_job
+		SET 
+			<if test="title != null and title != ''">
+			title = #{title},
+			</if>
+			<if test="status != null and status != ''">
+			status = #{status},
+			</if>
+			<if test="error_code != null and error_code != ''">
+			error_code = #{error_code},
+			</if>
+			update_date = now()
+		WHERE converter_job_id = #{converter_job_id}
+	</update>
 </mapper>

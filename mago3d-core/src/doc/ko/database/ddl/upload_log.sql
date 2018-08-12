@@ -35,6 +35,7 @@ create table converter_job(
 	title							varchar(256)						not null,
 	status							char(1)								default '0',
 	error_code						varchar(4000),
+	update_date						timestamp with time zone,
 	insert_date						timestamp with time zone			default now(),
 	constraint converter_job_pk primary key (converter_job_id)	
 );
@@ -44,6 +45,7 @@ comment on column converter_job.converter_job_id is '고유번호';
 comment on column converter_job.user_id is '사용자 아이디';
 comment on column converter_job.status is '0: 준비, 1: 성공, 2: 실패';
 comment on column converter_job.error_code is '에러 코드';
+comment on column converter_job.update_date is '수정일';
 comment on column converter_job.insert_date is '등록일';
 
 

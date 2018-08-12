@@ -20,14 +20,14 @@ public class Sezong {
 		
 		File[] fileList = attributeDirFile.listFiles(new ThreeDSFilter());
 		
-		StringBuilder builder = new StringBuilder();
-		builder.append("{");
-		builder.append("\"attributes\": {");
-		builder.append(		"\"isPhysical\": false,");
-		builder.append(		"\"nodeType\": \" root \",");
-		builder.append(		"\"projectType\": \"sejong\"");
-		builder.append("},");
-		builder.append("\"children\": [");
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("{");
+		buffer.append("\"attributes\": {");
+		buffer.append(		"\"isPhysical\": false,");
+		buffer.append(		"\"nodeType\": \" root \",");
+		buffer.append(		"\"projectType\": \"sejong\"");
+		buffer.append("},");
+		buffer.append("\"children\": [");
 
 		int i=1; 
 		int count = fileList.length;
@@ -35,40 +35,40 @@ public class Sezong {
 			String fileName = file.getName();
 			String[] fileNameValues = fileName.split("\\.");
 			
-			builder.append("{");
-			builder.append("\"attributes\": {");
-			builder.append(		"\"isPhysical\": true,");
-			builder.append(		"\"nodeType\": \"sejong\"");
-			builder.append("},");
-			builder.append("\"children\": [],");
-			builder.append("\"data_key\": \"" + fileNameValues[0] + "\",");
-			builder.append("\"data_name\": \"" + fileNameValues[0] + "\",");
-			builder.append("\"latitude\": 36.5010938719156,");
-			builder.append("\"longitude\": 127.26557490316421,");
-			builder.append("\"height\": 0,");
-			builder.append("\"heading\": 0,");
-			builder.append("\"pitch\": 0,");
-			builder.append("\"roll\": 0");
+			buffer.append("{");
+			buffer.append("\"attributes\": {");
+			buffer.append(		"\"isPhysical\": true,");
+			buffer.append(		"\"nodeType\": \"sejong\"");
+			buffer.append("},");
+			buffer.append("\"children\": [],");
+			buffer.append("\"data_key\": \"" + fileNameValues[0] + "\",");
+			buffer.append("\"data_name\": \"" + fileNameValues[0] + "\",");
+			buffer.append("\"latitude\": 36.5010938719156,");
+			buffer.append("\"longitude\": 127.26557490316421,");
+			buffer.append("\"height\": 0,");
+			buffer.append("\"heading\": 0,");
+			buffer.append("\"pitch\": 0,");
+			buffer.append("\"roll\": 0");
 			if(i == count) {
 				System.out.println("i =" + i + ", count  = " + count);
-				builder.append("}");
+				buffer.append("}");
 			} else {
-				builder.append("},");
+				buffer.append("},");
 			}
 			i++;
 		}
 		
-		builder.append("],");
-		builder.append("\"parent\": 0,");
-		builder.append("\"depth\": 1,");
-		builder.append("\"view_order\": 2,  ");
-		builder.append("\"data_key\": \"sejong\",");
-		builder.append("\"data_name\": \"sejong\"");
-		builder.append("}");
+		buffer.append("],");
+		buffer.append("\"parent\": 0,");
+		buffer.append("\"depth\": 1,");
+		buffer.append("\"view_order\": 2,  ");
+		buffer.append("\"data_key\": \"sejong\",");
+		buffer.append("\"data_name\": \"sejong\"");
+		buffer.append("}");
 		
 		File jsonFile = new File("D:\\sejong.json");
 		FileWriter fileWriter = new FileWriter(jsonFile);
-		fileWriter.write(builder.toString());
+		fileWriter.write(buffer.toString());
 		fileWriter.flush();
 		fileWriter.close();
 		

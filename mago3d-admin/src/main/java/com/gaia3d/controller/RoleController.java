@@ -464,16 +464,16 @@ public class RoleController {
 	 * @return
 	 */
 	private String getSearchParameters(Role role) {
-		StringBuilder builder = new StringBuilder(100);
-		builder.append("&");
-		builder.append("role_type=" + StringUtil.getDefaultValue(role.getRole_type()));
-		builder.append("&");
-		builder.append("use_yn=" + StringUtil.getDefaultValue(role.getUse_yn()));
-		builder.append("&");
-		builder.append("order_word=" + StringUtil.getDefaultValue(role.getOrder_word()));
-		builder.append("&");
-		builder.append("order_value=" + StringUtil.getDefaultValue(role.getOrder_value()));
-		return builder.toString();
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("&");
+		buffer.append("role_type=" + StringUtil.getDefaultValue(role.getRole_type()));
+		buffer.append("&");
+		buffer.append("use_yn=" + StringUtil.getDefaultValue(role.getUse_yn()));
+		buffer.append("&");
+		buffer.append("order_word=" + StringUtil.getDefaultValue(role.getOrder_word()));
+		buffer.append("&");
+		buffer.append("order_value=" + StringUtil.getDefaultValue(role.getOrder_value()));
+		return buffer.toString();
 	}
 	
 	/**
@@ -482,17 +482,17 @@ public class RoleController {
 	 * @return
 	 */
 	private String getListParameters(HttpServletRequest request) {
-		StringBuilder builder = new StringBuilder(100);
+		StringBuffer buffer = new StringBuffer();
 		String pageNo = request.getParameter("pageNo");
-		builder.append("pageNo=" + pageNo);
-		builder.append("&");
-		builder.append("role_type=" + StringUtil.getDefaultValue(request.getParameter("role_type")));
-		builder.append("&");
-		builder.append("use_yn=" + StringUtil.getDefaultValue(request.getParameter("use_yn")));
-		builder.append("&");
-		builder.append("order_word=" + StringUtil.getDefaultValue(request.getParameter("order_word")));
-		builder.append("&");
-		builder.append("order_value=" + StringUtil.getDefaultValue(request.getParameter("order_value")));
-		return builder.toString();
+		buffer.append("pageNo=" + pageNo);
+		buffer.append("&");
+		buffer.append("role_type=" + StringUtil.getDefaultValue(request.getParameter("role_type")));
+		buffer.append("&");
+		buffer.append("use_yn=" + StringUtil.getDefaultValue(request.getParameter("use_yn")));
+		buffer.append("&");
+		buffer.append("order_word=" + StringUtil.getDefaultValue(request.getParameter("order_word")));
+		buffer.append("&");
+		buffer.append("order_value=" + StringUtil.getDefaultValue(request.getParameter("order_value")));
+		return buffer.toString();
 	}
 }

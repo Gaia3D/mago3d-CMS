@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -72,7 +71,7 @@ public class ConverterController {
 			
 			Long jobId = converterService.insertConverterJob(check_ids, converterJob);
 			
-			StringBuilder buffer = new StringBuilder()
+			StringBuffer buffer = new StringBuffer()
 					.append("host=" + propertiesConfig.getServerIp())
 					.append("&")
 					.append("port=" + propertiesConfig.getServerPort())
@@ -174,27 +173,27 @@ public class ConverterController {
 	 * @return
 	 */
 	private String getSearchParameters(ConverterJob converterJob) {
-		StringBuilder builder = new StringBuilder(100);
-		builder.append("&");
-		builder.append("search_word=" + StringUtil.getDefaultValue(converterJob.getSearch_word()));
-		builder.append("&");
-		builder.append("search_option=" + StringUtil.getDefaultValue(converterJob.getSearch_option()));
-		builder.append("&");
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("&");
+		buffer.append("search_word=" + StringUtil.getDefaultValue(converterJob.getSearch_word()));
+		buffer.append("&");
+		buffer.append("search_option=" + StringUtil.getDefaultValue(converterJob.getSearch_option()));
+		buffer.append("&");
 		try {
-			builder.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(converterJob.getSearch_value()), "UTF-8"));
+			buffer.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(converterJob.getSearch_value()), "UTF-8"));
 		} catch(Exception e) {
 			e.printStackTrace();
-			builder.append("search_value=");
+			buffer.append("search_value=");
 		}
-		builder.append("&");
-		builder.append("start_date=" + StringUtil.getDefaultValue(converterJob.getStart_date()));
-		builder.append("&");
-		builder.append("end_date=" + StringUtil.getDefaultValue(converterJob.getEnd_date()));
-		builder.append("&");
-		builder.append("order_word=" + StringUtil.getDefaultValue(converterJob.getOrder_word()));
-		builder.append("&");
-		builder.append("order_value=" + StringUtil.getDefaultValue(converterJob.getOrder_value()));
-		return builder.toString();
+		buffer.append("&");
+		buffer.append("start_date=" + StringUtil.getDefaultValue(converterJob.getStart_date()));
+		buffer.append("&");
+		buffer.append("end_date=" + StringUtil.getDefaultValue(converterJob.getEnd_date()));
+		buffer.append("&");
+		buffer.append("order_word=" + StringUtil.getDefaultValue(converterJob.getOrder_word()));
+		buffer.append("&");
+		buffer.append("order_value=" + StringUtil.getDefaultValue(converterJob.getOrder_value()));
+		return buffer.toString();
 	}
 	
 	/**
@@ -203,26 +202,26 @@ public class ConverterController {
 	 * @return
 	 */
 	private String getSearchParameters(ConverterLog converterLog) {
-		StringBuilder builder = new StringBuilder(100);
-		builder.append("&");
-		builder.append("search_word=" + StringUtil.getDefaultValue(converterLog.getSearch_word()));
-		builder.append("&");
-		builder.append("search_option=" + StringUtil.getDefaultValue(converterLog.getSearch_option()));
-		builder.append("&");
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("&");
+		buffer.append("search_word=" + StringUtil.getDefaultValue(converterLog.getSearch_word()));
+		buffer.append("&");
+		buffer.append("search_option=" + StringUtil.getDefaultValue(converterLog.getSearch_option()));
+		buffer.append("&");
 		try {
-			builder.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(converterLog.getSearch_value()), "UTF-8"));
+			buffer.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(converterLog.getSearch_value()), "UTF-8"));
 		} catch(Exception e) {
 			e.printStackTrace();
-			builder.append("search_value=");
+			buffer.append("search_value=");
 		}
-		builder.append("&");
-		builder.append("start_date=" + StringUtil.getDefaultValue(converterLog.getStart_date()));
-		builder.append("&");
-		builder.append("end_date=" + StringUtil.getDefaultValue(converterLog.getEnd_date()));
-		builder.append("&");
-		builder.append("order_word=" + StringUtil.getDefaultValue(converterLog.getOrder_word()));
-		builder.append("&");
-		builder.append("order_value=" + StringUtil.getDefaultValue(converterLog.getOrder_value()));
-		return builder.toString();
+		buffer.append("&");
+		buffer.append("start_date=" + StringUtil.getDefaultValue(converterLog.getStart_date()));
+		buffer.append("&");
+		buffer.append("end_date=" + StringUtil.getDefaultValue(converterLog.getEnd_date()));
+		buffer.append("&");
+		buffer.append("order_word=" + StringUtil.getDefaultValue(converterLog.getOrder_word()));
+		buffer.append("&");
+		buffer.append("order_value=" + StringUtil.getDefaultValue(converterLog.getOrder_value()));
+		return buffer.toString();
 	}
 }

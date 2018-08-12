@@ -241,7 +241,7 @@ public class CacheConfig {
 		
 		if(dataInfoList == null || dataInfoList.isEmpty()) return null;
 		
-		StringBuilder builder = new StringBuilder(256);
+		StringBuffer buffer = new StringBuffer();
 		
 		int dataInfoCount = dataInfoList.size();
 		int preDepth = 0;
@@ -252,45 +252,45 @@ public class CacheConfig {
 			// 자식들 정보
 			if(preDepth < dataInfo.getDepth()) {
 				// 시작
-				builder.append("{");
+				buffer.append("{");
 				// location 정보 및 attributes
-				builder = getLocationAndAttributes(builder, dataInfo);
+				buffer = getLocationAndAttributes(buffer, dataInfo);
 				// 자식 노드
-				builder.append("\"children\"").append(":").append("[");
+				buffer.append("\"children\"").append(":").append("[");
 				brackets++;
 			} else if(preDepth == dataInfo.getDepth()) {
 				// 형제 노드, 닫는 처리
-				builder.append("]");
-				builder.append("}");
+				buffer.append("]");
+				buffer.append("}");
 				
-				builder.append(",");
-				builder.append("{");
+				buffer.append(",");
+				buffer.append("{");
 				// location 정보 및 attributes
-				builder = getLocationAndAttributes(builder, dataInfo);
+				buffer = getLocationAndAttributes(buffer, dataInfo);
 				// 자식 노드
-				builder.append("\"children\"").append(":").append("[");
+				buffer.append("\"children\"").append(":").append("[");
 			} else {
 				// 종료, 닫는처리
 				int closeCount = preDepth - dataInfo.getDepth();
 				for(int j=0; j<=closeCount; j++) {
-					builder.append("]");
-					builder.append("}");
+					buffer.append("]");
+					buffer.append("}");
 					brackets--;
 				}
 				
-				builder.append(",");
-				builder.append("{");
+				buffer.append(",");
+				buffer.append("{");
 				// location 정보 및 attributes
-				builder = getLocationAndAttributes(builder, dataInfo);
+				buffer = getLocationAndAttributes(buffer, dataInfo);
 				// 자식 노드
-				builder.append("\"children\"").append(":").append("[");
+				buffer.append("\"children\"").append(":").append("[");
 			}
 				
 			if(dataInfoCount == (i+1)) {
 				// 맨 마지막의 경우 괄호를 닫음
 				for(int k=0; k<brackets; k++) {
-					builder.append("]");
-					builder.append("}");
+					buffer.append("]");
+					buffer.append("}");
 				}
 			}
 			
@@ -298,26 +298,26 @@ public class CacheConfig {
 		}
 		
 		log.info(" ************** {} json file **********", project.getProject_name());
-		log.info(" ========= {} ", builder.toString());
-		return builder.toString();
+		log.info(" ========= {} ", buffer.toString());
+		return buffer.toString();
 	}
 	
-	private StringBuilder getLocationAndAttributes(StringBuilder builder, DataInfo dataInfo) {
-		builder.append("\"data_id\"").append(":").append("\"").append(dataInfo.getData_id()).append("\"").append(",");
-		builder.append("\"data_key\"").append(":").append("\"").append(dataInfo.getData_key()).append("\"").append(",");
-		builder.append("\"data_name\"").append(":").append("\"").append(dataInfo.getData_name()).append("\"").append(",");
-		builder.append("\"parent\"").append(":").append(dataInfo.getParent()).append(",");
-		builder.append("\"depth\"").append(":").append(dataInfo.getDepth()).append(",");
-		builder.append("\"view_order\"").append(":").append(dataInfo.getView_order()).append(",");
-		if(dataInfo.getMapping_type() != null) builder.append("\"mapping_type\"").append(":").append("\"").append(dataInfo.getMapping_type()).append("\"").append(",");
-		if(dataInfo.getLatitude() != null) builder.append("\"latitude\"").append(":").append(dataInfo.getLatitude()).append(",");
-		if(dataInfo.getLongitude() != null) builder.append("\"longitude\"").append(":").append(dataInfo.getLongitude()).append(",");
-		if(dataInfo.getHeight() != null) builder.append("\"height\"").append(":").append(dataInfo.getHeight()).append(",");
-		if(dataInfo.getHeading() != null) builder.append("\"heading\"").append(":").append(dataInfo.getHeading()).append(",");
-		if(dataInfo.getPitch() != null) builder.append("\"pitch\"").append(":").append(dataInfo.getPitch()).append(",");
-		if(dataInfo.getRoll() != null) builder.append("\"roll\"").append(":").append(dataInfo.getRoll()).append(",");
-		builder.append("\"attributes\"").append(":").append(dataInfo.getAttributes()).append(",");
+	private StringBuffer getLocationAndAttributes(StringBuffer buffer, DataInfo dataInfo) {
+		buffer.append("\"data_id\"").append(":").append("\"").append(dataInfo.getData_id()).append("\"").append(",");
+		buffer.append("\"data_key\"").append(":").append("\"").append(dataInfo.getData_key()).append("\"").append(",");
+		buffer.append("\"data_name\"").append(":").append("\"").append(dataInfo.getData_name()).append("\"").append(",");
+		buffer.append("\"parent\"").append(":").append(dataInfo.getParent()).append(",");
+		buffer.append("\"depth\"").append(":").append(dataInfo.getDepth()).append(",");
+		buffer.append("\"view_order\"").append(":").append(dataInfo.getView_order()).append(",");
+		if(dataInfo.getMapping_type() != null) buffer.append("\"mapping_type\"").append(":").append("\"").append(dataInfo.getMapping_type()).append("\"").append(",");
+		if(dataInfo.getLatitude() != null) buffer.append("\"latitude\"").append(":").append(dataInfo.getLatitude()).append(",");
+		if(dataInfo.getLongitude() != null) buffer.append("\"longitude\"").append(":").append(dataInfo.getLongitude()).append(",");
+		if(dataInfo.getHeight() != null) buffer.append("\"height\"").append(":").append(dataInfo.getHeight()).append(",");
+		if(dataInfo.getHeading() != null) buffer.append("\"heading\"").append(":").append(dataInfo.getHeading()).append(",");
+		if(dataInfo.getPitch() != null) buffer.append("\"pitch\"").append(":").append(dataInfo.getPitch()).append(",");
+		if(dataInfo.getRoll() != null) buffer.append("\"roll\"").append(":").append(dataInfo.getRoll()).append(",");
+		buffer.append("\"attributes\"").append(":").append(dataInfo.getAttributes()).append(",");
 		
-		return builder;
+		return buffer;
 	}
 }

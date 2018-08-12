@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.gaia3d.domain.ConverterJob;
 import com.gaia3d.domain.ConverterLog;
+import com.gaia3d.domain.UploadLog;
 
 /**
  * f4d converter manager
@@ -42,6 +43,20 @@ public interface ConverterMapper {
 	 * @return
 	 */
 	public List<ConverterLog> getListConverterLog(ConverterLog converterLog);
+	
+	/**
+	 * converter job 정보
+	 * @param jobId
+	 * @return
+	 */
+	public ConverterJob getConverterJobByJobId(Long jobId);
+	
+	/**
+	 * converter job file list
+	 * @param jobId
+	 * @return
+	 */
+	public List<ConverterLog> getAllListConverterLog(Long jobId);
 
 	/**
 	 * insert converter job
@@ -56,4 +71,10 @@ public interface ConverterMapper {
 	 * @return
 	 */
 	public Long insertConverterLog(ConverterLog converterLog);
+	
+	/**
+	 * update
+	 * @param converterJob
+	 */
+	public void updateConverterJob(ConverterJob converterJob);
 }

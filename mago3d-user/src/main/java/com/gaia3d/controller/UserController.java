@@ -458,35 +458,35 @@ public class UserController {
 	 */
 	private String getSearchParameters(UserInfo userInfo) {
 		// TODO 아래 메소드랑 통합
-		StringBuilder builder = new StringBuilder(100);
-		builder.append("&");
-		builder.append("search_word=" + StringUtil.getDefaultValue(userInfo.getSearch_word()));
-		builder.append("&");
-		builder.append("search_option=" + StringUtil.getDefaultValue(userInfo.getSearch_option()));
-		builder.append("&");
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("&");
+		buffer.append("search_word=" + StringUtil.getDefaultValue(userInfo.getSearch_word()));
+		buffer.append("&");
+		buffer.append("search_option=" + StringUtil.getDefaultValue(userInfo.getSearch_option()));
+		buffer.append("&");
 		try {
-			builder.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(userInfo.getSearch_value()), "UTF-8"));
+			buffer.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(userInfo.getSearch_value()), "UTF-8"));
 		} catch(Exception e) {
 			e.printStackTrace();
-			builder.append("search_value=");
+			buffer.append("search_value=");
 		}
-		builder.append("&");
-		builder.append("user_group_id=" + userInfo.getUser_group_id());
-		builder.append("&");
-		builder.append("status=" + StringUtil.getDefaultValue(userInfo.getStatus()));
-		builder.append("&");
-		builder.append("user_insert_type=" + StringUtil.getDefaultValue(userInfo.getUser_insert_type()));
-		builder.append("&");
-		builder.append("start_date=" + StringUtil.getDefaultValue(userInfo.getStart_date()));
-		builder.append("&");
-		builder.append("end_date=" + StringUtil.getDefaultValue(userInfo.getEnd_date()));
-		builder.append("&");
-		builder.append("order_word=" + StringUtil.getDefaultValue(userInfo.getOrder_word()));
-		builder.append("&");
-		builder.append("order_value=" + StringUtil.getDefaultValue(userInfo.getOrder_value()));
-		builder.append("&");
-		builder.append("list_count=" + userInfo.getList_counter());
-		return builder.toString();
+		buffer.append("&");
+		buffer.append("user_group_id=" + userInfo.getUser_group_id());
+		buffer.append("&");
+		buffer.append("status=" + StringUtil.getDefaultValue(userInfo.getStatus()));
+		buffer.append("&");
+		buffer.append("user_insert_type=" + StringUtil.getDefaultValue(userInfo.getUser_insert_type()));
+		buffer.append("&");
+		buffer.append("start_date=" + StringUtil.getDefaultValue(userInfo.getStart_date()));
+		buffer.append("&");
+		buffer.append("end_date=" + StringUtil.getDefaultValue(userInfo.getEnd_date()));
+		buffer.append("&");
+		buffer.append("order_word=" + StringUtil.getDefaultValue(userInfo.getOrder_word()));
+		buffer.append("&");
+		buffer.append("order_value=" + StringUtil.getDefaultValue(userInfo.getOrder_value()));
+		buffer.append("&");
+		buffer.append("list_count=" + userInfo.getList_counter());
+		return buffer.toString();
 	}
 	
 	/**
@@ -495,36 +495,36 @@ public class UserController {
 	 * @return
 	 */
 	private String getListParameters(HttpServletRequest request) {
-		StringBuilder builder = new StringBuilder(100);
+		StringBuffer buffer = new StringBuffer();
 		String pageNo = request.getParameter("pageNo");
-		builder.append("pageNo=" + pageNo);
-		builder.append("&");
-		builder.append("search_word=" + StringUtil.getDefaultValue(request.getParameter("search_word")));
-		builder.append("&");
-		builder.append("search_option=" + StringUtil.getDefaultValue(request.getParameter("search_option")));
-		builder.append("&");
+		buffer.append("pageNo=" + pageNo);
+		buffer.append("&");
+		buffer.append("search_word=" + StringUtil.getDefaultValue(request.getParameter("search_word")));
+		buffer.append("&");
+		buffer.append("search_option=" + StringUtil.getDefaultValue(request.getParameter("search_option")));
+		buffer.append("&");
 		try {
-			builder.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(request.getParameter("search_value")), "UTF-8"));
+			buffer.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(request.getParameter("search_value")), "UTF-8"));
 		} catch(Exception e) {
 			e.printStackTrace();
-			builder.append("search_value=");
+			buffer.append("search_value=");
 		}
-		builder.append("&");
-		builder.append("user_group_id=" + request.getParameter("user_group_id"));
-		builder.append("&");
-		builder.append("status=" + StringUtil.getDefaultValue(request.getParameter("status")));
-		builder.append("&");
-		builder.append("user_insert_type=" + StringUtil.getDefaultValue(request.getParameter("user_insert_type")));
-		builder.append("&");
-		builder.append("start_date=" + StringUtil.getDefaultValue(request.getParameter("start_date")));
-		builder.append("&");
-		builder.append("end_date=" + StringUtil.getDefaultValue(request.getParameter("end_date")));
-		builder.append("&");
-		builder.append("order_word=" + StringUtil.getDefaultValue(request.getParameter("order_word")));
-		builder.append("&");
-		builder.append("order_value=" + StringUtil.getDefaultValue(request.getParameter("order_value")));
-		builder.append("&");
-		builder.append("list_count=" + StringUtil.getDefaultValue(request.getParameter("list_count")));
-		return builder.toString();
+		buffer.append("&");
+		buffer.append("user_group_id=" + request.getParameter("user_group_id"));
+		buffer.append("&");
+		buffer.append("status=" + StringUtil.getDefaultValue(request.getParameter("status")));
+		buffer.append("&");
+		buffer.append("user_insert_type=" + StringUtil.getDefaultValue(request.getParameter("user_insert_type")));
+		buffer.append("&");
+		buffer.append("start_date=" + StringUtil.getDefaultValue(request.getParameter("start_date")));
+		buffer.append("&");
+		buffer.append("end_date=" + StringUtil.getDefaultValue(request.getParameter("end_date")));
+		buffer.append("&");
+		buffer.append("order_word=" + StringUtil.getDefaultValue(request.getParameter("order_word")));
+		buffer.append("&");
+		buffer.append("order_value=" + StringUtil.getDefaultValue(request.getParameter("order_value")));
+		buffer.append("&");
+		buffer.append("list_count=" + StringUtil.getDefaultValue(request.getParameter("list_count")));
+		return buffer.toString();
 	}
 }

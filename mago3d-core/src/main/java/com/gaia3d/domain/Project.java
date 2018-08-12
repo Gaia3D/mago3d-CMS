@@ -30,6 +30,22 @@ public class Project {
 	private Integer data_count;
 	// up : 위로, down : 아래로
 	private String update_type;
+	
+	// 페이지 처리를 위한 시작
+	private Long offset;
+	// 페이지별 표시할 건수
+	private Long limit;
+		
+	/********** 검색 조건 ************/
+	private String search_word;
+	// 검색 옵션. 0 : 일치, 1 : 포함
+	private String search_option;
+	private String search_value;
+	private String start_date;
+	private String end_date;
+	private String order_word;
+	private String order_value;
+	private Long list_counter = 10l;
 
 	/****** validator ********/
 	private String method_mode;

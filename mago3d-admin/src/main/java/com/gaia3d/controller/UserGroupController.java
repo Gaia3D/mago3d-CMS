@@ -382,28 +382,28 @@ public class UserGroupController {
 	 */
 	private String getUserGroupTree(List<UserGroup> userGroupList) {
 		
-		StringBuilder builder = new StringBuilder(256);
+		StringBuffer buffer = new StringBuffer();
 		
 		int userGroupCount = userGroupList.size();
 		UserGroup userGroup = userGroupList.get(0);
 		
-		builder.append("[");
-		builder.append("{");
+		buffer.append("[");
+		buffer.append("{");
 		
-		builder.append("\"user_group_id\"").append(":").append("\"" + userGroup.getUser_group_id() + "\"").append(",");
-		builder.append("\"group_key\"").append(":").append("\"" + userGroup.getGroup_key() + "\"").append(",");
-		builder.append("\"group_name\"").append(":").append("\"" + userGroup.getGroup_name() + "\"").append(",");
-		builder.append("\"open\"").append(":").append("\"" + userGroup.getOpen() + "\"").append(",");
-		builder.append("\"node_type\"").append(":").append("\"" + userGroup.getNode_type() + "\"").append(",");
-		builder.append("\"ancestor\"").append(":").append("\"" + userGroup.getAncestor() + "\"").append(",");
-		builder.append("\"parent\"").append(":").append("\"" + userGroup.getParent() + "\"").append(",");
-		builder.append("\"parent_name\"").append(":").append("\"" + userGroup.getParent_name() + "\"").append(",");
-		builder.append("\"view_order\"").append(":").append("\"" + userGroup.getView_order() + "\"").append(",");
-		builder.append("\"depth\"").append(":").append("\"" + userGroup.getDepth() + "\"").append(",");
-		builder.append("\"default_yn\"").append(":").append("\"" + userGroup.getDefault_yn() + "\"").append(",");
-		builder.append("\"use_yn\"").append(":").append("\"" + userGroup.getUse_yn() + "\"").append(",");
-		builder.append("\"child_yn\"").append(":").append("\"" + userGroup.getUse_yn() + "\"").append(",");
-		builder.append("\"description\"").append(":").append("\"" + userGroup.getDescription() + "\"");
+		buffer.append("\"user_group_id\"").append(":").append("\"" + userGroup.getUser_group_id() + "\"").append(",");
+		buffer.append("\"group_key\"").append(":").append("\"" + userGroup.getGroup_key() + "\"").append(",");
+		buffer.append("\"group_name\"").append(":").append("\"" + userGroup.getGroup_name() + "\"").append(",");
+		buffer.append("\"open\"").append(":").append("\"" + userGroup.getOpen() + "\"").append(",");
+		buffer.append("\"node_type\"").append(":").append("\"" + userGroup.getNode_type() + "\"").append(",");
+		buffer.append("\"ancestor\"").append(":").append("\"" + userGroup.getAncestor() + "\"").append(",");
+		buffer.append("\"parent\"").append(":").append("\"" + userGroup.getParent() + "\"").append(",");
+		buffer.append("\"parent_name\"").append(":").append("\"" + userGroup.getParent_name() + "\"").append(",");
+		buffer.append("\"view_order\"").append(":").append("\"" + userGroup.getView_order() + "\"").append(",");
+		buffer.append("\"depth\"").append(":").append("\"" + userGroup.getDepth() + "\"").append(",");
+		buffer.append("\"default_yn\"").append(":").append("\"" + userGroup.getDefault_yn() + "\"").append(",");
+		buffer.append("\"use_yn\"").append(":").append("\"" + userGroup.getUse_yn() + "\"").append(",");
+		buffer.append("\"child_yn\"").append(":").append("\"" + userGroup.getUse_yn() + "\"").append(",");
+		buffer.append("\"description\"").append(":").append("\"" + userGroup.getDescription() + "\"");
 		
 		if(userGroupCount > 1) {
 			long preParent = userGroup.getParent();
@@ -414,51 +414,51 @@ public class UserGroupController {
 				
 				if(preParent == userGroup.getParent()) {
 					// 부모가 같은 경우
-					builder.append("}");
-					builder.append(",");
+					buffer.append("}");
+					buffer.append(",");
 				} else {
 					if(preDepth > userGroup.getDepth()) {
 						// 닫힐때
 						int closeCount = preDepth - userGroup.getDepth();
 						for(int j=0; j<closeCount; j++) {
-							builder.append("}");
-							builder.append("]");
+							buffer.append("}");
+							buffer.append("]");
 							bigParentheses--;
 						}
-						builder.append("}");
-						builder.append(",");
+						buffer.append("}");
+						buffer.append(",");
 					} else {
 						// 열릴때
-						builder.append(",");
-						builder.append("\"subTree\"").append(":").append("[");
+						buffer.append(",");
+						buffer.append("\"subTree\"").append(":").append("[");
 						bigParentheses++;
 					}
 				} 
 				
-				builder.append("{");
-				builder.append("\"user_group_id\"").append(":").append("\"" + userGroup.getUser_group_id() + "\"").append(",");
-				builder.append("\"group_key\"").append(":").append("\"" + userGroup.getGroup_key() + "\"").append(",");
-				builder.append("\"group_name\"").append(":").append("\"" + userGroup.getGroup_name() + "\"").append(",");
-				builder.append("\"open\"").append(":").append("\"" + userGroup.getOpen() + "\"").append(",");
-				builder.append("\"node_type\"").append(":").append("\"" + userGroup.getNode_type() + "\"").append(",");
-				builder.append("\"ancestor\"").append(":").append("\"" + userGroup.getAncestor() + "\"").append(",");
-				builder.append("\"parent\"").append(":").append("\"" + userGroup.getParent() + "\"").append(",");
-				builder.append("\"parent_name\"").append(":").append("\"" + StringUtil.getDefaultValue(userGroup.getParent_name()) + "\"").append(",");
-				builder.append("\"view_order\"").append(":").append("\"" + userGroup.getView_order() + "\"").append(",");
-				builder.append("\"depth\"").append(":").append("\"" + userGroup.getDepth() + "\"").append(",");
-				builder.append("\"default_yn\"").append(":").append("\"" + userGroup.getDefault_yn() + "\"").append(",");
-				builder.append("\"use_yn\"").append(":").append("\"" + userGroup.getUse_yn() + "\"").append(",");			
-				builder.append("\"child_yn\"").append(":").append("\"" + userGroup.getUse_yn() + "\"").append(",");			
-				builder.append("\"description\"").append(":").append("\"" + userGroup.getDescription() + "\"");
+				buffer.append("{");
+				buffer.append("\"user_group_id\"").append(":").append("\"" + userGroup.getUser_group_id() + "\"").append(",");
+				buffer.append("\"group_key\"").append(":").append("\"" + userGroup.getGroup_key() + "\"").append(",");
+				buffer.append("\"group_name\"").append(":").append("\"" + userGroup.getGroup_name() + "\"").append(",");
+				buffer.append("\"open\"").append(":").append("\"" + userGroup.getOpen() + "\"").append(",");
+				buffer.append("\"node_type\"").append(":").append("\"" + userGroup.getNode_type() + "\"").append(",");
+				buffer.append("\"ancestor\"").append(":").append("\"" + userGroup.getAncestor() + "\"").append(",");
+				buffer.append("\"parent\"").append(":").append("\"" + userGroup.getParent() + "\"").append(",");
+				buffer.append("\"parent_name\"").append(":").append("\"" + StringUtil.getDefaultValue(userGroup.getParent_name()) + "\"").append(",");
+				buffer.append("\"view_order\"").append(":").append("\"" + userGroup.getView_order() + "\"").append(",");
+				buffer.append("\"depth\"").append(":").append("\"" + userGroup.getDepth() + "\"").append(",");
+				buffer.append("\"default_yn\"").append(":").append("\"" + userGroup.getDefault_yn() + "\"").append(",");
+				buffer.append("\"use_yn\"").append(":").append("\"" + userGroup.getUse_yn() + "\"").append(",");			
+				buffer.append("\"child_yn\"").append(":").append("\"" + userGroup.getUse_yn() + "\"").append(",");			
+				buffer.append("\"description\"").append(":").append("\"" + userGroup.getDescription() + "\"");
 				
 				if(i == (userGroupCount-1)) {
 					// 맨 마지막의 경우 괄호를 닫음
 					if(bigParentheses == 0) {
-						builder.append("}");
+						buffer.append("}");
 					} else {
 						for(int k=0; k<bigParentheses; k++) {
-							builder.append("}");
-							builder.append("]");
+							buffer.append("}");
+							buffer.append("]");
 						}
 					}
 				}
@@ -468,9 +468,9 @@ public class UserGroupController {
 			}
 		}
 		
-		builder.append("}");
-		builder.append("]");
+		buffer.append("}");
+		buffer.append("]");
 		
-		return builder.toString();
+		return buffer.toString();
 	}
 }

@@ -27,7 +27,7 @@
 	</div>
 	
 	<div class="menu-description-header">
-		<div style="padding-left: 13px; padding-top: 20px; height: 30px;">RENDERING</div>
+		<div style="padding-left: 13px; padding-top: 20px; height: 30px;">3D Visualization</div>
 		<div style="margin-left: 13px; width:195px; border-bottom: 1px solid #e3e7ea;"></div>
 	</div>
 	
@@ -48,11 +48,24 @@
 			<div style="width: 70px;">&nbsp;</div>
 		</div>
 		<div class="sub-menu-detail">
-			<div style="height: 25px;">
+			<div style="min-width:150px; height: 25px;">
 				<span style="font-size:15px; color: Mediumslateblue;">
 					<i class="far fa-stop-circle"></i>
 				</span>
-				<a href="/project/list-project.do" style="text-decoration: none; font-size: 14px; color: #2c2d2d;">프로젝트 목록</a>
+				<a href="/project/list-project.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">프로젝트 목록 보기</a>
+			</div>
+		</div>
+	</div>
+	<div class="sub-menu-area" >
+		<div class="sub-menu-icons">
+			<div style="width: 70px;">&nbsp;</div>
+		</div>
+		<div class="sub-menu-detail">
+			<div style="min-width:150px; height: 25px;">
+				<span style="font-size:15px; color: Mediumslateblue;">
+					<i class="far fa-stop-circle"></i>
+				</span>
+				<a href="/project/map-project.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">프로젝트 Map 보기</a>
 			</div>
 		</div>
 	</div>
@@ -65,19 +78,7 @@
 				<span style="font-size:15px; color: Mediumslateblue;">
 					<i class="far fa-stop-circle"></i>
 				</span>
-				<a href="/project/input-project.do" style="text-decoration: none; font-size: 14px; color: #2c2d2d;">프로젝트 등록</a>
-			</div>
-		</div>
-	</div>
-	<div style="clear: both;">
-		<div class="left-navigation-icons">
-			<div style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
-				<i class="fas fa-database" title="데이터"></i>
-			</div>
-		</div>
-		<div class="left-navigation-detail">
-			<div style="padding-top: 20px;">
-				<a href="/data/list-data.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">데이터</a>
+				<a href="/project/input-project.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">프로젝트 등록</a>
 			</div>
 		</div>
 	</div>
@@ -86,107 +87,159 @@
 			<div style="width: 70px;">&nbsp;</div>
 		</div>
 		<div class="sub-menu-detail">
-			<div style="height: 25px;">
+			<div style="min-width:150px; height: 25px;">
 				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="far fa-stop-circle"></i>
+					<i class="fas fa-database"></i>
 				</span>
-				<a href="/data/list-data.do" style="text-decoration: none; font-size: 14px; color: #2c2d2d;">데이터 목록</a>
-			</div>
-		</div>
-	</div>
-	<div class="sub-menu-area" >
-		<div class="sub-menu-icons">
-			<div style="width: 70px;">&nbsp;</div>
-		</div>
-		<div class="sub-menu-detail">
-			<div style="height: 25px;">
-				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="far fa-stop-circle"></i>
-				</span>
-				<a href="/data/list-data-info-log.do" style="text-decoration: none; font-size: 14px; color: #2c2d2d;">변경요청 목록</a>
+				<a href="/data/list-data.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">데이터 목록 보기</a>
 			</div>
 		</div>
 	</div>
 	
 	<div class="menu-description-header">
-		<div style="padding-left: 13px; padding-top: 20px; height: 30px;">CONVERTER</div>
+		<div style="padding-left: 13px; padding-top: 20px; height: 30px;">Data PreProcessing </div>
 		<div style="margin-left: 13px; width:195px; border-bottom: 1px solid #e3e7ea;"></div>
 	</div>
+	
 	
 	<div style="clear: both;">
 		<div class="left-navigation-icons">
 			<div style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
-				<i class="fas fa-cloud-upload-alt" title="파일 업로딩"></i>
+				<i class="fas fa-cloud-upload-alt" title="Converter"></i>
 			</div>
 		</div>
 		<div class="left-navigation-detail">
 			<div style="padding-top: 20px;">
+				<a href="/upload/input-upload.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">Converter</a>
+			</div>
+		</div>
+	</div>
+	
+	<div class="sub-menu-area" >
+		<div class="sub-menu-icons">
+			<div style="width: 70px;">&nbsp;</div>
+		</div>
+		<div class="sub-menu-detail">
+			<div style="min-width:150px; height: 25px;">
+				<span style="font-size:15px; color: Mediumslateblue;">
+					<i class="fas fa-arrow-alt-circle-down"></i>
+				</span>
 				<a href="/upload/input-upload.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">파일 업로딩</a>
 			</div>
 		</div>
 	</div>
-	<div style="clear: both;">
-		<div class="left-navigation-icons">
-			<div style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
-				<i class="fas fa-list-ul" title="업로딩한 파일 목록"></i>
-			</div>
+	<div class="sub-menu-area" >
+		<div class="sub-menu-icons">
+			<div style="width: 70px;">&nbsp;</div>
 		</div>
-		<div class="left-navigation-detail">
-			<div style="padding-top: 20px;">
-				<a href="/upload/list-upload-log.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">업로딩한 파일 목록</a>
-			</div>
-		</div>
-	</div>
-	<div style="clear: both;">
-		<div class="left-navigation-icons">
-			<div style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
-				<i class="fas fa-hourglass-start" title="Converter 결과"></i>
-			</div>
-		</div>
-		<div class="left-navigation-detail">
-			<div style="padding-top: 20px;">
-				<a href="/converter/list-converter-job.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">Converter 결과</a>
+		<div class="sub-menu-detail">
+			<div style="height: 25px;">
+				<span style="font-size:15px; color: Mediumslateblue;">
+					<i class="fas fa-arrow-alt-circle-down"></i>
+				</span>
+				<a href="/converter/input-converterjob.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">F4D 변환 Job 등록 </a>
 			</div>
 		</div>
 	</div>
-	<div style="clear: both;">
-		<div class="left-navigation-icons">
-			<div style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
-				<i class="fas fa-map-pin" title="F4D 파일 목록"></i>
-			</div>
+	<div class="sub-menu-area" >
+		<div class="sub-menu-icons">
+			<div style="width: 70px;">&nbsp;</div>
 		</div>
-		<div class="left-navigation-detail">
-			<div style="padding-top: 20px;">
-				<a href="/converter/list-converter-log.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">F4D 파일 목록</a>
+		<div class="sub-menu-detail">
+			<div style="height: 25px;">
+				<span style="font-size:15px; color: Mediumslateblue;">
+					<i class="fas fa-arrow-alt-circle-down"></i>
+				</span>
+				<a href="/converter/list-converterjob.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">Job 실행 결과</a>
 			</div>
 		</div>
 	</div>
 	
 	<div class="menu-description-header">
-		<div style="padding-left: 13px; padding-top: 20px; height: 30px;">SETTINGS</div>
+		<div style="padding-left: 13px; padding-top: 20px; height: 30px;">Project Sharing</div>
+		<div style="margin-left: 13px; width:195px; border-bottom: 1px solid #e3e7ea;"></div>
+	</div>
+	
+	
+	<div style="clear: both;">
+		<div class="left-navigation-icons">
+			<div style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
+				<i class="fas fa-user-friends" title="Participation Project"></i>
+			</div>
+		</div>
+		<div class="left-navigation-detail">
+			<div style="padding-top: 20px;">
+				<a href="/share/list-project.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">Participation Project</a>
+			</div>
+		</div>
+	</div>
+	
+	<div class="sub-menu-area" >
+		<div class="sub-menu-icons">
+			<div style="width: 70px;">&nbsp;</div>
+		</div>
+		<div class="sub-menu-detail">
+			<div style="min-width:150px; height: 25px;">
+				<span style="font-size:15px; color: Mediumslateblue;">
+					<i class="far fa-handshake"></i>
+				</span>
+				<a href="/share/list-project.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">프로젝트 목록 보기</a>
+			</div>
+		</div>
+	</div>
+	<div class="sub-menu-area" >
+		<div class="sub-menu-icons">
+			<div style="width: 70px;">&nbsp;</div>
+		</div>
+		<div class="sub-menu-detail">
+			<div style="height: 25px;">
+				<span style="font-size:15px; color: Mediumslateblue;">
+					<i class="far fa-handshake"></i>
+				</span>
+				<a href="/share/map-project.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">프로젝트 Map 보기 </a>
+			</div>
+		</div>
+	</div>
+	
+	<div class="menu-description-header">
+		<div style="padding-left: 13px; padding-top: 20px; height: 30px;">Settings</div>
 		<div style="margin-left: 13px; width:195px; border-bottom: 1px solid #e3e7ea;"></div>
 	</div>
 	<div style="clear: both;">
 		<div class="left-navigation-icons">
 			<div style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
-				<i class="fas fa-cog" title="기본 설정"></i>
+				<i class="fas fa-cog" title="Cloud Settings"></i>
 			</div>
 		</div>
 		<div class="left-navigation-detail">
 			<div style="padding-top: 20px;">
-				<a href="#" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">기본 설정</a>
+				<a href="/setting/detail-membership.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">Cloud Settings</a>
 			</div>
 		</div>
 	</div>
-	<div style="clear: both;">
-		<div class="left-navigation-icons">
-			<div style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
-				<i class="fab fa-expeditedssl" title="mago3D 설정"></i>
+	<div class="sub-menu-area" >
+		<div class="sub-menu-icons">
+			<div style="width: 70px;">&nbsp;</div>
+		</div>
+		<div class="sub-menu-detail">
+			<div style="min-width:150px; height: 25px;">
+				<span style="font-size:15px; color: Mediumslateblue;">
+					<i class="fas fa-user-secret"></i>
+				</span>
+				<a href="/setting/detail-membership.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">MemberShip 설정</a>
 			</div>
 		</div>
-		<div class="left-navigation-detail">
-			<div style="padding-top: 20px;">
-				<a href="#" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">mago3D 설정</a>
+	</div>
+	<div class="sub-menu-area" >
+		<div class="sub-menu-icons">
+			<div style="width: 70px;">&nbsp;</div>
+		</div>
+		<div class="sub-menu-detail">
+			<div style="height: 25px;">
+				<span style="font-size:15px; color: Mediumslateblue;">
+					<i class="fab fa-expeditedssl"></i>
+				</span>
+				<a href="/setting/detail-mago3d.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">mago3D 설정 </a>
 			</div>
 		</div>
 	</div>

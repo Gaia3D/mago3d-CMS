@@ -3,15 +3,75 @@
 
 <mapper namespace="com.gaia3d.persistence.ProjectMapper">
 
+	<!-- 프로젝트 총건수 -->
+	<select id="getProjectTotalCount" parameterType="project" resultType="long">
+		/* getProjectTotalCount */
+		SELECT COUNT(project_id) 
+		FROM project
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="user_id != null and user_id != ''">
+			user_id = #{user_id}
+			</if>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+			AND ${search_word} = #{search_value}
+			</if>
+			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+			AND ${search_word} LIKE '%' || #{search_value} || '%'
+			</if>
+			<if test="start_date != null and start_date != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="end_date != null and end_date != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+		</trim>
+	</select>
+
 	<!-- project 목록 -->
 	<select id="getListProject" parameterType="project" resultType="project">
 		/* getListProject */
-		SELECT * 
-		FROM project
-		<if test="use_yn != null and use_yn != ''">
-	    WHERE use_yn = #{use_yn}
-	    </if>
-		ORDER BY view_order
+		SELECT A.* 
+		FROM(
+			SELECT * 
+			FROM project
+			<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="user_id != null and user_id != ''">
+				user_id = #{user_id}
+				</if>
+				<if test="use_yn != null and use_yn != ''">
+			    AND use_yn = #{use_yn}
+			    </if>
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+				AND ${search_word} = #{search_value}
+				</if>
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+				AND ${search_word} LIKE '%' || #{search_value} || '%'
+				</if>
+				<if test="start_date != null and start_date != ''">
+				<![CDATA[
+				AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="end_date != null and end_date != ''">
+				<![CDATA[
+				AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+			</trim>
+			<choose>
+			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
+			ORDER BY ${order_word} ${order_value}
+			</when>
+			<otherwise>
+			ORDER BY insert_date DESC, view_order
+			</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) A
 	</select>
 	
 	<!-- project -->

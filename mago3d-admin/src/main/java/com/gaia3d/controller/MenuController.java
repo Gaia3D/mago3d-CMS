@@ -295,33 +295,33 @@ public class MenuController {
 	}
 	
 	private String getMenuTree(List<Menu> menuList) {
-		StringBuilder builder = new StringBuilder(256);
+		StringBuffer buffer = new StringBuffer();
 		
 		int menuCount = menuList.size();
 		Menu menu = menuList.get(0);
 		
-		builder.append("[");
-		builder.append("{");
+		buffer.append("[");
+		buffer.append("{");
 		
-		builder.append("\"menu_id\"").append(":").append("\"" + menu.getMenu_id() + "\"").append(",");
-		builder.append("\"menu_type\"").append(":").append("\"" + menu.getMenu_type() + "\"").append(",");
-		builder.append("\"name\"").append(":").append("\"" + menu.getName() + "\"").append(",");
-		builder.append("\"name_en\"").append(":").append("\"" + menu.getName_en() + "\"").append(",");
-		builder.append("\"open\"").append(":").append("\"" + menu.getOpen() + "\"").append(",");
-		builder.append("\"node_type\"").append(":").append("\"" + menu.getNode_type() + "\"").append(",");
-		builder.append("\"parent\"").append(":").append("\"" + menu.getParent() + "\"").append(",");
-		builder.append("\"parent_name\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getParent_name()) + "\"").append(",");
-		builder.append("\"view_order\"").append(":").append("\"" + menu.getView_order() + "\"").append(",");
-		builder.append("\"depth\"").append(":").append("\"" + menu.getDepth() + "\"").append(",");
-		builder.append("\"default_yn\"").append(":").append("\"" + menu.getDefault_yn() + "\"").append(",");
-		builder.append("\"use_yn\"").append(":").append("\"" + menu.getUse_yn() + "\"").append(",");
-		builder.append("\"display_yn\"").append(":").append("\"" + menu.getDisplay_yn() + "\"").append(",");
-		builder.append("\"url\"").append(":").append("\"" + menu.getUrl() + "\"").append(",");
-		builder.append("\"url_alias\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getUrl_alias()) + "\"").append(",");
-		builder.append("\"image\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getImage()) + "\"").append(",");
-		builder.append("\"image_alt\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getImage_alt()) + "\"").append(",");
-		builder.append("\"css_class\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getCss_class()) + "\"").append(",");
-		builder.append("\"description\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getDescription()) + "\"");
+		buffer.append("\"menu_id\"").append(":").append("\"" + menu.getMenu_id() + "\"").append(",");
+		buffer.append("\"menu_type\"").append(":").append("\"" + menu.getMenu_type() + "\"").append(",");
+		buffer.append("\"name\"").append(":").append("\"" + menu.getName() + "\"").append(",");
+		buffer.append("\"name_en\"").append(":").append("\"" + menu.getName_en() + "\"").append(",");
+		buffer.append("\"open\"").append(":").append("\"" + menu.getOpen() + "\"").append(",");
+		buffer.append("\"node_type\"").append(":").append("\"" + menu.getNode_type() + "\"").append(",");
+		buffer.append("\"parent\"").append(":").append("\"" + menu.getParent() + "\"").append(",");
+		buffer.append("\"parent_name\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getParent_name()) + "\"").append(",");
+		buffer.append("\"view_order\"").append(":").append("\"" + menu.getView_order() + "\"").append(",");
+		buffer.append("\"depth\"").append(":").append("\"" + menu.getDepth() + "\"").append(",");
+		buffer.append("\"default_yn\"").append(":").append("\"" + menu.getDefault_yn() + "\"").append(",");
+		buffer.append("\"use_yn\"").append(":").append("\"" + menu.getUse_yn() + "\"").append(",");
+		buffer.append("\"display_yn\"").append(":").append("\"" + menu.getDisplay_yn() + "\"").append(",");
+		buffer.append("\"url\"").append(":").append("\"" + menu.getUrl() + "\"").append(",");
+		buffer.append("\"url_alias\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getUrl_alias()) + "\"").append(",");
+		buffer.append("\"image\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getImage()) + "\"").append(",");
+		buffer.append("\"image_alt\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getImage_alt()) + "\"").append(",");
+		buffer.append("\"css_class\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getCss_class()) + "\"").append(",");
+		buffer.append("\"description\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getDescription()) + "\"");
 	
 		if(menuCount > 1) {
 			long preParent = menu.getParent();
@@ -332,56 +332,56 @@ public class MenuController {
 				
 				if(preParent == menu.getParent()) {
 					// 부모가 같은 경우
-					builder.append("}");
-					builder.append(",");
+					buffer.append("}");
+					buffer.append(",");
 				} else {
 					if(preDepth > menu.getDepth()) {
 						// 닫힐때
 						int closeCount = preDepth - menu.getDepth();
 						for(int j=0; j<closeCount; j++) {
-							builder.append("}");
-							builder.append("]");
+							buffer.append("}");
+							buffer.append("]");
 							bigParentheses--;
 						}
-						builder.append("}");
-						builder.append(",");
+						buffer.append("}");
+						buffer.append(",");
 					} else {
 						// 열릴때
-						builder.append(",");
-						builder.append("\"subTree\"").append(":").append("[");
+						buffer.append(",");
+						buffer.append("\"subTree\"").append(":").append("[");
 						bigParentheses++;
 					}
 				} 
 				
-				builder.append("{");
-				builder.append("\"menu_id\"").append(":").append("\"" + menu.getMenu_id() + "\"").append(",");
-				builder.append("\"menu_type\"").append(":").append("\"" + menu.getMenu_type() + "\"").append(",");
-				builder.append("\"name\"").append(":").append("\"" + menu.getName() + "\"").append(",");
-				builder.append("\"name_en\"").append(":").append("\"" + menu.getName_en() + "\"").append(",");
-				builder.append("\"open\"").append(":").append("\"" + menu.getOpen() + "\"").append(",");
-				builder.append("\"node_type\"").append(":").append("\"" + menu.getNode_type() + "\"").append(",");
-				builder.append("\"parent\"").append(":").append("\"" + menu.getParent() + "\"").append(",");
-				builder.append("\"parent_name\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getParent_name()) + "\"").append(",");
-				builder.append("\"view_order\"").append(":").append("\"" + menu.getView_order() + "\"").append(",");
-				builder.append("\"depth\"").append(":").append("\"" + menu.getDepth() + "\"").append(",");
-				builder.append("\"default_yn\"").append(":").append("\"" + menu.getDefault_yn() + "\"").append(",");
-				builder.append("\"use_yn\"").append(":").append("\"" + menu.getUse_yn() + "\"").append(",");
-				builder.append("\"display_yn\"").append(":").append("\"" + menu.getDisplay_yn() + "\"").append(",");
-				builder.append("\"url\"").append(":").append("\"" + menu.getUrl() + "\"").append(",");
-				builder.append("\"url_alias\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getUrl_alias()) + "\"").append(",");
-				builder.append("\"image\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getImage()) + "\"").append(",");
-				builder.append("\"image_alt\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getImage_alt()) + "\"").append(",");
-				builder.append("\"css_class\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getCss_class()) + "\"").append(",");
-				builder.append("\"description\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getDescription()) + "\"");
+				buffer.append("{");
+				buffer.append("\"menu_id\"").append(":").append("\"" + menu.getMenu_id() + "\"").append(",");
+				buffer.append("\"menu_type\"").append(":").append("\"" + menu.getMenu_type() + "\"").append(",");
+				buffer.append("\"name\"").append(":").append("\"" + menu.getName() + "\"").append(",");
+				buffer.append("\"name_en\"").append(":").append("\"" + menu.getName_en() + "\"").append(",");
+				buffer.append("\"open\"").append(":").append("\"" + menu.getOpen() + "\"").append(",");
+				buffer.append("\"node_type\"").append(":").append("\"" + menu.getNode_type() + "\"").append(",");
+				buffer.append("\"parent\"").append(":").append("\"" + menu.getParent() + "\"").append(",");
+				buffer.append("\"parent_name\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getParent_name()) + "\"").append(",");
+				buffer.append("\"view_order\"").append(":").append("\"" + menu.getView_order() + "\"").append(",");
+				buffer.append("\"depth\"").append(":").append("\"" + menu.getDepth() + "\"").append(",");
+				buffer.append("\"default_yn\"").append(":").append("\"" + menu.getDefault_yn() + "\"").append(",");
+				buffer.append("\"use_yn\"").append(":").append("\"" + menu.getUse_yn() + "\"").append(",");
+				buffer.append("\"display_yn\"").append(":").append("\"" + menu.getDisplay_yn() + "\"").append(",");
+				buffer.append("\"url\"").append(":").append("\"" + menu.getUrl() + "\"").append(",");
+				buffer.append("\"url_alias\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getUrl_alias()) + "\"").append(",");
+				buffer.append("\"image\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getImage()) + "\"").append(",");
+				buffer.append("\"image_alt\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getImage_alt()) + "\"").append(",");
+				buffer.append("\"css_class\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getCss_class()) + "\"").append(",");
+				buffer.append("\"description\"").append(":").append("\"" + StringUtil.getDefaultValue(menu.getDescription()) + "\"");
 				
 				if(i == (menuCount-1)) {
 					// 맨 마지막의 경우 괄호를 닫음
 					if(bigParentheses == 0) {
-						builder.append("}");
+						buffer.append("}");
 					} else {
 						for(int k=0; k<bigParentheses; k++) {
-							builder.append("}");
-							builder.append("]");
+							buffer.append("}");
+							buffer.append("]");
 						}
 					}
 				}
@@ -391,10 +391,10 @@ public class MenuController {
 			}
 		}
 		
-		builder.append("}");
-		builder.append("]");
+		buffer.append("}");
+		buffer.append("]");
 		
-		return builder.toString();
+		return buffer.toString();
 	}
 	
 	private List<Menu> getAllListMenu() {

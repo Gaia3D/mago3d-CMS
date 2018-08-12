@@ -51,7 +51,7 @@ public class HttpClientHelper {
 //		try {
 //        	httpclient = HttpClients.custom().setDefaultRequestConfig(defaultConfig).build();
 //        	
-//        	StringBuilder requestUrl = new StringBuilder(externalService.getUrl_scheme() + "://" + externalService.getUrl_host() 
+//        	StringBuffer requestUrl = new StringBuffer(externalService.getUrl_scheme() + "://" + externalService.getUrl_host() 
 //        			+ ":" + externalService.getUrl_port() + "/" + externalService.getUrl_path());
 //        	
 //			if(externalService.getExtra_key1() != null && !"".equals(externalService.getExtra_key1())) {
@@ -187,7 +187,7 @@ public class HttpClientHelper {
 //	                .setDefaultRequestConfig(defaultConfig)
 //	                .build();
 //       
-//	        StringBuilder requestUrl = new StringBuilder(externalService.getUrl_scheme() + "://" + externalService.getUrl_host() 
+//	        StringBuffer requestUrl = new StringBuffer(externalService.getUrl_scheme() + "://" + externalService.getUrl_host() 
 //        			+ ":" + externalService.getUrl_port() + "/" + externalService.getUrl_path());
 //        	
 //			requestUrl.append("?service_code=").append(StringUtils.defaultString(apiLog.getService_code()));
@@ -372,7 +372,7 @@ public class HttpClientHelper {
 //	                .setDefaultRequestConfig(defaultConfig)
 //	                .build();
 //       
-//	        StringBuilder requestUrl = new StringBuilder(externalService.getUrl_scheme() + "://" + externalService.getUrl_host() 
+//	        StringBuffer requestUrl = new StringBuffer(externalService.getUrl_scheme() + "://" + externalService.getUrl_host() 
 //        			+ ":" + externalService.getUrl_port() + "/" + externalService.getUrl_path());
 //        	
 //			requestUrl.append("?auth_data=").append(authData);
