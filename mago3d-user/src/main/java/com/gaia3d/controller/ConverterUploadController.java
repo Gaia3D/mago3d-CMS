@@ -23,9 +23,11 @@ import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.Pagination;
-import com.gaia3d.domain.UploadLog;
+import com.gaia3d.domain.Project;
+import com.gaia3d.domain.ConverterUploadLog;
 import com.gaia3d.domain.UserSession;
-import com.gaia3d.service.UploadService;
+import com.gaia3d.service.ConverterUploadService;
+import com.gaia3d.service.ProjectService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.FileUtil;
 import com.gaia3d.util.StringUtil;
@@ -39,13 +41,15 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Controller
-@RequestMapping("/job/")
-public class JobController {
+@RequestMapping("/converter/")
+public class ConverterUploadController {
 	
 	@Autowired
 	private PropertiesConfig propertiesConfig;
 	@Autowired
-	private UploadService uploadService;
+	private ConverterUploadService converterUploadService;
+	@Autowired
+	private ProjectService projectService;
 	
 	/**
 	 * data upload 화면
@@ -54,7 +58,7 @@ public class JobController {
 	 */
 	@GetMapping(value = "input-upload.do")
 	public String inputUpload(HttpServletRequest request, Model model) {
-		return "/upload/input-upload";
+		return "/converter/input-upload";
 	}
 	
 	/**
@@ -88,7 +92,7 @@ public class JobController {
 	        // TODO 예외가 발생하면 중단을 해야 하나? 아님 넘어 가야 하나?
 	        // 2개 중에 하나만 성공하고... 하나가 실패할 경우
 	        
-	        uploadService.insertFiles(fileList);       
+	        converterUploadService.insertFiles(fileList);       
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -105,34 +109,44 @@ public class JobController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "input-job.do")
-	public String listUploadLog(HttpServletRequest request, UploadLog uploadLog, @RequestParam(defaultValue="1") String pageNo, Model model) {
+	@RequestMapping(value = "input-converterjob.do")
+	public String inputConverterJob(HttpServletRequest request, ConverterUploadLog converterUploadLog, @RequestParam(defaultValue="1") String pageNo, Model model) {
+		log.info("@@ converterUploadLog = {}", converterUploadLog);
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-		uploadLog.setUser_id(userSession.getUser_id());
 		
-		log.info("@@ uploadLog = {}", uploadLog);
-		if(StringUtil.isNotEmpty(uploadLog.getStart_date())) {
-			uploadLog.setStart_date(uploadLog.getStart_date().substring(0, 8) + DateUtil.START_TIME);
-		}
-		if(StringUtil.isNotEmpty(uploadLog.getEnd_date())) {
-			uploadLog.setEnd_date(uploadLog.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
-		}
-		long totalCount = uploadService.getListUploadLogTotalCount(uploadLog);
+		Project project = new Project();
+		project.setUser_id(userSession.getUser_id());
+		project.setUse_yn(Project.IN_USE);
+		List<Project> projectList = projectService.getListProject(project);
+		log.info("@@ projectList size = {}, {}", projectList.size(), projectList.isEmpty());
 		
-		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(uploadLog), totalCount, Long.valueOf(pageNo).longValue());
+		converterUploadLog.setUser_id(userSession.getUser_id());
+		
+		if(StringUtil.isNotEmpty(converterUploadLog.getStart_date())) {
+			converterUploadLog.setStart_date(converterUploadLog.getStart_date().substring(0, 8) + DateUtil.START_TIME);
+		}
+		if(StringUtil.isNotEmpty(converterUploadLog.getEnd_date())) {
+			converterUploadLog.setEnd_date(converterUploadLog.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
+		}
+		long totalCount = converterUploadService.getListConverterUploadLogTotalCount(converterUploadLog);
+		
+		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(converterUploadLog), totalCount, Long.valueOf(pageNo).longValue());
 		log.info("@@ pagination = {}", pagination);
 		
-		uploadLog.setOffset(pagination.getOffset());
-		uploadLog.setLimit(pagination.getPageRows());
-		List<UploadLog> uploadLogList = new ArrayList<>();
+		converterUploadLog.setOffset(pagination.getOffset());
+		converterUploadLog.setLimit(pagination.getPageRows());
+		List<ConverterUploadLog> converterUploadLogList = new ArrayList<>();
 		if(totalCount > 0l) {
-			uploadLogList = uploadService.getListUploadLog(uploadLog);
+			converterUploadLogList = converterUploadService.getListConverterUploadLog(converterUploadLog);
 		}
 		
 		model.addAttribute(pagination);
-		model.addAttribute("uploadLogList", uploadLogList);
-		return "/job/input-job";
+		model.addAttribute("projectList", projectList);
+		model.addAttribute("projectListSize", projectList.size());
+		model.addAttribute("converterUploadLogList", converterUploadLogList);
+		
+		return "/converter/input-converterjob";
 	}
 	
 	/**
@@ -140,27 +154,27 @@ public class JobController {
 	 * @param dataInfo
 	 * @return
 	 */
-	private String getSearchParameters(UploadLog uploadLog) {
+	private String getSearchParameters(ConverterUploadLog converterUploadLog) {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("&");
-		buffer.append("search_word=" + StringUtil.getDefaultValue(uploadLog.getSearch_word()));
+		buffer.append("search_word=" + StringUtil.getDefaultValue(converterUploadLog.getSearch_word()));
 		buffer.append("&");
-		buffer.append("search_option=" + StringUtil.getDefaultValue(uploadLog.getSearch_option()));
+		buffer.append("search_option=" + StringUtil.getDefaultValue(converterUploadLog.getSearch_option()));
 		buffer.append("&");
 		try {
-			buffer.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(uploadLog.getSearch_value()), "UTF-8"));
+			buffer.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(converterUploadLog.getSearch_value()), "UTF-8"));
 		} catch(Exception e) {
 			e.printStackTrace();
 			buffer.append("search_value=");
 		}
 		buffer.append("&");
-		buffer.append("start_date=" + StringUtil.getDefaultValue(uploadLog.getStart_date()));
+		buffer.append("start_date=" + StringUtil.getDefaultValue(converterUploadLog.getStart_date()));
 		buffer.append("&");
-		buffer.append("end_date=" + StringUtil.getDefaultValue(uploadLog.getEnd_date()));
+		buffer.append("end_date=" + StringUtil.getDefaultValue(converterUploadLog.getEnd_date()));
 		buffer.append("&");
-		buffer.append("order_word=" + StringUtil.getDefaultValue(uploadLog.getOrder_word()));
+		buffer.append("order_word=" + StringUtil.getDefaultValue(converterUploadLog.getOrder_word()));
 		buffer.append("&");
-		buffer.append("order_value=" + StringUtil.getDefaultValue(uploadLog.getOrder_value()));
+		buffer.append("order_value=" + StringUtil.getDefaultValue(converterUploadLog.getOrder_value()));
 		return buffer.toString();
 	}
 }

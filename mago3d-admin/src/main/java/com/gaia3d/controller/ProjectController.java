@@ -90,19 +90,19 @@ public class ProjectController {
 	 */
 	@GetMapping(value = "ajax-project.do")
 	@ResponseBody
-	public Map<String, Object> ajaxProject(Long projectId) {
+	public Map<String, Object> ajaxProject(Project project) {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 						
-			log.info("@@ projectId = {} ", projectId);
-			if(projectId == null) {
+			log.info("@@ project = {} ", project);
+			if(project.getProject_id() == null) {
 				result = "input.invalid";
 				map.put("result", result);
 				return map;
 			}
 			
-			Project project = projectService.getProject(projectId);
+			project = projectService.getProject(project);
 			map.put("project", project);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -211,9 +211,9 @@ public class ProjectController {
 	 * @return
 	 */
 	@GetMapping(value = "modify-project.do")
-	public String modifyProject(Model model, Long project_id) {
+	public String modifyProject(Model model, Project project) {
 		
-		Project project = projectService.getProject(project_id);
+		project = projectService.getProject(project);
 		project.setOld_project_key(project.getProject_key());
 		
 		model.addAttribute("project", project);
@@ -267,12 +267,12 @@ public class ProjectController {
 	 */
 	@PostMapping(value = "ajax-delete-project.do")
 	@ResponseBody
-	public Map<String, Object> ajaxDeleteProject(HttpServletRequest request, Long project_id) {
-		log.info("@@@@@@@ project_id = {}", project_id);
+	public Map<String, Object> ajaxDeleteProject(HttpServletRequest request, Project project) {
+		log.info("@@@@@@@ project = {}", project);
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
-			if(project_id == null || project_id.longValue() <=0) {
+			if(project.getProject_id() == null || project.getProject_id().longValue() <=0) {
 				map.put("result", "project.project_id.empty");
 				return map;
 			}
@@ -289,7 +289,7 @@ public class ProjectController {
 				return map;
 			}
 	
-			projectService.deleteProject(project_id);
+			projectService.deleteProject(project);
 				
 			CacheParams cacheParams = new CacheParams();
 			cacheParams.setCacheName(CacheName.PROJECT);

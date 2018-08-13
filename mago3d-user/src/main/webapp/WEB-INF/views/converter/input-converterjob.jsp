@@ -33,15 +33,15 @@
 				<!-- Start content by page -->
 				<div class="page-content">
 					<div class="filters">
-		   				<form:form id="searchForm" modelAttribute="uploadLog" method="post" action="/upload/list-upload-log.do" onsubmit="return searchCheck();">
+		   				<form:form id="searchForm" modelAttribute="converterUploadLog" method="post" action="/converter/input-converterjob.do" onsubmit="return searchCheck();">
 						<div class="input-group row">
 							<div class="input-set">
 								<label for="search_word"><spring:message code='search.word'/></label>
-								<select id="search_word" name="search_word" class="select">
+								<select id="search_word" name="search_word" class="select" style="height: 30px;">
 									<option value=""><spring:message code='select'/></option>
 				          			<option value="file_name">파일 이름</option>
 								</select>
-								<select id="search_option" name="search_option" class="select">
+								<select id="search_option" name="search_option" class="select" style="height: 30px;">
 									<option value="0"><spring:message code='search.same'/></option>
 									<option value="1"><spring:message code='search.include'/></option>
 								</select>
@@ -55,17 +55,17 @@
 							</div>
 							<div class="input-set">
 								<label for="order_word"><spring:message code='search.order'/></label>
-								<select id="order_word" name="order_word" class="select">
+								<select id="order_word" name="order_word" class="select" style="height: 30px;">
 									<option value=""> <spring:message code='search.basic'/> </option>
 									<option value="file_name"> 파일 이름 </option>
 									<option value="insert_date"> <spring:message code='search.insert.date'/> </option>
 								</select>
-								<select id="order_value" name="order_value" class="select">
+								<select id="order_value" name="order_value" class="select" style="height: 30px;">
 			                		<option value=""> <spring:message code='search.basic'/> </option>
 				                	<option value="ASC"> <spring:message code='search.ascending'/> </option>
 									<option value="DESC"> <spring:message code='search.descending.order'/> </option>
 								</select>
-								<select id="list_counter" name="list_counter" class="select">
+								<select id="list_counter" name="list_counter" class="select" style="height: 30px;">
 			                		<option value="10"> <spring:message code='search.ten.count'/> </option>
 				                	<option value="50"> <spring:message code='search.fifty.count'/> </option>
 									<option value="100"> <spring:message code='search.hundred.count'/> </option>
@@ -110,43 +110,41 @@
 										<th scope="col" class="col-name">F4d 변환횟수</th>
 										<th scope="col" class="col-date"><spring:message code='insert.date'/></th>
 										<th scope="col" class="col-functions">변환</th>
-										<th scope="col" class="col-functions">수정 / 삭제</th>
+										<th scope="col" class="col-functions">삭제</th>
 									</tr>
 								</thead>
 								<tbody>
-		<c:if test="${empty uploadLogList }">
+<c:if test="${empty converterUploadLogList }">
 									<tr>
 										<td colspan="9" class="col-none">파일 업로딩 이력이 존재하지 않습니다.</td>
 									</tr>
-		</c:if>
-		<c:if test="${!empty uploadLogList }">
-		<c:forEach var="uploadLog" items="${uploadLogList}" varStatus="status">
+</c:if>
+<c:if test="${!empty converterUploadLogList }">
+	<c:forEach var="converterUploadLog" items="${converterUploadLogList}" varStatus="status">
 									<tr>
 										<td class="col-checkbox">
-											<input type="checkbox" id="upload_log_id_${uploadLog.upload_log_id}" name="upload_log_id" value="${uploadLog.upload_log_id}" />
+											<input type="checkbox" id="converter_upload_log_id_${converterUploadLog.converter_upload_log_id}" name="converter_upload_log_id" value="${converterUploadLog.converter_upload_log_id}" />
 										</td>
 										<td class="col-number">${pagination.rowNumber - status.index }</td>
-										<td class="col-name">${uploadLog.file_name }</td>
-										<td class="col-name">${uploadLog.file_path}</td>
-										<td class="col-name">${uploadLog.file_size}</td>
-										<td class="col-name">${uploadLog.converter_count}</td>
-										<td class="col-name">${uploadLog.viewInsertDate }</td>
+										<td class="col-name">${converterUploadLog.file_name }</td>
+										<td class="col-name">${converterUploadLog.file_path}</td>
+										<td class="col-name">${converterUploadLog.file_size}</td>
+										<td class="col-name">${converterUploadLog.converter_count}</td>
+										<td class="col-name">${converterUploadLog.viewInsertDate }</td>
 										<td class="col-functions">
 											<span class="button-group">
-												<a href="#" onclick="converterFile('${uploadLog.upload_log_id}'); return false;" class="button">F4D 변환</a>
+												<a href="#" onclick="converterFile('${converterUploadLog.converter_upload_log_id}'); return false;" class="button">F4D 변환</a>
 											</span>
 										</td>
 										<td class="col-functions">
 											<span class="button-group">
-												<a href="/data/modify-data.do?data_id=${uploadLog.upload_log_id }&amp;pageNo=${pagination.pageNo }${pagination.searchParameters}" 
-													class="image-button button-edit"><spring:message code='modified'/></a>
-												<a href="/data/delete-data.do?data_id=${uploadLog.upload_log_id }" onclick="return deleteWarning();" 
+												<a href="/converter/delete-upload.do?converter_upload_log_id=${converterUploadLog.converter_upload_log_id }" onclick="return deleteWarning();" 
 													class="image-button button-delete"><spring:message code='delete'/></a>
 											</span>
 										</td>
 									</tr>
-		</c:forEach>
-		</c:if>
+	</c:forEach>
+</c:if>
 								</tbody>
 						</table>
 						</form:form>
@@ -172,11 +170,33 @@
 			<col class="col-data" />
 			<tbody>
 				<tr>
+					<th class="col-sub-label x">프로젝트</th>
+					<td>
+						<div class="inner-data">
+							<select id="project_id" name="project_id" class="select" style="width: 350px; height: 30px;">
+								<option value=""> 선택 </option>
+<c:forEach var="project" items="${projectList}">
+								<option value="${project.project_id }">${project.project_name }</option>
+</c:forEach>							
+							</select>							
+						</div>
+					</td>
+				</tr>
+				<tr>
 					<th class="col-sub-label x">제목</th>
 					<td>
 						<div class="inner-data">
 							<input type="text" id="title" name="title" class="l" />
 						</div>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-sub-label x">F4D 변환 타입</th>
+					<td class="col-input">
+						<input type="radio" id="converter_type_default" name="converter_type" value="0" />
+						<label for="converter_type_default">기본</label>
+						<input type="radio" id="converter_type_big" name="converter_type" value="1" />
+						<label for="converter_type_big">Big Mesh One</label>
 					</td>
 				</tr>
 			</tbody>
@@ -195,12 +215,12 @@
 	
 	//전체 선택 
 	$("#chk_all").click(function() {
-		$(":checkbox[name=upload_log_id]").prop("checked", this.checked);
+		$(":checkbox[name=converter_upload_log_id]").prop("checked", this.checked);
 	});
 	
 	var dialogConverterJob = $( ".dialog_converter_job" ).dialog({
 		autoOpen: false,
-		height: 240,
+		height: 320,
 		width: 600,
 		modal: true,
 		resizable: false,
@@ -208,8 +228,8 @@
 	});
 	
 	// F4D Converter Button Click
-	function converterFile(upload_log_id) {
-		$("#check_ids").val(upload_log_id + ",");
+	function converterFile(converter_upload_log_id) {
+		$("#check_ids").val(converter_upload_log_id + ",");
 		
 		dialogConverterJob.dialog( "open" );
 	}
@@ -217,7 +237,7 @@
 	// All F4D Converter Button Click
 	function converterFiles() {
 		var checkedValue = "";
-		$("input:checkbox[name=upload_log_id]:checked").each(function(index){
+		$("input:checkbox[name=converter_upload_log_id]:checked").each(function(index){
 			checkedValue += $(this).val() + ",";
 		});
 		if(checkedValue === "") {
@@ -232,6 +252,15 @@
 	// F4D Converter 일괄 변환
 	var saveConverterJobFlag = true;
 	function saveConverterJob() {
+		var projectListSize = "${projectListSize}";
+		if(projectListSize === "0") {
+			alert("프로젝트 등록 후 이용 가능합니다.");
+			return false;	
+		}
+		if($("#project_id").val() == null || $("#project_id").val() == "") {
+			alert("프로젝트를 입력하여 주십시오. ");
+			return false;
+		}
 		if($("#title").val() == null || $("#title").val() == "") {
 			alert("제목을 입력하여 주십시오.");
 			return false;
@@ -254,7 +283,7 @@
 					
 					$("#check_ids").val("");
 					$("#title").val("");
-					$(":checkbox[name=upload_log_id]").prop("checked", false);
+					$(":checkbox[name=converter_upload_log_id]").prop("checked", false);
 					dialogConverterJob.dialog( "close" );
 					saveConverterJobFlag = true;
 				},

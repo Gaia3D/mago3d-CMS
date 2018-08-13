@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.Policy;
-import com.gaia3d.domain.UploadLog;
+import com.gaia3d.domain.ConverterUploadLog;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -209,9 +209,9 @@ public class FileUtil {
 	 * @param fileInfo
 	 * @return
 	 */
-	private static UploadLog userFileValidation(MultipartFile multipartFile, Policy policy) {
+	private static ConverterUploadLog userFileValidation(MultipartFile multipartFile, Policy policy) {
 		
-		UploadLog uploadLog = new UploadLog();
+		ConverterUploadLog uploadLog = new ConverterUploadLog();
 		// 1 파일 공백 체크
 		if(multipartFile == null || multipartFile.getSize() == 0l) {
 			log.info("@@ multipartFile is null");

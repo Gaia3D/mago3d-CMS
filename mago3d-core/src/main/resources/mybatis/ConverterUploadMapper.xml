@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.gaia3d.persistence.UploadMapper">
+<mapper namespace="com.gaia3d.persistence.ConverterUploadMapper">
 	<!-- 사용자가 업로드 완료한 파일 총 건수 -->
-	<select id="getListUploadLogTotalCount" parameterType="uploadLog" resultType="long">
-		/* getListUploadLogTotalCount */
-		SELECT COUNT(upload_log_id) 
-		FROM upload_log
+	<select id="getListConverterUploadLogTotalCount" parameterType="converterUploadLog" resultType="long">
+		/* getListConverterUploadLogTotalCount */
+		SELECT COUNT(converter_upload_log_id) 
+		FROM converter_upload_log
 		WHERE user_id = #{user_id}
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 			AND ${search_word} = #{search_value}
@@ -27,10 +27,10 @@
 	</select>
 	
 	<!-- 사용자가 업로드 완료한 파일 목록 -->
-	<select id="getListUploadLog" parameterType="uploadLog" resultType="uploadLog">
-		/* getListUploadLog */
+	<select id="getListConverterUploadLog" parameterType="converterUploadLog" resultType="converterUploadLog">
+		/* getListConverterUploadLog */
 		SELECT *
-		FROM upload_log A
+		FROM converter_upload_log A
 		WHERE A.user_id = #{user_id}
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 			AND A.${search_word} = #{search_value}
@@ -53,7 +53,7 @@
 		ORDER BY A.${order_word} ${order_value}
 		</when>
 		<otherwise>
-		ORDER BY A.insert_date DESC, A.upload_log_id DESC
+		ORDER BY A.insert_date DESC, A.converter_upload_log_id DESC
 		</otherwise>
 		</choose>
 		OFFSET #{offset} LIMIT #{limit}
@@ -62,21 +62,21 @@
 	<!-- 사용자 업로드 파일 정보 저장 -->
 	<insert id="insertFileInfo" parameterType="fileInfo" >
 		/* insertFileInfo */
-		<selectKey keyProperty="upload_log_id" resultType="long" order="BEFORE">
-    		SELECT NEXTVAL('upload_log_seq')
+		<selectKey keyProperty="converter_upload_log_id" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('converter_upload_log_seq')
   		</selectKey>
-		INSERT INTO upload_log(
-			upload_log_id, user_id, file_name, file_real_name, file_path, file_size, file_ext
+		INSERT INTO converter_upload_log(
+			converter_upload_log_id, user_id, file_name, file_real_name, file_path, file_size, file_ext
 		) values(
-			#{upload_log_id}, #{user_id}, #{file_name}, #{file_real_name}, #{file_path}, #{file_size}, #{file_ext}
+			#{converter_upload_log_id}, #{user_id}, #{file_name}, #{file_real_name}, #{file_path}, #{file_size}, #{file_ext}
 		)
 	</insert>
 	
 	<!-- f4d converter 변환 횟수 업데이트 -->
-	<insert id="updateConverterCount" parameterType="converterLog" >
+	<insert id="updateConverterCount" parameterType="converterUploadLog" >
 		/* updateConverterCount */
-		UPDATE upload_log
+		UPDATE converter_upload_log
 		SET converter_count = converter_count + 1
-		WHERE upload_log_id = #{upload_log_id} AND user_id = #{user_id}
+		WHERE converter_upload_log_id = #{converter_upload_log_id} AND user_id = #{user_id}
 	</insert>
 </mapper>

@@ -198,7 +198,7 @@
 		}
 		var info = "project_key=" + projectKey;
 		$.ajax({
-			url: "/data/ajax-project-key-duplication-check.do",
+			url: "/project/ajax-project-key-duplication-check.do",
 			type: "POST",
 			data: info,
 			cache: false,
@@ -234,7 +234,7 @@
 			insertProjectFlag = false;
 			var info = $("#project").serialize();
 			$.ajax({
-				url: "/data/ajax-insert-project.do",
+				url: "/project/ajax-insert-project.do",
 				type: "POST",
 				data: info,
 				cache: false,

@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.gaia3d.domain.ConverterLog;
+import com.gaia3d.domain.ConverterUploadLog;
 import com.gaia3d.domain.FileInfo;
-import com.gaia3d.domain.UploadLog;
 
 /**
  * 사용자
@@ -14,21 +14,21 @@ import com.gaia3d.domain.UploadLog;
  *
  */
 @Repository
-public interface UploadMapper {
+public interface ConverterUploadMapper {
 	
 	/**
 	 * 사용자가 업로드 완료한 파일 총 건수
-	 * @param uploadLog
+	 * @param converterUploadLog
 	 * @return
 	 */
-	public Long getListUploadLogTotalCount(UploadLog uploadLog);
+	public Long getListConverterUploadLogTotalCount(ConverterUploadLog converterUploadLog);
 	
 	/**
 	 * 사용자가 업로드 완료한 파일 목록
-	 * @param uploadLog
+	 * @param converterUploadLog
 	 * @return
 	 */
-	public List<UploadLog> getListUploadLog(UploadLog uploadLog);
+	public List<ConverterUploadLog> getListConverterUploadLog(ConverterUploadLog converterUploadLog);
 
 	/**
 	 * 사용자가 업로딩한 파일 목록을 저장

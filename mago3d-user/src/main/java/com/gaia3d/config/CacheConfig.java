@@ -176,7 +176,9 @@ public class CacheConfig {
 			}
 		} else {
 			// 관리자 페이지에서 data 정보가 갱신되었을때
-			Project project = projectService.getProject(projectId);
+			Project project = new Project();
+			project.setProject_id(projectId);
+			project = projectService.getProject(project);
 			DataInfo dataInfo = new DataInfo();
 			dataInfo.setProject_id(projectId);
 			List<DataInfo> dataInfoList = dataService.getListDataByProjectId(dataInfo);

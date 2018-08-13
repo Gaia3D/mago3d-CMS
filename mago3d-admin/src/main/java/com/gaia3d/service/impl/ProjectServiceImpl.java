@@ -48,12 +48,12 @@ public class ProjectServiceImpl implements ProjectService {
 	/**
 	 * Project 조회
 	 * 
-	 * @param project_id
+	 * @param project
 	 * @return
 	 */
 	@Transactional(readOnly = true)
-	public Project getProject(Long project_id) {
-		return projectMapper.getProject(project_id);
+	public Project getProject(Project project) {
+		return projectMapper.getProject(project);
 	}
 
 	/**
@@ -105,11 +105,12 @@ public class ProjectServiceImpl implements ProjectService {
 	 * @return
 	 */
 	@Transactional
-	public int deleteProject(Long project_id) {
+	public int deleteProject(Project project) {
+		Long project_id = project.getProject_id();
+		
 		// 환경 설정에서 init project 에도 삭제해 줘야 함
 		Policy policy = CacheManager.getPolicy();
 		String geo_data_default_projects = policy.getGeo_data_default_projects();
-		
 		log.info("@@ geo_data_default_projects = {} ", geo_data_default_projects);
 		if(geo_data_default_projects != null && !"".equals(geo_data_default_projects)) {
 			String[] projectIds = geo_data_default_projects.split(",");
@@ -132,6 +133,6 @@ public class ProjectServiceImpl implements ProjectService {
 		// project 이름으로 등록된 최상위 data를 삭제
 		dataMapper.deleteDataByProjectId(project_id);
 		
-		return projectMapper.deleteProject(project_id);
+		return projectMapper.deleteProject(project);
 	}
 }

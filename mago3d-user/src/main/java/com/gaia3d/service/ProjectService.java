@@ -37,9 +37,39 @@ public interface ProjectService {
 	/**
 	 * 프로젝트 정보 조회
 	 * 
-	 * @param project_id
+	 * @param project
 	 * @return
 	 */
-	Project getProject(Long project_id);
+	Project getProject(Project project);
+	
+	/**
+	 * Project Key 중복 건수
+	 * @param project_key
+	 * @return
+	 */
+	Integer getDuplicationKeyCount(String project_key);
+	
+	/**
+	 * Project 등록
+	 * 
+	 * @param project
+	 * @return
+	 */
+	int insertProject(Project project);
 
+	/**
+	 * Project 수정
+	 * 
+	 * @param project
+	 * @return
+	 */
+	int updateProject(Project project);
+
+	/**
+	 * Project 삭제
+	 * 
+	 * @param project
+	 * @return
+	 */
+	int deleteProject(Project project);
 }

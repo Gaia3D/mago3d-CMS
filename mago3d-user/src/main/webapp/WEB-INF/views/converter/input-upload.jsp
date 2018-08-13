@@ -12,6 +12,8 @@
 	<link rel="stylesheet" href="/css/cloud.css">
 	<link rel="stylesheet" href="/css/fontawesome-free-5.2.0-web/css/all.min.css">
 	<link rel="stylesheet" href="/externlib/dropzone/dropzone.css">
+	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
 	<script type="text/javascript" src="/js/cloud.js"></script>
 	<script type="text/javascript" src="/externlib/dropzone/dropzone.js"></script>
 </head>
@@ -57,7 +59,7 @@
 	// http://blog.naver.com/PostView.nhn?blogId=wolfre&logNo=220154561376&parentCategoryNo=&categoryNo=1&viewDate=&isShowPopularPosts=true&from=search
 
 	Dropzone.options.myDropzone = {
-		url: "/upload/insert-upload.do",	
+		url: "/converter/insert-upload.do",	
 		//paramName: "file",
 		// Prevents Dropzone from uploading dropped files immediately
 		autoProcessQueue: false,

@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gaia3d.domain.ConverterJob;
 import com.gaia3d.domain.ConverterLog;
-import com.gaia3d.domain.UploadLog;
+import com.gaia3d.domain.ConverterUploadLog;
 import com.gaia3d.persistence.ConverterMapper;
 import com.gaia3d.service.ConverterService;
-import com.gaia3d.service.UploadService;
+import com.gaia3d.service.ConverterUploadService;
 
 /**
  * f4d converter manager
@@ -22,7 +22,7 @@ import com.gaia3d.service.UploadService;
 public class ConverterServiceImpl implements ConverterService {
 
 	@Autowired
-	private UploadService uploadService;
+	private ConverterUploadService uploadService;
 	
 	@Autowired
 	private ConverterMapper converterMapper;

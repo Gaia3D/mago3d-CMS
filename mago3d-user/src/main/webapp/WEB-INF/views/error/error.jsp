@@ -11,6 +11,8 @@
 	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" href="/css/cloud.css">
 	<link rel="stylesheet" href="/css/fontawesome-free-5.2.0-web/css/all.min.css">
+	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
 	<script type="text/javascript" src="/js/cloud.js"></script>
 </head>
 <body>

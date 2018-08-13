@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gaia3d.domain.ConverterLog;
+import com.gaia3d.domain.ConverterUploadLog;
 import com.gaia3d.domain.FileInfo;
-import com.gaia3d.domain.UploadLog;
-import com.gaia3d.persistence.UploadMapper;
-import com.gaia3d.service.UploadService;
+import com.gaia3d.persistence.ConverterUploadMapper;
+import com.gaia3d.service.ConverterUploadService;
 
 /**
  * Data upload
@@ -18,29 +18,29 @@ import com.gaia3d.service.UploadService;
  *
  */
 @Service
-public class UploadServiceImpl implements UploadService {
+public class ConverterUploadServiceImpl implements ConverterUploadService {
 
 	@Autowired
-	private UploadMapper uploadMapper;
+	private ConverterUploadMapper converterUploadMapper;
 	
 	/**
 	 * 사용자가 업로드 완료한 파일 총 건수
-	 * @param uploadLog
+	 * @param converterUploadLog
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public Long getListUploadLogTotalCount(UploadLog uploadLog) {
-		return uploadMapper.getListUploadLogTotalCount(uploadLog);
+	public Long getListConverterUploadLogTotalCount(ConverterUploadLog converterUploadLog) {
+		return converterUploadMapper.getListConverterUploadLogTotalCount(converterUploadLog);
 	}
 	
 	/**
 	 * 사용자가 업로드 완료한 파일 목록
-	 * @param uploadLog
+	 * @param converterUploadLog
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<UploadLog> getListUploadLog(UploadLog uploadLog) {
-		return uploadMapper.getListUploadLog(uploadLog);
+	public List<ConverterUploadLog> getListConverterUploadLog(ConverterUploadLog converterUploadLog) {
+		return converterUploadMapper.getListConverterUploadLog(converterUploadLog);
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class UploadServiceImpl implements UploadService {
 	@Transactional
 	public void insertFiles(List<FileInfo> fileList) {
 		for(FileInfo fileInfo : fileList) {
-			uploadMapper.insertFileInfo(fileInfo);
+			converterUploadMapper.insertFileInfo(fileInfo);
 		}
 	}
 	
@@ -60,6 +60,6 @@ public class UploadServiceImpl implements UploadService {
 	 */
 	@Transactional
 	public void updateConverterCount(ConverterLog converterLog) {
-		uploadMapper.updateConverterCount(converterLog);
+		converterUploadMapper.updateConverterCount(converterLog);
 	}
 }

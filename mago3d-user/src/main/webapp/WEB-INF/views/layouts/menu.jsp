@@ -110,7 +110,7 @@
 		</div>
 		<div class="left-navigation-detail">
 			<div style="padding-top: 20px;">
-				<a href="/upload/input-upload.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">Converter</a>
+				<a href="/converter/input-upload.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">Converter</a>
 			</div>
 		</div>
 	</div>
@@ -124,7 +124,7 @@
 				<span style="font-size:15px; color: Mediumslateblue;">
 					<i class="fas fa-arrow-alt-circle-down"></i>
 				</span>
-				<a href="/upload/input-upload.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">파일 업로딩</a>
+				<a href="/converter/input-upload.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">파일 업로딩</a>
 			</div>
 		</div>
 	</div>

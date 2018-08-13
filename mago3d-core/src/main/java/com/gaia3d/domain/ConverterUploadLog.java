@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class UploadLog extends FileInfo {
+public class ConverterUploadLog extends FileInfo {
 	
 	// 페이지 처리를 위한 시작
 	private Long offset;
@@ -34,7 +34,7 @@ public class UploadLog extends FileInfo {
 	private String method_mode;
 	
 	// 고유번호
-	private Long upload_log_id;
+	private Long converter_upload_log_id;
 	// user id
 	private String user_id;
 	// file name
@@ -45,7 +45,7 @@ public class UploadLog extends FileInfo {
 	private String file_path;
 	// file size
 	private String file_size;
-	// fil ext
+	// file ext
 	private String file_ext;
 	// f4d converter count
 	private Integer converter_count;

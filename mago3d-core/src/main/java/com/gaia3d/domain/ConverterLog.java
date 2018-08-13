@@ -1,7 +1,5 @@
 package com.gaia3d.domain;
 
-import java.math.BigDecimal;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -48,31 +46,11 @@ public class ConverterLog {
 	private String user_id;
 	// 상태. 0: 준비, 1: step1, 2: step2, 3: step3, 4: step4, 5: 완료
 	private String status;
+	// converter_type is '0: 기본, 1: 큰 메쉬 하나';
+	private String converter_type;
 	
-	// geo information input status
-	private String geo_status;	
-	// origin : latitude, longitude, height 를 origin에 맟춤. boundingboxcenter : latitude, longitude, height 를 boundingboxcenter에 맟춤.
-	private String mapping_type;
-	// 위도, 경도 정보 geometry 타입
-	private String location;
-	// 위도
-	private BigDecimal latitude;
-	// 경도
-	private BigDecimal longitude;
-	// 높이
-	private BigDecimal height;
-	// heading
-	private BigDecimal heading;
-	// pitch
-	private BigDecimal pitch;
-	// roll
-	private BigDecimal roll;
-	// Data Control 속성
-	private String attributes;
 	// 에러 코드
 	private String error_code;
-	// visualize count
-	private Integer visualize_count;
 	// 등록일
 	private String insert_date;
 	

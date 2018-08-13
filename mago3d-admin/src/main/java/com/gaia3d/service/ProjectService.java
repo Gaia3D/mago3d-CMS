@@ -23,10 +23,10 @@ public interface ProjectService {
 	/**
 	 * Project 조회
 	 * 
-	 * @param project_id
+	 * @param project
 	 * @return
 	 */
-	Project getProject(Long project_id);
+	Project getProject(Project project);
 	
 	/**
 	 * Project Key 중복 건수
@@ -54,9 +54,9 @@ public interface ProjectService {
 	/**
 	 * Project 삭제
 	 * 
-	 * @param project_id
+	 * @param project
 	 * @return
 	 */
-	int deleteProject(Long project_id);
+	int deleteProject(Project project);
 
 }
