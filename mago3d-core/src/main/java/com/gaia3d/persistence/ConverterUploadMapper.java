@@ -3,6 +3,7 @@ package com.gaia3d.persistence;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gaia3d.domain.ConverterLog;
 import com.gaia3d.domain.ConverterUploadLog;
@@ -29,6 +30,13 @@ public interface ConverterUploadMapper {
 	 * @return
 	 */
 	public List<ConverterUploadLog> getListConverterUploadLog(ConverterUploadLog converterUploadLog);
+	
+	/**
+	 * 업로딩 파일 정보
+	 * @param converter_upload_log_id
+	 * @return
+	 */
+	public ConverterUploadLog getConverterUploadLog(Long converter_upload_log_id);
 
 	/**
 	 * 사용자가 업로딩한 파일 목록을 저장

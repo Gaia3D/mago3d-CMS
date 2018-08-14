@@ -70,6 +70,8 @@ public class ConverterUploadController {
 	@ResponseBody
 	public Map<String, Object> insertUpload(MultipartHttpServletRequest request, Model model) {
 		
+		// TODO 텍스처 파일 이름에 중복이 있을 수도 있음, 이전 이름을 백업 받아 두고 복사 하자.
+		
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {

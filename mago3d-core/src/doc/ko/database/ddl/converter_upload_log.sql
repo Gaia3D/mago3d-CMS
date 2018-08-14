@@ -32,6 +32,7 @@ comment on column converter_upload_log.insert_date is '등록일';
 create table converter_job(
 	converter_job_id				bigint,
 	user_id							varchar(32),
+	project_id						bigint								not null,
 	title							varchar(256)						not null,
 	converter_type					char(1)								default '0',
 	status							char(1)								default '0',
@@ -44,6 +45,7 @@ create table converter_job(
 comment on table converter_job is '사용자 f4d 변환 이력';
 comment on column converter_job.converter_job_id is '고유번호';
 comment on column converter_job.user_id is '사용자 아이디';
+comment on column converter_job.project_id is 'project 고유번호';
 comment on column converter_job.converter_type is '0: 기본, 1: 큰 메쉬 하나';
 comment on column converter_job.status is '0: 준비, 1: 성공, 2: 실패';
 comment on column converter_job.error_code is '에러 코드';

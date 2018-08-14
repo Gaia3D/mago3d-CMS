@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gaia3d.domain.ConverterJob;
 import com.gaia3d.domain.ConverterLog;
 import com.gaia3d.domain.ConverterUploadLog;
+import com.gaia3d.domain.DataInfo;
 import com.gaia3d.persistence.ConverterMapper;
 import com.gaia3d.service.ConverterService;
 import com.gaia3d.service.ConverterUploadService;
@@ -22,7 +23,7 @@ import com.gaia3d.service.ConverterUploadService;
 public class ConverterServiceImpl implements ConverterService {
 
 	@Autowired
-	private ConverterUploadService uploadService;
+	private ConverterUploadService converterUploadService;
 	
 	@Autowired
 	private ConverterMapper converterMapper;
@@ -99,13 +100,22 @@ public class ConverterServiceImpl implements ConverterService {
 		String[] converterUploadLogIds = check_ids.split(",");
 		String userId = converterJob.getUser_id();
 		Long converterJobId = converterJob.getConverter_job_id();
+		
+		Long projectId = converterJob.getProject_id();
 		for(String converter_upload_log_id : converterUploadLogIds) {
 			ConverterLog converterLog = new ConverterLog();
 			converterLog.setUser_id(userId);
 			converterLog.setConverter_job_id(converterJobId);
 			converterLog.setConverter_upload_log_id(new Long(converter_upload_log_id));
 			converterMapper.insertConverterLog(converterLog);
-			uploadService.updateConverterCount(converterLog);
+			
+			ConverterUploadLog converterUploadLog = converterUploadService.getConverterUploadLog(Long.valueOf(converter_upload_log_id));
+			// TODO 이건 굳이 안해도 될거 같음
+			converterUploadService.updateConverterCount(converterLog);
+			
+			DataInfo dataInfo = new DataInfo();
+			dataInfo.setProject_id(projectId);
+			dataInfo.setData_key(converterUploadLog.getFile_name());
 		}
 
 		return converterJobId;

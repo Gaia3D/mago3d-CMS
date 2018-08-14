@@ -58,6 +58,12 @@
 		</choose>
 		OFFSET #{offset} LIMIT #{limit}
 	</select>
+	
+	<!-- 사용자 업로드 파일 상세 정보 -->
+	<select id="getConverterUploadLog" parameterType="long" resultType="converterUploadLog">
+		/* getConverterUploadLog */
+		SELECT * FROM converter_upload_log WHERE converter_upload_log_id = #{converter_upload_log_id}
+	</select>
 
 	<!-- 사용자 업로드 파일 정보 저장 -->
 	<insert id="insertFileInfo" parameterType="fileInfo" >

@@ -44,6 +44,16 @@ public class ConverterUploadServiceImpl implements ConverterUploadService {
 	}
 	
 	/**
+	 * 업로딩 파일 정보
+	 * @param converter_upload_log_id
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public ConverterUploadLog getConverterUploadLog(Long converter_upload_log_id) {
+		return converterUploadMapper.getConverterUploadLog(converter_upload_log_id);
+	}
+	
+	/**
 	 * 사용자가 업로딩한 파일 목록을 저장
 	 * @param fileList
 	 */
