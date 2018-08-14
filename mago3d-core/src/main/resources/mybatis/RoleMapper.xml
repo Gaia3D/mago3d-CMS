@@ -145,7 +145,7 @@
 		/* insertRole */
 		INSERT INTO role(
 			role_id, role_name, role_key, role_type, business_type, use_yn, description
-		) values(
+		) VALUES (
 			#{role_id}, #{role_name}, #{role_key}, #{role_type}, #{business_type}, #{use_yn}, #{description}
 		)
 	</insert>
@@ -155,7 +155,7 @@
 		/* insertUserGroupRole */
 		INSERT INTO user_group_role(
 			user_group_role_id, user_group_id, role_id
-		) values(
+		) VALUES (
 			#{user_group_role_id}, #{user_group_id}, #{role_id}
 		)
 	</insert>

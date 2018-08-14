@@ -166,7 +166,7 @@ comment on column policy.password_create_char is 'の初期パスワードを生
 comment on column policy.password_exception_char is 'パスワードで使用できない特殊文字(XSS)。 <、>、＆、単一引用音符、二重引用括ってもよい';
 
 comment on column policy.geo_view_library is 'view library。基本cesium';
-comment on column policy.geo_data_path is 'dataフォルダ。基本/ data';
+comment on column policy.geo_data_path is 'dataフォルダ。基本/f4d';
 comment on column policy.geo_data_default_projects is 'の起動時にロードするプロジェクト。配列に格納';
 comment on column policy.geo_data_change_request_decision is '데이터 정보 변경 요청에 대한 처리. 0 : 자동승인, 1 : 결재(초기값)';
 comment on column policy.geo_cull_face_enable is 'cullFace使用の有無。基本false';

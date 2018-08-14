@@ -25,6 +25,11 @@
 		<div>
 			<div class="content-gnb"></div>
 			<div class="content-detail">
+				<!-- Start content by page -->
+				<div class="page-content">
+					<div style="padding-left: 200px; padding-top: 100px; font-size: 100px;">개발중 입니다.</div>
+				</div>
+				<!-- End content by page -->
 			</div>
 			<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 		</div>

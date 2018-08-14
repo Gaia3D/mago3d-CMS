@@ -10,15 +10,19 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.Pagination;
+import com.gaia3d.domain.Project;
 import com.gaia3d.domain.UserSession;
 import com.gaia3d.service.DataService;
+import com.gaia3d.service.ProjectService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.StringUtil;
 
@@ -36,28 +40,81 @@ public class DataController {
 	
 	@Autowired
 	private DataService dataService;
+	@Autowired
+	private ProjectService projectService;
 	
 	/**
-	 * 프로젝트에 등록된 Data 목록
+	 * Data 목록
 	 * @param request
+	 * @param dataInfo
+	 * @param pageNo
+	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-project-data-by-project-id.do")
-	@ResponseBody
-	public Map<String, Object> ajaxProjectDataByProjectId(HttpServletRequest request, @RequestParam("project_id") Long project_id) {
-		Map<String, Object> map = new HashMap<>();
-		String result = "success";
-		try {		
-			String projectDataJson =  CacheManager.getProjectDataJson(project_id);
-			map.put("projectDataJson", projectDataJson);
-		} catch(Exception e) {
-			e.printStackTrace();
-			result = "db.exception";
+	@RequestMapping(value = "list-data.do")
+	public String listData(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo, Model model) {
+		log.info("@@ dataInfo = {}", dataInfo);
+		
+		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+		
+		Project project = new Project();
+		project.setUser_id(userSession.getUser_id());
+		project.setUse_yn(Project.IN_USE);
+		List<Project> projectList = projectService.getListProject(project);
+		
+		dataInfo.setUser_id(userSession.getUser_id());
+		if(dataInfo.getProject_id() == null) {
+			dataInfo.setProject_id(Long.valueOf(0l));
+		}
+		if(StringUtil.isNotEmpty(dataInfo.getStart_date())) {
+			dataInfo.setStart_date(dataInfo.getStart_date().substring(0, 8) + DateUtil.START_TIME);
+		}
+		if(StringUtil.isNotEmpty(dataInfo.getEnd_date())) {
+			dataInfo.setEnd_date(dataInfo.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
+		}
+
+		long totalCount = dataService.getDataTotalCount(dataInfo);
+		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(dataInfo), totalCount, Long.valueOf(pageNo).longValue(), dataInfo.getList_counter());
+		log.info("@@ pagination = {}", pagination);
+		
+		dataInfo.setOffset(pagination.getOffset());
+		dataInfo.setLimit(pagination.getPageRows());
+		List<DataInfo> dataList = new ArrayList<>();
+		if(totalCount > 0l) {
+			dataList = dataService.getListData(dataInfo);
 		}
 		
-		map.put("result", result);
-		return map;
+		// TODO 다국어 처리를 여기서 해야 할거 같은데....
+//		Map<String, String> statusMap = new HashMap<>();
+//		String welcome = messageSource.getMessage("xxx.xxxx", new Object[]{}, locale);
+		
+		model.addAttribute(pagination);
+		model.addAttribute("projectList", projectList);
+		model.addAttribute("dataList", dataList);
+		return "/data/list-data";
 	}
+	
+//	/**
+//	 * 프로젝트에 등록된 Data 목록
+//	 * @param request
+//	 * @return
+//	 */
+//	@RequestMapping(value = "ajax-project-data-by-project-id.do")
+//	@ResponseBody
+//	public Map<String, Object> ajaxProjectDataByProjectId(HttpServletRequest request, @RequestParam("project_id") Long project_id) {
+//		Map<String, Object> map = new HashMap<>();
+//		String result = "success";
+//		try {		
+//			String projectDataJson =  CacheManager.getProjectDataJson(project_id);
+//			map.put("projectDataJson", projectDataJson);
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			result = "db.exception";
+//		}
+//		
+//		map.put("result", result);
+//		return map;
+//	}
 	
 	/**
 	 * 데이터 검색
@@ -67,18 +124,12 @@ public class DataController {
 	@RequestMapping(value = "ajax-search-data.do")
 	@ResponseBody
 	public Map<String, Object> ajaxSearchData(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) {
-		
+		log.info("@@ dataInfo = {}", dataInfo);
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-			if(userSession == null) {
-				dataInfo.setUser_id("guest");
-				dataInfo.setUser_name("guest");
-			} else {
-				dataInfo.setUser_id(userSession.getUser_id());
-				dataInfo.setUser_name(userSession.getUser_name());
-			}
+			dataInfo.setUser_id(userSession.getUser_id());
 			
 			log.info("@@ dataInfo = {}", dataInfo);
 			if(StringUtil.isNotEmpty(dataInfo.getStart_date())) {

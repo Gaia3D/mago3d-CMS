@@ -108,7 +108,7 @@
   		</selectKey>
 		INSERT INTO board(
 			board_id, title, user_id, start_date, end_date, use_yn, client_ip
-		) values(
+		) VALUES (
 			#{board_id}, #{title}, #{user_id}, 
 			<if test="start_date == null or start_date == ''">
 			null,
@@ -146,7 +146,7 @@
   		</selectKey>
 		INSERT INTO board_comment(
 			board_comment_id, board_id, user_id, comment, client_ip
-		) values(
+		) VALUES (
 			#{board_comment_id}, #{board_id}, #{user_id}, #{comment}, #{client_ip}
 		)
 	</insert>

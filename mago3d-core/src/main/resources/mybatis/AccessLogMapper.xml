@@ -76,7 +76,7 @@
   		</selectKey>
 		INSERT INTO access_log(
 			access_log_id, user_id, user_name, client_ip, request_uri, parameters, user_agent, referer
-		) values(
+		) VALUES (
 			#{access_log_id}, #{user_id}, #{user_name}, #{client_ip}, #{request_uri}, #{parameters}, #{user_agent}, #{referer}
 		)
 	</insert>

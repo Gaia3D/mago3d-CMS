@@ -96,14 +96,14 @@ public class ConverterServiceImpl implements ConverterService {
 	public Long insertConverterJob(String check_ids, ConverterJob converterJob) {
 		converterMapper.insertConverterJob(converterJob);
 		
-		String[] uploadLogIds = check_ids.split(",");
+		String[] converterUploadLogIds = check_ids.split(",");
 		String userId = converterJob.getUser_id();
 		Long converterJobId = converterJob.getConverter_job_id();
-		for(String upload_log_id : uploadLogIds) {
+		for(String converter_upload_log_id : converterUploadLogIds) {
 			ConverterLog converterLog = new ConverterLog();
 			converterLog.setUser_id(userId);
 			converterLog.setConverter_job_id(converterJobId);
-			converterLog.setUpload_log_id(new Long(upload_log_id));
+			converterLog.setConverter_upload_log_id(new Long(converter_upload_log_id));
 			converterMapper.insertConverterLog(converterLog);
 			uploadService.updateConverterCount(converterLog);
 		}

@@ -88,6 +88,42 @@ public class ProjectController {
 	}
 	
 	/**
+	 * Ajax Project 목록
+	 * @param request
+	 * @return
+	 */
+	@PostMapping(value = "ajax-list-project.do")
+	@ResponseBody
+	public Map<String, Object> ajaxListProject(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			Project project = new Project();
+			project.setUser_id(userSession.getUser_id());
+			project.setUse_yn(Project.IN_USE);
+			List<Project> projectList = projectService.getListProject(project);
+			map.put("projectList", projectList);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		map.put("result", result);
+		return map;
+	}
+	
+	/**
+	 * map project
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "map-project.do")
+	public String mapProject(HttpServletRequest request, Model model) {
+		return "/project/map-project";
+	}
+	
+	/**
 	 * Project 정보
 	 * @param projectId
 	 * @return
@@ -187,8 +223,7 @@ public class ProjectController {
 		try {
 			log.info("@@ project = {} ", project);
 			
-			if(project.getProject_key() == null || "".equals(project.getProject_key())
-					|| project.getProject_name() == null || "".equals(project.getProject_name())) {
+			if(project.getProject_name() == null || "".equals(project.getProject_name())) {
 				result = "input.invalid";
 				map.put("result", result);
 				return map;

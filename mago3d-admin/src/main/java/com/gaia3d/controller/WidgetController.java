@@ -250,10 +250,14 @@ public class WidgetController {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
-			long useTotalCount = dataService.getDataTotalCountByStatus(DataInfo.STATUS_USE);
-			long forbidTotalCount = dataService.getDataTotalCountByStatus(DataInfo.STATUS_FORBID);
-			long etcTotalCount = dataService.getDataTotalCountByStatus(DataInfo.STATUS_ETC);
-			
+			DataInfo dataInfo = new DataInfo();
+			dataInfo.setStatus(DataInfo.STATUS_USE);
+			long useTotalCount = dataService.getDataTotalCountByStatus(dataInfo);
+			dataInfo.setStatus(DataInfo.STATUS_FORBID);
+			long forbidTotalCount = dataService.getDataTotalCountByStatus(dataInfo);
+			dataInfo.setStatus(DataInfo.STATUS_ETC);
+			long etcTotalCount = dataService.getDataTotalCountByStatus(dataInfo);
+						
 			map.put("useTotalCount", useTotalCount);
 			map.put("forbidTotalCount", forbidTotalCount);
 			map.put("etcTotalCount", etcTotalCount);
@@ -274,6 +278,7 @@ public class WidgetController {
 	@GetMapping(value = "ajax-data-info-log-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDataInfoLogWidget(HttpServletRequest request) {
+		log.info("------------ data info log widget");
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {

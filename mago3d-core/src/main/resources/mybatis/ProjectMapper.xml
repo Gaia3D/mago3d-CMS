@@ -121,8 +121,15 @@
 			<if test="attributes != null and attributes != ''">
 			, attributes
 			</if>
-		) values(
-			#{project_id}, #{project_key}, #{project_name}, #{user_id}, #{view_order}, #{use_yn}, #{latitude}, #{longitude}, #{height}, #{duration}, #{description}
+		) VALUES (
+			#{project_id}
+			<if test="project_key == null or project_key == ''">
+			, #{project_id} 
+			</if>
+			<if test="project_key != null and project_key != ''">
+			, #{project_key} 
+			</if>
+			, #{project_name}, #{user_id}, #{view_order}, #{use_yn}, #{latitude}, #{longitude}, #{height}, #{duration}, #{description}
 			<if test="attributes != null and attributes != ''">
 			, TO_JSON(#{attributes}::json)
 			</if>

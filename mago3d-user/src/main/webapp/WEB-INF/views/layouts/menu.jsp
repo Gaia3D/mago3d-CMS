@@ -137,7 +137,7 @@
 				<span style="font-size:15px; color: Mediumslateblue;">
 					<i class="fas fa-arrow-alt-circle-down"></i>
 				</span>
-				<a href="/converter/input-converterjob.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">F4D 변환 Job 등록 </a>
+				<a href="/converter/input-converter-job.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">F4D 변환 Job 등록 </a>
 			</div>
 		</div>
 	</div>
@@ -150,7 +150,7 @@
 				<span style="font-size:15px; color: Mediumslateblue;">
 					<i class="fas fa-arrow-alt-circle-down"></i>
 				</span>
-				<a href="/converter/list-converterjob.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">Job 실행 결과</a>
+				<a href="/converter/list-converter-job.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">Job 실행 결과</a>
 			</div>
 		</div>
 	</div>
@@ -226,7 +226,7 @@
 				<span style="font-size:15px; color: Mediumslateblue;">
 					<i class="fas fa-user-secret"></i>
 				</span>
-				<a href="/setting/detail-membership.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">MemberShip 설정</a>
+				<a href="/settings/modify-membership.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">MemberShip 설정</a>
 			</div>
 		</div>
 	</div>
@@ -239,7 +239,7 @@
 				<span style="font-size:15px; color: Mediumslateblue;">
 					<i class="fab fa-expeditedssl"></i>
 				</span>
-				<a href="/setting/detail-mago3d.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">mago3D 설정 </a>
+				<a href="/settings/modify-user-policy.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">mago3D 설정 </a>
 			</div>
 		</div>
 	</div>

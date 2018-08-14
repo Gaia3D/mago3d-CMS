@@ -24,7 +24,7 @@
 		/* insertWidget */
 		INSERT INTO widget(
 			widget_id, name, view_order, user_id
-		) values(
+		) VALUES (
 			#{widget_id}, #{name}, #{view_order}, #{user_id}
 		)
 	</insert>

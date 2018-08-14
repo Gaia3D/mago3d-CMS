@@ -43,6 +43,7 @@
 		<typeAlias type="com.gaia3d.domain.UserGroup" alias="userGroup"/>
 		<typeAlias type="com.gaia3d.domain.UserGroupMenu" alias="userGroupMenu"/>
 		<typeAlias type="com.gaia3d.domain.UserGroupRole" alias="userGroupRole"/>
+		<typeAlias type="com.gaia3d.domain.UserPolicy" alias="userPolicy"/>
 		<typeAlias type="com.gaia3d.domain.Widget" alias="widget"/>
 	</typeAliases>
 	

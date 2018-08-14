@@ -133,7 +133,7 @@
 		/* insertUserGroup */
 		INSERT INTO user_group(
 			user_group_id, group_key, group_name, ancestor, parent, depth, view_order, use_yn, description
-		) values(
+		) VALUES (
 			#{user_group_id}, #{group_key}, #{group_name}, #{ancestor}, #{parent}, #{depth}, #{view_order}, #{use_yn}, #{description}
 		)
 	</insert>
@@ -143,7 +143,7 @@
 		/* insertUserGroupMenu */
 		INSERT INTO user_group_menu(
 			user_group_menu_id, user_group_id, menu_id, all_yn, read_yn, write_yn, update_yn, delete_yn
-		) values(
+		) VALUES (
 			#{user_group_menu_id}, #{user_group_id}, #{menu_id}, #{all_yn}, #{read_yn}, #{write_yn}, #{update_yn}, #{delete_yn}
 		)
 	</insert>

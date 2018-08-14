@@ -165,10 +165,10 @@
 	<!-- 사용자 등록 -->
 	<insert id="insertUser" parameterType="userInfo">
 		/* insertUser */
-		INSERT INTO user_info(
+		INSERT INTO user_info (
 			user_id, user_group_id, user_name, password, salt, telephone, mobile_phone, email, 
 			messanger, postal_code, address, address_etc, ci, di, status, user_insert_type, update_date
-		) values(
+		) VALUES (
 			#{user_id}, #{user_group_id}, #{user_name}, #{password}, #{salt}, #{telephone}, #{mobile_phone}, #{email}, 
 			#{messanger}, #{postal_code}, #{address}, #{address_etc}, #{ci}, #{di}, COALESCE(#{status}, '0'), COALESCE(#{user_insert_type}, 'SELF'), NOW()
 		)

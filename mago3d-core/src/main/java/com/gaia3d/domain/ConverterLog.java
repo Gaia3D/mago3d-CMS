@@ -41,13 +41,11 @@ public class ConverterLog {
 	// 파일 변환 그룹 job
 	private Long converter_job_id;
 	// 파일 정보 고유번호
-	private Long upload_log_id;
+	private Long converter_upload_log_id;
 	// user id
 	private String user_id;
 	// 상태. 0: 준비, 1: step1, 2: step2, 3: step3, 4: step4, 5: 완료
 	private String status;
-	// converter_type is '0: 기본, 1: 큰 메쉬 하나';
-	private String converter_type;
 	
 	// 에러 코드
 	private String error_code;

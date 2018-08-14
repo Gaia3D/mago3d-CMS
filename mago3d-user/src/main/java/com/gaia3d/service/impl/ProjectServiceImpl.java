@@ -1,5 +1,6 @@
 package com.gaia3d.service.impl;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,11 @@ import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.Project;
+import com.gaia3d.domain.UserPolicy;
 import com.gaia3d.persistence.DataMapper;
 import com.gaia3d.persistence.ProjectMapper;
 import com.gaia3d.service.ProjectService;
+import com.gaia3d.service.UserPolicyService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
+	@Autowired
+	private UserPolicyService userPolicyService;
 	@Autowired
 	private ProjectMapper projectMapper;
 	@Autowired
@@ -93,10 +98,18 @@ public class ProjectServiceImpl implements ProjectService {
 	public int insertProject(Project project) {
 		projectMapper.insertProject(project);
 		
+		// 프로젝트 디렉토리 생성
+		UserPolicy userPolicy = userPolicyService.getUserPolicy(project.getUser_id());
+		File projectDirectory = new File(userPolicy.getGeo_data_path() + File.separator + project.getProject_id());
+		if(!projectDirectory.exists()) {
+			projectDirectory.mkdir();
+		}
+		
 		DataInfo dataInfo = new DataInfo();
 		dataInfo.setProject_id(project.getProject_id());
-		dataInfo.setData_key(project.getProject_key());
+		dataInfo.setData_key(String.valueOf(project.getProject_id()));
 		dataInfo.setData_name(project.getProject_name());
+		dataInfo.setUser_id(project.getUser_id());
 		dataInfo.setParent(0l);
 		dataInfo.setDepth(1);
 		dataInfo.setView_order(1);
@@ -128,7 +141,14 @@ public class ProjectServiceImpl implements ProjectService {
 		
 		// TODO 프로젝트에 속한 데이터들은 삭제해야 하나?
 		// project 이름으로 등록된 최상위 data를 삭제
-		dataMapper.deleteDataByProjectId(project.getProject_id());
+		dataMapper.deleteDataByProjectId(project);
+		
+		// 프로젝트 디렉토리 삭제
+		UserPolicy userPolicy = userPolicyService.getUserPolicy(project.getUser_id());
+		File projectDirectory = new File(userPolicy.getGeo_data_path() + File.separator + project.getProject_id());
+		if(!projectDirectory.exists()) {
+			projectDirectory.delete();
+		}
 		
 		return projectMapper.deleteProject(project);
 	}

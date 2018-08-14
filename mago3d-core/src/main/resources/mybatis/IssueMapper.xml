@@ -190,7 +190,7 @@
   		</selectKey>
 		INSERT INTO issue(
 			issue_id, project_id, user_id, title, priority, due_date, issue_type, status, data_key, object_key, location, latitude, longitude, height, client_ip
-		) values(
+		) VALUES (
 			#{issue_id}, #{project_id}, #{user_id}, #{title}, #{priority},
 			<if test="due_date == null or due_date == ''">
 			null,
@@ -217,7 +217,7 @@
   		</selectKey>
 		INSERT INTO issue_detail (
 			issue_detail_id, issue_id, contents
-		) values (
+		) VALUES (
 			#{issue_detail_id}, #{issue_id}, #{contents}
 		)
 	</insert>
@@ -230,7 +230,7 @@
   		</selectKey>
 		INSERT INTO issue_comment(
 			issue_comment_id, issue_id, user_id, comment, client_ip
-		) values(
+		) VALUES (
 			#{issue_comment_id}, #{issue_id}, #{user_id}, #{comment}, #{client_ip}
 		)
 	</insert>
@@ -243,7 +243,7 @@
   		</selectKey>
 		INSERT INTO issue_file(
 			issue_file_id, issue_id, file_name, file_real_name, file_path, file_size, file_ext
-		) values(
+		) VALUES (
 			#{issue_file_id}, #{issue_id}, #{file_name}, #{file_real_name}, #{file_path}, #{file_size}, #{file_ext}
 		)
 	</insert>
@@ -256,7 +256,7 @@
   		</selectKey>
 		INSERT INTO issue_people(
 			issue_people_id, issue_id, role_type, user_id
-		) values(
+		) VALUES (
 			#{issue_people_id}, #{issue_id}, #{role_type}, #{user_id}
 		)
 	</insert>

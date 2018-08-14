@@ -1,5 +1,6 @@
 package com.gaia3d.service.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,12 +9,17 @@ import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserInfo;
+import com.gaia3d.domain.UserPolicy;
 import com.gaia3d.persistence.UserMapper;
+import com.gaia3d.persistence.UserPolicyMapper;
+import com.gaia3d.service.PolicyService;
 import com.gaia3d.service.UserDeviceService;
 import com.gaia3d.service.UserService;
+import com.gaia3d.util.FileUtil;
 import com.gaia3d.util.StringUtil;
 
 /**
@@ -25,9 +31,16 @@ import com.gaia3d.util.StringUtil;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	private UserMapper userMapper;
+	private PolicyService policyService;
+	@Autowired
+	private PropertiesConfig propertiesConfig;
 	@Autowired
 	private UserDeviceService userDeviceService;
+	
+	@Autowired
+	private UserMapper userMapper;
+	@Autowired
+	private UserPolicyMapper userPolicyMapper;
 	
 	/**
 	 * 사용자 수
@@ -96,7 +109,21 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Transactional
 	public int insertUser(UserInfo userInfo) {
-		return userMapper.insertUser(userInfo);
+		int result = userMapper.insertUser(userInfo);
+		
+		Policy policy = policyService.getPolicy();
+		String geo_data_path = policy.getGeo_data_path() + File.separator + userInfo.getUser_id();
+		UserPolicy userPolicy = new UserPolicy();
+		userPolicy.setGeo_data_path(geo_data_path);
+		userPolicyMapper.insertUserPolicy(userPolicy);
+		
+		// 사용자 디렉토리 생성
+		File userF4DDirectory = new File(geo_data_path);
+		if(!userF4DDirectory.exists()) {
+			userF4DDirectory.mkdir();
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -272,19 +299,29 @@ public class UserServiceImpl implements UserService {
 		Policy policy = CacheManager.getPolicy();
 		String userDeleteType = policy.getUser_delete_type();
 		
+		int result = 0;
 		UserInfo userInfo = userMapper.getUser(user_id);
 		if((Policy.LOGICAL_DELETE_USER).equals(userDeleteType)) {
 			// 논리적 정보 삭제
 			userInfo.setStatus(UserInfo.STATUS_LOGICAL_DELETE);
-			return userMapper.updateUser(userInfo);
+			result = userMapper.updateUser(userInfo);
 		} else if((Policy.PHYSICAL_DELETE_USER).equals(userDeleteType)) {
 			// 물리적 정보 삭제
 			//sSOService.deleteSSOLog(user_id);
 			userDeviceService.deleteUserDeviceByUserId(user_id);
-			return userMapper.deleteUser(user_id);
+			result = userMapper.deleteUser(user_id);
 		} else {
-			return 0;
+			result = 0;
 		}
+		
+		// 사용자 디렉토리 삭제
+		String geo_data_path = "/f4d/" + userInfo.getUser_id();
+		File userF4DDirectory = new File(geo_data_path);
+		if(!userF4DDirectory.exists()) {
+			userF4DDirectory.delete();
+		}
+		
+		return result;
 	}
 	
 	/**

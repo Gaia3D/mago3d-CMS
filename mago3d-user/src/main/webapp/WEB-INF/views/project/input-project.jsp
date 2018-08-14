@@ -45,23 +45,11 @@
 								<col class="col-input" />
 								<tr>
 									<th class="col-label" scope="row">
-										<form:label path="project_key">Key</form:label>
-										<span class="icon-glyph glyph-emark-dot color-warning"></span>
-									</th>
-									<td class="col-input">
-										<form:hidden path="duplication_value"/>
-										<form:input path="project_key" cssClass="m" />
-										<input type="button" id="project_duplication_buttion" value="<spring:message code='duplication.check'/>" />
-				  						<form:errors path="project_key" cssClass="error" />
-									</td>
-								</tr>
-								<tr>
-									<th class="col-label" scope="row">
 										<form:label path="project_name"><spring:message code='project.name'/></form:label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input">
-										<form:input path="project_name" cssClass="m" />
+										<form:input path="project_name" cssClass="l" />
 										<form:errors path="project_name" cssClass="error" />
 									</td>
 								</tr>
@@ -188,42 +176,6 @@
 		$("input[name='use_yn'][value='Y']").prop('checked', true);
 	});
 	
-	// project key 중복 확인
-	$( "#project_duplication_buttion" ).on( "click", function() {
-		var projectKey = $("#project_key").val();
-		if (projectKey == "") {
-			alert(JS_MESSAGE["project.key.empty"]);
-			$("#project_key").focus();
-			return false;
-		}
-		var info = "project_key=" + projectKey;
-		$.ajax({
-			url: "/project/ajax-project-key-duplication-check.do",
-			type: "POST",
-			data: info,
-			cache: false,
-			dataType: "json",
-			success: function(msg){
-				if(msg.result == "success") {
-					if(msg.duplication_value != "0") {
-						alert(JS_MESSAGE["project.key.duplication"]);
-						$("#project_key").focus();
-						return false;
-					} else {
-						alert(JS_MESSAGE["project.key.enable"]);
-						$("#duplication_value").val(msg.duplication_value);
-					}
-				} else {
-					alert(JS_MESSAGE[msg.result]);
-				}
-			},
-			error:function(request,status,error) {
-				//alert(JS_MESSAGE["ajax.error.message"]);
-				alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-    		}
-		});
-	});
-	
 	// Project 정보 저장
 	var insertProjectFlag = true;
 	function insertProject() {
@@ -260,18 +212,6 @@
 	}
 	
 	function checkProject() {
-		if ($("#project_key").val() == "") {
-			alert(JS_MESSAGE["project.key.empty"]);
-			$("#project_key").focus();
-			return false;
-		}
-		if($("#duplication_value").val() == null || $("#duplication_value").val() == "") {
-			alert(JS_MESSAGE["project.key.duplication_value.check"]);
-			return false;
-		} else if($("#duplication_value").val() == "1") {
-			alert(JS_MESSAGE["project.key.duplication_value.already"]);
-			return false;
-		}
 		if ($("#project_name").val() == "") {
 			alert(JS_MESSAGE["project.name.empty"]);
 			$("#project_name").focus();

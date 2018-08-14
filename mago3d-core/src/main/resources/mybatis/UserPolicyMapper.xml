@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaia3d.persistence.UserPolicyMapper">
+	
+	<!-- 사용자 정책 -->
+	<select id="getUserPolicy" parameterType="string" resultType="userPolicy">
+		/* getUserPolicy */
+		SELECT * FROM user_policy WHERE user_id = #{user_id}
+	</select>
+	
+	<insert id="insertUserPolicy" parameterType="userPolicy">
+		INSERT INTO user_policy 
+			(user_id, geo_data_path)
+		VALUES 
+			(#{user_id}, #{geo_data_path})
+	</insert>
+	
+	<!-- 사용자 정책 수정 -->
+	<update id="updateUserPolicy" parameterType="userPolicy">
+		/* updateUserPolicy */
+		UPDATE user_policy
+		SET geo_view_library = #{geo_view_library},
+			geo_data_path = #{geo_data_path},
+			<if test="geo_data_default_projects == null or geo_data_default_projects == ''">
+			geo_data_default_projects = null,
+			</if>
+			<if test="geo_data_default_projects != null and geo_data_default_projects != ''">
+			geo_data_default_projects = STRING_TO_ARRAY(#{geo_data_default_projects}, ','),
+			</if>
+			geo_cull_face_enable = #{geo_cull_face_enable},
+			geo_time_line_enable = #{geo_time_line_enable},
+			geo_init_camera_enable = #{geo_init_camera_enable},
+			geo_init_latitude = #{geo_init_latitude},
+			geo_init_longitude = #{geo_init_longitude},
+			geo_init_height = #{geo_init_height},
+			geo_init_duration = #{geo_init_duration},
+			geo_init_default_terrain = #{geo_init_default_terrain},
+			geo_init_default_fov = #{geo_init_default_fov},
+			geo_lod0 = #{geo_lod0},
+			geo_lod1 = #{geo_lod1},
+			geo_lod2 = #{geo_lod2},
+			geo_lod3 = #{geo_lod3},
+			geo_lod4 = #{geo_lod4},
+			geo_lod5 = #{geo_lod5},
+			geo_ambient_reflection_coef = #{geo_ambient_reflection_coef},
+			geo_diffuse_reflection_coef = #{geo_diffuse_reflection_coef},
+			geo_specular_reflection_coef = #{geo_specular_reflection_coef},
+			geo_specular_color = #{geo_specular_color},
+			geo_ambient_color = #{geo_ambient_color},
+			geo_ssao_radius = #{geo_ssao_radius}
+		WHERE user_id = #{user_id}
+	</update>
+	
+	<!-- 사용자 정책 삭제 -->
+	<delete id="deleteUserPolicy">
+		/* deleteUserPolicy */
+		DELETE FROM user_policy WHERE user_id = #{user_id}
+	</delete>
+</mapper>

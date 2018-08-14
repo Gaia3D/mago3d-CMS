@@ -94,7 +94,7 @@
 		INSERT INTO data_info_log(
 			data_info_log_id, project_id, data_id, user_id, latitude, longitude, height, heading, pitch, roll,
 			before_latitude, before_longitude, before_height, before_heading, before_pitch, before_roll, description
-		) values(
+		) VALUES (
 			#{data_info_log_id}, #{project_id}, #{data_id}, #{user_id}, #{latitude}, #{longitude}, #{height}, #{heading}, #{pitch}, #{roll},
 			#{before_latitude}, #{before_longitude}, #{before_height}, #{before_heading}, #{before_pitch}, #{before_roll}, #{description}
 		)

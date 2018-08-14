@@ -166,7 +166,7 @@ comment on column policy.password_create_char is 'Initial password generation st
 comment on column policy.password_exception_char is 'Special character (XSS) that can not be used as a password. <,>, &, Pound, double pound';
 
 comment on column policy.geo_view_library is 'view library. Basic cesium';
-comment on column policy.geo_data_path is 'data folder. Default / data';
+comment on column policy.geo_data_path is 'data folder. Default /f4d';
 comment on column policy.geo_data_default_projects is 'Loading project at startup. Save as array';
 comment on column policy.geo_data_change_request_decision is '데이터 정보 변경 요청에 대한 처리. 0 : 자동승인, 1 : 결재(초기값)';
 comment on column policy.geo_cull_face_enable is 'Use of cullFace. Default false';

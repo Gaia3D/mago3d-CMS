@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoAttribute;
 import com.gaia3d.domain.DataInfoObjectAttribute;
+import com.gaia3d.domain.Project;
 
 /**
  * Data
@@ -25,10 +26,10 @@ public interface DataMapper {
 	
 	/**
 	 * 데이터 상태별 통계 정보
-	 * @param status
+	 * @param dataInfo
 	 * @return
 	 */
-	Long getDataTotalCountByStatus(String status);
+	Long getDataTotalCountByStatus(DataInfo dataInfo);
 	
 	/**
 	 * Data Object 총건수
@@ -187,8 +188,8 @@ public interface DataMapper {
 	
 	/**
 	 * TODO 프로젝트에 속한 데이터들은 삭제해야 하나?
-	 * project 이름으로 등록된 최상위 data를 삭제
+	 * @param project
 	 * @return
 	 */
-	int deleteDataByProjectId(Long project_id);
+	int deleteDataByProjectId(Project project);
 }

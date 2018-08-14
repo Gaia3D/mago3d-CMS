@@ -180,6 +180,39 @@
 		$(":checkbox[name=project_id]").prop("checked", this.checked);
 	});
 	
+	// project 삭제
+	var deleteProjectFlag = true;
+	function deleteProject(project_id) {
+		if(confirm(JS_MESSAGE["delete.confirm"])) {
+			if(deleteProjectFlag) {
+				deleteProjectFlag = false;
+				var info = "project_id=" + project_id;
+				$.ajax({
+					url: "/project/ajax-delete-project.do",
+					type: "POST",
+					data: info,
+					cache: false,
+					dataType: "json",
+					success: function(msg){
+						if(msg.result == "success") {
+							alert(JS_MESSAGE["delete"]);	
+							location.reload();
+						} else {
+							alert(JS_MESSAGE[msg.result]);
+						}
+						deleteProjectFlag = true;
+					},
+					error:function(request,status,error){
+				        alert(JS_MESSAGE["ajax.error.message"]);
+				        deleteProjectFlag = true;
+					}
+				});
+			} else {
+				alert(JS_MESSAGE["button.dobule.click"]);
+				return;
+			}
+		}
+	}
 </script>
 </body>
 </html>

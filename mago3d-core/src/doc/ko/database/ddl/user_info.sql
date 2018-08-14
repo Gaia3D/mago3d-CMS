@@ -4,6 +4,7 @@ drop table if exists user_group_role cascade;
 drop table if exists user_group_menu cascade;
 drop table if exists user_info cascade;
 drop table if exists user_device cascade;
+drop table if exists user_policy cascade;
 
 -- 사용자 그룹
 create table user_group(
@@ -208,3 +209,73 @@ comment on column user_device.device_priority5 is '우선순위5';
 comment on column user_device.use_yn5 is '사용유무5. Y : 사용, N : 미사용';
 comment on column user_device.description5 is '설명5';
 comment on column user_device.insert_date is '등록일';
+
+
+
+-- 사용자 운영정책
+create table user_policy(
+	user_id						varchar(32)	 						not null,	
+		
+	geo_view_library						varchar(20)			default 'cesium',
+	geo_data_path							varchar(100)		default '/f4d',
+	geo_data_default_projects				varchar(30)[],
+	geo_cull_face_enable					varchar(5)			default 'false',
+	geo_time_line_enable					varchar(5)			default 'false',
+	
+	geo_init_camera_enable					varchar(5)			default 'true',
+	geo_init_latitude						varchar(30)			default '37.521168',
+	geo_init_longitude						varchar(30)			default '126.924185',
+	geo_init_height							varchar(30)			default '3000.0',
+	geo_init_duration						int					default 3,
+	geo_init_default_terrain				varchar(64),
+	geo_init_default_fov					int					default 0,
+	
+	geo_lod0								varchar(20)			default '15',
+	geo_lod1								varchar(20)			default '60',
+	geo_lod2								varchar(20)			default '90',
+	geo_lod3								varchar(20)			default '200',
+	geo_lod4								varchar(20)			default '1000',
+	geo_lod5								varchar(20)			default '50000',
+	geo_ambient_reflection_coef				varchar(10)			default '0.5',
+	geo_diffuse_reflection_coef				varchar(10)			default '1.0',
+	geo_specular_reflection_coef			varchar(10)			default '1.0',
+	geo_specular_color						varchar(11)			default '#d8d8d8',
+	geo_ambient_color						varchar(11)			default '#d8d8d8',
+	geo_ssao_radius							varchar(20)			default '0.15',
+	
+	update_date								timestamp with time zone			default now(),
+	insert_date								timestamp with time zone			default now(),
+	constraint user_policy_pk primary key (user_id)	
+);
+
+comment on table user_policy is '사용자 운영정책';
+comment on column user_policy.user_id is '사용자 아이디';
+
+comment on column user_policy.geo_view_library is 'view library. 기본 cesium';
+comment on column user_policy.geo_data_path is 'data 폴더. 기본 /f4d';
+comment on column user_policy.geo_data_default_projects is '시작시 로딩 프로젝트. 배열로 저장';
+comment on column user_policy.geo_cull_face_enable is 'cullFace 사용유무. 기본 false';
+comment on column user_policy.geo_time_line_enable is 'timeLine 사용유무. 기본 false';
+	
+comment on column user_policy.geo_init_camera_enable is '초기 카메라 이동 유무. 기본 true';
+comment on column user_policy.geo_init_latitude is '초기 카메라 이동 위도';
+comment on column user_policy.geo_init_longitude is '초기 카메라 이동 경도';
+comment on column user_policy.geo_init_height is '초기 카메라 이동 높이';
+comment on column user_policy.geo_init_duration is '초기 카메라 이동 시간. 초 단위';
+comment on column user_policy.geo_init_default_terrain is '기본 Terrain';
+comment on column user_policy.geo_init_default_fov is 'field of view. 기본값 0(1.8 적용)';
+comment on column user_policy.geo_lod0 is 'LOD0. 기본값 15M';
+comment on column user_policy.geo_lod1 is 'LOD1. 기본값 60M';
+comment on column user_policy.geo_lod2 is 'LOD2. 기본값 90M';
+comment on column user_policy.geo_lod3 is 'LOD3. 기본값 200M';
+comment on column user_policy.geo_lod4 is 'LOD4. 기본값 1000M';
+comment on column user_policy.geo_lod5 is 'LOD5. 기본값 50000M';
+comment on column user_policy.geo_ambient_reflection_coef is '다이렉트 빛이 아닌 반사율 범위. 기본값 0.5';
+comment on column user_policy.geo_diffuse_reflection_coef is '자기 색깔의 반사율 범위. 기본값 1.0';
+comment on column user_policy.geo_specular_reflection_coef is '표면의 반질거림 범위. 기본값 1.0';
+comment on column user_policy.geo_ambient_color is '다이렉트 빛이 아닌 반사율 RGB, 콤마로 연결';
+comment on column user_policy.geo_specular_color is '표면의 반질거림 색깔. RGB, 콤마로 연결';
+comment on column user_policy.geo_ssao_radius is '그림자 반경';
+
+comment on column user_policy.update_date is '수정일';
+comment on column user_policy.insert_date is '등록일';

@@ -155,9 +155,9 @@
     		SELECT NEXTVAL('converter_job_seq')
   		</selectKey>
 		INSERT INTO converter_job(
-			converter_job_id, user_id, title, status, error_code
-		) values(
-			#{converter_job_id}, #{user_id}, #{title}, #{status}, #{error_code}
+			converter_job_id, user_id, title, converter_type, status, error_code
+		) VALUES (
+			#{converter_job_id}, #{user_id}, #{title}, #{converter_type}, #{status}, #{error_code}
 		)
 	</insert>
 	
@@ -168,9 +168,9 @@
     		SELECT NEXTVAL('converter_log_seq')
   		</selectKey>
 		INSERT INTO converter_log(
-			converter_log_id, converter_job_id, upload_log_id, user_id, error_code
-		) values(
-			#{converter_log_id}, #{converter_job_id}, #{upload_log_id}, #{user_id}, #{error_code}
+			converter_log_id, converter_job_id, converter_upload_log_id, user_id, error_code
+		) VALUES (
+			#{converter_log_id}, #{converter_job_id}, #{converter_upload_log_id}, #{user_id}, #{error_code}
 		)
 	</insert>
 	
@@ -184,6 +184,9 @@
 			</if>
 			<if test="status != null and status != ''">
 			status = #{status},
+			</if>
+			<if test="converter_type != null and converter_type != ''">
+			converter_type = #{converter_type},
 			</if>
 			<if test="error_code != null and error_code != ''">
 			error_code = #{error_code},

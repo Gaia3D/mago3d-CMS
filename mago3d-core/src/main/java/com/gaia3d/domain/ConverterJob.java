@@ -42,6 +42,8 @@ public class ConverterJob {
 	private String user_id;
 	// title
 	private String title;
+	// converter_type is '0: 기본, 1: 큰 메쉬 하나';
+	private String converter_type;
 	// 0: 준비, 1: 성공, 2: 실패
 	private String status;
 	// 에러 코드

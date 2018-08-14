@@ -545,7 +545,7 @@
 					var content = "";
 					content 	= "<table class=\"widget-table\">"
 								+	"<col class=\"col-left\" />"
-								+	"<col class=\"col-left\" />";
+								+	"<col class=\"col-left\" />"
 								+	"<col class=\"col-left\" />";
 					if(dataInfoLogList == null || dataInfoLogList.length == 0) {
 						content += 	"<tr>"

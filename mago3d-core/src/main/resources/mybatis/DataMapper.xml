@@ -12,6 +12,9 @@
 			<if test="project_id != null and project_id > 0">
 			project_id = #{project_id}
 			</if>
+			<if test="user_id != null and user_id != ''">
+			AND	user_id = #{user_id}
+			</if>
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 			AND ${search_word} = #{search_value}
 			</if>
@@ -35,11 +38,15 @@
 	</select>
 	
 	<!-- 데이터 상태별 통계 정보 -->
-	<select id="getDataTotalCountByStatus" parameterType="string" resultType="long">
+	<select id="getDataTotalCountByStatus" parameterType="dataInfo" resultType="long">
 		/* getDataTotalCountByStatus */
 		SELECT COUNT(data_id) 
 		FROM data_info
-		WHERE status = #{status} AND parent > 0
+		WHERE status = #{status} 
+			AND parent > 0
+			<if test="user_id != null and user_id != ''">
+			AND user_id = #{user_id}
+			</if>
 	</select>
 	
 	<select id="getDataObjectAttributeTotalCount" parameterType="dataInfoObjectAttribute" resultType="long">
@@ -64,6 +71,9 @@
 			<trim prefix="WHERE" prefixOverrides="AND">
 				<if test="project_id != null and project_id > 0">
 				project_id = #{project_id}
+				</if>
+				<if test="user_id != null and user_id != ''">
+				AND user_id = #{user_id}
 				</if>
 				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 				AND ${search_word} = #{search_value}
@@ -143,6 +153,9 @@
 		FROM data_info A, project B
 		WHERE data_id = #{data_id}
 			AND A.project_id = B.project_id
+			<if test="user_id != null and user_id != ''">
+			AND A.user_id = #{user_id}
+			</if>
 	</select>
 	
 	<!-- Project Data 정보 -->
@@ -152,6 +165,9 @@
 		FROM data_info
 		WHERE project_id = #{project_id} 
 			AND data_key = #{data_key}
+			<if test="user_id != null and user_id != ''">
+			AND user_id = #{user_id}
+			</if>
 	</select>
 	
 	<!-- Data Attribute 정보 -->
@@ -216,7 +232,7 @@
     		SELECT NEXTVAL('data_info_seq')
   		</selectKey>
 		INSERT INTO data_info(
-			data_id, project_id, data_key, data_name, parent, depth, view_order, 
+			data_id, project_id, data_key, data_name, user_id, parent, depth, view_order, 
 			location, latitude, longitude, height, heading, pitch, roll, description
 			<if test="mapping_type != null and mapping_type != ''">
 			, mapping_type
@@ -224,8 +240,8 @@
 			<if test="attributes != null and attributes != ''">
 			, attributes
 			</if>
-		) values(
-			#{data_id}, #{project_id}, #{data_key}, #{data_name}, #{parent}, #{depth}, #{view_order}, 
+		) VALUES (
+			#{data_id}, #{project_id}, #{data_key}, #{data_name}, #{user_id}, #{parent}, #{depth}, #{view_order}, 
 			ST_GeographyFromText(#{location}), #{latitude}, #{longitude}, #{height}, #{heading}, #{pitch}, #{roll}, #{description}
 			<if test="mapping_type != null and mapping_type != ''">
 			, #{mapping_type}
@@ -244,7 +260,7 @@
   		</selectKey>
 		INSERT INTO data_info_attribute(
 			data_attribute_id, data_id, attributes
-		) values(
+		) VALUES (
 			#{data_attribute_id}, #{data_id}, TO_JSON(#{attributes}::json)
 		)
 	</insert>
@@ -257,7 +273,7 @@
   		</selectKey>
 		INSERT INTO data_info_object_attribute(
 			data_object_attribute_id, data_id, object_id, attributes
-		) values(
+		) VALUES (
 			#{data_object_attribute_id}, #{data_id}, #{object_id}, TO_JSON(#{attributes}::json)
 		)
 	</insert>
@@ -314,6 +330,9 @@
 			</if>
 			update_date = now()
 		WHERE data_id = #{data_id}
+			<if test="user_id != null and user_id != ''">
+			AND user_id = #{user_id}
+			</if>
 	</update>
 	
 	<!-- Data Attribute update -->
@@ -332,12 +351,20 @@
 		SET status = #{status},
 			update_date = NOW()
 		WHERE data_id = #{data_id}
+			<if test="user_id != null and user_id != ''">
+			AND user_id = #{user_id}
+			</if>
 	</update>
 	
 	<!-- Data 삭제 -->
 	<delete id="deleteData" parameterType="long">
 		/* deleteData */
-		DELETE FROM data_info WHERE data_id = #{data_id}
+		DELETE 
+		FROM data_info 
+		WHERE data_id = #{data_id}
+			<if test="user_id != null and user_id != ''">
+			AND user_id = #{user_id}
+			</if>
 	</delete>
 	
 	<!-- Data 에 속하는 모든 Object ID를 삭제 -->
@@ -347,8 +374,15 @@
 	</delete>
 	
 	<!-- Data 에 속하는 모든 Object ID를 삭제 -->
-	<delete id="deleteDataByProjectId" parameterType="long">
+	<delete id="deleteDataByProjectId" parameterType="project">
 		/* deleteDataByProjectId */
-		DELETE FROM data_info WHERE project_id = #{project_id} AND parent = 0 AND depth = 1
+		DELETE 
+		FROM data_info 
+		WHERE project_id = #{project_id} 
+			AND parent = 0 
+			AND depth = 1
+			<if test="user_id != null and user_id != ''">
+			AND user_id = #{user_id}
+			</if>
 	</delete>
 </mapper>

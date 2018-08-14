@@ -28,6 +28,26 @@ JS_MESSAGE["login.password.decrypt.exception"] = "로그인 비밀번호 처리 
 JS_MESSAGE["object.id.empty"] = "Object Id 선택하여 주십시오.";
 
 
+JS_MESSAGE["user.group.role.invalid"] = "사용자 그룹 권한이 유효하지 않습니다.";
+
+//project
+JS_MESSAGE["project.insert"] = "프로젝트를 등록 하였습니다.";
+JS_MESSAGE["project.update"] = "프로젝트를 수정 하였습니다.";
+JS_MESSAGE["project.project_id.empty"] = "Project Id를 입력하여 주십시오.";
+JS_MESSAGE["project.key.empty"] = "Key를 입력하여 주십시오.";
+JS_MESSAGE["project.key.enable"] = "사용 가능한 Key 입니다.";
+JS_MESSAGE["project.key.same"] = "동일 Key 입니다.";
+JS_MESSAGE["project.key.duplication"] = "사용중인 Key 입니다. 다른 Key를 선택해 주십시오.";
+JS_MESSAGE["project.key.duplication_value.check"] = "Key 중복확인을 해주십시오."
+JS_MESSAGE["project.key.duplication_value.already"] = "사용중인 Key 입니다. 다른 Key를 선택해 주십시오.";
+JS_MESSAGE["project.name.empty"] = "프로젝트명을 입력하여 주십시오.";
+JS_MESSAGE["project.latitude.empty"] = "위도를 입력하여 주십시오.";
+JS_MESSAGE["project.longitude.empty"] = "경도를  입력하여 주십시오.";
+JS_MESSAGE["project.height.empty"] = "높이를  입력하여 주십시오.";
+JS_MESSAGE["project.height.empty"] = "이동시간을  입력하여 주십시오.";
+
+JS_MESSAGE["project.data.no.found"] = "프로젝트가 데이터가 존재하지 않습니다.";
+
 // 데이터
 JS_MESSAGE["data.key.empty"] = "Data Key를 입력하여 주십시오.";
 JS_MESSAGE["data.key.invalid"] = "Data Key가 올바르지 않습니다.";
@@ -53,8 +73,6 @@ JS_MESSAGE["issue.reporter.empty"] = "보고 해야 하는 사람을 입력하�
 JS_MESSAGE["issue.contents.empty"] = "내용을 입력하여 주십시오.";
 JS_MESSAGE["issue.due_day.invalid"] = "issue 마감일을 올바르게 입력하여 주십시오.";
 JS_MESSAGE["issue.due_time.invalid"] = "issue 마감시간을 올바르게 입력하여 주십시오.";
-
-JS_MESSAGE["project.data.no.found"] = "프로젝트가 데이터가 존재하지 않습니다.";
 
 JS_MESSAGE["demo.browser.recommend"] = "이 데모 페이지는 대용량 웹 데이터 처리를 위해 Chrome 브라우저에 최적화 되어 있습니다. \n원활한 서비스 이용을 위해 Chrome 브라우저를 이용  하시기 바랍니다.";
 JS_MESSAGE["demo.select.object.message"] = "클릭 후 객체를 선택해 주세요.";

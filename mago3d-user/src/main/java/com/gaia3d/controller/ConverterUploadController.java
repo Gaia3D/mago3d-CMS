@@ -109,7 +109,7 @@ public class ConverterUploadController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "input-converterjob.do")
+	@RequestMapping(value = "input-converter-job.do")
 	public String inputConverterJob(HttpServletRequest request, ConverterUploadLog converterUploadLog, @RequestParam(defaultValue="1") String pageNo, Model model) {
 		log.info("@@ converterUploadLog = {}", converterUploadLog);
 		
@@ -146,7 +146,7 @@ public class ConverterUploadController {
 		model.addAttribute("projectListSize", projectList.size());
 		model.addAttribute("converterUploadLogList", converterUploadLogList);
 		
-		return "/converter/input-converterjob";
+		return "/converter/input-converter-job";
 	}
 	
 	/**

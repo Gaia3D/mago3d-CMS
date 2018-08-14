@@ -67,16 +67,16 @@
   		</selectKey>
 		INSERT INTO converter_upload_log(
 			converter_upload_log_id, user_id, file_name, file_real_name, file_path, file_size, file_ext
-		) values(
+		) VALUES (
 			#{converter_upload_log_id}, #{user_id}, #{file_name}, #{file_real_name}, #{file_path}, #{file_size}, #{file_ext}
 		)
 	</insert>
 	
 	<!-- f4d converter 변환 횟수 업데이트 -->
-	<insert id="updateConverterCount" parameterType="converterUploadLog" >
+	<update id="updateConverterCount" parameterType="converterUploadLog" >
 		/* updateConverterCount */
 		UPDATE converter_upload_log
 		SET converter_count = converter_count + 1
 		WHERE converter_upload_log_id = #{converter_upload_log_id} AND user_id = #{user_id}
-	</insert>
+	</update>
 </mapper>

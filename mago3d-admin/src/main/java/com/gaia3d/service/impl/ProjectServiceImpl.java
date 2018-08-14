@@ -131,7 +131,7 @@ public class ProjectServiceImpl implements ProjectService {
 		
 		// TODO 프로젝트에 속한 데이터들은 삭제해야 하나?
 		// project 이름으로 등록된 최상위 data를 삭제
-		dataMapper.deleteDataByProjectId(project_id);
+		dataMapper.deleteDataByProjectId(project);
 		
 		return projectMapper.deleteProject(project);
 	}

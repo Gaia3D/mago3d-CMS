@@ -82,7 +82,7 @@
 		/* insertMenu */
 		INSERT INTO menu(
 			menu_id, menu_type, name, name_en, parent, depth, view_order, url, url_alias, image, image_alt, css_class, use_yn, display_yn, description
-		) values(
+		) VALUES (
 			#{menu_id}, #{menu_type}, #{name}, #{name_en}, #{parent}, #{depth}, #{view_order}, #{url}, #{url_alias}, #{image}, #{image_alt}, #{css_class}, #{use_yn}, #{display_yn}, #{description} 
 		)
 	</insert>

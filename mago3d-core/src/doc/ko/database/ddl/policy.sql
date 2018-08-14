@@ -170,7 +170,7 @@ comment on column policy.password_create_char is '초기 패스워드 생성 문자열. 엑�
 comment on column policy.password_exception_char is '패스워드로 사용할수 없는 특수문자(XSS). <,>,&,작은따음표,큰따움표';
 
 comment on column policy.geo_view_library is 'view library. 기본 cesium';
-comment on column policy.geo_data_path is 'data 폴더. 기본 /data';
+comment on column policy.geo_data_path is 'data 폴더. 기본 /f4d';
 comment on column policy.geo_data_default_projects is '시작시 로딩 프로젝트. 배열로 저장';
 comment on column policy.geo_data_change_request_decision is '데이터 정보 변경 요청에 대한 처리. 0 : 자동승인, 1 : 결재(초기값)';
 comment on column policy.geo_cull_face_enable is 'cullFace 사용유무. 기본 false';

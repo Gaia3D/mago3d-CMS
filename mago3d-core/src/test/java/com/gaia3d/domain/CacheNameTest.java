@@ -1,5 +1,9 @@
 package com.gaia3d.domain;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+
 import org.junit.Test;
 
 public class CacheNameTest {

@@ -20,7 +20,7 @@
 		/* insertCommonCode */
 		INSERT INTO common_code(
 			code_key, code_type, code_name, code_name_en, code_value, use_yn, view_order, css_class, image, description
-		) values(
+		) VALUES (
 			#{code_key}, #{code_type}, #{code_name}, #{code_name_en}, #{code_value}, #{use_yn}, #{view_order}, #{css_class}, #{image}, #{description}
 		)
 	</insert>

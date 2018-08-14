@@ -112,14 +112,14 @@ insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, u
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(304, '1', '데이터 목록 보기', 'PROJECT', 300 , 2, 4, '/data/list-data.do', 'glyph-home', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(400, '1', 'Converter', 'CONVERTER', 0 , 1, 3, '/converter/input-upload.do', 'glyph-home', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(401, '1', '파일 업로딩', 'CONVERTER', 400 , 2, 1, '/converter/input-upload.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(402, '1', 'F4D 변환 Job 등록', 'CONVERTER', 400 , 2, 2, '/converter/input-converterjob.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(403, '1', 'Job 실행 결과', 'CONVERTER', 400 , 2, 3, '/converter/list-converterjob.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(402, '1', 'F4D 변환 Job 등록', 'CONVERTER', 400 , 2, 2, '/converter/input-converter-job.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(403, '1', 'Job 실행 결과', 'CONVERTER', 400 , 2, 3, '/converter/list-converter-job.do', 'glyph-home', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(500, '1', 'Participation Project', 'PARTICIPATION PROJECT', 0 , 1, 4, '/share/list-project.do', 'glyph-home', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(501, '1', '프로젝트 목록 보기', 'PARTICIPATION PROJECT', 500 , 2, 1, '/share/list-project.do', 'glyph-home', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(502, '1', '프로젝트 Map 보기', 'PARTICIPATION PROJECT', 500 , 2, 2, '/share/map-project.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(600, '1', 'Cloud Settings', 'CLOUD SETTINGS', 0 , 1, 5, '/setting/detail-membership.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(601, '1', 'MemberShip 설정', 'CLOUD SETTINGS', 600 , 2, 1, '/setting/detail-membership.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(602, '1', 'mago3D 설정', 'CLOUD SETTINGS', 600 , 2, 2, '/setting/detail-mago3d.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(600, '1', 'Cloud Settings', 'CLOUD SETTINGS', 0 , 1, 5, '/settings/modify-membership.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(601, '1', 'MemberShip 설정', 'CLOUD SETTINGS', 600 , 2, 1, '/settings/modify-membership.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(602, '1', 'mago3D 설정', 'CLOUD SETTINGS', 600 , 2, 2, '/settings/modify-user-policy.do', 'glyph-home', 'N', 'Y');
 
 
 -- 사용자 그룹별 메뉴
