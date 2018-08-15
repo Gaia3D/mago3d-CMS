@@ -14,6 +14,8 @@ import lombok.ToString;
 @ToString
 public class ConverterJob {
 	
+	public static final String JOB_FAIL = "3";
+	
 	// job에 포함된 변환 파일 갯수
 	private Integer converter_file_count;
 	
@@ -38,8 +40,6 @@ public class ConverterJob {
 	
 	// Primary Key
 	private Long converter_job_id;
-	// project 고유번호
-	private Long project_id;
 	// 사용자 고유번호
 	private String user_id;
 	// title

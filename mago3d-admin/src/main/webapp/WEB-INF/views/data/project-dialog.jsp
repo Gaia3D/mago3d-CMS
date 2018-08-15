@@ -4,11 +4,11 @@
 		<col class="col-label" />
 		<col class="col-data" />
 		<tr>
-			<th class="col-label" scope="row"><spring:message code='data.project.name'/></th>
+			<th class="col-label" scope="row"><spring:message code='project.name'/></th>
 			<td id="project_name_info" class="col-data"></td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row"><spring:message code='data.project.key'/></th>
+			<th class="col-label" scope="row"><spring:message code='project.key'/></th>
 			<td id="project_key_info" class="col-data"></td>
 		</tr>
 		<tr>

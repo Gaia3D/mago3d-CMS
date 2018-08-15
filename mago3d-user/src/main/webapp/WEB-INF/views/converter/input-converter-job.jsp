@@ -170,19 +170,6 @@
 			<col class="col-data" />
 			<tbody>
 				<tr>
-					<th class="col-sub-label x">프로젝트</th>
-					<td>
-						<div class="inner-data">
-							<select id="project_id" name="project_id" class="select" style="width: 350px; height: 30px;">
-								<option value=""> 선택 </option>
-<c:forEach var="project" items="${projectList}">
-								<option value="${project.project_id }">${project.project_name }</option>
-</c:forEach>							
-							</select>							
-						</div>
-					</td>
-				</tr>
-				<tr>
 					<th class="col-sub-label x">제목</th>
 					<td>
 						<div class="inner-data">
@@ -220,7 +207,7 @@
 	
 	var dialogConverterJob = $( ".dialog_converter_job" ).dialog({
 		autoOpen: false,
-		height: 320,
+		height: 280,
 		width: 600,
 		modal: true,
 		resizable: false,
@@ -252,15 +239,6 @@
 	// F4D Converter 일괄 변환
 	var saveConverterJobFlag = true;
 	function saveConverterJob() {
-		var projectListSize = "${projectListSize}";
-		if(projectListSize === "0") {
-			alert("프로젝트 등록 후 이용 가능합니다.");
-			return false;	
-		}
-		if($("#project_id").val() == null || $("#project_id").val() == "") {
-			alert("프로젝트를 입력하여 주십시오. ");
-			return false;
-		}
 		if($("#title").val() == null || $("#title").val() == "") {
 			alert("제목을 입력하여 주십시오.");
 			return false;

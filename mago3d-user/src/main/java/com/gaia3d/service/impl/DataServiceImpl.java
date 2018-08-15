@@ -1,5 +1,6 @@
 package com.gaia3d.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +101,16 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	/**
+	 * 최상위 root dataInfo 정보 취득
+	 * @param projectId
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public DataInfo getRootDataByProjectId(Long projectId) {
+		return dataMapper.getRootDataByProjectId(projectId);
+	}
+	
+	/**
 	 * Data Attribute 정보 취득
 	 * @param data_id
 	 * @return
@@ -155,5 +166,132 @@ public class DataServiceImpl implements DataService {
 		}
 		
 		return dataLogMapper.insertDataInfoLog(dataInfoLog);
+	}
+	
+	/**
+	 * Data 등록
+	 * @param dataInfo
+	 * @return
+	 */
+	@Transactional
+	public int insertData(DataInfo dataInfo) {
+		return dataMapper.insertData(dataInfo);
+	}
+	
+	/**
+	 * Data 속성 등록
+	 * @param dataInfoAttribute
+	 * @return
+	 */
+	@Transactional
+	public int insertDataAttribute(DataInfoAttribute dataInfoAttribute) {
+		return dataMapper.insertDataAttribute(dataInfoAttribute);
+	}
+	
+	/**
+	 * Data Object 속성 등록
+	 * @param dataInfoObjectAttribute
+	 * @return
+	 */
+	@Transactional
+	public int insertDataObjectAttribute(DataInfoObjectAttribute dataInfoObjectAttribute) {
+		return dataMapper.insertDataObjectAttribute(dataInfoObjectAttribute);
+	}
+	
+	/**
+	 * Data 수정
+	 * @param dataInfo
+	 * @return
+	 */
+	@Transactional
+	public int updateData(DataInfo dataInfo) {
+		// TODO 환경 설정 값을 읽어 와서 update 할 건지, delete 할건지 분기를 타야 함
+		return dataMapper.updateData(dataInfo);
+	}
+	
+	/**
+	 * Data 속성 수정
+	 * @param dataInfoAttribute
+	 * @return
+	 */
+	@Transactional
+	public int updateDataAttribute(DataInfoAttribute dataInfoAttribute) {
+		return dataMapper.updateDataAttribute(dataInfoAttribute);
+	}
+	
+	/**
+	 * Data 상태 수정
+	 * @param dataInfo
+	 * @return
+	 */
+	@Transactional
+	public int updateDataStatus(DataInfo dataInfo) {
+		return dataMapper.updateDataStatus(dataInfo);
+	}
+	
+	/**
+	 * TODO 위에 것과 하나로 합쳐라.
+	 * 일괄 데이터 상태 수정
+	 * @param business_type
+	 * @param status_value
+	 * @param check_ids
+	 * @return
+	 */
+	@Transactional
+	public List<String> updateDataStatus(String business_type, String status_value, String check_ids) {
+		
+		List<String> result = new ArrayList<>();
+		String[] dataIds = check_ids.split(",");
+		
+		for(String data_id : dataIds) {
+			DataInfo dataInfo = new DataInfo();
+			dataInfo.setData_id(Long.valueOf(data_id));
+			if("LOCK".equals(status_value)) {
+				dataInfo.setStatus(DataInfo.STATUS_FORBID);
+			} else if("UNLOCK".equals(status_value)) {
+				dataInfo.setStatus(DataInfo.STATUS_USE);
+			}
+			dataMapper.updateDataStatus(dataInfo);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Data 삭제
+	 * @param data_id
+	 * @return
+	 */
+	@Transactional
+	public int deleteData(Long data_id) {
+//		Policy policy = CacheManager.getPolicy();
+//		String dataDeleteType = policy.getData_delete_type();
+		
+		return dataMapper.deleteData(data_id);
+	}
+	
+	/**
+	 * 일괄 Data 삭제
+	 * @param check_ids
+	 * @return
+	 */
+	@Transactional
+	public int deleteDataList(String check_ids) {
+		String[] dataIds = check_ids.split(",");
+		for(String data_id : dataIds) {
+			dataMapper.deleteData(Long.valueOf(data_id));
+		}
+		
+		return check_ids.length();
+	}
+	
+	/**
+	 * Data 에 속하는 모든 Object ID를 삭제
+	 * @param dataId
+	 * @return
+	 */
+	@Transactional
+	public int deleteDataObjects(Long dataId) {
+		return dataMapper.deleteDataObjects(dataId);
 	}
 }

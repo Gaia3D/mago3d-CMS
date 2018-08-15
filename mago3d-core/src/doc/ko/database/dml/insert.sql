@@ -114,6 +114,7 @@ insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, u
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(401, '1', '파일 업로딩', 'CONVERTER', 400 , 2, 1, '/converter/input-upload.do', 'glyph-home', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(402, '1', 'F4D 변환 Job 등록', 'CONVERTER', 400 , 2, 2, '/converter/input-converter-job.do', 'glyph-home', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(403, '1', 'Job 실행 결과', 'CONVERTER', 400 , 2, 3, '/converter/list-converter-job.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(404, '1', 'F4D 공간정보 등록', 'CONVERTER', 400 , 2, 4, '/converter/list-converter-log.do', 'glyph-home', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(500, '1', 'Participation Project', 'PARTICIPATION PROJECT', 0 , 1, 4, '/share/list-project.do', 'glyph-home', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(501, '1', '프로젝트 목록 보기', 'PARTICIPATION PROJECT', 500 , 2, 1, '/share/list-project.do', 'glyph-home', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(502, '1', '프로젝트 Map 보기', 'PARTICIPATION PROJECT', 500 , 2, 2, '/share/map-project.do', 'glyph-home', 'N', 'Y');
@@ -186,6 +187,7 @@ insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (401, 2, 401);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (402, 2, 402);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (403, 2, 403);
+insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (404, 2, 404);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (500, 2, 500);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (501, 2, 501);
 insert into user_group_menu(user_group_menu_id, user_group_id, menu_id) values (502, 2, 502);

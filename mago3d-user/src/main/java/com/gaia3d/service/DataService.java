@@ -2,6 +2,8 @@ package com.gaia3d.service;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoAttribute;
 import com.gaia3d.domain.DataInfoLog;
@@ -64,6 +66,13 @@ public interface DataService {
 	DataInfo getDataByDataKey(DataInfo dataInfo);
 	
 	/**
+	 * 최상위 root dataInfo 정보 취득
+	 * @param projectId
+	 * @return
+	 */
+	public DataInfo getRootDataByProjectId(Long projectId);
+	
+	/**
 	 * Data Attribute 정보 취득
 	 * @param data_id
 	 * @return
@@ -85,8 +94,83 @@ public interface DataService {
 	List<DataInfoObjectAttribute> getListDataObjectAttribute(DataInfoObjectAttribute dataInfoObjectAttribute);
 	
 	/**
+	 * Data 등록
+	 * @param dataInfo
+	 * @return
+	 */
+	int insertData(DataInfo dataInfo);
+	
+	/**
+	 * Data 속성 등록
+	 * @param dataInfoAttribute
+	 * @return
+	 */
+	int insertDataAttribute(DataInfoAttribute dataInfoAttribute);
+	
+	/**
+	 * Data Object 속성 등록
+	 * @param dataInfoObjectAttribute
+	 * @return
+	 */
+	int insertDataObjectAttribute(DataInfoObjectAttribute dataInfoObjectAttribute);
+	
+	/**
 	 * 데이터 공간 정보 변경 요청
 	 * @return
 	 */
 	int updateDataLocationAndRotation(DataInfoLog dataInfoLog);
+	
+	/**
+	 * Data 수정
+	 * @param dataInfo
+	 * @return
+	 */
+	int updateData(DataInfo dataInfo);
+	
+	/**
+	 * Data Attribute 수정
+	 * @param dataInfoAttribute
+	 * @return
+	 */
+	int updateDataAttribute(DataInfoAttribute dataInfoAttribute);
+	
+	/**
+	 * Data 상태 수정
+	 * @param dataInfo
+	 * @return
+	 */
+	int updateDataStatus(DataInfo dataInfo);
+	
+	/**
+	 * Data 상태 수정
+	 * @param business_type
+	 * @param status_value
+	 * @param check_ids
+	 * @param business_type
+	 * @param status_value
+	 * @param check_ids
+	 * @return
+	 */
+	List<String> updateDataStatus(String business_type, String status_value, String check_ids);
+	
+	/**
+	 * Data 삭제
+	 * @param data_id
+	 * @return
+	 */
+	int deleteData(Long data_id);
+	
+	/**
+	 * 일괄 Data 삭제
+	 * @param dataIds
+	 * @return
+	 */
+	int deleteDataList(String dataIds);
+	
+	/**
+	 * Data 에 속하는 모든 Object ID를 삭제
+	 * @param dataId
+	 * @return
+	 */
+	int deleteDataObjects(Long dataId);
 }

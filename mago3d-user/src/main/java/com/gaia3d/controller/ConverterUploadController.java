@@ -21,10 +21,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.ConverterUploadLog;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.Pagination;
-import com.gaia3d.domain.Project;
-import com.gaia3d.domain.ConverterUploadLog;
 import com.gaia3d.domain.UserSession;
 import com.gaia3d.service.ConverterUploadService;
 import com.gaia3d.service.ProjectService;
@@ -116,13 +115,6 @@ public class ConverterUploadController {
 		log.info("@@ converterUploadLog = {}", converterUploadLog);
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-		
-		Project project = new Project();
-		project.setUser_id(userSession.getUser_id());
-		project.setUse_yn(Project.IN_USE);
-		List<Project> projectList = projectService.getListProject(project);
-		log.info("@@ projectList size = {}, {}", projectList.size(), projectList.isEmpty());
-		
 		converterUploadLog.setUser_id(userSession.getUser_id());
 		
 		if(StringUtil.isNotEmpty(converterUploadLog.getStart_date())) {
@@ -144,8 +136,6 @@ public class ConverterUploadController {
 		}
 		
 		model.addAttribute(pagination);
-		model.addAttribute("projectList", projectList);
-		model.addAttribute("projectListSize", projectList.size());
 		model.addAttribute("converterUploadLogList", converterUploadLogList);
 		
 		return "/converter/input-converter-job";

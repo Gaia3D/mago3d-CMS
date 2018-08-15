@@ -9,9 +9,6 @@
 		SELECT COUNT(converter_job_id) 
 		FROM converter_job
 		WHERE user_id = #{user_id}
-			<if test="project_id != null and project_id > 0">
-			AND project_id = #{project_id}
-			</if>
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 			AND ${search_word} = #{search_value}
 			</if>
@@ -42,9 +39,6 @@
 			SELECT A.*
 			FROM converter_job A
 			WHERE A.user_id = #{user_id}
-				<if test="project_id != null and project_id > 0">
-				AND project_id = #{project_id}
-				</if>
 				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 				AND A.${search_word} = #{search_value}
 				</if>
@@ -161,13 +155,13 @@
     		SELECT NEXTVAL('converter_job_seq')
   		</selectKey>
 		INSERT INTO converter_job(
-			converter_job_id, user_id, project_id, title, converter_type, 
+			converter_job_id, user_id, title, converter_type, 
 			<if test="status != null and status != ''">
 			status, 
 			</if>
 			error_code
 		) VALUES (
-			#{converter_job_id}, #{user_id}, #{project_id}, #{title}, #{converter_type}, 
+			#{converter_job_id}, #{user_id}, #{title}, #{converter_type}, 
 			<if test="status != null and status != ''">
 			#{status}, 
 			</if>
@@ -193,9 +187,6 @@
 		/* updateConverterJob */
 		UPDATE converter_job
 		SET 
-			<if test="project_id != null and project_id > 0">
-			project_id = #{project_id}
-			</if>
 			<if test="title != null and title != ''">
 			title = #{title},
 			</if>

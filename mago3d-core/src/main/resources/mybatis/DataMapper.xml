@@ -170,6 +170,17 @@
 			</if>
 	</select>
 	
+	<!-- 최상위 root dataInfo 정보 취득 -->
+	<select id="getRootDataByProjectId" parameterType="long" resultType="dataInfo">
+		/* getRootDataByProjectId */
+		SELECT *
+		FROM data_info
+		WHERE project_id = #{projectId}
+			AND parent = 0
+			AND depth = 1
+	</select>
+	
+	
 	<!-- Data Attribute 정보 -->
 	<select id="getDataAttribute" parameterType="long" resultType="dataInfoAttribute">
 		/* getDataAttribute */

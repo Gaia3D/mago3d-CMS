@@ -61,7 +61,8 @@ public class ConverterController {
 				map.put("result", "check.value.required");
 				return map;
 			}
-			if(converterJob.getTitle() == null || converterJob.getTitle().isEmpty()) {
+			if(/*converterJob.getProject_id() == null || converterJob.getProject_id().longValue() == 0l ||*/ 
+					converterJob.getTitle() == null || converterJob.getTitle().isEmpty()) {
 				map.put("result", "input.invalid");
 				return map;
 			}
@@ -81,7 +82,12 @@ public class ConverterController {
 			// TODO
 			// 조금 미묘하다. transaction 처리를 할지, 관리자 UI 재 실행을 위해서는 여기가 맞는거 같기도 하고....
 			// 별도 기능으로 분리해야 하나?
-			aMQPPublishService.send(buffer.toString());
+			try {
+				aMQPPublishService.send(buffer.toString());
+			} catch(Exception ex) {
+				converterJob.setStatus(ConverterJob.JOB_FAIL);
+				converterJob.setError_code(ex.getMessage());
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
@@ -130,7 +136,7 @@ public class ConverterController {
 	}
 	
 	/**
-	 * 각 파일별 f4d converter log 목록
+	 * F4D 공간 정보 등록
 	 * @param request
 	 * @param converterLog
 	 * @param pageNo

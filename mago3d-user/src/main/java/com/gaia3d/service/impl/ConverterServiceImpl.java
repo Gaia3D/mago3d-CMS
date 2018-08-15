@@ -13,6 +13,7 @@ import com.gaia3d.domain.DataInfo;
 import com.gaia3d.persistence.ConverterMapper;
 import com.gaia3d.service.ConverterService;
 import com.gaia3d.service.ConverterUploadService;
+import com.gaia3d.service.DataService;
 
 /**
  * f4d converter manager
@@ -24,6 +25,8 @@ public class ConverterServiceImpl implements ConverterService {
 
 	@Autowired
 	private ConverterUploadService converterUploadService;
+	@Autowired
+	private DataService dataService;
 	
 	@Autowired
 	private ConverterMapper converterMapper;
@@ -101,24 +104,69 @@ public class ConverterServiceImpl implements ConverterService {
 		String userId = converterJob.getUser_id();
 		Long converterJobId = converterJob.getConverter_job_id();
 		
-		Long projectId = converterJob.getProject_id();
 		for(String converter_upload_log_id : converterUploadLogIds) {
+			ConverterUploadLog converterUploadLog = converterUploadService.getConverterUploadLog(Long.valueOf(converter_upload_log_id));
+			
 			ConverterLog converterLog = new ConverterLog();
 			converterLog.setUser_id(userId);
 			converterLog.setConverter_job_id(converterJobId);
 			converterLog.setConverter_upload_log_id(new Long(converter_upload_log_id));
+			converterLog.setData_key(converterUploadLog.getFile_real_name().substring(0, converterUploadLog.getFile_real_name().lastIndexOf(".")));
+			converterLog.setData_name(converterUploadLog.getFile_name().substring(0, converterUploadLog.getFile_name().lastIndexOf(".")));
 			converterMapper.insertConverterLog(converterLog);
 			
-			ConverterUploadLog converterUploadLog = converterUploadService.getConverterUploadLog(Long.valueOf(converter_upload_log_id));
 			// TODO 이건 굳이 안해도 될거 같음
 			converterUploadService.updateConverterCount(converterLog);
-			
-			DataInfo dataInfo = new DataInfo();
-			dataInfo.setProject_id(projectId);
-			dataInfo.setData_key(converterUploadLog.getFile_name());
 		}
 
 		return converterJobId;
+	}
+	
+	/**
+	 * f4d converter job register
+	 * @param dataInfoLog
+	 * @return
+	 */
+	@Transactional
+	public Long insertData(String check_ids, ConverterJob converterJob) {
+//		converterMapper.insertConverterJob(converterJob);
+//		
+//		String[] converterUploadLogIds = check_ids.split(",");
+//		String userId = converterJob.getUser_id();
+//		Long converterJobId = converterJob.getConverter_job_id();
+//		
+//		Long projectId = converterJob.getProject_id();
+//		DataInfo rootDataInfo = dataService.getRootDataByProjectId(projectId);
+//		int order = 1;
+//		String attributes = "{\"isPhysical\": false}";
+//		for(String converter_upload_log_id : converterUploadLogIds) {
+//			ConverterLog converterLog = new ConverterLog();
+//			converterLog.setUser_id(userId);
+//			converterLog.setConverter_job_id(converterJobId);
+//			converterLog.setConverter_upload_log_id(new Long(converter_upload_log_id));
+//			converterMapper.insertConverterLog(converterLog);
+//			
+//			ConverterUploadLog converterUploadLog = converterUploadService.getConverterUploadLog(Long.valueOf(converter_upload_log_id));
+//			// TODO 이건 굳이 안해도 될거 같음
+//			converterUploadService.updateConverterCount(converterLog);
+//			
+//			// data_info 테이블을 조회 후 데이터가 존재하면 패스, 존재하지 않으면 등록
+//			
+//			DataInfo dataInfo = new DataInfo();
+//			dataInfo.setProject_id(projectId);
+//			dataInfo.setData_key(converterUploadLog.getFile_real_name().substring(0, converterUploadLog.getFile_real_name().lastIndexOf(".")));
+//			dataInfo.setData_name(converterUploadLog.getFile_name().substring(0, converterUploadLog.getFile_name().lastIndexOf(".")));
+//			dataInfo.setUser_id(userId);
+//			dataInfo.setParent(rootDataInfo.getData_id());
+//			dataInfo.setDepth(rootDataInfo.getDepth() + 1);
+//			dataInfo.setView_order(order);
+//			dataInfo.setAttributes(attributes);
+//			dataService.insertData(dataInfo);
+//			
+//			order++;
+//		}
+
+		return 0l;
 	}
 	
 	/**

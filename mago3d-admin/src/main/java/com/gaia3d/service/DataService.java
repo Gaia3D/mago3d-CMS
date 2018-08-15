@@ -120,13 +120,6 @@ public interface DataService {
 	int insertDataObjectAttribute(DataInfoObjectAttribute dataInfoObjectAttribute);
 	
 	/**
-	 * Data 그룹에 Data 등록
-	 * @param dataInfo
-	 * @return
-	 */
-	int updateDataGroupData(DataInfo dataInfo);
-	
-	/**
 	 * Data 수정
 	 * @param dataInfo
 	 * @return

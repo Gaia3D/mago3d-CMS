@@ -81,6 +81,13 @@ public interface DataMapper {
 	DataInfo getDataByDataKey(DataInfo dataInfo);
 	
 	/**
+	 * 최상위 root dataInfo 정보 취득
+	 * @param projectId
+	 * @return
+	 */
+	DataInfo getRootDataByProjectId(Long projectId);
+	
+	/**
 	 * Data Attribute 정보 취득
 	 * @param data_id
 	 * @return
