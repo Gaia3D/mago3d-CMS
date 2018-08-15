@@ -8,6 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>Mago3D</title>
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 	<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->

@@ -33,7 +33,7 @@
 				<!-- Start content by page -->
 				<div class="page-content">
 					<div class="filters">
-		   				<form:form id="searchForm" modelAttribute="converterJob" method="post" action="/converter/list-converter-job.do" onsubmit="return searchCheck();">
+		   				<form:form id="searchForm" modelAttribute="converterLog" method="post" action="/converter/list-converter-log.do" onsubmit="return searchCheck();">
 						<div class="input-group row">
 							<div class="input-set">
 								<label for="search_word"><spring:message code='search.word'/></label>
@@ -95,6 +95,12 @@
 							<col class="col-functions" />
 							<col class="col-functions" />
 							<col class="col-functions" />
+							<col class="col-functions" />
+							<col class="col-functions" />
+							<col class="col-functions" />
+							<col class="col-functions" />
+							<col class="col-functions" />
+							<col class="col-functions" />
 							<thead>
 								<tr>
 									<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
@@ -104,32 +110,40 @@
 									<th scope="col" class="col-functions">위도</th>
 									<th scope="col" class="col-functions">경도</th>
 									<th scope="col" class="col-functions">높이</th>
+									<th scope="col" class="col-functions">Heading</th>
+									<th scope="col" class="col-functions">Pitch</th>
+									<th scope="col" class="col-functions">Roll</th>
+									<th scope="col" class="col-functions">상태</th>
 									<th scope="col" class="col-functions">변환 결과</th>
-									<th scope="col" class="col-functions">공간정보</th>
-									<th scope="col" class="col-name">파일개수</th>
-									<th scope="col" class="col-functions">상세 결과</th>
+									<th scope="col" class="col-functions">정보</th>
 									<th scope="col" class="col-date"><spring:message code='insert.date'/></th>
 								</tr>
 							</thead>
 							<tbody>
-<c:if test="${empty converterJobList }">
+<c:if test="${empty converterLogList }">
 								<tr>
-									<td colspan="8" class="col-none">Converter Job이 존재하지 않습니다.</td>
+									<td colspan="14" class="col-none">Converter Log가 존재하지 않습니다.</td>
 								</tr>
 </c:if>
-<c:if test="${!empty converterJobList }">
-	<c:forEach var="converterJob" items="${converterJobList}" varStatus="status">
+<c:if test="${!empty converterLogList }">
+	<c:forEach var="converterLog" items="${converterLogList}" varStatus="status">
 									<tr>
 										<td class="col-checkbox">
-											<input type="checkbox" id="converter_job_id_${converterJob.converter_job_id}" name="converter_job_id" value="${converterJob.converter_job_id}" />
+											<input type="checkbox" id="converter_job_id_${converterLog.converter_log_id}" name="converter_log_id" value="${converterLog.converter_log_id}" />
 										</td>
 										<td class="col-number">${pagination.rowNumber - status.index }</td>
-										<td class="col-name">${converterJob.title }</td>
-										<td class="col-functions">${converterJob.converter_type }</td>
-										<td class="col-functions">${converterJob.status}</td>
-										<td class="col-name">${converterJob.converter_file_count}</td>
-										<td class="col-functions"><a href="#" onclick="detailConverterJob('${converterJob.converter_job_id}'); return false;">[보기]</a></td>
-										<td class="col-name">${converterJob.viewInsertDate }</td>
+										<td class="col-name">${converterLog.project_name }</td>
+										<td class="col-functions">${converterLog.data_name }</td>
+										<td class="col-functions">${converterLog.latitude}</td>
+										<td class="col-functions">${converterLog.longitude}</td>
+										<td class="col-functions">${converterLog.height}</td>
+										<td class="col-functions">${converterLog.heading}</td>
+										<td class="col-functions">${converterLog.pitch}</td>
+										<td class="col-functions">${converterLog.roll}</td>
+										<td class="col-functions">${converterLog.status}</td>
+										<td class="col-functions">${converterLog.converter_result}</td>
+										<td class="col-functions"><a href="/converter/modify-converter-log.do?converter_log_id=${converterLog.converter_log_id}" >수정</a></td>
+										<td class="col-name">${converterLog.viewInsertDate }</td>
 									</tr>
 	</c:forEach>
 </c:if>

@@ -57,7 +57,7 @@ create table converter_log(
 	converter_job_id				bigint,
 	converter_upload_log_id			bigint,
 	user_id							varchar(32),
-	project_id					int									not null,
+	project_id					int	,
 	data_key					varchar(128)						not null,
 	data_name					varchar(256),
 	parent						bigint								default 1,

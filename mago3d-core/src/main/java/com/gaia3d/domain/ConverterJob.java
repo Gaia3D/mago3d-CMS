@@ -14,6 +14,9 @@ import lombok.ToString;
 @ToString
 public class ConverterJob {
 	
+	public static final String JOB_READY = "0";
+	public static final String JOB_SUCCESS = "1";
+	public static final String JOB_MIX = "2";
 	public static final String JOB_FAIL = "3";
 	
 	// job에 포함된 변환 파일 갯수

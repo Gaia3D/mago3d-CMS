@@ -113,29 +113,29 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
         super.addViewControllers(registry);
     }
 
-	@Bean
-	public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
-		log.info(" @@@ ServletConfig exceptionResolver @@@");
-		
-		SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
-		
-		Properties exceptionMappings = new Properties();
-	 	exceptionMappings.put("BusinessLogicException", "/error/business-error");
-	 	exceptionMappings.put("RuntimeException", "/error/runtime-error");
-	 	exceptionMappings.put("Exception", "/error/error");
-	 	simpleMappingExceptionResolver.setExceptionMappings(exceptionMappings);
-	 	
-	 	Properties statusCodes = new Properties();
-        statusCodes.put("/error/error", "403");
-        statusCodes.put("/error/error", "404");
-        statusCodes.put("/error/error", "500");
-        simpleMappingExceptionResolver.setStatusCodes(statusCodes);
-
-	 	simpleMappingExceptionResolver.setOrder(1);
-	 	simpleMappingExceptionResolver.setDefaultErrorView("/error/error");
-	 	
-	 	return simpleMappingExceptionResolver;
-	}
+//	@Bean
+//	public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
+//		log.info(" @@@ ServletConfig exceptionResolver @@@");
+//		
+//		SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
+//		
+//		Properties exceptionMappings = new Properties();
+//	 	exceptionMappings.put("BusinessLogicException", "/error/business-error");
+//	 	exceptionMappings.put("RuntimeException", "/error/runtime-error");
+//	 	exceptionMappings.put("Exception", "/error/error");
+//	 	simpleMappingExceptionResolver.setExceptionMappings(exceptionMappings);
+//	 	
+//	 	Properties statusCodes = new Properties();
+//        statusCodes.put("/error/error", "403");
+//        statusCodes.put("/error/error", "404");
+//        statusCodes.put("/error/error", "500");
+//        simpleMappingExceptionResolver.setStatusCodes(statusCodes);
+//
+//	 	simpleMappingExceptionResolver.setOrder(1);
+//	 	simpleMappingExceptionResolver.setDefaultErrorView("/error/error");
+//	 	
+//	 	return simpleMappingExceptionResolver;
+//	}
 	
 	@Bean
 	@ConditionalOnMissingBean(InternalResourceViewResolver.class)

@@ -121,8 +121,16 @@
 										</td>
 										<td class="col-number">${pagination.rowNumber - status.index }</td>
 										<td class="col-name">${converterJob.title }</td>
-										<td class="col-functions">${converterJob.converter_type }</td>
-										<td class="col-functions">${converterJob.status}</td>
+										<td class="col-functions">
+		<c:if test="${converterJob.converter_type eq '0'}">기본</c:if>
+		<c:if test="${converterJob.converter_type eq '1'}">큰 메쉬 하나</c:if>
+										</td>
+										<td class="col-functions">
+		<c:if test="${converterJob.status eq '0'}">준비</c:if>
+		<c:if test="${converterJob.status eq '1'}">성공</c:if>
+		<c:if test="${converterJob.status eq '2'}">확인필요</c:if>
+		<c:if test="${converterJob.status eq '3'}">실패</c:if>
+										</td>
 										<td class="col-name">${converterJob.converter_file_count}</td>
 										<td class="col-functions"><a href="#" onclick="detailConverterJob('${converterJob.converter_job_id}'); return false;">[보기]</a></td>
 										<td class="col-name">${converterJob.viewInsertDate }</td>

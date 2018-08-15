@@ -20,6 +20,7 @@ import com.gaia3d.domain.ConverterJob;
 import com.gaia3d.domain.ConverterLog;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.UserSession;
+import com.gaia3d.exception.BusinessLogicException;
 import com.gaia3d.service.AMQPPublishService;
 import com.gaia3d.service.ConverterService;
 import com.gaia3d.util.DateUtil;
@@ -87,6 +88,8 @@ public class ConverterController {
 			} catch(Exception ex) {
 				converterJob.setStatus(ConverterJob.JOB_FAIL);
 				converterJob.setError_code(ex.getMessage());
+				converterService.updateConverterJob(converterJob);
+				throw ex;
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -148,7 +151,6 @@ public class ConverterController {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 		converterLog.setUser_id(userSession.getUser_id());
-		
 		log.info("@@ converterLog = {}", converterLog);
 		if(StringUtil.isNotEmpty(converterLog.getStart_date())) {
 			converterLog.setStart_date(converterLog.getStart_date().substring(0, 8) + DateUtil.START_TIME);

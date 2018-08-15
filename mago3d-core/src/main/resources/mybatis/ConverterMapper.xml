@@ -100,7 +100,7 @@
 	<!-- converter log 목록 -->
 	<select id="getListConverterLog" parameterType="converterLog" resultType="converterLog">
 		/* getListConverterLog */
-		SELECT X.*, Y.file_name
+		SELECT X.*, Y.project_name
 		FROM (
 			SELECT A.*
 			FROM converter_log A
@@ -133,8 +133,8 @@
 			</otherwise>
 			</choose>
 			OFFSET #{offset} LIMIT #{limit}
-		) X, upload_log Y
-		WHERE X.upload_log_id = Y.upload_log_id
+		) X RIGHT OUTER JOIN project Y
+		ON X.project_id = Y.project_id
 	</select>
 	
 	<!-- converter job 정보 -->
@@ -176,9 +176,9 @@
     		SELECT NEXTVAL('converter_log_seq')
   		</selectKey>
 		INSERT INTO converter_log(
-			converter_log_id, converter_job_id, converter_upload_log_id, user_id, error_code
+			converter_log_id, converter_job_id, converter_upload_log_id, user_id, data_key, data_name
 		) VALUES (
-			#{converter_log_id}, #{converter_job_id}, #{converter_upload_log_id}, #{user_id}, #{error_code}
+			#{converter_log_id}, #{converter_job_id}, #{converter_upload_log_id}, #{user_id}, #{data_key}, #{data_name}
 		)
 	</insert>
 	
@@ -202,7 +202,7 @@
 			update_date = now()
 		WHERE converter_job_id = #{converter_job_id}
 			<if test="user_id != null and user_id != ''">
-			AND user_id = #{user_id},
+			AND user_id = #{user_id}
 			</if>
 	</update>
 </mapper>

@@ -180,7 +180,7 @@
 				<tr>
 					<th class="col-sub-label x">F4D 변환 타입</th>
 					<td class="col-input">
-						<input type="radio" id="converter_type_default" name="converter_type" value="0" />
+						<input type="radio" id="converter_type_default" name="converter_type" value="0" checked="checked" />
 						<label for="converter_type_default">기본</label>
 						<input type="radio" id="converter_type_big" name="converter_type" value="1" />
 						<label for="converter_type_big">Big Mesh One</label>
