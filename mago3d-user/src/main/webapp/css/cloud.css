@@ -99,7 +99,9 @@ em {
 
 /* 전체 layout 시작 */
 .default-layout {
-	width: 100%; min-width: 1420px; max-width: 1920px; margin: 0px; padding: 0px;
+	width: 100%; min-width: 1420px; max-width: 1920px; 
+	height: 100%;
+	margin: 0px; padding: 0px;
 }
 	
 /* 왼쪽 메뉴 시작 */	
@@ -128,9 +130,8 @@ em {
 	float: left;
 }
 
-
 .left-navigation-layout {
-	float:left; min-width:70px; min-height:500px;
+	float:left; min-width:70px;
 }
 .left-navigation-icons {
 	float: left;
@@ -170,7 +171,7 @@ em {
 
 /* 컨텐츠 시작 */	
 .content-layout {
-	margin-left: 220px; min-height:700px; overflow: hidden; background-color: #edf1f5;
+	margin-left: 220px; overflow: hidden; background-color: #edf1f5;
 	border-left: 1px outset #e6e9ed;
 }
 .content-header {
@@ -183,7 +184,6 @@ em {
 	background-color: #ffffff;
 }
 .content-detail {
-	min-height: 510px;
 	background-color: #ffffff;
 }
 

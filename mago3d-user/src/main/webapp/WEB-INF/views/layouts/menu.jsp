@@ -6,8 +6,8 @@
 			<img src="/images/ko/homepage/home-icon.png" style="padding-top:13px; width: 45px; height: 45px;">
 		</div>
 		<div class="logo-detail">
-			<div style="padding-top: 13px; font-size:28px; font-family:Lousianne; color:#573592">
-				<a href="/main/index.do" style="text-decoration: none; font-weight: bold;">mago3D</a>
+			<div style="padding-top: 13px; font-size:24px; font-family:Lousianne; color:#573592">
+				<a href="/main/index.do" style="text-decoration: none; font-weight: bold;">OpenIndoor</a>
 			</div>
 		</div>
 	</div>
@@ -252,7 +252,7 @@
 				<span style="font-size:15px; color: Mediumslateblue;">
 					<i class="fab fa-expeditedssl"></i>
 				</span>
-				<a href="/settings/modify-user-policy.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">mago3D 설정 </a>
+				<a href="/settings/modify-user-policy.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">OpenIndoorMap 설정 </a>
 			</div>
 		</div>
 	</div>

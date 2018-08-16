@@ -38,9 +38,19 @@
 	
 	<style type="text/css">
 		.mapWrap {
-	height: 800px;
-	background-color: #eee;
-}
+			width: 100%;
+			height:100%;
+			background-color: #eee;
+		}
+		
+		#objectLabel {
+			background-color: transparent;  /* needed because webgl-tutoraisl.css sets canvas bg color to white */
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			z-index: 10;
+			pointer-events:none;
+		}
 	</style>
 </head>
 <body>
@@ -53,12 +63,15 @@
 	<!--  컨텐츠 -->
 	<div class="content-layout">
 		<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
-		<div>
-			
-			<div id="magoContainer" class="mapWrap">
-</div>
-<canvas id="objectLabel"></canvas>
-			
+		<div style="height: 100%;">
+			<%-- <%@ include file="/WEB-INF/views/layouts/page_header.jsp" %> --%>
+			<div class="content-detail">
+				
+				<!-- Start content by page -->
+				<div id="magoContainer" class="mapWrap"></div>
+				<canvas id="objectLabel"></canvas>
+				
+			</div>
 			<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 		</div>
 	</div>
@@ -179,8 +192,48 @@
 		saveCurrentLocation(latitude, longitude);
 	}
 	
-	function saveCurrentLocation(latitude, longitude) {
+	// 설정 메뉴 시작
+	// Label 표시
+	function changeLabel(isShow) {
 	}
+	// object info 표시
+	function changeObjectInfoViewMode(isShow) {
+	}
+	// Origin 표시/비표시
+    function changeOrigin(isShow) {
+    }
+	// boundingBox 표시/비표시
+	function changeBoundingBox(isShow) {
+	}
+	function changeObjectMove() {
+	}
+	function initRendering() {
+	}
+	function changeViewMode() {
+	}
+	// click poisition call back function
+	function showClickPosition(position) {
+		
+	}
+	
+	// 모든 데이터 비표시
+	function clearAllData() {
+		
+	}
+	
+	// general callback alert function
+	function showApiResult(apiName, result) {
+		
+	}
+	
+	function saveCurrentLocation(latitude, longitude) {
+		
+	}
+	
+	// moved data callback
+	function showMovedData(projectId, dataKey, objectId, latitude, longitude, height, heading, pitch, roll) {
+		
+    }
 </script>
 </body>
 </html>

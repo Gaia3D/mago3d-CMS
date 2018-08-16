@@ -1,4 +1,4 @@
-package com.gaia3d.persistence;
+package com.gaia3d.domain;
 
 public enum GlobalCode {
 	WINDOW,
