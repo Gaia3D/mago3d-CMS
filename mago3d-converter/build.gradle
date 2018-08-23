@@ -22,6 +22,12 @@ apply plugin: 'io.spring.dependency-management'
 group = 'com.gaia3d'
 version = '0.0.1-SNAPSHOT'
 
+bootJar {
+	// 이 옵션을 주면 ./xxx.jar로 바로 실행 할 수 있다는데 리눅스에서 테스트 해 봐야 함
+//	lanunchScript()
+	mainClassName = 'com.gaia3d.Mago3dConverterApplication'
+}
+
 compileJava {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8

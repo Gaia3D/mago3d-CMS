@@ -120,7 +120,7 @@ insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, u
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(502, '1', '프로젝트 Map 보기', 'PARTICIPATION PROJECT', 500 , 2, 2, '/share/map-project.do', 'glyph-home', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(600, '1', 'Cloud Settings', 'CLOUD SETTINGS', 0 , 1, 5, '/settings/modify-membership.do', 'glyph-home', 'N', 'Y');
 insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(601, '1', 'MemberShip 설정', 'CLOUD SETTINGS', 600 , 2, 1, '/settings/modify-membership.do', 'glyph-home', 'N', 'Y');
-insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(602, '1', 'mago3D 설정', 'CLOUD SETTINGS', 600 , 2, 2, '/settings/modify-user-policy.do', 'glyph-home', 'N', 'Y');
+insert into menu(menu_id, menu_type, name, name_en, parent, depth, view_order, url, css_class, default_yn, use_yn) values(602, '1', 'OpenIndoorMap 설정', 'CLOUD SETTINGS', 600 , 2, 2, '/settings/modify-user-policy.do', 'glyph-home', 'N', 'Y');
 
 
 -- 사용자 그룹별 메뉴

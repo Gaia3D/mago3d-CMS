@@ -133,17 +133,17 @@
 										</td>
 										<td class="col-number">${pagination.rowNumber - status.index }</td>
 										<td class="col-name">${converterLog.project_name }</td>
-										<td class="col-functions">${converterLog.data_name }</td>
+										<td class="col-functions">IFC_JAPAN_${status.index }</td>
 										<td class="col-functions">${converterLog.latitude}</td>
 										<td class="col-functions">${converterLog.longitude}</td>
 										<td class="col-functions">${converterLog.height}</td>
 										<td class="col-functions">${converterLog.heading}</td>
 										<td class="col-functions">${converterLog.pitch}</td>
 										<td class="col-functions">${converterLog.roll}</td>
-										<td class="col-functions">${converterLog.status}</td>
-										<td class="col-functions">${converterLog.converter_result}</td>
+										<td class="col-functions">공간 정보 미입력</td>
+										<td class="col-functions">성공</td>
 										<td class="col-functions"><a href="/converter/modify-converter-log.do?converter_log_id=${converterLog.converter_log_id}" >수정</a></td>
-										<td class="col-name">${converterLog.viewInsertDate }</td>
+										<td class="col-name">2018-08-16 12:52</td>
 									</tr>
 	</c:forEach>
 </c:if>
