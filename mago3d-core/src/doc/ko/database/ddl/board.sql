@@ -5,7 +5,7 @@ drop table if exists board_notice_file cascade;
 
 -- 공지사항
 create table board_notice(
-	notice_id 			bigint 							not null,
+	notice_id 			bigint,
 	title				varchar(4000)					not null,
 	user_id				varchar(32)						not null,
 	notice_site			varchar(30),
@@ -32,7 +32,7 @@ comment on column board_notice.insert_date is '등록일';
 
 -- 공지사항 상세
 create table board_notice_detail (
-	notice_detail_id		bigint						not null,
+	notice_detail_id		bigint,
 	notice_id				bigint 						not null,
 	contents				text,
 	insert_date				timestamp with time zone	default now(),
@@ -48,7 +48,7 @@ comment on column board_notice_detail.insert_date is '등록일';
 
 -- 공지사항 댓글(Comment)
 create table board_notice_comment (
-	notice_comment_id		bigint 						not null,
+	notice_comment_id		bigint,
 	notice_id				bigint						not null,
 	user_id					varchar(32)	 				not null,
 	comment					varchar(4000)				not null,
@@ -98,7 +98,7 @@ drop table if exists board_faq_file cascade;
 
 -- FAQ
 create table board_faq(
-	faq_id 				bigint 							not null,
+	faq_id 				bigint,
 	title				varchar(4000)					not null,
 	user_id				varchar(32)						not null,
 	faq_site			varchar(30),
@@ -125,7 +125,7 @@ comment on column board_faq.insert_date is '등록일';
 
 -- FAQ 상세
 create table board_faq_detail (
-	faq_detail_id			bigint						not null,
+	faq_detail_id			bigint,
 	faq_id					bigint 						not null,
 	contents				text,
 	insert_date				timestamp with time zone	default now(),
@@ -141,7 +141,7 @@ comment on column board_faq_detail.insert_date is '등록일';
 
 -- FAQ 댓글(Comment)
 create table board_faq_comment (
-	faq_comment_id			bigint 						not null,
+	faq_comment_id			bigint,
 	faq_id					bigint						not null,
 	user_id					varchar(32)	 				not null,
 	comment					varchar(4000)				not null,
@@ -191,7 +191,7 @@ drop table if exists board_press_file cascade;
 
 -- 보도자료
 create table board_press(
-	press_id 			bigint 							not null,
+	press_id 			bigint,
 	title				varchar(4000)					not null,
 	user_id				varchar(32)						not null,
 	press_site			varchar(30),
@@ -218,7 +218,7 @@ comment on column board_press.insert_date is '등록일';
 
 -- 보도자료 상세
 create table board_press_detail (
-	press_detail_id			bigint						not null,
+	press_detail_id			bigint,
 	press_id				bigint 						not null,
 	contents				text,
 	insert_date				timestamp with time zone	default now(),
@@ -234,7 +234,7 @@ comment on column board_press_detail.insert_date is '등록일';
 
 -- 보도자료 댓글(Comment)
 create table board_press_comment (
-	press_comment_id		bigint 						not null,
+	press_comment_id		bigint,
 	press_id				bigint						not null,
 	user_id					varchar(32)	 				not null,
 	comment					varchar(4000)				not null,
@@ -284,7 +284,7 @@ drop table if exists board_forum_file cascade;
 
 -- 포럼
 create table board_forum(
-	forum_id 			bigint 							not null,
+	forum_id 			bigint,
 	title				varchar(4000)					not null,
 	user_id				varchar(32)						not null,
 	forum_site			varchar(30),
@@ -309,7 +309,7 @@ comment on column board_forum.insert_date is '등록일';
 
 -- 포럼 상세
 create table board_forum_detail (
-	forum_detail_id			bigint						not null,
+	forum_detail_id			bigint,
 	forum_id				bigint 						not null,
 	contents				text,
 	insert_date				timestamp with time zone	default now(),
@@ -325,7 +325,7 @@ comment on column board_forum_detail.insert_date is '등록일';
 
 -- 포럼 댓글(Comment)
 create table board_forum_comment (
-	forum_comment_id		bigint 						not null,
+	forum_comment_id		bigint,
 	forum_id				bigint						not null,
 	user_id					varchar(32)	 				not null,
 	comment					varchar(4000)				not null,
