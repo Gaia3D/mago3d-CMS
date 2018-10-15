@@ -45,6 +45,11 @@
 				</div>
 				<!-- End content by page -->
 				
+				<form id="searchForm" name="searchForm">
+					<input type="text" id="userId" name="userId"></input>
+					<input type="text" id="userName" name="userName"></input>
+				</form>
+				
 			</div>
 			<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 		</div>
@@ -104,6 +109,11 @@
                 	magoDropzone.removeAllFiles(true);
                 }
             });
+			
+			this.on("sending", function(file, xhr, formData) {
+	            formData.append("userId", $("#userId").val());
+	            formData.append("userName", $("#userName").val());
+	        });
 			
 			// maxFiles 카운터를 초과하면 경고창
 			this.on("maxfilesexceeded", function (data) {

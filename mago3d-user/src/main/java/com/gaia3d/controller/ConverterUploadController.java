@@ -71,6 +71,9 @@ public class ConverterUploadController {
 		
 		// TODO 텍스처 파일 이름에 중복이 있을 수도 있음, 이전 이름을 백업 받아 두고 복사 하자.
 		
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ userId = {}", request.getParameter("userId"));
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ userName = {}", request.getParameter("userName"));
+		
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
