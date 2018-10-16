@@ -26,6 +26,7 @@ create table policy(
 	password_create_char				varchar(32)			default '!@#',
 	password_exception_char				varchar(10)			default '<>&',
 	
+	geo_cesium_ion_token				varchar(256)		default '',
 	geo_view_library					varchar(20)			default 'cesium',
 	geo_data_path						varchar(100)		default '/f4d',
 	geo_data_default_projects			varchar(30)[],
@@ -165,10 +166,11 @@ comment on column policy.password_create_type is 'の初期パスワードを生
 comment on column policy.password_create_char is 'の初期パスワードを生成する文字列です。エクセルアップロードなど';
 comment on column policy.password_exception_char is 'パスワードで使用できない特殊文字(XSS)。 <、>、＆、単一引用音符、二重引用括ってもよい';
 
+comment on column policy.geo_cesium_ion_token is 'Cesium ion token発行。基本mago3D';
 comment on column policy.geo_view_library is 'view library。基本cesium';
 comment on column policy.geo_data_path is 'dataフォルダ。基本/ data';
 comment on column policy.geo_data_default_projects is 'の起動時にロードするプロジェクト。配列に格納';
-comment on column policy.geo_data_change_request_decision is '데이터 정보 변경 요청에 대한 처리. 0 : 자동승인, 1 : 결재(초기값)';
+comment on column policy.geo_data_change_request_decision is 'データ情報の変更要求の処理。0：自動承認、1：お支払い（初期値）';
 comment on column policy.geo_cull_face_enable is 'cullFace使用の有無。基本false';
 comment on column policy.geo_time_line_enable is 'timeLine使用の有無。基本false';
 	

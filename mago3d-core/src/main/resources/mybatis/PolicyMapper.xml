@@ -54,6 +54,7 @@
 		/* updatePolicyGeo */
 		UPDATE policy
 		SET geo_view_library = #{geo_view_library},
+			geo_cesium_ion_token = #{geo_cesium_ion_token},
 			geo_data_path = #{geo_data_path},
 			<if test="geo_data_default_projects == null or geo_data_default_projects == ''">
 			geo_data_default_projects = null,
