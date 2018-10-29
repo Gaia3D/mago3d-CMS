@@ -18,6 +18,15 @@
   		</tr>
   		<tr>
 			<th class="col-label l" scope="row">
+				<form:label path="geo_cesium_ion_token"><spring:message code='config.geo.cesiu.ion.token'/></form:label>
+			</th>
+			<td class="col-input">
+				<form:input path="geo_cesium_ion_token" cssClass="l" />
+				<form:errors path="geo_cesium_ion_token" cssClass="error" />
+			</td>
+		</tr>
+  		<tr>
+			<th class="col-label l" scope="row">
 				<form:label path="geo_data_path"><spring:message code='config.data.folder'/></form:label>
 			</th>
 			<td class="col-input">

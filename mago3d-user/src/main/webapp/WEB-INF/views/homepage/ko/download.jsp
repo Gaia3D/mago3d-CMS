@@ -64,7 +64,7 @@
 		
 		<div class="contents">
 			<button type="button" class="down" onclick="location.href='https://github.com/Gaia3D/mago3d'">
-				DOWNLOAD mago3D 1.0.0 <span>2017-07-01</span>
+				DOWNLOAD mago3D 1.1.1 <span>2018-05-04</span>
 			</button>
 
 			<h4>추가된 기능</h4>
@@ -112,13 +112,13 @@
 					<th>설명</th>
 				</tr>
 				<tr>
-					<td>1.0.0</td>
+					<td>1.0.7</td>
 					<td>
 					<ul>
 						<li>GitHub : <a href="https://github.com/Gaia3D/mago3Djs" target="_blank">mago3D.js</a></li>
 					</ul>
 					</td>
-					<td>2017-07-01</td>
+					<td>2018-05-29</td>
 					<td><a href="https://github.com/Gaia3D/mago3djs/blob/develop/README.md" target="_blank">ReadMe</a>
 					</td>
 					
@@ -134,14 +134,14 @@
 					<th>설명</th>
 				</tr>
 				<tr>
-					<td>0.0.1</td>
+					<td>0.0.3</td>
 					<td>
 					<ul>
 						<li>GitHub : <a href="https://github.com/Gaia3D/F4DConverter" target="_blank">F4D Converter</a></li>
 						<li>Installer : <a href="/data/download/SetupF4DConverter.msi" target="_blank">F4D Converter 64bit (this installation requires Windows 7 or later)</a></li>
 					</ul>
 					</td>
-					<td>2017-08-17</td>
+					<td>2018-10-20</td>
 					<td><a href="https://github.com/Gaia3D/F4DConverter/blob/master/README.md" target="_blank">ReadMe</a>
 					</td>
 				</tr>
@@ -155,7 +155,13 @@
 					<th>날짜</th>
 				</tr>
 				<tr>
-					<td>0.0.1</td>
+					<td>
+						<ul>
+							<li style="list-style-type: none">1.0.7</a></li>
+							<li style="list-style-type: none">1.0.7</a></li>
+							<li style="list-style-type: none">0.0.3</a></li>
+						</ul>
+					</td>
 					<td>
 						<ul>
 							<li>tutorials : <a href="/data/download/tutorials.pdf" download>tutorials</a></li>
@@ -163,7 +169,13 @@
 							<li>Spec : <a href="/homepage/spec.do">F4D Converter Spec</a></li>
 						</ul>
 					</td>
-					<td>2017-10-30</td>
+					<td>
+						<ul>
+							<li style="list-style-type: none">2018-05-29</a></li>
+							<li style="list-style-type: none">2018-05-29</a></li>
+							<li style="list-style-type: none">2018-10-20</a></li>
+						</ul>
+					</td>
 				</tr>
 			</table>
 		</div>

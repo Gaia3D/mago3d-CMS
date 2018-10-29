@@ -103,6 +103,8 @@ public class Policy {
 	// 패스워드로 사용할수 없는 특수문자(XSS). <,>,&,작은따음표,큰따움표
 	private String password_exception_char;
 	
+	// Cesium ion token 발급. 기본 mago3D
+	private String geo_cesium_ion_token;
 	// view library. 기본 cesium
 	private String geo_view_library;
 	// data 폴더. 기본 /data

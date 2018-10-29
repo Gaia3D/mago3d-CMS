@@ -374,6 +374,12 @@
 						<td>vboData</td>
 						<td><img src="/images/${lang}/homepage/spec7.png" class="specImage" style="width: 100px;"> bytes</td>
 						<td>Data of each VBO</td>
+					</tr>	
+					<tr>
+						<td>dummy boolean</td>
+						<td>sizeof(bool) bytes</td>
+						<td>just false.</td>
+					</tr>
 				</table>
 <!-- Table 3-2 -->	
 				<br><b>Table 3-2 Detailed Structure of “vboData” in Table 3-1</b>
@@ -427,11 +433,6 @@
 						<td>indexArray</td>
 						<td>[indexCount] × sizeof(unsigned short) bytes</td>
 						<td>Array that records indexes of vertex of each triangle</td>
-					</tr>
-					<tr>
-						<td>dummy boolean</td>
-						<td>sizeof(bool) bytes</td>
-						<td>just false.</td>
 					</tr>
 				</table>
 				

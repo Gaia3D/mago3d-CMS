@@ -26,6 +26,7 @@ create table policy(
 	password_create_char				varchar(32)			default '!@#',
 	password_exception_char				varchar(10)			default '<>&',
 	
+	geo_cesium_ion_token				varchar(256)		default '',
 	geo_view_library					varchar(20)			default 'cesium',
 	geo_data_path						varchar(100)		default '/f4d',
 	geo_data_default_projects			varchar(30)[],
@@ -165,6 +166,7 @@ comment on column policy.password_create_type is 'How to create an initial passw
 comment on column policy.password_create_char is 'Initial password generation string. Excel upload, etc';
 comment on column policy.password_exception_char is 'Special character (XSS) that can not be used as a password. <,>, &, Pound, double pound';
 
+comment on column policy.geo_cesium_ion_token is 'Cesium ion token issued. Basic mago3D';
 comment on column policy.geo_view_library is 'view library. Basic cesium';
 comment on column policy.geo_data_path is 'data folder. Default /f4d';
 comment on column policy.geo_data_default_projects is 'Loading project at startup. Save as array';

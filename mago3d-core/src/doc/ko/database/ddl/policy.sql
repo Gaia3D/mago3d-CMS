@@ -1,6 +1,6 @@
 drop table if exists policy cascade;
 
--- ¿î¿µÁ¤Ã¥
+-- ìš´ì˜ì •ì±…
 create table policy(
 	policy_id								int,
 	
@@ -26,6 +26,7 @@ create table policy(
 	password_create_char					varchar(32)			default '!@#',
 	password_exception_char					varchar(10)			default '<>&',
 	
+	geo_cesium_ion_token					varchar(256)		default '',
 	geo_view_library						varchar(20)			default 'cesium',
 	geo_data_path							varchar(100)		default '/f4d',
 	geo_data_default_projects				varchar(30)[],
@@ -144,135 +145,136 @@ create table policy(
 	constraint policy_pk primary key (policy_id)	
 );
 
-comment on table policy is '¿î¿µÁ¤Ã¥';
-comment on column policy.policy_id is '°íÀ¯¹øÈ£';
+comment on table policy is 'ìš´ì˜ì •ì±…';
+comment on column policy.policy_id is 'ê³ ìœ ë²ˆí˜¸';
 
-comment on column policy.user_id_min_length is '»ç¿ëÀÚ ¾ÆÀÌµğ ÃÖ¼Ò ±æÀÌ. ±âº»°ª 5';
-comment on column policy.user_fail_login_count is '»ç¿ëÀÚ ·Î±×ÀÎ ½ÇÆĞ È½¼ö';
-comment on column policy.user_fail_lock_release is '»ç¿ëÀÚ ·Î±×ÀÎ ½ÇÆĞ Àá±İ ÇØÁ¦ ±â°£';
-comment on column policy.user_last_login_lock is '»ç¿ëÀÚ ¸¶Áö¸· ·Î±×ÀÎÀ¸·Î ºÎÅÍ Àá±İ ±â°£';
-comment on column policy.user_duplication_login_yn is 'Áßº¹ ·Î±×ÀÎ Çã¿ë ¿©ºÎ. Y : Çã¿ë, N : Çã¿ë¾ÈÇÔ(±âº»°ª)';
-comment on column policy.user_login_type is '»ç¿ëÀÚ ·Î±×ÀÎ ÀÎÁõ ¹æ¹ı. 0 : ÀÏ¹İ(¾ÆÀÌµğ/ºñ¹Ğ¹øÈ£(±âº»°ª)), 1 : ±â¾÷¿ë(»ç¹øÃß°¡), 2 : ÀÏ¹İ + OTP, 3 : ÀÏ¹İ + ÀÎÁõ¼­, 4 : OTP + ÀÎÁõ¼­, 5 : ÀÏ¹İ + OTP + ÀÎÁõ¼­';
-comment on column policy.user_update_check is '»ç¿ëÀÚ Á¤º¸ ¼öÁ¤½Ã È®ÀÎ';
-comment on column policy.user_delete_check is '»ç¿ëÀÚ Á¤º¸ »èÁ¦½Ã È®ÀÎ';
-comment on column policy.user_delete_type is '»ç¿ëÀÚ Á¤º¸ »èÁ¦ ¹æ¹ı. 0 : ³í¸®Àû(±âº»°ª), 1 : ¹°¸®Àû(DB »èÁ¦)';
+comment on column policy.user_id_min_length is 'ì‚¬ìš©ì ì•„ì´ë”” ìµœì†Œ ê¸¸ì´. ê¸°ë³¸ê°’ 5';
+comment on column policy.user_fail_login_count is 'ì‚¬ìš©ì ë¡œê·¸ì¸ ì‹¤íŒ¨ íšŸìˆ˜';
+comment on column policy.user_fail_lock_release is 'ì‚¬ìš©ì ë¡œê·¸ì¸ ì‹¤íŒ¨ ì ê¸ˆ í•´ì œ ê¸°ê°„';
+comment on column policy.user_last_login_lock is 'ì‚¬ìš©ì ë§ˆì§€ë§‰ ë¡œê·¸ì¸ìœ¼ë¡œ ë¶€í„° ì ê¸ˆ ê¸°ê°„';
+comment on column policy.user_duplication_login_yn is 'ì¤‘ë³µ ë¡œê·¸ì¸ í—ˆìš© ì—¬ë¶€. Y : í—ˆìš©, N : í—ˆìš©ì•ˆí•¨(ê¸°ë³¸ê°’)';
+comment on column policy.user_login_type is 'ì‚¬ìš©ì ë¡œê·¸ì¸ ì¸ì¦ ë°©ë²•. 0 : ì¼ë°˜(ì•„ì´ë””/ë¹„ë°€ë²ˆí˜¸(ê¸°ë³¸ê°’)), 1 : ê¸°ì—…ìš©(ì‚¬ë²ˆì¶”ê°€), 2 : ì¼ë°˜ + OTP, 3 : ì¼ë°˜ + ì¸ì¦ì„œ, 4 : OTP + ì¸ì¦ì„œ, 5 : ì¼ë°˜ + OTP + ì¸ì¦ì„œ';
+comment on column policy.user_update_check is 'ì‚¬ìš©ì ì •ë³´ ìˆ˜ì •ì‹œ í™•ì¸';
+comment on column policy.user_delete_check is 'ì‚¬ìš©ì ì •ë³´ ì‚­ì œì‹œ í™•ì¸';
+comment on column policy.user_delete_type is 'ì‚¬ìš©ì ì •ë³´ ì‚­ì œ ë°©ë²•. 0 : ë…¼ë¦¬ì (ê¸°ë³¸ê°’), 1 : ë¬¼ë¦¬ì (DB ì‚­ì œ)';
 
-comment on column policy.password_change_term is 'ÆĞ½º¿öµå º¯°æ ÁÖ±â ±âº» 30ÀÏ';
-comment on column policy.password_min_length is 'ÆĞ½º¿öµå ÃÖ¼Ò ±æÀÌ ±âº» 8';
-comment on column policy.password_max_length is 'ÆĞ½º¿öµå ÃÖ´ë ±æÀÌ ±âº» 32';
-comment on column policy.password_eng_upper_count is 'ÆĞ½º¿öµå ¿µ¹® ´ë¹®ÀÚ °³¼ö ±âº» 1';
-comment on column policy.password_eng_lower_count is 'ÆĞ½º¿öµå ¿µ¹® ¼Ò¹®ÀÚ °³¼ö ±âº» 1';
-comment on column policy.password_number_count is 'ÆĞ½º¿öµå ¼ıÀÚ °³¼ö ±âº» 1';
-comment on column policy.password_special_char_count is 'ÆĞ½º¿öµå Æ¯¼ö ¹®ÀÚ °³¼ö 1';
-comment on column policy.password_continuous_char_count is 'ÆĞ½º¿öµå ¿¬¼Ó¹®ÀÚ Á¦ÇÑ °³¼ö 3';
-comment on column policy.password_create_type is 'ÃÊ±â ÆĞ½º¿öµå »ı¼º ¹æ¹ı. 0 : »ç¿ëÀÚ ¾ÆÀÌµğ + ÃÊ±â¹®ÀÚ(±âº»°ª), 1 : ÃÊ±â¹®ÀÚ';
-comment on column policy.password_create_char is 'ÃÊ±â ÆĞ½º¿öµå »ı¼º ¹®ÀÚ¿­. ¿¢¼¿ ¾÷·Îµå µî';
-comment on column policy.password_exception_char is 'ÆĞ½º¿öµå·Î »ç¿ëÇÒ¼ö ¾ø´Â Æ¯¼ö¹®ÀÚ(XSS). <,>,&,ÀÛÀºµûÀ½Ç¥,Å«µû¿òÇ¥';
+comment on column policy.password_change_term is 'íŒ¨ìŠ¤ì›Œë“œ ë³€ê²½ ì£¼ê¸° ê¸°ë³¸ 30ì¼';
+comment on column policy.password_min_length is 'íŒ¨ìŠ¤ì›Œë“œ ìµœì†Œ ê¸¸ì´ ê¸°ë³¸ 8';
+comment on column policy.password_max_length is 'íŒ¨ìŠ¤ì›Œë“œ ìµœëŒ€ ê¸¸ì´ ê¸°ë³¸ 32';
+comment on column policy.password_eng_upper_count is 'íŒ¨ìŠ¤ì›Œë“œ ì˜ë¬¸ ëŒ€ë¬¸ì ê°œìˆ˜ ê¸°ë³¸ 1';
+comment on column policy.password_eng_lower_count is 'íŒ¨ìŠ¤ì›Œë“œ ì˜ë¬¸ ì†Œë¬¸ì ê°œìˆ˜ ê¸°ë³¸ 1';
+comment on column policy.password_number_count is 'íŒ¨ìŠ¤ì›Œë“œ ìˆ«ì ê°œìˆ˜ ê¸°ë³¸ 1';
+comment on column policy.password_special_char_count is 'íŒ¨ìŠ¤ì›Œë“œ íŠ¹ìˆ˜ ë¬¸ì ê°œìˆ˜ 1';
+comment on column policy.password_continuous_char_count is 'íŒ¨ìŠ¤ì›Œë“œ ì—°ì†ë¬¸ì ì œí•œ ê°œìˆ˜ 3';
+comment on column policy.password_create_type is 'ì´ˆê¸° íŒ¨ìŠ¤ì›Œë“œ ìƒì„± ë°©ë²•. 0 : ì‚¬ìš©ì ì•„ì´ë”” + ì´ˆê¸°ë¬¸ì(ê¸°ë³¸ê°’), 1 : ì´ˆê¸°ë¬¸ì';
+comment on column policy.password_create_char is 'ì´ˆê¸° íŒ¨ìŠ¤ì›Œë“œ ìƒì„± ë¬¸ìì—´. ì—‘ì…€ ì—…ë¡œë“œ ë“±';
+comment on column policy.password_exception_char is 'íŒ¨ìŠ¤ì›Œë“œë¡œ ì‚¬ìš©í• ìˆ˜ ì—†ëŠ” íŠ¹ìˆ˜ë¬¸ì(XSS). <,>,&,ì‘ì€ë”°ìŒí‘œ,í°ë”°ì›€í‘œ';
 
-comment on column policy.geo_view_library is 'view library. ±âº» cesium';
-comment on column policy.geo_data_path is 'data Æú´õ. ±âº» /f4d';
-comment on column policy.geo_data_default_projects is '½ÃÀÛ½Ã ·Îµù ÇÁ·ÎÁ§Æ®. ¹è¿­·Î ÀúÀå';
-comment on column policy.geo_data_change_request_decision is 'µ¥ÀÌÅÍ Á¤º¸ º¯°æ ¿äÃ»¿¡ ´ëÇÑ Ã³¸®. 0 : ÀÚµ¿½ÂÀÎ, 1 : °áÀç(ÃÊ±â°ª)';
-comment on column policy.geo_cull_face_enable is 'cullFace »ç¿ëÀ¯¹«. ±âº» false';
-comment on column policy.geo_time_line_enable is 'timeLine »ç¿ëÀ¯¹«. ±âº» false';
+comment on column policy.geo_cesium_ion_token is 'Cesium ion token ë°œê¸‰. ê¸°ë³¸ mago3D';
+comment on column policy.geo_view_library is 'view library. ê¸°ë³¸ cesium';
+comment on column policy.geo_data_path is 'data í´ë”. ê¸°ë³¸ /f4d';
+comment on column policy.geo_data_default_projects is 'ì‹œì‘ì‹œ ë¡œë”© í”„ë¡œì íŠ¸. ë°°ì—´ë¡œ ì €ì¥';
+comment on column policy.geo_data_change_request_decision is 'ë°ì´í„° ì •ë³´ ë³€ê²½ ìš”ì²­ì— ëŒ€í•œ ì²˜ë¦¬. 0 : ìë™ìŠ¹ì¸, 1 : ê²°ì¬(ì´ˆê¸°ê°’)';
+comment on column policy.geo_cull_face_enable is 'cullFace ì‚¬ìš©ìœ ë¬´. ê¸°ë³¸ false';
+comment on column policy.geo_time_line_enable is 'timeLine ì‚¬ìš©ìœ ë¬´. ê¸°ë³¸ false';
 	
-comment on column policy.geo_init_camera_enable is 'ÃÊ±â Ä«¸Ş¶ó ÀÌµ¿ À¯¹«. ±âº» true';
-comment on column policy.geo_init_latitude is 'ÃÊ±â Ä«¸Ş¶ó ÀÌµ¿ À§µµ';
-comment on column policy.geo_init_longitude is 'ÃÊ±â Ä«¸Ş¶ó ÀÌµ¿ °æµµ';
-comment on column policy.geo_init_height is 'ÃÊ±â Ä«¸Ş¶ó ÀÌµ¿ ³ôÀÌ';
-comment on column policy.geo_init_duration is 'ÃÊ±â Ä«¸Ş¶ó ÀÌµ¿ ½Ã°£. ÃÊ ´ÜÀ§';
-comment on column policy.geo_init_default_terrain is '±âº» Terrain';
-comment on column policy.geo_init_default_fov is 'field of view. ±âº»°ª 0(1.8 Àû¿ë)';
-comment on column policy.geo_lod0 is 'LOD0. ±âº»°ª 15M';
-comment on column policy.geo_lod1 is 'LOD1. ±âº»°ª 60M';
-comment on column policy.geo_lod2 is 'LOD2. ±âº»°ª 90M';
-comment on column policy.geo_lod3 is 'LOD3. ±âº»°ª 200M';
-comment on column policy.geo_lod4 is 'LOD4. ±âº»°ª 1000M';
-comment on column policy.geo_lod5 is 'LOD5. ±âº»°ª 50000M';
-comment on column policy.geo_ambient_reflection_coef is '´ÙÀÌ·ºÆ® ºûÀÌ ¾Æ´Ñ ¹İ»çÀ² ¹üÀ§. ±âº»°ª 0.5';
-comment on column policy.geo_diffuse_reflection_coef is 'ÀÚ±â »ö±òÀÇ ¹İ»çÀ² ¹üÀ§. ±âº»°ª 1.0';
-comment on column policy.geo_specular_reflection_coef is 'Ç¥¸éÀÇ ¹İÁú°Å¸² ¹üÀ§. ±âº»°ª 1.0';
-comment on column policy.geo_ambient_color is '´ÙÀÌ·ºÆ® ºûÀÌ ¾Æ´Ñ ¹İ»çÀ² RGB, ÄŞ¸¶·Î ¿¬°á';
-comment on column policy.geo_specular_color is 'Ç¥¸éÀÇ ¹İÁú°Å¸² »ö±ò. RGB, ÄŞ¸¶·Î ¿¬°á';
-comment on column policy.geo_ssao_radius is '±×¸²ÀÚ ¹İ°æ';
+comment on column policy.geo_init_camera_enable is 'ì´ˆê¸° ì¹´ë©”ë¼ ì´ë™ ìœ ë¬´. ê¸°ë³¸ true';
+comment on column policy.geo_init_latitude is 'ì´ˆê¸° ì¹´ë©”ë¼ ì´ë™ ìœ„ë„';
+comment on column policy.geo_init_longitude is 'ì´ˆê¸° ì¹´ë©”ë¼ ì´ë™ ê²½ë„';
+comment on column policy.geo_init_height is 'ì´ˆê¸° ì¹´ë©”ë¼ ì´ë™ ë†’ì´';
+comment on column policy.geo_init_duration is 'ì´ˆê¸° ì¹´ë©”ë¼ ì´ë™ ì‹œê°„. ì´ˆ ë‹¨ìœ„';
+comment on column policy.geo_init_default_terrain is 'ê¸°ë³¸ Terrain';
+comment on column policy.geo_init_default_fov is 'field of view. ê¸°ë³¸ê°’ 0(1.8 ì ìš©)';
+comment on column policy.geo_lod0 is 'LOD0. ê¸°ë³¸ê°’ 15M';
+comment on column policy.geo_lod1 is 'LOD1. ê¸°ë³¸ê°’ 60M';
+comment on column policy.geo_lod2 is 'LOD2. ê¸°ë³¸ê°’ 90M';
+comment on column policy.geo_lod3 is 'LOD3. ê¸°ë³¸ê°’ 200M';
+comment on column policy.geo_lod4 is 'LOD4. ê¸°ë³¸ê°’ 1000M';
+comment on column policy.geo_lod5 is 'LOD5. ê¸°ë³¸ê°’ 50000M';
+comment on column policy.geo_ambient_reflection_coef is 'ë‹¤ì´ë ‰íŠ¸ ë¹›ì´ ì•„ë‹Œ ë°˜ì‚¬ìœ¨ ë²”ìœ„. ê¸°ë³¸ê°’ 0.5';
+comment on column policy.geo_diffuse_reflection_coef is 'ìê¸° ìƒ‰ê¹”ì˜ ë°˜ì‚¬ìœ¨ ë²”ìœ„. ê¸°ë³¸ê°’ 1.0';
+comment on column policy.geo_specular_reflection_coef is 'í‘œë©´ì˜ ë°˜ì§ˆê±°ë¦¼ ë²”ìœ„. ê¸°ë³¸ê°’ 1.0';
+comment on column policy.geo_ambient_color is 'ë‹¤ì´ë ‰íŠ¸ ë¹›ì´ ì•„ë‹Œ ë°˜ì‚¬ìœ¨ RGB, ì½¤ë§ˆë¡œ ì—°ê²°';
+comment on column policy.geo_specular_color is 'í‘œë©´ì˜ ë°˜ì§ˆê±°ë¦¼ ìƒ‰ê¹”. RGB, ì½¤ë§ˆë¡œ ì—°ê²°';
+comment on column policy.geo_ssao_radius is 'ê·¸ë¦¼ì ë°˜ê²½';
 	
-comment on column policy.geo_server_enable is 'geo server »ç¿ëÀ¯¹«';
-comment on column policy.geo_server_url is 'geo server ±âº» Layers url';
-comment on column policy.geo_server_layers is 'geo server ±âº» layers';
-comment on column policy.geo_server_parameters_service is 'geo server ±âº» Layers service º¯¼ö°ª';
-comment on column policy.geo_server_parameters_version is 'geo server ±âº» Layers version º¯¼ö°ª';
-comment on column policy.geo_server_parameters_request is 'geo server ±âº» Layers request º¯¼ö°ª';
-comment on column policy.geo_server_parameters_transparent is 'geo server ±âº» Layers transparent º¯¼ö°ª';
-comment on column policy.geo_server_parameters_format is 'geo server ±âº» Layers format º¯¼ö°ª';
-comment on column policy.geo_server_add_url is 'geo server Ãß°¡ Layers url';
-comment on column policy.geo_server_add_layers is 'geo server Ãß°¡ Layers';
-comment on column policy.geo_server_add_parameters_service is 'geo server Ãß°¡ Layers service º¯¼ö°ª';
-comment on column policy.geo_server_add_parameters_version is 'geo server Ãß°¡ Layers version º¯¼ö°ª';
-comment on column policy.geo_server_add_parameters_request is 'geo server Ãß°¡ Layers request º¯¼ö°ª';
-comment on column policy.geo_server_add_parameters_transparent is 'geo server Ãß°¡ Layers transparent º¯¼ö°ª';
-comment on column policy.geo_server_add_parameters_format is 'geo server Ãß°¡ Layers format º¯¼ö°ª';
+comment on column policy.geo_server_enable is 'geo server ì‚¬ìš©ìœ ë¬´';
+comment on column policy.geo_server_url is 'geo server ê¸°ë³¸ Layers url';
+comment on column policy.geo_server_layers is 'geo server ê¸°ë³¸ layers';
+comment on column policy.geo_server_parameters_service is 'geo server ê¸°ë³¸ Layers service ë³€ìˆ˜ê°’';
+comment on column policy.geo_server_parameters_version is 'geo server ê¸°ë³¸ Layers version ë³€ìˆ˜ê°’';
+comment on column policy.geo_server_parameters_request is 'geo server ê¸°ë³¸ Layers request ë³€ìˆ˜ê°’';
+comment on column policy.geo_server_parameters_transparent is 'geo server ê¸°ë³¸ Layers transparent ë³€ìˆ˜ê°’';
+comment on column policy.geo_server_parameters_format is 'geo server ê¸°ë³¸ Layers format ë³€ìˆ˜ê°’';
+comment on column policy.geo_server_add_url is 'geo server ì¶”ê°€ Layers url';
+comment on column policy.geo_server_add_layers is 'geo server ì¶”ê°€ Layers';
+comment on column policy.geo_server_add_parameters_service is 'geo server ì¶”ê°€ Layers service ë³€ìˆ˜ê°’';
+comment on column policy.geo_server_add_parameters_version is 'geo server ì¶”ê°€ Layers version ë³€ìˆ˜ê°’';
+comment on column policy.geo_server_add_parameters_request is 'geo server ì¶”ê°€ Layers request ë³€ìˆ˜ê°’';
+comment on column policy.geo_server_add_parameters_transparent is 'geo server ì¶”ê°€ Layers transparent ë³€ìˆ˜ê°’';
+comment on column policy.geo_server_add_parameters_format is 'geo server ì¶”ê°€ Layers format ë³€ìˆ˜ê°’';
 	
-comment on column policy.geo_callback_enable is 'Äİ¹é function »ç¿ëÀ¯¹«. ±âº»°ª false';
-comment on column policy.geo_callback_apiresult is 'api Ã³¸® °á°ú callback function ÀÌ¸§';
-comment on column policy.geo_callback_datainfo is 'data info Ç¥½Ã callback function ÀÌ¸§';
-comment on column policy.geo_callback_moveddata is 'moved data callback function ÀÌ¸§';
-comment on column policy.geo_callback_selectedobject is 'object ¼±ÅÃ callback function ÀÌ¸§';
-comment on column policy.geo_callback_insertissue is 'issue µî·Ï callback function ÀÌ¸§';
-comment on column policy.geo_callback_listissue is 'issue ¸ñ·Ï callback function ÀÌ¸§';
-comment on column policy.geo_callback_clickposition is 'mouse click ½Ã À§Ä¡ Á¤º¸ callback function ÀÌ¸§';
+comment on column policy.geo_callback_enable is 'ì½œë°± function ì‚¬ìš©ìœ ë¬´. ê¸°ë³¸ê°’ false';
+comment on column policy.geo_callback_apiresult is 'api ì²˜ë¦¬ ê²°ê³¼ callback function ì´ë¦„';
+comment on column policy.geo_callback_datainfo is 'data info í‘œì‹œ callback function ì´ë¦„';
+comment on column policy.geo_callback_moveddata is 'moved data callback function ì´ë¦„';
+comment on column policy.geo_callback_selectedobject is 'object ì„ íƒ callback function ì´ë¦„';
+comment on column policy.geo_callback_insertissue is 'issue ë“±ë¡ callback function ì´ë¦„';
+comment on column policy.geo_callback_listissue is 'issue ëª©ë¡ callback function ì´ë¦„';
+comment on column policy.geo_callback_clickposition is 'mouse click ì‹œ ìœ„ì¹˜ ì •ë³´ callback function ì´ë¦„';
 
-comment on column policy.notice_service_yn is '¾Ë¸² ¼­ºñ½º »ç¿ë À¯¹«. Y : »ç¿ë, N : »ç¿ë¾ÈÇÔ(±âº»°ª)';
-comment on column policy.notice_service_send_type is '¾Ë¸² ¹ß¼Û ¸ÅÃ¼. 0 : SMS(±âº»°ª), 1 : ÀÌ¸ŞÀÏ, 2 : ¸Ş½ÅÀú';
-comment on column policy.notice_risk_yn is '¾Ë¸² Àå¾Ö ¹ß»ı½Ã. Y : »ç¿ë, N »ç¿ë¾ÈÇÔ(±âº»°ª)';
-comment on column policy.notice_risk_send_type is '¾Ë¸² Àå¾Ö ¹ß¼Û ¸ÅÃ¼. 0 : SMS(±âº»°ª), 1 : ÀÌ¸ŞÀÏ, 2 : ¸Ş½ÅÀú';
-comment on column policy.notice_risk_grade is '¾Ë¸² ¹ß¼Û Àå¾Ö µî±Ş. 1 : 1µî±Ş(±âº»°ª), 2 : 2µî±Ş, 3 : 3µî±Ş';
+comment on column policy.notice_service_yn is 'ì•Œë¦¼ ì„œë¹„ìŠ¤ ì‚¬ìš© ìœ ë¬´. Y : ì‚¬ìš©, N : ì‚¬ìš©ì•ˆí•¨(ê¸°ë³¸ê°’)';
+comment on column policy.notice_service_send_type is 'ì•Œë¦¼ ë°œì†¡ ë§¤ì²´. 0 : SMS(ê¸°ë³¸ê°’), 1 : ì´ë©”ì¼, 2 : ë©”ì‹ ì €';
+comment on column policy.notice_risk_yn is 'ì•Œë¦¼ ì¥ì•  ë°œìƒì‹œ. Y : ì‚¬ìš©, N ì‚¬ìš©ì•ˆí•¨(ê¸°ë³¸ê°’)';
+comment on column policy.notice_risk_send_type is 'ì•Œë¦¼ ì¥ì•  ë°œì†¡ ë§¤ì²´. 0 : SMS(ê¸°ë³¸ê°’), 1 : ì´ë©”ì¼, 2 : ë©”ì‹ ì €';
+comment on column policy.notice_risk_grade is 'ì•Œë¦¼ ë°œì†¡ ì¥ì•  ë“±ê¸‰. 1 : 1ë“±ê¸‰(ê¸°ë³¸ê°’), 2 : 2ë“±ê¸‰, 3 : 3ë“±ê¸‰';
 
-comment on column policy.security_session_timeout_yn is 'º¸¾È ¼¼¼Ç Å¸ÀÓ¾Æ¿ô. Y : »ç¿ë, N »ç¿ë¾ÈÇÔ(±âº»°ª)';
-comment on column policy.security_session_timeout is 'º¸¾È ¼¼¼Ç Å¸ÀÓ¾Æ¿ô ½Ã°£. ±âº»°ª 30ºĞ';
-comment on column policy.security_user_ip_check_yn is '·Î±×ÀÎ »ç¿ëÀÚ IP Ã¼Å© À¯¹«. Y : »ç¿ë, N »ç¿ë¾ÈÇÔ(±âº»°ª)';
-comment on column policy.security_session_hijacking is 'º¸¾È ¼¼¼Ç ÇÏÀÌÀçÅ· Ã³¸®. 0 : »ç¿ë¾ÈÇÔ, 1 : »ç¿ë(±âº»°ª), 2 : OTP Ãß°¡ ÀÎÁõ ';
-comment on column policy.security_sso is 'º¸¾È SSO. 0 : »ç¿ë¾ÈÇÔ(±âº»°ª), 1 : TOKEN ÀÎÁõ';
-comment on column policy.security_sso_token_verify_time is 'º¸¾È Single Sign-On ÅäÅ« À¯È¿½Ã°£(ºĞ´ÜÀ§). ±âº» 3ºĞ';
-comment on column policy.security_log_save_type is 'º¸¾È ·Î±× ÀúÀå ¹æ¹ı. 0 : DB(±âº»°ª), 1 : ÆÄÀÏ';
-comment on column policy.security_log_save_term is 'º¸¾È ·Î±× º¸Á¸ ±â°£. 2³â ±âº»°ª';
-comment on column policy.security_dynamic_block_yn is 'º¸¾È µ¿Àû Â÷´Ü. Y : »ç¿ë, N »ç¿ë¾ÈÇÔ(±âº»°ª)';
-comment on column policy.security_api_result_secure_yn is 'API °á°ú ¾ÏÈ£È­ »ç¿ë. Y : »ç¿ë, N »ç¿ë¾ÈÇÔ(±âº»°ª)';
-comment on column policy.security_masking_yn is '°³ÀÎÁ¤º¸ ¸¶½ºÅ· Ã³¸®. Y : »ç¿ë(±âº»°ª), N »ç¿ë¾ÈÇÔ';
+comment on column policy.security_session_timeout_yn is 'ë³´ì•ˆ ì„¸ì…˜ íƒ€ì„ì•„ì›ƒ. Y : ì‚¬ìš©, N ì‚¬ìš©ì•ˆí•¨(ê¸°ë³¸ê°’)';
+comment on column policy.security_session_timeout is 'ë³´ì•ˆ ì„¸ì…˜ íƒ€ì„ì•„ì›ƒ ì‹œê°„. ê¸°ë³¸ê°’ 30ë¶„';
+comment on column policy.security_user_ip_check_yn is 'ë¡œê·¸ì¸ ì‚¬ìš©ì IP ì²´í¬ ìœ ë¬´. Y : ì‚¬ìš©, N ì‚¬ìš©ì•ˆí•¨(ê¸°ë³¸ê°’)';
+comment on column policy.security_session_hijacking is 'ë³´ì•ˆ ì„¸ì…˜ í•˜ì´ì¬í‚¹ ì²˜ë¦¬. 0 : ì‚¬ìš©ì•ˆí•¨, 1 : ì‚¬ìš©(ê¸°ë³¸ê°’), 2 : OTP ì¶”ê°€ ì¸ì¦ ';
+comment on column policy.security_sso is 'ë³´ì•ˆ SSO. 0 : ì‚¬ìš©ì•ˆí•¨(ê¸°ë³¸ê°’), 1 : TOKEN ì¸ì¦';
+comment on column policy.security_sso_token_verify_time is 'ë³´ì•ˆ Single Sign-On í† í° ìœ íš¨ì‹œê°„(ë¶„ë‹¨ìœ„). ê¸°ë³¸ 3ë¶„';
+comment on column policy.security_log_save_type is 'ë³´ì•ˆ ë¡œê·¸ ì €ì¥ ë°©ë²•. 0 : DB(ê¸°ë³¸ê°’), 1 : íŒŒì¼';
+comment on column policy.security_log_save_term is 'ë³´ì•ˆ ë¡œê·¸ ë³´ì¡´ ê¸°ê°„. 2ë…„ ê¸°ë³¸ê°’';
+comment on column policy.security_dynamic_block_yn is 'ë³´ì•ˆ ë™ì  ì°¨ë‹¨. Y : ì‚¬ìš©, N ì‚¬ìš©ì•ˆí•¨(ê¸°ë³¸ê°’)';
+comment on column policy.security_api_result_secure_yn is 'API ê²°ê³¼ ì•”í˜¸í™” ì‚¬ìš©. Y : ì‚¬ìš©, N ì‚¬ìš©ì•ˆí•¨(ê¸°ë³¸ê°’)';
+comment on column policy.security_masking_yn is 'ê°œì¸ì •ë³´ ë§ˆìŠ¤í‚¹ ì²˜ë¦¬. Y : ì‚¬ìš©(ê¸°ë³¸ê°’), N ì‚¬ìš©ì•ˆí•¨';
 
-comment on column policy.content_cache_version is 'css, js °»½Å¿ë cache version.';
-comment on column policy.content_main_widget_count is '¸ŞÀÎ È­¸é À§Á¬ Ç¥½Ã °¹¼ö. ±âº» 6°³';
-comment on column policy.content_main_widget_interval is '¸ŞÀÎ È­¸é À§Á¬ Refresh °£°İ. ±âº» 65ÃÊ(¸ğ´ÏÅÍ¸µ °£°İ 60ÃÊ¿¡ ´ëÇÑ ½Ã°£ °£°İ °í·Á)';
-comment on column policy.content_statistics_interval is 'Åë°è ±âº» °Ë»ö ±â°£. 0 : 1³â ´ÜÀ§, 1 : »ó/ÇÏ¹İ±â, 2 : ºĞ±â ´ÜÀ§, 3 : ¿ù ´ÜÀ§';
-comment on column policy.content_menu_group_root is '¸Ş´º ±×·ì ÃÖ»óÀ§ ±×·ì¸í';
-comment on column policy.content_user_group_root is '»ç¿ëÀÚ ±×·ì ÃÖ»óÀ§ ±×·ì¸í';
-comment on column policy.content_data_group_root is 'µ¥ÀÌÅÍ ±×·ì ÃÖ»óÀ§ ±×·ì¸í';
+comment on column policy.content_cache_version is 'css, js ê°±ì‹ ìš© cache version.';
+comment on column policy.content_main_widget_count is 'ë©”ì¸ í™”ë©´ ìœ„ì ¯ í‘œì‹œ ê°¯ìˆ˜. ê¸°ë³¸ 6ê°œ';
+comment on column policy.content_main_widget_interval is 'ë©”ì¸ í™”ë©´ ìœ„ì ¯ Refresh ê°„ê²©. ê¸°ë³¸ 65ì´ˆ(ëª¨ë‹ˆí„°ë§ ê°„ê²© 60ì´ˆì— ëŒ€í•œ ì‹œê°„ ê°„ê²© ê³ ë ¤)';
+comment on column policy.content_statistics_interval is 'í†µê³„ ê¸°ë³¸ ê²€ìƒ‰ ê¸°ê°„. 0 : 1ë…„ ë‹¨ìœ„, 1 : ìƒ/í•˜ë°˜ê¸°, 2 : ë¶„ê¸° ë‹¨ìœ„, 3 : ì›” ë‹¨ìœ„';
+comment on column policy.content_menu_group_root is 'ë©”ë‰´ ê·¸ë£¹ ìµœìƒìœ„ ê·¸ë£¹ëª…';
+comment on column policy.content_user_group_root is 'ì‚¬ìš©ì ê·¸ë£¹ ìµœìƒìœ„ ê·¸ë£¹ëª…';
+comment on column policy.content_data_group_root is 'ë°ì´í„° ê·¸ë£¹ ìµœìƒìœ„ ê·¸ë£¹ëª…';
 
-comment on column policy.user_upload_type is '¾÷·Îµù °¡´É È®ÀåÀÚ. 3ds,obj,ifc,dae';
-comment on column policy.user_upload_max_filesize is 'ÃÖ´ë ¾÷·Îµù »çÀÌÁî(´ÜÀ§M). 500M';
-comment on column policy.user_upload_max_count is '1È¸, ÃÖ´ë ¾÷·Îµù ÆÄÀÏ ¼ö. 50°³';
+comment on column policy.user_upload_type is 'ì—…ë¡œë”© ê°€ëŠ¥ í™•ì¥ì. 3ds,obj,ifc,dae';
+comment on column policy.user_upload_max_filesize is 'ìµœëŒ€ ì—…ë¡œë”© ì‚¬ì´ì¦ˆ(ë‹¨ìœ„M). 500M';
+comment on column policy.user_upload_max_count is '1íšŒ, ìµœëŒ€ ì—…ë¡œë”© íŒŒì¼ ìˆ˜. 50ê°œ';
 	
-comment on column policy.site_name is '¼­ºñ½º¸í';
-comment on column policy.site_admin_name is '»çÀÌÆ® °ü¸®ÀÚ¸í';
-comment on column policy.site_admin_mobile_phone is '»çÀÌÆ® °ü¸®ÀÚ ÇÚµåÆù ¹øÈ£';
-comment on column policy.site_admin_email is '»çÀÌÆ® °ü¸®ÀÚ ÀÌ¸ŞÀÏ';
-comment on column policy.site_product_log is '»ó´Ü ¼Ö·ç¼Ç ·Î°í ÀÌ¹ÌÁö';
-comment on column policy.site_company_log is 'Footer È¸»ç ·Î°í ÀÌ¹ÌÁö';
+comment on column policy.site_name is 'ì„œë¹„ìŠ¤ëª…';
+comment on column policy.site_admin_name is 'ì‚¬ì´íŠ¸ ê´€ë¦¬ìëª…';
+comment on column policy.site_admin_mobile_phone is 'ì‚¬ì´íŠ¸ ê´€ë¦¬ì í•¸ë“œí° ë²ˆí˜¸';
+comment on column policy.site_admin_email is 'ì‚¬ì´íŠ¸ ê´€ë¦¬ì ì´ë©”ì¼';
+comment on column policy.site_product_log is 'ìƒë‹¨ ì†”ë£¨ì…˜ ë¡œê³  ì´ë¯¸ì§€';
+comment on column policy.site_company_log is 'Footer íšŒì‚¬ ë¡œê³  ì´ë¯¸ì§€';
 
-comment on column policy.backoffice_email_host IS 'Email ¿¬µ¿ ¼­¹ö host';
-comment on column policy.backoffice_email_port IS 'Email ¿¬µ¿ ¼­¹ö Æ÷Æ®';
-comment on column policy.backoffice_email_user IS 'Email ¿¬µ¿ ¼­¹ö »ç¿ëÀÚ';
-comment on column policy.backoffice_email_password IS 'Email ¿¬µ¿ ¼­¹ö ºñ¹Ğ¹øÈ£';
-comment on column policy.backoffice_user_db_driver IS '»ç¿ëÀÚ DB ¿¬µ¿ Driver';
-comment on column policy.backoffice_user_db_url IS '»ç¿ëÀÚ DB ¿¬µ¿ URL';
-comment on column policy.backoffice_user_db_user IS '»ç¿ëÀÚ DB ¿¬µ¿ »ç¿ëÀÚ';
-comment on column policy.backoffice_user_db_password IS '»ç¿ëÀÚ DB ¿¬µ¿ ºñ¹Ğ¹øÈ£';
+comment on column policy.backoffice_email_host IS 'Email ì—°ë™ ì„œë²„ host';
+comment on column policy.backoffice_email_port IS 'Email ì—°ë™ ì„œë²„ í¬íŠ¸';
+comment on column policy.backoffice_email_user IS 'Email ì—°ë™ ì„œë²„ ì‚¬ìš©ì';
+comment on column policy.backoffice_email_password IS 'Email ì—°ë™ ì„œë²„ ë¹„ë°€ë²ˆí˜¸';
+comment on column policy.backoffice_user_db_driver IS 'ì‚¬ìš©ì DB ì—°ë™ Driver';
+comment on column policy.backoffice_user_db_url IS 'ì‚¬ìš©ì DB ì—°ë™ URL';
+comment on column policy.backoffice_user_db_user IS 'ì‚¬ìš©ì DB ì—°ë™ ì‚¬ìš©ì';
+comment on column policy.backoffice_user_db_password IS 'ì‚¬ìš©ì DB ì—°ë™ ë¹„ë°€ë²ˆí˜¸';
 
-comment on column policy.solution_name IS 'Á¦Ç°¸í';
-comment on column policy.solution_version IS 'Á¦Ç° ¹öÀü';
-comment on column policy.solution_company IS 'Á¦Ç° È¸»ç¸í';
-comment on column policy.solution_company_phone IS 'Á¦Ç° È¸»ç ¿¬¶ôÃ³';
-comment on column policy.solution_manager IS 'Á¦Ç° È¸»ç ´ã´çÀÚ';
-comment on column policy.solution_manager_phone IS 'Á¦Ç° È¸»ç ´ã´çÀÚ ÀüÈ­¹øÈ£';
-comment on column policy.solution_manager_email IS 'Á¦Ç° È¸»ç ´ã´çÀÚ ÀÌ¸ŞÀÏ';
+comment on column policy.solution_name IS 'ì œí’ˆëª…';
+comment on column policy.solution_version IS 'ì œí’ˆ ë²„ì „';
+comment on column policy.solution_company IS 'ì œí’ˆ íšŒì‚¬ëª…';
+comment on column policy.solution_company_phone IS 'ì œí’ˆ íšŒì‚¬ ì—°ë½ì²˜';
+comment on column policy.solution_manager IS 'ì œí’ˆ íšŒì‚¬ ë‹´ë‹¹ì';
+comment on column policy.solution_manager_phone IS 'ì œí’ˆ íšŒì‚¬ ë‹´ë‹¹ì ì „í™”ë²ˆí˜¸';
+comment on column policy.solution_manager_email IS 'ì œí’ˆ íšŒì‚¬ ë‹´ë‹¹ì ì´ë©”ì¼';
 
-comment on column policy.insert_date is 'µî·ÏÀÏ';
+comment on column policy.insert_date is 'ë“±ë¡ì¼';
