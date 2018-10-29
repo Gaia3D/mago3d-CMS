@@ -11,7 +11,7 @@ import com.gaia3d.persistence.MonitoringMapper;
 import com.gaia3d.service.MonitoringService;
 
 /**
- * OTP 생성, 검증
+ * postgresql 현황
  * @author jeongdae
  *
  */

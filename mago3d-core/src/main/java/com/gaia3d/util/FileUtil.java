@@ -147,7 +147,11 @@ public class FileUtil {
 		
 		// 2 파일 이름
 		String fileName = multipartFile.getOriginalFilename();
-		if(fileName.indexOf("..") >= 0 || fileName.indexOf("/") >= 0) {
+		if(fileName == null) {
+			log.info("@@ fileName is null");
+			fileInfo.setError_code("fileinfo.name.invalid");
+			return fileInfo;
+		} else if(fileName.indexOf("..") >= 0 || fileName.indexOf("/") >= 0) {
 			// TODO File.seperator 정규 표현식이 안 먹혀서 이렇게 처리함
 			log.info("@@ fileName = {}", fileName);
 			fileInfo.setError_code("fileinfo.name.invalid");
@@ -221,7 +225,11 @@ public class FileUtil {
 		
 		// 2 파일 이름
 		String fileName = multipartFile.getOriginalFilename();
-		if(fileName.indexOf("..") >= 0 || fileName.indexOf("/") >= 0) {
+		if(fileName == null) {
+			log.info("@@ fileName is null");
+			uploadLog.setError_code("fileinfo.name.invalid");
+			return uploadLog;
+		} else if(fileName.indexOf("..") >= 0 || fileName.indexOf("/") >= 0) {
 			// TODO File.seperator 정규 표현식이 안 먹혀서 이렇게 처리함
 			log.info("@@ fileName = {}", fileName);
 			uploadLog.setError_code("fileinfo.name.invalid");

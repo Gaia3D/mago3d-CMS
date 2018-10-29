@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.gaia3d.domain.PGStatActivity;
 /**
- * OTP 관리
+ * postgresql 현황
  * @author jeongdae
  *
  */

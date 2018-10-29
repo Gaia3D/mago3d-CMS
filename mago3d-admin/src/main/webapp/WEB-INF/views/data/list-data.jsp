@@ -40,7 +40,7 @@
 									<label for="search_word"><spring:message code='search.word'/></label>
 									<select id="search_word" name="search_word" class="select">
 										<option value=""><spring:message code='select'/></option>
-					          <option value="data_name"><spring:message code='name'/></option>
+					         			<option value="data_name"><spring:message code='name'/></option>
 									</select>
 									<select id="search_option" name="search_option" class="select">
 										<option value="0"><spring:message code='search.same'/></option>
