@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Project {
+public class Project extends SearchDomain {
 
 	// 임시 그룹
 	public static final Long TEMP_GROUP = 2l;
@@ -31,22 +31,6 @@ public class Project {
 	// up : 위로, down : 아래로
 	private String update_type;
 	
-	// 페이지 처리를 위한 시작
-	private Long offset;
-	// 페이지별 표시할 건수
-	private Long limit;
-		
-	/********** 검색 조건 ************/
-	private String search_word;
-	// 검색 옵션. 0 : 일치, 1 : 포함
-	private String search_option;
-	private String search_value;
-	private String start_date;
-	private String end_date;
-	private String order_word;
-	private String order_value;
-	private Long list_counter = 10l;
-
 	/****** validator ********/
 	private String method_mode;
 	
@@ -61,6 +45,8 @@ public class Project {
 	private String old_project_key;
 	// 그룹명
 	private String project_name;
+	// 공유 타입
+	private String sharing_type;
 	// 사용자명
 	private String user_id;
 	private String user_name;

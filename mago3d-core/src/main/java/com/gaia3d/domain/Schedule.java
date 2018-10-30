@@ -12,23 +12,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Schedule {
+public class Schedule extends SearchDomain {
 	
 	// 로그인 실패 건수 잠김 해제
 	public static final String USER_LOGIN_FAIL_LOCK_RELEASE = "USER_LOGIN_FAIL_LOCK_RELEASE";
-	
-	// 페이지 처리를 위한 시작
-	private Long offset;
-	// 페이지별 표시할 건수
-	private Long limit;
-	
-	/********** 검색 조건 ************/
-	private String search_word;
-	// 검색 옵션. 0 : 일치, 1 : 포함
-	private String search_option;
-	private String search_value;
-	private String order_word;
-	private String order_value;
 	
 	/****** validator ********/
 	private String method_mode;

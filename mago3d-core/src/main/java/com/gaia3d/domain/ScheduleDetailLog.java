@@ -12,13 +12,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ScheduleDetailLog {
+public class ScheduleDetailLog extends SearchDomain {
 	
-	// 페이지 처리를 위한 시작
-	private Long offset;
-	// 페이지별 표시할 건수
-	private Long limit;
-
 	// 스케줄 실행 상세 이력 고유번호
 	private Long schedule_detail_log_id;
 	// 스케줄 실행 이력 고유번호

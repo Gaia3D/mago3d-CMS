@@ -1,14 +1,19 @@
 package com.gaia3d.domain;
 
 import com.gaia3d.util.StringUtil;
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 게시판 댓글(Comment)
  * @author jeongdae
  *
  */
-@Data
+@ToString
+@Setter
+@Getter
 public class BoardComment {
 	
 	// 사용자 이름

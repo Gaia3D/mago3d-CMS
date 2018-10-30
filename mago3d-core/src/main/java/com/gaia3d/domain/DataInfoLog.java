@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class DataInfoLog {
+public class DataInfoLog extends SearchDomain {
 	
 	// Data 변경 대기중
 	public static final String STATUS_REQUEST = "0";
@@ -31,22 +31,6 @@ public class DataInfoLog {
 	public static final String STATUS_LEVEL_CONFIRM = "CONFIRM";
 	public static final String STATUS_LEVEL_REJECT = "REJECT";
 	public static final String STATUS_LEVEL_RESET = "RESET";
-	
-	// 페이지 처리를 위한 시작
-	private Long offset;
-	// 페이지별 표시할 건수
-	private Long limit;
-	
-	/********** 검색 조건 ************/
-	private String search_word;
-	// 검색 옵션. 0 : 일치, 1 : 포함
-	private String search_option;
-	private String search_value;
-	private String start_date;
-	private String end_date;
-	private String order_word;
-	private String order_value;
-	private Long list_counter = 10l;
 	
 	// 사용자명
 	private String user_id;

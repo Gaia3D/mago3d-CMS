@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Role {
+public class Role extends SearchDomain {
 
 	public static final String DELIMITER = "!@#";
 	
@@ -23,9 +23,6 @@ public class Role {
 	
 	/****** validator ********/
 	private String method_mode;
-	
-	private String order_word;
-	private String order_value;
 	
 	// 고유번호
 	private Long role_id;

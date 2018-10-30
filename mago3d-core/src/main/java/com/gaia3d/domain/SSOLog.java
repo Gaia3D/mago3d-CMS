@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SSOLog {
+public class SSOLog extends SearchDomain {
 	
 	// Token 상태 생성
 	public static final String TOKEN_CREATE = "0";
@@ -25,20 +25,6 @@ public class SSOLog {
 	
 	// 총건수
 	private Long totalCount;
-	// 페이지 처리를 위한 시작
-	private Long offset;
-	// 페이지별 표시할 건수
-	private Long limit;
-	
-	/********** 검색 조건 ************/
-	private String search_word;
-	// 검색 옵션. 0 : 일치, 1 : 포함
-	private String search_option;
-	private String search_value;
-	private String start_date;
-	private String end_date;
-	private String order_word;
-	private String order_value;
 	
 	// Single Sign-On 토큰 유효시간(분단위). 기본 3분
 	private Integer security_sso_token_verify_time;

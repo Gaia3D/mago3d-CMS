@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class APILog {
+public class APILog extends SearchDomain {
 	
 	// service_code = Single Sign-On Token 생성 요청
 	public static final String CREATE_SSO_TOKEN = "CREATE_SSO_TOKEN";
@@ -31,20 +31,6 @@ public class APILog {
 	
 	// 총건수
 	private Long totalCount;
-	// 페이지 처리를 위한 시작
-	private Long offset;
-	// 페이지별 표시할 건수
-	private Long limit;
-	
-	/********** 검색 조건 ************/
-	private String search_word;
-	// 검색 옵션. 0 : 일치, 1 : 포함
-	private String search_option;
-	private String search_value;
-	private String start_date;
-	private String end_date;
-	private String order_word;
-	private String order_value;
 	
 	/************* 업무 처리 ***********/
     // 사용자명

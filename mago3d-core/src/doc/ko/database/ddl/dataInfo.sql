@@ -5,8 +5,9 @@ drop table if exists data_info cascade;
 -- data의 논리적인 그룹
 create table project(
 	project_id				int,
-	project_key				varchar(60)							not null ,
+	project_key				varchar(60)							not null,
 	project_name			varchar(100)						not null,
+	sharing_type			char(1)								default '0',
 	user_id					varchar(32),
 	view_order				int									default 1,
 	default_yn				char(1)								default 'N',
@@ -25,6 +26,7 @@ comment on table project is 'project(F4D Data) 그룹';
 comment on column project.project_id is '고유번호';
 comment on column project.project_key is '링크 활용 등을 위한 확장 컬럼';
 comment on column project.project_name is '프로젝트';
+comment on column project.sharing_type is '공유 타입. 0 : public, 1 : private, 2 : sharing';
 comment on column project.user_id is '사용자 아이디';
 comment on column project.view_order is '나열 순서';
 comment on column project.default_yn is '삭제 불가, Y : 기본, N : 선택';
@@ -44,6 +46,7 @@ create table data_info(
 	project_id					int									not null,
 	data_key					varchar(128)						not null,
 	data_name					varchar(256),
+	sharing_type				char(1)								default '0',
 	user_id						varchar(32),
 	parent						bigint								default 1,
 	depth						int									default 1,
@@ -72,6 +75,7 @@ comment on column data_info.data_id is '고유번호';
 comment on column data_info.project_id is 'project 고유번호';
 comment on column data_info.data_key is 'data 고유 식별번호';
 comment on column data_info.data_name is 'data 이름';
+comment on column project.sharing_type is '공유 타입. 0 : public, 1 : private, 2 : sharing';
 comment on column data_info.user_id is '고유번호';
 comment on column data_info.parent is '부모 data_id';
 comment on column data_info.depth is 'depth';

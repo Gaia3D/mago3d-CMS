@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class DataInfo {
+public class DataInfo extends SearchDomain {
 	
 	// Data 상태가 사용중
 	public static final String STATUS_USE = "0";
@@ -36,22 +36,6 @@ public class DataInfo {
 	private String duplication_value;
 	// 논리 삭제 
 	private String delete_flag;
-	
-	// 페이지 처리를 위한 시작
-	private Long offset;
-	// 페이지별 표시할 건수
-	private Long limit;
-	
-	/********** 검색 조건 ************/
-	private String search_word;
-	// 검색 옵션. 0 : 일치, 1 : 포함
-	private String search_option;
-	private String search_value;
-	private String start_date;
-	private String end_date;
-	private String order_word;
-	private String order_value;
-	private Long list_counter = 10l;
 	
 	// 사용자명
 	private String user_id;
@@ -74,6 +58,8 @@ public class DataInfo {
 	private String parent_data_key;
 	// data 이름
 	private String data_name;
+	// 공유 타입
+	private String sharing_type;
 	// 부모 고유번호
 	private Long parent;
 	// 부모 이름(화면 표시용)
@@ -121,21 +107,6 @@ public class DataInfo {
 	
 	private String search_data_name;
 	private String search_except_data_name;
-	
-//	public String getViewStatus() {
-//		// 사용자 상태. 0:사용중, 1:사용중지(관리자), 2:기타)
-//		if(this.status == null || "".equals(this.status)) {
-//			return "";
-//		}
-//		if("0".equals(this.status)) {
-//			return "사용중";
-//		} else if("1".equals(this.status)) {
-//			return "사용중지";
-//		} else if("2".equals(this.status)) {
-//			return "기타";
-//		}
-//		return "";
-//	}
 	
 	public String getViewDataInsertType() {
 		// TODO 이건 뭔가 아닌거 같은데... 어떻게 처리 하지?

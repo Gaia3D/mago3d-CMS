@@ -1,35 +1,23 @@
 package com.gaia3d.domain;
 
 import com.gaia3d.util.StringUtil;
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 게시판
  * @author jeongdae
  *
  */
-@Data
-public class Board {
+@ToString
+@Setter
+@Getter
+public class Board extends SearchDomain {
 	
 	// validation
 	private String error_code;
-	
-//	// 페이징 처리를 위한 시작 ROWNUM
-//	private long startRownum;
-//	// 페이징 처리를 위한 종료 ROWNUM
-//	private long endRownum;
-	// 페이지 처리를 위한 시작
-	private Long offset;
-	// 페이지별 표시할 건수
-	private Long limit;
-		
-	/********** 검색 조건 ************/
-	private String search_word;
-	// 검색 옵션. 0 : 일치, 1 : 포함
-	private String search_option;
-	private String search_value;
-	private String order_word;
-	private String order_value;
 	
 	/****** validator ********/
 	private String method_mode;

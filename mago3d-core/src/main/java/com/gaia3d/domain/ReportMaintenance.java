@@ -11,16 +11,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ReportMaintenance {
-	// 페이지 처리를 위한 시작
-	private Long offset;
-	// 페이지별 표시할 건수
-	private Long limit;
-		
-	private String start_date;
-	private String end_date;
-	private String order_word;
-	private String order_value;
+public class ReportMaintenance extends SearchDomain {
 	
 	private Long report_maintenance_id;
 	

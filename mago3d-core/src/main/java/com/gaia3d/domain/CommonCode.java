@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CommonCode {
+public class CommonCode extends SearchDomain {
 
 	// 사용자 등록 유형
 	public static final String USER_REGISTER_TYPE = "USER_REGISTER_TYPE";
@@ -29,10 +29,6 @@ public class CommonCode {
 	public static final String ISSUE_TYPE = "ISSUE_TYPE";
 	// 이슈 상태
 	public static final String ISSUE_STATUS = "ISSUE_STATUS";
-	
-	/****** validator ********/
-	private String order_word;
-	private String order_value;
 	
 	// 이메일 목록
 	@Getter(AccessLevel.NONE)
@@ -64,11 +60,6 @@ public class CommonCode {
 	private String description;
 	// 등록일
 	private String insert_date;
-	
-	// 페이지 처리를 위한 시작
-	private Long offset;
-	// 페이지별 표시할 건수
-	private Long limit;
 	
 	public String getViewUseYn() {
 		if("Y".equals(this.use_yn)) {
