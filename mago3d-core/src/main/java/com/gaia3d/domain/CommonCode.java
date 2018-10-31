@@ -14,7 +14,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class CommonCode extends SearchDomain {
 
 	// 사용자 등록 유형

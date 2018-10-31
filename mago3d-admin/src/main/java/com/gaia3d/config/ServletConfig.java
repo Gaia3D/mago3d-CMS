@@ -1,7 +1,6 @@
 package com.gaia3d.config;
 
-import java.util.Properties;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,8 +19,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -32,6 +30,10 @@ import com.gaia3d.interceptor.LogInterceptor;
 import com.gaia3d.interceptor.SecurityInterceptor;
 
 import lombok.extern.slf4j.Slf4j;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * <mvc:annotation-driven> 대신 EnableWebMvc
@@ -39,63 +41,66 @@ import lombok.extern.slf4j.Slf4j;
  * @author Cheon JeongDae
  *
  */
-//@EnableSwagger2
+
 @Slf4j
+@EnableSwagger2
 @EnableWebMvc
 @Configuration
 @ComponentScan(basePackages = { "com.gaia3d.config, com.gaia3d.controller, com.gaia3d.interceptor, com.gaia3d.validator" }, includeFilters = {
 		@Filter(type = FilterType.ANNOTATION, value = Component.class),
 		@Filter(type = FilterType.ANNOTATION, value = Controller.class),
 		@Filter(type = FilterType.ANNOTATION, value = RestController.class)})
-public class ServletConfig extends WebMvcConfigurerAdapter {
+public class ServletConfig implements WebMvcConfigurer {
+	
+	@Autowired
+	private LogInterceptor logInterceptor;
+	@Autowired
+	private ConfigInterceptor configInterceptor;
+	@Autowired
+	private SecurityInterceptor securityInterceptor;
+	@Autowired
+	private CSRFHandlerInterceptor cSRFHandlerInterceptor;
+	
+	@Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
+	
+	@Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController("/").setViewName("forward:/index.jsp");
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    }
 
 	@Override
     public void addInterceptors(InterceptorRegistry registry) {
 		log.info(" @@@ ServletConfig addInterceptors @@@@ ");
 		
-        registry.addInterceptor(new ConfigInterceptor())
+        registry.addInterceptor(configInterceptor)
         		.addPathPatterns("/**")
         		.excludePathPatterns("/css/**", "/externlib/**", "/f4d/**", "/images/**", "/js/**");
-        registry.addInterceptor(logInterceptor())
+        registry.addInterceptor(logInterceptor)
         		.addPathPatterns("/**")
         		.excludePathPatterns("/css/**", "/externlib/**", "/f4d/**", "/images/**", "/js/**");
-        registry.addInterceptor(new SecurityInterceptor())
+        registry.addInterceptor(securityInterceptor)
         		.addPathPatterns("/**")
         		.excludePathPatterns("/login/**", "/css/**", "/externlib/**", "/f4d/**", "/images/**", "/js/**");
-        registry.addInterceptor(new CSRFHandlerInterceptor())
+        registry.addInterceptor(cSRFHandlerInterceptor)
         		.addPathPatterns("/**")
         		.excludePathPatterns("/login/**", "/css/**", "/externlib/**", "/f4d/**", "/images/**", "/js/**");
     }
 	
-	/**
-	 * LogInterceptor 안에서 AcessLogService를 Autowired 하기 위해서
-	 * @return
-	 */
-	@Bean
-	public LogInterceptor logInterceptor() {
-		return new LogInterceptor();
-	}
-	
 	@Bean
 	public LocaleResolver localeResolver() {
 		SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-		//sessionLocaleResolver.setDefaultLocale(Locale.KOREA);
 		return sessionLocaleResolver;
 	}
-//	
-//	@Bean
-//	public LocaleChangeInterceptor localeChangeInterceptor() {
-//		LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-//		lci.setParamName("lang");
-//		return lci;
-//	}
 
 	@Bean
 	public ReloadableResourceBundleMessageSource messageSource(){
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 		messageSource.setBasename("classpath:/messages/messages");
 		messageSource.setDefaultEncoding("UTF-8");
-		//messageSource.setCacheSeconds(messagesCacheSeconds);
 		return messageSource;
 	}
 
@@ -113,58 +118,15 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 //		registry.addResourceHandler("/hompage/**").addResourceLocations("/homepage/");
 		registry.addResourceHandler("/images/**").addResourceLocations("/images/");
 		registry.addResourceHandler("/js/**").addResourceLocations("/js/");
-		//registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-//		registry.addResourceHandler("/swagger-ui.html**").addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
-//	    registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-	    //registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 		
-//		if (!registry.hasMappingForPattern("/webjars/**")) {
-//            registry.addResourceHandler("/webjars/**")
-//                    .addResourceLocations("classpath:/resources/webjars/")
-//                    .setCacheControl( CacheControl.maxAge(1, TimeUnit.HOURS).cachePublic() );
-//        }
-//        if (!registry.hasMappingForPattern("/**")) {
-//            registry.addResourceHandler("/**")
-//                    .addResourceLocations("classpath:/static")
-//                    .setCacheControl( CacheControl.maxAge(0, TimeUnit.SECONDS).cachePublic());
-//        }
+		registry
+		.addResourceHandler("swagger-ui.html")
+		.addResourceLocations("classpath:/META-INF/resources/");
+ 
+		registry
+			.addResourceHandler("/webjars/**")
+			.addResourceLocations("classpath:/META-INF/resources/webjars/");
 	}
-	
-	@Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
-    }
-	
-	@Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/index.jsp");
-        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        super.addViewControllers(registry);
-    }
-
-//	@Bean
-//	public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
-//		log.info(" @@@ ServletConfig exceptionResolver @@@");
-//		
-//		SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
-//		
-//		Properties exceptionMappings = new Properties();
-//	 	exceptionMappings.put("BusinessLogicException", "/error/business-error");
-//	 	exceptionMappings.put("RuntimeException", "/error/runtime-error");
-//	 	exceptionMappings.put("Exception", "/error/error");
-//	 	simpleMappingExceptionResolver.setExceptionMappings(exceptionMappings);
-//	 	
-//	 	Properties statusCodes = new Properties();
-//        statusCodes.put("/error/error", "403");
-//        statusCodes.put("/error/error", "404");
-//        statusCodes.put("/error/error", "500");
-//        simpleMappingExceptionResolver.setStatusCodes(statusCodes);
-//
-//	 	simpleMappingExceptionResolver.setOrder(1);
-//	 	simpleMappingExceptionResolver.setDefaultErrorView("/error/error");
-//	 	
-//	 	return simpleMappingExceptionResolver;
-//	}
 	
 	@Bean
 	@ConditionalOnMissingBean(InternalResourceViewResolver.class)
@@ -184,29 +146,11 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 		return new CSRFRequestDataValueProcessor();
 	}
 	
-//	/**
-//     * Global CORS Configuration
-//     */
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        // 간략설정
-//        registry.addMapping("/**");
-//
-//        // 상세설정
-//        registry.addMapping("/api/**").allowedOrigins("http://domain2.com")
-//                .allowedMethods("PUT", "DELETE")
-//                .allowedHeaders("header1", "header2", "header3")
-//                .exposedHeaders("header1", "header2").allowCredentials(false)
-//                .maxAge(3600);
-//    }
-	
-//	@Bean
-//	public Docket petApi() {
-//		return new Docket(DocumentationType.SWAGGER_2)
-//			.select()
-//	        .apis(RequestHandlerSelectors.any())
-//	        .paths(PathSelectors.any())
-//	        .build()
-//	        .pathMapping("/");
-//	}
+	@Bean
+    public Docket api() {
+    	return new Docket(DocumentationType.SWAGGER_2)
+        		.select()
+                .apis(RequestHandlerSelectors.basePackage("gaia3d.api"))
+                .build();
+    }
 }

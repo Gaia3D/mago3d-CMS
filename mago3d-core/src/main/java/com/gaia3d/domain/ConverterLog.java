@@ -13,7 +13,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class ConverterLog extends SearchDomain {
 	
 	// 화면 표기용

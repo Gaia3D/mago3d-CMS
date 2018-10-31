@@ -1,21 +1,21 @@
 package com.gaia3d.config;
 
 import org.junit.Ignore;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class LoginControllerTest {
 
 	@Ignore
 	public void test() {
 		// 'admin', 1, '슈퍼관리자', 'scYISRCtE5buaoxtL9XkmWR71iUbOpfFUCOlJjZDFso=', '"$2a$10$CMK4Fnjhg/CPE71xYSW9Se"', 'N', now()
 		String password = "admin";
-		String salt = "$2a$10$CMK4Fnjhg/CPE71xYSW9Se";
+		String salt = "$2a$10$5k31m5NLTdQEV7SgsV/lTO";
 		System.out.println(salt);
 		
-		ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(512);
-		shaPasswordEncoder.setIterations(1000);
-		String encryptPassword = shaPasswordEncoder.encodePassword(password, salt);
-		
-		System.out.println(encryptPassword);
+		String encryptPassword = BCrypt.hashpw(password, salt);
+		log.info(">>encryptPassword = {}", encryptPassword);
 	}
 }

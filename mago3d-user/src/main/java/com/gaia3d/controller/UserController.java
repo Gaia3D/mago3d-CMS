@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -222,13 +222,11 @@ public class UserController {
 						
 			UserInfo dbUserInfo = userService.getUser(userInfo.getUser_id());
 			String encryptPassword = null;
-			ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(512);
-			shaPasswordEncoder.setIterations(1000);
 			// 비밀번호의 경우 입력값이 있을때만 수정
 			if(userInfo.getPassword() != null && !"".equals(userInfo.getPassword())
 					&& userInfo.getPassword_confirm() != null && !"".equals(userInfo.getPassword_confirm())) {
 				
-				encryptPassword = shaPasswordEncoder.encodePassword(userInfo.getPassword(), dbUserInfo.getSalt()) ;
+				encryptPassword = BCrypt.hashpw(userInfo.getPassword(), dbUserInfo.getSalt()) ;
 				if("".equals(encryptPassword)) {
 					log.info("@@ password error!");
 					result = "user.password.exception";
@@ -276,9 +274,9 @@ public class UserController {
 					
 					String password = null;
 					if(isUserIdUse) {
-						password = shaPasswordEncoder.encodePassword(userInfo.getUser_id() + initPassword, dbUserInfo.getSalt());
+						password = BCrypt.hashpw(userInfo.getUser_id() + initPassword, dbUserInfo.getSalt());
 					} else {
-						password = shaPasswordEncoder.encodePassword(initPassword, dbUserInfo.getSalt());
+						password = BCrypt.hashpw(initPassword, dbUserInfo.getSalt());
 					}
 					log.info("@@ password = {}", password);	
 					userInfo.setPassword(password);
@@ -303,9 +301,9 @@ public class UserController {
 					
 					String password = null;
 					if(isUserIdUse) {
-						password = shaPasswordEncoder.encodePassword(userInfo.getUser_id() + initPassword, dbUserInfo.getSalt());
+						password = BCrypt.hashpw(userInfo.getUser_id() + initPassword, dbUserInfo.getSalt());
 					} else {
-						password = shaPasswordEncoder.encodePassword(initPassword, dbUserInfo.getSalt());
+						password = BCrypt.hashpw(initPassword, dbUserInfo.getSalt());
 					}
 					log.info("@@ password = {}", password);	
 					userInfo.setPassword(password);
@@ -400,9 +398,7 @@ public class UserController {
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 		UserInfo dbUserInfo = userService.getUser(userSession.getUser_id());
 		
-		ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(512);
-		shaPasswordEncoder.setIterations(1000);
-		String PasswordCheck = shaPasswordEncoder.encodePassword(userInfo.getPassword(), dbUserInfo.getSalt());
+		String PasswordCheck = BCrypt.hashpw(userInfo.getPassword(), dbUserInfo.getSalt());
 		if(!(PasswordCheck.equals(dbUserInfo.getPassword())) ){
 			errorcode = "user.password.compare.invalid";
 			log.info("@@@@@@@@@@@@@ errcode = {}", errorcode);
@@ -411,7 +407,7 @@ public class UserController {
 			return "/user/modify-password";
 		}
 		
-		String encryptPassword = shaPasswordEncoder.encodePassword(userInfo.getNew_password(), dbUserInfo.getSalt());
+		String encryptPassword = BCrypt.hashpw(userInfo.getNew_password(), dbUserInfo.getSalt());
 		userInfo.setUser_id(userSession.getUser_id());
 		userInfo.setPassword(encryptPassword);
 		userInfo.setStatus(UserInfo.STATUS_USE);

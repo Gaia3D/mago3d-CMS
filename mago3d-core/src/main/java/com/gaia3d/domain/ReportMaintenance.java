@@ -10,7 +10,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class ReportMaintenance extends SearchDomain {
 	
 	private Long report_maintenance_id;

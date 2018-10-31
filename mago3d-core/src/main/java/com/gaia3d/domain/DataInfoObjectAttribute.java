@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class DataInfoObjectAttribute extends SearchDomain {
 	
 	/******** 화면 오류 표시용 ********/

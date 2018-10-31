@@ -15,7 +15,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class Issue extends SearchDomain {
 	
 	public static final String TITLE = "title";

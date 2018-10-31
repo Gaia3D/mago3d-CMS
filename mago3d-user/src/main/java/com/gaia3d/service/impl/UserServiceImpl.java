@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -166,8 +166,6 @@ public class UserServiceImpl implements UserService {
 		}
 		String initChar = StringUtil.getDefaultValue(policy.getPassword_create_char());
 		
-		ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(512);
-		shaPasswordEncoder.setIterations(1000);
 		for(String user_id : user_ids) {
 			UserInfo userInfo = userMapper.getUser(user_id);
 			String tempPassword = null;
@@ -176,7 +174,7 @@ public class UserServiceImpl implements UserService {
 			} else {
 				tempPassword = initChar;
 			}
-			String encryptPassword = shaPasswordEncoder.encodePassword(tempPassword, userInfo.getSalt());
+			String encryptPassword = BCrypt.hashpw(tempPassword, userInfo.getSalt());
 			userInfo.setPassword(encryptPassword);
 			
 			// DB 처리

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -202,9 +202,7 @@ public class LoginController {
 			// 비밀번호 불일치
 			boolean isPasswordEquals = false;
 			try {
-				ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(512);
-				shaPasswordEncoder.setIterations(1000);
-				String encryptPassword = shaPasswordEncoder.encodePassword(loginForm.getPassword(), userSession.getSalt()) ;
+				String encryptPassword = BCrypt.hashpw(loginForm.getPassword(), userSession.getSalt()) ;
 				log.info("@@ dbpassword = {}, encriptPassword = {}", userSession.getPassword(), encryptPassword);
 				if(userSession.getPassword().equals(encryptPassword)) {
 					isPasswordEquals = true;

@@ -1,7 +1,9 @@
+
+
 buildscript {
 	ext {
-		springBootVersion = '1.5.15.RELEASE'
-		lombokVersion = '1.18.2'
+		springBootVersion = '2.1.0.RELEASE'
+		lombokVersion = '1.18.4'
 	}
 	repositories {
 		mavenCentral()
@@ -14,8 +16,11 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 version = '0.0.1-SNAPSHOT'
+bootJar.enabled = true
+jar.enabled = true
 
 compileJava {
     sourceCompatibility = 1.8
@@ -23,34 +28,37 @@ compileJava {
     // gralde 5.0 lombok error
     //options.compilerArgs += ["-proc:none"]
 }
-compileJava.options.encoding = 'UTF-8'
 
-bootRepackage.enabled = false
+compileJava.options.encoding = 'UTF-8'
 
 repositories {
 	mavenCentral()
 }
 
+test {
+	ignoreFailures = true
+}
+
 dependencies {
-	compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.2')
-	compile 'org.springframework.security:spring-security-core:4.2.2.RELEASE'
-	compile 'org.apache.httpcomponents:httpclient:4.5.3'
-	compile 'commons-codec:commons-codec:1.10'
-	compile 'org.apache.commons:commons-exec:1.3'
+	compile('org.springframework.boot:spring-boot-starter')	
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile("org.springframework.boot:spring-boot-starter-validation:${springBootVersion}")
+	
+	compile('org.springframework.security:spring-security-core')
 	compile 'commons-validator:commons-validator:1.6'
-	compile 'org.springframework:spring-web:4.3.9.RELEASE'
-	compile 'com.fasterxml.jackson.core:jackson-databind:2.9.7'
-	
-	compile 'javax.servlet:javax.servlet-api:3.1.0'
-	
-	runtime('org.postgresql:postgresql')
+	compile('org.apache.httpcomponents:httpclient')
+	compile('commons-codec:commons-codec:1.11')
+	compile('org.apache.commons:commons-exec:1.3')
+	compile('com.fasterxml.jackson.core:jackson-databind:2.9.7')
+	compile('junit:junit:4.12')
 	
 	annotationProcessor("org.projectlombok:lombok:$lombokVersion")
 	compileOnly("org.projectlombok:lombok:$lombokVersion")
 	testAnnotationProcessor("org.projectlombok:lombok:$lombokVersion")
 	testCompileOnly("org.projectlombok:lombok:$lombokVersion")	
-	//compileOnly('org.projectlombok:lombok:1.18.2')
+	//compileOnly("org.projectlombok:lombok:$lombokVersion")
 	
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
+	
+	runtime('org.postgresql:postgresql')
 }

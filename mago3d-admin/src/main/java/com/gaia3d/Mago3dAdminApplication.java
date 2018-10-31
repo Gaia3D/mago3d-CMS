@@ -7,11 +7,13 @@ import org.apache.catalina.webresources.StandardRoot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.gaia3d.filter.XSSFilter;
 import com.gaia3d.listener.Gaia3dHttpSessionBindingListener;
@@ -36,21 +38,30 @@ public class Mago3dAdminApplication extends SpringBootServletInitializer {
         return application.sources(Mago3dAdminApplication.class);
     }
 	
-//	@Bean
-//    public FilterRegistrationBean encodingFilter() {
-//		FilterRegistrationBean registrationBean = new FilterRegistrationBean(new CharacterEncodingFilter());
-//		registrationBean.addInitParameter("encoding", "utf-8");
-//		registrationBean.addInitParameter("forceEncoding", "true");
-//		registrationBean.addUrlPatterns("*.do");
-//        return registrationBean;
-//    }
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("*")
+					.allowedHeaders("*");
+			}
+		};
+	}
 
     @Bean
-    public FilterRegistrationBean xSSFilter() {
-    	FilterRegistrationBean registrationBean = new FilterRegistrationBean(new XSSFilter());
+    public FilterRegistrationBean<XSSFilter> xSSFilter() {
+    	FilterRegistrationBean<XSSFilter> registrationBean = new FilterRegistrationBean<>(new XSSFilter());
 		registrationBean.addUrlPatterns("*.do");
         return registrationBean;
     }
+    
+    @Bean
+	public FilterRegistrationBean<HiddenHttpMethodFilter> hiddenHttpMethodFilter() {
+		FilterRegistrationBean<HiddenHttpMethodFilter> registrationBean = new FilterRegistrationBean<>(new HiddenHttpMethodFilter());
+		registrationBean.addUrlPatterns("*.do");
+		return registrationBean;
+	}
 	
 	@Bean
 	public HttpSessionBindingListener httpSessionBindingListener() {
@@ -59,8 +70,8 @@ public class Mago3dAdminApplication extends SpringBootServletInitializer {
 	}
 	
 	@Bean
-	public EmbeddedServletContainerFactory servletContainer() {
-	    TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory() {
+	public TomcatServletWebServerFactory containerFactory() {
+		TomcatServletWebServerFactory tomcatServletWebServerFactory = new TomcatServletWebServerFactory() {
 	        @Override
 	        protected void postProcessContext(Context context) {
 	            final int cacheSize = 40 * 1024;
@@ -71,6 +82,6 @@ public class Mago3dAdminApplication extends SpringBootServletInitializer {
 	            logger.info(String.format("New cache size (KB): %d", context.getResources().getCacheMaxSize()));
 	        }
 	    };
-	    return tomcatFactory;
+	    return tomcatServletWebServerFactory;
 	}
 }

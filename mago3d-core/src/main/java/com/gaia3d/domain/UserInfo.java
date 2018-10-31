@@ -16,7 +16,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class UserInfo extends SearchDomain {
 	
 	// 사용자 상태가 사용중

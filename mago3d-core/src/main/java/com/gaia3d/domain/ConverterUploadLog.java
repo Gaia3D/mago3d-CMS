@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class ConverterUploadLog extends FileInfo {
 	
 	// 페이지 처리를 위한 시작

@@ -5,7 +5,8 @@ allprojects  {
 	
 	buildscript {
 		ext {
-			springBootVersion = '1.5.15.RELEASE'
+			springBootVersion = '2.1.0.RELEASE'
+			lombokVersion = '1.18.4'
 		}
 		repositories {
 			jcenter()

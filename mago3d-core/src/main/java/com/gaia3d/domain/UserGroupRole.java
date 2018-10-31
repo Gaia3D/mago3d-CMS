@@ -12,7 +12,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class UserGroupRole extends SearchDomain {
 	
 	// Role 유형. 0 : 사용자
@@ -30,7 +30,6 @@ public class UserGroupRole extends SearchDomain {
 	public static final String PROJECT_DELETE = "PROJECT_DELETE";
 	// 데이터 삭제 권한
 	public static final String DATA_DELETE = "DATA_DELETE";
-	
 	
 	/****** validator ********/
 	private String method_mode;

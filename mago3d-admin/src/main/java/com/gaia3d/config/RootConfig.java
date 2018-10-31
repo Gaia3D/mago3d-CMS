@@ -71,19 +71,6 @@ public class RootConfig {
 		dataSource.setMaximumPoolSize(maximumPoolSize);
 		dataSource.setMinimumIdle(minimumIdle);
 		
-//		org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
-//	    dataSource.setDriverClassName(driverClassName);
-//	    dataSource.setUrl(Crypt.decrypt(url));
-//	    dataSource.setUsername(Crypt.decrypt(username));
-//	    dataSource.setPassword(Crypt.decrypt(password));
-//	    // 서버용
-//	    dataSource.setInitialSize(10);
-//	    dataSource.setMaxActive(25);
-//	    dataSource.setMaxIdle(15);
-//	    dataSource.setMinIdle(10);
-////	    dataSource.setTestWhileIdle(testWhileIdle);     
-////	    dataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMills);
-////	    dataSource.setValidationQuery(validationQuery);
 	    return dataSource;
 	}
 	
@@ -93,14 +80,6 @@ public class RootConfig {
         final DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource());
         return transactionManager;
     }
-	
-//	@Bean
-//    public MBeanExporter exporter() {
-//		final MBeanExporter exporter = new MBeanExporter();
-//		// we exclude the "datasource" beans because it's already managed by hikari itself
-//		exporter.setExcludedBeans("datasourceAdmin", "datasourceUser");
-//		return exporter;
-//	}
 	
 	@Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {

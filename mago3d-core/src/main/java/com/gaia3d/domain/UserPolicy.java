@@ -12,7 +12,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class UserPolicy {
 
 	// 사용자 아이디

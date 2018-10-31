@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class ExternalService extends SearchDomain {
 	
 	// 상태. 0 : 사용, 1 : 미사용, ??

@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class ScheduleDetailLog extends SearchDomain {
 	
 	// 스케줄 실행 상세 이력 고유번호

@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class Schedule extends SearchDomain {
 	
 	// 로그인 실패 건수 잠김 해제

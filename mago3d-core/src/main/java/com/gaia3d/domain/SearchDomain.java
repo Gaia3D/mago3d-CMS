@@ -84,4 +84,11 @@ public class SearchDomain {
 		this.list_counter = list_counter;
 	}
 	
+	@Override
+	public String toString() {
+		return "SearchDomain [offset=" + offset + ", limit=" + limit + ", search_word=" + search_word
+				+ ", search_option=" + search_option + ", search_value=" + search_value + ", start_date=" + start_date
+				+ ", end_date=" + end_date + ", order_word=" + order_word + ", order_value=" + order_value
+				+ ", list_counter=" + list_counter + "]";
+	}
 }

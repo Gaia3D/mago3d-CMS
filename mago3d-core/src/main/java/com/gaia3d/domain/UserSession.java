@@ -13,7 +13,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class UserSession implements Serializable {
 	
 	private static final long serialVersionUID = -7648113594557708090L;

@@ -11,7 +11,7 @@ import lombok.ToString;
  * @author jeongdae
  *
  */
-@ToString
+@ToString(callSuper=true)
 @Setter
 @Getter
 public class Board extends SearchDomain {

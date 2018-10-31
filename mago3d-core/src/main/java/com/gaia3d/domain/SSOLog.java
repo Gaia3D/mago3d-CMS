@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper=true)
 public class SSOLog extends SearchDomain {
 	
 	// Token 상태 생성

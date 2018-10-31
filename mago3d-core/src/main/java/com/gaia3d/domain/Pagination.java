@@ -85,7 +85,7 @@ public class Pagination {
 		
 		long remainder = 0l;
 		this.prePageNo = 0l;
-		if(this.pageNo > 10l) {
+		if(this.pageNo > pageRows) {
 			// TODO 이전을 눌렀을때 현재 페이지 - 10 이 아닌 항상 1, 11, 21... 형태로 표시하고 싶을때
 			remainder = this.pageNo % this.pageListCount;
 			this.prePageNo = this.pageNo - this.pageListCount - remainder + 1l;
@@ -95,7 +95,7 @@ public class Pagination {
 		}
 		
 		this.nextPageNo = 0l;
-		if(this.lastPage > 10l && this.pageNo <= ((this.lastPage / this.pageListCount) * this.pageListCount)) {
+		if(this.lastPage > pageListCount && this.pageNo <= ((this.lastPage / this.pageListCount) * this.pageListCount)) {
 			if(this.lastPage >= (this.startPage + this.pageListCount)) {
 				if(this.pageNo % this.pageListCount == 0l) {
 					// TODO 다음을 눌렀을때 현재 페이지 + 10 이 아닌 항상 11, 21, 31... 형태로 표시하고 싶을때

@@ -1,5 +1,7 @@
 package com.gaia3d.helper;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UserInfo;
 
@@ -7,6 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class PasswordHelper {
+	
+	public static boolean isEqual(String encodedPassword, String plainTextPassword, String salt) {
+		if(encodedPassword.equals(BCrypt.hashpw(plainTextPassword, salt))) return true;
+		else return false;
+	}
 
 	/**
 	 * @param policy
