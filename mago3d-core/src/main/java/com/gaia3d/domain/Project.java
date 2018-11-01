@@ -45,7 +45,7 @@ public class Project extends SearchDomain {
 	private String old_project_key;
 	// 그룹명
 	private String project_name;
-	// 공유 타입
+	// 공유 타입. 0 : default, 1: public, 2 : private, 3 : sharing
 	private String sharing_type;
 	// 사용자명
 	private String user_id;
