@@ -67,6 +67,16 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 	
 	/**
+	 * 프로젝트 목록(데이터 총 건수로 정렬)
+	 * @param project
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public List<Project> getListProjectByDataCountRank(Project project) {
+		return projectMapper.getListProjectByDataCountRank(project);
+	}
+	
+	/**
 	 * Project 등록
 	 * 
 	 * @param project

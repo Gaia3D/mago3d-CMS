@@ -10,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoAttribute;
 import com.gaia3d.domain.DataInfoObjectAttribute;
+import com.gaia3d.domain.Project;
 import com.gaia3d.persistence.DataMapper;
 import com.gaia3d.service.DataService;
+import com.gaia3d.service.ProjectService;
 
 /**
  * Data
@@ -21,6 +23,8 @@ import com.gaia3d.service.DataService;
 @Service
 public class DataServiceImpl implements DataService {
 
+	@Autowired
+	private ProjectService projectService;
 	@Autowired
 	private DataMapper dataMapper;
 	
@@ -152,7 +156,13 @@ public class DataServiceImpl implements DataService {
 	 */
 	@Transactional
 	public int insertData(DataInfo dataInfo) {
-		return dataMapper.insertData(dataInfo);
+		int result = dataMapper.insertData(dataInfo);
+		
+		Project project = new Project();
+		project.setProject_id(dataInfo.getProject_id());
+		project.setData_count(1);
+		projectService.updateProject(project);
+		return result;
 	}
 	
 	/**
@@ -212,7 +222,6 @@ public class DataServiceImpl implements DataService {
 	 */
 	@Transactional
 	public int updateData(DataInfo dataInfo) {
-		// TODO 환경 설정 값을 읽어 와서 update 할 건지, delete 할건지 분기를 타야 함
 		return dataMapper.updateData(dataInfo);
 	}
 	
@@ -270,10 +279,15 @@ public class DataServiceImpl implements DataService {
 	 */
 	@Transactional
 	public int deleteData(Long data_id) {
-//		Policy policy = CacheManager.getPolicy();
-//		String dataDeleteType = policy.getData_delete_type();
 		
-		return dataMapper.deleteData(data_id);
+		DataInfo dataInfo = dataMapper.getData(data_id);
+		int result = dataMapper.deleteData(data_id);
+		
+		Project project = new Project();
+		project.setProject_id(dataInfo.getProject_id());
+		project.setData_count(-1);
+		projectService.updateProject(project);
+		return result;
 	}
 	
 	/**

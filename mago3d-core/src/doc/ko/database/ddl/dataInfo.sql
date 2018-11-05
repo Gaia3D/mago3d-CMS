@@ -7,8 +7,9 @@ create table project(
 	project_id				int,
 	project_key				varchar(60)							not null,
 	project_name			varchar(100)						not null,
-	sharing_type			char(1)								default '0',
+	sharing_type			char(1)								default '1',
 	user_id					varchar(32),
+	data_count				int									default 0,
 	view_order				int									default 1,
 	default_yn				char(1)								default 'N',
 	use_yn					char(1)								default 'Y',
@@ -28,6 +29,7 @@ comment on column project.project_key is '링크 활용 등을 위한 확장 컬럼';
 comment on column project.project_name is '프로젝트';
 comment on column project.sharing_type is '공유 타입. 0 : default, 1: public, 2 : private, 3 : sharing';
 comment on column project.user_id is '사용자 아이디';
+comment on column project.data_count is '프로젝트에 속하는 데이터 총 건수';
 comment on column project.view_order is '나열 순서';
 comment on column project.default_yn is '삭제 불가, Y : 기본, N : 선택';
 comment on column project.use_yn is '사용유무, Y : 사용, N : 사용안함';
@@ -46,7 +48,7 @@ create table data_info(
 	project_id					int									not null,
 	data_key					varchar(128)						not null,
 	data_name					varchar(256),
-	sharing_type				char(1)								default '0',
+	sharing_type				char(1)								default '1',
 	user_id						varchar(32),
 	parent						bigint								default 1,
 	depth						int									default 1,

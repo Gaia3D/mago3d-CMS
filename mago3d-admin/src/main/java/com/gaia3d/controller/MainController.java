@@ -20,6 +20,7 @@ import com.gaia3d.domain.AccessLog;
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataInfoLog;
+import com.gaia3d.domain.DataSharingType;
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.PGStatActivity;
 import com.gaia3d.domain.Policy;
@@ -358,19 +359,11 @@ public class MainController {
 		try {
 			Project defaultProject = new Project();
 			defaultProject.setUse_yn(Project.IN_USE);
-			List<Project> projectList = projectService.getListProject(defaultProject);
-			List<String> projectNameList = new ArrayList<>();
-			List<Long> dataTotalCountList = new ArrayList<>();
-			for(Project project : projectList) {
-				projectNameList.add(project.getProject_name());
-				DataInfo dataInfo = new DataInfo();
-				dataInfo.setProject_id(project.getProject_id());
-				Long dataTotalCount = dataService.getDataTotalCount(dataInfo);
-				dataTotalCountList.add(dataTotalCount);
-			}
-			
-			map.put("projectNameList", projectNameList);
-			map.put("dataTotalCountList", dataTotalCountList);
+			defaultProject.setSharing_type(DataSharingType.DEFAULT.getValue());
+			defaultProject.setOffset(0l);
+			defaultProject.setLimit(7l);
+			List<Project> projectList = projectService.getListProjectByDataCountRank(defaultProject);
+			map.put("projectList", projectList);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

@@ -52,6 +52,13 @@ public interface ProjectMapper {
 	Integer getDuplicationKeyCount(String project_key);
 	
 	/**
+	 * 프로젝트 목록(데이터 총 건수로 정렬)
+	 * @param project
+	 * @return
+	 */
+	List<Project> getListProjectByDataCountRank(Project project);
+	
+	/**
 	 * project 등록
 	 * 
 	 * @param project

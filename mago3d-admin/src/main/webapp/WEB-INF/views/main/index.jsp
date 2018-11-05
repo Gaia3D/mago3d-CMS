@@ -11,10 +11,10 @@
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
 	<link rel="stylesheet" href="/externlib/normalize/normalize.min.css" />
-	
 	<link rel="stylesheet" href="/externlib/jquery-ui/jquery-ui.css" />
-	<link rel="stylesheet" href="/externlib/jqplot/jquery.jqplot.min.css" />
 	<link rel="stylesheet" href="/css/${lang}/style.css" />
+	<script src="/externlib/webix/codebase/webix.js?v=6.0.5" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="/externlib/webix/codebase/webix.css?v=6.0.5">
 </head>
 
 <body class="home">
@@ -94,7 +94,7 @@
 								<a href="/data/list-data.do" title="<spring:message code='config.widget.project.more'/>"><span class="icon-glyph glyph-plus"></span></a>
 							</div>
 						</div>
-						<div id="${dbWidget.name}" class="widget-content row">
+						<div id="${dbWidget.name}" class="widget-content row" style="margin-top:0px; padding-top:0px; width:95%; height:90%;">
 							<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 					            <div id="projectSpinner" style="width: 150px; height: 70px;"></div>
 							</div>
@@ -111,7 +111,7 @@
 								<a href="/data/list-data.do" title="<spring:message code='config.widget.data.info.more'/>"><span class="icon-glyph glyph-plus"></span></a>
 							</div>
 						</div>
-						<div id="${dbWidget.name}" class="widget-content row">
+						<div id="${dbWidget.name}" class="widget-content row" style="margin-top:0px; padding-top:0px; width:95%; height:90%;">
 							<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 					      		<div id="dataInfoSpinner" style="width: 150px; height: 70px;"></div>
 					       	</div>
@@ -128,7 +128,7 @@
 								<a href="/data/list-data-log.do" title="<spring:message code='config.widget.data.info.log.more'/>"><span class="icon-glyph glyph-plus"></span></a>
 							</div>
 						</div>
-						<div id="${dbWidget.name}" class="widget-content row">
+						<div id="${dbWidget.name}" class="widget-content row" style="margin-top:0px; padding-top:0px; width:95%; height:90%;">
 							<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 					       		<div id="dataInfoLogListSpinner" style="width: 150px; height: 70px;"></div>
 					       	</div>
@@ -146,7 +146,7 @@
 								<a href="/user/list-user.do" title="${moreuserstatus}"><span class="icon-glyph glyph-plus"></span></a>
 							</div>
 						</div>
-						<div id="${dbWidget.name}" class="widget-content row">
+						<div id="${dbWidget.name}" class="widget-content row" style="margin-top:0px; padding-top:0px; width:95%; height:90%;">
 						</div>
 					</div>
 		</c:when>			
@@ -388,13 +388,6 @@
 <script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
 <script type="text/javascript" src="/externlib/jquery-ui/jquery-ui.js"></script>
 
-<script type="text/javascript" src="/externlib/jqplot/jquery.jqplot.min.js"></script>
-<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.barRenderer.min.js"></script>
-<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
-<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.dateAxisRenderer.min.js"></script>
-<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
-<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.pointLabels.min.js"></script>
-
 <script type="text/javascript" src="/externlib/spinner/progressSpin.min.js"></script>
 <script type="text/javascript" src="/externlib/spinner/raphael.js"></script>
 
@@ -499,7 +492,7 @@
 			headers: { "X-mago3D-Header" : "mago3D"},
 			success : function(msg) {
 				if(msg.result === "success") {
-					showProject(msg.projectNameList, msg.dataTotalCountList);
+					showProject(msg.projectList);
 				} else {
 					alert(JS_MESSAGE[msg.result]);
 				}
@@ -511,53 +504,53 @@
 		});
 	}
 	
-	function showProject(projectNameList, dataTotalCountList) {
+	function showProject(projectList) {
 		
 		$("#projectWidget").empty();
-		if(projectNameList == null || projectNameList.length == 0) {
+		if(projectList == null || projectList.length == 0) {
 			return;
 		} 
 		
-		var data = [];
-		var projectCount =  projectNameList.length;
+		var dataset = [];
+		var projectColor = ["#a67ee9", "#FE642E", "#01DF01", "#2E9AFE", "#F781F3", "#F6D8CE", "#99a0ac"];
+		var projectCount =  projectList.length;
 		for(i=0; i<projectCount; i++ ) {
-			var projectStatisticsArray = [ projectNameList[i], dataTotalCountList[i]];
-			data.push(projectStatisticsArray);
+			var projectJson = new Object();
+			projectJson.project_name = projectList[i].project_name;
+			projectJson.data_count = projectList[i].data_count;
+			projectJson.color = projectColor[i];
+			dataset.push(projectJson);
 		}
 		
-		var plot = $.jqplot("projectWidget", [data], {
-            //title : "project 별 chart",
-            seriesColors: [ "#a67ee9", "#FE642E", "#01DF01", "#2E9AFE", "#F781F3", "#F6D8CE", "#99a0ac" ],
-            grid: {
-                drawBorder: false,
-                drawGridlines: false,
-                background: "#ffffff",
-                shadow:false
-            },
-            gridPadding: {top:0, bottom:85, left:0, right:170},
-            seriesDefaults:{
-                renderer:$.jqplot.PieRenderer,
-                trendline : { show : false},
-                rendererOptions: {
-                    padding:8,
-                    showDataLabels: true,
-                    dataLabels: "value",
-                    //dataLabelFormatString: "%.1f%"
-                },
-            },
-            legend: {
-                show: true,
-                fontSize: "10pt",
-                placement : "outside",
-                rendererOptions: {
-                    numberRows: 7,
-                    numberCols: 1
-                },
-                location: "e",
-                border: "none",
-                marginLeft: "10px"
-            }
-        });
+		webix.ui({
+			container: "projectWidget",
+			margin : 0,
+			padding : 0,
+			//minWidth:390,
+			//maxWidth:535,
+			borderless:true,
+			cols:[{
+				rows:[{
+					view: "chart",
+					type:"pie",
+					height : 250,
+					value:"#data_count#",
+					color:"#color#",
+					pieInnerText:"#data_count#",
+					legend:{
+						//width:200,
+						align:"right",
+						valign:"top",
+						//padding: 10,
+						template:"#project_name#"
+					},
+					shadow:0,
+					x:150,
+					y:100,
+					data:dataset
+				}]
+			}]
+		});
 	}
 	
 	function dataInfoWidget() {
@@ -582,7 +575,6 @@
 	function showDataInfo(jsonData) {
 		
 		$("#dataInfoWidget").empty();
-		
 		var useTotalCount = parseInt(jsonData.useTotalCount);
 		var forbidTotalCount = parseInt(jsonData.forbidTotalCount);
 		var etcTotalCount = parseInt(jsonData.etcTotalCount);
@@ -591,61 +583,56 @@
 		var unused = "<spring:message code='data.status.unused'/>";
 		var etc = "<spring:message code='data.status.etc'/>";
 		
+		var dataset = [];
 		var dataValues = [ useTotalCount, forbidTotalCount, etcTotalCount];
 		var ticks = [use, unused, etc];
 		var yMax = 10;
+		var yStep = 1;
 		if(useTotalCount > 10 || forbidTotalCount > 10 || etcTotalCount > 10) {
 			yMax = Math.max(useTotalCount, forbidTotalCount, etcTotalCount) + (useTotalCount * 0.2);
+			yStep = parseInt(yMax / 5);
 		}
 		
-		var plot = $.jqplot("dataInfoWidget", [dataValues], {
-        	//title : "data info status",
-        	height: 205,
-        	animate: !$.jqplot.use_excanvas,
-        	seriesColors: [ "#40a7fe", "#3fbdf8" ],
-        	seriesDefaults:{
-            	shadow:false,
-            	renderer:$.jqplot.BarRenderer,
-                pointLabels: { show: true },
-                rendererOptions: {
-                	barWidth: 50
+		for(i=0; i<dataValues.length; i++ ) {
+			var dataInfoJson = new Object();
+			dataInfoJson.status = ticks[i];
+			dataInfoJson.count = dataValues[i];
+			dataset.push(dataInfoJson);
+		}
+		
+		webix.ui({
+            container:"dataInfoWidget",
+            borderless:true,
+            //height:220,
+            rows:[
+                {
+                    view:"chart",
+                    type:"bar",
+                    value:"#count#",
+                    label:"#count#",
+                    barWidth:50,
+                    color:"#40a7fe",
+                    /* tooltip:{
+                        template:"#count#"
+                    }, */
+                    xAxis:{
+                        template:"#status#"
+                    },
+                    yAxis:{
+                        start:0,
+                        end:yMax,
+                        step:yStep,
+                        template:function(obj){
+                            return (obj%yStep?"":obj)
+                        }
+                    },
+                    padding:{
+                        left: 40
+                    },
+                    radius:0,
+                    data: dataset
                 }
-            },
-            grid: {
-				background: "#fff",
-				//background: "#14BA6C"
-				gridLineWidth: 0.7,
-				//borderColor: 'transparent',
-				shadow: false,
-				borderWidth:0.1
-				//shadowColor: 'transparent'
-			},
-            gridPadding:{
-		        left:35,
-		        right:1,
-		        to:40,
-		        bottom:27
-		    },
-            axes: {
-                xaxis: {
-                    renderer: $.jqplot.CategoryAxisRenderer,
-                    ticks: ticks,
-                    tickOptions:{ 
-                    	formatString: "%'d",
-	                	fontSize: "10pt"
-	                } 
-                },
-                yaxis: {
-	            	numberTicks : 6,
-	                min : 0,
-	                max : yMax,
-                    tickOptions:{ 
-                    	formatString: "%'d",
-	                	fontSize: "10pt"
-	                }
-				}
-            },
-            highlighter: { show: false }
+            ]
         });
 	}
 	
@@ -731,61 +718,56 @@
 			tempPasswordUserTotalCount = parseInt(jsonData.tempPasswordUserTotalCount);
 		}
 
+		var dataset = [];
 		var userValues = [ activeUserTotalCount, fobidUserTotalCount, failUserTotalCount, sleepUserTotalCount, expireUserTotalCount, tempPasswordUserTotalCount];
 		var ticks = [JS_MESSAGE["main.status.in.use"], JS_MESSAGE["main.status.stop.use"], JS_MESSAGE["main.status.fail.count"], JS_MESSAGE["main.status.dormancy"], JS_MESSAGE["main.status.expires"], JS_MESSAGE["main.status.temporary.password"]];
 		var yMax = 10;
+		var yStep = 1;
 		if(activeUserTotalCount > 10 || fobidUserTotalCount > 10 || failUserTotalCount > 10 || sleepUserTotalCount > 10 || expireUserTotalCount > 10 || tempPasswordUserTotalCount > 10) {
 			yMax = Math.max(activeUserTotalCount, fobidUserTotalCount, failUserTotalCount, sleepUserTotalCount, expireUserTotalCount, tempPasswordUserTotalCount) + (activeUserTotalCount * 0.2);
+			yStep = parseInt(yMax / 5);
 		}
 		
-        var plot = $.jqplot("userWidget", [userValues], {
-        	//title : "사용자 상태별 현황",
-        	height: 205,
-        	animate: !$.jqplot.use_excanvas,
-        	seriesColors: [ "#ffa076"],
-        	grid: {
-        		background: "#fff",
-				//background: "#14BA6C"
-				gridLineWidth: 0.7,
-				//borderColor: 'transparent',
-				shadow: false,
-				borderWidth:0.1
-				//shadowColor: 'transparent'
-			}, 
-        	gridPadding:{
-		        left:35,
-		        right:1,
-		        to:40,
-		        bottom:27
-		    },
-            seriesDefaults:{
-            	shadow:false,
-            	renderer:$.jqplot.BarRenderer,
-                pointLabels: { show: true },
-                rendererOptions: {
-                	barWidth: 40
+		for(i=0; i<userValues.length; i++ ) {
+			var userJson = new Object();
+			userJson.status = ticks[i];
+			userJson.count = userValues[i];
+			dataset.push(userJson);
+		}
+		
+		webix.ui({
+            container:"userWidget",
+            borderless:true,
+          	//height:230,
+            rows:[
+                {
+                    view:"chart",
+                    type:"bar",
+                    value:"#count#",
+                    label:"#count#",
+                    barWidth:50,
+                    color:"#ffa076",
+                    /* tooltip:{
+                        template:"#count#"
+                    }, */
+                    xAxis:{
+                        template:"#status#"
+                    },
+                    yAxis:{
+                        start:0,
+                        end:yMax,
+                        step:yStep,
+                        template:function(obj){
+                            return (obj%yStep?"":obj)
+                        }
+                    },
+                    padding:{
+                        left: 40
+                    },
+                    radius:0,
+                    data: dataset
                 }
-            },
-            axes: {
-                xaxis: {
-                    renderer: $.jqplot.CategoryAxisRenderer,
-                    ticks: ticks,
-                    tickOptions:{ 
-                    	formatString: "%'d",
-	                	fontSize: "10pt"
-	                } 
-                },
-                yaxis: {
-	            	numberTicks : 6,
-	            	min : 0,
-	                max : yMax,
-                    tickOptions:{ 
-                    	formatString: "%'d",
-	                	fontSize: "10pt"
-	                }
-				}
-            },
-            highlighter: { show: false }
+            ]
         });
 	}
 	

@@ -110,6 +110,17 @@
 		WHERE project_key = #{project_key}
 	</select>
 	
+	<!-- 프로젝트 목록(데이터 총 건수로 정렬) -->
+	<select id="getListProjectByDataCountRank" parameterType="project" resultType="project">
+		/* getListProjectByDataCountRank */
+		SELECT * 
+		FROM project
+		WHERE use_yn = #{use_yn}
+			AND sharing_type = #{sharing_type}
+		ORDER BY data_count DESC, view_order, insert_date
+		OFFSET #{offset} LIMIT #{limit}
+	</select>
+	
 	<!-- project 등록 -->
 	<insert id="insertProject" parameterType="project" >
 		/* insertProject */
@@ -142,9 +153,17 @@
 		UPDATE project
 		SET project_key = #{project_key},
 			project_name = #{project_name},
+			<![CDATA[
+			<if test="data_count != null and data_count > 0">
+			data_count = data_count + #{data_count},
+			</if>
+			<if test="data_count != null and data_count < 0">
+			data_count = data_count - ABS(#{data_count}),
+			</if>
 			<if test="view_order != null and view_order > 0">
 			view_order = #{view_order},
 			</if>
+			]]>
 			use_yn = #{use_yn},
 			latitude = #{latitude},
 			longitude = #{longitude},
