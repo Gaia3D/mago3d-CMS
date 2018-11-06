@@ -16,6 +16,7 @@ import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.DataSharingType;
 import com.gaia3d.domain.Menu;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.Project;
@@ -138,7 +139,10 @@ public class CacheConfig {
 	 * @param cacheType
 	 */
 	private void project(CacheParams cacheParams) {
-		List<Project> projectList = projectService.getListProject(new Project());
+		Project defaultProject = new Project();
+		defaultProject.setUse_yn(Project.IN_USE);
+		defaultProject.setSharing_type(DataSharingType.DEFAULT.getValue());
+		List<Project> projectList = projectService.getListProject(defaultProject);
 		Map<Long, Project> projectMap = new HashMap<>();
 		for(Project project : projectList) {
 			projectMap.put(project.getProject_id(), project);
@@ -147,7 +151,7 @@ public class CacheConfig {
 		CacheManager.setProjectList(projectList);
 		CacheManager.setProjectMap(projectMap);
 		
-		// init project 때문에 policy 도 갱신해야 함
+		// 최초 로딩할 project 때문에 policy 도 갱신해야 함
 		Policy policy = policyService.getPolicy();
 		CacheManager.setPolicy(policy);
 	}

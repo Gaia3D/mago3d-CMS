@@ -33,7 +33,7 @@ import com.gaia3d.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 메인
+ * main
  * @author jeongdae
  *
  */
@@ -77,14 +77,15 @@ public class MainController {
 //			}
 //		}
 		
+		// TODO 이 기능은 mago3D가 더 발전 한 후에 고민해 보자. 사용자별로 widget 설정을 다르게 가제 가게 할지
 //		Widget widget = new Widget();
 //		widget.setLimit(policy.getContent_main_widget_count());
 //		List<Widget> widgetList = widgetService.getListWidget(widget);
 //		
 		String today = DateUtil.getToday(FormatUtil.VIEW_YEAR_MONTH_DAY_TIME);
 		String yearMonthDay = today.substring(0, 4) + today.substring(5,7) + today.substring(8,10);
-		String startDate = yearMonthDay + DateUtil.START_TIME;
-		String endDate = yearMonthDay + DateUtil.END_TIME;
+//		String startDate = yearMonthDay + DateUtil.START_TIME;
+//		String endDate = yearMonthDay + DateUtil.END_TIME;
 //		
 //		boolean isProjectDraw = false;
 //		boolean isDataInfoDraw = false;
