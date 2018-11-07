@@ -7,58 +7,86 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>main | mago3D User</title>
+	<title>프로젝트 목록 | mago3D User</title>
 	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
-	<link rel="stylesheet" href="/css/cloud.css">
+	<link rel="stylesheet" href="/css/cloud.css?cache_version=${cache_version}">
 	<link rel="stylesheet" href="/css/fontawesome-free-5.2.0-web/css/all.min.css">
+	<link rel="stylesheet" href="/externlib/jquery-ui/jquery-ui.css" />
 	<link rel="stylesheet" href="/externlib/dropzone/dropzone.css">
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
-	<script type="text/javascript" src="/js/cloud.js"></script>
+	<script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/externlib/jquery-ui/jquery-ui.js"></script>
+	<script type="text/javascript" src="/js/cloud.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/dropzone/dropzone.js"></script>
 </head>
 <body>
 
-<div class="default-layout">
-	<!-- 왼쪽 메뉴 -->
-	<%@ include file="/WEB-INF/views/layouts/menu.jsp" %>
-	<!-- 왼쪽 메뉴 -->
-	
-	<!--  컨텐츠 -->
-	<div class="content-layout">
-		<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
-		<div>
-			<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
-			<div class="content-detail">
+<div class="site-body">
+	<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
+	<div id="site-content" class="on">
+		<%@ include file="/WEB-INF/views/layouts/menu.jsp" %>
+		<div id="content-wrap">
+			<div id="gnb-content" class="clfix">
+				<h1 style="padding-left: 20px;">
+					<span style="font-size:26px;">파일 업로더</span>
+				</h1>
+				<div class="location">
+					<span style="padding-top:10px; font-size:12px; color: Mediumslateblue;">
+						<i class="fas fa-cubes" title="프로젝트"></i>
+					</span>
+					<span style="font-size:12px;">Converter > 파일 업로더</span>
+				</div>
+			</div>
+			
+			<div class="page-content">
+				<div class="input-header row">
+					<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
+				</div>
+				<form:form id="dataInfo" modelAttribute="dataInfo" method="post" onsubmit="return false;">
+				<table class="input-table scope-row">
+					<col class="col-label" />
+					<col class="col-input" />
+					<tr>
+						<th class="col-label" scope="row">
+							<form:label path="project_name"><spring:message code='project.name'/></form:label>
+							<span class="icon-glyph glyph-emark-dot color-warning"></span>
+						</th>
+						<td class="col-input">
+							<form:input path="project_name" cssClass="l" />
+							<form:errors path="project_name" cssClass="error" />
+						</td>
+					</tr>
+					<tr>
+						<th class="col-label m" scope="row">
+							데이터명
+							<span class="icon-glyph glyph-emark-dot color-warning"></span>
+						</th>
+						<td class="col-input">
+							<form:input path="data_name" cssClass="m" />
+						</td>
+					</tr>
 				
-				<!-- Start content by page -->
-				<div class="page-content">
-					<div>
-						<div id="data_info_tab">
-							<form id="my-dropzone" action="" class="dropzone" ></form>
-							<div style="margin-top: 10px; margin-left: 5px;">
-								<button id="allFileUpload">업로드</button>
-								<button id="allFileClear">All Clear</button>
-							</div>
-						</div>
+				</table>
+				</form:form>
+				
+				<div id="button-group" style="margin-top: 20px;">
+					<form id="my-dropzone" action="" class="dropzone" style=" border: 1px solid #d9d9d9;"></form>
+					<div style="margin-top: 10px; margin-left: 5px;">
+						<button id="allFileUpload">업로드</button>
+						<button id="allFileClear">All Clear</button>
 					</div>
 				</div>
-				<!-- End content by page -->
-				
-				<form id="searchForm" name="searchForm">
-					<input type="text" id="userId" name="userId"></input>
-					<input type="text" id="userName" name="userName"></input>
-				</form>
-				
 			</div>
-			<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
+			
+			
 		</div>
 	</div>
-	<!--  컨텐츠 -->
+	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 </div>
 
-<script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
-<script type="text/javascript" src="/js/${lang }/message.js"></script>
+<script type="text/javascript" src="/js/${lang}/common.js"></script>
+<script type="text/javascript" src="/js/${lang}/message.js"></script>
 <script type="text/javascript">
 	// https://ncube.net/13905
 	// http://blog.naver.com/PostView.nhn?blogId=wolfre&logNo=220154561376&parentCategoryNo=&categoryNo=1&viewDate=&isShowPopularPosts=true&from=search

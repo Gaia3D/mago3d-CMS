@@ -9,76 +9,38 @@
 	<meta name="viewport" content="width=device-width">
 	<title>main | mago3D User</title>
 	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
-	<link rel="stylesheet" href="/css/cloud.css">
+	<link rel="stylesheet" href="/css/cloud.css?cache_version=${cache_version}">
 	<link rel="stylesheet" href="/css/fontawesome-free-5.2.0-web/css/all.min.css">
-	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
-	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
-	
-	
 <c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 	<link rel="stylesheet" href="/externlib/cesium/Widgets/widgets.css?cache_version=${cache_version}" />
 </c:if>
-	<link rel="stylesheet" href="/externlib/jquery-ui/jquery-ui.css?cache_version=${cache_version}" />
+	<link rel="stylesheet" href="/externlib/jquery-ui/jquery-ui.css" />
+	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
+	<script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/externlib/jquery-ui/jquery-ui.js"></script>
+	<script type="text/javascript" src="/js/cloud.js?cache_version=${cache_version}"></script>
 	<link rel="stylesheet" href="/externlib/jquery-toast/jquery.toast.css" />
-	<link rel="stylesheet" href="/externlib/treegrid/jquery.treegrid.css?cache_version=${cache_version}" />
-	<link rel="stylesheet" href="/externlib/jqplot/jquery.jqplot.min.css?cache_version=${cache_version}" />
-	<script type="text/javascript" src="/externlib/jquery/jquery.js?cache_version=${cache_version}"></script>
-	<script type="text/javascript" src="/externlib/jquery-ui/jquery-ui.js?cache_version=${cache_version}"></script>
 	<script type="text/javascript" src="/externlib/jquery-toast/jquery.toast.js"></script>
-	<script type="text/javascript" src="/js/${lang}/common.js?cache_version=${cache_version}"></script>
-	<script type="text/javascript" src="/js/${lang}/message.js?cache_version=${cache_version}"></script>
-	<script type="text/javascript" src="/externlib/treegrid/jquery.treegrid.js?cache_version=${cache_version}"></script>
-	<script type="text/javascript" src="/externlib/treegrid/jquery.treegrid.bootstrap3.js?cache_version=${cache_version}"></script>
-	<script type="text/javascript" src="/externlib/jqplot/jquery.jqplot.min.js?cache_version=${cache_version}"></script>
-	<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.pieRenderer.min.js?cache_version=${cache_version}"></script>
-	<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.barRenderer.min.js?cache_version=${cache_version}"></script>
-	<script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.categoryAxisRenderer.min.js?cache_version=${cache_version}"></script>
-	
-	<script type="text/javascript" src="/js/cloud.js"></script>
-	
 	<style type="text/css">
-		.mapWrap {
-			width: 100%;
-			height:100%;
-			background-color: #eee;
-		}
-		
 		#objectLabel {
-			background-color: transparent;  /* needed because webgl-tutoraisl.css sets canvas bg color to white */
-			position: absolute;
-			left: 0px;
-			top: 0px;
-			z-index: 10;
-			pointer-events:none;
+			position:absolute;left:0px;top:0px; z-index: 999; pointer-events: none;
 		}
 	</style>
 </head>
 <body>
 
-<div class="default-layout">
-	<!-- 왼쪽 메뉴 -->
-	<%@ include file="/WEB-INF/views/layouts/menu.jsp" %>
-	<!-- 왼쪽 메뉴 -->
-	
-	<!--  컨텐츠 -->
-	<div class="content-layout">
-		<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
-		<div style="height: 100%;">
-			<%-- <%@ include file="/WEB-INF/views/layouts/page_header.jsp" %> --%>
-			<div class="content-detail">
-				
-				<!-- Start content by page -->
-				<div id="magoContainer" class="mapWrap"></div>
-				<canvas id="objectLabel"></canvas>
-				
-			</div>
-			<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
+<div class="site-body">
+	<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
+	<div id="site-content" class="on">
+		<%@ include file="/WEB-INF/views/layouts/menu.jsp" %>
+		<div id="content-wrap">
+			<div id="magoContainer" style="height: 700px;"></div>
+			<canvas id="objectLabel"></canvas>
 		</div>
 	</div>
-	<!--  컨텐츠 -->
+	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 </div>
-
-
 <c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 <script type="text/javascript" src="/externlib/cesium/Cesium.js?cache_version=${cache_version}"></script>
 </c:if>
@@ -86,7 +48,14 @@
 <script type="text/javascript" src="/externlib/webworldwind/worldwind.js?cache_version=${cache_version}"></script>
 </c:if>
 <script type="text/javascript" src="/js/mago3d.js?cache_version=${cache_version}"></script>
+<script type="text/javascript" src="/js/${lang}/common.js"></script>
+<script type="text/javascript" src="/js/${lang}/message.js"></script>
 <script>
+console.log("---------------- window.innerHeight = " + window.innerHeight);
+	var mapSize = window.innerHeight - 106;
+	console.log("---------------- map size = " + mapSize);
+	$("#magoContainer").css("height", mapSize);
+
 	var agent = navigator.userAgent.toLowerCase();
 	if(agent.indexOf('chrome') < 0) { 
 		alert(JS_MESSAGE["demo.browser.recommend"]);
@@ -112,7 +81,7 @@
 	function startMogoUI() {
 		intervalCount++;
 		if(managerFactory != null && managerFactory.getMagoManagerState() === CODE.magoManagerState.READY) {
-			initJqueryCalendar();
+			//initJqueryCalendar();
 			// Label 표시
 			changeLabel(false);
 			// object 정보 표시
@@ -195,6 +164,8 @@
 	// 설정 메뉴 시작
 	// Label 표시
 	function changeLabel(isShow) {
+		$("input:radio[name='labelInfo']:radio[value='" + isShow + "']").prop("checked", true);
+		changeLabelAPI(managerFactory, isShow);
 	}
 	// object info 표시
 	function changeObjectInfoViewMode(isShow) {

@@ -1,5 +1,43 @@
 var TOGGLE_MENU_STATUS = 0;
+
 function toggleMenu() {
+	console.log("click......");
+	$("#site-content").toggleClass("on");
+	if(TOGGLE_MENU_STATUS == 0) {
+		// hide
+		$("#smallUserProfileImage").attr("src","/images/ko/profile_example.png");
+		$("#smallUserProfileImage").attr("width","50px");
+		$("#smallUserProfileImage").attr("height","50px");
+		
+		// 메뉴 아이콘 작게
+		$(".profile-menu").css("height", "70px");
+		$(".project-menu").css("height", "70px");
+		$(".converter-menu").css("height", "70px");
+		$(".settings-menu").css("height", "70px");
+		
+		TOGGLE_MENU_STATUS = 1;
+	} else {
+		// show
+		$("#smallUserProfileImage").attr("src","/images/1px.png");
+		
+		$(".profile-menu").css("height", "110px");
+		$(".project-menu").css("height", "125px");
+		$(".converter-menu").css("height", "100px");
+		$(".settings-menu").css("height", "100px");
+		
+		// 메뉴 아이콘 원복
+		TOGGLE_MENU_STATUS = 0;
+	}
+		
+	/*<img id="smallProfileIcons" src="/images/1px.png" style="width: 50px; height: 80px;">*/
+}
+
+/*$( "#toggleMenuIcon" ).on( "click", function() {
+	console.log("click......");
+	$("#site-content").toggleClass("on");
+});*/
+
+/*function toggleMenu() {
 	if(TOGGLE_MENU_STATUS == 0) {
 		// hide
 		
@@ -40,4 +78,4 @@ function toggleMenu() {
 		$(".content-layout").css({"margin-left" : "220px"});
 		TOGGLE_MENU_STATUS = 0;
 	}
-}
+}*/

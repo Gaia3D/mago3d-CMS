@@ -1,259 +1,89 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<div class="left-navigation-layout">
-	<div class="logo-header">
-		<div class="logo-icons">
-			<img src="/images/ko/homepage/home-icon.png" style="padding-top:13px; width: 45px; height: 45px;">
-		</div>
-		<div class="logo-detail">
-			<div style="padding-top: 13px; font-size:24px; font-family:Lousianne; color:#573592">
-				<a href="/main/index.do" style="text-decoration: none; font-weight: bold;">OpenIndoor</a>
-			</div>
-		</div>
+<nav class="clfix">
+	<div id="nav-main">
+		<ul class="nav-main-list" style="list-style: none;">
+			<li class="profile-menu" style="height: 110px;">
+				<img id="smallUserProfileImage" src="/images/1px.png">
+			</li>
+			<li class="project-menu" style="height: 125px;">
+				<span style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
+					<i class="fas fa-cubes" title="프로젝트"></i>
+				</span>
+			</li>
+			<li class="converter-menu" style="height: 100px;">
+				<span style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
+					<i class="fas fa-cloud-upload-alt" title="Converter"></i>
+				</span>
+			</li>
+			<li class="settings-menu" style="height: 100px;">
+				<span style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
+					<i class="fas fa-cog" title="Cloud Settings"></i>
+				</span>
+			</li>
+		</ul>
 	</div>
-	
-	<div class="profile-header">
-		<div class="profile-icons">
-			<div style="padding-top: 15px;">
-				<img id="smallProfileIcons" src="/images/1px.png" width="40px;" height="40px;">
-			</div>
-		</div>
-		<div class="profile-detail">
-			<div style="padding-top: 20px;">
-				<img src="/images/ko/profile_example.png" width="80px;" height="80px;" />
-			</div>
+	<div id="nav-sub">
+		<!-- <div class="user-profile">
+			<img src="/images/ko/profile_example.png" style="width: 80px; height: 80px;" />
 			<div style="padding-left: 15px;">Profile</div>
-		</div>
-	</div>
-	
-	<div class="menu-description-header">
-		<div style="padding-left: 13px; padding-top: 20px; height: 30px;">3D Visualization</div>
-		<div style="margin-left: 13px; width:195px; border-bottom: 1px solid #e3e7ea;"></div>
-	</div>
-	
-	<div>
-		<div class="left-navigation-icons">
-			<div style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
-				<i class="fas fa-cubes" title="프로젝트"></i>
-			</div>
-		</div>
-		<div class="left-navigation-detail">
-			<div style="padding-top: 20px;">
-				<a href="/project/list-project.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">프로젝트</a>
-			</div>
-		</div>
-	</div>
-	<div class="sub-menu-area" >
-		<div class="sub-menu-icons">
-			<div style="width: 70px;">&nbsp;</div>
-		</div>
-		<div class="sub-menu-detail">
-			<div style="min-width:150px; height: 25px;">
-				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="far fa-stop-circle"></i>
+		</div> -->
+		<ul class="nav-sub-list" style="list-style: none;">
+			<li style="height: 110px;">
+				<img id="userProfileImage" src="/images/ko/profile_example.png" style="width: 80px; height: 80px;" />
+				<div style="padding-left: 15px;">Profile</div>
+			</li>
+			<li>
+				<span style="display:inline-block; padding-top: 20px; height: 50px;">
+					<a href="#" style="text-decoration: none; font-size:15px; font-weight: bold; color: #2c2d2d;">프로젝트</a>
+				</span> 
+				<span style="float:right; padding-top:10px; padding-right:10px; font-size:25px; color: Mediumslateblue;">
+					<i class="fas fa-angle-down" title="펼치기"></i>
 				</span>
-				<a href="/project/list-project.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">프로젝트 목록 보기</a>
-			</div>
-		</div>
-	</div>
-	<div class="sub-menu-area" >
-		<div class="sub-menu-icons">
-			<div style="width: 70px;">&nbsp;</div>
-		</div>
-		<div class="sub-menu-detail">
-			<div style="min-width:150px; height: 25px;">
-				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="far fa-stop-circle"></i>
+				<ul>
+					<li style="padding-top:0px; height: 25px; font-size: 14px;">
+						<a href="/project/map-project.do" style="text-decoration: none; color: #2c2d2d;">프로젝트 Map 보기</a>
+					</li>
+					<li style="padding-top:0px; height: 25px; font-size: 14px;">
+						<a href="/project/list-project.do" style="text-decoration: none; color: #2c2d2d;">프로젝트 목록</a>
+					</li>
+					<li style="padding-top:0px; height: 25px; font-size: 14px;">
+						<a href="/data/list-data.do" style="text-decoration: none; color: #2c2d2d;">데이터 목록</a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<span style="display:inline-block; padding-top: 20px; height: 50px;">
+					<a href="#" style="text-decoration: none; font-size:15px; font-weight: bold; color: #2c2d2d;">Converter</a>
+				</span> 
+				<span style="float:right; padding-top:10px; padding-right:10px; font-size:25px; color: Mediumslateblue;">
+					<i class="fas fa-angle-down" title="펼치기"></i>
 				</span>
-				<a href="/project/map-project.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">프로젝트 Map 보기</a>
-			</div>
-		</div>
-	</div>
-	<div class="sub-menu-area" >
-		<div class="sub-menu-icons">
-			<div style="width: 70px;">&nbsp;</div>
-		</div>
-		<div class="sub-menu-detail">
-			<div style="height: 25px;">
-				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="far fa-stop-circle"></i>
+				<ul>
+					<li style="padding-top:0px; height: 25px; font-size: 14px;">
+						<a href="/converter/input-upload.do" style="text-decoration: none; color: #2c2d2d;">파일 업로더</a>
+					</li>
+					<li style="padding-top:0px; height: 25px; font-size: 14px;">
+						<a href="/converter/input-converter-job.do" style="text-decoration: none; color: #2c2d2d;">Converter 결과</a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<span style="display:inline-block; padding-top: 20px; height: 50px;">
+					<a href="#" style="text-decoration: none; font-size:15px; font-weight: bold; color: #2c2d2d;">Settings</a>
+				</span> 
+				<span style="float:right; padding-top:10px; padding-right:10px; font-size:25px; color: Mediumslateblue;">
+					<i class="fas fa-angle-down" title="펼치기"></i>
 				</span>
-				<a href="/project/input-project.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">프로젝트 등록</a>
-			</div>
-		</div>
+				<ul>
+					<li style="padding-top:0px; height: 25px; font-size: 14px;">
+						<a href="/settings/modify-membership.do" style="text-decoration: none; color: #2c2d2d;">MemberShip 설정</a>
+					</li>
+					<li style="padding-top:0px; height: 25px; font-size: 14px;">
+						<a href="/settings/modify-user-policy.do" style="text-decoration: none; color: #2c2d2d;">mago3D 설정 </a>
+					</li>
+				</ul>
+			</li>
+		</ul>
 	</div>
-	<div class="sub-menu-area" >
-		<div class="sub-menu-icons">
-			<div style="width: 70px;">&nbsp;</div>
-		</div>
-		<div class="sub-menu-detail">
-			<div style="min-width:150px; height: 25px;">
-				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="fas fa-database"></i>
-				</span>
-				<a href="/data/list-data.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">데이터 목록 보기</a>
-			</div>
-		</div>
-	</div>
-	
-	<div class="menu-description-header">
-		<div style="padding-left: 13px; padding-top: 20px; height: 30px;">Data PreProcessing </div>
-		<div style="margin-left: 13px; width:195px; border-bottom: 1px solid #e3e7ea;"></div>
-	</div>
-	
-	
-	<div style="clear: both;">
-		<div class="left-navigation-icons">
-			<div style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
-				<i class="fas fa-cloud-upload-alt" title="Converter"></i>
-			</div>
-		</div>
-		<div class="left-navigation-detail">
-			<div style="padding-top: 20px;">
-				<a href="/converter/input-upload.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">Converter</a>
-			</div>
-		</div>
-	</div>
-	
-	<div class="sub-menu-area" >
-		<div class="sub-menu-icons">
-			<div style="width: 70px;">&nbsp;</div>
-		</div>
-		<div class="sub-menu-detail">
-			<div style="min-width:150px; height: 25px;">
-				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="fas fa-arrow-alt-circle-down"></i>
-				</span>
-				<a href="/converter/input-upload.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">파일 업로딩</a>
-			</div>
-		</div>
-	</div>
-	<div class="sub-menu-area" >
-		<div class="sub-menu-icons">
-			<div style="width: 70px;">&nbsp;</div>
-		</div>
-		<div class="sub-menu-detail">
-			<div style="height: 25px;">
-				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="fas fa-arrow-alt-circle-down"></i>
-				</span>
-				<a href="/converter/input-converter-job.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">F4D 변환 Job 등록 </a>
-			</div>
-		</div>
-	</div>
-	<div class="sub-menu-area" >
-		<div class="sub-menu-icons">
-			<div style="width: 70px;">&nbsp;</div>
-		</div>
-		<div class="sub-menu-detail">
-			<div style="height: 25px;">
-				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="fas fa-arrow-alt-circle-down"></i>
-				</span>
-				<a href="/converter/list-converter-job.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">Job 실행 결과</a>
-			</div>
-		</div>
-	</div>
-	<div class="sub-menu-area" >
-		<div class="sub-menu-icons">
-			<div style="width: 70px;">&nbsp;</div>
-		</div>
-		<div class="sub-menu-detail">
-			<div style="height: 25px;">
-				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="fas fa-arrow-alt-circle-down"></i>
-				</span>
-				<a href="/converter/list-converter-log.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">F4D 공간정보 등록 </a>
-			</div>
-		</div>
-	</div>
-	
-	<div class="menu-description-header">
-		<div style="padding-left: 13px; padding-top: 20px; height: 30px;">Project Sharing</div>
-		<div style="margin-left: 13px; width:195px; border-bottom: 1px solid #e3e7ea;"></div>
-	</div>
-	
-	
-	<div style="clear: both;">
-		<div class="left-navigation-icons">
-			<div style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
-				<i class="fas fa-user-friends" title="Participation Project"></i>
-			</div>
-		</div>
-		<div class="left-navigation-detail">
-			<div style="padding-top: 20px;">
-				<a href="/share/list-project.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">Participation Project</a>
-			</div>
-		</div>
-	</div>
-	
-	<div class="sub-menu-area" >
-		<div class="sub-menu-icons">
-			<div style="width: 70px;">&nbsp;</div>
-		</div>
-		<div class="sub-menu-detail">
-			<div style="min-width:150px; height: 25px;">
-				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="far fa-handshake"></i>
-				</span>
-				<a href="/share/list-project.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">프로젝트 목록 보기</a>
-			</div>
-		</div>
-	</div>
-	<div class="sub-menu-area" >
-		<div class="sub-menu-icons">
-			<div style="width: 70px;">&nbsp;</div>
-		</div>
-		<div class="sub-menu-detail">
-			<div style="height: 25px;">
-				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="far fa-handshake"></i>
-				</span>
-				<a href="/share/map-project.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">프로젝트 Map 보기 </a>
-			</div>
-		</div>
-	</div>
-	
-	<div class="menu-description-header">
-		<div style="padding-left: 13px; padding-top: 20px; height: 30px;">Settings</div>
-		<div style="margin-left: 13px; width:195px; border-bottom: 1px solid #e3e7ea;"></div>
-	</div>
-	<div style="clear: both;">
-		<div class="left-navigation-icons">
-			<div style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
-				<i class="fas fa-cog" title="Cloud Settings"></i>
-			</div>
-		</div>
-		<div class="left-navigation-detail">
-			<div style="padding-top: 20px;">
-				<a href="/setting/detail-membership.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">Cloud Settings</a>
-			</div>
-		</div>
-	</div>
-	<div class="sub-menu-area" >
-		<div class="sub-menu-icons">
-			<div style="width: 70px;">&nbsp;</div>
-		</div>
-		<div class="sub-menu-detail">
-			<div style="min-width:150px; height: 25px;">
-				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="fas fa-user-secret"></i>
-				</span>
-				<a href="/settings/modify-membership.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">MemberShip 설정</a>
-			</div>
-		</div>
-	</div>
-	<div class="sub-menu-area" >
-		<div class="sub-menu-icons">
-			<div style="width: 70px;">&nbsp;</div>
-		</div>
-		<div class="sub-menu-detail">
-			<div style="height: 25px;">
-				<span style="font-size:15px; color: Mediumslateblue;">
-					<i class="fab fa-expeditedssl"></i>
-				</span>
-				<a href="/settings/modify-user-policy.do" style="text-decoration: none; font-weight: bold; color: #2c2d2d;">OpenIndoorMap 설정 </a>
-			</div>
-		</div>
-	</div>
-</div>
+</nav>
