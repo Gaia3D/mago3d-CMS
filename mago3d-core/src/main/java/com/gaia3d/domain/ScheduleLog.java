@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class ScheduleLog extends SearchDomain {
+public class ScheduleLog extends SearchFilter {
 
 	// 성공
 	public static final String EXECUTE_RESULT_SUCCESS = "0";

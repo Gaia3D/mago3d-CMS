@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString(callSuper=true)
 @Setter
 @Getter
-public class Board extends SearchDomain {
+public class Board extends SearchFilter {
 	
 	// validation
 	private String error_code;

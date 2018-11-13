@@ -30,7 +30,6 @@ import com.gaia3d.interceptor.SecurityInterceptor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <mvc:annotation-driven> 대신 EnableWebMvc
  * 
  * @author Cheon JeongDae
  *

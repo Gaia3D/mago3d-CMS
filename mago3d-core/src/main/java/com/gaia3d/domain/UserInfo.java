@@ -17,7 +17,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class UserInfo extends SearchDomain {
+public class UserInfo extends SearchFilter {
 	
 	// 사용자 상태가 사용중
 	public static final String STATUS_USE = "0";

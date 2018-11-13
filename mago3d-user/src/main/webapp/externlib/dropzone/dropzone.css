@@ -174,7 +174,7 @@
   box-sizing: border-box; }
 
 .dropzone {
-  min-height: 250px;
+  min-height: 150px;
   border: 2px solid rgba(0, 0, 0, 0.3);
   background: white;
   padding: 20px 20px; }
@@ -192,9 +192,7 @@
       opacity: 0.5; }
   .dropzone .dz-message {
     text-align: center;
-    margin: 5em 0;
-    font-size: 1.4em;
-    }
+    margin: 2em 0; }
   .dropzone .dz-preview {
     position: relative;
     display: inline-block;

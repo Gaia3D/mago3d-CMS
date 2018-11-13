@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class CommonCode extends SearchDomain {
+public class CommonCode extends SearchFilter {
 
 	// 사용자 등록 유형
 	public static final String USER_REGISTER_TYPE = "USER_REGISTER_TYPE";

@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class DataInfoLog extends SearchDomain {
+public class DataInfoLog extends SearchFilter {
 	
 	// Data 변경 대기중
 	public static final String STATUS_REQUEST = "0";

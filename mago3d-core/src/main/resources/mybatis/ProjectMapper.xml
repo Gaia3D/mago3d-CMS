@@ -9,8 +9,11 @@
 		SELECT COUNT(project_id) 
 		FROM project
 		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="sharing_type != null and sharing_type != ''">
+			sharing_type = #{sharing_type}
+			</if>
 			<if test="user_id != null and user_id != ''">
-			user_id = #{user_id}
+			AND user_id = #{user_id}
 			</if>
 			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 			AND ${search_word} = #{search_value}
@@ -39,8 +42,11 @@
 			SELECT * 
 			FROM project
 			<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="sharing_type != null and sharing_type != ''">
+				sharing_type = #{sharing_type}
+				</if>
 				<if test="user_id != null and user_id != ''">
-				user_id = #{user_id}
+				AND user_id = #{user_id}
 				</if>
 				<if test="use_yn != null and use_yn != ''">
 			    AND use_yn = #{use_yn}
@@ -128,7 +134,7 @@
     		SELECT NEXTVAL('project_seq')
   		</selectKey>
 		INSERT INTO project(
-			project_id, project_key, project_name, user_id, view_order, use_yn, latitude, longitude, height, duration, description
+			project_id, project_key, project_name, sharing_type, user_id, view_order, use_yn, latitude, longitude, height, duration, description
 			<if test="attributes != null and attributes != ''">
 			, attributes
 			</if>
@@ -140,7 +146,7 @@
 			<if test="project_key != null and project_key != ''">
 			, #{project_key} 
 			</if>
-			, #{project_name}, #{user_id}, #{view_order}, #{use_yn}, #{latitude}, #{longitude}, #{height}, #{duration}, #{description}
+			, #{project_name}, #{sharing_type}, #{user_id}, #{view_order}, #{use_yn}, #{latitude}, #{longitude}, #{height}, #{duration}, #{description}
 			<if test="attributes != null and attributes != ''">
 			, TO_JSON(#{attributes}::json)
 			</if>
@@ -153,6 +159,7 @@
 		UPDATE project
 		SET project_key = #{project_key},
 			project_name = #{project_name},
+			sharing_type = #{sharing_type},
 			<![CDATA[
 			<if test="data_count != null and data_count > 0">
 			data_count = data_count + #{data_count},

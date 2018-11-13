@@ -21,7 +21,7 @@ function toggleMenu() {
 		$("#smallUserProfileImage").attr("src","/images/1px.png");
 		
 		$(".profile-menu").css("height", "110px");
-		$(".project-menu").css("height", "125px");
+		$(".project-menu").css("height", "190px");
 		$(".converter-menu").css("height", "100px");
 		$(".settings-menu").css("height", "100px");
 		
@@ -79,3 +79,28 @@ function toggleMenu() {
 		TOGGLE_MENU_STATUS = 0;
 	}
 }*/
+
+// project view type
+$( function() {
+	$( ".project-view-radio" ).checkboxradio({
+		icon: false
+	});
+	
+	var currentPathName = location.pathname;
+	if(currentPathName.indexOf("map-project") >= 0) {
+		$( "#project_view_map" ).prop( "checked", true ).checkboxradio( "refresh" );
+		console.log("--------- map-project");
+	} else {
+		$( "#project_view_table" ).prop( "checked", true ).checkboxradio( "refresh" );
+		console.log("--------- list-project");
+	}
+		
+	$('#project_view_map').click(function () {
+		location.href="/project/map-project.do";
+		return;
+	});
+	$('#project_view_table').click(function () {
+		location.href="/project/list-project.do";
+		return;
+	});
+});

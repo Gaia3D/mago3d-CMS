@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class Schedule extends SearchDomain {
+public class Schedule extends SearchFilter {
 	
 	// 로그인 실패 건수 잠김 해제
 	public static final String USER_LOGIN_FAIL_LOCK_RELEASE = "USER_LOGIN_FAIL_LOCK_RELEASE";

@@ -6,17 +6,17 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gaia3d.domain.ConverterUploadLog;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.Policy;
-import com.gaia3d.domain.ConverterUploadLog;
 
 import lombok.extern.slf4j.Slf4j;
+import net.lingala.zip4j.core.ZipFile;
 
 /**
  * TODO N중화 처리를 위해 FTP 로 다른 PM 으로 전송해 줘야 하는데....
@@ -225,41 +225,41 @@ public class FileUtil {
 		
 		// 2 파일 이름
 		String fileName = multipartFile.getOriginalFilename();
-		if(fileName == null) {
-			log.info("@@ fileName is null");
-			uploadLog.setError_code("fileinfo.name.invalid");
-			return uploadLog;
-		} else if(fileName.indexOf("..") >= 0 || fileName.indexOf("/") >= 0) {
-			// TODO File.seperator 정규 표현식이 안 먹혀서 이렇게 처리함
-			log.info("@@ fileName = {}", fileName);
-			uploadLog.setError_code("fileinfo.name.invalid");
-			return uploadLog;
-		}
+//		if(fileName == null) {
+//			log.info("@@ fileName is null");
+//			uploadLog.setError_code("fileinfo.name.invalid");
+//			return uploadLog;
+//		} else if(fileName.indexOf("..") >= 0 || fileName.indexOf("/") >= 0) {
+//			// TODO File.seperator 정규 표현식이 안 먹혀서 이렇게 처리함
+//			log.info("@@ fileName = {}", fileName);
+//			uploadLog.setError_code("fileinfo.name.invalid");
+//			return uploadLog;
+//		}
 		
 		// 3 파일 확장자
 		String[] fileNameValues = fileName.split("\\.");
-		if(fileNameValues.length != 2) {
-			log.info("@@ fileNameValues.length = {}, fileName = {}", fileNameValues.length, fileName);
-			uploadLog.setError_code("fileinfo.name.invalid");
-			return uploadLog;
-		}
-		if(fileNameValues[0].indexOf(".") >= 0 || fileNameValues[0].indexOf("..") >= 0) {
-			log.info("@@ fileNameValues[0] = {}", fileNameValues[0]);
-			uploadLog.setError_code("fileinfo.name.invalid");
-			return uploadLog;
-		}
+//		if(fileNameValues.length != 2) {
+//			log.info("@@ fileNameValues.length = {}, fileName = {}", fileNameValues.length, fileName);
+//			uploadLog.setError_code("fileinfo.name.invalid");
+//			return uploadLog;
+//		}
+//		if(fileNameValues[0].indexOf(".") >= 0 || fileNameValues[0].indexOf("..") >= 0) {
+//			log.info("@@ fileNameValues[0] = {}", fileNameValues[0]);
+//			uploadLog.setError_code("fileinfo.name.invalid");
+//			return uploadLog;
+//		}
 		// LowerCase로 비교
 		String extension = fileNameValues[1];
-		List<String> extList = new ArrayList<String>();
-		if(policy.getUser_upload_type() != null && !"".equals(policy.getUser_upload_type())) {
-			String[] uploadTypes = policy.getUser_upload_type().toLowerCase().split(",");
-			extList = Arrays.asList(uploadTypes);
-		}
-		if(!extList.contains(extension.toLowerCase())) {
-			log.info("@@ extList = {}, extension = {}", extList, extension);
-			uploadLog.setError_code("fileinfo.ext.invalid");
-			return uploadLog;
-		}
+//		List<String> extList = new ArrayList<String>();
+//		if(policy.getUser_upload_type() != null && !"".equals(policy.getUser_upload_type())) {
+//			String[] uploadTypes = policy.getUser_upload_type().toLowerCase().split(",");
+//			extList = Arrays.asList(uploadTypes);
+//		}
+//		if(!extList.contains(extension.toLowerCase())) {
+//			log.info("@@ extList = {}, extension = {}", extList, extension);
+//			uploadLog.setError_code("fileinfo.ext.invalid");
+//			return uploadLog;
+//		}
 		
 		// 4 파일 사이즈
 		// TODO data object attribute 파일은 사이즈가 커서 제한을 하지 않음
@@ -453,4 +453,18 @@ public class FileUtil {
 		
 		return isProcessAlive;
 	}
+	
+	//https://www.mkyong.com/java/how-to-decompress-files-from-a-zip-file/
+	public static void unzip(String targetZipFilePath, String destinationFolderPath, String password) {
+	        try {
+	            ZipFile zipFile = new ZipFile(targetZipFilePath);
+	            if (zipFile.isEncrypted()) {
+	                zipFile.setPassword(password);
+	            }
+	            zipFile.extractAll(destinationFolderPath);
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
 }

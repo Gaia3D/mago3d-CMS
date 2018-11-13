@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class DataInfoOrigin extends SearchDomain {
+public class DataInfoOrigin extends SearchFilter {
 	
 	/******** 화면 오류 표시용 ********/
 	private String message_code;

@@ -38,60 +38,63 @@
 			</div>
 			
 			<div class="page-content">
-				<div class="search-filter">
-					<div class="filters">
-		   				<form:form id="searchForm" modelAttribute="project" method="post" action="/project/list-project.do" onsubmit="return searchCheck();">
-						<div class="input-group row">
-							<div class="input-set">
-								<label for="search_word"><spring:message code='search.word'/></label>
-								<select id="search_word" name="search_word" class="select" style="height: 30px;">
-									<option value=""><spring:message code='select'/></option>
-				          			<option value="project_name">프로젝트명</option>
-								</select>
-								<select id="search_option" name="search_option" class="select" style="height: 30px;">
-									<option value="0"><spring:message code='search.same'/></option>
-									<option value="1"><spring:message code='search.include'/></option>
-								</select>
-								<form:input path="search_value" type="search" cssClass="m" />
-							</div>
-							<div class="input-set">
-								<label for="start_date"><spring:message code='search.date'/></label>
-								<input type="text" class="s date" id="start_date" name="start_date" />
-								<span class="delimeter tilde">~</span>
-								<input type="text" class="s date" id="end_date" name="end_date" />
-							</div>
-							<div class="input-set">
-								<label for="order_word"><spring:message code='search.order'/></label>
-								<select id="order_word" name="order_word" class="select" style="height: 30px;">
-									<option value=""> <spring:message code='search.basic'/> </option>
-									<option value="project_name"> 프로젝트명 </option>
-									<option value="insert_date"> <spring:message code='search.insert.date'/> </option>
-								</select>
-								<select id="order_value" name="order_value" class="select" style="height: 30px;">
-			                		<option value=""> <spring:message code='search.basic'/> </option>
-				                	<option value="ASC"> <spring:message code='search.ascending'/> </option>
-									<option value="DESC"> <spring:message code='search.descending.order'/> </option>
-								</select>
-								<select id="list_counter" name="list_counter" class="select" style="height: 30px;">
-			                		<option value="10"> <spring:message code='search.ten.count'/> </option>
-				                	<option value="50"> <spring:message code='search.fifty.count'/> </option>
-									<option value="100"> <spring:message code='search.hundred.count'/> </option>
-								</select>
-							</div>
-							<div class="input-set">
-								<input type="submit" value="<spring:message code='search'/>" />
-							</div>
+				<div class="filters">
+	   				<form:form id="searchForm" modelAttribute="project" method="post" action="/project/list-project.do" onsubmit="return searchCheck();">
+					<div class="input-group row">
+						<div class="input-set">
+							<label for="search_word"><spring:message code='search.word'/></label>
+							<select id="search_word" name="search_word" class="select" style="height: 30px;">
+								<option value=""><spring:message code='select'/></option>
+			          			<option value="project_name">프로젝트명</option>
+							</select>
+							<select id="search_option" name="search_option" class="select" style="height: 30px;">
+								<option value="0"><spring:message code='search.same'/></option>
+								<option value="1"><spring:message code='search.include'/></option>
+							</select>
+							<form:input path="search_value" type="search" cssClass="m" cssStyle="float: right;" />
 						</div>
-						</form:form>
+						<div class="input-set">
+							<label for="start_date"><spring:message code='search.date'/></label>
+							<input type="text" class="s date" id="start_date" name="start_date" />
+							<span class="delimeter tilde">~</span>
+							<input type="text" class="s date" id="end_date" name="end_date" />
+						</div>
+						<div class="input-set">
+							<label for="order_word"><spring:message code='search.order'/></label>
+							<select id="order_word" name="order_word" class="select" style="height: 30px;">
+								<option value=""> <spring:message code='search.basic'/> </option>
+								<option value="project_name"> 프로젝트명 </option>
+								<option value="insert_date"> <spring:message code='search.insert.date'/> </option>
+							</select>
+							<select id="order_value" name="order_value" class="select" style="height: 30px;">
+		                		<option value=""> <spring:message code='search.basic'/> </option>
+			                	<option value="ASC"> <spring:message code='search.ascending'/> </option>
+								<option value="DESC"> <spring:message code='search.descending.order'/> </option>
+							</select>
+							<select id="list_counter" name="list_counter" class="select" style="height: 30px;">
+		                		<option value="10"> <spring:message code='search.ten.count'/> </option>
+			                	<option value="50"> <spring:message code='search.fifty.count'/> </option>
+								<option value="100"> <spring:message code='search.hundred.count'/> </option>
+							</select>
+						</div>
+						<div class="input-set">
+							<input type="submit" value="<spring:message code='search'/>" />
+						</div>
 					</div>
+					</form:form>
 				</div>
 				
 				<div class="list">
 					<form:form id="listForm" modelAttribute="uploadLog" method="post">
-					<div class="list-header">
+					<div class="list-header row">
 						<div class="list-desc u-pull-left">
 							<spring:message code='all.d'/> <em><fmt:formatNumber value="${pagination.totalCount}" type="number"/></em><spring:message code='search.what.count'/> 
 							<fmt:formatNumber value="${pagination.pageNo}" type="number"/> / <fmt:formatNumber value="${pagination.lastPage }" type="number"/> <spring:message code='search.page'/>
+						</div>
+						<div class="list-functions u-pull-right">
+							<div class="button-group">
+								<a href="/project/input-project.do" class="button">프로젝트 등록</a>
+							</div>
 						</div>
 					</div>
 					
@@ -114,7 +117,6 @@
 							<tr>
 								<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
 								<th scope="col" class="col-number"><spring:message code='number'/></th>
-								<th scope="col" class="col-name">Key</th>
 								<th scope="col" class="col-name"><spring:message code='project.name'/></th>
 								<th scope="col" class="col-number"><spring:message code='order'/></th>
 								<th scope="col" class="col-toggle"><spring:message code='default.value'/></th>
@@ -123,7 +125,7 @@
 								<th scope="col" class="col-toggle"><spring:message code='longitude'/></th>
 								<th scope="col" class="col-toggle"><spring:message code='height'/></th>
 								<th scope="col" class="col-number"><spring:message code='movement.time'/></th>
-								<th scope="col" class="col-functions"><spring:message code='data.management'/></th>
+								<th scope="col" class="col-functions">데이터 건수</th>
 								<th scope="col" class="col-date"><spring:message code='search.insert.date'/></th>
 								<th scope="col" class="col-functions"><spring:message code='code.modify.delete'/></th>
 							</tr>
@@ -131,7 +133,7 @@
 						<tbody>
 	<c:if test="${empty projectList }">
 							<tr>
-								<td colspan="14" class="col-none"><spring:message code='project.does.not.exist'/></td>
+								<td colspan="13" class="col-none"><spring:message code='project.does.not.exist'/></td>
 							</tr>
 	</c:if>
 	<c:if test="${!empty projectList }">
@@ -141,7 +143,6 @@
 										<input type="checkbox" id="project_id_${project.project_id}" name="project_id" value="${project.project_id}" />
 									</td>
 									<td class="col-number">${pagination.rowNumber - status.index}</td>
-									<td class="col-name">${project.project_key }</td>
 									<td class="col-number">${project.project_name } [ 보기 ]</td>
 									<td class="col-number">${project.view_order}</td>
 									<td class="col-toggle">${project.default_yn}</td>
@@ -176,5 +177,8 @@
 
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
+<script type="text/javascript">
+	
+</script>
 </body>
 </html>

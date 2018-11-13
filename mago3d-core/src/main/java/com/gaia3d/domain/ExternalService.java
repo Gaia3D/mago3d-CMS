@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class ExternalService extends SearchDomain {
+public class ExternalService extends SearchFilter {
 	
 	// 상태. 0 : 사용, 1 : 미사용, ??
 	public static final String STATUS_USE = "0";

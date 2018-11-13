@@ -51,7 +51,9 @@
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
 <script>
-console.log("---------------- window.innerHeight = " + window.innerHeight);
+	
+
+	console.log("---------------- window.innerHeight = " + window.innerHeight);
 	var mapSize = window.innerHeight - 106;
 	console.log("---------------- map size = " + mapSize);
 	$("#magoContainer").css("height", mapSize);

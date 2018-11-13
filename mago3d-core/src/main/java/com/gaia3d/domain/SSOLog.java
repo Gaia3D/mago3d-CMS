@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class SSOLog extends SearchDomain {
+public class SSOLog extends SearchFilter {
 	
 	// Token 상태 생성
 	public static final String TOKEN_CREATE = "0";

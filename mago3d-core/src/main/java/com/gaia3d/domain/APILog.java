@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class APILog extends SearchDomain {
+public class APILog extends SearchFilter {
 	
 	// service_code = Single Sign-On Token 생성 요청
 	public static final String CREATE_SSO_TOKEN = "CREATE_SSO_TOKEN";

@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class Role extends SearchDomain {
+public class Role extends SearchFilter {
 
 	public static final String DELIMITER = "!@#";
 	

@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class ScheduleDetailLog extends SearchDomain {
+public class ScheduleDetailLog extends SearchFilter {
 	
 	// 스케줄 실행 상세 이력 고유번호
 	private Long schedule_detail_log_id;

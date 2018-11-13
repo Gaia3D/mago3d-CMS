@@ -13,7 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class UserGroupRole extends SearchDomain {
+public class UserGroupRole extends SearchFilter {
 	
 	// Role 유형. 0 : 사용자
 	public static final String ROLE_TYPE_USER = "0";

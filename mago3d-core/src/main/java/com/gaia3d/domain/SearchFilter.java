@@ -5,7 +5,7 @@ package com.gaia3d.domain;
  * @author Cheon JeongDae
  *
  */
-public class SearchDomain {
+public class SearchFilter {
 
 	// 페이지 처리를 위한 시작
 	private Long offset;

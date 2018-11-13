@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class AccessLog extends SearchDomain {
+public class AccessLog extends SearchFilter {
 	
 	// 총건수
 	private Long totalCount;

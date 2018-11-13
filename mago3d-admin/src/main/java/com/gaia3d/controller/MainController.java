@@ -359,7 +359,7 @@ public class MainController {
 		try {
 			Project defaultProject = new Project();
 			defaultProject.setUse_yn(Project.IN_USE);
-			defaultProject.setSharing_type(DataSharingType.DEFAULT.getValue());
+			defaultProject.setSharing_type(DataSharingType.COMMON.getValue());
 			defaultProject.setOffset(0l);
 			defaultProject.setLimit(7l);
 			List<Project> projectList = projectService.getListProjectByDataCountRank(defaultProject);

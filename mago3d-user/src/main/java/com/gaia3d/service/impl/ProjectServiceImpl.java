@@ -97,14 +97,15 @@ public class ProjectServiceImpl implements ProjectService {
 		projectMapper.insertProject(project);
 		
 		// 프로젝트 디렉토리 생성
-		UserPolicy userPolicy = userPolicyService.getUserPolicy(project.getUser_id());
+		/*UserPolicy userPolicy = userPolicyService.getUserPolicy(project.getUser_id());
 		File projectDirectory = new File(userPolicy.getGeo_data_path() + File.separator + project.getProject_id());
 		if(!projectDirectory.exists()) {
 			projectDirectory.mkdir();
-		}
+		}*/
 		
 		DataInfo dataInfo = new DataInfo();
 		dataInfo.setProject_id(project.getProject_id());
+		dataInfo.setSharing_type(project.getSharing_type());
 		dataInfo.setData_key(String.valueOf(project.getProject_id()));
 		dataInfo.setData_name(project.getProject_name());
 		dataInfo.setUser_id(project.getUser_id());

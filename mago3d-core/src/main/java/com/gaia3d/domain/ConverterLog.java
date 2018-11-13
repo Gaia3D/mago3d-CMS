@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class ConverterLog extends SearchDomain {
+public class ConverterLog extends SearchFilter {
 	
 	// 화면 표기용
 	private String file_name;	

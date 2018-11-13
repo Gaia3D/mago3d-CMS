@@ -525,9 +525,9 @@ a.button:hover {
 	margin-left: 5px !important;
 	margin-right: 0 !important; }
 	
- .page-content > .button-group,
+.page-content > .button-group,
 form > .button-group {
-	margin: 30px 0; } 
+	margin: 30px 0; }
 	
 .button-group .center-buttons {
 	text-align: center; }
@@ -2368,4 +2368,4 @@ tr:hover td {
 .f11{font-size:11px;}
 .f14{font-size:14px;}
 .f16{font-size:16px;}
-.f20{font-size:20px;}	
+.f20{font-size:20px;}

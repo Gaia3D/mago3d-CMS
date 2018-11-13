@@ -3,7 +3,7 @@
 
 <header>
 	<div id="header-logo">
-		<span style="padding-left: 15px; font-size:38px; color: Tomato;">
+		<span style="padding-left: 15px; font-size:38px; color: #573592;">
 			<i class="fas fa-home"></i>
 		</span>
 	</div>

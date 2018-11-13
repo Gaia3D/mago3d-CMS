@@ -4,7 +4,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,15 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.LocaleResolver;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.config.CacheConfig;
-import com.gaia3d.domain.CacheManager;
-import com.gaia3d.domain.CommonCode;
+import com.gaia3d.domain.DataSharingType;
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.Pagination;
-import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.Project;
-import com.gaia3d.domain.SessionKey;
 import com.gaia3d.domain.UserGroupRole;
 import com.gaia3d.domain.UserSession;
 import com.gaia3d.helper.GroupRoleHelper;
@@ -69,17 +65,19 @@ public class ProjectController {
 	 */
 	@GetMapping(value = "list-project.do")
 	public String listProject(HttpServletRequest request, Project project, @RequestParam(defaultValue="1") String pageNo, Model model) {
-		
 		log.info("@@ project = {}", project);
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 		project.setUser_id(userSession.getUser_id());
 		project.setUse_yn(Project.IN_USE);
+		if(StringUtils.isEmpty(project.getSharing_type())) {
+			project.setSharing_type(DataSharingType.PUBLIC.getValue());
+		}
 		
-		if(StringUtil.isNotEmpty(project.getStart_date())) {
+		if(!StringUtils.isEmpty(project.getStart_date())) {
 			project.setStart_date(project.getStart_date().substring(0, 8) + DateUtil.START_TIME);
 		}
-		if(StringUtil.isNotEmpty(project.getEnd_date())) {
+		if(!StringUtils.isEmpty(project.getEnd_date())) {
 			project.setEnd_date(project.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
 		}
 
@@ -105,106 +103,37 @@ public class ProjectController {
 	 * @return
 	 */
 	@GetMapping(value = "map-project.do")
-	public String mapProject(HttpServletRequest request, HttpServletResponse response, 
-			@RequestParam(defaultValue="1") String pageNo, @RequestParam(defaultValue="cesium") String viewLibrary, String device, Model model) throws Exception {
+	public String mapProject(HttpServletRequest request, HttpServletResponse response, Project project, 
+			@RequestParam(defaultValue="1") String pageNo, @RequestParam(defaultValue="cesium") String viewLibrary, Model model) throws Exception {
 		
 		log.info("@@ viewLibrary = {}", viewLibrary);
-		String viewName = "demo";
-		String lang = (String)request.getParameter("lang");
-		if(lang == null || "".equals(lang)) {
-			lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
-			if(lang == null || "".equals(lang)) {
-				Locale myLocale = request.getLocale();
-				lang = myLocale.getLanguage();
-			}
-		}
-		
-		if(!Locale.KOREA.getLanguage().equals(lang) 
-				&& !Locale.ENGLISH.getLanguage().equals(lang)
-				&& !Locale.JAPAN.getLanguage().equals(lang)) {
-			// TODO Because it does not support multilingual besides English and Japanese Based on English
-			lang = "en";
-		}
-		
-		log.info("@@ lang = {}", lang);
-		if(lang != null && !"".equals(lang)) {
-			request.getSession().setAttribute(SessionKey.LANG.name(), lang);
-			Locale locale = new Locale(lang);
-			localeResolver.setLocale(request, response, locale);
-		}
-		
-		Issue issue = new Issue();
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-		if(userSession == null) {
-			issue.setUser_id("guest");
-			issue.setUser_name("guest");
-		} else {
-			issue.setUser_id(userSession.getUser_id());
-			issue.setUser_name(userSession.getUser_name());
+		project.setUser_id(userSession.getUser_id());
+		project.setUse_yn(Project.IN_USE);
+		if(StringUtils.isEmpty(project.getSharing_type())) {
+			project.setSharing_type(DataSharingType.PUBLIC.getValue());
 		}
 		
-		log.info("@@ issue = {}", issue);
-		if(StringUtil.isNotEmpty(issue.getStart_date())) {
-			issue.setStart_date(issue.getStart_date().substring(0, 8) + DateUtil.START_TIME);
+		if(!StringUtils.isEmpty(project.getStart_date())) {
+			project.setStart_date(project.getStart_date().substring(0, 8) + DateUtil.START_TIME);
 		}
-		if(StringUtil.isNotEmpty(issue.getEnd_date())) {
-			issue.setEnd_date(issue.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
+		if(!StringUtils.isEmpty(project.getEnd_date())) {
+			project.setEnd_date(project.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
 		}
-		long totalCount = issueService.getIssueTotalCountByUserId(issue);
 		
-		Pagination pagination = new Pagination(request.getRequestURI(), getSearchIssueParameters(issue), totalCount, Long.valueOf(pageNo).longValue(), 10l);
+		long totalCount = projectService.getProjectTotalCount(project);
+		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(project), totalCount, Long.valueOf(pageNo).longValue(), project.getList_counter());
 		log.info("@@ pagination = {}", pagination);
 		
-		issue.setOffset(pagination.getOffset());
-		issue.setLimit(pagination.getPageRows());
-		List<Issue> issueList = new ArrayList<>();
+		project.setOffset(pagination.getOffset());
+		project.setLimit(pagination.getPageRows());
+		List<Project> projectList = new ArrayList<>();
 		if(totalCount > 0l) {
-			issueList = issueService.getListIssueByUserId(issue);
+			projectList = projectService.getListProject(project);
 		}
 		
-		Policy policy = CacheManager.getPolicy();
-		List<Project> projectList = CacheManager.getProjectList();
-		Map<String, String> initProjectJsonMap = new HashMap<>();
-		int initProjectsLength = 0;
-		String defaultProjects = policy.getGeo_data_default_projects();
-		String[] initProjects = null;
-		if(defaultProjects != null && !"".equals(defaultProjects)) {
-			initProjects = defaultProjects.split(",");
-			for(String projectId : initProjects) {
-				initProjectJsonMap.put(projectId, CacheManager.getProjectDataJson(Long.valueOf(projectId)));
-			}
-			initProjectsLength = initProjects.length;
-		}
-				
-		@SuppressWarnings("unchecked")
-		List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
-		@SuppressWarnings("unchecked")
-		List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
-		
-		policy.setGeo_view_library(viewLibrary);
-		
-		ObjectMapper mapper = new ObjectMapper();
-		
-		model.addAttribute("policy", policy);
-		model.addAttribute("geoViewLibrary", policy.getGeo_view_library());
-		model.addAttribute("issue", issue);
-		model.addAttribute("now_latitude", policy.getGeo_init_latitude());
-		model.addAttribute("now_longitude", policy.getGeo_init_longitude());
 		model.addAttribute(pagination);
-		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("issueList", issueList);
 		model.addAttribute("projectList", projectList);
-		model.addAttribute("initProjectsLength", initProjectsLength);
-		model.addAttribute("initProjectJsonMap", mapper.writeValueAsString(initProjectJsonMap));
-		model.addAttribute("cache_version", policy.getContent_cache_version());
-		model.addAttribute("policyJson", mapper.writeValueAsString(policy));
-		model.addAttribute("issuePriorityList", issuePriorityList);
-		model.addAttribute("issueTypeList", issueTypeList);
-		
-		log.info("@@@@@@ viewName = {}", viewName);
-		log.info("@@@@@@ policy = {}", policy);
-		log.info("@@@@@@ initProjectsLength = {}", initProjectsLength);
-		log.info("@@@@@@ initProjectJsonMap = {}", mapper.writeValueAsString(initProjectJsonMap));
 		
 		return "/project/map-project";
 	}
@@ -343,14 +272,7 @@ public class ProjectController {
 			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 			project.setUser_id(userSession.getUser_id());
-			
 			projectService.insertProject(project);
-			
-			// TODO 개인용 캐시 갱신은 어떻게 하지?
-//			CacheParams cacheParams = new CacheParams();
-//			cacheParams.setCacheName(CacheName.PROJECT);
-//			cacheParams.setCacheType(CacheType.BROADCAST);
-//			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

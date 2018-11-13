@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class ConverterJob extends SearchDomain {
+public class ConverterJob extends SearchFilter {
 	
 	public static final String JOB_READY = "0";
 	public static final String JOB_SUCCESS = "1";

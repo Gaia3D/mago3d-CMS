@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class DataInfo extends SearchDomain {
+public class DataInfo extends SearchFilter {
 	
 	// Data 상태가 사용중
 	public static final String STATUS_USE = "0";
@@ -58,7 +58,7 @@ public class DataInfo extends SearchDomain {
 	private String parent_data_key;
 	// data 이름
 	private String data_name;
-	// 공유 타입. 0 : default, 1: public, 2 : private, 3 : sharing
+	// 공유 타입. 0 : common, 1: public, 2 : private, 3 : sharing
 	private String sharing_type;
 	// 부모 고유번호
 	private Long parent;

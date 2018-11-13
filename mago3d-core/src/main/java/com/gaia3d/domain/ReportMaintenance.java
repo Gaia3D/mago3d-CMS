@@ -11,7 +11,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
-public class ReportMaintenance extends SearchDomain {
+public class ReportMaintenance extends SearchFilter {
 	
 	private Long report_maintenance_id;
 	

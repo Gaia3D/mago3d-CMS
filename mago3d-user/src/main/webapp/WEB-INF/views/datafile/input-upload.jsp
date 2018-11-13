@@ -7,14 +7,15 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>프로젝트 목록 | mago3D User</title>
+	<title>프로젝트 등록 | mago3D User</title>
 	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" href="/css/cloud.css?cache_version=${cache_version}">
 	<link rel="stylesheet" href="/css/fontawesome-free-5.2.0-web/css/all.min.css">
 	<link rel="stylesheet" href="/externlib/jquery-ui/jquery-ui.css" />
-	<link rel="stylesheet" href="/externlib/dropzone/dropzone.css">
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
+	<link rel="stylesheet" href="/externlib/dropzone/dropzone.css">
+	
 	<script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/externlib/jquery-ui/jquery-ui.js"></script>
 	<script type="text/javascript" src="/js/cloud.js?cache_version=${cache_version}"></script>
@@ -39,13 +40,13 @@
 		<div id="content-wrap">
 			<div id="gnb-content" class="clfix">
 				<h1 style="padding-left: 20px;">
-					<span style="font-size:26px;">파일 업로더</span>
+					<span style="font-size:26px;">파일 업로딩</span>
 				</h1>
 				<div class="location">
 					<span style="padding-top:10px; font-size:12px; color: Mediumslateblue;">
 						<i class="fas fa-cubes" title="프로젝트"></i>
 					</span>
-					<span style="font-size:12px;">Converter > 파일 업로더</span>
+					<span style="font-size:12px;">프로젝트 > 프로젝트 등록</span>
 				</div>
 			</div>
 			
