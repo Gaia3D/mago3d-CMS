@@ -139,19 +139,16 @@ public class ProjectController {
 	}
 	
 	/**
-	 * Ajax Project 목록
+	 * Project 목록
 	 * @param request
 	 * @return
 	 */
 	@PostMapping(value = "ajax-list-project.do")
 	@ResponseBody
-	public Map<String, Object> ajaxListProject(HttpServletRequest request) {
+	public Map<String, Object> ajaxListProject(HttpServletRequest request, Project project) {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
-			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-			Project project = new Project();
-			project.setUser_id(userSession.getUser_id());
 			project.setUse_yn(Project.IN_USE);
 			List<Project> projectList = projectService.getListProject(project);
 			map.put("projectList", projectList);

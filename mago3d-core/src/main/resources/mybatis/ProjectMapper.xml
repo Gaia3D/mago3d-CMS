@@ -76,7 +76,9 @@
 			ORDER BY insert_date DESC, view_order
 			</otherwise>
 			</choose>
+			<if test="offset != null and limit != ''">
 			OFFSET #{offset} LIMIT #{limit}
+			</if>
 		) A
 	</select>
 	

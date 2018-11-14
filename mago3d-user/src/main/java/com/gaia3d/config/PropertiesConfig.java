@@ -26,7 +26,7 @@ public class PropertiesConfig {
 	private String exchange;
 	
 	// User excel batch registration
-	private String userUploadDir;
+	private String uploadData;
 	private String userConverterDir;
 	
 }

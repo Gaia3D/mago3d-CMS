@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.gaia3d.domain.ConverterUploadLog;
 import com.gaia3d.domain.FileInfo;
 import com.gaia3d.domain.Policy;
+import com.gaia3d.domain.UploadDirectoryType;
 
 import lombok.extern.slf4j.Slf4j;
 import net.lingala.zip4j.core.ZipFile;
@@ -348,123 +349,82 @@ public class FileUtil {
 		return fileInfo;
 	}
 	
-	/**
-	 * 특정 파일을 읽어 데몬 PID를 확인한다 (PID 존재 유무에 따라 동작 상태도 알 수 있음)
-	 * @param fileName
-	 * @return
-	 */
-	public static String getPIDFromFile(String fileName) {
+	public static String makeDirectory(String userId, UploadDirectoryType uploadDirectoryType, String targetDirectory) {
+		String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY_TIME14);
+		String year = today.substring(0,4);
+		String month = today.substring(4,6);
+		String day = today.substring(6,8);
+		String sourceDirectory = targetDirectory;
 		
-		String pid = "";
-		try ( FileReader fileReader = new FileReader(fileName); BufferedReader bufferedReader = new BufferedReader(fileReader) ) {
-			pid = bufferedReader.readLine();			
-		} catch(Exception e) {
-			e.printStackTrace();
+		File rootDirectory = new File(sourceDirectory);
+		if(!rootDirectory.exists()) {
+			rootDirectory.mkdir();
 		}
 		
-		log.info("@@@@@@@@ fileName = {}, pid = {}", fileName, pid);
-		return pid;
-	}
-	
-	/**
-	 * 파일 IP를 읽어 옴
-	 * @param fileName
-	 * @return
-	 */
-	public static String getIPFromFile(String fileName) {
-		
-		String ip = "";
-		BufferedReader bufferedReader = null;
-		FileReader fileReader = null;
-		try {
-			fileReader = new FileReader(fileName);
-			bufferedReader = new BufferedReader(fileReader);
-			ip = bufferedReader.readLine();			
-			bufferedReader.close();
-			fileReader.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(bufferedReader != null) {
-				try {
-					bufferedReader.close();
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if(fileReader != null) {
-				try {
-					fileReader.close();
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
+		// 사용자 디렉토리
+		if(UploadDirectoryType.USERID_YEAR.equals(uploadDirectoryType) 
+				|| UploadDirectoryType.USERID_YEAR_MONTH.equals(uploadDirectoryType)
+				|| UploadDirectoryType.USERID_YEAR_MONTH_DAY.equals(uploadDirectoryType)) {
+			sourceDirectory = sourceDirectory + userId + File.separator;
+			File userDirectory = new File(sourceDirectory);
+			if(!userDirectory.exists()) {
+				userDirectory.mkdir();
 			}
 		}
 		
-		log.info("@@@@@@@@ fileName = {}, ip = {}", fileName, ip);
-		return ip;
-	}
-	
-	/**
-	 * pid 파일의 process가 실행 중인지 확인
-	 * @param pid
-	 * @param DAEMON_NAME
-	 * @return
-	 */
-	public static boolean isProcessAlive(String pid, String DAEMON_NAME) {
-		// 프로세스가 실행중인지를 판별
-		boolean isProcessAlive = false;
-		// 프로세스 확인 후 종료
-		File processFile = new File("/proc" + File.separator + pid);
-		log.info("@@@@@@@ processFile = {}, name = {}, path = {}, pathLength = {}", processFile.getName(), processFile.getAbsolutePath(), processFile.getPath(), processFile.getPath().length());
-		if(processFile.exists()) {
-			// 파일 읽어서 종료
-			File vrrpdFile = new File("/proc" + File.separator + pid + File.separator + "status");
-			if(vrrpdFile.exists()) {
-				FileReader fileReader = null;
-				BufferedReader bufferedReader = null;
-				String processName = null;
-				try {
-					fileReader = new FileReader(vrrpdFile);
-					bufferedReader = new BufferedReader(fileReader);
-					String line = bufferedReader.readLine();
-					if(line != null && !"".equals(line)) {
-						String[] fileInfo = line.split(":");
-						processName = fileInfo[1].replaceAll(" ", "").trim();
-					}
-				} catch(Exception e) {
-					e.printStackTrace();
-					throw new RuntimeException("@@@@@@@ /proc/" + pid + " process status file read error!");
-				} finally {
-					if(bufferedReader != null) { try { bufferedReader.close(); } catch(Exception e) { e.printStackTrace(); } }
-					if(fileReader != null) { try { fileReader.close(); } catch(Exception e) { e.printStackTrace(); } }
-				}
-				if(DAEMON_NAME.equals(processName)) {
-					isProcessAlive = true;
-				} else {
-					log.info("@@@@@@@@ processName = {}, DAEMON_NAME = {} is different", processName, DAEMON_NAME);
-				}
-			} else {
-				log.info("@@@@@@@ /proc/{} process status file is not exist!", pid);
+		// 년
+		if(UploadDirectoryType.USERID_YEAR.equals(uploadDirectoryType) 
+				|| UploadDirectoryType.USERID_YEAR_MONTH.equals(uploadDirectoryType)
+				|| UploadDirectoryType.USERID_YEAR_MONTH_DAY.equals(uploadDirectoryType)
+				|| UploadDirectoryType.YEAR.equals(uploadDirectoryType)
+				|| UploadDirectoryType.YEAR_MONTH .equals(uploadDirectoryType)
+				|| UploadDirectoryType.YEAR_MONTH_DAY .equals(uploadDirectoryType)
+				|| UploadDirectoryType.YEAR_USERID .equals(uploadDirectoryType)
+				|| UploadDirectoryType.YEAR_MONTH_USERID .equals(uploadDirectoryType)
+				|| UploadDirectoryType.YEAR_MONTH_DAY_USERID .equals(uploadDirectoryType)) {
+			sourceDirectory = sourceDirectory + year + File.separator;
+			File yearDirectory = new File(sourceDirectory);
+			if(!yearDirectory.exists()) {
+				yearDirectory.mkdir();
 			}
-		} else {
-			log.info("@@@@@@@ /proc/{} directory is not exist", pid);
 		}
 		
-		return isProcessAlive;
+		// 월
+		if(UploadDirectoryType.USERID_YEAR_MONTH.equals(uploadDirectoryType)
+				|| UploadDirectoryType.USERID_YEAR_MONTH_DAY.equals(uploadDirectoryType)
+				|| UploadDirectoryType.YEAR_MONTH .equals(uploadDirectoryType)
+				|| UploadDirectoryType.YEAR_MONTH_DAY .equals(uploadDirectoryType)
+				|| UploadDirectoryType.YEAR_MONTH_USERID .equals(uploadDirectoryType)
+				|| UploadDirectoryType.YEAR_MONTH_DAY_USERID .equals(uploadDirectoryType)) {
+			sourceDirectory = sourceDirectory + month + File.separator;
+			File monthDirectory = new File(sourceDirectory);
+			if(!monthDirectory.exists()) {
+				monthDirectory.mkdir();
+			}
+		}
+		
+		// 일
+		if(UploadDirectoryType.USERID_YEAR_MONTH_DAY.equals(uploadDirectoryType)
+				|| UploadDirectoryType.YEAR_MONTH_DAY .equals(uploadDirectoryType)
+				|| UploadDirectoryType.YEAR_MONTH_DAY_USERID .equals(uploadDirectoryType)) {
+			sourceDirectory = sourceDirectory + day + File.separator;
+			File dayDirectory = new File(sourceDirectory);
+			if(!dayDirectory.exists()) {
+				dayDirectory.mkdir();
+			}
+		}
+		
+		// 사용자 디렉토리
+		if(UploadDirectoryType.YEAR_USERID.equals(uploadDirectoryType)
+				|| UploadDirectoryType.YEAR_MONTH_USERID.equals(uploadDirectoryType) 
+				|| UploadDirectoryType.YEAR_MONTH_DAY_USERID .equals(uploadDirectoryType)) {
+			sourceDirectory = sourceDirectory + userId + File.separator;
+			File userDirectory = new File(sourceDirectory);
+			if(!userDirectory.exists()) {
+				userDirectory.mkdir();
+			}
+		}
+		
+		return sourceDirectory;
 	}
-	
-	//https://www.mkyong.com/java/how-to-decompress-files-from-a-zip-file/
-	public static void unzip(String targetZipFilePath, String destinationFolderPath, String password) {
-	        try {
-	            ZipFile zipFile = new ZipFile(targetZipFilePath);
-	            if (zipFile.isEncrypted()) {
-	                zipFile.setPassword(password);
-	            }
-	            zipFile.extractAll(destinationFolderPath);
-
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	    }
 }

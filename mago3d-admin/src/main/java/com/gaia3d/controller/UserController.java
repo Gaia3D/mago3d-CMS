@@ -879,7 +879,7 @@ public class UserController {
 		String result = "success";
 		try {
 			MultipartFile multipartFile = request.getFile("file_name");
-			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.USER_FILE_UPLOAD, propertiesConfig.getUserUploadDir());
+			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.USER_FILE_UPLOAD, propertiesConfig.getUploadData());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				map.put("result", fileInfo.getError_code());
 				return map;

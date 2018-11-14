@@ -151,7 +151,9 @@
 									<td class="col-toggle">${project.longitude}</td>
 									<td class="col-toggle">${project.height}</td>
 									<td class="col-toggle">${project.duration}</td>
-									<td class="col-functions"><a href="#" onclick="viewDataList('${project.project_id}', '${project.project_name}'); return false;"><spring:message code='view'/></a></td>
+									<td class="col-functions">
+										<a href="#" onclick="viewDataList('${project.project_id}', '${project.project_name}'); return false;">
+											<fmt:formatNumber value="${project.data_count }" pattern="###,###" /></a></td>
 									<td class="col-date">${project.viewInsertDate }</td>
 									<td class="col-functions">
 										<span class="button-group">

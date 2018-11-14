@@ -78,14 +78,12 @@ h1 {float:left;width:30%; font-size: 24px; line-height: 1.9;}
 #content-wrap > section.con > div.listNav > a {display:inline-block;margin:0 5px;}
 
 .site-footer {
-	position:absolute;
-    bottom:0;
-	margin: 0 auto;
+	margin-top: 30px;
 	padding: 10px 0 0;
-	border-top: 1px solid #dcdcdc;
+	/* border-top: 1px solid #dcdcdc; */
 	text-align: center; 
   	width: 100%; min-width: 1420px; max-width: 1920px;
-  	height: 40px;
+  	height: 50px;
 }
   	
 

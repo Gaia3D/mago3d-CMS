@@ -73,7 +73,7 @@
 				</span>
 				<ul style="list-style: none;">
 					<li style="padding-top:0px; height: 25px; font-size: 14px;">
-						<a href="/converter/input-upload.do" style="text-decoration: none; color: #2c2d2d;">파일 업로더</a>
+						<a href="/upload-data/input-upload.do" style="text-decoration: none; color: #2c2d2d;">파일 업로딩</a>
 					</li>
 					<li style="padding-top:0px; height: 25px; font-size: 14px;">
 						<a href="/converter/input-converter-job.do" style="text-decoration: none; color: #2c2d2d;">Converter 결과</a>

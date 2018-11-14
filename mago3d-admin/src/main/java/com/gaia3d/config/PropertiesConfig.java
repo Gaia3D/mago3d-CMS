@@ -20,8 +20,7 @@ public class PropertiesConfig {
 	private String licenseFile;
 	private String licenseFileChecker;
 	
-	// User excel batch registration
-	private String userUploadDir;
+	private String uploadData;
 	// Data json batch registration
 	private String dataUploadDir;
 	// 
