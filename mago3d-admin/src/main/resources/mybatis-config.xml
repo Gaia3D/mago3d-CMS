@@ -37,6 +37,8 @@
 		<typeAlias type="com.gaia3d.domain.Schedule" alias="schedule"/>
 		<typeAlias type="com.gaia3d.domain.ScheduleLog" alias="scheduleLog"/>
 		<typeAlias type="com.gaia3d.domain.ScheduleDetailLog" alias="scheduleDetailLog"/>
+		<typeAlias type="com.gaia3d.domain.UploadData" alias="uploadData"/>
+		<typeAlias type="com.gaia3d.domain.UploadDataFile" alias="uploadDataFile"/>
 		<typeAlias type="com.gaia3d.domain.UserSession" alias="userSession"/>
 		<typeAlias type="com.gaia3d.domain.UserInfo" alias="userInfo"/>
 		<typeAlias type="com.gaia3d.domain.UserDevice" alias="userDevice"/>

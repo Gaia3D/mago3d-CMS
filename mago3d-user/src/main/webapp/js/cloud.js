@@ -89,10 +89,8 @@ $( function() {
 	var currentPathName = location.pathname;
 	if(currentPathName.indexOf("map-project") >= 0) {
 		$( "#project_view_map" ).prop( "checked", true ).checkboxradio( "refresh" );
-		console.log("--------- map-project");
 	} else {
 		$( "#project_view_table" ).prop( "checked", true ).checkboxradio( "refresh" );
-		console.log("--------- list-project");
 	}
 		
 	$('#project_view_map').click(function () {

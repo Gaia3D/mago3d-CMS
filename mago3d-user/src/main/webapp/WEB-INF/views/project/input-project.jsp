@@ -237,17 +237,17 @@
 			return false;
 		}
 		if ($("#latitude").val() == "") {
-			alert(JS_MESSAGE["project.latitude.empty"]);
+			alert(JS_MESSAGE["latitude.empty"]);
 			$("#latitude").focus();
 			return false;
 		}
 		if ($("#longitude").val() == "") {
-			alert(JS_MESSAGE["project.longitude.empty"]);
+			alert(JS_MESSAGE["longitude.empty"]);
 			$("#longitude").focus();
 			return false;
 		}
 		if ($("#height").val() == "") {
-			alert(JS_MESSAGE["project.height.empty"]);
+			alert(JS_MESSAGE["height.empty"]);
 			$("#height").focus();
 			return false;
 		}

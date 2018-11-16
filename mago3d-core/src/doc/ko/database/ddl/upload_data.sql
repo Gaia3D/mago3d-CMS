@@ -15,6 +15,7 @@ create table upload_data(
 	height							numeric(7,3),
 	description						varchar(256),
 	file_count						int									default 0,
+	converter_count					int 								default 0,
 	status							char(1)								default '0',
 	update_date						timestamp with time zone,
 	insert_date						timestamp with time zone			default now(),
@@ -33,6 +34,7 @@ comment on column upload_data.longitude is '경도';
 comment on column upload_data.height is '높이';
 comment on column upload_data.description is '설명';
 comment on column upload_data.file_count is '파일 개수';
+comment on column upload_data.converter_count is 'converter 횟수';
 comment on column upload_data.status is '상태. 0 : 업로딩 완료, 1 : 변환';
 comment on column upload_data.update_date is '수정일';
 comment on column upload_data.insert_date is '등록일';
@@ -46,12 +48,15 @@ create table upload_data_file(
 	sharing_type					char(1)								default '1',
 	data_type						varchar(30),
 	user_id							varchar(32),
+	file_type						char(1)								default 'F',
 	file_name						varchar(100)						not null,
 	file_real_name					varchar(100)						not null,
 	file_path						varchar(256)						not null,
+	depth							int									default 1,
 	file_size						varchar(12)							not null,
-	file_ext						varchar(10)							not null,
-	converter_count					int									default 0,
+	file_ext						varchar(10),
+	error_message					varchar(256),
+	converter_count					int 								default 0,
 	insert_date						timestamp with time zone			default now(),
 	constraint upload_data_file_pk	primary key (upload_data_file_id)	
 );
@@ -63,10 +68,14 @@ comment on column upload_data_file.project_id is '프로젝트 아이디(중복)';
 comment on column upload_data_file.sharing_type is '공유 타입(중복)';
 comment on column upload_data_file.data_type is '데이터 타입(중복)';
 comment on column upload_data_file.user_id is '사용자 아이디';
+comment on column upload_data_file.file_type is '디렉토리/파일 구분. D : 디렉토리, F : 파일';
 comment on column upload_data_file.file_name is '파일 이름';
 comment on column upload_data_file.file_real_name is '파일 실제 이름';
 comment on column upload_data_file.file_path is '파일 경로';
+comment on column upload_data_file.depth is '계층구조 깊이. 1부터 시작';
 comment on column upload_data_file.file_size is '파일 사이즈';
 comment on column upload_data_file.file_ext is '파일 확장자';
+comment on column upload_data_file.error_message is '오류 메시지';
+comment on column upload_data_file.converter_count is 'converter 횟수';
 comment on column upload_data_file.insert_date is '등록일';
 

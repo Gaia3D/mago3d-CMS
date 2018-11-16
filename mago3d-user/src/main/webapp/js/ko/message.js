@@ -14,6 +14,11 @@ JS_MESSAGE["preparing"] = "준비중 입니다.";
 
 JS_MESSAGE["search.word.empty"] = "검색어를 입력해 주세요.";
 
+JS_MESSAGE["data.name.empty"] = "데이터명을 입력하여 주십시오.";
+JS_MESSAGE["latitude.empty"] = "위도를 입력하여 주십시오.";
+JS_MESSAGE["longitude.empty"] = "경도를  입력하여 주십시오.";
+JS_MESSAGE["height.empty"] = "높이를  입력하여 주십시오.";
+
 // 공통
 JS_MESSAGE["user.session.empty"] = "로그인 후 사용 가능한 서비스 입니다.";
 JS_MESSAGE["db.exception"] = "데이터 베이스 장애가 발생하였습니다. 잠시 후 다시 이용하여 주시기 바랍니다.";
@@ -41,10 +46,8 @@ JS_MESSAGE["project.key.duplication"] = "사용중인 Key 입니다. 다른 Key�
 JS_MESSAGE["project.key.duplication_value.check"] = "Key 중복확인을 해주십시오."
 JS_MESSAGE["project.key.duplication_value.already"] = "사용중인 Key 입니다. 다른 Key를 선택해 주십시오.";
 JS_MESSAGE["project.name.empty"] = "프로젝트명을 입력하여 주십시오.";
-JS_MESSAGE["project.latitude.empty"] = "위도를 입력하여 주십시오.";
-JS_MESSAGE["project.longitude.empty"] = "경도를  입력하여 주십시오.";
-JS_MESSAGE["project.height.empty"] = "높이를  입력하여 주십시오.";
-JS_MESSAGE["project.height.empty"] = "이동시간을  입력하여 주십시오.";
+
+JS_MESSAGE["project.duration.empty"] = "이동시간을  입력하여 주십시오.";
 
 JS_MESSAGE["project.data.no.found"] = "프로젝트가 데이터가 존재하지 않습니다.";
 

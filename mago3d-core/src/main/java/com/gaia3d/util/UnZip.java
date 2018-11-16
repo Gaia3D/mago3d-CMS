@@ -4,17 +4,20 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gaia3d.domain.FileType;
 import com.gaia3d.domain.Policy;
+import com.gaia3d.domain.UploadDataFile;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,13 +29,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UnZip {
 
-	public static Map<String, Object> unzip(Policy policy, String userId, MultipartFile multipartFile, String targetDirectory) throws Exception {
+	public static Map<String, Object> unzip(Policy policy, String today, String userId, MultipartFile multipartFile, String targetDirectory) throws Exception {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = validation(policy, multipartFile);
 		if(!StringUtils.isEmpty(errorCode)) {
 			result.put("errorCode", errorCode);
 			return result;
 		}
+		
+		List<UploadDataFile> fileList = new ArrayList<>();
 		
 		File uploadedFile = new File(targetDirectory + multipartFile.getOriginalFilename());
 		multipartFile.transferTo(uploadedFile);
@@ -41,31 +46,88 @@ public class UnZip {
 //			String saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + fileInfo.getFile_ext();
 //			long size = 0L;
 //			InputStream inputStream = multipartFile.getInputStream();
+//			fileInfo.setFile_real_name(saveFileName);
+//			fileInfo.setFile_size(String.valueOf(size));
+//			fileInfo.setFile_path(sourceDirectory);
 			
+			String directoryPath = targetDirectory;
+			String directoryName = null;
 			Enumeration<? extends ZipEntry> entries = zipFile.entries();
-            while( entries.hasMoreElements() ) {
+			while( entries.hasMoreElements() ) {
+            	UploadDataFile uploadDataFile = new UploadDataFile();
+            	
             	ZipEntry entry = entries.nextElement();
-            	String fileName = targetDirectory + entry.getName();
+            	String unzipfileName = targetDirectory + entry.getName();
             	if( entry.isDirectory() ) {
-                	log.info("@@@@@@@@@@@@@@@@ directory = {}", fileName);
-                    File file = new File(fileName);
+            		uploadDataFile.setFile_type(FileType.DIRECTORY.getValue());
+            		if(directoryName == null) {
+            			uploadDataFile.setFile_name(entry.getName());
+            			uploadDataFile.setFile_real_name(entry.getName());
+            			directoryName = entry.getName();
+            			directoryPath = directoryPath + directoryName;
+            		} else {
+            			String fileName = entry.getName().substring(entry.getName().indexOf(directoryName) + directoryName.length());  
+            			uploadDataFile.setFile_name(fileName);
+            			uploadDataFile.setFile_real_name(fileName);
+            			directoryName = fileName;
+            			directoryPath = directoryPath + fileName;
+            		}
+            		
+                	File file = new File(unzipfileName);
                     file.mkdirs();
+                    uploadDataFile.setFile_path(directoryPath);
                 } else {
                 	try ( 	InputStream inputStream = zipFile.getInputStream(entry);
-                			FileOutputStream outputStream = new FileOutputStream(fileName); ) {
+                			FileOutputStream outputStream = new FileOutputStream(unzipfileName); ) {
                 		int data = inputStream.read();
                 		while(data != -1){
                 			outputStream.write(data);
                             data = inputStream.read();
                         }
+                		
+                		uploadDataFile.setFile_type(FileType.FILE.getValue());
+                		String fileName = null;
+                		String extension = null;
+                		if(directoryName == null) {
+                			fileName = entry.getName();
+                			String[] divideFileName = fileName.split("\\.");
+                			String saveFileName = userId + "_" + today + "_" + System.nanoTime();
+                			if(divideFileName == null || divideFileName.length == 0) {
+                				saveFileName = userId + "_" + today + "_" + System.nanoTime();
+                			} else {
+                				extension = divideFileName[divideFileName.length - 1];
+                				saveFileName = saveFileName + "." + extension;
+                			}
+                			uploadDataFile.setFile_name(fileName);
+                			uploadDataFile.setFile_real_name(saveFileName);
+                		} else {
+                			fileName = entry.getName().substring(entry.getName().indexOf(directoryName) + directoryName.length());  
+                			String[] divideFileName = fileName.split("\\.");
+                			String saveFileName = userId + "_" + today + "_" + System.nanoTime();
+                			if(divideFileName == null || divideFileName.length == 0) {
+                			} else {
+                				extension = divideFileName[divideFileName.length - 1];
+                				saveFileName = saveFileName + "." + extension;
+                			}
+                			
+                			uploadDataFile.setFile_ext(extension);
+                			uploadDataFile.setFile_name(fileName);
+                			uploadDataFile.setFile_real_name(saveFileName);
+                		}
+                		uploadDataFile.setFile_path(directoryPath);
+                		
+                    } catch(Exception e) {
+                    	e.printStackTrace();
+                    	uploadDataFile.setError_message(e.getMessage());
                     }
-                	log.info("@@@@@@@@@@@@@@@@ file = {}", fileName);
                 }
+            	fileList.add(uploadDataFile);
             }
 		} catch(IOException ex) {
 			ex.printStackTrace(); 
 		}
 		
+		result.put("fileList", fileList);
 		return result;
 	}
 	

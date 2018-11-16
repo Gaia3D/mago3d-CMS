@@ -20,7 +20,6 @@ import com.gaia3d.domain.ConverterJob;
 import com.gaia3d.domain.ConverterLog;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.UserSession;
-import com.gaia3d.exception.BusinessLogicException;
 import com.gaia3d.service.AMQPPublishService;
 import com.gaia3d.service.ConverterService;
 import com.gaia3d.util.DateUtil;

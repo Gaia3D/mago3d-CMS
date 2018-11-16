@@ -121,7 +121,7 @@
 									<input type="button" id="project_search_buttion" value="찾기" />
 								</td>
 							</tr>
-							<%-- <tr>
+							<tr>
 								<th class="col-label m" scope="row">
 									데이터명
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
@@ -129,7 +129,7 @@
 								<td class="col-input">
 									<form:input path="data_name" cssClass="l" />
 								</td>
-							</tr> --%>
+							</tr>
 							<tr>
 								<th class="col-label" scope="row">
 									<form:label path="latitude"><spring:message code='latitude'/></form:label>
@@ -281,10 +281,12 @@
 	// https://ncube.net/13905
 	// http://blog.naver.com/PostView.nhn?blogId=wolfre&logNo=220154561376&parentCategoryNo=&categoryNo=1&viewDate=&isShowPopularPosts=true&from=search
 
+	var uploadFileCount = 0;
 	Dropzone.options.myDropzone = {
-		url: "/upload-data/insert-upload.do",	
+		url: "/upload-data/insert-upload-data.do",	
 		//paramName: "file",
 		// Prevents Dropzone from uploading dropped files immediately
+		timeout: 3600000,
 		autoProcessQueue: false,
 		// 여러개의 파일 허용
 		uploadMultiple: true,
@@ -335,7 +337,7 @@
 				formData.append("sharing_type", $("#sharing_type").val());
 				formData.append("data_type", $("#data_type").val());
 				formData.append("project_id", $("#project_id").val());
-				//formData.append("data_name", $("#data_name").val());
+				formData.append("data_name", $("#data_name").val());
 				formData.append("latitude", $("#latitude").val());
 				formData.append("longitude", $("#longitude").val());
 				formData.append("height", $("#height").val());
@@ -348,19 +350,36 @@
 				return;
 			});
 			
-			this.on("complete", function (file) {
+			/* this.on("complete", function (file) {
 				if (file.xhr !== undefined) {
 					var responseText = JSON.parse(file.xhr.responseText);
 					console.log("file name = " + file.name + ", responseText = " + responseText.result);
 					if(responseText.result === "success") {
-						
+						 return;
 					} else {
-						alert("file name = " + file.name + ", error message = " + responseText.result);
+						//alert("file name = " + file.name + ", error message = " + responseText.result);
 					}
 				} else {
 					console.log("file.xhr is undefined. file name = " + file.name);
 				}
-			});
+			}); */
+			
+			this.on("success", function(file, response) {
+				if(file !== undefined && file.name !== undefined) {
+					console.log("file name = " + file.name + ", result = " + response.result);
+					if(response.result === "success") {
+						if(uploadFileCount === 0) {
+							uploadFileCount++;
+							alert("업로딩을 완료 하였습니다.");
+						}
+						return;
+					} else if(response.result === "upload.file.type.invalid") {
+						alert("복수의 파일을 업로딩 할 경우 zip 파일은 사용할 수 없습니다.")
+					}
+				} else {
+					console.log("------- success response = " + response.result);	
+				}
+			})
 		}
 	};
 	
@@ -370,18 +389,23 @@
 			$("#project_id").focus();
 			return false;
 		}
+		if ($("#data_name").val() == "") {
+			alert(JS_MESSAGE["data.name.empty"]);
+			$("#data_name").focus();
+			return false;
+		}
 		if ($("#latitude").val() == "") {
-			alert(JS_MESSAGE["project.latitude.empty"]);
+			alert(JS_MESSAGE["latitude.empty"]);
 			$("#latitude").focus();
 			return false;
 		}
 		if ($("#longitude").val() == "") {
-			alert(JS_MESSAGE["project.longitude.empty"]);
+			alert(JS_MESSAGE["longitude.empty"]);
 			$("#longitude").focus();
 			return false;
 		}
 		if ($("#height").val() == "") {
-			alert(JS_MESSAGE["project.height.empty"]);
+			alert(JS_MESSAGE["height.empty"]);
 			$("#height").focus();
 			return false;
 		}

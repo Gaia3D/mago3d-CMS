@@ -11,7 +11,7 @@
 					<i class="fas fa-cubes" title="프로젝트"></i>
 				</span>
 			</li>
-			<li class="converter-menu" style="height: 100px;">
+			<li class="converter-menu" style="height: 125px;">
 				<span style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
 					<i class="fas fa-cloud-upload-alt" title="Converter"></i>
 				</span>
@@ -73,7 +73,10 @@
 				</span>
 				<ul style="list-style: none;">
 					<li style="padding-top:0px; height: 25px; font-size: 14px;">
-						<a href="/upload-data/input-upload.do" style="text-decoration: none; color: #2c2d2d;">파일 업로딩</a>
+						<a href="/upload-data/input-upload-data.do" style="text-decoration: none; color: #2c2d2d;">파일 업로딩</a>
+					</li>
+					<li style="padding-top:0px; height: 25px; font-size: 14px;">
+						<a href="/upload-data/list-upload-data.do" style="text-decoration: none; color: #2c2d2d;">업로딩 파일 목록</a>
 					</li>
 					<li style="padding-top:0px; height: 25px; font-size: 14px;">
 						<a href="/converter/input-converter-job.do" style="text-decoration: none; color: #2c2d2d;">Converter 결과</a>
