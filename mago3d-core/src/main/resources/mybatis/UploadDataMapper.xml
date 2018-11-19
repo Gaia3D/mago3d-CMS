@@ -36,40 +36,76 @@
 	<!-- 사용자가 업로드 완료한 파일 목록 -->
 	<select id="getListUploadData" parameterType="uploadData" resultType="uploadData">
 		/* getListUploadData */
-		SELECT *
-		FROM upload_data A
-		WHERE A.user_id = #{user_id}
-			<if test="sharing_type != null and sharing_type != ''">
-			AND A.sharing_type = #{sharing_type}
-			</if>
-			<if test="data_type != null and data_type != ''">
-			AND A.data_type = #{data_type}
-			</if>
-			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
-			AND ${search_word} = #{search_value}
-			</if>
-			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
-			AND ${search_word} LIKE '%' || #{search_value} || '%'
-			</if>
-			<if test="start_date != null and start_date != ''">
-			<![CDATA[
-			AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
-			]]>
-			</if>
-			<if test="end_date != null and end_date != ''">
-			<![CDATA[
-			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
-			]]>
-			</if>
+		SELECT X.*, Y.project_name
+		FROM(	
+			SELECT *
+			FROM upload_data A
+			WHERE A.user_id = #{user_id}
+				<if test="sharing_type != null and sharing_type != ''">
+				AND A.sharing_type = #{sharing_type}
+				</if>
+				<if test="data_type != null and data_type != ''">
+				AND A.data_type = #{data_type}
+				</if>
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
+				AND ${search_word} = #{search_value}
+				</if>
+				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
+				AND ${search_word} LIKE '%' || #{search_value} || '%'
+				</if>
+				<if test="start_date != null and start_date != ''">
+				<![CDATA[
+				AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="end_date != null and end_date != ''">
+				<![CDATA[
+				AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+			<choose>
+			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
+			ORDER BY A.${order_word} ${order_value}
+			</when>
+			<otherwise>
+			ORDER BY A.insert_date DESC, A.upload_data_id DESC
+			</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) X, project Y
+		WHERE x.project_id = Y.project_id
 		<choose>
 		<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
 		ORDER BY A.${order_word} ${order_value}
 		</when>
 		<otherwise>
-		ORDER BY A.insert_date DESC, A.upload_data_id DESC
+		ORDER BY X.insert_date DESC, X.upload_data_id DESC
 		</otherwise>
 		</choose>
-		OFFSET #{offset} LIMIT #{limit}
+	</select>
+	
+	<!-- 업로딩 정보 -->
+	<select id="getUploadData" parameterType="uploadData" resultType="uploadData">
+	/* getUploadData */
+		SELECT *
+		FROM upload_data
+		WHERE user_id =#{user_id} AND upload_data_id = #{upload_data_id}
+	</select>
+	
+	<!-- 업로딩한 파일 목록 -->
+	<select id="getListUploadDataFile" parameterType="uploadData" resultType="uploadDataFile">
+	/* getListUploadDataFile */
+		SELECT *
+		FROM upload_data_file
+		WHERE user_id =#{user_id} AND upload_data_id = #{upload_data_id}
+		<choose>
+		<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
+		ORDER BY ${order_word} ${order_value}
+		</when>
+		<otherwise>
+		ORDER BY depth, insert_date
+		</otherwise>
+		</choose>
 	</select>
 
 	<!-- 사용자 3차원 파일 정보 업로딩 -->
@@ -95,11 +131,23 @@
   		</selectKey>
 		INSERT INTO upload_data_file(
 			upload_data_file_id, upload_data_id, project_id, sharing_type, data_type, user_id, file_type,
-			file_name, file_real_name, file_path, file_size, file_ext, depth
+			file_name, file_real_name, file_path, file_sub_path, file_size, file_ext, depth
 		) VALUES (
 			#{upload_data_file_id}, #{upload_data_id}, #{project_id}, #{sharing_type}, #{data_type}, #{user_id}, #{file_type},
-			#{file_name}, #{file_real_name}, #{file_path}, #{file_size}, #{file_ext}, #{depth}
+			#{file_name}, #{file_real_name}, #{file_path}, #{file_sub_path}, #{file_size}, #{file_ext}, #{depth}
 		)
 	</insert>
+	
+	<!-- 업로딩 데이터 정보 삭제 -->
+	<delete id="deleteUploadData" parameterType="uploadData">
+		/* deleteUploadData */
+		DELETE from upload_data WHERE user_id = #{user_id} AND upload_data_id = #{upload_data_id}
+	</delete>
+	
+	<!-- 업로딩 데이터 파일 삭제 -->
+	<delete id="deleteUploadDataFile" parameterType="uploadData">
+		/* deleteUploadDataFile */
+		DELETE from upload_data_file WHERE user_id = #{user_id} AND upload_data_id = #{upload_data_id}
+	</delete>
 	
 </mapper>

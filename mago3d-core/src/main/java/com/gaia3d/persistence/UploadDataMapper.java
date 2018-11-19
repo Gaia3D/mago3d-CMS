@@ -25,6 +25,20 @@ public interface UploadDataMapper {
 	List<UploadData> getListUploadData(UploadData uploadData);
 	
 	/**
+	 * 업로딩 정보
+	 * @param uploadData
+	 * @return
+	 */
+	UploadData getUploadData(UploadData uploadData);
+	
+	/**
+	 * 업로딩한 파일 목록
+	 * @param uploadData
+	 * @return
+	 */
+	List<UploadDataFile> getListUploadDataFile(UploadData uploadData);
+	
+	/**
 	 * 사용자 3차원 파일 정보 업로딩
 	 * @param uploadData
 	 * @return
@@ -37,4 +51,18 @@ public interface UploadDataMapper {
 	 * @return
 	 */
 	int insertUploadDataFile(UploadDataFile uploadDataFile);
+
+	/**
+	 * 업로딩 데이터 정보 삭제
+	 * @param uploadData
+	 * @return
+	 */
+	int deleteUploadData(UploadData uploadData);
+	
+	/**
+	 * 업로딩 데이터 파일 삭제
+	 * @param uploadData
+	 * @return
+	 */
+	int deleteUploadDataFile(UploadData uploadData);
 }

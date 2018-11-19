@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.gaia3d.domain.ConverterJob;
 import com.gaia3d.domain.ConverterLog;
-import com.gaia3d.domain.ConverterUploadLog;
 
 /**
  * f4d converting manager

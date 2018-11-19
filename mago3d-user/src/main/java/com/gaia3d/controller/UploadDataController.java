@@ -36,7 +36,6 @@ import com.gaia3d.domain.FileType;
 import com.gaia3d.domain.PageType;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Policy;
-import com.gaia3d.domain.SearchFilter;
 import com.gaia3d.domain.UploadData;
 import com.gaia3d.domain.UploadDataFile;
 import com.gaia3d.domain.UploadDirectoryType;
@@ -149,6 +148,7 @@ public class UploadDataController {
 						
 						String[] divideFileName = multipartFile.getOriginalFilename().split("\\.");
 	        			String saveFileName = userId + "_" + today + "_" + System.nanoTime();
+	        			String tempDirectory = saveFileName;
 	        			String extension = null;
 	        			if(divideFileName != null && divideFileName.length != 0) {
 	        				extension = divideFileName[divideFileName.length - 1];
@@ -157,13 +157,14 @@ public class UploadDataController {
 	    						map.put("result", "upload.file.type.invalid");
 	    						return map;
 	        				}
-	        				saveFileName += extension;
+	        				saveFileName = saveFileName + "." + extension;
 	        			}
 	        			
 						// 파일을 upload 디렉토리로 복사
-						long size = 0L;
+						FileUtil.makeDirectory(makedDirectory + tempDirectory);
+	        			long size = 0L;
 						try (	InputStream inputStream = multipartFile.getInputStream();
-								OutputStream outputStream = new FileOutputStream(makedDirectory + saveFileName)) {
+								OutputStream outputStream = new FileOutputStream(makedDirectory + tempDirectory + File.separator + saveFileName)) {
 						
 							int bytesRead = 0;
 							byte[] buffer = new byte[BUFFER_SIZE];
@@ -176,7 +177,8 @@ public class UploadDataController {
 							uploadDataFile.setFile_ext(extension);
 	            			uploadDataFile.setFile_name(multipartFile.getOriginalFilename());
 	            			uploadDataFile.setFile_real_name(saveFileName);
-	            			uploadDataFile.setFile_path(makedDirectory);
+	            			uploadDataFile.setFile_path(makedDirectory + tempDirectory + File.separator);
+	            			uploadDataFile.setFile_sub_path(tempDirectory);
 	            			uploadDataFile.setFile_size(String.valueOf(size));
 	            			uploadDataFile.setDepth(1);
 						} catch(Exception e) {
@@ -330,6 +332,7 @@ public class UploadDataController {
 //			fileInfo.setFile_path(sourceDirectory);
 			
 			String directoryPath = targetDirectory;
+			String subDirectoryPath = "";
 			String directoryName = null;
 			int depth = 1;
 			Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -345,17 +348,20 @@ public class UploadDataController {
             			uploadDataFile.setFile_real_name(entry.getName());
             			directoryName = entry.getName();
             			directoryPath = directoryPath + directoryName;
+            			subDirectoryPath = directoryName;
             		} else {
             			String fileName = entry.getName().substring(entry.getName().indexOf(directoryName) + directoryName.length());  
             			uploadDataFile.setFile_name(fileName);
             			uploadDataFile.setFile_real_name(fileName);
             			directoryName = fileName;
             			directoryPath = directoryPath + fileName;
+            			subDirectoryPath = subDirectoryPath + fileName;
             		}
             		
                 	File file = new File(unzipfileName);
                     file.mkdirs();
                     uploadDataFile.setFile_path(directoryPath);
+                    uploadDataFile.setFile_sub_path(subDirectoryPath);
                     uploadDataFile.setDepth(depth);
                     depth++;
             	} else {
@@ -394,6 +400,7 @@ public class UploadDataController {
                 		uploadDataFile.setFile_name(fileName);
                 		uploadDataFile.setFile_real_name(saveFileName);
                 		uploadDataFile.setFile_path(directoryPath);
+                		uploadDataFile.setFile_sub_path(subDirectoryPath);
                 		uploadDataFile.setDepth(depth);
                     } catch(Exception e) {
                     	e.printStackTrace();
@@ -466,6 +473,57 @@ public class UploadDataController {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * data upload 수정
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "modify-upload-data.do")
+	public String modifyUploadData(HttpServletRequest request, UploadData uploadData, Model model) {
+		
+		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+		uploadData.setUser_id(userSession.getUser_id());
+		
+		uploadData = uploadDataService.getUploadData(uploadData);
+		List<UploadDataFile> uploadDataFileList = uploadDataService.getListUploadDataFile(uploadData);
+		
+		model.addAttribute("uploadData", uploadData);
+		model.addAttribute("uploadDataFileList", uploadDataFileList);
+		return "/upload-data/modify-upload-data";
+	}
+	
+	/**
+	 * 선택 upload-data 삭제
+	 * @param request
+	 * @param check_ids
+	 * @param model
+	 * @return
+	 */
+	@PostMapping(value = "ajax-delete-upload-data.do")
+	@ResponseBody
+	public Map<String, Object> ajaxDeleteDatas(HttpServletRequest request, @RequestParam("check_ids") String check_ids) {
+		
+		log.info("@@@@@@@ check_ids = {}", check_ids);
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			if(check_ids.length() <= 0) {
+				map.put("result", "check.value.required");
+				return map;
+			}
+			
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			
+			uploadDataService.deleteUploadDatas(userSession.getUser_id(), check_ids);
+		} catch(Exception e) {
+			e.printStackTrace();
+			map.put("result", "db.exception");
+		}
+		
+		map.put("result", result	);
+		return map;
 	}
 	
 	/**

@@ -15,7 +15,6 @@
 		<typeAlias type="com.gaia3d.domain.BoardComment" alias="boardComment"/>
 		<typeAlias type="com.gaia3d.domain.ConverterJob" alias="converterJob"/>
 		<typeAlias type="com.gaia3d.domain.ConverterLog" alias="converterLog"/>
-		<typeAlias type="com.gaia3d.domain.ConverterUploadLog" alias="converterUploadLog"/>
 		<typeAlias type="com.gaia3d.domain.CommonCode" alias="commonCode"/>
 		<typeAlias type="com.gaia3d.domain.Project" alias="project"/>
 		<typeAlias type="com.gaia3d.domain.DataInfo" alias="dataInfo"/>

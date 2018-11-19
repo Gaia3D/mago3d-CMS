@@ -61,8 +61,7 @@ public class ConverterController {
 				map.put("result", "check.value.required");
 				return map;
 			}
-			if(/*converterJob.getProject_id() == null || converterJob.getProject_id().longValue() == 0l ||*/ 
-					converterJob.getTitle() == null || converterJob.getTitle().isEmpty()) {
+			if(converterJob.getTitle() == null || converterJob.getTitle().isEmpty()) {
 				map.put("result", "input.invalid");
 				return map;
 			}

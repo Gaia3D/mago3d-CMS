@@ -56,6 +56,8 @@ public class UploadDataFile {
 	private String file_real_name;
 	// 파일 경로
 	private String file_path;
+	// 공통 디렉토리 이하 부터의 파일 경로
+	private String file_sub_path;
 	// 계층구조 깊이. 1부터 시작
 	private Integer depth;
 	// 파일 사이즈

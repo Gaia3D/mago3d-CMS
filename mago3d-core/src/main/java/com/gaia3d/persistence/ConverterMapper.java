@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.gaia3d.domain.ConverterJob;
 import com.gaia3d.domain.ConverterLog;
-import com.gaia3d.domain.ConverterUploadLog;
 
 /**
  * f4d converter manager

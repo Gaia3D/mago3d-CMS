@@ -1,9 +1,7 @@
 package com.gaia3d.util;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
@@ -11,13 +9,10 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.gaia3d.domain.ConverterUploadLog;
 import com.gaia3d.domain.FileInfo;
-import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.UploadDirectoryType;
 
 import lombok.extern.slf4j.Slf4j;
-import net.lingala.zip4j.core.ZipFile;
 
 /**
  * TODO N중화 처리를 위해 FTP 로 다른 PM 으로 전송해 줘야 하는데....
@@ -95,28 +90,6 @@ public class FileUtil {
 		
 		// 파일을 upload 디렉토리로 복사
 		fileInfo = fileCopy(multipartFile, fileInfo, directory);
-		
-		return fileInfo;
-	}
-	
-	/**
-	 * 사용자 파일 등록
-	 * @param userId
-	 * @param subDirectoryType
-	 * @param multipartFile
-	 * @param policy
-	 * @param directory
-	 * @return
-	 */
-	public static FileInfo userUpload(String userId, int subDirectoryType, MultipartFile multipartFile, Policy policy, String directory) {
-		// 파일 기본 validation 체크
-		FileInfo fileInfo = userFileValidation(multipartFile, policy);
-		if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
-			return fileInfo;
-		}
-		
-		// 파일을 upload 디렉토리로 복사
-		fileInfo = fileCopy(userId, subDirectoryType, multipartFile, fileInfo, directory);
 		
 		return fileInfo;
 	}
@@ -208,76 +181,6 @@ public class FileUtil {
 		return fileInfo;
 	}
 	
-	/**
-	 * 사용자 업로딩 파일에 대한 기본적인 validation 체크. 이름, 확장자, 사이즈
-	 * @param multipartFile
-	 * @param fileInfo
-	 * @return
-	 */
-	private static ConverterUploadLog userFileValidation(MultipartFile multipartFile, Policy policy) {
-		
-		ConverterUploadLog uploadLog = new ConverterUploadLog();
-		// 1 파일 공백 체크
-		if(multipartFile == null || multipartFile.getSize() == 0l) {
-			log.info("@@ multipartFile is null");
-			uploadLog.setError_code("fileinfo.invalid");
-			return uploadLog;
-		}
-		
-		// 2 파일 이름
-		String fileName = multipartFile.getOriginalFilename();
-//		if(fileName == null) {
-//			log.info("@@ fileName is null");
-//			uploadLog.setError_code("fileinfo.name.invalid");
-//			return uploadLog;
-//		} else if(fileName.indexOf("..") >= 0 || fileName.indexOf("/") >= 0) {
-//			// TODO File.seperator 정규 표현식이 안 먹혀서 이렇게 처리함
-//			log.info("@@ fileName = {}", fileName);
-//			uploadLog.setError_code("fileinfo.name.invalid");
-//			return uploadLog;
-//		}
-		
-		// 3 파일 확장자
-		String[] fileNameValues = fileName.split("\\.");
-//		if(fileNameValues.length != 2) {
-//			log.info("@@ fileNameValues.length = {}, fileName = {}", fileNameValues.length, fileName);
-//			uploadLog.setError_code("fileinfo.name.invalid");
-//			return uploadLog;
-//		}
-//		if(fileNameValues[0].indexOf(".") >= 0 || fileNameValues[0].indexOf("..") >= 0) {
-//			log.info("@@ fileNameValues[0] = {}", fileNameValues[0]);
-//			uploadLog.setError_code("fileinfo.name.invalid");
-//			return uploadLog;
-//		}
-		// LowerCase로 비교
-		String extension = fileNameValues[1];
-//		List<String> extList = new ArrayList<String>();
-//		if(policy.getUser_upload_type() != null && !"".equals(policy.getUser_upload_type())) {
-//			String[] uploadTypes = policy.getUser_upload_type().toLowerCase().split(",");
-//			extList = Arrays.asList(uploadTypes);
-//		}
-//		if(!extList.contains(extension.toLowerCase())) {
-//			log.info("@@ extList = {}, extension = {}", extList, extension);
-//			uploadLog.setError_code("fileinfo.ext.invalid");
-//			return uploadLog;
-//		}
-		
-		// 4 파일 사이즈
-		// TODO data object attribute 파일은 사이즈가 커서 제한을 하지 않음
-		long fileSize = multipartFile.getSize();
-		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@ user upload file size = {} KB", (fileSize / 1000));
-		if( fileSize > (policy.getUser_upload_max_filesize() * 1000000l)) {
-			log.info("@@ fileSize = {}, user upload max filesize = {} M", (fileSize / 1000), policy.getUser_upload_max_filesize());
-			uploadLog.setError_code("fileinfo.size.invalid");
-			return uploadLog;
-		}
-		
-		uploadLog.setFile_name(fileName);
-		uploadLog.setFile_ext(extension);
-		
-		return uploadLog;
-	}
-	
 	private static FileInfo fileCopy(MultipartFile multipartFile, FileInfo fileInfo, String directory) {
 		return fileCopy(null, 1, multipartFile, fileInfo, directory);
 	}
@@ -347,6 +250,15 @@ public class FileUtil {
 		}
 
 		return fileInfo;
+	}
+	
+	public static boolean makeDirectory(String targetDirectory) {
+		File directory = new File(targetDirectory);
+		if(directory.exists()) {
+			return true;
+		} else {
+			return directory.mkdir();
+		}
 	}
 	
 	public static String makeDirectory(String userId, UploadDirectoryType uploadDirectoryType, String targetDirectory) {

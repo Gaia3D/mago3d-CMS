@@ -8,11 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gaia3d.domain.ConverterJob;
 import com.gaia3d.domain.ConverterLog;
-import com.gaia3d.domain.ConverterUploadLog;
-import com.gaia3d.domain.DataInfo;
 import com.gaia3d.persistence.ConverterMapper;
 import com.gaia3d.service.ConverterService;
-import com.gaia3d.service.ConverterUploadService;
 import com.gaia3d.service.DataService;
 
 /**
@@ -23,8 +20,6 @@ import com.gaia3d.service.DataService;
 @Service
 public class ConverterServiceImpl implements ConverterService {
 
-	@Autowired
-	private ConverterUploadService converterUploadService;
 	@Autowired
 	private DataService dataService;
 	
@@ -104,20 +99,19 @@ public class ConverterServiceImpl implements ConverterService {
 		String userId = converterJob.getUser_id();
 		Long converterJobId = converterJob.getConverter_job_id();
 		
-		for(String converter_upload_log_id : converterUploadLogIds) {
-			ConverterUploadLog converterUploadLog = converterUploadService.getConverterUploadLog(Long.valueOf(converter_upload_log_id));
-			
-			ConverterLog converterLog = new ConverterLog();
-			converterLog.setUser_id(userId);
-			converterLog.setConverter_job_id(converterJobId);
-			converterLog.setConverter_upload_log_id(new Long(converter_upload_log_id));
-			converterLog.setData_key(converterUploadLog.getFile_real_name().substring(0, converterUploadLog.getFile_real_name().lastIndexOf(".")));
-			converterLog.setData_name(converterUploadLog.getFile_name().substring(0, converterUploadLog.getFile_name().lastIndexOf(".")));
-			converterMapper.insertConverterLog(converterLog);
-			
-			// TODO 이건 굳이 안해도 될거 같음
-			converterUploadService.updateConverterCount(converterLog);
-		}
+//		for(String converter_upload_log_id : converterUploadLogIds) {
+//			
+//			ConverterLog converterLog = new ConverterLog();
+//			converterLog.setUser_id(userId);
+//			converterLog.setConverter_job_id(converterJobId);
+//			converterLog.setConverter_upload_log_id(new Long(converter_upload_log_id));
+//			converterLog.setData_key(converterUploadLog.getFile_real_name().substring(0, converterUploadLog.getFile_real_name().lastIndexOf(".")));
+//			converterLog.setData_name(converterUploadLog.getFile_name().substring(0, converterUploadLog.getFile_name().lastIndexOf(".")));
+//			converterMapper.insertConverterLog(converterLog);
+//			
+//			// TODO 이건 굳이 안해도 될거 같음
+//			converterUploadService.updateConverterCount(converterLog);
+//		}
 
 		return converterJobId;
 	}
