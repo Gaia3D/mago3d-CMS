@@ -82,7 +82,7 @@ public class CacheController {
 				} else if(values[0].equals("cache_name")) {
 					cacheParams.setCacheName(CacheName.valueOf(values[1]));
 				} else if(values[0].equals("project_id")) {
-					if(values[1] != null && !"".equals(values[1])) cacheParams.setProject_id(Long.valueOf(values[1]));
+					if(values[1] != null && !"".equals(values[1])) cacheParams.setProject_id(Integer.valueOf(values[1]));
 				}
 			}
 			

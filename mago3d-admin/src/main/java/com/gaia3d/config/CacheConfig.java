@@ -181,7 +181,7 @@ public class CacheConfig {
 	 */
 	private void project(CacheParams cacheParams) {
 		List<Project> projectList = projectService.getListProject(new Project());
-		Map<Long, Project> projectMap = new HashMap<>();
+		Map<Integer, Project> projectMap = new HashMap<>();
 		for(Project project : projectList) {
 			projectMap.put(project.getProject_id(), project);
 		}

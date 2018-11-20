@@ -31,7 +31,7 @@ public class DataInfoAttribute extends SearchFilter {
 	// Data 고유번호
 	private Long data_id;
 	// Data Group 고유번호
-	private Long project_id;
+	private Integer project_id;
 	// Data Group 이름
 	private String project_name;
 	// data 고유 식별번호

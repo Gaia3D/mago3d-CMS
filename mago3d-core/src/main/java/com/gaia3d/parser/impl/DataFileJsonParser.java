@@ -18,7 +18,7 @@ import com.gaia3d.parser.DataFileParser;
 public class DataFileJsonParser implements DataFileParser {
 
 	@Override
-	public Map<String, Object> parse(Long projectId, FileInfo fileInfo) {
+	public Map<String, Object> parse(Integer projectId, FileInfo fileInfo) {
 		
 		int totalCount = 0;
 		int parseSuccessCount = 0;
@@ -93,7 +93,7 @@ public class DataFileJsonParser implements DataFileParser {
 	 * @param childrenNode
 	 * @return
 	 */
-	private List<DataInfo> parseChildren(Long projectId, String parentDataKey, List<DataInfo> dataInfoList, int depth, JsonNode childrenNode) {
+	private List<DataInfo> parseChildren(Integer projectId, String parentDataKey, List<DataInfo> dataInfoList, int depth, JsonNode childrenNode) {
 		if(dataInfoList == null) dataInfoList = new ArrayList<>();
 		
 		depth++;

@@ -14,6 +14,7 @@ create table upload_data(
 	longitude						numeric(13,10),
 	height							numeric(7,3),
 	description						varchar(256),
+	compress_yn						char(1)								default 'N',
 	file_count						int									default 0,
 	converter_count					int 								default 0,
 	status							char(1)								default '0',
@@ -33,6 +34,7 @@ comment on column upload_data.latitude is 'À§µµ';
 comment on column upload_data.longitude is '°æµµ';
 comment on column upload_data.height is '³ôÀÌ';
 comment on column upload_data.description is '¼³¸í';
+comment on column upload_data.compress_yn is '¾ĞÃàÀ¯¹«. N : ¾ĞÃà¾ÈÇÔ(±âº»°ª). Y : ¾ĞÃà';
 comment on column upload_data.file_count is 'ÆÄÀÏ °³¼ö';
 comment on column upload_data.converter_count is 'converter È½¼ö';
 comment on column upload_data.status is '»óÅÂ. 0 : ¾÷·Îµù ¿Ï·á, 1 : º¯È¯';
@@ -47,6 +49,7 @@ create table upload_data_file(
 	project_id						int,
 	sharing_type					char(1)								default '1',
 	data_type						varchar(30),
+	converter_target_yn				char(1)								default 'N',		
 	user_id							varchar(32),
 	file_type						char(1)								default 'F',
 	file_name						varchar(100)						not null,
@@ -68,12 +71,13 @@ comment on column upload_data_file.upload_data_id is '»ç¿ëÀÚ ¾÷·Îµå Á¤º¸ °íÀ¯¹øÈ
 comment on column upload_data_file.project_id is 'ÇÁ·ÎÁ§Æ® ¾ÆÀÌµğ(Áßº¹)';
 comment on column upload_data_file.sharing_type is '°øÀ¯ Å¸ÀÔ(Áßº¹). 0 : common, 1: public, 2 : private, 3 : sharing';
 comment on column upload_data_file.data_type is 'µ¥ÀÌÅÍ Å¸ÀÔ(Áßº¹)';
+comment on column upload_data_file.converter_target_yn is 'converter ´ë»ó ÆÄÀÏ À¯¹«. Y : ´ë»ó, N : ´ë»ó¾Æ´Ô(±âº»°ª)';
 comment on column upload_data_file.user_id is '»ç¿ëÀÚ ¾ÆÀÌµğ';
 comment on column upload_data_file.file_type is 'µğ·ºÅä¸®/ÆÄÀÏ ±¸ºĞ. D : µğ·ºÅä¸®, F : ÆÄÀÏ';
 comment on column upload_data_file.file_name is 'ÆÄÀÏ ÀÌ¸§';
 comment on column upload_data_file.file_real_name is 'ÆÄÀÏ ½ÇÁ¦ ÀÌ¸§';
 comment on column upload_data_file.file_path is 'ÆÄÀÏ °æ·Î';
-comment on column upload_data_file.file_sub_path is '°øÅë µğ·ºÅä¸® ÀÌÇÏ ºÎÅÍÀÇ ÆÄÀÏ °æ·Î';
+comment on column upload_data_file.file_sub_path is 'ÇÁ·ÎÁ§Æ® °æ·Î ¶Ç´Â °øÅë µğ·ºÅä¸® ÀÌÇÏ ºÎÅÍÀÇ ÆÄÀÏ °æ·Î';
 comment on column upload_data_file.depth is '°èÃş±¸Á¶ ±íÀÌ. 1ºÎÅÍ ½ÃÀÛ';
 comment on column upload_data_file.file_size is 'ÆÄÀÏ »çÀÌÁî';
 comment on column upload_data_file.file_ext is 'ÆÄÀÏ È®ÀåÀÚ';

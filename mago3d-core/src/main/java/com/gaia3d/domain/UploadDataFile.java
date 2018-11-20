@@ -1,5 +1,7 @@
 package com.gaia3d.domain;
 
+import java.math.BigDecimal;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -33,6 +35,16 @@ public class UploadDataFile {
 	/****** validator ********/
 	private String method_mode;
 	
+	/****** upload_data join ********/
+	// 데이터명
+	private String data_name;
+	// 위도
+	private BigDecimal latitude;
+	// 경도
+	private BigDecimal longitude;
+	// 높이
+	private BigDecimal height;
+		
 	// 고유번호
 	private Long upload_data_file_id;
 	// 사용자 업로드 정보 고유번호
@@ -43,6 +55,8 @@ public class UploadDataFile {
 	private String sharing_type;
 	// 데이터 타입. 3ds, .obj, .dae, .ifc, citygml, indoorgml
 	private String data_type;
+	// converter 대상 파일 유무. Y : 대상, N : 대상아님(기본값)
+	private String converter_target_yn;
 	// 사용자 아이디
 	private String user_id;
 	// 사용자명
@@ -75,6 +89,15 @@ public class UploadDataFile {
 	public String validate() {
 		// TODO 구현해야 한다.
 		return null;
+	}
+	
+	public Long getViewFileSizeUnitKB() {
+		if(this.file_size == null || "".equals(this.file_size)) {
+			return 0l;
+		} else {
+			Long size = new Long(this.file_size);
+			return size / 1000l;
+		}
 	}
 	
 	public String getViewInsertDate() {

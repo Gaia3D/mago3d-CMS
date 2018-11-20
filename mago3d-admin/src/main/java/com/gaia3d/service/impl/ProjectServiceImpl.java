@@ -116,7 +116,7 @@ public class ProjectServiceImpl implements ProjectService {
 	 */
 	@Transactional
 	public int deleteProject(Project project) {
-		Long project_id = project.getProject_id();
+		Integer project_id = project.getProject_id();
 		
 		// 환경 설정에서 init project 에도 삭제해 줘야 함
 		Policy policy = CacheManager.getPolicy();

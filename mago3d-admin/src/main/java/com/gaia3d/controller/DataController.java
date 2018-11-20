@@ -97,7 +97,7 @@ public class DataController {
 		project.setUse_yn(Project.IN_USE);
 		List<Project> projectList = projectService.getListProject(project);
 		if(dataInfo.getProject_id() == null) {
-			dataInfo.setProject_id(Long.valueOf(0l));
+			dataInfo.setProject_id(Integer.valueOf(0));
 		}
 		if(StringUtil.isNotEmpty(dataInfo.getStart_date())) {
 			dataInfo.setStart_date(dataInfo.getStart_date().substring(0, 8) + DateUtil.START_TIME);
@@ -167,7 +167,7 @@ public class DataController {
 	 */
 	@RequestMapping(value = "ajax-list-data-by-project-id.do")
 	@ResponseBody
-	public Map<String, Object> ajaxListDataByProjectId(HttpServletRequest request, @RequestParam("project_id") Long project_id) {
+	public Map<String, Object> ajaxListDataByProjectId(HttpServletRequest request, @RequestParam("project_id") Integer project_id) {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		List<DataInfo> dataList = new ArrayList<>();
@@ -453,7 +453,11 @@ public class DataController {
 	public String deleteData(@RequestParam("data_id") String data_id, Model model) {
 		
 		// validation 체크 해야 함
-		dataService.deleteData(Long.valueOf(data_id));
+		
+		DataInfo dataInfo = new DataInfo();
+		dataInfo.setData_id(Long.valueOf(data_id));
+		
+		dataService.deleteData(dataInfo);
 		CacheParams cacheParams = new CacheParams();
 		cacheParams.setCacheName(CacheName.DATA_INFO);
 		cacheParams.setCacheType(CacheType.BROADCAST);
@@ -508,7 +512,7 @@ public class DataController {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
-			Long project_id = Long.valueOf(request.getParameter("project_id"));
+			Integer project_id = Integer.valueOf(request.getParameter("project_id"));
 			MultipartFile multipartFile = request.getFile("data_file_name");
 			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.DATA_FILE_UPLOAD, propertiesConfig.getDataUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {

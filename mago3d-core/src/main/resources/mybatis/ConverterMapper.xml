@@ -34,7 +34,7 @@
 	<select id="getListConverterJob" parameterType="converterJob" resultType="converterJob">
 		/* getListConverterJob */
 		SELECT X.*, 
-			(SELECT COUNT(converter_log_id) FROM converter_log WHERE converter_job_id = X.converter_job_id) AS converter_file_count
+			(SELECT COUNT(converter_job_file_id) FROM converter_job_file WHERE converter_job_id = X.converter_job_id) AS converter_file_count
 		FROM (
 			SELECT A.*
 			FROM converter_job A
@@ -70,82 +70,10 @@
 		) X
 	</select>
 	
-	<!-- converter log 총 건수 -->
-	<select id="getListConverterLogTotalCount" parameterType="converterLog" resultType="long">
-		/* getListConverterLogTotalCount */
-		SELECT COUNT(converter_log_id) 
-		FROM converter_log
-		WHERE user_id = #{user_id}
-			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
-			AND ${search_word} = #{search_value}
-			</if>
-			<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
-			AND ${search_word} LIKE '%' || #{search_value} || '%'
-			</if>
-			<if test="status != null and status != ''">
-			AND status = #{status}
-			</if>
-			<if test="start_date != null and start_date != ''">
-			<![CDATA[
-			AND insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
-			]]>
-			</if>
-			<if test="end_date != null and end_date != ''">
-			<![CDATA[
-			AND insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
-			]]>
-			</if>
-	</select>
-	
-	<!-- converter log 목록 -->
-	<select id="getListConverterLog" parameterType="converterLog" resultType="converterLog">
-		/* getListConverterLog */
-		SELECT X.*, Y.project_name
-		FROM (
-			SELECT A.*
-			FROM converter_log A
-			WHERE A.user_id = #{user_id}
-				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
-				AND A.${search_word} = #{search_value}
-				</if>
-				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '1'.toString()">
-				AND A.${search_word} LIKE '%' || #{search_value} || '%'
-				</if>
-				<if test="status != null and status != ''">
-				AND A.status = #{status}
-				</if>
-				<if test="start_date != null and start_date != ''">
-				<![CDATA[
-				AND A.insert_date >= TO_TIMESTAMP(#{start_date}, 'YYYYMMDDHH24MISSUS')
-				]]>
-				</if>
-				<if test="end_date != null and end_date != ''">
-				<![CDATA[
-				AND A.insert_date <= TO_TIMESTAMP(#{end_date}, 'YYYYMMDDHH24MISSUS')
-				]]>
-				</if>
-			<choose>
-			<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
-			ORDER BY A.${order_word} ${order_value}
-			</when>
-			<otherwise>
-			ORDER BY A.insert_date DESC, A.converter_log_id DESC
-			</otherwise>
-			</choose>
-			OFFSET #{offset} LIMIT #{limit}
-		) X RIGHT OUTER JOIN project Y
-		ON X.project_id = Y.project_id
-	</select>
-	
 	<!-- converter job 정보 -->
 	<select id="getConverterJobByJobId" parameterType="long" resultType="converterJob">
 		/* getConverterJobByJobId */
 		SELECT * FROM converter_job WHERE converter_job_id = #{converter_job_id}
-	</select>
-	
-	<select id="getAllListConverterLog" parameterType="long" resultType="converterLog">
-		/* getAllListConverterLog */
-		SELECT * FROM converter_log WHERE converter_job_id = #{converter_job_id}
 	</select>
 	
 	<!-- converter job 등록 -->
@@ -155,13 +83,13 @@
     		SELECT NEXTVAL('converter_job_seq')
   		</selectKey>
 		INSERT INTO converter_job(
-			converter_job_id, user_id, title, converter_type, 
+			converter_job_id, upload_data_id, user_id, title, converter_type, file_count
 			<if test="status != null and status != ''">
 			status, 
 			</if>
 			error_code
 		) VALUES (
-			#{converter_job_id}, #{user_id}, #{title}, #{converter_type}, 
+			#{converter_job_id}, #{upload_data_id}, #{user_id}, #{title}, #{converter_type}, #{file_count},
 			<if test="status != null and status != ''">
 			#{status}, 
 			</if>
@@ -169,16 +97,24 @@
 		)
 	</insert>
 	
-	<!-- converter log 등록 -->
-	<insert id="insertConverterLog" parameterType="converterLog">
-		/* insertConverterLog */
-		<selectKey keyProperty="converter_log_id" resultType="long" order="BEFORE">
-    		SELECT NEXTVAL('converter_log_seq')
+	<!-- converter job file 등록 -->
+	<insert id="insertConverterJobFile" parameterType="converterJobFile">
+		/* insertConverterJobFile */
+		<selectKey keyProperty="converter_job_file_id" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('converter_job_file_seq')
   		</selectKey>
-		INSERT INTO converter_log(
-			converter_log_id, converter_job_id, converter_upload_log_id, user_id, data_key, data_name
+		INSERT INTO converter_job(
+			converter_job_file_id, converter_job_id, upload_data_id, user_id,
+			<if test="status != null and status != ''">
+			status, 
+			</if>
+			error_code
 		) VALUES (
-			#{converter_log_id}, #{converter_job_id}, #{converter_upload_log_id}, #{user_id}, #{data_key}, #{data_name}
+			#{converter_job_file_id}, #{converter_job_id}, #{upload_data_id}, #{user_id},
+			<if test="status != null and status != ''">
+			#{status}, 
+			</if>
+			#{error_code}
 		)
 	</insert>
 	

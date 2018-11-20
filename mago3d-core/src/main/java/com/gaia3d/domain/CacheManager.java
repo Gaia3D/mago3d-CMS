@@ -49,11 +49,11 @@ public class CacheManager {
 	
 	// project list
 	private List<Project> projectList = null;
-	private Map<Long, Project> projectMap = null;
+	private Map<Integer, Project> projectMap = null;
 	// 프로젝트별 데이터 목록
-	private Map<Long, List<DataInfo>> projectDataMap = null;
+	private Map<Integer, List<DataInfo>> projectDataMap = null;
 	// 프로젝트별 데이터 목록, json 변환 속도를 줄이기 위해 중복 보관
-	private Map<Long, String> projectDataJsonMap = null;
+	private Map<Integer, String> projectDataJsonMap = null;
 		
 	// 원격 캐시 목록
 	private List<ExternalService> remoteCacheServiceList = null;
@@ -180,10 +180,10 @@ public class CacheManager {
 		cacheManager.projectList = projectList;
 	}
 	
-	public static Map<Long, Project> getProjectMap() {
+	public static Map<Integer, Project> getProjectMap() {
 		return cacheManager.projectMap;
 	}
-	public static void setProjectMap(Map<Long, Project> projectMap) {
+	public static void setProjectMap(Map<Integer, Project> projectMap) {
 		cacheManager.projectMap = projectMap;
 	}
 
@@ -269,22 +269,22 @@ public class CacheManager {
 	 * 프로젝트별 데이터 목록
 	 * @return
 	 */
-	public static Map<Long, List<DataInfo>> getProjectDataMap() {
+	public static Map<Integer, List<DataInfo>> getProjectDataMap() {
 		return cacheManager.projectDataMap;
 	}
-	public static void setProjectDataMap(Map<Long, List<DataInfo>> projectDataMap) {
+	public static void setProjectDataMap(Map<Integer, List<DataInfo>> projectDataMap) {
 		cacheManager.projectDataMap = projectDataMap;
 	}
-	public static List<DataInfo> getProjectDataList(Long projectId) {
+	public static List<DataInfo> getProjectDataList(Integer projectId) {
 		return cacheManager.projectDataMap.get(projectId);
 	}
-	public static Map<Long, String> getProjectDataJsonMap() {
+	public static Map<Integer, String> getProjectDataJsonMap() {
 		return cacheManager.projectDataJsonMap;
 	}
-	public static void setProjectDataJsonMap(Map<Long, String> projectDataJsonMap) {
+	public static void setProjectDataJsonMap(Map<Integer, String> projectDataJsonMap) {
 		cacheManager.projectDataJsonMap = projectDataJsonMap;
 	}
-	public static String getProjectDataJson(Long projectId) {
+	public static String getProjectDataJson(Integer projectId) {
 		return cacheManager.projectDataJsonMap.get(projectId);
 	}
 }

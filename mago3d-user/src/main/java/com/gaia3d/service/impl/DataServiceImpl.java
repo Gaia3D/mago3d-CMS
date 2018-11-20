@@ -106,7 +106,7 @@ public class DataServiceImpl implements DataService {
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public DataInfo getRootDataByProjectId(Long projectId) {
+	public DataInfo getRootDataByProjectId(Integer projectId) {
 		return dataMapper.getRootDataByProjectId(projectId);
 	}
 	
@@ -263,11 +263,10 @@ public class DataServiceImpl implements DataService {
 	 * @return
 	 */
 	@Transactional
-	public int deleteData(Long data_id) {
+	public int deleteData(DataInfo dataInfo) {
 //		Policy policy = CacheManager.getPolicy();
 //		String dataDeleteType = policy.getData_delete_type();
-		
-		return dataMapper.deleteData(data_id);
+		return dataMapper.deleteData(dataInfo);
 	}
 	
 	/**
@@ -276,10 +275,15 @@ public class DataServiceImpl implements DataService {
 	 * @return
 	 */
 	@Transactional
-	public int deleteDataList(String check_ids) {
+	public int deleteDataList(String userId, String check_ids) {
+		// TODO sql in 으로 한번 query 가능 함. 수정해야 함
+		
 		String[] dataIds = check_ids.split(",");
 		for(String data_id : dataIds) {
-			dataMapper.deleteData(Long.valueOf(data_id));
+			DataInfo dataInfo = new DataInfo();
+			dataInfo.setUser_id(userId);
+			dataInfo.setData_id(Long.valueOf(data_id));
+			return dataMapper.deleteData(dataInfo);
 		}
 		
 		return check_ids.length();

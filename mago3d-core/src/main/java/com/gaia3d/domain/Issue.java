@@ -55,9 +55,9 @@ public class Issue extends SearchFilter {
     // 고유번호
 	private Long issue_id;
 	// 프로젝트 아이디
-	private Long project_id;
+	private Integer project_id;
 	// jsp 에서 project_id 충돌을 막기 위해
-	private Long issueProjectId;
+	private Integer issueProjectId;
 	// 사용자 아이디
 	private String user_id;
 	// 이슈명

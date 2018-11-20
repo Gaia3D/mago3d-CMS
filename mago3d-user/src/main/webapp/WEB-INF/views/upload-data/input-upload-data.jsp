@@ -330,6 +330,7 @@
 				if (checkData() === false) {
 					return;
 				}
+				uploadFileCount = 0;
 				e.preventDefault();
 	            e.stopPropagation();
 	            magoDropzone.processQueue(); // Tell Dropzone to process all queued files.
@@ -379,6 +380,7 @@
 			this.on("success", function(file, response) {
 				if(file !== undefined && file.name !== undefined) {
 					console.log("file name = " + file.name + ", result = " + response.result);
+					$("#fileUploadSpinner").empty();
 					fileUploadDialog.dialog( "close" );
 					if(response.result === "success") {
 						if(uploadFileCount === 0) {

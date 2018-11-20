@@ -495,7 +495,7 @@ public class FileServiceImpl implements FileService {
 	 * @return
 	 */
 	@Transactional
-	public FileInfo insertDataFile(Long projectId, FileInfo fileInfo) {
+	public FileInfo insertDataFile(Integer projectId, FileInfo fileInfo) {
 		
 		// 파일 이력을 저장
 		insertFileInfo(fileInfo);

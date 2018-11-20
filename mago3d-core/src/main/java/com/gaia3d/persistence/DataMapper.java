@@ -85,7 +85,7 @@ public interface DataMapper {
 	 * @param projectId
 	 * @return
 	 */
-	DataInfo getRootDataByProjectId(Long projectId);
+	DataInfo getRootDataByProjectId(Integer projectId);
 	
 	/**
 	 * Data Attribute 정보 취득
@@ -181,10 +181,10 @@ public interface DataMapper {
 	
 	/**
 	 * Data 삭제
-	 * @param data_id
+	 * @param dataInfo
 	 * @return
 	 */
-	int deleteData(Long data_id);
+	int deleteData(DataInfo dataInfo);
 	
 	/**
 	 * Data 에 속하는 모든 Object ID를 삭제

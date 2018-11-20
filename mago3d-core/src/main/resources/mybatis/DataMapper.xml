@@ -171,7 +171,7 @@
 	</select>
 	
 	<!-- 최상위 root dataInfo 정보 취득 -->
-	<select id="getRootDataByProjectId" parameterType="long" resultType="dataInfo">
+	<select id="getRootDataByProjectId" parameterType="int" resultType="dataInfo">
 		/* getRootDataByProjectId */
 		SELECT *
 		FROM data_info
@@ -368,7 +368,7 @@
 	</update>
 	
 	<!-- Data 삭제 -->
-	<delete id="deleteData" parameterType="long">
+	<delete id="deleteData" parameterType="dataInfo">
 		/* deleteData */
 		DELETE 
 		FROM data_info 

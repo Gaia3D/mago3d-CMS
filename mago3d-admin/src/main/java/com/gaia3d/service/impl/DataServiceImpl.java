@@ -278,10 +278,10 @@ public class DataServiceImpl implements DataService {
 	 * @return
 	 */
 	@Transactional
-	public int deleteData(Long data_id) {
+	public int deleteData(DataInfo dataInfo) {
 		
-		DataInfo dataInfo = dataMapper.getData(data_id);
-		int result = dataMapper.deleteData(data_id);
+		dataInfo = dataMapper.getData(dataInfo.getData_id());
+		int result = dataMapper.deleteData(dataInfo);
 		
 		Project project = new Project();
 		project.setProject_id(dataInfo.getProject_id());
@@ -299,7 +299,9 @@ public class DataServiceImpl implements DataService {
 	public int deleteDataList(String check_ids) {
 		String[] dataIds = check_ids.split(",");
 		for(String data_id : dataIds) {
-			deleteData(Long.valueOf(data_id));
+			DataInfo dataInfo = new DataInfo();
+			dataInfo.setData_id(Long.valueOf(data_id));
+			deleteData(dataInfo);
 		}
 		
 		return check_ids.length();

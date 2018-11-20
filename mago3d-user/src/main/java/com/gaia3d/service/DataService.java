@@ -70,7 +70,7 @@ public interface DataService {
 	 * @param projectId
 	 * @return
 	 */
-	public DataInfo getRootDataByProjectId(Long projectId);
+	public DataInfo getRootDataByProjectId(Integer projectId);
 	
 	/**
 	 * Data Attribute 정보 취득
@@ -155,17 +155,18 @@ public interface DataService {
 	
 	/**
 	 * Data 삭제
-	 * @param data_id
+	 * @param dataInfo
 	 * @return
 	 */
-	int deleteData(Long data_id);
+	int deleteData(DataInfo dataInfo);
 	
 	/**
 	 * 일괄 Data 삭제
+	 * @param userId
 	 * @param dataIds
 	 * @return
 	 */
-	int deleteDataList(String dataIds);
+	int deleteDataList(String userId, String dataIds);
 	
 	/**
 	 * Data 에 속하는 모든 Object ID를 삭제

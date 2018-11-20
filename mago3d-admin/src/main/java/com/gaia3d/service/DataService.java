@@ -157,7 +157,7 @@ public interface DataService {
 	 * @param data_id
 	 * @return
 	 */
-	int deleteData(Long data_id);
+	int deleteData(DataInfo dataInfo);
 	
 	/**
 	 * 일괄 Data 삭제

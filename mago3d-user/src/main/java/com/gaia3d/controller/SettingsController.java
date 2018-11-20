@@ -61,10 +61,10 @@ public class SettingsController {
 		String defaultProjects = userPolicy.getGeo_data_default_projects();
 		if(defaultProjects != null && !"".equals(defaultProjects)) {
 			String[] projectIds = defaultProjects.split(",");
-			Map<Long, Project> projectMap = CacheManager.getProjectMap();
+			Map<Integer, Project> projectMap = CacheManager.getProjectMap();
 			String defaultProjectsView = "";
 			for(String projectId : projectIds) {
-				Project project = projectMap.get(Long.valueOf(projectId));
+				Project project = projectMap.get(Integer.valueOf(projectId));
 				if("".equals(defaultProjectsView)) {
 					defaultProjectsView += project.getProject_name();
 				} else {

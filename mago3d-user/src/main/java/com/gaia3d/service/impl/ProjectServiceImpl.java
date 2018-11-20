@@ -106,7 +106,7 @@ public class ProjectServiceImpl implements ProjectService {
 		DataInfo dataInfo = new DataInfo();
 		dataInfo.setProject_id(project.getProject_id());
 		dataInfo.setSharing_type(project.getSharing_type());
-		dataInfo.setData_key(String.valueOf(project.getProject_id()));
+		dataInfo.setData_key(project.getProject_key());
 		dataInfo.setData_name(project.getProject_name());
 		dataInfo.setUser_id(project.getUser_id());
 		dataInfo.setParent(0l);

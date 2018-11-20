@@ -143,7 +143,7 @@ public class CacheConfig {
 		defaultProject.setUse_yn(Project.IN_USE);
 		defaultProject.setSharing_type(DataSharingType.COMMON.getValue());
 		List<Project> projectList = projectService.getListProject(defaultProject);
-		Map<Long, Project> projectMap = new HashMap<>();
+		Map<Integer, Project> projectMap = new HashMap<>();
 		for(Project project : projectList) {
 			projectMap.put(project.getProject_id(), project);
 		}
@@ -160,10 +160,10 @@ public class CacheConfig {
 	 * @param cacheType
 	 */
 	private void data(CacheParams cacheParams) {
-		Long projectId = cacheParams.getProject_id();
+		Integer projectId = cacheParams.getProject_id();
 		
-		Map<Long, List<DataInfo>> projectDataMap = null;
-		Map<Long, String> projectDataJsonMap = null;
+		Map<Integer, List<DataInfo>> projectDataMap = null;
+		Map<Integer, String> projectDataJsonMap = null;
 		if(projectId == null) {
 			// 최초 로딩시
 			projectDataMap = new HashMap<>();

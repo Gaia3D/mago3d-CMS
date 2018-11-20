@@ -90,11 +90,11 @@
 							<spring:message code='all.d'/> <em><fmt:formatNumber value="${pagination.totalCount}" type="number"/></em><spring:message code='search.what.count'/> 
 							<fmt:formatNumber value="${pagination.pageNo}" type="number"/> / <fmt:formatNumber value="${pagination.lastPage }" type="number"/> <spring:message code='search.page'/>
 						</div>
-						<!-- <div class="list-functions u-pull-right">
+						<div class="list-functions u-pull-right">
 							<div style="padding-bottom: 3px;" class="button-group">
 								<a href="#" onclick="converterFiles(); return false;" class="button">F4D 일괄 변환</a>	
 							</div>
-						</div> -->
+						</div>
 					</div>
 					<table class="list-table scope-col">
 							<col class="col-checkbox" />
@@ -103,6 +103,8 @@
 							<col class="col-name" />
 							<col class="col-name" />
 							<col class="col-name" />
+							<col class="col-number" />
+							<col class="col-number" />
 							<col class="col-number" />
 							<col class="col-functions" />
 							<col class="col-functions" />
@@ -115,7 +117,9 @@
 									<th scope="col" class="col-name">데이터 타입</th>
 									<th scope="col" class="col-name">프로젝트명</th>
 									<th scope="col" class="col-name">대표 데이터명</th>
-									<th scope="col" class="col-name">Converter 수</th>
+									<th scope="col" class="col-name">압축 유무</th>
+									<th scope="col" class="col-name">파일 개수</th>
+									<th scope="col" class="col-name">Converter 횟수</th>
 									<th scope="col" class="col-date"><spring:message code='insert.date'/></th>
 									<th scope="col" class="col-functions">Converter</th>
 									<th scope="col" class="col-functions">삭제</th>
@@ -124,7 +128,7 @@
 							<tbody>
 <c:if test="${empty uploadDataList }">
 								<tr>
-									<td colspan="10" class="col-none">파일 업로딩 이력이 존재하지 않습니다.</td>
+									<td colspan="12" class="col-none">파일 업로딩 이력이 존재하지 않습니다.</td>
 								</tr>
 </c:if>
 <c:if test="${!empty uploadDataList }">
@@ -155,6 +159,8 @@
 										${uploadData.data_name }
 										</a>
 									</td>
+									<td class="col-name" style="text-align: center;">${uploadData.compress_yn }</td>
+									<td class="col-name" style="text-align: right;"><fmt:formatNumber value="${uploadData.file_count}" type="number"/> 개</td>
 									<td class="col-name" style="text-align: right;">${uploadData.converter_count} 건</td>
 									<td class="col-name" style="text-align: center;">${uploadData.viewInsertDate }</td>
 									<td class="col-functions">
@@ -240,8 +246,10 @@
 		width: 600,
 		modal: true,
 		resizable: false,
-		close: function() { 
-			location.reload(); 
+		close: function() {
+			$("#check_ids").val("");
+			$("#title").val("");
+			//location.reload(); 
 		}
 	});
 	

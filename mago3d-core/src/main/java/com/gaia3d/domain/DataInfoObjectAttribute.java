@@ -29,7 +29,7 @@ public class DataInfoObjectAttribute extends SearchFilter {
 	// Data Attribute 고유번호
 	private Long data_object_attribute_id;
 	// Project 고유번호
-	private Long project_id;
+	private Integer project_id;
 	// Data 고유번호
 	private Long data_id;
 	// Data Object 고유번호

@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.gaia3d.domain.CacheManager;
-import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Project;
@@ -64,7 +62,7 @@ public class DataController {
 		
 		dataInfo.setUser_id(userSession.getUser_id());
 		if(dataInfo.getProject_id() == null) {
-			dataInfo.setProject_id(Long.valueOf(0l));
+			dataInfo.setProject_id(Integer.valueOf(0));
 		}
 		if(StringUtil.isNotEmpty(dataInfo.getStart_date())) {
 			dataInfo.setStart_date(dataInfo.getStart_date().substring(0, 8) + DateUtil.START_TIME);
@@ -101,7 +99,7 @@ public class DataController {
 //	 */
 //	@RequestMapping(value = "ajax-project-data-by-project-id.do")
 //	@ResponseBody
-//	public Map<String, Object> ajaxProjectDataByProjectId(HttpServletRequest request, @RequestParam("project_id") Long project_id) {
+//	public Map<String, Object> ajaxProjectDataByProjectId(HttpServletRequest request, @RequestParam("project_id") Integer project_id) {
 //		Map<String, Object> map = new HashMap<>();
 //		String result = "success";
 //		try {		

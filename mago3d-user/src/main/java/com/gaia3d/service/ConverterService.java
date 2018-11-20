@@ -3,7 +3,7 @@ package com.gaia3d.service;
 import java.util.List;
 
 import com.gaia3d.domain.ConverterJob;
-import com.gaia3d.domain.ConverterLog;
+import com.gaia3d.domain.ConverterJobFile;
 
 /**
  * f4d converting manager
@@ -27,40 +27,12 @@ public interface ConverterService {
 	public List<ConverterJob> getListConverterJob(ConverterJob converterJob);
 
 	/**
-	 * f4d converter 이력 총 건수
-	 * @param converterLog
-	 * @return
-	 */
-	public Long getListConverterLogTotalCount(ConverterLog converterLog);
-	
-	/**
-	 * f4d converter 이력 목록
-	 * @param converterLog
-	 * @return
-	 */
-	public List<ConverterLog> getListConverterLog(ConverterLog converterLog);
-	
-	/**
-	 * converter job 정보
-	 * @param jobId
-	 * @return
-	 */
-	public ConverterJob getConverterJobByJobId(Long jobId);
-	
-	/**
-	 * converter job file list
-	 * @param jobId
-	 * @return
-	 */
-	public List<ConverterLog> getAllListConverterLog(Long jobId);
-	
-	/**
-	 * 
-	 * @param check_ids
+	 * @param userId
+	 * @param checkIds
 	 * @param converterJob
 	 * @return
 	 */
-	public Long insertConverterJob(String check_ids, ConverterJob converterJob);
+	public Long insertConverter(String userId, String checkIds, ConverterJob converterJob);
 	
 	/**
 	 * update

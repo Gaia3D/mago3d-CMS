@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gaia3d.domain.ConverterJob;
-import com.gaia3d.domain.ConverterLog;
+import com.gaia3d.domain.ConverterJobFile;
 import com.gaia3d.service.ConverterService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,11 +42,11 @@ public class ConverterAPIController {
 		String result = "success";
 		try {
 			
-			ConverterJob converterJob = converterService.getConverterJobByJobId(jobId);
-			List<ConverterLog> converterLogList = converterService.getAllListConverterLog(jobId);
-			
-			map.put("converterJob", converterJob);
-			map.put("converterLogList", converterLogList);
+//			ConverterJob converterJob = converterService.getConverterJobByJobId(jobId);
+//			List<ConverterJobFile> converterLogList = converterService.getAllListConverterLog(jobId);
+//			
+//			map.put("converterJob", converterJob);
+//			map.put("converterLogList", converterLogList);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

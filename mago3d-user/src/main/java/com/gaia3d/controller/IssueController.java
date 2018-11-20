@@ -301,7 +301,7 @@ public class IssueController {
 				issue.setUser_name(userSession.getUser_name());
 			}
 			
-			issue.setProject_id(Long.valueOf((String)request.getParameter("project_id")));
+			issue.setProject_id(Integer.valueOf((String)request.getParameter("project_id")));
 			issue.setPriority((String)request.getParameter("priority"));
 			issue.setIssue_type((String)request.getParameter("issue_type"));
 			issue.setData_key((String)request.getParameter("data_key"));

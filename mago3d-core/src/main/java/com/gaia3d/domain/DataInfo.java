@@ -47,7 +47,7 @@ public class DataInfo extends SearchFilter {
 	// 고유번호
 	private Long data_id;
 	// Data project 고유번호
-	private Long project_id;
+	private Integer project_id;
 	// Data project 이름
 	private String project_name;
 	// data 고유 식별번호

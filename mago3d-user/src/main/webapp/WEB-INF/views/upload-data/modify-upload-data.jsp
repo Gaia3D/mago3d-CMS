@@ -107,7 +107,7 @@
 								<td class="col-input">
 									<form:hidden path="project_id" />
 									<form:input path="project_name" cssClass="l" readonly="true" />
-									<input type="button" id="project_search_buttion" value="찾기" />
+									<!-- <input type="button" id="project_search_buttion" value="찾기" /> -->
 								</td>
 							</tr>
 							<tr>
@@ -178,7 +178,10 @@
 										<li style="padding-left: ${paddingLeft}; height: 25px;">[ ${uploadDataFile.file_type } ] ${uploadDataFile.file_sub_path }</li>
 	</c:if>
 	<c:if test="${uploadDataFile.file_type eq 'F' }">
-										<li style="padding-left: ${paddingLeft}; height: 25px;">[ ${uploadDataFile.file_type } ] ${uploadDataFile.file_real_name }</li>
+										<li style="padding-left: ${paddingLeft}; height: 25px;">
+											[ ${uploadDataFile.file_type } ] ${uploadDataFile.file_real_name } 
+											(<fmt:formatNumber value="${uploadDataFile.viewFileSizeUnitKB }" type="number"/>)KB
+										</li>
 	</c:if>
 </c:forEach>
 									</ul>
@@ -199,8 +202,13 @@
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
 <script type="text/javascript">
-	//그룹 선택
-	$( "#project_search_buttion" ).on( "click", function() {
+	$(document).ready(function() {
+		$("#sharing_type").val("${uploadData.sharing_type}");
+		$("#data_type").val("${uploadData.data_type}");
+	});
+
+	// 프로젝트 찾기
+	/* $( "#project_search_buttion" ).on( "click", function() {
 		projectDialog.dialog( "open" );
 		searchProject();
 	});
@@ -210,7 +218,7 @@
 		width: 600,
 		modal: true,
 		resizable: false
-	});
+	}); */
 	
 	var searchProjectFlag = true;
 	function searchProject() {

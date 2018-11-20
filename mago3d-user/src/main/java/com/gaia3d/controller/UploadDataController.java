@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.ConverterTarget;
 import com.gaia3d.domain.FileType;
 import com.gaia3d.domain.PageType;
 import com.gaia3d.domain.Pagination;
@@ -40,6 +42,7 @@ import com.gaia3d.domain.UploadData;
 import com.gaia3d.domain.UploadDataFile;
 import com.gaia3d.domain.UploadDirectoryType;
 import com.gaia3d.domain.UserSession;
+import com.gaia3d.service.ProjectService;
 import com.gaia3d.service.UploadDataService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.FileUtil;
@@ -58,8 +61,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/upload-data/")
 public class UploadDataController {
 	
+	// 설계 파일 안의 texture 의 경우 설계 파일에서 참조하는 경우가 있으므로 이름 변경 불가.
+	private final String[] RENAME_FILE_TYPE = {"3ds", "obj", "dae", "ifc", "citygml", "indoorgml"};
+	
 	// 파일 copy 시 버퍼 사이즈
 	public static final int BUFFER_SIZE = 8192;
+	
+	@Autowired
+	private ProjectService projectService;
 	
 	@Autowired
 	private PropertiesConfig propertiesConfig;
@@ -93,6 +102,8 @@ public class UploadDataController {
 			
 			Map<String, Object> map = new HashMap<>();
 			String result = "success";
+			
+			List<String> renamePossibleFileList = Arrays.asList(RENAME_FILE_TYPE);
 			try {
 				String errorCode = dataValidate(request);
 				if(!StringUtils.isEmpty(errorCode)) {
@@ -137,6 +148,7 @@ public class UploadDataController {
 						log.info("@@@@@@@@@@@@@@@ name = {}, original_name = {}", multipartFile.getName(), multipartFile.getOriginalFilename());
 						
 						UploadDataFile uploadDataFile = new UploadDataFile();
+						String converterTargetYn = ConverterTarget.N.name();
 						
 						// 파일 기본 validation 체크
 						errorCode = fileValidate(policy, multipartFile);
@@ -146,9 +158,10 @@ public class UploadDataController {
 							return map;
 						}
 						
-						String[] divideFileName = multipartFile.getOriginalFilename().split("\\.");
+						String originalName = multipartFile.getOriginalFilename();
+						String[] divideFileName = originalName.split("\\.");
 	        			String saveFileName = userId + "_" + today + "_" + System.nanoTime();
-	        			String tempDirectory = saveFileName;
+	        			String tempDirectory = userId + "_" + System.nanoTime();
 	        			String extension = null;
 	        			if(divideFileName != null && divideFileName.length != 0) {
 	        				extension = divideFileName[divideFileName.length - 1];
@@ -157,7 +170,13 @@ public class UploadDataController {
 	    						map.put("result", "upload.file.type.invalid");
 	    						return map;
 	        				}
-	        				saveFileName = saveFileName + "." + extension;
+	        				
+	        				if(renamePossibleFileList.contains(extension)) {
+	        					saveFileName = saveFileName + "." + extension;
+	        					converterTargetYn = ConverterTarget.Y.name();
+	        				} else {
+	        					saveFileName = originalName;
+	        				}
 	        			}
 	        			
 						// 파일을 upload 디렉토리로 복사
@@ -180,6 +199,7 @@ public class UploadDataController {
 	            			uploadDataFile.setFile_path(makedDirectory + tempDirectory + File.separator);
 	            			uploadDataFile.setFile_sub_path(tempDirectory);
 	            			uploadDataFile.setFile_size(String.valueOf(size));
+	            			uploadDataFile.setConverter_target_yn(converterTargetYn);
 	            			uploadDataFile.setDepth(1);
 						} catch(Exception e) {
 							e.printStackTrace();
@@ -200,6 +220,11 @@ public class UploadDataController {
 				uploadData.setLongitude(new BigDecimal(request.getParameter("longitude")));
 				uploadData.setHeight(new BigDecimal(request.getParameter("height")));
 				uploadData.setDescription(request.getParameter("description"));
+				if(isZipFile) {
+					uploadData.setCompress_yn("Y");
+				} else {
+					uploadData.setCompress_yn("N");
+				}
 				uploadData.setFile_count(uploadDataFileList.size());
 				
 				uploadDataService.insertUploadData(uploadData, uploadDataFileList);       
@@ -211,6 +236,138 @@ public class UploadDataController {
 			map.put("result", result);
 			return map;
 		};
+	}
+	
+	/**
+	 * 업로딩 파일을 압축 해제
+	 * @param policy
+	 * @param today
+	 * @param userId
+	 * @param multipartFile
+	 * @param targetDirectory
+	 * @return
+	 * @throws Exception
+	 */
+	private Map<String, Object> unzip(Policy policy, String today, String userId, MultipartFile multipartFile, String targetDirectory) throws Exception {
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = fileValidate(policy, multipartFile);
+		if(!StringUtils.isEmpty(errorCode)) {
+			result.put("errorCode", errorCode);
+			return result;
+		}
+		
+		List<String> renamePossibleFileList = Arrays.asList(RENAME_FILE_TYPE);
+		
+		// input directory 생성
+		targetDirectory = targetDirectory + userId + "_" + System.nanoTime() + File.separator;
+		FileUtil.makeDirectory(targetDirectory);
+		
+		List<UploadDataFile> uploadDataFileList = new ArrayList<>();
+		
+		File uploadedFile = new File(targetDirectory + multipartFile.getOriginalFilename());
+		multipartFile.transferTo(uploadedFile);
+		
+		try ( ZipFile zipFile = new ZipFile(uploadedFile);) {
+//			String saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + fileInfo.getFile_ext();
+//			long size = 0L;
+//			InputStream inputStream = multipartFile.getInputStream();
+//			fileInfo.setFile_real_name(saveFileName);
+//			fileInfo.setFile_size(String.valueOf(size));
+//			fileInfo.setFile_path(sourceDirectory);
+			
+			String directoryPath = targetDirectory;
+			String subDirectoryPath = "";
+			String directoryName = null;
+			int depth = 1;
+			Enumeration<? extends ZipEntry> entries = zipFile.entries();
+			while( entries.hasMoreElements() ) {
+            	UploadDataFile uploadDataFile = new UploadDataFile();
+            	
+            	ZipEntry entry = entries.nextElement();
+            	String unzipfileName = targetDirectory + entry.getName();
+            	String converterTargetYn = ConverterTarget.N.name();
+            	if( entry.isDirectory() ) {
+            		uploadDataFile.setFile_type(FileType.DIRECTORY.getValue());
+            		if(directoryName == null) {
+            			uploadDataFile.setFile_name(entry.getName());
+            			uploadDataFile.setFile_real_name(entry.getName());
+            			directoryName = entry.getName();
+            			directoryPath = directoryPath + directoryName;
+            			//subDirectoryPath = directoryName;
+            		} else {
+            			String fileName = entry.getName().substring(entry.getName().indexOf(directoryName) + directoryName.length());  
+            			uploadDataFile.setFile_name(fileName);
+            			uploadDataFile.setFile_real_name(fileName);
+            			directoryName = fileName;
+            			directoryPath = directoryPath + fileName;
+            			subDirectoryPath = fileName;
+            		}
+            		
+                	File file = new File(unzipfileName);
+                    file.mkdirs();
+                    uploadDataFile.setFile_path(directoryPath);
+                    uploadDataFile.setFile_sub_path(subDirectoryPath);
+                    uploadDataFile.setDepth(depth);
+                    depth++;
+            	} else {
+            		String fileName = null;
+            		String extension = null;
+            		String[] divideFileName = null;
+            		String saveFileName = null;
+            		if(directoryName == null) {
+            			fileName = entry.getName();
+            			divideFileName = fileName.split("\\.");
+            			saveFileName = fileName;
+            			if(divideFileName != null && divideFileName.length != 0) {
+            				extension = divideFileName[divideFileName.length - 1];
+            				if(renamePossibleFileList.contains(extension)) {
+            					saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + extension;
+            					converterTargetYn = ConverterTarget.Y.name();
+	        				}
+            			}
+            		} else {
+            			fileName = entry.getName().substring(entry.getName().indexOf(directoryName) + directoryName.length());  
+            			divideFileName = fileName.split("\\.");
+            			saveFileName = fileName;
+            			if(divideFileName != null && divideFileName.length != 0) {
+            				extension = divideFileName[divideFileName.length - 1];
+            				if(renamePossibleFileList.contains(extension)) {
+            					saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + extension;
+            					converterTargetYn = ConverterTarget.Y.name();
+	        				}
+            			}
+            		}
+            		
+                	try ( 	InputStream inputStream = zipFile.getInputStream(entry);
+                			FileOutputStream outputStream = new FileOutputStream(directoryPath + saveFileName); ) {
+                		int data = inputStream.read();
+                		while(data != -1){
+                			outputStream.write(data);
+                            data = inputStream.read();
+                        }
+                		
+                		uploadDataFile.setFile_type(FileType.FILE.getValue());
+                		uploadDataFile.setFile_ext(extension);
+                		uploadDataFile.setFile_name(fileName);
+                		uploadDataFile.setFile_real_name(saveFileName);
+                		uploadDataFile.setFile_path(directoryPath);
+                		uploadDataFile.setFile_sub_path(subDirectoryPath);
+                		uploadDataFile.setDepth(depth);
+                    } catch(Exception e) {
+                    	e.printStackTrace();
+                    	uploadDataFile.setError_message(e.getMessage());
+                    }
+                }
+            	uploadDataFile.setConverter_target_yn(converterTargetYn);
+            	uploadDataFile.setFile_size(String.valueOf(entry.getSize()));
+            	uploadDataFileList.add(uploadDataFile);
+            }
+		} catch(IOException ex) {
+			ex.printStackTrace(); 
+		}
+		
+		result.put("uploadDataFileList", uploadDataFileList);
+		return result;
 	}
 	
 	/**
@@ -265,158 +422,6 @@ public class UploadDataController {
 //    public Future<Void> asyncInsertUpload(MultipartHttpServletRequest request) {
 //		return new AsyncResult<Void>(null);
 //    }
-	
-	/**
-	 * validation 체크
-	 * @param request
-	 * @return
-	 */
-	private String dataValidate(MultipartHttpServletRequest request) {
-		
-		if(StringUtils.isEmpty(request.getParameter("sharing_type"))) {
-			return "sharing.type.empty";
-		}
-		if(StringUtils.isEmpty(request.getParameter("data_type"))) {
-			return "data.type.empty";
-		}
-		if(StringUtils.isEmpty(request.getParameter("project_id"))) {
-			return "project.id.empty";
-		}
-		if(StringUtils.isEmpty(request.getParameter("latitude"))) {
-			return "latitude.empty";
-		}
-		if(StringUtils.isEmpty(request.getParameter("longitude"))) {
-			return "longitude.empty";
-		}
-		if(StringUtils.isEmpty(request.getParameter("height"))) {
-			return "height.empty";
-		}
-		
-		Map<String, MultipartFile> fileMap = request.getFileMap();
-		if(fileMap.isEmpty()) {
-			return "file.empty";
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * 업로딩 파일을 압축 해제
-	 * @param policy
-	 * @param today
-	 * @param userId
-	 * @param multipartFile
-	 * @param targetDirectory
-	 * @return
-	 * @throws Exception
-	 */
-	private Map<String, Object> unzip(Policy policy, String today, String userId, MultipartFile multipartFile, String targetDirectory) throws Exception {
-		Map<String, Object> result = new HashMap<>();
-		String errorCode = fileValidate(policy, multipartFile);
-		if(!StringUtils.isEmpty(errorCode)) {
-			result.put("errorCode", errorCode);
-			return result;
-		}
-		
-		List<UploadDataFile> uploadDataFileList = new ArrayList<>();
-		
-		File uploadedFile = new File(targetDirectory + multipartFile.getOriginalFilename());
-		multipartFile.transferTo(uploadedFile);
-		
-		try ( ZipFile zipFile = new ZipFile(uploadedFile);) {
-//			String saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + fileInfo.getFile_ext();
-//			long size = 0L;
-//			InputStream inputStream = multipartFile.getInputStream();
-//			fileInfo.setFile_real_name(saveFileName);
-//			fileInfo.setFile_size(String.valueOf(size));
-//			fileInfo.setFile_path(sourceDirectory);
-			
-			String directoryPath = targetDirectory;
-			String subDirectoryPath = "";
-			String directoryName = null;
-			int depth = 1;
-			Enumeration<? extends ZipEntry> entries = zipFile.entries();
-			while( entries.hasMoreElements() ) {
-            	UploadDataFile uploadDataFile = new UploadDataFile();
-            	
-            	ZipEntry entry = entries.nextElement();
-            	String unzipfileName = targetDirectory + entry.getName();
-            	if( entry.isDirectory() ) {
-            		uploadDataFile.setFile_type(FileType.DIRECTORY.getValue());
-            		if(directoryName == null) {
-            			uploadDataFile.setFile_name(entry.getName());
-            			uploadDataFile.setFile_real_name(entry.getName());
-            			directoryName = entry.getName();
-            			directoryPath = directoryPath + directoryName;
-            			subDirectoryPath = directoryName;
-            		} else {
-            			String fileName = entry.getName().substring(entry.getName().indexOf(directoryName) + directoryName.length());  
-            			uploadDataFile.setFile_name(fileName);
-            			uploadDataFile.setFile_real_name(fileName);
-            			directoryName = fileName;
-            			directoryPath = directoryPath + fileName;
-            			subDirectoryPath = subDirectoryPath + fileName;
-            		}
-            		
-                	File file = new File(unzipfileName);
-                    file.mkdirs();
-                    uploadDataFile.setFile_path(directoryPath);
-                    uploadDataFile.setFile_sub_path(subDirectoryPath);
-                    uploadDataFile.setDepth(depth);
-                    depth++;
-            	} else {
-            		String fileName = null;
-            		String extension = null;
-            		String[] divideFileName = null;
-            		String saveFileName = null;
-            		if(directoryName == null) {
-            			fileName = entry.getName();
-            			divideFileName = fileName.split("\\.");
-            			saveFileName = userId + "_" + today + "_" + System.nanoTime();
-            			if(divideFileName != null && divideFileName.length != 0) {
-            				extension = divideFileName[divideFileName.length - 1];
-            				saveFileName = saveFileName + "." + extension;
-            			}
-            		} else {
-            			fileName = entry.getName().substring(entry.getName().indexOf(directoryName) + directoryName.length());  
-            			divideFileName = fileName.split("\\.");
-            			saveFileName = userId + "_" + today + "_" + System.nanoTime();
-            			if(divideFileName != null && divideFileName.length != 0) {
-            				extension = divideFileName[divideFileName.length - 1];
-            				saveFileName = saveFileName + "." + extension;
-            			}
-            		}
-            		
-                	try ( 	InputStream inputStream = zipFile.getInputStream(entry);
-                			FileOutputStream outputStream = new FileOutputStream(directoryPath + saveFileName); ) {
-                		int data = inputStream.read();
-                		while(data != -1){
-                			outputStream.write(data);
-                            data = inputStream.read();
-                        }
-                		
-                		uploadDataFile.setFile_type(FileType.FILE.getValue());
-                		uploadDataFile.setFile_ext(extension);
-                		uploadDataFile.setFile_name(fileName);
-                		uploadDataFile.setFile_real_name(saveFileName);
-                		uploadDataFile.setFile_path(directoryPath);
-                		uploadDataFile.setFile_sub_path(subDirectoryPath);
-                		uploadDataFile.setDepth(depth);
-                    } catch(Exception e) {
-                    	e.printStackTrace();
-                    	uploadDataFile.setError_message(e.getMessage());
-                    }
-                }
-            	uploadDataFile.setFile_size(String.valueOf(entry.getSize()));
-            	uploadDataFileList.add(uploadDataFile);
-            }
-		} catch(IOException ex) {
-			ex.printStackTrace(); 
-		}
-		
-		result.put("uploadDataFileList", uploadDataFileList);
-		return result;
-	}
 	
 	/**
 	 * @param policy
@@ -524,6 +529,40 @@ public class UploadDataController {
 		
 		map.put("result", result	);
 		return map;
+	}
+	
+	/**
+	 * validation 체크
+	 * @param request
+	 * @return
+	 */
+	private String dataValidate(MultipartHttpServletRequest request) {
+		
+		if(StringUtils.isEmpty(request.getParameter("sharing_type"))) {
+			return "sharing.type.empty";
+		}
+		if(StringUtils.isEmpty(request.getParameter("data_type"))) {
+			return "data.type.empty";
+		}
+		if(StringUtils.isEmpty(request.getParameter("project_id"))) {
+			return "project.id.empty";
+		}
+		if(StringUtils.isEmpty(request.getParameter("latitude"))) {
+			return "latitude.empty";
+		}
+		if(StringUtils.isEmpty(request.getParameter("longitude"))) {
+			return "longitude.empty";
+		}
+		if(StringUtils.isEmpty(request.getParameter("height"))) {
+			return "height.empty";
+		}
+		
+		Map<String, MultipartFile> fileMap = request.getFileMap();
+		if(fileMap.isEmpty()) {
+			return "file.empty";
+		}
+		
+		return null;
 	}
 	
 	/**

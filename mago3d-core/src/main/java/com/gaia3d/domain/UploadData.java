@@ -64,6 +64,8 @@ public class UploadData {
 	private String description;
 	// 상태. 0 : 업로딩 완료, 1 : 변환
 	private String status;
+	// 압축유무. N : 압축안함(기본값). Y : 압축
+	private String compress_yn;
 	// 파일 개수
 	private Integer file_count;
 	// converter 횟수

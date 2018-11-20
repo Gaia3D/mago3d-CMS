@@ -163,7 +163,7 @@ public class HomepageController {
 		if(defaultProjects != null && !"".equals(defaultProjects)) {
 			initProjects = defaultProjects.split(",");
 			for(String projectId : initProjects) {
-				initProjectJsonMap.put(projectId, CacheManager.getProjectDataJson(Long.valueOf(projectId)));
+				initProjectJsonMap.put(projectId, CacheManager.getProjectDataJson(Integer.valueOf(projectId)));
 			}
 			initProjectsLength = initProjects.length;
 		}

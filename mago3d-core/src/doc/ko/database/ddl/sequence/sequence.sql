@@ -13,7 +13,7 @@ drop sequence if exists board_forum_seq;
 drop sequence if exists board_forum_detail_seq;
 drop sequence if exists board_forum_comment_seq;
 drop sequence if exists converter_job_seq;
-drop sequence if exists converter_log_seq;
+drop sequence if exists converter_job_file_seq;
 drop sequence if exists common_code_seq;
 drop sequence if exists data_info_seq;
 drop sequence if exists data_info_log_seq;
@@ -56,7 +56,7 @@ create sequence board_forum_seq increment 1 minvalue 1 maxvalue 999999999999 sta
 create sequence board_forum_detail_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence board_forum_comment_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence converter_job_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
-create sequence converter_log_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
+create sequence converter_job_file_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence common_code_seq increment 1 minvalue 1 maxvalue 999999999999 start 100 cache 1;
 create sequence data_info_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence data_info_log_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;

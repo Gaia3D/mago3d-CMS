@@ -38,7 +38,7 @@ public class Project extends SearchFilter {
 	private String duplication_value;
 
 	// 고유번호
-	private Long project_id;
+	private Integer project_id;
 	// 링크 활용 등을 위한 확장 컬럼
 	private String project_key;
 	// old 고유 식별번호

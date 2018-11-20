@@ -269,6 +269,7 @@ public class ProjectController {
 			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 			project.setUser_id(userSession.getUser_id());
+			project.setProject_key(userSession.getUser_id() + "_" + System.nanoTime());
 			projectService.insertProject(project);
 		} catch(Exception e) {
 			e.printStackTrace();

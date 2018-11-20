@@ -66,7 +66,7 @@ public class DataLogController {
 		project.setUse_yn(Project.IN_USE);
 		List<Project> projectList = projectService.getListProject(project);
 		if(dataInfoLog.getProject_id() == null) {
-			dataInfoLog.setProject_id(Long.valueOf(0l));
+			dataInfoLog.setProject_id(Integer.valueOf(0));
 		}
 		if(StringUtil.isNotEmpty(dataInfoLog.getStart_date())) {
 			dataInfoLog.setStart_date(dataInfoLog.getStart_date().substring(0, 8) + DateUtil.START_TIME);

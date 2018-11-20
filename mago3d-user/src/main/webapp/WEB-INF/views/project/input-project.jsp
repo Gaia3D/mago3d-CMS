@@ -154,7 +154,7 @@
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">
-									<form:input path="attributes" class="xl" value="{\"isPhysical\": false}" />
+									<form:input path="attributes" class="xl" value="{\"nodeType\": \"root\", \"isPhysical\": false, \"specularLighting\": true}" />
 			  						<form:errors path="attributes" cssClass="error" />
 								</td>
 							</tr>

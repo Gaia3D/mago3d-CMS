@@ -42,7 +42,7 @@ public class DataInfoLog extends SearchFilter {
 	// 고유번호
 	private Long data_info_log_id;
 	// Data project 고유번호
-	private Long project_id;
+	private Integer project_id;
 	// Data project 이름
 	private String project_name;
 	// Data 고유번호

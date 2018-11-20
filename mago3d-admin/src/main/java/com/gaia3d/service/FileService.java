@@ -44,7 +44,7 @@ public interface FileService {
 	 * @param fileInfo
 	 * @return
 	 */
-	public FileInfo insertDataFile(Long projectId, FileInfo fileInfo);
+	public FileInfo insertDataFile(Integer projectId, FileInfo fileInfo);
 	
 	/**
 	 * Data Attribute 등록
