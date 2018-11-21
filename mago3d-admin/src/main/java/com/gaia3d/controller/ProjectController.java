@@ -190,6 +190,8 @@ public class ProjectController {
 				return map;
 			}
 			
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			project.setUser_id(userSession.getUser_id());
 			projectService.insertProject(project);
 			
 			CacheParams cacheParams = new CacheParams();

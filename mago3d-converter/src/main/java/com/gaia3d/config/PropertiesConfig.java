@@ -11,7 +11,7 @@ import lombok.Data;
 @PropertySource("classpath:mago3d.properties")
 @ConfigurationProperties(prefix = "mago3d")
 public class PropertiesConfig {
-
+	
 	private String osType;
 	private boolean callRemoteEnable;
 	private String serverIp;
@@ -27,6 +27,5 @@ public class PropertiesConfig {
 	
 	// User excel batch registration
 	private String uploadData;
-	private String userConverterDir;
-	
+	private String converterDir;	
 }

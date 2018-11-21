@@ -12,16 +12,20 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.gaia3d.domain.AMQPSubscribe;
+import com.gaia3d.security.Crypt;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
-@EnableRabbit
 @ComponentScan(basePackages = { "com.gaia3d.config" }, includeFilters = {
-		@Filter(type = FilterType.ANNOTATION, value = Component.class)})
+		@Filter(type = FilterType.ANNOTATION, value = Component.class),
+		@Filter(type = FilterType.ANNOTATION, value = Controller.class),
+		@Filter(type = FilterType.ANNOTATION, value = RestController.class)})
+@EnableRabbit
 public class AMQPConfig {
 	@Autowired
 	private PropertiesConfig propertiesConfig;
@@ -37,18 +41,19 @@ public class AMQPConfig {
 	@Bean
 	public ConnectionFactory connectionFactory() {
 		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(propertiesConfig.getQueueServerHost());
-		connectionFactory.setUsername(propertiesConfig.getQueueUser());
-		connectionFactory.setPassword(propertiesConfig.getQueuePassword());
+		connectionFactory.setUsername(Crypt.decrypt(propertiesConfig.getQueueUser()));
+		connectionFactory.setPassword(Crypt.decrypt(propertiesConfig.getQueuePassword()));
 		connectionFactory.setPort(Integer.parseInt(propertiesConfig.getQueueServerPort()));
 		return connectionFactory;
 	}
 	
 	@Bean
 	public SimpleMessageListenerContainer listenerContainer() {
+		log.info("@@@@@@@ AMQPConfig listenerContainer >>>>> ");
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory());
 		container.setQueueNames(propertiesConfig.getQueueName());
-		container.setMessageListener(new MessageListenerAdapter(new AMQPSubscribe()));
+		container.setMessageListener(new MessageListenerAdapter(new AMQPSubscribe(propertiesConfig)));
 		return container;
 	}
 

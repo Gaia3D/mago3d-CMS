@@ -57,7 +57,8 @@ public class PolicyController {
 			Map<Integer, Project> projectMap = CacheManager.getProjectMap();
 			String defaultProjectsView = "";
 			for(String projectId : projectIds) {
-				Project project = projectMap.get(Long.valueOf(projectId));
+				log.info(" --------------  projectId = {}", projectId);
+				Project project = projectMap.get(Integer.valueOf(projectId));
 				if("".equals(defaultProjectsView)) {
 					defaultProjectsView += project.getProject_name();
 				} else {

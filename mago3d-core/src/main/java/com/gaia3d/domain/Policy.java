@@ -107,7 +107,7 @@ public class Policy {
 	private String geo_cesium_ion_token;
 	// view library. 기본 cesium
 	private String geo_view_library;
-	// data 폴더. 기본 /data
+	// data 폴더. 기본 /f4d
 	private String geo_data_path;
 	// 초기 로딩 프로젝트
 	@Getter(AccessLevel.NONE)

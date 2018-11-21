@@ -1,5 +1,6 @@
 package com.gaia3d.service.impl;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,12 @@ import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.Project;
+import com.gaia3d.domain.UploadDirectoryType;
 import com.gaia3d.persistence.DataMapper;
 import com.gaia3d.persistence.PolicyMapper;
 import com.gaia3d.persistence.ProjectMapper;
 import com.gaia3d.service.ProjectService;
+import com.gaia3d.util.FileUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -84,17 +87,28 @@ public class ProjectServiceImpl implements ProjectService {
 	 */
 	@Transactional
 	public int insertProject(Project project) {
-		projectMapper.insertProject(project);
+		
+		Policy policy = CacheManager.getPolicy();
+		// TODO 시연 때문에 일단 임시 경로로 함
+//		String makedDirectory = FileUtil.makeDirectory(project.getUser_id(), UploadDirectoryType.YEAR_MONTH, policy.getGeo_data_path() + File.separator);
+//		FileUtil.makeDirectory(makedDirectory + project.getProject_key());
+//		project.setProject_path(makedDirectory + project.getProject_key() + File.separator);
+		FileUtil.makeDirectory(policy.getGeo_data_path() + File.separator + project.getProject_key());
+		project.setProject_path(project.getProject_key() + File.separator);
+		int result = projectMapper.insertProject(project);
 		
 		DataInfo dataInfo = new DataInfo();
 		dataInfo.setProject_id(project.getProject_id());
 		dataInfo.setData_key(project.getProject_key());
 		dataInfo.setData_name(project.getProject_name());
+		dataInfo.setUser_id(project.getUser_id());
 		dataInfo.setParent(0l);
 		dataInfo.setDepth(1);
 		dataInfo.setView_order(1);
 		dataInfo.setAttributes(project.getAttributes());
-		return dataMapper.insertData(dataInfo);
+		dataMapper.insertData(dataInfo);
+		
+		return result;
 	}
 
 	/**

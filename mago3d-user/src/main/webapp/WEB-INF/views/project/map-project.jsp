@@ -39,7 +39,7 @@
 			<canvas id="objectLabel"></canvas>
 		</div>
 	</div>
-	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
+	<%-- <%@ include file="/WEB-INF/views/layouts/footer.jsp" %> --%>
 </div>
 <c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 <script type="text/javascript" src="/externlib/cesium/Cesium.js?cache_version=${cache_version}"></script>
@@ -54,7 +54,7 @@
 	
 
 	console.log("---------------- window.innerHeight = " + window.innerHeight);
-	var mapSize = window.innerHeight - 106;
+	var mapSize = window.innerHeight - 67;
 	console.log("---------------- map size = " + mapSize);
 	$("#magoContainer").css("height", mapSize);
 
@@ -65,7 +65,7 @@
 
 	var managerFactory = null;
 	var policyJson = ${policyJson};
-	var initProjectJsonMap = ${initProjectJsonMap};
+	var initProjectJsonMap = "${initProjectJsonMap}";
 	var menuObject = { 	homeMenu : false, myIssueMenu : false, searchMenu : false, apiMenu : false, insertIssueMenu : false, 
 						treeMenu : false, chartMenu : false, logMenu : false, attributeMenu : false, configMenu : false };
 	var insertIssueEnable = false;
@@ -108,7 +108,7 @@
 	
 	// mago3d 시작, 정책 데이터 파일을 로딩
 	function magoStart() {
-		var initProjectsLength = ${initProjectsLength};
+		var initProjectsLength = "${initProjectsLength}";
 		if(initProjectsLength === null || initProjectsLength === 0) {
 			managerFactory = new ManagerFactory(null, "magoContainer", policyJson, null, null, null, imagePath);
 		} else {

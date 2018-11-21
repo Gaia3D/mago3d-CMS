@@ -83,7 +83,7 @@
     		SELECT NEXTVAL('converter_job_seq')
   		</selectKey>
 		INSERT INTO converter_job(
-			converter_job_id, upload_data_id, user_id, title, converter_type, file_count
+			converter_job_id, upload_data_id, user_id, title, converter_type, file_count,
 			<if test="status != null and status != ''">
 			status, 
 			</if>
@@ -103,7 +103,7 @@
 		<selectKey keyProperty="converter_job_file_id" resultType="long" order="BEFORE">
     		SELECT NEXTVAL('converter_job_file_seq')
   		</selectKey>
-		INSERT INTO converter_job(
+		INSERT INTO converter_job_file(
 			converter_job_file_id, converter_job_id, upload_data_id, user_id,
 			<if test="status != null and status != ''">
 			status, 

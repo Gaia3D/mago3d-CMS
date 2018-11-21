@@ -101,6 +101,9 @@
 		WHERE A.user_id =#{user_id} 
 			AND A.upload_data_id = #{upload_data_id}
 			AND A.upload_data_id = B.upload_data_id
+			<if test="converter_target_yn != null and converter_target_yn != ''">
+			AND A.converter_target_yn = #{converter_target_yn}
+			</if>	
 		<choose>
 		<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
 		ORDER BY A.${order_word} A.${order_value}

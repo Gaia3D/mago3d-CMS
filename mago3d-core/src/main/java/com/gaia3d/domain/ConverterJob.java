@@ -11,8 +11,8 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString(callSuper=true)
-public class ConverterJob extends SearchFilter {
+@ToString
+public class ConverterJob {
 	
 	public static final String JOB_READY = "0";
 	public static final String JOB_SUCCESS = "1";
@@ -21,6 +21,22 @@ public class ConverterJob extends SearchFilter {
 	
 	// job에 포함된 변환 파일 갯수
 	private Integer converter_file_count;
+	
+	// 페이지 처리를 위한 시작
+	private Long offset;
+	// 페이지별 표시할 건수
+	private Long limit;
+	
+	/********** 검색 조건 ************/
+	private String search_word;
+	// 검색 옵션. 0 : 일치, 1 : 포함
+	private String search_option;
+	private String search_value;
+	private String start_date;
+	private String end_date;
+	private String order_word;
+	private String order_value;
+	private Long list_counter = 10l;
 	
 	/****** validator ********/
 	private String method_mode;

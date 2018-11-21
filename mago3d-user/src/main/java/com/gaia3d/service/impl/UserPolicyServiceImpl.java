@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gaia3d.domain.UserPolicy;
-import com.gaia3d.persistence.UserMapper;
 import com.gaia3d.persistence.UserPolicyMapper;
 import com.gaia3d.service.UserPolicyService;
 

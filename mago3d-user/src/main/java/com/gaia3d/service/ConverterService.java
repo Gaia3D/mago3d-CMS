@@ -32,7 +32,7 @@ public interface ConverterService {
 	 * @param converterJob
 	 * @return
 	 */
-	public Long insertConverter(String userId, String checkIds, ConverterJob converterJob);
+	public int insertConverter(String userId, String checkIds, ConverterJob converterJob);
 	
 	/**
 	 * update

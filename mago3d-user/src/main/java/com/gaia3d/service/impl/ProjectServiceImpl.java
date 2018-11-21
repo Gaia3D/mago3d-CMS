@@ -7,13 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.Project;
 import com.gaia3d.domain.UserPolicy;
 import com.gaia3d.persistence.DataMapper;
 import com.gaia3d.persistence.ProjectMapper;
 import com.gaia3d.service.ProjectService;
 import com.gaia3d.service.UserPolicyService;
+import com.gaia3d.util.FileUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,6 +59,15 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 	
 	/**
+	 * 기본 프로젝트 목록
+	 * @param projectIds
+	 * @return
+	 */
+	public List<Project> getListDefault(String[] projectIds) {
+		return projectMapper.getListDefault(projectIds);
+	}
+	
+	/**
 	 * geo 정보를 이용해서 가장 가까운 프로젝트 정보를 취득
 	 * @param project
 	 * @return
@@ -94,14 +106,15 @@ public class ProjectServiceImpl implements ProjectService {
 	 */
 	@Transactional
 	public int insertProject(Project project) {
-		projectMapper.insertProject(project);
 		
-		// 프로젝트 디렉토리 생성
-		/*UserPolicy userPolicy = userPolicyService.getUserPolicy(project.getUser_id());
-		File projectDirectory = new File(userPolicy.getGeo_data_path() + File.separator + project.getProject_id());
-		if(!projectDirectory.exists()) {
-			projectDirectory.mkdir();
-		}*/
+		Policy policy = CacheManager.getPolicy();
+		// TODO 시연 때문에 일단 임시 경로로 함
+//		String makedDirectory = FileUtil.makeDirectory(project.getUser_id(), UploadDirectoryType.YEAR_MONTH, policy.getGeo_data_path() + File.separator);
+//		FileUtil.makeDirectory(makedDirectory + project.getProject_key());
+//		project.setProject_path(makedDirectory + project.getProject_key() + File.separator);
+		FileUtil.makeDirectory(policy.getGeo_data_path() + File.separator + project.getProject_key());
+		project.setProject_path(project.getProject_key() + File.separator);
+		int result = projectMapper.insertProject(project);
 		
 		DataInfo dataInfo = new DataInfo();
 		dataInfo.setProject_id(project.getProject_id());
@@ -113,7 +126,9 @@ public class ProjectServiceImpl implements ProjectService {
 		dataInfo.setDepth(1);
 		dataInfo.setView_order(1);
 		dataInfo.setAttributes(project.getAttributes());
-		return dataMapper.insertData(dataInfo);
+		dataMapper.insertData(dataInfo);
+		
+		return result;
 	}
 
 	/**

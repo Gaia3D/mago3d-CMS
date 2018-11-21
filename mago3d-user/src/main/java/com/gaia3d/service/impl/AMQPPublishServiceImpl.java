@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gaia3d.config.PropertiesConfig;
+import com.gaia3d.domain.QueueMessage;
 import com.gaia3d.service.AMQPPublishService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +26,8 @@ public class AMQPPublishServiceImpl implements AMQPPublishService {
 	private RabbitTemplate rabbitTemplate;
 	
 	@Transactional
-	public void send(String message) {
-		log.info("@@ Publish send message >>> {}", message);
-		rabbitTemplate.convertAndSend(propertiesConfig.getQueueName(), message);
+	public void send(QueueMessage queueMessage) {
+		log.info("@@ Publish send message >>> {}", queueMessage);
+		rabbitTemplate.convertAndSend(propertiesConfig.getQueueName(), queueMessage);
 	}
 }

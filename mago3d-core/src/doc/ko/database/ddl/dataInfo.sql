@@ -7,6 +7,7 @@ create table project(
 	project_id				int,
 	project_key				varchar(60)							not null,
 	project_name			varchar(100)						not null,
+	project_path			varchar(256)						not null,
 	sharing_type			char(1)								default '1',
 	user_id					varchar(32),
 	data_count				int									default 0,
@@ -27,6 +28,7 @@ comment on table project is 'project(F4D Data) 그룹';
 comment on column project.project_id is '고유번호';
 comment on column project.project_key is '링크 활용 등을 위한 확장 컬럼';
 comment on column project.project_name is '프로젝트';
+comment on column project.project_path is '프로젝트 서비스 경로';
 comment on column project.sharing_type is '공유 타입. 0 : common, 1: public, 2 : private, 3 : sharing';
 comment on column project.user_id is '사용자 아이디';
 comment on column project.data_count is '프로젝트에 속하는 데이터 총 건수';

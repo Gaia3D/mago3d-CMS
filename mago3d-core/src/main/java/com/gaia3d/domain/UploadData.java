@@ -37,6 +37,9 @@ public class UploadData {
 	/****** validator ********/
 	private String method_mode;
 	
+	// query join
+	private String converter_target_yn;
+	
 	// 고유번호
 	private Long upload_data_id;
 	// 프로젝트 고유키

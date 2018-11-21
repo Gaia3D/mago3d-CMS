@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.ConverterJob;
-import com.gaia3d.domain.ConverterJobFile;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.UserSession;
-import com.gaia3d.service.AMQPPublishService;
 import com.gaia3d.service.ConverterService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.StringUtil;
@@ -39,9 +37,6 @@ public class ConverterController {
 	
 	@Autowired
 	private PropertiesConfig propertiesConfig;
-	
-	@Autowired
-	private AMQPPublishService aMQPPublishService;
 	
 	@Autowired
 	private ConverterService converterService;

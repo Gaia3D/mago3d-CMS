@@ -30,6 +30,13 @@ public interface ProjectMapper {
 	List<Project> getListProject(Project project);
 	
 	/**
+	 * 기본 프로젝트 목록
+	 * @param projectIds
+	 * @return
+	 */
+	List<Project> getListDefault(String[] projectIds);
+	
+	/**
 	 * geo 정보를 이용해서 가장 가까운 project 정보를 획득
 	 * @param project
 	 * @return

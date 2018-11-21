@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.gaia3d.security.Crypt;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,8 +30,8 @@ public class AMQPConfig {
 	@Bean
 	public ConnectionFactory connectionFactory() {
 		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(propertiesConfig.getQueueServerHost());
-		connectionFactory.setUsername(propertiesConfig.getQueueUser());
-		connectionFactory.setPassword(propertiesConfig.getQueuePassword());
+		connectionFactory.setUsername(Crypt.decrypt(propertiesConfig.getQueueUser()));
+		connectionFactory.setPassword(Crypt.decrypt(propertiesConfig.getQueuePassword()));
 		connectionFactory.setPort(Integer.parseInt(propertiesConfig.getQueueServerPort()));
 		return connectionFactory;
 	}

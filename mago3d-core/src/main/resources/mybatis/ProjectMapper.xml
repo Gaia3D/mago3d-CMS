@@ -132,11 +132,11 @@
 	<!-- project 등록 -->
 	<insert id="insertProject" parameterType="project" >
 		/* insertProject */
-		<selectKey keyProperty="project_id" resultType="long" order="BEFORE">
+		<selectKey keyProperty="project_id" resultType="int" order="BEFORE">
     		SELECT NEXTVAL('project_seq')
   		</selectKey>
 		INSERT INTO project(
-			project_id, project_key, project_name, sharing_type, user_id, view_order, use_yn, latitude, longitude, height, duration, description
+			project_id, project_key, project_name, project_path, sharing_type, user_id, view_order, use_yn, latitude, longitude, height, duration, description
 			<if test="attributes != null and attributes != ''">
 			, attributes
 			</if>
@@ -148,7 +148,7 @@
 			<if test="project_key != null and project_key != ''">
 			, #{project_key} 
 			</if>
-			, #{project_name}, #{sharing_type}, #{user_id}, #{view_order}, #{use_yn}, #{latitude}, #{longitude}, #{height}, #{duration}, #{description}
+			, #{project_name}, #{project_path}, #{sharing_type}, #{user_id}, #{view_order}, #{use_yn}, #{latitude}, #{longitude}, #{height}, #{duration}, #{description}
 			<if test="attributes != null and attributes != ''">
 			, TO_JSON(#{attributes}::json)
 			</if>
