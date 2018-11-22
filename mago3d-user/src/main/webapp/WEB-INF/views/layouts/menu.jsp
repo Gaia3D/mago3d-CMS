@@ -95,7 +95,7 @@
 						<a href="/settings/modify-membership.do" style="text-decoration: none; color: #2c2d2d;">MemberShip 설정</a>
 					</li>
 					<li style="padding-top:0px; height: 25px; font-size: 14px;">
-						<a href="/settings/modify-user-policy.do" style="text-decoration: none; color: #2c2d2d;">mago3D 설정 </a>
+						<a href="/user/modify-user-policy.do" style="text-decoration: none; color: #2c2d2d;">mago3D 설정 </a>
 					</li>
 				</ul>
 			</li>

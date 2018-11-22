@@ -21,6 +21,8 @@ public class UserPolicy {
 
 	// view library. 기본 cesium
 	private String geo_view_library;
+	// cesium ion token
+	private String geo_cesium_ion_token;
 	// data 폴더. 기본 /data
 	private String geo_data_path;
 	// 초기 로딩 프로젝트

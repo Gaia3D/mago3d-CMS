@@ -12,6 +12,9 @@
 			<if test="project_id != null and project_id > 0">
 			project_id = #{project_id}
 			</if>
+			<if test="sharing_type != null and sharing_type != ''">
+			AND sharing_type = #{sharing_type}
+			</if>
 			<if test="user_id != null and user_id != ''">
 			AND	user_id = #{user_id}
 			</if>
@@ -71,6 +74,9 @@
 			<trim prefix="WHERE" prefixOverrides="AND">
 				<if test="project_id != null and project_id > 0">
 				project_id = #{project_id}
+				</if>
+				<if test="sharing_type != null and sharing_type != ''">
+				AND sharing_type = #{sharing_type}
 				</if>
 				<if test="user_id != null and user_id != ''">
 				AND user_id = #{user_id}

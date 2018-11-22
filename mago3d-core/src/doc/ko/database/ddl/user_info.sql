@@ -218,6 +218,7 @@ create table user_policy(
 	user_id									varchar(32)	 						not null,	
 	
 	geo_view_library						varchar(20)			default 'cesium',
+	geo_cesium_ion_token					varchar(1000),
 	geo_data_path							varchar(100)		default '/f4d',
 	geo_data_default_projects				varchar(30)[],
 	geo_cull_face_enable					varchar(5)			default 'false',
@@ -254,6 +255,7 @@ comment on column user_policy.user_policy_id is '고유키';
 comment on column user_policy.user_id is '사용자 아이디';
 
 comment on column user_policy.geo_view_library is 'view library. 기본 cesium';
+comment on column user_policy.geo_cesium_ion_token is 'cesium ion token';
 comment on column user_policy.geo_data_path is 'data 폴더. 기본 /f4d';
 comment on column user_policy.geo_data_default_projects is '시작시 로딩 프로젝트. 배열로 저장';
 comment on column user_policy.geo_cull_face_enable is 'cullFace 사용유무. 기본 false';

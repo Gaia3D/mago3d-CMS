@@ -259,7 +259,7 @@
     	
     	$.ajax({
     		url: "/data/ajax-project.do",
-    		data: { projectId : projectId },
+    		data: { "project_id" : projectId },
     		type: "GET",
     		dataType: "json",
     		success: function(msg){

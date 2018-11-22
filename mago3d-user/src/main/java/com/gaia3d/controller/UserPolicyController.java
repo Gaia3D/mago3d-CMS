@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Controller
-@RequestMapping("/user-policy/")
+@RequestMapping("/user/")
 public class UserPolicyController {
 	
 	@Autowired
@@ -59,54 +59,41 @@ public class UserPolicyController {
 		UserPolicy userPolicy = userPolicyService.getUserPolicy(userSession.getUser_id());
 		log.info("@@@@@@@@@@ userPolicy = {}", userPolicy);
 		
-//		String defaultProjects = userPolicy.getGeo_data_default_projects();
-//		if(defaultProjects != null && !"".equals(defaultProjects)) {
-//			String[] projectIds = defaultProjects.split(",");
-//			List<Project> projectList = projectService.getListDefaultProject(projectIds);
-//			
-//			
-//			Map<Integer, Project> projectMap = new HashMap<>();
-//			for(Project project : projectList) {
-//				projectMap.put(project.getProject_id(), project);
-//			}
-//			
-//			
-//			
-//			
-//			
-//			
-//			
-//			
-//			
-//			
-//			
-//			Map<Integer, Project> projectMap = CacheManager.getProjectMap();
-//			String defaultProjectsView = "";
-//			for(String projectId : projectIds) {
-//				log.info(" --------------  projectId = {}", projectId);
-//				Project project = projectMap.get(Integer.valueOf(projectId));
-//				if("".equals(defaultProjectsView)) {
-//					defaultProjectsView += project.getProject_name();
-//				} else {
-//					defaultProjectsView += "," + project.getProject_name();
-//				}
-//			}
-//			userPolicy.setGeo_data_default_projects_view(defaultProjectsView);
-//			
-//		}
+		String defaultProjects = userPolicy.getGeo_data_default_projects();
+		if(defaultProjects != null && !"".equals(defaultProjects)) {
+			String[] projectIds = defaultProjects.split(",");
+			List<Project> projectList = projectService.getListDefaultProject(projectIds);
+			Map<Integer, Project> projectMap = new HashMap<>();
+			for(Project project : projectList) {
+				projectMap.put(project.getProject_id(), project);
+			}
+			
+			String defaultProjectsView = "";
+			for(String projectId : projectIds) {
+				log.info(" --------------  projectId = {}", projectId);
+				Project project = projectMap.get(Integer.valueOf(projectId));
+				if("".equals(defaultProjectsView)) {
+					defaultProjectsView += project.getProject_name();
+				} else {
+					defaultProjectsView += "," + project.getProject_name();
+				}
+			}
+			userPolicy.setGeo_data_default_projects_view(defaultProjectsView);
+			
+		}
 		
-		model.addAttribute("policy", userPolicy);
+		model.addAttribute("userPolicy", userPolicy);
 		
-		return "/user-policy/modify-user-policy";
+		return "/user/modify-user-policy";
 	}
 	
 	/**
-	 * Geo
+	 * 운영 정책 수정
 	 * @param request
-	 * @param policy
+	 * @param userPolicy
 	 * @return
 	 */
-	@PostMapping(value = "ajax-update-user-policy-geo.do")
+	@PostMapping(value = "ajax-update-user-policy.do")
 	@ResponseBody
 	public Map<String, String> ajaxUpdateUserPolicyGeo(HttpServletRequest request, UserPolicy userPolicy) {
 		Map<String, String> map = new HashMap<>();
@@ -118,8 +105,11 @@ public class UserPolicyController {
 //				map.put("result", result);
 //				return map;
 //			}
-//			
-//			userPolicyService.updateUserPolicyGeo(userPolicy);
+			
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);	
+			userPolicy.setUser_id(userSession.getUser_id());
+			
+			userPolicyService.updateUserPolicy(userPolicy);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

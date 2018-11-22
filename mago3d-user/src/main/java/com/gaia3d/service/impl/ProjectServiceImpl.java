@@ -63,8 +63,8 @@ public class ProjectServiceImpl implements ProjectService {
 	 * @param projectIds
 	 * @return
 	 */
-	public List<Project> getListDefault(String[] projectIds) {
-		return projectMapper.getListDefault(projectIds);
+	public List<Project> getListDefaultProject(String[] projectIds) {
+		return projectMapper.getListDefaultProject(projectIds);
 	}
 	
 	/**

@@ -24,18 +24,23 @@ import org.springframework.web.servlet.LocaleResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.config.CacheConfig;
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataSharingType;
 import com.gaia3d.domain.Issue;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.Project;
+import com.gaia3d.domain.ProjectDataJson;
 import com.gaia3d.domain.SessionKey;
 import com.gaia3d.domain.UserGroupRole;
+import com.gaia3d.domain.UserPolicy;
 import com.gaia3d.domain.UserSession;
 import com.gaia3d.helper.GroupRoleHelper;
+import com.gaia3d.service.DataService;
 import com.gaia3d.service.IssueService;
 import com.gaia3d.service.ProjectService;
 import com.gaia3d.service.RoleService;
+import com.gaia3d.service.UserPolicyService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.StringUtil;
 
@@ -57,11 +62,15 @@ public class ProjectController {
 	@Autowired
 	CacheConfig cacheConfig;
 	@Autowired
+	private DataService dataService;
+	@Autowired
 	private IssueService issueService;
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
 	private RoleService roleService;
+	@Autowired
+	private UserPolicyService userPolicyService;
 	
 	/**
 	 * Project 목록
@@ -95,6 +104,7 @@ public class ProjectController {
 		List<Project> projectList = new ArrayList<>();
 		if(totalCount > 0l) {
 			projectList = projectService.getListProject(project);
+			log.info("@@ projectList = {}", projectList);
 		}
 		
 		model.addAttribute(pagination);
@@ -136,8 +146,10 @@ public class ProjectController {
 		}
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+		String userId = userSession.getUser_id();
+		
 		Issue issue = new Issue();
-		issue.setUser_id(userSession.getUser_id());
+		issue.setUser_id(userId);
 		issue.setUser_name(userSession.getUser_name());
 		
 		log.info("@@ issue = {}", issue);
@@ -160,63 +172,73 @@ public class ProjectController {
 		}
 		
 		Policy policy = CacheManager.getPolicy();
-		if(StringUtil.isEmpty(project.getSharing_type())) {
-			project.setSharing_type(DataSharingType.PUBLIC.getValue());
-		}
-		List<Project> projectList = projectService.getListProject(project);
-		Map<String, String> initProjectJsonMap = new HashMap<>();
-		int initProjectsLength = 0;
-		String defaultProjects = policy.getGeo_data_default_projects();
-		String[] initProjects = null;
-		if(defaultProjects != null && !"".equals(defaultProjects)) {
-			initProjects = defaultProjects.split(",");
-			for(String projectId : initProjects) {
-				initProjectJsonMap.put(projectId, CacheManager.getProjectDataJson(Integer.valueOf(projectId)));
-			}
-			initProjectsLength = initProjects.length;
-		}
+		policy.setGeo_view_library(viewLibrary);
 		
-		
-		
-		
-		
-		
-		
-		
-//		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
-//		project.setUser_id(userSession.getUser_id());
-//		project.setUse_yn(Project.IN_USE);
-//		if(StringUtils.isEmpty(project.getSharing_type())) {
+//		if(StringUtil.isEmpty(project.getSharing_type())) {
 //			project.setSharing_type(DataSharingType.PUBLIC.getValue());
 //		}
-//		
-//		if(!StringUtils.isEmpty(project.getStart_date())) {
-//			project.setStart_date(project.getStart_date().substring(0, 8) + DateUtil.START_TIME);
-//		}
-//		if(!StringUtils.isEmpty(project.getEnd_date())) {
-//			project.setEnd_date(project.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
-//		}
-//		
-//		long totalCount = projectService.getProjectTotalCount(project);
-//		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(project), totalCount, Long.valueOf(pageNo).longValue(), project.getList_counter());
-//		log.info("@@ pagination = {}", pagination);
-//		
-//		project.setOffset(pagination.getOffset());
-//		project.setLimit(pagination.getPageRows());
-//		List<Project> projectList = new ArrayList<>();
-//		if(totalCount > 0l) {
-//			projectList = projectService.getListProject(project);
-//		}
-//		
-//		Policy policy = CacheManager.getPolicy();
-//		
+//		List<Project> projectList = projectService.getListProject(project);
+		
+		Map<Integer, String> initProjectJsonMap = new HashMap<>();
+		int initProjectsLength = 0;
+		UserPolicy userPolicy = userPolicyService.getUserPolicy(userId);
+		if(project.getProject_id() != null && project.getProject_id().intValue() > 0) {
+			// 프로젝트 map 보기를 클릭한 경우
+			project.setUser_id(userId);
+			project = projectService.getProject(project);
+			DataInfo dataInfo = new DataInfo();
+			dataInfo.setProject_id(project.getProject_id());
+			List<DataInfo> dataInfoList = dataService.getListDataByProjectId(dataInfo);
+			if(!dataInfoList.isEmpty()) {
+				initProjectJsonMap.put( project.getProject_id(), ProjectDataJson.getProjectDataJson(log, project.getProject_id(), dataInfoList));
+				initProjectsLength++;
+			}
+		} else {
+			// 기본 보기
+			if(userPolicy != null) {
+				String defaultProjects = userPolicy.getGeo_data_default_projects();
+				String[] initProjects = null;
+				if(defaultProjects != null && !"".equals(defaultProjects)) {
+					initProjects = defaultProjects.split(",");
+					for(String projectId : initProjects) {
+						DataInfo dataInfo = new DataInfo();
+						dataInfo.setProject_id(Integer.valueOf(projectId));
+						List<DataInfo> dataInfoList = dataService.getListDataByProjectId(dataInfo);
+						if(!dataInfoList.isEmpty()) {
+							initProjectJsonMap.put( Integer.valueOf(projectId), ProjectDataJson.getProjectDataJson(log, Integer.valueOf(projectId), dataInfoList));
+							initProjectsLength++;
+						}
+					}
+				}
+			}
+		}
+		
+//		@SuppressWarnings("unchecked")
+//		List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
+//		@SuppressWarnings("unchecked")
+//		List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
+		
 		ObjectMapper mapper = new ObjectMapper();
 		
-		model.addAttribute("policy", policy);
-		model.addAttribute("policyJson", mapper.writeValueAsString(policy));
-		
+		model.addAttribute("userPolicy", userPolicy);
+		model.addAttribute("geoViewLibrary", policy.getGeo_view_library());
+		model.addAttribute("issue", issue);
+		model.addAttribute("now_latitude", policy.getGeo_init_latitude());
+		model.addAttribute("now_longitude", policy.getGeo_init_longitude());
 		model.addAttribute(pagination);
-		model.addAttribute("projectList", projectList);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("issueList", issueList);
+//		model.addAttribute("projectList", projectList);
+		model.addAttribute("initProjectsLength", initProjectsLength);
+		model.addAttribute("initProjectJsonMap", mapper.writeValueAsString(initProjectJsonMap));
+		model.addAttribute("cache_version", policy.getContent_cache_version());
+		model.addAttribute("policyJson", mapper.writeValueAsString(userPolicy));
+//		model.addAttribute("issuePriorityList", issuePriorityList);
+//		model.addAttribute("issueTypeList", issueTypeList);
+		
+		log.info("@@@@@@ policy = {}", policy);
+		log.info("@@@@@@ initProjectsLength = {}", initProjectsLength);
+		log.info("@@@@@@ initProjectJsonMap = {}", mapper.writeValueAsString(initProjectJsonMap));
 		
 		return "/project/map-project";
 	}
@@ -232,8 +254,14 @@ public class ProjectController {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
+			
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			project.setUser_id(userSession.getUser_id());
 			project.setUse_yn(Project.IN_USE);
+			project.setSharing_type(DataSharingType.PUBLIC.getValue());
+			
 			List<Project> projectList = projectService.getListProject(project);
+			
 			map.put("projectList", projectList);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -251,7 +279,7 @@ public class ProjectController {
 	 */
 	@GetMapping(value = "ajax-project.do")
 	@ResponseBody
-	public Map<String, Object> ajaxProject(HttpServletRequest request, Project project) {
+	public Map<String, Object> getProject(HttpServletRequest request, Project project) {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
@@ -374,11 +402,9 @@ public class ProjectController {
 		project.setUser_id(userSession.getUser_id());
 		project.setUse_yn(Project.IN_USE);
 		project = projectService.getProject(project);
-		project.setOld_project_key(project.getProject_key());
-		
 		model.addAttribute("project", project);
 		
-		return "/data/modify-project";
+		return "/project/modify-project";
 	}
 	
 	/**
@@ -407,12 +433,6 @@ public class ProjectController {
 			project.setUser_id(userSession.getUser_id());
 			project.setUse_yn(Project.IN_USE);
 			projectService.updateProject(project);
-			
-			// TODO 개인용 캐시 갱신은 어떻게 하지?
-//			CacheParams cacheParams = new CacheParams();
-//			cacheParams.setCacheName(CacheName.PROJECT);
-//			cacheParams.setCacheType(CacheType.BROADCAST);
-//			cacheConfig.loadCache(cacheParams);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

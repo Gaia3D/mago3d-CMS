@@ -230,8 +230,7 @@
 </div>
 <%-- F4D Converter Job 등록 --%>
 
-<script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
-<script type="text/javascript" src="/externlib/jquery-ui/jquery-ui.js"></script>
+<script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
 <script type="text/javascript">
 	

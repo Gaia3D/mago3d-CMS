@@ -48,7 +48,8 @@
 			geo_specular_reflection_coef = #{geo_specular_reflection_coef},
 			geo_specular_color = #{geo_specular_color},
 			geo_ambient_color = #{geo_ambient_color},
-			geo_ssao_radius = #{geo_ssao_radius}
+			geo_ssao_radius = #{geo_ssao_radius},
+			update_date = NOW()
 		WHERE user_id = #{user_id}
 	</update>
 	

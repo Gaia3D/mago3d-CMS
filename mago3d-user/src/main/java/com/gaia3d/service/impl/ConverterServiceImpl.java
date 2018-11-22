@@ -131,6 +131,10 @@ public class ConverterServiceImpl implements ConverterService {
 				// queue 를 실행
 				executeConverter(projectRootPath, converterJobFile, uploadDataFile);
 			}
+			
+			Project project = new Project();
+			//project.setProject_id(project_id);
+			projectService.updateProject(project);
 		}
 		
 		return uploadDataIds.length;

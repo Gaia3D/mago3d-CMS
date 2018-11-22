@@ -11,12 +11,21 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.CacheName;
+import com.gaia3d.domain.CacheParams;
+import com.gaia3d.domain.CacheType;
+import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.DataSharingType;
 import com.gaia3d.domain.Pagination;
+import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.Project;
 import com.gaia3d.domain.UserSession;
 import com.gaia3d.service.DataService;
@@ -54,16 +63,15 @@ public class DataController {
 		log.info("@@ dataInfo = {}", dataInfo);
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+		String userId = userSession.getUser_id();
 		
-		Project project = new Project();
-		project.setUser_id(userSession.getUser_id());
-		project.setUse_yn(Project.IN_USE);
-		List<Project> projectList = projectService.getListProject(project);
+//		Project project = new Project();
+//		project.setUser_id(userId);
+//		project.setUse_yn(Project.IN_USE);
+//		List<Project> projectList = projectService.getListProject(project);
 		
-		dataInfo.setUser_id(userSession.getUser_id());
-		if(dataInfo.getProject_id() == null) {
-			dataInfo.setProject_id(Integer.valueOf(0));
-		}
+		dataInfo.setSharing_type(DataSharingType.PUBLIC.getValue());
+		dataInfo.setUser_id(userId);
 		if(StringUtil.isNotEmpty(dataInfo.getStart_date())) {
 			dataInfo.setStart_date(dataInfo.getStart_date().substring(0, 8) + DateUtil.START_TIME);
 		}
@@ -87,32 +95,112 @@ public class DataController {
 //		String welcome = messageSource.getMessage("xxx.xxxx", new Object[]{}, locale);
 		
 		model.addAttribute(pagination);
-		model.addAttribute("projectList", projectList);
+//		model.addAttribute("projectList", projectList);
 		model.addAttribute("dataList", dataList);
 		return "/data/list-data";
 	}
 	
-//	/**
-//	 * 프로젝트에 등록된 Data 목록
-//	 * @param request
-//	 * @return
-//	 */
-//	@RequestMapping(value = "ajax-project-data-by-project-id.do")
-//	@ResponseBody
-//	public Map<String, Object> ajaxProjectDataByProjectId(HttpServletRequest request, @RequestParam("project_id") Integer project_id) {
-//		Map<String, Object> map = new HashMap<>();
-//		String result = "success";
-//		try {		
-//			String projectDataJson =  CacheManager.getProjectDataJson(project_id);
-//			map.put("projectDataJson", projectDataJson);
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			result = "db.exception";
-//		}
-//		
-//		map.put("result", result);
-//		return map;
-//	}
+	/**
+	 * Data 정보
+	 * @param data_id
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "detail-data.do")
+	public String detailData(@RequestParam("data_id") String data_id, HttpServletRequest request, Model model) {
+		
+		String listParameters = getListParameters(request);
+			
+		DataInfo dataInfo =  dataService.getData(Long.valueOf(data_id));
+		
+		Policy policy = CacheManager.getPolicy();
+		
+		model.addAttribute("policy", policy);
+		model.addAttribute("listParameters", listParameters);
+		model.addAttribute("dataInfo", dataInfo);
+		
+		return "/data/detail-data";
+	}
+	
+	/**
+	 * Data 정보 수정 화면
+	 * @param data_id
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "modify-data.do")
+	public String modifyData(HttpServletRequest request, @RequestParam("data_id") Long data_id, Model model) {
+		
+		String listParameters = getListParameters(request);
+		
+		Project project = new Project();
+		project.setUse_yn(Project.IN_USE);
+		List<Project> projectList = projectService.getListProject(project);
+		DataInfo dataInfo =  dataService.getData(data_id);
+		dataInfo.setOld_data_key(dataInfo.getData_key());
+		
+		log.info("@@@@@@@@ dataInfo = {}", dataInfo);
+		Policy policy = CacheManager.getPolicy();
+		
+		@SuppressWarnings("unchecked")
+		List<CommonCode> dataRegisterTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.DATA_REGISTER_TYPE);
+		
+		model.addAttribute("dataRegisterTypeList", dataRegisterTypeList);
+		model.addAttribute("listParameters", listParameters);
+		model.addAttribute("policy", policy);
+		model.addAttribute("projectList", projectList);
+		model.addAttribute(dataInfo);
+		
+		return "/data/modify-data";
+	}
+	
+	/**
+	 * Data 정보 수정
+	 * @param request
+	 * @param dataInfo
+	 * @return
+	 */
+	@PostMapping(value = "ajax-update-data-info.do")
+	@ResponseBody
+	public Map<String, Object> ajaxUpdateDataInfo(HttpServletRequest request, DataInfo dataInfo) {
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		
+		log.info("@@ dataInfo = {}", dataInfo);
+		try {
+//			dataInfo.setMethod_mode("update");
+//			String errorcode = dataValidate(dataInfo);
+//			if(errorcode != null) {
+//				result = errorcode;
+//				map.put("result", result);
+//				return map;
+//			}
+//			
+//			if(dataInfo.getParent() == 0l && dataInfo.getDepth() == 1) {
+//				int rootCount = dataService.getRootParentCount(dataInfo);
+//				if(rootCount > 0) {
+//					result = "data.project.root.duplication";
+//					map.put("result", result);
+//					return map;
+//				}
+//			}
+
+			if(dataInfo.getLatitude() != null && dataInfo.getLatitude().floatValue() != 0f &&
+					dataInfo.getLongitude() != null && dataInfo.getLongitude().floatValue() != 0f) {
+				dataInfo.setLocation("POINT(" + dataInfo.getLongitude() + " " + dataInfo.getLatitude() + ")");
+			}
+			log.info("@@@@@@@@ dataInfo = {}", dataInfo);
+			
+			dataService.updateData(dataInfo);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		map.put("result", result);
+		return map;
+	}
 	
 	/**
 	 * 데이터 검색

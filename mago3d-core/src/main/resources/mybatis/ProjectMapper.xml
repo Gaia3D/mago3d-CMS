@@ -37,9 +37,10 @@
 	<!-- project 목록 -->
 	<select id="getListProject" parameterType="project" resultType="project">
 		/* getListProject */
-		SELECT A.* 
+		SELECT A.*, (SELECT COUNT(data_id) FROM data_info WHERE project_id = A.project_id) AS data_count
 		FROM(
-			SELECT * 
+			SELECT project_id, project_key, project_name, view_order, default_yn, use_yn, latitude, longitude, height, duration,
+				description, attributes, user_id, sharing_type, project_path, insert_date
 			FROM project
 			<trim prefix="WHERE" prefixOverrides="AND">
 				<if test="sharing_type != null and sharing_type != ''">
@@ -80,6 +81,17 @@
 			OFFSET #{offset} LIMIT #{limit}
 			</if>
 		) A
+	</select>
+	
+	<!-- 기본 프로젝트 목록 -->
+	<select id="getListDefaultProject" resultType="project">
+		/* getListDefaultProject */
+		SELECT *
+		FROM project
+		WHERE project_id IN
+		<foreach collection="array" item="project_id" index="index" open="(" separator="," close=")">
+			CAST (#{project_id} AS INTEGER)
+		</foreach>
 	</select>
 	
 	<!-- project -->
@@ -159,20 +171,21 @@
 	<update id="updateProject" parameterType="project">
 		/* updateProject */
 		UPDATE project
-		SET project_key = #{project_key},
+		SET 
+			<if test="project_key != null and project_key != ''">
+			project_key = #{project_key},
+			</if>
 			project_name = #{project_name},
 			sharing_type = #{sharing_type},
-			<![CDATA[
-			<if test="data_count != null and data_count > 0">
+			<if test="data_count != null and data_count gt 0">
 			data_count = data_count + #{data_count},
 			</if>
-			<if test="data_count != null and data_count < 0">
+			<if test="data_count != null and data_count lt 0">
 			data_count = data_count - ABS(#{data_count}),
 			</if>
-			<if test="view_order != null and view_order > 0">
+			<if test="view_order != null and view_order gt 0">
 			view_order = #{view_order},
 			</if>
-			]]>
 			use_yn = #{use_yn},
 			latitude = #{latitude},
 			longitude = #{longitude},

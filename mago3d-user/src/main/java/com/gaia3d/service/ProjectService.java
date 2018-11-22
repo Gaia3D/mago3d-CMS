@@ -32,7 +32,7 @@ public interface ProjectService {
 	 * @param projectIds
 	 * @return
 	 */
-	List<Project> getListDefault(String[] projectIds);
+	List<Project> getListDefaultProject(String[] projectIds);
 	
 	/**
 	 * geo 정보를 이용해서 가장 가까운 프로젝트 정보를 취득

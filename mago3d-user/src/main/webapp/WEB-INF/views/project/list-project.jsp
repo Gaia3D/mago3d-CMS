@@ -103,13 +103,12 @@
 						<col class="col-number" />
 						<col class="col-name" />
 						<col class="col-name" />
-						<col class="col-number" />
-						<col class="col-toggle" />
 						<col class="col-toggle" />
 						<col class="col-toggle" />
 						<col class="col-toggle" />
 						<col class="col-toggle" />
 						<col class="col-number" />
+						<col class="col-functions" />
 						<col class="col-functions" />
 						<col class="col-date" />
 						<col class="col-functions" />
@@ -117,15 +116,14 @@
 							<tr>
 								<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
 								<th scope="col" class="col-number"><spring:message code='number'/></th>
+								<th scope="col" class="col-number">공유타입</th>
 								<th scope="col" class="col-name"><spring:message code='project.name'/></th>
-								<th scope="col" class="col-number"><spring:message code='order'/></th>
-								<th scope="col" class="col-toggle"><spring:message code='default.value'/></th>
-								<th scope="col" class="col-toggle"><spring:message code='code.use.not'/></th>
 								<th scope="col" class="col-toggle"><spring:message code='latitude'/></th>
 								<th scope="col" class="col-toggle"><spring:message code='longitude'/></th>
 								<th scope="col" class="col-toggle"><spring:message code='height'/></th>
 								<th scope="col" class="col-number"><spring:message code='movement.time'/></th>
 								<th scope="col" class="col-functions">데이터 건수</th>
+								<th scope="col" class="col-functions">바로가기</th>
 								<th scope="col" class="col-date"><spring:message code='search.insert.date'/></th>
 								<th scope="col" class="col-functions"><spring:message code='code.modify.delete'/></th>
 							</tr>
@@ -133,7 +131,7 @@
 						<tbody>
 	<c:if test="${empty projectList }">
 							<tr>
-								<td colspan="13" class="col-none"><spring:message code='project.does.not.exist'/></td>
+								<td colspan="12" class="col-none"><spring:message code='project.does.not.exist'/></td>
 							</tr>
 	</c:if>
 	<c:if test="${!empty projectList }">
@@ -143,10 +141,24 @@
 										<input type="checkbox" id="project_id_${project.project_id}" name="project_id" value="${project.project_id}" />
 									</td>
 									<td class="col-number">${pagination.rowNumber - status.index}</td>
-									<td class="col-number">${project.project_name } [ 보기 ]</td>
-									<td class="col-number">${project.view_order}</td>
+									<td class="col-number">
+	<c:if test="${project.sharing_type eq '0' }">
+										공통 프로젝트
+	</c:if>
+	<c:if test="${project.sharing_type eq '1' }">
+										공개 프로젝트
+	</c:if>
+	<c:if test="${project.sharing_type eq '2' }">
+										개인 프로젝트
+	</c:if>
+	<c:if test="${project.sharing_type eq '3' }">
+										공유 프로젝트
+	</c:if>
+									</td>
+									<td class="col-number">${project.project_name }</td>
+									<%-- <td class="col-number">${project.view_order}</td>
 									<td class="col-toggle">${project.default_yn}</td>
-									<td class="col-toggle">${project.use_yn}</td>
+									<td class="col-toggle">${project.use_yn}</td> --%>
 									<td class="col-toggle">${project.latitude}</td>
 									<td class="col-toggle">${project.longitude}</td>
 									<td class="col-toggle">${project.height}</td>
@@ -154,10 +166,17 @@
 									<td class="col-functions">
 										<a href="#" onclick="viewDataList('${project.project_id}', '${project.project_name}'); return false;">
 											<fmt:formatNumber value="${project.data_count }" pattern="###,###" /></a></td>
+									<td class="col-functions">
+										<a href="/project/map-project.do?project_id=${project.project_id}">
+											<span style="padding-top:0px; font-size:20px; color: #c1e496;">
+												<i class="fas fa-globe-americas" title="MAP"></i>
+											</span>
+										</a>
+									</td>		
 									<td class="col-date">${project.viewInsertDate }</td>
 									<td class="col-functions">
 										<span class="button-group">
-											<a href="/data/modify-project.do?project_id=${project.project_id}" class="image-button button-edit"><spring:message code='modified'/></a>
+											<a href="/project/modify-project.do?project_id=${project.project_id}" class="image-button button-edit"><spring:message code='modified'/></a>
 											<a href="#" onclick="deleteProject('${project.project_id}'); return false;" class="image-button button-delete">
 												<spring:message code='delete'/>
 											</a>

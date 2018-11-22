@@ -34,7 +34,7 @@ public interface ProjectMapper {
 	 * @param projectIds
 	 * @return
 	 */
-	List<Project> getListDefault(String[] projectIds);
+	List<Project> getListDefaultProject(String[] projectIds);
 	
 	/**
 	 * geo 정보를 이용해서 가장 가까운 project 정보를 획득
