@@ -149,7 +149,9 @@ public class DataController {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {		
-			DataInfo dataInfo = dataService.getData(data_id);
+			DataInfo dataInfo = new DataInfo();
+			dataInfo.setData_id(data_id);
+			dataInfo = dataService.getData(dataInfo);
 			map.put("dataInfo", dataInfo);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -285,7 +287,7 @@ public class DataController {
 			return "data.input.invalid";
 		}
 			
-		if(dataInfo.getProject_id() == null || dataInfo.getProject_id().longValue() <= 0
+		if(dataInfo.getProject_id() == null || dataInfo.getProject_id().intValue() <= 0
 				|| dataInfo.getData_name() == null || "".equals(dataInfo.getData_name())) {
 			return "data.project.id.invalid";
 		}
@@ -305,7 +307,7 @@ public class DataController {
 		String result = "success";
 		String duplication_value = "";
 		try {
-			if(dataInfo.getProject_id() == null || dataInfo.getProject_id().longValue() < 0) {
+			if(dataInfo.getProject_id() == null || dataInfo.getProject_id().intValue() < 0) {
 				result = "project.id.empty";
 				map.put("result", result);
 				return map;
@@ -346,8 +348,10 @@ public class DataController {
 	public String detailData(@RequestParam("data_id") String data_id, HttpServletRequest request, Model model) {
 		
 		String listParameters = getListParameters(request);
-			
-		DataInfo dataInfo =  dataService.getData(Long.valueOf(data_id));
+		
+		DataInfo dataInfo = new DataInfo();
+		dataInfo.setData_id(Long.valueOf(data_id));
+		dataInfo =  dataService.getData(dataInfo);
 		
 		Policy policy = CacheManager.getPolicy();
 		
@@ -372,7 +376,9 @@ public class DataController {
 		Project project = new Project();
 		project.setUse_yn(Project.IN_USE);
 		List<Project> projectList = projectService.getListProject(project);
-		DataInfo dataInfo =  dataService.getData(data_id);
+		DataInfo dataInfo = new DataInfo();
+		dataInfo.setData_id(Long.valueOf(data_id));
+		dataInfo =  dataService.getData(dataInfo);
 		dataInfo.setOld_data_key(dataInfo.getData_key());
 		
 		log.info("@@@@@@@@ dataInfo = {}", dataInfo);

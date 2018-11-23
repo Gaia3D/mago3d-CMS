@@ -16,25 +16,32 @@ import com.gaia3d.domain.ConverterJobFile;
 public interface ConverterMapper {
 	
 	/**
-	 * f4d converter job 총 건수
+	 * converter job 총 건수
 	 * @param converterJob
 	 * @return
 	 */
 	public Long getListConverterJobTotalCount(ConverterJob converterJob);
 	
 	/**
-	 * f4d converter 이력 목록
+	 * converter job file 총 건수
+	 * @param converterJobFile
+	 * @return
+	 */
+	public Long getListConverterJobFileTotalCount(ConverterJobFile converterJobFile);
+	
+	/**
+	 * f4d converter job 목록
 	 * @param converterJob
 	 * @return
 	 */
 	public List<ConverterJob> getListConverterJob(ConverterJob converterJob);
 	
 	/**
-	 * converter job 정보
-	 * @param jobId
+	 * f4d converter job 목록
+	 * @param converterJob
 	 * @return
 	 */
-	public ConverterJob getConverterJobByJobId(Long jobId);
+	public List<ConverterJobFile> getListConverterJobFile(ConverterJobFile converterJobFile);
 	
 	/**
 	 * insert converter job

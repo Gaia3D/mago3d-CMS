@@ -7,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Converter 목록 | mago3D User</title>
+	<title>Converter 파일 목록 | mago3D User</title>
 	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" href="/css/cloud.css?cache_version=${cache_version}">
 	<link rel="stylesheet" href="/css/fontawesome-free-5.2.0-web/css/all.min.css">
@@ -27,25 +27,25 @@
 		<div id="content-wrap">
 			<div id="gnb-content" class="clfix">
 				<h1 style="padding-left: 20px;">
-					<span style="font-size:26px;">Converter 목록</span>
+					<span style="font-size:26px;">Converter 파일 목록</span>
 				</h1>
 				<div class="location">
 					<span style="padding-top:10px; font-size:12px; color: Mediumslateblue;">
 						<i class="fas fa-cubes" title="Converter"></i>
 					</span>
-					<span style="font-size:12px;">Converter > Converter 목로</span>
+					<span style="font-size:12px;">Converter > Converter 파일 목록</span>
 				</div>
 			</div>
 			
 			<div class="page-content">
 				<div class="filters">
-	   				<form:form id="searchForm" modelAttribute="converterJob" method="post" action="/converter/list-converter-job.do" onsubmit="return searchCheck();">
+	   				<form:form id="searchForm" modelAttribute="converterJobFile" method="post" action="/converter/list-converter-job-file.do" onsubmit="return searchCheck();">
 					<div class="input-group row">
 						<div class="input-set">
 							<label for="search_word"><spring:message code='search.word'/></label>
 							<select id="search_word" name="search_word" class="select" style="height: 30px;">
 								<option value=""><spring:message code='select'/></option>
-			          			<option value="title">제목</option>
+			          			<option value="file_name">파일명</option>
 							</select>
 							<select id="search_option" name="search_option" class="select" style="height: 30px;">
 								<option value="0"><spring:message code='search.same'/></option>
@@ -85,7 +85,7 @@
 				</div>
 				
 				<div class="list">
-					<form:form id="listForm" modelAttribute="converterJob" method="post">
+					<form:form id="listForm" modelAttribute="converterJobFile" method="post">
 					<div class="list-header">
 						<div class="list-desc u-pull-left">
 							<spring:message code='all.d'/> <em><fmt:formatNumber value="${pagination.totalCount}" type="number"/></em><spring:message code='search.what.count'/> 
@@ -106,51 +106,61 @@
 							<tr>
 								<th scope="col" class="col-checkbox"><input type="checkbox" id="chk_all" name="chk_all" /></th>
 								<th scope="col" class="col-number"><spring:message code='number'/></th>
-								<th scope="col" class="col-functions">변환 타입</th>
-								<th scope="col" class="col-name" style="width: 40%;">title</th>
+								<th scope="col" class="col-functions">공유타입</th>
+								<th scope="col" class="col-name">데이터 타입</th>
+								<th scope="col" class="col-name">파일명</th>
 								<th scope="col" class="col-functions">상태</th>
-								<th scope="col" class="col-name">파일개수</th>
 								<th scope="col" class="col-functions">에러코드</th>
 								<th scope="col" class="col-date"><spring:message code='insert.date'/></th>
 							</tr>
 						</thead>
 						<tbody>
-<c:if test="${empty converterJobList }">
+<c:if test="${empty converterJobFileList }">
 							<tr>
-								<td colspan="8" class="col-none">Converter Job이 존재하지 않습니다.</td>
+								<td colspan="8" class="col-none">Converter Job File 이 존재하지 않습니다.</td>
 							</tr>
 </c:if>
-<c:if test="${!empty converterJobList }">
-<c:forEach var="converterJob" items="${converterJobList}" varStatus="status">
+<c:if test="${!empty converterJobFileList }">
+<c:forEach var="converterJobFile" items="${converterJobFileList}" varStatus="status">
 							<tr>
 								<td class="col-checkbox">
-									<input type="checkbox" id="converter_job_id_${converterJob.converter_job_id}" name="converter_job_id" value="${converterJob.converter_job_id}" />
+									<input type="checkbox" id="converter_job_file_id_${converterJobFile.converter_job_file_id}" name="converter_job_file_id" 
+										value="${converterJobFile.converter_job_file_id}" />
 								</td>
 								<td class="col-number">${pagination.rowNumber - status.index }</td>
 								<td class="col-functions">
-	<c:if test="${converterJob.converter_type eq '0'}">정밀(배관공장)</c:if>
-	<c:if test="${converterJob.converter_type eq '1'}">기본</c:if>
-	<c:if test="${converterJob.converter_type eq '2'}">큰 건물</c:if>
-	<c:if test="${converterJob.converter_type eq '3'}">초대형 건물</c:if>
+	<c:if test="${converterJobFile.sharing_type eq '0' }">
+									공통 프로젝트
+	</c:if>
+	<c:if test="${converterJobFile.sharing_type eq '1' }">
+									공개 프로젝트
+	</c:if>
+	<c:if test="${converterJobFile.sharing_type eq '2' }">
+									개인 프로젝트
+	</c:if>
+	<c:if test="${converterJobFile.sharing_type eq '3' }">
+									공유 프로젝트
+	</c:if>							
 								</td>
-								<td class="col-name">${converterJob.title }</td>
+								<td class="col-name">${converterJobFile.data_type }</td>
 								<td class="col-functions">
-	<c:if test="${converterJob.status eq '0'}">준비</c:if>
-	<c:if test="${converterJob.status eq '1'}">성공</c:if>
-	<c:if test="${converterJob.status eq '2'}">확인필요</c:if>
-	<c:if test="${converterJob.status eq '3'}">실패</c:if>
+									${converterJobFile.file_name }
 								</td>
-								<td class="col-name" style="text-align: right;">${converterJob.converter_file_count}</td>
-								
+								<td class="col-name" style="text-align: right;">
+	<c:if test="${converterJobFile.status eq '0'}">준비</c:if>
+	<c:if test="${converterJobFile.status eq '1'}">성공</c:if>
+	<c:if test="${converterJobFile.status eq '2'}">확인필요</c:if>
+	<c:if test="${converterJobFile.status eq '3'}">실패</c:if>							
+								</td>
 								<td class="col-functions">
-	<c:if test="${empty converterJob.error_code }">
+	<c:if test="${empty converterJobFile.error_code }">
 									없음
 	</c:if>
-	<c:if test="${!empty converterJob.error_code }">
-									<a href="#" onclick="detailErrorCode('${converterJob.error_code}'); return false;">[보기]</a>
+	<c:if test="${!empty converterJobFile.error_code }">
+									<a href="#" onclick="detailErrorCode('${converterJobFile.error_code}'); return false;">[보기]</a>
 	</c:if>
 								</td>
-								<td class="col-name">${converterJob.viewInsertDate }</td>
+								<td class="col-name">${converterJobFile.viewInsertDate }</td>
 							</tr>
 </c:forEach>
 </c:if>
@@ -174,9 +184,8 @@
 	
 	//전체 선택 
 	$("#chk_all").click(function() {
-		$(":checkbox[name=converter_job_id]").prop("checked", this.checked);
+		$(":checkbox[name=converter_job_file_id]").prop("checked", this.checked);
 	});
-	
 	// 프로젝트 다이얼 로그
 	var errorDialog = $( ".errorDialog" ).dialog({
 		autoOpen: false,

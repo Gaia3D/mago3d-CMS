@@ -591,7 +591,7 @@ public class UploadDataController {
 			buffer.append("search_value=");
 		}
 		buffer.append("&");
-		buffer.append("search_word=" + StringUtil.getDefaultValue(isListPage ? uploadData.getSearch_word() : request.getParameter("search_type")));
+		buffer.append("search_word=" + StringUtil.getDefaultValue(isListPage ? uploadData.getSearch_word() : request.getParameter("search_word")));
 		buffer.append("&");
 		buffer.append("start_date=" + StringUtil.getDefaultValue(isListPage ? uploadData.getStart_date() : request.getParameter("start_date")));
 		buffer.append("&");

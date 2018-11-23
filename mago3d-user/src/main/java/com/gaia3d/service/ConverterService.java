@@ -13,11 +13,18 @@ import com.gaia3d.domain.ConverterJobFile;
 public interface ConverterService {
 	
 	/**
-	 * f4d converter job 총 건수
+	 * converter job 총 건수
 	 * @param converterJob
 	 * @return
 	 */
 	public Long getListConverterJobTotalCount(ConverterJob converterJob);
+	
+	/**
+	 * converter job file 총 건수
+	 * @param converterJobFile
+	 * @return
+	 */
+	public Long getListConverterJobFileTotalCount(ConverterJobFile converterJobFile);
 	
 	/**
 	 * f4d converter job 목록
@@ -25,6 +32,13 @@ public interface ConverterService {
 	 * @return
 	 */
 	public List<ConverterJob> getListConverterJob(ConverterJob converterJob);
+	
+	/**
+	 * f4d converter job 목록
+	 * @param converterJob
+	 * @return
+	 */
+	public List<ConverterJobFile> getListConverterJobFile(ConverterJobFile converterJobFile);
 
 	/**
 	 * @param userId

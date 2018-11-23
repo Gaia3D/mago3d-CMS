@@ -18,12 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gaia3d.domain.CacheManager;
-import com.gaia3d.domain.CacheName;
-import com.gaia3d.domain.CacheParams;
-import com.gaia3d.domain.CacheType;
-import com.gaia3d.domain.CommonCode;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataSharingType;
+import com.gaia3d.domain.PageType;
 import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.Project;
@@ -80,7 +77,7 @@ public class DataController {
 		}
 
 		long totalCount = dataService.getDataTotalCount(dataInfo);
-		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(dataInfo), totalCount, Long.valueOf(pageNo).longValue(), dataInfo.getList_counter());
+		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(PageType.LIST, request, dataInfo), totalCount, Long.valueOf(pageNo).longValue(), dataInfo.getList_counter());
 		log.info("@@ pagination = {}", pagination);
 		
 		dataInfo.setOffset(pagination.getOffset());
@@ -109,9 +106,10 @@ public class DataController {
 	@RequestMapping(value = "detail-data.do")
 	public String detailData(@RequestParam("data_id") String data_id, HttpServletRequest request, Model model) {
 		
-		String listParameters = getListParameters(request);
-			
-		DataInfo dataInfo =  dataService.getData(Long.valueOf(data_id));
+		String listParameters = getSearchParameters(PageType.DETAIL, request, null);
+		DataInfo dataInfo = new DataInfo();
+		dataInfo.setData_id(Long.valueOf(data_id));
+		dataInfo = dataService.getData(dataInfo);
 		
 		Policy policy = CacheManager.getPolicy();
 		
@@ -131,21 +129,23 @@ public class DataController {
 	@GetMapping(value = "modify-data.do")
 	public String modifyData(HttpServletRequest request, @RequestParam("data_id") Long data_id, Model model) {
 		
-		String listParameters = getListParameters(request);
+		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 		
 		Project project = new Project();
 		project.setUse_yn(Project.IN_USE);
+		project.setSharing_type(DataSharingType.PUBLIC.getValue());
+		project.setUser_id(userSession.getUser_id());
 		List<Project> projectList = projectService.getListProject(project);
-		DataInfo dataInfo =  dataService.getData(data_id);
-		dataInfo.setOld_data_key(dataInfo.getData_key());
+		
+		DataInfo dataInfo = new DataInfo();
+		dataInfo.setData_id(data_id);
+		dataInfo =  dataService.getData(dataInfo);
 		
 		log.info("@@@@@@@@ dataInfo = {}", dataInfo);
 		Policy policy = CacheManager.getPolicy();
 		
-		@SuppressWarnings("unchecked")
-		List<CommonCode> dataRegisterTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.DATA_REGISTER_TYPE);
+		String listParameters = getSearchParameters(PageType.MODIFY, request, null);
 		
-		model.addAttribute("dataRegisterTypeList", dataRegisterTypeList);
 		model.addAttribute("listParameters", listParameters);
 		model.addAttribute("policy", policy);
 		model.addAttribute("projectList", projectList);
@@ -168,23 +168,14 @@ public class DataController {
 		
 		log.info("@@ dataInfo = {}", dataInfo);
 		try {
-//			dataInfo.setMethod_mode("update");
-//			String errorcode = dataValidate(dataInfo);
-//			if(errorcode != null) {
-//				result = errorcode;
-//				map.put("result", result);
-//				return map;
-//			}
-//			
-//			if(dataInfo.getParent() == 0l && dataInfo.getDepth() == 1) {
-//				int rootCount = dataService.getRootParentCount(dataInfo);
-//				if(rootCount > 0) {
-//					result = "data.project.root.duplication";
-//					map.put("result", result);
-//					return map;
-//				}
-//			}
-
+			dataInfo.setMethod_mode("update");
+			String errorcode = dataValidate(dataInfo);
+			if(errorcode != null) {
+				result = errorcode;
+				map.put("result", result);
+				return map;
+			}
+			
 			if(dataInfo.getLatitude() != null && dataInfo.getLatitude().floatValue() != 0f &&
 					dataInfo.getLongitude() != null && dataInfo.getLongitude().floatValue() != 0f) {
 				dataInfo.setLocation("POINT(" + dataInfo.getLongitude() + " " + dataInfo.getLatitude() + ")");
@@ -203,51 +194,46 @@ public class DataController {
 	}
 	
 	/**
-	 * 데이터 검색
-	 * @param model
+	 * 프로젝트에 등록된 Data 목록
+	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "ajax-search-data.do")
+	@RequestMapping(value = "ajax-list-data-by-project-id.do")
 	@ResponseBody
-	public Map<String, Object> ajaxSearchData(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) {
-		log.info("@@ dataInfo = {}", dataInfo);
+	public Map<String, Object> ajaxListDataByProjectId(HttpServletRequest request, @RequestParam("project_id") Integer project_id) {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
-		try {
+		List<DataInfo> dataList = new ArrayList<>();
+		try {		
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			
+			DataInfo dataInfo = new DataInfo();
 			dataInfo.setUser_id(userSession.getUser_id());
-			
-			log.info("@@ dataInfo = {}", dataInfo);
-			if(StringUtil.isNotEmpty(dataInfo.getStart_date())) {
-				dataInfo.setStart_date(dataInfo.getStart_date().substring(0, 8) + DateUtil.START_TIME);
-			}
-			if(StringUtil.isNotEmpty(dataInfo.getEnd_date())) {
-				dataInfo.setEnd_date(dataInfo.getEnd_date().substring(0, 8) + DateUtil.END_TIME);
-			}
-			
-			long totalCount = dataService.getDataTotalCount(dataInfo);
-			
-			long pageRows = 10l;
-			if(dataInfo.getList_counter() != null && dataInfo.getList_counter().longValue() > 0) pageRows = dataInfo.getList_counter().longValue();
-			Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(dataInfo), totalCount, Long.valueOf(pageNo).longValue(), pageRows);
-			log.info("@@ pagination = {}", pagination);
-			
-			dataInfo.setOffset(pagination.getOffset());
-			dataInfo.setLimit(pagination.getPageRows());
-			List<DataInfo> dataInfoList = new ArrayList<>();
-			if(totalCount > 0l) {
-				dataInfoList = dataService.getListData(dataInfo);
-			}
-			
-			map.put("dataInfoList", dataInfoList);
-			map.put("totalCount", totalCount);
+			dataInfo.setProject_id(project_id);
+			dataList = dataService.getListDataByProjectId(dataInfo);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";
 		}
-	
+		
 		map.put("result", result);
+		map.put("dataList", dataList);
+		
 		return map;
+	}
+	
+	/**
+	 * ajax 용 Data validation 체크
+	 * @param dataInfo
+	 * @return
+	 */
+	private String dataValidate(DataInfo dataInfo) {
+		if(dataInfo.getProject_id() == null || dataInfo.getProject_id().intValue() <= 0
+				|| dataInfo.getData_name() == null || "".equals(dataInfo.getData_name())) {
+			return "data.project.id.invalid";
+		}
+		
+		return null;
 	}
 	
 	/**
@@ -255,27 +241,40 @@ public class DataController {
 	 * @param dataInfo
 	 * @return
 	 */
-	private String getSearchParameters(DataInfo dataInfo) {
+	private String getSearchParameters(PageType pageType, HttpServletRequest request, DataInfo dataInfo) {
 		StringBuffer buffer = new StringBuffer();
+		boolean isListPage = true;
+		if(pageType.equals(PageType.MODIFY) || pageType.equals(PageType.DETAIL)) {
+			isListPage = false;
+		}
+		
+		if(!isListPage) {
+			buffer.append("pageNo=" + request.getParameter("pageNo"));
+		}
 		buffer.append("&");
-		buffer.append("search_word=" + StringUtil.getDefaultValue(dataInfo.getSearch_word()));
+		buffer.append("search_word=" + StringUtil.getDefaultValue(isListPage ? dataInfo.getSearch_word() : request.getParameter("search_word")));
 		buffer.append("&");
-		buffer.append("search_option=" + StringUtil.getDefaultValue(dataInfo.getSearch_option()));
+		buffer.append("search_option=" + StringUtil.getDefaultValue(isListPage ? dataInfo.getSearch_option() : request.getParameter("search_option")));
 		buffer.append("&");
 		try {
-			buffer.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(dataInfo.getSearch_value()), "UTF-8"));
+			buffer.append("search_value=" + URLEncoder.encode(StringUtil.getDefaultValue(
+					isListPage ? dataInfo.getSearch_value() : request.getParameter("search_value")), "UTF-8"));
 		} catch(Exception e) {
 			e.printStackTrace();
 			buffer.append("search_value=");
 		}
 		buffer.append("&");
-		buffer.append("start_date=" + StringUtil.getDefaultValue(dataInfo.getStart_date()));
+		buffer.append("start_date=" + StringUtil.getDefaultValue(isListPage ? dataInfo.getStart_date() : request.getParameter("start_date")));
 		buffer.append("&");
-		buffer.append("end_date=" + StringUtil.getDefaultValue(dataInfo.getEnd_date()));
+		buffer.append("end_date=" + StringUtil.getDefaultValue(isListPage ? dataInfo.getEnd_date() : request.getParameter("end_date")));
 		buffer.append("&");
-		buffer.append("order_word=" + StringUtil.getDefaultValue(dataInfo.getOrder_word()));
+		buffer.append("order_word=" + StringUtil.getDefaultValue(isListPage ? dataInfo.getOrder_word() : request.getParameter("order_word")));
 		buffer.append("&");
-		buffer.append("order_value=" + StringUtil.getDefaultValue(dataInfo.getOrder_value()));
+		buffer.append("order_value=" + StringUtil.getDefaultValue(isListPage ? dataInfo.getOrder_value() : request.getParameter("order_value")));
+		if(!isListPage) {
+			buffer.append("&");
+			buffer.append("list_count=" + request.getParameter("list_count"));
+		}
 		return buffer.toString();
 	}
 }

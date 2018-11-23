@@ -33,7 +33,7 @@
 				</h1>
 				<div class="location">
 					<span style="padding-top:10px; font-size:12px; color: Mediumslateblue;">
-						<i class="fas fa-cubes" title="프로젝트"></i>
+						<i class="fas fa-cubes" title="Settings"></i>
 					</span>
 					<span style="font-size:12px;">Settings > mago3D 설정</span>
 				</div>
@@ -43,7 +43,8 @@
 			<div class="page-content">
 				<div class="content-desc u-pull-right" style="padding-right: 10px;">
 					<span class="icon-glyph glyph-emark-dot color-warning" style="display: inline-block; padding-bottom: 2px;"></span>
-					<span style="display: inline-block; padding-bottom: 2px;"><spring:message code='check'/></span></div>
+					<span style="display: inline-block; padding-bottom: 2px;"><spring:message code='check'/></span>
+				</div>
 				<div style="margin-top: 20px; border: 1px solid #dddddd;">
 					<ul style="list-style: none; font-size: 14px; border-bottom: 3px solid #573592">
 						<li style="padding-left: 10px; padding-top: 5px; width: 235px; height: 30px; color: white; background: #573690;">

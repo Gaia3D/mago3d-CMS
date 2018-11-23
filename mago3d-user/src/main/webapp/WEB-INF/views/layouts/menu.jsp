@@ -11,14 +11,14 @@
 					<i class="fas fa-cubes" title="프로젝트"></i>
 				</span>
 			</li>
-			<li class="converter-menu" style="height: 125px;">
+			<li class="converter-menu" style="height: 150px;" onclick="location.href='/upload-data/input-upload-data.do'">
 				<span style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
 					<i class="fas fa-cloud-upload-alt" title="Converter"></i>
 				</span>
 			</li>
-			<li class="settings-menu" style="height: 100px;">
+			<li class="settings-menu" style="height: 100px;" onclick="location.href='/membership/modify-membership.do'">
 				<span style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
-					<i class="fas fa-cog" title="Cloud Settings"></i>
+					<i class="fas fa-cog" title="Settings"></i>
 				</span>
 			</li>
 		</ul>
@@ -79,7 +79,10 @@
 						<a href="/upload-data/list-upload-data.do" style="text-decoration: none; color: #2c2d2d;">업로딩 파일 목록</a>
 					</li>
 					<li style="padding-top:0px; height: 25px; font-size: 14px;">
-						<a href="/converter/list-converter-job.do" style="text-decoration: none; color: #2c2d2d;">Converter 결과</a>
+						<a href="/converter/list-converter-job.do" style="text-decoration: none; color: #2c2d2d;">Converter 목록</a>
+					</li>
+					<li style="padding-top:0px; height: 25px; font-size: 14px;">
+						<a href="/converter/list-converter-job-file.do" style="text-decoration: none; color: #2c2d2d;">Converter 파일 목록</a>
 					</li>
 				</ul>
 			</li>
@@ -92,7 +95,7 @@
 				</span>
 				<ul style="list-style: none;">
 					<li style="padding-top:0px; height: 25px; font-size: 14px;">
-						<a href="/settings/modify-membership.do" style="text-decoration: none; color: #2c2d2d;">MemberShip 설정</a>
+						<a href="/membership/modify-membership.do" style="text-decoration: none; color: #2c2d2d;">Membership 설정</a>
 					</li>
 					<li style="padding-top:0px; height: 25px; font-size: 14px;">
 						<a href="/user/modify-user-policy.do" style="text-decoration: none; color: #2c2d2d;">mago3D 설정 </a>

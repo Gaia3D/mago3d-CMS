@@ -86,8 +86,8 @@ public class DataServiceImpl implements DataService {
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public DataInfo getData(Long data_id) {
-		return dataMapper.getData(data_id);
+	public DataInfo getData(DataInfo dataInfo) {
+		return dataMapper.getData(dataInfo);
 	}
 	
 	/**

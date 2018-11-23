@@ -28,6 +28,7 @@
 		<typeAlias type="com.gaia3d.domain.IssueComment" alias="issueComment"/>
 		<typeAlias type="com.gaia3d.domain.IssueFile" alias="issueFile"/>
 		<typeAlias type="com.gaia3d.domain.IssuePeople" alias="issuePeople"/>
+		<typeAlias type="com.gaia3d.domain.Membership" alias="membership"/>
 		<typeAlias type="com.gaia3d.domain.Menu" alias="menu"/>
 		<typeAlias type="com.gaia3d.domain.PGStatActivity" alias="pGStatActivity"/>
 		<typeAlias type="com.gaia3d.domain.Policy" alias="policy"/>

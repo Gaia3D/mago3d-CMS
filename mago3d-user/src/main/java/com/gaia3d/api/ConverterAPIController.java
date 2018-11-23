@@ -1,7 +1,6 @@
 package com.gaia3d.api;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gaia3d.domain.ConverterJob;
-import com.gaia3d.domain.ConverterJobFile;
 import com.gaia3d.service.ConverterService;
 
 import lombok.extern.slf4j.Slf4j;

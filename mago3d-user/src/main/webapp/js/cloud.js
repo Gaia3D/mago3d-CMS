@@ -22,7 +22,7 @@ function toggleMenu() {
 		
 		$(".profile-menu").css("height", "110px");
 		$(".project-menu").css("height", "190px");
-		$(".converter-menu").css("height", "100px");
+		$(".converter-menu").css("height", "150px");
 		$(".settings-menu").css("height", "100px");
 		
 		// 메뉴 아이콘 원복

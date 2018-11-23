@@ -50,7 +50,9 @@ public class DataAPIController {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
-			map.put("dataInfo", dataService.getData(data_id));
+			DataInfo dataInfo = new DataInfo();
+			dataInfo.setData_id(data_id);
+			map.put("dataInfo", dataService.getData(dataInfo));
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

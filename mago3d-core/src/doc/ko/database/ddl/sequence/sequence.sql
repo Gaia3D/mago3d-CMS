@@ -27,6 +27,7 @@ drop sequence if exists issue_comment_seq;
 drop sequence if exists issue_file_seq;
 drop sequence if exists issue_people_seq;
 drop sequence if exists menu_seq;
+drop sequence if exists membership_seq;
 drop sequence if exists project_seq;
 drop sequence if exists policy_seq;
 drop sequence if exists role_seq;
@@ -71,6 +72,7 @@ create sequence issue_comment_seq increment 1 minvalue 1 maxvalue 999999999999 s
 create sequence issue_file_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence issue_people_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence menu_seq increment 1 minvalue 1 maxvalue 999999999999 start 700 cache 1;
+create sequence membership_seq increment 1 minvalue 1 maxvalue 999999999999 start 700 cache 1;
 create sequence policy_seq increment 1 minvalue 1 maxvalue 999999999999 start 2 cache 1;
 create sequence project_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;
 create sequence role_seq increment 1 minvalue 1 maxvalue 999999999999 start 1 cache 1;

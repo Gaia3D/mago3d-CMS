@@ -237,7 +237,7 @@ public class ProjectController {
 		try {
 						
 			log.info("@@ project = {} ", project);
-			if(project.getProject_id() == null || project.getProject_id().longValue() == 0l
+			if(project.getProject_id() == null || project.getProject_id().intValue() == 0
 					|| project.getProject_name() == null || "".equals(project.getProject_name())) {
 				
 				result = "input.invalid";
@@ -274,7 +274,7 @@ public class ProjectController {
 		Map<String, Object> map = new HashMap<>();
 		String result = "success";
 		try {
-			if(project.getProject_id() == null || project.getProject_id().longValue() <=0) {
+			if(project.getProject_id() == null || project.getProject_id().intValue() <=0) {
 				map.put("result", "project.project_id.empty");
 				return map;
 			}

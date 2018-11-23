@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gaia3d.persistence.MembershipMapper">
+	
+	<!-- membership 정보 취득 -->
+	<select id="getMembership" parameterType="string" resultType="membership">
+		/* getMembership */
+		SELECT * FROM membership WHERE user_id = #{user_id}
+	</select>
+	
+	<!-- membership 정보 등록 -->
+	<insert id="insertMembership" parameterType="membership">
+		/* insertMembership */
+		<selectKey keyProperty="membership_id" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('membership_seq')
+  		</selectKey>
+		INSERT INTO membership (
+			membership_id, user_id, membership_type, charge_type
+		) VALUES (
+			#{membership_id}, #{user_id}, #{membership_type}, #{charge_type}
+		)
+	</insert>
+	
+	<!-- membership 정보 수정 -->
+	<update id="updateMembership" parameterType="membership">
+		/* updateMembership */
+		UPDATE membership
+		SET membership_type = #{membership_type},
+			charge_type = #{charge_type}
+		WHERE user_id = #{user_id}
+	</update>
+</mapper>

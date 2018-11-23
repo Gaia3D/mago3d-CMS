@@ -13,7 +13,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ConverterJobFile {
+	
 	// 화면 표기용
+	private String sharing_type;
+	private String data_type;
 	private String file_name;	
 	
 	// 페이지 처리를 위한 시작

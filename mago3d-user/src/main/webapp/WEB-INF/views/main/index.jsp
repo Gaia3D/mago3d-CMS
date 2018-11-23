@@ -3,207 +3,187 @@
 <%@ include file="/WEB-INF/views/common/config.jsp" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="${accessibility}">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" href="/css/cloud.css">
-<link rel="stylesheet" href="/css/fontawesome-free-5.2.0-web/css/all.min.css">
-<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
-<script src="/js/cloud.js"></script>
-<style type="text/css">
-	
-</style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Main | mago3D User</title>
+	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" href="/css/cloud.css?cache_version=${cache_version}">
+	<link rel="stylesheet" href="/css/fontawesome-free-5.2.0-web/css/all.min.css">
+	<link rel="stylesheet" href="/externlib/jquery-ui/jquery-ui.css" />
+	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
+	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
+	<script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/externlib/jquery-ui/jquery-ui.js"></script>
+	<script type="text/javascript" src="/js/cloud.js?cache_version=${cache_version}"></script>
 </head>
 <body>
-<div class="default-layout">
-	<!-- 왼쪽 메뉴 -->
-	<%@ include file="/WEB-INF/views/layouts/menu.jsp" %>
-	<!-- 왼쪽 메뉴 -->
-	
-	<!--  컨텐츠 -->
-	<div class="content-layout">
-		<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
-		<div>
-			<div class="content-detail">
-				<!-- Start content by page -->
-				
-				
-				
-				<div class="widgets">
-					<div class="row">
-						<div class="widget widget-low widget-otp-usage full column">
-							<div class="widget-header row">
-								<div class="widget-heading u-pull-left">						
-									<h3 class="widget-title">프로젝트 수<span class="widget-desc">${yearMonthDay } (<spring:message code='main.today'/>)</span></h3>
-								</div>
-							</div><!-- .widget-header -->
-							<div class="widget-content row">
-								<div class="one-third column banner-container">
-									<div class="banner info-generates">
-										<div class="info-device" style="background-color: #f9957b;">
+
+<div class="site-body">
+	<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
+	<div id="site-content" class="on">
+		<%@ include file="/WEB-INF/views/layouts/menu.jsp" %>
+		
+		<div id="content-wrap">
+		
+			<div class="widgets">
+				<div class="row">
+					<div class="widget widget-low widget-otp-usage full column">
+						<div class="widget-header row" style="height: 25px;">
+							<div class="widget-heading u-pull-left">						
+								<h3 class="widget-title">프로젝트 현황<span class="widget-desc">${yearMonthDay } (<spring:message code='main.today'/>)</span></h3>
+							</div>
+						</div><!-- .widget-header -->
+						<div class="widget-content row">
+							<div class="one-third column banner-container">
+								<div class="banner info-generates">
+									<div>
+										<div class="info-device">
 											<span class="icon-glyph glyph-plus-circle"></span>
 											<span class="info-numbers"></span>
 										</div>
-										<div>
-											<span class="banner-title">프로젝트</span>
-											<span id="firstCountSpinner" class="banner-number"></span>
-											<span class="banner-unit"> 5 <spring:message code='main.count'/> </span>
-										</div>
+									</div>
+									<div>
+										<span class="banner-title">공개 프로젝트</span>
+										<span id="firstCountSpinner" class="banner-number"></span>
+										<span class="banner-unit"> 0 <spring:message code='main.count'/> </span>
 									</div>
 								</div>
-								
-								<div class="one-third column banner-container">
-									<div class="banner info-success">
-										<div class="info-device" style="background-color: #1cc0c7;">
+							</div>
+							
+							<div class="one-third column banner-container">
+								<div class="banner info-success">
+									<div>
+										<div class="info-device">
 											<span class="icon-glyph glyph-check-circle"></span>
 											<span class="info-numbers"></span>
 										</div>
-										<div>
-											<span class="banner-title">최근 F4D 변환 결과(성공)</span>
-											<span id="secondeCountSpinner" class="banner-number"></span>
-											<span class="banner-unit"> 17 <spring:message code='main.count'/></span>
-										</div>
+									</div>
+									<div>
+										<span class="banner-title">개인 프로젝트</span>
+										<span id="secondeCountSpinner" class="banner-number"></span>
+										<span class="banner-unit"> 0 <spring:message code='main.count'/></span>
 									</div>
 								</div>
-								
-								<div class="one-third column banner-container">
-									<div class="banner info-failures">
-										<div class="info-device" style="background-color: #ab8de2;">
+							</div>
+							
+							<div class="one-third column banner-container">
+								<div class="banner info-failures">
+									<div>
+										<div class="info-device">
 											<span class="icon-glyph glyph-emark-circle"></span>
 											<span class="info-numbers"></span>
 										</div>
-										<div>
-											<span class="banner-title">최근 F4D 변환 결과(실패)</span>
-											<span id="thirdCountSpinner" class="banner-number"></span>
-											<span class="banner-unit"> 2 <spring:message code='main.count'/></span>
-										</div>
+									</div>
+									<div>
+										<span class="banner-title">공유 프로젝트</span>
+										<span id="thirdCountSpinner" class="banner-number"></span>
+										<span class="banner-unit"> 0 <spring:message code='main.count'/></span>
 									</div>
 								</div>
-							</div><!-- .widget-content -->
-						</div><!-- .widget -->
-		
+							</div>
+						</div><!-- .widget-content -->
+					</div><!-- .widget -->
 	
-						<div id="data_info_widget" class="widget one-third column" style="font-size: 16px;">
-					<div class="widget-header row">
-						<div class="widget-heading u-pull-left">						
-							<h3 class="widget-title">업로드 데이터<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+					<div id="data_info_widget" class="widget one-third column" style="font-size: 16px;">
+						<div class="widget-header row" style="height: 25px;">
+							<div class="widget-heading u-pull-left">						
+								<h3 class="widget-title">업로드 데이터<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+							</div>
+							<div class="widget-functions u-pull-right">
+								<a href="/data/list-data.do" title="more"><span class="icon-glyph glyph-plus"></span></a>
+							</div>
 						</div>
-						<div class="widget-functions u-pull-right">
-							<a href="/data/list-data.do" title="more"><span class="icon-glyph glyph-plus"></span></a>
-						</div>
-					</div>
-					<div id="dataInfoWidget" class="widget-content row">
-						<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
-				            <div id="uploadSpinner" style="width: 150px; height: 70px;"></div>
-						</div>
-					</div>
-				</div>
-				<div id="project_widget_content" class="widget one-third column" style="font-size: 16px;">
-					<div class="widget-header row">
-						<div class="widget-heading u-pull-left">						
-							<h3 class="widget-title">프로젝트<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
-						</div>
-						<div class="widget-functions u-pull-right">
-							<a href="/data/list-data.do" title="more"><span class="icon-glyph glyph-plus"></span></a>
+						<div id="dataInfoWidget" class="widget-content row">
+							<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+					            <div id="uploadSpinner" style="width: 150px; height: 70px;"></div>
+							</div>
 						</div>
 					</div>
-					<div id="projectWidget" class="widget-content row">
-						<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
-				            <div id="projectSpinner" style="width: 150px; height: 70px;"></div>
+					<div id="project_widget_content" class="widget one-third column" style="font-size: 16px;">
+						<div class="widget-header row" style="height: 25px;">
+							<div class="widget-heading u-pull-left">						
+								<h3 class="widget-title">프로젝트<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+							</div>
+							<div class="widget-functions u-pull-right">
+								<a href="/data/list-data.do" title="more"><span class="icon-glyph glyph-plus"></span></a>
+							</div>
+						</div>
+						<div id="projectWidget" class="widget-content row">
+							<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+					            <div id="projectSpinner" style="width: 150px; height: 70px;"></div>
+							</div>
+						</div>
+					</div>	
+					<div id="converter_job_widget" class="widget one-third column" style="font-size: 16px;">
+						<div class="widget-header row" style="height: 25px;">
+							<div class="widget-heading u-pull-left">						
+								<h3 class="widget-title">f4d 변경 job<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+							</div>
+							<div class="widget-functions u-pull-right">
+								<a href="/data/list-data.do" title="more"><span class="icon-glyph glyph-plus"></span></a>
+							</div>
+						</div>
+						<div id="converter_job_widget_content" class="widget-content row">
+							<div style="text-align: center; padding-top: 70px; padding-left: 40px;">
+					           	F4D 변환 Job 이력이 존재하지 않습니다.	
+							</div>
+						</div>
+					</div>
+					<div id="user_widget" class="widget one-third column" style="font-size: 16px;  margin-left: 0px;">
+						<div class="widget-header row" style="height: 25px;">
+							<div class="widget-heading u-pull-left">						
+								<h3 class="widget-title">사용자 상태별<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+							</div>
+							<div class="widget-functions u-pull-right">
+								<a href="/data/list-data.do" title="more"><span class="icon-glyph glyph-plus"></span></a>
+							</div>
+						</div>
+						<div id="userWidget" class="widget-content row">
+							<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+					            <div id="uploadCountSpinner" style="width: 150px; height: 70px;"></div>
+							</div>
+						</div>
+					</div>
+					<div id="upload_count_widget" class="widget one-third column" style="font-size: 16px;">
+						<div class="widget-header row" style="height: 25px;">
+							<div class="widget-heading u-pull-left">						
+								<h3 class="widget-title">총 데이터 업로딩 건수<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+							</div>
+							<div class="widget-functions u-pull-right">
+								<a href="/data/list-data.do" title="more"><span class="icon-glyph glyph-plus"></span></a>
+							</div>
+						</div>
+						<div id="upload_count_widget_content" class="widget-content row">
+							<div style="text-align: center; padding-top: 60px; padding-left: 250px;">
+					            <div id="uploadSizeSpinner" style="width: 150px; height: 70px;"></div>
+							</div>
+						</div>
+					</div>
+					<div id="converter_log_widget" class="widget one-third column" style="font-size: 16px;">
+						<div class="widget-header row" style="height: 25px;">
+							<div class="widget-heading u-pull-left">						
+								<h3 class="widget-title">데이터 건수<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+							</div>
+							<div class="widget-functions u-pull-right">
+								<a href="/data/list-data.do" title="more"><span class="icon-glyph glyph-plus"></span></a>
+							</div>
+						</div>
+						<div id="converter_log_widget_content" class="widget-content row">
+							<div style="text-align: center; padding-top: 70px; padding-left: 40px;">
+					           	변환 파일 목록이 존재하지 않습니다.
+							</div>
 						</div>
 					</div>
 				</div>	
-				<div id="converter_job_widget" class="widget one-third column" style="font-size: 16px;">
-					<div class="widget-header row">
-						<div class="widget-heading u-pull-left">						
-							<h3 class="widget-title">f4d 변경 job<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
-						</div>
-						<div class="widget-functions u-pull-right">
-							<a href="/data/list-data.do" title="more"><span class="icon-glyph glyph-plus"></span></a>
-						</div>
-					</div>
-					<div id="converter_job_widget_content" class="widget-content row">
-						<div style="text-align: center; padding-top: 70px; padding-left: 40px;">
-				           	F4D 변환 Job 이력이 존재하지 않습니다.	
-						</div>
-					</div>
-				</div>
-				<div id="user_widget" class="widget one-third column" style="font-size: 16px;  margin-left: 0px;">
-					<div class="widget-header row">
-						<div class="widget-heading u-pull-left">						
-							<h3 class="widget-title">사용자 상태별<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
-						</div>
-						<div class="widget-functions u-pull-right">
-							<a href="/data/list-data.do" title="more"><span class="icon-glyph glyph-plus"></span></a>
-						</div>
-					</div>
-					<div id="userWidget" class="widget-content row">
-						<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
-				            <div id="uploadCountSpinner" style="width: 150px; height: 70px;"></div>
-						</div>
-					</div>
-				</div>
-				<div id="upload_count_widget" class="widget one-third column" style="font-size: 16px;">
-					<div class="widget-header row">
-						<div class="widget-heading u-pull-left">						
-							<h3 class="widget-title">총 데이터 업로딩 건수<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
-						</div>
-						<div class="widget-functions u-pull-right">
-							<a href="/data/list-data.do" title="more"><span class="icon-glyph glyph-plus"></span></a>
-						</div>
-					</div>
-					<div id="upload_count_widget_content" class="widget-content row">
-						<div style="text-align: center; padding-top: 60px; padding-left: 250px;">
-				            <div id="uploadSizeSpinner" style="width: 150px; height: 70px;"></div>
-						</div>
-					</div>
-				</div>
-				<div id="converter_log_widget" class="widget one-third column" style="font-size: 16px;">
-					<div class="widget-header row">
-						<div class="widget-heading u-pull-left">						
-							<h3 class="widget-title">데이터 건수<span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
-						</div>
-						<div class="widget-functions u-pull-right">
-							<a href="/data/list-data.do" title="more"><span class="icon-glyph glyph-plus"></span></a>
-						</div>
-					</div>
-					<div id="converter_log_widget_content" class="widget-content row">
-						<div style="text-align: center; padding-top: 70px; padding-left: 40px;">
-				           	변환 파일 목록이 존재하지 않습니다.
-						</div>
-					</div>
-				</div>
-						
-			
-					</div>	
-				</div>
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				<!-- End content by page -->
 			</div>
-			<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
-		</div>
+			
+		<!-- End content by page -->
+		</div>	
 	</div>
-	<!--  컨텐츠 -->
+	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
 </div>
-<script type="text/javascript" src="/externlib/jquery/jquery.js"></script>
-<script type="text/javascript" src="/externlib/jquery-ui/jquery-ui.js"></script>
 
 <script type="text/javascript" src="/externlib/jqplot/jquery.jqplot.min.js"></script>
 <script type="text/javascript" src="/externlib/jqplot/plugins/jqplot.barRenderer.min.js"></script>
@@ -217,8 +197,10 @@
 
 <script type="text/javascript" src="/js/${lang}/common.js"></script>
 <script type="text/javascript" src="/js/${lang}/message.js"></script>
-<script type="text/javascript" src="/js/navigation.js"></script>
 <script type="text/javascript">
+	
+	// 메뉴 접히고 시작
+	toggleMenu();
 	
 	var refreshTime = parseInt("${widgetInterval}") * 1000;
 	$(document).ready(function() {

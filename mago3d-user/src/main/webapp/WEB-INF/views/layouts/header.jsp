@@ -18,9 +18,9 @@
 						<i id="toggleMenuIcon" class="fas fa-angle-double-left"></i>
 					</span>
 				</a>
-				<span style="font-size:30px;">
+				<!-- <span style="font-size:30px;">
 					<i class="fas fa-arrow-alt-circle-down"></i>
-				</span>
+				</span> -->
 			</div>
 		</div>
 		<div class="header-content-center">

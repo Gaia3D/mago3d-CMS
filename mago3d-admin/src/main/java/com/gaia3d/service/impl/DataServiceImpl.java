@@ -90,12 +90,12 @@ public class DataServiceImpl implements DataService {
 	
 	/**
 	 * Data 정보 취득
-	 * @param data_id
+	 * @param dataInfo
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public DataInfo getData(Long data_id) {
-		return dataMapper.getData(data_id);
+	public DataInfo getData(DataInfo dataInfo) {
+		return dataMapper.getData(dataInfo);
 	}
 	
 	/**
@@ -280,7 +280,7 @@ public class DataServiceImpl implements DataService {
 	@Transactional
 	public int deleteData(DataInfo dataInfo) {
 		
-		dataInfo = dataMapper.getData(dataInfo.getData_id());
+		dataInfo = dataMapper.getData(dataInfo);
 		int result = dataMapper.deleteData(dataInfo);
 		
 		Project project = new Project();

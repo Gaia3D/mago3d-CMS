@@ -52,7 +52,7 @@ public class ConverterServiceImpl implements ConverterService {
 	private ConverterMapper converterMapper;
 	
 	/**
-	 * f4d converter job 총 건수
+	 * converter job 총 건수
 	 * @param converterJob
 	 * @return
 	 */
@@ -62,7 +62,17 @@ public class ConverterServiceImpl implements ConverterService {
 	}
 	
 	/**
-	 * f4d converter job 목록
+	 * converter job file 총 건수
+	 * @param converterJobFile
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public Long getListConverterJobFileTotalCount(ConverterJobFile converterJobFile) {
+		return converterMapper.getListConverterJobFileTotalCount(converterJobFile);
+	}
+	
+	/**
+	 * converter job 목록
 	 * @param converterLog
 	 * @return
 	 */
@@ -72,13 +82,13 @@ public class ConverterServiceImpl implements ConverterService {
 	}
 	
 	/**
-	 * converter job 정보
-	 * @param jobId
+	 * converter job file 목록
+	 * @param converterJobFile
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public ConverterJob getConverterJobByJobId(Long jobId) {
-		return converterMapper.getConverterJobByJobId(jobId);
+	public List<ConverterJobFile> getListConverterJobFile(ConverterJobFile converterJobFile) {
+		return converterMapper.getListConverterJobFile(converterJobFile);
 	}
 	
 	/**

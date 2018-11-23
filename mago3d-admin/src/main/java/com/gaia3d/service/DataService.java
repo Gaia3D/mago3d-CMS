@@ -57,10 +57,10 @@ public interface DataService {
 	
 	/**
 	 * Data 정보 취득
-	 * @param data_id
+	 * @param dataInfo
 	 * @return
 	 */
-	DataInfo getData(Long data_id);
+	DataInfo getData(DataInfo dataInfo);
 	
 	/**
 	 * Data 정보 취득
