@@ -404,9 +404,9 @@ public class MenuController {
 		menu.setMenu_type(Menu.ADMIN);
 		menuList.add(getRootMenu(menu.getMenu_type()));
 		menuList.addAll(menuService.getListMenu(menu));
-		menu.setMenu_type(Menu.USER);
-		menuList.add(getRootMenu(menu.getMenu_type()));
-		menuList.addAll(menuService.getListMenu(menu));
+//		menu.setMenu_type(Menu.USER);
+//		menuList.add(getRootMenu(menu.getMenu_type()));
+//		menuList.addAll(menuService.getListMenu(menu));
 		return menuList;
 	}
 }
