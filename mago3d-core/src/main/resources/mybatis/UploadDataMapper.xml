@@ -86,16 +86,28 @@
 	
 	<!-- 업로딩 정보 -->
 	<select id="getUploadData" parameterType="uploadData" resultType="uploadData">
-	/* getUploadData */
+		/* getUploadData */
 		SELECT *, 
 			(SELECT project_name FROM project B WHERE B.project_id = A.project_id) AS project_name
 		FROM upload_data A
 		WHERE user_id =#{user_id} AND upload_data_id = #{upload_data_id}
 	</select>
 	
+	<!-- 업로딩 파일 총 건수 -->
+	<select id="getUploadDataFileTotalCount" parameterType="uploadDataFile" resultType="long">
+		/* getUploadDataFileTotalCount */
+		SELECT COUNT(upload_data_file_id) FROM upload_data_file WHERE user_id =#{user_id} 
+	</select>
+
+	<!-- 업로딩 파일 총 용량 -->
+	<select id="getUploadDataFileTotalSize" parameterType="uploadDataFile" resultType="long">
+		/* getUploadDataFileTotalSize */
+		SELECT SUM(TO_NUMBER(file_size, '99999999999999999999')) FROM upload_data_file WHERE user_id =#{user_id} 
+	</select>
+	
 	<!-- 업로딩한 파일 목록 -->
 	<select id="getListUploadDataFile" parameterType="uploadData" resultType="uploadDataFile">
-	/* getListUploadDataFile */
+		/* getListUploadDataFile */
 		SELECT A.*, B.data_name, B.latitude, B.longitude, B.height
 		FROM upload_data_file A, upload_data B
 		WHERE A.user_id =#{user_id} 

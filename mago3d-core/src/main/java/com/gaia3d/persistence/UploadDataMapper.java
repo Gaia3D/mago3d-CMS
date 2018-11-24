@@ -32,6 +32,20 @@ public interface UploadDataMapper {
 	UploadData getUploadData(UploadData uploadData);
 	
 	/**
+	 * 업로딩 파일 총 건수
+	 * @param uploadDataFile
+	 * @return
+	 */
+	Long getUploadDataFileTotalCount(UploadDataFile uploadDataFile);
+
+	/**
+	 * 업로딩 파일 총 용량
+	 * @param uploadDataFile
+	 * @return
+	 */
+	Long getUploadDataFileTotalSize(UploadDataFile uploadDataFile);
+	
+	/**
 	 * 업로딩한 파일 목록
 	 * @param uploadData
 	 * @return

@@ -1,7 +1,9 @@
 package com.gaia3d.controller;
 
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gaia3d.domain.CacheManager;
+import com.gaia3d.domain.ConverterJobFile;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.DataSharingType;
 import com.gaia3d.domain.PageType;
@@ -28,6 +31,7 @@ import com.gaia3d.domain.UserSession;
 import com.gaia3d.service.DataService;
 import com.gaia3d.service.ProjectService;
 import com.gaia3d.util.DateUtil;
+import com.gaia3d.util.FormatUtil;
 import com.gaia3d.util.StringUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -234,6 +238,46 @@ public class DataController {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * 최근 data_info
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "ajax-data-info-widget.do")
+	@ResponseBody
+	public Map<String, Object> dataInfoWidget(HttpServletRequest request) {
+		
+		log.info(" >>>>>>>>>>>>>>>>>>>>>>>>>>>> dataInfoWidget");
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.DATE, -30);
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+			String searchDay = simpleDateFormat.format(calendar.getTime());
+			String startDate = searchDay + DateUtil.START_TIME;
+			String endDate = today + DateUtil.END_TIME;
+			
+			DataInfo datInfo = new DataInfo();
+			datInfo.setUser_id(userSession.getUser_id());
+			datInfo.setStart_date(startDate);
+			datInfo.setEnd_date(endDate);
+			datInfo.setOffset(0l);
+			datInfo.setLimit(7l);
+			List<DataInfo> dataInfoList = dataService.getListData(datInfo);
+			
+			map.put("dataInfoList", dataInfoList);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		map.put("result", result);
+		return map;
 	}
 	
 	/**

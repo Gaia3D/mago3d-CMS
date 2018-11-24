@@ -1,7 +1,9 @@
 package com.gaia3d.controller;
 
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import com.gaia3d.domain.Pagination;
 import com.gaia3d.domain.UserSession;
 import com.gaia3d.service.ConverterService;
 import com.gaia3d.util.DateUtil;
+import com.gaia3d.util.FormatUtil;
 import com.gaia3d.util.StringUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -148,6 +151,78 @@ public class ConverterController {
 		model.addAttribute(pagination);
 		model.addAttribute("converterJobFileList", converterJobFileList);
 		return "/converter/list-converter-job-file";
+	}
+	
+	/**
+	 * 최근 converter-job
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "ajax-converter-job-widget.do")
+	@ResponseBody
+	public Map<String, Object> converterJobWidget(HttpServletRequest request) {
+		
+		log.info(" >>>>>>>>>>>>>>>>>>>>>>>>>>>> converterJobWidget");
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			
+			ConverterJob converterJob = new ConverterJob();
+			converterJob.setUser_id(userSession.getUser_id());
+			converterJob.setOffset(0l);
+			converterJob.setLimit(10l);
+			List<ConverterJob> converterJobList = converterService.getListConverterJob(converterJob);
+			
+			map.put("converterJobList", converterJobList);
+			map.put("converterJobListSize", converterJobList.size());
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		map.put("result", result);
+		return map;
+	}
+	
+	/**
+	 * 최근 converter-job-file
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "ajax-converter-job-file-widget.do")
+	@ResponseBody
+	public Map<String, Object> converterJobFileWidget(HttpServletRequest request) {
+		
+		log.info(" >>>>>>>>>>>>>>>>>>>>>>>>>>>> converterJobFileWidget");
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			String today = DateUtil.getToday(FormatUtil.YEAR_MONTH_DAY);
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.DATE, -30);
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+			String searchDay = simpleDateFormat.format(calendar.getTime());
+			String startDate = searchDay + DateUtil.START_TIME;
+			String endDate = today + DateUtil.END_TIME;
+			
+			ConverterJobFile converterJobFile = new ConverterJobFile();
+			converterJobFile.setUser_id(userSession.getUser_id());
+			converterJobFile.setStart_date(startDate);
+			converterJobFile.setEnd_date(endDate);
+			converterJobFile.setOffset(0l);
+			converterJobFile.setLimit(7l);
+			List<ConverterJobFile> converterJobFileList = converterService.getListConverterJobFile(converterJobFile);
+			
+			map.put("converterJobFileList", converterJobFileList);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		map.put("result", result);
+		return map;
 	}
 	
 	/**

@@ -18,6 +18,13 @@ create table upload_data(
 	file_count						int									default 0,
 	converter_count					int 								default 0,
 	status							char(1)								default '0',
+	year							char(4)				default to_char(now(), 'yyyy'),
+	month							varchar(2)			default to_char(now(), 'MM'),
+	day								varchar(2)			default to_char(now(), 'DD'),
+	year_week						varchar(2)			default to_char(now(), 'WW'),
+	week							varchar(2)			default to_char(now(), 'W'),
+	hour							varchar(2)			default to_char(now(), 'HH24'),
+	minute							varchar(2)			default to_char(now(), 'MI'),
 	update_date						timestamp with time zone,
 	insert_date						timestamp with time zone			default now(),
 	constraint upload_data_pk	primary key (upload_data_id)	
@@ -38,6 +45,13 @@ comment on column upload_data.compress_yn is '압축유무. N : 압축안함(기본값). Y 
 comment on column upload_data.file_count is '파일 개수';
 comment on column upload_data.converter_count is 'converter 횟수';
 comment on column upload_data.status is '상태. 0 : 업로딩 완료, 1 : 변환';
+comment on column upload_data.year is '년';
+comment on column upload_data.month is '월';
+comment on column upload_data.day is '일';
+comment on column upload_data.year_week is '일년중 몇주';
+comment on column upload_data.week is '이번달 몇주';
+comment on column upload_data.hour is '시간';
+comment on column upload_data.minute is '분';
 comment on column upload_data.update_date is '수정일';
 comment on column upload_data.insert_date is '등록일';
 
@@ -61,6 +75,13 @@ create table upload_data_file(
 	file_ext						varchar(10),
 	error_message					varchar(256),
 	converter_count					int 								default 0,
+	year							char(4)				default to_char(now(), 'yyyy'),
+	month							varchar(2)			default to_char(now(), 'MM'),
+	day								varchar(2)			default to_char(now(), 'DD'),
+	year_week						varchar(2)			default to_char(now(), 'WW'),
+	week							varchar(2)			default to_char(now(), 'W'),
+	hour							varchar(2)			default to_char(now(), 'HH24'),
+	minute							varchar(2)			default to_char(now(), 'MI'),
 	insert_date						timestamp with time zone			default now(),
 	constraint upload_data_file_pk	primary key (upload_data_file_id)	
 );
@@ -83,5 +104,12 @@ comment on column upload_data_file.file_size is '파일 사이즈';
 comment on column upload_data_file.file_ext is '파일 확장자';
 comment on column upload_data_file.error_message is '오류 메시지';
 comment on column upload_data_file.converter_count is 'converter 횟수';
+comment on column upload_data_file.year is '년';
+comment on column upload_data_file.month is '월';
+comment on column upload_data_file.day is '일';
+comment on column upload_data_file.year_week is '일년중 몇주';
+comment on column upload_data_file.week is '이번달 몇주';
+comment on column upload_data_file.hour is '시간';
+comment on column upload_data_file.minute is '분';
 comment on column upload_data_file.insert_date is '등록일';
 

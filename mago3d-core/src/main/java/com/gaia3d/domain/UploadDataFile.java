@@ -83,6 +83,22 @@ public class UploadDataFile {
 	private String error_message;
 	// converter 횟수
 	private Integer converter_count;
+	
+	// 년도
+	private String year;
+	// 월
+	private String month;
+	// 일
+	private String day;
+	// 일년중 몇주
+	private String year_week;
+	// 이번달 몇주
+	private String week;
+	// 시간
+	private String hour;
+	// 분
+	private String minute;
+	
 	// 등록일
 	private String insert_date;
 		

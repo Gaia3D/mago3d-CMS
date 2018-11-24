@@ -566,6 +566,96 @@ public class UploadDataController {
 	}
 	
 	/**
+	 * 최근 upload-data
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "ajax-upload-data-widget.do")
+	@ResponseBody
+	public Map<String, Object> uploadDataWidget(HttpServletRequest request) {
+		
+		log.info(" >>>>>>>>>>>>>>>>>>>>>>>>>>>> uploadDataWidget");
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			
+			UploadData uploadData = new UploadData();
+			uploadData.setUser_id(userSession.getUser_id());
+			uploadData.setOffset(0l);
+			uploadData.setLimit(10l);
+			List<UploadData> uploadDataList = uploadDataService.getListUploadData(uploadData);
+			
+			map.put("uploadDataList", uploadDataList);
+			map.put("uploadDataListSize", uploadDataList.size());
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		map.put("result", result);
+		return map;
+	}
+	
+	/**
+	 * 최근 upload-data
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "ajax-upload-data-count-widget.do")
+	@ResponseBody
+	public Map<String, Object> uploadDataCountWidget(HttpServletRequest request) {
+		
+		log.info(" >>>>>>>>>>>>>>>>>>>>>>>>>>>> uploadDataCountWidget");
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			
+			UploadDataFile uploadDataFile = new UploadDataFile();
+			uploadDataFile.setUser_id(userSession.getUser_id());
+			Long uploadDataTotalCount = uploadDataService.getUploadDataFileTotalCount(uploadDataFile);
+			
+			map.put("uploadDataTotalCount", uploadDataTotalCount);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		map.put("result", result);
+		return map;
+	}
+	
+	/**
+	 * 최근 upload-data
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "ajax-upload-data-size-widget.do")
+	@ResponseBody
+	public Map<String, Object> uploadDataSizeWidget(HttpServletRequest request) {
+		
+		log.info(" >>>>>>>>>>>>>>>>>>>>>>>>>>>> uploadDataSizeWidget");
+		Map<String, Object> map = new HashMap<>();
+		String result = "success";
+		try {
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			
+			UploadDataFile uploadDataFile = new UploadDataFile();
+			uploadDataFile.setUser_id(userSession.getUser_id());
+			Long uploadDataTotalSize = uploadDataService.getUploadDataFileTotalSize(uploadDataFile);
+			
+			map.put("uploadDataTotalSize", uploadDataTotalSize/1000l );
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+		
+		map.put("result", result);
+		return map;
+	}
+	
+	/**
 	 * 검색 조건
 	 * @param tokenLog
 	 * @return

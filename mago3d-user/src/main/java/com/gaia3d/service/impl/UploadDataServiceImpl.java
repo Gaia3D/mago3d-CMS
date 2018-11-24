@@ -54,6 +54,24 @@ public class UploadDataServiceImpl implements UploadDataService {
 	}
 	
 	/**
+	 * 업로딩 파일 총 건수
+	 * @param uploadDataFile
+	 * @return
+	 */
+	public Long getUploadDataFileTotalCount(UploadDataFile uploadDataFile) {
+		return uploadDataMapper.getUploadDataFileTotalCount(uploadDataFile);
+	}
+
+	/**
+	 * 업로딩 파일 총 용량
+	 * @param uploadDataFile
+	 * @return
+	 */
+	public Long getUploadDataFileTotalSize(UploadDataFile uploadDataFile) {
+		return uploadDataMapper.getUploadDataFileTotalSize(uploadDataFile);
+	}
+	
+	/**
 	 * 업로딩 파일 정보 목록
 	 * @param uploadData
 	 * @return

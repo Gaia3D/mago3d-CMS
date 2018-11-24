@@ -57,6 +57,22 @@ public class ConverterJob {
 	private String status;
 	// 에러 코드
 	private String error_code;
+	
+	// 년도
+	private String year;
+	// 월
+	private String month;
+	// 일
+	private String day;
+	// 일년중 몇주
+	private String year_week;
+	// 이번달 몇주
+	private String week;
+	// 시간
+	private String hour;
+	// 분
+	private String minute;
+	
 	// 수정일 
 	private String update_date;
 	// 등록일
