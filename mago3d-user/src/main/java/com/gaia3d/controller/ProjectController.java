@@ -194,7 +194,15 @@ public class ProjectController {
 				initProjectsLength++;
 			}
 		} else {
-			// 기본 보기
+			// 공통 프로젝트 보기
+			initProjectJsonMap = new HashMap<>(CacheManager.getProjectDataJsonMap());
+			if(initProjectJsonMap != null) {
+				initProjectsLength = initProjectJsonMap.entrySet().size();
+				log.info("@@@@@@@@@@@@@@@@@@@@@@ initProjectJsonMap = {}", initProjectJsonMap);
+				log.info("@@@@@@@@@@@@@@@@@@@@@@ initProjectsLength = {}", initProjectsLength);
+			}
+			
+			// 개인 프로젝트 보기
 			if(userPolicy != null) {
 				String defaultProjects = userPolicy.getGeo_data_default_projects();
 				log.info("@@@@@@@@@@@@@@@@@@@@@@ defaultProjects = {}", defaultProjects);
@@ -209,6 +217,7 @@ public class ProjectController {
 						if(!dataInfoList.isEmpty()) {
 							initProjectJsonMap.put( Integer.valueOf(projectId), ProjectDataJson.getProjectDataJson(log, Integer.valueOf(projectId), dataInfoList));
 							initProjectsLength++;
+							log.info("@@@@@@@@@@@@@@@@@@@@@@ for initProjectsLength = {}", initProjectsLength);
 						}
 					}
 				}

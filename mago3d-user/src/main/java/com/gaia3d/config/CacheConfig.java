@@ -169,6 +169,7 @@ public class CacheConfig {
 			projectDataMap = new HashMap<>();
 			projectDataJsonMap = new HashMap<>();
 			
+			// TODO 위에서 가져 온거 중복으로 가져 오고 있음.... 삭제 해야 함
 			Project commonProject = new Project();
 			commonProject.setSharing_type(DataSharingType.COMMON.getValue());
 			List<Project> projectList = projectService.getListProject(commonProject);
@@ -176,8 +177,9 @@ public class CacheConfig {
 				DataInfo dataInfo = new DataInfo();
 				dataInfo.setProject_id(project.getProject_id());
 				List<DataInfo> dataInfoList = dataService.getListDataByProjectId(dataInfo);
-				
+				log.info("++++++++++++ Project_id = {},  dataInfoList = {}", project.getProject_id(), dataInfoList);
 				projectDataMap.put(project.getProject_id(), dataInfoList);
+				log.info("++++++++++++ json = {}", getProjectDataJson(project, dataInfoList));
 				projectDataJsonMap.put(project.getProject_id(), getProjectDataJson(project, dataInfoList));
 			}
 		} else {

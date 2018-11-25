@@ -60,7 +60,7 @@
 									<thead>
 										<tr>
 											<th scope="col" class="col-number"><spring:message code='number'/></th>
-											<th scope="col" class="col-name">Key</th>
+											<th scope="col" class="col-name">공유 타입</th>
 											<th scope="col" class="col-name"><spring:message code='data.project.name'/></th>
 											<th scope="col" class="col-number"><spring:message code='order'/></th>
 											<th scope="col" class="col-toggle"><spring:message code='default.value'/></th>
@@ -85,7 +85,20 @@
 	<c:forEach var="project" items="${projectList}" varStatus="status">
 										<tr>
 											<td class="col-number">${status.index + 1}</td>
-											<td class="col-name">${project.project_key }</td>
+											<td class="col-name">
+		<c:if test="${project.sharing_type eq '0' }">
+											공통 프로젝트
+		</c:if>
+		<c:if test="${project.sharing_type eq '1' }">
+											공개 프로젝트
+		</c:if>
+		<c:if test="${project.sharing_type eq '2' }">
+											개인 프로젝트
+		</c:if>
+		<c:if test="${project.sharing_type eq '3' }">
+											공유 프로젝트
+		</c:if>
+											</td>
 											<td class="col-number">${project.project_name }</td>
 											<td class="col-number">${project.view_order}</td>
 											<td class="col-toggle">${project.default_yn}</td>

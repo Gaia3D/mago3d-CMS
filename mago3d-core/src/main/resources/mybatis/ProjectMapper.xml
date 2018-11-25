@@ -175,8 +175,12 @@
 			<if test="project_key != null and project_key != ''">
 			project_key = #{project_key},
 			</if>
+			<if test="project_name != null and project_name != ''">
 			project_name = #{project_name},
+			</if>
+			<if test="sharing_type != null and sharing_type != ''">
 			sharing_type = #{sharing_type},
+			</if>
 			<if test="data_count != null and data_count gt 0">
 			data_count = data_count + #{data_count},
 			</if>
@@ -186,15 +190,28 @@
 			<if test="view_order != null and view_order gt 0">
 			view_order = #{view_order},
 			</if>
+			<if test="use_yn != null">
 			use_yn = #{use_yn},
+			</if>
+			<if test="latitude != null">
 			latitude = #{latitude},
+			</if>
+			<if test="longitude != null">
 			longitude = #{longitude},
+			</if>
+			<if test="height != null">
 			height = #{height},
+			</if>
+			<if test="duration != null">
 			duration = #{duration},
+			</if>
 			<if test="attributes != null and attributes != ''">
 			attributes = TO_JSON(#{attributes}::json),
 			</if>
-			description = #{description}
+			<if test="description != null and description != ''">
+			description = #{description},
+			</if>
+			update_date = NOW()
 		WHERE project_id = #{project_id}
 		<if test="user_id != null and user_id != ''">
 			AND user_id = #{user_id}

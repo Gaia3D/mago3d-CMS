@@ -72,6 +72,8 @@ public class Project extends SearchFilter {
 	private String attributes;
 	// 설명
 	private String description;
+	// 수정일
+	private String update_date;
 	// 등록일
 	private String insert_date;
 

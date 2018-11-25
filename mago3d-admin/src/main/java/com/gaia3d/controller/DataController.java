@@ -174,7 +174,10 @@ public class DataController {
 		String result = "success";
 		List<DataInfo> dataList = new ArrayList<>();
 		try {		
+			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
+			
 			DataInfo dataInfo = new DataInfo();
+			dataInfo.setUser_id(userSession.getUser_id());
 			dataInfo.setProject_id(project_id);
 			dataList = dataService.getListDataByProjectId(dataInfo);
 		} catch(Exception e) {

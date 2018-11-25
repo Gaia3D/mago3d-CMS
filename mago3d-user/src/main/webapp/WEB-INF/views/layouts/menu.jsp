@@ -6,7 +6,7 @@
 			<li class="profile-menu" style="height: 110px;">
 				<img id="smallUserProfileImage" src="/images/1px.png">
 			</li>
-			<li class="project-menu" style="height: 125px;" onclick="location.href='/project/list-project.do'">
+			<li class="project-menu" style="height: 125px;" onclick="location.href='/project/map-project.do'">
 				<span style="padding-top:0px; font-size:35px; color: Mediumslateblue;">
 					<i class="fas fa-cubes" title="프로젝트"></i>
 				</span>

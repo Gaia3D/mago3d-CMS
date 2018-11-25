@@ -123,7 +123,10 @@
 	        	A.latitude, A.longitude, A.height, A.heading, A.pitch, A.roll,
 	        	A.public_yn, A.child_yn, A.attributes, A.insert_date, ARRAY[A.view_order], false
 			FROM data_info A
-	        WHERE A.parent = 0 AND A.project_id = #{project_id} AND A.user_id = #{user_id}
+	        WHERE A.parent = 0 AND A.project_id = #{project_id} 
+	        	<if test="user_id != null and user_id != ''">
+	        	AND A.user_id = #{user_id}
+	        	</if>
 	        UNION ALL
 	        SELECT A.data_id, A.data_key, A.data_name, A.parent, A.depth, A.view_order, A.mapping_type,
 	        	A.latitude, A.longitude, A.height, A.heading, A.pitch, A.roll,  

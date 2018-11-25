@@ -38,6 +38,20 @@
 									<col class="col-label" />
 									<col class="col-input" />
 									<tr>
+										<th class="col-label m" scope="row">
+											<form:label path="sharing_type">공유 타입</form:label>
+											<span class="icon-glyph glyph-emark-dot color-warning"></span>
+										</th>
+										<td class="col-input">
+											<select id="sharing_type" name="sharing_type" class="select" style="height: 30px;">
+												<option value="1" disabled="disabled"> 공개 프로젝트 </option>
+												<option value="2" disabled="disabled"> 개인 프로젝트 </option>
+								          		<option value="3" disabled="disabled"> 공유 프로젝트 </option>
+								          		<option value="0" selected="selected"> 공통 프로젝트 </option>
+											</select>
+										</td>
+									</tr>
+									<tr>
 										<th class="col-label" scope="row">
 											<form:label path="project_key">Key</form:label>
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>

@@ -118,7 +118,7 @@
 			</if>	
 		<choose>
 		<when test="order_word != null and order_word != '' and order_value != null and order_value != ''">
-		ORDER BY A.${order_word} A.${order_value}
+		ORDER BY A.${order_word} ${order_value}
 		</when>
 		<otherwise>
 		ORDER BY A.depth, A.insert_date

@@ -20,6 +20,7 @@ create table project(
 	duration				int,
 	attributes				jsonb,
 	description				varchar(256),
+	update_date				timestamp with time zone,
 	insert_date				timestamp with time zone			default now(),
 	constraint project_pk 	primary key (project_id)	
 );
@@ -41,6 +42,7 @@ comment on column project.height is '높이';
 comment on column project.duration is 'flyTo 이동시간';
 comment on column project.attributes is '속성';
 comment on column project.description is '설명';
+comment on column project.update_date is '수정일';
 comment on column project.insert_date is '등록일';
 
 
