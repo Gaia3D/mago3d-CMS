@@ -252,7 +252,7 @@
     		SELECT NEXTVAL('data_info_seq')
   		</selectKey>
 		INSERT INTO data_info(
-			data_id, project_id, data_key, data_name, user_id, parent, depth, view_order, 
+			data_id, sharing_type, project_id, data_key, data_name, user_id, parent, depth, view_order, 
 			location, latitude, longitude, height, heading, pitch, roll, description
 			<if test="mapping_type != null and mapping_type != ''">
 			, mapping_type
@@ -261,7 +261,7 @@
 			, attributes
 			</if>
 		) VALUES (
-			#{data_id}, #{project_id}, #{data_key}, #{data_name}, #{user_id}, #{parent}, #{depth}, #{view_order}, 
+			#{data_id}, #{sharing_type}, #{project_id}, #{data_key}, #{data_name}, #{user_id}, #{parent}, #{depth}, #{view_order}, 
 			ST_GeographyFromText(#{location}), #{latitude}, #{longitude}, #{height}, #{heading}, #{pitch}, #{roll}, #{description}
 			<if test="mapping_type != null and mapping_type != ''">
 			, #{mapping_type}

@@ -199,7 +199,7 @@ public class DataController {
 	@GetMapping(value = "input-data.do")
 	public String inputData(Model model) {
 		Project project = new Project();
-		project.setUse_yn(Project.IN_USE);
+		//project.setUse_yn(Project.IN_USE);
 		List<Project> projectList = projectService.getListProject(project);
 		
 		Policy policy = CacheManager.getPolicy();
@@ -263,6 +263,9 @@ public class DataController {
 			dataInfo.setView_order(dataService.getViewOrderByParent(dataInfo));
 			log.info("@@@@@@@@@@@@@@@@@@ after dataInfo = {}", dataInfo);
 			
+			Project project = new Project();
+			project.setProject_id(dataInfo.getProject_id());
+			dataInfo.setSharing_type(projectService.getProject(project).getSharing_type());
 			dataService.insertData(dataInfo);
 			
 			CacheParams cacheParams = new CacheParams();

@@ -81,6 +81,23 @@ public class UserPolicy {
 	private String geo_specular_colorB;
 	// 그림자 반경
 	private String geo_ssao_radius;
+	
+	// 콜백 function 사용유무. 기본값 false
+	private String geo_callback_enable;
+	// api 처리 결과 callback function 이름
+	private String geo_callback_apiresult;
+	// data info 표시 callback function 이름
+	private String geo_callback_dataInfo;
+	// moved data callback function 이름
+	private String geo_callback_moveddata;
+	// object 선택 callback function 이름
+	private String geo_callback_selectedobject;
+	// issue 등록 callback function 이름
+	private String geo_callback_insertissue;
+	// issue list callback function 이름
+	private String geo_callback_listissue;
+	// mouse click 시 위치 정보 callback function 이름
+	private String geo_callback_clickposition;
 
 	// 수정일
 	private String update_date;

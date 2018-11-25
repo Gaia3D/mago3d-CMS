@@ -43,7 +43,7 @@
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
-											<select id="project_id" name="project_id" class="select" >
+											<select id="project_id" name="project_id" style="height: 30px;">
 	<c:forEach var="project" items="${projectList }">
 												<option value="${project.project_id }">${project.project_name }</option>
 	</c:forEach>									

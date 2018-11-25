@@ -27,7 +27,22 @@
 		#objectLabel {
 			position:absolute;left:0px;top:0px; z-index: 999; pointer-events: none;
 		}
+		
+		.map-tool-tab {
+			position: absolute;
+			top:72px;
+			left:232px;
+			width: 380px;
+		}
+
 	</style>
+	<script type="text/javascript">
+		$( function() {
+			$( "#mapToolTab" ).tabs({
+				collapsible: true
+			});
+		});
+	</script>
 </head>
 <body>
 
@@ -42,6 +57,288 @@
 	</div>
 	<%-- <%@ include file="/WEB-INF/views/layouts/footer.jsp" %> --%>
 </div>
+
+<div id="mapToolTab" class="map-tool-tab">
+	<ul>
+		<li><a href="#projectShortCut">바로가기</a></li>
+		<li><a href="#basicOperation">Basic Operation</a></li>
+		<li><a href="#advancedAPI">API</a></li>
+		<li><a href="#detailSearch">Search</a></li>
+	</ul>
+	<div id="projectShortCut">
+		<ul>
+			<li>공통 프로젝트
+				<ul id="commonProjectArea" style="list-style:none; padding-left: 20px; height: 25px;">
+<c:forEach var="project" items="${commonProjectList}" varStatus="status">
+					<li onclick="gotoProject('${project.project_id }', '${project.longitude}', '${project.latitude}', '${project.height}', '${project.duration}')">${project.project_name }</li>
+</c:forEach>				
+				</ul>
+			</li>
+			<li>공개 프로젝트
+				<ul id="publicProjectArea" style="list-style:none; padding-left: 20px; height: 25px;">
+				</ul>
+			</li>
+			<li>개인 프로젝트
+				<ul id="privateProjectArea" style="list-style:none; padding-left: 20px; height: 25px;">
+					<li>개발 중</li>
+				</ul>
+			</li>
+			<li>공용 프로젝트
+				<ul id="sharingProjectArea" style="list-style:none; padding-left: 20px; height: 25px;">
+					<li>개발 중</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div id="basicOperation">
+		<div>
+			<h3 style="font-size: 14px; font-weight: normal;"><spring:message code='label'/></h3>
+			<input type="radio" id="showLabel" name="labelInfo" value="true" onclick="changeLabel(true);" />
+			<label for="showLabel"> <spring:message code='show'/> </label>
+			<input type="radio" id="hideLabel" name="labelInfo" value="false" onclick="changeLabel(false);"/>
+			<label for="hideLabel"> <spring:message code='hide'/> </label>
+		</div>
+		<div>
+			<h3 style="font-size: 14px; font-weight: normal;"><spring:message code='object.info'/></h3>
+			<input type="radio" id="showObjectInfo" name="objectInfo" value="true" onclick="changeObjectInfoViewMode(true);" />
+			<label for="showObjectInfo"> <spring:message code='show'/> </label>
+			<input type="radio" id="hideObjectInfo" name="objectInfo" value="false" onclick="changeObjectInfoViewMode(false);"/>
+			<label for="hideObjectInfo"> <spring:message code='hide'/> </label>
+		</div>
+		<div>
+			<h3 style="font-size: 14px; font-weight: normal;"><spring:message code='origin'/></h3>
+			<input type="radio" id="showOrigin" name="origin" value="true" onclick="changeOrigin(true);" />
+			<label for="showOrigin"> <spring:message code='show'/> </label>
+			<input type="radio" id="hideOrigin" name="origin" value="false" onclick="changeOrigin(false);"/>
+			<label for="hideOrigin"> <spring:message code='hide'/> </label>
+		</div>
+		<div>
+			<h3 style="font-size: 14px; font-weight: normal;"><spring:message code='boundingbox'/></h3>
+			<input type="radio" id="showBoundingBox" name="boundingBox" value="true" onclick="changeBoundingBox(true);" />
+			<label for="showBoundingBox"> <spring:message code='show'/> </label>
+			<input type="radio" id="hideBoundingBox" name="boundingBox" value="false" onclick="changeBoundingBox(false);"/>
+			<label for="hideBoundingBox"> <spring:message code='hide'/> </label>
+		</div>
+		<div>
+			<h3 style="font-size: 14px; font-weight: normal;"><spring:message code='demon.selection.and.moving'/></h3>
+			<input type="radio" id="objectNoneMove" name="objectMoveMode" value="2" onclick="changeObjectMove('2');"/>
+			<label for="objectNoneMove"><spring:message code='demo.object.none.move'/></label>
+			<input type="radio" id="objectAllMove" name="objectMoveMode" value="0" onclick="changeObjectMove('0');"/>
+			<label for="objectAllMove"><spring:message code='demo.object.all.move'/></label>
+			<input type="radio" id="objectMove" name="objectMoveMode" value="1" onclick="changeObjectMove('1');"/>
+			<label for="objectMove"><spring:message code='demo.object.move'/></label>
+			<button type="button" id="saveObjectMoveButton" style="background-color: white; width: 35px; padding: 0; margin: 0; "><spring:message code='save'/></button>
+			<button type="button" id="deleteAllObjectMoveButton" style="background-color: white; width: 60px; padding: 0; margin: 0; "><spring:message code='all.delete'/></button>
+		</div>
+		<div>
+			<h3 style="font-size: 14px; font-weight: normal;"><spring:message code='demo.object.occlusion.culling'/></h3>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;"><spring:message code='selection'/></div>
+				<input type="radio" id="useOcclusionCulling" name="occlusionCulling" value="true" />
+				<label for="useOcclusionCulling"> <spring:message code='use'/> </label>
+				<input type="radio" id="unusedOcclusionCulling" name="occlusionCulling" value="false" />
+				<label for="unusedOcclusionCulling"> <spring:message code='unused'/> </label>
+			</div>
+			<div style="height: 30px;">
+				<div style="display: inline-block; width: 70px;"><spring:message code='data.key'/></div>
+				<input type="text" id="occlusion_culling_data_key" name="occlusion_culling_data_key" size="22" />
+				<button type="button" id="changeOcclusionCullingButton" class="btn" style="background-color: white;"><spring:message code='change'/></button>
+			</div>
+		</div>
+	</div>
+	<div id="advancedAPI">
+		<div id="apiMenuContent" class="apiWrap">
+			<div>
+				<h3 style="font-size: 14px; font-weight: normal;"><spring:message code='demo.local.search'/></h3>
+				<ul class="apiLocal" style="list-style: none;">
+					<li>
+						<label for="localSearchProjectId"><spring:message code='project'/></label>
+						<select id="localSearchProjectId" name="localSearchProjectId" class="select">
+	<c:forEach var="project" items="${projectList}">
+							<option value="${project.project_id}">${project.project_name}</option>
+	</c:forEach>
+						</select>
+					</li>
+					<li>
+						<label for="localSearchDataKey"><spring:message code='data.key'/></label>
+						<input type="text" id="localSearchDataKey" name="localSearchDataKey" size="20" />
+						<button type="button" id="localSearch" class="btn" style="background-color: white;"><spring:message code='search'/></button> 
+					</li>
+				</ul>
+			</div>
+			<div>
+				<h3 style="font-size: 14px; font-weight: normal;"><spring:message code='demo.property.rendering'/></h3>
+				<ul class="apiLocal" style="list-style: none;">
+					<li>
+						<input type="radio" id="showPropertyRendering" name="propertyRendering" value="true" />
+						<label for="showLabel"> <spring:message code='show'/> </label>
+						<input type="radio" id="hidePropertyRendering" name="propertyRendering" value="false" />
+						<label for="hideLabel"> <spring:message code='hide'/> </label>
+					</li>
+					<li>
+						<label for="propertyRenderingProjectId"> <spring:message code='project'/> </label>
+						<select id="propertyRenderingProjectId" name="propertyRenderingProjectId" class="select">
+	<c:forEach var="project" items="${projectList}">
+							<option value="${project.project_id}">${project.project_name}</option>
+	</c:forEach>
+						</select>
+					</li>
+					<li>
+						<label for="propertyRenderingWord"><spring:message code='property'/></label>
+						<input type="text" id="propertyRenderingWord" name="propertyRenderingWord" size="21" placeholder="isMain=true" />
+						<button type="button" id="changePropertyRendering" class="btn" style="background-color: white;"><spring:message code='change'/></button> 
+					</li>
+				</ul>
+			</div>
+			<div>
+				<h3 style="font-size: 14px; font-weight: normal;"><spring:message code='demo.color.change'/></h3>
+				<ul class="apiLocal" style="list-style: none;">
+					<li>
+						<label for="colorProjectId"> <spring:message code='project'/> </label>
+						<select id="colorProjectId" name="colorProjectId" class="select">
+	<c:forEach var="project" items="${projectList}">
+							<option value="${project.project_id}">${project.project_name}</option>
+	</c:forEach>
+						</select>
+					</li>
+					<li>
+						<label for="colorDataKey"><spring:message code='data.key'/></label>
+						<input type="text" id="colorDataKey" name="colorDataKey" size="30" />
+					</li>
+					<li>
+						<label for="colorObjectIds"><spring:message code='object.id'/></label>
+						<input type="text" id="colorObjectIds" name="colorObjectIds" placeholder=" , <spring:message code='delimiter'/>" size="30" />
+					</li>
+					<li>
+						<label for="colorProperty"><spring:message code='property'/></label>
+						<input type="text" id="colorProperty" name="colorProperty" size="30" placeholder="isMain=true" />
+					</li>
+					<li>
+						<label for="updateColor"><spring:message code='color'/></label>
+						<select id="updateColor" name="updateColor" class="select">
+							<option value="255,0,0"> <spring:message code='color.red'/></option>
+							<option value="255,255,0"> <spring:message code='color.yellow'/></option>
+							<option value="0,255,0"> <spring:message code='color.green'/></option>
+							<option value="0,0,255"> <spring:message code='color.blue'/></option>
+							<option value="255,0,255"> <spring:message code='color.pink'/></option>
+							<option value="0,0,0"> <spring:message code='color.black'/></option>
+						</select>
+						<button type="button" id="changeColor" class="btn" style="background-color: white;"><spring:message code='change'/></button> 
+						<button type="button" id="deleteAllChangeColor" class="btn" style="background-color: white;"><spring:message code='all.delete'/></button>
+					</li>
+				</ul>
+			</div>
+			<div>
+				<h3 style="font-size: 14px; font-weight: normal;"><spring:message code='demo.location.and.rotation'/></h3>
+				<ul class="apiLocal" style="list-style: none;">
+					<li>
+						<label for="moveProjectId"><spring:message code='project'/></label>
+						<select id="moveProjectId" name="moveProjectId" class="select">
+	<c:forEach var="project" items="${projectList}">
+							<option value="${project.project_id}">${project.project_name}</option>
+	</c:forEach>
+						</select>
+					</li>
+					<li>
+						<label for="moveDataKey"><spring:message code='data.key'/></label>
+						<input type="text" id="moveDataKey" name="moveDataKey" size="25" />
+					</li>
+					<li>
+						<label for="moveLatitude"><spring:message code='latitude'/> </label>
+						<input type="text" id="moveLatitude" name="moveLatitude" size="25"/>
+					</li>
+					<li>
+						<label for="moveLongitude"><spring:message code='longitude'/> </label>
+						<input type="text" id="moveLongitude" name="moveLongitude" size="25"/>
+					</li>
+					<li>
+						<label for="moveHeight"><spring:message code='height'/> </label>
+						<input type="text" id="moveHeight" name="moveHeight" size="25" />
+					</li>
+					<li>
+						<label for="moveHeading"><spring:message code='heading'/> </label>
+						<input type="text" id="moveHeading" name="moveHeading" size="15" />
+					</li>
+					<li>
+						<label for="movePitch"><spring:message code='pitch'/> </label>
+						<input type="text" id="movePitch" name="movePitch" size="15" />
+					</li>
+					<li>
+						<label for="moveRoll"><spring:message code='roll'/> </label>
+						<input type="text" id="moveRoll" name="moveRoll" size="15" />
+						<button type="button" id="changeLocationAndRotation" class="btn" style="background-color: white;"><spring:message code='change'/></button>
+						<button type="button" id="updateLocationAndRotation" class="btn" style="background-color: white;"><spring:message code='save'/></button>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div id="detailSearch">
+		<form:form id="searchForm" modelAttribute="issue" method="post" onsubmit="return false;">
+		<div id="searchMenuContent" class="searchWrap">
+			<table>
+				<tr style="height: 35px;">
+					<td style="width: 80px;"><label for="project_id"><spring:message code='project'/></label></td>
+					<td><select id="project_id" name="project_id" class="select" style="height: 30px;">
+							<option value=""> <spring:message code='all'/></option>
+	<c:forEach var="project" items="${projectList}">
+							<option value="${project.project_id}">${project.project_name}</option>
+	</c:forEach>
+						</select>
+					</td>
+				</tr>
+				<tr style="height: 35px;">
+					<td><label for="search_word"><spring:message code='categorize'/></label></td>
+					<td>
+						<select id="search_word" name="search_word" class="select" style="height: 30px;">
+							<option value="data_name"><spring:message code='data.name'/></option>
+							<option value="title"><spring:message code='issue.name'/></option>
+						</select>
+						<select id="search_option" name="search_option" class="select" style="height: 30px;">
+							<option value="1"><spring:message code='included'/></option>
+							<option value="0"><spring:message code='matches'/></option>
+						</select>
+					</td>
+				</tr>
+				<tr style="height: 35px;">
+					<td>
+						<label for="search_value"><spring:message code='search.word'/></label></td>
+					<td><input type="text" id="search_value" name="search_value" size="31"/></td>
+				</tr>
+				<tr style="height: 35px;">
+					<td><label for="start_date"><spring:message code='day'/></label></td>
+					<td><input type="text" class="s date" id="start_date" name="start_date" size="12" />
+						<span class="delimeter tilde">~</span>
+						<input type="text" class="s date" id="end_date" name="end_date" size="12" /></td>
+				</tr>
+				<tr style="height: 30px;">
+					<td><label for="order_word"><spring:message code='view.order'/></label></td>
+					<td><select id="order_word" name="order_word" class="select" style="width: 20%; height: 30px;">
+							<option value=""><spring:message code='basic'/></option>
+					       	<option value="insert_date"><spring:message code='register.date'/></option>
+						</select>
+						<select id="order_value" name="order_value" class="select" style="width: 30%; height: 30px;">
+							<option value=""><spring:message code='basic'/></option>
+						   	<option value="ASC"><spring:message code='asc'/></option>
+							<option value="DESC"><spring:message code='desc'/></option>
+						</select>
+						<select id="list_counter" name="list_counter" class="select" style="width: 25%; height: 30px;">
+							<option value="5"><spring:message code='listing.5'/></option>
+						 	<option value="10"><spring:message code='listing.10'/></option>
+							<option value="50"><spring:message code='listing.50'/></option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<div class="btns" style="text-align: center; margin-top: 3px;">
+				<button type="button" id="searchData" class="full" style="width; 200px; background-color: white;"><spring:message code='search'/></button>
+			</div>
+			<ul id="searchList" class="searchList"></ul>
+		</div>
+		</form:form>
+	</div>
+</div>
+
 <c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 <script type="text/javascript" src="/externlib/cesium/Cesium.js?cache_version=${cache_version}"></script>
 </c:if>
@@ -56,7 +353,7 @@
 	var mapSize = window.innerHeight - 67;
 	console.log("---------------- map size = " + mapSize);
 	$("#magoContainer").css("height", mapSize);
-
+	
 	var agent = navigator.userAgent.toLowerCase();
 	if(agent.indexOf('chrome') < 0) { 
 		alert(JS_MESSAGE["demo.browser.recommend"]);
@@ -1479,6 +1776,54 @@
         $("#movePitch").val(pitch);
         $("#moveRoll").val(roll);
     }
+	
+	projectShortCut();
+	// TODO 여기서 common, public, private, sharing 다 처리 해야 함. 지금은 여러개로 되어 있음
+	function projectShortCut() {
+		var url = "/project/ajax-list-project.do";
+		var info = "";
+		$.ajax({
+			url: url,
+			type: "GET",
+			data: info,
+			dataType: "json",
+			headers: { "X-mago3D-Header" : "mago3D"},
+			success : function(msg) {
+				if(msg.result === "success") {
+					
+					var projectList = msg.projectList;
+					var content = "";
+					
+					if(projectList == null || projectList.length == 0) {
+						// pass
+					} else {
+						for(i=0; i<projectList.length; i++ ) {
+							var project = null;
+							project = projectList[i];
+							var viewStatus = "";
+							if(project.status === "0") viewStatus = "성공";
+							else if(project.status === "1") viewStatus = "확인필요";
+							else if(project.status === "2") viewStatus = "실패";
+							
+							content = content 
+								+ 	"<li onclick=\"gotoProject('" + project.project_id + "', '" + project.longitude 
+															+ "', '" + project.latitude + "', '" + project.height 
+															+ "', '" + project.duration + "'); \">" + project.project_name 
+								+	"</li>";
+						}
+					}
+					$("#publicProjectArea").empty();
+					$("#publicProjectArea").html(content);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error : function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+				console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			}
+		});
+	}
 </script>
 </body>
 </html>

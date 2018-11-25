@@ -98,6 +98,7 @@ public class ProjectServiceImpl implements ProjectService {
 		int result = projectMapper.insertProject(project);
 		
 		DataInfo dataInfo = new DataInfo();
+		dataInfo.setSharing_type(project.getSharing_type());
 		dataInfo.setProject_id(project.getProject_id());
 		dataInfo.setData_key(project.getProject_key());
 		dataInfo.setData_name(project.getProject_name());

@@ -140,7 +140,7 @@ public class CacheConfig {
 	 */
 	private void project(CacheParams cacheParams) {
 		Project defaultProject = new Project();
-		defaultProject.setUse_yn(Project.IN_USE);
+		//defaultProject.setUse_yn(Project.IN_USE);
 		defaultProject.setSharing_type(DataSharingType.COMMON.getValue());
 		List<Project> projectList = projectService.getListProject(defaultProject);
 		Map<Integer, Project> projectMap = new HashMap<>();

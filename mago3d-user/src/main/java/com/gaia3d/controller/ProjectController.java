@@ -224,10 +224,22 @@ public class ProjectController {
 			}
 		}
 		
-//		@SuppressWarnings("unchecked")
-//		List<CommonCode> issuePriorityList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_PRIORITY);
-//		@SuppressWarnings("unchecked")
-//		List<CommonCode> issueTypeList = (List<CommonCode>)CacheManager.getCommonCode(CommonCode.ISSUE_TYPE);
+		// TODO 참조 하는 버그 있음
+//		List<Project> projectList = CacheManager.getProjectList();
+//		if(projectList.isEmpty()) projectList = new ArrayList<>();
+//		Project publicProject = new Project();
+//		publicProject.setSharing_type(DataSharingType.PUBLIC.getValue());
+//		projectList.addAll(projectService.getListProject(publicProject));
+		
+		// callback 설정
+		userPolicy.setGeo_callback_enable(policy.getGeo_callback_enable());
+		userPolicy.setGeo_callback_apiresult(policy.getGeo_callback_apiresult());
+		userPolicy.setGeo_callback_dataInfo(policy.getGeo_callback_dataInfo());
+		userPolicy.setGeo_callback_moveddata(policy.getGeo_callback_moveddata());
+		userPolicy.setGeo_callback_selectedobject(policy.getGeo_callback_selectedobject());
+		userPolicy.setGeo_callback_insertissue(policy.getGeo_callback_insertissue());
+		userPolicy.setGeo_callback_listissue(policy.getGeo_callback_listissue());
+		userPolicy.setGeo_callback_clickposition(policy.getGeo_callback_clickposition());
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -240,12 +252,11 @@ public class ProjectController {
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("issueList", issueList);
 //		model.addAttribute("projectList", projectList);
+		model.addAttribute("commonProjectList", CacheManager.getProjectList());
 		model.addAttribute("initProjectsLength", initProjectsLength);
 		model.addAttribute("initProjectJsonMap", mapper.writeValueAsString(initProjectJsonMap));
 		model.addAttribute("cache_version", policy.getContent_cache_version());
 		model.addAttribute("policyJson", mapper.writeValueAsString(userPolicy));
-//		model.addAttribute("issuePriorityList", issuePriorityList);
-//		model.addAttribute("issueTypeList", issueTypeList);
 		
 		log.info("@@@@@@ policy = {}", policy);
 		log.info("@@@@@@ initProjectsLength = {}", initProjectsLength);
@@ -259,7 +270,7 @@ public class ProjectController {
 	 * @param request
 	 * @return
 	 */
-	@PostMapping(value = "ajax-list-project.do")
+	@RequestMapping(value = "ajax-list-project.do")
 	@ResponseBody
 	public Map<String, Object> ajaxListProject(HttpServletRequest request, Project project) {
 		Map<String, Object> map = new HashMap<>();
@@ -268,7 +279,7 @@ public class ProjectController {
 			
 			UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 			project.setUser_id(userSession.getUser_id());
-			project.setUse_yn(Project.IN_USE);
+//			project.setUse_yn(Project.IN_USE);
 			project.setSharing_type(DataSharingType.PUBLIC.getValue());
 			
 			List<Project> projectList = projectService.getListProject(project);
