@@ -57,6 +57,7 @@ public class UserPolicyController {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 		UserPolicy userPolicy = userPolicyService.getUserPolicy(userSession.getUser_id());
+		if(userPolicy == null) userPolicy = new UserPolicy();
 		log.info("@@@@@@@@@@ userPolicy = {}", userPolicy);
 		
 		String defaultProjects = userPolicy.getGeo_data_default_projects();

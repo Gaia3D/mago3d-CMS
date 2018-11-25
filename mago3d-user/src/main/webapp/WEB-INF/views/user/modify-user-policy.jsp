@@ -72,7 +72,7 @@
 									<form:label path="geo_data_path"><spring:message code='config.data.folder'/></form:label>
 								</th>
 								<td class="col-input">
-									<form:input path="geo_data_path" cssClass="l" />
+									<form:input path="geo_data_path" cssClass="l" placeholder="/f4d" />
 									<span class="table-desc"><spring:message code='config.directory'/></span>
 									<form:errors path="geo_data_path" cssClass="error" />
 								</td>

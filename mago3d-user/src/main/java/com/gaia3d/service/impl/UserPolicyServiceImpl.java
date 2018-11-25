@@ -46,7 +46,12 @@ public class UserPolicyServiceImpl implements UserPolicyService {
 	 */
 	@Transactional
 	public int updateUserPolicy(UserPolicy userPolicy) {
-		return userPolicyMapper.updateUserPolicy(userPolicy);
+		UserPolicy dbUserPolicy = userPolicyMapper.getUserPolicy(userPolicy.getUser_id());
+		if(dbUserPolicy == null) {
+			return userPolicyMapper.insertUserPolicy(userPolicy);
+		} else {
+			return userPolicyMapper.updateUserPolicy(userPolicy);
+		}
 	}
 	
 	/**

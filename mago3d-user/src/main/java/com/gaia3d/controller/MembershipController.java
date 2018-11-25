@@ -43,7 +43,8 @@ public class MembershipController {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 		Optional<Membership> membership = Optional.ofNullable(membershipService.getMembership(userSession.getUser_id()));
-		log.info("@@@@@@@@@@ membership = {}", membership.orElse(new Membership()));
+		membership.orElse(new Membership());
+		log.info("@@@@@@@@@@ membership = {}", membership);
 		
 		model.addAttribute("membership", membership);
 		

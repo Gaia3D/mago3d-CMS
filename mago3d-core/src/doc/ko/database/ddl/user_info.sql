@@ -214,7 +214,6 @@ comment on column user_device.insert_date is '등록일';
 
 -- 사용자 운영정책
 create table user_policy(
-	user_policy_id							bigint,
 	user_id									varchar(32)	 						not null,	
 	
 	geo_view_library						varchar(20)			default 'cesium',
@@ -247,11 +246,10 @@ create table user_policy(
 	
 	update_date								timestamp with time zone			default now(),
 	insert_date								timestamp with time zone			default now(),
-	constraint user_policy_pk primary key (user_policy_id)	
+	constraint user_policy_pk primary key (user_id)	
 );
 
 comment on table user_policy is '사용자 운영정책';
-comment on column user_policy.user_policy_id is '고유키';
 comment on column user_policy.user_id is '사용자 아이디';
 
 comment on column user_policy.geo_view_library is 'view library. 기본 cesium';
