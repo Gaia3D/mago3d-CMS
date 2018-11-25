@@ -644,8 +644,13 @@ public class UploadDataController {
 			UploadDataFile uploadDataFile = new UploadDataFile();
 			uploadDataFile.setUser_id(userSession.getUser_id());
 			Long uploadDataTotalSize = uploadDataService.getUploadDataFileTotalSize(uploadDataFile);
+			if(uploadDataTotalSize == null) {
+				uploadDataTotalSize = 0l;
+			} else {
+				uploadDataTotalSize = uploadDataTotalSize/1000l;
+			}
 			
-			map.put("uploadDataTotalSize", uploadDataTotalSize/1000l );
+			map.put("uploadDataTotalSize", uploadDataTotalSize );
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

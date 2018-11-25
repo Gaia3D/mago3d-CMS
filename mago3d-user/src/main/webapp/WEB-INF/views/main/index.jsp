@@ -151,7 +151,7 @@
 					<div id="data_info_widget_content" class="widget one-third column" style="font-size: 16px;">
 						<div class="widget-header row" style="height: 25px;">
 							<div class="widget-heading u-pull-left">						
-								<h3 class="widget-title">최근 Converter <span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
+								<h3 class="widget-title">데이터 정보 <span class="widget-desc">${today } <spring:message code='config.widget.basic'/></span></h3>
 							</div>
 							<div class="widget-functions u-pull-right">
 								<a href="/data/list-data.do" title="more"><span class="icon-glyph glyph-plus"></span></a>
@@ -527,7 +527,7 @@
 								+	"<col class=\"col-left\" />";
 					if(converterJobFileList == null || converterJobFileList.length == 0) {
 						content += 	"<tr>"
-								+	"	<td colspan=\"3\" class=\"col-none\">데이터 변경 요청 이력이 존재하지 않습니다.</td>"
+								+	"	<td colspan=\"3\" class=\"col-none\">Converter Job File이 존재하지 않습니다.</td>"
 								+	"</tr>";
 					} else {
 						for(i=0; i<converterJobFileList.length; i++ ) {
@@ -578,7 +578,7 @@
 								+	"<col class=\"col-left\" />";
 					if(dataInfoList == null || dataInfoList.length == 0) {
 						content += 	"<tr>"
-								+	"	<td colspan=\"3\" class=\"col-none\">데이터 정보이력이 존재하지 않습니다.</td>"
+								+	"	<td colspan=\"3\" class=\"col-none\">데이터 정보가 존재하지 않습니다.</td>"
 								+	"</tr>";
 					} else {
 						for(i=0; i<dataInfoList.length; i++ ) {

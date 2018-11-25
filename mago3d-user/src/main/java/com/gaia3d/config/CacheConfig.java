@@ -169,7 +169,9 @@ public class CacheConfig {
 			projectDataMap = new HashMap<>();
 			projectDataJsonMap = new HashMap<>();
 			
-			List<Project> projectList = projectService.getListProject(new Project());
+			Project commonProject = new Project();
+			commonProject.setSharing_type(DataSharingType.COMMON.getValue());
+			List<Project> projectList = projectService.getListProject(commonProject);
 			for(Project project : projectList) {
 				DataInfo dataInfo = new DataInfo();
 				dataInfo.setProject_id(project.getProject_id());

@@ -1,6 +1,6 @@
 -- FK, Index 는 별도 파일로 분리. 맨 마지막에 작업 예정
 drop table if exists converter_job cascade;
-drop table if exists converter_job_detail cascade;
+drop table if exists converter_job_file cascade;
 
 -- file converter job
 create table converter_job(
