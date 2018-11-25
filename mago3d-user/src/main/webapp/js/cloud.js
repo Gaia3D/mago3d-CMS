@@ -1,7 +1,6 @@
 var TOGGLE_MENU_STATUS = 0;
 
 function toggleMenu() {
-	console.log("click......");
 	$("#site-content").toggleClass("on");
 	if(TOGGLE_MENU_STATUS == 0) {
 		// hide
@@ -21,7 +20,7 @@ function toggleMenu() {
 		$("#smallUserProfileImage").attr("src","/images/1px.png");
 		
 		$(".profile-menu").css("height", "110px");
-		$(".project-menu").css("height", "190px");
+		$(".project-menu").css("height", "125px");
 		$(".converter-menu").css("height", "150px");
 		$(".settings-menu").css("height", "100px");
 		
@@ -81,7 +80,7 @@ function toggleMenu() {
 }*/
 
 // project view type
-$( function() {
+/*$( function() {
 	$( ".project-view-radio" ).checkboxradio({
 		icon: false
 	});
@@ -101,4 +100,4 @@ $( function() {
 		location.href="/project/list-project.do";
 		return;
 	});
-});
+});*/

@@ -697,7 +697,7 @@
 	function drawUploadDataSize(jsonData) {
 		$("#uploadDataSizeWidget").empty();
 		var uploadDataSet = [
-			{ totalCount: (1000000 - jsonData.uploadDataTotalSize), countLevel:"사용 가능 용량(M)", color: "#ee3639" },
+			{ totalCount: (1000000 - jsonData.uploadDataTotalSize), countLevel:"사용 가능 용량(M)", color: "#367fee" },
 			{ totalCount: jsonData.uploadDataTotalSize, countLevel:"현재 사용량(M)", color: "#9b36ee" }
 		];
 		

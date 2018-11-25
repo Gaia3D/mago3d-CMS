@@ -197,11 +197,13 @@ public class ProjectController {
 			// 기본 보기
 			if(userPolicy != null) {
 				String defaultProjects = userPolicy.getGeo_data_default_projects();
+				log.info("@@@@@@@@@@@@@@@@@@@@@@ defaultProjects = {}", defaultProjects);
 				String[] initProjects = null;
 				if(defaultProjects != null && !"".equals(defaultProjects)) {
 					initProjects = defaultProjects.split(",");
 					for(String projectId : initProjects) {
 						DataInfo dataInfo = new DataInfo();
+						dataInfo.setUser_id(userId);
 						dataInfo.setProject_id(Integer.valueOf(projectId));
 						List<DataInfo> dataInfoList = dataService.getListDataByProjectId(dataInfo);
 						if(!dataInfoList.isEmpty()) {
