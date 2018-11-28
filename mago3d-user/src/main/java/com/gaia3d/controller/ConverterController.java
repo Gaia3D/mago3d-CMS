@@ -128,7 +128,7 @@ public class ConverterController {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(UserSession.KEY);
 		converterJobFile.setUser_id(userSession.getUser_id());		
-		log.info("@@ converterJob = {}", converterJobFile);
+		log.info("@@ converterJobFile = {}", converterJobFile);
 		
 		if(StringUtil.isNotEmpty(converterJobFile.getStart_date())) {
 			converterJobFile.setStart_date(converterJobFile.getStart_date().substring(0, 8) + DateUtil.START_TIME);

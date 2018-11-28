@@ -105,6 +105,7 @@
 			SELECT A.*, B.sharing_type, B.data_type, B.file_name
 			FROM converter_job_file A, upload_data_file B
 			WHERE A.user_id = #{user_id}
+				AND A.upload_data_file_id = B.upload_data_file_id
 				<if test="search_word != null and search_word != '' and search_value != null and search_value != '' and search_option == '0'.toString()">
 				AND B.${search_word} = #{search_value}
 				</if>
@@ -164,13 +165,13 @@
     		SELECT NEXTVAL('converter_job_file_seq')
   		</selectKey>
 		INSERT INTO converter_job_file(
-			converter_job_file_id, converter_job_id, upload_data_id, user_id,
+			converter_job_file_id, converter_job_id, upload_data_id, upload_data_file_id, project_id, user_id,
 			<if test="status != null and status != ''">
 			status, 
 			</if>
 			error_code
 		) VALUES (
-			#{converter_job_file_id}, #{converter_job_id}, #{upload_data_id}, #{user_id},
+			#{converter_job_file_id}, #{converter_job_id}, #{upload_data_id}, #{upload_data_file_id}, #{project_id}, #{user_id},
 			<if test="status != null and status != ''">
 			#{status}, 
 			</if>
