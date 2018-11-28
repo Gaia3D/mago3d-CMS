@@ -187,6 +187,7 @@ public class ConverterServiceImpl implements ConverterService {
 		
 		DataInfo dataInfo = new DataInfo();
 		dataInfo.setProject_id(uploadDataFile.getProject_id());
+		dataInfo.setSharing_type(uploadDataFile.getSharing_type());
 		dataInfo.setData_key(uploadDataFile.getFile_real_name().substring(0, uploadDataFile.getFile_real_name().lastIndexOf(".")));
 		dataInfo.setData_name(uploadDataFile.getFile_name().substring(0, uploadDataFile.getFile_name().lastIndexOf(".")));
 		dataInfo.setUser_id(userId);
