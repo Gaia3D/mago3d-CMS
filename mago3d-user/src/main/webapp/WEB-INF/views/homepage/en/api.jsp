@@ -211,7 +211,7 @@
 					<tbody>
 						<tr>
 							<td>managerFactoryInstance</td>
-							<td>mago3D mago3D starting point</td>
+							<td>mago3D starting point</td>
 						</tr>
 						<tr>
 							<td>isShow</td>
@@ -515,7 +515,7 @@ function changeShadow(isShow) {
 			&lt;input type="text" id="colorProperty" name="colorProperty" size="30" placeholder="isMain=true" /&gt;
 		&lt;/li&gt;
 		&lt;li&gt;
-			&lt;label for="updateColor"&gt;����&lt;/label&gt;
+			&lt;label for="updateColor"&gt;Color&lt;/label&gt;
 			&lt;select id="updateColor" name="updateColor" class="select"&gt;
 				&lt;option value="255,0,0"&gt; Red &lt;/option&gt;
 				&lt;option value="255,255,0"&gt; Yellow &lt;/option&gt;
@@ -637,7 +637,7 @@ function changeShadow(isShow) {
 		&lt;li&gt;
 			&lt;label for="moveRoll"&gt;ROLL &lt;/label&gt;
 			&lt;input type="text" id="moveRoll" name="moveRoll" size="18" /&gt;
-			&lt;button type="button" id="changeLocationAndRotation" class="btn"&gt;��ȯ&lt;/button&gt; 
+			&lt;button type="button" id="changeLocationAndRotation" class="btn"&gt;Apply&lt;/button&gt; 
 		&lt;/li&gt;
 	&lt;/ul&gt;
 &lt;/div&gt;
@@ -732,7 +732,7 @@ function changeShadow(isShow) {
 				<br> <b>JavaScript</b>
 				<pre>
 <code>$("#saveObjectMoveButton").click(function () {
-	alert("�غ��� �Դϴ�.");
+	alert("Coming soon.");
 	var objectMoveMode = $(':radio[name="objectMoveMode"]:checked').val();
 	if(objectMoveMode === "2") {
 		alert("Can not be saved in None mode.");
@@ -746,7 +746,7 @@ function changeShadow(isShow) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="deleteAllObjectMoveAPI">deleteAllObjectMoveAPI</span></h2>
-				<p>��� ��ü ���콺 �̵� �̷��� Cache�� �輼�մϴ�.</p>
+				<p>Delete all object mouse move history Cache.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -758,7 +758,7 @@ function changeShadow(isShow) {
 					<tbody>
 						<tr>
 							<td>managerFactoryInstance</td>
-							<td>mago3D ���� �κ�</td>
+							<td>mago3D starting point</td>
 						</tr>
 						<tr>
 							<td>objectMoveMode</td>
@@ -769,14 +769,14 @@ function changeShadow(isShow) {
 				<h4>Examples:</h4>
 				<b>html</b>
 				<pre>
-<code>&lt;button type="button" id="deleteAllObjectMoveButton" class="btn"&gt;��ü ����&lt;/button&gt;
+<code>&lt;button type="button" id="deleteAllObjectMoveButton" class="btn"&gt;Delete All&lt;/button&gt;
 </code>
 				</pre>
 				<br> <b>JavaScript</b>
 				<pre>
 <code>$("#deleteAllObjectMoveButton").click(function () {
 	var objectMoveMode = $(':radio[name="objectMoveMode"]:checked').val();
-	if(confirm("���� �Ͻðڽ��ϱ�?")) {
+	if(confirm("Are you sure you want to delete?")) {
 		deleteAllObjectMoveAPI(managerFactory, objectMoveMode);
 	}
 });
@@ -786,7 +786,7 @@ function changeShadow(isShow) {
 			<hr>		
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="deleteAllChangeColorAPI">deleteAllChangeColorAPI</span></h2>
-				<p>������ ���� �̷��� ��ü �����մϴ�.</p>
+				<p>Delete all changed color histories.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -798,20 +798,20 @@ function changeShadow(isShow) {
 					<tbody>
 						<tr>
 							<td>managerFactoryInstance</td>
-							<td>mago3D ���� �κ�</td>
+							<td>mago3D starting point</td>
 						</tr>
 					</tbody>
 				</table>
 				<h4>Examples:</h4>
 				<b>html</b>
 				<pre>
-<code>&lt;button type="button" id="deleteAllChangeColor" class="btn"&gt;��ü ����&lt;/button&gt;
+<code>&lt;button type="button" id="deleteAllChangeColor" class="btn"&gt;Delete All&lt;/button&gt;
 </code>
 				</pre>
 				<br> <b>JavaScript</b>
 				<pre>
 <code>$("#deleteAllChangeColor").click(function () {
-	if(confirm("���� �Ͻðڽ��ϱ�?")) {
+	if(confirm("Are you sure you want to delete?")) {
 		deleteAllChangeColorAPI(managerFactory);
 	}
 });
@@ -967,7 +967,7 @@ function changeShadow(isShow) {
 			
 			// occlusion culling
 			$("#occlusion_culling_data_key").val(dataKey);
-			// ���� ��ǥ�� ����
+			// Save current coordinates
 			saveCurrentLocation(latitude, longitude);
 	}
 }
@@ -1076,7 +1076,7 @@ function changeShadow(isShow) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeNearGeoIssueListViewModeAPI">changeNearGeoIssueListViewModeAPI</span></h2>
-				<p>Ȱ��ȭ�� ���� ��ġ ��ó issue�� �����ִ� API�Դϴ�.</p>
+				<p>An API that shows issues near the current location when activated.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -1088,11 +1088,11 @@ function changeShadow(isShow) {
 					<tbody>
 						<tr>
 							<td>managerFactoryInstance</td>
-							<td>mago3D ���� �κ�</td>
+							<td>mago3D starting point</td>
 						</tr>
 						<tr>
 							<td>flag</td>
-							<td>true = Ȱ��ȭ, false = ��Ȱ��ȭ</td>
+							<td>true = Enable, false = Disable</td>
 						</tr>
 					</tbody>
 				</table>
@@ -1100,11 +1100,11 @@ function changeShadow(isShow) {
 				<b>html</b>
 				<pre>
 <code class="html">&lt;div&gt;
-	&lt;h3&gt;���� ��ġ ��ó Issue List(100��)&lt;/h3&gt;
+	&lt;h3&gt;Issue List near your current location (100)&lt;/h3&gt;
 	&lt;input type="radio" id="showNearGeoIssueList" name="nearGeoIssueList" value="true" onclick="changeNearGeoIssueList(true);" /&gt;
-	&lt;label for="showNearGeoIssueList"&gt; ǥ�� &lt;/label&gt;
+	&lt;label for="showNearGeoIssueList"&gt; Show &lt;/label&gt;
 	&lt;input type="radio" id="hideNearGeoIssueList" name="nearGeoIssueList" value="false" onclick="changeNearGeoIssueList(false);"/&gt;
-	&lt;label for="hideNearGeoIssueList"&gt; ��ǥ�� &lt;/label&gt;
+	&lt;label for="hideNearGeoIssueList"&gt; Hide &lt;/label&gt;
 &lt;/div&gt;
 </code>
 				</pre>
@@ -1117,7 +1117,7 @@ function changeShadow(isShow) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeInsertIssueStateAPI">changeInsertIssueStateAPI</span></h2>
-				<p>mago3DJS ������ �̽� ����� ���ؼ� ��ǥ�� ����ϰ� �־��µ� changeInsertIssueStateAPI�� �Ķ���Ϳ� 0�� �Ѱ� �ָ� ��ǥ�� �ʱ�ȭ�մϴ�.</p>
+				<p>The mago3DJS engine remembers coordinates for issue registration. Initialize the coordinates by passing 0 to the parameter in changeInsertIssueStateAPI.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -1129,11 +1129,11 @@ function changeShadow(isShow) {
 					<tbody>
 						<tr>
 							<td>managerFactoryInstance</td>
-							<td>mago3D ���� �κ�</td>
+							<td>mago3D starting point</td>
 						</tr>
 						<tr>
 							<td>insertIssueState</td>
-							<td>�̽� ��� ��ǥ ����</td>
+							<td>isure registration coordinates state</td>
 						</tr>
 					</tbody>
 				</table>
@@ -1147,7 +1147,7 @@ function changeShadow(isShow) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeLodAPI">changeLodAPI</span></h2>
-				<p>LOD(Level Of Detail)������ �������ִ� API�Դϴ�.</p>
+				<p>API to change LOD (Level Of Detail) setting.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -1159,7 +1159,7 @@ function changeShadow(isShow) {
 					<tbody>
 						<tr>
 							<td>managerFactoryInstance</td>
-							<td>mago3D ���� �κ�</td>
+							<td>mago3D starting point</td>
 						</tr>
 						<tr>
 							<td>lod0DistInMeters</td>
@@ -1204,7 +1204,7 @@ function changeShadow(isShow) {
 	&lt;input type="text" id="geo_lod2" name="geo_lod2" value="${policy.geo_lod0}" size="15" /&gt;&nbsp;M
 	&lt;div&gt;LOD5&lt;/div&gt;
 	&lt;input type="text" id="geo_lod2" name="geo_lod2" value="${policy.geo_lod0}" size="15" /&gt;&nbsp;M&nbsp;&nbsp;
-	&lt;button type="button" id="changeLodButton" class="btn"&gt;����&lt;/button&gt;
+	&lt;button type="button" id="changeLodButton" class="btn"&gt;Apply&lt;/button&gt;
 &lt;/div&gt;
 </code>
 				</pre>
@@ -1219,7 +1219,7 @@ function changeShadow(isShow) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeLightingAPI">changeLightingAPI</span></h2>
-				<p>������ Object�� ��⸦ �����ϴ� API�Դϴ�.</p>
+				<p>An API that adjusts the brightness of selected objects.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -1231,7 +1231,7 @@ function changeShadow(isShow) {
 					<tbody>
 						<tr>
 							<td>managerFactoryInstance</td>
-							<td>mago3D ���� �κ�</td>
+							<td>mago3D starting point</td>
 						</tr>
 						<tr>
 							<td>ambientReflectionCoef</td>
@@ -1277,7 +1277,7 @@ function changeShadow(isShow) {
 			&lt;input type="hidden" id="geo_specular_reflection_coef" name="geo_specular_reflection_coef" value="1" /&gt;
 		&lt;/div&gt;
 		&lt;div&gt;
-			&lt;button type="button" id="changeLightingButton" class="btn"&gt;����&lt;/button&gt;
+			&lt;button type="button" id="changeLightingButton" class="btn"&gt;Apply&lt;/button&gt;
 		&lt;/div&gt;
 	&lt;/div&gt;
 &lt;/div&gt;
@@ -1294,7 +1294,7 @@ function changeShadow(isShow) {
 			<hr>
 			<article class="api_description" style="margin-top: 50px;">
 				<h2><span id="changeSsaoRadiusAPI">changeSsaoRadiusAPI</span></h2>
-				<p>������ Object�� SSAO Radius�� �������ִ� API�Դϴ�.</p>
+				<p>API to set SSAO Radius in selected object.</p>
 				<h4>Parameters:</h4>
 				<table>
 					<thead>
@@ -1306,7 +1306,7 @@ function changeShadow(isShow) {
 					<tbody>
 						<tr>
 							<td>managerFactoryInstance</td>
-							<td>mago3D ���� �κ�</td>
+							<td>mago3D starting point</td>
 						</tr>
 						<tr>
 							<td>ssaoRadius</td>
@@ -1320,7 +1320,7 @@ function changeShadow(isShow) {
 <code class="html">&lt;div&gt;
 	&lt;h3&gt;&lt;label for="geo_ssao_radius"&gt;SSAO Radius&lt;/label&gt;&lt;/h3&gt;
 	&lt;input type="text" id="geo_ssao_radius" name="geo_ssao_radius" /&gt;
-	&lt;button type="button" id="changeSsaoRadiusButton" class="btn"&gt;����&lt;/button&gt;
+	&lt;button type="button" id="changeSsaoRadiusButton" class="btn"&gt;Apply&lt;/button&gt;
 &lt;/div&gt;
 </code>
 				</pre>
@@ -1492,7 +1492,7 @@ function changeShadow(isShow) {
 			gotoProjectAPI(managerFactory, projectId, projectData, projectData.data_key, longitude, latitude, height, duration);	
 		}
 		
-		// ���� ��ǥ�� ����
+		// Save current coordinates
 		saveCurrentLocation(latitude, longitude);
 	}
 </code>
@@ -1537,7 +1537,7 @@ function changeShadow(isShow) {
 						</tr>
 						<tr>
 							<td>latitude</td>
-							<td>����</td>
+							<td>latitude</td>
 						</tr>
 						<tr>
 							<td>longitude</td>
