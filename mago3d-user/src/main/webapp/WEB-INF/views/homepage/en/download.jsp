@@ -132,14 +132,14 @@
 					<th>Description</th>
 				</tr>
 				<tr>
-					<td>0.0.3</td>
+					<td>0.0.4</td>
 					<td>
 					<ul>
 						<li>GitHub : <a href="https://github.com/Gaia3D/F4DConverter" target="_blank">F4D Converter</a></li>
 						<li>Installer : <a href="/data/download/SetupF4DConverter.msi" target="_blank">F4D Converter 64bit (this installation requires Windows 7 or later)</a></li>
 					</ul>
 					</td>
-					<td>2018-10-20</td>
+					<td>2018-11-01</td>
 					<td><a href="https://github.com/Gaia3D/F4DConverter/blob/master/README.md" target="_blank">ReadMe</a>
 					</td>
 				</tr>
@@ -157,7 +157,7 @@
 						<ul>
 							<li style="list-style-type: none">1.0.7</a></li>
 							<li style="list-style-type: none">1.0.7</a></li>
-							<li style="list-style-type: none">0.0.3</a></li>
+							<li style="list-style-type: none">0.0.4</a></li>
 						</ul>
 					</td>
 					<td>
@@ -171,7 +171,7 @@
 						<ul>
 							<li style="list-style-type: none">2018-05-29</a></li>
 							<li style="list-style-type: none">2018-05-29</a></li>
-							<li style="list-style-type: none">2018-10-20</a></li>
+							<li style="list-style-type: none">2018-11-01</a></li>
 						</ul>
 					</td>
 				</tr>
