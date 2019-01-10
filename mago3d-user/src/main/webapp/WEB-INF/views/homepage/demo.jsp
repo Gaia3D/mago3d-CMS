@@ -753,7 +753,7 @@
 			// Label 표시
 			changeLabel(false);
 			// object 정보 표시
-			changeObjectInfoViewMode(true);
+			changeObjectInfoViewMode(false);
 			// Origin 표시
             changeOrigin(false);
 			// BoundingBox
