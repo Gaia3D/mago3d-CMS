@@ -61,31 +61,34 @@
 	</div>
 	
 	<ul id="homeMenuContent" class="menuList">
-		<li><a href="/homepage/index.do">Home</a>
-			(<a href="/homepage/about.do" onclick ="changeLanguage('ko');">KO</a> | 
-			<a href="/homepage/about.do" onclick ="changeLanguage('en');">EN</a>)
+		<li><a href="http://www.mago3d.com/kor/" target="_blank">Home</a>
+			(<a href="http://www.mago3d.com/kor/" onclick ="changeLanguage('ko');" target="_blank">KO</a> | 
+			<a href="http://www.mago3d.com/eng/" onclick ="changeLanguage('en');" target="_blank">EN</a>)
 		</li>
-		<li><a href="/homepage/about.do">mago3D</a></li>
+		<li><a href="http://www.mago3d.com/kor/?cat=5" target="_blank">mago3D</a></li>
 		<li>Demo
 			<ul>
 <c:if test="${geoViewLibrary == null || geoViewLibrary eq '' || geoViewLibrary eq 'cesium' }">
 				<li>Cesium</li>
-				<li><a href="/homepage/demo.do?viewLibrary=worldwind">World Wind</a></li>
+				<li><a href="http://www.mago3d.net/homepage/demo.do?viewLibrary=worldwind">World Wind</a></li>
 </c:if>				
 <c:if test="${geoViewLibrary eq 'worldwind' }">				
-				<li><a href="/homepage/demo.do?viewLibrary=cesium">Cesium</a></li>
+				<li><a href="http://www.mago3d.net/homepage/demo.do?viewLibrary=cesium">Cesium</a></li>
 				<li>World Wind</li>
 </c:if>
 			</ul>
 		</li>
-		<li><a href="/homepage/download.do">Download</a></li>
+		<li>Download
+			<ul><li><a href="http://www.mago3d.com/kor/?cat=11" target="_blank">Release</li></a></ul>
+			<ul><li><a href="http://www.mago3d.com/kor/?cat=12" target="_blank">Tutorial</a></li></ul>
+		</li>
 		<li>Documentation
 			<ul>
-				<li><a href="http://www.mago3d.com/homepage/api.do">API</a></li>
-				<li><a href="http://www.mago3d.com/homepage/spec.do">F4D Spec</a></li>
+				<li><a href="http://www.mago3d.com/api/ko-docs/api.html" target="_blank">API</a></li>
+				<li><a href="http://www.mago3d.com/kor/?p=1150" target="_blank">F4D Spec</a></li>
 			</ul>
 		</li>
-		<li><a href="/homepage/faq.do">FAQ</a></li>
+		<li><a href="http://www.mago3d.com/kor/?page_id=1171" target="_blank">FAQ</a></li>
 	</ul>
 		
 	<ul id="shortCutMenuContent" class="shortList">
