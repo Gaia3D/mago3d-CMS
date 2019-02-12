@@ -182,6 +182,7 @@ public class HomepageController {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		model.addAttribute("policy", policy);
+		model.addAttribute("lang", lang);
 		model.addAttribute("geoViewLibrary", policy.getGeo_view_library());
 		model.addAttribute("issue", issue);
 		model.addAttribute("now_latitude", policy.getGeo_init_latitude());
@@ -320,12 +321,30 @@ public class HomepageController {
 	 * @return
 	 */
 	@GetMapping(value = "api.do")
-	public String api(HttpServletRequest request, Model model) {
-		String lang = null;
-		lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+	public String api(HttpServletRequest request, HttpServletResponse response, Model model) {
+		String lang = (String)request.getParameter("lang");
 		if(lang == null || "".equals(lang)) {
-			lang = "ko";
+			lang = (String)request.getSession().getAttribute(SessionKey.LANG.name());
+			if(lang == null || "".equals(lang)) {
+				Locale myLocale = request.getLocale();
+				lang = myLocale.getLanguage();
+			}
 		}
+		
+		if(!Locale.KOREA.getLanguage().equals(lang) 
+				&& !Locale.ENGLISH.getLanguage().equals(lang)
+				&& !Locale.JAPAN.getLanguage().equals(lang)) {
+			// TODO Because it does not support multilingual besides English and Japanese Based on English
+			lang = "en";
+		}
+		
+		log.info("@@ lang = {}", lang);
+		if(lang != null && !"".equals(lang)) {
+			request.getSession().setAttribute(SessionKey.LANG.name(), lang);
+			Locale locale = new Locale(lang);
+			localeResolver.setLocale(request, response, locale);
+		}
+		
 		return "/homepage/" + lang + "/api";
 	}
 	

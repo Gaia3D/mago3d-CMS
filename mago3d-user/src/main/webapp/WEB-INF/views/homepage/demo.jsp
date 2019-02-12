@@ -81,7 +81,12 @@
 		</li>
 		<li>Documentation
 			<ul>
-				<li><a href="http://www.mago3d.com/api/ko-docs/api.html" target="_blank">API</a></li>
+<c:if test="${lang eq 'ko'}">			
+				<li><a href="http://www.mago3d.net/homepage/api.do?lang=ko" target="_blank">API</a></li>
+</c:if>	
+<c:if test="${lang eq 'en'}">			
+				<li><a href="http://www.mago3d.net/homepage/api.do?lang=en" target="_blank">API</a></li>
+</c:if>				
 				<li><a href="http://www.mago3d.com/kor/?p=1150" target="_blank">F4D Spec</a></li>
 			</ul>
 		</li>
