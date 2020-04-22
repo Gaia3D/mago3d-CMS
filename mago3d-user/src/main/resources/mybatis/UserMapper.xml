@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mago3d.persistence.UserMapper">
+
+	<!-- 사용자 정보 -->
+	<select id="getUser" parameterType="string" resultType="userInfo">
+		/* getUser */
+		SELECT A.*, B.user_group_name 
+		FROM user_info A, user_group B
+		WHERE A.user_id = #{userId}
+			AND A.user_group_id = B.user_group_id
+	</select>
+	
+	<!-- 사용자 기본 정보 중 비밀번호 정보 수정 -->
+	<update id="updatePassword" parameterType="userInfo">
+		/* updatePassword */
+		UPDATE user_info
+		SET password = #{password},
+			update_date = NOW(),
+			last_password_change_date = NOW(),
+			<if test="dbStatus != null and dbStatus == '2'.toString()">
+			fail_login_count = 0,
+			</if>
+			<if test="dbStatus != null and dbStatus == '3'.toString()">
+			last_login_date = NOW(),
+			</if>
+			status = #{status}
+		WHERE user_id = #{userId}
+	</update>
+</mapper>

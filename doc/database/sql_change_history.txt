@@ -1,0 +1,101 @@
+2월 18일
+update policy 
+set user_upload_type = '3ds,obj,dae,collada,ifc,las,gml,citygml,indoorgml,jpg,jpeg,gif,png,bmp,dds,zip,mtl', 
+	user_converter_type = '3ds,obj,dae,collada,ifc,las,gml,citygml,indoorgml';
+
+ALTER TABLE converter_job DROP COLUMN is_y_axis_up;
+
+ALTER TABLE converter_job ADD COLUMN y_axis_up char(1) default 'N';
+comment on column converter_job.y_axis_up is '높이방향. y축이 건물의 천장을 향하는 경우 Y. default = N';
+
+2월 17일
+ALTER TABLE converter_job ADD COLUMN is_y_axis_up varchar(1) default 'N';
+comment on column converter_job.is_y_axis_up is '높이방향. y축이 건물의 천장을 향하는 경우 Y. default = N';
+
+UPDATE converter_job
+SET converter_template = 'point-cloud'
+WHERE 
+	converter_template = 'single-realistic-mesh' or 
+	converter_template = 'splitted-realistic-mesh'
+
+2월 6일
+이 파일 재실행
+data_adjust_log.sql
+data_attribute.sql
+data_attribute_file_info.sql
+
+create sequence data_adjust_log_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 1 cache 1;
+create sequence data_attribute_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 1 cache 1;
+create sequence data_object_attribute_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 1 cache 1;
+create sequence data_attribute_file_info_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 1 cache 1;
+
+
+1 30
+update menu set url = '/data-adjust-log/list' where menu_id = 44;
+commit;
+
+1 29
+update menu set url = '/data-log/list' where menu_id = 44;
+commit;
+
+1 28
+alter table data_info_log add column update_user_id				varchar(32);
+comment on column data_info_log.update_user_id is '수정자 아이디';
+commit;
+
+alter table data_info add column update_user_id				varchar(32);
+comment on column data_info.update_user_id is '수정자 아이디';
+commit;
+
+1 24
+update policy set user_upload_type = '3ds,obj,dae,collada,ifc,las,citygml,indoorgml,jpg,jpeg,gif,png,bmp,dds,zip,mtl';
+update policy set user_converter_type =	'3ds,obj,dae,collada,ifc,las,citygml,indoorgml';
+commit;
+
+update menu set url = '/data/map' where menu_id = 1002;
+commit;
+
+
+alter table data_info drop column converter_job_id;
+alter table data_info add column converter_job_file_id			bigint;
+comment on column data_info.converter_job_file_id is 'converter job file 고유번호';
+commit;
+
+1 23 15:34
+
+alter table data_info add column converter_job_id			bigint;
+comment on column data_info.converter_job_id is 'converter 고유번호';
+commit;
+
+
+1 22 23:13
+alter table upload_data add column
+mapping_type					varchar(30)							default 'origin';
+comment on column upload_data.mapping_type is '기본값 origin : latitude, longitude, height를 origin에 맞춤. boundingboxcenter : latitude, longitude, height를 boundingboxcenter 맞춤';
+
+1 22 09:21
+update policy
+set user_upload_type = '3ds,obj,dae,collada,ifc,las,citygml,indoorgml,jpg,jpeg,gif,png,bmp,zip,mtl',
+	user_converter_type	= '3ds,obj,dae,collada,ifc,las,citygml,indoorgml,mtl';
+commit;
+
+1 21 16:25
+alter table data_group add column converter_target_count			int									default 0;
+comment on column upload_data.converter_target_count is 'converter 변환 대상 파일 수';
+
+2020 01 20 9:30
+converter.sql
+data_info.sql
+upload_data.sql
+재 실행
+
+
+2020 01 18 23:00 cheon
+
+alter table data_group add column data_group_target			varchar(5)							default 'admin';
+alter table data_group add column location_update_type		varchar(20)							default 'auto';
+commit;
+
+comment on column data_group.location_update_type is 'location 업데이트 방법. auto : data 입력시 자동, user : 사용자가 직접 입력';
+comment on column data_group.data_group_target is 'admin : 관리자용 데이터 그룹, user : 일반 사용자용 데이터 그룹';
+commit;

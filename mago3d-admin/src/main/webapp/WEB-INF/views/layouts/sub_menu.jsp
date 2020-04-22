@@ -4,17 +4,17 @@
 	<div class="nav-header">
 		<h2 class="nav-title">
 			<span class="ko">${parentMenu.name }</span>
-			<span class="en">${parentMenu.name_en }</span>
+			<span class="en">${parentMenu.nameEn }</span>
 		</h2>
 	</div>
 	
 	<ul>
 <c:forEach var="userGroupMenu" items="${cacheUserGroupMenuList }" varStatus="status">
-	<c:if test="${userGroupMenu.depth eq 2 and userGroupMenu.display_yn eq 'Y' and userGroupMenu.parent eq parentMenu.menu_id }">
-		<c:if test="${userGroupMenu.menu_id eq clickMenuId }">
+	<c:if test="${userGroupMenu.depth eq 2 and userGroupMenu.displayYn eq 'Y' and userGroupMenu.parent eq parentMenu.menuId }">
+		<c:if test="${userGroupMenu.menuId eq clickMenuId }">
 		<li class="current-page"><a href="${userGroupMenu.url }">${userGroupMenu.name }</a></li>
 		</c:if>
-		<c:if test="${userGroupMenu.menu_id ne clickMenuId }">
+		<c:if test="${userGroupMenu.menuId ne clickMenuId }">
 		<li><a href="${userGroupMenu.url }">${userGroupMenu.name }</a></li>
 		</c:if>
 	</c:if>

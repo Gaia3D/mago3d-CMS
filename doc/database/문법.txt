@@ -1,0 +1,27 @@
+
+psql -U postgres ndtp;
+
+
+
+1 파티션
+ - 선언적 파티션의 경우 부모 테이블에 pk, uk 지정을 할 수 없고 자식 데이블에 해 줘야 함
+ - detach 를 통해 분리를 먼저 한 후 삭제
+ 
+alter table user_group rename column group_key TO user_group_key;
+alter table user_group rename column group_name TO user_group_name;
+
+
+WITH RECURSIVE menu_tree ( menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, view_order, url, url_alias, alias_menu_id,     html_id, html_content_id, image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date, path, cycle ) AS ( 
+    SELECT A.menu_id, A.menu_type, A.menu_target, A.name, A.name_en, A.ancestor, A.parent, A.depth, A.view_order, A.url, A.url_alias, A.alias_menu_id,
+          A.html_id, A.html_content_id, A.image, A.image_alt, A.css_class, A.default_yn, A.use_yn, A.display_yn, A.description, A.insert_date,           ARRAY[A.view_order], false 
+    FROM menu A 
+    WHERE A.menu_target = '1' AND A.parent = 0 
+    UNION ALL 
+    SELECT A.menu_id, A.menu_type, A.menu_target, A.name, A.name_en, A.ancestor, A.parent, A.depth, A.view_order, A.url, A.url_alias, A.alias_menu_id,
+          A.html_id, A.html_content_id, A.image, A.image_alt, A.css_class, A.default_yn, A.use_yn, A.display_yn, A.description, A.insert_date,           path || A.view_order, A.menu_id = ANY(path) 
+    FROM menu A, menu_tree B 
+    WHERE A.menu_target = '1' AND A.parent = B.menu_id AND not cycle 
+) 
+SELECT menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, view_order, url, url_alias, alias_menu_id, html_id, html_content_id,  
+   image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date, path FROM menu_tree 
+ORDER BY path ;

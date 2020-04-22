@@ -1,0 +1,171 @@
+*{
+  margin : 0;
+  padding: 0;
+}
+input[type=range] {
+  -webkit-appearance: none;
+  margin: 0 0;
+  width: 95%;
+}
+input[type=range]:focus {
+  outline: none;
+}
+
+/* -webkit            : chrome
+   -slider            : input range 
+   -runnable-track    : 길
+   -thumb             : 마커 */
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 12.8px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+  background: #333;
+  border-radius: 0;
+  border: 0px solid #000101;
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+  border: 0px solid #000000;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #287BE4;
+  cursor: pointer;
+  /* 파이어폭스에는 없는것 V */
+  -webkit-appearance: none;
+  margin-top: -3.6px;
+}
+
+/* -moz      : firefox
+   -range    : input range 
+   -track    : 길
+   -thumb    : 마커 */
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 18px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+  background: #333;
+  border-radius: 0px;
+  border: 0px solid #000101;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+  border: 0px solid #000000;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #287BE4;
+  cursor: pointer;
+}
+
+
+/* 크롬과 파이어폭스는 매우 유사 */
+
+/* -ms            : IE
+   -fill          : input range
+   -lower, upper  : fill이 차오르고 줄어들고
+   -track         : 길
+   -thumb         : 마커 */
+
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 12.8px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  border-width: 5px 0;
+  border-radius: 0;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: #333;
+  border: 0px solid #000101;
+  border-radius: 50px;
+  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+}
+input[type=range]::-ms-fill-upper {
+  background: #333;
+  border: 0px solid #000101;
+  border-radius: 50px;
+  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+}
+input[type=range]::-ms-thumb {
+  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+  border: 0px solid #000000;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #287BE4;
+  cursor: pointer;
+}
+
+body {
+  padding: 30px;
+}
+
+/* 신D 추가 */
+div.rangeWrap {
+background:rgba(0,0,0,0.9);
+width: 100%;
+height:50px;
+}
+.start {
+width: 30px;
+height: 30px;
+text-indent: -999em;
+border: 1px solid #333;
+cursor: pointer;
+background: url(./images/slide.png) no-repeat 0 0;
+}
+.stop {
+width: 30px;
+height: 30px;
+text-indent: -999em;
+border: 1px solid #333;
+cursor: pointer;
+background: url(./images/slide.png) no-repeat -30px 0;
+}
+.after {
+width: 30px;
+height: 30px;
+text-indent: -999em;
+border: 1px solid #333;
+cursor: pointer;
+background: url(./images/slide.png) no-repeat -60px 0;
+}
+.before {
+width: 30px;
+height: 30px;
+text-indent: -999em;
+border: 1px solid #333;
+cursor: pointer;
+background: url(./images/slide.png) no-repeat -90px 0;
+}
+.rangeWrapChild{
+  display: inline-block;
+}
+.rangeWrapChild.slide{
+  width: 85%;
+}
+.rangeWrapChild.button{
+  width: 15%;
+}
+.rangeWrapChild.legend{
+width: 865px;
+height: 20px;
+float: right;
+background-color: black;
+}
+.rangeWrapChild.legend span{
+color: white;
+font-weight: bold;
+margin-left: 107px;
+cursor: pointer;
+}

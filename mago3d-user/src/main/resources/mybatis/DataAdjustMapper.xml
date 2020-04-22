@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mago3d.persistence.DataAdjustLogMapper">
+
+	<!-- 데이터 변경 요청 수 -->
+	<select id="getDataAdjustLogTotalCount" parameterType="dataAdjustLog" resultType="long">
+		/* getDataAdjustLogTotalCount */
+		SELECT COUNT(data_adjust_log_id) 
+		FROM data_adjust_log
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="userId != null and userId != ''">
+			user_id = #{userId}
+			</if>
+			<if test="status != null and status != ''">
+			AND status = #{status}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+			AND ${searchWord} = #{searchValue}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+			AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- 데이터 변경 요청 로그 목록. join 으로 변경해야 함 -->
+	<select id="getListDataAdjustLog" parameterType="dataAdjustLog" resultType="dataAdjustLog">
+		/* getListDataAdjustLog */
+		SELECT X.*, 
+			(SELECT data_group_name FROM data_group WHERE data_group_id = X.data_group_id) AS data_group_name
+		FROM (
+			SELECT A.*, B.data_name, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, ST_X(A.before_location) AS beforeLongitude, ST_Y(A.before_location) AS beforeLatitude
+			FROM data_adjust_log A, data_info B
+			WHERE A.data_id = B.data_id
+				<if test="userId != null and userId != ''">
+				AND A.user_id = #{userId}
+				</if>
+				<if test="status != null and status != ''">
+				AND A.status = #{status}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+				AND A.${searchWord} = #{searchValue}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+				AND A.${searchWord} LIKE '%' || #{searchValue} || '%'
+				</if>
+				<if test="startDate != null and startDate != ''">
+				<![CDATA[
+				AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="endDate != null and endDate != ''">
+				<![CDATA[
+				AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+			<choose>
+			<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+			ORDER BY A.${orderWord} ${orderValue}
+			</when>
+			<otherwise>
+			ORDER BY A.insert_date DESC, A.data_id DESC
+			</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) X
+	</select>
+	
+	<select id="getDataAdjustLog" parameterType="long" resultType="dataAdjustLog">
+		/* getDataAdjustLog */
+		SELECT A.*, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, B.data_name
+		FROM data_adjust_log A, data_info B
+		WHERE A.data_adjust_log_id = #{dataAdjustLogId}
+			AND A.data_id = B.data_id
+	</select>
+
+	<!-- Data Info 변경 이력 등록 -->
+	<insert id="insertDataAdjustLog" parameterType="dataAdjustLog">
+		/* insertDataAdjustLog */
+		<selectKey keyProperty="dataAdjustLogId" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('data_adjust_log_seq')
+  		</selectKey>
+		INSERT INTO data_adjust_log(
+			data_adjust_log_id, data_group_id, data_id, user_id, 
+			location, altitude, heading, pitch, roll,
+			before_location, before_altitude, before_heading, before_pitch, before_roll, change_type, description
+		) VALUES (
+			#{dataAdjustLogId}, #{dataGroupId}, #{dataId}, #{userId},
+			ST_GeomFromText(#{location}, 4326), #{altitude}, COALESCE(#{heading}, 0), COALESCE(#{pitch}, 0), COALESCE(#{roll}, 0),
+			ST_GeomFromText(#{beforeLocation}, 4326), #{beforeAltitude}, #{beforeHeading}, #{beforePitch}, #{beforeRoll}, #{changeType}, #{description}
+		)
+	</insert>
+</mapper>

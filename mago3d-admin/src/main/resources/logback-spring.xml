@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="5 minutes">
-	<!-- <include resource="org/springframework/boot/logging/logback/base.xml" /> -->
-	
+
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36}[%method:%line] - %msg%n
+				%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36}[%method:%line] - %replace(%msg){'[\r\n]', ''}%n
 			</Pattern>
 		</layout>
 	</appender>
 
-	<!-- 
-	<appender name="dailyRollingFileAppender"
+	<!-- <appender name="dailyRollingFileAppender"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<prudent>true</prudent>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>applicatoin.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>livedronemap-admin.%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>30</maxHistory>
 		</rollingPolicy>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -23,27 +21,18 @@
 		</filter>
 
 		<encoder>
-		    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36}[%method:%line] - %msg%n</pattern>
+		    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36}[%method:%line] - %replace(%msg){'[\r\n]', ''}%n</pattern>
 		</encoder>
-	</appender>
-	 -->
+	</appender> -->
 
 	<logger name="org.apache.tomcat" level="debug" additivity="false" />
-	<logger name="org.apache.commons" level="INFO" additivity="false" />
-<!-- tomcat 시작시 오류 날때는 이 로그 레벨을 적용하면 상세히 나옴	
-		<logger name="org.springframework.web" level="debug" additivity="false" />  -->
+	<logger name="org.apache.commons" level="info" additivity="false" />
 	<logger name="org.springframework" level="info" additivity="false" />
-	<!-- <logger name="java.sql.Connection" level="debug" additivity="false" />
-	<logger name="java.sql.PreparedStatement" level="debug" additivity="false" />
-	<logger name="java.sql.ResultSet" level="debug" additivity="false" /> -->
-	
+	<!-- <logger name="org.springframework.web" level="info" additivity="false" /> -->
 	<logger name="com.zaxxer.hikari.pool.HikariPool" level="info" additivity="false" />
-	
-	<!-- <logger name="springfox.documentation.spring.web" level="info" additivity="false" />
-	<logger name="springfox.documentation.swagger" level="info" additivity="false" />
-	<logger name="springfox.documentation.schema" level="info" additivity="false" /> -->
 	
 	<root level="debug">
 		<appender-ref ref="STDOUT" />
+		<!-- <appender-ref ref="dailyRollingFileAppender" /> -->
 	</root>
 </configuration>

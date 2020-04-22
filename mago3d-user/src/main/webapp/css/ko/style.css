@@ -2,15 +2,19 @@
 
 /* Typo
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
+/*user-style css 때문에 important로 적용 */
+/* * { margin:0; padding:0; outline:0; vertical-align:middle !important; } */
+
+
 html {
 	font-size: 62.5%; }
 	
-body {
-	font-size: 1.3em; /* currently ems cause chrome bug misinterpreting rems on body element */
-	line-height: 1.6;
-	font-weight: 400; /* Regular 300~500, Bold 600~700, Extra Bold 800~900 */
-	font-family: 'Nanum Gothic', sans-serif;
-	color: #888; }
+/* body { */
+/* 	font-size: 1.3em; currently ems cause chrome bug misinterpreting rems on body element */
+/* 	line-height: 1.6; */
+/* 	font-weight: 400; Regular 300~500, Bold 600~700, Extra Bold 800~900 */
+/* 	font-family: 'Nanum Gothic', sans-serif; */
+/* 	color: #888; } */
 	
 p {
 	margin: 0; }
@@ -25,12 +29,12 @@ input, select, textarea, button,
 	font-size: 1.3rem;
 	color: #7d7d7d; }
 
-h1, h2, h3, h4, h5, h6 {
-	margin: 0;
-	font-weight: 700;
-	color: #34373d; }
+/* h1, h2, h3, h4, h5, h6 { */
+/* 	margin: 0; */
+/* 	font-weight: 700; */
+/* 	color: #34373d; } */
 	
-h1 { font-size: 4.0rem; line-height: 1.2;  letter-spacing: -.1rem;}
+/* h1 { font-size: 4.0rem; line-height: 1.2;  letter-spacing: -.1rem;} */
 h2 { font-size: 3.6rem; line-height: 1.25; letter-spacing: -.1rem; }
 h3 { font-size: 3.0rem; line-height: 1.3;  letter-spacing: -.1rem; }
 h4 { font-size: 2.4rem; line-height: 1.35; letter-spacing: -.08rem; }
@@ -217,7 +221,76 @@ em {
 	line-height: 3.3rem;
 	vertical-align: middle; }
 	
+.banner.info-generates > div:first-child {
+	background-color: #36a9e1; }
+	 
+.banner.info-success > div:first-child {
+	background-color: #bdea74; }
+	 
+.banner.info-failures > div:first-child {
+	background-color: #ff5454; }
 
+
+
+/* device
+–––––––––––––––––––––––––––––––––––––––––––––––––– */	
+.info-device {
+	border: 3px solid #fff;
+	-webkit-border-radius: 30px;
+	   -moz-border-radius: 30px;
+			border-radius: 30px;
+	width: 80px;
+	height: 30px;
+	margin: 0 auto;
+	text-align: left;
+	vertical-align: middle; }
+	
+.info-device .icon-glyph {
+	font-size: 2.4rem;
+	line-height: 30px;
+	padding-left: 3px; }
+	
+.info-device .info-numbers { 
+	position: relative; }
+
+.info-device .info-numbers:after {
+	content: '012345';
+	padding: 0 2px;
+	font-size: .9rem;
+	position: absolute;
+	left: 0;
+	top: -9px;
+	z-index: 1;
+	border: 2px solid #fff;
+	display: block; }
+	
+	
+	
+/* Badge
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.badge {
+	-webkit-border-radius: 16px;
+	   -moz-border-radius: 16px;
+			border-radius: 16px;
+	height: 16px;
+	box-sizing: border-box;
+	padding: 1px 5px 3px 3px;
+	color: #fff; }
+	
+.badge .icon-text {
+	font-size: 70%; }
+	
+.badge.otp-generates {
+	background-color: #36a9e1; }
+	
+.badge.otp-failures {
+	background-color: #ea6576; }
+	
+.badge.otp-success {
+	background-color: #adde5e; }
+	
+	
+	
 /* Status bar
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .status-bar {
@@ -566,7 +639,7 @@ input[type=file] {
 	
 textarea {
 	min-width: 100%;
-	min-height: 150px; }
+	min-height: 300px; }
 
 textarea.reply {
 	min-height: 60px; }
@@ -603,7 +676,7 @@ label {
 .m {
 	width: 160px; }
 .ml {
-	width: 280px; }	
+	width: 250px; }
 .l {
 	width: 400px; }
 	
@@ -667,7 +740,7 @@ select + .ui-selectmenu-button + input {
 	display: block;
 	float: left;
 	height: 30px;
-	min-width: 160px;
+	min-width: 200px;
 	box-sizing: border-box; }
 	
 .ui-selectmenu-button span.ui-icon {
@@ -847,8 +920,8 @@ select + .ui-selectmenu-button + input {
   float: right; }
 .u-pull-left {
   float: left; }
-.on {
-	color: #06b20e !important; }
+/* .on { */
+/* 	color: #06b20e !important; } */
 .off {
 	color: #bf3000 !important; }
 .color-cyan {
@@ -883,8 +956,8 @@ hr {
 ol, ul, dl, li, dt, dd {
 	margin: 0;
 	padding: 0; }
-ul {
-	list-style: disc inside; }
+/* ul { */
+/* 	list-style: disc inside; } */
 ol {
 	list-style: decimal inside; }
 dl {
@@ -949,7 +1022,7 @@ dl {
 	border-right: 1px solid #b9b9b9;
 	margin: 3rem 0;
 	/*padding: 0 3rem;*/
-	width: 150px;
+	width: 170px;
 	text-align: center; }
 	
 .site-navigation .main-menu li:last-child {
@@ -999,7 +1072,7 @@ dl {
 	position: absolute;
 	list-style: none;
 	z-index: 100;
-	width: 150px;
+	width: 170px;
 	box-sizing: border-box;
 	padding: 2.3rem 2rem;
 	border-right: 1px solid #d9d9d9; }
@@ -1028,7 +1101,7 @@ dl {
 
 /* local */
 .local-navigation {
-	width: 190px;
+	width: 210px;
 	padding-left: 5px;
 	padding-right: 5px;
 	box-sizing: border-box; }
@@ -1074,7 +1147,7 @@ dl {
 	   -moz-border-radius-topright: 	5px;
 			border-top-left-radius: 	5px;
 			border-top-right-radius:	5px;
-	width: 190px;
+	width: 210px;
 	height: 30px;
 	left: -5px;
 	top: 7px;
@@ -1185,14 +1258,14 @@ dl {
 .breadcrumbs .icon-glyph {
 	color: #573592; }
 
-/* my-pagination */
-.my-pagination {
+/* pagination */
+.pagination {
 	text-align: center;
 	vertical-align: middle;
 	line-height: 21px;
 	height: 21px; }
 
-.my-pagination a {
+.pagination a {
 	padding: 2px 6px;
 	border: 1px solid #dbdbdb;
 	color: #34373d;
@@ -1200,18 +1273,18 @@ dl {
 	line-height: 18px;
 	height: 18px; }
 
-.my-pagination a:hover {
+.pagination a:hover {
 	background-color: #eee; }
 	
-.my-pagination a.current-page {
+.pagination a.current-page {
 	background-color: #573592;
 	border-color: #573592;
 	color: #fff; }
 	
-.my-pagination .prev {
+.pagination .prev {
 	margin-right: 10px; }
 	
-.my-pagination .next {
+.pagination .next {
 	margin-left: 10px; }
 
 /* Layout
@@ -1224,7 +1297,6 @@ html, body {
 .container {
 	width: 100%;
 	max-width: 1920px;
-	min-width: 1420px;
 	margin: 0 auto;
 	padding: 0 20px;
 	box-sizing: border-box; }
@@ -1234,6 +1306,9 @@ html, body {
   min-width: 1420px; }
 	
 /* header */
+header {
+min-width: 1420px;
+}
 .site-header {
 	padding-top: 13px; }
 	
@@ -1247,6 +1322,10 @@ html, body {
 	padding: 24px 0 0 0; }
 	
 /* body */
+#wrap {
+min-width: 1420px;
+min-height: 700px;
+}
 .site-body {
 	padding: 14px 0 21px 0; }
 
@@ -1303,15 +1382,15 @@ html, body {
 .filters {
 	margin-bottom: 30px; }
 	
-.list + .my-pagination {
+.list + .pagination {
 	margin-top: 40px;
 	margin-bottom: 40px; }
 	
-table + .my-pagination {
+table + .pagination {
 	margin-top: 20px; }
 	
 .tabs {
-	margin-top: 20px; }
+	margin-top: 10px; }
 
 .inner-table + .input-header {
 	margin-top: 20px; }
@@ -1461,6 +1540,7 @@ tr:hover td {
 .list-table th {
 	font-size: 1.3rem;
 	font-weight: normal;
+	vertical-align:middle;
 	color: #000;
 	border: 1px solid #d9d9d9;
 	border-top: 2px solid #3b095e;
@@ -1471,6 +1551,7 @@ tr:hover td {
 
 .list-table td {
 	font-size: 1.3rem;
+	vertical-align:middle;
 	border: 1px solid #d9d9d9;
 	height: 33px;
 	padding-left: 10px;
@@ -1506,6 +1587,7 @@ tr:hover td {
 	height: 37px;
 	line-height: 37px;
 	text-align: left;
+	padding-top: 6px;
 	padding-left: 20px;
 	padding-right: 20px; }
 	
@@ -1526,6 +1608,7 @@ tr:hover td {
 	border: 1px solid #d9d9d9;
 	height: 37px;
 	line-height: 37px;
+	padding-top: 6px;
 	padding-left: 5px;
 	padding-right: 5px; }
 	
@@ -1702,7 +1785,8 @@ tr:hover td {
 .scope-col td.col-toggle,
 .scope-col td.col-status,
 .scope-col td.col-type,
-.scope-col td.col-ip {
+.scope-col td.col-ip,
+.scope-col td.col-otp {
 	text-align: center; }
 
 .scope-col td.col-name,
@@ -1798,8 +1882,8 @@ tr:hover td {
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .filters {
 	border: 1px solid #d5d5d5;
-	border-top-width: 5px;
-	border-bottom-width: 2px;
+/* 	border-top-width: 5px; */
+/* 	border-bottom-width: 2px; */
 	padding: 15px 20px; }
 	
 
@@ -2334,6 +2418,17 @@ tr:hover td {
 	position: relative;
 	z-index: 10; }
 	
+.general-user .personal-stats.login .stats-content legend:before {
+	position: absolute;
+	display: block;
+	content: 'OTP 요청';
+	height: 20px;
+	width: 60px;
+	background-color: #3e3e3e;
+	top: 0;
+	left: 100px;
+	z-index: 0; }
+	
 .general-user .personal-stats.login .stats-content legend:after {
 	position: absolute;
 	display: block;
@@ -2445,3 +2540,95 @@ tr:hover td {
 .f14{font-size:14px;}
 .f16{font-size:16px;}
 .f20{font-size:20px;}	
+
+
+#geo_ambient_reflection_coef_view {
+	width: 3em;
+	height: 1.6em;
+	top: 50%;
+	margin-top: -.8em;
+	text-align: center;
+	line-height: 1.6em;
+}
+#geo_diffuse_reflection_coef_view {
+	width: 3em;
+	height: 1.6em;
+	top: 50%;
+	margin-top: -.8em;
+	text-align: center;
+	line-height: 1.6em;
+}
+#geo_specular_reflection_coef_view {
+	width: 3em;
+	height: 1.6em;
+	top: 50%;
+	margin-top: -.8em;
+	text-align: center;
+	line-height: 1.6em;
+}
+
+
+/*****************************************************************************************************/
+.tab {
+height: 31px;
+margin: 0;
+min-width: 325px;
+}
+.tab li {
+display: inline-block;
+width: 180px;
+/* padding: 5px 0px; */
+color: #000;
+cursor: pointer;
+border: 1px solid #d9d9d9;
+border-bottom: 1px solid #ececec;
+border-radius: 3px 3px 0 0;
+background-color: #fff;
+text-align: center;
+}
+.tab li.on {
+color: #fff;
+border: 1px solid #006bd2;
+background-color: #0073e2;
+}
+.tab li > a {
+display: inline-block;
+width: 100%;
+height: 100%;
+padding: 5px 0px;
+}
+.tab li > a:hover {
+color: #fff;
+}
+.tab li:not(.on) > a:hover {
+color: #006bd2;
+}
+.input-set {
+margin: 10px 20px 10px 10px;
+float: left; 
+}
+
+
+/* custom select box */
+.selectBoxClass {
+	height: 30px; margin-bottom: 7px; border-color: #d5d5d5;
+}
+
+.hiddenTag {
+overflow: hidden;
+border: 0;
+position: absolute;
+width: 1px;
+height: 1px;
+clip: rect(1px, 1px, 1px, 1px);
+clip-path: inset(50%);
+}
+/* 마고 라벨 렌더 캔버스 */
+#objectLabel {
+background-color: transparent;
+position: absolute;
+left: 0px;
+top: 0px;
+/* z-index: 10; */
+pointer-events: none;
+}

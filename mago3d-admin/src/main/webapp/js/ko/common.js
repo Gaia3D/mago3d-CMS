@@ -34,6 +34,18 @@ function isNumber(control) {
 	return true;
 }
 
+// 경도 체크
+function isLongitude(value) {
+	var regexLongitude = /^[-+]?(180(\.0{0,6})?|((1[0-7]\d)|([1-9]?\d))(\.\d{0,8})?)$/;
+	return regexLongitude.test(value) ? true : false;
+}
+
+// 위도 체크
+function isLatitude(value) {
+	var regexLatitude = /^[-+]?([0-8]?\d(\.\d{0,6})?|90(\.0{0,8})?)$/;
+	return regexLatitude.test(value) ? true : false;
+}
+
 // IP 체크
 var ipRegularExpression = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/;
 function isIP(ipAddress) {
@@ -52,11 +64,16 @@ function isExcelFile(fileName) {
 	}
 }
 
+// 세자리 콤마
+function formatNumber(value) {
+	return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 // 선택된 checkbox 가 있으면 true, 없으면 false
 function checkedStatus(element) {
 	var returnVal = true;
 	var checkStatusVal = 0;
-	$.each(element, function(index) {			
+	$.each(element, function(index) {
 		if (element[index].checked == true) {
 			checkStatusVal++;
 		}
@@ -68,7 +85,7 @@ function checkedStatus(element) {
 	return returnVal; 
 }
 
-function initJqueryCalendar() {
+function initDatePicker() {
 	$( ".date" ).datepicker({ 
 		dateFormat : "yymmdd",
 		dayNames : [ "일", "월", "화", "수", "목", "금", "토" ],
@@ -208,7 +225,7 @@ function changeLanguage(lang) {
 	if(updateFlag) {
 		updateFlag = false;
 		$.ajax({
-			url: "/login/ajax-change-language.do?lang=" + lang,
+			url: "/sign/change-language?lang=" + lang,
 			type: "GET",
 			//data: info,
 			cache: false,
@@ -233,3 +250,108 @@ function changeLanguage(lang) {
 	}
 }
 
+//한글인지 검사
+function isHangul(value) {
+	var pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+	if( pattern_kor.test(value) ) {
+		return true
+	} else {
+		return false
+	}
+}
+
+/**
+ * dropzone에 사용할 파일 포맷 정보 리턴
+ * @param fileType
+ * @returns
+ */
+function initAcceptedFiles(fileType){
+    var extension = fileType;
+    var result="";
+    extension = extension.split(",");
+    for(var item in extension){
+        result +="."+extension[item].trim()+",";
+    }
+    return result;
+}
+
+// 지도에서 찾기 팝업창
+function openFindDataPoint(dataId, referrer) {
+	var url = "/map/find-data-point?dataId=" + dataId + "&referrer=" + referrer;
+	var width = 1200;
+	var height = 740;
+
+	var popupX = (window.screen.width / 2) - (width / 2);
+	// 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
+	var popupY= (window.screen.height / 2) - (height / 2);
+
+    var popWin = window.open(url, "","toolbar=no, width=" + width + ", height=" + height + ", top=" + popupY 
+    		+ ", left=" + popupX + ", directories=no,status=yes,scrollbars=no,menubar=no,location=no");
+    //popWin.document.title = layerName;
+};
+
+//세슘 크레딧 이미지 alt추가(웹 접근성)
+function cesiumCreditAlt(){
+	var magoContiner = document.getElementsByClassName("cesium-credit-logoContainer")[0];
+	var creditImgTag = magoContiner.getElementsByTagName("img")[0];
+	creditImgTag.setAttribute( 'alt', 'cesium credit' );
+};
+
+// magoguide 팝업
+function goMagoAPIGuide(url) {
+	var width = 1200;
+	var height = 800;
+
+	// 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
+	var popupX = (window.screen.width / 2) - (width / 2);
+	var popupY = (window.screen.height / 2) - (height / 2);
+
+	var popWin = window.open(url, "", "toolbar=no, width=" + width + " ,height=" + height + ", top=" + popupY + ", left=" + popupX +
+			", directories=no,status=yes,scrollbars=no,menubar=no,location=no");
+	return false;
+}
+
+//init policy
+function initPolicy(callback, dataId) {
+	if(!dataId) dataId = "";
+	$.ajax({
+		url: "/geopolicies/user?dataId="+dataId,
+		type: "GET",
+		headers: {"X-Requested-With": "XMLHttpRequest"},
+		dataType: "json",
+		success: function(msg){
+			if(msg.statusCode <= 200) {
+				callback(msg.geoPolicy, msg.baseLayers);
+			} else {
+				alert(JS_MESSAGE[msg.errorCode]);
+			}
+		},
+		error:function(request,status,error){
+			alert(JS_MESSAGE["ajax.error.message"]);
+		}
+	});
+}
+
+/**
+ * 경위도 유효 범위 체크 
+ * @param longitude
+ * @param latitude
+ * @param altitude
+ * @returns
+ */
+function locationValidation(longitude, latitude, altitude) {
+	var lon = Number(longitude);
+	var lat = Number(latitude);
+	var alt = Number(altitude);
+	if(isNaN(lon) || isNaN(lat) || isNaN(alt)) {
+		alert("숫자만 입력 가능합니다.");
+		return false;
+	}
+	if((-180 <= lon && lon <= 180) &&  (-90 <= lat && lat <= 90) && (0 <= alt && alt <= 300000)) {
+		return true;
+	} else {
+		alert("경도 유효범위 : -180 ~ 180\n위도 유효범위 : -90 ~ 90 \n높이 유효범위 : 300000 입니다.");
+		return false;
+	}
+	
+}

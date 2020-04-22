@@ -7,15 +7,15 @@
 */
 
 var pageID = "MenuTreeControl";
-var menuTree = new AXTree();
-//var myModal = new AXModal();
+var MENU_TREE = new AXTree();
 	
-var fnObj = {
+var TREE_OBJECT = {
 	pageStart: function() {
-		fnObj.tree1();
+		TREE_OBJECT.tree();
+		MENU_TREE.collapseAll();
 	},
-	tree1: function(){
-		menuTree.setConfig({
+	tree: function(){
+		MENU_TREE.setConfig({
 			targetID : "AXTreeTarget",
 			theme: "AXTree_none",
 			//height:"auto",
@@ -26,12 +26,10 @@ var fnObj = {
 
 			relation:{
 				parentKey:"parent",
-				childKey:"menu_id",
-				parentName:"parent_name",
-				childName:"name"
+				childKey:"menuId"
 			},
 			colGroup: [
-				{ key:"name", label:"제목", width:"*", align:"left", indent:true,
+				{ key:"name", label:"메뉴명", width:"*", align:"left", indent:true,
 					getIconClass: function(){
                         if(this.item.__subTreeLength > 0){
                             return {
@@ -51,49 +49,57 @@ var fnObj = {
 				}
 			],
 			body: {
-				onclick:function(idx, item) {
-					//toast.push(Object.toJSON(item));
-					//trace(item);
+				onclick:function(idx, item) {					
 					
-					var obj = menuTree.getSelectedList();
-					document.treeWriteForm.reset();
-					document.treeWriteForm.writeMode.value = "modify";
-					$("#menu_id").val(obj.item.menu_id);
-					$("#menu_type").val(obj.item.menu_type);
-					$("#depth").val(obj.item.depth);
-					$("#name").val(obj.item.name);
-					$("#name_en").val(obj.item.name_en);
-					$("[name=use_yn]").removeAttr("checked");
-					$("[name=use_yn]").filter("[value='" + obj.item.use_yn + "']").prop("checked",true);
-					$("[name=display_yn]").removeAttr("checked");
-					$("[name=display_yn]").filter("[value='" + obj.item.display_yn + "']").prop("checked",true);
-					$("#url").val(obj.item.url);
-					$("#url_alias").val(obj.item.url_alias);
-					$("#image").val(obj.item.image);
-					$("#image_alt").val(obj.item.image_alt);
-					$("#css_class").val(obj.item.css_class);
-					$("#description").val(obj.item.description);
-					document.treeWriteForm.name.focus();
+					var obj = MENU_TREE.getSelectedList();
+					document.menuForm.reset();
+					document.menuForm.writeMode.value = "modify";
 					
+					$("#menuId").val(item.menuId);
+					$("#menuType").val(item.menuType);
+					$("#menuTarget").val(item.menuTarget);
+					$("#name").val(item.name);
+					$("#nameEn").val(item.nameEn);
+					$("#ancestor").val(item.ancestor);
+					$("#parent").val(item.parent);
+					$("#depth").val(item.depth);
+					$("#viewOrder").val(item.viewOrder);
+					$("#url").val(item.url);
+					$("#urlAlias").val(item.urlAlias);
+					$("#aliasMenuId").val(item.aliasMenuId);
+					$("#htmlId").val(item.htmlId);
+					$("#htmlContentId").val(item.htmlContentId);
+					$("#image").val(item.image);
+					$("#imageAlt").val(item.imageAlt);
+					$("#cssClass").val(item.cssClass);
+					$("[name=defaultYn]").removeAttr("checked");
+					$("[name=defaultYn]").filter("[value='" + item.defaultYn + "']").prop("checked",true);
+					$("[name=useYn]").removeAttr("checked");
+					$("[name=useYn]").filter("[value='" + item.useYn + "']").prop("checked",true);
+					$("[name=displayYn]").removeAttr("checked");
+					$("[name=displayYn]").filter("[value='" + item.displayYn + "']").prop("checked",true);
+					$("#description").val(item.description);
+					$("#updateType").val(item.updateType);
 				},
 				addClass: function(){
 					return "myClass";	
 				}
 			},
 			contextMenu: {
+				// TODO 이 부분을 어떻게 바꿔야 할지 모르겠음. library 랑 관련이 있음
 				theme:"AXContextMenu", // 선택항목
 				width:"150", // 선택항목
 				menu:[
 					{ userType:0, label:"위로", className:"up", onclick:function(id) {
-						menuTree.moveUpTree();
+						MENU_TREE.moveUpTree();
 					}},
 					{ userType:0, label:"아래로", className:"down", onclick:function(id) {
-						menuTree.moveDownTree();
+						MENU_TREE.moveDownTree();
 					}},
-					{userType:1, label:"추가", className:"plus", onclick:fnObj.addTree},
-					{userType:1, label:"하위메뉴추가", className:"plus", onclick:fnObj.addChildTree},
-					{userType:1, label:"선택삭제", className:"", onclick:fnObj.delTree}
-					/*{userType:1, label:"수정", className:"", onclick:fnObj.updateTree}*/
+					{userType:1, label:"추가", className:"plus", onclick:TREE_OBJECT.addTree},
+					{userType:1, label:"하위메뉴추가", className:"plus", onclick:TREE_OBJECT.addChildTree},
+					{userType:1, label:"삭제하기", className:"", onclick:TREE_OBJECT.delTree},
+					{userType:1, label:"수정하기", className:"", onclick:TREE_OBJECT.updateTree}
 				],
 				filter:function(id){
 					// this.menu : 메뉴
@@ -110,416 +116,223 @@ var fnObj = {
 				}
 			}
 		});
-		menuTree.setTree(MENU_TREE_DATA);
+		MENU_TREE.setTree(MENU_TREE_DATA);
 	},
 	appendTree: function(){
-		var frm = document.treeWriteForm;
-		var writeMode = document.treeWriteForm.writeMode.value;
+		var frm = document.menuForm;
+		var writeMode = document.menuForm.writeMode.value;
 		if(writeMode === null || writeMode === "") {
 			alert("메뉴를 선택해 주세요.");
 			return;
 		}
-		//myModal.close('addTreeModal');
 		if(writeMode == "child") {
 			// 자식 객체 추가
-//			var obj = menuTree.getSelectedList();
-//			menuTree.appendTree(obj.index, obj.item, [{menuId:"N", menuName:frm.menuName.value, writer:'mondo', type:"file", parentMenuId:obj.item.menuId}]);
-			ajaxInsertMenu();
-		}else if(writeMode == "append") {
+//			var obj = myTree.getSelectedList();
+//			myTree.appendTree(obj.index, obj.item, [{menuId:"N", menuName:frm.menuName.value, writer:'mondo', type:"file", parentMenuId:obj.item.menuId}]);
+			insertMenu();
+		} else if(writeMode == "append") {
 			// 형제 객체 추가
-			var obj = menuTree.getSelectedListParent(); // 선택 아이템의 부모 아이템 가져오기
+			var obj = MENU_TREE.getSelectedListParent(); // 선택 아이템의 부모 아이템 가져오기
 			var pno = 0;
 			if(obj.item){
-				pno = obj.item.menu_id;
-			}
-			
+				pno = obj.item.menuId;
+			}			
 			//document.treeWriteForm.depth.value = parseInt(obj.item.depth) + parseInt(1);
-//			menuTree.appendTree(obj.index, obj.item, [{menuId:"N", menuName:frm.menuName.value, writer:'mondo', type:"file", parentMenuId:pno}]);
-			ajaxInsertMenu();
+//			myTree.appendTree(obj.index, obj.item, [{menuId:"N", menuName:frm.menuName.value, writer:'mondo', type:"file", parentMenuId:pno}]);
+			insertMenu();
 		}else if(writeMode == "modify") {
-			var obj = menuTree.getSelectedList();
+			var obj = MENU_TREE.getSelectedList();
 			if(obj.error){
 				alert("메뉴를 선택해 주세요.");
 				return;
 			}
-			if(obj.item.menu_id == "0") {
+			if(obj.item.menuId == "0") {
 				alert("수정할 수 없는 메뉴 입니다.")
 				return;
 			}
-			
-			console.log($("#depth").val() + ", " + $(":radio[name='use_yn']:checked").val());
-			if($("#depth").val() == "1" && $(":radio[name='use_yn']:checked").val() == "N") {
+			//console.log($("#depth").val() + ", " + $(":radio[name='use_yn']:checked").val());
+			if( $("#depth").val() == "1" && $(':radio[name="useYn"]:checked').val() == "N" ) {
 				if(confirm("미사용으로 선택하실 경우 하위 메뉴를 전부 사용할수 없습니다. \n 계속 진행하시겠습니까?")) {
-					ajaxUpdateMenu();
+					updateMenu();
 				}
 			} else {
-				ajaxUpdateMenu();
+				updateMenu();
 			}
 		}
 		
 		return false;
 	},
 	addTree: function() {
-		var obj = menuTree.getSelectedList();
-		if(obj.item == null || obj.item == "" || obj.item == undefined || obj.item == "undefined" || obj.item.menu_id == "0") {
+		var obj = MENU_TREE.getSelectedList();
+		if(obj.item == null || obj.item == "" || obj.item == undefined || obj.item == "undefined" || obj.item.menuId == "0") {
 			alert("하위 메뉴를 추가하여 주십시오.");
 			return;
 		}
 		
-		document.treeWriteForm.reset();
-		document.treeWriteForm.writeMode.value = "append";
-		document.treeWriteForm.menu_type.value = obj.item.menu_type;
-		document.treeWriteForm.parent.value = obj.item.parent;
-		document.treeWriteForm.depth.value = obj.item.depth;
-		$("[name=use_yn]").removeAttr("checked");
-		$("[name=use_yn]").filter("[value='Y']").prop("checked",true);
-		$("[name=display_yn]").removeAttr("checked");
-		$("[name=display_yn]").filter("[value='Y']").prop("checked",true);
+		document.menuForm.reset();
+		document.menuForm.writeMode.value = "append";
+		console.log("--------------- add = " + obj.item.ancestor);
+		$("#menuTarget").val(obj.item.menuTarget);
 		
-		/*myModal.openDiv({
-			modalID:"addTreeModal",
-			targetID:"modalContent",
-			width:450,
-			top:150
-		});*/
-		document.treeWriteForm.name.focus();
+		document.menuForm.ancestor.value = obj.item.ancestor;
+		document.menuForm.parent.value = obj.item.parent;
+		document.menuForm.depth.value = obj.item.depth;
+//		document.menuForm.viewOrder.value = obj.item.viewOrder;
+		$("[name=defaultYn]").removeAttr("checked");
+		$("[name=defaultYn]").filter("[value='N']").prop("checked",true);
+		$("[name=useYn]").removeAttr("checked");
+		$("[name=useYn]").filter("[value='Y']").prop("checked",true);
+		$("[name=displayYn]").removeAttr("checked");
+		$("[name=displayYn]").filter("[value='Y']").prop("checked",true);
+		
+		document.menuForm.name.focus();
 	},
 	addChildTree: function(){
-		var obj = menuTree.getSelectedList();
+		var obj = MENU_TREE.getSelectedList();
 		if(obj.error){
 			alert("상위메뉴를 선택해 주세요.");
 			return;
 		}
-		if(obj.item.use_yn == "N") {
+		if(obj.item.useYn == "N") {
 			alert("상위 메뉴가 미사용이므로 하위 메뉴를 생성할 수 없습니다.");
 			return;
 		}
-		/*if(parseInt(obj.item.depth) == 2) {
-			alert("성능 최적화를 위해 2Depth 이하의 하위 메뉴를 생성할 수 없습니다.");
-			return;
-		}*/
-		document.treeWriteForm.reset();
-		document.treeWriteForm.writeMode.value = "child";
-		document.treeWriteForm.menu_type.value = obj.item.menu_type;
-		document.treeWriteForm.parent.value = obj.item.menu_id;
-		document.treeWriteForm.depth.value = parseInt(obj.item.depth) + parseInt(1);
-		$("[name=use_yn]").removeAttr("checked");
-		$("[name=use_yn]").filter("[value='Y']").prop("checked",true);
-		$("[name=display_yn]").removeAttr("checked");
-		$("[name=display_yn]").filter("[value='Y']").prop("checked",true);
-		/*myModal.openDiv({
-			modalID:"addTreeModal",
-			targetID:"modalContent",
-			width:450,
-			top:150
-		});*/
-		document.treeWriteForm.name.focus();
+		
+		document.menuForm.reset();
+		document.menuForm.writeMode.value = "child";
+		console.log("--------------- add child = " + obj.item.ancestor);
+		$("#menuTarget").val(obj.item.menuTarget);
+		
+		document.menuForm.ancestor.value = obj.item.ancestor;
+		document.menuForm.parent.value = obj.item.menuId;		
+		document.menuForm.depth.value = parseInt(obj.item.depth) + parseInt(1);		
+		$("[name=defaultYn]").removeAttr("checked");
+		$("[name=defaultYn]").filter("[value='N']").prop("checked",true);
+		$("[name=useYn]").removeAttr("checked");
+		$("[name=useYn]").filter("[value='Y']").prop("checked",true);
+		$("[name=displayYn]").removeAttr("checked");
+		$("[name=displayYn]").filter("[value='Y']").prop("checked",true);
+		document.menuForm.name.focus();
 	},
 	delTree: function(){
-		var obj = menuTree.getSelectedList();
+		var obj = MENU_TREE.getSelectedList();
 		if(obj.error){
 			alert("메뉴를 선택해 주세요.");
 			return;
 		}
-		if(obj.item.menu_id == "0" || obj.item.default_yn == "Y") {
+		if(obj.item.menuId == "0" || obj.item.defaultYn == "Y") {
 			alert("삭제할 수 없는 메뉴 입니다.")
 			return;
 		}
-		$("#menu_id").val(obj.item.menu_id);
-		ajaxDeleteMenu();
-		//menuTree.removeTree(obj.index, obj.item);
-		document.treeWriteForm.reset();
+		
+		$("#menuId").val(obj.item.menuId);		
+		deleteMenu();
+		//myTree.removeTree(obj.index, obj.item);
+		MENU_TREE.collapseAll();
+		document.menuForm.reset();
 	},
 	updateTree: function(){
-		var obj = menuTree.getSelectedList();
+		var obj = MENU_TREE.getSelectedList();
+		//console.log("group : " + obj.item.user_group_id);
+		$("#menuId").val(obj.item.menuId);
 		if(obj.error){
 			alert("메뉴를 선택해 주세요");
 			return;
 		}
-		if(obj.item.menu_id == "0") {
+		if(obj.item.menuId == "0") {
 			alert("수정할 수 없는 메뉴 입니다.")
 			return;
 		}
-		document.treeWriteForm.reset();
-		document.treeWriteForm.writeMode.value = "modify";
-		/*myModal.openDiv({
-			modalID:"addTreeModal",
-			targetID:"modalContent",
-			width:450,
-			top:150
-		});*/
-		$("#menu_id").val(obj.item.menu_id);
-		$("#menu_type").val(obj.item.menu_type);
-		$("#depth").val(obj.item.depth);
+		document.menuForm.reset();
+		document.menuForm.writeMode.value = "modify";
+		$("#menuId").val(obj.item.menuId);
+		$("#menuType").val(obj.item.menuType);
+		$("#menuTarget").val(obj.item.menuTarget);
 		$("#name").val(obj.item.name);
-		$("#name_en").val(obj.item.name_en);
-		$("[name=use_yn]").removeAttr("checked");
-		$("[name=use_yn]").filter("[value='" + obj.item.use_yn + "']").prop("checked",true);
-		$("[name=display_yn]").removeAttr("checked");
-		$("[name=display_yn]").filter("[value='" + obj.item.display_yn + "']").prop("checked", true);
+		$("#nameEn").val(obj.item.nameEn);
+		$("#ancestor").val(obj.item.ancestor);
+		$("#parent").val(obj.item.parent);
+		$("#depth").val(obj.item.depth);
 		$("#url").val(obj.item.url);
-		$("#url_alias").val(obj.item.url_alias);
+		$("#urlAlias").val(obj.item.urlAlias);
+		$("#aliasMenuId").val(obj.item.aliasMenuId);
+		$("#htmlId").val(obj.item.htmlId);
+		$("#htmlContentId").val(obj.item.htmlContentId);
 		$("#image").val(obj.item.image);
-		$("#image_alt").val(obj.item.image_alt);
-		$("#css_class").val(obj.item.css_class);
-		$("#description").val(obj.item.description);
-		document.treeWriteForm.name.focus();
+		$("#imageAlt").val(obj.item.imageAlt);
+		$("#cssClass").val(obj.item.cssClass);
+		$("[name=defaultYn]").removeAttr("checked");
+		$("[name=defaultYn]").filter("[value='" + obj.item.defaultYn + "']").prop("checked",true);
+		$("[name=useYn]").removeAttr("checked");
+		$("[name=useYn]").filter("[value='" + obj.item.useYn + "']").prop("checked",true);
+		$("[name=displayYn]").removeAttr("checked");
+		$("[name=displayYn]").filter("[value='" + obj.item.displayYn + "']").prop("checked",true);
+		document.menuForm.name.focus();
 	},
 	updateMoveUpTree: function() {
-		var obj = menuTree.getSelectedList();
+		var obj = MENU_TREE.getSelectedList();
 		if(obj.error){
 			alert("메뉴를 선택해 주세요.");
 			return;
 		}
-		if(obj.item.menu_id == "0") {
+		if(obj.item.menuId == "0" || obj.item.menuId == "1000") {
 			alert("이동할 수 없는 메뉴입니다.")
 			return;
 		}
-		if(obj.item.view_order == "1") {
+		if(obj.item.viewOrder == "1") {
 			alert("제일 처음 입니다.")
 			return;
 		}
-		$("#menu_id").val(obj.item.menu_id);
-		$("#view_order").val(obj.item.view_order);
+		$("#menuId").val(obj.item.menuId);
+		$("#nameEn").val(obj.item.nameEn);
+		$("#viewOrder").val(obj.item.viewOrder);
 		$("#parent").val(obj.item.parent);
-		$("#update_type").val("up");
-		ajaxUpdateMoveMenu();
+		$("#updateType").val("up");
+		updateMoveMenu();
 	},
 	updateMoveDownTree: function() {
-		var obj = menuTree.getSelectedList();
+		var obj = MENU_TREE.getSelectedList();
 		if(obj.error){
 			alert("메뉴를 선택해 주세요");
 			return;
 		}
-		if(obj.item.menu_id == "0") {
+		if(obj.item.menuId == "0" || obj.item.menuId == "1000") {
 			alert("이동할 수 없는 메뉴입니다.")
 			return;
 		}
-		$("#menu_id").val(obj.item.menu_id);
-		$("#view_order").val(obj.item.view_order);
+		$("#menuId").val(obj.item.menuId);
+		$("#nameEn").val(obj.item.nameEn);
+		$("#viewOrder").val(obj.item.viewOrder);
 		$("#parent").val(obj.item.parent);
-		$("#update_type").val("down");
-		ajaxUpdateMoveMenu();
+		$("#updateType").val("down");
+		updateMoveMenu();
 	},
 	moveTree: function(){
-		menuTree.moveTree({
+		MENU_TREE.moveTree({
 			startMove: function(){
-				menuTree.addClassItem({
-					className:"disable",
+				MENU_TREE.addClassItem({
+					className:"disable", 
 					addClass:function(){
-						return (this.menu_id == "N");
+						return (this.menuId == "N");
 					}
 				});
 			},
 			validate:function(){
-				//this.moveObj
-				//this.targetObj
-				/*if(this.targetObj.menuId == "0"){
-					alert("이동할 수 없는 대상을 선택하셨습니다.");
-					return false;
-				}*/
-				if(this.targetObj.menu_id == "N"){
+				if(this.targetObj.menuId == "N"){
 					alert("이동할 수 없는 대상을 선택하셨습니다.");
 					return false;
 				}else{
-					return true;
+					return true;	
 				}
 			},
 			endMove: function(){
-				menuTree.removeClassItem({
-					className:"disable",
+				MENU_TREE.removeClassItem({
+					className:"disable", 
 					removeClass:function(){
-						return (this.menu_id == "N");
+						return (this.menuId == "N");
 					}
 				});
 			}
 		});
-	}
+	}		
 };
-
-// 동일 레벨의 메뉴 추가
-function addTree() {
-	fnObj.addTree();
-}
-// 하위 레벨의 메뉴 추가
-function addChildTree() {
-	fnObj.addChildTree();
-}
-// 메뉴 삭제
-function delTree() {
-	fnObj.delTree();
-}
-// 메뉴 수정
-function updateTree() {
-	fnObj.updateTree();
-}
-
-// 메뉴 위로 이동
-var upFlag = true;
-function moveUpTree() {
-	if(upFlag) {
-		upFlag = false;
-		var validationCode = null;
-		validationCode = menuTree.moveUpTree();
-		if(validationCode == "1") {
-			fnObj.updateMoveUpTree();
-			upFlag = true;
-		}
-		upFlag = true;
-	} else {
-		alert("진행 중입니다.");
-		return;
-	}
-}
-
-// 메뉴 아래로 이동
-var downFlag = true;
-function moveDownTree() {
-	if(downFlag) {
-		downFlag = false;
-		var validationCode = null;
-		validationCode = menuTree.moveDownTree();
-		if(validationCode == "1") {
-			fnObj.updateMoveDownTree();
-			downFlag = true;
-		}
-		downFlag = true;
-	} else {
-		alert("진행 중입니다.");
-		return;
-	}
-}
-// 메뉴 정보 저장
-function appendTree() {
-	fnObj.appendTree();
-}
-// 취소
-/*function modalClose(modalId) {
-	myModal.close(modalId);
-}*/
-function resetForm() {
-	document.treeWriteForm.reset();
-}
-
-// 트리 초기화 값
-function initMenu(menuTree) {
-	MENU_TREE_DATA = menuTree;
-}
-
-// 메뉴 목록
-function getAjaxMenuList() {
-	// var info = $("#treeWriteForm").serialize();
-	var info = "";
-	$.ajax({
-		url: "/config/ajax-list-menu.do",
-		type: "POST",
-		data: info,
-		cache: false,
-		dataType: "json",
-		success: function(msg){
-			if(msg.result == "success") {
-				initMenu(JSON.parse(msg.menuTree));
-			} else {
-				alert(JS_MESSAGE[msg.result]);
-			}
-		},
-		error:function(request,status,error){
-			alert(JS_MESSAGE["ajax.error.message"]);
-		}
-	});
-}
-
-// 메뉴 등록
-function ajaxInsertMenu() {
-	var info = $("#treeWriteForm").serialize();
-	$.ajax({
-		url: "/config/ajax-insert-menu.do",
-		type: "POST",
-		data: info,
-		cache: false,
-		dataType: "json",
-		success: function(msg){
-			if(msg.result == "success") {
-				menuTree.setTree(JSON.parse(msg.menuTree));
-				alert(JS_MESSAGE["insert"]);
-			} else {
-				alert(JS_MESSAGE[msg.result]);
-			}
-		},
-		error:function(request,status,error){
-			alert(JS_MESSAGE["ajax.error.message"]);
-		}
-	});
-}
-
-// 메뉴 수정
-function ajaxUpdateMenu() {
-	var info = $("#treeWriteForm").serialize();
-	$.ajax({
-		url: "/config/ajax-update-menu.do",
-		type: "POST",
-		data: info,
-		cache: false,
-		dataType: "json",
-		success: function(msg){
-			if(msg.result == "success") {
-				menuTree.setTree(JSON.parse(msg.menuTree));
-				alert(JS_MESSAGE["update"]);
-			} else {
-				alert(JS_MESSAGE[msg.result]);
-			}
-		},
-		error:function(request,status,error){
-			alert(JS_MESSAGE["ajax.error.message"]);
-		}
-	});
-}
-
-// 메뉴 삭제
-function ajaxDeleteMenu() {
-	if(confirm(JS_MESSAGE["delete.confirm"])) {
-		var info = $("#treeWriteForm").serialize();
-		$.ajax({
-			url: "/config/ajax-delete-menu.do",
-			type: "POST",
-			data: info,
-			cache: false,
-			dataType: "json",
-			success: function(msg){
-				if(msg.result == "success") {
-					menuTree.setTree(JSON.parse(msg.menuTree));
-					alert(JS_MESSAGE["delete"]);
-				} else {
-					alert(JS_MESSAGE[msg.result]);
-				}
-			},
-			error:function(request,status,error){
-				alert(JS_MESSAGE["ajax.error.message"]);
-			}
-		});
-	}
-}
-
-// 메뉴 위로/아래로 수정
-function ajaxUpdateMoveMenu() {
-	if(confirm(JS_MESSAGE["move.confirm"])) {
-		var info = $("#treeWriteForm").serialize();
-		$.ajax({
-			url: "/config/ajax-update-move-menu.do",
-			type: "POST",
-			data: info,
-			cache: false,
-			dataType: "json",
-			success: function(msg){
-				if(msg.result == "success") {
-					menuTree.setTree(JSON.parse(msg.menuTree));
-				} else {
-					alert(JS_MESSAGE[msg.result]);
-				}
-			},
-			error:function(request,status,error){
-				alert(JS_MESSAGE["ajax.error.message"]);
-			}
-		});
-	}
-}

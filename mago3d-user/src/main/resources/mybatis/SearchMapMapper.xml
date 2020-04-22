@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mago3d.persistence.SearchMapMapper">
+	
+	<!-- Sdo 목록(wkb_geometry 은 제외) -->
+	<select id="getListSdoExceptGeom" resultType="skSdo">
+		/* getListSdoExceptGeom */
+		SELECT A.bjcd, SUBSTR(A.bjcd, 1, 2) AS sdo_code, A.name
+		FROM sk_sdo A, ( 
+			SELECT MIN(ogc_fid) AS ogc_fid, name 
+			FROM sk_sdo 
+			WHERE enable_yn ='Y'
+			GROUP BY name
+		) B
+		WHERE A.ogc_fid = B.ogc_fid
+		ORDER BY A.name
+	</select>
+	
+	<!-- Sgg 목록(wkb_geometry 은 제외) -->
+	<select id="getListSggBySdoExceptGeom" parameterType="string" resultType="skSgg">
+		/* getListSggBySdoExceptGeom */
+		SELECT B.bjcd, SUBSTR(B.bjcd, 1, 2) AS sdo_code, SUBSTR(B.bjcd, 3, 3) AS sgg_code, B.name	
+		FROM sk_sgg B, (
+			SELECT MIN(A.ogc_fid) AS ogc_fid, A.code AS bjcd, A.name 
+			FROM (
+				SELECT ogc_fid, SUBSTR(bjcd, 1, 5) as code, name 
+				FROM sk_sgg 
+				WHERE enable_yn = 'Y'
+					AND bjcd LIKE #{sdoCode} || '%'
+			) A
+			GROUP BY A.code, A.name
+		) C
+		WHERE B.ogc_fid = C.ogc_fid
+		ORDER BY C.name
+	</select>
+	
+	<!-- emd 목록(wkb_geometry 은 제외) -->
+	<select id="getListEmdBySdoAndSggExceptGeom" parameterType="skEmd" resultType="skEmd">
+		/* getListEmdBySdoAndSggExceptGeom */
+		SELECT B.bjcd, SUBSTR(B.bjcd, 1, 2) AS sdo_code, 
+			SUBSTR(B.bjcd, 3, 3) AS sgg_code,
+			SUBSTR(B.bjcd, 6, 3) AS emd_code,
+			B.name	
+		FROM sk_emd B, (
+			SELECT MIN(A.ogc_fid) AS ogc_fid, A.code AS bjcd, A.name 
+			FROM (
+				SELECT ogc_fid, SUBSTR(bjcd, 6, 3) as code, name 
+				FROM sk_emd 
+				WHERE enable_yn = 'Y'
+					AND bjcd LIKE #{sdoCode} || #{sggCode} ||'%'
+			) A
+			GROUP BY A.code, A.name
+		) C
+		WHERE B.ogc_fid = C.ogc_fid
+		ORDER BY C.name
+	</select>
+	
+	<!-- 선택한 시도의 center point를 구함 -->
+	<select id="getCentroidSdo" parameterType="skSdo" resultType="string">
+		/* getCentroidSdo */
+		SELECT ST_AsText(ST_Centroid(A.wkb_geometry))
+		FROM (
+			SELECT wkb_geometry 
+			FROM sk_sdo 
+			WHERE enable_yn = 'Y'
+				AND bjcd = #{bjcd}
+			ORDER BY bjcd LIMIT 1
+		) A
+	</select>
+	
+	<!-- 선택한 시군구의 center point를 구함 -->
+	<select id="getCentroidSgg" parameterType="skSgg" resultType="string">
+		/* getCentroidSgg */
+		SELECT ST_AsText(ST_Centroid(A.wkb_geometry))
+		FROM (
+			SELECT wkb_geometry 
+			FROM sk_sgg 
+			WHERE enable_yn = 'Y'
+				AND bjcd = #{bjcd}
+			ORDER BY bjcd LIMIT 1
+		) A
+	</select>
+	
+	<!-- 선택한 읍면동의 center point를 구함 -->
+	<select id="getCentroidEmd" parameterType="skEmd" resultType="string">
+		/* getCentroidEmd */
+		SELECT ST_AsText(ST_Centroid(A.wkb_geometry))
+		FROM (
+			SELECT wkb_geometry 
+			FROM sk_emd 
+			WHERE enable_yn = 'Y'
+				AND bjcd = #{bjcd}
+			ORDER BY bjcd LIMIT 1
+		) A
+	</select>
+
+	<!-- 선택한 시도의 BoundingBox를 구함 -->
+	<select id="getEnvelopSdo" parameterType="skSdo" resultType="string">
+		/* getCentroidSdo */
+		SELECT ST_AsText(ST_Envelope(A.wkb_geometry))
+		FROM (
+			SELECT wkb_geometry 
+			FROM sk_sdo 
+			WHERE enable_yn = 'Y'
+				AND bjcd = #{bjcd}
+			ORDER BY bjcd LIMIT 1
+		) A
+	</select>
+	
+	<!-- 선택한 시군구의 BoundingBox를 구함 -->
+	<select id="getEnvelopSgg" parameterType="skSgg" resultType="string">
+		/* getCentroidSgg */
+		SELECT ST_AsText(ST_Envelope(A.wkb_geometry))
+		FROM (
+			SELECT wkb_geometry 
+			FROM sk_sgg 
+			WHERE enable_yn = 'Y'
+				AND bjcd = #{bjcd}
+			ORDER BY bjcd LIMIT 1
+		) A
+	</select>
+	
+	<!-- 선택한 읍면동의 BoundingBox를 구함 -->
+	<select id="getEnvelopEmd" parameterType="skEmd" resultType="string">
+		/* getCentroidEmd */
+		SELECT ST_AsText(ST_Envelope(A.wkb_geometry))
+		FROM (
+			SELECT wkb_geometry 
+			FROM sk_emd 
+			WHERE enable_yn = 'Y'
+				AND bjcd = #{bjcd}
+			ORDER BY bjcd LIMIT 1
+		) A
+	</select>
+	
+	<!-- 행정구역 검색 총 건수 -->
+	<select id="getDistrictTotalCount" parameterType="district" resultType="long">
+		/* getDistrictTotalCount */
+		SELECT count(*)
+		FROM (
+			SELECT name
+			FROM sk_sdo
+			WHERE enable_yn = 'Y'
+				AND name like '%' || #{searchValue} || '%'
+			UNION ALL
+			SELECT name
+			FROM sk_sgg 
+			WHERE enable_yn = 'Y'
+				AND name like '%' || #{searchValue} || '%'
+			UNION ALL
+			SELECT name
+			FROM sk_emd 
+			WHERE enable_yn = 'Y'
+				AND name like '%' || #{searchValue} || '%'
+		) A 		
+	</select>
+	
+	<!-- 행정 구역 목록 -->
+	<select id="getListDistrict" parameterType="district" resultType="district">
+		/* getListDistrict */
+		SELECT bjcd AS id, name, ST_X(ST_Centroid(wkb_geometry)) AS longitude, ST_Y(ST_Centroid(wkb_geometry)) AS latitude
+		FROM sk_sdo
+		WHERE enable_yn = 'Y'
+			AND name LIKE '%' || #{searchValue} || '%'
+		UNION ALL
+		SELECT B.bjcd AS id, A.name||' ' || B.name, ST_X(ST_Centroid(B.wkb_geometry)) AS longitude, ST_Y(ST_Centroid(B.wkb_geometry)) AS latitude
+		FROM sk_sgg B
+		LEFT JOIN sk_sdo A on SUBSTR(A.bjcd,1,2) = SUBSTR(B.bjcd,1,2)
+		WHERE B.enable_yn = 'Y'
+			AND B.name LIKE '%' || #{searchValue} || '%'
+		UNION ALL
+		SELECT C.bjcd AS id, A.name||' ' || B.name ||' '|| C.name as name, ST_X(ST_Centroid(C.wkb_geometry)) AS longitude, ST_Y(ST_Centroid(C.wkb_geometry)) AS latitude
+		FROM sk_emd C
+		LEFT JOIN sk_sdo A on SUBSTR(A.bjcd,1,2) = SUBSTR(C.bjcd,1,2)
+		LEFT JOIN sk_sgg B on SUBSTR(B.bjcd,1,5) = SUBSTR(C.bjcd,1,5)
+		WHERE C.enable_yn = 'Y'
+			AND C.name like '%' || #{searchValue} || '%'
+		ORDER BY name
+		OFFSET #{offset} LIMIT #{limit}
+	</select>
+	
+</mapper>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mago3d.persistence.CivilVoiceCommentMapper">
+
+	<!-- 시민 참여 댓글 목록 조회 -->
+	<select id="getListCivilVoiceComment" parameterType="civilVoiceComment" resultType="civilVoiceComment">
+		/* getListCivilVoiceComment */
+		WITH civil_voice_comment AS (
+	        SELECT
+				civil_voice_comment_id,
+				civil_voice_id,
+				user_id,
+				title,
+				user_ip as client_ip,
+				year_week, week, hour, minute,
+				update_dt as update_date,
+				regist_dt as insert_date
+	        FROM tn_civil_voice_comment
+        )
+		SELECT *
+		FROM civil_voice_comment
+		WHERE civil_voice_id = #{civilVoiceId}
+		ORDER BY civil_voice_comment_id DESC
+		OFFSET #{offset} LIMIT #{limit}
+	</select>
+
+	<!-- 시민 참여 댓글 전체 건수 조회 -->
+	<select id="getCivilVoiceCommentTotalCount" parameterType="civilVoiceComment" resultType="long">
+		/* getCivilVoiceCommentTotalCount */
+		WITH civil_voice_comment AS (
+	        SELECT
+				civil_voice_comment_id,
+				civil_voice_id,
+				user_id,
+				title,
+				user_ip as client_ip,
+				year_week, week, hour, minute,
+				update_dt as update_date,
+				regist_dt as insert_date
+	        FROM tn_civil_voice_comment
+        )
+        SELECT COUNT(civil_voice_comment_id)
+        FROM civil_voice_comment
+		WHERE civil_voice_id = #{civilVoiceId}
+	</select>
+
+	<!-- 동의 여부 확인 -->
+	<select id="alreadyRegistered" parameterType="civilVoiceComment" resultType="boolean">
+		/* alreadyRegistered */
+		SELECT
+			CASE WHEN COUNT(1) > 0 THEN true ELSE false END
+		FROM tn_civil_voice_comment
+		WHERE civil_voice_id = #{civilVoiceId}
+		AND user_id = #{userId}
+	</select>
+
+	<!-- 등록 -->
+	<insert id="insertCivilVoiceComment" parameterType="civilVoiceComment">
+		/* insertCivilVoiceComment */
+		<selectKey keyProperty="civilVoiceCommentId" resultType="long" order="BEFORE">
+			SELECt NEXTVAL('civil_voice_comment_seq')
+		</selectKey>
+		INSERT INTO tn_civil_voice_comment(
+			civil_voice_comment_id, civil_voice_id, user_id, user_ip, title, regist_dt
+		) VALUES (
+			#{civilVoiceCommentId}, #{civilVoiceId}, #{userId}, #{clientIp}, #{title}, NOW()
+		)
+	</insert>
+
+	<!-- 수정 -->
+	<update id="updateCivilVoiceComment" parameterType="civilVoiceComment">
+		/* updateCivilVoiceComment */
+		UPDATE tn_civil_voice_comment
+		SET
+			title = #{title},
+			update_dt = NOW()
+		WHERE civil_voice_comment_id = #{civilVoiceCommentId}
+	</update>
+
+	<!-- 삭제 -->
+	<delete id="deleteCivilVoiceComment" parameterType="long">
+		/* deleteCivilVoiceComment */
+		DELETE FROM tn_civil_voice_comment WHERE civil_voice_comment_id = #{civilVoiceCommentId}
+	</delete>
+
+	<!-- 삭제 -->
+	<delete id="deleteCivilVoiceCommentFromId" parameterType="long">
+		/* deleteCivilVoiceCommentFromId */
+		DELETE FROM tn_civil_voice_comment WHERE civil_voice_id = #{civilVoiceId}
+	</delete>
+</mapper>

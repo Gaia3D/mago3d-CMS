@@ -1,0 +1,130 @@
+package mago3d.controller.rest;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.extern.slf4j.Slf4j;
+import mago3d.config.CacheConfig;
+import mago3d.domain.CacheName;
+import mago3d.domain.CacheParams;
+import mago3d.domain.CacheType;
+import mago3d.domain.Role;
+import mago3d.service.RoleService;
+
+@Slf4j
+@RestController
+@RequestMapping("/role")
+public class RoleRestController {
+
+	@Autowired
+	private CacheConfig cacheConfig;
+	@Autowired
+	private RoleService roleService;
+
+	/**
+	 * Role 등록
+	 * @param role
+	 * @param bindingResult
+	 * @return
+	 */
+	@PostMapping(value = "/insert")
+	public Map<String, Object> insert(@Valid Role role, BindingResult bindingResult) {
+		log.info("@@ role = {}", role);
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+		
+		if(bindingResult.hasErrors()) {
+			message = bindingResult.getAllErrors().get(0).getDefaultMessage();
+			log.info("@@@@@ message = {}", message);
+			result.put("statusCode", HttpStatus.BAD_REQUEST.value());
+			result.put("errorCode", errorCode);
+			result.put("message", message);
+            return result;
+		}
+
+		roleService.insertRole(role);
+		int statusCode = HttpStatus.OK.value();
+		
+		reloadCache();
+		
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
+
+	/**
+	 * Role 정보 수정
+	 * @param role
+	 * @param bindingResult
+	 * @return
+	 */
+	@PostMapping(value = "/update")
+	public Map<String, Object> update(HttpServletRequest request, @Valid Role role, BindingResult bindingResult) {
+		log.info("@@ role = {}", role);
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+
+		if(bindingResult.hasErrors()) {
+			message = bindingResult.getAllErrors().get(0).getDefaultMessage();
+			log.info("@@@@@ message = {}", message);
+			result.put("statusCode", HttpStatus.BAD_REQUEST.value());
+			result.put("errorCode", errorCode);
+			result.put("message", message);
+            return result;
+		}
+
+		roleService.updateRole(role);
+		int statusCode = HttpStatus.OK.value();
+		
+		reloadCache();
+	
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
+
+	/**
+	 * Role 삭제
+	 * @param roleId
+	 * @return
+	 */
+	@DeleteMapping(value = "/delete")
+	public Map<String, Object> delete(@RequestParam Integer roleId) {
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+		
+		roleService.deleteRole(roleId);
+		int statusCode = HttpStatus.OK.value();
+		
+		reloadCache();
+		
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
+
+	private void reloadCache() {
+		CacheParams cacheParams = new CacheParams();
+		cacheParams.setCacheName(CacheName.ROLE);
+		cacheParams.setCacheType(CacheType.BROADCAST);
+		cacheConfig.loadCache(cacheParams);
+	}
+}

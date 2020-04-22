@@ -1,0 +1,24 @@
+요청							주석							메소드 명						위젯 명
+-------------------------------------------------------------------------------------------------------
+/data-group-statistics		// 데이터 그룹별 통계 정보			dataGroupStatistics()		dataGroupWidget
+/data-status-statistics		// 데이터 상태별 통계 정보			dataStatusStatistics()		dataStatusWidget
+/user-status-statistics		// 사용자 상태별 통계 정보			userStatusStatistics()		userStatusWidget
+/data-adjust-log			// 데이터 변경 요청 목록			dataAdjustLogList()			dataAdjustLogWidget
+/user-access-log			// 사용자 접근 이력 목록			userAccessLogList()			userAccessLogWidget
+/civil-voice-status			// 시민 참여 현황 				civilVoiceStatus()			civilVoiceWidget
+/system-usage-status		// 시스템 사용 현황 				systemUsageStatus()			systemUsageWidget
+/dbcp-status				// DB Connection Pool 현황	dbcpStatus()				dbcpStatusWidget
+
+
+
+-- 메인 화면 위젯
+insert into widget(widget_id, name, view_order, user_id)
+values
+	(NEXTVAL('widget_seq'), 'dataGroupWidget', 1, 'admin' ),
+	(NEXTVAL('widget_seq'), 'dataStatusWidget', 2, 'admin' ),
+	(NEXTVAL('widget_seq'), 'dataAdjustLogWidget', 3, 'admin' ),
+	(NEXTVAL('widget_seq'), 'userStatusWidget', 4, 'admin' ),
+	(NEXTVAL('widget_seq'), 'systemUsageWidget', 5, 'admin' ),
+	(NEXTVAL('widget_seq'), 'civilVoiceWidget', 6, 'admin' ),
+	(NEXTVAL('widget_seq'), 'userAccessLogWidget', 7, 'admin' ),
+	(NEXTVAL('widget_seq'), 'dbcpStatusWidget', 8, 'admin' );

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mago3d.persistence.MenuMapper">
+
+	<!-- 메뉴 목록 -->
+	<select id="getListMenu" parameterType="menu" resultType="menu">
+		/* getListMenu */
+		WITH RECURSIVE menu_tree (
+			menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, view_order, url, url_alias, alias_menu_id,
+			html_id, html_content_id, image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date,
+			path, cycle
+		) AS (
+			SELECT A.menu_id, A.menu_type, A.menu_target, A.name, A.name_en, A.ancestor, A.parent, A.depth, A.view_order, A.url, A.url_alias, A.alias_menu_id,
+				A.html_id, A.html_content_id, A.image, A.image_alt, A.css_class, A.default_yn, A.use_yn, A.display_yn,  A.description, A.insert_date,
+				ARRAY[A.view_order], false
+			FROM menu A
+			WHERE A.menu_target = #{menuTarget}
+			<if test="menuType != null and menuType != ''">
+				AND A.menu_type = #{menuType}
+			</if>	
+				AND A.parent = 0
+			<if test="defaultYn != null and defaultYn != ''">
+				AND default_yn = #{defaultYn}
+			</if>
+	        UNION ALL
+	        SELECT A.menu_id, A.menu_type, A.menu_target, A.name, A.name_en, A.ancestor, A.parent, A.depth, A.view_order, A.url, A.url_alias, A.alias_menu_id,
+	        	A.html_id, A.html_content_id, A.image, A.image_alt, A.css_class, A.default_yn, A.use_yn, A.display_yn, A.description, A.insert_date,
+	        	path || A.view_order, A.menu_id = ANY(path)
+	        FROM menu A, menu_tree B
+			WHERE A.menu_target = #{menuTarget}
+			<if test="menuType != null and menuType != ''">
+				AND A.menu_type = #{menuType}
+			</if>	
+				AND A.parent = B.menu_id 
+				AND not cycle
+		)
+		SELECT menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, view_order, url, url_alias, alias_menu_id,
+			html_id, html_content_id, image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date,
+			path
+		FROM menu_tree
+		ORDER BY path
+	</select>
+	
+	<!-- 메뉴 정보 -->
+	<select id="getMenu" parameterType="int" resultType="menu">
+		/* getMenu */
+		SELECT * FROM menu WHERE menu_id = #{menuId}
+	</select>
+	
+	<!-- 부모와 순서를 가지고 메뉴 정보를 취득 -->
+	<select id="getMenuByParentAndViewOrder" parameterType="menu" resultType="menu">
+		/* getMenuByParentAndViewOrder */
+		SELECT * 
+		FROM menu 
+		WHERE menu_target = #{menuTarget}
+			AND parent = #{parent} 
+		<if test="updateType == 'up'.toString()">
+			<![CDATA[
+			AND view_order >= #{viewOrder} - 1
+			AND view_order < #{viewOrder}
+			]]>
+		</if>
+		<if test="updateType == 'down'.toString()">
+			<![CDATA[
+			AND view_order > #{viewOrder}
+			AND view_order <= #{viewOrder} + 1
+			]]>
+		</if>
+		ORDER BY view_order
+		LIMIT 1
+	</select>
+	
+	<!-- 자식 메뉴중 맨 마지막 순서의 메뉴 정보를 취득 -->
+	<select id="getMaxViewOrderChildMenu" parameterType="menu" resultType="menu">
+		/* getMaxViewOrderChildMenu */
+		SELECT * 
+		FROM menu 
+		WHERE menu_target = #{menuTarget}
+			AND parent = #{parent} 
+		ORDER BY view_order DESC 
+		LIMIT 1 
+	</select>
+	
+	<!-- 자식 메뉴 목록 -->
+	<select id="getListChildMenuId" parameterType="int" resultType="int">
+		/* getListChildMenuId */
+		SELECT menu_id FROM menu WHERE parent = #{parent}
+	</select>
+	
+	<!-- 메뉴 등록 -->
+	<insert id="insertMenu" parameterType="menu" >
+		/* insertMenu */
+		<selectKey keyProperty="menuId" resultType="int" order="BEFORE">
+            SELECT NEXTVAL('menu_seq')
+        </selectKey>
+		INSERT INTO menu(
+			menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, view_order, url, url_alias, alias_menu_id,
+			html_id, html_content_id, image, image_alt, css_class, default_yn, use_yn, display_yn, description
+		) VALUES (
+			#{menuId}, #{menuType}, #{menuTarget}, #{name}, #{nameEn}, 
+			(
+				SELECT COALESCE(MAX(ancestor), #{menuId})
+				FROM menu
+				WHERE menu_id = #{parent}
+					AND menu_id != 0
+			),
+			#{parent}, #{depth}, #{viewOrder}, #{url}, #{urlAlias}, #{aliasMenuId},
+			#{htmlId}, #{htmlContentId}, #{image}, #{imageAlt}, #{cssClass}, #{defaultYn}, #{useYn}, #{displayYn}, #{description} 
+		)
+	</insert>
+	
+	<!-- 메뉴 수정 -->
+	<update id="updateMenu" parameterType="menu">
+		/* updateMenu */
+		UPDATE menu
+		SET 
+			<if test="menuType != null and menuType != ''">
+			menu_type = #{menuType},
+			</if>
+			<if test="menuTarget != null and menuTarget != ''">
+			menu_target = #{menuTarget},
+			</if>
+			name = #{name},
+			name_en = #{nameEn},
+			<!-- parent = #{parent},
+			depth = #{depth},
+			view_order = #{view_order}, -->
+			<if test="url != null and url != ''">
+			url = #{url},
+			</if>
+			<if test="urlAlias != null and urlAlias != ''">
+			url_alias = #{urlAlias},
+			</if>
+			<if test="aliasMenuId != null and aliasMenuId != ''">
+			alias_menu_id = #{aliasMenuId},
+			</if>
+			<if test="htmlId != null and htmlId != ''">
+			html_id = #{htmlId},
+			</if>
+			<if test="htmlContentId != null and htmlContentId != ''">
+			html_content_id = #{htmlContentId},
+			</if>
+			<if test="image != null and image != ''">
+			image = #{image},
+			</if>
+			<if test="imageAlt != null and imageAlt != ''">
+			image_alt = #{imageAlt},
+			</if>
+			<if test="cssClass != null and cssClass != ''">
+			css_class = #{cssClass},
+			</if>
+			default_yn = #{defaultYn},
+			use_yn = #{useYn},
+			display_yn = #{displayYn},
+			description = #{description}
+		WHERE menu_id = #{menuId}
+	</update>
+	
+	<!-- 메뉴 순서 수정 -->
+	<update id="updateViewOrderMenu" parameterType="menu">
+		/* updateViewOrderMenu */
+		UPDATE menu SET view_order = #{viewOrder} WHERE menu_id = #{menuId}
+	</update>
+	
+	<!-- 자식 메뉴 상태 수정-->
+	<update id="updateChildMenu" parameterType="int">
+		/* updateChildMenu */
+		UPDATE menu SET use_yn = 'N' WHERE parent = #{parent}
+	</update>
+	
+	<!-- 메뉴 삭제 -->
+	<delete id="deleteMenu" parameterType="int">
+		/* deleteMenu */
+		DELETE FROM menu WHERE menu_id = #{menuId}
+	</delete>
+	
+</mapper>

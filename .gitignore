@@ -1,5 +1,14 @@
-.gradle/
-.settings/
-mago3d-user/src/main/webapp/mklink
-.idea/
-mago3d-user/src/main/webapp/f4d
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
+/.settings/
+
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/

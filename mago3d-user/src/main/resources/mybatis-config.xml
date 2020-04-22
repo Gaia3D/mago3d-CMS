@@ -4,54 +4,52 @@
     "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
-	<settings>
-		<setting name="lazyLoadingEnabled" value="false" />
-	</settings>
-	
-	<typeAliases>
-		<typeAlias type="com.gaia3d.domain.AccessLog" alias="accessLog"/>
-		<typeAlias type="com.gaia3d.domain.APILog" alias="aPILog"/>
-		<typeAlias type="com.gaia3d.domain.Board" alias="board"/>
-		<typeAlias type="com.gaia3d.domain.BoardComment" alias="boardComment"/>
-		<typeAlias type="com.gaia3d.domain.ConverterJob" alias="converterJob"/>
-		<typeAlias type="com.gaia3d.domain.ConverterLog" alias="converterLog"/>
-		<typeAlias type="com.gaia3d.domain.CommonCode" alias="commonCode"/>
-		<typeAlias type="com.gaia3d.domain.Project" alias="project"/>
-		<typeAlias type="com.gaia3d.domain.DataInfo" alias="dataInfo"/>
-		<typeAlias type="com.gaia3d.domain.DataInfoLog" alias="dataInfoLog"/>
-		<typeAlias type="com.gaia3d.domain.DataInfoAttribute" alias="dataInfoAttribute"/>
-		<typeAlias type="com.gaia3d.domain.DataInfoObjectAttribute" alias="dataInfoObjectAttribute"/>
-		<typeAlias type="com.gaia3d.domain.ExternalService" alias="externalService"/>
-		<typeAlias type="com.gaia3d.domain.FileInfo" alias="fileInfo"/>
-		<typeAlias type="com.gaia3d.domain.FileParseLog" alias="fileParseLog"/>
-		<typeAlias type="com.gaia3d.domain.Issue" alias="issue"/>
-		<typeAlias type="com.gaia3d.domain.IssueDetail" alias="issueDetail"/>
-		<typeAlias type="com.gaia3d.domain.IssueComment" alias="issueComment"/>
-		<typeAlias type="com.gaia3d.domain.IssueFile" alias="issueFile"/>
-		<typeAlias type="com.gaia3d.domain.IssuePeople" alias="issuePeople"/>
-		<typeAlias type="com.gaia3d.domain.Menu" alias="menu"/>
-		<typeAlias type="com.gaia3d.domain.PGStatActivity" alias="pGStatActivity"/>
-		<typeAlias type="com.gaia3d.domain.Policy" alias="policy"/>
-		<typeAlias type="com.gaia3d.domain.Role" alias="role"/>
-		<typeAlias type="com.gaia3d.domain.Schedule" alias="schedule"/>
-		<typeAlias type="com.gaia3d.domain.ScheduleLog" alias="scheduleLog"/>
-		<typeAlias type="com.gaia3d.domain.ScheduleDetailLog" alias="scheduleDetailLog"/>
-		<typeAlias type="com.gaia3d.domain.UserSession" alias="userSession"/>
-		<typeAlias type="com.gaia3d.domain.UserInfo" alias="userInfo"/>
-		<typeAlias type="com.gaia3d.domain.UserDevice" alias="userDevice"/>
-		<typeAlias type="com.gaia3d.domain.UserGroup" alias="userGroup"/>
-		<typeAlias type="com.gaia3d.domain.UserGroupMenu" alias="userGroupMenu"/>
-		<typeAlias type="com.gaia3d.domain.UserGroupRole" alias="userGroupRole"/>
-		<typeAlias type="com.gaia3d.domain.SSOLog" alias="sSOLog"/>
-		<typeAlias type="com.gaia3d.domain.UploadLog" alias="uploadLog"/>
-		<typeAlias type="com.gaia3d.domain.Widget" alias="widget"/>
-	</typeAliases>
-	
-	<!-- 
-		TODO 이 방법은 resultMap에 컬럼 개수가 너무 많아서 안 맞는듯, 그냥 꼼수 사용
-	<typeHandlers>
-		<typeHandler handler="com.gaia3d.typehandler.xxxxTypeHandler"/>
-		<package name="com.gaia3d.typehandler"/>
-	</typeHandlers>
-	 -->
+    <settings>
+        <setting name="lazyLoadingEnabled" value="false" />
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <typeAliases>
+    	<typeAlias type="mago3d.domain.AccessLog" alias="accessLog" />
+    	<typeAlias type="mago3d.domain.ConverterJob" alias="converterJob" />
+    	<typeAlias type="mago3d.domain.ConverterJobFile" alias="converterJobFile" />
+		<typeAlias type="mago3d.domain.DataGroup" alias="dataGroup" />
+		<typeAlias type="mago3d.domain.DataInfo" alias="dataInfo" />
+		<typeAlias type="mago3d.domain.DataInfoSimple" alias="dataInfoSimple" />
+		<typeAlias type="mago3d.domain.DataAdjustLog" alias="dataAdjustLog" />
+		<typeAlias type="mago3d.domain.DataInfoLog" alias="dataInfoLog" />
+		<typeAlias type="mago3d.domain.DataAttribute" alias="dataAttribute" />
+		<typeAlias type="mago3d.domain.DataAttributeFileInfo" alias="dataAttributeFileInfo" />
+		<typeAlias type="mago3d.domain.DataObjectAttribute" alias="dataObjectAttribute" />
+		<typeAlias type="mago3d.domain.DataObjectAttributeFileInfo" alias="dataObjectAttributeFileInfo" />
+		<typeAlias type="mago3d.domain.GeoPolicy" alias="geoPolicy" />
+    	<typeAlias type="mago3d.domain.Issue" alias="issue" />
+    	<typeAlias type="mago3d.domain.IssueDetail" alias="issueDetail" />
+    	<typeAlias type="mago3d.domain.Layer" alias="layer" />
+    	<typeAlias type="mago3d.domain.LayerGroup" alias="layerGroup" />
+    	<typeAlias type="mago3d.domain.LayerFileInfo" alias="layerFileInfo" />
+    	<typeAlias type="mago3d.domain.Menu" alias="menu" />
+    	<typeAlias type="mago3d.domain.Policy" alias="policy" />
+    	<typeAlias type="mago3d.domain.Role" alias="role" />
+    	
+		<typeAlias type="mago3d.domain.UploadData" alias="uploadData" />
+		<typeAlias type="mago3d.domain.UploadDataFile" alias="uploadDataFile" />
+    	<typeAlias type="mago3d.domain.UserGroup" alias="userGroup" />
+    	<typeAlias type="mago3d.domain.UserGroupMenu" alias="userGroupMenu" />
+    	<typeAlias type="mago3d.domain.UserGroupRole" alias="userGroupRole" />
+		<typeAlias type="mago3d.domain.UserInfo" alias="userInfo" />
+		<typeAlias type="mago3d.domain.UserPolicy" alias="userPolicy"/>
+    	<typeAlias type="mago3d.domain.UserSession" alias="userSession" />
+    	
+ 		<typeAlias type="mago3d.domain.District" alias="district"/>
+ 		<typeAlias type="mago3d.domain.SkSdo" alias="skSdo"/>
+ 		<typeAlias type="mago3d.domain.SkSgg" alias="skSgg"/>
+ 		<typeAlias type="mago3d.domain.SkEmd" alias="skEmd"/>
+ 		
+ 		<typeAlias type="mago3d.domain.CivilVoice" alias="civilVoice"/>
+ 		<typeAlias type="mago3d.domain.CivilVoiceComment" alias="civilVoiceComment"/>
+ 		
+ 		<typeAlias type="mago3d.domain.AttributeRepository" alias="attributeRepository"/>
+    </typeAliases>
+
 </configuration>

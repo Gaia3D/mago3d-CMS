@@ -1,0 +1,247 @@
+1 기존 데이터 삭제
+
+delete from data_info;
+
+delete from data_group where data_group_key != 'basic';
+commit;
+
+2 데이터 관련
+adjust, log, converter, upload, 파싱 등 다 삭제
+
+3 data_group insert
+
+drop sequence if exists data_group_seq;
+drop sequence if exists data_info_seq;
+
+
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	101, 'SEJONG', 'SEJONG', 'infra/SEJONG/', 'admin', 'public', 'admin',
+	101, 0, 1, 1, 0, true, true,true, 0,
+	32.997327, null, '{"isPhysical": false}'
+);
+		
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	106, 'busan', 'busan', 'infra/busan/', 'admin', 'public', 'admin',
+	106, 0, 1, 1, 0, true, true,true, 0,
+	12.4273148, null, '{"isPhysical": false}'
+);
+		
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	108, 'sejongApartment', 'sejongApartment', 'infra/sejongApartment/', 'admin', 'public', 'admin',
+	108, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+		
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	109, 'sejongCurture', 'sejongCurture', 'infra/sejongCurture/', 'admin', 'public', 'admin',
+	109, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);		
+		
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	110, 'sejongEtc', 'sejongEtc', 'infra/sejongEtc/', 'admin', 'public', 'admin',
+	110, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);	
+		
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	111, 'sejongIndustry', 'sejongIndustry', 'infra/sejongIndustry/', 'admin', 'public', 'admin',
+	111, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+		
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	112, 'sejongPublic', 'sejongPublic', 'infra/sejongPublic/', 'admin', 'public', 'admin',
+	112, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	113, 'sejongService', 'sejongService', 'infra/sejongService/', 'admin', 'public', 'admin',
+	113, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	122, 'busanDeltalu', 'busanDeltalu', 'infra/busanDeltalu/', 'admin', 'public', 'admin',
+	122, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	133, 'sejongCityfurniture', 'sejongCityfurniture', 'infra/sejongCityfurniture/', 'admin', 'public', 'admin',
+	133, 0, 1, 1, 0, true, true,true, 0,
+	16.9980772, null, '{"isPhysical": false}'
+);
+
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	134, 'busansmartvillage', 'busansmartvillage', 'infra/busansmartvillage/', 'admin', 'public', 'admin',
+	134, 0, 1, 1, 0, true, true,true, 0,
+	20, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	138, 'sejongBusSign', 'sejongBusSign', 'infra/sejongBusSign/', 'admin', 'public', 'admin',
+	138, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	139, 'sejongJeonju', 'sejongJeonju', 'infra/sejongJeonju/', 'admin', 'public', 'admin',
+	139, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	140, 'sejongPedestrianLight', 'sejongPedestrianLight', 'infra/sejongPedestrianLight/', 'admin', 'public', 'admin',
+	140, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	141, 'sejongRoadSign', 'sejongRoadSign', 'infra/sejongRoadSign/', 'admin', 'public', 'admin',
+	141, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	142, 'sejongSafeSign', 'sejongSafeSign', 'infra/sejongSafeSign/', 'admin', 'public', 'admin',
+	142, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	143, 'sejongTaxiSign', 'sejongTaxiSign', 'infra/sejongTaxiSign/', 'admin', 'public', 'admin',
+	143, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	144, 'sejongTrafficLight', 'sejongTrafficLight', 'infra/sejongTrafficLight/', 'admin', 'public', 'admin',
+	144, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	145, 'busanEDC', 'busanEDC', 'infra/busanEDC/', 'admin', 'public', 'admin',
+	145, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	146, 'busanMJ', 'busanMJ', 'infra/busanMJ/', 'admin', 'public', 'admin',
+	146, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	147, 'sejongVegetation', 'sejongVegetation', 'infra/sejongVegetation/', 'admin', 'public', 'admin',
+	147, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+INSERT INTO data_group (
+	data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, 
+	ancestor, parent, depth, view_order, children, basic, available,tiling, data_count, 
+	altitude, duration, metainfo
+) VALUES (
+	148, 'sejongStreetLamp', 'sejongStreetLamp', 'infra/sejongStreetLamp/', 'admin', 'public', 'admin',
+	148, 0, 1, 1, 0, true, true,true, 0,
+	null, null, '{"isPhysical": false}'
+);
+
+
+4 sequence 재생성
+drop sequence if exists data_group_seq;
+drop sequence if exists data_info_seq;
+create sequence data_group_seq increment 1 minvalue 1 maxvalue 999999999999 start 211 cache 1;
+create sequence data_info_seq increment 1 minvalue 1 maxvalue 9999999999999999 start 21125 cache 1;
+
+
+commit;
