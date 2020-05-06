@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div id="api0" class="api-help-toggle">
 	<img src="/images/ko/common/magologo.JPG" alt="메인">
-		<h2>mago3D.JS V1.0.5</h2>
+		<h2>gaia3d.JS V1.0.5</h2>
 		<br>
 		<img src="/images/ko/common/lisense.JPG" alt="라이센스">
 		<br>

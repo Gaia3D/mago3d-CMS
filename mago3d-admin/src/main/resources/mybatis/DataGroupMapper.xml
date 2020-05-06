@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="mago3d.persistence.DataGroupMapper">
+<mapper namespace="gaia3d.persistence.DataGroupMapper">
 
 	<!-- 데이터 그룹 총 건수 -->
 	<select id="getDataGroupTotalCount" parameterType="dataGroup" resultType="long">

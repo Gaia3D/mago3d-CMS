@@ -172,7 +172,7 @@
 <script type="text/javascript" src="/externlib/decodeTextAlternative/encoding-indexes.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/externlib/decodeTextAlternative/encoding.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/externlib/moment-2.22.2/moment-with-locales.min.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/js/mago3d.js?cacheVersion=${contentCacheVersion}"></script>
+<script type="text/javascript" src="/js/gaia3d.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/js/mago3d_lx.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/js/${lang}/common.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/js/${lang}/message.js?cacheVersion=${contentCacheVersion}"></script>
@@ -230,7 +230,7 @@
 		 * @param {object} options Cesium viewer parameter. option.
 		 * @param {Cesium.Viewer} legacyViewer 타 시스템과의 연동의 경우 view 객체가 생성되어서 넘어 오는 경우가 있음. option.
 		*/
-		MAGO3D_INSTANCE = new Mago3D.Mago3d('magoContainer', geoPolicyJson, {loadend : magoLoadEnd}, cesiumViewerOption);
+		MAGO3D_INSTANCE = new gaia3d.Mago3d('magoContainer', geoPolicyJson, {loadend : magoLoadEnd}, cesiumViewerOption);
 	}
 
 	var beforePointId = null;
@@ -245,12 +245,12 @@
 		// TODO : 세슘 MAP 선택 UI 제거,엔진에서 처리로 변경 예정.
 		if(viewer.baseLayerPicker) viewer.baseLayerPicker.destroy();
 		viewer.scene.globe.depthTestAgainstTerrain = true;
-		/* magoManager.on(Mago3D.MagoManager.EVENT_TYPE.CLICK, function(result) {
+		/* magoManager.on(gaia3d.MagoManager.EVENT_TYPE.CLICK, function(result) {
 			console.info(result);
 		}); */
 
 		// mago3d logo 추가
-		Mago3D.tempCredit(viewer);
+		gaia3d.tempCredit(viewer);
 
 		//우측 상단 지도 컨트롤러
 		MapControll(viewer);
@@ -266,7 +266,7 @@
 		MapDataControll(magoInstance);
 
 		//선택된 데이터 이동 시 결과 리턴
-	    magoManager.on(Mago3D.MagoManager.EVENT_TYPE.SELECTEDF4DMOVED, function(result) {
+	    magoManager.on(gaia3d.MagoManager.EVENT_TYPE.SELECTEDF4DMOVED, function(result) {
 	    	var dataInfo = result.result;
 	    	initData(dataInfo);
 	    });
@@ -333,7 +333,7 @@
 			f4dController.addF4dGroup(dataGroup);
 
 			// 로드되는 시점
-			magoInstance.getMagoManager().on(Mago3D.MagoManager.EVENT_TYPE.F4DLOADEND,function(e){
+			magoInstance.getMagoManager().on(gaia3d.MagoManager.EVENT_TYPE.F4DLOADEND,function(e){
 				var tiling = "${dataInfo.tiling}";
 				if(tiling === "true") {
 					gotoFly(magoInstance);
@@ -343,7 +343,7 @@
 			});
 
 			// 화면에 표출할 준비가 된 시점
-			magoInstance.getMagoManager().on(Mago3D.MagoManager.EVENT_TYPE.F4DRENDERREADY, function(e){
+			magoInstance.getMagoManager().on(gaia3d.MagoManager.EVENT_TYPE.F4DRENDERREADY, function(e){
 				var data = e.f4d.data;
 				if (data.dataGroupId === parseInt("${dataInfo.dataGroupId}") && data.nodeId === "${dataInfo.dataKey}") {
 					selectF4dAPI(magoInstance, data.dataGroupId, data.nodeId);

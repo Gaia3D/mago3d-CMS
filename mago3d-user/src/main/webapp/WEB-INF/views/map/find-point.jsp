@@ -55,7 +55,7 @@
 <script type="text/javascript" src="/externlib/decodeTextAlternative/encoding.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/js/${lang}/common.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/js/${lang}/message.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/js/mago3d.js?cacheVersion=${contentCacheVersion}"></script>
+<script type="text/javascript" src="/js/gaia3d.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/js/mago3d_lx.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/js/${lang}/map-init.js?cacheVersion=${contentCacheVersion}"></script>
 
@@ -94,7 +94,7 @@
 		 * @param {object} options Cesium viewer parameter. option.
 		 * @param {Cesium.Viewer} legacyViewer 타 시스템과의 연동의 경우 view 객체가 생성되어서 넘어 오는 경우가 있음. option.
 		*/	
-		MAGO3D_INSTANCE = new Mago3D.Mago3d('magoContainer', geoPolicyJson, {loadend : magoLoadEnd}, cesiumViewerOption);
+		MAGO3D_INSTANCE = new gaia3d.Mago3d('magoContainer', geoPolicyJson, {loadend : magoLoadEnd}, cesiumViewerOption);
 		 
 	}
 	
@@ -111,9 +111,9 @@
 		if(viewer.baseLayerPicker) viewer.baseLayerPicker.destroy();
 		
 		// mago3d logo 추가
-		Mago3D.tempCredit(viewer);
+		gaia3d.tempCredit(viewer);
 		
-		magoManager.on(Mago3D.MagoManager.EVENT_TYPE.CLICK, function(result) {
+		magoManager.on(gaia3d.MagoManager.EVENT_TYPE.CLICK, function(result) {
 			if(beforePointId !== undefined && beforePointId !== null) {
 				remove(beforePointId);
 			}

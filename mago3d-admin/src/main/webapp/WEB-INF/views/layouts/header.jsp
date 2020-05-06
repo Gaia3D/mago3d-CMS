@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@page import="mago3d.domain.Key"%>
-<%@page import="mago3d.domain.UserSession"%>
-<%@page import="mago3d.domain.CacheManager"%>
+<%@page import="gaia3d.domain.Key"%>
+<%@page import="gaia3d.domain.UserSession"%>
+<%@page import="gaia3d.domain.CacheManager"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
 <header class="site-header">

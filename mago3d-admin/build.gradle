@@ -1,6 +1,6 @@
 plugins {
-	id 'org.springframework.boot' version '2.2.2.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'org.springframework.boot' version '2.2.6.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 	id 'war'
 }
@@ -50,7 +50,7 @@ sourceSets {
                 copy {
                     from("src/main/resources/product") {
                         include 'application.properties'
-                        include 'ndtp.properties'
+                        include 'mago3d.properties'
                         include 'logback-spring.xml'
                     }
                     into "src/main/resources"
@@ -63,7 +63,7 @@ sourceSets {
                 copy {
                     from("src/main/resources/dev") {
                         include 'application.properties'
-                        include 'ndtp.properties'
+                        include 'mago3d.properties'
                         include 'logback-spring.xml'
                     }
                     into "src/main/resources"

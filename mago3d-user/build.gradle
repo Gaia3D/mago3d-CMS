@@ -1,11 +1,11 @@
 plugins {
-	id 'org.springframework.boot' version '2.2.2.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'org.springframework.boot' version '2.2.6.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 	id 'war'
 }
 
-group = 'com.ndtp'
+group = 'com.gaia3d'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
@@ -41,7 +41,7 @@ sourceSets {
                 copy {
                     from("src/main/resources/product") {
                         include 'application.properties'
-                        include 'ndtp.properties'
+                        include 'mago3d.properties'
                         include 'logback-spring.xml'
                     }
                     into "src/main/resources"
@@ -54,7 +54,7 @@ sourceSets {
                 copy {
                     from("src/main/resources/dev") {
                         include 'application.properties'
-                        include 'ndtp.properties'
+                        include 'mago3d.properties'
                         include 'logback-spring.xml'
                     }
                     into "src/main/resources"
@@ -85,9 +85,6 @@ dependencies {
 	implementation 'org.apache.commons:commons-compress:1.18'
 	
 	runtimeOnly 'org.postgresql:postgresql'
-	
-	// 전자 정부 프레임워크 연동 - name : egovframe runtime environment. version : 3.8.0
-	compile fileTree(dir: 'libs', include: ['*.jar']) 
 	
 	providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'

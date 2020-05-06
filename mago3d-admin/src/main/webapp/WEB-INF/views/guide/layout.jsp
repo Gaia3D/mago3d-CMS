@@ -20,7 +20,7 @@
 	<div id="popupWrap">
 		<div class="popupSub">
 			<h3>
-				<a onclick="changeToggleTab(0)">mago3D.JS API</a>
+				<a onclick="changeToggleTab(0)">gaia3d.JS API</a>
 			</h3>
 			<div class="searchWrap">
 			<label for="searchApi"></label>
@@ -39,7 +39,7 @@
 					<div id="testtoggle">
 						<div id="api0" class="api-help-toggle">
 							<img src="/images/ko/common/magologo.JPG" alt="메인">
-								<h2>mago3D.JS V1.0.5</h2>
+								<h2>gaia3d.JS V1.0.5</h2>
 								<br>
 								<img src="/images/ko/common/lisense.JPG" alt="라이센스">
 								<br>
@@ -92,7 +92,7 @@
 	<script type="text/javascript" src="/externlib/decodeTextAlternative/encoding-indexes.js?cacheVersion=${contentCacheVersion}"></script>
 	<script type="text/javascript" src="/externlib/decodeTextAlternative/encoding.js?cacheVersion=${contentCacheVersion}"></script>
 	<script type="text/javascript" src="/externlib/moment-2.22.2/moment-with-locales.min.js?cacheVersion=${contentCacheVersion}"></script>
-	<script type="text/javascript" src="/js/mago3d.js?cacheVersion=${contentCacheVersion}"></script>
+	<script type="text/javascript" src="/js/gaia3d.js?cacheVersion=${contentCacheVersion}"></script>
 	<script type="text/javascript" src="/js/mago3d_lx.js?cacheVersion=${contentCacheVersion}"></script>
 	<script type="text/javascript" src="/js/ko/common.js?cacheVersion=${contentCacheVersion}"></script>
 	<script type="text/javascript" src="/js/ko/message.js?cacheVersion=${contentCacheVersion}"></script>
@@ -153,7 +153,7 @@ function magoInit2() {
 	cesiumViewerOption.baseLayerPicker = false;
 	cesiumViewerOption.sceneModePicker = false;
 
-	MAGO3D_INSTANCE2 = new Mago3D.Mago3d('magoContainer2', geoPolicyJson, {loadend : magoLoadEnd2}, cesiumViewerOption);
+	MAGO3D_INSTANCE2 = new gaia3d.Mago3d('magoContainer2', geoPolicyJson, {loadend : magoLoadEnd2}, cesiumViewerOption);
 }
 
 function magoLoadEnd2(e) {
@@ -169,9 +169,9 @@ function magoLoadEnd2(e) {
 	magoManager.init(viewer.scene._context._gl);
 	magoManager.objMarkerManager.loadDefaultImages(magoManager);
 
-	Mago3D.MagoConfig.serverPolicy.geo_callback_enable = 'true';
-    Mago3D.MagoConfig.serverPolicy.geo_callback_selectedobject = 'selectedObjectCallBack';
-    Mago3D.MagoConfig.serverPolicy.geo_callback_insertissue = 'insertIssueCallBack';
+	gaia3d.MagoConfig.serverPolicy.geo_callback_enable = 'true';
+    gaia3d.MagoConfig.serverPolicy.geo_callback_selectedobject = 'selectedObjectCallBack';
+    gaia3d.MagoConfig.serverPolicy.geo_callback_insertissue = 'insertIssueCallBack';
     
 	$.ajax({
 		url: "/sample/json/sample_f4d.json",
@@ -180,7 +180,7 @@ function magoLoadEnd2(e) {
 		dataType: "json",
 		success: function(res){
 			if(res) {
-				var policy = Mago3D.MagoConfig.getPolicy();
+				var policy = gaia3d.MagoConfig.getPolicy();
 				var initLat = parseFloat(policy.initLatitude);
 				var initLon = parseFloat(policy.initLongitude);
 				var childs = res.children;

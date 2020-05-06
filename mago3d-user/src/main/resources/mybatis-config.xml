@@ -10,46 +10,46 @@
     </settings>
 
     <typeAliases>
-    	<typeAlias type="mago3d.domain.AccessLog" alias="accessLog" />
-    	<typeAlias type="mago3d.domain.ConverterJob" alias="converterJob" />
-    	<typeAlias type="mago3d.domain.ConverterJobFile" alias="converterJobFile" />
-		<typeAlias type="mago3d.domain.DataGroup" alias="dataGroup" />
-		<typeAlias type="mago3d.domain.DataInfo" alias="dataInfo" />
-		<typeAlias type="mago3d.domain.DataInfoSimple" alias="dataInfoSimple" />
-		<typeAlias type="mago3d.domain.DataAdjustLog" alias="dataAdjustLog" />
-		<typeAlias type="mago3d.domain.DataInfoLog" alias="dataInfoLog" />
-		<typeAlias type="mago3d.domain.DataAttribute" alias="dataAttribute" />
-		<typeAlias type="mago3d.domain.DataAttributeFileInfo" alias="dataAttributeFileInfo" />
-		<typeAlias type="mago3d.domain.DataObjectAttribute" alias="dataObjectAttribute" />
-		<typeAlias type="mago3d.domain.DataObjectAttributeFileInfo" alias="dataObjectAttributeFileInfo" />
-		<typeAlias type="mago3d.domain.GeoPolicy" alias="geoPolicy" />
-    	<typeAlias type="mago3d.domain.Issue" alias="issue" />
-    	<typeAlias type="mago3d.domain.IssueDetail" alias="issueDetail" />
-    	<typeAlias type="mago3d.domain.Layer" alias="layer" />
-    	<typeAlias type="mago3d.domain.LayerGroup" alias="layerGroup" />
-    	<typeAlias type="mago3d.domain.LayerFileInfo" alias="layerFileInfo" />
-    	<typeAlias type="mago3d.domain.Menu" alias="menu" />
-    	<typeAlias type="mago3d.domain.Policy" alias="policy" />
-    	<typeAlias type="mago3d.domain.Role" alias="role" />
+    	<typeAlias type="gaia3d.domain.AccessLog" alias="accessLog" />
+    	<typeAlias type="gaia3d.domain.ConverterJob" alias="converterJob" />
+    	<typeAlias type="gaia3d.domain.ConverterJobFile" alias="converterJobFile" />
+		<typeAlias type="gaia3d.domain.DataGroup" alias="dataGroup" />
+		<typeAlias type="gaia3d.domain.DataInfo" alias="dataInfo" />
+		<typeAlias type="gaia3d.domain.DataInfoSimple" alias="dataInfoSimple" />
+		<typeAlias type="gaia3d.domain.DataAdjustLog" alias="dataAdjustLog" />
+		<typeAlias type="gaia3d.domain.DataInfoLog" alias="dataInfoLog" />
+		<typeAlias type="gaia3d.domain.DataAttribute" alias="dataAttribute" />
+		<typeAlias type="gaia3d.domain.DataAttributeFileInfo" alias="dataAttributeFileInfo" />
+		<typeAlias type="gaia3d.domain.DataObjectAttribute" alias="dataObjectAttribute" />
+		<typeAlias type="gaia3d.domain.DataObjectAttributeFileInfo" alias="dataObjectAttributeFileInfo" />
+		<typeAlias type="gaia3d.domain.GeoPolicy" alias="geoPolicy" />
+    	<typeAlias type="gaia3d.domain.Issue" alias="issue" />
+    	<typeAlias type="gaia3d.domain.IssueDetail" alias="issueDetail" />
+    	<typeAlias type="gaia3d.domain.Layer" alias="layer" />
+    	<typeAlias type="gaia3d.domain.LayerGroup" alias="layerGroup" />
+    	<typeAlias type="gaia3d.domain.LayerFileInfo" alias="layerFileInfo" />
+    	<typeAlias type="gaia3d.domain.Menu" alias="menu" />
+    	<typeAlias type="gaia3d.domain.Policy" alias="policy" />
+    	<typeAlias type="gaia3d.domain.Role" alias="role" />
     	
-		<typeAlias type="mago3d.domain.UploadData" alias="uploadData" />
-		<typeAlias type="mago3d.domain.UploadDataFile" alias="uploadDataFile" />
-    	<typeAlias type="mago3d.domain.UserGroup" alias="userGroup" />
-    	<typeAlias type="mago3d.domain.UserGroupMenu" alias="userGroupMenu" />
-    	<typeAlias type="mago3d.domain.UserGroupRole" alias="userGroupRole" />
-		<typeAlias type="mago3d.domain.UserInfo" alias="userInfo" />
-		<typeAlias type="mago3d.domain.UserPolicy" alias="userPolicy"/>
-    	<typeAlias type="mago3d.domain.UserSession" alias="userSession" />
+		<typeAlias type="gaia3d.domain.UploadData" alias="uploadData" />
+		<typeAlias type="gaia3d.domain.UploadDataFile" alias="uploadDataFile" />
+    	<typeAlias type="gaia3d.domain.UserGroup" alias="userGroup" />
+    	<typeAlias type="gaia3d.domain.UserGroupMenu" alias="userGroupMenu" />
+    	<typeAlias type="gaia3d.domain.UserGroupRole" alias="userGroupRole" />
+		<typeAlias type="gaia3d.domain.UserInfo" alias="userInfo" />
+		<typeAlias type="gaia3d.domain.UserPolicy" alias="userPolicy"/>
+    	<typeAlias type="gaia3d.domain.UserSession" alias="userSession" />
     	
- 		<typeAlias type="mago3d.domain.District" alias="district"/>
- 		<typeAlias type="mago3d.domain.SkSdo" alias="skSdo"/>
- 		<typeAlias type="mago3d.domain.SkSgg" alias="skSgg"/>
- 		<typeAlias type="mago3d.domain.SkEmd" alias="skEmd"/>
+ 		<typeAlias type="gaia3d.domain.District" alias="district"/>
+ 		<typeAlias type="gaia3d.domain.SkSdo" alias="skSdo"/>
+ 		<typeAlias type="gaia3d.domain.SkSgg" alias="skSgg"/>
+ 		<typeAlias type="gaia3d.domain.SkEmd" alias="skEmd"/>
  		
- 		<typeAlias type="mago3d.domain.CivilVoice" alias="civilVoice"/>
- 		<typeAlias type="mago3d.domain.CivilVoiceComment" alias="civilVoiceComment"/>
+ 		<typeAlias type="gaia3d.domain.CivilVoice" alias="civilVoice"/>
+ 		<typeAlias type="gaia3d.domain.CivilVoiceComment" alias="civilVoiceComment"/>
  		
- 		<typeAlias type="mago3d.domain.AttributeRepository" alias="attributeRepository"/>
+ 		<typeAlias type="gaia3d.domain.AttributeRepository" alias="attributeRepository"/>
     </typeAliases>
 
 </configuration>

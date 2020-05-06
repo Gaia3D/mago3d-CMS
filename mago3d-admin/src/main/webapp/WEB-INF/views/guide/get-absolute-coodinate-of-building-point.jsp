@@ -86,7 +86,7 @@
 		var inputPoint_y = $('#api33-p4').val();
 		var inputPoint_z = $('#api33-p5').val();
 
-		var result = getAbsoluteCoodinateOfBuildingPointAPI(MAGO3D_INSTANCE2, projectId, dataKey, new Mago3D.Point3D(parseFloat(inputPoint_x), parseFloat(inputPoint_y), parseFloat(inputPoint_z)), new Mago3D.Point3D());
+		var result = getAbsoluteCoodinateOfBuildingPointAPI(MAGO3D_INSTANCE2, projectId, dataKey, new gaia3d.Point3D(parseFloat(inputPoint_x), parseFloat(inputPoint_y), parseFloat(inputPoint_z)), new gaia3d.Point3D());
 		var table = document.getElementById("api33-result");
 		
 		table.innerHTML = '';

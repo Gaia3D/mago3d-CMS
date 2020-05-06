@@ -150,7 +150,7 @@
 <script type="text/javascript" src="/externlib/decodeTextAlternative/encoding.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/externlib/moment-2.22.2/moment-with-locales.min.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/externlib/tuidatepicker-4.0.3/tui-date-picker.min.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/js/mago3d.js?cacheVersion=${contentCacheVersion}"></script>
+<script type="text/javascript" src="/js/gaia3d.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/js/mago3d_lx.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/js/${lang}/common.js?cacheVersion=${contentCacheVersion}"></script>
 <script type="text/javascript" src="/js/${lang}/message.js?cacheVersion=${contentCacheVersion}"></script>
@@ -207,7 +207,7 @@
 		 * @param {object} options Cesium viewer parameter. option.
 		 * @param {Cesium.Viewer} legacyViewer 타 시스템과의 연동의 경우 view 객체가 생성되어서 넘어 오는 경우가 있음. option.
 		*/
-		MAGO3D_INSTANCE = new Mago3D.Mago3d('magoContainer', geoPolicyJson, {loadend : magoLoadEnd}, cesiumViewerOption);
+		MAGO3D_INSTANCE = new gaia3d.Mago3d('magoContainer', geoPolicyJson, {loadend : magoLoadEnd}, cesiumViewerOption);
 
 	}
 
@@ -223,12 +223,12 @@
 		viewer.scene.globe.depthTestAgainstTerrain = true;
 		//viewer.scene.screenSpaceCameraController.minimumZoomDistance = 10;
 
-		magoManager.on(Mago3D.MagoManager.EVENT_TYPE.MOUSEMOVE, function(result) {
+		magoManager.on(gaia3d.MagoManager.EVENT_TYPE.MOUSEMOVE, function(result) {
 			//console.info(result);
 		});
 
 		// mago3d logo 추가
-		Mago3D.tempCredit(viewer);
+		gaia3d.tempCredit(viewer);
 
 		//우측 상단 지도 컨트롤러
 		MapControll(viewer);
@@ -301,7 +301,7 @@
 	function hereIamMarker(longitude, latitude, altitude) {
 		var magoManager = MAGO3D_INSTANCE.getMagoManager();
 		if(!magoManager.speechBubble) {
-			magoManager.speechBubble = new Mago3D.SpeechBubble();
+			magoManager.speechBubble = new gaia3d.SpeechBubble();
 		}
 		var sb = magoManager.speechBubble;
 		removeHearIam();
@@ -318,7 +318,7 @@
 		var img = sb.getPng([80,32],'#94D8F6', commentTextOption);
 
 		var options = {
-			positionWC    : Mago3D.ManagerUtils.geographicCoordToWorldPoint(longitude, latitude, parseFloat(altitude)+5),
+			positionWC    : gaia3d.ManagerUtils.geographicCoordToWorldPoint(longitude, latitude, parseFloat(altitude)+5),
 			imageFilePath : img
 		};
 
@@ -334,7 +334,7 @@
 			zMax : 30,
 			zMin : 0
 		};
-		var effect = new Mago3D.Effect(effectOption);
+		var effect = new gaia3d.Effect(effectOption);
 		magoManager.effectsManager.addEffect(omId, effect);
 
 		hereIamTimeOut = setTimeout(function() {
@@ -631,7 +631,7 @@
 								this.addIssue(issue[i]);
 							}
 						} else {
-							var point = Mago3D.ManagerUtils.geographicCoordToWorldPoint(issue.longitude,issue.latitude,issue.altitude);
+							var point = gaia3d.ManagerUtils.geographicCoordToWorldPoint(issue.longitude,issue.latitude,issue.altitude);
 							option.positionWC = point;
 
 							var objMarker = magoManager.objMarkerManager.newObjectMarker(option, magoManager);
