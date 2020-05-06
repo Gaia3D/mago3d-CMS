@@ -1,0 +1,5 @@
+docker image 다운로드
+    - docker image pull gaia3d/mago3d
+docker container 실행(geoserver host 경로는 각자 경로에 맞게 수정)
+    - docker container run --privileged  -d -p 15432:5432 -p 18080:8080 -v "D:\data\geoserver":"/data/geoserver_data" --name "mago3d" gaia3d/mago3d /sbin/init
+
