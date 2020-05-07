@@ -1,7 +1,6 @@
 package gaia3d.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -23,13 +22,13 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.interceptor.CSRFHandlerInterceptor;
 import gaia3d.interceptor.ConfigInterceptor;
 import gaia3d.interceptor.LogInterceptor;
 import gaia3d.interceptor.SecurityInterceptor;
+import lombok.extern.slf4j.Slf4j;
+//import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 @Slf4j
 @EnableWebMvc
@@ -77,17 +76,10 @@ public class ServletConfig implements WebMvcConfigurer {
 				.excludePathPatterns("/f4d/**", "/sign/**", "/cache/reload", "/guide/**", "/sample/**", "/css/**", "/externlib/**", "favicon*", "/images/**", "/js/**");
     }
 	
-	@Bean
-	@ConditionalOnMissingBean(InternalResourceViewResolver.class)
-	public InternalResourceViewResolver viewResolver() {
-		log.info(" @@@ ServletConfig viewResolver @@@");
-		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setPrefix("/WEB-INF/views");
-		viewResolver.setSuffix(".jsp");
-		viewResolver.setOrder(3);
-		
-		return viewResolver;
-	}
+//	@Bean
+//	public LayoutDialect layoutDialect() {
+//		return new LayoutDialect();
+//	}
 	
 	@Bean
 	public LocaleResolver localeResolver() {
@@ -137,7 +129,7 @@ public class ServletConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/images/**").addResourceLocations("/images/");
 		registry.addResourceHandler("/js/**").addResourceLocations("/js/");
 		
-//		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+//		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/", "classpath:/other-resources/");
 	}
 	
 	@Bean

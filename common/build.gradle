@@ -7,6 +7,7 @@ plugins {
 group = 'com.gaia3d'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 bootJar {
     enabled = false
@@ -27,20 +28,14 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.1'
-	
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.2'
 	implementation 'commons-codec:commons-codec:1.11'
 	
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		//exclude group: "junit", module: "junit"
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-	
-	testImplementation 'org.junit.jupiter:junit-jupiter-api'
-    testCompile 'org.junit.jupiter:junit-jupiter-params'
-    testRuntime 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 test {

@@ -8,6 +8,7 @@ plugins {
 group = 'com.gaia3d'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 // gradle build -Pprofile=product (develop, test, local)
 final String DEFAULT_PROFILE = 'local'
@@ -74,9 +75,8 @@ dependencies {
 	implementation project(':common')
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.1'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.2'
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	
 	implementation 'org.springframework.security:spring-security-core:5.2.1.RELEASE'
@@ -84,21 +84,24 @@ dependencies {
 	
 	implementation 'org.apache.commons:commons-compress:1.18'
 	
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	//implementation('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.4.1') {
+		//exclude group: 'org.codehaus.groovy', module: 'groovy'
+	//}
+	// thymeleaf
+	//compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
+	
+	
 	runtimeOnly 'org.postgresql:postgresql'
 	
 	providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude module: 'junit'
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 	
-	testImplementation 'org.junit.jupiter:junit-jupiter-api'
-    testCompile 'org.junit.jupiter:junit-jupiter-params'
-    testRuntime 'org.junit.jupiter:junit-jupiter-engine'
-    
-    compileOnly 'org.projectlombok:lombok:1.18.12'
+	compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 	testCompileOnly 'org.projectlombok:lombok:1.18.12'
