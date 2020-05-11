@@ -24,14 +24,11 @@ configurations {
 }
 
 repositories {
-	maven {
-        url "http://download.osgeo.org/webdav/geotools/"
-    }
-    maven {
-        url "https://repo.boundlessgeo.com/main"
-    }
     maven {
         url "https://repo.osgeo.org/repository/release/"
+    }
+    maven {
+        url "https://repo.osgeo.org/repository/Geoserver-releases/"
     }
 	mavenCentral()
 }
