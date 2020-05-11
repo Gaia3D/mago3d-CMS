@@ -1,5 +1,7 @@
 package gaia3d.config;
 
+import gaia3d.interceptor.*;
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -23,10 +25,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
-import gaia3d.interceptor.CSRFHandlerInterceptor;
-import gaia3d.interceptor.ConfigInterceptor;
-import gaia3d.interceptor.LogInterceptor;
-import gaia3d.interceptor.SecurityInterceptor;
 import lombok.extern.slf4j.Slf4j;
 //import nz.net.ultraq.thymeleaf.LayoutDialect;
 
@@ -41,7 +39,9 @@ public class ServletConfig implements WebMvcConfigurer {
 	
 	@Autowired
 	private PropertiesConfig propertiesConfig;
-	
+
+	@Autowired
+	private LocaleInterceptor localeInterceptor;
 	@Autowired
 	private CSRFHandlerInterceptor cSRFHandlerInterceptor;
 	@Autowired
@@ -59,7 +59,9 @@ public class ServletConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		log.info(" @@@ ServletConfig addInterceptors @@@@ ");
-		
+		registry.addInterceptor(localeInterceptor)
+				.addPathPatterns("/**")
+				.excludePathPatterns("/f4d/**", "/guide/**", "/sample/**", "/css/**", "/externlib/**", "favicon*", "/images/**", "/js/**");
 		registry.addInterceptor(securityInterceptor)
 				.addPathPatterns("/**")
 				.excludePathPatterns("/f4d/**", "/sign/**", "/cache/reload", "/guide/**", "/sample/**", "/css/**", "/externlib/**", "favicon*", "/images/**", "/js/**");
@@ -76,10 +78,10 @@ public class ServletConfig implements WebMvcConfigurer {
 				.excludePathPatterns("/f4d/**", "/sign/**", "/cache/reload", "/guide/**", "/sample/**", "/css/**", "/externlib/**", "favicon*", "/images/**", "/js/**");
     }
 	
-//	@Bean
-//	public LayoutDialect layoutDialect() {
-//		return new LayoutDialect();
-//	}
+	@Bean
+	public LayoutDialect layoutDialect() {
+		return new LayoutDialect();
+	}
 	
 	@Bean
 	public LocaleResolver localeResolver() {
@@ -129,7 +131,7 @@ public class ServletConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/images/**").addResourceLocations("/images/");
 		registry.addResourceHandler("/js/**").addResourceLocations("/js/");
 		
-//		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/", "classpath:/other-resources/");
+//		registry.addResourceHandler("/static/**").addResourceLocations("classpath:static/");
 	}
 	
 	@Bean

@@ -80,21 +80,18 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	
 	implementation 'org.springframework.security:spring-security-core:5.2.1.RELEASE'
-	implementation 'org.apache.taglibs:taglibs-standard-jstlel:1.2.5'
+	//implementation 'org.apache.taglibs:taglibs-standard-jstlel:1.2.5'
 	
 	implementation 'org.apache.commons:commons-compress:1.18'
 	
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	//implementation('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.4.1') {
-		//exclude group: 'org.codehaus.groovy', module: 'groovy'
-	//}
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.4.1'
 	// thymeleaf
 	//compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
-	
-	
+
 	runtimeOnly 'org.postgresql:postgresql'
 	
-	providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	//providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
