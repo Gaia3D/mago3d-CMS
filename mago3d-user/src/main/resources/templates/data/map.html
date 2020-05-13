@@ -101,9 +101,11 @@
 <div th:replace="~{/data/data-dialog :: #dataDialogWrap}"></div>
 <div th:replace="~{/data/data-group-dialog :: #dataGroupDialogWrap}"></div>
 <div th:replace="~{/data/map-data-template :: #templateDataList}"></div>
+<div th:replace="~{/data/map-data-group-template :: #templateDataGroupList}"></div>
 <div th:replace="~{/data/data-attribute-dialog :: #dataAttributeDialog}"></div>
 <div th:replace="~{/data/data-object-attribute-dialog :: #dataObjectAttributeDialog}"></div>
 <div th:replace="~{/data/sample-data-attribute-template :: #sampleDataAttributeDialogWrap}"></div>
+<div th:replace="~{/issue/issue-dialog :: #issueForm}"></div>
 <div th:replace="~{/simulation/simul-solar-dialog :: #simulSolarDialog}"></div>
 
 <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
@@ -203,7 +205,7 @@
 		//공간분석 기능 수행
 		SpatialAnalysis(magoInstance);
 		// 행정 구역 이동
-        DistrictControll(magoInstance);
+        // DistrictControll(magoInstance);
 
         dataGroupList();
         mapDataGroupList(1, null);
