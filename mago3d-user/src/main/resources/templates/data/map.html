@@ -98,15 +98,13 @@
 	<!-- E: MAP -->
 </div>
 <!-- E: WRAP -->
-<%@ include file="/WEB-INF/views/data/data-dialog.html" %>
-<%@ include file="/WEB-INF/views/data/data-group-dialog.html" %>
-<%@ include file="/WEB-INF/views/data/map-data-template.html" %>
-<%@ include file="/WEB-INF/views/data/map-data-group-template.html" %>
-<%@ include file="/WEB-INF/views/data/data-attribute-dialog.html" %>
-<%@ include file="/WEB-INF/views/data/data-object-attribute-dialog.html" %>
-<%@ include file="/WEB-INF/views/data/sample-data-attribute-template.html" %>
-<%@ include file="/WEB-INF/views/issue/issue-dialog.jsp" %>
-<%@ include file="/WEB-INF/views/simulation/simul-solar-dialog.jsp" %>
+<div th:replace="~{/data/data-dialog :: #dataDialogWrap}"></div>
+<div th:replace="~{/data/data-group-dialog :: #dataGroupDialogWrap}"></div>
+<div th:replace="~{/data/map-data-template :: #templateDataList}"></div>
+<div th:replace="~{/data/data-attribute-dialog :: #dataAttributeDialog}"></div>
+<div th:replace="~{/data/data-object-attribute-dialog :: #dataObjectAttributeDialog}"></div>
+<div th:replace="~{/data/sample-data-attribute-template :: #sampleDataAttributeDialogWrap}"></div>
+<div th:replace="~{/simulation/simul-solar-dialog :: #simulSolarDialog}"></div>
 
 <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
