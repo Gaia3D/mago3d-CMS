@@ -1,4 +1,4 @@
-
+-- constraint 는 부모 테이블에 생성 되지 않고 자식 테이블에 만들어야 함. index 를 잘 타는지는 테스트 필요.
 alter table only access_log_2019 add constraint access_log_2019_pk primary key (access_log_id);
 alter table only access_log_2020 add constraint access_log_2020_pk primary key (access_log_id);
 alter table only access_log_2021 add constraint access_log_2021_pk primary key (access_log_id);
@@ -22,29 +22,8 @@ alter table only access_log_2038 add constraint access_log_2038_pk primary key (
 alter table only access_log_2039 add constraint access_log_2039_pk primary key (access_log_id);
 alter table only access_log_2040 add constraint access_log_2040_pk primary key (access_log_id);
 
-create index access_log_2019_idx on access_log_2019 (insert_date);
-create index access_log_2020_idx on access_log_2020 (insert_date);
-create index access_log_2021_idx on access_log_2021 (insert_date);
-create index access_log_2022_idx on access_log_2022 (insert_date);
-create index access_log_2023_idx on access_log_2023 (insert_date);
-create index access_log_2024_idx on access_log_2024 (insert_date);
-create index access_log_2025_idx on access_log_2025 (insert_date);
-create index access_log_2026_idx on access_log_2026 (insert_date);
-create index access_log_2027_idx on access_log_2027 (insert_date);
-create index access_log_2028_idx on access_log_2028 (insert_date);
-create index access_log_2029_idx on access_log_2029 (insert_date);
-create index access_log_2030_idx on access_log_2030 (insert_date);
-create index access_log_2031_idx on access_log_2031 (insert_date);
-create index access_log_2032_idx on access_log_2032 (insert_date);
-create index access_log_2033_idx on access_log_2033 (insert_date);
-create index access_log_2034_idx on access_log_2034 (insert_date);
-create index access_log_2035_idx on access_log_2035 (insert_date);
-create index access_log_2036_idx on access_log_2036 (insert_date);
-create index access_log_2037_idx on access_log_2037 (insert_date);
-create index access_log_2038_idx on access_log_2038 (insert_date);
-create index access_log_2039_idx on access_log_2039 (insert_date);
-create index access_log_2040_idx on access_log_2040 (insert_date);
-
+-- index 의 경우 부모 테이블에만 만들면 됨
+create index access_log_idx on access_log (insert_date);
 commit;
 
 -- create unique index access_log_2019_idx on access_log_2019 (insert_date);
