@@ -1,5 +1,4 @@
 -- constraint 는 부모 테이블에 생성 되지 않고 자식 테이블에 만들어야 함. index 를 잘 타는지는 테스트 필요.
-alter table only access_log_2019 add constraint access_log_2019_pk primary key (access_log_id);
 alter table only access_log_2020 add constraint access_log_2020_pk primary key (access_log_id);
 alter table only access_log_2021 add constraint access_log_2021_pk primary key (access_log_id);
 alter table only access_log_2022 add constraint access_log_2022_pk primary key (access_log_id);
@@ -25,5 +24,3 @@ alter table only access_log_2040 add constraint access_log_2040_pk primary key (
 -- index 의 경우 부모 테이블에만 만들면 됨
 create index access_log_idx on access_log (insert_date);
 commit;
-
--- create unique index access_log_2019_idx on access_log_2019 (insert_date);
