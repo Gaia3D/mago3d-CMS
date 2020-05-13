@@ -24,19 +24,19 @@ public class LocaleInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    	String accessibility = "en-US";
-		String lang = (String)request.getSession().getAttribute(Key.LANG.name());
+    	String lang = (String)request.getSession().getAttribute(Key.LANG.name());
 		if(lang == null || "".equals(lang)) {
 			Locale myLocale = request.getLocale();
 			lang = myLocale.getLanguage();
 		}
 
-		if("en".equals(lang)) {
+		String accessibility = "ko-KR";
+		if("ko".equals(lang)) {
+			accessibility = "ko-KR";
+		} else if("en".equals(lang)) {
 			accessibility = "en-US";
 		} else if("ja".equals(lang)) {
 			accessibility = "ja-JP";
-		} else if("ko".equals(lang)) {
-			accessibility = "ko-KR";
 		} else {
 			// TODO Because it does not support multilingual besides English and Japanese Based on English
 			lang = "en";

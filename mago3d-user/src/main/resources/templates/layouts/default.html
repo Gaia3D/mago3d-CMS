@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title layout:title-pattern="$LAYOUT_TITLE : $CONTENT_TITLE">Eblo</title>
+    <!-- 공통 css, js, meta tag -->
+    <th:block th:replace="fragments/commonHead"></th:block>
+</head>
+<body>
+    <h1>기본 레이아웃</h1>
+    <!-- page content body 구성 -->
+    <th:block layout:fragment="content"></th:block>
+    <!-- 공통 footer -->
+    <footer th:replace="fragments/commonFooter :: commonFooter"></footer>
+    <!-- 공통 javascript -->
+    <th:block th:replace="fragments/commonScript"></th:block>
+    <!-- page content javascript -->
+    <th:block layout:fragment="pageCustomScript"></th:block>
+</body>
+</html>
