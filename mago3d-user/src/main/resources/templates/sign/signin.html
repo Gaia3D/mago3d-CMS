@@ -31,27 +31,23 @@
 		<div class="container">
 			<div class="row">
 				<h1 style="margin-bottom: 10px; font-size:38px; font-family:Lousianne; color:#573592;">mago3D</h1>
-				<c:if test="${signinForm.errorCode ne null && signinForm.errorCode ne ''}">
-					<h6 style="padding-left: 10px; color: red;">*
-						<spring:message code="${signinForm.errorCode}" />
-					</h6>
-				</c:if>
+				<h6 th:if="${signinForm.errorCode}" style="padding-left: 10px; color: red;" th:text="#{${signinForm.errorCode}}"></h6>
 			</div>
 			<div class="panel row">
 				<h2 class="sign-title"><span class="text-sub">사용자</span><br /><span class="text-main">SIGN IN</span></h2>
 				<div class="sign-inputs">
 					<div class="sign-desc" style="font-size: 16px; margin-top: 10px; margin-right: 25px;">Digital Twin Platform</div>
 
-					<form:form id="signinForm" th:object="${signinForm}" method="post" action="/sign/process-signin">
+					<form id="signinForm" th:object="${signinForm}" method="post" action="/sign/process-signin">
 						<label for="userId"><span class="icon-glyph glyph-users"></span></label>
 						<input type="text" id="userId" name="userId" maxlength="32" title="아이디" placeholder="아이디" required="required" autofocus="autofocus" />
 						<label for="password"><span class="icon-glyph glyph-lock"></span></label>
 						<input type="password" id="password" name="password" maxlength="32" title="비밀번호" placeholder="비밀번호" required="required" />
 						<input type="submit" value="Sign In" class="sign-submit" />
-					</form:form>
-					<div class="sign-links" style="font-size: 16px;">
-                        Don't have an account? &nbsp;<a th:href="@{#" onclick="alert('관리자에게 문의하여 주십시오.'); return false;">Sign up</a>
-                    </div>
+					</form>
+<!--					<div class="sign-links" style="font-size: 16px;">-->
+<!--                        Don't have an account? &nbsp;<a th:href="@{#" onclick="alert('관리자에게 문의하여 주십시오.'); return false;">Sign up</a>-->
+<!--                    </div>-->
 				</div>
 			</div>
 		</div>
@@ -60,8 +56,5 @@
 		</div>
 	</div>
 </div>
-
-<script type="text/javascript">
-</script>
 </body>
 </html>
