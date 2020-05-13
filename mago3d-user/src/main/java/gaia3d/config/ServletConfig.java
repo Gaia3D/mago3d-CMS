@@ -126,10 +126,10 @@ public class ServletConfig implements WebMvcConfigurer {
 		// F4D converter file 경로
 		registry.addResourceHandler("/f4d/**").addResourceLocations("file:" + propertiesConfig.getDataServiceDir());
 		registry.addResourceHandler("/f4d/sample/**").addResourceLocations("file:" + propertiesConfig.getGuideDataServiceDir());
-		registry.addResourceHandler("/css/**").addResourceLocations("/css/");
-		registry.addResourceHandler("/externlib/**").addResourceLocations("/externlib/");
-		registry.addResourceHandler("/images/**").addResourceLocations("/images/");
-		registry.addResourceHandler("/js/**").addResourceLocations("/js/");
+		registry.addResourceHandler("/css/**").addResourceLocations("classpath:static/css/");
+		registry.addResourceHandler("/externlib/**").addResourceLocations("classpath:static/externlib/");
+		registry.addResourceHandler("/images/**").addResourceLocations("classpath:static/images/");
+		registry.addResourceHandler("/js/**").addResourceLocations("classpath:static/js/");
 		
 //		registry.addResourceHandler("/static/**").addResourceLocations("classpath:static/");
 	}
