@@ -39,7 +39,7 @@
 		<!-- E: NAVWRAP -->
 		<div id="contentsWrap" class="contentsWrap" style="display: none;">
 			<div id="searchContent" class="contents fullHeight" style="display:none;">
-				<%@ include file="/WEB-INF/views/search/district.jsp" %>
+				<div th:replace="~{/search/district :: #districtWrap}"></div>
 			</div>
 			<div id="dataContent" class="contents-margin-default fullHeight">
 				<div class="tabs">
@@ -215,7 +215,7 @@
         // 환경 설정.
         UserPolicy(magoInstance);
         // 시민참여
-        CivilVoice(magoInstance);
+        // CivilVoice(magoInstance);
         // 기본 레이어 랜더링
         setTimeout(function(){
         	NDTP.map = new mapInit(magoInstance, NDTP.baseLayers, geoPolicyJson);
