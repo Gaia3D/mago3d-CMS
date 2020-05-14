@@ -1,7 +1,9 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
 <div id="userPolicyContent" class="contents yScroll fullHeight" style="display:none;">
 <div class="userPolicyContentWrap">
-<form:form id="userPolicy" modelAttribute="userPolicy" method="post" onsubmit="return false;">
-<form:hidden path="userPolicyId"/>
+<form id="userPolicy" th:object="${userPolicy}" method="post" onsubmit="return false;" th:action="@{#}">
+<input type="hidden" th:id="userPolicyId" th:name="userPolicyId"/>
 <div class="userPolicyContent">
 	<div class="button-group-align marB10">
 		<h3 class="h3-heading">시작 위치</h3>
@@ -10,19 +12,19 @@
 	<div class="userPolicyContentDetail">
 		<div class="form-group form-group-policy">
 			<label for="initLongitude">경도</label>
-			<form:input type="text" id="initLongitude" path="initLongitude" size="15" />M
+			<input type="text" id="initLongitude" name="initLongitude" size="15" th:value="${userPolicy.initLongitude}"/>M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="initLatitude">위도</label>
-			<form:input type="text" id="initLatitude" path="initLatitude" size="15" />M
+			<input type="text" id="initLatitude" name="initLatitude" size="15" th:value="${userPolicy.initLatitude}"/>M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="initAltitude">높이</label>
-			<form:input type="text" id="initAltitude" path="initAltitude" size="15" />M
+			<input type="text" id="initAltitude" name="initAltitude" size="15" th:value="${userPolicy.initAltitude}"/>M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="initDuration">이동 속도</label>
-			<form:input type="text" id="initDuration" path="initDuration" size="15" />초
+			<input type="text" id="initDuration" name="initDuration" size="15" th:value="${userPolicy.initDuration}"/>초
 		</div>
 	</div>
 </div>
@@ -31,7 +33,7 @@
 	<div class="userPolicyContentDetail">
 		<div class="form-group form-group-policy">
 			<label for="initfieldOfView">각도</label>
-			<form:input type="text" id="initfieldOfView" path="initDefaultFov" size="14" />M
+			<input type="text" id="initfieldOfView" name="initDefaultFov" size="14" th:value="${userPolicy.initDefaultFov}"/>M
 		</div>
 	</div>
 </div>
@@ -43,27 +45,27 @@
 	<div class="userPolicyContentDetail">
 		<div class="form-group form-group-policy">
 			<label for="geoLod0">LOD0</label>
-			<form:input type="text" id="geoLod0" path="lod0" size="15" />M
+			<input type="text" id="geoLod0" name="lod0" size="15" th:value="${userPolicy.lod0}"/>M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod1">LOD1</label>
-			<form:input type="text" id="geoLod1" path="lod1" size="15" />M
+			<input type="text" id="geoLod1" name="lod1" size="15" th:value="${userPolicy.lod1}"/>M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod2">LOD2</label>
-			<form:input type="text" id="geoLod2" path="lod2" size="15" />M
+			<input type="text" id="geoLod2" name="lod2" size="15" th:value="${userPolicy.lod2}"/>M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod3">LOD3</label>
-			<form:input type="text" id="geoLod3" path="lod3" size="15" />M
+			<input type="text" id="geoLod3" name="lod3" size="15" th:value="${userPolicy.lod3}"/>M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod4">LOD4</label>
-			<form:input type="text" id="geoLod4" path="lod4" size="15" />M
+			<input type="text" id="geoLod4" name="lod4" size="15" th:value="${userPolicy.lod4}"/>M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod5">LOD5</label>
-			<form:input type="text" id="geoLod5" path="lod5" size="15" />M
+			<input type="text" id="geoLod5" name="lod5" size="15" th:value="${userPolicy.lod5}"/>M
 		</div>
 	</div>
 </div>
@@ -75,13 +77,12 @@
 	<div class="userPolicyContentDetail">
 		<div class="form-group form-group-policy">
 			<label for="ssaoRadius">그림자 반경</label>
-			<form:input type="text" id="ssaoRadius" path="ssaoRadius" size="15" />M
+			<input type="text" id="ssaoRadius" name="ssaoRadius" size="15" th:value="${userPolicy.ssaoRadius}"/>M
 		</div>
 	</div>
 </div>
-<button class="focusA btn-full" title="저장" onclick="update();">저장</button>
-</form:form>
-</div>
+<button class="focusA btn-full" title="저장" th:onclick="'update();'">저장</button>
+</form>
 </div>
 <script type="text/javascript" src="/externlib/jquery-3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
@@ -120,3 +121,5 @@ function update() {
 	}
 }
 </script>
+</div>
+</html>
