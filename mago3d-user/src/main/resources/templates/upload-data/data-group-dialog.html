@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layout">
+<body>
+    <div id="dataGroupDialog" class="dialog">
+        <table class="list-table scope-col">
+            <col class="col-name">
+            <col class="col-toggle">
+            <col class="col-id">
+            <col class="col-function">
+            <col class="col-date">
+            <col class="col-toggle">
+            <thead>
+                <tr>
+                    <th scope="col" class="col-name">데이터 그룹명</th>
+                    <th scope="col" class="col-toggle">사용 여부</th>
+                    <th scope="col" class="col-toggle">공유 유형</th>
+                    <th scope="col" class="col-toggle">설명</th>
+                    <th scope="col" class="col-date">등록일</th>
+                    <th scope="col" class="col-date">선택</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${!dataGroupList.empty}">
+                <td colspan="6" class="col-none">데이터 그룹이 존재하지 않습니다.</td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

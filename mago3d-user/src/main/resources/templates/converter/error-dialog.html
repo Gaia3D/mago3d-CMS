@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+</head>
+<body>
+	<div class="errorDialog" title="에러 정보">
+        <table class="inner-table scope-row">
+            <col class="col-label" />
+            <col class="col-data" />
+            <tr>
+                <th class="col-label" scope="row">에러 메시지</th>
+                <td id="dialog_error_code" class="col-data"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
