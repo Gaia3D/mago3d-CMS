@@ -1,6 +1,8 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
 <div id="dataGroupInfoContent" class="contents contents-margin-none fullHeight" style="display:none;">
 	<h3>데이터 공유 유형별 현황</h3>
-	<form id="searchDataGroupForm" modelAttribute="searchDataGroupForm" method="post" onsubmit="return false;">
+	<form id="searchDataGroupForm" th:object="${searchDataGroupForm}" method="post" onsubmit="return false;">
 	<div class="dataGroupSummary table-data-group-summary">
 		<table class="table-word-break" summary="데이터 공유 유형별 현황 테이블">
 		<caption class="hiddenTag">데이터 공유 유형별 현황</caption>
@@ -18,10 +20,10 @@
 					<th scope="col" class="col-number">그룹</th>
 		        </tr>
 		    	<tr>
-		        	<td class="col-number"><fmt:formatNumber value="${commonDataCount}" type="number" /></td>
-		        	<td class="col-number"><fmt:formatNumber value="${publicDataCount}" type="number" /></td>
-		        	<td class="col-number"><fmt:formatNumber value="${privateDataCount}" type="number" /></td>
-		        	<td class="col-number"><fmt:formatNumber value="${groupDataCount}" type="number" /></td>
+		        	<td class="col-number" th:text="${commonDataCount}"></td>
+		        	<td class="col-number" th:text="${publicDataCount}"></td>
+		        	<td class="col-number" th:text="${privateDataCount}"></td>
+		        	<td class="col-number" th:text="${groupDataCount}"></td>
 		        </tr>
 		    </tbody>
 		</table>
@@ -43,3 +45,4 @@
 	</dl>
 	<div id="dataGroupListArea" style="height:calc(100% - 335px)"></div>
 </div>
+</html>
