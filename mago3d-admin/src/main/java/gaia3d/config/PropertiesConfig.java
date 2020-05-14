@@ -68,5 +68,7 @@ public class PropertiesConfig {
     
     private String guideDataServiceDir;
     
-    private String ogr2ogrEnviromentPath; 
+    private String ogr2ogrEnviromentPath;
+    private String ogr2ogrHost;
+    private String ogr2ogrPort;
 }
