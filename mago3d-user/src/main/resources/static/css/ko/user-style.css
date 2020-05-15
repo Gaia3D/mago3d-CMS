@@ -16,7 +16,7 @@ header {
 display: flex;
 /* min-width: 1420px; */
 height: 50px;
-background-color: #287be4;
+background-color: #258fff;
 }
 #wrap {
 position: relative;
@@ -33,13 +33,13 @@ h1 {
 width: 500px;
 height: 50px;
 margin: 13px;
-padding: 0 0 0 80px;
+/* padding: 0 0 0 80px; */
 font-size: 22px;
 letter-spacing: -1px;
 color: #fff;
 cursor: pointer;
 font-weight: normal;
-background: url(/images/ko/logo.png) no-repeat 0 0;
+/* background: url(/images/ko/logo.png) no-repeat 0 0; */
 }
 
 .gnb {
@@ -194,7 +194,7 @@ background-image: url(/images/ko/ico.png);
 background-repeat: no-repeat;
 }
 ul.nav li.on {
-background-color: #287be4;
+background-color: #258fff;
 }
 ul.nav li.search {
 background-position: -445px 10px;
@@ -426,10 +426,10 @@ font-weight: bold;
 .dataGroupSum li.total > label {
 color: #fff;
 border: 1px solid #1e6ed3;
-background-color: #287be4;
+background-color: #258fff;
 }
 .dataGroupSum li.total > span {
-color: #287be4;
+color: #258fff;
 }
 
 /* /// 데이터 그룹 summary /// */
@@ -570,7 +570,7 @@ display: list-item;
 float: left;
 }
 .bothSide > div:first-child > span {
-color: #287be4
+color: #258fff
 }
 .bothSide > div:last-child {
 /* text-align: right; */
@@ -695,7 +695,7 @@ color: #999;
 margin-top: 20px;
 }
 .agreeCount > span {
-color: #287be4;
+color: #258fff;
 }
 .agreeNew {
 margin: 10px 0;
@@ -727,7 +727,7 @@ color: #777;
 text-align: right;
 }
 .commentNew li p.info > span {
-color: #287be4
+color: #258fff
 }
 
 /* 목록검색 - 정연화 수정 */
@@ -933,7 +933,7 @@ display: none;
 ul.listDrop li.on > p {
 color: #fff;
 border-bottom: 3px solid #eaeaea;
-background-color: #287be4;
+background-color: #258fff;
 background-image: url(/images/ko/ico.png);
 background-repeat: no-repeat;
 background-position: 320px -688px;
@@ -1338,7 +1338,7 @@ text-align: center;
 .tab li.on {
 color: #fff;
 border: 1px solid #006bd2;
-background-color: #0073e2;
+background-color: #258fff;
 }
 .input-set {
 margin: 10px 20px 10px 10px;
@@ -1485,7 +1485,7 @@ background-color: #ffffff;
 ul.layerList li.on p.depthOne {
 font-weight: bold;
 font-size: 15px;
-background-color: #287be4;
+background-color: #258fff;
 color: white;
 }
 ul.layerList li p.depthOne > span.folder {
@@ -1544,12 +1544,12 @@ padding: 8px;
 border-radius: 3px;
 color: #fff;
 font-size: 14px;
-border: 1px solid #0073e2;
-background-color: #0073e2;
+border: 1px solid #258fff;
+background-color: #258fff;
 }
 button.textBtn:hover {
-color: #0073e2;
-border: 1px solid #0073e2;
+color: #258fff;
+border: 1px solid #258fff;
 background-color: #fff;
 
 }
@@ -1668,7 +1668,7 @@ background-position: -266px -197px;
 border-radius: 10px;
 }
 .layerDiv li > button:active {
-border: 1px solid #287be4;
+border: 1px solid #258fff;
 background-color: #ccc;
 }
 button.up:active {
@@ -1684,7 +1684,7 @@ button.rangeNext:active {
 background-position: -266px -247px;
 }
 .layerDiv li > button:hover {
-border: 1px solid #287be4;
+border: 1px solid #258fff;
 background-color: #eee;
 }
 button.up:hover {
@@ -1873,7 +1873,7 @@ ul.listDrop li > p {
 }
 ul.listDrop li.on > p {
 	background: none;
-	background-color: #287be4;
+	background-color: #258fff;
 	border: none;
     border-bottom: 3px solid #eaeaea;
 }
@@ -2054,7 +2054,7 @@ display: none;
 }
 ul.listDefault li.on > p {
 color: #fff;
-background-color: #287be4;
+background-color: #258fff;
 }
 ul.listDefault li.on > ul {
 height: calc(100% - 40px);
@@ -2288,7 +2288,7 @@ text-align:center;
 }
 
 .totalCount {
-color: #287BE4;
+color: #258fff;
 font-style: normal;
 }
 span.link {
