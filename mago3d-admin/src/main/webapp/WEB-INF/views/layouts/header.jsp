@@ -7,7 +7,7 @@
 <header class="site-header">
 	<div class="row">
 		<div class="container">
-			<h2 class="site-title u-pull-left" style="font-size:28px; font-family:Lousianne; color:#573592"><a href="/main/index">NDTP</a></h2>
+			<h2 class="site-title u-pull-left" style="font-size:28px; font-family:Lousianne; color:#573592"><a href="/main/index">mago3D</a></h2>
 			<aside class="site-aside-menu u-pull-right">
 				<ul>
 					<li>
