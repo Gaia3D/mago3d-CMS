@@ -9,7 +9,7 @@
     <meta name="referrer" content="origin">
     <meta name="viewport" content="width=device-width">
     <meta name="robots" content="index,nofollow"/>
-    <title>Layer 수정 | NDTP</title>
+    <title>Layer 수정 | mago3D</title>
     <link rel="stylesheet" href="/css/${lang}/font/font.css?cacheVersion=${contentCacheVersion}" />
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css?cacheVersion=${contentCacheVersion}" />
 	<link rel="stylesheet" href="/externlib/normalize/normalize.min.css?cacheVersion=${contentCacheVersion}" />

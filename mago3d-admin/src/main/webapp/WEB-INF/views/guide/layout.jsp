@@ -7,7 +7,7 @@
 <meta name="referrer" content="origin">
 <meta name="viewport" content="width=device-width">
 <meta name="robots" content="index,nofollow" />
-<title>mago3DJS API | NDTP</title>
+<title>mago3DJS API | mago3D</title>
 <link rel="shortcut icon" href="/images/favicon.ico?cacheVersion=${contentCacheVersion}">
 <link rel="stylesheet" href="/externlib/cesium/Widgets/widgets.css?cacheVersion=${contentCacheVersion}" />
 <link rel="stylesheet" href="/externlib/jquery-ui-1.12.1/jquery-ui.min.css?cacheVersion=${contentCacheVersion}" />
