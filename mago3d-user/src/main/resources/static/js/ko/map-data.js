@@ -148,15 +148,10 @@ function mapDataInfoList(pageNo, searchDataName, searchDataGroupId, searchDataTy
 					}
 					pageNo = msg.pagination.pageNo;
 					
-					$("#dataInfoListArea").html("");
-					var source = $("#templateDataList").html();
 	                //핸들바 템플릿 컴파일
-	                var template = Handlebars.compile(source);
-	                
+	                var template = Handlebars.compile($("#dataListSource").html());
 	               	//핸들바 템플릿에 데이터를 바인딩해서 HTML 생성
-	                var dataInfoListHtml = template(msg);
-	                $("#dataInfoListArea").html("");
-	                $("#dataInfoListArea").append(dataInfoListHtml);
+	                $("#dataListDHTML").html("").append(template(msg));
 				} else {
 					alert(JS_MESSAGE[msg.errorCode]);
 				}

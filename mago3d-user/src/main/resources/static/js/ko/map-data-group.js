@@ -217,16 +217,11 @@ function mapDataGroupList(pageNo, searchDataGroupName) {
 						}
 					}
 					
-					$("#dataGroupListArea").html("");
-
-					var source = $("#templateDataGroupList").html();
 	                //핸들바 템플릿 컴파일
-	                var template = Handlebars.compile(source);
+	                var template = Handlebars.compile($("#dataGroupListSource").html());
 
 	                //핸들바 템플릿에 데이터를 바인딩해서 HTML 생성
-	                var dataGroupListHtml = template(msg);
-	                $("#dataGroupListArea").html("");
-	                $("#dataGroupListArea").append(dataGroupListHtml);
+	                $("#dataGroupListDHTML").html("").append(template(msg));
 				} else {
 					alert(JS_MESSAGE[msg.errorCode]);
 				}
