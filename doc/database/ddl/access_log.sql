@@ -1,5 +1,4 @@
 drop table if exists access_log cascade;
-drop table if exists access_log_2019 cascade;
 drop table if exists access_log_2020 cascade;
 drop table if exists access_log_2021 cascade;
 drop table if exists access_log_2022 cascade;
@@ -63,7 +62,6 @@ comment on column access_log.minute is '분';
 comment on column access_log.insert_date is '등록일';
 
 
-create table access_log_2019 partition of access_log for values from ('2019-01-01 00:00:00.000000') to ('2020-01-01 00:00:00.000000');
 create table access_log_2020 partition of access_log for values from ('2020-01-01 00:00:00.000000') to ('2021-01-01 00:00:00.000000');
 create table access_log_2021 partition of access_log for values from ('2021-01-01 00:00:00.000000') to ('2022-01-01 00:00:00.000000');
 create table access_log_2022 partition of access_log for values from ('2022-01-01 00:00:00.000000') to ('2023-01-01 00:00:00.000000');

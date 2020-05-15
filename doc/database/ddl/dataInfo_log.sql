@@ -1,6 +1,5 @@
 -- FK, Index 는 별도 파일로 분리. 맨 마지막에 작업 예정
 drop table if exists data_info_log cascade;
-drop table if exists data_info_log_2019 cascade;
 drop table if exists data_info_log_2020 cascade;
 drop table if exists data_info_log_2021 cascade;
 drop table if exists data_info_log_2022 cascade;
@@ -86,7 +85,6 @@ comment on column data_info_log.update_date is '수정일';
 comment on column data_info_log.insert_date is '등록일';
 
 
-create table data_info_log_2019 partition of data_info_log for values from ('2019-01-01 00:00:00.000000') to ('2020-01-01 00:00:00.000000');
 create table data_info_log_2020 partition of data_info_log for values from ('2020-01-01 00:00:00.000000') to ('2021-01-01 00:00:00.000000');
 create table data_info_log_2021 partition of data_info_log for values from ('2021-01-01 00:00:00.000000') to ('2022-01-01 00:00:00.000000');
 create table data_info_log_2022 partition of data_info_log for values from ('2022-01-01 00:00:00.000000') to ('2023-01-01 00:00:00.000000');
