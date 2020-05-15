@@ -96,8 +96,7 @@ function getLayerList() {
 
 // 레이어 트리 html 랜더링 
 function createLayerHtml(res) {
-	var source = $("#templateLayerList").html();
-    var template = Handlebars.compile(source);
+	var template = Handlebars.compile($("#layerListSource").html());
 
     for(var i=0, len=res.length; i<len; i++) {
         var h = '';
