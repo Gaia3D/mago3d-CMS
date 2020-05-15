@@ -10,7 +10,7 @@
     <meta name="referrer" content="origin">
     <meta name="viewport" content="width=device-width">
     <meta name="robots" content="index,nofollow"/>
-	<title>오류 | NDTP</title>
+	<title>오류 | mago3D</title>
     <link rel="shortcut icon" href="/images/favicon.ico">
 	<link rel="stylesheet" href="/css/ko/style.css"/>
 </head>
