@@ -29,9 +29,13 @@
 <div class="site-body">
 	<div class="row">
 		<div class="container">
-			<div class="row">
-				<h1 style="margin-bottom: 10px; font-size:38px; font-family:Lousianne; color:#573592;">mago3D</h1>
-				<h6 th:if="${signinForm.errorCode}" style="padding-left: 10px; color: red;" th:text="#{${signinForm.errorCode}}"></h6>
+			<div th:if="${signinForm.errorCode}" style="margin-bottom: 10px;">
+				<div style="float:left; padding-left: 10px; "><img th:src="@{/images/{lang}/exclam_32.png(lang=${lang})}" /></div>
+				<div style="display: inline-block; padding-left: 10px; padding-top: 5px; color: red; font-size: 16px;"
+					 th:text="#{${signinForm.errorCode}}"></div>
+			</div>
+			<div class="row" style="height: 60px; margin-top: 0px;">
+				<h1 style="font-size:38px; font-family:Lousianne; color:#573592;">mago3D</h1>
 			</div>
 			<div class="panel row">
 				<h2 class="sign-title"><span class="text-sub">사용자</span><br /><span class="text-main">SIGN IN</span></h2>
