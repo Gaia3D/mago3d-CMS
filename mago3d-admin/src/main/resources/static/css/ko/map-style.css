@@ -1,0 +1,1588 @@
+@charset "utf-8";
+/* RESET CSS */
+* { margin:0; padding:0; outline:0; vertical-align:top; }
+article, aside, details, figcaption, figure, footer, header, hgroup, menu nav, section { display:block; }
+ul, ol, dl { list-style:none; }
+img, video { max-width:100%; border:0; vertical-align:top; }
+a {vertical-align:top; text-decoration:none; color:#000; }
+table { border-collapse:collapse; border-spacing:0; }
+input, select { vertical-align:middle; }
+html, body { margin:0; padding:0; height:100%; }
+body, th, td, input, select, textarea { color:#444; font-family:'Malgun Gothic','돋움',dotum, sans-serif; font-size:13px; line-height:1.5em;}
+button { cursor:pointer; font-family:'Malgun Gothic','돋움'; }
+
+/* ////////// LAYOUT ////////// */
+header {
+display: flex;
+min-width: 1420px;
+height: 50px;
+background-color: #287be4;
+}
+#wrap {
+position: relative;
+min-width: 1420px;
+height: calc(100% - 50px);
+}
+.map {
+height: 100%;
+}
+
+/* ////////// HEADER ////////// */
+h1 {
+width: 500px;
+height: 50px;
+margin: 13px;
+padding: 0 0 0 80px;
+font-size: 22px;
+letter-spacing: -1px;
+color: #fff;
+cursor: pointer;
+font-weight: normal;
+background: url(/images/ko/logo.png) no-repeat 0 0;
+}
+
+.signArea {
+right: 0;
+margin: 10px;
+font-size: 15px;
+color: #fff;
+text-align: right; 
+width: calc(100% - 500px);
+}
+.signArea > span {
+border-bottom: 1px solid #fff;
+}
+.signArea * {
+vertical-align: middle;
+}
+.signArea > span * {
+vertical-align: middle;
+}
+.signArea > .signButton {
+	margin: 0px 25px 0px 20px;
+	padding: 5px 25px 10px 25px;
+	height: 50px;
+	color: #fff;
+	border-radius: 15px;
+	border: none;
+	background-color: #262b3f;
+}
+
+
+/* ///// GNB WRAP ///// */
+/* 통합검색 */
+#gnbWrap {
+position: absolute;
+left: 60px;
+}
+#gnbWrap div {
+display: inline-block;
+}
+.totalSearch > input {
+width: 301px;
+height: 50px;
+padding: 0 10px;
+font-size: 1.1em;
+border: none;
+}
+.totalSearch {
+border-bottom: 1px solid #ccc;
+}
+.totalSearch > button.btnTotalSearch {
+width: 50px;
+height: 50px;
+margin-left: -5px;
+border: none;
+text-indent: -999em;
+background-color: #fff;
+background-image: url(/images/ko/ico.png);
+background-repeat: no-repeat;
+background-position: 5px -103px;
+}
+/* 행정구역 */
+.district {
+position: relative;
+height: 50px;
+margin-left: -5px;
+padding-right: 10px;
+color: #fff;
+cursor: pointer;
+background-color: #35353d;
+background-image: url(/images/ko/ico.png);
+background-repeat: no-repeat;
+background-position: right -750px;
+}
+.district > p {
+padding: 14px 8px;
+}
+/* 행정구역 레이어 */
+.districtWrap {
+position: absolute;
+left: 371px;
+top: 50px;
+width: 355px;
+box-shadow: 1px 1px 2px 0 #333;
+background-color: #fff;
+}
+.districtLayer {
+overflow: hidden;
+border-bottom: 1px solid #555;
+}
+.districtLayer > ul {
+overflow-x: hidden;
+overflow-y: scroll;
+display: inline-block;
+width: 120px;
+height: 250px;
+margin-left: -5px;
+}
+.districtLayer > ul li {
+display: block;
+padding: 3px 0 3px 8px;
+color: #222;
+cursor: pointer;
+letter-spacing: -1px;
+}
+.districtLayer > ul li:hover {
+background-color: #eee;
+}
+.districtLayer > ul li.on {
+background-color: #dbf1ff;	
+}
+.districtBtn {
+width: 335px;
+padding: 10px;
+text-align: center;
+background-color: #eee;
+}
+.districtBtn > button:first-child {
+width: 150px;
+}
+
+/* ////////// NAVWRAP ////////// */
+/* NAV */
+.navWrap {
+float: left;
+position: relative;
+height: 100%;
+background-color: #262b3f;
+}
+ul.nav {
+float: left;
+height: 100%;
+width: 60px;
+}
+ul.nav li {
+padding: 40px 0 10px 0px;
+font-size: 13px;
+color: #fff;
+cursor: pointer;
+text-align: center;
+border-bottom: 1px dotted #444a61;
+background-image: url(/images/ko/ico.png);
+background-repeat: no-repeat;
+}
+ul.nav li.on {
+background-color: #287be4;
+}
+ul.nav li.search {
+background-position: -445px 10px;
+}
+ul.nav li.data {
+background-position: -445px -90px;
+}
+ul.nav li.converter {
+background-position: -445px -190px;
+}
+ul.nav li.spatial {
+background-position: -445px -290px;
+}
+ul.nav li.simulation {
+letter-spacing: -2px;
+background-position: -445px -390px;
+}
+ul.nav li.civilVoice {
+background-position: -445px -490px;
+}
+ul.nav li.userPolicy {
+background-position: -445px -590px;
+}
+ul.nav li.layer {
+background-position: -360px -190px;
+}
+
+/* CONTENTSBTN */
+.contentsBtn {
+/* position: absolute; */
+/* right: -25px; */
+position: relative;
+right: -395px;
+top: 50%;	
+}
+.contentsBtn > button {
+/* position:fixed; */
+position: relative;
+z-index: 1;
+margin-left:-25px;
+display: inline-block;
+width: 25px;
+height: 50px;
+color: transparent;
+border-radius: 0px 5px 5px 0;
+border: none;
+background-image: url(/images/ko/ico.png);
+background-position: 8px -405px;
+background-repeat: no-repeat;
+background-color: #ccc;
+}
+
+/* CONTENTSWRAP */
+.contentsWrap {
+position:absolute;
+float: left;
+overflow-y: auto;
+height: 100%;
+width: 370px;
+padding-top: 50px;
+box-sizing: border-box;
+background-color: #eaeaea;
+margin-left:60px;
+z-index:10;
+}
+.contents {
+margin: 7px;
+padding: 10px;
+border: 1px solid #e0e0e0;
+background-color: #fff;
+}
+.contentsList {
+margin: 10px;
+background-color: #eaeaea;
+}
+
+.contentsCover {
+position: absolute;
+width: calc(100% - 60px);
+height: 100%;
+margin-left: 60px;
+padding: 30px;
+background-color: #fff;
+z-index: 100;
+box-sizing: border-box;
+}
+.contentsCover > div {
+height: 100%;
+}
+.fullHeight {
+height: calc(100% - 37px);
+}
+.contents > h3 {
+margin-bottom: 10px;
+padding-left: 12px;
+font-size: 16px;
+background: url(/images/ko/ico.png) no-repeat 3px -592px;
+}
+/* MAP / CTRLBTNS */
+.ctrlWrap {
+position: absolute;
+top: 3px;
+right: 3px;
+}
+.ctrlWrap div {
+display: inline-block;
+color: #fff;
+border-radius: 25px;
+background-color: #252535;
+}
+.ctrlWrap div > button {
+border: none;
+border-radius: 25px;
+background-color: transparent;
+background-image: url(/images/ko/ico.png);
+background-repeat: no-repeat;
+width: 50px;
+height: 50px;
+text-indent: -999em;
+}
+.ctrlWrap div button:hover {
+background-color: #333446;
+}
+.ctrlWrap div > button.reset {
+background-position: 15px 0;
+}
+.ctrlWrap div > button.zoomall {
+background-position: -35px 0;
+}
+.ctrlWrap div > button.zoomin {
+background-position: -85px 0;
+}
+.ctrlWrap div > button.zoomout {
+background-position: -135px 0;
+}
+.ctrlWrap div > button.distance {
+background-position: -185px 0;
+}
+.ctrlWrap div > button.distance.on {
+background-position: -185px -50px;
+background-color: #fff600;
+}
+.ctrlWrap div > button.area {
+background-position: -242px 0;
+}
+.ctrlWrap div > button.area.on {
+background-position: -242px -50px;
+background-color: #fff600;
+}
+.ctrlWrap div > button.rotateReset {
+background-position: -285px 0;
+}
+.ctrlWrap div > button.rotateReset.on {
+background-color: #fff600;
+background-position: -285px -50px;
+}
+.ctrlWrap div > button.rotateLeft {
+background-position: -340px 0;
+}
+.ctrlWrap div > button.rotateRight {
+background-position: -390px 0;
+}
+.ctrlWrap div > button.print {
+background-position: -151px -52px;
+}
+.ctrlWrap div > button.print.on {
+background-position: -151px -102px;
+background-color: #fff600;
+}
+.ctrlWrap div > button.save {
+background-position: -351px -52px;
+}
+.ctrlWrap div > button.save.on {
+background-position: -351px -102px;
+background-color: #fff600;
+}
+.ctrlWrap div > button.magoSet {
+background-position: -85px -52px;
+}
+.ctrlWrap div > button.magoSet.on {
+background-position: -85px -102px;
+background-color: #fff600;
+}
+
+.ctrlWrap div > input {
+width: 30px;
+margin-top: 3px;
+padding: 8px;
+font-size: 17px;
+color: #fff;
+text-align: center;
+border: none;
+border-bottom: 2px solid #fff;
+background-color: transparent;
+}
+
+/* ///// 데이터 ///// */
+.dataGroupSum {
+display: flex;
+margin: 10px 0;
+padding-bottom: 10px;
+border-bottom: 1px dotted #ccc;
+}
+.dataGroupSum li {
+flex: auto;
+margin:0 10px;
+text-align: center;
+}
+.dataGroupSum li:last-child {
+margin-right: 0;
+}
+.dataGroupSum li > label {
+display: block;
+padding: 1px 6px;	
+border-radius: 3px;
+border: 1px solid #dcdcdc;
+background-color: #f1f1f1;		
+}
+.dataGroupSum li > span {
+font-size: 17px;
+font-weight: bold;
+}
+.dataGroupSum li.total > label {
+color: #fff;
+border: 1px solid #1e6ed3;
+background-color: #287be4;
+}
+.dataGroupSum li.total > span {
+color: #287be4;
+}
+
+/* /// 데이터 그룹 summary /// */
+.dataGroupSummary {
+	position: relative;
+}
+.dataGroupSummary > table {
+	width: 100%;
+}
+.dataGroupSummary > table thead th {
+	padding: 5px;	
+	border: 1px solid #ccc;
+}
+.dataGroupSummary > table tbody tr:hover {
+	cursor: pointer;
+	background-color: #f9f9f9;
+}
+.dataGroupSummary > table tbody tr.selected {
+	background-color: #d6dcf2;
+}
+.dataGroupSummary > table tr td {
+	padding: 7px 5px;
+	border: 1px solid #ccc;
+	font-size: 14px;
+	text-align: center;
+}
+.dataGroupSummary > table tr td a {
+	border-bottom: 1px solid #000;
+}
+.dataGroupSummary > table tr td.alignLeft {
+	text-align: left;
+}
+.dataGroupSummary > table tr td.center {
+	text-align: center;
+}
+
+/* /// 데이터 게시판 목록 /// */
+.tableList {
+position: relative;
+}
+.tableList > table {
+width: 100%;
+}
+.tableList > table thead th {
+padding: 5px;	
+border: 1px solid #43444c;
+}
+.tableList > table tbody tr:hover {
+cursor: pointer;
+background-color: #f9f9f9;
+}
+.tableList > table tbody tr.selected {
+background-color: #d6dcf2;
+}
+.tableList > table tr td {
+padding: 7px 5px;
+border: 1px solid #bcbdc7;
+font-size: 14px;
+text-align: center;
+}
+.tableList > table tr td a {
+border-bottom: 1px solid #000;
+}
+.tableList > table tr td.alignLeft {
+text-align: left;
+}
+.tableList > table tr td.center {
+text-align: center;
+}
+button.goto {
+width: 30px;
+height: 30px;
+border:none;
+text-indent: -999em;
+background: url(/images/ko/ico.png) no-repeat -462px -697px;
+}
+
+/* 양쪽으로 나눠진 구분DIV */
+.bothSide {
+display: flex;
+margin-bottom: 3px;
+}
+.bothSide > div {
+flex: auto;
+}
+.bothSide > div:first-child {
+margin-top: 8px;
+}
+.bothSide > div:first-child > span {
+color: #287be4
+}
+.bothSide > div:last-child {
+text-align: right;
+}
+.dataBtns > button {
+padding: 4px 10px;
+color: #51515b;
+border: 1px solid #9898a0;
+border-radius: 3px;
+background-color: #fff;
+}
+.dataBtns > button.on { 
+color: #fff;
+border: 1px solid #414149;
+border-radius: 3px;
+background-color: #51515b;
+}
+
+/*  ///// 시민참여 ///// */
+.comment > li {
+display: flex;
+position: relative;
+margin-bottom: 10px;
+padding: 7px;
+border-radius: 5px;
+border: 1px solid #c7e0f2;
+background-color: #ecf7ff;
+}
+.comment li > p {
+flex: auto;
+padding-right: 10px;
+}
+.comment li > p:first-child {
+min-width: 215px;
+}
+.comment span.id {
+display: block;
+color: #999;
+}
+.comment p.count {
+min-width: 40px;
+padding: 8px 5px 0 15px;
+font-size: 17px;
+font-weight: bold;
+text-align: right;
+background: url(/images/ko/ico.png) no-repeat 0 -487px;
+}
+
+
+/* 의견보기 */
+.commentView {
+margin: 10px 0 20px;
+}
+.commentView > div {
+margin-bottom: 5px;
+}
+.commentView > .title {
+margin-bottom: 10px;
+padding: 10px 0 0 25px;
+font-size: 18px;
+font-weight: bold;
+border-radius: 5px;
+background: url(/images/ko/ico.png) no-repeat 3px -639px;
+}
+.commentView > .con {
+max-height: 250px;
+overflow-y: auto;
+padding: 10px;
+font-size: 14px;
+line-height: 1.5em;
+border-radius: 10px;
+background-color: #f1f1f1;
+}
+.agreeWrap {
+height: calc(100% - 485px)
+}
+.agreeWrap p.agree {
+padding: 0 0 0 25px;
+background: url(/images/ko/ico.png) no-repeat 0 -495px;	
+}
+.agreeCount {
+margin: 7px 0;
+}
+.agreeCount > span {
+color: #287be4;
+}
+.agreeNew {
+margin: 20px 0;
+}
+.agreeNew > input {
+width: 198px;
+padding: 7px 7px 7px 30px;
+border: 2px solid #555;
+background: url(/images/ko/ico.png) no-repeat 7px -490px;	
+}
+
+/* 의견등록 */
+.commentNew {
+margin-top: 20px;
+}
+.commentNew li {
+margin-bottom: 15px;
+}
+.commentNew li > label {
+display: block;
+margin-bottom: 7px;
+}
+.commentNew li > input {
+padding: 7px;
+}
+.commentNew li p.info {
+font-size: 12px;
+color: #777;
+text-align: right;
+}
+.commentNew li p.info > span {
+color: #287be4
+}
+
+/* 목록검색 */
+.listSearch {
+margin-bottom: 10px;
+padding: 7px;
+background-color: #f3f3f3;
+}
+.listSearch  > input {
+width: 230px;
+padding: 10px;
+font-size: 1.1em;
+border: none;
+}
+.listSearch > button {
+width: 30px;
+height: 30px;
+margin-left: -5px;
+border: none;
+text-indent: -999em;
+background-image: url(/images/ko/ico.png);
+background-repeat: no-repeat;
+background-position: 0px -110px;
+}
+
+/* PAGINATION */
+.pagination {
+position: relative;
+margin: 7px 0;
+text-align: center;
+}
+.pagination li {
+display: inline-block;
+margin: 0;
+padding: 0;
+font-size: 13px;
+padding: 2px 5px;
+cursor: pointer;
+}
+.pagination li * {
+vertical-align: middle;
+}
+.pagination li.on {
+font-weight: bold;
+text-decoration: underline;
+}
+.pagination .ico {
+width: 20px;
+height: 20px;
+padding: 0;
+text-indent: -999em;
+}
+.pagination .first {
+background: url(/images/ko/pagenation_first.png) no-repeat 0 0;
+}
+.pagination .forward {
+background: url(/images/ko/pagenation_forward.png) no-repeat 0 0;
+}
+.pagination .back {
+background: url(/images/ko/pagenation_back.png) no-repeat 0 0;
+}
+.pagination .end {
+background: url(/images/ko/pagenation_end.png) no-repeat 0 0;
+}
+/* 버튼정렬 */
+.btnAlignR {
+text-align: right;
+}
+.btnAlignC {
+text-align: center;
+}
+.btnText {
+padding: 2px 5px;
+font-size: 0.9em;
+color: #888;
+border: 1px solid #ccc;
+border-radius: 2px;
+background-image: none;
+background-color: #fff;
+}
+button.basicA {
+padding: 8px;
+color: #51515b;
+border: 1px solid #9898a0;
+border-radius: 3px;
+background-color: #fff;
+}
+button.focusA {
+padding: 8px 30px;
+color: #fff;
+border: 1px solid #414149;
+border-radius: 3px;
+background-color: #51515b;
+}
+button.focusC {
+padding: 8px 30px;
+color: #51515b;
+border: 1px solid #9898a0;
+border-radius: 3px;
+background-color: #fff;
+}
+button.focusAgree {
+padding: 8px 12px;
+color: #51515b;
+border: 1px solid #9898a0;
+border-radius: 3px;
+background-color: #fff;
+}
+
+/* FROM NIPA 국방부, 권재현*/
+.btnText.on {
+color: #477cdb;
+border: 1px solid #477cdb;
+background-color: #fff;
+background-image: none;
+}
+.btnText:hover {
+color: #477cdb;
+border: 1px solid #477cdb;
+background-color: #fff;
+background-image: none;
+}
+.btnTextF {
+padding: 2px 10px;
+font-size: 0.9em;
+color: #fff;
+border-radius: 2px;
+border: 1px solid #51515b;
+background-color: #51515b;
+background-image: none;
+}
+.btnTextF:hover {
+color: #477cdb;
+border: 1px solid #477cdb;
+background-color: #fff;
+background-image: none;
+}
+/* LIST DROP  / 검색결과 */
+ul.listDrop > li {
+margin-bottom: 3px;
+cursor: pointer;
+}
+ul.listDrop li > p {
+padding: 8px;
+font-weight: bold;
+border:1px solid #e0e0e0;
+background-image: url(/images/ko/ico.png);
+background-repeat: no-repeat;
+background-position: 320px -738px;
+background-color: #fff;
+}
+ul.listDrop li > p > span {
+font-weight: normal;
+}
+ul.listDrop li > ul {
+display: none;
+}
+ul.listDrop li.on > p {
+color: #fff;
+border-bottom: 3px solid #eaeaea;
+background-color: #287be4;
+background-image: url(/images/ko/ico.png);
+background-repeat: no-repeat;
+background-position: 320px -688px;
+}
+ul.listDrop li p span {
+display: inline-block;
+margin-left: 10px;
+}
+ul.listDrop li.on > ul {
+overflow-x: hidden;
+overflow-y: auto;
+display: block;
+background-color: #fff;
+}
+ul.listDrop li.on > ul li {
+padding: 10px;
+}
+ul.listDrop li.on ul li > span {
+display: block;
+}
+ul.listDrop li.on ul li > span.title {
+text-decoration: underline;
+}
+ul.listDrop li.on > ul > li:hover {
+background-color: #dbf1ff;
+}
+/* LIST DROP  / 분석 */
+ul.listDrop li > div.listContents {
+display: none;
+}
+ul.listDrop li.on > div.listContents {
+display: block;
+padding: 10px;
+border:1px solid #e0e0e0;
+background-color: #fff;
+}
+/* LIST DROP  / 분석 */
+ul.listDrop li > div.listContents {
+display: none;
+}
+ul.listDrop li.on > div.listContents {
+display: block;
+padding: 10px;
+border:1px solid #e0e0e0;
+background-color: #fff;
+}
+/*  CONTENTS / 분석 */
+.analysisGroup {
+/* margin: 10px 0;
+padding-left: 10px;
+padding-right: 10px; */
+cursor: pointer;
+}
+.analysisGroup.on {
+background-position: -755px -555px;
+}
+.analysisGroup.plus {
+background-position: -386px -555px;
+}
+.analysisGroup li {
+position: relative;
+padding: 5px 0;
+}
+.analysisGroup li label {
+display: inline-block;
+width: 120px;
+/* width: 35%; */
+padding: 3px 0;
+}
+.analysisGroup li input {
+width: 124px;
+/* width: 62%; */
+padding: 3px 0;
+border: none;
+border-bottom: 1px solid #e0e0e0;
+}
+.analysisGroup li input.withBtn {
+width: 120px;
+}
+
+.analysisGroup li span.coordText {
+padding-left: 123px;
+}
+.analysisGroup li button.coordBtn {
+margin-left: 30px;
+border: 0;
+text-decoration: underline;
+}
+.analysisGroup li input:hover {
+border-bottom: 1px solid #477cdb;
+}
+.analysisGroup li.btns {
+padding-top: 25px;
+text-align: right;
+}
+.analysisGroup li select {
+width: 124px;
+padding: 3px 0;
+border: none;
+border: 1px solid #e0e0e0;
+}
+.analysisGroup li select:hover {
+border: 1px solid #477cdb;
+}
+
+.analysisGroup .profileInfo {
+	display: none;
+}
+.analysisGroup .profileInfo .legend {
+}
+.analysisGraphic {
+	position: absolute;
+	bottom: 20px;
+	left: 410px;
+	right: 0;
+	height: 200px;
+	padding: 20px;
+	margin: 10px;
+	background-color: #fff;
+	z-index: 9;
+	display: none;
+}
+.analysisGraphic canvas {
+	border: 1px dotted red;
+}
+
+.analysisGroup .routeInfo {
+	margin-top: 20px;
+	border-top: 2px solid #e0e0e0;
+	display: none;
+}
+.analysisGroup .routeResult .cover {
+	padding: 10px 0 15px;
+	text-align: left;
+	border-bottom: 1px solid #e0e0e0;
+}
+.analysisGroup .routeResult .time {
+	font-size: 24px;
+	color: #2196F3;
+}
+.analysisGroup .routeResult .length {
+	font-size: 20px;
+	color: #fe6c59;
+}
+.analysisGroup .routeList .r_row {
+	display: flex;
+	border-bottom: 1px solid #e0e0e0;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.analysisGroup .routeList .r_row .num {
+	width: 20px;
+	border: 1px solid;
+	border-radius: 18px;
+	padding: 6px;
+	margin-left: 10px;
+	margin-right: 16px;
+	text-align: center;
+}
+.analysisGroup .routeList .r_row .name {
+	line-height: 33px;
+}
+.analysisGroup .routeList .r_row.on {
+	background-color: #eee;
+}
+/* SCROLL */
+.yScroll {
+overflow-x: hidden;
+overflow-y: auto;
+}
+
+.sliderWrap {
+position: absolute;
+bottom: 20px;
+left: 580px;
+right: 0;
+background-color: #fff;
+z-index: 9;
+display: none;
+width:900px;
+}
+
+/*========================================== temp css =========================================================*/
+.userPolicyContentWrap > p {
+padding: 8px;
+font-weight: bold;
+border:1px solid #e0e0e0;
+background-image: url(/images/ko/ico.png);
+background-repeat: no-repeat;
+background-position: right -255px;
+background-color: #fff;
+}
+
+.userPolicyContentWrap > div {
+padding-bottom: 7px;
+border-bottom: 1px dotted #888;
+}
+.userPolicyContentWrap div label {
+display: inline-block;
+margin-right: 10px;
+margin-bottom: 5px;
+}
+.userPolicyContentWrap div.userPolicyContent{
+margin-top : 8px;
+/* border-bottom: 1px dotted #888; */
+}
+.userPolicyContentWrap div.userPolicyContent div.userPolicyContentDetail{
+margin-left : 10px;
+margin-top : 5px;
+}
+button.focusB{
+padding: 5px 15px;
+color: #fff;
+border: 1px solid #51515b;
+border-radius: 3px;
+background-color: #51515b;
+}
+button.focusB:hover {
+color: #477cdb;
+border: 1px solid #477cdb;
+background-color: #fff;
+}
+button.basicB {
+padding: 5px;
+color: #51515b;
+border: 1px solid #9898a0;
+border-radius: 3px;
+background-color: #fff;
+}
+button.basicB:hover {
+color: #477cdb;
+border: 1px solid #477cdb;
+background-color: #fff;
+}
+
+
+
+/* 페이징 */
+.pager {
+border-top: 1px solid #eee;
+text-align: center;
+background-color: #fff;
+}
+.pager * {
+vertical-align: middle;
+}
+.pager > div {
+display: inline-block;
+overflow: hidden;
+height: 30px;
+max-width: 300px;
+}
+.pager a {
+display: inline-block;
+margin: 0 -3px;
+padding: 5px;
+cursor: pointer;
+}
+.pager a.thispage {
+color: tomato;
+}
+.pager > button {
+width: 20px;
+height: 20px;
+margin: 0 -2px;
+border: none;
+text-indent: -999em;
+background-color: #fff;
+background-image: url(../images/ico.png);
+background-repeat: no-repeat;
+}
+.pager > button.first {
+background-position: -50px -299px;
+}
+.pager > button.forward {
+background-position: -79px -299px;
+}
+.pager > button.next {
+background-position: -104px -299px;
+}
+.pager > button.last {
+background-position: -132px -299px;
+}
+.pager > button:hover {
+border-radius: 10px;
+background-color: #eee;
+}
+.topLine {
+border-top: 1px solid #ccc;
+}
+.pagerB {
+padding:10px;
+background-color: #fff;
+}
+.pagerB * {
+vertical-align: middle;
+}
+.pagerB .countPage {
+color: #477cdb;
+}
+.pagerB > div {
+float: right;
+}
+.pagerB div > input {
+border: none;
+text-align: center;
+border-bottom: 1px solid #757575;
+}
+.pagerB div > button {
+
+margin: 0 -2px;
+background-color: #fff;
+background-image: url(../images/ico.png);
+background-repeat: no-repeat;
+}
+.pagerB div > button.first {
+width: 20px;
+height: 20px;
+border: none;
+text-indent: -999em;
+background-position: -50px -299px;
+}
+.pagerB div > button.forward {
+width: 20px;
+height: 20px;
+border: none;
+text-indent: -999em;
+background-position: -79px -299px;
+}
+.pagerB div > button.next {
+width: 20px;
+height: 20px;
+border: none;
+text-indent: -999em;
+background-position: -104px -299px;
+}
+.pagerB div > button.last {
+width: 20px;
+height: 20px;
+border: none;
+text-indent: -999em;
+background-position: -132px -299px;
+}
+
+/* 연직분석 그래프 */
+.analysisGraphic {
+position: absolute;
+bottom: 20px;
+left: 460px;
+right: 0;
+height: 200px;
+padding: 20px;
+margin: 10px;
+background-color: #fff;
+z-index: 9;
+display: none;
+}
+.analysisGraphic canvas {
+border: 1px dotted red;
+}
+
+.analysisGraphic div.closeGraphic {
+position: absolute;
+top: 0px;
+left: 2px;
+font-weight: 900;
+color: red;
+font-size: 16px;
+cursor: pointer;
+}
+
+.tab {
+height: 31px;
+margin: 0;
+min-width: 325px;
+}
+.tab li {
+display: inline-block;
+width: 145px;
+padding: 5px 0px;
+color: #000;
+cursor: pointer;
+border: 1px solid #d9d9d9;
+border-bottom: 1px solid #ececec;
+border-radius: 3px 3px 0 0;
+background-color: #fff;
+text-align: center;
+}
+.tab li.on {
+color: #fff;
+border: 1px solid #006bd2;
+background-color: #0073e2;
+} 
+.input-set {
+margin: 10px 20px 10px 10px;
+float: left; 
+}
+#loadingWrap{	
+position: fixed;
+top: 50px;
+z-index: 100;
+width: 100%;
+height:calc(100% - 50px);
+display: none;
+background: rgba(0,0,0,0.6);
+z-index: 10001;
+}
+.loading {
+height: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.spinner {
+width: 40px;
+height: 40px;
+border: 4px #ddd solid;
+border-top: 4px #2e93e6 solid;
+border-radius: 50%;
+animation: spinning 0.8s infinite linear;
+}
+@keyframes spinning {
+100% { 
+	transform: rotate(360deg); 
+}
+}
+/* 
+#mapPolicy {
+width: 110px;
+height: 50px;
+padding-left: 25px;
+color: #fff;
+background-color:#ff8d00;
+font-size: 16px;
+font-weight: bold;
+letter-spacing: -1px;
+border-radius: 25px;
+background-position: -451px -588px;
+}
+#mapPolicy.on {
+color: #000;
+background-color: #fff600;
+border: 1px solid #333446;
+}
+*/
+.labelLayer {
+position: absolute;
+top:60px;
+right: 5px;
+min-width: 200px;
+min-height: 200px;
+border-radius: 5px;
+box-shadow: 1px 1px 2px 0 #333;
+background-color: #fff;
+z-index:1;
+overflow-y: auto;
+max-height: calc(100% - 90px);
+}
+.labelLayer > .layerHeader {
+height: 35px;
+padding: 5px 5px 0px 15px;
+cursor: pointer;
+border-radius: 5px 5px 0 0;
+border-bottom: 1px solid #e0e0e0;
+background-color: #f1f1f1;
+}
+.labelLayer > .layerContents {
+/* margin: 15px 20px; */
+padding: 15px 20px;
+max-width: 330px;
+}
+.layerHeader > h3 {
+margin-top:5px;	
+}
+.layerClose {
+position: absolute;
+top: 3px;
+right: 5px;
+width: 30px;
+height: 30px;
+border: none;
+text-indent: -999em;
+background-image: url(/images/ko/ico.png);
+background-position: -10px 792px;
+}
+.labelLayer div.layerContents > ul.category {
+list-style: circle;
+margin-bottom: 10px;
+margin-left: 10px;
+margin-top: 20px;
+}
+.labelLayer div.layerContents > div {
+/* margin: 20px 0 10px 0; */
+}
+.labelLayer div.layerContents > div label {
+/* display: inline-block; */
+/* width: 69px; */
+}
+.labelLayer div.layerContents > div h3{
+margin-bottom:10px;
+}
+.labelLayer div.layerContents > div ul.category {
+list-style: circle;
+margin-bottom: 10px;
+margin-left: 10px;
+}
+
+/* 레이어스타일 */
+ul.layerList > li {
+margin-bottom: 10px;
+cursor: pointer;
+background-color: #fff;
+border: 1px solid #ccc;
+}
+ul.layerList li {
+background-color: #fff;
+}
+ul.layerList li p {
+padding: 7px;
+}
+ul.layerList li.selected {
+background-color: #ffffd6;
+}
+ul.layerList span {
+display: inline-block;
+width: 35px;
+height: 20px;
+background-image: url(/images/ko/ico_layer.png);
+background-repeat: no-repeat;
+}
+ul.layerList li p.depthOne {
+font-weight: bold;
+font-size: 15px;
+background-color: #ececec;
+}
+ul.layerList li.on p.depthOne {
+font-weight: bold;
+font-size: 15px;
+background-color: #454554;
+color: white;
+}
+ul.layerList li p.depthOne > span.folder {
+background-position: 0 -48px;
+}
+ul.layerList li.on p.depthOne > span.folder {
+background-position: 0 -150px;
+}
+ul.layerList li > p > span.folder {
+background-position: 0 0;
+}
+ul.layerList li.on > p > span.folder {
+background-position: 0 -101px;
+}
+ul.layerList li > p > span.depthThree {
+background-position: 0 -300px;
+}
+ul.layerList li.on > p > span.depthThree {
+background-position: 0 -347px;
+}
+ul.layerList li > ul {
+display: none;
+}
+ul.layerList li.on > ul {
+display: block;
+margin: 0;
+padding-left: 15px;
+}
+ul.layerList li ul li {
+padding: 2px 5px 2px 15px;
+}
+li.nodepth span {
+background:url(/images/ko/ico_layer.png) no-repeat 5px -248px;
+}
+li.nodepth.on span {
+background:url(/images/ko/ico_layer.png) no-repeat 5px -198px;
+}
+
+button.textBtnSub {
+padding: 8px;
+border-radius: 3px;
+color: #333;
+font-size: 14px;
+border: 1px solid #555;
+background-color: #fff;
+}
+button.textBtnSub:hover {
+color: #fff;
+border: 1px solid #555;
+background-color: #555;
+}
+button.textBtn {
+padding: 8px;
+border-radius: 3px;
+color: #fff;
+font-size: 14px;
+border: 1px solid #0073e2;
+background-color: #0073e2;
+}
+button.textBtn:hover {
+color: #0073e2;
+border: 1px solid #0073e2;
+background-color: #fff;
+
+}
+
+/* /// 기본 테이블 /// */
+.basicTable {
+	position: relative;
+}
+.basicTable > table {
+	width: 100%;
+}
+.basicTable > table thead th {
+	padding: 5px;	
+	border: 1px solid #ccc;
+}
+.basicTable > table tbody tr:hover {
+	cursor: pointer;
+	background-color: #f9f9f9;
+}
+.basicTable > table tbody tr.selected {
+	background-color: #d6dcf2;
+}
+.basicTable > table th {
+	padding: 5px;	
+	border: 1px solid #ccc;
+	background-color: #ddd;
+}
+.basicTable > table tr td {
+	padding: 7px 5px;
+	border: 1px solid #ccc;
+	font-size: 14px;
+	text-align: left;
+}
+.basicTable > table tr td a {
+	border-bottom: 1px solid #000;
+}
+.basicTable > table tr td.alignLeft {
+	text-align: left;
+}
+.basicTable > table tr td.center {
+	text-align: center;
+}
+
+/* 레이어 스타일 추가 - 정연화 수정 */
+.layerDiv h4 {
+padding: 0 0 0 12px;
+/* font-size: 15px; */
+font-size: 14px;
+/* margin-bottom: 7px; */
+margin-bottom: 5px;
+background: url(/images/ko/ico.png) no-repeat left -815px;
+}
+.layerDiv li > label {
+/* display: inline-block; */
+/* padding-left: 10px; */
+/* font-size: 13px; */
+font-size: 12px;
+font-weight: bold;
+/* background: url(/images/ko/ico.png) no-repeat left -865px; */
+}
+.layerDiv {
+margin-bottom: 15px;
+}
+.layerDiv li {
+margin-bottom: 2px;
+}
+.layerDiv li * {
+vertical-align: middle;
+}
+.layerDivTit {
+margin-bottom: 10px;
+padding: 7px;
+color: #fff;
+border-radius: 5px;
+background-color: #444a61;
+}
+.layerDivTit > span {
+color: #fff;
+font-size: 16px;
+font-weight: bold;
+}
+.layerDiv label {
+display: inline-block;
+width: 70px;
+}
+.layerDiv input  {
+padding: 3px;
+}
+.layerDiv li > button:not(.btnTextF):not(.btnText) {
+text-indent: -999em;
+border: 1px solid #ccc;
+background-image: url(/images/ko/ico.png);
+background-repeat: no-repeat;
+background-color: #fff;
+}
+.layerDiv li > button.up,
+.layerDiv li > button.down {
+width: 30px;
+height: 30px;
+}
+.layerDiv li > button.rangePrev,
+.layerDiv li > button.rangeNext {
+width: 20px;
+height: 20px;
+}
+
+button.up {
+background-position: -112px -195px;
+}
+button.down {
+background-position: -162px -195px;
+}
+button.rangePrev {
+background-position: -217px -197px;
+border-radius: 10px;
+}
+button.rangeNext {
+background-position: -266px -197px;
+border-radius: 10px;
+}
+.layerDiv li > button:active {
+border: 1px solid #287be4;
+background-color: #ccc;
+}
+button.up:active {
+background-position: -112px -245px;
+}
+button.down:active {
+background-position: -162px -245px;
+}
+button.rangePrev:active {
+background-position: -217px -247px;
+}
+button.rangeNext:active {
+background-position: -266px -247px;
+}
+.layerDiv li > button:hover {
+border: 1px solid #287be4;
+background-color: #eee;
+}
+button.up:hover {
+background-position: -112px -245px;
+}
+button.down:hover {
+background-position: -162px -245px;
+}
+button.rangePrev:hover {
+background-position: -217px -247px;
+}
+button.rangeNext:hover {
+background-position: -266px -247px;
+}
+.ellipsis {
+overflow:hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+}
+
+.mapSelectButton {
+	position : absolute;
+	bottom : 17px;
+	right : 20px;
+	z-index : 1;
+	width: 90px;
+	height: 40px;
+	padding: 7px;
+	font-size: 17px;
+	border-radius: 3px;
+	color: #414e80;
+	border: 1px solid #414e80;
+	background-color: #fff;
+}
+.mapSelectButton:hover {
+	color: #fff;
+	border: 1px solid #414e80;
+	background-color: #414e80;
+}
+
+/* Mago3D 설정창 Toolbar 관련 - 정연화 추가 */
+.inline-toggle {
+	display: inline-block;
+	width: 100%;
+	margin-bottom: 10px;
+}
+.inline-toggle > *{
+	width: 40%;
+	float: left;
+	line-height: 2.4em;
+}
+
+/* Mago3D 로고 - 정연화 추가 */
+.mago3d_logo {
+	width: 90px;
+	padding: 0 0 5px 5px;
+}
+/* 마고 라벨 렌더 캔버스 */
+#objectLabel {
+background-color: transparent;
+position: absolute;
+left: 0px;
+top: 0px;
+/* z-index: 10; */
+pointer-events: none;
+}

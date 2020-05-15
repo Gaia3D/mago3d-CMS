@@ -1,12 +1,9 @@
 package gaia3d.config;
 
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.time.Duration;
-
+import gaia3d.interceptor.*;
+import lombok.extern.slf4j.Slf4j;
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,21 +19,14 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.interceptor.CSRFHandlerInterceptor;
-import gaia3d.interceptor.ConfigInterceptor;
-import gaia3d.interceptor.LogInterceptor;
-import gaia3d.interceptor.SecurityInterceptor;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 
 @Slf4j
 @EnableWebMvc
@@ -49,7 +39,9 @@ public class ServletConfig implements WebMvcConfigurer {
 	
 	@Autowired
 	private PropertiesConfig propertiesConfig;
-	
+
+	@Autowired
+	private LocaleInterceptor localeInterceptor;
 	@Autowired
 	private CSRFHandlerInterceptor cSRFHandlerInterceptor;
 	@Autowired
@@ -71,6 +63,9 @@ public class ServletConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		log.info(" @@@ ServletConfig addInterceptors @@@@ ");
 
+		registry.addInterceptor(localeInterceptor)
+				.addPathPatterns("/**")
+				.excludePathPatterns("/f4d/**", "/guide/**", "/sample/**", "/css/**", "/externlib/**", "favicon*", "/images/**", "/js/**");
 		registry.addInterceptor(securityInterceptor)
 				.addPathPatterns("/**")
 				.excludePathPatterns("/f4d/**",	"/sign/**", "/cache/reload", "/guide/**", "/sample/**", "/css/**", "/externlib/**", "favicon*", "/images/**", "/js/**");
@@ -86,17 +81,10 @@ public class ServletConfig implements WebMvcConfigurer {
 				.addPathPatterns("/**")
 				.excludePathPatterns("/f4d/**",	"/sign/**", "/cache/reload", "/guide/**", "/css/**", "/externlib/**", "favicon*", "/images/**", "/js/**");
     }
-	
+
 	@Bean
-	@ConditionalOnMissingBean(InternalResourceViewResolver.class)
-	public InternalResourceViewResolver viewResolver() {
-		log.info(" @@@ ServletConfig viewResolver @@@");
-		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setPrefix("/WEB-INF/views");
-		viewResolver.setSuffix(".jsp");
-		viewResolver.setOrder(3);
-		
-		return viewResolver;
+	public LayoutDialect layoutDialect() {
+		return new LayoutDialect();
 	}
 	
 	@Bean
@@ -142,10 +130,10 @@ public class ServletConfig implements WebMvcConfigurer {
 		// F4D converter file 경로
 		registry.addResourceHandler("/f4d/**").addResourceLocations("file:" + propertiesConfig.getDataServiceDir());
 		registry.addResourceHandler("/f4d/sample/**").addResourceLocations("file:" + propertiesConfig.getGuideDataServiceDir());
-		registry.addResourceHandler("/css/**").addResourceLocations("/css/");
-		registry.addResourceHandler("/externlib/**").addResourceLocations("/externlib/");
-		registry.addResourceHandler("/images/**").addResourceLocations("/images/");
-		registry.addResourceHandler("/js/**").addResourceLocations("/js/");
+		registry.addResourceHandler("/css/**").addResourceLocations("classpath:static/css/");
+		registry.addResourceHandler("/externlib/**").addResourceLocations("classpath:static/externlib/");
+		registry.addResourceHandler("/images/**").addResourceLocations("classpath:static/images/");
+		registry.addResourceHandler("/js/**").addResourceLocations("classpath:static/js/");
 		
 //		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 	}

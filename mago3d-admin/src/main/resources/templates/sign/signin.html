@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Sign In | mago3D</title>
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+	<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+	<style type="text/css">
+		::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+			color: white;
+			opacity: 1; /* Firefox */
+		}
+		:-ms-input-placeholder { /* Internet Explorer 10-11 */
+			color: white;
+		}
+		::-ms-input-placeholder { /* Microsoft Edge */
+			color: white;
+		}
+	</style>
+</head>
+<body class="sign">
+<div class="site-body">
+	<div class="row">
+		<div class="container">
+			<div th:if="${signinForm.errorCode}" style="margin-bottom: 10px;">
+				<div style="float:left; padding-left: 10px; "><img th:src="@{/images/{lang}/exclam_32.png(lang=${lang})}" /></div>
+				<div style="display: inline-block; padding-left: 10px; padding-top: 5px; color: red; font-size: 16px;"
+					 th:text="#{${signinForm.errorCode}}"></div>
+			</div>
+			<div class="row" style="height: 60px; margin-top: 0px;">
+				<h1 style="font-size:38px; font-family:Lousianne; color:#573592;">mago3D</h1>
+			</div>
+			<div class="panel row">
+				<h2 class="sign-title"><span class="text-sub">Administrator</span><br /><span class="text-main">SIGN IN</span></h2>
+				<div class="sign-inputs">
+					<div class="sign-desc" style="font-size: 16px; margin-top: 10px; margin-right: 25px;">Digital Twin Platform</div>
+
+					<form id="signinForm" th:object="${signinForm}" method="post" action="/sign/process-signin">
+						<label for="userId"><span class="icon-glyph glyph-users"></span></label>
+						<input type="text" id="userId" name="userId" maxlength="32" title="아이디" placeholder="아이디" required="required" autofocus="autofocus" />
+						<label for="password"><span class="icon-glyph glyph-lock"></span></label>
+						<input type="password" id="password" name="password" maxlength="32" title="비밀번호" placeholder="비밀번호" required="required" />
+						<input type="submit" value="Sign In" class="sign-submit" />
+					</form>
+					<!--					<div class="sign-links" style="font-size: 16px;">-->
+					<!--                        Don't have an account? &nbsp;<a th:href="@{#" onclick="alert('관리자에게 문의하여 주십시오.'); return false;">Sign up</a>-->
+					<!--                    </div>-->
+				</div>
+			</div>
+		</div>
+		<div class="" style="text-align: center; margin-top: 50px; font-size: 16px;">
+			mago3D ⓒ Gaia3d Corp. All Rights Reserved
+		</div>
+	</div>
+</div>
+</body>
+</html>
