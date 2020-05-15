@@ -41,7 +41,7 @@
         </div>
 
         <!-- S: 데이터 그룹 등록 -->
-		<form id="dataGroup" modelAttribute="dataGroup" method="post" onsubmit="return false;">
+		<form id="dataGroup" th:object="${dataGroup}" method="post" th:action="@{#}" onsubmit="return false;">
 		<table class="input-table scope-row">
 			<col class="col-label l">
 			<col class="col-input">
@@ -73,8 +73,8 @@
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</th>
 				<td class="col-input">
-					<hidden id="parent" name="parent">
-					<input type="text" id="parentName" name="parentName"cssClass="l" readonly="true">
+					<input type="hidden" id="parent" name="parent">
+					<input type="text" id="parentName" name="parentName" cssClass="l" readonly="true">
 					<input type="button" id="dataGroupButtion" value="상위 데이터 그룹 선택">
 				</td>
 			</tr>
@@ -159,13 +159,13 @@
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</th>
 				<td class="col-input">
-					<input type="text" id="metainfo" name="metainfo" class="xl">
+					<input type="text" id="metainfo" name="metainfo" value='{"isPhysical": false}'  class="xl">
                     <errors id="metainfo" name="metainfo" cssClass="error">
 				</td>
 			</tr>
 			<tr>
 				<th class="col-label l" scope="row"><label for="description" th:text="#{description}"></label></th>
-				<td class="col-input"><input type="text" id="description" name="description" cssClass="xl"></td>
+				<td class="col-input"><input type="text" id="description" name="description" class="xl"></td>
 			</tr>
 		</table>
 		<div class="button-group">
@@ -177,13 +177,10 @@
         </form>
         <!-- E: 데이터 그룹 등록 -->
 	</div>
-
+	<!-- 상위 그룹 선택 다이얼 로그 -->
+	<div th:replace="~{/data-group/parent-data-group-dialog :: #dataGroupDialog}"></div>
 </div>
 <!-- E: WRAP -->
-
-<!-- 상위 그룹 선택 다이얼 로그 -->
-<!-- <%@ include file="/WEB-INF/views/data-group/parent-data-group-dialog.jsp" %> -->
-
 <script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
@@ -345,7 +342,7 @@
 
 	$( "#rootParentSelect" ).on( "click", function() {
 		$("#parent").val(0);
-		$("#parentName").val("${dataGroup.parentName}");
+		$("#parentName").val("[[${dataGroup.parentName}]]");
 		dataGroupDialog.dialog( "close" );
 	});
 

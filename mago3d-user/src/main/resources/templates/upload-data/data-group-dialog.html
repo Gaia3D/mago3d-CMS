@@ -20,10 +20,54 @@
                 </tr>
             </thead>
             <tbody>
-            <tr th:if="${!dataGroupList.empty}">
+            <tr th:if="${dataGroupList.empty}">
                 <td colspan="6" class="col-none">데이터 그룹이 존재하지 않습니다.</td>
             </tr>
 
+            <th:block th:if="${!dataGroupList.empty}" th:each="dataGroup : ${dataGroupList}">
+                <th:block th:if="${dataGroup.depth == 1}">
+                <tr th:class="oneDepthClass">  
+                    <td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
+                        <span style="padding-left: 0px; font-size: 1.5em; color: Dodgerblue;">
+                            <i class="fa fa-folder oneFolder" aria-hidden="true"></i>
+                        </span>
+                        <span th:text="${dataGroup.dataGroupName}"></span>
+                    </td>
+                </th:block>
+                <th:block th:if="${dataGroup.depth == 2}">
+                <tr class="twoDepthClass">
+                    <td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
+                        <span style="padding-left: 40px; font-size: 1.5em; color: Mediumslateblue;">
+                            <i class="fa fa-folder oneFolder" aria-hidden="true"></i>
+                        </span>
+                        <span th:text="${dataGroup.dataGroupName}"></span>
+                    </td>
+                </th:block>
+                <th:block th:if="${dataGroup.depth == 3}">
+                <tr class="threeDepthClass">
+                    <td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
+                        <span style="padding-left: 80px; font-size: 1.5em; color: Tomato;">
+                            <i class="fa fa-folder oneFolder" aria-hidden="true"></i>
+                        </span>
+                        <span th:text="${dataGroup.dataGroupName}"></span>
+                    </td>
+                </th:block>
+                    
+                <td class="col-type" th:if="${dataGroup.available == true}" th:text="사용"></td>
+                <td class="col-type" th:unless="${dataGroup.available == true}" th:text="미사용"></td>
+                <td class="col-type" th:if="${#strings.equals(dataGroup.sharing, 'common')}" th:text="공통"></td>
+                <td class="col-type" th:if="${#strings.equals(dataGroup.sharing, 'public')}" th:text="공개"></td>
+                <td class="col-type" th:if="${#strings.equals(dataGroup.sharing, 'private')}" th:text="개인"></td>
+                <td class="col-type" th:if="${#strings.equals(dataGroup.sharing, 'group')}" th:text="그룹"></td>
+                <td class="col-key" th:text="${dataGroup.description}"></td>
+                <td class="col-date">
+                    <p th:text="${#dates.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
+                    <p th:text="${#dates.format(viewInsertDate,'yyyy-MM-dd HH:mm')}"></p>
+                </td>
+                <td class="col-toggle">
+                    <a href="#" th:onclick="confirmDataGroup([[${dataGroup.dataGroupId}]], [[${dataGroup.dataGroupName}]]); return false;">확인</a>
+                </td>
+                </tr>
             </tbody>
         </table>
     </div>

@@ -133,20 +133,18 @@
                         </tr>
 
                         <tr th:if="${!converterJobList.empty}" th:each="converterJob: ${converterJobList}">
-                            <!-- <td class="col-number">${pagination.rowNumber - status.index }</td> -->
+                            <td class="col-number" th:text="${converterJobStat.count}"></td>
                             <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'basic')}" th:text="기본"></td>
                             <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'building')}" th:text="빌딩"></td>
                             <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'extra-big-building')}" th:text="초대형 빌딩"></td>
                             <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'point-cloud')}" th:text="point cloud"></td>
                             <td class="col-name ellipsis" th:text="${converterJob.title}" style="min-width:200px;max-width:200px;"></td>
                             
-                            <!-- <td class="col-count"><fmt:formatNumber value="${converterJob.usf}" type="number">
-                            <c:if test="${converterJob.usf ge 1 and converterJob.usf lt 10}"> m</c:if>
-                            <c:if test="${converterJob.usf ge 0.1 and converterJob.usf lt 1 }"> cm</c:if>
-                            <c:if test="${converterJob.usf ge 0.01 and converterJob.usf lt 0.1}"> cm</c:if>
-                            <c:if test="${converterJob.usf ge 0.001 and converterJob.usf lt 0.01}"> mm</c:if>
-                            <c:if test="${converterJob.usf ge 10}"> m</c:if>
-                            </td> -->
+                            <td class="col-count" th:if="${converterJob.usf >= 1 and converterJob.usf < 10}" th:text="|${converterJob.usf}m|">
+                            <td class="col-count" th:if="${converterJob.usf >= 0.1 and converterJob.usf < 1}" th:text="|${converterJob.usf}cm|">
+                            <td class="col-count" th:if="${converterJob.usf >= 0.01 and converterJob.usf < 0.1}" th:text="|${converterJob.usf}cm|">
+                            <td class="col-count" th:if="${converterJob.usf >= 0.001 and converterJob.usf < 0.1}" th:text="|${converterJob.usf}mm|">
+                            <td class="col-count" th:if="${converterJob.usf >= 10}" th:text="|${converterJob.usf}m|">
 
                             <td class="col-type" th:if="${#strings.equals(converterJob.viewYAxisUp, 'N')}" th:text="Z축"></td>
                             <td class="col-type" th:if="${#strings.equals(converterJob.viewYAxisUp, 'Y')}" th:text="Y축"></td>
@@ -156,9 +154,9 @@
                             <td class="col-type" th:if="${#strings.equals(converterJob.status, 'fail')}" th:text="실패"></td>
                                
                             <td class="col-count" th:text="|${converterJob.fileCount}개|"></td>
-                            <td class="col-type" th:if="${converterJob.errorCode.empty}" th:text=" 없음">
-                            <td class="col-type" th:if="${!converterJob.errorCode.empty}">
-                                <a href="#" th:onclick="'detailErrorCode('+ ${converterJob.errorCode} +'); return false;'">[보기]</a>
+                            <td class="col-type" th:if="${#strings.equals(converterJob.errorCode, 'null')}" th:text="없음">
+                            <td class="col-type" th:unless="${#strings.equals(converterJob.errorCode, 'null')}">
+                                <a href="#" th:onclick="detailErrorCode([[${converterJob.errorCode}]]); return false;">[보기]</a>
                             </td>
                             <td class="col-type">
                                 <p th:text="${#dates.format(converterJob.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>

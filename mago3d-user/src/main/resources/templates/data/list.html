@@ -139,7 +139,7 @@
 						<td colspan="12" class="col-none">데이터가 존재하지 않습니다.</td>
 					</tr>
 					<tr th:if="${!dataInfoList.empty}" th:each="dataInfo : ${dataInfoList}">
-						<!-- <td class="col-number">${pagination.rowNumber - status.index }</td> -->
+						<td class="col-number" th:text="${dataInfoStat.count}"></td>
 						<td class="col-name ellipsis" th:text="${dataInfo.dataGroupName}" style="min-width:100px;max-width:100px;"></td>
 						<td class="col-name ellipsis" style="min-width:160px;max-width:160px;">
 							<a th:text="${dataInfo.dataName}" th:href="@{/data/modify(dataId=${dataInfo.dataId})}"></a>
@@ -147,21 +147,21 @@
 						<td class="col-type" th:if="${#strings.equals(dataInfo.userId, 'owner')}" th:text="${dataInfo.userId}">
 						<td class="col-type" th:unless="${#strings.equals(dataInfo.userId, 'owner')}"><span th:text="${dataInfo.userId}" style="color: blue;"></span></td>
 						<td class="col-type" th:text="${dataInfo.dataType}"></td>
-						<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'common')}" th:text="공통"></td>
-                        <td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'public')}" th:text="공개"></td>
-                        <td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'private')}" th:text="개인"></td>
-						<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'group')}" th:text="그룹"></td>
+						<td class="col-type" th:if="${#strings.equals(dataInfo.sharing, 'common')}" th:text="공통"></td>
+                        <td class="col-type" th:if="${#strings.equals(dataInfo.sharing, 'public')}" th:text="공개"></td>
+                        <td class="col-type" th:if="${#strings.equals(dataInfo.sharing, 'private')}" th:text="개인"></td>
+						<td class="col-type" th:if="${#strings.equals(dataInfo.sharing, 'group')}" th:text="그룹"></td>
 						<td class="col-type ellipsis" th:text="${dataInfo.mappingType}" style="min-width:80px;max-width:80px;"></td>
 						<td class="col-type" th:if="${#strings.equals(dataInfo.status, 'processing')}" th:text="변환중"></td>
                         <td class="col-type" th:if="${#strings.equals(dataInfo.status, 'use')}" th:text="사용중"></td>
                         <td class="col-type" th:if="${#strings.equals(dataInfo.status, 'unused')}" th:text="사용중지"></td>
 						<td class="col-type" th:if="${#strings.equals(dataInfo.status, 'delete')}" th:text="삭제"></td>
 						<td class="col-type">
-							<a href="#" th:onclick="'viewDataInfo('+ ${dataInfo.dataId} +'); return false;'">보기</a>
+							<a href="#" th:onclick="viewDataInfo([[${dataInfo.dataId}]]); return false;">보기</a>
 						</td>
 						<th:block th:if="${#strings.equals(dataInfo.attributeExist, 'true')}">
 							<td class="col-type">
-								<a href="#" onclick="detailDataAttribute('${dataInfo.dataId }', '${dataInfo.dataName }'); return false;">보기</a>
+								<a href="#" th:onclick="detailDataAttribute([[${dataInfo.dataId}]], [[${dataInfo.dataName}]]); return false;">보기</a>
 							</td>
 						</th:block>
 						<th:block th:if="${#strings.equals(dataInfo.attributeExist, 'false')}">
@@ -169,7 +169,7 @@
 						</th:block>
 						<th:block th:if="${#strings.equals(dataInfo.objectAttributeExist, 'true')}">
 							<td class="col-type">
-								<a href="#" onclick="detailDataObjectAttribute('${dataInfo.dataId }', '${dataInfo.dataName }'); return false;">보기</a>
+								<a href="#" th:onclick="detailDataObjectAttribute([[${dataInfo.dataId}]], [[${dataInfo.dataName}]]); return false;">보기</a>
 							</td>
 						</th:block>
 						<th:block th:if="${#strings.equals(dataInfo.objectAttributeExist, 'false')}">

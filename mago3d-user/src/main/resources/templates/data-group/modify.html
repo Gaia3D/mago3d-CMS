@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" th:lang="${accessibility}">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow"/>
+	<title>데이터 그룹 수정 | NDTP</title>
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/cesium/Widgets/widgets.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/user-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
+    <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+    <script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+</head>
+<body>
+<div th:replace="~{/layouts/header :: #headerWrap}"></div>
+<div id="wrap">
+    <!-- S: NAVWRAP -->
+    <div class="navWrap">
+        <div th:replace="~{/layouts/menu :: #navWrap}"></div>
+    </div>
+    <!-- E: NAVWRAP -->
+
+    <div class="container" style="float:left; width: calc(100% - 78px);">
+        <div style="padding: 20px 20px 0px 10px; font-size: 18px;">3D 업로딩 데이터 자동 변환</div>
+        <!-- TAB -->
+        <div class="tabs">
+            <ul class="tab">
+                <li id="tabDataGroupList"><a th:href="@{/data-group/list}">데이터 그룹</a></li>
+                <li id="tabDataGroupInput"><a th:href="@{/data-group/input}">데이터 그룹 등록</a></li>
+                <li id="tabUploadDataInput"><a th:href="@{/upload-data/input}">업로딩 데이터</a></li>
+                <li id="tabUploadDataList"><a th:href="@{/upload-data/list}">업로딩 데이터 목록</a></li>
+                <li id="tabConverterList"><a th:href="@{/converter/list}">업로딩 데이터 변환 목록</a></li>
+                <li id="tabDataList"><a th:href="@{/data/list}">데이터 목록</a></li>
+                <li id="tabDataLogList"><a th:href="@{/data-log/list}">데이터 변경 이력</a></li>
+            </ul>
+        </div>
+
+        <!-- S: 데이터 그룹 수정 -->
+        <form id="dataGroup" th:object="${dataGroup}" method="post" th:action="@{#}" onsubmit="return false;">
+        <table class="input-table scope-row">
+            <col class="col-label l">
+            <col class="col-input">
+            <tr>
+                <th class="col-label" scope="row">
+                    <label for="dataGroupName">데이터 그룹명</label>
+                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                </th>
+                <td class="col-input">
+                    <input type="text" id="dataGroupName" name="dataGroupName" th:value="${dataGroup.dataGroupName}" cssClass="l" maxlength="100">
+                    <errors id="dataGroupName" name="dataGroupName" cssClass="error">
+                </td>
+            </tr>
+            <tr>
+                <th class="col-label" scope="row">
+                    <label for="dataGroupKey">데이터 그룹 Key(영문,숫자,-,_)</label>
+                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                </th>
+                <td class="col-input" th:text="${dataGroup.dataGroupKey}"></td>
+            </tr>
+            <tr>
+                <th class="col-label" scope="row">
+                    <label for="parentName">상위 데이터 그룹</label>
+                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                </th>
+                <td class="col-input" th:text="${dataGroup.parentName}"></td>
+            </tr>
+            <tr>
+                <th class="col-label" scope="row">
+                    <label for="sharing">공유 타입</label>
+                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                </th>
+                <td class="col-input">
+                    <select id="sharing" name="sharing" class="selectBoxClass">
+                        <option value="public" selected="selected">공개</option>
+                        <option value="common">공통</option>
+                        <option value="private">개인</option>
+                        <option value="group">그룹</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+				<th class="col-label l" scope="row">
+                    <label for="basic">기본 여부</label>
+                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                </th>
+				<td class="col-input radio-set" th:if="${dataGroup.basic == true}" th:text="기본">
+                <td class="col-input radio-set" th:nuless="${dataGroup.basic == true}" th:text="선택"></td>
+			</tr>
+            <tr>
+                <th class="col-label l" scope="row">
+                    <label for="available">사용 여부</label>
+                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                </th>
+                
+                <td class="col-input radio-set" th:if="${dataGroup.basic == true}" th:text="사용">
+                <td class="col-input radio-set" th:nuless="${dataGroup.basic == true}">
+                    <input type="radio" id="availableTrue" name="available" value="true">
+                    <label for="availableTrue">사용</label>
+                    <input type="radio" id="availableFalse" name="available" value="false">
+                    <label for="availableFalse">미사용</label>
+                </td>
+            </tr>
+            <tr>
+                <th class="col-label" scope="row">
+                    <label for="longitude">경도</label>
+                </th>
+                <td class="col-input">
+                    <input type="text" id="longitude" name="longitude" th:value="${dataGroup.longitude}" cssClass="m">
+                    <input type="button" id="mapButtion" value="지도에서 찾기">
+                    <errors id="longitude" name="longitude" cssClass="error">
+                </td>
+            </tr>
+            <tr>
+                <th class="col-label" scope="row">
+                    <label for="latitude">위도</label>
+                </th>
+                <td class="col-input">
+                    <input type="text" id="latitude" name="latitude" th:value="${dataGroup.latitude}" cssClass="m">
+                    <errors id="latitude" name="latitude" cssClass="error">
+                </td>
+            </tr>
+            <tr>
+                <th class="col-label" scope="row">
+                    <label for="altitude">높이</label>
+                </th>
+                <td class="col-input">
+                    <input type="text" id="altitude" name="altitude" th:value="${dataGroup.altitude}" cssClass="m">
+                    <errors id="altitude" name="altitude"  cssClass="error">
+                </td>
+            </tr>
+            <tr>
+                <th class="col-label" scope="row">
+                    <label for="duration">이동시간</label>
+                </th>
+                <td class="col-input">
+                    <input type="text" id="duration" name="duration" th:value="${dataGroup.duration}" cssClass="s">&nbsp;&nbsp;ms
+                    <errors id="duration" name="duration" cssClass="error">
+                </td>
+            </tr>
+            <tr>
+                <th class="col-label" scope="row">
+                    <label for="metainfo">메타정보</label>
+                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                </th>
+                <td class="col-input">
+                    <input type="text" id="metainfo" name="metainfo" th:value="${dataGroup.metainfo}" value='{"isPhysical": false}' class="xl">
+                    <errors id="metainfo" name="metainfo" cssClass="error">
+                </td>
+            </tr>
+            <tr>
+                <th class="col-label l" scope="row"><label for="description" th:text="#{description}"></label></th>
+                <td class="col-input"><input type="text" name="description" th:value="${dataGroup.description}" class="xl"></td>
+            </tr>
+        </table>
+        <div class="button-group">
+            <div class="center-buttons">
+                <input type="submit" th:value="#{modified}" onclick="updatedataGroup();"/>
+                <a href="/data-group/list" class="button">목록</a>
+            </div>
+        </div>
+        </form>
+        <!-- E: 데이터 그룹 수정 -->
+	</div>
+</div>
+<!-- E: WRAP -->
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var isBasic = "[[${dataGroup.basic}]]";
+		if(isBasic === "false") {
+			// 기본 그룹이 아닐 경우만 사용 유무 수정 가능
+			$("[name=available]").filter("[value='[[${dataGroup.available}]]']").prop("checked",true);
+		}
+			
+		$("#sharing").val("[[${dataGroup.sharing}]]");
+	});
+	
+	function validate() {
+		var number = /^[0-9]+$/;
+		if ($("#dataGroupName").val() === null || $("#dataGroupName").val() === "") {
+			alert("데이터 그룹명을 입력해 주세요.");
+			$("#dataGroupName").focus();
+			return false;
+		}
+		if($("#duration").val() !== null && $("#duration").val() !== "") {
+			if(!isNumber($("#duration").val())) {
+				$("#duration").focus();
+				return false;
+			}
+		}
+		if(!locationValidation($("#longitude").val(), $("#latitude").val(), $("#altitude").val())) {
+			return false;
+		}
+	}
+	
+	// 수정
+	var updatedataGroupFlag = true;
+	function updatedataGroup() {
+		if (validate() == false) {
+			return false;
+		}
+		if(updatedataGroupFlag) {
+			updatedataGroupFlag = false;
+			var formData = $("#dataGroup").serialize();		
+			$.ajax({
+				url: "/data-groups/[[${dataGroup.dataGroupId}]]",
+				type: "POST",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				data: formData,
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						alert(JS_MESSAGE["update"]);
+						window.location.reload();
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+						console.log("---- " + msg.message);
+					}
+					updatedataGroupFlag = true;
+				},
+				error:function(request, status, error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        updatedataGroupFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+	
+	// 지도에서 찾기
+	$( "#mapButtion" ).on( "click", function() {
+		var url = "/map/find-point";
+		var width = 800;
+		var height = 700;
+	
+		var popupX = (window.screen.width / 2) - (width / 2);
+		// 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
+		var popupY= (window.screen.height / 2) - (height / 2);
+		
+	    var popWin = window.open(url, "","toolbar=no ,width=" + width + " ,height=" + height + ", top=" + popupY + ", left="+popupX
+	            + ", directories=no,status=yes,scrollbars=no,menubar=no,location=no");
+	    //popWin.document.title = layerName;
+	});
+</script>
+</body>
+</html>

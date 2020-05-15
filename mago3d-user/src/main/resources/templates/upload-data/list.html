@@ -142,9 +142,9 @@
 
                     <tr th:if="${!uploadDataList.empty}" th:each="uploadData : ${uploadDataList}">
 						<td class="col-checkbox">
-							<input type="checkbox" id="|uploadDataId_${uploadData.uploadDataId}|" name="uploadDataId" value="${uploadData.uploadDataId}">
+							<input type="checkbox" th:id="|uploadDataId_${uploadData.uploadDataId}|" name="uploadDataId" value="${uploadData.uploadDataId}">
 						</td>
-						<!-- <td class="col-number">${pagination.rowNumber - status.index }</td> -->
+						<td class="col-number" th:text="${uploadDataStat.count}"></td>
 						<td class="col-name ellipsis" th:text="${uploadData.dataGroupName}" style="min-width:120px;max-width:120px;"></td>
 						<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'common')}" th:text="공통"></td>
                         <td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'public')}" th:text="공개"></td>
@@ -157,17 +157,17 @@
 						</td>
 						<td class="col-count">
 							<span value="${uploadData.converterTargetCount}" style="color:blue; font-weight: bold;"></span>
-							<span th:text="| / ${uploadData.fileCount}개|"></span> 
+							<span th:text="| ${uploadData.converterTargetCount} / ${uploadData.fileCount}개|"></span> 
 						</td>
 						<td class="col-count" th:text="|${uploadData.converterCount}건|"></td>
 						<td class="col-functions">
 							<span class="button-group">
-                                <a th:text="F4D 변환" href="#" th:onclick="'converterFile(' + ${uploadData.uploadDataId} + ', ' + ${uploadData.dataName} + ', ' + ${uploadData.dataType} +'); return false;'" class="button" style="text-decoration: none;"></a>
+								<a href="#" th:onclick="converterFile([[${uploadData.uploadDataId}]], [[${uploadData.dataName}]], [[${uploadData.dataType}]]); return false;" class="button" style="text-decoration: none;">F4D 변환</a>
 							</span>
 						</td>
 						<td class="col-functions">
 							<span class="button-group">
-								<a th:text="#{delete}" href="#" onclick="deleteUploadData('${uploadData.uploadDataId }'); return false;" class="image-button button-delete"></a>
+								<a href="#" th:onclick="deleteUploadData([[${uploadData.uploadDataId}]]); return false;" th:text="#{delete}" class="image-button button-delete"></a>
 							</span>
 						</td>
 						<td class="col-type">
@@ -206,7 +206,9 @@
                 </div>
             </td>
         </th:block>
-        <!-- E: 페이지 -->
+		<!-- E: 페이지 -->
+		<!-- F4D 변환 -->
+        <div th:replace="~{/upload-data/converter-dialog :: #dialogConverterJob}"></div>
 	</div>
 </div>
 <!-- E: WRAP -->

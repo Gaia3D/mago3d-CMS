@@ -93,7 +93,7 @@
         </div>
 
         <!-- S: 3D 파일 업로드 -->
-		<form id="uploadData" modelAttribute="uploadData" method="post" onsubmit="return false;">
+		<form id="uploadData" th:object="${dataGroup}" th:action="@{#}" method="post" onsubmit="return false;">
 		<table class="input-table scope-row">
 			<colgroup>
 				<col class="col-label l" style="width: 13%">
@@ -181,7 +181,7 @@
 		<div style="padding: 20px 20px 10px 10px; font-size: 18px;">파일 업로딩</div>
 		<div class="fileSection" style="font-size: 17px;">
 	    	<form id="my-dropzone" action="" class="dropzone hzScroll"></form>
-        </div>
+	    </div>
         <!-- E: DropZone -->
 
 	    <div class="button-group" style="margin-top: 30px;">
@@ -261,7 +261,7 @@
 			"x-csrf-token": document.querySelectorAll("meta[name=csrf-token]")[0].getAttributeNode("content").value,
 		}, */
 		// 허용 확장자
-		acceptedFiles: "${acceptedFiles}",
+		acceptedFiles: "[[${acceptedFiles}]]",
 		// 업로드 취소 및 추가 삭제 미리 보기 그림 링크 를 기본 추가 하지 않음
 		// 기본 true false 로 주면 아무 동작 못함
 		//clickable: true,

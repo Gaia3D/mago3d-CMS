@@ -139,7 +139,7 @@
 						<td class="col-checkbox">
 							<input type="checkbox" id="dataInfoLogId_${dataInfoLog.dataLogId}" name="dataLogId" th:value="${dataInfoLog.dataLogId}">
 						</td>
-						<!-- <td class="col-number">${pagination.rowNumber - status.index }</td> -->
+						<td class="col-number" th:text="${dataInfoLogStat.count}"></td>
 						<td class="col-name ellipsis" th:text="${dataInfoLog.dataGroupName}" style="min-width:100px;max-width:100px;"></td>
 						<td class="col-name ellipsis" th:text="${dataInfoLog.dataName}" style="min-width:160px;max-width:160px;"></td>
 						<td class="col-type" th:text="${dataInfoLog.userId}"></td>
