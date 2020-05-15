@@ -70,15 +70,10 @@ function districtSearch(pageNo) {
 					msg.pagination.pageList.push(i);
 				}
 				//핸들바 템플릿 컴파일
-				var template = Handlebars.compile($("#templateDistrictSearchResult").html());
-				var pageTemplate = Handlebars.compile($("#templateDynamicPagination").html());
-				//핸들바 템플릿에 데이터를 바인딩해서 HTML 생성
-				var htmlList = template(msg);
-				var pageList = pageTemplate(msg);
-				$("#districtSearchResult").html("");
-				$("#districtSearchResult").append(htmlList);
-				$("#districtPage").html("");
-				$("#districtPage").append(pageList);
+				var template = Handlebars.compile($("#districtSearchResultSource").html());
+				var pageTemplate = Handlebars.compile($("#districtPaginationSource").html());
+				$("#districtSearchResultDHTML").html("").append(template(msg))
+				$("#districtPaginationDHTML").html("").append(pageTemplate(msg));
 				fullTextSearchFlag = true;
 			} else {
 				alert(JS_MESSAGE[msg.errorCode]);
