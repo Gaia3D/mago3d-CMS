@@ -1,0 +1,33 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<header id="headerWrap" class="site-header">
+    <div class="row">
+        <div class="container">
+            <h2 class="site-title u-pull-left" style="font-size:28px; font-family:Lousianne; color:#573592"><a
+                    href="/main/index">mago3D</a></h2>
+            <aside class="site-aside-menu u-pull-right">
+                <ul>
+                    <li>
+                        <span class="icon-glyph glyph-qmark-circle"></span>
+                        <a href="/guide/help" title="API도움말"
+                           onclick="goMagoAPIGuide(this.href);return false;">API도움말</a>
+                    </li>
+                    <li>
+                        <th:block th:if="${session.USER_SESSION}">
+                            <a href="/sign/signout">
+                                <span class="icon-glyph glyph-out"></span>
+                                <span class="icon-text" th:text="#{signout}"></span>
+                            </a>
+                        </th:block>
+                        <th:block th:unless="${session.USER_SESSION}">
+                            <a href="/sign/signin">
+                                <span class="icon-glyph glyph-on"></span>
+                                <span class="icon-text" th:text="#{signin}"></span>
+                            </a>
+                        </th:block>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+</header>
+</html>

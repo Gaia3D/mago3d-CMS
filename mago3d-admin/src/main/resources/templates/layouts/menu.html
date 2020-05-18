@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<nav id="navWrap" class="site-navigation">
+	<div class="main-menu row">
+		<div class="container">
+			<ul>
+<th:block th:with="menuDepthValue=${userGroupMenu.depth}" th:each="userGroupMenu, status : ${cacheUserGroupMenuList}">
+	<th:block th:if="${userGroupMenu.depth == 1 and userGroupMenu.displayYn == 'Y'}">
+		<th:block th:if="${userGroupMenu.viewOrder == 1}"
+				  th:utext="'</li>'">
+		</th:block>
+		<th:block th:unless="${userGroupMenu.viewOrder == 2}"
+				  th:utext="'</ul></li>'">
+		</th:block>
+		<th:block th:if="${parentMenu}">
+			<th:block th:if="${userGroupMenu.menuId == parentMenu.menuId}">
+				<li th:id="${'main-menu-' + userGroupMenu.menuId}" class="current-page">
+			</th:block>
+			<th:block th:unless="${userGroupMenu.menuId == parentMenu.menuId}">
+				<li th:id="${'main-menu-' + userGroupMenu.menuId}">
+			</th:block>
+			<a th:href="${userGroupMenu.url}">
+				<span th:class="${'icon-glyph '+ userGroupMenu.cssClass }"></span>
+				<span th:class="icon-text" th:text="${userGroupMenu.name}"></span>
+			</a>
+		</th:block>
+		<th:block th:if="${parentMenu == null}">
+			<li th:id="${'main-menu-' + userGroupMenu.menuId}">
+				<a th:href="${userGroupMenu.url}">
+					<span th:class="${'icon-glyph '+ userGroupMenu.cssClass }"></span>
+					<span th:class="icon-text" th:text="${userGroupMenu.name}"></span>
+				</a>
+		</th:block>
+	</th:block>
+	<th:block th:if="${userGroupMenu.depth == 2 and userGroupMenu.displayYn == 'Y'}">
+		<th:block th:if="${userGroupMenu.viewOrder == 1}">
+			<ul th:id="${'sub-menu-' + userGroupMenu.parent}">
+		</th:block>
+		<li><a th:href="${userGroupMenu.url}" th:text="${userGroupMenu.name}"></a></li>
+	</th:block>
+</th:block>
+			</ul>
+		</div>
+	</div>
+</nav>
+</html>
