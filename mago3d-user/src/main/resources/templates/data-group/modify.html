@@ -4,8 +4,8 @@
 	<meta charset="utf-8">
     <meta name="referrer" content="origin">
     <meta name="viewport" content="width=device-width">
-    <meta name="robots" content="index,nofollow"/>
-	<title>데이터 그룹 수정 | NDTP</title>
+    <meta name="robots" content="index,nofollow">
+	<title>데이터 그룹 수정 | mago3D</title>
 	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/externlib/cesium/Widgets/widgets.css(cacheVersion=${contentCacheVersion})}">
     <link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
@@ -42,127 +42,127 @@
 
         <!-- S: 데이터 그룹 수정 -->
         <form id="dataGroup" th:object="${dataGroup}" method="post" th:action="@{#}" onsubmit="return false;">
-        <table class="input-table scope-row">
-            <col class="col-label l">
-            <col class="col-input">
-            <tr>
-                <th class="col-label" scope="row">
-                    <label for="dataGroupName">데이터 그룹명</label>
-                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
-                </th>
-                <td class="col-input">
-                    <input type="text" id="dataGroupName" name="dataGroupName" th:value="${dataGroup.dataGroupName}" cssClass="l" maxlength="100">
-                    <errors id="dataGroupName" name="dataGroupName" cssClass="error">
-                </td>
-            </tr>
-            <tr>
-                <th class="col-label" scope="row">
-                    <label for="dataGroupKey">데이터 그룹 Key(영문,숫자,-,_)</label>
-                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
-                </th>
-                <td class="col-input" th:text="${dataGroup.dataGroupKey}"></td>
-            </tr>
-            <tr>
-                <th class="col-label" scope="row">
-                    <label for="parentName">상위 데이터 그룹</label>
-                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
-                </th>
-                <td class="col-input" th:text="${dataGroup.parentName}"></td>
-            </tr>
-            <tr>
-                <th class="col-label" scope="row">
-                    <label for="sharing">공유 타입</label>
-                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
-                </th>
-                <td class="col-input">
-                    <select id="sharing" name="sharing" class="selectBoxClass">
-                        <option value="public" selected="selected">공개</option>
-                        <option value="common">공통</option>
-                        <option value="private">개인</option>
-                        <option value="group">그룹</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-				<th class="col-label l" scope="row">
-                    <label for="basic">기본 여부</label>
-                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
-                </th>
-				<td class="col-input radio-set" th:if="${dataGroup.basic == true}" th:text="기본">
-                <td class="col-input radio-set" th:nuless="${dataGroup.basic == true}" th:text="선택"></td>
-			</tr>
-            <tr>
-                <th class="col-label l" scope="row">
-                    <label for="available">사용 여부</label>
-                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
-                </th>
-                
-                <td class="col-input radio-set" th:if="${dataGroup.basic == true}" th:text="사용">
-                <td class="col-input radio-set" th:nuless="${dataGroup.basic == true}">
-                    <input type="radio" id="availableTrue" name="available" value="true">
-                    <label for="availableTrue">사용</label>
-                    <input type="radio" id="availableFalse" name="available" value="false">
-                    <label for="availableFalse">미사용</label>
-                </td>
-            </tr>
-            <tr>
-                <th class="col-label" scope="row">
-                    <label for="longitude">경도</label>
-                </th>
-                <td class="col-input">
-                    <input type="text" id="longitude" name="longitude" th:value="${dataGroup.longitude}" cssClass="m">
-                    <input type="button" id="mapButtion" value="지도에서 찾기">
-                    <errors id="longitude" name="longitude" cssClass="error">
-                </td>
-            </tr>
-            <tr>
-                <th class="col-label" scope="row">
-                    <label for="latitude">위도</label>
-                </th>
-                <td class="col-input">
-                    <input type="text" id="latitude" name="latitude" th:value="${dataGroup.latitude}" cssClass="m">
-                    <errors id="latitude" name="latitude" cssClass="error">
-                </td>
-            </tr>
-            <tr>
-                <th class="col-label" scope="row">
-                    <label for="altitude">높이</label>
-                </th>
-                <td class="col-input">
-                    <input type="text" id="altitude" name="altitude" th:value="${dataGroup.altitude}" cssClass="m">
-                    <errors id="altitude" name="altitude"  cssClass="error">
-                </td>
-            </tr>
-            <tr>
-                <th class="col-label" scope="row">
-                    <label for="duration">이동시간</label>
-                </th>
-                <td class="col-input">
-                    <input type="text" id="duration" name="duration" th:value="${dataGroup.duration}" cssClass="s">&nbsp;&nbsp;ms
-                    <errors id="duration" name="duration" cssClass="error">
-                </td>
-            </tr>
-            <tr>
-                <th class="col-label" scope="row">
-                    <label for="metainfo">메타정보</label>
-                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
-                </th>
-                <td class="col-input">
-                    <input type="text" id="metainfo" name="metainfo" th:value="${dataGroup.metainfo}" value='{"isPhysical": false}' class="xl">
-                    <errors id="metainfo" name="metainfo" cssClass="error">
-                </td>
-            </tr>
-            <tr>
-                <th class="col-label l" scope="row"><label for="description" th:text="#{description}"></label></th>
-                <td class="col-input"><input type="text" name="description" th:value="${dataGroup.description}" class="xl"></td>
-            </tr>
-        </table>
-        <div class="button-group">
-            <div class="center-buttons">
-                <input type="submit" th:value="#{modified}" onclick="updatedataGroup();"/>
-                <a href="/data-group/list" class="button">목록</a>
+            <table class="input-table scope-row">
+                <col class="col-label l">
+                <col class="col-input">
+                <tr>
+                    <th class="col-label" scope="row">
+                        <label for="dataGroupName">데이터 그룹명</label>
+                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                    </th>
+                    <td class="col-input">
+                        <input type="text" id="dataGroupName" name="dataGroupName" th:value="${dataGroup.dataGroupName}" cssClass="l" maxlength="100">
+                        <errors id="dataGroupName" name="dataGroupName" cssClass="error">
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-label" scope="row">
+                        <label for="dataGroupKey">데이터 그룹 Key(영문,숫자,-,_)</label>
+                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                    </th>
+                    <td class="col-input" th:text="${dataGroup.dataGroupKey}"></td>
+                </tr>
+                <tr>
+                    <th class="col-label" scope="row">
+                        <label for="parentName">상위 데이터 그룹</label>
+                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                    </th>
+                    <td class="col-input" th:text="${dataGroup.parentName}"></td>
+                </tr>
+                <tr>
+                    <th class="col-label" scope="row">
+                        <label for="sharing">공유 타입</label>
+                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                    </th>
+                    <td class="col-input">
+                        <select id="sharing" name="sharing" class="selectBoxClass">
+                            <option value="public" selected="selected">공개</option>
+                            <option value="common">공통</option>
+                            <option value="private">개인</option>
+                            <option value="group">그룹</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-label l" scope="row">
+                        <label for="basic">기본 여부</label>
+                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                    </th>
+                    <td class="col-input radio-set" th:if="${dataGroup.basic == true}" th:text="기본">
+                    <td class="col-input radio-set" th:nuless="${dataGroup.basic == true}" th:text="선택"></td>
+                </tr>
+                <tr>
+                    <th class="col-label l" scope="row">
+                        <label for="available">사용 여부</label>
+                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                    </th>
+                    
+                    <td class="col-input radio-set" th:if="${dataGroup.basic == true}" th:text="사용">
+                    <td class="col-input radio-set" th:nuless="${dataGroup.basic == true}">
+                        <input type="radio" id="availableTrue" name="available" value="true">
+                        <label for="availableTrue">사용</label>
+                        <input type="radio" id="availableFalse" name="available" value="false">
+                        <label for="availableFalse">미사용</label>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-label" scope="row">
+                        <label for="longitude">경도</label>
+                    </th>
+                    <td class="col-input">
+                        <input type="text" id="longitude" name="longitude" th:value="${dataGroup.longitude}" cssClass="m">
+                        <input type="button" id="mapButtion" value="지도에서 찾기">
+                        <errors id="longitude" name="longitude" cssClass="error">
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-label" scope="row">
+                        <label for="latitude">위도</label>
+                    </th>
+                    <td class="col-input">
+                        <input type="text" id="latitude" name="latitude" th:value="${dataGroup.latitude}" cssClass="m">
+                        <errors id="latitude" name="latitude" cssClass="error">
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-label" scope="row">
+                        <label for="altitude">높이</label>
+                    </th>
+                    <td class="col-input">
+                        <input type="text" id="altitude" name="altitude" th:value="${dataGroup.altitude}" cssClass="m">
+                        <errors id="altitude" name="altitude"  cssClass="error">
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-label" scope="row">
+                        <label for="duration">이동시간</label>
+                    </th>
+                    <td class="col-input">
+                        <input type="text" id="duration" name="duration" th:value="${dataGroup.duration}" cssClass="s">&nbsp;&nbsp;ms
+                        <errors id="duration" name="duration" cssClass="error">
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-label" scope="row">
+                        <label for="metainfo">메타정보</label>
+                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                    </th>
+                    <td class="col-input">
+                        <input type="text" id="metainfo" name="metainfo" th:value="${dataGroup.metainfo}" value='{"isPhysical": false}' class="xl">
+                        <errors id="metainfo" name="metainfo" cssClass="error">
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-label l" scope="row"><label for="description" th:text="#{description}"></label></th>
+                    <td class="col-input"><input type="text" id="description" name="description" th:value="${dataGroup.description}" class="xl"></td>
+                </tr>
+            </table>
+            <div class="button-group">
+                <div class="center-buttons">
+                    <input type="submit" th:value="#{modified}" onclick="updatedataGroup();">
+                    <a th:href="@{/data-group/list}" class="button">목록</a>
+                </div>
             </div>
-        </div>
         </form>
         <!-- E: 데이터 그룹 수정 -->
 	</div>

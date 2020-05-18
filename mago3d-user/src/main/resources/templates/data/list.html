@@ -43,34 +43,34 @@
 
 		<!-- S: 검색 -->
 		<div class="filters">
-            <form id="searchForm" th:object="${dataInfo}" method="get" action="#" th:action="@{/data/list}" onsubmit="return searchCheck();">
+            <form id="searchForm" th:object="${dataInfo}" method="get" th:action="@{/data/list}" onsubmit="return searchCheck();">
 			<div class="input-group row">
 				<div class="input-set">
 					<label for="searchWord" th:text="#{search.word}"></label>
-					<select id="searchWord" th:field="*{searchWord}" class="selectBoxClass">
+					<select id="searchWord" name="searchWord" class="selectBoxClass">
 						<option value="" th:text="#{select}"></option>
 	          			<option value="data_name" th:text="데이터명"></option>
 					</select>
-					<select id="searchOption" th:field="*{searchOption}" class="selectBoxClass">
+					<select id="searchOption" name="searchOption" class="selectBoxClass">
 						<option value="0" th:text="#{search.same}"></option>
-						<option value="1"th:text="#{search.include}"></option>
+						<option value="1" th:text="#{search.include}"></option>
 					</select>
-					<input path="searchValue" type="search" cssClass="m" style="float: right;">
+					<input type="search" id="searchValue" name="searchValue" cssClass="m" style="float: right;">
 				</div>
 				<div class="input-set">
-					<label for="startDate" th:text="#{search.date}"></label>
-					<input type="text" id="startDate" th:field="*{startDate}" class="s date" autocomplete="off">
-					<span class="delimeter tilde">~</span>
-					<input type="text" id="endDate" th:field="*{endDate}" class="s date" autocomplete="off">
-				</div>
+                    <label for="startDate" th:text="#{search.date}"></label>
+                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off">
+                    <span class="delimeter tilde">~</span>
+                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off">
+                </div>
 				<div class="input-set">
 					<label for="orderWord" th:text="#{search.order}"></label>
-					<select id="orderWord" th:field="*{orderWord}" class="selectBoxClass">
+					<select id="orderWord" name="orderWord" class="selectBoxClass">
 						<option value="" th:text="#{search.basic}"></option>
 						<option value="data_name" th:text="데이터명"></option>
 						<option value="insert_date" th:text="#{search.insert.date}"></option>
 					</select>
-					<select id="orderValue" th:field="*{orderValue}" class="selectBoxClass">
+					<select id="orderValue" name="orderValue" class="selectBoxClass">
                 		<option value="" th:text="#{search.basic}"></option>
 	                	<option value="ASC" th:text="#{search.ascending}"></option>
 						<option value="DESC" th:text="#{search.descending.order}"></option>
@@ -183,36 +183,9 @@
 				</tbody>
 			</table>
 			</form>
-
 		</div>
-		
-		<!-- S: 페이지 -->
-		<th:block th:if="${pagination.totalCount > 0}" th:fragment="pageTemplate">
-			<td id="boardPage" colspan="8" th:if="${pagination.pageNo != 0}">
-				<div th:class="pagination">
-					<th:block th:if="${pagination.existPrePage == true}" th:object="${pagination}">
-						<a th:href="@{${pagination.uri}(pageNo=${pagination.firstPage})}"><span> [<<] </span></a>
-						<a th:href="@{${pagination.uri}(pageNo=${pagination.prePageNo})}"><span> [<] </span></a>
-					</th:block>
-
-					<th:block th:with="pageNo = ${pagination.pageNo}" th:each="seq : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
-						<th:block th:if="${seq == pageNo}">
-							<a th:href="@{#}" style="border: 1px solid blue;" th:text="${pageNo}"></a>
-						</th:block>
-						<th:block th:unless="${seq == pageNo}">
-							<a th:href="@{${pagination.uri}(pageNo=${seq})}" th:text="${seq}"></a>
-						</th:block>
-					</th:block>
-
-					<th:block th:if="${pagination.existNextPage == true}" th:object="${pagination}">
-						<a th:href="@{${pagination.uri}(pageNo=${pagination.nextPageNo})}"> [>] <span></span></a>
-						<a th:href="@{${pagination.uri}(pageNo=${pagination.lastPage})}"> [>>] <span></span></a>
-					</th:block>
-				</div>
-			</td>
-		</th:block>
-		<!-- E: 페이지 -->
-
+		<!-- 페이지 -->
+        <div th:replace="~{/common/pagination :: #paginationArea}"></div>
 		<!-- 데이터 속성 -->
         <div th:replace="~{/data/data-attribute-dialog :: #dataAttributeDialog}"></div>
 		<!-- 데이터 오브젝트 속성 -->
@@ -232,11 +205,11 @@
 		var orderValue = "[[${dataInfo.orderValue}]]";
 		var listCounter = "[[${dataInfo.listCounter}]]";
 
-		if(searchWord != "") $("#searchWord").val("${dataInfo.searchWord}");
-		if(searchOption != "") $("#searchOption").val("${dataInfo.searchOption}");
-		if(orderWord != "") $("#orderWord").val("${dataInfo.orderWord}");
-		if(orderValue != "") $("#orderValue").val("${dataInfo.orderValue}");
-		if(listCounter != "") $("#listCounter").val("${dataInfo.listCounter}");
+		if(searchWord != "") $("#searchWord").val("[[${dataInfo.searchWord}]]");
+		if(searchOption != "") $("#searchOption").val("[[${dataInfo.searchOption}]]");
+		if(orderWord != "") $("#orderWord").val("[[${dataInfo.orderWord}]]");
+		if(orderValue != "") $("#orderValue").val("[[${dataInfo.orderValue}]]");
+		if(listCounter != "") $("#listCounter").val("[[${dataInfo.listCounter}]]");
 
 		initDatePicker();
 		initCalendar(new Array("startDate", "endDate"), new Array("[[${dataInfo.startDate}]]", "[[${dataInfo.endDate}]]"));

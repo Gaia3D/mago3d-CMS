@@ -29,17 +29,14 @@
             white-space: nowrap;
             border: 1px solid #e5e5e5;
         }
-        
         .loader-txt p {
             font-size: 13px;
             color: #666;
         }
-    
         .loader-txt p small {
             font-size: 11.5px;
             color: #999;
         }
-        
         .loader {
             position: relative;
             text-align: center;
@@ -54,16 +51,14 @@
             animation: spin 1s ease-in-out infinite;
             -webkit-animation: spin 1s ease-in-out infinite;
         }
-    
         @keyframes spin {
             to {
-                -webkit-trans rotate(360deg);
+                -webkit-transform: rotate(360deg);
             }
         }
-    
         @-webkit-keyframes spin {
             to {
-                -webkit-trans rotate(360deg);
+                -webkit-transform: rotate(360deg);
             }
         }
     </style>

@@ -39,56 +39,55 @@
             </ul>
         </div>
 
-        <!-- 검색 -->
-        <div class="filters">
-            <form id="searchForm" th:object="${converterJob}" method="get" action="#" th:action="@{/converter/list}" onsubmit="return searchCheck();">
-                <div class="input-group row">
-                    <div class="input-set">
-                        <label for="searchWord" th:text="#{search.word}"></label>
-                        <select id="searchWord" th:field="*{searchWord}" class="selectBoxClass">
-                            <option value="" th:text="#{select}"></option>
-                              <option value="title" th:text="제목"></option>
-                        </select>
-                        <select id="searchOption" th:field="*{searchOption}" class="selectBoxClass">
-                            <option value="0" th:text="#{search.same}"></option>
-                            <option value="1"th:text="#{search.include}"></option>
-                        </select>
-                        <form:input path="searchValue" type="search" cssClass="m" cssStyle="float: right;">
-                    </div>
-                    <div class="input-set">
-                        <label for="startDate" th:text="#{search.date}"></label>
-                        <input type="text" id="startDate" th:field="*{startDate}" class="s date" autocomplete="off">
-                        <span class="delimeter tilde">~</span>
-                        <input type="text" id="endDate" th:field="*{endDate}" class="s date" autocomplete="off">
-                    </div>
-                    <div class="input-set">
-                        <label for="orderWord" th:text="#{search.order}"></label>
-                        <select id="orderWord" th:field="*{orderWord}" class="selectBoxClass">
-                            <option value="" th:text="#{search.basic}"></option>
-                            <option value="title" th:text="제목"></option>
-                            <option value="insert_date" th:text="#{search.insert.date}"></option>
-                        </select>
-                        <select id="orderValue" th:field="*{orderValue}" class="selectBoxClass">
-                            <option value="" th:text="#{search.basic}"></option>
-                            <option value="ASC" th:text="#{search.ascending}"></option>
-                            <option value="DESC" th:text="#{search.descending.order}"></option>
-                        </select>
-                        <select id="listCounter" name="listCounter" class="selectBoxClass">
-                            <option value="10" th:text="#{search.ten.count}"></option>
-                            <option value="50" th:text="#{search.fifty.count}"></option>
-                            <option value="100" th:text="#{search.hundred.count}"></option>
-                        </select>
-                    </div>
-                    <div class="input-set">
-                        <input type="submit" value="검색">
-                    </div>
+        <!-- S: 검색 -->
+		<div class="filters">
+            <form id="searchForm" th:object="${converterJob}" method="get" th:action="@{/converter/list}" onsubmit="return searchCheck();">
+			<div class="input-group row">
+				<div class="input-set">
+					<label for="searchWord" th:text="#{search.word}"></label>
+					<select id="searchWord" name="searchWord" class="selectBoxClass">
+						<option value="" th:text="#{select}"></option>
+	          			<option value="title" th:text="제목"></option>
+					</select>
+					<select id="searchOption" name="searchOption" class="selectBoxClass">
+						<option value="0" th:text="#{search.same}"></option>
+						<option value="1" th:text="#{search.include}"></option>
+					</select>
+					<input type="search" id="searchValue" name="searchValue" cssClass="m" style="float: right;">
+				</div>
+				<div class="input-set">
+                    <label for="startDate" th:text="#{search.date}"></label>
+                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off">
+                    <span class="delimeter tilde">~</span>
+                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off">
                 </div>
-            </form>
-            
+				<div class="input-set">
+					<label for="orderWord" th:text="#{search.order}"></label>
+					<select id="orderWord" name="orderWord" class="selectBoxClass">
+						<option value="" th:text="#{search.basic}"></option>
+						<option value="title" th:text="제목"></option>
+						<option value="insert_date" th:text="#{search.insert.date}"></option>
+					</select>
+					<select id="orderValue" name="orderValue" class="selectBoxClass">
+                		<option value="" th:text="#{search.basic}"></option>
+	                	<option value="ASC" th:text="#{search.ascending}"></option>
+						<option value="DESC" th:text="#{search.descending.order}"></option>
+					</select>
+					<select id="listCounter" name="listCounter" class="selectBoxClass">
+                		<option value="10" th:text="#{search.ten.count}"></option>
+	                	<option value="50" th:text="#{search.fifty.count}"></option>
+						<option value="100" th:text="#{search.hundred.count}"></option>
+					</select>
+				</div>
+				<div class="input-set">
+					<input type="submit" th:value="#{search}">
+				</div>
+			</div>
+			</form>
         </div>
-        <!-- 검색 -->
+        <!-- E: 검색 -->
 
-        <!-- 목록 -->
+        <!-- S: 변환 데이터 목록 -->
         <div class="list">
             <form id="listForm" modelAttribute="converterJob" method="post">
 				<input type="hidden" id="checkIds" name="checkIds" value="">
@@ -154,8 +153,8 @@
                             <td class="col-type" th:if="${#strings.equals(converterJob.status, 'fail')}" th:text="실패"></td>
                                
                             <td class="col-count" th:text="|${converterJob.fileCount}개|"></td>
-                            <td class="col-type" th:if="${#strings.equals(converterJob.errorCode, 'null')}" th:text="없음">
-                            <td class="col-type" th:unless="${#strings.equals(converterJob.errorCode, 'null')}">
+                            <td class="col-type" th:if="${converterJob.errorCode == null}" th:text="없음">
+                            <td class="col-type" th:unless="${converterJob.errorCode == null}">
                                 <a href="#" th:onclick="detailErrorCode([[${converterJob.errorCode}]]); return false;">[보기]</a>
                             </td>
                             <td class="col-type">
@@ -166,34 +165,9 @@
                     </tbody>
                 </table>
         </div>
-        <!-- 목록 -->
-
+        <!-- E: 변환 데이터 목록 -->
         <!-- 페이지 -->
-        <th:block th:if="${pagination.totalCount > 0}" th:fragment="pageTemplate">
-            <td id="boardPage" colspan="8" th:if="${pagination.pageNo != 0}">
-                <div th:class="pagination">
-                    <th:block th:if="${pagination.existPrePage == true}" th:object="${pagination}">
-                        <a th:href="@{${pagination.uri}(pageNo=${pagination.firstPage})}"><span> [<<] </span></a>
-                        <a th:href="@{${pagination.uri}(pageNo=${pagination.prePageNo})}"><span> [<] </span></a>
-                    </th:block>
-        
-                    <th:block th:with="pageNo = ${pagination.pageNo}" th:each="seq : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
-                        <th:block th:if="${seq == pageNo}">
-                            <a th:href="@{#}" style="border: 1px solid blue;" th:text="${pageNo}"></a>
-                        </th:block>
-                        <th:block th:unless="${seq == pageNo}">
-                            <a th:href="@{${pagination.uri}(pageNo=${seq})}" th:text="${seq}"></a>
-                        </th:block>
-                    </th:block>
-        
-                    <th:block th:if="${pagination.existNextPage == true}" th:object="${pagination}">
-                        <a th:href="@{${pagination.uri}(pageNo=${pagination.nextPageNo})}"> [>] <span></span></a>
-                        <a th:href="@{${pagination.uri}(pageNo=${pagination.lastPage})}"> [>>] <span></span></a>
-                    </th:block>
-                </div>
-            </td>
-        </th:block>
-        <!-- 페이지 -->
+        <div th:replace="~{/common/pagination :: #paginationArea}"></div>
     </div>
 </div>
 <script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
