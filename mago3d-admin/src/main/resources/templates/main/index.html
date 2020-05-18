@@ -15,8 +15,399 @@
 <body>
 <div th:replace="~{/layouts/header :: #headerWrap}"></div>
 <div th:replace="~{/layouts/menu :: #navWrap}"></div>
+<div class="site-body">
+	<div class="container">
+		<div class="widgets">
+			<div class="row">
+				<div class="widget widget-low widget-otp-usage full column">
+					<div class="widget-header row">
+						<div class="widget-heading u-pull-left">
+							<h3 class="widget-title">
+								<th:block th:text="#{main.converter.status}"></th:block>
+								<span class="widget-desc" th:text="${yearMonthDay}+'('+ #{main.today}+')'"></span>
+							</h3>
+						</div>
+					</div><!-- .widget-header -->
+					<div class="widget-content row">
+						<div class="one-third column banner-container">
+							<div class="banner info-generates">
+								<div>
+									<div class="info-device">
+										<span class="icon-glyph glyph-plus-circle"></span>
+										<span class="info-numbers"></span>
+									</div>
+								</div>
+								<div>
+									<span class="banner-title" th:text="#{main.converter.new}"></span>
+									<span id="firstCountSpinner" class="banner-number"></span>
+									<span class="banner-unit" th:text="${converterTotalCount} + #{main.count}"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="one-third column banner-container">
+							<div class="banner info-success">
+								<div>
+									<div class="info-device">
+										<span class="icon-glyph glyph-check-circle"></span>
+										<span class="info-numbers"></span>
+									</div>
+								</div>
+								<div>
+									<span class="banner-title" th:text="#{main.converter.success}"></span>
+									<span id="secondeCountSpinner" class="banner-number"></span>
+									<span class="banner-unit" th:text="${converterSuccessCount} + #{main.count}"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="one-third column banner-container">
+							<div class="banner info-failures">
+								<div>
+									<div class="info-device">
+										<span class="icon-glyph glyph-emark-circle"></span>
+										<span class="info-numbers"></span>
+									</div>
+								</div>
+								<div>
+									<span class="banner-title" th:text="#{main.converter.fail}"></span>
+									<span id="thirdCountSpinner" class="banner-number"></span>
+									<span class="banner-unit" th:text="${converterFailCount} + #{main.count}"></span>
+								</div>
+							</div>
+						</div>
+					</div><!-- .widget-content -->
+				</div><!-- .widget -->
+				<th:block th:each="dbWidget : ${widgetList}">
+					<th:blcok th:switch="${dbWidget.name}">
+						<th:block th:case="'dataGroupWidget'">
+							<div th:id="${dbWidget.widgetId}" class="widget one-third column" style="font-size: 16px;">
+								<div class="widget-header row">
+									<div class="widget-heading u-pull-left">
+										<h3 class="widget-title">
+											<th:block th:text="#{main.status.data.group}"></th:block>
+											<span class="widget-desc" th:text="${today} + #{config.widget.basic}"></span>
+										</h3>
+									</div>
+									<div class="widget-functions u-pull-right">
+										<a href="/data/list" th:title="#{'config.widget.project.more'}"><span class="icon-glyph glyph-plus"></span></a>
+									</div>
+								</div>
+								<div th:id="${dbWidget.name}" class="widget-content row">
+									<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+										<div id="dataGroupSpinner" style="width: 150px; height: 70px;"></div>
+									</div>
+								</div>
+							</div>
+						</th:block>
+						<th:block th:case="'dataStatusWidget'">
+							<div th:id="${dbWidget.widgetId}" class="widget one-third column" style="font-size: 16px;">
+								<div class="widget-header row">
+									<div class="widget-heading u-pull-left">
+										<h3 class="widget-title">
+											<th:block th:text="#{main.status.use.data}"></th:block>
+											<span class="widget-desc" th:text="${today} + #{config.widget.basic}"></span>
+										</h3>
+									</div>
+									<div class="widget-functions u-pull-right">
+										<a href="/data/list" th:title="#{config.widget.data.info.more}"><span class="icon-glyph glyph-plus"></span></a>
+									</div>
+								</div>
+								<div th:id="${dbWidget.name}" class="widget-content row">
+									<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+										<div id="dataStatusSpinner" style="width: 150px; height: 70px;"></div>
+									</div>
+								</div>
+							</div>
+						</th:block>
+						<th:block th:case="'dataAdjustLogWidget'">
+							<div th:id="${dbWidget.widgetId}" class="widget one-third column">
+								<div class="widget-header row">
+									<div class="widget-heading u-pull-left">
+										<h3 class="widget-title">
+											<th:block th:text="#{main.status.data.log}"></th:block>
+											<span class="widget-desc" th:text="${today}+ #{config.widget.basic}"></span>
+										</h3>
+									</div>
+									<div class="widget-functions u-pull-right">
+										<a href="/data-adjust-log/list" th:title="#{config.widget.data.info.log.more}"><span class="icon-glyph glyph-plus"></span></a>
+									</div>
+								</div>
+								<div th:id="${dbWidget.name}" class="widget-content row">
+									<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+										<div id="dataAdjustLogSpinner" style="width: 150px; height: 70px;"></div>
+									</div>
+								</div>
+							</div>
+						</th:block>
+						<th:block th:case="'userStatusWidget'">
+							<div th:id="${dbWidget.widgetId}" class="widget one-third column" style="font-size: 16px;">
+								<div class="widget-header row">
+									<div class="widget-heading u-pull-left">
+										<h3 class="widget-title">
+											<th:block th:text="#{main.status.userstatus}"></th:block>
+											<span class="widget-desc" th:text="${today} + #{main.standard}"></span></h3>
+									</div>
+									<div class="widget-functions u-pull-right">
+										<a href="/user/list" th:title="#{config.widget.user.status.more}"><span class="icon-glyph glyph-plus"></span></a>
+									</div>
+								</div>
+								<div th:id="${dbWidget.name}" class="widget-content row">
+								</div>
+							</div>
+						</th:block>
+						<th:block th:case="'userAccessLogWidget'">
+							<div th:id="${dbWidget.widgetId}" class="widget one-third column">
+								<div class="widget-header row">
+									<div class="widget-heading u-pull-left">
+										<h3 class="widget-title">
+											<th:block th:text="#{main.status.user.tracking}"></th:block>
+											<span class="widget-desc" th:text="${today} + #{main.standard}"></span></h3>
+									</div>
+									<div class="widget-functions u-pull-right">
+										<a href="/access/list" th:title="#{main.status.user.moretracking}"><span class="icon-glyph glyph-plus"></span></a>
+									</div>
+								</div>
+
+								<div th:id="${dbWidget.name}" class="widget-content row">
+									<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+										<div id="userAccessLogSpinner" style="width: 150px; height: 70px;"></div>
+									</div>
+								</div>
+							</div>
+						</th:block>
+						<th:block th:case="'civilVoiceWidget'">
+							<div th:id="${dbWidget.widgetId}" class="widget one-third column">
+								<div class="widget-header row">
+									<div class="widget-heading u-pull-left">
+										<h3 class="widget-title">
+											<th:block th:text="#{main.status.civilvoice.data}"></th:block>
+											<span class="widget-desc" th:text="${thisYear} + #{main.status.civilvoice.date}"></span></h3>
+									</div>
+									<div class="widget-functions u-pull-right">
+										<a href="/civil-voice/list?orderWord=comment_count&orderValue=DESC" th:title="#{main.status.civilvoice.moreexecution}"><span class="icon-glyph glyph-plus"></span></a>
+									</div>
+								</div>
+								<div th:id="${dbWidget.name}" class="widget-content row">
+									<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+										<div id="civilVoiceSpinner" style="width: 150px; height: 70px;"></div>
+									</div>
+								</div>
+							</div>
+						</th:block>
+						<th:block th:case="'systemUsageWidget'">
+							<div th:id="${dbWidget.widgetId}" class="widget one-third column">
+								<div class="widget-header row">
+									<div class="widget-heading u-pull-left">
+										<h3 class="widget-title">
+											<th:block th:text="#{main.status.system.usage}"></th:block>
+											<span class="widget-desc" th:text="${today} + #{main.standard}"></span></h3>
+									</div>
+								</div>
+
+								<div th:id="${dbWidget.name}" class="widget-content row">
+									<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+										<div id="systemUsageSpinner" style="width: 150px; height: 70px;"></div>
+									</div>
+								</div>
+							</div>
+						</th:block>
+						<th:block th:case="'dbcpStatusWidget'">
+							<div th:id="${dbWidget.widgetId}" class="widget one-third column">
+								<div class="widget-header row">
+									<div class="widget-heading u-pull-left">
+										<h3 class="widget-title">
+											<th:block th:text="#{main.status.db.connection.pool}"></th:block>
+											<span class="widget-desc" th:text="${today} + #{main.standard}"></span></h3>
+									</div>
+								</div>
+
+								<div th:id="${dbWidget.name}" class="widget-content row">
+									<table class="widget-table">
+										<col class="col-left" />
+										<col class="col-center" />
+										<col class="col-center" />
+										<col class="col-center" />
+										<tr>
+											<td class="col-left">
+												<em th:text="#{main.status.property}"></em>
+											</td>
+											<td class="col-center">
+												<em th:text="#{main.status.admin}"></em>
+											</td>
+											<td class="col-center">
+												<em th:text="#{main.status.user}"></em>
+											</td>
+											<td class="col-center">
+												<em th:text="#{main.status}"></em>
+											</td>
+										</tr>
+										<tr>
+											<td class="col-left">
+												<span class="icon-glyph glyph-users-circle"></span>
+												<em th:text="#{main.status.usersession.count}"></em>
+											</td>
+											<td class="col-center">
+												<span id="userSessionCount" class="tendency increase" th:text="${userSessionCount}"></span>
+											</td>
+											<td class="col-center">
+												<span id="userUserSessionCount" class="tendency increase" th:text="${userUserSessionCount}"></span>
+											</td>
+											<td class="col-center">
+										<span class="tendency increase">
+											<span class="icon-glyph glyph-up"></span>
+										</span>
+											</td>
+										</tr>
+										<tr>
+											<td class="col-left">
+												<span class="icon-glyph glyph-imark-circle"></span>
+												<em th:text="#{main.status.initialSize}"></em> (initialSize)
+											</td>
+											<td class="col-center">
+												<span id="initialSize" class="tendency increase" th:text="${initialSize}"></span>
+											</td>
+											<td class="col-center">
+												<span id="userInitialSize" class="tendency increase" th:text="${userInitialSize}"></span>
+											</td>
+											<td class="col-center">
+										<span class="tendency increase">
+											<span class="icon-glyph glyph-up"></span>
+										</span>
+											</td>
+										</tr>
+										<tr>
+											<td class="col-left">
+												<span class="icon-glyph glyph-plus-circle"></span>
+												<em th:text="#{main.status.maxtotal}"></em> (maxTotal)
+											</td>
+											<td class="col-center">
+												<span id="maxTotal" class="tendency decrease" th:text="${maxTotal}"></span>
+											</td>
+											<td class="col-center">
+												<span id="userMaxTotal" class="tendency decrease" th:text="${userMaxTotal}"></span>
+											</td>
+											<td class="col-center">
+										<span class="tendency decrease">
+											<span class="icon-glyph glyph-down"></span>
+										</span>
+											</td>
+										</tr>
+										<tr>
+											<td class="col-left">
+												<span class="icon-glyph glyph-top-circle"></span>
+												<em th:text="#{main.status.maxIdle}"></em> (maxIdle)
+											</td>
+											<td class="col-center">
+												<span id="maxIdle" class="tendency decrease" th:text="${maxIdle}"></span>
+											</td>
+											<td class="col-center">
+												<span id="userMaxIdle" class="tendency decrease" th:text="${userMaxIdle}"></span>
+											</td>
+											<td class="col-center">
+										<span class="tendency decrease">
+											<span class="icon-glyph glyph-down"></span>
+										</span>
+											</td>
+										</tr>
+										<tr>
+											<td class="col-left">
+												<span class="icon-glyph glyph-mouse-circle"></span>
+												<em th:text="#{main.status.numactive}"></em> (numActive)
+											</td>
+											<td class="col-center">
+												<span id="numActive" class="tendency increase" th:text="${numActive}"></span>
+											</td>
+											<td class="col-center">
+												<span id="userNumActive" class="tendency increase" th:text="${userNumActive}"></span>
+											</td>
+											<td class="col-center">
+										<span class="tendency increase">
+											<span class="icon-glyph glyph-up"></span>
+										</span>
+											</td>
+										</tr>
+										<tr>
+											<td class="col-left">
+												<span class="icon-glyph glyph-bottom-circle"></span>
+												<em th:text="#{main.status.minIdle}"></em> (minIdle, numIdle)
+											</td>
+											<td class="col-center">
+												<span id="minIdle" class="tendency increase" th:text="${minIdle}+','+${numIdle}"></span>
+											</td>
+											<td class="col-center">
+												<span id="userMinIdle" class="tendency increase" th:text="${userMinIdle}+','+${userNumIdle}"></span>
+											</td>
+											<td class="col-center">
+										<span class="tendency increase">
+											<span class="icon-glyph glyph-up"></span>
+										</span>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</th:block>
+						<th:block th:case="'dbSessionWidget'">
+							<div th:id="${dbWidget.widgetId}" class="widget one-third column">
+								<div class="widget-header row">
+									<div class="widget-heading u-pull-left">
+										<h3 class="widget-title">
+											<th:block th:text="#{main.status.db.session}+'('+${dbSessionCount}+')'"></th:block>
+											<span class="widget-desc" th:text="${today} + #{main.standard}"></span>
+										</h3>
+									</div>
+									<div class="widget-functions u-pull-right">
+										<a href="/monitoring/list-db-session.do" th:title="#{main.status.db.moresession}"><span class="icon-glyph glyph-plus"></span></a>
+									</div>
+								</div>
+								<div th:id="${dbWidget.name}" class="widget-content row">
+									<table class="widget-table">
+										<col class="col-left" />
+										<col class="col-left" />
+										<th:block th:if="${dbSessionList == null}">
+											<tr>
+												<td colspan="2" class="col-none" th:text="#{main.status.db.nosession}"></td>
+											</tr>
+										</th:block>
+										<th:block th:unless="${dbSessionList == null}">
+											<th:block th:each="pGStatActivity : ${dbSessionList}" >
+												<tr>
+													<td class="col-left">
+														<span class="index" th:text="${pGStatActivity.clientAddr}"></span>
+													</td>
+													<td class="col-left" th:text="${pGStatActivity.viewQuery}"></td>
+												</tr>
+											</th:block>
+										</th:block>
+									</table>
+								</div>
+							</div>
+						</th:block>
+					</th:blcok>
+				</th:block>
+			</div>
+		</div>
+	</div>
+</div>
+<div th:replace="~{/layouts/footer :: #footerWrap}"></div>
 
 <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jqplot/jquery.jqplot.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jqplot/plugins/jqplot.barRenderer.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jqplot/plugins/jqplot.categoryAxisRenderer.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jqplot/plugins/jqplot.dateAxisRenderer.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jqplot/plugins/jqplot.pieRenderer.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jqplot/plugins/jqplot.pointLabels.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jqplot/plugins/jqplot.donutRenderer.min.js(cacheVersion=${contentCacheVersion})}"></script>
+
+<script type="text/javascript" th:src="@{/externlib/spinner/progressSpin.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/spinner/raphael.js(cacheVersion=${contentCacheVersion})}"></script>
+
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+
+
 </body>
