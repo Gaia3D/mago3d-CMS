@@ -82,6 +82,7 @@
 			success: function(msg){
 				if(msg.statusCode <= 200) {
 					alert(JS_MESSAGE["change"]);
+					location.reload();
 				} else {
 					alert(JS_MESSAGE[msg.errorCode]);
 				}
