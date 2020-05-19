@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class KeyManager {
 
-	private static final String randomKeyword = "ZDNhaWFnQCBzaSBlbWFuIHltIC5wdGRuIHJvZiBhZWRpIGRhYiBhIGVrYW0gdG9uIG9kIGVzYWVscCAseWVrIHRlcmNzIyBkbnVvZiBldmFoIHVveSBmSQ==";
+	private static final String randomKeyword = "ZDNhaWFnQCBzaSBlbWFuIHltIC5kM2FpYWcgcm9mIGFlZGkgZGFiIGEgZWthbSB0b24gb2QgZXNhZWxwICx5ZWsgdGVyY3MjIGRudW9mIGV2YWggdW95IGZJ";
 
 	public static String getInitKey() {
 		String result = null;
@@ -29,6 +29,6 @@ public class KeyManager {
 	}
 	
 	private static String parse(String value) {
-		return value.substring(81, 87) + value.substring(64, 68) + value.substring(18, 24);
+		return value.substring(83, 90) + value.substring(18, 24) + value.substring(25, 28);
 	}
 }

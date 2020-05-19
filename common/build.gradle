@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.2'
+	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'commons-codec:commons-codec:1.11'
 	
 	compileOnly 'org.projectlombok:lombok'
