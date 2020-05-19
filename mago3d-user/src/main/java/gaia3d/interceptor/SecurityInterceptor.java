@@ -75,7 +75,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 				
 				Map<String, Object> unauthorizedResult = new HashMap<>();
 				unauthorizedResult.put("statusCode", HttpStatus.UNAUTHORIZED.value());
-				unauthorizedResult.put("errorCode", "user.session.empty");
+				unauthorizedResult.put("errorCode", "session.required");
 				unauthorizedResult.put("message", null);
 				
 				response.setContentType("application/json");       

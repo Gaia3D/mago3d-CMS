@@ -65,10 +65,12 @@ public class SigninController {
 
 		return "/sign/signin";
 	}
-	
+
 	/**
 	 * Sign in 처리
-	 * @param locale
+	 * @param request
+	 * @param signinForm
+	 * @param bindingResult
 	 * @param model
 	 * @return
 	 */
@@ -76,7 +78,7 @@ public class SigninController {
 	public String processSignin(HttpServletRequest request, @Valid @ModelAttribute("signinForm") UserInfo signinForm, BindingResult bindingResult, Model model) {
 		
 		Policy policy = CacheManager.getPolicy();
-			
+
 		signinForm.setPasswordChangeTerm(policy.getPasswordChangeTerm());
 		signinForm.setUserLastSigninLock(policy.getUserLastSigninLock());
 		UserSession userSession = signinService.getUserSession(signinForm);
@@ -173,7 +175,7 @@ public class SigninController {
 		}
 		
 		// 마지막 접속일(접속 정책이 3개월 미접속인 경우 접속 금지의 경우)
-		if(userSession.getUserLastSigninLockOver()) {	
+		if(userSession.getUserLastSigninLockOver()) {
 			signinForm.setLastSigninDate(userSession.getLastSigninDate());
 			signinForm.setUserLastSigninLock(policy.getUserLastSigninLock());
 			return "usersession.lastsignin.invalid";
@@ -211,27 +213,5 @@ public class SigninController {
 		}
 		
 		return null;
-	}
-	
-	/**
-	 * Sign out
-	 * @param request
-	 * @return
-	 */
-	@GetMapping(value = "/signout")
-	public String signout(HttpServletRequest request) {
-		
-		HttpSession session = request.getSession();
-		UserSession userSession = (UserSession)session.getAttribute(Key.USER_SESSION.name());
-		
-		if(userSession == null) {
-			return "redirect:/sign/signin";
-		}
-		
-		session.removeAttribute(userSession.getUserId());
-		session.removeAttribute(Key.USER_SESSION.name());
-		session.invalidate();
-		
-		return "redirect:/sign/signin";
 	}
 }

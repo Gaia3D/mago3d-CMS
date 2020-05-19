@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Sign In | mago3D</title>
+	<title><th:block th:text="#{signin.page.title}"></th:block></title>
 	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}" />
 	<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
 	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
@@ -31,7 +31,7 @@
 		<div class="container">
 			<div th:if="${signinForm.errorCode}" style="margin-bottom: 10px;">
 				<div style="float:left; padding-left: 10px; "><img th:src="@{/images/{lang}/exclam_32.png(lang=${lang})}" /></div>
-				<div style="display: inline-block; padding-left: 10px; padding-top: 5px; color: red; font-size: 16px;"
+				<div style="display: inline-block; padding-left: 10px; padding-top: 5px; color: #ff0000; font-size: 16px;"
 					 th:text="#{${signinForm.errorCode}}"></div>
 			</div>
 			<div class="row" style="height: 60px; margin-top: 0px;">
@@ -40,8 +40,14 @@
 			<div class="panel row">
 				<h2 class="sign-title"><span class="text-sub">사용자</span><br /><span class="text-main">SIGN IN</span></h2>
 				<div class="sign-inputs">
-					<div class="sign-desc" style="font-size: 16px; margin-top: 10px; margin-right: 25px;">Digital Twin Platform</div>
-
+					<div class="sign-desc" style="font-size: 16px; margin-top: 10px; margin-right: 25px;">
+						<span>Digital Twin Platform</span>&nbsp;
+						<select id="userLocale" name="userLocale" onchange="changeLanguage(this.value);"
+								style="background: #9065dc; color: white; height: 25px;">
+							<option value="ko">KOREA</option>
+							<option value="en">ENGLISH</option>
+						</select>
+					</div>
 					<form id="signinForm" th:object="${signinForm}" method="post" action="/sign/process-signin">
 						<label for="userId"><span class="icon-glyph glyph-users"></span></label>
 						<input type="text" id="userId" name="userId" maxlength="32" title="아이디" placeholder="아이디" required="required" autofocus="autofocus" />
@@ -49,9 +55,9 @@
 						<input type="password" id="password" name="password" maxlength="32" title="비밀번호" placeholder="비밀번호" required="required" />
 						<input type="submit" value="Sign In" class="sign-submit" />
 					</form>
-<!--					<div class="sign-links" style="font-size: 16px;">-->
-<!--                        Don't have an account? &nbsp;<a th:href="@{#" onclick="alert('관리자에게 문의하여 주십시오.'); return false;">Sign up</a>-->
-<!--                    </div>-->
+					<div class="sign-links" style="font-size: 16px;">
+                        Don't have an account? &nbsp;<a href="#" onclick="alert('관리자에게 문의하여 주십시오.'); return false;">Sign up</a>
+                    </div>
 				</div>
 			</div>
 		</div>
@@ -61,4 +67,30 @@
 	</div>
 </div>
 </body>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var lang = "[[${lang}]]";
+		$("#userLocale").val(lang);
+	});
+
+	function changeLanguage(lang) {
+		$.ajax({
+			url: "/languages/" + lang,
+			type: "GET",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+			dataType: "json",
+			success: function(msg){
+				if(msg.statusCode <= 200) {
+					alert(JS_MESSAGE["change"]);
+				} else {
+					alert(JS_MESSAGE[msg.errorCode]);
+				}
+			},
+			error:function(request, status, error){
+				console.log("code : " + request.status + "\n" + "message : " + request.responseText + "\n" + "error : " + error);
+				alert(JS_MESSAGE["ajax.error.message"]);
+			}
+		});
+	}
+</script>
 </html>
