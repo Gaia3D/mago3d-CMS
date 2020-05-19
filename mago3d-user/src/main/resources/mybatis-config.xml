@@ -46,9 +46,6 @@
  		<typeAlias type="gaia3d.domain.SkSgg" alias="skSgg"/>
  		<typeAlias type="gaia3d.domain.SkEmd" alias="skEmd"/>
  		
- 		<typeAlias type="gaia3d.domain.CivilVoice" alias="civilVoice"/>
- 		<typeAlias type="gaia3d.domain.CivilVoiceComment" alias="civilVoiceComment"/>
- 		
  		<typeAlias type="gaia3d.domain.AttributeRepository" alias="attributeRepository"/>
     </typeAliases>
 
