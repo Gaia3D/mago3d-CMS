@@ -33,11 +33,11 @@
 								<li><a href="#contentTab">컨텐트</a></li>
 								<li><a href="#uploadTab">사용자 업로딩 파일</a></li>
 							</ul>
-<!--							<%@ include file="/WEB-INF/views/policy/modify-user.jsp" %>-->
-<!--							<%@ include file="/WEB-INF/views/policy/modify-password.jsp" %>-->
-<!--							<%@ include file="/WEB-INF/views/policy/modify-security.jsp" %>-->
-<!--							<%@ include file="/WEB-INF/views/policy/modify-content.jsp" %>-->
-<!--							<%@ include file="/WEB-INF/views/policy/modify-upload.jsp" %>-->
+								<div th:replace="~{/policy/modify-user :: #userTab}"></div>
+								<div th:replace="~{/policy/modify-password :: #passwordTab}"></div>
+								<div th:replace="~{/policy/modify-security :: #securityTab}"></div>
+								<div th:replace="~{/policy/modify-content :: #contentTab}"></div>
+								<div th:replace="~{/policy/modify-upload :: #uploadTab}"></div>
 						</div>
 					</div>
 				</div>
