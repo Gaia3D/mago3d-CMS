@@ -61,7 +61,7 @@
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</th>
 				<td class="col-input">
-					<input type="hidden" id="duplication" name="dataGroupName" >
+					<input type="hidden" id="duplication" name="dataGroupName">
 					<input type="text" id="dataGroupKey" name="dataGroupKey" cssClass="l">
 					<input type="button" id="duplicationButtion" th:value="#{overlap.check}">
 					<errors id="dataGroupKey" name="dataGroupKey" cssClass="error">
@@ -74,7 +74,7 @@
 				</th>
 				<td class="col-input">
 					<input type="hidden" id="parent" name="parent">
-					<input type="text" id="parentName" name="parentName" cssClass="l" readonly="true">
+					<input type="text" id="parentName" name="parentName" cssClass="l" th:value="${dataGroup.parentName}" readonly="readonly">
 					<input type="button" id="dataGroupButtion" value="상위 데이터 그룹 선택">
 				</td>
 			</tr>
@@ -98,9 +98,9 @@
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</th>
 				<td class="col-input radio-set">
-					<input type="radio" id="basicTrue" name="basic" value="true" >
+					<input type="radio" id="basicTrue" name="basic" value="true">
 					<label for="basicTrue">기본</label>
-					<input type="radio" id="basicFalse" name="basic" value="false" checked >
+					<input type="radio" id="basicFalse" name="basic" value="false" checked>
 					<label for="basicFalse">선택</label>
 				</td>
 			</tr> -->
@@ -185,7 +185,7 @@
 <script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
-<script>
+<script type="text/javascript">
 	$(document).ready(function() {
 	});
 
