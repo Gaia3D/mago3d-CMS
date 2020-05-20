@@ -227,7 +227,7 @@ $("#districtFlyButton").click(function () {
     getEnvelope(name, sdoCode, sggCode, emdCode);
 });
 
-$("#districtCancleButton").click(function () {
+$("#districtCancelButton").click(function () {
     district.deleteDistrict();
 });
 

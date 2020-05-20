@@ -26,7 +26,7 @@
 		</div>
 		<div class="districtBtn">
 			<button type="button" class="focusB" id="districtFlyButton">이동</button>
-			<button type="button" class="basicB" id="districtCancleButton">취소</button>
+			<button type="button" class="basicB" id="districtCancelButton">취소</button>
 		</div>
 	</div>
 	<!-- E: 행정구역 레이어 -->
