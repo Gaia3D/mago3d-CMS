@@ -1,3 +1,5 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+
 <div id="gnbWrap" style="z-index: 100;">
 	<!-- S: 통합검색 -->
 	<div class="totalSearch">
@@ -23,8 +25,8 @@
 			</ul>
 		</div>
 		<div class="districtBtn">
-			<button type="button" class="focusB" id="districtFlyButton"><th:block th:text="#{common.move}" /></button>
-			<button type="button" class="basicB" id="districtCancelButton"><th:block th:text="#{common.cancel}" /></button>
+			<button type="button" class="focusB" id="districtFlyButton"><th:block th:text="#{common.move}"></th:block></button>
+			<button type="button" class="basicB" id="districtCancelButton"><th:block th:text="#{common.cancel}"></th:block></button>
 		</div>
 	</div>
 	<!-- E: 행정구역 레이어 -->

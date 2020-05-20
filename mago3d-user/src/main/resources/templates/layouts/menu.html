@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+
 <ul id="navWrap" class="nav">
 <th:block th:each="userGroupMenu : ${cacheUserGroupMenuList}">
 	<li th:id="${userGroupMenu.htmlId}" th:class="${userGroupMenu.cssClass}" th:data-nav="${userGroupMenu.htmlContentId}"
