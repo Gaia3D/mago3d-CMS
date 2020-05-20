@@ -3,12 +3,14 @@
 <body>
 <div id="dialogConverterJob" class=dialogConverterJob title="F4D Converter Job 등록">
 	<form id="converterJobForm" name="converterJobForm" th:action="@{#}" method="post">
-		<input type="hidden" id="converterCheckIds" name="converterCheckIds" value="" />
-		<input type="hidden" id="dataType" name=dataType value="" />
+		<input type="hidden" id="converterCheckIds" name="converterCheckIds" />
+		<input type="hidden" id="dataType" name="dataType" />
 		<table class="inner-table scope-row" summary="F4D Converter Job 등록">
-		<caption class="hiddenTag">Job 등록</caption>
-			<col class="col-sub-label xl" />
-			<col class="col-data" />
+			<caption class="hiddenTag">Job 등록</caption>
+			<colgroup>
+				<col class="col-sub-label xl"></col>
+				<col class="col-data"></col>
+			</colgroup>
 			<tbody>
 				<tr>
 					<th class="col-sub-label x">변환 템플릿</th>
@@ -60,7 +62,7 @@
 			</tbody>
 		</table>
 		<div class="button-group">
-			<a href="#" onclick="saveConverterJob(); return false;" class="button" style="color: white">저장</a>
+			<a class="button" href="#" onclick="saveConverterJob(); return false;" style="color: white">저장</a>
 		</div>
 	</form>
 </div>

@@ -2,12 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layout">
 <div id="dataGroupDialog" class="dialog">
 	<table class="list-table scope-col">
-		<col class="col-name" />
-		<col class="col-toggle" />
-		<col class="col-id" />
-		<col class="col-function" />
-		<col class="col-date" />
-		<col class="col-toggle" />
+        <colgroup>
+            <col class="col-name"></col>
+            <col class="col-toggle"></col>
+            <col class="col-id"></col>
+            <col class="col-function"></col>
+            <col class="col-date"></col>
+            <col class="col-toggle"></col>
+        </colgroup>
 		<thead>
 			<tr>
 				<th scope="col" class="col-name">데이터 그룹명</th>
@@ -52,8 +54,9 @@
                     </td>
                 </th:block>
                     
-                <td class="col-type" th:if="${dataGroup.available == true}" th:text="사용"></td>
-                <td class="col-type" th:unless="${dataGroup.available == true}" th:text="미사용"></td>
+                <td class="col-type" th:if="${#bools.isTrue(dataGroup.available)}" th:text="사용"></td>
+                <td class="col-type" th:if="${#bools.isFalse(dataGroup.available)}" th:text="미사용"></td>
+                
                 <td class="col-type" th:if="${#strings.equals(dataGroup.sharing, 'common')}" th:text="공통"></td>
                 <td class="col-type" th:if="${#strings.equals(dataGroup.sharing, 'public')}" th:text="공개"></td>
                 <td class="col-type" th:if="${#strings.equals(dataGroup.sharing, 'private')}" th:text="개인"></td>
@@ -71,7 +74,7 @@
 		</tbody>
 	</table>
 	<div class="button-group">
-		<input type="button" id="rootParentSelect" class="button" value="최상위 데이터 그룹으로 선택"/>
+		<input type="button" id="rootParentSelect" class="button" value="최상위 데이터 그룹으로 선택" />
 	</div>
 </div>
 </html>

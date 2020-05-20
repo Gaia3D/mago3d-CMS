@@ -31,13 +31,13 @@
         <!-- TAB -->
         <div class="tabs">
             <ul class="tab">
-                <li id="tabDataGroupList"><a th:href="@{/data-group/list}">데이터 그룹</a></li>
-                <li id="tabDataGroupInput"><a th:href="@{/data-group/input}">데이터 그룹 등록</a></li>
-                <li id="tabUploadDataInput"><a th:href="@{/upload-data/input}">업로딩 데이터</a></li>
-                <li id="tabUploadDataList"><a th:href="@{/upload-data/list}">업로딩 데이터 목록</a></li>
-                <li id="tabConverterList"><a th:href="@{/converter/list}">업로딩 데이터 변환 목록</a></li>
-                <li id="tabDataList"><a th:href="@{/data/list}">데이터 목록</a></li>
-                <li id="tabDataLogList"><a th:href="@{/data-log/list}">데이터 변경 이력</a></li>
+                <li id="tabDataGroupList"><a href="/data-group/list">데이터 그룹</a></li>
+                <li id="tabDataGroupInput"><a href="/data-group/input">데이터 그룹 등록</a></li>
+                <li id="tabUploadDataInput"><a href="/upload-data/input">업로딩 데이터</a></li>
+                <li id="tabUploadDataList"><a href="/upload-data/list">업로딩 데이터 목록</a></li>
+                <li id="tabConverterList"><a href="/converter/list">업로딩 데이터 변환 목록</a></li>
+                <li id="tabDataList"><a href="/data/list">데이터 목록</a></li>
+                <li id="tabDataLogList"><a href="/data-log/list">데이터 변경 이력</a></li>
             </ul>
 		</div>
 
@@ -55,13 +55,13 @@
 						<option value="0" th:text="#{search.same}"></option>
 						<option value="1" th:text="#{search.include}"></option>
 					</select>
-					<input type="search" id="searchValue" name="searchValue" cssClass="m" style="float: right;">
+					<input type="search" id="searchValue" name="searchValue" class="m" style="float: right;" />
 				</div>
 				<div class="input-set">
                     <label for="startDate" th:text="#{search.date}"></label>
-                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off">
+                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
                     <span class="delimeter tilde">~</span>
-                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off">
+                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
                 </div>
 				<div class="input-set">
 					<label for="orderWord" th:text="#{search.order}"></label>
@@ -82,7 +82,7 @@
 					</select>
 				</div>
 				<div class="input-set">
-					<input type="submit" th:value="#{search}">
+					<input type="submit" th:value="#{search}" />
 				</div>
 			</div>
 			</form>
@@ -91,97 +91,100 @@
 
 		<div class="list">
 			<form id="listForm" modelAttribute="dataInfo" method="post">
-				<input type="hidden" id="checkIds" name="checkIds" value="">
-			<div class="list-header row">
-				<!-- <div class="list-desc u-pull-left">
-                    <spring:message code='all.d'> 
-                    <span class="totalCount">
-                        <fmt:formatNumber value="${pagination.totalCount}" type="number">
-                    </span> 
-                    <spring:message code='search.what.count'>,
-                    <fmt:formatNumber value="${pagination.pageNo}" type="number">
-                     / <fmt:formatNumber value="${pagination.lastPage }" type="number"> 
-                    <spring:message code='search.page'>
-				</div> -->
-			</div>
-			<table class="list-table scope-col" summary="데이터 목록 테이블">
-			<caption class="hiddenTag">데이터 목록 테이블</caption>
-				<col class="col-number">
-				<col class="col-name">
-				<col class="col-name">
-				<col class="col-type">
-				<col class="col-type">
-				<col class="col-type">
-				<col class="col-type">
-				<col class="col-type">
-				<col class="col-type">
-				<col class="col-type">
-				<col class="col-type">
-				<col class="col-functions">
-				<thead>
-					<tr>
-						<th scope="col" class="col-number"><spring:message code='number'></th>
-						<th scope="col" class="col-name">그룹명</th>
-						<th scope="col" class="col-name">데이터명</th>
-						<th scope="col" class="col-type">등록자</th>
-						<th scope="col" class="col-type">데이터 타입</th>
-						<th scope="col" class="col-type">공유 유형</th>
-						<th scope="col" class="col-type">매핑타입</th>
-						<th scope="col" class="col-type">상태</th>
-						<th scope="col" class="col-type">지도</th>
-						<th scope="col" class="col-type">속성</th>
-						<th scope="col" class="col-type">Object 속성</th>
-						<th scope="col" class="col-functions">등록일</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:if="${dataInfoList.empty}">
-						<td colspan="12" class="col-none">데이터가 존재하지 않습니다.</td>
-					</tr>
-					<tr th:if="${!dataInfoList.empty}" th:each="dataInfo : ${dataInfoList}">
-						<td class="col-number" th:text="${dataInfoStat.count}"></td>
-						<td class="col-name ellipsis" th:text="${dataInfo.dataGroupName}" style="min-width:100px;max-width:100px;"></td>
-						<td class="col-name ellipsis" style="min-width:160px;max-width:160px;">
-							<a th:text="${dataInfo.dataName}" th:href="@{/data/modify(dataId=${dataInfo.dataId})}"></a>
-						</td>
-						<td class="col-type" th:if="${#strings.equals(dataInfo.userId, 'owner')}" th:text="${dataInfo.userId}">
-						<td class="col-type" th:unless="${#strings.equals(dataInfo.userId, 'owner')}"><span th:text="${dataInfo.userId}" style="color: blue;"></span></td>
-						<td class="col-type" th:text="${dataInfo.dataType}"></td>
-						<td class="col-type" th:if="${#strings.equals(dataInfo.sharing, 'common')}" th:text="공통"></td>
-                        <td class="col-type" th:if="${#strings.equals(dataInfo.sharing, 'public')}" th:text="공개"></td>
-                        <td class="col-type" th:if="${#strings.equals(dataInfo.sharing, 'private')}" th:text="개인"></td>
-						<td class="col-type" th:if="${#strings.equals(dataInfo.sharing, 'group')}" th:text="그룹"></td>
-						<td class="col-type ellipsis" th:text="${dataInfo.mappingType}" style="min-width:80px;max-width:80px;"></td>
-						<td class="col-type" th:if="${#strings.equals(dataInfo.status, 'processing')}" th:text="변환중"></td>
-                        <td class="col-type" th:if="${#strings.equals(dataInfo.status, 'use')}" th:text="사용중"></td>
-                        <td class="col-type" th:if="${#strings.equals(dataInfo.status, 'unused')}" th:text="사용중지"></td>
-						<td class="col-type" th:if="${#strings.equals(dataInfo.status, 'delete')}" th:text="삭제"></td>
-						<td class="col-type">
-							<a href="#" th:onclick="viewDataInfo([[${dataInfo.dataId}]]); return false;">보기</a>
-						</td>
-						<th:block th:if="${#strings.equals(dataInfo.attributeExist, 'true')}">
-							<td class="col-type">
-								<a href="#" th:onclick="detailDataAttribute([[${dataInfo.dataId}]], [[${dataInfo.dataName}]]); return false;">보기</a>
+				<input type="hidden" id="checkIds" name="checkIds" />
+				<div class="list-header row">
+					<!-- <div class="list-desc u-pull-left">
+						<spring:message code='all.d'> 
+						<span class="totalCount">
+							<fmt:formatNumber value="${pagination.totalCount}" type="number">
+						</span> 
+						<spring:message code='search.what.count'>,
+						<fmt:formatNumber value="${pagination.pageNo}" type="number">
+						/ <fmt:formatNumber value="${pagination.lastPage }" type="number"> 
+						<spring:message code='search.page'>
+					</div> -->
+				</div>
+				<table class="list-table scope-col" summary="데이터 목록 테이블">
+					<caption class="hiddenTag">데이터 목록 테이블</caption>
+					<colgroup>
+						<col class="col-number"></col>
+						<col class="col-name"></col>
+						<col class="col-name"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-functions"></col>
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col" class="col-number" th:text="#{number}"></th>
+							<th scope="col" class="col-name">그룹명</th>
+							<th scope="col" class="col-name">데이터명</th>
+							<th scope="col" class="col-type">등록자</th>
+							<th scope="col" class="col-type">데이터 타입</th>
+							<th scope="col" class="col-type">공유 유형</th>
+							<th scope="col" class="col-type">매핑타입</th>
+							<th scope="col" class="col-type">상태</th>
+							<th scope="col" class="col-type">지도</th>
+							<th scope="col" class="col-type">속성</th>
+							<th scope="col" class="col-type">Object 속성</th>
+							<th scope="col" class="col-functions">등록일</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:if="${dataInfoList.empty}">
+							<td colspan="12" class="col-none">데이터가 존재하지 않습니다.</td>
+						</tr>
+						<tr th:if="${!dataInfoList.empty}" th:each="dataInfo : ${dataInfoList}">
+							<td class="col-number" th:text="${dataInfoStat.count + ((pagination.pageNo-1)*10)}"></td>
+							<td class="col-name ellipsis" th:text="${dataInfo.dataGroupName}" style="min-width:100px;max-width:100px;"></td>
+							<td class="col-name ellipsis" style="min-width:160px;max-width:160px;">
+								<a th:text="${dataInfo.dataName}" th:href="@{/data/modify(dataId=${dataInfo.dataId})}"></a>
 							</td>
-						</th:block>
-						<th:block th:if="${#strings.equals(dataInfo.attributeExist, 'false')}">
-							<td class="col-type" th:text="미등록"></td>
-						</th:block>
-						<th:block th:if="${#strings.equals(dataInfo.objectAttributeExist, 'true')}">
+							<td class="col-type" th:if="${#strings.equals(dataInfo.userId, 'owner')}" th:text="${dataInfo.userId}">
+							<td class="col-type" th:unless="${#strings.equals(dataInfo.userId, 'owner')}"><span th:text="${dataInfo.userId}" style="color: blue;"></span></td>
+
+							<td class="col-type" th:text="${dataInfo.dataType}"></td>
+							<td class="col-type" th:if="${#strings.equals(dataInfo.sharing, 'common')}" th:text="공통"></td>
+							<td class="col-type" th:if="${#strings.equals(dataInfo.sharing, 'public')}" th:text="공개"></td>
+							<td class="col-type" th:if="${#strings.equals(dataInfo.sharing, 'private')}" th:text="개인"></td>
+							<td class="col-type" th:if="${#strings.equals(dataInfo.sharing, 'group')}" th:text="그룹"></td>
+							<td class="col-type ellipsis" th:text="${dataInfo.mappingType}" style="min-width:80px;max-width:80px;"></td>
+							<td class="col-type" th:if="${#strings.equals(dataInfo.status, 'processing')}" th:text="변환중"></td>
+							<td class="col-type" th:if="${#strings.equals(dataInfo.status, 'use')}" th:text="사용중"></td>
+							<td class="col-type" th:if="${#strings.equals(dataInfo.status, 'unused')}" th:text="사용중지"></td>
+							<td class="col-type" th:if="${#strings.equals(dataInfo.status, 'delete')}" th:text="삭제"></td>
 							<td class="col-type">
-								<a href="#" th:onclick="detailDataObjectAttribute([[${dataInfo.dataId}]], [[${dataInfo.dataName}]]); return false;">보기</a>
+								<a href="#" th:onclick="viewDataInfo([[${dataInfo.dataId}]]); return false;">보기</a>
 							</td>
-						</th:block>
-						<th:block th:if="${#strings.equals(dataInfo.objectAttributeExist, 'false')}">
-							<td class="col-type" th:text="미등록"></td>
-						</th:block>
-						<td class="col-date">
-							<p th:text="${#dates.format(dataInfo.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
-                            <p th:text="${#dates.format(viewInsertDate,'yyyy-MM-dd HH:mm')}"></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+							<th:block th:if="${#bools.isTrue(dataInfo.attributeExist)}">
+								<td class="col-type">
+									<a href="#" th:onclick="detailDataAttribute([[${dataInfo.dataId}]], [[${dataInfo.dataName}]]); return false;">보기</a>
+								</td>
+							</th:block>
+							<th:block th:if="${#bools.isFalse(dataInfo.attributeExist)}">
+								<td class="col-type" th:text="미등록"></td>
+							</th:block>
+							<th:block th:if="${#bools.isTrue(dataInfo.objectAttributeExist)}">
+								<td class="col-type">
+									<a href="#" th:onclick="detailDataObjectAttribute([[${dataInfo.dataId}]], [[${dataInfo.dataName}]]); return false;">보기</a>
+								</td>
+							</th:block>
+							<th:block th:if="${#bools.isFalse(dataInfo.objectAttributeExist)}">
+								<td class="col-type" th:text="미등록"></td>
+							</th:block>
+							<td class="col-date">
+								<p th:text="${#dates.format(dataInfo.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
+								<p th:text="${#dates.format(viewInsertDate,'yyyy-MM-dd HH:mm')}"></p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</form>
 		</div>
 		<!-- 페이지 -->

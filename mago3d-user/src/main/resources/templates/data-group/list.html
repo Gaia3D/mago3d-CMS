@@ -30,13 +30,13 @@
         <!-- TAB -->
         <div class="tabs">
             <ul class="tab">
-                <li id="tabDataGroupList"><a th:href="@{/data-group/list}">데이터 그룹</a></li>
-                <li id="tabDataGroupInput"><a th:href="@{/data-group/input}">데이터 그룹 등록</a></li>
-                <li id="tabUploadDataInput"><a th:href="@{/upload-data/input}">업로딩 데이터</a></li>
-                <li id="tabUploadDataList"><a th:href="@{/upload-data/list}">업로딩 데이터 목록</a></li>
-                <li id="tabConverterList"><a th:href="@{/converter/list}">업로딩 데이터 변환 목록</a></li>
-                <li id="tabDataList"><a th:href="@{/data/list}">데이터 목록</a></li>
-                <li id="tabDataLogList"><a th:href="@{/data-log/list}">데이터 변경 이력</a></li>
+                <li id="tabDataGroupList"><a href="/data-group/list">데이터 그룹</a></li>
+                <li id="tabDataGroupInput"><a href="/data-group/input">데이터 그룹 등록</a></li>
+                <li id="tabUploadDataInput"><a href="/upload-data/input">업로딩 데이터</a></li>
+                <li id="tabUploadDataList"><a href="/upload-data/list">업로딩 데이터 목록</a></li>
+                <li id="tabConverterList"><a href="/converter/list">업로딩 데이터 변환 목록</a></li>
+                <li id="tabDataList"><a href="/data/list">데이터 목록</a></li>
+                <li id="tabDataLogList"><a href="/data-log/list">데이터 변경 이력</a></li>
             </ul>
         </div>
 		<div style="height: 30px;"></div>
@@ -44,22 +44,24 @@
 			<div class="list-header row">
 				<div class="list-desc u-pull-left">
 					<div class="button-group">
-						<a href="#" onclick="openAll(); return false;" class="button">펼치기</a>
-						<a href="#" onclick="closeAll(); return false;" class="button">접기</a>
+						<a class="button" href="#" onclick="openAll(); return false;">펼치기</a>
+						<a class="button" href="#" onclick="closeAll(); return false;">접기</a>
 						<!-- <a href="/layer/tree" class="button">그룹 수정/등록</a> -->
 					</div>
 				</div>
 			</div>
 			<table class="list-table scope-col">
-				<col class="col-name">
-				<col class="col-name">
-				<col class="col-name">
-				<col class="col-toggle">
-				<col class="col-functions">
-				<col class="col-functions">
-				<col class="col-functions">
-				<col class="col-functions">
-				<col class="col-date">
+				<colgroup>
+					<col class="col-name"></col>
+					<col class="col-name"></col>
+					<col class="col-name"></col>
+					<col class="col-toggle"></col>
+					<col class="col-functions"></col>
+					<col class="col-functions"></col>
+					<col class="col-functions"></col>
+					<col class="col-functions"></col>
+					<col class="col-date"></col>
+				</colgroup>
 				<thead>
 					<tr>
 						<th scope="col">그룹명</th>
@@ -83,7 +85,7 @@
 							<th:block th:if="${dataGroup.depth == 1}">
 							<tr class="oneDepthClass">
 								<td class="col-key ellipsis" style="max-width: 300px;">
-									<span style="padding-left: 0px; font-size: 1.6em;" th:onclick="childrenDisplayToggle([[${dataGroup.depth}]], [[${dataGroup.dataGroupId}]], [[${dataGroup.ancestor}]]);">
+									<span th:onclick="childrenDisplayToggle([[${dataGroup.depth}]], [[${dataGroup.dataGroupId}]], [[${dataGroup.ancestor}]]);" style="padding-left: 0px; font-size: 1.6em;" >
 										<i th:id="|oneDepthArrow-${dataGroup.dataGroupId}|" class="fa fa-caret-right oneArrow" aria-hidden="true"></i>
 									</span>&nbsp;
 									<span style="font-size: 1.5em; color: Dodgerblue;">
@@ -95,7 +97,7 @@
 							<th:block th:if="${dataGroup.depth == 2} ">
 								<tr th:class="|twoDepthClass oneDepthParent-${dataGroup.parent}|" style="display: none;">
 									<td class="col-key ellipsis" style="max-width: 300px;">
-										<span style="padding-left: 40px; font-size: 1.6em;" th:onclick="childrenDisplayToggle([[${dataGroup.depth}]], [[${dataGroup.dataGroupId}]], [[${dataGroup.ancestor}]]);">
+										<span th:onclick="childrenDisplayToggle([[${dataGroup.depth}]], [[${dataGroup.dataGroupId}]], [[${dataGroup.ancestor}]]);" style="padding-left: 40px; font-size: 1.6em;">
 											<i th:id="|twoDepthArrow-${dataGroup.dataGroupId}|" th:class="|fa fa-caret-right twoArrow ancestorArrow-${dataGroup.ancestor}|" aria-hidden="true"></i>
 										</span>&nbsp;
 										<span style="font-size: 1.5em; color: Mediumslateblue;">
@@ -115,25 +117,25 @@
 							</th:block>
 									<td class="col-key ellipsis" th:text="${dataGroup.dataGroupKey}" style="max-width: 120px;"></td>
 									<td class="col-type" th:text="${dataGroup.sharing}"></td>
-									<td class="col-type" th:if="${#strings.equals(dataGroup.available, 'true')}" th:text="사용"></td>
-									<td class="col-type" th:if="${#strings.equals(dataGroup.available, 'false')}" th:text="미사용"></td>
+									<td class="col-type" th:if="${#bools.isTrue(dataGroup.available)}" th:text="사용"></td>
+									<td class="col-type" th:if="${#bools.isFalse(dataGroup.available)}" th:text="미사용"></td>
 
-									<td class="col-count" th:if="${dataGroup.dataCount > 0}">
-										<a th:value="${dataGroup.dataCount}" th:href="@{/data/list(dataGroupId=${dataGroup.dataGroupId})}" class="linkButton"></a>
+									<td th:if="${dataGroup.dataCount > 0}" class="col-count">
+										<a class="linkButton" th:value="${dataGroup.dataCount}" th:href="@{/data/list(dataGroupId=${dataGroup.dataGroupId})}"></a>
 									</td>
-									<td class="col-count" th:if="${dataGroup.dataCount == 0}" th:value="${dataGroup.dataCount}"></td>
+									<td  th:if="${dataGroup.dataCount == 0}" th:value="${dataGroup.dataCount}"></td>
 									<td class="col-type">
 										<div class="button-group">
-											<a href="#" th:onclick="moveUp([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;" class="button" style="text-decoration:none;">위로</a>
-											<a href="#" th:onclick="moveDown([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;" class="button" style="text-decoration:none;">아래로</a>
+											<a class="button" href="#" th:onclick="moveUp([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;"  style="text-decoration:none;">위로</a>
+											<a class="button" href="#" th:onclick="moveDown([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;" style="text-decoration:none;">아래로</a>
 										</div>
 									</td>
 									<td class="col-type">
-										<a th:href="@{/data-group/modify(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-edit">수정</a>
+										<a class="image-button button-edit" th:href="@{/data-group/modify(dataGroupId=${dataGroup.dataGroupId})}">수정</a>
 									</td>
-									<td class="col-type" th:if="${#strings.equals(dataGroup.basic, 'true')}" th:text="|불가(기본)|"></td>
-									<td class="col-type" th:unless="${#strings.equals(dataGroup.basic, 'true')}">
-										<a th:value="#{delete}" th:href="@{/data-group/delete(dataGroupId=${dataGroup.dataGroupId})}" onclick="return deleteWarning();" class="image-button button-delete"></a>                                            
+									<td class="col-type" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="|불가(기본)|"></td>
+									<td class="col-type" th:if="${#bools.isFalse(dataGroup.basic)}">
+										<a class="image-button button-delete" th:value="#{delete}" th:href="@{/data-group/delete(dataGroupId=${dataGroup.dataGroupId})}" onclick="return deleteWarning();"></a>                                            
 									</td>
 									<td class="col-date">
 										<p th:text="${#dates.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>

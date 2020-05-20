@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layout">
 <body>
-    <div id="paginationArea" class="pagination" th:if="${pagination.totalCount > 0}">
-        <a th:href="@{${pagination.uri}(pageNo=${pagination.firstPage})${pagination.searchParameters}}" class=""><span class="icon-glyph glyph-first"></span></a>
+    <div id="paginationArea" th:if="${pagination.totalCount > 0}" class="pagination">
+        <a th:href="@{${pagination.uri}(pageNo=${pagination.firstPage}, ${pagination.searchParameters})}"><span class="icon-glyph glyph-first"></span></a>
         <th:block th:if="${pagination.existPrePage == true}" th:object="${pagination}">
-            <a th:href="@{${pagination.uri}(pageNo=${pagination.prePageNo})${pagination.searchParameters}}" class=""><span class="icon-glyph glyph-prev"></span></a>
+            <a th:href="@{${pagination.uri}(pageNo=${pagination.prePageNo}, ${pagination.searchParameters})}"><span class="icon-glyph glyph-prev"></span></a>
         </th:block>
 
-        <th:block th:with="pageNo = ${pagination.pageNo}" th:each="seq : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+        <th:block th:each="seq : ${#numbers.sequence(pagination.startPage, pagination.endPage)}" th:with="pageNo = ${pagination.pageNo}">
             <th:block th:if="${seq == pageNo}">
-                <a th:href="@{#}" class="current-page" th:text="${pageNo}"></a>
+                <a class="current-page" th:text="${pageNo}" th:href="@{#}"></a>
             </th:block>
             <th:block th:unless="${seq == pageNo}">
-                <a th:href="@{${pagination.uri}(pageNo=${seq})}${pagination.searchParameters}}" th:text="${seq}"></a>
+                <a th:text="${seq}" th:href="@{${pagination.uri}(pageNo=${seq}, ${pagination.searchParameters})}"></a>
             </th:block>
         </th:block>
 
         <th:block th:if="${pagination.existNextPage == true}" th:object="${pagination}">
-            <a th:href="@{${pagination.uri}(pageNo=${pagination.nextPageNo})${pagination.searchParameters}}" class=""><span class="icon-glyph glyph-next"></span></a>
+            <a th:href="@{${pagination.uri}(pageNo=${pagination.nextPageNo}, ${pagination.searchParameters})}"><span class="icon-glyph glyph-next"></span></a>
         </th:block>
-            <a th:href="@{${pagination.uri}(pageNo=${pagination.lastPage})${pagination.searchParameters}}" class=""><span class="icon-glyph glyph-last"></span></a>
+            <a th:href="@{${pagination.uri}(pageNo=${pagination.lastPage}, ${pagination.searchParameters})}"><span class="icon-glyph glyph-last"></span></a>
     </div>
 </body>
 </html>

@@ -29,13 +29,13 @@
         <!-- TAB -->
         <div class="tabs">
             <ul class="tab">
-                <li id="tabDataGroupList"><a th:href="@{/data-group/list}">데이터 그룹</a></li>
-                <li id="tabDataGroupInput"><a th:href="@{/data-group/input}">데이터 그룹 등록</a></li>
-                <li id="tabUploadDataInput"><a th:href="@{/upload-data/input}">업로딩 데이터</a></li>
-                <li id="tabUploadDataList"><a th:href="@{/upload-data/list}">업로딩 데이터 목록</a></li>
-                <li id="tabConverterList"><a th:href="@{/converter/list}">업로딩 데이터 변환 목록</a></li>
-                <li id="tabDataList"><a th:href="@{/data/list}">데이터 목록</a></li>
-                <li id="tabDataLogList"><a th:href="@{/data-log/list}">데이터 변경 이력</a></li>
+                <li id="tabDataGroupList"><a href="/data-group/list">데이터 그룹</a></li>
+                <li id="tabDataGroupInput"><a href="/data-group/input">데이터 그룹 등록</a></li>
+                <li id="tabUploadDataInput"><a href="/upload-data/input">업로딩 데이터</a></li>
+                <li id="tabUploadDataList"><a href="/upload-data/list">업로딩 데이터 목록</a></li>
+                <li id="tabConverterList"><a href="/converter/list">업로딩 데이터 변환 목록</a></li>
+                <li id="tabDataList"><a href="/data/list">데이터 목록</a></li>
+                <li id="tabDataLogList"><a href="/data-log/list">데이터 변경 이력</a></li>
             </ul>
         </div>
 
@@ -53,13 +53,13 @@
 						<option value="0" th:text="#{search.same}"></option>
 						<option value="1" th:text="#{search.include}"></option>
 					</select>
-					<input type="search" id="searchValue" name="searchValue" cssClass="m" style="float: right;">
+					<input type="search" id="searchValue" name="searchValue" class="m" style="float: right;" />
 				</div>
 				<div class="input-set">
                     <label for="startDate" th:text="#{search.date}"></label>
-                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off">
+                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
                     <span class="delimeter tilde">~</span>
-                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off">
+                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
                 </div>
 				<div class="input-set">
 					<label for="orderWord" th:text="#{search.order}"></label>
@@ -80,7 +80,7 @@
 					</select>
 				</div>
 				<div class="input-set">
-					<input type="submit" th:value="#{search}">
+					<input type="submit" th:value="#{search}" />
 				</div>
 			</div>
 			</form>
@@ -90,7 +90,7 @@
         <!-- S: 변환 데이터 목록 -->
         <div class="list">
             <form id="listForm" modelAttribute="converterJob" method="post">
-				<input type="hidden" id="checkIds" name="checkIds" value="">
+				<input type="hidden" id="checkIds" name="checkIds" />
                 <div class="list-header row">
                     <!-- <div class="list-desc u-pull-left">
                     <spring:message code='all.d'> 
@@ -104,18 +104,20 @@
 				</div> -->
                 </div>
                 <table class="list-table scope-col">
-                    <col class="col-number">
-                    <col class="col-name">
-                    <col class="col-name">
-                    <col class="col-number">
-                    <col class="col-name">
-                    <col class="col-type">
-                    <col class="col-number">
-                    <col class="col-functions">
-                    <col class="col-functions">
+                    <colgroup>
+                        <col class="col-number"></col>
+                        <col class="col-name"></col>
+                        <col class="col-name"></col>
+                        <col class="col-number"></col>
+                        <col class="col-name"></col>
+                        <col class="col-type"></col>
+                        <col class="col-number"></col>
+                        <col class="col-functions"></col>
+                        <col class="col-functions"></col>
+                    </colgroup>
                     <thead>
                         <tr>
-                            <th scope="col" class="col-number"><spring:message code='number'></th>
+                            <th scope="col" class="col-number" th:text="#{number}"></th>
                             <th scope="col" class="col-name">변환 유형</th>
                             <th scope="col" class="col-name">제목</th>
                             <th scope="col" class="col-name">U.S.F</th>
@@ -132,7 +134,7 @@
                         </tr>
 
                         <tr th:if="${!converterJobList.empty}" th:each="converterJob: ${converterJobList}">
-                            <td class="col-number" th:text="${converterJobStat.count}"></td>
+                            <td class="col-number" th:text="${converterJobStat.count + ((pagination.pageNo-1)*10)}"></td>
                             <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'basic')}" th:text="기본"></td>
                             <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'building')}" th:text="빌딩"></td>
                             <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'extra-big-building')}" th:text="초대형 빌딩"></td>
@@ -153,8 +155,8 @@
                             <td class="col-type" th:if="${#strings.equals(converterJob.status, 'fail')}" th:text="실패"></td>
                                
                             <td class="col-count" th:text="|${converterJob.fileCount}개|"></td>
-                            <td class="col-type" th:if="${converterJob.errorCode == null}" th:text="없음">
-                            <td class="col-type" th:unless="${converterJob.errorCode == null}">
+                            <td class="col-type" th:if="${#strings.isEmpty(converterJob.errorCode)}" th:text="없음">
+                            <td class="col-type" th:unless="${#strings.isEmpty(converterJob.errorCode)}">
                                 <a href="#" th:onclick="detailErrorCode([[${converterJob.errorCode}]]); return false;">[보기]</a>
                             </td>
                             <td class="col-type">

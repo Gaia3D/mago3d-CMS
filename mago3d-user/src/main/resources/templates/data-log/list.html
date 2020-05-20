@@ -31,13 +31,13 @@
         <!-- TAB -->
         <div class="tabs">
             <ul class="tab">
-                <li id="tabDataGroupList"><a th:href="@{/data-group/list}">데이터 그룹</a></li>
-                <li id="tabDataGroupInput"><a th:href="@{/data-group/input}">데이터 그룹 등록</a></li>
-                <li id="tabUploadDataInput"><a th:href="@{/upload-data/input}">업로딩 데이터</a></li>
-                <li id="tabUploadDataList"><a th:href="@{/upload-data/list}">업로딩 데이터 목록</a></li>
-                <li id="tabConverterList"><a th:href="@{/converter/list}">업로딩 데이터 변환 목록</a></li>
-                <li id="tabDataList"><a th:href="@{/data/list}">데이터 목록</a></li>
-                <li id="tabDataLogList"><a th:href="@{/data-log/list}">데이터 변경 이력</a></li>
+                <li id="tabDataGroupList"><a href="/data-group/list">데이터 그룹</a></li>
+                <li id="tabDataGroupInput"><a href="/data-group/input">데이터 그룹 등록</a></li>
+                <li id="tabUploadDataInput"><a href="/upload-data/input">업로딩 데이터</a></li>
+                <li id="tabUploadDataList"><a href="/upload-data/list">업로딩 데이터 목록</a></li>
+                <li id="tabConverterList"><a href="/converter/list">업로딩 데이터 변환 목록</a></li>
+                <li id="tabDataList"><a href="/data/list">데이터 목록</a></li>
+                <li id="tabDataLogList"><a href="/data-log/list">데이터 변경 이력</a></li>
             </ul>
 		</div>
 
@@ -55,13 +55,13 @@
 						<option value="0" th:text="#{search.same}"></option>
 						<option value="1" th:text="#{search.include}"></option>
 					</select>
-					<input type="search" id="searchValue" name="searchValue" cssClass="m" style="float: right;">
+					<input type="search" id="searchValue" name="searchValue" class="m" style="float: right;" />
 				</div>
 				<div class="input-set">
                     <label for="startDate" th:text="#{search.date}"></label>
-                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off">
+                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
                     <span class="delimeter tilde">~</span>
-                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off">
+                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
                 </div>
 				<div class="input-set">
 					<label for="orderWord" th:text="#{search.order}"></label>
@@ -82,7 +82,7 @@
 					</select>
 				</div>
 				<div class="input-set">
-					<input type="submit" th:value="#{search}">
+					<input type="submit" th:value="#{search}" />
 				</div>
 			</div>
 			</form>
@@ -90,71 +90,73 @@
         <!-- E: 검색 -->
 
 		<div class="list">
-			<form:form id="listForm" modelAttribute="dataInfo" method="post">
-			<input type="hidden" id="checkIds" name="checkIds" value="">
-			<div class="list-header row">
-				<div class="list-desc u-pull-left">
-					<!-- <div class="list-desc u-pull-left">
-                        <spring:message code='all.d'> 
-                        <span class="totalCount">
-                            <fmt:formatNumber value="${pagination.totalCount}" type="number">
-                        </span> 
-                        <spring:message code='search.what.count'>,
-                        <fmt:formatNumber value="${pagination.pageNo}" type="number">
-                        / <fmt:formatNumber value="${pagination.lastPage }" type="number"> 
-                        <spring:message code='search.page'>
-                    </div> -->
-                </div>
-			</div>
-			<table class="list-table scope-col">
-				<col class="col-checkbox">
-				<col class="col-number">
-				<col class="col-name">
-				<col class="col-name">
-				<col class="col-type">
-				<col class="col-type">
-				<col class="col-type">
-				<col class="col-type">
-				<col class="col-type">
-				<col class="col-date">
-				<thead>
-					<tr>
-						<th scope="col" class="col-checkbox"><input type="checkbox" id="chkAll" name="chkAll"></th>
-						<th scope="col" class="col-number"><spring:message code='number'/></th>
-						<th scope="col" class="col-name">그룹명</th>
-						<th scope="col" class="col-name">데이터명</th>
-						<th scope="col" class="col-type">요청자</th>
-						<th scope="col" class="col-type">데이터타입</th>
-						<th scope="col" class="col-type">공개유형</th>
-						<th scope="col" class="col-type">매핑타입</th>
-						<th scope="col" class="col-type">변경유형</th>
-						<th scope="col" class="col-date">변경일</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:if="${dataInfoLogList.empty}">
-						<td colspan="10" class="col-none">데이터 변경 이력이 존재하지 않습니다.</td>
-					</tr>
-					<tr th:if="${!dataInfoLogList.empty}" th:each="dataInfoLog : ${dataInfoLogList}">
-						<td class="col-checkbox">
-							<input type="checkbox" id="dataInfoLogId_${dataInfoLog.dataLogId}" name="dataLogId" th:value="${dataInfoLog.dataLogId}">
-						</td>
-						<td class="col-number" th:text="${dataInfoLogStat.count}"></td>
-						<td class="col-name ellipsis" th:text="${dataInfoLog.dataGroupName}" style="min-width:100px;max-width:100px;"></td>
-						<td class="col-name ellipsis" th:text="${dataInfoLog.dataName}" style="min-width:160px;max-width:160px;"></td>
-						<td class="col-type" th:text="${dataInfoLog.userId}"></td>
-						<td class="col-type" th:text="${dataInfoLog.dataType}"></td>
-						<td class="col-type" th:text="${dataInfoLog.sharing}"></td>
-						<td class="col-type ellipsis"  th:text="${dataInfoLog.mappingType}"style="min-width:80px;max-width:80px;"></td>
-						<td class="col-type" th:text="${dataInfoLog.changeType}"></td>
-						<td class="col-date">
-                            <p th:text="${#dates.format(dataInfoLog.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
-                            <p th:text="${#dates.format(viewInsertDate,'yyyy-MM-dd HH:mm')}"></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			</form:form>
+			<form id="listForm" modelAttribute="dataInfoLogList" method="post">
+				<input type="hidden" id="checkIds" name="checkIds" value="" />
+				<div class="list-header row">
+					<div class="list-desc u-pull-left">
+						<!-- <div class="list-desc u-pull-left">
+							<spring:message code='all.d'> 
+							<span class="totalCount">
+								<fmt:formatNumber value="${pagination.totalCount}" type="number">
+							</span> 
+							<spring:message code='search.what.count'>,
+							<fmt:formatNumber value="${pagination.pageNo}" type="number">
+							/ <fmt:formatNumber value="${pagination.lastPage }" type="number"> 
+							<spring:message code='search.page'>
+						</div> -->
+					</div>
+				</div>
+				<table class="list-table scope-col">
+					<colgroup>
+						<col class="col-checkbox"></col>
+						<col class="col-number"></col>
+						<col class="col-name"></col>
+						<col class="col-name"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-date"></col>
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col" class="col-checkbox"><input type="checkbox" id="chkAll" name="chkAll" /></th>
+							<th scope="col" class="col-number" th:text="#{number}"></th>
+							<th scope="col" class="col-name">그룹명</th>
+							<th scope="col" class="col-name">데이터명</th>
+							<th scope="col" class="col-type">요청자</th>
+							<th scope="col" class="col-type">데이터타입</th>
+							<th scope="col" class="col-type">공개유형</th>
+							<th scope="col" class="col-type">매핑타입</th>
+							<th scope="col" class="col-type">변경유형</th>
+							<th scope="col" class="col-date">변경일</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:if="${dataInfoLogList.empty}">
+							<td colspan="10" class="col-none">데이터 변경 이력이 존재하지 않습니다.</td>
+						</tr>
+						<tr th:if="${!dataInfoLogList.empty}" th:each="dataInfoLog : ${dataInfoLogList}">
+							<td class="col-checkbox">
+								<input type="checkbox" id="dataInfoLogId_${dataInfoLog.dataLogId}" name="dataLogId" th:value="${dataInfoLog.dataLogId}" />
+							</td>
+							<td class="col-number" th:text="${dataInfoLogStat.count + ((pagination.pageNo-1)*10)}"></td>
+							<td class="col-name ellipsis" th:text="${dataInfoLog.dataGroupName}" style="min-width:100px;max-width:100px;"></td>
+							<td class="col-name ellipsis" th:text="${dataInfoLog.dataName}" style="min-width:160px;max-width:160px;"></td>
+							<td class="col-type" th:text="${dataInfoLog.userId}"></td>
+							<td class="col-type" th:text="${dataInfoLog.dataType}"></td>
+							<td class="col-type" th:text="${dataInfoLog.sharing}"></td>
+							<td class="col-type ellipsis"  th:text="${dataInfoLog.mappingType}"style="min-width:80px;max-width:80px;"></td>
+							<td class="col-type" th:text="${dataInfoLog.changeType}"></td>
+							<td class="col-date">
+								<p th:text="${#dates.format(dataInfoLog.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
+								<p th:text="${#dates.format(viewInsertDate,'yyyy-MM-dd HH:mm')}"></p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
 		</div>
         <!-- 페이지 -->
         <div th:replace="~{/common/pagination :: #paginationArea}"></div>

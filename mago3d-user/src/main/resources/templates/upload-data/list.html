@@ -29,13 +29,13 @@
         <!-- TAB -->
         <div class="tabs">
             <ul class="tab">
-                <li id="tabDataGroupList"><a th:href="@{/data-group/list}">데이터 그룹</a></li>
-                <li id="tabDataGroupInput"><a th:href="@{/data-group/input}">데이터 그룹 등록</a></li>
-                <li id="tabUploadDataInput"><a th:href="@{/upload-data/input}">업로딩 데이터</a></li>
-                <li id="tabUploadDataList"><a th:href="@{/upload-data/list}">업로딩 데이터 목록</a></li>
-                <li id="tabConverterList"><a th:href="@{/converter/list}">업로딩 데이터 변환 목록</a></li>
-                <li id="tabDataList"><a th:href="@{/data/list}">데이터 목록</a></li>
-                <li id="tabDataLogList"><a th:href="@{/data-log/list}">데이터 변경 이력</a></li>
+                <li id="tabDataGroupList"><a href="/data-group/list">데이터 그룹</a></li>
+                <li id="tabDataGroupInput"><a href="/data-group/input">데이터 그룹 등록</a></li>
+                <li id="tabUploadDataInput"><a href="/upload-data/input">업로딩 데이터</a></li>
+                <li id="tabUploadDataList"><a href="/upload-data/list">업로딩 데이터 목록</a></li>
+                <li id="tabConverterList"><a href="/converter/list">업로딩 데이터 변환 목록</a></li>
+                <li id="tabDataList"><a href="/data/list">데이터 목록</a></li>
+                <li id="tabDataLogList"><a href="/data-log/list">데이터 변경 이력</a></li>
             </ul>
         </div>
 
@@ -53,13 +53,13 @@
 						<option value="0" th:text="#{search.same}"></option>
 						<option value="1" th:text="#{search.include}"></option>
 					</select>
-					<input type="search" id="searchValue" name="searchValue" cssClass="m" style="float: right;">
+					<input type="search" id="searchValue" name="searchValue" class="m" style="float: right;" />
 				</div>
 				<div class="input-set">
                     <label for="startDate" th:text="#{search.date}"></label>
-                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off">
+                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
                     <span class="delimeter tilde">~</span>
-                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off">
+                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
                 </div>
 				<div class="input-set">
 					<label for="orderWord" th:text="#{search.order}"></label>
@@ -80,7 +80,7 @@
 					</select>
 				</div>
 				<div class="input-set">
-					<input type="submit" th:value="#{search}">
+					<input type="submit" th:value="#{search}" />
 				</div>
 			</div>
 			</form>
@@ -90,7 +90,7 @@
         <!-- S: 업로딩 데이터 목록 -->
 		<div class="list">
 			<form id="listForm" modelAttribute="uploadData" method="post">
-				<input type="hidden" id="checkIds" name="checkIds" value="">
+				<input type="hidden" id="checkIds" name="checkIds" />
 			<div class="list-header row">
 				<!-- <div class="list-desc u-pull-left">
                     <spring:message code='all.d'> 
@@ -109,21 +109,23 @@
 				</div>
 			</div>
 			<table class="list-table scope-col">
-				<col class="col-checkbox">
-				<col class="col-number">
-				<col class="col-name">
-				<col class="col-name">
-				<col class="col-name">
-				<col class="col-number">
-				<col class="col-number">
-				<col class="col-number">
-				<col class="col-functions">
-				<col class="col-functions">
-				<col class="col-functions">
+				<colgroup>
+					<col class="col-checkbox"></col>
+					<col class="col-number"></col>
+					<col class="col-name"></col>
+					<col class="col-name"></col>
+					<col class="col-name"></col>
+					<col class="col-number"></col>
+					<col class="col-number"></col>
+					<col class="col-number"></col>
+					<col class="col-functions"></col>
+					<col class="col-functions"></col>
+					<col class="col-functions"></col>
+				</colgroup>
 				<thead>
 					<tr>
-						<th scope="col" class="col-checkbox"><input type="checkbox" id="chkAll" name="chkAll"></th>
-						<th scope="col" class="col-number"><spring:message code='number'></th>
+						<th scope="col" class="col-checkbox"><input type="checkbox" id="chkAll" name="chkAll" /></th>
+						<th scope="col" class="col-number" th:text="#{number}"></th>
 						<th scope="col" class="col-name">그룹명</th>
 						<th scope="col" class="col-name">공유 유형</th>
 						<th scope="col" class="col-name">데이터 타입</th>
@@ -142,9 +144,9 @@
 
                     <tr th:if="${!uploadDataList.empty}" th:each="uploadData : ${uploadDataList}">
 						<td class="col-checkbox">
-							<input type="checkbox" th:id="|uploadDataId_${uploadData.uploadDataId}|" name="uploadDataId" value="${uploadData.uploadDataId}">
+							<input type="checkbox" th:id="|uploadDataId_${uploadData.uploadDataId}|" name="uploadDataId" th:value="${uploadData.uploadDataId}" />
 						</td>
-						<td class="col-number" th:text="${uploadDataStat.count}"></td>
+						<td class="col-number" th:text="${uploadDataStat.count + ((pagination.pageNo-1)*10)}"></td>
 						<td class="col-name ellipsis" th:text="${uploadData.dataGroupName}" style="min-width:120px;max-width:120px;"></td>
 						<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'common')}" th:text="공통"></td>
                         <td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'public')}" th:text="공개"></td>
@@ -156,18 +158,18 @@
 							<a th:text="${uploadData.dataName}" th:href="@{/upload-data/modify(uploadDataId=${uploadData.uploadDataId})}"></a>
 						</td>
 						<td class="col-count">
-							<span value="${uploadData.converterTargetCount}" th:text="${uploadData.converterTargetCount}" style="color:blue; font-weight: bold;"></span>
+							<span th:text="${uploadData.converterTargetCount}" style="color:blue; font-weight: bold;"></span>
 							<span th:text="| / ${uploadData.fileCount}개|"></span> 
 						</td>
 						<td class="col-count" th:text="|${uploadData.converterCount}건|"></td>
 						<td class="col-functions">
 							<span class="button-group">
-								<a href="#" th:onclick="converterFile([[${uploadData.uploadDataId}]], [[${uploadData.dataName}]], [[${uploadData.dataType}]]); return false;" class="button" style="text-decoration: none;">F4D 변환</a>
+								<a class="button" href="#" th:onclick="converterFile([[${uploadData.uploadDataId}]], [[${uploadData.dataName}]], [[${uploadData.dataType}]]); return false;" style="text-decoration: none;">F4D 변환</a>
 							</span>
 						</td>
 						<td class="col-functions">
 							<span class="button-group">
-								<a href="#" th:onclick="deleteUploadData([[${uploadData.uploadDataId}]]); return false;" th:text="#{delete}" class="image-button button-delete"></a>
+								<a class="image-button button-delete" href="#" th:onclick="deleteUploadData([[${uploadData.uploadDataId}]]); return false;" th:text="#{delete}"></a>
 							</span>
 						</td>
 						<td class="col-type">

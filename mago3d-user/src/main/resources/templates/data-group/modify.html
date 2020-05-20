@@ -30,29 +30,30 @@
         <!-- TAB -->
         <div class="tabs">
             <ul class="tab">
-                <li id="tabDataGroupList"><a th:href="@{/data-group/list}">데이터 그룹</a></li>
-                <li id="tabDataGroupInput"><a th:href="@{/data-group/input}">데이터 그룹 등록</a></li>
-                <li id="tabUploadDataInput"><a th:href="@{/upload-data/input}">업로딩 데이터</a></li>
-                <li id="tabUploadDataList"><a th:href="@{/upload-data/list}">업로딩 데이터 목록</a></li>
-                <li id="tabConverterList"><a th:href="@{/converter/list}">업로딩 데이터 변환 목록</a></li>
-                <li id="tabDataList"><a th:href="@{/data/list}">데이터 목록</a></li>
-                <li id="tabDataLogList"><a th:href="@{/data-log/list}">데이터 변경 이력</a></li>
+                <li id="tabDataGroupList"><a href="/data-group/list">데이터 그룹</a></li>
+                <li id="tabDataGroupInput"><a href="/data-group/input">데이터 그룹 등록</a></li>
+                <li id="tabUploadDataInput"><a href="/upload-data/input">업로딩 데이터</a></li>
+                <li id="tabUploadDataList"><a href="/upload-data/list">업로딩 데이터 목록</a></li>
+                <li id="tabConverterList"><a href="/converter/list">업로딩 데이터 변환 목록</a></li>
+                <li id="tabDataList"><a href="/data/list">데이터 목록</a></li>
+                <li id="tabDataLogList"><a href="/data-log/list">데이터 변경 이력</a></li>
             </ul>
         </div>
 
         <!-- S: 데이터 그룹 수정 -->
         <form id="dataGroup" th:object="${dataGroup}" method="post" th:action="@{#}" onsubmit="return false;">
             <table class="input-table scope-row">
-                <col class="col-label l">
-                <col class="col-input">
+                <colgroup></colgroup>
+                    <col class="col-label l"></col>
+                    <col class="col-input"></col>
+                </colgroup>
                 <tr>
                     <th class="col-label" scope="row">
                         <label for="dataGroupName">데이터 그룹명</label>
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
                     <td class="col-input">
-                        <input type="text" id="dataGroupName" name="dataGroupName" th:value="${dataGroup.dataGroupName}" cssClass="l" maxlength="100">
-                        <errors id="dataGroupName" name="dataGroupName" cssClass="error">
+                        <input type="text" id="dataGroupName" name="dataGroupName" th:field="*{dataGroupName}" class="l" maxlength="100" />
                     </td>
                 </tr>
                 <tr>
@@ -88,20 +89,19 @@
                         <label for="basic">기본 여부</label>
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
-                    <td class="col-input radio-set" th:if="${dataGroup.basic == true}" th:text="기본">
-                    <td class="col-input radio-set" th:nuless="${dataGroup.basic == true}" th:text="선택"></td>
+                    <td class="col-input radio-set" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="기본"></td>
+                    <td class="col-input radio-set" th:if="${#bools.isFalse(dataGroup.basic)}" th:text="선택"></td>
                 </tr>
                 <tr>
                     <th class="col-label l" scope="row">
                         <label for="available">사용 여부</label>
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
-                    
-                    <td class="col-input radio-set" th:if="${dataGroup.basic == true}" th:text="사용">
-                    <td class="col-input radio-set" th:nuless="${dataGroup.basic == true}">
-                        <input type="radio" id="availableTrue" name="available" value="true">
+                    <td class="col-input radio-set" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="사용">
+                    <td class="col-input radio-set" th:if="${#bools.isFalse(dataGroup.basic)}">
+                        <input type="radio" id="availableTrue" name="available" value="true" />
                         <label for="availableTrue">사용</label>
-                        <input type="radio" id="availableFalse" name="available" value="false">
+                        <input type="radio" id="availableFalse" name="available" value="false" />
                         <label for="availableFalse">미사용</label>
                     </td>
                 </tr>
@@ -110,9 +110,8 @@
                         <label for="longitude">경도</label>
                     </th>
                     <td class="col-input">
-                        <input type="text" id="longitude" name="longitude" th:value="${dataGroup.longitude}" cssClass="m">
-                        <input type="button" id="mapButtion" value="지도에서 찾기">
-                        <errors id="longitude" name="longitude" cssClass="error">
+                        <input type="text" id="longitude" name="longitude" th:field="*{longitude}" class="m" />
+                        <input type="button" id="mapButtion" value="지도에서 찾기" />
                     </td>
                 </tr>
                 <tr>
@@ -120,8 +119,7 @@
                         <label for="latitude">위도</label>
                     </th>
                     <td class="col-input">
-                        <input type="text" id="latitude" name="latitude" th:value="${dataGroup.latitude}" cssClass="m">
-                        <errors id="latitude" name="latitude" cssClass="error">
+                        <input type="text" id="latitude" name="latitude" th:field="*{latitude}" class="m" />
                     </td>
                 </tr>
                 <tr>
@@ -129,8 +127,7 @@
                         <label for="altitude">높이</label>
                     </th>
                     <td class="col-input">
-                        <input type="text" id="altitude" name="altitude" th:value="${dataGroup.altitude}" cssClass="m">
-                        <errors id="altitude" name="altitude"  cssClass="error">
+                        <input type="text" id="altitude" name="altitude" th:field="*{altitude}" class="m" />
                     </td>
                 </tr>
                 <tr>
@@ -138,8 +135,7 @@
                         <label for="duration">이동시간</label>
                     </th>
                     <td class="col-input">
-                        <input type="text" id="duration" name="duration" th:value="${dataGroup.duration}" cssClass="s">&nbsp;&nbsp;ms
-                        <errors id="duration" name="duration" cssClass="error">
+                        <input type="text" id="duration" name="duration" th:field="*{duration}" class="s" />&nbsp;&nbsp;ms
                     </td>
                 </tr>
                 <tr>
@@ -148,19 +144,22 @@
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
                     <td class="col-input">
-                        <input type="text" id="metainfo" name="metainfo" th:value="${dataGroup.metainfo}" value='{"isPhysical": false}' class="xl">
-                        <errors id="metainfo" name="metainfo" cssClass="error">
+                        <input type="text" id="metainfo" name="metainfo" th:field="*{metainfo}" class="xl" placeholder='{"isPhysical": false}' />
                     </td>
                 </tr>
                 <tr>
-                    <th class="col-label l" scope="row"><label for="description" th:text="#{description}"></label></th>
-                    <td class="col-input"><input type="text" id="description" name="description" th:value="${dataGroup.description}" class="xl"></td>
+                    <th class="col-label l" scope="row">
+                        <label for="description" th:text="#{description}"></label>
+                    </th>
+                    <td class="col-input">
+                        <input type="text" id="description" name="description" th:field="*{description}" class="xl" />
+                    </td>
                 </tr>
             </table>
             <div class="button-group">
                 <div class="center-buttons">
-                    <input type="submit" th:value="#{modified}" onclick="updatedataGroup();">
-                    <a th:href="@{/data-group/list}" class="button">목록</a>
+                    <input type="submit" th:value="#{modified}" onclick="updatedataGroup();" />
+                    <a class="button" href="/data-group/list">목록</a>
                 </div>
             </div>
         </form>
