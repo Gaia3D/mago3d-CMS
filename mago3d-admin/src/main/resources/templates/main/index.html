@@ -409,17 +409,17 @@
 <script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
 
 <script th:inline="javascript">
-	var refreshTime = parseInt(/*[[${widgetInterval}]]*/) * 1000;
-	var isDataGroupDraw = /*[[${isDataGroupDraw}]]*/"";
-	var isDataStatusDraw = /*[[${isDataStatusDraw}]]*/"";
-	var isDataAdjustLogDraw = /*[[${isDataAdjustLogDraw}]]*/"";
-	var isUserStatusDraw = /*[[${isUserStatusDraw}]]*/"";
-	var isUserAccessLogDraw = /*[[${isUserAccessLogDraw}]]*/"";
-	var isCivilVoiceDraw = /*[[${isCivilVoiceDraw}]]*/"";
-	var isSystemUsageDraw = /*[[${isSystemUsageDraw}]]*/"";
-	var isDbcpStatusDraw = /*[[${isDbcpStatusDraw}]]*/"";
-	var isDbSessionDraw = /*[[${isDbSessionDraw}]]*/"";
-	var isIssueDraw = /*[[${isIssueDraw}]]*/"";
+	var refreshTime = [[${widgetInterval}]] * 1000;
+	var isDataGroupDraw = [[${isDataGroupDraw}]];
+	var isDataStatusDraw = [[${isDataStatusDraw}]];
+	var isDataAdjustLogDraw = [[${isDataAdjustLogDraw}]];
+	var isUserStatusDraw = [[${isUserStatusDraw}]];
+	var isUserAccessLogDraw = [[${isUserAccessLogDraw}]];
+	var isCivilVoiceDraw = [[${isCivilVoiceDraw}]];
+	var isSystemUsageDraw = [[${isSystemUsageDraw}]];
+	var isDbcpStatusDraw = [[${isDbcpStatusDraw}]];
+	var isDbSessionDraw = [[${isDbSessionDraw}]];
+	var isIssueDraw = [[${isIssueDraw}]];
 
 	$(document).ready(function() {
 		if(isDataGroupDraw) {
@@ -461,7 +461,7 @@
 			issueWidget();
 		}
 
-		var isActive = /*[[${isActive}]]*/"";
+		var isActive = [[${isActive}]];
 		if(isActive) {
 			// Active 일때만 화면을 갱신함
 			setInterval(refreshMain, refreshTime);
@@ -732,12 +732,12 @@
 
 		if(drawType == 0) {
 			// el 데이터 표시
-			activeUserTotalCount = parseInt(/*[[${activeUserTotalCount}]]*/);
-			fobidUserTotalCount = parseInt(/*[[${fobidUserTotalCount}]]*/);
-			failUserTotalCount = parseInt(/*[[${failUserTotalCount}]]*/);
-			sleepUserTotalCount = parseInt(/*[[${sleepUserTotalCount}]]*/);
-			expireUserTotalCount = parseInt(/*[[${expireUserTotalCount}]]*/);
-			tempPasswordUserTotalCount = parseInt(/*[[${tempPasswordUserTotalCount}]]*/);
+			activeUserTotalCount = parseInt([[${activeUserTotalCount}]]);
+			fobidUserTotalCount = parseInt([[${fobidUserTotalCount}]]);
+			failUserTotalCount = parseInt([[${failUserTotalCount}]]);
+			sleepUserTotalCount = parseInt([[${sleepUserTotalCount}]]);
+			expireUserTotalCount = parseInt([[${expireUserTotalCount}]]);
+			tempPasswordUserTotalCount = parseInt([[${tempPasswordUserTotalCount}]]);
 		} else {
 			// ajax 데이터 표시
 			activeUserTotalCount = parseInt(jsonData.activeUserTotalCount);

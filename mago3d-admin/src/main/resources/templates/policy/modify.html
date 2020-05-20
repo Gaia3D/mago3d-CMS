@@ -65,7 +65,7 @@
 	        updatPolicyUserFlag = false;
 	        var formData = $('#policyUser').serialize();
 	        $.ajax({
-				url: "/policies/user/" + /*[[${policy.policyId}]]*/"",
+				url: "/policies/user/" + [[${policy.policyId}]],
 				type: "POST",
 				headers: {"X-Requested-With": "XMLHttpRequest"},
 		        data: formData,
@@ -97,7 +97,7 @@
 	        updatPolicyPasswordFlag = false;
 	        var formData = $('#policyPassword').serialize();
 	        $.ajax({
-				url: "/policies/password/" + /*[[${policy.policyId}]]*/"",
+				url: "/policies/password/" + [[${policy.policyId}]],
 				type: "POST",
 				headers: {"X-Requested-With": "XMLHttpRequest"},
 		        data: formData,
@@ -129,7 +129,7 @@
 	        updatPolicyNoticeFlag = false;
 	        var formData = $('#policyNotice').serialize();
 	        $.ajax({
-				url: "/policies/notice/" + /*[[${policy.policyId}]]*/"",
+				url: "/policies/notice/" + [[${policy.policyId}]],
 				type: "POST",
 				headers: {"X-Requested-With": "XMLHttpRequest"},
 		        data: formData,
@@ -161,7 +161,7 @@
 	        updatPolicySecurityFlag = false;
 	        var formData = $('#policySecurity').serialize();
 	        $.ajax({
-				url: "/policies/security/" + /*[[${policy.policyId}]]*/"",
+				url: "/policies/security/" + [[${policy.policyId}]],
 				type: "POST",
 				headers: {"X-Requested-With": "XMLHttpRequest"},
 		        data: formData,
@@ -193,7 +193,7 @@
 	        updatPolicyContentFlag = false;
 	        var formData = $('#policyContent').serialize();
 	        $.ajax({
-				url: "/policies/content/" + /*[[${policy.policyId}]]*/"",
+				url: "/policies/content/" + [[${policy.policyId}]],
 				type: "POST",
 				headers: {"X-Requested-With": "XMLHttpRequest"},
 		        data: formData,
@@ -225,7 +225,7 @@
 	        updatPolicyUploadFlag = false;
 	        var formData = $('#policyUpload').serialize();
 	        $.ajax({
-				url: "/policies/upload/" + /*[[${policy.policyId}]]*/"",
+				url: "/policies/upload/" + [[${policy.policyId}]],
 				type: "POST",
 				headers: {"X-Requested-With": "XMLHttpRequest"},
 		        data: formData,
