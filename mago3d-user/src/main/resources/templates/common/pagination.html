@@ -9,7 +9,7 @@
 
         <th:block th:each="seq : ${#numbers.sequence(pagination.startPage, pagination.endPage)}" th:with="pageNo = ${pagination.pageNo}">
             <th:block th:if="${seq == pageNo}">
-                <a class="current-page" th:text="${pageNo}" th:href="@{#}"></a>
+                <a th:href="@{#}" class="current-page" th:text="${pageNo}"></a>
             </th:block>
             <th:block th:unless="${seq == pageNo}">
                 <a th:text="${seq}" th:href="@{${pagination.uri}(pageNo=${seq}, ${pagination.searchParameters})}"></a>

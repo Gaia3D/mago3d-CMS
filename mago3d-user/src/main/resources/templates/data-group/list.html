@@ -44,8 +44,8 @@
 			<div class="list-header row">
 				<div class="list-desc u-pull-left">
 					<div class="button-group">
-						<a class="button" href="#" onclick="openAll(); return false;">펼치기</a>
-						<a class="button" href="#" onclick="closeAll(); return false;">접기</a>
+						<a href="#" class="button" onclick="openAll(); return false;">펼치기</a>
+						<a href="#" class="button" onclick="closeAll(); return false;">접기</a>
 						<!-- <a href="/layer/tree" class="button">그룹 수정/등록</a> -->
 					</div>
 				</div>
@@ -121,21 +121,21 @@
 									<td class="col-type" th:if="${#bools.isFalse(dataGroup.available)}" th:text="미사용"></td>
 
 									<td th:if="${dataGroup.dataCount > 0}" class="col-count">
-										<a class="linkButton" th:value="${dataGroup.dataCount}" th:href="@{/data/list(dataGroupId=${dataGroup.dataGroupId})}"></a>
+										<a th:href="@{/data/list(dataGroupId=${dataGroup.dataGroupId})}" class="linkButton" th:value="${dataGroup.dataCount}"></a>
 									</td>
 									<td  th:if="${dataGroup.dataCount == 0}" th:value="${dataGroup.dataCount}"></td>
 									<td class="col-type">
 										<div class="button-group">
-											<a class="button" href="#" th:onclick="moveUp([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;"  style="text-decoration:none;">위로</a>
-											<a class="button" href="#" th:onclick="moveDown([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;" style="text-decoration:none;">아래로</a>
+											<a href="#" class="button" th:onclick="moveUp([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;"  style="text-decoration:none;">위로</a>
+											<a href="#" class="button" th:onclick="moveDown([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;" style="text-decoration:none;">아래로</a>
 										</div>
 									</td>
 									<td class="col-type">
-										<a class="image-button button-edit" th:href="@{/data-group/modify(dataGroupId=${dataGroup.dataGroupId})}">수정</a>
+										<a th:href="@{/data-group/modify(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-edit">수정</a>
 									</td>
 									<td class="col-type" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="|불가(기본)|"></td>
 									<td class="col-type" th:if="${#bools.isFalse(dataGroup.basic)}">
-										<a class="image-button button-delete" th:value="#{delete}" th:href="@{/data-group/delete(dataGroupId=${dataGroup.dataGroupId})}" onclick="return deleteWarning();"></a>                                            
+										<a th:href="@{/data-group/delete(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-delete" th:value="#{delete}" onclick="return deleteWarning();"></a>                                            
 									</td>
 									<td class="col-date">
 										<p th:text="${#dates.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
