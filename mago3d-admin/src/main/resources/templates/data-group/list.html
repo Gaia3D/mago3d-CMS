@@ -12,7 +12,7 @@
 	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
-	<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css?cacheVersion=(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
 </head>
 <body>
 <th:block layout:fragment="pageCustomContent">
@@ -28,25 +28,27 @@
 							<div class="list-header row">
 								<div class="list-desc u-pull-left">
 									<div class="button-group">
-										<a href="#" onclick="openAll(); return false;" class="button">펼치기</a>
-										<a href="#" onclick="closeAll(); return false;" class="button">접기</a>
+										<a href="#" class="button" onclick="openAll(); return false;">펼치기</a>
+										<a href="#" class="button" onclick="closeAll(); return false;">접기</a>
 										<!-- <a href="/layer/tree" class="button">그룹 수정/등록</a> -->
 									</div>
 								</div>
 							</div>
 							<table class="list-table scope-col" summary="데이터 그룹 트리">
-							<caption class="hiddenTag">데이터 그룹</caption>
-								<col class="col-name">
-								<col class="col-name">
-								<col class="col-name">
-								<!-- <col class="col-toggle"> -->
-								<col class="col-functions">
-								<col class="col-functions">
-								<col class="col-functions">
-								<col class="col-functions">
-								<col class="col-functions">
-								<col class="col-functions">
-								<col class="col-date">
+								<caption class="hiddenTag">데이터 그룹</caption>
+								<colgroup>
+									<col class="col-name"></col>
+									<col class="col-name"></col>
+									<col class="col-name"></col>
+									<!-- <col class="col-toggle"></col> -->
+									<col class="col-functions"></col>
+									<col class="col-functions"></col>
+									<col class="col-functions"></col>
+									<col class="col-functions"></col>
+									<col class="col-functions"></col>
+									<col class="col-functions"></col>
+									<col class="col-date"></col>
+								</colgroup>
 								<thead>
 									<tr>
 										<th scope="col">그룹명</th>
@@ -106,20 +108,20 @@
 										<td class="col-key" th:text="${dataGroup.dataGroupKey}"></td>
                                         <td class="col-type" th:text="${dataGroup.sharing}"></td>
                                         
-                                        <!-- <td class="col-type" th:if="${dataGroup.basic == true}" th:text="기본"></td>
-                                        <td class="col-type" th:unless="${dataGroup.basic == true}" th:text="선택"></td> -->
-                                        <td class="col-type" th:if="${dataGroup.available == true}" th:text="사용"></td>
-                                        <td class="col-type" th:unless="${dataGroup.available == true}" th:text="미사용"></td>
+                                        <!-- <td class="col-type" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="기본"></td>
+                                        <td class="col-type" th:if="${#bools.isFalse(dataGroup.basic)}" th:text="선택"></td> -->
+                                        <td class="col-type" th:if="${#bools.isTrue(dataGroup.available)}" th:text="사용"></td>
+                                        <td class="col-type" th:if="${#bools.isFalse(dataGroup.available)}" th:text="미사용"></td>
                                     
                                         <td class="col-count" th:if="${dataGroup.dataCount > 0}">
-                                            <a th:text="${dataGroup.dataCount}" th:href="@{/data/list(searchOption=0, searchWord=data_group_name, searchValue=${dataGroup.dataGroupName})}" class="linkButton"></a>
+                                            <a th:href="@{/data/list(searchOption=0, searchWord=data_group_name, searchValue=${dataGroup.dataGroupName})}" class="linkButton" th:text="${dataGroup.dataCount}"></a>
                                         </td>
                                         <td class="col-count" th:if="${dataGroup.dataCount == 0}" th:text="${dataGroup.dataCount}"></td>
 
                                         <td class="col-type">
                                             <div class="button-group">
-                                                <a th:href="@{#}" th:onclick="moveUp([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;" class="button" style="text-decoration:none;">위로</a>
-                                                <a th:href="@{#}" th:onclick="moveDown([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;" class="button" style="text-decoration:none;">아래로</a>
+                                                <a href="#" class="button" th:onclick="moveUp([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;" style="text-decoration:none;">위로</a>
+                                                <a href="#" class="button" th:onclick="moveDown([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;" style="text-decoration:none;">아래로</a>
                                             </div>
                                         </td>
                                         <td class="col-functions block-element-wrapper">
@@ -132,9 +134,9 @@
 											<a th:href="@{/data-group/modify(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-edit">수정</a>
                                         </td>
 
-                                        <td class="col-type" th:if="${dataGroup.basic == true}" th:text="|불가(기본)|"></td>
-                                        <td class="col-type" th:unless="${dataGroup.basic == true}">
-                                            <a th:value="#{delete}" th:href="@{/data-group/delete(dataGroupId=${dataGroup.dataGroupId})}" onclick="return deleteWarning();" class="image-button button-delete"></a>                                            
+                                        <td class="col-type" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="|불가(기본)|"></td>
+                                        <td class="col-type" th:if="${#bools.isFalse(dataGroup.basic)}">
+                                            <a th:href="@{/data-group/delete(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-delete" th:value="#{delete}" onclick="return deleteWarning();"></a>
                                         </td>
                                         <td class="col-date">
                                             <p th:text="${#dates.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
@@ -142,15 +144,15 @@
                                         </td>
 								</tbody>
 							</table>
-                        </div>
+						</div>
+						<!-- smart tiling file dialog -->
+						<div th:replace="~{/data-group/data-smart-tiling-file-dialog :: #uploadDataSmartTilingDialog}"></div>
 					</div>
 				</div>
 			</div>
 		</div>
     </div>
 </th:block>
-
-<!-- <%@ include file="/WEB-INF/views/data-group/data-smart-tiling-file-dialog.jsp" %> -->
 <th:block layout:fragment="pageCustomScript">
 <script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>

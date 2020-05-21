@@ -1,46 +1,49 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/common/taglib.jsp" %>
-<%@ include file="/WEB-INF/views/common/config.jsp" %>
-
 <!DOCTYPE html>
-<html lang="${accessibility}">
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width">
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
 	<title>데이터 그룹 수정 | mago3D</title>
-	<link rel="stylesheet" href="/css/${lang}/font/font.css?cacheVersion=${contentCacheVersion}" />
-	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css?cacheVersion=${contentCacheVersion}" />
-	<link rel="stylesheet" href="/externlib/normalize/normalize.min.css?cacheVersion=${contentCacheVersion}" />
-	<link rel="stylesheet" href="/externlib/jquery-ui-1.12.1/jquery-ui.min.css?cacheVersion=${contentCacheVersion}" />
-    <link rel="stylesheet" href="/css/${lang}/admin-style.css?cacheVersion=${contentCacheVersion}" />
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css?cacheVersion=(lang=${lang}, cacheVersion=${contentCacheVersion})}">
 </head>
 <body>
-	<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
-	<%@ include file="/WEB-INF/views/layouts/menu.jsp" %>
+<th:block layout:fragment="pageCustomContent">
 	<div class="site-body">
 		<div class="container">
 			<div class="site-content">
-				<%@ include file="/WEB-INF/views/layouts/sub_menu.jsp" %>
+				<div th:replace="~{/layouts/sub-menu :: #subMenuWrap}"></div>
 				<div class="page-area">
-					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
+					<div th:replace="~{/layouts/page-header :: #pageHeaderWrap}"></div>
 					<div class="page-content">
 						<div class="input-header row">
-							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
+                            <div class="content-desc u-pull-right">
+                                <span class="icon-glyph glyph-emark-dot color-warning"></span>
+                                <th:block th:text="#{check}"></th:block>
+                            </div>
 						</div>
-						<form:form id="dataGroup" modelAttribute="dataGroup" method="post" onsubmit="return false;">
-							<form:hidden path="dataGroupId"/>
+						<form id="dataGroup" th:object="${dataGroup}" method="post" th:action="@{#}" onsubmit="return false;">
+							<input type="hidden" id="dataGroupId" name="dataGroupId" th:field="*{dataGroupId}" />
 							<table class="input-table scope-row" summary="데이터 그룹 수정 테이블">
-							<caption class="hiddenTag">데이터 그룹 수정</caption>
-								<col class="col-label" />
-								<col class="col-input" />
+								<caption class="hiddenTag">데이터 그룹 수정</caption>
+								<colgroup></colgroup>
+									<col class="col-label">
+									<col class="col-input">
+								</colgroup>
 								<tr>
 									<th class="col-label" scope="row">
-										<form:label path="dataGroupName">데이터 그룹명</form:label>
+										<label for="dataGroupName">데이터 그룹명</label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input">
-										<form:input path="dataGroupName" cssClass="l" />
-										<form:errors path="dataGroupName" cssClass="error" />
+										<input id="dataGroupName" name="dataGroupName" th:field="*{dataGroupName}" class="l" />
 									</td>
 								</tr>
 								<tr>
@@ -48,37 +51,24 @@
 										데이터 그룹 Key(영문,숫자,-,_)
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
-									<td class="col-input">
-										${dataGroup.dataGroupKey }
-									</td>
+									<td class="col-input" th:text="${dataGroup.dataGroupKey}"></td>
 								</tr>
 								<tr>
 									<th class="col-label" scope="row">
 										상위 그룹
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
-									<td class="col-input">
-										${dataGroup.parentName }
-									</td>
+									<td class="col-input" th:text="${dataGroup.parentName}"></td>
 								</tr>
-								<%-- <tr>
-									<th class="col-label" scope="row">
-										<form:label path="dataGroupPath">데이터 그룹 경로</form:label>
-									</th>
-									<td class="col-input">
-										<form:input path="dataGroupPath" cssClass="l" />
-										<form:errors path="dataGroupPath" cssClass="error" />
-									</td>
-								</tr> --%>
 								<tr>
 				                    <th class="col-label" scope="row">
-				                        <form:label path="sharing">공유 타입</form:label>
+				                        <label for="sharing">공유 타입</label>
 				                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
 				                    </th>
 				                    <td class="col-input">
-				                        <select id="sharing" name="sharing" class="selectBoxClass">
-											<option value="common">공통</option>
+				                        <select id="sharing" name="sharing" th:field="*{sharing}" class="selectBoxClass">
 											<option value="public">공개</option>
+											<option value="common">공통</option>
 											<option value="private">개인</option>
 											<option value="group">그룹</option>
 										</select>
@@ -86,33 +76,23 @@
 				                </tr>
 				                <tr>
 									<th class="col-label l" scope="row">
-										기본 여부
+										<label for="basic">기본 여부</label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
-									<td class="col-input radio-set">
-	<c:if test="${dataGroup.basic eq 'true' }">
-										기본
-	</c:if>
-	<c:if test="${dataGroup.basic ne 'true' }">
-										선택
-	</c:if>
-									</td>
+									<td class="col-input radio-set" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="기본"></td>
+									<td class="col-input radio-set" th:if="${#bools.isFalse(dataGroup.basic)}" th:text="선택"></td>
 								</tr>
 								<tr>
 									<th class="col-label l" scope="row">
-										사용 여부
+										<label for="available">사용 여부</label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
-									<td class="col-input radio-set">
-	<c:if test="${dataGroup.basic eq 'true' }">
-					사용
-	</c:if>
-	<c:if test="${dataGroup.basic ne 'true' }">
-										<input type="radio" id="availableTrue" name="available" value="true">
+									<td class="col-input radio-set" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="사용">
+									<td class="col-input radio-set" th:if="${#bools.isFalse(dataGroup.basic)}">
+										<input type="radio" id="availableTrue" name="available" value="true" />
 										<label for="availableTrue">사용</label>
-										<input type="radio" id="availableFalse" name="available" value="false">
+										<input type="radio" id="availableFalse" name="available" value="false" />
 										<label for="availableFalse">미사용</label>
-	</c:if>
 									</td>
 								</tr>
 								<tr>
@@ -120,101 +100,93 @@
 										Tiling 사용 여부
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
-									<td class="col-input radio-set">
-	<c:if test="${dataGroup.tiling eq 'true' }">
-					사용
-	</c:if>
-	<c:if test="${dataGroup.tiling ne 'true' }">								
-										<input type="radio" id="tilingTrue" name="tiling" value="true">
+									<td class="col-input radio-set" th:if="${#bools.isTrue(dataGroup.tiling)}" th:text="사용"></td>
+									<td class="col-input radio-set" th:if="${#bools.isFalse(dataGroup.tiling)}" th:text="사용">
+										<input type="radio" id="tilingTrue" name="tiling" value="true" />
 										<label for="tilingTrue">사용</label>
-										<input type="radio" id="tilingFalse" name="tiling" value="false" checked>
+										<input type="radio" id="tilingFalse" name="tiling" value="false" checked />
 										<label for="tilingFalse">미사용</label>
-	</c:if>
 									</td>
 								</tr>
 								<tr>
 									<th class="col-label" scope="row">
-										<form:label path="longitude">경도</form:label>
+										<label for="longitude">경도</label>
 									</th>
 									<td class="col-input">
-										<form:input path="longitude" cssClass="m" />
+										<input type="text" id="longitude" name="longitude" th:field="*{longitude}" class="m" />
 										<input type="button" id="mapButtion" value="지도에서 찾기" />
-										<form:errors path="longitude" cssClass="error" />
 									</td>
 								</tr>
 								<tr>
 									<th class="col-label" scope="row">
-										<form:label path="latitude">위도</form:label>
+										<label for="latitude">위도</label>
 									</th>
 									<td class="col-input">
-										<form:input path="latitude" cssClass="m" />
-										<form:errors path="latitude" cssClass="error" />
+										<input type="text" id="latitude" name="latitude" th:field="*{latitude}" class="m" />
 									</td>
 								</tr>
 								<tr>
 									<th class="col-label" scope="row">
-										<form:label path="altitude">높이</form:label>
+										<label for="altitude">높이</label>
 									</th>
 									<td class="col-input">
-										<form:input path="altitude" cssClass="m" />
-										<form:errors path="altitude" cssClass="error" />
+										<input type="text" id="altitude" name="altitude" th:field="*{altitude}" class="m" />
 									</td>
 								</tr>
 								<tr>
 									<th class="col-label" scope="row">
-										<form:label path="duration">이동시간</form:label>
+										<label for="duration">이동시간</label>
 									</th>
 									<td class="col-input">
-										<form:input path="duration" cssClass="s" />&nbsp;&nbsp;ms
-										<form:errors path="duration" cssClass="error" />
+										<input type="text" id="duration" name="duration" th:field="*{duration}" class="s" />&nbsp;&nbsp;ms
 									</td>
 								</tr>
 								<tr>
 									<th class="col-label" scope="row">
-										<form:label path="metainfo">메타정보</form:label>
+										<label for="metainfo">메타정보</label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input">
-										<form:input path="metainfo" class="xl" value="{\"isPhysical\": false}" />
-				  						<form:errors path="metainfo" cssClass="error" />
+										<input type="text" id="metainfo" name="metainfo" th:field="*{metainfo}" class="xl" placeholder='{"isPhysical": false}' />
 									</td>
 								</tr>
 								<tr>
-									<th class="col-label m" scope="row"><form:label path="description"><spring:message code='description'/></form:label></th>
+									<th class="col-label l" scope="row">
+										<label for="description" th:text="#{description}"></label>
+									</th>
 									<td class="col-input">
-										<form:input path="description" cssClass="xl" />
-										<form:errors path="description" cssClass="error" />
+										<input type="text" id="description" name="description" th:field="*{description}" class="xl" />
 									</td>
 								</tr>
 							</table>
 							<div class="button-group">
 								<div class="center-buttons">
-									<input type="submit" value="<spring:message code='save'/>" onclick="updateDataGroup();"/>
+									<input type="submit" th:value="#{save}" onclick="updateDataGroup();"/>
 									<a href="/data-group/list" class="button">목록</a>
 								</div>
 							</div>
-						</form:form>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
-
-<script type="text/javascript" src="/externlib/jquery-3.3.1/jquery.min.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/externlib/jquery-ui-1.12.1/jquery-ui.min.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/js/${lang}/common.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/js/${lang}/message.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/js/navigation.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript">
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+	<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript">
 	$(document).ready(function() {
-		var isBasic = "${dataGroup.basic}";
+		var isBasic = "[[${dataGroup.basic}]]";
 		if(isBasic === "false") {
 			// 기본 그룹이 아닐 경우만 사용 유무 수정 가능
-			$("[name=available]").filter("[value='${dataGroup.available}']").prop("checked",true);
+			$("[name=available]").filter("[value='[[${dataGroup.available}]]']").prop("checked",true);
 		}
 		
-		$("#sharing").val("${dataGroup.sharing}");
+		$("#sharing").val("[[${dataGroup.sharing}]]");
 	});
 
 	function validate() {
@@ -254,7 +226,7 @@
 			updateDataGroupFlag = false;
 			var formData = $("#dataGroup").serialize();
 			$.ajax({
-				url: "/data-groups/${dataGroup.dataGroupId}",
+				url: "/data-groups/[[${dataGroup.dataGroupId}]]",
 				type: "POST",
 				headers: {"X-Requested-With": "XMLHttpRequest"},
 		        data: formData,

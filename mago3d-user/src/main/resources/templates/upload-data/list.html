@@ -46,7 +46,7 @@
 				<div class="input-set">
 					<label for="searchWord" th:text="#{search.word}"></label>
 					<select id="searchWord" name="searchWord" class="selectBoxClass">
-						<option value="" th:text="#{select}"></option>
+						<option value="" th:text="#{common.select}"></option>
 	          			<option value="data_name" th:text="데이터명"></option>
 					</select>
 					<select id="searchOption" name="searchOption" class="selectBoxClass">
@@ -91,94 +91,98 @@
 		<div class="list">
 			<form id="listForm" modelAttribute="uploadData" method="post">
 				<input type="hidden" id="checkIds" name="checkIds" />
-			<div class="list-header row">
-				<!-- <div class="list-desc u-pull-left">
-                    <spring:message code='all.d'> 
-                    <span class="totalCount">
-                        <fmt:formatNumber value="${pagination.totalCount}" type="number">
-                    </span> 
-                    <spring:message code='search.what.count'>,
-                    <fmt:formatNumber value="${pagination.pageNo}" type="number">
-                     / <fmt:formatNumber value="${pagination.lastPage }" type="number"> 
-                    <spring:message code='search.page'>
-				</div> -->
-				<div class="list-functions u-pull-right">
-					<div style="padding-bottom: 3px;" class="button-group">
-						<a href="#" onclick="converterFiles(); return false;" class="button">F4D 일괄 변환</a>
+				<div class="list-header row">
+					<!-- <div class="list-desc u-pull-left">
+						<spring:message code='all.d'> 
+						<span class="totalCount">
+							<fmt:formatNumber value="${pagination.totalCount}" type="number">
+						</span> 
+						<spring:message code='search.what.count'>,
+						<fmt:formatNumber value="${pagination.pageNo}" type="number">
+						/ <fmt:formatNumber value="${pagination.lastPage }" type="number"> 
+						<spring:message code='search.page'>
+					</div> -->
+					<div class="list-functions u-pull-right">
+						<div class="button-group" style="padding-bottom: 3px;">
+							<a href="#" class="button" title="F4D 일괄 변환" onclick="converterFiles(); return false;">F4D 일괄 변환</a>
+						</div>
 					</div>
 				</div>
-			</div>
-			<table class="list-table scope-col">
-				<colgroup>
-					<col class="col-checkbox"></col>
-					<col class="col-number"></col>
-					<col class="col-name"></col>
-					<col class="col-name"></col>
-					<col class="col-name"></col>
-					<col class="col-number"></col>
-					<col class="col-number"></col>
-					<col class="col-number"></col>
-					<col class="col-functions"></col>
-					<col class="col-functions"></col>
-					<col class="col-functions"></col>
-				</colgroup>
-				<thead>
-					<tr>
-						<th scope="col" class="col-checkbox"><input type="checkbox" id="chkAll" name="chkAll" /></th>
-						<th scope="col" class="col-number" th:text="#{number}"></th>
-						<th scope="col" class="col-name">그룹명</th>
-						<th scope="col" class="col-name">공유 유형</th>
-						<th scope="col" class="col-name">데이터 타입</th>
-						<th scope="col" class="col-name">데이터명</th>
-						<th scope="col" class="col-name">3D파일/전체파일</th>
-						<th scope="col" class="col-name">Converter 횟수</th>
-						<th scope="col" class="col-functions">Converter</th>
-						<th scope="col" class="col-functions">삭제</th>
-						<th scope="col" class="col-date">등록일</th>
-					</tr>
-				</thead>
-				<tbody>
-                    <tr th:if="${uploadDataList.empty}">
-                        <td colspan="11" class="col-none">파일 업로딩 이력이 존재하지 않습니다.</td>
-                    </tr>
+				<table class="list-table scope-col" summary="업로드 목록 테이블">
+					<caption class="hiddenTag">업로드 목록</caption>
+					<colgroup>
+						<col class="col-checkbox"></col>
+						<col class="col-number"></col>
+						<col class="col-name"></col>
+						<col class="col-name"></col>
+						<col class="col-name"></col>
+						<col class="col-number"></col>
+						<col class="col-number"></col>
+						<col class="col-number"></col>
+						<col class="col-functions"></col>
+						<col class="col-functions"></col>
+						<col class="col-functions"></col>
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col" class="col-checkbox">
+								<label for="chkAll" class="hiddenTag">전체선택 체크박스</label>
+								<input type="checkbox" id="chkAll" name="chkAll" />
+							</th>
+							<th scope="col" class="col-number" th:text="#{number}"></th>
+							<th scope="col" class="col-name">그룹명</th>
+							<th scope="col" class="col-name">공유 유형</th>
+							<th scope="col" class="col-name">데이터 타입</th>
+							<th scope="col" class="col-name">데이터명</th>
+							<th scope="col" class="col-name">3D파일/전체파일</th>
+							<th scope="col" class="col-name">Converter 횟수</th>
+							<th scope="col" class="col-functions">Converter</th>
+							<th scope="col" class="col-functions">삭제</th>
+							<th scope="col" class="col-date">등록일</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:if="${uploadDataList.empty}">
+							<td colspan="11" class="col-none">파일 업로딩 이력이 존재하지 않습니다.</td>
+						</tr>
 
-                    <tr th:if="${!uploadDataList.empty}" th:each="uploadData : ${uploadDataList}">
-						<td class="col-checkbox">
-							<input type="checkbox" th:id="|uploadDataId_${uploadData.uploadDataId}|" name="uploadDataId" th:value="${uploadData.uploadDataId}" />
-						</td>
-						<td class="col-number" th:text="${uploadDataStat.count + ((pagination.pageNo-1)*10)}"></td>
-						<td class="col-name ellipsis" th:text="${uploadData.dataGroupName}" style="min-width:120px;max-width:120px;"></td>
-						<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'common')}" th:text="공통"></td>
-                        <td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'public')}" th:text="공개"></td>
-                        <td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'private')}" th:text="개인"></td>
-                        <td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'group')}" th:text="그룹"></td>
+						<tr th:if="${!uploadDataList.empty}" th:each="uploadData : ${uploadDataList}">
+							<td class="col-checkbox">
+								<input type="checkbox" th:id="|uploadDataId_${uploadData.uploadDataId}|" name="uploadDataId" th:value="${uploadData.uploadDataId}" />
+							</td>
+							<td class="col-number" th:text="${uploadDataStat.count + ((pagination.pageNo-1)*10)}"></td>
+							<td class="col-name ellipsis" th:text="${uploadData.dataGroupName}" style="min-width:120px;max-width:120px;"></td>
+							<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'common')}" th:text="공통"></td>
+							<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'public')}" th:text="공개"></td>
+							<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'private')}" th:text="개인"></td>
+							<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'group')}" th:text="그룹"></td>
 
-						<td class="col-type" th:text="${uploadData.dataType}"></td>
-						<td class="col-name ellipsis" style="min-width:300px;max-width:300px;">
-							<a th:text="${uploadData.dataName}" th:href="@{/upload-data/modify(uploadDataId=${uploadData.uploadDataId})}"></a>
-						</td>
-						<td class="col-count">
-							<span th:text="${uploadData.converterTargetCount}" style="color:blue; font-weight: bold;"></span>
-							<span th:text="| / ${uploadData.fileCount}개|"></span> 
-						</td>
-						<td class="col-count" th:text="|${uploadData.converterCount}건|"></td>
-						<td class="col-functions">
-							<span class="button-group">
-								<a href="#" class="button" th:onclick="converterFile([[${uploadData.uploadDataId}]], [[${uploadData.dataName}]], [[${uploadData.dataType}]]); return false;" style="text-decoration: none;">F4D 변환</a>
-							</span>
-						</td>
-						<td class="col-functions">
-							<span class="button-group">
-								<a href="#" class="image-button button-delete" th:text="#{delete}" th:onclick="deleteUploadData([[${uploadData.uploadDataId}]]); return false;"></a>
-							</span>
-						</td>
-						<td class="col-type">
-                            <p th:text="${#dates.format(uploadData.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
-                            <p th:text="${#dates.format(viewInsertDate,'yyyy-MM-dd HH:mm')}"></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+							<td class="col-type" th:text="${uploadData.dataType}"></td>
+							<td class="col-name ellipsis" style="min-width:300px;max-width:300px;">
+								<a th:text="${uploadData.dataName}" th:href="@{/upload-data/modify(uploadDataId=${uploadData.uploadDataId})}"></a>
+							</td>
+							<td class="col-count">
+								<span th:text="${uploadData.converterTargetCount}" style="color:blue; font-weight: bold;"></span>
+								<span th:text="| / ${uploadData.fileCount}개|"></span> 
+							</td>
+							<td class="col-count" th:text="|${uploadData.converterCount}건|"></td>
+							<td class="col-functions">
+								<span class="button-group">
+									<a href="#" class="button" th:onclick="converterFile([[${uploadData.uploadDataId}]], [[${uploadData.dataName}]], [[${uploadData.dataType}]]); return false;" style="text-decoration: none;">F4D 변환</a>
+								</span>
+							</td>
+							<td class="col-functions">
+								<span class="button-group">
+									<a href="#" class="image-button button-delete" th:text="#{delete}" th:onclick="deleteUploadData([[${uploadData.uploadDataId}]]); return false;"></a>
+								</span>
+							</td>
+							<td class="col-type">
+								<p th:text="${#dates.format(uploadData.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
+								<p th:text="${#dates.format(viewInsertDate,'yyyy-MM-dd HH:mm')}"></p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</form>
         </div>
         <!-- E: 업로딩 데이터 목록 -->

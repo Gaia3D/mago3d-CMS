@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layout">
 <body>
-    <div class="uploadDataSmartTilingDialog" title="SmartTiling 데이터 등록">
+    <div id="uploadDataSmartTilingDialog" class="uploadDataSmartTilingDialog" title="SmartTiling 데이터 등록">
         <form id="dataSmartTilingFileInfo" name="dataSmartTilingFileInfo" th:action="@{/datas/smart-tiling}" method="post" enctype="multipart/form-data">
-            <input type="hidden" id="smartTilingFileDataGroupId" name="smartTilingFileDataGroupId" value="">
+            <input type="hidden" id="smartTilingFileDataGroupId" name="smartTilingFileDataGroupId" />
             <table class="inner-table scope-row" style="width: 95%;" summary="SmatTiling 데이터 등록">
-            <caption class="hiddenTag">데이터 등록</caption>
-                <col class="col-sub-label xl">
-                <col class="col-data">
+                <caption class="hiddenTag">데이터 등록</caption>
+                <colgroup>
+                    <col class="col-sub-label xl"></col>
+                    <col class="col-data"></col>
+                </colgroup>
                 <tbody>
                     <tr>
                         <th class="col-sub-label">데이터 그룹명</th>
@@ -18,14 +20,14 @@
                         <td>
                             <div class="inner-data">
                                 <label for="smartTilingFileName" class="hiddenTag">smartTiling 파일이름</label>
-                                <input type="file" id="smartTilingFileName" name="smartTilingFileName" class="col-data">
+                                <input type="file" id="smartTilingFileName" name="smartTilingFileName" class="col-data" />
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div class="button-group">
-                <input type="button" th:value="#{data.file.save}" onclick="dataSmartTilingFileUpload();" class="button">
+                <input type="button" class="button" th:value="#{data.file.save}" onclick="dataSmartTilingFileUpload();" />
             </div>
 
             <table class="inner-table scope-row" style="width: 95%;">
