@@ -2,29 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
 <div id="userPolicyContent" class="contents yScroll fullHeight" style="display:none;">
 <div class="userPolicyContentWrap">
-<form id="userPolicy" th:object="${userPolicy}" method="post" onsubmit="return false;" th:action="@{#}">
-<input type="hidden" th:id="userPolicyId" th:name="userPolicyId"/>
+<form id="userPolicy" th:object="${userPolicy}" method="post" th:action="@{#}" onsubmit="return false;">
+<input type="hidden" id="userPolicyId" name="userPolicyId"/>
 <div class="userPolicyContent">
 	<div class="button-group-align marB10">
-		<h3 class="h3-heading">시작 위치</h3>
-		<button type="button" id="findStartPoint" class="btnTextF right-align">선택</button>
+		<h3 class="h3-heading" th:text="#{policy.init.position}"></h3>
+		<button type="button" id="findStartPoint" class="btnTextF right-align" th:text="#{common.select}"></button>
 	</div>
 	<div class="userPolicyContentDetail">
 		<div class="form-group form-group-policy">
-			<label for="initLongitude">경도</label>
-			<input type="text" id="initLongitude" name="initLongitude" size="15" th:value="${userPolicy.initLongitude}"/>M
+			<label for="initLongitude" th:text="#{common.longitude}"></label>
+			<input type="text" id="initLongitude" name="initLongitude" th:value="${userPolicy.initLongitude}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
-			<label for="initLatitude">위도</label>
-			<input type="text" id="initLatitude" name="initLatitude" size="15" th:value="${userPolicy.initLatitude}"/>M
+			<label for="initLatitude" th:text="#{common.latitude}"></label>
+			<input type="text" id="initLatitude" name="initLatitude" th:value="${userPolicy.initLatitude}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
-			<label for="initAltitude">높이</label>
-			<input type="text" id="initAltitude" name="initAltitude" size="15" th:value="${userPolicy.initAltitude}"/>M
+			<label for="initAltitude" th:text="#{common.height}"></label>
+			<input type="text" id="initAltitude" name="initAltitude" th:value="${userPolicy.initAltitude}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
-			<label for="initDuration">이동 속도</label>
-			<input type="text" id="initDuration" name="initDuration" size="15" th:value="${userPolicy.initDuration}"/>초
+			<label for="initDuration" th:text="#{policy.init.duration}"></label>
+			<input type="text" id="initDuration" name="initDuration" th:value="${userPolicy.initDuration}" size="15" />초
 		</div>
 	</div>
 </div>
@@ -32,56 +32,56 @@
 	<h3 class="h3-heading marB10">FOV (Field Of View)</h3>
 	<div class="userPolicyContentDetail">
 		<div class="form-group form-group-policy">
-			<label for="initfieldOfView">각도</label>
-			<input type="text" id="initfieldOfView" name="initDefaultFov" size="14" th:value="${userPolicy.initDefaultFov}"/>M
+			<label for="initfieldOfView" th:text="#{policy.init.fov}"></label>
+			<input type="text" id="initfieldOfView" name="initDefaultFov" th:value="${userPolicy.initDefaultFov}" size="14" />M
 		</div>
 	</div>
 </div>
 <div class="userPolicyContent">
 	<div class="button-group-align marB10">
 		<h3 class="h3-heading">LOD (Level Of Detail)</h3>
-		<button type="button" id="changeLodButton" class="btnTextF right-align">적용</button>
+		<button type="button" id="changeLodButton" class="btnTextF right-align" th:text="#{common.apply}"></button>
 	</div>
 	<div class="userPolicyContentDetail">
 		<div class="form-group form-group-policy">
 			<label for="geoLod0">LOD0</label>
-			<input type="text" id="geoLod0" name="lod0" size="15" th:value="${userPolicy.lod0}"/>M
+			<input type="text" id="geoLod0" name="lod0" th:value="${userPolicy.lod0}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod1">LOD1</label>
-			<input type="text" id="geoLod1" name="lod1" size="15" th:value="${userPolicy.lod1}"/>M
+			<input type="text" id="geoLod1" name="lod1" th:value="${userPolicy.lod1}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod2">LOD2</label>
-			<input type="text" id="geoLod2" name="lod2" size="15" th:value="${userPolicy.lod2}"/>M
+			<input type="text" id="geoLod2" name="lod2" th:value="${userPolicy.lod2}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod3">LOD3</label>
-			<input type="text" id="geoLod3" name="lod3" size="15" th:value="${userPolicy.lod3}"/>M
+			<input type="text" id="geoLod3" name="lod3" th:value="${userPolicy.lod3}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod4">LOD4</label>
-			<input type="text" id="geoLod4" name="lod4" size="15" th:value="${userPolicy.lod4}"/>M
+			<input type="text" id="geoLod4" name="lod4" th:value="${userPolicy.lod4}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod5">LOD5</label>
-			<input type="text" id="geoLod5" name="lod5" size="15" th:value="${userPolicy.lod5}"/>M
+			<input type="text" id="geoLod5" name="lod5" th:value="${userPolicy.lod5}" size="15" />M
 		</div>
 	</div>
 </div>
 <div class="userPolicyContent">
 	<div class="button-group-align marB10">
 		<h3 class="h3-heading">SSAO</h3>
-		<button type="button" id="changeSsaoButton" class="btnTextF right-align">적용</button>
+		<button type="button" id="changeSsaoButton" class="btnTextF right-align" th:text="#{common.apply}"></button>
 	</div>
 	<div class="userPolicyContentDetail">
 		<div class="form-group form-group-policy">
-			<label for="ssaoRadius">그림자 반경</label>
-			<input type="text" id="ssaoRadius" name="ssaoRadius" size="15" th:value="${userPolicy.ssaoRadius}"/>M
+			<label for="ssaoRadius" th:text="#{policy.init.ssao}"></label>
+			<input type="text" id="ssaoRadius" name="ssaoRadius" th:value="${userPolicy.ssaoRadius}" size="15" />M
 		</div>
 	</div>
 </div>
-<button class="focusA btn-full" title="저장" th:onclick="'update();'">저장</button>
+<button class="focusA btn-full" th:text="#{common.save}" th:onclick="'update();'"></button>
 </form>
 </div>
 <script type="text/javascript" src="/externlib/jquery-3.3.1/jquery.min.js"></script>
@@ -103,7 +103,7 @@ function update() {
 			dataType: "json",
 			success: function(msg) {
 				if(msg.statusCode <= 200) {
-					alert("저장 되었습니다.");
+					alert(JS_MESSAGE["save"]);
 				} else {
 					alert(msg.message);
 					console.log("---- " + msg.message);
@@ -116,7 +116,7 @@ function update() {
 	        }
 		});
 	} else {
-		alert("진행 중입니다.");
+		alert(JS_MESSAGE["button.dobule.click"]);
 		return;
 	}
 }
