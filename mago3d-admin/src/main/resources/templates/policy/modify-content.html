@@ -12,7 +12,7 @@
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</th>
 				<td class="col-input">
-					<input type="text" id="contentCacheVersion" name="contentCacheVersion" th:field="*{contentCacheVersion}" maxlength="3" class="s" onKeyPress="return numkeyCheck(event);" />
+					<input type="text" id="contentCacheVersion" name="contentCacheVersion" th:field="*{contentCacheVersion}" class="s" maxlength="3" onKeyPress="return numkeyCheck(event);" />
 				</td>
 			</tr>
 			<tr>
@@ -21,7 +21,7 @@
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</th>
 				<td class="col-input">
-					<input type="text" id="contentMenuGroupRoot" name="contentMenuGroupRoot" th:field="*{contentMenuGroupRoot}" maxlength="2" class="s" />
+					<input type="text" id="contentMenuGroupRoot" name="contentMenuGroupRoot" th:field="*{contentMenuGroupRoot}" class="s" maxlength="2" />
 				</td>
 			</tr>
 			<tr>
@@ -30,7 +30,7 @@
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</th>
 				<td class="col-input">
-					<input type="text" id="contentUserGroupRoot" name="contentUserGroupRoot" th:field="*{contentUserGroupRoot}" maxlength="2" class="s" />
+					<input type="text" id="contentUserGroupRoot" name="contentUserGroupRoot" th:field="*{contentUserGroupRoot}" class="s" maxlength="2" />
 				</td>
 			</tr>
 			<tr>
@@ -39,7 +39,7 @@
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</th>
 				<td class="col-input">
-					<input type="text" id="contentLayerGroupRoot" name="contentLayerGroupRoot" th:field="*{contentLayerGroupRoot}" maxlength="2" class="s" />
+					<input type="text" id="contentLayerGroupRoot" name="contentLayerGroupRoot" th:field="*{contentLayerGroupRoot}" class="s" maxlength="2" />
 				</td>
 			</tr>
 			<tr>
@@ -48,13 +48,13 @@
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</th>
 				<td class="col-input">
-					<input type="text" id="contentDataGroupRoot" name="contentDataGroupRoot" th:field="*{contentDataGroupRoot}" maxlength="2" class="s" />
+					<input type="text" id="contentDataGroupRoot" name="contentDataGroupRoot" th:field="*{contentDataGroupRoot}" class="s" maxlength="2" />
 				</td>
 			</tr>
 		</table>
 		<div class="button-group">
 			<div class="center-buttons">
-				<a href="#" onclick="updatePolicyContent();" class="button" th:text="#{save}"></a>
+				<a href="#" class="button" th:text="#{save}" onclick="updatePolicyContent();"></a>
 			</div>
 		</div>
 	</form>

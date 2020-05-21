@@ -12,10 +12,10 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input radio-set">
-						<input type="radio" id="securitySessionTimeoutYn1" name="securitySessionTimeoutYn" value="Y" th:field="*{securitySessionTimeoutYn}"/>
+						<input type="radio" id="securitySessionTimeoutYn1" name="securitySessionTimeoutYn" th:field="*{securitySessionTimeoutYn}" value="Y" />
 						<label for="securitySessionTimeoutYn1" th:text="#{use}"></label>
-						<input type="radio" id="securitySessionTimeoutYn2" name="securitySessionTimeoutYn" value="N"  th:field="*{securitySessionTimeoutYn}"/>
-						<label for="securitySessionTimeoutYn2" th:text="#{not.use} +'(기본값)'"></label>
+						<input type="radio" id="securitySessionTimeoutYn2" name="securitySessionTimeoutYn" th:field="*{securitySessionTimeoutYn}" value="N" />
+						<label for="securitySessionTimeoutYn2" th:text="|#{not.use}(기본값)|"></label>
 					</td>
 				</tr>
 				<tr>
@@ -24,7 +24,7 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
-						<input type="text" id="securitySessionTimeout" name="securitySessionTimeout" th:field="*{securitySessionTimeout}" maxlength="2" class="s" onKeyPress="return numkeyCheck(event);" />
+						<input type="text" id="securitySessionTimeout" name="securitySessionTimeout" th:field="*{securitySessionTimeout}" class="s" maxlength="2" onKeyPress="return numkeyCheck(event);" />
 						<span class="table-desc">분</span>
 					</td>
 				</tr>
@@ -34,16 +34,16 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input radio-set">
-						<input type="radio" id="securityMaskingYn1" name="securityMaskingYn" value="Y" th:field="*{securityMaskingYn}"/>
+						<input type="radio" id="securityMaskingYn1" name="securityMaskingYn" th:field="*{securityMaskingYn}" value="Y" />
 						<label for="securityMaskingYn1" th:text="#{use} +'(기본값)'"></label>
-						<input type="radio" id="securityMaskingYn2" name="securityMaskingYn" value="N"  th:field="*{securityMaskingYn}"/>
+						<input type="radio" id="securityMaskingYn2" name="securityMaskingYn" th:field="*{securityMaskingYn}" value="N" />
 						<label for="securityMaskingYn2" th:text="#{not.use}"></label>
 					</td>
 				</tr>
 			</table>
 			<div class="button-group">
 				<div class="center-buttons">
-					<a href="#" onclick="updatePolicySecurity();" class="button" th:text="#{save}"></a>
+					<a href="#" class="button" th:text="#{save}" onclick="updatePolicySecurity();"></a>
 				</div>
 			</div>
 		</form>
