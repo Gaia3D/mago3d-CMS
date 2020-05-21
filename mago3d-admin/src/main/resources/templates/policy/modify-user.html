@@ -12,7 +12,7 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
-						<input type="text" id="userIdMinLength" name="userIdMinLength" th:field="*{userIdMinLength}" maxlength="2" class="s" onKeyPress="return numkeyCheck(event);" />
+						<input type="text" id="userIdMinLength" name="userIdMinLength" th:field="*{userIdMinLength}" class="s" maxlength="2" onKeyPress="return numkeyCheck(event);" />
 						<span class="table-desc">이상</span>
 					</td>
 				</tr>
@@ -22,7 +22,7 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
-						<input type="text" id="userFailSigninCount" name="userFailSigninCount" th:field="*{userFailSigninCount}" maxlength="2" class="s" onKeyPress="return numkeyCheck(event);" />
+						<input type="text" id="userFailSigninCount" name="userFailSigninCount" th:field="*{userFailSigninCount}" class="s" maxlength="2" onKeyPress="return numkeyCheck(event);" />
 						<span class="table-desc">회</span>
 					</td>
 				</tr>
@@ -32,7 +32,7 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
-						<input type="text" id="userFailLockRelease" name="userFailLockRelease" th:field="*{userFailLockRelease}" maxlength="3" class="s" onKeyPress="return numkeyCheck(event);" />
+						<input type="text" id="userFailLockRelease" name="userFailLockRelease" th:field="*{userFailLockRelease}" class="s" maxlength="3" onKeyPress="return numkeyCheck(event);" />
 						<span class="table-desc">일</span>
 					</td>
 				</tr>
@@ -42,7 +42,7 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
-						<input type="text" id="userLastSigninLock" name="userLastSigninLock" th:field="*{userLastSigninLock}" maxlength="3" class="s" onKeyPress="return numkeyCheck(event);" />
+						<input type="text" id="userLastSigninLock" name="userLastSigninLock" th:field="*{userLastSigninLock}" class="s" maxlength="3" onKeyPress="return numkeyCheck(event);" />
 						<span class="table-desc">일</span>
 					</td>
 				</tr>
@@ -52,9 +52,9 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input radio-set">
-						<input type="radio" id="userDuplicationSigninYn1" name="userDuplicationSigninYn" value="Y" th:field="*{userDuplicationSigninYn}"/>
+						<input type="radio" id="userDuplicationSigninYn1" name="userDuplicationSigninYn" th:field="*{userDuplicationSigninYn}" value="Y" />
 						<label for="userDuplicationSigninYn1" th:text="#{use}"></label>
-						<input type="radio" id="userDuplicationSigninYn2" name="userDuplicationSigninYn" value="N" th:field="*{userDuplicationSigninYn}"/>
+						<input type="radio" id="userDuplicationSigninYn2" name="userDuplicationSigninYn" th:field="*{userDuplicationSigninYn}" value="N" />
 						<label for="userDuplicationSigninYn2" th:text="#{not.use} +'(기본값)'"></label>
 					</td>
 				</tr>
@@ -64,7 +64,7 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input radio-set">
-						<input type="radio" id="userSigninType" name="userSigninType" value="0" th:field="*{userSigninType}"/>
+						<input type="radio" id="userSigninType" name="userSigninType" th:field="*{userSigninType}" value="0" />
 						<label for="userSigninType" th:text="'일반(아이디/비밀번호)(기본값)'"></label>
 					</td>
 				</tr>
@@ -74,16 +74,16 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input radio-set">
-						<input type="radio" id="userDeleteType1" name="userDeleteType" value="0" th:field="*{userDeleteType}"/>
+						<input type="radio" id="userDeleteType1" name="userDeleteType" th:field="*{userDeleteType}" value="0" />
 						<label for="userDeleteType1" th:text="'논리적(기본값)'"></label>
-						<input type="radio" id="userDeleteType2" name="userDeleteType" value="1" th:field="*{userDeleteType}"/>
+						<input type="radio" id="userDeleteType2" name="userDeleteType" th:field="*{userDeleteType}" value="1" />
 						<label for="userDeleteType2" th:text="'물리적(DB 삭제)'"></label>
 					</td>
 				</tr>
 			</table>
 			<div class="button-group">
 				<div class="center-buttons">
-					<a href="#" onclick="updatePolicyUser();" class="button" th:text="#{save}"></a>
+					<a href="#" class="button" th:text="#{save}" onclick="updatePolicyUser();"></a>
 				</div>
 			</div>
 		</form>

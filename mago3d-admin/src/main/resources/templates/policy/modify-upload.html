@@ -12,7 +12,7 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
-						<input type="text" id="userUploadType" name="userUploadType" th:field="*{userUploadType}" maxlength="256" class="l" />
+						<input type="text" id="userUploadType" name="userUploadType" th:field="*{userUploadType}" class="l" maxlength="256" />
 					</td>
 				</tr>
 				<tr>
@@ -21,7 +21,7 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
-						<input type="text" id="userConverterType" name="userConverterType" th:field="*{userConverterType}" maxlength="256" class="l" />
+						<input type="text" id="userConverterType" name="userConverterType" th:field="*{userConverterType}" class="l" maxlength="256" />
 					</td>
 				</tr>
 				<tr>
@@ -39,7 +39,7 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
-						<input type="text" id="userUploadMaxFilesize" name="userUploadMaxFilesize" th:field="*{userUploadMaxFilesize}" maxlength="10" class="m" onKeyPress="return numkeyCheck(event);" />
+						<input type="text" id="userUploadMaxFilesize" name="userUploadMaxFilesize" th:field="*{userUploadMaxFilesize}" class="m" maxlength="10" onKeyPress="return numkeyCheck(event);" />
 						<span class="table-desc">MB</span>
 					</td>
 				</tr>
@@ -49,14 +49,14 @@
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
-						<input type="text" id="userUploadMaxCount" name="userUploadMaxCount" th:field="*{userUploadMaxCount}" maxlength="10" class="m" onKeyPress="return numkeyCheck(event);" />
+						<input type="text" id="userUploadMaxCount" name="userUploadMaxCount" th:field="*{userUploadMaxCount}" class="m" maxlength="10" onKeyPress="return numkeyCheck(event);" />
 						<span class="table-desc">개</span>
 					</td>
 				</tr>
 			</table>
 			<div class="button-group">
 				<div class="center-buttons">
-					<a href="#" onclick="updatePolicyUpload();" class="button" th:text="#{save}"></a>
+					<a href="#" class="button" th:text="#{save}" onclick="updatePolicyUpload();"></a>
 				</div>
 			</div>
 		</form>
