@@ -22,12 +22,12 @@
         </thead>
         <tbody>
 
-        <th:block th:if="${layerGroupList == null}">
+        <th:block th:if="${layerGroupList.empty}">
             <tr>
                 <td colspan="6" class="col-none">데이터 그룹이 존재하지 않습니다.</td>
             </tr>
         </th:block>
-        <th:block th:unless="${layerGroupList == null}" th:each="layerGroup : ${layerGroupList}">
+        <th:block th:unless="${layerGroupList.empty}" th:each="layerGroup : ${layerGroupList}">
             <th:block th:if="${layerGroup.depth == 1}">
                 <tr th:class="layerGroup">
                     <td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
@@ -56,8 +56,8 @@
                     </td>
             </th:block>
             <td class="col-type">
-                <th:block th:if="${layerGroup.available == true}" th:text="'사용'"></th:block>
-                <th:block th:if="${layerGroup.available == false}" th:text="'미사용'"></th:block>
+                <th:block th:if="${#bools.isTrue(layerGroup.available)}" th:text="'사용'"></th:block>
+                <th:block th:if="${#bools.isFalse(layerGroup.available)}" th:text="'미사용'"></th:block>
             </td>
             <td class="col-type" th:text="${layerGroup.userId}"></td>
             <td class="col-key" th:text="${layerGroup.description}"></td>

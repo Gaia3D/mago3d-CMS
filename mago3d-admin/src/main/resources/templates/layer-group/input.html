@@ -46,8 +46,8 @@
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input">
-										<input type="hidden" id="parent" name="parent" th:value="*{parent}"/>
-			 							<input type="text" id="parentName" name="parentName" class="l" th:readonly="true" th:field="*{parentName}"/>
+										<input type="hidden" id="parent" name="parent" th:value="*{parent}" />
+			 							<input type="text" id="parentName" name="parentName" th:field="*{parentName}" class="l" th:readonly="true" />
 										<input type="button" id="layerGroupButton" value="상위 레이어 그룹 선택" />
 									</td>
 								</tr>
@@ -57,9 +57,9 @@
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input radio-set">
-										<input type="radio" id="available1" name="available" value="true" checked>
+										<input type="radio" id="available1" name="available" value="true" checked />
 										<label for="available1" th:text="#{use}"></label>
-										<input type="radio" id="available2" name="available" value="false">
+										<input type="radio" id="available2" name="available" value="false" />
 										<label for="available2" th:text="#{not.use}"></label>
 									</td>
 								</tr>
@@ -171,7 +171,7 @@
 
 	$( "#rootParentSelect" ).on( "click", function() {
 		$("#parent").val(0);
-		$("#parentName").val(/*[[${layerGroup.parentName}]]*/"");
+		$("#parentName").val([[${layerGroup.parentName}]]);
 		layerGroupDialog.dialog( "close" );
 	});
 </script>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layout">
+<html xmlns:th="http://www.thymeleaf.org">
 <body>
     <div id="paginationArea" class="pagination" th:if="${pagination.totalCount > 0}">
         <a th:href="@{${pagination.uri}(pageNo=${pagination.firstPage})${pagination.searchParameters}}" class=""><span class="icon-glyph glyph-first"></span></a>

@@ -1,58 +1,51 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/common/taglib.jsp" %>
-<%@ include file="/WEB-INF/views/common/config.jsp" %>
-
 <!DOCTYPE html>
-<html lang="${accessibility}">
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width">
-	<title>Layer 그룹 수정 | mago3D</title>
-	<link rel="stylesheet" href="/css/${lang}/font/font.css?cacheVersion=${contentCacheVersion}" />
-	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css?cacheVersion=${contentCacheVersion}" />
-	<link rel="stylesheet" href="/externlib/normalize/normalize.min.css?cacheVersion=${contentCacheVersion}" />
-	<link rel="stylesheet" href="/css/fontawesome-free-5.2.0-web/css/all.min.css?cacheVersion=${contentCacheVersion}">
-	<link rel="stylesheet" href="/externlib/jquery-ui-1.12.1/jquery-ui.min.css?cacheVersion=${contentCacheVersion}" />
-    <link rel="stylesheet" href="/css/${lang}/admin-style.css?cacheVersion=${contentCacheVersion}" />
+	<title>Layer 그룹 수정</title>
+	<th:block layout:fragment="pageCustomStyle">
+		<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
+		<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+	</th:block>
 </head>
 <body>
-	<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
-	<%@ include file="/WEB-INF/views/layouts/menu.jsp" %>
+<th:block layout:fragment="pageCustomContent">
 	<div class="site-body">
 		<div class="container">
 			<div class="site-content">
-				<%@ include file="/WEB-INF/views/layouts/sub_menu.jsp" %>
+				<div th:replace="~{/layouts/sub-menu :: #subMenuWrap}"></div>
 				<div class="page-area">
-					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
+					<div th:replace="~{/layouts/page-header :: #pageHeaderWrap}"></div>
 					<div class="page-content">
 						<div class="input-header row">
 							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
 						</div>
-						<form:form id="layerGroup" modelAttribute="layerGroup" method="post" onsubmit="return false;">
-						<form:hidden path="layerGroupId"/>
+						<form id="layerGroup" th:object="${layerGroup}" method="post" th:action="@{#}" onsubmit="return false;">
+						<input type="hidden" id="layerGroupId" name="layerGroupId" th:field="*{layerGroupId}" />
 						<table class="input-table scope-row" summary="2D 레이어 그룹 수정 테이블">
 						<caption class="hiddenTag">2D 레이어 그룹 수정</caption>
 							<col class="col-label l" />
 							<col class="col-input" />
 							<tr>
 								<th class="col-label" scope="row">
-									<form:label path="layerGroupName">Layer 그룹명</form:label>
+									<label for="layerGroupName">Layer 그룹명</label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">
-									<form:input path="layerGroupName" cssClass="l" />
-									<form:errors path="layerGroupName" cssClass="error" />
+									<input type="text" id="layerGroupName" name="layerGroupName" th:field="*{layerGroupName}" class="l" />
 								</td>
 							</tr>
 							<tr>
 								<th class="col-label" scope="row">
-									<form:label path="parentName">상위 그룹</form:label>
+									<label for="parentName">상위 그룹</label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">
-									<form:hidden path="parent" />
-		 							<form:input path="parentName" cssClass="l" readonly="true" />
-									<!-- <input type="button" id="layerGroupButtion" value="상위 그룹 선택" /> -->
+									<input type="hidden" id="parent" name="parent" th:field="*{parent}" />
+		 							<input type="text" id="parentName" name="parentName" th:field="*{parentName}" class="l" th:readonly="true" />
 								</td>
 							</tr>
 							<tr>
@@ -61,45 +54,42 @@
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input radio-set">
-									<form:radiobutton label="사용" path="available" value="true" />
-									<form:radiobutton label="미사용" path="available" value="false" />
-									<form:errors path="available" cssClass="error" />
+									<input type="radio" id="available1" name="available" th:field="*{available}" value="true" checked />
+									<label for="available1" th:text="#{use}"></label>
+									<input type="radio" id="available2" name="available" th:field="*{available}" value="false" />
+									<label for="available2" th:text="#{not.use}"></label>
 								</td>
 							</tr>
 							<tr>
-								<th class="col-label l" scope="row"><form:label path="description"><spring:message code='description'/></form:label></th>
+								<th class="col-label l" scope="row"><label for="description" th:text="#{description}"></label></th>
 								<td class="col-input">
-									<form:input path="description" cssClass="xl" />
-									<form:errors path="description" cssClass="error" />
+									<input type="text" id="description" name="description" th:field="*{description}" class="xl" />
 								</td>
 							</tr>
 						</table>
 						<div class="button-group">
 							<div class="center-buttons">
-								<input type="submit" value="<spring:message code='save'/>" onclick="updateLayerGroup();"/>
+								<input type="button" th:value="#{save}" onclick="updateLayerGroup();"/>
 								<a href="/layer-group/list" class="button">목록</a>
 							</div>
 						</div>
-						</form:form>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
-
 	<!-- Dialog -->
-	<%@ include file="/WEB-INF/views/layer-group/layer-group-dialog.jsp" %>
+	<div th:replace="~{/layer-group/layer-group-dialog :: #layerGroupDialog}"></div>
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+	<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
 
-<script type="text/javascript" src="/externlib/jquery-3.3.1/jquery.min.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/externlib/jquery-ui-1.12.1/jquery-ui.min.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/js/${lang}/common.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/js/${lang}/message.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/js/navigation.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript">
-	$(document).ready(function() {
-	});
-
+<script th:inline="javascript">
 	function validate() {
 		var number = /^[0-9]+$/;
 		if ($("#layerGroupName").val() === null || $("#layerGroupName").val() === "") {
@@ -149,7 +139,7 @@
 	// 저장
 	var updateLayerGroupFlag = true;
 	function updateLayerGroup() {
-		if (validate() == false) {
+		if (validate() === false) {
 			return false;
 		}
 		if(updateLayerGroupFlag) {
