@@ -1,0 +1,35 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<body>
+	<div id="gnbWrap" style="z-index: 100;">
+		<!-- S: 통합검색 -->
+		<div class="totalSearch">
+			<label for="fullTextSearch" class="hiddenTag"><th:block th:text="#{search.intergrated}"></th:block></label>
+			<input type="text" id="fullTextSearch" name="fullTextSearch" th:placeholder="#{search.input.placeholder}" />
+			<button type="button" id="fullTextSearchButton" th:title="#{common.search}" class="btnTotalSearch"><th:block th:text="#{common.search}"></th:block></button>
+		</div>
+		<!-- S: 화면행정구역 -->
+		<div class="district" >
+			<p id="viewDistrictName"></p>
+		</div>
+		<!-- S: 행정구역 레이어 -->
+		<div class="districtWrap" style="display:none;">
+			<div class="districtLayer">
+				<ul id="sdoList">
+					<li class="on"><th:block th:text="#{common.all}"></th:block></li>
+				</ul>
+				<ul id="sggList">
+					<li class="on"><th:block th:text="#{common.all}"></th:block></li>
+				</ul>
+				<ul id="emdList">
+					<li class="on"><th:block th:text="#{common.all}"></th:block></li>
+				</ul>
+			</div>
+			<div class="districtBtn">
+				<button type="button" class="focusB" id="districtFlyButton"><th:block th:text="#{common.move}"></th:block></button>
+				<button type="button" class="basicB" id="districtCancelButton"><th:block th:text="#{common.cancel}"></th:block></button>
+			</div>
+		</div>
+		<!-- E: 행정구역 레이어 -->
+	</div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<body>
+    <header id="headerWrap">
+        <h1>mago3D Digital Twin Platform</h1>
+        <div class="gnb">
+            <th:block th:if="${session.USER_SESSION}">
+                <ul>
+                    <li class="user"><span th:text="${session.USER_SESSION.userName}"><th:block th:text="#{common.sir}"></th:block></span>
+                        <a href="/guide/help" th:title="#{common.api.document}" onclick="goMagoAPIGuide(this.href);return false;"><th:block th:text="#{common.api.document}"></th:block></a>
+                        <a href="/sign/signout" title="Sign out">Sign out</a>
+                    </li>
+                </ul>
+            </th:block>
+            <th:block th:unless="${session.USER_SESSION}">
+                <ul>
+                    <li>
+                        <a href="/guide/help" th:title="#{common.api.document}" onclick="goMagoAPIGuide(this.href);return false;"><th:block th:text="#{common.api.document}"></th:block></a>
+                    </li>
+                    <li class="user"><a href="/sign/signin">Sign in</a></li>
+                </ul>
+            </th:block>
+        </div>
+    </header>
+</body>
+</html>
