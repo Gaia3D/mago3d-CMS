@@ -1,16 +1,14 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
 <div id="layerContent" class="contents yScroll fullHeight" style="display:none;">
 	<div class="btnGroup">
-		<!-- 사용자 설정 정보 ==> settings.js -->
-		<button class="textBtnSub" onClick="turnOnAllLayer(); return false;">전체 켜기</button>
-		<button class="textBtnSub" onClick="turnOffAllLayer(); return false;">전체 끄기</button>
-		<button class="textBtnSub" onClick="openAllLayerTree(); return false;">펼치기</button>
-		<button class="textBtnSub" onClick="closeAllLayerTree(); return false;">접기</button>
-		<button class="textBtn" onClick="saveUserLayers(); return false;">저장</button>
+		<button class="textBtnSub" th:text="#{layer.turn.on}" onClick="turnOnAllLayer(); return false;"></button>
+		<button class="textBtnSub" th:text="#{layer.turn.off}" onClick="turnOffAllLayer(); return false;"></button>
+		<button class="textBtnSub" th:text="#{layer.open}" onClick="openAllLayerTree(); return false;"></button>
+		<button class="textBtnSub" th:text="#{layer.close}" onClick="closeAllLayerTree(); return false;"></button>
+		<button class="textBtn" th:text="#{common.save}" onClick="saveUserLayers(); return false;"></button>
 	</div>
-	<form id="layerForm" th:object="${userPolicy}" style="height: calc(100% - 50px)" th:action="@{#}">
-		<input type="hidden" th:id="baseLayers" th:name="baseLayers"/>
+	<form id="layerForm" th:object="${userPolicy}" th:action="@{#}" style="height: calc(100% - 50px)">
+		<input type="hidden" id="baseLayers" name="baseLayers"/>
 		<ul id="layerTreeList" class="layerList marT10 yScroll" style="height: 100%"></ul>
 	</form>
 	<div th:replace="~{/layer/layer-template :: #layerListSource}"></div>

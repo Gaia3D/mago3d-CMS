@@ -7,6 +7,7 @@ JS_MESSAGE["change"] = "변경 되었습니다.";
 JS_MESSAGE["delete"] = "삭제 되었습니다.";
 JS_MESSAGE["success"] = "성공 하였습니다.";
 JS_MESSAGE["save"] = "저장 되었습니다.";
+JS_MESSAGE["loading"] = "로딩중입니다.";
 
 JS_MESSAGE["apply"] = "적용되었습니다.";
 JS_MESSAGE["upload"] = "업로딩 중입니다.";
