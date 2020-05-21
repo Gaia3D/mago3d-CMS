@@ -5,7 +5,7 @@
     <meta name="referrer" content="origin">
     <meta name="viewport" content="width=device-width">
     <meta name="robots" content="index,nofollow">
-	<title>데이터 그룹 | mago3D</title>
+	<title><th:block th:text="#{data.group.list.page.title}"></th:block></title>
 	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/externlib/cesium/Widgets/widgets.css(cacheVersion=${contentCacheVersion})}">
     <link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
@@ -26,17 +26,17 @@
     <!-- E: NAVWRAP -->
 
     <div class="container" style="float:left; width: calc(100% - 78px);">
-        <div style="padding: 20px 20px 0px 10px; font-size: 18px;">3D 업로딩 데이터 자동 변환</div>
+        <div style="padding: 20px 20px 0px 10px; font-size: 18px;"><th:block th:text="#{converter.subtitle}"></th:block></div>
         <!-- TAB -->
         <div class="tabs">
             <ul class="tab">
-                <li id="tabDataGroupList"><a href="/data-group/list">데이터 그룹</a></li>
-                <li id="tabDataGroupInput"><a href="/data-group/input">데이터 그룹 등록</a></li>
-                <li id="tabUploadDataInput"><a href="/upload-data/input">업로딩 데이터</a></li>
-                <li id="tabUploadDataList"><a href="/upload-data/list">업로딩 데이터 목록</a></li>
-                <li id="tabConverterList"><a href="/converter/list">업로딩 데이터 변환 목록</a></li>
-                <li id="tabDataList"><a href="/data/list">데이터 목록</a></li>
-                <li id="tabDataLogList"><a href="/data-log/list">데이터 변경 이력</a></li>
+                <li id="tabDataGroupList"><a href="/data-group/list"><th:block th:text="#{data.group.list.page.title}"></th:block></a></li>
+                <li id="tabDataGroupInput"><a href="/data-group/input"><th:block th:text="#{data.group.input.page.title}"></th:block></a></li>
+                <li id="tabUploadDataInput"><a href="/upload-data/input"><th:block th:text="#{upload.data.input.page.title}"></th:block></a></li>
+                <li id="tabUploadDataList"><a href="/upload-data/list"><th:block th:text="#{upload.data.list.page.title}"></th:block></a></li>
+                <li id="tabConverterList"><a href="/converter/list"><th:block th:text="#{converter.list.page.title}"></th:block></a></li>
+                <li id="tabDataList"><a href="/data/list"><th:block th:text="#{data.list.page.title}"></th:block></a></li>
+                <li id="tabDataLogList"><a href="/data-log/list"><th:block th:text="#{data.log.list.page.title}"></th:block></a></li>
             </ul>
         </div>
 		<div style="height: 30px;"></div>
@@ -44,9 +44,8 @@
 			<div class="list-header row">
 				<div class="list-desc u-pull-left">
 					<div class="button-group">
-						<a href="#" class="button" onclick="openAll(); return false;">펼치기</a>
-						<a href="#" class="button" onclick="closeAll(); return false;">접기</a>
-						<!-- <a href="/layer/tree" class="button">그룹 수정/등록</a> -->
+						<a href="#" class="button" onclick="openAll(); return false;"><th:block th:text="#{converter.unfold}"></th:block></a>
+						<a href="#" class="button" onclick="closeAll(); return false;"><th:block th:text="#{converter.folding}"></th:block></a>
 					</div>
 				</div>
 			</div>
@@ -64,20 +63,20 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th scope="col">그룹명</th>
-	                    <th scope="col">그룹 Key</th>
-	                    <th scope="col">공유 유형</th>
-	                    <th scope="col">사용 여부</th>
-	                    <th scope="col">데이터 건수</th>
-	                    <th scope="col">순서</th>
-	                    <th scope="col">수정</th>
-	                    <th scope="col">삭제</th>
-	                    <th scope="col">등록일</th>
+						<th scope="col"><th:block th:text="#{converter.data.group}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{converter.data.group.key}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{converter.data.group.sharing}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{converter.data.group.available}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{converter.data.count}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{common.order}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{common.edit}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{common.delete}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{common.created}"></th:block></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:if="${dataGroupList.empty}">
-						<td colspan="9" class="col-none">데이터 그룹이 존재하지 않습니다.</td>
+						<td colspan="9" class="col-none"><th:block th:text="#{converter.data.group.does.not.exist}"></th:block></td>
                     </tr>
                     
                     <th:block th:if="${!dataGroupList.empty}">
@@ -119,27 +118,27 @@
 									<td class="col-type" th:text="${dataGroup.sharing}"></td>
 									<td class="col-type" th:if="${#bools.isTrue(dataGroup.available)}" th:text="사용"></td>
 									<td class="col-type" th:if="${#bools.isFalse(dataGroup.available)}" th:text="미사용"></td>
-
 									<td th:if="${dataGroup.dataCount > 0}" class="col-count">
 										<a th:href="@{/data/list(dataGroupId=${dataGroup.dataGroupId})}" class="linkButton" th:value="${dataGroup.dataCount}"></a>
 									</td>
 									<td  th:if="${dataGroup.dataCount == 0}" th:value="${dataGroup.dataCount}"></td>
 									<td class="col-type">
 										<div class="button-group">
-											<a href="#" class="button" th:onclick="moveUp([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;"  style="text-decoration:none;">위로</a>
-											<a href="#" class="button" th:onclick="moveDown([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;" style="text-decoration:none;">아래로</a>
+											<a href="#" class="button" th:onclick="moveUp([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;"  style="text-decoration:none;">
+												<th:block th:text="#{data.group.list.page.title}"></th:block>위로</a>
+											<a href="#" class="button" th:onclick="moveDown([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;" style="text-decoration:none;">
+												<th:block th:text="#{data.group.list.page.title}"></th:block>아래로</a>
 										</div>
 									</td>
 									<td class="col-type">
-										<a th:href="@{/data-group/modify(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-edit">수정</a>
+										<a th:href="@{/data-group/modify(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-edit"><th:block th:text="#{data.group.list.page.title}"></th:block>수정</a>
 									</td>
-									<td class="col-type" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="|불가(기본)|"></td>
+									<td class="col-type" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="|불가(기본)|"><th:block th:text="#{data.group.list.page.title}"></th:block></td>
 									<td class="col-type" th:if="${#bools.isFalse(dataGroup.basic)}">
 										<a th:href="@{/data-group/delete(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-delete" th:value="#{delete}" onclick="return deleteWarning();"></a>                                            
 									</td>
 									<td class="col-date">
-										<p th:text="${#dates.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
-										<p th:text="${#dates.format(viewInsertDate,'yyyy-MM-dd HH:mm')}"></p>
+										<th:block th:text="${#dates.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
 									</td>
 								</tr>
 						</th:block>
