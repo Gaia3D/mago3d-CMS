@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div id="uploadDataFileDialog" class="uploadDataFileDialog" th:text="#{data.all.insert}">
+		<form id="dataFileInfo" name="dataFileInfo" th:action="@{/datas/bulk-upload}" method="post" enctype="multipart/form-data">
+			<table class="inner-table scope-row" style="width: 95%;">
+				<colgroup>
+					<col class="col-sub-label xl"></col>
+					<col class="col-data"></col>
+				</colgroup>
+				<tbody>
+					<tr>
+						<th class="col-sub-label">
+							<label for="dataGroupId">데이터 그룹명</label>
+						</th>
+						<td>
+							<select id="dataGroupId" name="dataGroupId" class="selectBoxClass" th:each="dataGroup : ${dataGroupList}">
+								<option value="${dataGroup.dataGroupId}" th:text="${dataGroup.dataGroupName}"></option>
+							</select>
+						</td>
+					</tr>
+					
+					<tr>
+						<th class="col-sub-label" th:text="#{data.upload.file}"></th>
+						<td>
+							<div class="inner-data">
+								<input type="file" id="dataFileName" name="dataFileName" class="col-data" />
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="button-group">
+				<input type="button" onclick="uploadDataFileSave();" class="button" th:value="#{data.file.save}" />
+			</div>
+
+			<table id="dataFileUploadLog" class="inner-table scope-row" style="width: 95%;">
+				<colgroup>
+					<col class="col-sub-label xl"></col>
+					<col class="col-data"></col>
+				</colgroup>
+				<tbody></tbody>
+			</table>
+		</form>
+	</div>
+
+	<script id="templateDataFileUploadLog" type="text/x-handlebars-template">
+		<tr>
+			<td colspan="2" style="text-align: center;">Result of parsing</td>
+		</tr>
+		<tr>
+			<td> 총 건 수</td>
+			<td>{{totalCount}}</td>
+		</tr>
+		<tr>
+			<td> 성공 건수 </td>
+			<td>{{parseSuccessCount}}</td>
+		</tr>
+		<tr>
+			<td> 실패 건수 </td>
+			<td> {{parseErrorCount}}</td>
+		</tr>
+		<tr>
+			<td> DB 등록 건수 </td>
+			<td> {{insertSuccessCount}} </td>
+		</tr>
+		<tr>
+			<td> DB 수정 건수 </td>
+			<td> {{updateSuccessCount}} </td>
+		</tr>
+		<tr>
+			<td> DB 실패 건수 </td>"
+			<td> {{insertErrorCount}}</td>
+		</tr>
+	</script>
+</body>
+</html>

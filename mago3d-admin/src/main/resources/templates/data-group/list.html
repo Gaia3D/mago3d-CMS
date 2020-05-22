@@ -34,6 +34,8 @@
 									</div>
 								</div>
 							</div>
+
+							<!-- S: 데이터 그룹 목록 -->
 							<table class="list-table scope-col" summary="데이터 그룹 트리">
 								<caption class="hiddenTag">데이터 그룹</caption>
 								<colgroup>
@@ -126,8 +128,8 @@
                                         </td>
                                         <td class="col-functions block-element-wrapper">
                                             <a th:href="@{#}" th:onclick="uploadSmartTilingData([[${dataGroup.dataGroupId}]], [[${dataGroup.dataGroupName}]]); return false;">메타 정보 수정</a>
-                                            <a th:href="@{/data-groups/download/[[${dataGroup.dataGroupId}]]}">내보내기(일반용)</a>
-                                            <a th:href="@{/data-groups/download/converter/[[${dataGroup.dataGroupId}]]}">내보내기(변환용)</a>
+                                            <a th:href="@{/data-groups/download/${dataGroup.dataGroupId}}">내보내기(일반용)</a>
+                                            <a th:href="@{/data-groups/download/converter/${dataGroup.dataGroupId}}">내보내기(변환용)</a>
                                         </td>
 
                                         <td class="col-type">
@@ -144,6 +146,7 @@
                                         </td>
 								</tbody>
 							</table>
+							<!-- E: 데이터 그룹 목록 -->
 						</div>
 						<!-- smart tiling file dialog -->
 						<div th:replace="~{/data-group/data-smart-tiling-file-dialog :: #uploadDataSmartTilingDialog}"></div>

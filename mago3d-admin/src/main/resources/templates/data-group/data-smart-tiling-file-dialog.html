@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layout">
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
 <body>
     <div id="uploadDataSmartTilingDialog" class="uploadDataSmartTilingDialog" title="SmartTiling 데이터 등록">
         <form id="dataSmartTilingFileInfo" name="dataSmartTilingFileInfo" th:action="@{/datas/smart-tiling}" method="post" enctype="multipart/form-data">
