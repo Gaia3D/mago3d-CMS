@@ -11,7 +11,6 @@
 	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
-	<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
     <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css?cacheVersion=(lang=${lang}, cacheVersion=${contentCacheVersion})}">
 </head>
 <body>
@@ -29,6 +28,8 @@
                                 <th:block th:text="#{check}"></th:block>
                             </div>
 						</div>
+
+						<!-- S : 데이터 그룹 수정 -->
 						<form id="dataGroup" th:object="${dataGroup}" method="post" th:action="@{#}" onsubmit="return false;">
 							<input type="hidden" id="dataGroupId" name="dataGroupId" th:field="*{dataGroupId}" />
 							<table class="input-table scope-row" summary="데이터 그룹 수정 테이블">
@@ -166,6 +167,7 @@
 								</div>
 							</div>
 						</form>
+						<!-- E : 데이터 그룹 수정 -->
 					</div>
 				</div>
 			</div>
@@ -173,12 +175,12 @@
 	</div>
 </th:block>
 <th:block layout:fragment="pageCustomScript">
-	<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
-	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
-	<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
-	<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
-	<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
-	<script type="text/javascript">
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
 	$(document).ready(function() {
 		var isBasic = "[[${dataGroup.basic}]]";
 		if(isBasic === "false") {

@@ -93,16 +93,13 @@
 			<form id="listForm" modelAttribute="dataInfo" method="post">
 				<input type="hidden" id="checkIds" name="checkIds" />
 				<div class="list-header row">
-					<!-- <div class="list-desc u-pull-left">
-						<spring:message code='all.d'> 
-						<span class="totalCount">
-							<fmt:formatNumber value="${pagination.totalCount}" type="number">
-						</span> 
-						<spring:message code='search.what.count'>,
-						<fmt:formatNumber value="${pagination.pageNo}" type="number">
-						/ <fmt:formatNumber value="${pagination.lastPage }" type="number"> 
-						<spring:message code='search.page'>
-					</div> -->
+					<div class="list-desc u-pull-left">
+						<span th:text="#{all.d}"></span>
+						<span class="totalCount" th:text="${pagination.totalCount}"></span>
+						<span th:text="#{search.what.count}"></span>
+						<span th:text="|${pagination.pageNo} / ${pagination.lastPage}|"></span>
+						<span th:text="#{search.page}"></span>
+					</div>
 				</div>
 				<table class="list-table scope-col" summary="데이터 목록 테이블">
 					<caption class="hiddenTag">데이터 목록 테이블</caption>

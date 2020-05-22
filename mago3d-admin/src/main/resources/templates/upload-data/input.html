@@ -5,15 +5,14 @@
     <meta name="referrer" content="origin">
     <meta name="viewport" content="width=device-width">
     <meta name="robots" content="index,nofollow">
-    <title>업로딩 데이터 | mago3D</title>
+	<title>업로딩 데이터 | mago3D</title>
     <link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
-	<link rel="stylesheet" th:href="@{/externlib/cesium/Widgets/widgets.css(cacheVersion=${contentCacheVersion})}">
-    <link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
-    <link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
-    <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
-    <link rel="stylesheet" th:href="@{/css/{lang}/style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
-	<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
-	<link rel="stylesheet" th:href="@{/externlib/dropzone/dropzone.min.css(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/${lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/images/${lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/externlib/dropzone/dropzone.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/${lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
     <script type="text/javascript" th:src="@{/externlib/dropzone/dropzone.min.js(cacheVersion=${contentCacheVersion})}"></script>
     <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
     <script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
@@ -74,7 +73,7 @@
 					<div class="page-content">
 
 						<!-- S: 3D 파일 업로드 -->
-						<form id="uploadData" th:object="${dataGroup}" th:action="@{#}" method="post" onsubmit="return false;">
+						<form id="uploadData" th:object="${uploadData}" th:action="@{#}" method="post" onsubmit="return false;">
 							<table class="input-table scope-row">
 								<colgroup>
 									<col class="col-label l" style="width: 13%"></col>
@@ -131,14 +130,15 @@
 								</tr>
 								<tr>
 									<th class="col-label" scope="row">
-										<label for="longitude">대표 위치 (경도/위도/높이) </label>
-										<!-- <span class="icon-glyph glyph-emark-dot color-warning"></span> -->
+										<label for="longitude">대표 위치 (경도/위도/높이)</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td colspan="3" class="col-input">
 										<input type="text" id="longitude" name="longitude" class="m" placeholder="longitude" />
+										<label for="latitude" class="hiddenTag">대표 위치 (위도)</label>
 										<input type="text" id="latitude" name="latitude" class="m" placeholder="latitude" />
+										<label for="altitude" class="hiddenTag">대표 위치 (높이)</label>
 										<input type="text" id="altitude" name="altitude" class="m" placeholder="altitude" />
-										<input type="button" id="mapButtion" value="지도" />
 									</td>
 								</tr>
 								<tr>
@@ -156,7 +156,9 @@
 						<!-- S: DropZone -->
 						<div style="padding: 20px 20px 10px 10px; font-size: 18px;">파일 업로딩</div>
 						<div class="fileSection" style="font-size: 17px;">
-							<form id="my-dropzone" action="" class="dropzone hzScroll"></form>
+							<form id="my-dropzone" action="" class="dropzone hzScroll">
+								<label for="dropzoneFile" class="hiddenTag">dropzoneFile영역</label>
+							</form>
 						</div>
 						<!-- E: DropZone -->
 
@@ -178,7 +180,6 @@
 		</div>
 	</div>
 </th:block>
-<!-- E: WRAP -->
 <th:block layout:fragment="pageCustomScript">
 <script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>

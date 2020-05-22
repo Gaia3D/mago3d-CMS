@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="robots" content="index,nofollow">
     <title>업로딩 데이터 변환 목록 | mago3D</title>
-    <link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}">
@@ -76,16 +76,13 @@
 							<form id="listForm" modelAttribute="uploadData" method="post">
 								<input type="hidden" id="checkIds" name="checkIds" />
 								<div class="list-header row">
-									<!-- <div class="list-desc u-pull-left">
-										<spring:message code='all.d'> 
-										<span class="totalCount">
-											<fmt:formatNumber value="${pagination.totalCount}" type="number">
-										</span> 
-										<spring:message code='search.what.count'>,
-										<fmt:formatNumber value="${pagination.pageNo}" type="number">
-										/ <fmt:formatNumber value="${pagination.lastPage }" type="number"> 
-										<spring:message code='search.page'>
-									</div> -->
+									<div class="list-desc u-pull-left">
+										<span th:text="#{all.d}"></span>
+										<span class="totalCount" th:text="${pagination.totalCount}"></span>
+										<span th:text="#{search.what.count}"></span>
+										<span th:text="|${pagination.pageNo} / ${pagination.lastPage}|"></span>
+										<span th:text="#{search.page}"></span>
+									</div>
 									<div class="list-functions u-pull-right">
 										<div class="button-group" style="padding-bottom: 3px;">
 											<a href="#" class="button" title="F4D 일괄 변환" onclick="converterFiles(); return false;">F4D 일괄 변환</a>
