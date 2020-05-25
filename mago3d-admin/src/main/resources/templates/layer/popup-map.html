@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow"/>
+    <title>지도보기 | mago3D</title>
+    <link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+    <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+    <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+    <script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+    <script type="text/javascript" th:src="@{/externlib/ol45/ol.js(cacheVersion=${contentCacheVersion})}"></script>
+    <script type="text/javascript" th:src="@{/js/{lang}/map-view.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+ </head>
+<body>
+    <div style="height: 100%;">
+        <div id="map" style="position: absolute; width: 100%; height: 100%; overflow: hidden;"></div>
+    </div>
+</body>
+<script th:inline="javascript">
+    var policy = JSON.parse(/*[[${policyJson}]]*/"");
+    var layer = JSON.parse(/*[[${layerJson}]]*/"");
+    var mapViewer = new mapViewer(policy, layer, [[${versionId}]]);
+</script>
+</html>
