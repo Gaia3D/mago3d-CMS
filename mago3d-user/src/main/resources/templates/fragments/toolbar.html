@@ -3,7 +3,7 @@
 <div id="toolbarWrap">
 	<div class="ctrlWrap">
 		<div class="zoom">
-			<button type="button" id="mapCtrlReset" class="reset" th:title="#{toolbar.initialization}"><th:block th:text="#{toolbar.initialization}"></th:block></button>
+			<button type="button" id="mapCtrlReset" class="reset" th:title="#{toolbar.initialize.location}"><th:block th:text="#{toolbar.initialize.location}"></th:block></button>
 			<button type="button" id="mapCtrlAll" class="zoomall" th:title="#{toolbar.zoom.all}"><th:block th:text="#{toolbar.zoom.all}"></th:block></button>
 			<button type="button" id="mapCtrlZoomIn" class="zoomin" th:title="#{toolbar.zoom.in}"><th:block th:text="#{toolbar.zoom.in}"></th:block></button>
 			<button type="button" id="mapCtrlZoomOut" class="zoomout" th:title="#{toolbar.zoom.out}"><th:block th:text="#{toolbar.zoom.out}"></th:block></button>
@@ -12,7 +12,7 @@
 			<button type="button" id="mapCapture" class="save" data-type="" th:title="#{common.save}"><th:block th:text="#{common.save}"></th:block></button>
 		</div>
 		<div class="rotate">
-			<button type="button" class="rotateReset on" id="rotateReset" th:title="#{toolbar.initialization}"><th:block th:text="#{toolbar.initialization}"></th:block></button>
+			<button type="button" class="rotateReset on" id="rotateReset" th:title="#{toolbar.initialize.direction}"><th:block th:text="#{toolbar.initialize.direction}"></th:block></button>
 			<label for="rotateInput" class="hiddenTag">rotate</label>
 			<input type="text" id="rotateInput" placeholder="0" readonly>&deg;
 			<label for="pitchInput" class="hiddenTag">pitch</label>
