@@ -116,24 +116,28 @@
 							</th:block>
 									<td class="col-key ellipsis" th:text="${dataGroup.dataGroupKey}" style="max-width: 120px;"></td>
 									<td class="col-type" th:text="${dataGroup.sharing}"></td>
-									<td class="col-type" th:if="${#bools.isTrue(dataGroup.available)}" th:text="사용"></td>
-									<td class="col-type" th:if="${#bools.isFalse(dataGroup.available)}" th:text="미사용"></td>
-									<td th:if="${dataGroup.dataCount > 0}" class="col-count">
-										<a th:href="@{/data/list(dataGroupId=${dataGroup.dataGroupId})}" class="linkButton" th:value="${dataGroup.dataCount}"></a>
+									<td class="col-type">
+										<th:block th:if="${#bools.isTrue(dataGroup.available)}" th:text="#{common.use}"></th:block>
+										<th:block th:if="${#bools.isFalse(dataGroup.available)}" th:text="#{common.unused}"></th:block>
 									</td>
-									<td  th:if="${dataGroup.dataCount == 0}" th:value="${dataGroup.dataCount}"></td>
+									<td class="col-count">
+										<th:block th:if="${dataGroup.dataCount > 0}">
+										<a th:href="@{/data/list(dataGroupId=${dataGroup.dataGroupId})}" class="linkButton" th:value="${dataGroup.dataCount}"></a>
+										</th:block>
+										<th:block th:if="${dataGroup.dataCount == 0}">0</th:block>
+									</td>
 									<td class="col-type">
 										<div class="button-group">
 											<a href="#" class="button" th:onclick="moveUp([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;"  style="text-decoration:none;">
-												<th:block th:text="#{data.group.list.page.title}"></th:block>위로</a>
+												<th:block th:text="#{common.up}"></th:block></a>
 											<a href="#" class="button" th:onclick="moveDown([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;" style="text-decoration:none;">
-												<th:block th:text="#{data.group.list.page.title}"></th:block>아래로</a>
+												<th:block th:text="#{common.down}"></th:block></a>
 										</div>
 									</td>
 									<td class="col-type">
-										<a th:href="@{/data-group/modify(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-edit"><th:block th:text="#{data.group.list.page.title}"></th:block>수정</a>
+										<a th:href="@{/data-group/modify(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-edit"><th:block th:text="#{common.edit}"></th:block></a>
 									</td>
-									<td class="col-type" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="|불가(기본)|"><th:block th:text="#{data.group.list.page.title}"></th:block></td>
+									<td class="col-type" th:if="${#bools.isTrue(dataGroup.basic)}"><th:block th:text="#{common.cannot.be.deleted}"></th:block></td>
 									<td class="col-type" th:if="${#bools.isFalse(dataGroup.basic)}">
 										<a th:href="@{/data-group/delete(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-delete" th:value="#{delete}" onclick="return deleteWarning();"></a>                                            
 									</td>
@@ -269,7 +273,7 @@
 	    if(upFlag) {
 	        upFlag = false;
 	        if(viewOrder === "1") {
-	            alert("제일 처음 입니다.");
+	            alert(JS_MESSAGE["data.group.order.first"]);
 	            upFlag = true;
 	            return;
 	        }
@@ -288,7 +292,7 @@
 						openAll();
 					} else {
 						if(msg.errorCode === "data.group.view-order.invalid") {
-							alert("순서를 변경할 수 없습니다.");
+							alert(JS_MESSAGE["data.group.cannot.change.order"] );
 						} else {
 							alert(JS_MESSAGE[msg.errorCode]);
 						}
@@ -302,7 +306,7 @@
 				}
 			});
 	    } else {
-	        alert("진행 중입니다.");
+	        alert(JS_MESSAGE["button.dobule.click"]);
 	        return;
 	    }
 	}
@@ -326,7 +330,7 @@
 						openAll();
 					} else {
 						if(msg.errorCode === "data.group.view-order.invalid") {
-							alert("순서를 변경할 수 없습니다.");
+							alert(JS_MESSAGE["data.group.cannot.change.order"] );
 						} else {
 							alert(JS_MESSAGE[msg.errorCode]);
 						}
@@ -340,7 +344,7 @@
 				}
 			});
 	    } else {
-	        alert("진행 중입니다.");
+	        alert(JS_MESSAGE["button.dobule.click"]);
 	        return;
 	    }
 	}
