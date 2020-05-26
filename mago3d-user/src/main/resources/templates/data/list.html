@@ -46,43 +46,43 @@
             <form id="searchForm" th:object="${dataInfo}" method="get" th:action="@{/data/list}" onsubmit="return searchCheck();">
 			<div class="input-group row">
 				<div class="input-set">
-					<label for="searchWord" th:text="#{search.word}"></label>
+					<label for="searchWord" th:text="#{common.search.word}"></label>
 					<select id="searchWord" name="searchWord" class="selectBoxClass">
-						<option value="" th:text="#{select}"></option>
-	          			<option value="data_name" th:text="데이터명"></option>
+						<option value="" th:text="#{common.select}"></option>
+						<option value="data_name" th:text="#{common.data.name}"></option>
 					</select>
 					<select id="searchOption" name="searchOption" class="selectBoxClass">
-						<option value="0" th:text="#{search.same}"></option>
-						<option value="1" th:text="#{search.include}"></option>
+						<option value="0" th:text="#{common.search.same}"></option>
+						<option value="1" th:text="#{common.search.include}"></option>
 					</select>
 					<input type="search" id="searchValue" name="searchValue" class="m" style="float: right;" />
 				</div>
 				<div class="input-set">
-                    <label for="startDate" th:text="#{search.date}"></label>
-                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
-                    <span class="delimeter tilde">~</span>
-                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
+					<label for="startDate" th:text="#{common.date}"></label>
+					<input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
+					<span class="delimeter tilde">~</span>
+					<input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
                 </div>
 				<div class="input-set">
-					<label for="orderWord" th:text="#{search.order}"></label>
+					<label for="orderWord" th:text="#{common.order}"></label>
 					<select id="orderWord" name="orderWord" class="selectBoxClass">
-						<option value="" th:text="#{search.basic}"></option>
-						<option value="data_name" th:text="데이터명"></option>
-						<option value="insert_date" th:text="#{search.insert.date}"></option>
+						<option value="" th:text="#{common.basic}"></option>
+						<option value="data_name" th:text="#{common.data.name}"></option>
+						<option value="insert_date" th:text="#{common.insert.date}"></option>
 					</select>
 					<select id="orderValue" name="orderValue" class="selectBoxClass">
-                		<option value="" th:text="#{search.basic}"></option>
-	                	<option value="ASC" th:text="#{search.ascending}"></option>
-						<option value="DESC" th:text="#{search.descending.order}"></option>
+						<option value="" th:text="#{common.basic}"></option>
+						<option value="ASC" th:text="#{common.asc}"></option>
+						<option value="DESC" th:text="#{common.desc}"></option>
 					</select>
 					<select id="listCounter" name="listCounter" class="selectBoxClass">
-                		<option value="10" th:text="#{search.ten.count}"></option>
-	                	<option value="50" th:text="#{search.fifty.count}"></option>
-						<option value="100" th:text="#{search.hundred.count}"></option>
+						<option value="10" th:text="#{common.ten.count}"></option>
+						<option value="50" th:text="#{common.fifty.count}"></option>
+						<option value="100" th:text="#{common.hundred.count}"></option>
 					</select>
 				</div>
 				<div class="input-set">
-					<input type="submit" th:value="#{search}" />
+					<input type="submit" th:value="#{common.search}" />
 				</div>
 			</div>
 			</form>
@@ -94,11 +94,11 @@
 				<input type="hidden" id="checkIds" name="checkIds" />
 				<div class="list-header row">
 					<div class="list-desc u-pull-left">
-						<span th:text="#{all.d}"></span>
+						<span th:text="#{common.all}"></span>
 						<span class="totalCount" th:text="${pagination.totalCount}"></span>
-						<span th:text="#{search.what.count}"></span>
+						<span th:text="#{common.count.unit}"></span>
 						<span th:text="|${pagination.pageNo} / ${pagination.lastPage}|"></span>
-						<span th:text="#{search.page}"></span>
+						<span th:text="#{common.page}"></span>
 					</div>
 				</div>
 				<table class="list-table scope-col" summary="데이터 목록 테이블">
@@ -119,7 +119,7 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<th scope="col" class="col-number" th:text="#{number}"></th>
+							<th scope="col" class="col-number" th:text="#{common.number}"></th>
 							<th scope="col" class="col-name">그룹명</th>
 							<th scope="col" class="col-name">데이터명</th>
 							<th scope="col" class="col-type">등록자</th>

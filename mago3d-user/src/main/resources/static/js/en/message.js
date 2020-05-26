@@ -74,16 +74,16 @@ JS_MESSAGE["policy.menu.invalid"] = "필수 입력값이 유효하지 않습니�
 
 //widget
 
-JS_MESSAGE["data.name.empty"] = "데이터명을 입력하여 주십시오.";
-JS_MESSAGE["data.name.invalid"] = "데이터명이 유효하지 않습니다.";
-JS_MESSAGE["data.group.id.empty"] = "데이터 그룹명 입력하여 주십시오.";
-JS_MESSAGE["data.sharing.empty"] = "공유 유형을 입력하여 주십시오.";
-JS_MESSAGE["data.type.empty"] = "데이터 타입을 선택하여 주십시오.";
-JS_MESSAGE["data.latitude.empty"] = "위도를 입력하여 주십시오.";
-JS_MESSAGE["data.longitude.empty"] = "경도를  입력하여 주십시오.";
-JS_MESSAGE["data.altitude.empty"] = "높이를  입력하여 주십시오.";
-JS_MESSAGE["data.file.empty"] = "파일을 입력하여 주십시오.";
-JS_MESSAGE["data.insert"] = "데이터를 등록 하였습니다.";
+JS_MESSAGE["data.name.empty"] = "Please enter the data name.";
+JS_MESSAGE["data.name.invalid"] = "Data name is invalid.";
+JS_MESSAGE["data.group.id.empty"] = "Please enter the data group name.";
+JS_MESSAGE["data.sharing.empty"] = "Please enter the share type.";
+JS_MESSAGE["data.type.empty"] = "Please select a data type.";
+JS_MESSAGE["data.longitude.empty"] = "Please enter the longitude";
+JS_MESSAGE["data.latitude.empty"] = "Please enter the latitude";
+JS_MESSAGE["data.altitude.empty"] = "Please enter the altitude";
+JS_MESSAGE["data.file.empty"] = "Please enter a file";
+JS_MESSAGE["data.insert"] = "Data is registered";
 JS_MESSAGE["data.update.check"] = "현재 입력된 위치와 회전 정보를 db에 저장하시겠습니까?";
 JS_MESSAGE["data.update.request.check"] = "이 데이터는 관리자가 업로드 하였거나, 다른 사용자가 업로드한 데이터 입니다.\n입력된 위치와 회전정보 변경을 요청 하시겠습니까?";
 
@@ -113,9 +113,13 @@ JS_MESSAGE["upload.file.invalid"] = "The file is not valid. Please upload again.
 JS_MESSAGE["upload.file.ext.invalid"] = "The file extension is not valid.";
 JS_MESSAGE["upload.file.size.exceed"] = "File size is too large to upload.";
 JS_MESSAGE["upload.data.type.invalid"] = "The data type of uploading data is incorrect.";
+JS_MESSAGE["upload.file.select.empty"] = "Please select a file.";
+JS_MESSAGE["upload.las.file.constraint"] = "For LAS data, select the conversion template as Point Cloud.";
+JS_MESSAGE["upload.y.axis.facing"] = "When the Y axis is facing the ceiling of the building";
+JS_MESSAGE["upload.z.axis.facing"] = "When the Z axis is facing the ceiling of the building";
 
-JS_MESSAGE["converter.title.empty"] = "제목을 입력하여 주십시오.";
-JS_MESSAGE["converter.usf.empty"] = "Unit Scale Factor 를 입력하여 주십시오.";
+JS_MESSAGE["converter.title.empty"] = "Please enter a title.";
+JS_MESSAGE["converter.usf.empty"] = "Enter the Unit Scale Factor.";
 
 JS_MESSAGE["search.option.warning"] = "포함 옵션을 사용하실 경우 1분 이상이 소요될 수 있습니다. 계속 진행 하시겠습니까?";
 JS_MESSAGE["search.date.warning"] = "시작일이 종료일보다 클수 없습니다.";
