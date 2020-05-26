@@ -49,7 +49,7 @@
                 </colgroup>
                 <tr>
                     <th class="col-label" scope="row">
-                        <label for="dataGroupName">데이터 그룹명</label>
+                        <label for="dataGroupName"><th:block th:text="#{data.group.name}"></th:block></label>
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
                     <td class="col-input">
@@ -58,65 +58,68 @@
                 </tr>
                 <tr>
                     <th class="col-label" scope="row">
-                        <label for="dataGroupKey">데이터 그룹 Key(영문,숫자,-,_)</label>
+                        <label for="dataGroupKey"><th:block th:text="#{data.group.key}"></th:block>(<th:block th:text="#{data.group.key.constraint}"></th:block>)</label>
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
                     <td class="col-input" th:text="${dataGroup.dataGroupKey}"></td>
                 </tr>
                 <tr>
                     <th class="col-label" scope="row">
-                        <label for="parentName">상위 데이터 그룹</label>
+                        <label for="parentName"><th:block th:text="#{data.group.parent}"></th:block></label>
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
                     <td class="col-input" th:text="${dataGroup.parentName}"></td>
                 </tr>
                 <tr>
                     <th class="col-label" scope="row">
-                        <label for="sharing">공유 타입</label>
+                        <label for="sharing"><th:block th:text="#{data.group.sharing}"></th:block></label>
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
                     <td class="col-input">
                         <select id="sharing" name="sharing" class="selectBoxClass">
-                            <option value="public" selected="selected">공개</option>
-                            <option value="common">공통</option>
-                            <option value="private">개인</option>
-                            <option value="group">그룹</option>
+                            <option value="public" selected="selected"><th:block th:text="#{common.public}"></th:block></option>
+                            <option value="common"><th:block th:text="#{common.common}"></th:block></option>
+                            <option value="private"><th:block th:text="#{common.private}"></th:block></option>
+                            <option value="group"><th:block th:text="#{common.group}"></th:block></option>
                         </select>
                     </td>
                 </tr>
                 <tr>
                     <th class="col-label l" scope="row">
-                        <label for="basic">기본 여부</label>
+                        <label for="basic"><th:block th:text="#{data.group.basic}"></th:block></label>
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
-                    <td class="col-input radio-set" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="기본"></td>
-                    <td class="col-input radio-set" th:if="${#bools.isFalse(dataGroup.basic)}" th:text="선택"></td>
+                    <td class="col-input radio-set">
+                        <th:block th:if="${#bools.isTrue(dataGroup.basic)}" th:text="#{common.basic}" ></th:block>
+                        <th:block th:if="${#bools.isFalse(dataGroup.basic)}" th:text="#{common.option}" ></th:block>
+                    </td>
                 </tr>
                 <tr>
                     <th class="col-label l" scope="row">
-                        <label for="available">사용 여부</label>
+                        <label for="available"><th:block th:text="#{data.group.available}"></th:block></label>
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
-                    <td class="col-input radio-set" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="사용">
-                    <td class="col-input radio-set" th:if="${#bools.isFalse(dataGroup.basic)}">
-                        <input type="radio" id="availableTrue" name="available" value="true" />
-                        <label for="availableTrue">사용</label>
-                        <input type="radio" id="availableFalse" name="available" value="false" />
-                        <label for="availableFalse">미사용</label>
-                    </td>
+                    <td class="col-input radio-set">
+                        <th:block th:if="${#bools.isTrue(dataGroup.available)}" th:text="#{common.use}" ></th:block>
+                        <th:block th:if="${#bools.isFalse(dataGroup.available)}">
+                            <input type="radio" id="availableTrue" name="available" value="true" />
+                            <label for="availableTrue"><th:block th:text="#{common.use}"></th:block></label>
+                            <input type="radio" id="availableFalse" name="available" value="false" />
+                            <label for="availableFalse"><th:block th:text="#{common.unused}"></th:block></label>
+                        </th:block>
                 </tr>
                 <tr>
                     <th class="col-label" scope="row">
-                        <label for="longitude">경도</label>
+                        <label for="longitude"><th:block th:text="#{common.longitude}"></th:block></label>
                     </th>
                     <td class="col-input">
                         <input type="text" id="longitude" name="longitude" th:field="*{longitude}" class="m" />
-                        <input type="button" id="mapButtion" value="지도에서 찾기" />
+                        <input type="button" id="mapButtion" th:value="#{data.group.find.map}" />
                     </td>
                 </tr>
                 <tr>
                     <th class="col-label" scope="row">
-                        <label for="latitude">위도</label>
+                        <label for="latitude"><th:block th:text="#{common.latitude}"></th:block></label>
                     </th>
                     <td class="col-input">
                         <input type="text" id="latitude" name="latitude" th:field="*{latitude}" class="m" />
@@ -124,7 +127,7 @@
                 </tr>
                 <tr>
                     <th class="col-label" scope="row">
-                        <label for="altitude">높이</label>
+                        <label for="altitude"><th:block th:text="#{common.altitude}"></th:block></label>
                     </th>
                     <td class="col-input">
                         <input type="text" id="altitude" name="altitude" th:field="*{altitude}" class="m" />
@@ -132,7 +135,7 @@
                 </tr>
                 <tr>
                     <th class="col-label" scope="row">
-                        <label for="duration">이동시간</label>
+                        <label for="duration"><th:block th:text="#{common.moving.time}"></th:block></label>
                     </th>
                     <td class="col-input">
                         <input type="text" id="duration" name="duration" th:field="*{duration}" class="s" />&nbsp;&nbsp;ms
@@ -140,7 +143,7 @@
                 </tr>
                 <tr>
                     <th class="col-label" scope="row">
-                        <label for="metainfo">메타정보</label>
+                        <label for="metainfo"><th:block th:text="#{common.meta.information}"></th:block></label>
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
                     <td class="col-input">
@@ -149,7 +152,7 @@
                 </tr>
                 <tr>
                     <th class="col-label l" scope="row">
-                        <label for="description" th:text="#{description}"></label>
+                        <label for="description" th:text="#{common.description}"></label>
                     </th>
                     <td class="col-input">
                         <input type="text" id="description" name="description" th:field="*{description}" class="xl" />
@@ -158,8 +161,8 @@
             </table>
             <div class="button-group">
                 <div class="center-buttons">
-                    <input type="submit" th:value="#{modified}" onclick="updatedataGroup();" />
-                    <a href="/data-group/list" class="button">목록</a>
+                    <input type="submit" th:value="#{common.update}" onclick="updatedataGroup();" />
+                    <a href="/data-group/list" class="button"><th:block th:text="#{common.list}"></th:block></a>
                 </div>
             </div>
         </form>
@@ -185,7 +188,7 @@
 	function validate() {
 		var number = /^[0-9]+$/;
 		if ($("#dataGroupName").val() === null || $("#dataGroupName").val() === "") {
-			alert("데이터 그룹명을 입력해 주세요.");
+            alert(JS_MESSAGE["data.group.name.empty"]);
 			$("#dataGroupName").focus();
 			return false;
 		}
