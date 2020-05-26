@@ -62,18 +62,18 @@
 				</th>
 				<td class="col-input">
 					<input type="text" id="dataGroupKey" name="dataGroupKey" class="l" />
-					<input type="button" id="duplicationButtion" th:value="#{common.overlap.check}" />
+					<input type="button" id="duplicationButtion" th:value="#{common.duplication.check}" />
 				</td>
 			</tr>
 			<tr>
 				<th class="col-label" scope="row">
-					<label for="parentName"><th:block th:text="#{parent.data.group}"></th:block></label>
+					<label for="parentName"><th:block th:text="#{data.group.parent}"></th:block></label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</th>
 				<td class="col-input">
 					<input type="hidden" id="parent" name="parent" />
 					<input type="text" id="parentName" name="parentName" class="l" th:value="${dataGroup.parentName}" readonly="readonly" />
-					<input type="button" id="dataGroupButtion" th:value="#{select.parent.data.group}" />
+					<input type="button" id="dataGroupButtion" th:value="#{data.group.select.parent}" />
 				</td>
 			</tr>
 			<tr>
@@ -108,7 +108,7 @@
 				</th>
 				<td class="col-input">
 					<input type="text" id="longitude" name="longitude" class="m" />
-					<input type="button" id="mapButtion" th:value="#{find.on.the.map}" />
+					<input type="button" id="mapButtion" th:value="#{data.group.find.map}" />
 				</td>
 			</tr>
 			<tr>
