@@ -53,7 +53,7 @@
                         <option value="0" th:text="#{common.search.same}"></option>
                         <option value="1" th:text="#{common.search.include}"></option>
 					</select>
-					<input type="search" id="searchValue" name="searchValue" class="m" style="float: right;" />
+					<input type="search" id="searchValue" name="searchValue" th:field="*{searchValue}" class="m" style="float: right;" />
 				</div>
 				<div class="input-set">
                     <label for="startDate" th:text="#{common.date}"></label>
