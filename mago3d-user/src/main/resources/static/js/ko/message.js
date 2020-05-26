@@ -75,8 +75,9 @@ JS_MESSAGE["policy.menu.invalid"] = "필수 입력값이 유효하지 않습니�
 //widget
 
 JS_MESSAGE["data.name.empty"] = "데이터명을 입력하여 주십시오.";
+JS_MESSAGE["data.name.invalid"] = "데이터명이 유효하지 않습니다.";
 JS_MESSAGE["data.group.id.empty"] = "데이터 그룹명 입력하여 주십시오.";
-JS_MESSAGE["data.sharing.empty"] = "공유 유형을 선택하여 주십시오.";
+JS_MESSAGE["data.sharing.empty"] = "공유 유형을 입력하여 주십시오.";
 JS_MESSAGE["data.type.empty"] = "데이터 타입을 선택하여 주십시오.";
 JS_MESSAGE["data.latitude.empty"] = "위도를 입력하여 주십시오.";
 JS_MESSAGE["data.longitude.empty"] = "경도를  입력하여 주십시오.";
@@ -95,10 +96,23 @@ JS_MESSAGE["data.group.key.duplication"] = "사용중인 데이터 그룹 Key �
 JS_MESSAGE["data.group.key.enable"] = "사용 가능한 데이터 그룹 Key 입니다.";
 JS_MESSAGE["data.group.key.duplication.check"] = "데이터 그룹 Key 중복 확인이 필요 합니다.";
 JS_MESSAGE["data.group.select.parent"] = "상위 데이터 그룹을 선택해 주세요.";
-JS_MESSAGE["data.group.select"] = "데이터 그룹";
-JS_MESSAGE["data.group.depth.constraint"] = "사용자 데이터 그룹은 3Depth 이상 계층으로 입력할 수 없습니다.";
+JS_MESSAGE["data.group.select"] = "데이터 그룹 선택";
+JS_MESSAGE["data.group.depth.constraint"] = "사용자 데이터 그룹은 3 Depth 이상 계층으로 입력할 수 없습니다.";
 
-JS_MESSAGE["upload.file.type.invalid"] = "업로드 파일 타입이 유효하지 않습니다.";
+JS_MESSAGE["upload.guide"] = "업로딩 하려면 파일을 올리거나 클릭 하십시오.";
+JS_MESSAGE["upload.browser.guide"] = "죄송합니다. 최신의 브라우저로 Update 후 사용해 주십시오.";
+JS_MESSAGE["upload.file.empty"] = "업로딩 할 파일이 존재하지 않습니다.";
+JS_MESSAGE["upload.file.delete.confirm"] = "[파일 업로딩]의 모든 파일을 삭제하겠습니까?";
+JS_MESSAGE["upload.file.count.constraint"] = "최대 업로드 파일 수는 500개 입니다.";
+JS_MESSAGE["upload.complete"] = "업로딩을 완료 하였습니다.";
+JS_MESSAGE["representative.longitude.empty"] = "대표 위치(경도)를 입력하여 주십시오.";
+JS_MESSAGE["representative.latitude.empty"] = "대표 위치(위도)를 입력하여 주십시오.";
+JS_MESSAGE["representative.altitude.empty"] = "대표 위치(높이)를 입력하여 주십시오.";
+JS_MESSAGE["converter.target.file.empty"] = "변환 대상인 3D 파일이 존재하지 않습니다.";
+JS_MESSAGE["upload.file.invalid"] = "파일이 유효하지 않습니다. 다시 업로딩 해 주십시오.";
+JS_MESSAGE["upload.file.ext.invalid"] = "파일 확장자가 유효하지 않습니다.";
+JS_MESSAGE["upload.file.size.exceed"] = "파일 용량이 너무 커서 업로딩 할 수 없습니다.";
+JS_MESSAGE["upload.data.type.invalid"] = "업로딩 데이터의 데이터 타입이 올바르지 않습니다.";
 
 JS_MESSAGE["converter.title.empty"] = "제목을 입력하여 주십시오.";
 JS_MESSAGE["converter.usf.empty"] = "Unit Scale Factor 를 입력하여 주십시오.";
