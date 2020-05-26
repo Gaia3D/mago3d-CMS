@@ -13,17 +13,17 @@
             </colgroup>
             <thead>
                 <tr>
-                    <th scope="col" class="col-name">데이터 그룹명</th>
-                    <th scope="col" class="col-toggle">사용 여부</th>
-                    <th scope="col" class="col-toggle">공유 유형</th>
-                    <th scope="col" class="col-toggle">설명</th>
-                    <th scope="col" class="col-date">등록일</th>
-                    <th scope="col" class="col-date">선택</th>
+                    <th scope="col" class="col-name"><th:block th:text="#{data.group.name}"></th:block></th>
+                    <th scope="col" class="col-toggle"><th:block th:text="#{data.group.available}"></th:block></th>
+                    <th scope="col" class="col-toggle"><th:block th:text="#{common.sharing}"></th:block></th>
+                    <th scope="col" class="col-toggle"><th:block th:text="#{common.description}"></th:block></th>
+                    <th scope="col" class="col-date"><th:block th:text="#{common.created}"></th:block></th>
+                    <th scope="col" class="col-date"><th:block th:text="#{common.select}"></th:block></th>
                 </tr>
             </thead>
             <tbody>
             <tr th:if="${dataGroupList.empty}">
-                <td colspan="6" class="col-none">데이터 그룹이 존재하지 않습니다.</td>
+                <td colspan="6" class="col-none"><th:block th:text="#{data.group.does.not.exist}"></th:block></td>
             </tr>
 
             <th:block th:if="${!dataGroupList.empty}" th:each="dataGroup : ${dataGroupList}">
@@ -54,19 +54,25 @@
                         <span th:text="${dataGroup.dataGroupName}"></span>
                     </td>
                 </th:block>
-                    
-                <td class="col-type" th:if="${#bools.isTrue(dataGroup.available)}" th:text="사용"></td>
-                <td class="col-type" th:if="${#bools.isFalse(dataGroup.available)}" th:text="미사용"></td>
-                <td class="col-type" th:if="${#strings.equals(dataGroup.sharing, 'common')}" th:text="공통"></td>
-                <td class="col-type" th:if="${#strings.equals(dataGroup.sharing, 'public')}" th:text="공개"></td>
-                <td class="col-type" th:if="${#strings.equals(dataGroup.sharing, 'private')}" th:text="개인"></td>
-                <td class="col-type" th:if="${#strings.equals(dataGroup.sharing, 'group')}" th:text="그룹"></td>
+
+                <td class="col-type">
+                    <th:block th:if="${#bools.isTrue(dataGroup.available)}" th:text="#{common.use}"></th:block>
+                    <th:block th:if="${#bools.isFalse(dataGroup.available)}" th:text="#{common.unused}"></th:block>
+                </td>
+                <td class="col-type">
+                    <th:block th:if="${#strings.equals(dataGroup.sharing, 'common')}" th:text="#{common.common}"></th:block>
+                    <th:block th:if="${#strings.equals(dataGroup.sharing, 'public')}" th:text="#{common.public}"></th:block>
+                    <th:block th:if="${#strings.equals(dataGroup.sharing, 'private')}" th:text="#{common.private}"></th:block>
+                    <th:block th:if="${#strings.equals(dataGroup.sharing, 'group')}" th:text="#{common.group}"></th:block>
+                </td>
                 <td class="col-key" th:text="${dataGroup.description}"></td>
                 <td class="col-date">
                     <th:block th:text="${#dates.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
                 </td>
                 <td class="col-toggle">
-                    <a href="#" th:onclick="confirmDataGroup([[${dataGroup.dataGroupId}]], [[${dataGroup.dataGroupName}]]); return false;">확인</a>
+                    <a href="#" th:onclick="confirmDataGroup([[${dataGroup.dataGroupId}]], [[${dataGroup.dataGroupName}]]); return false;">
+                        <th:block th:text="#{common.confirm}"></th:block>
+                    </a>
                 </td>
                 </tr>
             </tbody>
