@@ -120,19 +120,19 @@
 						<tr>
 							<th scope="col" class="col-checkbox"><input type="checkbox" id="chkAll" name="chkAll" /></th>
 							<th scope="col" class="col-number" th:text="#{common.number}"></th>
-							<th scope="col" class="col-name">그룹명</th>
-							<th scope="col" class="col-name">데이터명</th>
-							<th scope="col" class="col-type">요청자</th>
-							<th scope="col" class="col-type">데이터타입</th>
-							<th scope="col" class="col-type">공개유형</th>
-							<th scope="col" class="col-type">매핑타입</th>
-							<th scope="col" class="col-type">변경유형</th>
-							<th scope="col" class="col-date">변경일</th>
+							<th scope="col" class="col-name"><th:block th:text="#{common.data.group.name}"></th:block></th>
+							<th scope="col" class="col-name"><th:block th:text="#{common.data.name}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{data.log.requester}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{common.data.type}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{common.sharing}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{common.mapping.type}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{data.log.change.type}"></th:block></th>
+							<th scope="col" class="col-date"><th:block th:text="#{data.log.change.date}"></th:block></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:if="${dataInfoLogList.empty}">
-							<td colspan="10" class="col-none">데이터 변경 이력이 존재하지 않습니다.</td>
+							<td colspan="10" class="col-none"><th:block th:text="#{data.log.change.history.does.not.exist}"></th:block></td>
 						</tr>
 						<tr th:if="${!dataInfoLogList.empty}" th:each="dataInfoLog : ${dataInfoLogList}">
 							<td class="col-checkbox">
