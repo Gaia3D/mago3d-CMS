@@ -1,13 +1,13 @@
 var JS_MESSAGE = new Object();
 
-JS_MESSAGE["create"] = "생성 되었습니다.";
-JS_MESSAGE["insert"] = "등록 되었습니다.";
-JS_MESSAGE["update"] = "수정 되었습니다.";
-JS_MESSAGE["change"] = "변경 되었습니다.";
-JS_MESSAGE["delete"] = "삭제 되었습니다.";
-JS_MESSAGE["success"] = "성공 하였습니다.";
-JS_MESSAGE["save"] = "저장 되었습니다.";
-JS_MESSAGE["loading"] = "로딩중입니다.";
+JS_MESSAGE["create"] = "It has been created.";
+JS_MESSAGE["insert"] = "It has been registered.";
+JS_MESSAGE["update"] = "It has been updated.";
+JS_MESSAGE["change"] = "It has been changed.";
+JS_MESSAGE["delete"] = "It has been deleted.";
+JS_MESSAGE["success"] = "It has been succeeded.";
+JS_MESSAGE["save"] = "It has been saved.";
+JS_MESSAGE["loading"] = "Loading";
 
 JS_MESSAGE["apply"] = "적용되었습니다.";
 JS_MESSAGE["upload"] = "업로딩 중입니다.";
