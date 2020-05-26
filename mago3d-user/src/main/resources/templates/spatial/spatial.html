@@ -1,11 +1,12 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
 <div id="spatialContent" class="contents yScroll fullHeight" style="display:none;">
 <ul class="listDrop">
 	<li class="on">
-		<p>방사형 가시성 분석<span class="collapse-icon">icon</span></p>
+		<p th:text="#{spatial.radial.line.of.sight}"><span class="collapse-icon">icon</span></p>
 		<div class="listContents" id="analysisRadialLineOfSight">
 			<ul class="analysisGroup">
 				<li>
-					<label for="radialLineDataType">분석 자료</label>
+					<label for="radialLineDataType" th:text="#{spatial.analysis.data}"></label>
 					<select id="radialLineDataType" class="dataType">
 						<option value="DEM" selected>DEM (DEM)</option>
 						<option value="DSM">DSM (DSM)</option>
@@ -13,88 +14,88 @@
 					</select>
 				</li>
 				<li>
-					<label for="rlosOffset">관찰 높이 (m)</label>
-					<input id="rlosOffset" class="observerOffset" type="text" placeholder="" value="1.7" title="지표로부터 관측자 지점의 높이">
+					<label for="rlosOffset" th:text="#{spatial.observer.offset}"></label>
+					<input type="text" id="rlosOffset" class="observerOffset" th:title="#{spatial.observer.offset}" placeholder="" value="1.7" />
 				</li>
 				<li>
-					<label for="rlosRadius">반경 (m)</label>
-					<input id="rlosRadius" class="radius" type="text" placeholder="" value="100" title="관찰자 지점으로부터의 가시선 분석 수행 반경. 단위는 m">
+					<label for="rlosRadius" th:text="#{spatial.radius}"></label>
+					<input type="text" id="rlosRadius" class="radius" th:title="#{spatial.radius}" placeholder="" value="100" />
 				</li>
 				<li>
-					<label for="rlosSidex">선분 수 (number)</label>
-					<input id="rlosSidex" class="sides" type="text" placeholder="" value="90" title="방사형 가시선의 수">
+					<label for="rlosSidex" th:text="#{spatial.sides}"></label>
+					<input type="text" id="rlosSidex" class="sides" th:title="#{spatial.sides}" placeholder="" value="90" />
 				</li>
 				<li>
-					<label for="radialLineObserverPoint">관찰자 위치</label>
-					<input type="text" id="radialLineObserverPoint" placeholder="" class="withBtn observerPointMGRS" disabled>
+					<label for="radialLineObserverPoint" th:text="#{common.observer.position}"></label>
+					<input type="text" id="radialLineObserverPoint" class="withBtn observerPointMGRS" placeholder="" disabled />
 					<input type="hidden" class="observerPoint">
-					<button type="button" class="btnText drawObserverPoint" data-draw-type="POINT">위치지정</button>
+					<button type="button" class="btnText drawObserverPoint" data-draw-type="POINT" th:text="#{common.position}"></button>
 				</li>
 				<li class="btns">
-					<button type="button" class="btnTextF execute" title="방사형 가시성 분석">분석</button>
-					<button type="button" class="btnText reset" title="취소">취소</button>
+					<button type="button" class="btnTextF execute" th:text="#{common.analysis}" th:title="#{spatial.radial.line.of.sight}"></button>
+					<button type="button" class="btnText reset" th:text="#{common.cancel}" th:title="#{common.cancel}"></button>
 				</li>
 			</ul>
 		</div>
 	</li>
 	<li>
-		<p>가시선 분석<span class="collapse-icon">icon</span></p>
-		<div class="listContents" id="analysisLinearLineOfSight">
+		<p th:text="#{spatial.linear.line.of.sight}"><span class="collapse-icon">icon</span></p>
+		<div id="analysisLinearLineOfSight" class="listContents">
 			<ul class="analysisGroup">
 				<li>
-					<label for="linearLineDataType">분석 자료</label>
+					<label for="linearLineDataType" th:text="#{spatial.analysis.data}"></label>
 					<select id="linearLineDataType" class="dataType">
 						<option value="DEM" selected>DEM (DEM)</option>
 						<option value="DSM">DSM (DSM)</option>
 					</select>
 				</li>
 				<li>
-					<label for="llosOffsete">관찰 높이 (m)</label>
-					<input id="llosOffsete" class="observerOffset" type="text" placeholder="" value="1.7" title="지표로부터 관측자 지점의 높이">
+					<label for="llosOffsete" th:text="#{spatial.observer.offset}"></label>
+					<input type="text" id="llosOffsete" class="observerOffset" th:title="#{spatial.observer.offset}" placeholder="" value="1.7" />
 				</li>
 				<li>
-					<label for="linearLineObserverPoint">관찰 위치</label>
-					<input type="text" id="linearLineObserverPoint" placeholder="" class="withBtn observerPointMGRS" disabled>
-					<input type="hidden" class="observerPoint">
-					<button type="button" class="btnText drawObserverPoint" data-draw-type="POINT">위치지정</button>
+					<label for="linearLineObserverPoint" th:text="#{common.observer.position}"></label>
+					<input type="text" id="linearLineObserverPoint" class="withBtn observerPointMGRS" placeholder="" disabled />
+					<input type="hidden" class="observerPoint" />
+					<button type="button" class="btnText drawObserverPoint" data-draw-type="POINT" th:text="#{common.position}"></button>
 				</li>
 				<li>
-					<label for="linearLineTargetPoint">대상 위치</label>
-					<input type="text" id="linearLineTargetPoint" placeholder="" class="withBtn targetPointMGRS" disabled>
-					<input type="hidden" class="targetPoint">
-					<button type="button" class="btnText drawTargetPoint" data-draw-type="POINT">위치지정</button>
+					<label for="linearLineTargetPoint" th:text="#{spatial.target.position}"></label>
+					<input type="text" id="linearLineTargetPoint" class="withBtn targetPointMGRS" placeholder="" disabled />
+					<input type="hidden" class="targetPoint" />
+					<button type="button" class="btnText drawTargetPoint" data-draw-type="POINT" th:text="#{common.position}"></button>
 				</li>
 				<li class="btns">
-					<button type="button" class="btnTextF execute" title="가시선 분석">분석</button>
-					<button type="button" class="btnText reset" title="취소">취소</button>
+					<button type="button" class="btnTextF execute" th:text="#{common.analysis}" th:title="#{spatial.linear.line.of.sight}"></button>
+					<button type="button" class="btnText reset" th:text="#{common.cancel}" th:title="#{common.cancel}"></button>
 				</li>
 			</ul>
 		</div>
 	</li>
 	<li>
-		<p>지형 단면 분석<span class="collapse-icon">icon</span></p>
+		<p th:text="#{spatial.raster.profile}"><span class="collapse-icon">icon</span></p>
 		<div class="listContents" id="analysisRasterProfile">
 			<ul class="analysisGroup">
 				<li>
-					<label for="RasterProfileDataType">분석 자료</label>
+					<label for="RasterProfileDataType" th:text="#{spatial.analysis.data}"></label>
 					<select id="RasterProfileDataType" class="dataType">
 						<option value="DEM" selected>DEM (DEM)</option>
 						<option value="DSM">DSM (DSM)</option>
 					</select>
 				</li>
 				<li>
-					<label for="rpInterval">간격 (number)</label>
-					<input id="rpInterval" class="interval" type="text" placeholder="" value="20">
+					<label for="rpInterval" th:text="#{spatial.interval}"></label>
+					<input type="text" id="rpInterval" class="interval" value="20" placeholder="" />
 				</li>
 				<li>
-					<label for="RasterProfileDrawUserLine">사용자 입력 선분</label>
-					<button type="button" id="RasterProfileDrawUserLine" class="btnText drawUserLine" data-draw-type="LINE">위치지정</button>
+					<label for="RasterProfileDrawUserLine" th:text="#{spatial.user.line}"></label>
+					<button type="button" id="RasterProfileDrawUserLine" class="btnText drawUserLine" th:text="#{common.pick.location}" data-draw-type="LINE"></button>
 					<input type="hidden" class="userLine">
 					<div class="coordsText"></div>
 				</li>
 				<li class="btns">
-					<button type="button" class="btnTextF execute" title="지형 단면 분석">분석</button>
-					<button type="button" class="btnText reset" title="취소">취소</button>
+					<button type="button" class="btnTextF execute" th:text="#{common.analysis}" th:title="#{spatial.raster.profile}"></button>
+					<button type="button" class="btnText reset" th:text="#{common.cancel}" th:title="#{common.cancel}"></button>
 				</li>
 
 				<li class="profileInfo">
@@ -104,66 +105,67 @@
 		</div>
 	</li>
 	<li id="analysisRasterHighLowPointsList">
-		<p>지형 최고/최저 점<span class="collapse-icon">icon</span></p>
-		<div class="listContents" id="analysisRasterHighLowPoints">
+		<p th:text="#{spatial.raster.high.low.points}"><span class="collapse-icon">icon</span></p>
+		<div id="analysisRasterHighLowPoints" class="listContents">
 			<ul class="analysisGroup">
 				<li>
-					<label for="rasterHighLowPointsDataType">분석 자료</label>
+					<label for="rasterHighLowPointsDataType" th:text="#{spatial.analysis.data}"></label>
 					<select id="rasterHighLowPointsDataType" class="dataType">
 						<option value="DEM" selected>DEM (DEM)</option>
 						<option value="DSM">DSM (DSM)</option>
 					</select>
 				</li>
 				<li>
-					<label for="rasterHighLowPointsAreaType">면적 타입</label>
+					<label for="rasterHighLowPointsAreaType" th:text="#{spatial.area.type}"></label>
 					<select id="rasterHighLowPointsAreaType" class="areaType">
-						<option value="useArea">사용자 영역</option>
-						<option value="extent">현재 지도 영역</option>
+						<option value="useArea" th:text="#{spatial.user.area}"></option>
+						<option value="extent" th:text="#{spatial.map.extent}"></option>
 					</select>
 				</li>
 				<li class="wrapCropShape">
-					<label for="rasterHighLowPointsDrawCropShape">영역 그리기</label>
-					<input type="hidden" class="cropShape">
-					<button type="button" id="rasterHighLowPointsDrawCropShape" class="btnText drawCropShape" data-draw-type="POLYGON">위치지정</button>
+					<label for="rasterHighLowPointsDrawCropShape" th:text="#{spatial.crop.shape}"></label>
+					<input type="hidden" class="cropShape" />
+					<button type="button" id="rasterHighLowPointsDrawCropShape" class="btnText drawCropShape" th:text="#{common.pick.location}" data-draw-type="POLYGON"></button>
 				</li>
 				<li class="extentInfo" style="display:none;">
-					<span style="color:red;"> - 지도 영역 선택 시, 지도가 2D모드로 전환됩니다.</span>
+					<span style="color:red;" th:text="#{spatial.extent.info}"></span>
 				</li>
 				<li>
-					<label for="rasterHighLowPointsValueType">최고/최저</label>
+					<label for="rasterHighLowPointsValueType" th:text="#{spatial.value.type}"></label>
 					<select id="rasterHighLowPointsValueType" class="valueType">
-						<option value="High">최고</option>
-						<option value="Low">최저</option>
+						<option value="High" th:text="#{spatial.high}"></option>
+						<option value="Low" th:text="#{spatial.low}"></option>
 					</select>
 				</li>
 				<li class="btns">
 					<input type="hidden" class="wcsExtent">
-					<button type="button" class="btnTextF execute" title="지형 최고/최저 점 분석">분석</button>
-					<button type="button" class="btnText reset" title="취소">취소</button>
+					<button type="button" class="btnTextF execute" th:text="#{common.analysis}"></button>
+					<button type="button" class="btnText reset" th:text="#{common.cancel}" th:title="#{spatial.raster.high.low.points}"></button>
 				</li>
 			</ul>
 		</div>
 	</li>
 	<li>
-		<p>위험 돔 분석<span class="collapse-icon">icon</span></p>
+		<p th:text="#{spatial.threat.dome}"><span class="collapse-icon">icon</span></p>
 		<div class="listContents" id="analysisRangeDome">
 			<ul class="analysisGroup">
 				<li>
-					<label for="rdRadius">반경 (m)</label>
-					<input id="rdRadius" class="radius" type="text" placeholder="" value="1000">
+					<label for="rdRadius" th:text="#{spatial.radius}"></label>
+					<input type="text" id="rdRadius" class="radius" value="1000" placeholder="" />
 				</li>
 				<li>
-					<label for="rangeDomeObserverPoint">관찰 위치</label>
-					<input type="text" id="rangeDomeObserverPoint" placeholder="" class="withBtn observerPointMGRS" disabled>
+					<label for="rangeDomeObserverPoint" th:text="#{common.observer.position}"></label>
+					<input type="text" id="rangeDomeObserverPoint" class="withBtn observerPointMGRS" placeholder="" disabled>
 					<input type="hidden" class="observerPoint">
-					<button type="button" class="btnText drawObserverPoint" data-draw-type="POINT">위치지정</button>
+					<button type="button" class="btnText drawObserverPoint" th:text="#{common.pick.location}" data-draw-type="POINT"></button>
 				</li>
 				<li class="btns">
-					<button type="button" class="btnTextF execute" title="위험 돔 분석 실행">분석</button>
-					<button type="button" class="btnText reset" title="취소">취소</button>
+					<button type="button" class="btnTextF execute" th:text="#{common.analysis}" th:title="#{spatial.threat.dome}"></button>
+					<button type="button" class="btnText reset" th:text="#{common.cancel}" th:title="#{common.cancel}"></button>
 				</li>
 			</ul>
 		</div>
 	</li>
 </ul>
 </div>
+</html>

@@ -126,7 +126,7 @@
                         					<a href="#" th:onclick="viewLayer([[${layer.layerId}]], [[${layer.layerName}]]); return false;" class="linkButton">보기</a>
 					                    </td>
 					                    <td class="col-type">
-											<a th:href="@{/layer/modify/(layerId=${layer.layerId})}" class="image-button button-edit" th:text="#{modified}"></a>&nbsp;&nbsp;
+											<a th:href="@{/layer/modify(layerId=${layer.layerId})}" class="image-button button-edit" th:text="#{modified}"></a>&nbsp;&nbsp;
 					                    	<a href="#" th:onclick="deleteLayer([[${layer.layerId}]]); return false;" class="image-button button-delete" th:text="#{delete}"></a>
 					                    </td>
 										<td class="col-date"
