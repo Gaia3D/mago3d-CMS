@@ -1,6 +1,10 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
 <script id="districtSearchResultSource" type="text/x-handlebars-template">
 <li id="districtList" class="on">
-	<p>행정구역<span>총 {{totalCount}} 건</span></p>
+	<p>
+		<th:block th:text="#{search.administrative.district}"></th:block>
+		<span th:text="|#{common.all} {{totalCount}} #{common.count.unit}|"></span>
+	</p>
 		<ul id="districtSearchList" class="yScroll">
 		{{#if districtList}}
 			{{#each districtList}}
@@ -10,10 +14,9 @@
 				</li>
 			{{/each}}
 		{{else}}
-			<li>
-				검색 결과가 없습니다.
-			</li>
+			<li th:text="#{search.no.results}"></li>
 		{{/if}}
 		</ul>
 </li>
 </script>
+</html>
