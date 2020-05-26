@@ -6,36 +6,23 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Debug (Launch) - Current File",
-            "request": "launch",
-            "mainClass": "${file}"
-        },
-        {
-            "type": "java",
-            "name": "Debug (Launch)-CommonApplication<common>",
-            "request": "launch",
-            "mainClass": "mago3d.CommonApplication",
-            "projectName": "common"
-        },
-        {
-            "type": "java",
             "name": "Debug (Launch)-Mago3dAdminApplication<mago3d-admin>",
             "request": "launch",
-            "mainClass": "mago3d.Mago3dAdminApplication",
+            "mainClass": "gaia3d.Mago3dAdminApplication",
             "projectName": "mago3d-admin"
         },
         {
             "type": "java",
             "name": "Debug (Launch)-Mago3dConverterApplication<mago3d-converter>",
             "request": "launch",
-            "mainClass": "mago3d.Mago3dConverterApplication",
+            "mainClass": "gaia3d.Mago3dConverterApplication",
             "projectName": "mago3d-converter"
         },
         {
             "type": "java",
             "name": "Debug (Launch)-Mago3dUserApplication<mago3d-user>",
             "request": "launch",
-            "mainClass": "mago3d.Mago3dUserApplication",
+            "mainClass": "gaia3d.Mago3dUserApplication",
             "projectName": "mago3d-user"
         }
     ]
