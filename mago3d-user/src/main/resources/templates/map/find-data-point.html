@@ -5,7 +5,7 @@
     <meta name="referrer" content="origin">
     <meta name="viewport" content="width=device-width">
     <meta name="robots" content="index,nofollow">
-    <title>지도에서 찾기 | mago3D</title>
+    <title><th:block th:text="#{map.find.data.point.page.title}"></title>
     <link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/externlib/cesium/Widgets/widgets.css(cacheVersion=${contentCacheVersion})}">
     <link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
@@ -23,31 +23,38 @@
 <body>
 	<div class="ctrlWrap">
 		<div class="zoom">
-			<button type="button" id="mapCtrlReset" class="reset" title="초기화">초기화</button>
-			<button type="button" id="mapCtrlAll" class="zoomall" title="전체보기">전체보기</button>
-			<button type="button" id="mapCtrlZoomIn" class="zoomin" title="확대">확대</button>
-			<button type="button" id="mapCtrlZoomOut" class="zoomout" title="축소">축소</button>
-			<button type="button" id="mapCtrlDistance" class="measures distance" data-type="LineString" title="거리">거리</button>
-			<button type="button" id="mapCtrlArea" class="measures area" data-type="Polygon" title="면적">면적</button>
-			<button type="button" id="mapCapture" class="save" data-type="" title="저장">저장</button>
+			<button type="button" id="mapCtrlReset" class="reset" th:title="#{toolbar.initialize.location}">
+				<th:block th:text="#{toolbar.initialize.location}"></th:block></button>
+			<button type="button" id="mapCtrlAll" class="zoomall" th:title="#{toolbar.zoom.all}"><th:block th:text="#{toolbar.zoom.all}"></th:block></button>
+			<button type="button" id="mapCtrlZoomIn" class="zoomin" th:title="#{toolbar.zoom.in}"><th:block th:text="#{toolbar.zoom.in}"></th:block></button>
+			<button type="button" id="mapCtrlZoomOut" class="zoomout" th:title="#{toolbar.zoom.out}"><th:block th:text="#{toolbar.zoom.out}"></th:block></button>
+			<button type="button" id="mapCtrlDistance" class="measures distance" data-type="LineString" th:title="#{toolbar.distance}">
+				<th:block th:text="#{toolbar.distance}"></th:block></button>
+			<button type="button" id="mapCtrlArea" class="measures area" data-type="Polygon" th:title="#{toolbar.area}">
+				<th:block th:text="#{toolbar.area}"></th:block></button>
+			<button type="button" id="mapCapture" class="save" data-type="" th:title="#{common.save}"><th:block th:text="#{common.save}"></th:block></button>
 		</div>
 		<div class="rotate">
-			<button type="button" class="rotateReset on" id="rotateReset" title="방향초기화"></button>
-			<!-- <input type="text" placeholder="0" id="rotateInput"/>&deg; -->
+			<button type="button" class="rotateReset on" id="rotateReset" th:title="#{toolbar.initialize.direction}">
+				<th:block th:text="#{toolbar.initialize.direction}"></th:block></button>
+			<label for="rotateInput" class="hiddenTag">rotate</label>
 			<input type="text" id="rotateInput" placeholder="0" readonly>&deg;
-	        <input type="text" id="pitchInput" placeholder="-90" readonly>&deg;
-			<button type="button" class="rotateLeft" id="rotateLeft" title="왼쪽으로 회전">왼쪽으로 회전</button>
-			<button type="button" class="rotateRight" id="rotateRight" title="오른쪽으로 회전">오른쪽으로 회전</button>
-	<!-- 		<button type="button" class="mapPolicy" id="mapPolicy" title="지도 설정">지도 설정</button> -->
+			<label for="pitchInput" class="hiddenTag">pitch</label>
+			<input type="text" id="pitchInput" placeholder="-90" readonly>&deg;
+			<button type="button" class="rotateLeft" id="rotateLeft" th:title="#{toolbar.rotate.camera.left}">
+				<th:block th:text="#{toolbar.rotate.camera.left}"></th:block></button>
+			<button type="button" class="rotateRight" id="rotateRight" th:title="#{toolbar.rotate.camera.right}">
+				<th:block th:text="#{toolbar.rotate.camera.right}"></th:block></button>
 		</div>
 		<div class="index">
-			<button type="button" class="magoSet on" id="mapPolicy" title="Mago3D 설정">Mago3D 설정</button>
+			<button type="button" class="magoSet" id="mapPolicy" th:title="#{toolbar.mago3d.settings}">
+				<th:block th:text="#{toolbar.mago3d.settings}"></th:block></button>
 		</div>
 	</div>
 	<div id="mago3DSettingLabelLayer" class="labelLayer">
 	    <div class="layerHeader">
-	        <h3 class="ellipsis" style="max-width:260px;">Mago3D 설정</h3>
-	        <button type="button" class="layerClose" title="닫기">닫기</button>
+	        <h3 class="ellipsis" style="max-width:260px;"><th:block th:text="#{toolbar.mago3d.settings}"></th:block></h3>
+	        <button type="button" class="layerClose" th:title="#{common.close}"><th:block th:text="#{common.close}"></th:block></button>
 	    </div>
 	    <div class="layerContents">
 
@@ -159,7 +166,7 @@
 	</div>
     <div id="magoContainer" style="height: 100%;"></div>
     <canvas id="objectLabel"></canvas>
-    <button class="mapSelectButton" onclick="window.close();">닫기</button>
+    <button class="mapSelectButton" onclick="window.close();"><th:block th:text="#{common.close}"></th:block></button>
     <div th:replace="~{/data/data-dialog :: #dataDialogWrap}"></div>
 </body>
 <script type="text/javascript" th:src="@{/externlib/handlebars-4.1.2/handlebars.js(cacheVersion=${contentCacheVersion})}"></script>

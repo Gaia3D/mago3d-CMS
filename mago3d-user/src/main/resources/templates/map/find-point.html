@@ -5,7 +5,7 @@
     <meta name="referrer" content="origin">
     <meta name="viewport" content="width=device-width">
     <meta name="robots" content="index,nofollow">
-    <title>지도에서 찾기 | mago3D</title>
+    <title><th:block th:text="#{map.find.point.page.title}"></th:block></title>
     <link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/externlib/cesium/Widgets/widgets.css(cacheVersion=${contentCacheVersion})}">
     <link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
@@ -40,7 +40,7 @@
     </style>
  </head>
 <body>
-	<button class="mapSelectButton" onclick="window.close();">닫기</button>
+	<button class="mapSelectButton" onclick="window.close();"><th:block th:text="#{common.close}"></th:block></button>
     <div id="magoContainer" style="height: 699px;">
 	</div>
 	<canvas id="objectLabel"></canvas>

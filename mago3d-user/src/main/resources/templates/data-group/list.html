@@ -137,9 +137,11 @@
 									<td class="col-type">
 										<a th:href="@{/data-group/modify(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-edit"><th:block th:text="#{common.edit}"></th:block></a>
 									</td>
-									<td class="col-type" th:if="${#bools.isTrue(dataGroup.basic)}"><th:block th:text="#{common.cannot.be.deleted}"></th:block></td>
-									<td class="col-type" th:if="${#bools.isFalse(dataGroup.basic)}">
-										<a th:href="@{/data-group/delete(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-delete" th:value="#{delete}" onclick="return deleteWarning();"></a>                                            
+									<td class="col-type">
+										<th:block th:if="${#bools.isTrue(dataGroup.basic)}" th:text="#{common.cannot.be.deleted}"></th:block>
+										<th:block th:if="${#bools.isFalse(dataGroup.basic)}">
+											<a th:href="@{/data-group/delete(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-delete" th:value="#{common.delete}" onclick="return deleteWarning();"></a>
+										</th:block>
 									</td>
 									<td class="col-date">
 										<th:block th:text="${#dates.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
