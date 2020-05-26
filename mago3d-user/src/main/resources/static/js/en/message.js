@@ -55,14 +55,6 @@ JS_MESSAGE["user.name.empty"] = "이름을 입력하여 주십시오.";
 JS_MESSAGE["user.input.invalid"] = "필수 입력값이 유효하지 않습니다.";
 JS_MESSAGE["user.id.duplication"] = "사용중인 아이디 입니다. 다른 아이디를 선택해 주십시오.";
 JS_MESSAGE["user.password.invalid"] = "입력한 패스워드가 설정된 패스워드 정책에 부적합 합니다.";
-JS_MESSAGE["user.password.digit.invalid"] = "입력한 패스워드가 설정된 패스워드 정책에(숫자 개수) 부적합 합니다.";
-JS_MESSAGE["user.password.upper.invalid"] = "입력한 패스워드가 설정된 패스워드 정책에(영문 대문자 개수) 부적합 합니다.";
-JS_MESSAGE["user.password.lower.invalid"] = "입력한 패스워드가 설정된 패스워드 정책에(영문 소문자 개수) 부적합 합니다.";
-JS_MESSAGE["user.password.special.invalid"] = "입력한 패스워드가 설정된 패스워드 정책에(특수 문자 개수) 부적합 합니다.";
-JS_MESSAGE["user.password.continuous.char.invalid"] = "연속 문자 제한 개수가 패스워드 정책에 부적합 합니다.";
-JS_MESSAGE["user.password.exception.char.message1"] = "관리자가 설정한 특수문자 ";
-JS_MESSAGE["user.password.exception.char.message2"] = " 는 비밀번호로 사용 하실 수 없습니다.";
-JS_MESSAGE["user.password.exception"] = "패스워드 등록 과정 중 오류가 발생하였습니다.";
 JS_MESSAGE["user.session.notexist"] = "세션 정보가 존재하지 않습니다.";
 JS_MESSAGE["user.session.closed"] = "세션 종료 처리 하였습니다.";
 JS_MESSAGE["user.session.close"] = "선택하신 사용자의 세션을 종료 하시겠습니까?";
@@ -70,86 +62,17 @@ JS_MESSAGE["user.insert"] = "사용자를 등록 하였습니다.";
 JS_MESSAGE["user.info.update"] = "사용자 정보를 수정 하였습니다.";
 JS_MESSAGE["user.id.notexist"] = "아이디가 존재하지 않습니다.";
 
-
-//운영정책
-JS_MESSAGE["policy.user.update"] = "사용자 정책을 수정 하였습니다.";
-JS_MESSAGE["policy.password.update"] = "패스워드 정책을 수정 하였습니다.";
-JS_MESSAGE["policy.geo.update"] = "공간 정보를 수정 하였습니다.";
-JS_MESSAGE["policy.geoserver.update"] = "GeoServer를 수정 하였습니다.";
-JS_MESSAGE["policy.geocallback.update"] = "CallBack 함수를 수정 하였습니다.";
-JS_MESSAGE["policy.notice.update"] = "알림 정책을 수정 하였습니다.";
-JS_MESSAGE["policy.security.update"] = "보안 정책을 수정 하였습니다.";
-JS_MESSAGE["policy.content.update"] = "컨텐트 정책을 수정 하였습니다.";
-JS_MESSAGE["policy.content.invalid"] = "필수 입력값이 유효하지 않습니다.";
-
-JS_MESSAGE["policy.user.id.min.length"] = "사용자 아이디 최소 길이를 입력하여 주십시오.";
-JS_MESSAGE["policy.user.id.min.length.rule"] = "사용자 아이디 최소 길이는 4 이상 입니다.";
-JS_MESSAGE["policy.user.signin.fail"] = "사인인 실패 횟수를 입력하여 주십시오.";
-JS_MESSAGE["policy.user.lockout.period"] = "마지막 사인인으로 부터 잠금 기간을 입력하여 주십시오.";
-
-JS_MESSAGE["policy.password.period"] = "변경 주기를 입력하여 주십시오.";
-JS_MESSAGE["policy.password.min.length"] = "최소 길이를 입력하여 주십시오.";
-JS_MESSAGE["policy.password.max.length"] = "최대 길이를 입력하여 주십시오.";
-JS_MESSAGE["policy.password.uppercase"] = "영문 대문자 개수를 입력하여 주십시오.";
-JS_MESSAGE["policy.password.lowercase"] = "영문 소문자 개수를 입력하여 주십시오.";
-JS_MESSAGE["policy.password.number"] = "숫자 개수를 입력하여 주십시오.";
-JS_MESSAGE["policy.password.special.letters"] = "특수 문자 개수를 입력하여 주십시오.";
-JS_MESSAGE["policy.password.serial.limit"] = "패스워드 연속문자 제한 개수를 입력하여 주십시오.";
-
-JS_MESSAGE["policy.contents.main.display"] = "메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.";
-JS_MESSAGE["policy.contents.widget.interval"] = "메인 화면 위젯 Refresh 간격을 입력하여 주십시오.";
-JS_MESSAGE["policy.statistics_.interval"] = "통계 기본 검색 기간을 선택해 주십시오.";
-JS_MESSAGE["policy.contents.menu.group.root"] = "메뉴 그룹 최상위 그룹명을 입력하여 주십시오.";
-JS_MESSAGE["policy.contents.user.group.root"] = "사용자 그룹 최상위 그룹명을 입력하여 주십시오.";
-JS_MESSAGE["policy.contents.main.display"] = "메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.";
-JS_MESSAGE["policy.contents.main.display"] = "메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.";
-JS_MESSAGE["policy.contents.main.display"] = "메인 화면 컨텐츠 표시 개수를 입력하여 주십시오.";
-
 JS_MESSAGE["policy.menu.invalid"] = "필수 입력값이 유효하지 않습니다.";
 
 // ticks
-JS_MESSAGE["main.status.in.use"] = "사용중";
-JS_MESSAGE["main.status.stop.use"] = "사용중지";
-JS_MESSAGE["main.status.fail.count"] = "실패횟수";
-JS_MESSAGE["main.status.dormancy"] = "휴면";
-JS_MESSAGE["main.status.expires"] = "기간만료";
-JS_MESSAGE["main.status.temporary.password"] = "임시비밀번호";
 
 //user group
-JS_MESSAGE["user.group.select"] = "사용자 그룹을 선택해 주세요.";
-JS_MESSAGE["user.group.top.not.insert"] = "최상위 그룹에는 사용자를 등록할 수 없습니다.";
-JS_MESSAGE["user.group.role.top.not.insert"] = "최상위 그룹에는 Role을 등록할 수 없습니다.";
-JS_MESSAGE["user.group.not.group.id"] = "그룹 아이디가 없습니다.";
-JS_MESSAGE["user.group.not.select"] = "선택된 항목이 없습니다.";
 
 //input group
-JS_MESSAGE["user.group.id.minlength"] = "사용자 아이디 최소 길이는";
-JS_MESSAGE["user.group.id.minlength.2"] = "입니다";
-JS_MESSAGE["user.group.password.not.same"] = "비밀번호가 비밀번호 확인 이랑 일치하지 않습니다.";
-JS_MESSAGE["user.group.phone.number.type"] = "전화번호 형식에 맞게 입력해 주십시오.";
-JS_MESSAGE["user.group.email.type"] = "이메일 형식에 맞게 입력해 주십시오."
-JS_MESSAGE["user.group.mobiler.type"] = "휴대폰 번호 형식에맞게 입력해 주십시오."
-JS_MESSAGE["user.basic.information.input"] = "사용자 기본 정보 등록 후 이용 가능 합니다.";
-JS_MESSAGE["use.device.name.input"] = "사용 기기명을 입력해 주십시오.";
-JS_MESSAGE["input.ip"] = "IP 형식에 맞게 입력해 주십시오.";
-JS_MESSAGE["user.device.input.max.five"] = "사용자 디바이스 등록은 최대 5개 까지 가능합니다.";
-JS_MESSAGE["error.exist.in.processing"] = "처리 과정에서 오류가 발생하였습니다. 확인하여 주십시오.";
-JS_MESSAGE["user.group.role.invalid"] = "사용자 그룹 권한이 유효하지 않습니다.";
 
 //role
-JS_MESSAGE["role.insert.name"] = "Role명을 입력하여 주십시오.";
-JS_MESSAGE["role.insert.key"] = "Role Key를 입력하여 주십시오.";
-JS_MESSAGE["role.insert.type"] = "Role 유형을 선택해 주십시오.";
 
 //widget
-JS_MESSAGE["config.schedule.widget.does.not.exist"] = "스케줄 실행 이력이 존재하지 않습니다.";
-JS_MESSAGE["config.widget.using"] = "사용중";
-JS_MESSAGE["config.widget.stop.using"] = "사용중지";
-JS_MESSAGE["config.widget.fail.count"] = "실패횟수";
-JS_MESSAGE["config.widget.dormancy"] = "휴면";
-JS_MESSAGE["config.widget.expires"] = "기간만료";
-JS_MESSAGE["config.temporary.password"] = "임시비밀번호";
-JS_MESSAGE["config.widget.content.does.not.exit"] = "수정된 컨텐츠가 존재하지 않습니다.";
 
 JS_MESSAGE["data.name.empty"] = "데이터명을 입력하여 주십시오.";
 JS_MESSAGE["data.group.id.empty"] = "데이터 그룹명 입력하여 주십시오.";
@@ -165,10 +88,15 @@ JS_MESSAGE["data.update.request.check"] = "이 데이터는 관리자가 업로�
 
 JS_MESSAGE["data.group.order.first"] = "제일 처음 입니다.";
 JS_MESSAGE["data.group.cannot.change.order"] = "순서를 변경할 수 없습니다.";
-JS_MESSAGE["data.group.key.empty"] = "데이터 그룹 Key 를 입력하여 주십시오.";
+JS_MESSAGE["data.group.name.empty"] = "Please enter the data group name.";
+JS_MESSAGE["data.group.key.empty"] = "Please enter the data group key (not Korean).";
+JS_MESSAGE["data.group.key.invalid"] = "Data group key (non-Korean) is incorrect.";
 JS_MESSAGE["data.group.key.duplication"] = "사용중인 데이터 그룹 Key 입니다. 다른 이름을 사용해 주십시오.";
 JS_MESSAGE["data.group.key.enable"] = "사용 가능한 데이터 그룹 Key 입니다.";
 JS_MESSAGE["data.group.key.duplication.check"] = "데이터 그룹 Key 중복 확인이 필요 합니다.";
+JS_MESSAGE["data.group.select.parent"] = "Please select a parent data group.";
+JS_MESSAGE["data.group.select"] = "Data Group";
+JS_MESSAGE["data.group.depth.constraint"] = "User data groups cannot be entered in hierarchies of 3Depth or higher.";
 
 JS_MESSAGE["upload.file.type.invalid"] = "업로드 파일 타입이 유효하지 않습니다.";
 

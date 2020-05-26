@@ -187,14 +187,14 @@
 	$( "#duplicationButtion" ).on( "click", function() {
 		var dataGroupKey = $("#dataGroupKey").val();
 		if (dataGroupKey == "") {
-			alert("데이터 그룹키(한글불가)를 입력해 주세요.");
+			alert(JS_MESSAGE["data.group.key.empty"]);
 			$("#dataGroupKey").focus();
 			return false;
 		}
 		
 		var regDataGroupKey = /^[a-zA-Z0-9-_]+$/;
 		if (!regDataGroupKey.test(document.getElementById("dataGroupKey").value)) {
-			alert("데이터 그룹키(한글불가)가 올바르지 않습니다.");
+			alert(JS_MESSAGE["data.group.key.invalid"]);
 			return false;
 		}
 		
@@ -230,7 +230,7 @@
 	function validate() {
 		var number = /^[0-9]+$/;
 		if ($("#dataGroupName").val() === null || $("#dataGroupName").val() === "") {
-			alert("데이터 그룹명을 입력해 주세요.");
+			alert(JS_MESSAGE["data.group.name.empty"]);
 			$("#dataGroupName").focus();
 			return false;
 		}
@@ -244,12 +244,12 @@
 			return false;
 		}
 		if ($("#dataGroupKey").val() === null || $("#dataGroupKey").val() === "") {
-			alert("데이터 그룹키(한글불가)를 입력해 주세요.");
+			alert(JS_MESSAGE["data.group.key.empty"]);
 			$("#dataGroupKey").focus();
 			return false;
 		}
 		if($("#parent").val() === null || $("#parent").val() === "" || !number.test($("#parent").val())) {
-			alert("상위 데이터 그룹을 선택해 주세요.");
+			alert(JS_MESSAGE["data.group.select.parent"]);
 			$("#parent").focus();
 			return false;
 		}
@@ -311,13 +311,13 @@
 	// 상위 데이터 그룹 찾기
 	$( "#dataGroupButtion" ).on( "click", function() {
 		dataGroupDialog.dialog( "open" );
-		dataGroupDialog.dialog( "option", "title", "데이터 그룹 선택");
+		dataGroupDialog.dialog( "option", "title", JS_MESSAGE["data.group.select"]);
 	});
 
 	// 다이얼로그에서 선택
 	function confirmParent(parent, parentName, parentDepth) {
 		if(parentDepth >= 3) {
-			alert("사용자 데이터 그룹은 3Depth 이상 계층으로 입력할 수 없습니다.");
+			alert(JS_MESSAGE["data.group.depth.constraint"]);
 			return;
 		}
 		$("#parent").val(parent);
