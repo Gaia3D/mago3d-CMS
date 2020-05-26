@@ -364,7 +364,7 @@ function locationValidation(longitude, latitude, altitude) {
 	if((-180 <= lon && lon <= 180) &&  (-90 <= lat && lat <= 90) && (0 <= alt && alt <= 300000)) {
 		return true;
 	} else {
-		alert("경도 유효범위 : -180 ~ 180\n위도 유효범위 : -90 ~ 90 \n높이 유효범위 : 300000 입니다.");
+		alert(JS_MESSAGE["location.constraint"]);
 		return false;
 	}
 }

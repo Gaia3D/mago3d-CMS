@@ -29,6 +29,9 @@ JS_MESSAGE["not.use"] = "미사용";
 
 JS_MESSAGE["csrf.token.invalid"] = "보안(CSRF) 토큰이 유효하지 않습니다.";
 
+JS_MESSAGE["number.constraint"] = "숫자만 입력 가능합니다.";
+JS_MESSAGE["location.constraint"]="경도 유효범위 : -180 ~ 180\n위도 유효범위 : -90 ~ 90 \n높이 유효범위 : 300000 입니다.";
+
 JS_MESSAGE["file.name.empty"] = "파일명을 입력하여 주십시오.";
 JS_MESSAGE["file.name.invalid"] = "파일명이 유효하지 않습니다.";
 JS_MESSAGE["file.ext.invalid"] = "파일 확장자가 유효하지 않습니다.";
@@ -61,8 +64,6 @@ JS_MESSAGE["user.session.close"] = "선택하신 사용자의 세션을 종료 �
 JS_MESSAGE["user.insert"] = "사용자를 등록 하였습니다.";
 JS_MESSAGE["user.info.update"] = "사용자 정보를 수정 하였습니다.";
 JS_MESSAGE["user.id.notexist"] = "아이디가 존재하지 않습니다.";
-
-JS_MESSAGE["policy.menu.invalid"] = "필수 입력값이 유효하지 않습니다.";
 
 // ticks
 
