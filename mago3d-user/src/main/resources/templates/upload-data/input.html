@@ -88,7 +88,7 @@
         </div>
 
         <!-- S: 3D 파일 업로드 -->
-		<form id="uploadData" th:object="${dataGroup}" th:action="@{#}" method="post" onsubmit="return false;">
+		<form id="uploadData" th:object="${uploadData}" th:action="@{#}" method="post" onsubmit="return false;">
 			<table class="input-table scope-row">
 				<colgroup>
 					<col class="col-label l" style="width: 13%"></col>
@@ -98,37 +98,37 @@
 				</colgroup>
 				<tr>
 					<th class="col-label" scope="row">
-						<label for="dataName">데이터명</label>
+						<label for="dataName"><th:block th:text="#{common.data.name}"></th:block></label>
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
 						<input type="text" id="dataName" name="dataName" class="l" maxlength="255" />
 					</td>
 					<th class="col-label" scope="row">
-						<label for="dataGroupName">데이터 그룹</label>
+						<label for="dataGroupName"><th:block th:text="#{common.data.group.name}"></th:block></label>
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
-						<hidden id="dataGroupId" name="dataGroupId">
+						<input type="hidden" id="dataGroupId" name="dataGroupId" />
 						<input type="text" id="dataGroupName" name="dataGroupName" class="ml" readonly="true" />
-						<input type="button" id="dataGroupButtion" value="데이터 그룹 선택" />
+						<input type="button" id="dataGroupButtion" th:value="#{data.group.select}" />
 					</td>
 				</tr>
 				<tr>
 					<th class="col-label" scope="row">
-						<label for="sharing">공유 유형</label>
+						<label for="sharing"><th:block th:text="#{common.sharing}"></th:block></label>
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
 						<select id="sharing" name="sharing" class="selectBoxClass">
-							<option value="public">공개</option>
-							<option value="common">공통</option>
-							<option value="private">비공개</option>
-							<option value="group">그룹 공개</option>
+							<option value="public"><th:block th:text="#{common.public}"></th:block></option>
+							<option value="common"><th:block th:text="#{common.common}"></th:block></option>
+							<option value="private"><th:block th:text="#{common.private}"></th:block></option>
+							<option value="group"><th:block th:text="#{common.group}"></th:block></option>
 						</select>
 					</td>
 					<th class="col-label m" scope="row">
-						<label for="dataType">데이터 타입</label>
+						<label for="dataType"><th:block th:text="#{common.data.type}"></th:block></label>
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
@@ -145,19 +145,19 @@
 				</tr>
 				<tr>
 					<th class="col-label" scope="row">
-						<label for="longitude">대표 위치 (경도/위도/높이) </label>
+						<label for="longitude"><th:block th:text="#{upload.representative.location}"></th:block></label>
 						<!-- <span class="icon-glyph glyph-emark-dot color-warning"></span> -->
 					</th>
 					<td colspan="3" class="col-input">
 						<input type="text" id="longitude" name="longitude" class="m" placeholder="longitude" />
 						<input type="text" id="latitude" name="latitude" class="m" placeholder="latitude" />
 						<input type="text" id="altitude" name="altitude" class="m" placeholder="altitude" />
-						<input type="button" id="mapButtion" value="지도" />
+						<input type="button" id="mapButtion" th:value="#{common.map}" />
 					</td>
 				</tr>
 				<tr>
 					<th class="col-label" scope="row">
-						<label for="description" th:text="#{description}"></label>
+						<label for="description" th:text="#{common.description}"></label>
 					</th>
 					<td colspan="3" class="col-input">
 						<input type="text" id="description" name="description" class="xl" maxlength="255" />
@@ -168,7 +168,7 @@
         <!-- E: 3D 파일 업로드 -->
 
         <!-- S: DropZone -->
-		<div style="padding: 20px 20px 10px 10px; font-size: 18px;">파일 업로딩</div>
+		<div style="padding: 20px 20px 10px 10px; font-size: 18px;"><th:block th:text="#{common.file.upload}"></th:block></div>
 		<div class="fileSection" style="font-size: 17px;">
 	    	<form id="my-dropzone" action="" class="dropzone hzScroll"></form>
 	    </div>
@@ -176,9 +176,9 @@
 
 	    <div class="button-group" style="margin-top: 30px;">
 			<div class="center-buttons">
-				<button id="allFileUpload">업로드</button>
-				<button id="allFileClear">파일 초기화</button>
-				<a href="/upload-data/list" class="button">목록</a>
+				<button id="allFileUpload"><th:block th:text="#{upload.upload}"></th:block></button>
+				<button id="allFileClear"><th:block th:text="#{upload.file.initialization}"></th:block></button>
+				<a href="/upload-data/list" class="button"><th:block th:text="#{common.list}"></th:block></a>
 			</div>
         </div>
 
@@ -209,7 +209,7 @@
 	// 상위 Layer Group 찾기
 	$( "#dataGroupButtion" ).on( "click", function() {
 		dataGroupDialog.dialog( "open" );
-		dataGroupDialog.dialog( "option", "title", "데이터 그룹 선택");
+		dataGroupDialog.dialog( "option", "title", JS_MESSAGE["data.group.select"]);
 	});
 	
 	// 데이터 그룹 선택
@@ -246,7 +246,7 @@
 		maxFiles: 500,
 		// 최대 업로드 용량 Mb단위
 		maxFilesize: 5000,
-		dictDefaultMessage: "업로딩 하려면 파일을 올리거나 클릭 하십시오.",
+		dictDefaultMessage: JS_MESSAGE["upload.guide"],
 		/* headers: {
 			"x-csrf-token": document.querySelectorAll("meta[name=csrf-token]")[0].getAttributeNode("content").value,
 		}, */
@@ -257,7 +257,7 @@
 		//clickable: true,
 		fallback: function() {
 	    	// 지원하지 않는 브라우저인 경우
-	    	alert("죄송합니다. 최신의 브라우저로 Update 후 사용해 주십시오.");
+			alert(JS_MESSAGE["upload.browser.guide"]);
 	    	return;
 	    },
 		init: function() {
@@ -280,13 +280,13 @@
 	                myDropzone.processQueue();
 	                fileUploadDialog.dialog( "open" );
 	            } else {
-	                alert("업로딩 할 파일이 존재하지 않습니다.");
+					alert(JS_MESSAGE["upload.file.empty"]);
 	                return;
 	            }
 			});
 
 			clearTask.addEventListener("click", function () {
-	            if (confirm("[파일 업로딩]의 모든 파일을 삭제하겠습니까?")) {
+	            if (confirm(JS_MESSAGE["upload.file.delete.confirm"])) {
 	            	// true 주면 업로드 중인 파일도 다 같이 삭제
 	            	myDropzone.removeAllFiles(true);
 	            }
@@ -306,7 +306,7 @@
 			// maxFiles 카운터를 초과하면 경고창
 			this.on("maxfilesexceeded", function (data) {
 				myDropzone.removeAllFiles(true);
-				alert("최대 업로드 파일 수는 500개 입니다.");
+				alert(JS_MESSAGE["upload.file.count.constraint"]);
 				return;
 			});
 			
@@ -318,7 +318,7 @@
 	                	if(response.errorCode === undefined || response.errorCode === null) {
 	                		uploadFileResultCount ++;
 							if(uploadFileCount === uploadFileResultCount) {
-							    alert("업로딩을 완료 하였습니다.");
+								alert(JS_MESSAGE["upload.complete"]);
 							    uploadFileCount = 0;
 							    uploadFileResultCount = 0;
 							    myDropzone.removeAllFiles(true);
@@ -341,7 +341,7 @@
 	
 	function validate() {
 		if ($("#dataName").val() === "") {
-			alert("데이터명을 입력하여 주십시오.");
+			alert(JS_MESSAGE["data.name.empty"]);
 			$("#dataName").focus();
 			return false;
 		}
@@ -349,17 +349,17 @@
 		// citygml 인 경우 longitude, latitude를 입력하지 않음
 		if($("#dataType").val() !== "citygml") {
 			if ($("#longitude").val() === "") {
-				alert("대표 위치(경도)를 입력하여 주십시오.");
+				alert(JS_MESSAGE["representative.longitude.empty"]);
 				$("#longitude").focus();
 				return false;
 			}
 			if ($("#latitude").val() === "") {
-				alert("대표 위치(위도)를 입력하여 주십시오.");
+				alert(JS_MESSAGE["representative.latitude.empty"]);
 				$("#latitude").focus();
 				return false;
 			}
 			if ($("#altitude").val() === "") {
-				alert("대표 위치(높이)를 입력하여 주십시오.");
+				alert(JS_MESSAGE["representative.altitude.empty"]);
 				$("#altitude").focus();
 				return false;
 			}
@@ -372,37 +372,37 @@
 	function alertMessage(response) {
 		if(uploadFileResultCount === 0) {
 			if(response.errorCode === "converter.target.count.invalid") {
-	    		alert("변환 대상인 3D 파일이 존재하지 않습니다.");
+				alert(JS_MESSAGE["converter.target.file.empty"]);
 			} else if(response.errorCode === "data.name.empty") {
-	    		alert("데이터명이 유효하지 않습니다.");
+				alert(JS_MESSAGE["data.name.empty"]);
 	    	} else if(response.errorCode === "data.group.id.empty") {
-	    		alert("데이터 그룹명을 입력하여 주십시오.");
+				alert(JS_MESSAGE["data.group.name.empty"]);
 	    	} else if(response.errorCode === "data.sharing.empty") {
-	    		alert("공유 유형을 입력하여 주십시오.");
+				alert(JS_MESSAGE["data.sharing.empty"]);
 	    	} else if(response.errorCode === "data.longitude.empty") {
-	    		alert("대표 위치(경도)를 입력하여 주십시오.");
+				alert(JS_MESSAGE["representative.longitude.empty"]);
 	    	} else if(response.errorCode === "data.latitude.empty") {
-	    		alert("대표 위치(위도)를 입력하여 주십시오.");
+				alert(JS_MESSAGE["representative.latitude.empty"]);
 	    	} else if(response.errorCode === "data.altitude.empty") {
-	    		alert("대표 위치(높이)를 입력하여 주십시오.");
+				alert(JS_MESSAGE["representative.altitude.empty"]);
 	    	} else if(response.errorCode === "data.file.empty") {
-	    		alert("파일이 유효하지 않습니다. 다시 업로딩 해 주십시오.");
+				alert(JS_MESSAGE["upload.file.invalid"]);
 	    	} else if(response.errorCode === "file.name.invalid") {
-				alert("파일명이 유효하지 않습니다.");
+				alert(JS_MESSAGE["file.name.invalid"]);
 	    	} else if(response.errorCode === "file.ext.invalid") {
-				alert("파일 확장자가 유효하지 않습니다.");
+				alert(JS_MESSAGE["upload.file.ext.invalid"]);
 	        } else if(response.errorCode === "file.size.invalid") {
-	            alert("파일 용량이 너무 커서 업로딩 할 수 없습니다.");
+				alert(JS_MESSAGE["upload.file.size.exceed"]);
 	        } else if(response.errorCode === "upload.file.type.invalid") {
-	            alert("업로딩 데이터의 데이터 타입이 올바르지 않습니다.");
+				alert(JS_MESSAGE["upload.data.type.invalid"]);
 	        } else if(response.errorCode === "db.exception") {
-	            alert("죄송 합니다. 서버 실행중에 오류가 발생 하였습니다. \n 로그를 확인하여 주십시오.");
+				alert(JS_MESSAGE["db.exception"]);
 	        } else if(response.errorCode === "io.exception") {
-	            alert("입출력 처리 과정중 오류가 발생하였습니다. 잠시 후 다시 이용하여 주시기 바랍니다.");
+				alert(JS_MESSAGE["io.exception"]);
 	        } else if(response.errorCode === "runtime.exception") {
-	            alert("프로그램 실행중 오류가 발생하였습니다. 잠시 후 다시 이용하여 주시기 바랍니다.");
+				alert(JS_MESSAGE["runtime.exception"]);
 	        } else if(response.errorCode === "unknown.exception") {
-	            alert("서버 장애가 발생하였습니다. 잠시 후 다시 이용하여 주시기 바랍니다.");
+				alert(JS_MESSAGE["unknown.exception"]);
 	        } else {
 	        	alert(response.errorCode);
 	        }

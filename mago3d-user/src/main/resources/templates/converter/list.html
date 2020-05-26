@@ -44,43 +44,43 @@
             <form id="searchForm" th:object="${converterJob}" method="get" th:action="@{/converter/list}" onsubmit="return searchCheck();">
 			<div class="input-group row">
 				<div class="input-set">
-					<label for="searchWord" th:text="#{search.word}"></label>
+                    <label for="searchWord" th:text="#{common.search.word}"></label>
 					<select id="searchWord" name="searchWord" class="selectBoxClass">
-						<option value="" th:text="#{select}"></option>
-	          			<option value="title" th:text="제목"></option>
+                        <option value="" th:text="#{common.select}"></option>
+                        <option value="title" th:text="#{common.title}"></option>
 					</select>
 					<select id="searchOption" name="searchOption" class="selectBoxClass">
-						<option value="0" th:text="#{search.same}"></option>
-						<option value="1" th:text="#{search.include}"></option>
+                        <option value="0" th:text="#{common.search.same}"></option>
+                        <option value="1" th:text="#{common.search.include}"></option>
 					</select>
 					<input type="search" id="searchValue" name="searchValue" class="m" style="float: right;" />
 				</div>
 				<div class="input-set">
-                    <label for="startDate" th:text="#{search.date}"></label>
+                    <label for="startDate" th:text="#{common.date}"></label>
                     <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
                     <span class="delimeter tilde">~</span>
                     <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
                 </div>
 				<div class="input-set">
-					<label for="orderWord" th:text="#{search.order}"></label>
+                    <label for="orderWord" th:text="#{common.order}"></label>
 					<select id="orderWord" name="orderWord" class="selectBoxClass">
-						<option value="" th:text="#{search.basic}"></option>
-						<option value="title" th:text="제목"></option>
-						<option value="insert_date" th:text="#{search.insert.date}"></option>
+                        <option value="" th:text="#{common.basic}"></option>
+                        <option value="title" th:text="#{common.title}"></option>
+                        <option value="insert_date" th:text="#{common.insert.date}"></option>
 					</select>
-					<select id="orderValue" name="orderValue" class="selectBoxClass">
-                		<option value="" th:text="#{search.basic}"></option>
-	                	<option value="ASC" th:text="#{search.ascending}"></option>
-						<option value="DESC" th:text="#{search.descending.order}"></option>
-					</select>
-					<select id="listCounter" name="listCounter" class="selectBoxClass">
-                		<option value="10" th:text="#{search.ten.count}"></option>
-	                	<option value="50" th:text="#{search.fifty.count}"></option>
-						<option value="100" th:text="#{search.hundred.count}"></option>
-					</select>
+                    <select id="orderValue" name="orderValue" class="selectBoxClass">
+                        <option value="" th:text="#{common.basic}"></option>
+                        <option value="ASC" th:text="#{common.asc}"></option>
+                        <option value="DESC" th:text="#{common.desc}"></option>
+                    </select>
+                    <select id="listCounter" name="listCounter" class="selectBoxClass">
+                        <option value="10" th:text="#{common.ten.count}"></option>
+                        <option value="50" th:text="#{common.fifty.count}"></option>
+                        <option value="100" th:text="#{common.hundred.count}"></option>
+                    </select>
 				</div>
 				<div class="input-set">
-					<input type="submit" th:value="#{search}" />
+                    <input type="submit" th:value="#{common.search}" />
 				</div>
 			</div>
 			</form>
@@ -93,11 +93,11 @@
 				<input type="hidden" id="checkIds" name="checkIds" />
                 <div class="list-header row">
                     <div class="list-desc u-pull-left">
-                        <span th:text="#{all.d}"></span>
+                        <span th:text="#{common.all}"></span>
                         <span class="totalCount" th:text="${pagination.totalCount}"></span>
-                        <span th:text="#{search.what.count}"></span>
+                        <span th:text="#{common.count.unit}"></span>
                         <span th:text="|${pagination.pageNo} / ${pagination.lastPage}|"></span>
-                        <span th:text="#{search.page}"></span>
+                        <span th:text="#{common.page}"></span>
                     </div>
                 </div>
                 <table class="list-table scope-col">
@@ -114,47 +114,52 @@
                     </colgroup>
                     <thead>
                         <tr>
-                            <th scope="col" class="col-number" th:text="#{number}"></th>
-                            <th scope="col" class="col-name">변환 유형</th>
-                            <th scope="col" class="col-name">제목</th>
-                            <th scope="col" class="col-name">U.S.F</th>
-                            <th scope="col" class="col-name">높이방향</th>
-                            <th scope="col" class="col-name">상태</th>
-                            <th scope="col" class="col-name">파일 개수</th>
-                            <th scope="col" class="col-name">에러코드</th>
-                            <th scope="col" class="col-date">등록일</th>
+                            <th scope="col" class="col-number" th:text="#{common.number}"></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.conversion.type}"></th:block></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.title}"></th:block></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.usf}"></th:block></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.view.axis}"></th:block></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.status}"></th:block></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.file.count}"></th:block></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.error.code}"></th:block></th>
+                            <th scope="col" class="col-date"><th:block th:text="#{common.created}"></th:block></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:if="${converterJobList.empty}">
-                            <td colspan="9" class="col-none">Converter Job이 존재하지 않습니다.</td>
+                            <td colspan="9" class="col-none"><th:block th:text="#{converter.job.does.not.exist}"></th:block></td>
                         </tr>
 
                         <tr th:if="${!converterJobList.empty}" th:each="converterJob: ${converterJobList}">
                             <td class="col-number" th:text="${converterJobStat.count + ((pagination.pageNo-1)*10)}"></td>
-                            <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'basic')}" th:text="기본"></td>
-                            <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'building')}" th:text="빌딩"></td>
-                            <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'extra-big-building')}" th:text="초대형 빌딩"></td>
-                            <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'point-cloud')}" th:text="point cloud"></td>
-                            <td class="col-name ellipsis" th:text="${converterJob.title}" style="min-width:200px;max-width:200px;"></td>
-                            
-                            <td class="col-count" th:if="${converterJob.usf >= 1 and converterJob.usf < 10}" th:text="|${converterJob.usf}m|">
-                            <td class="col-count" th:if="${converterJob.usf >= 0.1 and converterJob.usf < 1}" th:text="|${converterJob.usf}cm|">
-                            <td class="col-count" th:if="${converterJob.usf >= 0.01 and converterJob.usf < 0.1}" th:text="|${converterJob.usf}cm|">
-                            <td class="col-count" th:if="${converterJob.usf >= 0.001 and converterJob.usf < 0.1}" th:text="|${converterJob.usf}mm|">
-                            <td class="col-count" th:if="${converterJob.usf >= 10}" th:text="|${converterJob.usf}m|">
 
-                            <td class="col-type" th:if="${#strings.equals(converterJob.viewYAxisUp, 'N')}" th:text="Z축"></td>
-                            <td class="col-type" th:if="${#strings.equals(converterJob.viewYAxisUp, 'Y')}" th:text="Y축"></td>
-                            <td class="col-type" th:if="${#strings.equals(converterJob.status, 'ready')}" th:text="준비"></td>
-                            <td class="col-type" th:if="${#strings.equals(converterJob.status, 'success')}" th:text="성공"></td>
-                            <td class="col-type" th:if="${#strings.equals(converterJob.status, 'waiting')}" th:text="승인대기"></td>
-                            <td class="col-type" th:if="${#strings.equals(converterJob.status, 'fail')}" th:text="실패"></td>
-                               
+                            <td class="col-type">
+                                <th:block th:if="${#strings.equals(converterJob.converterTemplate, 'basic')}" th:text="#{converter.template.basic}"></th:block>
+                                <th:block th:if="${#strings.equals(converterJob.converterTemplate, 'building')}" th:text="#{converter.template.building}"></th:block>
+                                <th:block th:if="${#strings.equals(converterJob.converterTemplate, 'extra-big-building')}" th:text="#{converter.template.extra.big.building}"></th:block>
+                                <th:block th:if="${#strings.equals(converterJob.converterTemplate, 'point-cloud')}" th:text="#{converter.template.point.cloud}"></th:block>
+                            </td>
+                            <td class="col-name ellipsis" th:text="${converterJob.title}" style="min-width:200px;max-width:200px;"></td>
+                            <td class="col-count">
+                                <th:block th:if="${converterJob.usf >= 1 and converterJob.usf < 10}" th:text="|${converterJob.usf}m|"></th:block>
+                                <th:block th:if="${converterJob.usf >= 0.01 and converterJob.usf < 0.1}" th:text="|${converterJob.usf}m|"></th:block>
+                                <th:block th:if="${converterJob.usf >= 0.001 and converterJob.usf < 0.1}" th:text="|${converterJob.usf}m|"></th:block>
+                                <th:block th:if="${converterJob.usf >= 10}" th:text="|${converterJob.usf}m|"></th:block>
+                            </td>
+                            <td class="col-type">
+                                <th:block th:if="${#strings.equals(converterJob.viewYAxisUp, 'N')}" th:text="#{converter.view.z.axis}"></th:block>
+                                <th:block th:if="${#strings.equals(converterJob.viewYAxisUp, 'Y')}" th:text="#{converter.view.y.axis}"></th:block>
+                            </td>
+                            <td class="col-type">
+                                <th:block  th:if="${#strings.equals(converterJob.status, 'ready')}" th:text="#{converter.status.ready}"></th:block>
+                                <th:block  th:if="${#strings.equals(converterJob.status, 'success')}" th:text="#{converter.status.success}"></th:block>
+                                <th:block  th:if="${#strings.equals(converterJob.status, 'waiting')}" th:text="#{converter.status.waiting}"></th:block>
+                                <th:block  th:if="${#strings.equals(converterJob.status, 'fail')}" th:text="#{converter.status.fail}"></th:block>
+                            </td>
                             <td class="col-count" th:text="|${converterJob.fileCount}개|"></td>
-                            <td class="col-type" th:if="${#strings.isEmpty(converterJob.errorCode)}" th:text="없음">
+                            <td class="col-type" th:if="${#strings.isEmpty(converterJob.errorCode)}" th:text="#{converter.error.code.empty}">
                             <td class="col-type" th:unless="${#strings.isEmpty(converterJob.errorCode)}">
-                                <a href="#" th:onclick="detailErrorCode([[${converterJob.errorCode}]]); return false;">[보기]</a>
+                                <a href="#" th:onclick="detailErrorCode([[${converterJob.errorCode}]]); return false;">[<th:block th:text="#{converter.detail.error.code}"></th:block>]</a>
                             </td>
                             <td class="col-type">
                                 <th:block th:text="${#dates.format(converterJob.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
