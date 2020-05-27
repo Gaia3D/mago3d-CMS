@@ -249,6 +249,7 @@ public class DataController {
 	private String roleValidator(HttpServletRequest request, Integer userGroupId, String roleName) {
 		List<String> userGroupRoleKeyList = CacheManager.getUserGroupRoleKeyList(userGroupId);
         if(!RoleSupport.isUserGroupRoleValid(userGroupRoleKeyList, roleName)) {
+			log.info("---- Role 이 존재하지 않습니다. 확인 하세요. ");
 			request.setAttribute("httpStatusCode", 403);
 			return "/error/error";
 		}
