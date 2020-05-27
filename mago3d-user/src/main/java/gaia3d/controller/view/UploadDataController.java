@@ -2,10 +2,12 @@ package gaia3d.controller.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -50,7 +52,10 @@ public class UploadDataController {
 	
 	@Autowired
 	private DataGroupService dataGroupService;
-	
+
+	@Autowired
+	private MessageSource messageSource;
+
 	@Autowired
 	private PolicyService policyService;
 	
@@ -133,7 +138,7 @@ public class UploadDataController {
 		if(dataGroupList == null || dataGroupList.isEmpty()) {
 			String dataGroupPath = userSession.getUserId() + "/basic/";
 			dataGroup.setDataGroupKey("basic");
-			dataGroup.setDataGroupName("기본");
+			dataGroup.setDataGroupName(messageSource.getMessage("common.basic", null, getUserLocale(request)));
 			dataGroup.setDataGroupPath(propertiesConfig.getUserDataServicePath() + dataGroupPath);
 			dataGroup.setSharing(SharingType.PUBLIC.name().toLowerCase());
 			dataGroup.setMetainfo("{\"isPhysical\": false}");
@@ -213,5 +218,21 @@ public class UploadDataController {
 			return "/error/error";
 		}
 		return null;
+	}
+
+	/**
+	 * request.getLocale을 하면 브라우저 local을 타서, select box 로 lang을 선택할 경우 정상적으로 동작하지 않음
+	 * @param request
+	 * @return
+	 */
+	private Locale getUserLocale(HttpServletRequest request) {
+		String lang = (String)request.getSession().getAttribute(Key.LANG.name());
+		log.info("@@@@@@@@@@@ lang = {}", lang);
+		if(lang == null || "".equals(lang)) {
+			Locale myLocale = request.getLocale();
+			lang = myLocale.getLanguage();
+		}
+		Locale locale = new Locale(lang);
+		return locale;
 	}
 }
