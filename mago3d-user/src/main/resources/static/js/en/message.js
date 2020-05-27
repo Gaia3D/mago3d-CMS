@@ -8,6 +8,7 @@ JS_MESSAGE["delete"] = "It has been deleted.";
 JS_MESSAGE["success"] = "It has been succeeded.";
 JS_MESSAGE["save"] = "It has been saved.";
 JS_MESSAGE["loading"] = "Loading";
+JS_MESSAGE["requested"] = "Requested";
 
 JS_MESSAGE["apply"] = "적용되었습니다.";
 JS_MESSAGE["upload"] = "업로딩 중입니다.";
@@ -26,6 +27,7 @@ JS_MESSAGE["server"] = "서버";
 JS_MESSAGE["account"] = "계정";
 JS_MESSAGE["use"] = "사용";
 JS_MESSAGE["not.use"] = "미사용";
+JS_MESSAGE["more.information"] = "More Information";
 
 JS_MESSAGE["csrf.token.invalid"] = "보안(CSRF) 토큰이 유효하지 않습니다.";
 
@@ -87,6 +89,7 @@ JS_MESSAGE["data.file.empty"] = "Please enter a file";
 JS_MESSAGE["data.insert"] = "Data is registered";
 JS_MESSAGE["data.update.check"] = "현재 입력된 위치와 회전 정보를 db에 저장하시겠습니까?";
 JS_MESSAGE["data.update.request.check"] = "이 데이터는 관리자가 업로드 하였거나, 다른 사용자가 업로드한 데이터 입니다.\n입력된 위치와 회전정보 변경을 요청 하시겠습니까?";
+JS_MESSAGE["data.smart.tiling.grant.required"] = "The right to change (Smart Tiling) does not exist.";
 
 JS_MESSAGE["data.group.order.first"] = "제일 처음 입니다.";
 JS_MESSAGE["data.group.cannot.change.order"] = "순서를 변경할 수 없습니다.";

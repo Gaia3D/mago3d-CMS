@@ -361,7 +361,7 @@ function locationValidation(longitude, latitude, altitude) {
 		alert("숫자만 입력 가능합니다.");
 		return false;
 	}
-	if((-180 <= lon && lon <= 180) &&  (-90 <= lat && lat <= 90) && (0 <= alt && alt <= 300000)) {
+	if((-180 <= lon && lon <= 180) &&  (-90 <= lat && lat <= 90) && (-100 <= alt && alt <= 300000)) {
 		return true;
 	} else {
 		alert(JS_MESSAGE["location.constraint"]);
