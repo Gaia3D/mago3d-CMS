@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" th:lang="${accessibility}">
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
 <head>
 	<meta charset="utf-8">
     <meta name="referrer" content="origin">
@@ -111,7 +111,7 @@
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</th>
 				<td class="col-input">
-					<input type="hidden" id="dataGroupId" name="dataGroupId" th:field=""*{dataGroupId} />
+					<input type="hidden" id="dataGroupId" name="dataGroupId" th:field="*{dataGroupId}" />
 					<input type="text" id="dataGroupName" name="dataGroupName" th:field="*{dataGroupName}" class="ml" readonly="true" />
 					<input type="button" id="dataGroupButtion" th:value="#{data.group.select}" />
 				</td>
