@@ -1803,7 +1803,7 @@ ul.listDrop li.list-drop-button-none > p {
 	border-top: 1px solid #ccc;
 }
 .form-group > label {
-    width: 20%;
+    width: 22%;
 	padding: 7px;
     vertical-align: middle;
     display: inline-block;
@@ -2109,7 +2109,7 @@ vertical-align: middle;
 }
 .legendWrap > dt {
 display: inline-block;
-width: 26px;
+width: 42px;
 padding: 4px 5px;
 background-color: #f3f3f3;
 font-weight: bold;
@@ -2117,7 +2117,7 @@ border-right: 1px solid #ddd;
 }
 .legendWrap > dd {
 display: inline;
-margin-right: 5px;
+/*margin-right: 5px;*/
 }
 span.legend {
 display: inline-block;
@@ -2130,7 +2130,7 @@ font-weight: bold;
 color: #fff;
 text-align: center;
 border-radius: 50%;
-margin-right: 5px;
+margin-right: 1px;
 }
 span.co {
 background-color: cornflowerblue;

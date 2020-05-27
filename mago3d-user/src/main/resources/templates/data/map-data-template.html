@@ -3,12 +3,12 @@
 <script id="dataListSource" type="text/x-handlebars-template">
     <div>
 		<span>
-			<th:block th:text="#{all.d}"></th:block>
+			<th:block th:text="#{common.all}"></th:block>
 			<span class="totalCount">{{formatNumber pagination.totalCount}}</span>
-			<th:block th:text="#{search.what.count}"></th:block>
+			<th:block th:text="#{common.count.unit}"></th:block>
 		</span>
         <span class="float-right">{{formatNumber pagination.pageNo}} / {{formatNumber pagination.lastPage}}
-			<th:block th:text="#{search.page}"></th:block>
+			<th:block th:text="#{common.page}"></th:block>
 		</span>
         <input type="hidden" name="pageNo" value="{{pagination.pageNo}}">
     </div>
@@ -25,11 +25,11 @@
             </colgroup>
             <thead>
             <tr>
-                <th>번호</th>
-                <th>공유 유형</th>
-                <th>데이터명</th>
-                <th>표시</th>
-                <th>이동</th>
+                <th th:text="#{common.number}"></th>
+                <th th:text="#{common.sharing}"></th>
+                <th th:text="#{common.data.name}"></th>
+                <th th:text="#{common.show}"></th>
+                <th th:text="#{common.move}"></th>
             </tr>
             </thead>
             <tbody>
@@ -56,61 +56,61 @@
                 </td>
                 <td>
                     {{#if groupVisible}}
-                    <button type="button" title="표시" class="showHideButton show" data-group-id="{{dataGroupId}}"
-                            data-key="{{dataKey}}" data-tiling="{{tiling}}">표시
+                    <button type="button" class="showHideButton show" th:text="#{common.show}" th:title="#{common.show}" data-group-id="{{dataGroupId}}"
+                            data-key="{{dataKey}}" data-tiling="{{tiling}}">
                     </button>
                     {{else}}
-                    <button type="button" title="표시" class="showHideButton hide" data-group-id="{{dataGroupId}}"
-                            data-key="{{dataKey}}" data-tiling="{{tiling}}">표시
+                    <button type="button" class="showHideButton hide" th:text="#{common.show}" th:title="#{common.show}" data-group-id="{{dataGroupId}}"
+                            data-key="{{dataKey}}" data-tiling="{{tiling}}">
                     </button>
                     {{/if}}
                 </td>
                 <td>
                     {{#if tiling}}
-                    <button type="button" title="바로가기" class="goto" style="margin: 0px; padding: 0px;"
-                            onclick="gotoFly('{{longitude}}', '{{latitude}}', '{{altitude}}');">바로가기
+                    <button type="button" class="goto" th:text="#{common.move}" th:title="#{common.move}" style="margin: 0px; padding: 0px;"
+                            onclick="gotoFly('{{longitude}}', '{{latitude}}', '{{altitude}}');">
                     </button>
                     {{else}}
-                    <button type="button" title="바로가기" class="goto" style="margin: 0px; padding: 0px;"
-                            onclick="flyTo('{{dataGroupId}}', '{{dataKey}}');">바로가기
+                    <button type="button" class="goto" th:text="#{common.move}" th:title="#{common.move}" style="margin: 0px; padding: 0px;"
+                            onclick="flyTo('{{dataGroupId}}', '{{dataKey}}');">
                     </button>
                     {{/if}}
                 </td>
             </tr>
             <tr>
                 <td class="alignLeft" colspan="4">
-                    <span class="infoTag ellipsis"><span>그룹명: </span>{{dataGroupName}}</span>
+                    <span class="infoTag ellipsis"><span th:text="#{data.group.name.colon}"></span>{{dataGroupName}}</span>
                     {{#ifMatch dataGroupTarget 'admin'}}
-                    <span class="infoTag" style="color:blue">관리자</span>
+                    <span class="infoTag" th:text="#{data.administrator}" style="color:blue"></span>
                     {{else}}
                     {{#ifMatch userId ../owner}}
                     {{else}}
                     <span class="infoTag" style="color:blue">{{userId}}</span>
                     {{/ifMatch}}
                     {{/ifMatch}}
-                    <span class="infoTag"><span>상태:</span>
+                    <span class="infoTag"><span th:text="#{data.status.colon}"></span>
 		{{#ifMatch status 'processing'}}
-						변환중
+						<th:block th:text="#{data.status.processing}"></th:block>
 		{{/ifMatch}}
 		{{#ifMatch status 'use'}}
-						사용중
+						<th:block th:text="#{data.status.use}"></th:block>
 		{{/ifMatch}}
 		{{#ifMatch status 'unused'}}
-						사용중지
+						<th:block th:text="#{data.status.unused}"></th:block>
 		{{/ifMatch}}
 		{{#ifMatch status 'delete'}}
-						삭제
+						<th:block th:text="#{data.status.delete}"></th:block>
 		{{/ifMatch}}
 				</span>
                     {{#greaterThan dataType.length 0}}
-                    <span class="infoTag"><span>타입:</span>{{dataType}}</span>
+                    <span class="infoTag"><span th:text="#{data.type.colon}"></span>{{dataType}}</span>
                     {{/greaterThan}}
                 </td>
             </tr>
             {{/each}}
             {{else}}
             <tr>
-                <td colspan="5" style="height: 30px;">데이터가 존재하지 않습니다.</td>
+                <td colspan="5" th:text="#{data.does.not.exist}" style="height: 30px;"></td>
             </tr>
             {{/greaterThan}}
             </tbody>
