@@ -98,8 +98,8 @@
 	<!-- E: MAP -->
 </div>
 <!-- E: WRAP -->
-<div th:replace="~{/data/data-dialog :: #dataDialogWrap}"></div>
-<div th:replace="~{/data/data-group-dialog :: #dataGroupDialogWrap}"></div>
+<div th:replace="~{/data/data-dialog-template :: #dataDialogWrap}"></div>
+<div th:replace="~{/data/data-group-dialog-template :: #dataGroupDialogWrap}"></div>
 <div th:replace="~{/data/map-data-template :: #dataListSource}"></div>
 <div th:replace="~{/data/map-data-group-template :: #dataGroupListSource}"></div>
 <div th:replace="~{/data/data-attribute-dialog :: #dataAttributeDialog}"></div>
@@ -313,7 +313,7 @@
 	}
 
 	// 데이터 정보 다이얼 로그
-	var dataInfoDialog = $( "#dataInfoDialog" ).dialog({
+	var dataInfoDialog = $( "#dataInfoDialogDHTML" ).dialog({
 		autoOpen: false,
 		width: 500,
 		height: 720,
@@ -334,12 +334,10 @@
 				if(msg.statusCode <= 200) {
 					dataInfoDialog.dialog( "option", "title", msg.dataInfo.dataName + " 상세 정보");
 
-					var source = $("#templateDataInfo").html();
-				    var template = Handlebars.compile(source);
+				    var template = Handlebars.compile($("#dataInfoSource").html());
 				    var dataInfoHtml = template(msg.dataInfo);
 
-				    $("#dataInfoDialog").html("");
-	                $("#dataInfoDialog").append(dataInfoHtml);
+				    $("#dataInfoDialogDHTML").html("").append(dataInfoHtml);
 				} else {
 					alert(JS_MESSAGE[msg.errorCode]);
 				}
@@ -359,7 +357,7 @@
 		resizable: false
 	});
 	// 부산 데이터 속성용 다이얼 로그
-	var sampleDataAttributeDialog = $( "#sampleDataAttributeDialog" ).dialog({
+	var sampleDataAttributeDialog = $( "#sampleDataAttributeDialogDHTML" ).dialog({
 		autoOpen: false,
 		width: 500,
 		height: 600,
@@ -404,11 +402,9 @@
 				success: function(msg){
 					if(msg.statusCode <= 200) {
 						if(msg.attributeRepository !== null) {
-							var source = $("#templateSampleDataAttribute").html();
-						    var template = Handlebars.compile(source);
+						    var template = Handlebars.compile($("#sampleDataAttributeSource").html());
 						    var html = template(msg.attributeRepository);
-						    $("#sampleDataAttributeDialog").html("");
-			                $("#sampleDataAttributeDialog").append(html);
+						    $("#sampleDataAttributeDialogDHTML").html("").append(html);
 						}
 					} else {
 						alert(JS_MESSAGE[msg.errorCode]);
@@ -460,7 +456,7 @@
 	}
 
 	// 데이터 그룹 다이얼로그
-	var dataGroupDialog = $( "#dataGroupDialog" ).dialog({
+	var dataGroupDialog = $( "#dataGroupDialogDHTML" ).dialog({
 		autoOpen: false,
 		width: 500,
 		height: 620,
@@ -481,13 +477,10 @@
 				if(msg.statusCode <= 200) {
 					dataGroupDialog.dialog( "option", "title", msg.dataGroup.dataGroupName + " 상세 정보");
 
-					var source = $("#templateDataGroup").html();
-				    var template = Handlebars.compile(source);
+				    var template = Handlebars.compile($("#dataGroupSource").html());
 				    var dataGroupHtml = template(msg.dataGroup);
 
-				    $("#dataGroupDialog").html("");
-	                $("#dataGroupDialog").append(dataGroupHtml);
-
+				    $("#dataGroupDialogDHTML").html("").append(dataGroupHtml);
 				} else {
 					alert(JS_MESSAGE[msg.errorCode]);
 				}

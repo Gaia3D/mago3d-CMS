@@ -171,7 +171,7 @@
     <div id="magoContainer" style="height: 100%;"></div>
     <canvas id="objectLabel"></canvas>
     <button class="mapSelectButton" onclick="window.close();"><th:block th:text="#{common.close}"></th:block></button>
-    <div th:replace="~{/data/data-dialog :: #dataDialogWrap}"></div>
+    <div th:replace="~{/data/data-dialog-template :: #dataDialogWrap}"></div>
 </body>
 <script type="text/javascript" th:src="@{/externlib/handlebars-4.1.2/handlebars.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/handlebarsHelper.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
@@ -508,7 +508,7 @@
 	});
 	*/
 
-	var dataInfoDialog = $( "#dataInfoDialog" ).dialog({
+	var dataInfoDialog = $( "#dataInfoDialogDHTML" ).dialog({
 		autoOpen: false,
 		width: 500,
 		height: 720,
@@ -534,12 +534,10 @@
 				if(msg.statusCode <= 200) {
 					dataInfoDialog.dialog( "option", "title", msg.dataInfo.dataName + JS_MESSAGE["more.information"]);
 
-					var source = $("#templateDataInfo").html();
-				    var template = Handlebars.compile(source);
+				    var template = Handlebars.compile($("#dataInfoSource").html());
 				    var dataInfoHtml = template(msg.dataInfo);
 
-				    $("#dataInfoDialog").html("");
-	                $("#dataInfoDialog").append(dataInfoHtml);
+				    $("#dataInfoDialogDHTML").html("").append(dataInfoHtml);
 				} else {
 					alert(JS_MESSAGE[msg.errorCode]);
 				}
