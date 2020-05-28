@@ -24,7 +24,7 @@ $(document).ready(function() {
 	});
 	
 	//데이터 3D Instance show/hide
-	$('#dataInfoListArea').on('click', '.showHideButton', function() {
+	$('#dataListDHTML').on('click', '.showHideButton', function() {
 		var dataGroupId = $(this).data('group-id');
 		var dataKey = $(this).data('key');
 		var dataTiling = $(this).data('tiling');

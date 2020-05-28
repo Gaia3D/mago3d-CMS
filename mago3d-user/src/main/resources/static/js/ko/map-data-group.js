@@ -16,7 +16,7 @@ $(document).ready(function() {
 	});
 	
 	//데이터그룹 3D Instance show/hide
-	$('#dataGroupListArea').on('click', '.showHideButton', function() {
+	$('#dataGroupListDHTML').on('click', '.showHideButton', function() {
 		var dataGroupId = $(this).data('group-id');
 		
 		if(dataGroupId === null || dataGroupId === '') {
