@@ -83,10 +83,11 @@
                     {{#ifMatch dataGroupTarget 'admin'}}
                     <span class="infoTag" th:text="#{data.administrator}" style="color:blue"></span>
                     {{else}}
-                    {{#ifMatch userId ../owner}}
-                    {{else}}
-                    <span class="infoTag" style="color:blue">{{userId}}</span>
-                    {{/ifMatch}}
+                        {{#ifMatch userId ../owner}}
+                        <!--<span class="infoTag">{{userId}}</span>-->
+                        {{else}}
+                        <span class="infoTag" style="color:blue">{{userId}}</span>
+                        {{/ifMatch}}
                     {{/ifMatch}}
                     <span class="infoTag"><span th:text="#{data.status.colon}"></span>
 		{{#ifMatch status 'processing'}}

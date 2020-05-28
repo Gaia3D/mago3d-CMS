@@ -46,6 +46,7 @@ public class DataAdjustLogController {
 	private DataAdjustLogService dataAdjustLogService;
 	
 	/**
+	 * TODO 현재 사용하지 않음
 	 * 데이터 geometry 변경 이력 수정 화면
 	 * @param request
 	 * @param dataId
