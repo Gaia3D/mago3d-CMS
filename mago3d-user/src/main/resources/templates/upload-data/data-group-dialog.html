@@ -27,7 +27,7 @@
 
             <th:block th:if="${!dataGroupList.empty}" th:each="dataGroup : ${dataGroupList}">
                 <th:block th:if="${dataGroup.depth == 1}">
-                <tr th:class="oneDepthClass">  
+                <tr class="oneDepthClass">
                     <td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
                         <span style="padding-left: 0px; font-size: 1.5em; color: Dodgerblue;">
                             <i class="fa fa-folder oneFolder" aria-hidden="true"></i>
