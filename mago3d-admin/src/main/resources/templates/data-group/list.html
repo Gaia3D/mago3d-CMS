@@ -71,41 +71,40 @@
 										<td colspan="11" class="col-none">데이터 그룹이 존재하지 않습니다.</td>
                                     </tr>
 
-                                    <th:block th:if="${!dataGroupList.empty}">
-                                        <th:block th:each="dataGroup : ${dataGroupList}">
-                                            <th:block th:if="${dataGroup.depth == 1}">
-                                            <tr class="oneDepthClass">
-                                                <td class="col-key ellipsis" style="max-width: 300px;">
-                                                    <span style="padding-left: 0px; font-size: 1.6em;" th:onclick="childrenDisplayToggle([[${dataGroup.depth}]], [[${dataGroup.dataGroupId}]], [[${dataGroup.ancestor}]]);">
-                                                        <i th:id="|oneDepthArrow-${dataGroup.dataGroupId}|" class="fa fa-caret-right oneArrow" aria-hidden="true"></i>
-                                                    </span>&nbsp;
-                                                    <span style="font-size: 1.5em; color: Dodgerblue;">
-                                                        <i th:id="|oneDepthFolder-${dataGroup.dataGroupId}|" class="fa fa-folder oneFolder" aria-hidden="true"></i>
-                                                    </span>
-                                                    <span th:text="${dataGroup.dataGroupName}"></span>
-                                                </td>
-                                            </th:block>
-                                            <th:block th:if="${dataGroup.depth == 2} ">
-                                                <tr th:class="|twoDepthClass oneDepthParent-${dataGroup.parent}|" style="display: none;">
-                                                    <td class="col-key ellipsis" style="max-width: 300px;">
-                                                        <span style="padding-left: 40px; font-size: 1.6em;" th:onclick="childrenDisplayToggle([[${dataGroup.depth}]], [[${dataGroup.dataGroupId}]], [[${dataGroup.ancestor}]]);">
-                                                            <i th:id="|twoDepthArrow-${dataGroup.dataGroupId}|" th:class="|fa fa-caret-right twoArrow ancestorArrow-${dataGroup.ancestor}|" aria-hidden="true"></i>
-                                                        </span>&nbsp;
-                                                        <span style="font-size: 1.5em; color: Mediumslateblue;">
-                                                            <i th:id="|twoDepthArrow-${dataGroup.dataGroupId}|" th:class="|fa fa-folder twoFolder ancestorFolder-${dataGroup.ancestor}|" aria-hidden="true"></i>
-                                                        </span>
-                                                        <span th:text="${dataGroup.dataGroupName}"></span>
-                                                    </td>
-                                            </th:block>
-                                            <th:block th:if="${dataGroup.depth == 3}">
-                                                <tr th:class="|threeDepthClass twoDepthParent-${dataGroup.parent} ancestor-${dataGroup.ancestor}|" style="display: none;">
-                                                    <td class="col-key ellipsis" style="max-width: 300px;">
-                                                        <span style="padding-left: 80px; font-size: 1.5em; color: Tomato;">
-                                                            <i th:id="|threeDepthFolder-${dataGroup.dataGroupId}|" th:class="|fa fa-folder threeFolder ancestorFolder-${dataGroup.ancestor}|" aria-hidden="true"></i>
-                                                        </span>
-                                                        <span th:text="${dataGroup.dataGroupName}"></span>
-                                                    </td>
-                                            </th:block>
+                                    <th:block th:if="${!dataGroupList.empty}" th:each="dataGroup : ${dataGroupList}">
+										<th:block th:if="${dataGroup.depth == 1}">
+										<tr class="oneDepthClass">
+											<td class="col-key ellipsis" style="max-width: 300px;">
+												<span style="padding-left: 0px; font-size: 1.6em;" th:onclick="childrenDisplayToggle([[${dataGroup.depth}]], [[${dataGroup.dataGroupId}]], [[${dataGroup.ancestor}]]);">
+													<i th:id="|oneDepthArrow-${dataGroup.dataGroupId}|" class="fa fa-caret-right oneArrow" aria-hidden="true"></i>
+												</span>&nbsp;
+												<span style="font-size: 1.5em; color: Dodgerblue;">
+													<i th:id="|oneDepthFolder-${dataGroup.dataGroupId}|" class="fa fa-folder oneFolder" aria-hidden="true"></i>
+												</span>
+												<span th:text="${dataGroup.dataGroupName}"></span>
+											</td>
+										</th:block>
+										<th:block th:if="${dataGroup.depth == 2} ">
+											<tr th:class="|twoDepthClass oneDepthParent-${dataGroup.parent}|" style="display: none;">
+												<td class="col-key ellipsis" style="max-width: 300px;">
+													<span style="padding-left: 40px; font-size: 1.6em;" th:onclick="childrenDisplayToggle([[${dataGroup.depth}]], [[${dataGroup.dataGroupId}]], [[${dataGroup.ancestor}]]);">
+														<i th:id="|twoDepthArrow-${dataGroup.dataGroupId}|" th:class="|fa fa-caret-right twoArrow ancestorArrow-${dataGroup.ancestor}|" aria-hidden="true"></i>
+													</span>&nbsp;
+													<span style="font-size: 1.5em; color: Mediumslateblue;">
+														<i th:id="|twoDepthArrow-${dataGroup.dataGroupId}|" th:class="|fa fa-folder twoFolder ancestorFolder-${dataGroup.ancestor}|" aria-hidden="true"></i>
+													</span>
+													<span th:text="${dataGroup.dataGroupName}"></span>
+												</td>
+										</th:block>
+										<th:block th:if="${dataGroup.depth == 3}">
+											<tr th:class="|threeDepthClass twoDepthParent-${dataGroup.parent} ancestor-${dataGroup.ancestor}|" style="display: none;">
+												<td class="col-key ellipsis" style="max-width: 300px;">
+													<span style="padding-left: 80px; font-size: 1.5em; color: Tomato;">
+														<i th:id="|threeDepthFolder-${dataGroup.dataGroupId}|" th:class="|fa fa-folder threeFolder ancestorFolder-${dataGroup.ancestor}|" aria-hidden="true"></i>
+													</span>
+													<span th:text="${dataGroup.dataGroupName}"></span>
+												</td>
+										</th:block>
 
 										<td class="col-key" th:text="${dataGroup.dataGroupKey}"></td>
                                         <td class="col-type" th:text="${dataGroup.sharing}"></td>
@@ -143,7 +142,9 @@
                                         <td class="col-date">
                                             <p th:text="${#dates.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
                                             <p th:text="${#dates.format(viewInsertDate,'yyyy-MM-dd HH:mm')}"></p>
-                                        </td>
+										</td>
+									</tr>
+									</th:block>
 								</tbody>
 							</table>
 							<!-- E: 데이터 그룹 목록 -->

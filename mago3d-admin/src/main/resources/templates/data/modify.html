@@ -34,7 +34,7 @@
 
 						<!-- S: 데이터 수정 -->
 						<form id="dataInfo" th:object="${dataInfo}" method="post" onsubmit="return false;">
-							<input type="hidden" name="dataId" />
+							<input type="hidden" id="dataId" name="dataId" th:field="dataId" />
 							<table class="input-table scope-row" summary="데이터 정보 수정 테이블">
 								<caption class="hiddenTag">데이터 정보 수정</caption>
 								<colgroup>
