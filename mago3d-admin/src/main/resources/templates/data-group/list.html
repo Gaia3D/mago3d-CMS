@@ -128,8 +128,8 @@
                                         </td>
                                         <td class="col-functions block-element-wrapper">
                                             <a th:href="@{#}" th:onclick="uploadSmartTilingData([[${dataGroup.dataGroupId}]], [[${dataGroup.dataGroupName}]]); return false;">메타 정보 수정</a>
-                                            <a th:href="@{/data-groups/download/${dataGroup.dataGroupId}}">내보내기(일반용)</a>
-                                            <a th:href="@{/data-groups/download/converter/${dataGroup.dataGroupId}}">내보내기(변환용)</a>
+                                            <a th:href="@{|/data-groups/download/${dataGroup.dataGroupId}|}">내보내기(일반용)</a>
+                                            <a th:href="@{|/data-groups/download/converter/${dataGroup.dataGroupId}|}">내보내기(변환용)</a>
                                         </td>
 
                                         <td class="col-type">
