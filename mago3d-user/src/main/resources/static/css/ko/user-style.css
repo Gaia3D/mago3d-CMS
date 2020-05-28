@@ -315,6 +315,7 @@ background-repeat: no-repeat;
 width: 50px;
 height: 50px;
 text-indent: -999em;
+overflow: hidden;
 }
 .ctrlWrap div button:hover {
 background-color: #333446;
