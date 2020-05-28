@@ -1,21 +1,13 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
-<head>
-    <meta charset="utf-8">
-    <meta name="referrer" content="origin">
-    <meta name="viewport" content="width=device-width">
-    <meta name="robots" content="index,nofollow">
-    <title>Error | mago3D</title>
-</head>
 <body>
-	<div class="errorDialog" title="에러 정보">
+	<div id="converterErrorDialog" class="errorDialog" th:title="#{converter.error.information}">
         <table class="inner-table scope-row">
             <colgroup>
                 <col class="col-label"></col>
                 <col class="col-data"></col>
             </colgroup>
             <tr>
-                <th class="col-label" scope="row">에러 메시지</th>
+                <th class="col-label" scope="row"><th:block th:text="#{converter.error.message}"></th:block></th>
                 <td id="dialog_error_code" class="col-data"></td>
             </tr>
         </table>

@@ -113,7 +113,7 @@
                     </colgroup>
                     <thead>
                         <tr>
-                            <th scope="col" class="col-number" th:text="#{common.number}"></th>
+                            <th scope="col" class="col-number"><th:block th:text="#{common.number}"></th:block></th>
                             <th scope="col" class="col-name"><th:block th:text="#{converter.conversion.type}"></th:block></th>
                             <th scope="col" class="col-name"><th:block th:text="#{converter.title}"></th:block></th>
                             <th scope="col" class="col-name"><th:block th:text="#{converter.usf}"></th:block></th>
@@ -155,7 +155,10 @@
                                 <th:block  th:if="${#strings.equals(converterJob.status, 'waiting')}" th:text="#{converter.status.waiting}"></th:block>
                                 <th:block  th:if="${#strings.equals(converterJob.status, 'fail')}" th:text="#{converter.status.fail}"></th:block>
                             </td>
-                            <td class="col-count" th:text="|${converterJob.fileCount}개|"></td>
+                            <td class="col-count">
+                                <th:block th:text="${converterJob.fileCount}"></th:block>
+                                <th:block th:text="#{common.count}"></th:block>
+                            </td>
                             <td class="col-type" th:if="${#strings.isEmpty(converterJob.errorCode)}" th:text="#{converter.error.code.empty}">
                             <td class="col-type" th:unless="${#strings.isEmpty(converterJob.errorCode)}">
                                 <a href="#" th:onclick="detailErrorCode([[${converterJob.errorCode}]]); return false;">[<th:block th:text="#{converter.detail.error.code}"></th:block>]</a>
@@ -166,12 +169,13 @@
                         </tr>
                     </tbody>
                 </table>
-        </div>
-        <!-- E: 변환 데이터 목록 -->
-        <!-- 페이지 -->
+            </form>
+            </div>
         <div th:replace="~{/common/pagination :: #paginationArea}"></div>
     </div>
+
 </div>
+<div th:replace="~{/converter/error-dialog :: #converterErrorDialog}"></div>
 <script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
