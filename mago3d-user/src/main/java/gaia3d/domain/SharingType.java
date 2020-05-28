@@ -6,18 +6,12 @@ import lombok.Setter;
 public enum SharingType {
 
 	// 공통
-	COMMON("공통"),
+	COMMON,
 	// 공개
-	PUBLIC("공개"),
+	PUBLIC,
 	// 비공개
-	PRIVATE("비공개"),
+	PRIVATE,
 	// 그룹
-	GROUP("그룹");
-	
-	private @Setter @Getter String sharing;
-	
-	private SharingType(String sharing) {
-		this.sharing = sharing;
-	}
-	
+	GROUP;
+
 }

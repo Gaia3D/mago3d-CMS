@@ -68,11 +68,11 @@ public class DataLogController {
 	}
 
 	/**
-	 * Data 목록
+	 * 데이터 목록
+	 * @param locale
 	 * @param request
-	 * @param dataInfo
+	 * @param dataInfoLog
 	 * @param pageNo
-	 * @param list_counter
 	 * @param model
 	 * @return
 	 */
@@ -110,9 +110,6 @@ public class DataLogController {
 		if(totalCount > 0l) {
 			dataInfoLogList = dataLogService.getListDataInfoLog(dataInfoLog);
 		}
-		
-		// TODO 다국어 지원 시 변경 필요
-		dataInfoLogList.stream().forEach(DataInfoLog::convertDto);
 		
 		model.addAttribute(pagination);
 		model.addAttribute("dataGroupList", dataGroupList);

@@ -125,10 +125,4 @@ public class DataInfoLog extends Search {
 		}
 		this.metainfo = dataInfo.getMetainfo();
 	}
-	
-	public void convertDto() {
-		this.sharing = SharingType.valueOf(this.sharing.toUpperCase()).getSharing();
-		this.changeType = MethodType.valueOf(this.changeType.toUpperCase()).getMethod();
-	}
-	
 }
