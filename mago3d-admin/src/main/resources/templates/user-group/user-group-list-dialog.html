@@ -22,42 +22,50 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:="${userGroupList.empty}">
+				<tr th:if="${userGroupList.empty}">
 					<td colspan="6" class="col-none">사용자 그룹이 존재하지 않습니다.</td>
 				</tr>
 
-				<th:block th:if="${!userGroupList.empty}">
-					<th:block th:each="userGroup : ${userGroupList}">
-						<th:block th:if="${userGroup.depth == 1}">
-							<tr class="oneDepthClass">
-								<td class="col-name ellipsis" style="max-width:200px; text-align: left;" nowrap="nowrap">
-									<span th:text="${userGroup.userGroupName}" style="padding-left: 0px; font-size: 1.6em;"></span>
-								</td>
-						</th:block>
-						<th:block th:if="${userGroup.depth == 2}">
-							<tr class="twoDepthClass">
-								<td class="col-name ellipsis" style="max-width:200px; text-align: left;" nowrap="nowrap">
-									<span th:text="${userGroup.userGroupName}" style="padding-left: 40px; font-size: 1.6em;"></span>
-								</td>
-						</th:block>
-						<th:block th:if="${userGroup.depth == 3}">
-							<tr class="threeDepthClass">
-								<td class="col-name ellipsis" style="max-width:200px; text-align: left;" nowrap="nowrap">
-									<span th:text="${userGroup.userGroupName}" style="padding-left: 80px; font-size: 1.6em;"></span>
-								</td>
-						</th:block>
-						<td class="col-type">
-							<th:block th:if="${#bools.isTrue(userGroup.available)}" th:text="사용"></th:block>
-							<th:block th:if="${#bools.isFalse(userGroup.available)}" th:text="사용"></th:block>
-						</td>
-						<td class="col-key" th:text="${userGroup.description}"></td>
-						<td class="col-date">
-							<p th:text="${#dates.format(userGroup.insertDat,'yyyy-MM-dd HH:mm')}"></p>
-						</td>
-						<td class="col-toggle">
-							<a href="#" th:onclick="confirmParent([[${userGroup.userGroupId}]], [[${userGroup.userGroupName}]]); return false;">확인</a>
-						</td>
-					</tr>
+				<th:block th:if="${!userGroupList.empty}" th:each="userGroup : ${userGroupList}">
+					<th:block th:if="${userGroup.depth == 1}">
+						<tr class="oneDepthClass">
+							<td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
+								<span style="padding-left: 0px; font-size: 1.5em; color: Dodgerblue;">
+									<i class="fa fa-folder oneFolder" aria-hidden="true"></i>
+								</span>
+								<span th:text="${userGroup.userGroupName}"></span>
+							</td>
+					</th:block>
+					<th:block th:if="${userGroup.depth == 2}">
+						<tr class="twoDepthClass">
+							<td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
+								<span style="padding-left: 40px; font-size: 1.5em; color: Mediumslateblue;">
+									<i class="fa fa-folder oneFolder" aria-hidden="true"></i>
+								</span>
+								<span th:text="${userGroup.userGroupName}"></span>
+							</td>
+					</th:block>
+					<th:block th:if="${userGroup.depth == 3}">
+						<tr class="threeDepthClass">
+							<td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
+								<span style="padding-left: 80px; font-size: 1.5em; color: Tomato;">
+									<i class="fa fa-folder oneFolder" aria-hidden="true"></i>
+								</span>
+								<span th:text="${userGroup.userGroupName}"></span>
+							</td>
+					</th:block>
+					<td class="col-type">
+						<th:block th:if="${#bools.isTrue(userGroup.available)}" th:text="사용"></th:block>
+						<th:block th:if="${#bools.isFalse(userGroup.available)}" th:text="사용"></th:block>
+					</td>
+					<td class="col-key" th:text="${userGroup.description}"></td>
+					<td class="col-date">
+						<p th:text="${#dates.format(userGroup.insertDate,'yyyy-MM-dd HH:mm')}"></p>
+					</td>
+					<td class="col-toggle">
+						<a href="#" th:onclick="confirmParent([[${userGroup.userGroupId}]], [[${userGroup.userGroupName}]]); return false;">확인</a>
+					</td>
+				</tr>
 				</th:block>
 			</tbody>
 		</table>
@@ -66,3 +74,4 @@
 		</div>
 	</div>
 </body>
+</html>

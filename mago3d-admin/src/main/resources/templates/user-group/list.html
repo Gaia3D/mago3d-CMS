@@ -23,7 +23,6 @@
 					<div th:replace="~{/layouts/page-header :: #pageHeaderWrap}"></div>
 					<div class="page-content">
 						<div style="height: 30px;"></div>
-						<!-- S: 사용자 그룹 목록 -->
 						<div class="list">
 							<div class="list-header row">
 								<div class="list-desc u-pull-left">
@@ -33,6 +32,7 @@
 									</div>
 								</div>
 							</div>
+							<!-- S: 사용자 그룹 목록 -->
 							<table class="list-table scope-col" summary="사용자 그룹 리스트를 트리 형태로 조회 ">
 								<caption class="hiddenTag">사용자 그룹</caption>
 								<colgroup>
@@ -258,5 +258,6 @@
 		}
 	}
 </script>
+</th:block>
 </body>
 </html>

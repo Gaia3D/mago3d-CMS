@@ -10,7 +10,8 @@
 	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
 	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
 	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
-    <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
 </head>
 <body>
 <th:block layout:fragment="pageCustomContent">
@@ -44,7 +45,7 @@
                                     <td class="col-input">
                                         <input type="hidden" id="userGroupId" name="userGroupId" />
                                         <input type="text" id="userGroupName" class="l" readonly="true" />
-                                        <input type="button" id="userGroupButton" th:value="#{user.group.usergroup}" />
+                                        <input type="button" id="userGroupButton" value="상위 사용자 그룹 선택" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -111,7 +112,7 @@
         </div>
     </div>
     <!-- 사용자 그룹 -->
-    <!-- <div th:replace="~{/user-group/user-group-list-dialog :: #userGroupListDialog}"></div>  -->
+    <div th:replace="~{/user-group/user-group-list-dialog :: #userGroupListDialog}"></div> 
 </th:block>
 <th:block layout:fragment="pageCustomScript">		
 <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
@@ -233,7 +234,7 @@
 	}
 
 	function checkData() {
-		var passwordValidation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!#^%*?&])[A-Za-z\d$@$!#^%*?&]{${policy.passwordMinLength},${policy.passwordMaxLength}}$/;
+		var passwordValidation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!#^%*?&])[A-Za-z\d$@$!#^%*?&]{[[${policy.passwordMinLength}]],[[${policy.passwordMaxLength}]]}$/;
 
 		if($("#duplicationValue").val() == null || $("#duplicationValue").val() == "") {
 			alert(JS_MESSAGE["check.id.duplication"]);
