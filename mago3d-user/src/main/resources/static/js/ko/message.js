@@ -118,6 +118,7 @@ JS_MESSAGE["upload.complete"] = "업로딩을 완료 하였습니다.";
 JS_MESSAGE["representative.longitude.empty"] = "대표 위치(경도)를 입력하여 주십시오.";
 JS_MESSAGE["representative.latitude.empty"] = "대표 위치(위도)를 입력하여 주십시오.";
 JS_MESSAGE["representative.altitude.empty"] = "대표 위치(높이)를 입력하여 주십시오.";
+JS_MESSAGE["metainfo.empty"] = "메타 정보를 입력하여 주십시오.";
 JS_MESSAGE["converter.target.file.empty"] = "변환 대상인 3D 파일이 존재하지 않습니다.";
 JS_MESSAGE["upload.file.invalid"] = "파일이 유효하지 않습니다. 다시 업로딩 해 주십시오.";
 JS_MESSAGE["upload.file.ext.invalid"] = "파일 확장자가 유효하지 않습니다.";

@@ -3,8 +3,8 @@
 <div id="dataInfoDialogDHTML" class="basicTable" style="display: none;">
 </div>
 <script id="dataInfoSource" type="text/x-handlebars-template">
-	<table summary="데이터 다이얼로그">
-	<caption class="hiddenTag">데이터 다이얼로그</caption> 
+	<table th:summary="#{data.dialog.summary}">
+	<caption class="hiddenTag"><th:block th:text="#{data.dialog.summary}"></th:block></caption>
 		<col class="col-label" />
 		<col class="col-data" />
 		<tr>

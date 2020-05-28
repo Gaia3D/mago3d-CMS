@@ -1,7 +1,6 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
-
-<c:if test="${pagination.totalCount > 0}">			
+<!-- 사용하지 않는 코드.. 삭제 대상 -->
+<c:if test="${pagination.totalCount > 0}">
 		<ul class="pagination">
 			<li class="ico first" onclick="pagingDataGroupList('${pagination.firstPage }', '${pagination.searchParameters}');">처음</li>
 	<c:if test="${pagination.existPrePage == 'true' }">

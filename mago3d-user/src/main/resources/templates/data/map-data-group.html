@@ -1,11 +1,10 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
 <div id="dataGroupInfoContent" class="contents contents-margin-none fullHeight" style="display:none;">
 	<h3 th:text="#{data.group.sharing.status}"></h3>
 	<form id="searchDataGroupForm" th:object="${searchDataGroupForm}" method="post" onsubmit="return false;">
 	<div class="dataGroupSummary table-data-group-summary">
-		<table class="table-word-break" summary="데이터 공유 유형별 현황 테이블">
-		<caption class="hiddenTag">데이터 공유 유형별 현황</caption>
+		<table class="table-word-break" th:summary="#{data.group.statistics.summary}">
+		<caption class="hiddenTag"><th:block th:text="#{data.group.statistics.caption}"></th:block></caption>
 			<colgroup>
 		        <col class="col-number" />
 				<col class="col-number" />
@@ -32,7 +31,7 @@
 	<div class="summary-group-divide"></div>
 	<h3 th:text="#{data.group.search}"></h3>
 	<div class="listSearch search-text">
-		<label for="searchDataGroupName" class="hiddenTag">그룹명 입력</label>
+		<label for="searchDataGroupName" class="hiddenTag"><th:block th:text="#{data.group.name.input}"></th:block></label>
 		<input type="text" id="searchDataGroupName" name="searchDataGroupName" th:placeholder="#{data.group.search.placeholder}">
 		<button type="button" id="mapDataGroupSearch" class="btnTextF" th:text="#{common.search}" th:title="#{common.search}"></button>
 	</div>

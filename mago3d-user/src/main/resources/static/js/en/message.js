@@ -118,6 +118,7 @@ JS_MESSAGE["upload.complete"] = "Uploading is complete.";
 JS_MESSAGE["representative.longitude.empty"] = "Enter the representative location (longitude).";
 JS_MESSAGE["representative.latitude.empty"] = "Enter the representative location (latitude).";
 JS_MESSAGE["representative.altitude.empty"] = "Enter the representative location (altitude).";
+JS_MESSAGE["metainfo.empty"] = "Enter the meta information.";
 JS_MESSAGE["converter.target.file.empty"] = "The 3D file to be converted does not exist.";
 JS_MESSAGE["upload.file.invalid"] = "The file is not valid. Please upload again.";
 JS_MESSAGE["upload.file.ext.invalid"] = "The file extension is not valid.";
@@ -140,4 +141,3 @@ JS_MESSAGE["issue.title.empty"] = "Please enter an issue title.";
 JS_MESSAGE["issue.content.empty"] = "Please enter the content of the issue.";
 JS_MESSAGE["issue.details"] = "Issue Details";
 JS_MESSAGE["issue.register"] = "Register the issue";
-

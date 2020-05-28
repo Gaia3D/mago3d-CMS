@@ -3,8 +3,8 @@
 <div id="dataGroupDialogDHTML" class="basicTable" style="display: none;">
 </div>
 <script id="dataGroupSource" type="text/x-handlebars-template">
-	<table summary="데이터 그룹 다이얼로그">
-	<caption class="hiddenTag">데이터 그룹 다이얼로그</caption>
+	<table th:summary="#{data.group.dialog.summary}">
+	<caption class="hiddenTag"><th:block th:text="#{data.group.dialog.summary}"></th:block></caption>
 		<col class="col-label" />
 		<col class="col-data" />
 		<tr>

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
 <script id="dataListSource" type="text/x-handlebars-template">
     <div>
@@ -14,8 +13,8 @@
     </div>
     <div class="dataBtns"></div>
     <div class="tableList marT10 yScroll" style="height: calc(100% - 43px)">
-        <table summary="데이터 리스트 테이블">
-            <caption class="hiddenTag">데이터 목록</caption>
+        <table th:summary="#{data.map.summary}">
+            <caption class="hiddenTag"><th:block th:text="#{data.map.summary}"></th:block></caption>
             <colgroup>
                 <col class="col-width-12"/>
                 <col class="col-width-12"/>

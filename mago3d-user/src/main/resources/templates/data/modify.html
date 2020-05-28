@@ -48,55 +48,55 @@
 					<col class="col-input">
 				</colgroup>
 				<tr>
-					<th class="col-label" scope="row">데이터 그룹명</th>
+					<th class="col-label" scope="row"><th:block th:text="#{common.data.group.name}"></th:block></th>
 					<td class="col-input" th:text="${dataInfo.dataGroupName}"></td>
 				</tr>
 				<tr>
-					<th class="col-label" scope="row">데이터  Key</th>
+					<th class="col-label" scope="row"><th:block th:text="#{data.key}"></th:block></th>
 					<td class="col-input" th:text="${dataInfo.dataKey}"></td>
 				</tr>
 				<tr>
-					<th class="col-label" scope="row">데이터명</th>
+					<th class="col-label" scope="row"><th:block th:text="#{common.data.name}"></th:block></th>
 					<td class="col-input" th:text="${dataInfo.dataName}"></td>
 				</tr>
 				<tr>
-					<th class="col-label" scope="row">공유 타입</th>
+					<th class="col-label" scope="row"><th:block th:text="#{common.sharing}"></th:block></th>
 					<td class="col-input">
 						<select id="sharing" name="sharing" th:field="*{sharing}" class="selectBoxClass">
-							<option value="public">공개</option>
-							<option value="common">공통</option>
-							<option value="private">비공개</option>
-							<option value="group">그룹 공개</option>
+							<option value="public"><th:block th:text="#{common.public}"></th:block></option>
+							<option value="common"><th:block th:text="#{common.common}"></th:block></option>
+							<option value="private"><th:block th:text="#{common.private}"></th:block></option>
+							<option value="group"><th:block th:text="#{common.group}"></th:block></option>
 						</select>
 					</td>
 				</tr>
 				<tr>
 					<th class="col-label" scope="row">
-						<label for="mappingType">매핑 타입</label>
+						<label for="mappingType"><th:block th:text="#{common.mapping.type}"></th:block></label>
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
 						<select id="mappingType" name="mappingType" th:field="*{mappingType}" class="selectBoxClass">
-							<option value="origin">origin</option>
-							<option value="boundingboxcenter">boundingboxcenter</option>
+							<option value="origin"><th:block th:text="#{common.origin}"></th:block></option>
+							<option value="boundingboxcenter"><th:block th:text="#{common.bounding.box.center}"></th:block></option>
 						</select>
 					</td>
 				</tr>
 				<tr>
 					<th class="col-label" scope="row">
-						<label for="longitude">경도/위도/높이</label>
+						<label for="longitude"><th:block th:text="#{common.longitude}"></th:block></label>
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
 						<input type="text" id="longitude" name="longitude" th:field="*{longitude}" class="m">
 						<input type="text" id="latitude" name="latitude" th:field="*{latitude}" class="m" />
 						<input type="text" id="altitude" name="altitude" th:field="*{altitude}" class="m" />
-						<input type="button" id="mapButtion" value="지도에서 찾기" />
+						<input type="button" id="mapButtion" th:value="#{common.find.map}" />
 					</td>
 				</tr>
 				<tr>
 					<th class="col-label" scope="row">
-						<label for="heading">heading/pitch/roll</label>
+						<label for="heading"><th:block th:text="#{common.heading.pitch.roll}"></th:block></label>
 					</th>
 					<td class="col-input">
 						<input type="text" id="heading" name="heading" th:field="*{heading}" class="m" />
@@ -106,7 +106,7 @@
 				</tr>
 				<tr>
 					<th class="col-label" scope="row">
-						<label for="metainfo">메타정보</label>
+						<label for="metainfo"><th:block th:text="#{common.meta.information}"></th:block></label>
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
@@ -115,54 +115,52 @@
 				</tr>
 				<tr>
 					<th class="col-label" scope="row">
-						<label for="status">상태</label>
+						<label for="status"><th:block th:text="#{common.status}"></th:block></label>
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input">
 						<select id="status" name="status" th:field="*{status}" class="selectBoxClass">
-							<option value="processing">변환중 </option>
-							<option value="use">사용중</option>
-							<option value="unused">사용중지</option>
+							<option value="processing"><th:block th:text="#{data.status.processing}"></th:block></option>
+							<option value="use"><th:block th:text="#{data.status.use}"></th:block></option>
+							<option value="unused"><th:block th:text="#{data.status.unused}"></th:block></option>
 						</select>
 					</td>
 				</tr>
 				<tr>
-					<th class="col-label" scope="row">속성 정보</th>
-					<td class="col-input" th:if="${#bools.isTrue(dataInfo.attributeExist)}" th:text="등록"></td>
-					<td class="col-input" th:if="${#bools.isFalse(dataInfo.attributeExist)}" th:text="미등록"></td>
+					<th class="col-label" scope="row"><th:block th:text="#{data.attribute.information}"></th:block></th>
+					<td class="col-input" th:if="${#bools.isTrue(dataInfo.attributeExist)}" th:text="#{common.registered}"></td>
+					<td class="col-input" th:if="${#bools.isFalse(dataInfo.attributeExist)}" th:text="#{common.not.registered}"></td>
 				</tr>
 				<tr>
-					<th class="col-label" scope="row">Object 속성 정보</th>
-					<td class="col-input" th:if="${#bools.isTrue(dataInfo.objectAttributeExist)}" th:text="등록"></td>
-					<td class="col-input" th:if="${#bools.isFalse(dataInfo.objectAttributeExist)}" th:text="미등록"></td>
+					<th class="col-label" scope="row"><th:block th:text="#{data.object.attribute.information}"></th:block></th>
+					<td class="col-input" th:if="${#bools.isTrue(dataInfo.objectAttributeExist)}" th:text="#{common.registered}"></td>
+					<td class="col-input" th:if="${#bools.isFalse(dataInfo.objectAttributeExist)}" th:text="#{common.not.registered}"></td>
 				</tr>
 				<tr>
 					<th class="col-label l" scope="row">
-						<label for="description" th:text="#{description}"></label>
+						<label for="description" th:text="#{common.description}"></label>
 					</th>
 					<td class="col-input">
 						<input type="text" id="description" name="description" th:field="*{description}" class="xl" />
 					</td>
 				</tr>
 				<tr>
-					<th class="col-label" scope="row">수정일</th>
+					<th class="col-label" scope="row"><th:block th:text="#{common.updated}"></th:block></th>
 					<td class="col-input">
-						<p th:text="${#dates.format(dataInfo.updateDate,'yyyy-MM-dd HH:mm:ss')}"></p>
-						<p th:text="${#dates.format(viewUpdateDate,'yyyy-MM-dd HH:mm')}"></p>
+						<th:block th:text="${#dates.format(dataInfo.updateDate,'yyyy-MM-dd HH:mm')}"></th:block>
 					</td>
 				</tr>
 				<tr>
-					<th class="col-label" scope="row">등록일</th>
+					<th class="col-label" scope="row"><th:block th:text="#{common.created}"></th:block></th>
 					<td class="col-input">
-						<p th:text="${#dates.format(dataInfo.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
-						<p th:text="${#dates.format(viewUpdateDate,'yyyy-MM-dd HH:mm')}"></p>
+						<th:block th:text="${#dates.format(dataInfo.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
 					</td>
 				</tr>
 			</table>
 			<div class="button-group">
 				<div class="center-buttons">
-					<input type="submit" th:value="#{modified}" onclick="updateDataInfo();" />
-					<a href="/data/list" class="button">목록</a>
+					<input type="submit" th:value="#{common.update}" onclick="updateDataInfo();" />
+					<a href="/data/list" class="button"><th:block th:text="#{common.list}"></th:block></a>
 				</div>
 			</div>
 		</form>
@@ -182,22 +180,22 @@
 
 	function validate() {
 		if ($("#longitude").val() === "") {
-			alert("대표 위치(경도)를 입력하여 주십시오.");
+			alert(JS_MESSAGE["representative.longitude.empty"]);
 			$("#longitude").focus();
 			return false;
 		}
 		if ($("#latitude").val() === "") {
-			alert("대표 위치(위도)를 입력하여 주십시오.");
+			alert(JS_MESSAGE["representative.latitude.empty"]);
 			$("#latitude").focus();
 			return false;
 		}
 		if ($("#altitude").val() === "") {
-			alert("대표 위치(높이)를 입력하여 주십시오.");
+			alert(JS_MESSAGE["representative.altitude.empty"]);
 			$("#altitude").focus();
 			return false;
 		}
 		if ($("#metainfo").val() === "") {
-			alert("메타 정보를 입력하여 주십시오.");
+			alert(JS_MESSAGE["metainfo.empty"]);
 			$("#metainfo").focus();
 			return false;
 		}
@@ -221,7 +219,7 @@
 						alert(JS_MESSAGE["update"]);
 					} else if(msg.statusCode === 403) {
 						//data.smart.tiling
-						alert("변경 권한(Smart Tiling)이 존재하지 않습니다.");
+						alert(JS_MESSAGE["data.smart.tiling.grant.required"]);
 					} else if (msg.statusCode === 428) {
 						if(confirm(JS_MESSAGE[msg.errorCode])) {
 							$('input[name="dataId"]').val('${dataInfo.dataId}');
@@ -233,7 +231,7 @@
 								data: formData,
 								success: function(msg){
 									if(msg.statusCode <= 200) {
-										alert("요청 하였습니다.");
+										alert(JS_MESSAGE["requested"]);
 									} else {
 										alert(JS_MESSAGE[msg.errorCode]);
 										console.log("---- " + msg.message);
@@ -264,41 +262,7 @@
 			//alert('no');
 		}
 	}
-	/*
-	var updateDataInfoFlag = true;
-	function updateDataInfo() {
-		if (validate() == false) {
-			return false;
-		}
-		if(updateDataInfoFlag) {
-			updateDataInfoFlag = false;
-			var formData = $("#dataInfo").serialize();
-			$.ajax({
-				url: "/datas/${dataInfo.dataId}",
-				type: "POST",
-				headers: {"X-Requested-With": "XMLHttpRequest"},
-				data: formData,
-				success: function(msg){
-					if(msg.statusCode <= 200) {
-						alert(JS_MESSAGE["update"]);
-						window.location.reload();
-					} else {
-						alert(JS_MESSAGE[msg.errorCode]);
-						console.log("---- " + msg.message);
-					}
-					updateDataInfoFlag = true;
-				},
-				error:function(request, status, error){
-			        alert(JS_MESSAGE["ajax.error.message"]);
-			        updateDataInfoFlag = true;
-				}
-			});
-		} else {
-			alert(JS_MESSAGE["button.dobule.click"]);
-			return;
-		}
-	}
-	*/
+
 	// 지도에서 찾기 -- common.js, openFindDataPoint
 	$( "#mapButtion" ).on( "click", function() {
 		//openFindDataPoint("${dataInfo.dataId}", "MODIFY");
