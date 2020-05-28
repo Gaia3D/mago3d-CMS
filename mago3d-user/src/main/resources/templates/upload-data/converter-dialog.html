@@ -1,67 +1,61 @@
 <html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
 <body>
-<div id="dialogConverterJob" class=dialogConverterJob title="F4D Converter Job 등록">
+<div id="dialogConverterJob" class=dialogConverterJob th:title="#{converter.job.f4d.registration}">
 	<form id="converterJobForm" name="converterJobForm" th:action="@{#}" method="post">
 		<input type="hidden" id="converterCheckIds" name="converterCheckIds" />
 		<input type="hidden" id="dataType" name="dataType" />
-		<table class="inner-table scope-row" summary="F4D Converter Job 등록">
-			<caption class="hiddenTag">Job 등록</caption>
+		<table class="inner-table scope-row" th:summary="#{converter.job.f4d.conversion.summary}">
+			<caption class="hiddenTag"><th:block th:text="#{converter.job.f4d.conversion.caption}"></th:block></caption>
 			<colgroup>
 				<col class="col-sub-label xl"></col>
 				<col class="col-data"></col>
 			</colgroup>
 			<tbody>
 				<tr>
-					<th class="col-sub-label x">변환 템플릿</th>
+					<th class="col-sub-label x"><label for="converterTemplate"><th:block th:text="#{converter.conversion.type}"></th:block></label></th>
 					<td class="col-input">
-						<label for="converterTemplate" class="hiddenTag">변환 템플릿</label>
 						<select id="converterTemplate" name="converterTemplate" class="select" style="height: 30px;">
-	                		<option value="basic"> 기본 </option>
-		                	<option value="building"> 빌딩 </option>
-							<option value="extra-big-building"> 초대형 빌딩 </option>
-							<option value="point-cloud"> Point Cloud </option>
-							<!-- <option value="single-realistic-mesh"> 단일 Point Cloud </option> -->
-							<!-- <option value="splitted-realistic-mesh"> 분할 Point Cloud </option> -->
+	                		<option value="basic"> <th:block th:text="#{converter.template.basic}"></th:block> </option>
+		                	<option value="building"> <th:block th:text="#{converter.template.building}"></th:block> </option>
+							<option value="extra-big-building"> <th:block th:text="#{converter.template.extra.big.building}"></th:block> </option>
+							<option value="point-cloud"> <th:block th:text="#{converter.template.point.cloud}"></th:block> </option>
 						</select>
 					</td>
 				</tr>
 				<tr>
-					<th class="col-sub-label x">제목</th>
+					<th class="col-sub-label x"><label for="title"><th:block th:text="#{common.title}"></th:block></label></th>
 					<td>
 						<div class="inner-data">
-							<label for="title" class="hiddenTag">타이틀</label>
 							<input type="text" id="title" name="title" class="l" />
 						</div>
 					</td>
 				</tr>
 				<tr>
-					<th class="col-sub-label x">Original Unit</th>
+					<th class="col-sub-label x"><label for="usf"><th:block th:text="#{converter.usf}"></th:block></label></th>
 					<td>
-						<label for="usf" class="hiddenTag">usf</label>
 						<select id="usf" name="usf" class="select" style="height: 30px;">
-	                		<option value="1"> 기본(1m) </option>
-		                	<option value="0.1"> 10 cm </option>
-							<option value="0.01"> 1 cm </option>
-							<option value="0.001"> 1 mm </option>
-							<option value="10"> 10 m </option>
+	                		<option value="1"> <th:block th:text="#{converter.usf.basic}"></th:block> </option>
+		                	<option value="0.1"> <th:block th:text="#{converter.usf.unit10cm}"></th:block> </option>
+							<option value="0.01"> <th:block th:text="#{converter.usf.unit1cm}"></th:block> </option>
+							<option value="0.001"> <th:block th:text="#{converter.usf.unit1mm}"></th:block> </option>
+							<option value="10"> <th:block th:text="#{converter.usf.unit10m}"></th:block> </option>
 						</select>
 					</td>
 				</tr>
 				<tr>
-					<th class="col-sub-label x">높이 방향</th>
+					<th class="col-sub-label x"><label for="yAxisUp"><th:block th:text="#{converter.view.axis}"></th:block></label></th>
 					<td>
-						<label for="yAxisUp" class="hiddenTag">yAxisUp</label>
 						<select id="yAxisUp" name="yAxisUp" class="select" style="height: 30px;">
-							<option value="N">Z축</option>
-							<option value="Y">Y축</option>
+							<option value="N"><th:block th:text="#{converter.view.z.axis}"></th:block></option>
+							<option value="Y"><th:block th:text="#{converter.view.y.axis}"></th:block></option>
 						</select>
-						<span class="marL10">Z축이 건물의 천장을 향하는 경우</span>
+						<span class="marL10"><th:block th:text="#{converter.job.z.axis.facing}"></th:block></span>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 		<div class="button-group">
-			<a href="#" class="button" onclick="saveConverterJob(); return false;" style="color: white">저장</a>
+			<a href="#" class="button" onclick="saveConverterJob(); return false;" style="color: white"><th:block th:text="#{common.save}"></th:block></a>
 		</div>
 	</form>
 </div>
