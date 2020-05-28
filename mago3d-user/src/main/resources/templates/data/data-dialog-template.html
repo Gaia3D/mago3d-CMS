@@ -1,3 +1,4 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
 <div id="dataDialogWrap">
 <div id="dataInfoDialogDHTML" class="basicTable" style="display: none;">
 </div>
@@ -7,52 +8,52 @@
 		<col class="col-label" />
 		<col class="col-data" />
 		<tr>
-			<th class="col-label" scope="row">데이터 그룹명</th>
+			<th class="col-label" th:text="#{data.group.name}" scope="row"></th>
 			<td id="dataGroupName" class="col-data ellipsis" style="max-width: 300px;">{{dataGroupName}}</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">데이터 Key</th>
+			<th class="col-label" th:text="#{data.key}" scope="row"></th>
 			<td id="dataKey" class="col-data">{{dataKey}}</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">데이터 타입</th>
+			<th class="col-label" th:text="#{common.data.type}" scope="row"></th>
 			<td id="dataType" class="col-data">{{dataType}}</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">사용자 아이디</th>
+			<th class="col-label" th:text="#{data.group.user.id}" scope="row"></th>
 			<td id="userId" class="col-data">{{userId}}</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">공유 유형</th>
+			<th class="col-label" th:text="#{common.sharing}" scope="row"></th>
 			<td id="sharing" class="col-data">
 {{#ifMatch sharing 'common'}}
-				공통
+				<th:block th:text="#{common.common}"></th:block>
 {{/ifMatch}}
 {{#ifMatch sharing 'public'}}
-				공개
+				<th:block th:text="#{common.public}"></th:block>
 {{/ifMatch}}
 {{#ifMatch sharing 'private'}}
-				개인
+				<th:block th:text="#{common.private}"></th:block>
 {{/ifMatch}}
 {{#ifMatch sharing 'group'}}
-				그룹
+				<th:block th:text="#{common.group}"></th:block>
 {{/ifMatch}}			
 			</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">매핑 타입</th>
+			<th class="col-label" th:text="#{common.mapping.type}" scope="row"></th>
 			<td id="mappingType" class="col-data">{{mappingType}}</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">경도</th>
+			<th class="col-label" th:text="#{common.longitude}" scope="row"></th>
 			<td id="longitude" class="col-data">{{longitude}}</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">위도</th>
+			<th class="col-label" th:text="#{common.latitude}" scope="row"></th>
 			<td id="latitude" class="col-data">{{latitude}}</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">높이</th>
+			<th class="col-label" th:text="#{common.altitude}" scope="row"></th>
 			<td id="altitude" class="col-data">{{altitude}}</td>
 		</tr>
 		<tr>
@@ -68,41 +69,42 @@
 			<td id="roll" class="col-data">{{roll}}</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">메타정보</th>
+			<th class="col-label" th:text="#{common.meta.information}" scope="row"></th>
 			<td id="metainfo" class="col-data">{{metainfo}}</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">속성 존재 유무</th>
+			<th class="col-label" th:text="#{common.attribute}" scope="row"></th>
 			<td id="attributeExist" class="col-data">
 {{#if attributeExist}}
-				<a href="#" onclick="detailDataAttribute('{{dataId }}', '{{dataGroupKey}}', '{{dataKey}}', '{{dataName}}'); return false;">보기</a>	
+				<a href="#" th:text="#{common.view}" onclick="detailDataAttribute('{{dataId }}', '{{dataGroupKey}}', '{{dataKey}}', '{{dataName}}'); return false;"></a>
 {{else}}
-				미등록
+				<th:block th:text="#{data.not.registered}"></th:block>
 {{/if}}
 			</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">Object 속성 존재 유무</th>
+			<th class="col-label" th:text="#{common.object.attribute}" scope="row"></th>
 			<td id="objectAttributeExist" class="col-data">
 {{#if objectAttributeExist}}
 				<a href="#" onclick="detailDataObjectAttribute('{{dataId }}', '{{dataName}}'); return false;">보기</a>
 {{else}}
-				미등록
+				<th:block th:text="#{data.not.registered}"></th:block>
 {{/if}}
 			</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">설명</th>
+			<th class="col-label" th:text="#{common.description}" scope="row"></th>
 			<td id="description" class="col-data">{{description}}</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">수정일</th>
+			<th class="col-label" th:text="#{common.updated}" scope="row"></th>
 			<td id="updateDate" class="col-data">{{viewUpdateDate}}</td>
 		</tr>
 		<tr>
-			<th class="col-label" scope="row">등록일</th>
+			<th class="col-label" th:text="#{common.created}" scope="row"></th>
 			<td id="insertDate" class="col-data">{{viewInsertDate}}</td>
 		</tr>
 	</table>
 </script>
 </div>
+</html>
