@@ -44,8 +44,8 @@
 			<div id="dataContent" class="contents-margin-default fullHeight">
 				<div class="tabs">
 					<ul id="dataInfoTab" class="tab tab-divide">
-						<li id="dataGroupTab" data-nav="dataGroupInfoContent">데이터 그룹</li>
-						<li id="dataListTab" data-nav="dataInfoContent" class="on">데이터 목록</li>
+						<li id="dataGroupTab" th:text="#{data.group.list.tab.menu}" data-nav="dataGroupInfoContent"></li>
+						<li id="dataListTab" class="on" th:text="#{data.list.tab.menu}" data-nav="dataInfoContent"></li>
 					</ul>
 				</div>
 				<div th:replace="~{/data/map-data :: #dataInfoContent}"></div>
