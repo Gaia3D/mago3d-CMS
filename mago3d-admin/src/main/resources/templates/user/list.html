@@ -203,8 +203,8 @@
             </div>
         </div>
     </div>
-    <!-- 데이터 그룹 -->
-    <div th:replace="~{/user-group/dialog :: #userGroupInfoDialog}"></div>
+    <!-- 사용자 그룹 -->
+    <div th:replace="~{/user-group/user-group-info-dialog :: #userGroupInfoDialog}"></div>
 </th:block>
 <th:block layout:fragment="pageCustomScript">
 <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
