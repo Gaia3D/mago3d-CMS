@@ -27,12 +27,14 @@ JS_MESSAGE["server"] = "서버";
 JS_MESSAGE["account"] = "계정";
 JS_MESSAGE["use"] = "사용";
 JS_MESSAGE["not.use"] = "미사용";
-JS_MESSAGE["more.information"] = "상세 정보";
+JS_MESSAGE["more.information"] = " 상세 정보";
+JS_MESSAGE["here.it.is"] = "이곳 입니다.";
 
 JS_MESSAGE["csrf.token.invalid"] = "보안(CSRF) 토큰이 유효하지 않습니다.";
 
 JS_MESSAGE["number.constraint"] = "숫자만 입력 가능합니다.";
 JS_MESSAGE["location.constraint"]="경도 유효범위 : -180 ~ 180\n위도 유효범위 : -90 ~ 90 \n높이 유효범위 : 300000 입니다.";
+JS_MESSAGE["location.invalid"] = "위치 정보가 올바르지 않습니다. 확인하여 주십시오.";
 
 JS_MESSAGE["file.name.empty"] = "파일명을 입력하여 주십시오.";
 JS_MESSAGE["file.name.invalid"] = "파일명이 유효하지 않습니다.";
@@ -134,4 +136,7 @@ JS_MESSAGE["search.date.warning"] = "시작일이 종료일보다 클수 없습�
 
 JS_MESSAGE["already.agreed"] = "이미 동의하였습니다.";
 
-
+JS_MESSAGE["issue.title.empty"] = "이슈 제목을 입력하여 주십시오.";
+JS_MESSAGE["issue.content.empty"] = "이슈 내용을 입력하여 주십시오.";
+JS_MESSAGE["issue.details"] = "이슈 상세 정보";
+JS_MESSAGE["issue.register"] = "이슈 등록";

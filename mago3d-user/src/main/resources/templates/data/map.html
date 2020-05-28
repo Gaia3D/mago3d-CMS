@@ -5,7 +5,7 @@
     <meta name="referrer" content="origin">
     <meta name="viewport" content="width=device-width">
     <meta name="robots" content="index,nofollow"/>
-	<title>데이터 목록 | mago3D</title>
+	<title><th:block th:text="#{data.page.title}"></th:block></title>
 	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/externlib/cesium/Widgets/widgets.css(cacheVersion=${contentCacheVersion})}" />
 	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
@@ -64,7 +64,7 @@
 			<!-- E: CONTENTSBTN -->
 		</div>
 		<div class="contentsBtn">
-			<button type="button" id="closeLeftBtn" title="닫기" style="display:none;">Close</button>
+			<button type="button" id="closeLeftBtn" th:title="#{common.close}" style="display:none;">Close</button>
 		</div>
 		<!-- E: CONTENTSWRAP -->
 
@@ -231,7 +231,7 @@
 	// smart tiling data flyTo
 	function gotoFly(longitude, latitude, altitude) {
 		if(longitude === null || longitude === '' || latitude === null || latitude === '' || altitude === null || altitude === '') {
-			alert("위치 정보가 올바르지 않습니다. 확인하여 주십시오.");
+			alert(JS_MESSAGE["location.invalid"]);
 			return;
 		}
 
@@ -241,7 +241,7 @@
 
 	function flyTo(dataGroupId, dataKey) {
 		if(dataGroupId === null || dataGroupId === '' || dataKey === null || dataKey === '') {
-			alert("위치 정보가 올바르지 않습니다. 확인하여 주십시오.");
+			alert(JS_MESSAGE["location.invalid"]);
 			return;
 		}
 
@@ -268,7 +268,7 @@
 			pixel:12,
 			color:'black',
 			borderColor:'white',
-			text:'여기요 여기!'
+			text: JS_MESSAGE["here.it.is"]
 		}
 
 		var img = sb.getPng([80,32],'#94D8F6', commentTextOption);
@@ -306,7 +306,7 @@
 
 	function flyToGroup(longitude, latitude, altitude, duration) {
 		if(longitude === null || longitude === '' || latitude === null || latitude === '' || altitude === null || altitude === '') {
-			alert("위치 정보가 올바르지 않습니다. 확인하여 주십시오.");
+			alert(JS_MESSAGE["location.invalid"]);
 			return;
 		}
 		gotoFlyAPI(MAGO3D_INSTANCE, parseFloat(longitude), parseFloat(latitude), parseFloat(altitude), parseFloat(duration));
@@ -332,7 +332,7 @@
 			dataType: "json",
 			success: function(msg){
 				if(msg.statusCode <= 200) {
-					dataInfoDialog.dialog( "option", "title", msg.dataInfo.dataName + " 상세 정보");
+					dataInfoDialog.dialog( "option", "title", msg.dataInfo.dataName + JS_MESSAGE["more.information"]);
 
 				    var template = Handlebars.compile($("#dataInfoSource").html());
 				    var dataInfoHtml = template(msg.dataInfo);
@@ -475,7 +475,7 @@
 			dataType: "json",
 			success: function(msg){
 				if(msg.statusCode <= 200) {
-					dataGroupDialog.dialog( "option", "title", msg.dataGroup.dataGroupName + " 상세 정보");
+					dataGroupDialog.dialog( "option", "title", msg.dataGroup.dataGroupName + JS_MESSAGE["more.information"]);
 
 				    var template = Handlebars.compile($("#dataGroupSource").html());
 				    var dataGroupHtml = template(msg.dataGroup);
@@ -496,7 +496,7 @@
 		$('#issueTitle,#issueContents').prop('readonly',false);
 		$('#issueSaveButton').parent('.btns').show();
 		issueDialog.dialog( "open" );
-		issueDialog.dialog( "option", "title", "이슈 등록");
+		issueDialog.dialog( "option", "title", JS_MESSAGE["issue.register"]);
 	});
 	// 이슈 다이얼 로그
 	var issueDialog = $( "#issueDialog" ).dialog({
@@ -519,7 +519,7 @@
 			success: function(msg){
 				if(msg.statusCode <= 200) {
 					issueDialog.dialog( "open" );
-					issueDialog.dialog( "option", "title", "이슈 상세 정보");
+					issueDialog.dialog( "option", "title", JS_MESSAGE["issue.details"]);
 					$('#issueSaveButton').parent('.btns').hide();
 
 					$('#issueTitle,#issueContents').prop('readonly',true);
@@ -605,12 +605,12 @@
 
 	function validate() {
 		if ($("#issueTitle").val() === "") {
-			alert("제목을 입력하여 주십시오.");
+			alert(JS_MESSAGE["issue.title.empty"]);
 			$("#issueTitle").focus();
 			return false;
 		}
 		if ($("#issueContents").val() === "") {
-			alert("내용을 입력하여 주십시오.");
+			alert(JS_MESSAGE["issue.content.empty"]);
 			$("#issueContents").focus();
 			return false;
 		}

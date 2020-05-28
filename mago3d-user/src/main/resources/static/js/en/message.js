@@ -27,12 +27,14 @@ JS_MESSAGE["server"] = "서버";
 JS_MESSAGE["account"] = "계정";
 JS_MESSAGE["use"] = "사용";
 JS_MESSAGE["not.use"] = "미사용";
-JS_MESSAGE["more.information"] = "More Information";
+JS_MESSAGE["more.information"] = " More Information";
+JS_MESSAGE["here.it.is"] = "Here it is";
 
 JS_MESSAGE["csrf.token.invalid"] = "보안(CSRF) 토큰이 유효하지 않습니다.";
 
 JS_MESSAGE["number.constraint"] = "Only numbers can be entered.";
 JS_MESSAGE["location.constraint"]="Longitude effective range : -180 ~ 180\nLatitude effective range : -90 ~ 90 \nAltitude effective range : 300000";
+JS_MESSAGE["location.invalid"] = "The location information is incorrect. Please check.";
 
 JS_MESSAGE["file.name.empty"] = "파일명을 입력하여 주십시오.";
 JS_MESSAGE["file.name.invalid"] = "파일명이 유효하지 않습니다.";
@@ -134,4 +136,8 @@ JS_MESSAGE["search.date.warning"] = "시작일이 종료일보다 클수 없습�
 
 JS_MESSAGE["already.agreed"] = "이미 동의하였습니다.";
 
+JS_MESSAGE["issue.title.empty"] = "Please enter an issue title.";
+JS_MESSAGE["issue.content.empty"] = "Please enter the content of the issue.";
+JS_MESSAGE["issue.details"] = "Issue Details";
+JS_MESSAGE["issue.register"] = "Register the issue";
 
