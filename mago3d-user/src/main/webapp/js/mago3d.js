@@ -18691,9 +18691,7 @@ CesiumViewerInit.prototype.providerBuild = function()
 		case CesiumViewerInit.TERRAINTYPE.CESIUM_ION_DEFAULT :{
 			if (policy.cesiumIonToken && policy.cesiumIonToken.length > 0) 
 			{
-				this.options.terrainProvider = new Cesium.CesiumTerrainProvider({
-					url: Cesium.createWorldTerrain()
-				});
+				this.options.terrainProvider = Cesium.createWorldTerrain();
 			}
 			break;
 		}
