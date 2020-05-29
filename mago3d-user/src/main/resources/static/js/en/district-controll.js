@@ -17,7 +17,7 @@ function District(magoInstance, viewer) {
         // TODO 개발 서버 포팅후 geoserver url 변경하기 
         var provider = new Cesium.WebMapServiceImageryProvider({
             url: policy.geoserverDataUrl + "/wms",
-            layers: 'ndtp:district',
+            layers: 'mago3d:district',
             minimumLevel: 2,
             maximumLevel: 20,
             parameters: {
