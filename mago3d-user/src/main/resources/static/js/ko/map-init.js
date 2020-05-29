@@ -7,7 +7,7 @@
  */
 function mapInit(magoInstance, baseLayers, policy) {
 	if(!(this instanceof mapInit)) {
-        throw new Error("New 를 통해 생성 하십시오.");
+        throw new Error(JS_MESSAGE["layer.init"]);
     }
 	
 	var WMS_LAYER = 'wmsLayer';
@@ -274,7 +274,7 @@ function mapInit(magoInstance, baseLayers, policy) {
 				} else if(serviceType ==='wfs') {
 					addWFSLayer(layerKey);
 				} else {
-					alert(serviceType+" 타입은  지원하지 않습니다.");
+					alert(serviceType + JS_MESSAGE["layer.not.supported"]);
 				}
 			}
 			
@@ -297,7 +297,7 @@ function mapInit(magoInstance, baseLayers, policy) {
 				} else if(serviceType ==='wfs') {
 					addWFSLayer(layerKey);
 				} else {
-					alert(serviceType+" 타입은 지원하지 않는 서비스 타입입니다.");
+					alert(serviceType + JS_MESSAGE["layer.not.supported"]);
 				}
 			}
 		},
@@ -333,7 +333,7 @@ function mapInit(magoInstance, baseLayers, policy) {
 				} else if(serviceType ==='wfs') {
 					removeWFSLayer(layerKey);
 				} else {
-					alert(serviceType+" 타입은 지원하지 않는 서비스 타입입니다.");
+					alert(serviceType + JS_MESSAGE["layer.not.supported"]);
 				}
 			}
 		},

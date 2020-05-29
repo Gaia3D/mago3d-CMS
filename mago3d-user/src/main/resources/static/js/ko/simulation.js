@@ -83,7 +83,7 @@ var Simulation = function(magoInstance) {
 	$('#solarAnalysis .drawObserverPoint').click(function(){
 		var $this = $(this);
 		if(!solarMode) {
-			alert('분석 시작 후 위치를 선택해주세요.');
+			alert(JS_MESSAGE["simulation.analysis.start"]);
 			return;
 		}
 		magoManager.once(Mago3D.MagoManager.EVENT_TYPE.CLICK, function(e){
@@ -116,7 +116,7 @@ var Simulation = function(magoInstance) {
 		});
 		
 		if(filtered.length !== 1) {
-			alert('위치를 지정해주시기 바랍니다.');
+			alert(JS_MESSAGE["simulation.select.location"]);
 			return;
 		}
 		var om = filtered[0];

@@ -9,6 +9,7 @@ JS_MESSAGE["success"] = "It has been succeeded.";
 JS_MESSAGE["save"] = "It has been saved.";
 JS_MESSAGE["loading"] = "Loading";
 JS_MESSAGE["requested"] = "Requested";
+JS_MESSAGE["searching"] = "Searching.";
 
 JS_MESSAGE["apply"] = "적용되었습니다.";
 JS_MESSAGE["upload"] = "업로딩 중입니다.";
@@ -138,6 +139,8 @@ JS_MESSAGE["converter.usf.empty"] = "Enter the Unit Scale Factor.";
 
 JS_MESSAGE["search.option.warning"] = "포함 옵션을 사용하실 경우 1분 이상이 소요될 수 있습니다. 계속 진행 하시겠습니까?";
 JS_MESSAGE["search.date.warning"] = "시작일이 종료일보다 클수 없습니다.";
+JS_MESSAGE["search.enter.word"] = "Please enter a search term.";
+JS_MESSAGE["search.required.word"] = "Please enter at least 1 character for the search term.";
 
 JS_MESSAGE["already.agreed"] = "이미 동의하였습니다.";
 
@@ -145,3 +148,11 @@ JS_MESSAGE["issue.title.empty"] = "Please enter an issue title.";
 JS_MESSAGE["issue.content.empty"] = "Please enter the content of the issue.";
 JS_MESSAGE["issue.details"] = "Issue Details";
 JS_MESSAGE["issue.register"] = "Register the issue";
+
+JS_MESSAGE["layer.init"] = "Create it via New.";
+JS_MESSAGE["layer.not.supported"] = " type is not supported.";
+
+JS_MESSAGE["simulation.analysis.start"] = "Please select a location after starting analysis.";
+JS_MESSAGE["simulation.select.location"] = "Please specify the location.";
+
+JS_MESSAGE["policy.camera.location"] = "Move the camera closer to the ground.";

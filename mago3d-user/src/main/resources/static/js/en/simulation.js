@@ -83,7 +83,7 @@ var Simulation = function(magoInstance) {
 	$('#solarAnalysis .drawObserverPoint').click(function(){
 		var $this = $(this);
 		if(!solarMode) {
-			alert("Please select a location after starting analysis.");
+			alert(JS_MESSAGE["simulation.analysis.start"]);
 			return;
 		}
 		magoManager.once(Mago3D.MagoManager.EVENT_TYPE.CLICK, function(e){
@@ -116,7 +116,7 @@ var Simulation = function(magoInstance) {
 		});
 		
 		if(filtered.length !== 1) {
-			alert("Please specify the location.");
+			alert(JS_MESSAGE["simulation.select.location"]);
 			return;
 		}
 		var om = filtered[0];

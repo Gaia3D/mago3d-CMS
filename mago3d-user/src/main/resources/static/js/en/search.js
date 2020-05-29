@@ -17,12 +17,12 @@ $("#fullTextSearchButton").click(function() {
 // 입력 체크
 function fullTextSearchCheck() {
 	if($("#fullTextSearch").val() === null || $("#fullTextSearch").val().trim() === "") {
-		alert("검색어를 입력하여 주십시오.");
+		alert(JS_MESSAGE["search.enter.word"]);
 		$("#fullTextSearch").focus();
 		return false;
 	}
 	if($("#fullTextSearch").val().trim().length === 1) {
-		alert("검색어는 최소 1자 이상을 입력하여 주십시오.");
+		alert(JS_MESSAGE["search.required.word"]);
 		$("#fullTextSearch").focus();
 		return false;
 	}
@@ -36,7 +36,7 @@ function fullTextSearch() {
 		if($('#searchContent').css("display") ==='none') $(".search").click();
 		districtSearch(null);
 	} else {
-		alert("검색 중 입니다.");
+		alert(JS_MESSAGE["searching"]);
 		return;
 	}
 }

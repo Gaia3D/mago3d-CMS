@@ -23,7 +23,7 @@ var UserPolicy = function(magoInstance) {
 		var flag = JSON.parse($(this).val().toLowerCase());
 		var campos = getCameraCurrentPositionAPI(magoInstance);
 		if(campos.alt > 5000 && flag) {
-			alert('카메라를 지표면에 더 가까이 이동해주세요.');
+			alert(JS_MESSAGE["policy.camera.location"]);
 			$('#nearIssueDisplayN').prop('checked',true);
 			return false;
 		}
@@ -54,7 +54,7 @@ var UserPolicy = function(magoInstance) {
 		var lod4 = $("#geoLod4").val();
 		var lod5 = $("#geoLod5").val();
 		if(isNaN(lod0) || isNaN(lod1) || isNaN(lod2)|| isNaN(lod3) || isNaN(lod4) || isNaN(lod5)) {
-			alert('숫자만 입력 가능합니다.');
+			alert(JS_MESSAGE["number.constraint"]);
 			return;
 		}
 		
@@ -65,7 +65,7 @@ var UserPolicy = function(magoInstance) {
 	$('#changeSsaoButton').click(function(e){
 		var ssao = $('#ssaoRadius').val();
 		if(isNaN(ssao)) {
-			alert('숫자만 입력 가능합니다.');
+			alert(JS_MESSAGE["number.constraint"]);
 			return;
 		} 
 		
