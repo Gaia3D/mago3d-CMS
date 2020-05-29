@@ -20,7 +20,7 @@ $(document).ready(function() {
 		var dataGroupId = $(this).data('group-id');
 		
 		if(dataGroupId === null || dataGroupId === '') {
-			alert("객체 정보가 올바르지 않습니다. 확인하여 주십시오.");
+			alert(JS_MESSAGE["data.info.incorrect"]);
 			return;
 		}
 		
@@ -54,7 +54,7 @@ $(document).ready(function() {
 		}
 		
 		if (flag) {
-			alert('아직 로드되지 않은 데이터입니다.\n이동 후 다시 시도해 주시기 바랍니다.');
+			alert(JS_MESSAGE["data.not.loaded"]);
 			return;
 		}
 		

@@ -114,7 +114,7 @@ var MapDataControll = function(magoInstance) {
 	//색상변경 적용
 	$('#dcColorApply').click(function() {
 		if(!projectId || !dataKey) {
-			alert('데이터 선택을 해주십시오.');
+			alert(JS_MESSAGE["data.select"]);
 			return;
 		}
 
@@ -205,7 +205,7 @@ var MapDataControll = function(magoInstance) {
 	$('#dcSavePosRot').click(function() {
 		if(confirm(JS_MESSAGE["data.update.check"])) {
 			if(!dataId) {
-				alert('선택된 데이터가 없습니다.');
+				alert(JS_MESSAGE["data.not.select"]);
 				return false;
 			}
 			startLoading();
@@ -220,7 +220,7 @@ var MapDataControll = function(magoInstance) {
 						alert(JS_MESSAGE["update"]);
 					} else if(msg.statusCode === 403) {
 						//data.smart.tiling
-						alert("변경 권한(Smart Tiling)이 존재하지 않습니다.");
+						alert(JS_MESSAGE["data.smart.tiling.grant.required"]);
 					} else if (msg.statusCode === 428) {
 						if(confirm(JS_MESSAGE[msg.errorCode])) {
 							$('input[name="dataId"]').val(dataId);
@@ -232,7 +232,7 @@ var MapDataControll = function(magoInstance) {
 								data: formData,
 								success: function(msg){
 									if(msg.statusCode <= 200) {
-										alert("요청 하였습니다.");
+										alert(JS_MESSAGE["requested"]);
 									} else {
 										alert(JS_MESSAGE[msg.errorCode]);
 										console.log("---- " + msg.message);

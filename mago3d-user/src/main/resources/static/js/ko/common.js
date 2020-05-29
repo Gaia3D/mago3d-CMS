@@ -1,6 +1,6 @@
 // 삭제 처리 경고
 function deleteWarning() {
-	if(confirm("삭제 하시겠습니까?")) {
+	if(confirm(JS_MESSAGE["delete.confirm"])) {
 		return true;
 	} else {
 		return false;
@@ -36,7 +36,7 @@ function isNumber(control) {
 	var Num = "1234567890";
 	for (var i=0; i<val.length; i++) {
 		if(Num.indexOf(val.substring(i,i+1))<0) {
-			alert("숫자만 입력 가능 합니다.");
+			alert(JS_MESSAGE["number.constraint"]);
 			return false;
 		}
 	}
@@ -358,7 +358,7 @@ function locationValidation(longitude, latitude, altitude) {
 	var lat = Number(latitude);
 	var alt = Number(altitude);
 	if(isNaN(lon) || isNaN(lat) || isNaN(alt)) {
-		alert("숫자만 입력 가능합니다.");
+		alert(JS_MESSAGE["number.constraint"]);
 		return false;
 	}
 	if((-180 <= lon && lon <= 180) &&  (-90 <= lat && lat <= 90) && (-100 <= alt && alt <= 300000)) {

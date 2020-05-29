@@ -96,6 +96,10 @@ JS_MESSAGE["data.insert"] = "데이터를 등록 하였습니다.";
 JS_MESSAGE["data.update.check"] = "현재 입력된 위치와 회전 정보를 db에 저장하시겠습니까?";
 JS_MESSAGE["data.update.request.check"] = "이 데이터는 관리자가 업로드 하였거나, 다른 사용자가 업로드한 데이터 입니다.\n입력된 위치와 회전정보 변경을 요청 하시겠습니까?";
 JS_MESSAGE["data.smart.tiling.grant.required"] = "변경 권한(Smart Tiling)이 존재하지 않습니다.";
+JS_MESSAGE["data.not.loaded"] = "아직 로드되지 않은 데이터입니다.\n이동 후 다시 시도해 주시기 바랍니다.";
+JS_MESSAGE["data.info.incorrect"] = "객체 정보가 올바르지 않습니다. 확인하여 주십시오.";
+JS_MESSAGE["data.select"] = "데이터 선택을 해주십시오.";
+JS_MESSAGE["data.not.select"] = "선택된 데이터가 없습니다.";
 
 JS_MESSAGE["data.group.order.first"] = "제일 처음 입니다.";
 JS_MESSAGE["data.group.cannot.change.order"] = "순서를 변경할 수 없습니다.";
