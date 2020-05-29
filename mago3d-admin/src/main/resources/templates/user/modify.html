@@ -31,7 +31,7 @@
                         </div>
                         
 						<!-- S: 사용자 수정 -->
-						<form id="userInfo" th:object="${userInfo}" method="post" onsubmit="return false;">
+						<form id="userInfo" th:object="${userInfo}" method="post" th:action="@{#}" onsubmit="return false;">
 							<table class="input-table scope-row" summary="사용자 정보 등록 테이블">
 								<caption class="hiddenTag">사용자 등록</caption>
 								<colgroup>
@@ -122,7 +122,7 @@
 <script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript">
+<script th:inline="javascript">
 	$(document).ready(function() {
 		$('#password').val('');
 		$('#passwordConfirm').val('');
@@ -151,7 +151,7 @@
 	}
 
 	function check() {
-		var passwordValidation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!#^%*?&])[A-Za-z\d$@$!#^%*?&]{${policy.passwordMinLength},${policy.passwordMaxLength}}$/;
+		var passwordValidation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!#^%*?&])[A-Za-z\d$@$!#^%*?&]{[[${policy.passwordMinLength}]],[[${policy.passwordMaxLength}]]}$/;
 
 		if(!$("#userGroupId").val()) {
 			alert(JS_MESSAGE["user.group.select"]);
