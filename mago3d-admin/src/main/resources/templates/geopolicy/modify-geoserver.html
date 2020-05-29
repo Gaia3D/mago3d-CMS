@@ -1,0 +1,182 @@
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
+	<div id="geoserverTab">
+		<form id="geoPolicyGeoServer" th:object="${geoPolicy}" method="post" th:action="@{#}" onsubmit="return false;">
+			<table class="input-table scope-row" summary="환경설정 GeoServer 테이블">
+			<caption class="hiddenTag">환경설정 GeoServer</caption>
+				<col class="col-label l" />
+				<col class="col-input" />
+				<tr>
+					<th class="col-label l" scope="row">
+						<label>Geoserver 사용유무</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input radio-set">
+						<input type="radio" id="geoserverEnable1" name="geoserverEnable" th:field="*{geoserverEnable}" value="true" />
+						<label for="geoserverEnable1">사용</label>
+						<input type="radio" id="geoserverEnable2" name="geoserverEnable" th:field="*{geoserverEnable}" value="false" />
+						<label for="geoserverEnable2">미사용</label>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverWmsVersion">WMS 버전</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverWmsVersion" name="geoserverWmsVersion" th:field="*{geoserverWmsVersion}" class="l" maxlength="5" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverDataUrl">데이터 URL</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverDataUrl" name="geoserverDataUrl" th:field="*{geoserverDataUrl}" class="l" maxlength="256" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverDataWorkspace">작업공간명</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverDataWorkspace" name="geoserverDataWorkspace" th:field="*{geoserverDataWorkspace}" class="l" maxlength="60" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverDataStore">저장소명</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverDataStore" name="geoserverDataStore" th:field="*{geoserverDataStore}" class="l" maxlength="60" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverUser">사용자 계정</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverUser" name="geoserverUser" th:field="*{geoserverUser}" class="l" maxlength="256" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverPassword">비밀번호</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverPassword" name="geoserverPassword" th:field="*{geoserverPassword}" class="l" maxlength="256" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label>ImageryProvider 사용유무</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input radio-set">
+						<input type="radio" id="geoserverImageproviderEnable1" name="geoserverImageproviderEnable" th:field="*{geoserverImageproviderEnable}" value="true" />
+						<label for="geoserverImageproviderEnable1">사용</label>
+						<input type="radio" id="geoserverImageproviderEnable2" name="geoserverImageproviderEnable" th:field="*{geoserverImageproviderEnable}" value="false" />
+						<label for="geoserverImageproviderEnable2">미사용(기본값)</label>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverImageproviderUrl">ImageryProvider 요청 URL</label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverImageproviderUrl" name="geoserverImageproviderUrl" th:field="*{geoserverImageproviderUrl}" class="l" maxlength="256" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverImageproviderLayerName">ImageryProvider 레이어 명</label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverImageproviderLayerName" name="geoserverImageproviderLayerName" th:field="*{geoserverImageproviderLayerName}" class="l" maxlengvth="60" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverImageproviderStyleName">ImageryProvider 스타일 명</label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverImageproviderStyleName" name="geoserverImageproviderStyleName" th:field="*{geoserverImageproviderStyleName}" class="l" maxlength="60" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverImageproviderParametersWidth">ImageryProvider 레이어 이미지 가로 크기</label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverImageproviderParametersWidth" name="geoserverImageproviderParametersWidth" th:field="*{geoserverImageproviderParametersWidth}" class="l" onKeyPress="return numkeyCheck(event);" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverImageproviderParametersHeight">ImageryProvider 레이어 이미지 세로 크기</label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverImageproviderParametersHeight" name="geoserverImageproviderParametersHeight" th:field="*{geoserverImageproviderParametersHeight}" class="l" onKeyPress="return numkeyCheck(event);" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverImageproviderParametersFormat">ImageryProvider 레이어 포맷형식</label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverImageproviderParametersFormat" name="geoserverImageproviderParametersFormat" th:field="*{geoserverImageproviderParametersFormat}" class="l" maxlength="30" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverTerrainproviderLayerName">TerrainProvider 레이어 명</label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverTerrainproviderLayerName" name="geoserverTerrainproviderLayerName" th:field="*{geoserverTerrainproviderLayerName}" class="l" maxlength="60" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverTerrainproviderStyleName">TerrainProvider 스타일 명</label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverTerrainproviderStyleName" name="geoserverTerrainproviderStyleName" th:field="*{geoserverTerrainproviderStyleName}" class="l" maxlength="60" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverTerrainproviderParametersWidth">TerrainProvider 레이어 이미지 가로 크기</label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverTerrainproviderParametersWidth" name="geoserverTerrainproviderParametersWidth" th:field="*{geoserverTerrainproviderParametersWidth}" class="l" onKeyPress="return numkeyCheck(event);" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverTerrainproviderParametersHeight">TerrainProvider 레이어 이미지 세로 크기</label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverTerrainproviderParametersHeight" name="geoserverTerrainproviderParametersHeight" th:field="*{geoserverTerrainproviderParametersHeight}" class="l" onKeyPress="return numkeyCheck(event);" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="geoserverTerrainproviderParametersFormat">TerrainProvider 레이어 포맷 형식</label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="geoserverTerrainproviderParametersFormat" name="geoserverTerrainproviderParametersFormat" th:feild="*{geoserverTerrainproviderParametersFormat}" class="l" maxlength="30" />
+					</td>
+				</tr>
+			</table>
+			<div class="button-group">
+				<div class="center-buttons">
+					<a href="#" class="button" th:text="#{save}" onclick="updatePolicyGeoServer();"></a>
+				</div>
+			</div>
+		</form>
+	</div>
+</html>
