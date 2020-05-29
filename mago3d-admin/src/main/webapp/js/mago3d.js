@@ -34565,7 +34565,22 @@ SmartTile.prototype.parseSmartTileF4d = function(dataArrayBuffer, magoManager)
 	var buildingsCount = (new Int32Array(dataArrayBuffer.slice(bytesReaded, bytesReaded+4)))[0]; bytesReaded += 4;
 	magoManager.emit(MagoManager.EVENT_TYPE.SMARTTILELOADSTART, {tile: this, timestamp: new Date()});
 
-	var smartTilePathInfo = magoManager.f4dController.smartTilePathInfo;
+  var smartTilePathInfo = magoManager.f4dController.smartTilePathInfo;
+  var hardcodeList = ['F4D_mapo_health_center_del','F4D_NorthSeoulArt_del',
+  'F4D_Sadang_del','F4D_Sangdo3dong_del','F4D_Seodaemun_del',
+  'F4D_Seobu_del','F4D_Seobingo_del','F4D_Sesomoon1_3_del',
+  'F4D_Sesomoon2dong_del','F4D_seoul_museum_del',
+  'F4D_SEOULHISTORICA_del','F4D_Simincheong_del',
+  'F4D_Edumuseum_del_150417_02','F4D_SEOULSTATION_del',
+  'F4D_GyeomjaeJeongSeon_del','F4D_Gwangjin_center_del',
+  'F4D_Gangsu_office_del','F4D_gangil_del',
+  'F4D_GasanDigital_del','F4D_SD_COUNCIL_del',
+  'F4D_Seongdong_del','F4D_Seongbuk_del','F4D_SeongBuck_del',
+  'F4D_Main_del','F4D_Sinnae_del','F4D_Yongsan_del',
+  'F4D_imun_del','F4D_Leejina_del','F4D_junggok_del',
+  'F4D_GARAK_del','F4D_Jungnanggu-public-library_del',
+  'F4D_gangnamgu_office_del','F4D_gangdongguoffice_del_1222_02'];
+  
 	for (var i=0; i<buildingsCount; i++)
 	{
 		// read projectId.
@@ -34585,7 +34600,8 @@ SmartTile.prototype.parseSmartTileF4d = function(dataArrayBuffer, magoManager)
 		var attributes = {
 			"isPhysical" : true,
 			"objectType" : "basicF4d"
-		};
+    };
+    if(hardcodeList.indexOf(buildingId) > -1) attributes.flipYTexCoords = true;
 		if (projectFolderName.indexOf('-tree') > 0) 
 		{
 			attributes.isReference = true;
