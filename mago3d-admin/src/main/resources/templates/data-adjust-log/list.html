@@ -161,8 +161,7 @@
 										</td>
 										
 										<td class="col-date">
-											<p th:text="${#dates.format(dataAdjustLog.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
-											<p th:text="${#dates.format(viewInsertDate,'yyyy-MM-dd HH:mm')}"></p>
+											<th:block th:text="${#dates.format(dataAdjustLog.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
 										</td>
 									</tr>
 								</tbody>

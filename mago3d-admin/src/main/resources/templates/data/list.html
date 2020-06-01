@@ -176,8 +176,7 @@
 												<a th:href="@{/data/delete(dataId=${dataInfo.dataId})}" class="image-button button-delete" th:value="#{delete}" onclick="return deleteWarning();"></a>
 											</td>
 											<td class="col-type">
-												<p th:text="${#dates.format(dataInfo.insertDate,'yyyy-MM-dd HH:mm:ss')}"></p>
-												<p th:text="${#dates.format(viewInsertDate,'yyyy-MM-dd HH:mm')}"></p>
+												<th:block th:text="${#dates.format(dataInfo.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
 											</td>
 										</tr>
 									</tbody>
