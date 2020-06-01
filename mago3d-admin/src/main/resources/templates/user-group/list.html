@@ -101,12 +101,12 @@
 
 											<td class="col-key" th:text="${userGroup.userGroupKey}"></td>
 											<td class="col-type">
-												<th:block th:if="${#bools.isTrue(userGroup.basic)}" text="기본"></th:block>
-												<th:block th:if="${#bools.isFalse(userGroup.basic)}" text="선택"></th:block>
+												<th:block th:if="${#bools.isTrue(userGroup.basic)}">기본</th:block>
+												<th:block th:if="${#bools.isFalse(userGroup.basic)}">선택</th:block>
 											</td>
 											<td class="col-type">
-												<th:block th:if="${#bools.isTrue(userGroup.available)}" text="사용"></th:block>
-												<th:block th:if="${#bools.isFalse(userGroup.available)}" text="미사용"></th:block>
+												<th:block th:if="${#bools.isTrue(userGroup.available)}">사용</th:block>
+												<th:block th:if="${#bools.isFalse(userGroup.available)}">미사용</th:block>
 											</td>
 											<td class="col-type">
 												<a th:href="@{/user/list(searchOption=0, searchWord=user_group_name, searchValue=${userGroup.userGroupName})}" class="linkButton">보기</a>
