@@ -5,7 +5,8 @@
         <div class="gnb">
             <th:block th:if="${session.USER_SESSION}">
                 <ul>
-                    <li class="user"><span th:text="${session.USER_SESSION.userName}"><th:block th:text="#{common.sir}"></th:block></span>
+                    <li class="user">
+                        <span><th:block th:text="${session.USER_SESSION.userName}"></th:block> <th:block th:text="#{common.sir}"></th:block></span>
                         <a href="/guide/help" th:title="#{common.api.document}" onclick="goMagoAPIGuide(this.href);return false;"><th:block th:text="#{common.api.document}"></th:block></a>
                         <a href="/sign/signout" title="Sign out">Sign out</a>
                     </li>
