@@ -16,9 +16,9 @@
 	<div class="site-body">
 		<div class="container">
 			<div class="site-content">
-				<div th:replace="~{/layouts/sub-menu :: #subMenuWrap}"></div>
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
 				<div class="page-area">
-					<div th:replace="~{/layouts/page-header :: #pageHeaderWrap}"></div>
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
 					<div class="page-content">
 						<div class="content-desc u-pull-right">
 							<span class="icon-glyph glyph-emark-dot color-warning"></span>
@@ -40,15 +40,12 @@
 		</div>
 	</div>
 </th:block>
-
 <th:block layout:fragment="pageCustomScript">
-
 <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
-
 <script th:inline="javascript">
 	$(document).ready(function() {
 		$( ".tabs" ).tabs();

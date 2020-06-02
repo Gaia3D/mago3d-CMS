@@ -8,12 +8,12 @@
 </head>
 
 <body>
-<div th:replace="~{/layouts/header :: #headerWrap}"></div>
-<div th:replace="~{/layouts/menu :: #navWrap}"></div>
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
+<div th:replace="~{/fragments/menu :: #navWrap}"></div>
 
 <th:block layout:fragment="pageCustomContent"></th:block>
 
-<th:block th:replace="/layouts/footer"></th:block>
+<th:block th:replace="/fragments/footer"></th:block>
 
 <th:block layout:fragment="pageCustomScript"></th:block>
 
