@@ -18,9 +18,9 @@
 	<div class="site-body">
 		<div class="container">
 			<div class="site-content">
-				<div th:replace="~{/layouts/sub-menu :: #subMenuWrap}"></div>
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
 				<div class="page-area">
-					<div th:replace="~{/layouts/page-header :: #pageHeaderWrap}"></div>
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
 					<div class="page-content">
 
 						<!-- S: 검색 -->
@@ -179,28 +179,28 @@
 <!-- <%@ include file="/WEB-INF/views/data/group-dialog.jsp" %>
 <%@ include file="/WEB-INF/views/data-adjust-log/data-adjust-log-dialog.jsp" %> -->
 </th:block>
-<th:block layout:fragment="pageCustomScript"></th:block>
-<script type="text/javascript" src="/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" src="/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" src="/js/{lang}/common.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" src="/js/{lang}/message.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" src="/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+<th:block layout:fragment="pageCustomScript">
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		var searchWord = "${dataAdjustLog.searchWord}";
-		var searchOption = "${dataAdjustLog.searchOption}";
-		var orderWord = "${dataAdjustLog.orderWord}";
-		var orderValue = "${dataAdjustLog.orderValue}";
-		var listCounter = "${dataAdjustLog.listCounter}";
+		var searchWord = "[[${dataAdjustLog.searchWord}]]";
+		var searchOption = "[[${dataAdjustLog.searchOption}]]";
+		var orderWord = "[[${dataAdjustLog.orderWord}]]";
+		var orderValue = "[[${dataAdjustLog.orderValue}]]";
+		var listCounter = "[[${dataAdjustLog.listCounter}]]";
 
-		if(searchWord != "") $("#searchWord").val("${dataAdjustLog.searchWord}");
-		if(searchOption != "") $("#searchOption").val("${dataAdjustLog.searchOption}");
-		if(orderWord != "") $("#orderWord").val("${dataAdjustLog.orderWord}");
-		if(orderValue != "") $("#orderValue").val("${dataAdjustLog.orderValue}");
-		if(listCounter != "") $("#listCounter").val("${dataAdjustLog.listCounter}");
+		if(searchWord != "") $("#searchWord").val("[[${dataAdjustLog.searchWord}]]");
+		if(searchOption != "") $("#searchOption").val("[[${dataAdjustLog.searchOption}]]");
+		if(orderWord != "") $("#orderWord").val("[[${dataAdjustLog.orderWord}]]");
+		if(orderValue != "") $("#orderValue").val("[[${dataAdjustLog.orderValue}]]");
+		if(listCounter != "") $("#listCounter").val("[[${dataAdjustLog.listCounter}]]");
 
 		initDatePicker();
-		initCalendar(new Array("startDate", "endDate"), new Array("${dataAdjustLog.startDate}", "${dataAdjustLog.endDate}"));
+		initCalendar(new Array("startDate", "endDate"), new Array("[[${dataAdjustLog.startDate}]]", "[[${dataAdjustLog.endDate}]]"));
 	});
 
 	//전체 선택
@@ -342,5 +342,6 @@
 		}
 	}
 </script>
+</th:block>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" th:lang="${accessibility}">
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
 <head>
 	<meta charset="utf-8">
     <meta name="referrer" content="origin">
@@ -63,13 +63,13 @@
 </head>
 <body>
 <th:block layout:fragment="pageCustomContent">
-<div class="site-body">
-	<div class="container">
-		<div class="site-content">
-			<div th:replace="~{/layouts/sub-menu :: #subMenuWrap}"></div>
-			<div class="page-area">
-				<div th:replace="~{/layouts/page-header :: #pageHeaderWrap}"></div>
-				<div class="page-content">
+	<div class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+					<div class="page-content">
 
 					<!-- S: 3D 파일 업로드 수정 -->
 					<form id="uploadData" th:object="${uploadData}" th:action="@{#}" method="post" onsubmit="return false;">
@@ -220,6 +220,7 @@
 <script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
 <script>
 	$(document).ready(function() {
 		$("#sharing").val("[[${uploadData.sharing}]]");

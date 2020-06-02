@@ -15,11 +15,11 @@
     <script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>    
 </head>
 <body>
-<div th:replace="~{/layouts/header :: #headerWrap}"></div>
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
 <div id="wrap">
 	<!-- S: NAVWRAP -->
 	<div class="navWrap">
-        <div th:replace="~{/layouts/menu :: #navWrap}"></div>
+        <div th:replace="~{/fragments/menu :: #navWrap}"></div>
 	</div>
 	<!-- E: NAVWRAP -->
 

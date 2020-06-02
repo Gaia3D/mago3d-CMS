@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" th:lang="${accessibility}">
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
 <head>
 	<meta charset="utf-8">
     <meta name="referrer" content="origin">
@@ -67,9 +67,9 @@
 	<div class="site-body">
 		<div class="container">
 			<div class="site-content">
-				<div th:replace="~{/layouts/sub-menu :: #subMenuWrap}"></div>
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
 				<div class="page-area">
-					<div th:replace="~{/layouts/page-header :: #pageHeaderWrap}"></div>
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
 					<div class="page-content">
 
 						<!-- S: 3D 파일 업로드 -->
@@ -185,6 +185,7 @@
 <script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 	});

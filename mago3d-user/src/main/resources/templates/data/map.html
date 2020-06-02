@@ -26,7 +26,7 @@
 </head>
 <body>
 
-<div th:replace="~{/layouts/header :: #headerWrap}"></div>
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
 <div id="loadingWrap">
 	<div class="loading">
 		<span class="spinner"></span>
@@ -35,7 +35,7 @@
 <div id="wrap" style="min-height: 560px;"> <!-- 왼쪽 메뉴 높이에 맞춰서 설정해 줘야함 -->
 	<!-- S: NAVWRAP -->
 	<div class="navWrap">
-		<div th:replace="~{/layouts/menu :: #navWrap}"></div>
+		<div th:replace="~{/fragments/menu :: #navWrap}"></div>
 		<!-- E: NAVWRAP -->
 		<div id="contentsWrap" class="contentsWrap" style="display: none;">
 			<div id="searchContent" class="contents fullHeight" style="display:none;">
@@ -72,11 +72,11 @@
 	<!-- E: NAVWRAP -->
 
 	<!-- S: GNB WRAP -->
-	<div th:replace="~{/layouts/global-search :: #gnbWrap}"></div>
+	<div th:replace="~{/fragments/global-search :: #gnbWrap}"></div>
 	<!-- E: GNB WRAP -->
 
 	<!-- CTRLWRAP -->
-	<div th:replace="~{/layouts/toolbar :: #toolbarWrap}"></div>
+	<div th:replace="~{/fragments/toolbar :: #toolbarWrap}"></div>
 	<!-- E: CTRLWRAP -->
 
 	<!-- MAP -->
