@@ -172,7 +172,7 @@
 										<label for="layerLineStyle">외곽선 두께</label>
 									</th>
 									<td class="col-input">
-										<input type="number" id="layerLineStyle"  name="layerLineStyle" class="forRaster" alt="외곽선 두께" min="0.1" max="5.0" size="3" step="0.1" />
+										<input type="number" id="layerLineStyle"  name="layerLineStyle" th:field="*{layerLineStyle}" class="forRaster" alt="외곽선 두께" min="0.1" max="5.0" size="3" step="0.1" />
 									</td>
 								</tr>
 								<tr>
@@ -182,15 +182,15 @@
 									</th>
 									<td class="col-input">
 										<label for="fillColorValue" class="hiddenTag">채우기 색상값</label>
-										<input id="fillColorValue" class="forRaster forPolygon" placeholder="RGB" />
+										<input type="text" id="fillColorValue" class="forRaster forPolygon" placeholder="RGB" />
 										<input type="color" id="layerFillColor" name="layerFillColor" class="picker forPolygon" alt="채우기 색상" />
 									</td>
 									<th class="col-label" scope="row">
-										<label path="layerAlphaStyle">투명도</label>
+										<label for="layerAlphaStyle">투명도</label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input">
-										<input type="text" path="layerAlphaStyle" class="slider" alt="투명도"/>
+										<input type="text" id="layerAlphaStyle" name="layerAlphaStyle" th:field="*{layerAlphaStyle}" class="slider" alt="투명도"/>
 										<label for="sliderRange" class="hiddenTag">투명도 값</label>
 										<input type="range" id="sliderRange" min="0" max="100" value="100" alt="투명도">
 									</td>
@@ -200,49 +200,52 @@
 										<label for="viewOrder">레이어 표시 순서</label>
 									</th>
 									<td class="col-input">
-										<input path="viewOrder" class="s"/>
-										<errors path="viewOrder" class="error" />
+										<input type="text" id="viewOrder" name="viewOrder" th:field="*{viewOrder}" class="s"/>
 									</td>
 									<th class="col-label" scope="row">
 										<label for="zIndex">표시 순서(Z-Index)</label>
 									</th>
 									<td class="col-input">
-										<input path="zIndex" class="s" />
-										<errors path="zIndex" class="error" />
+										<input type="text" id="zIndex" name="zIndex" th:field="*{zIndex}" class="s" />
 									</td>
 								</tr>
 								<tr>
 									<th class="col-label" scope="row">
-										<label for="defaultDisplayTrue">기본 표시</label>
+										<label>기본 표시</label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input radio-set">
-										<radiobutton id="defaultDisplayTrue"  path="defaultDisplay" value="true" label="사용" />
-										<radiobutton id="defaultDisplayFlase" path="defaultDisplay" value="false" label="미사용" />
+										<input type="radio" id="defaultDisplayTrue" name="defaultDisplay" th:field="*{defaultDisplay}" value="true" />
+										<label for="defaultDisplayTrue">사용</label>
+										<input type="radio" id="defaultDisplayFalse" name="defaultDisplay" th:field="*{defaultDisplay}" value="false" />
+										<label for="defaultDisplayFalse">미사용</label>
 									</td>
 									<th class="col-label" scope="row">
-										<label for="useY">사용유무</label>
+										<label>사용유무</label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input radio-set">
-										<radiobutton id="availableTrue"  path="available" value="true" label="사용" />
-										<radiobutton id="availableFalse" path="available" value="false" label="미사용" />
+										<input type="radio" id="availableTrue" name="available" th:field="*{available}" value="true" />
+										<label for="availableTrue">사용</label>
+										<input type="radio" id="availableFalse" name="available" th:field="*{available}" value="false" />
+										<label for="availableFalse">미사용</label>
 									</td>
 								</tr>
 								<tr>
 									<th class="col-label" scope="row">
-										<label for="labelDisplayTrue">Label 표시 유무</label>
+										<label>Label 표시 유무</label>
 									</th>
 									<td class="col-input radio-set">
-										<radiobutton id="labelDisplayTrue"  path="labelDisplay" value="true" label="표시" />
-										<radiobutton id="labelDisplayFalse" path="labelDisplay" value="false" label="비표시" />
+										<input type="radio" id="labelDisplayTrue" name="labelDisplay" th:field="*{labelDisplay}" value="true" />
+										<label for="labelDisplayTrue">표시</label>
+										<input type="radio" id="labelDisplayFalse" name="labelDisplay" th:field="*{labelDisplay}" value="false" />
+										<label for="labelDisplayFalse">비표시</label>
 									</td>
 									<th class="col-label" scope="row">
-										<label path="description">설명</label>
+										<label for="description">설명</label>
 									</th>
 									<td class="col-input">
-										<input path="description" class="l"/>
-										<errors path="description" class="error" />
+										<input type="text" id="description" name="description" th:field="*{description}" class="l"/>
 									</td>
 								</tr>
 							</table>
@@ -250,7 +253,7 @@
 
 						<div class="button-group" style="margin-top:30px;">
 							<div class="center-buttons">
-								<input type="submit" onClick="geoserverLayerUpdate(); return false;" value="<spring:message code='save'/>"/>
+								<input type="submit" onClick="geoserverLayerUpdate(); return false;" th:value="#{save}"/>
 								<a href="/layer/list" class="button">목록</a>
 							</div>
 						</div>
@@ -276,27 +279,13 @@
 <script th:inline="javascript">
 	$(document).ready(function() {
 		showRange([[${layer.layerAlphaStyle * 100}]]);
-		// changeLayerType('${layer.layerType}');
-		// changeGeometryType('${layer.geometryType}');
 		$("#sliderRange").val([[${layer.layerAlphaStyle * 100}]]);
-		// $("#layerLineStyle").val('${layer.layerLineStyle}');
-		// $("input[name='sharing']").filter("[value='${layer.sharing}']").prop("checked", true);
-		// $("input[name='defaultDisplay']").filter("[value='${layer.defaultDisplay}']").prop("checked", true);
-		// $("input[name='available']").filter("[value='${layer.available}']").prop("checked", true);
-        // $("input[name='labelDisplay']").filter("[value='${layer.labelDisplay}']").prop("checked", true);
-        // $("input[name='layerFillColor']").filter("[value='${layer.layerFillColor}']").prop("checked", true);
-        // $("input[name='labelDisplay']").filter("[value='${layer.labelDisplay}']").prop("checked", true);
-        // $("select[name=serviceType] option[value='${layer.serviceType}'").prop('selected',true);
-        // $("select[name=geometryType] option[value='${layer.geometryType}'").prop('selected',true);
-        // $("select[name=layerType] option[value='${layer.layerType}'").prop('selected',true);
         $(".forLineColor").val([[${layer.layerLineColor}]]);
         $(".forPolygon").val([[${layer.layerFillColor}]]);
-        // $("input[name='cacheAvailable']").filter("[value='${layer.cacheAvailable}']").prop("checked", true);
-		//
+
         if([[${layer.serviceType}]] !== "wms") {
         	$("input[name='cacheAvailable']").attr("disabled", true);
         }
-
 	});
 
 	$('[name=layerType]').on('change', function() {

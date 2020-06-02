@@ -1,85 +1,82 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/common/taglib.jsp" %>
-<%@ include file="/WEB-INF/views/common/config.jsp" %>
-
 <!DOCTYPE html>
-<html lang="${accessibility}">
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Layer 수정 | mago3D</title>
-	<link rel="stylesheet" href="/css/${lang}/font/font.css?cacheVersion=${contentCacheVersion}" />
-	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css?cacheVersion=${contentCacheVersion}" />
-	<link rel="stylesheet" href="/externlib/normalize/normalize.min.css?cacheVersion=${contentCacheVersion}" />
-	<link rel="stylesheet" href="/css/fontawesome-free-5.2.0-web/css/all.min.css?cacheVersion=${contentCacheVersion}">
-	<link rel="stylesheet" href="/externlib/jquery-ui-1.12.1/jquery-ui.min.css?cacheVersion=${contentCacheVersion}" />
-	<link rel="stylesheet" href="/externlib/dropzone/dropzone.min.css?cacheVersion=${contentCacheVersion}">
-    <link rel="stylesheet" href="/css/${lang}/admin-style.css?cacheVersion=${contentCacheVersion}" />
-    <script type="text/javascript" src="../externlib/handlebars-4.1.2/handlebars.js?cacheVersion=${contentCacheVersion}"></script>
-    <script type="text/javascript" src="/externlib/dropzone/dropzone.min.js?cacheVersion=${contentCacheVersion}"></script>
-    <style type="text/css">
-        .dropzone .dz-preview.lp-preview {
-            width: 150px;
-        }
-        .dropzone.hzScroll {
-            min-width: 700px;
-            overflow: auto;
-            white-space: nowrap;
-            border: 1px solid #e5e5e5;
-        }
-        
-        .loader-txt p {
-            font-size: 13px;
-            color: #666;
-        }
-    
-        .loader-txt p small {
-            font-size: 11.5px;
-            color: #999;
-        }
-        
-        .loader {
-            position: relative;
-            text-align: center;
-            margin: 15px auto 35px auto;
-            z-index: 9999;
-            display: block;
-            width: 80px;
-            height: 80px;
-            border: 10px solid rgba(0, 0, 0, 0.3);
-            border-radius: 50%;
-            border-top-color: #000;
-            animation: spin 1s ease-in-out infinite;
-            -webkit-animation: spin 1s ease-in-out infinite;
-        }
-    
-        @keyframes spin {
-            to {
-                -webkit-transform: rotate(360deg);
-            }
-        }
-    
-        @-webkit-keyframes spin {
-            to {
-                -webkit-transform: rotate(360deg);
-            }
-        }
-    </style>
+	<title>Layer 수정</title>
+	<th:block layout:fragment="pageCustomStyle">
+		<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
+		<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/externlib/dropzone/dropzone.min.css(cacheVersion=${contentCacheVersion})}">
+		<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+		<script type="text/javascript" th:src="@{/externlib/handlebars-4.1.2/handlebars.js(cacheVersion=${contentCacheVersion})}"></script>
+		<script type="text/javascript" th:src="@{/externlib/dropzone/dropzone.min.js(cacheVersion=${contentCacheVersion})}"></script>
+		<style type="text/css">
+			.dropzone .dz-preview.lp-preview {
+				width: 150px;
+			}
+			.dropzone.hzScroll {
+				min-width: 700px;
+				overflow: auto;
+				white-space: nowrap;
+				border: 1px solid #e5e5e5;
+			}
+
+			.loader-txt p {
+				font-size: 13px;
+				color: #666;
+			}
+
+			.loader-txt p small {
+				font-size: 11.5px;
+				color: #999;
+			}
+
+			.loader {
+				position: relative;
+				text-align: center;
+				margin: 15px auto 35px auto;
+				z-index: 9999;
+				display: block;
+				width: 80px;
+				height: 80px;
+				border: 10px solid rgba(0, 0, 0, 0.3);
+				border-radius: 50%;
+				border-top-color: #000;
+				animation: spin 1s ease-in-out infinite;
+				-webkit-animation: spin 1s ease-in-out infinite;
+			}
+
+			@keyframes spin {
+				to {
+					-webkit-transform: rotate(360deg);
+				}
+			}
+
+			@-webkit-keyframes spin {
+				to {
+					-webkit-transform: rotate(360deg);
+				}
+			}
+		</style>
+	</th:block>
 </head>
 <body>
-	<%@ include file="/WEB-INF/views/layouts/header.jsp" %>
-	<%@ include file="/WEB-INF/views/layouts/menu.jsp" %>
+<th:block layout:fragment="pageCustomContent">
 	<div class="site-body">
 		<div class="container">
 			<div class="site-content">
-				<%@ include file="/WEB-INF/views/layouts/sub_menu.jsp" %>
+				<div th:replace="~{/layouts/sub-menu :: #subMenuWrap}"></div>
 				<div class="page-area">
-					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
+					<div th:replace="~{/layouts/page-header :: #pageHeaderWrap}"></div>
 					<div class="page-content">
 						<div class="input-header row">
 							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
 						</div>
-						<form:form id="layer" modelAttribute="layer" method="post" onsubmit="return false;">
+						<form id="layer" th:object="${layer}" method="post" th:action="@{#}" onsubmit="return false;">
 						<table class="input-table scope-row" summary="upload 레이어 수정 테이블">
 						<caption class="hiddenTag">업로드 레이어 수정</caption>
 							<colgroup>
@@ -90,48 +87,49 @@
 			                </colgroup>
 			                <tr>
 								<th class="col-label" scope="row">
-									<form:label path="layerGroupName">Layer 그룹명</form:label>
+									<label for="layerGroupName">Layer 그룹명</label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">
-									<form:hidden path="layerGroupId" />
-									<form:input path="layerGroupName" cssClass="ml" readonly="true" />
+									<input type="hidden" id="layerGroupId" name="layerGroupId" th:field="*{layerGroupId}" />
+									<input type="text" id="layerGroupName" name="layerGroupName" th:field="*{layerGroupName}" class="ml" readonly="true" />
 									<input type="button" id="layerGroupButtion" value="Layer 그룹 찾기" />
 								</td>
 								<th class="col-label" scope="row">
 			                        <label for="sharing">공유 유형</label>
 			                    </th>
 			                    <td class="col-input radio-set">
-			                        <form:radiobutton id="sharingPublic"  path="sharing" value="public" label="공개" />
-									<form:radiobutton id="sharingPrivate" path="sharing" value="private" label="비공개" />
-									<form:radiobutton id="sharingGroup" path="sharing" value="group" label="그룹" />
+									<input type="radio" id="sharingPublic" name="sharing" th:field="*{sharing}" value="public" />
+									<label for="sharingPublic">공개</label>
+									<input type="radio" id="sharingPrivate" name="sharing" th:field="*{sharing}" value="private" />
+									<label for="sharingPrivate">비공개</label>
+									<input type="radio" id="sharingGroup" name="sharing" th:field="*{sharing}" value="group" />
+									<label for="sharingGroup">그룹</label>
 			                    </td>
 							</tr>
 							<tr>
 			                    <th class="col-label" scope="row">
-			                        <form:label path="layerName">Layer 명</form:label>
+			                        <label for="layerName">Layer 명</label>
 			                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
 			                    </th>
 			                    <td class="col-input">
-			                        <form:input path="layerName" cssClass="ml" />
-			                        <form:errors path="layerName" cssClass="error" />
+			                        <input type="text" id="layerName" name="layerName" th:field="*{layerName}" class="ml" />
 			                    </td>
 			                    <th class="col-label" scope="row">
-			                        <form:label path="layerKey">Layer Key</form:label>
+			                        <label for="layerKey">Layer Key</label>
 			                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
 			                    </th>
 			                    <td class="col-input">
-			                        <form:input path="layerKey" cssClass="ml" readonly="true" />
-			                        <form:errors path="layerKey" cssClass="error" />
+			                        <input type="text" id="layerKey" name="layerKey" th:field="*{layerKey}" class="ml" readonly="true" />
 			                    </td>
 			                </tr>
 			                <tr>
 			                    <th class="col-label" scope="row">
-			                        <form:label path="serviceType">서비스 타입</form:label>
+			                        <label for="serviceType">서비스 타입</label>
 			                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
 			                    </th>
 			                    <td class="col-input">
-			                        <select id="serviceType" name="serviceType" class="selectBoxClass">
+			                        <select id="serviceType" name="serviceType" th:field="*{serviceType}" class="selectBoxClass">
 										<option value="">선택</option>
 										<option value="wms">WMS</option>
 										<option value="wfs">WFS</option>
@@ -140,31 +138,33 @@
 									</select>
 			                    </td>
 			                    <th class="col-label" scope="row">
-			                        <label for="cacheAvailableTrue">Cache 사용 유무</label>
+			                        <label>Cache 사용 유무</label>
 			                    </th>
 			                    <td class="col-input radio-set">
-			                        <form:radiobutton id="cacheAvailableTrue"  path="cacheAvailable" value="true" label="사용" />
-									<form:radiobutton id="cacheAvailableFalse" path="cacheAvailable" value="false" label="미사용" checked="checked"/>
+									<input type="radio" id="cacheAvailableTrue" name="cacheAvailable" th:field="*{cacheAvailable}" value="true" />
+									<label for="cacheAvailableTrue">사용</label>
+									<input type="radio" id="cacheAvailableFalse" name="cacheAvailable" th:field="*{cacheAvailable}" value="false" />
+									<label for="cacheAvailableFalse">미사용</label>
 			                    </td>
 			                </tr>
 			                <tr>
 			                	<th class="col-label" scope="row">
-			                        <form:label path="layerType">Layer 타입</form:label>
+			                        <label for="layerType">Layer 타입</label>
 			                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
 			                    </th>
 			                    <td class="col-input">
-			                        <select id="layerType" name="layerType" class="selectBoxClass">
+			                        <select id="layerType" name="layerType" th:field="*{layerType}" class="selectBoxClass">
 										<option value="">선택</option>
 										<option value="vector">Vector</option>
 										<option value="raster">Raster</option>
 									</select>
 			                    </td>
 			                    <th class="col-label" scope="row">
-			                        <form:label path="geometryType">도형 타입</form:label>
+			                        <label for="geometryType">도형 타입</label>
 			                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
 			                    </th>
 								<td class="col-input">
-									<select id="geometryType" name="geometryType" class="forRaster selectBoxClass">
+									<select id="geometryType" name="geometryType" th:field="*{geometryType}" class="forRaster selectBoxClass">
 										<option value="">선택</option>
 										<option value="Point">Point</option>
 										<option value="Line">Line</option>
@@ -172,39 +172,39 @@
 									</select>
 								</td>
 							</tr>
-							<tr>	
+							<tr>
 								<th class="col-label" scope="row">
-			                        <form:label path="layerLineColor">외곽선 색상</form:label>
+			                        <label for="layerLineColor">외곽선 색상</label>
 			                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
 			                    </th>
 								<td class="col-input">
 									<label for="lineColorValue" class="hiddenTag">외곽선 색상값</label>
-									<input id="lineColorValue" placeholder="RGB" class="forRaster forLineColor" />
+									<input type="text" id="lineColorValue" placeholder="RGB" class="forRaster forLineColor" />
 									<input type="color" id="layerLineColor" name="layerLineColor" class="picker forLineColor" alt="외곽선 색상" />
 								</td>
 								<th class="col-label" scope="row">
-			                        <form:label path="layerLineStyle">외곽선 두께</form:label>
+			                        <label for="layerLineStyle">외곽선 두께</label>
 			                    </th>
 								<td class="col-input">
-									<input type="number" id="layerLineStyle"  name="layerLineStyle" class="forRaster" alt="외곽선 두께" min="0.1" max="5.0" size="3" step="0.1">
+									<input type="number" id="layerLineStyle"  name="layerLineStyle" th:field="*{layerLineStyle}" class="forRaster" alt="외곽선 두께" min="0.1" max="5.0" size="3" step="0.1">
 								</td>
 							</tr>
 			                <tr>
 			                	<th class="col-label" scope="row">
-			                        <form:label path="layerFillColor">채우기 색상</form:label>
+			                        <label for="layerFillColor">채우기 색상</label>
 			                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
 			                    </th>
 								<td class="col-input">
 									<label for="fillColorValue" class="hiddenTag">채우기 색상값</label>
-									<input id="fillColorValue" placeholder="RGB" class="forRaster forPolygon">
+									<input type="text" id="fillColorValue" placeholder="RGB" class="forRaster forPolygon">
 									<input type="color" id="layerFillColor" name="layerFillColor" class="picker forPolygon" alt="채우기 색상">
 								</td>
 			                	<th class="col-label" scope="row">
-			                        <form:label path="layerAlphaStyle">투명도</form:label>
+			                        <label for="layerAlphaStyle">투명도</label>
 			                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
 			                    </th>
 								<td class="col-input">
-									<form:input type="text"  path="layerAlphaStyle" class="slider" alt="투명도"/>
+									<input type="text" id="layerAlphaStyle" name="layerAlphaStyle" th:field="*{layerAlphaStyle}" class="slider" alt="투명도"/>
 									<label for="sliderRange" class="hiddenTag">투명도 값</label>
 									<input type="range" id="sliderRange" min="0" max="100" value="100" alt="투명도">
 								</td>
@@ -214,49 +214,52 @@
 			                        <label for="viewOrder">레이어 표시 순서</label>
 			                    </th>
 			                    <td class="col-input">
-			                        <form:input path="viewOrder" cssClass="s"/>
-			                        <form:errors path="viewOrder" cssClass="error" />
+			                        <input type="text" id="viewOrder" name="viewOrder" th:field="*{viewOrder}" class="s"/>
 			                    </td>
 			                	<th class="col-label" scope="row">
 			                        <label for="zIndex">표시 순서(Z-Index)</label>
 			                    </th>
 			                    <td class="col-input">
-			                        <form:input path="zIndex" cssClass="s" />
-			                        <form:errors path="zIndex" cssClass="error" />
+			                        <input type="text" id="zIndex" name="zIndex" th:field="*{zIndex}" class="s" />
 			                    </td>
 			                </tr>
 			                <tr>
 			                	<th class="col-label" scope="row">
-			                        <label for="defaultDisplayTrue">기본 표시</label>
+			                        <label>기본 표시</label>
 			                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
 			                    </th>
 			                    <td class="col-input radio-set">
-			                        <form:radiobutton id="defaultDisplayTrue"  path="defaultDisplay" value="true" label="사용" />
-									<form:radiobutton id="defaultDisplayFlase" path="defaultDisplay" value="false" label="미사용" />
+									<input type="radio" id="defaultDisplayTrue" name="defaultDisplay" th:field="*{defaultDisplay}" value="true" />
+									<label for="defaultDisplayTrue">사용</label>
+									<input type="radio" id="defaultDisplayFalse" name="defaultDisplay" th:field="*{defaultDisplay}" value="false" />
+									<label for="defaultDisplayFalse">미사용</label>
 			                    </td>
 			                	<th class="col-label" scope="row">
-			                        <label for="useY">사용유무</label>
+			                        <label>사용유무</label>
 			                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
 			                    </th>
 			                    <td class="col-input radio-set">
-			                        <form:radiobutton id="availableTrue"  path="available" value="true" label="사용" />
-									<form:radiobutton id="availableFalse" path="available" value="false" label="미사용" />
+									<input type="radio" id="availableTrue" name="available" th:field="*{available}" value="true" />
+									<label for="availableTrue">사용</label>
+									<input type="radio" id="availableFalse" name="available" th:field="*{available}" value="false" />
+									<label for="availableFalse">미사용</label>
 			                    </td>
 			                </tr>
 			                <tr>
 			                	<th class="col-label" scope="row">
-			                        <label for="labelDisplayTrue">Label 표시 유무</label>
+			                        <label>Label 표시 유무</label>
 			                    </th>
 			                    <td class="col-input radio-set">
-			                        <form:radiobutton id="labelDisplayTrue"  path="labelDisplay" value="true" label="표시" />
-									<form:radiobutton id="labelDisplayFalse" path="labelDisplay" value="false" label="비표시" />
+									<input type="radio" id="labelDisplayTrue" name="labelDisplay" th:field="*{labelDisplay}" value="true" />
+									<label for="labelDisplayTrue">표시</label>
+									<input type="radio" id="labelDisplayFalse" name="labelDisplay" th:field="*{labelDisplay}" value="false" />
+									<label for="labelDisplayFalse">비표시</label>
 			                    </td>
 			                    <th class="col-label" scope="row">
-			                        <form:label path="description">설명</form:label>
+			                        <label for="description">설명</label>
 			                    </th>
 			                    <td class="col-input">
-			                        <form:input path="description" cssClass="l"/>
-			                        <form:errors path="description" cssClass="error" />
+			                        <input type="text" id="description" name="description" th:field="*{description}" class="l"/>
 			                    </td>
 			                </tr>
 			                <tr>
@@ -264,7 +267,7 @@
 			                        <form:label path="coordinate">좌표계</form:label>
 			                    </th>
 			                    <td class="col-input">
-			                        <select id="coordinate"name="coordinate" class="selectBoxClass">
+			                        <select id="coordinate" name="coordinate" th:field="*{coordinate}" class="selectBoxClass">
 										<option value="EPSG:2096">EPSG:2096</option>
 										<option value="EPSG:2097">EPSG:2097</option>
 										<option value="EPSG:2098">EPSG:2098</option>
@@ -291,20 +294,19 @@
 										<option value="EPSG:5187">EPSG:5187</option>
 										<option value="EPSG:5188">EPSG:5188</option>
 									</select>
-			                        <form:errors path="coordinate" cssClass="error" />
 			                    </td>
 			                    <th class="col-label" scope="row">
-			                        <form:label path="shapeEncoding">SHP 파일 인코딩</form:label>
+			                        <label for="shapeEncoding">SHP 파일 인코딩</label>
 			                    </th>
 			                    <td class="col-input">
-			                    	<select id="shapeEncoding" class="selectBoxClass" name="shapeEncoding" style="width:100px; height: 30px;">
+			                    	<select id="shapeEncoding" name="shapeEncoding" th:field="*{shapeEncoding}" class="selectBoxClass" style="width:100px; height: 30px;">
 				                    	<option value="CP949">CP949</option>
 				                        <option value="UTF-8">UTF-8</option>
 				                    </select>
 			                    </td>
 			                </tr>
 						</table>
-						</form:form>
+						</form>
 						
 						<h4 style="margin-top: 30px; margin-bottom: 5px;">파일 업로딩</h4>
 				        <div class="fileSection" style="font-size: 17px;">
@@ -314,7 +316,7 @@
 				        </div>
 				        <div class="button-group">
 							<div class="center-buttons">
-								<input type="submit" id="allFileUpload" value="<spring:message code='save'/>"/>
+								<input type="submit" id="allFileUpload" th:value="#{save}"/>
 								<input type="submit" id="allFileClear" value="파일 초기화" />
 								<a href="/layer/list" class="button">목록</a>
 							</div>
@@ -338,47 +340,37 @@
 									</tr>
 								</thead>
 								<tbody id="layerFileInfoListArea">
-				<c:if test="${empty layerFileInfoList }">
+								<th:block th:if="${layerFileInfoList.empty}">
 									<tr style="height:50px;">
 										<td colspan="9" style="padding-top:15px; text-align:center;">첨부 파일이 존재하지 않습니다.</td>
 									</tr>
-				</c:if>
-				<c:if test="${!empty layerFileInfoList }">
-					<c:forEach var="layerFileInfo" items="${layerFileInfoList}" varStatus="status">
-						<c:if test="${layerFileInfo.enableYn eq 'Y'}">
-							<c:set var="cssClass" value="selected"></c:set>
-						</c:if>
-						<c:if test="${layerFileInfo.enableYn ne 'Y'}">
-							<c:set var="cssClass" value=""></c:set>
-						</c:if>
-									<tr class="${cssClass}">
-										<td class="col-key">${layerFileInfoListSize - status.index}</td>
-										<td class="col-key" style="max-width:315px; word-wrap:break-word;">${layerFileInfo.fileName}</td>
-										<td class="col-type"><button type="button" onclick="viewFileDetail('${layerFileInfo.layerFileInfoId}');" title="보기" class="detailBtn">보기</button></td>
-										<td class="col-type"><button type="button" onclick="viewLayerMap('${layerFileInfo.layerId}', '${layerFileInfo.layerName}',
-											'${layerFileInfo.layerFileInfoId}');" title="보기" class="textBtn">보기</button></td>
+								</th:block>
+								<th:block th:unless="${layerFileInfoList.empty}" th:each="layerFileInfo, status : ${layerFileInfoList}">
+									<tr th:classappend="${#strings.equals(layerFileInfo.enableYn, 'Y')} ? selected">
+										<td class="col-key" th:text="${layerFileInfoListSize - status.index}"></td>
+										<td class="col-key" th:text="${layerFileInfo.fileName}" style="max-width:315px; word-wrap:break-word;"></td>
+										<td class="col-type"><button type="button" class="detailBtn" th:onclick="viewFileDetail([[${layerFileInfo.layerFileInfoId}]]);" title="보기">보기</button></td>
+										<td class="col-type"><button type="button" class="textBtn" th:onclick="viewLayerMap([[${layerFileInfo.layerId}]], [[${layerFileInfo.layerName}]],
+											[[${layerFileInfo.layerFileInfoId}]]);" title="보기">보기</button></td>
 										<td class="col-type">
-						<c:if test="${layerFileInfo.enableYn eq 'Y'}">
-											<p style="font-size:14px;">적용중</p>
-						</c:if>
-						<c:if test="${layerFileInfo.enableYn ne 'Y'}">
-											<button type="button" onclick="changeStatus('${layerFileInfo.layerId }', '${layerFileInfo.layerFileInfoGroupId}', '${layerFileInfo.layerFileInfoId}');"
-												title="적용하기" class="textBtn">적용하기</button>
-						</c:if>
+											<th:block th:if="${#strings.equals(layerFileInfo.enableYn, 'Y')}">
+												<p style="font-size:14px;">적용중</p>
+											</th:block>
+											<th:block th:unless="${#strings.equals(layerFileInfo.enableYn, 'Y')}">
+												<button type="button" class="textBtn" th:onclick="changeStatus([[${layerFileInfo.layerId }]], [[${layerFileInfo.layerFileInfoGroupId}]], [[${layerFileInfo.layerFileInfoId}]]);"
+														title="적용하기">적용하기</button>
+											</th:block>
 										</td>
-										<td class="col-type"><a href="/layer/${layer.layerId}/layer-file-info/${layerFileInfo.layerFileInfoGroupId}/download" class="linkButton">다운로드</a></td>
-										<td>${layerFileInfo.userId}</td>
-										<td>						
-											<fmt:parseDate value="${layerFileInfo.viewUpdateDate}" var="viewUpdateDate" pattern="yyyy-MM-dd HH:mm:ss"/>
-											<fmt:formatDate value="${viewUpdateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+										<td class="col-type"><a th:href="@{/layer/{layerId}/layer-file-info/{layerFileInfoGroupId}/download(layerId=${layer.layerId},layerFileInfoGroupId=${layerFileInfo.layerFileInfoGroupId})}" class="linkButton">다운로드</a></td>
+										<td th:text="${layerFileInfo.userId}"></td>
+										<td>
+											<th:block th:text="${#dates.format(layerFileInfo.viewUpdateDate, 'yyyy-MM-dd HH:mm:ss')}"></th:block>
 										</td>
 										<td>
-											<fmt:parseDate value="${layerFileInfo.viewInsertDate}" var="viewInsertDate" pattern="yyyy-MM-dd HH:mm:ss"/>
-											<fmt:formatDate value="${viewInsertDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+											<th:block th:text="${#dates.format(layerFileInfo.viewInsertDate, 'yyyy-MM-dd HH:mm:ss')}"></th:block>
 										</td>
 									</tr>
-					</c:forEach>
-				</c:if>
+								</th:block>
 				                </tbody>
 				            </table>
 				        </div>
@@ -387,13 +379,15 @@
 			</div>
 		</div>
 	</div>
-	<%@ include file="/WEB-INF/views/layouts/footer.jsp" %>
-	<%@ include file="/WEB-INF/views/layer/loading-dialog.jsp" %>
-	<%@ include file="/WEB-INF/views/layer/spinner-dialog.jsp" %>
-	<%@ include file="/WEB-INF/views/layer/fileInfo-deatil-dialog.jsp"%>
-	<!-- Dialog -->
-	<%@ include file="/WEB-INF/views/layer/layer-group-dialog.jsp" %>
 
+	<div th:replace="~{/layer/spinner-dialog :: #fileUploadDialog}"></div>
+	<div th:replace="~{/layer/loading-dialog :: #layerLoadingDialog}"></div>
+	<div th:replace="~{/layer/layer-group-dialog :: #layerGroupDialog}"></div>
+	<div th:replace="~{/layer/fileinfo-detail-dialog :: #fileInfoDetailDialog}"></div>
+
+</th:block>
+
+<th:block layout:fragment="pageCustomScript">
 <script id="templateLayerFileInfoList" type="text/x-handlebars-template">
 {{#each layerFileInfoList}}
 	{{#if enableYn}}
@@ -419,37 +413,23 @@
 		</tr>
 {{/each}}
 </script>
-	
-<script type="text/javascript" src="/externlib/jquery-3.3.1/jquery.min.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/externlib/jquery-ui-1.12.1/jquery-ui.min.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/js/${lang}/common.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/js/${lang}/message.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript" src="/js/navigation.js?cacheVersion=${contentCacheVersion}"></script>
-<script type="text/javascript">
+
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+
+<script th:inline="javascript">
 	$(document).ready(function() {
-		showRange(parseInt('${layer.layerAlphaStyle * 100}'));
-		changeLayerType('${layer.layerType}');
-		changeGeometryType('${layer.geometryType}');
-		$("#sliderRange").val(parseInt('${layer.layerAlphaStyle * 100}'));
-		$("#layerLineStyle").val('${layer.layerLineStyle}');
-		$("input[name='sharing']").filter("[value='${layer.sharing}']").prop("checked", true);
-		$("input[name='defaultDisplay']").filter("[value='${layer.defaultDisplay}']").prop("checked", true);
-		$("input[name='available']").filter("[value='${layer.available}']").prop("checked", true);
-        $("input[name='labelDisplay']").filter("[value='${layer.labelDisplay}']").prop("checked", true);
-        $("input[name='layerFillColor']").filter("[value='${layer.layerFillColor}']").prop("checked", true);
-        $("input[name='labelDisplay']").filter("[value='${layer.labelDisplay}']").prop("checked", true);
-        $("select[name=serviceType] option[value='${layer.serviceType}'").prop('selected',true);
-        $("select[name=geometryType] option[value='${layer.geometryType}'").prop('selected',true);
-        $("select[name=layerType] option[value='${layer.layerType}'").prop('selected',true);
-        $("select[name=shapeEncoding] option[value='${layer.shapeEncoding}'").prop('selected',true);
-        $("select[name=coordinate] option[value='${layer.coordinate}'").prop('selected',true);
-        $(".forLineColor").val("${layer.layerLineColor}");
-        $(".forPolygon").val("${layer.layerFillColor}");
-        $("input[name='cacheAvailable']").filter("[value='${layer.cacheAvailable}']").prop("checked", true);
-        
-        if('${layer.serviceType}' !== 'wms') {
-        	$("input[name='cacheAvailable']").attr("disabled", true);
-        }
+		showRange([[${layer.layerAlphaStyle * 100}]]);
+		$("#sliderRange").val([[${layer.layerAlphaStyle * 100}]]);
+		$(".forLineColor").val([[${layer.layerLineColor}]]);
+		$(".forPolygon").val([[${layer.layerFillColor}]]);
+
+		if([[${layer.serviceType}]] !== "wms") {
+			$("input[name='cacheAvailable']").attr("disabled", true);
+		}
         
         $("input[type='file']").attr("id", "dropzoneFile");
 	});
@@ -648,7 +628,7 @@
     // dropzone 업로딩 결과(n개 파일을 올리면 n개 리턴이 옴)
     var uploadFileResultCount = 0;
     Dropzone.options.myDropzone = {
-   		url: "/layer/update/${layer.layerId}",
+   		url: "/layer/update/[[${layer.layerId}]]",
         //paramName: "file",
         // Prevents Dropzone from uploading dropped files immediately
         timeout: 3600000,
@@ -667,7 +647,7 @@
             "x-csrf-token": document.querySelectorAll("meta[name=csrf-token]")[0].getAttributeNode("content").value,
         }, */
         // 허용 확장자
-        acceptedFiles: initAcceptedFiles("${policy.shapeUploadType}"),
+        acceptedFiles: initAcceptedFiles([[${policy.shapeUploadType}]]),
         // 업로드 취소 및 추가 삭제 미리 보기 그림 링크를 기본 추가 하지 않음
         // 기본 true false 로 주면 아무 동작 못함
         //clickable: true,
@@ -790,7 +770,7 @@
 	function reloadLayerFileInfoList() {
     	console.log("reloadLayerFileInfoListCount = " + reloadLayerFileInfoListCount);
     	$.ajax({
-            url: "/layer/${layer.layerId}/layer-fileinfos",
+            url: "/layer/[[${layer.layerId}]]/layer-fileinfos",
             type: "GET",
             headers: {"X-Requested-With": "XMLHttpRequest"},
             dataType: "json",
@@ -832,7 +812,7 @@
 		var info = "layerFileInfoGroupId=" + layerFileInfoGroupId;
 		if(confirm("이 파일을 layer Shape 파일로 사용하시겠습니까?")) {
             $.ajax({
-                url: "/layer/${layer.layerId}/layer-file-infos/" + layerFileInfoId,
+                url: "/layer/[[${layer.layerId}]]/layer-file-infos/" + layerFileInfoId,
 				type: "POST",
 				headers: {"X-Requested-With": "XMLHttpRequest"},
 				data: info,
@@ -866,9 +846,8 @@
         	headers: {"X-Requested-With": "XMLHttpRequest"},
         	dataType: "json",
         	success: function(msg) {
-        		var source = $("#templateFileInfoDetail").html();
 				//핸들바 템플릿 컴파일
-				var template = Handlebars.compile(source);
+				var template = Handlebars.compile($("#FileInfoDetailTemplate").html());
 
 				// 빼기 helper
 				Handlebars.registerHelper("multiply", function(value1, value2) {
@@ -880,8 +859,7 @@
 
 				//핸들바 템플릿에 데이터를 바인딩해서 HTML 생성
 				var fileInfoDetailHtml = template(msg.layerFileInfo);
-				$("#fileInfoDetailDialog").html("");
-				$("#fileInfoDetailDialog").append(fileInfoDetailHtml);
+				$("#fileInfoDetailDHTML").html("").append(fileInfoDetailHtml);
         	},
             error: function(request, status, error) {
             	alert(" code : " + request.status + "\n" + ", message : " + request.responseText + "\n" + ", error : " + error);
@@ -901,5 +879,6 @@
     }
 	
 </script>
+</th:block>
 </body>
 </html>

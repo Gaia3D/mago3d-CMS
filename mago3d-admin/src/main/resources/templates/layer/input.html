@@ -107,7 +107,7 @@
 			                        <label>공유 유형</label>
 			                    </th>
 			                    <td class="col-input radio-set">
-									<input type="radio" id="sharingPublic" name="sharing" value="public" />
+									<input type="radio" id="sharingPublic" name="sharing" value="public" checked />
 									<label for="sharingPublic">공개</label>
 									<input type="radio" id="sharingPrivate" name="sharing" value="private" />
 									<label for="sharingPrivate">비공개</label>
@@ -244,10 +244,11 @@
 			                        <span class="icon-glyph glyph-emark-dot color-warning"></span>
 			                    </th>
 			                    <td class="col-input radio-set">
-									<input type="radio" id="defaultDisplayTrue" name="defaultDisplayTrue" value="true" checked />
+									<input type="radio" id="defaultDisplayTrue" name="defaultDisplay" value="true" checked />
 									<label for="defaultDisplayTrue">사용</label>
-									<input type="radio" id="defaultDisplayFlase" name="defaultDisplayTrue" value="false" />
-									<label for="defaultDisplayTrue">미사용</label>
+									<input type="radio" id="defaultDisplayFalse" name="defaultDisplay" value="false" />
+									<label for="defaultDisplayFalse">미사용</label>
+
 			                    </td>
 			                	<th class="col-label" scope="row">
 			                        <label>사용 여부</label>
@@ -372,11 +373,6 @@
 		showRange(100);
 		changeLayerType(null);
 		changeGeometryType(null);
-
-		$("input[name='sharing']").filter("[value='public']").prop("checked", true);
-		$("input[name='defaultDisplay']").filter("[value='true']").prop("checked", true);
-		$("input[name='available']").filter("[value='true']").prop("checked", true);
-        $("input[name='labelDisplay']").filter("[value='true']").prop("checked", true);
 
         // geoserver layerlist 가져올 동안 스피너
 		var layerLoadingDialog = $("#layerLoadingDialog").dialog({

@@ -100,11 +100,10 @@
 												<span th:text="${layerGroup.layerGroupName}"></span>
 											</td>
 									</th:block>
-
-									<td class="col-type" th:if="${#bools.isTrue(layerGroup.available)}"
-										th:text="사용"></td>
-									<td class="col-type" th:if="${#bools.isFalse(layerGroup.available)}"
-										th:text="미사용"></td>
+									<td class="col-type">
+										<th:block th:if="${#bools.isTrue(layerGroup.available)}" th:text="사용"></th:block>
+										<th:block th:if="${#bools.isFalse(layerGroup.available)}" th:text="미사용"></th:block>
+									</td>
 									<td class="col-type" th:text="${layerGroup.userId}"></td>
 									<td class="col-type">
 										<a th:href="@{/layer/list(searchOption=0,searchWord=layer_group_name,searchValue=${layerGroup.layerGroupName})}"
