@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '2.2.6.RELEASE'
+	id 'org.springframework.boot' version '2.3.0.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 	id 'war'
@@ -78,7 +78,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.2'
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
-	
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 	implementation 'org.springframework.security:spring-security-core:5.2.1.RELEASE'
 	//implementation 'org.apache.taglibs:taglibs-standard-jstlel:1.2.5'
 	
