@@ -6,29 +6,31 @@
 	<!-- 데이터 변경 요청 수 -->
 	<select id="getDataInfoLogTotalCount" parameterType="dataInfoLog" resultType="long">
 		/* getDataInfoLogTotalCount */
-		SELECT COUNT(data_log_id) 
-		FROM data_info_log
-		<trim prefix="WHERE" prefixOverrides="AND">
-			<if test="userId != null and userId != ''">
-			user_id = #{userId}
-			</if>
-			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
-			AND ${searchWord} = #{searchValue}
-			</if>
-			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
-			AND ${searchWord} LIKE '%' || #{searchValue} || '%'
-			</if>
-			<if test="startDate != null and startDate != ''">
-			<![CDATA[
-			AND insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
-			]]>
-			</if>
-			<if test="endDate != null and endDate != ''">
-			<![CDATA[
-			AND insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
-			]]>
-			</if>
-		</trim>
+		SELECT COUNT(X.*) 
+		FROM (
+			SELECT A.data_id, B.data_id
+			FROM data_info_log A, data_info B
+			WHERE A.data_id = B.data_id
+				<if test="userId != null and userId != ''">
+				AND A.user_id = #{userId}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+				AND A.${searchWord} = #{searchValue}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+				AND A.${searchWord} LIKE '%' || #{searchValue} || '%'
+				</if>
+				<if test="startDate != null and startDate != ''">
+				<![CDATA[
+				AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="endDate != null and endDate != ''">
+				<![CDATA[
+				AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+			) X
 	</select>
 	
 	<!-- 데이터 변경 요청 로그 목록. join 으로 변경해야 함 -->
