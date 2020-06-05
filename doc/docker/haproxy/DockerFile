@@ -1,0 +1,32 @@
+FROM centos:8
+
+ENV HAPROXY_MJR_VERSION=2.1 \
+    HAPROXY_VERSION=2.1.5
+
+RUN \
+    dnf install -y epel-release && \
+    dnf update -y && \
+    dnf install -y passwd && dnf install -y sudo && dnf install -y ncurses && \
+    # haproxy 컴파일을 위한 패키지 추가(USER_SYSTEMD로 컴파일하기 위해 systemd-devel 패키지 필수)
+    dnf install -y inotify-tools wget tar gzip make gcc perl pcre-devel zlib-devel systemd-devel && \
+    # haproxy download & install
+    wget -O /tmp/haproxy.tgz http://www.haproxy.org/download/${HAPROXY_MJR_VERSION}/src/haproxy-${HAPROXY_VERSION}.tar.gz && \
+    tar -zxvf /tmp/haproxy.tgz -C /tmp && \
+    cd /tmp/haproxy-* && \
+    make TARGET=linux-glibc USE_PCRE=1USE_ZLIB=1 USE_SYSTEMD=1 && \
+    make install && \
+    # 폴더 생성 및 유저 생성
+    mkdir -p /var/lib/haproxy && \
+    mkdir -p /var/log/haproxy && \
+    mkdir -p /etc/haproxy/certs && \
+    mkdir -p /etc/haproxy/errors && \
+    groupadd haproxy && adduser haproxy -g haproxy && chown -R haproxy:haproxy /var/lib/haproxy && \
+    adduser -m gaia3d && \
+    # 설치파일 제거
+    rm -rf /tmp/haproxy* && \
+    dnf remove -y make gcc pcre-devel && \
+    dnf clean all && rm -rf /var/cache/dnf
+
+
+
+
