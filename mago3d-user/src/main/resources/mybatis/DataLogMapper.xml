@@ -6,9 +6,9 @@
 	<!-- 데이터 변경 요청 수 -->
 	<select id="getDataInfoLogTotalCount" parameterType="dataInfoLog" resultType="long">
 		/* getDataInfoLogTotalCount */
-		SELECT COUNT(X.*) 
+		SELECT COUNT(X.data_log_id) 
 		FROM (
-			SELECT A.data_id, B.data_id
+			SELECT A.data_log_id
 			FROM data_info_log A, data_info B
 			WHERE A.data_id = B.data_id
 				<if test="userId != null and userId != ''">
