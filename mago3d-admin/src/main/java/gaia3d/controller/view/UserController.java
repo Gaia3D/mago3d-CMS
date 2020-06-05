@@ -216,8 +216,8 @@ public class UserController implements AuthorizationController {
 			return "/user/modify-password";
 		}
 		
-		String encryptPassword = PasswordSupport.encodePassword(userInfo.getNewPassword());
-		if(encryptPassword == null) {
+		// String encryptPassword = PasswordSupport.encodePassword(userInfo.getNewPassword());
+		if(userInfo.getNewPassword() == null) {
 			errorcode = "user.password.exception";
 			log.info("@@@@@@@@@@@@@ errcode = {}", errorcode);
 			userInfo.setErrorCode(errorcode);
@@ -226,7 +226,7 @@ public class UserController implements AuthorizationController {
 		}
 		
 		userInfo.setUserId(userSession.getUserId());
-		userInfo.setPassword(encryptPassword);
+		userInfo.setPassword(userInfo.getNewPassword());
 		userInfo.setStatus(UserStatus.USE.getValue());
 		userService.updatePassword(userInfo);
 		
@@ -235,7 +235,7 @@ public class UserController implements AuthorizationController {
 			userSession.setStatus(UserStatus.USE.getValue());
 		}
 	
-		return "redirect:/data/map";
+		return "redirect:/main/index";
 	}
 	
 	/**

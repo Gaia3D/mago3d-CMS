@@ -66,6 +66,11 @@ JS_MESSAGE["user.insert"] = "사용자를 등록 하였습니다.";
 JS_MESSAGE["user.info.update"] = "사용자 정보를 수정 하였습니다.";
 JS_MESSAGE["user.id.notexist"] = "아이디가 존재하지 않습니다.";
 
+JS_MESSAGE["password.new"] = "새로운 비밀번호를 입력하여 주십시오.";
+JS_MESSAGE["password.match.current"] = "현재 비밀번호와 일치합니다.";
+JS_MESSAGE["password.not.match.new"] = "새로운 비밀번호와 일치하지 않습니다.";
+JS_MESSAGE["password.change.next"] = "다음에 변경 시 로그인 페이지로 돌아가며 서비스를 사용할 수 없습니다. 비밀번호를 다음에 변경하시겠습니까?";
+
 
 //운영정책
 JS_MESSAGE["policy.user.update"] = "사용자 정책을 수정 하였습니다.";
