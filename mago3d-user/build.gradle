@@ -53,7 +53,7 @@ sourceSets {
                 println " ===========> copy from src/main/resources/develop to src/main/resources"
 
                 copy {
-                    from("src/main/resources/dev") {
+                    from("src/main/resources/develop") {
                         include 'application.properties'
                         include 'mago3d.properties'
                         include 'logback-spring.xml'
