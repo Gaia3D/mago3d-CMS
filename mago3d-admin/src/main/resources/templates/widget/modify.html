@@ -38,52 +38,43 @@
 										<h3 class="widget-title">사용자 현황</h3>
 									</div>
 									<div class="widget-functions u-pull-right">
-                                        <a href="/user/list" title="#{config.widget.project.more}"><span class="icon-glyph glyph-plus"></span></a>
+                                        <a href="/user/list"><span class="icon-glyph glyph-plus"></span></a>
 									</div>
 								</div>
-								<div id="userStatus" class="widget-content row" style="width: 300px; height:200px;">
-                                    
-								</div>
+								<div id="userStatus" class="widget-content row" style="width: 300px; height:200px;"></div>
 							</div>
-							<!-- 위젯 2 -->
+							<!-- 위젯 2: 데이터 공유 타입 -->
 							<div class="widget one-third column" style="font-size: 16px;">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title">데이터 상태별 현황<span th:text="#{config.widget.basic}"></span></h3>
-									</div>
-									<div class="widget-functions u-pull-right">
-										<a href="/data/list" title="#{config.widget.data.info.more}"><span class="icon-glyph glyph-plus"></span></a>
+										<h3 class="widget-title">데이터 공유 타입</span></h3>
 									</div>
 								</div>
-								<div class="widget-content row">
-									
-								</div>
+								<div id="dataSharing" class="widget-content row" style="width: 350px; height:200px;"></div>
                             </div>
-							<!-- 위젯 3 -->
+							<!-- 위젯 3: 데이터 변환 상태 -->
 							<div class="widget one-third column">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title">데이터 변경 요청 이력<span th:text="#{config.widget.basic}"></span></h3>
+										<h3 class="widget-title">데이터 변환 상태</span></h3>
 									</div>
 									<div class="widget-functions u-pull-right">
-										<a href="/data-log/list" title="#{config.widget.data.info.log.more}"><span class="icon-glyph glyph-plus"></span></a>
+										<a href="/converter/list" title="#{config.widget.data.info.log.more}"><span class="icon-glyph glyph-plus"></span></a>
 									</div>
 								</div>
-								<div class="widget-content row">
-
-								</div>
+								<div id="converterStatus" class="widget-content row" style="width: 350px; height:200px;"></div>
 							</div>
-							<!-- 위젯 4 -->
+							<!-- 위젯 4: 업로드 데이터 타입 -->
 							<div class="widget one-third column">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title">최근 이슈<span th:text="#{config.widget.basic}"></span></h3>
+										<h3 class="widget-title">업로드 데이터 타입</span></h3>
 									</div>
 									<div class="widget-functions u-pull-right">
 										<a href="#" title="#{config.widget.issue.more}"><span class="icon-glyph glyph-plus"></span></a>
 									</div>
 								</div>
-								<div class="widget-content row">
+								<div id="uploadDataType" class="widget-content row" style="width: 300px; height:200px;">
 									
 								</div>
 							</div>
@@ -91,7 +82,7 @@
 							<div class="widget one-third column" style="font-size: 16px;">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title" th:text="#{config.widget.user.status}"><span th:text="#{config.widget.basic}"></span></h3>
+										<h3 class="widget-title" th:text="#{config.widget.user.status}"></span></h3>
 									</div>
 									<div class="widget-functions u-pull-right">
 										<a href="/user/list" title="#{config.widget.user.status.more}"><span class="icon-glyph glyph-plus"></span></a>
@@ -119,7 +110,7 @@
                             <div class="widget one-third column">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title" th:text="#{config.widget.user.tracking}"><span th:text="#{config.widget.basic}"></span></h3>
+										<h3 class="widget-title" th:text="#{config.widget.user.tracking}"></span></h3>
 									</div>
 									<div class="widget-functions u-pull-right">
 										<a href="#" title="#{config.widget.user.tracking.more}"><span class="icon-glyph glyph-plus"></span></a>
@@ -133,7 +124,7 @@
                             <div class="widget one-third column">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title" th:text="#{config.widget.db.connection}"><span th:text="#{config.widget.basic}"></span></h3>
+										<h3 class="widget-title" th:text="#{config.widget.db.connection}"></span></h3>
 									</div>
 								</div>
 								<div class="widget-content row">
@@ -144,7 +135,7 @@
                             <div class="widget one-third column">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title" th:text="#{config.widget.db.session}"><span th:text="#{config.widget.basic}"></span></h3>
+										<h3 class="widget-title" th:text="#{config.widget.db.session}"></span></h3>
 									</div>
 									<div class="widget-functions u-pull-right">
 										<a href="#" th:title="#{config.widget.db.session.more}"><span class="icon-glyph glyph-plus"></span></a>
@@ -175,21 +166,19 @@
 <script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript">
-	var userChart = echarts.init(document.getElementById('userStatus'));
-	var userOption = {
+	var data = {};
+	data.grid = { left: '2%', right: '2%', top: '2%', bottom: '2%', containLabel: true };
+
+	/* 사용자 상태별 현황 */
+	var userStatusChart = echarts.init(document.getElementById('userStatus'));
+	var userStatusOption = {
 		tooltip: {
 			trigger: 'axis',
 			axisPointer: {
 				type: 'shadow'
 			}
 		},
-		grid: {
-			left: '2%',
-			right: '2%',
-			top: '2%',
-			bottom: '2%',
-			containLabel: true
-		},
+		grid: data.grid,
 		xAxis: {
 			type: 'value',
 			boundaryGap: [0, 0.01]
@@ -203,12 +192,12 @@
 				name: '사용자',
 				type: 'bar',
 				data: [
-				{name: '사용중', value: [[${activeUserTotalCount}]]},
-				{name: '사용중지', value: [[${fobidUserTotalCount}]]},
-				{name: '잠금', value: [[${failUserTotalCount}]]},
-				{name: '휴면', value: [[${sleepUserTotalCount}]]},
-				{name: '만료', value: [[${expireUserTotalCount}]]},
-				{name: '삭제', value: [[${tempPasswordUserTotalCount}]]}
+					{name: '사용중', value: [[${activeUserTotalCount}]]},
+					{name: '사용중지', value: [[${fobidUserTotalCount}]]},
+					{name: '잠금', value: [[${failUserTotalCount}]]},
+					{name: '휴면', value: [[${sleepUserTotalCount}]]},
+					{name: '만료', value: [[${expireUserTotalCount}]]},
+					{name: '삭제', value: [[${tempPasswordUserTotalCount}]]}
 				],
 				emphasis: {
 					itemStyle: {
@@ -220,7 +209,158 @@
 			}
 		]
 	};
-	userChart.setOption(userOption);
+	userStatusChart.setOption(userStatusOption);
+
+	/* 데이터 공유 타입 */
+	var dataSharingChart = echarts.init(document.getElementById('dataSharing'));
+	var dataSharingOption = {
+		tooltip: {
+			trigger: 'item',
+			formatter: '{a} <br/>{b}: {c} ({d}%)'
+		},
+		legend: {
+			orient: 'vertical',
+			left: 10,
+			data: ['공통', '공개', '개인', '그룹']
+		},
+		series: [
+			{
+				name: '데이터',
+				type: 'pie',
+				radius: ['50%', '70%'],
+				avoidLabelOverlap: false,
+				label: {
+					show: false,
+					position: 'center'
+				},
+				emphasis: {
+					label: {
+						show: true,
+						fontSize: '30',
+						fontWeight: 'bold'
+					}
+				},
+				labelLine: {
+					show: false
+				},
+				data: [
+					{name: '공통', value: [[${commonTotalCount}]]},
+					{name: '공개', value: [[${publicTotalCount}]]},
+					{name: '개인', value: [[${privateTotalCount}]]},
+					{name: '그룹', value: [[${groupTotalCount}]]}
+				]
+			}
+		]
+	};
+	dataSharingChart.setOption(dataSharingOption);
+
+	/* 데이터 변환 상태 */
+	var converterStatusChart = echarts.init(document.getElementById('converterStatus'));
+	var converterStatusOption = {
+		tooltip: {
+			trigger: 'item',
+			formatter: '{a} <br/>{b} : {c} ({d}%)'
+		},
+		legend: {
+			orient: 'vertical',
+			left: 'left',
+			data: ['준비', '성공', '대기', '실패']
+		},
+		series: [
+			{
+				name: '데이터 변환 상태',
+				type: 'pie',
+				radius: '55%',
+				center: ['50%', '60%'],
+				data: [
+					{name: '준비', value: [[${readyFileTotalCount}]]},
+					{name: '성공', value: [[${successFileTotalCount}]]},
+					{name: '대기', value: [[${waitingFileTotalCount}]]},
+					{name: '실패', value: [[${failFileTotalCount}]]}
+				],
+				emphasis: {
+					itemStyle: {
+						shadowBlur: 10,
+						shadowOffsetX: 0,
+						shadowColor: 'rgba(0, 0, 0, 0.5)'
+					}
+				}
+			}
+		]
+	};
+	converterStatusChart.setOption(converterStatusOption);
+
+	/* 업로드 데이터 타입 */
+	var colorPalette = ['#d87c7c','#919e8b', '#d7ab82',  '#6e7074','#61a0a8','#efa18d', '#787464', '#cc7e63', '#724e58', '#4b565b'];
+	var uploadDataTypeChart = echarts.init(document.getElementById('uploadDataType'));
+	var uploadDataTypeOption = {
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				type: 'shadow'
+			}
+		},
+		grid: { left: '2%', right: '2%', top: '3%', bottom: '2%', containLabel: true },
+		xAxis: {
+			type: 'category',
+			data: ['3ds', 'obj', 'dae', 'collada', 'ifc', 'las', 'citygml', 'indoorgml']
+		},
+		yAxis: {
+			type: 'value',
+		},
+		graph: {
+			color: colorPalette
+		},
+		series: [
+			{
+				name: '업로드 데이터 타입',
+				type: 'bar',
+				data: [
+					{
+						itemStyle: {color: 'blue'},
+						name: '3ds', 
+						value: [[${type3dsTotalCount}]]
+					},
+					{
+						itemStyle: {color: 'red'},
+						name: 'obj', 
+						value: [[${typeObjTotalCount}]]
+					},
+					{
+						itemStyle: {color: 'green'},
+						name: 'dae', 
+						value: [[${typeDaeTotalCount}]]
+					},
+					{
+						itemStyle: {color: 'yellow'},
+						name: 'collada', 
+						value: [[${typeColladaTotalCount}]]
+					},
+					{
+						itemStyle: {color: 'orange'},
+						name: 'ifc', 
+						value: [[${typeIfcTotalCount}]]
+					},
+					{
+						itemStyle: {color: 'navy'},
+						name: 'las', 
+						value: [[${typeLasTotalCount}]]
+					},
+					{
+						itemStyle: {color: 'magenta'},
+						name: 'citygml', 
+						value: [[${typeCitygmlTotalCount}]]
+					},
+					{
+						itemStyle: {color: 'gray'},
+						name: 'indoorgml', 
+						value: [[${typeIndoorgmlTotalCount}]]
+					}
+				]
+			}
+		]
+	};
+	uploadDataTypeChart.setOption(uploadDataTypeOption);
 
 </script>
 </th:block>
