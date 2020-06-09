@@ -18,7 +18,7 @@
 			AND data_type = #{dataType}
 			</if>
 			<if test="sharing != null and sharing != ''">
-			AND a.sharing = #{sharing}
+			AND A.sharing = #{sharing}
 			</if>
 			<if test="userId != null and userId != ''">
 			AND A.user_id = #{userId}
