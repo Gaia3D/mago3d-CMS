@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,19 +28,25 @@ import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.PropertiesConfig;
 import gaia3d.domain.AccessLog;
 import gaia3d.domain.CivilVoice;
+import gaia3d.domain.ConverterJob;
+import gaia3d.domain.ConverterJobStatus;
 import gaia3d.domain.DataAdjustLog;
 import gaia3d.domain.DataGroup;
 import gaia3d.domain.DataInfo;
 import gaia3d.domain.DataStatus;
+import gaia3d.domain.DataType;
 import gaia3d.domain.Key;
+import gaia3d.domain.UploadData;
 import gaia3d.domain.UserInfo;
 import gaia3d.domain.UserSession;
 import gaia3d.domain.UserStatus;
 import gaia3d.service.AccessLogService;
 import gaia3d.service.CivilVoiceService;
+import gaia3d.service.ConverterService;
 import gaia3d.service.DataAdjustLogService;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.DataService;
+import gaia3d.service.UploadDataService;
 import gaia3d.service.UserService;
 import gaia3d.support.SessionUserSupport;
 import gaia3d.utils.DateUtils;
@@ -59,6 +67,12 @@ public class WidgetRestController {
 
 	@Autowired
 	private DataService dataService;
+
+	@Autowired
+	private UploadDataService uploadDataService;
+
+	@Autowired
+	private ConverterService converterService;
 
 	@Autowired
 	private DataAdjustLogService dataAdjustLogService;
@@ -440,4 +454,109 @@ public class WidgetRestController {
 
 		return userDbcp;
 	}
+
+	/**
+	 * 사용자 상태 집계
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "/user-status")
+	public Map<String, Object> userStatus(HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+		Map<String, Object> statistics = new HashMap<>();
+		
+		// 사용자 현황
+		UserInfo userInfo = new UserInfo();
+		List<UserInfo> userInfoStatusList = userService.getUserStatusCount(userInfo);
+		userInfoStatusList.stream().forEach(e -> statistics.put(UserStatus.findByStatus(e.getStatus()).toString(), e.getUserStatusCount()));
+		
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("statistics", statistics);
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
+
+	/**
+	 * 데이터 공유 타입
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "/data-sharing")
+	public Map<String, Object> dataSharing(HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+		Map<String, Object> statistics = new HashMap<>();
+		
+		// 데이터 공유 타입
+		DataInfo dataInfo = new DataInfo();
+		List<DataInfo> dataSharingList = dataService.getDataSharing(dataInfo);
+		dataSharingList.stream().forEach(e -> statistics.put(e.getSharing().toString(), e.getDataCount()));
+		
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("statistics", statistics);
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
+	
+	/**
+	 * 데이터 변환 상태 집계
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "/converter-status")
+	public Map<String, Object> converterStatus(HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+		Map<String, Object> statistics = new HashMap<>();
+		
+		// 데이터 변환 상태
+		ConverterJob converterJob = new ConverterJob();
+		List<ConverterJob> converterJobList = converterService.getConverterJobStatus(converterJob);
+		converterJobList.stream().forEach(e -> statistics.put(ConverterJobStatus.findByStatus(e.getStatus()).toString(), e.getStatusCount()));
+		
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("statistics", statistics);
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
+
+	/**
+	 * 업로드 타입 집계
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "/upload-type")
+	public Map<String, Object> uploadDataType(HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+		Map<String, Object> statistics = new HashMap<>();
+		
+		// 데이터 변환 상태
+		UploadData uploadData = new UploadData();
+		List<UploadData> uploadDataList = uploadDataService.getUploadDataType(uploadData);
+		uploadDataList.stream().forEach(e -> statistics.put(DataType.findByDataType(e.getDataType()).toString(), e.getDataCount()));
+
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("statistics", statistics);
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
+
 }

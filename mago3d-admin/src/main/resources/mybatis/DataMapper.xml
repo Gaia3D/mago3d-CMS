@@ -201,6 +201,18 @@
 		FROM data_info_attribute
 		WHERE data_id = #{dataId}
 	</select> -->
+	
+	<!-- 데이터 공유 타입 집계 -->
+	<select id="getDataSharing" parameterType="dataInfo" resultType="dataInfo">
+		/* getDataSharing */
+		SELECT 'common' sharing , COUNT(*) AS dataCount FROM data_info WHERE sharing = 'common'
+			UNION ALL
+		SELECT 'public' sharing, COUNT(*) AS dataCount FROM data_info WHERE sharing = 'public'
+			UNION ALL
+		SELECT 'private' sharing, COUNT(*) AS dataCount FROM data_info WHERE sharing = 'private'
+			UNION ALL
+		SELECT 'group' sharing, COUNT(*) AS dataCount FROM data_info WHERE sharing = 'group'
+	</select>
 
 	<!-- Data 등록 -->
 	<insert id="insertData" useGeneratedKeys="true" keyProperty="dataId" parameterType="dataInfo">

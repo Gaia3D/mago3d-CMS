@@ -120,6 +120,24 @@
 		WHERE user_id = #{userId}
 	</select>
 
+	<!-- 사용자 상태 집계 -->
+	<select id="getUserStatusCount" parameterType="userInfo" resultType="userInfo">	
+		/* getUserStatusCount */
+		SELECT '0' status, COUNT(*) AS userStatusCount FROM user_info WHERE status = '0'
+			UNION ALL
+		SELECT '1' status, COUNT(*) AS userStatusCount FROM user_info WHERE status = '1'
+			UNION ALL
+		SELECT '2' status, COUNT(*) AS userStatusCount FROM user_info WHERE status = '2'
+			UNION ALL
+		SELECT '3' status, COUNT(*) AS userStatusCount FROM user_info WHERE status = '3'
+			UNION ALL 
+		SELECT '4' status, COUNT(*) AS userStatusCount FROM user_info WHERE status = '4'
+			UNION ALL
+		SELECT '5' status, COUNT(*) AS userStatusCount FROM user_info WHERE status = '5'
+			UNION ALL
+		SELECT '6' status, COUNT(*) AS userStatusCount FROM user_info WHERE status = '6'
+	</select>
+
 	<!-- 사용자 등록 -->
 	<insert id="insertUser" parameterType="userInfo">
 		/* insertUser */

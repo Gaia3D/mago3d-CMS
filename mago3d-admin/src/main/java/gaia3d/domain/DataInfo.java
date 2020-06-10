@@ -119,6 +119,8 @@ public class DataInfo extends Search implements Serializable {
 	private String metainfo;
 	// data 상태. processing : 변환중, use : 사용중, unused : 사용중지(관리자), delete : 삭제(비표시)
 	private String status;
+	// 데이터 상태(ENUM)
+	private DataStatus dataStatus;
 	// 속성 존재 유무. true : 존재, false : 존재하지 않음(기본값)
 	private Boolean attributeExist;
 	// object 속성 존재 유무. true : 존재, false : 존재하지 않음(기본값)

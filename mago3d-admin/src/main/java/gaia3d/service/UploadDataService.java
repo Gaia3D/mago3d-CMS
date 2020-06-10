@@ -50,6 +50,13 @@ public interface UploadDataService {
 	List<UploadDataFile> getListUploadDataFile(UploadData uploadData);
 	
 	/**
+	 * 업로드 데이터 타입 집계
+	 * @param uploadData
+	 * @return
+	 */
+	List<UploadData> getUploadDataType(UploadData uploadData);
+	
+	/**
 	 * 사용자 파일 정보 업로딩
 	 * @param uploadData
 	 * @param uploadDataFileList

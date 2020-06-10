@@ -83,6 +83,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
+	 * 사용자 상태 집계
+	 */
+	@Transactional(readOnly = true)
+	public List<UserInfo> getUserStatusCount(UserInfo userInfo) {
+		return userMapper.getUserStatusCount(userInfo);
+	}
+
+	/**
 	 * 사용자 등록
 	 * @param userInfo
 	 * @return
@@ -198,4 +206,5 @@ public class UserServiceImpl implements UserService {
 //		return userMapper.updateUser(userInfo);
 		return userMapper.deleteUser(userId);
 	}
+
 }

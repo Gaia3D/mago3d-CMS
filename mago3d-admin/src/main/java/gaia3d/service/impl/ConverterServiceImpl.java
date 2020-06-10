@@ -113,6 +113,16 @@ public class ConverterServiceImpl implements ConverterService {
 	}
 
 	/**
+	 * 데이터 변환 상태 집계
+	 * @param converterJob
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public List<ConverterJob> getConverterJobStatus(ConverterJob converterJob) {
+		return converterMapper.getConverterJobStatus(converterJob);
+	}
+	
+	/**
 	 * converter 변환
 	 * @param converterJob
 	 * @return

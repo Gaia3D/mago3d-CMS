@@ -5,7 +5,6 @@ import java.util.List;
 import gaia3d.domain.DataFileInfo;
 import gaia3d.domain.DataInfo;
 import gaia3d.domain.DataInfoSimple;
-import gaia3d.domain.DataSmartTilingFileInfo;
 
 /**
  * Data 관리
@@ -62,6 +61,13 @@ public interface DataService {
 	 * @return
 	 */
 	List<DataInfo> getDataByConverterJob(DataInfo dataInfo);
+
+	/**
+	 * 데이터 공유 타입 집계
+	 * @param dataInfo
+	 * @return
+	 */
+	List<DataInfo> getDataSharing(DataInfo dataInfo);
 	
 	/**
 	 * Data 등록

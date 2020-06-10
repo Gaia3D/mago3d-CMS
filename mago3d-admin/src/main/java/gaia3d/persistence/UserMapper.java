@@ -47,7 +47,14 @@ public interface UserMapper {
      * @param userInfo
      * @return
      */
-    Boolean isUserIdDuplication(UserInfo userInfo);
+	Boolean isUserIdDuplication(UserInfo userInfo);
+	
+	/**
+	 * 사용자 상태 집계
+	 * @param userInfo
+	 * @return
+	 */
+	List<UserInfo> getUserStatusCount(UserInfo userInfo);
 
 	/**
 	 * 사용자 등록

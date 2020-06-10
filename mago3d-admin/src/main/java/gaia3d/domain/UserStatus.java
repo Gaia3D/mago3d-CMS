@@ -1,5 +1,7 @@
 package gaia3d.domain;
 
+import java.util.Arrays;
+
 public enum UserStatus {
 	// 사용중
 	USE("0"),
@@ -15,26 +17,35 @@ public enum UserStatus {
 	LOGICAL_DELETE("5"),
 	// 사용자 상태가 임시 비밀번호(비밀번호 찾기, 관리자 설정에 의한 임시 비밀번호 발급 시)
 	TEMP_PASSWORD("6");
-	
+
 	private final String value;
-	
+
 	UserStatus(String value) {
 		this.value = value;
 	}
-	
+
 	public String getValue() {
 		return this.value;
 	}
-	
+
 	/**
 	 * TODO values for loop 로 변환
+	 * 
 	 * @param value
 	 * @return
 	 */
 	public static UserStatus findBy(String value) {
-		for(UserStatus userStatus : values()) {
-			if(userStatus.getValue().equals(value)) return userStatus; 
+		for (UserStatus userStatus : values()) {
+			if (userStatus.getValue().equals(value))
+				return userStatus;
 		}
 		return null;
+	}
+
+	public static UserStatus findByStatus(String value) {
+		return Arrays.stream(UserStatus.values())
+					 .filter(e -> e.value.equals(value))
+					 .findAny()
+					 .orElse(null);
 	}
 }

@@ -124,6 +124,16 @@ public class DataServiceImpl implements DataService {
 	public List<DataInfo> getDataByConverterJob(DataInfo dataInfo) {
 		return dataMapper.getDataByConverterJob(dataInfo);
 	}
+
+	/**
+	 * 데이터 공유 타입 집계
+	 * @param dataInfo
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public List<DataInfo> getDataSharing(DataInfo dataInfo) {
+		return dataMapper.getDataSharing(dataInfo);
+	}
 	
 	/**
 	 * Data 등록

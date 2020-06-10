@@ -1,5 +1,7 @@
 package gaia3d.domain;
 
+import java.util.Arrays;
+
 /**
  * 3DS 를 enum 으로 바로 사용할 수가 없음
  * @author Jeongdae
@@ -28,7 +30,7 @@ public enum DataType {
 	
 	private final String value;
 	
-	DataType(String value) {
+	DataType(final String value) {
 		this.value = value;
 	}
 	
@@ -41,10 +43,18 @@ public enum DataType {
 	 * @param value
 	 * @return
 	 */
-	public static DataType findBy(String value) {
-		for(DataType dataType : values()) {
+	public static DataType findBy(final String value) {
+		for(final DataType dataType : values()) {
 			if(dataType.getValue().equals(value)) return dataType; 
 		}
 		return null;
 	}
+
+	public static DataType findByDataType(String value) {
+		return Arrays.stream(DataType.values())
+				.filter(e -> e.value.equals(value))
+				.findAny()
+				.orElse(null);
+	}
+	
 }

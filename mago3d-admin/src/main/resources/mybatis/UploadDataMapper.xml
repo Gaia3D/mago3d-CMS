@@ -137,6 +137,26 @@
 		</choose>
 	</select>
 
+	<!-- 업로드 데이터 타입 집계 -->
+	<select id="getUploadDataType" parameterType="uploadData" resultType="uploadData">
+		/* getUploadDataType */
+		SELECT '3ds' dataType, COUNT(*) AS dataCount FROM data_info WHERE data_type = '3ds'
+			UNION ALL
+		SELECT 'obj' dataType, COUNT(*) AS dataCount FROM data_info WHERE data_type = 'obj'
+			UNION ALL
+		SELECT 'dae' dataType, COUNT(*) AS dataCount FROM data_info WHERE data_type = 'dae'
+			UNION ALL
+		SELECT 'collada' dataType, COUNT(*) AS dataCount FROM data_info WHERE data_type = 'collada'
+			UNION ALL
+		SELECT 'ifc' dataType , COUNT(*) AS dataCount FROM data_info WHERE data_type = 'ifc'
+			UNION ALL
+		SELECT 'las' dataType, COUNT(*) AS dataCount FROM data_info WHERE data_type = 'las'
+			UNION ALL
+		SELECT 'citygml' dataType, COUNT(*) AS dataCount FROM data_info WHERE data_type = 'citygml'
+			UNION ALL
+		SELECT 'indoorgml' dataType, COUNT(*) AS dataCount FROM data_info WHERE data_type = 'indoorgml'
+	</select>
+
 	<!-- 사용자 3차원 파일 정보 업로딩 -->
 	<insert id="insertUploadData" parameterType="uploadData" >
 		/* insertUploadData */

@@ -95,6 +95,13 @@ public interface DataMapper {
 	 * @return
 	 */
 	Integer getRootParentCount(DataInfo dataInfo);
+
+	/**
+	 * 데이터 공유 타입 집계
+	 * @param dataInfo
+	 * @return
+	 */
+	List<DataInfo> getDataSharing(DataInfo dataInfo);
 	
 	/**
 	 * Data 등록
