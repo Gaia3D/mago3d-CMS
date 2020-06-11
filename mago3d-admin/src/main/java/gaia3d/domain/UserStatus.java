@@ -1,6 +1,10 @@
 package gaia3d.domain;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 public enum UserStatus {
 	// 사용중
@@ -40,6 +44,13 @@ public enum UserStatus {
 				return userStatus;
 		}
 		return null;
+	}
+
+	public static List<String> toEnumValues() {
+		return Stream.of(UserStatus.values())
+					 .map(e -> e.value)
+					 .collect(Collectors.toList());
+					 
 	}
 
 	public static UserStatus findByStatus(String value) {

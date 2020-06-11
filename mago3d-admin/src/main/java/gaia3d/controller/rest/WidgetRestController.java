@@ -468,10 +468,19 @@ public class WidgetRestController {
 		Map<String, Object> statistics = new HashMap<>();
 		
 		// 사용자 현황
-		UserInfo userInfo = new UserInfo();
-		List<UserInfo> userInfoStatusList = userService.getUserStatusCount(userInfo);
-		userInfoStatusList.stream().forEach(e -> statistics.put(UserStatus.findByStatus(e.getStatus()).toString(), e.getUserStatusCount()));
+		List<UserInfo> userInfoStatusList = userService.getUserStatusCount(UserInfo.builder().build());
 		
+		List<String> enumValues =  UserStatus.toEnumValues();
+		userInfoStatusList.stream().forEach(l -> {
+			enumValues.stream().forEach(e -> { 
+				if(l.getStatus().toString().equals(e.toString())) {
+					statistics.put(UserStatus.findByStatus(l.getStatus()).toString(), l.getUserStatusCount());
+				} else {
+					statistics.put(UserStatus.findByStatus(e.toString()).toString(), 0);
+				}	 
+			});
+		});
+
 		int statusCode = HttpStatus.OK.value();
 
 		result.put("statistics", statistics);
