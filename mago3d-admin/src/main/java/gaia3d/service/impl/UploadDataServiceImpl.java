@@ -90,12 +90,11 @@ public class UploadDataServiceImpl implements UploadDataService {
 
 	/**
 	 * 업로드 데이터 타입 집계
-	 * @param uploadData
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<UploadData> getUploadDataType(UploadData uploadData) {
-		return uploadDataMapper.getUploadDataType(uploadData);
+	public List<UploadData> getUploadDataType() {
+		return uploadDataMapper.getUploadDataType();
 	}
 	
 	/**

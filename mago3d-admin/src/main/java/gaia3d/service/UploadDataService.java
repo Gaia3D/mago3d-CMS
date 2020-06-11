@@ -51,10 +51,9 @@ public interface UploadDataService {
 	
 	/**
 	 * 업로드 데이터 타입 집계
-	 * @param uploadData
 	 * @return
 	 */
-	List<UploadData> getUploadDataType(UploadData uploadData);
+	List<UploadData> getUploadDataType();
 	
 	/**
 	 * 사용자 파일 정보 업로딩

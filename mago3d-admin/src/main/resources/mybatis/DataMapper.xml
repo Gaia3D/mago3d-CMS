@@ -203,15 +203,11 @@
 	</select> -->
 	
 	<!-- 데이터 공유 타입 집계 -->
-	<select id="getDataSharing" parameterType="dataInfo" resultType="dataInfo">
+	<select id="getDataSharing" resultType="dataInfo">
 		/* getDataSharing */
-		SELECT 'common' sharing , COUNT(*) AS dataCount FROM data_info WHERE sharing = 'common'
-			UNION ALL
-		SELECT 'public' sharing, COUNT(*) AS dataCount FROM data_info WHERE sharing = 'public'
-			UNION ALL
-		SELECT 'private' sharing, COUNT(*) AS dataCount FROM data_info WHERE sharing = 'private'
-			UNION ALL
-		SELECT 'group' sharing, COUNT(*) AS dataCount FROM data_info WHERE sharing = 'group'
+		SELECT sharing, COUNT(*) AS dataCount 
+		FROM data_info 
+		GROUP BY sharing;
 	</select>
 
 	<!-- Data 등록 -->

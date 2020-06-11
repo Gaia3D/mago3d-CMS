@@ -1,6 +1,9 @@
 package gaia3d.domain;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * 3DS 를 enum 으로 바로 사용할 수가 없음
@@ -48,6 +51,13 @@ public enum DataType {
 			if(dataType.getValue().equals(value)) return dataType; 
 		}
 		return null;
+	}
+
+	public static Map<String, Object> toEnumHashMap() {
+		Map<String, Object> eMap = new HashMap<>();
+		Stream.of(DataType.values())
+			  .forEach(e ->  eMap.put(e.toString(), 0l));
+		return eMap;
 	}
 
 	public static DataType findByDataType(String value) {

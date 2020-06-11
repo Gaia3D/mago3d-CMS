@@ -469,7 +469,6 @@ public class WidgetRestController {
 		
 		// 사용자 현황
 		List<UserInfo> userInfoStatusList = userService.getUserStatusCount();
-
 		statistics = UserStatus.toEnumHashMap();
 		userInfoStatusList.stream().forEach(e -> {
 			statistics.put(UserStatus.findByStatus(e.getStatus()).toString(), e.getUserStatusCount());
@@ -497,8 +496,7 @@ public class WidgetRestController {
 		Map<String, Object> statistics = new HashMap<>();
 		
 		// 데이터 공유 타입
-		DataInfo dataInfo = new DataInfo();
-		List<DataInfo> dataSharingList = dataService.getDataSharing(dataInfo);
+		List<DataInfo> dataSharingList = dataService.getDataSharing();
 		dataSharingList.stream().forEach(e -> statistics.put(e.getSharing().toString(), e.getDataCount()));
 		
 		int statusCode = HttpStatus.OK.value();
@@ -520,12 +518,14 @@ public class WidgetRestController {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		Map<String, Object> statistics = new HashMap<>();
+		Map<String, Object> statistics;
 		
 		// 데이터 변환 상태
-		ConverterJob converterJob = new ConverterJob();
-		List<ConverterJob> converterJobList = converterService.getConverterJobStatus(converterJob);
-		converterJobList.stream().forEach(e -> statistics.put(ConverterJobStatus.findByStatus(e.getStatus()).toString(), e.getStatusCount()));
+		List<ConverterJob> converterJobList = converterService.getConverterJobStatus();
+		statistics = ConverterJobStatus.toEnumHashMap();
+		converterJobList.stream().forEach(e -> {
+			statistics.put(ConverterJobStatus.findByStatus(e.getStatus()).toString(), e.getStatusCount());
+		});	
 		
 		int statusCode = HttpStatus.OK.value();
 
@@ -546,12 +546,14 @@ public class WidgetRestController {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		Map<String, Object> statistics = new HashMap<>();
+		Map<String, Object> statistics;
 		
 		// 데이터 변환 상태
-		UploadData uploadData = new UploadData();
-		List<UploadData> uploadDataList = uploadDataService.getUploadDataType(uploadData);
-		uploadDataList.stream().forEach(e -> statistics.put(DataType.findByDataType(e.getDataType()).toString(), e.getDataCount()));
+		List<UploadData> uploadDataList = uploadDataService.getUploadDataType();
+		statistics = DataType.toEnumHashMap();
+		uploadDataList.stream().forEach(e -> {
+			statistics.put(DataType.findByDataType(e.getDataType()).toString(), e.getDataCount());
+		});
 
 		int statusCode = HttpStatus.OK.value();
 
@@ -561,5 +563,6 @@ public class WidgetRestController {
 		result.put("message", message);
 		return result;
 	}
+
 
 }

@@ -98,10 +98,9 @@ public interface DataMapper {
 
 	/**
 	 * 데이터 공유 타입 집계
-	 * @param dataInfo
 	 * @return
 	 */
-	List<DataInfo> getDataSharing(DataInfo dataInfo);
+	List<DataInfo> getDataSharing();
 	
 	/**
 	 * Data 등록

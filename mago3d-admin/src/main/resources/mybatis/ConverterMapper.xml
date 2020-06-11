@@ -110,15 +110,11 @@
 	</select>
 
 	<!-- 데이터 변환 상태 집계 -->
-	<select id="getConverterJobStatus" parameterType="converterJob" resultType="converterJob">
+	<select id="getConverterJobStatus" resultType="converterJob">
 		/* getConverterJobStatus */
-		SELECT 'ready' status, COUNT(*) AS statusCount FROM converter_job WHERE status = 'ready'
-			UNION ALL
-		SELECT 'success' status, COUNT(*) AS statusCount FROM converter_job WHERE status = 'success'
-			UNION ALL
-		SELECT 'waiting' status, COUNT(*) AS statusCount FROM converter_job WHERE status = 'waiting'
-			UNION ALL
-		SELECT 'fail' status, COUNT(*) AS statusCount FROM converter_job WHERE status = 'fail'
+		SELECT status, COUNT(*) AS statusCount 
+		FROM converter_job
+		GROUP BY status
 	</select>
 
 	<!-- converter job file 목록 -->

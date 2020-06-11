@@ -121,7 +121,7 @@
 	</select>
 
 	<!-- 사용자 상태 집계 -->
-	<select id="getUserStatusCount" parameterType="userInfo" resultType="userInfo">	
+	<select id="getUserStatusCount" resultType="userInfo">	
 		/* getUserStatusCount */
 		select status, COUNT(*) AS userStatusCount 
 		FROM user_info 

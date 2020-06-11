@@ -45,10 +45,9 @@ public interface ConverterMapper {
 
 	/**
 	 * 데이터 변환 상태 집계
-	 * @param converterJob
 	 * @return
 	 */
-	public List<ConverterJob> getConverterJobStatus(ConverterJob converterJob);
+	public List<ConverterJob> getConverterJobStatus();
 	
 	/**
 	 * insert converter job

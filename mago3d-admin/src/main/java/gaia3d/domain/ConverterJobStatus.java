@@ -1,6 +1,9 @@
 package gaia3d.domain;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
 public enum ConverterJobStatus {
 
@@ -21,6 +24,13 @@ public enum ConverterJobStatus {
 
 	public String getValue() {
 		return this.value;
+	}
+
+	public static Map<String, Object> toEnumHashMap() {
+		Map<String, Object> eMap = new HashMap<>();
+		Stream.of(ConverterJobStatus.values())
+			  .forEach(e ->  eMap.put(e.toString(), 0l));
+		return eMap;
 	}
 
 	public static ConverterJobStatus findByStatus(String value) {
