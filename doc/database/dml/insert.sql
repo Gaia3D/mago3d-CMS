@@ -140,7 +140,8 @@ values
 	(NEXTVAL('user_group_role_seq'), 1, 5),
 	(NEXTVAL('user_group_role_seq'), 1, 6),
 	(NEXTVAL('user_group_role_seq'), 2, 4),
-	(NEXTVAL('user_group_role_seq'), 2, 5);
+	(NEXTVAL('user_group_role_seq'), 2, 5),
+    (NEXTVAL('user_group_role_seq'), 2, 6);
 
 
 -- 메인 화면 위젯
