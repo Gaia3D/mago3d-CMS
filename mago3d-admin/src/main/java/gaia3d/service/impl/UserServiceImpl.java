@@ -86,8 +86,8 @@ public class UserServiceImpl implements UserService {
 	 * 사용자 상태 집계
 	 */
 	@Transactional(readOnly = true)
-	public List<UserInfo> getUserStatusCount(UserInfo userInfo) {
-		return userMapper.getUserStatusCount(userInfo);
+	public List<UserInfo> getUserStatusCount() {
+		return userMapper.getUserStatusCount();
 	}
 
 	/**

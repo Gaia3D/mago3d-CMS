@@ -465,21 +465,15 @@ public class WidgetRestController {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		Map<String, Object> statistics = new HashMap<>();
+		Map<String, Object> statistics;
 		
 		// 사용자 현황
-		List<UserInfo> userInfoStatusList = userService.getUserStatusCount(UserInfo.builder().build());
-		
-		List<String> enumValues =  UserStatus.toEnumValues();
-		userInfoStatusList.stream().forEach(l -> {
-			enumValues.stream().forEach(e -> { 
-				if(l.getStatus().toString().equals(e.toString())) {
-					statistics.put(UserStatus.findByStatus(l.getStatus()).toString(), l.getUserStatusCount());
-				} else {
-					statistics.put(UserStatus.findByStatus(e.toString()).toString(), 0);
-				}	 
-			});
-		});
+		List<UserInfo> userInfoStatusList = userService.getUserStatusCount();
+
+		statistics = UserStatus.toEnumHashMap();
+		userInfoStatusList.stream().forEach(e -> {
+			statistics.put(UserStatus.findByStatus(e.getStatus()).toString(), e.getUserStatusCount());
+		});			
 
 		int statusCode = HttpStatus.OK.value();
 

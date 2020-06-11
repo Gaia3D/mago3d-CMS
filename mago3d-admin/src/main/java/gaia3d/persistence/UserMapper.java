@@ -51,10 +51,9 @@ public interface UserMapper {
 	
 	/**
 	 * 사용자 상태 집계
-	 * @param userInfo
 	 * @return
 	 */
-	List<UserInfo> getUserStatusCount(UserInfo userInfo);
+	List<UserInfo> getUserStatusCount();
 
 	/**
 	 * 사용자 등록

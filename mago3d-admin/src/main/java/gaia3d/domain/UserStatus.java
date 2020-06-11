@@ -1,10 +1,11 @@
 package gaia3d.domain;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 public enum UserStatus {
 	// 사용중
@@ -44,6 +45,13 @@ public enum UserStatus {
 				return userStatus;
 		}
 		return null;
+	}
+
+	public static Map<String, Object> toEnumHashMap() {
+		Map<String, Object> eMap = new HashMap<>();
+		Stream.of(UserStatus.values())
+			  .forEach(e ->  eMap.put(e.toString(), 0l));
+		return eMap;
 	}
 
 	public static List<String> toEnumValues() {
