@@ -12,19 +12,19 @@
 	<div class="userPolicyContentDetail">
 		<div class="form-group form-group-policy">
 			<label for="initLongitude" th:text="#{common.longitude}"></label>
-			<input type="text" id="initLongitude" name="initLongitude" th:value="${userPolicy.initLongitude}" size="15" />M
+			<input type="text" id="initLongitude" name="initLongitude" th:field="*{initLongitude}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="initLatitude" th:text="#{common.latitude}"></label>
-			<input type="text" id="initLatitude" name="initLatitude" th:value="${userPolicy.initLatitude}" size="15" />M
+			<input type="text" id="initLatitude" name="initLatitude" th:field="*{initLatitude}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="initAltitude" th:text="#{common.altitude}"></label>
-			<input type="text" id="initAltitude" name="initAltitude" th:value="${userPolicy.initAltitude}" size="15" />M
+			<input type="text" id="initAltitude" name="initAltitude" th:field="*{initAltitude}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="initDuration" th:text="#{policy.init.duration}"></label>
-			<input type="text" id="initDuration" name="initDuration" th:value="${userPolicy.initDuration}" size="15" />S
+			<input type="text" id="initDuration" name="initDuration" th:field="*{initDuration}" size="15" />S
 		</div>
 	</div>
 </div>
@@ -33,7 +33,7 @@
 	<div class="userPolicyContentDetail">
 		<div class="form-group form-group-policy">
 			<label for="initfieldOfView" th:text="#{policy.init.fov}"></label>
-			<input type="text" id="initfieldOfView" name="initDefaultFov" th:value="${userPolicy.initDefaultFov}" size="14" />M
+			<input type="text" id="initfieldOfView" name="initDefaultFov" th:field="*{initDefaultFov}" size="14" />M
 		</div>
 	</div>
 </div>
@@ -45,27 +45,27 @@
 	<div class="userPolicyContentDetail">
 		<div class="form-group form-group-policy">
 			<label for="geoLod0">LOD0</label>
-			<input type="text" id="geoLod0" name="lod0" th:value="${userPolicy.lod0}" size="15" />M
+			<input type="text" id="geoLod0" name="lod0" th:field="*{lod0}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod1">LOD1</label>
-			<input type="text" id="geoLod1" name="lod1" th:value="${userPolicy.lod1}" size="15" />M
+			<input type="text" id="geoLod1" name="lod1" th:field="*{lod1}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod2">LOD2</label>
-			<input type="text" id="geoLod2" name="lod2" th:value="${userPolicy.lod2}" size="15" />M
+			<input type="text" id="geoLod2" name="lod2" th:field="*{lod2}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod3">LOD3</label>
-			<input type="text" id="geoLod3" name="lod3" th:value="${userPolicy.lod3}" size="15" />M
+			<input type="text" id="geoLod3" name="lod3" th:field="*{lod3}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod4">LOD4</label>
-			<input type="text" id="geoLod4" name="lod4" th:value="${userPolicy.lod4}" size="15" />M
+			<input type="text" id="geoLod4" name="lod4" th:field="*{lod4}" size="15" />M
 		</div>
 		<div class="form-group form-group-policy">
 			<label for="geoLod5">LOD5</label>
-			<input type="text" id="geoLod5" name="lod5" th:value="${userPolicy.lod5}" size="15" />M
+			<input type="text" id="geoLod5" name="lod5" th:field="*{lod5}" size="15" />M
 		</div>
 	</div>
 </div>
@@ -77,7 +77,7 @@
 	<div class="userPolicyContentDetail">
 		<div class="form-group form-group-policy">
 			<label for="ssaoRadius" th:text="#{policy.init.ssao}"></label>
-			<input type="text" id="ssaoRadius" name="ssaoRadius" th:value="${userPolicy.ssaoRadius}" size="15" />M
+			<input type="text" id="ssaoRadius" name="ssaoRadius" th:field="*{ssaoRadius}" size="15" />M
 		</div>
 	</div>
 </div>
