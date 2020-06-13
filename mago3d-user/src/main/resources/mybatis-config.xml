@@ -9,8 +9,8 @@
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 
-    <typeAliases>
-    	<typeAlias type="gaia3d.domain.AccessLog" alias="accessLog" />
+	<typeAliases>
+		<typeAlias type="gaia3d.domain.AccessLog" alias="accessLog" />
     	<typeAlias type="gaia3d.domain.ConverterJob" alias="converterJob" />
     	<typeAlias type="gaia3d.domain.ConverterJobFile" alias="converterJobFile" />
 		<typeAlias type="gaia3d.domain.DataGroup" alias="dataGroup" />
@@ -48,5 +48,11 @@
  		
  		<typeAlias type="gaia3d.domain.AttributeRepository" alias="attributeRepository"/>
     </typeAliases>
+
+	<typeHandlers>
+		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="java.math.RoundingMode"/>
+		<!--<typeHandler handler="org.apache.ibatis.type.LocalDateTimeTypeHandler" javaType="java.time.LocalDateTime"/>-->
+		<typeHandler handler="gaia3d.type.LocalDateTimeTypeHandler" javaType="java.time.LocalDateTime" />
+	</typeHandlers>
 
 </configuration>

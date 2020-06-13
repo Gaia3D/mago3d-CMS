@@ -102,6 +102,7 @@ dependencies {
 	implementation 'org.modelmapper:modelmapper:2.3.6'
 	
 	runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.postgresql:postgresql:42.2.14'
 	
 	providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
