@@ -74,7 +74,7 @@
 
 						<!-- S: 데이터 목록 -->
 						<div class="list">
-							<form id="listForm" modelAttribute="dataInfo" method="post">
+							<form id="listForm" th:object="${dataInfo}" method="post">
 								<input type="hidden" id="checkIds" name="checkIds" />
 								<div class="list-header row">
 									<div class="list-desc u-pull-left">

@@ -73,7 +73,7 @@
 
 						<!-- S: 데이터 위치 변경 요청 목록 -->
 						<div class="list">
-							<form id="listForm" modelAttribute="dataInfo" method="post">
+							<form id="listForm" th:object="${dataInfo}" method="post">
 								<input type="hidden" id="checkIds" name="checkIds" />
 								<input type="hidden" id="status" name="status" />
 							<div class="list-header row">

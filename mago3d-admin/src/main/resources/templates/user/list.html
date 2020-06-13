@@ -79,7 +79,7 @@
                         
                         <!-- S: 사용자 목록-->
 						<div class="list">
-							<form id="listForm" modelAttribute="userInfo" method="post">
+							<form id="listForm" th:object="${userInfo}" method="post">
 								<input type="hidden" id="checkIds" name="checkIds" />
                                 <div class="list-header row">
                                     <div class="list-desc u-pull-left">

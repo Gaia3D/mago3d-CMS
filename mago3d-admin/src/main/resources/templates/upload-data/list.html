@@ -73,7 +73,7 @@
 
 						<!-- S: 업로딩 데이터 목록 -->
 						<div class="list">
-							<form id="listForm" modelAttribute="uploadData" method="post">
+							<form id="listForm" th:object="${uploadData}" method="post">
 								<input type="hidden" id="checkIds" name="checkIds" />
 								<div class="list-header row">
 									<div class="list-desc u-pull-left">

@@ -73,7 +73,7 @@
 
                         <!-- S: 데이터 변환 결과 목록 -->
                         <div class="list">
-                            <form id="listForm" modelAttribute="converterJob" method="post">
+                            <form id="listForm" th:object="${converterJob}" method="post">
                                 <input type="hidden" id="checkIds" name="checkIds" />
                                 <div class="list-header row">
                                     <div class="list-desc u-pull-left">

@@ -89,7 +89,7 @@
         <!-- E: 검색 -->
 
 		<div class="list">
-			<form id="listForm" modelAttribute="dataInfoLogList" method="post">
+			<form id="listForm" th:object="${dataInfoLogList}" method="post">
 				<input type="hidden" id="checkIds" name="checkIds" value="" />
 				<div class="list-header row">
 					<div class="list-desc u-pull-left">

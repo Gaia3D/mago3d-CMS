@@ -1,13 +1,13 @@
 <html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
 	<div id="noticeTab">
-		<form:form id="policyNotice" modelAttribute="policy" method="post" onsubmit="return false;">
+		<form id="policyNotice" th:object="${policy}" method="post" onsubmit="return false;">
 			<table class="input-table scope-row" summary="환경설정 공지사항 테이블">
 			<caption class="hiddenTag">환경설정 공시사항</caption>
 				<col class="col-label l" />
 				<col class="col-input" />
 				<tr>
 					<th class="col-label l" scope="row">
-						<form:label path="noticeServiceYn">알림 서비스 사용 유무</form:label>
+						<label for="noticeServiceYn">알림 서비스 사용 유무</label>
 						<span class="icon-glyph glyph-emark-dot color-warning"></span>
 					</th>
 					<td class="col-input radio-set">
@@ -69,6 +69,6 @@
 					<a href="#" onclick="updatePolicyNotice();" class="button"><spring:message code='save'/></a>
 				</div>
 			</div>
-		</form:form>
+		</form>
 	</div>
 </html>

@@ -57,14 +57,14 @@
                 </tr>
                 <tr>
                     <th class="col-label" scope="row">
-                        <label for="dataGroupKey"><th:block th:text="#{data.group.key}"></th:block>(<th:block th:text="#{data.group.key.constraint}"></th:block>)</label>
+                        <th:block th:text="#{data.group.key}"></th:block>(<th:block th:text="#{data.group.key.constraint}"></th:block>)
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
                     <td class="col-input" th:text="${dataGroup.dataGroupKey}"></td>
                 </tr>
                 <tr>
                     <th class="col-label" scope="row">
-                        <label for="parentName"><th:block th:text="#{data.group.parent}"></th:block></label>
+                        <th:block th:text="#{data.group.parent}"></th:block>
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
                     <td class="col-input" th:text="${dataGroup.parentName}"></td>
@@ -85,7 +85,7 @@
                 </tr>
                 <tr>
                     <th class="col-label l" scope="row">
-                        <label for="basic"><th:block th:text="#{data.group.basic}"></th:block></label>
+                        <th:block th:text="#{data.group.basic}"></th:block>
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
                     <td class="col-input radio-set">
@@ -95,7 +95,7 @@
                 </tr>
                 <tr>
                     <th class="col-label l" scope="row">
-                        <label for="available"><th:block th:text="#{data.group.available}"></th:block></label>
+                        <th:block th:text="#{data.group.available}"></th:block>
                         <span class="icon-glyph glyph-emark-dot color-warning"></span>
                     </th>
                     <td class="col-input radio-set">
@@ -129,6 +129,7 @@
                         <label for="altitude"><th:block th:text="#{common.altitude}"></th:block></label>
                     </th>
                     <td class="col-input">
+<!--                        <input type="text" id="altitude" name="altitude" th:value="*{altitude}" class="m" />-->
                         <input type="text" id="altitude" name="altitude" th:field="*{altitude}" class="m" />
                     </td>
                 </tr>
