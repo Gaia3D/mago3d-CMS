@@ -77,7 +77,7 @@
 				                </tr>
 				                <tr>
 									<th class="col-label l" scope="row">
-										<label for="basic">기본 여부</label>
+										기본 여부
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input radio-set" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="기본"></td>
@@ -85,7 +85,7 @@
 								</tr>
 								<tr>
 									<th class="col-label l" scope="row">
-										<label for="available">사용 여부</label>
+										사용 여부
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input radio-set" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="사용">
@@ -102,7 +102,7 @@
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input radio-set" th:if="${#bools.isTrue(dataGroup.tiling)}" th:text="사용"></td>
-									<td class="col-input radio-set" th:if="${#bools.isFalse(dataGroup.tiling)}" th:text="사용">
+									<td class="col-input radio-set" th:if="${#bools.isFalse(dataGroup.tiling)}">
 										<input type="radio" id="tilingTrue" name="tiling" value="true" />
 										<label for="tilingTrue">사용</label>
 										<input type="radio" id="tilingFalse" name="tiling" value="false" checked />

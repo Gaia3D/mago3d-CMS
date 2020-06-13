@@ -130,7 +130,7 @@
                     </th>
                     <td class="col-input">
 <!--                        <input type="text" id="altitude" name="altitude" th:value="*{altitude}" class="m" />-->
-                        <input type="text" id="altitude" name="altitude" th:field="*{altitude}" class="m" />
+                        <input type="text" id="altitude" name="altitude" th:value="${(dataGroup.altitude != 0) ? dataGroup.altitude : 0}" class="m" />
                     </td>
                 </tr>
                 <tr>
