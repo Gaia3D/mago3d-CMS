@@ -123,9 +123,9 @@
 	<!-- 사용자 상태 집계 -->
 	<select id="getUserStatusCount" resultType="userInfo">	
 		/* getUserStatusCount */
-		select status, COUNT(*) AS userStatusCount 
+		SELECT status, COUNT(user_id) AS statusCount
 		FROM user_info 
-		GROUP BY status;
+		GROUP BY status
 	</select>
 
 	<!-- 사용자 등록 -->

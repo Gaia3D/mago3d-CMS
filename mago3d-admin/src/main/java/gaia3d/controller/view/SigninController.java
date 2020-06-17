@@ -88,8 +88,8 @@ public class SigninController {
 				// 실패 횟수가 운영 정책의 횟수와 일치할 경우 잠금(비밀번호 실패횟수 초과)
 				if(userSession.getFailSigninCount() >= policy.getUserFailSigninCount()) {
 					log.error("@@ 비밀번호 실패 횟수 초과에 의해 잠김 처리됨");
-					userSession.setStatus(UserStatus.FAIL_LOGIN_COUNT_OVER.getValue());
-					signinForm.setStatus(UserStatus.FAIL_LOGIN_COUNT_OVER.getValue());
+					userSession.setStatus(UserStatus.FAIL_SIGNIN_COUNT_OVER.getValue());
+					signinForm.setStatus(UserStatus.FAIL_SIGNIN_COUNT_OVER.getValue());
 				}
 				signinService.updateSigninUserSession(userSession);
 				

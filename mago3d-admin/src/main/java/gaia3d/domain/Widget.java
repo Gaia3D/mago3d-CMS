@@ -1,6 +1,7 @@
 package gaia3d.domain;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -32,12 +33,14 @@ public class Widget {
 	// 고유번호
 	private Long widgetId;
 	// 이름
-	private String name;
+	private String widgetName;
+	// Key
+	private String widgetKey;
 	// 나열 순서
 	private Integer viewOrder;
 	// 사용자 아이디
 	private String userId;
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 }

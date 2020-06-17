@@ -91,34 +91,34 @@ public class MainController {
 
 		// widget-contents
 		for(Widget dbWidget : widgetList) {
-			if("dataGroupWidget".equals(dbWidget.getName())) {
-				isDataGroupDraw = true;
-				dataGroupWidget(startDate, endDate, model);
-			} else if("dataStatusWidget".equals(dbWidget.getName())) {
-				isDataStatusDraw = true;
-				dataStatusWidget(startDate, endDate, model);
-			} else if("dataAdjustLogWidget".equals(dbWidget.getName())) {
-				isDataAdjustLogDraw = true;
-				dataAdjustLogWidget(startDate, endDate, model);
-			} else if("userStatusWidget".equals(dbWidget.getName())) {
-				isUserStatusDraw = true;
-				userStatusWidget(startDate, endDate, model);
-			} else if("civilVoiceWidget".equals(dbWidget.getName())) {
-				isCivilVoiceDraw = true;
-				civilVoiceWidget(startDate, endDate, model);
-			} else if("userAccessLogWidget".equals(dbWidget.getName())) {
-				isUserAccessLogDraw = true;
-				userAccessLogWidget(startDate, endDate, model);
-			} else if("systemUsageWidget".equals(dbWidget.getName())) {
-				isSystemUsageDraw = true;
-				systemUsageWidget(model);
-			} else if("dbcpStatusWidget".equals(dbWidget.getName())) {
-				isDbcpStatusDraw = true;
-				dbcpStatusWidget(model);
-//			} else if("dbSessionWidget".equals(dbWidget.getName())) {
-//			isDbSessionDraw = true;
-//			dbSessionWidget(model);
-			}
+//			if("dataGroupWidget".equals(dbWidget.getName())) {
+//				isDataGroupDraw = true;
+//				dataGroupWidget(startDate, endDate, model);
+//			} else if("dataStatusWidget".equals(dbWidget.getName())) {
+//				isDataStatusDraw = true;
+//				dataStatusWidget(startDate, endDate, model);
+//			} else if("dataAdjustLogWidget".equals(dbWidget.getName())) {
+//				isDataAdjustLogDraw = true;
+//				dataAdjustLogWidget(startDate, endDate, model);
+//			} else if("userStatusWidget".equals(dbWidget.getName())) {
+//				isUserStatusDraw = true;
+//				userStatusWidget(startDate, endDate, model);
+//			} else if("civilVoiceWidget".equals(dbWidget.getName())) {
+//				isCivilVoiceDraw = true;
+//				civilVoiceWidget(startDate, endDate, model);
+//			} else if("userAccessLogWidget".equals(dbWidget.getName())) {
+//				isUserAccessLogDraw = true;
+//				userAccessLogWidget(startDate, endDate, model);
+//			} else if("systemUsageWidget".equals(dbWidget.getName())) {
+//				isSystemUsageDraw = true;
+//				systemUsageWidget(model);
+//			} else if("dbcpStatusWidget".equals(dbWidget.getName())) {
+//				isDbcpStatusDraw = true;
+//				dbcpStatusWidget(model);
+////			} else if("dbSessionWidget".equals(dbWidget.getName())) {
+////			isDbSessionDraw = true;
+////			dbSessionWidget(model);
+//			}
 		}
 
 		model.addAttribute("today", today);
@@ -211,7 +211,7 @@ public class MainController {
 		Long activeUserTotalCount = userService.getUserTotalCount(userInfo);
 		userInfo.setStatus(UserStatus.FORBID.getValue());
 		Long fobidUserTotalCount = userService.getUserTotalCount(userInfo);
-		userInfo.setStatus(UserStatus.FAIL_LOGIN_COUNT_OVER.getValue());
+		userInfo.setStatus(UserStatus.FAIL_SIGNIN_COUNT_OVER.getValue());
 		Long failUserTotalCount = userService.getUserTotalCount(userInfo);
 		userInfo.setStatus(UserStatus.SLEEP.getValue());
 		Long sleepUserTotalCount = userService.getUserTotalCount(userInfo);

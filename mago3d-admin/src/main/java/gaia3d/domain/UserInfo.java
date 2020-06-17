@@ -106,10 +106,8 @@ public class UserInfo extends Search implements Serializable {
 	private String userRoleCheckYn;
 	// 사용자 상태. 0:사용중, 1:사용중지(관리자), 2:잠금(비밀번호 실패횟수 초과), 3:휴면(사인인 기간), 4:만료(사용기간 종료), 5:삭제(화면 비표시, policy.user_delete_method=0), 6:임시비밀번호
 	private String status;
-	// 사용자 상태(ENUM)
-	private UserStatus userStatus;
 	// 사용자 상태 집계
-	private Long userStatusCount;
+	private Long statusCount;
 	// 현재 사용자 상태값
 	private String dbStatus;
 	// 새로운 비밀번호

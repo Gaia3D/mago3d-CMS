@@ -1,4 +1,4 @@
-package gaia3d.type;
+package gaia3d.typehandler;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;

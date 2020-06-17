@@ -13,7 +13,7 @@ public enum UserStatus {
 	// 사용자 상태가 중지(관리자)
 	FORBID("1"),
 	// 사용자 상태가 잠금(비밀번호 실패횟수 초과)
-	FAIL_LOGIN_COUNT_OVER("2"),
+	FAIL_SIGNIN_COUNT_OVER("2"),
 	// 사용자 상태가 휴면(로그인 기간)
 	SLEEP("3"),
 	// 사용자 상태가 만료(사용기간 종료)
@@ -47,24 +47,11 @@ public enum UserStatus {
 		return null;
 	}
 
-	public static Map<String, Object> toEnumHashMap() {
-		Map<String, Object> eMap = new HashMap<>();
-		Stream.of(UserStatus.values())
-			  .forEach(e ->  eMap.put(e.toString(), 0l));
-		return eMap;
-	}
-
-	public static List<String> toEnumValues() {
-		return Stream.of(UserStatus.values())
-					 .map(e -> e.value)
-					 .collect(Collectors.toList());
-					 
-	}
-
-	public static UserStatus findByStatus(String value) {
-		return Arrays.stream(UserStatus.values())
-					 .filter(e -> e.value.equals(value))
-					 .findAny()
-					 .orElse(null);
+	/**
+	 * 위젯 처리를 위해 0 값으로 세팅
+	 * @return
+	 */
+	public static Map<String, Long> getStatisticsMap() {
+		return Stream.of(values()).collect(Collectors.toMap(UserStatus::getValue, t -> 0l));
 	}
 }

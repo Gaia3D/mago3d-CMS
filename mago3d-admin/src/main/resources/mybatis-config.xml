@@ -46,8 +46,10 @@
     	<typeAlias type="gaia3d.domain.Widget" alias="widget" />
     </typeAliases>
 
-	<!-- <typeHandlers>
-    	<typeHandler handler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
-    </typeHandlers> -->
+	<typeHandlers>
+		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="java.math.RoundingMode"/>
+		<!--<typeHandler handler="org.apache.ibatis.type.LocalDateTimeTypeHandler" javaType="java.time.LocalDateTime"/>-->
+		<typeHandler handler="gaia3d.typehandler.LocalDateTimeTypeHandler" javaType="java.time.LocalDateTime" />
+	</typeHandlers>
 
 </configuration>

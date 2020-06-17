@@ -6,12 +6,14 @@
     <meta name="viewport" content="width=device-width">
     <meta name="robots" content="index,nofollow">
 	<title>대시보드 수정 | mago3D</title>
+<th:block layout:fragment="pageCustomStyle">
     <link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
     <link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}">
 	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
     <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+</th:block>
 </head>
 <body>
 <th:block layout:fragment="pageCustomContent">
@@ -30,11 +32,13 @@
                         <form id="widget" th:object="${widget}" method="post" th:action="@{#}" onsubmit="return false;">
                         	<input type="hidden" id="widgetOrder" name="widgetOrder" th:field="*{widgetOrder}" />
 						<div id="sortable" class="widgets row">
+<th:block th:unless="${widgetList.empty}" th:each="dbWidget : ${widgetList}">
+	<th:block th:if="${#strings.equals(dbWidget.widgetKey, 'userWidget')}">
 							<!-- 위젯 1: 사용자 현황-->
 							<div class="widget one-third column" style="font-size: 16px;">
 								<div class="widget-header row">
 									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title">사용자 현황</h3>
+										<h3 class="widget-title"><th:block th:text="${dbWidget.widgetName}"></th:block></h3>
 									</div>
 									<div class="widget-functions u-pull-right">
                                         <a href="/user/list"><span class="icon-glyph glyph-plus"></span></a>
@@ -46,11 +50,13 @@
 									</div>
 								</div>
 							</div>
+	</th:block>
+	<th:block th:if="${#strings.equals(dbWidget.widgetKey, 'dataTypeWidget')}">
 							<!-- 위젯 2: 데이터 공유 타입 -->
 							<div class="widget one-third column" style="font-size: 16px;">
 								<div class="widget-header row">
-									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title">데이터 공유 타입</span></h3>
+									<div class="widget-heading u-pull-left">
+										<h3 class="widget-title"><th:block th:text="${dbWidget.widgetName}"></th:block></h3>
 									</div>
 									<div class="widget-functions u-pull-right">
                                         <a href="/data/list"><span class="icon-glyph glyph-plus"></span></a>
@@ -62,11 +68,13 @@
 									</div>
 								</div>
                             </div>
+	</th:block>
+	<th:block th:if="${#strings.equals(dbWidget.widgetKey, 'dataConverterWidget')}">
 							<!-- 위젯 3: 데이터 변환 상태 -->
 							<div class="widget one-third column">
 								<div class="widget-header row">
-									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title">데이터 변환 상태</span></h3>
+									<div class="widget-heading u-pull-left">
+										<h3 class="widget-title"><th:block th:text="${dbWidget.widgetName}"></th:block></h3>
 									</div>
 									<div class="widget-functions u-pull-right">
 										<a href="/converter/list" title="#{config.widget.data.info.log.more}"><span class="icon-glyph glyph-plus"></span></a>
@@ -78,11 +86,13 @@
 									</div>
 								</div>
 							</div>
+	</th:block>
+	<th:block th:if="${#strings.equals(dbWidget.widgetKey, 'issueWidget')}">
 							<!-- 위젯 4: 업로드 데이터 타입 -->
 							<div class="widget one-third column">
 								<div class="widget-header row">
-									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title">업로드 데이터 타입</span></h3>
+									<div class="widget-heading u-pull-left">
+										<h3 class="widget-title"><th:block th:text="${dbWidget.widgetName}"></th:block></h3>
 									</div>
 									<div class="widget-functions u-pull-right">
 										<a href="/upload-data/list" title="#{config.widget.issue.more}"><span class="icon-glyph glyph-plus"></span></a>
@@ -94,73 +104,8 @@
 									</div>
 								</div>
 							</div>
-							<!-- 위젯 5 -->
-							<div class="widget one-third column" style="font-size: 16px;">
-								<div class="widget-header row">
-									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title" th:text="#{config.widget.user.status}"></span></h3>
-									</div>
-									<div class="widget-functions u-pull-right">
-										<a href="#" title="#{config.widget.user.status.more}"><span class="icon-glyph glyph-plus"></span></a>
-									</div>
-								</div>
-								<div class="widget-content row">
-                                    
-								</div>
-							</div>
-							<!-- 위젯 6 -->
-                            <div class="widget one-third column">
-								<div class="widget-header row">
-									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title" th:text="#{config.widget.schedule}"><span th:text="#{config.widget.last.year.7}"></span></h3>
-									</div>
-									<div class="widget-functions u-pull-right">
-										<a href="#" title="#{config.widget.schedule.more}"><span class="icon-glyph glyph-plus"></span></a>
-									</div>
-								</div>
-								<div class="widget-content row">
-									
-								</div>
-							</div>
-							<!-- 위젯 7 -->
-                            <div class="widget one-third column">
-								<div class="widget-header row">
-									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title" th:text="#{config.widget.user.tracking}"></span></h3>
-									</div>
-									<div class="widget-functions u-pull-right">
-										<a href="#" title="#{config.widget.user.tracking.more}"><span class="icon-glyph glyph-plus"></span></a>
-									</div>
-								</div>
-								<div class="widget-content row">
-
-								</div>
-							</div>
-							<!-- 위젯 8 -->
-                            <div class="widget one-third column">
-								<div class="widget-header row">
-									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title" th:text="#{config.widget.db.connection}"></span></h3>
-									</div>
-								</div>
-								<div class="widget-content row">
-									
-								</div>
-							</div>
-							<!-- 위젯 9 -->
-                            <div class="widget one-third column">
-								<div class="widget-header row">
-									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title" th:text="#{config.widget.db.session}"></span></h3>
-									</div>
-									<div class="widget-functions u-pull-right">
-										<a href="#" th:title="#{config.widget.db.session.more}"><span class="icon-glyph glyph-plus"></span></a>
-									</div>
-								</div>
-								<div class="widget-content row">
-									
-								</div>
-							</div>
+	</th:block>
+</th:block>
 						</div>
                         </form>
 						<div class="button-group">
@@ -185,17 +130,29 @@
 <script type="text/javascript" th:src="@{/externlib/spinner/raphael.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		$("#sortable").sortable({
+			update: function( event, ui ) {
+				var widgetValue = "";
+				$(".widget").each(function() {
+					widgetValue = widgetValue + "," + $(this).attr("id");
+				});
+				$("#widgetOrder").val(widgetValue);
+				console.log(widgetValue);
+			}
+		});
+		$("#sortable").disableSelection();
+
 		startSpinner("userStatusSpinner");
-		userStatusWidget();
+		userWidget();
 
-		startSpinner("dataSharingSpinner");
-		dataSharingWidget();
-
-		startSpinner("converterStatusSpinner");
-		converterStatusWidget();
-		
-		startSpinner("uploadDataTypeSpinner");
-		uploadDataTypeWidget();
+		// startSpinner("dataSharingSpinner");
+		// dataSharingWidget();
+		//
+		// startSpinner("converterStatusSpinner");
+		// converterStatusWidget();
+		//
+		// startSpinner("uploadDataTypeSpinner");
+		// uploadDataTypeWidget();
 	});
 
 	var data = {};
@@ -203,22 +160,22 @@
 	var colorPalette = ['#d87c7c','#919e8b', '#d7ab82',  '#6e7074','#61a0a8','#efa18d', '#787464', '#cc7e63', '#724e58', '#4b565b'];
 
 	/* 사용자 상태별 현황 */
-	function userStatusWidget() {
+	function userWidget() {
 		$.ajax({
 			url : "/widgets/user-status",
-			type : "GET",
-			cache : false,
-			dataType : "json",
-			success : function(msg) {
+			type: "GET",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+			dataType: "json",
+			success: function(msg){
 				if(msg.statusCode <= 200) {
 					$("#userStatus").empty();
-					showUserStatus(msg.statistics);
+					showUserStatus(msg.userStatusMap);
 				} else {
 					$("#userStatus").html(JS_MESSAGE[msg.errorCode]);
 				}
 			},
-			error : function(request, status, error) {
-				$("#userStatus").html(JS_MESSAGE["ajax.error.message"]);
+			error:function(request,status,error){
+				alert(JS_MESSAGE["ajax.error.message"]);
 			}
 		});
 	}
@@ -287,7 +244,9 @@
 	}
 
 	/* 사용자 상태별 현황 위젯 */
-	function showUserStatus(res) {
+	function showUserStatus(userStatusMap) {
+		console.log("-------- " + userStatusMap);
+
 		var userStatusChart = echarts.init(document.getElementById('userStatus'));
 		var userStatusOption = {
 			tooltip: {
