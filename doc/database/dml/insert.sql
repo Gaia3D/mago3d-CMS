@@ -149,7 +149,7 @@ insert into widget(widget_id, widget_name, widget_key, view_order, user_id)
 values
 	(NEXTVAL('widget_seq'), '사용자 현황', 'userWidget', 1, 'admin' ),
 	(NEXTVAL('widget_seq'), '데이터 타입별 현황', 'dataTypeWidget', 2, 'admin' ),
-	(NEXTVAL('widget_seq'), '데이터 변환 현황', 'dataConverterWidget', 3, 'admin' ),
+	(NEXTVAL('widget_seq'), '데이터 변환 현황', 'converterWidget', 3, 'admin' ),
 	(NEXTVAL('widget_seq'), '최근 이슈', 'issueWidget', 4, 'admin' ),
 	(NEXTVAL('widget_seq'), '데이터 위치 정보 변경 요청', 'dataAdjustLogWidget', 5, 'admin' ),
 	(NEXTVAL('widget_seq'), '리소스 현황', 'systemResourceWidget', 6, 'admin' ),

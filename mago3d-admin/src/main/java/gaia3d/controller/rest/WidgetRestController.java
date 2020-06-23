@@ -145,6 +145,52 @@ public class WidgetRestController {
 		return result;
 	}
 
+	/**
+	 * 데이터 변환 현황
+	 * @param request
+	 * @return
+	 */
+	@GetMapping("/converters")
+	public Map<String, Object> converters(HttpServletRequest request) {
+		log.info("@@@@@ converters widget start.");
+
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+
+		// 데이터 타입
+		Map<String, Long> dataTypeMap = DataType.getStatisticsMap();
+		List<DataInfo> dataInfoStatusList = dataService.getDataTypeCount();
+		dataInfoStatusList.stream()
+				.filter(d -> {
+					if(dataTypeMap.containsKey(d.getDataType())) {
+						dataTypeMap.put(d.getDataType(), d.getDataTypeCount());
+						return true;
+					}
+					return false;
+				})
+				.collect(toList());
+
+		List<String> dataTypeKeys = new ArrayList<>();
+		List<Long> dataTypeValues = new ArrayList<>();
+		for(Map.Entry<String, Long> entry : dataTypeMap.entrySet()) {
+			String key = entry.getKey();
+			Long value = entry.getValue();
+
+			dataTypeKeys.add(key);
+			dataTypeValues.add(value);
+		}
+
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("dataTypeKeys", dataTypeKeys);
+		result.put("dataTypeValues", dataTypeValues);
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
+
 //	/**
 //	 * 데이터 변경 요청 목록
 //	 * @param model
@@ -182,49 +228,7 @@ public class WidgetRestController {
 //		return result;
 //	}
 //
-//	/**
-//	 * 사용자 상태별 통계 정보
-//	 * @param request
-//	 * @return
-//	 */
-//	@GetMapping(value = "/user-status-statistics")
-//	public Map<String, Object> userStatusStatistics(HttpServletRequest request) {
-//		Map<String, Object> result = new HashMap<>();
-//		String errorCode = null;
-//		String message = null;
-//		Map<String, Object> statistics = new HashMap<>();
-//
-//		// 사용자 현황
-//		UserInfo userInfo = new UserInfo();
-//		userInfo.setStatus(UserStatus.USE.getValue());
-//		Long activeUserTotalCount = userService.getUserTotalCount(userInfo);
-//		userInfo.setStatus(UserStatus.FORBID.getValue());
-//		Long fobidUserTotalCount = userService.getUserTotalCount(userInfo);
-//		userInfo.setStatus(UserStatus.FAIL_LOGIN_COUNT_OVER.getValue());
-//		Long failUserTotalCount = userService.getUserTotalCount(userInfo);
-//		userInfo.setStatus(UserStatus.SLEEP.getValue());
-//		Long sleepUserTotalCount = userService.getUserTotalCount(userInfo);
-//		userInfo.setStatus(UserStatus.TERM_END.getValue());
-//		Long expireUserTotalCount = userService.getUserTotalCount(userInfo);
-//		userInfo.setStatus(UserStatus.TEMP_PASSWORD.getValue());
-//		Long tempPasswordUserTotalCount = userService.getUserTotalCount(userInfo);
-//
-//		statistics.put("activeUserTotalCount", activeUserTotalCount);
-//		statistics.put("fobidUserTotalCount", fobidUserTotalCount);
-//		statistics.put("failUserTotalCount", String.valueOf(failUserTotalCount));
-//		statistics.put("sleepUserTotalCount", sleepUserTotalCount);
-//		statistics.put("expireUserTotalCount", expireUserTotalCount);
-//		statistics.put("tempPasswordUserTotalCount", tempPasswordUserTotalCount);
-//
-//		int statusCode = HttpStatus.OK.value();
-//
-//		result.put("statistics", statistics);
-//		result.put("statusCode", statusCode);
-//		result.put("errorCode", errorCode);
-//		result.put("message", message);
-//		return result;
-//	}
-//
+
 //	/**
 //	 * 사용자 접근 이력 목록
 //	 * @param request
@@ -260,45 +264,7 @@ public class WidgetRestController {
 //		result.put("message", message);
 //		return result;
 //	}
-//
-//	/**
-//	 * 시민 참여 현황
-//	 * @param request
-//	 * @return
-//	 */
-//	@GetMapping(value = "/civil-voice-status")
-//	public Map<String, Object> civilVoiceStatus(HttpServletRequest request) {
-//		Map<String, Object> result = new HashMap<>();
-//		String errorCode = null;
-//		String message = null;
-//		List<CivilVoice> civilVoiceList = new ArrayList<>();
-//
-//		String today = DateUtils.getToday(FormatUtils.YEAR_MONTH_DAY);
-//		Calendar calendar = Calendar.getInstance();
-//		calendar.add(Calendar.DATE, -7);
-//		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-//		String searchDay = simpleDateFormat.format(calendar.getTime());
-//		String startDate = searchDay + DateUtils.START_TIME;
-//		String endDate = today + DateUtils.END_TIME;
-//
-//		CivilVoice civilVoice = new CivilVoice();
-//		civilVoice.setStartDate(startDate);
-//		civilVoice.setEndDate(endDate);
-//		civilVoice.setOffset(0l);
-//		civilVoice.setLimit(WIDGET_LIST_VIEW_COUNT);
-//		civilVoice.setOrderWord("comment_count");
-//		civilVoice.setOrderValue("desc");
-//		civilVoiceList = civilVoiceService.getListCivilVoice(civilVoice);
-//
-//		int statusCode = HttpStatus.OK.value();
-//
-//		result.put("civilVoiceList", civilVoiceList);
-//		result.put("statusCode", statusCode);
-//		result.put("errorCode", errorCode);
-//		result.put("message", message);
-//		return result;
-//	}
-//
+
 //	/**
 //	 * 시스템 사용 현황
 //	 * @param request
@@ -359,158 +325,5 @@ public class WidgetRestController {
 //		result.put("message", message);
 //		return result;
 //	}
-//
-//	/**
-//	 * DB Connection Pool 현황
-//	 * @param request
-//	 * @return
-//	 */
-//	@GetMapping(value = "/dbcp-status")
-//	public Map<String, Object> dbcpStatus(HttpServletRequest request) {
-//		Map<String, Object> result = new HashMap<>();
-//		String errorCode = null;
-//		String message = null;
-//		Map<String, Object> dbcp = new HashMap<>();
-//
-//		dbcp.put("userSessionCount", SessionUserSupport.signinUsersMap.size());
-//
-//		dbcp.put("initialSize", dataSource.getMaximumPoolSize());
-//		dbcp.put("minIdle", dataSource.getMinimumIdle());
-//		dbcp.put("numIdle", dataSource.getMaximumPoolSize());
-//
-////			dbcp.put("initialSize", dataSource.getInitialSize());
-//////			dbcp.put("maxTotal", dataSource.getMaxTotal());
-////			dbcp.put("maxIdle", dataSource.getMaxIdle());
-////			dbcp.put("minIdle", dataSource.getMinIdle());
-////			dbcp.put("numActive", dataSource.getNumActive());
-////			dbcp.put("numIdle", dataSource.getNumIdle());
-//
-//		// 사용자 dbcp 정보
-//		Map<String, Integer> userDbcp = getUserDbcp();
-//		dbcp.put("userUserSessionCount", userDbcp.get("userSessionCount"));
-//		dbcp.put("userInitialSize", userDbcp.get("initialSize"));
-//		dbcp.put("userMaxTotal", userDbcp.get("maxTotal"));
-//		dbcp.put("userMaxIdle", userDbcp.get("maxIdle"));
-//		dbcp.put("userMinIdle", userDbcp.get("minIdle"));
-//		dbcp.put("userNumActive", userDbcp.get("numActive"));
-//		dbcp.put("userNumIdle", userDbcp.get("numIdle"));
-//
-//		int statusCode = HttpStatus.OK.value();
-//
-//		result.put("dbcp", dbcp);
-//		result.put("statusCode", statusCode);
-//		result.put("errorCode", errorCode);
-//		result.put("message", message);
-//
-//		return result;
-//	}
-//
-//	/**
-//	 * 사용자 페이지 DBCP 정보
-//	 * @return
-//	 */
-//	private Map<String, Integer> getUserDbcp() {
-//		// 사용자 페이지에서 API로 가져와야 함
-//		Map<String, Integer> userDbcp = new HashMap<>();
-//		String success_yn = null;
-//		String result_message = "";
-//		Integer userSessionCount = 0;
-//		Integer initialSize = 0;
-//		Integer maxTotal = 0;
-//		Integer maxIdle = 0;
-//		Integer minIdle = 0;
-//		Integer numActive = 0;
-//		Integer numIdle = 0;
-//
-//		userDbcp.put("userSessionCount", userSessionCount);
-//		userDbcp.put("initialSize", initialSize);
-//		userDbcp.put("maxTotal", maxTotal);
-//		userDbcp.put("maxIdle", maxIdle);
-//		userDbcp.put("minIdle", minIdle);
-//		userDbcp.put("numActive", numActive);
-//		userDbcp.put("numIdle", numIdle);
-//
-//		return userDbcp;
-//	}
-//
-//	/**
-//	 * 데이터 공유 타입
-//	 * @param request
-//	 * @return
-//	 */
-//	@GetMapping(value = "/data-sharing")
-//	public Map<String, Object> dataSharing(HttpServletRequest request) {
-//		Map<String, Object> result = new HashMap<>();
-//		String errorCode = null;
-//		String message = null;
-//		Map<String, Object> statistics = new HashMap<>();
-//
-//		// 데이터 공유 타입
-//		List<DataInfo> dataSharingList = dataService.getDataSharing();
-//		dataSharingList.stream().forEach(e -> statistics.put(e.getSharing().toString(), e.getDataCount()));
-//
-//		int statusCode = HttpStatus.OK.value();
-//
-//		result.put("statistics", statistics);
-//		result.put("statusCode", statusCode);
-//		result.put("errorCode", errorCode);
-//		result.put("message", message);
-//		return result;
-//	}
-//
-//	/**
-//	 * 데이터 변환 상태 집계
-//	 * @param request
-//	 * @return
-//	 */
-//	@GetMapping(value = "/converter-status")
-//	public Map<String, Object> converterStatus(HttpServletRequest request) {
-//		Map<String, Object> result = new HashMap<>();
-//		String errorCode = null;
-//		String message = null;
-//		Map<String, Object> statistics;
-//
-//		// 데이터 변환 상태
-//		List<ConverterJob> converterJobList = converterService.getConverterJobStatus();
-//		statistics = ConverterJobStatus.toEnumHashMap();
-//		converterJobList.stream().forEach(e -> {
-//			statistics.put(ConverterJobStatus.findByStatus(e.getStatus()).toString(), e.getStatusCount());
-//		});
-//
-//		int statusCode = HttpStatus.OK.value();
-//
-//		result.put("statistics", statistics);
-//		result.put("statusCode", statusCode);
-//		result.put("errorCode", errorCode);
-//		result.put("message", message);
-//		return result;
-//	}
-//
-//	/**
-//	 * 업로드 타입 집계
-//	 * @param request
-//	 * @return
-//	 */
-//	@GetMapping(value = "/upload-type")
-//	public Map<String, Object> uploadDataType(HttpServletRequest request) {
-//		Map<String, Object> result = new HashMap<>();
-//		String errorCode = null;
-//		String message = null;
-//		Map<String, Object> statistics;
-//
-//		// 데이터 변환 상태
-//		List<UploadData> uploadDataList = uploadDataService.getUploadDataType();
-//		statistics = DataType.toEnumHashMap();
-//		uploadDataList.stream().forEach(e -> {
-//			statistics.put(DataType.findByDataType(e.getDataType()).toString(), e.getDataCount());
-//		});
-//
-//		int statusCode = HttpStatus.OK.value();
-//
-//		result.put("statistics", statistics);
-//		result.put("statusCode", statusCode);
-//		result.put("errorCode", errorCode);
-//		result.put("message", message);
-//		return result;
-//	}
+
 }
