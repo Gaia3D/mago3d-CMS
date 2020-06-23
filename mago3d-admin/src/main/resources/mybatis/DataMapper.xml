@@ -202,12 +202,12 @@
 		WHERE data_id = #{dataId}
 	</select> -->
 	
-	<!-- 데이터 공유 타입 집계 -->
-	<select id="getDataSharing" resultType="dataInfo">
-		/* getDataSharing */
-		SELECT sharing, COUNT(*) AS dataCount 
-		FROM data_info 
-		GROUP BY sharing;
+	<!-- 데이터 현황 -->
+	<select id="getDataTypeCount" resultType="dataInfo">
+		/* getDataTypeCount */
+		SELECT data_type, COUNT(data_id) AS dataTypeCount
+		FROM data_info
+		GROUP BY data_type
 	</select>
 
 	<!-- Data 등록 -->

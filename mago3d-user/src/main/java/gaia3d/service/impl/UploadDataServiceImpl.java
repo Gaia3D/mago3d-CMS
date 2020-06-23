@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataType;
+import gaia3d.domain.UploadDataType;
 import gaia3d.domain.FileType;
 import gaia3d.domain.UploadData;
 import gaia3d.domain.UploadDataFile;
@@ -167,7 +167,7 @@ public class UploadDataServiceImpl implements UploadDataService {
 					String extension = fileNameValues[fileNameValues.length - 1];
 					
 					// 원본이 gml 파일이고 데이터 타입을 citygml 혹은 indoorgml로 처음 등록과 다르게 변경하는 경우 
-					if (DataType.GML.getValue().equalsIgnoreCase(extension) && !uploadData.getDataType().equalsIgnoreCase(uploadExt)) {
+					if (UploadDataType.GML.getValue().equalsIgnoreCase(extension) && !uploadData.getDataType().equalsIgnoreCase(uploadExt)) {
 						String originalFileName = uploadDataFile.getFileRealName();
 						String updateFileName = originalFileName.replace(uploadExt, uploadData.getDataType());
 						

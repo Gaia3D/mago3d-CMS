@@ -2,449 +2,350 @@
 <html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
 <head>
 	<meta charset="utf-8">
-    <meta name="referrer" content="origin">
-    <meta name="viewport" content="width=device-width">
-    <meta name="robots" content="index,nofollow">
+	<meta name="referrer" content="origin">
+	<meta name="viewport" content="width=device-width">
+	<meta name="robots" content="index,nofollow">
 	<title>대시보드 수정 | mago3D</title>
-<th:block layout:fragment="pageCustomStyle">
-    <link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
-    <link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
-	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
-	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}">
-	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
-    <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
-</th:block>
+	<th:block layout:fragment="pageCustomStyle">
+		<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+		<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+		<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+		<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}">
+		<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+		<link rel="stylesheet" th:href="@{/externlib/chart-js-2.9.3/Chart.min.css(cacheVersion=${contentCacheVersion})}">
+		<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	</th:block>
 </head>
 <body>
 <th:block layout:fragment="pageCustomContent">
-    <div class="site-body">
-        <div class="container">
-            <div class="site-content">
-                <div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
-                <div class="page-area">
-                    <div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
-                    <div class="page-content">
-                        <div class="content-header row">
-                            <div class="content-title u-pull-left">
-                                <th:block th:text="#{config.widget.top}"></th:block>
-                            </div>
-                        </div>
-                        <form id="widget" th:object="${widget}" method="post" th:action="@{#}" onsubmit="return false;">
-                        	<input type="hidden" id="widgetOrder" name="widgetOrder" th:field="*{widgetOrder}" />
-						<div id="sortable" class="widgets row">
-<th:block th:unless="${widgetList.empty}" th:each="dbWidget : ${widgetList}">
-	<th:block th:if="${#strings.equals(dbWidget.widgetKey, 'userWidget')}">
-							<!-- 위젯 1: 사용자 현황-->
-							<div class="widget one-third column" style="font-size: 16px;">
-								<div class="widget-header row">
-									<div class="widget-heading u-pull-left">						
-										<h3 class="widget-title"><th:block th:text="${dbWidget.widgetName}"></th:block></h3>
-									</div>
-									<div class="widget-functions u-pull-right">
-                                        <a href="/user/list"><span class="icon-glyph glyph-plus"></span></a>
-									</div>
-								</div>
-								<div id="userStatus" class="widget-content row" style="width: 300px; height:200px;">
-									<div style="text-align: center; padding-top: 60px; padding-left: 80px;">
-										<div id="userStatusSpinner" style="width: 150px; height: 70px;"></div>
-									</div>
-								</div>
+	<div class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+					<div class="page-content">
+						<div class="content-header row">
+							<div class="content-title u-pull-left">
+								<th:block th:text="#{config.widget.top}"></th:block>
 							</div>
-	</th:block>
-	<th:block th:if="${#strings.equals(dbWidget.widgetKey, 'dataTypeWidget')}">
-							<!-- 위젯 2: 데이터 공유 타입 -->
-							<div class="widget one-third column" style="font-size: 16px;">
-								<div class="widget-header row">
-									<div class="widget-heading u-pull-left">
-										<h3 class="widget-title"><th:block th:text="${dbWidget.widgetName}"></th:block></h3>
-									</div>
-									<div class="widget-functions u-pull-right">
-                                        <a href="/data/list"><span class="icon-glyph glyph-plus"></span></a>
-									</div>
-								</div>
-								<div id="dataSharing" class="widget-content row" style="width: 350px; height:200px;">
-									<div style="text-align: center; padding-top: 60px; padding-left: 80px;">
-										<div id="dataSharingSpinner" style="width: 150px; height: 70px;"></div>
-									</div>
-								</div>
-                            </div>
-	</th:block>
-	<th:block th:if="${#strings.equals(dbWidget.widgetKey, 'dataConverterWidget')}">
-							<!-- 위젯 3: 데이터 변환 상태 -->
-							<div class="widget one-third column">
-								<div class="widget-header row">
-									<div class="widget-heading u-pull-left">
-										<h3 class="widget-title"><th:block th:text="${dbWidget.widgetName}"></th:block></h3>
-									</div>
-									<div class="widget-functions u-pull-right">
-										<a href="/converter/list" title="#{config.widget.data.info.log.more}"><span class="icon-glyph glyph-plus"></span></a>
-									</div>
-								</div>
-								<div id="converterStatus" class="widget-content row" style="width: 350px; height:200px;">
-									<div style="text-align: center; padding-top: 60px; padding-left: 80px;">
-										<div id="converterStatusSpinner" style="width: 150px; height: 70px;"></div>
-									</div>
-								</div>
-							</div>
-	</th:block>
-	<th:block th:if="${#strings.equals(dbWidget.widgetKey, 'issueWidget')}">
-							<!-- 위젯 4: 업로드 데이터 타입 -->
-							<div class="widget one-third column">
-								<div class="widget-header row">
-									<div class="widget-heading u-pull-left">
-										<h3 class="widget-title"><th:block th:text="${dbWidget.widgetName}"></th:block></h3>
-									</div>
-									<div class="widget-functions u-pull-right">
-										<a href="/upload-data/list" title="#{config.widget.issue.more}"><span class="icon-glyph glyph-plus"></span></a>
-									</div>
-								</div>
-								<div id="uploadDataType" class="widget-content row" style="width: 300px; height:200px;">
-									<div style="text-align: center; padding-top: 60px; padding-left: 80px;">
-										<div id="uploadDataTypeSpinner" style="width: 150px; height: 70px;"></div>
-									</div>
-								</div>
-							</div>
-	</th:block>
-</th:block>
 						</div>
-                        </form>
+
+						<form id="widget" th:object="${widget}" method="post" th:action="@{#}" onsubmit="return false;">
+							<input type="hidden" id="widgetOrder" name="widgetOrder" th:field="*{widgetOrder}" />
+							<div id="sortable" class="widgets row">
+								<th:block th:unless="${widgetList.empty}" th:each="dbWidget : ${widgetList}">
+									<th:block th:if="${#strings.equals(dbWidget.widgetKey, 'userWidget')}">
+										<!-- 위젯 1: 사용자 현황-->
+										<div class="widget one-third column" style="font-size: 16px;">
+											<div class="widget-header row">
+												<div class="widget-heading u-pull-left">
+													<h3 class="widget-title"><th:block th:text="${dbWidget.widgetName}"></th:block></h3>
+												</div>
+												<div class="widget-functions u-pull-right">
+													<a href="/user/list"><span class="icon-glyph glyph-plus"></span></a>
+												</div>
+											</div>
+											<canvas id="userStatusChart" width="450" height="200"></canvas>
+											<div id="userStatus" class="widget-content row" style="width: 450px; height:200px;">
+												<div style="text-align: center; padding-top: 60px; padding-left: 80px;">
+													<div id="userStatusSpinner" style="width: 150px; height: 70px;"></div>
+												</div>
+											</div>
+										</div>
+									</th:block>
+									<th:block th:if="${#strings.equals(dbWidget.widgetKey, 'dataTypeWidget')}">
+										<!-- 위젯 2: 데이터 공유 타입 -->
+										<div class="widget one-third column" style="font-size: 16px;">
+											<div class="widget-header row">
+												<div class="widget-heading u-pull-left">
+													<h3 class="widget-title"><th:block th:text="${dbWidget.widgetName}"></th:block></h3>
+												</div>
+												<div class="widget-functions u-pull-right">
+													<a href="/data/list"><span class="icon-glyph glyph-plus"></span></a>
+												</div>
+											</div>
+											<canvas id="dataTypeChart" width="450" height="200"></canvas>
+											<div id="dataType" class="widget-content row" style="width: 350px; height:200px;">
+												<div style="text-align: center; padding-top: 60px; padding-left: 80px;">
+													<div id="dataTypeSpinner" style="width: 150px; height: 70px;"></div>
+												</div>
+											</div>
+										</div>
+									</th:block>
+									<th:block th:if="${#strings.equals(dbWidget.widgetKey, 'dataConverterWidget')}">
+										<!-- 위젯 3: 데이터 변환 상태 -->
+										<div class="widget one-third column">
+											<div class="widget-header row">
+												<div class="widget-heading u-pull-left">
+													<h3 class="widget-title"><th:block th:text="${dbWidget.widgetName}"></th:block></h3>
+												</div>
+												<div class="widget-functions u-pull-right">
+													<a href="/converter/list" title="#{config.widget.data.info.log.more}"><span class="icon-glyph glyph-plus"></span></a>
+												</div>
+											</div>
+											<div id="converterStatus" class="widget-content row" style="width: 350px; height:200px;">
+												<div style="text-align: center; padding-top: 60px; padding-left: 80px;">
+													<div id="converterStatusSpinner" style="width: 150px; height: 70px;"></div>
+												</div>
+											</div>
+										</div>
+									</th:block>
+									<th:block th:if="${#strings.equals(dbWidget.widgetKey, 'issueWidget')}">
+										<!-- 위젯 4: 업로드 데이터 타입 -->
+										<div class="widget one-third column">
+											<div class="widget-header row">
+												<div class="widget-heading u-pull-left">
+													<h3 class="widget-title"><th:block th:text="${dbWidget.widgetName}"></th:block></h3>
+												</div>
+												<div class="widget-functions u-pull-right">
+													<a href="/upload-data/list" title="#{config.widget.issue.more}"><span class="icon-glyph glyph-plus"></span></a>
+												</div>
+											</div>
+											<div id="uploadDataType" class="widget-content row" style="width: 300px; height:200px;">
+												<div style="text-align: center; padding-top: 60px; padding-left: 80px;">
+													<div id="uploadDataTypeSpinner" style="width: 150px; height: 70px;"></div>
+												</div>
+											</div>
+										</div>
+									</th:block>
+								</th:block>
+							</div>
+						</form>
 						<div class="button-group">
 							<div class="center-buttons">
 								<input type="submit" th:value="#{save}" onclick="updateWidget(); return false;" />
 							</div>
 						</div>
-					</div>				
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </th:block>
 <th:block layout:fragment="pageCustomScript">
-<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/externlib/echart-4.8.0/echarts-en.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/externlib/spinner/progressSpin.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/externlib/spinner/raphael.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$("#sortable").sortable({
-			update: function( event, ui ) {
-				var widgetValue = "";
-				$(".widget").each(function() {
-					widgetValue = widgetValue + "," + $(this).attr("id");
-				});
-				$("#widgetOrder").val(widgetValue);
-				console.log(widgetValue);
-			}
-		});
-		$("#sortable").disableSelection();
+	<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/chart-js-2.9.3/Chart.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/spinner/progressSpin.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/spinner/raphael.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript">
+		Chart.platform.disableCSSInjection = true;
 
-		startSpinner("userStatusSpinner");
-		userWidget();
-
-		// startSpinner("dataSharingSpinner");
-		// dataSharingWidget();
-		//
-		// startSpinner("converterStatusSpinner");
-		// converterStatusWidget();
-		//
-		// startSpinner("uploadDataTypeSpinner");
-		// uploadDataTypeWidget();
-	});
-
-	var data = {};
-	data.grid = { left: '2%', right: '2%', top: '2%', bottom: '2%', containLabel: true };
-	var colorPalette = ['#d87c7c','#919e8b', '#d7ab82',  '#6e7074','#61a0a8','#efa18d', '#787464', '#cc7e63', '#724e58', '#4b565b'];
-
-	/* 사용자 상태별 현황 */
-	function userWidget() {
-		$.ajax({
-			url : "/widgets/user-status",
-			type: "GET",
-			headers: {"X-Requested-With": "XMLHttpRequest"},
-			dataType: "json",
-			success: function(msg){
-				if(msg.statusCode <= 200) {
-					$("#userStatus").empty();
-					showUserStatus(msg.userStatusMap);
-				} else {
-					$("#userStatus").html(JS_MESSAGE[msg.errorCode]);
+		$(document).ready(function() {
+			$("#sortable").sortable({
+				update: function( event, ui ) {
+					var widgetValue = "";
+					$(".widget").each(function() {
+						widgetValue = widgetValue + "," + $(this).attr("id");
+					});
+					$("#widgetOrder").val(widgetValue);
+					console.log(widgetValue);
 				}
-			},
-			error:function(request,status,error){
-				alert(JS_MESSAGE["ajax.error.message"]);
-			}
-		});
-	}
-	
-	/* 데이터 공유 타입 */
-	function dataSharingWidget() {
-		$.ajax({
-			url : "/widgets/data-sharing",
-			type : "GET",
-			cache : false,
-			dataType : "json",
-			success : function(msg) {
-				if(msg.statusCode <= 200) {
-					$("#dataSharing").empty();
-					showDataSharing(msg.statistics);
-				} else {
-					$("#dataSharing").html(JS_MESSAGE[msg.errorCode]);
-				}
-			},
-			error : function(request, status, error) {
-				$("#dataSharing").html(JS_MESSAGE["ajax.error.message"]);
-			}
-		});
-	}
+			});
+			$("#sortable").disableSelection();
 
-	/* 데이터 변환 상태 */
-	function converterStatusWidget() {
-		$.ajax({
-			url : "/widgets/converter-status",
-			type : "GET",
-			cache : false,
-			dataType : "json",
-			success : function(msg) {
-				if(msg.statusCode <= 200) {
-					$("#converterStatus").empty();
-					showConverterStatus(msg.statistics);
-				} else {
-					$("#converterStatus").html(JS_MESSAGE[msg.errorCode]);
-				}
-			},
-			error : function(request, status, error) {
-				$("#converterStatus").html(JS_MESSAGE["ajax.error.message"]);
-			}
+			startSpinner("userStatusSpinner");
+			userWidget();
+
+			startSpinner("dataTypeSpinner");
+			dataTypeWidget();
+
+			// startSpinner("converterStatusSpinner");
+			// converterStatusWidget();
+			//
+			// startSpinner("uploadDataTypeSpinner");
+			// uploadDataTypeWidget();
 		});
-	}
 
-	/* 업로드 데이터 타입 */
-	function uploadDataTypeWidget() {
-		$.ajax({
-			url : "/widgets/upload-type",
-			type : "GET",
-			cache : false,
-			dataType : "json",
-			success : function(msg) {
-				if(msg.statusCode <= 200) {
-					$("#uploadDataType").empty();
-					showUploadDataType(msg.statistics);
-				} else {
-					$("#uploadDataType").html(JS_MESSAGE[msg.errorCode]);
+		/* 사용자 상태별 현황 */
+		function userWidget() {
+			$.ajax({
+				url : "/widgets/user-status",
+				type: "GET",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				dataType: "json",
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						$("#userStatus").empty();
+						showUserStatus(msg);
+					} else {
+						$("#userStatus").html(JS_MESSAGE[msg.errorCode]);
+					}
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
 				}
-			},
-			error : function(request, status, error) {
-				$("#uploadDataType").html(JS_MESSAGE["ajax.error.message"]);
-			}
-		});
-	}
+			});
+		}
 
-	/* 사용자 상태별 현황 위젯 */
-	function showUserStatus(userStatusMap) {
-		console.log("-------- " + userStatusMap);
-
-		var userStatusChart = echarts.init(document.getElementById('userStatus'));
-		var userStatusOption = {
-			tooltip: {
-				trigger: 'axis',
-				axisPointer: {
-					type: 'shadow'
-				}
-			},
-			grid: data.grid,
-			xAxis: {
-				type: 'value',
-				boundaryGap: [0, 0.01]
-			},
-			yAxis: {
-				type: 'category',
-				data: ['사용중', '사용중지', '잠금', '휴면', '만료', '삭제']
-			},
-			series: [
-				{
-					name: '사용자',
-					type: 'bar',
-					data: [
-						{name: '사용중', value: res.USE},
-						{name: '사용중지', value: res.FORBID},
-						{name: '잠금', value: res.FAIL_LOGIN_COUNT_OVER},
-						{name: '휴면', value: res.SLEEP},
-						{name: '만료', value: res.TERM_END},
-						{name: '삭제', value: res.TEMP_PASSWORD}
-					],
-					emphasis: {
-						itemStyle: {
-							shadowBlur: 10,
-							shadowOffsetX: 0,
-							shadowColor: 'rgba(0, 0, 0, 0.5)'
-						}
+		/* 사용자 상태별 현황 위젯 */
+		function showUserStatus(msg) {
+			var ctx = $("#userStatusChart");
+			var chart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: msg.userStatusKeys,
+					datasets: [{
+						barThickness: 40,
+						backgroundColor: 'rgb(255, 99, 132)',
+						borderColor: 'rgb(255, 99, 132)',
+						data: msg.userStatusValues
+					}]
+				},
+				options: {
+					legend: {
+						display: false
+					},
+					tooltips: {
+						enabled: false
+					},
+					scales: {
+						yAxes: [{
+							ticks: {
+								maxTicksLimit: 7
+							}
+						}]
 					}
 				}
-			]
-		};
-		userStatusChart.setOption(userStatusOption);
-	}
+			});
+		}
 
-	/* 데이터 공유 타입 위젯 */
-	function showDataSharing(res) {
-		var dataSharingChart = echarts.init(document.getElementById('dataSharing'));
-		var dataSharingOption = {
-			tooltip: {
-				trigger: 'item',
-				formatter: '{a} <br/>{b} : {c} ({d}%)'
-			},
-			legend: {
-				orient: 'vertical',
-				left: 10,
-				data: ['공통', '공개', '개인', '그룹']
-			},
-			series: [
-				{
-					name: '데이터',
-					type: 'pie',
-					radius: ['50%', '70%'],
-					avoidLabelOverlap: false,
-					label: {
-						show: false,
-						position: 'center'
-					},
-					emphasis: {
-						label: {
-							show: true,
-							fontSize: '30',
-							fontWeight: 'bold'
-						}
-					},
-					labelLine: {
-						show: false
-					},
-					data: [
-						{name: '공통', value: res.common},
-						{name: '공개', value: res.public},
-						{name: '개인', value: res.private},
-						{name: '그룹', value: res.group}
-					]
+		/* 데이터 현황 */
+		function dataTypeWidget() {
+			$.ajax({
+				url : "/widgets/data-types",
+				type: "GET",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				dataType: "json",
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						$("#dataType").empty();
+						showDataType(msg);
+					} else {
+						$("#dataType").html(JS_MESSAGE[msg.errorCode]);
+					}
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
 				}
-			]
-		};
-		dataSharingChart.setOption(dataSharingOption);
-	}
+			});
+		}
 
-	/* 데이터 변환 상태 위젯 */
-	function showConverterStatus(res) {
-		var converterStatusChart = echarts.init(document.getElementById('converterStatus'));
-		var converterStatusOption = {
-			tooltip: {
-				trigger: 'item',
-				formatter: '{a} <br/>{b} : {c} ({d}%)'
-			},
-			legend: {
-				orient: 'vertical',
-				left: 'left',
-				data: ['준비', '성공', '대기', '실패']
-			},
-			series: [
-				{
-					name: '데이터 변환 상태',
-					type: 'pie',
-					radius: '55%',
-					center: ['50%', '60%'],
-					data: [
-						{name: '준비', value: res.READY},
-						{name: '성공', value: res.SUCCESS},
-						{name: '대기', value: res.WAITING},
-						{name: '실패', value: res.FAIL}
-					],
-					emphasis: {
-						itemStyle: {
-							shadowBlur: 10,
-							shadowOffsetX: 0,
-							shadowColor: 'rgba(0, 0, 0, 0.5)'
-						}
+		/* 데이터 현황 위젯 */
+		function showDataType(msg) {
+			var ctx = $("#dataTypeChart");
+			var chart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: msg.dataTypeKeys,
+					datasets: [{
+						barThickness: 40,
+						backgroundColor: 'rgba(75, 192, 192, 0.2)',
+						borderColor: 'rgb(75, 192, 192)',
+						data: msg.dataTypeValues,
+						borderWidth: 1
+					}]
+				},
+				options: {
+					legend: {
+						display: false
+					},
+					tooltips: {
+						enabled: false
+					},
+					scales: {
+						xAxis: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}],
+						yAxes: [{
+							ticks: {
+								maxTicksLimit: 7
+							}
+						}]
 					}
 				}
-			]
-		};
-		converterStatusChart.setOption(converterStatusOption);
-	}
+			});
+		}
 
-	/* 업로드 데이터 타입 위젯 */
-	function showUploadDataType(res) {
-		var uploadDataTypeChart = echarts.init(document.getElementById('uploadDataType'));
-		var uploadDataTypeOption = {
-			tooltip: {
-				trigger: 'axis',
-				axisPointer: {
-					type: 'shadow'
-				}
-			},
-			grid: { left: '2%', right: '2%', top: '3%', bottom: '2%', containLabel: true },
-			xAxis: {
-				type: 'category',
-				data: ['3ds', 'obj', 'dae', 'collada', 'ifc', 'las', 'citygml', 'indoorgml']
-			},
-			yAxis: {
-				type: 'value',
-			},
-			graph: {
-				color: colorPalette
-			},
-			series: [
-				{
-					name: '데이터',
-					type: 'bar',
-					data: [
-						{
-							itemStyle: {color: 'blue'},
-							name: '3ds', 
-							value: res.AUTODESK_3DS
-						},
-						{
-							itemStyle: {color: 'red'},
-							name: 'obj', 
-							value: res.OBJ
-						},
-						{
-							itemStyle: {color: 'green'},
-							name: 'dae', 
-							value: res.DAE
-						},
-						{
-							itemStyle: {color: 'yellow'},
-							name: 'collada', 
-							value: res.COLLADA
-						},
-						{
-							itemStyle: {color: 'orange'},
-							name: 'ifc', 
-							value: res.IFC
-						},
-						{
-							itemStyle: {color: 'navy'},
-							name: 'las', 
-							value: res.LAS
-						},
-						{
-							itemStyle: {color: 'magenta'},
-							name: 'citygml', 
-							value: res.CITYGML
-						},
-						{
-							itemStyle: {color: 'gray'},
-							name: 'indoorgml', 
-							value: res.INDOORGML
-						}
-					]
-				}
-			]
-		};
-		uploadDataTypeChart.setOption(uploadDataTypeOption);
-	}
-</script>
+		/* 업로드 데이터 타입 위젯 */
+		function showUploadDataType(res) {
+			var uploadDataTypeChart = echarts.init(document.getElementById('uploadDataType'));
+			var uploadDataTypeOption = {
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'shadow'
+					}
+				},
+				grid: { left: '2%', right: '2%', top: '3%', bottom: '2%', containLabel: true },
+				xAxis: {
+					type: 'category',
+					data: ['3ds', 'obj', 'dae', 'collada', 'ifc', 'las', 'citygml', 'indoorgml']
+				},
+				yAxis: {
+					type: 'value',
+				},
+				graph: {
+					color: colorPalette
+				},
+				series: [
+					{
+						name: '데이터',
+						type: 'bar',
+						data: [
+							{
+								itemStyle: {color: 'blue'},
+								name: '3ds',
+								value: res.AUTODESK_3DS
+							},
+							{
+								itemStyle: {color: 'red'},
+								name: 'obj',
+								value: res.OBJ
+							},
+							{
+								itemStyle: {color: 'green'},
+								name: 'dae',
+								value: res.DAE
+							},
+							{
+								itemStyle: {color: 'yellow'},
+								name: 'collada',
+								value: res.COLLADA
+							},
+							{
+								itemStyle: {color: 'orange'},
+								name: 'ifc',
+								value: res.IFC
+							},
+							{
+								itemStyle: {color: 'navy'},
+								name: 'las',
+								value: res.LAS
+							},
+							{
+								itemStyle: {color: 'magenta'},
+								name: 'citygml',
+								value: res.CITYGML
+							},
+							{
+								itemStyle: {color: 'gray'},
+								name: 'indoorgml',
+								value: res.INDOORGML
+							}
+						]
+					}
+				]
+			};
+			uploadDataTypeChart.setOption(uploadDataTypeOption);
+		}
+	</script>
 </th:block>
 </body>
 </html>

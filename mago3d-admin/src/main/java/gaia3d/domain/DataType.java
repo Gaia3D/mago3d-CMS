@@ -3,6 +3,7 @@ package gaia3d.domain;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -17,22 +18,12 @@ public enum DataType {
 	COLLADA("collada"),
 	IFC("ifc"),
 	LAS("las"),
-	GML("gml"),
+//	GML("gml"),
 	CITYGML("citygml"),
-	INDOORGML("indoorgml"),
-	
-	JPG("jpg"),
-	JPEG("jpeg"),
-	GIF("gif"),
-	PNG("png"),
-	BMP("bmp"),
-	DDS("dds"),
-	
-	ZIP("zip"),
-	MTL("mtl");
-	
+	INDOORGML("indoorgml");
+
 	private final String value;
-	
+
 	DataType(final String value) {
 		this.value = value;
 	}
@@ -53,18 +44,11 @@ public enum DataType {
 		return null;
 	}
 
-	public static Map<String, Object> toEnumHashMap() {
-		Map<String, Object> eMap = new HashMap<>();
-		Stream.of(DataType.values())
-			  .forEach(e ->  eMap.put(e.toString(), 0l));
-		return eMap;
+	/**
+	 * 위젯 처리를 위해 0 값으로 세팅
+	 * @return
+	 */
+	public static Map<String, Long> getStatisticsMap() {
+		return Stream.of(values()).collect(Collectors.toMap(DataType::getValue, t -> 0l));
 	}
-
-	public static DataType findByDataType(String value) {
-		return Arrays.stream(DataType.values())
-				.filter(e -> e.value.equals(value))
-				.findAny()
-				.orElse(null);
-	}
-	
 }

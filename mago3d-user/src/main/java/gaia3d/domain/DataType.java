@@ -12,22 +12,12 @@ public enum DataType {
 	COLLADA("collada"),
 	IFC("ifc"),
 	LAS("las"),
-	GML("gml"),
+//	GML("gml"),
 	CITYGML("citygml"),
-	INDOORGML("indoorgml"),
-	
-	JPG("jpg"),
-	JPEG("jpeg"),
-	GIF("gif"),
-	PNG("png"),
-	BMP("bmp"),
-	DDS("dds"),
-	
-	ZIP("zip"),
-	MTL("mtl");
-	
+	INDOORGML("indoorgml");
+
 	private final String value;
-	
+
 	DataType(String value) {
 		this.value = value;
 	}

@@ -120,7 +120,7 @@
 		WHERE user_id = #{userId}
 	</select>
 
-	<!-- 사용자 상태 집계 -->
+	<!-- 사용자 상태 통계 -->
 	<select id="getUserStatusCount" resultType="userInfo">	
 		/* getUserStatusCount */
 		SELECT status, COUNT(user_id) AS statusCount

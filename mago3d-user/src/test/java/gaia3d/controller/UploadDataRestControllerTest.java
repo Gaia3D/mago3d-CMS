@@ -14,7 +14,7 @@ import java.util.zip.ZipFile;
 import org.junit.jupiter.api.Disabled;
 
 import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataType;
+import gaia3d.domain.UploadDataType;
 import gaia3d.domain.FileType;
 import gaia3d.domain.UploadDataFile;
 import gaia3d.utils.FileUtils;
@@ -131,11 +131,11 @@ class UploadDataRestControllerTest {
             					if(converterTypeList.contains(extension.toLowerCase())) {
             						if(!dataType.equalsIgnoreCase(extension)) {
                 						// 데이터 타입과 업로딩 파일 확장자가 같지 않고
-                						if(	DataType.CITYGML == DataType.findBy(dataType)
-                								&& DataType.GML.getValue().equalsIgnoreCase(extension)){
+                						if(	UploadDataType.CITYGML == UploadDataType.findBy(dataType)
+                								&& UploadDataType.GML.getValue().equalsIgnoreCase(extension)){
                 							// 데이터 타입은 citygml 인데 확장자는 gml 인 경우 통과
-                						} else if(DataType.INDOORGML == DataType.findBy(dataType)
-                								&& DataType.GML.getValue().equalsIgnoreCase(extension)) {
+                						} else if(UploadDataType.INDOORGML == UploadDataType.findBy(dataType)
+                								&& UploadDataType.GML.getValue().equalsIgnoreCase(extension)) {
                 							// 데이터 타입은 indoorgml 인데 확장자는 gml 인 경우 통과
                 						} else {
                 							// 전부 예외
@@ -143,10 +143,10 @@ class UploadDataRestControllerTest {
                 						}
                 					}
             						
-            						if (DataType.CITYGML.getValue().equalsIgnoreCase(dataType) && DataType.GML.getValue().equalsIgnoreCase(extension)) {
-                						extension = DataType.CITYGML.getValue();
-                					} else if (DataType.INDOORGML.getValue().equalsIgnoreCase(dataType) && DataType.GML.getValue().equalsIgnoreCase(extension)) {
-                						extension = DataType.INDOORGML.getValue();
+            						if (UploadDataType.CITYGML.getValue().equalsIgnoreCase(dataType) && UploadDataType.GML.getValue().equalsIgnoreCase(extension)) {
+                						extension = UploadDataType.CITYGML.getValue();
+                					} else if (UploadDataType.INDOORGML.getValue().equalsIgnoreCase(dataType) && UploadDataType.GML.getValue().equalsIgnoreCase(extension)) {
+                						extension = UploadDataType.INDOORGML.getValue();
                 					}
             						// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
             						saveFileName = System.nanoTime() + "." + extension;
@@ -175,11 +175,11 @@ class UploadDataRestControllerTest {
             					if(converterTypeList.contains(extension.toLowerCase())) {
             						if(!dataType.equalsIgnoreCase(extension)) {
                 						// 데이터 타입과 업로딩 파일 확장자가 같지 않고
-                						if(	DataType.CITYGML == DataType.findBy(dataType)
-                								&& DataType.GML.getValue().equalsIgnoreCase(extension)){
+                						if(	UploadDataType.CITYGML == UploadDataType.findBy(dataType)
+                								&& UploadDataType.GML.getValue().equalsIgnoreCase(extension)){
                 							// 데이터 타입은 citygml 인데 확장자는 gml 인 경우 통과
-                						} else if(DataType.INDOORGML == DataType.findBy(dataType)
-                								&& DataType.GML.getValue().equalsIgnoreCase(extension)) {
+                						} else if(UploadDataType.INDOORGML == UploadDataType.findBy(dataType)
+                								&& UploadDataType.GML.getValue().equalsIgnoreCase(extension)) {
                 							// 데이터 타입은 indoorgml 인데 확장자는 gml 인 경우 통과
                 						} else {
                 							// 전부 예외
@@ -187,10 +187,10 @@ class UploadDataRestControllerTest {
                 						}
                 					}
             						
-            						if (DataType.CITYGML.getValue().equalsIgnoreCase(dataType) && DataType.GML.getValue().equalsIgnoreCase(extension)) {
-                						extension = DataType.CITYGML.getValue();
-                					} else if (DataType.INDOORGML.getValue().equalsIgnoreCase(dataType) && DataType.GML.getValue().equalsIgnoreCase(extension)) {
-                						extension = DataType.INDOORGML.getValue();
+            						if (UploadDataType.CITYGML.getValue().equalsIgnoreCase(dataType) && UploadDataType.GML.getValue().equalsIgnoreCase(extension)) {
+                						extension = UploadDataType.CITYGML.getValue();
+                					} else if (UploadDataType.INDOORGML.getValue().equalsIgnoreCase(dataType) && UploadDataType.GML.getValue().equalsIgnoreCase(extension)) {
+                						extension = UploadDataType.INDOORGML.getValue();
                 					}
             						// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
             						saveFileName = System.nanoTime() + "." + extension;

@@ -2,14 +2,8 @@ package gaia3d.persistence;
 
 import java.util.List;
 
+import gaia3d.domain.*;
 import org.springframework.stereotype.Repository;
-
-import gaia3d.domain.DataFileInfo;
-import gaia3d.domain.DataFileParseLog;
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.DataInfoSimple;
-import gaia3d.domain.FileInfo;
 
 /**
  * Data
@@ -97,10 +91,10 @@ public interface DataMapper {
 	Integer getRootParentCount(DataInfo dataInfo);
 
 	/**
-	 * 데이터 공유 타입 집계
+	 * 데이터 현황
 	 * @return
 	 */
-	List<DataInfo> getDataSharing();
+	List<DataInfo> getDataTypeCount();
 	
 	/**
 	 * Data 등록

@@ -1,74 +1,38 @@
 package gaia3d.controller.rest;
 
-import java.net.URI;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import gaia3d.domain.*;
+import gaia3d.service.DataService;
+import gaia3d.utils.LocaleUtils;
+import lombok.RequiredArgsConstructor;
+import org.opengis.metadata.Datatype;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
-import com.zaxxer.hikari.HikariDataSource;
 
 import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.AccessLog;
-import gaia3d.domain.CivilVoice;
-import gaia3d.domain.ConverterJob;
-import gaia3d.domain.ConverterJobStatus;
-import gaia3d.domain.DataAdjustLog;
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.DataStatus;
-import gaia3d.domain.DataType;
-import gaia3d.domain.Key;
-import gaia3d.domain.UploadData;
-import gaia3d.domain.UserInfo;
-import gaia3d.domain.UserSession;
-import gaia3d.domain.UserStatus;
-import gaia3d.service.AccessLogService;
-import gaia3d.service.CivilVoiceService;
-import gaia3d.service.ConverterService;
-import gaia3d.service.DataAdjustLogService;
-import gaia3d.service.DataGroupService;
-import gaia3d.service.DataService;
-import gaia3d.service.UploadDataService;
 import gaia3d.service.UserService;
-import gaia3d.support.SessionUserSupport;
-import gaia3d.utils.DateUtils;
-import gaia3d.utils.FormatUtils;
 
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/widgets")
 public class WidgetRestController {
 
 	private static final long WIDGET_LIST_VIEW_COUNT = 6l;
 
-	@Autowired
-	private MessageSource messageSource;
-	@Autowired
-	private PropertiesConfig propertiesConfig;
-	@Autowired
-	private UserService userService;
+	private final MessageSource messageSource;
+	private final PropertiesConfig propertiesConfig;
+	private final DataService dataService;
+	private final UserService userService;
 
 	/**
 	 * 사용자 현황
@@ -79,110 +43,108 @@ public class WidgetRestController {
 	public Map<String, Object> userStatus(HttpServletRequest request) {
 		log.info("@@@@@ userStatus widget start.");
 
-		//UserSession userSession = (UserSession)request.getSession().getAttribute(Key.USER_SESSION.name());
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
 
 		// 사용자 상태
-		Map<String, Long> userStatusMap = UserStatus.getStatisticsMap();
+		Map<String, Long> statusMap = UserStatus.getStatisticsMap();
 
 		// 사용자 현황
 		List<UserInfo> userInfoStatusList = userService.getUserStatusCount();
 		userInfoStatusList.stream()
 			.filter(u -> {
-				if(userStatusMap.containsKey(u.getStatus())) {
-					userStatusMap.put(u.getStatus(), u.getStatusCount());
+				if(statusMap.containsKey(u.getStatus())) {
+					statusMap.put(u.getStatus(), u.getStatusCount());
 					return true;
 				}
 				return false;
 			})
 			.collect(toList());
 
-		result.put("userStatusMap", userStatusMap);
+		List<String> userStatusKeys = new ArrayList<>();
+		List<Long> userStatusValues = new ArrayList<>();
+		Locale locale = LocaleUtils.getUserLocale(request);
+		for(Map.Entry<String, Long> entry : statusMap.entrySet()) {
+			String key = entry.getKey();
+			Long value = entry.getValue();
+			String status = null;
+			if(UserStatus.USE == UserStatus.findBy(key)) {
+				status = messageSource.getMessage("user.status.use", null, locale);
+			} else if(UserStatus.FORBID == UserStatus.findBy(key)) {
+				status = messageSource.getMessage("user.status.forbid", null, locale);
+			} else if(UserStatus.FAIL_SIGNIN_COUNT_OVER == UserStatus.findBy(key)) {
+				status = messageSource.getMessage("user.status.fail.signin.count.over", null, locale);
+			} else if(UserStatus.SLEEP == UserStatus.findBy(key)) {
+				status = messageSource.getMessage("user.status.sleep", null, locale);
+			} else if(UserStatus.TERM_END == UserStatus.findBy(key)) {
+				status = messageSource.getMessage("user.status.term.end", null, locale);
+			} else if(UserStatus.LOGICAL_DELETE == UserStatus.findBy(key)) {
+				status = messageSource.getMessage("user.status.logical.delete", null, locale);
+			} else if(UserStatus.TEMP_PASSWORD == UserStatus.findBy(key)) {
+				status = messageSource.getMessage("user.status.temp.password", null, locale);
+			}
+
+			userStatusKeys.add(status);
+			userStatusValues.add(value);
+		}
+
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("userStatusKeys", userStatusKeys);
+		result.put("userStatusValues", userStatusValues);
+		result.put("statusCode", statusCode);
 		result.put("errorCode", errorCode);
 		result.put("message", message);
 		return result;
 	}
 
-//	/**
-//	 * 데이터 그룹별 통계 정보
-//	 * @param request
-//	 * @return
-//	 */
-//	@GetMapping(value = "/data-group-statistics")
-//	public Map<String, Object> dataGroupStatistics(HttpServletRequest request) {
-//		Map<String, Object> result = new HashMap<>();
-//		String errorCode = null;
-//		String message = null;
-//		List<Map<String, Object>> dataGroupWidgetList = new ArrayList<>();
-//
-//		UserSession userSession = (UserSession)request.getSession().getAttribute(Key.USER_SESSION.name());
-//
-//		DataGroup dataGroup = new DataGroup();
-//		dataGroup.setUserId(userSession.getUserId());
-//		List<DataGroup> dataGroupList = dataGroupService.getListDataGroup(dataGroup);
-//
-//		for(DataGroup dbDataGroup : dataGroupList) {
-//			// get count
-//			DataInfo dataInfo = new DataInfo();
-//			dataInfo.setDataGroupId(dbDataGroup.getDataGroupId());
-//			Long dataTotalCount = dataService.getDataTotalCount(dataInfo);
-//
-//			// set list
-//			Map<String, Object> tempMap = new HashMap<>();
-//			tempMap.put("name", dbDataGroup.getDataGroupName());
-//			tempMap.put("count", dataTotalCount);
-//			dataGroupWidgetList.add(tempMap);
-//		}
-//
-//		// 건수를 기준으로 DESC 정렬
-//		Collections.sort(dataGroupWidgetList, new Comparator<Map<String, Object>>() {
-//			@Override
-//            public int compare(final Map<String, Object> o1, final Map<String, Object> o2) {
-//				Integer i1 = Math.toIntExact((long) o1.get("count"));
-//				Integer i2 = Math.toIntExact((long) o2.get("count"));
-//                return i2.compareTo(i1);
-//            }
-//        });
-//
-//		int statusCode = HttpStatus.OK.value();
-//
-//		result.put("dataGroupWidgetList", dataGroupWidgetList);
-//		result.put("statusCode", statusCode);
-//		result.put("errorCode", errorCode);
-//		result.put("message", message);
-//		return result;
-//	}
-//
-//	/**
-//	 * 데이터 상태별 통계 정보
-//	 * @param request
-//	 * @return
-//	 */
-//	@GetMapping(value = "/data-status-statistics")
-//	public Map<String, Object> dataStatusStatistics(HttpServletRequest request) {
-//		Map<String, Object> result = new HashMap<>();
-//		String errorCode = null;
-//		String message = null;
-//		Map<String, Object> statistics = new HashMap<>();
-//
-//		long useTotalCount = dataService.getDataTotalCountByStatus(DataStatus.USE.name().toLowerCase());
-//		long forbidTotalCount = dataService.getDataTotalCountByStatus(DataStatus.UNUSED.name().toLowerCase());
-//		long etcTotalCount = dataService.getDataTotalCountByStatus(DataStatus.DELETE.name().toLowerCase());
-//
-//		statistics.put("useTotalCount", useTotalCount);
-//		statistics.put("forbidTotalCount", forbidTotalCount);
-//		statistics.put("etcTotalCount", etcTotalCount);
-//		int statusCode = HttpStatus.OK.value();
-//
-//		result.put("statistics", statistics);
-//		result.put("statusCode", statusCode);
-//		result.put("errorCode", errorCode);
-//		result.put("message", message);
-//		return result;
-//	}
-//
+	/**
+	 * 데이터 현황
+	 * @param request
+	 * @return
+	 */
+	@GetMapping("/data-types")
+	public Map<String, Object> dataTypes(HttpServletRequest request) {
+		log.info("@@@@@ dataTypes widget start.");
+
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+
+		// 데이터 타입
+		Map<String, Long> dataTypeMap = DataType.getStatisticsMap();
+		List<DataInfo> dataInfoStatusList = dataService.getDataTypeCount();
+		dataInfoStatusList.stream()
+				.filter(d -> {
+					if(dataTypeMap.containsKey(d.getDataType())) {
+						dataTypeMap.put(d.getDataType(), d.getDataTypeCount());
+						return true;
+					}
+					return false;
+				})
+				.collect(toList());
+
+		List<String> dataTypeKeys = new ArrayList<>();
+		List<Long> dataTypeValues = new ArrayList<>();
+		for(Map.Entry<String, Long> entry : dataTypeMap.entrySet()) {
+			String key = entry.getKey();
+			Long value = entry.getValue();
+
+			dataTypeKeys.add(key);
+			dataTypeValues.add(value);
+		}
+
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("dataTypeKeys", dataTypeKeys);
+		result.put("dataTypeValues", dataTypeValues);
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
+
 //	/**
 //	 * 데이터 변경 요청 목록
 //	 * @param model

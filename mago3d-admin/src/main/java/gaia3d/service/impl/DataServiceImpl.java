@@ -57,7 +57,7 @@ public class DataServiceImpl implements DataService {
 	
 	/**
 	 * 데이터 상태별 통계 정보
-	 * @param dataInfo
+	 * @param status
 	 * @return
 	 */
 	@Transactional(readOnly=true)
@@ -87,7 +87,7 @@ public class DataServiceImpl implements DataService {
 	
 	/**
 	 * Data 정보 취득
-	 * @param data_id
+	 * @param dataInfo
 	 * @return
 	 */
 	@Transactional(readOnly=true)
@@ -107,7 +107,7 @@ public class DataServiceImpl implements DataService {
 	
 	/**
 	 * 최상위 root dataInfo 정보 취득
-	 * @param projectId
+	 * @param dataGroupId
 	 * @return
 	 */
 	@Transactional(readOnly=true)
@@ -126,12 +126,12 @@ public class DataServiceImpl implements DataService {
 	}
 
 	/**
-	 * 데이터 공유 타입 집계
+	 * 데이터 현황
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<DataInfo> getDataSharing() {
-		return dataMapper.getDataSharing();
+	public List<DataInfo> getDataTypeCount() {
+		return dataMapper.getDataTypeCount();
 	}
 	
 	/**

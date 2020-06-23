@@ -27,7 +27,7 @@ import gaia3d.domain.DataAttribute;
 import gaia3d.domain.DataGroup;
 import gaia3d.domain.DataInfo;
 import gaia3d.domain.DataStatus;
-import gaia3d.domain.DataType;
+import gaia3d.domain.UploadDataType;
 import gaia3d.domain.LocationUdateType;
 import gaia3d.domain.MethodType;
 import gaia3d.domain.QueueMessage;
@@ -366,7 +366,7 @@ public class ConverterServiceImpl implements ConverterService {
 			String serviceDirectory = propertiesConfig.getUserDataServiceDir() + converterJob.getUserId() + File.separator;
 			// TODO 상태를 success 로 udpate 해야 함
 			for(DataInfo updateDataInfo : dataInfoList) {
-				if(	DataType.CITYGML == DataType.findBy(updateDataInfo.getDataType())) {
+				if(	UploadDataType.CITYGML == UploadDataType.findBy(updateDataInfo.getDataType())) {
 					// json 파일을 읽어서 longitude, latitude를 갱신, 없을 때 예외가 맞는 것일까?
 					getCityGmlLocation(serviceDirectory, updateDataInfo);
 					// json 파일을 읽어서 속성 정보를 update

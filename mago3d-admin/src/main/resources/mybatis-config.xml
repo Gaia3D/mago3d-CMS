@@ -11,8 +11,6 @@
 
     <typeAliases>
     	<typeAlias type="gaia3d.domain.AccessLog" alias="accessLog" />
-    	<typeAlias type="gaia3d.domain.CivilVoice" alias="civilVoice" />
-    	<typeAlias type="gaia3d.domain.CivilVoiceComment" alias="civilVoiceComment" />
     	<typeAlias type="gaia3d.domain.ConverterJob" alias="converterJob" />
     	<typeAlias type="gaia3d.domain.ConverterJobFile" alias="converterJobFile" />
 		<typeAlias type="gaia3d.domain.DataAdjustLog" alias="dataAdjustLog" />

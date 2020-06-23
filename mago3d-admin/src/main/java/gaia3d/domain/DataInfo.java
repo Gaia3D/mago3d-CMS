@@ -47,6 +47,8 @@ public class DataInfo extends Search implements Serializable {
 	private String referrer;
 	// 고유번호
 	private Integer userGroupId;
+	// 데이터 타입별 현황
+	private Long dataTypeCount;
 	
 	// 위도
 	private BigDecimal latitude;

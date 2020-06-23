@@ -63,11 +63,11 @@ public interface DataService {
 	List<DataInfo> getDataByConverterJob(DataInfo dataInfo);
 
 	/**
-	 * 데이터 공유 타입 집계
+	 * 데이터 현황
 	 * @return
 	 */
-	List<DataInfo> getDataSharing();
-	
+	List<DataInfo> getDataTypeCount();
+
 	/**
 	 * Data 등록
 	 * @param dataInfo
