@@ -94,7 +94,7 @@ public class ConverterServiceImpl implements ConverterService {
 
 	/**
 	 * converter job 목록
-	 * @param converterLog
+	 * @param converterJob
 	 * @return
 	 */
 	@Transactional(readOnly=true)
@@ -113,12 +113,13 @@ public class ConverterServiceImpl implements ConverterService {
 	}
 
 	/**
-	 * 데이터 변환 상태 집계
+	 * 데이터 변환 현황
+	 * @param converterJobFile
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<ConverterJob> getConverterJobStatus() {
-		return converterMapper.getConverterJobStatus();
+	public List<ConverterJobFile> getConverterJobFileStatus(ConverterJobFile converterJobFile) {
+		return converterMapper.getConverterJobFileStatus(converterJobFile);
 	}
 	
 	/**

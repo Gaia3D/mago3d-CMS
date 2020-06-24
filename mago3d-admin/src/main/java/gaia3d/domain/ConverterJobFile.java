@@ -30,6 +30,8 @@ public class ConverterJobFile extends Search {
 	private String dataType;
 	private String fileName;
 	private BigDecimal usf;
+	// 위젯 표현용
+	private Long fileCount;
 	
 	/****** validator ********/
 	private String methodMode;

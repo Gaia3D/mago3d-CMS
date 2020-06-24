@@ -5,7 +5,10 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
 import gaia3d.domain.*;
+import gaia3d.service.ConverterService;
 import gaia3d.service.DataService;
+import gaia3d.utils.DateUtils;
+import gaia3d.utils.FormatUtils;
 import gaia3d.utils.LocaleUtils;
 import lombok.RequiredArgsConstructor;
 import org.opengis.metadata.Datatype;
@@ -31,6 +34,8 @@ public class WidgetRestController {
 
 	private final MessageSource messageSource;
 	private final PropertiesConfig propertiesConfig;
+
+	private final ConverterService converterService;
 	private final DataService dataService;
 	private final UserService userService;
 
@@ -158,9 +163,12 @@ public class WidgetRestController {
 		String errorCode = null;
 		String message = null;
 
-		// 데이터 타입
-		Map<String, Long> dataTypeMap = DataType.getStatisticsMap();
-		List<DataInfo> dataInfoStatusList = dataService.getDataTypeCount();
+		String today = DateUtils.getToday(FormatUtils.YEAR_MONTH_DAY);
+		ConverterJobFile converterJobFile = new ConverterJobFile();
+		converterJobFile.setStartDate(today);
+
+		// 데이터 변환 현황
+		List<ConverterJobFile> converterJobFileList = converterService.getConverterJobFileStatus(converterJobFile);
 		dataInfoStatusList.stream()
 				.filter(d -> {
 					if(dataTypeMap.containsKey(d.getDataType())) {

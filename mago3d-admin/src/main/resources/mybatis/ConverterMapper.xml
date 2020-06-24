@@ -109,14 +109,6 @@
 		) X
 	</select>
 
-	<!-- 데이터 변환 상태 집계 -->
-	<select id="getConverterJobStatus" resultType="converterJob">
-		/* getConverterJobStatus */
-		SELECT status, COUNT(*) AS statusCount 
-		FROM converter_job
-		GROUP BY status
-	</select>
-
 	<!-- converter job file 목록 -->
 	<select id="getListConverterJobFile" parameterType="converterJobFile" resultType="converterJobFile">
 		/* getListConverterJobFile */
@@ -157,6 +149,14 @@
 			</choose>
 			OFFSET #{offset} LIMIT #{limit}
 		) X
+	</select>
+
+	<!-- 데이터 변환 현황 -->
+	<select id="getConverterJobFileStatus" parameterType="string" resultType="converterJobFile">
+		/* getConverterJobFileStatus */
+		SELECT status, COUNT(*) AS statusCount
+		FROM converter_job
+		GROUP BY status
 	</select>
 
 	<!-- converter job 등록 -->

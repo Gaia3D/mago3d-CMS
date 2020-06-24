@@ -38,16 +38,17 @@ public interface ConverterMapper {
 
 	/**
 	 * f4d converter job 목록
-	 * @param converterJob
+	 * @param converterJobFile
 	 * @return
 	 */
 	public List<ConverterJobFile> getListConverterJobFile(ConverterJobFile converterJobFile);
 
 	/**
-	 * 데이터 변환 상태 집계
+	 * 데이터 변환 현황
+	 * @param converterJobFile
 	 * @return
 	 */
-	public List<ConverterJob> getConverterJobStatus();
+	public List<ConverterJobFile> getConverterJobFileStatus(ConverterJobFile converterJobFile);
 	
 	/**
 	 * insert converter job
