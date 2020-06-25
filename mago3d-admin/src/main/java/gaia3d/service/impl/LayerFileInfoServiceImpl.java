@@ -31,14 +31,14 @@ public class LayerFileInfoServiceImpl implements LayerFileInfoService {
 	 * @param layerId
 	 * @return
 	 */
-	@Transactional
+	@Transactional(readOnly=true)
 	public List<String> getListLayerFilePath(Integer layerId) {
 		return layerFileInfoMapper.getListLayerFilePath(layerId);
 	}
 	
 	/**
 	 * 파일 정보 취득
-	 * @param layerId
+	 * @param layerFileInfoId
 	 * @return
 	 */
 	@Transactional(readOnly=true)
@@ -108,7 +108,7 @@ public class LayerFileInfoServiceImpl implements LayerFileInfoService {
 	
 	/**
 	 * group id 로 레이어 파일 이력을 삭제
-	 * @param deleteLayerFileInfoGroupId
+	 * @param layerFileInfoGroupId
 	 * @return
 	 */
 	@Transactional

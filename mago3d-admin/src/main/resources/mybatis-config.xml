@@ -27,6 +27,7 @@
 		<typeAlias type="gaia3d.domain.DataInfoSimple" alias="dataInfoSimple" />
 		<typeAlias type="gaia3d.domain.DataInfoLog" alias="dataInfoLog" />
 		<typeAlias type="gaia3d.domain.GeoPolicy" alias="geoPolicy" />
+		<typeAlias type="gaia3d.domain.Issue" alias="issue" />
     	<typeAlias type="gaia3d.domain.Layer" alias="layer" />
     	<typeAlias type="gaia3d.domain.LayerGroup" alias="layerGroup" />
     	<typeAlias type="gaia3d.domain.LayerFileInfo" alias="layerFileInfo" />

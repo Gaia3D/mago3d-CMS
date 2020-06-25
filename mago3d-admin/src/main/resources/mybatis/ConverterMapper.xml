@@ -152,11 +152,22 @@
 	</select>
 
 	<!-- 데이터 변환 현황 -->
-	<select id="getConverterJobFileStatus" parameterType="string" resultType="converterJobFile">
-		/* getConverterJobFileStatus */
-		SELECT status, COUNT(*) AS statusCount
-		FROM converter_job
-		GROUP BY status
+	<select id="getConverterJobFileStatistics" resultType="converterJobFile">
+		/* getConverterJobFileStatistics */
+		SELECT SUBSTRING(X.temp_day, 1, 4) AS year, SUBSTRING(X.temp_day, 5, 2) AS month, SUBSTRING(X.temp_day, 7, 2) AS day, COALESCE(count, 0) AS count
+		FROM (
+			SELECT to_char(current_date - s, 'YYYYMMDD') AS temp_day FROM generate_series(0, 6, 1) AS s
+		) X LEFT OUTER JOIN
+		(
+			SELECT COUNT(converter_job_file_id) AS count, TO_CHAR(insert_date, 'YYYYMMDD') AS temp_day
+			FROM converter_job_file
+			<![CDATA[
+			WHERE insert_date >= (NOW() - INTERVAL '6 DAY')
+			]]>
+			GROUP BY temp_day
+		) Y
+		ON X.temp_day = Y.temp_day
+		ORDER BY x.temp_day
 	</select>
 
 	<!-- converter job 등록 -->

@@ -123,6 +123,9 @@
 			</div>
 		</div>
 	</div>
+
+	<div th:replace="~{/widget/issue-template :: #issueListSource}"></div>
+
 </th:block>
 <th:block layout:fragment="pageCustomScript">
 	<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
@@ -158,8 +161,8 @@
 			startSpinner("converterSpinner");
 			converterWidget();
 
-			startSpinner("issueSpinner");
-			issueWidget();
+			//startSpinner("issueSpinner");
+			//issueWidget();
 		});
 
 		/* 사용자 상태별 현황 */
@@ -207,6 +210,7 @@
 					scales: {
 						yAxes: [{
 							ticks: {
+								beginAtZero: true,
 								maxTicksLimit: 7
 							}
 						}]
@@ -266,6 +270,7 @@
 						}],
 						yAxes: [{
 							ticks: {
+								beginAtZero: true,
 								maxTicksLimit: 7
 							}
 						}]
@@ -297,20 +302,21 @@
 
 		/* 데이터 변환 현황 위젯 */
 		function showConverter(msg) {
-			var ctx = $("#dataTypeChart");
+			var ctx = $("#converterChart");
 			var chart = new Chart(ctx, {
 				type: 'line',
 				data: {
-					labels: msg.dataTypeKeys,
+					labels: msg.converterJobFileKeys,
 					datasets: [{
-						barThickness: 40,
-						backgroundColor: 'rgba(75, 192, 192, 0.2)',
-						borderColor: 'rgb(75, 192, 192)',
-						data: msg.dataTypeValues,
-						borderWidth: 1
+						fill: false,
+						backgroundColor: 'rgba(153, 102, 255, 0.2)',
+						borderColor: 'rgb(153, 102, 255)',
+						data: msg.converterJobFileValues
+						//borderWidth: 1
 					}]
 				},
 				options: {
+					responsive: true,
 					legend: {
 						display: false
 					},
@@ -319,12 +325,19 @@
 					},
 					scales: {
 						xAxis: [{
-							ticks: {
-								beginAtZero: true
-							}
+							// ticks: {
+							// 	beginAtZero: true
+							// }
+							// type: 'time',
+							// time: {
+							// 	displayFormats: {
+							// 		quarter: 'YYYY-MM-DD'
+							// 	}
+							// }
 						}],
 						yAxes: [{
 							ticks: {
+								min: 0,
 								maxTicksLimit: 7
 							}
 						}]
@@ -342,8 +355,9 @@
 				dataType: "json",
 				success: function(msg){
 					if(msg.statusCode <= 200) {
-						$("#issue").empty();
-						showDataType(msg);
+						var template = Handlebars.compile($("#issueListSource").html());
+						var html = template(msg.issue);
+						$("#issue").html("").append(html);
 					} else {
 						$("#issue").html(JS_MESSAGE[msg.errorCode]);
 					}

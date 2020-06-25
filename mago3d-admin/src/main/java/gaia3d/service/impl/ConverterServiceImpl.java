@@ -114,12 +114,11 @@ public class ConverterServiceImpl implements ConverterService {
 
 	/**
 	 * 데이터 변환 현황
-	 * @param converterJobFile
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<ConverterJobFile> getConverterJobFileStatus(ConverterJobFile converterJobFile) {
-		return converterMapper.getConverterJobFileStatus(converterJobFile);
+	public List<ConverterJobFile> getConverterJobFileStatistics() {
+		return converterMapper.getConverterJobFileStatistics();
 	}
 	
 	/**

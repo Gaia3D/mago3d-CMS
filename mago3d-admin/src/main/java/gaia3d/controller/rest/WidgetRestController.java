@@ -1,5 +1,6 @@
 package gaia3d.controller.rest;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import gaia3d.domain.*;
 import gaia3d.service.ConverterService;
 import gaia3d.service.DataService;
+import gaia3d.service.IssueService;
 import gaia3d.utils.DateUtils;
 import gaia3d.utils.FormatUtils;
 import gaia3d.utils.LocaleUtils;
@@ -37,6 +39,7 @@ public class WidgetRestController {
 
 	private final ConverterService converterService;
 	private final DataService dataService;
+	private final IssueService issueService;
 	private final UserService userService;
 
 	/**
@@ -163,36 +166,45 @@ public class WidgetRestController {
 		String errorCode = null;
 		String message = null;
 
-		String today = DateUtils.getToday(FormatUtils.YEAR_MONTH_DAY);
-		ConverterJobFile converterJobFile = new ConverterJobFile();
-		converterJobFile.setStartDate(today);
-
 		// 데이터 변환 현황
-		List<ConverterJobFile> converterJobFileList = converterService.getConverterJobFileStatus(converterJobFile);
-		dataInfoStatusList.stream()
-				.filter(d -> {
-					if(dataTypeMap.containsKey(d.getDataType())) {
-						dataTypeMap.put(d.getDataType(), d.getDataTypeCount());
-						return true;
-					}
-					return false;
-				})
-				.collect(toList());
-
-		List<String> dataTypeKeys = new ArrayList<>();
-		List<Long> dataTypeValues = new ArrayList<>();
-		for(Map.Entry<String, Long> entry : dataTypeMap.entrySet()) {
-			String key = entry.getKey();
-			Long value = entry.getValue();
-
-			dataTypeKeys.add(key);
-			dataTypeValues.add(value);
-		}
+		List<ConverterJobFile> converterJobFileList = converterService.getConverterJobFileStatistics();
+		List<String> converterJobFileKeys = new ArrayList<>();
+		List<Long> converterJobFileValues = new ArrayList<>();
+		String hyphen = "-";
+		converterJobFileList.stream().forEach(x -> {
+			converterJobFileKeys.add(x.getYear() + hyphen + x.getMonth() + hyphen + x.getDay());
+			converterJobFileValues.add(x.getCount());
+		});
 
 		int statusCode = HttpStatus.OK.value();
 
-		result.put("dataTypeKeys", dataTypeKeys);
-		result.put("dataTypeValues", dataTypeValues);
+		result.put("converterJobFileKeys", converterJobFileKeys);
+		result.put("converterJobFileValues", converterJobFileValues);
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
+
+	/**
+	 * 최신 이슈
+	 * @param request
+	 * @return
+	 */
+	@GetMapping("/issues")
+	public Map<String, Object> issues(HttpServletRequest request) {
+		log.info("@@@@@ issues widget start.");
+
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+
+		// 최근 이슈 목록
+		List<Issue> issueList = issueService.getListRecentIssue();
+
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("issueList", issueList);
 		result.put("statusCode", statusCode);
 		result.put("errorCode", errorCode);
 		result.put("message", message);

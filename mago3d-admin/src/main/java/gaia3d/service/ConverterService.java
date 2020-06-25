@@ -42,10 +42,9 @@ public interface ConverterService {
 
 	/**
 	 * 데이터 변환 현황
-	 * @param converterJobFile
 	 * @return
 	 */
-	public List<ConverterJobFile> getConverterJobFileStatus(ConverterJobFile converterJobFile);
+	public List<ConverterJobFile> getConverterJobFileStatistics();
 	
 	/**
 	 * f4d converter 변환 job 등록
