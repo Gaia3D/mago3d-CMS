@@ -103,8 +103,8 @@
 													<a href="/issue/list" title="#{config.widget.issue.more}"><span class="icon-glyph glyph-plus"></span></a>
 												</div>
 											</div>
-											<div id="issue" class="widget-content row" style="width: 300px; height:200px;">
-												<div style="text-align: center; padding-top: 60px; padding-left: 80px;">
+											<div id="issue" class="widget-content row">
+												<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 													<div id="issueSpinner" style="width: 150px; height: 70px;"></div>
 												</div>
 											</div>
@@ -131,6 +131,8 @@
 	<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
 	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
 	<script type="text/javascript" th:src="@{/externlib/chart-js-2.9.3/Chart.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/handlebars-4.1.2/handlebars.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/handlebars-helper.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 	<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 	<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 	<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
@@ -161,8 +163,8 @@
 			startSpinner("converterSpinner");
 			converterWidget();
 
-			//startSpinner("issueSpinner");
-			//issueWidget();
+			startSpinner("issueSpinner");
+			issueWidget();
 		});
 
 		/* 사용자 상태별 현황 */
@@ -353,10 +355,11 @@
 				type: "GET",
 				headers: {"X-Requested-With": "XMLHttpRequest"},
 				dataType: "json",
-				success: function(msg){
+				success: function(msg) {
+					$("#issue").empty();
 					if(msg.statusCode <= 200) {
 						var template = Handlebars.compile($("#issueListSource").html());
-						var html = template(msg.issue);
+						var html = template(msg.issueList);
 						$("#issue").html("").append(html);
 					} else {
 						$("#issue").html(JS_MESSAGE[msg.errorCode]);
