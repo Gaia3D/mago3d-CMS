@@ -102,13 +102,30 @@
 			OFFSET #{offset} LIMIT #{limit}
 		) X
 	</select>
-	
+
+	<!-- 데이터 변경 요청 상세 정보 -->
 	<select id="getDataAdjustLog" parameterType="long" resultType="dataAdjustLog">
 		/* getDataAdjustLog */
 		SELECT A.*, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, B.data_name
 		FROM data_adjust_log A, data_info B
 		WHERE A.data_adjust_log_id = #{dataAdjustLogId}
 			AND A.data_id = B.data_id
+	</select>
+
+	<!-- 최근 데이터 변경 요청 이력 -->
+	<select id="getListRecentDataAdjustLog" resultType="dataAdjustLog">
+		/* getListRecentDataAdjustLog */
+		SELECT A.*, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, B.data_name
+		FROM (
+			SELECT *
+			FROM data_adjust_log
+			<![CDATA[
+			WHERE insert_date >= (NOW() - INTERVAL '1 MONTH')
+			]]>
+			ORDER BY insert_date DESC
+			LIMIT 7
+		) A, data_info B
+		WHERE A.data_id = B.data_id
 	</select>
 
 	<!-- Data Info 변경 이력 등록 -->

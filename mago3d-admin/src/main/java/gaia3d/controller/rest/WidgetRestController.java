@@ -1,14 +1,13 @@
 package gaia3d.controller.rest;
 
+import java.net.URI;
 import java.sql.Timestamp;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
 import gaia3d.domain.*;
-import gaia3d.service.ConverterService;
-import gaia3d.service.DataService;
-import gaia3d.service.IssueService;
+import gaia3d.service.*;
 import gaia3d.utils.DateUtils;
 import gaia3d.utils.FormatUtils;
 import gaia3d.utils.LocaleUtils;
@@ -16,13 +15,14 @@ import lombok.RequiredArgsConstructor;
 import org.opengis.metadata.Datatype;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.PropertiesConfig;
-import gaia3d.service.UserService;
+import org.springframework.web.client.RestTemplate;
 
 import static java.util.stream.Collectors.toList;
 
@@ -39,7 +39,9 @@ public class WidgetRestController {
 
 	private final ConverterService converterService;
 	private final DataService dataService;
+	private final DataAdjustLogService dataAdjustLogService;
 	private final IssueService issueService;
+	private final RestTemplate restTemplate;
 	private final UserService userService;
 
 	/**
@@ -211,139 +213,137 @@ public class WidgetRestController {
 		return result;
 	}
 
-//	/**
-//	 * 데이터 변경 요청 목록
-//	 * @param model
-//	 * @return
-//	 */
-//	@GetMapping(value = "/data-adjust-log")
-//	public Map<String, Object> dataAdjustLogList(HttpServletRequest request) {
-//		Map<String, Object> result = new HashMap<>();
-//		String errorCode = null;
-//		String message = null;
-//		List<DataAdjustLog> dataAdjustLogList = new ArrayList<>();
-//
-//
-//		String today = DateUtils.getToday(FormatUtils.YEAR_MONTH_DAY);
-//		Calendar calendar = Calendar.getInstance();
-//		calendar.add(Calendar.DATE, -7);
-//		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-//		String searchDay = simpleDateFormat.format(calendar.getTime());
-//		String startDate = searchDay + DateUtils.START_TIME;
-//		String endDate = today + DateUtils.END_TIME;
-//
-//		DataAdjustLog dataInfoAdjustLog = new DataAdjustLog();
-//		dataInfoAdjustLog.setStartDate(startDate);
-//		dataInfoAdjustLog.setEndDate(endDate);
-//		dataInfoAdjustLog.setOffset(0l);
-//		dataInfoAdjustLog.setLimit(WIDGET_LIST_VIEW_COUNT);
-//		dataAdjustLogList = dataAdjustLogService.getListDataAdjustLog(dataInfoAdjustLog);
-//
-//		int statusCode = HttpStatus.OK.value();
-//
-//		result.put("dataAdjustLogList", dataAdjustLogList);
-//		result.put("statusCode", statusCode);
-//		result.put("errorCode", errorCode);
-//		result.put("message", message);
-//		return result;
-//	}
-//
+	/**
+	 * 데이터 변경 요청 목록
+	 * @param request
+	 * @return
+	 */
+	@GetMapping(value = "/data-adjust-logs")
+	public Map<String, Object> dataAdjustLogs(HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
 
-//	/**
-//	 * 사용자 접근 이력 목록
-//	 * @param request
-//	 * @return
-//	 */
-//	@GetMapping(value = "/user-access-log")
-//	public Map<String, Object> userAccessLogList(HttpServletRequest request) {
-//		Map<String, Object> result = new HashMap<>();
-//		String errorCode = null;
-//		String message = null;
-//		List<AccessLog> userAccessLogList = new ArrayList<>();
-//
-//		String today = DateUtils.getToday(FormatUtils.YEAR_MONTH_DAY);
-//		Calendar calendar = Calendar.getInstance();
-//		calendar.add(Calendar.DATE, -7);
-//		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-//		String searchDay = simpleDateFormat.format(calendar.getTime());
-//		String startDate = searchDay + DateUtils.START_TIME;
-//		String endDate = today + DateUtils.END_TIME;
-//
-//		AccessLog accessLog = new AccessLog();
-//		accessLog.setStartDate(startDate);
-//		accessLog.setEndDate(endDate);
-//		accessLog.setOffset(0l);
-//		accessLog.setLimit(WIDGET_LIST_VIEW_COUNT);
-//		userAccessLogList = logService.getListAccessLog(accessLog);
-//
-//		int statusCode = HttpStatus.OK.value();
-//
-//		result.put("userAccessLogList", userAccessLogList);
-//		result.put("statusCode", statusCode);
-//		result.put("errorCode", errorCode);
-//		result.put("message", message);
-//		return result;
-//	}
+		List<DataAdjustLog> dataAdjustLogList = dataAdjustLogService.getListRecentDataAdjustLog();
 
-//	/**
-//	 * 시스템 사용 현황
-//	 * @param request
-//	 * @return
-//	 */
-//	@GetMapping(value = "/system-usage-status")
-//	public Map<String, Object> systemUsageStatus(HttpServletRequest request) throws Exception {
-//		Map<String, Object> result = new HashMap<>();
-//		String errorCode = null;
-//		String message = null;
-//		Map<String, Object> statistics = new HashMap<>();
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("dataAdjustLogList", dataAdjustLogList);
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
+
+	/**
+	 * 시스템 현황
+	 * TODO 쓸만한 정보가 없음. OS 전체에 대한 디스크 사용량, 메모리 등이 나와야 함.
+	 * @param request
+	 * @return
+	 */
+	@GetMapping(value = "/system-resources")
+	public Map<String, Object> systemResources(HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+
+		String serverHost = propertiesConfig.getRestServer();
+
+		Long diskSpaceTotal = 0l;
+		Long diskSpaceFree = 0l;
+		Long diskSpaceUsed = 0l;
+		Long diskSpacePercent = 0l;
+
+		String jvmMemoryMax = "";
+		String jvmMemoryUsed = "";
+		String systemCpuUsage = "";
+		String processCpuUsage = "";
+
+		try {
+			@SuppressWarnings("rawtypes")
+			ResponseEntity<Map> response = restTemplate.getForEntity(new URI(serverHost + "/actuator/health/diskSpace"), Map.class);
+			@SuppressWarnings("unchecked")
+			Map<String, Long> diskSpace = (Map<String, Long>) response.getBody().get("details");
+			diskSpaceTotal = diskSpace.get("total");
+			diskSpaceFree = diskSpace.get("free");
+			diskSpaceUsed = diskSpaceTotal - diskSpaceFree;
+			diskSpacePercent = diskSpaceUsed / diskSpaceTotal * 100l;
+
+//			response = restTemplate.getForEntity(new URI(serverHost + "/actuator/metrics/jvm.memory.max"), Map.class);
+//			@SuppressWarnings("unchecked")
+//			List<Map<String, Object>> jvmMemoryMax = (List<Map<String, Object>>) response.getBody().get("measurements");
 //
-//		RestTemplate restTemplate = new RestTemplate();
-//		String serverHost = propertiesConfig.getRestServer();
+//			@SuppressWarnings("rawtypes")
+//			ResponseEntity<Map> response3 = restTemplate.getForEntity(new URI(serverHost + "/actuator/metrics/jvm.memory.used"), Map.class);
+//			@SuppressWarnings("unchecked")
+//			List<Map<String, Object>> jvmMemoryUsed = (List<Map<String, Object>>) response3.getBody().get("measurements");
 //
-//		URI diskSpaceURI = new URI(serverHost + "/actuator/health/diskSpace");
-//		@SuppressWarnings("rawtypes")
-//		ResponseEntity<Map> response1 = restTemplate.getForEntity(diskSpaceURI, Map.class);
-//		@SuppressWarnings("unchecked")
-//		Map<String, Long> diskSpace = (Map<String, Long>) response1.getBody().get("details");
+//			URI cpuMax = new URI(serverHost + "/actuator/metrics/system.cpu.usage");
+//			@SuppressWarnings("rawtypes")
+//			ResponseEntity<Map> response4 = restTemplate.getForEntity(cpuMax, Map.class);
+//			@SuppressWarnings("unchecked")
+//			List<Map<String, Object>> systemCpuUsage = (List<Map<String, Object>>) response4.getBody().get("measurements");
 //
-//		URI memoryMax = new URI(serverHost + "/actuator/metrics/jvm.memory.max");
-//		@SuppressWarnings("rawtypes")
-//		ResponseEntity<Map> response2 = restTemplate.getForEntity(memoryMax, Map.class);
-//		@SuppressWarnings("unchecked")
-//		List<Map<String, Object>> jvmMemoryMax = (List<Map<String, Object>>) response2.getBody().get("measurements");
-//
-//		URI memoryUsed = new URI(serverHost + "/actuator/metrics/jvm.memory.used");
-//		@SuppressWarnings("rawtypes")
-//		ResponseEntity<Map> response3 = restTemplate.getForEntity(memoryUsed, Map.class);
-//		@SuppressWarnings("unchecked")
-//		List<Map<String, Object>> jvmMemoryUsed = (List<Map<String, Object>>) response3.getBody().get("measurements");
-//
-//		URI cpuMax = new URI(serverHost + "/actuator/metrics/system.cpu.usage");
-//		@SuppressWarnings("rawtypes")
-//		ResponseEntity<Map> response4 = restTemplate.getForEntity(cpuMax, Map.class);
-//		@SuppressWarnings("unchecked")
-//		List<Map<String, Object>> systemCpuUsage = (List<Map<String, Object>>) response4.getBody().get("measurements");
-//
-//		URI cpuUsed = new URI(serverHost + "/actuator/metrics/process.cpu.usage");
-//		@SuppressWarnings("rawtypes")
-//		ResponseEntity<Map> response5 = restTemplate.getForEntity(cpuUsed, Map.class);
-//		@SuppressWarnings("unchecked")
-//		List<Map<String, Object>> processCpuUsage = (List<Map<String, Object>>) response5.getBody().get("measurements");
-//
-//		statistics.put("diskSpaceTotal", diskSpace.get("total"));
-//		statistics.put("diskSpaceFree", diskSpace.get("free"));
-//		statistics.put("jvmMemoryMax", jvmMemoryMax);
-//		statistics.put("jvmMemoryUsed", jvmMemoryUsed);
-//		statistics.put("systemCpuUsage", systemCpuUsage);
-//		statistics.put("processCpuUsage", processCpuUsage);
-//
-//		int statusCode = HttpStatus.OK.value();
-//
-//		result.put("statistics", statistics);
-//		result.put("statusCode", statusCode);
-//		result.put("errorCode", errorCode);
-//		result.put("message", message);
-//		return result;
-//	}
+//			URI cpuUsed = new URI(serverHost + "/actuator/metrics/process.cpu.usage");
+//			@SuppressWarnings("rawtypes")
+//			ResponseEntity<Map> response5 = restTemplate.getForEntity(cpuUsed, Map.class);
+//			@SuppressWarnings("unchecked")
+//			List<Map<String, Object>> processCpuUsage = (List<Map<String, Object>>) response5.getBody().get("measurements");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("diskSpaceTotal", diskSpaceTotal);
+		result.put("diskSpaceFree", diskSpaceFree);
+		result.put("diskSpaceUsed", diskSpaceUsed);
+		result.put("diskSpacePercent", diskSpacePercent);
+
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
+
+	/**
+	 * 스케줄 실행 결과
+	 * @param request
+	 * @return
+	 */
+	@GetMapping(value = "/schedules")
+	public Map<String, Object> schedules(HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+
+
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
+
+	/**
+	 * api 요청 이력
+	 * @param request
+	 * @return
+	 */
+	@GetMapping(value = "/api-logs")
+	public Map<String, Object> apiLogs(HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+
+
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
 
 }

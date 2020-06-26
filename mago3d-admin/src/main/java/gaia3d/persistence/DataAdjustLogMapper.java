@@ -34,6 +34,12 @@ public interface DataAdjustLogMapper {
 	 * @return
 	 */
 	DataAdjustLog getDataAdjustLog(Long dataAdjustLogId);
+
+	/**
+	 * 최근 데이터 geometry 변경 요청 목록
+	 * @return
+	 */
+	List<DataAdjustLog> getListRecentDataAdjustLog();
 	
 	/**
 	 * 데이터 geometry 변경 이력 저장

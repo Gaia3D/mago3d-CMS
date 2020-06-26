@@ -29,7 +29,7 @@ public class DataAdjustLogServiceImpl implements DataAdjustLogService {
 	
 	/**
 	 * 데이터 geometry 변경 요청 수
-	 * @param dataInfoAdjustLog
+	 * @param dataAdjustLog
 	 * @return
 	 */
 	@Transactional(readOnly=true)
@@ -49,19 +49,22 @@ public class DataAdjustLogServiceImpl implements DataAdjustLogService {
 	
 	/**
 	 * 데이터 geometry 조회
-	 * @param dataAdjustLogId
+	 * @param dataAdjustLog
 	 * @return
 	 */
 	@Transactional(readOnly=true)
 	public DataAdjustLog getDataAdjustLog(Long dataAdjustLog) {
 		return dataAdjustLogMapper.getDataAdjustLog(dataAdjustLog);
 	}
-	
+
 	/**
-	 * 데이터 geometry 변경 이력 등록
-	 * @param dataInfoLog
+	 * 최근 데이터 geometry 변경 요청 목록
 	 * @return
 	 */
+	@Transactional(readOnly=true)
+	public List<DataAdjustLog> getListRecentDataAdjustLog() {
+		return dataAdjustLogMapper.getListRecentDataAdjustLog();
+	}
 	
 	/**
 	 * 데이터 geometry 변경 요청 상태 변경
