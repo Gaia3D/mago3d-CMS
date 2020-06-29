@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
 <head>
-	<title>대시보드</title>
+	<meta charset="utf-8">
+	<meta name="referrer" content="origin">
+	<meta name="viewport" content="width=device-width">
+	<meta name="robots" content="index,nofollow">
+	<title>메인 | mago3D</title>
 	<th:block layout:fragment="pageCustomStyle">
 		<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
 		<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
 		<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
-		<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
-		<link rel="stylesheet" th:href="@{/externlib/jqplot/jquery.jqplot.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+		<link rel="stylesheet" th:href="@{/externlib/chart-js-2.9.3/Chart.min.css(cacheVersion=${contentCacheVersion})}">
 		<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
 		<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
 	</th:block>
@@ -77,34 +81,36 @@
 							</div>
 						</div><!-- .widget-content -->
 					</div><!-- .widget -->
-					<th:block th:each="dbWidget : ${widgetList}">
-						<th:blcok th:switch="${dbWidget.name}">
-							<th:block th:case="'dataGroupWidget'">
+
+<th:block th:each="dbWidget : ${widgetList}">
+	<th:blcok th:switch="${dbWidget.widgetKey}">
+		<th:block th:case="userWidget">
 								<div th:id="${dbWidget.widgetId}" class="widget one-third column" style="font-size: 16px;">
 									<div class="widget-header row">
 										<div class="widget-heading u-pull-left">
 											<h3 class="widget-title">
-												<th:block th:text="#{main.status.data.group}"></th:block>
+												<th:block th:text="${dbWidget.widgetName}"></th:block>
 												<span class="widget-desc" th:text="${today} + #{config.widget.basic}"></span>
 											</h3>
 										</div>
 										<div class="widget-functions u-pull-right">
-											<a href="/data/list" th:title="#{'config.widget.project.more'}"><span class="icon-glyph glyph-plus"></span></a>
+											<a href="/user/list" title="사용자 목록"><span class="icon-glyph glyph-plus"></span></a>
 										</div>
 									</div>
-									<div th:id="${dbWidget.name}" class="widget-content row">
+									<canvas id="userStatusChart" width="450px" height="170px"></canvas>
+									<div id="userStatusArea" class="widget-content row" style="width: 350px; height:200px;">
 										<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
-											<div id="dataGroupSpinner" style="width: 150px; height: 70px;"></div>
+											<div id="userStatusSpinner" style="width: 150px; height: 70px;"></div>
 										</div>
 									</div>
 								</div>
-							</th:block>
-							<th:block th:case="'dataStatusWidget'">
+		</th:block>
+		<th:block th:case="dataTypeWidget">
 								<div th:id="${dbWidget.widgetId}" class="widget one-third column" style="font-size: 16px;">
 									<div class="widget-header row">
 										<div class="widget-heading u-pull-left">
 											<h3 class="widget-title">
-												<th:block th:text="#{main.status.use.data}"></th:block>
+												<th:block th:text="${dbWidget.widgetName}"></th:block>
 												<span class="widget-desc" th:text="${today} + #{config.widget.basic}"></span>
 											</h3>
 										</div>
@@ -112,974 +118,581 @@
 											<a href="/data/list" th:title="#{config.widget.data.info.more}"><span class="icon-glyph glyph-plus"></span></a>
 										</div>
 									</div>
-									<div th:id="${dbWidget.name}" class="widget-content row">
+									<canvas id="dataTypeChart" width="450px" height="170px"></canvas>
+									<div id="dataTypeArea" class="widget-content row" style="width: 350px; height:200px;">
 										<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
-											<div id="dataStatusSpinner" style="width: 150px; height: 70px;"></div>
+											<div id="dataTypeSpinner" style="width: 150px; height: 70px;"></div>
 										</div>
 									</div>
 								</div>
-							</th:block>
-							<th:block th:case="'dataAdjustLogWidget'">
+		</th:block>
+		<th:block th:case="converterWidget">
 								<div th:id="${dbWidget.widgetId}" class="widget one-third column">
 									<div class="widget-header row">
 										<div class="widget-heading u-pull-left">
 											<h3 class="widget-title">
-												<th:block th:text="#{main.status.data.log}"></th:block>
+												<th:block th:text="${dbWidget.widgetName}"></th:block>
 												<span class="widget-desc" th:text="${today}+ #{config.widget.basic}"></span>
 											</h3>
 										</div>
 										<div class="widget-functions u-pull-right">
-											<a href="/data-adjust-log/list" th:title="#{config.widget.data.info.log.more}"><span class="icon-glyph glyph-plus"></span></a>
+											<a href="/converter/list" title="데이터 변환 목록"><span class="icon-glyph glyph-plus"></span></a>
 										</div>
 									</div>
-									<div th:id="${dbWidget.name}" class="widget-content row">
+									<canvas id="converterChart" width="450px" height="170px"></canvas>
+									<div id="converterArea" class="widget-content row" style="width: 350px; height:200px;">
+										<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+											<div id="converterSpinner" style="width: 150px; height: 70px;"></div>
+										</div>
+									</div>
+								</div>
+		</th:block>
+		<th:block th:case="issueWidget">
+								<div th:id="${dbWidget.widgetId}" class="widget one-third column" style="font-size: 16px;">
+									<div class="widget-header row">
+										<div class="widget-heading u-pull-left">
+											<h3 class="widget-title">
+												<th:block th:text="${dbWidget.widgetName}"></th:block>
+												<span class="widget-desc" th:text="${today} + #{main.standard}"></span></h3>
+										</div>
+										<div class="widget-functions u-pull-right">
+											<a href="/issue/list" title="#{config.widget.issue.more}"><span class="icon-glyph glyph-plus"></span></a>
+										</div>
+									</div>
+									<div id="issueArea" class="widget-content row">
+										<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+											<div id="issueSpinner" style="width: 150px; height: 70px;"></div>
+										</div>
+									</div>
+								</div>
+		</th:block>
+		<th:block th:case="dataAdjustLogWidget">
+								<div th:id="${dbWidget.widgetId}" class="widget one-third column">
+									<div class="widget-header row">
+										<div class="widget-heading u-pull-left">
+											<h3 class="widget-title">
+												<th:block th:text="${dbWidget.widgetName}"></th:block>
+												<span class="widget-desc" th:text="${today} + #{main.standard}"></span></h3>
+										</div>
+										<div class="widget-functions u-pull-right">
+											<a href="/data-adjust-log/list" title="데이터 위치 변경 요청 이력 더보기"><span class="icon-glyph glyph-plus"></span></a>
+										</div>
+									</div>
+									<div id="dataAdjustLogArea" class="widget-content row">
 										<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 											<div id="dataAdjustLogSpinner" style="width: 150px; height: 70px;"></div>
 										</div>
 									</div>
 								</div>
-							</th:block>
-							<th:block th:case="'userStatusWidget'">
-								<div th:id="${dbWidget.widgetId}" class="widget one-third column" style="font-size: 16px;">
+		</th:block>
+		<th:block th:case="systemResourceWidget">
+								<div th:id="${dbWidget.widgetId}" class="widget one-third column">
 									<div class="widget-header row">
 										<div class="widget-heading u-pull-left">
 											<h3 class="widget-title">
-												<th:block th:text="#{main.status.userstatus}"></th:block>
+												<th:block th:text="${dbWidget.widgetName}"></th:block>
+											</h3>
+										</div>
+									</div>
+									<canvas id="systemResourceChart" width="450px" height="170px"></canvas>
+									<div id="systemResourceArea" class="widget-content row" style="width: 350px; height:200px;">
+										<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+											<div id="systemResourceSpinner" style="width: 150px; height: 70px;"></div>
+										</div>
+									</div>
+								</div>
+		</th:block>
+		<th:block th:case="scheduleWidget">
+								<div th:id="${dbWidget.widgetId}" class="widget one-third column">
+									<div class="widget-header row">
+										<div class="widget-heading u-pull-left">
+											<h3 class="widget-title">
+												<th:block th:text="${dbWidget.widgetName}"></th:block>
 												<span class="widget-desc" th:text="${today} + #{main.standard}"></span></h3>
 										</div>
 										<div class="widget-functions u-pull-right">
-											<a href="/user/list" th:title="#{config.widget.user.status.more}"><span class="icon-glyph glyph-plus"></span></a>
+											<a href="/schedule/list" title="스케줄 실행 결과 더보기"><span class="icon-glyph glyph-plus"></span></a>
 										</div>
 									</div>
-									<div th:id="${dbWidget.name}" class="widget-content row">
-									</div>
-								</div>
-							</th:block>
-							<th:block th:case="'userAccessLogWidget'">
-								<div th:id="${dbWidget.widgetId}" class="widget one-third column">
-									<div class="widget-header row">
-										<div class="widget-heading u-pull-left">
-											<h3 class="widget-title">
-												<th:block th:text="#{main.status.user.tracking}"></th:block>
-												<span class="widget-desc" th:text="${today} + #{main.standard}"></span></h3>
-										</div>
-										<div class="widget-functions u-pull-right">
-											<a href="/access/list" th:title="#{main.status.user.moretracking}"><span class="icon-glyph glyph-plus"></span></a>
-										</div>
-									</div>
-
-									<div th:id="${dbWidget.name}" class="widget-content row">
+									<div id="scheduleArea" class="widget-content row">
 										<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
-											<div id="userAccessLogSpinner" style="width: 150px; height: 70px;"></div>
+											<div id="scheduleSpinner" style="width: 150px; height: 70px;"></div>
 										</div>
 									</div>
 								</div>
-							</th:block>
-							<th:block th:case="'civilVoiceWidget'">
+		</th:block>
+		<th:block th:case="apiLogWidget">
 								<div th:id="${dbWidget.widgetId}" class="widget one-third column">
 									<div class="widget-header row">
 										<div class="widget-heading u-pull-left">
 											<h3 class="widget-title">
-												<th:block th:text="#{main.status.civilvoice.data}"></th:block>
-												<span class="widget-desc" th:text="${thisYear} + #{main.status.civilvoice.date}"></span></h3>
-										</div>
-										<div class="widget-functions u-pull-right">
-											<a href="/civil-voice/list?orderWord=comment_count&orderValue=DESC" th:title="#{main.status.civilvoice.moreexecution}"><span class="icon-glyph glyph-plus"></span></a>
-										</div>
-									</div>
-									<div th:id="${dbWidget.name}" class="widget-content row">
-										<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
-											<div id="civilVoiceSpinner" style="width: 150px; height: 70px;"></div>
-										</div>
-									</div>
-								</div>
-							</th:block>
-							<th:block th:case="'systemUsageWidget'">
-								<div th:id="${dbWidget.widgetId}" class="widget one-third column">
-									<div class="widget-header row">
-										<div class="widget-heading u-pull-left">
-											<h3 class="widget-title">
-												<th:block th:text="#{main.status.system.usage}"></th:block>
-												<span class="widget-desc" th:text="${today} + #{main.standard}"></span></h3>
-										</div>
-									</div>
-
-									<div th:id="${dbWidget.name}" class="widget-content row">
-										<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
-											<div id="systemUsageSpinner" style="width: 150px; height: 70px;"></div>
-										</div>
-									</div>
-								</div>
-							</th:block>
-							<th:block th:case="'dbcpStatusWidget'">
-								<div th:id="${dbWidget.widgetId}" class="widget one-third column">
-									<div class="widget-header row">
-										<div class="widget-heading u-pull-left">
-											<h3 class="widget-title">
-												<th:block th:text="#{main.status.db.connection.pool}"></th:block>
-												<span class="widget-desc" th:text="${today} + #{main.standard}"></span></h3>
-										</div>
-									</div>
-
-									<div th:id="${dbWidget.name}" class="widget-content row">
-										<table class="widget-table">
-											<col class="col-left" />
-											<col class="col-center" />
-											<col class="col-center" />
-											<col class="col-center" />
-											<tr>
-												<td class="col-left">
-													<em th:text="#{main.status.property}"></em>
-												</td>
-												<td class="col-center">
-													<em th:text="#{main.status.admin}"></em>
-												</td>
-												<td class="col-center">
-													<em th:text="#{main.status.user}"></em>
-												</td>
-												<td class="col-center">
-													<em th:text="#{main.status}"></em>
-												</td>
-											</tr>
-											<tr>
-												<td class="col-left">
-													<span class="icon-glyph glyph-users-circle"></span>
-													<em th:text="#{main.status.usersession.count}"></em>
-												</td>
-												<td class="col-center">
-													<span id="userSessionCount" class="tendency increase" th:text="${userSessionCount}"></span>
-												</td>
-												<td class="col-center">
-													<span id="userUserSessionCount" class="tendency increase" th:text="${userUserSessionCount}"></span>
-												</td>
-												<td class="col-center">
-										<span class="tendency increase">
-											<span class="icon-glyph glyph-up"></span>
-										</span>
-												</td>
-											</tr>
-											<tr>
-												<td class="col-left">
-													<span class="icon-glyph glyph-imark-circle"></span>
-													<em th:text="#{main.status.initialSize}"></em> (initialSize)
-												</td>
-												<td class="col-center">
-													<span id="initialSize" class="tendency increase" th:text="${initialSize}"></span>
-												</td>
-												<td class="col-center">
-													<span id="userInitialSize" class="tendency increase" th:text="${userInitialSize}"></span>
-												</td>
-												<td class="col-center">
-										<span class="tendency increase">
-											<span class="icon-glyph glyph-up"></span>
-										</span>
-												</td>
-											</tr>
-											<tr>
-												<td class="col-left">
-													<span class="icon-glyph glyph-plus-circle"></span>
-													<em th:text="#{main.status.maxtotal}"></em> (maxTotal)
-												</td>
-												<td class="col-center">
-													<span id="maxTotal" class="tendency decrease" th:text="${maxTotal}"></span>
-												</td>
-												<td class="col-center">
-													<span id="userMaxTotal" class="tendency decrease" th:text="${userMaxTotal}"></span>
-												</td>
-												<td class="col-center">
-										<span class="tendency decrease">
-											<span class="icon-glyph glyph-down"></span>
-										</span>
-												</td>
-											</tr>
-											<tr>
-												<td class="col-left">
-													<span class="icon-glyph glyph-top-circle"></span>
-													<em th:text="#{main.status.maxIdle}"></em> (maxIdle)
-												</td>
-												<td class="col-center">
-													<span id="maxIdle" class="tendency decrease" th:text="${maxIdle}"></span>
-												</td>
-												<td class="col-center">
-													<span id="userMaxIdle" class="tendency decrease" th:text="${userMaxIdle}"></span>
-												</td>
-												<td class="col-center">
-										<span class="tendency decrease">
-											<span class="icon-glyph glyph-down"></span>
-										</span>
-												</td>
-											</tr>
-											<tr>
-												<td class="col-left">
-													<span class="icon-glyph glyph-mouse-circle"></span>
-													<em th:text="#{main.status.numactive}"></em> (numActive)
-												</td>
-												<td class="col-center">
-													<span id="numActive" class="tendency increase" th:text="${numActive}"></span>
-												</td>
-												<td class="col-center">
-													<span id="userNumActive" class="tendency increase" th:text="${userNumActive}"></span>
-												</td>
-												<td class="col-center">
-										<span class="tendency increase">
-											<span class="icon-glyph glyph-up"></span>
-										</span>
-												</td>
-											</tr>
-											<tr>
-												<td class="col-left">
-													<span class="icon-glyph glyph-bottom-circle"></span>
-													<em th:text="#{main.status.minIdle}"></em> (minIdle, numIdle)
-												</td>
-												<td class="col-center">
-													<span id="minIdle" class="tendency increase" th:text="${minIdle}+','+${numIdle}"></span>
-												</td>
-												<td class="col-center">
-													<span id="userMinIdle" class="tendency increase" th:text="${userMinIdle}+','+${userNumIdle}"></span>
-												</td>
-												<td class="col-center">
-										<span class="tendency increase">
-											<span class="icon-glyph glyph-up"></span>
-										</span>
-												</td>
-											</tr>
-										</table>
-									</div>
-								</div>
-							</th:block>
-							<th:block th:case="'dbSessionWidget'">
-								<div th:id="${dbWidget.widgetId}" class="widget one-third column">
-									<div class="widget-header row">
-										<div class="widget-heading u-pull-left">
-											<h3 class="widget-title">
-												<th:block th:text="#{main.status.db.session}+'('+${dbSessionCount}+')'"></th:block>
+												<th:block th:text="${dbWidget.widgetName}"></th:block>
 												<span class="widget-desc" th:text="${today} + #{main.standard}"></span>
 											</h3>
 										</div>
 										<div class="widget-functions u-pull-right">
-											<a href="/monitoring/list-db-session.do" th:title="#{main.status.db.moresession}"><span class="icon-glyph glyph-plus"></span></a>
+											<a href="/api-log/list" title="api 요청 이력 더보기"><span class="icon-glyph glyph-plus"></span></a>
 										</div>
 									</div>
-									<div th:id="${dbWidget.name}" class="widget-content row">
-										<table class="widget-table">
-											<col class="col-left" />
-											<col class="col-left" />
-											<th:block th:if="${dbSessionList == null}">
-												<tr>
-													<td colspan="2" class="col-none" th:text="#{main.status.db.nosession}"></td>
-												</tr>
-											</th:block>
-											<th:block th:unless="${dbSessionList == null}">
-												<th:block th:each="pGStatActivity : ${dbSessionList}" >
-													<tr>
-														<td class="col-left">
-															<span class="index" th:text="${pGStatActivity.clientAddr}"></span>
-														</td>
-														<td class="col-left" th:text="${pGStatActivity.viewQuery}"></td>
-													</tr>
-												</th:block>
-											</th:block>
-										</table>
+									<div id="apiLogArea" class="widget-content row">
+										<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
+											<div id="apiLogSpinner" style="width: 150px; height: 70px;"></div>
+										</div>
 									</div>
 								</div>
-							</th:block>
-						</th:blcok>
-					</th:block>
+		</th:block>
+	</th:blcok>
+</th:block>
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<div th:replace="~{/widget/issue-template :: #issueListSource}"></div>
+
 </th:block>
 <th:block layout:fragment="pageCustomScript">
-<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/externlib/jqplot/jquery.jqplot.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/externlib/jqplot/plugins/jqplot.barRenderer.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/externlib/jqplot/plugins/jqplot.categoryAxisRenderer.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/externlib/jqplot/plugins/jqplot.dateAxisRenderer.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/externlib/jqplot/plugins/jqplot.pieRenderer.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/externlib/jqplot/plugins/jqplot.pointLabels.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/externlib/jqplot/plugins/jqplot.donutRenderer.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/chart-js-2.9.3/Chart.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/handlebars-4.1.2/handlebars.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/handlebars-helper.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 
-<script type="text/javascript" th:src="@{/externlib/spinner/progressSpin.min.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/externlib/spinner/raphael.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/spinner/progressSpin.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/spinner/raphael.js(cacheVersion=${contentCacheVersion})}"></script>
 
-<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
 
-<script th:inline="javascript">
-	var refreshTime = [[${widgetInterval}]] * 1000;
-	var isDataGroupDraw = [[${isDataGroupDraw}]];
-	var isDataStatusDraw = [[${isDataStatusDraw}]];
-	var isDataAdjustLogDraw = [[${isDataAdjustLogDraw}]];
-	var isUserStatusDraw = [[${isUserStatusDraw}]];
-	var isUserAccessLogDraw = [[${isUserAccessLogDraw}]];
-	var isCivilVoiceDraw = [[${isCivilVoiceDraw}]];
-	var isSystemUsageDraw = [[${isSystemUsageDraw}]];
-	var isDbcpStatusDraw = [[${isDbcpStatusDraw}]];
-	var isDbSessionDraw = [[${isDbSessionDraw}]];
-	var isIssueDraw = [[${isIssueDraw}]];
+	<script th:inline="javascript">
+		Chart.platform.disableCSSInjection = true;
 
-	$(document).ready(function() {
-		if(isDataGroupDraw) {
-			startSpinner("dataGroupSpinner");
-			dataGroupWidget();
+		var refreshTime = [[${widgetInterval}]] * 1000;
+
+		var isUserDraw = [[${isUserDraw}]];
+		var isDataTypeDraw = [[${isDataTypeDraw}]];
+		var isConverterDraw = [[${isConverterDraw}]];
+		var isIssueDraw = [[${isIssueDraw}]];
+		var isDataAdjustLogDraw = [[${isDataAdjustLogDraw}]];
+		var isSystemResourceDraw = [[${isSystemResourceDraw}]];
+		var isScheduleDraw = [[${isScheduleDraw}]];
+		var isApiLogDraw = [[${isApiLogDraw}]];
+
+		$(document).ready(function() {
+			if(isUserDraw) {
+				startSpinner("userStatusSpinner");
+				userWidget();
+			}
+			if(isDataTypeDraw) {
+				startSpinner("dataTypeSpinner");
+				dataTypeWidget();
+			}
+			if(isConverterDraw) {
+				startSpinner("converterSpinner");
+				converterWidget();
+			}
+			if(isIssueDraw) {
+				startSpinner("issueSpinner");
+				issueWidget();
+			}
+			if(isDataAdjustLogDraw) {
+				startSpinner("dataAdjustLogSpinner");
+				setTimeout(callDataAdjustLogWidget, 1000);
+			}
+			if(isSystemResourceDraw) {
+				startSpinner("systemResourceSpinner");
+				setTimeout(callSystemResourceWidget, 1000);
+			}
+			if(isScheduleDraw) {
+				startSpinner("scheduleSpinner");
+				setTimeout(callScheduleWidget, 2000);
+			}
+			if(isApiLogDraw) {
+				startSpinner("apiLogSpinner");
+				setTimeout(callApiLogWidget, 3000);
+			}
+
+			var autoRefresh = [[${autoRefresh}]];
+			if(autoRefresh) {
+				// Active 일때만 화면을 갱신함
+				setInterval(refreshMain, refreshTime);
+			}
+		});
+
+		function refreshMain() {
+			if(isUserDraw) {
+				userWidget();
+			}
+			if(isDataTypeDraw) {
+				dataTypeWidget();
+			}
+			if(isConverterDraw) {
+				converterWidget();
+			}
+			if(isIssueDraw) {
+				issueWidget();
+			}
 		}
-		if(isDataStatusDraw) {
-			startSpinner("dataStatusSpinner");
-			dataStatusWidget();
-		}
-		if(isDataAdjustLogDraw) {
-			startSpinner("dataAdjustLogSpinner");
+
+		// 데이터 Location 정보 변경 요청 이력
+		function callDataAdjustLogWidget() {
 			dataAdjustLogWidget();
-		}
-		if(isUserStatusDraw) {
-			userStatusWidget(0, null);
-		}
-		if(isUserAccessLogDraw) {
-			startSpinner("userAccessLogSpinner");
-			setTimeout(callUserAccessLogWidget, 1000);
-		}
-		if(isCivilVoiceDraw == "true") {
-			startSpinner("civilVoiceSpinner");
-			civilVoiceWidget();
-		}
-		if(isSystemUsageDraw) {
-			startSpinner("systemUsageSpinner");
-			setTimeout(callSystemUsageWidget, 1000);
-		}
-		if(isDbcpStatusDraw) {
-			setTimeout(callDbcpStatusWidget, 2000);
-		}
-		if(isDbSessionDraw) {
-			//startSpinner("dbSessionSpinner");
-			setTimeout(dbSessionWidget, 3000);
-		}
-		if(isIssueDraw) {
-			// TODO spinner
-			issueWidget();
+			setInterval(dataAdjustLogWidget, refreshTime);
 		}
 
-		var isActive = [[${isActive}]];
-		if(isActive) {
-			// Active 일때만 화면을 갱신함
-			setInterval(refreshMain, refreshTime);
-		}
-	});
-
-	function refreshMain() {
-		if(isDataGroupDraw) {
-			dataGroupWidget();
-		}
-		if(isDataStatusDraw) {
-			dataStatusWidget();
-		}
-		if(isDataAdjustLogDraw) {
-			dataAdjustLogWidget();
-		}
-		if(isUserStatusDraw) {
-			//userStatusWidget();
-		}
-		if(isIssueDraw) {
-			issueWidget();
-		}
-	}
-
-	// DB Connection Pool 현황
-	function callDbcpStatusWidget() {
-		dbcpStatusWidget();
-		setInterval(dbcpStatusWidget, refreshTime);
-	}
-
-	// 사용자 추적
-	function callUserAccessLogWidget() {
-		userAccessLogWidget();
-		setInterval(userAccessLogWidget, refreshTime);
-	}
-
-	// 시스템 사용량
-	function callSystemUsageWidget() {
-		systemUsageWidget();
-		setInterval(systemUsageWidget, refreshTime);
-	}
-
-	function dataGroupWidget() {
-		var url = "/widgets/data-group-statistics";
-		var info = "";
-		$.ajax({
-			url: url,
-			type: "GET",
-			data: info,
-			dataType: "json",
-			headers: { "X-mago3D-Header" : "mago3D"},
-			success : function(msg) {
-				if(msg.statusCode <= 200) {
-					$("#dataGroupWidget").empty();
-					showDataGroup(msg.dataGroupWidgetList);
-				} else {
-					$("#dataGroupWidget").html(JS_MESSAGE[msg.errorCode]);
-				}
-			},
-			error : function(request, status, error) {
-				$("#dataGroupWidget").html(JS_MESSAGE["ajax.error.message"]);
-			}
-		});
-	}
-
-	function showDataGroup(dataGroupWidgetList) {
-		if(dataGroupWidgetList == null || dataGroupWidgetList.length == 0) {
-			return;
+		// 시스템 리소스 현황
+		function callSystemResourceWidget() {
+			systemResourceWidget();
+			setInterval(systemResourceWidget, refreshTime);
 		}
 
-		var data = [];
-		var dataGroupCount =  dataGroupWidgetList.length;
-		for(i=0; i<dataGroupCount; i++ ) {
-			var dataGroupStatisticsArray = [ dataGroupWidgetList[i]["name"], dataGroupWidgetList[i]["count"]];
-			data.push(dataGroupStatisticsArray);
+		// 스케줄
+		function callScheduleWidget() {
+			scheduleWidget();
+			setInterval(scheduleWidget, refreshTime);
+		}
+		// API 호출 이력
+		function callApiLogWidget() {
+			apiLogWidget();
+			setInterval(apiLogWidget, refreshTime);
 		}
 
-		var plot = $.jqplot("dataGroupWidget", [data], {
-			//title : "project 별 chart",
-			seriesColors: [ "#a67ee9", "#FE642E", "#01DF01", "#2E9AFE", "#F781F3", "#F6D8CE", "#99a0ac" ],
-			grid: {
-				drawBorder: false,
-				drawGridlines: false,
-				background: "#ffffff",
-				shadow:false
-			},
-			gridPadding: {top:0, bottom:85, left:0, right:170},
-			seriesDefaults:{
-				renderer:$.jqplot.PieRenderer,
-				trendline : { show : false},
-				rendererOptions: {
-					padding:8,
-					showDataLabels: true,
-					dataLabels: "value",
-					startAngle: -90,
-				},
-			},
-			legend: {
-				show: true,
-				fontSize: "10pt",
-				placement : "outside",
-				rendererOptions: {
-					numberRows: 7,
-					numberColumns: 1
-				},
-				location: "e",
-				//border: "none",
-				marginLeft: "10px"
-			}
-		});
-	}
-
-	function dataStatusWidget() {
-		$.ajax({
-			url : "/widgets/data-status-statistics",
-			type : "GET",
-			cache : false,
-			dataType : "json",
-			success : function(msg) {
-				if(msg.statusCode <= 200) {
-					$("#dataStatusWidget").empty();
-					showDataStatus(msg.statistics);
-				} else {
-					$("#dataStatusWidget").html(JS_MESSAGE[msg.errorCode]);
-				}
-			},
-			error : function(request, status, error) {
-				$("#dataStatusWidget").html(JS_MESSAGE["ajax.error.message"]);
-				//alert(JS_MESSAGE["ajax.error.message"]);
-			}
-		});
-	}
-
-	function showDataStatus(jsonData) {
-		var useTotalCount = parseInt(jsonData.useTotalCount);
-		var forbidTotalCount = parseInt(jsonData.forbidTotalCount);
-		var etcTotalCount = parseInt(jsonData.etcTotalCount);
-
-		var use = /*[[#{data.status.use}]]*/"";
-		var unused = /*[[#{data.status.unused}]]*/"";
-		var etc = /*[[#{data.status.etc}]]*/"";
-		var dataValues = [ useTotalCount, forbidTotalCount, etcTotalCount];
-		var ticks = [use, unused, etc];
-		var yMax = 10;
-		if(useTotalCount > 10 || forbidTotalCount > 10 || etcTotalCount > 10) {
-			yMax = Math.max(useTotalCount, forbidTotalCount, etcTotalCount) + (useTotalCount * 0.2);
-		}
-
-		var plot = $.jqplot("dataStatusWidget", [dataValues], {
-			//title : "data info status",
-			height: 205,
-			animate: !$.jqplot.use_excanvas,
-			seriesColors: [ "#40a7fe", "#3fbdf8" ],
-			seriesDefaults:{
-				shadow:false,
-				renderer:$.jqplot.BarRenderer,
-				pointLabels: { show: true },
-				rendererOptions: {
-					barWidth: 50
-				}
-			},
-			grid: {
-				background: "#fff",
-				//background: "#14BA6C"
-				gridLineWidth: 0.7,
-				//borderColor: 'transparent',
-				shadow: false,
-				borderWidth:0.1
-				//shadowColor: 'transparent'
-			},
-			gridPadding:{
-				left:35,
-				right:1,
-				to:40,
-				bottom:27
-			},
-			axes: {
-				xaxis: {
-					renderer: $.jqplot.CategoryAxisRenderer,
-					ticks: ticks,
-					tickOptions:{
-						formatString: "%'d",
-						fontSize: "10pt"
-					}
-				},
-				yaxis: {
-					numberTicks : 6,
-					min : 0,
-					max : yMax,
-					tickOptions:{
-						formatString: "%'d",
-						fontSize: "10pt"
-					}
-				}
-			},
-			highlighter: { show: false }
-		});
-	}
-
-	function dataAdjustLogWidget() {
-		$.ajax({
-			url : "/widgets/data-adjust-log",
-			type : "GET",
-			cache : false,
-			dataType : "json",
-			success : function(msg) {
-				if(msg.statusCode <= 200) {
-					var dataAdjustLogList = msg.dataAdjustLogList;
-					var content = "";
-					content 	= "<table class=\"widget-table\">"
-							+	"<col class=\"col-left\"/>"
-							+	"<col class=\"col-center\"/>"
-							+	"<col class=\"col-center\" />"
-							+	"<thead><tr>"
-							+	"	<td class=\"col-left\"><em>데이터 명</em></td>"
-							+	"	<td class=\"col-center\"><em>요청 현황</em></td>"
-							+ 	"	<td class=\"col-center\"><em>요청 일시</em></td>"
-							+	"</tr></thead>";
-					if(dataAdjustLogList == null || dataAdjustLogList.length == 0) {
-						content += 	"<tr>"
-								+	"	<td colspan=\"3\" class=\"col-none\">데이터 변경 요청 이력이 존재하지 않습니다.</td>"
-								+	"</tr>";
+		/* 사용자 상태별 현황 */
+		function userWidget() {
+			$.ajax({
+				url : "/widgets/user-status",
+				type: "GET",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				dataType: "json",
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						$("#userStatusArea").empty();
+						showUserStatus(msg);
 					} else {
-						for(i=0; i<dataAdjustLogList.length; i++ ) {
-							var dataAdjustLog = null;
-							dataAdjustLog = dataAdjustLogList[i];
-							var viewStatus = "";
-							if(dataAdjustLog.status === "request") viewStatus = "요청";
-							else if(dataAdjustLog.status === "approval") viewStatus = "승인";
-							else if(dataAdjustLog.status === "reject") viewStatus = "반려";
-							else if(dataAdjustLog.status === "rollback") viewStatus = "원복";
-
-							content = content
-									+ 	"<tr>"
-									+ 	"	<td class=\"col-left ellipsis\" style=\"max-width:160px;\">"
-									+		"	<span class=\"index\"></span>"
-									+		"	<em>" + dataAdjustLog.dataName + "</em>"
-									+		"</td>"
-									+ 		"<td class=\"col-center\" style=\"width:60px;\">" + viewStatus + "</td>"
-									+ 		"<td class=\"col-center\">" + dataAdjustLog.viewInsertDate + "</td>"
-									+ 	"</tr>";
-						}
-					}
-					$("#dataAdjustLogWidget").empty();
-					$("#dataAdjustLogWidget").html(content);
-				} else {
-					$("#dataAdjustLogWidget").html(JS_MESSAGE[msg.errorCode]);
-				}
-			},
-			error : function(request, status, error) {
-				$("#dataAdjustLogWidget").html(JS_MESSAGE["ajax.error.message"]);
-			}
-		});
-	}
-
-	function issueWidget() {
-
-	}
-
-	// 사용자 상태별 현황
-	function showUserStatus(drawType, jsonData) {
-		var activeUserTotalCount = null;
-		var fobidUserTotalCount = null;
-		var failUserTotalCount = null;
-		var sleepUserTotalCount = null;
-		var expireUserTotalCount = null;
-		var tempPasswordUserTotalCount = null;
-
-		if(drawType == 0) {
-			// el 데이터 표시
-			activeUserTotalCount = parseInt([[${activeUserTotalCount}]]);
-			fobidUserTotalCount = parseInt([[${fobidUserTotalCount}]]);
-			failUserTotalCount = parseInt([[${failUserTotalCount}]]);
-			sleepUserTotalCount = parseInt([[${sleepUserTotalCount}]]);
-			expireUserTotalCount = parseInt([[${expireUserTotalCount}]]);
-			tempPasswordUserTotalCount = parseInt([[${tempPasswordUserTotalCount}]]);
-		} else {
-			// ajax 데이터 표시
-			activeUserTotalCount = parseInt(jsonData.activeUserTotalCount);
-			fobidUserTotalCount = parseInt(jsonData.fobidUserTotalCount);
-			failUserTotalCount = parseInt(jsonData.failUserTotalCount);
-			sleepUserTotalCount = parseInt(jsonData.sleepUserTotalCount);
-			expireUserTotalCount = parseInt(jsonData.expireUserTotalCount);
-			tempPasswordUserTotalCount = parseInt(jsonData.tempPasswordUserTotalCount);
-		}
-
-		var userValues = [ activeUserTotalCount, fobidUserTotalCount, failUserTotalCount, sleepUserTotalCount, expireUserTotalCount, tempPasswordUserTotalCount];
-		var ticks = [JS_MESSAGE["main.status.in.use"], JS_MESSAGE["main.status.stop.use"], JS_MESSAGE["main.status.fail.count"], JS_MESSAGE["main.status.dormancy"], JS_MESSAGE["main.status.expires"], JS_MESSAGE["main.status.temporary.password"]];
-		var yMax = 10;
-		if(activeUserTotalCount > 10 || fobidUserTotalCount > 10 || failUserTotalCount > 10 || sleepUserTotalCount > 10 || expireUserTotalCount > 10 || tempPasswordUserTotalCount > 10) {
-			yMax = Math.max(activeUserTotalCount, fobidUserTotalCount, failUserTotalCount, sleepUserTotalCount, expireUserTotalCount, tempPasswordUserTotalCount) + (activeUserTotalCount * 0.2);
-		}
-
-		var plot = $.jqplot("userStatusWidget", [userValues], {
-			//title : "사용자 상태별 현황",
-			height: 205,
-			animate: !$.jqplot.use_excanvas,
-			seriesColors: [ "#ffa076"],
-			grid: {
-				background: "#fff",
-				//background: "#14BA6C"
-				gridLineWidth: 0.7,
-				//borderColor: 'transparent',
-				shadow: false,
-				borderWidth:0.1
-				//shadowColor: 'transparent'
-			},
-			gridPadding:{
-				left:35,
-				right:1,
-				to:40,
-				bottom:27
-			},
-			seriesDefaults:{
-				shadow:false,
-				renderer:$.jqplot.BarRenderer,
-				pointLabels: { show: true },
-				rendererOptions: {
-					barWidth: 40
-				}
-			},
-			axes: {
-				xaxis: {
-					renderer: $.jqplot.CategoryAxisRenderer,
-					ticks: ticks,
-					tickOptions:{
-						formatString: "%'d",
-						fontSize: "10pt"
+						$("#userStatusArea").html(JS_MESSAGE[msg.errorCode]);
 					}
 				},
-				yaxis: {
-					numberTicks : 6,
-					min : 0,
-					max : yMax,
-					tickOptions:{
-						formatString: "%'d",
-						fontSize: "10pt"
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
+				}
+			});
+		}
+
+		/* 사용자 상태별 현황 위젯 */
+		function showUserStatus(msg) {
+			var ctx = $("#userStatusChart");
+			var chart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: msg.userStatusKeys,
+					datasets: [{
+						barThickness: 40,
+						backgroundColor: 'rgb(255, 99, 132)',
+						borderColor: 'rgb(255, 99, 132)',
+						data: msg.userStatusValues
+					}]
+				},
+				options: {
+					legend: {
+						display: false
+					},
+					tooltips: {
+						enabled: false
+					},
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true,
+								maxTicksLimit: 7
+							}
+						}]
 					}
 				}
-			},
-			highlighter: { show: false }
-		});
-	}
+			});
+		}
 
-	// 사용자 상태별 현황 정보 갱신
-	function userStatusWidget() {
-		$.ajax({
-			url : "/widgets/user-status-statistics",
-			type : "GET",
-			cache : false,
-			dataType : "json",
-			success : function(msg) {
-				if(msg.statusCode <= 200) {
-					$("#userStatusWidget").empty();
-					showUserStatus(1, msg.statistics);
-				} else {
-					$("#userStatusWidget").html(JS_MESSAGE[msg.errorCode]);
-				}
-			},
-			error : function(request, status, error) {
-				$("#userStatusWidget").html(JS_MESSAGE["ajax.error.message"]);
-			}
-		});
-	}
-
-	// 사용자 추적
-	function userAccessLogWidget() {
-		$.ajax({
-			url : "/widgets/user-access-log",
-			type : "GET",
-			cache : false,
-			dataType : "json",
-			success : function(msg) {
-				if(msg.statusCode <= 200) {
-					var userAccessLogList = msg.userAccessLogList;
-					var content = "";
-					content 	= "<table class=\"widget-table\">"
-							+	"<col class=\"col-left\" />"
-							+	"<col class=\"col-left\" />"
-							+	"<thead><tr>"
-							+	"	<td class=\"col-left\"><em>사용자 명</em></td>"
-							+	"	<td class=\"col-left\"><em>접근 URL</em></td>"
-							+	"</tr></thead>";
-					if(userAccessLogList == null || userAccessLogList.length == 0) {
-						content += 	"<tr>"
-								+	"	<td colspan=\"2\" class=\"col-none\"><spring:message code='main.status.no.user.tracking'/></td>"
-								+	"</tr>";
+		/* 데이터 현황 */
+		function dataTypeWidget() {
+			$.ajax({
+				url : "/widgets/data-types",
+				type: "GET",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				dataType: "json",
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						$("#dataTypeArea").empty();
+						showDataType(msg);
 					} else {
-						for(i=0; i<userAccessLogList.length; i++ ) {
-							var userAccessLog = null;
-							userAccessLog = userAccessLogList[i];
-							content = content
-									+ 	"<tr>"
-									+ 	"	<td class=\"col-left\">"
-									+		"	<span class=\"index\"></span>"
-									+		"	<em>" + userAccessLog.userName + "</em>"
-									+		"</td>"
-									+ 		"<td class=\"col-left\">" + userAccessLog.viewRequestUri + "</td>"
-									+ 	"</tr>";
-						}
+						$("#dataTypeArea").html(JS_MESSAGE[msg.errorCode]);
 					}
-					$("#userAccessLogWidget").empty();
-					$("#userAccessLogWidget").html(content);
-				} else {
-					$("#userAccessLogWidget").html(JS_MESSAGE[msg.errorCode]);
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
 				}
-			},
-			error : function(request, status, error) {
-				$("#userAccessLogWidget").html(JS_MESSAGE["ajax.error.message"]);
-			}
-		});
-	}
+			});
+		}
 
-	// 스케줄 실행 이력 갱신
-	function civilVoiceWidget() {
-		$.ajax({
-			url : "/widgets/civil-voice-status",
-			type : "GET",
-			cache : false,
-			dataType : "json",
-			success : function(msg) {
-				if(msg.statusCode <= 200) {
-					var civilVoiceList = msg.civilVoiceList;
-					var content = "";
-					content 	= "<table class=\"widget-table\">"
-							+	"<col class=\"col-left\"/>"
-							+	"<col class=\"col-center\"/>"
-							+	"<col class=\"col-center\"/>"
-							+	"<thead><tr>"
-							+	"	<td class=\"col-left\"><em>제목</em></td>"
-							+	"	<td class=\"col-center\"><em>동의 수</em></td>"
-							+ 	"	<td class=\"col-center\"><em>등록 일시</em></td>"
-							+	"</tr></thead>";
-					if(civilVoiceList == null || civilVoiceList.length == 0) {
-						content += 	"<tr>"
-								+	"	<td colspan=\"3\" class=\"col-none\"><spring:message code='main.status.no.civilvoice'/></td>"
-								+	"</tr>";
+		/* 데이터 현황 위젯 */
+		function showDataType(msg) {
+			var ctx = $("#dataTypeChart");
+			var chart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: msg.dataTypeKeys,
+					datasets: [{
+						barThickness: 40,
+						backgroundColor: 'rgba(75, 192, 192, 0.2)',
+						borderColor: 'rgb(75, 192, 192)',
+						data: msg.dataTypeValues,
+						borderWidth: 1
+					}]
+				},
+				options: {
+					legend: {
+						display: false
+					},
+					tooltips: {
+						enabled: false
+					},
+					scales: {
+						xAxis: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}],
+						yAxes: [{
+							ticks: {
+								beginAtZero: true,
+								maxTicksLimit: 7
+							}
+						}]
+					}
+				}
+			});
+		}
+
+		/* 1주일간 데이터 변환 현황 */
+		function converterWidget() {
+			$.ajax({
+				url : "/widgets/converters",
+				type: "GET",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				dataType: "json",
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						$("#converterArea").empty();
+						showConverter(msg);
 					} else {
-						for(i=0; i<civilVoiceList.length; i++ ) {
-							var civilVoice = null;
-							civilVoice = civilVoiceList[i];
-							content = content
-									+ 	"<tr>"
-									+ 	"	<td class=\"col-left ellipsis\" style=\"max-width:160px;\">"
-									+	"		<span class=\"index\"></span>"
-									+ 	"		<em>" + civilVoice.title + "</em>"
-									+	"	</td>"
-									+ 	"	<td class=\"col-center\" style=\"width:70px;\">"
-									+	"		<span class='likes-icon' style='float: left;'>icon</span>"
-									+	"		<span style='font-weight:bold;'>" + formatNumber(civilVoice.commentCount) + "</span>"
-									+	"	</td>"
-									+ 	"	<td class=\"col-center\">" + civilVoice.viewInsertDate + "</td>"
-									+ 	"</tr>";
-						}
+						$("#converterArea").html(JS_MESSAGE[msg.errorCode]);
 					}
-					$("#civilVoiceWidget").empty();
-					$("#civilVoiceWidget").html(content);
-				} else {
-					$("#civilVoiceWidget").html(JS_MESSAGE[msg.errorCode]);
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
 				}
-			},
-			error : function(request, status, error) {
-				$("#civilVoiceWidget").html(JS_MESSAGE["ajax.error.message"]);
-			}
-		});
-	}
+			});
+		}
 
-	// 시스템 사용량
-	function systemUsageWidget() {
-		$.ajax({
-			url : "/widgets/system-usage-status",
-			type : "GET",
-			cache : false,
-			dataType : "json",
-			success : function(msg) {
-				if(msg.statusCode <= 200) {
-					var stat = msg.statistics;
-
-					// disk
-					var diskMax = stat.diskSpaceTotal;
-					var diskUsed = (diskMax - stat.diskSpaceFree);
-					var diskValue = diskUsed / diskMax * 100;
-
-					// memory
-					var memoryMax = stat.jvmMemoryMax[0]["value"];
-					var memoryUsed = stat.jvmMemoryUsed[0]["value"];
-					var memoryValue = memoryUsed / memoryMax * 100;
-
-					// cpu
-					var cpuMax = stat.systemCpuUsage[0]["value"];
-					if(!cpuMax) cpuMax = 1;
-					var cpuUsed = stat.processCpuUsage[0]["value"];
-					var cpuValue = cpuUsed / cpuMax * 100;
-
-					var res = {
-						disk: {
-							id: 'pie-chart1',
-							title: 'Disk',
-							value: Math.round(diskValue),
-							color: 'tomato'
-						},
-						memory: {
-							id: 'pie-chart2',
-							title: 'JVM Memory',
-							value: Math.round(memoryValue),
-							color: '#8b22ff'
-						},
-						cpu: {
-							id: 'pie-chart3',
-							title: 'CPU',
-							value: Math.round(cpuValue),
-							color: '#1cabf1'
-						}
+		/* 데이터 변환 현황 위젯 */
+		function showConverter(msg) {
+			var ctx = $("#converterChart");
+			var chart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: msg.converterJobFileKeys,
+					datasets: [{
+						fill: false,
+						backgroundColor: 'rgba(153, 102, 255, 0.2)',
+						borderColor: 'rgb(153, 102, 255)',
+						data: msg.converterJobFileValues
+						//borderWidth: 1
+					}]
+				},
+				options: {
+					responsive: true,
+					legend: {
+						display: false
+					},
+					tooltips: {
+						enabled: false
+					},
+					scales: {
+						xAxis: [{
+							// ticks: {
+							// 	beginAtZero: true
+							// }
+							// type: 'time',
+							// time: {
+							// 	displayFormats: {
+							// 		quarter: 'YYYY-MM-DD'
+							// 	}
+							// }
+						}],
+						yAxes: [{
+							ticks: {
+								min: 0,
+								maxTicksLimit: 7
+							}
+						}]
 					}
+				}
+			});
+		}
 
-					$("#systemUsageWidget").empty();
-					$("#systemUsageWidget").html('<div class="gaugeGraph"></div>');
-
-					for(var property in res) {
-						showSystemUsageHtml(res[property]);
-						showSystemUsageGraph(res[property]);
+		/* 최근 이슈 목록 */
+		function issueWidget() {
+			$.ajax({
+				url : "/widgets/issues",
+				type: "GET",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				dataType: "json",
+				success: function(msg) {
+					$("#issueArea").empty();
+					if(msg.statusCode <= 200) {
+						var template = Handlebars.compile($("#issueListSource").html());
+						var html = template(msg.issueList);
+						$("#issueArea").html("").append(html);
+					} else {
+						$("#issueArea").html(JS_MESSAGE[msg.errorCode]);
 					}
-				} else {
-					$("#systemUsageWidget").html(JS_MESSAGE[msg.errorCode]);
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
 				}
-			},
-			error : function(request, status, error) {
-				$("#systemUsageWidget").html(JS_MESSAGE["ajax.error.message"]);
-			}
-		});
-	}
+			});
+		}
 
-	// DB Connection Pool 현황
-	function dbcpStatusWidget() {
-		$.ajax({
-			url : "/widgets/dbcp-status",
-			type : "GET",
-			cache : false,
-			dataType : "json",
-			success : function(msg) {
-				if(msg.statusCode <= 200) {
-					var dbcp = msg.dbcp;
-					$("#userSessionCount").html(dbcp.userSessionCount);
-					$("#userUserSessionCount").html(dbcp.userUserSessionCount);
-					$("#initialSize").html(dbcp.initialSize);
-					$("#userInitialSize").html(dbcp.userInitialSize);
-					$("#maxTotal").html(dbcp.maxTotal);
-					$("#userMaxTotal").html(dbcp.userMaxTotal);
-					$("#maxIdle").html(dbcp.maxIdle);
-					$("#userMaxIdle").html(dbcp.userMaxIdle);
-					$("#numActive").html(dbcp.numActive);
-					$("#userNumActive").html(dbcp.userNumActive);
-					$("#minIdle").html(dbcp.minIdle + "," + dbcp.numIdle);
-					$("#userMinIdle").html(dbcp.userMinIdle + "," + dbcp.userNumIdle);
-				} else {
-					$("#dbcpStatusWidget").html(JS_MESSAGE[msg.errorCode]);
+		/* 최근 데이터 위치 정보 변경 요청 */
+		function dataAdjustLogWidget() {
+			$.ajax({
+				url : "/widgets/data-adjust-logs",
+				type: "GET",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				dataType: "json",
+				success: function(msg) {
+					$("#dataAdjustLogArea").empty();
+					return;
+
+					if(msg.statusCode <= 200) {
+						var template = Handlebars.compile($("#dataAdjustLogListSource").html());
+						var html = template(msg.dataAdjustLogList);
+						$("#dataAdjustLogArea").html("").append(html);
+					} else {
+						$("#dataAdjustLogArea").html(JS_MESSAGE[msg.errorCode]);
+					}
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
 				}
-			},
-			error : function(request, status, error) {
-				$("#dbcpStatusWidget").html(JS_MESSAGE["ajax.error.message"]);
-			}
-		});
-	}
-</script>
-<!-- thymelaf 에서 th:inline="script"로는 이차원 배열 표현이 안되서 이부분만 none 처리 -->
-<script th:inline="none">
-	function showSystemUsageHtml(data) {
-		var content = "";
-		content += "<div id='"+ data.id +"' class='pie-chart'>";
-		content += "	<span class='center'>" + data.value + "%</span>";
-		content += "	<span class='title'>" + data.title + "</span>";
-		content += "</div>";
-		$('#systemUsageWidget div.gaugeGraph').append(content);
-	}
+			});
+		}
 
-	function showSystemUsageGraph(data) {
-		var usageValues = [[data.title, data.value], ['blank', (100-data.value)]];
-
-		$.jqplot(data.id, [usageValues], {
-			seriesColors: [data.color, "#e0e0e0"],
-			grid: {
-				drawBorder: false,
-				drawGridlines: false,
-				background: "#ffffff",
-				shadow: false
-			},
-			seriesDefaults:{
-				renderer:$.jqplot.DonutRenderer,
-				rendererOptions:{
-					sliceMargin: 0,
-					startAngle: -90,
-					diameter : 100,
-					padding: 10
+		/* 리소스 현황 */
+		function systemResourceWidget() {
+			$.ajax({
+				url : "/widgets/system-resources",
+				type: "GET",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				dataType: "json",
+				success: function(msg) {
+					if(msg.statusCode <= 200) {
+						$("#systemResourceArea").empty();
+						showSystemResource(msg);
+					} else {
+						$("#systemResourceArea").html(JS_MESSAGE[msg.errorCode]);
+					}
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
 				}
-			},
-			legend: {
-				background: 'white',
-				textColor: 'black',
-				fontFamily: 'Times New Roman',
-				border: '1px solid black'
-			}
-		});
-	}
+			});
+		}
 
-	function goMagoAPIGuide() {
-		var url = "/guide/help";
-		var width = 1200;
-		var height = 800;
+		/* 리소스 현황 */
+		function showSystemResource(msg) {
+			var ctx = $("#systemResourceChart");
+			var chart = new Chart(ctx, {
+				type: 'pie',
+				data: {
+					labels: ['Used', 'Free'],
+					datasets: [{
+						backgroundColor: ['rgb(255, 159, 64)', 'rgb(153, 102, 255)'],
+						data: [msg.diskSpaceUsed, msg.diskSpaceFree]
+						//borderWidth: 1
+					}]
+				},
+				options: {
+					title: {
+						display: true,
+						text: 'Disk 사용량'
+					},
+					responsive: true
+				}
+			});
+		}
 
-		// 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
-		var popupX = (window.screen.width / 2) - (width / 2);
-		var popupY = (window.screen.height / 2) - (height / 2);
+		/* 스케줄 실행 결과 */
+		function scheduleWidget() {
+			$.ajax({
+				url : "/widgets/schedules",
+				type: "GET",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				dataType: "json",
+				success: function(msg) {
+					$("#scheduleArea").empty();
+					if(msg.statusCode <= 200) {
+						return;
 
-		var popWin = window.open(url, "", "toolbar=no, width=" + width + " ,height=" + height + ", top=" + popupY + ", left=" + popupX +
-				", directories=no,status=yes,scrollbars=no,menubar=no,location=no");
-		return false;
-	}
+						var template = Handlebars.compile($("#scheduleListSource").html());
+						var html = template(msg.scheduleList);
+						$("#scheduleArea").html("").append(html);
+					} else {
+						$("#scheduleArea").html(JS_MESSAGE[msg.errorCode]);
+					}
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
+				}
+			});
+		}
 
-</script>
+		/* api 요청 이력 */
+		function apiLogWidget() {
+			$.ajax({
+				url : "/widgets/api-logs",
+				type: "GET",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				dataType: "json",
+				success: function(msg) {
+					$("#apiLogArea").empty();
+					return;
+					if(msg.statusCode <= 200) {
+						var template = Handlebars.compile($("#apiLogListSource").html());
+						var html = template(msg.apiLogList);
+						$("#apiLogArea").html("").append(html);
+					} else {
+						$("#apiLogArea").html(JS_MESSAGE[msg.errorCode]);
+					}
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
+				}
+			});
+		}
+
+		function goMagoAPIGuide() {
+			var url = "/guide/help";
+			var width = 1200;
+			var height = 800;
+
+			// 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
+			var popupX = (window.screen.width / 2) - (width / 2);
+			var popupY = (window.screen.height / 2) - (height / 2);
+
+			var popWin = window.open(url, "", "toolbar=no, width=" + width + " ,height=" + height + ", top=" + popupY + ", left=" + popupX +
+					", directories=no,status=yes,scrollbars=no,menubar=no,location=no");
+			return false;
+		}
+	</script>
 </th:block>
 </body>

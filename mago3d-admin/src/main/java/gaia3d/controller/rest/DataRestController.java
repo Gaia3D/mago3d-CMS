@@ -208,7 +208,7 @@ public class DataRestController {
 	
 	/**
 	 * Smart Tiling 데이터 수정
-	 * @param model
+	 * @param request
 	 * @return
 	 */
 	@PostMapping(value = "/smart-tiling")
@@ -261,7 +261,7 @@ public class DataRestController {
 	
 	/**
 	 * Data Attribute 수정
-	 * @param model
+	 * @param request
 	 * @return
 	 */
 	@PostMapping(value = "/attributes")
@@ -315,7 +315,7 @@ public class DataRestController {
 	
 	/**
 	 * Data object Attribute 수정
-	 * @param model
+	 * @param request
 	 * @return
 	 */
 	@PostMapping(value = "/object/attributes")

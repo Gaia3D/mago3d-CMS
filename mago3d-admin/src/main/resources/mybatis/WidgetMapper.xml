@@ -23,9 +23,9 @@
 	<insert id="insertWidget" parameterType="widget">
 		/* insertWidget */
 		INSERT INTO widget(s
-			widget_id, name, view_order, user_id
+			widget_id, widget_name, widget_key, view_order, user_id
 		) values(
-			#{widgetId}, #{name}, #{viewOrder}, #{userId}
+			#{widgetId}, #{widgetName}, #{widgetKey}, #{viewOrder}, #{userId}
 		)
 	</insert>
 	
@@ -34,8 +34,8 @@
 		/* updateWidget */
 		UPDATE widget
 		SET 
-			<if test="name != null and name != ''">
-			name = #{name},
+			<if test="widgetName != null and widgetName != ''">
+			widget_name = #{widgetName},
 			</if>
 			view_order = #{viewOrder},
 			user_id = #{userId}

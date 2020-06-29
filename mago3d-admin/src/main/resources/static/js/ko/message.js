@@ -150,7 +150,7 @@ JS_MESSAGE["config.widget.fail.count"] = "실패횟수";
 JS_MESSAGE["config.widget.dormancy"] = "휴면";
 JS_MESSAGE["config.widget.expires"] = "기간만료";
 JS_MESSAGE["config.temporary.password"] = "임시비밀번호";
-JS_MESSAGE["config.widget.content.does.not.exit"] = "수정된 컨텐츠가 존재하지 않습니다.";
+JS_MESSAGE["config.widget.content.does.not.exist"] = "수정된 컨텐츠가 존재하지 않습니다.";
 
 JS_MESSAGE["data.name.empty"] = "데이터명을 입력하여 주십시오.";
 JS_MESSAGE["data.group.id.empty"] = "데이터 그룹명 입력하여 주십시오.";

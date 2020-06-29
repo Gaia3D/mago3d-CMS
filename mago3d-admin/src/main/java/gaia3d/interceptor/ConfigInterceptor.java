@@ -30,16 +30,13 @@ import gaia3d.service.PolicyService;
 @Component
 public class ConfigInterceptor extends HandlerInterceptorAdapter {
 	
-	@Autowired
-	private PolicyService policyService;
-
-    @Override
+	@Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     	
     	String uri = request.getRequestURI();
     	HttpSession session = request.getSession();
     	
-    	Policy policy = policyService.getPolicy();
+    	Policy policy = CacheManager.getPolicy();
     	
     	// TODO 너무 비 효율 적이다. 좋은 방법을 찾자.
     	// 세션이 존재하지 않는 경우

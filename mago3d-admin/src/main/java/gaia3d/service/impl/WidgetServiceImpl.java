@@ -49,11 +49,7 @@ public class WidgetServiceImpl implements WidgetService {
 	 */
 	@Transactional
 	public int updateWidget(List<Widget> widgetList) {
-		int count = 0;
-		for(Widget widget : widgetList) {
-			widgetMapper.updateWidget(widget);
-			count++;
-		}
-		return count;
+		widgetList.stream().forEach(widget -> widgetMapper.updateWidget(widget));
+		return widgetList.size();
 	}
 }

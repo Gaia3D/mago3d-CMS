@@ -8,23 +8,13 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import gaia3d.domain.*;
+import gaia3d.service.PolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.CacheManager;
-import gaia3d.domain.CacheName;
-import gaia3d.domain.CacheParams;
-import gaia3d.domain.CacheType;
-import gaia3d.domain.Menu;
-import gaia3d.domain.MenuTarget;
-import gaia3d.domain.ProfileType;
-import gaia3d.domain.RoleTarget;
-import gaia3d.domain.UserGroup;
-import gaia3d.domain.UserGroupMenu;
-import gaia3d.domain.UserGroupRole;
-import gaia3d.domain.YOrN;
 import gaia3d.service.MenuService;
 import gaia3d.service.UserGroupService;
 import gaia3d.support.LogMessageSupport;
@@ -37,6 +27,8 @@ public class CacheConfig {
 	private MenuService menuService;
 	@Autowired
 	private PropertiesConfig propertiesConfig;
+	@Autowired
+	private PolicyService policyService;
 	@Autowired
 	private RestTemplate restTemplate;
     @Autowired
@@ -55,6 +47,9 @@ public class CacheConfig {
 
         CacheParams cacheParams = new CacheParams();
 		cacheParams.setCacheType(CacheType.SELF);
+
+		// 운영 정책 캐시 갱신
+		policy(cacheParams);
         // 사용자 그룹
 		userGroup(cacheParams);
         // 사용자 그룹별 메뉴, Menu
@@ -83,6 +78,10 @@ public class CacheConfig {
      */
     private void policy(CacheParams cacheParams) {
     	log.info("************ Cache Reload Policy ************");
+
+		Policy policy = policyService.getPolicy();
+		CacheManager.setPolicy(policy);
+
     	CacheType cacheType = cacheParams.getCacheType();
     	if(cacheType == CacheType.BROADCAST) {
     		callRemoteCache(cacheParams);
@@ -194,7 +193,7 @@ public class CacheConfig {
 
     /**
 	 * Remote Cache 갱신 요청
-	 * @param cacheName
+	 * @param cacheParams
 	 */
 	private void callRemoteCache(CacheParams cacheParams) {
 

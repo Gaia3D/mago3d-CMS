@@ -1,5 +1,6 @@
 package gaia3d.controller.rest;
 
+import java.io.File;
 import java.net.URI;
 import java.sql.Timestamp;
 import java.util.*;
@@ -9,20 +10,26 @@ import javax.servlet.http.HttpServletRequest;
 import gaia3d.domain.*;
 import gaia3d.service.*;
 import gaia3d.utils.DateUtils;
+import gaia3d.utils.FileUtils;
 import gaia3d.utils.FormatUtils;
 import gaia3d.utils.LocaleUtils;
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.opengis.metadata.Datatype;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.PropertiesConfig;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import static java.util.stream.Collectors.toList;
 
@@ -43,6 +50,7 @@ public class WidgetRestController {
 	private final IssueService issueService;
 	private final RestTemplate restTemplate;
 	private final UserService userService;
+	private final WidgetService widgetService;
 
 	/**
 	 * 사용자 현황
@@ -346,4 +354,47 @@ public class WidgetRestController {
 		return result;
 	}
 
+	/**
+	 * 위젯 수정
+	 * @param widget
+	 * @return
+	 */
+	@PostMapping(value = "/order")
+	public Map<String, Object> order(HttpServletRequest request, Widget widget) {
+		log.info("@@@@@@@@@@@@@@@@@@@@ widget = {}", widget);
+
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+
+		UserSession userSession = (UserSession)request.getSession().getAttribute(Key.USER_SESSION.name());
+		String userId = userSession.getUserId();
+
+		if(StringUtils.isEmpty(widget.getWidgetOrder())) {
+			result.put("statusCode", HttpStatus.BAD_REQUEST.value());
+			result.put("errorCode", "widget.invalid");
+			result.put("message", message);
+			return result;
+		}
+
+		List<Widget> widgetList = new ArrayList<>();
+		String[] orders = widget.getWidgetOrder().split(",");
+		int count = orders.length;
+		for(int i=1; i<count; i++) {
+			Widget tempWidget = new Widget();
+			tempWidget.setUserId(userId);
+			tempWidget.setWidgetId(Long.valueOf(orders[i]));
+			tempWidget.setViewOrder(Integer.valueOf(i));
+			widgetList.add(tempWidget);
+		}
+
+		widgetService.updateWidget(widgetList);
+
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("statusCode", statusCode);
+		result.put("errorCode", errorCode);
+		result.put("message", message);
+		return result;
+	}
 }

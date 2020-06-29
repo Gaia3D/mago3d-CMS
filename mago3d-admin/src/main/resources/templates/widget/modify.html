@@ -5,7 +5,7 @@
 	<meta name="referrer" content="origin">
 	<meta name="viewport" content="width=device-width">
 	<meta name="robots" content="index,nofollow">
-	<title>대시보드 수정 | mago3D</title>
+	<title>위젯 수정 | mago3D</title>
 	<th:block layout:fragment="pageCustomStyle">
 		<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
 		<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
@@ -46,9 +46,9 @@
 													<a href="/user/list" title="사용자 목록"><span class="icon-glyph glyph-plus"></span></a>
 												</div>
 											</div>
-											<canvas id="userStatusChart" width="450" height="200"></canvas>
-											<div id="userStatus" class="widget-content row" style="width: 450px; height:200px;">
-												<div style="text-align: center; padding-top: 60px; padding-left: 80px;">
+											<canvas id="userStatusChart" width="450" height="150"></canvas>
+											<div id="userStatusArea" class="widget-content row">
+												<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 													<div id="userStatusSpinner" style="width: 150px; height: 70px;"></div>
 												</div>
 											</div>
@@ -66,8 +66,8 @@
 												</div>
 											</div>
 											<canvas id="dataTypeChart" width="450" height="200"></canvas>
-											<div id="dataType" class="widget-content row" style="width: 350px; height:200px;">
-												<div style="text-align: center; padding-top: 60px; padding-left: 80px;">
+											<div id="dataTypeArea" class="widget-content row" style="width: 350px; height:200px;">
+												<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 													<div id="dataTypeSpinner" style="width: 150px; height: 70px;"></div>
 												</div>
 											</div>
@@ -85,8 +85,8 @@
 												</div>
 											</div>
 											<canvas id="converterChart" width="450" height="200"></canvas>
-											<div id="converter" class="widget-content row" style="width: 350px; height:200px;">
-												<div style="text-align: center; padding-top: 60px; padding-left: 80px;">
+											<div id="converterArea" class="widget-content row" style="width: 350px; height:200px;">
+												<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 													<div id="converterSpinner" style="width: 150px; height: 70px;"></div>
 												</div>
 											</div>
@@ -103,7 +103,7 @@
 													<a href="/issue/list" title="#{config.widget.issue.more}"><span class="icon-glyph glyph-plus"></span></a>
 												</div>
 											</div>
-											<div id="issue" class="widget-content row">
+											<div id="issueArea" class="widget-content row">
 												<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 													<div id="issueSpinner" style="width: 150px; height: 70px;"></div>
 												</div>
@@ -121,7 +121,7 @@
 													<a href="/data-adjust-log/list" title="데이터 위치 변경 요청 이력 더보기"><span class="icon-glyph glyph-plus"></span></a>
 												</div>
 											</div>
-											<div id="dataAdjustLog" class="widget-content row">
+											<div id="dataAdjustLogArea" class="widget-content row">
 												<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 													<div id="dataAdjustLogSpinner" style="width: 150px; height: 70px;"></div>
 												</div>
@@ -137,8 +137,8 @@
 												</div>
 											</div>
 											<canvas id="systemResourceChart" width="450" height="200"></canvas>
-											<div id="systemResource" class="widget-content row" style="width: 350px; height:200px;">
-												<div style="text-align: center; padding-top: 60px; padding-left: 80px;">
+											<div id="systemResourceArea" class="widget-content row" style="width: 350px; height:200px;">
+												<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 													<div id="systemResourceSpinner" style="width: 150px; height: 70px;"></div>
 												</div>
 											</div>
@@ -155,7 +155,7 @@
 													<a href="/schedule/list" title="스케줄 실행 결과 더보기"><span class="icon-glyph glyph-plus"></span></a>
 												</div>
 											</div>
-											<div id="schedule" class="widget-content row">
+											<div id="scheduleArea" class="widget-content row">
 												<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 													<div id="scheduleSpinner" style="width: 150px; height: 70px;"></div>
 												</div>
@@ -173,7 +173,7 @@
 													<a href="/api-log/list" title="api 요청 이력 더보기"><span class="icon-glyph glyph-plus"></span></a>
 												</div>
 											</div>
-											<div id="apiLog" class="widget-content row">
+											<div id="apiLogArea" class="widget-content row">
 												<div style="text-align: center; padding-top: 60px; padding-left: 150px;">
 													<div id="apiLogSpinner" style="width: 150px; height: 70px;"></div>
 												</div>
@@ -251,10 +251,10 @@
 				dataType: "json",
 				success: function(msg){
 					if(msg.statusCode <= 200) {
-						$("#userStatus").empty();
+						$("#userStatusArea").empty();
 						showUserStatus(msg);
 					} else {
-						$("#userStatus").html(JS_MESSAGE[msg.errorCode]);
+						$("#userStatusArea").html(JS_MESSAGE[msg.errorCode]);
 					}
 				},
 				error:function(request,status,error){
@@ -305,10 +305,10 @@
 				dataType: "json",
 				success: function(msg){
 					if(msg.statusCode <= 200) {
-						$("#dataType").empty();
+						$("#dataTypeArea").empty();
 						showDataType(msg);
 					} else {
-						$("#dataType").html(JS_MESSAGE[msg.errorCode]);
+						$("#dataTypeArea").html(JS_MESSAGE[msg.errorCode]);
 					}
 				},
 				error:function(request,status,error){
@@ -365,10 +365,10 @@
 				dataType: "json",
 				success: function(msg){
 					if(msg.statusCode <= 200) {
-						$("#converter").empty();
+						$("#converterArea").empty();
 						showConverter(msg);
 					} else {
-						$("#converter").html(JS_MESSAGE[msg.errorCode]);
+						$("#converterArea").html(JS_MESSAGE[msg.errorCode]);
 					}
 				},
 				error:function(request,status,error){
@@ -431,13 +431,13 @@
 				headers: {"X-Requested-With": "XMLHttpRequest"},
 				dataType: "json",
 				success: function(msg) {
-					$("#issue").empty();
+					$("#issueArea").empty();
 					if(msg.statusCode <= 200) {
 						var template = Handlebars.compile($("#issueListSource").html());
 						var html = template(msg.issueList);
-						$("#issue").html("").append(html);
+						$("#issueArea").html("").append(html);
 					} else {
-						$("#issue").html(JS_MESSAGE[msg.errorCode]);
+						$("#issueArea").html(JS_MESSAGE[msg.errorCode]);
 					}
 				},
 				error:function(request,status,error){
@@ -454,15 +454,15 @@
 				headers: {"X-Requested-With": "XMLHttpRequest"},
 				dataType: "json",
 				success: function(msg) {
-					$("#dataAdjustLog").empty();
+					$("#dataAdjustLogArea").empty();
 					return;
 
 					if(msg.statusCode <= 200) {
 						var template = Handlebars.compile($("#dataAdjustLogListSource").html());
 						var html = template(msg.dataAdjustLogList);
-						$("#dataAdjustLog").html("").append(html);
+						$("#dataAdjustLogArea").html("").append(html);
 					} else {
-						$("#dataAdjustLog").html(JS_MESSAGE[msg.errorCode]);
+						$("#dataAdjustLogArea").html(JS_MESSAGE[msg.errorCode]);
 					}
 				},
 				error:function(request,status,error){
@@ -480,10 +480,10 @@
 				dataType: "json",
 				success: function(msg) {
 					if(msg.statusCode <= 200) {
-						$("#systemResource").empty();
+						$("#systemResourceArea").empty();
 						showSystemResource(msg);
 					} else {
-						$("#systemResource").html(JS_MESSAGE[msg.errorCode]);
+						$("#systemResourceArea").html(JS_MESSAGE[msg.errorCode]);
 					}
 				},
 				error:function(request,status,error){
@@ -506,6 +506,10 @@
 					}]
 				},
 				options: {
+					title: {
+						display: true,
+						text: 'Disk 사용량'
+					},
 					responsive: true
 				}
 			});
@@ -519,15 +523,15 @@
 				headers: {"X-Requested-With": "XMLHttpRequest"},
 				dataType: "json",
 				success: function(msg) {
-					$("#schedule").empty();
+					$("#scheduleArea").empty();
 					if(msg.statusCode <= 200) {
 						return;
 
 						var template = Handlebars.compile($("#scheduleListSource").html());
 						var html = template(msg.scheduleList);
-						$("#schedule").html("").append(html);
+						$("#scheduleArea").html("").append(html);
 					} else {
-						$("#schedule").html(JS_MESSAGE[msg.errorCode]);
+						$("#scheduleArea").html(JS_MESSAGE[msg.errorCode]);
 					}
 				},
 				error:function(request,status,error){
@@ -544,20 +548,58 @@
 				headers: {"X-Requested-With": "XMLHttpRequest"},
 				dataType: "json",
 				success: function(msg) {
-					$("#apiLog").empty();
+					$("#apiLogArea").empty();
 					return;
 					if(msg.statusCode <= 200) {
 						var template = Handlebars.compile($("#apiLogListSource").html());
 						var html = template(msg.apiLogList);
-						$("#apiLog").html("").append(html);
+						$("#apiLogArea").html("").append(html);
 					} else {
-						$("#apiLog").html(JS_MESSAGE[msg.errorCode]);
+						$("#apiLogArea").html(JS_MESSAGE[msg.errorCode]);
 					}
 				},
 				error:function(request,status,error){
 					alert(JS_MESSAGE["ajax.error.message"]);
 				}
 			});
+		}
+
+		/* 위젯 순서 수정 */
+		var updateFlag = true;
+		function updateWidget() {
+			if($("#widgetOrder").val() === "") {
+				alert(JS_MESSAGE["config.widget.content.does.not.exist"]);
+				return false;
+			}
+
+			if (updateFlag) {
+				updateFlag = false;
+				var formData = $("#widget").serialize();
+				$.ajax({
+					url : "/widgets/order",
+					type : "POST",
+					data : formData,
+					headers: {"X-Requested-With": "XMLHttpRequest"},
+					dataType: "json",
+					success: function(msg) {
+						if(msg.statusCode <= 200) {
+							alert(JS_MESSAGE["update"]);
+							$("#widgetOrder").val("");
+						} else {
+							alert(JS_MESSAGE[msg.errorCode]);
+							console.log("---- " + msg.message);
+						}
+						updateFlag = true;
+					},
+					error:function(request,status,error){
+						alert(JS_MESSAGE["ajax.error.message"]);
+						updateFlag = true;
+					}
+				});
+			} else {
+				alert(JS_MESSAGE["button.dobule.click"]);
+				return;
+			}
 		}
 	</script>
 </th:block>
