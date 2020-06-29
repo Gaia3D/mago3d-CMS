@@ -105,6 +105,10 @@ public class MainController {
 		model.addAttribute(widget);
 		model.addAttribute("widgetList", widgetList);
 
+		model.addAttribute("converterTotalCount", 0l);
+		model.addAttribute("converterSuccessCount", 0l);
+		model.addAttribute("converterFailCount", 0l);
+
 		model.addAttribute("isUserDraw", isUserDraw);
 		model.addAttribute("isDataTypeDraw", isDataTypeDraw);
 		model.addAttribute("isConverterDraw", isConverterDraw);
