@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @MapperScan(basePackages="gaia3d.persistence")
 @Configuration
-@ComponentScan(	basePackages = {"gaia3d.service, gaia3d.persistence"},
+@ComponentScan(	basePackages = {"gaia3d.service", "gaia3d.persistence"},
               includeFilters = {	@Filter(type = FilterType.ANNOTATION, value = Component.class),
                                   	@Filter(type = FilterType.ANNOTATION, value = Service.class),
                                   	@Filter(type = FilterType.ANNOTATION, value = Repository.class) },

@@ -30,10 +30,11 @@ public class ConverterAPIController {
 	
 	@Autowired
 	private ConverterService converterService;
-	
+
 	/**
 	 * 데이터 변환 작업 상태를 갱신
-	 * @param model
+	 * @param request
+	 * @param converterJob
 	 * @return
 	 */
 	@PostMapping(value = "/status")

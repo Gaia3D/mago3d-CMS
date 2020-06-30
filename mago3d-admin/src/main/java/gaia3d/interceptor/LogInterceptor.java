@@ -43,7 +43,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     	
     	// 로그 예외 URL, 사용이력, 이중화, 메인 위젯(main, ajax, widget 이건 너무 많아서 키워드로 Filter)
     	boolean isExceptionURI = false;
-    	if(uri.indexOf("main") >= 0 && uri.indexOf("widget") >= 0) {
+    	if(uri.indexOf("main") >= 0 && uri.indexOf("widgets") >= 0) {
     		isExceptionURI = true;
     	}
     	if(!isExceptionURI) {
