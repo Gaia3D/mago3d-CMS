@@ -2,6 +2,7 @@ package gaia3d.domain;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -60,5 +61,5 @@ public class UserSession implements Serializable {
 	
 	// 마지막 사인인 날짜
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp lastSigninDate;
+	private LocalDateTime lastSigninDate;
 }

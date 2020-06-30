@@ -1,6 +1,7 @@
 package gaia3d.domain;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -59,7 +60,7 @@ public class AccessLog extends Search {
 	private String minute;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 	
 	public String getViewRequestUri() {
 		if(this.requestUri == null || "".equals(this.requestUri)) {

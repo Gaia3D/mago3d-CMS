@@ -2,6 +2,7 @@ package gaia3d.domain;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.constraints.Size;
@@ -83,10 +84,10 @@ public class LayerGroup implements Serializable {
 	private String description;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp updateDate;
+	private LocalDateTime updateDate;
 
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 	
 	/**
 	 * 자식 레이어 목록

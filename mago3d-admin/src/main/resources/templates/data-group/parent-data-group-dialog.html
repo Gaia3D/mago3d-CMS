@@ -64,7 +64,7 @@
                     <td class="col-type" th:if="${#strings.equals(dataGroup.sharing, 'group')}" th:text="그룹"></td>
                     <td class="col-key" th:text="${dataGroup.description}"></td>
                     <td class="col-date">
-                        <th:block th:text="${#dates.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+                        <th:block th:text="${#temporals.format((dataGroup.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
                     </td>
                     <td class="col-toggle">
                         <a href="#" th:onclick="confirmParent([[${dataGroup.dataGroupId}]], [[${dataGroup.dataGroupName}]], [[${dataGroup.depth}]]); return false;">확인</a>

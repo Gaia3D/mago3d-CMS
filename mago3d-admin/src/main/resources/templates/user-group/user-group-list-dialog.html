@@ -60,7 +60,7 @@
 					</td>
 					<td class="col-key" th:text="${userGroup.description}"></td>
 					<td class="col-date">
-						<p th:text="${#dates.format(userGroup.insertDate,'yyyy-MM-dd HH:mm')}"></p>
+						<p th:text="${#temporals.format((userGroup.insertDate,'yyyy-MM-dd HH:mm')}"></p>
 					</td>
 					<td class="col-toggle">
 						<a href="#" th:onclick="confirmParent([[${userGroup.userGroupId}]], [[${userGroup.userGroupName}]]); return false;">확인</a>

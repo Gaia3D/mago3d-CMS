@@ -140,7 +140,7 @@
                                             <a th:href="@{/data-group/delete(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-delete" th:value="#{delete}" onclick="return deleteWarning();"></a>
                                         </td>
                                         <td class="col-date">
-											<th:block th:text="${#dates.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+											<th:block th:text="${#temporals.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
 										</td>
 									</tr>
 									</th:block>

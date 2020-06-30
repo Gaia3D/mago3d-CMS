@@ -1,6 +1,7 @@
 package gaia3d.domain;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -38,13 +39,13 @@ public class FileInfo {
 	private String fileExt;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp updateDate;
+	private LocalDateTime updateDate;
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-	private Timestamp viewUpdateDate;
+	private LocalDateTime viewUpdateDate;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-	private Timestamp viewInsertDate;
+	private LocalDateTime viewInsertDate;
 	
 	public String getErrorCode() {
 		return errorCode;
@@ -100,23 +101,23 @@ public class FileInfo {
 	public void setFileExt(String fileExt) {
 		this.fileExt = fileExt;
 	}
-	public Timestamp getUpdateDate() {
+	public LocalDateTime getUpdateDate() {
 		return updateDate;
 	}
-	public void setUpdateDate(Timestamp updateDate) {
+	public void setUpdateDate(LocalDateTime updateDate) {
 		this.updateDate = updateDate;
 	}
-	public Timestamp getInsertDate() {
+	public LocalDateTime getInsertDate() {
 		return insertDate;
 	}
-	public void setInsertDate(Timestamp insertDate) {
+	public void setInsertDate(LocalDateTime insertDate) {
 		this.insertDate = insertDate;
 	}
 	
-	public Timestamp getViewUpdateDate() {
+	public LocalDateTime getViewUpdateDate() {
 		return this.updateDate;
 	}
-	public Timestamp getViewInsertDate() {
+	public LocalDateTime getViewInsertDate() {
 		return this.insertDate;
 	}
 	

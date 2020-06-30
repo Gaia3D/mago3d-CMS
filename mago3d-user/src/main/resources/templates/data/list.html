@@ -180,7 +180,7 @@
 								</th:block>
 							</td>
 							<td class="col-date">
-								<th:block th:text="${#dates.format(dataInfo.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+								<th:block th:text="${#temporals.format((dataInfo.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
 							</td>
 						</tr>
 					</tbody>

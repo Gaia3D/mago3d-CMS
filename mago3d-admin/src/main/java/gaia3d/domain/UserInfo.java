@@ -2,6 +2,7 @@ package gaia3d.domain;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -101,7 +102,7 @@ public class UserInfo extends Search implements Serializable {
 	private String lastPasswordChangeDate;
 	// 마지막 사인인 날짜
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp lastSigninDate;
+	private LocalDateTime lastSigninDate;
 	// 최초 사인인시 사용자 Role 권한 체크 패스 기능
 	private String userRoleCheckYn;
 	// 사용자 상태. 0:사용중, 1:사용중지(관리자), 2:잠금(비밀번호 실패횟수 초과), 3:휴면(사인인 기간), 4:만료(사용기간 종료), 5:삭제(화면 비표시, policy.user_delete_method=0), 6:임시비밀번호
@@ -129,8 +130,8 @@ public class UserInfo extends Search implements Serializable {
 	
 	// 개인정보 수정 날짜
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp updateDate;
+	private LocalDateTime updateDate;
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 }

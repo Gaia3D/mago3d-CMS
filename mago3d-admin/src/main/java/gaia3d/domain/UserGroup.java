@@ -1,6 +1,7 @@
 package gaia3d.domain;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.validation.constraints.Size;
 
@@ -78,16 +79,7 @@ public class UserGroup {
 	private String description;
 
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp updateDate;
+	private LocalDateTime updateDate;
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
-
-	public String getViewInsertDate() {
-		if(getInsertDate() == null) {
-			return "";
-		}
-
-		String tempDate = FormatUtils.getViewDateyyyyMMddHHmmss(getInsertDate());
-		return tempDate.substring(0, 19);
-	}
+	private LocalDateTime insertDate;
 }

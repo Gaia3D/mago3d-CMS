@@ -132,7 +132,7 @@
 											</th:block>
 										</td>
 										<td class="col-date-time">
-											<th:block th:text="${#dates.format(role.insertDate, 'yyyy-MM-dd HH:mm:ss')}"></th:block>
+											<th:block th:text="${#temporals.format((role.insertDate, 'yyyy-MM-dd HH:mm:ss')}"></th:block>
 										</td>
 									</tr>
 								</th:block>

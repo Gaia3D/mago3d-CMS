@@ -180,14 +180,14 @@
                                                 </th:block>
                                             </td>
                                             <td class="col-type">
-                                                <p th:text="${#dates.format(user.lastSigninDate,'yyyy-MM-dd HH:mm')}"></p>
+                                                <p th:text="${#temporals.format((user.lastSigninDate,'yyyy-MM-dd HH:mm')}"></p>
                                             </td>
                                             <td class="col-type">
                                                 <a th:href="@{/user/modify(userId=${user.userId})}" class="image-button button-edit" th:text="#{modified}"></a>&nbsp;&nbsp;
                                                 <a th:href="@{/user/delete(userId=${user.userId})}" onclick="return deleteWarning();" class="image-button button-delete" th:text="#{delete}"></a>
                                             </td>
                                             <td class="col-type">
-                                                <p th:text="${#dates.format(user.insertDate,'yyyy-MM-dd HH:mm')}"></p>
+                                                <p th:text="${#temporals.format((user.insertDate,'yyyy-MM-dd HH:mm')}"></p>
                                             </td>
                                         </tr>
                                     </tbody>

@@ -3,6 +3,7 @@ package gaia3d.domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -83,7 +84,7 @@ public class UploadDataFile extends Search implements Serializable {
 	
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 		
 	public String validate() {
 		// TODO 구현해야 한다.

@@ -1,6 +1,7 @@
 package gaia3d.domain;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -54,7 +55,7 @@ public class UserGroupRole {
 	private String description;
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 	
 //	public String getViewInsertDate() {
 //		if(getInsertDate() == null) {

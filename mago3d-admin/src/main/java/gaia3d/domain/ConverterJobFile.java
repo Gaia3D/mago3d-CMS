@@ -2,6 +2,7 @@ package gaia3d.domain;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -72,7 +73,7 @@ public class ConverterJobFile extends Search {
 	
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 	
 	public String validate() {
 		// TODO 구현해야 한다.

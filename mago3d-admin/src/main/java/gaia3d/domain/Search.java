@@ -116,7 +116,6 @@ public class Search {
 	
 	/**
 	 * 검색 조건
-	 * @param search
 	 * @return
 	 */
 	public String getParameters() {

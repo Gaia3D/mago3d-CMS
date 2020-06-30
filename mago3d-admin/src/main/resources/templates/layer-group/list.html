@@ -127,7 +127,7 @@
 										   onclick="return deleteWarning();"></a>
 									</td>
 									<td class="col-date"
-										th:text="${#dates.format(layerGroup.insertDate, 'yyyy-MM-dd HH:mm:ss')}">
+										th:text="${#temporals.format((layerGroup.insertDate, 'yyyy-MM-dd HH:mm:ss')}">
 									</td>
 									</tr>
 								</th:block>

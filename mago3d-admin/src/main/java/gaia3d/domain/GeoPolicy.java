@@ -2,6 +2,7 @@ package gaia3d.domain;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
@@ -159,5 +160,5 @@ public class GeoPolicy {
  	
  	// 등록일
  	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 }

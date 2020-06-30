@@ -364,10 +364,10 @@
 										<td class="col-type"><a th:href="@{/layer/{layerId}/layer-file-info/{layerFileInfoGroupId}/download(layerId=${layer.layerId},layerFileInfoGroupId=${layerFileInfo.layerFileInfoGroupId})}" class="linkButton">다운로드</a></td>
 										<td th:text="${layerFileInfo.userId}"></td>
 										<td>
-											<th:block th:text="${#dates.format(layerFileInfo.viewUpdateDate, 'yyyy-MM-dd HH:mm:ss')}"></th:block>
+											<th:block th:text="${#temporals.format((layerFileInfo.viewUpdateDate, 'yyyy-MM-dd HH:mm:ss')}"></th:block>
 										</td>
 										<td>
-											<th:block th:text="${#dates.format(layerFileInfo.viewInsertDate, 'yyyy-MM-dd HH:mm:ss')}"></th:block>
+											<th:block th:text="${#temporals.format((layerFileInfo.viewInsertDate, 'yyyy-MM-dd HH:mm:ss')}"></th:block>
 										</td>
 									</tr>
 								</th:block>

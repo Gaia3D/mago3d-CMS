@@ -132,7 +132,7 @@
 											<td class="col-type ellipsis"  th:text="${dataInfoLog.mappingType}"style="min-width:80px;max-width:80px;"></td>
 											<td class="col-type" th:text="${dataInfoLog.changeType}"></td>
 											<td class="col-date">
-												<th:block th:text="${#dates.format(dataInfoLog.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+												<th:block th:text="${#temporals.format((dataInfoLog.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
 											</td>
 										</tr>
 									</tbody>

@@ -164,7 +164,7 @@
                                 <a href="#" th:onclick="detailErrorCode([[${converterJob.errorCode}]]); return false;">[<th:block th:text="#{converter.detail.error.code}"></th:block>]</a>
                             </td>
                             <td class="col-type">
-                                <th:block th:text="${#dates.format(converterJob.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+                                <th:block th:text="${#temporals.format((converterJob.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
                             </td>
                         </tr>
                     </tbody>

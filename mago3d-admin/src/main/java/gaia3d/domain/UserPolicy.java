@@ -2,6 +2,7 @@ package gaia3d.domain;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.validation.constraints.Digits;
 
@@ -54,9 +55,9 @@ public class UserPolicy implements Serializable {
 	private Float ssaoRadius;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp updateDate;
+	private LocalDateTime updateDate;
 
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 
 }

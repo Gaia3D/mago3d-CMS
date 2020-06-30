@@ -2,6 +2,7 @@ package gaia3d.domain;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -89,26 +90,26 @@ public class DataAdjustLog extends Search {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-	private Timestamp viewUpdateDate;
+	private LocalDateTime viewUpdateDate;
 
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-	private Timestamp viewInsertDate;
+	private LocalDateTime viewInsertDate;
 
-	public Timestamp getViewUpdateDate() {
+	public LocalDateTime getViewUpdateDate() {
 		return this.updateDate;
 	}
-	public Timestamp getViewInsertDate() {
+	public LocalDateTime getViewInsertDate() {
 		return this.insertDate;
 	}
 
 	// 수정일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp updateDate;
+	private LocalDateTime updateDate;
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 
 	public String validate() {
 		// TODO 구현해야 한다.
