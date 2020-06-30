@@ -1,15 +1,9 @@
 package gaia3d.domain;
 
-import java.sql.Timestamp;
-
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.time.LocalDateTime;
 
 /**
  * 메뉴
@@ -91,5 +85,5 @@ public class Menu {
 	private String description;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 }

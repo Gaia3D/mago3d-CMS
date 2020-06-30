@@ -1,17 +1,11 @@
 package gaia3d.domain;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * Issue
@@ -115,8 +109,8 @@ public class Issue extends Search {
 	
 	// 수정일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp updateDate;
+	private LocalDateTime updateDate;
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 }

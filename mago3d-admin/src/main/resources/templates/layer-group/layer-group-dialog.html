@@ -61,7 +61,7 @@
             </td>
             <td class="col-type" th:text="${layerGroup.userId}"></td>
             <td class="col-key" th:text="${layerGroup.description}"></td>
-            <td class="col-date" th:text="${#temporals.format((layerGroup.insertDate, 'yyyy-MM-dd HH:mm:ss')}">
+            <td class="col-date" th:text="${#temporals.format(layerGroup.insertDate, 'yyyy-MM-dd HH:mm:ss')}">
             </td>
             <td class="col-toggle">
                 <a href="#"

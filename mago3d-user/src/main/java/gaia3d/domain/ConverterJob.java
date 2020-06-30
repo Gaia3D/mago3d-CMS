@@ -1,16 +1,10 @@
 package gaia3d.domain;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * f4d converter 변환 job
@@ -85,5 +79,5 @@ public class ConverterJob extends Search {
 	private String updateDate;
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 }

@@ -1,18 +1,11 @@
 package gaia3d.domain;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-
-import javax.validation.constraints.Digits;
-
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import javax.validation.constraints.Digits;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @ToString
 @Builder
@@ -51,9 +44,9 @@ public class UserPolicy implements Serializable {
 	private Float ssaoRadius;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp updateDate;
+	private LocalDateTime updateDate;
 
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 
 }

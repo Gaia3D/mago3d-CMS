@@ -1,17 +1,11 @@
 package gaia3d.domain;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.List;
-
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @ToString
 @Builder
@@ -77,10 +71,10 @@ public class LayerGroup implements Serializable {
 	private String description;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp updateDate;
+	private LocalDateTime updateDate;
 
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 	
 	/**
 	 * 자식 레이어 목록

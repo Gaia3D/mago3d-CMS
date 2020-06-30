@@ -1,15 +1,10 @@
 package gaia3d.domain;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 세션에 저장될 사용자 정보
@@ -58,5 +53,5 @@ public class UserSession implements Serializable {
 	
 	// 마지막 사인인 날짜
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp lastSigninDate;
+	private LocalDateTime lastSigninDate;
 }

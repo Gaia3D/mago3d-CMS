@@ -130,7 +130,7 @@
 					                    	<a href="#" th:onclick="deleteLayer([[${layer.layerId}]]); return false;" class="image-button button-delete" th:text="#{delete}"></a>
 					                    </td>
 										<td class="col-date"
-											th:text="${#temporals.format((layer.updateDate, 'yyyy-MM-dd HH:mm:ss')}">
+											th:text="${#temporals.format(layer.updateDate, 'yyyy-MM-dd HH:mm:ss')}">
 										</td>
 					                </tr>
 								</th:block>

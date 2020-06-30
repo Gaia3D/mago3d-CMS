@@ -1,15 +1,9 @@
 package gaia3d.domain;
 
-import java.sql.Timestamp;
-
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.time.LocalDateTime;
 
 /**
  * Data Attribute 정보
@@ -53,8 +47,8 @@ public class DataAttribute extends Search {
 	private String attributes;
 	// 수정일 
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp updateDate;
+	private LocalDateTime updateDate;
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 }

@@ -1,17 +1,10 @@
 package gaia3d.domain;
 
-import java.sql.Timestamp;
-
-import javax.validation.constraints.NotBlank;
-
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 /**
  * Role
@@ -52,5 +45,5 @@ public class Role extends Search {
 	
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 }

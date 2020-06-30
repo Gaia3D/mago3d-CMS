@@ -1,18 +1,11 @@
 package gaia3d.domain;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-
-import javax.validation.constraints.NotBlank;
-
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 사용자 데이터 그룹
@@ -97,8 +90,8 @@ public class UserDataGroup extends Search {
 	private String description;
 	// 수정일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp updateDate;
+	private LocalDateTime updateDate;
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 }

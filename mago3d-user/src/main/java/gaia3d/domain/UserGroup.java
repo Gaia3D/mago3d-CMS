@@ -1,16 +1,9 @@
 package gaia3d.domain;
 
-import java.sql.Timestamp;
-
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import gaia3d.utils.FormatUtils;
+import java.time.LocalDateTime;
 
 /**
  * 사용자 그룹
@@ -74,16 +67,16 @@ public class UserGroup {
 	private String description;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp updateDate;
+	private LocalDateTime updateDate;
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 	
-	public String getViewInsertDate() {
-		if(getInsertDate() == null) {
-			return "";
-		}
-		
-		String tempDate = FormatUtils.getViewDateyyyyMMddHHmmss(getInsertDate());
-		return tempDate.substring(0, 19);
-	}
+//	public String getViewInsertDate() {
+//		if(getInsertDate() == null) {
+//			return "";
+//		}
+//
+//		String tempDate = FormatUtils.getViewDateyyyyMMddHHmmss(getInsertDate());
+//		return tempDate.substring(0, 19);
+//	}
 }

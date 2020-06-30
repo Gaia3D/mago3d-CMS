@@ -147,13 +147,13 @@
 				<tr>
 					<th class="col-label" scope="row"><th:block th:text="#{common.updated}"></th:block></th>
 					<td class="col-input">
-						<th:block th:text="${#temporals.format((dataInfo.updateDate,'yyyy-MM-dd HH:mm')}"></th:block>
+						<th:block th:text="${#temporals.format(dataInfo.updateDate,'yyyy-MM-dd HH:mm')}"></th:block>
 					</td>
 				</tr>
 				<tr>
 					<th class="col-label" scope="row"><th:block th:text="#{common.created}"></th:block></th>
 					<td class="col-input">
-						<th:block th:text="${#temporals.format((dataInfo.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+						<th:block th:text="${#temporals.format(dataInfo.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
 					</td>
 				</tr>
 			</table>

@@ -1,17 +1,11 @@
 package gaia3d.domain;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 사용자 업로드 정보
@@ -100,7 +94,7 @@ public class UploadData extends Search implements Serializable {
 	// 설명
 	private String description;
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private String updateDate;
+	private LocalDateTime updateDate;
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 }

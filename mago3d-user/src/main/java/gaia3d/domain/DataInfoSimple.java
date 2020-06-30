@@ -1,20 +1,12 @@
 package gaia3d.domain;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * Data 정보(간략)
@@ -112,24 +104,24 @@ public class DataInfoSimple implements Serializable {
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-	private Timestamp viewUpdateDate;
+	private LocalDateTime viewUpdateDate;
 	
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-	private Timestamp viewInsertDate;
+	private LocalDateTime viewInsertDate;
 	
-	public Timestamp getViewUpdateDate() {
+	public LocalDateTime getViewUpdateDate() {
 		return this.updateDate;
 	}
-	public Timestamp getViewInsertDate() {
+	public LocalDateTime getViewInsertDate() {
 		return this.insertDate;
 	}
 	
 	// 수정일 
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp updateDate;
+	private LocalDateTime updateDate;
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Timestamp insertDate;
+	private LocalDateTime insertDate;
 }
