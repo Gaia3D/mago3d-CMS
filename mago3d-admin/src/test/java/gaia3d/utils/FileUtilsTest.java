@@ -38,5 +38,19 @@ class FileUtilsTest {
 		
 		System.out.println(filePath);
 	}
+	
+	@Test
+	void 파일이름() {
+		String[] divideFileName = null;
+		String saveFileName = null;
+		String coupleKey = null;
+		
+		String fileName = "x.obj";
+		divideFileName = fileName.split("\\.");
+		String extension = divideFileName[divideFileName.length - 1];
+		System.out.println(fileName.substring(0, fileName.length()-extension.length() -1));
+		
+		
+	}
 
 }

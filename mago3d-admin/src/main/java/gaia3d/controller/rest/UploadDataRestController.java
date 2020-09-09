@@ -351,6 +351,7 @@ public class UploadDataRestController {
 		File uploadedFile = new File(targetDirectory + multipartFile.getOriginalFilename());
 		multipartFile.transferTo(uploadedFile);
 		
+		Map<String, String> fileNameCoupleMap = new HashMap<>();
 		List<UploadDataFile> uploadDataFileList = new ArrayList<>();
 		// zip 파일을 압축할때 한글이나 다국어가 포함된 경우 java.lang.IllegalArgumentException: malformed input off 같은 오류가 발생. 윈도우가 CP949 인코딩으로 파일명을 저장하기 때문.
 		// Charset CP949 = Charset.forName("UTF-8");
@@ -409,6 +410,7 @@ public class UploadDataRestController {
             		String extension = null;
             		String[] divideFileName = null;
             		String saveFileName = null;
+            		String coupleKey = null;
             		
             		// TODO zip 파일도 확장자 validation 체크를 해야 함
             		if(directoryName == null) {
@@ -448,10 +450,30 @@ public class UploadDataRestController {
                 						extension = UploadDataType.INDOORGML.getValue();
                 					}
             						
-            						// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
-            						saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + extension;
-            						converterTarget = true;
-            						converterTargetCount++;
+            						// Obj 파일이거나 확장자가 mtl 인 경우
+            						String coupleFileName = null;
+            						if(UploadDataType.OBJ.getValue().equalsIgnoreCase(dataType) || UploadDataType.MTL.getValue().equalsIgnoreCase(extension)) {
+            							coupleFileName = fileNameCoupleMap.get(fileName);
+            							if(StringUtils.isEmpty(coupleFileName)) {
+            								// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
+                    						saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + extension;
+                    						converterTarget = true;
+                    						converterTargetCount++;
+                    						
+                    						coupleKey = fileName.substring(0, fileName.length() - extension.length() -1);
+                    						fileNameCoupleMap.put(coupleKey, saveFileName);
+            							} else {
+            								// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
+                    						saveFileName = coupleFileName;
+                    						converterTarget = true;
+                    						converterTargetCount++;
+            							}
+            						} else {
+            							// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
+                						saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + extension;
+                						converterTarget = true;
+                						converterTargetCount++;
+            						}
             					}
 	        				}
             			}
@@ -500,10 +522,31 @@ public class UploadDataRestController {
                 					} else if (UploadDataType.INDOORGML.getValue().equalsIgnoreCase(dataType) && UploadDataType.GML.getValue().equalsIgnoreCase(extension)) {
                 						extension = UploadDataType.INDOORGML.getValue();
                 					}
-            						// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
-            						saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + extension;
-                					converterTarget = true;
-                					converterTargetCount++;
+            						
+            						// Obj 파일이거나 확장자가 mtl 인 경우
+            						String coupleFileName = null;
+            						if(UploadDataType.OBJ.getValue().equalsIgnoreCase(dataType) || UploadDataType.MTL.getValue().equalsIgnoreCase(extension)) {
+            							coupleFileName = fileNameCoupleMap.get(fileName);
+            							if(StringUtils.isEmpty(coupleFileName)) {
+            								// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
+            								saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + extension;
+                        					converterTarget = true;
+                        					converterTargetCount++;
+                    						
+                    						coupleKey = fileName.substring(0, fileName.length() - extension.length() -1);
+                    						fileNameCoupleMap.put(coupleKey, saveFileName);
+            							} else {
+            								// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
+                    						saveFileName = coupleFileName;
+                    						converterTarget = true;
+                        					converterTargetCount++;
+            							}
+            						} else {
+            							// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
+            							saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + extension;
+                    					converterTarget = true;
+                    					converterTargetCount++;
+            						}
             					}
 	        				} else {
 	        					// 예외 처리
