@@ -1,7 +1,7 @@
 # mago3D
 <strong>mago3D 는 Digital Twin Platform 입니다.</strong>
 
-[설치 및 교육자료](https://gaia3d.atlassian.net/wiki/spaces/education/pages/71892997/mago3D)
+[설치 및 교육 상세 자료](https://gaia3d.atlassian.net/wiki/spaces/education/pages/71892997/mago3D)
 
 ## Features
 - 2차원 공간정보 관리 기능
