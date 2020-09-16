@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="api14" class="api-help-toggle">
+	<div class="menu_tab">
+		<ul>
+			<li class="fst active"><a href="#" onclick="tabMenu(0);">Run</a></li>
+			<li><a href="#" onclick="tabMenu(1);">Code</a></li>
+		</ul>
+	</div>
+	<div id="panels" class="menu_tab00 mTs">
+		<h2>changeObjectInfoViewModeAPI</h2>
+		<p>changeObjectInfoViewModeAPI is an API that activates the object information display function. this
+The flag parameter in the API is of type Boolean, and if true, the information display mode is activated, and if false, it is deactivated
+Way. A database that manages the callback function when an object you want to know information is clicked while it is active
+The information display callback function is called according to the operation policy and the object information is
+Comes out. In addition, the information display callback function can be customized by the user.</p>
+		<table>
+		<caption>Parameter</caption>
+			<tr>
+				<th scope="col">name</th>
+				<th scope="col">type</th>
+				<th scope="col">description</th>
+			</tr>
+			<tr>
+				<td>managerFactoryInstance</td>
+				<td>ManagerFactory</td>
+				<td>start of mago3D</td>
+			</tr>
+			<tr>
+				<td>flag</td>
+				<td>Boolean</td>
+				<td>true: active, false: Inactive</td>
+			</tr>
+		</table>
+		<br/>
+		<h4>Execution</h4>
+		<div class="paramContainer">
+			<input type="radio" id="api14-opt1" name="api14-p1" value="true" />
+			<label for="api14-opt1">active</label>
+			<input type="radio" id="api14-opt2" name="api14-p1" value="false" checked />
+			<label for="api14-opt2">Inactive</label>
+		</div>
+		<br/> 
+		<input type="button" id="changeObjectInfoViewMode" value="Run" class="popupBtn">
+		<div id="resultContainer">
+			<h4>Result</h4>
+			<table id="api14-result"></table>
+		</div>
+	</div>
+	<div id="panels" class="menu_tab01 mTs" style="display: none;"></div>
+</div>
+<script>
+	var changeObjectInfoViewMode = function() {
+
+		var table = document.getElementById("api14-result");
+		table.innerHTML = '';
+		var flag = $("input[name=api14-p1]:checked").val();
+		flag = (flag === 'true');
+
+		changeObjectInfoViewModeAPI(MAGO3D_INSTANCE2, flag);
+	}
+
+	function selectedObjectCallBack(projectId, dataKey, objectId, latitude, longitude, altitude, heading, pitch, roll){
+		var table = document.getElementById("api14-result");
+		if(table) {
+			table.innerHTML = '';
+			var result = {
+	        		projectId: projectId,
+	        		dataKey : dataKey,
+	        		objectId : objectId,
+	        		latitude : latitude,
+	        		longitude : longitude,
+	        		altitude : altitude,
+	        		heading : heading,
+	        		pitch : pitch, 
+	        		roll : roll
+	        }
+			
+			for ( var i in Object.keys(result)) {
+				var row = table.insertRow();
+				var th = document.createElement("th");
+				var td = document.createElement("td");
+				var key = document.createTextNode(Object.keys(result)[i]);
+				var value = document.createTextNode(Object.values(result)[i]);
+				th.appendChild(key);
+				td.appendChild(value);
+				row.appendChild(th);
+				row.appendChild(td);
+			}
+		}
+		if($('#api14').length!=0){
+			$('.popupGroup').stop().animate({scrollTop:$('.menu_tab00').height()},800);
+		}
+		
+    }
+</script>
+</html>

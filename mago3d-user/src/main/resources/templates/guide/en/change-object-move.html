@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="api9" class="api-help-toggle">
+	<div class="menu_tab">
+		<ul>
+			<li class="fst active"><a href="#" onclick="tabMenu(0);">Run</a></li>
+			<li><a href="#" onclick="tabMenu(1);">Code</a></li>
+		</ul>
+	</div>
+	<div id="panels" class="menu_tab00 mTs">
+		<h2>changeObjectMoveAPI</h2>
+		<p>API to change the moving mode of an object. Building when the move mode (objectMoveMode) value is 0 (All)
+The whole is selected and moved, and if 1 (Object), it can be selected and moved in units of objects, such as a window, and if it is 2 (None)
+The object is not selected and the screen is moved.</p>
+		<table>
+		<caption>Parameter</caption>
+			<tr>
+				<th scope="col">name</th>
+				<th scope="col">type</th>
+				<th scope="col">description</th>
+			</tr>
+			<tr>
+				<td>managerFactoryInstance</td>
+				<td>ManagerFactory</td>
+				<td>start of mago3D</td>
+			</tr>
+			<tr>
+				<td>objectMoveMode</td>
+				<td>Number</td>
+				<td>0 = All, 1 = Object, 2 = None</td>
+			</tr>
+		</table>
+		<br/>
+		<h4>Execution</h4>
+		<div class="paramContainer">
+			<input type="radio" id="api9-opt1" name="api9-p1" value="0" />
+			<label for="api9-opt1">All</label> 
+			<input type="radio" id="api9-opt2" name="api9-p1" value="1" />
+			<label for="api9-opt2">Object</label> 
+			<input type="radio" id="api9-opt3" name="api9-p1" value="2" checked />
+			<label for="api9-opt3">None</label>
+		</div>
+		<br/> 
+		<input type="button" id="changeObjectMove" value="Run" class="popupBtn">
+	</div>
+	<div id="panels" class="menu_tab01 mTs" style="display: none;"></div>
+</div>
+<script>
+	var changeObjectMove = function() {
+
+		var objectMoveMode = $("input[name=api9-p1]:checked").val();
+
+		changeObjectMoveAPI(MAGO3D_INSTANCE2, objectMoveMode);
+	}
+</script>
+</html>

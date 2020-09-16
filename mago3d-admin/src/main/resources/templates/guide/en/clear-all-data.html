@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="api22" class="api-help-toggle">
+	<div class="menu_tab">
+		<ul>
+			<li class="fst active"><a href="#" onclick="tabMenu(0);">Run</a></li>
+			<li><a href="#" onclick="tabMenu(1);">Code</a></li>
+		</ul>
+	</div>
+	<div id="panels" class="menu_tab00 mTs">
+		<h2>clearAllDataAPI</h2>
+		<p>This API deletes and hides all data on the screen.</p>
+		<table>
+		<caption>Parameter</caption>
+			<tr>
+				<th scope="col">name</th>
+				<th scope="col">type</th>
+				<th scope="col">description</th>
+			</tr>
+			<tr>
+				<td>managerFactoryInstance</td>
+				<td>ManagerFactory</td>
+				<td>start of mago3D</td>
+			</tr>
+		</table>
+		<br/>
+		<input type="button" id="clearAllData" value="Run" class="popupBtn">
+	</div>
+	<div id="panels" class="menu_tab01 mTs" style="display: none;"></div>
+</div>
+<script>
+	var clearAllData = function() {
+
+		clearAllDataAPI(MAGO3D_INSTANCE2);
+	}
+</script>
+</html>

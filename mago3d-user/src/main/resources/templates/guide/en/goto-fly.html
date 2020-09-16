@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="api31" class="api-help-toggle">
+	<div class="menu_tab">
+		<ul>
+			<li class="fst active"><a href="#" onclick="tabMenu(0);">Run</a></li>
+			<li><a href="#" onclick="tabMenu(1);">Code</a></li>
+		</ul>
+	</div>
+	<div id="panels" class="menu_tab00 mTs">
+		<h2>gotoFlyAPI</h2>
+		<p>The camera moves to that point.</p>
+		<table>
+		<caption>Parameter</caption>
+			<tr>
+				<th scope="col">name</th>
+				<th scope="col">type</th>
+				<th scope="col">description</th>
+			</tr>
+			<tr>
+				<td>managerFactoryInstance</td>
+				<td>ManagerFactory</td>
+				<td>start of mago3D</td>
+			</tr>
+			<tr>
+				<td>longitude</td>
+				<td>Number</td>
+				<td>longitude</td>
+			</tr>
+			<tr>
+				<td>latitude</td>
+				<td>Number</td>
+				<td>latitude</td>
+			</tr>
+			<tr>
+				<td>height</td>
+				<td>Number</td>
+				<td>height</td>
+			</tr>
+			<tr>
+				<td>duration</td>
+				<td>Number</td>
+				<td>Time to move</td>
+			</tr>
+		</table>
+		<br>
+		<h4>Execution</h4>
+		<div class="paramContainer">
+			<label for="api31-p1">longitude</label>
+			<input type="text" id="api31-p1" value="127.0000" data-require="true"><br>
+			<label for="api31-p2">latitude</label>
+			<input type="text" id="api31-p2" value="37.000" data-require="true"><br>
+			<label for="api31-p3">height</label>
+			<input type="text" id="api31-p3" value="100" data-require="true"><br>
+			<label for="api31-p4">duration</label>
+			<input type="text" id="api31-p4" value="10" data-require="true">
+		</div>
+		<br>
+		<input type="button" id="gotofly" value="Run" class="popupBtn">
+	</div>
+	<div id="panels" class="menu_tab01 mTs" style="display: none;"></div>
+</div>
+<script>
+	var gotofly = function() {
+
+		var longitude = $('#api31-p1').val();
+		var latitude = $('#api31-p2').val();
+		var height = $('#api31-p3').val();
+		var duration = $('#api31-p4').val();
+
+		gotoFlyAPI(MAGO3D_INSTANCE2, parseFloat(longitude), parseFloat(latitude), parseFloat(height), parseFloat(duration));
+	}
+</script>
+</html>
