@@ -37,7 +37,6 @@ public class ConverterController {
 	/**
 	 * converter job 목록
 	 * @param request
-	 * @param membership_id
 	 * @param pageNo
 	 * @param model
 	 * @return

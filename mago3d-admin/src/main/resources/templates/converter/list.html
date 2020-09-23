@@ -117,10 +117,10 @@
 
                                         <tr th:if="${!converterJobList.empty}" th:each="converterJob: ${converterJobList}">
                                             <td class="col-number" th:text="${converterJobStat.count + ((pagination.pageNo-1)*10)}"></td>
-                                            <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'basic')}" th:text="기본"></td>
-                                            <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'building')}" th:text="빌딩"></td>
-                                            <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'extra-big-building')}" th:text="초대형 빌딩"></td>
-                                            <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'point-cloud')}" th:text="point cloud"></td>
+                                            <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'basic')}" th:text="'기본'"></td>
+                                            <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'building')}" th:text="'빌딩'"></td>
+                                            <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'extra-big-building')}" th:text="'초대형 빌딩'"></td>
+                                            <td class="col-type" th:if="${#strings.equals(converterJob.converterTemplate, 'point-cloud')}" th:text="'포인트 클라우드'"></td>
                                             <td class="col-name ellipsis" th:text="${converterJob.title}" style="min-width:200px;max-width:200px;"></td>
                                             
                                             <td class="col-count" th:if="${converterJob.usf >= 1 and converterJob.usf < 10}" th:text="|${converterJob.usf}m|">
