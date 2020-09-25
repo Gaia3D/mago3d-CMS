@@ -1,9 +1,10 @@
 package gaia3d.service;
 
-import java.util.List;
+import gaia3d.domain.agent.ConverterResultLog;
+import gaia3d.domain.converter.ConverterJob;
+import gaia3d.domain.converter.ConverterJobFile;
 
-import gaia3d.domain.ConverterJob;
-import gaia3d.domain.ConverterJobFile;
+import java.util.List;
 
 /**
  * f4d converting manager
@@ -11,52 +12,56 @@ import gaia3d.domain.ConverterJobFile;
  *
  */
 public interface ConverterService {
-	
+
 	/**
 	 * converter job 총 건수
-	 * @param converterJob
-	 * @return
+	 * @param converterJob converterJob
+	 * @return converter job 총 건수
 	 */
-	public Long getConverterJobTotalCount(ConverterJob converterJob);
-	
+	Long getConverterJobTotalCount(ConverterJob converterJob);
+
 	/**
 	 * converter job file 총 건수
-	 * @param converterJobFile
-	 * @return
+	 * @param converterJobFile converterJobFile
+	 * @return converter job file 총 건수
 	 */
-	public Long getConverterJobFileTotalCount(ConverterJobFile converterJobFile);
-	
+	Long getConverterJobFileTotalCount(ConverterJobFile converterJobFile);
+
 	/**
 	 * f4d converter job 목록
-	 * @param converterJob
-	 * @return
+	 * @param converterJob converterJob
+	 * @return f4d converter job 목록
 	 */
-	public List<ConverterJob> getListConverterJob(ConverterJob converterJob);
-	
+	List<ConverterJob> getListConverterJob(ConverterJob converterJob);
+
 	/**
-	 * f4d converter job 목록
-	 * @param converterJobFile
-	 * @return
+	 * f4d converter job file 목록
+	 * @param converterJobFile converterJobFile
+	 * @return f4d converter job file 목록
 	 */
-	public List<ConverterJobFile> getListConverterJobFile(ConverterJobFile converterJobFile);
+	List<ConverterJobFile> getListConverterJobFile(ConverterJobFile converterJobFile);
 
 	/**
 	 * 데이터 변환 현황
-	 * @return
+	 * @return 데이터 변환 현황
 	 */
-	public List<ConverterJobFile> getConverterJobFileStatistics();
-	
+	List<ConverterJobFile> getConverterJobFileStatistics();
+
 	/**
 	 * f4d converter 변환 job 등록
-	 * @param converterJob
-	 * @return
+	 * @param converterJob    converterJob
 	 */
-	public int insertConverter(ConverterJob converterJob);
-	
+	void insertConverter(ConverterJob converterJob);
+
 	/**
-	 * 데이터 변환 작업 상태를 변경
+	 *
 	 * @param converterJob
-	 * @return
 	 */
-	public int updateConverterJob(ConverterJob converterJob);
+	void updateConverterJob(ConverterJob converterJob);
+
+	/**
+	 * 로그파일을 통한 데이터 변환 작업 상태를 갱신
+	 * @param converterResultLog converterResultLog
+	 */
+	void updateConverterJobStatus(ConverterResultLog converterResultLog);
 }

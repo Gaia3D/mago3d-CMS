@@ -13,7 +13,7 @@ public enum ConverterTemplate {
 	private final @Getter String meshType;
 	private final @Getter String skinLevel;
 	
-	private ConverterTemplate(String name, String meshType, String skinLevel) {
+	ConverterTemplate(String name, String meshType, String skinLevel) {
 		this.name = name;
 		this.meshType = meshType;
 		this.skinLevel = skinLevel;

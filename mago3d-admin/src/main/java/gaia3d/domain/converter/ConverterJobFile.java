@@ -1,17 +1,11 @@
-package gaia3d.domain;
+package gaia3d.domain.converter;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
+import gaia3d.domain.Search;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * converter 대상 파일
@@ -25,7 +19,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConverterJobFile extends Search {
-	
+
 	// 화면 표기용
 	private String sharing;
 	private String dataType;
@@ -33,10 +27,10 @@ public class ConverterJobFile extends Search {
 	private BigDecimal usf;
 	// 위젯 표현용
 	private Long count;
-	
+
 	/****** validator ********/
 	private String methodMode;
-	
+
 	// 고유번호
 	private Long converterJobFileId;
 	// 파일 변환 그룹 job
@@ -55,7 +49,7 @@ public class ConverterJobFile extends Search {
 	private String status;
 	// 에러 코드
 	private String errorCode;
-	
+
 	// 년도
 	private String year;
 	// 월
@@ -70,14 +64,14 @@ public class ConverterJobFile extends Search {
 	private String hour;
 	// 분
 	private String minute;
-	
+
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime insertDate;
-	
+
 	public String validate() {
 		// TODO 구현해야 한다.
 		return null;
 	}
-	
+
 }

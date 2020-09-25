@@ -23,7 +23,6 @@ import gaia3d.domain.PageType;
 import gaia3d.domain.Pagination;
 import gaia3d.domain.Policy;
 import gaia3d.domain.RoleKey;
-import gaia3d.domain.UploadData;
 import gaia3d.domain.UserGroup;
 import gaia3d.domain.UserInfo;
 import gaia3d.domain.UserSession;

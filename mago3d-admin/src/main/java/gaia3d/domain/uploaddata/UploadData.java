@@ -1,18 +1,13 @@
-package gaia3d.domain;
+package gaia3d.domain.uploaddata;
+
+import gaia3d.domain.Search;
+import gaia3d.domain.UploadDataType;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * 사용자 업로드 정보
@@ -26,20 +21,20 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UploadData extends Search implements Serializable {
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -639261582314376967L;
 
 	public static final String ZIP_EXTENSION = "zip";
-	
+
 	// converter 대상 파일 유무. true : 대상, false : 대상아님(기본값)
 	private Boolean converterTarget;
-	
+
 	/****** validator ********/
 	private String methodMode;
-	
+
 	// 고유번호
 	private Long uploadDataId;
 	// 데이터 그룹 고유키
@@ -55,7 +50,7 @@ public class UploadData extends Search implements Serializable {
 	// 데이터 타입 집계
 	private Long dataCount;
 	// 데이터명
-	private String dataName;	
+	private String dataName;
 	// 사용자 아이디
 	private String userId;
 	// 사용자명
@@ -76,8 +71,8 @@ public class UploadData extends Search implements Serializable {
 	private BigDecimal pitch;
 	// roll
 	private BigDecimal roll;
-	
-	
+
+
 	// 상태. upload : 업로딩 완료, converter : 변환
 	private String status;
 	// 파일 개수
@@ -86,7 +81,7 @@ public class UploadData extends Search implements Serializable {
 	private Integer converterTargetCount;
 	// converter 횟수
 	private Integer converterCount;
-	
+
 	// 년도
 	private String year;
 	// 월

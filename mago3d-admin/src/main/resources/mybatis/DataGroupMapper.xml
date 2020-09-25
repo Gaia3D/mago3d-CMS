@@ -356,6 +356,17 @@
 		</if>
 	</update>
 
+	<!-- 자식의 수를 + 또는 - 연산. children 변수에는 자식 수를 증가 하거나 감소 시키는 값이 들어옴 -->
+	<update id="updateDataGroupChildren" parameterType="dataGroup">
+		/* updateDataGroupChildren */
+		UPDATE data_group
+		SET children = children + #{children}
+		WHERE data_group_id = #{dataGroupId}
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
+	</update>
+
 	<!-- ancestor를 이용하여 데이터 그룹 삭제 -->
 	<delete id="deleteDataGroupByAncestor" parameterType="dataGroup">
 		/* deleteDataGroupByAncestor */

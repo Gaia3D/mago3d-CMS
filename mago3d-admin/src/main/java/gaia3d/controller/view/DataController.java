@@ -20,7 +20,7 @@ import gaia3d.domain.Key;
 import gaia3d.domain.PageType;
 import gaia3d.domain.Pagination;
 import gaia3d.domain.Policy;
-import gaia3d.domain.UploadData;
+import gaia3d.domain.uploaddata.UploadData;
 import gaia3d.domain.UserSession;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.DataService;

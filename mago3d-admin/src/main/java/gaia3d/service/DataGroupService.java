@@ -1,8 +1,8 @@
 package gaia3d.service;
 
-import java.util.List;
-
 import gaia3d.domain.DataGroup;
+
+import java.util.List;
 
 public interface DataGroupService {
 	
@@ -80,6 +80,11 @@ public interface DataGroupService {
 	 * @return
 	 */
 	int updateDataGroupViewOrder(DataGroup dataGroup);
+
+	/**
+	 * 자식의 수를 + 또는 - 연산
+	 */
+	int updateDataGroupChildren(DataGroup dataGroup);
 
 	/**
 	 * 데이터 그룹 삭제

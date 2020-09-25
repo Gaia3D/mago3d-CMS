@@ -1,10 +1,9 @@
 package gaia3d.persistence;
 
-import java.util.List;
-
+import gaia3d.domain.DataGroup;
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.DataGroup;
+import java.util.List;
 
 @Repository
 public interface DataGroupMapper {
@@ -97,6 +96,11 @@ public interface DataGroupMapper {
 	 * @return
 	 */
 	int updateDataGroupViewOrder(DataGroup dataGroup);
+
+	/**
+	 * 자식의 수를 + 또는 - 연산
+	 */
+	int updateDataGroupChildren(DataGroup dataGroup);
 
 	/**
 	 * 데이터 그룹 삭제

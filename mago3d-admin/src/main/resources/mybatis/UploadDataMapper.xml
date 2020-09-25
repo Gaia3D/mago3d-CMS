@@ -137,6 +137,18 @@
 		</choose>
 	</select>
 
+	<!-- 업로딩한 파일 -->
+	<select id="getUploadDataFile" parameterType="uploadDataFile" resultType="uploadDataFile">
+		/* getUploadDataFile */
+		SELECT A.data_group_id, A.sharing, A.data_type, A.data_name, A.mapping_type, A.location, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, A.altitude, B.*
+		FROM upload_data A, upload_data_file B
+		WHERE A.upload_data_id = B.upload_data_id
+		<if test="userId != null and userId != ''">
+			AND B.user_id =#{userId}
+		</if>
+		AND upload_data_file_id = #{uploadDataFileId}
+	</select>
+
 	<!-- 업로드 데이터 타입 집계 -->
 	<select id="getUploadDataType" resultType="uploadData">
 		/* getUploadDataType */

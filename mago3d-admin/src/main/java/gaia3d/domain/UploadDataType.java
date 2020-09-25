@@ -24,8 +24,7 @@ public enum UploadDataType {
 	DDS("dds"),
 	
 	ZIP("zip"),
-	MTL("mtl"),
-	FBX("fbx");
+	MTL("mtl");
 	
 	private final String value;
 	

@@ -1,22 +1,13 @@
 package gaia3d.controller.rest;
 
-import java.io.File;
-import java.net.URI;
-import java.sql.Timestamp;
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-
+import gaia3d.config.PropertiesConfig;
 import gaia3d.domain.*;
+import gaia3d.domain.converter.ConverterJobFile;
 import gaia3d.service.*;
-import gaia3d.utils.DateUtils;
-import gaia3d.utils.FileUtils;
-import gaia3d.utils.FormatUtils;
 import gaia3d.utils.LocaleUtils;
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.opengis.metadata.Datatype;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.config.PropertiesConfig;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 

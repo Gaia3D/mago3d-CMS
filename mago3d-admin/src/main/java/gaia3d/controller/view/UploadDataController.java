@@ -16,22 +16,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.ConverterJob;
+import gaia3d.domain.converter.ConverterJob;
 import gaia3d.domain.DataGroup;
 import gaia3d.domain.Key;
 import gaia3d.domain.PageType;
 import gaia3d.domain.Pagination;
-import gaia3d.domain.ServerTarget;
-import gaia3d.domain.SharingType;
-import gaia3d.domain.UploadData;
-import gaia3d.domain.UploadDataFile;
+import gaia3d.domain.uploaddata.UploadData;
+import gaia3d.domain.uploaddata.UploadDataFile;
 import gaia3d.domain.UserSession;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.PolicyService;
 import gaia3d.service.UploadDataService;
 import gaia3d.support.SQLInjectSupport;
 import gaia3d.utils.DateUtils;
-import gaia3d.utils.FileUtils;
 
 /**
  * 3D 데이터 파일 업로더

@@ -1,21 +1,20 @@
 package gaia3d.service.impl;
 
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.List;
-
+import gaia3d.domain.FileType;
+import gaia3d.domain.UploadDataType;
+import gaia3d.domain.uploaddata.UploadData;
+import gaia3d.domain.uploaddata.UploadDataFile;
+import gaia3d.persistence.UploadDataMapper;
+import gaia3d.service.UploadDataService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.UploadDataType;
-import gaia3d.domain.FileType;
-import gaia3d.domain.UploadData;
-import gaia3d.domain.UploadDataFile;
-import gaia3d.persistence.UploadDataMapper;
-import gaia3d.service.UploadDataService;
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * @author Cheon JeongDae
@@ -86,6 +85,16 @@ public class UploadDataServiceImpl implements UploadDataService {
 	@Transactional(readOnly=true)
 	public List<UploadDataFile> getListUploadDataFile(UploadData uploadData) {
 		return uploadDataMapper.getListUploadDataFile(uploadData);
+	}
+
+	/**
+	 * 업로딩 데이터 파일
+	 * @param uploadDataFile
+	 * @return	업로딩 데이터 파일
+	 */
+	@Transactional(readOnly=true)
+	public UploadDataFile getUploadDataFile(UploadDataFile uploadDataFile) {
+		return uploadDataMapper.getUploadDataFile(uploadDataFile);
 	}
 
 	/**

@@ -1,11 +1,10 @@
 package gaia3d.persistence;
 
-import java.util.List;
-
+import gaia3d.domain.converter.ConverterJob;
+import gaia3d.domain.converter.ConverterJobFile;
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.ConverterJob;
-import gaia3d.domain.ConverterJobFile;
+import java.util.List;
 
 /**
  * f4d converter manager
@@ -14,58 +13,73 @@ import gaia3d.domain.ConverterJobFile;
  */
 @Repository
 public interface ConverterMapper {
-	
+
 	/**
 	 * converter job 총 건수
 	 * @param converterJob
 	 * @return
 	 */
-	public Long getConverterJobTotalCount(ConverterJob converterJob);
-	
+	Long getConverterJobTotalCount(ConverterJob converterJob);
+
 	/**
 	 * converter job file 총 건수
 	 * @param converterJobFile
 	 * @return
 	 */
-	public Long getConverterJobFileTotalCount(ConverterJobFile converterJobFile);
-	
+	Long getConverterJobFileTotalCount(ConverterJobFile converterJobFile);
+
 	/**
 	 * f4d converter job 목록
 	 * @param converterJob
 	 * @return
 	 */
-	public List<ConverterJob> getListConverterJob(ConverterJob converterJob);
+	List<ConverterJob> getListConverterJob(ConverterJob converterJob);
 
 	/**
-	 * f4d converter job 목록
+	 * f4d converter job 파일 목록
 	 * @param converterJobFile
 	 * @return
 	 */
-	public List<ConverterJobFile> getListConverterJobFile(ConverterJobFile converterJobFile);
+	List<ConverterJobFile> getListConverterJobFile(ConverterJobFile converterJobFile);
+
+	/**
+	 * converter job에 해당하는 f4d converter job 파일 목록
+	 * @param converterJob
+	 * @return converter job에 해당하는 f4d converter job 파일 목록
+	 */
+	List<ConverterJobFile> getListConverterJobFileByConverterJob(ConverterJob converterJob);
 
 	/**
 	 * 데이터 변환 현황
 	 * @return
 	 */
-	public List<ConverterJobFile> getConverterJobFileStatistics();
-	
+	List<ConverterJobFile> getConverterJobFileStatistics();
+
 	/**
 	 * insert converter job
 	 * @param converterJob
 	 * @return
 	 */
-	public Long insertConverterJob(ConverterJob converterJob);
-	
+	Long insertConverterJob(ConverterJob converterJob);
+
 	/**
 	 * insert converter job file
 	 * @param converterJobFile
 	 * @return
 	 */
-	public Long insertConverterJobFile(ConverterJobFile converterJobFile);
-	
+	Long insertConverterJobFile(ConverterJobFile converterJobFile);
+
 	/**
-	 * update
+	 * update converter job
 	 * @param converterJob
+	 * @return 갱신된 converter job 아이디
 	 */
-	public int updateConverterJob(ConverterJob converterJob);
+	int updateConverterJob(ConverterJob converterJob);
+
+	/**
+	 * update converter job file
+	 * @param converterJobFile
+	 * @return 갱신된 converter job file 아이디
+	 */
+	int updateConverterJobFile(ConverterJobFile converterJobFile);
 }

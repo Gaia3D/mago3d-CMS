@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+    <title>업로딩 데이터 변환 목록</title>
+    <th:block layout:fragment="pageCustomStyle">
+        <link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+        <link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+        <link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+        <link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}">
+        <link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+        <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    </th:block>
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+    <div class="site-body">
+        <div class="container">
+            <div class="site-content">
+                <div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+                <div class="page-area">
+                    <div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+                    <div class="page-content">
+					                        <!-- S: 검색 -->
+                        <div class="filters">
+                            <!--<form id="searchForm" th:object="${converterJobFileList}" method="get" th:action="@{/converter/converter-job-file-list}" onsubmit="return searchCheck();">
+                            <div class="input-group row">
+                                <div class="input-set">
+                                    <label for="searchWord" th:text="#{search.word}"></label>
+                                    <select id="searchWord" name="searchWord" class="selectBoxClass">
+                                        <option value="" th:text="#{select}"></option>
+                                        <option value="title" th:text="제목"></option>
+                                    </select>
+                                    <select id="searchOption" name="searchOption" class="selectBoxClass">
+                                        <option value="0" th:text="#{search.same}"></option>
+                                        <option value="1" th:text="#{search.include}"></option>
+                                    </select>
+                                    <input type="search" id="searchValue" name="searchValue" class="m" style="float: right;" />
+                                </div>
+                                <div class="input-set">
+                                    <label for="startDate" th:text="#{search.date}"></label>
+                                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
+                                    <span class="delimeter tilde">~</span>
+                                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
+                                </div>
+                                <div class="input-set">
+                                    <label for="orderWord" th:text="#{search.order}"></label>
+                                    <select id="orderWord" name="orderWord" class="selectBoxClass">
+                                        <option value="" th:text="#{search.basic}"></option>
+                                        <option value="title" th:text="제목"></option>
+                                        <option value="insert_date" th:text="#{search.insert.date}"></option>
+                                    </select>
+                                    <select id="orderValue" name="orderValue" class="selectBoxClass">
+                                        <option value="" th:text="#{search.basic}"></option>
+                                        <option value="ASC" th:text="#{search.ascending}"></option>
+                                        <option value="DESC" th:text="#{search.descending.order}"></option>
+                                    </select>
+                                    <select id="listCounter" name="listCounter" class="selectBoxClass">
+                                        <option value="10" th:text="#{search.ten.count}"></option>
+                                        <option value="50" th:text="#{search.fifty.count}"></option>
+                                        <option value="100" th:text="#{search.hundred.count}"></option>
+                                    </select>
+                                </div>
+                                <div class="input-set">
+                                    <input type="submit" th:value="#{search}" />
+                                </div>
+                            </div>
+                            </form>-->
+                        </div>
+                        <!-- E: 검색 -->
+
+                        <!-- S: 데이터 변환 결과 목록 -->
+                        <div class="list">
+                            <form id="listForm" th:object="${converterJobFile}" method="post">
+                                <input type="hidden" id="checkIds" name="checkIds" />
+                                
+                                <table class="list-table scope-col">
+                                    <caption class="hiddenTag">데이터 변환 결과</caption>
+                                    <colgroup>
+                                        <col class="col-number"></col>
+                                        <col class="col-name"></col>
+                                        <col class="col-name"></col>
+                                        <col class="col-number"></col>
+                                        <col class="col-name"></col>
+                                        <col class="col-type"></col>
+                                        <col class="col-number"></col>
+                                        <col class="col-functions"></col>
+                                        <col class="col-functions"></col>
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="col-number" th:text="#{number}"></th>
+                                            <th scope="col" class="col-name">데이터 타입</th>
+                                            <th scope="col" class="col-name">변환 결과</th>
+                                            <th scope="col" class="col-name">제목</th>
+
+                                            <th scope="col" class="col-name">에러코드</th>
+                                            <th scope="col" class="col-date">등록일</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6">개발 예정</td>
+
+                                        </tr>
+                                        <!--<tr th:if="${converterJobFileList.empty}">
+                                            <td colspan="9" class="col-none">Converter Job이 존재하지 않습니다.</td>
+                                        </tr>
+
+                                        <tr th:unless="${converterJobFileList.empty}" th:each="converterJobFile: ${converterJobFileList}">
+                                            <td class="col-number" th:text="${converterJobFile.count}"></td>
+                                            <td class="col-type" th:text="${converterJobFile.dataType}"></td>
+                                            <td class="col-type" th:if="${#strings.equals(converterJobFile.status, 'ready')}" th:text="준비"></td>
+                                            <td class="col-type" th:if="${#strings.equals(converterJobFile.status, 'success')}" th:text="성공"></td>
+                                            <td class="col-type" th:if="${#strings.equals(converterJobFile.status, 'fail')}" th:text="실패"></td>
+                                            <td class="col-name ellipsis" style="min-width:200px;max-width:200px;" th:text="${converterJobFile.fileName}">
+                                            </td>
+                                            
+                                            
+
+                                            <td class="col-type" th:if="${#strings.isEmpty(converterJobFile.errorCode)}" th:text="없음">
+                                            <td class="col-type" th:unless="${#strings.isEmpty(converterJobFile.errorCode)}">
+                                                <a href="#" th:onclick="detailErrorCode([[${converterJobFile.errorCode}]]); return false;">[보기]</a>
+                                            </td>
+                                            <td class="col-type">
+                                                <th:block th:text="${#temporals.format(converterJobFile.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+                                            </td>
+                                        </tr>-->
+                                    </tbody>
+                                </table>
+                            </form>
+                            <!-- E: 데이터 변환 결과 목록 -->
+                        </div>
+                        <!-- 페이지 -->
+<!--                        <div th:replace="~{/common/pagination :: #paginationArea}"></div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+    	/*var searchWord = "[[${converterJob.searchWord}]]";
+		var searchOption = "[[${converterJob.searchOption}]]";
+		var orderWord = "[[${converterJob.orderWord}]]";
+		var orderValue = "[[${converterJob.orderValue}]]";
+		var listCounter = "[[${converterJob.listCounter}]]";
+
+		if(searchWord != "") $("#searchWord").val("${converterJob.searchWord}");
+		if(searchOption != "") $("#searchOption").val("${converterJob.searchOption}");
+		if(orderWord != "") $("#orderWord").val("${converterJob.orderWord}");
+		if(orderValue != "") $("#orderValue").val("${converterJob.orderValue}");
+		if(listCounter != "") $("#listCounter").val("${converterJob.listCounter}");
+
+		initDatePicker();
+		initCalendar(new Array("startDate", "endDate"), new Array("[[${converterJob.startDate}]]", "[[${converterJob.endDate}]]"));*/
+	});
+
+	//전체 선택
+	$("#chkAll").click(function() {
+		$(":checkbox[name=uploadDataId]").prop("checked", this.checked);
+	});
+
+	// 프로젝트 다이얼 로그
+	var errorDialog = $( ".errorDialog" ).dialog({
+		autoOpen: false,
+		width: 400,
+		height: 500,
+		modal: true,
+		resizable: false
+	});
+
+	function detailErrorCode(errorCode) {
+		errorDialog.dialog( "open" );
+		$("#dialog_error_code").html(errorCode);
+	}
+</script>
+</th:block>
+</body>
+</html>

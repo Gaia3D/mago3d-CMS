@@ -1,18 +1,12 @@
-package gaia3d.domain;
+package gaia3d.domain.uploaddata;
+
+import gaia3d.domain.Search;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * 사용자 업로드 파일 정보 
@@ -26,19 +20,19 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UploadDataFile extends Search implements Serializable {
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -5630897579641436048L;
-	
+
 	private Integer dataGroupId;
 	private String sharing;
 	private String dataType;
-	
+
 	/****** validator ********/
 	private String methodMode;
-	
+
 	/****** upload_data join ********/
 	// 데이터명
 	private String dataName;
@@ -50,7 +44,7 @@ public class UploadDataFile extends Search implements Serializable {
 	private BigDecimal longitude;
 	// 높이
 	private BigDecimal altitude;
-		
+
 	// 고유번호
 	private Long uploadDataFileId;
 	// 사용자 업로드 정보 고유번호
@@ -61,7 +55,7 @@ public class UploadDataFile extends Search implements Serializable {
 	private String userId;
 	// 사용자명
 	private String userName;
-	
+
 	// 디렉토리/파일 구분. D : 디렉토리, F : 파일
 	private String fileType;
 	// 파일 이름
@@ -78,25 +72,25 @@ public class UploadDataFile extends Search implements Serializable {
 	private String fileSize;
 	// 파일 확장자
 	private String fileExt;
-	
+
 	// 오류 메시지
 	private String errorMessage;
-	
+
 	// 등록일
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime insertDate;
-		
+
 	public String validate() {
 		// TODO 구현해야 한다.
 		return null;
 	}
-	
+
 	public Long getViewFileSizeUnitKB() {
 		if(this.fileSize == null || "".equals(this.fileSize)) {
-			return 0l;
+			return 0L;
 		} else {
-			Long size = Long.valueOf(this.fileSize);
-			return size / 1000l;
+			long size = Long.parseLong(this.fileSize);
+			return size / 1000L;
 		}
 	}
 }
