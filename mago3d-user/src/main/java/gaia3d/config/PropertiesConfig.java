@@ -31,13 +31,12 @@ public class PropertiesConfig {
     
     // http, https
     private String restTemplateMode;
-    
     private String restAuthKey;
-
     private String gisRestServer;
-    
+
+    // layer 파일 업로딩 디렉토리
     private String layerUploadDir;
-    
+    // layer export 용 임시 디렉토리
     private String layerExportDir;
     
     private String queueServerHost;
@@ -46,20 +45,31 @@ public class PropertiesConfig {
 	private String queuePassword;
 	private String queueName;
 	private String exchange;
+	private String routingKey;
     
     // F4D 파일이 변환되는 Root 경로 이자, mago3DJS 에서 요청되는 파일의 Root 경로. ServletConfig 에서 매핑
     private String dataServiceDir;
+    // F4D 변환 결과 로그 저장 경로
+    private String dataConverterLogDir;
     // 관리자용
     private String adminDataServiceDir;
+    private String adminDataLibraryServiceDir;
     private String adminDataServicePath;
+    private String adminDataLibraryServicePath;
     // 사용자용
     private String userDataServiceDir;
+    private String userDataLibraryServiceDir;
     private String userDataServicePath;
-    
+    private String userDataLibraryServicePath;
+
     private String dataUploadDir;
+    private String dataBulkUploadDir;
+    // smart tiling 데이터 업로드 디렉토리
+    private String dataSmartTilingDir;
     private String dataAttributeDir;
     private String dataAttributeUploadDir;
     private String dataObjectAttributeUploadDir;
     
     private String guideDataServiceDir;
+
 }
