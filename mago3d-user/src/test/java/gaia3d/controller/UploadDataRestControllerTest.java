@@ -14,9 +14,9 @@ import java.util.zip.ZipFile;
 import org.junit.jupiter.api.Disabled;
 
 import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.UploadDataType;
+import gaia3d.domain.uploaddata.UploadDataType;
 import gaia3d.domain.FileType;
-import gaia3d.domain.UploadDataFile;
+import gaia3d.domain.uploaddata.UploadDataFile;
 import gaia3d.utils.FileUtils;
 
 @Slf4j

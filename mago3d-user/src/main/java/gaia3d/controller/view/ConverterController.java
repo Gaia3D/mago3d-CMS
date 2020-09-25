@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.extern.slf4j.Slf4j;
 import gaia3d.domain.CacheManager;
-import gaia3d.domain.ConverterJob;
+import gaia3d.domain.converter.ConverterJob;
 import gaia3d.domain.Key;
 import gaia3d.domain.PageType;
 import gaia3d.domain.Pagination;

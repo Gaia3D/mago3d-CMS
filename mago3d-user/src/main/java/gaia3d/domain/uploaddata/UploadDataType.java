@@ -1,4 +1,4 @@
-package gaia3d.domain;
+package gaia3d.domain.uploaddata;
 
 /**
  * 3DS 를 enum 으로 바로 사용할 수가 없음

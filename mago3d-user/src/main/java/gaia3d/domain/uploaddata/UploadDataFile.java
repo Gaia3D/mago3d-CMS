@@ -1,5 +1,6 @@
-package gaia3d.domain;
+package gaia3d.domain.uploaddata;
 
+import gaia3d.domain.Search;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 

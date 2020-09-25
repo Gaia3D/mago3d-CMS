@@ -1,14 +1,9 @@
 package gaia3d.domain;
 
+import lombok.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @ToString
 @Builder
@@ -22,13 +17,16 @@ public class QueueMessage implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	// 사용자에서 호출인지, 관리자에서 호출인지 구분하기 위함, enum 귀찮아서.....
-	private String serverTarget;
+	public static final String F4D_PREFIX = "F4D_";
+
+	private ConverterType converterType;
+	private ServerTarget serverTarget;
 	private String userId;
 	
 	private Long converterJobId;
 	private Long converterJobFileId;
+	private Long dataLibraryConverterJobId;
+	private Long dataLibraryConverterJobFileId;
 	private String inputFolder;
 	private String outputFolder;
 	private String meshType;
@@ -39,4 +37,7 @@ public class QueueMessage implements Serializable {
 	// unit scale factor. 설계 파일의 1이 의미하는 단위. 기본 1 = 0.01m
 	private BigDecimal usf;
 	private String isYAxisUp;
+
+	// cityGML, indoorGML 구분을 위해..
+	private UploadDataType uploadDataType;
 }

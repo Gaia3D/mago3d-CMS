@@ -11,8 +11,8 @@
 
     <typeAliases>
     	<typeAlias type="gaia3d.domain.AccessLog" alias="accessLog" />
-    	<typeAlias type="gaia3d.domain.ConverterJob" alias="converterJob" />
-    	<typeAlias type="gaia3d.domain.ConverterJobFile" alias="converterJobFile" />
+    	<typeAlias type="gaia3d.domain.converter.ConverterJob" alias="converterJob" />
+    	<typeAlias type="gaia3d.domain.converter.ConverterJobFile" alias="converterJobFile" />
 		<typeAlias type="gaia3d.domain.DataAdjustLog" alias="dataAdjustLog" />
 		<typeAlias type="gaia3d.domain.DataAttribute" alias="dataAttribute" />
 		<typeAlias type="gaia3d.domain.DataFileInfo" alias="dataFileInfo" />
@@ -34,8 +34,8 @@
     	<typeAlias type="gaia3d.domain.Menu" alias="menu" />
     	<typeAlias type="gaia3d.domain.Policy" alias="policy" />
     	<typeAlias type="gaia3d.domain.Role" alias="role" />
-		<typeAlias type="gaia3d.domain.UploadData" alias="uploadData" />
-		<typeAlias type="gaia3d.domain.UploadDataFile" alias="uploadDataFile" />
+		<typeAlias type="gaia3d.domain.uploaddata.UploadData" alias="uploadData" />
+		<typeAlias type="gaia3d.domain.uploaddata.UploadDataFile" alias="uploadDataFile" />
     	<typeAlias type="gaia3d.domain.UserInfo" alias="userInfo" />
     	<typeAlias type="gaia3d.domain.UserGroup" alias="userGroup" />
     	<typeAlias type="gaia3d.domain.UserGroupMenu" alias="userGroupMenu" />
