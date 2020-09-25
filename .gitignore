@@ -12,3 +12,4 @@ build
 *.iml
 *.ipr
 out/
+bin
