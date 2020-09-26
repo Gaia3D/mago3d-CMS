@@ -142,7 +142,7 @@
                             <td class="col-count">
                                 <th:block th:if="${converterJob.usf >= 1 and converterJob.usf < 10}" th:text="|${converterJob.usf}m|"></th:block>
                                 <th:block th:if="${converterJob.usf >= 0.01 and converterJob.usf < 0.1}" th:text="|${converterJob.usf}m|"></th:block>
-                                <th:block th:if="${converterJob.usf >= 0.001 and converterJob.usf < 0.1}" th:text="|${converterJob.usf}m|"></th:block>
+                                <th:block th:if="${converterJob.usf >= 0.001 and converterJob.usf < 0.01}" th:text="|${converterJob.usf}m|"></th:block>
                                 <th:block th:if="${converterJob.usf >= 10}" th:text="|${converterJob.usf}m|"></th:block>
                             </td>
                             <td class="col-type">
