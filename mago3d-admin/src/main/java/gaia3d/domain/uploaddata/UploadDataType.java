@@ -24,11 +24,12 @@ public enum UploadDataType {
 	DDS("dds"),
 	
 	ZIP("zip"),
-	MTL("mtl");
+	MTL("mtl"),
+	FBX("fbx");
 	
 	private final String value;
 	
-	UploadDataType(final String value) {
+	UploadDataType(String value) {
 		this.value = value;
 	}
 	
@@ -41,8 +42,8 @@ public enum UploadDataType {
 	 * @param value
 	 * @return
 	 */
-	public static UploadDataType findBy(final String value) {
-		for(final UploadDataType uploadDataType : values()) {
+	public static UploadDataType findBy(String value) {
+		for(UploadDataType uploadDataType : values()) {
 			if(uploadDataType.getValue().equals(value)) return uploadDataType;
 		}
 		return null;
