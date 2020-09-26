@@ -62,6 +62,9 @@
 			AND insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
 			]]>
 			</if>
+			<if test="converterJobId != null">
+				AND converter_job_id = #{converterJobId}
+			</if>
 		</trim>
 	</select>
 
@@ -114,40 +117,43 @@
 		/* getListConverterJobFile */
 		SELECT X.*
 		FROM (
-		SELECT A.*, B.file_name
-		FROM converter_job_file A, upload_data_file B
-		WHERE A.upload_data_file_id = B.upload_data_file_id
-		<if test="userId != null and userId != ''">
-			AND user_id = #{userId}
-		</if>
-		<if test="status != null and status != ''">
-			AND A.status = #{status}
-		</if>
-		<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
-			AND B.${searchWord} = #{searchValue}
-		</if>
-		<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
-			AND B.${searchWord} LIKE '%' || #{searchValue} || '%'
-		</if>
-		<if test="startDate != null and startDate != ''">
-			<![CDATA[
-				AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
-				]]>
-		</if>
-		<if test="endDate != null and endDate != ''">
-			<![CDATA[
-				AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
-				]]>
-		</if>
-		<choose>
-			<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
-				ORDER BY A.${orderWord} ${orderValue}
-			</when>
-			<otherwise>
-				ORDER BY A.insert_date DESC, A.converter_job_id DESC
-			</otherwise>
-		</choose>
-		OFFSET #{offset} LIMIT #{limit}
+			SELECT A.*, B.file_name
+			FROM converter_job_file A, upload_data_file B
+			WHERE A.upload_data_file_id = B.upload_data_file_id
+				<if test="userId != null and userId != ''">
+					AND A.user_id = #{userId}
+				</if>
+				<if test="status != null and status != ''">
+					AND A.status = #{status}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+					AND B.${searchWord} = #{searchValue}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+					AND B.${searchWord} LIKE '%' || #{searchValue} || '%'
+				</if>
+				<if test="startDate != null and startDate != ''">
+					<![CDATA[
+						AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+						]]>
+				</if>
+				<if test="endDate != null and endDate != ''">
+					<![CDATA[
+						AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+						]]>
+				</if>
+				<if test="converterJobId != null">
+					AND converter_job_id = #{converterJobId}
+				</if>
+			<choose>
+				<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+					ORDER BY A.${orderWord} ${orderValue}
+				</when>
+				<otherwise>
+					ORDER BY A.insert_date DESC, A.converter_job_id DESC
+				</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
 		) X
 	</select>
 

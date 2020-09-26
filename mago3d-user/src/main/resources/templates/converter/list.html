@@ -33,6 +33,7 @@
                 <li id="tabUploadDataInput"><a href="/upload-data/input"><th:block th:text="#{upload.data.input.tab.menu}"></th:block></a></li>
                 <li id="tabUploadDataList"><a href="/upload-data/list"><th:block th:text="#{upload.data.list.tab.menu}"></th:block></a></li>
                 <li id="tabConverterList"><a href="/converter/list"><th:block th:text="#{converter.list.tab.menu}"></th:block></a></li>
+                <li id="tabConverterJobFileList"><a href="/converter/converter-job-file-list"><th:block th:text="#{converter.job.file.list.tab.menu}"></th:block></a></li>
                 <li id="tabDataList"><a href="/data/list"><th:block th:text="#{data.list.tab.menu}"></th:block></a></li>
                 <li id="tabDataLogList"><a href="/data-log/list"><th:block th:text="#{data.log.list.tab.menu}"></th:block></a></li>
             </ul>
@@ -138,7 +139,9 @@
                                 <th:block th:if="${#strings.equals(converterJob.converterTemplate, 'extra-big-building')}" th:text="#{converter.template.extra.big.building}"></th:block>
                                 <th:block th:if="${#strings.equals(converterJob.converterTemplate, 'point-cloud')}" th:text="#{converter.template.point.cloud}"></th:block>
                             </td>
-                            <td class="col-name ellipsis" th:text="${converterJob.title}" style="min-width:200px;max-width:200px;"></td>
+                            <td class="col-name ellipsis" style="min-width:200px;max-width:200px;">
+                                <a th:text="${converterJob.title}" th:href="@{/converter/converter-job-file-list(converterJobId=${converterJob.converterJobId})}"></a>
+                            </td>
                             <td class="col-count">
                                 <th:block th:if="${converterJob.usf >= 1 and converterJob.usf < 10}" th:text="|${converterJob.usf}m|"></th:block>
                                 <th:block th:if="${converterJob.usf >= 0.01 and converterJob.usf < 0.1}" th:text="|${converterJob.usf}m|"></th:block>

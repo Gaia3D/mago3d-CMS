@@ -74,6 +74,8 @@ $(function() {
 				$("#tabUploadDataList").addClass("on");
 			} else if (location.href.indexOf("/converter/list") > 0) {
 				$("#tabConverterList").addClass("on");
+			} else if (location.href.indexOf("/converter/converter-job-file-list") > 0) {
+				$("#tabConverterJobFileList").addClass("on");
 			} else if (location.href.indexOf("/data/list") > 0 
 					|| location.href.indexOf("/data/modify") > 0
 					|| location.href.indexOf("/data-adjust-log/modify") > 0) {
