@@ -54,20 +54,22 @@ public class DataGroupController {
 		DataGroup dataGroup = new DataGroup();
 		dataGroup.setUserId(userSession.getUserId());
 		// 자기것만 나와야 해서 dataGroupId가 필요 없음
-		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroup(dataGroup);
-		if(dataGroupList == null || dataGroupList.isEmpty()) {
-			String dataGroupPath = userSession.getUserId() + "/basic/";
+		String dataGroupPath = userSession.getUserId() + "/basic/";
+		DataGroup basicDataGroup = dataGroupService.getBasicDataGroup(dataGroup);
+		if(basicDataGroup == null) {
 			dataGroup.setDataGroupKey("basic");
 			dataGroup.setDataGroupName(messageSource.getMessage("common.basic", null, getUserLocale(request)));
 			dataGroup.setDataGroupPath(propertiesConfig.getUserDataServicePath() + dataGroupPath);
 			dataGroup.setSharing(SharingType.PUBLIC.name().toLowerCase());
 			dataGroup.setMetainfo("{\"isPhysical\": false}");
 			
-			FileUtils.makeDirectoryByPath(propertiesConfig.getUserDataServiceDir(), dataGroupPath);
 			dataGroupService.insertBasicDataGroup(dataGroup);
-			
-			dataGroupList = dataGroupService.getListDataGroup(dataGroup);
 		}
+		
+		FileUtils.makeDirectoryByPath(propertiesConfig.getUserDataServiceDir(), dataGroupPath);
+		
+		// 자기것만 나와야 해서 dataGroupId가 필요 없음
+		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroup(dataGroup);
 		
 		model.addAttribute("dataGroupList", dataGroupList);
 		
@@ -89,20 +91,22 @@ public class DataGroupController {
 		DataGroup dataGroup = new DataGroup();
 		dataGroup.setUserId(userSession.getUserId());
 		// 자기것만 나와야 해서 dataGroupId가 필요 없음
-		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroup(dataGroup);
-		if(dataGroupList == null || dataGroupList.isEmpty()) {
-			String dataGroupPath = userSession.getUserId() + "/basic/";
+		String dataGroupPath = userSession.getUserId() + "/basic/";
+		DataGroup basicDataGroup = dataGroupService.getBasicDataGroup(dataGroup);
+		if(basicDataGroup == null) {
 			dataGroup.setDataGroupKey("basic");
 			dataGroup.setDataGroupName(messageSource.getMessage("common.basic", null, getUserLocale(request)));
 			dataGroup.setDataGroupPath(propertiesConfig.getUserDataServicePath() + dataGroupPath);
 			dataGroup.setSharing(SharingType.PUBLIC.name().toLowerCase());
 			dataGroup.setMetainfo("{\"isPhysical\": false}");
 			
-			FileUtils.makeDirectoryByPath(propertiesConfig.getUserDataServiceDir(), dataGroupPath);
 			dataGroupService.insertBasicDataGroup(dataGroup);
-			
-			dataGroupList = dataGroupService.getListDataGroup(dataGroup);
 		}
+		
+		FileUtils.makeDirectoryByPath(propertiesConfig.getUserDataServiceDir(), dataGroupPath);
+		
+		// 자기것만 나와야 해서 dataGroupId가 필요 없음
+		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroup(dataGroup);
 		
 		dataGroup.setParentName(policy.getContentDataGroupRoot());
 		dataGroup.setParent(0);
