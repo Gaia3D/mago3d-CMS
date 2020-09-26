@@ -128,7 +128,7 @@
                                             <td class="col-count" th:if="${converterJob.usf >= 1 and converterJob.usf < 10}" th:text="|${converterJob.usf}m|">
                                             <td class="col-count" th:if="${converterJob.usf >= 0.1 and converterJob.usf < 1}" th:text="|${converterJob.usf}cm|">
                                             <td class="col-count" th:if="${converterJob.usf >= 0.01 and converterJob.usf < 0.1}" th:text="|${converterJob.usf}cm|">
-                                            <td class="col-count" th:if="${converterJob.usf >= 0.001 and converterJob.usf < 0.1}" th:text="|${converterJob.usf}mm|">
+                                            <td class="col-count" th:if="${converterJob.usf >= 0.001 and converterJob.usf < 0.01}" th:text="|${converterJob.usf}mm|">
                                             <td class="col-count" th:if="${converterJob.usf >= 10}" th:text="|${converterJob.usf}m|">
 
                                             <td class="col-type" th:if="${#strings.equals(converterJob.viewYAxisUp, 'N')}" th:text="Z축"></td>
