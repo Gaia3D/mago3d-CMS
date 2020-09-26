@@ -82,6 +82,8 @@ $(function() {
 				$("#tabDataList").addClass("on");
 			} else if (location.href.indexOf("/data-log/list") > 0) {
 				$("#tabDataLogList").addClass("on");
+			} else if (location.href.indexOf("/converter-job-file-list") > 0) {
+				$("#tabConverterJobFileList").addClass("on");
 			}
 		}
 		
