@@ -156,6 +156,7 @@
                             <td class="col-type">
                                 <th:block  th:if="${#strings.equals(converterJob.status, 'ready')}" th:text="#{converter.status.ready}"></th:block>
                                 <th:block  th:if="${#strings.equals(converterJob.status, 'success')}" th:text="#{converter.status.success}"></th:block>
+                                <th:block  th:if="${#strings.equals(converterJob.status, 'partial_success')}" th:text="#{converter.status.partial.success}"></th:block>
                                 <th:block  th:if="${#strings.equals(converterJob.status, 'waiting')}" th:text="#{converter.status.waiting}"></th:block>
                                 <th:block  th:if="${#strings.equals(converterJob.status, 'fail')}" th:text="#{converter.status.fail}"></th:block>
                             </td>

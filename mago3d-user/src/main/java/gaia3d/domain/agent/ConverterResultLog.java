@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gaia3d.domain.converter.ConverterJob;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
+@ToString(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ConverterResultLog implements Serializable {
 

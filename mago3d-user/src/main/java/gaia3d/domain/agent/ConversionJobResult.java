@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ConversionJobResult implements Serializable {
 
