@@ -193,11 +193,11 @@
 		var orderValue = "[[${converterJob.orderValue}]]";
 		var listCounter = "[[${converterJob.listCounter}]]";
 
-		if(searchWord != "") $("#searchWord").val("${converterJob.searchWord}");
-		if(searchOption != "") $("#searchOption").val("${converterJob.searchOption}");
-		if(orderWord != "") $("#orderWord").val("${converterJob.orderWord}");
-		if(orderValue != "") $("#orderValue").val("${converterJob.orderValue}");
-		if(listCounter != "") $("#listCounter").val("${converterJob.listCounter}");
+        if(searchWord != "") $("#searchWord").val(searchWord);
+        if(searchOption != "") $("#searchOption").val(searchOption);
+        if(orderWord != "") $("#orderWord").val(orderWord);
+        if(orderValue != "") $("#orderValue").val(orderValue);
+        if(listCounter != "") $("#listCounter").val(listCounter);
 
 		initDatePicker();
 		initCalendar(new Array("startDate", "endDate"), new Array("[[${converterJob.startDate}]]", "[[${converterJob.endDate}]]"));
