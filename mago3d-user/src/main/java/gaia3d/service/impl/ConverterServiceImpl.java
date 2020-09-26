@@ -288,7 +288,7 @@ public class ConverterServiceImpl implements ConverterService {
 			String key = uploadDataFile.getFileRealName();
 			ConversionJobResult conversionJobResult = converterJobResultMap.get(key);
 
-			if (ConverterJobResultStatus.SUCCESS.equals(conversionJobResult.getResultStatus())) {
+			if (ConverterJobResultStatus.SUCCESS == conversionJobResult.getResultStatus()) {
 				// 상태가 성공인 경우
 
 				// 데이터를 등록 혹은 갱신. 상태를 use(사용중)로 등록.
@@ -429,7 +429,7 @@ public class ConverterServiceImpl implements ConverterService {
 	private void updateConverterLocation(ConverterLocation converterLocation, DataInfo updateDataInfo) {
 		BigDecimal longitude = converterLocation.getLongitude();
 		BigDecimal latitude = converterLocation.getLatitude();
-		if (validationLonLat(longitude, latitude)) {
+		if (isNotNull(longitude, latitude)) {
 			updateDataInfo.setLongitude(longitude);
 			updateDataInfo.setLatitude(latitude);
 			updateDataInfo.setLocation("POINT(" + longitude + " " + latitude + ")");
@@ -510,7 +510,7 @@ public class ConverterServiceImpl implements ConverterService {
 			dataInfo.setLatitude(latitude);
 			dataInfo.setLongitude(longitude);
 			dataInfo.setAltitude(altitude);
-			if (validationLonLat(longitude, latitude)) {
+			if (isNotNull(longitude, latitude)) {
 				dataInfo.setLocation("POINT(" + longitude + " " + latitude + ")");
 			}
 			dataInfo.setMetainfo(metainfo);
@@ -526,13 +526,17 @@ public class ConverterServiceImpl implements ConverterService {
 			dataInfo.setDataType(dataType);
 			dataInfo.setDataName(dataName);
 			dataInfo.setUserId(userId);
-			if(!StringUtils.isEmpty(heightReference)) {
-				dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": " + heightReference + "}");
+			if("none".equalsIgnoreCase(heightReference)) {
+				dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": \"none\"}");
+			} else if("clampToGround".equalsIgnoreCase(heightReference)) {
+				dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": \"clampToGround\"}");
+			} else if("relativeToGround".equalsIgnoreCase(heightReference)) {
+				dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": \"relativeToGround\"}");
 			}
 			dataInfo.setLatitude(latitude);
 			dataInfo.setLongitude(longitude);
 			dataInfo.setAltitude(altitude);
-			if (validationLonLat(longitude, latitude)) {
+			if (isNotNull(longitude, latitude)) {
 				dataInfo.setLocation("POINT(" + longitude + " " + latitude + ")");
 			} else {
 				dataInfo.setLocation(null);
@@ -567,7 +571,7 @@ public class ConverterServiceImpl implements ConverterService {
 		if (LocationUdateType.AUTO == LocationUdateType.valueOf(dbDataGroup.getLocationUpdateType().toUpperCase())) {
 			BigDecimal longitude = dataInfo.getLongitude();
 			BigDecimal latitude = dataInfo.getLatitude();
-			if (validationLonLat(longitude, latitude)) {
+			if (isNotNull(longitude, latitude)) {
 				dataGroup.setLocation("POINT(" + longitude + " " + latitude + ")");
 				dataGroup.setAltitude(dataInfo.getAltitude());
 			}
@@ -601,7 +605,7 @@ public class ConverterServiceImpl implements ConverterService {
 	 * @param latitude	위도
 	 * @return 유효한 값일 경우 true, 아닐경우 false
 	 */
-	private boolean validationLonLat(BigDecimal longitude, BigDecimal latitude) {
+	private boolean isNotNull(BigDecimal longitude, BigDecimal latitude) {
 		return longitude != null && latitude != null;
 	}
 

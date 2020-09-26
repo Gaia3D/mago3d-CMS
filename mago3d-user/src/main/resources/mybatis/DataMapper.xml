@@ -302,7 +302,7 @@
 			</if>
 			#{altitude}, COALESCE(#{heading}, 0), COALESCE(#{pitch}, 0), COALESCE(#{roll}, 0), #{childrenAncestor}, #{childrenParent}, #{childrenDepth}, #{childrenViewOrder},
 			<if test="metainfo != null and metainfo != ''">
-			TO_JSON(#{metainfo}::json),
+			(#{metainfo}::jsonb),
 			</if>
 			#{status}, #{description}
 		)
@@ -359,7 +359,7 @@
 			object_attribute_exist = #{objectAttributeExist},
 			</if>
 			<if test="metainfo != null and metainfo != ''">
-			metainfo = TO_JSON(#{metainfo}::json),
+			metainfo = (#{metainfo}::json),
 			</if>
 			<if test="description != null and description != ''">
 			description = #{description},

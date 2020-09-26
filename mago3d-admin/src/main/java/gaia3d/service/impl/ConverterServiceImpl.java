@@ -526,8 +526,12 @@ public class ConverterServiceImpl implements ConverterService {
 			dataInfo.setDataType(dataType);
 			dataInfo.setDataName(dataName);
 			dataInfo.setUserId(userId);
-			if(!StringUtils.isEmpty(heightReference)) {
-				dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": " + heightReference + "}");
+			if("none".equalsIgnoreCase(heightReference)) {
+				dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": \"none\"}");
+			} else if("clampToGround".equalsIgnoreCase(heightReference)) {
+				dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": \"clampToGround\"}");
+			} else if("relativeToGround".equalsIgnoreCase(heightReference)) {
+				dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": \"relativeToGround\"}");
 			}
 			dataInfo.setLatitude(latitude);
 			dataInfo.setLongitude(longitude);
