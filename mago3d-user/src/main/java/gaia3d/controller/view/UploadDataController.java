@@ -137,13 +137,14 @@ public class UploadDataController {
 		String dataGroupPath = userSession.getUserId() + "/basic/";
 		DataGroup basicDataGroup = dataGroupService.getBasicDataGroup(dataGroup);
 		if(basicDataGroup == null) {
-			dataGroup.setDataGroupKey("basic");
-			dataGroup.setDataGroupName(messageSource.getMessage("common.basic", null, getUserLocale(request)));
-			dataGroup.setDataGroupPath(propertiesConfig.getUserDataServicePath() + dataGroupPath);
-			dataGroup.setSharing(SharingType.PUBLIC.name().toLowerCase());
-			dataGroup.setMetainfo("{\"isPhysical\": false}");
+			basicDataGroup = new DataGroup();
+			basicDataGroup.setDataGroupKey("basic");
+			basicDataGroup.setDataGroupName(messageSource.getMessage("common.basic", null, getUserLocale(request)));
+			basicDataGroup.setDataGroupPath(propertiesConfig.getUserDataServicePath() + dataGroupPath);
+			basicDataGroup.setSharing(SharingType.PUBLIC.name().toLowerCase());
+			basicDataGroup.setMetainfo("{\"isPhysical\": false}");
 			
-			dataGroupService.insertBasicDataGroup(dataGroup);
+			dataGroupService.insertBasicDataGroup(basicDataGroup);
 		}
 		
 		FileUtils.makeDirectoryByPath(propertiesConfig.getUserDataServiceDir(), dataGroupPath);
