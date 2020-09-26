@@ -41,26 +41,34 @@ public class CustomMessageListener {
     public void receiveMessage(final QueueMessage queueMessage) {
 		log.info("--------------- queueMessage = {}", queueMessage);
 
+		String osType = propertiesConfig.getOsType();
+		final String PREFIX;
+		if(OSType.WINDOW.name().equalsIgnoreCase(osType)) {
+			PREFIX = "#";
+		} else {
+			PREFIX = "-";
+		}
+
 		CompletableFuture.supplyAsync( () -> {
 			List<String> command = new ArrayList<>();
 			command.add(propertiesConfig.getConverterDir());
-			command.add("#inputFolder");
+			command.add(PREFIX + "inputFolder");
 			command.add(queueMessage.getInputFolder());
-			command.add("#outputFolder");
+			command.add(PREFIX + "outputFolder");
 			command.add(queueMessage.getOutputFolder());
-			command.add("#meshType");
+			command.add(PREFIX + "meshType");
 			command.add(queueMessage.getMeshType());
 			if (!StringUtils.isEmpty(queueMessage.getSkinLevel())) {
-				command.add("#skinLevel");
+				command.add(PREFIX + "skinLevel");
 				command.add(queueMessage.getSkinLevel());
 			}
-			command.add("#log");
+			command.add(PREFIX + "log");
 			command.add(queueMessage.getLogPath());
-			command.add("#indexing");
+			command.add(PREFIX + "indexing");
 			command.add(queueMessage.getIndexing());
-			command.add("#usf");
+			command.add(PREFIX + "usf");
 			command.add(queueMessage.getUsf().toString());
-			command.add("#isYAxisUp");
+			command.add(PREFIX + "isYAxisUp");
 			command.add(queueMessage.getIsYAxisUp());
 
 			log.info(" >>>>>> command = {}", command.toString());
