@@ -65,9 +65,7 @@ public class ConverterAPIController {
     }
 
     @PostMapping(value = "{converterJobId}/logs", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<ConverterResultLog> logs(@RequestBody ConverterResultLog converterResultLog,
-                                                   @PathVariable("converterJobId") Long converterJobId,
-                                                   HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<ConverterResultLog> logs(@RequestBody ConverterResultLog converterResultLog, @PathVariable("converterJobId") Long converterJobId, HttpServletRequest request) {
 
         HttpStatus statusCode = HttpStatus.OK;
         String errorCode = null;
@@ -75,7 +73,7 @@ public class ConverterAPIController {
         Locale locale = LocaleUtils.getUserLocale(request);
 
         try {
-            log.info(" >>>>>> converterJobId = {}", converterJobId);
+            log.info(" >>>>>> converterResultLog = {}", converterResultLog);
             converterService.updateConverterJobStatus(converterResultLog);
         } catch (DataAccessException e) {
             statusCode = HttpStatus.INTERNAL_SERVER_ERROR;

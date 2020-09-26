@@ -315,7 +315,7 @@ public class ConverterServiceImpl implements ConverterService {
 				// 2) 데이터 그룹 데이터 건수 -1
 				// 3) 데이터 그룹 최신 이동 location 은? 이건 그냥 다음에 하는걸로~
 				DataInfo dataInfo = new DataInfo();
-				// dataInfo.setUserId(converterJob.getUserId());
+				dataInfo.setUserId(converterJob.getUserId());
 				dataInfo.setConverterJobId(converterJobId);
 				List<DataInfo> dataInfoList = dataService.getDataByConverterJob(dataInfo);
 				deleteFailData(dataInfoList);
