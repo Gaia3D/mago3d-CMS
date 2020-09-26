@@ -140,7 +140,8 @@
 	<!-- 업로딩한 파일 -->
 	<select id="getUploadDataFile" parameterType="uploadDataFile" resultType="uploadDataFile">
 		/* getUploadDataFile */
-		SELECT A.data_group_id, A.sharing, A.data_type, A.data_name, A.mapping_type, A.location, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, A.altitude, B.*
+		SELECT A.data_group_id, A.sharing, A.data_type, A.data_name, A.mapping_type, A.height_reference, 
+			A.location, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, A.altitude, B.*
 		FROM upload_data A, upload_data_file B
 		WHERE A.upload_data_id = B.upload_data_id
 		<if test="userId != null and userId != ''">
@@ -164,13 +165,13 @@
     		SELECT NEXTVAL('upload_data_seq')
   		</selectKey>
 		INSERT INTO upload_data(
-			upload_data_id, data_group_id, sharing, data_type, data_name, user_id, 
+			upload_data_id, data_group_id, sharing, data_type, data_name, user_id, height_reference, 
 			<if test="latitude != null">
 			location, altitude,
 			</if>
 			file_count, converter_target_count, description
 		) VALUES (
-			#{uploadDataId}, #{dataGroupId}, #{sharing}, #{dataType}, #{dataName}, #{userId}, 
+			#{uploadDataId}, #{dataGroupId}, #{sharing}, #{dataType}, #{dataName}, #{userId}, #{heightReference},
 			<if test="latitude != null">
 			ST_GeomFromText(#{location}, 4326), #{altitude},
 			</if>
@@ -212,6 +213,9 @@
 			</if>
 			<if test="mappingType != null and mappingType != ''">
 			mapping_type = #{mappingType},
+			</if>
+			<if test="heightReference != null and heightReference != ''">
+			height_reference = #{heightReference},
 			</if>
 			<if test="latitude != null and latitude gt 0 and longitude != null and longitude gt 0">
 			location = ST_GeomFromText(#{location}, 4326),

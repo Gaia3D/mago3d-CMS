@@ -38,6 +38,8 @@ public class UploadDataFile extends Search implements Serializable {
 	private String dataName;
 	// 기본값 origin : latitude, longitude, height를 origin에 맞춤. boundingboxcenter : latitude, longitude, height를 boundingboxcenter 맞춤
 	private String mappingType;
+	// 높이 설정 방법. none : 해발 고드, clampToGround : Terrain(지형)에 맞춤, relativeToGround : Terrain(지형)으로 부터 높이 설정
+	private String heightReference;
 	// 위도
 	private BigDecimal latitude;
 	// 경도

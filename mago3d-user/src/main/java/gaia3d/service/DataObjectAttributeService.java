@@ -1,7 +1,6 @@
 package gaia3d.service;
 
 import gaia3d.domain.DataObjectAttribute;
-import gaia3d.domain.DataObjectAttributeFileInfo;
 
 /**
  * 데이터 파일 속성 관리

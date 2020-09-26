@@ -110,7 +110,7 @@
 				</th>
 				<td class="col-input">
 					<input type="hidden" id="dataGroupId" name="dataGroupId" th:field="*{dataGroupId}" />
-					<input type="text" id="dataGroupName" name="dataGroupName" th:field="*{dataGroupName}" class="ml" readonly="true" />
+					<input type="text" id="dataGroupName" name="dataGroupName" th:field="*{dataGroupName}" class="ml" readonly="readonly" />
 					<input type="button" id="dataGroupButtion" th:value="#{data.group.select}" />
 				</td>
 			</tr>
@@ -133,7 +133,7 @@
 				</th>
 				<td class="col-input">
 					<select id="dataType" name="dataType" th:field="*{dataType}" class="selectBoxClass">
-						<option value="citygml" selected="selected"> CITYGML </option>
+						<option value="citygml"> CITYGML </option>
 						<option value="indoorgml"> INDOORGML </option>
 						<option value="ifc"> IFC </option>
 						<option value="las"> LAS(POINT CLOUD) </option>
@@ -145,6 +145,16 @@
 			</tr>
 			<tr>
 				<th class="col-label" scope="row">
+					<label for="heightReference">높이 설정 방법</label>
+				</th>
+				<td class="col-input radio-set">
+					<select id="heightReference" name="heightReference" th:field="*{heightReference}" class="selectBoxClass">
+						<option value="none"> 해발 고도 </option>
+						<option value="clampToGround"> Terrain(지형)에 맞춤 </option>
+						<option value="relativeToGround"> Terrain(지형)으로 부터 높이 설정 </option>
+					</select>
+				</td>
+				<th class="col-label" scope="row">
 					<label for="longitude"><th:block th:text="#{upload.representative.location}"></th:block></label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</th>
@@ -154,6 +164,8 @@
 					<input type="text" id="altitude" name="altitude" th:field="*{altitude}" class="m" placeholder="altitude" />
 					<input type="button" id="mapButtion" th:value="#{common.map}" />
 				</td>
+			</tr>
+			<tr>
 				<th class="col-label m" scope="row">
 					<label for="mappingType"><th:block th:text="#{common.mapping.type}"></th:block></label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
@@ -164,13 +176,11 @@
 						<option value="boundingboxcenter"> BOUNDING BOX CENTER </option>
 					</select>
 				</td>
-			</tr>
-			<tr>
 				<th class="col-label" scope="row">
 					<label for="description" th:text="#{common.description}"></label>
 				</th>
-				<td colspan="3" class="col-input">
-					<input type="text" id="description" name="description" th:field="*{description}" class="xl" />
+				<td class="col-input">
+					<input type="text" id="description" name="description" th:field="*{description}" class="l" />
 				</td>
 			</tr>
 		</table>
@@ -196,10 +206,10 @@
 				<td colspan="3" class="col-input">
 					<ul style="list-style: none; margin-bottom: 20px;">
 						<th:block th:each="uploadDataFile : ${uploadDataFileList}" th:if="${#strings.equals(uploadDataFile.fileType, 'DIRECTORY')}">
-							<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" tyle="padding-left: 0px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-							<li th:if="${#strings.equals(uploadDataFile.depth, '2')}" tyle="padding-left: 50px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-							<li th:if="${#strings.equals(uploadDataFile.depth, '3')}" tyle="padding-left: 100px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-							<li th:if="${#strings.equals(uploadDataFile.depth, '4')}" tyle="padding-left: 150px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
+							<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 0px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
+							<li th:if="${#strings.equals(uploadDataFile.depth, '2')}" style="padding-left: 50px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
+							<li th:if="${#strings.equals(uploadDataFile.depth, '3')}" style="padding-left: 100px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
+							<li th:if="${#strings.equals(uploadDataFile.depth, '4')}" style="padding-left: 150px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
 						</th:block>
 						<th:block th:each="uploadDataFile : ${uploadDataFileList}" th:if="${#strings.equals(uploadDataFile.fileType, 'FILE')}">
 							<th:block th:if="${uploadDataFile.converterTarget == true}" style="list-style: none; margin-bottom: 20px;">
@@ -234,6 +244,7 @@
 	$(document).ready(function() {
 		$("#sharing").val("[[${uploadData.sharing}]]");
 		$("#dataType").val("[[${uploadData.dataType}]]");
+		$("#heightReference").val("[[${uploadData.heightReference}]]");
 		$("#mappingType").val("[[${uploadData.mappingType}]]");
 	});
 	

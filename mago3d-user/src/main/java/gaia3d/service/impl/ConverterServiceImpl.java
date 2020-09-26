@@ -482,6 +482,7 @@ public class ConverterServiceImpl implements ConverterService {
 		String dataType = uploadDataFile.getDataType();
 		String sharing = uploadDataFile.getSharing();
 		String mappingType = uploadDataFile.getMappingType();
+		String heightReference = uploadDataFile.getHeightReference();
 		BigDecimal latitude = uploadDataFile.getLatitude();
 		BigDecimal longitude = uploadDataFile.getLongitude();
 		BigDecimal altitude = uploadDataFile.getAltitude();
@@ -494,7 +495,7 @@ public class ConverterServiceImpl implements ConverterService {
 		if (dataInfo == null) {
 			// int order = 1;
 			// TODO nodeType 도 입력해야 함
-			String metainfo = "{\"isPhysical\": true}";
+			String metainfo = "{\"isPhysical\": true, \"heightReference\": \"none\"}";
 
 			dataInfo = new DataInfo();
 			dataInfo.setMethodType(MethodType.INSERT);
@@ -525,6 +526,9 @@ public class ConverterServiceImpl implements ConverterService {
 			dataInfo.setDataType(dataType);
 			dataInfo.setDataName(dataName);
 			dataInfo.setUserId(userId);
+			if(!StringUtils.isEmpty(heightReference)) {
+				dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": " + heightReference + "}");
+			}
 			dataInfo.setLatitude(latitude);
 			dataInfo.setLongitude(longitude);
 			dataInfo.setAltitude(altitude);

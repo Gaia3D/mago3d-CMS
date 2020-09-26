@@ -11,6 +11,7 @@ create table upload_data (
 	data_name						varchar(256),
 	user_id							varchar(32),
 	mapping_type					varchar(30)							default 'origin',
+	height_reference				varchar(16)							default 'none',
 	location		 				GEOMETRY(POINT, 4326),
 	altitude						numeric(13,7),
 	file_count						int									default 0,
@@ -38,6 +39,7 @@ comment on column upload_data.data_type is '데이터 타입. 3ds,obj,dae,collad
 comment on column upload_data.data_name is '데이터명';
 comment on column upload_data.user_id is '사용자 아이디';
 comment on column upload_data.mapping_type is '기본값 origin : latitude, longitude, height를 origin에 맞춤. boundingboxcenter : latitude, longitude, height를 boundingboxcenter 맞춤';
+comment on column upload_data.height_reference is '높이 설정 방법. none : 해발 고드, clampToGround : Terrain(지형)에 맞춤, relativeToGround : Terrain(지형)으로 부터 높이 설정';
 comment on column upload_data.location is 'POINT(위도, 경도). 공간 검색 속도 때문에 altitude는 분리';
 comment on column upload_data.altitude is '높이';
 comment on column upload_data.file_count is '파일 개수';

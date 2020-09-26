@@ -1,4 +1,4 @@
-package gaia3d.domain;
+package gaia3d.domain.uploaddata;
 
 /**
  * 디렉토리 구조

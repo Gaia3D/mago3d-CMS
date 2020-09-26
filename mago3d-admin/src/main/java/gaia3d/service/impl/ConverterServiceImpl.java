@@ -9,6 +9,8 @@ import gaia3d.domain.converter.ConverterJob;
 import gaia3d.domain.converter.ConverterJobFile;
 import gaia3d.domain.uploaddata.UploadData;
 import gaia3d.domain.uploaddata.UploadDataFile;
+import gaia3d.domain.uploaddata.UploadDataType;
+import gaia3d.domain.uploaddata.UploadDirectoryType;
 import gaia3d.persistence.ConverterMapper;
 import gaia3d.service.*;
 import gaia3d.support.LogMessageSupport;
@@ -18,6 +20,7 @@ import org.springframework.amqp.AmqpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -479,6 +482,7 @@ public class ConverterServiceImpl implements ConverterService {
 		String dataType = uploadDataFile.getDataType();
 		String sharing = uploadDataFile.getSharing();
 		String mappingType = uploadDataFile.getMappingType();
+		String heightReference = uploadDataFile.getHeightReference();
 		BigDecimal latitude = uploadDataFile.getLatitude();
 		BigDecimal longitude = uploadDataFile.getLongitude();
 		BigDecimal altitude = uploadDataFile.getAltitude();
@@ -491,7 +495,7 @@ public class ConverterServiceImpl implements ConverterService {
 		if (dataInfo == null) {
 			// int order = 1;
 			// TODO nodeType 도 입력해야 함
-			String metainfo = "{\"isPhysical\": true}";
+			String metainfo = "{\"isPhysical\": true, \"heightReference\": \"none\"}";
 
 			dataInfo = new DataInfo();
 			dataInfo.setMethodType(MethodType.INSERT);
@@ -522,6 +526,9 @@ public class ConverterServiceImpl implements ConverterService {
 			dataInfo.setDataType(dataType);
 			dataInfo.setDataName(dataName);
 			dataInfo.setUserId(userId);
+			if(!StringUtils.isEmpty(heightReference)) {
+				dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": " + heightReference + "}");
+			}
 			dataInfo.setLatitude(latitude);
 			dataInfo.setLongitude(longitude);
 			dataInfo.setAltitude(altitude);

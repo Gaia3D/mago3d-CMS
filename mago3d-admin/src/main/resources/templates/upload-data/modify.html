@@ -71,146 +71,156 @@
 					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
 					<div class="page-content">
 
-					<!-- S: 3D 파일 업로드 수정 -->
-					<form id="uploadData" th:object="${uploadData}" th:action="@{#}" method="post" onsubmit="return false;">
-						<input type="hidden" id="uploadDataId" name="uploadDataId" th:field="*{uploadDataId}" />
-						<table class="input-table scope-row">
-							<colgroup>
-								<col class="col-label l" style="width: 13%"></col>
-								<col class="col-input" style="width: 37%"></col>
-								<col class="col-label l" style="width: 13%"></col>
-								<col class="col-input" style="width: 37%"></col>
-							</colgroup>
-							<tr>
-								<th class="col-label" scope="row">
-									<label id="dataName" name="dataName">데이터명</label>
-									<span class="icon-glyph glyph-emark-dot color-warning"></span>
-								</th>
-								<td class="col-input">
-									<input type="text" id="dataName" name="dataName" th:field="*{dataName}" class="l" />
-								</td>
-								<th class="col-label" scope="row">
-									<label id="dataGroupName" name="dataGroupName">데이터 그룹</label>
-									<span class="icon-glyph glyph-emark-dot color-warning"></span>
-								</th>
-								<td class="col-input">
-									<input type="text" id="dataGroupId" name="dataGroupId" th:field="*{dataGroupId}" class="ml" readonly="true" />
-									<input type="button" id="dataGroupButtion" value="데이터 그룹 선택" />
-								</td>
-							</tr>
-							<tr>
-								<th class="col-label" scope="row">
-									<label id="sharing" name="sharing">공유 유형</label>
-									<span class="icon-glyph glyph-emark-dot color-warning"></span>
-								</th>
-								<td class="col-input">
-									<select id="sharing" name="sharing" th:field="*{sharing}" class="selectBoxClass">
-										<option value="public">공개</option>
-										<option value="common">공통</option>
-										<option value="private">비공개</option>
-										<option value="group">그룹 공개</option>
-									</select>
-								</td>
-								<th class="col-label m" scope="row">
-									<label id="dataType" name="dataType">데이터 타입</label>
-									<span class="icon-glyph glyph-emark-dot color-warning"></span>
-								</th>
-								<td class="col-input">
-									<select id="dataType" name="dataType" th:field="*{dataType}" class="selectBoxClass">
-										<option value="citygml" selected="selected"> CITYGML </option>
-										<option value="indoorgml"> INDOORGML </option>
-										<option value="ifc"> IFC </option>
-										<option value="las"> LAS(POINT CLOUD) </option>
-										<option value="3ds"> 3DS </option>
-										<option value="obj"> OBJ </option>
-										<option value="dae"> COLLADA(DAE) </option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<th class="col-label" scope="row">
-									<label id="longitude" name="longitude">대표 위치 (경도/위도/높이)</label>
-									<span class="icon-glyph glyph-emark-dot color-warning"></span>
-								</th>
-								<td class="col-input">
-									<input type="text" id="longitude" name="longitude" class="m" placeholder="longitude" />
-									<label for="latitude" class="hiddenTag">대표 위치 (위도)</label>
-									<input type="text" id="latitude" name="latitude" class="m" placeholder="latitude" />
-									<label for="altitude" class="hiddenTag">대표 위치 (높이)</label>
-									<input type="text" id="altitude" name="altitude" class="m" placeholder="altitude" />
-								</td>
-								<th class="col-label m" scope="row">
-									<label id="mappingType" name="mappingType">매핑 타입</label>
-									<span class="icon-glyph glyph-emark-dot color-warning"></span>
-								</th>
-								<td class="col-input">
-									<select id="mappingType" name="mappingType" th:field="*{mappingType}" class="selectBoxClass">
-										<option value="origin" selected="selected"> ORIGIN </option>
-										<option value="boundingboxcenter"> BOUNDING BOX CENTER </option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<th class="col-label" scope="row">
-									<label id="description" name="description" th:text="#{description}"></label>
-								</th>
-								<td colspan="3" class="col-input">
-									<input type="text" id="description" name="description" th:field="*{description}" class="xl" />
-								</td>
-							</tr>
-						</table>
-
-						<!-- 수정/목록 버튼 -->
-						<div class="button-group">
-							<div class="center-buttons">
-								<button id="updateButton">수정</button>
-								<a href="/upload-data/list" class="button">목록</a>
+						<!-- S: 3D 파일 업로드 수정 -->
+						<form id="uploadData" th:object="${uploadData}" th:action="@{#}" method="post" onsubmit="return false;">
+							<input type="hidden" id="uploadDataId" name="uploadDataId" th:field="*{uploadDataId}" />
+							<table class="input-table scope-row">
+								<colgroup>
+									<col class="col-label l" style="width: 13%"></col>
+									<col class="col-input" style="width: 37%"></col>
+									<col class="col-label l" style="width: 13%"></col>
+									<col class="col-input" style="width: 37%"></col>
+								</colgroup>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="dataName">데이터명</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<input type="text" id="dataName" name="dataName" th:field="*{dataName}" class="l" />
+									</td>
+									<th class="col-label" scope="row">
+										<label for="dataGroupName">데이터 그룹</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<input type="text" id="dataGroupId" name="dataGroupId" th:field="*{dataGroupId}" class="ml" readonly="readonly" />
+										<input type="button" id="dataGroupButtion" value="데이터 그룹 선택" />
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="sharing">공유 유형</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<select id="sharing" name="sharing" th:field="*{sharing}" class="selectBoxClass">
+											<option value="public">공개</option>
+											<option value="common">공통</option>
+											<option value="private">비공개</option>
+											<option value="group">그룹 공개</option>
+										</select>
+									</td>
+									<th class="col-label m" scope="row">
+										<label for="dataType">데이터 타입</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<select id="dataType" name="dataType" th:field="*{dataType}" class="selectBoxClass">
+											<option value="citygml" selected="selected"> CITYGML </option>
+											<option value="indoorgml"> INDOORGML </option>
+											<option value="ifc"> IFC </option>
+											<option value="las"> LAS(POINT CLOUD) </option>
+											<option value="3ds"> 3DS </option>
+											<option value="obj"> OBJ </option>
+											<option value="dae"> COLLADA(DAE) </option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="heightReference">높이 설정 방법</label>
+									</th>
+									<td class="col-input radio-set">
+										<select id="heightReference" name="heightReference" th:field="*{heightReference}" class="selectBoxClass">
+											<option value="none"> 해발 고도 </option>
+											<option value="clampToGround"> Terrain(지형)에 맞춤 </option>
+											<option value="relativeToGround"> Terrain(지형)으로 부터 높이 설정 </option>
+										</select>
+									</td>
+									<th class="col-label" scope="row">
+										<label for="longitude"><th:block th:text="#{upload.representative.location}"></th:block></label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<input type="text" id="longitude" name="longitude" th:field="*{longitude}" class="m" placeholder="longitude" />
+										<input type="text" id="latitude" name="latitude" th:field="*{latitude}" class="m" placeholder="latitude" />
+										<input type="text" id="altitude" name="altitude" th:field="*{altitude}" class="m" placeholder="altitude" />
+										<input type="button" id="mapButtion" th:value="#{common.map}" />
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label m" scope="row">
+										<label for="mappingType"><th:block th:text="#{common.mapping.type}"></th:block></label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<select id="mappingType" name="mappingType" th:field="*{mappingType}" class="selectBoxClass">
+											<option value="origin" selected="selected"> ORIGIN </option>
+											<option value="boundingboxcenter"> BOUNDING BOX CENTER </option>
+										</select>
+									</td>
+									<th class="col-label" scope="row">
+										<label for="description" th:text="#{common.description}"></label>
+									</th>
+									<td class="col-input">
+										<input type="text" id="description" name="description" th:field="*{description}" class="l" />
+									</td>
+								</tr>
+							</table>
+	
+							<!-- 수정/목록 버튼 -->
+							<div class="button-group">
+								<div class="center-buttons">
+									<button id="updateButton">수정</button>
+									<a href="/upload-data/list" class="button">목록</a>
+								</div>
 							</div>
-						</div>
+										
+							<!-- 업로드 목록 -->
+							<table class="input-table scope-row">
+								<colgroup>
+									<col class="col-label l" style="width: 15%">
+									<col class="col-input" style="width: 35%">
+									<col class="col-label l" style="width: 15%">
+									<col class="col-input" style="width: 35%">
+								</colgroup>
+								<tr>
+									<th class="col-label" scope="row" style="vertical-align: top;">
+										<label>첨부 파일</label>
+									</th>
 									
-						<!-- 업로드 목록 -->
-						<table class="input-table scope-row">
-							<colgroup>
-								<col class="col-label l" style="width: 15%">
-								<col class="col-input" style="width: 35%">
-								<col class="col-label l" style="width: 15%">
-								<col class="col-input" style="width: 35%">
-							</colgroup>
-							<tr>
-								<th class="col-label" scope="row" style="vertical-align: top;">
-									<label>첨부 파일</label>
-								</th>
-								
-								<td colspan="3" class="col-input">
-									<ul style="list-style: none; margin-bottom: 20px;">
-										<th:block th:each="uploadDataFile : ${uploadDataFileList}" th:if="${#strings.equals(uploadDataFile.fileType, 'DIRECTORY')}">
-											<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" tyle="padding-left: 0px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-											<li th:if="${#strings.equals(uploadDataFile.depth, '2')}" tyle="padding-left: 50px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-											<li th:if="${#strings.equals(uploadDataFile.depth, '3')}" tyle="padding-left: 100px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-											<li th:if="${#strings.equals(uploadDataFile.depth, '4')}" tyle="padding-left: 150px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-										</th:block>
-										<th:block th:each="uploadDataFile : ${uploadDataFileList}" th:if="${#strings.equals(uploadDataFile.fileType, 'FILE')}">
-											<th:block th:if="${#bools.isTrue(uploadDataFile.converterTarget)}" style="list-style: none; margin-bottom: 20px;">
-												<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 0px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-												<li th:if="${#strings.equals(uploadDataFile.depth, '2')}" style="padding-left: 50px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-												<li th:if="${#strings.equals(uploadDataFile.depth, '3')}" style="padding-left: 100px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-												<li th:if="${#strings.equals(uploadDataFile.depth, '4')}" style="padding-left: 150px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
+									<td colspan="3" class="col-input">
+										<ul style="list-style: none; margin-bottom: 20px;">
+											<th:block th:each="uploadDataFile : ${uploadDataFileList}" th:if="${#strings.equals(uploadDataFile.fileType, 'DIRECTORY')}">
+												<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 0px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
+												<li th:if="${#strings.equals(uploadDataFile.depth, '2')}" style="padding-left: 50px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
+												<li th:if="${#strings.equals(uploadDataFile.depth, '3')}" style="padding-left: 100px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
+												<li th:if="${#strings.equals(uploadDataFile.depth, '4')}" style="padding-left: 150px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
 											</th:block>
-											<th:block th:if="${#bools.isFalse(uploadDataFile.converterTarget)}" style="list-style: none; margin-bottom: 20px;">
-												<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 0px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-												<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 50px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-												<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 100px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-												<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 150px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
+											<th:block th:each="uploadDataFile : ${uploadDataFileList}" th:if="${#strings.equals(uploadDataFile.fileType, 'FILE')}">
+												<th:block th:if="${#bools.isTrue(uploadDataFile.converterTarget)}" style="list-style: none; margin-bottom: 20px;">
+													<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 0px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
+													<li th:if="${#strings.equals(uploadDataFile.depth, '2')}" style="padding-left: 50px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
+													<li th:if="${#strings.equals(uploadDataFile.depth, '3')}" style="padding-left: 100px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
+													<li th:if="${#strings.equals(uploadDataFile.depth, '4')}" style="padding-left: 150px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
+												</th:block>
+												<th:block th:if="${#bools.isFalse(uploadDataFile.converterTarget)}" style="list-style: none; margin-bottom: 20px;">
+													<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 0px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
+													<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 50px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
+													<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 100px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
+													<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 150px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
+												</th:block>
 											</th:block>
-										</th:block>
-									</ul>
-								</td>
-							</tr>
-						</table>
-					</form>
-				</div>
+										</ul>
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
 				<!-- 상위 그룹 선택 다이얼 로그 -->
 				<div th:replace="~{/data-group/parent-data-group-dialog :: #dataGroupDialog}"></div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -225,6 +235,7 @@
 	$(document).ready(function() {
 		$("#sharing").val("[[${uploadData.sharing}]]");
 		$("#dataType").val("[[${uploadData.dataType}]]");
+		$("#heightReference").val("[[${uploadData.heightReference}]]");
 		$("#mappingType").val("[[${uploadData.mappingType}]]");
 	});
 	

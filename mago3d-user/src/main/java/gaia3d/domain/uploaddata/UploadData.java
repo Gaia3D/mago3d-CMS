@@ -44,14 +44,20 @@ public class UploadData extends Search implements Serializable {
 	private String sharing;
 	// 데이터 타입. 3ds,obj, dae, collada, ifc, las, citygml, indoorgml
 	private String dataType;
+	// 데이터 타입
+	private UploadDataType dataInfoType;
+	// 데이터 타입 집계
+	private Long dataCount;
 	// 데이터명
-	private String dataName;	
+	private String dataName;
 	// 사용자 아이디
 	private String userId;
 	// 사용자명
 	private String userName;
 	// 기본값 origin : latitude, longitude, height를 origin에 맞춤. boundingboxcenter : latitude, longitude, height를 boundingboxcenter 맞춤
 	private String mappingType;
+	// 높이 설정 방법. none : 해발 고드, clampToGround : Terrain(지형)에 맞춤, relativeToGround : Terrain(지형)으로 부터 높이 설정
+	private String heightReference;
 	// POINT(위도, 경도). 공간 검색 속도 때문에 altitude는 분리
 	private String location;
 	// 위도

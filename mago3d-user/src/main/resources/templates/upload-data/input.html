@@ -109,7 +109,7 @@
 					</th>
 					<td class="col-input">
 						<input type="hidden" id="dataGroupId" name="dataGroupId" />
-						<input type="text" id="dataGroupName" name="dataGroupName" class="ml" readonly="true" />
+						<input type="text" id="dataGroupName" name="dataGroupName" class="ml" readonly="readonly" />
 						<input type="button" id="dataGroupButtion" th:value="#{data.group.select}" />
 					</td>
 				</tr>
@@ -145,10 +145,20 @@
 				</tr>
 				<tr>
 					<th class="col-label" scope="row">
+						<label for="heightReference">높이 설정 방법</label>
+					</th>
+					<td class="col-input radio-set">
+						<select id="heightReference" name="heightReference" class="selectBoxClass">
+							<option value="none" selected="selected"> 해발 고도 </option>
+							<option value="clampToGround"> Terrain(지형)에 맞춤 </option>
+							<option value="relativeToGround"> Terrain(지형)으로 부터 높이 설정 </option>
+						</select>
+					</td>
+					<th class="col-label" scope="row">
 						<label for="longitude"><th:block th:text="#{upload.representative.location}"></th:block></label>
 						<!-- <span class="icon-glyph glyph-emark-dot color-warning"></span> -->
 					</th>
-					<td colspan="3" class="col-input">
+					<td class="col-input">
 						<input type="text" id="longitude" name="longitude" class="m" placeholder="longitude" />
 						<input type="text" id="latitude" name="latitude" class="m" placeholder="latitude" />
 						<input type="text" id="altitude" name="altitude" class="m" placeholder="altitude" />
@@ -297,6 +307,7 @@
 				formData.append("dataGroupId", $("#dataGroupId").val());
 				formData.append("sharing", $("#sharing").val());
 				formData.append("dataType", $("#dataType").val());
+				formData.append("heightReference", $("#heightReference").val());
 				formData.append("longitude", $("#longitude").val());
 				formData.append("latitude", $("#latitude").val());
 				formData.append("altitude", $("#altitude").val());

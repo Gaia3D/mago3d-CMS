@@ -1,7 +1,7 @@
 package gaia3d.service.impl;
 
 import gaia3d.domain.FileType;
-import gaia3d.domain.UploadDataType;
+import gaia3d.domain.uploaddata.UploadDataType;
 import gaia3d.domain.uploaddata.UploadData;
 import gaia3d.domain.uploaddata.UploadDataFile;
 import gaia3d.persistence.UploadDataMapper;

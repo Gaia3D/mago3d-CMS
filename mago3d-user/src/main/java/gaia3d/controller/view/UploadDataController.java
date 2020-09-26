@@ -15,19 +15,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.PropertiesConfig;
 import gaia3d.domain.CacheManager;
-import gaia3d.domain.converter.ConverterJob;
 import gaia3d.domain.DataGroup;
 import gaia3d.domain.Key;
 import gaia3d.domain.PageType;
 import gaia3d.domain.Pagination;
 import gaia3d.domain.RoleKey;
 import gaia3d.domain.SharingType;
+import gaia3d.domain.UserSession;
+import gaia3d.domain.converter.ConverterJob;
 import gaia3d.domain.uploaddata.UploadData;
 import gaia3d.domain.uploaddata.UploadDataFile;
-import gaia3d.domain.UserSession;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.PolicyService;
 import gaia3d.service.UploadDataService;
@@ -35,6 +34,7 @@ import gaia3d.support.RoleSupport;
 import gaia3d.support.SQLInjectSupport;
 import gaia3d.utils.DateUtils;
 import gaia3d.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 3D 데이터 파일 업로더
@@ -133,23 +133,23 @@ public class UploadDataController {
 		
 		DataGroup dataGroup = new DataGroup();
 		dataGroup.setUserId(userSession.getUserId());
-		// 자기것만 나와야 해서 dataGroupId가 필요 없음
-		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroup(dataGroup);
-		if(dataGroupList == null || dataGroupList.isEmpty()) {
-			String dataGroupPath = userSession.getUserId() + "/basic/";
+		
+		String dataGroupPath = userSession.getUserId() + "/basic/";
+		DataGroup basicDataGroup = dataGroupService.getBasicDataGroup(dataGroup);
+		if(basicDataGroup == null) {
 			dataGroup.setDataGroupKey("basic");
 			dataGroup.setDataGroupName(messageSource.getMessage("common.basic", null, getUserLocale(request)));
 			dataGroup.setDataGroupPath(propertiesConfig.getUserDataServicePath() + dataGroupPath);
 			dataGroup.setSharing(SharingType.PUBLIC.name().toLowerCase());
 			dataGroup.setMetainfo("{\"isPhysical\": false}");
 			
-			FileUtils.makeDirectoryByPath(propertiesConfig.getUserDataServiceDir(), dataGroupPath);
 			dataGroupService.insertBasicDataGroup(dataGroup);
-			
-			dataGroupList = dataGroupService.getListDataGroup(dataGroup);
 		}
 		
-		DataGroup basicDataGroup = dataGroupService.getBasicDataGroup(dataGroup);
+		FileUtils.makeDirectoryByPath(propertiesConfig.getUserDataServiceDir(), dataGroupPath);
+		
+		// 자기것만 나와야 해서 dataGroupId가 필요 없음
+		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroup(dataGroup);
 		
 		UploadData uploadData = UploadData.builder().
 											dataGroupId(basicDataGroup.getDataGroupId()).

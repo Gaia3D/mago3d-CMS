@@ -1,7 +1,7 @@
 package gaia3d.utils;
 
 import gaia3d.domain.FileInfo;
-import gaia3d.domain.UploadDirectoryType;
+import gaia3d.domain.uploaddata.UploadDirectoryType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
