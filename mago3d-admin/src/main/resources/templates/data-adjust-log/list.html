@@ -128,7 +128,7 @@
 											<label for="dataAdjustLogId_${dataAdjustLog.dataAdjustLogId}" class="hiddenTag">선택 체크박스</label>
 											<input type="checkbox" id="|dataAdjustLogId_${dataAdjustLog.dataAdjustLogId}|" name="dataAdjustLogId" value="${dataAdjustLog.dataAdjustLogId}" />
 										</td>
-										<td class="col-number" th:text="${dataAdjustLog.count + ((pagination.pageNo-1)*10)}"></td>
+										<td class="col-number" th:text="${pagination.rowNumber - dataAdjustLogStat.index}"></td>
 										<td class="col-name ellipsis" style="max-width:120px;">
 											<a href="#" class="view-group-detail" th:value="${dataAdjustLog.dataGroupName}" th:onclick="detailDataGroup([[${dataAdjustLog.dataGroupId }]]); return false;"></a></td>
 										<td class="col-name ellipsis" style="max-width:140px;">

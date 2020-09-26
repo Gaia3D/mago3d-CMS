@@ -131,7 +131,7 @@
 											<td class="col-checkbox">
 												<input type="checkbox" th:id="|uploadDataId_${uploadData.uploadDataId}|" name="uploadDataId" th:value="${uploadData.uploadDataId}" />
 											</td>
-											<td class="col-number" th:text="${uploadDataStat.count + ((pagination.pageNo-1)*10)}"></td>
+											<td class="col-number" th:text="${pagination.rowNumber - uploadDataStat.index}"></td>
 											<td class="col-name ellipsis" th:text="${uploadData.dataGroupName}" style="min-width:120px;max-width:120px;"></td>
 											<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'common')}" th:text="공통"></td>
 											<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'public')}" th:text="공개"></td>

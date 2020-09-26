@@ -137,7 +137,7 @@
 												<label class="hiddenTag">선택 체크박스</label>
 												<input type="checkbox" th:id="|dataId_${dataInfo.dataId}|" name="dataId" value="${dataInfo.dataId}" />
 											</td>
-											<td class="col-number" th:text="${dataInfoStat.count + ((pagination.pageNo-1)*10)}"></td>
+											<td class="col-number" th:text="${pagination.rowNumber - dataInfoStat.index}"></td>
 											<td class="col-name ellipsis" style="max-width:200px;">
 												<a href="#" class="view-group-detail" th:text="${dataInfo.dataGroupName}" th:onclick="detailDataGroup([[${dataInfo.dataGroupId }]]); return false;"></a>
 											</td>

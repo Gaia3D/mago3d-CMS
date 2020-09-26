@@ -123,7 +123,7 @@
 											<td class="col-checkbox">
 												<input type="checkbox" id="dataInfoLogId_${dataInfoLog.dataLogId}" name="dataLogId" th:value="${dataInfoLog.dataLogId}" />
 											</td>
-											<td class="col-number" th:text="${dataInfoLogStat.count + ((pagination.pageNo-1)*10)}"></td>
+											<td class="col-number" th:text="${pagination.rowNumber - dataInfoLogStat.index}"></td>
 											<td class="col-name ellipsis" th:text="${dataInfoLog.dataGroupName}" style="min-width:100px;max-width:100px;"></td>
 											<td class="col-name ellipsis" th:text="${dataInfoLog.dataName}" style="min-width:160px;max-width:160px;"></td>
 											<td class="col-type" th:text="${dataInfoLog.userId}"></td>

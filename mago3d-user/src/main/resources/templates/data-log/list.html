@@ -139,7 +139,7 @@
 								<input type="checkbox" id="dataInfoLogId_${dataInfoLog.dataLogId}" name="dataLogId" th:value="${dataInfoLog.dataLogId}" />
 							</td>
 							<td class="col-number">
-								<th:block th:text="${dataInfoLogStat.count + ((pagination.pageNo-1)*10)}"></th:block></td>
+								<th:block th:text="${pagination.rowNumber - dataInfoLogStat.index}"></th:block></td>
 							<td class="col-name ellipsis" style="min-width:100px;max-width:100px;">
 								<th:block th:text="${dataInfoLog.dataGroupName}"></th:block></td>
 							<td class="col-name ellipsis" style="min-width:160px;max-width:160px;">

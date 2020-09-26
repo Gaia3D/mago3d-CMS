@@ -141,7 +141,7 @@
                                                 <label for="userId_${user.userId}" class="hiddenTag"></label>
                                                 <input type="checkbox" th:id="|userId_${user.userId}|" name="userId" th:value="${user.userId}" />
                                             </td>
-                                            <td class="col-number" th:text="${userStat.count + ((pagination.pageNo-1)*10)}"></td>
+                                            <td class="col-number" th:text="${pagination.rowNumber - userStat.index}"></td>
                                             <td class="col-name ellipsis">
                                                 <a href="#" class="view-group-detail" th:onclick="detailUserGroup([[${user.userGroupId}]]); return false;" th:text="${user.userGroupName}"></a>
                                             </td>
