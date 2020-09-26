@@ -34,7 +34,7 @@ JS_MESSAGE["here.it.is"] = "이곳 입니다.";
 JS_MESSAGE["csrf.token.invalid"] = "보안(CSRF) 토큰이 유효하지 않습니다.";
 
 JS_MESSAGE["number.constraint"] = "숫자만 입력 가능합니다.";
-JS_MESSAGE["location.constraint"]="경도 유효범위 : -180 ~ 180\n위도 유효범위 : -90 ~ 90 \n높이 유효범위 : 300000 입니다.";
+JS_MESSAGE["location.constraint"]="경도 유효범위 : -180 ~ 180\n위도 유효범위 : -90 ~ 90 \n높이 유효범위 : -30000 ~ 300000 입니다.";
 JS_MESSAGE["location.invalid"] = "위치 정보가 올바르지 않습니다. 확인하여 주십시오.";
 
 JS_MESSAGE["file.name.empty"] = "파일명을 입력하여 주십시오.";

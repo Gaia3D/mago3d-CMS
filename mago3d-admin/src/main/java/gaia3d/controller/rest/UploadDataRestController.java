@@ -593,9 +593,11 @@ public class UploadDataRestController {
     		uploadDataFile.setFileSize(String.valueOf(size));
     	
     	} catch(IOException e) {
+    		e.printStackTrace();
     		log.info("@@@@@@@@@@@@ io exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
     		uploadDataFile.setErrorMessage(e.getMessage());
         } catch(Exception e) {
+        	e.printStackTrace();
         	log.info("@@@@@@@@@@@@ exception. message = {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
         	uploadDataFile.setErrorMessage(e.getMessage());
         }
