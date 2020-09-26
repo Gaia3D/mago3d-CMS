@@ -124,6 +124,7 @@
 											<option value="3ds"> 3DS </option>
 											<option value="obj"> OBJ </option>
 											<option value="dae"> COLLADA(DAE) </option>
+											<option value="fbx"> FBX </option>
 										</select>
 									</td>
 								</tr>
@@ -139,19 +140,19 @@
 										</select>
 									</td>
 									<th class="col-label" scope="row">
-										<label for="longitude"><th:block th:text="#{upload.representative.location}"></th:block></label>
+										<label for="longitude">대표 위치 (경도/위도/높이)</label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input">
 										<input type="text" id="longitude" name="longitude" th:field="*{longitude}" class="m" placeholder="longitude" />
 										<input type="text" id="latitude" name="latitude" th:field="*{latitude}" class="m" placeholder="latitude" />
 										<input type="text" id="altitude" name="altitude" th:field="*{altitude}" class="m" placeholder="altitude" />
-										<input type="button" id="mapButtion" th:value="#{common.map}" />
+										<input type="button" id="mapButtion" value="지도에서 찾기" />
 									</td>
 								</tr>
 								<tr>
 									<th class="col-label m" scope="row">
-										<label for="mappingType"><th:block th:text="#{common.mapping.type}"></th:block></label>
+										<label for="mappingType">매핑 타입</label>
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input">
@@ -161,7 +162,7 @@
 										</select>
 									</td>
 									<th class="col-label" scope="row">
-										<label for="description" th:text="#{common.description}"></label>
+										<label for="description" th:text="#{description}"></label>
 									</th>
 									<td class="col-input">
 										<input type="text" id="description" name="description" th:field="*{description}" class="l" />
@@ -192,26 +193,21 @@
 									
 									<td colspan="3" class="col-input">
 										<ul style="list-style: none; margin-bottom: 20px;">
-											<th:block th:each="uploadDataFile : ${uploadDataFileList}" th:if="${#strings.equals(uploadDataFile.fileType, 'DIRECTORY')}">
-												<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 0px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-												<li th:if="${#strings.equals(uploadDataFile.depth, '2')}" style="padding-left: 50px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-												<li th:if="${#strings.equals(uploadDataFile.depth, '3')}" style="padding-left: 100px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-												<li th:if="${#strings.equals(uploadDataFile.depth, '4')}" style="padding-left: 150px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-											</th:block>
-											<th:block th:each="uploadDataFile : ${uploadDataFileList}" th:if="${#strings.equals(uploadDataFile.fileType, 'FILE')}">
-												<th:block th:if="${#bools.isTrue(uploadDataFile.converterTarget)}" style="list-style: none; margin-bottom: 20px;">
-													<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 0px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-													<li th:if="${#strings.equals(uploadDataFile.depth, '2')}" style="padding-left: 50px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-													<li th:if="${#strings.equals(uploadDataFile.depth, '3')}" style="padding-left: 100px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-													<li th:if="${#strings.equals(uploadDataFile.depth, '4')}" style="padding-left: 150px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-												</th:block>
-												<th:block th:if="${#bools.isFalse(uploadDataFile.converterTarget)}" style="list-style: none; margin-bottom: 20px;">
-													<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 0px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-													<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 50px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-													<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 100px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-													<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 150px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-												</th:block>
-											</th:block>
+	<th:block th:unless="${uploadDataFileList.empty}" th:each="uploadDataFile : ${uploadDataFileList}">
+		<th:block th:with="paddingLeftValue = ${(uploadDataFile.depth -1)  * 50}">
+			<th:block th:if="${#strings.equals(uploadDataFile.fileType, 'DIRECTORY')}">
+											<li th:style="|padding-left: ${paddingLeftValue}px; height: 25px;|" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
+			</th:block>
+			<th:block th:if="${#strings.equals(uploadDataFile.fileType, 'FILE')}">
+				<th:block th:if="${#strings.equals(uploadDataFile.converterTarget, 'true')}">
+											<li th:style="|padding-left: ${paddingLeftValue}px; height: 25px; color:blue; font-weight: bold;|" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>	
+				</th:block>
+				<th:block th:if="${#strings.equals(uploadDataFile.converterTarget, 'false')}">
+						<li th:style="|padding-left: ${paddingLeftValue}px; height: 25px;|" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>	
+				</th:block>
+			</th:block>
+		</th:block>
+	</th:block>				
 										</ul>
 									</td>
 								</tr>

@@ -141,6 +141,7 @@
 						<option value="3ds"> 3DS </option>
 						<option value="obj"> OBJ </option>
 		          		<option value="dae"> COLLADA(DAE) </option>
+		          		<option value="fbx"> FBX </option>
 					</select>
 				</td>
 			</tr>
@@ -206,26 +207,21 @@
 				
 				<td colspan="3" class="col-input">
 					<ul style="list-style: none; margin-bottom: 20px;">
-						<th:block th:each="uploadDataFile : ${uploadDataFileList}" th:if="${#strings.equals(uploadDataFile.fileType, 'DIRECTORY')}">
-							<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 0px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-							<li th:if="${#strings.equals(uploadDataFile.depth, '2')}" style="padding-left: 50px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-							<li th:if="${#strings.equals(uploadDataFile.depth, '3')}" style="padding-left: 100px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-							<li th:if="${#strings.equals(uploadDataFile.depth, '4')}" style="padding-left: 150px; height: 25px;" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
-						</th:block>
-						<th:block th:each="uploadDataFile : ${uploadDataFileList}" th:if="${#strings.equals(uploadDataFile.fileType, 'FILE')}">
-							<th:block th:if="${uploadDataFile.converterTarget == true}" style="list-style: none; margin-bottom: 20px;">
-								<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 0px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-								<li th:if="${#strings.equals(uploadDataFile.depth, '2')}" style="padding-left: 50px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-								<li th:if="${#strings.equals(uploadDataFile.depth, '3')}" style="padding-left: 100px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-								<li th:if="${#strings.equals(uploadDataFile.depth, '4')}" style="padding-left: 150px; height: 25px; color:blue; font-weight: bold;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-							</th:block>
-							<th:block th:if="${uploadDataFile.converterTarget == false}" style="list-style: none; margin-bottom: 20px;">
-								<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 0px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-								<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 50px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-								<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 100px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-								<li th:if="${#strings.equals(uploadDataFile.depth, '1')}" style="padding-left: 150px; height: 25px;" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>
-							</th:block>
-						</th:block>
+	<th:block th:unless="${uploadDataFileList.empty}" th:each="uploadDataFile : ${uploadDataFileList}">
+		<th:block th:with="paddingLeftValue = ${(uploadDataFile.depth -1)  * 50}">
+			<th:block th:if="${#strings.equals(uploadDataFile.fileType, 'DIRECTORY')}">
+						<li th:style="|padding-left: ${paddingLeftValue}px; height: 25px;|" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
+			</th:block>
+			<th:block th:if="${#strings.equals(uploadDataFile.fileType, 'FILE')}">
+				<th:block th:if="${#strings.equals(uploadDataFile.converterTarget, 'true')}">
+						<li th:style="|padding-left: ${paddingLeftValue}px; height: 25px; color:blue; font-weight: bold;|" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>	
+				</th:block>
+				<th:block th:if="${#strings.equals(uploadDataFile.converterTarget, 'false')}">
+						<li th:style="|padding-left: ${paddingLeftValue}px; height: 25px;|" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>	
+				</th:block>
+			</th:block>
+        </th:block>
+	</th:block>				
 					</ul>
 				</td>
 			</tr>
