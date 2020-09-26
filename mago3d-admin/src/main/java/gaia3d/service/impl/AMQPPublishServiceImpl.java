@@ -27,6 +27,6 @@ public class AMQPPublishServiceImpl implements AMQPPublishService {
 	@Transactional
 	public void send(QueueMessage queueMessage) {
 		log.info("@@ Publish send message >>> {}", queueMessage);
-		rabbitTemplate.convertAndSend(propertiesConfig.getQueueName(), queueMessage);
+		rabbitTemplate.convertAndSend(propertiesConfig.getExchange(), propertiesConfig.getQueueName(), queueMessage);
 	}
 }
