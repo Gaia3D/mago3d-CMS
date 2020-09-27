@@ -27,6 +27,50 @@ repositories {
 	mavenCentral()
 }
 
+sourceSets {
+	main {
+		resources {
+			if (!project.hasProperty('profile') || !profile) {
+				println " ========== > default profile is local. "
+				ext.profile = DEFAULT_PROFILE
+			}
+
+			if (profile == 'product') {
+				println " ===========> profile file is ${profile}"
+				println " ===========> copy from src/main/resources/product to src/main/resources"
+
+				copy {
+					from("src/main/resources/product") {
+						include 'application.properties'
+						include 'mago3d.properties'
+						include 'logback-spring.xml'
+					}
+					into "src/main/resources"
+				}
+				exclude "**/develop/*"
+			} else if (profile == 'develop') {
+				println " ===========> profile file is ${profile}"
+				println " ===========> copy from src/main/resources/develop to src/main/resources"
+
+				copy {
+					from("src/main/resources/develop") {
+						include 'application.properties'
+						include 'mago3d.properties'
+						include 'logback-spring.xml'
+					}
+					into "src/main/resources"
+				}
+				exclude "**/product/*"
+			} else {
+				println " ===========> profile file is ${profile}"
+				//srcDir "src/main/resources"
+				exclude "**/product/*"
+				exclude "**/develop/*"
+			}
+		}
+	}
+}
+
 dependencies {
 	implementation project(':common')
 
