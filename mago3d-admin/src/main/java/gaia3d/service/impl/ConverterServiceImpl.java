@@ -495,8 +495,8 @@ public class ConverterServiceImpl implements ConverterService {
 		if (dataInfo == null) {
 			// int order = 1;
 			// TODO nodeType 도 입력해야 함
-			String metainfo = "{\"isPhysical\": true, \"heightReference\": \"none\"}";
-
+			String metainfo = "{\"isPhysical\": true, \"heightReference\": \"" + heightReference + "\"}";
+			
 			dataInfo = new DataInfo();
 			dataInfo.setMethodType(MethodType.INSERT);
 			dataInfo.setDataGroupId(dataGroupId);
@@ -526,13 +526,7 @@ public class ConverterServiceImpl implements ConverterService {
 			dataInfo.setDataType(dataType);
 			dataInfo.setDataName(dataName);
 			dataInfo.setUserId(userId);
-			if("none".equalsIgnoreCase(heightReference)) {
-				dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": \"none\"}");
-			} else if("clampToGround".equalsIgnoreCase(heightReference)) {
-				dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": \"clampToGround\"}");
-			} else if("relativeToGround".equalsIgnoreCase(heightReference)) {
-				dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": \"relativeToGround\"}");
-			}
+			dataInfo.setMetainfo("{\"isPhysical\": true, \"heightReference\": \"" + heightReference + "\"}");
 			dataInfo.setLatitude(latitude);
 			dataInfo.setLongitude(longitude);
 			dataInfo.setAltitude(altitude);

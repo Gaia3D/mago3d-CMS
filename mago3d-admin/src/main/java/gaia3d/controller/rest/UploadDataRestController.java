@@ -215,20 +215,13 @@ public class UploadDataRestController {
 						extension = UploadDataType.INDOORGML.getValue();
 					}
 					
+					// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
+					saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + extension;
+					
 					converterTarget = true;
 					converterTargetCount++;
-				}
+				} 
 				
-				if (StringUtils.isEmpty(sameFileName)) {
-					// 한쌍으로 사용되어야 하는 texture 같은 파일이 없다는 의미. 이름을 변경하고 맵에 저장
-					String searchfileNameValue = userId + "_" + today + "_" + System.nanoTime();
-					saveFileName = searchfileNameValue + "." + extension;
-					fileNameMatchingMap.put(searchfileNameKey, searchfileNameValue);
-				} else {
-					// 한쌍으로 사용되어야 하는 texture 같은 파일이 있다는 의미. 그 이름을 그대로 사용해야 함
-					saveFileName = sameFileName + "." + extension;
-				}
-    			
 				long size = 0L;
 				try (	InputStream inputStream = multipartFile.getInputStream();
 						OutputStream outputStream = new FileOutputStream(makedDirectory + tempDirectory + File.separator + saveFileName)) {
@@ -438,19 +431,11 @@ public class UploadDataRestController {
                 						extension = UploadDataType.INDOORGML.getValue();
                 					}
             						
+            						// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
+            						saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + extension;
             						converterTarget = true;
 									converterTargetCount++;
             					}
-            					
-            					if (StringUtils.isEmpty(sameFileName)) {
-        							// 한쌍으로 사용되어야 하는 texture 같은 파일이 없다는 의미. 이름을 변경하고 맵에 저장
-									String searchfileNameValue = userId + "_" + today + "_" + System.nanoTime();
-									saveFileName = searchfileNameValue + "." + extension;
-									fileNameMatchingMap.put(searchfileNameKey, searchfileNameValue);
-								} else {
-									// 한쌍으로 사용되어야 하는 texture 같은 파일이 있다는 의미. 그 이름을 그대로 사용해야 함
-									saveFileName = sameFileName + "." + extension;
-								}
 	        				}
             			}
             		} else {
@@ -502,19 +487,11 @@ public class UploadDataRestController {
                 						extension = UploadDataType.INDOORGML.getValue();
                 					}
             						
+            						// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
+            						saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + extension;
 									converterTarget = true;
 									converterTargetCount++;
-            					} 
-            					
-            					if (StringUtils.isEmpty(sameFileName)) {
-        							// 한쌍으로 사용되어야 하는 texture 같은 파일이 없다는 의미. 이름을 변경하고 맵에 저장
-        							String searchfileNameValue = userId + "_" + today + "_" + System.nanoTime();
-        							saveFileName = searchfileNameValue + "." + extension;
-        							fileNameMatchingMap.put(searchfileNameKey, searchfileNameValue);
-        						} else {
-        							// 한쌍으로 사용되어야 하는 texture 같은 파일이 있다는 의미. 그 이름을 그대로 사용해야 함
-        							saveFileName = sameFileName + "." + extension;
-        						}
+            					}
 	        				} else {
 	        					// 예외 처리
 	        					log.info("@@ file.ext.invalid. extList = {}, extension = {}", uploadTypeList, fileName);
