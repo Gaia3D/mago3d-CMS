@@ -32,7 +32,7 @@
 	<logger name="com.zaxxer.hikari.pool.HikariPool" level="info" additivity="false" />
 
 	<root level="info">
-		<appender-ref ref="STDOUT" />
-		<!-- <appender-ref ref="dailyRollingFileAppender" /> -->
+<!--		<appender-ref ref="STDOUT" />-->
+		 <appender-ref ref="dailyRollingFileAppender" />
 	</root>
 </configuration>
