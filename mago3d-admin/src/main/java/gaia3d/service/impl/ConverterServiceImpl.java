@@ -298,11 +298,12 @@ public class ConverterServiceImpl implements ConverterService {
 				// location_update_type 이 auto 일 경우 dataInfo 위치 정보로 dataGroup 위치 정보 수정
 				updateDataGroup(userId, dataInfo, uploadDataFile);
 
-				if (conversionJobResult.getLocation() != null && conversionJobResult.getAttributes() != null) {
+				if (conversionJobResult.getLocation() != null) {
 					// 위치정보 갱신
 					ConverterLocation converterLocation = conversionJobResult.getLocation();
 					updateConverterLocation(converterLocation, dataInfo);
-
+				}
+				if (conversionJobResult.getAttributes() != null) {
 					// 속성정보 갱신
 					String attributes = conversionJobResult.getAttributes();
 					updateConverterAttribute(attributes, dataInfo);

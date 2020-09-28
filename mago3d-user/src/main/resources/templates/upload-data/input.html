@@ -359,7 +359,7 @@
 		}
 		
 		// citygml 인 경우 longitude, latitude를 입력하지 않음
-		if($("#dataType").val() !== "citygml") {
+		if($("#dataType").val() !== "citygml" && $("#dataType").val() !== "las" ) {
 			if ($("#longitude").val() === "") {
 				alert(JS_MESSAGE["representative.longitude.empty"]);
 				$("#longitude").focus();

@@ -266,7 +266,7 @@ public class UploadDataRestController {
 		uploadData.setUserId(userId);
 		uploadData.setHeightReference(request.getParameter("heightReference"));
 		// citygml 인 경우 converter 에서 자동 추출
-		if(	UploadDataType.CITYGML != UploadDataType.findBy(dataType)) {
+		if(	UploadDataType.CITYGML != UploadDataType.findBy(dataType) && UploadDataType.LAS != UploadDataType.findBy(dataType)) {
 			uploadData.setLongitude(new BigDecimal(request.getParameter("longitude")) );
 			uploadData.setLatitude(new BigDecimal(request.getParameter("latitude")) );
 			uploadData.setAltitude(new BigDecimal(request.getParameter("altitude")) );
@@ -732,7 +732,7 @@ public class UploadDataRestController {
 			return "data.type.empty";
 		}
 		
-		if(	UploadDataType.CITYGML != UploadDataType.findBy(dataType)) {
+		if(	UploadDataType.CITYGML != UploadDataType.findBy(dataType) && UploadDataType.LAS != UploadDataType.findBy(dataType)) {
 			if(StringUtils.isEmpty(request.getParameter("longitude"))) {
 				return "data.longitude.empty";
 			}
