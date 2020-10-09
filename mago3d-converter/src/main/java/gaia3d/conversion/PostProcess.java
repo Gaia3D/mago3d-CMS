@@ -185,13 +185,8 @@ public class PostProcess {
             String locationFilePath = outputFilePath + File.separator + "lonsLats.json";
             String attributeFilePath = outputFilePath + File.separator + "attributes.json";
 
-            if(UploadDataType.LAS == uploadDataType) {
-            	if (invalidFilePath(locationFilePath)) throw new FileNotFoundException("The file in the specified path cannot be found.");
-            } else {
-            	// citygml, indoor gml
-            	if (invalidFilePath(locationFilePath) || invalidFilePath(attributeFilePath)) throw new FileNotFoundException("The file in the specified path cannot be found.");
-            }
-            
+            if (invalidFilePath(locationFilePath)) throw new FileNotFoundException("The file in the specified path cannot be found.");
+
             ConverterLocation location = objectMapper.readValue(Paths.get(locationFilePath).toFile(), ConverterLocation.class);
             log.info("longitude = {}, latitude = {}", location.getLongitude(), location.getLatitude());
             result.setLocation(location);
@@ -200,11 +195,13 @@ public class PostProcess {
             // List<Map<String, Object>> attributes = objectMapper.readValue(attributeFile, new TypeReference<>() {});
 
             if (UploadDataType.CITYGML == uploadDataType || UploadDataType.INDOORGML == uploadDataType) {
-	            // json 파일을 Object로 변환하여 전송할 예정이였으나, json string으로 DB에 넣기 때문에 string 변경함.
-	            byte[] jsonData = Files.readAllBytes(Paths.get(attributeFilePath));
-	            String attributes = new String(jsonData, StandardCharsets.UTF_8);
-	            log.info(">>>>>>>>>> attributesJson : {}", attributes);
-	            result.setAttributes(attributes);
+                if(!invalidFilePath(attributeFilePath)) {
+                    // json 파일을 Object로 변환하여 전송할 예정이였으나, json string으로 DB에 넣기 때문에 string 변경함.
+                    byte[] jsonData = Files.readAllBytes(Paths.get(attributeFilePath));
+                    String attributes = new String(jsonData, StandardCharsets.UTF_8);
+                    log.info(">>>>>>>>>> attributesJson : {}", attributes);
+                    result.setAttributes(attributes);
+                }
             }
         }
     }
