@@ -19,3 +19,8 @@
  
 # paths that don't start with / are treated relative to the .gitattributes folder
 relative/path/*.txt text eol-lf
+
+# Shell scripts
+*.sh eol=lf
+configure eol=lf
+configure.ac eol=lf
