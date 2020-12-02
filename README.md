@@ -108,7 +108,7 @@
                 - Read regexp : .*
             - Topic permission
                 - Virtual Host : /
-                - Exchange : (AMQP default)
+                - Exchange : f4d.converter
                 - Write regexp : .*
                 - Read regexp : .*
                 
