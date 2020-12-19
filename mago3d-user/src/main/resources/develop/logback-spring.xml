@@ -13,7 +13,7 @@
 			  class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<prudent>true</prudent>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>/home/gaia3d/mago3d/mago3d-tomcat/logs/mago3d-user.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>/home/gaia3d/mago3d/tools/mago3d-tomcat/logs/mago3d-user.%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>30</maxHistory>
 		</rollingPolicy>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -31,7 +31,7 @@
 	<!-- <logger name="org.springframework.web" level="info" additivity="false" /> -->
 	<logger name="com.zaxxer.hikari.pool.HikariPool" level="info" additivity="false" />
 
-	<root level="debug">
+	<root level="info">
 		<!-- 		<appender-ref ref="STDOUT" /> -->
 		<appender-ref ref="dailyRollingFileAppender" />
 	</root>
