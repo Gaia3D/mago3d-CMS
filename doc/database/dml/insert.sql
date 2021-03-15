@@ -10,7 +10,7 @@ insert into user_info(
 	user_id, user_group_id, user_name, password, user_role_check_yn, last_signin_date)
 values
     ('admin', 1, '슈퍼관리자', '$2a$10$KFr/2p5Og2jBy8NkTaEb/eoUna6AVlQ.A7s4YpPJ9A8dZwLYum5f.', 'N', now()),
-    ('lhdt', 2, 'Gaia3D', '$2a$10$KFr/2p5Og2jBy8NkTaEb/eoUna6AVlQ.A7s4YpPJ9A8dZwLYum5f.', 'Y', now());
+    ('mago3d', 2, 'mago3D', '$2a$10$lmYPqp2UJm4lHuF57Rs.wuzX034x7y/21jlCc8OQ4yFxbZt6Iich2', 'Y', now());
 
 -- 관리자 메뉴
 insert into menu(menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, view_order, url, url_alias, html_id, css_class, default_yn, use_yn, display_yn)
