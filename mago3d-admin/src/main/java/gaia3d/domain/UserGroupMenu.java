@@ -44,6 +44,10 @@ public class UserGroupMenu {
 	private Integer parent;
 	// 깊이
 	private Integer depth;
+	// 이전 depth
+	private Integer previousDepth;
+	// 내 사용자 그룹 이전 depth
+	private Integer myPreviousDepth;
 	// 나열 순서
 	private Integer viewOrder;
 	// URL

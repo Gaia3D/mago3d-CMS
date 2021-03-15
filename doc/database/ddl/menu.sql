@@ -11,6 +11,7 @@ create table menu(
 	ancestor			integer,
 	parent				integer									default 1,
 	depth				integer									default 1,
+    previous_depth		integer									default 0,
 	view_order			integer									default 1,
 	url					varchar(256),
 	url_alias			varchar(256),
@@ -39,6 +40,7 @@ comment on column menu.lang is '언어';
 comment on column menu.ancestor is '조상';
 comment on column menu.parent is '부모 고유번호';
 comment on column menu.depth is '깊이';
+comment on column menu.previous_depth is '이전 깊이(화면 표시용)';
 comment on column menu.view_order is '나열 순서';
 comment on column menu.url is 'URL';
 comment on column menu.url_alias is 'URL Alias';

@@ -25,6 +25,8 @@ public class UserGroupMenu {
 	private String menuType;
 	// 0 : 사용자 사이트, 1 : 관리자 사이트
 	private String menuTarget;
+	// 이전 depth
+	private Integer previousDepth;
 	// 메뉴명
 	private String name;
 	// 영어 메뉴명

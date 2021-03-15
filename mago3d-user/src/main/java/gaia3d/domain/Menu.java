@@ -57,6 +57,8 @@ public class Menu {
 	private Integer parent;
 	// 깊이
 	private Integer depth;
+	// 이전 depth
+	private Integer previousDepth;
 	// 나열 순서
 	private Integer viewOrder;
 	// URL

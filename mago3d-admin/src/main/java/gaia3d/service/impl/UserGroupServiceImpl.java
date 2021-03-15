@@ -9,12 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import gaia3d.domain.Depth;
 import gaia3d.domain.Move;
+import gaia3d.domain.Menu;
 import gaia3d.domain.UserGroup;
 import gaia3d.domain.UserGroupMenu;
 import gaia3d.domain.UserGroupRole;
 import gaia3d.domain.UserInfo;
 import gaia3d.domain.YOrN;
 import gaia3d.persistence.UserGroupMapper;
+import gaia3d.service.MenuService;
 import gaia3d.service.UserGroupService;
 import gaia3d.service.UserService;
 
@@ -22,6 +24,8 @@ import gaia3d.service.UserService;
 @Service
 public class UserGroupServiceImpl implements UserGroupService {
 
+	@Autowired
+	private MenuService menuService;
 	@Autowired
 	private UserGroupMapper userGroupMapper;
 	@Autowired
@@ -204,28 +208,35 @@ public class UserGroupServiceImpl implements UserGroupService {
 		userGroupMapper.deleteUserGroupMenu(userGroupId);
 
 		String[] allYnValues = userGroupMenu.getAllYn().split(",");
-		String[] readYnValues = userGroupMenu.getReadYn().split(",");
-		String[] writeYnValues = userGroupMenu.getWriteYn().split(",");
-		String[] updateYnValues = userGroupMenu.getUpdateYn().split(",");
-		String[] deleteYnValues = userGroupMenu.getDeleteYn().split(",");
+		//String[] readYnValues = userGroupMenu.getReadYn().split(",");
+		//String[] writeYnValues = userGroupMenu.getWriteYn().split(",");
+		//String[] updateYnValues = userGroupMenu.getUpdateYn().split(",");
+		//String[] deleteYnValues = userGroupMenu.getDeleteYn().split(",");
 
 		int totalCount = allYnValues.length;
+		int previousDepth = 0;
+		int displayPreviousDepth = 0;
 		for(int i=0; i<totalCount; i++) {
 			boolean insertFlag = false;
 			String[] allValues = allYnValues[i].split("_");
-			String[] readValues = readYnValues[i].split("_");
-			String[] writeValues = writeYnValues[i].split("_");
-			String[] updateValues = updateYnValues[i].split("_");
-			String[] deleteValues = deleteYnValues[i].split("_");
+			//String[] readValues = readYnValues[i].split("_");
+			//String[] writeValues = writeYnValues[i].split("_");
+			//String[] updateValues = updateYnValues[i].split("_");
+			//String[] deleteValues = deleteYnValues[i].split("_");
 
 			UserGroupMenu tempUserGroupMenu = new UserGroupMenu();
 			tempUserGroupMenu.setUserGroupId(userGroupId);
 			tempUserGroupMenu.setMenuId(Integer.parseInt(allValues[0]));
 
+			Menu menu = menuService.getMenu(tempUserGroupMenu.getMenuId());
+
+			tempUserGroupMenu.setPreviousDepth(displayPreviousDepth);
+
 			if(allValues.length == 2 && YOrN.Y.name().equals(allValues[1])) {
 				tempUserGroupMenu.setAllYn(allValues[1]);
 				insertFlag = true;
 			}
+			/*
 			if(readValues.length == 2 && YOrN.Y.name().equals(readValues[1])) {
 				tempUserGroupMenu.setReadYn(readValues[1]);
 				insertFlag = true;
@@ -242,8 +253,15 @@ public class UserGroupServiceImpl implements UserGroupService {
 				tempUserGroupMenu.setDeleteYn(deleteValues[1]);
 				insertFlag = true;
 			}
+			*/
+			if(insertFlag) {
+				userGroupMapper.insertUserGroupMenu(tempUserGroupMenu);
 
-			if(insertFlag) userGroupMapper.insertUserGroupMenu(tempUserGroupMenu);
+				previousDepth = menu.getDepth();
+				if(YOrN.Y == YOrN.valueOf(menu.getDisplayYn().toUpperCase())) {
+					displayPreviousDepth = menu.getDepth();
+				}
+			}
 		}
 
 		return totalCount;

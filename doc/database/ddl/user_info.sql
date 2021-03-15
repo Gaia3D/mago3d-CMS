@@ -176,11 +176,12 @@ comment on column user_group_role.user_group_id is '사용자 그룹 고유키';
 comment on column user_group_role.role_id is 'Role 고유키';
 comment on column user_group_role.insert_date is '등록일';
 
--- 사용자 그룹 권한
+-- 사용자 그룹 메뉴
 create table user_group_menu(
 	user_group_menu_id				integer,
 	user_group_id					integer 							not null,
 	menu_id							integer 							not null,
+    previous_depth		            integer								default 0,
 	all_yn							char(1)								default 'N',
 	read_yn							char(1)								default 'N',
 	write_yn						char(1)								default 'N',
@@ -194,6 +195,7 @@ comment on table user_group_menu is '사용자 그룹 메뉴';
 comment on column user_group_menu.user_group_menu_id is '고유번호';
 comment on column user_group_menu.user_group_id is '사용자 그룹 고유키';
 comment on column user_group_menu.menu_id is '메뉴 고유키';
+comment on column user_group_menu.previous_depth is '이전 메뉴 Depth(thymeleaf 때문)';
 comment on column user_group_menu.all_yn is '메뉴 접근 모든 권한';
 comment on column user_group_menu.read_yn is '읽기 권한';
 comment on column user_group_menu.write_yn is '쓰기 권한';
