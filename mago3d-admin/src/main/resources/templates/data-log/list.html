@@ -26,7 +26,7 @@
 
 						<!-- S: 검색 -->
 						<div class="filters">
-							<form id="searchForm" th:object="${dataInfoLog}" method="get" th:action="@{/data/list}" onsubmit="return searchCheck();">
+							<form id="searchForm" th:object="${dataInfoLog}" method="get" th:action="@{/data-log/list}" onsubmit="return searchCheck();">
 							<div class="input-group row">
 								<div class="input-set">
 									<label for="searchWord" th:text="#{search.word}"></label>
