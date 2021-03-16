@@ -41,13 +41,7 @@ public class CustomMessageListener {
     public void receiveMessage(final QueueMessage queueMessage) {
 		log.info("--------------- queueMessage = {}", queueMessage);
 
-		String osType = propertiesConfig.getOsType();
-		final String PREFIX;
-		if(OSType.WINDOW.name().equalsIgnoreCase(osType)) {
-			PREFIX = "#";
-		} else {
-			PREFIX = "-";
-		}
+		final String PREFIX = "-";
 
 		CompletableFuture.supplyAsync( () -> {
 			List<String> command = new ArrayList<>();
