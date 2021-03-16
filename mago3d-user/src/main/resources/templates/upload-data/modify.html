@@ -132,18 +132,7 @@
 					<label for="dataType"><th:block th:text="#{common.data.type}"></th:block></label>
 					<span class="icon-glyph glyph-emark-dot color-warning"></span>
 				</th>
-				<td class="col-input">
-					<select id="dataType" name="dataType" th:field="*{dataType}" class="selectBoxClass">
-						<option value="citygml"> CITYGML </option>
-						<option value="indoorgml"> INDOORGML </option>
-						<option value="ifc"> IFC </option>
-						<option value="las"> LAS(POINT CLOUD) </option>
-						<option value="3ds"> 3DS </option>
-						<option value="obj"> OBJ </option>
-		          		<option value="dae"> COLLADA(DAE) </option>
-		          		<option value="fbx"> FBX </option>
-					</select>
-				</td>
+				<td class="col-input" id="dataType" name="dataType" th:text="*{dataType}"></td>
 			</tr>
 			<tr>
 				<th class="col-label" scope="row">

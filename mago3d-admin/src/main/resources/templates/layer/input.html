@@ -387,9 +387,11 @@
         $("input[type='file']").attr("id", "dropzoneFile");
 	});
 
+	var activeTab = "#uploadLayerTab";
+
 	// 레이어 탭 이벤트
 	$("#layerTabControl ul li").click(function(){
-		var activeTab = $(this).find("a").attr("href");
+		activeTab = $(this).find("a").attr("href");
 		$("#layerButtonArea li").removeClass("onArea");
 		if(activeTab === '#uploadLayerTab') {
 			$("#uploadLayerButton").addClass("onArea");
@@ -648,6 +650,10 @@
                 } else {
                     //send empty
                     //myDropzone.uploadFiles([{ name: 'nofiles', upload: { filename: 'nofiles' } }]);
+					if(activeTab === '#uploadLayerTab'){
+						alert("업로딩 할 파일이 존재하지 않습니다.");
+						return;
+					}
                     myDropzone._uploadData([{ upload: { filename: '' } }], [{ filename: '', name: '', data: new Blob() }]);
                 }
             });
