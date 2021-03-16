@@ -1,29 +1,7 @@
 package gaia3d.controller.view;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.CacheManager;
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.Key;
-import gaia3d.domain.PageType;
-import gaia3d.domain.Pagination;
-import gaia3d.domain.RoleKey;
-import gaia3d.domain.SharingType;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.*;
 import gaia3d.domain.converter.ConverterJob;
 import gaia3d.domain.uploaddata.UploadData;
 import gaia3d.domain.uploaddata.UploadDataFile;
@@ -35,6 +13,19 @@ import gaia3d.support.SQLInjectSupport;
 import gaia3d.utils.DateUtils;
 import gaia3d.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * 3D 데이터 파일 업로더
@@ -106,7 +97,7 @@ public class UploadDataController {
 		uploadData.setOffset(pagination.getOffset());
 		uploadData.setLimit(pagination.getPageRows());
 		List<UploadData> uploadDataList = new ArrayList<>();
-		if(totalCount > 0l) {
+		if(totalCount > 0L) {
 			uploadDataList = uploadDataService.getListUploadData(uploadData);
 		}
 		
@@ -137,14 +128,13 @@ public class UploadDataController {
 		String dataGroupPath = userSession.getUserId() + "/basic/";
 		DataGroup basicDataGroup = dataGroupService.getBasicDataGroup(dataGroup);
 		if(basicDataGroup == null) {
-			basicDataGroup = new DataGroup();
-			basicDataGroup.setDataGroupKey("basic");
-			basicDataGroup.setDataGroupName(messageSource.getMessage("common.basic", null, getUserLocale(request)));
-			basicDataGroup.setDataGroupPath(propertiesConfig.getUserDataServicePath() + dataGroupPath);
-			basicDataGroup.setSharing(SharingType.PUBLIC.name().toLowerCase());
-			basicDataGroup.setMetainfo("{\"isPhysical\": false}");
+			dataGroup.setDataGroupKey("basic");
+			dataGroup.setDataGroupName(messageSource.getMessage("common.basic", null, getUserLocale(request)));
+			dataGroup.setDataGroupPath(propertiesConfig.getUserDataServicePath() + dataGroupPath);
+			dataGroup.setSharing(SharingType.PUBLIC.name().toLowerCase());
+			dataGroup.setMetainfo("{\"isPhysical\": false}");
 			
-			dataGroupService.insertBasicDataGroup(basicDataGroup);
+			dataGroupService.insertBasicDataGroup(dataGroup);
 		}
 		
 		FileUtils.makeDirectoryByPath(propertiesConfig.getUserDataServiceDir(), dataGroupPath);
@@ -153,8 +143,8 @@ public class UploadDataController {
 		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroup(dataGroup);
 		
 		UploadData uploadData = UploadData.builder().
-											dataGroupId(basicDataGroup.getDataGroupId()).
-											dataGroupName(basicDataGroup.getDataGroupName()).build();
+											dataGroupId(dataGroup.getDataGroupId()).
+											dataGroupName(dataGroup.getDataGroupName()).build();
 		
 		String acceptedFiles = policyService.getUserUploadType();
 		
