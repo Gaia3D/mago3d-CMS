@@ -9,7 +9,7 @@ services:
     image: gaia3d/mago3d-ce
     volumes:
     - f4d-data:/data/f4d/
-    - webserver-data:/etc/nginx/html
+    - webserver-data:/usr/share/nginx/html/
     ports:
     - 10080:80
     command: "/usr/sbin/nginx"
