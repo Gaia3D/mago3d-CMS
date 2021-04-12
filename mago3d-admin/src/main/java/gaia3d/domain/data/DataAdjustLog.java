@@ -1,13 +1,13 @@
-package gaia3d.domain;
+package gaia3d.domain.data;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import gaia3d.domain.common.Search;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -64,6 +64,8 @@ public class DataAdjustLog extends Search {
 	private BigDecimal pitch;
 	// roll
 	private BigDecimal roll;
+	// 높이 설정 방법. none : 해발 고드, clampToGround : Terrain(지형)에 맞춤, relativeToGround : Terrain(지형)으로 부터 높이 설정
+	private String heightReference;
 	// 변경전 위도, 경도 정보 geometry 타입
 	private String beforeLocation;
 	// 변경전 위도
@@ -78,6 +80,8 @@ public class DataAdjustLog extends Search {
 	private BigDecimal beforePitch;
 	// 변경전 roll
 	private BigDecimal beforeRoll;
+	// 높이 설정 방법. none : 해발 고드, clampToGround : Terrain(지형)에 맞춤, relativeToGround : Terrain(지형)으로 부터 높이 설정
+	private String beforeHeightReference;
 	// 상태. request : 요청, approval : 승인, reject : 기각, rollback : 원복
 	private String status;
 	// status 의 ajax 처리 값

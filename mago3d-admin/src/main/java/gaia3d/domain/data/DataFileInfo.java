@@ -1,5 +1,6 @@
-package gaia3d.domain;
+package gaia3d.domain.data;
 
+import gaia3d.domain.common.FileInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,12 +14,15 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DataAttributeFileInfo extends FileInfo {
+public class DataFileInfo extends FileInfo {
+	
+	//
+	private String userId;
 	
 	// 고유번호
-	private Long dataAttributeFileInfoId;
-	// 데이터 고유번호
-	private Long dataId;
+	private Long dataFileInfoId;
+	// 데이터 그룹 고유번호
+	private Integer dataGroupId;
 	
 	// 전체 데이터 건수
 	private Integer totalCount;

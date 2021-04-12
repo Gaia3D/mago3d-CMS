@@ -1,14 +1,15 @@
-package gaia3d.domain;
+package gaia3d.domain.data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import gaia3d.domain.MethodType;
+import gaia3d.domain.common.Search;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,6 +56,8 @@ public class DataInfo extends Search implements Serializable {
 	private BigDecimal latitude;
 	// 경도
 	private BigDecimal longitude;
+	// 높이 설정 방법. none : 해발 고드, clampToGround : Terrain(지형)에 맞춤, relativeToGround : Terrain(지형)으로 부터 높이 설정
+	private String heightReference;
 	
 	// 사용자명
 	private String userId;
@@ -69,6 +72,8 @@ public class DataInfo extends Search implements Serializable {
 	private Long dataId;
 	// Data Group 고유번호
 	private Integer dataGroupId;
+	// data 연관 관계 정보의 id
+	private Long dataRelationId;
 	// converter job 고유번호
 	private Long converterJobId;
 	// Data Group 이름
@@ -122,8 +127,14 @@ public class DataInfo extends Search implements Serializable {
 	private String metainfo;
 	// data 상태. processing : 변환중, use : 사용중, unused : 사용중지(관리자), delete : 삭제(비표시)
 	private String status;
+	// 합체 가능한 데이터 유무. true : 합체, false : 단일
+	private Boolean assemble;
 	// 데이터 상태(ENUM)
 	private DataStatus dataStatus;
+	// 라벨. data_name과 다른 이름으로 style을 활용하기 위함. 줄바꿈 \n
+	private String label;
+	// 라벨 템플릿. 데이터에 적용할 라벨 템플릿 타입을 저장
+	private String labelTemplate;
 	// 속성 존재 유무. true : 존재, false : 존재하지 않음(기본값)
 	private Boolean attributeExist;
 	// object 속성 존재 유무. true : 존재, false : 존재하지 않음(기본값)

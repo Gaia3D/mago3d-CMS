@@ -1,15 +1,8 @@
-package gaia3d.domain;
+package gaia3d.domain.data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Data 정보
+ * Data 정보(간략)
  * @author Cheon JeongDae
  *
  */
@@ -39,22 +32,13 @@ public class DataInfoSimple implements Serializable {
 	private BigDecimal latitude;
 	// 경도
 	private BigDecimal longitude;
-	
-	// 사용자명
-	private String userId;
-	// 수정자 아이디
-	private String updateUserId;
-	private String userName;
-	
-	/****** validator ********/
-	private MethodType methodType;
+	// 높이 설정 방법. none : 해발 고드, clampToGround : Terrain(지형)에 맞춤, relativeToGround : Terrain(지형)으로 부터 높이 설정
+	private String heightReference;
 
 	// 고유번호
 	private Long dataId;
 	// Data Group 고유번호
 	private Integer dataGroupId;
-	// converter job 고유번호
-	private Long converterJobId;
 	// Data Group 이름
 	private String dataGroupName;
 	// admin : 관리자용 데이터 그룹, user : 일반 사용자용 데이터 그룹
@@ -77,8 +61,6 @@ public class DataInfoSimple implements Serializable {
 	// origin : latitude, longitude, height 를 origin에 맟춤. boundingboxcenter : latitude, longitude, height 를 boundingboxcenter에 맟춤.
 	private String mappingType;
 
-	// POINT(위도, 경도). 공간 검색 속도 때문에 altitude는 분리
-	private String location;
 	// 높이
 	private BigDecimal altitude;
 	// heading
@@ -88,47 +70,17 @@ public class DataInfoSimple implements Serializable {
 	// roll
 	private BigDecimal roll;
 	
-	// 조상
-	private Integer childrenAncestor;
-	// 부모
-	private Integer childrenParent;
-	// 깊이
-	private Integer childrenDepth;
-	// 순서
-	private Integer childrenViewOrder;
-	
 	// 기본 정보
 	private String metainfo;
+	// 라벨. data_name과 다른 이름으로 style을 활용하기 위함. 줄바꿈 \n
+	private String label;
+	// 라벨 템플릿. 데이터에 적용할 라벨 템플릿 타입을 저장
+	private String labelTemplate;
 	// data 상태. processing : 변환중, use : 사용중, unused : 사용중지(관리자), delete : 삭제(비표시)
 	private String status;
 	// 속성 존재 유무. true : 존재, false : 존재하지 않음(기본값)
 	private Boolean attributeExist;
 	// object 속성 존재 유무. true : 존재, false : 존재하지 않음(기본값)
 	private Boolean objectAttributeExist;
-	// 설명
-	private String description;
 	
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-	private LocalDateTime viewUpdateDate;
-	
-	@Getter(AccessLevel.NONE)
-	@Setter(AccessLevel.NONE)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-	private LocalDateTime viewInsertDate;
-	
-	public LocalDateTime getViewUpdateDate() {
-		return this.updateDate;
-	}
-	public LocalDateTime getViewInsertDate() {
-		return this.insertDate;
-	}
-	
-	// 수정일 
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime updateDate;
-	// 등록일
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime insertDate;
 }

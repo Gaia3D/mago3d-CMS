@@ -1,7 +1,5 @@
-package gaia3d.domain;
+package gaia3d.domain.data;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -49,6 +47,6 @@ public enum DataType {
 	 * @return
 	 */
 	public static Map<String, Long> getStatisticsMap() {
-		return Stream.of(values()).collect(Collectors.toMap(DataType::getValue, t -> 0l));
+		return Stream.of(values()).collect(Collectors.toMap(DataType::getValue, t -> 0L));
 	}
 }

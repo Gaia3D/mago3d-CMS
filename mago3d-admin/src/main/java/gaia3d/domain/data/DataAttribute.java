@@ -1,10 +1,10 @@
-package gaia3d.domain;
+package gaia3d.domain.data;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import gaia3d.domain.common.Search;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

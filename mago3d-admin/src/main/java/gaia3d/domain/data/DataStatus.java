@@ -1,4 +1,4 @@
-package gaia3d.domain;
+package gaia3d.domain.data;
 
 public enum DataStatus {
 
@@ -9,5 +9,5 @@ public enum DataStatus {
 	// 사용 중지
 	UNUSED,
 	// 삭제(화면 비표시)
-	DELETE;
+	DELETE
 }

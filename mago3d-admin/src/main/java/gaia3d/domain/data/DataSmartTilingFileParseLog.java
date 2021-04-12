@@ -1,10 +1,10 @@
-package gaia3d.domain;
+package gaia3d.domain.data;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import gaia3d.domain.common.Search;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +23,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DataFileParseLog extends Search {
+public class DataSmartTilingFileParseLog extends Search {
 	
 	// Excel 데이터 파싱 로그
 	public static final String FILE = "file";
@@ -35,9 +35,9 @@ public class DataFileParseLog extends Search {
 	public static final String FAIL = "fail";
 	
 	// 고유번호
-	private Long dataFileParseLogId;
+	private Long dataSmartTilingFileParseLogId;
 	// 파일 정보 고유번호
-	private Long dataFileInfoId;
+	private Long dataSmartTilingFileInfoId;
 	// 식별자 값
 	private String identifierValue;
 	// validation

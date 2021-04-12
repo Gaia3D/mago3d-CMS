@@ -1,16 +1,16 @@
-package gaia3d.domain;
+package gaia3d.domain.data;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.constraints.Size;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import gaia3d.domain.common.Search;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +33,8 @@ import lombok.ToString;
 public class DataGroup extends Search {
 
 	private List<DataInfoSimple> datas;
+	// true : 기본 그룹은 제외, false : 전체
+	private Boolean exceptBasic;
 	
 	/****** 화면 표시용 *******/
 	private String parentName;
@@ -46,6 +48,13 @@ public class DataGroup extends Search {
 	private BigDecimal longitude;
 	// data_group_key 중복 확인을 위한 화면 전용 값. true 중복
 	private String duplication;
+	
+	// 스마트 타일링 고유번호
+	private Integer tileId;
+	// 스마트 타일링 key
+	private String tileKey;
+	// 스마트 타일링 경로
+	private String tilePath;
 	
 	/****** validator ********/
 	private String methodMode;
@@ -96,6 +105,8 @@ public class DataGroup extends Search {
 	private BigDecimal altitude;
 	// Map 이동시간
 	private Integer duration;
+	// 라벨 템플릿. 데이터에 적용할 라벨 템플릿 타입을 저장
+	private String labelTemplate;
 	// location 업데이트 방법. auto : data 입력시 자동, user : 사용자가 직접 입력
 	private String locationUpdateType;
 	// 데이터 그룹 메타 정보. 그룹 control을 위해 인위적으로 만든 속성

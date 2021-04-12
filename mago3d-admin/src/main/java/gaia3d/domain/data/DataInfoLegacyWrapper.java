@@ -1,4 +1,4 @@
-package gaia3d.domain;
+package gaia3d.domain.data;
 
 import java.util.List;
 

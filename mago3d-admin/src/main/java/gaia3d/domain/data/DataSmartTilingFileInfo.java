@@ -1,5 +1,6 @@
-package gaia3d.domain;
+package gaia3d.domain.data;
 
+import gaia3d.domain.common.FileInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
