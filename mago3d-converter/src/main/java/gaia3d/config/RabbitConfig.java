@@ -30,32 +30,32 @@ public class RabbitConfig {
 
     @Bean
     Queue queue() {
-        return new Queue(propertiesConfig.getQueueName(), true);
+        return new Queue(propertiesConfig.getRabbitmqConverterQueue(), true);
     }
 
     @Bean
     TopicExchange exchange() {
-        return new TopicExchange(propertiesConfig.getExchange());
+        return new TopicExchange(propertiesConfig.getRabbitmqConverterExchange());
     }
 
     @Bean
     Binding binding(Queue queue, TopicExchange topicExchange) {
-        return BindingBuilder.bind(queue).to(topicExchange).with(propertiesConfig.getQueueName());
+        return BindingBuilder.bind(queue).to(topicExchange).with(propertiesConfig.getRabbitmqConverterRoutingKey());
     }
 
     @Bean
 	ConnectionFactory connectionFactory() {
-		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(propertiesConfig.getQueueServerHost());
-		connectionFactory.setUsername(Crypt.decrypt(propertiesConfig.getQueueUser()));
-		connectionFactory.setPassword(Crypt.decrypt(propertiesConfig.getQueuePassword()));
-		connectionFactory.setPort(Integer.parseInt(propertiesConfig.getQueueServerPort()));
+		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(propertiesConfig.getRabbitmqServerHost());
+		connectionFactory.setUsername(Crypt.decrypt(propertiesConfig.getRabbitmqUser()));
+		connectionFactory.setPassword(Crypt.decrypt(propertiesConfig.getRabbitmqPassword()));
+		connectionFactory.setPort(Integer.parseInt(propertiesConfig.getRabbitmqServerPort()));
 		return connectionFactory;
 	}
 
     @Bean
     RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setRoutingKey(propertiesConfig.getQueueName());
+        rabbitTemplate.setRoutingKey(propertiesConfig.getRabbitmqConverterRoutingKey());
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         return rabbitTemplate;
     }

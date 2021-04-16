@@ -28,12 +28,14 @@ public class PropertiesConfig {
 	// 관리자 서버
 	private String cmsAdminRestServer;
 	
-	private String queueServerHost;
-	private String queueServerPort;
-	private String queueUser;
-	private String queuePassword;
-	private String queueName;
-	private String exchange;
+	private String rabbitmqServerHost;
+	private String rabbitmqServerPort;
+	private String rabbitmqUser;
+	private String rabbitmqPassword;
+	
+	private String rabbitmqConverterQueue;
+	private String rabbitmqConverterExchange;
+	private String rabbitmqConverterRoutingKey;
 	
 	// User excel batch registration
 	private String dataUploadDir;

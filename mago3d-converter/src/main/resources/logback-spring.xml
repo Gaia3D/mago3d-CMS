@@ -13,7 +13,7 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<prudent>true</prudent>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>livedronemap-admin.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>mago3d-converter.%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>30</maxHistory>
 		</rollingPolicy>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -28,7 +28,7 @@
 	<logger name="org.apache.tomcat" level="debug" additivity="false" />
 	<logger name="org.apache.commons" level="info" additivity="false" />
 	<logger name="org.springframework" level="info" additivity="false" />
-	<!-- <logger name="org.springframework.web" level="info" additivity="false" /> -->
+	<logger name="org.springframework.web" level="info" additivity="false" />
 	<logger name="com.zaxxer.hikari.pool.HikariPool" level="info" additivity="false" />
 	
 	<root level="debug">

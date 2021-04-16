@@ -2,15 +2,18 @@ package gaia3d;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.context.ApplicationPidFileWriter;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
-public class Mago3dConverterApplication {
+@SpringBootApplication
+public class Mago3dConverterApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
-		SpringApplication application = new SpringApplication(Mago3dConverterApplication.class);
-		application.addListeners(new ApplicationPidFileWriter("./bin/app.pid"));
-		application.run(args);
+		SpringApplication.run(Mago3dConverterApplication.class, args);
+	}
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(Mago3dConverterApplication.class);
 	}
 }

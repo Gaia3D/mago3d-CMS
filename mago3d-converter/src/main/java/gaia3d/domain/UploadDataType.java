@@ -29,7 +29,7 @@ public enum UploadDataType {
 	
 	private final String value;
 	
-	UploadDataType(String value) {
+	UploadDataType(final String value) {
 		this.value = value;
 	}
 	
@@ -42,8 +42,8 @@ public enum UploadDataType {
 	 * @param value
 	 * @return
 	 */
-	public static UploadDataType findBy(String value) {
-		for(UploadDataType uploadDataType : values()) {
+	public static UploadDataType findBy(final String value) {
+		for(final UploadDataType uploadDataType : values()) {
 			if(uploadDataType.getValue().equals(value)) return uploadDataType;
 		}
 		return null;

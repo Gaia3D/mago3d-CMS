@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 @ToString(callSuper = true)
 @Getter
@@ -38,15 +39,19 @@ public class ConversionJobResult implements Serializable {
     private ConverterJobResultStatus resultStatus;
 
     // 위치정보
-    private ConverterLocation location;
+    private ConverterLocation[] location;
 
     // 속성정보
-    private String attributes;
+    private String[] attributes;
+
+    // 분리된 F4D 정보
+    private String[] splitResult;
 
     @JsonProperty(value = "bGeoReferenced")
     public boolean getBGeoReferenced() {
         return bGeoReferenced;
     }
+
     public void setBGeoReferenced(boolean bGeoReferenced) {
         this.bGeoReferenced = bGeoReferenced;
     }
@@ -55,8 +60,29 @@ public class ConversionJobResult implements Serializable {
     public ConverterJobResultStatus getResultStatus() {
         return resultStatus;
     }
+
     public void setResultStatus(String resultStatus) {
         this.resultStatus = ConverterJobResultStatus.findByStatus(resultStatus);
     }
+
+    // TODO: restTemplate 에 list 를 넘길 수 없어서 일단 이렇게 처리
+    public void setLocation(List<ConverterLocation> location) {
+        if (location != null) {
+            this.location = location.toArray(ConverterLocation[]::new);
+        }
+    }
+
+    public void setSplitResult(List<String> splitResult) {
+        if (splitResult != null) {
+            this.splitResult = splitResult.toArray(String[]::new);
+        }
+    }
+
+    public void setAttributes(List<String> attributes) {
+        if (attributes != null) {
+            this.attributes = attributes.toArray(String[]::new);
+        }
+    }
+
 
 }

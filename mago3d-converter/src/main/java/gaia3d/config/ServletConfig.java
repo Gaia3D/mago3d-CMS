@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
+@EnableWebMvc
 @Configuration
 @ComponentScan(basePackages = { "gaia3d.config" }, includeFilters = {
 		@Filter(type = FilterType.ANNOTATION, value = Component.class),
@@ -47,7 +49,7 @@ public class ServletConfig implements WebMvcConfigurer {
 	 * @throws KeyManagementException
 	 */
 	@Bean
-    public RestTemplate restTempate() {
+    public RestTemplate restTemplate() {
 		// TODO user 나 admin을 참조 하세요. 여기는 sample 로 해 둔거임
 		
     	RestTemplateBuilder builder = new RestTemplateBuilder();

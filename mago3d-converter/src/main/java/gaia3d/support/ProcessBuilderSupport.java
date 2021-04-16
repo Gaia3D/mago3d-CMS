@@ -13,7 +13,7 @@ public class ProcessBuilderSupport {
 
 	public static int execute(List<String> command) throws Exception {
 		
-		log.info("@@@@@@@ command = {}", command);
+		log.info("@@@@@@@ command = {}", String.join(" ", command));
 		log.info("--------------- start ----------------");
 		
 		ProcessBuilder processBuilder = new ProcessBuilder(command);

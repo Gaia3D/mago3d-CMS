@@ -37,7 +37,7 @@ public class CustomMessageListener {
     private RestTemplate restTemplate;
 
     @Async
-    @RabbitListener(queues = {"${mago3d.queue-name}"})
+    @RabbitListener(queues = {"${mago3d.rabbitmq-converter-queue}"})
     public void receiveMessage(final QueueMessage queueMessage) {
 		log.info("--------------- queueMessage = {}", queueMessage);
 
@@ -65,22 +65,19 @@ public class CustomMessageListener {
 			command.add(PREFIX + "isYAxisUp");
 			command.add(queueMessage.getIsYAxisUp());
 
-			log.info(" >>>>>> command = {}", command.toString());
+			log.info(" >>>>>> command = {}", String.join(" ", command));
 
 			String result;
 			try {
 				int exitCode = ProcessBuilderSupport.execute(command);
 				if(exitCode == 0) result = ConverterJobStatus.SUCCESS.name().toLowerCase();
 				else result = ConverterJobStatus.FAIL.name().toLowerCase();
-			} catch(InterruptedException e1) {
+			} catch(InterruptedException | IOException e) {
 				result = ConverterJobStatus.FAIL.name().toLowerCase();
-				LogMessageSupport.printMessage(e1);
-			} catch(IOException e1) {
+				LogMessageSupport.printMessage(e);
+			} catch (Exception e) {
 				result = ConverterJobStatus.FAIL.name().toLowerCase();
-				LogMessageSupport.printMessage(e1);
-			} catch (Exception e1) {
-				result = ConverterJobStatus.FAIL.name().toLowerCase();
-				LogMessageSupport.printMessage(e1);
+				LogMessageSupport.printMessage(e);
 			}
 			return result;
         })
@@ -112,11 +109,10 @@ public class CustomMessageListener {
 					PostProcess.execute(dataLibraryConverterJob, objectMapper, propertiesConfig, restTemplate, queueMessage);
 				}
 			} catch (IOException | URISyntaxException e) {
-				e.printStackTrace();
+				log.info(" PostProcess.execute exception. message = {} ", e.getMessage());
 
 				// 로그파일 전송 오류 시 변환 실패 전송
 				handlerException(queueMessage, e.getMessage());
-				LogMessageSupport.printMessage(e);
 			}
 
 			log.info("thenAccept end");
