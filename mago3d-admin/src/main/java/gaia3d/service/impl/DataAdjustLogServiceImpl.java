@@ -7,19 +7,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gaia3d.domain.ApprovalStatus;
-import gaia3d.domain.DataAdjustLog;
-import gaia3d.domain.DataInfo;
+import gaia3d.domain.data.DataAdjustLog;
+import gaia3d.domain.data.DataInfo;
 import gaia3d.persistence.DataAdjustLogMapper;
+import gaia3d.service.CommonService;
 import gaia3d.service.DataAdjustLogService;
 import gaia3d.service.DataService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 데이터 geometry 변경 이력
  * @author jeongdae
  *
  */
+@Slf4j
 @Service
 public class DataAdjustLogServiceImpl implements DataAdjustLogService {
+
+	@Autowired
+	private CommonService commonService;
 
 	@Autowired
 	private DataService dataService;
@@ -67,6 +73,23 @@ public class DataAdjustLogServiceImpl implements DataAdjustLogService {
 	}
 	
 	/**
+	 * 스케줄러에 의한 다음년도 파티션 테이블 자동 생성
+	 * @param tableName
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	@Transactional
+	public int createPartitionTable(String tableName, String startTime, String endTime) {
+		Boolean exist = commonService.isTableExist("data_adjust_log_" + tableName);
+		log.info("@@@ dataAdjustLog tableName = {}, isTableExist = {}", tableName, exist);
+
+		if(!exist) return dataAdjustLogMapper.createPartitionTable(tableName, startTime, endTime);
+
+		return 0;
+	}
+	
+	/**
 	 * 데이터 geometry 변경 요청 상태 변경
 	 * @param dataAdjustLog
 	 * @return
@@ -90,6 +113,7 @@ public class DataAdjustLogServiceImpl implements DataAdjustLogService {
 			dataInfo.setHeading(dbDataInfoAdjustLog.getHeading());
 			dataInfo.setPitch(dbDataInfoAdjustLog.getPitch());
 			dataInfo.setRoll(dbDataInfoAdjustLog.getRoll());
+			dataInfo.setHeightReference(dbDataInfoAdjustLog.getHeightReference());
 			dataService.updateData(dataInfo);
 		} else if(ApprovalStatus.REJECT == ApprovalStatus.valueOf(dataAdjustLog.getStatus().toUpperCase())) {
 			// 화면에서 기각으로 상태 변경을 요청한 경우. 대기 상태여야 함
@@ -106,11 +130,12 @@ public class DataAdjustLogServiceImpl implements DataAdjustLogService {
 			}
 			// data_info 의 상태를 원래대로 되돌림. 를 update
 			dataInfo.setDataId(dbDataInfoAdjustLog.getDataId());
-			dataInfo.setLocation("POINT(" + dbDataInfoAdjustLog.getLongitude() + " " + dbDataInfoAdjustLog.getLatitude() + ")");
+			dataInfo.setLocation("POINT(" + dbDataInfoAdjustLog.getBeforeLongitude() + " " + dbDataInfoAdjustLog.getBeforeLatitude() + ")");
 			dataInfo.setAltitude(dbDataInfoAdjustLog.getBeforeAltitude());
 			dataInfo.setHeading(dbDataInfoAdjustLog.getBeforeHeading());
 			dataInfo.setPitch(dbDataInfoAdjustLog.getBeforePitch());
 			dataInfo.setRoll(dbDataInfoAdjustLog.getBeforeRoll());
+			dataInfo.setHeightReference(dbDataInfoAdjustLog.getBeforeHeightReference());
 			dataService.updateData(dataInfo);
 		}
 		

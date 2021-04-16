@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.UserInfo;
+import gaia3d.domain.user.UserInfo;
 
 /**
  * 사용자

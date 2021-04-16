@@ -10,7 +10,7 @@ import lombok.ToString;
 import java.io.Serializable;
 
 /**
- * TODO converter 로 합쳐야 함
+ * TODO: converter 로 합쳐야 함
  */
 @ToString(callSuper = true)
 @Getter
@@ -41,15 +41,19 @@ public class ConversionJobResult implements Serializable {
     private ConverterJobResultStatus resultStatus;
 
     // 위치정보
-    private ConverterLocation location;
+    private ConverterLocation[] location;
 
     // 속성정보
-    private String attributes;
+    private String[] attributes;
+
+    // 분리된 F4D 정보
+    private String[] splitResult;
 
     @JsonProperty(value = "bGeoReferenced")
     public boolean getBGeoReferenced() {
         return bGeoReferenced;
     }
+
     public void setBGeoReferenced(boolean bGeoReferenced) {
         this.bGeoReferenced = bGeoReferenced;
     }

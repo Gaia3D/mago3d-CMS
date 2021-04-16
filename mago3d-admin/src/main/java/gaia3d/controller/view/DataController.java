@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.DataInfo;
 import gaia3d.domain.Key;
 import gaia3d.domain.PageType;
-import gaia3d.domain.Pagination;
-import gaia3d.domain.Policy;
+import gaia3d.domain.common.Pagination;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.policy.Policy;
 import gaia3d.domain.uploaddata.UploadData;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.DataService;
 import gaia3d.service.PolicyService;
 import gaia3d.support.SQLInjectSupport;
 import gaia3d.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
@@ -164,7 +164,7 @@ public class DataController {
 
 		// TODO validation 체크 해야 함
 		if(dataId == null) {
-			log.info("@@@ validation error dataId = {}", dataId);
+			log.info("@@@ validation error dataId is null");
 			return "redirect:/data/list";
 		}
 
@@ -179,7 +179,8 @@ public class DataController {
 
 	/**
 	 * 검색 조건
-	 * @param search
+	 * @param pageType
+	 * @param dataInfo
 	 * @return
 	 */
 	private String getSearchParameters(PageType pageType, DataInfo dataInfo) {

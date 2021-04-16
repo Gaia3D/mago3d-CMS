@@ -9,7 +9,7 @@
 		SELECT COUNT(data_id)
 		FROM data_info A
         LEFT JOIN data_group B
-        ON a.data_group_id = B.data_group_id
+        ON A.data_group_id = B.data_group_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			<if test="dataGroupId != null and dataGroupId > 0">
 			AND A.data_group_id = #{dataGroupId}
@@ -43,6 +43,10 @@
 			]]>
 			</if>
 		</trim>
+	</select>
+
+	<select id="getDataRelationCount" parameterType="long" resultType="long">
+		SELECT COUNT(data_id) FROM data_info WHERE data_relation_id = #{dataRelationId}
 	</select>
 
 	<!-- 데이터 상태별 통계 정보 -->
@@ -123,7 +127,7 @@
 	<!-- Data 정보 -->
 	<select id="getData" parameterType="dataInfo" resultType="dataInfo">
 		/* getData */
-		SELECT A.*, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, B.data_group_name, B.data_group_target, B.data_group_key
+		SELECT A.*, A.metainfo->>'heightReference' AS heightReference, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, B.data_group_name, B.data_group_target, B.data_group_key
 		FROM data_info A, data_group B
 		WHERE data_id = #{dataId}
 			AND A.data_group_id = B.data_group_id
@@ -217,7 +221,7 @@
     		SELECT NEXTVAL('data_info_seq')
   		</selectKey>
 		INSERT INTO data_info(
-			data_id, data_group_id, converter_job_id, data_key, data_name, data_type, sharing, user_id, mapping_type,
+			data_id, data_group_id, converter_job_id, data_relation_id, data_key, data_name, data_type, sharing, user_id, mapping_type, assemble,
 			<if test="location != null">
 			location,
 			</if>
@@ -225,9 +229,9 @@
 			<if test="metainfo != null and metainfo != ''">
 			metainfo,
 			</if>
-			status, description
+			status, label, label_template, description
 		) VALUES (
-			#{dataId}, #{dataGroupId}, #{converterJobId}, #{dataKey}, #{dataName}, #{dataType}, #{sharing}, #{userId}, #{mappingType},
+			#{dataId}, #{dataGroupId}, #{converterJobId}, #{dataRelationId}, #{dataKey}, #{dataName}, #{dataType}, #{sharing}, #{userId}, #{mappingType}, #{assemble},
 			<if test="location != null">
 			ST_GeomFromText(#{location}, 4326),
 			</if>
@@ -235,7 +239,7 @@
 			<if test="metainfo != null and metainfo != ''">
 			(#{metainfo}::jsonb),
 			</if>
-			#{status}, #{description}
+			#{status}, #{label}, #{labelTemplate}, #{description}
 		)
 	</insert>
 	
@@ -243,7 +247,7 @@
 	<insert id="insertBulkData" parameterType="dataInfo">
 		/* insertBulkData */
 		INSERT INTO data_info(
-			data_id, data_group_id, converter_job_id, data_key, data_name, data_type, sharing, user_id, mapping_type,
+			data_id, data_group_id, converter_job_id, data_relation_id, data_key, data_name, data_type, sharing, user_id, mapping_type, assemble,
 			<if test="location != null">
 			location,
 			</if>
@@ -251,9 +255,9 @@
 			<if test="metainfo != null and metainfo != ''">
 			metainfo,
 			</if>
-			status, description
+			status, label, label_template, description
 		) VALUES (
-			#{dataId}, #{dataGroupId}, #{converterJobId}, #{dataKey}, #{dataName}, #{dataType}, #{sharing}, #{userId}, #{mappingType},
+			#{dataId}, #{dataGroupId}, #{converterJobId}, #{dataRelationId}, #{dataKey}, #{dataName}, #{dataType}, #{sharing}, #{userId}, #{mappingType}, #{assemble},
 			<if test="location != null">
 			ST_GeomFromText(#{location}, 4326),
 			</if>
@@ -261,7 +265,36 @@
 			<if test="metainfo != null and metainfo != ''">
 			#{metainfo}::jsonb,
 			</if>
-			#{status}, #{description}
+			#{status}, #{label}, #{labelTemplate}, #{description}
+		)
+	</insert>
+
+	<!-- Bulk 파일로 부터 데이터 등록. dataId 시퀀스 사용 -->
+	<insert id="insertBulkDataWithDataId" parameterType="dataInfo">
+		/* insertBulkData */
+		<selectKey keyProperty="dataId" resultType="long" order="BEFORE">
+			SELECT NEXTVAL('data_info_seq')
+		</selectKey>
+		INSERT INTO data_info(
+			data_id, data_group_id, converter_job_id, data_relation_id, data_key, data_name, data_type, sharing, user_id, mapping_type, assemble,
+			<if test="location != null">
+				location,
+			</if>
+			altitude, heading, pitch, roll, children_ancestor, children_parent, children_depth, children_view_order,
+			<if test="metainfo != null and metainfo != ''">
+				metainfo,
+			</if>
+			status, label, label_template, description
+		) VALUES (
+			#{dataId}, #{dataGroupId}, #{converterJobId}, #{dataRelationId}, #{dataKey}, #{dataName}, #{dataType}, #{sharing}, #{userId}, #{mappingType}, #{assemble},
+			<if test="location != null">
+			ST_GeomFromText(#{location}, 4326),
+			</if>
+			#{altitude}, COALESCE(#{heading}, 0), COALESCE(#{pitch}, 0), COALESCE(#{roll}, 0), #{childrenAncestor}, #{childrenParent}, #{childrenDepth}, #{childrenViewOrder},
+			<if test="metainfo != null and metainfo != ''">
+			#{metainfo}::jsonb,
+			</if>
+			#{status}, #{label}, #{labelTemplate}, #{description}
 		)
 	</insert>
 	
@@ -302,6 +335,9 @@
 			<if test="converterJobId != null and converterJobId > 0">
 			converter_job_id = #{converterJobId},
 			</if>
+			<if test="dataRelationId != null and dataRelationId > 0">
+			data_relation_id = #{dataRelationId},
+			</if>
 			<if test="sharing != null and sharing != ''">
 			sharing = #{sharing},
 			</if>
@@ -316,6 +352,9 @@
 			</if>
 			<if test="mappingType != null and mappingType != ''">
 			mapping_type = #{mappingType},
+			</if>
+			<if test="assemble != null">
+			assemble = #{assemble},
 			</if>
 			<if test="location != null">
 			location = ST_GeomFromText(#{location}, 4326),
@@ -343,6 +382,17 @@
 			</if>
 			<if test="metainfo != null and metainfo != ''">
 			metainfo = (#{metainfo}::json),
+			</if>
+			<if test="metainfo == null or metainfo == ''">
+				<if test="heightReference != null and heightReference != ''">
+					metainfo = JSONB_SET(metainfo, '{heightReference}', '"${heightReference}"'),
+				</if>
+			</if>
+			<if test="label != null and label != ''">
+				label = #{label},
+			</if>
+			<if test="labelTemplate != null and labelTemplate != ''">
+				label_template = #{labelTemplate},
 			</if>
 			<if test="description != null and description != ''">
 			description = #{description},
@@ -426,6 +476,7 @@
 			</if>
 	</delete>
 	
+	<!-- 사용자 아이디를 이용한 데이터 정보 삭제 -->
 	<delete id="deleteDataByUserId" parameterType="string">
 		/* deleteDataByProjectId */
 		DELETE

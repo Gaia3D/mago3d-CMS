@@ -16,7 +16,7 @@ public enum SharingType {
 	
 	private @Setter @Getter String sharing;
 	
-	private SharingType(String sharing) {
+	SharingType(String sharing) {
 		this.sharing = sharing;
 	}
 	

@@ -2,7 +2,7 @@ package gaia3d.parser;
 
 import java.util.Map;
 
-import gaia3d.domain.DataSmartTilingFileInfo;
+import gaia3d.domain.data.DataSmartTilingFileInfo;
 
 /**
  * @author Cheon JeongDae
@@ -11,8 +11,9 @@ import gaia3d.domain.DataSmartTilingFileInfo;
 public interface DataSmartTilingFileParser {
 	
 	/**
+	 *
 	 * @param dataGroupId
-	 * @param dataSmartTilingFileInfo
+	 * @param fileInfo
 	 * @return
 	 */
 	Map<String, Object> parse(Integer dataGroupId, DataSmartTilingFileInfo fileInfo);

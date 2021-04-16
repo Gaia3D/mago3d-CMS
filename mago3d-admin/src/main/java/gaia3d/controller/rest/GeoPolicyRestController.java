@@ -18,22 +18,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.CacheConfig;
-import gaia3d.domain.CacheName;
-import gaia3d.domain.CacheParams;
-import gaia3d.domain.CacheType;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.GeoPolicy;
 import gaia3d.domain.Key;
-import gaia3d.domain.LayerGroup;
-import gaia3d.domain.UserPolicy;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.cache.CacheName;
+import gaia3d.domain.cache.CacheParams;
+import gaia3d.domain.cache.CacheType;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.layer.LayerGroup;
+import gaia3d.domain.policy.GeoPolicy;
+import gaia3d.domain.user.UserPolicy;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.DataService;
 import gaia3d.service.GeoPolicyService;
 import gaia3d.service.LayerGroupService;
 import gaia3d.service.UserPolicyService;
 import gaia3d.support.LayerDisplaySupport;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -78,7 +78,7 @@ public class GeoPolicyRestController {
 		GeoPolicy geoPolicy = geoPolicyService.getGeoPolicy();
 		UserPolicy userPolicy = userPolicyService.getUserPolicy(userSession.getUserId());
 		
-		if(dataId != null && dataId.trim() != "") {
+		if(dataId != null && !"".equals(dataId.trim())) {
 			// dataId가 있을경우 data 위치로 가기 위해 위치값을 변경해줌 
 			DataInfo data = DataInfo.builder().dataId(Long.parseLong(dataId)).build();
 			DataInfo dataInfo = dataService.getData(data);

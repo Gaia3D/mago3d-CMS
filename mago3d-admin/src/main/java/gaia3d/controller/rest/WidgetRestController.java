@@ -1,13 +1,16 @@
 package gaia3d.controller.rest;
 
-import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.*;
-import gaia3d.domain.converter.ConverterJobFile;
-import gaia3d.service.*;
-import gaia3d.utils.LocaleUtils;
-import io.micrometer.core.instrument.util.StringUtils;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static java.util.stream.Collectors.toList;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +20,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
-import java.util.*;
-
-import static java.util.stream.Collectors.toList;
+import gaia3d.config.PropertiesConfig;
+import gaia3d.domain.Key;
+import gaia3d.domain.converter.ConverterJobFile;
+import gaia3d.domain.data.DataAdjustLog;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataType;
+import gaia3d.domain.issue.Issue;
+import gaia3d.domain.user.UserInfo;
+import gaia3d.domain.user.UserSession;
+import gaia3d.domain.user.UserStatus;
+import gaia3d.domain.widget.Widget;
+import gaia3d.service.ConverterService;
+import gaia3d.service.DataAdjustLogService;
+import gaia3d.service.DataService;
+import gaia3d.service.IssueService;
+import gaia3d.service.UserService;
+import gaia3d.service.WidgetService;
+import gaia3d.utils.LocaleUtils;
+import io.micrometer.core.instrument.util.StringUtils;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,7 +48,7 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/widgets")
 public class WidgetRestController {
 
-	private static final long WIDGET_LIST_VIEW_COUNT = 6l;
+	private static final long WIDGET_LIST_VIEW_COUNT = 6L;
 
 	private final MessageSource messageSource;
 	private final PropertiesConfig propertiesConfig;
@@ -60,6 +79,7 @@ public class WidgetRestController {
 
 		// 사용자 현황
 		List<UserInfo> userInfoStatusList = userService.getUserStatusCount();
+		// TODO 다른 걸로 바꿔야 함
 		userInfoStatusList.stream()
 			.filter(u -> {
 				if(statusMap.containsKey(u.getStatus())) {
@@ -91,6 +111,8 @@ public class WidgetRestController {
 				status = messageSource.getMessage("user.status.logical.delete", null, locale);
 			} else if(UserStatus.TEMP_PASSWORD == UserStatus.findBy(key)) {
 				status = messageSource.getMessage("user.status.temp.password", null, locale);
+			} else if (UserStatus.WAITING_APPROVAL == UserStatus.findBy(key)) {
+				status = messageSource.getMessage("user.status.waiting.approval", null, locale);
 			}
 
 			userStatusKeys.add(status);
@@ -123,6 +145,7 @@ public class WidgetRestController {
 		// 데이터 타입
 		Map<String, Long> dataTypeMap = DataType.getStatisticsMap();
 		List<DataInfo> dataInfoStatusList = dataService.getDataTypeCount();
+		// TODO 다른 걸로 바꿔야 함
 		dataInfoStatusList.stream()
 				.filter(d -> {
 					if(dataTypeMap.containsKey(d.getDataType())) {
@@ -171,7 +194,7 @@ public class WidgetRestController {
 		List<String> converterJobFileKeys = new ArrayList<>();
 		List<Long> converterJobFileValues = new ArrayList<>();
 		String hyphen = "-";
-		converterJobFileList.stream().forEach(x -> {
+		converterJobFileList.forEach(x -> {
 			converterJobFileKeys.add(x.getYear() + hyphen + x.getMonth() + hyphen + x.getDay());
 			converterJobFileValues.add(x.getCount());
 		});
@@ -247,10 +270,10 @@ public class WidgetRestController {
 
 		String serverHost = propertiesConfig.getRestServer();
 
-		Long diskSpaceTotal = 0l;
-		Long diskSpaceFree = 0l;
-		Long diskSpaceUsed = 0l;
-		Long diskSpacePercent = 0l;
+		Long diskSpaceTotal = 0L;
+		Long diskSpaceFree = 0L;
+		Long diskSpaceUsed = 0L;
+		Long diskSpacePercent = 0L;
 
 		String jvmMemoryMax = "";
 		String jvmMemoryUsed = "";
@@ -265,7 +288,7 @@ public class WidgetRestController {
 			diskSpaceTotal = diskSpace.get("total");
 			diskSpaceFree = diskSpace.get("free");
 			diskSpaceUsed = diskSpaceTotal - diskSpaceFree;
-			diskSpacePercent = diskSpaceUsed / diskSpaceTotal * 100l;
+			diskSpacePercent = diskSpaceUsed / diskSpaceTotal * 100L;
 
 //			response = restTemplate.getForEntity(new URI(serverHost + "/actuator/metrics/jvm.memory.max"), Map.class);
 //			@SuppressWarnings("unchecked")
@@ -374,7 +397,7 @@ public class WidgetRestController {
 			Widget tempWidget = new Widget();
 			tempWidget.setUserId(userId);
 			tempWidget.setWidgetId(Long.valueOf(orders[i]));
-			tempWidget.setViewOrder(Integer.valueOf(i));
+			tempWidget.setViewOrder(i);
 			widgetList.add(tempWidget);
 		}
 

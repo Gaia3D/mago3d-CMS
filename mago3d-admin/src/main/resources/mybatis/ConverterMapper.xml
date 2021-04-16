@@ -37,35 +37,37 @@
 	<!-- converter job file 총 건수 -->
 	<select id="getConverterJobFileTotalCount" parameterType="converterJobFile" resultType="long">
 		/* getConverterJobFileTotalCount */
-		SELECT COUNT(converter_job_file_id)
-		FROM converter_job_file
-		<trim prefix="WHERE" prefixOverrides="AND">
+		SELECT COUNT(X.*)
+		FROM (
+			SELECT A.*, B.file_name
+			FROM converter_job_file A, upload_data_file B
+			WHERE A.upload_data_file_id = B.upload_data_file_id
 			<if test="userId != null and userId != ''">
-				user_id = #{userId}
+					AND A.user_id = #{userId}
 			</if>
 			<if test="status != null and status != ''">
-				AND status = #{status}
+					AND A.status = #{status}
 			</if>
 			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
-				AND ${searchWord} = #{searchValue}
+					AND B.${searchWord} = #{searchValue}
 			</if>
 			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
-				AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+					AND B.${searchWord} LIKE '%' || #{searchValue} || '%'
 			</if>
 			<if test="startDate != null and startDate != ''">
 				<![CDATA[
-			AND insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+						AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
 			]]>
 			</if>
 			<if test="endDate != null and endDate != ''">
 				<![CDATA[
-			AND insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+						AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
 			]]>
 			</if>
 			<if test="converterJobId != null">
-				AND converter_job_id = #{converterJobId}
+					AND A.converter_job_id = #{converterJobId}
 			</if>
-		</trim>
+		) X
 	</select>
 
 	<!-- converter job 목록 -->
@@ -133,28 +135,24 @@
 					AND B.${searchWord} LIKE '%' || #{searchValue} || '%'
 				</if>
 				<if test="startDate != null and startDate != ''">
-					<![CDATA[
-						AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
-						]]>
+					<![CDATA[AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')]]>
 				</if>
 				<if test="endDate != null and endDate != ''">
-					<![CDATA[
-						AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
-						]]>
+					<![CDATA[AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')]]>
 				</if>
 				<if test="converterJobId != null">
-					AND converter_job_id = #{converterJobId}
+					AND A.converter_job_id = #{converterJobId}
 				</if>
-			<choose>
-				<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
-					ORDER BY A.${orderWord} ${orderValue}
-				</when>
-				<otherwise>
-					ORDER BY A.insert_date DESC, A.converter_job_id DESC
-				</otherwise>
-			</choose>
 			OFFSET #{offset} LIMIT #{limit}
 		) X
+			<choose>
+				<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+				ORDER BY X.${orderWord} ${orderValue}
+				</when>
+				<otherwise>
+				ORDER BY X.insert_date DESC, X.converter_job_id DESC
+				</otherwise>
+			</choose>
 	</select>
 
 	<!-- 데이터 변환 파일 목록 -->
@@ -163,6 +161,9 @@
 		SELECT *
 		FROM converter_job_file
 		WHERE converter_job_id = #{converterJobId}
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
 	</select>
 
 	<!-- 데이터 변환 현황 -->

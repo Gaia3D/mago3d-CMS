@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<title>Tile 등록</title>
+	<th:block layout:fragment="pageCustomStyle">
+		<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
+		<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+	</th:block>
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+	<div id="siteBody" class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+					<div class="page-content">
+						<form id="tileInfo" th:object="${tileInfo}" method="post" th:action="@{#}" onsubmit="return false;">
+						<table class="input-table scope-row" summary="타일 등록 테이블">
+						<caption class="hiddenTag">타일 등록</caption>
+							<col class="col-label l" />
+							<col class="col-input" />
+							<tr>
+								<th class="col-label l" scope="row">
+									<label for="tileName">타일 명</label>
+									<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								</th>
+								<td class="col-input"><input type="text" id="tileName" name="tileName" class="l" size="70" /></td>
+							</tr>
+							<tr>
+								<th class="col-label" scope="row">
+									<label for="tileKey">타일 Key(영문,숫자,-,_)</label>
+									<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								</th>
+								<td class="col-input">
+									<input type="text" id="tileKey" name="tileKey" class="l" />
+									<input type="button" id="duplicationButton" th:value="#{overlap.check}" />
+								</td>
+							</tr>
+							<tr>
+								<th class="col-label" scope="row">
+									<label for="viewDataGroupNames">타일 대상 데이터 그룹</label>
+									<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								</th>
+								<td class="col-input">
+									<input type="hidden" id="dataGroupCheckIds" name="dataGroupCheckIds" />
+									<input type="text" id="viewDataGroupNames" name="viewDataGroupNames" class="l" th:value="${tileInfo.viewDataGroupNames}" readonly="readonly" />
+									<input type="button" id="dataGroupButton" value="데이터 그룹 선택" />
+								</td>
+							</tr>
+							<tr>
+								<th class="col-label l" scope="row">
+									<span>사용 유무</span>
+									<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								</th>
+								<td class="col-input radio-set">
+									<input type="radio" id="availableTrue" name="available" value="true" checked />
+									<label for="availableTrue">사용</label>
+									<input type="radio" id="availableFalse" name="available" value="false" />
+									<label for="availableFalse">미사용</label>
+								</td>
+							</tr>
+							<tr>
+								<th class="col-label l" scope="row"><label for="description">설명</label></th>
+								<td class="col-input"><input type="text" id="description" name="description" class="xl" size="100" /></td>
+							</tr>
+						</table>
+						<div class="button-group">
+							<div id="insertTileLink" class="center-buttons">
+								<input type="submit" value="저장" onclick="insert();" />
+								<a href="/tile/list" class="button">목록</a>
+							</div>
+						</div>
+						</form>
+					</div>
+
+					<!-- 데이터 그룹 선택 다이얼 로그 -->
+					<div th:replace="~{/tile/data-group-dialog :: #dataGroupDialog}"></div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+	<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script th:inline="javascript">
+
+		// 타일 키 유효성 체크
+		$("#tileKey").keyup(function (event) {
+			var inputValue = $(this).val();
+			if (isHangul(inputValue)) {
+				alert("타일 Key는 영문 및 숫자만 입력 가능 합니다.");
+				return;
+			}
+		});
+
+		// 데이터 그룹 전체 선택
+		function checkDataGroupAll() {
+			$("input:checkbox[name=dataGroupId]").each(function () {
+				this.checked = $("input:checkbox[id=dataGroupAll]").is(":checked");
+			});
+		}
+
+		// 스마트 타일 입력값 유효성 체크
+		function check() {
+			if ($("#tileName").val().trim() === "") {
+				alert("타일명을 입력하여 주십시오.");
+				$("#tileName").focus();
+				return false;
+			}
+			if ($("#tileKey").val().trim() === "") {
+				alert("타일 Key를 입력하여 주십시오.");
+				$("#tileKey").focus();
+				return false;
+			}
+			if ($("#dataGroupCheckIds").val().length <= 0) {
+				alert("타일 대상 데이터 그룹을 선택하여 주십시오.");
+				return false;
+			}
+		}
+
+		// 타일 등록
+		var insertTileFlag = true;
+		function insert() {
+			if (check() === false) return false;
+
+			if (insertTileFlag) {
+				insertTileFlag = false;
+				$.ajax({
+					url: "/tiles",
+					type: "POST",
+					headers: {"X-Requested-With": "XMLHttpRequest"},
+					data: $("#tileInfo").serialize(),
+					dataType: "json",
+					success: function (msg) {
+						if (msg.statusCode <= 200) {
+							alert(JS_MESSAGE["insert"]);
+							window.location.reload();
+						} else {
+							alert(JS_MESSAGE[msg.errorCode]);
+							console.log("---- " + msg.message);
+						}
+						insertTileFlag = true;
+					},
+					error: function (request, status, error) {
+						// alert message, 세션이 없는 경우 로그인 페이지로 이동 - common.js
+						// ajaxErrorHandler(request);
+						insertTileFlag = true;
+					}
+				});
+			} else {
+				alert("진행 중입니다.");
+			}
+		}
+
+		// 타일링 Key 중복 확인
+		$("#duplicationButton").on("click", function () {
+			var tileKey = $("#tileKey").val();
+			if (tileKey == "") {
+				alert("타일 키(한글불가)를 입력해 주세요.");
+				$("#tileKey").focus();
+				return false;
+			}
+
+			var regTileKey = /^[a-zA-Z0-9-_]+$/;
+			if (!regTileKey.test(document.getElementById("tileKey").value)) {
+				alert("타일 키(한글불가)가 올바르지 않습니다.");
+				return false;
+			}
+
+			var formData = "tileKey=" + tileKey;
+			$.ajax({
+				url: "/tiles/duplication",
+				type: "GET",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				data: formData,
+				dataType: "json",
+				success: function (msg) {
+					if (msg.statusCode <= 200) {
+						if (msg.duplication === true) {
+							alert(JS_MESSAGE["tile.key.duplication"]);
+							$("#tileKey").focus();
+							return false;
+						} else {
+							alert(JS_MESSAGE["tile.key.enable"]);
+							$("#duplication").val(msg.duplication);
+						}
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+						console.log("---- " + msg.message);
+					}
+				},
+				error: function (request, status, error) {
+					//alert(JS_MESSAGE["ajax.error.message"]);
+					alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			});
+		});
+
+		// 데이터 그룹 선택 다이얼로그
+		var dataGroupDialog = $(".dialog").dialog({
+			autoOpen: false,
+			height: 500,
+			width: 1000,
+			modal: true,
+			overflow: "auto",
+			resizable: false
+		});
+
+		// 상위 데이터 그룹 찾기
+		$("#dataGroupButton").on("click", function () {
+			dataGroupDialog.dialog("open");
+			dataGroupDialog.dialog("option", "title", "데이터 그룹 선택");
+		});
+
+		// 타일 대상 데이터 그룹으로 선택
+		$("#tileDataGroupSelect").on("click", function () {
+			if ($("input:checkbox[name=dataGroupId]:checked").length === 0) {
+				alert(JS_MESSAGE["check.value.required"]);
+				return false;
+			} else {
+				var checkedName = "";
+				var checkedValue = "";
+
+				$("input:checkbox[name=dataGroupId]:checked").each(function () {
+					var values = $(this).val().split("_");
+					checkedName += values[1] + ",";
+					checkedValue += values[0] + ",";
+				});
+				$("#dataGroupCheckIds").val(checkedValue);
+				$("#viewDataGroupNames").val(checkedName);
+			}
+
+			dataGroupDialog.dialog("close");
+		});
+
+	</script>
+</th:block>
+</body>
+</html>

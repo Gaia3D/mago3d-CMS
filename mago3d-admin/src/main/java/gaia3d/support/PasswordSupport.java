@@ -2,9 +2,9 @@ package gaia3d.support;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.user.UserInfo;
 import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.Policy;
-import gaia3d.domain.UserInfo;
 
 @Slf4j
 public class PasswordSupport {
@@ -214,8 +214,6 @@ public class PasswordSupport {
 					log.info("@@@@@@@  b1 = {}, b2 = {}", b1, b2);
 					if(b1 == b2) {
 						return true;
-					} else {
-						continue;
 					}
 				}
 			} else if(continuousCharCount == 3) {
@@ -229,8 +227,6 @@ public class PasswordSupport {
 					log.info("@@@@@@@  b1 = {}, b2 = {}, b3 = {}, b4 = {}", b1, b2, b3, b4);
 					if ((b1 == b2) && (b3 == b4)) {
 						return true;
-					} else {
-						continue;
 					}
 				}
 			} if(continuousCharCount == 4) {
@@ -246,8 +242,6 @@ public class PasswordSupport {
 					log.info("@@@@@@@  b1 = {}, b2 = {}, b3 = {}, b4 = {}, b5 = {}, b6 = {}", b1, b2, b3, b4, b5, b6);
 					if ((b1 == b2) && (b3 == b4) && (b5 == b6)) {
 						return true;
-					} else {
-						continue;
 					}
 				}
 			}

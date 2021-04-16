@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gaia3d.domain.GeoPolicy;
+import gaia3d.domain.policy.GeoPolicy;
 import gaia3d.persistence.GeoPolicyMapper;
 import gaia3d.service.GeoPolicyService;
 

@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -20,20 +24,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.DataInfoLegacy;
-import gaia3d.domain.DataInfoLegacyWrapper;
-import gaia3d.domain.DataInfoSimple;
 import gaia3d.domain.Key;
 import gaia3d.domain.LocationUdateType;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.data.DataInfoLegacy;
+import gaia3d.domain.data.DataInfoLegacyWrapper;
+import gaia3d.domain.data.DataInfoSimple;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.DataService;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -50,15 +50,15 @@ public class DataGroupRestController {
 
 	/**
 	 * 그룹Key 중복 체크
-	 * @param model
+	 * @param request
+	 * @param dataGroup
 	 * @return
 	 */
 	@GetMapping(value = "/duplication")
-	public Map<String, Object> ajaxKeyDuplicationCheck(HttpServletRequest request, DataGroup dataGroup) {
+	public Map<String, Object> dataGroupKeyDuplicationCheck(HttpServletRequest request, DataGroup dataGroup) {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		Boolean duplication = Boolean.TRUE;
 		
 		// TODO @Valid 로 구현해야 함
 		if(StringUtils.isEmpty(dataGroup.getDataGroupKey())) {
@@ -68,7 +68,7 @@ public class DataGroupRestController {
 			return result;
 		}
 		
-		duplication = dataGroupService.isDataGroupKeyDuplication(dataGroup);
+		Boolean duplication = dataGroupService.isDataGroupKeyDuplication(dataGroup);
 		log.info("@@ duplication = {}", duplication);
 		int statusCode = HttpStatus.OK.value();
 		
@@ -203,7 +203,9 @@ public class DataGroupRestController {
 	
 	/**
 	 * Smart Tiling 데이터 다운로드
-	 * @param model
+	 * @param request
+	 * @param response
+	 * @param dataGroupId
 	 * @return
 	 */
 	@GetMapping(value = "/download/{dataGroupId:[0-9]+}")
@@ -240,7 +242,9 @@ public class DataGroupRestController {
 	
 	/**
 	 * Smart Tiling Converter용 JSON 다운로드
-	 * @param model
+	 * @param request
+	 * @param response
+	 * @param dataGroupId
 	 * @return
 	 */
 	@GetMapping(value = "/download/converter/{dataGroupId:[0-9]+}")

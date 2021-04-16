@@ -10,13 +10,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.Policy;
-import gaia3d.domain.Widget;
+import gaia3d.domain.ConverterJobStatus;
+import gaia3d.domain.converter.ConverterJob;
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.widget.Widget;
+import gaia3d.service.ConverterService;
 import gaia3d.service.PolicyService;
 import gaia3d.service.WidgetService;
 import gaia3d.utils.DateUtils;
 import gaia3d.utils.FormatUtils;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -29,6 +32,8 @@ import gaia3d.utils.FormatUtils;
 @RequestMapping("/main")
 public class MainController {
 
+	@Autowired
+	private ConverterService converterService;
 	@Autowired
 	private PolicyService policyService;
 	@Autowired
@@ -83,6 +88,14 @@ public class MainController {
 			}
 		}
 
+		ConverterJob converterJob = new ConverterJob();
+		converterJob.setStatus(ConverterJobStatus.SUCCESS.toString().toLowerCase());
+		converterJob.setStartDate(startDate);
+		long converterSuccessCount = converterService.getConverterJobTotalCount(converterJob);
+		converterJob.setStatus(ConverterJobStatus.FAIL.toString().toLowerCase());
+		long converterFailCount = converterService.getConverterJobTotalCount(converterJob);
+		long converterTotalCount = converterSuccessCount + converterFailCount;
+
 		// 메인 페이지 자동 갱신 여부
 		model.addAttribute("autoRefresh", autoRefresh);
 		// 메인 페이지 갱신 속도
@@ -95,9 +108,9 @@ public class MainController {
 		model.addAttribute(widget);
 		model.addAttribute("widgetList", widgetList);
 
-		model.addAttribute("converterTotalCount", 0l);
-		model.addAttribute("converterSuccessCount", 0l);
-		model.addAttribute("converterFailCount", 0l);
+		model.addAttribute("converterTotalCount", converterTotalCount);
+		model.addAttribute("converterSuccessCount", converterSuccessCount);
+		model.addAttribute("converterFailCount", converterFailCount);
 
 		model.addAttribute("isUserDraw", isUserDraw);
 		model.addAttribute("isDataTypeDraw", isDataTypeDraw);

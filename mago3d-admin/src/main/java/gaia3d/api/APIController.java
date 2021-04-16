@@ -1,6 +1,6 @@
 package gaia3d.api;
 
-import gaia3d.domain.APIHeader;
+import gaia3d.domain.api.APIHeader;
 
 public interface APIController {
 	

@@ -47,26 +47,41 @@ public class PropertiesConfig {
     // 디자인 레이어 export 용 임시 디렉토리
     private String deisgnLayerExportDir;
     
-    private String queueServerHost;
-	private String queueServerPort;
-	private String queueUser;
-	private String queuePassword;
-	private String queueName;
-	private String exchange;
-	private String routingKey;
+    private String rabbitmqServerHost;
+	private String rabbitmqServerPort;
+	private String rabbitmqUser;
+	private String rabbitmqPassword;
 
+	private String rabbitmqConverterQueue;
+	private String rabbitmqConverterExchange;
+	private String rabbitmqConverterRoutingKey;
+
+    private String rabbitmqTilerQueue;
+    private String rabbitmqTilerExchange;
+    private String rabbitmqTilerRoutingKey;
+    
     // F4D 파일이 변환되는 Root 경로 이자, mago3DJS 에서 요청되는 파일의 Root 경로. ServletConfig 에서 매핑
     private String dataServiceDir;
     // F4D 변환 결과 로그 저장 경로
     private String dataConverterLogDir;
     // 데이터 라이브러리 F4D 변환 결과 로그 저장 경로
     private String dataLibraryConverterLogDir;
+    // 스마트 타일링 생성을 위한 json 파일이 있는 위치
+    private String tileMetaDir;
+    // 스마트 타일링 로그 위치
+    private String tileLogDir;
+
     // 관리자용
+    private String adminTileServiceDir;
+    private String adminTileServicePath;
     private String adminDataServiceDir;
     private String adminDataLibraryServiceDir;
     private String adminDataServicePath;
     private String adminDataLibraryServicePath;
+
     // 사용자용
+    private String userTileServiceDir;
+    private String userTileServicePath;
     private String userDataServiceDir;
     private String userDataLibraryServiceDir;
     private String userDataServicePath;
@@ -85,7 +100,7 @@ public class PropertiesConfig {
     
     private String guideDataServiceDir;
     
-    private String ogr2ogrEnviromentPath;
+    private String gdalCommandPath;
     private String ogr2ogrHost;
     private String ogr2ogrPort;
 }

@@ -1,22 +1,21 @@
 package gaia3d.domain;
 
-import org.junit.jupiter.api.Test;
-
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.RoleKey;
-
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.Disabled;
+
+import gaia3d.domain.user.UserInfo;
+import gaia3d.domain.user.UserStatus;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 class UserStatusTest {
 
-	@Test
+	@Disabled
 	void test() {
 		Map<String, Long> map = UserStatus.getStatisticsMap();
 		log.info("----------- map = {}", map);

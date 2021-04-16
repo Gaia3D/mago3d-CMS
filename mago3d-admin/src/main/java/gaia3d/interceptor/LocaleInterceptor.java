@@ -28,17 +28,19 @@ public class LocaleInterceptor extends HandlerInterceptorAdapter {
 			lang = myLocale.getLanguage();
 		}
 
-		String accessibility = "ko-KR";
+		String accessibility = "ko";
 		if("ko".equals(lang)) {
-			accessibility = "ko-KR";
+			accessibility = "ko";
 		} else if("en".equals(lang)) {
-			accessibility = "en-US";
+			accessibility = "en";
 		} else if("ja".equals(lang)) {
-			accessibility = "ja-JP";
+			accessibility = "ja";
 		} else {
 			// TODO Because it does not support multilingual besides English and Japanese Based on English
-			lang = "en";
-			accessibility = "en-US";
+//			lang = "en";
+//			accessibility = "en-US";
+			lang = "ko";
+			accessibility = "ko";
 		}
 
 		request.setAttribute("lang", lang);

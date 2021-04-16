@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gaia3d.domain.Role;
+import gaia3d.domain.role.Role;
 import gaia3d.persistence.RoleMapper;
 import gaia3d.service.RoleService;
 
@@ -30,6 +30,15 @@ public class RoleServiceImpl implements RoleService {
 	public Long getRoleTotalCount(Role role) {
 		return roleMapper.getRoleTotalCount(role);
 	}
+	
+	/**
+	 * role 사용자 수
+	 * @return
+	 */
+	// @Transactional(readOnly=true)
+	// public List<UserStatistics> getRoleUserCount() {
+	// 	return roleMapper.getRoleUserCount();
+	// }
 	
 	/**
 	 * Role 목록

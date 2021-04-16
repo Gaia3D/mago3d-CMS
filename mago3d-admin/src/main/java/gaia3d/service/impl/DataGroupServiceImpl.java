@@ -1,19 +1,19 @@
 package gaia3d.service.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.Depth;
 import gaia3d.domain.Move;
+import gaia3d.domain.data.DataGroup;
 import gaia3d.persistence.DataGroupMapper;
 import gaia3d.persistence.DataMapper;
 import gaia3d.service.DataGroupService;
 import gaia3d.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -31,6 +31,7 @@ public class DataGroupServiceImpl implements DataGroupService {
 	 * @param dataGroup
 	 * @return
 	 */
+	@Transactional(readOnly = true)
 	public Long getDataGroupTotalCount(DataGroup dataGroup) {
 		return dataGroupMapper.getDataGroupTotalCount(dataGroup);
 	}
@@ -50,7 +51,7 @@ public class DataGroupServiceImpl implements DataGroupService {
      */
 	@Transactional(readOnly = true)
 	public List<DataGroup> getListDataGroup(DataGroup dataGroup) {
-		return dataGroupMapper.getListDataGroup();
+		return dataGroupMapper.getListDataGroup(dataGroup);
 	}
 
 	/**
@@ -99,12 +100,12 @@ public class DataGroupServiceImpl implements DataGroupService {
      */
     @Transactional
 	public int insertDataGroup(DataGroup dataGroup) {
-    	String userId = dataGroup.getUserId();
+//    	String userId = dataGroup.getUserId();
     	Integer parentDataGroupId = 0;
     	
     	DataGroup parentDataGroup = new DataGroup();
     	//parentDataGroup.setUserId(userId);
-    	Integer depth = 0;
+    	int depth = 0;
     	if(dataGroup.getParent() > 0) {
     		parentDataGroupId = dataGroup.getParent();
     		parentDataGroup.setDataGroupId(parentDataGroupId);
@@ -200,7 +201,7 @@ public class DataGroupServiceImpl implements DataGroupService {
 	 */
 	@Transactional
 	public int updateDataGroupChildren(DataGroup dataGroup) {
-		return updateDataGroupChildren(dataGroup);
+		return dataGroupMapper.updateDataGroupChildren(dataGroup);
 	}
 
     /**
@@ -211,70 +212,33 @@ public class DataGroupServiceImpl implements DataGroupService {
     @Transactional
 	public int deleteDataGroup(DataGroup dataGroup) {
     	
-    	// TODO converter_job 이력도 삭제해야 하는가?
-    	// 삭제하고, children update
-    	
-    	//String userId = dataGroup.getUserId();
-    	dataGroup = dataGroupMapper.getDataGroup(dataGroup);
-    	
     	int result = 0;
-    	if(Depth.ONE == Depth.findBy(dataGroup.getDepth())) {
-    		// 하위 데이터 그룹 조회
-    		List<Integer> dataGroupIdList = dataGroupMapper.getDataGroupListByAncestor(dataGroup);
-    		for(Integer dataGroupId : dataGroupIdList) {
-    			DataGroup deleteDataGroup = new DataGroup();
-    			//deleteDataGroup.setUserId(userId);
-    			deleteDataGroup.setDataGroupId(dataGroupId);
-    			// 하위 데이터 삭제
-    			dataMapper.deleteDataByDataGroupId(deleteDataGroup);
-    		}
+		// TODO converter_job 이력도 삭제해야 하는가?
+		// 삭제 대상의 하위목록을 트리로 가져와서 모두 삭제
+		List<DataGroup> dataGroupList = dataGroupMapper.getListDataGroup(dataGroup);
+		dataGroupList.forEach(f -> {
+					// 데이터 삭제
+					dataMapper.deleteDataByDataGroupId(f);
+					// 데이터 그룹 삭제
+					dataGroupMapper.deleteDataGroup(f);
+				});
     		
-    		// 데이터 그룹 일괄 삭제
-    		result = dataGroupMapper.deleteDataGroupByAncestor(dataGroup);
-    	} else if(Depth.TWO == Depth.findBy(dataGroup.getDepth())) {
-    		// 하위 데이터 그룹 조회
-    		List<Integer> dataGroupIdList = dataGroupMapper.getDataGroupListByParent(dataGroup);
-    		for(Integer dataGroupId : dataGroupIdList) {
-    			DataGroup deleteDataGroup = new DataGroup();
-    			//deleteDataGroup.setUserId(userId);
-    			deleteDataGroup.setDataGroupId(dataGroupId);
-    			// 하위 데이터 삭제
-    			dataMapper.deleteDataByDataGroupId(deleteDataGroup);
-    		}
-    		
-    		// 조상의 children -1
-    		DataGroup ancestorDataGroup = new DataGroup();
-    		//ancestorDataGroup.setUserId(userId);
-    		ancestorDataGroup.setDataGroupId(dataGroup.getAncestor());
-    		ancestorDataGroup = dataGroupMapper.getDataGroup(ancestorDataGroup);
-    		DataGroup tempDataGroup = new DataGroup();
-    		tempDataGroup.setDataGroupId(ancestorDataGroup.getDataGroupId());
-    		tempDataGroup.setChildren(ancestorDataGroup.getChildren() - 1);
-	    	dataGroupMapper.updateDataGroup(tempDataGroup);
-    		
-	    	// 데이터 그룹 일괄 삭제
-    		result = dataGroupMapper.deleteDataGroupByParent(dataGroup);
-    	} else if(Depth.THREE == Depth.findBy(dataGroup.getDepth())) {
-    		DataGroup deleteDataGroup = new DataGroup();
-			//deleteDataGroup.setUserId(userId);
-			deleteDataGroup.setDataGroupId(dataGroup.getDataGroupId());
-			// 하위 데이터 삭제
-			dataMapper.deleteDataByDataGroupId(deleteDataGroup);
-    		
-			// 부모의 children -1
-			DataGroup parentDataGroup = new DataGroup();
-    		parentDataGroup.setDataGroupId(dataGroup.getParent());
-    		parentDataGroup = dataGroupMapper.getDataGroup(parentDataGroup);
-    		DataGroup tempDataGroup = new DataGroup();
-    		tempDataGroup.setDataGroupId(parentDataGroup.getDataGroupId());
-    		tempDataGroup.setChildren(parentDataGroup.getChildren() - 1);
-	    	dataGroupMapper.updateDataGroup(tempDataGroup);
-	    	
-	    	result = dataGroupMapper.deleteDataGroup(dataGroup);
-    	} else {
-    		
+		DataGroup parentGroup = dataGroupMapper.getDataGroup(DataGroup.builder()
+				.dataGroupId(dataGroupList.get(0).getParent())
+				.build());
+
+		if (parentGroup != null) {
+			// parent 데이터 그룹의 카운트 1 감소
+			dataGroupMapper.updateDataGroup(DataGroup.builder()
+					.dataGroupId(parentGroup.getDataGroupId())
+					.children(parentGroup.getChildren() - 1)
+					.build());
     	}
     	
+		// 마지막으로 실제 삭제 대상 그룹 삭제
+		dataGroupMapper.deleteDataGroup(dataGroup);
+		dataMapper.deleteDataByDataGroupId(dataGroup);
+
     	return result;
     }
     

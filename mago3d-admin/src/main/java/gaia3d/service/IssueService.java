@@ -2,7 +2,7 @@ package gaia3d.service;
 
 import java.util.List;
 
-import gaia3d.domain.Issue;
+import gaia3d.domain.issue.Issue;
 
 /**
  * issue

@@ -61,7 +61,7 @@
         SELECT * FROM user_group WHERE parent = #{parent} ORDER BY view_order DESC LIMIT 1
     </select>
 
-    <!-- 부모와 순서를 가지고 유저그룹 정보를 취득 -->
+    <!-- 부모와 순서를 가지고 사용자 그룹 정보를 취득 -->
 	<select id="getUserGroupByParentAndViewOrder" parameterType="userGroup" resultType="userGroup">
 		/* getUserGroupByParentAndViewOrder */
 		SELECT *
@@ -93,14 +93,14 @@
 		/* getListUserGroupMenu */
 		WITH RECURSIVE menu_tree (
 		user_group_menu_id, user_group_id, all_yn, read_yn, write_yn, update_yn, delete_yn,
-		menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, previous_depth, view_order, url, url_alias, html_id, html_content_id,
+			menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, previous_depth, myPreviousDepth, view_order, url, url_alias, html_id, html_content_id,
 		image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date, path, cycle
 		) AS (
 		SELECT X.user_group_menu_id, X.user_group_id, X.all_yn, X.read_yn, X.write_yn, X.update_yn, X.delete_yn,
-		X.menu_id, X.menu_type, X.menu_target, X.name, X.name_en, X.ancestor, X.parent, X.depth, X.previous_depth, X.view_order, X.url, X.url_alias, X.html_id, X.html_content_id,
+				X.menu_id, X.menu_type, X.menu_target, X.name, X.name_en, X.ancestor, X.parent, X.depth, X.previous_depth, X.myPreviousDepth, X.view_order, X.url, X.url_alias, X.html_id, X.html_content_id,
 		X.image, X.image_alt, X.css_class, X.default_yn, X.use_yn, X.display_yn, X.description, X.insert_date, ARRAY[X.view_order], false
 		FROM (
-		SELECT A.user_group_menu_id, A.user_group_id,
+				SELECT A.user_group_menu_id, A.user_group_id, A.previous_depth AS myPreviousDepth,
 		COALESCE(A.all_yn, 'N') AS all_yn, COALESCE(A.read_yn, 'N') AS read_yn, COALESCE(A.write_yn, 'N') AS write_yn,
 		COALESCE(A.update_yn, 'N') AS update_yn, COALESCE(A.delete_yn, 'N') AS delete_yn,
 		B.menu_id, B.menu_type, B.menu_target, B.name, B.name_en, B.ancestor, B.parent, B.depth, B.previous_depth, B.view_order, B.url, B.url_alias, B.html_id, B.html_content_id,
@@ -121,11 +121,11 @@
 		) X
 		UNION ALL
 		SELECT X.user_group_menu_id, X.user_group_id, X.all_yn, X.read_yn, X.write_yn, X.update_yn, X.delete_yn,
-		X.menu_id, X.menu_type, X.menu_target, X.name, X.name_en, X.ancestor, X.parent, X.depth, X.previous_depth, X.view_order, X.url, X.url_alias, X.html_id, X.html_content_id,
+				X.menu_id, X.menu_type, X.menu_target, X.name, X.name_en, X.ancestor, X.parent, X.depth, X.previous_depth, X.myPreviousDepth, X.view_order, X.url, X.url_alias, X.html_id, X.html_content_id,
 		X.image, X.image_alt, X.css_class, X.default_yn, X.use_yn, X.display_yn, X.description, X.insert_date,
 		path || X.view_order, X.menu_id = ANY(path)
 		FROM (
-		SELECT A.user_group_menu_id, A.user_group_id,
+	        	SELECT A.user_group_menu_id, A.user_group_id, A.previous_depth AS myPreviousDepth,
 		COALESCE(A.all_yn, 'N') AS all_yn, COALESCE(A.read_yn, 'N') AS read_yn, COALESCE(A.write_yn, 'N') AS write_yn,
 		COALESCE(A.update_yn, 'N') AS update_yn, COALESCE(A.delete_yn, 'N') AS delete_yn,
 		B.menu_id, B.menu_type, B.menu_target, B.name, B.name_en, B.ancestor, B.parent, B.depth, B.previous_depth, B.view_order, B.url, B.url_alias, B.html_id, B.html_content_id,
@@ -146,7 +146,7 @@
 		WHERE X.parent = Y.menu_id AND not cycle
 		)
 		SELECT user_group_menu_id, user_group_id, all_yn, read_yn, write_yn, update_yn, delete_yn,
-		menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, previous_depth, view_order, url, url_alias, html_id, html_content_id,
+			menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, previous_depth, myPreviousDepth, view_order, url, url_alias, html_id, html_content_id,
 		image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date
 		FROM menu_tree
 		ORDER BY path
@@ -210,6 +210,31 @@
 		WHERE user_group_key = #{userGroupKey}
 	</select>
 
+	<!-- 트리 구조의 하위 사용자 그룹 목록 -->
+	<select id="getListUserGroupTree" parameterType="userGroup" resultType="userGroup">
+		WITH RECURSIVE user_group_tree (
+			user_group_id, user_group_key, user_group_name, ancestor, parent, depth, view_order, basic, available, children,
+			description, insert_date, path, cycle
+		) AS (
+			SELECT A.user_group_id, A.user_group_key, A.user_group_name, A.ancestor, A.parent, A.depth, A.view_order, A.basic, A.available, A.children,
+				A.description, A.insert_date, ARRAY[A.view_order], false
+			FROM user_group A
+			WHERE
+				A.user_group_id = #{userGroupId}
+				<if test="available != null">
+					AND A.available = #{available}
+				</if>
+			UNION ALL
+			SELECT A.user_group_id, A.user_group_key, A.user_group_name, A.ancestor, A.parent, A.depth, A.view_order, A.basic, A.available, A.children,
+			A.description, A.insert_date, path || A.view_order, A.user_group_id = ANY(path)
+			FROM user_group A, user_group_tree B
+			WHERE A.parent = B.user_group_id AND NOT cycle
+		)
+		SELECT user_group_id, user_group_key, user_group_name, ancestor, parent, depth, view_order, basic, available, children, description, insert_date, path
+		FROM user_group_tree
+		ORDER BY path DESC;
+	</select>
+
     <!-- 사용자 그룹 등록 -->
     <insert id="insertUserGroup" parameterType="userGroup">
     	/* insertUserGroup */
@@ -254,9 +279,9 @@
 			SELECT NEXTVAL('user_group_menu_seq')
         </selectKey>
         INSERT INTO user_group_menu (
-			user_group_menu_id, user_group_id, menu_id, all_yn, read_yn, write_yn, update_yn, delete_yn
+		user_group_menu_id, user_group_id, menu_id, previous_depth, all_yn, read_yn, write_yn, update_yn, delete_yn
         ) VALUES (
-            #{userGroupMenuId}, #{userGroupId}, #{menuId}, #{allYn}, #{readYn}, #{writeYn}, #{updateYn}, #{deleteYn}
+		#{userGroupMenuId}, #{userGroupId}, #{menuId}, #{previousDepth}, #{allYn}, #{readYn}, #{writeYn}, #{updateYn}, #{deleteYn}
         )
     </insert>
 

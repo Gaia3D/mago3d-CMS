@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div id="dataGroupDialog" class="dialog">
+        <table class="list-table scope-col">
+            <colgroup>
+                <col class="col-name">
+                <col class="col-toggle">
+                <col class="col-id">
+                <col class="col-function">
+                <col class="col-date">
+                <col class="col-toggle">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th scope="col" class="col-name">데이터 그룹명</th>
+                    <th scope="col" class="col-toggle">사용 여부</th>
+                    <th scope="col" class="col-toggle">공유 유형</th>
+                    <th scope="col" class="col-toggle">설명</th>
+                    <th scope="col" class="col-date">등록일</th>
+                    <th scope="col" class="col-date">전체 선택(
+                        <input type="checkbox" id="dataGroupAll" name="dataGroupAll" value="Y" onclick="checkDataGroupAll();"/>
+                        <label for="dataGroupAll">일괄 부여</label>)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            <th:block th:if="${#lists.isEmpty(dataGroupList)}">
+                <tr><td colspan="6" class="col-none">데이터 그룹이 존재하지 않습니다.</td></tr>
+            </th:block>
+            <th:block th:unless="${#lists.isEmpty(dataGroupList)}" th:each="dataGroup : ${dataGroupList}">
+                <tr>
+                    <td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
+                    <th:block th:with="paddingLeftValue = ${(dataGroup.depth - 1)  * 40}">
+                        <span th:style="|padding-left: ${paddingLeftValue}px; font-size: 1.6em;|"></span>
+                        <span th:class="|depth${dataGroup.depth}|"><i class="fa fa-folder" aria-hidden="true"></i></span>
+                    </th:block>
+                        <span th:text="${dataGroup.dataGroupName}"></span>
+                    </td>
+                    <td class="col-type">
+                        <th:block th:if="${#bools.isTrue(dataGroup.available)}" th:text="사용"></th:block>
+                        <th:block th:if="${#bools.isFalse(dataGroup.available)}" th:text="미사용"></th:block>
+                    </td>
+                    <td class="col-type">
+                        <th:block th:if="${#strings.equals(dataGroup.sharing, 'common')}" th:text="공통"></th:block>
+                        <th:block th:if="${#strings.equals(dataGroup.sharing, 'public')}" th:text="공개"></th:block>
+                        <th:block th:if="${#strings.equals(dataGroup.sharing, 'private')}" th:text="개인"></th:block>
+                        <th:block th:if="${#strings.equals(dataGroup.sharing, 'group')}" th:text="그룹"></th:block>
+                    </td>
+                    <td class="col-key" th:text="${dataGroup.description}"></td>
+                    <td class="col-date">
+                        <th:block th:text="${#temporals.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+                    </td>
+                    <td class="col-toggle">
+                        <input type="checkbox" th:id="|dataGroupId_${dataGroup.dataGroupId}|" name="dataGroupId"
+                               th:value="|${dataGroup.dataGroupId}_${dataGroup.dataGroupName}|"/>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <div class="button-group">
+            <input type="button" id="tileDataGroupSelect" class="button" value="타일 대상 데이터 그룹으로 선택" />
+        </div>
+    </div>
+</body>
+</html>

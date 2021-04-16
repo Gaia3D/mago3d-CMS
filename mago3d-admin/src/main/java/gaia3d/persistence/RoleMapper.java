@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.Role;
+import gaia3d.domain.role.Role;
 
 /**
  * Role
@@ -20,6 +20,12 @@ public interface RoleMapper {
 	 * @return
 	 */
 	Long getRoleTotalCount(Role role);
+	
+	/**
+	 * role 사용자 수
+	 * @return
+	 */
+	// List<UserStatistics> getRoleUserCount();
 
 	/**
 	 * Role 목록

@@ -10,7 +10,7 @@ public enum MethodType {
 	
 	private @Setter @Getter String method;
 	
-	private MethodType(String method) {
+	MethodType(String method) {
 		this.method = method;
 	}
 	

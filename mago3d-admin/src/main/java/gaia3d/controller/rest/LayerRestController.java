@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -38,17 +39,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.PropertiesConfig;
 import gaia3d.controller.AuthorizationController;
-import gaia3d.domain.GeoPolicy;
 import gaia3d.domain.Key;
-import gaia3d.domain.Layer;
-import gaia3d.domain.LayerFileInfo;
-import gaia3d.domain.LayerType;
-import gaia3d.domain.Policy;
 import gaia3d.domain.ShapeFileExt;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.layer.Layer;
+import gaia3d.domain.layer.LayerFileInfo;
+import gaia3d.domain.layer.LayerType;
+import gaia3d.domain.policy.GeoPolicy;
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.user.UserSession;
 import gaia3d.geospatial.ShapeFileParser;
 import gaia3d.service.GeoPolicyService;
 import gaia3d.service.LayerFileInfoService;
@@ -57,6 +57,7 @@ import gaia3d.service.PolicyService;
 import gaia3d.support.LogMessageSupport;
 import gaia3d.support.ZipSupport;
 import gaia3d.utils.WebUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -82,10 +83,9 @@ public class LayerRestController implements AuthorizationController {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		String geoserverLayerJson = null;
 		
 		GeoPolicy geoPolicy = geoPolicyService.getGeoPolicy();
-		geoserverLayerJson = layerService.getListGeoserverLayer(geoPolicy);
+		String geoserverLayerJson = layerService.getListGeoserverLayer(geoPolicy);
 		int statusCode = HttpStatus.OK.value();
 
 		result.put("statusCode", statusCode);
@@ -135,7 +135,7 @@ public class LayerRestController implements AuthorizationController {
 	 * shape 파일 변환 TODO dropzone 이 파일 갯수만큼 form data를 전송해 버려서 command 패턴을(Layer
 	 * layer) 사용할 수 없음 dropzone 이 예외 처리가 이상해서 BAD_REQUEST 를 던지지 않고 OK 를 넣짐
 	 *
-	 * @param model
+	 * @param request
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -178,7 +178,7 @@ public class LayerRestController implements AuthorizationController {
 							.sharing(request.getParameter("sharing"))
 							.layerName(request.getParameter("layerName"))
 							.layerKey(request.getParameter("layerKey"))
-							.serviceType(request.getParameter("serviceType"))
+							.ogcWebServices(request.getParameter("ogcWebServices"))
 							.layerType(request.getParameter("layerType"))
 							.layerInsertType(request.getParameter("layerInsertType"))
 							.geometryType(request.getParameter("geometryType"))
@@ -234,7 +234,7 @@ public class LayerRestController implements AuthorizationController {
 					// 파일 기본 validation 체크
 					errorCode = fileValidate(policy, multipartFile);
 					if (!StringUtils.isEmpty(errorCode)) {
-						statusCode = HttpStatus.BAD_REQUEST.value();
+						result.put("statusCode", HttpStatus.BAD_REQUEST.value());
 						result.put("errorCode", errorCode);
 						return result;
 					}
@@ -242,7 +242,7 @@ public class LayerRestController implements AuthorizationController {
 					String originalName = multipartFile.getOriginalFilename();
 					String[] divideFileName = originalName.split("\\.");
 					String extension = null;
-					if (divideFileName != null && divideFileName.length != 0) {
+					if (divideFileName.length != 0) {
 						extension = divideFileName[divideFileName.length - 1];
 						if (LayerFileInfo.ZIP_EXTENSION.equalsIgnoreCase(extension)) {
 							log.info("@@@@@@@@@@@@ upload.file.type.invalid");
@@ -393,7 +393,8 @@ public class LayerRestController implements AuthorizationController {
     * shape 파일 변환
     * TODO dropzone 이 파일 갯수만큼 form data를 전송해 버려서 command 패턴을(Layer layer) 사용할 수 없음
     * dropzone 이 예외 처리가 이상해서 BAD_REQUEST 를 던지지 않고 OK 를 넣짐
-    * @param model
+	 * @param request
+	 * @param layerId
     * @return
     */
     @SuppressWarnings("unchecked")
@@ -477,7 +478,7 @@ public class LayerRestController implements AuthorizationController {
                     String originalName = multipartFile.getOriginalFilename();
                     String[] divideFileName = originalName.split("\\.");
                     String extension = null;
-                    if(divideFileName != null && divideFileName.length != 0) {
+                    if(divideFileName.length != 0) {
                         extension = divideFileName[divideFileName.length - 1];
                         if(LayerFileInfo.ZIP_EXTENSION.equalsIgnoreCase(extension)) {
                             log.info("@@@@@@@@@@@@ upload.file.type.invalid");
@@ -539,7 +540,7 @@ public class LayerRestController implements AuthorizationController {
             layer.setSharing(request.getParameter("sharing"));
             layer.setLayerName(request.getParameter("layerName"));
 			layer.setLayerKey(request.getParameter("layerKey"));
-			layer.setServiceType(request.getParameter("serviceType"));
+			layer.setOgcWebServices(request.getParameter("ogcWebServices"));
 			layer.setLayerType(request.getParameter("layerType"));
 			layer.setGeometryType(request.getParameter("geometryType"));
 			layer.setLayerLineColor(request.getParameter("layerLineColor"));
@@ -631,7 +632,7 @@ public class LayerRestController implements AuthorizationController {
 
 	/**
 	 * 레이어 삭제 삭제
-	 * @param roleId
+	 * @param layerId
 	 * @return
 	 */
 	@DeleteMapping(value = "/delete/{layerId:[0-9]+}")
@@ -651,7 +652,8 @@ public class LayerRestController implements AuthorizationController {
 
     /**
     * shape 파일 목록
-    * @param model
+	 * @param request
+	 * @param layerId
     * @return
     */
     @GetMapping(value = "/{layerId:[0-9]+}/layer-fileinfos")
@@ -661,9 +663,7 @@ public class LayerRestController implements AuthorizationController {
 		String errorCode = null;
 		String message = null;
 
-		List<LayerFileInfo> layerFileInfoList = new ArrayList<>();
-        
-        layerFileInfoList = layerFileInfoService.getListLayerFileInfo(layerId);
+		List<LayerFileInfo> layerFileInfoList = layerFileInfoService.getListLayerFileInfo(layerId);
         log.info("layerFileInfoList =============================== {} " , layerFileInfoList);
         int statusCode = HttpStatus.OK.value();
         
@@ -676,8 +676,10 @@ public class LayerRestController implements AuthorizationController {
 
     /**
     * shape 파일 다운 로드
-    * @param model
-    * @return
+	 * @param request
+	 * @param response
+	 * @param layerId
+	 * @param layerFileInfoTeamId
     */
     @GetMapping(value = "/{layerId:[0-9]+}/layer-file-info/{layerFileInfoGroupId:[0-9]+}/download")
     public void download(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer layerId, @PathVariable Integer layerFileInfoGroupId) {
@@ -721,7 +723,7 @@ public class LayerRestController implements AuthorizationController {
 
             File zipFile = new File(zipFileName);
             try(	BufferedInputStream in = new BufferedInputStream(new FileInputStream(zipFile));
-                    BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());) {
+                    BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream())) {
 
                 FileCopyUtils.copy(in, out);
                 out.flush();
@@ -742,7 +744,10 @@ public class LayerRestController implements AuthorizationController {
 
     /**
     * 비활성화 상태의 layer를 활성화
-    * @param model
+	 * @param request
+	 * @param layerId
+	 * @param layerFileInfoId
+	 * @param layerFileInfoGroupId
     * @return
     */
     @PostMapping(value = "/{layerId:[0-9]+}/layer-file-infos/{layerFileInfoId:[0-9]+}")
@@ -770,9 +775,8 @@ public class LayerRestController implements AuthorizationController {
     	Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		LayerFileInfo layerFileInfo = new LayerFileInfo();
-    	
-        layerFileInfo = layerFileInfoService.getLayerFileInfo(layerFileInfoId);
+
+		LayerFileInfo layerFileInfo = layerFileInfoService.getLayerFileInfo(layerFileInfoId);
         log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@ layerFileInfo = {}", layerFileInfo);
         int statusCode = HttpStatus.OK.value();
 
@@ -792,9 +796,9 @@ public class LayerRestController implements AuthorizationController {
     * 업로딩 파일을 압축 해제
     * TODO 여기 Exception을 던지면 안될거 같음. 수정 필요
     * @param policy
-    * @param groupFileName layer 의 경우 한 세트가 같은 이름에 확장자만 달라야 함
-    * @param userId
+	* @param groupFileName groupFileName layer 의 경우 한 세트가 같은 이름에 확장자만 달라야 함
     * @param multipartFile
+	* @param shapeEncoding
     * @param targetDirectory
     * @return
     * @throws Exception
@@ -816,7 +820,7 @@ public class LayerRestController implements AuthorizationController {
         File uploadedFile = new File(tempDirectory + multipartFile.getOriginalFilename());
         multipartFile.transferTo(uploadedFile);
 
-        try ( ZipFile zipFile = new ZipFile(uploadedFile);) {
+        try ( ZipFile zipFile = new ZipFile(uploadedFile)) {
             String directoryPath = targetDirectory;
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
             while( entries.hasMoreElements() ) {
@@ -828,14 +832,12 @@ public class LayerRestController implements AuthorizationController {
                     File file = new File(unzipfileName);
                     file.mkdirs();
                 } else {
-                    String fileName = null;
                     String extension = null;
-                    String[] divideFileName = null;
                     String saveFileName = null;
 
-                    fileName = entry.getName();
-                    divideFileName = fileName.split("\\.");
-                    if(divideFileName != null && divideFileName.length != 0) {
+					String fileName = entry.getName();
+					String[] divideFileName = fileName.split("\\.");
+                    if(divideFileName.length != 0) {
                         extension = divideFileName[divideFileName.length - 1];
                         saveFileName = groupFileName + "." + extension;
                         log.info("--------- unzip saveFileName = {}", saveFileName);
@@ -843,7 +845,7 @@ public class LayerRestController implements AuthorizationController {
 
                     long size = 0L;
                     try ( 	InputStream inputStream = zipFile.getInputStream(entry);
-                            FileOutputStream outputStream = new FileOutputStream(targetDirectory + saveFileName); ) {
+                            FileOutputStream outputStream = new FileOutputStream(targetDirectory + saveFileName) ) {
                     	int bytesRead = 0;
                         byte[] buffer = new byte[BUFFER_SIZE];
                         while ((bytesRead = inputStream.read(buffer, 0, BUFFER_SIZE)) != -1) {
@@ -928,7 +930,7 @@ public class LayerRestController implements AuthorizationController {
         // 4 파일 사이즈
         long fileSize = multipartFile.getSize();
         log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@ upload file size = {} KB", (fileSize / 1000));
-        if( fileSize > (policy.getUserUploadMaxFilesize() * 1000000l)) {
+        if( fileSize > (policy.getUserUploadMaxFilesize() * 1000000L)) {
             log.info("@@ fileSize = {}, user upload max filesize = {} M", (fileSize / 1000), policy.getUserUploadMaxFilesize());
             return "fileinfo.size.invalid";
         }
@@ -954,10 +956,8 @@ public class LayerRestController implements AuthorizationController {
     }
 
     /**
-    * @param userId
-    * @param today
+	 *
     * @param targetDirectory
-    * @return
     */
     private void createDirectory(String targetDirectory) {
         File directory = new File(targetDirectory);
@@ -989,31 +989,31 @@ public class LayerRestController implements AuthorizationController {
 
         log.info("================================= browser = {}", browser);
         if (browser.equals("MSIE")) {
-            encodedFilename = URLEncoder.encode(filename, "UTF-8").replaceAll("\\+", "%20");
+            encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
         } else if (browser.equals("Trident")) {       // IE11 문자열 깨짐 방지
-            encodedFilename = URLEncoder.encode(filename, "UTF-8").replaceAll("\\+", "%20");
+            encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
         } else if (browser.equals("Firefox")) {
-            encodedFilename = "\"" + new String(filename.getBytes("UTF-8"), "8859_1") + "\"";
-            encodedFilename = URLDecoder.decode(encodedFilename, "UTF-8");
+            encodedFilename = "\"" + new String(filename.getBytes(StandardCharsets.UTF_8), "8859_1") + "\"";
+            encodedFilename = URLDecoder.decode(encodedFilename, StandardCharsets.UTF_8);
         } else if (browser.equals("Opera")) {
-            encodedFilename = "\"" + new String(filename.getBytes("UTF-8"), "8859_1") + "\"";
+            encodedFilename = "\"" + new String(filename.getBytes(StandardCharsets.UTF_8), "8859_1") + "\"";
         } else if (browser.equals("Chrome")) {
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < filename.length(); i++) {
                 char c = filename.charAt(i);
                 if (c > '~') {
-                    sb.append(URLEncoder.encode("" + c, "UTF-8"));
+                    sb.append(URLEncoder.encode("" + c, StandardCharsets.UTF_8));
                 } else {
                     sb.append(c);
                 }
             }
             encodedFilename = sb.toString();
         } else if (browser.equals("Safari")){
-            encodedFilename = "\"" + new String(filename.getBytes("UTF-8"), "8859_1")+ "\"";
-            encodedFilename = URLDecoder.decode(encodedFilename, "UTF-8");
+            encodedFilename = "\"" + new String(filename.getBytes(StandardCharsets.UTF_8), "8859_1")+ "\"";
+            encodedFilename = URLDecoder.decode(encodedFilename, StandardCharsets.UTF_8);
         }
         else {
-            encodedFilename = "\"" + new String(filename.getBytes("UTF-8"), "8859_1")+ "\"";
+            encodedFilename = "\"" + new String(filename.getBytes(StandardCharsets.UTF_8), "8859_1")+ "\"";
         }
 
         response.setHeader("Content-Disposition", dispositionPrefix + encodedFilename);

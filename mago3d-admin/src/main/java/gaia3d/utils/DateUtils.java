@@ -95,8 +95,8 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String getMonthLastDay(String yearMonth) {
-		int year = Integer.valueOf(yearMonth.substring(0, 4));
-		int month = Integer.valueOf(yearMonth.substring(4, 6));
+		int year = Integer.parseInt(yearMonth.substring(0, 4));
+		int month = Integer.parseInt(yearMonth.substring(4, 6));
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, year);
@@ -116,10 +116,10 @@ public class DateUtils {
 		Calendar calendar = Calendar.getInstance();
 		
 		if("DAY".equals(type)) {
-			calendar.add(Calendar.DAY_OF_MONTH, Integer.valueOf(value));
+			calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(value));
 			return FormatUtils.getDayFormat(calendar.getTime(), FormatUtils.YEAR_MONTH_DAY);
 		} else if("HOUR".equals(type)) {
-			calendar.add(Calendar.HOUR, Integer.valueOf(value));
+			calendar.add(Calendar.HOUR, Integer.parseInt(value));
 			return FormatUtils.getDayFormat(calendar.getTime(), FormatUtils.YEAR_MONTH_DAY_TIME14);
 		} else {
 			return null;

@@ -22,7 +22,7 @@
 	<!-- 위젯 등록 -->
 	<insert id="insertWidget" parameterType="widget">
 		/* insertWidget */
-		INSERT INTO widget(s
+		INSERT INTO widget(
 			widget_id, widget_name, widget_key, view_order, user_id
 		) values(
 			#{widgetId}, #{widgetName}, #{widgetKey}, #{viewOrder}, #{userId}

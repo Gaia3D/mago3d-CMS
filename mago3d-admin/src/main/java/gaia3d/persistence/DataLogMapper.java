@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.DataInfoLog;
+import gaia3d.domain.data.DataInfoLog;
 
 /**
  * Data Info 변경 이력
@@ -16,7 +16,7 @@ public interface DataLogMapper {
 
 	/**
 	 * 데이터 변경 요청 수
-	 * @param dataInfo
+	 * @param dataInfoLog
 	 * @return
 	 */
 	Long getDataInfoLogTotalCount(DataInfoLog dataInfoLog);
@@ -34,6 +34,15 @@ public interface DataLogMapper {
 	 * @return
 	 */
 	DataInfoLog getDataInfoLog(Long dataInfoLogId);
+
+	/**
+	 * 스케줄러에 의한 다음년도 파티션 테이블 자동 생성
+	 * @param tableName
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	int createPartitionTable(String tableName, String startTime, String endTime);
 	
 	/**
 	 * Data Info 변경 이력을 저장

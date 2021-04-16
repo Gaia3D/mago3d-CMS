@@ -19,9 +19,7 @@ import java.util.Locale;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/converters")
-// @RequestMapping(value = "/api/design-layers", produces = MediaTypes.HAL_JSON_VALUE)
-// RestControllerExceptionHandler
+@RequestMapping(value = "/api-internal/converters")
 public class ConverterAPIController {
 
     @Autowired

@@ -2,7 +2,7 @@ package gaia3d.parser;
 
 import java.util.Map;
 
-import gaia3d.domain.DataFileInfo;
+import gaia3d.domain.data.DataFileInfo;
 
 /**
  * @author Cheon JeongDae

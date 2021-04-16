@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<title>스마트 타일링</title>
+	<th:block layout:fragment="pageCustomStyle">
+		<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
+		<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+	</th:block>
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+	<div id="siteBody" class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+					<div class="page-content">
+						<div class="filters">
+							<form id="searchForm" th:object="${tileInfo}" method="get" th:action="@{/tile/list}" onsubmit="return searchCheck();">
+								<div class="input-group row">
+									<div class="input-set">
+										<label for="searchWord" class="hiddenTag">검색유형</label>
+										<select id="searchWord" name="searchWord" class="select" title="검색유형" style="height: 30px;">
+											<option value="" th:text="#{select}"></option>
+											<option value="tile_name">Tile명</option>
+										</select>
+										<label for="searchOption" class="hiddenTag">검색옵션</label>
+										<select id="searchOption" name="searchOption" class="select" title="검색옵션" style="height: 30px;">
+											<option value="0" th:text="#{search.same}"></option>
+											<option value="1" th:text="#{search.include}"></option>
+										</select>
+										<label for="searchValue" th:text="#{search.word}"></label>
+										<input type="search" id="searchValue" name="searchValue" class="m" style="float: right;" />
+									</div>
+									<div class="input-set">
+										<label for="startDate" th:text="#{search.date}"></label>
+										<input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
+										<span class="delimeter tilde">~</span>
+										<label for="endDate" class="hiddenTag">종료일</label>
+										<input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
+									</div>
+									<div class="input-set">
+										<label for="orderWord" th:text="#{search.order}"></label>
+										<select id="orderWord" name="orderWord" class="select" title="표시기준" style="height: 30px;">
+											<option value="" th:text="#{search.basic}"></option>
+											<option value="tile_name">Tile 명</option>
+											<option value="insert_date" th:text="#{search.insert.date}"></option>
+										</select>
+										<label for="orderValue" class="hiddenTag">정렬기준</label>
+										<select id="orderValue" name="orderValue" class="select" title="정렬기준" style="height: 30px;">
+					                		<option value="" th:text="#{search.basic}"></option>
+						                	<option value="ASC" th:text="#{search.ascending}"></option>
+											<option value="DESC" th:text="#{search.descending.order}"></option>
+										</select>
+										<label for="listCounter" class="hiddenTag">리스트건수</label>
+										<select id="listCounter" class="select" title="리스트건수" style="height: 30px;">
+					                		<option value="10" th:text="#{search.ten.count}"></option>
+						                	<option value="50" th:text="#{search.fifty.count}"></option>
+											<option value="100" th:text="#{search.hundred.count}"></option>
+										</select>
+									</div>
+									<div class="input-set">
+										<input type="submit" th:value="#{search}" />
+									</div>
+								</div>
+							</form>
+						</div>
+
+						<div class="list">
+					    	<div class="list-header row">
+								<div class="list-desc u-pull-left">
+									전체: <em th:text="${pagination.totalCount}"></em> 건,
+									<th:block th:text="${pagination.pageNo}"></th:block> / <th:block th:text="${pagination.lastPage}"></th:block> 페이지
+								</div>
+								<div class="list-functions u-pull-right">
+									<div style="padding-bottom: 3px;" class="button-group">
+										<a href="/tile/input" class="button" title="타일 등록">타일 등록</a>
+									</div>
+								</div>
+							</div>
+							<table class="list-table scope-col">
+							<caption class="hiddenTag">스마트 타일링 검색 결과 - 번호, Tile명, Tile key, 스마트 타일 경로, 아이디, 사용유무, 수정, 삭제, 등록일로 구성</caption>
+								<thead>
+								<tr>
+									<th scope="col">번호</th>
+									<th scope="col">Tile 명</th>
+									<th scope="col">Tile Key</th>
+									<th scope="col">스마트 타일 경로</th>
+									<th scope="col">아이디</th>
+									<th scope="col">사용유무</th>
+									<th scope="col">수정</th>
+									<th scope="col">삭제</th>
+									<th scope="col">등록일</th>
+								</tr>
+								</thead>
+<th:block th:if="${#lists.isEmpty(tileInfoList)}">
+									<tr>
+										<td colspan="9" class="col-none">tile 이 존재하지 않습니다.</td>
+									</tr>
+</th:block>
+<th:block th:unless="${#lists.isEmpty(tileInfoList)}" th:each="tileInfo : ${tileInfoList}">
+									<tr>
+										<td class="col-number" th:text="${pagination.rowNumber - tileInfoStat.index}"></td>
+										<td class="col-name" th:text="${tileInfo.tileName}" style="text-align: left;"></td>
+										<td class="col-key" th:text="${tileInfo.tileKey}" style="text-align: left;"></td>
+										<td class="col-type">
+											<th:block th:text="${tileInfo.tilePath}"></th:block>
+										</td>
+										<td class="col-type">
+											<th:block th:text="${tileInfo.userId}"></th:block>
+										</td>
+										<td class="col-toggle">
+											<th:block th:if="${#bools.isTrue(tileInfo.available)}">사용</th:block>
+											<th:block th:unless="${#bools.isTrue(tileInfo.available)}">미사용</th:block>
+										</td>
+										<td class="col-functions">
+											<a th:href="@{/tile/modify(tileId=${tileInfo.tileId})}" class="linkButton">수정</a>
+										</td>
+										<td class="col-functions">
+											<a href="#" class="linkButton" th:onclick="deleteTile([[${tileInfo.tileId}]]); return false;">삭제</a>
+										</td>
+										<td class="col-date-time">
+											<th:block th:text="${#temporals.format(tileInfo.insertDate, 'yyyy-MM-dd HH:mm:ss')}"></th:block>
+										</td>
+									</tr>
+</th:block>
+							</table>
+						</div>
+						<div th:replace="~{/common/pagination :: #paginationArea}"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+
+<script th:inline="javascript">
+$(document).ready(function() {
+	initDatePicker();
+
+	$("#searchWord").val([[${tileInfo.searchWord}]]);
+	$("#searchValue").val([[${tileInfo.searchValue}]]);
+	$("#orderWord").val([[${tileInfo.orderWord}]]);
+	$("#orderValue").val([[${tileInfo.orderValue}]]);
+
+	initCalendar(new Array("startDate", "endDate"), new Array([[${tileInfo.startDate}]], [[${tileInfo.endDate}]]));
+});
+
+function searchCheck() {
+	if($("#searchOption").val() == "1") {
+		if(confirm(JS_MESSAGE["search.option.warning"])) {
+			// go
+		} else {
+			return false;
+		}
+	}
+
+	var startDate = $("#startDate").val();
+	var endDate = $("#endDate").val();
+	if(startDate != null && startDate != "" && endDate != null && endDate != "") {
+		if(parseInt(startDate) > parseInt(endDate)) {
+			alert(JS_MESSAGE["search.date.warning"]);
+			$("#startDate").focus();
+			return false;
+		}
+	}
+	return true;
+}
+
+var deleteTileFlag = true;
+function deleteTile(tileId) {
+	if(deleteTileFlag) {
+		if(confirm(JS_MESSAGE["delete.confirm"])) {
+			deleteTileFlag = false;
+			$.ajax({
+				url: "/tiles/" + tileId,
+				type: "DELETE",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				dataType: "json",
+				success: function(msg) {
+					alert(JS_MESSAGE["delete"]);
+					location.reload();
+				},
+		        error: function(request, status, error) {
+		        	// alert message, 세션이 없는 경우 로그인 페이지로 이동 - common.js
+		        	// ajaxErrorHandler(request);
+					deleteTileFlag = true;
+		        }
+			});
+		} else {
+			deleteTileFlag = true;
+		}
+	} else {
+		alert(JS_MESSAGE["button.dobule.click"]);
+	}
+}
+</script>
+</th:block>
+</body>
+</html>

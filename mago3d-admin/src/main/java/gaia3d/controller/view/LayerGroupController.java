@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.LayerGroup;
-import gaia3d.domain.Policy;
+import gaia3d.domain.layer.LayerGroup;
+import gaia3d.domain.policy.Policy;
 import gaia3d.service.LayerGroupService;
 import gaia3d.service.PolicyService;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller

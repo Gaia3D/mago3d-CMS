@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.Issue;
+import gaia3d.domain.issue.Issue;
 
 /**
  * 이슈

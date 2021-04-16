@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
  
 public class XSSRequestWrapper extends HttpServletRequestWrapper {
  
-    private static Pattern[] patterns = new Pattern[] {
+    private static final Pattern[] patterns = new Pattern[] {
         // Script fragments
         Pattern.compile("<script>(.*?)</script>", Pattern.CASE_INSENSITIVE),
         Pattern.compile("%3CScRiPt.*?%3C/ScRiPt%3E", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),

@@ -1,13 +1,18 @@
 package gaia3d.utils;
 
-import gaia3d.domain.FileInfo;
-import gaia3d.domain.uploaddata.UploadDirectoryType;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import gaia3d.domain.common.FileInfo;
+import gaia3d.domain.uploaddata.UploadDirectoryType;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * TODO N중화 처리를 위해 FTP 로 다른 PM 으로 전송해 줘야 하는데....
@@ -65,7 +70,7 @@ public class FileUtils {
 	public static final String EXCEL_EXTENSION_XLSX = "xlsx";
 	
 	// 업로더 가능한 파일 사이즈(2G)
-	public static final long FILE_UPLOAD_SIZE = 2_000_000_000l;
+	public static final long FILE_UPLOAD_SIZE = 2_000_000_000L;
 	// 파일 copy 시 버퍼 사이즈
 	public static final int BUFFER_SIZE = 8192;
 	
@@ -100,7 +105,7 @@ public class FileUtils {
 	 * @return
 	 */
 	private static FileInfo fileValidation(MultipartFile multipartFile, FileInfo fileInfo) {
-		return fileValidation(multipartFile, fileInfo, 0l);
+		return fileValidation(multipartFile, fileInfo, 0L);
 	}
 	
 	/**
@@ -112,7 +117,7 @@ public class FileUtils {
 	private static FileInfo fileValidation(MultipartFile multipartFile, FileInfo fileInfo, long fileUploadSize) {
 		
 		// 1 파일 공백 체크
-		if(multipartFile == null || multipartFile.getSize() == 0l) {
+		if(multipartFile == null || multipartFile.getSize() == 0L) {
 			log.info("@@ multipartFile is null");
 			fileInfo.setErrorCode("fileinfo.invalid");
 			return fileInfo;
@@ -371,10 +376,33 @@ public class FileUtils {
 	public static String getFilePath(String dataGroupPath) {
 		String[] names = dataGroupPath.split("/");
 		
+		// TODO SpringBuilder
 		String filePath = "";
 		for(String name : names) {
 			filePath = filePath + name + File.separator;
 		}
 		return filePath;
+	}
+	
+	public static void deleteFileReculsive(String path) {
+		File folder = new File(path);
+		try {
+		    while(folder.exists()) {
+		    if(!folder.isDirectory()) {
+		    	folder.delete();
+		    	break;
+		    }
+			File[] folder_list = folder.listFiles(); //파일리스트 얻어오기
+			for (int j = 0; j < folder_list.length; j++) {
+				folder_list[j].delete(); //파일 삭제 
+			}
+					
+			if(folder_list.length == 0 && folder.isDirectory()){ 
+				folder.delete(); //대상폴더 삭제
+			}
+	            }
+		 } catch (Exception e) {
+			e.getStackTrace();
+		}
 	}
 }

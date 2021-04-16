@@ -2,8 +2,8 @@ package gaia3d.support;
 
 import java.util.List;
 
-import gaia3d.domain.RoleKey;
-import gaia3d.domain.UserGroupRole;
+import gaia3d.domain.role.RoleKey;
+import gaia3d.domain.user.UserGroupRole;
 
 /**
  * Role Check

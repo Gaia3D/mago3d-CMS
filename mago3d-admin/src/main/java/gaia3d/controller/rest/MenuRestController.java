@@ -17,16 +17,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.CacheConfig;
-import gaia3d.domain.CacheName;
-import gaia3d.domain.CacheParams;
-import gaia3d.domain.CacheType;
-import gaia3d.domain.Menu;
-import gaia3d.domain.MenuTarget;
-import gaia3d.domain.MenuType;
+import gaia3d.domain.cache.CacheName;
+import gaia3d.domain.cache.CacheParams;
+import gaia3d.domain.cache.CacheType;
+import gaia3d.domain.menu.Menu;
+import gaia3d.domain.menu.MenuTarget;
+import gaia3d.domain.menu.MenuType;
 import gaia3d.service.MenuService;
 import gaia3d.utils.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 메뉴 관리
@@ -53,9 +53,8 @@ public class MenuRestController {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		String menuTree = null;
-		
-		menuTree = getMenuTree(getAllListMenu(MenuTarget.ADMIN.getValue()));
+
+		String menuTree = getMenuTree(getAllListMenu(MenuTarget.ADMIN.getValue()));
 		log.info("@@ menuTree = {} ", menuTree);
 		int statusCode = HttpStatus.OK.value();
 		
@@ -222,7 +221,7 @@ public class MenuRestController {
 		String message = null;
 		String menuTree = null;
 		
-		if(	menu.getViewOrder() == null || menu.getViewOrder().intValue() == 0
+		if(	menu.getViewOrder() == null || menu.getViewOrder() == 0
 			|| menu.getUpdateType() == null || "".equals(menu.getUpdateType())) {
 			
 			menuTree = getMenuTree(getAllListMenu(menu.getMenuTarget()));
@@ -288,10 +287,9 @@ public class MenuRestController {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		String menuTree = null;
 		
 		menuService.deleteMenu(menuId);
-		menuTree = getMenuTree(getAllListMenu(MenuTarget.USER.getValue()));
+		String menuTree = getMenuTree(getAllListMenu(MenuTarget.USER.getValue()));
 		log.info("@@ menuTree = {} ", menuTree);
 		int statusCode = HttpStatus.OK.value();
 		
@@ -307,13 +305,14 @@ public class MenuRestController {
 	private String getMenuTree(List<Menu> menuList) {
 		if(menuList.isEmpty()) return "{}";
 		
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 		
 		int count = menuList.size();
 		int lastDepth = 0;
 		Menu menu = menuList.get(0);
 		
-		buffer.append("[")
+		// TODO + 를 append 로 변경 할것
+		builder.append("[")
 		.append("{")
 		.append("\"menuId\"").append(":").append("\"" + menu.getMenuId() + "\"").append(",")
 		.append("\"menuType\"").append(":").append("\"" + menu.getMenuType() + "\"").append(",")
@@ -350,28 +349,28 @@ public class MenuRestController {
 				
 				if(preParent == menu.getParent()) {
 					// 부모가 같은 경우
-					buffer.append("}");
-					buffer.append(",");
+					builder.append("}");
+					builder.append(",");
 				} else {
 					if(preDepth > menu.getDepth()) {
 						// 닫힐때
 						int closeCount = preDepth - menu.getDepth();
 						for(int j=0; j<closeCount; j++) {
-							buffer.append("}");
-							buffer.append("]");
+							builder.append("}");
+							builder.append("]");
 							bigParentheses--;
 						}
-						buffer.append("}");
-						buffer.append(",");
+						builder.append("}");
+						builder.append(",");
 					} else {
 						// 열릴때
-						buffer.append(",");
-						buffer.append("\"subTree\"").append(":").append("[");
+						builder.append(",");
+						builder.append("\"subTree\"").append(":").append("[");
 						bigParentheses++;
 					}
 				} 
 				
-				buffer.append("{")
+				builder.append("{")
 				.append("\"menuId\"").append(":").append("\"" + menu.getMenuId() + "\"").append(",")
 				.append("\"menuType\"").append(":").append("\"" + menu.getMenuType() + "\"").append(",")
 				.append("\"menuTarget\"").append(":").append("\"" + menu.getMenuTarget() + "\"").append(",")
@@ -401,14 +400,14 @@ public class MenuRestController {
 					// 맨 마지막의 경우 괄호를 닫음
 					if(bigParentheses == 0) {
 						if(preParent == 0) {
-							buffer.append("}");
+							builder.append("}");
 						} else {
-							buffer.append("}");
+							builder.append("}");
 						}
 					} else {
 						for(int k=0; k<bigParentheses; k++) {
-							buffer.append("}");
-							buffer.append("]");
+							builder.append("}");
+							builder.append("]");
 						}
 					}
 				}
@@ -419,13 +418,13 @@ public class MenuRestController {
 		}
 		
 		if(lastDepth == 1) {
-			buffer.append("]");
+			builder.append("]");
 		} else if(lastDepth == 2) {
-			buffer.append("}");
-			buffer.append("]");
+			builder.append("}");
+			builder.append("]");
 		}
 			
-		return buffer.toString();
+		return builder.toString();
 	}
 	
 	private List<Menu> getAllListMenu(String target) {

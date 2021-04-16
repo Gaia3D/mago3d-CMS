@@ -56,7 +56,7 @@
 								</tr>
 								<tr>
 									<th class="col-label" scope="row">
-										상위 그룹
+										상위 데이터 그룹
 										<span class="icon-glyph glyph-emark-dot color-warning"></span>
 									</th>
 									<td class="col-input" th:text="${dataGroup.parentName}"></td>
@@ -90,9 +90,9 @@
 									</th>
 									<td class="col-input radio-set" th:if="${#bools.isTrue(dataGroup.basic)}" th:text="사용">
 									<td class="col-input radio-set" th:if="${#bools.isFalse(dataGroup.basic)}">
-										<input type="radio" id="availableTrue" name="available" value="true" />
+										<input type="radio" id="availableTrue" name="available" th:field="*{basic}" value="true" />
 										<label for="availableTrue">사용</label>
-										<input type="radio" id="availableFalse" name="available" value="false" />
+										<input type="radio" id="availableFalse" name="available" th:field="*{basic}" value="false" />
 										<label for="availableFalse">미사용</label>
 									</td>
 								</tr>
@@ -103,9 +103,9 @@
 									</th>
 									<td class="col-input radio-set" th:if="${#bools.isTrue(dataGroup.tiling)}" th:text="사용"></td>
 									<td class="col-input radio-set" th:if="${#bools.isFalse(dataGroup.tiling)}">
-										<input type="radio" id="tilingTrue" name="tiling" value="true" />
+										<input type="radio" id="tilingTrue" name="tiling" th:field="*{tiling}" value="true" />
 										<label for="tilingTrue">사용</label>
-										<input type="radio" id="tilingFalse" name="tiling" value="false" checked />
+										<input type="radio" id="tilingFalse" name="tiling" th:field="*{tiling}" value="false" />
 										<label for="tilingFalse">미사용</label>
 									</td>
 								</tr>
@@ -115,7 +115,7 @@
 									</th>
 									<td class="col-input">
 										<input type="text" id="longitude" name="longitude" th:field="*{longitude}" class="m" />
-										<input type="button" id="mapButtion" value="지도에서 찾기" />
+										<input type="button" id="mapButton" value="지도에서 찾기" />
 									</td>
 								</tr>
 								<tr>
@@ -249,12 +249,11 @@
 			});
 		} else {
 			alert(JS_MESSAGE["button.dobule.click"]);
-			return;
 		}
 	}
 	
 	// 지도에서 찾기
-	$( "#mapButtion" ).on( "click", function() {
+	$( "#mapButton" ).on( "click", function() {
 		var url = "/map/find-point";
 		var width = 800;
 		var height = 700;
@@ -268,5 +267,6 @@
 	    //popWin.document.title = layerName;
 	});
 </script>
+</th:block>
 </body>
 </html>

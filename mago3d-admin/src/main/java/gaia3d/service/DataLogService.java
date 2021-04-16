@@ -2,7 +2,7 @@ package gaia3d.service;
 
 import java.util.List;
 
-import gaia3d.domain.DataInfoLog;
+import gaia3d.domain.data.DataInfoLog;
 
 /**
  * Data 변경 이력 관리
@@ -13,7 +13,7 @@ public interface DataLogService {
 	
 	/**
 	 * 데이터 변경 요청 총건 수
-	 * @param dataInfo
+	 * @param dataInfoLog
 	 * @return
 	 */
 	Long getDataInfoLogTotalCount(DataInfoLog dataInfoLog);
@@ -31,6 +31,11 @@ public interface DataLogService {
 	 * @return
 	 */
 	DataInfoLog getDataInfoLog(Long dataInfoLogId);
+
+	/**
+	 * 스케줄러에 의한 다음년도 파티션 테이블 자동 생성
+	 */
+	public int createPartitionTable(String tableName, String startTime, String endTime);
 	
 	/**
 	 * 데이터 변경 이력 등록

@@ -44,9 +44,9 @@ public class StringUtil {
 	 */
 	public static Integer getIntegerFromString(String value) {
 		if(value == null || "".equals(value)) {
-			return Integer.valueOf(0);
+			return 0;
 		}
-		return  Integer.valueOf(value);
+		return  Integer.parseInt(value);
 	}
 	
 	/**

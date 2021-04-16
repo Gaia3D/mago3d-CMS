@@ -1,10 +1,32 @@
 package gaia3d.service.impl;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+
 import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.GeoPolicy;
-import gaia3d.domain.Layer;
-import gaia3d.domain.LayerFileInfo;
 import gaia3d.domain.ShapeFileExt;
+import gaia3d.domain.layer.Layer;
+import gaia3d.domain.layer.LayerFileInfo;
+import gaia3d.domain.policy.GeoPolicy;
 import gaia3d.geospatial.LayerStyleParser;
 import gaia3d.geospatial.Ogr2OgrExecute;
 import gaia3d.persistence.LayerFileInfoMapper;
@@ -13,18 +35,6 @@ import gaia3d.security.Crypt;
 import gaia3d.service.GeoPolicyService;
 import gaia3d.service.LayerService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
-
-import java.io.File;
-import java.util.*;
 
 /**
  * 여기서는 Geoserver Rest API 결과를 가지고 파싱 하기 때문에 RestTemplate을 커스트마이징하면 안됨
@@ -273,7 +283,8 @@ public class LayerServiceImpl implements LayerService {
     */
     @Transactional
     public void insertOgr2Ogr(Layer layer, boolean isLayerFileInfoExist, String shapeFileName, String shapeEncoding) throws Exception {
-        String osType = propertiesConfig.getOsType().toUpperCase();
+        //String osType = propertiesConfig.getOsType().toUpperCase();
+        String gdalCommandPath =  propertiesConfig.getGdalCommandPath();
         String ogr2ogrPort = propertiesConfig.getOgr2ogrPort();
         String ogr2ogrHost = propertiesConfig.getOgr2ogrHost();
         String dbName = Crypt.decrypt(url);
@@ -293,10 +304,11 @@ public class LayerServiceImpl implements LayerService {
         GeoPolicy geoPolicy = geoPolicyService.getGeoPolicy();
         String layerSourceCoordinate = layer.getCoordinate();
         String layerTargetCoordinate = geoPolicy.getLayerTargetCoordinate();
-//		ShapeFileParser shapeFileParser = new ShapeFileParser();
-//		shapeFileParser.parse(shapeFileName);
-        String enviromentPath = propertiesConfig.getOgr2ogrEnviromentPath();
-        Ogr2OgrExecute ogr2OgrExecute = new Ogr2OgrExecute(osType, driver, shapeFileName, shapeEncoding, layer.getLayerKey(), updateOption, layerSourceCoordinate, layerTargetCoordinate, enviromentPath);
+		//ShapeFileParser shapeFileParser = new ShapeFileParser();
+		//shapeFileParser.parse(shapeFileName);
+        //String enviromentPath = propertiesConfig.getOgr2ogrEnviromentPath();
+
+        Ogr2OgrExecute ogr2OgrExecute = new Ogr2OgrExecute(gdalCommandPath, driver, shapeFileName, shapeEncoding, layer.getLayerKey(), updateOption, layerSourceCoordinate, layerTargetCoordinate);
         ogr2OgrExecute.insert();
     }
     
@@ -310,7 +322,8 @@ public class LayerServiceImpl implements LayerService {
         String shpEncoding = layerFileInfo.getShapeEncoding();
         String exportPath = layerFileInfo.getFilePath() + layerFileInfo.getFileRealName()+ "." + ShapeFileExt.SHP.getValue();
 
-        String osType = propertiesConfig.getOsType().toUpperCase();
+        //String osType = propertiesConfig.getOsType().toUpperCase();
+        String gdalCommandPath =  propertiesConfig.getGdalCommandPath();
         String ogr2ogrPort = propertiesConfig.getOgr2ogrPort();
         String ogr2ogrHost = propertiesConfig.getOgr2ogrHost();
         String dbName = Crypt.decrypt(url);
@@ -322,7 +335,7 @@ public class LayerServiceImpl implements LayerService {
         String layerColumn = getLayerColumn(tableName);
         String sql = "SELECT "+ layerColumn + ", null::text AS enable_yn, null::int AS version_id FROM "+tableName+" WHERE version_id="+versionId;
 
-        Ogr2OgrExecute ogr2OgrExecute = new Ogr2OgrExecute(osType, driver, shpEncoding, exportPath, sql, layerSourceCoordinate, layerTargetCoordinate);
+        Ogr2OgrExecute ogr2OgrExecute = new Ogr2OgrExecute(gdalCommandPath, driver, shpEncoding, exportPath, sql, layerSourceCoordinate, layerTargetCoordinate);
         ogr2OgrExecute.export();
     }
 

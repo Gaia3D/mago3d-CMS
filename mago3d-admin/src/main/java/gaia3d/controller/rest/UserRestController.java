@@ -12,15 +12,17 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.controller.AuthorizationController;
-import gaia3d.domain.UserInfo;
+import gaia3d.domain.user.UserInfo;
 import gaia3d.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 사용자
@@ -37,15 +39,15 @@ public class UserRestController implements AuthorizationController {
 
 	/**
 	 * 사용자 ID 중복 체크
-	 * @param model
+	 * @param request
+	 * @param userInfo
 	 * @return
 	 */
 	@GetMapping(value = "/duplication")
-	public Map<String, Object> ajaxUserIdDuplicationCheck(HttpServletRequest request, UserInfo userInfo) {
+	public Map<String, Object> userIdDuplicationCheck(HttpServletRequest request, UserInfo userInfo) {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		Boolean duplication = Boolean.TRUE;
 
 		// TODO @Valid 로 구현해야 함
 		if(StringUtils.isEmpty(userInfo.getUserId())) {
@@ -55,7 +57,7 @@ public class UserRestController implements AuthorizationController {
 			return result;
 		}
 
-		duplication = userService.isUserIdDuplication(userInfo);
+		Boolean duplication = userService.isUserIdDuplication(userInfo);
 		log.info("@@ duplication = {}", duplication);
 		int statusCode = HttpStatus.OK.value();
 
@@ -103,27 +105,50 @@ public class UserRestController implements AuthorizationController {
 	 * 사용자 수정
 	 * @param request
 	 * @param userInfo
-	 * @param bindingResult
 	 * @return
 	 */
-	@PostMapping(value = "/update")
-	public Map<String, Object> update(HttpServletRequest request, @Valid UserInfo userInfo, BindingResult bindingResult) {
+	@PutMapping(value = "/{userId}")
+	public Map<String, Object> update(HttpServletRequest request, @PathVariable String userId, UserInfo userInfo) {
 		log.info("@@ userInfo = {}", userInfo);
 
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
 
-		if(bindingResult.hasErrors()) {
-			message = bindingResult.getAllErrors().get(0).getDefaultMessage();
-			log.info("@@@@@ message = {}", message);
-			result.put("statusCode", HttpStatus.BAD_REQUEST.value());
+//		if(bindingResult.hasErrors()) {
+//			message = bindingResult.getAllErrors().get(0).getDefaultMessage();
+//			log.info("@@@@@ message = {}", message);
+//			result.put("statusCode", HttpStatus.BAD_REQUEST.value());
+//			result.put("errorCode", errorCode);
+//			result.put("message", message);
+//            return result;
+//		}
+
+		userInfo.setUserId(userId);
+		userService.updateUser(userInfo);
+		int statusCode = HttpStatus.OK.value();
+
+		result.put("statusCode", statusCode);
 			result.put("errorCode", errorCode);
 			result.put("message", message);
             return result;
 		}
 
-		userService.updateUser(userInfo);
+	/**
+	 * 사용 대기자 사용 승인
+	 * @param request
+	 * @param userId
+	 * @return
+	 */
+	@PostMapping(value = "/{userId}/approvals")
+	public Map<String, Object> approval(HttpServletRequest request, @PathVariable String userId) {
+		log.info("@@@@@@@ approval , userId = {}", userId);
+
+		Map<String, Object> result = new HashMap<>();
+		String errorCode = null;
+		String message = null;
+
+		userService.updateUserStatusUse(userId);
 		int statusCode = HttpStatus.OK.value();
 
 		result.put("statusCode", statusCode);

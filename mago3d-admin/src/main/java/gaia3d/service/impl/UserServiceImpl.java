@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import gaia3d.domain.CacheManager;
-import gaia3d.domain.RoleKey;
-import gaia3d.domain.UserInfo;
-import gaia3d.domain.UserStatus;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.role.RoleKey;
+import gaia3d.domain.user.UserInfo;
+import gaia3d.domain.user.UserStatus;
 import gaia3d.persistence.UserMapper;
+import gaia3d.security.Crypt;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.DataService;
 import gaia3d.service.UserService;
@@ -98,6 +99,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public int insertUser(UserInfo userInfo) {
 		userInfo.setPassword(PasswordSupport.encodePassword(userInfo.getPassword()));
+		userInfo.setEmail(Crypt.encrypt(userInfo.getEmail()));
 		return userMapper.insertUser(userInfo);
 	}
 
@@ -108,15 +110,32 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Transactional
 	public int updateUser(UserInfo userInfo) {
-		// TODO 환경 설정 값을 읽어 와서 update 할 건지, delete 할건지 분기를 타야 함
+		if(!StringUtils.isEmpty(userInfo.getPassword())) {
 		userInfo.setPassword(PasswordSupport.encodePassword(userInfo.getPassword()));
+		}
+		userInfo.setEmail(Crypt.encrypt(userInfo.getEmail()));
 		return userMapper.updateUser(userInfo);
 	}
 
 	/**
+	 * 사용 대기자 사용 승인
+	 * @param userId
+	 * @return
+	 */
+	@Transactional
+	public int updateUserStatusUse(String userId) {
+		UserInfo userInfo = new UserInfo();
+		userInfo.setUserId(userId);
+		userInfo.setFailSigninCount(0);
+		userInfo.setStatus(UserStatus.USE.getValue());
+
+		return userMapper.updateUserStatus(userInfo);
+	}
+
+	/**
 	 * 사용자 상태 수정
-	 * @param status_value
-	 * @param check_ids
+	 * @param statusValue
+	 * @param checkIds
 	 * @return
 	 */
 	@Transactional
@@ -171,8 +190,6 @@ public class UserServiceImpl implements UserService {
 		// TODO user_id 참조하는 모든 테이블 삭제는 추후에..
 		/*
 		access_log 
-		tn_civil_voice
-		tn_civil_voice_comment
 		converter_job
 		converter_job_file
 		data_adjust_log

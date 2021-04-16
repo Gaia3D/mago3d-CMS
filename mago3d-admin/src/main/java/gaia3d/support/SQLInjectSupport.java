@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SQLInjectSupport {
 
-	public static List<String> sqlInjection = new ArrayList<String>(
+	public static final List<String> sqlInjection = new ArrayList<>(
 		Arrays.asList(
 				"create",
 				"drop",

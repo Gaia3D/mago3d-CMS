@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.TileMapper">
+
+	<!-- 스마트 타일링 총 건수 -->
+	<select id="getTileTotalCount" parameterType="tileInfo" resultType="long">
+		/* getTileTotalCount */
+		SELECT COUNT(tile_id)
+		FROM tile_info
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="userId != null and userId != ''">
+				user_id = #{userId}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+			AND ${searchWord} = #{searchValue}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+			AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+		</trim>
+	</select>
+
+	<!-- 스마트 타일링 목록 조회 -->
+	<select id="getListTile" parameterType="tileInfo" resultType="tileInfo">
+		/* getListTile */
+		SELECT C.*,
+			( SELECT array_to_string ( ARRAY (
+				SELECT Y.data_group_name
+				FROM tile_data_group X, data_group Y
+				WHERE X.data_group_id = Y.data_group_id
+					AND X.tile_id = C.tile_id
+				), ',')
+			) AS viewDataGroupNames
+		FROM (
+			SELECT A.*
+			FROM tile_info A
+			<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+					AND ${searchWord} = #{searchValue}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+					AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+				</if>
+				<if test="startDate != null and startDate != ''">
+					<![CDATA[
+					AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+					]]>
+				</if>
+				<if test="endDate != null and endDate != ''">
+					<![CDATA[
+					AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+					]]>
+				</if>
+			</trim>
+			<choose>
+				<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+					ORDER BY ${orderWord} ${orderValue}
+				</when>
+				<otherwise>
+					ORDER BY A.insert_date DESC, A.tile_id DESC
+				</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) C
+	</select>
+
+	<!-- 스마트 타일링 정보 -->
+	<select id="getTile" parameterType="tileInfo" resultType="tileInfo">
+		/* getTile */
+		SELECT A.*,
+			(SELECT array_to_string (ARRAY(
+				SELECT X.data_group_id
+				FROM tile_data_group X
+				WHERE X.tile_id = A.tile_id
+				), ',')
+			) AS dataGroupCheckIds,
+		    (SELECT array_to_string (ARRAY(
+				SELECT Y.data_group_name
+				FROM tile_data_group X, data_group Y
+				WHERE X.data_group_id = Y.data_group_id
+				AND X.tile_id = A.tile_id
+				), ',')
+			) AS viewDataGroupNames
+		FROM tile_info A
+		WHERE A.tile_id = #{tileId}
+			<if test="userId != null and userId != ''">
+			AND A.user_id = #{userId}
+			</if>
+	</select>
+
+	<!-- 스마트 타일에 해당하는 데이터 그룹 목록 조회 -->
+	<select id="getListTileDataGroup" parameterType="tileInfo" resultType="tileDataGroup">
+		/* getListTileDataGroup */
+		SELECT *
+		FROM tile_data_group
+		WHERE tile_id = #{tileId}
+	</select>
+
+	<!-- 스마트 타일링 Key 중복 확인 -->
+	<select id="isTileKeyDuplication" parameterType="tileInfo" resultType="boolean">
+		/* isTileKeyDuplication */
+		SELECT 
+			CASE 
+				WHEN COUNT(*) > 0 THEN true
+				ELSE false
+			END AS duplication
+		FROM tile_info
+		WHERE tile_key = #{tileKey}
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
+	</select>
+	
+	<!-- 스마트 타일링 등록 -->
+	<insert id="insertTile" parameterType="tileInfo">
+		/* insertTile */
+		<selectKey keyProperty="tileId" resultType="int" order="BEFORE">
+    		SELECT NEXTVAL('tile_info_seq')
+  		</selectKey>
+		INSERT INTO tile_info (
+			tile_id, tile_name, tile_key, tile_path, user_id, available, description
+		) VALUES (
+			#{tileId}, #{tileName}, #{tileKey}, #{tilePath}, #{userId}, #{available}, trim(#{description})
+		)
+	</insert>
+
+	<!-- 스마트 타일링 데이터 그룹 등록 -->
+	<insert id="insertTileDataGroup" parameterType="tileDataGroup">
+		/* insertTileDataGroup */
+		<selectKey keyProperty="tileDataGroupId" resultType="int" order="BEFORE">
+			SELECT NEXTVAL('tile_data_group_seq')
+		</selectKey>
+		INSERT INTO tile_data_group (
+			tile_data_group_id, tile_id, data_group_id, tile_path
+		) VALUES (
+			#{tileDataGroupId}, #{tileId}, #{dataGroupId}, #{tilePath}
+		)
+	</insert>
+
+	<!-- 스마트 타일링 이력 등록 -->
+	<insert id="insertTileLog" parameterType="tileLog">
+		/* insertTileLog */
+		<selectKey keyProperty="tileLogId" resultType="long" order="BEFORE">
+			SELECT NEXTVAL('tile_log_seq')
+		</selectKey>
+		INSERT INTO tile_log (
+			tile_log_id, tile_id, user_id, file_path, file_real_name
+		) VALUES (
+			#{tileLogId}, #{tileId}, #{userId}, #{filePath}, #{fileRealName}
+		)
+	</insert>
+
+	<!-- 스마트 타일링 수정 -->
+	<update id="updateTile" parameterType="tileInfo">
+		/* updateTile */
+		UPDATE tile_info
+		SET
+			<if test="tileName != null and tileName != ''">
+			tile_name = #{tileName},
+			</if>
+			<if test="tileKey != null and tileKey != ''">
+			tile_key = #{tileKey},
+			</if>
+			<if test="tilePath != null and tilePath != ''">
+			tile_path = #{tilePath},
+			</if>
+			<if test="status != null and status != ''">
+			status = #{status},
+			</if>
+			<if test="available != null">
+			available = #{available},
+			</if>
+			<if test="description != null and description != ''">
+			description = #{description},
+			</if>
+			update_date = NOW()
+		WHERE tile_id = #{tileId}
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
+	</update>
+
+	<!-- 스마트 타일 데이터 그룹 수정 -->
+	<update id="updateTileDataGroup" parameterType="tileDataGroup">
+		/* updateTileDataGroup */
+		UPDATE tile_data_group
+		SET
+			<if test="tilePath != null and tilePath != ''">
+				tile_path = #{tilePath},
+			</if>
+			update_date = NOW()
+		WHERE tile_id = #{tileId}
+	</update>
+
+	<!-- 스마트 타일링 변경 이력 수정 -->
+	<update id="updateTileLog" parameterType="tileLog">
+		/* updateTileLog */
+		UPDATE tile_log
+		SET
+			<if test="status != null and status != ''">
+				status = #{status},
+			</if>
+			update_date = NOW()
+		WHERE tile_id = #{tileId}
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
+	</update>
+
+	<!-- 스마트 타일링 삭제 -->
+	<delete id="deleteTile" parameterType="tileInfo">
+		/* deleteTile */
+		DELETE
+		FROM tile_info
+		WHERE tile_id = #{tileId}
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
+	</delete>
+
+	<!-- 스마트 타일링 그룹 삭제 -->
+	<delete id="deleteTileDataGroup" parameterType="tileDataGroup">
+		/* deleteTileDataGroup */
+		DELETE
+		FROM tile_data_group
+		WHERE tile_id = #{tileId}
+	</delete>
+</mapper>

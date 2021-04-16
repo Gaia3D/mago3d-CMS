@@ -10,8 +10,8 @@ import java.util.List;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
+import gaia3d.domain.common.FileInfo;
 import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.LayerFileInfo;
 
 /**
  * TODO 사용안함. 삭제 예정
@@ -21,7 +21,7 @@ import gaia3d.domain.LayerFileInfo;
 @Slf4j
 public class ZipSupport {
 
-	public static void makeZip(String zipFileName, List<LayerFileInfo> layerFileInfoList) throws Exception {
+	public static void makeZip(String zipFileName, List<? extends FileInfo> layerFileInfoList) throws Exception {
 
 		// buffer size
 		int size = 8192;
@@ -37,7 +37,7 @@ public class ZipSupport {
         		ZipArchiveOutputStream zipArchiveOutputStream = new ZipArchiveOutputStream(bufferedOutputStream)) {
         	
         	zipArchiveOutputStream.setEncoding("UTF-8");
-        	for(LayerFileInfo layerFileInfo : layerFileInfoList) {
+        	for(FileInfo layerFileInfo : layerFileInfoList) {
         		String fileName = layerFileInfo.getFileRealName();
         		fileName = fileName.replaceAll("&", "");
         		try (	FileInputStream fileInputStream = new FileInputStream(layerFileInfo.getFilePath() + fileName);

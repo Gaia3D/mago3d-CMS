@@ -2,8 +2,8 @@ package gaia3d.persistence;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.DataSmartTilingFileInfo;
-import gaia3d.domain.DataSmartTilingFileParseLog;
+import gaia3d.domain.data.DataSmartTilingFileInfo;
+import gaia3d.domain.data.DataSmartTilingFileParseLog;
 
 /**
  * Smart Tiling 데이터 파일 관리

@@ -6,15 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataGroup;
 import gaia3d.domain.Depth;
-import gaia3d.domain.Layer;
-import gaia3d.domain.LayerGroup;
 import gaia3d.domain.Move;
+import gaia3d.domain.layer.Layer;
+import gaia3d.domain.layer.LayerGroup;
 import gaia3d.persistence.LayerGroupMapper;
 import gaia3d.service.LayerGroupService;
 import gaia3d.service.LayerService;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -61,7 +60,7 @@ public class LayerGroupServiceImpl implements LayerGroupService {
 	}
 
 	/**
-	 * 데이터 그룹 표시 순서 수정 (up/down)
+	 * 레이어 그룹 표시 순서 수정 (up/down)
 	 * @param layerGroup
 	 * @return
 	 */
@@ -109,7 +108,7 @@ public class LayerGroupServiceImpl implements LayerGroupService {
 		Integer parentLayerGroupId = 0;
     	
     	LayerGroup parentLayerGroup = new LayerGroup();
-    	Integer depth = 0;
+    	int depth = 0;
     	if(layerGroup.getParent() > 0) {
     		parentLayerGroupId = layerGroup.getParent();
     		parentLayerGroup.setLayerGroupId(parentLayerGroupId);
@@ -135,8 +134,8 @@ public class LayerGroupServiceImpl implements LayerGroupService {
 	}
 
 	/**
-	 * 데이터 그룹 수정
-	 * @param dataGroup
+	 * 레이어 그룹 수정
+	 * @param layerGroup
 	 * @return
 	 */
     @Transactional
@@ -163,7 +162,7 @@ public class LayerGroupServiceImpl implements LayerGroupService {
 	}
 
     /**
-	 * 데이터 그룹 삭제
+	 * 레이어 그룹 삭제
 	 * @param layerGroup
 	 * @return
 	 */

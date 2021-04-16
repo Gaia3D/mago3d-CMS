@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.DataAdjustLog;
+import gaia3d.domain.data.DataAdjustLog;
 
 /**
  * 데이터 geometry 변경 이력
@@ -40,6 +40,15 @@ public interface DataAdjustLogMapper {
 	 * @return
 	 */
 	List<DataAdjustLog> getListRecentDataAdjustLog();
+
+	/**
+	 * 스케줄러에 의한 다음년도 파티션 테이블 자동 생성
+	 * @param tableName
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	int createPartitionTable(String tableName, String startTime, String endTime);
 	
 	/**
 	 * 데이터 geometry 변경 이력 저장

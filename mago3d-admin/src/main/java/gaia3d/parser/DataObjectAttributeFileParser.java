@@ -2,7 +2,7 @@ package gaia3d.parser;
 
 import java.util.Map;
 
-import gaia3d.domain.DataObjectAttributeFileInfo;
+import gaia3d.domain.data.DataObjectAttributeFileInfo;
 
 /**
  * 데이터 속성 파일 분석

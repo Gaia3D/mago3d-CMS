@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gaia3d.domain.UserInfo;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.user.UserInfo;
+import gaia3d.domain.user.UserSession;
 import gaia3d.persistence.SigninMapper;
 import gaia3d.service.SigninService;
 

@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import gaia3d.domain.Layer;
-import gaia3d.domain.LayerGroup;
+import gaia3d.domain.layer.Layer;
+import gaia3d.domain.layer.LayerGroup;
 
 public class LayerDisplaySupport {
 	

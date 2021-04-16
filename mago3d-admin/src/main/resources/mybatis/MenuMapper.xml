@@ -48,6 +48,12 @@
 		SELECT * FROM menu WHERE menu_id = #{menuId}
 	</select>
 	
+	<!-- 메뉴 아이콘 -->
+	<select id="getMenuIcon" resultType="menu">
+		/* getMenuIcon */
+		SELECT * FROM menu WHERE depth = 1
+	</select>
+	
 	<!-- 부모와 순서를 가지고 메뉴 정보를 취득 -->
 	<select id="getMenuByParentAndViewOrder" parameterType="menu" resultType="menu">
 		/* getMenuByParentAndViewOrder */

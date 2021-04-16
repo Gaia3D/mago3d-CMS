@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.Layer;
+import gaia3d.domain.layer.Layer;
 
 @Repository
 public interface LayerMapper {
 	
 	/**
 	 * Layer 총 건수
-	 * @param accessLog
+	 * @param layer
 	 * @return
 	 */
 	Long getLayerTotalCount(Layer layer);
@@ -102,7 +102,7 @@ public interface LayerMapper {
     
     /**
      * 공간정보 테이블 삭제
-     * @param layerId
+     * @param layerKey
      * @return
      */
     int deleteLayerTable(String layerKey);

@@ -105,7 +105,7 @@
 		WHERE layer_group_id = #{layerGroupId}
 	</update>
 
-	<!-- 데이터 그룹 수정 -->
+	<!-- 레이어 그룹 수정 -->
 	<update id="updateLayerGroup" parameterType="layerGroup">
 		/* updateLayerGroup */
 		UPDATE layer_group
@@ -144,7 +144,7 @@
 		</if>
 	</update>
 
-	<!-- 데이터 그룹 삭제 -->
+	<!-- 레이어 그룹 삭제 -->
 	<delete id="deleteLayerGroup" parameterType="layerGroup">
 		/* deleteLayerGroup */
 		DELETE
@@ -155,7 +155,7 @@
 		</if>
 	</delete>
 
-	<!-- ancestor를 이용하여 데이터 그룹 삭제 -->
+	<!-- ancestor를 이용하여 레이어 그룹 삭제 -->
 	<delete id="deleteLayerGroupByAncestor" parameterType="layerGroup">
 		/* deleteLayerGroupByAncestor */
 		DELETE
@@ -167,7 +167,7 @@
 		</if>
 	</delete>
 
-	<!-- parent를 이용하여 데이터 그룹 삭제 -->
+	<!-- parent를 이용하여 레이어 그룹 삭제 -->
 	<delete id="deleteLayerGroupByParent" parameterType="layerGroup">
 		/* deleteLayerGroupByParent */
 		DELETE

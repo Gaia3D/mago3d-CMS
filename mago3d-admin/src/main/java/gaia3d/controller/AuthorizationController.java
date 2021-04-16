@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.http.HttpStatus;
 
-import gaia3d.domain.CacheManager;
+import gaia3d.domain.cache.CacheManager;
 import gaia3d.support.RoleSupport;
 
 /**

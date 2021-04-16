@@ -1,31 +1,49 @@
 package gaia3d.service.impl;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.amqp.AmqpException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.*;
+import gaia3d.domain.ConverterJobResultStatus;
+import gaia3d.domain.ConverterJobStatus;
+import gaia3d.domain.ConverterTemplate;
+import gaia3d.domain.ConverterType;
+import gaia3d.domain.LocationUdateType;
+import gaia3d.domain.MethodType;
+import gaia3d.domain.ServerTarget;
 import gaia3d.domain.agent.ConversionJobResult;
 import gaia3d.domain.agent.ConverterLocation;
 import gaia3d.domain.agent.ConverterResultLog;
+import gaia3d.domain.common.QueueMessage;
 import gaia3d.domain.converter.ConverterJob;
 import gaia3d.domain.converter.ConverterJobFile;
+import gaia3d.domain.data.DataAttribute;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataRelationInfo;
+import gaia3d.domain.data.DataStatus;
 import gaia3d.domain.uploaddata.UploadData;
 import gaia3d.domain.uploaddata.UploadDataFile;
 import gaia3d.domain.uploaddata.UploadDataType;
 import gaia3d.domain.uploaddata.UploadDirectoryType;
 import gaia3d.persistence.ConverterMapper;
-import gaia3d.service.*;
+import gaia3d.service.AMQPPublishService;
+import gaia3d.service.ConverterService;
+import gaia3d.service.DataAttributeService;
+import gaia3d.service.DataGroupService;
+import gaia3d.service.DataRelationService;
+import gaia3d.service.DataService;
+import gaia3d.service.UploadDataService;
 import gaia3d.support.LogMessageSupport;
 import gaia3d.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.AmqpException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * converter manager
@@ -47,6 +65,9 @@ public class ConverterServiceImpl implements ConverterService {
 
 	@Autowired
 	private DataService dataService;
+
+	@Autowired
+	private DataRelationService dataRelationService;
 
 	@Autowired
 	private DataGroupService dataGroupService;
@@ -268,6 +289,15 @@ public class ConverterServiceImpl implements ConverterService {
 		// 2. 로그파일 정보를 통해 ConvertJobFile 갱신
 		List<ConverterJobFile> converterJobFiles = converterMapper.getListConverterJobFileByConverterJob(converterJob);
 
+		// upload 한 파일 정보
+		UploadData uploadData = uploadDataService.getUploadData(UploadData.builder()
+				.uploadDataId(converterJobFiles.get(0).getUploadDataId())
+				.build()
+		);
+		DataRelationInfo dataRelationInfo = DataRelationInfo.builder()
+				.assemble(uploadData.getAssemble())
+				.build();
+
 		// List to Map
 		List<ConversionJobResult> conversionJobResultList = converterResultLog.getConversionJobResult();
 		Map<String, ConversionJobResult> converterJobResultMap = conversionJobResultList
@@ -281,32 +311,51 @@ public class ConverterServiceImpl implements ConverterService {
 		for (ConverterJobFile converterJobFile : converterJobFiles) {
 
 			UploadDataFile uploadDataFile = new UploadDataFile();
-			// uploadDataFile.setUserId(userId);
 			uploadDataFile.setUploadDataFileId(converterJobFile.getUploadDataFileId());
 			uploadDataFile = uploadDataService.getUploadDataFile(uploadDataFile);
 
 			String key = uploadDataFile.getFileRealName();
+			String dataName = uploadDataFile.getDataName();
+			String fileName = uploadDataFile.getFileName();
+			// dataName(converterTargetCount = 1 이면 uploading 시 데이터 이름을 넣고, 아닐 경우 dataFile 명을 등록)
+			String countDataName = converterTargetCount == 1 ? dataName : fileName.substring(0, fileName.lastIndexOf("."));
+
 			ConversionJobResult conversionJobResult = converterJobResultMap.get(key);
 
 			if (ConverterJobResultStatus.SUCCESS == conversionJobResult.getResultStatus()) {
 				// 상태가 성공인 경우
+				var splitResult = conversionJobResult.getSplitResult();
+				var length = splitResult.length;
+				for (var i = 0; i < length; i++) {
+					// dataKey
+					uploadDataFile.setFileRealName(splitResult[i]);
+					// 쪼개진 파일일경우 splitInfo.json 에 기록된 "파일명_인덱스"를 dataName 으로 사용
+					uploadDataFile.setDataName(length > 1 ? dataName + "_" + i : countDataName);
 
-				// 데이터를 등록 혹은 갱신. 상태를 use(사용중)로 등록.
-				DataInfo dataInfo = upsertData(userId, converterJobId, converterTargetCount, uploadDataFile);
+					// 쪼개진 파일이거나 합체인 경우에는 relation 정보 insert
+					// TODO: 단일 파일이 쪼개진 경우 upload_data 의 assemble 정보를 갱신해줘야함
+					// TODO: 변환한 파일 다시 변환할 때 data_relation_id 또 생성하는거 수정해야함. 컨버팅쪽 소스정리하면서 같이하기
+					if (length > 1 || uploadData.getAssemble()) {
+						dataRelationInfo.setAssemble(true);
+						dataRelationService.insertDataRelation(dataRelationInfo);
+					}
 
-				// 데이터 그룹 신규 생성의 경우 데이터 건수 update
-				// location_update_type 이 auto 일 경우 dataInfo 위치 정보로 dataGroup 위치 정보 수정
-				updateDataGroup(userId, dataInfo, uploadDataFile);
+					DataInfo dataInfo = upsertData(converterJob, uploadDataFile, dataRelationInfo);
 
-				if (conversionJobResult.getLocation() != null) {
-					// 위치정보 갱신
-					ConverterLocation converterLocation = conversionJobResult.getLocation();
-					updateConverterLocation(converterLocation, dataInfo);
-				}
-				if (conversionJobResult.getAttributes() != null) {
-					// 속성정보 갱신
-					String attributes = conversionJobResult.getAttributes();
-					updateConverterAttribute(attributes, dataInfo);
+					// 데이터 그룹 신규 생성의 경우 데이터 건수 update
+					// location_update_type 이 auto 일 경우 dataInfo 위치 정보로 dataGroup 위치 정보 수정
+					updateDataGroup(userId, dataInfo, uploadDataFile);
+
+					if (conversionJobResult.getLocation() != null) {
+						// 위치정보 갱신
+						ConverterLocation converterLocation = conversionJobResult.getLocation()[i];
+						updateConverterLocation(converterLocation, dataInfo);
+					}
+					if (conversionJobResult.getAttributes() != null) {
+						// 속성정보 갱신
+						String attributes = conversionJobResult.getAttributes()[i];
+						updateConverterAttribute(attributes, dataInfo);
+					}
 				}
 
 				converterJobFile.setStatus(ConverterJobStatus.SUCCESS.getValue());
@@ -389,7 +438,7 @@ public class ConverterServiceImpl implements ConverterService {
 		// 조금 미묘하다. transaction 처리를 할지, 관리자 UI 재 실행을 위해서는 여기가 맞는거 같기도 하고....
 		// 별도 기능으로 분리해야 하나?
 		try {
-			aMQPPublishService.send(queueMessage);
+			aMQPPublishService.converterMessageSend(propertiesConfig.getRabbitmqConverterExchange(), propertiesConfig.getRabbitmqConverterRoutingKey(), queueMessage);
 		} catch(AmqpException e) {
 			ConverterJob converterJob = new ConverterJob();
 			//converterJob.setUserId(userId);
@@ -407,18 +456,23 @@ public class ConverterServiceImpl implements ConverterService {
 	 * @param converterJob	converterJob
 	 * @param converterResultLog	converterResultLog
 	 */
-	private void updateConverterJob(ConverterJob converterJob, ConverterResultLog converterResultLog) {
-		if (converterResultLog.getIsSuccess()) {
-			if (converterResultLog.getNumberOfFilesConverted() != converterResultLog.getNumberOfFilesToBeConverted()) {
+	private boolean updateConverterJob(ConverterJob converterJob, ConverterResultLog converterResultLog) {
+		boolean isSuccess = true;
+		int numberOfFilesConverted = converterResultLog.getNumberOfFilesConverted();
+		if (converterResultLog.getIsSuccess() && numberOfFilesConverted != 0) {
+			if (converterResultLog.getNumberOfFilesToBeConverted() - numberOfFilesConverted > 0) {
 				converterJob.setStatus(ConverterJobStatus.PARTIAL_SUCCESS.getValue());
 			} else {
 				converterJob.setStatus(ConverterJobStatus.SUCCESS.getValue());
 			}
+			isSuccess = true;
 		} else {
 			converterJob.setStatus(ConverterJobStatus.FAIL.getValue());
 			converterJob.setErrorCode(converterResultLog.getFailureLog());
+			isSuccess = false;
 		}
 		converterMapper.updateConverterJob(converterJob);
+		return isSuccess;
 	}
 
 	/**
@@ -461,25 +515,15 @@ public class ConverterServiceImpl implements ConverterService {
 	/**
 	 * TODO 현재는 converterJob 과 dataInfo 가 1:1 의 관계여서 converterJobId를 받지만, 나중에는 converterJobFileId 를 받아야 함
 	 * dataKey가 존재하지 않을 경우 insert, 존재할 경우 update
-	 * @param userId	userId
 	 * @param uploadDataFile	uploadDataFile
 	 */
-	private DataInfo upsertData(String userId, Long converterJobId, int converterTargetCount, UploadDataFile uploadDataFile) {
+	private DataInfo upsertData(ConverterJob converterJob, UploadDataFile uploadDataFile, DataRelationInfo dataRelationInfo) {
 
-		// converterTargetCount = 1 이면 uploading 시 데이터 이름을 넣고, 아닐 경우 dataFile명을 등록
-
+		Long converterJobId = converterJob.getConverterJobId();
+		String userId = converterJob.getUserId();
 		Integer dataGroupId = uploadDataFile.getDataGroupId();
-		String fileRealName = uploadDataFile.getFileRealName();
-		String fileName = uploadDataFile.getFileName();
-
-		String dataKey = fileRealName.substring(0, fileRealName.lastIndexOf("."));
-		String dataName;
-		if (converterTargetCount == 1) {
-			dataName = uploadDataFile.getDataName();
-		} else {
-			dataName = fileName.substring(0, fileName.lastIndexOf("."));
-		}
-
+		String dataKey = uploadDataFile.getFileRealName();
+		String dataName = uploadDataFile.getDataName();
 		String dataType = uploadDataFile.getDataType();
 		String sharing = uploadDataFile.getSharing();
 		String mappingType = uploadDataFile.getMappingType();
@@ -487,6 +531,9 @@ public class ConverterServiceImpl implements ConverterService {
 		BigDecimal latitude = uploadDataFile.getLatitude();
 		BigDecimal longitude = uploadDataFile.getLongitude();
 		BigDecimal altitude = uploadDataFile.getAltitude();
+
+		Boolean assemble = dataRelationInfo.getAssemble();
+		Long dataRelationId = dataRelationInfo.getDataRelationId();
 
 		DataInfo dataInfo = new DataInfo();
 		dataInfo.setDataGroupId(dataGroupId);
@@ -497,10 +544,12 @@ public class ConverterServiceImpl implements ConverterService {
 			// int order = 1;
 			// TODO nodeType 도 입력해야 함
 			String metainfo = "{\"isPhysical\": true, \"heightReference\": \"" + heightReference + "\"}";
-			
+
 			dataInfo = new DataInfo();
 			dataInfo.setMethodType(MethodType.INSERT);
 			dataInfo.setDataGroupId(dataGroupId);
+			dataInfo.setDataRelationId(dataRelationId);
+			dataInfo.setAssemble(assemble);
 			dataInfo.setConverterJobId(converterJobId);
 			dataInfo.setSharing(sharing);
 			dataInfo.setMappingType(mappingType);
@@ -517,9 +566,12 @@ public class ConverterServiceImpl implements ConverterService {
 			dataInfo.setMetainfo(metainfo);
 			//dataInfo.setStatus(DataStatus.PROCESSING.name().toLowerCase());
 			dataInfo.setStatus(DataStatus.USE.name().toLowerCase());
+			dataInfo.setLabel(dataName);
 			dataService.insertData(dataInfo);
 
 		} else {
+			dataInfo.setDataRelationId(dataRelationId);
+			dataInfo.setAssemble(assemble);
 			dataInfo.setMethodType(MethodType.UPDATE);
 			dataInfo.setConverterJobId(converterJobId);
 			dataInfo.setSharing(sharing);
@@ -609,12 +661,21 @@ public class ConverterServiceImpl implements ConverterService {
 	 * @param dataInfoList	dataInfoList
 	 */
 	private void deleteFailData(List<DataInfo> dataInfoList) {
-		for(DataInfo dataInfo : dataInfoList) {
+		for(DataInfo deleteDataInfo : dataInfoList) {
+			// deleteDataInfo.setUserId(converterJob.getUserId());
+			// deleteDataInfo.setConverterJobId(converterJob.getConverterJobId());
+			// dataService.deleteDataByConverterJob(deleteDataInfo);
+
 			DataGroup dataGroup = new DataGroup();
 			// dataGroup.setUserId(converterJob.getUserId());
-			dataGroup.setDataGroupId(dataInfo.getDataGroupId());
-			dataGroup.setDataCount(-1);
-			dataGroupService.updateDataGroupChildren(dataGroup);
+			dataGroup.setDataGroupId(deleteDataInfo.getDataGroupId());
+			dataGroup = dataGroupService.getDataGroup(dataGroup);
+
+			DataGroup updateDataGroup = new DataGroup();
+			// updateDataGroup.setUserId(converterJob.getUserId());
+			updateDataGroup.setDataGroupId(dataGroup.getDataGroupId());
+			updateDataGroup.setDataCount(dataGroup.getDataCount() - 1);
+			dataGroupService.updateDataGroup(updateDataGroup);
 		}
 	}
 }

@@ -2,7 +2,7 @@ package gaia3d.service;
 
 import java.util.List;
 
-import gaia3d.domain.Widget;
+import gaia3d.domain.widget.Widget;
 
 /**
  * 위젯

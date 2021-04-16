@@ -2,7 +2,7 @@ package gaia3d.service;
 
 import java.util.List;
 
-import gaia3d.domain.Menu;
+import gaia3d.domain.menu.Menu;
 
 /**
  * 메뉴 관리
@@ -59,4 +59,5 @@ public interface MenuService {
 	 * @return
 	 */
 	int deleteMenu(Integer menuId);
+	
 }

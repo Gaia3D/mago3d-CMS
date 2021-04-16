@@ -13,13 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.AccessLog;
 import gaia3d.domain.Key;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.accesslog.AccessLog;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.AccessLogService;
 import gaia3d.support.URLSupport;
 import gaia3d.utils.WebUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 모든 요청에 대한 이력을 남김

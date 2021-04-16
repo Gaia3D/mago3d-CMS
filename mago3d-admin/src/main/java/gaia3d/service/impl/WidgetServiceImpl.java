@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gaia3d.domain.Widget;
+import gaia3d.domain.widget.Widget;
 import gaia3d.persistence.WidgetMapper;
 import gaia3d.service.WidgetService;
 
@@ -49,7 +49,8 @@ public class WidgetServiceImpl implements WidgetService {
 	 */
 	@Transactional
 	public int updateWidget(List<Widget> widgetList) {
-		widgetList.stream().forEach(widget -> widgetMapper.updateWidget(widget));
+		// TODO 그냥 foreach
+		widgetList.forEach(widget -> widgetMapper.updateWidget(widget));
 		return widgetList.size();
 	}
 }

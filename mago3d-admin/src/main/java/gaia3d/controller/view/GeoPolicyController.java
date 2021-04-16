@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import gaia3d.domain.GeoPolicy;
+import gaia3d.domain.policy.GeoPolicy;
 import gaia3d.service.GeoPolicyService;
 
 @Controller

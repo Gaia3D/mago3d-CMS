@@ -1,8 +1,8 @@
 package gaia3d.service;
 
-import gaia3d.domain.DataGroup;
-
 import java.util.List;
+
+import gaia3d.domain.data.DataGroup;
 
 public interface DataGroupService {
 	
@@ -40,7 +40,7 @@ public interface DataGroupService {
     DataGroup getBasicDataGroup();
     
     /**
-     * 부모와 표시 순서로 메뉴 조회
+     * 부모와 표시 순서로 데이터 그룹 조회
      * @param dataGroup
      * @return
      */

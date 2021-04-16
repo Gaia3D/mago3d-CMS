@@ -187,3 +187,8 @@ JS_MESSAGE["group.key.duplication.check"] = "그룹 Key 중복 확인이 필요 
 JS_MESSAGE["layer.key.duplication"] = "사용중인 layer Key 입니다. 다른 이름을 사용해 주십시오.";
 
 JS_MESSAGE["already.agreed"] = "이미 동의하였습니다.";
+
+JS_MESSAGE["tile.key.empty"] = "타일 Key 를 입력하여 주십시오.";
+JS_MESSAGE["tile.key.duplication"] = "사용중인 타일 Key 입니다. 다른 이름을 사용해 주십시오.";
+JS_MESSAGE["tile.key.enable"] = "사용 가능한 타일 Key 입니다.";
+JS_MESSAGE["tile.key.duplication.check"] = "타일 Key 중복 확인이 필요 합니다.";

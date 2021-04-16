@@ -1,13 +1,18 @@
 package gaia3d.domain.uploaddata;
 
-import gaia3d.domain.Search;
-import gaia3d.domain.uploaddata.UploadDataType;
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import gaia3d.domain.common.Search;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 사용자 업로드 정보
@@ -73,7 +78,8 @@ public class UploadData extends Search implements Serializable {
 	private BigDecimal pitch;
 	// roll
 	private BigDecimal roll;
-
+	// 합체 가능한 데이터 유무. true : 합체, false : 단일
+	private Boolean assemble;
 
 	// 상태. upload : 업로딩 완료, converter : 변환
 	private String status;

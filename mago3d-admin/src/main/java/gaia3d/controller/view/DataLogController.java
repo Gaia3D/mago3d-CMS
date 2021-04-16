@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.DataInfoLog;
 import gaia3d.domain.Key;
 import gaia3d.domain.PageType;
-import gaia3d.domain.Pagination;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.common.Pagination;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.data.DataInfoLog;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.DataLogService;
 import gaia3d.support.SQLInjectSupport;
 import gaia3d.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Data
@@ -43,10 +43,10 @@ public class DataLogController {
 	
 	/**
 	 * Data 목록
+	 * @param locale
 	 * @param request
-	 * @param dataInfo
+	 * @param dataInfoLog
 	 * @param pageNo
-	 * @param list_counter
 	 * @param model
 	 * @return
 	 */

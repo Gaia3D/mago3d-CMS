@@ -9,15 +9,14 @@ import java.util.List;
 import org.geotools.data.shapefile.dbf.DbaseFileHeader;
 import org.geotools.data.shapefile.dbf.DbaseFileReader;
 import org.geotools.data.shapefile.files.ShpFiles;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
-import gaia3d.domain.LayerFileInfo;
-import gaia3d.domain.ShapeFileExt;
-import gaia3d.domain.ShapeFileField;
+import gaia3d.domain.layer.LayerFileInfo;
 
 
 public class ShapeFileValidationTest {
 	
+	@Disabled
 	public void test() {
 		DbaseFileReader r = null;
         try {
@@ -28,7 +27,7 @@ public class ShapeFileValidationTest {
             // 필드수
             int filedValidCount = 0;
             int numFields = header.getNumFields();
-            for(int iField=0; iField < numFields; ++iField) {
+            for(int iField=0; iField < numFields; iField++) {
                 String fieldName = header.getFieldName(iField);
                 System.out.println(fieldName);
                 if(ShapeFileField.findBy(fieldName) != null) filedValidCount++;
@@ -51,7 +50,7 @@ public class ShapeFileValidationTest {
         } 
 	}
 	
-	@Test
+	@Disabled
 	public void count() {
 		LayerFileInfo file0 = new LayerFileInfo();
 		file0.setFileExt("shp");

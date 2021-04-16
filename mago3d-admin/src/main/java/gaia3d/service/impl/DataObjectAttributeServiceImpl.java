@@ -7,16 +7,16 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.DataObjectAttribute;
-import gaia3d.domain.DataObjectAttributeFileInfo;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataObjectAttribute;
+import gaia3d.domain.data.DataObjectAttributeFileInfo;
 import gaia3d.parser.DataObjectAttributeFileParser;
 import gaia3d.parser.impl.DataObjectAttributeFileJsonParser;
 import gaia3d.persistence.DataObjectAttributeMapper;
 import gaia3d.service.DataObjectAttributeService;
 import gaia3d.service.DataService;
 import gaia3d.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 데이터 Object 속성 관리

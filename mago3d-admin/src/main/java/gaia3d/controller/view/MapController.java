@@ -2,6 +2,9 @@ package gaia3d.controller.view;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
@@ -10,19 +13,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.micrometer.core.instrument.util.StringUtils;
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.GeoPolicy;
 import gaia3d.domain.Key;
-import gaia3d.domain.UserPolicy;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.policy.GeoPolicy;
+import gaia3d.domain.user.UserPolicy;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.DataService;
 import gaia3d.service.GeoPolicyService;
 import gaia3d.service.UserPolicyService;
+import io.micrometer.core.instrument.util.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 지도에서 위치 찾기, 보기 등을 위한 공통 클래스
@@ -47,7 +47,7 @@ public class MapController {
 	/**
 	 * 위치(경도, 위도) 찾기
      * @param request
-     * @param dataId
+     * @param dataInfo
      * @param model
      * @return
      */

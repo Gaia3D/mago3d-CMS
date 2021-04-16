@@ -4,22 +4,23 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.domain.Key;
-import gaia3d.domain.UserSession;
-import gaia3d.domain.UserStatus;
+import gaia3d.domain.user.UserSession;
+import gaia3d.domain.user.UserStatus;
 import gaia3d.support.URLSupport;
 import gaia3d.utils.WebUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 보안 관련 체크 인터셉터
@@ -142,6 +143,12 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 	}
     
     private void printHead(HttpServletRequest request) {
+		Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+		String statusMsg = status.toString();
+		HttpStatus httpStatus = HttpStatus.valueOf(Integer.parseInt(statusMsg));
+		log.info(" ================ httpStatus = {}", httpStatus);
+		log.info(" ================ message = {}", httpStatus.getReasonPhrase());
+
     	Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
         	String headerName = headerNames.nextElement();

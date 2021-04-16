@@ -15,7 +15,7 @@
     </select>
     
     <select id="getListLayerFilePath" parameterType="int" resultType="string">
-        /* getListLayerFileInfo */
+        /* getListLayerFilePath */
         SELECT CONCAT(file_path, file_real_name) FROM layer_File_info
         WHERE layer_id =#{layerId}
     </select>

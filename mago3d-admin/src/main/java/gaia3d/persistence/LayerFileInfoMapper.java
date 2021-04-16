@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.LayerFileInfo;
+import gaia3d.domain.layer.LayerFileInfo;
 
 /**
  * layer shape 파일 정보
@@ -37,7 +37,7 @@ public interface LayerFileInfoMapper {
 	
 	/**
 	 * 파일 정보 취득
-	 * @param layerId
+	 * @param layerFileInfoId
 	 * @return
 	 */
 	LayerFileInfo getLayerFileInfo(Integer layerFileInfoId);

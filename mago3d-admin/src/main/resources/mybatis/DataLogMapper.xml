@@ -81,6 +81,11 @@
 			AND A.data_id = B.data_id
 	</select>
 
+	<!-- 다음년도 파티션 테이블 자동 생성 -->
+	<select id="createPartitionTable" parameterType="partitionTable" resultType="int">
+		SELECT create_data_info_log( '${tableName}', '${startTime}', '${endTime}' )
+	</select>
+
 	<!-- Data Info 변경 이력 등록 -->
 	<insert id="insertDataInfoLog" parameterType="dataInfoLog">
 		/* insertDataInfoLog */

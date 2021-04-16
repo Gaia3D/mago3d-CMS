@@ -2,7 +2,7 @@ package gaia3d.service;
 
 import java.util.List;
 
-import gaia3d.domain.UserInfo;
+import gaia3d.domain.user.UserInfo;
 
 /**
  * 사용자
@@ -65,6 +65,13 @@ public interface UserService {
 	 * @return
 	 */
 	int updateUser(UserInfo userInfo);
+
+	/**
+	 * 사용 대기자 사용 승인
+	 * @param userId
+	 * @return
+	 */
+	int updateUserStatusUse(String userId);
 
 	/**
 	 * 사용자 상태 수정

@@ -1,6 +1,6 @@
 package gaia3d.service;
 
-import gaia3d.domain.GeoPolicy;
+import gaia3d.domain.policy.GeoPolicy;
 
 /**
  * 2D, 3D 운영 정책

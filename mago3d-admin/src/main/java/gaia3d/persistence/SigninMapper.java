@@ -2,8 +2,8 @@ package gaia3d.persistence;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.UserInfo;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.user.UserInfo;
+import gaia3d.domain.user.UserSession;
 
 
 /**

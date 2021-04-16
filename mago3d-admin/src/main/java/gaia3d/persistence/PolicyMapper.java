@@ -2,7 +2,7 @@ package gaia3d.persistence;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.Policy;
+import gaia3d.domain.policy.Policy;
 
 /**
  * 운영 정책

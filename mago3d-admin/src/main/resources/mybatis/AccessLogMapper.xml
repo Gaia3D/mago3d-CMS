@@ -31,7 +31,7 @@
     <!-- 서비스 요청 이력 목록 -->
     <select id="getListAccessLog" parameterType="accessLog" resultType="accessLog">
         /* getListAccessLog */
-        SELECT *
+        SELECT access_log_id, user_id, user_name, client_ip, request_uri, substring(parameters from 0 for 35) AS parameters, substring(user_agent from 0 for 20) AS user_agent, referer, insert_date
         FROM access_log
         <trim prefix="WHERE" prefixOverrides="AND">
 			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
@@ -66,6 +66,11 @@
 	<select id="getAccessLog" parameterType="long" resultType="accessLog">
 		/* getAccessLog */
 		SELECT * FROM access_log WHERE access_log_id = #{accessLogId}
+	</select>
+
+	<!-- 다음년도 파티션 테이블 자동 생성 -->
+	<select id="createPartitionTable" parameterType="partitionTable" resultType="int">
+		SELECT create_access_log( '${tableName}', '${startTime}', '${endTime}' )
 	</select>
 
 	<!-- 서비스 요청 이력 등록 -->

@@ -14,21 +14,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.converter.ConverterJob;
-import gaia3d.domain.DataGroup;
 import gaia3d.domain.Key;
 import gaia3d.domain.PageType;
-import gaia3d.domain.Pagination;
+import gaia3d.domain.common.Pagination;
+import gaia3d.domain.converter.ConverterJob;
+import gaia3d.domain.data.DataGroup;
 import gaia3d.domain.uploaddata.UploadData;
 import gaia3d.domain.uploaddata.UploadDataFile;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.PolicyService;
 import gaia3d.service.UploadDataService;
 import gaia3d.support.SQLInjectSupport;
 import gaia3d.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 3D 데이터 파일 업로더
@@ -159,7 +159,7 @@ public class UploadDataController {
 	
 	/**
 	 * 검색 조건
-	 * @param search
+	 * @param uploadData
 	 * @return
 	 */
 	private String getSearchParameters(PageType pageType, UploadData uploadData) {

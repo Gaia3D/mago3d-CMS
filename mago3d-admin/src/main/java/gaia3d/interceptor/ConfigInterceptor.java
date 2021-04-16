@@ -6,19 +6,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.CacheManager;
 import gaia3d.domain.Key;
-import gaia3d.domain.Menu;
-import gaia3d.domain.Policy;
-import gaia3d.domain.UserGroupMenu;
-import gaia3d.domain.UserSession;
 import gaia3d.domain.YOrN;
-import gaia3d.service.PolicyService;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.menu.Menu;
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.user.UserGroupMenu;
+import gaia3d.domain.user.UserSession;
+import gaia3d.support.URLSupport;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 사이트 전체 설정 관련 처리를 담당
@@ -32,6 +31,7 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 	
 	@Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+//		log.info("**** 버그 추적용 ConfigInterceptor ****");
     	
     	String uri = request.getRequestURI();
     	HttpSession session = request.getSession();
@@ -46,8 +46,6 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 	    	Integer clickParentId = null;
 			Integer clickMenuId = null;
 			Integer clickDepth = null;
-			Menu menu = null;
-			Menu parentMenu = null;
 			
 			for(UserGroupMenu userGroupMenu : userGroupMenuList) {
 				if(uri.equals(userGroupMenu.getUrl())) {
@@ -69,8 +67,8 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 				}
 			}
 			
-			menu = CacheManager.getMenuMap().get(clickMenuId);
-			parentMenu = CacheManager.getMenuMap().get(clickParentId);
+			Menu menu = CacheManager.getMenuMap().get(clickMenuId);
+			Menu parentMenu = CacheManager.getMenuMap().get(clickParentId);
 			if(menu != null) {
 				if(YOrN.Y == YOrN.valueOf(menu.getDisplayYn())) {
 					menu.setAliasName(null);
@@ -79,6 +77,7 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 					Integer aliasMenuId = CacheManager.getMenuUrlMap().get(menu.getUrlAlias());
 					Menu aliasMenu = CacheManager.getMenuMap().get(aliasMenuId);
 					menu.setAliasName(aliasMenu.getName());
+					menu.setAliasMenuId(aliasMenuId);
 					parentMenu.setAliasName(aliasMenu.getName());
 				}
 			}
@@ -86,6 +85,23 @@ public class ConfigInterceptor extends HandlerInterceptorAdapter {
 //			Integer contentLoadBalancingIntervalValue = policy.getContent_load_balancing_interval().intValue() * 1000;
 //			request.setAttribute("contentLoadBalancingInterval", contentLoadBalancingIntervalValue);
 			
+			if(uri.indexOf("/main/index") < 0) {
+				Menu originMenu = CacheManager.getMenuByUrl(uri);
+//				log.info("+++++++++++++++++++++++ originMenu = {}", originMenu);
+				if (originMenu != null) {
+					log.info("+++++++++++++++++++++++ 메뉴 테이블에는 있는 메뉴");
+					if (clickMenuId == null) {
+						log.info("+++++++++++++++++++++++ 권한이 없는 메뉴");
+						response.sendRedirect(URLSupport.FORBIDDEN_MENU);
+						return false;
+					}
+				}
+			}
+
+			log.info("+++++++++++++++++++++++ clickMenuId = {}", clickMenuId);
+//			log.info("+++++++++++++++++++++++ menu = {}", menu);
+//			log.info("+++++++++++++++++++++++ parentMenu = {}", parentMenu);
+
 			request.setAttribute("clickMenuId", clickMenuId);
 //			request.setAttribute("clickParentId", clickParentId);
 //			request.setAttribute("clickDepth", clickDepth);

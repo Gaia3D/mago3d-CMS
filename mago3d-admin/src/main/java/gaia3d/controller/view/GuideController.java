@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import gaia3d.domain.CacheManager;
+
 import gaia3d.domain.Key;
-import gaia3d.domain.Policy;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.policy.Policy;
 
 /**
  * @author hansangkim

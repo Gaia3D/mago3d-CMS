@@ -133,10 +133,10 @@
 		/* insertUser */
 		INSERT INTO user_info(
 			user_id, user_group_id, user_name, password, telephone, mobile_phone, email,
-			messanger, postal_code, address, address_etc, status, update_date
+			messenger, postal_code, address, address_etc, status, update_date
 		) values(
 			#{userId}, #{userGroupId}, #{userName}, #{password}, #{telephone}, #{mobilePhone}, #{email},
-			#{messanger}, #{postalCode}, #{address}, #{addressEtc}, COALESCE(#{status}, '0'), NOW()
+			#{messenger}, #{postalCode}, #{address}, #{addressEtc}, COALESCE(#{status}, '0'), NOW()
 		)
 	</insert>
 
@@ -163,8 +163,8 @@
 			<if test="email != null and email != ''">
 			email = #{email},
 			</if>
-			<if test="messanger != null and messanger != ''">
-			messanger = #{messanger},
+			<if test="messenger != null and messenger != ''">
+			messenger = #{messenger},
 			</if>
 			postal_code = #{postalCode},
 			address = #{address},

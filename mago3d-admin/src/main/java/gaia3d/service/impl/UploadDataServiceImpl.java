@@ -147,7 +147,6 @@ public class UploadDataServiceImpl implements UploadDataService {
 	 */
 	@Transactional
 	public int deleteUploadData(UploadData uploadData) {
-			
 		List<UploadDataFile> uploadDataFileList = uploadDataMapper.getListUploadDataFile(uploadData);
 		uploadDataMapper.deleteUploadDataFile(uploadData);
 		for(UploadDataFile deleteUploadDataFile : uploadDataFileList) {

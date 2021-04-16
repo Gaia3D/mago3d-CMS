@@ -2,7 +2,7 @@ package gaia3d.service;
 
 import java.util.List;
 
-import gaia3d.domain.LayerGroup;
+import gaia3d.domain.layer.LayerGroup;
 
 public interface LayerGroupService {
 
@@ -14,7 +14,7 @@ public interface LayerGroupService {
 
     /**
      * 레이어 그룹 정보 조회
-     * @param userGroup
+	 * @param layerGroup
      * @return
      */
     LayerGroup getLayerGroup(LayerGroup layerGroup);

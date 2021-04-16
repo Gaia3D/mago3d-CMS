@@ -4,17 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 class CollectAttributeFileTest {
 
-	String inputDirectory = "C:\\data\\lx";
+	String inputDirectory = "C:\\data\\xx";
 	String outDirectory = "C:\\data\\mago3d\\smart-tiling-attribute";
 	
-	@Test
+	@Disabled
 	void test() throws Exception {
 		File rootDirectory = new File(inputDirectory);
 		if(!rootDirectory.isDirectory()) {

@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,23 +17,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.controller.AuthorizationController;
-import gaia3d.domain.GeoPolicy;
 import gaia3d.domain.Key;
-import gaia3d.domain.Layer;
-import gaia3d.domain.LayerFileInfo;
-import gaia3d.domain.LayerGroup;
-import gaia3d.domain.LayerInsertType;
 import gaia3d.domain.PageType;
-import gaia3d.domain.Pagination;
-import gaia3d.domain.Policy;
-import gaia3d.domain.RoleKey;
 import gaia3d.domain.ShapeFileExt;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.common.Pagination;
+import gaia3d.domain.layer.Layer;
+import gaia3d.domain.layer.LayerFileInfo;
+import gaia3d.domain.layer.LayerGroup;
+import gaia3d.domain.layer.LayerInsertType;
+import gaia3d.domain.policy.GeoPolicy;
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.role.RoleKey;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.GeoPolicyService;
 import gaia3d.service.LayerFileInfoService;
 import gaia3d.service.LayerGroupService;
@@ -39,6 +38,7 @@ import gaia3d.service.PolicyService;
 import gaia3d.support.SQLInjectSupport;
 import gaia3d.utils.DateUtils;
 import gaia3d.utils.FormatUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
@@ -72,7 +72,7 @@ public class LayerController implements AuthorizationController {
 		log.info("@@ layer = {}", layer);
 
 		String roleCheckResult = roleValidate(request);
-    	if(roleValidate(request) != null) return roleCheckResult;
+        if(roleCheckResult != null) return roleCheckResult;
 
 		String today = DateUtils.getToday(FormatUtils.YEAR_MONTH_DAY);
 		if(StringUtils.isEmpty(layer.getStartDate())) {
@@ -87,13 +87,13 @@ public class LayerController implements AuthorizationController {
 		}
 
 		Long totalCount = layerService.getLayerTotalCount(layer);
-		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(PageType.LIST, layer),
+        Pagination pagination = new Pagination(request.getRequestURI(), layer.getParameters(),
 				totalCount, Long.parseLong(pageNo), layer.getListCounter());
 		layer.setOffset(pagination.getOffset());
 		layer.setLimit(pagination.getPageRows());
 
 		List<Layer> layerList = new ArrayList<>();
-		if(totalCount > 0l) {
+        if (totalCount > 0L) {
 			layerList = layerService.getListLayer(layer);
 		}
 
@@ -107,13 +107,14 @@ public class LayerController implements AuthorizationController {
 
 	/**
      * layer 등록
+     *
      * @param model
      * @return
      */
     @GetMapping(value = "/input")
     public String input(HttpServletRequest request, Model model) {
     	String roleCheckResult = roleValidate(request);
-    	if(roleValidate(request) != null) return roleCheckResult;
+        if(roleCheckResult != null) return roleCheckResult;
 
     	Policy policy = policyService.getPolicy();
     	List<LayerGroup> layerGroupList = layerGroupService.getListLayerGroup();
@@ -127,13 +128,14 @@ public class LayerController implements AuthorizationController {
 
     /**
     * layer 수정
+     *
     * @param model
     * @return
     */
     @GetMapping(value = "/modify")
     public String modify(HttpServletRequest request, @RequestParam Integer layerId, Model model) {
     	String roleCheckResult = roleValidate(request);
-    	if(roleValidate(request) != null) return roleCheckResult;
+        if(roleCheckResult != null) return roleCheckResult;
 
         Policy policy = policyService.getPolicy();
         Layer layer = layerService.getLayer(layerId);
@@ -147,9 +149,9 @@ public class LayerController implements AuthorizationController {
         if(LayerInsertType.UPLOAD == LayerInsertType.valueOf(layer.getLayerInsertType().toUpperCase())) {
         	List<LayerFileInfo> layerFileInfoList = layerFileInfoService.getListLayerFileInfo(layerId);
             LayerFileInfo layerFileInfo = new LayerFileInfo();
-            for(int i = 0; i < layerFileInfoList.size(); i++) {
-                if(ShapeFileExt.SHP == ShapeFileExt.valueOf(layerFileInfoList.get(i).getFileExt().toUpperCase())) {
-                    layerFileInfo = layerFileInfoList.get(i);
+            for (LayerFileInfo fileInfo : layerFileInfoList) {
+                if (ShapeFileExt.SHP == ShapeFileExt.valueOf(fileInfo.getFileExt().toUpperCase())) {
+                    layerFileInfo = fileInfo;
                 }
             }
             model.addAttribute("layerFileInfo", layerFileInfo);
@@ -164,6 +166,7 @@ public class LayerController implements AuthorizationController {
     
     /**
     * layer 지도 보기
+     *
     * @param model
     * @return
     */

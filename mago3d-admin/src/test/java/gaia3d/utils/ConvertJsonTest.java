@@ -3,19 +3,24 @@ package gaia3d.utils;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import org.junit.jupiter.api.Test;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import org.junit.jupiter.api.Disabled;
+
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataInfoLegacy;
+import gaia3d.domain.data.DataInfoLegacyWrapper;
+import gaia3d.support.LogMessageSupport;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.DataInfoLegacy;
-import gaia3d.domain.DataInfoLegacyWrapper;
 
 @Slf4j
 class ConvertJsonTest {
@@ -27,7 +32,7 @@ class ConvertJsonTest {
 		private String dataGroupKey;
 	}
 	
-	@Test
+	@Disabled
 	void test() {
 		try {
 			String filePath = "C:\\temp";
@@ -76,6 +81,42 @@ class ConvertJsonTest {
 			System.out.println("" + e);
 		}
 		
+	}
+
+	@Disabled
+	void objectToJson() {
+		ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+		List<Map<String, Object>> attributes = new ArrayList<>();
+		Map<String, Object> attribute = new HashMap<>();
+		attribute.put("bldg:rooftype", "1000");
+		attribute.put("gml:name", "Potsdamer Platz Nord");
+		attributes.add(attribute);
+		try {
+			String attributesJsonString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(attributes);
+			log.info(">>>>>>>>>> attributesJsonString = {}", attributesJsonString);
+		} catch (JsonProcessingException e) {
+			LogMessageSupport.printMessage(e);
+		}
+
+	}
+
+	@Disabled
+	void JsonStringToObject() {
+
+		String attributesJsonString = "[ {\n" +
+				"  \"bldg:rooftype\" : \"1000\",\n" +
+				"  \"gml:name\" : \"Potsdamer Platz Nord\"\n" +
+				"} ]";
+
+		ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+		try {
+			List<Map<String, Object>> attributes = objectMapper.readValue(attributesJsonString, new TypeReference<>() {});
+			attributes.forEach(item -> item.forEach((k, v) -> log.info("{} : {}", k, v)));
+		} catch (JsonProcessingException e) {
+			LogMessageSupport.printMessage(e);
+		}
+
 	}
 
 }

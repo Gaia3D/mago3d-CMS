@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.CacheConfig;
-import gaia3d.domain.CacheName;
-import gaia3d.domain.CacheParams;
-import gaia3d.domain.CacheType;
-import gaia3d.domain.Policy;
+import gaia3d.domain.cache.CacheName;
+import gaia3d.domain.cache.CacheParams;
+import gaia3d.domain.cache.CacheType;
+import gaia3d.domain.policy.Policy;
 import gaia3d.service.PolicyService;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController

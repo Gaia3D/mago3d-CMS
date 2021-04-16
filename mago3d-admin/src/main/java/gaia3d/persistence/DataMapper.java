@@ -3,6 +3,13 @@ package gaia3d.persistence;
 import java.util.List;
 
 import gaia3d.domain.*;
+import gaia3d.domain.common.FileInfo;
+import gaia3d.domain.data.DataFileInfo;
+import gaia3d.domain.data.DataFileParseLog;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataInfoSimple;
+
 import org.springframework.stereotype.Repository;
 
 /**
@@ -21,8 +28,15 @@ public interface DataMapper {
 	Long getDataTotalCount(DataInfo dataInfo);
 	
 	/**
+	 * 그룹핑 데이터 수
+	 * @param dataRelationId dataRelationId
+	 * @return
+	 */
+	Long getDataRelationCount(Long dataRelationId);
+
+	/**
 	 * 데이터 상태별 통계 정보
-	 * @param dataInfo
+	 * @param status
 	 * @return
 	 */
 	Long getDataTotalCountByStatus(String status);
@@ -109,6 +123,13 @@ public interface DataMapper {
 	 * @return
 	 */
 	int insertBulkData(DataInfo dataInfo);
+
+	/**
+	 * Bulk 파일로 부터 데이터 등록(dataId 시퀀스 사용)
+	 * @param dataInfo
+	 * @return
+	 */
+	int insertBulkDataWithDataId(DataInfo dataInfo);
 	
 	/**
 	 * Data 파일 정보 등록

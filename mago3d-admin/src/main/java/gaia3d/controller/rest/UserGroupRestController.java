@@ -17,16 +17,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.CacheConfig;
 import gaia3d.controller.AuthorizationController;
-import gaia3d.domain.CacheName;
-import gaia3d.domain.CacheParams;
-import gaia3d.domain.CacheType;
-import gaia3d.domain.UserGroup;
-import gaia3d.domain.UserGroupMenu;
-import gaia3d.domain.UserGroupRole;
+import gaia3d.domain.cache.CacheName;
+import gaia3d.domain.cache.CacheParams;
+import gaia3d.domain.cache.CacheType;
+import gaia3d.domain.user.UserGroup;
+import gaia3d.domain.user.UserGroupMenu;
+import gaia3d.domain.user.UserGroupRole;
 import gaia3d.service.UserGroupService;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -41,15 +41,15 @@ public class UserGroupRestController implements AuthorizationController {
 
 	/**
 	 * 그룹Key 중복 체크
-	 * @param model
+	 * @param request
+	 * @param userGroup
 	 * @return
 	 */
 	@GetMapping(value = "/duplication")
-	public Map<String, Object> ajaxKeyDuplicationCheck(HttpServletRequest request, UserGroup userGroup) {
+	public Map<String, Object> keyDuplicationCheck(HttpServletRequest request, UserGroup userGroup) {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		Boolean duplication = Boolean.TRUE;
 		
 		// TODO @Valid 로 구현해야 함
 		if(StringUtils.isEmpty(userGroup.getUserGroupKey())) {
@@ -60,7 +60,7 @@ public class UserGroupRestController implements AuthorizationController {
 			return result;
 		}
 
-		duplication = userGroupService.isUserGroupKeyDuplication(userGroup);
+		Boolean duplication = userGroupService.isUserGroupKeyDuplication(userGroup);
 		log.info("@@ duplication = {}", duplication);
 		int statusCode = HttpStatus.OK.value();
 		
@@ -183,7 +183,6 @@ public class UserGroupRestController implements AuthorizationController {
 	/**
 	 * 사용자 그룹 메뉴 수정
 	 * @param request
-	 * @param userGroupId
 	 * @param userGroupMenu
 	 * @return
 	 */
@@ -212,7 +211,6 @@ public class UserGroupRestController implements AuthorizationController {
 	/**
 	 * 사용자 그룹 Role 수정
 	 * @param request
-	 * @param userGroupId
 	 * @param userGroupRole
 	 * @return
 	 */

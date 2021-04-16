@@ -1,5 +1,7 @@
 package gaia3d.geospatial;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,8 @@ import gaia3d.support.ProcessBuilderSupport;
 public class Ogr2OgrExecute {
 
     // os 종류(WINDOW, LINUX)
-    private String osType;
+    //private String osType;
+    private String gdalCommandPath;
     private String driver;
     private String shapeFile;
     private String shapeEncoding;
@@ -21,10 +24,10 @@ public class Ogr2OgrExecute {
     private String layerTargetCoordinate;
     private String exportPath;
     private String sql;
-    private String environmentPath;
+    //private String environmentPath;
 
-    public Ogr2OgrExecute(String osType, String driver, String shapeFile, String shapeEncoding, String tableName, String updateOption, String layerSourceCoordinate, String layerTargetCoordinate, String environmentPath) {
-        this.osType = osType;
+    public Ogr2OgrExecute(String gdalCommandPath, String driver, String shapeFile, String shapeEncoding, String tableName, String updateOption, String layerSourceCoordinate, String layerTargetCoordinate) {
+        this.gdalCommandPath = gdalCommandPath;
         this.driver = driver;
         this.shapeFile = shapeFile;
         this.shapeEncoding = shapeEncoding;
@@ -32,11 +35,10 @@ public class Ogr2OgrExecute {
         this.updateOption = updateOption;
         this.layerSourceCoordinate = layerSourceCoordinate;
         this.layerTargetCoordinate = layerTargetCoordinate;
-        this.environmentPath = environmentPath;
     }
 
-    public Ogr2OgrExecute(String osType, String driver, String shapeEncoding, String exportPath, String sql, String layerSourceCoordinate, String layerTargetCoordinate) {
-        this.osType = osType;
+    public Ogr2OgrExecute(String gdalCommandPath, String driver, String shapeEncoding, String exportPath, String sql, String layerSourceCoordinate, String layerTargetCoordinate) {
+        this.gdalCommandPath = gdalCommandPath;
         this.driver = driver;
         this.shapeEncoding = shapeEncoding;
         this.layerSourceCoordinate = layerSourceCoordinate;
@@ -46,8 +48,11 @@ public class Ogr2OgrExecute {
     }
 
     public void insert() throws Exception {
+
+        Path commandPath = Paths.get(gdalCommandPath, "ogr2ogr");
+
         List<String> command = new ArrayList<>();
-        command.add("ogr2ogr");
+        command.add(commandPath.toString());
         command.add("-s_srs");
         command.add(layerSourceCoordinate);
         command.add("-t_srs");
@@ -69,7 +74,7 @@ public class Ogr2OgrExecute {
         command.add("PostgreSQL");
         command.add(this.driver);
         
-        // shape file full path 파일 호가장자 까지
+        // shape file full path 파일 확장자 까지
         command.add(this.shapeFile);
         command.add("-nlt");
         command.add("PROMOTE_TO_MULTI");
@@ -78,13 +83,17 @@ public class Ogr2OgrExecute {
 //		command.add("schema=");
         command.add("-nln");
         command.add(this.tableName);
-        log.info(" >>>>>> insert command = {}", command.toString());
-        ProcessBuilderSupport.execute(command, environmentPath);
+
+        log.info(" >>>>>> insert command = {}", String.join(" ", command));
+        ProcessBuilderSupport.execute(command, null);
     }
 
     public void export() throws Exception {
+
+        Path commandPath = Paths.get(gdalCommandPath, "ogr2ogr");
+
         List<String> command = new ArrayList<>();
-        command.add("ogr2ogr");
+        command.add(commandPath.toString());
         command.add("-s_srs");
         command.add(layerSourceCoordinate);
         command.add("-t_srs");
@@ -104,8 +113,8 @@ public class Ogr2OgrExecute {
         command.add("-sql");
         command.add(sql);
 
-        log.info(" >>>>>> export command = {}", command.toString());
-
-        ProcessBuilderSupport.execute(command, environmentPath);
+        log.info(" >>>>>> export command = {}", String.join(" ", command));
+        ProcessBuilderSupport.execute(command, null);
     }
+
 }

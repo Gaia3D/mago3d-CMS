@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.Widget;
+import gaia3d.domain.widget.Widget;
 
 /**
  * 위젯

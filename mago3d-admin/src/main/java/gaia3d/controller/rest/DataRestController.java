@@ -18,23 +18,23 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.DataAttribute;
-import gaia3d.domain.DataAttributeFileInfo;
-import gaia3d.domain.DataFileInfo;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.DataObjectAttribute;
-import gaia3d.domain.DataObjectAttributeFileInfo;
-import gaia3d.domain.DataSmartTilingFileInfo;
-import gaia3d.domain.FileInfo;
 import gaia3d.domain.Key;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.common.FileInfo;
+import gaia3d.domain.data.DataAttribute;
+import gaia3d.domain.data.DataAttributeFileInfo;
+import gaia3d.domain.data.DataFileInfo;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataObjectAttribute;
+import gaia3d.domain.data.DataObjectAttributeFileInfo;
+import gaia3d.domain.data.DataSmartTilingFileInfo;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.DataAttributeService;
 import gaia3d.service.DataObjectAttributeService;
 import gaia3d.service.DataService;
 import gaia3d.service.DataSmartTilingService;
 import gaia3d.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -82,8 +82,8 @@ public class DataRestController {
 	/**
 	 * 사용자 데이터 수정
 	 * @param request
-	 * @param dataGroup
-	 * @param bindingResult
+	 * @param dataId
+	 * @param dataInfo
 	 * @return
 	 */
 	@PostMapping("/{dataId:[0-9]+}")
@@ -155,7 +155,7 @@ public class DataRestController {
 	
 	/**
 	 * 데이터 파일 업로딩
-	 * @param model
+	 * @param request
 	 * @return
 	 */
 	@PostMapping(value = "/bulk-upload")

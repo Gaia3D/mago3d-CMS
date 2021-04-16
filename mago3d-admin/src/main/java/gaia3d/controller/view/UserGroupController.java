@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,27 +15,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.CacheConfig;
 import gaia3d.controller.AuthorizationController;
-import gaia3d.domain.CacheName;
-import gaia3d.domain.CacheParams;
-import gaia3d.domain.CacheType;
-import gaia3d.domain.Menu;
-import gaia3d.domain.MenuTarget;
-import gaia3d.domain.MenuType;
-import gaia3d.domain.Policy;
-import gaia3d.domain.Role;
-import gaia3d.domain.UserGroup;
-import gaia3d.domain.UserGroupMenu;
-import gaia3d.domain.UserGroupRole;
+import gaia3d.domain.cache.CacheName;
+import gaia3d.domain.cache.CacheParams;
+import gaia3d.domain.cache.CacheType;
+import gaia3d.domain.menu.Menu;
+import gaia3d.domain.menu.MenuTarget;
+import gaia3d.domain.menu.MenuType;
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.role.Role;
+import gaia3d.domain.user.UserGroup;
+import gaia3d.domain.user.UserGroupMenu;
+import gaia3d.domain.user.UserGroupRole;
 import gaia3d.service.MenuService;
 import gaia3d.service.PolicyService;
 import gaia3d.service.RoleService;
 import gaia3d.service.UserGroupService;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
@@ -134,6 +134,7 @@ public class UserGroupController implements AuthorizationController {
 
 		userGroupService.deleteUserGroup(userGroup);
 
+		// 삭제 후 캐시 갱신
 		CacheParams cacheParams = new CacheParams();
 		cacheParams.setCacheType(CacheType.BROADCAST);
 		cacheParams.setCacheName(CacheName.USER_GROUP);

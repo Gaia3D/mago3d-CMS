@@ -9,23 +9,24 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataFileInfo;
-import gaia3d.domain.DataFileParseLog;
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.DataInfoLog;
-import gaia3d.domain.DataInfoSimple;
-import gaia3d.domain.DataStatus;
 import gaia3d.domain.MethodType;
 import gaia3d.domain.ServerTarget;
 import gaia3d.domain.SharingType;
+import gaia3d.domain.data.DataFileInfo;
+import gaia3d.domain.data.DataFileParseLog;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataInfoLog;
+import gaia3d.domain.data.DataInfoSimple;
+import gaia3d.domain.data.DataStatus;
 import gaia3d.parser.DataFileParser;
 import gaia3d.parser.impl.DataFileJsonParser;
 import gaia3d.persistence.DataMapper;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.DataLogService;
+import gaia3d.service.DataRelationService;
 import gaia3d.service.DataService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Data
@@ -38,6 +39,9 @@ public class DataServiceImpl implements DataService {
 
 	@Autowired
 	private DataMapper dataMapper;
+	
+	@Autowired
+	private DataRelationService dataRelationService;
 	
 	@Autowired
 	private DataGroupService dataGroupService;
@@ -55,6 +59,11 @@ public class DataServiceImpl implements DataService {
 		return dataMapper.getDataTotalCount(dataInfo);
 	}
 	
+	@Transactional(readOnly = true)
+	public Long getDataRelationCount(Long dataRelationId) {
+		return dataMapper.getDataRelationCount(dataRelationId);
+	}
+
 	/**
 	 * 데이터 상태별 통계 정보
 	 * @param status
@@ -215,7 +224,11 @@ public class DataServiceImpl implements DataService {
 					dataInfo.setSharing(sharing);
 					dataInfo.setUserId(userId);
 					dataInfo.setStatus(status);
+					if(dataInfo.getDataId() == null || dataInfo.getDataId() == 0L) {
+						dataMapper.insertBulkDataWithDataId(dataInfo);
+					} else {
 					dataMapper.insertBulkData(dataInfo);
+					}
 					insertSuccessCount++;
 				} else {
 					dataInfo.setDataId(dbDataInfo.getDataId());
@@ -302,6 +315,12 @@ public class DataServiceImpl implements DataService {
 				.dataCount(dataGroup.getDataCount() - 1).build();
 		dataGroupService.updateDataGroup(tempDataGroup);
 		
+		// data_relation 삭제
+		Long dataRelationId = dataInfo.getDataRelationId();
+		if (dataMapper.getDataRelationCount(dataRelationId) == 1) {
+			dataRelationService.deleteDataRelation(dataInfo.getDataRelationId());
+		}
+
 		return dataMapper.deleteData(dataInfo);
 		// TODO 디렉토리도 삭제 해야 함
 	}

@@ -146,20 +146,29 @@
 	    	)
     </select>
 
+	<select id="isLayerExists" parameterType="string" resultType="string">
+        /* isLayerExists */
+        SELECT tablename
+			FROM pg_tables
+		WHERE schemaname = 'public'
+		AND tablename = #{value}
+    </select>
+
     <!-- layer 등록 -->
     <insert id="insertLayer" parameterType="layer">
+		/* insertLayer */
         <selectKey keyProperty="layerId" resultType="int" order="BEFORE">
             SELECT NEXTVAL('layer_seq')
         </selectKey>
         INSERT INTO layer (
-            layer_id, layer_group_id, sharing, layer_name, layer_key, service_type, layer_type, geometry_type,
+            layer_id, layer_group_id, sharing, layer_name, layer_key, ogc_web_services, layer_type, geometry_type,
             layer_line_color, layer_line_style, layer_fill_color, layer_alpha_style, default_display, available,
             label_display, coordinate, description, z_index, user_id, layer_insert_type, cache_available
             <if test="viewOrder != null and viewOrder gt 0">
 				, view_order
 			</if>
         ) VALUES (
-         #{layerId}, #{layerGroupId}, #{sharing}, #{layerName}, #{layerKey}, #{serviceType}, #{layerType}, #{geometryType},
+         #{layerId}, #{layerGroupId}, #{sharing}, #{layerName}, #{layerKey}, #{ogcWebServices}, #{layerType}, #{geometryType},
          #{layerLineColor}, #{layerLineStyle}, #{layerFillColor}, #{layerAlphaStyle}, #{defaultDisplay}, #{available},
          #{labelDisplay}, #{coordinate}, #{description}, #{zIndex}, #{userId}, #{layerInsertType}, #{cacheAvailable}
          <if test="viewOrder != null and viewOrder gt 0">
@@ -199,7 +208,7 @@
 	        layer_group_id = #{layerGroupId},
 	        sharing = #{sharing},
 	        layer_key = #{layerKey},
-	        service_type = #{serviceType},
+			ogc_web_services = #{ogcWebServices},
 	        layer_type = #{layerType},
 	        geometry_type = #{geometryType},
 	        layer_line_color = #{layerLineColor},
@@ -231,12 +240,4 @@
         /* deleteLayer */
         DROP TABLE ${value}
     </delete>
-    
-    <select id="isLayerExists" parameterType="string" resultType="string">
-        /* isLayerExists */
-        SELECT tablename
-			FROM pg_tables
-		WHERE schemaname = 'public'
-		AND tablename = #{value}
-    </select>
 </mapper>

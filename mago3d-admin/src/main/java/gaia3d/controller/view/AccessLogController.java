@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.AccessLog;
-import gaia3d.domain.Pagination;
+import gaia3d.domain.accesslog.AccessLog;
+import gaia3d.domain.common.Pagination;
 import gaia3d.service.AccessLogService;
 import gaia3d.utils.DateUtils;
 import gaia3d.utils.FormatUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequestMapping("/access")

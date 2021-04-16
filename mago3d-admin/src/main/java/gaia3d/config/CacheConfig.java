@@ -9,6 +9,17 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import gaia3d.domain.*;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.cache.CacheName;
+import gaia3d.domain.cache.CacheParams;
+import gaia3d.domain.cache.CacheType;
+import gaia3d.domain.menu.Menu;
+import gaia3d.domain.menu.MenuTarget;
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.role.RoleTarget;
+import gaia3d.domain.user.UserGroup;
+import gaia3d.domain.user.UserGroupMenu;
+import gaia3d.domain.user.UserGroupRole;
 import gaia3d.service.PolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +47,8 @@ public class CacheConfig {
 
     @PostConstruct
     public void init() {
-    	if(ProfileType.LOCAL  == ProfileType.valueOf(propertiesConfig.getProfile().toUpperCase())) {
+		CacheManager.setProfile(propertiesConfig.getProfile().toUpperCase());
+		if(ProfileType.LOCAL == ProfileType.valueOf(CacheManager.getProfile())) {
         	LogMessageSupport.stackTraceEnable = true;
         }
     	log.info("************ Admin Profile = {}, stackTraceEnable = {} *************", propertiesConfig.getProfile(), LogMessageSupport.stackTraceEnable);

@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,13 +17,13 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.geospatial.LayerStyleParser;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class LayerStyleAPITest {
 	
-	@Test
+	@Disabled
 	public void getLayerList() {
 		try {
 			RestTemplate restTemplate = new RestTemplate();

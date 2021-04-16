@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.UserGroup;
-import gaia3d.domain.UserGroupMenu;
-import gaia3d.domain.UserGroupRole;
+import gaia3d.domain.user.UserGroup;
+import gaia3d.domain.user.UserGroupMenu;
+import gaia3d.domain.user.UserGroupRole;
 
 @Repository
 public interface UserGroupMapper {
@@ -78,6 +78,13 @@ public interface UserGroupMapper {
 	 * @return
 	 */
 	List<String> getListUserGroupRoleKey(UserGroupRole userGroupRole);
+
+    /**
+	 * 트리 구조의 하위 사용자 그룹 목록
+	 * @param userGroup
+	 * @return
+	 */
+	List<UserGroup> getListUserGroupTree(UserGroup userGroup);
 
     /**
      * 사용자 그룹 등록

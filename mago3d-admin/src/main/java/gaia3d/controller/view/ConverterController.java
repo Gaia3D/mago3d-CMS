@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import gaia3d.domain.converter.ConverterJobFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,13 +13,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.converter.ConverterJob;
 import gaia3d.domain.PageType;
-import gaia3d.domain.Pagination;
+import gaia3d.domain.common.Pagination;
+import gaia3d.domain.converter.ConverterJob;
+import gaia3d.domain.converter.ConverterJobFile;
 import gaia3d.service.ConverterService;
 import gaia3d.support.SQLInjectSupport;
 import gaia3d.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Data Converter
@@ -36,8 +36,9 @@ public class ConverterController {
 	private ConverterService converterService;
 	
 	/**
-	 * converter job 목록
+	 * 변환 job 목록
 	 * @param request
+	 * @param converterJob
 	 * @param pageNo
 	 * @param model
 	 * @return
@@ -101,6 +102,9 @@ public class ConverterController {
 
 		long totalCount = converterService.getConverterJobFileTotalCount(converterJobFile);
 		StringBuffer buffer = new StringBuffer(converterJobFile.getParameters());
+		if (converterJobFile.getConverterJobId() != null) {
+			buffer.append("&converterJobId=").append(converterJobFile.getConverterJobId());
+		}
 		Pagination pagination = new Pagination(request.getRequestURI(), buffer.toString(),
 				totalCount, Long.parseLong(pageNo), converterJobFile.getListCounter());
 		converterJobFile.setOffset(pagination.getOffset());
@@ -138,4 +142,5 @@ public class ConverterController {
 		
 		return buffer.toString();
 	}
+	
 }

@@ -15,15 +15,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.CacheManager;
 import gaia3d.domain.Key;
-import gaia3d.domain.Policy;
-import gaia3d.domain.RoleKey;
-import gaia3d.domain.UserInfo;
-import gaia3d.domain.UserSession;
-import gaia3d.domain.UserStatus;
 import gaia3d.domain.YOrN;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.role.RoleKey;
+import gaia3d.domain.user.UserInfo;
+import gaia3d.domain.user.UserSession;
+import gaia3d.domain.user.UserStatus;
 import gaia3d.listener.Gaia3dHttpSessionBindingListener;
 import gaia3d.service.PolicyService;
 import gaia3d.service.SigninService;
@@ -31,6 +30,7 @@ import gaia3d.support.PasswordSupport;
 import gaia3d.support.RoleSupport;
 import gaia3d.support.SessionUserSupport;
 import gaia3d.utils.WebUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Sign in 처리

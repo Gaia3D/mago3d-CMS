@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.AccessLog;
-import gaia3d.domain.Pagination;
+import gaia3d.domain.accesslog.AccessLog;
+import gaia3d.domain.common.Pagination;
 import gaia3d.service.AccessLogService;
 import gaia3d.utils.DateUtils;
 import gaia3d.utils.FormatUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -33,7 +33,9 @@ public class AccessLogRestController {
 	
 	/**
 	 * 모든 서비스 요청에 대한 이력
-	 * @param model
+	 * @param request
+	 * @param accessLog
+	 * @param pageNo
 	 * @return
 	 */
 	@GetMapping(value = "/accesses")
@@ -57,13 +59,13 @@ public class AccessLogRestController {
 			accessLog.setEndDate(accessLog.getEndDate().substring(0, 8) + DateUtils.END_TIME);
 		}
 		
-		if(accessLog.getTotalCount() == null) accessLog.setTotalCount(0l);
-		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(accessLog), accessLog.getTotalCount().longValue(), Long.parseLong(pageNo));
+		if(accessLog.getTotalCount() == null) accessLog.setTotalCount(0L);
+		Pagination pagination = new Pagination(request.getRequestURI(), getSearchParameters(accessLog), accessLog.getTotalCount(), Long.parseLong(pageNo));
 		log.info("@@ pagination = {}", pagination);
 		
 		accessLog.setOffset(pagination.getOffset());
 		accessLog.setLimit(pagination.getPageRows());
-		if(accessLog.getTotalCount().longValue() > 0l) {
+		if(accessLog.getTotalCount() > 0L) {
 			accessLogList = accessLogService.getListAccessLog(accessLog);
 		}
 			
@@ -109,7 +111,7 @@ public class AccessLogRestController {
 	
 	/**
 	 * 검색 조건
-	 * @param search
+	 * @param accessLog
 	 * @return
 	 */
 	private String getSearchParameters(AccessLog accessLog) {

@@ -8,20 +8,20 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.DataSmartTilingFileInfo;
-import gaia3d.domain.DataSmartTilingFileParseLog;
-import gaia3d.domain.DataStatus;
 import gaia3d.domain.ServerTarget;
 import gaia3d.domain.SharingType;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataSmartTilingFileInfo;
+import gaia3d.domain.data.DataSmartTilingFileParseLog;
+import gaia3d.domain.data.DataStatus;
 import gaia3d.parser.DataSmartTilingFileParser;
 import gaia3d.parser.impl.DataSmartTilingFileJsonParser;
 import gaia3d.persistence.DataSmartTilingMapper;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.DataService;
 import gaia3d.service.DataSmartTilingService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 데이터 속성 관리

@@ -6,19 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.Depth;
 import gaia3d.domain.Move;
-import gaia3d.domain.Menu;
-import gaia3d.domain.UserGroup;
-import gaia3d.domain.UserGroupMenu;
-import gaia3d.domain.UserGroupRole;
-import gaia3d.domain.UserInfo;
 import gaia3d.domain.YOrN;
+import gaia3d.domain.menu.Menu;
+import gaia3d.domain.user.UserGroup;
+import gaia3d.domain.user.UserGroupMenu;
+import gaia3d.domain.user.UserGroupRole;
 import gaia3d.persistence.UserGroupMapper;
 import gaia3d.service.MenuService;
 import gaia3d.service.UserGroupService;
 import gaia3d.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -89,6 +87,16 @@ public class UserGroupServiceImpl implements UserGroupService {
 	}
 
     /**
+     * 사용자 그룹 Key 중복 확인
+     * @param userGroup
+     * @return
+     */
+	@Transactional(readOnly = true)
+	public Boolean isUserGroupKeyDuplication(UserGroup userGroup) {
+		return userGroupMapper.isUserGroupKeyDuplication(userGroup);
+	}
+	
+    /**
      * 사용자 그룹 등록
      * @param userGroup
      * @return
@@ -98,7 +106,7 @@ public class UserGroupServiceImpl implements UserGroupService {
     	//GeoPolicy geoPolicy = geoPolicyService.getGeoPolicy();
 
     	UserGroup parentUserGroup = new UserGroup();
-    	Integer depth = 0;
+    	int depth = 0;
     	if(userGroup.getParent() > 0) {
 	    	parentUserGroup.setUserGroupId(userGroup.getParent());
 	    	parentUserGroup = userGroupMapper.getUserGroup(parentUserGroup);
@@ -118,16 +126,6 @@ public class UserGroupServiceImpl implements UserGroupService {
 
     	return result;
     }
-
-    /**
-     * 사용자 그룹 Key 중복 확인
-     * @param userGroup
-     * @return
-     */
-	@Transactional(readOnly = true)
-	public Boolean isUserGroupKeyDuplication(UserGroup userGroup) {
-		return userGroupMapper.isUserGroupKeyDuplication(userGroup);
-	}
 
 	/**
 	 * 사용자 그룹 수정
@@ -295,71 +293,38 @@ public class UserGroupServiceImpl implements UserGroupService {
 	 */
     @Transactional
 	public int deleteUserGroup(UserGroup userGroup) {
-    	// 삭제하고, children update
 
-    	userGroup = userGroupMapper.getUserGroup(userGroup);
-    	log.info("--- delete userGroup = {}", userGroup);
-    	// TODO 삭제 후 캐시 갱신 필요 
     	int result = 0;
-    	if(Depth.ONE == Depth.findBy(userGroup.getDepth())) {
-    		log.info("--- one ================");
-    		List<Integer> userGroupIdList = userGroupMapper.getUserGroupIdByAncestor(userGroup.getUserGroupId());
-    		for(Integer userGroupId : userGroupIdList) {
-    			userGroupMapper.deleteUserGroupMenu(userGroupId);
-    			userGroupMapper.deleteUserGroupRole(userGroupId);
-    			// 사용자 삭제
-    			List<String> userList = userService.getListUserByGroupId(userGroupId);
-    			for(String userId : userList) {
-    				userService.deleteUser(userId);
+		UserGroup deleteUserGroup = userGroupMapper.getUserGroup(userGroup);
+		log.info("--- delete userGroup = {}", deleteUserGroup);
+    	List<UserGroup> userGroups = userGroupMapper.getListUserGroupTree(deleteUserGroup);
+		// parent 데이터 그룹의 카운트를 삭제한 만큼 감소
+    	UserGroup parentUserGroup = userGroupMapper.getUserGroup(UserGroup.builder()
+				.userGroupId(deleteUserGroup.getParent())
+				.build());
+    	if (parentUserGroup != null) {
+			parentUserGroup.setChildren(parentUserGroup.getChildren() - (userGroups.size() - 1));
+			userGroupMapper.updateUserGroup(parentUserGroup);
     			}
-    		}
-    		result = userGroupMapper.deleteUserGroupByAncestor(userGroup);
-    	} else if(Depth.TWO == Depth.findBy(userGroup.getDepth())) {
-    		log.info("--- two ================");
-    		List<Integer> userGroupIdList = userGroupMapper.getUserGroupIdByParent(userGroup.getUserGroupId());
-    		userGroupIdList.add(userGroup.getUserGroupId());
-    		for(Integer userGroupId : userGroupIdList) {
-    			userGroupMapper.deleteUserGroupMenu(userGroupId);
-    			userGroupMapper.deleteUserGroupRole(userGroupId);
-    			List<String> userList = userService.getListUserByGroupId(userGroupId);
-    			// 사용자 삭제
-    			for(String userId : userList) {
-    				userService.deleteUser(userId);
-    			}
-    		}
+		
+    	userGroups.forEach(userGroupNode -> {
+
+    		int userGroupId = userGroupNode.getUserGroupId();
+
+    		// 메뉴, 권한 삭제
+			userGroupMapper.deleteUserGroupMenu(userGroupId);
+			userGroupMapper.deleteUserGroupRole(userGroupId);
     		
-    		result = userGroupMapper.deleteUserGroupByParent(userGroup);
-
-    		UserGroup ancestorUserGroup = new UserGroup();
-    		ancestorUserGroup.setUserGroupId(userGroup.getAncestor());
-    		ancestorUserGroup = userGroupMapper.getUserGroup(ancestorUserGroup);
-    		ancestorUserGroup.setChildren(ancestorUserGroup.getChildren() + 1);
-
-    		log.info("--- delete ancestorUserGroup = {}", ancestorUserGroup);
-
-	    	userGroupMapper.updateUserGroup(ancestorUserGroup);
-    		// ancestor - 1
-    	} else if(Depth.THREE == Depth.findBy(userGroup.getDepth())) {
-    		log.info("--- three ================");
-    		userGroupMapper.deleteUserGroupMenu(userGroup.getUserGroupId());
-			userGroupMapper.deleteUserGroupRole(userGroup.getUserGroupId());
-			List<String> userList = userService.getListUserByGroupId(userGroup.getUserGroupId());
+			// 사용자 삭제
+			List<String> userList = userService.getListUserByGroupId(userGroupId);
 			for(String userId : userList) {
 				userService.deleteUser(userId);
 			}
-    		result = userGroupMapper.deleteUserGroup(userGroup);
-    		log.info("--- userGroup ================ {}", userGroup);
 
-    		UserGroup parentUserGroup = new UserGroup();
-    		parentUserGroup.setUserGroupId(userGroup.getParent());
-    		parentUserGroup = userGroupMapper.getUserGroup(parentUserGroup);
-	    	log.info("--- parentUserGroup ================ {}", parentUserGroup);
-	    	parentUserGroup.setChildren(parentUserGroup.getChildren() - 1);
-	    	log.info("--- parentUserGroup children ================ {}", parentUserGroup);
-	    	userGroupMapper.updateUserGroup(parentUserGroup);
-    	} else {
+			// 마지막으로 실제 삭제 대상 그룹 삭제
+			userGroupMapper.deleteUserGroup(userGroupNode);
 
-    	}
+		});
 
     	return result;
     }

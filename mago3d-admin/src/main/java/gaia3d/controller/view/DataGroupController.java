@@ -1,5 +1,6 @@
 package gaia3d.controller.view;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.DataGroup;
 import gaia3d.domain.Key;
-import gaia3d.domain.Policy;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.PolicyService;
 import gaia3d.support.SQLInjectSupport;
@@ -49,6 +50,12 @@ public class DataGroupController {
 		
 		log.info("@@ dataGroup = {}", dataGroup);
 		
+		// basic 디렉토리를 실수로 지웠거나 만들지 않았는지 확인
+		File basicDirectory = new File(propertiesConfig.getAdminDataServiceDir() + "basic");
+		if(!basicDirectory.exists()) {
+			basicDirectory.mkdir();
+		}
+		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(Key.USER_SESSION.name());
 		dataGroup.setUserId(userSession.getUserId());
 		List<DataGroup> dataGroupList = dataGroupService.getListDataGroup(dataGroup);
@@ -67,6 +74,12 @@ public class DataGroupController {
 	public String input(HttpServletRequest request, Model model) {
 		UserSession userSession = (UserSession)request.getSession().getAttribute(Key.USER_SESSION.name());
 		
+		// basic 디렉토리를 실수로 지웠거나 만들지 않았는지 확인
+		File basicDirectory = new File(propertiesConfig.getAdminDataServiceDir() + "basic");
+		if(!basicDirectory.exists()) {
+			basicDirectory.mkdir();
+		}
+
 		DataGroup dataGroup = new DataGroup();
 		dataGroup.setUserId(userSession.getUserId());
 		List<DataGroup> dataGroupList = dataGroupService.getListDataGroup(dataGroup);
@@ -110,21 +123,17 @@ public class DataGroupController {
 	/**
 	 * 데이터 그룹 삭제
 	 * @param dataGroupId
-	 * @param model
 	 * @return
 	 */
 	@GetMapping(value = "/delete")
-	public String delete(@RequestParam("dataGroupId") Integer dataGroupId, Model model) {
+	public String delete(@RequestParam("dataGroupId") Integer dataGroupId) {
 		// TODO validation 체크 해야 함
 		if(dataGroupId == null) {
 			log.info("@@@ validation error dataGroupId = {}", dataGroupId);
 			return "redirect:/data-group/list";
 		}
 		
-		DataGroup dataGroup = new DataGroup();
-		dataGroup.setDataGroupId(dataGroupId);
-
-		dataGroupService.deleteDataGroup(dataGroup);
+		dataGroupService.deleteDataGroup(DataGroup.builder().dataGroupId(dataGroupId).build());
 		
 		return "redirect:/data-group/list";
 	}

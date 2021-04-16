@@ -3,7 +3,6 @@ package gaia3d.domain.agent;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,7 +12,6 @@ import java.math.BigDecimal;
  */
 @Getter
 @Setter
-@ToString(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ConverterLocation implements Serializable {
 

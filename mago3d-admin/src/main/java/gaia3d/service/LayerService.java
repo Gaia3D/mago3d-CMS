@@ -3,15 +3,15 @@ package gaia3d.service;
 import java.util.List;
 import java.util.Map;
 
-import gaia3d.domain.GeoPolicy;
-import gaia3d.domain.Layer;
-import gaia3d.domain.LayerFileInfo;
+import gaia3d.domain.layer.Layer;
+import gaia3d.domain.layer.LayerFileInfo;
+import gaia3d.domain.policy.GeoPolicy;
 
 public interface LayerService {
 
 	/**
 	 * Layer 총 건수
-	 * @param accessLog
+	 * @param layer
 	 * @return
 	 */
 	Long getLayerTotalCount(Layer layer);
@@ -85,8 +85,9 @@ public interface LayerService {
 
     /**
      * shp파일 정보를 db정보를 기준으로 갱신
-     * @param version
-     * @return
+     * @param layerFileInfo
+     * @param layer
+     * @throws Exception
      */
     void exportOgr2Ogr(LayerFileInfo layerFileInfo, Layer layer) throws Exception;
     
@@ -110,18 +111,18 @@ public interface LayerService {
     * @param layer
     * @param isLayerFileInfoExist
     * @param layerFileInfo
-    * @param deleteLayerFileInfoGroupId
+    * @param deleteLayerFileInfoTeamId
     */
-    void rollbackLayer(Layer layer, boolean isLayerFileInfoExist, LayerFileInfo layerFileInfo, Integer deleteLayerFileInfoGroupId);
+    void rollbackLayer(Layer layer, boolean isLayerFileInfoExist, LayerFileInfo layerFileInfo, Integer deleteLayerFileInfoTeamId);
 
     /**
     * layer 를 이 shape 파일로 활성화
     * @param layerId
-    * @param layerFileInfoGroupId
+    * @param deleteLayerFileInfoTeamId
     * @param layerFileInfoId
     * @return
     */
-    int updateLayerByLayerFileInfoId(Integer layerId, Integer layerFileInfoGroupId, Integer layerFileInfoId);
+    int updateLayerByLayerFileInfoId(Integer layerId, Integer deleteLayerFileInfoTeamId, Integer layerFileInfoId);
 
      /**
     * 레이어 삭제

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.LayerGroup;
+import gaia3d.domain.layer.LayerGroup;
 
 @Repository
 public interface LayerGroupMapper {

@@ -27,6 +27,24 @@
 			</if>
 		</trim>
 	</select>
+	
+	<!-- Role 권한별 사용자 수 -->
+	<!-- <select id="getRoleUserCount" resultType="userStatistics">
+		/* getRoleUserCount */
+		SELECT role_name,
+			   COALESCE(sum, 0) AS count
+		FROM role AS a
+		LEFT OUTER JOIN (
+			SELECT role_id, SUM(count)
+			FROM(SELECT b.user_group_id, COUNT(*)
+			FROM user_info a, user_group b
+			WHERE a.user_group_id = b.user_group_id
+			GROUP BY b.user_group_id) AS a LEFT OUTER JOIN user_group_role AS b
+			ON a.user_group_id = b.user_group_id
+			GROUP BY role_id
+		) AS b
+		ON a.role_id = b.role_id;
+	</select> -->
 
 	<!-- Role 목록 -->
 	<select id="getListRole" parameterType="role" resultType="role">

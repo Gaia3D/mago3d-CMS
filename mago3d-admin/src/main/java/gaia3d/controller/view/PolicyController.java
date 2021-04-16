@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import gaia3d.domain.Policy;
+import gaia3d.domain.policy.Policy;
 import gaia3d.service.PolicyService;
 
 @Controller
@@ -19,7 +19,7 @@ public class PolicyController {
 	private PolicyService policyService;
 
 	@GetMapping(value = "/modify")
-	public String modify(HttpServletRequest reuqet, Model model) {
+	public String modify(HttpServletRequest request, Model model) {
 		Policy policy = policyService.getPolicy();
 
 		model.addAttribute("policy", policy);

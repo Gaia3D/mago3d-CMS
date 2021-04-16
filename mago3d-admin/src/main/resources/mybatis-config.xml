@@ -10,39 +10,45 @@
     </settings>
 
     <typeAliases>
-    	<typeAlias type="gaia3d.domain.AccessLog" alias="accessLog" />
+    	<typeAlias type="gaia3d.domain.accesslog.AccessLog" alias="accessLog" />
+		<typeAlias type="gaia3d.domain.apilog.APILog" alias="apiLog" />
     	<typeAlias type="gaia3d.domain.converter.ConverterJob" alias="converterJob" />
     	<typeAlias type="gaia3d.domain.converter.ConverterJobFile" alias="converterJobFile" />
-		<typeAlias type="gaia3d.domain.DataAdjustLog" alias="dataAdjustLog" />
-		<typeAlias type="gaia3d.domain.DataAttribute" alias="dataAttribute" />
-		<typeAlias type="gaia3d.domain.DataFileInfo" alias="dataFileInfo" />
-		<typeAlias type="gaia3d.domain.DataFileParseLog" alias="dataFileParseLog" />
-		<typeAlias type="gaia3d.domain.DataSmartTilingFileInfo" alias="dataSmartTilingFileInfo" />
-		<typeAlias type="gaia3d.domain.DataSmartTilingFileParseLog" alias="dataSmartTilingFileParseLog" />
-		<typeAlias type="gaia3d.domain.DataAttributeFileInfo" alias="dataAttributeFileInfo" />
-		<typeAlias type="gaia3d.domain.DataObjectAttribute" alias="dataObjectAttribute" />
-		<typeAlias type="gaia3d.domain.DataObjectAttributeFileInfo" alias="dataObjectAttributeFileInfo" />
-		<typeAlias type="gaia3d.domain.DataGroup" alias="dataGroup" />
-		<typeAlias type="gaia3d.domain.DataInfo" alias="dataInfo" />
-		<typeAlias type="gaia3d.domain.DataInfoSimple" alias="dataInfoSimple" />
-		<typeAlias type="gaia3d.domain.DataInfoLog" alias="dataInfoLog" />
-		<typeAlias type="gaia3d.domain.GeoPolicy" alias="geoPolicy" />
-		<typeAlias type="gaia3d.domain.Issue" alias="issue" />
-    	<typeAlias type="gaia3d.domain.Layer" alias="layer" />
-    	<typeAlias type="gaia3d.domain.LayerGroup" alias="layerGroup" />
-    	<typeAlias type="gaia3d.domain.LayerFileInfo" alias="layerFileInfo" />
-    	<typeAlias type="gaia3d.domain.Menu" alias="menu" />
-    	<typeAlias type="gaia3d.domain.Policy" alias="policy" />
-    	<typeAlias type="gaia3d.domain.Role" alias="role" />
+		<typeAlias type="gaia3d.domain.common.PartitionTable" alias="partitionTable" />
+		<typeAlias type="gaia3d.domain.data.DataAdjustLog" alias="dataAdjustLog" />
+		<typeAlias type="gaia3d.domain.data.DataAttribute" alias="dataAttribute" />
+		<typeAlias type="gaia3d.domain.data.DataFileInfo" alias="dataFileInfo" />
+		<typeAlias type="gaia3d.domain.data.DataFileParseLog" alias="dataFileParseLog" />
+		<typeAlias type="gaia3d.domain.data.DataSmartTilingFileInfo" alias="dataSmartTilingFileInfo" />
+		<typeAlias type="gaia3d.domain.data.DataSmartTilingFileParseLog" alias="dataSmartTilingFileParseLog" />
+		<typeAlias type="gaia3d.domain.data.DataAttributeFileInfo" alias="dataAttributeFileInfo" />
+		<typeAlias type="gaia3d.domain.data.DataObjectAttribute" alias="dataObjectAttribute" />
+		<typeAlias type="gaia3d.domain.data.DataObjectAttributeFileInfo" alias="dataObjectAttributeFileInfo" />
+		<typeAlias type="gaia3d.domain.data.DataGroup" alias="dataGroup" />
+		<typeAlias type="gaia3d.domain.data.DataInfo" alias="dataInfo" />
+		<typeAlias type="gaia3d.domain.data.DataInfoSimple" alias="dataInfoSimple" />
+		<typeAlias type="gaia3d.domain.data.DataInfoLog" alias="dataInfoLog" />
+		<typeAlias type="gaia3d.domain.policy.GeoPolicy" alias="geoPolicy" />
+		<typeAlias type="gaia3d.domain.issue.Issue" alias="issue" />
+    	<typeAlias type="gaia3d.domain.layer.Layer" alias="layer" />
+    	<typeAlias type="gaia3d.domain.layer.LayerGroup" alias="layerGroup" />
+    	<typeAlias type="gaia3d.domain.layer.LayerFileInfo" alias="layerFileInfo" />
+    	<typeAlias type="gaia3d.domain.menu.Menu" alias="menu" />
+    	<typeAlias type="gaia3d.domain.policy.Policy" alias="policy" />
+    	<typeAlias type="gaia3d.domain.role.Role" alias="role" />
+		<typeAlias type="gaia3d.domain.tile.TileDataGroup" alias="tileDataGroup" />
+		<typeAlias type="gaia3d.domain.tile.TileInfo" alias="tileInfo" />
+		<typeAlias type="gaia3d.domain.tile.TileLog" alias="tileLog" />
 		<typeAlias type="gaia3d.domain.uploaddata.UploadData" alias="uploadData" />
 		<typeAlias type="gaia3d.domain.uploaddata.UploadDataFile" alias="uploadDataFile" />
-    	<typeAlias type="gaia3d.domain.UserInfo" alias="userInfo" />
-    	<typeAlias type="gaia3d.domain.UserGroup" alias="userGroup" />
-    	<typeAlias type="gaia3d.domain.UserGroupMenu" alias="userGroupMenu" />
-    	<typeAlias type="gaia3d.domain.UserGroupRole" alias="userGroupRole" />
-    	<typeAlias type="gaia3d.domain.UserPolicy" alias="userPolicy"/>
-    	<typeAlias type="gaia3d.domain.UserSession" alias="userSession" />
-    	<typeAlias type="gaia3d.domain.Widget" alias="widget" />
+    	<typeAlias type="gaia3d.domain.user.UserInfo" alias="userInfo" />
+    	<typeAlias type="gaia3d.domain.user.UserGroup" alias="userGroup" />
+    	<typeAlias type="gaia3d.domain.user.UserGroupMenu" alias="userGroupMenu" />
+    	<typeAlias type="gaia3d.domain.user.UserGroupRole" alias="userGroupRole" />
+    	<typeAlias type="gaia3d.domain.user.UserPolicy" alias="userPolicy"/>
+    	<typeAlias type="gaia3d.domain.user.UserSession" alias="userSession" />
+    	<typeAlias type="gaia3d.domain.widget.Widget" alias="widget" />
+		<typeAlias type="gaia3d.domain.data.DataRelationInfo" alias="dataRelationInfo" />
     </typeAliases>
 
 	<typeHandlers>

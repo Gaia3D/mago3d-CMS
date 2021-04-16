@@ -16,8 +16,7 @@ public class LocaleUtils {
             Locale myLocale = request.getLocale();
             lang = myLocale.getLanguage();
         }
-        Locale locale = new Locale(lang);
-        return locale;
+        return new Locale(lang);
     }
 
 }

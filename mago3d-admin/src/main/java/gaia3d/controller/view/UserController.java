@@ -16,17 +16,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.controller.AuthorizationController;
 import gaia3d.domain.Key;
 import gaia3d.domain.PageType;
-import gaia3d.domain.Pagination;
-import gaia3d.domain.Policy;
-import gaia3d.domain.RoleKey;
-import gaia3d.domain.UserGroup;
-import gaia3d.domain.UserInfo;
-import gaia3d.domain.UserSession;
-import gaia3d.domain.UserStatus;
+import gaia3d.domain.common.Pagination;
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.role.RoleKey;
+import gaia3d.domain.user.UserGroup;
+import gaia3d.domain.user.UserInfo;
+import gaia3d.domain.user.UserSession;
+import gaia3d.domain.user.UserStatus;
 import gaia3d.service.PolicyService;
 import gaia3d.service.UserGroupService;
 import gaia3d.service.UserService;
@@ -34,6 +33,7 @@ import gaia3d.support.PasswordSupport;
 import gaia3d.support.SQLInjectSupport;
 import gaia3d.utils.DateUtils;
 import gaia3d.utils.FormatUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 사용자

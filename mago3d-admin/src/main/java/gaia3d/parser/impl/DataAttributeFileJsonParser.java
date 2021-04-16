@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import gaia3d.domain.DataAttributeFileInfo;
+import gaia3d.domain.data.DataAttributeFileInfo;
 import gaia3d.parser.DataAttributeFileParser;
 
 public class DataAttributeFileJsonParser implements DataAttributeFileParser {

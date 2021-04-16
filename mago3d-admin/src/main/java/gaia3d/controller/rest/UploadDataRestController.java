@@ -30,21 +30,21 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.uploaddata.UploadDataType;
 import gaia3d.domain.FileType;
 import gaia3d.domain.Key;
-import gaia3d.domain.Policy;
+import gaia3d.domain.policy.Policy;
 import gaia3d.domain.uploaddata.UploadData;
 import gaia3d.domain.uploaddata.UploadDataFile;
+import gaia3d.domain.uploaddata.UploadDataType;
 import gaia3d.domain.uploaddata.UploadDirectoryType;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.PolicyService;
 import gaia3d.service.UploadDataService;
 import gaia3d.utils.DateUtils;
 import gaia3d.utils.FileUtils;
 import gaia3d.utils.FormatUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 3D 데이터 파일 업로더
@@ -71,8 +71,9 @@ public class UploadDataRestController {
 	
 	/**
 	 * TODO 비동기로 처리해야 할듯
-	 * data upload 처리
+	 * @param request
 	 * @return
+	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	@PostMapping
@@ -154,7 +155,7 @@ public class UploadDataRestController {
 				log.info("@@@@@@@@@@@@@@@ name = {}, originalName = {}", multipartFile.getName(), multipartFile.getOriginalFilename());
 				
 				UploadDataFile uploadDataFile = new UploadDataFile();
-				Boolean converterTarget = false;
+				boolean converterTarget = false;
 				
 				// 파일 기본 validation 체크
 				errorCode = fileValidate(policy, uploadTypeList, multipartFile);
@@ -167,7 +168,7 @@ public class UploadDataRestController {
     			String saveFileName = originalName;
     			
     			// validation
-    			if(divideFileName == null || divideFileName.length == 0) {
+    			if(divideFileName.length == 0) {
     				log.info("@@@@@@@@@@@@ upload.file.type.invalid. originalName = {}", originalName);
     				errorCode = "upload.file.type.invalid";
     				return getResultMap(result, HttpStatus.BAD_REQUEST.value(), errorCode, message);
@@ -217,7 +218,6 @@ public class UploadDataRestController {
 					
 					// 변환 대상 파일만 이름을 변경하고 나머지 파일은 그대로 이름 유지
 					saveFileName = userId + "_" + today + "_" + System.nanoTime() + "." + extension;
-					
 					converterTarget = true;
 					converterTargetCount++;
 				} 
@@ -256,11 +256,7 @@ public class UploadDataRestController {
 		
 		if(converterTargetCount <= 0) {
 			log.info("@@@@@@@@@@@@ converterTargetCount = {}", converterTargetCount);
-			result.put("statusCode", HttpStatus.BAD_REQUEST.value());
-			result.put("errorCode", "converter.target.count.invalid");
-			result.put("message", message);
-            
-			return getResultMap(result, HttpStatus.BAD_REQUEST.value(), errorCode, message);
+			return getResultMap(result, HttpStatus.BAD_REQUEST.value(), "converter.target.count.invalid", message);
 		}
 
 		UploadData uploadData = new UploadData();
@@ -270,6 +266,7 @@ public class UploadDataRestController {
 		uploadData.setDataType(dataType);
 		uploadData.setUserId(userId);
 		uploadData.setHeightReference(request.getParameter("heightReference"));
+		uploadData.setAssemble(Boolean.valueOf(request.getParameter("assemble")));
 		// citygml 인 경우 converter 에서 자동 추출
 		if(	UploadDataType.CITYGML != UploadDataType.findBy(dataType) && UploadDataType.LAS != UploadDataType.findBy(dataType)) {
 			uploadData.setLongitude(new BigDecimal(request.getParameter("longitude")) );
@@ -335,7 +332,7 @@ public class UploadDataRestController {
 		// zip 파일을 압축할때 한글이나 다국어가 포함된 경우 java.lang.IllegalArgumentException: malformed input off 같은 오류가 발생. 윈도우가 CP949 인코딩으로 파일명을 저장하기 때문.
 		// Charset CP949 = Charset.forName("UTF-8");
 //		try ( ZipFile zipFile = new ZipFile(uploadedFile, CP949);) {
-		try ( ZipFile zipFile = new ZipFile(uploadedFile);) {
+		try ( ZipFile zipFile = new ZipFile(uploadedFile)) {
 			String directoryPath = targetDirectory;
 			String subDirectoryPath = "";
 			String directoryName = null;
@@ -347,7 +344,7 @@ public class UploadDataRestController {
             	
             	ZipEntry entry = entries.nextElement();
             	String unzipfileName = targetDirectory + entry.getName();
-            	Boolean converterTarget = false;
+            	boolean converterTarget = false;
             	
             	if( entry.isDirectory() ) {
             		// 디렉토리인 경우
@@ -359,7 +356,7 @@ public class UploadDataRestController {
             			directoryPath = directoryPath + directoryName;
             			//subDirectoryPath = directoryName;
             		} else {
-            			String fileName = null;
+            			String fileName;
             			if(entry.getName().indexOf(directoryName) >=0) {
             				fileName = entry.getName().substring(entry.getName().indexOf(directoryName) + directoryName.length());  
             			} else {
@@ -385,17 +382,17 @@ public class UploadDataRestController {
                     depth++;
             	} else {
             		// 파일인 경우
-            		String fileName = null;
+            		String fileName;
             		String extension = null;
-            		String[] divideFileName = null;
-            		String saveFileName = null;
+            		String[] divideFileName;
+            		String saveFileName;
             		
             		// TODO zip 파일도 확장자 validation 체크를 해야 함
             		if(directoryName == null) {
             			fileName = entry.getName();
             			divideFileName = fileName.split("\\.");
             			saveFileName = fileName;
-            			if(divideFileName != null && divideFileName.length != 0) {
+            			if(divideFileName.length != 0) {
             				extension = divideFileName[divideFileName.length - 1];
             				if(uploadTypeList.contains(extension.toLowerCase())) {
             					
@@ -451,7 +448,7 @@ public class UploadDataRestController {
             			}
             			divideFileName = fileName.split("\\.");
             			saveFileName = fileName;
-            			if(divideFileName != null && divideFileName.length != 0) {
+            			if(divideFileName.length != 0) {
             				extension = divideFileName[divideFileName.length - 1];
             				if(uploadTypeList.contains(extension.toLowerCase())) {
             					
@@ -568,7 +565,7 @@ public class UploadDataRestController {
 		if(fileName == null) {
 			log.info("@@ fileName is null");
 			return "file.name.invalid";
-		} else if(fileName.indexOf("..") >= 0 || fileName.indexOf("/") >= 0) {
+		} else if(fileName.contains("..") || fileName.indexOf("/") >= 0) {
 			// TODO File.seperator 정규 표현식이 안 먹혀서 이렇게 처리함
 			log.info("@@ fileName = {}", fileName);
 			return "file.name.invalid";
@@ -598,7 +595,7 @@ public class UploadDataRestController {
 		// TODO 파일은 사이즈가 커서 제한을 해야 할지 의문?
 		long fileSize = multipartFile.getSize();
 		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@ user upload file size = {} KB", (fileSize / 1000));
-		if( fileSize > (policy.getUserUploadMaxFilesize() * 1000000l)) {
+		if( fileSize > (policy.getUserUploadMaxFilesize() * 1000000L)) {
 			log.info("@@ fileSize = {}, user upload max filesize = {} M", (fileSize / 1000), policy.getUserUploadMaxFilesize());
 			return "file.size.invalid";
 		}
@@ -646,9 +643,9 @@ public class UploadDataRestController {
 		if(StringUtils.isEmpty(uploadData.getSharing())) {
 			errorCode = "data.sharing.empty";
 		}
-		if(StringUtils.isEmpty(uploadData.getDataType())) {
+		/*if(StringUtils.isEmpty(uploadData.getDataType())) {
 			errorCode = "data.type.empty";
-		}
+		}*/
 		
 		// TODO citygml, indoorgml 의 경우 위도, 경도, 높이를 포함하고 있어서 validation 체크를 하지 않음
 		// 지금은 converter 가 update를 해 주지 않아서 기본 체크 함
@@ -694,6 +691,7 @@ public class UploadDataRestController {
 	 */
 	@DeleteMapping(value = "/{uploadDataId:[0-9]+}")
 	public Map<String, Object> deleteDatas(HttpServletRequest request, @PathVariable Long uploadDataId) {
+		
 		log.info("@@@@@@@ uploadDataId = {}", uploadDataId);
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;

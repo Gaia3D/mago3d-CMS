@@ -9,16 +9,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.util.StringUtils;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.DataSmartTilingFileInfo;
+import org.springframework.util.StringUtils;
+
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataSmartTilingFileInfo;
 import gaia3d.parser.DataSmartTilingFileParser;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DataSmartTilingFileJsonParser implements DataSmartTilingFileParser {

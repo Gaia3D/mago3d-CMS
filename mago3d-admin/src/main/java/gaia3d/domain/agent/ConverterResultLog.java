@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * TODO converter 로 합쳐야 함
+ * TODO: converter 로 합쳐야 함
  */
 @ToString(callSuper = true)
 @Getter
@@ -19,7 +19,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ConverterResultLog implements Serializable {
 
-    // TODO 사용자, 관리자 동시에 들어올 경우 테스트 필요
+    // TODO: 사용자, 관리자 동시에 들어올 경우 테스트 필요
     private static final long serialVersionUID = 9122521223392537909L;
 
     private ConverterJob converterJob;

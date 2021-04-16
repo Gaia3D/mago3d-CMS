@@ -1,9 +1,10 @@
 package gaia3d.persistence;
 
-import gaia3d.domain.DataGroup;
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import gaia3d.domain.data.DataGroup;
 
 @Repository
 public interface DataGroupMapper {
@@ -26,7 +27,7 @@ public interface DataGroupMapper {
      * 데이터 그룹 목록
      * @return
      */
-    List<DataGroup> getListDataGroup();
+    List<DataGroup> getListDataGroup(DataGroup dataGroup);
 
     /**
      * 데이터 정보 조회

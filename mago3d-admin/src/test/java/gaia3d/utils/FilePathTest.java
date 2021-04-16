@@ -1,18 +1,23 @@
 package gaia3d.utils;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.File;
-import java.nio.file.Paths;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import gaia3d.config.PropertiesConfig;
+import gaia3d.domain.uploaddata.UploadDirectoryType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 class FilePathTest {
 
+	@Autowired
+	private PropertiesConfig propertiesConfig;
+
 	@Test
+	@Disabled
 	void test() {
 //		File file = Paths.get("/f4d/test", "aa").toFile();
 //		System.out.println(file.getPath());
@@ -29,5 +34,14 @@ class FilePathTest {
 			log.info("----------- fullName = {}", fullName);
 		}
 	}
+
+	@Test
+	void mkdirDatePatternTest() {
+		String today = DateUtils.getToday(FormatUtils.YEAR_MONTH_DAY_TIME14);
+		String makedDirectory = FileUtils.makeDirectory("admin", UploadDirectoryType.YEAR_MONTH,
+				propertiesConfig.getDataConverterLogDir());
+		log.info(">>>>>>>>>> today = {}", today);
+		log.info(">>>>>>>>>> makedDirectory = {}", makedDirectory);
+}
 
 }

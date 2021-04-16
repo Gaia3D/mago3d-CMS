@@ -1,6 +1,6 @@
 package gaia3d.service;
 
-import gaia3d.domain.DataSmartTilingFileInfo;
+import gaia3d.domain.data.DataSmartTilingFileInfo;
 
 /**
  * Smart Tiling 데이터 파일 관리
