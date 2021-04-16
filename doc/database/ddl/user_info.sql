@@ -16,7 +16,7 @@ create table user_info(
 	telephone					varchar(256),
 	mobile_phone				varchar(256),
 	email						varchar(256),
-	messanger					varchar(100),
+	messenger					varchar(100),
 	postal_code					varchar(6),
 	address						varchar(256),
 	address_etc					varchar(1000),
@@ -40,12 +40,12 @@ comment on column user_info.salt is 'SALT';
 comment on column user_info.telephone is '전화번호';
 comment on column user_info.mobile_phone is '핸드폰 번호';
 comment on column user_info.email is '이메일';
-comment on column user_info.messanger is '메신저 아이디';
+comment on column user_info.messenger is '메신저 아이디';
 comment on column user_info.postal_code is '우편번호';
 comment on column user_info.address is '주소';
 comment on column user_info.address_etc is '상세주소';
 comment on column user_info.user_role_check_yn is '최초 사인인시 사용자 Role 권한 체크 패스 기능. 기본값 Y : 체크';
-comment on column user_info.status is '사용자 상태. 0:사용중, 1:사용중지(관리자), 2:잠금(비밀번호 실패횟수 초과), 3:휴면(사인인 기간), 4:만료(사용기간 종료), 5:삭제(화면 비표시, policy.user_delete_type=0), 6:임시비밀번호';
+comment on column user_info.status is '사용자 상태. 0:사용중, 1:사용중지(관리자), 2:잠금(비밀번호 실패횟수 초과), 3:휴면(사인인 기간), 4:만료(사용기간 종료), 5:삭제(화면 비표시, policy.user_delete_type=0), 6:임시비밀번호, 7:승인대기';
 comment on column user_info.signin_count is '사인인 횟수';
 comment on column user_info.fail_signin_count is '사인인 실패 횟수';
 comment on column user_info.last_signin_date is '마지막 사인인 날짜';

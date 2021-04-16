@@ -15,14 +15,13 @@ alter table only data_smart_tiling_file_parse_log add constraint data_smart_tili
 
 alter table only data_info_origin add constraint data_info_origin_fk_data_id foreign key (data_id) references data_info(data_id);
 alter table only data_group add constraint data_group_fk_user_id foreign key (user_id) references user_info(user_id);
-alter table only data_info add constraint data_info_fk_user_id foreign key (user_id) references user_info(user_id);
 
 alter table only issue add constraint issue_fk_data_id foreign key (data_id) references data_info(data_id);
 alter table only issue_detail add constraint issue_detail_fk_issue_id foreign key (issue_id) references issue(issue_id);
 
 alter table only layer add constraint layer_fk_layer_group_id foreign key (layer_group_id) references layer_group(layer_group_id);
-alter table only layer_file_info add constraint layer_file_info_fk_user_id foreign key (user_id) references user_info(user_id);
 alter table only layer_file_info add constraint layer_file_info_fk_layer_id foreign key (layer_id) references layer(layer_id);
+alter table only layer_group add constraint layer_group_fk_user_id foreign key (user_id) references user_info(user_id);
 
 alter table only upload_data add constraint upload_data_fk_data_group_id foreign key (data_group_id) references data_group(data_group_id);
 alter table only upload_data_file add constraint upload_data_file_fk_upload_data_id foreign key (upload_data_id) references upload_data(upload_data_id);
@@ -35,3 +34,6 @@ alter table only user_group_role add constraint user_group_role_fk_role_id forei
 
 alter table only user_policy add constraint user_policy_fk_user_id foreign key (user_id) references user_info(user_id);
 
+alter table only data_info add constraint data_info_fk_data_group_id foreign key (data_group_id) references data_group(data_group_id);
+alter table only data_file_info add constraint data_file_info_fk_data_group_id foreign key (data_group_id) references data_group(data_group_id);
+alter table only data_file_parse_log add constraint data_file_parse_log_fk_data_file_info_id foreign key (data_file_info_id) references data_file_info(data_file_info_id);

@@ -1,7 +1,7 @@
 -- FK, Index 는 별도 파일로 분리. 맨 마지막에 작업 예정
 drop table if exists data_info_origin cascade;
 
--- Data 변환전 정보(origin)
+-- Data 변환전 정보(origin). 원본 파일 정보
 create table data_info_origin(
 	data_origin_id				bigint,
 	data_id						bigint								not null,
@@ -17,7 +17,7 @@ create table data_info_origin(
 	constraint data_info_origin_pk 	primary key(data_origin_id)
 );
 
-comment on table data_info_origin is 'Data 정보';
+comment on table data_info_origin is 'Data 변환전 정보';
 comment on column data_info_origin.data_origin_id is '고유번호';
 comment on column data_info_origin.data_id is '고유번호';
 comment on column data_info_origin.data_origin_name is 'data 고유 이름';

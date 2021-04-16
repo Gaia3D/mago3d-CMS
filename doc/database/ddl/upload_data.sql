@@ -14,6 +14,7 @@ create table upload_data (
 	height_reference				varchar(16)							default 'none',
 	location		 				GEOMETRY(POINT, 4326),
 	altitude						numeric(13,7),
+    assemble                        boolean                             default false,
 	file_count						int									default 0,
 	converter_target_count			int									default 0,
 	converter_count					int 								default 0,
@@ -42,6 +43,7 @@ comment on column upload_data.mapping_type is '기본값 origin : latitude, long
 comment on column upload_data.height_reference is '높이 설정 방법. none : 해발 고드, clampToGround : Terrain(지형)에 맞춤, relativeToGround : Terrain(지형)으로 부터 높이 설정';
 comment on column upload_data.location is 'POINT(위도, 경도). 공간 검색 속도 때문에 altitude는 분리';
 comment on column upload_data.altitude is '높이';
+comment on column upload_data.assemble is '합체 가능한 데이터 유무. true : 합체, false : 단일';
 comment on column upload_data.file_count is '파일 개수';
 comment on column upload_data.converter_target_count is 'converter 변환 대상 파일 수';
 comment on column upload_data.converter_count is 'converter 횟수';
