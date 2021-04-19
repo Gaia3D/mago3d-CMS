@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="5 minutes">
+	<!--
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36}[%method:%line] - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+	-->
+	<appender name="dailyRollingFileAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<prudent>true</prudent>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/home/gaia3d/mago3d/tools/mago3d-tiler/logs/mago3d-tiler.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+
+		<encoder>
+		    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36}[%method:%line] - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="org.apache.tomcat" level="debug" additivity="false" />
+	<logger name="org.apache.commons" level="info" additivity="false" />
+	<logger name="org.springframework" level="info" additivity="false" />
+	<!-- <logger name="org.springframework.web" level="info" additivity="false" /> -->
+	<logger name="com.zaxxer.hikari.pool.HikariPool" level="info" additivity="false" />
+
+	<root level="info">
+<!--		<appender-ref ref="STDOUT" />-->
+		 <appender-ref ref="dailyRollingFileAppender" />
+	</root>
+</configuration>

@@ -13,12 +13,6 @@ include ':common'
 include ':mago3d-admin'
 include ':mago3d-user'
 include ':mago3d-converter'
+include ':mago3d-tiler'
 include ':html'
 include ':doc'
-
-//project(':common').projectDir = "$rootDir/common" as File
-//project(':mago3d-admin').projectDir = "$rootDir/mago3d-admin" as File
-//project(':mago3d-user').projectDir = "$rootDir/mago3d-user" as File
-//project(':mago3d-converter').projectDir = "$rootDir/mago3d-converter" as File
-//project(':html').projectDir = "$rootDir/html" as File
-//project(':doc').projectDir = "$rootDir/doc" as File
