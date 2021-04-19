@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gaia3d.domain.District;
-import gaia3d.domain.SkEmd;
-import gaia3d.domain.SkSdo;
-import gaia3d.domain.SkSgg;
+import gaia3d.domain.country.District;
+import gaia3d.domain.country.SkEmd;
+import gaia3d.domain.country.SkSdo;
+import gaia3d.domain.country.SkSgg;
 import gaia3d.persistence.SearchMapMapper;
 import gaia3d.service.SearchMapService;
 
@@ -24,8 +24,8 @@ public class SearchMapServiceImpl implements SearchMapService {
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<SkSdo> getListSdoExceptGeom() {
-		return searchMapMapper.getListSdoExceptGeom();
+	public List<SkSdo> getListSdoExceptGeom(District district) {
+		return searchMapMapper.getListSdoExceptGeom(district);
 	}
 	
 	/**
@@ -34,8 +34,8 @@ public class SearchMapServiceImpl implements SearchMapService {
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public List<SkSgg> getListSggBySdoExceptGeom(String sdoCode) {
-		return searchMapMapper.getListSggBySdoExceptGeom(sdoCode);
+	public List<SkSgg> getListSggBySdoExceptGeom(District district) {
+		return searchMapMapper.getListSggBySdoExceptGeom(district);
 	}
 	
 	/**

@@ -19,27 +19,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataAttribute;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.DataObjectAttribute;
 import gaia3d.domain.Key;
 import gaia3d.domain.PageType;
-import gaia3d.domain.Pagination;
 import gaia3d.domain.ServerTarget;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.common.Pagination;
+import gaia3d.domain.data.DataAttribute;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataObjectAttribute;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.DataAttributeService;
 import gaia3d.service.DataObjectAttributeService;
 import gaia3d.service.DataService;
 import gaia3d.support.SQLInjectSupport;
 import gaia3d.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequestMapping("/datas")
 public class DataRestController {
-	private static final long PAGE_ROWS = 5l;
-	private static final long PAGE_LIST_COUNT = 5l;
+	private static final long PAGE_ROWS = 5L;
+	private static final long PAGE_LIST_COUNT = 5L;
 	
 	@Autowired
 	private DataService dataService;
@@ -52,7 +52,8 @@ public class DataRestController {
 	
 	/**
 	 * 데이터 그룹에 속하는 전체 데이터 목록
-	 * @param projectId
+	 * @param request
+	 * @param dataGroupId
 	 * @return
 	 */
 	@GetMapping(value = "/{dataGroupId:[0-9]+}/list")
@@ -84,7 +85,7 @@ public class DataRestController {
 	 * @return
 	 */
 	@GetMapping
-	public Map<String, Object> list(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) throws Exception {
+	public Map<String, Object> list(HttpServletRequest request, DataInfo dataInfo, @RequestParam(defaultValue="1") String pageNo) {
 		dataInfo.setSearchWord(SQLInjectSupport.replaceSqlInection(dataInfo.getSearchWord()));
 		dataInfo.setOrderWord(SQLInjectSupport.replaceSqlInection(dataInfo.getOrderWord()));
 		
@@ -135,7 +136,8 @@ public class DataRestController {
 	
 	/**
 	 * 데이터 정보
-	 * @param projectId
+	 * @param request
+	 * @param dataId
 	 * @return
 	 */
 	@GetMapping("/{dataId:[0-9]+}")
@@ -162,8 +164,8 @@ public class DataRestController {
 	/**
 	 * 사용자 데이터 수정
 	 * @param request
-	 * @param dataGroup
-	 * @param bindingResult
+	 * @param dataId
+	 * @param dataInfo
 	 * @return
 	 */
 	@PostMapping("/{dataId:[0-9]+}")
@@ -176,10 +178,8 @@ public class DataRestController {
 		String errorCode = null;
 		String message = null;
 		
-		DataInfo preDataInfo = new DataInfo();
-		//dataInfo.setUserId(userSession.getUserId());
 		dataInfo.setDataId(dataId);
-		preDataInfo = dataService.getData(dataInfo);
+		DataInfo preDataInfo = dataService.getData(dataInfo);
 		String groupTarget = preDataInfo.getDataGroupTarget();
 		
 		// 관리자가 업로드 한 경우
@@ -217,6 +217,8 @@ public class DataRestController {
 	}
 	
 	private Map<String, Object> createUpdateRequestResult(Map<String, Object> result) {
+		// TODO 관리자에게 요청하는 로직이 빠진거 같음
+
 		result.put("statusCode", HttpStatus.PRECONDITION_REQUIRED.value());
 		result.put("errorCode", "data.update.request.check");
 		result.put("message", null);
@@ -271,34 +273,35 @@ public class DataRestController {
 	
 	/**
 	 * 검색 조건
-	 * @param search
+	 * @param pageType
+	 * @param dataInfo
 	 * @return
 	 */
 	private String getSearchParameters(PageType pageType, DataInfo dataInfo) {
-		StringBuffer buffer = new StringBuffer(dataInfo.getParameters());
-//		buffer.append("&");
+		StringBuilder builder = new StringBuilder(dataInfo.getParameters());
+//		builder.append("&");
 //		try {
-//			buffer.append("dataName=" + URLEncoder.encode(getDefaultValue(dataInfo.getDataName()), "UTF-8"));
+//			builder.append("dataName=" + URLEncoder.encode(getDefaultValue(dataInfo.getDataName()), "UTF-8"));
 //		} catch(Exception e) {
-//			buffer.append("dataName=");
+//			builder.append("dataName=");
 //		}
 		
 		if (dataInfo.getStatus() != null) {
-			buffer.append("&");
-			buffer.append("status=");
-			buffer.append(dataInfo.getStatus());
+			builder.append("&")
+					.append("status=")
+					.append(dataInfo.getStatus());
 		}
 		if (dataInfo.getDataType() != null) {
-			buffer.append("&");
-			buffer.append("dataType=");
-			buffer.append(dataInfo.getDataType());
+			builder.append("&")
+					.append("dataType=")
+					.append(dataInfo.getDataType());
 		}
 		if (dataInfo.getDataGroupId() != null) {
-			buffer.append("&");
-			buffer.append("dataGroupId=");
-			buffer.append(dataInfo.getDataGroupId());
+			builder.append("&")
+					.append("dataGroupId=")
+					.append(dataInfo.getDataGroupId());
 		}
-		return buffer.toString();
+		return builder.toString();
 	}
 	
 	private String getDefaultValue(String value) {

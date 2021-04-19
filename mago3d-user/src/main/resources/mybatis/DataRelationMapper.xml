@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.DataRelationMapper">
+
+	<!-- select -->
+	<select id="getDataRelation" parameterType="long" resultType="dataRelationInfo">
+		/* select */
+		SELECT * FROM data_relation_info WHERE data_relation_id= #{dataRelationId}
+	</select>
+
+	<insert id="insertDataRelation" useGeneratedKeys="true" keyProperty="dataRelationId" parameterType="dataRelationInfo">
+		/* insert */
+		<selectKey keyProperty="dataRelationId" resultType="long" order="BEFORE">
+			SELECT NEXTVAL('data_relation_info_seq')
+		</selectKey>
+		INSERT INTO data_relation_info(
+			data_relation_id, relation_info
+		) VALUES (
+			#{dataRelationId}, #{relationInfo}
+		)
+	</insert>
+
+<!--	<update id="updateDataRelation" parameterType="dataRelationInfo">-->
+<!--		/* update */-->
+<!--		UPDATE data_relation_info-->
+<!--		SET relation_type = #{relationType}-->
+<!--		WHERE data_id = #{dataId}-->
+<!--	</update>-->
+
+	<delete id="deleteDataRelation" parameterType="long">
+		DELETE FROM data_relation_info WHERE data_relation_id = #{dataRelationId}
+	</delete>
+</mapper>

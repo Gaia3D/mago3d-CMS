@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.CacheManager;
-import gaia3d.domain.GeoPolicy;
-import gaia3d.domain.UserPolicy;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.policy.GeoPolicy;
+import gaia3d.domain.user.UserPolicy;
 import gaia3d.persistence.UserPolicyMapper;
 import gaia3d.service.GeoPolicyService;
 import gaia3d.service.UserPolicyService;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service

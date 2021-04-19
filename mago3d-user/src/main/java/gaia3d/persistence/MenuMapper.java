@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.Menu;
+import gaia3d.domain.menu.Menu;
 
 
 /**

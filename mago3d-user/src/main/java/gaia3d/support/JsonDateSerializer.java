@@ -13,8 +13,7 @@ public class JsonDateSerializer extends JsonSerializer<Timestamp> {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
-    public void serialize(Timestamp arg0, JsonGenerator arg1, SerializerProvider arg2)
-            throws IOException, JsonProcessingException {
+    public void serialize(Timestamp arg0, JsonGenerator arg1, SerializerProvider arg2) throws IOException, JsonProcessingException {
         String formattedDate = dateFormat.format(arg0);
         arg1.writeString(formattedDate);
 

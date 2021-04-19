@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataAdjustLog;
+import gaia3d.domain.data.DataAdjustLog;
 import gaia3d.service.DataAdjustLogService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 데이터 geometry 변경 이력
@@ -33,7 +33,8 @@ public class DataAdjustLogRestController {
 	/**
 	 * 데이터 geometry 변경 이력 상태 수정
 	 * @param request
-	 * @param dataInfo
+	 * @param dataInfoAdjustLog
+	 * @param errors
 	 * @return
 	 */
 	@PostMapping

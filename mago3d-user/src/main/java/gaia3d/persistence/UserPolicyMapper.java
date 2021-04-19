@@ -2,7 +2,7 @@ package gaia3d.persistence;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.UserPolicy;
+import gaia3d.domain.user.UserPolicy;
 
 @Repository
 public interface UserPolicyMapper {

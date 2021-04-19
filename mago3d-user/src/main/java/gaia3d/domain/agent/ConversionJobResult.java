@@ -1,16 +1,17 @@
 package gaia3d.domain.agent;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.io.Serializable;
-
 @Getter
 @Setter
-@ToString(callSuper = true)
+@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ConversionJobResult implements Serializable {
 
@@ -37,10 +38,13 @@ public class ConversionJobResult implements Serializable {
     private ConverterJobResultStatus resultStatus;
 
     // 위치정보
-    private ConverterLocation location;
+    private ConverterLocation[] location;
 
     // 속성정보
-    private String attributes;
+    private String[] attributes;
+
+    // 분리된 F4D 정보
+    private String[] splitResult;
 
     @JsonProperty(value = "bGeoReferenced")
     public boolean getBGeoReferenced() {

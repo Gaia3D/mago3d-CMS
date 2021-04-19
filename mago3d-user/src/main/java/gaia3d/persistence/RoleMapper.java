@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.Role;
+import gaia3d.domain.role.Role;
 
 /**
  * Role

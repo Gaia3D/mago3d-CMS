@@ -1,6 +1,6 @@
 package gaia3d.service;
 
-import gaia3d.domain.AccessLog;
+import gaia3d.domain.accesslog.AccessLog;
 
 /**
  * 로그 처리

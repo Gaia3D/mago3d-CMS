@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.DataAdjustLog;
+import gaia3d.domain.data.DataAdjustLog;
 
 /**
  * 데이터 geometry 변경 이력

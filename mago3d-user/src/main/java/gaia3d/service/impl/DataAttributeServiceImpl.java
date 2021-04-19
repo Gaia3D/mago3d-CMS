@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gaia3d.domain.DataAttribute;
+import gaia3d.domain.data.DataAttribute;
 import gaia3d.persistence.DataAttributeMapper;
 import gaia3d.service.DataAttributeService;
 

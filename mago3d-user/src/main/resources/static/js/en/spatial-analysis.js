@@ -1,13 +1,13 @@
 var SpatialAnalysis = function(magoInstance) {
 	
 	//본인 환경에 맞게 일단은 수정바람...
-	var WPS_URL = NDTP.policy.geoserverDataUrl + '/wps';
+	var WPS_URL = MAGO.policy.geoserverDataUrl + '/wps';
 	var magoManager = magoInstance.getMagoManager();
 	var viewer = magoInstance.getViewer();
 	var entities = viewer.entities;
 	var entityObject = {};
 	//wps 관련 스키마가 추가될때까지 하드코딩, 각자 환경에 맞는 이름으로..
-	var layerDEM = 'ndtp:sejong_dem';
+	var layerDEM = 'mago3d:sejong_dem';
 	var layerDSM = 'mago3d:dsm_busan';
 	var selectedLayer;
 	var wpsLayerInfo = {

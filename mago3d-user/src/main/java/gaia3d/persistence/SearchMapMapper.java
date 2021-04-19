@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.District;
-import gaia3d.domain.SkEmd;
-import gaia3d.domain.SkSdo;
-import gaia3d.domain.SkSgg;
+import gaia3d.domain.country.District;
+import gaia3d.domain.country.SkEmd;
+import gaia3d.domain.country.SkSdo;
+import gaia3d.domain.country.SkSgg;
 
 @Repository
 public interface SearchMapMapper {
@@ -16,14 +16,14 @@ public interface SearchMapMapper {
 	 * Sdo 목록(geom 은 제외)
 	 * @return
 	 */
-	List<SkSdo> getListSdoExceptGeom();
+	List<SkSdo> getListSdoExceptGeom(District district);
 	
 	/**
 	 * Sgg 목록(geom 은 제외)
 	 * @param sdo_code
 	 * @return
 	 */
-	List<SkSgg> getListSggBySdoExceptGeom(String sdoCode);
+	List<SkSgg> getListSggBySdoExceptGeom(District district);
 	
 	/**
 	 * emd 목록(geom 은 제외)

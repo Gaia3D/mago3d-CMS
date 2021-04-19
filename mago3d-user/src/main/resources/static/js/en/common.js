@@ -238,7 +238,6 @@ function changeLanguage(lang) {
 		});
 	} else {
 		alert(JS_MESSAGE["button.dobule.click"]);
-		return;
 	}
 }
 
@@ -361,7 +360,7 @@ function locationValidation(longitude, latitude, altitude) {
 		alert(JS_MESSAGE["number.constraint"]);
 		return false;
 	}
-	if((-180 <= lon && lon <= 180) &&  (-90 <= lat && lat <= 90) && (-100 <= alt && alt <= 300000)) {
+	if((-180 <= lon && lon <= 180) &&  (-90 <= lat && lat <= 90) && (-30000 <= alt && alt <= 300000)) {
 		return true;
 	} else {
 		alert(JS_MESSAGE["location.constraint"]);

@@ -3,6 +3,18 @@
 
 <mapper namespace="gaia3d.persistence.UserMapper">
 
+	<!-- 사용자 ID 중복 체크 -->
+	<select id="isUserIdDuplication" parameterType="userInfo" resultType="boolean">
+		/* isUserIdDuplication */
+		SELECT
+			CASE
+				WHEN COUNT(*) > 0 THEN true
+				ELSE false
+				END AS duplication
+		FROM user_info
+		WHERE user_id = #{userId}
+	</select>
+
 	<!-- 사용자 정보 -->
 	<select id="getUser" parameterType="string" resultType="userInfo">
 		/* getUser */
@@ -11,6 +23,16 @@
 		WHERE A.user_id = #{userId}
 			AND A.user_group_id = B.user_group_id
 	</select>
+
+	<!-- 사용자 등록 -->
+	<insert id="insertUser" parameterType="userInfo">
+		/* insertUser */
+		INSERT INTO user_info(
+			user_id, user_group_id, user_name, password, department, position, email, status, update_date
+		) values(
+			#{userId}, #{userGroupId}, #{userName}, #{password}, #{department}, #{position}, #{email}, COALESCE(#{status}, '0'), NOW()
+		)
+	</insert>
 	
 	<!-- 사용자 기본 정보 중 비밀번호 정보 수정 -->
 	<update id="updatePassword" parameterType="userInfo">

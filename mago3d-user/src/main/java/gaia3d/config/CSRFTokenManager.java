@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 public class CSRFTokenManager {
 
 	private CSRFTokenManager() {
-	};
+	}
 	
 	/**
 	 * The token parameter name

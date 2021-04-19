@@ -5,17 +5,17 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import org.junit.jupiter.api.Test;
+
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataInfoLegacy;
+import gaia3d.domain.data.DataInfoLegacyWrapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.DataInfoLegacy;
-import gaia3d.domain.DataInfoLegacyWrapper;
 
 @Slf4j
 class ConvertJsonTest {

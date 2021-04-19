@@ -20,16 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataGroup;
 import gaia3d.domain.Key;
 import gaia3d.domain.LocationUdateType;
 import gaia3d.domain.PageType;
-import gaia3d.domain.Pagination;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.common.Pagination;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.DataGroupService;
 import gaia3d.support.SQLInjectSupport;
 import gaia3d.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 사용자 데이터 그룹 관리
@@ -41,8 +41,8 @@ import gaia3d.utils.DateUtils;
 @RequestMapping("/data-groups")
 public class DataGroupRestController {
 
-	private static final long PAGE_ROWS = 4l;
-	private static final long PAGE_LIST_COUNT = 5l;
+	private static final long PAGE_ROWS = 4L;
+	private static final long PAGE_LIST_COUNT = 5L;
 	
 	@Autowired
 	private DataGroupService dataGroupService;
@@ -55,7 +55,8 @@ public class DataGroupRestController {
 	
 	/**
 	 * 데이터 그룹 전체 목록
-	 * @param projectId
+	 * @param request
+	 * @param dataGroup
 	 * @return
 	 */
 	@GetMapping(value = "/all")
@@ -83,7 +84,9 @@ public class DataGroupRestController {
 	
 	/**
 	 * 데이터 그룹 정보
-	 * @param projectId
+	 * @param request
+	 * @param dataGroup
+	 * @param pageNo
 	 * @return
 	 */
 	@GetMapping
@@ -117,7 +120,7 @@ public class DataGroupRestController {
 		dataGroup.setOffset(pagination.getOffset());
 		dataGroup.setLimit(pagination.getPageRows());
 		List<DataGroup> dataGroupList = new ArrayList<>();
-		if(totalCount > 0l) {
+		if(totalCount > 0L) {
 			dataGroupList = dataGroupService.getListDataGroup(dataGroup);
 		}
 		
@@ -144,7 +147,6 @@ public class DataGroupRestController {
 		Map<String, Object> result = new HashMap<>();
 		String errorCode = null;
 		String message = null;
-		Boolean duplication = Boolean.TRUE;
 		
 		// TODO @Valid 로 구현해야 함
 		if(StringUtils.isEmpty(dataGroup.getDataGroupKey())) {
@@ -156,7 +158,7 @@ public class DataGroupRestController {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(Key.USER_SESSION.name());
 		dataGroup.setUserId(userSession.getUserId());
-		duplication = dataGroupService.isDataGroupKeyDuplication(dataGroup);
+		Boolean duplication = dataGroupService.isDataGroupKeyDuplication(dataGroup);
 		log.info("@@ duplication = {}", duplication);
 		int statusCode = HttpStatus.OK.value();
 		
@@ -323,14 +325,14 @@ public class DataGroupRestController {
 	 * @return
 	 */
 	private String getSearchParameters(PageType pageType, DataGroup dataGroup) {
-		StringBuffer buffer = new StringBuffer(dataGroup.getParameters());
+		StringBuilder builder = new StringBuilder(dataGroup.getParameters());
 //		buffer.append("&");
 //		try {
-//			buffer.append("dataName=" + URLEncoder.encode(getDefaultValue(dataInfo.getDataName()), "UTF-8"));
+//			builder.append("dataName=" + URLEncoder.encode(getDefaultValue(dataInfo.getDataName()), "UTF-8"));
 //		} catch(Exception e) {
-//			buffer.append("dataName=");
+//			builder.append("dataName=");
 //		}
-		return buffer.toString();
+		return builder.toString();
 	}
 	
 	private String getDefaultValue(String value) {

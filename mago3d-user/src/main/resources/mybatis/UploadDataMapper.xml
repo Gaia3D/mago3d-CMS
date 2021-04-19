@@ -156,13 +156,13 @@
 			<if test="latitude != null">
 			location, altitude,
 			</if>
-			file_count, converter_target_count, description
+			assemble, file_count, converter_target_count, description
 		) VALUES (
 			#{uploadDataId}, #{dataGroupId}, #{sharing}, #{dataType}, #{dataName}, #{userId}, #{heightReference},
 			<if test="latitude != null">
 			ST_GeomFromText(#{location}, 4326), #{altitude},
 			</if>
-			#{fileCount}, #{converterTargetCount}, #{description}
+			#{assemble}, #{fileCount}, #{converterTargetCount}, #{description}
 		)
 	</insert>
 	
@@ -204,7 +204,10 @@
 			<if test="heightReference != null and heightReference != ''">
 			height_reference = #{heightReference},
 			</if>
-			<if test="latitude != null and latitude gt 0 and longitude != null and longitude gt 0">
+			<if test="assemble != null">
+			assemble = #{assemble},
+			</if>
+			<if test="latitude != null and latitude gte -90 and latitude lte 90 and longitude != null and longitude gte -180 and longitude lte 180">
 			location = ST_GeomFromText(#{location}, 4326),
 			</if>
 			<if test="altitude != null">

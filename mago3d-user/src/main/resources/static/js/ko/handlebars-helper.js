@@ -74,10 +74,26 @@ Handlebars.registerHelper("subtract", function(value1, value2) {
     return value1 - value2;
 });
 
+// 더하기 helper
+Handlebars.registerHelper("plus", function(value1, value2) {
+    if(value1 === undefined)
+        return;
+    return value1 + value2;
+});
+
 // foreach start end 1씩 증가
 Handlebars.registerHelper('forEachStep', function(from, to, incr, block) {
     var accum = '';
     for(var i = from; i <= to; i += incr)
         accum += block.fn(i);
     return accum;
+});
+
+Handlebars.registerHelper("numberToAlphabet", function(num) {
+    return String.fromCharCode(65 + num);
+});
+
+Handlebars.registerHelper('incremented', function (index) {
+    index++;
+    return index;
 });

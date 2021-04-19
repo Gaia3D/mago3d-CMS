@@ -11,6 +11,10 @@ JS_MESSAGE["loading"] = "Loading";
 JS_MESSAGE["requested"] = "Requested";
 JS_MESSAGE["searching"] = "Searching.";
 
+JS_MESSAGE["search.input.data.name"] = "데이터명을 입력하여 주십시오.";
+JS_MESSAGE["search.input.data.group.name"] = "데이터 그룹명을 입력하여 주십시오.";
+JS_MESSAGE["search.input.data.address"] = "도로명 입력하여 주십시오.";
+
 JS_MESSAGE["apply"] = "적용되었습니다.";
 JS_MESSAGE["upload"] = "업로딩 중입니다.";
 JS_MESSAGE["proceed.confirm"] = "진행 하시겠습니까?";
@@ -62,6 +66,7 @@ JS_MESSAGE["password.new"] = "Please enter a new password.";
 JS_MESSAGE["password.correct.empty"] = "Please enter a password confirmation.";
 JS_MESSAGE["password.match.current"] = "It matches the current password.";
 JS_MESSAGE["password.not.match.new"] = "It doesn't match the new password.";
+JS_MESSAGE["password.not.match.confirm"] = "비밀번호 확인과 일치하지 않습니다.";
 JS_MESSAGE["password.change.next"] = "The next time you change, you will be returned to the login page and the service will be unavailable. Would you like to change your password next time?";
 JS_MESSAGE["user.name.empty"] = "이름을 입력하여 주십시오.";
 JS_MESSAGE["user.input.invalid"] = "필수 입력값이 유효하지 않습니다.";
@@ -73,16 +78,6 @@ JS_MESSAGE["user.session.close"] = "선택하신 사용자의 세션을 종료 �
 JS_MESSAGE["user.insert"] = "사용자를 등록 하였습니다.";
 JS_MESSAGE["user.info.update"] = "사용자 정보를 수정 하였습니다.";
 JS_MESSAGE["user.id.notexist"] = "아이디가 존재하지 않습니다.";
-
-// ticks
-
-//user group
-
-//input group
-
-//role
-
-//widget
 
 JS_MESSAGE["data.name.empty"] = "Please enter the data name.";
 JS_MESSAGE["data.name.invalid"] = "Data name is invalid.";

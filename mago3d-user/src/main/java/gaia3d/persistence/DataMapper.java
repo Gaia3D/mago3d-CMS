@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.DataInfoSimple;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataInfoSimple;
 
 /**
  * Data
@@ -22,6 +22,13 @@ public interface DataMapper {
 	 * @return
 	 */
 	Long getDataTotalCount(DataInfo dataInfo);
+
+	/**
+	 * 그룹핑 데이터 수
+	 * @param dataRelationId dataRelationId
+	 * @return
+	 */
+	Long getDataRelationCount(Long dataRelationId);
 	
 	/**
 	 * 데이터 상태별 통계 정보

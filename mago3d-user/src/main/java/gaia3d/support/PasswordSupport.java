@@ -2,9 +2,9 @@ package gaia3d.support;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.user.UserInfo;
 import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.Policy;
-import gaia3d.domain.UserInfo;
 
 @Slf4j
 public class PasswordSupport {

@@ -19,33 +19,42 @@ public class RabbitConfig {
     private PropertiesConfig propertiesConfig;
 
     @Bean
-    Queue queue() {
-        return new Queue(propertiesConfig.getQueueName(), true);
+    Queue converterQueue() {
+        return new Queue(propertiesConfig.getRabbitmqConverterQueue(), true);
     }
 
     @Bean
-    TopicExchange exchange() {
-        return new TopicExchange(propertiesConfig.getExchange());
+    Queue tilerQueue() {
+        return new Queue(propertiesConfig.getRabbitmqTilerQueue(), true);
     }
 
     @Bean
-    Binding binding(Queue queue, TopicExchange topicExchange) {
-        return BindingBuilder.bind(queue).to(topicExchange).with(propertiesConfig.getQueueName());
+    TopicExchange topicExchange() {
+        return new TopicExchange(propertiesConfig.getRabbitmqConverterExchange());
+    }
+
+    @Bean
+    Binding converterBinding(Queue converterQueue, TopicExchange topicExchange) {
+        return BindingBuilder.bind(converterQueue).to(topicExchange).with(propertiesConfig.getRabbitmqConverterRoutingKey());
+    }
+
+    @Bean
+    Binding tileBinding(Queue tilerQueue, TopicExchange topicExchange) {
+        return BindingBuilder.bind(tilerQueue).to(topicExchange).with(propertiesConfig.getRabbitmqTilerRoutingKey());
     }
 
     @Bean
     ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(propertiesConfig.getQueueServerHost());
-        connectionFactory.setUsername(Crypt.decrypt(propertiesConfig.getQueueUser()));
-        connectionFactory.setPassword(Crypt.decrypt(propertiesConfig.getQueuePassword()));
-        connectionFactory.setPort(Integer.parseInt(propertiesConfig.getQueueServerPort()));
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(propertiesConfig.getRabbitmqServerHost());
+        connectionFactory.setUsername(Crypt.decrypt(propertiesConfig.getRabbitmqUser()));
+        connectionFactory.setPassword(Crypt.decrypt(propertiesConfig.getRabbitmqPassword()));
+        connectionFactory.setPort(Integer.parseInt(propertiesConfig.getRabbitmqServerPort()));
         return connectionFactory;
     }
 
     @Bean
     RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setRoutingKey(propertiesConfig.getQueueName());
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         return rabbitTemplate;
     }

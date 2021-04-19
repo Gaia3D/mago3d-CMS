@@ -13,12 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.CacheConfig;
-import gaia3d.domain.CacheName;
-import gaia3d.domain.CacheParams;
+import gaia3d.domain.cache.CacheName;
+import gaia3d.domain.cache.CacheParams;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 사용자 Cache 갱신
@@ -37,9 +35,8 @@ public class CacheRestController {
 	/**
 	 * HttpClient 로 Cache 요청이 왔을때 실행되는 메서드
 	 * @param request
-	 * @param policy
+	 * @param authData
 	 * @return
-	 * @throws JsonProcessingException 
 	 */
 	@PostMapping(value = "/reload")
 	public Map<String, Object> reload(HttpServletRequest request, @RequestBody String authData) {

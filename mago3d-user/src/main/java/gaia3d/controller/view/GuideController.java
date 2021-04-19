@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import gaia3d.domain.CacheManager;
+
 import gaia3d.domain.Key;
-import gaia3d.domain.Policy;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.policy.Policy;
 
 /**
  * @author hansangkim
@@ -33,10 +34,8 @@ public class GuideController {
 		String k = (String)request.getSession().getAttribute(Key.LANG.name());
 		if(k!=null) {
 			lang = "en";
-			return "/guide/"+lang+"/layout";
 		}
 		return "/guide/"+lang+"/layout";
-		
 	}
 	
 	/**
@@ -50,7 +49,6 @@ public class GuideController {
 		String lang = "ko";
 		if(k!=null) {
 			lang = "en";
-			return "/guide/"+lang+"/"+api;
 		}
 		return "/guide/"+lang+"/"+api;
 	}

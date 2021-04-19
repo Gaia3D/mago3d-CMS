@@ -2,7 +2,7 @@ package gaia3d.service;
 
 import java.util.List;
 
-import gaia3d.domain.DataAdjustLog;
+import gaia3d.domain.data.DataAdjustLog;
 
 /**
  * 데이터 geometry 변경 이력 관리
@@ -13,7 +13,7 @@ public interface DataAdjustLogService {
 	
 	/**
 	 * 데이터 geometry 변경 요청 수
-	 * @param dataInfo
+	 * @param dataInfoAdjustLog
 	 * @return
 	 */
 	Long getDataAdjustLogTotalCount(DataAdjustLog dataInfoAdjustLog);

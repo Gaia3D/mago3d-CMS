@@ -1,18 +1,11 @@
 package gaia3d.controller.view;
 
-import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.*;
-import gaia3d.domain.converter.ConverterJob;
-import gaia3d.domain.uploaddata.UploadData;
-import gaia3d.domain.uploaddata.UploadDataFile;
-import gaia3d.service.DataGroupService;
-import gaia3d.service.PolicyService;
-import gaia3d.service.UploadDataService;
-import gaia3d.support.RoleSupport;
-import gaia3d.support.SQLInjectSupport;
-import gaia3d.utils.DateUtils;
-import gaia3d.utils.FileUtils;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -22,10 +15,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import gaia3d.config.PropertiesConfig;
+import gaia3d.domain.Key;
+import gaia3d.domain.PageType;
+import gaia3d.domain.SharingType;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.common.Pagination;
+import gaia3d.domain.converter.ConverterJob;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.role.RoleKey;
+import gaia3d.domain.uploaddata.UploadData;
+import gaia3d.domain.uploaddata.UploadDataFile;
+import gaia3d.domain.user.UserSession;
+import gaia3d.service.DataGroupService;
+import gaia3d.service.PolicyService;
+import gaia3d.service.UploadDataService;
+import gaia3d.support.RoleSupport;
+import gaia3d.support.SQLInjectSupport;
+import gaia3d.utils.DateUtils;
+import gaia3d.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 3D 데이터 파일 업로더
@@ -140,7 +149,7 @@ public class UploadDataController {
 		FileUtils.makeDirectoryByPath(propertiesConfig.getUserDataServiceDir(), dataGroupPath);
 		
 		// 자기것만 나와야 해서 dataGroupId가 필요 없음
-		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroup(dataGroup);
+		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroupForBasic(dataGroup);
 		
 		UploadData uploadData = UploadData.builder().
 											dataGroupId(dataGroup.getDataGroupId()).
@@ -172,7 +181,7 @@ public class UploadDataController {
 		DataGroup dataGroup = new DataGroup();
 		dataGroup.setUserId(userSession.getUserId());
 		// 자기것만 나와야 해서 dataGroupId가 필요 없음
-		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroup(dataGroup);
+		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroupForBasic(dataGroup);
 		
 		model.addAttribute("uploadData", uploadData);
 		model.addAttribute("uploadDataFileList", uploadDataFileList);
@@ -183,23 +192,24 @@ public class UploadDataController {
 	
 	/**
 	 * 검색 조건
-	 * @param search
+	 * @param pageType
+	 * @param uploadData
 	 * @return
 	 */
 	private String getSearchParameters(PageType pageType, UploadData uploadData) {
-		StringBuffer buffer = new StringBuffer(uploadData.getParameters());
+		StringBuilder builder = new StringBuilder(uploadData.getParameters());
 		boolean isListPage = true;
 		if(pageType == PageType.MODIFY || pageType == PageType.DETAIL) {
 			isListPage = false;
 		}
 		
 //		if(!isListPage) {
-//			buffer.append("pageNo=" + request.getParameter("pageNo"));
-//			buffer.append("&");
-//			buffer.append("list_count=" + uploadData.getList_counter());
+//			builder.append("pageNo=" + request.getParameter("pageNo"));
+//			builder.append("&");
+//			builder.append("list_count=" + uploadData.getList_counter());
 //		}
 		
-		return buffer.toString();
+		return builder.toString();
 	}
 	
 	private String roleValidator(HttpServletRequest request, Integer userGroupId, String roleName) {
@@ -224,7 +234,6 @@ public class UploadDataController {
 			Locale myLocale = request.getLocale();
 			lang = myLocale.getLanguage();
 		}
-		Locale locale = new Locale(lang);
-		return locale;
+		return new Locale(lang);
 	}
 }

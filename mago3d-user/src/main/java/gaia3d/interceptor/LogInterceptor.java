@@ -13,13 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.AccessLog;
 import gaia3d.domain.Key;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.accesslog.AccessLog;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.AccessLogService;
 import gaia3d.support.URLSupport;
 import gaia3d.utils.WebUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 모든 요청에 대한 이력을 남김
@@ -89,10 +89,9 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     	if(isMultipartURI) {
     		// TODO url 매핑이 귀찮아서 임시로
     		//accessLog.setParameters(getMultipartRequestParameters(request));
-    		accessLog.setParameters(getRequestParameters(request));
     	} else {
-    		accessLog.setParameters(getRequestParameters(request));
     	}
+		accessLog.setParameters(getRequestParameters(request));
     		
     	String userAgent = request.getHeader("User-Agent");
     	if(userAgent != null && userAgent.length() > 256) {

@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import gaia3d.domain.CacheManager;
 import gaia3d.domain.Key;
-import gaia3d.domain.Policy;
-import gaia3d.domain.RoleKey;
-import gaia3d.domain.UserInfo;
-import gaia3d.domain.UserSession;
-import gaia3d.domain.UserStatus;
 import gaia3d.domain.YOrN;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.role.RoleKey;
+import gaia3d.domain.user.UserInfo;
+import gaia3d.domain.user.UserSession;
+import gaia3d.domain.user.UserStatus;
 import gaia3d.listener.Gaia3dHttpSessionBindingListener;
 import gaia3d.service.RoleService;
 import gaia3d.service.SigninService;
@@ -90,8 +90,8 @@ public class SigninController {
 				// 실패 횟수가 운영 정책의 횟수와 일치할 경우 잠금(비밀번호 실패횟수 초과)
 				if(userSession.getFailSigninCount() >= policy.getUserFailSigninCount()) {
 					log.error("@@ 비밀번호 실패 횟수 초과에 의해 잠김 처리됨");
-					userSession.setStatus(UserStatus.FAIL_LOGIN_COUNT_OVER.getValue());
-					signinForm.setStatus(UserStatus.FAIL_LOGIN_COUNT_OVER.getValue());
+					userSession.setStatus(UserStatus.FAIL_SIGNIN_COUNT_OVER.getValue());
+					signinForm.setStatus(UserStatus.FAIL_SIGNIN_COUNT_OVER.getValue());
 				}
 				signinService.updateSigninUserSession(userSession);
 				
@@ -109,6 +109,7 @@ public class SigninController {
 			signinForm.setErrorCode(errorCode);
 			signinForm.setUserId(null);
 			signinForm.setPassword(null);
+			signinForm.setStatus(userSession.getStatus());
 			model.addAttribute("signinForm", signinForm);
 			model.addAttribute("policy", policy);
 			
@@ -116,7 +117,7 @@ public class SigninController {
 		}
 		
 		// 사용자 정보를 갱신
-		userSession.setFailSigninCount(0);
+		userSession.setFailSigninCount(Integer.valueOf(0));
 		signinService.updateSigninUserSession(userSession);
 		
 		// TODO 고민을 하자. 사인인 시점에 토큰을 발행해서 사용하고.... 비밀번호와 SALT는 초기화 해서 세션에 저장할지
@@ -149,7 +150,6 @@ public class SigninController {
 	 * @return
 	 */
 	private String validate(HttpServletRequest request, Policy policy, UserInfo signinForm, UserSession userSession) {
-		
 		// 사용자 정보가 존재하지 않을 경우
 		if(userSession == null) {
 			return "user.session.empty";
@@ -168,7 +168,7 @@ public class SigninController {
 		}
 		
 		// 사인인 실패 횟수
-		if(userSession.getFailSigninCount().intValue() >= policy.getUserFailSigninCount()) {
+		if(userSession.getFailSigninCount() >= policy.getUserFailSigninCount()) {
 			signinForm.setFailSigninCount(userSession.getFailSigninCount());
 			return "usersession.failsignincount.invalid";
 		}

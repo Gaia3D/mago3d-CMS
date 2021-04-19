@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.CacheManager;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.GeoPolicy;
 import gaia3d.domain.Key;
-import gaia3d.domain.LayerGroup;
-import gaia3d.domain.UserPolicy;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.layer.LayerGroup;
+import gaia3d.domain.policy.GeoPolicy;
+import gaia3d.domain.user.UserPolicy;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.DataService;
 import gaia3d.service.LayerGroupService;
 import gaia3d.service.UserPolicyService;
 import gaia3d.support.LayerDisplaySupport;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 초기 로딩 policy init
@@ -74,7 +74,7 @@ public class GeoPolicyRestController {
 		GeoPolicy geoPolicy = CacheManager.getGeoPolicy();
 		UserPolicy userPolicy = userPolicyService.getUserPolicy(userSession.getUserId());
 		if(userId != null) {
-			if(dataId != null && dataId.trim() != "") {
+			if(dataId != null && !"".equals(dataId.trim())) {
 				// dataId가 있을경우 data 위치로 가기 위해 위치값을 변경해줌 
 				DataInfo data = DataInfo.builder().dataId(Long.parseLong(dataId)).build();
 				DataInfo dataInfo = dataService.getData(data);
@@ -100,7 +100,8 @@ public class GeoPolicyRestController {
 			geoPolicy.setSsaoRadius(userPolicy.getSsaoRadius());
 		}
 		
-		List<LayerGroup> baseLayers = LayerDisplaySupport.getListDisplayLayer(layerGroupService.getListLayerGroupAndLayer(), userPolicy.getBaseLayers());
+		LayerGroup layerGroup = LayerGroup.builder().userGroupId(userSession.getUserGroupId()).build();
+		List<LayerGroup> baseLayers = LayerDisplaySupport.getListDisplayLayer(layerGroupService.getListLayerGroupAndLayer(layerGroup), userPolicy.getBaseLayers());
 		int statusCode = HttpStatus.OK.value();
 		
 		result.put("geoPolicy", geoPolicy);

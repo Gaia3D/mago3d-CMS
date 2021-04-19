@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataAttribute;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.DataObjectAttribute;
+import gaia3d.domain.data.DataAttribute;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataObjectAttribute;
 import gaia3d.service.DataAttributeService;
 import gaia3d.service.DataObjectAttributeService;
 import gaia3d.service.DataService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Data API

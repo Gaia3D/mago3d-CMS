@@ -2,7 +2,7 @@ package gaia3d.persistence;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.AccessLog;
+import gaia3d.domain.accesslog.AccessLog;
 
 
 /**

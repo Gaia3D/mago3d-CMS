@@ -1,21 +1,21 @@
 package gaia3d.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.Depth;
 import gaia3d.domain.Move;
+import gaia3d.domain.data.DataGroup;
 import gaia3d.persistence.DataGroupMapper;
 import gaia3d.persistence.DataMapper;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.GeoPolicyService;
 import gaia3d.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -29,6 +29,24 @@ public class DataGroupServiceImpl implements DataGroupService {
 	private GeoPolicyService geoPolicyService;
 	@Autowired
 	private PropertiesConfig propertiesConfig;
+
+	/**
+	 * Data Group 총건수
+	 * @param dataGroup
+	 * @return
+	 */
+	public Long getDataGroupTotalCountForBasic(DataGroup dataGroup) {
+		return dataGroupMapper.getDataGroupTotalCountForBasic(dataGroup);
+	}
+
+	/**
+	 * 전체 데이터 그룹 목록
+	 * @param dataGroup
+	 */
+	@Transactional(readOnly = true)
+	public List<DataGroup> getAllListDataGroupForBasic(DataGroup dataGroup) {
+		return dataGroupMapper.getAllListDataGroupForBasic(dataGroup);
+	}
 
 	/**
 	 * Data Group 총건수
@@ -55,6 +73,15 @@ public class DataGroupServiceImpl implements DataGroupService {
 	 */
 	public List<DataGroup> getListDataGroup(DataGroup dataGroup) {
 		return dataGroupMapper.getListDataGroup(dataGroup);
+	}
+	
+	/**
+	 * 데이터 그룹 목록(부모)
+	 * @param dataGroup
+	 * @return
+	 */
+	public List<DataGroup> getListDataGroupByPatent(DataGroup dataGroup) {
+		return dataGroupMapper.getListDataGroupByPatent(dataGroup);
 	}
 	
 	/**
@@ -206,71 +233,43 @@ public class DataGroupServiceImpl implements DataGroupService {
 	 */
     @Transactional
 	public int deleteDataGroup(DataGroup dataGroup) {
-    	// 삭제하고, children update
-    	
+		int result = 0;
+		// TODO converter_job 이력도 삭제해야 하는가?
     	String userId = dataGroup.getUserId();
     	dataGroup = dataGroupMapper.getDataGroup(dataGroup);
+		List<DataGroup> dataGroups = dataGroupMapper.getAllListDataGroupForBasic(dataGroup);
+		DataGroup finalDataGroup = dataGroup;
     	
-    	int result = 0;
-    	if(Depth.ONE == Depth.findBy(dataGroup.getDepth())) {
-    		// 하위 데이터 그룹 조회
-    		List<Integer> dataGroupIdList = dataGroupMapper.getDataGroupListByAncestor(dataGroup);
-    		for(Integer dataGroupId : dataGroupIdList) {
-    			DataGroup deleteDataGroup = new DataGroup();
-    			deleteDataGroup.setUserId(userId);
-    			deleteDataGroup.setDataGroupId(dataGroupId);
+		// 삭제 대상의 하위목록을 가져와서 모두 삭제
+		List<DataGroup> childrenGroups = dataGroups.stream()
+				.filter(g -> g.getParent().equals(finalDataGroup.getDataGroupId()))
+				.collect(Collectors.toList());
+		childrenGroups.forEach(c -> {
     			// 하위 데이터 삭제
-    			dataMapper.deleteDataByDataGroupId(deleteDataGroup);
-    		}
+			dataMapper.deleteDataByDataGroupId(c);
+			// 데이터 그룹 삭제
+			dataGroupMapper.deleteDataGroup(c);
+		});
     		
-    		// 데이터 그룹 일괄 삭제
-    		result = dataGroupMapper.deleteDataGroupByAncestor(dataGroup);
-    	} else if(Depth.TWO == Depth.findBy(dataGroup.getDepth())) {
-    		// 하위 데이터 그룹 조회
-    		List<Integer> dataGroupIdList = dataGroupMapper.getDataGroupListByParent(dataGroup);
-    		for(Integer dataGroupId : dataGroupIdList) {
-    			DataGroup deleteDataGroup = new DataGroup();
-    			deleteDataGroup.setUserId(userId);
-    			deleteDataGroup.setDataGroupId(dataGroupId);
-    			// 하위 데이터 삭제
-    			dataMapper.deleteDataByDataGroupId(deleteDataGroup);
-    		}
+		// 삭제 대상의 상위목록을 가져옴
+		DataGroup parentGroup = dataGroupMapper.getDataGroup(DataGroup.builder()
+				.userId(dataGroup.getUserId())
+				.dataGroupId(dataGroup.getParent())
+				.build());
     		
-    		// 조상의 children -1
-    		DataGroup ancestorDataGroup = new DataGroup();
-    		ancestorDataGroup.setUserId(userId);
-    		ancestorDataGroup.setDataGroupId(dataGroup.getAncestor());
-    		ancestorDataGroup = dataGroupMapper.getDataGroup(ancestorDataGroup);
-    		DataGroup tempDataGroup = new DataGroup();
-    		tempDataGroup.setUserId(userId);
-    		tempDataGroup.setDataGroupId(ancestorDataGroup.getDataGroupId());
-    		tempDataGroup.setChildren(ancestorDataGroup.getChildren() - 1);
-	    	dataGroupMapper.updateDataGroup(tempDataGroup);
-    		
-	    	// 데이터 그룹 일괄 삭제
-    		result = dataGroupMapper.deleteDataGroupByParent(dataGroup);
-    	} else if(Depth.THREE == Depth.findBy(dataGroup.getDepth())) {
-    		DataGroup deleteDataGroup = new DataGroup();
-			deleteDataGroup.setUserId(userId);
-			deleteDataGroup.setDataGroupId(dataGroup.getDataCount());
-			// 하위 데이터 삭제
-			dataMapper.deleteDataByDataGroupId(deleteDataGroup);
-    		
-			// 부모의 children -1
-			DataGroup parentDataGroup = new DataGroup();
-    		parentDataGroup.setDataGroupId(dataGroup.getParent());
-    		parentDataGroup = dataGroupMapper.getDataGroup(parentDataGroup);
-	    	parentDataGroup.setChildren(parentDataGroup.getChildren() - 1);
-	    	DataGroup tempDataGroup = new DataGroup();
-    		tempDataGroup.setDataGroupId(parentDataGroup.getDataGroupId());
-    		tempDataGroup.setChildren(parentDataGroup.getChildren() - 1);
-	    	dataGroupMapper.updateDataGroup(tempDataGroup);
-	    	
-	    	result = dataGroupMapper.deleteDataGroup(dataGroup);
-    	} else {
-    		
+		if (parentGroup != null) {
+			// parent 데이터 그룹의 카운트 1 감소
+			dataGroupMapper.updateDataGroup(DataGroup.builder()
+					.userId(userId)
+					.dataGroupId(parentGroup.getDataGroupId())
+					.children(parentGroup.getChildren() - 1)
+					.build());
     	}
     	
+		// 마지막으로 실제 삭제 대상 그룹 삭제
+		dataGroupMapper.deleteDataGroup(dataGroup);
+		dataMapper.deleteDataByDataGroupId(dataGroup);
+
     	return result;
     }
 

@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import gaia3d.domain.ApprovalStatus;
 import gaia3d.domain.ApprovalType;
-import gaia3d.domain.CacheManager;
-import gaia3d.domain.DataAdjustLog;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.GeoPolicy;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.data.DataAdjustLog;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.policy.GeoPolicy;
 import gaia3d.persistence.DataAdjustLogMapper;
 import gaia3d.service.DataAdjustLogService;
 import gaia3d.service.DataService;
@@ -65,7 +65,7 @@ public class DataAdjustLogServiceImpl implements DataAdjustLogService {
 	
 	/**
 	 * 데이터 geometry 변경 이력 등록
-	 * @param dataInfoLog
+	 * @param dataInfoAdjustLog
 	 * @return
 	 */
 	@Transactional
@@ -85,6 +85,7 @@ public class DataAdjustLogServiceImpl implements DataAdjustLogService {
 		dataInfoAdjustLog.setBeforePitch(dataInfo.getPitch());
 		dataInfoAdjustLog.setBeforeRoll(dataInfo.getRoll());
 		dataInfoAdjustLog.setLocation("POINT(" + dataInfoAdjustLog.getLongitude() + " " + dataInfoAdjustLog.getLatitude() + ")");
+		dataInfoAdjustLog.setBeforeHeightReference(dataInfo.getHeightReference());
 		
 		if(ApprovalType.AUTO == ApprovalType.valueOf(dataChangeRequestDecision.toUpperCase())) {
 			// 자동 승인의 경우
@@ -97,6 +98,7 @@ public class DataAdjustLogServiceImpl implements DataAdjustLogService {
 			dataInfo.setHeading(dataInfoAdjustLog.getHeading());
 			dataInfo.setPitch(dataInfoAdjustLog.getPitch());
 			dataInfo.setRoll(dataInfoAdjustLog.getRoll());
+			dataInfo.setHeightReference(dataInfoAdjustLog.getHeightReference());
 			dataService.updateData(dataInfo);
 		} else if(ApprovalType.APPROVAL == ApprovalType.valueOf(dataChangeRequestDecision.toUpperCase())) {
 			// 승인이 필요한 경우

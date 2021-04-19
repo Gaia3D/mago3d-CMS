@@ -93,12 +93,12 @@
   		</selectKey>
 		INSERT INTO data_adjust_log(
 			data_adjust_log_id, data_group_id, data_id, user_id, 
-			location, altitude, heading, pitch, roll,
-			before_location, before_altitude, before_heading, before_pitch, before_roll, change_type, description
+			location, altitude, heading, pitch, roll, height_reference,
+			before_location, before_altitude, before_heading, before_pitch, before_roll, before_height_reference, change_type, description
 		) VALUES (
 			#{dataAdjustLogId}, #{dataGroupId}, #{dataId}, #{userId},
-			ST_GeomFromText(#{location}, 4326), #{altitude}, COALESCE(#{heading}, 0), COALESCE(#{pitch}, 0), COALESCE(#{roll}, 0),
-			ST_GeomFromText(#{beforeLocation}, 4326), #{beforeAltitude}, #{beforeHeading}, #{beforePitch}, #{beforeRoll}, #{changeType}, #{description}
+			ST_GeomFromText(#{location}, 4326), #{altitude}, COALESCE(#{heading}, 0), COALESCE(#{pitch}, 0), COALESCE(#{roll}, 0), #{heightReference},
+			ST_GeomFromText(#{beforeLocation}, 4326), #{beforeAltitude}, #{beforeHeading}, #{beforePitch}, #{beforeRoll}, #{beforeHeightReference}, #{changeType}, #{description}
 		)
 	</insert>
 </mapper>

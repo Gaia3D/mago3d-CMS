@@ -7,7 +7,7 @@ public class URLSupport {
 	public static final String POPUP_URL = "popup";
 	
 	// login 의 경우 통과
-	public static final String[] EXCEPTION_URI = { "error", "sign", "/languages/", "/api/", "swagger" };
+	public static final String[] EXCEPTION_URI = { "error", "sign", "/api-internal", "/languages/", "/docs/" };
 	public static final String[] USER_STATUS_EXCEPTION_URI = { "/sign/signin", "/sign/process-signin", "/user/modify-password", "/user/update-password"};
 	
 	// 로그 예외 URL, 사용이력, 이중화, 메인 위젯(main, ajax, widget 이건 너무 많아서 키워드로 Filter)

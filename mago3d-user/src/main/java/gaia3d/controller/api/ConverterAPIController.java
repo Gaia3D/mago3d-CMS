@@ -1,32 +1,40 @@
 package gaia3d.controller.api;
 
-import gaia3d.domain.agent.ConverterResultLog;
-import gaia3d.domain.converter.ConverterJob;
-import gaia3d.service.ConverterService;
-import gaia3d.support.LogMessageSupport;
-import gaia3d.utils.LocaleUtils;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Locale;
+import gaia3d.api.APIController;
+import gaia3d.domain.agent.ConverterResultLog;
+import gaia3d.domain.converter.ConverterJob;
+import gaia3d.service.ApiLogService;
+import gaia3d.service.ConverterService;
+import gaia3d.support.LogMessageSupport;
+import gaia3d.utils.LocaleUtils;
+import gaia3d.utils.WebUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/converters")
-// @RequestMapping(value = "/api/design-layers", produces = MediaTypes.HAL_JSON_VALUE)
-// RestControllerExceptionHandler
-public class ConverterAPIController {
+@RequestMapping(value = "/api-internal/converters")
+public class ConverterAPIController implements APIController {
 
     @Autowired
     private ConverterService converterService;
-
+    @Autowired
+    private ApiLogService apiLogService;
     @Autowired
     private MessageSource messageSource;
 
@@ -60,12 +68,15 @@ public class ConverterAPIController {
             LogMessageSupport.printMessage(e, "@@ exception. message = {}", message);
         }
         converterJob.setErrorCode(errorCode);
+        insertLog(apiLogService, WebUtils.getClientIp(request), request.getRequestURL().toString(), statusCode.value(), message);
 
         return new ResponseEntity<>(converterJob, statusCode);
     }
 
     @PostMapping(value = "{converterJobId}/logs", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<ConverterResultLog> logs(@RequestBody ConverterResultLog converterResultLog, @PathVariable("converterJobId") Long converterJobId, HttpServletRequest request) {
+    public ResponseEntity<ConverterResultLog> logs(@RequestBody ConverterResultLog converterResultLog,
+                                                   @PathVariable("converterJobId") Long converterJobId,
+                                                   HttpServletRequest request, HttpServletResponse response) {
 
         HttpStatus statusCode = HttpStatus.OK;
         String errorCode = null;
@@ -73,7 +84,7 @@ public class ConverterAPIController {
         Locale locale = LocaleUtils.getUserLocale(request);
 
         try {
-            log.info(" >>>>>> converterResultLog = {}", converterResultLog);
+            log.info(" >>>>>> converterJobId = {}", converterJobId);
             converterService.updateConverterJobStatus(converterResultLog);
         } catch (DataAccessException e) {
             statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -92,6 +103,7 @@ public class ConverterAPIController {
             LogMessageSupport.printMessage(e, "@@ exception. message = {}", message);
         }
         converterResultLog.setFailureLog(errorCode);
+        insertLog(apiLogService, WebUtils.getClientIp(request), request.getRequestURL().toString(), statusCode.value(), message);
 
         return new ResponseEntity<>(converterResultLog, statusCode);
     }

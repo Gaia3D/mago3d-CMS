@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.DataInfoLog;
+import gaia3d.domain.data.DataInfoLog;
 
 /**
  * Data Info 변경 이력
@@ -16,7 +16,7 @@ public interface DataLogMapper {
 
 	/**
 	 * 데이터 변경 요청 수
-	 * @param dataInfo
+	 * @param dataInfoLog
 	 * @return
 	 */
 	Long getDataInfoLogTotalCount(DataInfoLog dataInfoLog);

@@ -1,6 +1,6 @@
 package gaia3d.service;
 
-import gaia3d.domain.UserPolicy;
+import gaia3d.domain.user.UserPolicy;
 
 public interface UserPolicyService {
 

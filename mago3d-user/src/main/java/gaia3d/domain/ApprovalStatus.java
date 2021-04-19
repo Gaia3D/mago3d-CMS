@@ -9,6 +9,6 @@ public enum ApprovalStatus {
 	// 기각
 	REJECT,
 	// 원복
-	ROLLBACK;
+	ROLLBACK
 	
 }

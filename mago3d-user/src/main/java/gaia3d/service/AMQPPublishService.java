@@ -1,12 +1,14 @@
 package gaia3d.service;
 
-import gaia3d.domain.QueueMessage;
+import gaia3d.domain.common.QueueMessage;
 
 public interface AMQPPublishService {
 
 	/**
-	 * message 전송
+	 * 메시지 전송
+	 * @param exchange
+	 * @param routingKey
 	 * @param queueMessage
 	 */
-	public void send(QueueMessage queueMessage);
+	public void send(String exchange, String routingKey, QueueMessage queueMessage);
 }

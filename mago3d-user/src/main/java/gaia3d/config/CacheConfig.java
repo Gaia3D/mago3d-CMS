@@ -9,23 +9,22 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.CacheManager;
-import gaia3d.domain.CacheName;
-import gaia3d.domain.CacheParams;
-import gaia3d.domain.CacheType;
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.DataInfoSimple;
-import gaia3d.domain.GeoPolicy;
-import gaia3d.domain.Menu;
-import gaia3d.domain.MenuTarget;
-import gaia3d.domain.Policy;
 import gaia3d.domain.ProfileType;
-import gaia3d.domain.RoleTarget;
 import gaia3d.domain.ServerTarget;
-import gaia3d.domain.UserGroup;
-import gaia3d.domain.UserGroupMenu;
-import gaia3d.domain.UserGroupRole;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.cache.CacheName;
+import gaia3d.domain.cache.CacheParams;
+import gaia3d.domain.cache.CacheType;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.data.DataInfoSimple;
+import gaia3d.domain.menu.Menu;
+import gaia3d.domain.menu.MenuTarget;
+import gaia3d.domain.policy.GeoPolicy;
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.role.RoleTarget;
+import gaia3d.domain.user.UserGroup;
+import gaia3d.domain.user.UserGroupMenu;
+import gaia3d.domain.user.UserGroupRole;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.DataService;
 import gaia3d.service.GeoPolicyService;
@@ -33,6 +32,7 @@ import gaia3d.service.MenuService;
 import gaia3d.service.PolicyService;
 import gaia3d.service.UserGroupService;
 import gaia3d.support.LogMessageSupport;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -55,14 +55,15 @@ public class CacheConfig {
 
     @PostConstruct
     public void init() {
-    	if(ProfileType.LOCAL  == ProfileType.valueOf(propertiesConfig.getProfile().toUpperCase())) {
-        	LogMessageSupport.stackTraceEnable = true;
-        }
-        log.info("************ User Profile = {}, stackTraceEnable = {} *************", propertiesConfig.getProfile(), LogMessageSupport.stackTraceEnable);
-        
     	log.info("*************************************************");
         log.info("************ User Cache Init Start *************");
         log.info("*************************************************");
+
+		CacheManager.setProfile(propertiesConfig.getProfile().toUpperCase());
+    	if(ProfileType.LOCAL == ProfileType.valueOf(CacheManager.getProfile())) {
+        	LogMessageSupport.stackTraceEnable = true;
+        }
+        log.info("************ User Profile = {}, stackTraceEnable = {} *************", propertiesConfig.getProfile(), LogMessageSupport.stackTraceEnable);
 
         CacheParams cacheParams = new CacheParams();
 		cacheParams.setCacheType(CacheType.SELF);

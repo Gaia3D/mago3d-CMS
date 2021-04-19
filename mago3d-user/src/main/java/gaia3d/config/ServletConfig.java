@@ -1,8 +1,10 @@
 package gaia3d.config;
 
-import gaia3d.interceptor.*;
-import nz.net.ultraq.thymeleaf.LayoutDialect;
+import java.time.Duration;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -25,8 +28,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
+import gaia3d.interceptor.CSRFHandlerInterceptor;
+import gaia3d.interceptor.ConfigInterceptor;
+import gaia3d.interceptor.LocaleInterceptor;
+import gaia3d.interceptor.LogInterceptor;
+import gaia3d.interceptor.SecurityInterceptor;
 import lombok.extern.slf4j.Slf4j;
 //import nz.net.ultraq.thymeleaf.LayoutDialect;
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 @Slf4j
 @EnableWebMvc
@@ -69,13 +78,14 @@ public class ServletConfig implements WebMvcConfigurer {
 				.addPathPatterns("/**")
 				.excludePathPatterns("/f4d/**",
 						"/sign/**", "/cache/reload", "/data-groups/view-order/*", "/layer-groups/view-order/*", "/upload-datas", "/issues",
-						"/guide/**", "/css/**", "/externlib/**", "favicon*", "/images/**", "/js/**");
-		registry.addInterceptor(logInterceptor)
-				.addPathPatterns("/**")
-				.excludePathPatterns("/f4d/**",	"/sign/**", "/cache/reload", "/guide/**", "/css/**", "/externlib/**", "favicon*", "/images/**", "/js/**");
+                        "/guide/**", "/css/**", "/externlib/**", "favicon*", "/images/**", "/js/**", "/api-internal/**", "/api/sensor/**", "/api/simulation-logs", "/api/user-interests/**");
+//        registry.addInterceptor(logInterceptor)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/f4d/**", "/sign/**", "/cache/reload", "/guide/**", "/css/**", "/externlib/**", "favicon*", "/images/**", "/js/**");
 		registry.addInterceptor(configInterceptor)
 				.addPathPatterns("/**")
-				.excludePathPatterns("/f4d/**", "/sign/**", "/cache/reload", "/guide/**", "/sample/**", "/css/**", "/externlib/**", "favicon*", "/images/**", "/js/**");
+                .excludePathPatterns("/f4d/**", "/sign/**", "/cache/reload", "/guide/**", "/sample/**", "/css/**", "/externlib/**", "favicon*", "/images/**", "/js/**",
+                        "/api-internal/**");
     }
 	
 	@Bean
@@ -85,8 +95,7 @@ public class ServletConfig implements WebMvcConfigurer {
 	
 	@Bean
 	public LocaleResolver localeResolver() {
-		SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-		return sessionLocaleResolver;
+        return new SessionLocaleResolver();
 	}
 
 	@Bean
@@ -132,8 +141,7 @@ public class ServletConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/externlib/**").addResourceLocations("classpath:static/externlib/");
 		registry.addResourceHandler("/images/**").addResourceLocations("classpath:static/images/");
 		registry.addResourceHandler("/js/**").addResourceLocations("classpath:static/js/");
-		
-//		registry.addResourceHandler("/static/**").addResourceLocations("classpath:static/");
+		registry.addResourceHandler("/docs/**").addResourceLocations("classpath:static/docs/");
 	}
 	
 	@Bean
@@ -142,4 +150,19 @@ public class ServletConfig implements WebMvcConfigurer {
 		return new CSRFRequestDataValueProcessor();
 	}
 	
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        RestTemplateBuilder builder = new RestTemplateBuilder();
+        RestTemplate restTemplate = builder.
+                setConnectTimeout(Duration.ofMillis(10000))
+                .setReadTimeout(Duration.ofMillis(10000))
+                .build();
+        return restTemplate;
+    }
+
 }

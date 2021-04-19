@@ -18,7 +18,7 @@ $(document).ready(function (){
 					$(this).addClass("on");
 				}
 			});
-			NDTP.map.addGroupLayer(Number(layerGroupId));
+			MAGO.map.addGroupLayer(Number(layerGroupId));
 		} else {
 			$(this).text("OFF");
 			$(".nodepth").each(function(e){
@@ -26,7 +26,7 @@ $(document).ready(function (){
 					$(this).removeClass("on");
 				}
 			});
-			NDTP.map.removeGroupLayer(Number(layerGroupId));
+			MAGO.map.removeGroupLayer(Number(layerGroupId));
 		}
 	});
 	
@@ -51,9 +51,9 @@ function layerOnOff(obj) {
 	var layerKey = $(obj).attr("data-layer-key");
     var flag = $(obj).hasClass("on");
 	if(flag) {
-		NDTP.map.addLayer(layerKey);
+		MAGO.map.addLayer(layerKey);
 	} else {
-		NDTP.map.removeLayer(layerKey);
+		MAGO.map.removeLayer(layerKey);
 	}
 }
 
@@ -96,6 +96,7 @@ function getLayerList() {
 
 // 레이어 트리 html 랜더링 
 function createLayerHtml(res) {
+	if (!$("#layerListSource").html()) return;
 	var template = Handlebars.compile($("#layerListSource").html());
 
     for(var i=0, len=res.length; i<len; i++) {
@@ -150,15 +151,15 @@ function turnOnAllLayer() {
 	if(!initLayerCheck()) return;
 	$(".nodepth").addClass("on");
 	$(".layerGroup").text("ON");
-	NDTP.map.removeAllLayers();
-	NDTP.map.initLayer(true);
+	MAGO.map.removeAllLayers();
+	MAGO.map.initLayer(true);
 }
 //레이어 전체 끄기
 function turnOffAllLayer() {
 	if(!initLayerCheck()) return;
 	$(".nodepth").removeClass("on");
 	$(".layerGroup").text("OFF");
-	NDTP.map.removeAllLayers();
+	MAGO.map.removeAllLayers();
 }
 
 // 레이어 트리 전체 펼치기 
@@ -174,7 +175,7 @@ function closeAllLayerTree() {
 }
 
 function initLayerCheck() {
-	if(!NDTP.map) {
+	if(!MAGO.map) {
 		alert(JS_MESSAGE["loading"]);
 		return false;
 	} else {

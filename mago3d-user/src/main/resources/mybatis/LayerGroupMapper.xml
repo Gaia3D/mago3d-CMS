@@ -13,9 +13,7 @@
 	        	A.description, A.insert_date, ARRAY[A.view_order], false
 			FROM layer_group A
 			WHERE A.parent = 0
-			<if test="available != null">
-				AND A.available = #{available}
-			</if>
+				AND A.available = true
 			UNION ALL
 	        SELECT A.layer_group_id, A.layer_group_name, A.user_id, A.ancestor, A.parent, A.depth, A.view_order, A.children, A.available,
 	        	A.description, A.insert_date, path || A.view_order, A.layer_group_id = ANY(path)
@@ -25,5 +23,17 @@
 	    SELECT layer_group_id, layer_group_name, user_id, ancestor, parent, depth, view_order, children, available, description, insert_date, path
 	    FROM layer_group_tree
 	    ORDER BY path
+	</select>
+
+	<!-- 레이어 그룹 정보 -->
+	<select id="getLayerGroup" parameterType="int" resultType="layerGroup">
+		/* getLayerGroup */
+		SELECT A.*,
+			   CASE
+				   WHEN parent > 0 THEN ( SELECT layer_group_name FROM layer_group WHERE layer_group_id = A.parent )
+				   ELSE null
+				   END AS parentName
+		FROM layer_group A
+		WHERE layer_group_id = #{layerGroupId}
 	</select>
 </mapper>

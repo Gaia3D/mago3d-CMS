@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import lombok.extern.slf4j.Slf4j;
 import gaia3d.config.PropertiesConfig;
-import gaia3d.domain.CacheManager;
-import gaia3d.domain.DataGroup;
 import gaia3d.domain.Key;
-import gaia3d.domain.Policy;
 import gaia3d.domain.SharingType;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.policy.Policy;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.DataGroupService;
 import gaia3d.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 사용자 데이터 그룹 관리
@@ -46,30 +46,27 @@ public class DataGroupController {
 	 * 사용자 데이터 그룹 관리
 	 */
 	@GetMapping(value = "/list")
-	public String list(	HttpServletRequest request, 
-						Model model) throws Exception {
+	public String list(	HttpServletRequest request, Model model) {
 		
 		UserSession userSession = (UserSession)request.getSession().getAttribute(Key.USER_SESSION.name());
 		
 		DataGroup dataGroup = new DataGroup();
 		dataGroup.setUserId(userSession.getUserId());
 		// 자기것만 나와야 해서 dataGroupId가 필요 없음
+		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroupForBasic(dataGroup);
+		if (dataGroupList == null || dataGroupList.isEmpty()) {
 		String dataGroupPath = userSession.getUserId() + "/basic/";
-		DataGroup basicDataGroup = dataGroupService.getBasicDataGroup(dataGroup);
-		if(basicDataGroup == null) {
 			dataGroup.setDataGroupKey("basic");
 			dataGroup.setDataGroupName(messageSource.getMessage("common.basic", null, getUserLocale(request)));
 			dataGroup.setDataGroupPath(propertiesConfig.getUserDataServicePath() + dataGroupPath);
 			dataGroup.setSharing(SharingType.PUBLIC.name().toLowerCase());
 			dataGroup.setMetainfo("{\"isPhysical\": false}");
 			
+			FileUtils.makeDirectoryByPath(propertiesConfig.getUserDataServiceDir(), dataGroupPath);
 			dataGroupService.insertBasicDataGroup(dataGroup);
+		
+			dataGroupList = dataGroupService.getListDataGroup(dataGroup);
 		}
-		
-		FileUtils.makeDirectoryByPath(propertiesConfig.getUserDataServiceDir(), dataGroupPath);
-		
-		// 자기것만 나와야 해서 dataGroupId가 필요 없음
-		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroup(dataGroup);
 		
 		model.addAttribute("dataGroupList", dataGroupList);
 		
@@ -91,22 +88,20 @@ public class DataGroupController {
 		DataGroup dataGroup = new DataGroup();
 		dataGroup.setUserId(userSession.getUserId());
 		// 자기것만 나와야 해서 dataGroupId가 필요 없음
+		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroupForBasic(dataGroup);
+		if (dataGroupList == null || dataGroupList.isEmpty()) {
 		String dataGroupPath = userSession.getUserId() + "/basic/";
-		DataGroup basicDataGroup = dataGroupService.getBasicDataGroup(dataGroup);
-		if(basicDataGroup == null) {
 			dataGroup.setDataGroupKey("basic");
 			dataGroup.setDataGroupName(messageSource.getMessage("common.basic", null, getUserLocale(request)));
 			dataGroup.setDataGroupPath(propertiesConfig.getUserDataServicePath() + dataGroupPath);
 			dataGroup.setSharing(SharingType.PUBLIC.name().toLowerCase());
 			dataGroup.setMetainfo("{\"isPhysical\": false}");
 			
+			FileUtils.makeDirectoryByPath(propertiesConfig.getUserDataServiceDir(), dataGroupPath);
 			dataGroupService.insertBasicDataGroup(dataGroup);
+		
+			dataGroupList = dataGroupService.getListDataGroup(dataGroup);
 		}
-		
-		FileUtils.makeDirectoryByPath(propertiesConfig.getUserDataServiceDir(), dataGroupPath);
-		
-		// 자기것만 나와야 해서 dataGroupId가 필요 없음
-		List<DataGroup> dataGroupList = dataGroupService.getAllListDataGroup(dataGroup);
 		
 		dataGroup.setParentName(policy.getContentDataGroupRoot());
 		dataGroup.setParent(0);

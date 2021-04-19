@@ -76,10 +76,29 @@ var UserPolicy = function(magoInstance) {
 	$("#findStartPoint").click(function(e){
 		var magoManager = MAGO3D_INSTANCE.getMagoManager();
 		// TODO event 삭제 필요 
-		magoManager.once(Mago3D.MagoManager.EVENT_TYPE.CLICK, function(result) {
-			var longitude = result.clickCoordinate.geographicCoordinate.longitude;
-			var latitude = result.clickCoordinate.geographicCoordinate.latitude;
+		magoManager.on(Mago3D.MagoManager.EVENT_TYPE.CLICK, function(result) {
+
+			var longitude = result.point.geographicCoordinate.longitude;
+			var latitude = result.point.geographicCoordinate.latitude;
 			var altitude = getCameraCurrentPositionAPI(MAGO3D_INSTANCE).alt;
+			
+			var x = result.point.worldCoordinate.x;
+			var y = result.point.worldCoordinate.y;
+			var z = result.point.worldCoordinate.z;
+
+			var pointGraphic = new Cesium.PointGraphics({
+				pixelSize : 10,
+				heightReference : Cesium.HeightReference.CLAMP_TO_GROUND,
+				color : Cesium.Color.AQUAMARINE,
+				outlineColor : Cesium.Color.WHITE,
+				outlineWidth : 2
+			});
+
+			var viewer = MAGO3D_INSTANCE.getViewer();
+			var addedEntity = viewer.entities.add({
+				position : new Cesium.Cartesian3(x, y, z),
+				point : pointGraphic
+			});
 			
 			$("#initLatitude").val(latitude);
 			$("#initLongitude").val(longitude);
@@ -90,11 +109,42 @@ var UserPolicy = function(magoInstance) {
 
 	//카메라 위치 기반 이슈 가져오기
 	function getCenterRadiusIssue(){
-		NDTP.issueController.getCenterRadiusIssue();
+		MAGO.issueController.getCenterRadiusIssue();
 	}
 	
 	//이슈 클리어, layer 도입해야함
 	function clearCenterRadiusIssue(){
-		NDTP.issueController.clearIssue();
+		MAGO.issueController.clearIssue();
+	}
+}
+
+var updateUserPolicyFlag = true;
+function userPolicyUpdate() {
+	if(updateUserPolicyFlag) {
+		updateUserPolicyFlag = false;
+		var url = "/user-policy/update";
+		var formData = $("#userPolicy").serialize();
+		$.ajax({
+			url: url,
+			type: "POST",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+			data: formData,
+			dataType: "json",
+			success: function(msg) {
+				if(msg.statusCode <= 200) {
+					alert(JS_MESSAGE["save"]);
+				} else {
+					alert(msg.message);
+					console.log("---- " + msg.message);
+				}
+				updateUserPolicyFlag = true;
+			},
+			error: function(request, status, error) {
+				alert(JS_MESSAGE["ajax.error.message"]);
+				updateUserPolicyFlag = true;
+			}
+		});
+	} else {
+		alert(JS_MESSAGE["button.dobule.click"]);
 	}
 }

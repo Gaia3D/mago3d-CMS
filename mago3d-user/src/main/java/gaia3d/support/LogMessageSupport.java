@@ -16,8 +16,6 @@ public class LogMessageSupport {
 	/**
 	 * log print
 	 * @param e
-	 * @param message
-	 * @param value
 	 */
 	public static void printMessage(Exception e) {
 		if(stackTraceEnable) {
@@ -31,7 +29,6 @@ public class LogMessageSupport {
 	 * log print
 	 * @param e
 	 * @param message
-	 * @param value
 	 */
 	public static void printMessage(Exception e, String message) {
 		if(stackTraceEnable) {

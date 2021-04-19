@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gaia3d.domain.Issue;
+import gaia3d.domain.issue.Issue;
 import gaia3d.persistence.IssueMapper;
 import gaia3d.service.IssueService;
 

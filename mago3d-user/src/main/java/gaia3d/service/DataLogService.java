@@ -2,7 +2,7 @@ package gaia3d.service;
 
 import java.util.List;
 
-import gaia3d.domain.DataInfoLog;
+import gaia3d.domain.data.DataInfoLog;
 
 /**
  * Data 변경 이력 관리

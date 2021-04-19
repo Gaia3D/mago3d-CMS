@@ -18,15 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.Issue;
 import gaia3d.domain.Key;
 import gaia3d.domain.PageType;
-import gaia3d.domain.Pagination;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.common.Pagination;
+import gaia3d.domain.issue.Issue;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.IssueService;
 import gaia3d.support.SQLInjectSupport;
 import gaia3d.utils.WebUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 이슈
@@ -37,15 +37,15 @@ import gaia3d.utils.WebUtils;
 @RestController
 @RequestMapping("/issues")
 public class IssueRestController {
-	private static final long PAGE_ROWS = 5l;
-	private static final long PAGE_LIST_COUNT = 5l;
+	private static final long PAGE_ROWS = 5L;
+	private static final long PAGE_LIST_COUNT = 5L;
 	@Autowired
 	private IssueService issueService;
 	
 	/**
 	 * 이슈 정보
 	 * @param request
-	 * @param dataInfo
+	 * @param issueId
 	 * @return
 	 */
 	@GetMapping(value = "/{issueId:[0-9]+}")
@@ -69,7 +69,8 @@ public class IssueRestController {
 	/**
 	 * 이슈 등록
 	 * @param request
-	 * @param dataInfo
+	 * @param issue
+	 * @param errors
 	 * @return
 	 */
 	@PostMapping
@@ -105,7 +106,7 @@ public class IssueRestController {
 	/**
 	 * 이슈 목록 조회
 	 * @param request
-	 * @param Issue
+	 * @param issue
 	 * @param pageNo
 	 * @return
 	 */
@@ -120,9 +121,6 @@ public class IssueRestController {
 		String errorCode = null;
 		String message = null;
 		
-	//	civilVoice.setUserId(userSession.getUserId());
-	//	civilVoice.setClientIp(WebUtils.getClientIp(request));
-		
 		long rows = issue.getLimit() != null ? issue.getLimit() : PAGE_ROWS; 
 		long totalCount = issueService.getIssueTotalCount(issue);
 		Pagination pagination = new Pagination(	request.getRequestURI(),
@@ -136,7 +134,7 @@ public class IssueRestController {
 		issue.setOffset(pagination.getOffset());
 		issue.setLimit(pagination.getPageRows());
 		List<Issue> issueList = new ArrayList<>();
-		if(totalCount > 0l) {
+		if(totalCount > 0L) {
 			issueList = issueService.getListIssue(issue);
 		}
 
@@ -153,11 +151,12 @@ public class IssueRestController {
 	
 	/**
 	 * 검색 조건
-	 * @param search
+	 * @param pageType
+	 * @param issue
 	 * @return
 	 */
 	private String getSearchParameters(PageType pageType, Issue issue) {
-		StringBuffer buffer = new StringBuffer(issue.getParameters());
+		StringBuilder builder = new StringBuilder(issue.getParameters());
 //		buffer.append("&");
 //		try {
 //			buffer.append("dataName=" + URLEncoder.encode(getDefaultValue(dataInfo.getDataName()), "UTF-8"));
@@ -165,9 +164,7 @@ public class IssueRestController {
 //			buffer.append("dataName=");
 //		}
 		
-		buffer.append("&");
-		buffer.append("location=");
-		buffer.append(issue.getLocation());
-		return buffer.toString();
+		builder.append("&location=").append(issue.getLocation());
+		return builder.toString();
 	}
 }

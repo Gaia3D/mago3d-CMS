@@ -10,5 +10,5 @@ public enum ApprovalType {
 	// 자동 승인
 	AUTO,
 	// 결재(초기값)
-	APPROVAL;
+	APPROVAL
 }

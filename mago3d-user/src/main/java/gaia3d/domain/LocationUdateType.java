@@ -11,5 +11,5 @@ public enum LocationUdateType {
 	// 사용자가 입력하지 않은 경우, data가 등록 될때 가장 최신 데이터의 location, altitude, duration = 3,000 을 입력 
 	AUTO,
 	// 사용자가 직접 location, altitude, duration 을 입력
-	USER;
+	USER
 }

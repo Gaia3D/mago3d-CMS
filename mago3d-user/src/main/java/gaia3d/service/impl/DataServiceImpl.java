@@ -6,14 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gaia3d.domain.DataGroup;
-import gaia3d.domain.DataInfo;
-import gaia3d.domain.DataInfoLog;
-import gaia3d.domain.DataInfoSimple;
 import gaia3d.domain.MethodType;
+import gaia3d.domain.data.DataGroup;
+import gaia3d.domain.data.DataInfo;
+import gaia3d.domain.data.DataInfoLog;
+import gaia3d.domain.data.DataInfoSimple;
 import gaia3d.persistence.DataMapper;
 import gaia3d.service.DataGroupService;
 import gaia3d.service.DataLogService;
+import gaia3d.service.DataRelationService;
 import gaia3d.service.DataService;
 
 /**
@@ -26,6 +27,9 @@ public class DataServiceImpl implements DataService {
 
 	@Autowired
 	private DataMapper dataMapper;
+	
+	@Autowired
+	private DataRelationService dataRelationService;
 	
 	@Autowired
 	private DataGroupService dataGroupService;
@@ -41,6 +45,11 @@ public class DataServiceImpl implements DataService {
 	@Transactional(readOnly=true)
 	public Long getDataTotalCount(DataInfo dataInfo) {
 		return dataMapper.getDataTotalCount(dataInfo);
+	}
+	
+	@Transactional(readOnly = true)
+	public Long getDataRelationCount(Long dataRelationId) {
+		return dataMapper.getDataRelationCount(dataRelationId);
 	}
 	
 	/**
@@ -316,6 +325,12 @@ public class DataServiceImpl implements DataService {
 				.dataGroupId(dataGroup.getDataGroupId())
 				.dataCount(dataGroup.getDataCount() - 1).build();
 		dataGroupService.updateDataGroup(tempDataGroup);
+
+		// data_relation 삭제
+		Long dataRelationId = dataInfo.getDataRelationId();
+		if (dataMapper.getDataRelationCount(dataRelationId) == 1) {
+			dataRelationService.deleteDataRelation(dataInfo.getDataRelationId());
+		}
 		
 		return dataMapper.deleteData(dataInfo);
 		// TODO 디렉토리도 삭제 해야 함

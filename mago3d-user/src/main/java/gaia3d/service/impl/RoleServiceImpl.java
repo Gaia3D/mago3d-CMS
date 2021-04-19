@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gaia3d.domain.Role;
+import gaia3d.domain.role.Role;
 import gaia3d.persistence.RoleMapper;
 import gaia3d.service.RoleService;
 

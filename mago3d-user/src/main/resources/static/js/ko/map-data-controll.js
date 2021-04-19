@@ -17,7 +17,7 @@ var MapDataControll = function(magoInstance) {
 			dataKey = data.nodeId;
 			projectId = data.projectId;
 
-			var dataGroupName = NDTP.dataGroup.get(projectId);
+			var dataGroupName = MAGO.dataGroup.get(projectId);
 
 			var tempDataName = data.data_name || data.nodeId;
 			if(tempDataName.indexOf("F4D_") >= 0) {
@@ -294,7 +294,7 @@ var MapDataControll = function(magoInstance) {
 		if(f4d) {
 			var data = f4d.data;
 			projectId = data.projectId;
-			var dataGroupName = NDTP.dataGroup.get(projectId);
+			var dataGroupName = MAGO.dataGroup.get(projectId);
 			
 			var tempDataName = data.data_name;
 			if(tempDataName.indexOf("F4D_") >= 0) {

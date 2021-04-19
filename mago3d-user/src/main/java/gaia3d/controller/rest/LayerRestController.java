@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gaia3d.domain.Key;
-import gaia3d.domain.LayerGroup;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.layer.LayerGroup;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.LayerGroupService;
 import gaia3d.service.UserPolicyService;
 import gaia3d.support.LayerDisplaySupport;
@@ -34,7 +34,6 @@ public class LayerRestController {
 	/**
 	 * 레이어 그룹 목록
 	 * @param request
-	 * @param layerGroup
 	 * @param model
 	 * @return
 	 */
@@ -46,7 +45,7 @@ public class LayerRestController {
 		String errorCode = null;
 		String message = null;
 		
-		List<LayerGroup> layerGroupList = layerGroupService.getListLayerGroupAndLayer();
+		List<LayerGroup> layerGroupList = layerGroupService.getListLayerGroupAndLayer(new LayerGroup());
 		int statusCode = HttpStatus.OK.value();
 		
 		result.put("layerGroupList", LayerDisplaySupport.getListDisplayLayer(layerGroupList, baseLayers));

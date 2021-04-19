@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.DataInfoLog;
+import gaia3d.domain.data.DataInfoLog;
 import gaia3d.service.DataLogService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Data
@@ -33,7 +33,8 @@ public class DataLogRestController {
 	/**
 	 * Data Info Log 상태 수정
 	 * @param request
-	 * @param dataInfo
+	 * @param dataInfoLog
+	 * @param errors
 	 * @return
 	 */
 	@PostMapping

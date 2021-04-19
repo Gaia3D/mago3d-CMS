@@ -12,6 +12,7 @@
 			FROM data_info A, data_group B, user_info C
 			WHERE A.data_group_id = B.data_group_id
 				AND A.user_id = C.user_id
+		<if test="userId != null and userId != ''">
 				AND (
 						B.data_group_target = 'admin'
 					OR
@@ -33,12 +34,34 @@
 						AND C.user_group_id = #{userGroupId}
 					)
 				)
+		</if>
 				<if test="dataGroupId != null and dataGroupId > 0">
 				AND A.data_group_id = #{dataGroupId}
 				</if>
+			<!-- 공유타입 -->
+			<if test="sharing != null and sharing != ''">
+				AND A.sharing = #{sharing}
+			</if>
+			<!-- 데이터 타입 -->
 				<if test="dataType != null and dataType != ''">
 				AND A.data_type = #{dataType}
 				</if>
+			<!-- 데이터 타입들 -->
+			<if test="dataTypes != null">
+				AND A.data_type IN
+				<foreach collection="dataTypes"	item="dataType"	index="index" separator="," open="(" close=")" >
+					#{dataType}
+				</foreach>
+			</if>
+			<!-- 맵핑 타입 -->
+			<if test="mappingType != null and mappingType != ''">
+				AND A.mapping_type = #{mappingType}
+			</if>
+			<!-- 속성 유무 -->
+			<if test="attributeExist != null">
+				AND A.attribute_exist = #{attributeExist}
+			</if>
+			<!-- 데이터 상태 -->
 				<if test="status != null and status != ''">
 				AND A.status = #{status}
 				</if>
@@ -59,6 +82,10 @@
 				]]>
 				</if>			
 		) X
+	</select>
+	
+	<select id="getDataRelationCount" parameterType="long" resultType="long">
+		SELECT COUNT(data_id) FROM data_info WHERE data_relation_id = #{dataRelationId}
 	</select>
 	
 	<!-- 데이터 상태별 통계 정보 -->
@@ -98,6 +125,7 @@
 			FROM data_info A, data_group B, user_info C
 			WHERE A.data_group_id = B.data_group_id
 				AND A.user_id = C.user_id
+			<if test="userId != null and userId != ''">
 				AND (
 						B.data_group_target = 'admin'
 					OR
@@ -119,12 +147,34 @@
 						AND C.user_group_id = #{userGroupId}
 					)
 				)
+			</if>
 				<if test="dataGroupId != null and dataGroupId > 0">
 				AND A.data_group_id = #{dataGroupId}
 				</if>
+				<!-- 공유타입 -->
+				<if test="sharing != null and sharing != ''">
+					AND A.sharing = #{sharing}
+				</if>
+				<!-- 데이터 타입 -->
 				<if test="dataType != null and dataType != ''">
 				AND A.data_type = #{dataType}
 				</if>
+				<!-- 데이터 타입들 -->
+				<if test="dataTypes != null">
+					AND A.data_type IN
+					<foreach collection="dataTypes"	item="dataType"	index="index" separator="," open="(" close=")" >
+						#{dataType}
+					</foreach>
+				</if>
+				<!-- 맵핑 타입 -->
+				<if test="mappingType != null and mappingType != ''">
+					AND A.mapping_type = #{mappingType}
+				</if>
+				<!-- 속성 유무 -->
+				<if test="attributeExist != null">
+					AND A.attribute_exist = #{attributeExist}
+				</if>
+				<!-- 데이터 상태 -->
 				<if test="status != null and status != ''">
 				AND A.status = #{status}
 				</if>
@@ -202,7 +252,7 @@
 	<!-- Data 정보 -->
 	<select id="getData" parameterType="dataInfo" resultType="dataInfo">
 		/* getData */
-		SELECT A.*, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, B.data_group_name, B.data_group_target, B.data_group_key, B.tiling
+		SELECT A.*, A.metainfo->>'heightReference' AS heightReference, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, B.data_group_name, B.data_group_target, B.data_group_key, B.tiling
 		FROM data_info A, data_group B
 		WHERE data_id = #{dataId}
 			AND A.data_group_id = B.data_group_id
@@ -286,7 +336,7 @@
     		SELECT NEXTVAL('data_info_seq')
   		</selectKey>
 		INSERT INTO data_info(
-			data_id, data_group_id, converter_job_id, data_key, data_name, data_type, sharing, user_id, mapping_type,
+			data_id, data_group_id, converter_job_id, data_relation_id, data_key, data_name, data_type, sharing, user_id, mapping_type, assemble,
 			<if test="location != null">
 			location,
 			</if>
@@ -294,17 +344,17 @@
 			<if test="metainfo != null and metainfo != ''">
 			metainfo,
 			</if>
-			status, description
+			status, label, label_template, description
 		) VALUES (
-			#{dataId}, #{dataGroupId}, #{converterJobId}, #{dataKey}, #{dataName}, #{dataType}, #{sharing}, #{userId}, #{mappingType},
+			#{dataId}, #{dataGroupId}, #{converterJobId}, #{dataRelationId}, #{dataKey}, #{dataName}, #{dataType}, #{sharing}, #{userId}, #{mappingType}, #{assemble},
 			<if test="location != null">
 			ST_GeomFromText(#{location}, 4326),
 			</if>
 			#{altitude}, COALESCE(#{heading}, 0), COALESCE(#{pitch}, 0), COALESCE(#{roll}, 0), #{childrenAncestor}, #{childrenParent}, #{childrenDepth}, #{childrenViewOrder},
 			<if test="metainfo != null and metainfo != ''">
-			(#{metainfo}::jsonb),
+			#{metainfo}::jsonb,
 			</if>
-			#{status}, #{description}
+			#{status}, #{label}, #{labelTemplate}, #{description}
 		)
 	</insert>
 	
@@ -318,6 +368,9 @@
 			</if>
 			<if test="converterJobId != null and converterJobId > 0">
 			converter_job_id = #{converterJobId},
+			</if>
+			<if test="dataRelationId != null and dataRelationId > 0">
+			data_relation_id = #{dataRelationId},
 			</if>
 			<if test="sharing != null and sharing != ''">
 			sharing = #{sharing},
@@ -360,6 +413,17 @@
 			</if>
 			<if test="metainfo != null and metainfo != ''">
 			metainfo = (#{metainfo}::json),
+			</if>
+			<if test="metainfo == null or metainfo == ''">
+				<if test="heightReference != null and heightReference != ''">
+					metainfo = JSONB_SET(metainfo, '{heightReference}', '"${heightReference}"'),
+				</if>
+			</if>
+			<if test="label != null and label != ''">
+				label = #{label},
+			</if>
+			<if test="labelTemplate != null and labelTemplate != ''">
+				label_template = #{labelTemplate},
 			</if>
 			<if test="description != null and description != ''">
 			description = #{description},

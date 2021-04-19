@@ -4,10 +4,24 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.DataGroup;
+import gaia3d.domain.data.DataGroup;
 
 @Repository
 public interface DataGroupMapper {
+	
+	/**
+	 * 사용자 Data Group 총건수
+	 * @param dataGroup
+	 * @return
+	 */
+	Long getDataGroupTotalCountForBasic(DataGroup dataGroup);
+
+	/**
+	 * 사용자 데이터 그룹 전체 목록
+	 * @param dataGroup
+	 * @return
+	 */
+	List<DataGroup> getAllListDataGroupForBasic(DataGroup dataGroup);
 	
 	/**
 	 * 사용자 Data Group 총건수
@@ -28,6 +42,12 @@ public interface DataGroupMapper {
      * @return
      */
     List<DataGroup> getListDataGroup(DataGroup dataGroup);
+    
+    /**
+	 * 사용자 데이터 그룹 목록
+	 * @return
+	 */
+	List<DataGroup> getListDataGroupByPatent(DataGroup dataGroup);
     
     /**
      * 사용자 데이터 정보 조회

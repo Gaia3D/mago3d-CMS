@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import gaia3d.domain.converter.ConverterJobFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,17 +13,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.CacheManager;
-import gaia3d.domain.converter.ConverterJob;
 import gaia3d.domain.Key;
 import gaia3d.domain.PageType;
-import gaia3d.domain.Pagination;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.cache.CacheManager;
+import gaia3d.domain.common.Pagination;
+import gaia3d.domain.converter.ConverterJob;
+import gaia3d.domain.converter.ConverterJobFile;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.ConverterService;
 import gaia3d.support.RoleSupport;
 import gaia3d.support.SQLInjectSupport;
 import gaia3d.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Data Converter
@@ -42,7 +42,7 @@ public class ConverterController {
 	/**
 	 * converter job 목록
 	 * @param request
-	 * @param membership_id
+	 * @param converterJob
 	 * @param pageNo
 	 * @param model
 	 * @return
@@ -75,7 +75,7 @@ public class ConverterController {
 		converterJob.setOffset(pagination.getOffset());
 		converterJob.setLimit(pagination.getPageRows());
 		List<ConverterJob> converterJobList = new ArrayList<>();
-		if(totalCount > 0l) {
+		if(totalCount > 0L) {
 			converterJobList = converterService.getListConverterJob(converterJob);
 		}
 		
@@ -94,7 +94,8 @@ public class ConverterController {
 	 * @return
 	 */
 	@GetMapping(value = "/converter-job-file-list")
-	public String converterJobFileList(HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo, ConverterJobFile converterJobFile, Model model) {
+	public String converterJobFileList(HttpServletRequest request, @RequestParam(defaultValue="1") String pageNo,
+									   ConverterJobFile converterJobFile, Model model) {
 
 		converterJobFile.setSearchWord(SQLInjectSupport.replaceSqlInection(converterJobFile.getSearchWord()));
 		converterJobFile.setOrderWord(SQLInjectSupport.replaceSqlInection(converterJobFile.getOrderWord()));
@@ -112,6 +113,9 @@ public class ConverterController {
 
 		long totalCount = converterService.getConverterJobFileTotalCount(converterJobFile);
 		StringBuffer buffer = new StringBuffer(converterJobFile.getParameters());
+		if (converterJobFile.getConverterJobId() != null) {
+			buffer.append("&converterJobId=").append(converterJobFile.getConverterJobId());
+		}
 		Pagination pagination = new Pagination(request.getRequestURI(), buffer.toString(),
 				totalCount, Long.parseLong(pageNo), converterJobFile.getListCounter());
 		converterJobFile.setOffset(pagination.getOffset());
@@ -135,19 +139,19 @@ public class ConverterController {
 	 * @return
 	 */
 	private String getSearchParameters(PageType pageType, ConverterJob converterJob) {
-		StringBuffer buffer = new StringBuffer(converterJob.getParameters());
+		StringBuilder builder = new StringBuilder(converterJob.getParameters());
 		boolean isListPage = true;
 		if(pageType == PageType.MODIFY || pageType == PageType.DETAIL) {
 			isListPage = false;
 		}
 		
 //		if(!isListPage) {
-//			buffer.append("pageNo=" + request.getParameter("pageNo"));
-//			buffer.append("&");
-//			buffer.append("list_count=" + uploadData.getList_counter());
+//			builder.append("pageNo=" + request.getParameter("pageNo"));
+//			builder.append("&");
+//			builder.append("list_count=" + uploadData.getList_counter());
 //		}
 		
-		return buffer.toString();
+		return builder.toString();
 	}
 	
 	private String roleValidator(HttpServletRequest request, Integer userGroupId, String roleName) {

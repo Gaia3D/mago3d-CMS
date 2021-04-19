@@ -20,7 +20,6 @@ public class FormatUtils {
 	/**
 	 * 년월일 시간분초 까지 표시
 	 * @param date
-	 * @param pattern
 	 * @return
 	 */
 	public static String getDayFormat(Date date) {

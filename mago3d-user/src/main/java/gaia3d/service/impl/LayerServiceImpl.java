@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gaia3d.domain.Layer;
+import gaia3d.domain.layer.Layer;
 import gaia3d.persistence.LayerMapper;
 import gaia3d.service.LayerService;
 
@@ -29,5 +29,15 @@ public class LayerServiceImpl implements LayerService {
     @Transactional(readOnly=true)
     public List<Layer> getListLayer(Layer layer) {
         return layerMapper.getListLayer(layer);
+    }
+
+    /**
+     * layer 정보 취득
+     * @param layerId
+     * @return
+     */
+    @Transactional(readOnly=true)
+    public Layer getLayer(Long layerId) {
+        return layerMapper.getLayer(layerId);
     }
 }

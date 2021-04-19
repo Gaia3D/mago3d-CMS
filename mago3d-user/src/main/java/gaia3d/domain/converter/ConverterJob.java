@@ -1,11 +1,17 @@
 package gaia3d.domain.converter;
 
-import gaia3d.domain.Search;
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import gaia3d.domain.common.Search;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * f4d converter 변환 job
@@ -58,7 +64,7 @@ public class ConverterJob extends Search {
 	// 상태. ready : 준비, success : 성공, waiting : 승인대기, fail : 실패
 	private String status;
 	// 상태(ENUM)
-	private ConverterJobStatus ConverterJobStatus;
+	private ConverterJobStatus converterJobStatus;
 	// 데이터 변환 상태 집계
 	private Long statusCount;
 

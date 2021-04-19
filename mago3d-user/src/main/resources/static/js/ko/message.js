@@ -11,6 +11,10 @@ JS_MESSAGE["loading"] = "로딩중입니다.";
 JS_MESSAGE["requested"] = "요청 하였습니다.";
 JS_MESSAGE["searching"] = "검색중입니다.";
 
+JS_MESSAGE["search.input.data.name"] = "데이터명을 입력하여 주십시오.";
+JS_MESSAGE["search.input.data.group.name"] = "데이터 그룹명을 입력하여 주십시오.";
+JS_MESSAGE["search.input.data.address"] = "도로명 입력하여 주십시오.";
+
 JS_MESSAGE["apply"] = "적용되었습니다.";
 JS_MESSAGE["upload"] = "업로딩 중입니다.";
 JS_MESSAGE["proceed.confirm"] = "진행 하시겠습니까?";
@@ -34,7 +38,7 @@ JS_MESSAGE["here.it.is"] = "이곳 입니다.";
 JS_MESSAGE["csrf.token.invalid"] = "보안(CSRF) 토큰이 유효하지 않습니다.";
 
 JS_MESSAGE["number.constraint"] = "숫자만 입력 가능합니다.";
-JS_MESSAGE["location.constraint"]="경도 유효범위 : -180 ~ 180\n위도 유효범위 : -90 ~ 90 \n높이 유효범위 : -30000 ~ 300000 입니다.";
+JS_MESSAGE["location.constraint"]="경도 유효범위 : -180 ~ 180\n위도 유효범위 : -90 ~ 90 \n높이 유효범위 : 300000 입니다.";
 JS_MESSAGE["location.invalid"] = "위치 정보가 올바르지 않습니다. 확인하여 주십시오.";
 
 JS_MESSAGE["file.name.empty"] = "파일명을 입력하여 주십시오.";
@@ -62,6 +66,7 @@ JS_MESSAGE["password.new"] = "새로운 비밀번호를 입력하여 주십시�
 JS_MESSAGE["password.correct.empty"] = "비밀번호 확인을 입력하여 주십시오.";
 JS_MESSAGE["password.match.current"] = "현재 비밀번호와 일치합니다.";
 JS_MESSAGE["password.not.match.new"] = "새로운 비밀번호와 일치하지 않습니다.";
+JS_MESSAGE["password.not.match.confirm"] = "비밀번호 확인과 일치하지 않습니다.";
 JS_MESSAGE["password.change.next"] = "다음에 변경 시 로그인 페이지로 돌아가며 서비스를 사용할 수 없습니다. 비밀번호를 다음에 변경하시겠습니까?";
 JS_MESSAGE["user.name.empty"] = "이름을 입력하여 주십시오.";
 JS_MESSAGE["user.input.invalid"] = "필수 입력값이 유효하지 않습니다.";
@@ -73,16 +78,6 @@ JS_MESSAGE["user.session.close"] = "선택하신 사용자의 세션을 종료 �
 JS_MESSAGE["user.insert"] = "사용자를 등록 하였습니다.";
 JS_MESSAGE["user.info.update"] = "사용자 정보를 수정 하였습니다.";
 JS_MESSAGE["user.id.notexist"] = "아이디가 존재하지 않습니다.";
-
-// ticks
-
-//user group
-
-//input group
-
-//role
-
-//widget
 
 JS_MESSAGE["data.name.empty"] = "데이터명을 입력하여 주십시오.";
 JS_MESSAGE["data.name.invalid"] = "데이터명이 유효하지 않습니다.";
@@ -112,7 +107,7 @@ JS_MESSAGE["data.group.key.enable"] = "사용 가능한 데이터 그룹 Key 입
 JS_MESSAGE["data.group.key.duplication.check"] = "데이터 그룹 Key 중복 확인이 필요 합니다.";
 JS_MESSAGE["data.group.select.parent"] = "상위 데이터 그룹을 선택해 주세요.";
 JS_MESSAGE["data.group.select"] = "데이터 그룹 선택";
-JS_MESSAGE["data.group.depth.constraint"] = "사용자 데이터 그룹은 3 Depth 이상 계층으로 입력할 수 없습니다.";
+JS_MESSAGE["data.group.depth.constraint"] = "사용자 데이터 그룹은 5 Depth 이상 계층으로 입력할 수 없습니다.";
 
 JS_MESSAGE["upload.guide"] = "업로딩 하려면 파일을 올리거나 클릭 하십시오.";
 JS_MESSAGE["upload.browser.guide"] = "죄송합니다. 최신의 브라우저로 Update 후 사용해 주십시오.";

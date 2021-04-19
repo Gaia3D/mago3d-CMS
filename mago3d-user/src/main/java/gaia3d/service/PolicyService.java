@@ -1,6 +1,6 @@
 package gaia3d.service;
 
-import gaia3d.domain.Policy;
+import gaia3d.domain.policy.Policy;
 
 /**
  * 위젯

@@ -7,19 +7,20 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.slf4j.Slf4j;
+import gaia3d.config.PropertiesConfig;
 import gaia3d.domain.Key;
-import gaia3d.domain.UserSession;
-import gaia3d.domain.UserStatus;
+import gaia3d.domain.user.UserSession;
+import gaia3d.domain.user.UserStatus;
 import gaia3d.support.URLSupport;
 import gaia3d.utils.WebUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 보안 관련 체크 인터셉터
@@ -30,6 +31,8 @@ import gaia3d.utils.WebUtils;
 @Component
 public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
+	@Autowired
+	private PropertiesConfig propertiesConfig;
 	@Autowired
 	private ObjectMapper objectMapper;
 	
@@ -62,6 +65,9 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
     	}
     	
     	String loginUrl = URLSupport.SIGNIN_URL;
+//		if(ProfileType.PRODUCT == ProfileType.valueOf(propertiesConfig.getProfile().toUpperCase())) {
+//			loginUrl = propertiesConfig.getSsoLoginUrlWithParams();
+//		}
     	if(uri.indexOf(URLSupport.POPUP_URL) >=0) {
     		loginUrl = URLSupport.POPUP_SIGNIN_URL;
     	}

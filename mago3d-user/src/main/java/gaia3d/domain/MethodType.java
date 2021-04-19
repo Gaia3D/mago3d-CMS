@@ -8,7 +8,9 @@ public enum MethodType {
 	INSERT("등록"),
 	UPDATE("수정");
 	
-	private @Setter @Getter String method;
+	@Setter
+	@Getter
+	private String method;
 	
 	private MethodType(String method) {
 		this.method = method;

@@ -42,9 +42,6 @@ $(function() {
 			} else if( currentUrl.indexOf("#simulation") >= 0) {
 				$("#simulationMenu").addClass('on');
 				$('#simulationContent').toggle(true);
-			} else if( currentUrl.indexOf("#civilVoice") >= 0) {
-				$("#civilVoiceMenu").addClass('on');
-				$('#civilVoiceContent').toggle(true);
 			} else if( currentUrl.indexOf("#userPolicy") >= 0) {
 				$("#userPolicyMenu").addClass('on');
 				$('#userPolicyContent').toggle(true);
@@ -119,18 +116,6 @@ $(function() {
         // 변환 클릭 이벤트시 url 변경 
         if(active === "converterContent") {
         	window.location="../upload-data/list";
-        }
-        
-        //시민참여 벗어날 시 지도 클리어.
-        if(active !== 'civilVoiceContent') {
-        	if(window.civilVoice) {
-        		civilVoice.clear();
-            	civilVoice.showContent('list');
-            	var cluster = civilVoice.cluster
-            	if(cluster && cluster.magoCluster) {
-            		civilVoice.cluster.stopRender();
-            	}
-        	}
         }
         
         $("ul.nav li[data-nav]:not(:empty)").not($(this)).each(function() {

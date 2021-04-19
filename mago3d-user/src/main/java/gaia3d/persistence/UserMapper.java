@@ -2,7 +2,7 @@ package gaia3d.persistence;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.UserInfo;
+import gaia3d.domain.user.UserInfo;
 
 /**
  * 사용자
@@ -13,11 +13,25 @@ import gaia3d.domain.UserInfo;
 public interface UserMapper {
 
 	/**
+	 * 사용자 ID 중복 체크
+	 * @param userInfo
+	 * @return
+	 */
+	Boolean isUserIdDuplication(UserInfo userInfo);
+
+	/**
 	 * 사용자 정보 취득
 	 * @param userId
 	 * @return
 	 */
 	UserInfo getUser(String userId);
+
+	/**
+	 * 사용자 등록
+	 * @param userInfo
+	 * @return
+	 */
+	int insertUser(UserInfo userInfo);
 	
 	/**
 	 * 사용자 비밀번호 수정

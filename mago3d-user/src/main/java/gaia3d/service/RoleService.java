@@ -2,7 +2,7 @@ package gaia3d.service;
 
 import java.util.List;
 
-import gaia3d.domain.Role;
+import gaia3d.domain.role.Role;
 
 public interface RoleService {
 	

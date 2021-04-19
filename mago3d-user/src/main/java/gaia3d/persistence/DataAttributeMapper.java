@@ -2,8 +2,8 @@ package gaia3d.persistence;
 
 import org.springframework.stereotype.Repository;
 
-import gaia3d.domain.DataAttribute;
-import gaia3d.domain.DataAttributeFileInfo;
+import gaia3d.domain.data.DataAttribute;
+import gaia3d.domain.data.DataAttributeFileInfo;
 
 /**
  * 데이터 속성 파일 관리

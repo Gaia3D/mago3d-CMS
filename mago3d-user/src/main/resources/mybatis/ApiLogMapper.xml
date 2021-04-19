@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.ApiLogMapper">
+
+	<!-- API 요청 이력 등록 -->
+	<insert id="insertApiLog" parameterType="apiLog" >
+		/* insertApiLog */
+		<selectKey keyProperty="apiLogId" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('api_log_seq')
+  		</selectKey>
+		INSERT INTO api_log(
+			api_log_id, client_ip, request_uri, status_code, result_message
+		) VALUES (
+			#{apiLogId}, #{clientIp}, #{requestUri}, #{statusCode}, #{resultMessage}
+		)
+	</insert>
+
+</mapper>

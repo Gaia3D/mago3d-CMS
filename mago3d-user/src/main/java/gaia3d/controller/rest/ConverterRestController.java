@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
-import gaia3d.domain.converter.ConverterJob;
 import gaia3d.domain.Key;
-import gaia3d.domain.UserSession;
+import gaia3d.domain.converter.ConverterJob;
+import gaia3d.domain.user.UserSession;
 import gaia3d.service.ConverterService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Data Converter
@@ -33,8 +33,8 @@ public class ConverterRestController {
 	
 	/**
 	 * TODO 우선은 여기서 적당히 구현해 두고... 나중에 좀 깊이 생각해 보자. converter에 어디까지 넘겨야 할지
-	 * converter job insert
-	 * @param model
+	 * @param request
+	 * @param converterJob
 	 * @return
 	 */
 	@PostMapping
