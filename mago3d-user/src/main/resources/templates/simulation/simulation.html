@@ -1,0 +1,84 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="simulationContent" class="contents yScroll fullHeight" style="display:none;">
+<ul class="listDrop">
+	<li class="on">
+		<p th:text="|#{simulation.landscape.analysis}(#{simulation.solar.analysis})|"><span class="collapse-icon">icon</span></p>
+		<div id="solarAnalysis" class="listContents">
+			<ul class="analysisGroup">
+				<li>
+					<label for="solarAnalysisObserverPoint" th:text="#{common.observer.position}"></label>
+					<input type="text" id="solarAnalysisObserverPoint" value="" placeholder=""  readonly/>
+					<button type="button" class="btnText drawObserverPoint" th:text="#{common.pick.location}"></button>
+				</li>
+				<li>
+					<label for="datepicker-input" th:text="#{common.date}"></label>
+					<!-- <input class="" type="text" id="solayDatePicker" placeholder="" value=""/> -->
+					<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+			            <input type="text" id="datepicker-input" aria-label="Date-Time">
+			            <span class="tui-ico-date"></span>
+			        </div>
+			        <div id="solayDatePicker" style="margin-top: -1px;"></div>
+				</li>
+				<li class="btns">
+					<!-- <button type="button" class="btnTextF report" title="일조분석 리포트" style="display:none;">리포트</button> -->
+					<button type="button" class="btnTextF execute" th:text="#{common.analysis}" th:title="#{common.analysis}"></button>
+					<button type="button" class="btnText reset" th:text="#{common.cancel}" th:title="#{common.cancel}"></button>
+				</li>
+			</ul>
+		</div>
+	</li>
+	<li class="on">
+		<p th:text="#{simulation.construction.process}"><span class="collapse-icon">icon</span></p>
+		<div id="constructionProcess" class="listContents">
+			<ul class="analysisGroup">
+				<li>
+					<span th:text="#{common.position}" style="display: inline-block;padding: 3px 0;margin-right: 20px;"></span>
+					<!-- <input class="" type="text" placeholder="" value=""/>
+					<button type="button" class="btnText drawObserverPoint">찾기</button> -->
+					<label for="cpSejong" th:text="#{common.sejong}" style="width:35px;"></label>
+					<input type="radio" id="cpSejong" name="cpProtoArea" value="s" style="width:20px;" checked />
+					<label for="cpBusan" th:text="#{common.busan}" style="width:35px;"></label>
+					<input type="radio" id="cpBusan"  name="cpProtoArea" value="p" style="width:20px;" />
+				</li>
+
+				<li class="btns">
+					<button type="button" class="btnTextF execute" th:text="#{common.lookup}" th:title="#{common.lookup}"></button>
+					<button type="button" class="btnText reset" th:text="#{common.cancel}" th:title="#{common.cancel}"></button>
+				</li>
+				<li class="profileInfo" style="display:none;cursor: default;">
+					<div class="legend">
+						<div class="geostats-legend">
+							<div class="geostats-legend-title">Legend</div>
+							<div class="level" data-level="1" style="width: 80px;display: inline-block;">
+								<div class="geostats-legend-block" style="background-color:#e60800"></div>
+								<span class="geostats-legend-counter" th:text="|1#{common.step}|" style="font-size: 1em;"></span>
+							</div>
+							<div class="level" data-level="2" style="width: 80px;display: inline-block;">
+								<div class="geostats-legend-block" style="background-color:#ff641c"></div>
+								<span class="geostats-legend-counter" th:text="|2#{common.step}|" style="font-size: 1em;"></span>
+							</div>
+							<div class="level" data-level="3" style="width: 80px;display: inline-block;">
+								<div class="geostats-legend-block" style="background-color:#8d1e4d"></div>
+								<span class="geostats-legend-counter" th:text="|3#{common.step}|" style="font-size: 1em;"></span>
+							</div>
+							<div class="level" data-level="4" style="width: 80px;display: inline-block;">
+								<div class="geostats-legend-block" style="background-color:#7d2c79"></div>
+								<span class="geostats-legend-counter" th:text="|4#{common.step}|" style="font-size: 1em;"></span>
+							</div>
+							<div class="level" data-level="5" style="width: 80px;display: inline-block;">
+								<div class="geostats-legend-block" style="background-color:#ffd009"></div>
+								<span class="geostats-legend-counter" th:text="|5#{common.step}|" style="font-size: 1em;"></span>
+							</div>
+							<div class="level" data-level="6" style="width: 80px;display: inline-block;">
+								<div class="geostats-legend-block" style="background-color:#00a9b6"></div>
+								<span class="geostats-legend-counter" th:text="|6#{common.step}|" style="font-size: 1em;"></span>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</li>
+</ul>
+</div>
+</html>

@@ -1,0 +1,50 @@
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
+	<div id="securityTab">
+		<form id="policySecurity" th:object="${policy}" method="post" th:action="@{#}" onsubmit="return false;">
+			<table class="input-table scope-row" summary="환경설정 보안 테이블">
+			<caption class="hiddenTag">환경설정 보안</caption>
+				<col class="col-label l" />
+				<col class="col-input" />
+				<tr>
+					<th class="col-label l" scope="row">
+						<label>보안 세션 타임아웃</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input radio-set">
+						<input type="radio" id="securitySessionTimeoutYn1" name="securitySessionTimeoutYn" th:field="*{securitySessionTimeoutYn}" value="Y" />
+						<label for="securitySessionTimeoutYn1" th:text="#{use}"></label>
+						<input type="radio" id="securitySessionTimeoutYn2" name="securitySessionTimeoutYn" th:field="*{securitySessionTimeoutYn}" value="N" />
+						<label for="securitySessionTimeoutYn2" th:text="|#{not.use}(기본값)|"></label>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="securitySessionTimeout">보안 세션 타임아웃 시간</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="securitySessionTimeout" name="securitySessionTimeout" th:field="*{securitySessionTimeout}" class="s" maxlength="2" onKeyPress="return numkeyCheck(event);" />
+						<span class="table-desc">분</span>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label>개인정보 마스킹 처리</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input radio-set">
+						<input type="radio" id="securityMaskingYn1" name="securityMaskingYn" th:field="*{securityMaskingYn}" value="Y" />
+						<label for="securityMaskingYn1" th:text="#{use} +'(기본값)'"></label>
+						<input type="radio" id="securityMaskingYn2" name="securityMaskingYn" th:field="*{securityMaskingYn}" value="N" />
+						<label for="securityMaskingYn2" th:text="#{not.use}"></label>
+					</td>
+				</tr>
+			</table>
+			<div class="button-group">
+				<div class="center-buttons">
+					<a href="#" class="button" th:text="#{save}" onclick="updatePolicySecurity();"></a>
+				</div>
+			</div>
+		</form>
+	</div>
+</html>

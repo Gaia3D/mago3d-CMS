@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+	<title>사용자 그룹 | mago3D</title>
+	<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />	
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+	<div class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+					<div class="page-content">
+						<div style="height: 30px;"></div>
+						<div class="list">
+							<div class="list-header row">
+								<div class="list-desc u-pull-left">
+									<div class="button-group">
+										<a href="#" onclick="openAll(); return false;" class="button">펼치기</a>
+										<a href="#" onclick="closeAll(); return false;" class="button">접기</a>
+									</div>
+								</div>
+							</div>
+							<!-- S: 사용자 그룹 목록 -->
+							<table class="list-table scope-col" summary="사용자 그룹 리스트를 트리 형태로 조회 ">
+								<caption class="hiddenTag">사용자 그룹</caption>
+								<colgroup>
+									<col class="col-name"></col>
+									<col class="col-id"></col>
+									<col class="col-toggle"></col>
+									<col class="col-toggle"></col>
+									<col class="col-functions"></col>
+									<col class="col-functions"></col>
+									<col class="col-functions"></col>
+									<col class="col-date"></col>
+								</colgroup>
+								<thead>
+									<tr>
+										<th scope="col"><spring:message code='user.group.name'/></th>
+					                    <th scope="col">그룹Key</th>
+					                    <th scope="col">기본 여부</th>
+					                    <th scope="col">사용 여부</th>
+					                    <th scope="col">사용자</th>
+					                    <th scope="col">메뉴</th>
+					                    <th scope="col">Role</th>
+					                    <th scope="col">편집</th>
+					                    <th scope="col">등록일</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:if="${userGroupList.empty}">
+										<td colspan="8" class="col-none"><spring:message code='user.group.empty'/></td>
+									</tr>
+
+									<th:block th:if="${!userGroupList.empty}">
+										<th:block th:each="userGroup : ${userGroupList}">
+											<th:block th:if="${userGroup.depth == 1}">
+											<tr class="oneDepthClass">
+												<td class="col-key ellipsis" style="max-width: 300px;">
+													<span style="padding-left: 0px; font-size: 1.6em;" th:onclick="childrenDisplayToggle([[${userGroup.depth}]], [[${userGroup.userGroupId}]], [[${userGroup.ancestor}]]);">
+														<i th:id="|oneDepthArrow-${userGroup.userGroupId}|" class="fa fa-caret-right oneArrow" aria-hidden="true"></i>
+													</span>&nbsp;
+													<span style="font-size: 1.5em; color: Dodgerblue;">
+														<i th:id="|oneDepthFolder-${userGroup.userGroupId}|" class="fa fa-folder oneFolder" aria-hidden="true"></i>
+													</span>
+													<span th:text="${userGroup.userGroupName}"></span>
+												</td>
+											</th:block>
+											<th:block th:if="${userGroup.depth == 2} ">
+												<tr th:class="|twoDepthClass oneDepthParent-${userGroup.parent}|" style="display: none;">
+													<td class="col-key ellipsis" style="max-width: 300px;">
+														<span style="padding-left: 40px; font-size: 1.6em;" th:onclick="childrenDisplayToggle([[${userGroup.depth}]], [[${userGroup.userGroupId}]], [[${userGroup.ancestor}]]);">
+															<i th:id="|twoDepthArrow-${userGroup.userGroupId}|" th:class="|fa fa-caret-right twoArrow ancestorArrow-${userGroup.ancestor}|" aria-hidden="true"></i>
+														</span>&nbsp;
+														<span style="font-size: 1.5em; color: Mediumslateblue;">
+															<i th:id="|twoDepthArrow-${userGroup.userGroupId}|" th:class="|fa fa-folder twoFolder ancestorFolder-${userGroup.ancestor}|" aria-hidden="true"></i>
+														</span>
+														<span th:text="${userGroup.userGroupName}"></span>
+													</td>
+											</th:block>
+											<th:block th:if="${userGroup.depth == 3}">
+												<tr th:class="|threeDepthClass twoDepthParent-${userGroup.parent} ancestor-${userGroup.ancestor}|" style="display: none;">
+													<td class="col-key ellipsis" style="max-width: 300px;">
+														<span style="padding-left: 80px; font-size: 1.5em; color: Tomato;">
+															<i th:id="|threeDepthFolder-${userGroup.userGroupId}|" th:class="|fa fa-folder threeFolder ancestorFolder-${userGroup.ancestor}|" aria-hidden="true"></i>
+														</span>
+														<span th:text="${userGroup.userGroupName}"></span>
+													</td>
+											</th:block>
+
+											<td class="col-key" th:text="${userGroup.userGroupKey}"></td>
+											<td class="col-type">
+												<th:block th:if="${#bools.isTrue(userGroup.basic)}">기본</th:block>
+												<th:block th:if="${#bools.isFalse(userGroup.basic)}">선택</th:block>
+											</td>
+											<td class="col-type">
+												<th:block th:if="${#bools.isTrue(userGroup.available)}">사용</th:block>
+												<th:block th:if="${#bools.isFalse(userGroup.available)}">미사용</th:block>
+											</td>
+											<td class="col-type">
+												<a th:href="@{/user/list(searchOption=0, searchWord=user_group_name, searchValue=${userGroup.userGroupName})}" class="linkButton">보기</a>
+											</td>
+											<td class="col-type">
+												<a th:href="@{/user-group/menu(userGroupId=${userGroup.userGroupId})}" class="linkButton">수정</a>
+											</td>
+											<td class="col-type">
+												<a th:href="@{/user-group/role(userGroupId=${userGroup.userGroupId})}" class="linkButton">수정</a>
+											</td>
+											<td class="col-type">
+												<a th:href="@{/user-group/modify(userGroupId=${userGroup.userGroupId})}" class="image-button button-edit" th:text="#{modified}"></a>&nbsp;&nbsp;
+												<a th:href="@{/user-group/delete(userGroupId=${userGroup.userGroupId})}" onclick="return deleteUserGroupWarning();" class="image-button button-delete" th:text="#{delete}"></a>
+											</td>
+											<td class="col-date">
+												<p th:text="${#temporals.format(userGroup.insertDate,'yyyy-MM-dd HH:mm')}"></p>
+											</td>
+										</tr>
+										</th:block>
+									</th:block>
+								</tbody>
+							</table>
+						</div>
+						<!-- E: 사용자 그룹 목록 -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	//펼치기
+	function openAll() {
+	    $(".threeDepthClass").show();
+	    $(".twoDepthClass").show();
+
+	    // fa-caret-right
+	    // fa-caret-down
+	    $(".oneArrow").removeClass("fa-caret-right");
+	    $(".oneArrow").addClass("fa-caret-down");
+	    $(".twoArrow").removeClass("fa-caret-right");
+	    $(".twoArrow").addClass("fa-caret-down");
+
+	    $(".oneFolder").removeClass("fa-folder");
+	    $(".oneFolder").addClass("fa-folder-open");
+	    $(".twoFolder").removeClass("fa-folder");
+	    $(".twoFolder").addClass("fa-folder-open");
+	}
+
+	// 접기
+	function closeAll() {
+	    $(".threeDepthClass").hide();
+	    $(".twoDepthClass").hide();
+
+	    $(".oneArrow").removeClass("fa-caret-down");
+	    $(".oneArrow").addClass("fa-caret-right");
+	    $(".twoArrwo").removeClass("fa-caret-down");
+	    $(".twoArrwo").addClass("fa-caret-right");
+
+	    $(".oneFolder").removeClass("fa-folder-open");
+	    $(".oneFolder").addClass("fa-folder");
+	    $(".twoFolder").removeClass("fa-folder-open");
+	    $(".twoFolder").addClass("fa-folder");
+	}
+
+	// 화살표 클릭시
+	function childrenDisplayToggle(depth, id, ancestor) {
+	    if(depth === "1") {
+	        if( $(".oneDepthParent-" + id).css("display") === "none" ) {
+	            // 접힌 상태
+	            $(".oneDepthParent-" + id).show();
+
+	            $("#oneDepthArrow-" + id).removeClass("fa-caret-right");
+	            $("#oneDepthArrow-" + id).addClass("fa-caret-down");
+	            $("#oneDepthFolder-" + id).removeClass("fa-folder");
+	            $("#oneDepthFolder-" + id).addClass("fa-folder-open");
+
+	            $(".ancestorArrow-" + ancestor).removeClass("fa-caret-down");
+	            $(".ancestorArrow-" + ancestor).addClass("fa-caret-right");
+	            $(".ancestorFolder-" + ancestor).removeClass("fa-folder-open");
+	            $(".ancestorFolder-" + ancestor).addClass("fa-folder");
+	        } else {
+				// 펼친 상태
+	            $(".ancestor-" + ancestor).hide();
+	            $(".oneDepthParent-" + id).hide();
+
+	        	var clickClass = $("#oneDepthArrow-" + id).attr("class");
+	            if(clickClass.indexOf("right") >= 0) {
+	            	// 닫힘 상태라 펼침
+	            	$("#oneDepthArrow-" + id).removeClass("fa-caret-right");
+	            	$("#oneDepthArrow-" + id).addClass("fa-caret-down");
+	            	$("#oneDepthFolder-" + id).removeClass("fa-folder");
+	            	$("#oneDepthFolder-" + id).addClass("fa-folder-open");
+	            } else {
+	            	// 펼침 상태라 닫힘
+	            	$("#oneDepthArrow-" + id).removeClass("fa-caret-down");
+	                $("#oneDepthArrow-" + id).addClass("fa-caret-right");
+	                $("#oneDepthFolder-" + id).removeClass("fa-folder-open");
+	                $("#oneDepthFolder-" + id).addClass("fa-folder");
+	            }
+
+	            $(".ancestorArrow-" + ancestor).removeClass("fa-caret-down");
+	            $(".ancestorArrow-" + ancestor).addClass("fa-caret-right");
+	            $(".ancestorFolder-" + ancestor).removeClass("fa-folder-open");
+	            $(".ancestorFolder-" + ancestor).addClass("fa-folder");
+	        }
+	    } else if(depth === "2") {
+	    	if( $(".twoDepthParent-" + id).css("display") === "none" ) {
+	            // 접힌 상태
+	            $(".twoDepthParent-" + id).show();
+
+	            $("#twoDepthArrow-" + id).removeClass("fa-caret-right");
+	            $("#twoDepthArrow-" + id).addClass("fa-caret-down");
+	            $("#twoDepthFolder-" + id).removeClass("fa-folder");
+	            $("#twoDepthFolder-" + id).addClass("fa-folder-open");
+	        } else {
+	            // 펼친 상태
+	            $(".twoDepthParent-" + id).hide();
+
+	            var clickClass = $("#twoDepthArrow-" + id).attr("class");
+	            if(clickClass.indexOf("right") >= 0) {
+	            	// 닫힘 상태라 펼침
+	            	$("#twoDepthArrow-" + id).removeClass("fa-caret-right");
+	            	$("#twoDepthArrow-" + id).addClass("fa-caret-down");
+	            	$("#twoDepthFolder-" + id).removeClass("fa-folder");
+	            	$("#twoDepthFolder-" + id).addClass("fa-folder-open");
+	            } else {
+	            	// 펼침 상태라 닫힘
+	            	$("#twoDepthArrow-" + id).removeClass("fa-caret-down");
+	                $("#twoDepthArrow-" + id).addClass("fa-caret-right");
+	                $("#twoDepthFolder-" + id).removeClass("fa-folder-open");
+	                $("#twoDepthFolder-" + id).addClass("fa-folder");
+	            }
+	        }
+	    }
+	}
+
+	function deleteUserGroupWarning() {
+		if(confirm("삭제 하시겠습니까?\n그룹에 포함된 사용자도 함께 삭제됩니다.")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+</script>
+</th:block>
+</body>
+</html>

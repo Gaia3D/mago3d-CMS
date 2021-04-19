@@ -1,0 +1,12 @@
+ogr2ogr을 실행 시키다 보면 아래 오류가 발생 한다.
+
+ERROR 1: PROJ: proj_create_from_wkt: Cannot find proj.db 
+ERROR 1: PROJ: proj_identify: Cannot find proj.db
+
+일부 컴퓨터에서만 나는데...
+원인을 모르겠다, 아무리 검색해도 답이 없고 해서...
+
+C:\Program Files\QGIS 3.4\share\proj
+
+여기에 보면 proj.db가 있다.
+위에 경로를 환경 설정 path 에 넣고, 실행하니 잘 되었다.

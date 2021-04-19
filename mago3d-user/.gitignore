@@ -1,6 +1,10 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
-
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+/src/main/webapp/sample/f4d/**
 ### STS ###
 .apt_generated
 .classpath
@@ -8,20 +12,22 @@ target/
 .project
 .settings
 .springBeans
+.sts4-cache
 
 ### IntelliJ IDEA ###
 .idea
 *.iws
 *.iml
 *.ipr
+out/
 
 ### NetBeans ###
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-/bin/
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
 
-src/main/webapp/f4d
+### VS Code ###
+.vscode/
+/bin/

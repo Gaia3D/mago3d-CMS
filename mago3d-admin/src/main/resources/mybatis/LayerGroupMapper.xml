@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.LayerGroupMapper">
+
+	<!-- 레이어 그룹 목록 조회 -->
+	<select id="getListLayerGroup" resultType="layerGroup">
+		/* getListLayerGroup */
+		WITH RECURSIVE layer_group_tree (
+			layer_group_id, layer_group_name, user_id, ancestor, parent, depth, view_order, children, available, description, insert_date, path, cycle
+		) AS (
+	        SELECT A.layer_group_id, A.layer_group_name, A.user_id, A.ancestor, A.parent, A.depth, A.view_order, A.children, A.available,
+	        	A.description, A.insert_date, ARRAY[A.view_order], false
+			FROM layer_group A
+			WHERE A.parent = 0
+			<if test="available != null">
+				AND A.available = #{available}
+			</if>
+			UNION ALL
+	        SELECT A.layer_group_id, A.layer_group_name, A.user_id, A.ancestor, A.parent, A.depth, A.view_order, A.children, A.available,
+	        	A.description, A.insert_date, path || A.view_order, A.layer_group_id = ANY(path)
+	        FROM layer_group A, layer_group_tree B
+	        WHERE A.parent = B.layer_group_id AND not cycle
+		)
+	    SELECT layer_group_id, layer_group_name, user_id, ancestor, parent, depth, view_order, children, available, description, insert_date, path
+	    FROM layer_group_tree
+	    ORDER BY path
+	</select>
+
+	<!-- 레이어 그룹 정보 -->
+	<select id="getLayerGroup" parameterType="int" resultType="layerGroup">
+		/* getLayerGroup */
+		SELECT A.*,
+			CASE
+				WHEN parent > 0 THEN ( SELECT layer_group_name FROM layer_group WHERE layer_group_id = A.parent )
+				ELSE null
+			END AS parentName
+		FROM layer_group A
+		WHERE layer_group_id = #{layerGroupId}
+	</select>
+
+	<!-- 부모와 순서를 가지고 레이어 그룹 정보를 취득 -->
+	<select id="getLayerGroupByParentAndViewOrder" parameterType="layerGroup" resultType="layerGroup">
+		/* getLayerGroupByParentAndViewOrder */
+		SELECT *
+		FROM layer_group
+		WHERE parent = #{parent}
+		<if test="updateType == 'UP'.toString()">
+			<![CDATA[
+			AND view_order < #{viewOrder}
+			]]>
+		ORDER BY view_order DESC
+		</if>
+		<if test="updateType == 'DOWN'.toString()">
+			<![CDATA[
+			AND view_order > #{viewOrder}
+			]]>
+		ORDER BY view_order
+		</if>
+		LIMIT 1
+	</select>
+
+	<!-- 레이어 그룹 등록 -->
+	<insert id="insertLayerGroup" parameterType="layerGroup">
+		/* insertLayerGroup */
+		<selectKey keyProperty="layerGroupId" resultType="int" order="BEFORE">
+    		SELECT NEXTVAL('layer_group_seq')
+  		</selectKey>
+		INSERT INTO layer_group (
+			layer_group_id, layer_group_name, user_id, ancestor, parent, depth, view_order, children, available, description
+		) VALUES (
+			#{layerGroupId}, #{layerGroupName}, #{userId},
+			(
+				SELECT COALESCE(MAX(ancestor), #{layerGroupId})
+				FROM layer_group
+				WHERE layer_group_id = #{parent}
+					AND layer_group_id != 0
+			),
+			#{parent},
+			(
+				SELECT COALESCE(MAX(depth),  0 ) + 1
+				FROM layer_group
+				WHERE layer_group_id = #{parent}
+			),
+			(
+				SELECT COALESCE(MAX(view_order), 0) + 1
+				FROM layer_group
+				WHERE parent = #{parent}
+			),
+			(
+				SELECT COUNT(*)
+				FROM layer_group
+				WHERE parent = #{layerGroupId}
+			),
+			#{available},
+			trim(#{description})
+		)
+	</insert>
+
+	<!-- 레이어 그룹 순서 수정 -->
+	<update id="updateLayerGroupViewOrder" parameterType="layerGroup">
+		/* updateLayerGroupViewOrder */
+		UPDATE layer_group
+		SET view_order = #{viewOrder}
+		WHERE layer_group_id = #{layerGroupId}
+	</update>
+
+	<!-- 데이터 그룹 수정 -->
+	<update id="updateLayerGroup" parameterType="layerGroup">
+		/* updateLayerGroup */
+		UPDATE layer_group
+		SET
+			<if test="layerGroupName != null and layerGroupName != ''">
+			layer_group_name = #{layerGroupName},
+			</if>
+			<if test="userId != null and userId != ''">
+			user_id = #{userId},
+			</if>
+			<if test="ancestor != null and ancestor gt 0">
+			ancestor = #{ancestor},
+			</if>
+			<if test="parent != null and parent gt 0">
+			parent = #{parent},
+			</if>
+			<if test="depth != null and depth gt 0">
+			depth = #{depth},
+			</if>
+			<if test="viewOrder != null and viewOrder gt 0">
+			view_order = #{viewOrder},
+			</if>
+			<if test="children != null and children gte 0">
+			children = #{children},
+			</if>
+			<if test="description != null and description != ''">
+			description = #{description},
+			</if>
+			<if test="available != null">
+            available = #{available},
+            </if>
+			update_date = NOW()
+		WHERE layer_group_id = #{layerGroupId}
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
+	</update>
+
+	<!-- 데이터 그룹 삭제 -->
+	<delete id="deleteLayerGroup" parameterType="layerGroup">
+		/* deleteLayerGroup */
+		DELETE
+		FROM layer_group
+		WHERE layer_group_id = #{layerGroupId}
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
+	</delete>
+
+	<!-- ancestor를 이용하여 데이터 그룹 삭제 -->
+	<delete id="deleteLayerGroupByAncestor" parameterType="layerGroup">
+		/* deleteLayerGroupByAncestor */
+		DELETE
+		FROM layer_group
+		WHERE ancestor = #{layerGroupId}
+		OR layer_group_id = #{layerGroupId}
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
+	</delete>
+
+	<!-- parent를 이용하여 데이터 그룹 삭제 -->
+	<delete id="deleteLayerGroupByParent" parameterType="layerGroup">
+		/* deleteLayerGroupByParent */
+		DELETE
+		FROM layer_group
+		WHERE parent = #{layerGroupId}
+		OR layer_group_id = #{layerGroupId}
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
+	</delete>
+</mapper>

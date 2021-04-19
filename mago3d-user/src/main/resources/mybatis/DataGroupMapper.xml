@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.DataGroupMapper">
+
+	<!-- 사용자 데이터 그룹 총 건수 -->
+	<select id="getDataGroupTotalCount" parameterType="dataGroup" resultType="long">
+		/* getDataGroupTotalCount */
+		SELECT COUNT(A.data_group_id) 
+		FROM data_group A , user_info B
+		WHERE A.user_id = B.user_id
+		<if test="userId != null and userId != '' and userGroupId != null and userGroupId >= 0">
+			AND (
+					A.data_group_target = 'admin'
+				OR
+				(
+					A.data_group_target = 'user'
+					AND A.user_id = #{userId}
+				)
+				OR
+				(
+					A.data_group_target = 'user'
+					AND A.user_id != #{userId}
+					AND (A.sharing = 'common' OR A.sharing = 'public')
+				)
+				OR
+				(
+					A.data_group_target = 'user'
+					AND A.user_id != #{userId}
+					AND A.sharing = 'group'
+					AND B.user_group_id = #{userGroupId}
+				)
+			)
+	    </if>
+<!-- 		<trim prefix="WHERE" prefixOverrides="AND"> -->
+		<if test="userId != null and userId != '' and userGroupId == null">
+		AND	A.user_id = #{userId}
+		</if>
+<!-- 			<if test="dataGroupId != null and dataGroupId > 0"> -->
+<!-- 			AND data_group_id = #{dataGroupId} -->
+<!-- 			</if> -->
+		<if test="sharing != null and sharing != ''">
+		AND A.sharing = #{sharing}
+		</if>
+		<if test="basic != null">
+		AND A.basic = #{basic}
+		</if>
+		<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+		AND ${searchWord} = #{searchValue}
+		</if>
+		<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+		AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+		</if>
+		<if test="startDate != null and startDate != ''">
+		<![CDATA[
+		AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+		]]>
+		</if>
+		<if test="endDate != null and endDate != ''">
+		<![CDATA[
+		AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+		]]>
+		</if>
+<!-- 		</trim> -->
+	</select>
+
+	<!-- 사용자 데이터 그룹 목록 조회 -->
+	<select id="getAllListDataGroup" parameterType="dataGroup" resultType="dataGroup">
+		/* getAllListDataGroup */
+		WITH RECURSIVE data_group_tree (
+			data_group_id, data_group_name, data_group_key, data_group_path, data_group_target, sharing, user_id, ancestor, parent, depth, view_order,
+			children, basic, available, tiling, data_count, location, altitude, duration, location_update_type, metainfo, description, update_date, insert_date,
+			path, cycle
+		) AS (
+	        SELECT A.data_group_id, A.data_group_name, A.data_group_key, A.data_group_path, A.data_group_target, A.sharing, A.user_id, A.ancestor, A.parent, A.depth, A.view_order,
+	        	A.children, A.basic, A.available, A.tiling, A.data_count, A.location, A.altitude, A.duration, A.location_update_type, A.metainfo, A.description, A.update_date, A.insert_date,
+	        	ARRAY[A.view_order], false
+			FROM data_group A
+			WHERE A.parent = 0
+			<if test="dataGroupTarget != null">
+				AND A.data_group_target = #{dataGroupTarget}
+			</if>
+			<if test="userId != null and userId != '' and userGroupId == null">
+				AND A.user_id = #{userId}
+				AND A.data_group_target = 'user'
+			</if>
+			<if test="available != null">
+				AND A.available = #{available}
+			</if>
+			<if test="tiling != null">
+				AND A.tiling = #{tiling}
+			</if>
+			UNION ALL
+	        SELECT A.data_group_id, A.data_group_name, A.data_group_key, A.data_group_path, A.data_group_target, A.sharing, A.user_id, A.ancestor, A.parent, A.depth, A.view_order,
+	        	A.children, A.basic, A.available, A.tiling, A.data_count, A.location, A.altitude, A.duration, A.location_update_type, A.metainfo, A.description, A.update_date, A.insert_date,
+	        	path || A.view_order, A.data_group_id = ANY(path)
+	        FROM data_group A,data_group_tree B
+	        WHERE A.parent = B.data_group_id
+	        <if test="userId != null and userId != '' and userGroupId == null">
+				AND A.user_id = #{userId}
+			</if>
+			<if test="tiling != null">
+				AND A.tiling = #{tiling}
+			</if>
+	        	AND not cycle
+		)
+	    SELECT A.data_group_id, A.data_group_name, A.data_group_key, A.data_group_path, A.data_group_target, A.sharing, A.user_id, A.ancestor, A.parent, A.depth, A.view_order,
+	    	A.children, A.basic, A.available, A.tiling, A.data_count, A.location, A.altitude, A.duration, A.location_update_type, A.metainfo, A.description, A.update_date, A.insert_date,
+	    	path
+	    FROM data_group_tree A
+	    <if test="userId != null and userId != '' and userGroupId != null and userGroupId >= 0">
+	    LEFT JOIN user_info B on A.user_id = B.user_id
+			WHERE (
+					A.data_group_target = 'admin'
+				OR
+				(
+					A.data_group_target = 'user'
+					AND A.user_id = #{userId}
+				)
+				OR
+				(
+					A.data_group_target = 'user'
+					AND A.user_id != #{userId}
+					AND (A.sharing = 'common' OR A.sharing = 'public')
+				)
+				OR
+				(
+					A.data_group_target = 'user'
+					AND A.user_id != #{userId}
+					AND A.sharing = 'group'
+					AND B.user_group_id = #{userGroupId}
+				)
+			)
+	    </if>
+	    ORDER BY path
+	</select>
+	
+	<!-- 사용자 데이터 그룹 목록 -->
+	<select id="getListDataGroup" parameterType="dataGroup" resultType="dataGroup">
+		/* getListDataGroup */
+		SELECT *, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude
+		FROM data_group A, user_info B
+		WHERE A.user_id = B.user_id
+		<if test="userId != null and userId != '' and userGroupId != null and userGroupId >= 0">
+			AND (
+					A.data_group_target = 'admin'
+				OR
+				(
+					A.data_group_target = 'user'
+					AND A.user_id = #{userId}
+				)
+				OR
+				(
+					A.data_group_target = 'user'
+					AND A.user_id != #{userId}
+					AND (A.sharing = 'common' OR A.sharing = 'public')
+				)
+				OR
+				(
+					A.data_group_target = 'user'
+					AND A.user_id != #{userId}
+					AND A.sharing = 'group'
+					AND B.user_group_id = #{userGroupId}
+				)
+			)
+	    </if>
+<!-- 	    <trim prefix="WHERE" prefixOverrides="AND"> -->
+		<if test="userId != null and userId != '' and userGroupId == null">
+		AND	A.user_id = #{userId}
+		</if>
+<!-- 			<if test="dataGroupId != null and dataGroupId > 0"> -->
+<!-- 			AND data_group_id = #{dataGroupId} -->
+<!-- 			</if> -->
+		<if test="sharing != null and sharing != ''">
+		AND A.sharing = #{sharing}
+		</if>
+		<if test="basic != null">
+		AND A.basic = #{basic}
+		</if>
+		<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+		AND ${searchWord} = #{searchValue}
+		</if>
+		<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+		AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+		</if>
+		<if test="startDate != null and startDate != ''">
+		<![CDATA[
+		AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+		]]>
+		</if>
+		<if test="endDate != null and endDate != ''">
+		<![CDATA[
+		AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+		]]>
+		</if>
+<!-- 		</trim> -->
+		<choose>
+		<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+		ORDER BY ${orderWord} ${orderValue}
+		</when>
+		<otherwise>
+		ORDER BY A.insert_date DESC, A.data_group_id DESC
+		</otherwise>
+		</choose>
+		OFFSET #{offset} LIMIT #{limit}
+	</select>
+	
+	<!-- 사용자 데이터 그룹 정보 -->
+	<select id="getDataGroup" parameterType="dataGroup" resultType="dataGroup">
+		/* getDataGroup */
+		SELECT A.*, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude,
+			CASE 
+				WHEN parent > 0 THEN ( SELECT data_group_name FROM data_group WHERE data_group_id = A.parent )
+				ELSE null
+			END AS parentName
+		FROM data_group A
+		WHERE A.data_group_id = #{dataGroupId} 
+			<if test="userId != null and userId != ''">
+			AND A.user_id = #{userId}
+			</if>
+	</select>
+	
+	<!-- 사용자 기본 데이터 그룹 정보 -->
+	<select id="getBasicDataGroup" parameterType="dataGroup" resultType="dataGroup">
+		/* getBasicDataGroup */
+		SELECT *
+		FROM data_group
+		WHERE user_id = #{userId}
+			AND data_group_target = 'user'
+			AND data_group_key = 'basic'
+			AND basic = 'true' 
+			AND depth = 1
+		ORDER BY view_order
+		LIMIT 1 
+	</select>
+	
+	<!-- 부모와 순서를 가지고 사용자 데이터 그룹 정보를 취득 -->
+	<select id="getDataGroupByParentAndViewOrder" parameterType="dataGroup" resultType="dataGroup">
+		/* getDataGroupByParentAndViewOrder */
+		SELECT * 
+		FROM data_group 
+		WHERE user_id = #{userId}
+			AND parent = #{parent}
+		<if test="updateType == 'UP'.toString()">
+			<![CDATA[
+			AND view_order < #{viewOrder}
+			]]>
+		ORDER BY view_order DESC
+		</if>
+		<if test="updateType == 'DOWN'.toString()">
+			<![CDATA[
+			AND view_order > #{viewOrder}
+			]]>
+		ORDER BY view_order
+		</if>
+		LIMIT 1
+	</select>
+
+	<!-- 사용자 데이터 그룹 Key 중복 확인 -->
+	<select id="isDataGroupKeyDuplication" parameterType="dataGroup" resultType="boolean">
+		/* isDataGroupKeyDuplication */
+		SELECT 
+			CASE 
+				WHEN COUNT(*) > 0 THEN true
+				ELSE false
+			END AS duplication
+		FROM data_group
+		WHERE user_id = #{userId}
+			AND data_group_key = #{dataGroupKey}
+	</select>
+	
+	<!-- 데이터 삭제를 위해 조상 dataGroupId를 이용해서 모든 하위 dataGroupId를 취득 -->
+	<select id="getDataGroupListByAncestor" parameterType="dataGroup" resultType="int">
+		/* getDataGroupListByAncestor */
+		SELECT data_group_id
+		FROM data_group
+		WHERE ancestor = #{ancestor}
+			AND user_id = #{userId}
+	</select>
+	
+	<!-- 데이터 삭제를 위해 부모 dataGroupId를 이용해서 모든 하위 dataGroupId를 취득 -->
+	<select id="getDataGroupListByParent" parameterType="dataGroup" resultType="int">
+		/* getDataGroupListByParent */
+		SELECT data_group_id
+		FROM data_group
+		WHERE parent = #{ancestor}
+			AND user_id = #{userId}
+	</select>
+	
+	<!-- 사용자 데이터 그룹 등록 -->
+	<insert id="insertDataGroup" parameterType="dataGroup">
+		/* insertDataGroup */
+		<selectKey keyProperty="dataGroupId" resultType="int" order="BEFORE">
+    		SELECT NEXTVAL('data_group_seq')
+  		</selectKey>
+		INSERT INTO data_group (
+			data_group_id, data_group_name, data_group_key,
+			data_group_path, sharing, user_id, ancestor, parent, depth, view_order, children, 
+			<if test="basic != null">
+			basic,
+			</if>
+			<if test="available != null">
+			available,
+			</if>
+			<if test="tiling != null">
+			tiling,
+			</if>
+			data_count,
+			<if test="location != null">
+			location,
+			</if>
+			altitude, duration,
+			<if test="locationUpdateType != null and locationUpdateType != ''">
+			location_update_type,
+			</if>
+			<if test="metainfo != null and metainfo != ''">
+			metainfo,
+			</if>
+			description
+		) VALUES (
+			#{dataGroupId}, #{dataGroupName}, #{dataGroupKey},
+			#{dataGroupPath}, #{sharing}, #{userId},
+			(
+				SELECT COALESCE(MAX(ancestor), #{dataGroupId})
+				FROM data_group
+				WHERE data_group_id = #{parent}
+					AND data_group_id != 0
+			),
+			#{parent},
+			(
+				SELECT COALESCE(MAX(depth),  0 ) + 1
+				FROM data_group
+				WHERE data_group_id = #{parent}
+			),
+			(
+				SELECT COALESCE(MAX(view_order), 0) + 1
+				FROM data_group
+				WHERE parent = #{parent}
+			),
+			(
+				SELECT COUNT(*)
+				FROM data_group
+				WHERE parent = #{dataGroupId}
+			),
+			<if test="basic != null">
+			#{basic},
+			</if>
+			<if test="available != null">
+			#{available},
+			</if>
+			<if test="tiling != null">
+			#{tiling},
+			</if>
+			COALESCE(#{dataCount}, 0),
+			<if test="location != null">
+			ST_GeomFromText(#{location}, 4326),
+			</if>
+			#{altitude}, #{duration}, 
+			<if test="locationUpdateType != null and locationUpdateType != ''">
+			#{locationUpdateType},
+			</if>
+			<if test="metainfo != null and metainfo != ''">
+			TO_JSON(#{metainfo}::json),
+			</if>
+			trim(#{description})
+		)
+	</insert>
+	
+	<!-- 기본 사용자 데이터 그룹 등록 -->
+	<insert id="insertBasicDataGroup" parameterType="dataGroup">
+		/* insertBasicDataGroup */
+		<selectKey keyProperty="dataGroupId" resultType="int" order="BEFORE">
+    		SELECT NEXTVAL('data_group_seq')
+  		</selectKey>
+		INSERT INTO data_group (
+			data_group_id, data_group_name, data_group_key, data_group_path, sharing, user_id, 
+			ancestor, parent, depth, view_order, children, basic, available, data_count, 
+			<if test="location != null">
+			location,
+			</if>
+			altitude, duration,
+			<if test="metainfo != null and metainfo != ''">
+			metainfo,
+			</if>
+			description
+		) VALUES (
+			#{dataGroupId}, #{dataGroupName}, #{dataGroupKey}, #{dataGroupPath}, #{sharing}, #{userId},
+			#{dataGroupId}, 0, 1, 1, 0, true, true, 0,
+			<if test="location != null">
+			ST_GeomFromText(#{location}, 4326),
+			</if>
+			#{altitude}, #{duration}, 
+			<if test="metainfo != null and metainfo != ''">
+			TO_JSON(#{metainfo}::json),
+			</if>
+			trim(#{description})
+		)
+	</insert>
+	
+	<!-- 사용자 데이터 그룹 수정 -->
+	<update id="updateDataGroup" parameterType="dataGroup">
+		/* updateDataGroup */
+		UPDATE data_group
+		SET
+			<if test="dataGroupName != null and dataGroupName != ''">
+			data_group_name = #{dataGroupName},
+			</if>
+			<if test="dataGroupKey != null and dataGroupKey != ''">
+			data_group_key = #{dataGroupKey},
+			</if>
+			<if test="dataGroupPath != null and dataGroupPath != ''">
+			data_group_path = #{dataGroupPath},
+			</if>
+			<if test="sharing != null and sharing != ''">
+			sharing = #{sharing},
+			</if>
+			<if test="userId != null and userId != ''">
+			user_id = #{userId},
+			</if>
+			<if test="ancestor != null and ancestor gt 0">
+			ancestor = #{ancestor},
+			</if>
+			<if test="parent != null and parent gt 0">
+			parent = #{parent},
+			</if>
+			<if test="depth != null and depth gt 0">
+			depth = #{depth},
+			</if>
+			<if test="viewOrder != null and viewOrder gt 0">
+			view_order = #{viewOrder},
+			</if>
+			<if test="children != null and children gte 0">
+			children = #{children},
+			</if>
+			<if test="basic != null">
+			basic = #{basic},
+			</if>
+			<if test="available != null">
+			available = #{available},
+			</if>
+			<if test="tiling != null">
+			tiling = #{tiling},
+			</if>
+			<if test="dataCount != null and dataCount gte 0">
+			data_count = #{dataCount},
+			</if>
+			<if test="location != null">
+			location = ST_GeomFromText(#{location}, 4326),
+			</if>
+			<if test="altitude != null">
+			altitude = #{altitude},
+			</if>
+			<if test="duration != null">
+			duration = #{duration},
+			</if>
+			<if test="locationUpdateType != null and locationUpdateType != ''">
+			location_update_type = #{locationUpdateType},
+			</if>
+			<if test="metainfo != null and metainfo != ''">
+			metainfo = TO_JSON(#{metainfo}::json),
+			</if>
+			<if test="description != null and description != ''">
+			description = #{description},
+			</if>
+			update_date = NOW()
+		WHERE data_group_id = #{dataGroupId}
+			AND user_id = #{userId}
+	</update>
+	
+	<!-- 사용자 데이터 그룹 순서 수정 -->
+	<update id="updateDataGroupViewOrder" parameterType="dataGroup">
+		/* updateDataGroupViewOrder */
+		UPDATE data_group
+		SET view_order = #{viewOrder}
+		WHERE data_group_id = #{dataGroupId}
+			AND user_id = #{userId}
+	</update>
+	
+	<!-- ancestor를 이용하여 사용자 데이터 그룹 삭제 -->
+	<delete id="deleteDataGroupByAncestor" parameterType="dataGroup">
+		/* deleteDataGroupByAncestor */
+		DELETE
+		FROM data_group
+		WHERE ancestor = #{dataGroupId}
+			AND user_id = #{userId}
+	</delete>
+	
+	<!-- parent를 이용하여 사용자 데이터 그룹 삭제 -->
+	<delete id="deleteDataGroupByParent" parameterType="dataGroup">
+		/* deleteDataGroupByParent */
+		DELETE 
+		FROM data_group
+		WHERE parent = #{dataGroupId}
+			AND user_id = #{userId}
+	</delete>
+	
+	<!-- 사용자 데이터 그룹 삭제 -->
+	<delete id="deleteDataGroup" parameterType="dataGroup">
+		/* deleteDataGroup */
+		DELETE
+		FROM data_group
+		WHERE data_group_id = #{dataGroupId} 
+			AND user_id = #{userId}
+	</delete>
+</mapper>

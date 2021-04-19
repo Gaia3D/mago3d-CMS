@@ -1,0 +1,53 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="dataInfoContent" class="contents contents-margin-none fullHeight" style="display:block;">
+	<form id="searchDataForm" th:object="${searchDataForm}" method="post" onsubmit="return false;">
+	<div class="form-group form-group-data">
+		<label for="searchDataName" th:text="#{common.data.name}"></label>
+		<input type="text" id="searchDataName" name="searchDataName" th:placeholder="#{data.enter.data.name}" size="30" />
+	</div>
+	<div class="form-group form-group-data">
+		<label for="searchDataGroup" th:text="#{data.list.tab.group}"></label>
+		<select id="searchDataGroup" name="searchDataGroup">
+			<option value="" th:text="#{common.all}"></option>
+			<th:block th:if="${dataGroupList.size() > 0}" th:each="dataGroup : ${dataGroupList}">
+				<option th:value="${dataGroup.dataGroupId}">
+					<th:block th:if="${dataGroup.dataGroupTarget == 'admin'}" th:text="|[#{common.common}]|"></th:block>
+					<th:block th:unless="${dataGroup.dataGroupTarget == 'admin'}">
+						<th:block th:if="${dataGroup.sharing == 'commomn'}" th:text="|[#{common.common}]|"></th:block>
+						<th:block th:if="${dataGroup.sharing == 'public'}" th:text="|[#{common.public}]|"></th:block>
+						<th:block th:if="${dataGroup.sharing == 'private'}" th:text="|[#{data.share.private}]|"></th:block>
+						<th:block th:if="${dataGroup.sharing == 'group'}" th:text="|[#{data.share.group}]|"></th:block>
+						<th:block th:text="'['+${dataGroup.userId}+']'"></th:block>
+					</th:block>
+					<th:block th:text="${dataGroup.dataGroupName }"></th:block>
+				</option>
+			</th:block>
+		</select>
+	</div>
+	<div class="form-group form-group-data">
+		<label for="searchDataType" th:text="#{common.type}"></label>
+		<select id="searchDataType" name="searchDataType">
+			<option value="" th:text="#{common.all}"></option>
+			<option value="citygml">citygml</option>
+			<option value="indoorgml">indoorgml</option>
+			<option value="las">las</option>
+			<option value="ifc">ifc</option>
+			<option value="dae">dae(collada)</option>
+			<option value="obj">obj</option>
+			<option value="3ds">3ds</option>
+		</select>
+	</div>
+	<div class="form-group button-group-center">
+		<button type="submit" id="mapDataSearch" class="btnTextF search-text" th:text="#{common.search}" th:title="#{common.search}"></button>
+	</div>
+	</form>
+	<dl class="legendWrap">
+		<dt th:text="#{data.group.sharing}"></dt>
+		<dd><span class="legend co">C</span><th:block th:text="#{common.common}"></th:block></dd>
+		<dd><span class="legend pu">O</span><th:block th:text="#{common.public}"></th:block></dd>
+		<dd><span class="legend pr">P</span><th:block th:text="#{common.private}"></th:block></dd>
+		<dd><span class="legend gr">G</span><th:block th:text="#{common.group}"></th:block></dd>
+	</dl>
+	<div id="dataListDHTML" style="height:calc(100% - 255px)"></div>
+</div>
+</html>

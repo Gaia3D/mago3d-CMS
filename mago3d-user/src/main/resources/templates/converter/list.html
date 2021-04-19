@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+    <title><th:block th:text="#{converter.list.page.title}"></th:block></title>
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/user-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+    <script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+</head>
+<body>
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
+<div id="wrap">
+    <!-- S: NAVWRAP -->
+	<div class="navWrap">
+        <div th:replace="~{/fragments/menu :: #navWrap}"></div>
+	</div>
+	<!-- E: NAVWRAP -->
+
+    <div class="container" style="float:left; width: calc(100% - 78px);">
+        <div style="padding: 20px 20px 0px 10px; font-size: 18px;"><th:block th:text="#{converter.subtitle}"></th:block></div>
+        <!-- TAB -->
+        <div class="tabs">
+            <ul class="tab">
+                <li id="tabDataGroupList"><a href="/data-group/list"><th:block th:text="#{data.group.list.tab.menu}"></th:block></a></li>
+                <li id="tabDataGroupInput"><a href="/data-group/input"><th:block th:text="#{data.group.input.tab.menu}"></th:block></a></li>
+                <li id="tabUploadDataInput"><a href="/upload-data/input"><th:block th:text="#{upload.data.input.tab.menu}"></th:block></a></li>
+                <li id="tabUploadDataList"><a href="/upload-data/list"><th:block th:text="#{upload.data.list.tab.menu}"></th:block></a></li>
+                <li id="tabConverterList"><a href="/converter/list"><th:block th:text="#{converter.list.tab.menu}"></th:block></a></li>
+                <li id="tabConverterJobFileList"><a href="/converter/converter-job-file-list"><th:block th:text="#{converter.job.file.list.tab.menu}"></th:block></a></li>
+                <li id="tabDataList"><a href="/data/list"><th:block th:text="#{data.list.tab.menu}"></th:block></a></li>
+                <li id="tabDataLogList"><a href="/data-log/list"><th:block th:text="#{data.log.list.tab.menu}"></th:block></a></li>
+            </ul>
+        </div>
+
+        <!-- S: 검색 -->
+		<div class="filters">
+            <form id="searchForm" th:object="${converterJob}" method="get" th:action="@{/converter/list}" onsubmit="return searchCheck();">
+			<div class="input-group row">
+				<div class="input-set">
+                    <label for="searchWord" th:text="#{common.search.word}"></label>
+					<select id="searchWord" name="searchWord" class="selectBoxClass">
+                        <option value="" th:text="#{common.select}"></option>
+                        <option value="title" th:text="#{common.title}"></option>
+					</select>
+					<select id="searchOption" name="searchOption" class="selectBoxClass">
+                        <option value="0" th:text="#{common.search.same}"></option>
+                        <option value="1" th:text="#{common.search.include}"></option>
+					</select>
+					<input type="search" id="searchValue" name="searchValue" th:field="*{searchValue}" class="m" style="float: right;" />
+				</div>
+				<div class="input-set">
+                    <label for="startDate" th:text="#{common.date}"></label>
+                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
+                    <span class="delimeter tilde">~</span>
+                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
+                </div>
+				<div class="input-set">
+                    <label for="orderWord" th:text="#{common.order}"></label>
+					<select id="orderWord" name="orderWord" class="selectBoxClass">
+                        <option value="" th:text="#{common.basic}"></option>
+                        <option value="title" th:text="#{common.title}"></option>
+                        <option value="insert_date" th:text="#{common.insert.date}"></option>
+					</select>
+                    <select id="orderValue" name="orderValue" class="selectBoxClass">
+                        <option value="" th:text="#{common.basic}"></option>
+                        <option value="ASC" th:text="#{common.asc}"></option>
+                        <option value="DESC" th:text="#{common.desc}"></option>
+                    </select>
+                    <select id="listCounter" name="listCounter" class="selectBoxClass">
+                        <option value="10" th:text="#{common.ten.count}"></option>
+                        <option value="50" th:text="#{common.fifty.count}"></option>
+                        <option value="100" th:text="#{common.hundred.count}"></option>
+                    </select>
+				</div>
+				<div class="input-set">
+                    <input type="submit" th:value="#{common.search}" />
+				</div>
+			</div>
+			</form>
+        </div>
+        <!-- E: 검색 -->
+
+        <!-- S: 변환 데이터 목록 -->
+        <div class="list">
+            <form id="listForm" th:object="${converterJob}" method="post">
+				<input type="hidden" id="checkIds" name="checkIds" />
+                <div class="list-header row">
+                    <div class="list-desc u-pull-left">
+                        <span th:text="#{common.all}"></span>
+                        <span class="totalCount" th:text="${pagination.totalCount}"></span>
+                        <span th:text="#{common.count.unit}"></span>
+                        <span th:text="|${pagination.pageNo} / ${pagination.lastPage}|"></span>
+                        <span th:text="#{common.page}"></span>
+                    </div>
+                </div>
+                <table class="list-table scope-col">
+                    <colgroup>
+                        <col class="col-number"></col>
+                        <col class="col-name"></col>
+                        <col class="col-name"></col>
+                        <col class="col-number"></col>
+                        <col class="col-name"></col>
+                        <col class="col-type"></col>
+                        <col class="col-number"></col>
+                        <col class="col-functions"></col>
+                        <col class="col-functions"></col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th scope="col" class="col-number"><th:block th:text="#{common.number}"></th:block></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.conversion.type}"></th:block></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.title}"></th:block></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.usf}"></th:block></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.view.axis}"></th:block></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.status}"></th:block></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.file.count}"></th:block></th>
+                            <th scope="col" class="col-name"><th:block th:text="#{converter.error.code}"></th:block></th>
+                            <th scope="col" class="col-date"><th:block th:text="#{common.created}"></th:block></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${converterJobList.empty}">
+                            <td colspan="9" class="col-none"><th:block th:text="#{converter.job.does.not.exist}"></th:block></td>
+                        </tr>
+
+                        <tr th:if="${!converterJobList.empty}" th:each="converterJob: ${converterJobList}">
+                            <td class="col-number" th:text="${pagination.rowNumber - converterJobStat.index}"></td>
+
+                            <td class="col-type">
+                                <th:block th:if="${#strings.equals(converterJob.converterTemplate, 'basic')}" th:text="#{converter.template.basic}"></th:block>
+                                <th:block th:if="${#strings.equals(converterJob.converterTemplate, 'building')}" th:text="#{converter.template.building}"></th:block>
+                                <th:block th:if="${#strings.equals(converterJob.converterTemplate, 'extra-big-building')}" th:text="#{converter.template.extra.big.building}"></th:block>
+                                <th:block th:if="${#strings.equals(converterJob.converterTemplate, 'point-cloud')}" th:text="#{converter.template.point.cloud}"></th:block>
+                            </td>
+                            <td class="col-name ellipsis" style="min-width:200px;max-width:200px;">
+                                <a th:text="${converterJob.title}" th:href="@{/converter/converter-job-file-list(converterJobId=${converterJob.converterJobId})}"></a>
+                            </td>
+                            <td class="col-count">
+                                <th:block th:if="${converterJob.usf >= 1 and converterJob.usf < 10}" th:text="|${converterJob.usf}m|"></th:block>
+                                <th:block th:if="${converterJob.usf >= 0.1 and converterJob.usf < 1}" th:text="|${converterJob.usf}cm|"></th:block>
+                                <th:block th:if="${converterJob.usf >= 0.01 and converterJob.usf < 0.1}" th:text="|${converterJob.usf}cm|"></th:block>
+                                <th:block th:if="${converterJob.usf >= 0.001 and converterJob.usf < 0.01}" th:text="|${converterJob.usf}mm|"></th:block>
+                                <th:block th:if="${converterJob.usf >= 10}" th:text="|${converterJob.usf}m|"></th:block>
+                            </td>
+                            <td class="col-type">
+                                <th:block th:if="${#strings.equals(converterJob.viewYAxisUp, 'N')}" th:text="#{converter.view.z.axis}"></th:block>
+                                <th:block th:if="${#strings.equals(converterJob.viewYAxisUp, 'Y')}" th:text="#{converter.view.y.axis}"></th:block>
+                            </td>
+                            <td class="col-type">
+                                <th:block  th:if="${#strings.equals(converterJob.status, 'ready')}" th:text="#{converter.status.ready}"></th:block>
+                                <th:block  th:if="${#strings.equals(converterJob.status, 'success')}" th:text="#{converter.status.success}"></th:block>
+                                <th:block  th:if="${#strings.equals(converterJob.status, 'partial_success')}" th:text="#{converter.status.partial.success}"></th:block>
+                                <th:block  th:if="${#strings.equals(converterJob.status, 'waiting')}" th:text="#{converter.status.waiting}"></th:block>
+                                <th:block  th:if="${#strings.equals(converterJob.status, 'fail')}" th:text="#{converter.status.fail}"></th:block>
+                            </td>
+                            <td class="col-count">
+                                <th:block th:text="${converterJob.fileCount}"></th:block>
+                                <th:block th:text="#{common.count}"></th:block>
+                            </td>
+                            <td class="col-type" th:if="${#strings.isEmpty(converterJob.errorCode)}" th:text="#{converter.error.code.empty}">
+                            <td class="col-type" th:unless="${#strings.isEmpty(converterJob.errorCode)}">
+                                <a href="#" th:onclick="detailErrorCode([[${converterJob.errorCode}]]); return false;">[<th:block th:text="#{converter.detail.error.code}"></th:block>]</a>
+                            </td>
+                            <td class="col-type">
+                                <th:block th:text="${#temporals.format(converterJob.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+            </div>
+        <div th:replace="~{/common/pagination :: #paginationArea}"></div>
+    </div>
+
+</div>
+<div th:replace="~{/converter/error-dialog :: #converterErrorDialog}"></div>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+		var searchWord = "[[${converterJob.searchWord}]]";
+		var searchOption = "[[${converterJob.searchOption}]]";
+		var orderWord = "[[${converterJob.orderWord}]]";
+		var orderValue = "[[${converterJob.orderValue}]]";
+		var listCounter = "[[${converterJob.listCounter}]]";
+
+        if(searchWord != "") $("#searchWord").val(searchWord);
+        if(searchOption != "") $("#searchOption").val(searchOption);
+        if(orderWord != "") $("#orderWord").val(orderWord);
+        if(orderValue != "") $("#orderValue").val(orderValue);
+        if(listCounter != "") $("#listCounter").val(listCounter);
+
+		initDatePicker();
+		initCalendar(new Array("startDate", "endDate"), new Array("[[${converterJob.startDate}]]", "[[${converterJob.endDate}]]"));
+	});
+
+	//전체 선택
+	$("#chkAll").click(function() {
+		$(":checkbox[name=uploadDataId]").prop("checked", this.checked);
+	});
+
+	// 프로젝트 다이얼 로그
+	var errorDialog = $( ".errorDialog" ).dialog({
+		autoOpen: false,
+		width: 400,
+		height: 500,
+		modal: true,
+		resizable: false
+	});
+
+	function detailErrorCode(errorCode) {
+		errorDialog.dialog( "open" );
+		$("#dialog_error_code").html(errorCode);
+	}
+</script>
+</body>

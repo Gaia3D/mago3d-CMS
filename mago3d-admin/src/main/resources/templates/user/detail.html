@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+	<title>사용자 상세 정보 | mago3D</title>
+	<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+    <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+<div class="site-body">
+    <div class="container">
+        <div class="site-content">
+            <div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+            <div class="page-area">
+                <div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+                <div class="page-content">
+                    <div class="content-desc u-pull-right">
+                        <span class="icon-glyph glyph-emark-dot color-warning" th:text="#{check}">
+                    </div>
+
+                        <div class="tabs">
+							<ul>
+								<li><a href="#userInfoTab" th:text="#{user.input.information}"></a></li>
+								<!-- <li><a href="#userDeviceTab" th:text="#{user.input.device}"></a></li> -->
+							</ul>
+							<div id="userInfoTab">
+								<table class="inner-table scope-row">
+                                    <colgroup>
+                                        <col class="col-label"></col>
+                                        <col class="col-data"></col>
+                                    </colgroup>
+									<tr>
+										<th class="col-label" scope="row" th:text="#{user.group.name}"></th>
+										<td class="col-data" th:text="${userInfo.userGroupName}"></td>
+									</tr>
+									<tr>
+										<th class="col-label" scope="row" th:text="#{user.id}"></th>
+										<td class="col-data" th:text="${userInfo.userId}"></td>
+									</tr>
+									<tr>
+										<th class="col-label" scope="row" th:text="#{name}"></th>
+										<td class="col-data" th:text="${userInfo.userName}"></td>
+									</tr>
+									<tr>
+										<th class="col-label" scope="row" th:text="#{status}"></th>
+										<td class="col-data">
+                                            <th:block th:if="${#strings.equals(userInfo.status, '0')}" th:text="사용중"></th:block>
+                                            <th:block th:if="${#strings.equals(userInfo.status, '1')}" th:text="사용중지"></th:block>
+                                            <th:block th:if="${#strings.equals(userInfo.status, '2')}" th:text="잠금"></th:block>
+                                            <th:block th:if="${#strings.equals(userInfo.status, '3')}" th:text="휴면"></th:block>
+                                            <th:block th:if="${#strings.equals(userInfo.status, '4')}" th:text="만료"></th:block>
+                                            <th:block th:if="${#strings.equals(userInfo.status, '5')}" th:text="삭제"></th:block>
+                                            <th:block th:if="${#strings.equals(userInfo.status, '6')}" th:text="임시비밀번호"></th:block>
+										</td>
+									</tr>
+									<tr>
+										<th class="col-label" scope="row" th:text="#{password}"></th>
+										<td class="col-data">********</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="button-group">
+							<div class="center-buttons">
+								<a th:href="@{/user/list(${listParameters})}" class="button" th:text="#{list}"></a>
+								<a th:href="@{/user/modify(userId=${userInfo.userId}, ${listParameters})}" class="button" th:text="#{modified}"></a>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="pageCustomScript">		
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$( ".tabs" ).tabs();
+	});
+</script>
+</th:block>
+</body>
+</html>

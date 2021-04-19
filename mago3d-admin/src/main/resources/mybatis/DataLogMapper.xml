@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.DataLogMapper">
+
+	<!-- 데이터 변경 요청 수 -->
+	<select id="getDataInfoLogTotalCount" parameterType="dataInfoLog" resultType="long">
+		/* getDataInfoLogTotalCount */
+		SELECT COUNT(X.data_log_id) 
+		FROM (
+			SELECT A.data_log_id
+			FROM data_info_log A, data_info B
+			WHERE A.data_id = B.data_id
+				<if test="userId != null and userId != ''">
+				AND A.user_id = #{userId}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+				AND A.${searchWord} = #{searchValue}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+				AND A.${searchWord} LIKE '%' || #{searchValue} || '%'
+				</if>
+				<if test="startDate != null and startDate != ''">
+				<![CDATA[
+				AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="endDate != null and endDate != ''">
+				<![CDATA[
+				AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+			) X
+	</select>
+	
+	<!-- 데이터 변경 요청 로그 목록. join 으로 변경해야 함 -->
+	<select id="getListDataInfoLog" parameterType="dataInfoLog" resultType="dataInfoLog">
+		/* getListDataInfoLog */
+		SELECT X.*, 
+			(SELECT data_group_name FROM data_group WHERE data_group_id = X.data_group_id) AS data_group_name
+		FROM (
+			SELECT A.*, B.data_name, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude
+			FROM data_info_log A, data_info B
+			WHERE A.data_id = B.data_id
+				<if test="userId != null and userId != ''">
+				AND A.user_id = #{userId}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+				AND A.${searchWord} = #{searchValue}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+				AND A.${searchWord} LIKE '%' || #{searchValue} || '%'
+				</if>
+				<if test="startDate != null and startDate != ''">
+				<![CDATA[
+				AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="endDate != null and endDate != ''">
+				<![CDATA[
+				AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+			<choose>
+			<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+			ORDER BY A.${orderWord} ${orderValue}
+			</when>
+			<otherwise>
+			ORDER BY A.insert_date DESC, A.data_id DESC
+			</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) X
+	</select>
+	
+	<select id="getDataInfoLog" parameterType="long" resultType="dataInfoLog">
+		/* getDataInfoLog */
+		SELECT A.*, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, B.data_name
+		FROM data_info_log A, data_info B
+		WHERE A.data_log_id = #{dataLogId}
+			AND A.data_id = B.data_id
+	</select>
+
+	<!-- Data Info 변경 이력 등록 -->
+	<insert id="insertDataInfoLog" parameterType="dataInfoLog">
+		/* insertDataInfoLog */
+		<selectKey keyProperty="dataLogId" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('data_info_log_seq')
+  		</selectKey>
+		INSERT INTO data_info_log(
+			data_log_id, data_group_id, data_id, data_key, data_name, data_type, converter_job_id, 
+			sharing, user_id, mapping_type, location, altitude, 
+			heading, pitch, roll, 
+			change_type,
+			<if test="metainfo != null and metainfo != ''">
+				metainfo,
+			</if> 
+			description
+		) VALUES (
+			#{dataLogId}, #{dataGroupId}, #{dataId}, #{dataKey}, #{dataName}, #{dataType}, #{converterJobId}, 
+			#{sharing}, #{userId}, #{mappingType}, ST_GeomFromText(#{location}, 4326), #{altitude}, 
+			COALESCE(#{heading}, 0), COALESCE(#{pitch}, 0), COALESCE(#{roll}, 0), 
+			#{changeType},
+			<if test="metainfo != null and metainfo != ''">
+				TO_JSON(#{metainfo}::json),
+			</if> 
+ 			#{description}
+		)
+	</insert>
+	
+	<!-- 데이터 로그 상태 변경 -->
+	<update id="updateDataInfoLogStatus" parameterType="dataInfoLog">
+		/* updateDataInfoLogStatus */
+		UPDATE data_info_log
+		SET status = #{status},
+			update_date = NOW()
+		WHERE data_log_id = #{dataLogId}
+	</update>
+</mapper>

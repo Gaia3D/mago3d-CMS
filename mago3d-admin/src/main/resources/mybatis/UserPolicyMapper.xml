@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.UserPolicyMapper">
+
+    <!-- 사용자 설정 정보 조회 -->
+    <select id="getUserPolicy" parameterType="string" resultType="userPolicy">
+        /* getUserPolicy */
+        SELECT * FROM user_policy WHERE user_id = #{userId}
+    </select>
+
+    <!-- 사용자 설정 등록 -->
+    <insert id="insertUserPolicy" parameterType="userPolicy">
+        /* insertUserPolicy */
+        <selectKey keyProperty="userPolicyId" resultType="int" order="BEFORE">
+        SELECT NEXTVAL('user_policy_seq')
+        </selectKey>
+        INSERT INTO user_policy (
+        	user_policy_id, user_id, base_layers, init_latitude, init_longitude, init_altitude, init_duration, init_default_fov, lod0, lod1, lod2, lod3, lod4, lod5, ssao_radius, insert_date
+        )
+        VALUES (
+        	#{userPolicyId}, #{userId}, #{baseLayers}, #{initLatitude}, #{initLongitude}, #{initAltitude}, #{initDuration}, #{initDefaultFov},
+        	#{lod0}, #{lod1}, #{lod2}, #{lod3}, #{lod4}, #{lod5}, #{ssaoRadius}, NOW()
+        )
+    </insert>
+
+    <!-- 사용자 설정 수정 -->
+    <update id="updateUserPolicy" parameterType="userPolicy">
+        /* updateUserPolicy */
+        UPDATE user_policy SET
+        	<if test="baseLayers != null and baseLayers != ''">
+        		base_layers = #{baseLayers}, 
+        	</if>
+        	<if test="initLatitude != null and initLatitude != ''">
+        		init_latitude = #{initLatitude}, 
+        	</if>
+        	<if test="initLongitude != null and initLongitude != ''">
+        		init_longitude = #{initLongitude}, 
+        	</if>
+        	<if test="initAltitude != null and initAltitude != ''">
+        		init_altitude = #{initAltitude}, 
+        	</if>
+        	<if test="initDuration != null">
+        		init_duration = #{initDuration}, 
+        	</if>
+        	<if test="initDefaultFov != null">
+        		init_default_fov = #{initDefaultFov},
+        	</if>
+        	<if test="lod0 != null and lod0 != ''">
+        		lod0 = #{lod0},
+        	</if>
+        	<if test="lod1 != null and lod1 != ''">
+        		lod1 = #{lod1}, 
+        	</if>
+        	<if test="lod2 != null and lod2 != ''">
+        		lod2 = #{lod2}, 
+        	</if>
+        	<if test="lod3 != null and lod3 != ''">
+        		lod3 = #{lod3},
+        	</if>
+        	<if test="lod4 != null and lod4 != ''">
+        		lod4 = #{lod4}, 
+        	</if>
+        	<if test="lod5 != null and lod5 != ''">
+        		lod5 = #{lod5}, 
+        	</if>
+        	<if test="ssaoRadius != null">
+        		ssao_radius = #{ssaoRadius}, 
+        	</if>
+           		update_date = NOW()
+        WHERE user_id = #{userId}
+    </update>
+</mapper>

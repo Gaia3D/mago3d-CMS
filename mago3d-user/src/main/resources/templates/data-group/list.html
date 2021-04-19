@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+	<title><th:block th:text="#{data.group.list.page.title}"></th:block></title>
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/user-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/{lang}/style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
+    <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+    <script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+</head>
+<body>
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
+<div id="wrap">
+    <!-- S: NAVWRAP -->
+    <div class="navWrap">
+        <div th:replace="~{/fragments/menu :: #navWrap}"></div>
+    </div>
+    <!-- E: NAVWRAP -->
+
+    <div class="container" style="float:left; width: calc(100% - 78px);">
+        <div style="padding: 20px 20px 0px 10px; font-size: 18px;"><th:block th:text="#{converter.subtitle}"></th:block></div>
+        <!-- TAB -->
+        <div class="tabs">
+            <ul class="tab">
+				<li id="tabDataGroupList"><a href="/data-group/list"><th:block th:text="#{data.group.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataGroupInput"><a href="/data-group/input"><th:block th:text="#{data.group.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataInput"><a href="/upload-data/input"><th:block th:text="#{upload.data.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataList"><a href="/upload-data/list"><th:block th:text="#{upload.data.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterList"><a href="/converter/list"><th:block th:text="#{converter.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterJobFileList"><a href="/converter/converter-job-file-list"><th:block th:text="#{converter.job.file.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataList"><a href="/data/list"><th:block th:text="#{data.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataLogList"><a href="/data-log/list"><th:block th:text="#{data.log.list.tab.menu}"></th:block></a></li>
+            </ul>
+        </div>
+		<div style="height: 30px;"></div>
+		<div class="list">
+			<div class="list-header row">
+				<div class="list-desc u-pull-left">
+					<div class="button-group">
+						<a href="#" class="button" onclick="openAll(); return false;"><th:block th:text="#{common.unfold}"></th:block></a>
+						<a href="#" class="button" onclick="closeAll(); return false;"><th:block th:text="#{common.folding}"></th:block></a>
+					</div>
+				</div>
+			</div>
+			<table class="list-table scope-col">
+				<colgroup>
+					<col class="col-name"></col>
+					<col class="col-name"></col>
+					<col class="col-name"></col>
+					<col class="col-toggle"></col>
+					<col class="col-functions"></col>
+					<col class="col-functions"></col>
+					<col class="col-functions"></col>
+					<col class="col-functions"></col>
+					<col class="col-date"></col>
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col"><th:block th:text="#{converter.data.group}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{converter.data.group.key}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{converter.data.group.sharing}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{converter.data.group.available}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{converter.data.count}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{common.order}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{common.edit}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{common.delete}"></th:block></th>
+	                    <th scope="col"><th:block th:text="#{common.created}"></th:block></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${dataGroupList.empty}">
+						<td colspan="9" class="col-none"><th:block th:text="#{converter.data.group.does.not.exist}"></th:block></td>
+                    </tr>
+                    
+                    <th:block th:if="${!dataGroupList.empty}">
+						<th:block th:each="dataGroup : ${dataGroupList}">
+							<th:block th:if="${dataGroup.depth == 1}">
+							<tr class="oneDepthClass">
+								<td class="col-key ellipsis" style="max-width: 300px;">
+									<span th:onclick="childrenDisplayToggle([[${dataGroup.depth}]], [[${dataGroup.dataGroupId}]], [[${dataGroup.ancestor}]]);" style="padding-left: 0px; font-size: 1.6em;" >
+										<i th:id="|oneDepthArrow-${dataGroup.dataGroupId}|" class="fa fa-caret-right oneArrow" aria-hidden="true"></i>
+									</span>&nbsp;
+									<span style="font-size: 1.5em; color: Dodgerblue;">
+										<i th:id="|oneDepthFolder-${dataGroup.dataGroupId}|" class="fa fa-folder oneFolder" aria-hidden="true"></i>
+									</span>
+									<span th:text="${dataGroup.dataGroupName}"></span>
+								</td>
+							</th:block>
+							<th:block th:if="${dataGroup.depth == 2} ">
+								<tr th:class="|twoDepthClass oneDepthParent-${dataGroup.parent}|" style="display: none;">
+									<td class="col-key ellipsis" style="max-width: 300px;">
+										<span th:onclick="childrenDisplayToggle([[${dataGroup.depth}]], [[${dataGroup.dataGroupId}]], [[${dataGroup.ancestor}]]);" style="padding-left: 40px; font-size: 1.6em;">
+											<i th:id="|twoDepthArrow-${dataGroup.dataGroupId}|" th:class="|fa fa-caret-right twoArrow ancestorArrow-${dataGroup.ancestor}|" aria-hidden="true"></i>
+										</span>&nbsp;
+										<span style="font-size: 1.5em; color: Mediumslateblue;">
+											<i th:id="|twoDepthArrow-${dataGroup.dataGroupId}|" th:class="|fa fa-folder twoFolder ancestorFolder-${dataGroup.ancestor}|" aria-hidden="true"></i>
+										</span>
+										<span th:text="${dataGroup.dataGroupName}"></span>
+									</td>
+							</th:block>
+							<th:block th:if="${dataGroup.depth == 3}">
+								<tr th:class="|threeDepthClass twoDepthParent-${dataGroup.parent} ancestor-${dataGroup.ancestor}|" style="display: none;">
+									<td class="col-key ellipsis" style="max-width: 300px;">
+										<span style="padding-left: 80px; font-size: 1.5em; color: Tomato;">
+											<i th:id="|threeDepthFolder-${dataGroup.dataGroupId}|" th:class="|fa fa-folder threeFolder ancestorFolder-${dataGroup.ancestor}|" aria-hidden="true"></i>
+										</span>
+										<span th:text="${dataGroup.dataGroupName}"></span>
+									</td>
+							</th:block>
+									<td class="col-key ellipsis" th:text="${dataGroup.dataGroupKey}" style="max-width: 120px;"></td>
+									<td class="col-type" th:text="${dataGroup.sharing}"></td>
+									<td class="col-type">
+										<th:block th:if="${#bools.isTrue(dataGroup.available)}" th:text="#{common.use}"></th:block>
+										<th:block th:if="${#bools.isFalse(dataGroup.available)}" th:text="#{common.unused}"></th:block>
+									</td>
+									<td class="col-count">
+										<th:block th:if="${dataGroup.dataCount > 0}">
+										<a th:href="@{/data/list(dataGroupId=${dataGroup.dataGroupId})}" class="linkButton" th:value="${dataGroup.dataCount}"></a>
+										</th:block>
+										<th:block th:if="${dataGroup.dataCount == 0}">0</th:block>
+									</td>
+									<td class="col-type">
+										<div class="button-group">
+											<a href="#" class="button" th:onclick="moveUp([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;"  style="text-decoration:none;">
+												<th:block th:text="#{common.up}"></th:block></a>
+											<a href="#" class="button" th:onclick="moveDown([[${dataGroup.dataGroupId}]], [[${dataGroup.viewOrder}]]); return false;" style="text-decoration:none;">
+												<th:block th:text="#{common.down}"></th:block></a>
+										</div>
+									</td>
+									<td class="col-type">
+										<a th:href="@{/data-group/modify(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-edit"><th:block th:text="#{common.edit}"></th:block></a>
+									</td>
+									<td class="col-type">
+										<th:block th:if="${#bools.isTrue(dataGroup.basic)}" th:text="#{common.cannot.be.deleted}"></th:block>
+										<th:block th:if="${#bools.isFalse(dataGroup.basic)}">
+											<a th:href="@{/data-group/delete(dataGroupId=${dataGroup.dataGroupId})}" class="image-button button-delete" th:value="#{common.delete}" onclick="return deleteWarning();"></a>
+										</th:block>
+									</td>
+									<td class="col-date">
+										<th:block th:text="${#temporals.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+									</td>
+								</tr>
+						</th:block>
+                    </th:block>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<!-- E: WRAP -->
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+	});
+	
+	//펼치기
+	function openAll() {
+	    $(".threeDepthClass").show();
+	    $(".twoDepthClass").show();
+	
+	    // fa-caret-right
+	    // fa-caret-down
+	    $(".oneArrow").removeClass("fa-caret-right");
+	    $(".oneArrow").addClass("fa-caret-down");
+	    $(".twoArrow").removeClass("fa-caret-right");
+	    $(".twoArrow").addClass("fa-caret-down");
+	
+	    $(".oneFolder").removeClass("fa-folder");
+	    $(".oneFolder").addClass("fa-folder-open");
+	    $(".twoFolder").removeClass("fa-folder");
+	    $(".twoFolder").addClass("fa-folder-open");
+	}
+	
+	// 접기
+	function closeAll() {
+	    $(".threeDepthClass").hide();
+	    $(".twoDepthClass").hide();
+	
+	    $(".oneArrow").removeClass("fa-caret-down");
+	    $(".oneArrow").addClass("fa-caret-right");
+	    $(".twoArrwo").removeClass("fa-caret-down");
+	    $(".twoArrwo").addClass("fa-caret-right");
+	
+	    $(".oneFolder").removeClass("fa-folder-open");
+	    $(".oneFolder").addClass("fa-folder");
+	    $(".twoFolder").removeClass("fa-folder-open");
+	    $(".twoFolder").addClass("fa-folder");
+	}
+	
+	// 화살표 클릭시
+	function childrenDisplayToggle(depth, id, ancestor) {
+	    if(depth === "1") {
+	        if( $(".oneDepthParent-" + id).css("display") === "none" ) {
+				// 접힌 상태
+	            $(".oneDepthParent-" + id).show();
+	
+	            $("#oneDepthArrow-" + id).removeClass("fa-caret-right");
+	            $("#oneDepthArrow-" + id).addClass("fa-caret-down");
+	            $("#oneDepthFolder-" + id).removeClass("fa-folder");
+	            $("#oneDepthFolder-" + id).addClass("fa-folder-open");
+	
+	            $(".ancestorArrow-" + ancestor).removeClass("fa-caret-down");
+	            $(".ancestorArrow-" + ancestor).addClass("fa-caret-right");
+	            $(".ancestorFolder-" + ancestor).removeClass("fa-folder-open");
+	            $(".ancestorFolder-" + ancestor).addClass("fa-folder");
+			} else {
+				// 펼친 상태
+	            $(".ancestor-" + ancestor).hide();
+	            $(".oneDepthParent-" + id).hide();
+	
+	            var clickClass = $("#oneDepthArrow-" + id).attr("class");
+	            if(clickClass.indexOf("right") >= 0) {
+	            	// 닫힘 상태라 펼침
+	            	$("#oneDepthArrow-" + id).removeClass("fa-caret-right");
+	            	$("#oneDepthArrow-" + id).addClass("fa-caret-down");
+	            	$("#oneDepthFolder-" + id).removeClass("fa-folder");
+	            	$("#oneDepthFolder-" + id).addClass("fa-folder-open");
+	            } else {
+	            	// 펼침 상태라 닫힘
+	            	$("#oneDepthArrow-" + id).removeClass("fa-caret-down");
+	                $("#oneDepthArrow-" + id).addClass("fa-caret-right");
+	                $("#oneDepthFolder-" + id).removeClass("fa-folder-open");
+	                $("#oneDepthFolder-" + id).addClass("fa-folder");
+	            }
+	            
+	            $(".ancestorArrow-" + ancestor).removeClass("fa-caret-down");
+	            $(".ancestorArrow-" + ancestor).addClass("fa-caret-right");
+	            $(".ancestorFolder-" + ancestor).removeClass("fa-folder-open");
+	            $(".ancestorFolder-" + ancestor).addClass("fa-folder");
+	        }
+	    } else if(depth === "2") {
+	    	if( $(".twoDepthParent-" + id).css("display") === "none" ) {
+	            // 접힌 상태
+	            $(".twoDepthParent-" + id).show();
+	
+	            $("#twoDepthArrow-" + id).removeClass("fa-caret-right");
+	            $("#twoDepthArrow-" + id).addClass("fa-caret-down");
+	            $("#twoDepthFolder-" + id).removeClass("fa-folder");
+	            $("#twoDepthFolder-" + id).addClass("fa-folder-open");
+	        } else {
+	            // 펼친 상태
+	            $(".twoDepthParent-" + id).hide();
+	            
+	            var clickClass = $("#twoDepthArrow-" + id).attr("class");
+	            if(clickClass.indexOf("right") >= 0) {
+	            	// 닫힘 상태라 펼침
+	            	$("#twoDepthArrow-" + id).removeClass("fa-caret-right");
+	            	$("#twoDepthArrow-" + id).addClass("fa-caret-down");
+	            	$("#twoDepthFolder-" + id).removeClass("fa-folder");
+	            	$("#twoDepthFolder-" + id).addClass("fa-folder-open");
+	            } else {
+	            	// 펼침 상태라 닫힘
+	            	$("#twoDepthArrow-" + id).removeClass("fa-caret-down");
+	                $("#twoDepthArrow-" + id).addClass("fa-caret-right");
+	                $("#twoDepthFolder-" + id).removeClass("fa-folder-open");
+	                $("#twoDepthFolder-" + id).addClass("fa-folder");
+	            }
+	        }
+	    }
+	}
+	
+	// 위로 이동
+	var upFlag = true;
+	function moveUp(id, viewOrder) {
+	    if(upFlag) {
+	        upFlag = false;
+	        if(viewOrder === "1") {
+	            alert(JS_MESSAGE["data.group.order.first"]);
+	            upFlag = true;
+	            return;
+	        }
+	        
+	        var formData = "updateType=UP";
+		    $.ajax({
+				url: "/data-groups/view-order/" + id,
+				type: "POST",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+		        data: formData,
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						alert(JS_MESSAGE["update"]);
+						window.location.reload();
+						upFlag = true;
+						openAll();
+					} else {
+						if(msg.errorCode === "data.group.view-order.invalid") {
+							alert(JS_MESSAGE["data.group.cannot.change.order"] );
+						} else {
+							alert(JS_MESSAGE[msg.errorCode]);
+						}
+						console.log("---- " + msg.message);
+						upFlag = true;
+					}
+				},
+				error:function(request, status, error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        upFlag = true;
+				}
+			});
+	    } else {
+	        alert(JS_MESSAGE["button.dobule.click"]);
+	        return;
+	    }
+	}
+	
+	// 아래로 이동
+	var downFlag = true;
+	function moveDown(id, viewOrder) {
+	    if(downFlag) {
+	        downFlag = false;
+	        var formData = "updateType=DOWN";
+		    $.ajax({
+				url: "/data-groups/view-order/" + id,
+				type: "POST",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+		        data: formData,
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						alert(JS_MESSAGE["update"]);
+						window.location.reload();
+						downFlag = true;
+						openAll();
+					} else {
+						if(msg.errorCode === "data.group.view-order.invalid") {
+							alert(JS_MESSAGE["data.group.cannot.change.order"] );
+						} else {
+							alert(JS_MESSAGE[msg.errorCode]);
+						}
+						console.log("---- " + msg.message);
+						downFlag = true;
+					}
+				},
+				error:function(request, status, error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        downFlag = true;
+				}
+			});
+	    } else {
+	        alert(JS_MESSAGE["button.dobule.click"]);
+	        return;
+	    }
+	}
+</script>
+</body>
+</html>

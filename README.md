@@ -1,357 +1,172 @@
-[![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
-[![Korean](https://img.shields.io/badge/language-Korean-blue.svg)](#korean)
-[![English](https://img.shields.io/badge/language-English-orange.svg)](#english)
-[![Japan](https://img.shields.io/badge/language-Japan-red.svg)](#japan)
-<a name="korean"></a>
-
 # mago3D
-mago3D는 AEC(Architecture, Engineering, Construction) 영역과 전통적인 3차원 공간정보(3D GIS)를 통합적으로 관리, 가시화해 주는 차세대 3차원 플랫폼입니다. mago3D는 기존의 솔루션과 달리 실내외 구별 없이 끊김 없이 AEC와 3D GIS를 웹 브라우저에서 통합해 줍니다. 이에 따라, mago3D 사용자는 초대용량 BIM(Building Information Modelling), JT(Jupiter Tessellation), 3D GIS 파일 등을 별도의 프로그램 설치 없이 웹 브라우저 상에서 바로 살펴보고 협업작업을 진행할 수 있습니다.
+<strong>mago3D 는 Digital Twin Platform 입니다.</strong>
 
-## Mission
-mago3DJS 3차원 다중 블록 가시화를 위한 오픈소스 자바스크립트 라이브러리를 사용한 가시화 데이터를 통합 과제 & 이슈 관리를 할 수 있습니다.
+[설치 및 교육 상세 자료](https://gaia3d.atlassian.net/wiki/spaces/education/pages/71892997/mago3D)
 
 ## Features
-- 이슈 현황 신규 이슈, 진행 중인 이슈, 완료된 이슈를 볼 수 있습니다.
-- 사용자 상태별 현황을 그래프로 되어 있어 보기 편합니다.
-- DB Connection Pool 현황이나 DV세션 현황을 테이블로 볼 수 있습니다.
+- 2차원 공간정보 관리 기능
+- 3차원 데이터 포맷 지원 기능
+- 3차원 데이터 관리기능
+- 자동화된 2차원/3차원 공간정보 관리 기능
+- 3차원 가시화 기능
+- 3차원 데이터 운영 기능
+- 시뮬레이션 서비스 연동
 
 ## Development Environment
-- Spring
-- mybatis
-- lombok
-- PostgreSQL
-- PostGIS
-- Gradle
+- JAVA(OpenJDK) 11.0.2
+- Spring Boot 2.3.0
+- PostgreSQL 12
+- PostGIS 3.0
+- Gradle 6.5.0
+- Mybatis
+- Lombok
+- Thymeleaf
+- F4d Converter
+- Geoserver 2.17.x
+- RabbitMQ 3.8.x
+- Gdal 3.x
+
+## Project Composition
+- mago3d-admin : 플랫폼(mago3D) 관리자     
+- mago3d-converter : 3차원 공간정보 자동화 관리
+- mago3d-user : 2차원/3차원  공간데이터 조회, 시뮬레이션 연동 등
+- common : 암호화(보안), 통계모듈 등 공통 기능 관리
+- doc : database schema, 개발 문서
+- html : html 디자인 파일 (npm init으로 생성)
+
+## Quick Started 
+- mago3D-CE(mago3D js, mago3D converter)
+  ~~~ java
+  docker-compose -f docker-compose-ce.yml up -d
+  ~~~
+- *TOBE...mago3D-EE(mago3Djs, mago3D converter, mago3D CMS)*
 
 
 ## Getting Started
 
-### 1. Install
-#### [java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-- java jdk-8u161 (8버전 설치)
+## 1. Install
+### 1.1 공통
+#### [java](https://jdk.java.net/archive/)
+- OpenJDK 11.0.2 (build 11.0.2+9) : 11버전 설치
 
+#### [GDAL](https://trac.osgeo.org/osgeo4w/)
+- GDAL을 설치하기 위해서 OSGeo4W(FOSSGIS for Windows)를 설치
+- 시스템 변수 추가 <br>
+  Path) C:\OSGeo4W64\bin 
+  
+#### [F4D Converter](https://github.com/Gaia3D/F4DConverter/blob/master/install/SetupF4DConverter.msi)
+- 설치경로 : C:\F4DConverterConsole
+- 내려 받은 파일을 실행하여, Converter 를 설치합니다.
+ 
+### 1.2 docker 환경
+- docker-compose 를 사용하기 위해서는 사전에 docker 가 설치되어 있어야 합니다.
+- checkout 받은 프로젝트의 root 경로에서 아래의 명령어를 실행합니다. 
+~~~ cmd
+    docker-compose up -d
+~~~
+- docker-compose 파일에 정의된 내용에 따라 database, geoserver, rabbitmq 가 container 로 생성됩니다. 
 
-#### [eclipse](https://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R/eclipse-inst-win64.exe)
-- eclipse Oxygen(neon버전 이상 설치) <br>
-  IntelliJ IDEA 에서 InternalResourceViewResolver 에서 jsp 찾지 못하는 치명적 버그 있음
-- eclipse를 실행 후 Project Import <br>
+### 1.3 일반 환경 
+- 1.2 의 docker 환경에서 docker-compose 로 개발환경을 구성하였다면 1.3 과정은 생략해도 됩니다. 
+
+#### [PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+- PostgreSQL12 버전으로 설정
+- 설치경로 C:/PostgreSQL/12 <br>
+  doc/database/doc/database/ 참조 
+- [PostGIS](https://postgis.net/) 최신 SQL 버전으로 설정
+
+#### [Erlang](https://www.erlang.org/downloads)
+- rabbit mq 를 설치하기 위해서는 erlang 이 필요하기 때문에 먼저 erlang를 설치하도록 합니다.
+- Download OTP 23.1 항목에서 ‘OTP 23.1 Windows 64-bit Binary File’을 클릭하여 파일을 내려 받고 실행합니다.
+- 구성요소 설정은 기본값으로 할 것이므로 next를 클릭하여 설치 합니다.
+- **Visual C++ 구성요소 설치 창이 뜰 경우 체크박스를 체크하고 설치합니다.**
+
+#### [RabbitMQ](https://www.rabbitmq.com/download.html)
+- 최신 버전을 확인하고 운영체제 환경에 맞춰 설치 파일을 내려 받고 설치 합니다.
+    - 환경변수 설정
+        - [제어판] → [시스템 및 보안] → [시스템] 또는 [내 PC]의 [속성]을 클릭 한 후, [고급 시스템 설정]을 클릭합니다.
+        - [시스템 속성]의 [고급]탭 화면에서 [환경 변수]를 클릭합니다.
+        - [환경변수] 화면에서 [새로 만들기]를 클릭하여, 변수 이름과 변수 값 입력란에 RABBITMQ_HOME과 RabbitMQ 설치 경로를 설정합니다.
+        - RabbitMQ 설치 경로를 설정 한 후, 시스템 변수의 [Path] 변수를 선택하고 [편집] 버튼을 클릭합니다.
+        - [새로 만들기] 버튼을 클릭하여, %RABBITMQ_HOME%\sbin 을 입력합니다.
+    - 관리자 플러그인 활성화
+        - 관리자 페이지에 접속하기 위해서는 management plugin 이 활성화 되어야 합니다. (비활성화 시 접속 불가)
+        - RabbitMQ의 management plugin 을 활성화하기 위해 명령 프롬프트 창에 ‘rabbitmq-plugins enable rabbitmq_management’라고 입력하여 활성화 합니다.
+        - 명령 프롬프트를 재시작하고, ‘rabbitmq-plugins list’로 플러그인의 활성화 여부를 확인합니다.
+    - 관리자 설정
+        - RabbitMQ 관리자 페이지(http://localhost:15672)에 접속합니다.
+        - 아이디와 비밀번호는 모두 guest 로 로그인 합니다.
+        - 상단에 Exchange 탭을 클릭하고, 하단에 Add a new exchanges 를 클릭하여 아래와 같이 입력한 뒤, Add exchange 버튼을 클릭합니다. 
+            - Name : f4d.converter
+            - Type : topic
+            - Durability : Durable
+        - 상단에 Queues 탭을 글릭하고, 하단에 Add a new queue 를 클릭하여 아래와 같이 입력한 뒤, Add queue 버튼을 클릭합니다.
+            - Type : Classic
+            - Name : f4d.converter.queue
+            - Durability : Durable
+        - 다른 관리자 계정을 생성하기 위해 Admin 메뉴 하단의 Add a user를 클릭하고 아래와 같이 입력하여 관리자 계정을 생성합니다.
+            - Username : mago3d
+            - Password : mago3d
+            - Tags : administrator
+        - guest 아래에 새로 생성된 mago3d 계정을 클릭하고, 아래와 같이 Current permissions, Current topic permissions 을 생성하고 Update this user 에 비밀번호(mago3d)를 입력한 뒤, 하단의 Update user 버튼을 클릭합니다.
+            - Current permission
+                - Virtual Host : /
+                - Configure regexp : .*
+                - Write regexp : .*
+                - Read regexp : .*
+            - Topic permission
+                - Virtual Host : /
+                - Exchange : f4d.converter
+                - Write regexp : .*
+                - Read regexp : .*
+                
+#### IDE 설정 
+#### [eclipse](https://www.eclipse.org/downloads/download.php?file=/oomph/epp/2019-12/R/eclipse-inst-win64.exe)
+- Eclipse IDE 2019-12 (2019-12(4.14.0) 버전 이상 설치)<br>
+- Eclipse 설정 - STS(Spring Tools) 설정 <br>
+  Help → Eclipse Marketplace → 'STS' 검색후, Spring Tools 4 설치
+- Eclipse를 실행 후 Project Import <br>
   File → import → Gradle → Existing Gradle Project
-
-
-#### [PostgreSQL](https://github.com/Gaia3D/mago3d/wiki/PostgreSQL-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
-- PostgreSQL9.6.3 최신버전으로 설정
-- 설치경로 C:/PostgreSQL <br>
-  mago3d-core/src/doc/database/dbinit.bat 에서 설치 경로와 일치
   
-  
-#### [PostGIS](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
-- PostGIS 최신 SQL 버전으로 설정
-- 설치경로 C:/PostGIS
-
-
-#### [gradle](https://gradle.org/docs/)
-- 설치경로 C:/gradle
-- 시스템 변수 추가 <br> 
-  Path) C:\gradle\gradle-4.1 
-- eclipse BuildShip Gradle Plugin을 이용하여 gradle을 사용할 수 있습니다.
+#### intellij
+- 로컬 개발환경에서 static resource 들을 build 없이 갱신하기 위하여 resource 경로를 file path 로 잡아 주는데, mago3d 의 실행을 bootRun 으로 실행하거나
+configuration 에 Working directory 를 **$MODULE_WORKING_DIR$** 로 설정해 주어야 합니다.
 
 
 #### [lombok](https://projectlombok.org/)
-- 설치한 뒤에 다운로드 폴더 이동 후 실행
+- eclipse 를 사용한다면 아래의 과정을 통해 lombok 을 설치해 주어야 합니다.
+- 다운로드 폴더 이동 후 실행
 - eclipse 설치 위치 [Specify location..]를 검색해서 'eclipse.exe' 파일을 선택합니다.
 - install/update 클릭합니다.
 
-  
-### 2. DB 생성 및 초기 데이터 등록
 
+
+## 2. DB 생성 및 초기 데이터 등록
+- 1.2 의 docker 환경에서 docker-compose 로 개발환경을 구성하였다면 해당 과정은 생략해도 됩니다.
 - Database & Extensions
-	- mago3d 데이터베이스를 생성합니다.
-	    한글 정렬을 위해 데이터베이스를 다음과 같이 설정합니다.
-	  <pre><code>Name:mago3d, Encoding:UTF-8, Template:template0, Collation:C, Character type:C, Connection Limit:-1</code></pre>
-	- psql(SQL Shell) 혹은 pgAdmin에서 Extensions를 실행합니다.
-	  <pre><code>CREATE EXTENSION postgis</code></pre>
-	  PosGIS Extensions이 성공적으로 끝나면 데이터베이스 생성 및 초기 데이더 등록 후 spatial_ref_sys라는 테이블이 자동 생성됩니다.
+	- mago3d 데이터베이스를 생성합니다. 한글 정렬을 위해 데이터베이스를 다음과 같이 설정합니다.
+	~~~ sql
+        CREATE DATABASE mago3d
+        WITH OWNER = postgres
+        	ENCODING = 'UTF8'
+        	TEMPLATE = template0
+        	TABLESPACE = pg_default
+        	LC_COLLATE = 'C'
+        	LC_CTYPE = 'C'
+        	CONNECTION LIMIT = -1; 
+    ~~~
+	- psql(SQL Shell) 혹은 pgAdmin에서 Extensions 를 실행합니다.
+	~~~ sql
+        CREATE EXTENSION postgis
+    ~~~
+- sql 실행
+    - doc/database 경로에 있는 ddl/dml/index 폴더의 sql 들을 실행해 줍니다.
 
-
-- 데이터 등록
-	- download 한 소스의 /mago3d-core/src/doc/database 폴더로 이동합니다.
-	- PostgreSQL에서 database 폴더에 있는 쿼리를 실행해 줍니다. (windows 자동 실행 script는 개발 중입니다.) <br>
-	   - ddl 폴더의 sql 파일을 실행하여 table을 생성합니다. <br>
-	     (table, table column comment 다국어 버전은 개발 중입니다.)
-	   - ddl 폴더의 sequence sql 실행하여 sequence 생성합니다.<br>
-	   - index, trigger 폴더의 sql을 실행하여 index 및 partition 생성합니다.<br>
-	   - dml 폴더의 sql을 실행하여 초기 데이터 등록합니다.
-	- dbinit.bat 파일을 실행하여 데이터를 초기화 합니다.<br>
-	  ex) C:\git\repository\mago3d\mago3d-core\src\doc\database\dbinit.bat 실행
-
-
-### 3. symbolic link
-
-- 데이터 링크
-	- F4D 파일을 서비스하기 위한 폴더를 지정합니다. <br>
-	  ex) data 폴더 하위에 프로젝트 별로 디렉토리를 생성하여 관리 → <code>  C:\f4d\프로젝트명    </code>
-	- mago3d-user 데이터를 저장하기 위한 심볼릭 링크(symbolic link)를 걸어줍니다.
-	- 관리자 권한으로 Command Line Prompt(cmd.exe)를 실행
-	- mago3d-user\src\main\webapp 디렉토리로 이동
-	  <pre><code>C:\git\repository\mago3d\mago3d-user\src\main\webapp > mklink /d "C:\git\repository\mago3d\mago3d-user\src\main\webapp\f4d" "C:\f4d"</code></pre>
-
-
-### 4. Execution
-- mago3D-admin project spring boot 실행 <br>
-  url : http://localhost(:port)/login/login.do
-<pre><code>/mago3D-admin/src/main/java/com/gaia3d/mago3DAdminApplication.java</code></pre>
-
-- mago3D-user project spring boot 실행 <br>
-  url : http://localhost/homepage/demo.do
-<pre><code>/mago3D-user/src/main/java/com/gaia3d/mago3DUserApplication.java</code></pre>
-
-
-## github
-- [mago3DJs](https://github.com/Gaia3D/mago3djs) 깃허브 사이트 입니다
-- [F4DConverter](https://github.com/Gaia3D/F4DConverter) 깃허브 사이트 입니다.
-
+	   
+## 3. Execution
+- mago3d-admin project spring boot 실행 <br>
+  url : http://localhost(:port)/
+<pre><code>/mago3d-admin/src/main/java/gaia3d/Mago3DAdminApplication.java</code></pre>
 
 ## License
 [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
-
-
-<br><br>
------
-<br><br>
-
-
-###### Using Google Translator
-# <a name="english"></a>mago3D
-mago3D is a next-generation 3D platform that integrates and visualizes AEC (Architecture, Engineering, Construction) areas and traditional 3D spatial information (3D GIS). mago3D seamlessly integrates AEC and 3D GIS in a web browser, indistinguishable from existing solutions. As a result, mago3D users can quickly view and collaborate on large capacity building information modeling (BIM), JT (Jupiter Tessellation) and 3D GIS files without installing any additional programs.
-
-
-## Mission
-mago3DJS Integrate visualization data with open source JavaScript library for 3-D multi-block visualization.
-
-
-## Features
-- Issue Status You can see new issue, ongoing issue, and finished issue.
-- It is easy to view the status by user status graph.
-- DB Connection Pool status or DV session status can be viewed as a table.
-
-
-## Development Environment
-- Spring
-- mybatis
-- lombok
-- PostgreSQL
-- PostGIS
-- Gradle
-
-
-## Getting Started
-
-### 1. Install
-#### [java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-- java jdk-8u161 (8 version installed)
-
-
-#### [eclipse](https://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R/eclipse-inst-win64.exe)
-- eclipse Oxygen (neon version or higher installed) <br>
-  In IntelliJ IDEA, there is a fatal bug that jsp can not find in InternalResourceViewResolver
-- After running eclipse Project Import <br>
-  File → import → Gradle → Existing Gradle Project
-
-
-#### [PostgreSQL](https://github.com/Gaia3D/mago3d/wiki/PostgreSQL-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%%EB93%9C)
-- Set PostgreSQL9.6.3 to the latest version
-- Installation path C:/PostgreSQL <br>
-  mago3d-core/src/doc/database/dbinit.bat 에서 설치 경로와 일치
-
-#### [PostGIS](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98)
-- Set to latest SQL version of PostGIS
-- Installation path C:/PostGIS
-
-
-#### [gradle](https://gradle.org/docs/)
-- Installation path C:/gradle
-- Add System Variable <br>
-  Path) C:\grade\grade-4.1
-- You can use gradle with eclipse BuildShip Gradle Plugin.
-
-
-#### [lombok](https://projectlombok.org/)
-- After installation, move the download folder and execute it.
-- Locate the eclipse installation location [Specify location ..] and select the file 'eclipse.exe'.
-- Click on install/update.
-
-  
-### 2. DB creation & initial data registration
-
-- Database & Extensions
-	- Create the mago3d database.
-	  Set the database as follows for sorting.
-	  <pre><code>Name:mago3d, Encoding:UTF-8, Template:template0, Collation:C, Character type:C, Connection Limit:-1</code></pre
-	- Run Extensions from psql(SQL Shell) or pgAdmin.
-	  <pre><code> CREATE EXTENSION postgis </code></pre>
-	  When PosGIS Extensions is successfully completed, a table called spatial_ref_sys is automatically created after creating the database and registering the initial data.
-
-
-- Data registration
-	- Go to the /mago3d-core/src/doc/database folder of the downloaded source.
-	- PostgreSQL will execute the query in the database folder. (Windows autorun script is under development.) <br>
-	- Run the sql file in the ddl folder to create the table. <br>
-	  (A multilanguage version of table, table column comment is under development.)
-	- Generate sequence by executing sequence sql in ddl folder <br>
-	- Execute sql of index, trigger folder to create index and partition. <br>
-	- Register the initial data by running sql in the dml folder.
-	- Run the dbinit.bat file to initialize the data. <br>
-	  ex) C:\git\repository\mago3d\mago3d-core\src\doc\database\dbinit.bat
-
-
-### 3. symbolic link
-
-- Data link
-	- F4D Specify the folder to serve the file. <br>
-	  ex) Create and manage a project-specific directory under the data folder → <code>C:\f4d\project name</code>
-	- mago3d-user Makes a symbolic link for storing data.
-	- Execute Command Line Prompt (cmd.exe) with administrative privileges
-	- Go to mago3d-user\src\main\webapp directory
-	  <pre><code>C:\git\repository\mago3d\mago3d-user\src\main\webapp > mklink /d "C:\git\repository\mago3d\mago3d-user\src\main\webapp\f4d" "C:\f4d"</code></pre>
-
-
-### 4. Execution
-- run mago3D-admin project spring boot <br>
-  url: http://localhost(:port)/login/login.do
-<pre><code>/mago3D-admin/src/main/java/com/gaia3d/mago3DAdminApplication.java</code></pre>
-
-- run mago3D-user project spring boot <br>
-  url: http://localhost/homepage/demo.do
-<pre><code>/mago3D-user/src/main/java/com/gaia3d/mago3DUserApplication.java</code></pre>
-
-
-## github
-- [mago3DJs](https://github.com/Gaia3D/mago3djs) is a feather hub site
-- [F4DConverter](https://github.com/Gaia3D/F4DConverter) This is the hub site.
-
-
-## License
-[Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
-
-
-
-<br><br>
------
-<br><br>
-
-
-
-###### Googleの翻訳を使用して
-# <a name="japan"></a>mago3D
-mago3DはAEC（Architecture、Engineering、Construction）領域と、伝統的な3次元空間情報（3D GIS）を統合的に管理、可視化してくれる次世代3次元のプラットフォームです。 mago3Dは、従来のソリューションとは異なり、室内外の区別なくシームレスにAECと3D GISをWebブラウザに統合されています。これにより、mago3Dユーザーは超大容量BIM（Building Information Modelling）、JT（Jupiter Tessellation）、3D GISファイルなどを、別のプログラムをインストールすることなく、Webブラウザ上ですぐに見てコラボレーションを行うことができます。
-
-## Mission
-mago3DJS 3次元マルチブロック可視化のためのオープンソースのJavaScriptライブラリを使用した可視化データを統合課題及び問題管理をすることができます。
-
-## Features
-- 問題の現状新規問題、進行中の問題、終了した問題を見ることができます。
-- ユーザーの状態別状況をグラフになっており表示楽です。
-- DB Connection Pool現況やDVセッションのステータスをテーブルに見ることができます。
-
-## Development Environment
-- Spring
-- mybatis
-- lombok
-- PostgreSQL
-- PostGIS
-- Gradle
-
-
-## Getting Started
-
-### 1. Install
-#### [java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-- java jdk-8u161（8バージョンのインストール）
-
-
-#### [eclipse](https://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R/eclipse-inst-win64.exe)
-- eclipse Oxygen（neon以降のインストール） <br>
-  IntelliJ IDEAでInternalResourceViewResolverでjsp見つからない致命的バグあり
-- eclipseを実行した後Project Import <br>
-  File → import → Gradle → Existing Gradle Project
-
-
-#### [PostgreSQL](https://github.com/Gaia3D/mago3d/wiki/PostgreSQL-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB％93％9C)
-- PostgreSQL9.6.3最新のバージョンに設定
-- インストールパスは C:/PostgreSQL <br>
-  mago3d-core/src/doc/database/dbinit.bat でインストールパスと一致
-
-#### [PostGIS](https://github.com/Gaia3D/mago3d/wiki/PostGIS-%EC%84%A4%EC%B9%98) 
-- PostGIS最新のSQLバージョンに設定
-- インストールパスは C:/PostGIS
-
-
-#### [gradle](https://gradle.org/docs)
-- インストールパスはC：/ gradle
-- システム変数の追加 <br>
-  Path) C:\gradle\gradle-4.1
-- eclipse BuildShip Gradle Pluginを利用して、gradleを使用することができます。
-
-
-#### [lombok](https://projectlombok.org/)
-- インストールした後にダウンロードフォルダの移動後に実行
-- eclipse設置位置[Specify location ..]を検索して「eclipse.exe」ファイルを選択します。
-- install/update クリックします。
-
-  
-### 2. DBの作成と初期データの登録
-
-- Database＆Extensions
-	- mago3dデータベースを作成します。
-	    ハングルのソートのためにデータベースを次のように設定します。
-	  <pre><code>Name：mago3d、Encoding：UTF-8、Template：template0、Collat​​ion：C、Character type：C、Connection Limit：-1</code></pre>
-	- psql(SQL Shell)でのpgAdminの拡張機能の実行。
-	  <pre><code> CREATE EXTENSION postgis </code></pre>
-	  PosGIS Extensionsが正常に完了したら、データベースの作成と初期データより登録後spatial_ref_sysというテーブルが自動的に作成されます。
-
-
-- データの登録
-	- downloadしたソースの/mago3d-core/src/doc/databaseフォルダに移動します。
-	- PostgreSQLでdatabaseフォルダにあるクエリを実行してくれます。 (windows自動実行scriptは開発中です。) <br>
-	- ddlフォルダのsqlファイルを実行してtableを生成します。 <br>
-	  （table、table column comment多言語バージョンは開発中です。）
-	- ddlフォルダのsequence sql実行してsequence生成します。<br>
-	- index、triggerフォルダのsqlを実行して、indexとpartition生成します。<br>
-	- dmlフォルダのsqlを実行して、初期データ登録します。
-	- dbinit.batファイルを実行して、データを初期化します。<br>
-	  ex) C:\git\repository\mago3d\mago3d-core\src\doc\database\dbinit.bat 実行
-
-
-### 3. symbolic link
-
-- データリンク
-	- F4D ファイルをサービスするためのフォルダを指定します。 <br>
-	  ex）dataフォルダサブプロジェクトごとにディレクトリを作成して管理  → <code>C:\f4d\プロジェクト名</code>
-	- mago3d-userデータを格納するためのシンボリックリンク（symbolic link）をかけます。
-	- 管理者権限でCommand Line Prompt(cmd.exe)を実行
-	- mago3d-user\src\main\webapp ディレクトリに移動
-	  <pre><code>C:\git\repository\mago3d\mago3d-user\src\main\webapp> mklink /d "C:\git\repository\mago3d\mago3d-user\src\main\webapp\f4d" "C:\f4d"</code></pre>
-
-
-### 4. Execution
-- mago3D-admin project spring boot 実行 <br>
-  url: http://localhost(:port)/login/login.do
-<pre><code>/mago3D-admin/src/main/java/com/gaia3d/mago3DAdminApplication.java</code></pre>
-
-- mago3D-user project spring boot 実行 <br>
-  url: http://localhost/homepage/demo.do
-<pre><code>/mago3D-user/src/main/java/com/gaia3d/mago3DUserApplication.java</code></pre>
-
-
-
-## github
-- [mago3DJs](https://github.com/Gaia3D/mago3djs)襟ハブサイトです
-- [F4DConverter](https://github.com/Gaia3D/F4DConverter)襟ハブサイトです。
-
-
-## License
-[Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)。
-
-
-
-<br><br>

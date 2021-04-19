@@ -1,0 +1,19 @@
+<tif 좌표계 변환 배치 > 
+
+@echo off
+FOR /r %%f in (%1\*.tif) do (
+	echo %%~nf
+	echo %%~nf%%~xf
+	
+	C:\PROGRA~1\QGIS3~1.4\bin\gdalwarp -s_srs EPSG:5186 -t_srs EPSG:4326 -dstnodata 255.0 -r near -of GTiff D://basemap/origin/5000cut_10cm/%%~nf%%~xf D:/ndtp/basemap/translate/%%~nf%%~xf
+)
+
+
+<tif 병합>
+ 
+gdal_merge -n 255 -a_nodata 255 -o d:\ndtp\basemap\merge\basemap.tif -of gtiff "병합할 tif목록" 
+
+
+<overview 생성> 
+
+gdaladdo -ro --config COMPRESS_OVERVIEW DEFLATE basemap.tif

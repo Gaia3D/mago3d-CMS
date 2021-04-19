@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div id="uploadDataAttributeDialog" class="uploadDataAttributeDialog" title="Data Attribute">
+		<form id="dataAttributeInfo" name="dataAttributeInfo" th::action="@{/datas/attributes}" method="post" enctype="multipart/form-data">
+			<input type="hidden" id="attributeFileDataId" name="attributeFileDataId" value="" />
+			<table class="inner-table scope-row" style="width: 95%;" summary="데이터 속성정보 ">
+			<caption class="hiddenTag">데이터 속성정보</caption>
+				<colgroup>
+					<col class="col-sub-label xl"></col>
+					<col class="col-data"></col>
+				</colgroup>
+				<tbody>
+					<tr>
+						<th class="col-sub-label">데이터명</th>
+						<td id="attributeDataName"></td>
+					</tr>
+					<tr>
+						<th class="col-sub-label">업로딩 파일</th>
+						<td>
+							<div class="inner-data">
+								<label for="attributeFileName" class="hiddenTag">속성파일이름</label>
+								<input type="file" id="attributeFileName" name="attributeFileName" class="col-data" />
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="button-group">
+				<input type="button" class="button" onclick="dataAttributeFileUpload();" th:value="#{data.file.save}" />
+			</div>
+
+			<table class="inner-table scope-row" style="width: 95%;">
+				<colgroup>
+					<col class="col-sub-label xl"></col>
+					<col class="col-data"></col>
+				<colgroup>
+
+				<tbody id="dataAttributeUploadLog"></tbody>
+			</table>
+		</form>
+	</div>
+
+	<script id="templateDataAttributeUploadLog" type="text/x-handlebars-template">
+				<tr>
+					<td colspan="2" style="text-align: center;">Result of parsing</td>
+				</tr>
+				<tr>
+					<td> 총 건 수</td>
+					<td>{{totalCount}}</td>
+				</tr>
+				<tr>
+					<td> 성공 건수 </td>
+					<td>{{parseSuccessCount}}</td>
+				</tr>
+				<tr>
+					<td> 실패 건수 </td>
+					<td> {{parseErrorCount}}</td>
+				</tr>
+				<tr>
+					<td> DB 등록 건수 </td>
+					<td> {{insertSuccessCount}} </td>
+				</tr>
+				<tr>
+					<td> DB 수정 건수 </td>
+					<td> {{updateSuccessCount}} </td>
+				</tr>
+				<tr>
+					<td> DB 실패 건수 </td>"
+					<td> {{insertErrorCount}}</td>
+				</tr>
+	</script>
+</body>
+</html>

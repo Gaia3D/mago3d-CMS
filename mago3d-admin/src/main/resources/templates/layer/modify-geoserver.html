@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<title>Layer 수정</title>
+	<th:block layout:fragment="pageCustomStyle">
+		<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
+		<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+		<style type="text/css">
+			.loader-txt p {
+				font-size: 13px;
+				color: #666;
+			}
+
+			.loader-txt p small {
+				font-size: 11.5px;
+				color: #999;
+			}
+
+			.loader {
+				position: relative;
+				text-align: center;
+				margin: 15px auto 35px auto;
+				z-index: 9999;
+				display: block;
+				width: 80px;
+				height: 80px;
+				border: 10px solid rgba(0, 0, 0, 0.3);
+				border-radius: 50%;
+				border-top-color: #000;
+				animation: spin 1s ease-in-out infinite;
+				-webkit-animation: spin 1s ease-in-out infinite;
+			}
+			@keyframes spin {
+				to {
+					-webkit-transform: rotate(360deg);
+				}
+			}
+
+			@-webkit-keyframes spin {
+				to {
+					-webkit-transform: rotate(360deg);
+				}
+			}
+		</style>
+	</th:block>
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+	<div class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+					<div class="page-content">
+						<div class="input-header row">
+							<div class="content-desc u-pull-right">
+								<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								<th:block th:text="#{check}"></th:block>
+							</div>
+						</div>
+						<form id="layer" th:object="${layer}" method="post" th:action="@{#}" onsubmit="return false;">
+							<input type="hidden" id="layerId" name="layerId" th:field="*{layerId}" />
+							<table class="input-table scope-row" summary="geoserver 레이어 수정 테이블">
+								<caption class="hiddenTag">geoserver 레이어 수정</caption>
+								<colgroup>
+									<col class="col-label l" style="width: 15%" >
+									<col class="col-input" style="width: 35%" >
+									<col class="col-label l" style="width: 15%" >
+									<col class="col-input" style="width: 35%" >
+								</colgroup>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="layerGroupName">Layer 그룹명</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<input type="hidden" id="layerGroupId" name="layerGroupId" th:field="*{layerGroupId}" />
+										<input type="text" id="layerGroupName" name="layerGroupName" th:field="*{layerGroupName}" class="ml" th:readonly="true" />
+										<input type="button" id="layerGroupButton" value="Layer 그룹 찾기" />
+									</td>
+									<th class="col-label" scope="row">공유 유형</th>
+									<td class="col-input radio-set">
+										<input type="radio" id="sharingPublic" name="sharing" th:field="*{sharing}" value="public" />
+										<label for="sharingPublic">공개</label>
+										<input type="radio" id="sharingPrivate" name="sharing" th:field="*{sharing}" value="private" />
+										<label for="sharingPrivate">비공개</label>
+										<input type="radio" id="sharingGroup" name="sharing" th:field="*{sharing}" value="group" />
+										<label for="sharingGroup">그룹</label>
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="layerName">Layer 명</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<input type="text" id="layerName" name="layerName" th:field="*{layerName}" class="ml" />
+									</td>
+									<th class="col-label" scope="row">
+										<label for="layerKey">Layer Key</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<input type="text" id="layerKey" name="layerKey" th:field="*{layerKey}" class="ml" th:readonly="true" />
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="serviceType">서비스 타입</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<select id="serviceType" name="serviceType" th:field="*{serviceType}" class="selectBoxClass">
+											<option value="">선택</option>
+											<option value="wms">WMS</option>
+											<option value="wfs">WFS</option>
+											<option value="wcs">WCS</option>
+											<option value="wps">WPS</option>
+										</select>
+									</td>
+									<th class="col-label" scope="row">
+										<label for="cacheAvailableTrue">Cache 사용 유무</label>
+									</th>
+									<td class="col-input radio-set">
+										<input type="radio" id="cacheAvailableTrue" name="cacheAvailable" th:field="*{cacheAvailable}" value="true" />
+										<label for="cacheAvailableTrue">사용</label>
+										<input type="radio" id="cacheAvailableFalse" name="cacheAvailable" th:field="*{cacheAvailable}" value="false" />
+										<label for="cacheAvailableFalse">미사용</label>
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="layerType">Layer 타입</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<select id="layerType" name="layerType" th:field="*{layerType}" class="selectBoxClass">
+											<option value="">선택</option>
+											<option value="vector">Vector</option>
+											<option value="raster">Raster</option>
+										</select>
+									</td>
+									<th class="col-label" scope="row">
+										<label for="geometryType">도형 타입</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<select id="geometryType" name="geometryType" th:field="*{geometryType}" class="forRaster selectBoxClass">
+											<option value="">선택</option>
+											<option value="Point">Point</option>
+											<option value="Line">Line</option>
+											<option value="Polygon">Polygon</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="layerLineColor">외곽선 색상</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<label for="lineColorValue" class="hiddenTag">외곽선 색상값</label>
+										<input type="text" id="lineColorValue" class="forRaster forLineColor" placeholder="RGB" />
+										<input type="color" id="layerLineColor" name="layerLineColor" class="picker forLineColor" alt="외곽선 색상" />
+									</td>
+									<th class="col-label" scope="row">
+										<label for="layerLineStyle">외곽선 두께</label>
+									</th>
+									<td class="col-input">
+										<input type="number" id="layerLineStyle"  name="layerLineStyle" th:field="*{layerLineStyle}" class="forRaster" alt="외곽선 두께" min="0.1" max="5.0" size="3" step="0.1" />
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="layerFillColor">채우기 색상</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<label for="fillColorValue" class="hiddenTag">채우기 색상값</label>
+										<input type="text" id="fillColorValue" class="forRaster forPolygon" placeholder="RGB" />
+										<input type="color" id="layerFillColor" name="layerFillColor" class="picker forPolygon" alt="채우기 색상" />
+									</td>
+									<th class="col-label" scope="row">
+										<label for="layerAlphaStyle">투명도</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<input type="text" id="layerAlphaStyle" name="layerAlphaStyle" th:field="*{layerAlphaStyle}" class="slider" alt="투명도"/>
+										<label for="sliderRange" class="hiddenTag">투명도 값</label>
+										<input type="range" id="sliderRange" min="0" max="100" value="100" alt="투명도">
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="viewOrder">레이어 표시 순서</label>
+									</th>
+									<td class="col-input">
+										<input type="text" id="viewOrder" name="viewOrder" th:field="*{viewOrder}" class="s"/>
+									</td>
+									<th class="col-label" scope="row">
+										<label for="zIndex">표시 순서(Z-Index)</label>
+									</th>
+									<td class="col-input">
+										<input type="text" id="zIndex" name="zIndex" th:field="*{zIndex}" class="s" />
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label>기본 표시</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input radio-set">
+										<input type="radio" id="defaultDisplayTrue" name="defaultDisplay" th:field="*{defaultDisplay}" value="true" />
+										<label for="defaultDisplayTrue">사용</label>
+										<input type="radio" id="defaultDisplayFalse" name="defaultDisplay" th:field="*{defaultDisplay}" value="false" />
+										<label for="defaultDisplayFalse">미사용</label>
+									</td>
+									<th class="col-label" scope="row">
+										<label>사용유무</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input radio-set">
+										<input type="radio" id="availableTrue" name="available" th:field="*{available}" value="true" />
+										<label for="availableTrue">사용</label>
+										<input type="radio" id="availableFalse" name="available" th:field="*{available}" value="false" />
+										<label for="availableFalse">미사용</label>
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label>Label 표시 유무</label>
+									</th>
+									<td class="col-input radio-set">
+										<input type="radio" id="labelDisplayTrue" name="labelDisplay" th:field="*{labelDisplay}" value="true" />
+										<label for="labelDisplayTrue">표시</label>
+										<input type="radio" id="labelDisplayFalse" name="labelDisplay" th:field="*{labelDisplay}" value="false" />
+										<label for="labelDisplayFalse">비표시</label>
+									</td>
+									<th class="col-label" scope="row">
+										<label for="description">설명</label>
+									</th>
+									<td class="col-input">
+										<input type="text" id="description" name="description" th:field="*{description}" class="l"/>
+									</td>
+								</tr>
+							</table>
+						</form>
+
+						<div class="button-group" style="margin-top:30px;">
+							<div class="center-buttons">
+								<input type="submit" onClick="geoserverLayerUpdate(); return false;" th:value="#{save}"/>
+								<a href="/layer/list" class="button">목록</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="~{/layer/loading-dialog :: #layerLoadingDialog}"></div>
+	<div th:replace="~{/layer/layer-group-dialog :: #layerGroupDialog}"></div>
+
+</th:block>
+
+<th:block layout:fragment="pageCustomScript">
+
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+
+<script th:inline="javascript">
+	$(document).ready(function() {
+		showRange([[${layer.layerAlphaStyle * 100}]]);
+		$("#sliderRange").val([[${layer.layerAlphaStyle * 100}]]);
+        $(".forLineColor").val([[${layer.layerLineColor}]]);
+        $(".forPolygon").val([[${layer.layerFillColor}]]);
+
+        if([[${layer.serviceType}]] !== "wms") {
+        	$("input[name='cacheAvailable']").attr("disabled", true);
+        }
+	});
+
+	$('[name=layerType]').on('change', function() {
+		changeLayerType($("[name=layerType]").val());
+	});
+
+	$('[name=geometryType]').on('change', function() {
+		changeGeometryType($("[name=geometryType]").val());
+	});
+
+	// wms일 경우에만 cache 설정 할 수 있도록 활성화
+	$("select[name=serviceType]").change(function(e){
+		var value = $(this).val();
+	    if(value === "wms") {
+	    	$("input[name='cacheAvailable']").attr("disabled", false);
+	    } else {
+	    	$("input[name='cacheAvailable']").attr("disabled", true);
+	    	$("input[name='cacheAvailable']").filter("[value='false']").prop("checked", true);
+	    }
+	});
+
+
+	// 레이어 타입 Raster 선택 시 입력폼 변경
+	function changeLayerType(layerType) {
+		if(layerType == 'vector') {
+			$('.forRaster').attr('disabled', false);
+			$('.forRaster').removeClass('disabled');
+			$('.picker').attr('disabled', false);
+			changeGeometryType(null);
+			$('#layerLineStyle').val(Number(1.0));
+		} else {
+			$('.forRaster').attr('disabled', true);
+			$('.forRaster').addClass('disabled');
+			$('.picker').attr('disabled', true);
+			$('.forRaster').val('');
+			$('.picker').val(null);
+		}
+	}
+
+	// 도형 타입 Polygon 선택시 선택폼 변경
+	function changeGeometryType(geometryType) {
+		if(geometryType === 'Polygon') {
+			$('.forPolygon').attr('disabled', false);
+			$('.forPolygon').removeClass("disabled");
+			$('.picker.forPolygon').attr('disabled', false);
+		} else {
+			$('.forPolygon').attr('disabled', true);
+			$('.forPolygon').addClass("disabled");
+			$('.picker.forPolygon').attr('disabled', true);
+			$('.forPolygon').val(null);
+		}
+	}
+
+	// 슬라이더
+	function showRange(valus) {
+		$('#layerAlphaStyle').val(valus + "%");
+	}
+
+	var rangeSlider = function(){
+		var range = $('#sliderRange');
+
+		range.on('change', function(){
+			showRange(this.value);
+		});
+	};
+	rangeSlider();
+
+	// color picker
+	function pickerColor() {
+		var layerFillColor = $('#layerFillColor');
+		var layerLineColor = $('#layerLineColor');
+		var fillColorValue = $('#fillColorValue');
+		var lineColorValue = $('#lineColorValue');
+
+		layerFillColor.on('change', function(){
+			$('#fillColorValue').val($(this).val().toUpperCase());
+		});
+
+		layerLineColor.on('change', function(){
+			$('#lineColorValue').val($(this).val().toUpperCase());
+		});
+
+		fillColorValue.on('change', function(){
+			$('#layerFillColor').val($(this).val().toUpperCase());
+		});
+
+		lineColorValue.on('change', function(){
+			$('#layerLineColor').val($(this).val().toUpperCase());
+		});
+	}
+	pickerColor();
+
+	var layerGroupDialog = $( ".dialog" ).dialog({
+		autoOpen: false,
+		height: 600,
+		width: 1200,
+		modal: true,
+		overflow : "auto",
+		resizable: false
+	});
+
+	var layerLoadingDialog = $("#layerLoadingDialog").dialog({
+		autoOpen: false,
+		width: 250,
+		height: 290,
+		modal: true,
+		resizable: false
+	});
+
+	// Layer Group 찾기
+	$( "#layerGroupButton" ).on( "click", function() {
+		layerGroupDialog.dialog( "open" );
+		layerGroupDialog.dialog( "option", "title", "Layer 그룹 선택");
+	});
+
+	// 상위 Node
+	function confirmParent(parent, parentName) {
+		$("#layerGroupId").val(parent);
+		$("#layerGroupName").val(parentName);
+		layerGroupDialog.dialog( "close" );
+	}
+
+	function check() {
+		var number = /^[0-9]+$/;
+
+		if(!$("#layerGroupId").val() || !number.test($("#layerGroupId").val())) {
+			alert("레이어 그룹을 선택해 주세요.");
+			$("#layerGroupName").focus();
+			return false;
+		}
+		if (!$("#layerName").val()) {
+			alert("Layer 명을 입력하여 주십시오.");
+			$("#layerName").focus();
+			return false;
+		}
+		if (!$("#layerKey").val()) {
+			alert("Layer key를 입력하여 주십시오.");
+			$("#layerKey").focus();
+			return false;
+		}
+		if (!$("select[name=serviceType]").val()) {
+			alert("서비스 타입을 선택해 주십시오.");
+			$("#serviceType").focus();
+			return false;
+		}
+		if (!$("select[name=layerType]").val()) {
+			alert("layer 타입을 선택해 주십시오.");
+			$("#layerType").focus();
+			return false;
+		}
+		if ($("select[name=layerType]").val() ==='vector' && !$("select[name=geometryType]").val()) {
+			alert("도형 타입을 선택해 주십시오.");
+			$("#geometryType").focus();
+			return false;
+		}
+	}
+
+	var updateGeoserverLayerFlag = true;
+	function geoserverLayerUpdate() {
+	    if(updateGeoserverLayerFlag) {
+	    	if (check() === false) {
+                return;
+            }
+	    	updateGeoserverLayerFlag = false;
+	    	$("#layerAlphaStyle").val($("#sliderRange").val() / 100);
+	    	if(!$("#zIndex").val()) $("#zIndex").val(0);
+	        var formData = $('#layer').serialize();
+	        var layerLoadingDialog = $("#layerLoadingDialog").dialog({
+	    		autoOpen: false,
+	    		width: 250,
+	    		height: 290,
+	    		modal: true,
+	    		resizable: false
+	    	});
+	        layerLoadingDialog.dialog("open");
+	        $.ajax({
+				url: "/layer/update-geoserver",
+				type: "POST",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+		        data: formData,
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						layerLoadingDialog.dialog("close");
+						setTimeout(function(){
+							alert(JS_MESSAGE["update"]);
+						},100);
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+						console.log("---- " + msg.message);
+					}
+					updateGeoserverLayerFlag = true;
+				},
+				error:function(request, status, error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        updateGeoserverLayerFlag = true;
+				}
+			});
+	    } else {
+	        alert("진행 중입니다.");
+	        return;
+		}
+	}
+
+</script>
+</th:block>
+</body>
+</html>

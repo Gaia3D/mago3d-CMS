@@ -1,0 +1,16 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="layerContent" class="contents yScroll fullHeight" style="display:none;">
+	<div class="btnGroup">
+		<button class="textBtnSub" th:text="#{common.turn.on}" onClick="turnOnAllLayer(); return false;"></button>
+		<button class="textBtnSub" th:text="#{common.turn.off}" onClick="turnOffAllLayer(); return false;"></button>
+		<button class="textBtnSub" th:text="#{common.unfold}" onClick="openAllLayerTree(); return false;"></button>
+		<button class="textBtnSub" th:text="#{common.folding}" onClick="closeAllLayerTree(); return false;"></button>
+		<button class="textBtn" th:text="#{common.save}" onClick="saveUserLayers(); return false;"></button>
+	</div>
+	<form id="layerForm" th:object="${userPolicy}" th:action="@{#}" style="height: calc(100% - 50px)">
+		<input type="hidden" id="baseLayers" name="baseLayers"/>
+		<ul id="layerTreeList" class="layerList marT10 yScroll" style="height: 100%"></ul>
+	</form>
+	<div th:replace="~{/layer/layer-template :: #layerListSource}"></div>
+</div>
+</html>

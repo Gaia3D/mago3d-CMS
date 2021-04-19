@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.DataObjectAttributeMapper">
+
+	<!-- 데이터 Object 속성 정보를 취득 -->
+	<select id="getDataObjectAttribute" parameterType="long" resultType="dataObjectAttribute">
+		/* getDataObjectAttribute */
+		SELECT * FROM data_object_attribute WHERE data_id = #{dataId}
+	</select>
+</mapper>

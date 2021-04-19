@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.PolicyMapper">
+
+	<!-- 운영 정책 정보 -->
+	<select id="getPolicy" resultType="policy">
+		/* getPolicy */
+		SELECT * FROM policy ORDER BY policy_id DESC LIMIT 1
+	</select>
+
+	<!-- 업로딩 가능 확장자 조회 -->
+	<select id="getUserUploadType" resultType="String">
+		/* getUserUploadType */
+		SELECT user_upload_type FROM policy ORDER BY policy_id DESC LIMIT 1
+	</select>
+
+	<!-- 운영 정책 사용자 수정 -->
+	<update id="updatePolicyUser" parameterType="policy">
+		/* updatePolicyUser */
+		UPDATE policy
+		SET user_id_min_length = #{userIdMinLength},
+			user_fail_signin_count = #{userFailSigninCount},
+			user_fail_lock_release = #{userFailLockRelease},
+			user_last_signin_lock = #{userLastSigninLock},
+			user_duplication_signin_yn = #{userDuplicationSigninYn},
+			user_signin_type = #{userSigninType},
+			<!-- user_update_check = #{userUpdateCheck},
+			user_delete_check = #{userDeleteCheck}, -->
+			user_delete_type = #{userDeleteType}
+		WHERE policy_id = #{policyId}
+	</update>
+
+	<!-- 운영 정책 패스워드 수정 -->
+	<update id="updatePolicyPassword" parameterType="policy">
+		/* updatePolicyPassword */
+		UPDATE policy
+		SET password_change_term = #{passwordChangeTerm},
+			password_min_length = #{passwordMinLength},
+			password_max_length = #{passwordMaxLength},
+			password_eng_upper_count = #{passwordEngUpperCount},
+			password_eng_lower_count = #{passwordEngLowerCount},
+			password_number_count = #{passwordNumberCount},
+			password_special_char_count = #{passwordSpecialCharCount},
+			password_continuous_char_count = #{passwordContinuousCharCount},
+			password_create_type = #{passwordCreateType},
+			password_create_char = #{passwordCreateChar},
+			password_exception_char = #{passwordExceptionChar}
+		WHERE policy_id = #{policyId}
+	</update>
+
+	<!-- 운영 정책 알림 수정 -->
+	<update id="updatePolicyNotice" parameterType="policy">
+		/* updatePolicyNotice */
+		UPDATE policy
+		SET notice_service_yn = #{noticeServiceYn},
+			notice_service_send_type = #{noticeServiceSendType},
+			notice_approval_request_yn = #{noticeApprovalRequestYn},
+			notice_approval_sign_yn = #{noticeApprovalSignYn},
+			notice_password_update_yn = #{noticePasswordUpdateYn},
+			notice_approval_delay_yn = #{noticeApprovalDelayYn},
+			notice_risk_yn = #{noticeRiskYn},
+			notice_risk_send_type = #{noticeRiskSendType},
+			notice_risk_grade = #{noticeRiskGrade}
+		WHERE policy_id = #{policyId}
+	</update>
+
+	<!-- 운영 정책 보안 수정 -->
+	<update id="updatePolicySecurity" parameterType="policy">
+		/* updatePolicySecurity */
+		UPDATE policy
+		SET security_session_timeout_yn = #{securitySessionTimeoutYn},
+			security_session_timeout = #{securitySessionTimeout},
+			<!-- security_user_ip_check_yn = #{securityUserIpCheckYn},
+			security_session_hijacking = #{securitySessionHijacking},
+			security_log_save_type = #{securityLogSaveType},
+			security_log_save_term = #{securityLogSaveTerm},
+			security_dynamic_block_yn = #{securityDynamicBlockYn},
+			security_api_result_secure_yn = #{securityApiResultSecureYn}, -->
+			security_masking_yn = #{securityMaskingYn}
+		WHERE policy_id = #{policyId}
+	</update>
+
+	<!-- 운영 정책 컨텐트 수정 -->
+	<update id="updatePolicyContent" parameterType="policy">
+		/* updatePolicyContent */
+		UPDATE policy
+		SET content_cache_version = #{contentCacheVersion},
+			<!-- content_main_widget_count = #{contentMainWidgetCount},
+			content_main_widget_interval = #{contentMainWidgetInterval},
+			content_statistics_interval = #{contentStatisticsInterval},
+			content_load_balancing_interval = #{contentLoadBalancingInterval}, -->
+			content_menu_group_root = #{contentMenuGroupRoot},
+			content_user_group_root = #{contentUserGroupRoot},
+			content_layer_group_root = #{contentLayerGroupRoot},
+			content_data_group_root = #{contentDataGroupRoot}
+		WHERE policy_id = #{policyId}
+	</update>
+
+	<!-- 사용자 업로드 파일 정책 수정 -->
+	<update id="updatePolicyUserUpload" parameterType="policy">
+		/* updatePolicyUserUpload */
+		UPDATE policy
+		SET user_upload_type = #{userUploadType},
+			user_converter_type = #{userConverterType},
+			user_upload_max_filesize = #{userUploadMaxFilesize},
+			user_upload_max_count = #{userUploadMaxCount},
+			shape_upload_type = #{shapeUploadType}
+		WHERE policy_id = #{policyId}
+	</update>
+
+</mapper>

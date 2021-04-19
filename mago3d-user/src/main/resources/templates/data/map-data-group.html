@@ -1,0 +1,47 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="dataGroupInfoContent" class="contents contents-margin-none fullHeight" style="display:none;">
+	<h3 th:text="#{data.group.sharing.status}"></h3>
+	<form id="searchDataGroupForm" th:object="${searchDataGroupForm}" method="post" onsubmit="return false;">
+	<div class="dataGroupSummary table-data-group-summary">
+		<table class="table-word-break" th:summary="#{data.group.statistics.summary}">
+		<caption class="hiddenTag"><th:block th:text="#{data.group.statistics.caption}"></th:block></caption>
+			<colgroup>
+		        <col class="col-number" />
+				<col class="col-number" />
+				<col class="col-number" />
+				<col class="col-number" />
+		    </colgroup>
+		    <tbody>
+		    	<tr>
+					<th scope="col" class="col-number" th:text="#{common.common}"></th>
+					<th scope="col" class="col-number" th:text="#{common.public}"></th>
+					<th scope="col" class="col-number" th:text="#{common.private}"></th>
+					<th scope="col" class="col-number" th:text="#{common.group}"></th>
+		        </tr>
+		    	<tr>
+		        	<td class="col-number" th:text="${commonDataCount}"></td>
+		        	<td class="col-number" th:text="${publicDataCount}"></td>
+		        	<td class="col-number" th:text="${privateDataCount}"></td>
+		        	<td class="col-number" th:text="${groupDataCount}"></td>
+		        </tr>
+		    </tbody>
+		</table>
+	</div>
+	</form>
+	<div class="summary-group-divide"></div>
+	<h3 th:text="#{data.group.search}"></h3>
+	<div class="listSearch search-text">
+		<label for="searchDataGroupName" class="hiddenTag"><th:block th:text="#{data.group.name.input}"></th:block></label>
+		<input type="text" id="searchDataGroupName" name="searchDataGroupName" th:placeholder="#{data.group.search.placeholder}">
+		<button type="button" id="mapDataGroupSearch" class="btnTextF" th:text="#{common.search}" th:title="#{common.search}"></button>
+	</div>
+	<dl class="legendWrap">
+		<dt th:text="#{data.group.sharing}"></dt>
+		<dd><span class="legend co">C</span><th:block th:text="#{common.common}"></th:block></dd>
+		<dd><span class="legend pu">O</span><th:block th:text="#{common.public}"></th:block></dd>
+		<dd><span class="legend pr">P</span><th:block th:text="#{common.private}"></th:block></dd>
+		<dd><span class="legend gr">G</span><th:block th:text="#{common.group}"></th:block></dd>
+	</dl>
+	<div id="dataGroupListDHTML" style="height:calc(100% - 335px)"></div>
+</div>
+</html>

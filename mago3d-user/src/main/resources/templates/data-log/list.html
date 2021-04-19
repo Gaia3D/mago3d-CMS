@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+    <title><th:block th:text="#{data.log.list.page.title}"></th:block></title>
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/user-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/json-viewer/json-viewer.css(cacheVersion=${contentCacheVersion})}">
+	<script type="text/javascript" th:src="@{/externlib/json-viewer/json-viewer.js(cacheVersion=${contentCacheVersion})}"></script>
+    <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+</head>
+<body>
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
+<div id="wrap">
+    <!-- S: NAVWRAP -->
+    <div class="navWrap">
+        <div th:replace="~{/fragments/menu :: #navWrap}"></div>
+    </div>
+    <!-- E: NAVWRAP -->
+
+	<div class="container" style="float:left; width: calc(100% - 78px);">
+        <div style="padding: 20px 20px 0px 10px; font-size: 18px;"><th:block th:text="#{converter.subtitle}"></th:block></div>
+        <!-- TAB -->
+        <div class="tabs">
+            <ul class="tab">
+				<li id="tabDataGroupList"><a href="/data-group/list"><th:block th:text="#{data.group.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataGroupInput"><a href="/data-group/input"><th:block th:text="#{data.group.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataInput"><a href="/upload-data/input"><th:block th:text="#{upload.data.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataList"><a href="/upload-data/list"><th:block th:text="#{upload.data.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterList"><a href="/converter/list"><th:block th:text="#{converter.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterJobFileList"><a href="/converter/converter-job-file-list"><th:block th:text="#{converter.job.file.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataList"><a href="/data/list"><th:block th:text="#{data.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataLogList"><a href="/data-log/list"><th:block th:text="#{data.log.list.tab.menu}"></th:block></a></li>
+            </ul>
+		</div>
+
+		<!-- S: 검색 -->
+		<div class="filters">
+            <form id="searchForm" th:object="${dataInfoLog}" method="get" th:action="@{/data/list}" onsubmit="return searchCheck();">
+			<div class="input-group row">
+				<div class="input-set">
+					<label for="searchWord" th:text="#{common.search.word}"></label>
+					<select id="searchWord" name="searchWord" class="selectBoxClass">
+						<option value="" th:text="#{common.select}"></option>
+						<option value="data_name" th:text="#{common.data.name}"></option>
+					</select>
+					<select id="searchOption" name="searchOption" class="selectBoxClass">
+						<option value="0" th:text="#{common.search.same}"></option>
+						<option value="1" th:text="#{common.search.include}"></option>
+					</select>
+					<input type="search" id="searchValue" name="searchValue" th:field="*{searchValue}" class="m" style="float: right;" />
+				</div>
+				<div class="input-set">
+					<label for="startDate" th:text="#{common.date}"></label>
+					<input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
+					<span class="delimeter tilde">~</span>
+					<input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
+                </div>
+				<div class="input-set">
+					<label for="orderWord" th:text="#{common.order}"></label>
+					<select id="orderWord" name="orderWord" class="selectBoxClass">
+						<option value="" th:text="#{common.basic}"></option>
+						<option value="data_name" th:text="#{common.data.name}"></option>
+						<option value="insert_date" th:text="#{common.insert.date}"></option>
+					</select>
+					<select id="orderValue" name="orderValue" class="selectBoxClass">
+						<option value="" th:text="#{common.basic}"></option>
+						<option value="ASC" th:text="#{common.asc}"></option>
+						<option value="DESC" th:text="#{common.desc}"></option>
+					</select>
+					<select id="listCounter" name="listCounter" class="selectBoxClass">
+						<option value="10" th:text="#{common.ten.count}"></option>
+						<option value="50" th:text="#{common.fifty.count}"></option>
+						<option value="100" th:text="#{common.hundred.count}"></option>
+					</select>
+				</div>
+				<div class="input-set">
+					<input type="submit" th:value="#{common.search}" />
+				</div>
+			</div>
+			</form>
+        </div>
+        <!-- E: 검색 -->
+
+		<div class="list">
+			<form id="listForm" th:object="${dataInfoLogList}" method="post">
+				<input type="hidden" id="checkIds" name="checkIds" value="" />
+				<div class="list-header row">
+					<div class="list-desc u-pull-left">
+						<div class="list-desc u-pull-left">
+							<span th:text="#{common.all}"></span>
+							<span class="totalCount" th:text="${pagination.totalCount}"></span>
+							<span th:text="#{common.count.unit}"></span>
+							<span th:text="|${pagination.pageNo} / ${pagination.lastPage}|"></span>
+							<span th:text="#{common.page}"></span>
+						</div>
+					</div>
+				</div>
+				<table class="list-table scope-col">
+					<colgroup>
+						<col class="col-checkbox"></col>
+						<col class="col-number"></col>
+						<col class="col-name"></col>
+						<col class="col-name"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-date"></col>
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col" class="col-checkbox"><input type="checkbox" id="chkAll" name="chkAll" /></th>
+							<th scope="col" class="col-number" th:text="#{common.number}"></th>
+							<th scope="col" class="col-name"><th:block th:text="#{common.data.group.name}"></th:block></th>
+							<th scope="col" class="col-name"><th:block th:text="#{common.data.name}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{data.log.requester}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{common.data.type}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{common.sharing}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{common.mapping.type}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{data.log.change.type}"></th:block></th>
+							<th scope="col" class="col-date"><th:block th:text="#{data.log.change.date}"></th:block></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:if="${dataInfoLogList.empty}">
+							<td colspan="10" class="col-none"><th:block th:text="#{data.log.change.history.does.not.exist}"></th:block></td>
+						</tr>
+						<tr th:if="${!dataInfoLogList.empty}" th:each="dataInfoLog : ${dataInfoLogList}">
+							<td class="col-checkbox">
+								<input type="checkbox" id="dataInfoLogId_${dataInfoLog.dataLogId}" name="dataLogId" th:value="${dataInfoLog.dataLogId}" />
+							</td>
+							<td class="col-number">
+								<th:block th:text="${pagination.rowNumber - dataInfoLogStat.index}"></th:block></td>
+							<td class="col-name ellipsis" style="min-width:100px;max-width:100px;">
+								<th:block th:text="${dataInfoLog.dataGroupName}"></th:block></td>
+							<td class="col-name ellipsis" style="min-width:160px;max-width:160px;">
+								<th:block th:text="${dataInfoLog.dataName}"></th:block></td>
+							<td class="col-type"><th:block th:text="${dataInfoLog.userId}"></th:block></td>
+							<td class="col-type"><th:block th:text="${dataInfoLog.dataType}"></th:block></td>
+							<td class="col-type">
+								<th:block th:if="${#strings.equals(dataInfoLog.sharing, 'common')}" th:text="#{common.common}"></th:block>
+								<th:block th:if="${#strings.equals(dataInfoLog.sharing, 'public')}" th:text="#{common.public}"></th:block>
+								<th:block th:if="${#strings.equals(dataInfoLog.sharing, 'private')}" th:text="#{common.private}"></th:block>
+								<th:block th:if="${#strings.equals(dataInfoLog.sharing, 'group')}" th:text="#{common.group}"></th:block>
+							</td>
+							<td class="col-type ellipsis" style="min-width:80px;max-width:80px;">
+								<th:block th:text="${dataInfoLog.mappingType}"></th:block></td>
+							<td class="col-type">
+								<th:block th:if="${#strings.equals(dataInfoLog.changeType, 'insert')}" th:text="#{common.insert}"></th:block>
+								<th:block th:if="${#strings.equals(dataInfoLog.changeType, 'update')}" th:text="#{common.update}"></th:block>
+							</td>
+							<td class="col-date">
+								<th:block th:text="${#temporals.format(dataInfoLog.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+		</div>
+        <!-- 페이지 -->
+        <div th:replace="~{/common/pagination :: #paginationArea}"></div>
+	</div>
+</div>
+<!-- E: WRAP -->
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var searchWord = "[[${dataInfoLog.searchWord}]]";
+		var searchOption = "[[${dataInfoLog.searchOption}]]";
+		var orderWord = "[[${dataInfoLog.orderWord}]]";
+		var orderValue = "[[${dataInfoLog.orderValue}]]";
+		var listCounter = "[[${dataInfoLog.listCounter}]]";
+
+		if(searchWord != "") $("#searchWord").val("[[${dataInfoLog.searchWord}]]");
+		if(searchOption != "") $("#searchOption").val("[[${dataInfoLog.searchOption}]]");
+		if(orderWord != "") $("#orderWord").val("[[${dataInfoLog.orderWord}]]");
+		if(orderValue != "") $("#orderValue").val("[[${dataInfoLog.orderValue}]]");
+		if(listCounter != "") $("#listCounter").val("[[${dataInfoLog.listCounter}]]");
+
+		initDatePicker();
+		initCalendar(new Array("startDate", "endDate"), new Array("[[${dataInfoLog.startDate}]]", "[[${dataInfoLog.endDate}]]"));
+	});
+
+	//전체 선택
+	$("#chkAll").click(function() {
+		$(":checkbox[name=dataLogId]").prop("checked", this.checked);
+	});
+
+	function searchCheck() {
+		if($("#searchOption").val() == "1") {
+			if(confirm(JS_MESSAGE["search.option.warning"])) {
+				// go
+			} else {
+				return false;
+			}
+		}
+
+		var startDate = $("#startDate").val();
+		var endDate = $("#endDate").val();
+		if(startDate != null && startDate != "" && endDate != null && endDate != "") {
+			if(parseInt(startDate) > parseInt(endDate)) {
+				alert(JS_MESSAGE["search.date.warning"]);
+				$("#startDate").focus();
+				return false;
+			}
+		}
+
+		var searchValue = $('#searchValue').val();
+		if (searchValue) {
+			$('#searchValue').val(searchValue.trim());
+		}
+
+		return true;
+	}
+</script>
+</body>
+</html>

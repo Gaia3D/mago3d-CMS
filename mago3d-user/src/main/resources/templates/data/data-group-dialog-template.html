@@ -1,0 +1,98 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="dataGroupDialogWrap">
+<div id="dataGroupDialogDHTML" class="basicTable" style="display: none;">
+</div>
+<script id="dataGroupSource" type="text/x-handlebars-template">
+	<table th:summary="#{data.group.dialog.summary}">
+	<caption class="hiddenTag"><th:block th:text="#{data.group.dialog.summary}"></th:block></caption>
+		<col class="col-label" />
+		<col class="col-data" />
+		<tr>
+			<th class="col-label" th:text="#{data.group.name}" scope="row"></th>
+			<td id="dataGroupName" class="col-data ellipsis" style="max-width: 300px;">{{dataGroupName}}</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{data.group.target}" scope="row"></th>
+			<td id="dataGroupTarget" class="col-data">{{dataGroupTarget}}</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{data.group.sharing}" scope="row"></th>
+			<td id="sharing" class="col-data">
+{{#ifMatch sharing 'common'}}
+				<th:block th:text="#{common.common}"></th:block>
+{{/ifMatch}}
+{{#ifMatch sharing 'public'}}
+				<th:block th:text="#{common.public}"></th:block>
+{{/ifMatch}}
+{{#ifMatch sharing 'private'}}
+				<th:block th:text="#{common.private}"></th:block>
+{{/ifMatch}}
+{{#ifMatch sharing 'group'}}
+				<th:block th:text="#{common.group}"></th:block>
+{{/ifMatch}}			
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{data.group.user.id}" scope="row"></th>
+			<td id="userId" class="col-data">{{userId}}</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{data.group.basic}" scope="row"></th>
+			<td id="basic" class="col-data">
+{{#if basic}}
+				<th:block th:text="#{common.basic}"></th:block>
+{{else}}
+				<th:block th:text="#{common.option}"></th:block>
+{{/if}}			
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{data.group.available}" scope="row"></th>
+			<td id="available" class="col-data">
+{{#if available}}
+				<th:block th:text="#{common.use}"></th:block>
+{{else}}
+				<th:block th:text="#{common.unused}"></th:block>
+{{/if}}			
+			</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{converter.data.count}" scope="row"></th>
+			<td id="dataCount" class="col-data">{{dataCount}}</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{common.longitude}" scope="row"></th>
+			<td id="longitude" class="col-data">{{longitude}}</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{common.latitude}" scope="row"></th>
+			<td id="latitude" class="col-data">{{latitude}}</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{common.altitude}" scope="row"></th>
+			<td id="altitude" class="col-data">{{altitude}}</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{common.moving.time}" scope="row"></th>
+			<td id="duration" class="col-data">{{duration}}</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{common.meta.information}" scope="row"></th>
+			<td id="metainfo" class="col-data">{{metainfo}}</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{common.description}" scope="row"></th>
+			<td id="description" class="col-data">{{description}}</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{common.updated}" scope="row"></th>
+			<td id="updateDate" class="col-data">{{viewUpdateDate}}</td>
+		</tr>
+		<tr>
+			<th class="col-label" th:text="#{common.created}" scope="row"></th>
+			<td id="insertDate" class="col-data">{{viewInsertDate}}</td>
+		</tr>
+	</table>
+</script>
+</div>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="api18" class="api-help-toggle">
+	<div class="menu_tab">
+		<ul>
+			<li class="fst active"><a href="#" onclick="tabMenu(0);">Run</a></li>
+			<li><a href="#" onclick="tabMenu(1);">Code</a></li>
+		</ul>
+	</div>
+	<div id="panels" class="menu_tab00 mTs">
+		<h2>changeInsertIssueStateAPI</h2>
+		<p>The mago3DJS engine remembered the coordinates to register the issue.
+If you pass 0 as a parameter to changeInsertIssueStateAPI, the coordinates are initialized.</p>
+		<table>
+		<caption>Parameter</caption>
+			<tr>
+				<th scope="col">name</th>
+				<th scope="col">type</th>
+				<th scope="col">description</th>
+			</tr>
+			<tr>
+				<td>managerFactoryInstance</td>
+				<td>ManagerFactory</td>
+				<td>start of mago3D</td>
+			</tr>
+			<tr>
+				<td>insertIssueState</td>
+				<td>String</td>
+				<td>Issue registration coordinate status</td>
+			</tr>
+		</table>
+		<br/>
+		<h4>Execution</h4>
+		<div class="paramContainer">
+			<label for="api18-p1">insertIssueState</label>
+			<input type="text" id="api18-p1" value="0" data-require="true">
+		</div>
+		<br/> 
+		<input type="button" id="changeInsertIssueState" value="Run" class="popupBtn">
+	</div>
+	<div id="panels" class="menu_tab01 mTs" style="display: none;"></div>
+</div>
+<script>
+	var changeInsertIssueState = function() {
+
+		var insertIssueState = $('#api18-p1').val();
+
+		changeInsertIssueStateAPI(MAGO3D_INSTANCE2, parseFloat(insertIssueState));
+	}
+</script>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow"/>
+    <title><th:block th:text="#{data.group.input.page.title}"></th:block></title>
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/user-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
+    <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+    <script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+</head>
+<body>
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
+<div id="wrap">
+    <!-- S: NAVWRAP -->
+    <div class="navWrap">
+        <div th:replace="~{/fragments/menu :: #navWrap}"></div>
+    </div>
+    <!-- E: NAVWRAP -->
+
+	<div class="container" style="float:left; width: calc(100% - 78px);">
+		<div style="padding: 20px 20px 0px 10px; font-size: 18px;"><th:block th:text="#{converter.subtitle}"></th:block></div>
+        <!-- TAB -->
+        <div class="tabs">
+            <ul class="tab">
+				<li id="tabDataGroupList"><a href="/data-group/list"><th:block th:text="#{data.group.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataGroupInput"><a href="/data-group/input"><th:block th:text="#{data.group.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataInput"><a href="/upload-data/input"><th:block th:text="#{upload.data.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataList"><a href="/upload-data/list"><th:block th:text="#{upload.data.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterList"><a href="/converter/list"><th:block th:text="#{converter.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterJobFileList"><a href="/converter/converter-job-file-list"><th:block th:text="#{converter.job.file.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataList"><a href="/data/list"><th:block th:text="#{data.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataLogList"><a href="/data-log/list"><th:block th:text="#{data.log.list.tab.menu}"></th:block></a></li>
+            </ul>
+        </div>
+
+        <!-- S: 데이터 그룹 등록 -->
+		<form id="dataGroup" th:object="${dataGroup}" method="post" th:action="@{#}" onsubmit="return false;">
+		<table class="input-table scope-row">
+			<colgroup>
+				<col class="col-label l"></col>
+				<col class="col-input"></col>
+			</colgroup>
+			<tr>
+				<th class="col-label" scope="row">
+					<label for="dataGroupName"><th:block th:text="#{data.group.name}"></th:block></label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+					<input type="text" id="dataGroupName" name="dataGroupName" class="l" maxlength="100" />
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row">
+					<label for="dataGroupKey"><th:block th:text="#{data.group.key}"></th:block>(<th:block th:text="#{data.group.key.constraint}"></th:block>)</label>
+				</th>
+				<td class="col-input">
+					<input type="text" id="dataGroupKey" name="dataGroupKey" class="l" />
+					<input type="button" id="duplicationButtion" th:value="#{common.duplication.check}" />
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row">
+					<label for="parentName"><th:block th:text="#{data.group.parent}"></th:block></label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+					<input type="hidden" id="parent" name="parent" />
+					<input type="text" id="parentName" name="parentName" class="l" th:value="${dataGroup.parentName}" readonly="readonly" />
+					<input type="button" id="dataGroupButtion" th:value="#{data.group.select.parent}" />
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row">
+                	<label for="sharing"><th:block th:text="#{data.group.sharing}"></th:block></label>
+                    <span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+                	<select id="sharing" name="sharing" class="selectBoxClass">
+						<option value="public" selected="selected"><th:block th:text="#{common.public}"></th:block></option>
+						<option value="common"><th:block th:text="#{common.common}"></th:block></option>
+						<option value="private"><th:block th:text="#{common.private}"></th:block></option>
+						<option value="group"><th:block th:text="#{common.group}"></th:block></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label l" scope="row">
+					<th:block th:text="#{data.group.available}"></th:block>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input radio-set">
+					<input type="radio" id="availableTrue" name="available" value="true" checked />
+					<label for="availableTrue"><th:block th:text="#{common.use}"></th:block></label>
+					<input type="radio" id="availableFalse" name="available" value="false" />
+					<label for="availableFalse"><th:block th:text="#{common.unused}"></th:block></label>
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row">
+					<label for="longitude"><th:block th:text="#{common.longitude}"></th:block></label>
+				</th>
+				<td class="col-input">
+					<input type="text" id="longitude" name="longitude" class="m" />
+					<input type="button" id="mapButtion" th:value="#{data.group.find.map}" />
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row">
+					<label for="latitude"><th:block th:text="#{common.latitude}"></th:block></label>
+				</th>
+				<td class="col-input">
+					<input type="text" id="latitude" name="latitude" class="m" />
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row">
+					<label for="altitude"><th:block th:text="#{common.altitude}"></th:block></label>
+				</th>
+				<td class="col-input">
+					<input type="text" id="altitude" name="altitude" class="m" />
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row">
+					<label for="duration"><th:block th:text="#{common.moving.time}"></th:block></label>
+				</th>
+				<td class="col-input">
+					<input type="text" id="duration" name="duration" class="s" />&nbsp;&nbsp;ms
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row">
+					<label for="metainfo"><th:block th:text="#{common.meta.information}"></th:block></label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+					<input type="text" id="metainfo" name="metainfo" class="xl" value='{"isPhysical": false}' />
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label l" scope="row">
+					<label for="description" th:text="#{common.description}"></label>
+				</th>
+				<td class="col-input">
+					<input type="text" id="description" name="description" class="xl" />
+				</td>
+			</tr>
+		</table>
+		<div class="button-group">
+			<div class="center-buttons">
+				<input type="submit" th:value="#{common.save}" onclick="insertDataGroup();" />
+				<a href="/data-group/list" class="button"><th:block th:text="#{common.list}"></th:block></a>
+			</div>
+		</div>
+        </form>
+        <!-- E: 데이터 그룹 등록 -->
+	</div>
+	<!-- 상위 그룹 선택 다이얼 로그 -->
+	<div th:replace="~{/data-group/parent-data-group-dialog :: #dataGroupDialog}"></div>
+</div>
+<!-- E: WRAP -->
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+	});
+
+	// 입력값이 변경되면 중복체크, 영문+숫자
+	/* $("#dataGroupKey").on("keyup", function(event) {
+		$("#duplication").val(null);
+		if (!(event.keyCode >=37 && event.keyCode<=40)) {
+			var inputValue = $(this).val();
+			$(this).val(inputValue.replace(/[^a-z0-9]/gi,''));
+		}
+	}); */
+	
+	// 데이터 그룹 중복 확인
+	$( "#duplicationButtion" ).on( "click", function() {
+		var dataGroupKey = $("#dataGroupKey").val();
+		if (dataGroupKey == "") {
+			alert(JS_MESSAGE["data.group.key.empty"]);
+			$("#dataGroupKey").focus();
+			return false;
+		}
+		
+		var regDataGroupKey = /^[a-zA-Z0-9-_]+$/;
+		if (!regDataGroupKey.test(document.getElementById("dataGroupKey").value)) {
+			alert(JS_MESSAGE["data.group.key.invalid"]);
+			return false;
+		}
+		
+		var formData = "dataGroupKey=" + dataGroupKey;
+		$.ajax({
+			url: "/data-groups/duplication",
+			type: "GET",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+	        data: formData,
+			dataType: "json",
+			success: function(msg){
+				if(msg.statusCode <= 200) {
+					if(msg.duplication == true) {
+						alert(JS_MESSAGE["data.group.key.duplication"]);
+						$("#dataGroupKey").focus();
+						return false;
+					} else {
+						alert(JS_MESSAGE["data.group.key.enable"]);
+						$("#duplication").val(msg.duplication);
+					}
+				} else {
+					alert(JS_MESSAGE[msg.errorCode]);
+					console.log("---- " + msg.message);
+				}
+			},
+			error:function(request, status, error) {
+				//alert(JS_MESSAGE["ajax.error.message"]);
+				alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			}
+		});
+	});
+
+	function validate() {
+		var number = /^[0-9]+$/;
+		if ($("#dataGroupName").val() === null || $("#dataGroupName").val() === "") {
+			alert(JS_MESSAGE["data.group.name.empty"]);
+			$("#dataGroupName").focus();
+			return false;
+		}
+		if($("#duplication").val() === null || $("#duplication").val() === "") {
+			alert(JS_MESSAGE["data.group.key.duplication.check"]);
+			$("#dataGroupKey").focus();
+			return false;
+		} else if($("#duplication").val() === "true") {
+			alert(JS_MESSAGE["data.group.key.duplication"]);
+			$("#dataGroupKey").focus();
+			return false;
+		}
+		if ($("#dataGroupKey").val() === null || $("#dataGroupKey").val() === "") {
+			alert(JS_MESSAGE["data.group.key.empty"]);
+			$("#dataGroupKey").focus();
+			return false;
+		}
+		if($("#parent").val() === null || $("#parent").val() === "" || !number.test($("#parent").val())) {
+			alert(JS_MESSAGE["data.group.select.parent"]);
+			$("#parent").focus();
+			return false;
+		}
+		if($("#duration").val() !== null && $("#duration").val() !== "") {
+			if(!isNumber($("#duration").val())) {
+				$("#duration").focus();
+				return false;
+			}
+		}
+		if(!locationValidation($("#longitude").val(), $("#latitude").val(), $("#altitude").val())) {
+			return false;
+		}
+	}
+
+	// 저장
+	var insertDataGroupFlag = true;
+	function insertDataGroup() {
+		if (validate() == false) {
+			return false;
+		}
+		if(insertDataGroupFlag) {
+			insertDataGroupFlag = false;
+			var formData = $("#dataGroup").serialize();
+			$.ajax({
+				url: "/data-groups",
+				type: "POST",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+		        data: formData,
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						alert(JS_MESSAGE["insert"]);
+						window.location.reload();
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+						console.log("---- " + msg.message);
+					}
+					insertDataGroupFlag = true;
+				},
+				error:function(request, status, error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        insertDataGroupFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+
+	var dataGroupDialog = $( ".dialog" ).dialog({
+		autoOpen: false,
+		height: 500,
+		width: 1000,
+		modal: true,
+		overflow : "auto",
+		resizable: false
+	});
+
+	// 상위 데이터 그룹 찾기
+	$( "#dataGroupButtion" ).on( "click", function() {
+		dataGroupDialog.dialog( "open" );
+		dataGroupDialog.dialog( "option", "title", JS_MESSAGE["data.group.select"]);
+	});
+
+	// 다이얼로그에서 선택
+	function confirmParent(parent, parentName, parentDepth) {
+		if(parentDepth >= 3) {
+			alert(JS_MESSAGE["data.group.depth.constraint"]);
+			return;
+		}
+		$("#parent").val(parent);
+		$("#parentName").val(parentName);
+		dataGroupDialog.dialog( "close" );
+	}
+
+	$( "#rootParentSelect" ).on( "click", function() {
+		$("#parent").val(0);
+		$("#parentName").val("[[${dataGroup.parentName}]]");
+		dataGroupDialog.dialog( "close" );
+	});
+
+	// 지도에서 찾기
+	$( "#mapButtion" ).on( "click", function() {
+		var url = "/map/find-point?referrer=data-group-input";
+		var width = 800;
+		var height = 700;
+
+		var popupX = (window.screen.width / 2) - (width / 2);
+		// 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
+		var popupY= (window.screen.height / 2) - (height / 2);
+
+	    var popWin = window.open(url, "","toolbar=no ,width=" + width + " ,height=" + height + ", top=" + popupY + ", left="+popupX
+	            + ", directories=no,status=yes,scrollbars=no,menubar=no,location=no");
+	    //popWin.document.title = layerName;
+	});
+</script>
+</body>
+</html>

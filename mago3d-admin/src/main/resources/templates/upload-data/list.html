@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+    <title>업로딩 데이터 변환 목록 | mago3D</title>
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+	<div class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+					<div class="page-content">
+
+						<!-- S: 검색 -->
+						<div class="filters">
+							<form id="searchForm" th:object="${uploadData}" method="get" th:action="@{/upload-data/list}" onsubmit="return searchCheck();">
+							<div class="input-group row">
+								<div class="input-set">
+									<label for="searchWord" th:text="#{search.word}"></label>
+									<select id="searchWord" name="searchWord" class="selectBoxClass">
+										<option value="" th:text="#{select}"></option>
+										<option value="data_name" th:text="데이터명"></option>
+									</select>
+									<select id="searchOption" name="searchOption" class="selectBoxClass">
+										<option value="0" th:text="#{search.same}"></option>
+										<option value="1" th:text="#{search.include}"></option>
+									</select>
+									<input type="search" id="searchValue" name="searchValue" class="m" style="float: right;" />
+								</div>
+								<div class="input-set">
+									<label for="startDate" th:text="#{search.date}"></label>
+									<input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
+									<span class="delimeter tilde">~</span>
+									<input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
+								</div>
+								<div class="input-set">
+									<label for="orderWord" th:text="#{search.order}"></label>
+									<select id="orderWord" name="orderWord" class="selectBoxClass">
+										<option value="" th:text="#{search.basic}"></option>
+										<option value="data_name" th:text="데이터명"></option>
+										<option value="insert_date" th:text="#{search.insert.date}"></option>
+									</select>
+									<select id="orderValue" name="orderValue" class="selectBoxClass">
+										<option value="" th:text="#{search.basic}"></option>
+										<option value="ASC" th:text="#{search.ascending}"></option>
+										<option value="DESC" th:text="#{search.descending.order}"></option>
+									</select>
+									<select id="listCounter" name="listCounter" class="selectBoxClass">
+										<option value="10" th:text="#{search.ten.count}"></option>
+										<option value="50" th:text="#{search.fifty.count}"></option>
+										<option value="100" th:text="#{search.hundred.count}"></option>
+									</select>
+								</div>
+								<div class="input-set">
+									<input type="submit" th:value="#{search}" />
+								</div>
+							</div>
+							</form>
+						</div>
+						<!-- E: 검색 -->
+
+						<!-- S: 업로딩 데이터 목록 -->
+						<div class="list">
+							<form id="listForm" th:object="${uploadData}" method="post">
+								<input type="hidden" id="checkIds" name="checkIds" />
+								<div class="list-header row">
+									<div class="list-desc u-pull-left">
+										<span th:text="#{all.d}"></span>
+										<span class="totalCount" th:text="${pagination.totalCount}"></span>
+										<span th:text="#{search.what.count}"></span>
+										<span th:text="|${pagination.pageNo} / ${pagination.lastPage}|"></span>
+										<span th:text="#{search.page}"></span>
+									</div>
+									<div class="list-functions u-pull-right">
+										<div class="button-group" style="padding-bottom: 3px;">
+											<a href="#" class="button" title="F4D 일괄 변환" onclick="converterFiles(); return false;">F4D 일괄 변환</a>
+										</div>
+									</div>
+								</div>
+								<table class="list-table scope-col" summary="업로드 목록 테이블">
+									<caption class="hiddenTag">업로드 목록</caption>
+									<colgroup>
+										<col class="col-checkbox"></col>
+										<col class="col-number"></col>
+										<col class="col-name"></col>
+										<col class="col-name"></col>
+										<col class="col-name"></col>
+										<col class="col-number"></col>
+										<col class="col-number"></col>
+										<col class="col-number"></col>
+										<col class="col-functions"></col>
+										<col class="col-functions"></col>
+										<col class="col-functions"></col>
+									</colgroup>
+									<thead>
+										<tr>
+											<th scope="col" class="col-checkbox">
+												<label for="chkAll" class="hiddenTag">전체선택 체크박스</label>
+												<input type="checkbox" id="chkAll" name="chkAll" />
+											</th>
+											<th scope="col" class="col-number" th:text="#{number}"></th>
+											<th scope="col" class="col-name">그룹명</th>
+											<th scope="col" class="col-name">공유 유형</th>
+											<th scope="col" class="col-name">데이터 타입</th>
+											<th scope="col" class="col-name">데이터명</th>
+											<th scope="col" class="col-name">3D파일/전체파일</th>
+											<th scope="col" class="col-name">Converter 횟수</th>
+											<th scope="col" class="col-functions">Converter</th>
+											<th scope="col" class="col-functions">삭제</th>
+											<th scope="col" class="col-date">등록일</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:if="${uploadDataList.empty}">
+											<td colspan="11" class="col-none">파일 업로딩 이력이 존재하지 않습니다.</td>
+										</tr>
+
+										<tr th:if="${!uploadDataList.empty}" th:each="uploadData : ${uploadDataList}">
+											<td class="col-checkbox">
+												<input type="checkbox" th:id="|uploadDataId_${uploadData.uploadDataId}|" name="uploadDataId" th:value="${uploadData.uploadDataId}" />
+											</td>
+											<td class="col-number" th:text="${pagination.rowNumber - uploadDataStat.index}"></td>
+											<td class="col-name ellipsis" th:text="${uploadData.dataGroupName}" style="min-width:120px;max-width:120px;"></td>
+											<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'common')}" th:text="공통"></td>
+											<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'public')}" th:text="공개"></td>
+											<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'private')}" th:text="개인"></td>
+											<td class="col-type" th:if="${#strings.equals(uploadData.sharing, 'group')}" th:text="그룹"></td>
+					
+											<td class="col-type" th:text="${uploadData.dataType}"></td>
+											<td class="col-name ellipsis" style="min-width:300px;max-width:300px;">
+												<a th:text="${uploadData.dataName}" th:href="@{/upload-data/modify(uploadDataId=${uploadData.uploadDataId})}"></a>
+											</td>
+											<td class="col-count">
+												<span th:text="${uploadData.converterTargetCount}" style="color:blue; font-weight: bold;"></span>
+												<span th:text="| / ${uploadData.fileCount}개|"></span> 
+											</td>
+											<td class="col-count" th:text="|${uploadData.converterCount}건|"></td>
+											<td class="col-functions">
+												<span class="button-group">
+													<a href="#" class="button" th:onclick="converterFile([[${uploadData.uploadDataId}]], [[${uploadData.dataName}]], [[${uploadData.dataType}]]); return false;" style="text-decoration: none;">F4D 변환</a>
+												</span>
+											</td>
+											<td class="col-functions">
+												<span class="button-group">
+													<a href="#" class="image-button button-delete" th:text="#{delete}" th:onclick="deleteUploadData([[${uploadData.uploadDataId}]]); return false;"></a>
+												</span>
+											</td>
+											<td class="col-type">
+												<th:block th:text="${#temporals.format(uploadData.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<!-- E: 업로딩 데이터 목록 -->
+							</form>
+						</div>
+						<!-- 페이지 -->
+						<div th:replace="~{/common/pagination :: #paginationArea}"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- F4D 변환 -->
+	<div th:replace="~{/upload-data/converter-dialog :: #dialogConverterJob}"></div>
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var searchWord = "[[${uploadData.searchWord}]]";
+		var searchOption = "[[${uploadData.searchOption}]]";
+		var orderWord = "[[${uploadData.orderWord}]]";
+		var orderValue = "[[${uploadData.orderValue}]]";
+		var listCounter = "[[${uploadData.listCounter}]]";
+
+		if(searchWord != "") $("#searchWord").val("[[${uploadData.searchWord}]]");
+		if(searchOption != "") $("#searchOption").val("[[${uploadData.searchOption}]]");
+		if(orderWord != "") $("#orderWord").val("[[${uploadData.orderWord}]]");
+		if(orderValue != "") $("#orderValue").val("[[${uploadData.orderValue}]]");
+		if(listCounter != "") $("#listCounter").val("[[${uploadData.listCounter}]]");
+
+		initDatePicker();
+		initCalendar(new Array("startDate", "endDate"), new Array("[[${uploadData.startDate}]]", "[[${uploadData.endDate}]]"));
+	});
+
+	function searchCheck() {
+		if($("#searchOption").val() == "1") {
+			if(confirm(JS_MESSAGE["search.option.warning"])) {
+				// go
+			} else {
+				return false;
+			}
+		}
+
+		var startDate = $("#startDate").val();
+		var endDate = $("#endDate").val();
+		if(startDate != null && startDate != "" && endDate != null && endDate != "") {
+			if(parseInt(startDate) > parseInt(endDate)) {
+				alert(JS_MESSAGE["search.date.warning"]);
+				$("#startDate").focus();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	//전체 선택
+	$("#chkAll").click(function() {
+		$(":checkbox[name=uploadDataId]").prop("checked", this.checked);
+	});
+
+	var dialogConverterJob = $( "#dialogConverterJob" ).dialog({
+		autoOpen: false,
+		/* height: 315, */
+		width: 600,
+		modal: true,
+		resizable: false,
+		close: function() {
+			$("#converterCheckIds").val("");
+			$("#title").val("");
+			//location.reload();
+		}
+	});
+
+	// F4D Converter Button Click
+	function converterFile(uploadDataId, dataName, dataType) {
+		$("#dataType").val(dataType);
+		$("#converterCheckIds").val(uploadDataId + ",");
+		$("#title").val(dataName);
+		// 여기서 확장자가 las면 template 을 포인트 클라우트 클릭하게
+		if(dataType === "las") {
+			$("#converterTemplate").val("point-cloud");
+		} else {
+			$("#converterTemplate").val("basic");
+		}
+		
+		dialogConverterJob.dialog( "open" );
+	}
+
+	// All F4D Converter Button Click
+	function converterFiles() {
+		var checkedValue = "";
+		$("input:checkbox[name=uploadDataId]:checked").each(function(index) {
+			checkedValue += $(this).val() + ",";
+		});
+		if(checkedValue === "") {
+			alert("파일을 선택해 주십시오.");
+			return;
+		}
+		$("#dataType").val("");
+		$("#converterCheckIds").val(checkedValue);
+
+		dialogConverterJob.dialog( "open" );
+	}
+
+	// F4D Converter 일괄 변환
+	var saveConverterJobFlag = true;
+	function saveConverterJob() {
+		if($("#title").val() === null || $("#title").val() === "") {
+			alert("제목을 입력하여 주십시오.");
+			$("#title").focus();
+			return false;
+		}
+		
+		if($("#dataType").val() === "las") {
+			// 여기서 확장자가 las면 template 을 포인트 클라우트 클릭하게
+			if($("#converterTemplate").val() != "point-cloud") {
+				alert("LAS 데이터의 경우 변환 템플릿을 Point Cloud 로 선택하여 주십시오.");
+				$("#converterTemplate").focus();
+				return false;
+			}
+		}
+		
+		if(saveConverterJobFlag) {
+			saveConverterJobFlag = false;
+			var formData =$("#converterJobForm").serialize();
+			$.ajax({
+				url: "/converters",
+				type: "POST",
+				data: formData,
+				dataType: "json",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						alert(JS_MESSAGE["insert"]);
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+					}
+
+					$("#converterCheckIds").val("");
+					$("#title").val("");
+					$(":checkbox[name=uploadDataId]").prop("checked", false);
+					dialogConverterJob.dialog( "close" );
+					saveConverterJobFlag = true;
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
+					dialogConverterJob.dialog( "close" );
+					saveConverterJobFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+
+	var deleteUploadDataFlag = true;
+	function deleteUploadData(uploadDataId) {
+		if(confirm(JS_MESSAGE["delete.confirm"])) {
+			if(deleteUploadDataFlag) {
+				deleteUploadDataFlag = false;
+				$.ajax({
+					url: "/upload-datas/" + uploadDataId,
+					type: "DELETE",
+					//data: formData,
+					dataType: "json",
+					headers: {"X-Requested-With": "XMLHttpRequest"},
+					success: function(msg){
+						if(msg.statusCode <= 200) {
+							alert(JS_MESSAGE["delete"]);
+							location.reload();
+						} else {
+							alert(JS_MESSAGE[msg.errorCode]);
+						}
+						deleteDatasFlag = true;
+					},
+					error:function(request,status,error){
+						alert(JS_MESSAGE["ajax.error.message"]);
+						deleteDatasFlag = true;
+					}
+				});
+			} else {
+				alert(JS_MESSAGE["button.dobule.click"]);
+				return;
+			}
+		}
+	}
+
+	$('#yAxisUp').change(function() {
+		var desc = $(this).siblings('span');
+		var value = $(this).val();
+		if (value === 'Y') {
+			desc.text('Y축이 건물의 천장을 향하는 경우');
+		} else if (value === 'N') {
+			desc.text('Z축이 건물의 천장을 향하는 경우');
+		}
+	});
+</script>
+</th:block>
+</body>
+</html>	

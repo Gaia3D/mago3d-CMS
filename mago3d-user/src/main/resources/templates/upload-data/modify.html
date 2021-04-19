@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+	<title><th:block th:text="#{upload.data.edit.page.title}"></th:block></title>
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/user-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/dropzone/dropzone.min.css(cacheVersion=${contentCacheVersion})}">
+    <script type="text/javascript" th:src="@{/externlib/dropzone/dropzone.min.js(cacheVersion=${contentCacheVersion})}"></script>
+    <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<style type="text/css">
+        .dropzone .dz-preview.lp-preview {
+            width: 150px;
+        }
+        .dropzone.hzScroll {
+            min-width: 700px;
+            /*min-width: 1153px;*/
+			max-width: 1920px;
+            overflow: auto;
+            white-space: nowrap;
+            border: 1px solid #e5e5e5;
+        }
+        .loader-txt p {
+            font-size: 13px;
+            color: #666;
+        }
+        .loader-txt p small {
+            font-size: 11.5px;
+            color: #999;
+        }
+        .loader {
+            position: relative;
+            text-align: center;
+            margin: 15px auto 35px auto;
+            z-index: 9999;
+            display: block;
+            width: 80px;
+            height: 80px;
+            border: 10px solid rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            border-top-color: #000;
+            animation: spin 1s ease-in-out infinite;
+            -webkit-animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+        @-webkit-keyframes spin {
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
+<div id="wrap">
+	<!-- S: NAVWRAP -->
+	<div class="navWrap">
+		<div th:replace="~{/fragments/menu :: #navWrap}"></div>
+	</div>
+	<!-- E: NAVWRAP -->
+	
+	<div class="container" style="float:left; width: calc(100% - 78px);">
+		<div style="padding: 20px 20px 0px 10px; font-size: 18px;"><th:block th:text="#{converter.subtitle}"></th:block></div>
+        <!-- TAB -->
+        <div class="tabs">
+            <ul class="tab">
+				<li id="tabDataGroupList"><a href="/data-group/list"><th:block th:text="#{data.group.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataGroupInput"><a href="/data-group/input"><th:block th:text="#{data.group.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataInput"><a href="/upload-data/input"><th:block th:text="#{upload.data.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataList"><a href="/upload-data/list"><th:block th:text="#{upload.data.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterList"><a href="/converter/list"><th:block th:text="#{converter.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterJobFileList"><a href="/converter/converter-job-file-list"><th:block th:text="#{converter.job.file.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataList"><a href="/data/list"><th:block th:text="#{data.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataLogList"><a href="/data-log/list"><th:block th:text="#{data.log.list.tab.menu}"></th:block></a></li>
+            </ul>
+		</div>
+		
+		<!-- S: 3D 파일 업로드 수정 -->
+		<form id="uploadData" th:object="${uploadData}" th:action="@{#}" method="post" onsubmit="return false;">
+			<input type="hidden" id="uploadDataId" name="uploadDataId" th:field="*{uploadDataId}" />
+		<table class="input-table scope-row">
+			<colgroup>
+				<col class="col-label l" style="width: 13%"></col>
+				<col class="col-input" style="width: 37%"></col>
+				<col class="col-label l" style="width: 13%"></col>
+				<col class="col-input" style="width: 37%"></col>
+            </colgroup>
+			<tr>
+				<th class="col-label" scope="row">
+					<label for="dataName"><th:block th:text="#{common.data.name}"></th:block></label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+					<input type="text" id="dataName" name="dataName" th:field="*{dataName}" class="l" maxlength="255"  />
+				</td>
+				<th class="col-label" scope="row">
+					<label for="dataGroupName"><th:block th:text="#{common.data.group.name}"></th:block></label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+					<input type="hidden" id="dataGroupId" name="dataGroupId" th:field="*{dataGroupId}" />
+					<input type="text" id="dataGroupName" name="dataGroupName" th:field="*{dataGroupName}" class="ml" readonly="readonly" />
+					<input type="button" id="dataGroupButtion" th:value="#{data.group.select}" />
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row">
+					<label for="sharing"><th:block th:text="#{common.sharing}"></th:block></label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+					<select id="sharing" name="sharing" th:field="*{sharing}" class="selectBoxClass">
+						<option value="public"><th:block th:text="#{common.public}"></th:block></option>
+						<option value="common"><th:block th:text="#{common.common}"></th:block></option>
+						<option value="private"><th:block th:text="#{common.private}"></th:block></option>
+						<option value="group"><th:block th:text="#{common.group}"></th:block></option>
+					</select>
+				</td>
+				<th class="col-label m" scope="row">
+					<label for="dataType"><th:block th:text="#{common.data.type}"></th:block></label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input" id="dataType" name="dataType" th:text="*{dataType}"></td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row">
+					<label for="heightReference">높이 설정 방법</label>
+				</th>
+				<td class="col-input radio-set">
+					<select id="heightReference" name="heightReference" th:field="*{heightReference}" class="selectBoxClass">
+						<option value="none"> 해발 고도 </option>
+						<option value="clampToGround"> Terrain(지형)에 맞춤 </option>
+						<option value="relativeToGround"> Terrain(지형)으로 부터 높이 설정 </option>
+					</select>
+				</td>
+				<th class="col-label" scope="row">
+					<label for="longitude"><th:block th:text="#{upload.representative.location}"></th:block></label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+					<input type="text" id="longitude" name="longitude" th:field="*{longitude}" class="m" placeholder="longitude" />
+					<input type="text" id="latitude" name="latitude" th:field="*{latitude}" class="m" placeholder="latitude" />
+					<input type="text" id="altitude" name="altitude" th:field="*{altitude}" class="m" placeholder="altitude" />
+					<input type="button" id="mapButtion" th:value="#{common.map}" />
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label m" scope="row">
+					<label for="mappingType"><th:block th:text="#{common.mapping.type}"></th:block></label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+					<select id="mappingType" name="mappingType" th:field="*{mappingType}" class="selectBoxClass">
+						<option value="origin" selected="selected"> ORIGIN </option>
+						<option value="boundingboxcenter"> BOUNDING BOX CENTER </option>
+					</select>
+				</td>
+				<th class="col-label" scope="row">
+					<label for="description" th:text="#{common.description}"></label>
+				</th>
+				<td class="col-input">
+					<input type="text" id="description" name="description" th:field="*{description}" class="l" />
+				</td>
+			</tr>
+		</table>
+		<div class="button-group">
+			<div class="center-buttons">
+				<button id="updateButton"><th:block th:text="#{common.update}"></th:block></button>
+				<a th:href="@{/upload-data/list}" class="button"><th:block th:text="#{common.list}"></th:block></a>
+			</div>
+		</div>
+						
+		<table class="input-table scope-row">
+			<colgroup>
+				<col class="col-label l" style="width: 15%">
+				<col class="col-input" style="width: 35%">
+				<col class="col-label l" style="width: 15%">
+				<col class="col-input" style="width: 35%">
+			</colgroup>
+			<tr>
+				<th class="col-label" scope="row" style="vertical-align: top;">
+					<label><th:block th:text="#{common.attachments}"></th:block></label>
+				</th>
+				
+				<td colspan="3" class="col-input">
+					<ul style="list-style: none; margin-bottom: 20px;">
+	<th:block th:unless="${uploadDataFileList.empty}" th:each="uploadDataFile : ${uploadDataFileList}">
+		<th:block th:with="paddingLeftValue = ${(uploadDataFile.depth -1)  * 50}">
+			<th:block th:if="${#strings.equals(uploadDataFile.fileType, 'DIRECTORY')}">
+						<li th:style="|padding-left: ${paddingLeftValue}px; height: 25px;|" th:text="|[ ${uploadDataFile.fileType} ] ${uploadDataFile.fileSubPath}|"></li>
+			</th:block>
+			<th:block th:if="${#strings.equals(uploadDataFile.fileType, 'FILE')}">
+				<th:block th:if="${#strings.equals(uploadDataFile.converterTarget, 'true')}">
+						<li th:style="|padding-left: ${paddingLeftValue}px; height: 25px; color:blue; font-weight: bold;|" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>	
+				</th:block>
+				<th:block th:if="${#strings.equals(uploadDataFile.converterTarget, 'false')}">
+						<li th:style="|padding-left: ${paddingLeftValue}px; height: 25px;|" th:text="|[ ${uploadDataFile.fileType } ] ${uploadDataFile.fileName }(${uploadDataFile.viewFileSizeUnitKB})KB|"></li>	
+				</th:block>
+			</th:block>
+        </th:block>
+	</th:block>				
+					</ul>
+				</td>
+			</tr>
+		</table>
+		</form>
+		
+	</div>
+	<!-- 상위 그룹 선택 다이얼 로그 -->
+	<div th:replace="~{/data-group/parent-data-group-dialog :: #dataGroupDialog}"></div>
+</div>
+<!-- E: WRAP -->
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script>
+	$(document).ready(function() {
+		$("#sharing").val("[[${uploadData.sharing}]]");
+		$("#dataType").val("[[${uploadData.dataType}]]");
+		$("#heightReference").val("[[${uploadData.heightReference}]]");
+		$("#mappingType").val("[[${uploadData.mappingType}]]");
+	});
+	
+	var dataGroupDialog = $( ".dialog" ).dialog({
+		autoOpen: false,
+		height: 500,
+		width: 1000,
+		modal: true,
+		overflow : "auto",
+		resizable: false
+	});
+	
+	// 상위 Layer Group 찾기
+	$( "#dataGroupButtion" ).on( "click", function() {
+		dataGroupDialog.dialog( "open" );
+		dataGroupDialog.dialog( "option", "title", JS_MESSAGE["data.group.select"]);
+	});
+	
+	// 데이터 그룹 선택
+	function confirmDataGroup(dataGroupId, dataGroupName) {
+		$("#dataGroupId").val(dataGroupId);
+		$("#dataGroupName").val(dataGroupName);
+		dataGroupDialog.dialog( "close" );
+	}
+	
+	function validate() {
+		if ($("#dataName").val() === "") {
+			alert(JS_MESSAGE["data.name.empty"]);
+			$("#dataName").focus();
+			return false;
+		}
+		if ($("#longitude").val() === "") {
+			alert(JS_MESSAGE["representative.longitude.empty"]);
+			$("#longitude").focus();
+			return false;
+		}
+		if ($("#latitude").val() === "") {
+			alert(JS_MESSAGE["representative.latitude.empty"]);
+			$("#latitude").focus();
+			return false;
+		}
+		if ($("#altitude").val() === "") {
+			alert(JS_MESSAGE["representative.altitude.empty"]);
+			$("#altitude").focus();
+			return false;
+		}
+		if(!locationValidation($("#longitude").val(), $("#latitude").val(), $("#altitude").val())) {
+			return false;
+		}
+	}
+	
+	// 수정
+	var updateFlag = true;
+	$( "#updateButton" ).on( "click", function() {
+		if (validate() == false) {
+			return false;
+		}
+		if(updateFlag) {
+			updateFlag = false;
+			var formData = $("#uploadData").serialize();		
+			$.ajax({
+				url: "/upload-datas/[[${uploadData.uploadDataId}]]",
+				type: "POST",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+		        data: formData,
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						alert(JS_MESSAGE["update"]);
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+						console.log("---- " + msg.message);
+					}
+					updateFlag = true;
+				},
+				error:function(request, status, error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        updateFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	});
+	
+	//지도에서 찾기
+	$( "#mapButtion" ).on( "click", function() {
+		var url = "/map/find-point";
+		var width = 800;
+		var height = 700;
+	
+		var popupX = (window.screen.width / 2) - (width / 2);
+		// 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
+		var popupY= (window.screen.height / 2) - (height / 2);
+		
+	    var popWin = window.open(url, "","toolbar=no ,width=" + width + " ,height=" + height + ", top=" + popupY + ", left="+popupX
+	            + ", directories=no,status=yes,scrollbars=no,menubar=no,location=no");
+	    //popWin.document.title = layerName;
+	});
+</script>
+</body>
+</html>

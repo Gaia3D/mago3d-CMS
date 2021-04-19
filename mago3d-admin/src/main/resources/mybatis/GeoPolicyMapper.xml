@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.GeoPolicyMapper">
+
+	<!-- 운영 정책 정보 -->
+	<select id="getGeoPolicy" resultType="geoPolicy">
+		/* getGeoPolicy */
+		SELECT * FROM geopolicy ORDER BY geopolicy_id DESC LIMIT 1
+	</select>
+
+	<!-- 공간 정보 기본 수정 -->
+	<update id="updateGeoPolicy" parameterType="geoPolicy">
+		/* updateGeoPolicy */
+		UPDATE geopolicy
+		SET cesium_ion_token = #{cesiumIonToken},
+			terrain_type = #{terrainType},
+			terrain_value = #{terrainValue},
+			data_api_url = #{dataApiUrl},
+			data_service_path = #{dataServicePath},
+			data_change_request_decision = #{dataChangeRequestDecision}
+			<!-- init_camera_enable = #{initCameraEnable},
+			init_latitude = #{initLatitude},
+			init_longitude = #{initLongitude},
+			init_altitude = #{initAltitude},
+			init_duration = #{initDuration},
+			init_default_terrain = #{initDefaultTerrain},
+			init_default_fov = #{initDefaultFov},
+			init_camera_enable = #{initCameraEnable},
+			init_latitude = #{initLatitude},
+			init_longitude = #{initLongitude},
+			init_altitude = #{initAltitude},
+			init_duration = #{initDuration},
+			init_default_terrain = #{initDefaultTerrain},
+			init_default_fov = #{initDefaultFov},
+			lod0 = #{lod0},
+			lod1 = #{lod1},
+			lod2 = #{lod2},
+			lod3 = #{lod3},
+			lod4 = #{lod4},
+			lod5 = #{lod5},
+			ssao_radius = #{ssaoRadiustltlffl2},
+			cull_face_enable = #{cullFaceEnable},
+			time_line_enable = #{timeLineEnable},
+			max_partitions_lod0 = #{maxPartitionsLod0},
+			max_partitions_lod1 = #{maxPartitionsLod1},
+			max_partitions_lod2_or_less = #{maxPartitionsLod2OrLess},
+			max_ratio_points_dist_0m = #{maxRatioPointsDist0m},
+			max_ratio_points_dist_100m = #{maxRatioPointsDist100m},
+			max_ratio_points_dist_200m = #{maxRatioPointsDist200m},
+			max_ratio_points_dist_400m = #{maxRatioPointsDist400m},
+			max_ratio_points_dist_800m = #{maxRatioPointsDist800m},
+			max_ratio_points_dist_1600m = #{maxRatioPointsDist1600m},
+			max_ratio_points_dist_over_1600m = #{maxRatioPointsDistOver1600m},
+			max_point_size_for_pc = #{maxPointSizeForPc},
+			min_point_size_for_pc = #{minPointSizeForPc},
+			pendent_point_size_for_pc = #{pendentPointSizeForPc},
+			memory_management = #{memoryManagement},
+			layer_source_coordinate = #{layerSourceCoordinate},
+			layer_target_coordinate = #{layerTargetCoordinate}, -->
+		WHERE geopolicy_id = #{geoPolicyId}
+	</update>
+
+	<!-- Geo Server 수정 -->
+	<update id="updateGeoPolicyGeoServer" parameterType="geoPolicy">
+		/* updateGeoPolicyGeoServer */
+		UPDATE geopolicy
+		SET geoserver_enable = #{geoserverEnable},
+			geoserver_data_url = #{geoserverDataUrl},
+			geoserver_data_workspace = #{geoserverDataWorkspace},
+			geoserver_data_store = #{geoserverDataStore},
+			geoserver_user = #{geoserverUser},
+			geoserver_password = #{geoserverPassword},
+			geoserver_imageprovider_enable = #{geoserverImageproviderEnable},
+			geoserver_imageprovider_url = #{geoserverImageproviderUrl},
+			geoserver_imageprovider_layer_name = #{geoserverImageproviderLayerName},
+			geoserver_imageprovider_style_name = #{geoserverImageproviderStyleName},
+			geoserver_imageprovider_parameters_width = #{geoserverImageproviderParametersWidth},
+			geoserver_imageprovider_parameters_height = #{geoserverImageproviderParametersHeight},
+			geoserver_imageprovider_parameters_format = #{geoserverImageproviderParametersFormat},
+			geoserver_terrainprovider_layer_name = #{geoserverTerrainproviderLayerName},
+			geoserver_terrainprovider_style_name = #{geoserverTerrainproviderStyleName},
+			geoserver_terrainprovider_parameters_width = #{geoserverTerrainproviderParametersWidth},
+			geoserver_terrainprovider_parameters_height = #{geoserverTerrainproviderParametersHeight},
+			geoserver_terrainprovider_parameters_format = #{geoserverTerrainproviderParametersFormat},
+			geoserver_wms_version = #{geoserverWmsVersion}
+		WHERE geopolicy_id = #{geoPolicyId}
+	</update>
+
+</mapper>

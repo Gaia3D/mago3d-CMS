@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.GeoPolicyMapper">
+
+	<!-- 운영 정책 정보 -->
+	<select id="getGeoPolicy" resultType="geoPolicy">
+		/* getGeoPolicy */
+		SELECT * FROM geopolicy ORDER BY geopolicy_id DESC LIMIT 1
+	</select>
+	
+</mapper>

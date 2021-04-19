@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div id="uploadDataSmartTilingDialog" class="uploadDataSmartTilingDialog" title="SmartTiling 데이터 등록">
+        <form id="dataSmartTilingFileInfo" name="dataSmartTilingFileInfo" th:action="@{/datas/smart-tiling}" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="smartTilingFileDataGroupId" name="smartTilingFileDataGroupId" />
+            <table class="inner-table scope-row" style="width: 95%;" summary="SmatTiling 데이터 등록">
+                <caption class="hiddenTag">데이터 등록</caption>
+                <colgroup>
+                    <col class="col-sub-label xl"></col>
+                    <col class="col-data"></col>
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th class="col-sub-label">데이터 그룹명</th>
+                        <td id="smartTilingDataGroupName"></td>
+                    </tr>
+                    <tr>
+                        <th class="col-sub-label">업로딩 파일</th>
+                        <td>
+                            <div class="inner-data">
+                                <label for="smartTilingFileName" class="hiddenTag">smartTiling 파일이름</label>
+                                <input type="file" id="smartTilingFileName" name="smartTilingFileName" class="col-data" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="button-group">
+                <input type="button" class="button" th:value="#{data.file.save}" onclick="dataSmartTilingFileUpload();" />
+            </div>
+
+            <table class="inner-table scope-row" style="width: 95%;">
+                <col class="col-sub-label xl">
+                <col class="col-data">
+                <tbody id="dataSmartTilingUploadLog">
+                </tbody>
+            </table>
+        </form>
+    </div>
+</body>
+</html>
+
+<script id="templateDataSmartTilingUploadLog" type="text/x-handlebars-template">
+			<tr>
+				<td colspan="2" style="text-align: center;">Result of parsing</td>
+			</tr>
+			<tr>
+				<td> 총 건 수</td>
+				<td>{{totalCount}}</td>
+			</tr>
+			<tr>
+				<td> 성공 건수 </td>
+				<td>{{parseSuccessCount}}</td>
+			</tr>
+			<tr>
+				<td> 실패 건수 </td>
+				<td> {{parseErrorCount}}</td>
+			</tr>
+			<tr>
+				<td> DB 등록 건수 </td>
+				<td> {{insertSuccessCount}} </td>
+			</tr>
+			<tr>
+				<td> DB 수정 건수 </td>
+				<td> {{updateSuccessCount}} </td>
+			</tr>
+			<tr>
+				<td> DB 실패 건수 </td>"
+				<td> {{insertErrorCount}}</td>
+			</tr>
+</script>

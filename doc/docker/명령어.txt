@@ -1,0 +1,41 @@
+이미지 검색
+    - docker search 검색어
+이미지 다운로드 : 태그명 생략시 latest 버전 다운로드
+    - docker image pull 이미지명:태그명
+이미지 목록 표시
+    - docker image ls
+이미지 삭제
+    - docker image rm 이미지명:태그명
+사용하지 않는 이미지 모두 삭제
+    - docker image prune -a
+컨테이너 생성
+    - docker container create --name "컨테이너명" 이미지명:태그명
+컨테이너 생성 및 시작(이미지가 없을경우 자동 다운로드)
+    - docker container run --name "컨테이너명" 이미지명
+컨테이너 주요 설정값
+    - -d : 컨테이너 백그라운드 실행
+    - -it : 컨테이너의 표준 입력을 사용하여 단말기 디바이스를 사용한다.
+    - --restart=always : 자동재시작. 값을 설정하지 않을 경우 기본값으로 자동재시작을 하지 않는다.
+    - -p : 호스트의 임의의 포트를 컨테이너에 할당. -p 옵션을 여러개 사용하여 여러 포트 할당 가능.
+    - -v : 호스트와 컨테이너의 디렉토리를 공유. 예) -v "D:\data\geoserver":"/data/geoserver_data"
+가동 컨테이너에서 프로세스를 실행
+    - docker exec [옵션] 컨테이너명 실행명령인수 예) docker exec -it mago3d bash
+파일 복사
+    - docker container cp [컨테이너 식별자]:[컨테이너 안의 파일 경로] [호스트의 디렉토리 경로] : 컨테이너의 파일을 호스트 경로에 복사
+    - docker container cp [호스트의 파일] [컨테이너 식별자]:[컨테이너 안의 파일 경로] : 호스트의 파일을 컨테이너에 복사
+컨테이너 조작의 변경 내용 확인
+    -  docker container diff 컨테이너명
+docker 이미지 생성
+    - docker container commit 컨테이너명 생성이미지명:(태그명)
+docker hub login
+    - docker login -u "사용자명" -p "비밀번호"
+docker 이미지 업로드(이미지명은 사용자명/repository 형태여야함)
+    - docker image push 이미지명:태그명
+컨테이너를 tar 파일로 출력
+    - docker container export 컨테이너명 > 파일명.tar
+tar 파일로부터 이미지 작성(사용자가 입력한 이미지명으로 만들어진다.)
+    - docker image import 파일명.tar 이미지명:태그명
+이미지 저장
+    - docker image save -o 파일명.tar 이미지명
+이미지 읽어 들이기(파일명이 아닌 저장한 이미지명으로 읽어 들인다.)
+    - docker image load -i 파일명.tar

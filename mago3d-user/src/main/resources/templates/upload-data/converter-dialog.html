@@ -1,0 +1,63 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<body>
+<div id="dialogConverterJob" class=dialogConverterJob th:title="#{converter.job.f4d.registration}">
+	<form id="converterJobForm" name="converterJobForm" th:action="@{#}" method="post">
+		<input type="hidden" id="converterCheckIds" name="converterCheckIds" />
+		<input type="hidden" id="dataType" name="dataType" />
+		<table class="inner-table scope-row" th:summary="#{converter.job.f4d.conversion.summary}">
+			<caption class="hiddenTag"><th:block th:text="#{converter.job.f4d.conversion.caption}"></th:block></caption>
+			<colgroup>
+				<col class="col-sub-label xl"></col>
+				<col class="col-data"></col>
+			</colgroup>
+			<tbody>
+				<tr>
+					<th class="col-sub-label x"><label for="converterTemplate"><th:block th:text="#{converter.conversion.type}"></th:block></label></th>
+					<td class="col-input">
+						<select id="converterTemplate" name="converterTemplate" class="select" style="height: 30px;">
+	                		<option value="basic"> <th:block th:text="#{converter.template.basic}"></th:block> </option>
+		                	<option value="building"> <th:block th:text="#{converter.template.building}"></th:block> </option>
+							<option value="extra-big-building"> <th:block th:text="#{converter.template.extra.big.building}"></th:block> </option>
+							<option value="point-cloud"> <th:block th:text="#{converter.template.point.cloud}"></th:block> </option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-sub-label x"><label for="title"><th:block th:text="#{common.title}"></th:block></label></th>
+					<td>
+						<div class="inner-data">
+							<input type="text" id="title" name="title" class="l" />
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-sub-label x"><label for="usf"><th:block th:text="#{converter.usf}"></th:block></label></th>
+					<td>
+						<select id="usf" name="usf" class="select" style="height: 30px;">
+	                		<option value="1"> <th:block th:text="#{converter.usf.basic}"></th:block> </option>
+		                	<option value="0.1"> <th:block th:text="#{converter.usf.unit10cm}"></th:block> </option>
+							<option value="0.01"> <th:block th:text="#{converter.usf.unit1cm}"></th:block> </option>
+							<option value="0.001"> <th:block th:text="#{converter.usf.unit1mm}"></th:block> </option>
+							<option value="10"> <th:block th:text="#{converter.usf.unit10m}"></th:block> </option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-sub-label x"><label for="yAxisUp"><th:block th:text="#{converter.view.axis}"></th:block></label></th>
+					<td>
+						<select id="yAxisUp" name="yAxisUp" class="select" style="height: 30px;">
+							<option value="N"><th:block th:text="#{converter.view.z.axis}"></th:block></option>
+							<option value="Y"><th:block th:text="#{converter.view.y.axis}"></th:block></option>
+						</select>
+						<span class="marL10"><th:block th:text="#{converter.job.z.axis.facing}"></th:block></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="button-group">
+			<a href="#" class="button" onclick="saveConverterJob(); return false;" style="color: white"><th:block th:text="#{common.save}"></th:block></a>
+		</div>
+	</form>
+</div>
+</body>
+</html>

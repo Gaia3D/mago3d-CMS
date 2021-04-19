@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.LayerGroupMapper">
+
+	<!-- 레이어 그룹 목록 조회 -->
+	<select id="getListLayerGroup" resultType="layerGroup">
+		/* getListLayerGroup */
+		WITH RECURSIVE layer_group_tree (
+			layer_group_id, layer_group_name, user_id, ancestor, parent, depth, view_order, children, available, description, insert_date, path, cycle
+		) AS (
+	        SELECT A.layer_group_id, A.layer_group_name, A.user_id, A.ancestor, A.parent, A.depth, A.view_order, A.children, A.available,
+	        	A.description, A.insert_date, ARRAY[A.view_order], false
+			FROM layer_group A
+			WHERE A.parent = 0
+			<if test="available != null">
+				AND A.available = #{available}
+			</if>
+			UNION ALL
+	        SELECT A.layer_group_id, A.layer_group_name, A.user_id, A.ancestor, A.parent, A.depth, A.view_order, A.children, A.available,
+	        	A.description, A.insert_date, path || A.view_order, A.layer_group_id = ANY(path)
+	        FROM layer_group A, layer_group_tree B
+	        WHERE A.parent = B.layer_group_id AND not cycle
+		)
+	    SELECT layer_group_id, layer_group_name, user_id, ancestor, parent, depth, view_order, children, available, description, insert_date, path
+	    FROM layer_group_tree
+	    ORDER BY path
+	</select>
+</mapper>

@@ -1,0 +1,32 @@
+
+form tag 전송은 하는데.... mapping 이 안되는 문제...
+나중에 해결 해야 겠다. 우선 post 로 하자.
+
+이건 json 으로 보내는건데.... .이 방법은 정석이 아닌거 같아서 해 보기가 싫다.
+event.preventDefault();
+            var form = $(this);
+            var idVal = form.find('input[name="id"]').val();
+            var contentVal = form.find('input[name="content"]').val();
+            var url = 'http://localhost:8080/articles/'+idVal;
+            var jsonString = JSON.stringify({id: idVal, content: contentVal});
+            console.log(jsonString);
+            $.ajax({
+                type : 'PUT',
+                url : url,
+                contentType: 'application/json',
+                data : jsonString,
+                success : function(data, status, xhr){
+                   $("#result").html(data+
+                   " link: <a href='"+url+"'>"+url+"</a>");
+                },
+                error: function(xhr, status, error){
+                  alert(error);
+                }
+            });
+            
+ @PutMapping("/{id}")
+  @ResponseBody
+  public String createNewArticle(@RequestBody Article article) {
+      articleService.saveArticle(article);
+      return "Article created.";
+  }

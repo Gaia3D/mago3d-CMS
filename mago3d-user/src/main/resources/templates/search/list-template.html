@@ -1,0 +1,22 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<script id="districtSearchResultSource" type="text/x-handlebars-template">
+<li id="districtList" class="on">
+	<p>
+		<th:block th:text="#{search.administrative.district}"></th:block>
+		<span th:text="|#{common.all} {{totalCount}} #{common.count.unit}|"></span>
+	</p>
+		<ul id="districtSearchList" class="yScroll">
+		{{#if districtList}}
+			{{#each districtList}}
+				<li>
+					<span>{{name}}</span>
+					<button type="button" onclick="gotoFly('{{longitude}}', '{{latitude}}', '300', '2')" title="위치이동" class="goto">위치이동</button>
+				</li>
+			{{/each}}
+		{{else}}
+			<li th:text="#{search.no.results}"></li>
+		{{/if}}
+		</ul>
+</li>
+</script>
+</html>

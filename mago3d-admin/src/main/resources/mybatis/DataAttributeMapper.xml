@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.DataAttributeMapper">
+
+	<!-- 데이터 속성 정보를 취득 -->
+	<select id="getDataAttribute" parameterType="long" resultType="dataAttribute">
+		/* getDataAttribute */
+		SELECT * FROM data_attribute WHERE data_id = #{dataId}
+	</select>
+
+	<!-- 데이터 속성 정보 등록 -->
+	<insert id="insertDataAttribute" parameterType="dataAttribute">
+		/* insertDataAttribute */
+		<selectKey keyProperty="dataAttributeId" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('data_attribute_seq')
+  		</selectKey>
+		INSERT INTO data_attribute(
+			data_attribute_id, data_id, attributes
+		) VALUES (
+			#{dataAttributeId}, #{dataId}, TO_JSON(#{attributes}::json)
+		)
+	</insert>
+
+	<!-- 파일 정보 저장 -->
+	<insert id="insertDataAttributeFileInfo" parameterType="dataAttributeFileInfo" >
+		/* insertDataAttributeFileInfo */
+		<selectKey keyProperty="dataAttributeFileInfoId" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('data_attribute_file_info_seq')
+  		</selectKey>
+		INSERT INTO data_attribute_file_info (
+			data_attribute_file_info_id, data_id, user_id, file_name, file_real_name, file_path, file_size, file_ext
+		) VALUES (
+			#{dataAttributeFileInfoId}, #{dataId}, #{userId}, #{fileName}, #{fileRealName}, #{filePath}, #{fileSize}, #{fileExt}
+		)
+	</insert>
+	
+	<!-- 데이터 속성 정보 수정 -->
+	<update id="updateDataAttribute" parameterType="dataAttribute">
+		/* updateDataAttribute */
+		UPDATE data_attribute
+		SET attributes = TO_JSON(#{attributes}::json),
+			update_date = now()
+		WHERE data_attribute_id = ${dataAttributeId}
+	</update>
+	
+	<!-- 데이터 속성 파일 정보 수정 -->
+	<update id="updateDataAttributeFileInfo" parameterType="dataAttributeFileInfo">
+		/* updateDataAttributeFileInfo */
+		UPDATE data_attribute_file_info
+		SET total_count = #{totalCount},
+			parse_success_count = #{parseSuccessCount},
+			parse_error_count = #{parseErrorCount},
+			insert_success_count = #{insertSuccessCount},
+			insert_error_count = #{insertErrorCount}
+		WHERE data_attribute_file_info_id = #{dataAttributeFileInfoId}
+	</update>
+</mapper>

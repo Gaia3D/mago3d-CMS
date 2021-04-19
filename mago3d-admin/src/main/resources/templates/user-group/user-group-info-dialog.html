@@ -1,0 +1,34 @@
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
+<body>
+	<!-- Dialog 그룹 정보 보기 -->
+	<div id="userGroupInfoDialog" title="사용자 그룹 정보" class="dialog">
+		<table class="inner-table scope-row" summary="사용자 그룹 정보 보기">
+			<caption class="hiddenTag">그룹 정보</caption>
+			<colgroup>
+				<col class="col-label"></col>
+				<col class="col-data"></col>
+			</colgroup>
+			<tr>
+				<th class="col-label" scope="row">사용자 그룹명</th>
+				<td id="userGroupNameInfo" class="col-data ellipsis"></td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row">그룹Key</th>
+				<td id="userGroupKeyInfo" class="col-data"></td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row">기본유무</th>
+				<td id="basicInfo" class="col-data"></td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row">사용유무</th>
+				<td id="availableInfo" class="col-data"></td>
+			</tr>
+			<tr>
+				<th class="col-label" scope="row" th:text="#{description}"></th>
+				<td id="descriptionInfo" class="col-data"></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

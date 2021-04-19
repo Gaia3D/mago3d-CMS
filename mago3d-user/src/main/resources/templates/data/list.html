@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+	<title><th:block th:text="#{data.list.page.title}"></th:block></title>
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/cesium/Widgets/widgets.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/user-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/json-viewer/json-viewer.css(cacheVersion=${contentCacheVersion})}">
+	<script type="text/javascript" th:src="@{/externlib/json-viewer/json-viewer.js(cacheVersion=${contentCacheVersion})}"></script>
+    <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+</head>
+<body>
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
+<div id="wrap">
+	<!-- S: NAVWRAP -->
+	<div class="navWrap">
+		<div th:replace="~{/fragments/menu :: #navWrap}"></div>
+	</div>
+	<!-- E: NAVWRAP -->
+
+	<div class="container" style="float:left; width: calc(100% - 78px);">
+        <div style="padding: 20px 20px 0px 10px; font-size: 18px;"><th:block th:text="#{converter.subtitle}"></th:block></div>
+        <!-- TAB -->
+        <div class="tabs">
+            <ul class="tab">
+				<li id="tabDataGroupList"><a href="/data-group/list"><th:block th:text="#{data.group.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataGroupInput"><a href="/data-group/input"><th:block th:text="#{data.group.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataInput"><a href="/upload-data/input"><th:block th:text="#{upload.data.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataList"><a href="/upload-data/list"><th:block th:text="#{upload.data.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterList"><a href="/converter/list"><th:block th:text="#{converter.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterJobFileList"><a href="/converter/converter-job-file-list"><th:block th:text="#{converter.job.file.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataList"><a href="/data/list"><th:block th:text="#{data.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataLogList"><a href="/data-log/list"><th:block th:text="#{data.log.list.tab.menu}"></th:block></a></li>
+            </ul>
+		</div>
+
+		<!-- S: 검색 -->
+		<div class="filters">
+            <form id="searchForm" th:object="${dataInfo}" method="get" th:action="@{/data/list}" onsubmit="return searchCheck();">
+			<div class="input-group row">
+				<div class="input-set">
+					<label for="searchWord" th:text="#{common.search.word}"></label>
+					<select id="searchWord" name="searchWord" class="selectBoxClass">
+						<option value="" th:text="#{common.select}"></option>
+						<option value="data_name" th:text="#{common.data.name}"></option>
+					</select>
+					<select id="searchOption" name="searchOption" class="selectBoxClass">
+						<option value="0" th:text="#{common.search.same}"></option>
+						<option value="1" th:text="#{common.search.include}"></option>
+					</select>
+					<input type="search" id="searchValue" name="searchValue" th:field="*{searchValue}" class="m" style="float: right;" />
+				</div>
+				<div class="input-set">
+					<label for="startDate" th:text="#{common.date}"></label>
+					<input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
+					<span class="delimeter tilde">~</span>
+					<input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
+                </div>
+				<div class="input-set">
+					<label for="orderWord" th:text="#{common.order}"></label>
+					<select id="orderWord" name="orderWord" class="selectBoxClass">
+						<option value="" th:text="#{common.basic}"></option>
+						<option value="data_name" th:text="#{common.data.name}"></option>
+						<option value="insert_date" th:text="#{common.insert.date}"></option>
+					</select>
+					<select id="orderValue" name="orderValue" class="selectBoxClass">
+						<option value="" th:text="#{common.basic}"></option>
+						<option value="ASC" th:text="#{common.asc}"></option>
+						<option value="DESC" th:text="#{common.desc}"></option>
+					</select>
+					<select id="listCounter" name="listCounter" class="selectBoxClass">
+						<option value="10" th:text="#{common.ten.count}"></option>
+						<option value="50" th:text="#{common.fifty.count}"></option>
+						<option value="100" th:text="#{common.hundred.count}"></option>
+					</select>
+				</div>
+				<div class="input-set">
+					<input type="submit" th:value="#{common.search}" />
+				</div>
+			</div>
+			</form>
+        </div>
+        <!-- E: 검색 -->
+
+		<div class="list">
+			<form id="listForm" th:object="${dataInfo}" method="post">
+				<input type="hidden" id="checkIds" name="checkIds" />
+				<div class="list-header row">
+					<div class="list-desc u-pull-left">
+						<span th:text="#{common.all}"></span>
+						<span class="totalCount" th:text="${pagination.totalCount}"></span>
+						<span th:text="#{common.count.unit}"></span>
+						<span th:text="|${pagination.pageNo} / ${pagination.lastPage}|"></span>
+						<span th:text="#{common.page}"></span>
+					</div>
+				</div>
+				<table class="list-table scope-col" th:summary="#{data.list.page.summary}">
+					<caption class="hiddenTag"><th:block th:text="#{data.list.page.caption}"></th:block></caption>
+					<colgroup>
+						<col class="col-number"></col>
+						<col class="col-name"></col>
+						<col class="col-name"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-type"></col>
+						<col class="col-functions"></col>
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col" class="col-number" th:text="#{common.number}"></th>
+							<th scope="col" class="col-name"><th:block th:text="#{data.group.name}"></th:block></th>
+							<th scope="col" class="col-name"><th:block th:text="#{common.data.name}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{data.registrant}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{common.data.type}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{common.sharing}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{common.mapping.type}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{common.status}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{common.map}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{common.attribute}"></th:block></th>
+							<th scope="col" class="col-type"><th:block th:text="#{common.object.attribute}"></th:block></th>
+							<th scope="col" class="col-functions"><th:block th:text="#{common.created}"></th:block></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:if="${dataInfoList.empty}">
+							<td colspan="12" class="col-none"><th:block th:text="#{data.does.not.exist}"></th:block></td>
+						</tr>
+						<tr th:if="${!dataInfoList.empty}" th:each="dataInfo : ${dataInfoList}">
+							<td class="col-number" th:text="${pagination.rowNumber - dataInfoStat.index}"></td>
+							<td class="col-name ellipsis" th:text="${dataInfo.dataGroupName}" style="min-width:100px;max-width:100px;"></td>
+							<td class="col-name ellipsis" style="min-width:160px;max-width:160px;">
+								<a th:text="${dataInfo.dataName}" th:href="@{/data/modify(dataId=${dataInfo.dataId})}"></a>
+							</td>
+							<td class="col-type">
+								<th:block th:if="${#strings.equals(dataInfo.userId, 'owner')}" th:text="${dataInfo.userId}"></th:block>
+								<th:block th:unless="${#strings.equals(dataInfo.userId, 'owner')}" th:text="${dataInfo.userId}">
+									<span th:text="${dataInfo.userId}" style="color: blue;"></span>
+								</th:block>
+							</td>
+							<td class="col-type" th:text="${dataInfo.dataType}"></td>
+							<td class="col-type">
+								<th:block th:if="${#strings.equals(dataInfo.sharing, 'common')}" th:text="#{common.common}"></th:block>
+								<th:block th:if="${#strings.equals(dataInfo.sharing, 'public')}" th:text="#{common.public}"></th:block>
+								<th:block th:if="${#strings.equals(dataInfo.sharing, 'private')}" th:text="#{common.private}"></th:block>
+								<th:block th:if="${#strings.equals(dataInfo.sharing, 'group')}" th:text="#{common.group}"></th:block>
+							</td>
+							<td class="col-type ellipsis" th:text="${dataInfo.mappingType}" style="min-width:80px;max-width:80px;"></td>
+							<td class="col-type">
+								<th:block th:if="${#strings.equals(dataInfo.status, 'processing')}" th:text="#{data.status.processing}"></th:block>
+								<th:block th:if="${#strings.equals(dataInfo.status, 'use')}" th:text="#{data.status.use}"></th:block>
+								<th:block th:if="${#strings.equals(dataInfo.status, 'unused')}" th:text="#{data.status.unused}"></th:block>
+								<th:block th:if="${#strings.equals(dataInfo.status, 'delete')}" th:text="#{data.status.delete}"></th:block>
+							</td>
+							<td class="col-type">
+								<a href="#" th:onclick="viewDataInfo([[${dataInfo.dataId}]]); return false;"><th:block th:text="#{common.view}"></th:block></a>
+							</td>
+							<td class="col-type">
+								<th:block th:if="${#bools.isTrue(dataInfo.attributeExist)}">
+								<a href="#" th:onclick="detailDataAttribute([[${dataInfo.dataId}]], [[${dataInfo.dataName}]]); return false;"><th:block th:text="#{common.view}"></th:block></a>
+								</th:block>
+								<th:block th:if="${#bools.isFalse(dataInfo.attributeExist)}" th:text="#{data.not.registered}"></th:block>
+							</td>
+							<td class="col-type">
+								<th:block th:if="${#bools.isTrue(dataInfo.objectAttributeExist)}">
+								<a href="#" th:onclick="detailDataObjectAttribute([[${dataInfo.dataId}]], [[${dataInfo.dataName}]]); return false;"><th:block th:text="#{common.view}"></th:block></a>
+								</th:block>
+								<th:block th:if="${#bools.isFalse(dataInfo.objectAttributeExist)}" th:text="#{data.not.registered}">
+								</th:block>
+							</td>
+							<td class="col-date">
+								<th:block th:text="${#temporals.format(dataInfo.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+		</div>
+		<!-- 페이지 -->
+        <div th:replace="~{/common/pagination :: #paginationArea}"></div>
+		<!-- 데이터 속성 -->
+        <div th:replace="~{/data/data-attribute-dialog :: #dataAttributeDialog}"></div>
+		<!-- 데이터 오브젝트 속성 -->
+		<div th:replace="~{/data/data-object-attribute-dialog :: #dataObjectAttributeDialog}"></div>
+	</div>
+</div>
+<!-- E: WRAP -->
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var searchWord = "[[${dataInfo.searchWord}]]";
+		var searchOption = "[[${dataInfo.searchOption}]]";
+		var orderWord = "[[${dataInfo.orderWord}]]";
+		var orderValue = "[[${dataInfo.orderValue}]]";
+		var listCounter = "[[${dataInfo.listCounter}]]";
+
+		if(searchWord != "") $("#searchWord").val("[[${dataInfo.searchWord}]]");
+		if(searchOption != "") $("#searchOption").val("[[${dataInfo.searchOption}]]");
+		if(orderWord != "") $("#orderWord").val("[[${dataInfo.orderWord}]]");
+		if(orderValue != "") $("#orderValue").val("[[${dataInfo.orderValue}]]");
+		if(listCounter != "") $("#listCounter").val("[[${dataInfo.listCounter}]]");
+
+		initDatePicker();
+		initCalendar(new Array("startDate", "endDate"), new Array("[[${dataInfo.startDate}]]", "[[${dataInfo.endDate}]]"));
+	});
+
+	//전체 선택
+	$("#chkAll").click(function() {
+		$(":checkbox[name=dataId]").prop("checked", this.checked);
+	});
+
+	// 데이터 속성 다이얼 로그
+	var dataAttributeDialog = $( "#dataAttributeDialog" ).dialog({
+		autoOpen: false,
+		width: 800,
+		height: 550,
+		modal: true,
+		resizable: false
+	});
+
+	// 데이터 속성
+	function detailDataAttribute(dataId, dataName) {
+		dataAttributeDialog.dialog( "open" );
+		$("#dataNameForAttribute").html(dataName);
+
+		$.ajax({
+			url: "/datas/attributes/" + dataId,
+			type: "GET",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+			dataType: "json",
+			success: function(msg){
+				if(msg.statusCode <= 200) {
+					if(msg.dataAttribute !== null) {
+						//$("#dataAttributeForOrigin").html(msg.dataAttribute.attributes);
+						$("#dataAttributeViewer").html("");
+						var jsonViewer = new JSONViewer();
+						document.querySelector("#dataAttributeViewer").appendChild(jsonViewer.getContainer());
+						jsonViewer.showJSON(JSON.parse(msg.dataAttribute.attributes), -1, -1);
+					}
+				} else {
+					alert(JS_MESSAGE[msg.errorCode]);
+				}
+			},
+			error:function(request,status,error){
+				alert(JS_MESSAGE["ajax.error.message"]);
+			}
+		});
+	}
+
+	// 데이터 Object 속성 다이얼 로그
+	var dataObjectAttributeDialog = $( "#dataObjectAttributeDialog" ).dialog({
+		autoOpen: false,
+		width: 800,
+		height: 550,
+		modal: true,
+		resizable: false
+	});
+
+	// 데이터 Object 속성
+	function detailDataObjectAttribute(dataId, dataName) {
+		dataObjectAttributeDialog.dialog( "open" );
+		$("#dataNameForObjectAttribute").html(dataName);
+
+		$.ajax({
+			url: "/datas/object/attributes/" + dataId,
+			type: "GET",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+			dataType: "json",
+			success: function(msg){
+				if(msg.statusCode <= 200) {
+					if(msg.dataObjectAttribute !== null) {
+						//$("#dataObjectAttributeForOrigin").html(msg.dataObjectAttribute.attributes);
+						$("#dataObjectAttributeViewer").html("");
+						var jsonViewer = new JSONViewer();
+						document.querySelector("#dataObjectAttributeViewer").appendChild(jsonViewer.getContainer());
+						jsonViewer.showJSON(JSON.parse(msg.dataObjectAttribute.attributes), -1, -1);
+					}
+				} else {
+					alert(JS_MESSAGE[msg.errorCode]);
+				}
+			},
+			error:function(request,status,error){
+				alert(JS_MESSAGE["ajax.error.message"]);
+			}
+		});
+	}
+
+	// 지도에서 찾기 -- common.js, openFindDataPoint
+	function viewDataInfo(dataId) {
+		openFindDataPoint(dataId, "list");
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="dataAttributeDialog" class="basicTable" title="Data Attribute" style="display: none;">
+	<table class="inner-table scope-row" th:summary="#{data.attribute.dialog.summary}">
+		<caption class="hiddenTag"><th:block th:text="#{data.attribute.dialog.caption}"></th:block></caption>
+		<colgroup>
+			<col class="col-label"></col>
+			<col class="col-data"></col>
+		</colgroup>
+		<tr>
+			<th class="col-label" scope="row" style="text-align: center; min-width: 100px;">
+				<th:block th:text="#{common.data.name}"></th:block></th>
+			<td id="dataNameForAttribute" class="col-data"></td>
+		</tr>
+		<tr>
+			<th class="col-label" scope="row" style="text-align: center; min-width: 100px;"><th:block th:text="#{common.attribute}"></th:block></th>
+			<td id="dataAttributeViewer" class="col-data" style="font-size: 14px;"></td>
+		</tr>
+	</table>
+</div>
+</html>

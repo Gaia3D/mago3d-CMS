@@ -1,0 +1,150 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<script id="dataListSource" type="text/x-handlebars-template">
+    <div>
+		<span>
+			<th:block th:text="#{common.all}"></th:block>
+			<span class="totalCount">{{formatNumber pagination.totalCount}}</span>
+			<th:block th:text="#{common.count.unit}"></th:block>
+		</span>
+        <span class="float-right">{{formatNumber pagination.pageNo}} / {{formatNumber pagination.lastPage}}
+			<th:block th:text="#{common.page}"></th:block>
+		</span>
+        <input type="hidden" name="pageNo" value="{{pagination.pageNo}}">
+    </div>
+    <div class="dataBtns"></div>
+    <div class="tableList marT10 yScroll" style="height: calc(100% - 43px)">
+        <table th:summary="#{data.map.summary}">
+            <caption class="hiddenTag"><th:block th:text="#{data.map.summary}"></th:block></caption>
+            <colgroup>
+                <col class="col-width-12"/>
+                <col class="col-width-12"/>
+                <col/>
+                <col class="col-width-12"/>
+                <col class="col-width-12"/>
+            </colgroup>
+            <thead>
+            <tr>
+                <th th:text="#{common.number}"></th>
+                <th th:text="#{common.sharing}"></th>
+                <th th:text="#{common.data.name}"></th>
+                <th th:text="#{common.show}"></th>
+                <th th:text="#{common.move}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#greaterThan dataList.length 0}}
+            {{#each dataList}}
+            <tr>
+                <td rowspan="2"><span class="no">{{subtract ../pagination.rowNumber @index}}</span></td>
+                <td>
+                    {{#ifMatch sharing 'common'}}
+                    <span class="legend co mar0">C</span>
+                    {{/ifMatch}}
+                    {{#ifMatch sharing 'public'}}
+                    <span class="legend pu mar0">O</span>
+                    {{/ifMatch}}
+                    {{#ifMatch sharing 'private'}}
+                    <span class="legend pr mar0">P</span>
+                    {{/ifMatch}}
+                    {{#ifMatch sharing 'group'}}
+                    <span class="legend gr mar0">G</span>
+                    {{/ifMatch}}
+                </td>
+                <td class="alignLeft ellipsis" style="max-width:100px;">
+                    <span onclick="detailDataInfo('/datas/{{dataId}}');" class="link">{{dataName}}</span>
+                </td>
+                <td>
+                    {{#if groupVisible}}
+                    <button type="button" class="showHideButton show" th:text="#{common.show}" th:title="#{common.show}" data-group-id="{{dataGroupId}}"
+                            data-key="{{dataKey}}" data-tiling="{{tiling}}">
+                    </button>
+                    {{else}}
+                    <button type="button" class="showHideButton hide" th:text="#{common.show}" th:title="#{common.show}" data-group-id="{{dataGroupId}}"
+                            data-key="{{dataKey}}" data-tiling="{{tiling}}">
+                    </button>
+                    {{/if}}
+                </td>
+                <td>
+                    {{#if tiling}}
+                    <button type="button" class="goto" th:text="#{common.move}" th:title="#{common.move}" style="margin: 0px; padding: 0px;"
+                            onclick="gotoFly('{{longitude}}', '{{latitude}}', '{{altitude}}');">
+                    </button>
+                    {{else}}
+                    <button type="button" class="goto" th:text="#{common.move}" th:title="#{common.move}" style="margin: 0px; padding: 0px;"
+                            onclick="flyTo('{{dataGroupId}}', '{{dataKey}}');">
+                    </button>
+                    {{/if}}
+                </td>
+            </tr>
+            <tr>
+                <td class="alignLeft" colspan="4">
+                    <span class="infoTag ellipsis"><span th:text="#{data.group.name.colon}"></span>{{dataGroupName}}</span>
+                    {{#ifMatch dataGroupTarget 'admin'}}
+                    <span class="infoTag" th:text="#{data.administrator}" style="color:blue"></span>
+                    {{else}}
+                        {{#ifMatch userId ../owner}}
+                        <!--<span class="infoTag">{{userId}}</span>-->
+                        {{else}}
+                        <span class="infoTag" style="color:blue">{{userId}}</span>
+                        {{/ifMatch}}
+                    {{/ifMatch}}
+                    <span class="infoTag"><span th:text="#{data.status.colon}"></span>
+		{{#ifMatch status 'processing'}}
+						<th:block th:text="#{data.status.processing}"></th:block>
+		{{/ifMatch}}
+		{{#ifMatch status 'use'}}
+						<th:block th:text="#{data.status.use}"></th:block>
+		{{/ifMatch}}
+		{{#ifMatch status 'unused'}}
+						<th:block th:text="#{data.status.unused}"></th:block>
+		{{/ifMatch}}
+		{{#ifMatch status 'delete'}}
+						<th:block th:text="#{data.status.delete}"></th:block>
+		{{/ifMatch}}
+				</span>
+                    {{#greaterThan dataType.length 0}}
+                    <span class="infoTag"><span th:text="#{data.type.colon}"></span>{{dataType}}</span>
+                    {{/greaterThan}}
+                </td>
+            </tr>
+            {{/each}}
+            {{else}}
+            <tr>
+                <td colspan="5" th:text="#{data.does.not.exist}" style="height: 30px;"></td>
+            </tr>
+            {{/greaterThan}}
+            </tbody>
+        </table>
+    </div>
+
+    {{#greaterThan pagination.totalCount 0}}
+    <ul class="pagination">
+        <li class="ico first"
+            onclick="pagingDataInfoList('{{pagination.firstPage}}', '{{pagination.searchParameters}}');">처음
+        </li>
+        {{#if pagination.existPrePage}}
+        <li class="ico forward"
+            onclick="pagingDataInfoList('{{pagination.prePageNo}}', '{{pagination.searchParameters}}');">앞으로
+        </li>
+        {{/if}}
+
+        {{#forEachStep pagination.startPage pagination.endPage 1}}
+        {{#numberEqual this ../pagination.pageNo}}
+        <li class="on">{{this}}</li>
+        {{else}}
+        <li onclick="pagingDataInfoList('{{this}}', '{{../pagination.searchParameters}}');">{{this}}</li>
+        {{/numberEqual}}
+        {{/forEachStep}}
+
+        {{#if pagination.existNextPage}}
+        <li class="ico back"
+            onclick="pagingDataInfoList('{{pagination.nextPageNo}}', '{{pagination.searchParameters}}');">뒤로
+        </li>
+        {{/if}}
+        <li class="ico end" onclick="pagingDataInfoList('{{pagination.lastPage}}', '{{pagination.searchParameters}}');">
+            마지막
+        </li>
+    </ul>
+    {{/greaterThan}}
+</script>
+</html>

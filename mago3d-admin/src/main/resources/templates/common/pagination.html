@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layout">
+<body>
+<div id="paginationArea" th:if="${pagination.totalCount > 0}" class="pagination">
+    <!--        <a th:href="@{${pagination.uri}(pageNo=${pagination.firstPage}, ${pagination.searchParameters})}"><span class="icon-glyph glyph-first"></span></a>-->
+    <th:block th:with="escapeUri = |${pagination.uri }?pageNo=${pagination.firstPage}${pagination.searchParameters}|">
+        <a th:href="@{${escapeUri}}" th:title="처음"><span class="icon-glyph glyph-first"></span></a>
+    </th:block>
+    <th:block th:if="${pagination.existPrePage == true}" th:object="${pagination}">
+        <th:block th:with="escapeUri = |${pagination.uri }?pageNo=${pagination.prePageNo}${pagination.searchParameters}|">
+            <a th:href="@{${escapeUri}}" th:title="이전"><span class="icon-glyph glyph-prev"></span></a>
+        </th:block>
+        <!--            <a th:href="@{${pagination.uri}(pageNo=${pagination.prePageNo}, ${pagination.searchParameters})}"><span class="icon-glyph glyph-prev"></span></a>-->
+    </th:block>
+
+    <th:block th:each="seq : ${#numbers.sequence(pagination.startPage, pagination.endPage)}" th:with="pageNo = ${pagination.pageNo}">
+        <th:block th:if="${seq == pageNo}">
+            <a th:href="@{#}" class="current-page" th:text="${pageNo}"></a>
+        </th:block>
+        <th:block th:unless="${seq == pageNo}">
+            <th:block th:with="escapeUri = |${pagination.uri }?pageNo=${seq }${pagination.searchParameters}|">
+                <a th:text="${seq}" th:href="@{${escapeUri}}"></a>
+            </th:block>
+            <!--<a th:text="${seq}" th:href="@{${pagination.uri}(pageNo=${seq}, ${pagination.searchParameters})}"></a>-->
+        </th:block>
+    </th:block>
+
+    <th:block th:if="${pagination.existNextPage == true}" th:object="${pagination}">
+        <th:block th:with="escapeUri = |${pagination.uri }?pageNo=${pagination.nextPageNo}${pagination.searchParameters}|">
+            <a th:href="@{${escapeUri}}" th:title="다음"><span class="icon-glyph glyph-next"></span></a>
+        </th:block>
+        <!--            <a th:href="@{${pagination.uri}(pageNo=${pagination.nextPageNo}, ${pagination.searchParameters})}"><span class="icon-glyph glyph-next"></span></a>-->
+    </th:block>
+    <th:block th:with="escapeUri = |${pagination.uri }?pageNo=${pagination.lastPage}${pagination.searchParameters}|">
+        <a th:href="@{${escapeUri}}" th:title="마지막"><span class="icon-glyph glyph-last"></span></a>
+    </th:block>
+    <!--            <a th:href="@{${pagination.uri}(pageNo=${pagination.lastPage}, ${pagination.searchParameters})}"><span class="icon-glyph glyph-last"></span></a>-->
+</div>
+</body>
+</html>

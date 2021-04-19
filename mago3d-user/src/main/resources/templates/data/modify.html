@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+	<title><th:block th:text="#{data.edit.page.title}"></th:block></title>
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/cesium/Widgets/widgets.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/user-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+</head>
+</head>
+<body>
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
+<div id="wrap">
+	<!-- S: NAVWRAP -->
+	<div class="navWrap">
+		<div th:replace="~{/fragments/menu :: #navWrap}"></div>
+	</div>
+	<!-- E: NAVWRAP -->
+
+	<div class="container" style="float:left; width: calc(100% - 78px);">
+        <div style="padding: 20px 20px 0px 10px; font-size: 18px;"><th:block th:text="#{converter.subtitle}"></th:block></div>
+        <!-- TAB -->
+        <div class="tabs">
+            <ul class="tab">
+				<li id="tabDataGroupList"><a href="/data-group/list"><th:block th:text="#{data.group.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataGroupInput"><a href="/data-group/input"><th:block th:text="#{data.group.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataInput"><a href="/upload-data/input"><th:block th:text="#{upload.data.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataList"><a href="/upload-data/list"><th:block th:text="#{upload.data.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterList"><a href="/converter/list"><th:block th:text="#{converter.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterJobFileList"><a href="/converter/converter-job-file-list"><th:block th:text="#{converter.job.file.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataList"><a href="/data/list"><th:block th:text="#{data.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataLogList"><a href="/data-log/list"><th:block th:text="#{data.log.list.tab.menu}"></th:block></a></li>
+            </ul>
+		</div>
+
+		<form id="dataInfo" th:object="${dataInfo}" th:action="@{#}" method="post" onsubmit="return false;">
+			<input type="hidden" id="dataId" name="dataId" th:field="*{dataId}" />
+			<table class="input-table scope-row">
+				<colgroup>
+					<col class="col-label l">
+					<col class="col-input">
+				</colgroup>
+				<tr>
+					<th class="col-label" scope="row"><th:block th:text="#{common.data.group.name}"></th:block></th>
+					<td class="col-input" th:text="${dataInfo.dataGroupName}"></td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row"><th:block th:text="#{data.key}"></th:block></th>
+					<td class="col-input" th:text="${dataInfo.dataKey}"></td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row"><th:block th:text="#{common.data.name}"></th:block></th>
+					<td class="col-input" th:text="${dataInfo.dataName}"></td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row"><th:block th:text="#{common.sharing}"></th:block></th>
+					<td class="col-input">
+						<select id="sharing" name="sharing" th:field="*{sharing}" class="selectBoxClass">
+							<option value="public"><th:block th:text="#{common.public}"></th:block></option>
+							<option value="common"><th:block th:text="#{common.common}"></th:block></option>
+							<option value="private"><th:block th:text="#{common.private}"></th:block></option>
+							<option value="group"><th:block th:text="#{common.group}"></th:block></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row">
+						<label for="mappingType"><th:block th:text="#{common.mapping.type}"></th:block></label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<select id="mappingType" name="mappingType" th:field="*{mappingType}" class="selectBoxClass">
+							<option value="origin"><th:block th:text="#{common.origin}"></th:block></option>
+							<option value="boundingboxcenter"><th:block th:text="#{common.bounding.box.center}"></th:block></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row">
+						<label for="longitude"><th:block th:text="#{common.longitude}"></th:block></label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="longitude" name="longitude" th:field="*{longitude}" class="m">
+						<input type="text" id="latitude" name="latitude" th:field="*{latitude}" class="m" />
+						<input type="text" id="altitude" name="altitude" th:field="*{altitude}" class="m" />
+						<input type="button" id="mapButtion" th:value="#{common.find.map}" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row">
+						<label for="heading"><th:block th:text="#{common.heading.pitch.roll}"></th:block></label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="heading" name="heading" th:field="*{heading}" class="m" />
+						<input type="text" id="pitch" name="pitch" th:field="*{pitch}" class="m" />
+						<input type="text" id="roll" name="roll" th:field="*{roll}" class="m" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row">
+						<label for="metainfo"><th:block th:text="#{common.meta.information}"></th:block></label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="metainfo" name="metainfo" th:field="*{metainfo}" class="xl" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row">
+						<label for="status"><th:block th:text="#{common.status}"></th:block></label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<select id="status" name="status" th:field="*{status}" class="selectBoxClass">
+							<option value="processing"><th:block th:text="#{data.status.processing}"></th:block></option>
+							<option value="use"><th:block th:text="#{data.status.use}"></th:block></option>
+							<option value="unused"><th:block th:text="#{data.status.unused}"></th:block></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row"><th:block th:text="#{data.attribute.information}"></th:block></th>
+					<td class="col-input" th:if="${#bools.isTrue(dataInfo.attributeExist)}" th:text="#{common.registered}"></td>
+					<td class="col-input" th:if="${#bools.isFalse(dataInfo.attributeExist)}" th:text="#{common.not.registered}"></td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row"><th:block th:text="#{data.object.attribute.information}"></th:block></th>
+					<td class="col-input" th:if="${#bools.isTrue(dataInfo.objectAttributeExist)}" th:text="#{common.registered}"></td>
+					<td class="col-input" th:if="${#bools.isFalse(dataInfo.objectAttributeExist)}" th:text="#{common.not.registered}"></td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="description" th:text="#{common.description}"></label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="description" name="description" th:field="*{description}" class="xl" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row"><th:block th:text="#{common.updated}"></th:block></th>
+					<td class="col-input">
+						<th:block th:text="${#temporals.format(dataInfo.updateDate,'yyyy-MM-dd HH:mm')}"></th:block>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row"><th:block th:text="#{common.created}"></th:block></th>
+					<td class="col-input">
+						<th:block th:text="${#temporals.format(dataInfo.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+					</td>
+				</tr>
+			</table>
+			<div class="button-group">
+				<div class="center-buttons">
+					<input type="submit" th:value="#{common.update}" onclick="updateDataInfo();" />
+					<a href="/data/list" class="button"><th:block th:text="#{common.list}"></th:block></a>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<!-- E: WRAP -->
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#sharing").val("[[${dataInfo.sharing}]]");
+		$("#mappingType").val("[[${dataInfo.mappingType}]]");
+		$("#status").val("[[${dataInfo.status}]]");
+	});
+
+	function validate() {
+		if ($("#longitude").val() === "") {
+			alert(JS_MESSAGE["representative.longitude.empty"]);
+			$("#longitude").focus();
+			return false;
+		}
+		if ($("#latitude").val() === "") {
+			alert(JS_MESSAGE["representative.latitude.empty"]);
+			$("#latitude").focus();
+			return false;
+		}
+		if ($("#altitude").val() === "") {
+			alert(JS_MESSAGE["representative.altitude.empty"]);
+			$("#altitude").focus();
+			return false;
+		}
+		if ($("#metainfo").val() === "") {
+			alert(JS_MESSAGE["metainfo.empty"]);
+			$("#metainfo").focus();
+			return false;
+		}
+	}
+
+	// 수정
+	function updateDataInfo() {
+		if (validate() == false) {
+			return false;
+		}
+		if(confirm(JS_MESSAGE["data.update.check"])) {
+			startLoading();
+			var formData = $("#dataInfo").serialize();
+			$.ajax({
+				url: "/datas/[[${dataInfo.dataId}]]",
+				type: "POST",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				data: formData,
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						alert(JS_MESSAGE["update"]);
+					} else if(msg.statusCode === 403) {
+						//data.smart.tiling
+						alert(JS_MESSAGE["data.smart.tiling.grant.required"]);
+					} else if (msg.statusCode === 428) {
+						if(confirm(JS_MESSAGE[msg.errorCode])) {
+							$('input[name="dataId"]').val('${dataInfo.dataId}');
+							var formData = $("#dataInfo").serialize();
+							$.ajax({
+								url: "/data-adjust-logs",
+								type: "POST",
+								headers: {"X-Requested-With": "XMLHttpRequest"},
+								data: formData,
+								success: function(msg){
+									if(msg.statusCode <= 200) {
+										alert(JS_MESSAGE["requested"]);
+									} else {
+										alert(JS_MESSAGE[msg.errorCode]);
+										console.log("---- " + msg.message);
+									}
+									insertDataAdjustLogFlag = true;
+								},
+								error: function(request, status, error){
+							        alert(JS_MESSAGE["ajax.error.message"]);
+							        insertDataAdjustLogFlag = true;
+								},
+								always: function(msg) {
+									$('input[name="dataId"]').val("");
+								}
+							});
+						}
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+						console.log("---- " + msg.message);
+					}
+					updateDataInfoFlag = true;
+				},
+				error:function(request, status, error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        updateDataInfoFlag = true;
+				}
+			}).always(stopLoading);
+		} else {
+			//alert('no');
+		}
+	}
+
+	// 지도에서 찾기 -- common.js, openFindDataPoint
+	$( "#mapButtion" ).on( "click", function() {
+		//openFindDataPoint("${dataInfo.dataId}", "MODIFY");
+		var url = "/map/find-point";
+		var width = 800;
+		var height = 700;
+
+		var popupX = (window.screen.width / 2) - (width / 2);
+		// 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
+		var popupY= (window.screen.height / 2) - (height / 2);
+
+	    var popWin = window.open(url, "","toolbar=no ,width=" + width + " ,height=" + height + ", top=" + popupY + ", left="+popupX
+	            + ", directories=no,status=yes,scrollbars=no,menubar=no,location=no");
+	    //popWin.document.title = layerName;
+	});
+	
+</script>
+</body>
+</html>

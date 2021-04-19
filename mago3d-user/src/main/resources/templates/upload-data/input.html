@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+    <title><th:block th:text="#{upload.data.input.page.title}"></th:block></title>
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/user-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/dropzone/dropzone.min.css(cacheVersion=${contentCacheVersion})}">
+    <script type="text/javascript" th:src="@{/externlib/dropzone/dropzone.min.js(cacheVersion=${contentCacheVersion})}"></script>
+    <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+    <script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<style type="text/css">
+        .dropzone .dz-preview.lp-preview {
+            width: 150px;
+        }
+        .dropzone.hzScroll {
+            min-width: 700px;
+            /*min-width: 1153px;*/
+			max-width: 1920px;
+            overflow: auto;
+            white-space: nowrap;
+            border: 1px solid #e5e5e5;
+        }
+        .loader-txt p {
+            font-size: 13px;
+            color: #666;
+        }
+        .loader-txt p small {
+            font-size: 11.5px;
+            color: #999;
+        }
+        .loader {
+            position: relative;
+            text-align: center;
+            margin: 15px auto 35px auto;
+            z-index: 9999;
+            display: block;
+            width: 80px;
+            height: 80px;
+            border: 10px solid rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            border-top-color: #000;
+            animation: spin 1s ease-in-out infinite;
+            -webkit-animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+        @-webkit-keyframes spin {
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
+<div id="wrap">
+	<!-- S: NAVWRAP -->
+	<div class="navWrap">
+        <div th:replace="~{/fragments/menu :: #navWrap}"></div>
+	</div>
+	<!-- E: NAVWRAP -->
+	
+	<div class="container" style="float:left; width: calc(100% - 78px);">
+		<div style="padding: 20px 20px 0px 10px; font-size: 18px;"><th:block th:text="#{converter.subtitle}"></th:block></div>
+        <!-- TAB -->
+        <div class="tabs">
+            <ul class="tab">
+				<li id="tabDataGroupList"><a href="/data-group/list"><th:block th:text="#{data.group.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataGroupInput"><a href="/data-group/input"><th:block th:text="#{data.group.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataInput"><a href="/upload-data/input"><th:block th:text="#{upload.data.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataList"><a href="/upload-data/list"><th:block th:text="#{upload.data.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterList"><a href="/converter/list"><th:block th:text="#{converter.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterJobFileList"><a href="/converter/converter-job-file-list"><th:block th:text="#{converter.job.file.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataList"><a href="/data/list"><th:block th:text="#{data.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataLogList"><a href="/data-log/list"><th:block th:text="#{data.log.list.tab.menu}"></th:block></a></li>
+            </ul>
+        </div>
+
+        <!-- S: 3D 파일 업로드 -->
+		<form id="uploadData" th:object="${uploadData}" th:action="@{#}" method="post" onsubmit="return false;">
+			<table class="input-table scope-row">
+				<colgroup>
+					<col class="col-label l" style="width: 13%"></col>
+					<col class="col-input" style="width: 37%"></col>
+					<col class="col-label l" style="width: 13%"></col>
+					<col class="col-input" style="width: 37%"></col>
+				</colgroup>
+				<tr>
+					<th class="col-label" scope="row">
+						<label for="dataName"><th:block th:text="#{common.data.name}"></th:block></label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="dataName" name="dataName" class="l" maxlength="255" />
+					</td>
+					<th class="col-label" scope="row">
+						<label for="dataGroupName"><th:block th:text="#{common.data.group.name}"></th:block></label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="hidden" id="dataGroupId" name="dataGroupId" />
+						<input type="text" id="dataGroupName" name="dataGroupName" class="ml" readonly="readonly" />
+						<input type="button" id="dataGroupButtion" th:value="#{data.group.select}" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row">
+						<label for="sharing"><th:block th:text="#{common.sharing}"></th:block></label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<select id="sharing" name="sharing" class="selectBoxClass">
+							<option value="public"><th:block th:text="#{common.public}"></th:block></option>
+							<option value="common"><th:block th:text="#{common.common}"></th:block></option>
+							<option value="private"><th:block th:text="#{common.private}"></th:block></option>
+							<option value="group"><th:block th:text="#{common.group}"></th:block></option>
+						</select>
+					</td>
+					<th class="col-label m" scope="row">
+						<label for="dataType"><th:block th:text="#{common.data.type}"></th:block></label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<select id="dataType" name="dataType" class="selectBoxClass">
+							<option value="citygml" selected="selected"> CITYGML </option>
+							<option value="indoorgml"> INDOORGML </option>
+							<option value="ifc"> IFC </option>
+							<option value="las"> LAS(POINT CLOUD) </option>
+							<option value="3ds"> 3DS </option>
+							<option value="obj"> OBJ </option>
+							<option value="dae"> COLLADA(DAE) </option>
+							<option value="fbx"> FBX </option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row">
+						<label for="heightReference">높이 설정 방법</label>
+					</th>
+					<td class="col-input radio-set">
+						<select id="heightReference" name="heightReference" class="selectBoxClass">
+							<option value="none" selected="selected"> 해발 고도 </option>
+							<option value="clampToGround"> Terrain(지형)에 맞춤 </option>
+							<option value="relativeToGround"> Terrain(지형)으로 부터 높이 설정 </option>
+						</select>
+					</td>
+					<th class="col-label" scope="row">
+						<label for="longitude"><th:block th:text="#{upload.representative.location}"></th:block></label>
+						<!-- <span class="icon-glyph glyph-emark-dot color-warning"></span> -->
+					</th>
+					<td class="col-input">
+						<input type="text" id="longitude" name="longitude" class="m" placeholder="longitude" />
+						<input type="text" id="latitude" name="latitude" class="m" placeholder="latitude" />
+						<input type="text" id="altitude" name="altitude" class="m" placeholder="altitude" />
+						<input type="button" id="mapButtion" th:value="#{common.map}" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label" scope="row">
+						<label for="description" th:text="#{common.description}"></label>
+					</th>
+					<td colspan="3" class="col-input">
+						<input type="text" id="description" name="description" class="xl" maxlength="255" />
+					</td>
+				</tr>
+			</table>
+        </form>
+        <!-- E: 3D 파일 업로드 -->
+
+        <!-- S: DropZone -->
+		<div style="padding: 20px 20px 10px 10px; font-size: 18px;"><th:block th:text="#{common.file.upload}"></th:block></div>
+		<div class="fileSection" style="font-size: 17px;">
+	    	<form id="my-dropzone" action="" class="dropzone hzScroll"></form>
+	    </div>
+        <!-- E: DropZone -->
+
+	    <div class="button-group" style="margin-top: 30px;">
+			<div class="center-buttons">
+				<button id="allFileUpload"><th:block th:text="#{upload.upload}"></th:block></button>
+				<button id="allFileClear"><th:block th:text="#{upload.file.initialization}"></th:block></button>
+				<a href="/upload-data/list" class="button"><th:block th:text="#{common.list}"></th:block></a>
+			</div>
+        </div>
+
+        <!-- 데이터 그룹 선택 -->
+        <div th:replace="~{/upload-data/data-group-dialog :: #dataGroupDialog}"></div>
+		<!-- Spinner -->
+		<div th:replace="~{/upload-data/spinner-dialog :: #fileUploadDialog}"></div>
+	</div>
+</div>
+<!-- E: WRAP -->
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+	});
+	
+	var dataGroupDialog = $( ".dialog" ).dialog({
+		autoOpen: false,
+		height: 500,
+		width: 1000,
+		modal: true,
+		overflow : "auto",
+		resizable: false
+	});
+	
+	// 상위 Layer Group 찾기
+	$( "#dataGroupButtion" ).on( "click", function() {
+		dataGroupDialog.dialog( "open" );
+		dataGroupDialog.dialog( "option", "title", JS_MESSAGE["data.group.select"]);
+	});
+	
+	// 데이터 그룹 선택
+	function confirmDataGroup(dataGroupId, dataGroupName) {
+		$("#dataGroupId").val(dataGroupId);
+		$("#dataGroupName").val(dataGroupName);
+		dataGroupDialog.dialog( "close" );
+	}
+	
+	var fileUploadDialog = $( ".spinner-dialog" ).dialog({
+		autoOpen: false,
+		width: 250,
+		height: 290,
+		modal: true,
+		resizable: false
+	});
+	
+	// 업로딩 파일 개수
+	var uploadFileCount = 0;
+	// dropzone 업로딩 결과(n개 파일을 올리면 n개 리턴이 옴)
+	var uploadFileResultCount = 0;
+	Dropzone.options.myDropzone = {
+		url: "/upload-datas",
+		//paramName: "file",
+		// Prevents Dropzone from uploading dropped files immediately
+		timeout: 3600000,
+	    autoProcessQueue: false,
+	    // 여러개의 파일 허용
+		uploadMultiple: true,
+		method: "post",
+		// 병렬 처리
+		parallelUploads: 500,
+		// 최대 파일 업로드 갯수
+		maxFiles: 500,
+		// 최대 업로드 용량 Mb단위
+		maxFilesize: 5000,
+		dictDefaultMessage: JS_MESSAGE["upload.guide"],
+		/* headers: {
+			"x-csrf-token": document.querySelectorAll("meta[name=csrf-token]")[0].getAttributeNode("content").value,
+		}, */
+		// 허용 확장자
+		acceptedFiles: "[[${acceptedFiles}]]",
+		// 업로드 취소 및 추가 삭제 미리 보기 그림 링크 를 기본 추가 하지 않음
+		// 기본 true false 로 주면 아무 동작 못함
+		//clickable: true,
+		fallback: function() {
+	    	// 지원하지 않는 브라우저인 경우
+			alert(JS_MESSAGE["upload.browser.guide"]);
+	    	return;
+	    },
+		init: function() {
+			var myDropzone = this; // closure
+			var uploadTask = document.querySelector("#allFileUpload");
+			var clearTask = document.querySelector("#allFileClear");
+			
+			uploadTask.addEventListener("click", function(e) {
+				if (validate() === false) {
+					return;
+				}
+				
+				uploadFileCount = 0;
+	            uploadFileResultCount = 0;
+	            e.preventDefault();
+	            e.stopPropagation();
+				
+	            if (myDropzone.getQueuedFiles().length > 0) {
+	                uploadFileCount = myDropzone.getQueuedFiles().length;
+	                myDropzone.processQueue();
+	                fileUploadDialog.dialog( "open" );
+	            } else {
+					alert(JS_MESSAGE["upload.file.empty"]);
+	                return;
+	            }
+			});
+
+			clearTask.addEventListener("click", function () {
+	            if (confirm(JS_MESSAGE["upload.file.delete.confirm"])) {
+	            	// true 주면 업로드 중인 파일도 다 같이 삭제
+	            	myDropzone.removeAllFiles(true);
+	            }
+	        });
+
+			this.on("sending", function(file, xhr, formData) {
+				formData.append("dataName", $("#dataName").val());
+				formData.append("dataGroupId", $("#dataGroupId").val());
+				formData.append("sharing", $("#sharing").val());
+				formData.append("dataType", $("#dataType").val());
+				formData.append("heightReference", $("#heightReference").val());
+				formData.append("longitude", $("#longitude").val());
+				formData.append("latitude", $("#latitude").val());
+				formData.append("altitude", $("#altitude").val());
+				formData.append("description", $("#description").val());
+			});
+			
+			// maxFiles 카운터를 초과하면 경고창
+			this.on("maxfilesexceeded", function (data) {
+				myDropzone.removeAllFiles(true);
+				alert(JS_MESSAGE["upload.file.count.constraint"]);
+				return;
+			});
+			
+			this.on("success", function(file, response) {
+				if(file !== undefined && file.name !== undefined) {
+	                console.log("file name = " + file.name);
+	                fileUploadDialog.dialog( "close" );
+	                if(response.statusCode <= 200) {
+	                	if(response.errorCode === undefined || response.errorCode === null) {
+	                		uploadFileResultCount ++;
+							if(uploadFileCount === uploadFileResultCount) {
+								alert(JS_MESSAGE["upload.complete"]);
+							    uploadFileCount = 0;
+							    uploadFileResultCount = 0;
+							    myDropzone.removeAllFiles(true);
+							}
+		                } else {
+		                	alertMessage(response);
+		                }
+	                } else {
+                        alertMessage(response);
+	                	//alert(JS_MESSAGE[response.errorCode]);
+						//alert(response.message);
+						console.log("---- " + response.message);
+	                }
+	            } else {
+					console.log("------- success response = " + response);
+	            }
+	        });
+		}
+	};
+	
+	function validate() {
+		if ($("#dataName").val() === "") {
+			alert(JS_MESSAGE["data.name.empty"]);
+			$("#dataName").focus();
+			return false;
+		}
+		
+		// citygml 인 경우 longitude, latitude를 입력하지 않음
+		if($("#dataType").val() !== "citygml" && $("#dataType").val() !== "las" ) {
+			if ($("#longitude").val() === "") {
+				alert(JS_MESSAGE["representative.longitude.empty"]);
+				$("#longitude").focus();
+				return false;
+			}
+			if ($("#latitude").val() === "") {
+				alert(JS_MESSAGE["representative.latitude.empty"]);
+				$("#latitude").focus();
+				return false;
+			}
+			if ($("#altitude").val() === "") {
+				alert(JS_MESSAGE["representative.altitude.empty"]);
+				$("#altitude").focus();
+				return false;
+			}
+			if(!locationValidation($("#longitude").val(), $("#latitude").val(), $("#altitude").val())) {
+				return false;
+			}	
+		}
+	}
+	
+	function alertMessage(response) {
+		if(uploadFileResultCount === 0) {
+			if(response.errorCode === "converter.target.count.invalid") {
+				alert(JS_MESSAGE["converter.target.file.empty"]);
+			} else if(response.errorCode === "data.name.empty") {
+				alert(JS_MESSAGE["data.name.empty"]);
+	    	} else if(response.errorCode === "data.group.id.empty") {
+				alert(JS_MESSAGE["data.group.name.empty"]);
+	    	} else if(response.errorCode === "data.sharing.empty") {
+				alert(JS_MESSAGE["data.sharing.empty"]);
+	    	} else if(response.errorCode === "data.longitude.empty") {
+				alert(JS_MESSAGE["representative.longitude.empty"]);
+	    	} else if(response.errorCode === "data.latitude.empty") {
+				alert(JS_MESSAGE["representative.latitude.empty"]);
+	    	} else if(response.errorCode === "data.altitude.empty") {
+				alert(JS_MESSAGE["representative.altitude.empty"]);
+	    	} else if(response.errorCode === "data.file.empty") {
+				alert(JS_MESSAGE["upload.file.invalid"]);
+	    	} else if(response.errorCode === "file.name.invalid") {
+				alert(JS_MESSAGE["file.name.invalid"]);
+	    	} else if(response.errorCode === "file.ext.invalid") {
+				alert(JS_MESSAGE["upload.file.ext.invalid"]);
+	        } else if(response.errorCode === "file.size.invalid") {
+				alert(JS_MESSAGE["upload.file.size.exceed"]);
+	        } else if(response.errorCode === "upload.file.type.invalid") {
+				alert(JS_MESSAGE["upload.data.type.invalid"]);
+	        } else if(response.errorCode === "db.exception") {
+				alert(JS_MESSAGE["db.exception"]);
+	        } else if(response.errorCode === "io.exception") {
+				alert(JS_MESSAGE["io.exception"]);
+	        } else if(response.errorCode === "runtime.exception") {
+				alert(JS_MESSAGE["runtime.exception"]);
+	        } else if(response.errorCode === "unknown.exception") {
+				alert(JS_MESSAGE["unknown.exception"]);
+	        } else {
+	        	alert(response.errorCode);
+	        }
+	        uploadFileResultCount++;
+		}
+	    return;
+	}
+	
+	//지도에서 찾기
+	$( "#mapButtion" ).on( "click", function() {
+		var url = "/map/find-point";
+		var width = 800;
+		var height = 700;
+	
+		var popupX = (window.screen.width / 2) - (width / 2);
+		// 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
+		var popupY= (window.screen.height / 2) - (height / 2);
+		
+	    var popWin = window.open(url, "","toolbar=no ,width=" + width + " ,height=" + height + ", top=" + popupY + ", left="+popupX
+	            + ", directories=no,status=yes,scrollbars=no,menubar=no,location=no");
+	    //popWin.document.title = layerName;
+	});
+</script>
+</body>
+</html>

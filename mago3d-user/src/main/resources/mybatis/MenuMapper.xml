@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.MenuMapper">
+
+	<!-- 메뉴 목록 -->
+	<select id="getListMenu" parameterType="menu" resultType="menu">
+		/* getListMenu */
+		WITH RECURSIVE menu_tree (
+		menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, previous_depth, view_order, url, url_alias, html_id, html_content_id,
+		image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date, path, cycle
+		) AS (
+		SELECT A.menu_id, A.menu_type, A.menu_target, A.name, A.name_en, A.ancestor, A.parent, A.depth, A.previous_depth, A.view_order, A.url, A.url_alias, A.html_id, A.html_content_id,
+		A.image, A.image_alt, A.css_class, A.default_yn, A.use_yn, A.display_yn,  A.description, A.insert_date, ARRAY[A.view_order], false
+		FROM menu A
+		WHERE A.menu_target = #{menuTarget}
+		<if test="menuType != null and menuType != ''">
+			AND A.menu_type = #{menuType}
+		</if>
+		AND A.parent = 0
+		<if test="defaultYn != null and defaultYn != ''">
+			AND default_yn = #{defaultYn}
+		</if>
+		UNION ALL
+		SELECT A.menu_id, A.menu_type, A.menu_target, A.name, A.name_en, A.ancestor, A.parent, A.depth, A.previous_depth, A.view_order, A.url, A.url_alias, A.html_id, A.html_content_id,
+		A.image, A.image_alt, A.css_class, A.default_yn, A.use_yn, A.display_yn, A.description, A.insert_date, path || A.view_order, A.menu_id = ANY(path)
+		FROM menu A, menu_tree B
+		WHERE A.menu_target = #{menuTarget}
+		<if test="menuType != null and menuType != ''">
+			AND A.menu_type = #{menuType}
+		</if>
+		AND A.parent = B.menu_id
+		AND not cycle
+		)
+		SELECT menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, previous_depth, view_order, url, url_alias, html_id, html_content_id,
+		image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date, path
+		FROM menu_tree
+		ORDER BY path
+	</select>
+	
+	<!-- 메뉴 정보 -->
+	<select id="getMenu" parameterType="int" resultType="menu">
+		/* getMenu */
+		SELECT * FROM menu WHERE menu_id = #{menuId}
+	</select>
+	
+	<!-- 부모와 순서를 가지고 메뉴 정보를 취득 -->
+	<select id="getMenuByParentAndViewOrder" parameterType="menu" resultType="menu">
+		/* getMenuByParentAndViewOrder */
+		SELECT * 
+		FROM menu 
+		WHERE menu_target = #{menuTarget}
+			AND parent = #{parent}
+		<if test="updateType == 'up'.toString()">
+			<![CDATA[
+			AND view_order < #{viewOrder}
+			]]>
+		ORDER BY view_order DESC 
+		</if>
+		<if test="updateType == 'down'.toString()">
+			<![CDATA[
+			AND view_order > #{viewOrder}
+			]]>
+		ORDER BY view_order 
+		</if>
+		LIMIT 1 
+	</select>
+	
+	<!-- 자식 메뉴중 맨 마지막 순서의 메뉴 정보를 취득 -->
+	<select id="getMaxViewOrderChildMenu" parameterType="menu" resultType="menu">
+		/* getMaxViewOrderChildMenu */
+		SELECT * 
+		FROM menu 
+		WHERE menu_target = #{menuTarget}
+			AND parent = #{parent} 
+		ORDER BY view_order DESC 
+		LIMIT 1 
+	</select>
+	
+	<!-- 자식 메뉴 목록 -->
+	<select id="getListChildMenuId" parameterType="int" resultType="int">
+		/* getListChildMenuId */
+		SELECT menu_id FROM menu WHERE parent = #{parent}
+	</select>
+</mapper>

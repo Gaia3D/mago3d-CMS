@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+	<title>사용자 그룹 메뉴 | mago3D</title>
+	<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />	
+</head>
+    <style type="text/css">
+    	.title {
+			font-size: 15px;
+			font-weight: bold;
+			color: black;
+    	}
+    </style>
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+	<div class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+						<div class="page-content">
+						
+						<!-- S: 사용자 그룹 메뉴 -->
+						<div class="list">
+							<form id="userGroupMenu" th:object="${ususerGroupMenuerGroup}" th:action="@{#}" method="post" onsubmit="return false;">
+								<input type="hidden" id="allYn" name="allYn" value="" />
+								<input type="hidden" id="readYn" name="readYn" value="" />
+								<input type="hidden" id="writeYn" name="writeYn" value="" />
+								<input type="hidden" id="updateYn" name="updateYn" value="" />
+								<input type="hidden" id="deleteYn" name="deleteYn" value="" />
+								<div>
+							    	<div style="float: left; padding: 5px; width: 100%;">
+										<div style="float: left; width: 50%; ">
+											<span class="title" th:text="|사용자 그룹명: ${userGroup.userGroupName}|"></span>
+										</div>
+									</div>
+									<table class="list-table scope-col">
+										<thead>
+											<tr>
+												<th scope="col">메뉴명</th>
+												<th scope="col">전체 권한 (
+													<input type="checkbox" id="menuGrantAll" name="menuGrantAll" value="Y" onclick="checkMenuGrantAll();" />
+													<label for="menuGrantAll">일괄 부여</label> )
+												</th>
+												<th scope="col">개별 권한</th>
+												<th scope="col">메뉴 타입</th>
+												<th scope="col">URL</th>
+												<th scope="col">HTML ID</th>
+											</tr>
+										</thead>
+										
+										<tr th:if="${menuList.empty}">
+											<td colspan="6" class="col-none">메뉴가 존재하지 않습니다.</td>
+										</tr>
+
+										<th:block th:if="${!menuList.empty}" th:each="menu : ${menuList}">
+											<th:block  th:if="${menu.depth == 0}">
+												<tr style="background: #ededed;">
+													<td class="col-name" th:text="${menu.name}" style="text-align: left; padding-left: 15px"></td>
+											</th:block>
+											<th:block  th:if="${menu.depth == 1}">
+												<tr>
+													<td class="col-name" th:text="|+${menu.name}|" style="text-align: left; padding-left: 15px"></td>
+											</th:block>
+											<th:block  th:if="${menu.depth == 2}">
+												<tr>
+													<td class="col-name" th:text="${menu.name}" style="text-align: left; padding-left: 45px"></td>
+											</th:block>
+
+											<td style="text-align: center;">
+												<th:block th:if="${menu.depth > 0 }">
+													<input type="checkbox" th:id="|menuAllYn${menu.menuId}|" name="menuAllYn" class="all_yn" th:value="|${menu.menuId}_${menu.allYn}|" th:onclick="checkAllYn([[${menu.menuId}]]);" />
+													<label>권한 있음</label>&nbsp;&nbsp;
+												</th:block>
+											</td>
+
+											<td th:if="${menu.depth > 0}" style="padding-left:20px; text-align: left;">
+												<input type="checkbox" th:id="|menuReadYn${menu.menuId}|" name="menuReadYn" th:value="|${menu.menuId }_${menu.readYn}|" th:onclick="checkReadYn([[${menu.menuId}]]);" />
+												<label>읽기</label>&nbsp;&nbsp;
+												<input type="checkbox" th:id="|menuWriteYn${menu.menuId}|" name="menuWriteYn" th:value="|${menu.menuId}_${menu.writeYn}|" th:onclick="checkWriteYn([[${menu.menuId}]]);" />
+												<label>쓰기</label>&nbsp;&nbsp;
+												<input type="checkbox" th:id="|menuUpdateYn${menu.menuId}|" name="menuUpdateYn" th:value="|${menu.menuId }_${menu.updateYn}|" th:onclick="checkUpdateYn([[${menu.menuId}]]);" />
+												<label>수정</label>&nbsp;&nbsp;
+												<input type="checkbox" th:id="|menuDeleteYn${menu.menuId}|" name="menuDeleteYn" th:value="|${menu.menuId }_${menu.deleteYn}|" th:onclick="checkDeleteYn([[${menu.menuId}]]);" />
+												<label>삭제</label>&nbsp;&nbsp;
+											</td>
+											<td class="col-name">
+												<th:block th:if="${#strings.equals(menu.menuType, '0')}" text="URL"></th:block>
+												<th:block th:if="${#strings.equals(menu.menuType, '1')}" text="HTML ID"></th:block>
+											</td>
+											<td class="col-name" th:text="${menu.url}" style="text-align: left;"></td>
+											<td class="col-name" th:text="${menu.htmlId}" style="text-align: left;"></td>
+										</tr>
+										</th:block>
+									</table>
+								</div>
+								<div class="button-group">
+									<div class="center-buttons">
+										<input type="submit" th:value="#{save}" onclick="update();"/>
+										<a href="/user-group/list" class="button">목록</a>
+									</div>
+								</div>
+							</form>
+						</div>
+						<!-- E: 사용자 그룹 메뉴 -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:inline="javascript">
+	$(document).ready(function() {
+		$("#allYn").val(null);
+		$("#readYn").val(null);
+		$("#writeYn").val(null);
+		$("#updateYn").val(null);
+		$("#deleteYn").val(null);
+
+		var userGroupMenuJson = JSON.parse(/*[[${userGroupMenuJson}]]*/"");
+		for(var i=0; i<userGroupMenuJson.length; i++) {
+			var userGroupMenu = userGroupMenuJson[i];
+			var menuId = userGroupMenu.menuId;
+
+			if(userGroupMenu.allYn === "Y") {
+				$("input:checkbox[id='menuAllYn" + menuId + "']").prop("checked", true);
+				checkAllYn(menuId);
+			}
+			if(userGroupMenu.readYn === "Y") {
+				$("input:checkbox[id='menuReadYn" + menuId + "']").prop("checked", true);
+				checkReadYn(menuId);
+			}
+			if(userGroupMenu.writeYn === "Y") {
+				$("input:checkbox[id='menuWriteYn" + menuId + "']").prop("checked", true);
+				checkWriteYn(menuId);
+			}
+			if(userGroupMenu.updateYn === "Y") {
+				$("input:checkbox[id='menuUpdateYn" + menuId + "']").prop("checked", true);
+				checkUpdateYn(menuId);
+			}
+			if(userGroupMenu.deleteYn === "Y") {
+				$("input:checkbox[id='menuDeleteYn" + menuId + "']").prop("checked", true);
+				checkDeleteYn(menuId);
+			}
+		}
+	});
+
+	// 전체 권한 일괄 부여
+	function checkMenuGrantAll() {
+		var value = "";
+		if($("input:checkbox[id=menuGrantAll]").is(":checked") == true ) {
+			$("input:checkbox[name=menuAllYn]").each(function() {
+				this.checked = true;
+				var checkValue = $(this).val();
+				var values = checkValue.split("_");
+				$(this).val(values[0] + "_Y");
+			});
+		} else {
+			$("input:checkbox[name=menuAllYn]").each(function() {
+				this.checked = false;
+				var checkValue = $(this).val();
+				var values = checkValue.split("_");
+				$(this).val(values[0] + "_N");
+			});
+		}
+	}
+
+	// 전체 권한 개별 클릭
+	function checkAllYn(menuId) {
+		if($("input:checkbox[id=menuAllYn" + menuId + "]").is(":checked") == true ) {
+			$("input:checkbox[id=menuAllYn" + menuId + "]").val(menuId + "_Y");
+		} else {
+			$("input:checkbox[id=menuAllYn" + menuId + "]").val(menuId + "_N");
+		}
+	}
+
+	// 읽기 권한
+	function checkReadYn(menuId) {
+		if($("input:checkbox[id=menuReadYn" + menuId + "]").is(":checked") == true ) {
+			$("input:checkbox[id=menuReadYn" + menuId + "]").val(menuId + "_Y");
+		} else {
+			$("input:checkbox[id=menuReadYn" + menuId + "]").val(menuId + "_N");
+		}
+	}
+
+	// 쓰기 권한
+	function checkWriteYn(menuId) {
+		if($("input:checkbox[id=menuWriteYn" + menuId + "]").is(":checked") == true ) {
+			$("input:checkbox[id=menuWriteYn" + menuId + "]").val(menuId + "_Y");
+		} else {
+			$("input:checkbox[id=menuWriteYn" + menuId + "]").val(menuId + "_N");
+		}
+	}
+
+	// 수정 권한
+	function checkUpdateYn(menuId) {
+		if($("input:checkbox[id=menuUpdateYn" + menuId + "]").is(":checked") == true ) {
+			$("input:checkbox[id=menuUpdateYn" + menuId + "]").val(menuId + "_Y");
+		} else {
+			$("input:checkbox[id=menuUpdateYn" + menuId + "]").val(menuId + "_N");
+		}
+	}
+
+	// 삭제 권한
+	function checkDeleteYn(menuId) {
+		if($("input:checkbox[id=menuDeleteYn" + menuId + "]").is(":checked") == true ) {
+			$("input:checkbox[id=menuDeleteYn" + menuId + "]").val(menuId + "_Y");
+		} else {
+			$("input:checkbox[id=menuDeleteYn" + menuId + "]").val(menuId + "_N");
+		}
+	}
+
+	function check() {
+		var allYn = $("#allYn").val();
+		var readYn = $("#readYn").val();
+		var writeYn = $("#writeYn").val();
+		var updateYn = $("#updateYn").val();
+		var deleteYn = $("#deleteYn").val();
+
+		$("input:checkbox[name=menuAllYn]").each(function() {
+			var checkValue = $(this).val();
+			if(allYn == null || allYn == "") {
+				allYn = checkValue;
+			} else {
+				allYn = allYn + "," + checkValue;
+			}
+		});
+		$("input:checkbox[name=menuReadYn]").each(function() {
+			var checkValue = $(this).val();
+			if(readYn == null || readYn == "") {
+				readYn = checkValue;
+			} else {
+				readYn = readYn + "," + checkValue;
+			}
+		});
+		$("input:checkbox[name=menuWriteYn]").each(function() {
+			var checkValue = $(this).val();
+			if(writeYn == null || writeYn == "") {
+				writeYn = checkValue;
+			} else {
+				writeYn = writeYn + "," + checkValue;
+			}
+		});
+		$("input:checkbox[name=menuUpdateYn]").each(function() {
+			var checkValue = $(this).val();
+			if(updateYn == null || updateYn == "") {
+				updateYn = checkValue;
+			} else {
+				updateYn = updateYn + "," + checkValue;
+			}
+		});
+		$("input:checkbox[name=menuDeleteYn]").each(function() {
+			var checkValue = $(this).val();
+			if(deleteYn == null || deleteYn == "") {
+				deleteYn = checkValue;
+			} else {
+				deleteYn = deleteYn + "," + checkValue;
+			}
+		});
+
+		$("#allYn").val(allYn);
+		$("#readYn").val(readYn);
+		$("#writeYn").val(writeYn);
+		$("#updateYn").val(updateYn);
+		$("#deleteYn").val(deleteYn);
+	}
+
+	var updateUserGroupMenuFlag = true;
+	function update() {
+		if(updateUserGroupMenuFlag) {
+			updateUserGroupMenuFlag = false;
+
+			check();
+
+			$.ajax({
+				url: "/user-groups/menu",
+				type: "POST",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				data: $("#userGroupMenu").serialize()+ "&userGroupId=[[${userGroup.userGroupId}]]",
+				dataType: "json",
+				success: function(msg) {
+					if(msg.statusCode <= 200) {
+    					alert(JS_MESSAGE["update"]);
+    					window.location.reload();
+    					updateUserGroupMenuFlag = true;
+    				} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+    					console.log("---- " + msg.message);
+    					updateUserGroupMenuFlag = true;
+    				}
+				},
+		        error: function(request, status, error) {
+		        	alert(JS_MESSAGE["ajax.error.message"]);
+		        	updateUserGroupMenuFlag = true;
+		        }
+			});
+		} else {
+			alert("진행 중입니다.");
+			return;
+		}
+	}
+</script>
+</th:block>
+</body>
+</html>

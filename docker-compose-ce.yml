@@ -1,0 +1,15 @@
+version: '3'
+volumes:
+  f4d-data:
+  webserver-data:
+
+services:
+  mago3d-ce:
+    container_name: mago3d-ce
+    image: gaia3d/mago3d-ce
+    volumes:
+    - f4d-data:/data/f4d/
+    - webserver-data:/usr/share/nginx/html/
+    ports:
+    - 10080:80
+    command: "/usr/sbin/nginx"

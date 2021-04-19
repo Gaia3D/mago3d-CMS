@@ -1,0 +1,6 @@
+- 관리자에서 레이어 등록 및 다운로드를 위해서는 ndtp.properties 파일의  ndtp.upload-data-dir, ndtp.data-service-dir 의 폴더가 만들어져 있어야 합니다.
+- 업로드 하고자 하는 shape파일의 필수 칼럼으로는 version_id(integer), enable_yn(char(1))각 꼭 있어야 합니다.(버전 관리를 위한 칼럼)
+- shape파일 업로드시 geoserver에 스타일과 레이어를 자동으로 등록하기 때문에 geo_policy에 설정된  geoserver_data_url, geoserver_data_workspace,
+  geoserver_data_store, geoserver_user, geoserver_password와 geoserver의 정보가 일치해야 합니다. 
+- 업로드 한 shape파일은 ogr2ogr로 db에 들어가기 때문에 ogr2ogr을 환경변수로 잡아줘야 합니다. 
+  

@@ -1,0 +1,23 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="pageHeaderWrap" class="page-header row">
+	<h2 class="page-title u-pull-left" th:text="${menu.name}"></h2>
+	<div class="breadcrumbs u-pull-right">
+		<a th:href="${parentMenu.url}">
+			<span th:class="icon-glyph" th:classappend="${parentMenu.cssClass}"></span>
+			<span class="icon-text" th:text="${parentMenu.name}"></span>
+		</a>
+
+		<th:block th:if="${menu.displayYn == 'Y'}">
+			<span class="delimeter">&gt;</span>
+			<span class="icon-text" th:text="${menu.name}"></span>
+		</th:block>
+		<th:block th:unless="${menu.displayYn == 'Y'}">
+			<span class="delimeter">&gt;</span>
+			<a th:href="${menu.urlAlias}">
+				<span class="icon-text" th:text="${menu.aliasName}"></span>
+			</a>
+			<span class="delimeter">&gt;</span>
+			<span class="icon-text" th:text="${menu.name}"></span>
+		</th:block>
+	</div>
+</div>

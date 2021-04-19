@@ -1,0 +1,7 @@
+DockerFile 에서 systemd 를 사용 할 수 없어서 서비스 등록은 수동으로 등록함.
+
+이미지 실행은 다음 명령으로...
+docker container run --privileged  -d -p 10080:80 --name "haproxy" gaia3d/haproxy /sbin/init
+
+haproxy 상태 체크
+http://localhost/haproxy?stats

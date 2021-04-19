@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.UserGroupMapper">
+
+	<!-- 사용자 그룹 목록 -->
+	<select id="getListUserGroup" parameterType="userGroup" resultType="userGroup">
+		/* getListUserGroup */
+		WITH RECURSIVE user_group_tree (
+			user_group_id, user_group_key, user_group_name, ancestor, parent, depth, view_order, basic, available, children,
+			description, insert_date, path, cycle
+		) AS (
+	        SELECT A.user_group_id, A.user_group_key, A.user_group_name, A.ancestor, A.parent, A.depth, A.view_order, A.basic, A.available, A.children,
+	        	A.description, A.insert_date, ARRAY[A.view_order], false
+			FROM user_group A
+			WHERE A.parent = 0
+			<if test="available == true">
+				AND A.available = true
+			</if>
+			UNION ALL
+	        SELECT A.user_group_id, A.user_group_key, A.user_group_name, A.ancestor, A.parent, A.depth, A.view_order, A.basic, A.available, A.children,
+	        	A.description, A.insert_date, path || A.view_order, A.user_group_id = ANY(path)
+	        FROM user_group A, user_group_tree B
+	        WHERE A.parent = B.user_group_id AND not cycle
+		)
+	    SELECT user_group_id, user_group_key, user_group_name, ancestor, parent, depth, view_order, basic, available, children, description, insert_date, path
+	    FROM user_group_tree
+	    ORDER BY path
+	</select>
+
+	<!-- 사용자 그룹 정보 취득 -->
+	<select id="getUserGroup" parameterType="int" resultType="userGroup">
+		/* getUserGroup */
+		SELECT * FROM user_group WHERE user_group_id = #{userGroupId}
+	</select>
+
+	<!-- 사용자 그룹 정보 취득 -->
+	<select id="getUserGroupByUserId" parameterType="string" resultType="userGroup">
+		/* getUserGroupByUserId */
+		SELECT A.user_id, A.status, B.user_group_id
+		FROM user_info A, user_group B
+		WHERE A.user_id = #{userId}
+			AND A.user_group_id = B.user_group_id
+	</select>
+
+	<!-- 자식 사용자 그룹 개수 -->
+    <select id="getChildUserGroupCount" parameterType="int" resultType="int">
+        /* getChildUserGroupCount */
+        SELECT COUNT(user_group_id) FROM user_group WHERE parent = #{userGroupId}
+    </select>
+
+     <!-- 자식 사용자 그룹 중 순서가 최대인 사용자 그룹 검색 -->
+    <select id="getMaxViewOrderChildUserGroup" parameterType="int" resultType="userGroup">
+        /* getMaxViewOrderChildUserGroup */
+        SELECT * FROM user_group WHERE parent = #{parent} ORDER BY view_order DESC LIMIT 1
+    </select>
+
+    <!-- 부모와 순서를 가지고 유저그룹 정보를 취득 -->
+	<select id="getUserGroupByParentAndViewOrder" parameterType="userGroup" resultType="userGroup">
+		/* getUserGroupByParentAndViewOrder */
+		SELECT *
+		FROM user_group
+		WHERE parent = #{parent}
+		<if test="updateType == 'up'.toString()">
+			<![CDATA[
+			AND view_order < #{viewOrder}
+			]]>
+		ORDER BY view_order DESC
+		</if>
+		<if test="updateType == 'down'.toString()">
+			<![CDATA[
+			AND view_order > #{viewOrder}
+			]]>
+		ORDER BY view_order
+		</if>
+		LIMIT 1
+	</select>
+
+	<!-- 사용자 그룹에 속한 자식 그룹 목록 -->
+	<select id="getListUserGroupChild" parameterType="int" resultType="int">
+		/* getListUserGroupChild */
+		SELECT user_group_id FROM user_group WHERE parent = #{parent}
+	</select>
+
+	<!-- 사용자 그룹별 메뉴 목록 -->
+	<select id="getListUserGroupMenu" parameterType="userGroupMenu" resultType="userGroupMenu">
+		/* getListUserGroupMenu */
+		WITH RECURSIVE menu_tree (
+			user_group_menu_id, user_group_id, all_yn, read_yn, write_yn, update_yn, delete_yn,
+			menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, view_order, url, url_alias, html_id, html_content_id,
+			image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date, path, cycle
+		) AS (
+	        SELECT X.user_group_menu_id, X.user_group_id, X.all_yn, X.read_yn, X.write_yn, X.update_yn, X.delete_yn,
+				X.menu_id, X.menu_type, X.menu_target, X.name, X.name_en, X.ancestor, X.parent, X.depth, X.view_order, X.url, X.url_alias, X.html_id, X.html_content_id,
+				X.image, X.image_alt, X.css_class, X.default_yn, X.use_yn, X.display_yn, X.description, X.insert_date, ARRAY[X.view_order], false
+			FROM (
+				SELECT A.user_group_menu_id, A.user_group_id,
+					COALESCE(A.all_yn, 'N') AS all_yn, COALESCE(A.read_yn, 'N') AS read_yn, COALESCE(A.write_yn, 'N') AS write_yn,
+					COALESCE(A.update_yn, 'N') AS update_yn, COALESCE(A.delete_yn, 'N') AS delete_yn,
+					B.menu_id, B.menu_type, B.menu_target, B.name, B.name_en, B.ancestor, B.parent, B.depth, B.view_order, B.url, B.url_alias, B.html_id, B.html_content_id,
+					B.image, B.image_alt, B.css_class, B.default_yn, B.use_yn, B.display_yn, B.description, B.insert_date
+				FROM user_group_menu A, menu B
+				WHERE user_group_id = #{userGroupId}
+					AND A.menu_id = B.menu_id
+					AND B.parent = 0
+					<if test="menuType != null and menuType != ''">
+					AND B.menu_type = #{menuType}
+					</if>
+					<if test="menuTarget != null and menuTarget != ''">
+					AND B.menu_target = #{menuTarget}
+					</if>
+					<if test="useYn != null and useYn != ''">
+					AND B.use_yn = #{useYn}
+					</if>
+			) X
+	        UNION ALL
+	        SELECT X.user_group_menu_id, X.user_group_id, X.all_yn, X.read_yn, X.write_yn, X.update_yn, X.delete_yn,
+				X.menu_id, X.menu_type, X.menu_target, X.name, X.name_en, X.ancestor, X.parent, X.depth, X.view_order, X.url, X.url_alias, X.html_id, X.html_content_id,
+				X.image, X.image_alt, X.css_class, X.default_yn, X.use_yn, X.display_yn, X.description, X.insert_date,
+				path || X.view_order, X.menu_id = ANY(path)
+	        FROM (
+	        	SELECT A.user_group_menu_id, A.user_group_id,
+	        		COALESCE(A.all_yn, 'N') AS all_yn, COALESCE(A.read_yn, 'N') AS read_yn, COALESCE(A.write_yn, 'N') AS write_yn,
+					COALESCE(A.update_yn, 'N') AS update_yn, COALESCE(A.delete_yn, 'N') AS delete_yn,
+					B.menu_id, B.menu_type, B.menu_target, B.name, B.name_en, B.ancestor, B.parent, B.depth, B.view_order, B.url, B.url_alias, B.html_id, B.html_content_id,
+					B.image, B.image_alt, B.css_class, B.default_yn, B.use_yn, B.display_yn, B.description, B.insert_date
+				FROM user_group_menu A, menu B
+				WHERE user_group_id = #{userGroupId}
+					AND A.menu_id = B.menu_id
+					<if test="menuType != null and menuType != ''">
+					AND B.menu_type = #{menuType}
+					</if>
+					<if test="menuTarget != null and menuTarget != ''">
+					AND B.menu_target = #{menuTarget}
+					</if>
+					<if test="useYn != null and useYn != ''">
+					AND B.use_yn = #{useYn}
+					</if>
+	        ) X, menu_tree Y
+	        WHERE X.parent = Y.menu_id AND not cycle
+		)
+	    SELECT user_group_menu_id, user_group_id, all_yn, read_yn, write_yn, update_yn, delete_yn,
+			menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, view_order, url, url_alias, html_id, html_content_id,
+			image, image_alt, css_class, default_yn, use_yn, display_yn, description, insert_date
+	    FROM menu_tree
+	    ORDER BY path
+	</select>
+
+	<!-- 사용자 그룹별 Role 목록 -->
+	<select id="getListUserGroupRole" parameterType="userGroupRole" resultType="userGroupRole">
+		/* getListUserGroupRole */
+		SELECT A.*,
+			B.role_key, B.role_name, B.role_type, B.use_yn, B.description
+		FROM user_group_role A, role B
+		WHERE A.role_id = B.role_id
+			<if test="userGroupId != null and userGroupId gt 0">
+			AND A.user_group_id = #{userGroupId}
+			</if>
+			<if test="roleType != null and roleType != ''">
+			AND B.role_type = #{roleType}
+			</if>
+		ORDER BY A.insert_date DESC
+	</select>
+
+	<select id="getListUserGroupRoleKey" parameterType="userGroupRole" resultType="string">
+		/* getListUserGroupRoleKey */
+		SELECT B.role_key
+		FROM user_group_role A, role B
+		WHERE A.role_id = B.role_id
+			<if test="userGroupId != null and userGroupId gt 0">
+			AND A.user_group_id = #{userGroupId}
+			</if>
+			<if test="roleType != null and roleType != ''">
+			AND B.role_type = #{roleType}
+			</if>
+		ORDER BY A.insert_date DESC
+	</select>
+</mapper>

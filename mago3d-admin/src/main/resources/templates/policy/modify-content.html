@@ -1,0 +1,61 @@
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
+<div id="contentTab">
+	<form id="policyContent" th:object="${policy}" method="post" th:action="@{#}" onsubmit="return false;">
+		<table class="input-table scope-row" summary="환경설정 컨텐츠  테이블">
+		<caption class="hiddenTag">환경설정 컨텐츠</caption>
+			<col class="col-label l" />
+			<col class="col-input" />
+			<tr>
+				<th class="col-label l" scope="row">
+					<label for="contentCacheVersion">css, js 갱신용 cache version</label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+					<input type="text" id="contentCacheVersion" name="contentCacheVersion" th:field="*{contentCacheVersion}" class="s" maxlength="3" onKeyPress="return numkeyCheck(event);" />
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label l" scope="row">
+					<label for="contentMenuGroupRoot">메뉴 그룹 최상위 그룹명</label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+					<input type="text" id="contentMenuGroupRoot" name="contentMenuGroupRoot" th:field="*{contentMenuGroupRoot}" class="s" maxlength="60" />
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label l" scope="row">
+					<label for="contentUserGroupRoot">사용자 그룹 최상위 그룹명</label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+					<input type="text" id="contentUserGroupRoot" name="contentUserGroupRoot" th:field="*{contentUserGroupRoot}" class="s" maxlength="60" />
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label l" scope="row">
+					<label for="contentLayerGroupRoot">레이어 그룹 최상위 그룹명</label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+					<input type="text" id="contentLayerGroupRoot" name="contentLayerGroupRoot" th:field="*{contentLayerGroupRoot}" class="s" maxlength="60" />
+				</td>
+			</tr>
+			<tr>
+				<th class="col-label l" scope="row">
+					<label for="contentDataGroupRoot">데이터 그룹 최상위 그룹명</label>
+					<span class="icon-glyph glyph-emark-dot color-warning"></span>
+				</th>
+				<td class="col-input">
+					<input type="text" id="contentDataGroupRoot" name="contentDataGroupRoot" th:field="*{contentDataGroupRoot}" class="s" maxlength="60" />
+				</td>
+			</tr>
+		</table>
+		<div class="button-group">
+			<div class="center-buttons">
+				<a href="#" class="button" th:text="#{save}" onclick="updatePolicyContent();"></a>
+			</div>
+		</div>
+	</form>
+</div>
+</html>

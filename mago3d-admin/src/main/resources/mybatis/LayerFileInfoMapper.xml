@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.LayerFileInfoMapper">
+
+    <!-- layer shape 파일 목록 -->
+    <select id="getListLayerFileInfo" parameterType="int" resultType="layerFileInfo">
+        /* getListLayerFileInfo */
+        SELECT A.*, B.layer_name
+        FROM layer_file_info A, layer B
+        WHERE A.layer_id = B.layer_id
+            AND A.layer_id = #{layerId}
+            AND A.file_ext = 'shp'
+        ORDER BY A.update_date DESC
+    </select>
+    
+    <select id="getListLayerFilePath" parameterType="int" resultType="string">
+        /* getListLayerFileInfo */
+        SELECT CONCAT(file_path, file_real_name) FROM layer_File_info
+        WHERE layer_id =#{layerId}
+    </select>
+
+    <!-- 파일 정보 취득 -->
+    <select id="getLayerFileInfo" parameterType="int" resultType="layerFileInfo">
+        /* getLayerFileInfo */
+        SELECT * FROM layer_file_info WHERE layer_file_info_id = #{layerFileInfoId}
+    </select>
+
+    <!-- layer shape 그룹 파일 정보 -->
+    <select id="getLayerFileInfoGroup" parameterType="int" resultType="layerFileInfo">
+        /* getLayerFileInfoGroup */
+        SELECT * FROM layer_file_info WHERE layer_file_info_group_id = #{layerFileInfoGroupId}
+    </select>
+
+    <!-- layer shape 파일이 있는지 확인 -->
+    <select id="isLayerFileInfoExist" parameterType="int" resultType="boolean">
+        /* isLayerFileInfoExist */
+        SELECT EXISTS(SELECT 1 FROM layer_file_info WHERE layer_id = #{layerId})
+    </select>
+
+    <!-- layer shape 파일 version -->
+    <select id="getLayerShapeFileVersion" parameterType="int" resultType="int">
+        /* getLayerShapeFileVersion */
+        SELECT version_id
+        FROM layer_file_info
+        WHERE layer_file_info_id = #{layerFileInfoId}
+    </select>
+
+    <!-- 레이어별 shape 파일 version 최대값 + 1 을 취득 -->
+    <select id="getMaxFileVersion" parameterType="int" resultType="int">
+        /* getMaxFileVersion */
+        SELECT MAX(version_id) FROM layer_file_info WHERE layer_id = #{layerId}
+    </select>
+
+    <!-- 레이어 이력내 활성화 된 데이터 정보를 취득 -->
+    <select id="getEnableLayerFileInfo" parameterType="int" resultType="layerFileInfo">
+        /* getEnableLayerFileInfo */
+        SELECT layer_file_info_id, layer_id, layer_file_info_group_id, version_id
+        FROM layer_file_info
+        WHERE layer_id = #{layerId}
+            AND enable_yn = 'Y'
+            AND file_ext = 'shp'
+    </select>
+
+    <!-- layer shape 파일 정보 등록 -->
+    <insert id="insertLayerFileInfoMapper" parameterType="layerFileInfo">
+        <selectKey keyProperty="layerFileInfoId" resultType="int" order="BEFORE">
+            SELECT NEXTVAL('layer_file_info_seq')
+        </selectKey>
+        INSERT INTO layer_file_info (
+            layer_file_info_id, layer_id, user_id, enable_yn, file_name, file_real_name, file_path, file_size, file_ext, shape_encoding, update_date
+        ) VALUES (
+            #{layerFileInfoId}, #{layerId}, #{userId}, #{enableYn}, #{fileName}, #{fileRealName}, #{filePath}, #{fileSize}, #{fileExt}, #{shapeEncoding}, NOW()
+        )
+    </insert>
+
+    <!-- layer shape 파일 정보 수정 -->
+    <update id="updateLayerFileInfo" parameterType="layerFileInfo">
+        /* updateLayerFileInfo */
+        UPDATE layer_file_info
+        SET user_id = #{userId},
+            shape_encoding = #{shapeEncoding},
+            update_date = NOW()
+        WHERE layer_file_info_id = #{layerFileInfoId}
+    </update>
+
+    <!-- layerFileInfoGroupId에 의한 layer shape 파일 정보 수정 -->
+    <update id="updateLayerFileInfoByGroupId" parameterType="layerFileInfo">
+        /* updateLayerFileInfoByGroupId */
+        UPDATE layer_file_info
+        SET enable_yn = 'Y'
+        WHERE layer_id = #{layerId}
+            AND layer_file_info_group_id = #{layerFileInfoGroupId}
+    </update>
+
+    <!-- layerId와 일치하는 모든 shape 파일의 상태를 layer 비활성화로 함 -->
+    <update id="updateLayerFileInfoAllDisabledByLayerId" parameterType="int">
+        UPDATE layer_file_info SET enable_yn = 'N' WHERE layer_id = #{layerId}
+    </update>
+
+    <!-- 동일 그룹 layerFileInfo 정보 활성화로 수정(where 절 중복) -->
+    <update id="updateLayerFileInfoGroup" parameterType="map">
+        /* updateLayerFileInfoGroup */
+        UPDATE layer_file_info
+        SET layer_file_info_group_id = #{layerFileInfoGroupId},
+            version_id = CAST(#{fileVersion} AS integer),
+            enable_yn = 'Y',
+            update_date = NOW()
+            <!-- update_date = TO_TIMESTAMP(#{updateDate}, 'YYYYMMDDHH24MISSUS') -->
+        WHERE layer_file_info_id IN
+        <foreach collection="layerFileInfoGroupIdList" item="item" index="index" open="(" close=")" separator=",">
+            #{item.value}
+        </foreach>
+    </update>
+
+    <!-- 해당 레이어의 이전 데이터를 전부 비활성화 상태로 수정 -->
+    <update id="updateShapePreDataDisable" parameterType="string">
+        /* updateShapePreDataDisable */
+        UPDATE ${value} SET enable_yn = 'N'
+    </update>
+
+    <!-- org2org를 이용해서 생성한 테이블을 데이터 버전 갱신 -->
+    <update id="updateOgr2OgrDataFileVersion" parameterType="map">
+        /* updateOgr2OgrDataFileVersion */
+        UPDATE ${tableName}
+        SET enable_yn = 'Y',
+            <!-- update = #{updateDate} -->
+            version_id = CAST(#{fileVersion} AS integer)
+        WHERE enable_yn IS NULL OR enable_yn = 'Y'
+    </update>
+
+    <!-- shape 테이블 데이터 상태 변경 -->
+    <update id="updateOgr2OgrStatus" parameterType="map">
+        /* updateOgr2OgrStatus */
+        UPDATE ${tableName}
+        SET enable_yn = 'Y'
+        <!-- WHERE update = #{updateDate} -->
+        WHERE version_id = CAST(#{fileVersion} AS integer)
+    </update>
+
+    <!-- 레이어 삭제 -->
+    <delete id="deleteLayerFileInfo" parameterType="int">
+        /* deleteLayerFileInfo */
+        DELETE FROM layer_file_info WHERE layer_id = #{layerId}
+    </delete>
+
+    <!-- group id 로 레이어 파일 이력을 삭제 -->
+    <delete id="deleteLayerFileInfoByGroupId" parameterType="int">
+        /* deleteLayerFileInfoByGroupId */
+        DELETE FROM layer_file_info WHERE layer_file_info_group_id = #{layerFileInfoGroupId}
+    </delete>
+</mapper>

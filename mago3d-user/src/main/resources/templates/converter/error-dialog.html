@@ -1,0 +1,16 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<body>
+	<div id="converterErrorDialog" class="errorDialog" th:title="#{converter.error.information}">
+        <table class="inner-table scope-row">
+            <colgroup>
+                <col class="col-label"></col>
+                <col class="col-data"></col>
+            </colgroup>
+            <tr>
+                <th class="col-label" scope="row"><th:block th:text="#{converter.error.message}"></th:block></th>
+                <td id="dialog_error_code" class="col-data"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

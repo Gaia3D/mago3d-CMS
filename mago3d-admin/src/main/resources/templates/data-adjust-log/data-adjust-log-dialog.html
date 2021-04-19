@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div id="dataInfoAdjustLogDialog" class="dataInfoAdjustLogDialog" title="Data Info Change Log">
+		<table class="inner-table scope-row" style="width: 100%;" summary="데이터 위치 변경 요청 이력">
+			<caption class="hiddenTag">데이터 위치 변경 요청 이력</caption>
+			<colgroup>
+				<col class="col-label"></col>
+				<col class="col-data"></col>
+				<col class="col-data"></col>
+			</colgroup>
+			<tr style="height: 30px;">
+				<th class="col-label" scope="row" th:text="#{categorize}" style="width: 30%; text-align: center;"></th>
+				<th class="col-label" scope="row" th:text="#{before}" style="width: 35%; text-align: center;"></th>
+				<th class="col-label" scope="row" th:text="#{after}" style="width: 35%; text-align: center;"></th>
+			</tr>
+			<tr style="height: 30px;">
+				<th class="col-label" scope="row" th:text="#{longitude}" style="text-align: left"></th>
+				<td id="beforeLongitude" class="col-data"></td>
+				<td id="afterLongitude" class="col-data" style="color: blue"></td>
+			</tr>
+			<tr style="height: 30px;">
+				<th class="col-label" scope="row" th:text="#{latitude}" style="text-align: left;"></th>
+				<td id="beforeLatitude" class="col-data"></td>
+				<td id="afterLatitude" class="col-data" style="color: blue"></td>
+			</tr>
+			<tr style="height: 30px;">
+				<th class="col-label" scope="row" th:text="높이" style="text-align: left"></th>
+				<td id="beforeAltitude" class="col-data"></td>
+				<td id="afterAltitude" class="col-data" style="color: blue"></td>
+			</tr>
+			<tr style="height: 30px;">
+				<th class="col-label" scope="row" th:text="#{heading}" style="text-align: left"></th>
+				<td id="beforeHeading" class="col-data"></td>
+				<td id="afterHeading" class="col-data" style="color: blue"></td>
+			</tr>
+			<tr style="height: 30px;">
+				<th class="col-label" scope="row" th:text="#{pitch}" style="text-align: left"></th>
+				<td id="beforePitch" class="col-data"></td>
+				<td id="afterPitch" class="col-data" style="color: blue"></td>
+			</tr>
+			<tr style="height: 30px;">
+				<th class="col-label" scope="row" th:text="#{roll}" style="text-align: left"></th>
+				<td id="beforeRoll" class="col-data"></td>
+				<td id="afterRoll" class="col-data" style="color: blue"></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<title>권한 수정</title>
+	<th:block layout:fragment="pageCustomStyle">
+		<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}" />
+		<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang},cacheVersion=${contentCacheVersion})}" />
+	</th:block>
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+	<div class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+					<div class="page-content">
+						<form id="role" th:object="${role}" method="post" th:action="@{#}" onsubmit="return false;">
+						<input type="hidden" id="roleId" name="roleId" th:field="*{roleId}" />
+						<table class="input-table scope-row" summary="권한 수정 테이블">
+						<caption class="hiddenTag">권한 수정</caption>
+							<col class="col-label l" />
+							<col class="col-input" />
+							<tr>
+								<th class="col-label l" scope="row">
+									<label for="roleName">Role 명</label>
+									<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								</th>
+								<td class="col-input"><input type="text" id="roleName" name="roleName" th:field="*{roleName}" class="l" size="70" /></td>
+							</tr>
+							<tr>
+								<th class="col-label l" scope="row">
+									<label for="roleKey">Role Key</label>
+									<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								</th>
+								<td class="col-input"><input type="text" id="roleKey" name="roleKey" th:field="*{roleKey}" size="70" /></td>
+							</tr>
+							<tr>
+								<th class="col-label l" scope="row">
+									<label for="roleTarget">Role Target</label>
+									<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								</th>
+								<td class="col-input">
+									<select id="roleTarget" name="roleTarget" th:field="*{roleTarget}" class="selectBoxClass" >
+										<option value="0"> 사용자 사이트 </option>
+										<option value="1"> 관리자 사이트 </option>
+										<option value="2"> 서버 </option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th class="col-label l" scope="row">
+									<label for="roleType">Role 유형</label>
+									<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								</th>
+								<td class="col-input">
+									<select id="roleType" name="roleType" th:field="*{roleType}" class="selectBoxClass" >
+										<option value="0"> 사용자 </option>
+										<option value="1"> 서버 </option>
+										<option value="2"> API </option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th class="col-label l" scope="row">
+									<span>사용 유무</span>
+									<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								</th>
+								<td class="col-input radio-set">
+									<input type="radio" id="useY" name="useYn" th:field="*{useYn}" value="Y" />
+									<label for="useY">사용</label>&nbsp;&nbsp;
+									<input type="radio" id="useN" name="useYn" th:field="*{useYn}" value="N" />
+									<label for="useN">미사용</label>
+								</td>
+							</tr>
+							<tr>
+								<th class="col-label l" scope="row">
+									<span>기본사용 유무</span>
+									<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								</th>
+								<td class="col-input radio-set">
+									<input type="radio" id="defaultY" name="defaultYn" value="Y" th:field="*{defaultYn}" />
+									<label for="defaultY">사용</label>&nbsp;&nbsp;
+									<input type="radio" id="defaultN" name="defaultYn" value="N" th:field="*{defaultYn}" />
+									<label for="defaultN">미사용</label>
+								</td>
+							</tr>
+							<tr>
+								<th class="col-label l" scope="row"><label for="description">설명</label></th>
+								<td class="col-input"><input type="text" id="description" name="description" th:field="*{description}" class="xl" size="100" /></td>
+							</tr>
+						</table>
+						<div class="button-group">
+							<div id="insertRoleLink" class="center-buttons">
+								<button class="point" type="submit" onclick="update();">저장</button>
+								<a href="/role/list" class="button">목록</a>
+							</div>
+						</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+
+	<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+
+<script th:inline="javascript">
+
+function check() {
+	if( $("#roleName").val().trim() === "" ) {
+		alert("Role 명을 입력하여 주십시오.");
+		$("#roleName").focus();
+		return false;
+	}
+	else if( $("#roleKey").val().trim() === "" ) {
+		alert("Role Key를 입력하여 주십시오.");
+		$("#roleKey").focus();
+		return false;
+	}
+	else if($("#roleTarget").val() === "") {
+		alert("Role Target을 선택하여 주십시오.");
+		return false;
+	}
+	else if( $("#roleType").val() === "") {
+		alert("Role 유형을 선택하여 주십시오.");
+		return false;
+	}
+	else if( $("[name=useYn]:checked").val() === "" || $("[name=useYn]:checked").val() === undefined) {
+		alert("사용 유무를 선택하여 주십시오.");
+		return false;
+	}
+	else if( $("[name=defaultYn]:checked").val() === "" || $("[name=defaultYn]:checked").val() === undefined ) {
+		alert("기본사용 유무를 선택하여 주십시오.");
+		return false;
+	}
+}
+
+var updateRoleFlag = true;
+function update() {
+	if(check() === false) return false;
+
+	if(updateRoleFlag) {
+		updateRoleFlag = false;
+		var url = "/role/update";
+		var formData = $("#role").serialize();
+		$.ajax({
+			url: url,
+			type: "POST",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+			data: formData,
+			dataType: "json",
+			success: function(msg) {
+				alert("수정 하였습니다.");
+				updateRoleFlag = true;
+			},
+	        error: function(request, status, error) {
+	        	// alert message, 세션이 없는 경우 로그인 페이지로 이동 - common.js
+	        	ajaxErrorHandler(request);
+	        	updateRoleFlag = true;
+	        }
+		});
+	} else {
+		alert("진행 중입니다.");
+		return;
+	}
+}
+</script>
+</th:block>
+</body>
+</html>

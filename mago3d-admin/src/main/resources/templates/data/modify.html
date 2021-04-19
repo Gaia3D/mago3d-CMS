@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+	<title>데이터 수정 | mago3D</title>
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/cesium/Widgets/widgets.css(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+	<div class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+					<div class="page-content">
+						<div class="input-header row">
+							<div class="content-desc u-pull-right">
+								<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								<th:block th:text="#{check}"></th:block>
+							</div>
+						</div>
+
+						<!-- S: 데이터 수정 -->
+						<form id="dataInfo" th:object="${dataInfo}" th:action="@{#}" method="post" onsubmit="return false;">
+							<input type="hidden" id="dataId" name="dataId" th:field="*{dataId}" />
+							<table class="input-table scope-row" summary="데이터 정보 수정 테이블">
+								<caption class="hiddenTag">데이터 정보 수정</caption>
+								<colgroup>
+				                    <col class="col-label l"></col>
+				                    <col class="col-input"></col>
+				                </colgroup>
+								<tr>
+									<th class="col-label" scope="row">데이터 그룹명</th>
+									<td class="col-input" th:text="${dataInfo.dataGroupName}"></td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">데이터  Key</th>
+									<td class="col-input" th:text="${dataInfo.dataKey}"></td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">데이터명</th>
+									<td class="col-input" th:text="${dataInfo.dataName}"></td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">공유 타입</th>
+						            <td class="col-input" th:if="${#strings.equals(dataInfo.sharing, 'common')}" th:text="공통"></td>
+									<td class="col-input" th:if="${#strings.equals(dataInfo.sharing, 'public')}" th:text="공개"></td>
+									<td class="col-input" th:if="${#strings.equals(dataInfo.sharing, 'private')}" th:text="개인"></td>
+									<td class="col-input" th:if="${#strings.equals(dataInfo.sharing, 'group')}" th:text="그룹"></td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+						            	<label for="mappingType">매핑 타입</label>
+						                <span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+						            <td class="col-input">
+										<select id="mappingType" name="mappingType" class="selectBoxClass">
+											<option value="origin">origin</option>
+											<option value="boundingboxcenter">boundingboxcenter</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="longitude">경도 / 위도 / 높이</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<input type="text" id="longitude" name="longitude" th:field="*{longitude}" class="m" />
+										<input type="text" id="latitude" name="latitude" th:field="*{latitude}" class="m" />
+										<input type="text" id="altitude" name="altitude" th:field="*{altitude}" class="m" />
+										<input type="button" id="mapButtion" value="지도에서 찾기" />
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="heading">heading/pitch/roll</label>
+					
+									</th>
+									<td class="col-input">
+										<input type="text" id="heading" name="heading" th:field="*{heading}" class="m" />
+										<input type="text" id="pitch" name="pitch" th:field="*{pitch}" class="m" />
+										<input type="text" id="roll" name="roll" th:field="*{roll}" class="m" />
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+						            	<label for="status" th:text="상태"></label>
+						                <span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<select id="status" name="status" class="selectBoxClass">
+											<option value="processing">변환중 </option>
+											<option value="use">사용중</option>
+											<option value="unused">사용중지</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="metainfo" th:text="메타정보"></label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<input type="text" id="metainfo" name="metainfo" th:field="*{metainfo}" class="xl" />
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">속성 정보</th>
+									<td class="col-input" th:if="${#bools.isTrue(dataInfo.attributeExist)}" th:text="등록"></td>
+									<td class="col-input" th:if="${#bools.isFalse(dataInfo.attributeExist)}" th:text="미등록"></td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">Object 속성 정보</th>
+									<td class="col-input" th:if="${#bools.isTrue(dataInfo.objectAttributeExist)}" th:text="등록"></td>
+									<td class="col-input" th:if="${#bools.isFalse(dataInfo.objectAttributeExist)}" th:text="등록"></td>
+								</tr>
+								<tr>
+									<th class="col-label l" scope="row">
+										<label for="description" th:text="#{description}"></label>
+									</th>
+									<td class="col-input">
+										<input type="text" id="description" name="description" th:field="*{description}" class="xl" />
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">수정일</th>
+									<td class="col-input">
+										<th:block th:text="${#temporals.format(dataInfo.updateDate,'yyyy-MM-dd HH:mm')}"></th:block>
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">등록일</th>
+									<td class="col-input">
+										<th:block th:text="${#temporals.format(dataInfo.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+									</td>
+								</tr>
+							</table>
+						</form>
+
+						<div class="button-group">
+							<div class="center-buttons">
+								<input type="submit" th:value="#{modified}" onclick="updateDataInfo();"/>
+								<a href="/data/list" class="button">목록</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="pageCustomScript">				
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#mappingType").val("[[${dataInfo.mappingType}]]");
+		$("#status").val("[[${dataInfo.status}]]");
+	});
+	
+	function validate() {
+		if ($("#longitude").val() === "") {
+			alert("대표 위치(경도)를 입력하여 주십시오.");
+			$("#longitude").focus();
+			return false;
+		}
+		if ($("#latitude").val() === "") {
+			alert("대표 위치(위도)를 입력하여 주십시오.");
+			$("#latitude").focus();
+			return false;
+		}
+		if ($("#altitude").val() === "") {
+			alert("대표 위치(높이)를 입력하여 주십시오.");
+			$("#altitude").focus();
+			return false;
+		}
+		if ($("#metainfo").val() === "") {
+			alert("메타 정보를 입력하여 주십시오.");
+			$("#metainfo").focus();
+			return false;
+		}
+	}
+
+	// 수정
+	function updateDataInfo() {
+		if (validate() == false) {
+			return false;
+		}
+		if(confirm(JS_MESSAGE["data.update.check"])) {
+			//startLoading();
+			var formData = $("#dataInfo").serialize();
+			$.ajax({
+				url: "/datas/[[${dataInfo.dataId}]]",
+				type: "POST",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				data: formData,
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						alert(JS_MESSAGE["update"]);
+					} else if(msg.statusCode === 403) {
+						//data.smart.tiling
+						alert("변경 권한(Smart Tiling)이 존재하지 않습니다.");
+					} else if (msg.statusCode === 428) {
+						if(confirm(JS_MESSAGE[msg.errorCode])) {
+							$('input[name="dataId"]').val('[[${dataInfo.dataId}]]');
+							var formData = $("#dataInfo").serialize();
+							$.ajax({
+								url: "/data-adjust-logs",
+								type: "POST",
+								headers: {"X-Requested-With": "XMLHttpRequest"},
+								data: formData,
+								success: function(msg){
+									if(msg.statusCode <= 200) {
+										alert("요청 하였습니다.");
+									} else {
+										alert(JS_MESSAGE[msg.errorCode]);
+										console.log("---- " + msg.message);
+									}
+									insertDataAdjustLogFlag = true;
+								},
+								error: function(request, status, error){
+							        alert(JS_MESSAGE["ajax.error.message"]);
+							        insertDataAdjustLogFlag = true;
+								},
+								always: function(msg) {
+									$('input[name="dataId"]').val("");
+								}
+							});
+						}
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+						console.log("---- " + msg.message);
+					}
+					updateDataInfoFlag = true;
+				},
+				error:function(request, status, error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        updateDataInfoFlag = true;
+				}
+			}).always(/*stopLoading*/);
+		} else {
+			//alert('no');
+		}
+	}
+	/*
+	var updateDataInfoFlag = true;
+	function updateDataInfo() {
+		if (validate() == false) {
+			return false;
+		}
+		if(updateDataInfoFlag) {
+			updateDataInfoFlag = false;
+			var formData = $("#dataInfo").serialize();		
+			$.ajax({
+				url: "/datas/${dataInfo.dataId}",
+				type: "POST",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				data: formData,
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						alert(JS_MESSAGE["update"]);
+						window.location.reload();
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+						console.log("---- " + msg.message);
+					}
+					updateDataInfoFlag = true;
+				},
+				error:function(request, status, error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        updateDataInfoFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+	*/
+	
+	// 지도에서 찾기 -- common.js, openFindDataPoint
+	$( "#mapButtion" ).on( "click", function() {
+		//openFindDataPoint("${dataInfo.dataId}", "MODIFY");
+		var url = "/map/find-point";
+		var width = 800;
+		var height = 700;
+
+		var popupX = (window.screen.width / 2) - (width / 2);
+		// 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
+		var popupY= (window.screen.height / 2) - (height / 2);
+
+	    var popWin = window.open(url, "","toolbar=no ,width=" + width + " ,height=" + height + ", top=" + popupY + ", left="+popupX
+	            + ", directories=no,status=yes,scrollbars=no,menubar=no,location=no");
+	    //popWin.document.title = layerName;
+	});
+</script>
+</th:block>	
+</body>
+</html>

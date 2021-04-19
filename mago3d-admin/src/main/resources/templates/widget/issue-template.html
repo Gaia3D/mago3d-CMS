@@ -1,0 +1,38 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<script id="issueListSource" type="text/x-handlebars-template">
+
+    <table class="widget-table">
+        <col class="col-left" />
+        <col class="col-center" />
+        <col class="col-right" />
+        <thead>
+        <tr>
+            <td class="col-center"><em>이슈명</em></td>
+            <td class="col-center"><em>아이디</em></td>
+            <td class="col-center"><em>등록일</em></td>
+        </tr>
+        </thead>
+{{#greaterThan issueList.length 0}}
+    {{#each issueList}}
+        <tr>
+            <td class="col-left ellipsis" style="max-width: 160px;">
+                <span class="index"></span>
+                <em>{{title}}</em>
+            </td>
+            <td class="col-center">
+                {{userId}}
+            </td>
+            <td class="col-right">
+                {{viewInsertDate}}
+            </td>
+        </tr>
+    {{/each}}
+{{else}}
+        <tr>
+            <td colspan="3" class="col-none">이슈 목록이(최근 1달) 존재하지 않습니다.</td>
+        </tr>
+{{/greaterThan}}
+    </table>
+
+</script>
+</html>

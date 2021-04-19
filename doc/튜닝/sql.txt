@@ -1,0 +1,30 @@
+
+1 느린 쿼리 로그
+디폴트로 $PGDATA/pg_log/postgresql-%Y-%m-%d_%H%M%S.log 이러한 파일 형태로 log가 쌓이는데 그 안에 느린 쿼리에 대한 내용이 같이 있습니다. 
+
+
+postgresql.conf 설정화일에 아래 패러미터를 세팅합니다. 
+
+. . . . . . . . . . . . . . 
+log_min_duration_statement = 5000      # 단위는 밀리 세컨드이므로 5000 ms = 5 초를 의미함
+. . . . . . . . . . . . . . 
+
+PostgreSQL 를 restart 하면 로그 화일에, SQL 수행시 5 초 이상 걸리는 느린 쿼리들이 로깅됩니다.
+느린 쿼리 찾는데 유용합니다. 아래 처럼 인위적으로 6 초 정도 수행되는 쿼리를 수행합니다.
+
+SQL> select pg_sleep(6);
+ pg_sleep
+----------
+(1 row)
+
+로그화일을 볼까요? 
+
+. . . . . . . . . . . . . . 
+2013-06-24 11:04:39 KST LOG:  duration: 6017.000 ms  statement: select pg_sleep(6);
+. . . . . . . . . . . . . . 
+
+참고로 log_min_duration_statement=0 으로 하면 모든 쿼리가 남습니다.
+  
+
+
+

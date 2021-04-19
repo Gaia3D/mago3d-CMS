@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.PolicyMapper">
+
+	<!-- 운영 정책 정보 -->
+	<select id="getPolicy" resultType="policy">
+		/* getPolicy */
+		SELECT * FROM policy ORDER BY policy_id DESC LIMIT 1
+	</select>
+	
+	<!-- 업로딩 가능 확장자 조회 -->
+	<select id="getUserUploadType" resultType="String">
+		/* getUserUploadType */
+		SELECT user_upload_type FROM policy ORDER BY policy_id DESC LIMIT 1
+	</select>
+</mapper>

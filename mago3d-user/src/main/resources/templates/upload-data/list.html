@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+    <title><th:block th:text="#{upload.data.list.page.title}"></th:block></title>
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/user-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}">
+    <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+    <script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>    
+</head>
+<body>
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
+<div id="wrap">
+	<!-- S: NAVWRAP -->
+	<div class="navWrap">
+        <div th:replace="~{/fragments/menu :: #navWrap}"></div>
+	</div>
+	<!-- E: NAVWRAP -->
+
+	<div class="container" style="float:left; width: calc(100% - 78px);">
+		<div style="padding: 20px 20px 0px 10px; font-size: 18px;"><th:block th:text="#{converter.subtitle}"></th:block></div>
+        <!-- TAB -->
+        <div class="tabs">
+            <ul class="tab">
+				<li id="tabDataGroupList"><a href="/data-group/list"><th:block th:text="#{data.group.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataGroupInput"><a href="/data-group/input"><th:block th:text="#{data.group.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataInput"><a href="/upload-data/input"><th:block th:text="#{upload.data.input.tab.menu}"></th:block></a></li>
+				<li id="tabUploadDataList"><a href="/upload-data/list"><th:block th:text="#{upload.data.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterList"><a href="/converter/list"><th:block th:text="#{converter.list.tab.menu}"></th:block></a></li>
+				<li id="tabConverterJobFileList"><a href="/converter/converter-job-file-list"><th:block th:text="#{converter.job.file.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataList"><a href="/data/list"><th:block th:text="#{data.list.tab.menu}"></th:block></a></li>
+				<li id="tabDataLogList"><a href="/data-log/list"><th:block th:text="#{data.log.list.tab.menu}"></th:block></a></li>
+            </ul>
+        </div>
+
+        <!-- S: 검색 -->
+		<div class="filters">
+            <form id="searchForm" th:object="${uploadData}" method="get" th:action="@{/upload-data/list}" onsubmit="return searchCheck();">
+			<div class="input-group row">
+				<div class="input-set">
+					<label for="searchWord" th:text="#{common.search.word}"></label>
+					<select id="searchWord" name="searchWord" class="selectBoxClass">
+						<option value="" th:text="#{common.select}"></option>
+	          			<option value="data_name" th:text="#{common.data.name}"></option>
+					</select>
+					<select id="searchOption" name="searchOption" class="selectBoxClass">
+						<option value="0" th:text="#{common.search.same}"></option>
+						<option value="1" th:text="#{common.search.include}"></option>
+					</select>
+					<input type="search" id="searchValue" name="searchValue" th:field="*{searchValue}" class="m" style="float: right;" />
+				</div>
+				<div class="input-set">
+                    <label for="startDate" th:text="#{common.date}"></label>
+                    <input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
+                    <span class="delimeter tilde">~</span>
+                    <input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
+                </div>
+				<div class="input-set">
+					<label for="orderWord" th:text="#{common.order}"></label>
+					<select id="orderWord" name="orderWord" class="selectBoxClass">
+						<option value="" th:text="#{common.basic}"></option>
+						<option value="data_name" th:text="#{common.data.name}"></option>
+						<option value="insert_date" th:text="#{common.insert.date}"></option>
+					</select>
+					<select id="orderValue" name="orderValue" class="selectBoxClass">
+                		<option value="" th:text="#{common.basic}"></option>
+	                	<option value="ASC" th:text="#{common.asc}"></option>
+						<option value="DESC" th:text="#{common.desc}"></option>
+					</select>
+					<select id="listCounter" name="listCounter" class="selectBoxClass">
+                		<option value="10" th:text="#{common.ten.count}"></option>
+	                	<option value="50" th:text="#{common.fifty.count}"></option>
+						<option value="100" th:text="#{common.hundred.count}"></option>
+					</select>
+				</div>
+				<div class="input-set">
+					<input type="submit" th:value="#{common.search}" />
+				</div>
+			</div>
+			</form>
+        </div>
+        <!-- E: 검색 -->
+
+        <!-- S: 업로딩 데이터 목록 -->
+		<div class="list">
+			<form id="listForm" th:object="${uploadData}" method="post">
+				<input type="hidden" id="checkIds" name="checkIds" />
+				<div class="list-header row">
+					<div class="list-desc u-pull-left">
+						<span th:text="#{common.all}"></span>
+						<span class="totalCount" th:text="${pagination.totalCount}"></span>
+						<span th:text="#{common.count.unit}"></span>
+						<span th:text="|${pagination.pageNo} / ${pagination.lastPage}|"></span>
+						<span th:text="#{common.page}"></span>
+					</div>
+					<div class="list-functions u-pull-right">
+						<div class="button-group" style="padding-bottom: 3px;">
+							<a href="#" class="button" th:title="#{converter.f4d.all}" onclick="converterFiles(); return false;"><th:block th:text="#{converter.f4d.all}"></th:block></a>
+						</div>
+					</div>
+				</div>
+				<table class="list-table scope-col" th:summary="#{upload.list.page.summary}">
+					<caption class="hiddenTag"><th:block th:text="#{upload.list.page.caption}"></th:block></caption>
+					<colgroup>
+						<col class="col-checkbox"></col>
+						<col class="col-number"></col>
+						<col class="col-name"></col>
+						<col class="col-name"></col>
+						<col class="col-name"></col>
+						<col class="col-number"></col>
+						<col class="col-number"></col>
+						<col class="col-number"></col>
+						<col class="col-functions"></col>
+						<col class="col-functions"></col>
+						<col class="col-functions"></col>
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col" class="col-checkbox">
+								<label for="chkAll" class="hiddenTag"><th:block th:text="#{common.select.all}"></th:block></label>
+								<input type="checkbox" id="chkAll" name="chkAll" />
+							</th>
+							<th scope="col" class="col-number" th:text="#{common.number}"></th>
+							<th scope="col" class="col-name"><th:block th:text="#{common.data.group.name}"></th:block></th>
+							<th scope="col" class="col-name"><th:block th:text="#{common.sharing}"></th:block></th>
+							<th scope="col" class="col-name"><th:block th:text="#{common.data.type}"></th:block></th>
+							<th scope="col" class="col-name"><th:block th:text="#{common.data.name}"></th:block></th>
+							<th scope="col" class="col-name"><th:block th:text="#{upload.target.file.count.compare.all}"></th:block></th>
+							<th scope="col" class="col-name"><th:block th:text="#{upload.converter.count}"></th:block></th>
+							<th scope="col" class="col-functions"><th:block th:text="#{upload.converter}"></th:block></th>
+							<th scope="col" class="col-functions"><th:block th:text="#{common.delete}"></th:block></th>
+							<th scope="col" class="col-date"><th:block th:text="#{common.created}"></th:block></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:if="${uploadDataList.empty}">
+							<td colspan="11" class="col-none"><th:block th:text="#{upload.history.does.not.exist}"></th:block></td>
+						</tr>
+
+						<tr th:if="${!uploadDataList.empty}" th:each="uploadData : ${uploadDataList}">
+							<td class="col-checkbox">
+								<input type="checkbox" th:id="|uploadDataId_${uploadData.uploadDataId}|" name="uploadDataId" th:value="${uploadData.uploadDataId}" />
+							</td>
+							<td class="col-number" th:text="${pagination.rowNumber - uploadDataStat.index}"></td>
+							<td class="col-name ellipsis" th:text="${uploadData.dataGroupName}" style="min-width:120px;max-width:120px;"></td>
+							<td class="col-type">
+								<th:block th:if="${#strings.equals(uploadData.sharing, 'common')}" th:text="#{common.common}"></th:block>
+								<th:block th:if="${#strings.equals(uploadData.sharing, 'public')}" th:text="#{common.public}"></th:block>
+								<th:block th:if="${#strings.equals(uploadData.sharing, 'private')}" th:text="#{common.private}"></th:block>
+								<th:block th:if="${#strings.equals(uploadData.sharing, 'group')}" th:text="#{common.group}"></th:block>
+							</td>
+							<td class="col-type" th:text="${uploadData.dataType}"></td>
+							<td class="col-name ellipsis" style="min-width:300px;max-width:300px;">
+								<a th:text="${uploadData.dataName}" th:href="@{/upload-data/modify(uploadDataId=${uploadData.uploadDataId})}"></a>
+							</td>
+							<td class="col-count">
+								<span th:text="${uploadData.converterTargetCount}" style="color:blue; font-weight: bold;"></span>
+								<span th:text="| / ${uploadData.fileCount}#{common.count}|"></span>
+							</td>
+							<td class="col-count" th:text="|${uploadData.converterCount}#{common.count.unit}|"></td>
+							<td class="col-functions">
+								<span class="button-group">
+									<a href="#" class="button"
+									   th:onclick="converterFile([[${uploadData.uploadDataId}]], [[${uploadData.dataName}]], [[${uploadData.dataType}]]); return false;" style="text-decoration: none;">
+										<th:block th:text="#{common.f4d.converter}"></th:block>
+									</a>
+								</span>
+							</td>
+							<td class="col-functions">
+								<span class="button-group">
+									<a href="#" class="image-button button-delete" th:onclick="deleteUploadData([[${uploadData.uploadDataId}]]); return false;">
+										<th:block th:text="#{common.delete}"></th:block>
+									</a>
+								</span>
+							</td>
+							<td class="col-type">
+								<th:block th:text="${#temporals.format(uploadData.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+        </div>
+        <!-- E: 업로딩 데이터 목록 -->
+        
+        <!-- 페이지 -->
+        <div th:replace="~{/common/pagination :: #paginationArea}"></div>
+		<!-- F4D 변환 -->
+        <div th:replace="~{/upload-data/converter-dialog :: #dialogConverterJob}"></div>
+	</div>
+</div>
+<!-- E: WRAP -->
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+		var searchWord = "[[${uploadData.searchWord}]]";
+		var searchOption = "[[${uploadData.searchOption}]]";
+		var orderWord = "[[${uploadData.orderWord}]]";
+		var orderValue = "[[${uploadData.orderValue}]]";
+        var listCounter = "[[${uploadData.listCounter}]]";
+
+		if(searchWord != "") $("#searchWord").val("[[${uploadData.searchWord}]]");
+		if(searchOption != "") $("#searchOption").val("[[${uploadData.searchOption}]]");
+		if(orderWord != "") $("#orderWord").val("[[${uploadData.orderWord}]]");
+		if(orderValue != "") $("#orderValue").val("[[${uploadData.orderValue}]]");
+		if(listCounter != "") $("#listCounter").val("[[${uploadData.listCounter}]]");
+
+		initDatePicker();
+		initCalendar(new Array("startDate", "endDate"), new Array("[[${uploadData.startDate}]]", "[[${uploadData.endDate}]]"));
+	});
+
+	//전체 선택
+	$("#chkAll").click(function() {
+		$(":checkbox[name=uploadDataId]").prop("checked", this.checked);
+	});
+
+	var dialogConverterJob = $( ".dialogConverterJob" ).dialog({
+		autoOpen: false,
+		/* height: 315, */
+		width: 600,
+		modal: true,
+		resizable: false,
+		close: function() {
+			$("#converterCheckIds").val("");
+			$("#title").val("");
+			//location.reload();
+		}
+	});
+
+	// F4D Converter Button Click
+	function converterFile(uploadDataId, dataName, dataType) {
+		$("#dataType").val(dataType);
+		$("#converterCheckIds").val(uploadDataId + ",");
+		$("#title").val(dataName);
+		// 여기서 확장자가 las면 template 을 포인트 클라우트 클릭하게
+		if(dataType === "las") {
+			$("#converterTemplate").val("point-cloud");
+		} else {
+			$("#converterTemplate").val("basic");
+		}
+
+		dialogConverterJob.dialog( "open" );
+	}
+
+	// All F4D Converter Button Click
+	function converterFiles() {
+		var checkedValue = "";
+		$("input:checkbox[name=uploadDataId]:checked").each(function(index) {
+			checkedValue += $(this).val() + ",";
+		});
+		if(checkedValue === "") {
+			alert(JS_MESSAGE["upload.file.select.empty"]);
+			return;
+		}
+		$("#dataType").val("");
+		$("#converterCheckIds").val(checkedValue);
+
+		dialogConverterJob.dialog( "open" );
+	}
+
+	// F4D Converter 일괄 변환
+	var saveConverterJobFlag = true;
+	function saveConverterJob() {
+		if($("#title").val() === null || $("#title").val() === "") {
+			alert(JS_MESSAGE["converter.title.empty"]);
+			$("#title").focus();
+			return false;
+		}
+
+		if($("#dataType").val() === "las") {
+			// 여기서 확장자가 las면 template 을 포인트 클라우트 클릭하게
+			if($("#converterTemplate").val() != "point-cloud") {
+				alert(JS_MESSAGE["upload.las.file.constraint"]);
+				$("#converterTemplate").focus();
+				return false;
+			}
+		}
+
+		if(saveConverterJobFlag) {
+			saveConverterJobFlag = false;
+			var formData =$("#converterJobForm").serialize();
+			$.ajax({
+				url: "/converters",
+				type: "POST",
+				data: formData,
+				dataType: "json",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						alert(JS_MESSAGE["insert"]);
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+					}
+
+					$("#converterCheckIds").val("");
+					$("#title").val("");
+					$(":checkbox[name=uploadDataId]").prop("checked", false);
+					dialogConverterJob.dialog( "close" );
+					saveConverterJobFlag = true;
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
+					dialogConverterJob.dialog( "close" );
+					saveConverterJobFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+
+	var deleteUploadDataFlag = true;
+	function deleteUploadData(uploadDataId) {
+		if(confirm(JS_MESSAGE["delete.confirm"])) {
+			if(deleteUploadDataFlag) {
+				deleteUploadDataFlag = false;
+				$.ajax({
+					url: "/upload-datas/" + uploadDataId,
+					type: "DELETE",
+					//data: formData,
+					dataType: "json",
+					headers: {"X-Requested-With": "XMLHttpRequest"},
+					success: function(msg){
+						if(msg.statusCode <= 200) {
+							alert(JS_MESSAGE["delete"]);
+							location.reload();
+						} else {
+							alert(JS_MESSAGE[msg.errorCode]);
+						}
+						deleteDatasFlag = true;
+					},
+					error:function(request,status,error){
+				        alert(JS_MESSAGE["ajax.error.message"]);
+				        deleteDatasFlag = true;
+					}
+				});
+			} else {
+				alert(JS_MESSAGE["button.dobule.click"]);
+				return;
+			}
+		}
+	}
+
+	$('#yAxisUp').change(function() {
+		var desc = $(this).siblings('span');
+		var value = $(this).val();
+		if (value === 'Y') {
+			desc.text(JS_MESSAGE["upload.y.axis.facing"]);
+		} else if (value === 'N') {
+			desc.text(JS_MESSAGE["upload.z.axis.facing"]);
+		}
+	});
+</script>
+</body>
+</html>

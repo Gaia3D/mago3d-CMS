@@ -1,0 +1,21 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="subMenuWrap" class="local-navigation">
+	<div class="nav-header">
+		<h2 class="nav-title">
+			<span class="ko" th:text="${parentMenu.name}"></span>
+			<span class="en" th:text="${parentMenu.nameEn}"></span>
+		</h2>
+	</div>
+	<ul>
+		<th:block th:each="userGroupMenu : ${cacheUserGroupMenuList}">
+			<th:block th:if="${userGroupMenu.depth == 2 and userGroupMenu.displayYn == 'Y' and userGroupMenu.parent == parentMenu.menuId }">
+				<th:block th:if="${userGroupMenu.menuId == clickMenuId}">
+					<li class="current-page"><a th:href="${userGroupMenu.url}" th:text="${userGroupMenu.name}"></a></li>
+				</th:block>
+				<th:block th:unless="${userGroupMenu.menuId == clickMenuId}">
+					<li><a th:href="${userGroupMenu.url}" th:text="${userGroupMenu.name}"></a></li>
+				</th:block>
+			</th:block>
+		</th:block>
+	</ul>
+</div>

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.IssueMapper">
+
+	<!-- 이슈 총 건수 -->
+	<select id="getIssueTotalCount" parameterType="issue" resultType="long">
+		/* getIssueTotalCount */
+		SELECT COUNT(issue_id) 
+		FROM issue
+		<trim prefix="WHERE" prefixOverrides="AND">	
+			<if test="dataGroupId != null and dataGroupId > 0">
+				data_group_id = #{dataGroupId}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+			AND ${searchWord} = #{searchValue}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+			AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="location != null and location != ''">
+			<![CDATA[
+			AND ST_CONTAINS(ST_BUFFER(ST_GeomFromText(#{location}, 4326), 300), location)
+			]]>
+			</if>
+		</trim>
+	</select>
+
+	<!-- 이슈 목록 -->
+	<select id="getListIssue" parameterType="issue" resultType="issue">
+		/* getListIssue */
+		SELECT A.*, ST_X(A.location::geometry) AS longitude, ST_Y(A.location::geometry) AS latitude,
+			(SELECT user_name FROM user_info WHERE user_id = A.user_id) AS userName
+		FROM(
+			SELECT *
+			FROM issue
+			<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="dataGroupId != null and dataGroupId > 0">
+				data_group_id = #{dataGroupId}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+				AND ${searchWord} = #{searchValue}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+				AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+				</if>
+				<if test="startDate != null and startDate != ''">
+				<![CDATA[
+				AND insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="endDate != null and endDate != ''">
+				<![CDATA[
+				AND insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="location != null and location != ''">
+				<![CDATA[
+				AND ST_CONTAINS(ST_BUFFER(ST_GeomFromText(#{location}, 4326), 300), location)
+				]]>
+				</if>
+			</trim>
+			<choose>
+			<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+			ORDER BY ${orderWord} ${orderValue}
+			</when>
+			<otherwise>
+			ORDER BY insert_date DESC, issue_id DESC
+			</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) A
+	</select>
+	
+	<!-- 이슈 총 건수 -->
+	<select id="getIssueTotalCountByUserId" parameterType="issue" resultType="long">
+		/* getIssueTotalCountByUserId */
+		SELECT COUNT(issue_id) 
+		FROM issue
+		WHERE user_id = #{userId}
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+			AND ${searchWord} = #{searchValue}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+			AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+	</select>
+
+	<!-- 이슈 목록 -->
+	<select id="getListIssueByUserId" parameterType="issue" resultType="issue">
+		/* getListIssueByUserId */
+		SELECT A.*, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, 
+			B.user_name, C.data_group_name
+		FROM issue A LEFT OUTER JOIN user_info B ON A.user_id = B.user_id
+			INNER JOIN data_group C ON A.data_group_id = C.data_group_id
+		WHERE A.user_id = #{userId}
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+			AND ${searchWord} = #{searchValue}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+			AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+		<choose>
+		<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+		ORDER BY ${orderWord} ${orderValue}
+		</when>
+		<otherwise>
+		ORDER BY A.insert_date DESC, A.issue_id DESC
+		</otherwise>
+		</choose>
+		OFFSET #{offset} LIMIT #{limit}
+	</select>
+	
+	<!-- TODO assignee, reporter 값은 N개 이므로 subquery로 하면 안됨
+		이슈 정보 -->
+	<select id="getIssue" parameterType="long" resultType="issue">
+		/* getIssue */
+		SELECT A.*, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude,
+			(SELECT data_group_name FROM data_group WHERE data_group_id = A.data_group_id) AS dataGroupName,
+			(SELECT user_name FROM user_info WHERE user_id = A.user_id) AS userName,
+			B.contents
+		FROM issue A
+			LEFT OUTER JOIN issue_detail B ON A.issue_id = B.issue_id
+		WHERE A.issue_id = #{issueId}
+	</select>
+	
+	<!-- 이슈 등록 -->
+	<insert id="insertIssue" parameterType="issue">
+		/* insertIssue */
+		<selectKey keyProperty="issueId" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('issue_seq')
+  		</selectKey>
+		INSERT INTO issue(
+			issue_id, data_group_id, data_id, data_key, object_key, user_id, title, priority, due_date, issue_type, status, location, altitude, client_ip
+		) VALUES (
+			#{issueId}, #{dataGroupId}, #{dataId}, #{dataKey}, #{objectKey}, #{userId}, #{title}, #{priority},
+			<if test="dueDate == null or dueDate == ''">
+			null,
+			</if>		
+			<if test="dueDate != null and dueDate != ''">
+			TO_TIMESTAMP(#{dueDate}, 'YYYYMMDDHH24MISSUS'),
+			</if>			
+			#{issueType}, #{status},
+			<if test="location == null or location == ''">
+			null,
+			</if>		
+			<if test="location != null and location != ''">
+			ST_GeomFromText(#{location}, 4326),
+			</if>		
+			#{altitude}, #{clientIp}
+		)
+	</insert>
+	
+	<!-- 이슈 상세 등록 -->
+	<insert id="insertIssueDetail" parameterType="issue">
+		/* insertIssueDetail */
+		<selectKey keyProperty="issueDetailId" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('issue_detail_seq')
+  		</selectKey>
+		INSERT INTO issue_detail (
+			issue_detail_id, issue_id, contents
+		) VALUES (
+			#{issueDetailId}, #{issueId}, #{contents}
+		)
+	</insert>
+	
+	<!-- 이슈 수정 -->	
+	<update id="updateIssue" parameterType="issue">
+		/* updateIssue */
+		UPDATE issue
+		SET 
+			<if test="dataGroupId != null and dataGroupId > 0">
+			data_group_id = #{dataGroupId}
+			</if>
+			<if test="userId != null and userId != ''">
+			user_id = #{userId},
+			</if>
+			<if test="title != null and title != ''">
+			title = #{title},
+			</if>
+			<if test="priority != null and priority != ''">
+			priority = #{priority},
+			</if>
+			<if test="dueDate != null and dueDate != ''">
+			TO_TIMESTAMP(#{due_date}, 'YYYYMMDDHH24MISSUS'),
+			</if>
+			<if test="location != null and location != ''">
+			location = ST_GeomFromText(#{location}, 4326),
+			</if>
+			<if test="altitude != null">
+			altitude = #{altitude},
+			</if>
+			<if test="clientIp != null and clientIp != ''">
+			client_ip = #{clientIp},
+			</if>
+			update_date = NOW()
+		WHERE issue_id = #{issueId}
+	</update>
+	
+	<!-- 이슈 상세 수정 -->	
+	<update id="updateIssueDetail" parameterType="issue">
+		/* updateIssueDetail */
+		UPDATE issue_detail
+		SET contents = #{contents}
+		WHERE issueId = #{issueId}
+	</update>
+	
+	<!-- 이슈 삭제 -->
+	<delete id="deleteIssue" parameterType="long">
+		/* deleteIssue */
+		DELETE FROM issue WHERE issue_id = #{issueId}
+	</delete>
+	
+	<!-- 이슈 상세 삭제 -->
+	<delete id="deleteIssueDetail" parameterType="long">
+		/* deleteIssueDetail */
+		DELETE FROM issue_detail WHERE issue_id = #{issueId}
+	</delete>
+</mapper>

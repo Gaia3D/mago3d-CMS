@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.UploadDataMapper">
+
+	<!-- 사용자가 업로드 완료한 파일 총 건수 -->
+	<select id="getUploadDataTotalCount" parameterType="uploadData" resultType="long">
+		/* getUploadDataTotalCount */
+		SELECT COUNT(upload_data_id) 
+		FROM upload_data A, data_group B
+		WHERE A.user_id = #{userId}
+			AND A.data_group_id = B.data_group_id
+			AND B.data_group_target = 'user'
+			<if test="sharing != null and sharing != ''">
+			AND A.sharing = #{sharing}
+			</if>
+			<if test="dataType != null and dataType != ''">
+			AND A.data_type = #{dataType}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+			AND ${searchWord} = #{searchValue}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+			AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+			<![CDATA[
+			AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+			<![CDATA[
+			AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+	</select>
+	
+	<!-- 사용자가 업로드 완료한 파일 목록 -->
+	<select id="getListUploadData" parameterType="uploadData" resultType="uploadData">
+		/* getListUploadData */
+		SELECT A.*, B.data_group_name
+		FROM upload_data A, data_group B
+		WHERE A.user_id = #{userId}
+			AND A.data_group_id = B.data_group_id
+			AND B.data_group_target = 'user'
+		<if test="dataGroupName != null and dataGroupName != ''">
+			AND B.data_group_name = #{dataGroupName}
+		</if>
+		<if test="sharing != null and sharing != ''">
+			AND A.sharing = #{sharing}
+		</if>
+		<if test="dataType != null and dataType != ''">
+			AND A.data_type = #{dataType}
+		</if>
+		<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+			AND ${searchWord} = #{searchValue}
+		</if>
+		<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+			AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+		</if>
+		<if test="startDate != null and startDate != ''">
+		<![CDATA[
+			AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+		]]>
+		</if>
+		<if test="endDate != null and endDate != ''">
+		<![CDATA[
+			AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+		]]>
+		</if>
+		<choose>
+		<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+		ORDER BY A.${orderWord} ${orderValue}
+		</when>
+		<otherwise>
+		ORDER BY A.insert_date DESC, A.upload_data_id DESC
+		</otherwise>
+		</choose>
+		OFFSET #{offset} LIMIT #{limit}
+	</select>
+	
+	<!-- 업로딩 정보 -->
+	<select id="getUploadData" parameterType="uploadData" resultType="uploadData">
+		/* getUploadData */
+		SELECT A.*, B.data_group_name, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude
+		FROM upload_data A, data_group B
+		WHERE A.data_group_id = B.data_group_id
+			<if test="userId != null and userId != ''">
+			AND A.user_id = #{userId}
+			</if>
+			AND upload_data_id = #{uploadDataId}
+	</select>
+	
+	<!-- 업로딩 파일 총 건수 -->
+	<!-- <select id="getUploadDataFileTotalCount" parameterType="uploadDataFile" resultType="long">
+		/* getUploadDataFileTotalCount */
+		SELECT COUNT(upload_data_file_id) 
+		FROM upload_data_file 
+		<if test="userId != null and userId != ''">
+		WHERE user_id =#{userId} 
+		</if>
+	</select> -->
+
+	<!-- 업로딩 파일 총 용량 -->
+	<!-- <select id="getUploadDataFileTotalSize" parameterType="uploadDataFile" resultType="long">
+		/* getUploadDataFileTotalSize */
+		SELECT SUM(TO_NUMBER(file_size, '99999999999999999999')) 
+		FROM upload_data_file 
+		<if test="userId != null and userId != ''">
+		WHERE user_id =#{userId} 
+		</if> 
+	</select> -->
+	
+	<!-- 업로딩한 파일 목록 -->
+	<select id="getListUploadDataFile" parameterType="uploadData" resultType="uploadDataFile">
+		/* getListUploadDataFile */
+		SELECT A.data_group_id, A.sharing, A.data_type, A.data_name, A.mapping_type, A.location, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, A.altitude, B.*
+		FROM upload_data A, upload_data_file B
+		WHERE A.upload_data_id = B.upload_data_id
+			AND B.user_id = #{userId}
+		<if test="converterTarget != null">
+			AND B.converter_target = #{converterTarget}
+		</if>
+			AND A.upload_data_id = #{uploadDataId}
+		<choose>
+		<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+		ORDER BY B.${orderWord} ${orderValue}
+		</when>
+		<otherwise>
+		ORDER BY B.depth, A.insert_date
+		</otherwise>
+		</choose>
+	</select>
+
+	<!-- 업로딩한 파일 -->
+	<select id="getUploadDataFile" parameterType="uploadDataFile" resultType="uploadDataFile">
+		/* getUploadDataFile */
+		SELECT A.data_group_id, A.sharing, A.data_type, A.data_name, A.mapping_type, A.height_reference,
+			A.location, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, A.altitude, B.*
+		FROM upload_data A, upload_data_file B
+		WHERE A.upload_data_id = B.upload_data_id
+		<if test="userId != null and userId != ''">
+			AND B.user_id =#{userId}
+		</if>
+		AND upload_data_file_id = #{uploadDataFileId}
+	</select>
+
+	<!-- 사용자 3차원 파일 정보 업로딩 -->
+	<insert id="insertUploadData" parameterType="uploadData" >
+		/* insertUploadData */
+		<selectKey keyProperty="uploadDataId" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('upload_data_seq')
+  		</selectKey>
+		INSERT INTO upload_data(
+			upload_data_id, data_group_id, sharing, data_type, data_name, user_id, height_reference, 
+			<if test="latitude != null">
+			location, altitude,
+			</if>
+			file_count, converter_target_count, description
+		) VALUES (
+			#{uploadDataId}, #{dataGroupId}, #{sharing}, #{dataType}, #{dataName}, #{userId}, #{heightReference},
+			<if test="latitude != null">
+			ST_GeomFromText(#{location}, 4326), #{altitude},
+			</if>
+			#{fileCount}, #{converterTargetCount}, #{description}
+		)
+	</insert>
+	
+	<!-- 사용자 3차원 파일 업로딩 -->
+	<insert id="insertUploadDataFile" parameterType="uploadDataFile" >
+		/* insertUploadDataFile */
+		<selectKey keyProperty="uploadDataFileId" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('upload_data_file_seq')
+  		</selectKey>
+		INSERT INTO upload_data_file(
+			upload_data_file_id, upload_data_id, converter_target, user_id, file_type,
+			file_name, file_real_name, file_path, file_sub_path, file_size, file_ext, depth, error_message
+		) VALUES (
+			#{uploadDataFileId}, #{uploadDataId}, #{converterTarget}, #{userId}, #{fileType},
+			#{fileName}, #{fileRealName}, #{filePath}, #{fileSubPath}, #{fileSize}, #{fileExt}, #{depth}, #{errorMessage}
+		)
+	</insert>
+	
+	<!-- 파일 정보 업로딩 -->
+	<update id="updateUploadData" parameterType="uploadData" >
+		/* updateUploadData */
+		UPDATE upload_data
+		SET 
+			<if test="dataName != null and dataName != ''">
+			data_name = #{dataName},
+			</if>
+			<if test="dataGroupId != null and dataGroupId gt 0">
+			data_group_id = #{dataGroupId},
+			</if>
+			<if test="sharing != null and sharing != ''">
+			sharing = #{sharing},
+			</if>
+			<if test="dataType != null and dataType != ''">
+			data_type = #{dataType},
+			</if>
+			<if test="mappingType != null and mappingType != ''">
+			mapping_type = #{mappingType},
+			</if>
+			<if test="heightReference != null and heightReference != ''">
+			height_reference = #{heightReference},
+			</if>
+			<if test="latitude != null and latitude gt 0 and longitude != null and longitude gt 0">
+			location = ST_GeomFromText(#{location}, 4326),
+			</if>
+			<if test="altitude != null">
+			altitude = #{altitude},
+			</if>
+			<if test="converterCount != null and converterCount gt 0">
+			converter_count = converter_count + 1,
+			</if>
+			<if test="description != null and description != ''">
+			description = #{description},
+			</if>
+			update_date = NOW()
+		WHERE upload_data_id = #{uploadDataId}
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
+	</update>
+	
+	<!-- 사용자 3차원 파일 업로딩 수정 -->
+	<update id="updateUploadDataFile" parameterType="uploadDataFile" >
+		/* updateUploadDataFile */
+		UPDATE upload_data_file
+		<set>
+			<if test="fileExt != null and fileExt != ''">
+			file_ext = #{fileExt},
+			</if>
+			<if test="fileRealName != null and fileRealName != ''">
+			file_real_name = #{fileRealName},
+			</if>
+		</set>
+		WHERE upload_data_file_id = #{uploadDataFileId}
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
+	</update>
+	
+	<!-- 업로딩 데이터 정보 삭제 -->
+	<delete id="deleteUploadData" parameterType="uploadData">
+		/* deleteUploadData */
+		DELETE FROM upload_data 
+		WHERE upload_data_id = #{uploadDataId}
+		<if test="userId != null and userId != ''">
+			AND user_id =#{userId} 
+		</if> 
+	</delete>
+	
+	<!-- 업로딩 데이터 파일 삭제 -->
+	<delete id="deleteUploadDataFile" parameterType="uploadData">
+		/* deleteUploadDataFile */
+		DELETE FROM upload_data_file 
+		WHERE upload_data_id = #{uploadDataId}
+		<if test="userId != null and userId != ''">
+			AND user_id =#{userId} 
+		</if> 
+	</delete>
+	
+</mapper>

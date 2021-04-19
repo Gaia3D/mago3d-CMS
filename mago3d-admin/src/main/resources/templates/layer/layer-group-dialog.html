@@ -1,0 +1,74 @@
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
+<div id="layerGroupDialog" class="dialog">
+	<table class="list-table scope-col" summary="2D 레이어 그룹 다이얼로그">
+		<caption class="hiddenTag">2D 레이어 그룹 다이얼로그</caption>
+		<col class="col-number"/>
+		<col class="col-name"/>
+		<col class="col-toggle"/>
+		<col class="col-id"/>
+		<col class="col-function"/>
+		<col class="col-date"/>
+		<col class="col-toggle"/>
+		<thead>
+		<tr>
+			<th scope="col" class="col-name">Layer 그룹명</th>
+			<th scope="col" class="col-toggle">사용 여부</th>
+			<th scope="col" class="col-toggle">사용자 아이디</th>
+			<th scope="col" class="col-toggle">설명</th>
+			<th scope="col" class="col-date">등록일</th>
+			<th scope="col" class="col-date">선택</th>
+		</tr>
+		</thead>
+		<tbody>
+
+		<th:block th:if="${layerGroupList.empty}">
+			<tr>
+				<td colspan="6" class="col-none">데이터 그룹이 존재하지 않습니다.</td>
+			</tr>
+		</th:block>
+		<th:block th:unless="${layerGroupList.empty}" th:each="layerGroup : ${layerGroupList}">
+			<th:block th:if="${layerGroup.depth == 1}">
+				<tr th:class="layerGroup">
+					<td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
+                        <span style="padding-left: 0px; font-size: 1.5em; color: Dodgerblue;">
+                            <i class="fa fa-folder oneFolder" aria-hidden="true"></i>
+                        </span>
+						<span th:text="${layerGroup.layerGroupName}"></span>
+					</td>
+			</th:block>
+			<th:block th:if="${layerGroup.depth == 2}">
+				<tr class="twoDepthClass">
+					<td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
+                        <span style="padding-left: 40px; font-size: 1.5em; color: Mediumslateblue;">
+                            <i class="fa fa-folder oneFolder" aria-hidden="true"></i>
+                        </span>
+						<span th:text="${layerGroup.layerGroupName}"></span>
+					</td>
+			</th:block>
+			<th:block th:if="${layerGroup.depth == 3}">
+				<tr class="threeDepthClass">
+					<td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
+                        <span style="padding-left: 80px; font-size: 1.5em; color: Tomato;">
+                            <i class="fa fa-folder oneFolder" aria-hidden="true"></i>
+                        </span>
+						<span th:text="${layerGroup.layerGroupName}"></span>
+					</td>
+			</th:block>
+			<td class="col-type">
+				<th:block th:if="${#bools.isTrue(layerGroup.available)}" th:text="'사용'"></th:block>
+				<th:block th:if="${#bools.isFalse(layerGroup.available)}" th:text="'미사용'"></th:block>
+			</td>
+			<td class="col-type" th:text="${layerGroup.userId}"></td>
+			<td class="col-key" th:text="${layerGroup.description}"></td>
+			<td class="col-date" th:text="${#temporals.format(layerGroup.insertDate, 'yyyy-MM-dd HH:mm:ss')}">
+			</td>
+			<td class="col-toggle">
+				<a href="#"
+				   th:onclick="confirmParent([[${layerGroup.layerGroupId}]], [[${layerGroup.layerGroupName}]], [[${layerGroup.depth}]]); return false;">확인</a>
+			</td>
+			</tr>
+		</th:block>
+		</tbody>
+	</table>
+</div>
+</html>

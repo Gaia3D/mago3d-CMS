@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.RoleMapper">
+	
+	<!-- Role 총 건수 -->
+	<select id="getRoleTotalCount" parameterType="role" resultType="long">
+		/* getRoleTotalCount */
+		SELECT COUNT(role_id) 
+		FROM role
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+			${searchWord} = #{searchValue}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+			AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+		</trim>
+	</select>
+
+	<!-- Role 목록 -->
+	<select id="getListRole" parameterType="role" resultType="role">
+		/* getListRole */
+		SELECT *
+		FROM role 
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+			${searchWord} = #{searchValue}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+			AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+			<![CDATA[
+			AND insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+			<![CDATA[
+			AND insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+		</trim> 
+        <choose>
+		<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+		ORDER BY ${orderWord} ${orderValue}
+		</when>
+		<otherwise>
+		ORDER BY insert_date DESC, role_id DESC
+		</otherwise>
+		</choose>
+		OFFSET #{offset} LIMIT #{limit}
+	</select>
+	
+	<!-- Role 정보 -->
+	<select id="getRole" parameterType="int" resultType="role">
+		/* getRole */
+		SELECT * FROM role WHERE role_id = #{roleId}
+	</select>
+	
+	<!-- 사용자 그룹 Role 목록을 사용자 아이디로 조회 -->
+	<select id="getListUserGroupRoleByUserId" parameterType="userGroupRole" resultType="String">
+		/* getListUserGroupRoleByUserId */
+		SELECT role_key
+		FROM user_info A, role B, user_group_role C
+		WHERE A.user_id = #{user_id}
+			AND A.user_group_id = C.user_group_id
+			AND B.role_id = C.role_id
+			AND B.use_yn = 'Y'
+	</select>
+	
+</mapper>

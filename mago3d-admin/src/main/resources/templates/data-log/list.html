@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+    <title>데이터 변경 요청 이력 | mago3D</title>
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang},cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang},cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}">
+    <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang},cacheVersion=${contentCacheVersion})}">
+	
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+	<div class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+					<div class="page-content">
+
+						<!-- S: 검색 -->
+						<div class="filters">
+							<form id="searchForm" th:object="${dataInfoLog}" method="get" th:action="@{/data-log/list}" onsubmit="return searchCheck();">
+							<div class="input-group row">
+								<div class="input-set">
+									<label for="searchWord" th:text="#{search.word}"></label>
+									<select id="searchWord" name="searchWord" class="selectBoxClass">
+										<option value="" th:text="#{select}"></option>
+										<option value="data_name" th:text="데이터명"></option>
+									</select>
+									<select id="searchOption" name="searchOption" class="selectBoxClass">
+										<option value="0" th:text="#{search.same}"></option>
+										<option value="1" th:text="#{search.include}"></option>
+									</select>
+									<input type="search" id="searchValue" name="searchValue" class="m" style="float: right;" />
+								</div>
+								<div class="input-set">
+									<label for="startDate" th:text="#{search.date}"></label>
+									<input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
+									<span class="delimeter tilde">~</span>
+									<input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
+								</div>
+								<div class="input-set">
+									<label for="orderWord" th:text="#{search.order}"></label>
+									<select id="orderWord" name="orderWord" class="selectBoxClass">
+										<option value="" th:text="#{search.basic}"></option>
+										<option value="data_name" th:text="데이터명"></option>
+										<option value="insert_date" th:text="#{search.insert.date}"></option>
+									</select>
+									<select id="orderValue" name="orderValue" class="selectBoxClass">
+										<option value="" th:text="#{search.basic}"></option>
+										<option value="ASC" th:text="#{search.ascending}"></option>
+										<option value="DESC" th:text="#{search.descending.order}"></option>
+									</select>
+									<select id="listCounter" name="listCounter" class="selectBoxClass">
+										<option value="10" th:text="#{search.ten.count}"></option>
+										<option value="50" th:text="#{search.fifty.count}"></option>
+										<option value="100" th:text="#{search.hundred.count}"></option>
+									</select>
+								</div>
+								<div class="input-set">
+									<input type="submit" th:value="#{search}" />
+								</div>
+							</div>
+							</form>
+						</div>
+						<!-- E: 검색 -->
+
+						<!-- S: 데이터 변경 이력 목록 -->
+						<div class="list">
+							<form id="listForm" th:object="${dataInfoLogList}" method="post">
+								<input type="hidden" id="checkIds" name="checkIds" value="" />
+								<div class="list-header row">
+									<div class="list-desc u-pull-left">
+										<div class="list-desc u-pull-left">
+											<span th:text="#{all.d}"></span>
+											<span class="totalCount" th:text="${pagination.totalCount}"></span>
+											<span th:text="#{search.what.count}"></span>
+											<span th:text="|${pagination.pageNo} / ${pagination.lastPage}|"></span>
+											<span th:text="#{search.page}"></span>
+										</div>
+									</div>
+								</div>
+								<table class="list-table scope-col">
+									<caption class="hiddenTag">데이터 변경 이력</caption>
+									<colgroup>
+										<col class="col-checkbox"></col>
+										<col class="col-number"></col>
+										<col class="col-name"></col>
+										<col class="col-name"></col>
+										<col class="col-type"></col>
+										<col class="col-type"></col>
+										<col class="col-type"></col>
+										<col class="col-type"></col>
+										<col class="col-type"></col>
+										<col class="col-date"></col>
+									</colgroup>
+									<thead>
+										<tr>
+											<th scope="col" class="col-checkbox"><input type="checkbox" id="chkAll" name="chkAll" /></th>
+											<th scope="col" class="col-number" th:text="#{number}"></th>
+											<th scope="col" class="col-name">그룹명</th>
+											<th scope="col" class="col-name">데이터명</th>
+											<th scope="col" class="col-type">요청자</th>
+											<th scope="col" class="col-type">데이터타입</th>
+											<th scope="col" class="col-type">공개유형</th>
+											<th scope="col" class="col-type">매핑타입</th>
+											<th scope="col" class="col-type">변경유형</th>
+											<th scope="col" class="col-date">변경일</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:if="${dataInfoLogList.empty}">
+											<td colspan="10" class="col-none">데이터 변경 이력이 존재하지 않습니다.</td>
+										</tr>
+										<tr th:if="${!dataInfoLogList.empty}" th:each="dataInfoLog : ${dataInfoLogList}">
+											<td class="col-checkbox">
+												<input type="checkbox" id="dataInfoLogId_${dataInfoLog.dataLogId}" name="dataLogId" th:value="${dataInfoLog.dataLogId}" />
+											</td>
+											<td class="col-number" th:text="${pagination.rowNumber - dataInfoLogStat.index}"></td>
+											<td class="col-name ellipsis" th:text="${dataInfoLog.dataGroupName}" style="min-width:100px;max-width:100px;"></td>
+											<td class="col-name ellipsis" th:text="${dataInfoLog.dataName}" style="min-width:160px;max-width:160px;"></td>
+											<td class="col-type" th:text="${dataInfoLog.userId}"></td>
+											<td class="col-type" th:text="${dataInfoLog.dataType}"></td>
+											<td class="col-type" th:text="${dataInfoLog.sharing}"></td>
+											<td class="col-type ellipsis"  th:text="${dataInfoLog.mappingType}"style="min-width:80px;max-width:80px;"></td>
+											<td class="col-type" th:text="${dataInfoLog.changeType}"></td>
+											<td class="col-date">
+												<th:block th:text="${#temporals.format(dataInfoLog.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<!-- E: 데이터 변경 이력 목록 -->
+							</form>
+						</div>
+						<!-- 페이지 -->
+						<div th:replace="~{/common/pagination :: #paginationArea}"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+<script type="text/javascript" th:src="@{/externlib/json-viewer/json-viewer.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var searchWord = "[[${dataInfoLog.searchWord}]]";
+		var searchOption = "[[${dataInfoLog.searchOption}]]";
+		var orderWord = "[[${dataInfoLog.orderWord}]]";
+		var orderValue = "[[${dataInfoLog.orderValue}]]";
+		var listCounter = "[[${dataInfoLog.listCounter}]]";
+
+		if(searchWord != "") $("#searchWord").val("[[${dataInfoLog.searchWord}]]");
+		if(searchOption != "") $("#searchOption").val("[[${dataInfoLog.searchOption}]]");
+		if(orderWord != "") $("#orderWord").val("[[${dataInfoLog.orderWord}]]");
+		if(orderValue != "") $("#orderValue").val("[[${dataInfoLog.orderValue}]]");
+		if(listCounter != "") $("#listCounter").val("[[${dataInfoLog.listCounter}]]");
+
+		initDatePicker();
+		initCalendar(new Array("startDate", "endDate"), new Array("[[${dataInfoLog.startDate}]]", "[[${dataInfoLog.endDate}]]"));
+	});
+
+	//전체 선택
+	$("#chkAll").click(function() {
+		$(":checkbox[name=dataLogId]").prop("checked", this.checked);
+	});
+
+	function searchCheck() {
+		if($("#searchOption").val() == "1") {
+			if(confirm(JS_MESSAGE["search.option.warning"])) {
+				// go
+			} else {
+				return false;
+			}
+		}
+
+		var startDate = $("#startDate").val();
+		var endDate = $("#endDate").val();
+		if(startDate != null && startDate != "" && endDate != null && endDate != "") {
+			if(parseInt(startDate) > parseInt(endDate)) {
+				alert(JS_MESSAGE["search.date.warning"]);
+				$("#startDate").focus();
+				return false;
+			}
+		}
+
+		var searchValue = $('#searchValue').val();
+		if (searchValue) {
+			$('#searchValue').val(searchValue.trim());
+		}
+
+		return true;
+	}
+</script>
+</th:block>
+</body>
+</html>

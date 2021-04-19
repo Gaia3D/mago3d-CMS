@@ -1,0 +1,16 @@
+OS 클러스터링 솔루션
+pacemaker
+
+DB 두개에서 공유 디스크 사용
+공유 디스크가 없다면 iscsi 로 구축해도 됨
+iSCSI(Internet Small Computer System Interface)는 기존의 DAS(직접 연결 스토리지 장치)와 비슷한 네트워크 공유에 대한 로컬 스토리지 성능을 제공합니다.
+
+장애가 나거나 절체를 하여, 슬레이브가 마스터로 승격되고 마스터가 슬레이브가 되어 새로운 마스터의 데이터를 복제를 합니다.(리플리케이션이 끊어져서)
+이 때 리플리케이션을 다시 맺을 때, pg_rewind를 사용하는데, 걸리는 시간이 38G 기준으로 6분이 소요됩니다.  
+// pg_basebackup 사용 시 체크포인트를 찾는 시간이 추가로 소요
+
+pg_rewind --target-pgdata = "targetdir" --source-server="sourceserver" 
+
+pg 9.5 부터 지원
+pg_rewind
+http://minsql.com/postgres/pg_rewind%EB%A1%9C-%EC%A2%80%EB%8D%94-%ED%8E%B8%ED%95%B4%EC%A7%84-Streaming-replication-Failback/

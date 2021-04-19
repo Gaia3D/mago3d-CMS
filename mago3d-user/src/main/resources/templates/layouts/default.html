@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">mago3D</title>
+    <th:block layout:fragement="pageCustomStyle"></th:block>
+</head>
+
+<body>
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
+<div th:replace="~{/fragments/menu :: #navWrap}"></div>
+
+<th:block layout:fragment="pageCustomContent"></th:block>
+
+<th:block th:replace="/fragments/footer"></th:block>
+
+<th:block layout:fragment="pageCustomScript"></th:block>
+
+</body>
+</html>

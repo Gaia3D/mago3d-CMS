@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+	<title>사용자 목록 | mago3D</title>
+	<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+    <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+	<div class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+					<div class="page-content">
+
+                        <!-- S: 검색 -->
+						<div class="filters">
+							<form id="searchForm" th:object="${userInfo}" method="get" th:action="@{/user/list}" onsubmit="return searchCheck();">
+								<div class="input-group row">
+									<div class="input-set">
+										<label for="searchWord" th:text="#{search.word}"></label>
+										<select id="searchWord" name="searchWord" class="selectBoxClass">
+											<option value="" th:text="#{select}"></option>
+											<option value="user_id">아이디</option>
+                                            <option value="user_name">사용자명</option>
+                                            <option value="user_group_name">그룹명</option>
+                                            <option value="status">상태</option>
+										</select>
+										<select id="searchOption" name="searchOption" class="selectBoxClass">
+											<option value="0" th:text="#{search.same}"></option>
+											<option value="1" th:text="#{search.include}"></option>
+										</select>
+										<input type="search" id="searchValue" name="searchValue" class="m" style="float: right;" />
+									</div>
+									<div class="input-set">
+										<label for="startDate" th:text="#{search.date}"></label>
+										<input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
+										<span class="delimeter tilde">~</span>
+										<input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
+									</div>
+									<div class="input-set">
+										<label for="orderWord" th:text="#{search.order}"></label>
+										<select id="orderWord" name="orderWord" class="selectBoxClass">
+											<option value="" th:text="#{search.basic}"></option>
+											<option value="user_id">아이디</option>
+											<option value="user_name">사용자명</option>
+						          			<option value="user_group_name">그룹명</option>
+						          			<option value="status">상태</option>
+						          			<option value="last_signin_date">마지막 로그인</option>
+											<option value="insert_date" th:text="#{search.insert.date}"></option>
+										</select>
+										<select id="orderValue" name="orderValue" class="selectBoxClass">
+											<option value="" th:text="#{search.basic}"></option>
+											<option value="ASC" th:text="#{search.ascending}"></option>
+											<option value="DESC" th:text="#{search.descending.order}"></option>
+										</select>
+										<select id="listCounter" name="listCounter" class="selectBoxClass">
+											<option value="10" th:text="#{search.ten.count}"></option>
+											<option value="50" th:text="#{search.fifty.count}"></option>
+											<option value="100" th:text="#{search.hundred.count}"></option>
+										</select>
+									</div>
+									<div class="input-set">
+										<input type="submit" th:value="#{search}" />
+									</div>
+								</div>
+							</form>
+                        </div>
+                        <!-- E: 검색 -->
+                        
+                        <!-- S: 사용자 목록-->
+						<div class="list">
+							<form id="listForm" th:object="${userInfo}" method="post">
+								<input type="hidden" id="checkIds" name="checkIds" />
+                                <div class="list-header row">
+                                    <div class="list-desc u-pull-left">
+                                        <span th:text="#{all.d}"></span>
+                                        <span class="totalCount" th:text="${pagination.totalCount}"></span>
+                                        <span th:text="#{search.what.count}"></span>
+                                        <span th:text="|${pagination.pageNo} / ${pagination.lastPage}|"></span>
+                                        <span th:text="#{search.page}"></span>
+                                    </div>
+                                    <div class="list-functions u-pull-right">
+                                        <div style="padding-bottom: 3px;" class="button-group">
+                                            <a href="#" onclick="updateUserStatus('LOCK'); return false;" class="button" th:text="#{user.group.user.lock}"></a>
+                                            <a href="#" onclick="updateUserStatus('UNLOCK'); return false;" class="button" th:text="#{user.group.user.lock.init}"></a>
+                                        </div>
+                                        <!-- <div style="padding-bottom: 3px;" class="button-group">
+                                            <a href="#" onclick="return false;" class="button">비밀번호 초기화</a>
+                                            <a href="#" onclick="return false;" class="button">사용자 잠금</a>
+                                            <a href="#" onclick="return false;" class="button">사용자 잠금 해제</a>
+                                            <a href="#" onclick="return false;" class="button">일괄삭제</a>
+                                            <a href="#" onclick="return false;" class="button">일괄등록(EXCEL)</a>
+                                            <a href="#" onclick="return false;" class="button">다운로드(EXCEL)</a>
+                                        </div> -->
+                                    </div>
+                                </div>
+
+                                <table class="list-table scope-col" summary="사용자 목록 조회 ">
+                                    <caption class="hiddenTag">사용자 목록</caption>
+                                    <colgroup>
+                                        <col class="col-checkbox"></col>
+                                        <col class="col-number"></col>
+                                        <col class="col-name"></col>
+                                        <col class="col-name"></col>
+                                        <col class="col-name"></col>
+                                        <col class="col-type"></col>
+                                        <col class="col-functions"></col>
+                                        <col class="col-functions"></col>
+                                        <col class="col-functions"></col>
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="col-checkbox"><label for="chkAll" class="hiddenTag"></label><input type="checkbox" id="chkAll" name="chkAll" /></th>
+                                            <th scope="col" class="col-number" th:text="#{number}"></th>
+                                            <th scope="col" th:text="#{user.group.name}"></th>
+                                            <th scope="col">아이디</th>
+                                            <th scope="col">이름</th>
+                                            <th scope="col">상태</th>
+                                            <th scope="col">마지막 로그인</th>
+                                            <th scope="col">편집</th>
+                                            <th scope="col">등록일</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:if="${userList.empty}">
+                                            <td colspan="9" class="col-none">사용자 목록이 존재하지 않습니다.</td>
+                                        </tr>
+                                        
+                                        <tr th:if="${!userList.empty}" th:each="user : ${userList}">
+                                            <td class="col-checkbox">
+                                                <label for="userId_${user.userId}" class="hiddenTag"></label>
+                                                <input type="checkbox" th:id="|userId_${user.userId}|" name="userId" th:value="${user.userId}" />
+                                            </td>
+                                            <td class="col-number" th:text="${pagination.rowNumber - userStat.index}"></td>
+                                            <td class="col-name ellipsis">
+                                                <a href="#" class="view-group-detail" th:onclick="detailUserGroup([[${user.userGroupId}]]); return false;" th:text="${user.userGroupName}"></a>
+                                            </td>
+                                            <td class="col-name" th:text="${user.userId}"></td>
+                                            <td class="col-name">
+                                                <a th:href="@{/user/detail(userId=${user.userId}, pageNo=${pagination.pageNo}, ${pagination.searchParameters})}" class="linkButton" th:text="${user.userName}"></a>
+                                            </td>
+                                            <td class="col-type" th:switch="${user.status}">
+                                                <th:block th:case="0">
+                                                    <span class="icon-glyph glyph-on on" style="margin-right:3px;"></span>
+                                                    <span class="icon-text" th:text="user.group.in.use"></span>
+                                                </th:block>
+                                                <th:block th:case="1">
+                                                    <span class="icon-glyph glyph-off off" style="margin-right:3px;"></span>
+                                                    <span class="icon-text" th:text="user.group.stop.use"></span>
+                                                </th:block>
+                                                <th:block th:case="2">
+                                                    <span class="icon-glyph glyph-off off" style="margin-right:3px;"></span>
+                                                    <span class="icon-text" th:text="user.group.lock.password"></span>
+                                                </th:block>
+                                                <th:block th:case="3">
+                                                    <span class="icon-glyph glyph-off off" style="margin-right:3px;"></span>
+                                                    <span class="icon-text" th:text="user.group.dormancy"></span>
+                                                </th:block>
+                                                <th:block th:case="4">
+                                                    <span class="icon-glyph glyph-off off" style="margin-right:3px;"></span>
+                                                    <span class="icon-text" th:text="user.group.expires"></span>
+                                                </th:block>
+                                                <th:block th:case="5">
+                                                    <span class="icon-glyph glyph-off off" style="margin-right:3px;"></span>
+                                                    <span class="icon-text" th:text="user.group.delete"></span>
+                                                </th:block>
+                                                <th:block th:case="6">
+                                                    <span class="icon-glyph glyph-off off" style="margin-right:3px;"></span>
+                                                    <span class="icon-text" th:text="user.group.temporary.password"></span>
+                                                </th:block>
+                                            </td>
+                                            <td class="col-type">
+                                                <p th:text="${#temporals.format(user.lastSigninDate,'yyyy-MM-dd HH:mm')}"></p>
+                                            </td>
+                                            <td class="col-type">
+                                                <a th:href="@{/user/modify(userId=${user.userId})}" class="image-button button-edit" th:text="#{modified}"></a>&nbsp;&nbsp;
+                                                <a th:href="@{/user/delete(userId=${user.userId})}" onclick="return deleteWarning();" class="image-button button-delete" th:text="#{delete}"></a>
+                                            </td>
+                                            <td class="col-type">
+                                                <p th:text="${#temporals.format(user.insertDate,'yyyy-MM-dd HH:mm')}"></p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+							</form>
+                        </div>
+                        <!-- E: 사용자 목록-->
+
+						<!-- 페이지 -->
+                        <div th:replace="~{/common/pagination :: #paginationArea}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 사용자 그룹 -->
+    <div th:replace="~{/user-group/user-group-info-dialog :: #userGroupInfoDialog}"></div>
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		initDatePicker();
+
+		$("#searchWord").val("[[${userInfo.searchWord}]]");
+		$("#searchValue").val("[[${userInfo.searchValue}]]");
+		$("#orderWord").val("[[${userInfo.orderWord}]]");
+		$("#orderValue").val("[[${userInfo.orderValue}]]");
+
+		initCalendar(new Array("startDate", "endDate"), new Array("[[${userInfo.startDate}]]", "[[${userInfo.endDate}]]"));
+	});
+
+	//전체 선택
+	$("#chkAll").click(function() {
+		$(":checkbox[name=userId]").prop("checked", this.checked);
+	});
+
+	// 사용자 그룹 정보
+	var userGroupDialog = $("#userGroupInfoDialog").dialog({
+		autoOpen: false,
+		width: 700,
+		height: 400,
+		modal: true,
+		resizable: false
+	});
+
+	// 사용자 그룹 정보
+	function detailUserGroup(userGroupId) {
+		userGroupDialog.dialog("open");
+
+		$.ajax({
+			url: "/user-groups/detail",
+			data: {"userGroupId": userGroupId},
+			type: "GET",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+			dataType: "json",
+			success: function(msg){
+				if(msg.statusCode <= 200) {
+					$("#userGroupNameInfo").html(msg.userGroup.userGroupName);
+					$("#userGroupKeyInfo").html(msg.userGroup.userGroupKey);
+					$("#basicInfo").html(msg.userGroup.basic?'기본':'선택');
+					$("#availableInfo").html(msg.userGroup.available?'사용':'미사용');
+					$("#descriptionInfo").html(msg.userGroup.description);
+				} else {
+					alert(JS_MESSAGE[msg.errorCode]);
+				}
+			},
+			error: function(request, status, error){
+				alert(JS_MESSAGE["ajax.error.message"]);
+			}
+		});
+	}
+
+	// 사용자 잠금, 사용자 잠금 해제
+	var updateUserStatusFlag = true;
+	function updateUserStatus(statusValue) {
+		if($("input:checkbox[name=userId]:checked").length == 0) {
+			alert(JS_MESSAGE["check.value.required"]);
+			return false;
+		} else {
+			var checkedValue = "";
+			$("input:checkbox[name=userId]:checked").each(function(index){
+				checkedValue += $(this).val() + ",";
+			});
+			$("#checkIds").val(checkedValue);
+		}
+
+		if(updateUserStatusFlag) {
+			updateUserStatusFlag = false;
+			$.ajax({
+				url: "/users/status",
+				type: "POST",
+				data: {checkIds: checkedValue, statusValue: statusValue},
+				dataType: "json",
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						alert(JS_MESSAGE["update"]);
+						location.reload();
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+					}
+					updateUserStatusFlag = true;
+				},
+				error:function(request,status,error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        updateUserStatusFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+
+	function searchCheck() {
+		if($("#searchOption").val() == "1") {
+			if(confirm(JS_MESSAGE["search.option.warning"])) {
+				// go
+			} else {
+				return false;
+			}
+		}
+
+		var startDate = $("#startDate").val();
+		var endDate = $("#endDate").val();
+		if(startDate != null && startDate != "" && endDate != null && endDate != "") {
+			if(parseInt(startDate) > parseInt(endDate)) {
+				alert(JS_MESSAGE["search.date.warning"]);
+				$("#startDate").focus();
+				return false;
+			}
+		}
+		return true;
+	}
+</script>
+</th:block>
+</body>
+</html>

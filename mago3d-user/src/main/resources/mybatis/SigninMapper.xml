@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.SigninMapper">
+
+	<!-- 세션 정보 -->
+	<select id="getUserSession" parameterType="userInfo" resultType="userSession">
+		/* getUserSession */
+		SELECT A.*, B.user_group_name AS userGroupName,
+			<![CDATA[
+			CASE WHEN A.last_password_change_date < (NOW() - INTERVAL '${passwordChangeTerm} DAY') THEN true
+				ELSE false
+			END AS password_change_term_over,
+			]]>
+			<![CDATA[
+			CASE WHEN A.last_signin_date IS NULL THEN A.insert_date < (NOW() - INTERVAL '${userLastSigninLock} DAY')
+				ELSE A.last_signin_date < (NOW() - INTERVAL '${userLastSigninLock} DAY')
+			END AS user_last_signin_lock_over
+			]]>
+		FROM user_info A LEFT OUTER JOIN user_group B ON A.user_group_id = B.user_group_id
+		WHERE A.user_id = #{userId}
+	</select>
+	
+	<!-- 사용자 기본 정보 중 세션 관련 정보 수정 -->
+	<update id="updateSigninUserSession" parameterType="userSession">
+		/* updateSigninUserSession */
+		UPDATE user_info
+		SET 
+		<if test="status != null and status != ''">
+			status = #{status},
+			update_date = NOW(),
+		</if>
+		<if test="failSigninCount != null and failSigninCount gte 0">
+			fail_signin_count = #{failSigninCount},
+		</if>
+			last_signin_date = NOW()
+		WHERE user_id = #{userId}
+	</update>
+</mapper>

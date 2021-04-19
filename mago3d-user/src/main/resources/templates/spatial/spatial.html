@@ -1,0 +1,171 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="spatialContent" class="contents yScroll fullHeight" style="display:none;">
+<ul class="listDrop">
+	<li class="on">
+		<p th:text="#{spatial.radial.line.of.sight}"><span class="collapse-icon">icon</span></p>
+		<div class="listContents" id="analysisRadialLineOfSight">
+			<ul class="analysisGroup">
+				<li>
+					<label for="radialLineDataType" th:text="#{spatial.analysis.data}"></label>
+					<select id="radialLineDataType" class="dataType">
+						<option value="DEM" selected>DEM (DEM)</option>
+						<option value="DSM">DSM (DSM)</option>
+						<!-- <option value="DSM">DSM (DSM)</option> -->
+					</select>
+				</li>
+				<li>
+					<label for="rlosOffset" th:text="#{spatial.observer.offset}"></label>
+					<input type="text" id="rlosOffset" class="observerOffset" th:title="#{spatial.observer.offset}" placeholder="" value="1.7" />
+				</li>
+				<li>
+					<label for="rlosRadius" th:text="#{spatial.radius}"></label>
+					<input type="text" id="rlosRadius" class="radius" th:title="#{spatial.radius}" placeholder="" value="100" />
+				</li>
+				<li>
+					<label for="rlosSidex" th:text="#{spatial.sides}"></label>
+					<input type="text" id="rlosSidex" class="sides" th:title="#{spatial.sides}" placeholder="" value="90" />
+				</li>
+				<li>
+					<label for="radialLineObserverPoint" th:text="#{common.observer.position}"></label>
+					<input type="text" id="radialLineObserverPoint" class="withBtn observerPointMGRS" placeholder="" disabled />
+					<input type="hidden" class="observerPoint">
+					<button type="button" class="btnText drawObserverPoint" data-draw-type="POINT" th:text="#{common.position}"></button>
+				</li>
+				<li class="btns">
+					<button type="button" class="btnTextF execute" th:text="#{common.analysis}" th:title="#{spatial.radial.line.of.sight}"></button>
+					<button type="button" class="btnText reset" th:text="#{common.cancel}" th:title="#{common.cancel}"></button>
+				</li>
+			</ul>
+		</div>
+	</li>
+	<li>
+		<p th:text="#{spatial.linear.line.of.sight}"><span class="collapse-icon">icon</span></p>
+		<div id="analysisLinearLineOfSight" class="listContents">
+			<ul class="analysisGroup">
+				<li>
+					<label for="linearLineDataType" th:text="#{spatial.analysis.data}"></label>
+					<select id="linearLineDataType" class="dataType">
+						<option value="DEM" selected>DEM (DEM)</option>
+						<option value="DSM">DSM (DSM)</option>
+					</select>
+				</li>
+				<li>
+					<label for="llosOffsete" th:text="#{spatial.observer.offset}"></label>
+					<input type="text" id="llosOffsete" class="observerOffset" th:title="#{spatial.observer.offset}" placeholder="" value="1.7" />
+				</li>
+				<li>
+					<label for="linearLineObserverPoint" th:text="#{common.observer.position}"></label>
+					<input type="text" id="linearLineObserverPoint" class="withBtn observerPointMGRS" placeholder="" disabled />
+					<input type="hidden" class="observerPoint" />
+					<button type="button" class="btnText drawObserverPoint" data-draw-type="POINT" th:text="#{common.position}"></button>
+				</li>
+				<li>
+					<label for="linearLineTargetPoint" th:text="#{spatial.target.position}"></label>
+					<input type="text" id="linearLineTargetPoint" class="withBtn targetPointMGRS" placeholder="" disabled />
+					<input type="hidden" class="targetPoint" />
+					<button type="button" class="btnText drawTargetPoint" data-draw-type="POINT" th:text="#{common.position}"></button>
+				</li>
+				<li class="btns">
+					<button type="button" class="btnTextF execute" th:text="#{common.analysis}" th:title="#{spatial.linear.line.of.sight}"></button>
+					<button type="button" class="btnText reset" th:text="#{common.cancel}" th:title="#{common.cancel}"></button>
+				</li>
+			</ul>
+		</div>
+	</li>
+	<li>
+		<p th:text="#{spatial.raster.profile}"><span class="collapse-icon">icon</span></p>
+		<div class="listContents" id="analysisRasterProfile">
+			<ul class="analysisGroup">
+				<li>
+					<label for="RasterProfileDataType" th:text="#{spatial.analysis.data}"></label>
+					<select id="RasterProfileDataType" class="dataType">
+						<option value="DEM" selected>DEM (DEM)</option>
+						<option value="DSM">DSM (DSM)</option>
+					</select>
+				</li>
+				<li>
+					<label for="rpInterval" th:text="#{spatial.interval}"></label>
+					<input type="text" id="rpInterval" class="interval" value="20" placeholder="" />
+				</li>
+				<li>
+					<label for="RasterProfileDrawUserLine" th:text="#{spatial.user.line}"></label>
+					<button type="button" id="RasterProfileDrawUserLine" class="btnText drawUserLine" th:text="#{common.pick.location}" data-draw-type="LINE"></button>
+					<input type="hidden" class="userLine">
+					<div class="coordsText"></div>
+				</li>
+				<li class="btns">
+					<button type="button" class="btnTextF execute" th:text="#{common.analysis}" th:title="#{spatial.raster.profile}"></button>
+					<button type="button" class="btnText reset" th:text="#{common.cancel}" th:title="#{common.cancel}"></button>
+				</li>
+
+				<li class="profileInfo">
+					<div class="legend"></div>
+				</li>
+			</ul>
+		</div>
+	</li>
+	<li id="analysisRasterHighLowPointsList">
+		<p th:text="#{spatial.raster.high.low.points}"><span class="collapse-icon">icon</span></p>
+		<div id="analysisRasterHighLowPoints" class="listContents">
+			<ul class="analysisGroup">
+				<li>
+					<label for="rasterHighLowPointsDataType" th:text="#{spatial.analysis.data}"></label>
+					<select id="rasterHighLowPointsDataType" class="dataType">
+						<option value="DEM" selected>DEM (DEM)</option>
+						<option value="DSM">DSM (DSM)</option>
+					</select>
+				</li>
+				<li>
+					<label for="rasterHighLowPointsAreaType" th:text="#{spatial.area.type}"></label>
+					<select id="rasterHighLowPointsAreaType" class="areaType">
+						<option value="useArea" th:text="#{spatial.user.area}"></option>
+						<option value="extent" th:text="#{spatial.map.extent}"></option>
+					</select>
+				</li>
+				<li class="wrapCropShape">
+					<label for="rasterHighLowPointsDrawCropShape" th:text="#{spatial.crop.shape}"></label>
+					<input type="hidden" class="cropShape" />
+					<button type="button" id="rasterHighLowPointsDrawCropShape" class="btnText drawCropShape" th:text="#{common.pick.location}" data-draw-type="POLYGON"></button>
+				</li>
+				<li class="extentInfo" style="display:none;">
+					<span style="color:red;" th:text="#{spatial.extent.info}"></span>
+				</li>
+				<li>
+					<label for="rasterHighLowPointsValueType" th:text="#{spatial.value.type}"></label>
+					<select id="rasterHighLowPointsValueType" class="valueType">
+						<option value="High" th:text="#{spatial.high}"></option>
+						<option value="Low" th:text="#{spatial.low}"></option>
+					</select>
+				</li>
+				<li class="btns">
+					<input type="hidden" class="wcsExtent">
+					<button type="button" class="btnTextF execute" th:text="#{common.analysis}"></button>
+					<button type="button" class="btnText reset" th:text="#{common.cancel}" th:title="#{spatial.raster.high.low.points}"></button>
+				</li>
+			</ul>
+		</div>
+	</li>
+	<li>
+		<p th:text="#{spatial.threat.dome}"><span class="collapse-icon">icon</span></p>
+		<div class="listContents" id="analysisRangeDome">
+			<ul class="analysisGroup">
+				<li>
+					<label for="rdRadius" th:text="#{spatial.radius}"></label>
+					<input type="text" id="rdRadius" class="radius" value="1000" placeholder="" />
+				</li>
+				<li>
+					<label for="rangeDomeObserverPoint" th:text="#{common.observer.position}"></label>
+					<input type="text" id="rangeDomeObserverPoint" class="withBtn observerPointMGRS" placeholder="" disabled>
+					<input type="hidden" class="observerPoint">
+					<button type="button" class="btnText drawObserverPoint" th:text="#{common.pick.location}" data-draw-type="POINT"></button>
+				</li>
+				<li class="btns">
+					<button type="button" class="btnTextF execute" th:text="#{common.analysis}" th:title="#{spatial.threat.dome}"></button>
+					<button type="button" class="btnText reset" th:text="#{common.cancel}" th:title="#{common.cancel}"></button>
+				</li>
+			</ul>
+		</div>
+	</li>
+</ul>
+</div>
+</html>

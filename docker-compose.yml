@@ -1,0 +1,39 @@
+version: '3'
+volumes:
+  mago3d-geoserver-data:
+
+services:
+  db:
+    container_name: mago3d-db
+    restart: always
+    build:
+      context: ./doc/docker/postgres
+      dockerfile: Dockerfile
+    volumes:
+      - ./doc/database:/database:ro
+      - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh:ro
+    ports:
+      - 15432:5432
+      - 18080:8080
+
+  geoserver:
+    container_name: mago3d-geoserver
+    restart: always
+    image: gaia3d/geoserver:mago3d-2.17.3
+#    build:
+#      context: ./doc/docker/geoserver
+#      dockerfile: Dockerfile
+    volumes:
+      - mago3d-geoserver-data:/geoserver-data
+    network_mode: "service:db"
+
+  rabbitmq:
+    container_name: mago3d-rabbitmq
+    restart: always
+    image: gaia3d/rabbitmq:mago3d-3.8.9
+#    build:
+#      context: ./doc/docker/rabbitmq
+#      dockerfile: Dockerfile
+    ports:
+      - 5672:5672
+      - 15672:15672

@@ -1,0 +1,4 @@
+postgresql 설정 기본값 잡아 주는 사이트
+ - https://pgtune.leopard.in.ua/
+ - case by case 이지만.... 아무것도 없는 것보단 참고 하는게 좋을 듯 싶다.
+

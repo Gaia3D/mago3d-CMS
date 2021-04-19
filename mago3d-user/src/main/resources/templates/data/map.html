@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow"/>
+	<title><th:block th:text="#{data.page.title}"></th:block></title>
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/externlib/cesium/Widgets/widgets.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/geostats/geostats.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/kotSlider/range.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/tuidatepicker-4.0.3/tui-date-picker.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/css/{lang}/user-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/json-viewer/json-viewer.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/css-toggle-switch/toggle-switch.css(cacheVersion=${contentCacheVersion})}" />
+	<style type="text/css">
+		.mapWrap {
+			float:right;
+			width: calc(100% - 60px);
+			height: 100%;
+			background-color: #eee;
+		}
+    </style>
+</head>
+<body>
+
+<div th:replace="~{/fragments/header :: #headerWrap}"></div>
+<div id="loadingWrap">
+	<div class="loading">
+		<span class="spinner"></span>
+	</div>
+</div>
+<div id="wrap" style="min-height: 560px;"> <!-- 왼쪽 메뉴 높이에 맞춰서 설정해 줘야함 -->
+	<!-- S: NAVWRAP -->
+	<div class="navWrap">
+		<div th:replace="~{/fragments/menu :: #navWrap}"></div>
+		<!-- E: NAVWRAP -->
+		<div id="contentsWrap" class="contentsWrap" style="display: none;">
+			<div id="searchContent" class="contents fullHeight" style="display:none;">
+				<div th:replace="~{/search/district :: #districtWrap}"></div>
+			</div>
+			<div id="dataContent" class="contents-margin-default fullHeight">
+				<div class="tabs">
+					<ul id="dataInfoTab" class="tab tab-divide">
+						<li id="dataGroupTab" th:text="#{data.group.list.tab.menu}" data-nav="dataGroupInfoContent"></li>
+						<li id="dataListTab" class="on" th:text="#{data.list.tab.menu}" data-nav="dataInfoContent"></li>
+					</ul>
+				</div>
+				<div th:replace="~{/data/map-data :: #dataInfoContent}"></div>
+				<div th:replace="~{/data/map-data-group :: #dataGroupInfoContent}"></div>
+			</div>
+			<!-- E: 데이터 -->
+
+			<div th:replace="~{/spatial/spatial :: #spatialContent}"></div>
+
+			<div th:replace="~{/simulation/simulation :: #simulationContent}"></div>
+
+			<div th:replace="~{/layer/list :: #layerContent}"></div>
+
+			<div th:replace="~{/user-policy/modify :: #userPolicyContent}"></div>
+
+			<!-- E: CONTENTSBTN -->
+		</div>
+		<div class="contentsBtn">
+			<button type="button" id="closeLeftBtn" th:title="#{common.close}" style="display:none;">Close</button>
+		</div>
+		<!-- E: CONTENTSWRAP -->
+
+	</div>
+	<!-- E: NAVWRAP -->
+
+	<!-- S: GNB WRAP -->
+	<div th:replace="~{/fragments/global-search :: #gnbWrap}"></div>
+	<!-- E: GNB WRAP -->
+
+	<!-- CTRLWRAP -->
+	<div th:replace="~{/fragments/toolbar :: #toolbarWrap}"></div>
+	<!-- E: CTRLWRAP -->
+
+	<!-- MAP -->
+	<div id="magoContainer" class="mapWrap">
+		<div class="analysisGraphic">
+			<canvas id="analysisGraphic"></canvas>
+			<div class="closeGraphic">X</div>
+		</div>
+		<div class="sliderWrap" id="csRange">
+			<label for="rangeInput" class="hiddenTag">caRange</label>
+			<input id="rangeInput"/>
+		</div>
+		<div class="sliderWrap" id="saRange">
+			<label for="timeInput" class="hiddenTag">saRange</label>
+			<input id="timeInput"/>
+		</div>
+	</div>
+	<canvas id="objectLabel"></canvas>
+	<!-- E: MAP -->
+</div>
+<!-- E: WRAP -->
+<div th:replace="~{/data/data-dialog-template :: #dataDialogWrap}"></div>
+<div th:replace="~{/data/data-group-dialog-template :: #dataGroupDialogWrap}"></div>
+<div th:replace="~{/data/map-data-template :: #dataListSource}"></div>
+<div th:replace="~{/data/map-data-group-template :: #dataGroupListSource}"></div>
+<div th:replace="~{/data/data-attribute-dialog :: #dataAttributeDialog}"></div>
+<div th:replace="~{/data/data-object-attribute-dialog :: #dataObjectAttributeDialog}"></div>
+<div th:replace="~{/data/sample-data-attribute-template :: #sampleDataAttributeDialogWrap}"></div>
+<div th:replace="~{/issue/issue-dialog :: #issueForm}"></div>
+<div th:replace="~{/simulation/simul-solar-dialog :: #simulSolarDialog}"></div>
+
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/json-viewer/json-viewer.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/handlebars-4.1.2/handlebars.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/handlebars-helper.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/cesium/Cesium.js}"></script>
+<script type="text/javascript" th:src="@{/externlib/cesium-geoserver-terrain-provider/GeoserverTerrainProvider.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/geostats/geostats.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/chartjs/Chart.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/kotSlider/range.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/decodeTextAlternative/encoding-indexes.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/decodeTextAlternative/encoding.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/moment-2.22.2/moment-with-locales.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/tuidatepicker-4.0.3/tui-date-picker.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/mago3d.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/mago3d_lx.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/ui-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/spatial-analysis.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/district-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/wps-request.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/search.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/data-info.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/user-policy.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/simulation.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/layer.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-data-controll.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-init.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/issue-controller.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-data.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/map-data-group.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+
+	var MAGO3D_INSTANCE;
+	var NDTP = NDTP || {
+		policy : {},
+		dataGroup : {},
+		baseLayers : {}
+	};
+
+	initPolicy(function(policy, baseLayers){
+		NDTP.policy = policy;
+		NDTP.baseLayers = baseLayers;
+		magoInit();
+	});
+
+	function magoInit() {
+		var geoPolicyJson = NDTP.policy;
+
+		var cesiumViewerOption = {};
+		cesiumViewerOption.infoBox = false;
+		cesiumViewerOption.navigationHelpButton = false;
+		cesiumViewerOption.selectionIndicator = false;
+		cesiumViewerOption.homeButton = false;
+		cesiumViewerOption.fullscreenButton = false;
+		cesiumViewerOption.geocoder = false;
+		cesiumViewerOption.baseLayerPicker = false;
+		cesiumViewerOption.sceneModePicker = false;
+
+		/**
+		 * @param {Stirng} containerId container div id. required.
+		 * @param {object} serverPolicy mage3d geopolicy. required.
+		 * @param {object} callback loadstart callback, loadend callback. option.
+		 * @param {object} options Cesium viewer parameter. option.
+		 * @param {Cesium.Viewer} legacyViewer 타 시스템과의 연동의 경우 view 객체가 생성되어서 넘어 오는 경우가 있음. option.
+		*/
+		MAGO3D_INSTANCE = new Mago3D.Mago3d('magoContainer', geoPolicyJson, {loadend : magoLoadEnd}, cesiumViewerOption);
+
+	}
+
+	function magoLoadEnd(e) {
+		var magoInstance = e;
+		var geoPolicyJson = NDTP.policy;
+		var viewer = magoInstance.getViewer();
+		var magoManager = magoInstance.getMagoManager();
+		var f4dController = magoInstance.getF4dController();
+
+		// TODO : 세슘 MAP 선택 UI 제거,엔진에서 처리로 변경 예정.
+		if(viewer.baseLayerPicker) viewer.baseLayerPicker.destroy();
+		viewer.scene.globe.depthTestAgainstTerrain = true;
+		//viewer.scene.screenSpaceCameraController.minimumZoomDistance = 10;
+
+		magoManager.on(Mago3D.MagoManager.EVENT_TYPE.MOUSEMOVE, function(result) {
+			//console.info(result);
+		});
+
+		// mago3d logo 추가
+		Mago3D.tempCredit(viewer);
+
+		//우측 상단 지도 컨트롤러
+		MapControll(viewer);
+		//공간분석 기능 수행
+		SpatialAnalysis(magoInstance);
+		// 행정 구역 이동
+        // DistrictControll(magoInstance);
+
+        dataGroupList();
+        mapDataGroupList(1, null);
+        mapDataInfoList(1, null, null, null);
+
+        Simulation(magoInstance);
+        // 환경 설정.
+        UserPolicy(magoInstance);
+        // 시민참여
+        // CivilVoice(magoInstance);
+        // 기본 레이어 랜더링
+        setTimeout(function(){
+        	NDTP.map = new mapInit(magoInstance, NDTP.baseLayers, geoPolicyJson);
+        	NDTP.map.initLayer();
+        	cesiumCreditAlt(); //웹접근성
+        }, geoPolicyJson.initDuration * 1000);
+
+		//지도상에 데이터 다루는거
+		MapDataControll(magoInstance);
+
+		NDTP.issueController = new IssueController(magoInstance);
+	}
+
+	// smart tiling data flyTo
+	function gotoFly(longitude, latitude, altitude) {
+		if(longitude === null || longitude === '' || latitude === null || latitude === '' || altitude === null || altitude === '') {
+			alert(JS_MESSAGE["location.invalid"]);
+			return;
+		}
+
+		gotoFlyAPI(MAGO3D_INSTANCE, longitude, latitude, 500, 3);
+		hereIamMarker(longitude, latitude, altitude);
+	}
+
+	function flyTo(dataGroupId, dataKey) {
+		if(dataGroupId === null || dataGroupId === '' || dataKey === null || dataKey === '') {
+			alert(JS_MESSAGE["location.invalid"]);
+			return;
+		}
+
+		//  searchDataAPI
+		 searchDataAPI(MAGO3D_INSTANCE, dataGroupId, dataKey);
+
+		 var node = MAGO3D_INSTANCE.getMagoManager().hierarchyManager.getNodeByDataKey(dataGroupId, dataKey);
+		 var geographic = node.data.bbox.geographicCoord;
+		 hereIamMarker(geographic.longitude, geographic.latitude, geographic.altitude);
+	}
+
+	var hereIamTimeOut;
+	function hereIamMarker(longitude, latitude, altitude) {
+		var magoManager = MAGO3D_INSTANCE.getMagoManager();
+		if(!magoManager.speechBubble) {
+			magoManager.speechBubble = new Mago3D.SpeechBubble();
+		}
+		var sb = magoManager.speechBubble;
+		removeHearIam();
+		if(hereIamTimeOut) {
+			clearTimeout(hereIamTimeOut);
+		}
+		var commentTextOption = {
+			pixel:12,
+			color:'black',
+			borderColor:'white',
+			text: JS_MESSAGE["here.it.is"]
+		}
+
+		var img = sb.getPng([80,32],'#94D8F6', commentTextOption);
+
+		var options = {
+			positionWC    : Mago3D.ManagerUtils.geographicCoordToWorldPoint(longitude, latitude, parseFloat(altitude)+5),
+			imageFilePath : img
+		};
+
+		var omId = new Date().getTime();
+		var om = magoManager.objMarkerManager.newObjectMarker(options, magoManager);
+		om.id = omId;
+		om.hereIam = true;
+
+		var effectOption = {
+			effectType : "zMovement",
+			durationSeconds : 9.9,
+			zVelocity : 100,
+			zMax : 30,
+			zMin : 0
+		};
+		var effect = new Mago3D.Effect(effectOption);
+		magoManager.effectsManager.addEffect(omId, effect);
+
+		hereIamTimeOut = setTimeout(function() {
+			removeHearIam();
+		},10000);
+
+		function removeHearIam() {
+			magoManager.objMarkerManager.setMarkerByCondition(function(om){
+				return !om.hereIam;
+			});
+		}
+	}
+
+	function flyToGroup(longitude, latitude, altitude, duration) {
+		if(longitude === null || longitude === '' || latitude === null || latitude === '' || altitude === null || altitude === '') {
+			alert(JS_MESSAGE["location.invalid"]);
+			return;
+		}
+		gotoFlyAPI(MAGO3D_INSTANCE, parseFloat(longitude), parseFloat(latitude), parseFloat(altitude), parseFloat(duration));
+	}
+
+	// 데이터 정보 다이얼 로그
+	var dataInfoDialog = $( "#dataInfoDialogDHTML" ).dialog({
+		autoOpen: false,
+		width: 500,
+		height: 720,
+		modal: true,
+		overflow : "auto",
+		resizable: false
+	});
+
+	//데이터 상세 정보 조회
+	function detailDataInfo(url) {
+		dataInfoDialog.dialog( "open" );
+		$.ajax({
+			url: url,
+			type: "GET",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+			dataType: "json",
+			success: function(msg){
+				if(msg.statusCode <= 200) {
+					dataInfoDialog.dialog( "option", "title", msg.dataInfo.dataName + JS_MESSAGE["more.information"]);
+
+				    var template = Handlebars.compile($("#dataInfoSource").html());
+				    var dataInfoHtml = template(msg.dataInfo);
+
+				    $("#dataInfoDialogDHTML").html("").append(dataInfoHtml);
+				} else {
+					alert(JS_MESSAGE[msg.errorCode]);
+				}
+			},
+			error:function(request,status,error){
+				alert(JS_MESSAGE["ajax.error.message"]);
+			}
+		});
+	}
+
+	// 데이터 속성 다이얼 로그
+	var dataAttributeDialog = $( "#dataAttributeDialog" ).dialog({
+		autoOpen: false,
+		width: 600,
+		height: 350,
+		modal: true,
+		resizable: false
+	});
+	// 부산 데이터 속성용 다이얼 로그
+	var sampleDataAttributeDialog = $( "#sampleDataAttributeDialogDHTML" ).dialog({
+		autoOpen: false,
+		width: 500,
+		height: 600,
+		modal: true,
+		resizable: false
+	});
+
+	// 데이터 속성
+	function detailDataAttribute(dataId, dataGroupKey, dataKey, dataName) {
+		if(	dataGroupKey !== "busan-mj" ) {
+			dataAttributeDialog.dialog( "open" );
+			$("#dataNameForAttribute").html(dataName);
+			$.ajax({
+				url: "/datas/attributes/" + dataId,
+				type: "GET",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				dataType: "json",
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						if(msg.dataAttribute !== null) {
+							//$("#dataAttributeForOrigin").html(msg.dataAttribute.attributes);
+							$("#dataAttributeViewer").html("");
+							var jsonViewer = new JSONViewer();
+							document.querySelector("#dataAttributeViewer").appendChild(jsonViewer.getContainer());
+							jsonViewer.showJSON(JSON.parse(msg.dataAttribute.attributes), -1, -1);
+						}
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+					}
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
+				}
+			});
+		} else {
+			sampleDataAttributeDialog.dialog( "open" );
+			$.ajax({
+				url: "/attribute-repository/" + dataKey,
+				type: "GET",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				dataType: "json",
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						if(msg.attributeRepository !== null) {
+						    var template = Handlebars.compile($("#sampleDataAttributeSource").html());
+						    var html = template(msg.attributeRepository);
+						    $("#sampleDataAttributeDialogDHTML").html("").append(html);
+						}
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+					}
+				},
+				error:function(request,status,error){
+					alert(JS_MESSAGE["ajax.error.message"]);
+				}
+			});
+		}
+	}
+
+	// 데이터 Object 속성 다이얼 로그
+	var dataObjectAttributeDialog = $( "#dataObjectAttributeDialog" ).dialog({
+		autoOpen: false,
+		width: 800,
+		height: 550,
+		modal: true,
+		resizable: false
+	});
+
+	// 데이터 Object 속성
+	function detailDataObjectAttribute(dataId, dataName) {
+		dataObjectAttributeDialog.dialog( "open" );
+		$("#dataNameForObjectAttribute").html(dataName);
+
+		$.ajax({
+			url: "/datas/object/attributes/" + dataId,
+			type: "GET",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+			dataType: "json",
+			success: function(msg){
+				if(msg.statusCode <= 200) {
+					if(msg.dataObjectAttribute !== null) {
+						//$("#dataObjectAttributeForOrigin").html(msg.dataObjectAttribute.attributes);
+						$("#dataObjectAttributeViewer").html("");
+						var jsonViewer = new JSONViewer();
+						document.querySelector("#dataObjectAttributeViewer").appendChild(jsonViewer.getContainer());
+						jsonViewer.showJSON(JSON.parse(msg.dataObjectAttribute.attributes), -1, -1);
+					}
+				} else {
+					alert(JS_MESSAGE[msg.errorCode]);
+				}
+			},
+			error:function(request,status,error){
+				alert(JS_MESSAGE["ajax.error.message"]);
+			}
+		});
+	}
+
+	// 데이터 그룹 다이얼로그
+	var dataGroupDialog = $( "#dataGroupDialogDHTML" ).dialog({
+		autoOpen: false,
+		width: 500,
+		height: 620,
+		modal: true,
+		overflow : "auto",
+		resizable: false
+	});
+
+	// 데이터 그룹 상세 정보 조회
+	function detailDataGroup(url) {
+		dataGroupDialog.dialog( "open" );
+		$.ajax({
+			url: url,
+			type: "GET",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+			dataType: "json",
+			success: function(msg){
+				if(msg.statusCode <= 200) {
+					dataGroupDialog.dialog( "option", "title", msg.dataGroup.dataGroupName + JS_MESSAGE["more.information"]);
+
+				    var template = Handlebars.compile($("#dataGroupSource").html());
+				    var dataGroupHtml = template(msg.dataGroup);
+
+				    $("#dataGroupDialogDHTML").html("").append(dataGroupHtml);
+				} else {
+					alert(JS_MESSAGE[msg.errorCode]);
+				}
+			},
+			error:function(request,status,error){
+				alert(JS_MESSAGE["ajax.error.message"]);
+			}
+		});
+	}
+
+	// 이슈 등록 버튼 클릭
+	$("#issueButton").click(function() {
+		$('#issueTitle,#issueContents').prop('readonly',false);
+		$('#issueSaveButton').parent('.btns').show();
+		issueDialog.dialog( "open" );
+		issueDialog.dialog( "option", "title", JS_MESSAGE["issue.register"]);
+	});
+	// 이슈 다이얼 로그
+	var issueDialog = $( "#issueDialog" ).dialog({
+		autoOpen: false,
+		width: 500,
+		height: 500,
+		modal: true,
+		overflow : "auto",
+		resizable: false
+	});
+
+	// 이슈 상세 정보 조회
+	function detailIssueInfo(issueId) {
+
+		$.ajax({
+			url: "/issues/" + issueId,
+			type: "GET",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+			dataType: "json",
+			success: function(msg){
+				if(msg.statusCode <= 200) {
+					issueDialog.dialog( "open" );
+					issueDialog.dialog( "option", "title", JS_MESSAGE["issue.details"]);
+					$('#issueSaveButton').parent('.btns').hide();
+
+					$('#issueTitle,#issueContents').prop('readonly',true);
+
+					var issue = msg.issue;
+					$('#issueDataGroupName').text(issue.dataGroupName);
+					$('#issueDataName').text(issue.dataKey);
+					$('#issueLongitude').val(issue.longitude);
+					$('#issueLatitude').val(issue.latitude);
+					$('#issueAltitude').val(issue.altitude);
+					$('#issueTitle').val(issue.title);
+					$('#issueContents').val(issue.contents);
+				} else {
+					alert(JS_MESSAGE[msg.errorCode]);
+				}
+			},
+			error:function(request,status,error){
+				alert(JS_MESSAGE["ajax.error.message"]);
+			}
+		});
+	}
+
+	// 이슈 등록
+	var insertIssueFlag = true;
+	function insertIssue() {
+		if (validate() == false) {
+			return false;
+		}
+		if(insertIssueFlag) {
+			insertIssueFlag = false;
+			var lon = $("#issueLongitude").val();
+			var lat = $("#issueLatitude").val();
+			var alt = $("#issueAltitude").val();
+			$.ajax({
+				url: "/issues",
+				type: "POST",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+				data: { "dataId" : $("#issueDataId").val(), "dataGroupId" : $("#issueDataGroupId").val(),
+					"dataKey" : $("#issueDataKey").val(), "dataGroupName" : $("#issueDataGroupName").val(), "objectKey" : $("#issueObjectKey").val(),
+					"longitude" : lon, "latitude" : lat, "altitude" : alt,
+					"title" : $("#issueTitle").val(), "contents" : $("#issueContents").val()
+				},
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						alert(JS_MESSAGE["insert"]);
+						insertIssueFlag = true;
+						issueDialog.dialog('close');
+
+						NDTP.issueController.addIssue({
+							longitude : parseFloat(lon),
+							latitude : parseFloat(lat),
+							altitude : parseFloat(alt),
+							issueId : msg.issueId
+						});
+						/* var magoManager = this.magoInstance.getMagoManager();
+						if(Array.isArray(issue)) {
+							for(var i in issue) {
+								this.addIssue(issue[i]);
+							}
+						} else {
+							var point = Mago3D.ManagerUtils.geographicCoordToWorldPoint(issue.longitude,issue.latitude,issue.altitude);
+							option.positionWC = point;
+
+							var objMarker = magoManager.objMarkerManager.newObjectMarker(option, magoManager);
+							objMarker.issueId = issue.issueId;
+						} */
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+						console.log("---- " + msg.message);
+					}
+					insertIssueFlag = true;
+				},
+				error:function(request, status, error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        insertIssueFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+
+	function validate() {
+		if ($("#issueTitle").val() === "") {
+			alert(JS_MESSAGE["issue.title.empty"]);
+			$("#issueTitle").focus();
+			return false;
+		}
+		if ($("#issueContents").val() === "") {
+			alert(JS_MESSAGE["issue.content.empty"]);
+			$("#issueContents").focus();
+			return false;
+		}
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.AccessLogMapper">
+
+    <!-- 서비스 요청 이력 등록 -->
+	<insert id="insertAccessLog" parameterType="accessLog" >
+		/* insertAccessLog */
+		<selectKey keyProperty="accessLogId" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('access_log_seq')
+  		</selectKey>
+		INSERT INTO access_log(
+			access_log_id, user_id, user_name, client_ip, request_uri, parameters, user_agent, referer
+		) VALUES (
+			#{accessLogId}, #{userId}, #{userName}, #{clientIp}, #{requestUri}, #{parameters}, #{userAgent}, #{referer}
+		)
+	</insert>
+
+</mapper>

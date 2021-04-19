@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.DataSmartTilingMapper">
+
+	<!-- 파일 정보 저장 -->
+	<insert id="insertDataSmartTilingFileInfo" parameterType="dataSmartTilingFileInfo" >
+		/* insertDataSmartTilingFileInfo */
+		<selectKey keyProperty="dataSmartTilingFileInfoId" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('data_smart_tiling_file_info_seq')
+  		</selectKey>
+		INSERT INTO data_smart_tiling_file_info (
+			data_smart_tiling_file_info_id, data_group_id, user_id, file_name, file_real_name, file_path, file_size, file_ext
+		) VALUES (
+			#{dataSmartTilingFileInfoId}, #{dataGroupId}, #{userId}, #{fileName}, #{fileRealName}, #{filePath}, #{fileSize}, #{fileExt}
+		)
+	</insert>
+	
+	<!-- 파일 파싱 로그 저장 -->
+	<insert id="insertDataSmartTilingFileParseLog" parameterType="dataSmartTilingFileParseLog">
+		/* insertDataSmartTilingFileParseLog */
+		<selectKey keyProperty="dataSmartTilingFileParseLogId" resultType="long" order="BEFORE">
+			SELECT NEXTVAL('data_smart_tiling_file_parse_log_seq');
+		</selectKey>
+		INSERT INTO data_smart_tiling_file_parse_log (
+			data_smart_tiling_file_parse_log_id	, data_smart_tiling_file_info_id, identifier_value, error_code, log_type, status
+		) VALUES (
+			#{dataSmartTilingFileParseLogId}, #{dataSmartTilingFileInfoId}, #{identifierValue}, #{errorCode}, #{logType}, #{status}
+		)
+	</insert>
+	
+	<!-- Smart Tiling Data 정보 수정 -->
+	<update id="updateDataSmartTilingFileInfo" parameterType="dataSmartTilingFileInfo">
+		/* updateDataSmartTilingFileInfo */
+		UPDATE data_smart_tiling_file_info
+		SET total_count = #{totalCount},
+			parse_success_count = #{parseSuccessCount},
+			parse_error_count = #{parseErrorCount},
+			insert_success_count = #{insertSuccessCount},
+			insert_error_count = #{insertErrorCount}
+		WHERE data_smart_tiling_file_info_id = #{dataSmartTilingFileInfoId}
+	</update>
+	
+</mapper>

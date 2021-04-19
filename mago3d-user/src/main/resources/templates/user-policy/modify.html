@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="userPolicyContent" class="contents yScroll fullHeight" style="display:none;">
+<div class="userPolicyContentWrap">
+<form id="userPolicy" th:object="${userPolicy}" method="post" th:action="@{#}" onsubmit="return false;">
+<input type="hidden" id="userPolicyId" name="userPolicyId"/>
+<div class="userPolicyContent">
+	<div class="button-group-align marB10">
+		<h3 class="h3-heading" th:text="#{policy.init.position}"></h3>
+		<button type="button" id="findStartPoint" class="btnTextF right-align" th:text="#{common.select}"></button>
+	</div>
+	<div class="userPolicyContentDetail">
+		<div class="form-group form-group-policy">
+			<label for="initLongitude" th:text="#{common.longitude}"></label>
+			<input type="text" id="initLongitude" name="initLongitude" th:field="*{initLongitude}" size="15" />M
+		</div>
+		<div class="form-group form-group-policy">
+			<label for="initLatitude" th:text="#{common.latitude}"></label>
+			<input type="text" id="initLatitude" name="initLatitude" th:field="*{initLatitude}" size="15" />M
+		</div>
+		<div class="form-group form-group-policy">
+			<label for="initAltitude" th:text="#{common.altitude}"></label>
+			<input type="text" id="initAltitude" name="initAltitude" th:field="*{initAltitude}" size="15" />M
+		</div>
+		<div class="form-group form-group-policy">
+			<label for="initDuration" th:text="#{policy.init.duration}"></label>
+			<input type="text" id="initDuration" name="initDuration" th:field="*{initDuration}" size="15" />S
+		</div>
+	</div>
+</div>
+<div class="userPolicyContent">
+	<h3 class="h3-heading marB10">FOV (Field Of View)</h3>
+	<div class="userPolicyContentDetail">
+		<div class="form-group form-group-policy">
+			<label for="initfieldOfView" th:text="#{policy.init.fov}"></label>
+			<input type="text" id="initfieldOfView" name="initDefaultFov" th:field="*{initDefaultFov}" size="14" />M
+		</div>
+	</div>
+</div>
+<div class="userPolicyContent">
+	<div class="button-group-align marB10">
+		<h3 class="h3-heading">LOD (Level Of Detail)</h3>
+		<button type="button" id="changeLodButton" class="btnTextF right-align" th:text="#{common.apply}"></button>
+	</div>
+	<div class="userPolicyContentDetail">
+		<div class="form-group form-group-policy">
+			<label for="geoLod0">LOD0</label>
+			<input type="text" id="geoLod0" name="lod0" th:field="*{lod0}" size="15" />M
+		</div>
+		<div class="form-group form-group-policy">
+			<label for="geoLod1">LOD1</label>
+			<input type="text" id="geoLod1" name="lod1" th:field="*{lod1}" size="15" />M
+		</div>
+		<div class="form-group form-group-policy">
+			<label for="geoLod2">LOD2</label>
+			<input type="text" id="geoLod2" name="lod2" th:field="*{lod2}" size="15" />M
+		</div>
+		<div class="form-group form-group-policy">
+			<label for="geoLod3">LOD3</label>
+			<input type="text" id="geoLod3" name="lod3" th:field="*{lod3}" size="15" />M
+		</div>
+		<div class="form-group form-group-policy">
+			<label for="geoLod4">LOD4</label>
+			<input type="text" id="geoLod4" name="lod4" th:field="*{lod4}" size="15" />M
+		</div>
+		<div class="form-group form-group-policy">
+			<label for="geoLod5">LOD5</label>
+			<input type="text" id="geoLod5" name="lod5" th:field="*{lod5}" size="15" />M
+		</div>
+	</div>
+</div>
+<div class="userPolicyContent">
+	<div class="button-group-align marB10">
+		<h3 class="h3-heading">SSAO</h3>
+		<button type="button" id="changeSsaoButton" class="btnTextF right-align" th:text="#{common.apply}"></button>
+	</div>
+	<div class="userPolicyContentDetail">
+		<div class="form-group form-group-policy">
+			<label for="ssaoRadius" th:text="#{policy.init.ssao}"></label>
+			<input type="text" id="ssaoRadius" name="ssaoRadius" th:field="*{ssaoRadius}" size="15" />M
+		</div>
+	</div>
+</div>
+<button class="focusA btn-full" th:text="#{common.save}" th:onclick="'update();'"></button>
+</form>
+</div>
+<script type="text/javascript" src="/externlib/jquery-3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+});
+
+var updateUserPolicyFlag = true;
+function update() {
+	if(updateUserPolicyFlag) {
+		updateUserPolicyFlag = false;
+		var url = "/user-policy/update";
+		var formData = $("#userPolicy").serialize();
+		$.ajax({
+			url: url,
+			type: "POST",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+			data: formData,
+			dataType: "json",
+			success: function(msg) {
+				if(msg.statusCode <= 200) {
+					alert(JS_MESSAGE["save"]);
+				} else {
+					alert(msg.message);
+					console.log("---- " + msg.message);
+				}
+				updateUserPolicyFlag = true;
+			},
+	        error: function(request, status, error) {
+	        	alert(JS_MESSAGE["ajax.error.message"]);
+	        	updateUserPolicyFlag = true;
+	        }
+		});
+	} else {
+		alert(JS_MESSAGE["button.dobule.click"]);
+		return;
+	}
+}
+</script>
+</div>
+</html>

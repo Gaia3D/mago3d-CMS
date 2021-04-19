@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.LayerMapper">
+
+    <!-- Layer 총 건수 -->
+    <select id="getLayerTotalCount" parameterType="layer" resultType="long">
+        /* getLayerTotalCount */
+        SELECT COUNT(layer_id)
+        FROM layer a
+        LEFT JOIN layer_group b
+        ON a.layer_group_id = b.layer_group_id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="layerGroupId != null and layerGroupId gt 0">
+			AND a.layer_group_id = #{layerGroupId}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+			AND ${searchWord} = #{searchValue}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+			AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+			<![CDATA[
+			AND a.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+			<![CDATA[
+			AND a.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+		</trim>
+    </select>
+
+    <!-- Layer 목록 -->
+    <select id="getListLayer" parameterType="layer" resultType="layer">
+        /* getListLayer */
+        SELECT a.*, b.layer_group_name
+        FROM layer a
+        LEFT JOIN layer_group b
+        ON a.layer_group_id = b.layer_group_id
+		<trim prefix="WHERE" prefixOverrides="AND">
+        	<if test="layerGroupId != null and layerGroupId gt 0">
+			AND a.layer_group_id = #{layerGroupId}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+			AND ${searchWord} = #{searchValue}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+			AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+			<![CDATA[
+			AND a.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+			<![CDATA[
+			AND a.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+		</trim>
+		<choose>
+		<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+		ORDER BY a.${orderWord} ${orderValue}
+		</when>
+		<otherwise>
+		ORDER BY a.insert_date DESC, layer_id DESC
+		</otherwise>
+		</choose>
+		OFFSET #{offset} LIMIT #{limit}
+    </select>
+
+    <!-- layer 정보 취득 -->
+    <select id="getLayer" parameterType="int" resultType="layer">
+        /* getLayer */
+        SELECT A.*, B.layer_group_name
+        FROM layer A
+        LEFT JOIN layer_group B on B.layer_group_id = A.layer_group_id
+        WHERE A.layer_id = #{layerId}
+    </select>
+    
+    <select id="isLayerKeyDuplication" parameterType="string" resultType="boolean">
+    	/* isLayerKeyDuplication */
+    	SELECT
+			CASE
+				WHEN COUNT(*) > 0 THEN true
+				ELSE false
+			END AS duplication
+		FROM layer
+		WHERE layer_key = #{value}
+    </select>
+
+    <!-- 자식 레이어 중 순서가 최대인 레이어를 검색 -->
+    <select id="getMaxViewOrderChildLayer" parameterType="int" resultType="layer">
+        /* getMaxViewOrderChildLayer */
+        SELECT * FROM layer WHERE parent = #{parent} ORDER BY view_order DESC LIMIT 1
+    </select>
+
+    <!-- 자식 레이어 개수 -->
+    <select id="getChildLayerCount" parameterType="int" resultType="int">
+        /* getChildLayerCount */
+        SELECT COUNT(layer_id) FROM layer WHERE parent = #{layerId}
+    </select>
+
+    <!-- 레이어 트리 부모와 순서로 그룹 정보 취득 -->
+<!--     <select id="getLayerByParentAndViewOrder" parameterType="layer" resultType="layer"> -->
+<!--         /* getLayerByParentAndViewOrder */ -->
+<!--         SELECT * -->
+<!--         FROM layer -->
+<!--         WHERE parent = #{parent} -->
+<!--         <if test="updateType == 'up'.toString()"> -->
+<!--             <![CDATA[ -->
+<!--             AND view_order < #{viewOrder} -->
+<!--             ]]> -->
+<!--         ORDER BY view_order DESC -->
+<!--         </if> -->
+<!--         <if test="updateType == 'down'.toString()"> -->
+<!--             <![CDATA[ -->
+<!--             AND view_order > #{viewOrder} -->
+<!--             ]]> -->
+<!--         ORDER BY view_order -->
+<!--         </if> -->
+<!--         LIMIT 1 -->
+<!--     </select> -->
+
+    <!-- 레이어 테이블의 컬럼 타입이 어떤 geometry 타입인지를 구함 -->
+    <select id="getGeometryType" parameterType="string" resultType="string">
+        /* getGeometryType */
+        SELECT ST_GeometryType(wkb_geometry) AS geometryType
+        FROM ${value}
+        WHERE enable_yn = 'Y'
+        LIMIT 1
+    </select>
+
+    <select id="getLayerColumn" parameterType="string" resultType="string">
+    	/* getLayerColumn */
+    	SELECT ARRAY_TO_STRING(
+    		ARRAY(
+	    		SELECT ''||A.column_name||''
+	        	FROM information_schema.columns As A
+	            WHERE table_name = #{value}
+	            	AND  A.column_name NOT IN ('enable_yn', 'version_id')
+	    		), ','
+	    	)
+    </select>
+
+    <!-- layer 등록 -->
+    <insert id="insertLayer" parameterType="layer">
+        <selectKey keyProperty="layerId" resultType="int" order="BEFORE">
+            SELECT NEXTVAL('layer_seq')
+        </selectKey>
+        INSERT INTO layer (
+            layer_id, layer_group_id, sharing, layer_name, layer_key, service_type, layer_type, geometry_type,
+            layer_line_color, layer_line_style, layer_fill_color, layer_alpha_style, default_display, available,
+            label_display, coordinate, description, z_index, user_id, layer_insert_type, cache_available
+            <if test="viewOrder != null and viewOrder gt 0">
+				, view_order
+			</if>
+        ) VALUES (
+         #{layerId}, #{layerGroupId}, #{sharing}, #{layerName}, #{layerKey}, #{serviceType}, #{layerType}, #{geometryType},
+         #{layerLineColor}, #{layerLineStyle}, #{layerFillColor}, #{layerAlphaStyle}, #{defaultDisplay}, #{available},
+         #{labelDisplay}, #{coordinate}, #{description}, #{zIndex}, #{userId}, #{layerInsertType}, #{cacheAvailable}
+         <if test="viewOrder != null and viewOrder gt 0">
+			, #{viewOrder}
+		 </if>
+        )
+    </insert>
+
+    <!-- 레이어 트리 정보 수정 -->
+<!--     <update id="updateTreeLayer" parameterType="layer"> -->
+<!--         /* updateTreeLayer */ -->
+<!--         UPDATE layer -->
+<!--         SET layer_name = #{layerName}, -->
+<!--             layer_key = #{layerKey}, -->
+<!--             <if test="viewType != null and viewType != ''"> -->
+<!--                 view_type = #{viewType}, -->
+<!--             </if> -->
+<!--             <if test="sharing != null and sharing != ''"> -->
+<!--                 sharing, -->
+<!--             </if> -->
+<!--             use_yn = #{useYn}, -->
+<!--             shape_insert_yn = #{shapeInsertYn} -->
+<!--         WHERE layer_id = #{layerId} -->
+<!--     </update> -->
+
+    <!-- 레이어 트리  순서 수정 -->
+<!--     <update id="updateViewOrderLayer" parameterType="layer"> -->
+<!--         /* updateViewOrderLayer */ -->
+<!--         UPDATE layer SET view_order = #{viewOrder} WHERE layer_id = #{layerId} -->
+<!--     </update> -->
+
+    <!-- layer 정보 수정 -->
+    <update id="updateLayer" parameterType="layer">
+        /* updateLayer */
+        UPDATE layer SET
+	        layer_name = #{layerName},
+	        layer_group_id = #{layerGroupId},
+	        sharing = #{sharing},
+	        layer_key = #{layerKey},
+	        service_type = #{serviceType},
+	        layer_type = #{layerType},
+	        geometry_type = #{geometryType},
+	        layer_line_color = #{layerLineColor},
+	        layer_line_style = #{layerLineStyle},
+	        layer_fill_color = #{layerFillColor},
+	        layer_alpha_style = #{layerAlphaStyle},
+	        default_display = #{defaultDisplay},
+	        available = #{available},
+	        label_display = #{labelDisplay},
+	        coordinate = #{coordinate},
+	        description = #{description},
+	        z_index = #{zIndex},
+	        user_id = #{userId},
+	        cache_available = #{cacheAvailable},
+	        <if test="viewOrder != null and viewOrder gt 0">
+			view_order = #{viewOrder},
+			</if>
+	        update_date = NOW()
+        WHERE layer_id = #{layerId}
+    </update>
+
+    <!-- 레이어 삭제 -->
+    <delete id="deleteLayer" parameterType="int">
+        /* deleteLayer */
+        DELETE FROM layer WHERE layer_id = #{layerId}
+    </delete>
+
+    <delete id="deleteLayerTable" parameterType="string">
+        /* deleteLayer */
+        DROP TABLE ${value}
+    </delete>
+    
+    <select id="isLayerExists" parameterType="string" resultType="string">
+        /* isLayerExists */
+        SELECT tablename
+			FROM pg_tables
+		WHERE schemaname = 'public'
+		AND tablename = #{value}
+    </select>
+</mapper>

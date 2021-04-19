@@ -1,0 +1,63 @@
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
+	<div id="uploadTab">
+		<form id="policyUpload" th:object="${policy}" method="post" th:action="@{#}" onsubmit="return false;">
+			<table class="input-table scope-row" summary="환경설정 사용자 업로딩 파일 테이블">
+			<caption class="hiddenTag">환경설정 사용자 업로딩 파일</caption>
+				<col class="col-label l" />
+				<col class="col-input" />
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="userUploadType">업로딩 가능 확장자</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="userUploadType" name="userUploadType" th:field="*{userUploadType}" class="l" maxlength="256" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="userConverterType">변환 가능 확장자</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="userConverterType" name="userConverterType" th:field="*{userConverterType}" class="l" maxlength="256" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="shapeUploadType">shpae 업로딩 가능 확장자</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="shapeUploadType" name="shapeUploadType" th:field="*{shapeUploadType}" maxlength="256" class="l" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="userUploadMaxFilesize">최대 업로딩 사이즈</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="userUploadMaxFilesize" name="userUploadMaxFilesize" th:field="*{userUploadMaxFilesize}" class="m" maxlength="10" onKeyPress="return numkeyCheck(event);" />
+						<span class="table-desc">MB</span>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="userUploadMaxCount">최대 업로딩 파일 수</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="userUploadMaxCount" name="userUploadMaxCount" th:field="*{userUploadMaxCount}" class="m" maxlength="10" onKeyPress="return numkeyCheck(event);" />
+						<span class="table-desc">개</span>
+					</td>
+				</tr>
+			</table>
+			<div class="button-group">
+				<div class="center-buttons">
+					<a href="#" class="button" th:text="#{save}" onclick="updatePolicyUpload();"></a>
+				</div>
+			</div>
+		</form>
+	</div>
+</html>

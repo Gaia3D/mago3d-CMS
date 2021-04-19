@@ -1,0 +1,85 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<body>
+    <div id="dataGroupDialog" class="dialog">
+        <table class="list-table scope-col">
+            <colgroup>
+                <col class="col-name"></col>
+                <col class="col-toggle"></col>
+                <col class="col-id"></col>
+                <col class="col-function"></col>
+                <col class="col-date"></col>
+                <col class="col-toggle"></col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th scope="col" class="col-name"><th:block th:text="#{data.group.name}"></th:block></th>
+                    <th scope="col" class="col-toggle"><th:block th:text="#{data.group.available}"></th:block></th>
+                    <th scope="col" class="col-toggle"><th:block th:text="#{common.sharing}"></th:block></th>
+                    <th scope="col" class="col-toggle"><th:block th:text="#{common.description}"></th:block></th>
+                    <th scope="col" class="col-date"><th:block th:text="#{common.created}"></th:block></th>
+                    <th scope="col" class="col-date"><th:block th:text="#{common.select}"></th:block></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${dataGroupList.empty}">
+                    <td colspan="6" class="col-none"><th:block th:text="#{data.group.does.not.exist}"></th:block></td>
+                </tr>
+                
+                <th:block th:if="${!dataGroupList.empty}" th:each="dataGroup : ${dataGroupList}">
+                    <th:block th:if="${dataGroup.depth == 1}">
+                    <tr th:class="oneDepthClass">  
+                        <td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
+                            <span style="padding-left: 0px; font-size: 1.5em; color: Dodgerblue;">
+                                <i class="fa fa-folder oneFolder" aria-hidden="true"></i>
+                            </span>
+                            <span th:text="${dataGroup.dataGroupName}"></span>
+                        </td>
+                    </th:block>
+                    <th:block th:if="${dataGroup.depth == 2}">
+                    <tr class="twoDepthClass">
+                        <td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
+                            <span style="padding-left: 40px; font-size: 1.5em; color: Mediumslateblue;">
+                                <i class="fa fa-folder oneFolder" aria-hidden="true"></i>
+                            </span>
+                            <span th:text="${dataGroup.dataGroupName}"></span>
+                        </td>
+                    </th:block>
+                    <th:block th:if="${dataGroup.depth == 3}">
+                    <tr class="threeDepthClass">
+                        <td class="col-name ellipsis" style="max-width:300px; text-align: left;" nowrap="nowrap">
+                            <span style="padding-left: 80px; font-size: 1.5em; color: Tomato;">
+                                <i class="fa fa-folder oneFolder" aria-hidden="true"></i>
+                            </span>
+                            <span th:text="${dataGroup.dataGroupName}"></span>
+                        </td>
+                    </th:block>
+                        
+                    <td class="col-type">
+                        <th:block th:if="${#bools.isTrue(dataGroup.available)}" th:text="#{common.use}"></th:block>
+                        <th:block th:if="${#bools.isFalse(dataGroup.available)}" th:text="#{common.unused}"></th:block>
+                    </td>
+                    <td class="col-type">
+                        <th:block th:if="${#strings.equals(dataGroup.sharing, 'common')}" th:text="#{common.common}"></th:block>
+                        <th:block th:if="${#strings.equals(dataGroup.sharing, 'public')}" th:text="#{common.public}"></th:block>
+                        <th:block th:if="${#strings.equals(dataGroup.sharing, 'private')}" th:text="#{common.private}"></th:block>
+                        <th:block th:if="${#strings.equals(dataGroup.sharing, 'group')}" th:text="#{common.group}"></th:block>
+                    </td>
+                    <td class="col-key" th:text="${dataGroup.description}"></td>
+                    <td class="col-date">
+                        <th:block th:text="${#temporals.format(dataGroup.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+                    </td>
+                    <td class="col-toggle">
+                        <a href="#" th:onclick="confirmParent([[${dataGroup.dataGroupId}]], [[${dataGroup.dataGroupName}]], [[${dataGroup.depth}]]); return false;">
+                            <th:block th:text="#{common.confirm}"></th:block>
+                        </a>
+                    </td>
+                    </tr>
+                </th:block> 
+            </tbody>
+        </table>
+        <div class="button-group">
+            <input type="button" id="rootParentSelect" class="button" th:value="#{data.group.select.top}" />
+        </div>
+    </div>
+    </body>
+</html>

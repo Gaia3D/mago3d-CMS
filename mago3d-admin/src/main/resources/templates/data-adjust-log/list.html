@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+	<title>데이터 변경 요청 이력 | mago3D</title>
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico(cacheVersion=${contentCacheVersion})}">
+	<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+    <link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+	<div class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+					<div class="page-content">
+
+						<!-- S: 검색 -->
+						<div class="filters">
+							<form id="searchForm" th:object="${uploadData}" method="get" th:action="@{/data-adjust-log/list}" onsubmit="return searchCheck();">
+							<div class="input-group row">
+								<div class="input-set">
+									<label for="searchWord" th:text="#{search.word}"></label>
+									<select id="searchWord" name="searchWord" class="selectBoxClass">
+										<option value="" th:text="#{select}"></option>
+										<option value="data_name" th:text="데이터명"></option>
+									</select>
+									<select id="searchOption" name="searchOption" class="selectBoxClass">
+										<option value="0" th:text="#{search.same}"></option>
+										<option value="1" th:text="#{search.include}"></option>
+									</select>
+									<input type="search" id="searchValue" name="searchValue" class="m" style="float: right;" />
+								</div>
+								<div class="input-set">
+									<label for="startDate" th:text="#{search.date}"></label>
+									<input type="text" id="startDate" name="startDate" class="s date" autocomplete="off" />
+									<span class="delimeter tilde">~</span>
+									<input type="text" id="endDate" name="endDate" class="s date" autocomplete="off" />
+								</div>
+								<div class="input-set">
+									<label for="orderWord" th:text="#{search.order}"></label>
+									<select id="orderWord" name="orderWord" class="selectBoxClass">
+										<option value="" th:text="#{search.basic}"></option>
+										<option value="data_name" th:text="데이터명"></option>
+										<option value="insert_date" th:text="#{search.insert.date}"></option>
+									</select>
+									<select id="orderValue" name="orderValue" class="selectBoxClass">
+										<option value="" th:text="#{search.basic}"></option>
+										<option value="ASC" th:text="#{search.ascending}"></option>
+										<option value="DESC" th:text="#{search.descending.order}"></option>
+									</select>
+									<select id="listCounter" name="listCounter" class="selectBoxClass">
+										<option value="10" th:text="#{search.ten.count}"></option>
+										<option value="50" th:text="#{search.fifty.count}"></option>
+										<option value="100" th:text="#{search.hundred.count}"></option>
+									</select>
+								</div>
+								<div class="input-set">
+									<input type="submit" th:value="#{search}" />
+								</div>
+							</div>
+							</form>
+						</div>
+						<!-- E: 검색 -->
+
+						<!-- S: 데이터 위치 변경 요청 목록 -->
+						<div class="list">
+							<form id="listForm" th:object="${dataInfo}" method="post">
+								<input type="hidden" id="checkIds" name="checkIds" />
+								<input type="hidden" id="status" name="status" />
+							<div class="list-header row">
+								<div class="list-desc u-pull-left">
+									<span th:text="#{all.d}"></span>
+									<span class="totalCount" th:text="${pagination.totalCount}"></span>
+									<span th:text="#{search.what.count}"></span>
+									<span th:text="|${pagination.pageNo} / ${pagination.lastPage}|"></span>
+									<span th:text="#{search.page}"></span>
+								</div>
+							</div>
+							<table class="list-table scope-col" summary="데이터 위치 변경 요청 이력 리스트 ">
+								<caption class="hiddenTag">데이터 위치 변경 요척 이력</caption>
+								<colgroup>
+									<col class="col-checkbox"></col>
+									<col class="col-number"></col>
+									<col class="col-name"></col>
+									<col class="col-name"></col>
+									<col class="col-type"></col>
+									<col class="col-count"></col>
+									<col class="col-count"></col>
+									<col class="col-count"></col>
+									<col class="col-type"></col>
+									<col class="col-functions"></col>
+									<col class="col-date"></col>
+								</colgroup>
+								<thead>
+									<tr>
+										<th scope="col" class="col-checkbox">
+											<label for="chkAll" class="hiddenTag">전체선택 체크박스</label>
+											<input type="checkbox" id="chkAll" name="chkAll" />
+										</th>
+										<th scope="col" class="col-number" th:text="#{number}"></th>
+										<th scope="col" class="col-name">그룹명</th>
+										<th scope="col" class="col-name">데이터명</th>
+										<th scope="col" class="col-type">요청자</th>
+										<th scope="col" class="col-count">변경 후 경도</th>
+										<th scope="col" class="col-count">변경 후 위도</th>
+										<th scope="col" class="col-count">높이</th>
+										<th scope="col" class="col-type">상태</th>
+										<th scope="col" class="col-functions">결재</th>
+										<th scope="col" class="col-date">요청일</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:if="${dataAdjustLogList.empty}">
+										<td colspan="11" class="col-none">데이터 변경 요청 이력이 존재하지 않습니다.</td>
+									</tr>
+
+									<tr th:if="${!dataAdjustLogList.empty}" th:each="dataAdjustLog : ${dataAdjustLogList}">
+										<td class="col-checkbox">
+											<label for="dataAdjustLogId_${dataAdjustLog.dataAdjustLogId}" class="hiddenTag">선택 체크박스</label>
+											<input type="checkbox" id="|dataAdjustLogId_${dataAdjustLog.dataAdjustLogId}|" name="dataAdjustLogId" value="${dataAdjustLog.dataAdjustLogId}" />
+										</td>
+										<td class="col-number" th:text="${pagination.rowNumber - dataAdjustLogStat.index}"></td>
+										<td class="col-name ellipsis" style="max-width:120px;">
+											<a href="#" class="view-group-detail" th:value="${dataAdjustLog.dataGroupName}" th:onclick="detailDataGroup([[${dataAdjustLog.dataGroupId }]]); return false;"></a></td>
+										<td class="col-name ellipsis" style="max-width:140px;">
+											<a href="#" class="view-group-detail" th:value="${dataAdjustLog.dataName}" th:onclick="detailDataAdjustLog([[${dataAdjustLog.dataName}]]
+														, [[${dataAdjustLog.beforeLatitude}]], [[${dataAdjustLog.latitude}]], [[${dataAdjustLog.beforeLongitude}]], [[${dataAdjustLog.longitude}]]
+														, [[${dataAdjustLog.beforeAltitude}]], [[${dataAdjustLog.altitude}]], [[${dataAdjustLog.beforeHeading}]], [[${dataAdjustLog.heading}]]
+														, [[${dataAdjustLog.beforePitch}]], [[${dataAdjustLog.pitch}]], [[${dataAdjustLog.beforeRoll}]], [[${dataAdjustLog.roll}]]); return false;"></a>
+											</td>
+										<td class="col-type" th:text="${dataAdjustLog.userId}"></td>
+										<td class="col-count" th:text="${dataAdjustLog.longitude}"></td>
+										<td class="col-count" th:text="${dataAdjustLog.latitude}"></td>
+										<td class="col-count" th:text="${dataAdjustLog.altitude}"></td>
+										
+										<td class="col-type">
+											<span class="icon-glyph glyph-on on"></span>
+											<span class="icon-text" th:if="${#strings.equals(dataAdjustLog.status, 'request')}" th:text="요청"></span>
+											<span class="col-type" th:if="${#strings.equals(dataAdjustLog.status, 'approval')}" th:text="승인"></span>
+											<span class="col-type" th:if="${#strings.equals(dataAdjustLog.status, 'reject')}" th:text="반려"></span>
+											<span class="col-type" th:if="${#strings.equals(dataAdjustLog.status, 'rollback')}" th:text="원복"></span>
+										</td> 
+
+										<td class="col-functions">
+											<span class="button-group" th:if="${#strings.equals(dataAdjustLog.status, 'request')}">
+												<a href="#" class="button" th:text="승인" th:onclick="return warning('approval', [[${dataAdjustLog.dataAdjustLogId}]]);"></a>
+												<a href="#" class="button" th:text="반려" th:onclick="return warning('reject', [[${dataAdjustLog.dataAdjustLogId}]]);"></a>
+											</span>
+											<span class="button-group" th:if="${#strings.equals(dataAdjustLog.status, 'complete')}">
+												<a href="#" class="button" th:text="원복" th:onclick="return warning('rollback', [[${dataAdjustLog.dataAdjustLogId}]]);"></a>
+											</span>
+										</td>
+										
+										<td class="col-date">
+											<th:block th:text="${#temporals.format(dataAdjustLog.insertDate,'yyyy-MM-dd HH:mm')}"></th:block>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</form>
+						<!-- E: 데이터 위치 변경 요청 목록 -->
+					</div>
+					<!-- 페이지 -->
+					<div th:replace="~{/common/pagination :: #paginationArea}"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- <%@ include file="/WEB-INF/views/data/group-dialog.jsp" %>
+<%@ include file="/WEB-INF/views/data-adjust-log/data-adjust-log-dialog.jsp" %> -->
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var searchWord = "[[${dataAdjustLog.searchWord}]]";
+		var searchOption = "[[${dataAdjustLog.searchOption}]]";
+		var orderWord = "[[${dataAdjustLog.orderWord}]]";
+		var orderValue = "[[${dataAdjustLog.orderValue}]]";
+		var listCounter = "[[${dataAdjustLog.listCounter}]]";
+
+		if(searchWord != "") $("#searchWord").val("[[${dataAdjustLog.searchWord}]]");
+		if(searchOption != "") $("#searchOption").val("[[${dataAdjustLog.searchOption}]]");
+		if(orderWord != "") $("#orderWord").val("[[${dataAdjustLog.orderWord}]]");
+		if(orderValue != "") $("#orderValue").val("[[${dataAdjustLog.orderValue}]]");
+		if(listCounter != "") $("#listCounter").val("[[${dataAdjustLog.listCounter}]]");
+
+		initDatePicker();
+		initCalendar(new Array("startDate", "endDate"), new Array("[[${dataAdjustLog.startDate}]]", "[[${dataAdjustLog.endDate}]]"));
+	});
+
+	//전체 선택
+	$("#chkAll").click(function() {
+		$(":checkbox[name=dataAdjustLogId]").prop("checked", this.checked);
+	});
+
+	function searchCheck() {
+		if($("#searchOption").val() == "1") {
+			if(confirm(JS_MESSAGE["search.option.warning"])) {
+				// go
+			} else {
+				return false;
+			}
+		}
+
+		var startDate = $("#startDate").val();
+		var endDate = $("#endDate").val();
+		if(startDate != null && startDate != "" && endDate != null && endDate != "") {
+			if(parseInt(startDate) > parseInt(endDate)) {
+				alert(JS_MESSAGE["search.date.warning"]);
+				$("#startDate").focus();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	var dataGroupDialog = $( ".dataGroupDialog" ).dialog({
+		autoOpen: false,
+		width: 500,
+		height: 530,
+		modal: true,
+		resizable: false
+	});
+
+	// 데이터 그룹 정보
+	function detailDataGroup(dataGroupId) {
+		dataGroupDialog.dialog( "open" );
+		viewDataGroup(dataGroupId);
+	}
+
+	// project 정보
+	function viewDataGroup(dataGroupId) {
+		$.ajax({
+			url: "/data-groups/" + dataGroupId,
+			//data: { dataGroupId : dataGroupId },
+			type: "GET",
+			dataType: "json",
+			headers: {"X-Requested-With": "XMLHttpRequest"},
+			success: function(msg){
+				if(msg.statusCode <= 200) {
+					drawDataGroup(msg.dataGroup);
+				} else {
+					alert(JS_MESSAGE[msg.errorCode]);
+					console.log("---- " + msg.message);
+				}
+			},
+			error:function(request, status, error){
+		        alert(JS_MESSAGE["ajax.error.message"]);
+		        console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+			}
+		});
+	}
+
+	// 프로젝트 정보
+	function drawDataGroup(dataGroup) {
+		$("#dataGroupNameInfo").html(dataGroup.dataGroupName);
+		$("#dataGroupKeyInfo").html(dataGroup.dataGroupKey);
+		$("#dataGroupTargetInfo").html(dataGroup.dataGroupTarget);
+		$("#sharingInfo").html(dataGroup.sharing);
+		$("#userIdInfo").html(dataGroup.userId);
+		$("#basicInfo").html(dataGroup.basic);
+		$("#availableInfo").html(dataGroup.available);
+		$("#locationInfo").html(dataGroup.longitude + " / " + dataGroup.latitude);
+		$("#dataCountInfo").html(dataGroup.dataCount);
+		$("#metainfoInfo").html(dataGroup.metainfo);
+		$("#descriptionInfo").html(dataGroup.description);
+	}
+
+	// data info change request log
+	var dataInfoAdjustLogDialog = $( ".dataInfoAdjustLogDialog" ).dialog({
+	    autoOpen: false,
+	    width: 500,
+	    height: 380,
+	    modal: true,
+	    resizable: false
+	});
+	function detailDataAdjustLog(dataName, beforeLatitude, latitude, beforeLongitude, longitude, beforeAltitude, altitude, beforeHeading, heading, beforePitch, pitch, beforeRoll, roll) {
+		$("#beforeLatitude").html(beforeLatitude);
+		$("#afterLatitude").html(latitude);
+		$("#beforeLongitude").html(beforeLongitude);
+		$("#afterLongitude").html(longitude);
+		$("#beforeAltitude").html(beforeAltitude);
+		$("#afterAltitude").html(altitude);
+		$("#beforeHeading").html(beforeHeading);
+		$("#afterHeading").html(heading);
+		$("#beforePitch").html(beforePitch);
+		$("#afterPitch").html(pitch);
+		$("#beforeRoll").html(beforeRoll);
+		$("#afterRoll").html(roll);
+
+		dataInfoAdjustLogDialog.dialog({title: dataName + " Change Request Log"}).dialog( "open" );
+	}
+
+	var warningFlag = true;
+	function warning(status, dataAdjustLogId) {
+		if(confirm("계속 진행 하시겠습니까?")) {
+			if(warningFlag) {
+				warningFlag = false;
+				$('#status').val(status);
+				var formData = $("#listForm").serialize();
+				$.ajax({
+					url: "/data-adjust-logs/status/" + dataAdjustLogId,
+					type: "POST",
+					data: formData,
+					dataType: "json",
+					headers: {"X-Requested-With": "XMLHttpRequest"},
+					success: function(msg){
+						if(msg.statusCode <= 200) {
+							alert(JS_MESSAGE["update"]);
+							location.reload();
+						} else {
+							alert(JS_MESSAGE[msg.errorCode]);
+							console.log("---- " + msg.message);
+						}
+						warningFlag = true;
+					},
+					error:function(request, status, error){
+				        alert(JS_MESSAGE["ajax.error.message"]);
+				        console.log("code : " + request.status + "\n message : " + request.responseText + "\n error : " + error);
+				        warningFlag = true;
+					}
+				});
+			} else {
+				alert(JS_MESSAGE["button.dobule.click"]);
+				return;
+			}
+		}
+	}
+</script>
+</th:block>
+</body>
+</html>

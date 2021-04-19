@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+	<title>사용자 그룹 수정 | mago3D</title>
+	<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />	
+	<link rel="stylesheet" th:href="@{/css/fontawesome-free-5.2.0-web/css/all.min.css(cacheVersion=${contentCacheVersion})}">
+</head>
+<body>
+<th:block layout:fragment="pageCustomContent">
+	<div class="site-body">
+		<div class="container">
+			<div class="site-content">
+				<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+				<div class="page-area">
+					<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+					<div class="page-content">
+						<div class="input-header row">
+							<div class="content-desc u-pull-right">
+								<span class="icon-glyph glyph-emark-dot color-warning"></span>
+								<th:block th:text="#{check}"></th:block>
+							</div>
+						</div>
+
+						<!-- S: 사용자 그룹 수정 -->
+						<form id="userGroup" th:object="${userGroup}" th:action="@{#}" method="post" onsubmit="return false;">
+							<input type="hidden" id="userGroupId" name="userGroupId" th:field="*{userGroupId}" />
+							<table class="input-table scope-row" summary="사용자 그룹 수정 테이블">
+								<caption class="hiddenTag">사용자 그룹 수정</caption>
+								<colgroup>
+									<col class="col-label"></col>
+									<col class="col-input"></col>
+								</colgroup>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="userGroupName">사용자 그룹명</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<input type="text" id="userGroupName" name="userGroupName" th:field="*{userGroupName}" class="l" />
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="userGroupKey">사용자 그룹 Key</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<input type="text" id="userGroupKey" name="userGroupKey" th:field="*{userGroupKey}" class="l" readonly="true"/>
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label" scope="row">
+										<label for="parentName">상위 그룹</label>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input">
+										<input type="hidden" id="parent" name="parent" th:field="*{parent}" />
+										<input type="text" id="parentName" name="parentName" th:field="*{parentName}" class="l" readonly="true" />
+										<!-- <input type="button" id="userGroupButton" value="상위 그룹 선택" /> -->
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label m" scope="row">
+										<span>기본 여부</span>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input radio-set">
+										<input type="radio" id="basicTrue" name="basic" th:field="*{basic}" value="true" />
+										<label for="basicTrue">기본</label>
+										<input type="radio" id="basicFalse" name="basic" th:field="*{basic}" value="false" checked="checked" />
+										<label for="basicFalse">선택</label>
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label m" scope="row">
+										<span>사용여부</span>
+										<span class="icon-glyph glyph-emark-dot color-warning"></span>
+									</th>
+									<td class="col-input radio-set">
+										<input type="radio" id="availableTrue" name="available" th:field="*{available}" value="true" checked="checked" />
+										<label for="availableTrue">사용</label>
+										<input type="radio" id="availableFalse" name="available" th:field="*{available}" value="false" />
+										<label for="availableFalse">미사용</label>
+									</td>
+								</tr>
+								<tr>
+									<th class="col-label m" scope="row">
+										<label for="description" th:text="#{description}"></label>
+									</th>
+									<td class="col-input">
+										<input type="text" id="description" name="description" th:field="*{description}" class="xl" />
+									</td>
+								</tr>
+							</table>
+							<div class="button-group">
+								<div class="center-buttons">
+									<input type="submit" th:value="#{save}" onclick="updateUserGroup();"/>
+									<a href="/user-group/list" class="button">목록</a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+	<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+	});
+
+	function validate() {
+		var number = /^[0-9]+$/;
+		if ($("#userGroupName").val() === null || $("#userGroupName").val() === "") {
+			alert("사용자 그룹명을 입력해 주세요.");
+			$("#userGroupName").focus();
+			return false;
+		}
+		if($("#parent").val() === null || $("#parent").val() === "" || !number.test($("#parent").val())) {
+			alert("상위 레이어 그룹을 선택해 주세요.");
+			$("#parent").focus();
+			return false;
+		}
+	}
+
+	var userGroupDialog = $("#userGroupListDialog").dialog({
+		autoOpen: false,
+		height: 600,
+		width: 1200,
+		modal: true,
+		overflow : "auto",
+		resizable: false
+	});
+
+	// 상위 사용자 그룹 찾기
+	$( "#userGroupButton" ).on( "click", function() {
+		userGroupDialog.dialog("open" );
+		userGroupDialog.dialog("option", "title", "사용자 그룹 선택");
+	});
+
+	// 상위 Node
+	function confirmParent(parent, parentName) {
+		$("#parent").val(parent);
+		$("#parentName").val(parentName);
+		userGroupDialog.dialog( "close" );
+	}
+
+	$( "#rootParentSelect" ).on( "click", function() {
+		$("#parent").val(0);
+		$("#parentName").val("[[${userGroup.parentName}]]");
+		userGroupDialog.dialog("close");
+	});
+
+	// 저장
+	var updateUserGroupFlag = true;
+	function updateUserGroup() {
+		if (validate() == false) {
+			return false;
+		}
+		if(updateUserGroupFlag) {
+			updateUserGroupFlag = false;
+			var formData = $("#userGroup").serialize();
+			$.ajax({
+				url: "/user-groups/update",
+				type: "POST",
+				headers: {"X-Requested-With": "XMLHttpRequest"},
+		        data: formData,
+				success: function(msg){
+					if(msg.statusCode <= 200) {
+						alert(JS_MESSAGE["update"]);
+						window.location.reload();
+					} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+						console.log("---- " + msg.message);
+					}
+					updateUserGroupFlag = true;
+				},
+				error:function(request, status, error){
+			        alert(JS_MESSAGE["ajax.error.message"]);
+			        updateUserGroupFlag = true;
+				}
+			});
+		} else {
+			alert(JS_MESSAGE["button.dobule.click"]);
+			return;
+		}
+	}
+</script>
+</th:block>
+</body>
+</html>

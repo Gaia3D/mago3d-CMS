@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.DataMapper">
+
+	<!-- Data 총 건수 -->
+	<select id="getDataTotalCount" parameterType="dataInfo" resultType="long">
+		/* getDataTotalCount */
+		SELECT COUNT(data_id)
+		FROM (
+			SELECT data_id
+			FROM data_info A, data_group B, user_info C
+			WHERE A.data_group_id = B.data_group_id
+				AND A.user_id = C.user_id
+				AND (
+						B.data_group_target = 'admin'
+					OR
+					(
+						B.data_group_target = 'user'
+						AND A.user_id = #{userId}
+					)
+					OR
+					(
+						B.data_group_target = 'user'
+						AND A.user_id != #{userId}
+						AND (B.sharing = 'common' OR B.sharing = 'public')
+					)
+					OR
+					(
+						B.data_group_target = 'user'
+						AND A.user_id != #{userId}
+						AND B.sharing = 'group'
+						AND C.user_group_id = #{userGroupId}
+					)
+				)
+				<if test="dataGroupId != null and dataGroupId > 0">
+				AND A.data_group_id = #{dataGroupId}
+				</if>
+				<if test="dataType != null and dataType != ''">
+				AND A.data_type = #{dataType}
+				</if>
+				<if test="status != null and status != ''">
+				AND A.status = #{status}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+				AND A.${searchWord} = #{searchValue}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+				AND A.${searchWord} LIKE '%' || #{searchValue} || '%'
+				</if>
+				<if test="startDate != null and startDate != ''">
+				<![CDATA[
+				AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="endDate != null and endDate != ''">
+				<![CDATA[
+				AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>			
+		) X
+	</select>
+	
+	<!-- 데이터 상태별 통계 정보 -->
+	<select id="getDataTotalCountByStatus" parameterType="dataInfo" resultType="long">
+		/* getDataTotalCountByStatus */
+		SELECT COUNT(data_id) 
+		FROM data_info
+		WHERE status = #{status} 
+			AND parent > 0
+			<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+			</if>
+	</select>
+	
+	<!-- 데이터 그룹에 속하는 전체 데이터 목록  -->
+	<select id="getAllListData" parameterType="dataInfo" resultType="dataInfo">
+		/* getAllListData */
+		SELECT A.*, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, B.data_group_name, B.data_group_target, B.data_group_key, B.tiling
+		FROM data_info A, data_group B
+		WHERE A.data_group_id = #{dataGroupId}
+			AND A.data_group_id = B.data_group_id
+			<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+			</if>
+			<if test="status != null and status != ''">
+			AND status = #{status}
+			</if>
+		ORDER BY A.insert_date DESC, A.data_id DESC
+	</select>
+	
+	<!-- Data 목록 -->
+	<select id="getListData" parameterType="dataInfo" resultType="dataInfo">
+		/* getListData */
+		SELECT *
+		FROM (	
+			SELECT A.*, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, B.data_group_name, B.data_group_target, B.data_group_key, B.tiling
+			FROM data_info A, data_group B, user_info C
+			WHERE A.data_group_id = B.data_group_id
+				AND A.user_id = C.user_id
+				AND (
+						B.data_group_target = 'admin'
+					OR
+					(
+						B.data_group_target = 'user'
+						AND A.user_id = #{userId}
+					)
+					OR
+					(
+						B.data_group_target = 'user'
+						AND A.user_id != #{userId}
+						AND (B.sharing = 'common' OR B.sharing = 'public')
+					)
+					OR
+					(
+						B.data_group_target = 'user'
+						AND A.user_id != #{userId}
+						AND B.sharing = 'group'
+						AND C.user_group_id = #{userGroupId}
+					)
+				)
+				<if test="dataGroupId != null and dataGroupId > 0">
+				AND A.data_group_id = #{dataGroupId}
+				</if>
+				<if test="dataType != null and dataType != ''">
+				AND A.data_type = #{dataType}
+				</if>
+				<if test="status != null and status != ''">
+				AND A.status = #{status}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+				AND A.${searchWord} = #{searchValue}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+				AND A.${searchWord} LIKE '%' || #{searchValue} || '%'
+				</if>
+				<if test="startDate != null and startDate != ''">
+				<![CDATA[
+				AND A.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="endDate != null and endDate != ''">
+				<![CDATA[
+				AND A.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+		) X
+		<choose>
+		<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+		ORDER BY X.${orderWord} ${orderValue}
+		</when>
+		<otherwise>
+		ORDER BY X.insert_date DESC, X.data_id DESC
+		</otherwise>
+		</choose>
+		OFFSET #{offset} LIMIT #{limit}
+	</select>
+	
+	<!-- Smart Tiling용 데이터 그룹에 포함되는 모든 데이터를 취득 -->
+	<select id="getListAllDataByDataGroupId" parameterType="int" resultType="dataInfoSimple">
+		/* getListData */
+		SELECT A.*, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, B.data_group_name, B.tiling
+		FROM data_info A LEFT JOIN data_group B
+        	ON A.data_group_id = B.data_group_id
+		WHERE A.data_group_id = #{dataGroupId}
+		ORDER BY A.insert_date DESC, A.data_id DESC
+	</select>
+	
+	<!-- 공유 유형별 데이터 통계 -->
+	<select id="getDataTotalCountBySharing" parameterType="string" resultType="dataInfo">
+		/* getDataTotalCountBySharing */
+		SELECT DISTINCT A.sharing, COUNT(*) AS dataCount 
+		<if test="userId != null and userId != '' and userGroupId != null and userGroupId >= 0">
+		FROM data_info A, data_group B, user_info C
+			WHERE A.data_group_id = B.data_group_id
+				AND A.user_id = C.user_id
+				AND (
+						B.data_group_target = 'admin'
+					OR
+					(
+						B.data_group_target = 'user'
+						AND A.user_id = #{userId}
+					)
+					OR
+					(
+						B.data_group_target = 'user'
+						AND A.user_id != #{userId}
+						AND (B.sharing = 'common' OR B.sharing = 'public')
+					)
+					OR
+					(
+						B.data_group_target = 'user'
+						AND A.user_id != #{userId}
+						AND B.sharing = 'group'
+						AND C.user_group_id = #{userGroupId}
+					)
+				)
+		</if>
+		GROUP BY A.sharing
+	</select>
+	
+	<!-- Data 정보 -->
+	<select id="getData" parameterType="dataInfo" resultType="dataInfo">
+		/* getData */
+		SELECT A.*, ST_X(A.location) AS longitude, ST_Y(A.location) AS latitude, B.data_group_name, B.data_group_target, B.data_group_key, B.tiling
+		FROM data_info A, data_group B
+		WHERE data_id = #{dataId}
+			AND A.data_group_id = B.data_group_id
+			<if test="userId != null and userId != ''">
+			AND A.user_id = #{userId}
+			</if>
+	</select>
+	
+	<!-- Data 정보 -->
+	<select id="getDataByDataKey" parameterType="dataInfo" resultType="dataInfo">
+		/* getDataByDataKey */
+		SELECT *, ST_X(location) AS longitude, ST_Y(location) AS latitude
+		FROM data_info
+		WHERE data_group_id = #{dataGroupId}
+			AND data_key = #{dataKey}
+			<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+			</if>
+	</select>
+	
+	<!-- 최상위 root dataInfo 정보 취득 -->
+	<select id="getRootDataByDataGroupId" parameterType="int" resultType="dataInfo">
+		/* getRootDataByDataGroupId */
+		SELECT *, ST_X(location) AS longitude, ST_Y(location) AS latitude
+		FROM data_info
+		WHERE data_group_id = #{dataGroupId} 
+			AND parent = 0
+			AND depth = 1
+	</select>
+	
+	<!-- Data 아이디 중복 체크 -->
+	<select id="getDuplicationKeyCount" parameterType="dataInfo" resultType="int">
+		/* getDuplicationKeyCount */
+		SELECT COUNT(data_key) AS count 
+		FROM data_info 
+		WHERE data_group_id = #{dataGroupId} 
+			AND data_key = #{dataKey}
+	</select>
+	
+	<!-- 표시 순서 -->
+	<select id="getViewOrderByParent" parameterType="dataInfo" resultType="int">
+		/* getViewOrderByParent */
+		SELECT COALESCE(MAX(view_order), 0) + 1 
+		FROM data_info
+		WHERE parent = #{parent}
+	</select>
+	
+	<!-- 한 프로젝트 내 Root Parent 개수를 체크 -->
+	<select id="getRootParentCount" parameterType="dataInfo" resultType="int">
+		/* getRootParentCount */
+		SELECT COUNT(data_id) 
+		FROM data_info 
+		WHERE data_group_id = #{dataGroupId} 
+			AND parent = 0 
+			AND depth = 1
+			AND data_id != #{dataId}
+	</select>
+	
+	<!-- converterJob 정보를 이용하여 data 정보 취득 -->
+	<select id="getDataByConverterJob" parameterType="dataInfo" resultType="dataInfo">
+		/* getDataByConverterJob */
+		SELECT A.data_id, A.data_key, A.data_group_id, A.data_type, B.data_group_key
+		FROM data_info A, data_group B 
+		WHERE A.user_id = #{userId}
+			AND A.data_group_id = B.data_group_id
+			AND A.converter_job_id = #{converterJobId}
+	</select>
+	
+	<!-- Data Attribute 정보 -->
+	<!-- <select id="getDataAttribute" parameterType="long" resultType="dataInfoAttribute">
+		/* getDataAttribute */
+		SELECT *
+		FROM data_info_attribute
+		WHERE data_id = #{dataId}
+	</select> -->
+	
+	<!-- Data 등록 -->
+	<insert id="insertData" useGeneratedKeys="true" keyProperty="dataId" parameterType="dataInfo">
+		/* insertData */
+		<selectKey keyProperty="dataId" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('data_info_seq')
+  		</selectKey>
+		INSERT INTO data_info(
+			data_id, data_group_id, converter_job_id, data_key, data_name, data_type, sharing, user_id, mapping_type,
+			<if test="location != null">
+			location,
+			</if>
+			altitude, heading, pitch, roll, children_ancestor, children_parent, children_depth, children_view_order,
+			<if test="metainfo != null and metainfo != ''">
+			metainfo,
+			</if>
+			status, description
+		) VALUES (
+			#{dataId}, #{dataGroupId}, #{converterJobId}, #{dataKey}, #{dataName}, #{dataType}, #{sharing}, #{userId}, #{mappingType},
+			<if test="location != null">
+			ST_GeomFromText(#{location}, 4326),
+			</if>
+			#{altitude}, COALESCE(#{heading}, 0), COALESCE(#{pitch}, 0), COALESCE(#{roll}, 0), #{childrenAncestor}, #{childrenParent}, #{childrenDepth}, #{childrenViewOrder},
+			<if test="metainfo != null and metainfo != ''">
+			(#{metainfo}::jsonb),
+			</if>
+			#{status}, #{description}
+		)
+	</insert>
+	
+	<!-- Data 수정 -->	
+	<update id="updateData" parameterType="dataInfo">
+		/* updateData */
+		UPDATE data_info
+		SET 
+			<if test="dataGroupId != null and dataGroupId > 0">
+			data_group_id = #{dataGroupId},
+			</if>
+			<if test="converterJobId != null and converterJobId > 0">
+			converter_job_id = #{converterJobId},
+			</if>
+			<if test="sharing != null and sharing != ''">
+			sharing = #{sharing},
+			</if>
+			<if test="dataName != null and dataName != ''">
+			data_name = #{dataName},
+			</if>
+			<if test="updateUserId != null and updateUserId != ''">
+			update_user_id = #{updateUserId},
+			</if>
+			<if test="dataType != null and dataType != ''">
+			data_type = #{dataType},
+			</if>
+			<if test="mappingType != null and mappingType != ''">
+			mapping_type = #{mappingType},
+			</if>
+			<if test="location != null">
+			location = ST_GeomFromText(#{location}, 4326),
+			</if>
+			<if test="altitude != null">
+			altitude = #{altitude},
+			</if>
+			<if test="heading != null">
+			heading = #{heading},
+			</if>
+			<if test="pitch != null">
+			pitch = #{pitch},
+			</if>
+			<if test="roll != null">
+			roll = #{roll},
+			</if>
+			<if test="status != null and status != ''">
+			status = #{status},
+			</if>
+			<if test="attributeExist != null">
+			attribute_exist = #{attributeExist},
+			</if>
+			<if test="objectAttributeExist != null">
+			object_attribute_exist = #{objectAttributeExist},
+			</if>
+			<if test="metainfo != null and metainfo != ''">
+			metainfo = (#{metainfo}::json),
+			</if>
+			<if test="description != null and description != ''">
+			description = #{description},
+			</if>
+			update_date = now()
+		WHERE data_id = #{dataId}
+			<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+			</if>
+	</update>
+	
+	<!-- Data 상태 수정 -->	
+	<update id="updateDataStatus" parameterType="dataInfo">
+		/* updateDataStatus */
+		UPDATE data_info
+		SET status = #{status},
+			<if test="location != null">
+			location = ST_GeomFromText(#{location}, 4326),
+			</if>
+			<if test="altitude != null">
+			altitude = #{altitude},
+			</if>
+			<if test="attributeExist != null">
+			attribute_exist = #{attributeExist},
+			</if>
+			<if test="objectAttributeExist != null">
+			object_attribute_exist = #{objectAttributeExist},
+			</if>
+			update_date = NOW()
+		WHERE data_id = #{dataId}
+			<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+			</if>
+	</update>
+	
+	<!-- Data 삭제 -->
+	<delete id="deleteData" parameterType="dataInfo">
+		/* deleteData */
+		DELETE 
+		FROM data_info 
+		WHERE data_id = #{dataId}
+			<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+			</if>
+	</delete>
+	
+	<!-- Data 에 속하는 모든 Object ID를 삭제 -->
+	<delete id="deleteDataByDataGroupId" parameterType="dataGroup">
+		/* deleteDataByProjectId */
+		DELETE 
+		FROM data_info 
+		WHERE data_group_id = #{dataGroupId} 
+			AND user_id = #{userId}
+	</delete>
+	
+	<!-- converterJob 정보를 이용하여 data 정보 삭제 -->
+	<delete id="deleteDataByConverterJob" parameterType="dataInfo">
+		/* deleteDataByConverterJob */
+		DELETE
+		FROM data_info 
+		WHERE user_id = #{userId}
+			AND converter_job_id = #{converterJobId}
+			<if test="dataId != null and dataId != ''">
+			AND data_id = #{dataId}
+			</if>
+	</delete>
+</mapper>

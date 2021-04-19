@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<div id="districtWrap">
+    <ul id="districtSearchResultDHTML" class="listDefault">
+        <li id="districtList" class="on">
+            <p>
+                <th:block th:text="#{search.administrative.district}"></th:block>
+                <span th:text="|#{common.all} 0 #{common.count.unit}|"></span>
+            </p>
+            <ul id="districtSearchList" class="yScroll">
+                <li th:text="#{search.no.results}"></li>
+            </ul>
+        </li>
+    </ul>
+    <div id="districtPaginationDHTML"></div>
+    <div th:replace="~{/search/list-template :: #districtSearchResultSource}"></div>
+    <div th:replace="~{/search/pagination-template :: #districtPaginationSource}"></div>
+</div>
+</html>

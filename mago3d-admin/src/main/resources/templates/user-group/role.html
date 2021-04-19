@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="/layouts/default">
+<head>
+	<meta charset="utf-8">
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="index,nofollow">
+	<title>사용자 그룹 Role | mago3D</title>
+	<link rel="stylesheet" th:href="@{/css/{lang}/font/font.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/images/{lang}/icon/glyph/glyphicon.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/normalize/normalize.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.css(cacheVersion=${contentCacheVersion})}" />
+	<link rel="stylesheet" th:href="@{/css/{lang}/admin-style.css(lang=${lang}, cacheVersion=${contentCacheVersion})}" />	
+</head>
+    <style type="text/css">
+    	.title {
+			font-size: 15px;
+			font-weight: bold;
+			color: black;
+    	}
+    </style>
+</head>
+<body>
+	<th:block layout:fragment="pageCustomContent">
+		<div class="site-body">
+			<div class="container">
+				<div class="site-content">
+					<div th:replace="~{/fragments/sub-menu :: #subMenuWrap}"></div>
+					<div class="page-area">
+						<div th:replace="~{/fragments/page-header :: #pageHeaderWrap}"></div>
+							<div class="page-content">
+							<!-- S: 사용자 그룹 권한 -->
+							<div class="list">
+								<form id="userGroupRole" th:object="${userGroupRole}" th:action="@{#}" method="post" onsubmit="return false;">
+									<input type="hidden" id="checkIds" name="checkIds" />
+									<div class="">
+										<div style="float: left; padding: 5px; width: 100%;">
+											<div style="float: left; width: 50%; ">
+												<span class="title" th:text="|사용자 그룹명: ${userGroup.userGroupName}|"></span>
+											</div>
+										</div>
+										<table class="list-table scope-col">
+											<thead>
+												<tr>
+													<th scope="col"><input type="checkbox" id="chkAll" name="chkAll" /></th>
+													<th scope="col">Role Target</th>
+													<th scope="col">Role 타입</th>
+													<th scope="col">Role명</th>
+													<th scope="col">Role Key</th>
+													<th scope="col">사용 유무</th>
+													<th scope="col">기본 사용 유무</th>
+													<th scope="col">설명</th>
+												</tr>
+											</thead>
+
+											<tr th:if="${roleList.empty}">
+												<td colspan="8" class="col-none">Role이 존재하지 않습니다.</td>
+											</tr>
+											<tr th:if="${!roleList.empty}" th:each="role : ${roleList}">
+												<td class="col-checkbox">
+													<input type="checkbox" th:id="|roleId${role.roleId}|" name="roleId" th:value="${role.roleId}" />
+												</td>
+												<td class="col-type">
+													<th:block th:if="${#strings.equals(role.roleTarget, '0')}">사용자 사이트</th:block>
+													<th:block th:if="${#strings.equals(role.roleTarget, '1')}">관리자 사이트</th:block>
+													<th:block th:if="${#strings.equals(role.roleTarget, '2')}">서버</th:block>
+												</td>
+												<td class="col-type">
+													<th:block th:if="${#strings.equals(role.roleType, '0')}">사용자</th:block>
+													<th:block th:if="${#strings.equals(role.roleType, '1')}">서버</th:block>
+													<th:block th:if="${#strings.equals(role.roleType, '2')}">API</th:block>
+												</td>
+												<td class="col-id" th:text="${role.roleName}" style="text-align: left;"></td>
+												<td class="col-name" th:text="${role.roleKey}" style="text-align: left;"></td>
+												<td class="col-type" th:text="${role.useYn}"></td>
+												<td class="col-type" th:text="${role.defaultYn}"></td>
+												<td class="col-id" th:text="${role.description}"></td>
+											</tr>
+										</table>
+									</div>
+									<div class="button-group">
+										<div class="center-buttons">
+											<input type="submit" th:value="#{save}" onclick="update();"/>
+											<a href="/user-group/list" class="button">목록</a>
+										</div>
+									</div>
+								</form>
+							</div>
+							<!-- E: 사용자 그룹 권한 -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="pageCustomScript">
+<script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/navigation.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:inline="javascript">
+	$(document).ready(function() {
+		var userGroupRoleJson = JSON.parse(/*[[${userGroupRoleJson}]]*/"");
+		for(var i=0; i<userGroupRoleJson.length; i++) {
+			var userGroupRole = userGroupRoleJson[i];
+			var roleId = userGroupRole.roleId;
+			$("input:checkbox[id='roleId" + roleId + "']").prop("checked", true);
+		}
+	});
+
+	//전체 선택
+	$("#chkAll").click(function() {
+		$(":checkbox[name=roleId]").prop("checked", this.checked);
+	});
+
+	var updateUserGroupRoleFlag = true;
+	function update() {
+		if($("input:checkbox[name=roleId]:checked").length == 0) {
+			alert(JS_MESSAGE["check.value.required"]);
+			return false;
+		}
+		var checkedValue = "";
+		$("input:checkbox[name=roleId]:checked").each(function(index){
+			checkedValue += $(this).val() + ",";
+		});
+		$("#checkIds").val(checkedValue);
+
+		if(updateUserGroupRoleFlag) {
+			updateUserGroupRoleFlag = false;
+
+			$.ajax({
+    			url: "/user-groups/role",
+    			type: "POST",
+    			headers: {"X-Requested-With": "XMLHttpRequest"},
+    	        data: {userGroupId: "[[${userGroup.userGroupId}]]", checkIds: $("#checkIds").val()},
+    			success: function(msg){
+    				if(msg.statusCode <= 200) {
+    					alert(JS_MESSAGE["update"]);
+    					window.location.reload();
+    					updateUserGroupRoleFlag = true;
+    				} else {
+						alert(JS_MESSAGE[msg.errorCode]);
+    					console.log("---- " + msg.message);
+    					updateUserGroupRoleFlag = true;
+    				}
+    			},
+    			error:function(request, status, error){
+    		        alert(JS_MESSAGE["ajax.error.message"]);
+    		        downFlag = true;
+    			}
+    		});
+		} else {
+			alert("진행 중입니다.");
+			return;
+		}
+	}
+</script>
+</th:block>
+</body>
+</html>

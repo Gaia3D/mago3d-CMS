@@ -1,0 +1,72 @@
+<html th:lang="${accessibility}" xmlns:th="http://www.thymeleaf.org">
+	<div id="geopolicyTab">
+		<form id="geoPolicyGeoInfo" th:object="${geoPolicy}" method="post" th:action="@{#}" onsubmit="return false;">
+			<table class="input-table scope-row" summary="환경설정 공간정보 테이블">
+			<caption class="hiddenTag">환경설정 공간정보 테이블</caption>
+				<col class="col-label l" />
+				<col class="col-input" />
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="cesiumIonToken">Cesium ion token</label>
+					</th>
+					<td class="col-input">
+						<input type="text" id="cesiumIonToken" name="cesiumIonToken" th:field="*{cesiumIonToken}" class="l" maxlength="256" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="dataServicePath">Data 폴더</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="dataServicePath" name="dataServicePath" th:field="*{dataServicePath}" class="l" maxlength="256" />
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label>Data 변경 요청 처리</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input radio-set">
+						<input type="radio" id="dataChangeRequestDecision1" name="dataChangeRequestDecision" th:field="*{dataChangeRequestDecision}" value="approval" />
+						<label for="dataChangeRequestDecision1">결재(기본값)</label>
+						<input type="radio" id="dataChangeRequestDecision2" name="dataChangeRequestDecision" th:field="*{dataChangeRequestDecision}" value="auto" />
+						<label for="dataChangeRequestDecision2">자동승인</label>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label>Terrain 유형</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input radio-set">
+						<input type="radio" id="terrainType1" name="terrainType" th:field="*{terrainType}" value="cesium-default" />
+						<label for="terrainType1">Cesium 기본</label>
+						<input type="radio" id="terrainType2" name="terrainType" th:field="*{terrainType}" value="geoserver" />
+						<label for="terrainType2">GeoServer</label>
+						<input type="radio" id="terrainType3" name="terrainType" th:field="*{terrainType}" value="cesium-ion-default" />
+						<label for="terrainType3">Cesium Ion 기본</label>
+						<input type="radio" id="terrainType4" name="terrainType" th:field="*{terrainType}" value="cesium-ion-cdn" />
+						<label for="terrainType4">Cesium Ion CDN</label>
+						<input type="radio" id="terrainType5" name="terrainType" th:field="*{terrainType}" value="cesium-customer" />
+						<label for="terrainType5">Cesium Docker Provider</label>
+					</td>
+				</tr>
+				<tr>
+					<th class="col-label l" scope="row">
+						<label for="terrainValue">Terrain 값(URL 또는 Code)</label>
+						<span class="icon-glyph glyph-emark-dot color-warning"></span>
+					</th>
+					<td class="col-input">
+						<input type="text" id="terrainValue" name="terrainValue" th:field="*{terrainValue}" class="l" maxlength="256" />
+					</td>
+				</tr>
+			</table>
+			<div class="button-group">
+				<div class="center-buttons">
+					<a href="#" class="button" th:text="#{save}" onclick="updatePolicyGeoInfo();"></a>
+				</div>
+			</div>
+		</form>
+	</div>
+</html>

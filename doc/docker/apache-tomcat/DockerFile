@@ -1,0 +1,15 @@
+FROM centos:8
+
+RUN \
+    dnf install -y epel-release && \
+    # os update 및 docker centos 에 없는 기본 패키지 설치
+    dnf update -y && \
+    dnf install -y passwd sudo ncurses wget unzip make && \
+    mkdir /setup && \
+    # tomcat, jdk 다운로드
+    wget -O /setup/tomcat.tgz http://apache.mirror.cdnetworks.com/tomcat/tomcat-9/v9.0.36/bin/apache-tomcat-9.0.36.tar.gz && \
+    wget -O /setup/jdk-11.tgz https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz && \
+    wget -O /setup/tomcat-connectors.tgz http://mirror.navercorp.com/apache/tomcat/tomcat-connectors/jk/tomcat-connectors-1.2.48-src.tar.gz
+
+
+

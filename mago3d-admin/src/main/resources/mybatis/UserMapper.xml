@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.UserMapper">
+
+	<!-- 사용자 총 건수 -->
+	<select id="getUserTotalCount" parameterType="userInfo" resultType="long">
+		/* getUserTotalCount */
+		SELECT COUNT(user_id)
+		FROM user_info a
+		LEFT JOIN user_group b
+		ON a.user_group_id = b.user_group_id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="userGroupId != null and userGroupId gt 0">
+			AND a.user_group_id = #{userGroupId}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+			AND ${searchWord} = #{searchValue}
+			</if>
+			<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+			AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="status == null or status == ''">
+			AND (status IS NULL OR status != '5')
+			</if>
+			<if test="status != null and status != ''">
+			AND status = #{status}
+			</if>
+			<if test="startDate != null and startDate != ''">
+			<![CDATA[
+			AND a.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+			<![CDATA[
+			AND a.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+			]]>
+			</if>
+		</trim>
+	</select>
+
+	<!-- TODO password 안 가져오게 수정해야 함 -->
+	<!-- 사용자 목록 -->
+	<select id="getListUser" parameterType="userInfo" resultType="userInfo">
+		/* getListUser */
+		SELECT X.*
+		FROM (
+			SELECT a.*, b.user_group_name
+			FROM user_info a
+			LEFT JOIN user_group b
+			ON a.user_group_id = b.user_group_id
+			<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="userGroupId != null and userGroupId gt 0">
+				AND a.user_group_id = #{userGroupId}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '0'.toString()">
+				AND ${searchWord} = #{searchValue}
+				</if>
+				<if test="searchWord != null and searchWord != '' and searchValue != null and searchValue != '' and searchOption == '1'.toString()">
+				AND ${searchWord} LIKE '%' || #{searchValue} || '%'
+				</if>
+				<if test="status == null or status == ''">
+				AND (status IS NULL OR status != '5')
+				</if>
+				<if test="status != null and status != ''">
+				AND status = #{status}
+				</if>
+				<if test="userGroupName != null and userGroupName != ''">
+				AND user_group_name = #{userGroupName}
+				</if>
+				<if test="startDate != null and startDate != ''">
+				<![CDATA[
+				AND a.insert_date >= TO_TIMESTAMP(#{startDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+				<if test="endDate != null and endDate != ''">
+				<![CDATA[
+				AND a.insert_date <= TO_TIMESTAMP(#{endDate}, 'YYYYMMDDHH24MISSUS')
+				]]>
+				</if>
+			</trim>
+			<choose>
+			<when test="orderWord != null and orderWord != '' and orderValue != null and orderValue != ''">
+			ORDER BY ${orderWord} ${orderValue}
+			</when>
+			<otherwise>
+			ORDER BY a.insert_date DESC, user_id DESC
+			</otherwise>
+			</choose>
+			OFFSET #{offset} LIMIT #{limit}
+		) X
+	</select>
+	
+	<!-- 사용자 정보 -->
+	<select id="getListUserByGroupId" parameterType="int" resultType="string">
+		/* getListUserByGroupId */
+		SELECT user_id
+		FROM user_info
+		WHERE user_group_id = #{userGroupId}
+	</select>
+	
+	<!-- 사용자 정보 -->
+	<select id="getUser" parameterType="string" resultType="userInfo">
+		/* getUser */
+		SELECT A.*, B.user_group_key, B.user_group_name AS user_group_name
+		FROM user_info A, user_group B
+		WHERE A.user_id = #{userId}
+			AND A.user_group_id = B.user_group_id
+	</select>
+
+	<!-- 사용자 ID 중복 체크 -->
+	<select id="isUserIdDuplication" parameterType="userInfo" resultType="boolean">
+		/* isUserIdDuplication */
+		SELECT
+			CASE
+				WHEN COUNT(*) > 0 THEN true
+				ELSE false
+			END AS duplication
+		FROM user_info
+		WHERE user_id = #{userId}
+	</select>
+
+	<!-- 사용자 상태 통계 -->
+	<select id="getUserStatusCount" resultType="userInfo">	
+		/* getUserStatusCount */
+		SELECT status, COUNT(user_id) AS statusCount
+		FROM user_info 
+		GROUP BY status
+	</select>
+
+	<!-- 사용자 등록 -->
+	<insert id="insertUser" parameterType="userInfo">
+		/* insertUser */
+		INSERT INTO user_info(
+			user_id, user_group_id, user_name, password, telephone, mobile_phone, email,
+			messanger, postal_code, address, address_etc, status, update_date
+		) values(
+			#{userId}, #{userGroupId}, #{userName}, #{password}, #{telephone}, #{mobilePhone}, #{email},
+			#{messanger}, #{postalCode}, #{address}, #{addressEtc}, COALESCE(#{status}, '0'), NOW()
+		)
+	</insert>
+
+	<!-- 사용자 수정 -->
+	<update id="updateUser" parameterType="userInfo">
+		/* updateUser */
+		UPDATE user_info
+		SET
+			<if test="userGroupId != null and userGroupId gt 0">
+			user_group_id = #{userGroupId},
+			</if>
+			<if test="userName != null and userName != ''">
+			user_name = #{userName},
+			</if>
+			<if test="password != null and password != ''">
+			password = #{password},
+			</if>
+			<if test="telephone != null and telephone != ''">
+			telephone = #{telephone},
+			</if>
+			<if test="mobilePhone != null and mobilePhone != ''">
+			mobile_phone = #{mobilePhone},
+			</if>
+			<if test="email != null and email != ''">
+			email = #{email},
+			</if>
+			<if test="messanger != null and messanger != ''">
+			messanger = #{messanger},
+			</if>
+			postal_code = #{postalCode},
+			address = #{address},
+			address_etc = #{addressEtc},
+			<if test="status != null and status != ''">
+			status = #{status},
+			</if>
+			<if test="dbStatus != null and dbStatus == '3'.toString()">
+				<if test="status == '0'.toString() or status == '6'.toString()">
+			last_signin_date = NOW(),
+				</if>
+			</if>
+			<if test="failSigninCount != null and failSigninCount gte 0">
+			fail_signin_count = #{failSigninCount},
+			</if>
+			update_date = NOW()
+		WHERE user_id = #{userId}
+	</update>
+	
+	<!-- 사용자 기본 정보 중 비밀번호 정보 수정 -->
+	<update id="updatePassword" parameterType="userInfo">
+		/* updatePassword */
+		UPDATE user_info
+		SET password = #{password},
+			update_date = NOW(),
+			last_password_change_date = NOW(),
+			<if test="dbStatus != null and dbStatus == '2'.toString()">
+			fail_login_count = 0,
+			</if>
+			<if test="dbStatus != null and dbStatus == '3'.toString()">
+			last_login_date = NOW(),
+			</if>
+			status = #{status}
+		WHERE user_id = #{userId}
+	</update>
+
+	<!-- 사용자 상태 수정 -->
+	<update id="updateUserStatus" parameterType="userInfo">
+		/* updateUserStatus */
+		UPDATE user_info
+		SET
+			<if test="status != null and status != ''">
+			status = #{status},
+			</if>
+			<if test="status != null and status == '0'.toString()">
+			last_signin_date = NOW(),
+			</if>
+			<if test="failSigninCount != null and failSigninCount == 0">
+			fail_signin_count = #{failSigninCount},
+			</if>
+			update_date = NOW()
+		WHERE user_id = #{userId}
+	</update>
+
+	<!-- 사용자 삭제 -->
+	<delete id="deleteUser" parameterType="string">
+		/* deleteUser */
+		DELETE FROM user_info WHERE user_id = #{value}
+	</delete>
+
+</mapper>

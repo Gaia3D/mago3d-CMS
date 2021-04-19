@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gaia3d.persistence.LayerMapper">
+
+    <!-- Layer 목록 -->
+    <select id="getListLayer" parameterType="layer" resultType="layer">
+        /* getListLayer */
+        SELECT A.*, B.layer_group_name
+        FROM layer A
+        LEFT JOIN layer_group B
+        ON a.layer_group_id = B.layer_group_id
+        WHERE A.layer_group_id = #{layerGroupId}
+        AND A.available = TRUE
+        ORDER BY view_order
+    </select>
+</mapper>

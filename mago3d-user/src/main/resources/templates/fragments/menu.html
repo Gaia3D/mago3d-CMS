@@ -1,0 +1,11 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<body>
+	<ul id="navWrap" class="nav">
+	<th:block th:each="userGroupMenu : ${cacheUserGroupMenuList}">
+		<li th:id="${userGroupMenu.htmlId}" th:class="${userGroupMenu.cssClass}" th:data-nav="${userGroupMenu.htmlContentId}"
+			th:title="${#strings.equals(lang,'ko')} ? ${userGroupMenu.name} : ${userGroupMenu.nameEn}" th:text="${#strings.equals(lang,'ko')} ? ${userGroupMenu.name} : ${userGroupMenu.nameEn}"></li>
+	</th:block>
+	</ul>
+</body>
+</html>
+	

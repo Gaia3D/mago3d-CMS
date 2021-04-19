@@ -1,0 +1,181 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<body>
+<div id="toolbarWrap">
+	<div class="ctrlWrap">
+		<div class="zoom">
+			<button type="button" id="mapCtrlReset" class="reset" th:title="#{toolbar.initialize.location}"><th:block th:text="#{toolbar.initialize.location}"></th:block></button>
+			<button type="button" id="mapCtrlAll" class="zoomall" th:title="#{toolbar.zoom.all}"><th:block th:text="#{toolbar.zoom.all}"></th:block></button>
+			<button type="button" id="mapCtrlZoomIn" class="zoomin" th:title="#{toolbar.zoom.in}"><th:block th:text="#{toolbar.zoom.in}"></th:block></button>
+			<button type="button" id="mapCtrlZoomOut" class="zoomout" th:title="#{toolbar.zoom.out}"><th:block th:text="#{toolbar.zoom.out}"></th:block></button>
+			<button type="button" id="mapCtrlDistance" class="measures distance" data-type="LineString" th:title="#{toolbar.distance}"><th:block th:text="#{toolbar.distance}"></th:block></button>
+			<button type="button" id="mapCtrlArea" class="measures area" data-type="Polygon" th:title="#{toolbar.area}"><th:block th:text="#{toolbar.area}"></th:block></button>
+			<button type="button" id="mapCapture" class="save" data-type="" th:title="#{common.save}"><th:block th:text="#{common.save}"></th:block></button>
+		</div>
+		<div class="rotate">
+			<button type="button" class="rotateReset on" id="rotateReset" th:title="#{toolbar.initialize.direction}"><th:block th:text="#{toolbar.initialize.direction}"></th:block></button>
+			<label for="rotateInput" class="hiddenTag">rotate</label>
+			<input type="text" id="rotateInput" placeholder="0" readonly>&deg;
+			<label for="pitchInput" class="hiddenTag">pitch</label>
+			<input type="text" id="pitchInput" placeholder="-90" readonly>&deg;
+			<button type="button" class="rotateLeft" id="rotateLeft" th:title="#{toolbar.rotate.camera.left}"><th:block th:text="#{toolbar.rotate.camera.left}"></th:block></button>
+			<button type="button" class="rotateRight" id="rotateRight" th:title="#{toolbar.rotate.camera.right}"><th:block th:text="#{toolbar.rotate.camera.right}"></th:block></button>
+		</div>
+		<div class="index">
+			<button type="button" class="magoSet" id="mapPolicy" th:title="#{toolbar.mago3d.settings}"><th:block th:text="#{toolbar.mago3d.settings}"></th:block></button>
+		</div>
+	</div>
+	<div id="mago3DSettingLabelLayer" class="labelLayer" style="display:none;">
+		<div class="layerHeader">
+			<h3><th:block th:text="#{toolbar.mago3d.settings}"></th:block></h3>
+			<button type="button" class="layerClose" th:title="#{common.close}"><th:block th:text="#{common.close}"></th:block></button>
+		</div>
+		<div class="layerContents">
+			<div class="inline-toggle">
+				<h4 class="category"><th:block th:text="#{common.label}"></th:block></h4>
+				<div id="labelDisplay" class="switch-toggle switch-ios">
+					<input type="radio" id="labelDisplayY" name="labelDisplay" value="true">
+					<label for="labelDisplayY"><th:block th:text="#{common.show}"></th:block></label>
+					<input type="radio" id="labelDisplayN" name="labelDisplay" value="false" checked>
+					<label for="labelDisplayN"><th:block th:text="#{common.hide}"></th:block></label>
+					<a></a>
+				</div>
+			</div>
+
+			<div class="inline-toggle">
+				<h4 class="category"><th:block th:text="#{toolbar.origin}"></th:block></h4>
+				<div id="originDisplay" class="switch-toggle switch-ios">
+					<input type="radio" id="originDisplayY" name="originDisplay" value="true">
+					<label for="originDisplayY"><th:block th:text="#{common.show}"></th:block></label>
+					<input type="radio" id="originDisplayN" name="originDisplay" value="false" checked>
+					<label for="originDisplayN"><th:block th:text="#{common.hide}"></th:block></label>
+					<a></a>
+				</div>
+			</div>
+
+			<div class="inline-toggle">
+				<h4 class="category"><th:block th:text="#{toolbar.bounding.box}"></th:block></h4>
+				<div id="bboxDisplay" class="switch-toggle switch-ios">
+					<input type="radio" id="bboxDisplayY" name="bboxDisplay" value="true">
+					<label for="bboxDisplayY"><th:block th:text="#{common.show}"></th:block></label>
+					<input type="radio" id="bboxDisplayN" name="bboxDisplay" value="false" checked>
+					<label for="bboxDisplayN"><th:block th:text="#{common.hide}"></th:block></label>
+					<a></a>
+				</div>
+			</div>
+
+			<div class="inline-toggle">
+				<h4 class="category"><th:block th:text="#{toolbar.close.range.issues}"></th:block></h4>
+				<div id="nearIssueDisplay" class="switch-toggle switch-ios">
+					<input type="radio" id="nearIssueDisplayY" name="nearIssueDisplay" value="true">
+					<label for="nearIssueDisplayY"><th:block th:text="#{common.show}"></th:block></label>
+					<input type="radio" id="nearIssueDisplayN" name="nearIssueDisplay" value="false" checked>
+					<label for="nearIssueDisplayN"><th:block th:text="#{common.hide}"></th:block></label>
+					<a></a>
+				</div>
+			</div>
+
+			<div class="inline-toggle">
+				<h4 class="category"><th:block th:text="#{toolbar.shadow}"></th:block></h4>
+				<div id="shadowDisplay" class="switch-toggle switch-ios">
+					<input type="radio" id="shadowDisplayY" name="shadowDisplay" value="true">
+					<label for="shadowDisplayY"><th:block th:text="#{common.show}"></th:block></label>
+					<input type="radio" id="shadowDisplayN" name="shadowDisplay" value="false" checked>
+					<label for="shadowDisplayN"><th:block th:text="#{common.hide}"></th:block></label>
+					<a></a>
+				</div>
+			</div>
+
+			<div class="inline-toggle marB20">
+				<h4 class="category"><th:block th:text="#{toolbar.select.and.move}"></th:block></h4>
+				<div class="switch-toggle switch-ios" style="width: 60%;">
+					<input type="radio" id="objectNoneMove" name="objectMoveMode" value="2" checked>
+					<label for="objectNoneMove">None</label>
+					<input type="radio" id="objectAllMove" name="objectMoveMode" value="0">
+					<label for="objectAllMove">All</label>
+					<input type="radio" id="objectMove" name="objectMoveMode" value="1">
+					<label for="objectMove">Object</label>
+					<a></a>
+				</div>
+			</div>
+
+			<div id="dataControllWrap" style="display:none;">
+				<div class="layerDivTit"></div>
+				<div class="layerDiv">
+					<h4 class="category"><th:block th:text="#{toolbar.change.color}"></th:block></h4>
+					<ul>
+						<li>
+							<label for="dcColorPicker"><th:block th:text="#{common.color}"></th:block></label>
+							<input type="color" id="dcColorPicker">
+							<label for="dcColorInput" class="hiddenTag"><th:block th:text="#{toolbar.rgb.color.table}"></th:block></label>
+							<input type="text" id="dcColorInput" value="#000000" size="6" readonly style="color: rgb(0, 0, 0);">
+							<button type="button" id="dcColorApply" class="btnTextF"><th:block th:text="#{common.apply}"></th:block></button>
+							<button type="button" id="dcColorCancle" class="btnText"><th:block th:text="#{common.revert}"></th:block></button>
+						</li>
+					</ul>
+				</div>
+				<form id="dcRotLocForm" class="layerDiv marB0" th:action="@{#}">
+					<input type="hidden" name="dataId" value="" />
+					<h4 class="category"><th:block th:text="#{toolbar.change.location}"></th:block></h4>
+					<ul class="layerDiv">
+						<li>
+							<label for="dcLongitude"><th:block th:text="#{common.longitude}"></th:block></label>
+							<input type="text" id="dcLongitude" name="longitude" readonly>
+						</li>
+						<li>
+							<label for="dcLatitude"><th:block th:text="#{common.latitude}"></th:block></label>
+							<input type="text" id="dcLatitude" name="latitude" readonly>
+						</li>
+						<li>
+							<label for="dcAltitude"><th:block th:text="#{common.altitude}"></th:block></label>
+							<input type="text" id="dcAltitude" name="altitude" size="10" readonly>
+							<button id="dcAltUp" data-type="up" type="button" class="up"></button>
+							<button id="dcAltDown" data-type="down" type="button" class="down"></button>
+							<label for="dcAltitudeOffset" style="width: 40px;">offset</label>
+							<input type="text" id="dcAltitudeOffset" value="1" size="1">
+						</li>
+					</ul>
+
+					<h4 class="category"><th:block th:text="#{toolbar.change.rotation}"></th:block></h4>
+					<ul class="layerDiv">
+						<li>
+							<label for="dcPitch">x(pitch)</label>
+							<input type="text" id="dcPitch" name="pitch" size="2" readonly>
+							<button type="button" class="dcRangeBtn rangePrev" data-type="prev" id="rcPitchPrev"></button>
+							<label for="dcPitchRange" class="hiddenTag">x(pitch) <th:block th:text="#{toolbar.slide}"></th:block></label>
+							<input id="dcPitchRange" data-type="Pitch" style="width: 140px;" type="range" min="-360" max="360" step="1" value="1">
+							<button type="button" class="dcRangeBtn rangeNext" data-type="next" id="rcPitchNext"></button>
+						</li>
+
+						<li>
+							<label for="dcRoll">y(roll)</label>
+							<input type="text" id="dcRoll" name="roll" size="2" readonly>
+							<button type="button" class="dcRangeBtn rangePrev" data-type="prev" id="rcRollPrev"></button>
+							<label for="dcRollRange" class="hiddenTag">y(roll) <th:block th:text="#{toolbar.slide}"></th:block></label>
+							<input id="dcRollRange" data-type="Roll" style="width: 140px;" type="range" min="-360" max="360" step="1" value="1">
+							<button type="button" class="dcRangeBtn rangeNext" data-type="next" id="rcRollNext"></button>
+						</li>
+
+						<li>
+							<label for="dcHeading">z(heading)</label>
+							<input type="text" id="dcHeading" name="heading" size="2" readonly>
+							<button type="button" class="dcRangeBtn rangePrev" data-type="prev" id="rcHeadingPrev"></button>
+							<label for="dcHeadingRange" class="hiddenTag">z(heading) <th:block th:text="#{toolbar.slide}"></th:block></label>
+							<input id="dcHeadingRange" data-type="Heading" style="width: 140px;" type="range" min="-360" max="360" step="1" value="1">
+							<button type="button" class="dcRangeBtn rangeNext" data-type="next" id="rcHeadingNext"></button>
+						</li>
+					</ul>
+
+					<div>
+						<button type="button" id="dcSavePosRot" class="btnTextF" th:title="#{toolbar.data.transform.save}">
+							<th:block th:text="#{toolbar.data.transform.save}"></th:block>
+						</button>
+						<button type="button" id="issueButton" class="btnTextF"><th:block th:text="#{toolbar.issue.registration}"></th:block></button>
+						<button type="button" id="dcShowAttr" class="btnTextF"><th:block th:text="#{toolbar.data.information.inquiry}"></th:block></button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

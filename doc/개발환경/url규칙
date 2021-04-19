@@ -1,0 +1,19 @@
+view page 가 있는 경우에는 queryString을 붙여서 사용한다. ConfigInterceptor에서 메뉴 자동완성을 위한 url을 파싱할때 rest형태로 된 url은 파싱하기 까다로우므로...  
+
+view page가 없는 경우에는 rest 형태로 사용하거나 일관성있게 모두 queryString을 붙인다. 
+
+* 일반적인 도메인에 대한 url 규칙 
+/'도메인'/list
+/'도메인'/input
+/'도메인'/modify
+/'도메인'/insert
+/'도메인'/update
+/'도메인'/delete 
+
+* 도메인의 하위 메뉴에 대한 url 규칙
+/'도메인'/list-'하위도메인'
+/'도메인'/input-'하위도메인'
+/'도메인'/modify-'하위도메인'
+/'도메인'/insert-'하위도메인'
+/'도메인'/update-'하위도메인'
+/'도메인'/delete-'하위도메인'
