@@ -72,7 +72,7 @@ values
 insert into menu(menu_id, menu_type, menu_target, name, name_en, ancestor, parent, depth, previous_depth, view_order, url, url_alias, html_id, html_content_id,
     css_class, default_yn, use_yn, display_yn)
 values
-    (1001, '1', '0', '검색', 'SEARCH', 1001, 0, 1, 1, 1, '/search', null, 'searchMenu', 'searchContent', 'search', 'Y', 'Y', 'Y'),
+    --(1001, '1', '0', '검색', 'SEARCH', 1001, 0, 1, 1, 1, '/search', null, 'searchMenu', 'searchContent', 'search', 'Y', 'Y', 'Y'),
     (1002, '1', '0', '데이터', 'DATA', 1002, 0, 1, 1, 2, '/data/map', null, 'dataMenu', 'dataContent', 'data', 'Y', 'Y', 'Y'),
     (1003, '1', '0', '변환', 'CONVERTER', 1003, 0, 1, 1, 3, '/upload-data/list', null, 'converterMenu', 'converterContent', 'converter', 'Y', 'Y', 'Y'),
     --(1004, '1', '0', '공간분석', 'SPATIAL', 1004, 0, 1, 4, '/spatial', null, 'spatialMenu', 'spatialContent', 'spatial', 'Y', 'Y', 'Y'),
@@ -134,7 +134,7 @@ values
     (421, 1, 421, 2, 'Y'),
     (422, 1, 422, 2, 'Y'),
     
-	(NEXTVAL('user_group_menu_seq'), 1, 1001, 1, 'Y'),
+	--(NEXTVAL('user_group_menu_seq'), 1, 1001, 1, 'Y'),
 	(NEXTVAL('user_group_menu_seq'), 1, 1002, 1, 'Y'),
 	(NEXTVAL('user_group_menu_seq'), 1, 1003, 1, 'Y'),
 	(NEXTVAL('user_group_menu_seq'), 1, 1004, 1, 'Y'),
@@ -142,7 +142,7 @@ values
 	(NEXTVAL('user_group_menu_seq'), 1, 1007, 1, 'Y'),
 	(NEXTVAL('user_group_menu_seq'), 1, 1008, 1, 'Y'),
 
-	(NEXTVAL('user_group_menu_seq'), 2, 1001, 1, 'Y'),
+	--(NEXTVAL('user_group_menu_seq'), 2, 1001, 1, 'Y'),
 	(NEXTVAL('user_group_menu_seq'), 2, 1002, 1, 'Y'),
 	(NEXTVAL('user_group_menu_seq'), 2, 1003, 1, 'Y'),
 	--(NEXTVAL('user_group_menu_seq'), 2, 1004, 'Y'),

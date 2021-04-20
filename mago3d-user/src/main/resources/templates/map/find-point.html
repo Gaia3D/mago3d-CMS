@@ -43,7 +43,6 @@
 	<button class="mapSelectButton" onclick="window.close();"><th:block th:text="#{common.close}"></th:block></button>
     <div id="magoContainer" style="height: 699px;">
 	</div>
-	<canvas id="objectLabel"></canvas>
 </body>
 <script type="text/javascript" th:src="@{/externlib/cesium/Cesium.js}"></script>
 <script type="text/javascript" th:src="@{/externlib/cesium-geoserver-terrain-provider/GeoserverTerrainProvider.js(cacheVersion=${contentCacheVersion})}"></script>
@@ -51,8 +50,7 @@
 <script type="text/javascript" th:src="@{/externlib/decodeTextAlternative/encoding.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/common.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/message.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/js/mago3d/mago3d.js(cacheVersion=${contentCacheVersion})}"></script>
-<script type="text/javascript" th:src="@{/js/mago3d/mago3d_lx.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/mago3d/mago3d.min.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/js/{lang}/map-init.js(lang=${lang}, cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript">
 	//Cesium.Ion.defaultAccessToken = '';
@@ -73,14 +71,24 @@
 	
 	function magoInit() {
 		var geoPolicyJson = MAGO.policy;
-		var cesiumViewerOption = {};
-			cesiumViewerOption.infoBox = false;
-			cesiumViewerOption.navigationHelpButton = false;
-			cesiumViewerOption.selectionIndicator = false;
-			cesiumViewerOption.homeButton = false;
-			cesiumViewerOption.fullscreenButton = false;
-			cesiumViewerOption.geocoder = false;
-			cesiumViewerOption.baseLayerPicker = false;
+		var option = {};
+		option.infoBox = false;
+		option.navigationHelpButton = false;
+		option.selectionIndicator = false;
+		option.homeButton = false;
+		option.fullscreenButton = false;
+		option.geocoder = false;
+		option.baseLayerPicker = false;
+		option.sceneModePicker = false;
+			
+		option.defaultControl = {};
+		option.defaultControl.zoom = false;
+		option.defaultControl.initCamera = false;
+		option.defaultControl.fullScreen = false;
+		option.defaultControl.measure = false;
+		option.defaultControl.tools = false;
+		option.defaultControl.attribution = false;
+		option.defaultControl.overviewMap = false;
 			
 		/**
 		 * @param {Stirng} containerId container div id. required.
@@ -89,7 +97,7 @@
 		 * @param {object} options Cesium viewer parameter. option.
 		 * @param {Cesium.Viewer} legacyViewer 타 시스템과의 연동의 경우 view 객체가 생성되어서 넘어 오는 경우가 있음. option.
 		*/	
-        MAGO3D_INSTANCE = new Mago3D.Mago3d('magoContainer', geoPolicyJson, {loadend : magoLoadEnd}, cesiumViewerOption);
+        MAGO3D_INSTANCE = new Mago3D.Mago3d('magoContainer', geoPolicyJson, {loadend : magoLoadEnd}, option);
 		 
 	}
 	
@@ -106,20 +114,21 @@
 		if(viewer.baseLayerPicker) viewer.baseLayerPicker.destroy();
 		
 		// mago3d logo 추가
-		Mago3D.tempCredit(viewer);
+		//Mago3D.tempCredit(viewer);
 		
 		magoManager.on(Mago3D.MagoManager.EVENT_TYPE.CLICK, function(result) {
 			if(beforePointId !== undefined && beforePointId !== null) {
 				remove(beforePointId);
 			}
 			
-			var longitude = result.clickCoordinate.geographicCoordinate.longitude;
-			var latitude = result.clickCoordinate.geographicCoordinate.latitude;
-			var altitude = result.clickCoordinate.geographicCoordinate.altitude;
+			var longitude = result.point.geographicCoordinate.longitude;
+			var latitude = result.point.geographicCoordinate.latitude;
+			var altitude = result.point.geographicCoordinate.altitude;
 			
-			var x = result.clickCoordinate.worldCoordinate.x;
-			var y = result.clickCoordinate.worldCoordinate.y;
-			var z = result.clickCoordinate.worldCoordinate.z;
+			var x = result.point.worldCoordinate.x;
+			var y = result.point.worldCoordinate.y;
+			var z = result.point.worldCoordinate.z;
+
 			
 			var pointGraphic = new Cesium.PointGraphics({
 				pixelSize : 10,

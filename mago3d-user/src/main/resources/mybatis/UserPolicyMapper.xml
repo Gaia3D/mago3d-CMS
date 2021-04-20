@@ -38,7 +38,31 @@
         	</if>
         	<if test="initDuration != null">
         		init_duration = #{initDuration}, 
-        	</if>
+            <if test="initDefaultFov != null and initDefaultFov != ''">
+                init_default_fov = #{initDefaultFov}, 
+            </if>
+            </if>
+            <if test="lod0 != null and lod0 != ''">
+                lod0 = #{lod0}, 
+            </if>
+            <if test="lod1 != null and lod1 != ''">
+                lod1 = #{lod1}, 
+            </if>
+            <if test="lod2 != null and lod2 != ''">
+                lod2 = #{lod2}, 
+            </if>
+            <if test="lod3 != null and lod3 != ''">
+                lod3 = #{lod3}, 
+            </if>
+            <if test="lod4 != null and lod4 != ''">
+                lod4 = #{lod4}, 
+            </if>
+            <if test="lod5 != null and lod5 != ''">
+                lod5 = #{lod5}, 
+            </if>
+            <if test="ssaoRadius != null and ssaoRadius != ''">
+                ssao_radius = #{ssaoRadius}, 
+            </if>
            		update_date = NOW()
         WHERE user_id = #{userId}
     </update>

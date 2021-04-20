@@ -38,9 +38,9 @@
 		<div th:replace="~{/fragments/menu :: #navWrap}"></div>
 		<!-- E: NAVWRAP -->
 		<div id="contentsWrap" class="contentsWrap" style="display: none;">
-			<div id="searchContent" class="contents fullHeight" style="display:none;">
+			<!-- <div id="searchContent" class="contents fullHeight" style="display:none;">
 				<div th:replace="~{/search/district :: #districtWrap}"></div>
-			</div>
+			</div> -->
 			<div id="dataContent" class="contents-margin-default fullHeight">
 				<div class="tabs">
 					<ul id="dataInfoTab" class="tab tab-divide">
@@ -72,7 +72,7 @@
 	<!-- E: NAVWRAP -->
 
 	<!-- S: GNB WRAP -->
-	<div th:replace="~{/fragments/global-search :: #gnbWrap}"></div>
+	<!-- <div th:replace="~{/fragments/global-search :: #gnbWrap}"></div> -->
 	<!-- E: GNB WRAP -->
 
 	<!-- CTRLWRAP -->
@@ -159,15 +159,24 @@
 	function magoInit() {
 		var geoPolicyJson = MAGO.policy;
 
-		var cesiumViewerOption = {};
-		cesiumViewerOption.infoBox = false;
-		cesiumViewerOption.navigationHelpButton = false;
-		cesiumViewerOption.selectionIndicator = false;
-		cesiumViewerOption.homeButton = false;
-		cesiumViewerOption.fullscreenButton = false;
-		cesiumViewerOption.geocoder = false;
-		cesiumViewerOption.baseLayerPicker = false;
-		cesiumViewerOption.sceneModePicker = false;
+		var option = {};
+		option.infoBox = false;
+		option.navigationHelpButton = false;
+		option.selectionIndicator = false;
+		option.homeButton = false;
+		option.fullscreenButton = false;
+		option.geocoder = false;
+		option.baseLayerPicker = false;
+		option.sceneModePicker = false;
+
+		option.defaultControl = {};
+		option.defaultControl.zoom = false;
+		option.defaultControl.initCamera = false;
+		option.defaultControl.fullScreen = false;
+		option.defaultControl.measure = false;
+		option.defaultControl.tools = false;
+		option.defaultControl.attribution = false;
+		// option.defaultControl.overviewMap = false;
 
 		/**
 		 * @param {Stirng} containerId container div id. required.
@@ -176,7 +185,7 @@
 		 * @param {object} options Cesium viewer parameter. option.
 		 * @param {Cesium.Viewer} legacyViewer 타 시스템과의 연동의 경우 view 객체가 생성되어서 넘어 오는 경우가 있음. option.
 		*/
-		MAGO3D_INSTANCE = new Mago3D.Mago3d('magoContainer', geoPolicyJson, {loadend : magoLoadEnd}, cesiumViewerOption);
+		MAGO3D_INSTANCE = new Mago3D.Mago3d('magoContainer', geoPolicyJson, {loadend : magoLoadEnd}, option);
 
 	}
 

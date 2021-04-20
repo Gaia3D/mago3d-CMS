@@ -86,7 +86,7 @@
 		var inputPoint_x = $('#api32-p3').val();
 		var inputPoint_y = $('#api32-p4').val();
 		var inputPoint_z = $('#api32-p5').val();
-		var result = getCoordinateRelativeToBuildingAPI(MAGO3D_INSTANCE2, projectId, dataKey, new gaia3d.Point3D(parseFloat(inputPoint_x), parseFloat(inputPoint_y), parseFloat(inputPoint_z)), new gaia3d.Point3D());
+		var result = getCoordinateRelativeToBuildingAPI(MAGO3D_INSTANCE2, projectId, dataKey, new Mago3D.Point3D(parseFloat(inputPoint_x), parseFloat(inputPoint_y), parseFloat(inputPoint_z)), new Mago3D.Point3D());
 		var table = document.getElementById("api32-result");
 		table.innerHTML = '';
 		

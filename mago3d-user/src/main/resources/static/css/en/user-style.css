@@ -254,7 +254,7 @@ float: left;
 overflow-y: auto;
 height: 100%;
 width: 370px;
-padding-top: 50px;
+/* padding-top: 50px; */
 box-sizing: border-box;
 background-color: #eaeaea;
 margin-left:60px;
