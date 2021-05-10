@@ -73,25 +73,38 @@ $(document).ready(function() {
 //데이터 검색 페이징에서 호출됨
 function pagingDataInfoList(pageNo, searchParameters) {
 	// searchParameters=&searchWord=data_name&searchOption=1&searchValue=&startDate=&endDate=&orderWord=&orderValue=&dataType=&dataGroupId=
+	// &searchWord=data_name&searchOption=1&searchValue=&startDate=&endDate=&orderWord=&orderValue=&listCounter=10&dataType=
 	var dataName = null;
-	var status = null;
+	// var status = null;
 	var dataType = null;
 	var dataGroupId = null;
+
 	var parameters = searchParameters.split("&");
-	for(var i=0; i<parameters.length; i++) {
-		if(i == 3) {
-			var tempDataName = parameters[3].split("=");
-			dataName = tempDataName[1];
-		/*} else if(i == 8) {
-			var tempDataStatus = parameters[8].split("=");
-			status = tempDataStatus[1];*/
-		} else if(i == 8) {
-			var tempDataType = parameters[8].split("=");
-			dataType = tempDataType[1];
-		} else if(i == 9) {
-			var tempDataGroupId = parameters[9].split("=");
-			dataGroupId = tempDataGroupId[1];
+	for (var i = 0; i < parameters.length; i++) {
+		var keyValue = parameters[i].split("=");
+		var key = keyValue[0];
+		var value = keyValue[1];
+		if (key === 'searchValue') {
+			dataName = value;
+		} else if (key === 'dataGroupId') {
+			dataGroupId = value;
+		} else if (key === 'dataType') {
+			dataType = value;
 		}
+	// 	if(i == 3) {
+	// 		var tempDataName = parameters[3].split("=");
+	// 		dataName = tempDataName[1];
+	// 	/*} else if(i == 8) {
+	// 		var tempDataStatus = parameters[8].split("=");
+	// 		status = tempDataStatus[1];*/
+	// 	} else if(i == 8) {
+	// 		var tempDataType = parameters[8].split("=");
+	// 		dataType = tempDataType[1];
+	// 	} else if(i == 9) {
+	// 		var tempDataGroupId = parameters[9].split("=");
+	// 		dataGroupId = tempDataGroupId[1];
+	// 	}
+
 	}
 
 	mapDataInfoList(pageNo, dataName, dataGroupId, dataType);
