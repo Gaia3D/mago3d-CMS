@@ -130,18 +130,34 @@ public class ServletConfig implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		log.info(" @@@ ServletConfig addResourceHandlers @@@");
-		
+		String profile = propertiesConfig.getProfile().toUpperCase();
 		// F4D converter file 경로
 		registry.addResourceHandler("/f4d/**").addResourceLocations("file:" + propertiesConfig.getDataServiceDir());
+
+		if (profile.equalsIgnoreCase("local")) {
+			log.info(" @@@ ServletConfig addResourceHandlers profile is LOCAL @@@");
+			registry.addResourceHandler("/css/**").addResourceLocations("file:src/main/resources/static/css/");
+			registry.addResourceHandler("/externlib/**").addResourceLocations("file:src/main/resources/static/externlib/");
+			registry.addResourceHandler("/images/**").addResourceLocations("file:src/main/resources/static/images/");
+			registry.addResourceHandler("/js/**").addResourceLocations("file:src/main/resources/static/js/");
+			registry.addResourceHandler("/docs/**").addResourceLocations("file:src/main/resources/static/docs/");
+		} else {
+			log.info(" @@@ ServletConfig addResourceHandlers profile is {} @@@", profile);
+			registry.addResourceHandler("/css/**").addResourceLocations("classpath:static/css/");
+			registry.addResourceHandler("/externlib/**").addResourceLocations("classpath:static/externlib/");
+			registry.addResourceHandler("/images/**").addResourceLocations("classpath:static/images/");
+			registry.addResourceHandler("/js/**").addResourceLocations("classpath:static/js/");
+			registry.addResourceHandler("/docs/**").addResourceLocations("classpath:static/docs/");
+		}
 		
 		registry.addResourceHandler("/f4d/sample/**").addResourceLocations("file:" + propertiesConfig.getGuideDataServiceDir());
 		registry.addResourceHandler("/sample/json/**").addResourceLocations("classpath:static/sample/json/");
 		registry.addResourceHandler("/sample/images/**").addResourceLocations("classpath:static/sample/images/");
-		registry.addResourceHandler("/css/**").addResourceLocations("classpath:static/css/");
-		registry.addResourceHandler("/externlib/**").addResourceLocations("classpath:static/externlib/");
-		registry.addResourceHandler("/images/**").addResourceLocations("classpath:static/images/");
-		registry.addResourceHandler("/js/**").addResourceLocations("classpath:static/js/");
-		registry.addResourceHandler("/docs/**").addResourceLocations("classpath:static/docs/");
+		//registry.addResourceHandler("/css/**").addResourceLocations("classpath:static/css/");
+		//registry.addResourceHandler("/externlib/**").addResourceLocations("classpath:static/externlib/");
+		//registry.addResourceHandler("/images/**").addResourceLocations("classpath:static/images/");
+		//registry.addResourceHandler("/js/**").addResourceLocations("classpath:static/js/");
+		//registry.addResourceHandler("/docs/**").addResourceLocations("classpath:static/docs/");
 //		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 	}
 	

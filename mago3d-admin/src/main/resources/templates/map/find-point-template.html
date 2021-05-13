@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${accessibility}">
+<script id="searchListSource" type="text/x-handlebars-template">
+<ul>
+    {{#greaterThan items.length 0}}
+    {{#each items}}
+        <li onclick="gotoFly('{{point.x}}', '{{point.y}}', '500');">
+            <label>타이틀</label>
+            <span>{{title}}</span>
+            <label>카테고리</label>
+            <span>{{category}}</span>
+            <label>주소</label>
+            <span>{{address.road}}</span>
+        </li>
+    {{/each}}
+    {{else}}
+        <li>검색된 결과가 없습니다.</li>
+    {{/greaterThan}}
+</ul>
+</script>
+</html>

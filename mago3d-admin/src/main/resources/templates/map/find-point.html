@@ -42,13 +42,20 @@
  </head>
 <body>
 	<button class="mapSelectButton" onclick="window.close();">닫기</button>
-    <div id="magoContainer" style="height: 699px;">
-	</div>
+    <form id="searchForm" onsubmit="return false;">
+        <input type="text" name="query">
+        <button type="submit" id="btnSearch">검색</button>
+    </form>
+    <div th:replace="~{/map/find-point-template :: #searchListSource}"></div>
+    <div id="searchListDHTML"></div>
+    <div id="magoContainer" style="height: 699px;"></div>
 	<canvas id="objectLabel"></canvas>
 </body>
 
 <script type="text/javascript" th:src="@{/externlib/jquery-3.3.1/jquery.min.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/externlib/jquery-ui-1.12.1/jquery-ui.min.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/externlib/handlebars-4.1.2/handlebars.js(cacheVersion=${contentCacheVersion})}"></script>
+<script type="text/javascript" th:src="@{/js/{lang}/handlebars-helper.js(lang=${lang},cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/externlib/cesium/Cesium.js}"></script>
 <script type="text/javascript" th:src="@{/externlib/cesium-geoserver-terrain-provider/GeoserverTerrainProvider.js(cacheVersion=${contentCacheVersion})}"></script>
 <script type="text/javascript" th:src="@{/externlib/decodeTextAlternative/encoding-indexes.js(cacheVersion=${contentCacheVersion})}"></script>
@@ -159,6 +166,68 @@
 	function remove(entityStored) {
 		entities.removeById(entityStored);
 	}
-	
+
+    function gotoFly(longitude, latitude, altitude) {
+
+        if(longitude === null || longitude === '' || latitude === null || latitude === '' || altitude === null || altitude === '') {
+            alert(JS_MESSAGE["location.invalid"]);
+            return;
+        }
+
+        gotoFlyAPI(MAGO3D_INSTANCE, longitude, latitude, altitude, 3);
+        drawPointAPI(MAGO3D_INSTANCE, longitude, latitude, altitude);
+        //hereIamMarker(longitude, latitude, altitude);
+    }
+
+    function drawPointAPI(MAGO3D_INSTANCE, longitude, latitude, altitude) {
+
+        viewer = MAGO3D_INSTANCE.getViewer();
+
+        if(beforePointId !== undefined && beforePointId !== null) {
+            remove(beforePointId);
+        }
+
+        var pointGraphic = new Cesium.PointGraphics({
+            pixelSize : 10,
+            heightReference : Cesium.HeightReference.CLAMP_TO_GROUND,
+            color : Cesium.Color.AQUAMARINE,
+            outlineColor : Cesium.Color.WHITE,
+            outlineWidth : 2
+        });
+
+        var addedEntity = viewer.entities.add({
+            position : Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude),
+            point : pointGraphic
+        });
+
+        $(opener.document).find("#longitude").val(longitude);
+        $(opener.document).find("#latitude").val(latitude);
+        $(opener.document).find("#altitude").val(0.0);
+
+        beforePointId = addedEntity.id;
+    }
+
+	$('#btnSearch').click(function() {
+        var formData =$("#searchForm").serialize();
+        $.ajax({
+            url: "/search/places",
+            type: "GET",
+            data: formData,
+            dataType: "json",
+            headers: {"X-Requested-With": "XMLHttpRequest"},
+            success: function (msg) {
+
+                //핸들바 템플릿 컴파일
+                var template = Handlebars.compile($("#searchListSource").html());
+                //핸들바 템플릿에 데이터를 바인딩해서 HTML 생성
+                $("#searchListDHTML").html("").append(template(msg.response.result));
+
+            },
+            error: function (request, status, error) {
+
+            }
+        });
+    });
+
 </script>
 </html>
