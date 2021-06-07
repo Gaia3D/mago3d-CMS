@@ -79,21 +79,18 @@ function pagingDataInfoList(pageNo, searchParameters) {
 	var dataGroupId = null;
 	var parameters = searchParameters.split("&");
 	for(var i=0; i<parameters.length; i++) {
-		if(i == 3) {
-			var tempDataName = parameters[3].split("=");
-			dataName = tempDataName[1];
-		/*} else if(i == 8) {
-			var tempDataStatus = parameters[8].split("=");
-			status = tempDataStatus[1];*/
-		} else if(i == 8) {
-			var tempDataType = parameters[8].split("=");
-			dataType = tempDataType[1];
-		} else if(i == 9) {
-			var tempDataGroupId = parameters[9].split("=");
-			dataGroupId = tempDataGroupId[1];
+		var tempParams = parameters[i];
+		if(tempParams != null && tempParams.indexOf("=") >= 0) {
+			var tempValue = parameters[i].split("=");
+			if(tempValue[0] === "searchValue") {
+				dataName = tempValue[1];
+			} else if(tempValue[0] === "dataType") {
+				dataType = tempValue[1];
+			} else if(tempValue[0] === "dataGroupId") {
+				dataGroupId = tempValue[1];
+			}
 		}
 	}
-
 	mapDataInfoList(pageNo, dataName, dataGroupId, dataType);
 }
 
