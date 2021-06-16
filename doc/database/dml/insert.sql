@@ -134,17 +134,6 @@ values
 	(NEXTVAL('user_group_menu_seq'), 2, 1007, 1, 'Y'),
 	(NEXTVAL('user_group_menu_seq'), 2, 1008, 1, 'Y');
 
-insert into user_group_role(user_group_role_id, user_group_id, role_id)
-values
-	(NEXTVAL('user_group_role_seq'), 1, 1),
-	(NEXTVAL('user_group_role_seq'), 1, 2),
-	(NEXTVAL('user_group_role_seq'), 1, 3),
-	(NEXTVAL('user_group_role_seq'), 1, 4),
-	(NEXTVAL('user_group_role_seq'), 1, 5),
-	(NEXTVAL('user_group_role_seq'), 1, 6),
-	(NEXTVAL('user_group_role_seq'), 2, 4),
-	(NEXTVAL('user_group_role_seq'), 2, 5),
-    (NEXTVAL('user_group_role_seq'), 2, 6);
 
 
 -- 메인 화면 위젯
@@ -184,6 +173,18 @@ INSERT INTO data_group (
     data_group_id, data_group_key, data_group_name, data_group_path, data_group_target, sharing, user_id,
     ancestor, parent, depth, view_order, children, basic, available, tiling, data_count, metainfo)
 values
-(1, 'basic', '기본', 'infra/data/basic/', 'admin', 'common', 'admin', 1, 0, 1, 1, 0, true, true, false, 0,  TO_JSON('{"isPhysical": false}'::json))
+(1, 'basic', '기본', 'infra/data/basic/', 'admin', 'common', 'admin', 1, 0, 1, 1, 0, true, true, false, 0,  TO_JSON('{"isPhysical": false}'::json));
 
-;
+
+
+insert into user_group_role(user_group_role_id, user_group_id, role_id)
+values
+	(NEXTVAL('user_group_role_seq'), 1, 1),
+	(NEXTVAL('user_group_role_seq'), 1, 2),
+	(NEXTVAL('user_group_role_seq'), 1, 3),
+	(NEXTVAL('user_group_role_seq'), 1, 4),
+	(NEXTVAL('user_group_role_seq'), 1, 5),
+	(NEXTVAL('user_group_role_seq'), 1, 6),
+	(NEXTVAL('user_group_role_seq'), 2, 4),
+	(NEXTVAL('user_group_role_seq'), 2, 5),
+    (NEXTVAL('user_group_role_seq'), 2, 6);
